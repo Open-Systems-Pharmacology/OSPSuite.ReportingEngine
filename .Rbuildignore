@@ -1,5 +1,7 @@
-^ospsuite\.reportingengine\.Rproj$
+^.*\.Rproj$
 ^\.Rproj\.user$
 ^appveyor\.yml$
+^README\.md$
 ^tests/dev
+^tools
 ^\.covrignore$
