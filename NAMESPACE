@@ -23,3 +23,8 @@ export(simulatePopulation)
 import(ospsuite)
 import(tlf)
 import(utils)
+
+export(ConfigurationPlan)
+export(PopulationWorkflow)
+import(ospsuite)
+import(tlf)
