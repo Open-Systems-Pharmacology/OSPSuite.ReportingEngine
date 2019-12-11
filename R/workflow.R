@@ -1,134 +1,115 @@
 #' @title Workflow
 #' @docType class
 #' @description  Workflow Task for Reporting Engine
-#' @field reportingEngineInfo R6 class object with relevant information about reporting engine
-#' @field settings setting object
-#' @field models simulation class object
-#' @field population population class object
-#' @field observedData List of observed data (use Nonmem format ?)
-#' @field outputFolder path where output is saved
-#' #' @section Methods:
-#' #' \describe{
-#' \item{setPKParametersCalculationSettings()}{Define PK parameters calculation task settings}
-#' \item{setSensitivityAnalysisSettings()}{Define sensitivity analysis task settings}
-#' \item{setpkParametersPlotSettings()}{Define PK parameters plot settings}
-#' \item{setSensitivityPlotSettings()}{Define sensitivity plot settings}
-#' }
+#' @field settings class
 #' @import tlf
 #' @import ospsuite
 Workflow <- R6::R6Class(
   "Workflow",
   public = list(
-    reportingEngineInfo = ReportingEngineInfo$new(),
     settings = NULL,
-    simulation = NULL,
-    population = NULL,
-    observedData = NULL,
-    workflowFolder = NULL,
-    inputFolder = NULL,
-    simulationFolder = NULL,
-    sensitivityFolder = NULL,
-    outputFolder = NULL,
-
-    initialize = function(simulationFile,
-                              populationFile,
-                              observedDataFile = NULL,
-                              workflowFolder = paste0("Workflow", "_", format(Sys.Date(), "%Y%m%d"), "_", format(Sys.time(), "%H%M%S")),
-                              inputFolder = "Inputs",
-                              simulationFolder = "Simulations",
-                              sensitivityFolder = "Sensitivities",
-                              outputFolder = "Outputs",
-                              settings = NULL) {
-
-
-      # Check of Workflow inputs
-      validateIsOfType(simulationFile, "character")
-      validateIsOfType(populationFile, "character")
-      validateIsSameLength(simulationFile, populationFile)
-
-      validateIsFileExtension(simulationFile, "pkml")
-      validateIsFileExtension(populationFile, "csv")
-      validateIsFileExtension(observedDataFile, "csv", nullAllowed = TRUE)
-
-      # Create folder and branches where reporting engine structure will be saved
-      if (!is.null(workflowFolder)) {
-        dir.create(workflowFolder)
-      }
-      # Null workflow folder is assumed to be current folder
-      self$workflowFolder <- workflowFolder %||% getwd()
-      self$inputFolder <- file.path(workflowFolder, inputFolder)
-      self$simulationFolder <- file.path(workflowFolder, simulationFolder)
-      self$sensitivityFolder <- file.path(workflowFolder, sensitivityFolder)
-      self$outputFolder <- file.path(workflowFolder, outputFolder)
-
-      dir.create(self$inputFolder)
-      dir.create(self$simulationFolder)
-      dir.create(self$sensitivityFolder)
-      dir.create(self$outputFolder)
-
-      # Workflow inputs:
-      simulationName <- trimFileName(simulationFile, extension = "pkml")
-      populationName <- trimFileName(populationFile, extension = "csv")
-
-      file.copy(
-        simulationFile,
-        file.path(self$inputFolder, paste0(simulationName, ".pkml"))
-      )
-      self$simulation <- simulationName
-
-      file.copy(
-        populationFile,
-        file.path(self$inputFolder, paste0(populationName, ".csv"))
-      )
-      self$population <- populationName
-
-      if (!is.null(observedDataFile)) {
-        observedDataName <- trimFileName(observedDataFile, extension = "csv")
-        file.copy(
-          observedDataFile,
-          file.path(self$inputFolder, paste0(observedDataName, ".csv"))
-        )
-        self$observedData <- observedDataName
-      }
-
-      # In case settings need to be defined later on
+    initialize = function(settings = NULL){
       self$settings <- settings
-    },
+    }
+  )
+)
 
-    setPKParametersCalculationSettings = function(message = NULL) {
-      self$pkParametersCalculation <- Task$new(message = message %||% "Calculate PK parameters")
+#' @title PopulationWorkflow
+#' @docType class
+#' @description  Population Workflow Task for Reporting Engine 
+#' @field populationSimulation Population simulation task
+#' @field pkParametersCalculation PK parameters calculation task
+#' @field sensitivityAnalysis Sensitivity analysis task
+#' @field demographyPlot Plot demography task
+#' @field timeProfilePlot Plot time profile task
+#' @field pkParametersPlot Plot PK parameters task
+#' @field sensitivityPlot Plot sensitiviy task
+#' @section Methods:
+#' \describe{
+#' \item{new()}{Initilialize reporting engine population workflow}
+#' \item{runPopulationSimulation()}{Simulate population(s)}
+#' \item{runPKParametersCalculation(Calculate population PK parameters)}{}
+#' \item{runSensitivityAnalysis(Calculate population sensitivity)}{}
+#' \item{plotDemography()}{}
+#' \item{plotSensitivity()}{}
+#' \item{runWorkflow()}{}
+#' }
+#' @export
+#' @import tlf
+#' @import ospsuite
+#' @format NULL
+PopulationWorkflow <- R6::R6Class(
+  "PopulationWorkflow",
+  inherit = Workflow,
+  
+  public = list(
+    populationSimulation = NULL,
+    pkParametersCalculation = NULL,
+    sensitivityAnalysis = NULL,
+    demographyPlot = NULL,
+    timeProfilePlot = NULL,
+    pkParametersPlot = NULL,
+    sensitivityPlot =NULL,
+   
+    initialize = function(){
+      super$initialize()
+      
+      self$populationSimulation <- Task$new()
+      self$pkParametersCalculation <- Task$new()
+      self$sensitivityAnalysis <- Task$new()
+      
+      self$demographyPlot <- Task$new()
+      self$timeProfilePlot <- Task$new()
+      self$pkParametersPlot <- Task$new()
+      self$sensitivityPlot <- Task$new()
     },
-
-    setSensitivityAnalysisSettings = function(input = NULL,
-                                                  output = NULL,
-                                                  active = TRUE,
-                                                  message = NULL) {
-      self$sensitivityAnalysis <- Task$new(
-        input = input %||% list(
-          "simulation" = file.path(self$inputFolder, paste0(self$simulation, ".pkml"))
-        ),
-        output = output %||% list("sensitivityAnalysis" = file.path(self$sensitivityFolder, "sensitivityAnalysis.RData")),
-        active = active,
-        message = message %||% "Analyze sensitivity"
-      )
+    
+    runPopulationSimulation = function(){
+      
     },
-
-    setpkParametersPlotSettings = function(message = NULL) {
-      self$pkParametersPlot <- Task$new(message = message %||% "Plot PK parameters")
+    runPKParametersCalculation = function(){},
+    runSensitivityAnalysis = function(){},
+    
+    plotDemography = function(simulation,
+                              parameterNames = c(StandardPath$Age, StandardPath$Weight, StandardPath$Height)){
+      demographyParameters <- ospsuite::getAllParametersMatching(parameterNames, simulation)
+      demographyValues <- as.data.frame(lapply(demographyParameters, function(p) toDisplayUnit(p, pop$getValues(p))))
+      names(demographyValues) <- parameterNames
+      
+      demographyPlot <- lapply(parameterNames, function(x){})
+      for (parameterName in parameterNames){
+        mapping <- tlf::HistogramDataMapping$new(x = parameterName)
+        demographyPlot[[parameterName]] <- plotHistogram(data = demographyValues,
+                                                          dataMapping = mapping)
+      }
+      return(demographyPlot)
     },
-
-    setSensitivityPlotSettings = function(input = NULL,
-                                              output = NULL,
-                                              active = TRUE,
-                                              message = NULL) {
-      self$sensitivityPlot <- Task$new(
-        input = input %||% list(
-          "sensitivityAnalysis" = self$sensitivityAnalysis$output$sensitivityAnalysis
-        ),
-        output = output %||% list("sensitivityPlot" = file.path(self$outputFolder, "sensitivityPlot.png")),
-        active = active,
-        message = message %||% "Plot sensitivity analysis"
-      )
+    plotTimeProfile = function(){},
+    plotPKParameters = function(){},
+    plotSensitivity = function(){},
+    
+    runWorkflow = function(){
+      if(self$populationSimulation$active){
+        self$runPopulationSimulation()
+      }
+      if(self$pkParametersCalculation$active){
+        self$runPKParametersCalculation()
+      }
+      if(self$sensitivityAnalysis$active){
+        self$runSensitivityAnalysis()
+      }
+      if(self$demographyPlot$active){
+        self$plotDemography()
+      }
+      if(self$timeProfilePlot$active){
+        self$plotTimeProfile()
+      }
+      if(self$pkParametersPlot$active){
+        self$plotPKParameters()
+      }
+      if(self$sensitivityPlot$active){
+        self$plotSensitivity()
+      }
     }
   )
 )
