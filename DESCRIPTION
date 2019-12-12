@@ -19,8 +19,8 @@ Depends:
     R (>= 3.5),
 Imports: 
     R6,
-    ospsuite,
-    tlf
+    tlf,
+    ospsuite
 Suggests: 
     testthat (>= 2.1.0)
 Encoding: UTF-8
