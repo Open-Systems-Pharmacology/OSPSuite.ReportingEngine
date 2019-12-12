@@ -14,7 +14,15 @@ Workflow Task for Reporting Engine
 \section{Fields}{
 
 \describe{
-\item{\code{settings}}{class}
+\item{\code{settings}}{setting object}
+
+\item{\code{models}}{simulation class object}
+
+\item{\code{population}}{population class object}
+
+\item{\code{observedDatasets}}{Nonmem format datasets}
+
+\item{\code{outputFolder}}{path where output is saved}
 }}
 
 \keyword{datasets}

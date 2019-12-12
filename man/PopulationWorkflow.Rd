@@ -35,9 +35,11 @@ Population Workflow Task for Reporting Engine
 \item{runPopulationSimulation()}{Simulate population(s)}
 \item{runPKParametersCalculation(Calculate population PK parameters)}{}
 \item{runSensitivityAnalysis(Calculate population sensitivity)}{}
-\item{plotDemography()}{}
-\item{plotSensitivity()}{}
-\item{runWorkflow()}{}
+\item{plotDemography()}{Plot demography}
+\item{plotTimeProfile()}{Plot time profile, residuals and their distribution}
+\item{plotPKParameters()}{Plot PK parameters}
+\item{plotSensitivity()}{Plot sensitivity analysis results}
+\item{runWorkflow()}{Run the active tasks of population worklfow}
 }
 }
 
