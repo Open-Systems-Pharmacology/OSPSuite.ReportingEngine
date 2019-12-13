@@ -4,7 +4,7 @@
 #' @field settings setting object
 #' @field models simulation class object
 #' @field population population class object
-#' @field observedDatasets Nonmem format datasets
+#' @field observedData List of observed data (use Nonmem format ?)
 #' @field outputFolder path where output is saved
 #' @import tlf
 #' @import ospsuite
@@ -14,11 +14,12 @@ Workflow <- R6::R6Class(
     settings = NULL,
     models = NULL,
     population = NULL,
-    observedDatasets = NULL,
+    observedData = NULL,
     outputFolder = NULL,
     initialize = function(outputFolder = NULL,
                           simulationPath = NULL,
                           populationPath = NULL,
+                          observationPath = NULL,
                           settings = NULL){
       
       if(!is.null(outputFolder)){
@@ -30,6 +31,7 @@ Workflow <- R6::R6Class(
       self$settings <- settings
       self$models <- ifnotnull(simulationPath, loadSimulation(simulationPath))
       self$population <- ifnotnull(populationPath, loadPopulation(populationPath))
+      self$observedData <- ifnotnull(observationPath, read.table(observationPath))
     }
   )
 )
@@ -47,13 +49,13 @@ Workflow <- R6::R6Class(
 #' @section Methods:
 #' \describe{
 #' \item{new()}{Initilialize reporting engine population workflow}
-#' \item{runPopulationSimulation()}{Simulate population(s)}
-#' \item{runPKParametersCalculation(Calculate population PK parameters)}{}
-#' \item{runSensitivityAnalysis(Calculate population sensitivity)}{}
-#' \item{plotDemography()}{Plot demography}
-#' \item{plotTimeProfile()}{Plot time profile, residuals and their distribution}
-#' \item{plotPKParameters()}{Plot PK parameters}
-#' \item{plotSensitivity()}{Plot sensitivity analysis results}
+#' \item{setPopulationSimulationSettings()}{Define population simulation task settings}
+#' \item{setPKParametersCalculationSettings()}{Define PK parameters calculation task settings}
+#' \item{setSensitivityAnalysisSettings()}{Define sensitivity analysis task settings}
+#' \item{setPlotDemographySettings()}{Define demography plots settings}
+#' \item{setPlotTimeProfileSettings()}{Define goodness of fit plots settings}
+#' \item{setPlotPKParametersSettings()}{Define PK parameters plot settings}
+#' \item{setPlotSensitivitySettings()}{Define sensitivity plot settings}
 #' \item{runWorkflow()}{Run the active tasks of population worklfow}
 #' }
 #' @export
@@ -69,7 +71,7 @@ PopulationWorkflow <- R6::R6Class(
     pkParametersCalculation = NULL,
     sensitivityAnalysis = NULL,
     demographyPlot = NULL,
-    timeProfilePlot = NULL,
+    gofPlot = NULL,
     pkParametersPlot = NULL,
     sensitivityPlot =NULL,
    
@@ -81,7 +83,7 @@ PopulationWorkflow <- R6::R6Class(
       self$setSensitivityAnalysisSettings()
       
       self$setDemographyPlotSettings()
-      self$setTimeProfilePlotSettings()
+      self$setGofPlotSettings()
       self$setpkParametersPlotSettings()
       self$setSensitivityPlotSettings()
     },
@@ -102,8 +104,8 @@ PopulationWorkflow <- R6::R6Class(
     setDemographyPlotSettings = function(message = NULL){
       self$demographyPlot <- Task$new(message = message %||% "Plot demography")
     },
-    setTimeProfilePlotSettings = function(message = NULL){
-      self$timeProfilePlot <- Task$new(message = message %||% "Plot time profile")
+    setGofPlotSettings = function(message = NULL){
+      self$gofPlot <- Task$new(message = message %||% "Plot goodness of fit diagnostics")
     },
     setpkParametersPlotSettings = function(message = NULL){
       self$pkParametersPlot <- Task$new(message = message %||% "Plot PK parameters")
@@ -112,80 +114,62 @@ PopulationWorkflow <- R6::R6Class(
       self$sensitivityPlot <- Task$new(message = message %||% "Plot sensitivity analysis")
     },
     
-    runPopulationSimulation = function(){
-      populationResults <- runSimulation(self$models, self$population)
-      self$populationSimulation$output <- populationResults
-      save(populationResults, file = file.path(self$outputFolder, 'populationSimulation.Rdata'))
-      return(populationResults)
-    },
-    runPKParametersCalculation = function(){},
-    runSensitivityAnalysis = function(){},
-    
-    plotDemography = function(parameterNames = c(StandardPath$Age, StandardPath$Weight, StandardPath$Height)){
-      demographyParameters <- ospsuite::getAllParametersMatching(parameterNames, self$models)
-      demographyValues <- as.data.frame(lapply(demographyParameters, function(p) toDisplayUnit(p, self$population$getValues(p))))
-      names(demographyValues) <- parameterNames
-      
-      demographyPlot <- list()
-      for (parameterName in parameterNames){
-        mapping <- tlf::HistogramDataMapping$new(x = parameterName)
-        demographyPlot[[parameterName]] <- plotHistogram(data = demographyValues,
-                                                         dataMapping = mapping,
-                                                         bins = 5)
-      }
-      # TO DO: add plot configuration to generate standadized plot and save format
-      save(demographyPlot, file = file.path(self$outputFolder, 'demographyPlot.Rdata'))
-      self$demographyPlot$output <- demographyPlot
-      return(demographyPlot)
-    },
-    plotTimeProfile = function(quantity = NULL){
-      if(is.null(self$populationSimulation$output)){
-        warning("No simulated population, time profile task can't be performed")
-        return()
-      }
-      resultsPaths <- self$populationSimulation$output$allQuantityPaths
-      path <- resultsPaths[[1]]
-      
-      timeProfileResults <- getOutputValuesTLF(self$populationSimulation$output, 
-                                               path, 
-                                               population = self$population)
-      # For this test the default mapping will be last quantity of data
-      quantity <- quantity %||% utils::tail(names(timeProfileResults$data), 1)
-      
-      mapping <- TimeProfileDataMapping$new(x = "Time",
-                                            y = quantity)
-      timeProfilePlot <- plotTimeProfile(data = timeProfileResults$data,
-                                         metaData = timeProfileResults$metaData,
-                                         dataMapping = mapping)
-      save(timeProfilePlot, file = file.path(self$outputFolder, 'timeProfilePlot.Rdata'))
-      self$timeProfilePlot$output <- timeProfilePlot
-      return(timeProfilePlot)
-    },
-    plotPKParameters = function(){},
-    plotSensitivity = function(){},
-    
     runWorkflow = function(){
       if(self$populationSimulation$active){
-        self$runPopulationSimulation()
+        self$populationSimulation$output <- runSimulation(self$models, self$population)
       }
       if(self$pkParametersCalculation$active){
-        self$runPKParametersCalculation()
+        self$pkParametersCalculation$output <- calculatePKParameters()
       }
       if(self$sensitivityAnalysis$active){
-        self$runSensitivityAnalysis()
+        self$sensitivityAnalysis$output <- runSensitivityAnalysis()
       }
       if(self$demographyPlot$active){
-        self$plotDemography()
+        # The last properties of plotDemograpy will be set within task settings
+        self$demographyPlot$output <- plotDemography(simulation = self$models, 
+                                                     population = self$population,
+                                                     parameterNames = c(StandardPath$Age, StandardPath$Weight, StandardPath$Height),
+                                                     plotConfiguration = NULL)
+        demographyPlot <- self$demographyPlot$output
+        save(demographyPlot, file = file.path(self$outputFolder, 'demographyPlot.RData'))
       }
-      if(self$timeProfilePlot$active){
-        self$plotTimeProfile()
+      if(self$gofPlot$active){
+        self$gofPlot$output <- plotGoodnessOfFit(self$populationSimulation$output,
+                                                 self$population,
+                                                 self$observedData,
+                                                 quantity = NULL,
+                                                 plotConfiguration = NULL)
+        gofPlot <- self$gofPlot$output
+        save(gofPlot, file = file.path(self$outputFolder, 'gofPlot.RData'))
       }
       if(self$pkParametersPlot$active){
-        self$plotPKParameters()
+        self$pkParametersPlot$output <- plotPKParameters()
       }
       if(self$sensitivityPlot$active){
-        self$plotSensitivity()
+        self$sensitivityPlot$output <- plotSensitivity()
       }
+    },
+    
+    print = function(){
+      tasks <- c(self$populationSimulation,
+                 self$pkParametersCalculation,
+                 self$sensitivityAnalysis,
+                 self$demographyPlot,
+                 self$gofPlot,
+                 self$pkParametersPlot,
+                 self$sensitivityPlot)
+      
+      message <- data.frame("task"=NULL,
+                            "active"=NULL, 
+                            "available ouptut" = NULL)
+      for (task in tasks){
+        message <- rbind.data.frame(message,
+                                    data.frame("task"=task$message,
+                                               "active"=task$active, 
+                                               "available ouptut" = !is.null(task$output)))
+      }
+      print(message)
+      return(message)
     }
   )
 )
