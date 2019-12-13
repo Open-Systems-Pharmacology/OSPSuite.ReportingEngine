@@ -9,16 +9,28 @@ library(ospsuite.reportingengine)
 #sim <- loadSimulation("../tests/data/S1.pkml")
 #pop <- loadPopulation("../tests/data/pop_10.csv")
 
+# This define the workflow structure
 popWorkflow <- PopulationWorkflow$new(outputFolder = "../tests/WorkflowOutput",
                                       simulationPath = "../tests/data/S1.pkml",
                                       populationPath = "../tests/data/pop_10.csv"
                                       )
 
+# The print method gives an overview of the task list and if they are active
+popWorkflow
+
+# You can go into more detail for each tasks:
+popWorkflow$demographyPlot
+
+# You can also turn off/on some tasks
+popWorkflow$sensitivityPlot$inactivate()
+popWorkflow
+
+# To run the whole workflow
 popWorkflow$runWorkflow()
 
 # This line is for showing the result as a subplots
 # It can be automatized later on when generating the report
-demographyPlots <- gridExtra::grid.arrange(grobs = popWorkflow$demographyPlot$output, layout_matrix = rbind(c(1,1),c(2,3)))
-plot(demographyPlots)
+#demographyPlots <- gridExtra::grid.arrange(grobs = popWorkflow$demographyPlot$output, layout_matrix = rbind(c(1,1),c(2,3)))
+#plot(demographyPlots)
 
-plot(popWorkflow$timeProfilePlot$output)
+#plot(popWorkflow$gofPlot$output[["timeProfile"]])
