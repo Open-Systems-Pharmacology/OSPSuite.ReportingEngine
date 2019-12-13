@@ -29,6 +29,7 @@ MeanModel <- R6::R6Class(
 
     #TASKS
     simulateMeanModel = function(){
+
       #Simulate mean model (details s. #31)
       #Remarks: Mass balance plots require all model outputs, thus it's not enough to save only model outputs of interest
 

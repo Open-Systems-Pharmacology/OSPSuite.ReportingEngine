@@ -1,8 +1,12 @@
 #' @export
-getAllPathStrings <- function(inputEnv){
+getAllPathStrings <- function(inputEnv,searchString=NULL){
+  if(is.null(searchString)){
+    searchString = "**"
+  }
+
   #Function that returns a vector of strings.  Each element of the returned vector is a path of a Quantity in the simulation inputEnv
   strs=NULL
-  currentEnv <- getAllQuantitiesMatching(paths = "**",container = inputEnv)
+  currentEnv <- getAllQuantitiesMatching(paths = searchString,container = inputEnv)
   for (env in currentEnv){
     strs <- c(env$path,strs)
   }
