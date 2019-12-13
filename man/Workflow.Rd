@@ -20,7 +20,7 @@ Workflow Task for Reporting Engine
 
 \item{\code{population}}{population class object}
 
-\item{\code{observedDatasets}}{Nonmem format datasets}
+\item{\code{observedData}}{List of observed data (use Nonmem format ?)}
 
 \item{\code{outputFolder}}{path where output is saved}
 }}

@@ -32,13 +32,13 @@ Population Workflow Task for Reporting Engine
 
 \describe{
 \item{new()}{Initilialize reporting engine population workflow}
-\item{runPopulationSimulation()}{Simulate population(s)}
-\item{runPKParametersCalculation(Calculate population PK parameters)}{}
-\item{runSensitivityAnalysis(Calculate population sensitivity)}{}
-\item{plotDemography()}{Plot demography}
-\item{plotTimeProfile()}{Plot time profile, residuals and their distribution}
-\item{plotPKParameters()}{Plot PK parameters}
-\item{plotSensitivity()}{Plot sensitivity analysis results}
+\item{setPopulationSimulationSettings()}{Define population simulation task settings}
+\item{setPKParametersCalculationSettings()}{Define PK parameters calculation task settings}
+\item{setSensitivityAnalysisSettings()}{Define sensitivity analysis task settings}
+\item{setPlotDemographySettings()}{Define demography plots settings}
+\item{setPlotTimeProfileSettings()}{Define goodness of fit plots settings}
+\item{setPlotPKParametersSettings()}{Define PK parameters plot settings}
+\item{setPlotSensitivitySettings()}{Define sensitivity plot settings}
 \item{runWorkflow()}{Run the active tasks of population worklfow}
 }
 }
