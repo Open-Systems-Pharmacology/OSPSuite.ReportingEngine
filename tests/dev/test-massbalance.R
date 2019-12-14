@@ -6,15 +6,34 @@ library(ospsuite.reportingengine)
 wbsim <- loadSimulation("./data/individualPksimSim.pkml")
 
 compounds <- getCompoundsList(wbsim)
-pths <- getPathsForMoleculeAmount(simulation = wbsim,compounds[1])
+n <- 1
+pths <- getPathsForMoleculeAmount(simulation = wbsim,compounds[n])
 
+pthsVec <- envList2PathStringsVector(pths,removeSimulationName = TRUE)
 
 print(wbsim$outputSelections)
-addOutputs(quantitiesOrPaths = pths[c(131,132)], simulation = wbsim)
+addOutputs(quantitiesOrPaths = pths, simulation = wbsim)
 print(wbsim$outputSelections)
+
+
+
+# mn <- getAllMoleculesMatching(paths = paste0("**|",compounds[n]) , container = wbsim)
+# mn_strs <- NULL
+# for (pp in mn){
+#   mn_strs <- c(mn_strs,pp$path)
+# }
 
 res <- ospsuite::runSimulation(wbsim)
-df<-getOutputValues(simulationResults = res,quantitiesOrPaths = res$allQuantityPaths , individualIds = 0 )
+resList<-getOutputValues(simulationResults = res,quantitiesOrPaths = res$allQuantityPaths , individualIds = 0 )
+resDF <- getOutputValuesTLF(simulationResults = res, quantitiesOrPaths = res$allQuantityPaths , individualIds = 0 , population =  loadPopulation(csvPopulationFile = "./data/popData.csv"))  #using this placeholder population CSV file for now...need to make optional the population input to getOutputValuesTLF
+
+#write.csv(resDF$data,file = "./tests/dev/massBalanceTestCSV.csv" )
+amtBalance <- rep(0,nrow(resDF$data))
+for (t in seq(1:nrow(resDF$data))){
+  amtBalance[t] <- sum(resDF$data[t,pthsVec])
+}
+
+
 
 
 # #Are molecule amounts the intersection of getAllContainersMatching and getALlMoleculesMatching ???

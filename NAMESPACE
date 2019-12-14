@@ -3,6 +3,7 @@
 export(ConfigurationPlan)
 export(MeanModel)
 export(addBranch)
+export(envList2PathStringsVector)
 export(getAllPathStrings)
 export(getCompoundsList)
 export(getEnum)
