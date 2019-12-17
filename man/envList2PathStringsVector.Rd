@@ -4,7 +4,7 @@
 \alias{envList2PathStringsVector}
 \title{pathStringsVector}
 \usage{
-envList2PathStringsVector(envList, removeSimulationName = FALSE)
+envList2PathStringsVector(envList)
 }
 \description{
 Input is a list envList of environments that is output by the ospsuite::getAllXXXMatching() functions
