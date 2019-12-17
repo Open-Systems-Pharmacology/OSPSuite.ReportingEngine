@@ -27,19 +27,13 @@ getPathsForMoleculeAmount = function(simulation,compound){
 #' @description Input is a list envList of environments that is output by the ospsuite::getAllXXXMatching() functions
 #' @description Output is a list of the paths in each environment in the input list
 #' @export
-envList2PathStringsVector = function(envList,removeSimulationName = FALSE){
+envList2PathStringsVector = function(envList){
+  #envList2PathStringsVector = function(envList,removeSimulationName = FALSE){
   pathStringsVector = NULL
 
-  if (removeSimulationName){
-    for (eL in envList){
-      eLPathStringSimulationNameRemoved <- ospsuite::toPathString(tail(ospsuite::toPathArray( eL$path ),-1))
-      pathStringsVector <- c(pathStringsVector,eLPathStringSimulationNameRemoved)
-    }
-  }
-  else{
-    for (eL in envList){
-      pathStringsVector <- c(pathStringsVector,eL$path)
-    }
+
+  for (eL in envList){
+    pathStringsVector <- c(pathStringsVector,eL$path)
   }
 
   return(pathStringsVector)
