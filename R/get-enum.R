@@ -56,8 +56,7 @@ allPathStrings <- getAllPathStrings(currentEnv)
 
 pathEnumList<-list() #Initiate list to be returned as a null list.
 for (str in allPathStrings){
-  pathArray <-  toPathArray(str) #Convert the path string to a vector of strings, each representing a branch portion.
-  pathArray <- tail(pathArray,-1) #Remove the first element of the new vector, which is the name of the simulation.
+  pathArray <- toPathArray(str) #Convert the path string to a vector of strings, each representing a branch portion.
   pathEnumList <- nextStep(pathEnumList,pathArray,pathArray) #Begin recursive loop to generate branched list.
 }
 
