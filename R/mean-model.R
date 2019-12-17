@@ -6,6 +6,7 @@ MeanModel <- R6::R6Class(
   "MeanModel",
   public = list(
     modelFilePath = NULL, #a path to a pkml file that will be loaded using loadSimulation()
+    simModel = NULL, #a model previously loaded using loadSimulation, an alternative to providing modelFilePath
     modelDisplayName = NULL, #a string, to be set to name of model file if not supplied
     modelOutputsList = NULL, #to be a vector of model path strings
     calculatedOutputs = NULL,
@@ -16,19 +17,33 @@ MeanModel <- R6::R6Class(
     #Time raster
 
 
-    loadedModel = NULL,
     simulationResults = NULL,
     sensitivityResults = NULL,
 
 
-    initialize = function(modelFilePath,
+    initialize = function(modelFilePath = NULL,
+                          simModel = NULL,
                           modelDisplayName = NULL,
                           calculatedOutputsFolder = "." #default output folder is current directory
     ) {
-      self$modelFilePath <- modelFilePath
+
+      if (!is.null(modelFilePath)){
+        self$modelFilePath <- modelFilePath
+      } else{
+
+        if (!is.null(simModel)){
+          self$modelFilePath <- simModel$sourceFile
+        } else{
+          stop("Either modelFilePath or simModel need to be provided.")
+        }
+
+      }
+
       self$modelDisplayName <- modelDisplayName
       self$calculatedOutputsFolder <- calculatedOutputsFolder
-      self$loadedModel <- loadSimulation(modelFilePath, loadFromCache = FALSE)
+
+
+
       #Active task list: (ie tasks that are to be started when workflow begins)
 
 
@@ -37,13 +52,13 @@ MeanModel <- R6::R6Class(
     #TASKS
     simulateMeanModel = function(saveSimulation = FALSE,calculateMassBalance = FALSE) {
 
-
+      loadedModel <- loadSimulation(self$modelFilePath, loadFromCache = FALSE)
       if (calculateMassBalance) {  #If statement to add all outputs to loadedModel's output list if a mass balance is required
-        compoundList <- getCompoundsList(self$loadedModel) #Get a vector of all compound names
+        compoundList <- getCompoundsList(loadedModel) #Get a vector of all compound names
         pathsPerCompoundList <-list()
         for (cmp in compoundList){ #For loop to get the list of paths for each compound
-          pathsPerCompoundList[[cmp]]  <- getPathsForMoleculeAmount(simulation = self$loadedModel,cmp)
-          addOutputs(quantitiesOrPaths = pathsPerCompoundList[[cmp]], simulation = self$loadedModel) #add outputs for current compound to loadedModel's output list
+          pathsPerCompoundList[[cmp]]  <- getPathsForMoleculeAmount(simulation = loadedModel,cmp)
+          addOutputs(quantitiesOrPaths = pathsPerCompoundList[[cmp]], simulation = loadedModel) #add outputs for current compound to loadedModel's output list
         }
       }
 
@@ -51,7 +66,7 @@ MeanModel <- R6::R6Class(
       #Remarks: Mass balance plots require all model outputs, thus it's not enough to save only model outputs of interest
 
       # IF TIME RASTER PROVIDED THEN USE IT, ELSE USE DEFAULT SIMULATION TIMES IN PKML
-      self$simulationResults <- runSimulation(self$loadedModel)
+      self$simulationResults <- runSimulation(loadedModel)
       self$modelOutputsList <-  self$simulationResults$allQuantityPaths
       self$calculatedOutputs <- getOutputValuesTLF(simulationResults = self$simulationResults, quantitiesOrPaths = self$modelOutputsList , individualIds = 0 , population =  loadPopulation(csvPopulationFile = "./data/popData.csv"))  #using this placeholder population CSV file for now...need to make optional the population input to getOutputValuesTLF
 
