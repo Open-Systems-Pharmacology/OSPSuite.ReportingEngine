@@ -2,6 +2,7 @@
 
 export(ConfigurationPlan)
 export(MeanModel)
+export(UserDefinedPKFunction)
 export(addBranch)
 export(envList2PathStringsVector)
 export(getAllPathStrings)
