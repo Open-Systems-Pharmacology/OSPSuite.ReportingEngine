@@ -1,4 +1,4 @@
-"ï»¿IndividualId","Time [min]","Organism|blockA|mol1 [Âµmol]","Organism|blockB|mol1 [Âµmol]","Organism|blockB|mol1|twice_mol1_blockB [Âµmol]","Organism|blockA|mol1|Concentration [Âµmol/l]"
+"<U+FEFF>IndividualId","Time [min]","Organism|blockA|mol1 [µmol]","Organism|blockB|mol1 [µmol]","Organism|blockB|mol1|twice_mol1_blockB [µmol]","Organism|blockA|mol1|Concentration [µmol/l]"
 0,0,10,0,0,10
 0,0.6,6.505896,3.494104,6.988208,6.505896
 0,1.2,5.453003,4.546997,9.093994,5.453003
