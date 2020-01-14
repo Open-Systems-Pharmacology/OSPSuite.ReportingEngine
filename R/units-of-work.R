@@ -8,7 +8,7 @@
 #' @return pkParametersResults
 #' @export
 #' @import ospsuite
-calculatePKParameters <- function(){}
+calculatePKParameters <- function() {}
 
 #' @title runSensitivityAnalysis
 #' @description Run a sensitivity analysis from a simulation
@@ -16,11 +16,11 @@ calculatePKParameters <- function(){}
 #' @return sensitivityResults
 #' @export
 #' @import ospsuite
-runSensitivityAnalysis <- function(){}
+runSensitivityAnalysis <- function() {}
 
 
 #' @title plotDemography
-#' @description Plot histograms of demography parameters from a simulated population 
+#' @description Plot histograms of demography parameters from a simulated population
 #' @param simulation simulation class object
 #' @param population population class object
 #' @param demographyParameters Paths of the demography parameters to plot
@@ -29,29 +29,32 @@ runSensitivityAnalysis <- function(){}
 #' @export
 #' @import tlf
 #' @import ospsuite
-plotDemography <- function(simulation, 
+plotDemography <- function(simulation,
                            population,
                            parameterNames = c(StandardPath$Age, StandardPath$Weight, StandardPath$Height),
-                           plotConfiguration = NULL){
-  
+                           plotConfiguration = NULL) {
   demographyParameters <- ospsuite::getAllParametersMatching(parameterNames, simulation)
   # plotHistogram uses data input as data.frame
-  demographyValues <- as.data.frame(lapply(demographyParameters, 
-                                           function(p) {toDisplayUnit(p, population$getValues(p))}
-                                           )
-                                    )
+  demographyValues <- as.data.frame(lapply(
+    demographyParameters,
+    function(p) {
+      toDisplayUnit(p, population$getValues(p))
+    }
+  ))
   names(demographyValues) <- parameterNames
-  
+
   # TO DO: extract metaData for the demography parameters
-  
+
   # Initialize list of plot objects
   demographyPlot <- list()
-  for (parameterName in parameterNames){
+  for (parameterName in parameterNames) {
     mapping <- tlf::HistogramDataMapping$new(x = parameterName)
-    demographyPlot[[parameterName]] <- tlf::plotHistogram(data = demographyValues,
-                                                     dataMapping = mapping,
-                                                     plotConfiguration = plotConfiguration,
-                                                     bins = 5)
+    demographyPlot[[parameterName]] <- tlf::plotHistogram(
+      data = demographyValues,
+      dataMapping = mapping,
+      plotConfiguration = plotConfiguration,
+      bins = 5
+    )
   }
   return(demographyPlot)
 }
@@ -69,51 +72,62 @@ plotDemography <- function(simulation,
 #' @import tlf
 #' @import ospsuite
 #' @import utils
-plotGoodnessOfFit = function(populationSimulation,
-                             population,
-                             observedData = NULL, # TO DO: include observedData into the analysis
-                             quantity = NULL,
-                             plotConfiguration = NULL){
-  
+plotGoodnessOfFit <- function(populationSimulation,
+                              population,
+                              observedData = NULL, # TO DO: include observedData into the analysis
+                              quantity = NULL,
+                              plotConfiguration = NULL) {
   resultsPaths <- populationSimulation$allQuantityPaths
   path <- resultsPaths[[1]]
-  
-  timeProfileResults <- getOutputValuesTLF(populationSimulation, 
-                                           path, 
-                                           population = population)
-  
+
+  timeProfileResults <- getOutputValuesTLF(populationSimulation,
+    path,
+    population = population
+  )
+
   # For this test the default mapping will be last quantity of data
   quantity <- quantity %||% utils::tail(names(timeProfileResults$data), 1)
-  
+
   # Initialize GofPlots
   gofPlots <- list()
-  
-  timeProfileMapping <- tlf::TimeProfileDataMapping$new(x = "Time",
-                                                   y = quantity)
-  timeProfilePlot <- tlf::plotTimeProfile(data = timeProfileResults$data,
-                                     metaData = timeProfileResults$metaData,
-                                     dataMapping = timeProfileMapping, 
-                                     plotConfiguration = plotConfiguration[["timeProfile"]])
-  
+
+  timeProfileMapping <- tlf::TimeProfileDataMapping$new(
+    x = "Time",
+    y = quantity
+  )
+  timeProfilePlot <- tlf::plotTimeProfile(
+    data = timeProfileResults$data,
+    metaData = timeProfileResults$metaData,
+    dataMapping = timeProfileMapping,
+    plotConfiguration = plotConfiguration[["timeProfile"]]
+  )
+
   gofPlots[["timeProfile"]] <- timeProfilePlot
-  
+
   # All the other diagnostic plots need observedData
-  if(is.null(observedData)){return(gofPlots)}
+  if (is.null(observedData)) {
+    return(gofPlots)
+  }
   # TO DO: perform other gof plots
   # Template example for residuals histogram
-  residualsData <- getResiduals(timeProfileResults$data, 
-                                observedData,
-                                dataMapping = XYDataMapping$new(x = "Time",
-                                                                y = quantity))
-  
+  residualsData <- getResiduals(timeProfileResults$data,
+    observedData,
+    dataMapping = XYDataMapping$new(
+      x = "Time",
+      y = quantity
+    )
+  )
+
   residualsHistogramMapping <- tlf::HistogramDataMapping$new(x = "residuals")
-  
-  residualsHistogramPlot <- tlf::plotHistogram(data = residualsData,
-                                               dataMapping = residualsHistogramMapping, 
-                                               plot = plotConfiguration[["residualsHistogram"]])
-  
+
+  residualsHistogramPlot <- tlf::plotHistogram(
+    data = residualsData,
+    dataMapping = residualsHistogramMapping,
+    plot = plotConfiguration[["residualsHistogram"]]
+  )
+
   gofPlots[["residualsHistogram"]] <- residualsHistogramPlot
-  
+
   return(gofPlots)
 }
 
@@ -127,19 +141,22 @@ plotGoodnessOfFit = function(populationSimulation,
 #' @export
 #' @import tlf
 #' @import utils
-getResiduals <- function(simulatedData, 
+getResiduals <- function(simulatedData,
                          observedData,
-                         dataMapping = NULL){
-  
-  dataMapping <- dataMapping %||% XYDataMapping$new(x = "Time",
-                                                    y = ncol(observedData))
+                         dataMapping = NULL) {
+  dataMapping <- dataMapping %||% XYDataMapping$new(
+    x = "Time",
+    y = ncol(observedData)
+  )
   # Caution: This is only a template for example,
   # Observed data will need to be an actual innput
-  residualsData <- data.frame("time" = simulatedData[, dataMapping$x],
-                              "observed" = observedData[, dataMapping$y], 
-                              "simulated" = simulatedData[, dataMapping$y], 
-                              "residuals" = simulatedData[, dataMapping$y] - simulatedData[, dataMapping$y])
-  
+  residualsData <- data.frame(
+    "time" = simulatedData[, dataMapping$x],
+    "observed" = observedData[, dataMapping$y],
+    "simulated" = simulatedData[, dataMapping$y],
+    "residuals" = simulatedData[, dataMapping$y] - simulatedData[, dataMapping$y]
+  )
+
   return(residualsData)
 }
 
@@ -163,4 +180,4 @@ plotPKParameters <- function() {}
 #' @export
 #' @import tlf
 #' @import ospsuite
-plotSensitivity <- function(){}
+plotSensitivity <- function() {}
