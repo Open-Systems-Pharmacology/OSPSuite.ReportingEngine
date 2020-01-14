@@ -14,6 +14,8 @@ Workflow Task for Reporting Engine
 \section{Fields}{
 
 \describe{
+\item{\code{reportingEngineInfo}}{R6 class object with relevant information about reporting engine}
+
 \item{\code{settings}}{setting object}
 
 \item{\code{models}}{simulation class object}
