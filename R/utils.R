@@ -74,3 +74,32 @@ ifIncluded <- function(x, y, outputIfIncluded, outputIfNotIncluded = NULL) {
     outputIfNotIncluded
   }
 }
+
+#' @title trimFileName
+#' @param path character string containing the name of the path or file to trim
+#' @param extension character string containing the extension file
+#' @param sep character string separating path elements. "/" is default value.
+#' @return fileName character string of the trimmed filed name
+#' @description
+#' Trim path and extension of a file
+#' @examples
+#' \dontrun{
+#' pathName <- "folder/subfolder/testFile.txt"
+#' trimFileName(pathName, extension = "txt")
+#' }
+trimFileName <- function(path, extension = NULL, sep = "/") {
+  fileName <- sub(
+    pattern = paste0("^.*[", sep, "]"),
+    replacement = "",
+    x = path
+  )
+  if (!is.null(extension)) {
+    fileName <- sub(
+      pattern = paste0("[.].*", extension),
+      "[.].*$",
+      replacement = "",
+      x = fileName
+    )
+  }
+  return(fileName)
+}
