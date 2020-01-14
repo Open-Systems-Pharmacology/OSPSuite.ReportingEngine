@@ -1,9 +1,9 @@
 #' @title Task
 #' @docType class
-#' @description  Task settings for Reporting Engine 
+#' @description  Task settings for Reporting Engine
 #' @field active logical
-#' @field input character
-#' @field output character
+#' @field input List of input files/folders to use to perform tasks
+#' @field output List of output files/folders to save the task output
 #' @field settings class
 #' @section Methods:
 #' \describe{
@@ -21,32 +21,47 @@ Task <- R6::R6Class(
     output = NULL,
     settings = NULL,
     message = NULL,
-    
+
     initialize = function(input = NULL,
-                          output = NULL, 
-                          settings = NULL,
-                          active = TRUE,
-                          message = NULL){
+                              output = NULL,
+                              settings = NULL,
+                              active = TRUE,
+                              message = NULL) {
       validateIsOfType(active, "logical")
       self$active <- active
-      self$input <- input
-      self$output <- output
+      self$input <- as.list(input)
+      self$output <- as.list(output)
       self$settings <- settings
       self$message <- message
-      
     },
-    activate = function(){
+    activate = function() {
       self$active <- TRUE
     },
-    inactivate = function(){
+    inactivate = function() {
       self$active <- FALSE
     },
-    
-    print = function(){
-      print(paste0("Task: ", self$message))
-      print(paste0("Task to be performed in workflow: ", self$active))
-      print(paste0("Task already performed in workflow: ", !is.null(self$output)))
+    validateInput = function() {
+      inputPaths <- sapply(self$input, identity)
+      isValid <- TRUE
+      for (inputToCheck in inputPaths) {
+        if (!file.exists(inputToCheck)) {
+          isValid <- FALSE
+          warning(messages$errorTaskInputDoesNotExist(inputToCheck))
+        }
+      }
+      return(isValid)
+    },
+
+    print = function() {
+      info <- list(
+        "task" = self$message,
+        "active" = self$active,
+        "input" = sapply(self$input, identity),
+        "output" = sapply(self$output, identity)
+      )
+
       invisible(self)
+      return(info)
     }
   )
 )

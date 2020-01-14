@@ -15,9 +15,9 @@ Task settings for Reporting Engine
 \describe{
 \item{\code{active}}{logical}
 
-\item{\code{input}}{character}
+\item{\code{input}}{List of input files/folders to use to perform tasks}
 
-\item{\code{output}}{character}
+\item{\code{output}}{List of output files/folders to save the task output}
 
 \item{\code{settings}}{class}
 }}
