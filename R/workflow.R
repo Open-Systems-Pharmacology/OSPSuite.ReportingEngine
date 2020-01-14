@@ -22,7 +22,7 @@ Workflow <- R6::R6Class(
 
       if(!is.null(outputFolder)){
         dir.create(outputFolder)
-        }
+      }
       # Get current folder if output folder left empty
       self$outputFolder <- outputFolder %||% getwd()
 
@@ -70,8 +70,9 @@ PopulationWorkflow <- R6::R6Class(
     gofPlot = NULL,
     pkParametersPlot = NULL,
     sensitivityPlot =NULL,
+    numberOfSlaves = 1,
 
-    initialize = function(...){
+    initialize = function(numberOfSlaves,...){
       super$initialize(...)
 
       self$setPopulationSimulationSettings()
@@ -82,6 +83,7 @@ PopulationWorkflow <- R6::R6Class(
       self$setGofPlotSettings()
       self$setpkParametersPlotSettings()
       self$setSensitivityPlotSettings()
+      self$numberOfSlaves = numberOfSlaves
     },
 
     setPopulationSimulationSettings = function(populationsList = NULL,
@@ -112,6 +114,17 @@ PopulationWorkflow <- R6::R6Class(
 
     runWorkflow = function(){
       if(self$populationSimulation$active){
+
+        if(numberOfSlaves > 1){
+
+          #if there is a population file and
+          #split it up into the number of cores
+          #pass to the cores
+          #
+
+        }
+
+
         self$populationSimulation$output <- runSimulation(self$models, self$population)
       }
       if(self$pkParametersCalculation$active){
