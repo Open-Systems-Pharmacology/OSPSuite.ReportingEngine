@@ -149,13 +149,13 @@ getResiduals <- function(simulatedData,
 #' @param populationSimulation class object from runSimulation(simulation, population)
 #' @param population population class object
 #' @param observedData list of datasets corresponding to observations
-#' @param parameterNames 
+#' @param parameterNames names of PK parameters to plot
 #' @param plotConfiguration List of PlotConfiguration class objects for each plot
 #' @return pkParametersPlot ggplot object
 #' @export
 #' @import tlf
 #' @import ospsuite
-plotPKParameters <- function(){}
+plotPKParameters <- function() {}
 
 #' @title plotSensitivity
 #' @description Plot sensitivity analysis results

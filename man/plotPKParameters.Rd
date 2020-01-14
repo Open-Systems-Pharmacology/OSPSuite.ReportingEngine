@@ -13,7 +13,7 @@ plotPKParameters()
 
 \item{observedData}{list of datasets corresponding to observations}
 
-\item{parameterNames}{}
+\item{parameterNames}{names of PK parameters to plot}
 
 \item{plotConfiguration}{List of PlotConfiguration class objects for each plot}
 }
