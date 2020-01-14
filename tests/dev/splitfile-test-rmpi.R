@@ -1,5 +1,5 @@
 library('Rmpi')
-
+library(ospsuite)
 
 
 
@@ -9,7 +9,7 @@ if(!(mpi.comm.size() == 0)){
 
 theNumberOfSlaves <- 5
 theFolderName <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/"
-theFileName   <- "popData.csv"
+theFileName   <- "popData"
 theNumberOfCommentLines <- 2
 
 #start 2 R workers (slaves) instances (once per WORKFLOW or once per Task?)
@@ -18,10 +18,18 @@ mpi.spawn.Rslaves(nslaves = theNumberOfSlaves)
 library('ospsuite')
 library('ospsuite.reportingengine')
 
-tempPopDataFiles <- splitPopDataFile(fileName = theFileName,
-                                     folderName = theFolderName,
-                                     numberOfSlaves = theNumberOfSlaves,
-                                     numberOfCommentLines = theNumberOfCommentLines)
+# tempPopDataFiles <- splitPopDataFile(fileName = theFileName,
+#                                      folderName = theFolderName,
+#                                      numberOfSlaves = theNumberOfSlaves,
+#                                      numberOfCommentLines = theNumberOfCommentLines)
+
+
+tempPopDataFiles <- ospsuite::splitPopulationFile(csvPopulationFile = paste0(theFolderName,theFileName,".csv"),
+                                                  numberOfCores = theNumberOfSlaves,
+                                                  outputFolder = theFolderName,
+                                                  outputFileName = theFileName)
+
+
 
 
 
@@ -57,19 +65,19 @@ mpi.bcast.Robj2slave(obj = theFolderName)
 
 mpi.remote.exec( runpop( popDataFileName = paste0(tempPopDataFiles[mpi.comm.rank()]), popDataFolderName = theFolderName  ) ) #mpi.remote.exec and not mpi.bcast.cmd so we ensure that this process has finished before next process begins
 
-removeTempPopFiles(folderName = theFolderName, fileNamesVec= tempPopDataFiles)
+#removeTempPopFiles(folderName = theFolderName, fileNamesVec= tempPopDataFiles)
 
-resultsList <- list()
-for (n in 1:theNumberOfSlaves){
-  resultsList[[n]] <- read.csv(file = paste0(theFolderName,"results",n,".csv"),check.names=FALSE, encoding="UTF-8")
-}
+# resultsList <- list()
+# for (n in 1:theNumberOfSlaves){
+#   resultsList[[n]] <- read.csv(file = paste0(theFolderName,"results",n,".csv"),check.names=FALSE, encoding="UTF-8")
+# }
 
-resultsDf <- do.call("rbind", resultsList)
-write.csv(x = resultsDf,file = paste0(theFolderName,"results.csv"),row.names = FALSE)
+# resultsDf <- do.call("rbind", resultsList)
+# write.csv(x = resultsDf,file = paste0(theFolderName,"results.csv"),row.names = FALSE)
 
-for (n in 1:theNumberOfSlaves){
-  file.remove(paste0(theFolderName,"results",n,".csv"))
-}
+# for (n in 1:theNumberOfSlaves){
+#   file.remove(paste0(theFolderName,"results",n,".csv"))
+# }
 
 mpi.close.Rslaves()
 
