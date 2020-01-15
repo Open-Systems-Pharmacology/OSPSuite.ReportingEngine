@@ -1,21 +1,18 @@
 # Test Script for workflow
 
+# Clear and load libraries
 rm(list = ls())
 
 library(tlf)
 library(ospsuite)
 library(ospsuite.reportingengine)
 
-# sim <- loadSimulation("../tests/data/S1.pkml")
-# pop <- loadPopulation("../tests/data/pop_10.csv")
-
-# This define the workflow structure
+# Initializing the workflow creates a folder structure
+# (if it does not already exist) automatThis define the workflow structure
 popWorkflow <- PopulationWorkflow$new(
   simulationFile = "../tests/data/S1.pkml",
   populationFile = "../tests/data/pop_10.csv"
 )
-output1 <- "../S1_pop_10/"
-output2 <- "../S1_pop_20/"
 
 # The print method gives an overview of the task list and if they are active
 popWorkflow
