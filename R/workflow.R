@@ -167,10 +167,7 @@ PopulationWorkflow <- R6::R6Class(
                                              active = TRUE,
                                              message = NULL) {
       self$demographyPlot <- Task$new(
-        input = input %||% list(
-          "population" = file.path(self$inputFolder, paste0(self$population, ".csv")),
-          "simulation" = file.path(self$inputFolder, paste0(self$simulation, ".pkml"))
-        ),
+        input = input %||% self$populationSimulation$input,
         output = output %||% list(
           "demographyResults" = file.path(self$simulationFolder, "demography.RData"),
           "demographyPlot" = file.path(self$outputFolder, "demographyPlot.png"),
@@ -180,8 +177,22 @@ PopulationWorkflow <- R6::R6Class(
         message = message %||% "Plot demography"
       )
     },
-    setGofPlotSettings = function(message = NULL) {
-      self$gofPlot <- Task$new(message = message %||% "Plot goodness of fit diagnostics")
+    setGofPlotSettings = function(input = NULL,
+                                      output = NULL,
+                                      active = TRUE,
+                                      message = NULL) {
+      self$gofPlot <- Task$new(
+        input = input %||% list(
+          "population" = file.path(self$inputFolder, paste0(self$population, ".csv")),
+          "populationSimulation" = self$populationSimulation$output$populationSimulation
+        ),
+        output = output %||% list(
+          "gofResults" = file.path(self$simulationFolder, "gofResults.RData"),
+          "gofPlots" = file.path(self$outputFolder, "gofPlots")
+        ),
+        active = active,
+        message = message %||% "Plot goodness of fit diagnostics"
+      )
     },
     setpkParametersPlotSettings = function(message = NULL) {
       self$pkParametersPlot <- Task$new(message = message %||% "Plot PK parameters")
@@ -230,14 +241,23 @@ PopulationWorkflow <- R6::R6Class(
         }
       }
       if (self$gofPlot$active) {
-        self$gofPlot$output <- plotGoodnessOfFit(self$populationSimulation$output,
-          self$population,
-          self$observedData,
-          quantity = NULL,
-          plotConfiguration = NULL
-        )
-        gofPlot <- self$gofPlot$output
-        save(gofPlot, file = file.path(self$outputFolder, "gofPlot.RData"))
+        if (self$gofPlot$validateInput()) {
+          load(file = self$gofPlot$input$populationSimulation)
+          population <- loadPopulation(self$gofPlot$input$population)
+          observedData <- self$gofPlot$input$observedData
+
+          gofPlot <- plotGoodnessOfFit(
+            populationSimulation = populationSimulation,
+            population = population,
+            observedData = observedData,
+            quantity = NULL,
+            plotConfiguration = NULL
+          )
+          dir.create(self$gofPlot$output)
+          for (plotName in names(gofPlot)) {
+            save(gofPlot[[plotName]], file = file.path(self$gofPlot$output, paste0("plotName", ".png")))
+          }
+        }
       }
       if (self$pkParametersPlot$active) {
         self$pkParametersPlot$output <- plotPKParameters()
@@ -259,7 +279,6 @@ PopulationWorkflow <- R6::R6Class(
       )
       invisible(self)
 
-      print(taskOrder)
       return(taskOrder)
     }
   )
