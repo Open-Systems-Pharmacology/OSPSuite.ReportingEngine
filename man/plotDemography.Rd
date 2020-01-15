@@ -13,9 +13,9 @@ plotDemography(simulation, population,
 
 \item{population}{population class object}
 
-\item{plotConfiguration}{HistogramPlotConfiguration class object}
+\item{parameterNames}{Paths of the demography parameters to plot}
 
-\item{demographyParameters}{Paths of the demography parameters to plot}
+\item{plotConfiguration}{HistogramPlotConfiguration class object}
 }
 \value{
 demographyPlots list of ggplot objects

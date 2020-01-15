@@ -23,7 +23,7 @@ runSensitivityAnalysis <- function() {}
 #' @description Plot histograms of demography parameters from a simulated population
 #' @param simulation simulation class object
 #' @param population population class object
-#' @param demographyParameters Paths of the demography parameters to plot
+#' @param parameterNames Paths of the demography parameters to plot
 #' @param plotConfiguration HistogramPlotConfiguration class object
 #' @return demographyPlots list of ggplot objects
 #' @export
