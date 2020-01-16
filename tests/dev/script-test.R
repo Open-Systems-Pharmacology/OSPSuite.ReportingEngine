@@ -21,9 +21,7 @@ popWorkflow
 popWorkflow$demographyPlot
 
 # You can also turn off/on some tasks
-popWorkflow$sensitivityPlot$inactivate()
-popWorkflow
-
+popWorkflow$gofPlot$inactivate()
 # To run the whole workflow
 popWorkflow$runWorkflow()
 

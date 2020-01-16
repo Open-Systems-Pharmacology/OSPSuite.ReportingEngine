@@ -29,8 +29,8 @@ The initialization of the workflow defines:
 
 ```{r}
 popWorkflow <- PopulationWorkflow$new(
-  simulationFile = "../tests/data/S1.pkml",
-  populationFile = "../tests/data/pop_10.csv"
+  simulationFile = "../data/S1.pkml",
+  populationFile = "../data/pop_10.csv"
 )
 ```
 
@@ -78,9 +78,9 @@ popWorkflow$demographyPlot$print()
 It is possible to modify the fields of the tasks either using the method `set()`, or directly modifying the value of the field itself (however, the latter is unadvised). 
 The methods `activate()` and `inactivate()` can be used for changing the value of the logical field `active`:
 ```{r}
-popWorkflow$sensitivityPlot$print()
-popWorkflow$sensitivityPlot$inactivate()
-popWorkflow$sensitivityPlot$print()
+popWorkflow$gofPlot$print()
+popWorkflow$gofPlot$inactivate()
+popWorkflow$gofPlot$print()
 ```
 
 
@@ -89,7 +89,28 @@ Running all the active tasks of the workflow is possible using the method `runWo
 At the start of the worklow, general information about the workflow are printed and can be saved within a logfile.
 
 ```{r}
-popWorkflow$gofPlot$inactivate()
 popWorkflow$runWorkflow()
 ```
 
+## Get the resulting plots
+After running the workflow, the output are saved in the structure described in Fig 1.
+You can check where the results are printing the task output:
+```{r}
+popWorkflow$plotDemography$output
+```
+
+The output is usually saved as `.png` files within the plot folders:
+```{r}
+demographyOutputFolder <- popWorkflow$demographyPlot$output$demographyPlot
+demographyPlots <- list.files(demographyOutputFolder)
+```
+
+```{r, out.width="100%", echo=FALSE, include=TRUE, fig.align="center", fig.cap="Fig 2: Demography plots"}
+knitr::include_graphics(file.path(demographyOutputFolder, demographyPlots))
+```
+
+You can also access to the complete version of results as a `.RData` output, which allows to further  customize or modify the results:
+```{r, fig.height=5, fig.width=7.5, fig.cap="Customized results"}
+load(popWorkflow$demographyPlot$output$demographyResults)
+gridExtra::grid.arrange(grobs = demographyPlot, ncol = 2)
+```
