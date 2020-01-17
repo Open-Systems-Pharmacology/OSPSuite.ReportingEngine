@@ -160,9 +160,9 @@ PopulationWorkflow <- R6::R6Class(
       self$pkParametersCalculation <- Task$new(message = message %||% "Calculate PK parameters")
     },
     setSensitivityAnalysisSettings = function(input = NULL,
-                                              output = NULL,
-                                              active = TRUE,
-                                              message = NULL) {
+                                                  output = NULL,
+                                                  active = TRUE,
+                                                  message = NULL) {
       self$sensitivityAnalysis <- Task$new(
         input = input %||% list(
           "simulation" = file.path(self$inputFolder, paste0(self$simulation, ".pkml"))
@@ -208,12 +208,13 @@ PopulationWorkflow <- R6::R6Class(
       self$pkParametersPlot <- Task$new(message = message %||% "Plot PK parameters")
     },
     setSensitivityPlotSettings = function(input = NULL,
-                                          output = NULL,
-                                          active = TRUE,
-                                          message = NULL) {
+                                              output = NULL,
+                                              active = TRUE,
+                                              message = NULL) {
       self$sensitivityPlot <- Task$new(
         input = input %||% list(
-          "sensitivityAnalysis" = self$sensitivityAnalysis$output$sensitivityAnalysis),
+          "sensitivityAnalysis" = self$sensitivityAnalysis$output$sensitivityAnalysis
+        ),
         output = output %||% list("sensitivityPlot" = file.path(self$outputFolder, "sensitivityPlot.png")),
         active = active,
         message = message %||% "Plot sensitivity analysis"
@@ -240,12 +241,12 @@ PopulationWorkflow <- R6::R6Class(
         # }
       }
       if (self$sensitivityAnalysis$active) {
-         if (self$sensitivityAnalysis$validateInput()){
-           simulation <- loadSimulation(self$demographyPlot$input$simulation)
-           
-           pkSensitivities <- analyzeSensitivity(simulation = simulation)
-           save(pkSensitivities, file = self$sensitivityAnalysis$output$sensitivityAnalysis)
-         }
+        if (self$sensitivityAnalysis$validateInput()) {
+          simulation <- loadSimulation(self$demographyPlot$input$simulation)
+
+          pkSensitivities <- analyzeSensitivity(simulation = simulation)
+          save(pkSensitivities, file = self$sensitivityAnalysis$output$sensitivityAnalysis)
+        }
       }
       if (self$demographyPlot$active) {
         if (self$demographyPlot$validateInput()) {
@@ -259,12 +260,14 @@ PopulationWorkflow <- R6::R6Class(
             parameterNames = c(StandardPath$Age, StandardPath$Weight, StandardPath$Height),
             plotConfiguration = NULL
           )
-          
+
           save(demographyPlot, file = self$demographyPlot$output$demographyResults)
           dir.create(self$demographyPlot$output$demographyPlot)
           for (plotName in names(demographyPlot)) {
-            ggplot2::ggsave(filename = file.path(self$demographyPlot$output$demographyPlot, paste0(removeForbiddenLetters(plotName), ".png")),
-                            plot = demographyPlot[[plotName]])
+            ggplot2::ggsave(
+              filename = file.path(self$demographyPlot$output$demographyPlot, paste0(removeForbiddenLetters(plotName), ".png")),
+              plot = demographyPlot[[plotName]]
+            )
           }
         }
       }
@@ -281,12 +284,14 @@ PopulationWorkflow <- R6::R6Class(
             quantity = NULL,
             plotConfiguration = NULL
           )
-          
+
           save(gofPlot, file = self$gofPlot$output$gofResults)
           dir.create(self$gofPlot$output$gofPlot)
           for (plotName in names(gofPlot)) {
-            ggplot2::ggsave(filename = file.path(self$gofPlot$output$gofPlot, paste0(removeForbiddenLetters(plotName), ".png")),
-                            plot = gofPlot[[plotName]])
+            ggplot2::ggsave(
+              filename = file.path(self$gofPlot$output$gofPlot, paste0(removeForbiddenLetters(plotName), ".png")),
+              plot = gofPlot[[plotName]]
+            )
           }
         }
       }
@@ -296,7 +301,7 @@ PopulationWorkflow <- R6::R6Class(
       if (self$sensitivityPlot$active) {
         if (self$sensitivityPlot$validateInput()) {
           load(file = self$sensitivityPlot$input$sensitivityAnalysis)
-          
+
           sensitivityPlot <- plotSensitivity(sensitivityAnalysis)
           save(sensitivityPlot, file = file.path(self$sensitivityPlot$output$sensitivityPlot))
         }

@@ -16,7 +16,7 @@ calculatePKParameters <- function() {}
 #' @param pkParameterName name of parameter to be analyzed
 #' @param totalSensitivityThreshold numeric value between 0 and 1.
 #' Close to 0, only the most sensitive output paths are returned.
-#' Close to 1, almost all the output paths are returned. 
+#' Close to 1, almost all the output paths are returned.
 #' @return sensitivityResults
 #' @export
 #' @import ospsuite
@@ -25,15 +25,17 @@ analyzeSensitivity <- function(simulation,
                                totalSensitivityThreshold = 1) {
   outputSelections <- simulation$outputSelections
   sensitivity <- ospsuite::SensitivityAnalysis$new(simulation)
-  
+
   sensitivityAnalysisOptions <- ospsuite::SensitivityAnalysisRunOptions$new(showProgress = TRUE)
   results <- ospsuite::runSensitivityAnalysis(sensitivity, sensitivityAnalysisOptions)
-  
+
   pkSensitivities <- list()
   for (output in outputSelections$allOutputs) {
-    pkSensitivities <- results$allPKParameterSensitivitiesFor(pkParameterName = "AUC", 
-                                                                        outputPath = output$path,
-                                                                        totalSensitivityThreshold = totalSensitivityThreshold)
+    pkSensitivities <- results$allPKParameterSensitivitiesFor(
+      pkParameterName = "AUC",
+      outputPath = output$path,
+      totalSensitivityThreshold = totalSensitivityThreshold
+    )
   }
   return(pkSensitivities)
 }
