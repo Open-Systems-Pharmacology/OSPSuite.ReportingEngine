@@ -62,6 +62,17 @@ validateIsOfType <- function(object, type, nullAllowed = FALSE) {
   stop(messages$errorWrongType(objectName, class(object)[1], objectTypes))
 }
 
+
+
+validateIsInteger <- function(object, nullAllowed = FALSE) {
+  validateIsOfType(object, c("numeric", "integer"), nullAllowed)
+
+  if (isFALSE(object %% 1 == 0)){
+    stop(messages$errorWrongType(deparse(substitute(object)), class(object)[1], "integer"))
+  }
+
+}
+
 validateEnumValue <- function(enum, value) {
   if (value %in% names(enum)) {
     return()
@@ -85,6 +96,9 @@ validateIsString <- function(object, nullAllowed = FALSE) {
 validateIsNumeric <- function(object, nullAllowed = FALSE) {
   validateIsOfType(object, c("numeric", "integer"), nullAllowed)
 }
+
+
+
 
 validateIsLogical <- function(object, nullAllowed = FALSE) {
   validateIsOfType(object, "logical", nullAllowed)

@@ -5,18 +5,17 @@
 \title{plotDemography}
 \usage{
 plotDemography(simulation, population,
-  parameterNames = c(ospsuite::StandardPath$Age,
-  ospsuite::StandardPath$Weight, ospsuite::StandardPath$Height),
-  plotConfiguration = NULL)
+  parameterNames = c(StandardPath$Age, StandardPath$Weight,
+  StandardPath$Height), plotConfiguration = NULL)
 }
 \arguments{
 \item{simulation}{simulation class object}
 
 \item{population}{population class object}
 
-\item{plotConfiguration}{HistogramPlotConfiguration class object}
+\item{parameterNames}{Paths of the demography parameters to plot}
 
-\item{demographyParameters}{Paths of the demography parameters to plot}
+\item{plotConfiguration}{HistogramPlotConfiguration class object}
 }
 \value{
 demographyPlots list of ggplot objects

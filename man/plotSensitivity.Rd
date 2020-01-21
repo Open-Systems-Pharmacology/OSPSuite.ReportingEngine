@@ -4,7 +4,12 @@
 \alias{plotSensitivity}
 \title{plotSensitivity}
 \usage{
-plotSensitivity()
+plotSensitivity(pkSensitivities = NULL, plotConfiguration = NULL)
+}
+\arguments{
+\item{pkSensitivities}{List of PK senstivities computed by runSensitivityAnalysis}
+
+\item{plotConfiguration}{List of PlotConfiguration class objects for each plot}
 }
 \value{
 sensitivityPlot ggplot object

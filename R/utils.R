@@ -107,7 +107,7 @@ trimFileName <- function(path, extension = NULL, sep = "/") {
 #' @title removeForbiddenLetters
 #' @param text character string to be evaluated
 #' @param forbiddenLetters characters to be removed if in the \code{text}.
-#' Default value of \code{forbiddenLetters} is \code{"[[:punct:]]"} 
+#' Default value of \code{forbiddenLetters} is \code{"[[:punct:]]"}
 #' meaning that all pointuation characters are forbidden.
 #' @param replacement character replacing the \code{forbiddenLetters}.
 #' Default value of \code{forbiddenLetters} is "_".
@@ -116,7 +116,6 @@ trimFileName <- function(path, extension = NULL, sep = "/") {
 #' Trim path and extension of a file
 #' @examples
 #' \dontrun{
-#' text <- "!#$%&()*+,-./:;<=>?]@[\^_`}{|~ are all forbidden letters"
 #' removeForbiddenLetters(text)
 #' }
 removeForbiddenLetters <- function(text, forbiddenLetters = "[[:punct:]]", replacement = "_") {

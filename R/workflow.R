@@ -24,14 +24,14 @@ Workflow <- R6::R6Class(
     outputFolder = NULL,
 
     initialize = function(simulationFile,
-                              populationFile,
-                              observedDataFile = NULL,
-                              workflowFolder = paste0("Workflow", Sys.Date()),
-                              inputFolder = "Inputs",
-                              simulationFolder = "Simulations",
-                              sensitivityFolder = "Sensitivities",
-                              outputFolder = "Outputs",
-                              settings = NULL) {
+                          populationFile,
+                          observedDataFile = NULL,
+                          workflowFolder = paste0("Workflow", Sys.Date()),
+                          inputFolder = "Inputs",
+                          simulationFolder = "Simulations",
+                          sensitivityFolder = "Sensitivities",
+                          outputFolder = "Outputs",
+                          settings = NULL) {
 
 
       # Check of Workflow inputs
@@ -128,9 +128,20 @@ PopulationWorkflow <- R6::R6Class(
     gofPlot = NULL,
     pkParametersPlot = NULL,
     sensitivityPlot = NULL,
+    numberOfSlaves = 1,
 
-    initialize = function(...) {
+    initialize = function(numberOfSlaves = NULL,...) {
+
+
       super$initialize(...)
+
+
+      if(!is.null(numberOfSlaves)){
+        validateIsInteger(numberOfSlaves)
+        self$numberOfSlaves <- numberOfSlaves
+      }
+
+
 
       self$setPopulationSimulationSettings()
       self$setPKParametersCalculationSettings()
@@ -156,9 +167,13 @@ PopulationWorkflow <- R6::R6Class(
         message = message %||% "Simulate population"
       )
     },
+
+
     setPKParametersCalculationSettings = function(message = NULL) {
       self$pkParametersCalculation <- Task$new(message = message %||% "Calculate PK parameters")
     },
+
+
     setSensitivityAnalysisSettings = function(input = NULL,
                                                   output = NULL,
                                                   active = TRUE,
@@ -172,6 +187,8 @@ PopulationWorkflow <- R6::R6Class(
         message = message %||% "Analyze sensitivity"
       )
     },
+
+
     setDemographyPlotSettings = function(input = NULL,
                                              output = NULL,
                                              active = TRUE,
@@ -187,6 +204,8 @@ PopulationWorkflow <- R6::R6Class(
         message = message %||% "Plot demography"
       )
     },
+
+
     setGofPlotSettings = function(input = NULL,
                                       output = NULL,
                                       active = TRUE,
@@ -204,9 +223,13 @@ PopulationWorkflow <- R6::R6Class(
         message = message %||% "Plot goodness of fit diagnostics"
       )
     },
+
+
     setpkParametersPlotSettings = function(message = NULL) {
       self$pkParametersPlot <- Task$new(message = message %||% "Plot PK parameters")
     },
+
+
     setSensitivityPlotSettings = function(input = NULL,
                                               output = NULL,
                                               active = TRUE,
@@ -220,6 +243,7 @@ PopulationWorkflow <- R6::R6Class(
         message = message %||% "Plot sensitivity analysis"
       )
     },
+
 
     runWorkflow = function() {
       print("Start of population workflow: ")
