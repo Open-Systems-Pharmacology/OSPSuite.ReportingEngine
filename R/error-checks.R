@@ -160,3 +160,23 @@ checkOverwriteExisitingPath <- function(path, overwrite) {
     unlink(path, recursive = TRUE)
   }
 }
+
+#' Check if the provided path has required extension
+#'
+#' @param path (character) file or path name to be checked
+#' @param extension extension of the file required after "."
+#'
+#' @return TRUE if the path includes the extension
+isFileExtension <- function(path, extension) {
+  return(grep(pattern = paste0(".", extension), x = path) == 1)
+}
+
+validateIsFileExtension <- function(path, extension, nullAllowed = FALSE) {
+  if (nullAllowed && is.null(path)) {
+    return()
+  }
+  if (isFileExtension(path, extension)) {
+    return()
+  }
+  stop(messages$errorExtension(path, extension))
+}
