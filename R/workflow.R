@@ -26,7 +26,7 @@ Workflow <- R6::R6Class(
     initialize = function(simulationFile,
                           populationFile,
                           observedDataFile = NULL,
-                          workflowFolder = paste0("Workflow", Sys.Date()),
+                          workflowFolder = paste0("Workflow","_",format(Sys.Date(),"%Y%m%d"),"_",format(Sys.time(),"%H%M%S")),
                           inputFolder = "Inputs",
                           simulationFolder = "Simulations",
                           sensitivityFolder = "Sensitivities",
@@ -128,17 +128,17 @@ PopulationWorkflow <- R6::R6Class(
     gofPlot = NULL,
     pkParametersPlot = NULL,
     sensitivityPlot = NULL,
-    numberOfSlaves = 1,
+    numberOfCores = 1,
 
-    initialize = function(numberOfSlaves = NULL,...) {
+    initialize = function(numberOfCores = NULL,...) {
 
 
       super$initialize(...)
 
 
-      if(!is.null(numberOfSlaves)){
-        validateIsInteger(numberOfSlaves)
-        self$numberOfSlaves <- numberOfSlaves
+      if(!is.null(numberOfCores)){
+        validateIsInteger(numberOfCores)
+        self$numberOfCores <- numberOfCores
       }
 
 
@@ -154,9 +154,9 @@ PopulationWorkflow <- R6::R6Class(
     },
 
     setPopulationSimulationSettings = function(input = NULL,
-                                                   output = NULL,
-                                                   active = TRUE,
-                                                   message = NULL) {
+                                               output = NULL,
+                                               active = TRUE,
+                                               message = NULL) {
       self$populationSimulation <- Task$new(
         input = input %||% list(
           "population" = file.path(self$inputFolder, paste0(self$population, ".csv")),
@@ -175,9 +175,9 @@ PopulationWorkflow <- R6::R6Class(
 
 
     setSensitivityAnalysisSettings = function(input = NULL,
-                                                  output = NULL,
-                                                  active = TRUE,
-                                                  message = NULL) {
+                                              output = NULL,
+                                              active = TRUE,
+                                              message = NULL) {
       self$sensitivityAnalysis <- Task$new(
         input = input %||% list(
           "simulation" = file.path(self$inputFolder, paste0(self$simulation, ".pkml"))
@@ -190,9 +190,9 @@ PopulationWorkflow <- R6::R6Class(
 
 
     setDemographyPlotSettings = function(input = NULL,
-                                             output = NULL,
-                                             active = TRUE,
-                                             message = NULL) {
+                                         output = NULL,
+                                         active = TRUE,
+                                         message = NULL) {
       self$demographyPlot <- Task$new(
         input = input %||% self$populationSimulation$input,
         output = output %||% list(
@@ -207,9 +207,9 @@ PopulationWorkflow <- R6::R6Class(
 
 
     setGofPlotSettings = function(input = NULL,
-                                      output = NULL,
-                                      active = TRUE,
-                                      message = NULL) {
+                                  output = NULL,
+                                  active = TRUE,
+                                  message = NULL) {
       self$gofPlot <- Task$new(
         input = input %||% list(
           "population" = file.path(self$inputFolder, paste0(self$population, ".csv")),
@@ -231,9 +231,9 @@ PopulationWorkflow <- R6::R6Class(
 
 
     setSensitivityPlotSettings = function(input = NULL,
-                                              output = NULL,
-                                              active = TRUE,
-                                              message = NULL) {
+                                          output = NULL,
+                                          active = TRUE,
+                                          message = NULL) {
       self$sensitivityPlot <- Task$new(
         input = input %||% list(
           "sensitivityAnalysis" = self$sensitivityAnalysis$output$sensitivityAnalysis
@@ -245,91 +245,175 @@ PopulationWorkflow <- R6::R6Class(
     },
 
 
+
+
     runWorkflow = function() {
       print("Start of population workflow: ")
       print(self$reportingEngineInfo)
 
+      #simFile <- self$populationSimulation$input$simulation
+      #popFile <- self$populationSimulation$input$population
+
       if (self$populationSimulation$active) {
         if (self$populationSimulation$validateInput()) {
           # These lines can be encompassed within a unit of work funciton
-          population <- loadPopulation(self$populationSimulation$input$population)
-          simulation <- loadSimulation(self$populationSimulation$input$simulation)
+          #population <- loadPopulation(popFile)
+          #simulation <- loadSimulation(simFile,addToCache = FALSE,loadFromCache = FALSE)
 
-          populationSimulation <- ospsuite::runSimulation(simulation, population)
-          save(populationSimulation, file = self$populationSimulation$output$populationSimulation)
-        }
-      }
-      if (self$pkParametersCalculation$active) {
-        # if (self$pkParametersCalculation$validateInput()){
-        # calculatePKParameters()
-        # }
-      }
-      if (self$sensitivityAnalysis$active) {
-        if (self$sensitivityAnalysis$validateInput()) {
-          simulation <- loadSimulation(self$demographyPlot$input$simulation)
+          if (self$numberOfCores > 1){
+            print("Starting parallelization")
+            library('Rmpi')
+            mpi.spawn.Rslaves(nslaves = self$numberOfCores)
 
-          pkSensitivities <- analyzeSensitivity(simulation = simulation)
-          save(pkSensitivities, file = self$sensitivityAnalysis$output$sensitivityAnalysis)
-        }
-      }
-      if (self$demographyPlot$active) {
-        if (self$demographyPlot$validateInput()) {
-          population <- loadPopulation(self$demographyPlot$input$population)
-          simulation <- loadSimulation(self$demographyPlot$input$simulation)
+            #Check that the correct number of slaves has been spawned.
+            if(!(mpi.comm.size() - 1 == self$numberOfCores )){
+              mpi.close.Rslaves()
+              stop(paste0(self$numberOfCores," cores were not successfully spawned."))
+            }
 
-          # The last properties of plotDemograpy will be set within task settings
-          demographyPlot <- plotDemography(
-            simulation = simulation,
-            population = population,
-            parameterNames = c(StandardPath$Age, StandardPath$Weight, StandardPath$Height),
-            plotConfiguration = NULL
-          )
 
-          save(demographyPlot, file = self$demographyPlot$output$demographyResults)
-          dir.create(self$demographyPlot$output$demographyPlot)
-          for (plotName in names(demographyPlot)) {
-            ggplot2::ggsave(
-              filename = file.path(self$demographyPlot$output$demographyPlot, paste0(removeForbiddenLetters(plotName), ".png")),
-              plot = demographyPlot[[plotName]]
-            )
+            # print(self$populationSimulation$input$population)
+            print(getwd())
+            print(self$workflowFolder)
+            print(self$inputFolder)
+            print(self$outputFolder)
+            print(self$population)
+
+            mpi.bcast.cmd(library('ospsuite'))
+            mpi.bcast.cmd(library('ospsuite.reportingengine'))
+
+            tempPopDataFiles <- ospsuite::splitPopulationFile(csvPopulationFile = self$populationSimulation$input$population,
+                                                              numberOfCores = self$numberOfCores,
+                                                              outputFolder = paste0(self$inputFolder,"/"),
+                                                              outputFileName =  self$population )
+
+            wdir <- getwd()
+            inputFolder  <- self$inputFolder
+            outputFolder <- self$outputFolder
+            simFileName  <- self$simulation
+            popFileName  <- self$population
+
+            mpi.bcast.Robj2slave(obj = simFileName)
+            mpi.bcast.Robj2slave(obj = popFileName)
+            mpi.bcast.Robj2slave(obj = tempPopDataFiles)
+            mpi.bcast.Robj2slave(obj = wdir)
+            mpi.bcast.Robj2slave(obj = inputFolder)
+            mpi.bcast.Robj2slave(obj = outputFolder)
+
+            mpi.remote.exec(ospsuite.reportingengine::simulatePopulation(simFileName       = paste0(simFileName,".pkml"),
+                                                                         simFileFolder     = paste0(wdir,"/",inputFolder,"/"),
+                                                                         popDataFileName   = paste0(popFileName,"_",mpi.comm.rank(),".csv"),
+                                                                         popDataFileFolder = paste0(wdir,"/",inputFolder,"/"),
+                                                                         resultFileName    = paste0("results_",mpi.comm.rank(),".csv"),
+                                                                         resultFileFolder  = paste0(wdir,"/",outputFolder,"/")  ))
+
+
+            #mpi.bcast.cmd((print( paste0(wdir,"/",inputFolder,"/",popFileName,"_",mpi.comm.rank(),".csv") )))
+
+
+
+            #mpi.bcast.cmd((print(paste("#########",mpi.comm.rank(),"#########"))))
+            #mpi.bcast.cmd( ospsuite::loadSimulation(simFile) )
+
+
+            #            mpi.remote.exec( runpop( popDataFileName = paste0(tempPopDataFiles[mpi.comm.rank()]), popDataFolderName = theFolderName  ) ) #mpi.remote.exec and not mpi.bcast.cmd so we ensure that this process has finished before next process begins
+
+            success <- mpi.close.Rslaves()
+            print(success)
           }
+
+
+
+          ## ###############
+          ##           #pkmlFilePath <- "./data/simpleMobiEventSim.pkml"
+          ##           sim <- loadSimulation(pkmlFilePath)
+          #pathEnumList <- getEnum(self$populationSimulation$input$simulation)
+          #addOutputs( quantitiesOrPaths = pathEnumList$Organism$blockA$mol1$Concentration$path , simulation = simulation )
+          #populationSimulation <- runSimulation(simulation,population)
+          #populationSimulation$getValuesByPath(path = pathEnumList$Organism$blockA$mol1$Concentration$path,individualIds = 0)
+          #ospsuite::exportResultsToCSV( results = populationSimulation , filePath =  paste0(self$outputFolder,"/exp1.csv"))
+
+          ##populationSimulation$getValuesByPath(path = populationSimulation$allQuantityPaths[1] , individualIds = 0)  #
+
+
+          #populationSimulation <- ospsuite::runSimulation(simulation, population)
+          #save(populationSimulation, file = self$populationSimulation$output$populationSimulation)
+
         }
       }
-      if (self$gofPlot$active) {
-        if (self$gofPlot$validateInput()) {
-          load(file = self$gofPlot$input$populationSimulation)
-          population <- loadPopulation(self$gofPlot$input$population)
-          observedData <- self$gofPlot$input$observedData
 
-          gofPlot <- plotGoodnessOfFit(
-            populationSimulation = populationSimulation,
-            population = population,
-            observedData = observedData,
-            quantity = NULL,
-            plotConfiguration = NULL
-          )
-
-          save(gofPlot, file = self$gofPlot$output$gofResults)
-          dir.create(self$gofPlot$output$gofPlot)
-          for (plotName in names(gofPlot)) {
-            ggplot2::ggsave(
-              filename = file.path(self$gofPlot$output$gofPlot, paste0(removeForbiddenLetters(plotName), ".png")),
-              plot = gofPlot[[plotName]]
-            )
-          }
-        }
-      }
-      if (self$pkParametersPlot$active) {
-        self$pkParametersPlot$output <- plotPKParameters()
-      }
-      if (self$sensitivityPlot$active) {
-        if (self$sensitivityPlot$validateInput()) {
-          load(file = self$sensitivityPlot$input$sensitivityAnalysis)
-
-          sensitivityPlot <- plotSensitivity(sensitivityAnalysis)
-          save(sensitivityPlot, file = file.path(self$sensitivityPlot$output$sensitivityPlot))
-        }
-      }
+      #return(populationSimulation)
+      # if (self$pkParametersCalculation$active) {
+      #   # if (self$pkParametersCalculation$validateInput()){
+      #   # calculatePKParameters()
+      #   # }
+      # }
+      # if (self$sensitivityAnalysis$active) {
+      #   if (self$sensitivityAnalysis$validateInput()) {
+      #     simulation <- loadSimulation(self$demographyPlot$input$simulation)
+      #
+      #     pkSensitivities <- analyzeSensitivity(simulation = simulation)
+      #     save(pkSensitivities, file = self$sensitivityAnalysis$output$sensitivityAnalysis)
+      #   }
+      # }
+      # if (self$demographyPlot$active) {
+      #   if (self$demographyPlot$validateInput()) {
+      #     population <- loadPopulation(self$demographyPlot$input$population)
+      #     simulation <- loadSimulation(self$demographyPlot$input$simulation)
+      #
+      #     # The last properties of plotDemograpy will be set within task settings
+      #     demographyPlot <- plotDemography(
+      #       simulation = simulation,
+      #       population = population,
+      #       parameterNames = c(StandardPath$Age, StandardPath$Weight, StandardPath$Height),
+      #       plotConfiguration = NULL
+      #     )
+      #
+      #     save(demographyPlot, file = self$demographyPlot$output$demographyResults)
+      #     dir.create(self$demographyPlot$output$demographyPlot)
+      #     for (plotName in names(demographyPlot)) {
+      #       ggplot2::ggsave(
+      #         filename = file.path(self$demographyPlot$output$demographyPlot, paste0(removeForbiddenLetters(plotName), ".png")),
+      #         plot = demographyPlot[[plotName]]
+      #       )
+      #     }
+      #   }
+      # }
+      # if (self$gofPlot$active) {
+      #   if (self$gofPlot$validateInput()) {
+      #     load(file = self$gofPlot$input$populationSimulation)
+      #     population <- loadPopulation(self$gofPlot$input$population)
+      #     observedData <- self$gofPlot$input$observedData
+      #
+      #     gofPlot <- plotGoodnessOfFit(
+      #       populationSimulation = populationSimulation,
+      #       population = population,
+      #       observedData = observedData,
+      #       quantity = NULL,
+      #       plotConfiguration = NULL
+      #     )
+      #
+      #     save(gofPlot, file = self$gofPlot$output$gofResults)
+      #     dir.create(self$gofPlot$output$gofPlot)
+      #     for (plotName in names(gofPlot)) {
+      #       ggplot2::ggsave(
+      #         filename = file.path(self$gofPlot$output$gofPlot, paste0(removeForbiddenLetters(plotName), ".png")),
+      #         plot = gofPlot[[plotName]]
+      #       )
+      #     }
+      #   }
+      # }
+      # if (self$pkParametersPlot$active) {
+      #   self$pkParametersPlot$output <- plotPKParameters()
+      # }
+      # if (self$sensitivityPlot$active) {
+      #   if (self$sensitivityPlot$validateInput()) {
+      #     load(file = self$sensitivityPlot$input$sensitivityAnalysis)
+      #
+      #     sensitivityPlot <- plotSensitivity(sensitivityAnalysis)
+      #     save(sensitivityPlot, file = file.path(self$sensitivityPlot$output$sensitivityPlot))
+      #   }
+      # }
     },
 
     print = function() {

@@ -1,5 +1,6 @@
 #rm(list = ls())
 
+library("ospsuite.reportingengine")
 library("ospsuite")
 #library("tlf")
 #source("./R/get-enum.R")

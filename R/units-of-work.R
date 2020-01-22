@@ -2,6 +2,34 @@
 # I saw that it is possible to use the tag @family for documentation of related topics
 # We may bind all the units of work together this way
 
+
+#' @title simulatePopulation
+#' @description Simulate model for a given population
+#' @return Simulation results for population
+#' @export
+#' @import ospsuite
+simulatePopulation <- function(simFileName,
+                               simFileFolder,
+                               popDataFileName,
+                               popDataFileFolder,
+                               resultFileName,
+                               resultFileFolder){
+
+  print(paste0(simFileFolder,simFileName))
+  print(paste0(popDataFileFolder,popDataFileName))
+  print(paste0(resultFileFolder,resultFileName))
+
+  sim <- loadSimulation(paste0(simFileFolder,simFileName),
+                        addToCache = FALSE,
+                        loadFromCache = FALSE)
+  pop <- loadPopulation(paste0(popDataFileFolder,popDataFileName))
+  res<-runSimulation(sim,population = pop)
+  exportResultsToCSV(res, paste0(resultFileFolder,resultFileName))
+}
+
+
+
+
 #' @title calculatePKParameters
 #' @description Calculate PK parameters from simulated time profiles
 #' @param populationSimulation populationSimulation object
