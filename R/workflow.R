@@ -314,7 +314,7 @@ PopulationWorkflow <- R6::R6Class(
                                                                          popDataFileFolder = paste0(wdir,"/",inputFolder,"/"),
                                                                          resultFileName    = paste0("results_",mpi.comm.rank(),".csv"),
                                                                          resultFileFolder  = paste0(wdir,"/",outputFolder,"/")  ))
-            mpi.close.Rslaves()
+            mpi.close.Rslaves()  #Move to end of workflow
 
           }
 
