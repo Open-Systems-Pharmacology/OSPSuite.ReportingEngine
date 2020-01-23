@@ -14,11 +14,6 @@ simulatePopulation <- function(simFileName,
                                popDataFileFolder,
                                resultFileName,
                                resultFileFolder){
-
-  print(paste0(simFileFolder,simFileName))
-  print(paste0(popDataFileFolder,popDataFileName))
-  print(paste0(resultFileFolder,resultFileName))
-
   sim <- loadSimulation(paste0(simFileFolder,simFileName),
                         addToCache = FALSE,
                         loadFromCache = FALSE)

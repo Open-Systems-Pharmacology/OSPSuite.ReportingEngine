@@ -248,51 +248,59 @@ PopulationWorkflow <- R6::R6Class(
 
 
     runWorkflow = function() {
+
+      # #Example:
+      # library(ospsuite)
+      # library(ospsuite.reportingengine)
+      # simfile <- "./data/simpleMobiEventSim.pkml"
+      # popfile <- "./data/popData.csv"
+      # pwf <- PopulationWorkflow$new(simulationFile = simfile,
+      #                               populationFile = popfile,
+      #                               numberOfCores = 3)
+      # res<-pwf$runWorkflow()
+
+
       print("Start of population workflow: ")
       print(self$reportingEngineInfo)
 
-      #simFile <- self$populationSimulation$input$simulation
-      #popFile <- self$populationSimulation$input$population
+
+      wdir <- getwd()
+      inputFolder  <- self$inputFolder
+      outputFolder <- self$outputFolder
+      simFileName  <- self$simulation
+      popFileName  <- self$population
 
       if (self$populationSimulation$active) {
         if (self$populationSimulation$validateInput()) {
-          # These lines can be encompassed within a unit of work funciton
-          #population <- loadPopulation(popFile)
-          #simulation <- loadSimulation(simFile,addToCache = FALSE,loadFromCache = FALSE)
 
-          if (self$numberOfCores > 1){
-            print("Starting parallelization")
+
+          if (self$numberOfCores == 1) {
+            print("Starting population simulation")
+
+            simulatePopulation(simFileName       = paste0(simFileName,".pkml"),
+                               simFileFolder     = paste0(wdir,"/",inputFolder,"/"),
+                               popDataFileName   = paste0(popFileName,".csv"),
+                               popDataFileFolder = paste0(wdir,"/",inputFolder,"/"),
+                               resultFileName    = paste0("results",".csv"),
+                               resultFileFolder  = paste0(wdir,"/",outputFolder,"/"))
+
+          }
+          else if (self$numberOfCores > 1){
+            print("Starting parallel population simulation")
             library('Rmpi')
             mpi.spawn.Rslaves(nslaves = self$numberOfCores)
 
             #Check that the correct number of slaves has been spawned.
-            if(!(mpi.comm.size() - 1 == self$numberOfCores )){
+            if(!(mpi.comm.size() - 1 == self$numberOfCores )){ #-1 since mpi.comm.size() counts master
               mpi.close.Rslaves()
               stop(paste0(self$numberOfCores," cores were not successfully spawned."))
             }
-
-
-            # print(self$populationSimulation$input$population)
-            print(getwd())
-            print(self$workflowFolder)
-            print(self$inputFolder)
-            print(self$outputFolder)
-            print(self$population)
-
             mpi.bcast.cmd(library('ospsuite'))
             mpi.bcast.cmd(library('ospsuite.reportingengine'))
-
             tempPopDataFiles <- ospsuite::splitPopulationFile(csvPopulationFile = self$populationSimulation$input$population,
                                                               numberOfCores = self$numberOfCores,
                                                               outputFolder = paste0(self$inputFolder,"/"),
                                                               outputFileName =  self$population )
-
-            wdir <- getwd()
-            inputFolder  <- self$inputFolder
-            outputFolder <- self$outputFolder
-            simFileName  <- self$simulation
-            popFileName  <- self$population
-
             mpi.bcast.Robj2slave(obj = simFileName)
             mpi.bcast.Robj2slave(obj = popFileName)
             mpi.bcast.Robj2slave(obj = tempPopDataFiles)
@@ -306,43 +314,16 @@ PopulationWorkflow <- R6::R6Class(
                                                                          popDataFileFolder = paste0(wdir,"/",inputFolder,"/"),
                                                                          resultFileName    = paste0("results_",mpi.comm.rank(),".csv"),
                                                                          resultFileFolder  = paste0(wdir,"/",outputFolder,"/")  ))
+            mpi.close.Rslaves()
 
-
-            #mpi.bcast.cmd((print( paste0(wdir,"/",inputFolder,"/",popFileName,"_",mpi.comm.rank(),".csv") )))
-
-
-
-            #mpi.bcast.cmd((print(paste("#########",mpi.comm.rank(),"#########"))))
-            #mpi.bcast.cmd( ospsuite::loadSimulation(simFile) )
-
-
-            #            mpi.remote.exec( runpop( popDataFileName = paste0(tempPopDataFiles[mpi.comm.rank()]), popDataFolderName = theFolderName  ) ) #mpi.remote.exec and not mpi.bcast.cmd so we ensure that this process has finished before next process begins
-
-            success <- mpi.close.Rslaves()
-            print(success)
           }
 
 
 
-          ## ###############
-          ##           #pkmlFilePath <- "./data/simpleMobiEventSim.pkml"
-          ##           sim <- loadSimulation(pkmlFilePath)
-          #pathEnumList <- getEnum(self$populationSimulation$input$simulation)
-          #addOutputs( quantitiesOrPaths = pathEnumList$Organism$blockA$mol1$Concentration$path , simulation = simulation )
-          #populationSimulation <- runSimulation(simulation,population)
-          #populationSimulation$getValuesByPath(path = pathEnumList$Organism$blockA$mol1$Concentration$path,individualIds = 0)
-          #ospsuite::exportResultsToCSV( results = populationSimulation , filePath =  paste0(self$outputFolder,"/exp1.csv"))
-
-          ##populationSimulation$getValuesByPath(path = populationSimulation$allQuantityPaths[1] , individualIds = 0)  #
-
-
-          #populationSimulation <- ospsuite::runSimulation(simulation, population)
-          #save(populationSimulation, file = self$populationSimulation$output$populationSimulation)
-
         }
       }
 
-      #return(populationSimulation)
+
       # if (self$pkParametersCalculation$active) {
       #   # if (self$pkParametersCalculation$validateInput()){
       #   # calculatePKParameters()
