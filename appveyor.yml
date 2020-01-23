@@ -29,7 +29,7 @@ environment:
 
 build_script:
   - Rscript -e "install.packages('./tools/rClr_0.8.3.zip', repos = NULL, type = 'binary', lib = 'C:/RLibrary')"
-  - Rscript -e "install.packages('devtools', repos = 'http://cran.us.r-project.org', lib = 'C:/RLibrary')"
+  - Rscript -e "install.packages('./tools/devtools_2.2.1.zip', repos = NULL, type = 'binary', lib = 'C:/RLibrary')"
   - Rscript -e "devtools::install_github('Open-Systems-Pharmacology/TLF-Library', ref ='develop', lib = 'C:/RLibrary')"
   - Rscript -e "devtools::install_github('Open-Systems-Pharmacology/OSPSuite-R', ref ='develop', lib = 'C:/RLibrary')"
   - travis-tool.sh install_deps
