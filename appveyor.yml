@@ -28,11 +28,13 @@ environment:
 # Adapt as necessary starting from here
 
 build_script:
-  - Rscript -e "install.packages('./tools/rClr_0.8.3.zip', repos = NULL, type = 'binary')"
+  - Rscript -e "install.packages('./tools/rClr_0.8.3.zip', repos = NULL, type = 'binary', lib = 'C:/RLibrary')"
+  - Rscript -e "install.packages('devtools', repos = 'http://cran.us.r-project.org', lib = 'C:/RLibrary')"
+  - Rscript -e "devtools::install_github('Open-Systems-Pharmacology/TLF-Library', ref ='develop', lib = 'C:/RLibrary')"
+  - Rscript -e "devtools::install_github('Open-Systems-Pharmacology/OSPSuite-R', ref ='develop', lib = 'C:/RLibrary')"
   - travis-tool.sh install_deps
   - travis-tool.sh r_binary_install curl
-  - Rscript -e "install.packages('covr', repos = 'http://cran.us.r-project.org')"
-
+  - Rscript -e "install.packages('covr', repos = 'http://cran.us.r-project.org', lib = 'C:/RLibrary')"
 
 on_success:
   - Rscript -e "covr::codecov(function_exclusions = c('print.*', '\\.onLoad'))"
