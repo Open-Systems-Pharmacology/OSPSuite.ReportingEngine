@@ -18,8 +18,8 @@ BugReports:
 Depends: 
     R (>= 3.5),
 Imports: 
-    R6
-    ospsuite
+    R6,
+    ospsuite,
     tlf
 Suggests: 
     testthat (>= 2.1.0)
