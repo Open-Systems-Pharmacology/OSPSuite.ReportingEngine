@@ -4,38 +4,11 @@
 \name{UserDefinedPKFunction}
 \alias{UserDefinedPKFunction}
 \title{UserDefinedPKFunction}
+\format{An object of class \code{R6ClassGenerator} of length 24.}
+\usage{
+UserDefinedPKFunction
+}
 \description{
 UserDefinedPKFunction R6 class
 }
-\section{Methods}{
-\subsection{Public methods}{
-\itemize{
-\item \href{#method-new}{\code{UserDefinedPKFunction$new()}}
-\item \href{#method-clone}{\code{UserDefinedPKFunction$clone()}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\subsection{Method \code{new()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{UserDefinedPKFunction$new(pKParameterName, pKFunction, pKParameterUnit = NULL)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{UserDefinedPKFunction$clone(deep = FALSE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
-}
+\keyword{datasets}

@@ -11,7 +11,7 @@ removeForbiddenLetters(text, forbiddenLetters = "[[:punct:]]",
 \item{text}{character string to be evaluated}
 
 \item{forbiddenLetters}{characters to be removed if in the \code{text}.
-Default value of \code{forbiddenLetters} is \code{"[[:punct:]]"} 
+Default value of \code{forbiddenLetters} is \code{"[[:punct:]]"}
 meaning that all pointuation characters are forbidden.}
 
 \item{replacement}{character replacing the \code{forbiddenLetters}.
@@ -25,7 +25,7 @@ Trim path and extension of a file
 }
 \examples{
 \dontrun{
-text <- "!#$\%&()*+,-./:;<=>?]@[\\^_`}{|~ are all forbidden letters"
+text <- "!#$\%&()*+,-./:;<=>? are all forbidden letters"
 removeForbiddenLetters(text)
 }
 }
