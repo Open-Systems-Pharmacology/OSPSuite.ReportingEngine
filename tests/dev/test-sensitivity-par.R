@@ -34,12 +34,12 @@ if (numberOfCores>1){
   mpi.bcast.Robj2slave(obj = simFileName)
   mpi.bcast.Robj2slave(obj = simFileFolder)
   mpi.bcast.Robj2slave(obj = paramIndices)
-  mpi.bcast.cmd(ospsuite.reportingengine::performSensitivityAnalysis(simFileName,simFileFolder,paramIndices[[mpi.comm.rank()]]))
+  mpi.bcast.cmd(ospsuite.reportingengine::analyzeSensitivity(simFileName,simFileFolder,paramIndices[[mpi.comm.rank()]]))
   mpi.close.Rslaves()
 } else
 {
   #paramIndices[[1]] <- c(1,totalNumberParameters)
-  resa <- ospsuite.reportingengine::performSensitivityAnalysis(simFileName,simFileFolder)
+  resa <- ospsuite.reportingengine::analyzeSensitivity(simFileName,simFileFolder)
 }
 
 

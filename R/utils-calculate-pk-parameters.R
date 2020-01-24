@@ -1,3 +1,13 @@
+#' @title calculatePKParameters
+#' @description Calculate PK parameters from simulated time profiles
+#' @param populationSimulation populationSimulation object
+#' @return pkParametersResults
+#' @export
+#' @import ospsuite
+calculatePKParameters <- function() {}
+
+
+
 #' @title UserDefinedPKFunction
 #' @docType class
 #' @description  UserDefinedPKFunction R6 class
