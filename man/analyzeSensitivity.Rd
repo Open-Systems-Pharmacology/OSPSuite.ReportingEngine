@@ -4,8 +4,13 @@
 \alias{analyzeSensitivity}
 \title{analyzeSensitivity}
 \usage{
-analyzeSensitivity(simFileName, simFileFolder, paramRange = NULL,
-  pkParameterName = "AUC", totalSensitivityThreshold = 1)
+analyzeSensitivity(
+  simFileName,
+  simFileFolder,
+  paramRange = NULL,
+  pkParameterName = "AUC",
+  totalSensitivityThreshold = 1
+)
 }
 \arguments{
 \item{pkParameterName}{name of parameter to be analyzed}

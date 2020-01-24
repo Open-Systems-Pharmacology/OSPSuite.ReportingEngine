@@ -1,18 +1,18 @@
-#rm(list = ls())
+# rm(list = ls())
 
 library("ospsuite.reportingengine")
 library("ospsuite")
-#library("tlf")
-#source("./R/get-enum.R")
+# library("tlf")
+# source("./R/get-enum.R")
 
 pkmlFilePath <- "./data/simpleMobiEventSim.pkml"
 sim <- loadSimulation(pkmlFilePath)
 pathEnumList <- getEnum(pkmlFilePath)
-addOutputs( quantitiesOrPaths = pathEnumList$Organism$blockA$mol1$Concentration$path , simulation = sim )
+addOutputs(quantitiesOrPaths = pathEnumList$Organism$blockA$mol1$Concentration$path, simulation = sim)
 res <- runSimulation(sim)
-res$getValuesByPath(path = pathEnumList$Organism$blockA$mol1$Concentration$path,individualIds = 0)
-#ospsuite::exportResultsToCSV( results = res , filePath = "C:/Users/ahamadeh/Dropbox/rproject/workflow/exp1.csv")
-#res$getValuesByPath(path = res$allQuantityPaths[1] , individualIds = 0)  #
+res$getValuesByPath(path = pathEnumList$Organism$blockA$mol1$Concentration$path, individualIds = 0)
+# ospsuite::exportResultsToCSV( results = res , filePath = "C:/Users/ahamadeh/Dropbox/rproject/workflow/exp1.csv")
+# res$getValuesByPath(path = res$allQuantityPaths[1] , individualIds = 0)  #
 
 
 
@@ -41,6 +41,3 @@ res$getValuesByPath(path = pathEnumList$Organism$blockA$mol1$Concentration$path,
 #
 # allCon  <-ospsuite::getAllContainersMatching(path = "*" , container = indSim)
 # allCon1 <-ospsuite::getAllContainersMatching(path = "*" , container = allCon[[1]])
-
-
-

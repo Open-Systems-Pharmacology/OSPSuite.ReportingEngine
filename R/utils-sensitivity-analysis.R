@@ -9,27 +9,29 @@
 #' @export
 #' @import ospsuite
 analyzeSensitivity <- function(simFileName,
-                                       simFileFolder,
-                                       paramRange=NULL,
-                                       pkParameterName = "AUC",
-                                       totalSensitivityThreshold = 1){
-  sim<-loadSimulation(paste0(simFileFolder,simFileName))
+                               simFileFolder,
+                               paramRange = NULL,
+                               pkParameterName = "AUC",
+                               totalSensitivityThreshold = 1) {
+  sim <- loadSimulation(paste0(simFileFolder, simFileName))
   print("Getting param list...")
-  allParameters <- ospsuite::getAllParametersMatching(paths = "**" , container = sim)
+  allParameters <- ospsuite::getAllParametersMatching(paths = "**", container = sim)
   print("...done")
   outputSelections <- sim$outputSelections
 
-  if (is.null(paramRange)){
+  if (is.null(paramRange)) {
     parameters <- allParameters
   }
-  else{
+  else {
     parameters <- allParameters[ paramRange ]
   }
 
-  print(paste0("Performing sensitivity analysis for parameters ",paramRange[1]," to ",paramRange[2],"."))
+  print(paste0("Performing sensitivity analysis for parameters ", paramRange[1], " to ", paramRange[2], "."))
 
-  sensitivityAnalysis <- SensitivityAnalysis$new(simulation = sim,
-                                                 parameters = parameters )
+  sensitivityAnalysis <- SensitivityAnalysis$new(
+    simulation = sim,
+    parameters = parameters
+  )
   print("****")
   print(sensitivityAnalysis)
   print("****")
@@ -37,8 +39,10 @@ analyzeSensitivity <- function(simFileName,
 
 
   print("Running sensitivity analysis...")
-  results <- runSensitivityAnalysis(sensitivityAnalysis = sensitivityAnalysis,
-                                    sensitivityAnalysisRunOptions = sensitivityAnalysisRunOptions)
+  results <- runSensitivityAnalysis(
+    sensitivityAnalysis = sensitivityAnalysis,
+    sensitivityAnalysisRunOptions = sensitivityAnalysisRunOptions
+  )
   print("...done")
 
   pkSensitivities <- list()

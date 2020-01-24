@@ -2,10 +2,8 @@ library(ospsuite)
 library(ospsuite.reportingengine)
 
 
-receiverFunc <- function(simObject){
-
+receiverFunc <- function(simObject) {
   print(simObject$outputSelections)
-
 }
 
 simFile <- "./data/simpleMobiEventSim.pkml"

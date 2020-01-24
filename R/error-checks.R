@@ -67,10 +67,9 @@ validateIsOfType <- function(object, type, nullAllowed = FALSE) {
 validateIsInteger <- function(object, nullAllowed = FALSE) {
   validateIsOfType(object, c("numeric", "integer"), nullAllowed)
 
-  if (isFALSE(object %% 1 == 0)){
+  if (isFALSE(object %% 1 == 0)) {
     stop(messages$errorWrongType(deparse(substitute(object)), class(object)[1], "integer"))
   }
-
 }
 
 validateEnumValue <- function(enum, value) {

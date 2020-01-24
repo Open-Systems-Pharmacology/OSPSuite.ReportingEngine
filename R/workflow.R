@@ -31,14 +31,14 @@ Workflow <- R6::R6Class(
     outputFolder = NULL,
 
     initialize = function(simulationFile,
-                          populationFile,
-                          observedDataFile = NULL,
-                          workflowFolder = paste0("Workflow","_",format(Sys.Date(),"%Y%m%d"),"_",format(Sys.time(),"%H%M%S")),
-                          inputFolder = "Inputs",
-                          simulationFolder = "Simulations",
-                          sensitivityFolder = "Sensitivities",
-                          outputFolder = "Outputs",
-                          settings = NULL) {
+                              populationFile,
+                              observedDataFile = NULL,
+                              workflowFolder = paste0("Workflow", "_", format(Sys.Date(), "%Y%m%d"), "_", format(Sys.time(), "%H%M%S")),
+                              inputFolder = "Inputs",
+                              simulationFolder = "Simulations",
+                              sensitivityFolder = "Sensitivities",
+                              outputFolder = "Outputs",
+                              settings = NULL) {
 
 
       # Check of Workflow inputs
@@ -100,9 +100,9 @@ Workflow <- R6::R6Class(
     },
 
     setSensitivityAnalysisSettings = function(input = NULL,
-                                              output = NULL,
-                                              active = TRUE,
-                                              message = NULL) {
+                                                  output = NULL,
+                                                  active = TRUE,
+                                                  message = NULL) {
       self$sensitivityAnalysis <- Task$new(
         input = input %||% list(
           "simulation" = file.path(self$inputFolder, paste0(self$simulation, ".pkml"))
@@ -118,9 +118,9 @@ Workflow <- R6::R6Class(
     },
 
     setSensitivityPlotSettings = function(input = NULL,
-                                          output = NULL,
-                                          active = TRUE,
-                                          message = NULL) {
+                                              output = NULL,
+                                              active = TRUE,
+                                              message = NULL) {
       self$sensitivityPlot <- Task$new(
         input = input %||% list(
           "sensitivityAnalysis" = self$sensitivityAnalysis$output$sensitivityAnalysis
@@ -130,7 +130,5 @@ Workflow <- R6::R6Class(
         message = message %||% "Plot sensitivity analysis"
       )
     }
-
-
   )
 )

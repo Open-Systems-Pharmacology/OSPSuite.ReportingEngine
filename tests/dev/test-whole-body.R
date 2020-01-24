@@ -1,9 +1,9 @@
 library(ospsuite)
 library(tlf)
 
-#source("./R/get-enum.R")
+# source("./R/get-enum.R")
 
-#pkmlFilePath <- "./data/individualPksimSim.pkml"
+# pkmlFilePath <- "./data/individualPksimSim.pkml"
 #
 # theList <- getEnum(pkmlFilePath)
 #
@@ -17,7 +17,3 @@ library(tlf)
 # write.csv(allResultsPopTLF$data , file = "popsimdata.csv")
 #
 #
-
-
-
-

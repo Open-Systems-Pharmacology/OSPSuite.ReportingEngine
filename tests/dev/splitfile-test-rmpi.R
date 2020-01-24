@@ -1,22 +1,22 @@
-library('Rmpi')
+library("Rmpi")
 library(ospsuite)
 
 
 
-if(!(mpi.comm.size() == 0)){
+if (!(mpi.comm.size() == 0)) {
   mpi.close.Rslaves()
 }
 
 theNumberOfSlaves <- 5
 theFolderName <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/"
-theFileName   <- "popData"
+theFileName <- "popData"
 theNumberOfCommentLines <- 2
 
-#start 2 R workers (slaves) instances (once per WORKFLOW or once per Task?)
+# start 2 R workers (slaves) instances (once per WORKFLOW or once per Task?)
 mpi.spawn.Rslaves(nslaves = theNumberOfSlaves)
 
-library('ospsuite')
-library('ospsuite.reportingengine')
+library("ospsuite")
+library("ospsuite.reportingengine")
 
 # tempPopDataFiles <- splitPopDataFile(fileName = theFileName,
 #                                      folderName = theFolderName,
@@ -24,48 +24,47 @@ library('ospsuite.reportingengine')
 #                                      numberOfCommentLines = theNumberOfCommentLines)
 
 
-tempPopDataFiles <- ospsuite::splitPopulationFile(csvPopulationFile = paste0(theFolderName,theFileName,".csv"),
-                                                  numberOfCores = theNumberOfSlaves,
-                                                  outputFolder = theFolderName,
-                                                  outputFileName = theFileName)
+tempPopDataFiles <- ospsuite::splitPopulationFile(
+  csvPopulationFile = paste0(theFolderName, theFileName, ".csv"),
+  numberOfCores = theNumberOfSlaves,
+  outputFolder = theFolderName,
+  outputFileName = theFileName
+)
 
 
 
 
 
-#load ospsuite and ospsuite.reportingengine libs on the slaves
-mpi.bcast.cmd(library('ospsuite'))
-mpi.bcast.cmd(library('ospsuite.reportingengine'))
+# load ospsuite and ospsuite.reportingengine libs on the slaves
+mpi.bcast.cmd(library("ospsuite"))
+mpi.bcast.cmd(library("ospsuite.reportingengine"))
 
 
-runpop <- function(popDataFileName,popDataFolderName){
-
-  popDataFilePath <- paste0(popDataFolderName,popDataFileName)
+runpop <- function(popDataFileName, popDataFolderName) {
+  popDataFilePath <- paste0(popDataFolderName, popDataFileName)
   simfile <- c("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/simpleMobiEventSim.pkml")
-  sim <-loadSimulation(simfile,addToCache = FALSE,loadFromCache = FALSE)
+  sim <- loadSimulation(simfile, addToCache = FALSE, loadFromCache = FALSE)
   LL <- getEnum(simulationFilePath = simfile)
   print(popDataFilePath)
 
   popsim.OutputList <- c(LL$Organism$blockA$mol1$Concentration$path)
-  op <- getAllQuantitiesMatching(paths = popsim.OutputList, container = sim )
-  pop<-loadPopulation(popDataFilePath)
-  addOutputs(op,simulation = sim)
+  op <- getAllQuantitiesMatching(paths = popsim.OutputList, container = sim)
+  pop <- loadPopulation(popDataFilePath)
+  addOutputs(op, simulation = sim)
 
-  res<-runSimulation(sim,population = pop)
+  res <- runSimulation(sim, population = pop)
   print(res$count)
 
-  exportResultsToCSV(res,paste0(popDataFolderName,"results",mpi.comm.rank(),".csv"))
-
-
+  exportResultsToCSV(res, paste0(popDataFolderName, "results", mpi.comm.rank(), ".csv"))
 }
 
 mpi.bcast.Robj2slave(obj = runpop)
 mpi.bcast.Robj2slave(obj = tempPopDataFiles)
 mpi.bcast.Robj2slave(obj = theFolderName)
 
-mpi.remote.exec( runpop( popDataFileName = paste0(tempPopDataFiles[mpi.comm.rank()]), popDataFolderName = theFolderName  ) ) #mpi.remote.exec and not mpi.bcast.cmd so we ensure that this process has finished before next process begins
+mpi.remote.exec(runpop(popDataFileName = paste0(tempPopDataFiles[mpi.comm.rank()]), popDataFolderName = theFolderName)) # mpi.remote.exec and not mpi.bcast.cmd so we ensure that this process has finished before next process begins
 
-#removeTempPopFiles(folderName = theFolderName, fileNamesVec= tempPopDataFiles)
+# removeTempPopFiles(folderName = theFolderName, fileNamesVec= tempPopDataFiles)
 
 # resultsList <- list()
 # for (n in 1:theNumberOfSlaves){
@@ -80,5 +79,3 @@ mpi.remote.exec( runpop( popDataFileName = paste0(tempPopDataFiles[mpi.comm.rank
 # }
 
 mpi.close.Rslaves()
-
-

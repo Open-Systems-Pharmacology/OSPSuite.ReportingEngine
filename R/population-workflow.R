@@ -35,13 +35,11 @@ PopulationWorkflow <- R6::R6Class(
     sensitivityPlot = NULL,
     numberOfCores = 1,
 
-    initialize = function(numberOfCores = NULL,...) {
-
-
+    initialize = function(numberOfCores = NULL, ...) {
       super$initialize(...)
 
 
-      if(!is.null(numberOfCores)){
+      if (!is.null(numberOfCores)) {
         validateIsInteger(numberOfCores)
         self$numberOfCores <- numberOfCores
       }
@@ -59,9 +57,9 @@ PopulationWorkflow <- R6::R6Class(
     },
 
     setPopulationSimulationSettings = function(input = NULL,
-                                               output = NULL,
-                                               active = TRUE,
-                                               message = NULL) {
+                                                   output = NULL,
+                                                   active = TRUE,
+                                                   message = NULL) {
       self$populationSimulation <- Task$new(
         input = input %||% list(
           "population" = file.path(self$inputFolder, paste0(self$population, ".csv")),
@@ -80,9 +78,9 @@ PopulationWorkflow <- R6::R6Class(
 
 
     setDemographyPlotSettings = function(input = NULL,
-                                         output = NULL,
-                                         active = TRUE,
-                                         message = NULL) {
+                                             output = NULL,
+                                             active = TRUE,
+                                             message = NULL) {
       self$demographyPlot <- Task$new(
         input = input %||% self$populationSimulation$input,
         output = output %||% list(
@@ -97,9 +95,9 @@ PopulationWorkflow <- R6::R6Class(
 
 
     setGofPlotSettings = function(input = NULL,
-                                  output = NULL,
-                                  active = TRUE,
-                                  message = NULL) {
+                                      output = NULL,
+                                      active = TRUE,
+                                      message = NULL) {
       self$gofPlot <- Task$new(
         input = input %||% list(
           "population" = file.path(self$inputFolder, paste0(self$population, ".csv")),
@@ -132,43 +130,44 @@ PopulationWorkflow <- R6::R6Class(
 
 
       wdir <- getwd()
-      inputFolder  <- self$inputFolder
+      inputFolder <- self$inputFolder
       outputFolder <- self$outputFolder
-      simFileName  <- self$simulation
-      popFileName  <- self$population
+      simFileName <- self$simulation
+      popFileName <- self$population
       resultsFileName <- "populationSimulationResults"
 
       if (self$populationSimulation$active) {
         if (self$populationSimulation$validateInput()) {
-
-
           if (self$numberOfCores == 1) {
             print("Starting population simulation")
 
-            simulatePopulation(simFileName       = paste0(simFileName,".pkml"),
-                               simFileFolder     = paste0(wdir,"/",inputFolder,"/"),
-                               popDataFileName   = paste0(popFileName,".csv"),
-                               popDataFileFolder = paste0(wdir,"/",inputFolder,"/"),
-                               resultFileName    = paste0(resultsFileName,".csv"),
-                               resultFileFolder  = paste0(wdir,"/",outputFolder,"/"))
-
+            simulatePopulation(
+              simFileName = paste0(simFileName, ".pkml"),
+              simFileFolder = paste0(wdir, "/", inputFolder, "/"),
+              popDataFileName = paste0(popFileName, ".csv"),
+              popDataFileFolder = paste0(wdir, "/", inputFolder, "/"),
+              resultFileName = paste0(resultsFileName, ".csv"),
+              resultFileFolder = paste0(wdir, "/", outputFolder, "/")
+            )
           }
-          else if (self$numberOfCores > 1){
+          else if (self$numberOfCores > 1) {
             print("Starting parallel population simulation")
-            library('Rmpi')
+            library("Rmpi")
             mpi.spawn.Rslaves(nslaves = self$numberOfCores)
 
-            #Check that the correct number of slaves has been spawned.
-            if(!(mpi.comm.size() - 1 == self$numberOfCores )){ #-1 since mpi.comm.size() counts master
+            # Check that the correct number of slaves has been spawned.
+            if (!(mpi.comm.size() - 1 == self$numberOfCores)) { #-1 since mpi.comm.size() counts master
               mpi.close.Rslaves()
-              stop(paste0(self$numberOfCores," cores were not successfully spawned."))
+              stop(paste0(self$numberOfCores, " cores were not successfully spawned."))
             }
-            mpi.bcast.cmd(library('ospsuite'))
-            mpi.bcast.cmd(library('ospsuite.reportingengine'))
-            tempPopDataFiles <- ospsuite::splitPopulationFile(csvPopulationFile = self$populationSimulation$input$population,
-                                                              numberOfCores = self$numberOfCores,
-                                                              outputFolder = paste0(self$inputFolder,"/"),
-                                                              outputFileName =  self$population )
+            mpi.bcast.cmd(library("ospsuite"))
+            mpi.bcast.cmd(library("ospsuite.reportingengine"))
+            tempPopDataFiles <- ospsuite::splitPopulationFile(
+              csvPopulationFile = self$populationSimulation$input$population,
+              numberOfCores = self$numberOfCores,
+              outputFolder = paste0(self$inputFolder, "/"),
+              outputFileName = self$population
+            )
             mpi.bcast.Robj2slave(obj = simFileName)
             mpi.bcast.Robj2slave(obj = popFileName)
             mpi.bcast.Robj2slave(obj = tempPopDataFiles)
@@ -176,18 +175,16 @@ PopulationWorkflow <- R6::R6Class(
             mpi.bcast.Robj2slave(obj = inputFolder)
             mpi.bcast.Robj2slave(obj = outputFolder)
 
-            mpi.remote.exec(ospsuite.reportingengine::simulatePopulation(simFileName       = paste0(simFileName,".pkml"),
-                                                                         simFileFolder     = paste0(wdir,"/",inputFolder,"/"),
-                                                                         popDataFileName   = paste0(popFileName,"_",mpi.comm.rank(),".csv"),
-                                                                         popDataFileFolder = paste0(wdir,"/",inputFolder,"/"),
-                                                                         resultFileName    = paste0(resultsFileName,"_",mpi.comm.rank(),".csv"),
-                                                                         resultFileFolder  = paste0(wdir,"/",outputFolder,"/")  ))
-            mpi.close.Rslaves()  #Move to end of workflow
-
+            mpi.remote.exec(ospsuite.reportingengine::simulatePopulation(
+              simFileName = paste0(simFileName, ".pkml"),
+              simFileFolder = paste0(wdir, "/", inputFolder, "/"),
+              popDataFileName = paste0(popFileName, "_", mpi.comm.rank(), ".csv"),
+              popDataFileFolder = paste0(wdir, "/", inputFolder, "/"),
+              resultFileName = paste0(resultsFileName, "_", mpi.comm.rank(), ".csv"),
+              resultFileFolder = paste0(wdir, "/", outputFolder, "/")
+            ))
+            mpi.close.Rslaves() # Move to end of workflow
           }
-
-
-
         }
       }
 

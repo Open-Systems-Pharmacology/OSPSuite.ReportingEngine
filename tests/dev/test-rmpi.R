@@ -1,56 +1,56 @@
-library('Rmpi')
+library("Rmpi")
 # library(ospsuite)
 # library(ospsuite.reportingengine)
 
-if(!(mpi.comm.size() == 0)){
+if (!(mpi.comm.size() == 0)) {
   mpi.close.Rslaves()
 }
 
 
-#start 2 R workers (slaves) instances (once per WORKFLOW or once per Task?)
+# start 2 R workers (slaves) instances (once per WORKFLOW or once per Task?)
 mpi.spawn.Rslaves(nslaves = 2)
 
-#load ospsuite and ospsuite.reportingengine libs on the slaves
-mpi.bcast.cmd(library('ospsuite'))
-mpi.bcast.cmd(library('ospsuite.reportingengine'))
+# load ospsuite and ospsuite.reportingengine libs on the slaves
+mpi.bcast.cmd(library("ospsuite"))
+mpi.bcast.cmd(library("ospsuite.reportingengine"))
 
 
 
 # #set simulation file on the slaves
 mpi.bcast.cmd(simfile <- c("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/simpleMobiEventSim.pkml"))
-mpi.bcast.cmd(sim<-loadSimulation(simfile,addToCache = FALSE,loadFromCache = FALSE))
-mpi.bcast.cmd(LL<- getEnum(simulationFilePath = simfile))
-mpi.bcast.cmd(popsim.OutputList<-c(LL$Organism$blockA$mol1$Concentration$path))
-mpi.bcast.cmd(op <- getAllQuantitiesMatching(paths = popsim.OutputList, container = sim ))
+mpi.bcast.cmd(sim <- loadSimulation(simfile, addToCache = FALSE, loadFromCache = FALSE))
+mpi.bcast.cmd(LL <- getEnum(simulationFilePath = simfile))
+mpi.bcast.cmd(popsim.OutputList <- c(LL$Organism$blockA$mol1$Concentration$path))
+mpi.bcast.cmd(op <- getAllQuantitiesMatching(paths = popsim.OutputList, container = sim))
 
 # #set C:/Temp/humans-Population#I.csv on slave #I (#I=1,2) (sub-population-table, assuming the split before!)
-mpi.bcast.cmd(popsim.popFile <-paste("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/popData",mpi.comm.rank(),'.csv',sep = ''))
+mpi.bcast.cmd(popsim.popFile <- paste("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/popData", mpi.comm.rank(), ".csv", sep = ""))
 
 mpi.bcast.cmd(print(popsim.popFile))
 
 
-mpi.bcast.cmd(pop<-loadPopulation(popsim.popFile))
+mpi.bcast.cmd(pop <- loadPopulation(popsim.popFile))
 mpi.bcast.cmd(print(pop$allCovariateNames))
 
-mpi.bcast.cmd(addOutputs(op,simulation = sim))
+mpi.bcast.cmd(addOutputs(op, simulation = sim))
 
 
 mpi.bcast.cmd(print(sim$outputSelections$allOutputs[[1]]))
-#simprint <-  mpi.remote.exec(sim$outputSelections$allOutputs[[1]])
-#print(simprint)
+# simprint <-  mpi.remote.exec(sim$outputSelections$allOutputs[[1]])
+# print(simprint)
 
 
-mpi.bcast.cmd(res<-runSimulation(sim,population = pop))
+mpi.bcast.cmd(res <- runSimulation(sim, population = pop))
 
 # resNum <-  mpi.remote.exec(res$count)
 # print(resNum)
 
 mpi.bcast.cmd(print(res$count))
-mpi.bcast.cmd(exportResultsToCSV(res,paste("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/results",mpi.comm.rank(),".csv",sep = '')))
+mpi.bcast.cmd(exportResultsToCSV(res, paste("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/results", mpi.comm.rank(), ".csv", sep = "")))
 #
 #
 
-#mpi.bcast.cmd(popsim.sourceFile<-c("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/individualPksimSim.pkml"))
+# mpi.bcast.cmd(popsim.sourceFile<-c("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/individualPksimSim.pkml"))
 
 
 
@@ -76,11 +76,11 @@ mpi.bcast.cmd(exportResultsToCSV(res,paste("C:/Users/ahamadeh/Dropbox/GitHub/OSP
 
 
 
-#close R slaves
+# close R slaves
 mpi.close.Rslaves()
 
-#close MPI (at the end of the workflow)
-#mpi.exit()
+# close MPI (at the end of the workflow)
+# mpi.exit()
 
 
 

@@ -8,11 +8,12 @@ simulatePopulation <- function(simFileName,
                                popDataFileName,
                                popDataFileFolder,
                                resultFileName,
-                               resultFileFolder){
-  sim <- loadSimulation(paste0(simFileFolder,simFileName),
-                        addToCache = FALSE,
-                        loadFromCache = FALSE)
-  pop <- loadPopulation(paste0(popDataFileFolder,popDataFileName))
-  res<-runSimulation(sim,population = pop)
-  exportResultsToCSV(res, paste0(resultFileFolder,resultFileName))
+                               resultFileFolder) {
+  sim <- loadSimulation(paste0(simFileFolder, simFileName),
+    addToCache = FALSE,
+    loadFromCache = FALSE
+  )
+  pop <- loadPopulation(paste0(popDataFileFolder, popDataFileName))
+  res <- runSimulation(sim, population = pop)
+  exportResultsToCSV(res, paste0(resultFileFolder, resultFileName))
 }

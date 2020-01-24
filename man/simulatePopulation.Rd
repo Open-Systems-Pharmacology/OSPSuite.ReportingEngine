@@ -4,8 +4,14 @@
 \alias{simulatePopulation}
 \title{simulatePopulation}
 \usage{
-simulatePopulation(simFileName, simFileFolder, popDataFileName,
-  popDataFileFolder, resultFileName, resultFileFolder)
+simulatePopulation(
+  simFileName,
+  simFileFolder,
+  popDataFileName,
+  popDataFileFolder,
+  resultFileName,
+  resultFileFolder
+)
 }
 \value{
 Simulation results for population

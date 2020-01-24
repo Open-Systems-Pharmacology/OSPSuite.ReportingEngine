@@ -2,7 +2,7 @@ library(ospsuite)
 library(ospsuite.reportingengine)
 simFile <- "./data/simpleMobiEventSim.pkml"
 sim <- loadSimulation(simFile)
-save(sim,file = "./data/testLoadSim.Rdata")
+save(sim, file = "./data/testLoadSim.Rdata")
 rm(list = ls())
 
 library(ospsuite)
