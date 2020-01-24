@@ -24,7 +24,14 @@ Workflow Task for Reporting Engine
 
 \item{\code{observedData}}{List of observed data (use Nonmem format ?)}
 
-\item{\code{outputFolder}}{path where output is saved}
+\item{\code{outputFolder}}{path where output is saved
+#' @section Methods:
+#' \describe{
+\item{setPKParametersCalculationSettings()}{Define PK parameters calculation task settings}
+\item{setSensitivityAnalysisSettings()}{Define sensitivity analysis task settings}
+\item{setpkParametersPlotSettings()}{Define PK parameters plot settings}
+\item{setSensitivityPlotSettings()}{Define sensitivity plot settings}
+}}
 }}
 
 \keyword{datasets}
