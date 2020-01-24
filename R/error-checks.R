@@ -62,6 +62,16 @@ validateIsOfType <- function(object, type, nullAllowed = FALSE) {
   stop(messages$errorWrongType(objectName, class(object)[1], objectTypes))
 }
 
+
+
+validateIsInteger <- function(object, nullAllowed = FALSE) {
+  validateIsOfType(object, c("numeric", "integer"), nullAllowed)
+
+  if (isFALSE(object %% 1 == 0)) {
+    stop(messages$errorWrongType(deparse(substitute(object)), class(object)[1], "integer"))
+  }
+}
+
 validateEnumValue <- function(enum, value) {
   if (value %in% names(enum)) {
     return()
@@ -85,6 +95,9 @@ validateIsString <- function(object, nullAllowed = FALSE) {
 validateIsNumeric <- function(object, nullAllowed = FALSE) {
   validateIsOfType(object, c("numeric", "integer"), nullAllowed)
 }
+
+
+
 
 validateIsLogical <- function(object, nullAllowed = FALSE) {
   validateIsOfType(object, "logical", nullAllowed)
@@ -159,4 +172,24 @@ checkOverwriteExisitingPath <- function(path, overwrite) {
     warning(messages$warningOverwriting(path))
     unlink(path, recursive = TRUE)
   }
+}
+
+#' Check if the provided path has required extension
+#'
+#' @param path (character) file or path name to be checked
+#' @param extension extension of the file required after "."
+#'
+#' @return TRUE if the path includes the extension
+isFileExtension <- function(path, extension) {
+  return(grep(pattern = paste0(".", extension), x = path) == 1)
+}
+
+validateIsFileExtension <- function(path, extension, nullAllowed = FALSE) {
+  if (nullAllowed && is.null(path)) {
+    return()
+  }
+  if (isFileExtension(path, extension)) {
+    return()
+  }
+  stop(messages$errorExtension(path, extension))
 }

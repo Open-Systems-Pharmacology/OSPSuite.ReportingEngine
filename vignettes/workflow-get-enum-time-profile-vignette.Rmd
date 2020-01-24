@@ -1,0 +1,112 @@
+---
+title: "Workflow notes"
+author: "OSPSuiteR 2019"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{workflow-vignette}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+--- 
+
+```{r, results='asis', echo=FALSE} 
+library(ospsuite)
+library(tlf)
+library(ospsuite.reportingengine)
+#source("./R/get-enum.R")
+```
+
+# Simple simulation from MoBi
+
+Load a simulation:
+```{r, results='asis'}
+pkmlFilePath <- "../data/simpleMobiEventSim.pkml"
+sim <- loadSimulation(pkmlFilePath) 
+```
+
+Print possible paths to simulate:
+Load a simulation:
+```{r}
+sim$outputSelections
+```
+
+
+If another path is required, it can be added using the `addOutputs`:
+```{r}
+pathEnumList <- getEnum(pkmlFilePath)
+addOutputs(pathEnumList$Organism$blockA$mol1$Concentration$path,simulation = sim)
+sim$outputSelections
+```
+
+
+Run a simulation:
+```{r}
+res <- runSimulation(sim)
+```
+
+Export results of a simulation:
+```{r, results='asis'}
+ospsuite::exportResultsToCSV( results = res , filePath = "../data/exp1.csv")
+```
+
+Extract the results from the simulation results:
+```{r}
+timeValues    <- res$timeValues
+blockAResults <- res$getValuesByPath(path = res$allQuantityPaths[1] , individualIds = 0)
+blockBResults <- res$getValuesByPath(path = res$allQuantityPaths[2] , individualIds = 0)
+print(head(timeValues))
+print(head(blockAResults))
+print(head(blockBResults))
+```
+
+Can also get a list which has a tree structure for each output:
+```{r}
+allResults <- getOutputValues(simulationResults = res,
+                              quantitiesOrPaths = res$allQuantityPaths[c(1,2)],
+                              individualIds = 0)
+```
+
+
+# Simulation from PKSim population model
+
+Load a PKSim simulation:
+```{r}
+pkmlFilePath <- "../data/individualPksimSim.pkml"
+indSim <- loadSimulation(pkmlFilePath) 
+```
+
+
+Load a population from a population datafile:
+```{r}
+popDataFilePath <- "../data/popData.csv"
+population <- loadPopulation(csvPopulationFile = popDataFilePath)
+```
+
+
+Run a population simulation:
+```{r}
+popRes <- runSimulation(simulation = indSim , population = population)
+```
+
+
+Get population results in TLF (dataframe) format:
+```{r}
+allResultsPopTLF <- getOutputValuesTLF(simulationResults = popRes,
+                                       population = population,
+                                       quantitiesOrPaths = popRes$allQuantityPaths[c(1,2)],
+                                       individualIds = seq(0,5)) 
+print(head(allResultsPopTLF$data))
+```
+
+
+```{r, fig.height=5, fig.width=7.5}
+wfGrouping <- Grouping$new( group = "IndividualId" )
+wfDataMapping <- TimeProfileDataMapping$new(x = "Time",
+                                            y = popRes$allQuantityPaths[1],
+                                            groupMapping = GroupMapping$new(color = wfGrouping))
+wfTimeProfilePlot <- plotTimeProfile(data = allResultsPopTLF$data, metaData = allResultsPopTLF$metaData, dataMapping = wfDataMapping)
+show(wfTimeProfilePlot)
+```
+
+
+

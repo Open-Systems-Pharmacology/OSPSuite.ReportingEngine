@@ -48,5 +48,13 @@ messages <- list(
 
   warningOverwriting = function(overwrittenPath) {
     paste0("Overwriting path: '", overwrittenPath, "'.")
+  },
+
+  errorExtension = function(path, extension) {
+    paste0("File extension: '.", extension, "' is required. File name was : '", path, "'.")
+  },
+
+  errorTaskInputDoesNotExist = function(input) {
+    paste0("Task input file '", input, "' does not exist.")
   }
 )
