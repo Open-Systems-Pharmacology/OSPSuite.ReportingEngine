@@ -1,0 +1,1299 @@
+﻿"QuantityPath","Parameter","PKParameter","Value"
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (lipid),C_max,-0.00184840632370199
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (protein),C_max,-0.000215849534644335
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (water),C_max,-0.00471092758311943
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Large intestinal transit time,C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Volume,C_max,-0.0316433528403031
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Specific blood flow rate,C_max,-0.0256969968880288
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (water),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,C_max,-0.000175100083817229
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,C_max,-0.000349204410377404
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,C_max,-0.000250675506403842
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (water),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Fraction of periportal zone,C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (lipid),C_max,-0.0173040142906996
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (protein),C_max,-0.00251507857341789
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (water),C_max,-0.0373718422111816
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Volume,C_max,-0.0752297671572294
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Specific blood flow rate,C_max,-0.0140338197973496
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (lipid),C_max,-0.000695370484508927
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (protein),C_max,-0.000693532163418982
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (water),C_max,-0.0111858519132276
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Volume,C_max,-0.0293379194678509
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Peripheral blood flow fraction,C_max,0.123645016929405
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Volume,C_max,0.17105945406153
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (lipid),C_max,-0.00386366581855382
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (protein),C_max,-0.00286760217465215
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (water),C_max,-0.0481402675758049
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Specific blood flow rate,C_max,-0.144457237230128
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Pancreas-Vf (lipid),C_max,-0.000480006062374438
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (lipid),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (protein),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (water),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Large intestinal transit time,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Volume,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Specific blood flow rate,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (water),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (water),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Fraction of periportal zone,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (lipid),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (protein),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (water),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Volume,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Specific blood flow rate,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (lipid),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (protein),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (water),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Volume,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Peripheral blood flow fraction,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Volume,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (lipid),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (protein),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (water),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Specific blood flow rate,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Pancreas-Vf (lipid),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (lipid),C_tEnd,-0.000725432907408255
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (protein),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (water),C_tEnd,-0.00184919043445323
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Large intestinal transit time,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Volume,C_tEnd,0.0016865518060255
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Specific blood flow rate,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (water),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (water),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Fraction of periportal zone,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (lipid),C_tEnd,-0.00438170006524501
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (protein),C_tEnd,-0.000637069509552552
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (water),C_tEnd,-0.00946509426060989
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Volume,C_tEnd,0.00940074968006503
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Specific blood flow rate,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (lipid),C_tEnd,-0.000112899212131092
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (protein),C_tEnd,-0.000112899212131092
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (water),C_tEnd,-0.00181905381972867
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Volume,C_tEnd,0.00424211088481962
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Peripheral blood flow fraction,C_tEnd,0.287007827506375
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Volume,C_tEnd,0.185651305020971
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (lipid),C_tEnd,-0.013857285055927
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (protein),C_tEnd,-0.0102825095446256
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (water),C_tEnd,-0.172442140284713
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Specific blood flow rate,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Pancreas-Vf (lipid),C_tEnd,-0.00041482543942157
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (lipid),AUC,-0.000761279309385817
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (protein),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (water),AUC,-0.00193896277702263
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Large intestinal transit time,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Volume,AUC,0.00153253325201408
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Specific blood flow rate,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (water),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (water),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Fraction of periportal zone,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (lipid),AUC,-0.00461213506230114
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (protein),AUC,-0.000669653917300344
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (water),AUC,-0.00996289318739022
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Volume,AUC,0.0083052503762408
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Specific blood flow rate,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (lipid),AUC,-0.000118283261459088
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (protein),AUC,-0.000118283261459088
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (water),AUC,-0.00190830328487329
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Volume,AUC,0.00413397056429825
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Peripheral blood flow fraction,AUC,0.285818128245654
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Volume,AUC,0.175868054962995
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (lipid),AUC,-0.014378595649318
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (protein),AUC,-0.0106696209627598
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (water),AUC,-0.178919233482095
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Specific blood flow rate,AUC,0.000202582153021349
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Pancreas-Vf (lipid),AUC,-0.000436176882554607
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,AUC_inf,-0.00777280549978523
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),AUC_inf,-0.000102405784407249
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (lipid),AUC_inf,-0.00144722497254245
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (protein),AUC_inf,-0.00404777444564404
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (water),AUC_inf,-0.00368863157875612
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Large intestinal transit time,AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Volume,AUC_inf,0.00336254348219803
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Specific blood flow rate,AUC_inf,0.0709009545292715
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),AUC_inf,-0.0077625236286895
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (water),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),AUC_inf,-0.00776595091905474
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),AUC_inf,-0.00387923847424961
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),AUC_inf,-0.00351272486844366
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),AUC_inf,-0.00775934409425428
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),AUC_inf,-0.00387923847424961
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),AUC_inf,0.00424170539986527
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,AUC_inf,0.00422820270167931
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),AUC_inf,-0.00776937820941999
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),AUC_inf,-0.00388609305498009
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),AUC_inf,-0.00387923847424961
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (water),AUC_inf,0.0123921735223072
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Fraction of periportal zone,AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (lipid),AUC_inf,-0.00485287798656352
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (protein),AUC_inf,-0.00127036853116493
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (water),AUC_inf,-0.00257050906658697
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Volume,AUC_inf,0.0269015866372343
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Specific blood flow rate,AUC_inf,0.00814662790552669
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (lipid),AUC_inf,-0.000225375311005954
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (protein),AUC_inf,-0.00798261347985507
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (water),AUC_inf,-0.0113842817526684
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Volume,AUC_inf,0.0166172999211888
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Peripheral blood flow fraction,AUC_inf,0.282628175911005
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Volume,AUC_inf,0.430601623247302
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (lipid),AUC_inf,0.00459981595037811
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (protein),AUC_inf,0.00357414769276052
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (water),AUC_inf,-0.0176532913425572
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Specific blood flow rate,AUC_inf,-0.00384449070506465
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Pancreas-Vf (lipid),AUC_inf,-0.000827236404001059
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,MRT,-0.00780885794278366
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (lipid),MRT,-0.000725215553769367
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (protein),MRT,-0.00398539629317036
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (water),MRT,-0.00184916320840302
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Large intestinal transit time,MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Volume,MRT,0.00168757329000521
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Specific blood flow rate,MRT,0.0713152471363393
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),MRT,-0.00780408924474739
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (water),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),MRT,-0.00780587032473684
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),MRT,-0.00390085244786463
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),MRT,-0.00352208567914016
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),MRT,-0.0078020208937919
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),MRT,-0.00390085244786463
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),MRT,0.00427812540756568
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,MRT,0.00427125963147731
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),MRT,-0.00780768013182289
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),MRT,-0.00390444333494013
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),MRT,-0.00390085244786463
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (water),MRT,0.0124729031661282
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Fraction of periportal zone,MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (lipid),MRT,-0.000469228395930629
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (protein),MRT,-0.00063682227751869
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (water),MRT,0.00693520948086114
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Volume,MRT,0.0176122669298835
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Specific blood flow rate,MRT,0.00819147414245306
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (lipid),MRT,-0.000113098579330164
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (protein),MRT,-0.00791480347505941
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (water),MRT,-0.00961964175012367
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Volume,MRT,0.0124472498688608
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Peripheral blood flow fraction,MRT,-0.00440656425648241
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Volume,MRT,0.246387538874943
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (lipid),MRT,0.0185675578003547
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (protein),MRT,0.0139395650832483
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (water),MRT,0.155780035472219
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Specific blood flow rate,MRT,-0.00388476527376635
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Pancreas-Vf (lipid),MRT,-0.000414560731093117
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,Thalf,-0.00780807994169122
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (lipid),Thalf,-0.000725192563559751
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (protein),Thalf,-0.00398452944630285
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (water),Thalf,-0.00184912398031126
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Large intestinal transit time,Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Volume,Thalf,0.00168644615243733
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Specific blood flow rate,Thalf,0.0713026947089098
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),Thalf,-0.00780292115677775
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (water),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),Thalf,-0.0078046407517489
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),Thalf,-0.00390016570265758
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),Thalf,-0.00352110896058149
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),Thalf,-0.00780099438168958
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),Thalf,-0.00390016570265758
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),Thalf,0.0042772749516338
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,Thalf,0.00427083164999488
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),Thalf,-0.00780636034672006
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),Thalf,-0.00390426786897432
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),Thalf,-0.00390016570265758
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (water),Thalf,0.012470440576806
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Fraction of periportal zone,Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (lipid),Thalf,-0.000470878969933602
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (protein),Thalf,-0.000636768089621146
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (water),Thalf,0.00693121081447061
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Volume,Thalf,0.0176028514613864
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Specific blood flow rate,Thalf,0.00819034797558091
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (lipid),Thalf,-0.000112892445757138
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (protein),Thalf,-0.00791280949083827
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (water),Thalf,-0.00961815046994666
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Volume,Thalf,0.0124443773180865
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Peripheral blood flow fraction,Thalf,-0.00441204561774689
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Volume,Thalf,0.246287021533058
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (lipid),Thalf,0.0185613909907312
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (protein),Thalf,0.0139343752835778
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (water),Thalf,0.155715125681674
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Specific blood flow rate,Thalf,-0.00388340483119171
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Pancreas-Vf (lipid),Thalf,-0.00041508536442361
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (lipid),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (protein),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (water),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Large intestinal transit time,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Volume,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Specific blood flow rate,FractionAucLastToInf,0.000385220617690697
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (water),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (water),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Fraction of periportal zone,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (lipid),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (protein),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (water),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Volume,FractionAucLastToInf,0.000102575665060697
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Specific blood flow rate,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (lipid),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (protein),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (water),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Volume,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Peripheral blood flow fraction,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Volume,FractionAucLastToInf,0.00140348561878987
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (lipid),FractionAucLastToInf,0.000104733260118941
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (protein),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (water),FractionAucLastToInf,0.000889273779874
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Specific blood flow rate,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Pancreas-Vf (lipid),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,CL,0.0077849168577001
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),CL,0.000102660279109608
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (lipid),CL,0.00144724670396058
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (protein),CL,0.00405418240700177
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (water),CL,0.00368879895207001
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Large intestinal transit time,CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Volume,CL,-0.00336262791144007
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Specific blood flow rate,CL,-0.0699097439146145
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),CL,0.00777436944440874
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (water),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),CL,0.00777758268391402
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),CL,0.00388511517811622
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),CL,0.00351864248945385
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),CL,0.00777119251269447
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),CL,0.00388511517811622
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),CL,-0.00424819308831819
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,CL,-0.00423484997511827
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),CL,0.00778172177209032
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),CL,0.0038921044278876
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),CL,0.00388511517811622
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (water),CL,-0.0124112918972847
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Fraction of periportal zone,CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (lipid),CL,0.004852772270491
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (protein),CL,0.00127086345518446
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (water),CL,0.00257304238012384
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Volume,CL,-0.026900896214252
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Specific blood flow rate,CL,-0.00815928649090935
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (lipid),CL,0.000225271689384814
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (protein),CL,0.00799477588979683
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (water),CL,0.0113995753005069
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Volume,CL,-0.0166178581031982
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Peripheral blood flow fraction,CL,-0.28249400249754
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Volume,CL,-0.430521901258929
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (lipid),CL,-0.00460046943069165
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (protein),CL,-0.00357364879284946
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (water),CL,0.017658439393837
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Specific blood flow rate,CL,0.00385080431560213
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Pancreas-Vf (lipid),CL,0.000827254864499686
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (lipid),Vss,0.000721778305514352
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (protein),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (water),Vss,0.00183983734675926
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Large intestinal transit time,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Volume,Vss,-0.00167531242062049
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Specific blood flow rate,Vss,0.000408739972851462
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (water),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (water),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Fraction of periportal zone,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (lipid),Vss,0.00438132923121117
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (protein),Vss,0.000633706198169485
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (water),Vss,0.00950977521646349
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Volume,Vss,-0.00928890374042396
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Specific blood flow rate,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (lipid),Vss,0.000112360620159228
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (protein),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (water),Vss,0.00176529191117628
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Volume,Vss,-0.00417036214872563
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Peripheral blood flow fraction,Vss,-0.286919169439255
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Volume,Vss,-0.184189399583063
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (lipid),Vss,0.0139688696861091
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (protein),Vss,0.0103659277942412
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (water),Vss,0.173451934538048
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Specific blood flow rate,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Pancreas-Vf (lipid),Vss,0.000412379749987908
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (lipid),Vd,0.000721649217596343
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (protein),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Vf (water),Vd,0.00183948119635612
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Large intestinal transit time,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Volume,Vd,-0.00167659925745431
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Specific blood flow rate,Vd,0.000396095284289692
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Vf (water),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Vf (water),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Fraction of periportal zone,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (lipid),Vd,0.00438029948022641
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (protein),Vd,0.000633577501116029
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Vf (water),Vd,0.0095059894015819
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Volume,Vd,-0.00929789941433182
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Liver-Specific blood flow rate,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (lipid),Vd,0.00011235529663023
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (protein),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Vf (water),Vd,0.00176670043740536
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Lung-Volume,Vd,-0.00417315424321272
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Peripheral blood flow fraction,Vd,-0.286925265567542
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Volume,Vd,-0.18428919196632
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (lipid),Vd,0.0139627611648308
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (protein),Vd,0.0103614957313735
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Vf (water),Vd,0.173387316595112
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Muscle-Specific blood flow rate,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Organism-Pancreas-Vf (lipid),Vd,0.000412296001306134
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,C_max,0.000201456847459501
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),C_max,-0.000101052378780339
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (lipid),C_max,0.00664511717670149
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (protein),C_max,0.000779241478686349
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (water),C_max,0.016981032647758
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Large intestinal transit time,C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Volume,C_max,-0.0228567781763145
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Specific blood flow rate,C_max,-0.205939586270526
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,C_max,0.112352168511915
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),C_max,-0.00128765653508044
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (water),C_max,-0.00342588945098689
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,C_max,-0.00345349042129706
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,C_max,-0.00779785723171338
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,C_max,-0.00398445274921214
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,C_max,-0.00452781175706308
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,C_max,-0.00182082175733952
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (water),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Fraction of periportal zone,C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (lipid),C_max,-0.0272641434455686
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (protein),C_max,-0.00396285574583955
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (water),C_max,-0.0588823723530712
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Volume,C_max,-0.102488212355559
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Specific blood flow rate,C_max,0.010437378192901
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (lipid),C_max,-0.000839885864156576
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (protein),C_max,-0.0008374238057721
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (water),C_max,-0.0135063123721457
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Volume,C_max,0.0156889055329795
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Peripheral blood flow fraction,C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Volume,C_max,0.0948218592773815
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (lipid),C_max,-0.00099238230497042
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (protein),C_max,-0.000736371426991762
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (water),C_max,-0.0123675455783159
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Specific blood flow rate,C_max,-0.286970830223364
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Pancreas-Vf (lipid),C_max,-0.000938065841488361
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (lipid),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (protein),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (water),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Large intestinal transit time,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Volume,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Specific blood flow rate,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (water),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (water),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Fraction of periportal zone,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (lipid),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (protein),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (water),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Volume,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Specific blood flow rate,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (lipid),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (protein),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (water),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Volume,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Peripheral blood flow fraction,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Volume,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (lipid),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (protein),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (water),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Specific blood flow rate,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Pancreas-Vf (lipid),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (lipid),C_tEnd,-0.000724543986131538
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (protein),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (water),C_tEnd,-0.0018474902192205
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Large intestinal transit time,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Volume,C_tEnd,0.00168624250221267
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Specific blood flow rate,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (water),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (water),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Fraction of periportal zone,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (lipid),C_tEnd,-0.00438207744937365
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (protein),C_tEnd,-0.000636714334100176
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (water),C_tEnd,-0.0094645927563312
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Volume,C_tEnd,0.00940144801144406
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Specific blood flow rate,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (lipid),C_tEnd,-0.000112688192754572
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (protein),C_tEnd,-0.000112688192754572
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (water),C_tEnd,-0.00181869598404053
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Volume,C_tEnd,0.00424253392973766
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Peripheral blood flow fraction,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Volume,C_tEnd,0.185661871524579
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (lipid),C_tEnd,-0.0138580432051277
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (protein),C_tEnd,-0.0102830146308284
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (water),C_tEnd,-0.172448645553904
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Specific blood flow rate,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Pancreas-Vf (lipid),C_tEnd,-0.000415157887328476
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (lipid),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (protein),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (water),AUC,-0.000235406772251453
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Large intestinal transit time,AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Volume,AUC,0.0017239823149257
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Specific blood flow rate,AUC,-0.00543995760429555
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,AUC,0.00212787209082792
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (water),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,AUC,-0.000147259904619132
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,AUC,-0.000331384095567378
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,AUC,-0.000165701909818555
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,AUC,-0.000198798898828856
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (water),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Fraction of periportal zone,AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (lipid),AUC,-0.00463188219144513
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (protein),AUC,-0.000673241672162449
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (water),AUC,-0.0100060797472542
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Volume,AUC,0.00851912157829796
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Specific blood flow rate,AUC,0.000400615580326708
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (lipid),AUC,-0.00011729904269622
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (protein),AUC,-0.000117082077929168
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (water),AUC,-0.00188925029521015
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Volume,AUC,0.00498829613150242
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Peripheral blood flow fraction,AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Volume,AUC,0.175288123293424
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (lipid),AUC,-0.0142517054811375
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (protein),AUC,-0.0105749613664646
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (water),AUC,-0.17733591566114
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Specific blood flow rate,AUC,-0.00243136635179424
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Pancreas-Vf (lipid),AUC,-0.000438683034909473
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,AUC_inf,-0.00475712399000479
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),AUC_inf,-0.010047573707985
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),AUC_inf,0.00104986847849693
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),AUC_inf,0.0114864123698222
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (lipid),AUC_inf,0.0154162068715872
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (protein),AUC_inf,-0.00490967906120629
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (water),AUC_inf,-0.0194754661389718
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Large intestinal transit time,AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Volume,AUC_inf,-0.00665063874037721
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Specific blood flow rate,AUC_inf,0.0648888319705848
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,AUC_inf,-0.00474234290365254
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),AUC_inf,0.00052194511417909
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),AUC_inf,0.0168558133820661
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (water),AUC_inf,0.00630963167397584
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,AUC_inf,0.00102318573819871
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),AUC_inf,0.00104531623297845
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),AUC_inf,0.0115875490051972
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),AUC_inf,0.00103226280606994
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,AUC_inf,0.000985396615761959
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),AUC_inf,0.00577600429117697
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),AUC_inf,0.00105102025145945
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),AUC_inf,0.00100357817467019
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,AUC_inf,-0.0100444200439209
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),AUC_inf,0.0168473122006761
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),AUC_inf,0.0115875490051972
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),AUC_inf,0.00102768313738566
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,AUC_inf,0.0010129294741992
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),AUC_inf,0.00104191576042246
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),AUC_inf,0.0115875490051972
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),AUC_inf,0.000496359300511809
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,AUC_inf,0.00578028230503774
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),AUC_inf,-0.00474917127193029
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),AUC_inf,0.0115875490051972
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (water),AUC_inf,-0.00476167623552332
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Fraction of periportal zone,AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (lipid),AUC_inf,-0.0024064376430118
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (protein),AUC_inf,0.0045252611233845
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (water),AUC_inf,-0.00674881367384861
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Volume,AUC_inf,0.013985979083803
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Specific blood flow rate,AUC_inf,-0.00473781808129982
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (lipid),AUC_inf,0.000829715303662186
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (protein),AUC_inf,0.000829715303662202
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (water),AUC_inf,0.00269942674614264
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Volume,AUC_inf,0.0095011945531011
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Peripheral blood flow fraction,AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Volume,AUC_inf,0.414133378599839
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (lipid),AUC_inf,0.000303629291451216
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (protein),AUC_inf,0.00214813884458525
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (water),AUC_inf,0.00109374554373557
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Specific blood flow rate,AUC_inf,-0.0099445722973373
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Pancreas-Vf (lipid),AUC_inf,-0.00556843834943257
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,MRT,-0.0047764904546307
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),MRT,-0.0100854250993288
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),MRT,0.00105775958663675
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),MRT,0.0116032616814796
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (lipid),MRT,0.0162246511747854
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (protein),MRT,-0.00485300427807132
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (water),MRT,-0.0177474012281519
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Large intestinal transit time,MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Volume,MRT,-0.00838167185487572
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Specific blood flow rate,MRT,0.0653283204187617
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,MRT,-0.00478560735786918
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),MRT,0.000527701128257955
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),MRT,0.016951873316284
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (water),MRT,0.00635081775497875
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,MRT,0.00104571732192302
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),MRT,0.0010548342251615
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),MRT,0.0116538448735908
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),MRT,0.00104807465204386
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,MRT,0.00102776753112329
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),MRT,0.00581808954923417
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),MRT,0.00105778798820447
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),MRT,0.00103424308856369
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,MRT,-0.0100813068720092
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),MRT,0.0169474710732873
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),MRT,0.0116538448735908
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),MRT,0.00104600133760022
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,MRT,0.00104100266168133
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),MRT,0.00105307332796279
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),MRT,0.0116538448735908
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),MRT,0.00051389796634549
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,MRT,0.00582075929659995
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),MRT,-0.00477237222731114
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),MRT,0.0116538448735908
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (water),MRT,-0.00477884778475157
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Fraction of periportal zone,MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (lipid),MRT,0.00198279864731285
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (protein),MRT,0.0051908693276815
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (water),MRT,0.00271666675565824
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Volume,MRT,0.00463002356989303
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Specific blood flow rate,MRT,-0.00476856641723653
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (lipid),MRT,0.000947447897608014
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (protein),MRT,0.000947447897608034
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (water),MRT,0.00454121186762914
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Volume,MRT,0.00528976358648633
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Peripheral blood flow fraction,MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Volume,MRT,0.230276900516465
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (lipid),MRT,0.0142309179238999
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (protein),MRT,0.0124879989175595
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (water),MRT,0.174276734196885
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Specific blood flow rate,MRT,-0.0100128874953691
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Pancreas-Vf (lipid),MRT,-0.00518163881817215
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,Thalf,-0.00477488790031271
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),Thalf,-0.0100830727341967
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),Thalf,0.00105764277020103
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),Thalf,0.0116010108143999
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (lipid),Thalf,0.0162247132535554
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (protein),Thalf,-0.00485149454232978
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (water),Thalf,-0.0177344785930727
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Large intestinal transit time,Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Volume,Thalf,-0.00837988586511594
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Specific blood flow rate,Thalf,0.0652856141411109
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,Thalf,-0.00477361795063222
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),Thalf,0.000527561676949704
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),Thalf,0.016948830368151
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (water),Thalf,0.00634970743636649
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,Thalf,0.00104449264609009
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),Thalf,0.00105551253202732
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),Thalf,0.0116519112169166
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),Thalf,0.00104893746997182
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,Thalf,0.00102644707079142
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),Thalf,0.00581684064704181
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),Thalf,0.00105807291444765
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),Thalf,0.00103429208252738
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,Thalf,-0.0100805123517764
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),Thalf,0.0169441807136757
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),Thalf,0.0116519112169166
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),Thalf,0.00104617225695784
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,Thalf,0.00103959719490238
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),Thalf,0.00105340277691295
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),Thalf,0.0116519112169166
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),Thalf,0.000514616383432369
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,Thalf,0.00581897088521556
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),Thalf,-0.00477064790702459
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),Thalf,0.0116519112169166
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (water),Thalf,-0.00477701813848647
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Fraction of periportal zone,Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (lipid),Thalf,0.00198075280650686
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (protein),Thalf,0.00518944453875755
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (water),Thalf,0.00271273541589786
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Volume,Thalf,0.00462470610906427
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Specific blood flow rate,Thalf,-0.00476599825254925
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (lipid),Thalf,0.00094687038516671
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (protein),Thalf,0.000946870385166729
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (water),Thalf,0.00454025445531119
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Volume,Thalf,0.00529265867488696
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Peripheral blood flow fraction,Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Volume,Thalf,0.230174938436117
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (lipid),Thalf,0.0142259353548092
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (protein),Thalf,0.0124837487407015
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (water),Thalf,0.174215916680813
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Specific blood flow rate,Thalf,-0.0100241839385285
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Pancreas-Vf (lipid),Thalf,-0.00518100551830007
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (lipid),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (protein),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (water),FractionAucLastToInf,-0.000105237299622878
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Large intestinal transit time,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Volume,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Specific blood flow rate,FractionAucLastToInf,0.000380960822538569
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (water),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (water),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Fraction of periportal zone,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (lipid),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (protein),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (water),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Volume,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Specific blood flow rate,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (lipid),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (protein),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (water),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Volume,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Peripheral blood flow fraction,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Volume,FractionAucLastToInf,0.00131224500106346
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (lipid),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (protein),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (water),FractionAucLastToInf,0.000976366615108779
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Specific blood flow rate,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Pancreas-Vf (lipid),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,CL,0.00476723542114032
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),CL,0.0100689048364705
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),CL,-0.00105213873645162
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),CL,-0.011510764070859
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (lipid),CL,-0.0154489174479209
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (protein),CL,0.00491987617729375
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (water),CL,0.019516531179772
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Large intestinal transit time,CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Volume,CL,0.00666075712220566
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Specific blood flow rate,CL,-0.0643505163161049
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,CL,0.0047519549442976
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),CL,-0.000523663854876688
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),CL,-0.016891952103605
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (water),CL,-0.00632294650892766
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,CL,-0.00102469401596845
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),CL,-0.00104760106354306
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),CL,-0.0116123970098594
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),CL,-0.00103401538019629
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,CL,-0.000987572571330852
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),CL,-0.00578823916094819
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),CL,-0.00105328682236824
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),CL,-0.00100569592758616
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,CL,0.0100654879140995
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),CL,-0.0168832047823355
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),CL,-0.0116123970098594
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),CL,-0.00103002441486706
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,CL,-0.00101531798098268
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),CL,-0.00104421147655112
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),CL,-0.0116123970098594
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),CL,-0.000497613238720832
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,CL,-0.00579247614468813
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),CL,0.00475900747207115
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),CL,-0.0116123970098594
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (water),CL,0.00477177309404891
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Fraction of periportal zone,CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (lipid),CL,0.00242114918589227
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (protein),CL,-0.00453575943204518
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (water),CL,0.00677972069147137
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Volume,CL,-0.0140147121196432
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Specific blood flow rate,CL,0.00474744460676801
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (lipid),CL,-0.000830421477647793
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (protein),CL,-0.000830421477647808
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (water),CL,-0.00270098146038058
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Volume,CL,-0.00953974657042132
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Peripheral blood flow fraction,CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Volume,CL,-0.416112970342098
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (lipid),CL,-0.000305035493896179
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (protein),CL,-0.00215394585648686
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (water),CL,-0.00109644938575765
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Specific blood flow rate,CL,0.00996481171336294
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Pancreas-Vf (lipid),CL,0.00557986156708043
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),Vss,0.000116628426158654
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (lipid),Vss,0.000809599782925764
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (protein),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (water),Vss,0.0017299405619651
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Large intestinal transit time,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Volume,Vss,-0.00173410865403241
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Specific blood flow rate,Vss,0.000436555542900764
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (water),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),Vss,0.000100164462492746
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (water),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Fraction of periportal zone,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (lipid),Vss,0.00439561779304318
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (protein),Vss,0.000666009011206644
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (water),Vss,0.00948610863485919
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Volume,Vss,-0.00936552052123658
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Specific blood flow rate,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (lipid),Vss,0.000118191460683898
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (protein),Vss,0.000118191460683898
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (water),Vss,0.00184497990302308
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Volume,Vss,-0.00422066212851749
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Peripheral blood flow fraction,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Volume,Vss,-0.184286199124138
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (lipid),Vss,0.0139429973812919
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (protein),Vss,0.0103569272700237
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (water),Vss,0.173540571218261
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Specific blood flow rate,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Pancreas-Vf (lipid),Vss,0.000385600617377797
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-UpperIleum-Intracellular-pH,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Fraction mucosa,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (lipid),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (protein),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Vf (water),Vd,0.00011431174743464
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-SmallIntestine-Mucosa-LowerIleum-Intracellular-pH,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (lipid),Vd,0.000809063595878254
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (protein),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Vf (water),Vd,0.00174217978984974
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Large intestinal transit time,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Volume,Vd,-0.00173202221830736
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Specific blood flow rate,Vd,0.000394035640678667
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Fraction mucosa,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (lipid),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (protein),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Vf (water),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Caecum-Intracellular-pH,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Fraction mucosa,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (lipid),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (protein),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Vf (water),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonAscendens-Intracellular-pH,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Fraction mucosa,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (lipid),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (protein),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Vf (water),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonTransversum-Intracellular-pH,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Fraction mucosa,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (lipid),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (protein),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Vf (water),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonDescendens-Intracellular-pH,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Fraction mucosa,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (lipid),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (protein),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Vf (water),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-ColonSigmoid-Intracellular-pH,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Fraction mucosa,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (lipid),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (protein),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Vf (water),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-LargeIntestine-Mucosa-Rectum-Intracellular-pH,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Fraction of periportal zone,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (lipid),Vd,0.0043939831338473
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (protein),Vd,0.000665268845915473
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Vf (water),Vd,0.00948224930514397
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Volume,Vd,-0.00937150573027677
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Liver-Specific blood flow rate,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (lipid),Vd,0.000117984100223039
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (protein),Vd,0.000117984100223039
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Vf (water),Vd,0.00184362527999736
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Lung-Volume,Vd,-0.00421781438022509
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Peripheral blood flow fraction,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Volume,Vd,-0.184388416784642
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (lipid),Vd,0.0139380634001236
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (protein),Vd,0.0103529615467679
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Vf (water),Vd,0.173479315173401
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Muscle-Specific blood flow rate,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Organism-Pancreas-Vf (lipid),Vd,0.000387003475764711
