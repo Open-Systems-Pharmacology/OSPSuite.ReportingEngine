@@ -5,21 +5,20 @@
 \title{analyzeSensitivity}
 \usage{
 analyzeSensitivity(
-  simFileName,
-  simFileFolder,
-  paramRange = NULL,
-  pkParameterName = "AUC",
-  totalSensitivityThreshold = 1
+  simFilePath,
+  perturbationParameterNamesVector = NULL,
+  totalSensitivityThreshold = 1,
+  resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv")
 )
 }
 \arguments{
-\item{pkParameterName}{name of parameter to be analyzed}
-
 \item{totalSensitivityThreshold}{numeric value between 0 and 1.
 Close to 0, only the most sensitive output paths are returned.
 Close to 1, almost all the output paths are returned.}
 
 \item{simulation}{simulation class object}
+
+\item{pkParameterName}{name of parameter to be analyzed}
 }
 \value{
 sensitivityResults

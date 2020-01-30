@@ -63,9 +63,9 @@ Population Workflow Task for Reporting Engine
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="setPKParametersCalculationSettings">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-setPKParametersCalculationSettings}{\code{ospsuite.reportingengine::Workflow$setPKParametersCalculationSettings()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="setpkParametersPlotSettings">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-setpkParametersPlotSettings}{\code{ospsuite.reportingengine::Workflow$setpkParametersPlotSettings()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="setSensitivityAnalysisSettings">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-setSensitivityAnalysisSettings}{\code{ospsuite.reportingengine::Workflow$setSensitivityAnalysisSettings()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="setSensitivityPlotSettings">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-setSensitivityPlotSettings}{\code{ospsuite.reportingengine::Workflow$setSensitivityPlotSettings()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="setpkParametersPlotSettings">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-setpkParametersPlotSettings}{\code{ospsuite.reportingengine::Workflow$setpkParametersPlotSettings()}}\out{</span>}
 }
 \out{</details>}
 }

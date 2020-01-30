@@ -1,0 +1,512 @@
+print(pkSensitivity)
+}
+}
+for (output in outputSelections$allOutputs) {
+pkSensitivities <- results$allPKParameterSensitivitiesFor(pkParameterName = "AUC", outputPath = output$path, totalSensitivityThreshold = 0.2)
+for (pkSensitivity in pkSensitivities) {
+print(pkSensitivity)
+}
+}
+library(ospsuite)
+library(ospsuite.reportingengine)
+source('C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/R/utils-parallel.R')
+#' @title splitPopDataFile
+#' @description Function to split a population data file for parallel processing
+#' @description Input is a CSV population data file
+#' @description Output is vector of strings of the name of new CSV files
+#' @export
+splitPopDataFile <- function(fileName,folderName,numberOfSlaves,numberOfCommentLines){
+allPopData <- read.csv(file = paste0(folderName,fileName),
+skip = numberOfCommentLines,
+check.names = FALSE )
+print(head(allPopData))
+numRows <- nrow(allPopData)
+numLinesPerSlave <- ceiling(numRows/numberOfSlaves)
+firstRow<- c(1,((1:(numberOfSlaves-1))*numLinesPerSlave)+1)
+lastRow <- c(((1:(numberOfSlaves-1))*numLinesPerSlave),numRows)
+newFileNamesVec <- NULL
+for (n in 1:numberOfSlaves){
+dF <- allPopData[firstRow[n]:lastRow[n],]
+newFileName <- paste0("tempPopFile",n,"_",fileName)
+newFileNamesVec <- c(newFileNamesVec,newFileName)
+write.csv( x = dF , file = paste0(folderName,newFileName) , row.names=FALSE  )
+}
+return(newFileNamesVec)
+}
+#' @title removeTempPopFiles
+#' @description Function to remove temporary population data files previously created when splitting main population data file for parallelization.
+#' @description Input is vector of strings containting names of temporary population data files, as output by function splitPopDataFile
+#' @description No output.
+#' @export
+removeTempPopFiles <- function(folderName,fileNamesVec){
+for (n in 1:length(fileNamesVec)){
+file.remove(paste0(folderName,fileNamesVec[n]))
+}
+}
+folderName <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/"
+fileName   <- "popData.csv"
+numberOfSlaves <- 4
+flz <- splitPopDataFile(fileName = fileName,
+folderName = folderName,
+numberOfSlaves = numberOfSlaves,
+numberOfCommentLines = 2)
+removeTempPopFiles(folderName = folderName, fileNamesVec= flz)
+source('C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/R/utils-parallel.R')
+source('C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/R/utils-parallel.R')
+source('C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/R/utils-parallel.R')
+source('C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/R/utils-parallel.R')
+library('Rmpi')
+# library(ospsuite)
+# library(ospsuite.reportingengine)
+# splitPopDataFile <- function(fileName,folderName,numberOfSlaves,numberOfCommentLines){
+#   allPopData <- read.csv(file = paste0(folderName,fileName),
+#                          skip = numberOfCommentLines,
+#                          check.names = FALSE )
+#   print(head(allPopData))
+#   numRows <- nrow(allPopData)
+#   numLinesPerSlave <- ceiling(numRows/numberOfSlaves)
+#   firstRow<- c(1,((1:(numberOfSlaves-1))*numLinesPerSlave)+1)
+#   lastRow <- c(((1:(numberOfSlaves-1))*numLinesPerSlave),numRows)
+#   newFileNamesVec <- NULL
+#   for (n in 1:numberOfSlaves){
+#     dF <- allPopData[firstRow[n]:lastRow[n],]
+#     newFileName <- paste0("tempPopFile",n,"_",fileName)
+#     newFileNamesVec <- c(newFileNamesVec,newFileName)
+#     write.csv( x = dF , file = paste0(folderName,newFileName) , row.names=FALSE  )
+#   }
+#   return(newFileNamesVec)
+# }
+#
+# removeTempPopFiles <- function(folderName,fileNamesVec){
+#   for (n in 1:length(fileNamesVec)){
+#     file.remove(paste0(folderName,fileNamesVec[n]))
+#   }
+# }
+folderName <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/"
+fileName   <- "popData.csv"
+numberOfSlaves <- 3
+fls <- splitPopDataFile(fileName = fileName,
+folderName = folderName,
+numberOfSlaves = numberOfSlaves,
+numberOfCommentLines = 2)
+fls
+library('Rmpi')
+# library(ospsuite)
+# library(ospsuite.reportingengine)
+# splitPopDataFile <- function(fileName,folderName,numberOfSlaves,numberOfCommentLines){
+#   allPopData <- read.csv(file = paste0(folderName,fileName),
+#                          skip = numberOfCommentLines,
+#                          check.names = FALSE )
+#   print(head(allPopData))
+#   numRows <- nrow(allPopData)
+#   numLinesPerSlave <- ceiling(numRows/numberOfSlaves)
+#   firstRow<- c(1,((1:(numberOfSlaves-1))*numLinesPerSlave)+1)
+#   lastRow <- c(((1:(numberOfSlaves-1))*numLinesPerSlave),numRows)
+#   newFileNamesVec <- NULL
+#   for (n in 1:numberOfSlaves){
+#     dF <- allPopData[firstRow[n]:lastRow[n],]
+#     newFileName <- paste0("tempPopFile",n,"_",fileName)
+#     newFileNamesVec <- c(newFileNamesVec,newFileName)
+#     write.csv( x = dF , file = paste0(folderName,newFileName) , row.names=FALSE  )
+#   }
+#   return(newFileNamesVec)
+# }
+#
+# removeTempPopFiles <- function(folderName,fileNamesVec){
+#   for (n in 1:length(fileNamesVec)){
+#     file.remove(paste0(folderName,fileNamesVec[n]))
+#   }
+# }
+folderName <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/"
+fileName   <- "popData.csv"
+numberOfSlaves <- 3
+fls <- splitPopDataFile(fileName = fileName,
+folderName = folderName,
+numberOfSlaves = numberOfSlaves,
+numberOfCommentLines = 2)
+if(!(mpi.comm.size() == 0)){
+mpi.close.Rslaves()
+}
+library('Rmpi')
+# library(ospsuite)
+# library(ospsuite.reportingengine)
+# splitPopDataFile <- function(fileName,folderName,numberOfSlaves,numberOfCommentLines){
+#   allPopData <- read.csv(file = paste0(folderName,fileName),
+#                          skip = numberOfCommentLines,
+#                          check.names = FALSE )
+#   print(head(allPopData))
+#   numRows <- nrow(allPopData)
+#   numLinesPerSlave <- ceiling(numRows/numberOfSlaves)
+#   firstRow<- c(1,((1:(numberOfSlaves-1))*numLinesPerSlave)+1)
+#   lastRow <- c(((1:(numberOfSlaves-1))*numLinesPerSlave),numRows)
+#   newFileNamesVec <- NULL
+#   for (n in 1:numberOfSlaves){
+#     dF <- allPopData[firstRow[n]:lastRow[n],]
+#     newFileName <- paste0("tempPopFile",n,"_",fileName)
+#     newFileNamesVec <- c(newFileNamesVec,newFileName)
+#     write.csv( x = dF , file = paste0(folderName,newFileName) , row.names=FALSE  )
+#   }
+#   return(newFileNamesVec)
+# }
+#
+# removeTempPopFiles <- function(folderName,fileNamesVec){
+#   for (n in 1:length(fileNamesVec)){
+#     file.remove(paste0(folderName,fileNamesVec[n]))
+#   }
+# }
+folderName <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/"
+fileName   <- "popData.csv"
+numberOfSlaves <- 3
+fls <- splitPopDataFile(fileName = fileName,
+folderName = folderName,
+numberOfSlaves = numberOfSlaves,
+numberOfCommentLines = 2)
+if(!(mpi.comm.size() == 0)){
+mpi.close.Rslaves()
+}
+#start 2 R workers (slaves) instances (once per WORKFLOW or once per Task?)
+mpi.spawn.Rslaves(nslaves = numberOfSlaves)
+if(!(mpi.comm.size() == 0)){
+mpi.close.Rslaves()
+}
+library('Rmpi')
+# library(ospsuite)
+# library(ospsuite.reportingengine)
+# splitPopDataFile <- function(fileName,folderName,numberOfSlaves,numberOfCommentLines){
+#   allPopData <- read.csv(file = paste0(folderName,fileName),
+#                          skip = numberOfCommentLines,
+#                          check.names = FALSE )
+#   print(head(allPopData))
+#   numRows <- nrow(allPopData)
+#   numLinesPerSlave <- ceiling(numRows/numberOfSlaves)
+#   firstRow<- c(1,((1:(numberOfSlaves-1))*numLinesPerSlave)+1)
+#   lastRow <- c(((1:(numberOfSlaves-1))*numLinesPerSlave),numRows)
+#   newFileNamesVec <- NULL
+#   for (n in 1:numberOfSlaves){
+#     dF <- allPopData[firstRow[n]:lastRow[n],]
+#     newFileName <- paste0("tempPopFile",n,"_",fileName)
+#     newFileNamesVec <- c(newFileNamesVec,newFileName)
+#     write.csv( x = dF , file = paste0(folderName,newFileName) , row.names=FALSE  )
+#   }
+#   return(newFileNamesVec)
+# }
+#
+# removeTempPopFiles <- function(folderName,fileNamesVec){
+#   for (n in 1:length(fileNamesVec)){
+#     file.remove(paste0(folderName,fileNamesVec[n]))
+#   }
+# }
+folderName <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/"
+fileName   <- "popData.csv"
+numberOfSlaves <- 3
+fls <- splitPopDataFile(fileName = fileName,
+folderName = folderName,
+numberOfSlaves = numberOfSlaves,
+numberOfCommentLines = 2)
+if(!(mpi.comm.size() == 0)){
+mpi.close.Rslaves()
+}
+#start 2 R workers (slaves) instances (once per WORKFLOW or once per Task?)
+mpi.spawn.Rslaves(nslaves = numberOfSlaves)
+mpi.spawn.Rslaves(nslaves = numberOfSlaves)
+devtools::load_all(".")
+devtools::document()
+devtools::install()
+devtools::install()
+source('C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/tests/dev/splitfile-test-rmpi.R')
+library('Rmpi')
+library(ospsuite)
+?ospsuite::splitPopulationFile
+library('Rmpi')
+library(ospsuite)
+theNumberOfSlaves <- 5
+theFolderName <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/"
+theFileName   <- "popData.csv"
+theNumberOfCommentLines <- 2
+tempPopDataFiles <- ospsuite::splitPopulationFile(csvPopulationFile = paste0(theFolderName,fileName),
+numberOfCores = theNumberOfSlaves,
+outputFolder = theFolderName,
+outputFileName = fileName)
+tempPopDataFiles <- ospsuite::splitPopulationFile(csvPopulationFile = paste0(theFolderName,theFileName),
+numberOfCores = theNumberOfSlaves,
+outputFolder = theFolderName,
+outputFileName = theFileName)
+tempPopDataFiles
+library('Rmpi')
+library(ospsuite)
+theNumberOfSlaves <- 5
+theFolderName <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/"
+theFileName   <- "popData"
+theNumberOfCommentLines <- 2
+tempPopDataFiles <- ospsuite::splitPopulationFile(csvPopulationFile = paste0(theFolderName,theFileName,".csv"),
+numberOfCores = theNumberOfSlaves,
+outputFolder = theFolderName,
+outputFileName = theFileName)
+devtools::load_all(".")
+devtools::document()
+devtools::install()
+devtools::install()
+devtools::document()
+devtools::install()
+devtools::check()
+devtools::document()
+devtools::load_all(".")
+devtools::check()
+devtools::document()
+devtools::check()
+devtools::document()
+devtools::check()
+devtools::check()
+devtools::document()
+devtools::check()
+devtools::document()
+devtools::check()
+devtools::check()
+devtools::document()
+devtools::check()
+devtools::document()
+devtools::check()
+devtools::document()
+devtools::check()
+typeof(1)
+typeof(1.1)
+is.integer
+is.integer(1)
+>is.integer
+?is.integer
+1%%1
+1.5%%1
+2.5%%1
+isFALSE(1 %% 1 == 0)
+isFALSE(1.5 %% 1 == 0)
+substitute(1)
+?substitute
+x=1, substitute(x)
+x=1, substitute(x=1)
+x=1, substitute("x=1")
+substitute("x=1")
+substitute(x=1)
+deparse(substitute(x=1))
+deparse(substitute(x))
+x=1
+class(x)
+devtools::load_all(".")
+validateIsInteger(2)
+devtools::load_all(".")
+validateIsInteger(2)
+validateIsInteger(2.5)
+validateIsInteger("2.5")
+validateIsInteger("2")
+devtools::install()
+devtools::document()
+devtools::install()
+devtools::install()
+devtools::install()
+devtools::document()
+devtools::install()
+devtools::check()
+devtools::check()
+source('C:/Users/ahamadeh/Dropbox/rproject/workflow/integrated41.R')
+getwd()
+source('C:/Users/ahamadeh/Dropbox/rproject/workflow/integrated41.R')
+source('C:/Users/ahamadeh/Dropbox/rproject/workflow/integrated41.R')
+source('C:/Users/ahamadeh/Dropbox/rproject/workflow/integrated41.R')
+Sys.time()
+system.time()
+Sys.time()
+format(Sys.time(),%x)
+format(Sys.time(),"%x")
+format(Sys.time(),"%X")
+format(Sys.time(),"%T")
+format(Sys.time(),"%F")
+format(Sys.time(),"%f")
+format(Sys.time(),"%T")
+strptime(x, "%m/%d/%y %H:%M:%S")
+strptime(Sys.time(), "%m/%d/%y %H:%M:%S")
+strptime(format(Sys.time(),"%T"), "%m/%d/%y %H:%M:%S")
+Sys.Date()
+format(Sys.time(),"%H")
+format(Sys.time(),"%M")
+format(Sys.time(),"%S")
+format(Sys.time(),"%M%S")
+format(Sys.time(),"%H%M%S")
+format(Sys.Date(),"%y%m%d")
+format(Sys.Date(),"%Y%m%d")
+format(Sys.Date(),"%Y%M%F")
+format(Sys.Date(),"%Y%M%D")
+format(Sys.Date(),"%Y%m%d")
+paste0("Workflow","_",format(Sys.Date(),"%Y%m%d"),"_",format(Sys.time(),"%H%M%S"))
+devtools::load_all(".")
+source('C:/Users/ahamadeh/Dropbox/rproject/workflow/integrated41.R')
+source('C:/Users/ahamadeh/Dropbox/rproject/workflow/integrated41.R')
+setwd("C:/Users/ahamadeh/Dropbox/rproject/workflow")
+getwd()
+source('C:/Users/ahamadeh/Dropbox/rproject/workflow/integrated41.R')
+ff <- sapply(c("44","566"),identity)
+ff
+typeof(ff)
+ff
+ff[,1]
+ff[1]
+ff[2]
+class(ff)
+source('C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/R/workflow.R')
+devtools::load_all("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine")
+source('C:/Users/ahamadeh/Dropbox/rproject/workflow/integrated41.R')
+source('C:/Users/ahamadeh/Dropbox/rproject/workflow/integrated41.R')
+source('C:/Users/ahamadeh/Dropbox/rproject/workflow/integrated41.R')
+pwf
+pwf$populationSimulation$input$population
+source('C:/Users/ahamadeh/Dropbox/rproject/workflow/integrated41.R')
+source('C:/Users/ahamadeh/Dropbox/rproject/workflow/integrated41.R')
+pwf
+pwf$population
+source('C:/Users/ahamadeh/Dropbox/rproject/workflow/integrated41.R')
+source('C:/Users/ahamadeh/Dropbox/rproject/workflow/integrated41.R')
+source('C:/Users/ahamadeh/Dropbox/rproject/workflow/integrated41.R')
+source('C:/Users/ahamadeh/Dropbox/rproject/workflow/integrated41.R')
+?DataSplitter
+?ospsuite::DataSplitter
+?ospsuite::splitPopulationFile
+Sys.getenv(
+)
+Sys.getenv("SLURM_NTASKS")
+library(parallel)
+detectCores()
+parallel::detectCores()
+rm(list = ls())
+detectCores()
+detectCores()
+parallel::detectCores()
+?stopifnot
+stopifnot(FALSE)
+?stop()
+stop(FALSE,call. = "dd")
+stop("ddd")
+devtools::install()
+devtools::install()
+devtools::install()
+source('C:/Users/ahamadeh/Dropbox/rproject/workflow/integrated41.R')
+devtools::install()
+devtools::install()
+devtools::install()
+devtools::install()
+getwd()
+##Example:
+simfile <- "./data/simpleMobiEventSim.pkml"
+popfile <- "./data/popData.csv"
+pwf <- PopulationWorkflow$new(simulationFile = simfile , populationFile = popfile , numberOfCores = 2)
+res<-pwf$runWorkflow()
+library(ospsuite)
+library(ospsuite.reportingengine)
+simfile <- "./data/simpleMobiEventSim.pkml"
+popfile <- "./data/popData.csv"
+pwf <- PopulationWorkflow$new(simulationFile = simfile , populationFile = popfile , numberOfCores = 2)
+res<-pwf$runWorkflow()
+library(ospsuite)
+library(ospsuite.reportingengine)
+simfile <- "./data/simpleMobiEventSim.pkml"
+popfile <- "./data/popData.csv"
+pwf <- PopulationWorkflow$new(simulationFile = simfile , populationFile = popfile , numberOfCores = 1)
+res<-pwf$runWorkflow()
+library(ospsuite)
+library(ospsuite.reportingengine)
+simfile <- "./data/simpleMobiEventSim.pkml"
+popfile <- "./data/popData.csv"
+pwf <- PopulationWorkflow$new(simulationFile = simfile , populationFile = popfile , numberOfCores = 1)
+res<-pwf$runWorkflow()
+devtools::install()
+devtools::install()
+library(ospsuite)
+library(ospsuite.reportingengine)
+simfile <- "./data/simpleMobiEventSim.pkml"
+popfile <- "./data/popData.csv"
+pwf <- PopulationWorkflow$new(simulationFile = simfile , populationFile = popfile , numberOfCores = 1)
+res<-pwf$runWorkflow()
+library(ospsuite)
+library(ospsuite.reportingengine)
+simfile <- "./data/simpleMobiEventSim.pkml"
+popfile <- "./data/popData.csv"
+workflowFolder <- "./test/dev
+pwf <- PopulationWorkflow$new(simulationFile = simfile,
+populationFile = popfile,
+numberOfCores = 1,
+workflowFolder = workflowFolder)
+res<-pwf$runWorkflow()
+#Example:
+library(ospsuite)
+library(ospsuite.reportingengine)
+simfile <- "./data/simpleMobiEventSim.pkml"
+popfile <- "./data/popData.csv"
+workflowFolder <- "./test/dev"
+pwf <- PopulationWorkflow$new(simulationFile = simfile,
+populationFile = popfile,
+numberOfCores = 1,
+workflowFolder = workflowFolder)
+res<-pwf$runWorkflow()
+#Example:
+library(ospsuite)
+library(ospsuite.reportingengine)
+simfile <- "./data/simpleMobiEventSim.pkml"
+popfile <- "./data/popData.csv"
+outputFolder <- "./test/dev"
+pwf <- PopulationWorkflow$new(simulationFile = simfile,
+populationFile = popfile,
+numberOfCores = 1,
+workflowFolder = workflowFolder)
+res<-pwf$runWorkflow()
+rm(list = ls())
+library(ospsuite.reportingengine)
+library(ospsuite)
+#devtools::load_all("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine")
+#devtools::install()
+#setwd("C:/Users/ahamadeh/Dropbox/rproject/workflow")
+setwd("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/test/dev/")
+simfile <- "../../data/simpleMobiEventSim.pkml"
+popfile <- "../../data/popData.csv"
+#simfile <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/simpleMobiEventSim.pkml"
+#popfile <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/popData.csv"
+pwf <- PopulationWorkflow$new(simulationFile = simfile , populationFile = popfile , numberOfCores = 2)
+res<-pwf$runWorkflow()
+source('C:/Users/ahamadeh/Dropbox/rproject/workflow/integrated41.R')
+source('C:/Users/ahamadeh/Dropbox/rproject/workflow/integrated41.R')
+source('C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/tests/dev/test-sensitivity-par.R')
+resa
+resa[[1]]
+resa[[1]]$pkParameterName
+resa[[1]]$print()
+resa[[1]]$outputPath
+?split
+split(x = c("paul","john","george","ringo","freddie","mick"),f = 2)
+x = c("paul","john","george","ringo","freddie","mick")
+split(x, sort(rank(x) %% n))
+split(x, sort(rank(x) %% 3))
+rank(x)
+?rank
+ospsuite::exportPKAnalysesToCSV()
+?ospsuite::exportPKAnalysesToCSV()
+split(x, sort(rank(x) %% 2))
+split(x, sort(x %% 2))
+split(x, sort(1:length(x) %% 2))
+split(x, sort(1:length(x) %% 2))
+sort(1:length(x) %% 2)
+sort(1:length(x) %% 2)
+split(x, 1:length(x) %% 2 )
+?ospsuite::exportPKAnalysesToCSV()
+?ospsuite::exportResultsToCSV
+1:length(x) %% 2
+1:length(x) %% 2
+1:length(x) %% 2
+1:length(x) %% 2
+sort(1:length(x)) %% 2
+rank(sort(1:length(x))) %% 2
+sort(1:length(x) %% 2)
+installed.packages()
+LL<-installed.packages()
+LL[,1]
+which(LL[,1]=="rclr")
+which(LL[,1]=="utils")
+which(LL[,1]=="Rclr")
+which(LL[,1]=="rClr")
+LL[91,1]
+LL[91,]
