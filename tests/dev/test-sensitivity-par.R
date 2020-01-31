@@ -3,20 +3,19 @@ library(ospsuite)
 library(ospsuite.reportingengine)
 library(Rmpi)
 
+
 #INPUTS ARE FOLDER OR PATH TO SIMULATION, LIST OF PARAMETERS (OPTIONAL,DEFAULT NULL) AND NUMBER OF CORES (OPTIONAL, DEFAULT 1), LIST OF OUTPUTS (OPTIONAL??), LIST OF PK PARAMS (OPTIONAL DEFAULT NULL)
-simFilePath <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/individualPksimSim.pkml"
-#simFilePath <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/simpleMobiEventSim_nonzeroinitial.pkml"
-numberOfCores <- 4
+simFilePath <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/simpleMobiEventSim_nonzeroinitial.pkml"
+numberOfCores <- 2
 resultsFileFolder <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/tests/dev/"
 resultsFileName <- "SAResults"
 allParameters <- NULL
 
-sim <- loadSimulation(simFilePath,loadFromCache = FALSE)
+sim <- loadSimulation(simFilePath)
 
 if (is.null(allParameters)){
   allParameters <- ospsuite::potentialVariableParameterPathsFor(simulation =  sim)
 }
-
 
 totalNumberParameters <- length(allParameters)
 numberOfCores <- min(numberOfCores,totalNumberParameters) #in case there are more cores specified in numberOfCores that there are parameters, this ensures at least one parameter per spawned core
@@ -35,25 +34,22 @@ if (numberOfCores > 1) {
   mpi.spawn.Rslaves(nslaves = numberOfCores)
   mpi.bcast.cmd(library("ospsuite"))
   mpi.bcast.cmd(library("ospsuite.reportingengine"))
-
   mpi.bcast.Robj2slave(obj = simFilePath)
   mpi.bcast.Robj2slave(obj = listSplitParameters)
   mpi.bcast.Robj2slave(obj = resultsFileFolder)
-#Send individual ID and pop file and command to update sim here.
+
 
   allResultsFileNames<-sapply(X = 1:numberOfCores ,function(x,resultsFileFolder,resultsFileName){
-    return(paste0(resultsFileFolder,resultsFileName,"_",x,".csv"))},
-    resultsFileFolder = resultsFileFolder,
-    resultsFileName = resultsFileName,
-    USE.NAMES = FALSE)
+                                                          return(paste0(resultsFileFolder,resultsFileName,"_",x,".csv"))},
+                                                          resultsFileFolder = resultsFileFolder,
+                                                          resultsFileName = resultsFileName,
+                                                          USE.NAMES = FALSE)
 
   mpi.bcast.Robj2slave(obj = allResultsFileNames)
-#######
   mpi.remote.exec(ospsuite.reportingengine::analyzeSensitivity(simFilePath = simFilePath,
-                                                               perturbationParameterNamesVector = listSplitParameters[[mpi.comm.rank()]],
-                                                               totalSensitivityThreshold = 1,
-                                                               resultsFilePath = allResultsFileNames[mpi.comm.rank()]),
-                                                               numberOfCoresToUse = 1)
+                                                             perturbationParameterNamesVector = listSplitParameters[[mpi.comm.rank()]],
+                                                             totalSensitivityThreshold = 1,
+                                                             resultsFilePath = allResultsFileNames[mpi.comm.rank()]))
 
 
   mpi.close.Rslaves()
@@ -82,7 +78,7 @@ if (numberOfCores > 1) {
 #print("...done")
 
 
-#Do we need this?
+ #Do we need this?
 #numParametersPerCore <- ceiling(totalNumberParameters / numberOfCores) #Do we need this?
 
 
