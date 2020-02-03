@@ -31,14 +31,14 @@ Workflow <- R6::R6Class(
     outputFolder = NULL,
 
     initialize = function(simulationFile,
-                              populationFile,
-                              observedDataFile = NULL,
-                              workflowFolder = paste0("Workflow", "_", format(Sys.Date(), "%Y%m%d"), "_", format(Sys.time(), "%H%M%S")),
-                              inputFolder = "Inputs",
-                              simulationFolder = "Simulations",
-                              sensitivityFolder = "Sensitivities",
-                              outputFolder = "Outputs",
-                              settings = NULL) {
+                          populationFile,
+                          observedDataFile = NULL,
+                          workflowFolder = paste0(getwd(),"Workflow", "_", format(Sys.Date(), "%Y%m%d"), "_", format(Sys.time(), "%H%M%S")),
+                          inputFolder = "Inputs",
+                          simulationFolder = "Simulations",
+                          sensitivityFolder = "Sensitivities",
+                          outputFolder = "Outputs",
+                          settings = NULL) {
 
 
       # Check of Workflow inputs
@@ -93,25 +93,25 @@ Workflow <- R6::R6Class(
 
       # In case settings need to be defined later on
       self$settings <- settings
-    }#,
+    },
 
     # setPKParametersCalculationSettings = function(message = NULL) {
     #   self$pkParametersCalculation <- Task$new(message = message %||% "Calculate PK parameters")
     # },
-#
-#     setSensitivityAnalysisSettings = function(input = NULL,
-#                                                   output = NULL,
-#                                                   active = TRUE,
-#                                                   message = NULL) {
-#       self$sensitivityAnalysis <- Task$new(
-#         input = input %||% list(
-#           "simulation" = file.path(self$inputFolder, paste0(self$simulation, ".pkml"))
-#         ),
-#         output = output %||% list("sensitivityAnalysis" = file.path(self$sensitivityFolder, "sensitivityAnalysis.RData")),
-#         active = active,
-#         message = message %||% "Analyze sensitivity"
-#       )
-#     },
+    #
+    setSensitivityAnalysisSettings = function(input = NULL,
+                                              output = NULL,
+                                              active = TRUE,
+                                              message = NULL) {
+      self$sensitivityAnalysis <- Task$new(
+        input = input %||% list(
+          "simulation" = file.path(self$inputFolder, paste0(self$simulation, ".pkml"))
+        ),
+        output = output %||% list("sensitivityAnalysis" = file.path(self$sensitivityFolder, "sensitivityAnalysis.RData")),
+        active = active,
+        message = message %||% "Analyze sensitivity"
+      )
+    } # ,
 
     # setpkParametersPlotSettings = function(message = NULL) {
     #   self$pkParametersPlot <- Task$new(message = message %||% "Plot PK parameters")

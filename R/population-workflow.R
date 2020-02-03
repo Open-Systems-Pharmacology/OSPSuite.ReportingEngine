@@ -65,7 +65,7 @@ PopulationWorkflow <- R6::R6Class(
           "population" = file.path(self$inputFolder, paste0(self$population, ".csv")),
           "simulation" = file.path(self$inputFolder, paste0(self$simulation, ".pkml"))
         ),
-        output = output %||% list("populationSimulation" = file.path(self$simulationFolder, "populationSimulation.RData")),
+        #output = output %||% list("populationSimulation" = file.path(self$simulationFolder, "populationSimulation.RData")),
         active = active,
         message = message %||% "Simulate population"
       )
@@ -114,6 +114,23 @@ PopulationWorkflow <- R6::R6Class(
 
     runWorkflow = function() {
 
+
+      #POPULATION WORKFLOW
+
+      #CORE STAGE 0:  DEMOGRAPHY SUMMARY
+      # 0a - Demography Plots/Tables
+
+      #CORE STAGE 1:  SIMULATION
+      # 1a - Time profile Plot
+
+      #CORE STAGE 2:  CALCULATE PK PARAMETER
+      # 2a - PK parameter Plot
+
+      #CORE STAGE 3:  CALCULATE SENSITIVITY
+      # 3a - Plots and Tables based on sensitivity results
+
+
+
       # #Example:
       # library(ospsuite)
       # library(ospsuite.reportingengine)
@@ -129,35 +146,33 @@ PopulationWorkflow <- R6::R6Class(
       print(self$reportingEngineInfo)
 
 
-      wdir <- getwd()
+      wdir <- self$workflowFolder
       resultsFileName <- "populationSimulationResults"
-      # inputFolder <- self$inputFolder
-      # outputFolder <- self$outputFolder
-      # simFileName <- self$simulation
-      # popFileName <- self$population
-
 
       if (self$populationSimulation$active) {
         if (self$populationSimulation$validateInput()) {
           if (self$numberOfCores == 1) {
             print("Starting population simulation")
 
-            simulatePopulation(
-              simFilePath = paste0(wdir,"/",self$inputFolder,"/",self$simulation,".pkml"),
-              popDataFilePath = paste0(wdir,"/",self$inputFolder, "/",self$population,".csv"),
-              resultsFilePath = paste0(wdir,"/",self$outputFolder,"/",resultsFileName,".csv")
+            simulateModel(
+              simFilePath = paste0(wdir, "/", self$inputFolder, "/", self$simulation, ".pkml"),
+              popDataFilePath = paste0(wdir, "/", self$inputFolder, "/", self$population, ".csv"),
+              resultsFilePath = paste0(wdir, "/", self$outputFolder, "/", resultsFileName, ".csv")
             )
           }
           else if (self$numberOfCores > 1) {
             print("Starting parallel population simulation")
 
-            runParallelPopulationSimulation(numberOfCores = self$numberOfCores,
-                                            workingDirectory = wdir,
-                                            inputFolder = self$inputFolder,
-                                            outputFolder = self$outputFolder,
-                                            simFileName = self$simulation,
-                                            popFileName = self$population,
-                                            resultsFileName = resultsFileName)}
+            runParallelPopulationSimulation(
+              numberOfCores = self$numberOfCores,
+              workingDirectory = wdir,
+              inputFolder = self$inputFolder,
+              outputFolder = self$outputFolder,
+              simFileName = self$simulation,
+              popFileName = self$population,
+              resultsFileName = resultsFileName
+            )
+          }
         }
       }
     },

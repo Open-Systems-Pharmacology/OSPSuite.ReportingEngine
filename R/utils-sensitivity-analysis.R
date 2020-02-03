@@ -12,30 +12,46 @@ analyzeSensitivity <- function(simFilePath,
                                perturbationParameterNamesVector = NULL,
                                totalSensitivityThreshold = 1,
                                individualParameters = NULL,
-                               resultsFilePath = paste0(getwd(),"sensitivityAnalysisResults.csv"),
-                               numberOfCoresToUse = NULL){
-
+                               resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv"),
+                               numberOfCoresToUse = NULL) {
   sim <- loadSimulation(simFilePath)
-  updateSimulationIndividualParameters(simulation = sim,individualParameters)
+  updateSimulationIndividualParameters(simulation = sim, individualParameters)
   sensitivityAnalysis <- SensitivityAnalysis$new(simulation = sim)
   sensitivityAnalysis$addParameterPaths(perturbationParameterNamesVector)
 
-  if (is.null(numberOfCoresToUse)){
+  if (is.null(numberOfCoresToUse)) {
     sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(showProgress = FALSE)
   }
-  else
-  {
-    sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(showProgress = FALSE,
-                                                                       numberOfCoresToUse = numberOfCoresToUse)
+  else {
+    sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(
+      showProgress = FALSE,
+      numberOfCoresToUse = numberOfCoresToUse
+    )
   }
-
-
-
   print("Running sensitivity analysis...")
   sensitivityAnalysisResults <- runSensitivityAnalysis(
     sensitivityAnalysis = sensitivityAnalysis,
     sensitivityAnalysisRunOptions = sensitivityAnalysisRunOptions
   )
   print("...done")
-  exportSensitivityAnalysisResultsToCSV(results = sensitivityAnalysisResults,resultsFilePath)
+  exportSensitivityAnalysisResultsToCSV(results = sensitivityAnalysisResults, resultsFilePath)
+}
+
+
+
+
+#' @title runParallelSensitivityAnalysis
+#' @description Spawn cores, divide parameters among cores, run sensitivity analysis on cores, save results as CSV.
+#' @return Simulation results for population
+#' @export
+#' @import ospsuite
+runParallelSensitivityAnalysis <- function(numberOfCores,
+                                           workingDirectory,
+                                           inputFolder,
+                                           outputFolder,
+                                           simFileName,
+                                           SAResultsFileName,
+                                           popFileName=NULL,
+                                           IndividualId=NULL){
+
 }
