@@ -93,42 +93,42 @@ Workflow <- R6::R6Class(
 
       # In case settings need to be defined later on
       self$settings <- settings
-    },
+    }#,
 
-    setPKParametersCalculationSettings = function(message = NULL) {
-      self$pkParametersCalculation <- Task$new(message = message %||% "Calculate PK parameters")
-    },
+    # setPKParametersCalculationSettings = function(message = NULL) {
+    #   self$pkParametersCalculation <- Task$new(message = message %||% "Calculate PK parameters")
+    # },
+#
+#     setSensitivityAnalysisSettings = function(input = NULL,
+#                                                   output = NULL,
+#                                                   active = TRUE,
+#                                                   message = NULL) {
+#       self$sensitivityAnalysis <- Task$new(
+#         input = input %||% list(
+#           "simulation" = file.path(self$inputFolder, paste0(self$simulation, ".pkml"))
+#         ),
+#         output = output %||% list("sensitivityAnalysis" = file.path(self$sensitivityFolder, "sensitivityAnalysis.RData")),
+#         active = active,
+#         message = message %||% "Analyze sensitivity"
+#       )
+#     },
 
-    setSensitivityAnalysisSettings = function(input = NULL,
-                                                  output = NULL,
-                                                  active = TRUE,
-                                                  message = NULL) {
-      self$sensitivityAnalysis <- Task$new(
-        input = input %||% list(
-          "simulation" = file.path(self$inputFolder, paste0(self$simulation, ".pkml"))
-        ),
-        output = output %||% list("sensitivityAnalysis" = file.path(self$sensitivityFolder, "sensitivityAnalysis.RData")),
-        active = active,
-        message = message %||% "Analyze sensitivity"
-      )
-    },
+    # setpkParametersPlotSettings = function(message = NULL) {
+    #   self$pkParametersPlot <- Task$new(message = message %||% "Plot PK parameters")
+    # },
 
-    setpkParametersPlotSettings = function(message = NULL) {
-      self$pkParametersPlot <- Task$new(message = message %||% "Plot PK parameters")
-    },
-
-    setSensitivityPlotSettings = function(input = NULL,
-                                              output = NULL,
-                                              active = TRUE,
-                                              message = NULL) {
-      self$sensitivityPlot <- Task$new(
-        input = input %||% list(
-          "sensitivityAnalysis" = self$sensitivityAnalysis$output$sensitivityAnalysis
-        ),
-        output = output %||% list("sensitivityPlot" = file.path(self$outputFolder, "sensitivityPlot.png")),
-        active = active,
-        message = message %||% "Plot sensitivity analysis"
-      )
-    }
+    # setSensitivityPlotSettings = function(input = NULL,
+    #                                           output = NULL,
+    #                                           active = TRUE,
+    #                                           message = NULL) {
+    #   self$sensitivityPlot <- Task$new(
+    #     input = input %||% list(
+    #       "sensitivityAnalysis" = self$sensitivityAnalysis$output$sensitivityAnalysis
+    #     ),
+    #     output = output %||% list("sensitivityPlot" = file.path(self$outputFolder, "sensitivityPlot.png")),
+    #     active = active,
+    #     message = message %||% "Plot sensitivity analysis"
+    #   )
+    # }
   )
 )
