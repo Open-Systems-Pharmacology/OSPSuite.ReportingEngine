@@ -1,0 +1,661 @@
+﻿"QuantityPath","Parameter","PKParameter","Value"
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Lipophilicity,C_max,-0.251190568228113
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Fraction unbound (plasma, reference value),C_max,-0.557244016596771
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility at reference pH,C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Reference pH,C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility gain per charge,C_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,C_max,0.99999719145389
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Lipophilicity,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Fraction unbound (plasma, reference value),t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility at reference pH,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Reference pH,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility gain per charge,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,t_max,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Lipophilicity,C_tEnd,-0.88114002828318
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Fraction unbound (plasma, reference value),C_tEnd,-0.890403213687597
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility at reference pH,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Reference pH,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility gain per charge,C_tEnd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,C_tEnd,1
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Lipophilicity,AUC,-0.813284869758359
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Fraction unbound (plasma, reference value),AUC,-0.8612272235576
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility at reference pH,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Reference pH,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility gain per charge,AUC,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,AUC,0.999989686994243
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Lipophilicity,AUC_inf,-0.250792158293576
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Fraction unbound (plasma, reference value),AUC_inf,-0.90869058430841
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility at reference pH,AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Reference pH,AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility gain per charge,AUC_inf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,AUC_inf,0.992221909040374
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Lipophilicity,MRT,0.639878768779621
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Fraction unbound (plasma, reference value),MRT,-0.0183396082888015
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility at reference pH,MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Reference pH,MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility gain per charge,MRT,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,MRT,-0.00838989219869728
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Lipophilicity,Thalf,0.640133109081574
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Fraction unbound (plasma, reference value),Thalf,-0.018176595359414
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility at reference pH,Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Reference pH,Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility gain per charge,Thalf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,Thalf,-0.00838814283328754
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Lipophilicity,FractionAucLastToInf,0.00309754235538899
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Fraction unbound (plasma, reference value),FractionAucLastToInf,-0.000258866457092266
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility at reference pH,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Reference pH,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility gain per charge,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,FractionAucLastToInf,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Lipophilicity,CL,0.249528942719304
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Fraction unbound (plasma, reference value),CL,0.906287866756796
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility at reference pH,CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Reference pH,CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility gain per charge,CL,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,CL,-0.993926105948022
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Lipophilicity,Vss,0.889506480518197
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Fraction unbound (plasma, reference value),Vss,0.888226188910452
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility at reference pH,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Reference pH,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility gain per charge,Vss,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,Vss,-1.0029188387795
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Lipophilicity,Vd,0.889760261579645
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Fraction unbound (plasma, reference value),Vd,0.88838932401441
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility at reference pH,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Reference pH,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),smarties-Solubility gain per charge,Vd,0
+Organism|PeripheralVenousBlood|smarties|Plasma (Peripheral Venous Blood),Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,Vd,-1.00291719628082
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Lipophilicity,C_max,0.0987591657682313
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Fraction unbound (plasma, reference value),C_max,0.591246043428982
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility at reference pH,C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Reference pH,C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility gain per charge,C_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,C_max,0.99998917990131
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Lipophilicity,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Fraction unbound (plasma, reference value),t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility at reference pH,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Reference pH,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility gain per charge,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,t_max,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Lipophilicity,C_tEnd,-0.74821166095335
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Fraction unbound (plasma, reference value),C_tEnd,0.11154698605676
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility at reference pH,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Reference pH,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility gain per charge,C_tEnd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,C_tEnd,1.00000017363358
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Lipophilicity,AUC,-0.679993773505667
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Fraction unbound (plasma, reference value),AUC,0.143808409380799
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility at reference pH,AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Reference pH,AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility gain per charge,AUC,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,AUC,0.999989013693159
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),AUC_inf,0.00579418585008522
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),AUC_inf,0.00579448750490874
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),AUC_inf,-0.00526744168189566
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),AUC_inf,0.00579418585008522
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Lipophilicity,AUC_inf,-0.0854546431807361
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Fraction unbound (plasma, reference value),AUC_inf,0.102305492969797
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility at reference pH,AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Reference pH,AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility gain per charge,AUC_inf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,AUC_inf,0.999999245862941
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),MRT,0.00582720645247264
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),MRT,0.00582720645247264
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),MRT,-0.00529746041133877
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),MRT,0.00582720645247264
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Lipophilicity,MRT,0.670232833780052
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Fraction unbound (plasma, reference value),MRT,-0.00956916980286244
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility at reference pH,MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Reference pH,MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility gain per charge,MRT,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,MRT,0.00137562993257126
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),Thalf,0.00582616043905191
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),Thalf,0.00582616043905191
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),Thalf,-0.0052965094900472
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),Thalf,0.00582616043905191
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Lipophilicity,Thalf,0.670473272557091
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Fraction unbound (plasma, reference value),Thalf,-0.00939224059106571
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility at reference pH,Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Reference pH,Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility gain per charge,Thalf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,Thalf,0.00137519163950339
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Lipophilicity,FractionAucLastToInf,0.00324281906753639
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Fraction unbound (plasma, reference value),FractionAucLastToInf,-0.000226416012514369
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility at reference pH,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Reference pH,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility gain per charge,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,FractionAucLastToInf,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),CL,-0.00580660853561422
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),CL,-0.00580690922478286
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),CL,0.00527873503237657
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),CL,-0.00580660853561422
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Lipophilicity,CL,0.0851240922330675
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Fraction unbound (plasma, reference value),CL,-0.1025521184536
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility at reference pH,CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Reference pH,CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility gain per charge,CL,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,CL,-1.00561949786658
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Lipophilicity,Vss,0.754748160230212
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Fraction unbound (plasma, reference value),Vss,-0.112049308112347
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility at reference pH,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Reference pH,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility gain per charge,Vss,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,Vss,-1.00285235565454
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Gonads_pls_Gonads_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Heart_pls_Heart_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Kidney_pls_Kidney_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Stomach_pls_Stomach_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-SmallIntestine_pls_SmallIntestine_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LargeIntestine_pls_LargeIntestine_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Periportal_pls_Periportal_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pericentral_pls_Pericentral_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Lung_pls_Lung_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Muscle_pls_Muscle_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Pancreas_pls_Pancreas_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Skin_pls_Skin_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Spleen_pls_Spleen_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Duodenum_pls_Duodenum_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperJejunum_pls_UpperJejunum_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerJejunum_pls_LowerJejunum_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-UpperIleum_pls_UpperIleum_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-LowerIleum_pls_LowerIleum_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Caecum_pls_Caecum_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonAscendens_pls_ColonAscendens_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonTransversum_pls_ColonTransversum_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonDescendens_pls_ColonDescendens_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-ColonSigmoid_pls_ColonSigmoid_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Neighborhoods-Rectum_pls_Rectum_int-P (plasma<->interstitial),Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Lipophilicity,Vd,0.754988748015236
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Fraction unbound (plasma, reference value),Vd,-0.111872002930381
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility at reference pH,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Reference pH,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,smarties-Solubility gain per charge,Vd,0
+Organism|LargeIntestine|Mucosa|Caecum|BloodCells|smarties|Concentration in container,Applications-oneAdmin-Application_1-ProtocolSchemaItem-DosePerBodyWeight,Vd,-1.00285263676493

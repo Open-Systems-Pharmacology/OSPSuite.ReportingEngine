@@ -11,14 +11,24 @@
 analyzeSensitivity <- function(simFilePath,
                                perturbationParameterNamesVector = NULL,
                                totalSensitivityThreshold = 1,
-                               resultsFilePath = paste0(getwd(),"sensitivityAnalysisResults.csv")){
+                               individualParameters = NULL,
+                               resultsFilePath = paste0(getwd(),"sensitivityAnalysisResults.csv"),
+                               numberOfCoresToUse = NULL){
 
   sim <- loadSimulation(simFilePath)
-
-
+  updateSimulationIndividualParameters(simulation = sim,individualParameters)
   sensitivityAnalysis <- SensitivityAnalysis$new(simulation = sim)
   sensitivityAnalysis$addParameterPaths(perturbationParameterNamesVector)
-  sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(showProgress = FALSE)
+
+  if (is.null(numberOfCoresToUse)){
+    sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(showProgress = FALSE)
+  }
+  else
+  {
+    sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(showProgress = FALSE,
+                                                                       numberOfCoresToUse = numberOfCoresToUse)
+  }
+
 
 
   print("Running sensitivity analysis...")
@@ -28,13 +38,4 @@ analyzeSensitivity <- function(simFilePath,
   )
   print("...done")
   exportSensitivityAnalysisResultsToCSV(results = sensitivityAnalysisResults,resultsFilePath)
-  # pkSensitivities <- list()
-  # for (output in outputSelections$allOutputs) {
-  #   pkSensitivities <- results$allPKParameterSensitivitiesFor(
-  #     pkParameterName = "AUC",
-  #     outputPath = output$path,
-  #     totalSensitivityThreshold = totalSensitivityThreshold
-  #   )
-  # }
-  # print(pkSensitivities)
 }

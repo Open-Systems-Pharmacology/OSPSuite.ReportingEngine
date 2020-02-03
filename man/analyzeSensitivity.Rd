@@ -8,7 +8,8 @@ analyzeSensitivity(
   simFilePath,
   perturbationParameterNamesVector = NULL,
   totalSensitivityThreshold = 1,
-  resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv")
+  resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv"),
+  numberOfCoresToUse = NULL
 )
 }
 \arguments{
