@@ -4,90 +4,133 @@ library(ospsuite.reportingengine)
 library(Rmpi)
 library(tictoc)
 
-tictoc::tic()
+
+# function(populationFilePath,IndividualID,simulationFilePath){
+#
+#   individualParameters <- popObject$getParameterValuesForIndividual(individualId = 2)
+#
+#
+# }
+
+
+
 # INPUTS ARE FOLDER OR PATH TO SIMULATION, LIST OF PARAMETERS (OPTIONAL,DEFAULT NULL) AND NUMBER OF CORES (OPTIONAL, DEFAULT 1), LIST OF OUTPUTS (OPTIONAL??), LIST OF PK PARAMS (OPTIONAL DEFAULT NULL)
 # simFilePath <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/simpleMobiEventSim_nonzeroinitial.pkml"
 simFilePath <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/individualPksimSim.pkml"
 popFilePath <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/popData.csv" # DEFAULT NULL
 popObject <- loadPopulation(popFilePath)
 individualParameters <- popObject$getParameterValuesForIndividual(individualId = 2) # DEFAULT NULL
+
 numberOfCores <- 2
+
+
 resultsFileFolder <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/tests/dev/"
 resultsFileName <- "SAResults"
-allParameters <- NULL
+
+parametersToPerturb <- NULL
 
 
-sim <- loadSimulation(simFilePath)
 
-if (is.null(allParameters)) {
-  allParameters <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
+analyzeSensitivity <- function(simFilePath,
+                               parametersToPerturb = NULL,
+                               popFilePath=NULL,
+                               individualID=NULL,
+                               numberOfCores=NULL,
+                               resultsFileFolder="getwd()",
+                               resultsFileName="sensitivityAnalysisResults"){
+
+
+  #If there is a population file and individualID then for each individual perform SA
+  #If there is a population file and no individualID then do SA for entire population
+  #If there is no population file and individualID then do SA for mean model
+  #If there is no population file and no individualID then do SA for mean model.
+
+
+
+  #Determine if SA is to be done for a single individual or more
+  if (!is.null(popFilePath)){
+    popObject <- loadPopulation(popFilePath)
+    individualSeq <- individualID %||% seq(1,popObject$count)
+    for (ind in individualSeq){
+      individualParameters <-
+        individualSensitivityAnalysis(simFilePath = simFilePath,
+                                      parametersToPerturb = parametersToPerturb,
+                                      individualParameters = popObject$getParameterValuesForIndividual(individualId = ind),
+                                      numberOfCores = numberOfCores,
+                                      resultsFileFolder = resultsFileFolder,
+                                      resultsFileName = resultsFileName
+        )
+    }
+  }
+  else {
+    individualSensitivityAnalysis(simFilePath = simFilePath,
+                                  parametersToPerturb = parametersToPerturb,
+                                  individualParameters = NULL,
+                                  numberOfCores = numberOfCores,
+                                  resultsFileFolder = resultsFileFolder,
+                                  resultsFileName = resultsFileName)
+  }
 }
 
-totalNumberParameters <- length(allParameters)
-numberOfCores <- min(numberOfCores, totalNumberParameters) # in case there are more cores specified in numberOfCores that there are parameters, this ensures at least one parameter per spawned core
 
-if (totalNumberParameters == 0) {
-  stop("No variable parameters found for sensitivity analysis.")
+
+individualSensitivityAnalysis <- function(simFilePath,
+                                          parametersToPerturb = NULL,
+                                          individualParameters,
+                                          numberOfCores = 1,
+                                          resultsFileFolder = resultsFileFolder,
+                                          resultsFileName = resultsFileName){
+  #Load simulation to determine number of perturbation parameters
+  sim <- loadSimulation(simFilePath)
+
+  #If no perturbation parameters specified, perturb all parameters
+  if (is.null(parametersToPerturb)) {
+    parametersToPerturb <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
+  }
+  totalNumberParameters <- length(parametersToPerturb)
+
+  #In case there are more cores specified in numberOfCores than there are parameters, ensure at least one parameter per spawned core
+  numberOfCores <- min(numberOfCores, totalNumberParameters)
+  if (totalNumberParameters == 0) {
+    stop("No variable parameters found for sensitivity analysis.")
+  }
+
+  #Determine if SA is to be done on a single core or more
+  if (numberOfCores > 1) {
+
+
+    runParallelSensitivityAnalysis(simFilePath,
+                                   parametersToPerturb,
+                                   individualParameters,
+                                   numberOfCores,
+                                   resultsFileFolder,
+                                   resultsFileName)
+
+
+
+
+
+
+
+    # combinedSensitivityAnalysisResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(simulation = sim, filePaths = allResultsFileNames)
+    # ospsuite::exportSensitivityAnalysisResultsToCSV(
+    #   results = combinedSensitivityAnalysisResults,
+    #   filePath = paste0(resultsFileFolder, resultsFileName, ".csv")
+    # )
+  } else {
+    # No parallelization
+    updateSimulationIndividualParameters(simulation = sim, individualParameters)
+    ospsuite.reportingengine::analyzeCoreSensitivity(
+      simulation = sim,
+      perturbationParameterNamesVector = parametersToPerturb,
+      totalSensitivityThreshold = 1,
+      resultsFilePath = paste0(resultsFileFolder, resultsFileName, ".csv")
+    )
+  }
+
+
+
 }
-
-
-if (numberOfCores > 1) {
-  # Parallelizing among a total of min(numberOfCores,totalNumberParameters) cores
-  seqVec <- (1 + ((1:totalNumberParameters) %% numberOfCores)) # Create a vector, of length totalNumberParameters, consisting of a repeating sequence of integers from 1 to numberOfCores
-  sortVec <- sort(seqVec) # Sort seqVec to obtain an concatenated array of repeated integers, with the repeated integers ranging from from 1 to numberOfCores.  These are the core numbers to which each parameter will be assigned.
-  listSplitParameters <- split(x = allParameters, sortVec) # Split the parameters of the model according to sortVec
-  # listSplitParameters <- split(x = allParameters, sort(1+( (1:length(totalNumberParameters)) %% numberOfCores))  )
-  mpi.spawn.Rslaves(nslaves = numberOfCores)
-  mpi.bcast.cmd(library("ospsuite"))
-  mpi.bcast.cmd(library("ospsuite.reportingengine"))
-  mpi.bcast.Robj2slave(obj = simFilePath)
-  mpi.bcast.Robj2slave(obj = listSplitParameters)
-  mpi.bcast.Robj2slave(obj = resultsFileFolder)
-  mpi.bcast.Robj2slave(obj = individualParameters)
-
-  allResultsFileNames <- sapply(
-    X = 1:numberOfCores, function(x, resultsFileFolder, resultsFileName) {
-      return(paste0(resultsFileFolder, resultsFileName, "_", x, ".csv"))
-    },
-    resultsFileFolder = resultsFileFolder,
-    resultsFileName = resultsFileName,
-    USE.NAMES = FALSE
-  )
-
-  mpi.bcast.Robj2slave(obj = allResultsFileNames)
-  mpi.remote.exec(ospsuite.reportingengine::analyzeSensitivity(
-    simFilePath = simFilePath,
-    perturbationParameterNamesVector = listSplitParameters[[mpi.comm.rank()]],
-    totalSensitivityThreshold = 1,
-    individualParameters = individualParameters,
-    resultsFilePath = allResultsFileNames[mpi.comm.rank()],
-    numberOfCoresToUse = 1 # Number of local cores, set to 1 when parallelizing.
-  ))
-
-
-  mpi.close.Rslaves()
-
-
-  # combinedSensitivityAnalysisResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(simulation = sim, filePaths = allResultsFileNames)
-  # ospsuite::exportSensitivityAnalysisResultsToCSV(
-  #   results = combinedSensitivityAnalysisResults,
-  #   filePath = paste0(resultsFileFolder, resultsFileName, ".csv")
-  # )
-} else {
-  # No parallelization
-  ospsuite.reportingengine::analyzeSensitivity(
-    simFilePath = simFilePath,
-    perturbationParameterNamesVector = allParameters,
-    totalSensitivityThreshold = 1,
-    individualParameters = individualParameters,
-    resultsFilePath = paste0(resultsFileFolder, resultsFileName, ".csv")
-  )
-}
-
-tictoc::toc()
-
-
-
 
 
 # sort(1+(1:length(dd) %% (length(dd)+10))
