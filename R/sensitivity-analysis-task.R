@@ -1,7 +1,7 @@
 #' @title SensitivityAnalysisTask
 #' @docType class
 #' @description  Sensitivity analysis task settings for Reporting Engine
-#' @field resultFileName string with not file extension for.  Name of CSV file to which simulation results will be saved.
+#' @field resultsFileName string with not file extension for.  Name of CSV file to which simulation results will be saved.
 #' @section Methods:
 #' \describe{
 #' \item{new()}{Initilialize Task settings}
@@ -16,18 +16,19 @@ SensitivityAnalysisTask <- R6::R6Class(
   public = list(
     simulationFilePath = NULL,
     populationFilePath = NULL,
-    resultFileName = "simulationResults",
+    resultsFolderName = NULL,
+    resultsFileName = NULL,
     numberOfCores = 1,
     initialize = function(simulationFilePath,
-                          populationFilePath,
-                          resultFileName,
+                          populationFilePath = NULL,
+                          resultsFolderName = getwd(),
+                          resultsFileName = "sensitivityAnalysisResults",
                           ...) {
       super$initialize(...)
-
       self$simulationFilePath = simulationFilePath
       self$populationFilePath = populationFilePath
-      self$resultFileName = resultFileName
-
+      self$resultsFolderName = resultsFolderName
+      self$resultsFileName = resultsFileName
     }
   )
 )

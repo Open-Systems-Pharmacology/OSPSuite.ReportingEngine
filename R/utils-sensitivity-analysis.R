@@ -94,7 +94,7 @@ individualSensitivityAnalysis <- function(simFilePath,
       simulation = sim,
       parametersToPerturb = parametersToPerturb,
       totalSensitivityThreshold = 1,
-      resultsFilePath = paste0(resultsFileFolder, resultsFileName, ".csv")
+      resultsFilePath = file.path(resultsFileFolder,paste0(resultsFileName,".csv"))
     )
   }
 
@@ -136,7 +136,7 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   #Generate a listcontaining names of SA CSV result files that will be output by each core
   allResultsFileNames <- sapply(
     X = 1:numberOfCores, function(x, resultsFileFolder, resultsFileName) {
-      return(paste0(resultsFileFolder, resultsFileName, "_", x, ".csv"))
+      return(file.path(resultsFileFolder,paste0(resultsFileName,"_",x,".csv")))
     },
     resultsFileFolder = resultsFileFolder,
     resultsFileName = resultsFileName,

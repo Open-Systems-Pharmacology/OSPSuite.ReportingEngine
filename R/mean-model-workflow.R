@@ -51,7 +51,8 @@ MeanModelWorkflow <- R6::R6Class(
                                               message = NULL,
                                               simulationFilePath = file.path(self$inputFolder,paste0(self$simulation, ".pkml")),
                                               populationFilePath = NULL,
-                                              resultFileName = "meanModelSimulation") {
+                                              resultsFolderName = file.path(self$simulationFolder),
+                                              resultsFileName = "meanModelSimulation") {
       self$meanModelSimulation <- SimulationTask$new(
         input = input,
         output = output,
@@ -60,7 +61,8 @@ MeanModelWorkflow <- R6::R6Class(
         message = message %||% "Simulate mean model",
         simulationFilePath = simulationFilePath,
         populationFilePath = populationFilePath,
-        resultFileName = resultFileName
+        resultsFolderName = resultsFolderName,
+        resultsFileName = resultsFileName
       )
     },
 
@@ -73,7 +75,8 @@ MeanModelWorkflow <- R6::R6Class(
                                               message = NULL,
                                               simulationFilePath = file.path(self$inputFolder,paste0(self$simulation, ".pkml")),
                                               populationFilePath = NULL,
-                                              resultFileName = "meanModelSimulation") {
+                                              resultsFolderName = file.path(self$sensitivityFolder),
+                                              resultsFileName = "meanModelSensitivityAnalysis") {
       self$meanModelSensitivityAnalysis <- SensitivityAnalysisTask$new(
         input = input,
         output = output,
@@ -82,17 +85,21 @@ MeanModelWorkflow <- R6::R6Class(
         message = message %||% "Sensitivity analysis for mean model",
         simulationFilePath = simulationFilePath,
         populationFilePath = populationFilePath,
-        resultFileName = resultFileName
+        resultsFolderName = resultsFolderName,
+        resultsFileName = resultsFileName
       )
     },
 
 
+
+
+    #self$meanModelSensitivityAnalysis$resultsFileName
     # setSensitivityAnalysisSettings = function(input = NULL,
     #                                           output = NULL,
     #                                           settings = NULL,
     #                                           active = TRUE,
     #                                           message = NULL,
-    #                                           resultFileName = "simulationResults") {
+    #                                           resultsFileName = "simulationResults") {
     #   self$meanModelSensitivityAnalysis <- Task$new(
     #     input = input %||% list(),
     #     output = output %||% list("meanModelSensitivityAnalysisResultsFileName" = "meanModelSensitivityAnalysis"),
@@ -149,22 +156,24 @@ MeanModelWorkflow <- R6::R6Class(
         if (self$meanModelSimulation$validateInput()) {
           print("Starting mean model simulation")
           simulateModel(simFilePath     = self$meanModelSimulation$simulationFilePath,
-                        resultsFilePath = file.path(self$outputFolder,paste0(self$meanModelSimulation$resultFileName,".csv")))
+                        resultsFilePath = file.path( self$meanModelSimulation$resultsFolderName,paste0(self$meanModelSimulation$resultsFileName,".csv") ))
         }
       }
 
 
+
+
       if (self$meanModelSensitivityAnalysis$active) {
         if (self$meanModelSensitivityAnalysis$validateInput()) {
-               print("Starting mean model sensitivity analysis")
-           print(file.path(self$inputFolder,paste0(self$simulation, ".pkml")))
+          print("Starting mean model sensitivity analysis")
+
           #print("DDDD")
-           print(file.path(self$outputFolder))
-           print(self$meanModelSimulation$output$meanModelSensitivityAnalysisResultsFileName)
+
+print(self$meanModelSensitivityAnalysis$resultsFolderName )
           analyzeSensitivity(
             simFilePath = file.path(self$inputFolder,paste0(self$simulation, ".pkml")),
-            resultsFileFolder = file.path(self$outputFolder),
-            resultsFileName =  self$meanModelSimulation$output$meanModelSensitivityAnalysisResultsFileName
+            resultsFileFolder = file.path( self$meanModelSensitivityAnalysis$resultsFolderName ),
+            resultsFileName =  self$meanModelSensitivityAnalysis$resultsFileName
           )
         }
       }
@@ -217,7 +226,7 @@ MeanModelWorkflow <- R6::R6Class(
     #               simFileFolder = paste0(wdir, "/", inputFolder, "/"),
     #               popDataFileName = paste0(popFileName, "_", mpi.comm.rank(), ".csv"),
     #               popDataFileFolder = paste0(wdir, "/", inputFolder, "/"),
-    #               resultFileName = paste0(resultsFileName, "_", mpi.comm.rank(), ".csv"),
+    #               resultsFileName = paste0(resultsFileName, "_", mpi.comm.rank(), ".csv"),
     #               resultFileFolder = paste0(wdir, "/", outputFolder, "/")
     #             ))
     #             mpi.close.Rslaves() # Move to end of workflow
