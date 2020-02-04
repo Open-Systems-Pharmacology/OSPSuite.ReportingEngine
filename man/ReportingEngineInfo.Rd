@@ -4,19 +4,14 @@
 \name{ReportingEngineInfo}
 \alias{ReportingEngineInfo}
 \title{ReportingEngineInfo}
+\usage{
+ReportingEngineInfo
+}
 \description{
 R6 class providing relevant information regarding the Reporting Engine
 }
-\section{Methods}{
+\section{Fields}{
 
-\describe{
-\item{new()}{Initialize ReportingEngineInfo}
-\item{print()}{Print Reporting Engine Inforation}
-}
-}
-
-\section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{Date}}{(public)}
 
@@ -33,66 +28,14 @@ R6 class providing relevant information regarding the Reporting Engine
 \item{\code{Rversion}}{(private) version of R}
 
 \item{\code{isValidatedSystem}}{(private) logical for computers that are evaluatued validated for Reporting Engine}
-}
-\if{html}{\out{</div>}}
-}
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{computerName}}{(private) name of computer}
+}}
 
-\item{\code{userName}}{(private) name of user}
-
-\item{\code{login}}{(private)}
-
-\item{\code{tlfVersion}}{(private) version of tlf package}
-
-\item{\code{ospsuiteVersion}}{(private) version of osp suite package}
-
-\item{\code{Rversion}}{(private) version of R}
-
-\item{\code{isValidatedSystem}}{(private) logical for computers that are evaluatued validated for Reporting Engine}
-}
-\if{html}{\out{</div>}}
-}
 \section{Methods}{
-\subsection{Public methods}{
-\itemize{
-\item \href{#method-new}{\code{ReportingEngineInfo$new()}}
-\item \href{#method-print}{\code{ReportingEngineInfo$print()}}
-\item \href{#method-clone}{\code{ReportingEngineInfo$clone()}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\subsection{Method \code{new()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ReportingEngineInfo$new()}\if{html}{\out{</div>}}
-}
 
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\subsection{Method \code{print()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ReportingEngineInfo$print()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ReportingEngineInfo$clone(deep = FALSE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
+\item{new()}{Initialize ReportingEngineInfo}
+\item{print()}{Print Reporting Engine Inforation}
 }
 }
+
+\keyword{datasets}

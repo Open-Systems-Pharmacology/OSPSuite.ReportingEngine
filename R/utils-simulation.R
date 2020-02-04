@@ -6,6 +6,7 @@
 simulateModel <- function(simFilePath,
                           popDataFilePath=NULL,
                           resultsFilePath) {
+  print(simFilePath)
   sim <- loadSimulation(simFilePath,
                         addToCache = FALSE,
                         loadFromCache = FALSE

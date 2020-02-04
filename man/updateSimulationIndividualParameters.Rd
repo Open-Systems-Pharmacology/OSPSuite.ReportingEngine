@@ -4,9 +4,10 @@
 \alias{updateSimulationIndividualParameters}
 \title{updateSimulationIndividualParameters}
 \usage{
-updateSimulationIndividualParameters(simulation, parameterPathValuesList)
+updateSimulationIndividualParameters(simulation,
+  individualParameters = NULL)
 }
 \description{
-Update individual parameters with parameters in parameterPathValuesList.
-parameterPathValuesList is obtained from a population object's getParameterValuesForIndividual() function.
+Update individual parameters with parameters in individualParameters,
+individualParameters is obtained from a population object's getParameterValuesForIndividual() function.
 }

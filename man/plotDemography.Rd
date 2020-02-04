@@ -4,12 +4,9 @@
 \alias{plotDemography}
 \title{plotDemography}
 \usage{
-plotDemography(
-  simulation,
-  population,
-  parameterNames = c(StandardPath$Age, StandardPath$Weight, StandardPath$Height),
-  plotConfiguration = NULL
-)
+plotDemography(simulation, population,
+  parameterNames = c(StandardPath$Age, StandardPath$Weight,
+  StandardPath$Height), plotConfiguration = NULL)
 }
 \arguments{
 \item{simulation}{simulation class object}

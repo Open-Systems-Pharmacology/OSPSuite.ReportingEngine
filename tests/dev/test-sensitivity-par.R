@@ -5,12 +5,9 @@ library(Rmpi)
 library(tictoc)
 
 
-# function(populationFilePath,IndividualID,simulationFilePath){
-#
-#   individualParameters <- popObject$getParameterValuesForIndividual(individualId = 2)
-#
-#
-# }
+tictoc::tic()
+
+setwd("C:/Users/ahamadeh/Dropbox/rproject/workflow")
 
 
 
@@ -18,18 +15,27 @@ library(tictoc)
 # simFilePath <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/simpleMobiEventSim_nonzeroinitial.pkml"
 simFilePath <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/individualPksimSim.pkml"
 popFilePath <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/popData.csv" # DEFAULT NULL
-popObject <- loadPopulation(popFilePath)
-individualParameters <- popObject$getParameterValuesForIndividual(individualId = 2) # DEFAULT NULL
+# popObject <- loadPopulation(popFilePath)
+# individualParameters <- popObject$getParameterValuesForIndividual(individualId = 2) # DEFAULT NULL
+#
+# numberOfCores <- 2
+#
+#
+# resultsFileFolder <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/tests/dev/"
+# resultsFileName <- "SAResults"
+#
+# parametersToPerturb <- NULL
 
-numberOfCores <- 2
+
+mwf <- MeanModelWorkflow$new(simulationFile = simFilePath)
+mwf$setMeanModelSimulationSettings()
+mwf$setSensitivityAnalysisSettings(active = TRUE)
+mwf$runWorkflow()
 
 
-resultsFileFolder <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/tests/dev/"
-resultsFileName <- "SAResults"
-
-parametersToPerturb <- NULL
 
 
+tictoc::toc()
 
 
 

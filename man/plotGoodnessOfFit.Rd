@@ -4,13 +4,8 @@
 \alias{plotGoodnessOfFit}
 \title{plotGoodnessOfFit}
 \usage{
-plotGoodnessOfFit(
-  populationSimulation,
-  population,
-  observedData = NULL,
-  quantity = NULL,
-  plotConfiguration = NULL
-)
+plotGoodnessOfFit(populationSimulation, population, observedData = NULL,
+  quantity = NULL, plotConfiguration = NULL)
 }
 \arguments{
 \item{populationSimulation}{class object from runSimulation(simulation, population)}

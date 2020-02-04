@@ -4,11 +4,8 @@
 \alias{removeForbiddenLetters}
 \title{removeForbiddenLetters}
 \usage{
-removeForbiddenLetters(
-  text,
-  forbiddenLetters = "[[:punct:]]",
-  replacement = "_"
-)
+removeForbiddenLetters(text, forbiddenLetters = "[[:punct:]]",
+  replacement = "_")
 }
 \arguments{
 \item{text}{character string to be evaluated}

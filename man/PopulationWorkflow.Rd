@@ -4,25 +4,14 @@
 \name{PopulationWorkflow}
 \alias{PopulationWorkflow}
 \title{PopulationWorkflow}
+\usage{
+PopulationWorkflow
+}
 \description{
 Population Workflow Task for Reporting Engine
 }
-\section{Methods}{
+\section{Fields}{
 
-\describe{
-\item{new()}{Initilialize reporting engine population workflow}
-\item{setPopulationSimulationSettings()}{Define population simulation task settings}
-\item{setPlotDemographySettings()}{Define demography plot settings}
-\item{setPlotTimeProfileSettings()}{Define time profile plot settings}
-\item{runWorkflow()}{Run the active tasks of population worklfow}
-}
-}
-
-\section{Super class}{
-\code{\link[ospsuite.reportingengine:Workflow]{ospsuite.reportingengine::Workflow}} -> \code{PopulationWorkflow}
-}
-\section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{populationSimulation}}{Population simulation task}
 
@@ -37,115 +26,17 @@ Population Workflow Task for Reporting Engine
 \item{\code{pkParametersPlot}}{Plot PK parameters task}
 
 \item{\code{sensitivityPlot}}{Plot sensitiviy task}
-}
-\if{html}{\out{</div>}}
-}
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{timeProfilePlot}}{Plot time profile task}
-}
-\if{html}{\out{</div>}}
-}
+}}
+
 \section{Methods}{
-\subsection{Public methods}{
-\itemize{
-\item \href{#method-new}{\code{PopulationWorkflow$new()}}
-\item \href{#method-setPopulationSimulationSettings}{\code{PopulationWorkflow$setPopulationSimulationSettings()}}
-\item \href{#method-setDemographyPlotSettings}{\code{PopulationWorkflow$setDemographyPlotSettings()}}
-\item \href{#method-setGofPlotSettings}{\code{PopulationWorkflow$setGofPlotSettings()}}
-\item \href{#method-runWorkflow}{\code{PopulationWorkflow$runWorkflow()}}
-\item \href{#method-print}{\code{PopulationWorkflow$print()}}
-\item \href{#method-clone}{\code{PopulationWorkflow$clone()}}
-}
-}
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="setPKParametersCalculationSettings">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-setPKParametersCalculationSettings}{\code{ospsuite.reportingengine::Workflow$setPKParametersCalculationSettings()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="setpkParametersPlotSettings">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-setpkParametersPlotSettings}{\code{ospsuite.reportingengine::Workflow$setpkParametersPlotSettings()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="setSensitivityAnalysisSettings">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-setSensitivityAnalysisSettings}{\code{ospsuite.reportingengine::Workflow$setSensitivityAnalysisSettings()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="setSensitivityPlotSettings">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-setSensitivityPlotSettings}{\code{ospsuite.reportingengine::Workflow$setSensitivityPlotSettings()}}\out{</span>}
-}
-\out{</details>}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\subsection{Method \code{new()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$new(numberOfCores = NULL, ...)}\if{html}{\out{</div>}}
-}
 
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setPopulationSimulationSettings"></a>}}
-\subsection{Method \code{setPopulationSimulationSettings()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$setPopulationSimulationSettings(
-  input = NULL,
-  output = NULL,
-  active = TRUE,
-  message = NULL
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setDemographyPlotSettings"></a>}}
-\subsection{Method \code{setDemographyPlotSettings()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$setDemographyPlotSettings(
-  input = NULL,
-  output = NULL,
-  active = TRUE,
-  message = NULL
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setGofPlotSettings"></a>}}
-\subsection{Method \code{setGofPlotSettings()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$setGofPlotSettings(
-  input = NULL,
-  output = NULL,
-  active = TRUE,
-  message = NULL
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-runWorkflow"></a>}}
-\subsection{Method \code{runWorkflow()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$runWorkflow()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\subsection{Method \code{print()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$print()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$clone(deep = FALSE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{deep}}{Whether to make a deep clone.}
+\item{new()}{Initilialize reporting engine population workflow}
+\item{setPopulationSimulationSettings()}{Define population simulation task settings}
+\item{setPlotDemographySettings()}{Define demography plot settings}
+\item{setPlotTimeProfileSettings()}{Define time profile plot settings}
+\item{runWorkflow()}{Run the active tasks of population worklfow}
 }
-\if{html}{\out{</div>}}
 }
-}
-}
+
+\keyword{datasets}

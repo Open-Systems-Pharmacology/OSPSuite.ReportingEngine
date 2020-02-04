@@ -4,26 +4,15 @@
 \alias{analyzeSensitivity}
 \title{analyzeSensitivity}
 \usage{
-analyzeSensitivity(
-  simFilePath,
-  perturbationParameterNamesVector = NULL,
-  totalSensitivityThreshold = 1,
-  resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv"),
-  numberOfCoresToUse = NULL
-)
-}
-\arguments{
-\item{totalSensitivityThreshold}{numeric value between 0 and 1.
-Close to 0, only the most sensitive output paths are returned.
-Close to 1, almost all the output paths are returned.}
-
-\item{simulation}{simulation class object}
-
-\item{pkParameterName}{name of parameter to be analyzed}
+analyzeSensitivity(simFilePath, parametersToPerturb = NULL,
+  popFilePath = NULL, individualID = NULL, numberOfCores = NULL,
+  resultsFileFolder = "getwd()",
+  resultsFileName = "sensitivityAnalysisResults")
 }
 \value{
-sensitivityResults
+SA results for individual or population
 }
 \description{
-Run a sensitivity analysis from a simulation
+Determine whether to run SA for individual or population.  If for individual,  pass simulation to individualSensitivityAnalysis.
+If SA is for population, loop thru population file, extract parameters for each individual, and pass them to individualSensitivityAnalysis.
 }
