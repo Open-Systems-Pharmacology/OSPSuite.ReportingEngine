@@ -1,21 +1,14 @@
-#' @title PopulationWorkflow
+#' @title MeanModelWorkflow
 #' @docType class
-#' @description  Population Workflow Task for Reporting Engine
-#' @field populationSimulation Population simulation task
+#' @description  Mean Model Workflow Task for Reporting Engine
+#' @field meanModelSimulation Population simulation task
 #' @field pkParametersCalculation PK parameters calculation task
 #' @field sensitivityAnalysis Sensitivity analysis task
-#' @field demographyPlot Plot demography task
-#' @field timeProfilePlot Plot time profile task
-#' @field pkParametersPlot Plot PK parameters task
-#' @field sensitivityPlot Plot sensitiviy task
 #' @section Methods:
 #' \describe{
-#' \item{new()}{Initilialize reporting engine population workflow}
-#' \item{setPopulationSimulationSettings()}{Define population simulation task settings}
-#' \item{setPlotDemographySettings()}{Define demography plot settings}
-#' \item{setPlotTimeProfileSettings()}{Define time profile plot settings}
-
-#' \item{runWorkflow()}{Run the active tasks of population worklfow}
+#' \item{new()}{Initilialize reporting engine mean model workflow}
+#' \item{setMeanModelSimulationSettings()}{Define mean model simulation task settings}
+#' \item{runWorkflow()}{Run the active tasks of mean model worklfow}
 #' }
 #' @export
 #' @import tlf
@@ -27,7 +20,7 @@ MeanModelWorkflow <- R6::R6Class(
 
   public = list(
     meanModelSimulation = NULL,
-    sensitivityAnalysis = NULL,
+    meanModelSensitivityAnalysis = NULL,
     sensitivityPlot = NULL,
 
     initialize = function(numberOfCores = NULL, ...) {
@@ -42,8 +35,8 @@ MeanModelWorkflow <- R6::R6Class(
 
 
       self$setMeanModelSimulationSettings()
-      # self$setPKParametersCalculationSettings()
-      # self$setSensitivityAnalysisSettings()
+      #      self$setPKParametersCalculationSettings()
+      self$setSensitivityAnalysisSettings()
 
       # self$setDemographyPlotSettings()
       # self$setGofPlotSettings()
@@ -56,36 +49,26 @@ MeanModelWorkflow <- R6::R6Class(
                                               active = TRUE,
                                               message = NULL) {
       self$meanModelSimulation <- Task$new(
-        input = input %||% list(
-          "simulation" = file.path(self$inputFolder, paste0(self$simulation, ".pkml"))
-        ),
-        #output = output %||% list("meanModelSimulationResults" = file.path(self$outputFolder, "meanModelSimulation.csv")),
+        input = input %||% list(),
+        output = output %||% list("meanModelSimulationResultsFileName" = "meanModelSimulation"),
         active = active,
         message = message %||% "Simulate mean model"
       )
     },
 
 
+    setSensitivityAnalysisSettings = function(input = NULL,
+                                              output = NULL,
+                                              active = TRUE,
+                                              message = NULL) {
+      self$meanModelSensitivityAnalysis <- Task$new(
+        input = input %||% list("numberOfCores" = 1),
+        output = output %||% list("meanModelSensitivityAnalysisResultsFileName" = "meanModelSensitivityAnalysis"),
+        active = active,
+        message = message %||% "Perform sensitivity analysis on mean model"
+      )
+    },
 
-
-
-
-
-    # setDemographyPlotSettings = function(input = NULL,
-    #                                          output = NULL,
-    #                                          active = TRUE,
-    #                                          message = NULL) {
-    #   self$demographyPlot <- Task$new(
-    #     input = input %||% self$populationSimulation$input,
-    #     output = output %||% list(
-    #       "demographyResults" = file.path(self$simulationFolder, "demography.RData"),
-    #       "demographyPlot" = file.path(self$outputFolder, "demographyPlot"),
-    #       "demographyTable" = file.path(self$outputFolder, "demographyTable.md")
-    #     ),
-    #     active = active,
-    #     message = message %||% "Plot demography"
-    #   )
-    # },
 
 
     # setGofPlotSettings = function(input = NULL,
@@ -128,18 +111,35 @@ MeanModelWorkflow <- R6::R6Class(
       print(self$reportingEngineInfo)
 
 
-      wdir <- self$workflowFolder #
-      resultsFileName <- "meanModelSimulationResults"
 
       if (self$meanModelSimulation$active) {
         if (self$meanModelSimulation$validateInput()) {
           print("Starting mean model simulation")
-          simulateModel(simFilePath = paste0(wdir, "/", self$inputFolder, "/", self$simulation, ".pkml"),
-                        resultsFilePath = paste0(wdir, "/", self$outputFolder, "/", resultsFileName, ".csv")
+          simulateModel(simFilePath     = file.path(self$workflowFolder,self$inputFolder,paste0(self$simulation, ".pkml")),
+                        resultsFilePath = file.path(self$workflowFolder,self$outputFolder,paste0(self$meanModelSimulation$output$meanModelSimulationResultsFileName,".csv")))
+         }
+      }
+
+
+      if (self$meanModelSensitivityAnalysis$active) {
+        if (self$meanModelSensitivityAnalysis$validateInput()) {
+          print("Starting mean model sensitivity analysis")
+          analyzeSensitivity(
+            simFilePath = file.path(self$workflowFolder,self$inputFolder,paste0(self$simulation, ".pkml")),
+            resultsFileFolder = file.path(self$workflowFolder,self$outputFolder),
+            resultsFileName = paste0( self$meanModelSimulation$output$meanModelSensitivityAnalysisResultsFileName)
           )
         }
       }
+
+
     },
+
+
+
+
+
+
     # self$numberOfCores,
     # self$populationSimulation$input$population,
     # self$inputFolder,
