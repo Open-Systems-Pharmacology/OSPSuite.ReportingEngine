@@ -1,6 +1,6 @@
-#' @title SimulationTask
+#' @title SensitivityAnalysisTask
 #' @docType class
-#' @description  Simulation task settings for Reporting Engine
+#' @description  Sensitivity analysis task settings for Reporting Engine
 #' @field resultFileName string with not file extension for.  Name of CSV file to which simulation results will be saved.
 #' @section Methods:
 #' \describe{
@@ -10,8 +10,8 @@
 #' \item{print()}{Show task settings}
 #' }
 #' @format NULL
-SimulationTask <- R6::R6Class(
-  "SimulationTask",
+SensitivityAnalysisTask <- R6::R6Class(
+  "SensitivityAnalysisTask",
   inherit = Task,
   public = list(
     simulationFilePath = NULL,
