@@ -29,7 +29,7 @@ popFilePath <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/da
 
 mwf <- MeanModelWorkflow$new(simulationFile = simFilePath)
 mwf$setMeanModelSimulationSettings()
-#mwf$setSensitivityAnalysisSettings(active = TRUE)
+mwf$setSensitivityAnalysisSettings()
 mwf$runWorkflow()
 
 

@@ -8,7 +8,7 @@ analyzeSensitivity <- function(simFilePath,
                                parametersToPerturb = NULL,
                                popFilePath=NULL,
                                individualID=NULL,
-                               numberOfCores=NULL,
+                               numberOfCores=1,
                                resultsFileFolder="getwd()",
                                resultsFileName="sensitivityAnalysisResults"){
 
@@ -25,7 +25,6 @@ analyzeSensitivity <- function(simFilePath,
     popObject <- loadPopulation(popFilePath)
     individualSeq <- individualID %||% seq(1,popObject$count)
     for (ind in individualSeq){
-      individualParameters <-
         individualSensitivityAnalysis(simFilePath = simFilePath,
                                       parametersToPerturb = parametersToPerturb,
                                       individualParameters = popObject$getParameterValuesForIndividual(individualId = ind),
@@ -36,6 +35,8 @@ analyzeSensitivity <- function(simFilePath,
     }
   }
   else {
+    print("ZEROZERO")
+    print(numberOfCores)
     individualSensitivityAnalysis(simFilePath = simFilePath,
                                   parametersToPerturb = parametersToPerturb,
                                   individualParameters = NULL,
@@ -59,6 +60,9 @@ individualSensitivityAnalysis <- function(simFilePath,
                                           resultsFileFolder = resultsFileFolder,
                                           resultsFileName = resultsFileName){
   #Load simulation to determine number of perturbation parameters
+  print("HALFHALF")
+  print(numberOfCores)
+  print("HALFHALF")
   sim <- loadSimulation(simFilePath)
 
   #If no perturbation parameters specified, perturb all parameters
@@ -88,7 +92,7 @@ individualSensitivityAnalysis <- function(simFilePath,
     updateSimulationIndividualParameters(simulation = sim, individualParameters)
     ospsuite.reportingengine::analyzeCoreSensitivity(
       simulation = sim,
-      perturbationParameterNamesVector = parametersToPerturb,
+      parametersToPerturb = parametersToPerturb,
       totalSensitivityThreshold = 1,
       resultsFilePath = paste0(resultsFileFolder, resultsFileName, ".csv")
     )
@@ -106,6 +110,7 @@ individualSensitivityAnalysis <- function(simFilePath,
 #' @return Simulation results for population
 #' @export
 #' @import ospsuite
+#' @import Rmpi
 runParallelSensitivityAnalysis <- function(simFilePath,
                                            parametersToPerturb,
                                            individualParameters,
@@ -185,11 +190,13 @@ analyzeCoreSensitivity <- function(simulation,
   sensitivityAnalysis$addParameterPaths(parametersToPerturb)
 
   if (is.null(numberOfCoresToUse)) {
-    sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(showProgress = FALSE)
+    print("ONEONE")
+    sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(showProgress = TRUE)
   }
   else {
+    print("TWOTWO")
     sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(
-      showProgress = FALSE,
+      showProgress = TRUE,
       numberOfCoresToUse = numberOfCoresToUse
     )
   }

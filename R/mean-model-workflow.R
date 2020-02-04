@@ -148,28 +148,26 @@ MeanModelWorkflow <- R6::R6Class(
       if (self$meanModelSimulation$active) {
         if (self$meanModelSimulation$validateInput()) {
           print("Starting mean model simulation")
-          print(self$meanModelSimulation$simulationFilePath)
-          print( file.path(self$outputFolder,paste0(self$meanModelSimulation$resultFileName,".csv"))   )
           simulateModel(simFilePath     = self$meanModelSimulation$simulationFilePath,
                         resultsFilePath = file.path(self$outputFolder,paste0(self$meanModelSimulation$resultFileName,".csv")))
         }
       }
 
-      #
-      #       if (self$meanModelSensitivityAnalysis$active) {
-      #        # if (self$meanModelSensitivityAnalysis$validateInput()) {
-      #       #    print("Starting mean model sensitivity analysis")
-      #           #print(file.path(self$inputFolder,paste0(self$simulation, ".pkml")))
-      #           #print("DDDD")
-      #           #print(file.path(self$outputFolder))
-      #           #print(self$meanModelSimulation$output$meanModelSensitivityAnalysisResultsFileName)
-      #           # analyzeSensitivity(
-      #           #   simFilePath = file.path(self$inputFolder,paste0(self$simulation, ".pkml")),
-      #           #   resultsFileFolder = file.path(self$outputFolder),
-      #           #   resultsFileName =  self$meanModelSimulation$output$meanModelSensitivityAnalysisResultsFileName
-      #           # )
-      #        # }
-      #       }
+
+      if (self$meanModelSensitivityAnalysis$active) {
+        if (self$meanModelSensitivityAnalysis$validateInput()) {
+               print("Starting mean model sensitivity analysis")
+           print(file.path(self$inputFolder,paste0(self$simulation, ".pkml")))
+          #print("DDDD")
+           print(file.path(self$outputFolder))
+           print(self$meanModelSimulation$output$meanModelSensitivityAnalysisResultsFileName)
+          analyzeSensitivity(
+            simFilePath = file.path(self$inputFolder,paste0(self$simulation, ".pkml")),
+            resultsFileFolder = file.path(self$outputFolder),
+            resultsFileName =  self$meanModelSimulation$output$meanModelSensitivityAnalysisResultsFileName
+          )
+        }
+      }
 
 
     },
