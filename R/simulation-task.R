@@ -39,7 +39,7 @@ SimulationTask <- R6::R6Class(
       self$populationFileName = populationFileName
       self$resultsFolderName = resultsFolderName
       self$resultsFileName = resultsFileName
-      numberOfCores = numberOfCores
+      self$numberOfCores = numberOfCores
       self$calculatePKParameters = calculatePKParameters
       self$PKParametersFolderName = PKParametersFolderName
       self$PKParametersFileName = PKParametersFileName

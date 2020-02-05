@@ -25,6 +25,7 @@ SensitivityAnalysisTask <- R6::R6Class(
                           populationFileName = NULL,
                           resultsFolderName = getwd(),
                           resultsFileName = "sensitivityAnalysisResults",
+                          numberOfCores = 1,
                           ...) {
       super$initialize(...)
       self$inputFolderName = inputFolderName
@@ -32,6 +33,7 @@ SensitivityAnalysisTask <- R6::R6Class(
       self$populationFileName = populationFileName
       self$resultsFolderName = resultsFolderName
       self$resultsFileName = resultsFileName
+      self$numberOfCores = numberOfCores
     }
   )
 )

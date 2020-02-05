@@ -43,7 +43,17 @@ Population Workflow Task for Reporting Engine
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
+\item{\code{pkParametersCalculation}}{PK parameters calculation task}
+
+\item{\code{sensitivityAnalysis}}{Sensitivity analysis task}
+
+\item{\code{demographyPlot}}{Plot demography task}
+
 \item{\code{timeProfilePlot}}{Plot time profile task}
+
+\item{\code{pkParametersPlot}}{Plot PK parameters task}
+
+\item{\code{sensitivityPlot}}{Plot sensitiviy task}
 }
 \if{html}{\out{</div>}}
 }
@@ -67,7 +77,7 @@ Population Workflow Task for Reporting Engine
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$new(numberOfCores = NULL, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$new(...)}\if{html}{\out{</div>}}
 }
 
 }
@@ -81,9 +91,10 @@ Population Workflow Task for Reporting Engine
   settings = NULL,
   active = TRUE,
   message = NULL,
-  simulationFilePath = file.path(self$inputFolder, paste0(self$simulation, ".pkml")),
-  populationFilePath = file.path(self$inputFolder, paste0(self$population, ".csv")),
-  resultsFolderName = file.path(self$simulationFolder),
+  inputFolderName = self$inputFolder,
+  simulationFileName = self$simulation,
+  populationFileName = self$population,
+  resultsFolderName = self$simulationFolder,
   resultsFileName = "populationSimulation",
   numberOfCores = 1,
   calculatePKParameters = TRUE,

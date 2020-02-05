@@ -6,12 +6,14 @@
 \usage{
 runParallelPopulationSimulation(
   numberOfCores,
-  workingDirectory,
-  inputFolder,
-  outputFolder,
-  simFileName,
-  popFileName,
-  resultsFileName
+  inputFolderName,
+  simulationFileName,
+  populationFileName,
+  resultsFolderName,
+  resultsFileName,
+  calculatePKParameters,
+  PKParametersFolderName,
+  PKParametersFileName
 )
 }
 \value{

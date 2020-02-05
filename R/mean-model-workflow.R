@@ -21,17 +21,9 @@ MeanModelWorkflow <- R6::R6Class(
   public = list(
     meanModelSimulation = NULL,
     meanModelSensitivityAnalysis = NULL,
-    sensitivityPlot = NULL,
 
     initialize = function(...) {
       super$initialize(...)
-
-
-      # if (!is.null(numberOfCores)) {
-      #   validateIsInteger(numberOfCores)
-      #   self$numberOfCores <- numberOfCores
-      # }
-
 
 
       #self$setMeanModelSimulationSettings()
@@ -70,32 +62,34 @@ MeanModelWorkflow <- R6::R6Class(
         resultsFileName = resultsFileName,
         calculatePKParameters = calculatePKParameters,
         PKParametersFolderName = PKParametersFolderName,
-        PKParametersFileName = PKParametersFileName
-      )
+        PKParametersFileName = PKParametersFileName)
     },
 
 
 
-    setSensitivityAnalysisSettings = function(input = NULL,
+    setMeanModelSensitivityAnalysisSettings = function(input = NULL,
                                               output = NULL,
                                               settings = NULL,
                                               active = TRUE,
                                               message = NULL,
-                                              simulationFilePath = file.path(self$inputFolder,paste0(self$simulation, ".pkml")),
-                                              populationFilePath = NULL,
-                                              resultsFolderName = file.path(self$sensitivityFolder),
-                                              resultsFileName = "meanModelSensitivityAnalysis") {
+                                              inputFolderName = self$inputFolder,
+                                              simulationFileName = self$simulation,
+                                              populationFileName = NULL,
+                                              resultsFolderName = self$sensitivityFolder,
+                                              resultsFileName = "meanModelSensitivityAnalysis",
+                                              numberOfCores = 1) {
       self$meanModelSensitivityAnalysis <- SensitivityAnalysisTask$new(
         input = input,
         output = output,
         settings = settings,
         active = active,
         message = message %||% "Sensitivity analysis for mean model",
-        simulationFilePath = simulationFilePath,
-        populationFilePath = populationFilePath,
+        inputFolderName = inputFolderName,
+        simulationFileName = simulationFileName,
+        populationFileName = populationFileName,
         resultsFolderName = resultsFolderName,
-        resultsFileName = resultsFileName
-      )
+        resultsFileName = resultsFileName,
+        numberOfCores = numberOfCores)
     },
 
 
@@ -176,7 +170,8 @@ MeanModelWorkflow <- R6::R6Class(
           analyzeSensitivity(
             simFilePath = file.path(self$meanModelSensitivityAnalysis$inputFolderName,paste0(self$meanModelSensitivityAnalysis$simulationFileName, ".pkml")),
             resultsFileFolder = file.path( self$meanModelSensitivityAnalysis$resultsFolderName ),
-            resultsFileName =  self$meanModelSensitivityAnalysis$resultsFileName
+            resultsFileName =  self$meanModelSensitivityAnalysis$resultsFileName,
+            numberOfCores = self$meanModelSensitivityAnalysis$numberOfCores
           )
         }
       }

@@ -49,10 +49,12 @@ Sensitivity analysis task settings for Reporting Engine
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$new(
-  simulationFilePath,
-  populationFilePath = NULL,
+  inputFolderName = getwd(),
+  simulationFileName,
+  populationFileName = NULL,
   resultsFolderName = getwd(),
   resultsFileName = "sensitivityAnalysisResults",
+  numberOfCores = 1,
   ...
 )}\if{html}{\out{</div>}}
 }

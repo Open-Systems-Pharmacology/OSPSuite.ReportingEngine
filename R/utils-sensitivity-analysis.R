@@ -35,7 +35,6 @@ analyzeSensitivity <- function(simFilePath,
     }
   }
   else {
-    print(numberOfCores)
     individualSensitivityAnalysis(simFilePath = simFilePath,
                                   parametersToPerturb = parametersToPerturb,
                                   individualParameters = NULL,
@@ -75,8 +74,6 @@ individualSensitivityAnalysis <- function(simFilePath,
 
   #Determine if SA is to be done on a single core or more
   if (numberOfCores > 1) {
-
-
     runParallelSensitivityAnalysis(simFilePath,
                                    parametersToPerturb,
                                    individualParameters,
@@ -93,12 +90,7 @@ individualSensitivityAnalysis <- function(simFilePath,
       resultsFilePath = file.path(resultsFileFolder,paste0(resultsFileName,".csv"))
     )
   }
-
-
-
 }
-
-
 
 
 #' @title runParallelSensitivityAnalysis
@@ -140,27 +132,23 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   )
   Rmpi::mpi.bcast.Robj2slave(obj = allResultsFileNames)
 
-
   #Load simulation on each core
   Rmpi::mpi.bcast.cmd(sim <- loadSimulation(simFilePath))
 
   #Update simulation with individual parameters
   Rmpi::mpi.bcast.cmd(updateSimulationIndividualParameters(simulation = sim, individualParameters))
 
-  Rmpi::mpi.remote.exec(ospsuite.reportingengine::analyzeCoreSensitivity(
+
+
+  Rmpi::mpi.remote.exec(analyzeCoreSensitivity(
     simulation = sim,
-    perturbationParameterNamesVector = listSplitParameters[[mpi.comm.rank()]],
+    parametersToPerturb = listSplitParameters[[mpi.comm.rank()]],
     totalSensitivityThreshold = 1,
     resultsFilePath = allResultsFileNames[mpi.comm.rank()],
     numberOfCoresToUse = 1 # Number of local cores, set to 1 when parallelizing.
   ))
-
-
   Rmpi::mpi.close.Rslaves()
-
 }
-
-
 
 #' @title analyzeCoreSensitivity
 #' @description Run a sensitivity analysis from a simulation
@@ -182,11 +170,11 @@ analyzeCoreSensitivity <- function(simulation,
   sensitivityAnalysis$addParameterPaths(parametersToPerturb)
 
   if (is.null(numberOfCoresToUse)){
-    sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(showProgress = TRUE)
+    sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(showProgress = FALSE)
   }
   else {
     sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(
-      showProgress = TRUE,
+      showProgress = FALSE,
       numberOfCoresToUse = numberOfCoresToUse
     )
   }

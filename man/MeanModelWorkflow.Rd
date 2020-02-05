@@ -44,7 +44,7 @@ Mean Model Workflow Task for Reporting Engine
 \itemize{
 \item \href{#method-new}{\code{MeanModelWorkflow$new()}}
 \item \href{#method-setMeanModelSimulationSettings}{\code{MeanModelWorkflow$setMeanModelSimulationSettings()}}
-\item \href{#method-setSensitivityAnalysisSettings}{\code{MeanModelWorkflow$setSensitivityAnalysisSettings()}}
+\item \href{#method-setMeanModelSensitivityAnalysisSettings}{\code{MeanModelWorkflow$setMeanModelSensitivityAnalysisSettings()}}
 \item \href{#method-runWorkflow}{\code{MeanModelWorkflow$runWorkflow()}}
 \item \href{#method-print}{\code{MeanModelWorkflow$print()}}
 \item \href{#method-clone}{\code{MeanModelWorkflow$clone()}}
@@ -74,31 +74,34 @@ Mean Model Workflow Task for Reporting Engine
   settings = NULL,
   active = TRUE,
   message = NULL,
-  simulationFilePath = file.path(self$inputFolder, paste0(self$simulation, ".pkml")),
-  populationFilePath = NULL,
-  resultsFolderName = file.path(self$simulationFolder),
+  inputFolderName = self$inputFolder,
+  simulationFileName = self$simulation,
+  populationFileName = NULL,
+  resultsFolderName = self$simulationFolder,
   resultsFileName = "meanModelSimulation",
   calculatePKParameters = TRUE,
-  PKParametersFolderName = file.path(self$outputFolder),
+  PKParametersFolderName = self$outputFolder,
   PKParametersFileName = "meanModelPKParameters"
 )}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setSensitivityAnalysisSettings"></a>}}
-\subsection{Method \code{setSensitivityAnalysisSettings()}}{
+\if{html}{\out{<a id="method-setMeanModelSensitivityAnalysisSettings"></a>}}
+\subsection{Method \code{setMeanModelSensitivityAnalysisSettings()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$setSensitivityAnalysisSettings(
+\if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$setMeanModelSensitivityAnalysisSettings(
   input = NULL,
   output = NULL,
   settings = NULL,
   active = TRUE,
   message = NULL,
-  simulationFilePath = file.path(self$inputFolder, paste0(self$simulation, ".pkml")),
-  populationFilePath = NULL,
-  resultsFolderName = file.path(self$sensitivityFolder),
-  resultsFileName = "meanModelSensitivityAnalysis"
+  inputFolderName = self$inputFolder,
+  simulationFileName = self$simulation,
+  populationFileName = NULL,
+  resultsFolderName = self$sensitivityFolder,
+  resultsFileName = "meanModelSensitivityAnalysis",
+  numberOfCores = 1
 )}\if{html}{\out{</div>}}
 }
 

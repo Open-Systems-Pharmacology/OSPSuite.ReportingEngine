@@ -49,10 +49,12 @@ Simulation task settings for Reporting Engine
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SimulationTask$new(
-  simulationFilePath,
-  populationFilePath = NULL,
+  inputFolderName = getwd(),
+  simulationFileName,
+  populationFileName = NULL,
   resultsFolderName = getwd(),
   resultsFileName = "simulationResults",
+  numberOfCores = 1,
   calculatePKParameters = FALSE,
   PKParametersFolderName = getwd(),
   PKParametersFileName = "PKParameters",

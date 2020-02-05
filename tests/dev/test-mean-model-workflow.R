@@ -1,26 +1,55 @@
 rm(list = ls())
-devtools::load_all(".")
-mmm <- MeanModel$new(modelFilePath = "./data/sim2compounds.pkml", simulationOutputsFolder = "./data", modelDisplayName = "twoCompound")
+library(ospsuite)
+library(ospsuite.reportingengine)
+library(Rmpi)
+library(tictoc)
 
-mmm$simulateMeanModel(saveSimulation = TRUE)
-mmm$calculateMassBalance(saveMassBalance = TRUE)
+devtools::load_all("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine")
+tictoc::tic()
 
-
-
-##### USER DEFINED PK PARAMETERS#####
-getMyMin <- function(x = NULL, y) {
-  return(min(y))
-}
-
-getMyMax <- function(x = NULL, y) {
-  return(max(y))
-}
-###################################
-
-udPKFunctionArray <- c(
-  UserDefinedPKFunction$new(pKParameterName = "myMin", pKFunction = getMyMin, pKParameterUnit = "umol"), ### Manually enter units?
-  UserDefinedPKFunction$new(pKParameterName = "myMax", pKFunction = getMyMax, pKParameterUnit = "umol") ### Manually enter units?
-)
+# # SINGLE CORE SA
+# setwd("C:/Users/ahamadeh/Dropbox/rproject/workflow")
+# simFilePath <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/simpleMobiEventSim_nonzeroinitial.pkml"
+# mwf <- MeanModelWorkflow$new(simulationFile = simFilePath)
+# mwf$setMeanModelSimulationSettings()
+# mwf$setMeanModelSensitivityAnalysisSettings()
+# mwf$runWorkflow()
 
 
-mmm$calculateMeanModelPKParameters(userDefinedPKFunctions = udPKFunctionArray, savePKAnalysis = TRUE)
+# MULTI CORE SA
+setwd("C:/Users/ahamadeh/Dropbox/rproject/workflow")
+simFilePath <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/individualPksimSim.pkml"
+mwf <- MeanModelWorkflow$new(simulationFile = simFilePath)
+mwf$setMeanModelSimulationSettings(calculatePKParameters = FALSE)
+mwf$setMeanModelSensitivityAnalysisSettings(numberOfCores = 4)
+mwf$runWorkflow()
+
+
+
+# INPUTS ARE FOLDER OR PATH TO SIMULATION, LIST OF PARAMETERS (OPTIONAL,DEFAULT NULL) AND NUMBER OF CORES (OPTIONAL, DEFAULT 1), LIST OF OUTPUTS (OPTIONAL??), LIST OF PK PARAMS (OPTIONAL DEFAULT NULL)
+#simFilePath <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/individualPksimSim.pkml"
+# popObject <- loadPopulation(popFilePath)
+# individualParameters <- popObject$getParameterValuesForIndividual(individualId = 2) # DEFAULT NULL
+#
+# numberOfCores <- 2
+#
+#
+# resultsFileFolder <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/tests/dev/"
+# resultsFileName <- "SAResults"
+#
+# parametersToPerturb <- NULL
+
+
+
+
+
+
+tictoc::toc()
+
+
+
+
+
+
+
+

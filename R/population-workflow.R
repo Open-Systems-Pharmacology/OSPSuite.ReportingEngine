@@ -27,26 +27,17 @@ PopulationWorkflow <- R6::R6Class(
 
   public = list(
     populationSimulation = NULL,
-    pkParametersCalculation = NULL,
-    sensitivityAnalysis = NULL,
-    demographyPlot = NULL,
-    gofPlot = NULL,
-    pkParametersPlot = NULL,
-    sensitivityPlot = NULL,
-    numberOfCores = 1,
+    populationSensitivityAnalysis = NULL,
 
-    initialize = function(numberOfCores = NULL, ...) {
+    initialize = function(...) {
       super$initialize(...)
 
+      # if (!is.null(numberOfCores)) {
+      #   validateIsInteger(numberOfCores)
+      #   self$numberOfCores <- numberOfCores
+      # }
 
-      if (!is.null(numberOfCores)) {
-        validateIsInteger(numberOfCores)
-        self$numberOfCores <- numberOfCores
-      }
-
-
-
-      self$setPopulationSimulationSettings()
+      # self$setPopulationSimulationSettings()
       # self$setPKParametersCalculationSettings()
       # self$setSensitivityAnalysisSettings()
 
@@ -78,8 +69,8 @@ PopulationWorkflow <- R6::R6Class(
         active = active,
         message = message %||% "Simulate population",
         inputFolderName = inputFolderName,
-        simulationFilePath = simulationFileName,
-        populationFilePath = populationFileName,
+        simulationFileName = simulationFileName,
+        populationFileName = populationFileName,
         resultsFolderName = resultsFolderName,
         resultsFileName = resultsFileName,
         numberOfCores = numberOfCores,
