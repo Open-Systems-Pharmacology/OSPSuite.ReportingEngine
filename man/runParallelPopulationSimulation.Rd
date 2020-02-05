@@ -4,8 +4,15 @@
 \alias{runParallelPopulationSimulation}
 \title{runParallelPopulationSimulation}
 \usage{
-runParallelPopulationSimulation(numberOfCores, workingDirectory,
-  inputFolder, outputFolder, simFileName, popFileName, resultsFileName)
+runParallelPopulationSimulation(
+  numberOfCores,
+  workingDirectory,
+  inputFolder,
+  outputFolder,
+  simFileName,
+  popFileName,
+  resultsFileName
+)
 }
 \value{
 Simulation results for population

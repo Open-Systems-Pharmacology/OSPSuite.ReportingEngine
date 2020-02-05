@@ -4,10 +4,14 @@
 \alias{individualSensitivityAnalysis}
 \title{individualSensitivityAnalysis}
 \usage{
-individualSensitivityAnalysis(simFilePath, parametersToPerturb = NULL,
-  individualParameters, numberOfCores = 1,
+individualSensitivityAnalysis(
+  simFilePath,
+  parametersToPerturb = NULL,
+  individualParameters,
+  numberOfCores = 1,
   resultsFileFolder = resultsFileFolder,
-  resultsFileName = resultsFileName)
+  resultsFileName = resultsFileName
+)
 }
 \value{
 SA results for individual or population

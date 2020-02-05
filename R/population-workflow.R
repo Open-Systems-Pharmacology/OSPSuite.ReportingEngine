@@ -56,20 +56,53 @@ PopulationWorkflow <- R6::R6Class(
       # self$setSensitivityPlotSettings()
     },
 
+
     setPopulationSimulationSettings = function(input = NULL,
-                                               output = NULL,
-                                               active = TRUE,
-                                               message = NULL) {
-      self$populationSimulation <- Task$new(
-        input = input %||% list(
-          "population" = file.path(self$inputFolder, paste0(self$population, ".csv")),
-          "simulation" = file.path(self$inputFolder, paste0(self$simulation, ".pkml"))
-        ),
-        #output = output %||% list("populationSimulation" = file.path(self$simulationFolder, "populationSimulation.RData")),
+                                              output = NULL,
+                                              settings = NULL,
+                                              active = TRUE,
+                                              message = NULL,
+                                              inputFolderName = self$inputFolder,
+                                              simulationFileName = self$simulation,
+                                              populationFileName = self$population,
+                                              resultsFolderName = self$simulationFolder,
+                                              resultsFileName = "populationSimulation",
+                                              numberOfCores = 1,
+                                              calculatePKParameters = TRUE,
+                                              PKParametersFolderName = file.path(self$outputFolder),
+                                              PKParametersFileName = "populationPKParameters") {
+      self$populationSimulation <- SimulationTask$new(
+        input = input,
+        output = output,
+        settings = settings,
         active = active,
-        message = message %||% "Simulate population"
+        message = message %||% "Simulate population",
+        inputFolderName = inputFolderName,
+        simulationFilePath = simulationFileName,
+        populationFilePath = populationFileName,
+        resultsFolderName = resultsFolderName,
+        resultsFileName = resultsFileName,
+        numberOfCores = numberOfCores,
+        calculatePKParameters = calculatePKParameters,
+        PKParametersFolderName = PKParametersFolderName,
+        PKParametersFileName = PKParametersFileName
       )
     },
+
+    # setPopulationSimulationSettings = function(input = NULL,
+    #                                            output = NULL,
+    #                                            active = TRUE,
+    #                                            message = NULL) {
+    #   self$populationSimulation <- Task$new(
+    #     input = input %||% list(
+    #       "population" = file.path(self$inputFolder, paste0(self$population, ".csv")),
+    #       "simulation" = file.path(self$inputFolder, paste0(self$simulation, ".pkml"))
+    #     ),
+    #     #output = output %||% list("populationSimulation" = file.path(self$simulationFolder, "populationSimulation.RData")),
+    #     active = active,
+    #     message = message %||% "Simulate population"
+    #   )
+    # },
 
 
 
@@ -146,32 +179,34 @@ PopulationWorkflow <- R6::R6Class(
       print(self$reportingEngineInfo)
 
 
-      wdir <- self$workflowFolder
-      resultsFileName <- "populationSimulationResults"
+      #wdir <- self$workflowFolder
+      #resultsFileName <- "populationSimulationResults"
 
       if (self$populationSimulation$active) {
         if (self$populationSimulation$validateInput()) {
-          if (self$numberOfCores == 1) {
+          if (self$populationSimulation$numberOfCores == 1) {
             print("Starting population simulation")
-
             simulateModel(
-              simFilePath = paste0(wdir, "/", self$inputFolder, "/", self$simulation, ".pkml"),
-              popDataFilePath = paste0(wdir, "/", self$inputFolder, "/", self$population, ".csv"),
-              resultsFilePath = paste0(wdir, "/", self$outputFolder, "/", resultsFileName, ".csv")
+              simFilePath = file.path(self$populationSimulation$inputFolderName,paste0(self$populationSimulation$simulationFileName,".pkml")),
+              popDataFilePath = file.path(self$populationSimulation$inputFolderName,paste0(self$populationSimulation$populationFileName,".csv")),
+              resultsFilePath = file.path(self$populationSimulation$resultsFolderName,paste0(self$populationSimulation$resultsFileName,".csv")),
+              calculatePKParameters = self$populationSimulation$calculatePKParameters,
+              PKParametersFilePath = file.path(self$populationSimulation$PKParametersFolderName,paste0(self$populationSimulation$PKParametersFileName,".csv"))
             )
           }
-          else if (self$numberOfCores > 1) {
+          else if (self$populationSimulation$numberOfCores > 1) {
             print("Starting parallel population simulation")
 
             runParallelPopulationSimulation(
-              numberOfCores = self$numberOfCores,
-              workingDirectory = wdir,
-              inputFolder = self$inputFolder,
-              outputFolder = self$outputFolder,
-              simFileName = self$simulation,
-              popFileName = self$population,
-              resultsFileName = resultsFileName
-            )
+              numberOfCores = self$populationSimulationnumberOfCores,
+              inputFolderName = self$populationSimulation$inputFolderName,
+              simulationFileName = self$populationSimulation$simulationFileName,
+              populationFileName = self$populationSimulation$populationFileName,
+              resultsFolderName = self$populationSimulation$resultsFolderName,
+              resultsFileName = self$populationSimulation$resultsFileName,
+              calculatePKParameters = self$populationSimulation$calculatePKParameters,
+              PKParametersFolderName = self$populationSimulation$PKParametersFolderName,
+              PKParametersFileName = self$populationSimulation$PKParametersFileName)
           }
         }
       }

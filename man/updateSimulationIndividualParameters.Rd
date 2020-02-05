@@ -4,8 +4,7 @@
 \alias{updateSimulationIndividualParameters}
 \title{updateSimulationIndividualParameters}
 \usage{
-updateSimulationIndividualParameters(simulation,
-  individualParameters = NULL)
+updateSimulationIndividualParameters(simulation, individualParameters = NULL)
 }
 \description{
 Update individual parameters with parameters in individualParameters,

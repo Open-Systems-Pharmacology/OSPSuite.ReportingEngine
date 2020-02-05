@@ -4,9 +4,13 @@
 \alias{analyzeCoreSensitivity}
 \title{analyzeCoreSensitivity}
 \usage{
-analyzeCoreSensitivity(simulation, parametersToPerturb = NULL,
-  totalSensitivityThreshold = 1, resultsFilePath = paste0(getwd(),
-  "sensitivityAnalysisResults.csv"), numberOfCoresToUse = NULL)
+analyzeCoreSensitivity(
+  simulation,
+  parametersToPerturb = NULL,
+  totalSensitivityThreshold = 1,
+  resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv"),
+  numberOfCoresToUse = NULL
+)
 }
 \arguments{
 \item{simulation}{simulation class object}

@@ -4,14 +4,25 @@
 \name{PopulationWorkflow}
 \alias{PopulationWorkflow}
 \title{PopulationWorkflow}
-\usage{
-PopulationWorkflow
-}
 \description{
 Population Workflow Task for Reporting Engine
 }
-\section{Fields}{
+\section{Methods}{
 
+\describe{
+\item{new()}{Initilialize reporting engine population workflow}
+\item{setPopulationSimulationSettings()}{Define population simulation task settings}
+\item{setPlotDemographySettings()}{Define demography plot settings}
+\item{setPlotTimeProfileSettings()}{Define time profile plot settings}
+\item{runWorkflow()}{Run the active tasks of population worklfow}
+}
+}
+
+\section{Super class}{
+\code{\link[ospsuite.reportingengine:Workflow]{ospsuite.reportingengine::Workflow}} -> \code{PopulationWorkflow}
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{populationSimulation}}{Population simulation task}
 
@@ -26,17 +37,92 @@ Population Workflow Task for Reporting Engine
 \item{\code{pkParametersPlot}}{Plot PK parameters task}
 
 \item{\code{sensitivityPlot}}{Plot sensitiviy task}
-}}
-
-\section{Methods}{
-
+}
+\if{html}{\out{</div>}}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
-\item{new()}{Initilialize reporting engine population workflow}
-\item{setPopulationSimulationSettings()}{Define population simulation task settings}
-\item{setPlotDemographySettings()}{Define demography plot settings}
-\item{setPlotTimeProfileSettings()}{Define time profile plot settings}
-\item{runWorkflow()}{Run the active tasks of population worklfow}
+\item{\code{timeProfilePlot}}{Plot time profile task}
 }
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{PopulationWorkflow$new()}}
+\item \href{#method-setPopulationSimulationSettings}{\code{PopulationWorkflow$setPopulationSimulationSettings()}}
+\item \href{#method-runWorkflow}{\code{PopulationWorkflow$runWorkflow()}}
+\item \href{#method-print}{\code{PopulationWorkflow$print()}}
+\item \href{#method-clone}{\code{PopulationWorkflow$clone()}}
+}
+}
+\if{html}{
+\out{<details open ><summary>Inherited methods</summary>}
+\itemize{
+}
+\out{</details>}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\subsection{Method \code{new()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$new(numberOfCores = NULL, ...)}\if{html}{\out{</div>}}
 }
 
-\keyword{datasets}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setPopulationSimulationSettings"></a>}}
+\subsection{Method \code{setPopulationSimulationSettings()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$setPopulationSimulationSettings(
+  input = NULL,
+  output = NULL,
+  settings = NULL,
+  active = TRUE,
+  message = NULL,
+  simulationFilePath = file.path(self$inputFolder, paste0(self$simulation, ".pkml")),
+  populationFilePath = file.path(self$inputFolder, paste0(self$population, ".csv")),
+  resultsFolderName = file.path(self$simulationFolder),
+  resultsFileName = "populationSimulation",
+  numberOfCores = 1,
+  calculatePKParameters = TRUE,
+  PKParametersFolderName = file.path(self$outputFolder),
+  PKParametersFileName = "populationPKParameters"
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-runWorkflow"></a>}}
+\subsection{Method \code{runWorkflow()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$runWorkflow()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\subsection{Method \code{print()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$print()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}

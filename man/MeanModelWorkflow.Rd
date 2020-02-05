@@ -4,22 +4,9 @@
 \name{MeanModelWorkflow}
 \alias{MeanModelWorkflow}
 \title{MeanModelWorkflow}
-\usage{
-MeanModelWorkflow
-}
 \description{
 Mean Model Workflow Task for Reporting Engine
 }
-\section{Fields}{
-
-\describe{
-\item{\code{meanModelSimulation}}{Population simulation task}
-
-\item{\code{pkParametersCalculation}}{PK parameters calculation task}
-
-\item{\code{sensitivityAnalysis}}{Sensitivity analysis task}
-}}
-
 \section{Methods}{
 
 \describe{
@@ -29,4 +16,123 @@ Mean Model Workflow Task for Reporting Engine
 }
 }
 
-\keyword{datasets}
+\section{Super class}{
+\code{\link[ospsuite.reportingengine:Workflow]{ospsuite.reportingengine::Workflow}} -> \code{MeanModelWorkflow}
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{meanModelSimulation}}{Population simulation task}
+
+\item{\code{pkParametersCalculation}}{PK parameters calculation task}
+
+\item{\code{sensitivityAnalysis}}{Sensitivity analysis task}
+}
+\if{html}{\out{</div>}}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{pkParametersCalculation}}{PK parameters calculation task}
+
+\item{\code{sensitivityAnalysis}}{Sensitivity analysis task}
+}
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{MeanModelWorkflow$new()}}
+\item \href{#method-setMeanModelSimulationSettings}{\code{MeanModelWorkflow$setMeanModelSimulationSettings()}}
+\item \href{#method-setSensitivityAnalysisSettings}{\code{MeanModelWorkflow$setSensitivityAnalysisSettings()}}
+\item \href{#method-runWorkflow}{\code{MeanModelWorkflow$runWorkflow()}}
+\item \href{#method-print}{\code{MeanModelWorkflow$print()}}
+\item \href{#method-clone}{\code{MeanModelWorkflow$clone()}}
+}
+}
+\if{html}{
+\out{<details open ><summary>Inherited methods</summary>}
+\itemize{
+}
+\out{</details>}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\subsection{Method \code{new()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$new(...)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setMeanModelSimulationSettings"></a>}}
+\subsection{Method \code{setMeanModelSimulationSettings()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$setMeanModelSimulationSettings(
+  input = NULL,
+  output = NULL,
+  settings = NULL,
+  active = TRUE,
+  message = NULL,
+  simulationFilePath = file.path(self$inputFolder, paste0(self$simulation, ".pkml")),
+  populationFilePath = NULL,
+  resultsFolderName = file.path(self$simulationFolder),
+  resultsFileName = "meanModelSimulation",
+  calculatePKParameters = TRUE,
+  PKParametersFolderName = file.path(self$outputFolder),
+  PKParametersFileName = "meanModelPKParameters"
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setSensitivityAnalysisSettings"></a>}}
+\subsection{Method \code{setSensitivityAnalysisSettings()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$setSensitivityAnalysisSettings(
+  input = NULL,
+  output = NULL,
+  settings = NULL,
+  active = TRUE,
+  message = NULL,
+  simulationFilePath = file.path(self$inputFolder, paste0(self$simulation, ".pkml")),
+  populationFilePath = NULL,
+  resultsFolderName = file.path(self$sensitivityFolder),
+  resultsFileName = "meanModelSensitivityAnalysis"
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-runWorkflow"></a>}}
+\subsection{Method \code{runWorkflow()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$runWorkflow()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\subsection{Method \code{print()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$print()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}

@@ -4,8 +4,14 @@
 \alias{runParallelSensitivityAnalysis}
 \title{runParallelSensitivityAnalysis}
 \usage{
-runParallelSensitivityAnalysis(simFilePath, parametersToPerturb,
-  individualParameters, numberOfCores, resultsFileFolder, resultsFileName)
+runParallelSensitivityAnalysis(
+  simFilePath,
+  parametersToPerturb,
+  individualParameters,
+  numberOfCores,
+  resultsFileFolder,
+  resultsFileName
+)
 }
 \value{
 Simulation results for population

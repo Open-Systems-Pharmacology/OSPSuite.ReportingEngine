@@ -4,24 +4,9 @@
 \name{Task}
 \alias{Task}
 \title{Task}
-\usage{
-Task
-}
 \description{
 Task settings for Reporting Engine
 }
-\section{Fields}{
-
-\describe{
-\item{\code{active}}{logical}
-
-\item{\code{input}}{List of input files/folders to use to perform tasks}
-
-\item{\code{output}}{List of output files/folders to save the task output}
-
-\item{\code{settings}}{class}
-}}
-
 \section{Methods}{
 
 \describe{
@@ -32,4 +17,90 @@ Task settings for Reporting Engine
 }
 }
 
-\keyword{datasets}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{active}}{logical}
+
+\item{\code{input}}{List of input files/folders to use to perform tasks}
+
+\item{\code{output}}{List of output files/folders to save the task output}
+
+\item{\code{settings}}{class}
+}
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{Task$new()}}
+\item \href{#method-activate}{\code{Task$activate()}}
+\item \href{#method-inactivate}{\code{Task$inactivate()}}
+\item \href{#method-validateInput}{\code{Task$validateInput()}}
+\item \href{#method-print}{\code{Task$print()}}
+\item \href{#method-clone}{\code{Task$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\subsection{Method \code{new()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Task$new(
+  input = NULL,
+  output = NULL,
+  settings = NULL,
+  active = TRUE,
+  message = NULL
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-activate"></a>}}
+\subsection{Method \code{activate()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Task$activate()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-inactivate"></a>}}
+\subsection{Method \code{inactivate()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Task$inactivate()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-validateInput"></a>}}
+\subsection{Method \code{validateInput()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Task$validateInput()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\subsection{Method \code{print()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Task$print()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Task$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}

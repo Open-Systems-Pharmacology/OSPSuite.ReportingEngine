@@ -4,10 +4,15 @@
 \alias{analyzeSensitivity}
 \title{analyzeSensitivity}
 \usage{
-analyzeSensitivity(simFilePath, parametersToPerturb = NULL,
-  popFilePath = NULL, individualID = NULL, numberOfCores = NULL,
+analyzeSensitivity(
+  simFilePath,
+  parametersToPerturb = NULL,
+  popFilePath = NULL,
+  individualID = NULL,
+  numberOfCores = 1,
   resultsFileFolder = "getwd()",
-  resultsFileName = "sensitivityAnalysisResults")
+  resultsFileName = "sensitivityAnalysisResults"
+)
 }
 \value{
 SA results for individual or population

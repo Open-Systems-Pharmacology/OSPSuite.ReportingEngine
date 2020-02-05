@@ -4,15 +4,11 @@
 \name{Workflow}
 \alias{Workflow}
 \title{Workflow}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
-\usage{
-Workflow
-}
 \description{
 Workflow Task for Reporting Engine
 }
-\section{Fields}{
-
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{reportingEngineInfo}}{R6 class object with relevant information about reporting engine}
 
@@ -32,6 +28,56 @@ Workflow Task for Reporting Engine
 \item{setpkParametersPlotSettings()}{Define PK parameters plot settings}
 \item{setSensitivityPlotSettings()}{Define sensitivity plot settings}
 }}
-}}
+}
+\if{html}{\out{</div>}}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{models}}{simulation class object}
+}
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{Workflow$new()}}
+\item \href{#method-clone}{\code{Workflow$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\subsection{Method \code{new()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$new(
+  simulationFile,
+  populationFile = NULL,
+  observedDataFile = NULL,
+  workflowFolder = paste0(getwd(), "/", "Workflow", "_", format(Sys.Date(),
+    "\%Y\%m\%d"), "_", format(Sys.time(), "\%H\%M\%S")),
+  inputFolder = "Inputs",
+  simulationFolder = "Simulations",
+  sensitivityFolder = "Sensitivities",
+  outputFolder = "Outputs",
+  settings = NULL
+)}\if{html}{\out{</div>}}
+}
 
-\keyword{datasets}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}

@@ -4,11 +4,17 @@
 \alias{simulateModel}
 \title{simulateModel}
 \usage{
-simulateModel(simFilePath, popDataFilePath = NULL, resultsFilePath)
+simulateModel(
+  simFilePath,
+  popDataFilePath = NULL,
+  resultsFilePath,
+  calculatePKParameters = FALSE,
+  PKParametersFilePath = NULL
+)
 }
 \value{
 Simulation results for individual or population
 }
 \description{
-Simulate model, either for an individual or for a given population
+Simulate model, either for an individual or for a given population.  Calculate and save PK parameters as an option.
 }
