@@ -31,20 +31,6 @@ PopulationWorkflow <- R6::R6Class(
 
     initialize = function(...) {
       super$initialize(...)
-
-      # if (!is.null(numberOfCores)) {
-      #   validateIsInteger(numberOfCores)
-      #   self$numberOfCores <- numberOfCores
-      # }
-
-      # self$setPopulationSimulationSettings()
-      # self$setPKParametersCalculationSettings()
-      # self$setSensitivityAnalysisSettings()
-
-      # self$setDemographyPlotSettings()
-      # self$setGofPlotSettings()
-      # self$setpkParametersPlotSettings()
-      # self$setSensitivityPlotSettings()
     },
 
 
@@ -58,10 +44,7 @@ PopulationWorkflow <- R6::R6Class(
                                                populationFileName = self$population,
                                                resultsFolderName = self$simulationFolder,
                                                resultsFileName = "populationSimulation",
-                                               numberOfCores = 1,
-                                               calculatePKParameters = TRUE,
-                                               PKParametersFolderName = file.path(self$outputFolder),
-                                               PKParametersFileName = "populationPKParameters") {
+                                               numberOfCores = 1) {
       self$populationSimulation <- SimulationTask$new(
         input = input,
         output = output,
@@ -73,10 +56,7 @@ PopulationWorkflow <- R6::R6Class(
         populationFileName = populationFileName,
         resultsFolderName = resultsFolderName,
         resultsFileName = resultsFileName,
-        numberOfCores = numberOfCores,
-        calculatePKParameters = calculatePKParameters,
-        PKParametersFolderName = PKParametersFolderName,
-        PKParametersFileName = PKParametersFileName
+        numberOfCores = numberOfCores
       )
     },
 
@@ -181,10 +161,7 @@ PopulationWorkflow <- R6::R6Class(
             simulateModel(
               simFilePath = file.path(self$populationSimulation$inputFolderName, paste0(self$populationSimulation$simulationFileName, ".pkml")),
               popDataFilePath = file.path(self$populationSimulation$inputFolderName, paste0(self$populationSimulation$populationFileName, ".csv")),
-              resultsFilePath = resultsFilePath,
-              calculatePKParameters = self$populationSimulation$calculatePKParameters,
-              PKParametersFilePath = file.path(self$populationSimulation$PKParametersFolderName, paste0(self$populationSimulation$PKParametersFileName, ".csv"))
-            )
+              resultsFilePath = resultsFilePath)
             self$populationSimulation$generatedResultFileNames <- resultsFilePath
           }
           else if (self$populationSimulation$numberOfCores > 1) {
@@ -195,10 +172,7 @@ PopulationWorkflow <- R6::R6Class(
               simulationFileName = self$populationSimulation$simulationFileName,
               populationFileName = self$populationSimulation$populationFileName,
               resultsFolderName = self$populationSimulation$resultsFolderName,
-              resultsFileName = self$populationSimulation$resultsFileName,
-              calculatePKParameters = self$populationSimulation$calculatePKParameters,
-              PKParametersFolderName = self$populationSimulation$PKParametersFolderName,
-              PKParametersFileName = self$populationSimulation$PKParametersFileName
+              resultsFileName = self$populationSimulation$resultsFileName
             )
           }
         }

@@ -20,9 +20,6 @@ SimulationTask <- R6::R6Class(
     resultsFolderName = NULL,
     resultsFileName = NULL,
     numberOfCores = 1,
-    calculatePKParameters = FALSE,
-    PKParametersFolderName = NULL,
-    PKParametersFileName = NULL,
     generatedResultFileNames = NULL,
     initialize = function(inputFolderName = getwd(),
                           simulationFileName,
@@ -30,9 +27,6 @@ SimulationTask <- R6::R6Class(
                           resultsFolderName = getwd(),
                           resultsFileName = "simulationResults",
                           numberOfCores = 1,
-                          calculatePKParameters = FALSE,
-                          PKParametersFolderName = getwd(),
-                          PKParametersFileName = "PKParameters",
                           ...) {
       super$initialize(...)
       self$inputFolderName <- inputFolderName
@@ -41,9 +35,6 @@ SimulationTask <- R6::R6Class(
       self$resultsFolderName <- resultsFolderName
       self$resultsFileName <- resultsFileName
       self$numberOfCores <- numberOfCores
-      self$calculatePKParameters <- calculatePKParameters
-      self$PKParametersFolderName <- PKParametersFolderName
-      self$PKParametersFileName <- PKParametersFileName
     }
   )
 )

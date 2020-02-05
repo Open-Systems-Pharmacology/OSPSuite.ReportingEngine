@@ -45,10 +45,7 @@ MeanModelWorkflow <- R6::R6Class(
                                               simulationFileName = self$simulation,
                                               populationFileName = NULL,
                                               resultsFolderName = self$simulationFolder,
-                                              resultsFileName = "meanModelSimulation",
-                                              calculatePKParameters = TRUE,
-                                              PKParametersFolderName = self$outputFolder,
-                                              PKParametersFileName = "meanModelPKParameters") {
+                                              resultsFileName = "meanModelSimulation") {
       self$meanModelSimulation <- SimulationTask$new(
         input = input,
         output = output,
@@ -59,10 +56,7 @@ MeanModelWorkflow <- R6::R6Class(
         simulationFileName = simulationFileName,
         populationFileName = populationFileName,
         resultsFolderName = resultsFolderName,
-        resultsFileName = resultsFileName,
-        calculatePKParameters = calculatePKParameters,
-        PKParametersFolderName = PKParametersFolderName,
-        PKParametersFileName = PKParametersFileName
+        resultsFileName = resultsFileName
       )
     },
 
@@ -162,10 +156,7 @@ MeanModelWorkflow <- R6::R6Class(
           resultsFilePath <- file.path(self$meanModelSimulation$resultsFolderName, paste0(self$meanModelSimulation$resultsFileName, ".csv"))
           simulateModel(
             simFilePath = file.path(self$meanModelSimulation$inputFolderName, paste0(self$meanModelSimulation$simulationFileName, ".pkml")),
-            resultsFilePath = resultsFilePath,
-            calculatePKParameters = TRUE,
-            PKParametersFilePath = file.path(self$meanModelSimulation$PKParametersFolderName, paste0(self$meanModelSimulation$PKParametersFileName, ".csv"))
-          )
+            resultsFilePath = resultsFilePath)
         }
         self$meanModelSimulation$generatedResultFileNames <- resultsFilePath
       }

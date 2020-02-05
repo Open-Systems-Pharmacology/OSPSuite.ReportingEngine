@@ -5,9 +5,7 @@
 #' @import ospsuite
 simulateModel <- function(simFilePath,
                           popDataFilePath = NULL,
-                          resultsFilePath,
-                          calculatePKParameters = FALSE,
-                          PKParametersFilePath = NULL) {
+                          resultsFilePath) {
   sim <- loadSimulation(simFilePath,
     addToCache = FALSE,
     loadFromCache = FALSE
@@ -18,13 +16,6 @@ simulateModel <- function(simFilePath,
   }
   res <- runSimulation(sim, population = pop)
   exportResultsToCSV(res, resultsFilePath)
-  if (calculatePKParameters) {
-    print("Test print for parallel calculation of PK parameters:")
-    print(PKParametersFilePath)
-    pkAnalyses <- calculatePKAnalyses(results = res)
-    print(pkAnalyses$simulation$name)
-    exportPKAnalysesToCSV(pkAnalyses = pkAnalyses, filePath = PKParametersFilePath)
-  }
 }
 
 
@@ -40,10 +31,7 @@ runParallelPopulationSimulation <- function(numberOfCores,
                                             simulationFileName,
                                             populationFileName,
                                             resultsFolderName,
-                                            resultsFileName,
-                                            calculatePKParameters,
-                                            PKParametersFolderName,
-                                            PKParametersFileName) {
+                                            resultsFileName) {
 
   # library("Rmpi")
   Rmpi::mpi.spawn.Rslaves(nslaves = numberOfCores)
@@ -64,26 +52,17 @@ runParallelPopulationSimulation <- function(numberOfCores,
 
   allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFolderName, fileName = resultsFileName)
 
-
   Rmpi::mpi.bcast.Robj2slave(obj = simulationFileName)
   Rmpi::mpi.bcast.Robj2slave(obj = populationFileName)
   Rmpi::mpi.bcast.Robj2slave(obj = tempPopDataFiles)
   Rmpi::mpi.bcast.Robj2slave(obj = inputFolderName)
   Rmpi::mpi.bcast.Robj2slave(obj = allResultsFileNames)
-  # Rmpi::mpi.bcast.Robj2slave(obj = resultsFolderName)
-  # Rmpi::mpi.bcast.Robj2slave(obj = resultsFileName)
-  Rmpi::mpi.bcast.Robj2slave(obj = calculatePKParameters)
-  Rmpi::mpi.bcast.Robj2slave(obj = PKParametersFolderName)
-  Rmpi::mpi.bcast.Robj2slave(obj = PKParametersFileName)
 
 
   Rmpi::mpi.remote.exec(simulateModel(
     simFilePath = file.path(inputFolderName, paste0(simulationFileName, ".pkml")),
     popDataFilePath = file.path(inputFolderName, paste0(populationFileName, "_", mpi.comm.rank(), ".csv")),
-    resultsFilePath = allResultsFileNames[mpi.comm.rank()], # file.path(resultsFolderName,paste0(resultsFileName, "_", mpi.comm.rank(), ".csv")),
-    calculatePKParameters = calculatePKParameters,
-    PKParametersFilePath = file.path(PKParametersFolderName, paste0(PKParametersFileName, "_", mpi.comm.rank(), ".csv"))
-  ))
+    resultsFilePath = allResultsFileNames[mpi.comm.rank()]))
   Rmpi::mpi.close.Rslaves() # Move to end of workflow
 
   return(allResultsFileNames)
