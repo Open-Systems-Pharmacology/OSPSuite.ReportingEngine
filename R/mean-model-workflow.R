@@ -34,8 +34,8 @@ MeanModelWorkflow <- R6::R6Class(
 
 
 
-      self$setMeanModelSimulationSettings()
-      #      self$setPKParametersCalculationSettings()
+      #self$setMeanModelSimulationSettings()
+      #self$setPKParametersCalculationSettings()
       #self$setSensitivityAnalysisSettings()
 
       # self$setDemographyPlotSettings()
@@ -52,7 +52,10 @@ MeanModelWorkflow <- R6::R6Class(
                                               simulationFilePath = file.path(self$inputFolder,paste0(self$simulation, ".pkml")),
                                               populationFilePath = NULL,
                                               resultsFolderName = file.path(self$simulationFolder),
-                                              resultsFileName = "meanModelSimulation") {
+                                              resultsFileName = "meanModelSimulation",
+                                              calculatePKParameters = TRUE,
+                                              PKParametersFolderName = file.path(self$outputFolder),
+                                              PKParametersFileName = "meanModelPKParameters") {
       self$meanModelSimulation <- SimulationTask$new(
         input = input,
         output = output,
@@ -62,7 +65,10 @@ MeanModelWorkflow <- R6::R6Class(
         simulationFilePath = simulationFilePath,
         populationFilePath = populationFilePath,
         resultsFolderName = resultsFolderName,
-        resultsFileName = resultsFileName
+        resultsFileName = resultsFileName,
+        calculatePKParameters = calculatePKParameters,
+        PKParametersFolderName = PKParametersFolderName,
+        PKParametersFileName = PKParametersFileName
       )
     },
 
@@ -156,12 +162,12 @@ MeanModelWorkflow <- R6::R6Class(
         if (self$meanModelSimulation$validateInput()) {
           print("Starting mean model simulation")
           simulateModel(simFilePath     = self$meanModelSimulation$simulationFilePath,
-                        resultsFilePath = file.path( self$meanModelSimulation$resultsFolderName,paste0(self$meanModelSimulation$resultsFileName,".csv") ))
+                        resultsFilePath = file.path( self$meanModelSimulation$resultsFolderName,paste0(self$meanModelSimulation$resultsFileName,".csv") ),
+                        calculatePKParameters = TRUE,
+                        PKParametersFilePath = file.path(self$meanModelSimulation$PKParametersFolderName,
+                                                         paste0(self$meanModelSimulation$PKParametersFileName,".csv"))
         }
       }
-
-
-
 
       if (self$meanModelSensitivityAnalysis$active) {
         if (self$meanModelSensitivityAnalysis$validateInput()) {
@@ -169,7 +175,6 @@ MeanModelWorkflow <- R6::R6Class(
 
           #print("DDDD")
 
-print(self$meanModelSensitivityAnalysis$resultsFolderName )
           analyzeSensitivity(
             simFilePath = file.path(self$inputFolder,paste0(self$simulation, ".pkml")),
             resultsFileFolder = file.path( self$meanModelSensitivityAnalysis$resultsFolderName ),

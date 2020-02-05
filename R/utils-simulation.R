@@ -5,17 +5,22 @@
 #' @import ospsuite
 simulateModel <- function(simFilePath,
                           popDataFilePath=NULL,
-                          resultsFilePath) {
+                          resultsFilePath,
+                          calculatePKParameters=FALSE,
+                          PKParametersFilePath=NULL) {
   sim <- loadSimulation(simFilePath,
                         addToCache = FALSE,
-                        loadFromCache = FALSE
-  )
+                        loadFromCache = FALSE)
   pop <- NULL
   if(!is.null(popDataFilePath)){
     pop <- loadPopulation(popDataFilePath)
   }
   res <- runSimulation(sim, population = pop)
   exportResultsToCSV(res, resultsFilePath)
+  if(calculatePKParameters){
+    pkAnalyses <- calculatePKAnalyses(results = res)
+    exportPKAnalysesToCSV(pkAnalyses = pkAnalyses,filePath = PKParametersFilePath)
+  }
 }
 
 
@@ -25,6 +30,7 @@ simulateModel <- function(simFilePath,
 #' @return Simulation results for population
 #' @export
 #' @import ospsuite
+#' @import Rmpi
 runParallelPopulationSimulation <- function(numberOfCores,
                                             workingDirectory,
                                             inputFolder,
@@ -32,36 +38,36 @@ runParallelPopulationSimulation <- function(numberOfCores,
                                             simFileName,
                                             popFileName,
                                             resultsFileName) {
-  library("Rmpi")
-  mpi.spawn.Rslaves(nslaves = numberOfCores)
+  #library("Rmpi")
+  Rmpi::mpi.spawn.Rslaves(nslaves = numberOfCores)
 
   # Check that the correct number of slaves has been spawned.
-  if (!(mpi.comm.size() - 1 == numberOfCores)) { #-1 since mpi.comm.size() counts master
-    mpi.close.Rslaves()
+  if (!(Rmpi::mpi.comm.size() - 1 == numberOfCores)) { #-1 since mpi.comm.size() counts master
+    Rmpi::mpi.close.Rslaves()
     stop(paste0(numberOfCores, " cores were not successfully spawned."))
   }
-  mpi.bcast.cmd(library("ospsuite"))
-  mpi.bcast.cmd(library("ospsuite.reportingengine"))
+  Rmpi::mpi.bcast.cmd(library("ospsuite"))
+  Rmpi::mpi.bcast.cmd(library("ospsuite.reportingengine"))
   tempPopDataFiles <- splitPopulationFile(
     csvPopulationFile = paste0(workingDirectory, "/", inputFolder, "/", popFileName, ".csv"),
     numberOfCores = numberOfCores,
     outputFolder = paste0(inputFolder, "/"),
     outputFileName = popFileName
   )
-  mpi.bcast.Robj2slave(obj = simFileName)
-  mpi.bcast.Robj2slave(obj = popFileName)
-  mpi.bcast.Robj2slave(obj = tempPopDataFiles)
-  mpi.bcast.Robj2slave(obj = workingDirectory)
-  mpi.bcast.Robj2slave(obj = inputFolder)
-  mpi.bcast.Robj2slave(obj = outputFolder)
-  mpi.bcast.Robj2slave(obj = resultsFileName)
+  Rmpi::mpi.bcast.Robj2slave(obj = simFileName)
+  Rmpi::mpi.bcast.Robj2slave(obj = popFileName)
+  Rmpi::mpi.bcast.Robj2slave(obj = tempPopDataFiles)
+  Rmpi::mpi.bcast.Robj2slave(obj = workingDirectory)
+  Rmpi::mpi.bcast.Robj2slave(obj = inputFolder)
+  Rmpi::mpi.bcast.Robj2slave(obj = outputFolder)
+  Rmpi::mpi.bcast.Robj2slave(obj = resultsFileName)
 
-  mpi.remote.exec(simulateModel(
+  Rmpi::mpi.remote.exec(simulateModel(
     simFilePath = paste0(workingDirectory, "/", inputFolder, "/", simFileName, ".pkml"),
     popDataFilePath = paste0(workingDirectory, "/", inputFolder, "/", popFileName, "_", mpi.comm.rank(), ".csv"),
     resultsFilePath = paste0(workingDirectory, "/", outputFolder, "/", resultsFileName, "_", mpi.comm.rank(), ".csv")
   ))
-  mpi.close.Rslaves() # Move to end of workflow
+  Rmpi::mpi.close.Rslaves() # Move to end of workflow
 }
 
 

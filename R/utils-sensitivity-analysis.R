@@ -25,17 +25,16 @@ analyzeSensitivity <- function(simFilePath,
     popObject <- loadPopulation(popFilePath)
     individualSeq <- individualID %||% seq(1,popObject$count)
     for (ind in individualSeq){
-        individualSensitivityAnalysis(simFilePath = simFilePath,
-                                      parametersToPerturb = parametersToPerturb,
-                                      individualParameters = popObject$getParameterValuesForIndividual(individualId = ind),
-                                      numberOfCores = numberOfCores,
-                                      resultsFileFolder = resultsFileFolder,
-                                      resultsFileName = resultsFileName
-        )
+      individualSensitivityAnalysis(simFilePath = simFilePath,
+                                    parametersToPerturb = parametersToPerturb,
+                                    individualParameters = popObject$getParameterValuesForIndividual(individualId = ind),
+                                    numberOfCores = numberOfCores,
+                                    resultsFileFolder = resultsFileFolder,
+                                    resultsFileName = resultsFileName
+      )
     }
   }
   else {
-    print("ZEROZERO")
     print(numberOfCores)
     individualSensitivityAnalysis(simFilePath = simFilePath,
                                   parametersToPerturb = parametersToPerturb,
@@ -60,9 +59,6 @@ individualSensitivityAnalysis <- function(simFilePath,
                                           resultsFileFolder = resultsFileFolder,
                                           resultsFileName = resultsFileName){
   #Load simulation to determine number of perturbation parameters
-  print("HALFHALF")
-  print(numberOfCores)
-  print("HALFHALF")
   sim <- loadSimulation(simFilePath)
 
   #If no perturbation parameters specified, perturb all parameters
@@ -125,13 +121,13 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   sortVec <- sort(seqVec) # Sort seqVec to obtain an concatenated array of repeated integers, with the repeated integers ranging from from 1 to numberOfCores.  These are the core numbers to which each parameter will be assigned.
   listSplitParameters <- split(x = parametersToPerturb, sortVec) # Split the parameters of the model according to sortVec
   # listSplitParameters <- split(x = parametersToPerturb, sort(1+( (1:length(totalNumberParameters)) %% numberOfCores))  )
-  mpi.spawn.Rslaves(nslaves = numberOfCores)
-  mpi.bcast.cmd(library("ospsuite"))
-  mpi.bcast.cmd(library("ospsuite.reportingengine"))
-  mpi.bcast.Robj2slave(obj = simFilePath)
-  mpi.bcast.Robj2slave(obj = listSplitParameters)
-  mpi.bcast.Robj2slave(obj = resultsFileFolder)
-  mpi.bcast.Robj2slave(obj = individualParameters)
+  Rmpi::mpi.spawn.Rslaves(nslaves = numberOfCores)
+  Rmpi::mpi.bcast.cmd(library("ospsuite"))
+  Rmpi::mpi.bcast.cmd(library("ospsuite.reportingengine"))
+  Rmpi::mpi.bcast.Robj2slave(obj = simFilePath)
+  Rmpi::mpi.bcast.Robj2slave(obj = listSplitParameters)
+  Rmpi::mpi.bcast.Robj2slave(obj = resultsFileFolder)
+  Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
 
   #Generate a listcontaining names of SA CSV result files that will be output by each core
   allResultsFileNames <- sapply(
@@ -142,16 +138,16 @@ runParallelSensitivityAnalysis <- function(simFilePath,
     resultsFileName = resultsFileName,
     USE.NAMES = FALSE
   )
-  mpi.bcast.Robj2slave(obj = allResultsFileNames)
+  Rmpi::mpi.bcast.Robj2slave(obj = allResultsFileNames)
 
 
   #Load simulation on each core
-  mpi.bcast.cmd(sim <- loadSimulation(simFilePath))
+  Rmpi::mpi.bcast.cmd(sim <- loadSimulation(simFilePath))
 
   #Update simulation with individual parameters
-  mpi.bcast.cmd(updateSimulationIndividualParameters(simulation = sim, individualParameters))
+  Rmpi::mpi.bcast.cmd(updateSimulationIndividualParameters(simulation = sim, individualParameters))
 
-  mpi.remote.exec(ospsuite.reportingengine::analyzeCoreSensitivity(
+  Rmpi::mpi.remote.exec(ospsuite.reportingengine::analyzeCoreSensitivity(
     simulation = sim,
     perturbationParameterNamesVector = listSplitParameters[[mpi.comm.rank()]],
     totalSensitivityThreshold = 1,
@@ -160,13 +156,9 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   ))
 
 
-  mpi.close.Rslaves()
+  Rmpi::mpi.close.Rslaves()
 
 }
-
-
-
-
 
 
 
@@ -189,12 +181,10 @@ analyzeCoreSensitivity <- function(simulation,
   sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation)
   sensitivityAnalysis$addParameterPaths(parametersToPerturb)
 
-  if (is.null(numberOfCoresToUse)) {
-    print("ONEONE")
+  if (is.null(numberOfCoresToUse)){
     sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(showProgress = TRUE)
   }
   else {
-    print("TWOTWO")
     sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(
       showProgress = TRUE,
       numberOfCoresToUse = numberOfCoresToUse
