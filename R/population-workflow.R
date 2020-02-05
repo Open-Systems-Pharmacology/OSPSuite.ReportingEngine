@@ -49,19 +49,19 @@ PopulationWorkflow <- R6::R6Class(
 
 
     setPopulationSimulationSettings = function(input = NULL,
-                                              output = NULL,
-                                              settings = NULL,
-                                              active = TRUE,
-                                              message = NULL,
-                                              inputFolderName = self$inputFolder,
-                                              simulationFileName = self$simulation,
-                                              populationFileName = self$population,
-                                              resultsFolderName = self$simulationFolder,
-                                              resultsFileName = "populationSimulation",
-                                              numberOfCores = 1,
-                                              calculatePKParameters = TRUE,
-                                              PKParametersFolderName = file.path(self$outputFolder),
-                                              PKParametersFileName = "populationPKParameters") {
+                                               output = NULL,
+                                               settings = NULL,
+                                               active = TRUE,
+                                               message = NULL,
+                                               inputFolderName = self$inputFolder,
+                                               simulationFileName = self$simulation,
+                                               populationFileName = self$population,
+                                               resultsFolderName = self$simulationFolder,
+                                               resultsFileName = "populationSimulation",
+                                               numberOfCores = 1,
+                                               calculatePKParameters = TRUE,
+                                               PKParametersFolderName = file.path(self$outputFolder),
+                                               PKParametersFileName = "populationPKParameters") {
       self$populationSimulation <- SimulationTask$new(
         input = input,
         output = output,
@@ -139,18 +139,18 @@ PopulationWorkflow <- R6::R6Class(
     runWorkflow = function() {
 
 
-      #POPULATION WORKFLOW
+      # POPULATION WORKFLOW
 
-      #CORE STAGE 0:  DEMOGRAPHY SUMMARY
+      # CORE STAGE 0:  DEMOGRAPHY SUMMARY
       # 0a - Demography Plots/Tables
 
-      #CORE STAGE 1:  SIMULATION
+      # CORE STAGE 1:  SIMULATION
       # 1a - Time profile Plot
 
-      #CORE STAGE 2:  CALCULATE PK PARAMETER
+      # CORE STAGE 2:  CALCULATE PK PARAMETER
       # 2a - PK parameter Plot
 
-      #CORE STAGE 3:  CALCULATE SENSITIVITY
+      # CORE STAGE 3:  CALCULATE SENSITIVITY
       # 3a - Plots and Tables based on sensitivity results
 
 
@@ -170,25 +170,26 @@ PopulationWorkflow <- R6::R6Class(
       print(self$reportingEngineInfo)
 
 
-      #wdir <- self$workflowFolder
-      #resultsFileName <- "populationSimulationResults"
+      # wdir <- self$workflowFolder
+      # resultsFileName <- "populationSimulationResults"
 
       if (self$populationSimulation$active) {
         if (self$populationSimulation$validateInput()) {
           if (self$populationSimulation$numberOfCores == 1) {
             print("Starting population simulation")
+            resultsFilePath <- file.path(self$populationSimulation$resultsFolderName, paste0(self$populationSimulation$resultsFileName, ".csv"))
             simulateModel(
-              simFilePath = file.path(self$populationSimulation$inputFolderName,paste0(self$populationSimulation$simulationFileName,".pkml")),
-              popDataFilePath = file.path(self$populationSimulation$inputFolderName,paste0(self$populationSimulation$populationFileName,".csv")),
-              resultsFilePath = file.path(self$populationSimulation$resultsFolderName,paste0(self$populationSimulation$resultsFileName,".csv")),
+              simFilePath = file.path(self$populationSimulation$inputFolderName, paste0(self$populationSimulation$simulationFileName, ".pkml")),
+              popDataFilePath = file.path(self$populationSimulation$inputFolderName, paste0(self$populationSimulation$populationFileName, ".csv")),
+              resultsFilePath = resultsFilePath,
               calculatePKParameters = self$populationSimulation$calculatePKParameters,
-              PKParametersFilePath = file.path(self$populationSimulation$PKParametersFolderName,paste0(self$populationSimulation$PKParametersFileName,".csv"))
+              PKParametersFilePath = file.path(self$populationSimulation$PKParametersFolderName, paste0(self$populationSimulation$PKParametersFileName, ".csv"))
             )
+            self$populationSimulation$generatedResultFileNames <- resultsFilePath
           }
           else if (self$populationSimulation$numberOfCores > 1) {
             print("Starting parallel population simulation")
-
-            runParallelPopulationSimulation(
+            self$populationSimulation$generatedResultFileNames <- runParallelPopulationSimulation(
               numberOfCores = self$populationSimulation$numberOfCores,
               inputFolderName = self$populationSimulation$inputFolderName,
               simulationFileName = self$populationSimulation$simulationFileName,
@@ -197,7 +198,8 @@ PopulationWorkflow <- R6::R6Class(
               resultsFileName = self$populationSimulation$resultsFileName,
               calculatePKParameters = self$populationSimulation$calculatePKParameters,
               PKParametersFolderName = self$populationSimulation$PKParametersFolderName,
-              PKParametersFileName = self$populationSimulation$PKParametersFileName)
+              PKParametersFileName = self$populationSimulation$PKParametersFileName
+            )
           }
         }
       }

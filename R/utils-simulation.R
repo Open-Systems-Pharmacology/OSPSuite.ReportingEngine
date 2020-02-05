@@ -4,25 +4,26 @@
 #' @export
 #' @import ospsuite
 simulateModel <- function(simFilePath,
-                          popDataFilePath=NULL,
+                          popDataFilePath = NULL,
                           resultsFilePath,
-                          calculatePKParameters=FALSE,
-                          PKParametersFilePath=NULL) {
+                          calculatePKParameters = FALSE,
+                          PKParametersFilePath = NULL) {
   sim <- loadSimulation(simFilePath,
-                        addToCache = FALSE,
-                        loadFromCache = FALSE)
+    addToCache = FALSE,
+    loadFromCache = FALSE
+  )
   pop <- NULL
-  if(!is.null(popDataFilePath)){
+  if (!is.null(popDataFilePath)) {
     pop <- loadPopulation(popDataFilePath)
   }
   res <- runSimulation(sim, population = pop)
   exportResultsToCSV(res, resultsFilePath)
-  if(calculatePKParameters){
+  if (calculatePKParameters) {
     print("Test print for parallel calculation of PK parameters:")
     print(PKParametersFilePath)
     pkAnalyses <- calculatePKAnalyses(results = res)
     print(pkAnalyses$simulation$name)
-    exportPKAnalysesToCSV(pkAnalyses = pkAnalyses,filePath = PKParametersFilePath)
+    exportPKAnalysesToCSV(pkAnalyses = pkAnalyses, filePath = PKParametersFilePath)
   }
 }
 
@@ -42,9 +43,9 @@ runParallelPopulationSimulation <- function(numberOfCores,
                                             resultsFileName,
                                             calculatePKParameters,
                                             PKParametersFolderName,
-                                            PKParametersFileName){
+                                            PKParametersFileName) {
 
-  #library("Rmpi")
+  # library("Rmpi")
   Rmpi::mpi.spawn.Rslaves(nslaves = numberOfCores)
 
   # Check that the correct number of slaves has been spawned.
@@ -55,29 +56,37 @@ runParallelPopulationSimulation <- function(numberOfCores,
   Rmpi::mpi.bcast.cmd(library("ospsuite"))
   Rmpi::mpi.bcast.cmd(library("ospsuite.reportingengine"))
   tempPopDataFiles <- splitPopulationFile(
-    csvPopulationFile = file.path(inputFolderName,paste0(populationFileName,".csv")),
+    csvPopulationFile = file.path(inputFolderName, paste0(populationFileName, ".csv")),
     numberOfCores = numberOfCores,
-    outputFolder = paste0(inputFolderName, "/"),  ####USE file.path()?  Do we need "/"?
+    outputFolder = paste0(inputFolderName, "/"), #### USE file.path()?  Do we need "/"?
     outputFileName = populationFileName
   )
+
+  allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFolderName, fileName = resultsFileName)
+
+
   Rmpi::mpi.bcast.Robj2slave(obj = simulationFileName)
   Rmpi::mpi.bcast.Robj2slave(obj = populationFileName)
   Rmpi::mpi.bcast.Robj2slave(obj = tempPopDataFiles)
   Rmpi::mpi.bcast.Robj2slave(obj = inputFolderName)
-  Rmpi::mpi.bcast.Robj2slave(obj = resultsFolderName)
-  Rmpi::mpi.bcast.Robj2slave(obj = resultsFileName)
+  Rmpi::mpi.bcast.Robj2slave(obj = allResultsFileNames)
+  # Rmpi::mpi.bcast.Robj2slave(obj = resultsFolderName)
+  # Rmpi::mpi.bcast.Robj2slave(obj = resultsFileName)
   Rmpi::mpi.bcast.Robj2slave(obj = calculatePKParameters)
   Rmpi::mpi.bcast.Robj2slave(obj = PKParametersFolderName)
   Rmpi::mpi.bcast.Robj2slave(obj = PKParametersFileName)
 
+
   Rmpi::mpi.remote.exec(simulateModel(
-    simFilePath = file.path(inputFolderName,paste0(simulationFileName, ".pkml")),
-    popDataFilePath = file.path(inputFolderName,paste0(populationFileName, "_", mpi.comm.rank(), ".csv")),
-    resultsFilePath = file.path(resultsFolderName,paste0(resultsFileName, "_", mpi.comm.rank(), ".csv")),
+    simFilePath = file.path(inputFolderName, paste0(simulationFileName, ".pkml")),
+    popDataFilePath = file.path(inputFolderName, paste0(populationFileName, "_", mpi.comm.rank(), ".csv")),
+    resultsFilePath = allResultsFileNames[mpi.comm.rank()], # file.path(resultsFolderName,paste0(resultsFileName, "_", mpi.comm.rank(), ".csv")),
     calculatePKParameters = calculatePKParameters,
-    PKParametersFilePath = file.path(PKParametersFolderName,paste0(PKParametersFileName, "_", mpi.comm.rank(), ".csv"))
+    PKParametersFilePath = file.path(PKParametersFolderName, paste0(PKParametersFileName, "_", mpi.comm.rank(), ".csv"))
   ))
   Rmpi::mpi.close.Rslaves() # Move to end of workflow
+
+  return(allResultsFileNames)
 }
 
 

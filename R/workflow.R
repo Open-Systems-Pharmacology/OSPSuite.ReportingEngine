@@ -33,7 +33,7 @@ Workflow <- R6::R6Class(
     initialize = function(simulationFile,
                           populationFile = NULL,
                           observedDataFile = NULL,
-                          workflowFolder = paste0(getwd(),"/","Workflow", "_", format(Sys.Date(), "%Y%m%d"), "_", format(Sys.time(), "%H%M%S")),
+                          workflowFolder = paste0(getwd(), "/", "Workflow", "_", format(Sys.Date(), "%Y%m%d"), "_", format(Sys.time(), "%H%M%S")),
                           inputFolder = "Inputs",
                           simulationFolder = "Simulations",
                           sensitivityFolder = "Sensitivities",
@@ -97,7 +97,7 @@ Workflow <- R6::R6Class(
 
       # In case settings need to be defined later on
       self$settings <- settings
-    }#,
+    } # ,
 
     # setPKParametersCalculationSettings = function(message = NULL) {
     #   self$pkParametersCalculation <- Task$new(message = message %||% "Calculate PK parameters")
