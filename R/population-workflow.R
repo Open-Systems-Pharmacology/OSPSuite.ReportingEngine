@@ -189,7 +189,7 @@ PopulationWorkflow <- R6::R6Class(
             print("Starting parallel population simulation")
 
             runParallelPopulationSimulation(
-              numberOfCores = self$populationSimulationnumberOfCores,
+              numberOfCores = self$populationSimulation$numberOfCores,
               inputFolderName = self$populationSimulation$inputFolderName,
               simulationFileName = self$populationSimulation$simulationFileName,
               populationFileName = self$populationSimulation$populationFileName,

@@ -18,7 +18,10 @@ simulateModel <- function(simFilePath,
   res <- runSimulation(sim, population = pop)
   exportResultsToCSV(res, resultsFilePath)
   if(calculatePKParameters){
+    print("Test print for parallel calculation of PK parameters:")
+    print(PKParametersFilePath)
     pkAnalyses <- calculatePKAnalyses(results = res)
+    print(pkAnalyses$simulation$name)
     exportPKAnalysesToCSV(pkAnalyses = pkAnalyses,filePath = PKParametersFilePath)
   }
 }
