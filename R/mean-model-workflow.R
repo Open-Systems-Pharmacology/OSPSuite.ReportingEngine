@@ -20,15 +20,12 @@ MeanModelWorkflow <- R6::R6Class(
 
   public = list(
     meanModelSimulation = NULL,
+    meanModelPKParameters = NULL,
     meanModelSensitivityAnalysis = NULL,
 
     initialize = function(...) {
       super$initialize(...)
 
-
-      # self$setMeanModelSimulationSettings()
-      # self$setPKParametersCalculationSettings()
-      # self$setSensitivityAnalysisSettings()
 
       # self$setDemographyPlotSettings()
       # self$setGofPlotSettings()
@@ -65,11 +62,11 @@ MeanModelWorkflow <- R6::R6Class(
                                               settings = NULL,
                                               active = TRUE,
                                               message = NULL,
-                                              simulationFilePath = NULL,#file.path(self$inputFolder,paste0(self$simulation,".pkml")),
-                                              simulationResultFilePaths = NULL, #self$meanModelSimulation$generatedResultFileNames,
+                                              simulationFilePath = file.path(self$inputFolder,paste0(self$simulation,".pkml")),
+                                              simulationResultFilePaths = self$meanModelSimulation$generatedResultFileNames,
                                               pkParametersToEvaluate = NULL,
                                               userDefinedPKFunctions = NULL,
-                                              pkParameterResultsFilePath = NULL){  #file.path(self$pkParametersFolder,"pkParameters.csv")){
+                                              pkParameterResultsFilePath = file.path(self$pkParametersFolder,"meanModelPKParameters.csv")){
       self$meanModelPKParameters <- CalculatePKParametersTask$new(
         input = input,
         output = output,
@@ -167,7 +164,7 @@ MeanModelWorkflow <- R6::R6Class(
           self$meanModelPKParameters$generatedResultFileNames <- calculatePKParameters(
             simulationFilePath = self$meanModelPKParameters$simulationFilePath,
             simulationResultFilePaths = self$meanModelSimulation$generatedResultFileNames,
-            pkParametersResultFilePath = self$meanModelPKParameters$pkParameterResultsFilePath)
+            pkParameterResultsFilePath = self$meanModelPKParameters$pkParameterResultsFilePath)
         }
       }
 

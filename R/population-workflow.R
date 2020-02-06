@@ -14,7 +14,6 @@
 #' \item{setPopulationSimulationSettings()}{Define population simulation task settings}
 #' \item{setPlotDemographySettings()}{Define demography plot settings}
 #' \item{setPlotTimeProfileSettings()}{Define time profile plot settings}
-
 #' \item{runWorkflow()}{Run the active tasks of population worklfow}
 #' }
 #' @export
@@ -27,6 +26,7 @@ PopulationWorkflow <- R6::R6Class(
 
   public = list(
     populationSimulation = NULL,
+    populationPKParameters = NULL,
     populationSensitivityAnalysis = NULL,
 
     initialize = function(...) {
@@ -71,7 +71,7 @@ PopulationWorkflow <- R6::R6Class(
                                                simulationResultFilePaths = self$populationSimulation$generatedResultFileNames,
                                                pkParametersToEvaluate = NULL,
                                                userDefinedPKFunctions = NULL,
-                                               pkParameterResultsFilePath = file.path(self$pkParametersFolder,"pkParameters.csv")){
+                                               pkParameterResultsFilePath = file.path(self$pkParametersFolder,"populationPKParameters.csv")){
       self$populationPKParameters <- CalculatePKParametersTask$new(
         input = input,
         output = output,
@@ -84,25 +84,6 @@ PopulationWorkflow <- R6::R6Class(
         userDefinedPKFunctions = userDefinedPKFunctions,
         pkParameterResultsFilePath = pkParameterResultsFilePath)
     },
-
-    # setPopulationSimulationSettings = function(input = NULL,
-    #                                            output = NULL,
-    #                                            active = TRUE,
-    #                                            message = NULL) {
-    #   self$populationSimulation <- Task$new(
-    #     input = input %||% list(
-    #       "population" = file.path(self$inputFolder, paste0(self$population, ".csv")),
-    #       "simulation" = file.path(self$inputFolder, paste0(self$simulation, ".pkml"))
-    #     ),
-    #     #output = output %||% list("populationSimulation" = file.path(self$simulationFolder, "populationSimulation.RData")),
-    #     active = active,
-    #     message = message %||% "Simulate population"
-    #   )
-    # },
-
-
-
-
 
 
 
@@ -159,24 +140,9 @@ PopulationWorkflow <- R6::R6Class(
       # 3a - Plots and Tables based on sensitivity results
 
 
-
-      # #Example:
-      # library(ospsuite)
-      # library(ospsuite.reportingengine)
-      # simfile <- "./data/simpleMobiEventSim.pkml"
-      # popfile <- "./data/popData.csv"
-      # pwf <- PopulationWorkflow$new(simulationFile = simfile,
-      #                               populationFile = popfile,
-      #                               numberOfCores = 3)
-      # res<-pwf$runWorkflow()
-
-
       print("Start of population workflow: ")
       print(self$reportingEngineInfo)
 
-
-      # wdir <- self$workflowFolder
-      # resultsFileName <- "populationSimulationResults"
 
       if (self$populationSimulation$active) {
         if (self$populationSimulation$validateInput()) {
@@ -210,7 +176,7 @@ PopulationWorkflow <- R6::R6Class(
           self$populationPKParameters$generatedResultFileNames <- calculatePKParameters(
             simulationFilePath = self$populationPKParameters$simulationFilePath,
             simulationResultFilePaths = self$populationSimulation$generatedResultFileNames,
-            pkParametersResultFilePath = self$populationPKParameters$pkParameterResultsFilePath)
+            pkParameterResultsFilePath = self$populationPKParameters$pkParameterResultsFilePath)
         }
       }
 

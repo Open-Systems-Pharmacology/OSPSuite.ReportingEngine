@@ -8,10 +8,11 @@ calculatePKParameters <- function(simulationFilePath,
                                   pkParametersToEvaluate = NULL,
                                   userDefinedPKFunctions = NULL,
                                   pkParameterResultsFilePath){
-res <- importResultsFromCSV(simulation = loadSimulation(simulationFilePath),filePaths = simulationResultFilePaths)
-pkAnalyses <- calculatePKAnalyses(results = res)
-exportPKAnalysesToCSV(pkAnalyses = pkAnalyses,filePath = pkParameterResultsFilePath)
-return(pkParameterResultsFilePath)
+  sim <- loadSimulation(simulationFilePath)
+  res <- importResultsFromCSV(simulation = sim ,filePaths = simulationResultFilePaths)
+  pkAnalyses <- calculatePKAnalyses(results = res)
+  exportPKAnalysesToCSV(pkAnalyses = pkAnalyses,filePath = pkParameterResultsFilePath)
+  return(pkParameterResultsFilePath)
 }
 
 #' @title UserDefinedPKFunction
