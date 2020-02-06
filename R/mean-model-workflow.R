@@ -40,7 +40,6 @@ MeanModelWorkflow <- R6::R6Class(
                                               message = NULL,
                                               inputFolderName = self$inputFolder,
                                               simulationFileName = self$simulation,
-                                              populationFileName = NULL,
                                               resultsFolderName = self$simulationFolder,
                                               resultsFileName = "meanModelSimulation") {
       self$meanModelSimulation <- SimulationTask$new(
@@ -51,7 +50,6 @@ MeanModelWorkflow <- R6::R6Class(
         message = message %||% "Simulate mean model",
         inputFolderName = inputFolderName,
         simulationFileName = simulationFileName,
-        populationFileName = populationFileName,
         resultsFolderName = resultsFolderName,
         resultsFileName = resultsFileName
       )
@@ -87,7 +85,6 @@ MeanModelWorkflow <- R6::R6Class(
                                                        message = NULL,
                                                        inputFolderName = self$inputFolder,
                                                        simulationFileName = self$simulation,
-                                                       populationFileName = NULL,
                                                        resultsFolderName = self$sensitivityFolder,
                                                        resultsFileName = "meanModelSensitivityAnalysis",
                                                        numberOfCores = 1) {
@@ -99,7 +96,6 @@ MeanModelWorkflow <- R6::R6Class(
         message = message %||% "Sensitivity analysis for mean model",
         inputFolderName = inputFolderName,
         simulationFileName = simulationFileName,
-        populationFileName = populationFileName,
         resultsFolderName = resultsFolderName,
         resultsFileName = resultsFileName,
         numberOfCores = numberOfCores
