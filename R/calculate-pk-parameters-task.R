@@ -1,4 +1,4 @@
-#' @title CalculatePKParameters
+#' @title CalculatePKParametersTask
 #' @docType class
 #' @description  Calculating PK parameters task settings for Reporting Engine
 #' @field resultsFileName string with no file extension.  Name of CSV file to which simulation results will be saved.
@@ -10,40 +10,28 @@
 #' \item{print()}{Show task settings}
 #' }
 #' @format NULL
-CalculatePKParameters <- R6::R6Class(
-  "CalculatePKParameters",
+CalculatePKParametersTask <- R6::R6Class(
+  "CalculatePKParametersTask",
   inherit = Task,
   public = list(
-    inputFolderName = NULL,
-    simulationFileName = NULL,
-    populationFileName = NULL,
-    resultsFolderName = NULL,
-    resultsFileName = NULL,
-    numberOfCores = 1,
-    calculatePKParameters = FALSE,
-    PKParametersFolderName = NULL,
-    PKParametersFileName = NULL,
+    simulationFilePath = NULL,
+    simulationResultFilePaths = NULL,
+    pkParametersToEvaluate = NULL,
+    userDefinedPKFunctions = NULL,
+    pkParameterResultsFilePath = NULL,
     generatedResultFileNames = NULL,
-    initialize = function(inputFolderName = getwd(),
-                          simulationFileName,
-                          populationFileName = NULL,
-                          resultsFolderName = getwd(),
-                          resultsFileName = "pkParameterResults",
-                          numberOfCores = 1,
-                          calculatePKParameters = FALSE,
-                          PKParametersFolderName = getwd(),
-                          PKParametersFileName = "PKParameters",
+    initialize = function(simulationFilePath,
+                          simulationResultFilePaths,
+                          pkParametersToEvaluate = NULL,
+                          userDefinedPKFunctions = NULL,
+                          pkParameterResultsFilePath = file.path(getwd(),"pkParameters.csv"),
                           ...) {
       super$initialize(...)
-      self$inputFolderName <- inputFolderName
-      self$simulationFileName <- simulationFileName
-      self$populationFileName <- populationFileName
-      self$resultsFolderName <- resultsFolderName
-      self$resultsFileName <- resultsFileName
-      self$numberOfCores <- numberOfCores
-      self$calculatePKParameters <- calculatePKParameters
-      self$PKParametersFolderName <- PKParametersFolderName
-      self$PKParametersFileName <- PKParametersFileName
+      self$simulationFilePath <- simulationFilePath
+      self$simulationResultFilePaths <- simulationResultFilePaths
+      self$pkParametersToEvaluate <- pkParametersToEvaluate
+      self$userDefinedPKFunctions <- userDefinedPKFunctions
+      self$pkParameterResultsFilePath <- pkParameterResultsFilePath
     }
   )
 )

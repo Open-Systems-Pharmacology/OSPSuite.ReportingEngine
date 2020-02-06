@@ -9,8 +9,10 @@ popfile <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/p
 pwf <- PopulationWorkflow$new(simulationFile = simfile,
                               populationFile = popfile)
 pwf$setPopulationSimulationSettings()
+pwf$setPopulationPKParameterSettings()
 res<-pwf$runWorkflow()
 print(pwf$populationSimulation$generatedResultFileNames)
+print(pwf$populationPKParameters$generatedResultFileNames)
 
 
 # # MULTIPLE CORE
@@ -25,3 +27,4 @@ print(pwf$populationSimulation$generatedResultFileNames)
 # pwf$setPopulationSimulationSettings(numberOfCores = 2)
 # res <- pwf$runWorkflow()
 # print(pwf$populationSimulation$generatedResultFileNames)
+# print(pwf$populationPKParameters$generatedResultFileNames)

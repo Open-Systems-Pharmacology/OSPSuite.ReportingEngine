@@ -6,7 +6,7 @@
 #' @field models simulation class object
 #' @field population population class object
 #' @field observedData List of observed data (use Nonmem format ?)
-#' @field outputFolder path where output is saved
+#' @field pkParametersFolder path where output is saved
 #' #' @section Methods:
 #' #' \describe{
 #' \item{setPKParametersCalculationSettings()}{Define PK parameters calculation task settings}
@@ -28,7 +28,7 @@ Workflow <- R6::R6Class(
     inputFolder = NULL,
     simulationFolder = NULL,
     sensitivityFolder = NULL,
-    outputFolder = NULL,
+    pkParametersFolder = NULL,
 
     initialize = function(simulationFile,
                           populationFile = NULL,
@@ -37,7 +37,7 @@ Workflow <- R6::R6Class(
                           inputFolder = "Inputs",
                           simulationFolder = "Simulations",
                           sensitivityFolder = "Sensitivities",
-                          outputFolder = "Outputs",
+                          pkParametersFolder = "PKParameters",
                           settings = NULL) {
 
 
@@ -58,12 +58,12 @@ Workflow <- R6::R6Class(
       self$inputFolder <- file.path(workflowFolder, inputFolder)
       self$simulationFolder <- file.path(workflowFolder, simulationFolder)
       self$sensitivityFolder <- file.path(workflowFolder, sensitivityFolder)
-      self$outputFolder <- file.path(workflowFolder, outputFolder)
+      self$pkParametersFolder <- file.path(workflowFolder, pkParametersFolder)
 
       dir.create(self$inputFolder)
       dir.create(self$simulationFolder)
       dir.create(self$sensitivityFolder)
-      dir.create(self$outputFolder)
+      dir.create(self$pkParametersFolder)
 
       # Workflow inputs:
       simulationName <- trimFileName(simulationFile, extension = "pkml")

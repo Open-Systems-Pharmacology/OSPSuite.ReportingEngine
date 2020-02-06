@@ -60,6 +60,31 @@ PopulationWorkflow <- R6::R6Class(
       )
     },
 
+
+
+    setPopulationPKParameterSettings = function(input = NULL,
+                                               output = NULL,
+                                               settings = NULL,
+                                               active = TRUE,
+                                               message = NULL,
+                                               simulationFilePath = file.path(self$inputFolder,paste0(self$simulation,".pkml")),
+                                               simulationResultFilePaths = self$populationSimulation$generatedResultFileNames,
+                                               pkParametersToEvaluate = NULL,
+                                               userDefinedPKFunctions = NULL,
+                                               pkParameterResultsFilePath = file.path(self$pkParametersFolder,"pkParameters.csv")){
+      self$populationPKParameters <- CalculatePKParametersTask$new(
+        input = input,
+        output = output,
+        settings = settings,
+        active = active,
+        message = message %||% "Calculate PK parameters for population",
+        simulationFilePath = simulationFilePath,
+        simulationResultFilePaths = simulationResultFilePaths,
+        pkParametersToEvaluate = pkParametersToEvaluate,
+        userDefinedPKFunctions = userDefinedPKFunctions,
+        pkParameterResultsFilePath = pkParameterResultsFilePath)
+    },
+
     # setPopulationSimulationSettings = function(input = NULL,
     #                                            output = NULL,
     #                                            active = TRUE,
@@ -89,8 +114,8 @@ PopulationWorkflow <- R6::R6Class(
     #     input = input %||% self$populationSimulation$input,
     #     output = output %||% list(
     #       "demographyResults" = file.path(self$simulationFolder, "demography.RData"),
-    #       "demographyPlot" = file.path(self$outputFolder, "demographyPlot"),
-    #       "demographyTable" = file.path(self$outputFolder, "demographyTable.md")
+    #       "demographyPlot" = file.path(self$pkParametersFolder, "demographyPlot"),
+    #       "demographyTable" = file.path(self$pkParametersFolder, "demographyTable.md")
     #     ),
     #     active = active,
     #     message = message %||% "Plot demography"
@@ -109,7 +134,7 @@ PopulationWorkflow <- R6::R6Class(
     #     ),
     #     output = output %||% list(
     #       "gofResults" = file.path(self$simulationFolder, "gofResults.RData"),
-    #       "gofPlot" = file.path(self$outputFolder, "gofPlot")
+    #       "gofPlot" = file.path(self$pkParametersFolder, "gofPlot")
     #     ),
     #     active = active,
     #     message = message %||% "Plot goodness of fit diagnostics"
@@ -177,7 +202,25 @@ PopulationWorkflow <- R6::R6Class(
           }
         }
       }
+
+
+      if (self$populationPKParameters$active) {
+        if (self$populationPKParameters$validateInput()) {
+         print("Starting PK parameter calculation")
+          self$populationPKParameters$generatedResultFileNames <- calculatePKParameters(
+            simulationFilePath = self$populationPKParameters$simulationFilePath,
+            simulationResultFilePaths = self$populationSimulation$generatedResultFileNames,
+            pkParametersResultFilePath = self$populationPKParameters$pkParameterResultsFilePath)
+        }
+      }
+
+
     },
+
+
+
+
+
     # self$numberOfCores,
     # self$populationSimulation$input$population,
     # self$inputFolder,
@@ -186,7 +229,7 @@ PopulationWorkflow <- R6::R6Class(
     # popFileName,
     # wdir,
     # inputFolder,
-    # outputFolder,
+    # pkParametersFolder,
     # resultsFileName,
 
     #
@@ -203,7 +246,7 @@ PopulationWorkflow <- R6::R6Class(
     #             tempPopDataFiles <- ospsuite::splitPopulationFile(
     #               csvPopulationFile = self$populationSimulation$input$population,
     #               numberOfCores = self$numberOfCores,
-    #               outputFolder = paste0(inputFolder, "/"),
+    #               pkParametersFolder = paste0(inputFolder, "/"),
     #               outputFileName = popFileName
     #             )
     #             mpi.bcast.Robj2slave(obj = simFileName)
@@ -211,7 +254,7 @@ PopulationWorkflow <- R6::R6Class(
     #             mpi.bcast.Robj2slave(obj = tempPopDataFiles)
     #             mpi.bcast.Robj2slave(obj = wdir)
     #             mpi.bcast.Robj2slave(obj = inputFolder)
-    #             mpi.bcast.Robj2slave(obj = outputFolder)
+    #             mpi.bcast.Robj2slave(obj = pkParametersFolder)
     #
     #             mpi.remote.exec(ospsuite.reportingengine::simulatePopulation(
     #               simFileName = paste0(simFileName, ".pkml"),
@@ -219,7 +262,7 @@ PopulationWorkflow <- R6::R6Class(
     #               popDataFileName = paste0(popFileName, "_", mpi.comm.rank(), ".csv"),
     #               popDataFileFolder = paste0(wdir, "/", inputFolder, "/"),
     #               resultFileName = paste0(resultsFileName, "_", mpi.comm.rank(), ".csv"),
-    #               resultFileFolder = paste0(wdir, "/", outputFolder, "/")
+    #               resultFileFolder = paste0(wdir, "/", pkParametersFolder, "/")
     #             ))
     #             mpi.close.Rslaves() # Move to end of workflow
 

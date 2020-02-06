@@ -60,7 +60,28 @@ MeanModelWorkflow <- R6::R6Class(
       )
     },
 
-
+    setMeanModelPKParameterSettings = function(input = NULL,
+                                              output = NULL,
+                                              settings = NULL,
+                                              active = TRUE,
+                                              message = NULL,
+                                              simulationFilePath = NULL,#file.path(self$inputFolder,paste0(self$simulation,".pkml")),
+                                              simulationResultFilePaths = NULL, #self$meanModelSimulation$generatedResultFileNames,
+                                              pkParametersToEvaluate = NULL,
+                                              userDefinedPKFunctions = NULL,
+                                              pkParameterResultsFilePath = NULL){  #file.path(self$pkParametersFolder,"pkParameters.csv")){
+      self$meanModelPKParameters <- CalculatePKParametersTask$new(
+        input = input,
+        output = output,
+        settings = settings,
+        active = active,
+        message = message %||% "Calculate mean model PK parameters",
+        simulationFilePath = simulationFilePath,
+        simulationResultFilePaths = simulationResultFilePaths,
+        pkParametersToEvaluate = pkParametersToEvaluate,
+        userDefinedPKFunctions = userDefinedPKFunctions,
+        pkParameterResultsFilePath = pkParameterResultsFilePath)
+    },
 
     setMeanModelSensitivityAnalysisSettings = function(input = NULL,
                                                        output = NULL,
@@ -89,26 +110,6 @@ MeanModelWorkflow <- R6::R6Class(
     },
 
 
-
-
-    # self$meanModelSensitivityAnalysis$resultsFileName
-    # setSensitivityAnalysisSettings = function(input = NULL,
-    #                                           output = NULL,
-    #                                           settings = NULL,
-    #                                           active = TRUE,
-    #                                           message = NULL,
-    #                                           resultsFileName = "simulationResults") {
-    #   self$meanModelSensitivityAnalysis <- Task$new(
-    #     input = input %||% list(),
-    #     output = output %||% list("meanModelSensitivityAnalysisResultsFileName" = "meanModelSensitivityAnalysis"),
-    #     settings = settings,
-    #     active = active,
-    #     message = message %||% "Perform sensitivity analysis on mean model"
-    #   )
-    # },
-
-
-
     # setGofPlotSettings = function(input = NULL,
     #                                   output = NULL,
     #                                   active = TRUE,
@@ -120,7 +121,7 @@ MeanModelWorkflow <- R6::R6Class(
     #     ),
     #     output = output %||% list(
     #       "gofResults" = file.path(self$simulationFolder, "gofResults.RData"),
-    #       "gofPlot" = file.path(self$outputFolder, "gofPlot")
+    #       "gofPlot" = file.path(self$pkParametersFolder, "gofPlot")
     #     ),
     #     active = active,
     #     message = message %||% "Plot goodness of fit diagnostics"
@@ -153,13 +154,23 @@ MeanModelWorkflow <- R6::R6Class(
       if (self$meanModelSimulation$active) {
         if (self$meanModelSimulation$validateInput()) {
           print("Starting mean model simulation")
-          resultsFilePath <- file.path(self$meanModelSimulation$resultsFolderName, paste0(self$meanModelSimulation$resultsFileName, ".csv"))
-          simulateModel(
+            self$meanModelSimulation$generatedResultFileNames <-simulateModel(
             simFilePath = file.path(self$meanModelSimulation$inputFolderName, paste0(self$meanModelSimulation$simulationFileName, ".pkml")),
-            resultsFilePath = resultsFilePath)
+            resultsFilePath = file.path(self$meanModelSimulation$resultsFolderName, paste0(self$meanModelSimulation$resultsFileName, ".csv")))
         }
-        self$meanModelSimulation$generatedResultFileNames <- resultsFilePath
       }
+
+
+      if (self$meanModelPKParameters$active) {
+        if (self$meanModelPKParameters$validateInput()) {
+          print("Starting mean model PK parameters calculation")
+          self$meanModelPKParameters$generatedResultFileNames <- calculatePKParameters(
+            simulationFilePath = self$meanModelPKParameters$simulationFilePath,
+            simulationResultFilePaths = self$meanModelSimulation$generatedResultFileNames,
+            pkParametersResultFilePath = self$meanModelPKParameters$pkParameterResultsFilePath)
+        }
+      }
+
 
       if (self$meanModelSensitivityAnalysis$active) {
         if (self$meanModelSensitivityAnalysis$validateInput()) {
@@ -174,55 +185,6 @@ MeanModelWorkflow <- R6::R6Class(
       }
     },
 
-
-
-
-
-
-    # self$numberOfCores,
-    # self$populationSimulation$input$population,
-    # self$inputFolder,
-    # self$population,
-    # simFileName,
-    # popFileName,
-    # wdir,
-    # inputFolder,
-    # outputFolder,
-    # resultsFileName,
-
-    #
-    #             library("Rmpi")
-    #             mpi.spawn.Rslaves(nslaves = self$numberOfCores)
-    #
-    #             # Check that the correct number of slaves has been spawned.
-    #             if (!(mpi.comm.size() - 1 == self$numberOfCores)) { #-1 since mpi.comm.size() counts master
-    #               mpi.close.Rslaves()
-    #               stop(paste0(self$numberOfCores, " cores were not successfully spawned."))
-    #             }
-    #             mpi.bcast.cmd(library("ospsuite"))
-    #             mpi.bcast.cmd(library("ospsuite.reportingengine"))
-    #             tempPopDataFiles <- ospsuite::splitPopulationFile(
-    #               csvPopulationFile = self$populationSimulation$input$population,
-    #               numberOfCores = self$numberOfCores,
-    #               outputFolder = paste0(inputFolder, "/"),
-    #               outputFileName = popFileName
-    #             )
-    #             mpi.bcast.Robj2slave(obj = simFileName)
-    #             mpi.bcast.Robj2slave(obj = popFileName)
-    #             mpi.bcast.Robj2slave(obj = tempPopDataFiles)
-    #             mpi.bcast.Robj2slave(obj = wdir)
-    #             mpi.bcast.Robj2slave(obj = inputFolder)
-    #             mpi.bcast.Robj2slave(obj = outputFolder)
-    #
-    #             mpi.remote.exec(ospsuite.reportingengine::simulatePopulation(
-    #               simFileName = paste0(simFileName, ".pkml"),
-    #               simFileFolder = paste0(wdir, "/", inputFolder, "/"),
-    #               popDataFileName = paste0(popFileName, "_", mpi.comm.rank(), ".csv"),
-    #               popDataFileFolder = paste0(wdir, "/", inputFolder, "/"),
-    #               resultsFileName = paste0(resultsFileName, "_", mpi.comm.rank(), ".csv"),
-    #               resultFileFolder = paste0(wdir, "/", outputFolder, "/")
-    #             ))
-    #             mpi.close.Rslaves() # Move to end of workflow
 
 
     # if (self$pkParametersCalculation$active) {

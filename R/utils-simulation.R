@@ -16,6 +16,7 @@ simulateModel <- function(simFilePath,
   }
   res <- runSimulation(sim, population = pop)
   exportResultsToCSV(res, resultsFilePath)
+  return(resultsFilePath)
 }
 
 

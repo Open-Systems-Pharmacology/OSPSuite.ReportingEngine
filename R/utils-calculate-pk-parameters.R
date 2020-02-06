@@ -1,12 +1,18 @@
 #' @title calculatePKParameters
 #' @description Calculate PK parameters from simulated time profiles
-#' @param populationSimulation populationSimulation object
-#' @return pkParametersResults
+#' @return generatedResultFileNames
 #' @export
 #' @import ospsuite
-calculatePKParameters <- function() {}
-
-
+calculatePKParameters <- function(simulationFilePath,
+                                  simulationResultFilePaths,
+                                  pkParametersToEvaluate = NULL,
+                                  userDefinedPKFunctions = NULL,
+                                  pkParameterResultsFilePath){
+res <- importResultsFromCSV(simulation = loadSimulation(simulationFilePath),filePaths = simulationResultFilePaths)
+pkAnalyses <- calculatePKAnalyses(results = res)
+exportPKAnalysesToCSV(pkAnalyses = pkAnalyses,filePath = pkParameterResultsFilePath)
+return(pkParameterResultsFilePath)
+}
 
 #' @title UserDefinedPKFunction
 #' @docType class

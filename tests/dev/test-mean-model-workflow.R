@@ -12,9 +12,11 @@ setwd("C:/Users/ahamadeh/Dropbox/rproject/workflow")
 simFilePath <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/simpleMobiEventSim_nonzeroinitial.pkml"
 mwf <- MeanModelWorkflow$new(simulationFile = simFilePath)
 mwf$setMeanModelSimulationSettings()
+mwf$setMeanModelPKParameterSettings()
 mwf$setMeanModelSensitivityAnalysisSettings()
 mwf$runWorkflow()
 print(mwf$meanModelSimulation$generatedResultFileNames)
+#print(mwf$meanModelPKParameters$generatedResultFileNames)
 print(mwf$meanModelSensitivityAnalysis$generatedResultFileNames)
 
 
