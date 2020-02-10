@@ -33,3 +33,20 @@ UserDefinedPKFunction <- R6::R6Class(
     }
   )
 )
+
+#' @title AllPKParameters
+#' @description  list of usual PK parameters from OSP Suite
+#' @export 
+AllPKParameters <- enum(c('C_max',
+                     'C_max_norm',
+                     't_max',
+                     'C_tEnd',
+                     'AUC',
+                     'AUC_norm',
+                     'AUC_inf',
+                     'AUC_inf_norm',
+                     'MRT',
+                     'Thalf',
+                     'CL',
+                     'Vss',
+                     'Vd'))
