@@ -9,11 +9,11 @@
 logError <- function(message, 
                      file = "log-error.txt", 
                      printConsole = TRUE){
-
+  timeStampMessage <- paste0(format(Sys.time(), "%d/%m/%Y - %H:%M : "), message)
   if (printConsole) {
-    print(message)
+    print(timeStampMessage)
   }
-  return(message)
+  return(timeStampMessage)
 }
 
 #' @title logDebug
@@ -27,10 +27,11 @@ logError <- function(message,
 logDebug <- function(message, 
                      file = "log-debug.txt", 
                      printConsole = TRUE){
+  timeStampMessage <- paste0(format(Sys.time(), "%d/%m/%Y - %H:%M : "), message)
   if (printConsole) {
-    print(message)
+    print(timeStampMessage)
   }
-  return(message)
+  return(timeStampMessage)
 }
 
 #' @title logInfo
@@ -41,11 +42,12 @@ logDebug <- function(message,
 #' @param printConsole logical to print error on console
 #' @return 
 #' @export
-loglogInfo <- function(message, 
+logInfo <- function(message, 
                      file = "log-info.txt", 
                      printConsole = TRUE){
+  timeStampMessage <- paste0(format(Sys.time(), "%d/%m/%Y - %H:%M : "), message)
   if (printConsole) {
-    print(message)
+    print(timeStampMessage)
   }
-  return(message)
+  return(timeStampMessage)
 } 
