@@ -23,10 +23,10 @@ Task <- R6::R6Class(
     message = NULL,
 
     initialize = function(input = NULL,
-                          output = NULL,
-                          settings = NULL,
-                          active = TRUE,
-                          message = NULL) {
+                              output = NULL,
+                              settings = NULL,
+                              active = TRUE,
+                              message = NULL) {
       validateIsOfType(active, "logical")
       self$active <- active
       self$input <- as.list(input)

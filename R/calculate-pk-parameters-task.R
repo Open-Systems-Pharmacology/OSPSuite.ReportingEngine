@@ -21,11 +21,11 @@ CalculatePKParametersTask <- R6::R6Class(
     pkParameterResultsFilePath = NULL,
     generatedResultFileNames = NULL,
     initialize = function(simulationFilePath,
-                          simulationResultFilePaths,
-                          pkParametersToEvaluate = NULL,
-                          userDefinedPKFunctions = NULL,
-                          pkParameterResultsFilePath = file.path(getwd(),"pkParameters.csv"),
-                          ...) {
+                              simulationResultFilePaths,
+                              pkParametersToEvaluate = NULL,
+                              userDefinedPKFunctions = NULL,
+                              pkParameterResultsFilePath = file.path(getwd(), "pkParameters.csv"),
+                              ...) {
       super$initialize(...)
       self$simulationFilePath <- simulationFilePath
       self$simulationResultFilePaths <- simulationResultFilePaths

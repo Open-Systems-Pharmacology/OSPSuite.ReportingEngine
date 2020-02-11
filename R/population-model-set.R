@@ -14,11 +14,11 @@
 #' @export
 PopModelSet <- R6::R6Class(
   "PopModelSet",
-  inherit = "MeanModelSet",
+  inherit = MeanModelSet,
   public = list(
-    populationFile = NULL, 
+    populationFile = NULL,
     populationName = NULL,
-    
+
     #' @description
     #' Create a new `PopModelSet` object.
     #' @param simulationFile names of pkml file to be used for the simulation
@@ -34,33 +34,33 @@ PopModelSet <- R6::R6Class(
     #' @param pkParameterUnits display units for `pkParameters`
     #' @param dataFilter filter to compare with observed data
     #' @return A new `MeanModelSet` object
-    initialize = function(simulationFile, 
-                          simulationName = NULL,
-                          populationFile,
-                          populationName = NULL,
-                          pathID,
-                          pathName = NULL,
-                          pathUnit = NULL,
-                          pkParameters = AllPKParameters,
-                          pkParametersNames = NULL,
-                          pkParametersUnits = NULL,
-                          dataFilter = NULL){
-      
-      super$initialize(simulationFile, 
-                       simulationName,
-                       populationFile,
-                       populationName,
-                       pathID,
-                       pathName,
-                       pathUnit,
-                       pkParameters,
-                       pkParametersNames,
-                       pkParametersUnits,
-                       dataFilter)
-      
-      self$populationFile <-  populationFile
+    initialize = function(simulationFile,
+                              simulationName = NULL,
+                              populationFile,
+                              populationName = NULL,
+                              pathID,
+                              pathName = NULL,
+                              pathUnit = NULL,
+                              pkParameters = AllPKParameters,
+                              pkParametersNames = NULL,
+                              pkParametersUnits = NULL,
+                              dataFilter = NULL) {
+      super$initialize(
+        simulationFile,
+        simulationName,
+        populationFile,
+        populationName,
+        pathID,
+        pathName,
+        pathUnit,
+        pkParameters,
+        pkParametersNames,
+        pkParametersUnits,
+        dataFilter
+      )
+
+      self$populationFile <- populationFile
       self$populationName <- populationName %||% trimFileName(populationFile, extension = "csv")
-      
     }
   )
 )

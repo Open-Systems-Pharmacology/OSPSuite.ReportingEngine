@@ -7,11 +7,11 @@ calculatePKParameters <- function(simulationFilePath,
                                   simulationResultFilePaths,
                                   pkParametersToEvaluate = NULL,
                                   userDefinedPKFunctions = NULL,
-                                  pkParameterResultsFilePath){
+                                  pkParameterResultsFilePath) {
   sim <- loadSimulation(simulationFilePath)
-  res <- importResultsFromCSV(simulation = sim ,filePaths = simulationResultFilePaths)
+  res <- importResultsFromCSV(simulation = sim, filePaths = simulationResultFilePaths)
   pkAnalyses <- calculatePKAnalyses(results = res)
-  exportPKAnalysesToCSV(pkAnalyses = pkAnalyses,filePath = pkParameterResultsFilePath)
+  exportPKAnalysesToCSV(pkAnalyses = pkAnalyses, filePath = pkParameterResultsFilePath)
   return(pkParameterResultsFilePath)
 }
 
@@ -36,17 +36,19 @@ UserDefinedPKFunction <- R6::R6Class(
 
 #' @title AllPKParameters
 #' @description  list of usual PK parameters from OSP Suite
-#' @export 
-AllPKParameters <- enum(c('C_max',
-                     'C_max_norm',
-                     't_max',
-                     'C_tEnd',
-                     'AUC',
-                     'AUC_norm',
-                     'AUC_inf',
-                     'AUC_inf_norm',
-                     'MRT',
-                     'Thalf',
-                     'CL',
-                     'Vss',
-                     'Vd'))
+#' @export
+AllPKParameters <- enum(c(
+  "C_max",
+  "C_max_norm",
+  "t_max",
+  "C_tEnd",
+  "AUC",
+  "AUC_norm",
+  "AUC_inf",
+  "AUC_inf_norm",
+  "MRT",
+  "Thalf",
+  "CL",
+  "Vss",
+  "Vd"
+))

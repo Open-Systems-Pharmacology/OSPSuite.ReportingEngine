@@ -4,11 +4,11 @@
 #' @param file log file name.
 #' Default is `log-error.txt`
 #' @param printConsole logical to print error on console
-#' @return 
+#' @return
 #' @export
-logError <- function(message, 
-                     file = "log-error.txt", 
-                     printConsole = TRUE){
+logError <- function(message,
+                     file = "log-error.txt",
+                     printConsole = TRUE) {
   timeStampMessage <- paste0(format(Sys.time(), "%d/%m/%Y - %H:%M : "), message)
   if (printConsole) {
     print(timeStampMessage)
@@ -22,11 +22,11 @@ logError <- function(message,
 #' @param file log file name.
 #' Default is `log-debug.txt`
 #' @param printConsole logical to print error on console
-#' @return 
+#' @return
 #' @export
-logDebug <- function(message, 
-                     file = "log-debug.txt", 
-                     printConsole = TRUE){
+logDebug <- function(message,
+                     file = "log-debug.txt",
+                     printConsole = TRUE) {
   timeStampMessage <- paste0(format(Sys.time(), "%d/%m/%Y - %H:%M : "), message)
   if (printConsole) {
     print(timeStampMessage)
@@ -40,14 +40,14 @@ logDebug <- function(message,
 #' @param file log file name.
 #' Default is `log-info.txt`
 #' @param printConsole logical to print error on console
-#' @return 
+#' @return
 #' @export
-logInfo <- function(message, 
-                     file = "log-info.txt", 
-                     printConsole = TRUE){
+logInfo <- function(message,
+                    file = "log-info.txt",
+                    printConsole = TRUE) {
   timeStampMessage <- paste0(format(Sys.time(), "%d/%m/%Y - %H:%M : "), message)
   if (printConsole) {
     print(timeStampMessage)
   }
   return(timeStampMessage)
-} 
+}

@@ -23,9 +23,9 @@ MeanModel <- R6::R6Class(
 
 
     initialize = function(modelFilePath = NULL,
-                          simModel = NULL,
-                          modelDisplayName = NULL,
-                          simulationOutputsFolder = "." # default output folder is current directory
+                              simModel = NULL,
+                              modelDisplayName = NULL,
+                              simulationOutputsFolder = "." # default output folder is current directory
     ) {
       if (!is.null(modelFilePath)) {
         self$modelFilePath <- modelFilePath

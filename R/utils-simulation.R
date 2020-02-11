@@ -63,7 +63,8 @@ runParallelPopulationSimulation <- function(numberOfCores,
   Rmpi::mpi.remote.exec(simulateModel(
     simFilePath = file.path(inputFolderName, paste0(simulationFileName, ".pkml")),
     popDataFilePath = file.path(inputFolderName, paste0(populationFileName, "_", mpi.comm.rank(), ".csv")),
-    resultsFilePath = allResultsFileNames[mpi.comm.rank()]))
+    resultsFilePath = allResultsFileNames[mpi.comm.rank()]
+  ))
   Rmpi::mpi.close.Rslaves() # Move to end of workflow
 
   return(allResultsFileNames)

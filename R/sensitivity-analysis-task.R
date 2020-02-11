@@ -22,12 +22,12 @@ SensitivityAnalysisTask <- R6::R6Class(
     numberOfCores = 1,
     generatedResultFileNames = NULL,
     initialize = function(inputFolderName = getwd(),
-                          simulationFileName,
-                          populationFileName = NULL,
-                          resultsFolderName = getwd(),
-                          resultsFileName = "sensitivityAnalysisResults",
-                          numberOfCores = 1,
-                          ...) {
+                              simulationFileName,
+                              populationFileName = NULL,
+                              resultsFolderName = getwd(),
+                              resultsFileName = "sensitivityAnalysisResults",
+                              numberOfCores = 1,
+                              ...) {
       super$initialize(...)
       self$inputFolderName <- inputFolderName
       self$simulationFileName <- simulationFileName

@@ -160,8 +160,6 @@ checkExisitingPath <- function(path) {
   if (!dir.exists(path)) {
     return()
   }
-  logInfo(message = messages$warningExistingPath(path))
-  logDebug(message = messages$warningExistingPath(path))
   warning(messages$warningExistingPath(path))
 }
 
