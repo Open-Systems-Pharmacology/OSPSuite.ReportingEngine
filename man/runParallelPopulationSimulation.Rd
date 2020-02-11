@@ -10,10 +10,7 @@ runParallelPopulationSimulation(
   simulationFileName,
   populationFileName,
   resultsFolderName,
-  resultsFileName,
-  calculatePKParameters,
-  PKParametersFolderName,
-  PKParametersFileName
+  resultsFileName
 )
 }
 \value{
