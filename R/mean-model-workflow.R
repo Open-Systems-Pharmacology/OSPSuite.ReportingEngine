@@ -34,7 +34,7 @@ MeanModelWorkflow <- R6::R6Class(
       super$initialize(...)
 
       # TO DO: include task parameters from initialization ?
-      meanModelSimulationSettings()
+      self$meanModelSimulationSettings()
       self$calculatePKParametersSettings()
       self$plotGoFSettings()
       self$plotMassBalanceSettings()
@@ -44,14 +44,28 @@ MeanModelWorkflow <- R6::R6Class(
       self$plotSensitivitySettings()
     },
 
+    #' @description
+    #' Define simulate `task` settings 
+    #' @param input file or folder of input
+    #' @param output file or folder of output
+    #' @param settings specific settings for task
+    #' @param active logical indicating if `task` is performed in worklfow.
+    #' Default value is `TRUE`
+    #' @param message title of the `task`.
+    #' Default value indicates `task` name.
+    #' @param inputFolderName folder of input
+    #' @param simulationFileName name of simulation file
+    #' @param resultsFolderName folder where output is saved
+    #' @param resultsFileName file where output is saved
+    #' @return A new `Task` object
     meanModelSimulationSettings = function(input = NULL,
                                                output = NULL,
                                                settings = NULL,
                                                active = TRUE,
                                                message = NULL,
-                                               inputFolderName = self$inputFolder,
-                                               simulationFileName = self$simulation,
-                                               resultsFolderName = self$simulationFolder,
+                                               inputFolderName = getwd(),
+                                               simulationFileName = self$simulations,
+                                               resultsFolderName = self$resultsFolder,
                                                resultsFileName = "meanModelSimulation") {
       self$meanModelSimulation <- SimulationTask$new(
         input = input,
@@ -66,6 +80,21 @@ MeanModelWorkflow <- R6::R6Class(
       )
     },
 
+    #' @description
+    #' Define calculate PK Parameters `task` settings 
+    #' @param input file or folder of input
+    #' @param output file or folder of output
+    #' @param settings specific settings for task
+    #' @param active logical indicating if `task` is performed in worklfow.
+    #' Default value is `TRUE`
+    #' @param message title of the `task`.
+    #' Default value indicates `task` name.
+    #' @param simulationFilePath TO DO
+    #' @param simulationResultFilePaths TO DO
+    #' @param pkParametersToEvaluate TO DO
+    #' @param userDefinedPKFunctions TO DO
+    #' @param pkParameterResultsFilePath TO DO
+    #' @return A new `Task` object
     calculatePKParametersSettings = function(input = NULL,
                                                  output = NULL,
                                                  settings = NULL,
@@ -90,6 +119,21 @@ MeanModelWorkflow <- R6::R6Class(
       )
     },
 
+    #' @description
+    #' Define mean Model Sensitivity Analysis `task` settings 
+    #' @param input file or folder of input
+    #' @param output file or folder of output
+    #' @param settings specific settings for task
+    #' @param active logical indicating if `task` is performed in worklfow.
+    #' Default value is `TRUE`
+    #' @param message title of the `task`.
+    #' Default value indicates `task` name.
+    #' @param inputFolderName TO DO
+    #' @param simulationFileName TO DO
+    #' @param resultsFolderName TO DO
+    #' @param resultsFileName TO DO
+    #' @param numberOfCores TO DO
+    #' @return A new `Task` object
     meanModelSensitivityAnalysisSettings = function(input = NULL,
                                                         output = NULL,
                                                         settings = NULL,
@@ -115,6 +159,16 @@ MeanModelWorkflow <- R6::R6Class(
     },
 
     # TO DO: Define the tasks settings for plots
+    #' @description
+    #' Define Goodness of fit `task` settings 
+    #' @param input file or folder of input
+    #' @param output file or folder of output
+    #' @param settings specific settings for task
+    #' @param active logical indicating if `task` is performed in worklfow.
+    #' Default value is `TRUE`
+    #' @param message title of the `task`.
+    #' Default value indicates `task` name.
+    #' @return A new `Task` object
     plotGoFSettings = function(input = NULL,
                                    output = NULL,
                                    active = TRUE,
@@ -127,6 +181,16 @@ MeanModelWorkflow <- R6::R6Class(
       )
     },
 
+    #' @description
+    #' Define plot PK parameters `task` settings 
+    #' @param input file or folder of input
+    #' @param output file or folder of output
+    #' @param settings specific settings for task
+    #' @param active logical indicating if `task` is performed in worklfow.
+    #' Default value is `TRUE`
+    #' @param message title of the `task`.
+    #' Default value indicates `task` name.
+    #' @return A new `Task` object
     plotPKParametersSettings = function(input = NULL,
                                             output = NULL,
                                             active = TRUE,
@@ -139,6 +203,16 @@ MeanModelWorkflow <- R6::R6Class(
       )
     },
 
+    #' @description
+    #' Define plot mass balance `task` settings 
+    #' @param input file or folder of input
+    #' @param output file or folder of output
+    #' @param settings specific settings for task
+    #' @param active logical indicating if `task` is performed in worklfow.
+    #' Default value is `TRUE`
+    #' @param message title of the `task`.
+    #' Default value indicates `task` name.
+    #' @return A new `Task` object
     plotMassBalanceSettings = function(input = NULL,
                                            output = NULL,
                                            active = TRUE,
@@ -151,6 +225,16 @@ MeanModelWorkflow <- R6::R6Class(
       )
     },
 
+    #' @description
+    #' Define plot absorption `task` settings 
+    #' @param input file or folder of input
+    #' @param output file or folder of output
+    #' @param settings specific settings for task
+    #' @param active logical indicating if `task` is performed in worklfow.
+    #' Default value is `TRUE`
+    #' @param message title of the `task`.
+    #' Default value indicates `task` name.
+    #' @return A new `Task` object
     plotAbsorptionSettings = function(input = NULL,
                                           output = NULL,
                                           active = TRUE,
@@ -163,11 +247,21 @@ MeanModelWorkflow <- R6::R6Class(
       )
     },
 
+    #' @description
+    #' Define plot sensisitivity `task` settings 
+    #' @param input file or folder of input
+    #' @param output file or folder of output
+    #' @param settings specific settings for task
+    #' @param active logical indicating if `task` is performed in worklfow.
+    #' Default value is `TRUE`
+    #' @param message title of the `task`.
+    #' Default value indicates `task` name.
+    #' @return A new `Task` object
     plotSensitivitySettings = function(input = NULL,
                                            output = NULL,
                                            active = TRUE,
                                            message = NULL) {
-      self$plotPKParameters <- Task$new(
+      self$plotSensitivity <- Task$new(
         input = input,
         output = output,
         active = active,
@@ -175,6 +269,9 @@ MeanModelWorkflow <- R6::R6Class(
       )
     },
 
+    #' @description
+    #' Run mean model workflow tasks
+    #' @return All results and plots as a structured output.
     runWorkflow = function() {
       logInfo(message = "Start of mean model workflow")
 
