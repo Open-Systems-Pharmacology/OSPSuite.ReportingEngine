@@ -9,11 +9,12 @@
 logError <- function(message,
                      file = "log-error.txt",
                      printConsole = TRUE) {
-  timeStampMessage <- paste0(format(Sys.time(), "%d/%m/%Y - %H:%M : "), message)
+  timeStamp <- sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M"))
   if (printConsole) {
-    print(timeStampMessage)
+    print(timeStamp)
+    print(message)
   }
-  return(timeStampMessage)
+  return(message)
 }
 
 #' @title logDebug
@@ -27,11 +28,12 @@ logError <- function(message,
 logDebug <- function(message,
                      file = "log-debug.txt",
                      printConsole = TRUE) {
-  timeStampMessage <- paste0(format(Sys.time(), "%d/%m/%Y - %H:%M : "), message)
-  if (printConsole) {
-    print(timeStampMessage)
-  }
-  return(timeStampMessage)
+  timeStamp <- sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M"))
+                       if (printConsole) {
+                         print(timeStamp)
+                         print(message)
+                       }
+                       return(message)
 }
 
 #' @title logInfo
@@ -45,9 +47,10 @@ logDebug <- function(message,
 logInfo <- function(message,
                     file = "log-info.txt",
                     printConsole = TRUE) {
-  timeStampMessage <- paste0(format(Sys.time(), "%d/%m/%Y - %H:%M : "), message)
-  if (printConsole) {
-    print(timeStampMessage)
-  }
-  return(timeStampMessage)
+  timeStamp <- sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M"))
+                       if (printConsole) {
+                         print(timeStamp)
+                         print(message)
+                       }
+                       return(message)
 }
