@@ -38,23 +38,24 @@ ReportingEngineInfo <- R6::R6Class(
       }
     },
     print = function() {
-      cat("Reporting Engine Information: \n")
-      cat("Date: ", as.character(self$Date), "\n", sep = "")
-      cat("\nUser Information: \n")
-      cat("Computer Name: ", private$computerName, "\n", sep = "")
-      cat("User: ", private$userName, "\n", sep = "")
-      cat("Login: ", private$login, "\n", sep = "")
-      cat("System is ")
-      if (!private$isValidatedSystem) {
-        cat("NOT")
+      systemValidated <- "NOT"
+      if (private$isValidatedSystem) {
+        systemValidated <- ""
       }
-      cat("validated \n", sep = "")
-      cat("\nSystem versions: \n")
-      cat("R version: ", private$Rversion, "\n", sep = "")
-      cat("OSP Suite Package version: ", as.character(private$ospsuiteVersion), "\n", sep = "")
-      cat("tlf version: ", as.character(private$tlfVersion), "\n", sep = "")
-
+      infoPrint <- c(sprintf("\nReporting Engine Information:\n"),
+                     sprintf("Date: %s \n", as.character(self$Date)),
+                     sprintf("\nUser Information: \n"),
+                     sprintf("Computer Name: %s \n", private$computerName),
+                     sprintf("User: %s \n", private$userName),
+                     sprintf("Login: %s \n", private$login),
+                     sprintf("System is %s validated \n", systemValidated),
+                     sprintf("\nSystem versions: \n"),
+                     sprintf("R version: %s \n", private$Rversion),
+                     sprintf("OSP Suite Package version: %s \n", as.character(private$ospsuiteVersion)),
+                     sprintf("tlf version: %s \n", as.character(private$tlfVersion))
+      )
       invisible(self)
+      return(infoPrint)
     }
   ),
   private = list(
