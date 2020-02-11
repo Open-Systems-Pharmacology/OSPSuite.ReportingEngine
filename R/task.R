@@ -1,18 +1,10 @@
 #' @title Task
-#' @docType class
-#' @description  Task settings for Reporting Engine
+#' @description  R6 class for Task settings
 #' @field active logical
 #' @field input List of input files/folders to use to perform tasks
 #' @field output List of output files/folders to save the task output
 #' @field settings class
-#' @section Methods:
-#' \describe{
-#' \item{new()}{Initilialize Task settings}
-#' \item{activate()}{Set Task as active in workflow}
-#' \item{inactivate()}{Set Task as inactive in workflow}
-#' \item{print()}{Show task settings}
-#' }
-#' @format NULL
+#' @field message message or title of the task
 Task <- R6::R6Class(
   "Tasks",
   public = list(
@@ -22,6 +14,16 @@ Task <- R6::R6Class(
     settings = NULL,
     message = NULL,
 
+    #' @description
+    #' Create a `Task` object
+    #' @param input list of files or folders of input
+    #' @param output list of files or folders of output
+    #' @param settings specific settings for task
+    #' @param active logical indicating if `task` is performed in a worklfow.
+    #' Default value is `TRUE`
+    #' @param message title of the `task`.
+    #' Default value indicates `task` name.
+    #' @return A new `Task` object
     initialize = function(input = NULL,
                               output = NULL,
                               settings = NULL,
@@ -52,6 +54,9 @@ Task <- R6::R6Class(
       return(isValid)
     },
 
+    #' @description
+    #' Print `Task` features
+    #' @return List of task features
     print = function() {
       info <- list(
         "task" = self$message,
