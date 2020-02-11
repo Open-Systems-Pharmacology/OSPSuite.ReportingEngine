@@ -1,5 +1,0 @@
-output;plotType;messsage;success
-Raltegravir;residuals vs time;residuals fit a line with intercept 7.37 [-8.22-0.0366] and slope 7.37 [-0.105-0.0366];1
-Raltegravir;residuals vs Y;residuals fit a line with intercept 0.0102 [-1.51-0.2] and slope 0.0102 [-0.255-0.2];1
-Raltegravir;residuals vs time;residuals fit a line with intercept -0.584 [NaN-0] and slope -0.584 [0-0];0
-Raltegravir;residuals vs Y;residuals fit a line with intercept 0 [0-NaN] and slope 0 [NaN-NaN];0

@@ -1,8 +1,0 @@
-Massbalance for Raltegravir 400 mg filmcoated tablet md;;;1
-S13_TPamount_Filmcoated_tablet_400mg_md_lin;Amount of drug vs time within the different compartments. Time profiles are in a linear scale.;;
-S13_TPamount_Filmcoated_tablet_400mg_md_log;Amount of drug vs time within the different compartments. Time profiles are in a logarithmic scale.;;
-S13_TPfraction_Filmcoated_tablet_400mg_md_lin;Amount of drug vs time within the different compartments normalized to applicated drugmass. Time profiles are in a linear scale.;;
-S13_TPfraction_Filmcoated_tablet_400mg_md_log;Amount of drug vs time within the different compartments normalized to applicated drugmass. Time profiles are in a logarithmic scale.;;
-S13_cumTPamount_Filmcoated_tablet_400mg_md_lin;Cumulated amount of drug vs time within the different compartments. Time profiles ar in a linear scale.;;
-S13_cumTPfraction_Filmcoated_tablet_400mg_md_lin;Cumulated amount of drug vs time within the different compartments normalized to applicated drugmass. Time profiles ar in a linear scale.;;
-S13_pie_Filmcoated_tablet_400mg_md_t240;Fraction of drug  within the different compartments a 240h.;;
