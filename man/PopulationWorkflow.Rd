@@ -71,6 +71,7 @@ A new `PopulationWorkflow` object
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-populationSimulationSettings"></a>}}
 \subsection{Method \code{populationSimulationSettings()}}{
+Define simulate `task` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$populationSimulationSettings(
   input = NULL,
@@ -87,10 +88,41 @@ A new `PopulationWorkflow` object
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{file or folder of input}
+
+\item{\code{output}}{file or folder of output}
+
+\item{\code{settings}}{specific settings for task}
+
+\item{\code{active}}{logical indicating if `task` is performed in worklfow.
+Default value is `TRUE`}
+
+\item{\code{message}}{title of the `task`.
+Default value indicates `task` name.}
+
+\item{\code{inputFolderName}}{folder of input}
+
+\item{\code{simulationFileName}}{name of simulation file}
+
+\item{\code{resultsFolderName}}{folder where output is saved}
+
+\item{\code{resultsFileName}}{file where output is saved}
+
+\item{\code{numberOfCores}}{number of cores for parallelization}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new `Task` object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-populationPKParameterSettings"></a>}}
 \subsection{Method \code{populationPKParameterSettings()}}{
+Define calculate PK parameters `task` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$populationPKParameterSettings(
   input = NULL,
@@ -107,10 +139,41 @@ A new `PopulationWorkflow` object
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{file or folder of input}
+
+\item{\code{output}}{file or folder of output}
+
+\item{\code{settings}}{specific settings for task}
+
+\item{\code{active}}{logical indicating if `task` is performed in worklfow.
+Default value is `TRUE`}
+
+\item{\code{message}}{title of the `task`.
+Default value indicates `task` name.}
+
+\item{\code{simulationFilePath}}{TO DO}
+
+\item{\code{simulationResultFilePaths}}{TO DO}
+
+\item{\code{pkParametersToEvaluate}}{TO DO}
+
+\item{\code{userDefinedPKFunctions}}{TO DO}
+
+\item{\code{pkParameterResultsFilePath}}{TO DO}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new `Task` object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotDemographySettings"></a>}}
 \subsection{Method \code{plotDemographySettings()}}{
+Define plot demography `task` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotDemographySettings(
   input = NULL,
@@ -120,10 +183,31 @@ A new `PopulationWorkflow` object
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{file or folder of input}
+
+\item{\code{output}}{file or folder of output}
+
+\item{\code{active}}{logical indicating if `task` is performed in worklfow.
+Default value is `TRUE`}
+
+\item{\code{message}}{title of the `task`.
+Default value indicates `task` name.}
+
+\item{\code{settings}}{specific settings for task}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new `Task` object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotGoFSettings"></a>}}
 \subsection{Method \code{plotGoFSettings()}}{
+Define plot goodness of fit `task` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotGoFSettings(
   input = NULL,
@@ -133,10 +217,31 @@ A new `PopulationWorkflow` object
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{file or folder of input}
+
+\item{\code{output}}{file or folder of output}
+
+\item{\code{active}}{logical indicating if `task` is performed in worklfow.
+Default value is `TRUE`}
+
+\item{\code{message}}{title of the `task`.
+Default value indicates `task` name.}
+
+\item{\code{settings}}{specific settings for task}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new `Task` object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotPKParametersSettings"></a>}}
 \subsection{Method \code{plotPKParametersSettings()}}{
+Define plot PK parameters `task` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotPKParametersSettings(
   input = NULL,
@@ -146,10 +251,31 @@ A new `PopulationWorkflow` object
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{file or folder of input}
+
+\item{\code{output}}{file or folder of output}
+
+\item{\code{active}}{logical indicating if `task` is performed in worklfow.
+Default value is `TRUE`}
+
+\item{\code{message}}{title of the `task`.
+Default value indicates `task` name.}
+
+\item{\code{settings}}{specific settings for task}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new `Task` object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotSensitivitySettings"></a>}}
 \subsection{Method \code{plotSensitivitySettings()}}{
+Define plot sensisitivity `task` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotSensitivitySettings(
   input = NULL,
@@ -159,14 +285,38 @@ A new `PopulationWorkflow` object
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{file or folder of input}
+
+\item{\code{output}}{file or folder of output}
+
+\item{\code{active}}{logical indicating if `task` is performed in worklfow.
+Default value is `TRUE`}
+
+\item{\code{message}}{title of the `task`.
+Default value indicates `task` name.}
+
+\item{\code{settings}}{specific settings for task}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new `Task` object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-runWorkflow"></a>}}
 \subsection{Method \code{runWorkflow()}}{
+Run population workflow tasks
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$runWorkflow()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+All results and plots as a structured output.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
