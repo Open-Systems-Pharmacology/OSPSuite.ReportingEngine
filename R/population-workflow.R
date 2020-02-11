@@ -41,7 +41,21 @@ PopulationWorkflow <- R6::R6Class(
       self$plotSensitivitySettings()
     },
 
-
+    #' @description
+    #' Define simulate `task` settings
+    #' @param input file or folder of input
+    #' @param output file or folder of output
+    #' @param settings specific settings for task
+    #' @param active logical indicating if `task` is performed in worklfow.
+    #' Default value is `TRUE`
+    #' @param message title of the `task`.
+    #' Default value indicates `task` name.
+    #' @param inputFolderName folder of input
+    #' @param simulationFileName name of simulation file
+    #' @param resultsFolderName folder where output is saved
+    #' @param resultsFileName file where output is saved
+    #' @param numberOfCores number of cores for parallelization
+    #' @return A new `Task` object
     populationSimulationSettings = function(input = NULL,
                                                 output = NULL,
                                                 settings = NULL,
@@ -68,6 +82,21 @@ PopulationWorkflow <- R6::R6Class(
       )
     },
 
+    #' @description
+    #' Define calculate PK parameters `task` settings
+    #' @param input file or folder of input
+    #' @param output file or folder of output
+    #' @param settings specific settings for task
+    #' @param active logical indicating if `task` is performed in worklfow.
+    #' Default value is `TRUE`
+    #' @param message title of the `task`.
+    #' Default value indicates `task` name.
+    #' @param simulationFilePath TO DO
+    #' @param simulationResultFilePaths TO DO
+    #' @param pkParametersToEvaluate TO DO
+    #' @param userDefinedPKFunctions TO DO
+    #' @param pkParameterResultsFilePath TO DO
+    #' @return A new `Task` object
     populationPKParameterSettings = function(input = NULL,
                                                  output = NULL,
                                                  settings = NULL,
@@ -93,6 +122,16 @@ PopulationWorkflow <- R6::R6Class(
     },
 
     # TO DO: Define the tasks settings for plots
+    #' @description
+    #' Define plot demography `task` settings
+    #' @param input file or folder of input
+    #' @param output file or folder of output
+    #' @param settings specific settings for task
+    #' @param active logical indicating if `task` is performed in worklfow.
+    #' Default value is `TRUE`
+    #' @param message title of the `task`.
+    #' Default value indicates `task` name.
+    #' @return A new `Task` object
     plotDemographySettings = function(input = NULL,
                                           output = NULL,
                                           active = TRUE,
@@ -105,6 +144,16 @@ PopulationWorkflow <- R6::R6Class(
       )
     },
 
+    #' @description
+    #' Define plot goodness of fit `task` settings
+    #' @param input file or folder of input
+    #' @param output file or folder of output
+    #' @param settings specific settings for task
+    #' @param active logical indicating if `task` is performed in worklfow.
+    #' Default value is `TRUE`
+    #' @param message title of the `task`.
+    #' Default value indicates `task` name.
+    #' @return A new `Task` object
     plotGoFSettings = function(input = NULL,
                                    output = NULL,
                                    active = TRUE,
@@ -117,6 +166,16 @@ PopulationWorkflow <- R6::R6Class(
       )
     },
 
+    #' @description
+    #' Define plot PK parameters `task` settings
+    #' @param input file or folder of input
+    #' @param output file or folder of output
+    #' @param settings specific settings for task
+    #' @param active logical indicating if `task` is performed in worklfow.
+    #' Default value is `TRUE`
+    #' @param message title of the `task`.
+    #' Default value indicates `task` name.
+    #' @return A new `Task` object
     plotPKParametersSettings = function(input = NULL,
                                             output = NULL,
                                             active = TRUE,
@@ -129,11 +188,21 @@ PopulationWorkflow <- R6::R6Class(
       )
     },
 
+    #' @description
+    #' Define plot sensisitivity `task` settings
+    #' @param input file or folder of input
+    #' @param output file or folder of output
+    #' @param settings specific settings for task
+    #' @param active logical indicating if `task` is performed in worklfow.
+    #' Default value is `TRUE`
+    #' @param message title of the `task`.
+    #' Default value indicates `task` name.
+    #' @return A new `Task` object
     plotSensitivitySettings = function(input = NULL,
                                            output = NULL,
                                            active = TRUE,
                                            message = NULL) {
-      self$plotPKParameters <- Task$new(
+      self$plotSensitivity <- Task$new(
         input = input,
         output = output,
         active = active,
@@ -177,6 +246,9 @@ PopulationWorkflow <- R6::R6Class(
     #   )
     # },
 
+    #' @description
+    #' Run population workflow tasks
+    #' @return All results and plots as a structured output.
     runWorkflow = function() {
       logInfo(message = "Start of population workflow")
       # POPULATION WORKFLOW
