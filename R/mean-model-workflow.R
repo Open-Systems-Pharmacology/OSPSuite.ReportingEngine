@@ -45,7 +45,7 @@ MeanModelWorkflow <- R6::R6Class(
     },
 
     #' @description
-    #' Define simulate `task` settings 
+    #' Define simulate `task` settings
     #' @param input file or folder of input
     #' @param output file or folder of output
     #' @param settings specific settings for task
@@ -81,7 +81,7 @@ MeanModelWorkflow <- R6::R6Class(
     },
 
     #' @description
-    #' Define calculate PK Parameters `task` settings 
+    #' Define calculate PK Parameters `task` settings
     #' @param input file or folder of input
     #' @param output file or folder of output
     #' @param settings specific settings for task
@@ -120,7 +120,7 @@ MeanModelWorkflow <- R6::R6Class(
     },
 
     #' @description
-    #' Define mean Model Sensitivity Analysis `task` settings 
+    #' Define mean Model Sensitivity Analysis `task` settings
     #' @param input file or folder of input
     #' @param output file or folder of output
     #' @param settings specific settings for task
@@ -160,7 +160,7 @@ MeanModelWorkflow <- R6::R6Class(
 
     # TO DO: Define the tasks settings for plots
     #' @description
-    #' Define Goodness of fit `task` settings 
+    #' Define Goodness of fit `task` settings
     #' @param input file or folder of input
     #' @param output file or folder of output
     #' @param settings specific settings for task
@@ -182,7 +182,7 @@ MeanModelWorkflow <- R6::R6Class(
     },
 
     #' @description
-    #' Define plot PK parameters `task` settings 
+    #' Define plot PK parameters `task` settings
     #' @param input file or folder of input
     #' @param output file or folder of output
     #' @param settings specific settings for task
@@ -204,7 +204,7 @@ MeanModelWorkflow <- R6::R6Class(
     },
 
     #' @description
-    #' Define plot mass balance `task` settings 
+    #' Define plot mass balance `task` settings
     #' @param input file or folder of input
     #' @param output file or folder of output
     #' @param settings specific settings for task
@@ -226,7 +226,7 @@ MeanModelWorkflow <- R6::R6Class(
     },
 
     #' @description
-    #' Define plot absorption `task` settings 
+    #' Define plot absorption `task` settings
     #' @param input file or folder of input
     #' @param output file or folder of output
     #' @param settings specific settings for task
@@ -248,7 +248,7 @@ MeanModelWorkflow <- R6::R6Class(
     },
 
     #' @description
-    #' Define plot sensisitivity `task` settings 
+    #' Define plot sensisitivity `task` settings
     #' @param input file or folder of input
     #' @param output file or folder of output
     #' @param settings specific settings for task

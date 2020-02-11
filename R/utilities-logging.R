@@ -29,11 +29,11 @@ logDebug <- function(message,
                      file = "log-debug.txt",
                      printConsole = TRUE) {
   timeStamp <- sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M"))
-                       if (printConsole) {
-                         print(timeStamp)
-                         print(message)
-                       }
-                       return(message)
+  if (printConsole) {
+    print(timeStamp)
+    print(message)
+  }
+  return(message)
 }
 
 #' @title logInfo
@@ -48,9 +48,9 @@ logInfo <- function(message,
                     file = "log-info.txt",
                     printConsole = TRUE) {
   timeStamp <- sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M"))
-                       if (printConsole) {
-                         print(timeStamp)
-                         print(message)
-                       }
-                       return(message)
+  if (printConsole) {
+    print(timeStamp)
+    print(message)
+  }
+  return(message)
 }
