@@ -1,0 +1,8 @@
+Massbalance for Raltegravir 25 mg  (lactose formulation);;;1
+S2_TPamount_Lactose_formulation_25mg_lin;Amount of drug vs time within the different compartments. Time profiles are in a linear scale.;;
+S2_TPamount_Lactose_formulation_25mg_log;Amount of drug vs time within the different compartments. Time profiles are in a logarithmic scale.;;
+S2_TPfraction_Lactose_formulation_25mg_lin;Amount of drug vs time within the different compartments normalized to applicated drugmass. Time profiles are in a linear scale.;;
+S2_TPfraction_Lactose_formulation_25mg_log;Amount of drug vs time within the different compartments normalized to applicated drugmass. Time profiles are in a logarithmic scale.;;
+S2_cumTPamount_Lactose_formulation_25mg_lin;Cumulated amount of drug vs time within the different compartments. Time profiles ar in a linear scale.;;
+S2_cumTPfraction_Lactose_formulation_25mg_lin;Cumulated amount of drug vs time within the different compartments normalized to applicated drugmass. Time profiles ar in a linear scale.;;
+S2_pie_Lactose_formulation_25mg_t12;Fraction of drug  within the different compartments a 12h.;;

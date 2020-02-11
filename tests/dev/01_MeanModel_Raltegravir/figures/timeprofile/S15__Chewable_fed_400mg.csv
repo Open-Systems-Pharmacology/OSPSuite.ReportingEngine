@@ -1,0 +1,10 @@
+Time profiles for Raltegravir 400mg chewable fed;;;1
+Time profiles of Raltegravir;;;2
+S15.1_TP_Chewable_fed_400mg_O1_lin;Time profiles of Raltegravir for Raltegravir 400mg chewable fed. Data source: Observed_Raltegravir 400mg chewable fed. Time profiles are plotted in a linear scale.;;
+S15.1_TP_Chewable_fed_400mg_O1_log;Time profiles of Raltegravir for Raltegravir 400mg chewable fed. Data source: Observed_Raltegravir 400mg chewable fed. Time profiles are plotted in a logarithmic scale.;;
+S15.1_PvO_Chewable_fed_400mg_O1_log;Predicted vs observed of Raltegravir for Raltegravir 400mg chewable fed. Data source: Observed_Raltegravir 400mg chewable fed. Prediction and observations are plotted in a logarithmic scale.;;
+S15.1_RvT_Chewable_fed_400mg_O1_log;Logarithmic residuals vs time of Raltegravir for Raltegravir 400mg chewable fed. Data source: Observed_Raltegravir 400mg chewable fed.;;
+S15.1_RvY_Chewable_fed_400mg_O1_log;Logarithmic residuals vs predicted values of Raltegravir for Raltegravir 400mg chewable fed. Data source: Observed_Raltegravir 400mg chewable fed.;;
+Overview on all residuals;;;2
+S15.2_ResidualHist;Distribution of residuals for Raltegravir 400mg chewable fed;;
+S15.2_ResidualQQplot;Residuals for Raltegravir 400mg chewable fed as quantile-quantile plot.;;

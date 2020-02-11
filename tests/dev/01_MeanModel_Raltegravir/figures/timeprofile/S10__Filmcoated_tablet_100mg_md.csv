@@ -1,0 +1,20 @@
+Time profiles for Raltegravir 100 mg filmcoated tablet md;;;1
+Time profiles of Raltegravir;;;2
+For total simulation time range;;;3
+S10.1.1_TP_Filmcoated_tablet_100mg_md_O1_lin;Time profiles of Raltegravir for Raltegravir 100 mg filmcoated tablet md for total simulation time range. Data source: Observed_Raltegravir 100 mg filmcoated tablet md. Time profiles are plotted in a linear scale.;;
+S10.1.1_TP_Filmcoated_tablet_100mg_md_O1_log;Time profiles of Raltegravir for Raltegravir 100 mg filmcoated tablet md for total simulation time range. Data source: Observed_Raltegravir 100 mg filmcoated tablet md. Time profiles are plotted in a logarithmic scale.;;
+S10.1.1_PvO_Filmcoated_tablet_100mg_md_O1_log;Predicted vs observed of Raltegravir for Raltegravir 100 mg filmcoated tablet md. Data source: Observed_Raltegravir 100 mg filmcoated tablet md. Prediction and observations are plotted in a logarithmic scale.;;
+S10.1.1_RvT_Filmcoated_tablet_100mg_md_O1_log;Logarithmic residuals vs time of Raltegravir for Raltegravir 100 mg filmcoated tablet md. Data source: Observed_Raltegravir 100 mg filmcoated tablet md.;;
+S10.1.1_RvY_Filmcoated_tablet_100mg_md_O1_log;Logarithmic residuals vs predicted values of Raltegravir for Raltegravir 100 mg filmcoated tablet md. Data source: Observed_Raltegravir 100 mg filmcoated tablet md.;;
+For first application range;;;3
+S10.1.2_TP_Filmcoated_tablet_100mg_md_O1_lin;Time profiles of Raltegravir for Raltegravir 100 mg filmcoated tablet md for first application range. Data source: Observed_Raltegravir 100 mg filmcoated tablet md. Time profiles are plotted in a linear scale.;;
+S10.1.2_TP_Filmcoated_tablet_100mg_md_O1_log;Time profiles of Raltegravir for Raltegravir 100 mg filmcoated tablet md for first application range. Data source: Observed_Raltegravir 100 mg filmcoated tablet md. Time profiles are plotted in a logarithmic scale.;;
+For last application range;;;3
+S10.1.3_TP_Filmcoated_tablet_100mg_md_O1_lin;Time profiles of Raltegravir for Raltegravir 100 mg filmcoated tablet md for last application range. Data source: Observed_Raltegravir 100 mg filmcoated tablet md. Time profiles are plotted in a linear scale.;;
+S10.1.3_TP_Filmcoated_tablet_100mg_md_O1_log;Time profiles of Raltegravir for Raltegravir 100 mg filmcoated tablet md for last application range. Data source: Observed_Raltegravir 100 mg filmcoated tablet md. Time profiles are plotted in a logarithmic scale.;;
+S10.1.3_PvO_Filmcoated_tablet_100mg_md_O1_log;Predicted vs observed of Raltegravir for Raltegravir 100 mg filmcoated tablet md. Data source: Observed_Raltegravir 100 mg filmcoated tablet md. Prediction and observations are plotted in a logarithmic scale.;;
+S10.1.3_RvT_Filmcoated_tablet_100mg_md_O1_log;Logarithmic residuals vs time of Raltegravir for Raltegravir 100 mg filmcoated tablet md. Data source: Observed_Raltegravir 100 mg filmcoated tablet md.;;
+S10.1.3_RvY_Filmcoated_tablet_100mg_md_O1_log;Logarithmic residuals vs predicted values of Raltegravir for Raltegravir 100 mg filmcoated tablet md. Data source: Observed_Raltegravir 100 mg filmcoated tablet md.;;
+Overview on all residuals;;;2
+S10.2_ResidualHist;Distribution of residuals for Raltegravir 100 mg filmcoated tablet md;;
+S10.2_ResidualQQplot;Residuals for Raltegravir 100 mg filmcoated tablet md as quantile-quantile plot.;;

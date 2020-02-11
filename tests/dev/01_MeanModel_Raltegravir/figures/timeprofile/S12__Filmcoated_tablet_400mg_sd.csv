@@ -1,0 +1,10 @@
+Time profiles for Filmcoated_tablet_400mg_sd;;;1
+Time profiles of Raltegravir;;;2
+S12.1_TP_Filmcoated_tablet_400mg_sd_O1_lin;Time profiles of Raltegravir for Filmcoated_tablet_400mg_sd. Data source: Observed_Raltegravir 400mg filmcoated tablet. Time profiles are plotted in a linear scale.;;
+S12.1_TP_Filmcoated_tablet_400mg_sd_O1_log;Time profiles of Raltegravir for Filmcoated_tablet_400mg_sd. Data source: Observed_Raltegravir 400mg filmcoated tablet. Time profiles are plotted in a logarithmic scale.;;
+S12.1_PvO_Filmcoated_tablet_400mg_sd_O1_log;Predicted vs observed of Raltegravir for Filmcoated_tablet_400mg_sd. Data source: Observed_Raltegravir 400mg filmcoated tablet. Prediction and observations are plotted in a logarithmic scale.;;
+S12.1_RvT_Filmcoated_tablet_400mg_sd_O1_log;Logarithmic residuals vs time of Raltegravir for Filmcoated_tablet_400mg_sd. Data source: Observed_Raltegravir 400mg filmcoated tablet.;;
+S12.1_RvY_Filmcoated_tablet_400mg_sd_O1_log;Logarithmic residuals vs predicted values of Raltegravir for Filmcoated_tablet_400mg_sd. Data source: Observed_Raltegravir 400mg filmcoated tablet.;;
+Overview on all residuals;;;2
+S12.2_ResidualHist;Distribution of residuals for Filmcoated_tablet_400mg_sd;;
+S12.2_ResidualQQplot;Residuals for Filmcoated_tablet_400mg_sd as quantile-quantile plot.;;

@@ -1,0 +1,8 @@
+Massbalance for Raltegravir 400mg (granules in suspension);;;1
+S16_TPamount_Granules_in_suspension_400mg_lin;Amount of drug vs time within the different compartments. Time profiles are in a linear scale.;;
+S16_TPamount_Granules_in_suspension_400mg_log;Amount of drug vs time within the different compartments. Time profiles are in a logarithmic scale.;;
+S16_TPfraction_Granules_in_suspension_400mg_lin;Amount of drug vs time within the different compartments normalized to applicated drugmass. Time profiles are in a linear scale.;;
+S16_TPfraction_Granules_in_suspension_400mg_log;Amount of drug vs time within the different compartments normalized to applicated drugmass. Time profiles are in a logarithmic scale.;;
+S16_cumTPamount_Granules_in_suspension_400mg_lin;Cumulated amount of drug vs time within the different compartments. Time profiles ar in a linear scale.;;
+S16_cumTPfraction_Granules_in_suspension_400mg_lin;Cumulated amount of drug vs time within the different compartments normalized to applicated drugmass. Time profiles ar in a linear scale.;;
+S16_pie_Granules_in_suspension_400mg_t24;Fraction of drug  within the different compartments a 24h.;;
