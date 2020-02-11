@@ -33,11 +33,12 @@ Workflow <- R6::R6Class(
                               reportFolder = file.path(getwd(), defaultFileNames$reportFolder()),
                               resultsFolder = file.path(getwd(), defaultFileNames$resultsFolder()),
                               figuresFolder = file.path(getwd(), defaultFileNames$figuresFolder())) {
-      logInfo(message = self$reportingEngineInfo)
+      logInfo(message = self$reportingEngineInfo$print())
 
       # Check of Workflow inputs
       for (simulationSet in simulationSets) {
-        validateIsOfType(simulationSet, "MeanModelSet")
+        # TO DO: include simulationFiles as simulationSets
+        # validateIsOfType(simulationSet, "MeanModelSet")
       }
       validateIsOfType(observedDataFile, "character", nullAllowed = TRUE)
       validateIsOfType(observedMetaDataFile, "character", nullAllowed = TRUE)
