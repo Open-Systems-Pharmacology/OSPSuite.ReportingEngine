@@ -28,6 +28,7 @@ SimulationTask <- R6::R6Class(
     #' @param resultsFileName name of file where results are saved
     #' @param numberOfCores number of cores for parallel computation
     #' @param generatedResultFileNames name of files where PK parameters are saved
+    #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SimulationTask` object
     initialize = function(inputFolderName = getwd(),
                               simulationFileName,

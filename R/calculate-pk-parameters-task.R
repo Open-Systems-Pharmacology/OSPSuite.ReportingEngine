@@ -25,6 +25,7 @@ CalculatePKParametersTask <- R6::R6Class(
     #' @param userDefinedPKFunctions list of user defined functions to calculate PK parameters
     #' @param pkParameterResultsFilePath files where PK parameters are saved
     #' @param generatedResultFileNames name of files where PK parameters are saved
+    #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `CalculatePKParametersTask` object
     initialize = function(simulationFilePath,
                               simulationResultFilePaths,
