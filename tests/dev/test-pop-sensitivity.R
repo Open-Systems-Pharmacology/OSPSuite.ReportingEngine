@@ -1,198 +1,102 @@
-inputFolderName = "C:/Users/ahamadeh/Dropbox/rproject/workflow/"
-simulationFileName = "C:/Users/ahamadeh/Dropbox/rproject/workflow/individualPksimSim.pkml"
-populationFileName = "C:/Users/ahamadeh/Dropbox/rproject/workflow/popData.csv"
-resultsFolderName = "C:/Users/ahamadeh/Dropbox/rproject/workflow/res20200212/"
-resultsFileName = "popSensSim"
+rm(list= ls())
+library(ospsuite)
+library(ospsuite.reportingengine)
+devtools::load_all("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine")
+
+inputFolderName = "C:/Users/ahamadeh/Dropbox/rproject/workflow"
+simulationFileName = "individualPksimSim"
+populationFileName = "popData"
+resultsFolderName = "C:/Users/ahamadeh/Dropbox/rproject/workflow/res20200212"
+resultsFileName = "popSimRes"
 numberOfCores = 1
 
-popSim <- ospsuite.reportingengine::SimulationTask$new(
-  inputFolderName,
-  simulationFileName,
-  populationFileName,
-  resultsFolderName,
-  resultsFileName,
-  numberOfCores)
+simFilePath <-  file.path(inputFolderName, paste0(simulationFileName, ".pkml"))
+popDataFilePath <- file.path(inputFolderName, paste0(populationFileName, ".csv"))
+simResultsFilePath <- file.path(resultsFolderName,paste0(resultsFileName,".csv"))
+# dir.create(resultsFolderName)
+# ospsuite.reportingengine::simulateModel(
+#   simFilePath = simFilePath,
+#   popDataFilePath = popDataFilePath,
+#   resultsFilePath = simResultsFilePath)
+
+pkParameterResultsFilePath <- "C:/Users/ahamadeh/Dropbox/rproject/workflow/res20200212/pkRes.csv"
+# pkGeneratedResultFileNames <- calculatePKParameters(
+#      simulationFilePath =  simFilePath,
+#      simulationResultFilePaths = simResultsFilePath,
+#      pkParameterResultsFilePath = pkParameterResultsFilePath)
+
+sensResultsFileName <- "sensRes"
+# sensGeneratedResultFileNames <- analyzeSensitivity(
+#  simFilePath = simFilePath,
+#  resultsFileFolder = resultsFolderName,
+#  resultsFileName = sensResultsFileName,
+#  numberOfCores = 1)
 
 
-
-popPK <- ospsuite.reportingengine::CalculatePKParametersTask$new(
-  simulationFilePath = paste0(simulationFileName,simulationFileName,".pkml"),
-  simulationResultFilePaths = paste0(resultsFolderName,resultsFileName,".csv"),
-  NULL,
-  NULL,
-  "C:/Users/ahamadeh/Dropbox/rproject/workflow/res20200212/pkParamResults.csv")
-
-
-
-ospsuite.reportingengine::simulateModel(
-  simFilePath = file.path(popSim$inputFolderName, paste0(popSim$simulationFileName, ".pkml")),
-  popDataFilePath = file.path(popSim$inputFolderName, paste0(popSim$populationFileName, ".csv")),
-  resultsFilePath = file.path(popSim$resultsFolderName,popSim$resultsFileName,".csv"))
-
-
-if (self$populationPKParameters$active) {
-  if (self$populationPKParameters$validateInput()) {
-    print("Starting PK parameter calculation")
-    self$populationPKParameters$generatedResultFileNames <- calculatePKParameters(
-      simulationFilePath = self$populationPKParameters$simulationFilePath,
-      simulationResultFilePaths = self$populationSimulation$generatedResultFileNames,
-      pkParameterResultsFilePath = self$populationPKParameters$pkParameterResultsFilePath
-    )
-  }
+getPKResultsDataFrame <- function(pkParameterResultsFilePath){
+  pkResultsDataFrame <- read.csv(pkParameterResultsFilePath, encoding="UTF-8",check.names = FALSE)
+  colnames(pkResultsDataFrame) <- c("IndividualId","QuantityPath","Parameter","Value","Unit")
+  #pkResultsDataFrame$IndividualId <- as.factor(pkResultsDataFrame$IndividualId)
+  pkResultsDataFrame$QuantityPath <- as.factor(pkResultsDataFrame$QuantityPath)
+  pkResultsDataFrame$Parameter <- as.factor(pkResultsDataFrame$Parameter)
+  pkResultsDataFrame$Unit <- as.factor(pkResultsDataFrame$Unit)
+  return(pkResultsDataFrame)
 }
 
-# TO DO: Abdullah, I don't know if this chunk have to be included somewhere so I left it as is
-# self$numberOfCores,
-# self$populationSimulation$input$population,
-# self$inputFolder,
-# self$population,
-# simFileName,
-# popFileName,
-# wdir,
-# inputFolder,
-# pkParametersFolder,
-# resultsFileName,
-
-#
-#             library("Rmpi")
-#             mpi.spawn.Rslaves(nslaves = self$numberOfCores)
-#
-#             # Check that the correct number of slaves has been spawned.
-#             if (!(mpi.comm.size() - 1 == self$numberOfCores)) { #-1 since mpi.comm.size() counts master
-#               mpi.close.Rslaves()
-#               stop(paste0(self$numberOfCores, " cores were not successfully spawned."))
-#             }
-#             mpi.bcast.cmd(library("ospsuite"))
-#             mpi.bcast.cmd(library("ospsuite.reportingengine"))
-#             tempPopDataFiles <- ospsuite::splitPopulationFile(
-#               csvPopulationFile = self$populationSimulation$input$population,
-#               numberOfCores = self$numberOfCores,
-#               pkParametersFolder = paste0(inputFolder, "/"),
-#               outputFileName = popFileName
-#             )
-#             mpi.bcast.Robj2slave(obj = simFileName)
-#             mpi.bcast.Robj2slave(obj = popFileName)
-#             mpi.bcast.Robj2slave(obj = tempPopDataFiles)
-#             mpi.bcast.Robj2slave(obj = wdir)
-#             mpi.bcast.Robj2slave(obj = inputFolder)
-#             mpi.bcast.Robj2slave(obj = pkParametersFolder)
-#
-#             mpi.remote.exec(ospsuite.reportingengine::simulatePopulation(
-#               simFileName = paste0(simFileName, ".pkml"),
-#               simFileFolder = paste0(wdir, "/", inputFolder, "/"),
-#               popDataFileName = paste0(popFileName, "_", mpi.comm.rank(), ".csv"),
-#               popDataFileFolder = paste0(wdir, "/", inputFolder, "/"),
-#               resultFileName = paste0(resultsFileName, "_", mpi.comm.rank(), ".csv"),
-#               resultFileFolder = paste0(wdir, "/", pkParametersFolder, "/")
-#             ))
-#             mpi.close.Rslaves() # Move to end of workflow
-
-# TO DO: plug plot tasks to actual results
-if (self$plotDemography$active) {
-  logInfo(message = self$plotDemography$message)
+getQuantileIndividualIds <- function(dataframe,quantileVec = c(0.05,0.5,0.95)){
+  rowNums<-(c(which.min(abs(dataframe$Value - quantile(dataframe$Value,quantileVec[1]))),
+              which.min(abs(dataframe$Value - quantile(dataframe$Value,quantileVec[2]))),
+              which.min(abs(dataframe$Value - quantile(dataframe$Value,quantileVec[3])))))
+  ids<- as.numeric(dataframe$IndividualId[rowNums])
+  return(ids)
 }
-if (self$plotGoF$active) {
-  logInfo(message = self$plotGoF$message)
-}
-if (self$plotPKParameters$active) {
-  logInfo(message = self$plotPKParameters$message)
-}
-if (self$plotSensitivity$active) {
-  logInfo(message = self$plotSensitivity$message)
-}
-},
+
+df <- getPKResultsDataFrame(pkParameterResultsFilePath)
+outputs <- levels(df$QuantityPath)
+pkParameters <- levels(df$Parameter)
+
+dat <- df[ df["QuantityPath"] == outputs[1] & df["Parameter"]== pkParameters[1]  ,]
+
+ids <-  getQuantileIndividualIds(dat)
+analyzeSensitivity(simFilePath,
+                   parametersToPerturb = NULL,
+                   popFilePath = popDataFilePath,
+                   individualID = ids,
+                   numberOfCores = 1,
+                   resultsFileFolder = resultsFolderName,
+                   resultsFileName = "sensitivityAnalysisResults")
 
 
-# TO DO: include these chunk into the previous task
-# if (self$pkParametersCalculation$active) {
-#   # if (self$pkParametersCalculation$validateInput()){
-#   # calculatePKParameters()
-#   # }
-# }
-# if (self$sensitivityAnalysis$active) {
-#   if (self$sensitivityAnalysis$validateInput()) {
-#     simulation <- loadSimulation(self$demographyPlot$input$simulation)
-#
-#     pkSensitivities <- analyzeSensitivity(simulation = simulation)
-#     save(pkSensitivities, file = self$sensitivityAnalysis$output$sensitivityAnalysis)
-#   }
-# }
-# if (self$demographyPlot$active) {
-#   if (self$demographyPlot$validateInput()) {
-#     population <- loadPopulation(self$demographyPlot$input$population)
-#     simulation <- loadSimulation(self$demographyPlot$input$simulation)
-#
-#     # The last properties of plotDemograpy will be set within task settings
-#     demographyPlot <- plotDemography(
-#       simulation = simulation,
-#       population = population,
-#       parameterNames = c(StandardPath$Age, StandardPath$Weight, StandardPath$Height),
-#       plotConfiguration = NULL
-#     )
-#
-#     save(demographyPlot, file = self$demographyPlot$output$demographyResults)
-#     dir.create(self$demographyPlot$output$demographyPlot)
-#     for (plotName in names(demographyPlot)) {
-#       ggplot2::ggsave(
-#         filename = file.path(self$demographyPlot$output$demographyPlot, paste0(removeForbiddenLetters(plotName), ".png")),
-#         plot = demographyPlot[[plotName]]
-#       )
-#     }
-#   }
-# }
-# if (self$gofPlot$active) {
-#   if (self$gofPlot$validateInput()) {
-#     load(file = self$gofPlot$input$populationSimulation)
-#     population <- loadPopulation(self$gofPlot$input$population)
-#     observedData <- self$gofPlot$input$observedData
-#
-#     gofPlot <- plotGoodnessOfFit(
-#       populationSimulation = populationSimulation,
-#       population = population,
-#       observedData = observedData,
-#       quantity = NULL,
-#       plotConfiguration = NULL
-#     )
-#
-#     save(gofPlot, file = self$gofPlot$output$gofResults)
-#     dir.create(self$gofPlot$output$gofPlot)
-#     for (plotName in names(gofPlot)) {
-#       ggplot2::ggsave(
-#         filename = file.path(self$gofPlot$output$gofPlot, paste0(removeForbiddenLetters(plotName), ".png")),
-#         plot = gofPlot[[plotName]]
-#       )
-#     }
-#   }
-# }
-# if (self$pkParametersPlot$active) {
-#   self$pkParametersPlot$output <- plotPKParameters()
-# }
-# if (self$sensitivityPlot$active) {
-#   if (self$sensitivityPlot$validateInput()) {
-#     load(file = self$sensitivityPlot$input$sensitivityAnalysis)
-#
-#     sensitivityPlot <- plotSensitivity(sensitivityAnalysis)
-#     save(sensitivityPlot, file = file.path(self$sensitivityPlot$output$sensitivityPlot))
-#   }
-# }
 
-#' @description
-#' Print workflow list of tasks
-#' TO DO: add simulationSets to print() method
-#' @return Task list information
-print = function() {
-  taskOrder <- list(
-    "Task 1" = self$populationSimulation$print(),
-    "Task 2" = self$pkParametersCalculation$print(),
-    "Task 3" = self$sensitivityAnalysis$print(),
-    "Task 4" = self$plotDemography$print(),
-    "Task 5" = self$plotGoF$print(),
-    "Task 6" = self$plotPKParameters$print(),
-    "Task 7" = self$plotSensitivity$print()
-  )
-  invisible(self)
 
-  return(taskOrder)
-}
-)
-)
+#dat$IndividualId[c(85,38,66)]
+
+#print(dat$IndividualId[ which.min(abs(dat$Value - quantile(dat$Value,quantileVec[1]))) ])
+#print(dat$IndividualId[ which.min(abs(dat$Value - quantile(dat$Value,quantileVec[2]))) ])
+#print(dat$IndividualId[ which.min(abs(dat$Value - quantile(dat$Value,quantileVec[3]))) ])
+
+#ids <- c(dat$IndividualId[ which.min(abs(dat$Value - quantile(dat$Value,quantileVec[1]))) ],
+#dat$IndividualId[ which.min(abs(dat$Value - quantile(dat$Value,quantileVec[2])))] ,
+#dat$IndividualId[ which.min(abs(dat$Value - quantile(dat$Value,quantileVec[3])))] )
+
+#print(ids)
+#getIndividualIdsQuantile <-
+
+#q50<-quantile(dat$Value,0.5)
+#dat <- df[ df$QuantityPath == outputs[2]  ,]
+#dat <- df[df[c("QuantityPath","Parameter")]==c(outputs[1],pkParameters[1]),]
+
+
+# Report structure will be as following:
+#   Population 1
+#      Output 1
+#         PK-Parameter 1
+#         PK-Parameter 2
+#                :
+#         PK-Parameter N
+#      Output 2
+#         PK-Parameter 1
+#         PK-Parameter 2
+#                :
+#         PK-Parameter N
+
