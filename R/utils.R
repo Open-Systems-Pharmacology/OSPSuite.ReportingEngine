@@ -126,13 +126,6 @@ removeForbiddenLetters <- function(text, forbiddenLetters = "[[:punct:]]", repla
   )
 }
 
-
-
-
-
-
-
-
 #' @title generateResultFileNames
 #' @return A list of filenames to be output by each core
 #' @description
