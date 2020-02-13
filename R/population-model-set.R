@@ -7,7 +7,7 @@
 #' @field pathUnit display unit for `pathID`
 #' @field pkParameters PK parameters function names to be calculated from the simulation (e.g. `C_max`).
 #' @field pkParametersNames display names for `pkParameters`
-#' @field pkParameterUnits display units for `pkParameters`
+#' @field pkParametersUnits display units for `pkParameters`
 #' @field dataFilter filter to compare with observed data
 #' @field populationFile name of csv file to be used for the population
 #' @field populationName display name of population
@@ -31,7 +31,7 @@ PopModelSet <- R6::R6Class(
     #' @param pkParameters PK parameters function names to be calculated from the simulation (e.g. `C_max`).
     #' Default value is enum `AllPKParameters`.
     #' @param pkParametersNames display names for `pkParameters`
-    #' @param pkParameterUnits display units for `pkParameters`
+    #' @param pkParametersUnits display units for `pkParameters`
     #' @param dataFilter filter to compare with observed data
     #' @return A new `MeanModelSet` object
     initialize = function(simulationFile,
