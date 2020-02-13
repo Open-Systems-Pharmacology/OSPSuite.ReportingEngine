@@ -1,15 +1,11 @@
 #' @title CalculatePKParametersTask
-#' @docType class
-#' @description  Calculating PK parameters task settings for Reporting Engine
-#' @field resultsFileName string with no file extension.  Name of CSV file to which simulation results will be saved.
-#' @section Methods:
-#' \describe{
-#' \item{new()}{Initilialize Task settings}
-#' \item{activate()}{Set Task as active in workflow}
-#' \item{inactivate()}{Set Task as inactive in workflow}
-#' \item{print()}{Show task settings}
-#' }
-#' @format NULL
+#' @description  R6 class for CalculatePKParametersTask settings
+#' @field simulationFilePath simulation folder 
+#' @field simulationResultFilePaths simulation files
+#' @field pkParametersToEvaluate list of PK parameters to evaluate
+#' @field userDefinedPKFunctions list of user defined functions to calculate PK parameters
+#' @field pkParameterResultsFilePath files where PK parameters are saved
+#' @field generatedResultFileNames name of files where PK parameters are saved
 CalculatePKParametersTask <- R6::R6Class(
   "CalculatePKParametersTask",
   inherit = Task,
@@ -20,6 +16,16 @@ CalculatePKParametersTask <- R6::R6Class(
     userDefinedPKFunctions = NULL,
     pkParameterResultsFilePath = NULL,
     generatedResultFileNames = NULL,
+    
+    #' @description
+    #' Create a `CalculatePKParametersTask` object
+    #' @param simulationFilePath simulation folder 
+    #' @param simulationResultFilePaths simulation files
+    #' @param pkParametersToEvaluate list of PK parameters to evaluate
+    #' @param userDefinedPKFunctions list of user defined functions to calculate PK parameters
+    #' @param pkParameterResultsFilePath files where PK parameters are saved
+    #' @param generatedResultFileNames name of files where PK parameters are saved
+    #' @return A new `CalculatePKParametersTask` object
     initialize = function(simulationFilePath,
                               simulationResultFilePaths,
                               pkParametersToEvaluate = NULL,
