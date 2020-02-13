@@ -5,7 +5,7 @@ resultsFolderName = "C:/Users/ahamadeh/Dropbox/rproject/workflow/res20200212/"
 resultsFileName = "popSensSim"
 numberOfCores = 1
 
-popSim <- SimulationTask$new(
+popSim <- ospsuite.reportingengine::SimulationTask$new(
   inputFolderName,
   simulationFileName,
   populationFileName,
@@ -15,7 +15,7 @@ popSim <- SimulationTask$new(
 
 
 
-popPK <- CalculatePKParametersTask$new(
+popPK <- ospsuite.reportingengine::CalculatePKParametersTask$new(
   simulationFilePath = paste0(simulationFileName,simulationFileName,".pkml"),
   simulationResultFilePaths = paste0(resultsFolderName,resultsFileName,".csv"),
   NULL,
@@ -24,10 +24,10 @@ popPK <- CalculatePKParametersTask$new(
 
 
 
-simulateModel(
+ospsuite.reportingengine::simulateModel(
   simFilePath = file.path(popSim$inputFolderName, paste0(popSim$simulationFileName, ".pkml")),
   popDataFilePath = file.path(popSim$inputFolderName, paste0(popSim$populationFileName, ".csv")),
-  resultsFilePath = file.path(popSim$resultsFolderName,resultsFileName,".csv"))
+  resultsFilePath = file.path(popSim$resultsFolderName,popSim$resultsFileName,".csv"))
 
 
 if (self$populationPKParameters$active) {
