@@ -1,6 +1,6 @@
 #' @title CalculatePKParametersTask
 #' @description  R6 class for CalculatePKParametersTask settings
-#' @field simulationFilePath simulation folder 
+#' @field simulationFilePath simulation folder
 #' @field simulationResultFilePaths simulation files
 #' @field pkParametersToEvaluate list of PK parameters to evaluate
 #' @field userDefinedPKFunctions list of user defined functions to calculate PK parameters
@@ -16,10 +16,10 @@ CalculatePKParametersTask <- R6::R6Class(
     userDefinedPKFunctions = NULL,
     pkParameterResultsFilePath = NULL,
     generatedResultFileNames = NULL,
-    
+
     #' @description
     #' Create a `CalculatePKParametersTask` object
-    #' @param simulationFilePath simulation folder 
+    #' @param simulationFilePath simulation folder
     #' @param simulationResultFilePaths simulation files
     #' @param pkParametersToEvaluate list of PK parameters to evaluate
     #' @param userDefinedPKFunctions list of user defined functions to calculate PK parameters
@@ -27,18 +27,19 @@ CalculatePKParametersTask <- R6::R6Class(
     #' @param generatedResultFileNames name of files where PK parameters are saved
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `CalculatePKParametersTask` object
-    initialize = function(simulationFilePath,
-                              simulationResultFilePaths,
-                              pkParametersToEvaluate = NULL,
-                              userDefinedPKFunctions = NULL,
-                              pkParameterResultsFilePath = file.path(getwd(), "pkParameters.csv"),
-                              ...) {
+    initialize = function(
+      #simulationFilePath,
+      #simulationResultFilePaths,
+      #pkParametersToEvaluate = NULL,
+      #userDefinedPKFunctions = NULL,
+      #pkParameterResultsFilePath = file.path(getwd(), "pkParameters.csv"),
+      ...) {
       super$initialize(...)
-      self$simulationFilePath <- simulationFilePath
-      self$simulationResultFilePaths <- simulationResultFilePaths
-      self$pkParametersToEvaluate <- pkParametersToEvaluate
-      self$userDefinedPKFunctions <- userDefinedPKFunctions
-      self$pkParameterResultsFilePath <- pkParameterResultsFilePath
+      # self$simulationFilePath <- simulationFilePath
+      # self$simulationResultFilePaths <- simulationResultFilePaths
+      # self$pkParametersToEvaluate <- pkParametersToEvaluate
+      # self$userDefinedPKFunctions <- userDefinedPKFunctions
+      # self$pkParameterResultsFilePath <- pkParameterResultsFilePath
     }
   )
 )

@@ -1,6 +1,6 @@
 #' @title SimulationTask
 #' @description  R6 class for SimulationTask settings
-#' @field inputFolderName name of input folder 
+#' @field inputFolderName name of input folder
 #' @field simulationFileName name of simulation files
 #' @field populationFileName name of population file
 #' @field resultsFolderName name of folder where results are saved
@@ -11,17 +11,17 @@ SimulationTask <- R6::R6Class(
   "SimulationTask",
   inherit = Task,
   public = list(
-    inputFolderName = NULL,
-    simulationFileName = NULL,
-    populationFileName = NULL,
-    resultsFolderName = NULL,
-    resultsFileName = NULL,
+    # inputFolderName = NULL,
+    # simulationFileName = NULL,
+    # populationFileName = NULL,
+    # resultsFolderName = NULL,
+    # resultsFileName = NULL,
     numberOfCores = 1,
-    generatedResultFileNames = NULL,
-    
+    # generatedResultFileNames = NULL,
+
     #' @description
     #' Create a `SimulationTask` object
-    #' @param inputFolderName name of input folder 
+    #' @param inputFolderName name of input folder
     #' @param simulationFileName name of simulation files
     #' @param populationFileName name of population file
     #' @param resultsFolderName name of folder where results are saved
@@ -30,20 +30,20 @@ SimulationTask <- R6::R6Class(
     #' @param generatedResultFileNames name of files where PK parameters are saved
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SimulationTask` object
-    initialize = function(inputFolderName = getwd(),
-                              simulationFileName,
-                              populationFileName = NULL,
-                              resultsFolderName = getwd(),
-                              resultsFileName = "simulationResults",
+    initialize = function(#inputFolderName = getwd(),
+                              #simulationFileName,
+                              #populationFileName = NULL,
+                              #resultsFolderName = getwd(),
+                              #resultsFileName = "simulationResults",
                               numberOfCores = 1,
                               ...) {
       super$initialize(...)
-      self$inputFolderName <- inputFolderName
-      self$simulationFileName <- simulationFileName
-      self$populationFileName <- populationFileName
-      self$resultsFolderName <- resultsFolderName
-      self$resultsFileName <- resultsFileName
-      self$numberOfCores <- numberOfCores
+      # self$inputFolderName <- inputFolderName
+      # self$simulationFileName <- simulationFileName
+      # self$populationFileName <- populationFileName
+      # self$resultsFolderName <- resultsFolderName
+      # self$resultsFileName <- resultsFileName
+      # self$numberOfCores <- numberOfCores
     }
   )
 )

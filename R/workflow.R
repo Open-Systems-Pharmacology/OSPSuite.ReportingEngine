@@ -73,20 +73,21 @@ Workflow <- R6::R6Class(
       logDebug(message = paste0(self$figuresFolder, " was successfully created"),printConsole = FALSE)
 
 
-
+      self$simulationSets <- simulationSets
 
       # Check of Workflow inputs
-      for (n in 1:length(simulationSets)) {
+      for (n in 1:length(self$simulationSets)) {
         # TO DO: include simulationFiles as simulationSets
         # validateIsOfType(simulationSet, "MeanModelSet")
         # validateIsOfType(observedDataFile, "character", nullAllowed = TRUE)
         # validateIsOfType(observedMetaDataFile, "character", nullAllowed = TRUE)
-        simulationSetFolder <- file.path(workflowFolder,paste0("Set",n))
+        simulationSetFolder <- file.path(self$resultsFolder,paste0("Set",n))
         dir.create(simulationSetFolder)
-        simulationSets[[n]]$createDirectories(rootDirectory = simulationSetFolder)
+        self$simulationSets[[n]]$createDirectories(rootDirectory = simulationSetFolder)
+        self$simulationSets[[n]]$copyInputFiles()
       }
 
-      #self$simulationSets <- simulationSets
+
 
       # if (!is.null(observedDataFile)) {
       #   data <- read.csv(observedDataFile)
