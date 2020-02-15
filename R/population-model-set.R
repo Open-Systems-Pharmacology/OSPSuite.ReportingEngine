@@ -34,33 +34,57 @@ PopModelSet <- R6::R6Class(
     #' @param pkParametersUnits display units for `pkParameters`
     #' @param dataFilter filter to compare with observed data
     #' @return A new `MeanModelSet` object
-    initialize = function(simulationFile,
-                              simulationName = NULL,
-                              populationFile,
-                              populationName = NULL,
-                              pathID,
-                              pathName = NULL,
-                              pathUnit = NULL,
-                              pkParameters = AllPKParameters,
-                              pkParametersNames = NULL,
-                              pkParametersUnits = NULL,
-                              dataFilter = NULL) {
-      super$initialize(
-        simulationFile,
-        simulationName,
-        populationFile,
-        populationName,
-        pathID,
-        pathName,
-        pathUnit,
-        pkParameters,
-        pkParametersNames,
-        pkParametersUnits,
-        dataFilter
-      )
+    #'
+
+    initialize = function(populationFile,
+                          populationName = NULL,
+                          ...){
+
+      super$initialize(...)
+      # initialize = function(simulationFile,
+      #                           simulationName = NULL,
+      #                           populationFile,
+      #                           populationName = NULL,
+      #                           pathID,
+      #                           pathName = NULL,
+      #                           pathUnit = NULL,
+      #                           pkParameters = AllPKParameters,
+      #                           pkParametersNames = NULL,
+      #                           pkParametersUnits = NULL,
+      #                           dataFilter = NULL) {
+      # super$initialize(
+      #   simulationFile,
+      #   simulationName,
+      #   populationFile,
+      #   populationName,
+      #   pathID,
+      #   pathName,
+      #   pathUnit,
+      #   pkParameters,
+      #   pkParametersNames,
+      #   pkParametersUnits,
+      #   dataFilter
+      # )
 
       self$populationFile <- populationFile
       self$populationName <- populationName %||% trimFileName(populationFile, extension = "csv")
+    },
+
+    copyInputFiles = function(){
+
+      if(!is.null(self$simulationFile)){
+        file.copy(self$simulationFile, file.path(self$inputFilesFolder,paste0(self$simulationName,".pkml")))
+      }
+
+      if(!is.null(self$populationFile)){
+        file.copy(self$populationFile, file.path(self$inputFilesFolder,paste0(self$populationName,".csv")))
+      }
+
+      if(!is.null(self$observedDataFile)){
+        file.copy(self$observedDataFile, self$inputFilesFolder)
+      }
+
     }
+
   )
 )

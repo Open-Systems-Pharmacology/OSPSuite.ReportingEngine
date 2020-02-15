@@ -96,7 +96,7 @@ MeanModelSet <- R6::R6Class(
     copyInputFiles = function(){
 
       if(!is.null(self$simulationFile)){
-        file.copy(self$simulationFile, self$inputFilesFolder)
+        file.copy(self$simulationFile, file.path(self$inputFilesFolder,paste0(self$simulationName,".pkml")))
       }
 
       if(!is.null(self$observedDataFile)){
