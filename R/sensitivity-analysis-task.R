@@ -31,20 +31,20 @@ SensitivityAnalysisTask <- R6::R6Class(
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SensitivityAnalysisTask` object
     initialize = function(
-      #inputFolderName = getwd(),
-      #                        simulationFileName,
-      #                        populationFileName = NULL,
-      #                        resultsFolderName = getwd(),
-      #                        resultsFileName = "sensitivityAnalysisResults",
-                               numberOfCores = 1,
-                              ...) {
+                          # inputFolderName = getwd(),
+                          #                        simulationFileName,
+                          #                        populationFileName = NULL,
+                          #                        resultsFolderName = getwd(),
+                          #                        resultsFileName = "sensitivityAnalysisResults",
+                          numberOfCores = 1,
+                          ...) {
       super$initialize(...)
-      #self$inputFolderName <- inputFolderName
-      #self$simulationFileName <- simulationFileName
-      #self$populationFileName <- populationFileName
-      #self$resultsFolderName <- resultsFolderName
-      #self$resultsFileName <- resultsFileName
-      #self$numberOfCores <- numberOfCores
+      # self$inputFolderName <- inputFolderName
+      # self$simulationFileName <- simulationFileName
+      # self$populationFileName <- populationFileName
+      # self$resultsFolderName <- resultsFolderName
+      # self$resultsFileName <- resultsFileName
+      # self$numberOfCores <- numberOfCores
     }
   )
 )

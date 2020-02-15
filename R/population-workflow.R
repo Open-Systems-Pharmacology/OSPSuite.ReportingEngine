@@ -57,27 +57,27 @@ PopulationWorkflow <- R6::R6Class(
     #' @param numberOfCores number of cores for parallelization
     #' @return A new `Task` object
     populationSimulationSettings = function(input = NULL,
-                                                output = NULL,
-                                                settings = NULL,
-                                                active = TRUE,
-                                                message = NULL,
-                                                inputFolderName = self$inputFolder,
-                                                simulationFileName = self$simulation,
-                                                populationFileName = self$population,
-                                                resultsFolderName = self$simulationFolder,
-                                                resultsFileName = "populationSimulation",
-                                                numberOfCores = 1) {
+                                            output = NULL,
+                                            settings = NULL,
+                                            active = TRUE,
+                                            message = NULL,
+                                            # inputFolderName = self$inputFolder,
+                                            # simulationFileName = self$simulation,
+                                            # populationFileName = self$population,
+                                            # resultsFolderName = self$simulationFolder,
+                                            # resultsFileName = "populationSimulation",
+                                            numberOfCores = 1) {
       self$populationSimulation <- SimulationTask$new(
         input = input,
         output = output,
         settings = settings,
         active = active,
         message = message %||% "Simulate population",
-        inputFolderName = inputFolderName,
-        simulationFileName = simulationFileName,
-        populationFileName = populationFileName,
-        resultsFolderName = resultsFolderName,
-        resultsFileName = resultsFileName,
+        # inputFolderName = inputFolderName,
+        # simulationFileName = simulationFileName,
+        # populationFileName = populationFileName,
+        # resultsFolderName = resultsFolderName,
+        # resultsFileName = resultsFileName,
         numberOfCores = numberOfCores
       )
     },
@@ -98,26 +98,27 @@ PopulationWorkflow <- R6::R6Class(
     #' @param pkParameterResultsFilePath TO DO
     #' @return A new `Task` object
     populationPKParameterSettings = function(input = NULL,
-                                                 output = NULL,
-                                                 settings = NULL,
-                                                 active = TRUE,
-                                                 message = NULL,
-                                                 simulationFilePath = file.path(self$inputFolder, paste0(self$simulation, ".pkml")),
-                                                 simulationResultFilePaths = self$populationSimulation$generatedResultFileNames,
-                                                 pkParametersToEvaluate = NULL,
-                                                 userDefinedPKFunctions = NULL,
-                                                 pkParameterResultsFilePath = file.path(self$pkParametersFolder, "populationPKParameters.csv")) {
+                                             output = NULL,
+                                             settings = NULL,
+                                             active = TRUE,
+                                             message = NULL#,
+                                             # simulationFilePath = file.path(self$inputFolder, paste0(self$simulation, ".pkml")),
+                                             # simulationResultFilePaths = self$populationSimulation$generatedResultFileNames,
+                                             # pkParametersToEvaluate = NULL,
+                                             # userDefinedPKFunctions = NULL,
+                                             # pkParameterResultsFilePath = file.path(self$pkParametersFolder, "populationPKParameters.csv")
+                                             ) {
       self$populationPKParameters <- CalculatePKParametersTask$new(
         input = input,
         output = output,
         settings = settings,
         active = active,
-        message = message %||% "Calculate PK parameters for population",
-        simulationFilePath = simulationFilePath,
-        simulationResultFilePaths = simulationResultFilePaths,
-        pkParametersToEvaluate = pkParametersToEvaluate,
-        userDefinedPKFunctions = userDefinedPKFunctions,
-        pkParameterResultsFilePath = pkParameterResultsFilePath
+        message = message %||% "Calculate PK parameters for population"#,
+        # simulationFilePath = simulationFilePath,
+        # simulationResultFilePaths = simulationResultFilePaths,
+        # pkParametersToEvaluate = pkParametersToEvaluate,
+        # userDefinedPKFunctions = userDefinedPKFunctions,
+        # pkParameterResultsFilePath = pkParameterResultsFilePath
       )
     },
 
@@ -133,9 +134,9 @@ PopulationWorkflow <- R6::R6Class(
     #' Default value indicates `task` name.
     #' @return A new `Task` object
     plotDemographySettings = function(input = NULL,
-                                          output = NULL,
-                                          active = TRUE,
-                                          message = NULL) {
+                                      output = NULL,
+                                      active = TRUE,
+                                      message = NULL) {
       self$plotDemography <- Task$new(
         input = input,
         output = output,
@@ -155,9 +156,9 @@ PopulationWorkflow <- R6::R6Class(
     #' Default value indicates `task` name.
     #' @return A new `Task` object
     plotGoFSettings = function(input = NULL,
-                                   output = NULL,
-                                   active = TRUE,
-                                   message = NULL) {
+                               output = NULL,
+                               active = TRUE,
+                               message = NULL) {
       self$plotGoF <- Task$new(
         input = input,
         output = output,
@@ -177,9 +178,9 @@ PopulationWorkflow <- R6::R6Class(
     #' Default value indicates `task` name.
     #' @return A new `Task` object
     plotPKParametersSettings = function(input = NULL,
-                                            output = NULL,
-                                            active = TRUE,
-                                            message = NULL) {
+                                        output = NULL,
+                                        active = TRUE,
+                                        message = NULL) {
       self$plotPKParameters <- Task$new(
         input = input,
         output = output,
@@ -199,9 +200,9 @@ PopulationWorkflow <- R6::R6Class(
     #' Default value indicates `task` name.
     #' @return A new `Task` object
     plotSensitivitySettings = function(input = NULL,
-                                           output = NULL,
-                                           active = TRUE,
-                                           message = NULL) {
+                                       output = NULL,
+                                       active = TRUE,
+                                       message = NULL) {
       self$plotSensitivity <- Task$new(
         input = input,
         output = output,
@@ -246,10 +247,25 @@ PopulationWorkflow <- R6::R6Class(
     #   )
     # },
 
+
+
     #' @description
-    #' Run population workflow tasks
-    #' @return All results and plots as a structured output.
+    #' Loop through all simulation sets and run active population model workflow tasks for each
     runWorkflow = function() {
+      logInfo(message = "Start of population model workflow")
+
+      for (set in self$simulationSets) {
+        # print(set)
+        self$runSingleSetWorkflow(set)
+      }
+    },
+
+
+
+    #' @description
+    #' Run population workflow tasks for a single simulation set
+    #' @return All results and plots as a structured output in a folder specific to simulation set
+    runSingleSetWorkflow = function(set) {
       logInfo(message = "Start of population workflow")
       # POPULATION WORKFLOW
 

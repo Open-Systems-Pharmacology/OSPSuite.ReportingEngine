@@ -32,7 +32,7 @@ analyzeSensitivity <- function(simFilePath,
         individualParameters = popObject$getParameterValuesForIndividual(individualId = ind),
         numberOfCores = numberOfCores,
         resultsFileFolder = resultsFileFolder,
-        resultsFileName = paste0(resultsFileName,"_IndividualId_",ind)
+        resultsFileName = paste0(resultsFileName, "_IndividualId_", ind)
       )
       allResultsFileNames <- c(allResultsFileNames, resFile)
     }

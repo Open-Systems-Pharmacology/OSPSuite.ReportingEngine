@@ -36,10 +36,9 @@ PopModelSet <- R6::R6Class(
     #' @return A new `MeanModelSet` object
     #'
 
-    initialize = function(populationFile,
-                          populationName = NULL,
-                          ...){
-
+    initialize = function(...,
+                          populationFile,
+                          populationName = NULL) {
       super$initialize(...)
       # initialize = function(simulationFile,
       #                           simulationName = NULL,
@@ -68,23 +67,23 @@ PopModelSet <- R6::R6Class(
 
       self$populationFile <- populationFile
       self$populationName <- populationName %||% trimFileName(populationFile, extension = "csv")
+
+      self$simulationSetName <- simulationSetName %||% paste(simulationName,populationName,sep="-")
+
     },
 
-    copyInputFiles = function(){
-
-      if(!is.null(self$simulationFile)){
-        file.copy(self$simulationFile, file.path(self$inputFilesFolder,paste0(self$simulationName,".pkml")))
+    copyInputFiles = function(inputFilesFolder) {
+      if (!is.null(self$simulationFile)) {
+        file.copy(self$simulationFile, file.path(inputFilesFolder, paste0(self$simulationName, ".pkml")))
       }
 
-      if(!is.null(self$populationFile)){
-        file.copy(self$populationFile, file.path(self$inputFilesFolder,paste0(self$populationName,".csv")))
+      if (!is.null(self$populationFile)) {
+        file.copy(self$populationFile, file.path(inputFilesFolder, paste0(self$populationName, ".csv")))
       }
 
-      if(!is.null(self$observedDataFile)){
-        file.copy(self$observedDataFile, self$inputFilesFolder)
+      if (!is.null(self$observedDataFile)) {
+        file.copy(self$observedDataFile, inputFilesFolder)
       }
-
     }
-
   )
 )

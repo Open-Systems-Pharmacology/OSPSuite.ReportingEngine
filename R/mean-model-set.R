@@ -13,6 +13,7 @@
 MeanModelSet <- R6::R6Class(
   "MeanModelSet",
   public = list(
+    simulationSetName = NULL,
     simulationFile = NULL,
     simulationName = NULL,
     pathID = NULL,
@@ -44,7 +45,8 @@ MeanModelSet <- R6::R6Class(
     #'     #' @param pkParametersUnits display units for `pkParameters`
     #'     #' @param dataFilter filter to compare with observed data
     #'     #' @return A new `MeanModelSet` object
-    initialize = function(simulationFile,
+    initialize = function(simulationSetName = NULL,
+                          simulationFile,
                           simulationName = NULL,
                           pathID = NULL,
                           pathName = NULL,
@@ -61,6 +63,8 @@ MeanModelSet <- R6::R6Class(
       self$simulationFile <- simulationFile
       self$simulationName <- simulationName %||% trimFileName(simulationFile, extension = "pkml")
 
+      self$simulationSetName <- simulationSetName %||% self$simulationName
+
       self$pathID <- pathID
       self$pathName <- pathName %||% pathID
       self$pathUnit <- pathUnit
@@ -75,36 +79,32 @@ MeanModelSet <- R6::R6Class(
       self$observedMetaDataFile <- observedMetaDataFile
     },
 
-    createDirectories = function(rootDirectory) {
-      self$inputFilesFolder <- file.path(rootDirectory, defaultFileNames$inputFolder())
-      dir.create(self$inputFilesFolder)
-      logDebug(message = paste0(self$inputFilesFolder, " was successfully created"), printConsole = TRUE)
+    # createDirectories = function(rootDirectory) {
+    #   self$inputFilesFolder <- file.path(rootDirectory, defaultFileNames$inputFolder())
+    #   dir.create(self$inputFilesFolder)
+    #   logDebug(message = paste0(self$inputFilesFolder, " was successfully created"), printConsole = TRUE)
+    #
+    #   self$simulationResultsFolder <- file.path(rootDirectory, defaultFileNames$simulationResultsFolder())
+    #   dir.create(self$simulationResultsFolder)
+    #   logDebug(message = paste0(self$simulationResultsFolder, " was successfully created"), printConsole = TRUE)
+    #
+    #   self$pkAnalysisResultsFolder <- file.path(rootDirectory, defaultFileNames$pkAnalysisResultsFolder())
+    #   dir.create(self$pkAnalysisResultsFolder)
+    #   logDebug(message = paste0(self$pkAnalysisResultsFolder, " was successfully created"), printConsole = TRUE)
+    #
+    #   self$sensitivityAnalysisResultsFolder <- file.path(rootDirectory, defaultFileNames$sensitivityAnalysisResultsFolder())
+    #   dir.create(self$sensitivityAnalysisResultsFolder)
+    #   logDebug(message = paste0(self$sensitivityAnalysisResultsFolder, " was successfully created"), printConsole = TRUE)
+    # },
 
-      self$simulationResultsFolder <- file.path(rootDirectory, defaultFileNames$simulationResultsFolder())
-      dir.create(self$simulationResultsFolder)
-      logDebug(message = paste0(self$simulationResultsFolder, " was successfully created"), printConsole = TRUE)
-
-      self$pkAnalysisResultsFolder <- file.path(rootDirectory, defaultFileNames$pkAnalysisResultsFolder())
-      dir.create(self$pkAnalysisResultsFolder)
-      logDebug(message = paste0(self$pkAnalysisResultsFolder, " was successfully created"), printConsole = TRUE)
-
-      self$sensitivityAnalysisResultsFolder <- file.path(rootDirectory, defaultFileNames$sensitivityAnalysisResultsFolder())
-      dir.create(self$sensitivityAnalysisResultsFolder)
-      logDebug(message = paste0(self$sensitivityAnalysisResultsFolder, " was successfully created"), printConsole = TRUE)
-    },
-
-    copyInputFiles = function(){
-
-      if(!is.null(self$simulationFile)){
-        file.copy(self$simulationFile, file.path(self$inputFilesFolder,paste0(self$simulationName,".pkml")))
+    copyInputFiles = function(inputFilesFolder) {
+      if (!is.null(self$simulationFile)) {
+        file.copy(self$simulationFile, file.path(inputFilesFolder, paste0(self$simulationName, ".pkml")))
       }
 
-      if(!is.null(self$observedDataFile)){
-        file.copy(self$observedDataFile, self$inputFilesFolder)
+      if (!is.null(self$observedDataFile)) {
+        file.copy(self$observedDataFile, inputFilesFolder)
       }
-
     }
-
-
   )
 )

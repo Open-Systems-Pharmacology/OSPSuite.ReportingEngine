@@ -2,9 +2,6 @@ defaultFileNames <- list(
   simulationResultsFile = function(simulationName) {
     getDefaultFileName(simulationName, suffix = "Results")
   },
-  populationDataFile = function(populationName) {
-    getDefaultFileName(populationName, suffix = "PopulationData")
-  },
   popSimulationResultsFile = function(populationName, simulationName) {
     getDefaultFileName(populationName, simulationName, suffix = "Results")
   },
@@ -17,26 +14,26 @@ defaultFileNames <- list(
   workflowFolder = function(name = "Workflow") {
     getDefaultFolderName(name, suffix = paste0("_", format(Sys.Date(), "%Y%m%d"), "_", format(Sys.time(), "%H%M%S")), sep = "")
   },
-  inputFolder = function(name = "Inputs") {
-    getDefaultFolderName(name, sep = "")
+  inputFolder = function(name = NULL) {
+    getDefaultFolderName(name, suffix="Inputs", sep = ifnotnull(name,"-",""))
   },
-  simulationResultsFolder = function(name = "SimulationResults") {
-    getDefaultFolderName(name, sep = "")
+  simulationResultsFolder = function(name = NULL) {
+    getDefaultFolderName(name, suffix =  "SimulationResults", sep = ifnotnull(name,"-",""))
   },
-  pkAnalysisResultsFolder = function(name = "PKAnalysisResults") {
-    getDefaultFolderName(name, sep = "")
+  pkAnalysisResultsFolder = function(name = NULL) {
+    getDefaultFolderName(name, suffix = "PKAnalysisResults" , sep = ifnotnull(name,"-",""))
   },
-  sensitivityAnalysisResultsFolder = function(name = "SensitivityAnalysisResults") {
-    getDefaultFolderName(name, sep = "")
+  sensitivityAnalysisResultsFolder = function(name = NULL ) {
+    getDefaultFolderName(name, suffix = "SensitivityAnalysisResults" , sep = ifnotnull(name,"-",""))
   },
-  reportFolder = function(name = "Report") {
-    getDefaultFolderName(name, sep = "")
+  reportFolder = function(name = NULL) {
+    getDefaultFolderName(name, suffix = "Report" , sep = ifnotnull(name,"-",""))
   },
-  resultsFolder = function(name = "Results") {
-    getDefaultFolderName(name, sep = "")
+  resultsFolder = function(name = NULL) {
+    getDefaultFolderName(name, suffix = "Results", sep = ifnotnull(name,"-",""))
   },
-  figuresFolder = function(name = "Figures") {
-    getDefaultFolderName(name, sep = "")
+  figuresFolder = function(name = NULL) {
+    getDefaultFolderName(name, suffix = "Figures" , sep = ifnotnull(name,"-",""))
   }
 )
 

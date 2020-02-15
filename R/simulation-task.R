@@ -30,13 +30,13 @@ SimulationTask <- R6::R6Class(
     #' @param generatedResultFileNames name of files where PK parameters are saved
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SimulationTask` object
-    initialize = function(#inputFolderName = getwd(),
-                              #simulationFileName,
-                              #populationFileName = NULL,
-                              #resultsFolderName = getwd(),
-                              #resultsFileName = "simulationResults",
-                              numberOfCores = 1,
-                              ...) {
+    initialize = function( # inputFolderName = getwd(),
+                          # simulationFileName,
+                          # populationFileName = NULL,
+                          # resultsFolderName = getwd(),
+                          # resultsFileName = "simulationResults",
+                          numberOfCores = 1,
+                          ...) {
       super$initialize(...)
       # self$inputFolderName <- inputFolderName
       # self$simulationFileName <- simulationFileName

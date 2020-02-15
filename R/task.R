@@ -25,10 +25,10 @@ Task <- R6::R6Class(
     #' Default value indicates `task` name.
     #' @return A new `Task` object
     initialize = function(input = NULL,
-                              output = NULL,
-                              settings = NULL,
-                              active = TRUE,
-                              message = NULL) {
+                          output = NULL,
+                          settings = NULL,
+                          active = TRUE,
+                          message = NULL) {
       validateIsOfType(active, "logical")
       self$active <- active
       self$input <- as.list(input)

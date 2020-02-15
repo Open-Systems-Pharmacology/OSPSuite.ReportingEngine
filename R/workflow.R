@@ -12,7 +12,7 @@ Workflow <- R6::R6Class(
   "Workflow",
   public = list(
     reportingEngineInfo = ReportingEngineInfo$new(),
-    simulationSets = NULL,
+    simulationStructures = NULL,
     workflowFolder = NULL,
     observedData = NULL,
     reportFolder = NULL,
@@ -30,33 +30,33 @@ Workflow <- R6::R6Class(
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
                           workflowFolder = file.path(getwd(), defaultFileNames$workflowFolder()),
-                          reportFolderName =  defaultFileNames$reportFolder(),
+                          reportFolderName = defaultFileNames$reportFolder(),
                           resultsFolderName = defaultFileNames$resultsFolder(),
                           figuresFolderName = defaultFileNames$figuresFolder()) {
       logInfo(message = self$reportingEngineInfo$print())
 
-      workflowFolderCheck <- checkExisitingPath(workflowFolder,stopIfPathExists = TRUE)
+      workflowFolderCheck <- checkExisitingPath(workflowFolder, stopIfPathExists = TRUE)
       if (!is.null(workflowFolderCheck)) {
         logDebug(message = workflowFolderCheck)
       }
       self$workflowFolder <- workflowFolder
 
-      reportFolder <- file.path(workflowFolder,reportFolderName)
-      reportFolderCheck <- checkExisitingPath(reportFolder,stopIfPathExists = TRUE)
+      reportFolder <- file.path(workflowFolder, reportFolderName)
+      reportFolderCheck <- checkExisitingPath(reportFolder, stopIfPathExists = TRUE)
       if (!is.null(reportFolderCheck)) {
         logDebug(message = reportFolderCheck)
       }
       self$reportFolder <- reportFolder
 
-      resultsFolder <- file.path(workflowFolder,resultsFolderName)
-      resultsFolderCheck <- checkExisitingPath(resultsFolder,stopIfPathExists = TRUE)
+      resultsFolder <- file.path(workflowFolder, resultsFolderName)
+      resultsFolderCheck <- checkExisitingPath(resultsFolder, stopIfPathExists = TRUE)
       if (!is.null(resultsFolderCheck)) {
         logDebug(message = resultsFolderCheck)
       }
       self$resultsFolder <- resultsFolder
 
-      figuresFolder <- file.path(workflowFolder,figuresFolderName)
-      figuresFolderCheck <- checkExisitingPath(figuresFolder,stopIfPathExists = TRUE)
+      figuresFolder <- file.path(workflowFolder, figuresFolderName)
+      figuresFolderCheck <- checkExisitingPath(figuresFolder, stopIfPathExists = TRUE)
       if (!is.null(figuresFolderCheck)) {
         logDebug(message = figuresFolderCheck)
       }
@@ -64,27 +64,33 @@ Workflow <- R6::R6Class(
 
       # Create workflow output structure
       dir.create(self$workflowFolder)
-      logDebug(message = paste0(self$workflowFolder, " was successfully created"),printConsole = FALSE)
+      logDebug(message = paste0(self$workflowFolder, " was successfully created"), printConsole = FALSE)
       dir.create(self$reportFolder)
-      logDebug(message = paste0(self$reportFolder, " was successfully created"),printConsole = FALSE)
+      logDebug(message = paste0(self$reportFolder, " was successfully created"), printConsole = FALSE)
       dir.create(self$resultsFolder)
-      logDebug(message = paste0(self$resultsFolder, " was successfully created"),printConsole = FALSE)
+      logDebug(message = paste0(self$resultsFolder, " was successfully created"), printConsole = FALSE)
       dir.create(self$figuresFolder)
-      logDebug(message = paste0(self$figuresFolder, " was successfully created"),printConsole = FALSE)
+      logDebug(message = paste0(self$figuresFolder, " was successfully created"), printConsole = FALSE)
 
+      #self$simulationSets <- simulationSets
 
-      self$simulationSets <- simulationSets
-
+      self$simulationSets <- NULL
       # Check of Workflow inputs
-      for (n in 1:length(self$simulationSets)) {
+      for (n in 1:length(simulationSets)) {
+        self$simulationStructures[n] <- SimulationStructure$new(simulationSet = simulationSets[n],
+                                                                workflowResultsFolder = self$resultsFolder)
         # TO DO: include simulationFiles as simulationSets
         # validateIsOfType(simulationSet, "MeanModelSet")
         # validateIsOfType(observedDataFile, "character", nullAllowed = TRUE)
         # validateIsOfType(observedMetaDataFile, "character", nullAllowed = TRUE)
-        simulationSetFolder <- file.path(self$resultsFolder,paste0("Set",n))
-        dir.create(simulationSetFolder)
-        self$simulationSets[[n]]$createDirectories(rootDirectory = simulationSetFolder)
-        self$simulationSets[[n]]$copyInputFiles()
+
+
+
+        #        simulationSetFolder <- file.path(self$resultsFolder, self$simulationSets[[n]]$simulationSetName %||% paste0("Set", n))
+        #       dir.create(simulationSetFolder)
+
+        #   self$simulationSets[[n]]$createDirectories(rootDirectory = simulationSetFolder)
+        #  self$simulationSets[[n]]$copyInputFiles()
       }
 
 
@@ -98,7 +104,6 @@ Workflow <- R6::R6Class(
       #     "metaData" = metaData
       #   )
       # }
-
     }
   )
 )
