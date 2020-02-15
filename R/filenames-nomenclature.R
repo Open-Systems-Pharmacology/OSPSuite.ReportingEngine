@@ -1,24 +1,39 @@
 defaultFileNames <- list(
-  populationFile = function(populationName) {
-    getDefaultFileName(populationName, suffix = "Population")
+  populationDataFile = function(populationName) {
+    getDefaultFileName(populationName, suffix = "PopulationData")
   },
-  resultsFile = function(simulationName) {
+  simulationResultsFile = function(simulationName) {
     getDefaultFileName(simulationName, suffix = "Results")
   },
-  popResultsFile = function(populationName, simulationName) {
+  popSimulationResultsFile = function(populationName, simulationName) {
     getDefaultFileName(populationName, simulationName, suffix = "Results")
   },
   pkAnalysisFile = function(simulationName) {
     getDefaultFileName(simulationName, suffix = "PK-Analyses")
   },
+  workflowFolder = function(name = "Workflow") {
+    getDefaultFolderName(name, suffix = paste0("_", format(Sys.Date(), "%Y%m%d"), "_", format(Sys.time(), "%H%M%S")), sep = "")
+  },
+  inputFolder = function(name = "Inputs") {
+    getDefaultFolderName(name, sep = "")
+  },
+  simulationResultsFolder = function(name = "SimulationResults") {
+    getDefaultFolderName(name, sep = "")
+  },
+  pkAnalysisResultsFolder = function(name = "PKAnalysisResults") {
+    getDefaultFolderName(name, sep = "")
+  },
+  sensitivityAnalysisResultsFolder = function(name = "SensitivityAnalysisResults") {
+    getDefaultFolderName(name, sep = "")
+  },
   reportFolder = function(name = "Report") {
-    getDefaultFolderName(name)
+    getDefaultFolderName(name, sep = "")
   },
   resultsFolder = function(name = "Results") {
-    getDefaultFolderName(name)
+    getDefaultFolderName(name, sep = "")
   },
   figuresFolder = function(name = "Figures") {
-    getDefaultFolderName(name)
+    getDefaultFolderName(name, sep = "")
   }
 )
 
@@ -43,7 +58,7 @@ getDefaultFileName <- function(..., suffix, extension = "csv", sep = "-") {
 #' Dafault `suffix` is the curent date
 #' @param sep separation between names and suffix. Default is `-`
 #' @return default filename adding default suffix and fileextension
-getDefaultFolderName <- function(..., suffix = format(Sys.Date(), "%Y%m%d"), sep = "-") {
+getDefaultFolderName <- function(..., suffix = "", sep = "-") {
   defaultFolderName <- paste(..., suffix, sep = sep)
   return(defaultFolderName)
 }

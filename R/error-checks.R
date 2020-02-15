@@ -156,11 +156,16 @@ validateMapping <- function(mapping, data, nullAllowed = FALSE) {
   return()
 }
 
-checkExisitingPath <- function(path) {
+checkExisitingPath <- function(path,stopIfPathExists = FALSE) {
   if (!dir.exists(path)) {
     return()
   }
-  warning(messages$warningExistingPath(path))
+  if (stopIfPathExists){
+    stop(messages$warningExistingPath(path))
+  }
+  else {
+    warning(messages$warningExistingPath(path))
+  }
 }
 
 checkOverwriteExisitingPath <- function(path, overwrite) {

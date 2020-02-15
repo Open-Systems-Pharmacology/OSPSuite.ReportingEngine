@@ -13,6 +13,7 @@ Workflow <- R6::R6Class(
   public = list(
     reportingEngineInfo = ReportingEngineInfo$new(),
     simulationSets = NULL,
+    workflowFolder = NULL,
     observedData = NULL,
     reportFolder = NULL,
     resultsFolder = NULL,
@@ -28,60 +29,75 @@ Workflow <- R6::R6Class(
     #' @param figuresFolder name of folder where figures are saved
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
-                              observedDataFile = NULL,
-                              observedMetaDataFile = NULL,
-                              reportFolder = file.path(getwd(), defaultFileNames$reportFolder()),
-                              resultsFolder = file.path(getwd(), defaultFileNames$resultsFolder()),
-                              figuresFolder = file.path(getwd(), defaultFileNames$figuresFolder())) {
+                          workflowFolder = file.path(getwd(), defaultFileNames$workflowFolder()),
+                          reportFolderName =  defaultFileNames$reportFolder(),
+                          resultsFolderName = defaultFileNames$resultsFolder(),
+                          figuresFolderName = defaultFileNames$figuresFolder()) {
       logInfo(message = self$reportingEngineInfo$print())
 
-      # Check of Workflow inputs
-      for (simulationSet in simulationSets) {
-        # TO DO: include simulationFiles as simulationSets
-        # validateIsOfType(simulationSet, "MeanModelSet")
+      workflowFolderCheck <- checkExisitingPath(workflowFolder,stopIfPathExists = TRUE)
+      if (!is.null(workflowFolderCheck)) {
+        logDebug(message = workflowFolderCheck)
       }
-      validateIsOfType(observedDataFile, "character", nullAllowed = TRUE)
-      validateIsOfType(observedMetaDataFile, "character", nullAllowed = TRUE)
+      self$workflowFolder <- workflowFolder
 
-      reportFolderCheck <- checkExisitingPath(reportFolder)
+      reportFolder <- file.path(workflowFolder,reportFolderName)
+      reportFolderCheck <- checkExisitingPath(reportFolder,stopIfPathExists = TRUE)
       if (!is.null(reportFolderCheck)) {
         logDebug(message = reportFolderCheck)
-        reportFolder <- paste(reportFolder, format(Sys.time(), "%H%M"), sep = "-")
       }
-      resultsFolderCheck <- checkExisitingPath(resultsFolder)
+      self$reportFolder <- reportFolder
+
+      resultsFolder <- file.path(workflowFolder,resultsFolderName)
+      resultsFolderCheck <- checkExisitingPath(resultsFolder,stopIfPathExists = TRUE)
       if (!is.null(resultsFolderCheck)) {
         logDebug(message = resultsFolderCheck)
-        resultsFolder <- paste(resultsFolder, format(Sys.time(), "%H%M"), sep = "-")
       }
-      figuresFolderCheck <- checkExisitingPath(figuresFolder)
+      self$resultsFolder <- resultsFolder
+
+      figuresFolder <- file.path(workflowFolder,figuresFolderName)
+      figuresFolderCheck <- checkExisitingPath(figuresFolder,stopIfPathExists = TRUE)
       if (!is.null(figuresFolderCheck)) {
         logDebug(message = figuresFolderCheck)
-        figuresFolder <- paste(figuresFolder, format(Sys.time(), "%H%M"), sep = "-")
       }
-
-      # Create workflow output structure
-      dir.create(reportFolder)
-      logDebug(message = paste0(reportFolder, " was successfully created"))
-      dir.create(resultsFolder)
-      logDebug(message = paste0(resultsFolder, " was successfully created"))
-      dir.create(figuresFolder)
-      logDebug(message = paste0(figuresFolder, " was successfully created"))
-
-      self$reportFolder <- reportFolder
-      self$resultsFolder <- resultsFolder
       self$figuresFolder <- figuresFolder
 
-      self$simulationSets <- simulationSets
+      # Create workflow output structure
+      dir.create(self$workflowFolder)
+      logDebug(message = paste0(self$workflowFolder, " was successfully created"),printConsole = FALSE)
+      dir.create(self$reportFolder)
+      logDebug(message = paste0(self$reportFolder, " was successfully created"),printConsole = FALSE)
+      dir.create(self$resultsFolder)
+      logDebug(message = paste0(self$resultsFolder, " was successfully created"),printConsole = FALSE)
+      dir.create(self$figuresFolder)
+      logDebug(message = paste0(self$figuresFolder, " was successfully created"),printConsole = FALSE)
 
-      if (!is.null(observedDataFile)) {
-        data <- read.csv(observedDataFile)
-        metaData <- read.csv(observedMetaDataFile)
 
-        self$observedData <- list(
-          "data" = data,
-          "metaData" = metaData
-        )
+
+
+      # Check of Workflow inputs
+      for (n in 1:length(simulationSets)) {
+        # TO DO: include simulationFiles as simulationSets
+        # validateIsOfType(simulationSet, "MeanModelSet")
+        # validateIsOfType(observedDataFile, "character", nullAllowed = TRUE)
+        # validateIsOfType(observedMetaDataFile, "character", nullAllowed = TRUE)
+        simulationSetFolder <- file.path(workflowFolder,paste0("Set",n))
+        dir.create(simulationSetFolder)
+        simulationSets[[n]]$createDirectories(rootDirectory = simulationSetFolder)
       }
+
+      #self$simulationSets <- simulationSets
+
+      # if (!is.null(observedDataFile)) {
+      #   data <- read.csv(observedDataFile)
+      #   metaData <- read.csv(observedMetaDataFile)
+      #
+      #   self$observedData <- list(
+      #     "data" = data,
+      #     "metaData" = metaData
+      #   )
+      # }
+
     }
   )
 )
