@@ -30,17 +30,26 @@ SimulationStructure <- R6::R6Class(
                           workflowFiguresFolder = NULL) {
       self$simulationSet <- simulationSet
       simulationSetFolder <- file.path(workflowResultsFolder,self$simulationSet$simulationSetName)
-      dir.create(simulationSetFolder)
-      logDebug(message = paste0(simulationSetFolder, " was successfully created"), printConsole = TRUE)
-      self$inputFilesFolder <- file.path(simulationSetFolder,defaultFileNames$inputFolder())
 
-      dir.create(self$inputFilesFolder)
-      logDebug(message = paste0(self$inputFilesFolder, " was successfully created"), printConsole = TRUE)
+      createFolder(simulationSetFolder)
+
+      #dir.create(simulationSetFolder)
+      #logDebug(message = paste0(simulationSetFolder, " was successfully created"), printConsole = TRUE)
+
+      self$inputFilesFolder <- file.path(simulationSetFolder,defaultFileNames$inputFolder())
+      createFolder(self$inputFilesFolder)
+
+      # dir.create(self$inputFilesFolder)
+      # logDebug(message = paste0(self$inputFilesFolder, " was successfully created"), printConsole = TRUE)
+
       simulationSet$copyInputFiles(self$inputFilesFolder)
       self$simulationResultsFolder <- file.path(simulationSetFolder,defaultFileNames$simulationResultsFolder())
       self$pkAnalysisResultsFolder <- file.path(simulationSetFolder,defaultFileNames$pkAnalysisResultsFolder())
       self$sensitivityAnalysisResultsFolder <- file.path(simulationSetFolder,defaultFileNames$sensitivityAnalysisResultsFolder())
     }
+
+
+
 
 
   )

@@ -63,14 +63,21 @@ Workflow <- R6::R6Class(
       self$figuresFolder <- figuresFolder
 
       # Create workflow output structure
-      dir.create(self$workflowFolder)
-      logDebug(message = paste0(self$workflowFolder, " was successfully created"), printConsole = FALSE)
-      dir.create(self$reportFolder)
-      logDebug(message = paste0(self$reportFolder, " was successfully created"), printConsole = FALSE)
-      dir.create(self$resultsFolder)
-      logDebug(message = paste0(self$resultsFolder, " was successfully created"), printConsole = FALSE)
-      dir.create(self$figuresFolder)
-      logDebug(message = paste0(self$figuresFolder, " was successfully created"), printConsole = FALSE)
+      createFolder(self$workflowFolder)
+      createFolder(self$reportFolder)
+      createFolder(self$resultsFolder)
+      createFolder(self$figuresFolder)
+
+
+
+      # dir.create(self$workflowFolder)
+      # logDebug(message = paste0(self$workflowFolder, " was successfully created"), printConsole = FALSE)
+      # dir.create(self$reportFolder)
+      # logDebug(message = paste0(self$reportFolder, " was successfully created"), printConsole = FALSE)
+      # dir.create(self$resultsFolder)
+      # logDebug(message = paste0(self$resultsFolder, " was successfully created"), printConsole = FALSE)
+      # dir.create(self$figuresFolder)
+      # logDebug(message = paste0(self$figuresFolder, " was successfully created"), printConsole = FALSE)
 
       #self$simulationSets <- simulationSets
 

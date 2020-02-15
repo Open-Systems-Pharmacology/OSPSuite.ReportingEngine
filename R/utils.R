@@ -142,3 +142,18 @@ generateResultFileNames <- function(numberOfCores, folderName, fileName, separat
   )
   return(allResultsFileNames)
 }
+
+
+#' @title createFolder
+#' @param folderName Path of folder to be created
+#' @description
+#' Create a folder with path folderName and log in logDebug
+#' @export
+createFolder <- function(folderName,printConsole = FALSE){
+  dir.create(folderName)
+  logDebug(message = paste0(folderName, " was successfully created"), printConsole = printConsole)
+}
+
+
+
+
