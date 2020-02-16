@@ -18,7 +18,7 @@ PopulationWorkflow <- R6::R6Class(
   public = list(
     populationSimulation = NULL, # TO DO: rename with simpler task name simulate
     populationPKParameters = NULL, # TO DO: rename with simpler task name calculatePKParameters
-    #populationSensitivityAnalysis = NULL,
+    populationSensitivityAnalysis = NULL,
     plotDemography = NULL,
     plotGoF = NULL,
     plotPKParameters = NULL,
@@ -35,7 +35,7 @@ PopulationWorkflow <- R6::R6Class(
       # TO DO: include task parameters from initialization ?
       self$populationSimulationSettings()
       self$populationPKParameterSettings()
-      #self$populationSensitivityAnalysisSettings()
+      self$populationSensitivityAnalysisSettings()
       self$plotDemographySettings()
       self$plotGoFSettings()
       self$plotPKParametersSettings()
@@ -115,6 +115,40 @@ PopulationWorkflow <- R6::R6Class(
         settings = settings,
         active = active,
         message = message %||% "Calculate PK parameters for population"#,
+        # simulationFilePath = simulationFilePath,
+        # simulationResultFilePaths = simulationResultFilePaths,
+        # pkParametersToEvaluate = pkParametersToEvaluate,
+        # userDefinedPKFunctions = userDefinedPKFunctions,
+        # pkParameterResultsFilePath = pkParameterResultsFilePath
+      )
+    },
+
+    #' @description
+    #' Define population Sensitivity Analysis `task` settings
+    #' @param input file or folder of input
+    #' @param output file or folder of output
+    #' @param settings specific settings for task
+    #' @param active logical indicating if `task` is performed in worklfow.
+    #' Default value is `TRUE`
+    #' @param message title of the `task`.
+    #' Default value indicates `task` name.
+    #' @param inputFolderName TO DO
+    #' @param simulationFileName TO DO
+    #' @param resultsFolderName TO DO
+    #' @param resultsFileName TO DO
+    #' @param numberOfCores TO DO
+    #' @return A new `Task` object
+    populationSensitivityAnalysisSettings = function(input = NULL,
+                                                     output = NULL,
+                                                     settings = NULL,
+                                                     active = TRUE,
+                                                     message = NULL){
+      self$populationSensitivityAnalysis <- SensitivityAnalysisTask$new(
+        input = input,
+        output = output,
+        settings = settings,
+        active = active,
+        message = message %||% "Sensitivity analysis for population"#,
         # simulationFilePath = simulationFilePath,
         # simulationResultFilePaths = simulationResultFilePaths,
         # pkParametersToEvaluate = pkParametersToEvaluate,
@@ -322,6 +356,27 @@ PopulationWorkflow <- R6::R6Class(
           )
         }
       }
+
+
+      if (self$populationSensitivityAnalysis$active) {
+        if (self$populationSensitivityAnalysis$validateInput()) {
+          print("Starting population sensitivity analysis")
+          createFolder( set$sensitivityAnalysisResultsFolder )
+          set$sensitivityAnalysisResultsFileNames <-  populationSensitivityAnalysis(
+            simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
+            popDataFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$populationName, ".csv")),
+            pkParameterResultsFilePath = file.path(set$pkAnalysisResultsFolder,defaultFileNames$pkAnalysisResultsFile(set$simulationSet$simulationSetName)),
+            resultsFileFolder = set$sensitivityAnalysisResultsFolder,
+            resultsFileName = trimFileName( defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName) , extension = "csv" ),
+            quantileVec = self$populationSensitivityAnalysis$quantileVec,
+            numberOfCores = self$populationSensitivityAnalysis$numberOfCores)
+        }
+      }
+
+
+
+
+
 
       # TO DO: Abdullah, I don't know if this chunk have to be included somewhere so I left it as is
       # self$numberOfCores,

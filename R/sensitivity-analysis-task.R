@@ -17,6 +17,7 @@ SensitivityAnalysisTask <- R6::R6Class(
     # resultsFolderName = NULL,
     # resultsFileName = NULL,
     numberOfCores = 1,
+    quantileVec = c(0.05,0.5,0.95),
     # generatedResultFileNames = NULL,
 
     #' @description
@@ -37,8 +38,11 @@ SensitivityAnalysisTask <- R6::R6Class(
                           #                        resultsFolderName = getwd(),
                           #                        resultsFileName = "sensitivityAnalysisResults",
                           numberOfCores = 1,
+                          quantileVec = c(0.05,0.5,0.95),
                           ...) {
       super$initialize(...)
+      self$numberOfCores = numberOfCores
+      self$quantileVec = quantileVec
       # self$inputFolderName <- inputFolderName
       # self$simulationFileName <- simulationFileName
       # self$populationFileName <- populationFileName

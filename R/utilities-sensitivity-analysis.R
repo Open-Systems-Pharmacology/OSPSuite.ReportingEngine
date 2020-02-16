@@ -191,3 +191,138 @@ analyzeCoreSensitivity <- function(simulation,
   print("...done")
   exportSensitivityAnalysisResultsToCSV(results = sensitivityAnalysisResults, resultsFilePath)
 }
+
+
+
+#' @title getPKResultsDataFrame
+#' @description Read PK parameter results into a dataframe and set QuantityPath,Parameter and Unit columns as factors
+#' @param pkParameterResultsFilePath Path to PK parameter results CSV file
+#' @return pkResultsDataFrame, a dataframe storing the contents of the CSV file with path pkParameterResultsFilePath
+#' @export
+#' @import ospsuite
+getPKResultsDataFrame <- function(pkParameterResultsFilePath) {
+  pkResultsDataFrame <- read.csv(pkParameterResultsFilePath, encoding = "UTF-8", check.names = FALSE)
+  colnames(pkResultsDataFrame) <- c("IndividualId", "QuantityPath", "Parameter", "Value", "Unit")
+  pkResultsDataFrame$QuantityPath <- as.factor(pkResultsDataFrame$QuantityPath)
+  pkResultsDataFrame$Parameter <- as.factor(pkResultsDataFrame$Parameter)
+  pkResultsDataFrame$Unit <- as.factor(pkResultsDataFrame$Unit)
+  return(pkResultsDataFrame)
+}
+
+
+
+
+#' @title getQuantileIndividualIds
+#' @description Find IDs of individuals whose PK analysis results closest to quantiles given by vector of quantiles quantileVec
+#' @param pkAnalysisResultsDataframe Dataframe storing the PK analysis results for multiple individuals for a single PK parameter and single output path
+#' @return ids, IDs of individuals whose PK analysis results closest to quantiles given by vector of quantiles quantileVec
+#' @export
+getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec = c(0.05, 0.5, 0.95)) {
+  rowNums <- NULL
+  for (n in 1:length(quantileVec)){
+    rowNums[n] <- which.min(abs(pkAnalysisResultsDataframe$Value - quantile(pkAnalysisResultsDataframe$Value, quantileVec[n])))
+  }
+  ids <- as.numeric(pkAnalysisResultsDataframe$IndividualId[rowNums])
+  return(ids)
+}
+
+#' @title populationSensitivityAnalysis
+#' @param simFilePath path to simulation file
+#' @param popDataFilePath path to population file
+#' @param pkParameterResultsFilePath path to pk parameter results CSV
+#' @param resultsFileFolder folder where results of sensitivity analysis will be saved
+#' @param fileNamesIndex Names of CSV file containing index of sensitivity analysis CSV files
+#' @param resultsFileName root name of sensitivity analysis results CSV files
+#' @param quantileVec vector of quantiles in (0,1).  For each output and pk parameter, there will be a distribution of pk parameter values for the population.
+#' The individuals yielding pk parameters closest to these quantiles will be selected for sensitivity analysis.  Default is (0.05,0.5,0.95)
+#' @param numberOfCores the number of cores to be used for parallelization of the sensitivity analysis.  Default is 1 core (no parallelization).
+#' @export
+populationSensitivityAnalysis <- function(simFilePath,
+                                          popDataFilePath,
+                                          pkParameterResultsFilePath,
+                                          resultsFileFolder,
+                                          resultsFileName,
+                                          fileNamesIndex = "sensitivityAnalysesFileIndex",
+                                          quantileVec = c(0.05, 0.5, 0.95),
+                                          numberOfCores = 1){
+
+
+  sensitivityAnalysesFileIndexDF <- getSAFileIndex(pkParameterResultsFilePath,quantileVec,resultsFileFolder,resultsFileName,fileNamesIndex)
+
+  ids <- unique(sensitivityAnalysesFileIndexDF$IndividualId)
+
+  analyzeSensitivity(simFilePath,
+                     parametersToPerturb = NULL,
+                     popFilePath = popDataFilePath,
+                     individualID = ids,
+                     numberOfCores = numberOfCores,
+                     resultsFileFolder = resultsFileFolder,
+                     resultsFileName = resultsFileName
+  )
+
+
+
+  # outputColumn <- NULL
+  # pkParameterColumn <- NULL
+  # individualIdColumn <- NULL
+  #
+  # for (output in outputs){
+  #   for (pkParameter in pkParameters){
+  #     singleOuputSinglePKDataframe <- allPKResultsDataframe[ allPKResultsDataframe["QuantityPath"] == output & allPKResultsDataframe["Parameter"] == pkParameter, ]
+  #     ids <- getQuantileIndividualIds(singleOuputSinglePKDataframe,quantileVec)
+  #     for (id in ids){
+  #       outputColumn <- c(outputColumn,output)
+  #       pkParameterColumn <- c(pkParameterColumn,pkParameter)
+  #       individualIdColumn <- c(individualIdColumn,id)
+  #     }
+  #   }
+  # }
+  #
+  # filenamesColumn <- paste(resultsFileName,seq(1,length(outputColumn)),".csv",sep="-")
+  # sensitivityAnalysesFileIndexDF <- data.frame( "Filename" = filenamesColumn, "IndividualId" = individualIdColumn,  "Outputs" = outputColumn , "pkParameters" = pkParameterColumn)
+  # write.csv(x = sensitivityAnalysesFileIndexDF,file = file.path(resultsFileFolder,paste0(fileNamesIndex,".csv") ))
+
+
+}
+
+
+#' @title getSAFileIndex
+#' @description Function to build and write to CSV a dataframe that
+#' @param pkParameterResultsFilePath path to pk parameter results CSV file
+#' @param quantileVec quantiles to seek
+#' @export
+getSAFileIndex <- function(pkParameterResultsFilePath,
+                           quantileVec,
+                           resultsFileFolder,
+                           resultsFileName,
+                           fileNamesIndex){
+
+
+  allPKResultsDataframe <- getPKResultsDataFrame(pkParameterResultsFilePath)
+  outputs <- levels(allPKResultsDataframe$QuantityPath)
+  pkParameters <- levels(allPKResultsDataframe$Parameter)
+  pkParameters<- pkParameters[1:3]#### REMOVE THIS LINE EVENTUALLY!!!!!!!!!!!!!!!!!!!!
+
+
+  outputColumn <- NULL
+  pkParameterColumn <- NULL
+  individualIdColumn <- NULL
+
+  for (output in outputs){
+    for (pkParameter in pkParameters){
+      singleOuputSinglePKDataframe <- allPKResultsDataframe[ allPKResultsDataframe["QuantityPath"] == output & allPKResultsDataframe["Parameter"] == pkParameter, ]
+      ids <- getQuantileIndividualIds(singleOuputSinglePKDataframe,quantileVec)
+      for (id in ids){
+        outputColumn <- c(outputColumn,output)
+        pkParameterColumn <- c(pkParameterColumn,pkParameter)
+        individualIdColumn <- c(individualIdColumn,id)
+      }
+    }
+  }
+
+  filenamesColumn <- paste(resultsFileName,paste0(individualIdColumn,".csv"),sep="-")
+  sensitivityAnalysesFileIndexDF <- data.frame(  "Outputs" = outputColumn , "pkParameters" = pkParameterColumn, "IndividualId" = individualIdColumn,"Filename" = filenamesColumn )
+  write.csv(x = sensitivityAnalysesFileIndexDF,file = file.path(resultsFileFolder,paste0(fileNamesIndex,".csv") ))
+  return(sensitivityAnalysesFileIndexDF)
+
+}

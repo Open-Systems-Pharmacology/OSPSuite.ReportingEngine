@@ -131,7 +131,7 @@ removeForbiddenLetters <- function(text, forbiddenLetters = "[[:punct:]]", repla
 #' @description
 #' #Generate a listcontaining names of CSV result files that will be output by each corein parallel computation
 #' @export
-generateResultFileNames <- function(numberOfCores, folderName, fileName, separator = "_", extension = ".csv") {
+generateResultFileNames <- function(numberOfCores, folderName, fileName, separator = "-", extension = ".csv") {
   allResultsFileNames <- sapply(
     X = 1:numberOfCores, function(x, folderName, fileName) {
       return(file.path(folderName, paste0(fileName, separator, x, extension)))
