@@ -108,7 +108,6 @@ individualSensitivityAnalysis <- function(simFilePath,
 #' @return Simulation results for population
 #' @export
 #' @import ospsuite
-#  @import Rmpi
 runParallelSensitivityAnalysis <- function(simFilePath,
                                            parametersToPerturb,
                                            individualParameters,
@@ -306,7 +305,7 @@ getSAFileIndex <- function(pkParameterResultsFilePath,
   allPKResultsDataframe <- getPKResultsDataFrame(pkParameterResultsFilePath)
   outputs <- levels(allPKResultsDataframe$QuantityPath)
   pkParameters <- levels(allPKResultsDataframe$Parameter)
-  pkParameters<- pkParameters[1:3]#### REMOVE THIS LINE EVENTUALLY!!!!!!!!!!!!!!!!!!!!
+  #pkParameters<- pkParameters[1:3]#### ONLY TO TEST SMALL PK PARAMETER SET - REMOVE THIS LINE EVENTUALLY!!!!!!!!!!!!!!!!!!!!
 
 
   outputColumn <- NULL
