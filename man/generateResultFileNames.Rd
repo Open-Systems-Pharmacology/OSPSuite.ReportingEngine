@@ -8,7 +8,7 @@ generateResultFileNames(
   numberOfCores,
   folderName,
   fileName,
-  separator = "_",
+  separator = "-",
   extension = ".csv"
 )
 }

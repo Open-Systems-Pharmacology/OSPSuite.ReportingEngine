@@ -26,7 +26,7 @@ R6 class representing Reporting Engine Population Model Set
 
 \item{\code{pkParametersNames}}{display names for `pkParameters`}
 
-\item{\code{pkParameterUnits}}{display units for `pkParameters`}
+\item{\code{pkParametersUnits}}{display units for `pkParameters`}
 
 \item{\code{dataFilter}}{filter to compare with observed data}
 
@@ -53,7 +53,7 @@ R6 class representing Reporting Engine Population Model Set
 
 \item{\code{pkParametersNames}}{display names for `pkParameters`}
 
-\item{\code{pkParameterUnits}}{display units for `pkParameters`}
+\item{\code{pkParametersUnits}}{display units for `pkParameters`}
 
 \item{\code{dataFilter}}{filter to compare with observed data}
 }
@@ -63,6 +63,7 @@ R6 class representing Reporting Engine Population Model Set
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{PopModelSet$new()}}
+\item \href{#method-copyInputFiles}{\code{PopModelSet$copyInputFiles()}}
 \item \href{#method-clone}{\code{PopModelSet$clone()}}
 }
 }
@@ -78,17 +79,20 @@ R6 class representing Reporting Engine Population Model Set
 Create a new `PopModelSet` object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopModelSet$new(
+  simulationSetName = NULL,
   simulationFile,
   simulationName = NULL,
-  populationFile,
-  populationName = NULL,
-  pathID,
+  pathID = NULL,
   pathName = NULL,
   pathUnit = NULL,
   pkParameters = AllPKParameters,
   pkParametersNames = NULL,
   pkParametersUnits = NULL,
-  dataFilter = NULL
+  dataFilter = NULL,
+  observedDataFile = NULL,
+  observedMetaDataFile = NULL,
+  populationFile,
+  populationName = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -98,10 +102,6 @@ Create a new `PopModelSet` object.
 \item{\code{simulationFile}}{names of pkml file to be used for the simulation}
 
 \item{\code{simulationName}}{display name of simulation}
-
-\item{\code{populationFile}}{names of pkml file to be used for the population}
-
-\item{\code{populationName}}{display name of population}
 
 \item{\code{pathID}}{path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)}
 
@@ -114,15 +114,27 @@ Default value is enum `AllPKParameters`.}
 
 \item{\code{pkParametersNames}}{display names for `pkParameters`}
 
+\item{\code{pkParametersUnits}}{display units for `pkParameters`}
+
 \item{\code{dataFilter}}{filter to compare with observed data}
 
-\item{\code{pkParameterUnits}}{display units for `pkParameters`}
+\item{\code{populationFile}}{names of pkml file to be used for the population}
+
+\item{\code{populationName}}{display name of population}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
 A new `MeanModelSet` object
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-copyInputFiles"></a>}}
+\subsection{Method \code{copyInputFiles()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PopModelSet$copyInputFiles(inputFilesFolder)}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

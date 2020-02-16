@@ -108,7 +108,7 @@ individualSensitivityAnalysis <- function(simFilePath,
 #' @return Simulation results for population
 #' @export
 #' @import ospsuite
-#' @import Rmpi
+#  @import Rmpi
 runParallelSensitivityAnalysis <- function(simFilePath,
                                            parametersToPerturb,
                                            individualParameters,

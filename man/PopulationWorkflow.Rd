@@ -28,17 +28,26 @@ R6 class for Reporting Engine Population Workflow
 }
 \if{html}{\out{</div>}}
 }
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{calculateSensitivity}}{R6 class `Task` for sensitivity analysis}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{PopulationWorkflow$new()}}
 \item \href{#method-populationSimulationSettings}{\code{PopulationWorkflow$populationSimulationSettings()}}
 \item \href{#method-populationPKParameterSettings}{\code{PopulationWorkflow$populationPKParameterSettings()}}
+\item \href{#method-populationSensitivityAnalysisSettings}{\code{PopulationWorkflow$populationSensitivityAnalysisSettings()}}
 \item \href{#method-plotDemographySettings}{\code{PopulationWorkflow$plotDemographySettings()}}
 \item \href{#method-plotGoFSettings}{\code{PopulationWorkflow$plotGoFSettings()}}
 \item \href{#method-plotPKParametersSettings}{\code{PopulationWorkflow$plotPKParametersSettings()}}
 \item \href{#method-plotSensitivitySettings}{\code{PopulationWorkflow$plotSensitivitySettings()}}
 \item \href{#method-runWorkflow}{\code{PopulationWorkflow$runWorkflow()}}
+\item \href{#method-runSingleSetWorkflow}{\code{PopulationWorkflow$runSingleSetWorkflow()}}
 \item \href{#method-print}{\code{PopulationWorkflow$print()}}
 \item \href{#method-clone}{\code{PopulationWorkflow$clone()}}
 }
@@ -79,11 +88,6 @@ Define simulate `task` settings
   settings = NULL,
   active = TRUE,
   message = NULL,
-  inputFolderName = self$inputFolder,
-  simulationFileName = self$simulation,
-  populationFileName = self$population,
-  resultsFolderName = self$simulationFolder,
-  resultsFileName = "populationSimulation",
   numberOfCores = 1
 )}\if{html}{\out{</div>}}
 }
@@ -103,6 +107,8 @@ Default value is `TRUE`}
 \item{\code{message}}{title of the `task`.
 Default value indicates `task` name.}
 
+\item{\code{numberOfCores}}{number of cores for parallelization}
+
 \item{\code{inputFolderName}}{folder of input}
 
 \item{\code{simulationFileName}}{name of simulation file}
@@ -110,8 +116,6 @@ Default value indicates `task` name.}
 \item{\code{resultsFolderName}}{folder where output is saved}
 
 \item{\code{resultsFileName}}{file where output is saved}
-
-\item{\code{numberOfCores}}{number of cores for parallelization}
 }
 \if{html}{\out{</div>}}
 }
@@ -129,13 +133,7 @@ Define calculate PK parameters `task` settings
   output = NULL,
   settings = NULL,
   active = TRUE,
-  message = NULL,
-  simulationFilePath = file.path(self$inputFolder, paste0(self$simulation, ".pkml")),
-  simulationResultFilePaths = self$populationSimulation$generatedResultFileNames,
-  pkParametersToEvaluate = NULL,
-  userDefinedPKFunctions = NULL,
-  pkParameterResultsFilePath = file.path(self$pkParametersFolder,
-    "populationPKParameters.csv")
+  message = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -171,6 +169,51 @@ A new `Task` object
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-populationSensitivityAnalysisSettings"></a>}}
+\subsection{Method \code{populationSensitivityAnalysisSettings()}}{
+Define population Sensitivity Analysis `task` settings
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$populationSensitivityAnalysisSettings(
+  input = NULL,
+  output = NULL,
+  settings = NULL,
+  active = TRUE,
+  message = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{file or folder of input}
+
+\item{\code{output}}{file or folder of output}
+
+\item{\code{settings}}{specific settings for task}
+
+\item{\code{active}}{logical indicating if `task` is performed in worklfow.
+Default value is `TRUE`}
+
+\item{\code{message}}{title of the `task`.
+Default value indicates `task` name.}
+
+\item{\code{inputFolderName}}{TO DO}
+
+\item{\code{simulationFileName}}{TO DO}
+
+\item{\code{resultsFolderName}}{TO DO}
+
+\item{\code{resultsFileName}}{TO DO}
+
+\item{\code{numberOfCores}}{TO DO}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new `Task` object
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotDemographySettings"></a>}}
 \subsection{Method \code{plotDemographySettings()}}{
 Define plot demography `task` settings
@@ -178,7 +221,7 @@ Define plot demography `task` settings
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotDemographySettings(
   input = NULL,
   output = NULL,
-  active = TRUE,
+  active = FALSE,
   message = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -212,7 +255,7 @@ Define plot goodness of fit `task` settings
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotGoFSettings(
   input = NULL,
   output = NULL,
-  active = TRUE,
+  active = FALSE,
   message = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -246,7 +289,7 @@ Define plot PK parameters `task` settings
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotPKParametersSettings(
   input = NULL,
   output = NULL,
-  active = TRUE,
+  active = FALSE,
   message = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -280,7 +323,7 @@ Define plot sensisitivity `task` settings
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotSensitivitySettings(
   input = NULL,
   output = NULL,
-  active = TRUE,
+  active = FALSE,
   message = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -309,13 +352,22 @@ A new `Task` object
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-runWorkflow"></a>}}
 \subsection{Method \code{runWorkflow()}}{
-Run population workflow tasks
+Loop through all simulation sets and run active population model workflow tasks for each
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$runWorkflow()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-runSingleSetWorkflow"></a>}}
+\subsection{Method \code{runSingleSetWorkflow()}}{
+Run population workflow tasks for a single simulation set
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$runSingleSetWorkflow(set)}\if{html}{\out{</div>}}
+}
+
 \subsection{Returns}{
-All results and plots as a structured output.
+All results and plots as a structured output in a folder specific to simulation set
 }
 }
 \if{html}{\out{<hr>}}

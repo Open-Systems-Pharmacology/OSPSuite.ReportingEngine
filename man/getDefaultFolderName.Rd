@@ -4,7 +4,7 @@
 \alias{getDefaultFolderName}
 \title{getDefaultFolderName}
 \usage{
-getDefaultFolderName(..., suffix = format(Sys.Date(), "\%Y\%m\%d"), sep = "-")
+getDefaultFolderName(..., suffix = "", sep = "-")
 }
 \arguments{
 \item{...}{names}

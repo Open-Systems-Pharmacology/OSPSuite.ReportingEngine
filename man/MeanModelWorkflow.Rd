@@ -43,6 +43,7 @@ R6 class for Reporting Engine Mean Model Workflow
 \item \href{#method-plotAbsorptionSettings}{\code{MeanModelWorkflow$plotAbsorptionSettings()}}
 \item \href{#method-plotSensitivitySettings}{\code{MeanModelWorkflow$plotSensitivitySettings()}}
 \item \href{#method-runWorkflow}{\code{MeanModelWorkflow$runWorkflow()}}
+\item \href{#method-runSingleSetWorkflow}{\code{MeanModelWorkflow$runSingleSetWorkflow()}}
 \item \href{#method-print}{\code{MeanModelWorkflow$print()}}
 \item \href{#method-clone}{\code{MeanModelWorkflow$clone()}}
 }
@@ -82,11 +83,7 @@ Define simulate `task` settings
   output = NULL,
   settings = NULL,
   active = TRUE,
-  message = NULL,
-  inputFolderName = getwd(),
-  simulationFileName = self$simulations,
-  resultsFolderName = self$resultsFolder,
-  resultsFileName = "meanModelSimulation"
+  message = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -129,13 +126,7 @@ Define calculate PK Parameters `task` settings
   output = NULL,
   settings = NULL,
   active = TRUE,
-  message = NULL,
-  simulationFilePath = file.path(self$inputFolder, paste0(self$simulation, ".pkml")),
-  simulationResultFilePaths = self$meanModelSimulation$generatedResultFileNames,
-  pkParametersToEvaluate = NULL,
-  userDefinedPKFunctions = NULL,
-  pkParameterResultsFilePath = file.path(self$pkParametersFolder,
-    "meanModelPKParameters.csv")
+  message = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -181,10 +172,6 @@ Define mean Model Sensitivity Analysis `task` settings
   settings = NULL,
   active = TRUE,
   message = NULL,
-  inputFolderName = self$inputFolder,
-  simulationFileName = self$simulation,
-  resultsFolderName = self$sensitivityFolder,
-  resultsFileName = "meanModelSensitivityAnalysis",
   numberOfCores = 1
 )}\if{html}{\out{</div>}}
 }
@@ -204,6 +191,8 @@ Default value is `TRUE`}
 \item{\code{message}}{title of the `task`.
 Default value indicates `task` name.}
 
+\item{\code{numberOfCores}}{TO DO}
+
 \item{\code{inputFolderName}}{TO DO}
 
 \item{\code{simulationFileName}}{TO DO}
@@ -211,8 +200,6 @@ Default value indicates `task` name.}
 \item{\code{resultsFolderName}}{TO DO}
 
 \item{\code{resultsFileName}}{TO DO}
-
-\item{\code{numberOfCores}}{TO DO}
 }
 \if{html}{\out{</div>}}
 }
@@ -228,7 +215,7 @@ Define Goodness of fit `task` settings
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$plotGoFSettings(
   input = NULL,
   output = NULL,
-  active = TRUE,
+  active = FALSE,
   message = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -262,7 +249,7 @@ Define plot PK parameters `task` settings
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$plotPKParametersSettings(
   input = NULL,
   output = NULL,
-  active = TRUE,
+  active = FALSE,
   message = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -296,7 +283,7 @@ Define plot mass balance `task` settings
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$plotMassBalanceSettings(
   input = NULL,
   output = NULL,
-  active = TRUE,
+  active = FALSE,
   message = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -330,7 +317,7 @@ Define plot absorption `task` settings
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$plotAbsorptionSettings(
   input = NULL,
   output = NULL,
-  active = TRUE,
+  active = FALSE,
   message = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -364,7 +351,7 @@ Define plot sensisitivity `task` settings
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$plotSensitivitySettings(
   input = NULL,
   output = NULL,
-  active = TRUE,
+  active = FALSE,
   message = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -393,13 +380,22 @@ A new `Task` object
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-runWorkflow"></a>}}
 \subsection{Method \code{runWorkflow()}}{
-Run mean model workflow tasks
+Loop through all simulation sets and run active mean model workflow tasks for each
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$runWorkflow()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-runSingleSetWorkflow"></a>}}
+\subsection{Method \code{runSingleSetWorkflow()}}{
+Run population workflow tasks for a single simulation set
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$runSingleSetWorkflow(set)}\if{html}{\out{</div>}}
+}
+
 \subsection{Returns}{
-All results and plots as a structured output.
+All results and plots as a structured output in a folder specific to simulation set.
 }
 }
 \if{html}{\out{<hr>}}
