@@ -25,13 +25,13 @@ MeanModelSet <- R6::R6Class(
     dataFilter = NULL,
     observedDataFile = NULL,
     observedMetaDataFile = NULL,
-    inputFilesFolder = NULL,
-    simulationResultsFolder = NULL,
-    simulationResultFileNames = NULL,
-    pkAnalysisResultsFolder = NULL,
-    pkAnalysisResultsFileNames = NULL,
-    sensitivityAnalysisResultsFolder = NULL,
-    sensitivityAnalysisResultsFileNames = NULL,
+    #inputFilesFolder = NULL,
+    #simulationResultsFolder = NULL,
+    #simulationResultFileNames = NULL,
+    #pkAnalysisResultsFolder = NULL,
+    #pkAnalysisResultsFileNames = NULL,
+    #sensitivityAnalysisResultsFolder = NULL,
+    #sensitivityAnalysisResultsFileNames = NULL,
     #'     #' @description
     #'     #' Create a new `MeanModelSet` object.
     #'     #' @param simulationFile names of pkml file to be used for the simulation
@@ -56,10 +56,11 @@ MeanModelSet <- R6::R6Class(
                           pkParametersUnits = NULL,
                           dataFilter = NULL,
                           observedDataFile = NULL,
-                          observedMetaDataFile = NULL,
-                          simulationResultsFolder = NULL,
-                          pkAnalysisResultsFolder = NULL,
-                          sensitivityAnalysisResultsFolder = NULL) {
+                          observedMetaDataFile = NULL#,
+                          #simulationResultsFolder = NULL,
+                          #pkAnalysisResultsFolder = NULL,
+                          #sensitivityAnalysisResultsFolder = NULL
+                          ) {
       self$simulationFile <- simulationFile
       self$simulationName <- simulationName %||% trimFileName(simulationFile, extension = "pkml")
 

@@ -11,15 +11,14 @@
 SimulationStructure <- R6::R6Class(
   "SimulationSetStructure",
   public = list(
-    reportingEngineInfo = ReportingEngineInfo$new(),
     simulationSet= NULL,
-    simulationSetName = NULL,
     inputFilesFolder = NULL,
     simulationResultsFolder = NULL,
     pkAnalysisResultsFolder = NULL,
     sensitivityAnalysisResultsFolder = NULL,
-
-
+    simulationResultFileNames = NULL,
+    pkAnalysisResultsFileNames = NULL,
+    sensitivityAnalysisResultsFileNames = NULL,
     #Initialize SimulationStructure
     #Create simulationSetFolder folder to store simulationSet results.
     #Create inputFilesFolder as subfolder of simulationSetFolder

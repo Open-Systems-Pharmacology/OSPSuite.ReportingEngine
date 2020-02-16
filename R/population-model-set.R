@@ -36,10 +36,32 @@ PopModelSet <- R6::R6Class(
     #' @return A new `MeanModelSet` object
     #'
 
-    initialize = function(...,
+    initialize = function(simulationSetName = NULL,
+                          simulationFile,
+                          simulationName = NULL,
+                          pathID = NULL,
+                          pathName = NULL,
+                          pathUnit = NULL,
+                          pkParameters = AllPKParameters,
+                          pkParametersNames = NULL,
+                          pkParametersUnits = NULL,
+                          dataFilter = NULL,
+                          observedDataFile = NULL,
+                          observedMetaDataFile = NULL,
                           populationFile,
                           populationName = NULL) {
-      super$initialize(...)
+      super$initialize(simulationSetName = NULL,
+                       simulationFile,
+                       simulationName = NULL,
+                       pathID = NULL,
+                       pathName = NULL,
+                       pathUnit = NULL,
+                       pkParameters = AllPKParameters,
+                       pkParametersNames = NULL,
+                       pkParametersUnits = NULL,
+                       dataFilter = NULL,
+                       observedDataFile = NULL,
+                       observedMetaDataFile = NULL)
       # initialize = function(simulationFile,
       #                           simulationName = NULL,
       #                           populationFile,
@@ -68,7 +90,7 @@ PopModelSet <- R6::R6Class(
       self$populationFile <- populationFile
       self$populationName <- populationName %||% trimFileName(populationFile, extension = "csv")
 
-      self$simulationSetName <- simulationSetName %||% paste(simulationName,populationName,sep="-")
+      self$simulationSetName <- simulationSetName %||% paste(self$simulationName,self$populationName,sep="-")
 
     },
 

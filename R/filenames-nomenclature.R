@@ -3,13 +3,13 @@ defaultFileNames <- list(
     getDefaultFileName(simulationName, suffix = "Results")
   },
   popSimulationResultsFile = function(populationName, simulationName) {
-    getDefaultFileName(populationName, simulationName, suffix = "Results")
+    getDefaultFileName(populationName, simulationName, suffix = "SimulationResults")
   },
   pkAnalysisResultsFile = function(simulationName) {
-    getDefaultFileName(simulationName, suffix = "PKAnalysis")
+    getDefaultFileName(simulationName, suffix = "PKAnalysisResults")
   },
   sensitivityAnalysisResultsFile = function(simulationName) {
-    getDefaultFileName(simulationName, suffix = "SensitivityAnalysis")
+    getDefaultFileName(simulationName, suffix = "SensitivityAnalysisResults")
   },
   workflowFolder = function(name = "Workflow") {
     getDefaultFolderName(name, suffix = paste0("_", format(Sys.Date(), "%Y%m%d"), "_", format(Sys.time(), "%H%M%S")), sep = "")

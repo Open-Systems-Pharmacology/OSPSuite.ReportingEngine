@@ -18,7 +18,7 @@ PopulationWorkflow <- R6::R6Class(
   public = list(
     populationSimulation = NULL, # TO DO: rename with simpler task name simulate
     populationPKParameters = NULL, # TO DO: rename with simpler task name calculatePKParameters
-    calculateSensitivity = NULL,
+    #populationSensitivityAnalysis = NULL,
     plotDemography = NULL,
     plotGoF = NULL,
     plotPKParameters = NULL,
@@ -35,9 +35,10 @@ PopulationWorkflow <- R6::R6Class(
       # TO DO: include task parameters from initialization ?
       self$populationSimulationSettings()
       self$populationPKParameterSettings()
+      #self$populationSensitivityAnalysisSettings()
+      self$plotDemographySettings()
       self$plotGoFSettings()
       self$plotPKParametersSettings()
-      self$calculateSensitivitySettings()
       self$plotSensitivitySettings()
     },
 
@@ -135,7 +136,7 @@ PopulationWorkflow <- R6::R6Class(
     #' @return A new `Task` object
     plotDemographySettings = function(input = NULL,
                                       output = NULL,
-                                      active = TRUE,
+                                      active = FALSE,
                                       message = NULL) {
       self$plotDemography <- Task$new(
         input = input,
@@ -157,7 +158,7 @@ PopulationWorkflow <- R6::R6Class(
     #' @return A new `Task` object
     plotGoFSettings = function(input = NULL,
                                output = NULL,
-                               active = TRUE,
+                               active = FALSE,
                                message = NULL) {
       self$plotGoF <- Task$new(
         input = input,
@@ -179,7 +180,7 @@ PopulationWorkflow <- R6::R6Class(
     #' @return A new `Task` object
     plotPKParametersSettings = function(input = NULL,
                                         output = NULL,
-                                        active = TRUE,
+                                        active = FALSE,
                                         message = NULL) {
       self$plotPKParameters <- Task$new(
         input = input,
@@ -201,7 +202,7 @@ PopulationWorkflow <- R6::R6Class(
     #' @return A new `Task` object
     plotSensitivitySettings = function(input = NULL,
                                        output = NULL,
-                                       active = TRUE,
+                                       active = FALSE,
                                        message = NULL) {
       self$plotSensitivity <- Task$new(
         input = input,
@@ -254,7 +255,7 @@ PopulationWorkflow <- R6::R6Class(
     runWorkflow = function() {
       logInfo(message = "Start of population model workflow")
 
-      for (set in self$simulationSets) {
+      for (set in self$simulationStructures) {
         # print(set)
         self$runSingleSetWorkflow(set)
       }
@@ -284,24 +285,26 @@ PopulationWorkflow <- R6::R6Class(
       if (self$populationSimulation$active) {
         if (self$populationSimulation$validateInput()) {
           if (self$populationSimulation$numberOfCores == 1) {
-            print("Starting population simulation")
-            resultsFilePath <- file.path(self$populationSimulation$resultsFolderName, paste0(self$populationSimulation$resultsFileName, ".csv"))
+            logInfo(message = "Starting population simulation")
+            createFolder( set$simulationResultsFolder )
+            resultsFilePath <- file.path(set$simulationResultsFolder, defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName))
             simulateModel(
-              simFilePath = file.path(self$populationSimulation$inputFolderName, paste0(self$populationSimulation$simulationFileName, ".pkml")),
-              popDataFilePath = file.path(self$populationSimulation$inputFolderName, paste0(self$populationSimulation$populationFileName, ".csv")),
+              simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
+              popDataFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$populationName, ".csv")),
               resultsFilePath = resultsFilePath
             )
-            self$populationSimulation$generatedResultFileNames <- resultsFilePath
+            set$simulationResultFileNames <- resultsFilePath
           }
           else if (self$populationSimulation$numberOfCores > 1) {
-            print("Starting parallel population simulation")
-            self$populationSimulation$generatedResultFileNames <- runParallelPopulationSimulation(
+            logInfo(message = "Starting parallel population simulation")
+            createFolder( set$simulationResultsFolder )
+            set$simulationResultFileNames <- runParallelPopulationSimulation(
               numberOfCores = self$populationSimulation$numberOfCores,
-              inputFolderName = self$populationSimulation$inputFolderName,
-              simulationFileName = self$populationSimulation$simulationFileName,
-              populationFileName = self$populationSimulation$populationFileName,
-              resultsFolderName = self$populationSimulation$resultsFolderName,
-              resultsFileName = self$populationSimulation$resultsFileName
+              inputFolderName = set$inputFilesFolder,
+              simulationFileName = set$simulationSet$simulationName,
+              populationFileName = set$simulationSet$populationName,
+              resultsFolderName = set$simulationResultsFolder,
+              resultsFileName = trimFileName( defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName) , extension = "csv" )
             )
           }
         }
@@ -311,10 +314,11 @@ PopulationWorkflow <- R6::R6Class(
       if (self$populationPKParameters$active) {
         if (self$populationPKParameters$validateInput()) {
           print("Starting PK parameter calculation")
-          self$populationPKParameters$generatedResultFileNames <- calculatePKParameters(
-            simulationFilePath = self$populationPKParameters$simulationFilePath,
-            simulationResultFilePaths = self$populationSimulation$generatedResultFileNames,
-            pkParameterResultsFilePath = self$populationPKParameters$pkParameterResultsFilePath
+          createFolder( set$pkAnalysisResultsFolder )
+          set$pkAnalysisResultsFileNames <- calculatePKParameters(
+            simulationFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
+            simulationResultFilePaths = set$simulationResultFileNames,
+            pkParameterResultsFilePath = file.path(set$pkAnalysisResultsFolder,defaultFileNames$pkAnalysisResultsFile(set$simulationSet$simulationSetName))
           )
         }
       }
