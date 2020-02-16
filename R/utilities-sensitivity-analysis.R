@@ -32,7 +32,7 @@ analyzeSensitivity <- function(simFilePath,
         individualParameters = popObject$getParameterValuesForIndividual(individualId = ind),
         numberOfCores = numberOfCores,
         resultsFileFolder = resultsFileFolder,
-        resultsFileName = paste0(resultsFileName, "_IndividualId_", ind)
+        resultsFileName = paste0(resultsFileName,"-IndividualId-", ind)
       )
       allResultsFileNames <- c(allResultsFileNames, resFile)
     }
@@ -131,8 +131,8 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
 
   # Generate a listcontaining names of SA CSV result files that will be output by each core
-
   allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFileFolder, fileName = resultsFileName)
+
 
   Rmpi::mpi.bcast.Robj2slave(obj = allResultsFileNames)
 
@@ -153,7 +153,12 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   ))
   Rmpi::mpi.close.Rslaves()
 
-  return(allResultsFileNames)
+  allSAResults <- importSensitivityAnalysisResultsFromCSV(simulation = loadSimulation(simFilePath),filePaths = allResultsFileNames)
+  combinedFilePath <- file.path(resultsFileFolder, paste0(resultsFileName,".csv"))
+  exportSensitivityAnalysisResultsToCSV(results = allSAResults,filePath = combinedFilePath)
+  file.remove(allResultsFileNames)
+  return(combinedFilePath)
+  #return(allResultsFileNames)
 }
 
 #' @title analyzeCoreSensitivity
@@ -320,7 +325,7 @@ getSAFileIndex <- function(pkParameterResultsFilePath,
     }
   }
 
-  filenamesColumn <- paste(resultsFileName,paste0(individualIdColumn,".csv"),sep="-")
+  filenamesColumn <- paste(resultsFileName,"IndividualId",paste0(individualIdColumn,".csv"),sep="-")
   sensitivityAnalysesFileIndexDF <- data.frame(  "Outputs" = outputColumn , "pkParameters" = pkParameterColumn, "IndividualId" = individualIdColumn,"Filename" = filenamesColumn )
   write.csv(x = sensitivityAnalysesFileIndexDF,file = file.path(resultsFileFolder,paste0(fileNamesIndex,".csv") ))
   return(sensitivityAnalysesFileIndexDF)
