@@ -46,7 +46,7 @@ getPKResultsDataFrame <- function(pkParameterResultsFilePath) {
 getQuantileIndividualIds <- function(dataframe, quantileVec = c(0.05, 0.5, 0.95)) {
   rowNums <- NULL
 
-  for (n in 1:length(quantileVec)){
+  for (n in 1:length(quantileVec)) {
     rowNums[n] <- which.min(abs(dataframe$Value - quantile(dataframe$Value, quantileVec[n])))
   }
   ids <- as.numeric(dataframe$IndividualId[rowNums])
