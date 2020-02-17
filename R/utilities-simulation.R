@@ -1,5 +1,8 @@
 #' @title simulateModel
 #' @description Simulate model, either for an individual or for a given population.  Calculate and save PK parameters as an option.
+#' @param simFilePath path to simulation file
+#' @param popDataFilePath path to the population data file
+#' @param resultsFilePath path to simulation results CSV files
 #' @return Simulation results for individual or population
 #' @export
 #' @import ospsuite
@@ -23,6 +26,12 @@ simulateModel <- function(simFilePath,
 
 #' @title runParallelPopulationSimulation
 #' @description Spawn cores, divide population among cores, run population simulation on cores, save results as CSV.
+#' @param numberOfCores number of cores over which to parallelize the population simulation
+#' @param inputFolderName path to folder storing pkml and population data files for the simulation
+#' @param simulationFileName name of simulation pkml file
+#' @param populationFileName name of population data CSV file
+#' @param resultsFileFolder path to population simulation results CSV files
+#' @param resultsFileName root name of population simulation results CSV files
 #' @return Simulation results for population
 #' @export
 #' @import ospsuite
@@ -72,8 +81,9 @@ runParallelPopulationSimulation <- function(numberOfCores,
 
 
 #' @title updateSimulationIndividualParameters
-#' @description Update individual parameters with parameters in individualParameters,
-#' individualParameters is obtained from a population object's getParameterValuesForIndividual() function.
+#' @description Update simulation with parameters from individualParameters
+#' @param simulation is the simulation object to be updated
+#' @param individualParameters is an object storing an individual's parameters, obtained from a population object's getParameterValuesForIndividual() function.
 #' @export
 #' @import ospsuite
 updateSimulationIndividualParameters <- function(simulation, individualParameters = NULL) {
