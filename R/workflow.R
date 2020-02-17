@@ -1,134 +1,116 @@
 #' @title Workflow
-#' @docType class
-#' @description  Workflow Task for Reporting Engine
+#' @description R6 class representing Reporting Engine generic Workflow
 #' @field reportingEngineInfo R6 class object with relevant information about reporting engine
-#' @field settings setting object
-#' @field models simulation class object
-#' @field population population class object
-#' @field observedData List of observed data (use Nonmem format ?)
-#' @field outputFolder path where output is saved
-#' #' @section Methods:
-#' #' \describe{
-#' \item{setPKParametersCalculationSettings()}{Define PK parameters calculation task settings}
-#' \item{setSensitivityAnalysisSettings()}{Define sensitivity analysis task settings}
-#' \item{setpkParametersPlotSettings()}{Define PK parameters plot settings}
-#' \item{setSensitivityPlotSettings()}{Define sensitivity plot settings}
-#' }
+#' @field simulationSets list of `MeanModelSet` R6 class objects
+#' @field observedData list of observed `data` and `metaData`
+#' @field reportFolder path where report and logs are saved
+#' @field resultsFolder path where results are saved
+#' @field figuresFolder path where figure are saved
 #' @import tlf
 #' @import ospsuite
 Workflow <- R6::R6Class(
   "Workflow",
   public = list(
     reportingEngineInfo = ReportingEngineInfo$new(),
-    settings = NULL,
-    simulation = NULL,
-    population = NULL,
-    observedData = NULL,
+    simulationStructures = NULL,
     workflowFolder = NULL,
-    inputFolder = NULL,
-    simulationFolder = NULL,
-    sensitivityFolder = NULL,
-    outputFolder = NULL,
+    observedData = NULL,
+    reportFolder = NULL,
+    resultsFolder = NULL,
+    figuresFolder = NULL,
 
-    initialize = function(simulationFile,
-                              populationFile,
-                              observedDataFile = NULL,
-                              workflowFolder = paste0("Workflow", "_", format(Sys.Date(), "%Y%m%d"), "_", format(Sys.time(), "%H%M%S")),
-                              inputFolder = "Inputs",
-                              simulationFolder = "Simulations",
-                              sensitivityFolder = "Sensitivities",
-                              outputFolder = "Outputs",
-                              settings = NULL) {
+    #' @description
+    #' Create a new `Workflow` object.
+    #' @param simulationSets names of pkml files to be used for simulations
+    #' @param observedDataFile name of csv file to be used for observations
+    #' @param observedMetaDataFile name of csv file to be used as dictionary for observed data
+    #' @param reportFolder name of folder where reports and logs are saved
+    #' @param resultsFolder name of folder where results are saved
+    #' @param figuresFolder name of folder where figures are saved
+    #' @return A new `Workflow` object
+    initialize = function(simulationSets,
+                          workflowFolder = file.path(getwd(), defaultFileNames$workflowFolder()),
+                          reportFolderName = defaultFileNames$reportFolder(),
+                          resultsFolderName = defaultFileNames$resultsFolder(),
+                          figuresFolderName = defaultFileNames$figuresFolder()) {
+      logInfo(message = self$reportingEngineInfo$print())
+
+      workflowFolderCheck <- checkExisitingPath(workflowFolder, stopIfPathExists = TRUE)
+      if (!is.null(workflowFolderCheck)) {
+        logDebug(message = workflowFolderCheck)
+      }
+      self$workflowFolder <- workflowFolder
+
+      reportFolder <- file.path(workflowFolder, reportFolderName)
+      reportFolderCheck <- checkExisitingPath(reportFolder, stopIfPathExists = TRUE)
+      if (!is.null(reportFolderCheck)) {
+        logDebug(message = reportFolderCheck)
+      }
+      self$reportFolder <- reportFolder
+
+      resultsFolder <- file.path(workflowFolder, resultsFolderName)
+      resultsFolderCheck <- checkExisitingPath(resultsFolder, stopIfPathExists = TRUE)
+      if (!is.null(resultsFolderCheck)) {
+        logDebug(message = resultsFolderCheck)
+      }
+      self$resultsFolder <- resultsFolder
+
+      figuresFolder <- file.path(workflowFolder, figuresFolderName)
+      figuresFolderCheck <- checkExisitingPath(figuresFolder, stopIfPathExists = TRUE)
+      if (!is.null(figuresFolderCheck)) {
+        logDebug(message = figuresFolderCheck)
+      }
+      self$figuresFolder <- figuresFolder
+
+      # Create workflow output structure
+      createFolder(self$workflowFolder)
+      createFolder(self$reportFolder)
+      createFolder(self$resultsFolder)
+      createFolder(self$figuresFolder)
 
 
+
+      # dir.create(self$workflowFolder)
+      # logDebug(message = paste0(self$workflowFolder, " was successfully created"), printConsole = FALSE)
+      # dir.create(self$reportFolder)
+      # logDebug(message = paste0(self$reportFolder, " was successfully created"), printConsole = FALSE)
+      # dir.create(self$resultsFolder)
+      # logDebug(message = paste0(self$resultsFolder, " was successfully created"), printConsole = FALSE)
+      # dir.create(self$figuresFolder)
+      # logDebug(message = paste0(self$figuresFolder, " was successfully created"), printConsole = FALSE)
+
+      #self$simulationSets <- simulationSets
+
+      self$simulationStructures <- list()
       # Check of Workflow inputs
-      validateIsOfType(simulationFile, "character")
-      validateIsOfType(populationFile, "character")
-      validateIsSameLength(simulationFile, populationFile)
+      for (n in 1:length(simulationSets)) {
+        self$simulationStructures[[n]] <- SimulationStructure$new(simulationSet = simulationSets[[n]],
+                                                                  workflowResultsFolder = self$resultsFolder)
+        # TO DO: include simulationFiles as simulationSets
+        # validateIsOfType(simulationSet, "MeanModelSet")
+        # validateIsOfType(observedDataFile, "character", nullAllowed = TRUE)
+        # validateIsOfType(observedMetaDataFile, "character", nullAllowed = TRUE)
 
-      validateIsFileExtension(simulationFile, "pkml")
-      validateIsFileExtension(populationFile, "csv")
-      validateIsFileExtension(observedDataFile, "csv", nullAllowed = TRUE)
 
-      # Create folder and branches where reporting engine structure will be saved
-      if (!is.null(workflowFolder)) {
-        dir.create(workflowFolder)
-      }
-      # Null workflow folder is assumed to be current folder
-      self$workflowFolder <- workflowFolder %||% getwd()
-      self$inputFolder <- file.path(workflowFolder, inputFolder)
-      self$simulationFolder <- file.path(workflowFolder, simulationFolder)
-      self$sensitivityFolder <- file.path(workflowFolder, sensitivityFolder)
-      self$outputFolder <- file.path(workflowFolder, outputFolder)
 
-      dir.create(self$inputFolder)
-      dir.create(self$simulationFolder)
-      dir.create(self$sensitivityFolder)
-      dir.create(self$outputFolder)
+        #        simulationSetFolder <- file.path(self$resultsFolder, self$simulationSets[[n]]$simulationSetName %||% paste0("Set", n))
+        #       dir.create(simulationSetFolder)
 
-      # Workflow inputs:
-      simulationName <- trimFileName(simulationFile, extension = "pkml")
-      populationName <- trimFileName(populationFile, extension = "csv")
-
-      file.copy(
-        simulationFile,
-        file.path(self$inputFolder, paste0(simulationName, ".pkml"))
-      )
-      self$simulation <- simulationName
-
-      file.copy(
-        populationFile,
-        file.path(self$inputFolder, paste0(populationName, ".csv"))
-      )
-      self$population <- populationName
-
-      if (!is.null(observedDataFile)) {
-        observedDataName <- trimFileName(observedDataFile, extension = "csv")
-        file.copy(
-          observedDataFile,
-          file.path(self$inputFolder, paste0(observedDataName, ".csv"))
-        )
-        self$observedData <- observedDataName
+        #   self$simulationSets[[n]]$createDirectories(rootDirectory = simulationSetFolder)
+        #  self$simulationSets[[n]]$copyInputFiles()
       }
 
-      # In case settings need to be defined later on
-      self$settings <- settings
-    },
 
-    setPKParametersCalculationSettings = function(message = NULL) {
-      self$pkParametersCalculation <- Task$new(message = message %||% "Calculate PK parameters")
-    },
 
-    setSensitivityAnalysisSettings = function(input = NULL,
-                                                  output = NULL,
-                                                  active = TRUE,
-                                                  message = NULL) {
-      self$sensitivityAnalysis <- Task$new(
-        input = input %||% list(
-          "simulation" = file.path(self$inputFolder, paste0(self$simulation, ".pkml"))
-        ),
-        output = output %||% list("sensitivityAnalysis" = file.path(self$sensitivityFolder, "sensitivityAnalysis.RData")),
-        active = active,
-        message = message %||% "Analyze sensitivity"
-      )
-    },
-
-    setpkParametersPlotSettings = function(message = NULL) {
-      self$pkParametersPlot <- Task$new(message = message %||% "Plot PK parameters")
-    },
-
-    setSensitivityPlotSettings = function(input = NULL,
-                                              output = NULL,
-                                              active = TRUE,
-                                              message = NULL) {
-      self$sensitivityPlot <- Task$new(
-        input = input %||% list(
-          "sensitivityAnalysis" = self$sensitivityAnalysis$output$sensitivityAnalysis
-        ),
-        output = output %||% list("sensitivityPlot" = file.path(self$outputFolder, "sensitivityPlot.png")),
-        active = active,
-        message = message %||% "Plot sensitivity analysis"
-      )
+      # if (!is.null(observedDataFile)) {
+      #   data <- read.csv(observedDataFile)
+      #   metaData <- read.csv(observedMetaDataFile)
+      #
+      #   self$observedData <- list(
+      #     "data" = data,
+      #     "metaData" = metaData
+      #   )
+      # }
     }
   )
 )

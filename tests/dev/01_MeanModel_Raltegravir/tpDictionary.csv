@@ -1,0 +1,5 @@
+matlabID;type;nonmenColumn;nonmemUnit;reportName;pathID;comment
+sid;identifier;ID;;NaN;NaN;
+stud;identifier;Study_Num;;NaN;NaN;
+time;timeprofile;Time;h;NaN;NaN;
+dv;timeprofile;UnitConv;;NaN;NaN;units are defined in corresponding output definitions

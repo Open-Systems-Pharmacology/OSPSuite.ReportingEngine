@@ -1,26 +1,35 @@
 rm(list = ls())
-devtools::load_all(".")
-mmm <- MeanModel$new(modelFilePath = "./data/sim2compounds.pkml", simulationOutputsFolder = "./data", modelDisplayName = "twoCompound")
+library(ospsuite)
+library(ospsuite.reportingengine)
+library(Rmpi)
+library(tictoc)
 
-mmm$simulateMeanModel(saveSimulation = TRUE)
-mmm$calculateMassBalance(saveMassBalance = TRUE)
+devtools::load_all("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine")
+tictoc::tic()
 
-
-
-##### USER DEFINED PK PARAMETERS#####
-getMyMin <- function(x = NULL, y) {
-  return(min(y))
-}
-
-getMyMax <- function(x = NULL, y) {
-  return(max(y))
-}
-###################################
-
-udPKFunctionArray <- c(
-  UserDefinedPKFunction$new(pKParameterName = "myMin", pKFunction = getMyMin, pKParameterUnit = "umol"), ### Manually enter units?
-  UserDefinedPKFunction$new(pKParameterName = "myMax", pKFunction = getMyMax, pKParameterUnit = "umol") ### Manually enter units?
-)
+# # SINGLE CORE SA
+# setwd("C:/Users/ahamadeh/Dropbox/rproject/workflow")
+# simFilePath <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/simpleMobiEventSim_nonzeroinitial.pkml"
+# mwf <- MeanModelWorkflow$new(simulationFile = simFilePath)
+# mwf$setMeanModelSimulationSettings()
+# mwf$setMeanModelPKParameterSettings()
+# mwf$setMeanModelSensitivityAnalysisSettings()
+# mwf$runWorkflow()
+# print(mwf$meanModelSimulation$generatedResultFileNames)
+# print(mwf$meanModelPKParameters$generatedResultFileNames)
+# print(mwf$meanModelSensitivityAnalysis$generatedResultFileNames)
 
 
-mmm$calculateMeanModelPKParameters(userDefinedPKFunctions = udPKFunctionArray, savePKAnalysis = TRUE)
+# # MULTI CORE SA
+setwd("C:/Users/ahamadeh/Dropbox/rproject/workflow")
+simFilePath <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/individualPksimSim.pkml"
+mwf <- MeanModelWorkflow$new(simulationFile = simFilePath)
+mwf$setMeanModelSimulationSettings()
+mwf$setMeanModelPKParameterSettings()
+mwf$setMeanModelSensitivityAnalysisSettings(numberOfCores = 4)
+mwf$runWorkflow()
+print(mwf$meanModelSimulation$generatedResultFileNames)
+print(mwf$meanModelPKParameters$generatedResultFileNames)
+print(mwf$meanModelSensitivityAnalysis$generatedResultFileNames)
+
+tictoc::toc()

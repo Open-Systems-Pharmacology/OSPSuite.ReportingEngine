@@ -125,3 +125,35 @@ removeForbiddenLetters <- function(text, forbiddenLetters = "[[:punct:]]", repla
     x = text
   )
 }
+
+#' @title generateResultFileNames
+#' @return A list of filenames to be output by each core
+#' @description
+#' #Generate a listcontaining names of CSV result files that will be output by each corein parallel computation
+#' @export
+generateResultFileNames <- function(numberOfCores, folderName, fileName, separator = "-", extension = ".csv") {
+  allResultsFileNames <- sapply(
+    X = 1:numberOfCores, function(x, folderName, fileName) {
+      return(file.path(folderName, paste0(fileName, separator, x, extension)))
+    },
+    folderName = folderName,
+    fileName = fileName,
+    USE.NAMES = FALSE
+  )
+  return(allResultsFileNames)
+}
+
+
+#' @title createFolder
+#' @param folderName Path of folder to be created
+#' @description
+#' Create a folder with path folderName and log in logDebug
+#' @export
+createFolder <- function(folderName,printConsole = FALSE){
+  dir.create(folderName)
+  logDebug(message = paste0(folderName, " was successfully created"), printConsole = printConsole)
+}
+
+
+
+
