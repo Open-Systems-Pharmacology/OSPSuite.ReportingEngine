@@ -5,7 +5,7 @@
 #' @param parametersToPerturb paths to parameters to perturb in sensitivity analysis
 #' @param popFilePath path to the population data file
 #' @param individualID ID of individual in population data file for whom to perform sensitivity analysis
-#' @param numberOfCores is the number of cores over which to parallelize the sensitivity analysis
+#' @param numberOfCores number of cores over which to parallelize the sensitivity analysis
 #' @param resultsFileFolder path to population sensitivity analysis results CSV files
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
 #' @return SA results for individual or population
