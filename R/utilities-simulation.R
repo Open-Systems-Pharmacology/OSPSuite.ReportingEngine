@@ -1,6 +1,6 @@
 #' @title simulateModel
 #' @description Simulate model, either for an individual or for a given population.  Calculate and save PK parameters as an option.
-#' @param simFilePath path to simulation file
+#' @param simFilePath path to pkml model file
 #' @param popDataFilePath path to the population data file
 #' @param resultsFilePath path to simulation results CSV files
 #' @return Simulation results for individual or population
@@ -28,7 +28,7 @@ simulateModel <- function(simFilePath,
 #' @description Spawn cores, divide population among cores, run population simulation on cores, save results as CSV.
 #' @param numberOfCores number of cores over which to parallelize the population simulation
 #' @param inputFolderName path to folder storing pkml and population data files for the simulation
-#' @param simulationFileName name of simulation pkml file
+#' @param simulationFileName name of pkml model file
 #' @param populationFileName name of population data CSV file
 #' @param resultsFileFolder path to population simulation results CSV files
 #' @param resultsFileName root name of population simulation results CSV files
