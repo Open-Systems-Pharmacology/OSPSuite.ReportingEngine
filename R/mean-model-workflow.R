@@ -303,7 +303,7 @@ MeanModelWorkflow <- R6::R6Class(
         # for (simulationSet in self$simulationSets){}
         if (self$meanModelSimulation$validateInput()) {
           logInfo(message = "Starting mean model simulation")
-          createFolder( set$simulationResultsFolder )
+          createFolder(set$simulationResultsFolder)
           set$simulationResultFileNames <- simulateModel(
             simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
             resultsFilePath = file.path(set$simulationResultsFolder, defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName))

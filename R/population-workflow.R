@@ -102,19 +102,19 @@ PopulationWorkflow <- R6::R6Class(
                                              output = NULL,
                                              settings = NULL,
                                              active = TRUE,
-                                             message = NULL#,
+                                             message = NULL # ,
                                              # simulationFilePath = file.path(self$inputFolder, paste0(self$simulation, ".pkml")),
                                              # simulationResultFilePaths = self$populationSimulation$generatedResultFileNames,
                                              # pkParametersToEvaluate = NULL,
                                              # userDefinedPKFunctions = NULL,
                                              # pkParameterResultsFilePath = file.path(self$pkParametersFolder, "populationPKParameters.csv")
-                                             ) {
+    ) {
       self$populationPKParameters <- CalculatePKParametersTask$new(
         input = input,
         output = output,
         settings = settings,
         active = active,
-        message = message %||% "Calculate PK parameters for population"#,
+        message = message %||% "Calculate PK parameters for population" # ,
         # simulationFilePath = simulationFilePath,
         # simulationResultFilePaths = simulationResultFilePaths,
         # pkParametersToEvaluate = pkParametersToEvaluate,
@@ -142,13 +142,13 @@ PopulationWorkflow <- R6::R6Class(
                                                      output = NULL,
                                                      settings = NULL,
                                                      active = TRUE,
-                                                     message = NULL){
+                                                     message = NULL) {
       self$populationSensitivityAnalysis <- SensitivityAnalysisTask$new(
         input = input,
         output = output,
         settings = settings,
         active = active,
-        message = message %||% "Sensitivity analysis for population"#,
+        message = message %||% "Sensitivity analysis for population" # ,
         # simulationFilePath = simulationFilePath,
         # simulationResultFilePaths = simulationResultFilePaths,
         # pkParametersToEvaluate = pkParametersToEvaluate,
@@ -320,7 +320,7 @@ PopulationWorkflow <- R6::R6Class(
         if (self$populationSimulation$validateInput()) {
           if (self$populationSimulation$numberOfCores == 1) {
             logInfo(message = "Starting population simulation")
-            createFolder( set$simulationResultsFolder )
+            createFolder(set$simulationResultsFolder)
             resultsFilePath <- file.path(set$simulationResultsFolder, defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName))
             simulateModel(
               simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
@@ -331,14 +331,14 @@ PopulationWorkflow <- R6::R6Class(
           }
           else if (self$populationSimulation$numberOfCores > 1) {
             logInfo(message = "Starting parallel population simulation")
-            createFolder( set$simulationResultsFolder )
+            createFolder(set$simulationResultsFolder)
             set$simulationResultFileNames <- runParallelPopulationSimulation(
               numberOfCores = self$populationSimulation$numberOfCores,
               inputFolderName = set$inputFilesFolder,
               simulationFileName = set$simulationSet$simulationName,
               populationFileName = set$simulationSet$populationName,
               resultsFolderName = set$simulationResultsFolder,
-              resultsFileName = trimFileName( defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName) , extension = "csv" )
+              resultsFileName = trimFileName(defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName), extension = "csv")
             )
           }
         }
@@ -348,11 +348,11 @@ PopulationWorkflow <- R6::R6Class(
       if (self$populationPKParameters$active) {
         if (self$populationPKParameters$validateInput()) {
           print("Starting PK parameter calculation")
-          createFolder( set$pkAnalysisResultsFolder )
+          createFolder(set$pkAnalysisResultsFolder)
           set$pkAnalysisResultsFileNames <- calculatePKParameters(
             simulationFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
             simulationResultFilePaths = set$simulationResultFileNames,
-            pkParameterResultsFilePath = file.path(set$pkAnalysisResultsFolder,defaultFileNames$pkAnalysisResultsFile(set$simulationSet$simulationSetName))
+            pkParameterResultsFilePath = file.path(set$pkAnalysisResultsFolder, defaultFileNames$pkAnalysisResultsFile(set$simulationSet$simulationSetName))
           )
         }
       }
@@ -361,15 +361,16 @@ PopulationWorkflow <- R6::R6Class(
       if (self$populationSensitivityAnalysis$active) {
         if (self$populationSensitivityAnalysis$validateInput()) {
           print("Starting population sensitivity analysis")
-          createFolder( set$sensitivityAnalysisResultsFolder )
-          set$sensitivityAnalysisResultsFileNames <-  populationSensitivityAnalysis(
+          createFolder(set$sensitivityAnalysisResultsFolder)
+          set$sensitivityAnalysisResultsFileNames <- populationSensitivityAnalysis(
             simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
             popDataFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$populationName, ".csv")),
-            pkParameterResultsFilePath = file.path(set$pkAnalysisResultsFolder,defaultFileNames$pkAnalysisResultsFile(set$simulationSet$simulationSetName)),
+            pkParameterResultsFilePath = file.path(set$pkAnalysisResultsFolder, defaultFileNames$pkAnalysisResultsFile(set$simulationSet$simulationSetName)),
             resultsFileFolder = set$sensitivityAnalysisResultsFolder,
-            resultsFileName = trimFileName( defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName) , extension = "csv" ),
+            resultsFileName = trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName), extension = "csv"),
             quantileVec = self$populationSensitivityAnalysis$quantileVec,
-            numberOfCores = self$populationSensitivityAnalysis$numberOfCores)
+            numberOfCores = self$populationSensitivityAnalysis$numberOfCores
+          )
         }
       }
 

@@ -27,19 +27,8 @@ CalculatePKParametersTask <- R6::R6Class(
     #' @param generatedResultFileNames name of files where PK parameters are saved
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `CalculatePKParametersTask` object
-    initialize = function(
-                          # simulationFilePath,
-                          # simulationResultFilePaths,
-                          # pkParametersToEvaluate = NULL,
-                          # userDefinedPKFunctions = NULL,
-                          # pkParameterResultsFilePath = file.path(getwd(), "pkParameters.csv"),
-                          ...) {
+    initialize = function(...) {
       super$initialize(...)
-      # self$simulationFilePath <- simulationFilePath
-      # self$simulationResultFilePaths <- simulationResultFilePaths
-      # self$pkParametersToEvaluate <- pkParametersToEvaluate
-      # self$userDefinedPKFunctions <- userDefinedPKFunctions
-      # self$pkParameterResultsFilePath <- pkParameterResultsFilePath
     }
   )
 )

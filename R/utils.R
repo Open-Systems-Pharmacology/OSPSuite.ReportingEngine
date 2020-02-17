@@ -149,11 +149,7 @@ generateResultFileNames <- function(numberOfCores, folderName, fileName, separat
 #' @description
 #' Create a folder with path folderName and log in logDebug
 #' @export
-createFolder <- function(folderName,printConsole = FALSE){
+createFolder <- function(folderName, printConsole = FALSE) {
   dir.create(folderName)
   logDebug(message = paste0(folderName, " was successfully created"), printConsole = printConsole)
 }
-
-
-
-
