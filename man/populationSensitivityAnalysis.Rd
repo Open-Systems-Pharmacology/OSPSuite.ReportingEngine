@@ -10,7 +10,7 @@ populationSensitivityAnalysis(
   pkParameterResultsFilePath,
   resultsFileFolder,
   resultsFileName,
-  fileNamesIndex = "sensitivityAnalysesFileIndex",
+  popSAResultsIndexFile = "sensitivityAnalysesResultsIndexFile",
   quantileVec = c(0.05, 0.5, 0.95),
   numberOfCores = 1
 )
@@ -26,7 +26,7 @@ populationSensitivityAnalysis(
 
 \item{resultsFileName}{root name of sensitivity analysis results CSV files}
 
-\item{fileNamesIndex}{Names of CSV file containing index of sensitivity analysis CSV files}
+\item{popSAResultsIndexFile}{Names of CSV file containing index of sensitivity analysis CSV files}
 
 \item{quantileVec}{vector of quantiles in (0,1).  For each output and pk parameter, there will be a distribution of pk parameter values for the population.
 The individuals yielding pk parameters closest to these quantiles will be selected for sensitivity analysis.  Default is (0.05,0.5,0.95)}

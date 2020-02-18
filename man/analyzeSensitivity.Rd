@@ -14,6 +14,21 @@ analyzeSensitivity(
   resultsFileName = "sensitivityAnalysisResults"
 )
 }
+\arguments{
+\item{simFilePath}{path to simulation file}
+
+\item{parametersToPerturb}{paths to parameters to perturb in sensitivity analysis}
+
+\item{popFilePath}{path to the population data file}
+
+\item{individualID}{ID of individual in population data file for whom to perform sensitivity analysis}
+
+\item{numberOfCores}{number of cores over which to parallelize the sensitivity analysis}
+
+\item{resultsFileFolder}{path to population sensitivity analysis results CSV files}
+
+\item{resultsFileName}{root name of population sensitivity analysis results CSV files}
+}
 \value{
 SA results for individual or population
 }

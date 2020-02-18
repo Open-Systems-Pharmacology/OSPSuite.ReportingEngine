@@ -13,8 +13,21 @@ individualSensitivityAnalysis(
   resultsFileName = resultsFileName
 )
 }
+\arguments{
+\item{simFilePath}{path to simulation file}
+
+\item{parametersToPerturb}{paths to parameters to perturb in sensitivity analysis}
+
+\item{individualParameters}{is an object storing an individual's parameters, obtained from a population object's getParameterValuesForIndividual() function.}
+
+\item{numberOfCores}{is the number of cores over which to parallelize the sensitivity analysis}
+
+\item{resultsFileFolder}{path to population sensitivity analysis results CSV files}
+
+\item{resultsFileName}{root name of population sensitivity analysis results CSV files}
+}
 \value{
-SA results for individual or population
+allResultsFileNames, the paths to CSV files containing results of sensitivity analysis
 }
 \description{
 Run SA for an individual, possibly after modifying the simulation using individualParameters.  Determine whether to run SA for on single core or in parallel.

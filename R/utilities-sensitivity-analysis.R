@@ -39,7 +39,7 @@ analyzeSensitivity <- function(simFilePath,
         individualParameters = popObject$getParameterValuesForIndividual(individualId = ind),
         numberOfCores = numberOfCores,
         resultsFileFolder = resultsFileFolder,
-        resultsFileName = paste(resultsFileName, "IndividualId", ind,sep="-")
+        resultsFileName = getIndividualSAResultsFileName(ind,resultsFileName) # resultsFileName = paste(resultsFileName, "IndividualId", ind,sep="-")
       )
       allResultsFileNames <- c(allResultsFileNames, resFile)
     }
@@ -124,7 +124,6 @@ individualSensitivityAnalysis <- function(simFilePath,
 #' @param resultsFileFolder path to population sensitivity analysis results CSV files
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
 #' @return Simulation results for population
-#' @export
 #' @import ospsuite
 runParallelSensitivityAnalysis <- function(simFilePath,
                                            parametersToPerturb,
@@ -188,8 +187,8 @@ runParallelSensitivityAnalysis <- function(simFilePath,
 #' @param resultsFilePath Path to file storing results of sensitivity analysis
 #' @param numberOfCoresToUse Number of cores to use on local node.  This parameter should be should be set to 1 when parallelizing over many nodes.
 #' @return Save sensitivity analysis results as CSV in path given by resultsFilePath.
-#' @export
 #' @import ospsuite
+#' @export
 analyzeCoreSensitivity <- function(simulation,
                                    parametersToPerturb = NULL,
                                    totalSensitivityThreshold = 1,
@@ -225,7 +224,6 @@ analyzeCoreSensitivity <- function(simulation,
 #' @description Read PK parameter results into a dataframe and set QuantityPath,Parameter and Unit columns as factors
 #' @param pkParameterResultsFilePath Path to PK parameter results CSV file
 #' @return pkResultsDataFrame, a dataframe storing the contents of the CSV file with path pkParameterResultsFilePath
-#' @export
 #' @import ospsuite
 getPKResultsDataFrame <- function(pkParameterResultsFilePath) {
   pkResultsDataFrame <- read.csv(pkParameterResultsFilePath, encoding = "UTF-8", check.names = FALSE)
@@ -243,7 +241,6 @@ getPKResultsDataFrame <- function(pkParameterResultsFilePath) {
 #' @description Find IDs of individuals whose PK analysis results closest to quantiles given by vector of quantiles quantileVec
 #' @param pkAnalysisResultsDataframe Dataframe storing the PK analysis results for multiple individuals for a single PK parameter and single output path
 #' @return ids, IDs of individuals whose PK analysis results closest to quantiles given by vector of quantiles quantileVec
-#' @export
 getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec = c(0.05, 0.5, 0.95)) {
   rowNums <- NULL
   for (n in 1:length(quantileVec)) {
@@ -297,7 +294,6 @@ populationSensitivityAnalysis <- function(simFilePath,
 #' @param resultsFileFolder path to population sensitivity analysis results CSV files
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
 #' @param popSAResultsIndexFile name of CSV file that will store index that identifies name of sensitivity analysis results file for each sensitivity analysis run
-#' @export
 getSAFileIndex <- function(pkParameterResultsFilePath,
                            quantileVec,
                            resultsFileFolder,
@@ -331,8 +327,19 @@ getSAFileIndex <- function(pkParameterResultsFilePath,
     }
   }
 
-  filenamesColumn <- paste(resultsFileName, "IndividualId", paste0(individualIdColumn, ".csv"), sep = "-")
+  filenamesColumn <-  paste0(sapply(X = individualIdColumn,FUN = getIndividualSAResultsFileName,resultsFileName),".csv")
+
+  #filenamesColumn <- paste(resultsFileName, "IndividualId", paste0(individualIdColumn, ".csv"), sep = "-")
   sensitivityAnalysesResultsIndexFileDF <- data.frame("Outputs" = outputColumn, "pkParameters" = pkParameterColumn, "Quantile" = quantileColumn, "Value" = valuesColumn, "Unit" = unitsColumn,  "IndividualId" = individualIdColumn, "Filename" = filenamesColumn)
   write.csv(x = sensitivityAnalysesResultsIndexFileDF, file = file.path(resultsFileFolder, paste0(popSAResultsIndexFile, ".csv")))
   return(sensitivityAnalysesResultsIndexFileDF)
+}
+
+
+#' @title getIndividualSAResultsFileName
+#' @description Function to build name of inidividual SA results file
+#' @param resultsFileName root name of population sensitivity analysis results CSV files
+#' @param individualId id of individual
+getIndividualSAResultsFileName <- function(individualId,resultsFileName){
+  return(paste(resultsFileName,"IndividualId",individualId,sep="-"))
 }

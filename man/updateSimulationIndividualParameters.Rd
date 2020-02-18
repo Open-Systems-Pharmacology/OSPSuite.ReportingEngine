@@ -6,7 +6,11 @@
 \usage{
 updateSimulationIndividualParameters(simulation, individualParameters = NULL)
 }
+\arguments{
+\item{simulation}{is the simulation object to be updated}
+
+\item{individualParameters}{is an object storing an individual's parameters, obtained from a population object's getParameterValuesForIndividual() function.}
+}
 \description{
-Update individual parameters with parameters in individualParameters,
-individualParameters is obtained from a population object's getParameterValuesForIndividual() function.
+Update simulation with parameters from individualParameters
 }

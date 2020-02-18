@@ -12,8 +12,19 @@ calculatePKParameters(
   pkParameterResultsFilePath
 )
 }
+\arguments{
+\item{simulationFilePath}{path to pkml model file}
+
+\item{simulationResultFilePaths}{path to simulation CSV results files}
+
+\item{pkParametersToEvaluate}{vector of PK parameters to evaluate}
+
+\item{userDefinedPKFunctions}{vector of userDefinedPKFunction objects}
+
+\item{pkParameterResultsFilePath}{path to PK analysis result file}
+}
 \value{
-generatedResultFileNames
+pkParameterResultsFilePath, paths to pk results file CSV
 }
 \description{
 Calculate PK parameters from simulated time profiles
