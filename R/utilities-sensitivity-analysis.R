@@ -39,7 +39,7 @@ analyzeSensitivity <- function(simFilePath,
         individualParameters = popObject$getParameterValuesForIndividual(individualId = ind),
         numberOfCores = numberOfCores,
         resultsFileFolder = resultsFileFolder,
-        resultsFileName = getIndividualSAResultsFileName(ind,resultsFileName) # resultsFileName = paste(resultsFileName, "IndividualId", ind,sep="-")
+        resultsFileName = getIndividualSAResultsFileName(ind,resultsFileName)
       )
       allResultsFileNames <- c(allResultsFileNames, resFile)
     }
@@ -174,7 +174,6 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   exportSensitivityAnalysisResultsToCSV(results = allSAResults, filePath = combinedFilePath)
   file.remove(allResultsFileNames)
   return(combinedFilePath)
-  # return(allResultsFileNames)
 }
 
 #' @title analyzeCoreSensitivity
@@ -328,8 +327,6 @@ getSAFileIndex <- function(pkParameterResultsFilePath,
   }
 
   filenamesColumn <-  paste0(sapply(X = individualIdColumn,FUN = getIndividualSAResultsFileName,resultsFileName),".csv")
-
-  #filenamesColumn <- paste(resultsFileName, "IndividualId", paste0(individualIdColumn, ".csv"), sep = "-")
   sensitivityAnalysesResultsIndexFileDF <- data.frame("Outputs" = outputColumn, "pkParameters" = pkParameterColumn, "Quantile" = quantileColumn, "Value" = valuesColumn, "Unit" = unitsColumn,  "IndividualId" = individualIdColumn, "Filename" = filenamesColumn)
   write.csv(x = sensitivityAnalysesResultsIndexFileDF, file = file.path(resultsFileFolder, paste0(popSAResultsIndexFile, ".csv")))
   return(sensitivityAnalysesResultsIndexFileDF)
