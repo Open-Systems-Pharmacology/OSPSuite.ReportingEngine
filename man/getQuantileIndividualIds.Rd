@@ -4,10 +4,7 @@
 \alias{getQuantileIndividualIds}
 \title{getQuantileIndividualIds}
 \usage{
-getQuantileIndividualIds(
-  pkAnalysisResultsDataframe,
-  quantileVec = c(0.05, 0.5, 0.95)
-)
+getQuantileIndividualIds(pkAnalysisResultsDataframe, quantileVec)
 }
 \arguments{
 \item{pkAnalysisResultsDataframe}{Dataframe storing the PK analysis results for multiple individuals for a single PK parameter and single output path}

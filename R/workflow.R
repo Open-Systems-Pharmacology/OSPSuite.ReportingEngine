@@ -68,51 +68,14 @@ Workflow <- R6::R6Class(
       createFolder(self$resultsFolder)
       createFolder(self$figuresFolder)
 
-
-
-      # dir.create(self$workflowFolder)
-      # logDebug(message = paste0(self$workflowFolder, " was successfully created"), printConsole = FALSE)
-      # dir.create(self$reportFolder)
-      # logDebug(message = paste0(self$reportFolder, " was successfully created"), printConsole = FALSE)
-      # dir.create(self$resultsFolder)
-      # logDebug(message = paste0(self$resultsFolder, " was successfully created"), printConsole = FALSE)
-      # dir.create(self$figuresFolder)
-      # logDebug(message = paste0(self$figuresFolder, " was successfully created"), printConsole = FALSE)
-
-      # self$simulationSets <- simulationSets
-
       self$simulationStructures <- list()
       # Check of Workflow inputs
-      for (n in 1:length(simulationSets)) {
-        self$simulationStructures[[n]] <- SimulationStructure$new(
-          simulationSet = simulationSets[[n]],
+      for (i in 1:length(simulationSets)) {
+        self$simulationStructures[[i]] <- SimulationStructure$new(
+          simulationSet = simulationSets[[i]],
           workflowResultsFolder = self$resultsFolder
         )
-        # TO DO: include simulationFiles as simulationSets
-        # validateIsOfType(simulationSet, "MeanModelSet")
-        # validateIsOfType(observedDataFile, "character", nullAllowed = TRUE)
-        # validateIsOfType(observedMetaDataFile, "character", nullAllowed = TRUE)
-
-
-
-        #        simulationSetFolder <- file.path(self$resultsFolder, self$simulationSets[[n]]$simulationSetName %||% paste0("Set", n))
-        #       dir.create(simulationSetFolder)
-
-        #   self$simulationSets[[n]]$createDirectories(rootDirectory = simulationSetFolder)
-        #  self$simulationSets[[n]]$copyInputFiles()
       }
-
-
-
-      # if (!is.null(observedDataFile)) {
-      #   data <- read.csv(observedDataFile)
-      #   metaData <- read.csv(observedMetaDataFile)
-      #
-      #   self$observedData <- list(
-      #     "data" = data,
-      #     "metaData" = metaData
-      #   )
-      # }
     }
   )
 )

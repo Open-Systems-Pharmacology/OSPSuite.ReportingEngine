@@ -178,7 +178,10 @@ Define population Sensitivity Analysis `task` settings
   output = NULL,
   settings = NULL,
   active = TRUE,
-  message = NULL
+  message = NULL,
+  variationRange = 0.1,
+  numberOfCores = 1,
+  quantileVec = c(0.05, 0.5, 0.95)
 )}\if{html}{\out{</div>}}
 }
 
@@ -197,6 +200,10 @@ Default value is `TRUE`}
 \item{\code{message}}{title of the `task`.
 Default value indicates `task` name.}
 
+\item{\code{variationRange}}{TO DO}
+
+\item{\code{numberOfCores}}{TO DO}
+
 \item{\code{inputFolderName}}{TO DO}
 
 \item{\code{simulationFileName}}{TO DO}
@@ -204,8 +211,6 @@ Default value indicates `task` name.}
 \item{\code{resultsFolderName}}{TO DO}
 
 \item{\code{resultsFileName}}{TO DO}
-
-\item{\code{numberOfCores}}{TO DO}
 }
 \if{html}{\out{</div>}}
 }

@@ -8,6 +8,7 @@ individualSensitivityAnalysis(
   simFilePath,
   parametersToPerturb = NULL,
   individualParameters,
+  variationRange,
   numberOfCores = 1,
   resultsFileFolder = resultsFileFolder,
   resultsFileName = resultsFileName
@@ -19,6 +20,8 @@ individualSensitivityAnalysis(
 \item{parametersToPerturb}{paths to parameters to perturb in sensitivity analysis}
 
 \item{individualParameters}{is an object storing an individual's parameters, obtained from a population object's getParameterValuesForIndividual() function.}
+
+\item{variationRange}{variation range for sensitivity analysis}
 
 \item{numberOfCores}{is the number of cores over which to parallelize the sensitivity analysis}
 

@@ -172,6 +172,7 @@ Define mean Model Sensitivity Analysis `task` settings
   settings = NULL,
   active = TRUE,
   message = NULL,
+  variationRange = 0.1,
   numberOfCores = 1
 )}\if{html}{\out{</div>}}
 }
@@ -190,6 +191,8 @@ Default value is `TRUE`}
 
 \item{\code{message}}{title of the `task`.
 Default value indicates `task` name.}
+
+\item{\code{variationRange}}{TO DO}
 
 \item{\code{numberOfCores}}{TO DO}
 

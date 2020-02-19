@@ -7,7 +7,7 @@
 analyzeCoreSensitivity(
   simulation,
   parametersToPerturb = NULL,
-  totalSensitivityThreshold = 1,
+  variationRange = 0.1,
   resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv"),
   numberOfCoresToUse = NULL
 )
@@ -17,9 +17,7 @@ analyzeCoreSensitivity(
 
 \item{parametersToPerturb}{paths of parameters to be analyzed}
 
-\item{totalSensitivityThreshold}{numeric value between 0 and 1.
-Close to 0, only the most sensitive output paths are returned.
-Close to 1, almost all the output paths are returned.}
+\item{variationRange}{variation range for sensitivity analysis}
 
 \item{resultsFilePath}{Path to file storing results of sensitivity analysis}
 

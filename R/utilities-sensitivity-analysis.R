@@ -20,17 +20,11 @@ runSensitivity <- function(simFilePath,
                            numberOfCores = 1,
                            resultsFileFolder,
                            resultsFileName = "sensitivityAnalysisResults") {
-
-
   # If there is a population file and individualId then for each individual perform SA
   # If there is a population file and no individualId then do SA for entire population
   # If there is no population file and individualId then do SA for mean model
   # If there is no population file and no individualId then do SA for mean model.
-
-
-
-  # Determine if SA is to be done for a single individual or more
-  if (!is.null(popFilePath)) {
+  if (!is.null(popFilePath)) {   # Determine if SA is to be done for a single individual or more
     popObject <- loadPopulation(popFilePath)
     individualSeq <- individualId %||% seq(1, popObject$count)
     allResultsFileNames <- NULL
@@ -83,15 +77,11 @@ individualSensitivityAnalysis <- function(simFilePath,
                                           resultsFileName = resultsFileName) {
   # Load simulation to determine number of perturbation parameters
   sim <- loadSimulation(simFilePath)
-
-  # If no perturbation parameters specified, perturb all parameters
-  if (is.null(parametersToPerturb)) {
+  if (is.null(parametersToPerturb)) {   # If no perturbation parameters specified, perturb all parameters
     parametersToPerturb <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
   }
   totalNumberParameters <- length(parametersToPerturb)
-
-  # In case there are more cores specified in numberOfCores than there are parameters, ensure at least one parameter per spawned core
-  numberOfCores <- min(numberOfCores, totalNumberParameters)
+  numberOfCores <- min(numberOfCores, totalNumberParameters)   # In case there are more cores specified in numberOfCores than there are parameters, ensure at least one parameter per spawned core
   if (totalNumberParameters == 0) {
     stop("No variable parameters found for sensitivity analysis.")
   }
@@ -140,12 +130,10 @@ runParallelSensitivityAnalysis <- function(simFilePath,
                                            resultsFileFolder,
                                            resultsFileName) {
   totalNumberParameters <- length(parametersToPerturb)
-
   # Parallelizing among a total of min(numberOfCores,totalNumberParameters) cores
   seqVec <- (1 + ((1:totalNumberParameters) %% numberOfCores)) # Create a vector, of length totalNumberParameters, consisting of a repeating sequence of integers from 1 to numberOfCores
   sortVec <- sort(seqVec) # Sort seqVec to obtain an concatenated array of repeated integers, with the repeated integers ranging from from 1 to numberOfCores.  These are the core numbers to which each parameter will be assigned.
   listSplitParameters <- split(x = parametersToPerturb, sortVec) # Split the parameters of the model according to sortVec
-  # listSplitParameters <- split(x = parametersToPerturb, sort(1+( (1:length(totalNumberParameters)) %% numberOfCores))  )
   Rmpi::mpi.spawn.Rslaves(nslaves = numberOfCores)
   Rmpi::mpi.bcast.cmd(library("ospsuite"))
   Rmpi::mpi.bcast.cmd(library("ospsuite.reportingengine"))
@@ -154,21 +142,10 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   Rmpi::mpi.bcast.Robj2slave(obj = resultsFileFolder)
   Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
   Rmpi::mpi.bcast.Robj2slave(obj = variationRange)
-
-  # Generate a listcontaining names of SA CSV result files that will be output by each core
-  allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFileFolder, fileName = resultsFileName)
-
-
+  allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFileFolder, fileName = resultsFileName)   # Generate a listcontaining names of SA CSV result files that will be output by each core
   Rmpi::mpi.bcast.Robj2slave(obj = allResultsFileNames)
-
-  # Load simulation on each core
-  Rmpi::mpi.bcast.cmd(sim <- loadSimulation(simFilePath))
-
-  # Update simulation with individual parameters
-  Rmpi::mpi.bcast.cmd(updateSimulationIndividualParameters(simulation = sim, individualParameters))
-
-
-
+  Rmpi::mpi.bcast.cmd(sim <- loadSimulation(simFilePath))   # Load simulation on each core
+  Rmpi::mpi.bcast.cmd(updateSimulationIndividualParameters(simulation = sim, individualParameters))   # Update simulation with individual parameters
   Rmpi::mpi.remote.exec(analyzeCoreSensitivity(
     simulation = sim,
     parametersToPerturb = listSplitParameters[[mpi.comm.rank()]],
@@ -177,7 +154,6 @@ runParallelSensitivityAnalysis <- function(simFilePath,
     numberOfCoresToUse = 1 # Number of local cores, set to 1 when parallelizing.
   ))
   Rmpi::mpi.close.Rslaves()
-
   allSAResults <- importSensitivityAnalysisResultsFromCSV(simulation = loadSimulation(simFilePath), filePaths = allResultsFileNames)
   combinedFilePath <- file.path(resultsFileFolder, paste0(resultsFileName, ".csv"))
   exportSensitivityAnalysisResultsToCSV(results = allSAResults, filePath = combinedFilePath)
@@ -194,17 +170,14 @@ runParallelSensitivityAnalysis <- function(simFilePath,
 #' @param numberOfCoresToUse Number of cores to use on local node.  This parameter should be should be set to 1 when parallelizing over many nodes.
 #' @return Save sensitivity analysis results as CSV in path given by resultsFilePath.
 #' @import ospsuite
+#' @export
 analyzeCoreSensitivity <- function(simulation,
                                    parametersToPerturb = NULL,
                                    variationRange = 0.1,
                                    resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv"),
                                    numberOfCoresToUse = NULL) {
- # sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation, variationRange = variationRange)
-  sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation)
+  sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation, variationRange = variationRange)
   sensitivityAnalysis$addParameterPaths(parametersToPerturb)
-
-
-
   if (is.null(numberOfCoresToUse)) {
     sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(showProgress = FALSE)
   }
@@ -215,12 +188,12 @@ analyzeCoreSensitivity <- function(simulation,
       # The numberOfCoresToUse input in the SensitivityAnalysisRunOptions initializer should not be set to NULL.
     )
   }
-  print("Running sensitivity analysis...")
+  logDebug(message = "Running sensitivity analysis...", printConsole = TRUE)
   sensitivityAnalysisResults <- runSensitivityAnalysis(
     sensitivityAnalysis = sensitivityAnalysis,
     sensitivityAnalysisRunOptions = sensitivityAnalysisRunOptions
   )
-  print("...done")
+  logDebug(message = "...done", printConsole = TRUE)
   exportSensitivityAnalysisResultsToCSV(results = sensitivityAnalysisResults, resultsFilePath)
 }
 
@@ -249,8 +222,8 @@ getPKResultsDataFrame <- function(pkParameterResultsFilePath) {
 #' @return ids, IDs of individuals whose PK analysis results closest to quantiles given by vector of quantiles quantileVec
 getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
   rowNums <- NULL
-  for (n in 1:length(quantileVec)) {
-    rowNums[n] <- which.min(abs(pkAnalysisResultsDataframe$Value - quantile(pkAnalysisResultsDataframe$Value, quantileVec[n])))
+  for (i in 1:length(quantileVec)) {
+    rowNums[i] <- which.min(abs(pkAnalysisResultsDataframe$Value - quantile(pkAnalysisResultsDataframe$Value, quantileVec[i])))
   }
   ids <- as.numeric(pkAnalysisResultsDataframe$IndividualId[rowNums])
   values <- pkAnalysisResultsDataframe$Value[rowNums]
@@ -281,9 +254,7 @@ populationSensitivityAnalysis <- function(simFilePath,
                                           quantileVec,
                                           numberOfCores) {
   sensitivityAnalysesResultsIndexFileDF <- getSAFileIndex(pkParameterResultsFilePath, quantileVec, resultsFileFolder, resultsFileName, popSAResultsIndexFile)
-
   ids <- unique(sensitivityAnalysesResultsIndexFileDF$IndividualId)
-
   runSensitivity(simFilePath,
     parametersToPerturb = NULL,
     popFilePath = popDataFilePath,
@@ -311,31 +282,26 @@ getSAFileIndex <- function(pkParameterResultsFilePath,
   allPKResultsDataframe <- getPKResultsDataFrame(pkParameterResultsFilePath)
   outputs <- levels(allPKResultsDataframe$QuantityPath)
   pkParameters <- levels(allPKResultsDataframe$Parameter)
-  # pkParameters<- pkParameters[1:3]#### ONLY TO TEST SMALL PK PARAMETER SET - REMOVE THIS LINE EVENTUALLY!!!!!!!!!!!!!!!!!!!!
-
-
   outputColumn <- NULL
   pkParameterColumn <- NULL
   individualIdColumn <- NULL
   valuesColumn <- NULL
   unitsColumn <- NULL
   quantileColumn <- NULL
-
   for (output in outputs) {
     for (pkParameter in pkParameters) {
       singleOuputSinglePKDataframe <- allPKResultsDataframe[ allPKResultsDataframe["QuantityPath"] == output & allPKResultsDataframe["Parameter"] == pkParameter, ]
       quantileResults <- getQuantileIndividualIds(singleOuputSinglePKDataframe, quantileVec)
-      for (n in 1:length(quantileResults$ids)) {
+      for (i in 1:length(quantileResults$ids)) {
         outputColumn <- c(outputColumn, output)
         pkParameterColumn <- c(pkParameterColumn, pkParameter)
-        individualIdColumn <- c(individualIdColumn, quantileResults$ids[n])
-        valuesColumn <- c(valuesColumn, quantileResults$values[n])
-        unitsColumn <- c(unitsColumn, quantileResults$units[n])
-        quantileColumn <- c(quantileColumn, quantileVec[n])
+        individualIdColumn <- c(individualIdColumn, quantileResults$ids[i])
+        valuesColumn <- c(valuesColumn, quantileResults$values[i])
+        unitsColumn <- c(unitsColumn, quantileResults$units[i])
+        quantileColumn <- c(quantileColumn, quantileVec[i])
       }
     }
   }
-
   filenamesColumn <- paste0(sapply(X = individualIdColumn, FUN = getIndividualSAResultsFileName, resultsFileName), ".csv")
   sensitivityAnalysesResultsIndexFileDF <- data.frame("Outputs" = outputColumn, "pkParameters" = pkParameterColumn, "Quantile" = quantileColumn, "Value" = valuesColumn, "Unit" = unitsColumn, "IndividualId" = individualIdColumn, "Filename" = filenamesColumn)
   write.csv(x = sensitivityAnalysesResultsIndexFileDF, file = file.path(resultsFileFolder, paste0(popSAResultsIndexFile, ".csv")))
