@@ -12,15 +12,7 @@ R6 class for SensitivityAnalysisTask settings
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{inputFolderName}}{input folder}
-
-\item{\code{simulationFileName}}{name of simulation files}
-
-\item{\code{populationFileName}}{name of population files}
-
-\item{\code{resultsFolderName}}{name of folder where results are saved}
-
-\item{\code{resultsFileName}}{name of file where results are saved}
+\item{\code{variationRange}}{variation range for sensitivity analysis}
 
 \item{\code{numberOfCores}}{number of cores for parallel computation}
 
@@ -31,16 +23,6 @@ R6 class for SensitivityAnalysisTask settings
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
-\item{\code{inputFolderName}}{input folder}
-
-\item{\code{simulationFileName}}{name of simulation files}
-
-\item{\code{populationFileName}}{name of population files}
-
-\item{\code{resultsFolderName}}{name of folder where results are saved}
-
-\item{\code{resultsFileName}}{name of file where results are saved}
-
 \item{\code{generatedResultFileNames}}{name of files where PK parameters are saved}
 }
 \if{html}{\out{</div>}}
@@ -68,8 +50,9 @@ R6 class for SensitivityAnalysisTask settings
 Create a `SensitivityAnalysisTask` object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$new(
-  numberOfCores = 1,
-  quantileVec = c(0.05, 0.5, 0.95),
+  variationRange = NULL,
+  numberOfCores = NULL,
+  quantileVec = NULL,
   ...
 )}\if{html}{\out{</div>}}
 }
@@ -77,19 +60,11 @@ Create a `SensitivityAnalysisTask` object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{variationRange}}{variation range for sensitivity analysis}
+
 \item{\code{numberOfCores}}{number of cores for parallel computation}
 
 \item{\code{...}}{parameters inherited from R6 class `Task` object}
-
-\item{\code{inputFolderName}}{input folder}
-
-\item{\code{simulationFileName}}{name of simulation files}
-
-\item{\code{populationFileName}}{name of population files}
-
-\item{\code{resultsFolderName}}{name of folder where results are saved}
-
-\item{\code{resultsFileName}}{name of file where results are saved}
 
 \item{\code{generatedResultFileNames}}{name of files where PK parameters are saved}
 }

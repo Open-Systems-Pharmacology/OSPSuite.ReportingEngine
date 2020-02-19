@@ -4,39 +4,47 @@
 \alias{SimulationStructure}
 \title{SimulationStructure}
 \description{
-R6 class representing Reporting Engine generic Workflow
+R6 class representing that stores file structure (file names and paths) relating to a particular instance of a simulationSet object
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{reportingEngineInfo}}{R6 class object with relevant information about reporting engine}
+\item{\code{simulationSet:}}{the set for which the SimulationStructure object stores paths input and results}
 
-\item{\code{simulationSets}}{list of `MeanModelSet` R6 class objects}
+\item{\code{inputFilesFolder:}}{path to folder storing pkml and population data files for the simulationSet}
 
-\item{\code{observedData}}{list of observed `data` and `metaData`}
+\item{\code{simulationResultsFolder:}}{path to folder storing results of simulations}
 
-\item{\code{reportFolder}}{path where report and logs are saved}
+\item{\code{pkAnalysisResultsFolder:}}{path to folder storing results of pk analyses}
 
-\item{\code{resultsFolder}}{path where results are saved}
+\item{\code{sensitivityAnalysisResultsFolder:}}{path to folder storing results of sensitivity analyses}
 
-\item{\code{figuresFolder}}{path where figure are saved}
+\item{\code{simulationResultFileNames:}}{vector of names of CSV files storing simulation results}
+
+\item{\code{pkAnalysisResultsFileNames:}}{vector of names of CSV files storing results of pk analyses}
+
+\item{\code{sensitivityAnalysisResultsFileNames:}}{vector of names of CSV files storing results of sensitivity analyses}
 }
 \if{html}{\out{</div>}}
 }
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
-\item{\code{reportingEngineInfo}}{R6 class object with relevant information about reporting engine}
+\item{\code{simulationSet:}}{the set for which the SimulationStructure object stores paths input and results}
 
-\item{\code{simulationSets}}{list of `MeanModelSet` R6 class objects}
+\item{\code{inputFilesFolder:}}{path to folder storing pkml and population data files for the simulationSet}
 
-\item{\code{observedData}}{list of observed `data` and `metaData`}
+\item{\code{simulationResultsFolder:}}{path to folder storing results of simulations}
 
-\item{\code{reportFolder}}{path where report and logs are saved}
+\item{\code{pkAnalysisResultsFolder:}}{path to folder storing results of pk analyses}
 
-\item{\code{resultsFolder}}{path where results are saved}
+\item{\code{sensitivityAnalysisResultsFolder:}}{path to folder storing results of sensitivity analyses}
 
-\item{\code{figuresFolder}}{path where figure are saved}
+\item{\code{simulationResultFileNames:}}{vector of names of CSV files storing simulation results}
+
+\item{\code{pkAnalysisResultsFileNames:}}{vector of names of CSV files storing results of pk analyses}
+
+\item{\code{sensitivityAnalysisResultsFileNames:}}{vector of names of CSV files storing results of sensitivity analyses}
 }
 \if{html}{\out{</div>}}
 }

@@ -8,14 +8,28 @@ runParallelSensitivityAnalysis(
   simFilePath,
   parametersToPerturb,
   individualParameters,
+  variationRange,
   numberOfCores,
   resultsFileFolder,
   resultsFileName
 )
 }
+\arguments{
+\item{parametersToPerturb}{paths to parameters to perturb in sensitivity analysis}
+
+\item{individualParameters}{is an object storing an individual's parameters, obtained from a population object's getParameterValuesForIndividual() function.}
+
+\item{variationRange}{variation range for sensitivity analysis}
+
+\item{numberOfCores}{is the number of cores over which to parallelize the sensitivity analysis}
+
+\item{resultsFileFolder}{path to population sensitivity analysis results CSV files}
+
+\item{resultsFileName}{root name of population sensitivity analysis results CSV files}
+}
 \value{
 Simulation results for population
 }
 \description{
-Spawn cores, divide parameters among cores, run sensitivity analysis on cores, save results as CSV.
+Spawn cores, divide parameters among cores, run sensitivity analysis on cores for a single individual, save results as CSV.
 }

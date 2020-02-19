@@ -6,6 +6,13 @@
 \usage{
 simulateModel(simFilePath, popDataFilePath = NULL, resultsFilePath)
 }
+\arguments{
+\item{simFilePath}{path to pkml model file}
+
+\item{popDataFilePath}{path to the population data file}
+
+\item{resultsFilePath}{path to simulation results CSV files}
+}
 \value{
 Simulation results for individual or population
 }

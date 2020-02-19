@@ -63,20 +63,12 @@ MeanModelWorkflow <- R6::R6Class(
                                            settings = NULL,
                                            active = TRUE,
                                            message = NULL) {
-      #    inputFolderName = getwd(),
-      #     simulationFileName = self$simulations,
-      #     resultsFolderName = self$resultsFolder,
-      #     resultsFileName = "meanModelSimulation"
       self$meanModelSimulation <- SimulationTask$new(
         input = input,
         output = output,
         settings = settings,
         active = active,
-        message = message %||% "Simulate mean model" # ,
-        # inputFolderName = inputFolderName,
-        # simulationFileName = simulationFileName,
-        # resultsFolderName = resultsFolderName,
-        # resultsFileName = resultsFileName
+        message = message %||% "Simulate mean model"
       )
     },
 
@@ -100,23 +92,12 @@ MeanModelWorkflow <- R6::R6Class(
                                              settings = NULL,
                                              active = TRUE,
                                              message = NULL) {
-      # ,
-      # simulationFilePath = file.path(self$inputFolder, paste0(self$simulation, ".pkml")),
-      # simulationResultFilePaths = self$meanModelSimulation$generatedResultFileNames,
-      # pkParametersToEvaluate = NULL,
-      # userDefinedPKFunctions = NULL,
-      # pkParameterResultsFilePath = file.path(self$pkParametersFolder, "meanModelPKParameters.csv")) {
       self$meanModelPKParameters <- CalculatePKParametersTask$new(
         input = input,
         output = output,
         settings = settings,
         active = active,
-        message = message %||% "Calculate mean model PK parameters" # ,
-        # simulationFilePath = simulationFilePath,
-        # simulationResultFilePaths = simulationResultFilePaths,
-        # pkParametersToEvaluate = pkParametersToEvaluate,
-        # userDefinedPKFunctions = userDefinedPKFunctions,
-        # pkParameterResultsFilePath = pkParameterResultsFilePath
+        message = message %||% "Calculate mean model PK parameters"
       )
     },
 
@@ -133,6 +114,7 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param simulationFileName TO DO
     #' @param resultsFolderName TO DO
     #' @param resultsFileName TO DO
+    #' @param variationRange TO DO
     #' @param numberOfCores TO DO
     #' @return A new `Task` object
     meanModelSensitivityAnalysisSettings = function(input = NULL,
@@ -140,10 +122,7 @@ MeanModelWorkflow <- R6::R6Class(
                                                     settings = NULL,
                                                     active = TRUE,
                                                     message = NULL,
-                                                    # inputFolderName = self$inputFolder,
-                                                    # simulationFileName = self$simulation,
-                                                    # resultsFolderName = self$sensitivityFolder,
-                                                    # resultsFileName = "meanModelSensitivityAnalysis",
+                                                    variationRange = 0.1,
                                                     numberOfCores = 1) {
       self$meanModelSensitivityAnalysis <- SensitivityAnalysisTask$new(
         input = input,
@@ -151,10 +130,7 @@ MeanModelWorkflow <- R6::R6Class(
         settings = settings,
         active = active,
         message = message %||% "Sensitivity analysis for mean model",
-        # inputFolderName = inputFolderName,
-        # simulationFileName = simulationFileName,
-        # resultsFolderName = resultsFolderName,
-        # resultsFileName = resultsFileName,
+        variationRange = variationRange,
         numberOfCores = numberOfCores
       )
     },
@@ -327,8 +303,9 @@ MeanModelWorkflow <- R6::R6Class(
         if (self$meanModelSensitivityAnalysis$validateInput()) {
           logInfo(message = "Starting mean model sensitivity analysis")
           createFolder(set$sensitivityAnalysisResultsFolder)
-          set$sensitivityAnalysisResultsFileNames <- analyzeSensitivity(
+          set$sensitivityAnalysisResultsFileNames <- runSensitivity(
             simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
+            variationRange = self$meanModelSensitivityAnalysis$variationRange,
             resultsFileFolder = set$sensitivityAnalysisResultsFolder,
             resultsFileName = trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName), extension = "csv"),
             numberOfCores = self$meanModelSensitivityAnalysis$numberOfCores

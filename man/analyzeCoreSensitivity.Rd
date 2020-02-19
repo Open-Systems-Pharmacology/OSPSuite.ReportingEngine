@@ -7,7 +7,7 @@
 analyzeCoreSensitivity(
   simulation,
   parametersToPerturb = NULL,
-  totalSensitivityThreshold = 1,
+  variationRange = 0.1,
   resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv"),
   numberOfCoresToUse = NULL
 )
@@ -15,15 +15,17 @@ analyzeCoreSensitivity(
 \arguments{
 \item{simulation}{simulation class object}
 
-\item{totalSensitivityThreshold}{numeric value between 0 and 1.
-Close to 0, only the most sensitive output paths are returned.
-Close to 1, almost all the output paths are returned.}
+\item{parametersToPerturb}{paths of parameters to be analyzed}
 
-\item{pkParameterName}{name of parameter to be analyzed}
+\item{variationRange}{variation range for sensitivity analysis}
+
+\item{resultsFilePath}{Path to file storing results of sensitivity analysis}
+
+\item{numberOfCoresToUse}{Number of cores to use on local node.  This parameter should be should be set to 1 when parallelizing over many nodes.}
 }
 \value{
-sensitivityResults
+Save sensitivity analysis results as CSV in path given by resultsFilePath.
 }
 \description{
-Run a sensitivity analysis from a simulation
+Run a sensitivity analysis for a single individual, perturbing only the set of parameters parametersToPerturb
 }
