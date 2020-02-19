@@ -62,11 +62,6 @@ PopulationWorkflow <- R6::R6Class(
                                             settings = NULL,
                                             active = TRUE,
                                             message = NULL,
-                                            # inputFolderName = self$inputFolder,
-                                            # simulationFileName = self$simulation,
-                                            # populationFileName = self$population,
-                                            # resultsFolderName = self$simulationFolder,
-                                            # resultsFileName = "populationSimulation",
                                             numberOfCores = 1) {
       self$populationSimulation <- SimulationTask$new(
         input = input,
@@ -74,11 +69,6 @@ PopulationWorkflow <- R6::R6Class(
         settings = settings,
         active = active,
         message = message %||% "Simulate population",
-        # inputFolderName = inputFolderName,
-        # simulationFileName = simulationFileName,
-        # populationFileName = populationFileName,
-        # resultsFolderName = resultsFolderName,
-        # resultsFileName = resultsFileName,
         numberOfCores = numberOfCores
       )
     },
@@ -102,24 +92,13 @@ PopulationWorkflow <- R6::R6Class(
                                              output = NULL,
                                              settings = NULL,
                                              active = TRUE,
-                                             message = NULL # ,
-                                             # simulationFilePath = file.path(self$inputFolder, paste0(self$simulation, ".pkml")),
-                                             # simulationResultFilePaths = self$populationSimulation$generatedResultFileNames,
-                                             # pkParametersToEvaluate = NULL,
-                                             # userDefinedPKFunctions = NULL,
-                                             # pkParameterResultsFilePath = file.path(self$pkParametersFolder, "populationPKParameters.csv")
-    ) {
+                                             message = NULL) {
       self$populationPKParameters <- CalculatePKParametersTask$new(
         input = input,
         output = output,
         settings = settings,
         active = active,
-        message = message %||% "Calculate PK parameters for population" # ,
-        # simulationFilePath = simulationFilePath,
-        # simulationResultFilePaths = simulationResultFilePaths,
-        # pkParametersToEvaluate = pkParametersToEvaluate,
-        # userDefinedPKFunctions = userDefinedPKFunctions,
-        # pkParameterResultsFilePath = pkParameterResultsFilePath
+        message = message %||% "Calculate PK parameters for population"
       )
     },
 
@@ -136,25 +115,24 @@ PopulationWorkflow <- R6::R6Class(
     #' @param simulationFileName TO DO
     #' @param resultsFolderName TO DO
     #' @param resultsFileName TO DO
+    #' @param totalSensitivityThreshold TO DO
     #' @param numberOfCores TO DO
     #' @return A new `Task` object
     populationSensitivityAnalysisSettings = function(input = NULL,
                                                      output = NULL,
                                                      settings = NULL,
                                                      active = TRUE,
-                                                     message = NULL) {
+                                                     message = NULL,
+                                                     totalSensitivityThreshold = NULL,
+                                                     numberOfCores = numberOfCores) {
       self$populationSensitivityAnalysis <- SensitivityAnalysisTask$new(
         input = input,
         output = output,
         settings = settings,
         active = active,
-        message = message %||% "Sensitivity analysis for population" # ,
-        # simulationFilePath = simulationFilePath,
-        # simulationResultFilePaths = simulationResultFilePaths,
-        # pkParametersToEvaluate = pkParametersToEvaluate,
-        # userDefinedPKFunctions = userDefinedPKFunctions,
-        # pkParameterResultsFilePath = pkParameterResultsFilePath
-      )
+        message = message %||% "Sensitivity analysis for population",
+        totalSensitivityThreshold = totalSensitivityThreshold,
+        numberOfCores = numberOfCores)
     },
 
     # TO DO: Define the tasks settings for plots
@@ -246,42 +224,6 @@ PopulationWorkflow <- R6::R6Class(
       )
     },
 
-    # TO DO: include this chunk into previous tasks
-    # setDemographyPlotSettings = function(input = NULL,
-    #                                          output = NULL,
-    #                                          active = TRUE,
-    #                                          message = NULL) {
-    #   self$demographyPlot <- Task$new(
-    #     input = input %||% self$populationSimulation$input,
-    #     output = output %||% list(
-    #       "demographyResults" = file.path(self$simulationFolder, "demography.RData"),
-    #       "demographyPlot" = file.path(self$pkParametersFolder, "demographyPlot"),
-    #       "demographyTable" = file.path(self$pkParametersFolder, "demographyTable.md")
-    #     ),
-    #     active = active,
-    #     message = message %||% "Plot demography"
-    #   )
-    # },
-
-
-    # setGofPlotSettings = function(input = NULL,
-    #                                   output = NULL,
-    #                                   active = TRUE,
-    #                                   message = NULL) {
-    #   self$gofPlot <- Task$new(
-    #     input = input %||% list(
-    #       "population" = file.path(self$inputFolder, paste0(self$population, ".csv")),
-    #       "populationSimulation" = self$populationSimulation$output$populationSimulation
-    #     ),
-    #     output = output %||% list(
-    #       "gofResults" = file.path(self$simulationFolder, "gofResults.RData"),
-    #       "gofPlot" = file.path(self$pkParametersFolder, "gofPlot")
-    #     ),
-    #     active = active,
-    #     message = message %||% "Plot goodness of fit diagnostics"
-    #   )
-    # },
-
 
 
     #' @description
@@ -368,6 +310,7 @@ PopulationWorkflow <- R6::R6Class(
             pkParameterResultsFilePath = file.path(set$pkAnalysisResultsFolder, defaultFileNames$pkAnalysisResultsFile(set$simulationSet$simulationSetName)),
             resultsFileFolder = set$sensitivityAnalysisResultsFolder,
             resultsFileName = trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName), extension = "csv"),
+            totalSensitivityThreshold = self$populationSensitivityAnalysis$totalSensitivityThreshold,
             quantileVec = self$populationSensitivityAnalysis$quantileVec,
             numberOfCores = self$populationSensitivityAnalysis$numberOfCores
           )
@@ -377,53 +320,6 @@ PopulationWorkflow <- R6::R6Class(
 
 
 
-
-
-      # TO DO: Abdullah, I don't know if this chunk have to be included somewhere so I left it as is
-      # self$numberOfCores,
-      # self$populationSimulation$input$population,
-      # self$inputFolder,
-      # self$population,
-      # simFileName,
-      # popFileName,
-      # wdir,
-      # inputFolder,
-      # pkParametersFolder,
-      # resultsFileName,
-
-      #
-      #             library("Rmpi")
-      #             mpi.spawn.Rslaves(nslaves = self$numberOfCores)
-      #
-      #             # Check that the correct number of slaves has been spawned.
-      #             if (!(mpi.comm.size() - 1 == self$numberOfCores)) { #-1 since mpi.comm.size() counts master
-      #               mpi.close.Rslaves()
-      #               stop(paste0(self$numberOfCores, " cores were not successfully spawned."))
-      #             }
-      #             mpi.bcast.cmd(library("ospsuite"))
-      #             mpi.bcast.cmd(library("ospsuite.reportingengine"))
-      #             tempPopDataFiles <- ospsuite::splitPopulationFile(
-      #               csvPopulationFile = self$populationSimulation$input$population,
-      #               numberOfCores = self$numberOfCores,
-      #               pkParametersFolder = paste0(inputFolder, "/"),
-      #               outputFileName = popFileName
-      #             )
-      #             mpi.bcast.Robj2slave(obj = simFileName)
-      #             mpi.bcast.Robj2slave(obj = popFileName)
-      #             mpi.bcast.Robj2slave(obj = tempPopDataFiles)
-      #             mpi.bcast.Robj2slave(obj = wdir)
-      #             mpi.bcast.Robj2slave(obj = inputFolder)
-      #             mpi.bcast.Robj2slave(obj = pkParametersFolder)
-      #
-      #             mpi.remote.exec(ospsuite.reportingengine::simulatePopulation(
-      #               simFileName = paste0(simFileName, ".pkml"),
-      #               simFileFolder = paste0(wdir, "/", inputFolder, "/"),
-      #               popDataFileName = paste0(popFileName, "_", mpi.comm.rank(), ".csv"),
-      #               popDataFileFolder = paste0(wdir, "/", inputFolder, "/"),
-      #               resultFileName = paste0(resultsFileName, "_", mpi.comm.rank(), ".csv"),
-      #               resultFileFolder = paste0(wdir, "/", pkParametersFolder, "/")
-      #             ))
-      #             mpi.close.Rslaves() # Move to end of workflow
 
       # TO DO: plug plot tasks to actual results
       if (self$plotDemography$active) {
@@ -440,79 +336,6 @@ PopulationWorkflow <- R6::R6Class(
       }
     },
 
-
-    # TO DO: include these chunk into the previous task
-    # if (self$pkParametersCalculation$active) {
-    #   # if (self$pkParametersCalculation$validateInput()){
-    #   # calculatePKParameters()
-    #   # }
-    # }
-    # if (self$sensitivityAnalysis$active) {
-    #   if (self$sensitivityAnalysis$validateInput()) {
-    #     simulation <- loadSimulation(self$demographyPlot$input$simulation)
-    #
-    #     pkSensitivities <- analyzeSensitivity(simulation = simulation)
-    #     save(pkSensitivities, file = self$sensitivityAnalysis$output$sensitivityAnalysis)
-    #   }
-    # }
-    # if (self$demographyPlot$active) {
-    #   if (self$demographyPlot$validateInput()) {
-    #     population <- loadPopulation(self$demographyPlot$input$population)
-    #     simulation <- loadSimulation(self$demographyPlot$input$simulation)
-    #
-    #     # The last properties of plotDemograpy will be set within task settings
-    #     demographyPlot <- plotDemography(
-    #       simulation = simulation,
-    #       population = population,
-    #       parameterNames = c(StandardPath$Age, StandardPath$Weight, StandardPath$Height),
-    #       plotConfiguration = NULL
-    #     )
-    #
-    #     save(demographyPlot, file = self$demographyPlot$output$demographyResults)
-    #     dir.create(self$demographyPlot$output$demographyPlot)
-    #     for (plotName in names(demographyPlot)) {
-    #       ggplot2::ggsave(
-    #         filename = file.path(self$demographyPlot$output$demographyPlot, paste0(removeForbiddenLetters(plotName), ".png")),
-    #         plot = demographyPlot[[plotName]]
-    #       )
-    #     }
-    #   }
-    # }
-    # if (self$gofPlot$active) {
-    #   if (self$gofPlot$validateInput()) {
-    #     load(file = self$gofPlot$input$populationSimulation)
-    #     population <- loadPopulation(self$gofPlot$input$population)
-    #     observedData <- self$gofPlot$input$observedData
-    #
-    #     gofPlot <- plotGoodnessOfFit(
-    #       populationSimulation = populationSimulation,
-    #       population = population,
-    #       observedData = observedData,
-    #       quantity = NULL,
-    #       plotConfiguration = NULL
-    #     )
-    #
-    #     save(gofPlot, file = self$gofPlot$output$gofResults)
-    #     dir.create(self$gofPlot$output$gofPlot)
-    #     for (plotName in names(gofPlot)) {
-    #       ggplot2::ggsave(
-    #         filename = file.path(self$gofPlot$output$gofPlot, paste0(removeForbiddenLetters(plotName), ".png")),
-    #         plot = gofPlot[[plotName]]
-    #       )
-    #     }
-    #   }
-    # }
-    # if (self$pkParametersPlot$active) {
-    #   self$pkParametersPlot$output <- plotPKParameters()
-    # }
-    # if (self$sensitivityPlot$active) {
-    #   if (self$sensitivityPlot$validateInput()) {
-    #     load(file = self$sensitivityPlot$input$sensitivityAnalysis)
-    #
-    #     sensitivityPlot <- plotSensitivity(sensitivityAnalysis)
-    #     save(sensitivityPlot, file = file.path(self$sensitivityPlot$output$sensitivityPlot))
-    #   }
-    # }
 
     #' @description
     #' Print workflow list of tasks

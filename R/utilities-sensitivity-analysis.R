@@ -1,36 +1,38 @@
-#' @title analyzeSensitivity
+#' @title runSensitivity
 #' @description Determine whether to run SA for individual or population.  If for individual,  pass simulation to individualSensitivityAnalysis.
 #' If SA is for population, loop thru population file, extract parameters for each individual, and pass them to individualSensitivityAnalysis.
 #' @param simFilePath path to simulation file
 #' @param parametersToPerturb paths to parameters to perturb in sensitivity analysis
 #' @param popFilePath path to the population data file
-#' @param individualID ID of individual in population data file for whom to perform sensitivity analysis
+#' @param individualId ID of individual in population data file for whom to perform sensitivity analysis
+#' @param totalSensitivityThreshold Sensitivity threshold filter for sensitivity analysis
 #' @param numberOfCores number of cores over which to parallelize the sensitivity analysis
 #' @param resultsFileFolder path to population sensitivity analysis results CSV files
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
 #' @return SA results for individual or population
 #' @export
 #' @import ospsuite
-analyzeSensitivity <- function(simFilePath,
-                               parametersToPerturb = NULL,
-                               popFilePath = NULL,
-                               individualID = NULL,
-                               numberOfCores = 1,
-                               resultsFileFolder = "getwd()",
-                               resultsFileName = "sensitivityAnalysisResults") {
+runSensitivity <- function(simFilePath,
+                           parametersToPerturb = NULL,
+                           popFilePath = NULL,
+                           individualId = NULL,
+                           totalSensitivityThreshold,
+                           numberOfCores = 1,
+                           resultsFileFolder,
+                           resultsFileName = "sensitivityAnalysisResults") {
 
 
-  # If there is a population file and individualID then for each individual perform SA
-  # If there is a population file and no individualID then do SA for entire population
-  # If there is no population file and individualID then do SA for mean model
-  # If there is no population file and no individualID then do SA for mean model.
+  # If there is a population file and individualId then for each individual perform SA
+  # If there is a population file and no individualId then do SA for entire population
+  # If there is no population file and individualId then do SA for mean model
+  # If there is no population file and no individualId then do SA for mean model.
 
 
 
   # Determine if SA is to be done for a single individual or more
   if (!is.null(popFilePath)) {
     popObject <- loadPopulation(popFilePath)
-    individualSeq <- individualID %||% seq(1, popObject$count)
+    individualSeq <- individualId %||% seq(1, popObject$count)
     allResultsFileNames <- NULL
     for (ind in individualSeq) {
       resFile <- individualSensitivityAnalysis(
@@ -39,7 +41,7 @@ analyzeSensitivity <- function(simFilePath,
         individualParameters = popObject$getParameterValuesForIndividual(individualId = ind),
         numberOfCores = numberOfCores,
         resultsFileFolder = resultsFileFolder,
-        resultsFileName = getIndividualSAResultsFileName(ind,resultsFileName)
+        resultsFileName = getIndividualSAResultsFileName(ind, resultsFileName)
       )
       allResultsFileNames <- c(allResultsFileNames, resFile)
     }
@@ -64,15 +66,16 @@ analyzeSensitivity <- function(simFilePath,
 #' @param simFilePath path to simulation file
 #' @param parametersToPerturb paths to parameters to perturb in sensitivity analysis
 #' @param individualParameters is an object storing an individual's parameters, obtained from a population object's getParameterValuesForIndividual() function.
+#' @param totalSensitivityThreshold Sensitivity threshold filter for sensitivity analysis
 #' @param numberOfCores is the number of cores over which to parallelize the sensitivity analysis
 #' @param resultsFileFolder path to population sensitivity analysis results CSV files
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
 #' @return allResultsFileNames, the paths to CSV files containing results of sensitivity analysis
-#' @export
 #' @import ospsuite
 individualSensitivityAnalysis <- function(simFilePath,
                                           parametersToPerturb = NULL,
                                           individualParameters,
+                                          totalSensitivityThreshold,
                                           numberOfCores = 1,
                                           resultsFileFolder = resultsFileFolder,
                                           resultsFileName = resultsFileName) {
@@ -97,6 +100,7 @@ individualSensitivityAnalysis <- function(simFilePath,
       simFilePath,
       parametersToPerturb,
       individualParameters,
+      totalSensitivityThreshold,
       numberOfCores,
       resultsFileFolder,
       resultsFileName
@@ -108,7 +112,7 @@ individualSensitivityAnalysis <- function(simFilePath,
     analyzeCoreSensitivity(
       simulation = sim,
       parametersToPerturb = parametersToPerturb,
-      totalSensitivityThreshold = 1,
+      totalSensitivityThreshold = totalSensitivityThreshold,
       resultsFilePath = allResultsFileNames
     )
   }
@@ -120,6 +124,7 @@ individualSensitivityAnalysis <- function(simFilePath,
 #' @description Spawn cores, divide parameters among cores, run sensitivity analysis on cores for a single individual, save results as CSV.
 #' @param parametersToPerturb paths to parameters to perturb in sensitivity analysis
 #' @param individualParameters is an object storing an individual's parameters, obtained from a population object's getParameterValuesForIndividual() function.
+#' @param totalSensitivityThreshold Sensitivity threshold filter for sensitivity analysis
 #' @param numberOfCores is the number of cores over which to parallelize the sensitivity analysis
 #' @param resultsFileFolder path to population sensitivity analysis results CSV files
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
@@ -128,6 +133,7 @@ individualSensitivityAnalysis <- function(simFilePath,
 runParallelSensitivityAnalysis <- function(simFilePath,
                                            parametersToPerturb,
                                            individualParameters,
+                                           totalSensitivityThreshold,
                                            numberOfCores,
                                            resultsFileFolder,
                                            resultsFileName) {
@@ -145,6 +151,7 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   Rmpi::mpi.bcast.Robj2slave(obj = listSplitParameters)
   Rmpi::mpi.bcast.Robj2slave(obj = resultsFileFolder)
   Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
+  Rmpi::mpi.bcast.Robj2slave(obj = totalSensitivityThreshold)
 
   # Generate a listcontaining names of SA CSV result files that will be output by each core
   allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFileFolder, fileName = resultsFileName)
@@ -163,7 +170,7 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   Rmpi::mpi.remote.exec(analyzeCoreSensitivity(
     simulation = sim,
     parametersToPerturb = listSplitParameters[[mpi.comm.rank()]],
-    totalSensitivityThreshold = 1,
+    totalSensitivityThreshold = totalSensitivityThreshold,
     resultsFilePath = allResultsFileNames[mpi.comm.rank()],
     numberOfCoresToUse = 1 # Number of local cores, set to 1 when parallelizing.
   ))
@@ -187,7 +194,6 @@ runParallelSensitivityAnalysis <- function(simFilePath,
 #' @param numberOfCoresToUse Number of cores to use on local node.  This parameter should be should be set to 1 when parallelizing over many nodes.
 #' @return Save sensitivity analysis results as CSV in path given by resultsFilePath.
 #' @import ospsuite
-#' @export
 analyzeCoreSensitivity <- function(simulation,
                                    parametersToPerturb = NULL,
                                    totalSensitivityThreshold = 1,
@@ -205,7 +211,7 @@ analyzeCoreSensitivity <- function(simulation,
     sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(
       showProgress = FALSE,
       numberOfCoresToUse = numberOfCoresToUse
-      #The numberOfCoresToUse input in the SensitivityAnalysisRunOptions initializer should not be set to NULL.
+      # The numberOfCoresToUse input in the SensitivityAnalysisRunOptions initializer should not be set to NULL.
     )
   }
   print("Running sensitivity analysis...")
@@ -240,7 +246,7 @@ getPKResultsDataFrame <- function(pkParameterResultsFilePath) {
 #' @description Find IDs of individuals whose PK analysis results closest to quantiles given by vector of quantiles quantileVec
 #' @param pkAnalysisResultsDataframe Dataframe storing the PK analysis results for multiple individuals for a single PK parameter and single output path
 #' @return ids, IDs of individuals whose PK analysis results closest to quantiles given by vector of quantiles quantileVec
-getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec = c(0.05, 0.5, 0.95)) {
+getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
   rowNums <- NULL
   for (n in 1:length(quantileVec)) {
     rowNums[n] <- which.min(abs(pkAnalysisResultsDataframe$Value - quantile(pkAnalysisResultsDataframe$Value, quantileVec[n])))
@@ -248,7 +254,7 @@ getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec = c
   ids <- as.numeric(pkAnalysisResultsDataframe$IndividualId[rowNums])
   values <- pkAnalysisResultsDataframe$Value[rowNums]
   units <- as.character(pkAnalysisResultsDataframe$Unit[rowNums])
-  quantileResults <- list(ids = ids,values=values,units=units)
+  quantileResults <- list(ids = ids, values = values, units = units)
   return(quantileResults)
 }
 
@@ -260,7 +266,7 @@ getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec = c
 #' @param popSAResultsIndexFile Names of CSV file containing index of sensitivity analysis CSV files
 #' @param resultsFileName root name of sensitivity analysis results CSV files
 #' @param quantileVec vector of quantiles in (0,1).  For each output and pk parameter, there will be a distribution of pk parameter values for the population.
-#' The individuals yielding pk parameters closest to these quantiles will be selected for sensitivity analysis.  Default is (0.05,0.5,0.95)
+#' The individuals yielding pk parameters closest to these quantiles will be selected for sensitivity analysis.
 #' @param numberOfCores the number of cores to be used for parallelization of the sensitivity analysis.  Default is 1 core (no parallelization).
 #' @export
 populationSensitivityAnalysis <- function(simFilePath,
@@ -269,16 +275,17 @@ populationSensitivityAnalysis <- function(simFilePath,
                                           resultsFileFolder,
                                           resultsFileName,
                                           popSAResultsIndexFile = "sensitivityAnalysesResultsIndexFile",
-                                          quantileVec = c(0.05, 0.5, 0.95),
-                                          numberOfCores = 1) {
+                                          totalSensitivityThreshold = totalSensitivityThreshold,
+                                          quantileVec,
+                                          numberOfCores) {
   sensitivityAnalysesResultsIndexFileDF <- getSAFileIndex(pkParameterResultsFilePath, quantileVec, resultsFileFolder, resultsFileName, popSAResultsIndexFile)
 
   ids <- unique(sensitivityAnalysesResultsIndexFileDF$IndividualId)
 
-  analyzeSensitivity(simFilePath,
+  runSensitivity(simFilePath,
     parametersToPerturb = NULL,
     popFilePath = popDataFilePath,
-    individualID = ids,
+    individualId = ids,
     numberOfCores = numberOfCores,
     resultsFileFolder = resultsFileFolder,
     resultsFileName = resultsFileName
@@ -326,8 +333,8 @@ getSAFileIndex <- function(pkParameterResultsFilePath,
     }
   }
 
-  filenamesColumn <-  paste0(sapply(X = individualIdColumn,FUN = getIndividualSAResultsFileName,resultsFileName),".csv")
-  sensitivityAnalysesResultsIndexFileDF <- data.frame("Outputs" = outputColumn, "pkParameters" = pkParameterColumn, "Quantile" = quantileColumn, "Value" = valuesColumn, "Unit" = unitsColumn,  "IndividualId" = individualIdColumn, "Filename" = filenamesColumn)
+  filenamesColumn <- paste0(sapply(X = individualIdColumn, FUN = getIndividualSAResultsFileName, resultsFileName), ".csv")
+  sensitivityAnalysesResultsIndexFileDF <- data.frame("Outputs" = outputColumn, "pkParameters" = pkParameterColumn, "Quantile" = quantileColumn, "Value" = valuesColumn, "Unit" = unitsColumn, "IndividualId" = individualIdColumn, "Filename" = filenamesColumn)
   write.csv(x = sensitivityAnalysesResultsIndexFileDF, file = file.path(resultsFileFolder, paste0(popSAResultsIndexFile, ".csv")))
   return(sensitivityAnalysesResultsIndexFileDF)
 }
@@ -337,6 +344,6 @@ getSAFileIndex <- function(pkParameterResultsFilePath,
 #' @description Function to build name of inidividual SA results file
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
 #' @param individualId id of individual
-getIndividualSAResultsFileName <- function(individualId,resultsFileName){
-  return(paste(resultsFileName,"IndividualId",individualId,sep="-"))
+getIndividualSAResultsFileName <- function(individualId, resultsFileName) {
+  return(paste(resultsFileName, "IndividualId", individualId, sep = "-"))
 }
