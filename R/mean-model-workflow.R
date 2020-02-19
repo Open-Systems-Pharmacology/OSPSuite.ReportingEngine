@@ -68,7 +68,8 @@ MeanModelWorkflow <- R6::R6Class(
         output = output,
         settings = settings,
         active = active,
-        message = message %||% "Simulate mean model")
+        message = message %||% "Simulate mean model"
+      )
     },
 
     #' @description
@@ -113,7 +114,7 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param simulationFileName TO DO
     #' @param resultsFolderName TO DO
     #' @param resultsFileName TO DO
-    #' @param totalSensitivityThreshold TO DO
+    #' @param variationRange TO DO
     #' @param numberOfCores TO DO
     #' @return A new `Task` object
     meanModelSensitivityAnalysisSettings = function(input = NULL,
@@ -121,7 +122,7 @@ MeanModelWorkflow <- R6::R6Class(
                                                     settings = NULL,
                                                     active = TRUE,
                                                     message = NULL,
-                                                    totalSensitivityThreshold = NULL,
+                                                    variationRange = 0.1,
                                                     numberOfCores = 1) {
       self$meanModelSensitivityAnalysis <- SensitivityAnalysisTask$new(
         input = input,
@@ -129,7 +130,7 @@ MeanModelWorkflow <- R6::R6Class(
         settings = settings,
         active = active,
         message = message %||% "Sensitivity analysis for mean model",
-        totalSensitivityThreshold = totalSensitivityThreshold,
+        variationRange = variationRange,
         numberOfCores = numberOfCores
       )
     },
@@ -304,7 +305,7 @@ MeanModelWorkflow <- R6::R6Class(
           createFolder(set$sensitivityAnalysisResultsFolder)
           set$sensitivityAnalysisResultsFileNames <- runSensitivity(
             simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
-            totalSensitivityThreshold = self$meanModelSensitivityAnalysis$totalSensitivityThreshold,
+            variationRange = self$meanModelSensitivityAnalysis$variationRange,
             resultsFileFolder = set$sensitivityAnalysisResultsFolder,
             resultsFileName = trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName), extension = "csv"),
             numberOfCores = self$meanModelSensitivityAnalysis$numberOfCores

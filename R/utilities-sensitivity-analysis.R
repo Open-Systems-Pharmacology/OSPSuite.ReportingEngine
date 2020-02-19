@@ -5,7 +5,7 @@
 #' @param parametersToPerturb paths to parameters to perturb in sensitivity analysis
 #' @param popFilePath path to the population data file
 #' @param individualId ID of individual in population data file for whom to perform sensitivity analysis
-#' @param totalSensitivityThreshold Sensitivity threshold filter for sensitivity analysis
+#' @param variationRange variation range for sensitivity analysis
 #' @param numberOfCores number of cores over which to parallelize the sensitivity analysis
 #' @param resultsFileFolder path to population sensitivity analysis results CSV files
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
@@ -16,7 +16,7 @@ runSensitivity <- function(simFilePath,
                            parametersToPerturb = NULL,
                            popFilePath = NULL,
                            individualId = NULL,
-                           totalSensitivityThreshold,
+                           variationRange,
                            numberOfCores = 1,
                            resultsFileFolder,
                            resultsFileName = "sensitivityAnalysisResults") {
@@ -39,6 +39,7 @@ runSensitivity <- function(simFilePath,
         simFilePath = simFilePath,
         parametersToPerturb = parametersToPerturb,
         individualParameters = popObject$getParameterValuesForIndividual(individualId = ind),
+        variationRange = variationRange,
         numberOfCores = numberOfCores,
         resultsFileFolder = resultsFileFolder,
         resultsFileName = getIndividualSAResultsFileName(ind, resultsFileName)
@@ -51,6 +52,7 @@ runSensitivity <- function(simFilePath,
       simFilePath = simFilePath,
       parametersToPerturb = parametersToPerturb,
       individualParameters = NULL,
+      variationRange = variationRange,
       numberOfCores = numberOfCores,
       resultsFileFolder = resultsFileFolder,
       resultsFileName = resultsFileName
@@ -66,7 +68,7 @@ runSensitivity <- function(simFilePath,
 #' @param simFilePath path to simulation file
 #' @param parametersToPerturb paths to parameters to perturb in sensitivity analysis
 #' @param individualParameters is an object storing an individual's parameters, obtained from a population object's getParameterValuesForIndividual() function.
-#' @param totalSensitivityThreshold Sensitivity threshold filter for sensitivity analysis
+#' @param variationRange variation range for sensitivity analysis
 #' @param numberOfCores is the number of cores over which to parallelize the sensitivity analysis
 #' @param resultsFileFolder path to population sensitivity analysis results CSV files
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
@@ -75,7 +77,7 @@ runSensitivity <- function(simFilePath,
 individualSensitivityAnalysis <- function(simFilePath,
                                           parametersToPerturb = NULL,
                                           individualParameters,
-                                          totalSensitivityThreshold,
+                                          variationRange,
                                           numberOfCores = 1,
                                           resultsFileFolder = resultsFileFolder,
                                           resultsFileName = resultsFileName) {
@@ -100,7 +102,7 @@ individualSensitivityAnalysis <- function(simFilePath,
       simFilePath,
       parametersToPerturb,
       individualParameters,
-      totalSensitivityThreshold,
+      variationRange,
       numberOfCores,
       resultsFileFolder,
       resultsFileName
@@ -112,7 +114,7 @@ individualSensitivityAnalysis <- function(simFilePath,
     analyzeCoreSensitivity(
       simulation = sim,
       parametersToPerturb = parametersToPerturb,
-      totalSensitivityThreshold = totalSensitivityThreshold,
+      variationRange = variationRange,
       resultsFilePath = allResultsFileNames
     )
   }
@@ -124,7 +126,7 @@ individualSensitivityAnalysis <- function(simFilePath,
 #' @description Spawn cores, divide parameters among cores, run sensitivity analysis on cores for a single individual, save results as CSV.
 #' @param parametersToPerturb paths to parameters to perturb in sensitivity analysis
 #' @param individualParameters is an object storing an individual's parameters, obtained from a population object's getParameterValuesForIndividual() function.
-#' @param totalSensitivityThreshold Sensitivity threshold filter for sensitivity analysis
+#' @param variationRange variation range for sensitivity analysis
 #' @param numberOfCores is the number of cores over which to parallelize the sensitivity analysis
 #' @param resultsFileFolder path to population sensitivity analysis results CSV files
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
@@ -133,7 +135,7 @@ individualSensitivityAnalysis <- function(simFilePath,
 runParallelSensitivityAnalysis <- function(simFilePath,
                                            parametersToPerturb,
                                            individualParameters,
-                                           totalSensitivityThreshold,
+                                           variationRange,
                                            numberOfCores,
                                            resultsFileFolder,
                                            resultsFileName) {
@@ -151,7 +153,7 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   Rmpi::mpi.bcast.Robj2slave(obj = listSplitParameters)
   Rmpi::mpi.bcast.Robj2slave(obj = resultsFileFolder)
   Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
-  Rmpi::mpi.bcast.Robj2slave(obj = totalSensitivityThreshold)
+  Rmpi::mpi.bcast.Robj2slave(obj = variationRange)
 
   # Generate a listcontaining names of SA CSV result files that will be output by each core
   allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFileFolder, fileName = resultsFileName)
@@ -170,7 +172,7 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   Rmpi::mpi.remote.exec(analyzeCoreSensitivity(
     simulation = sim,
     parametersToPerturb = listSplitParameters[[mpi.comm.rank()]],
-    totalSensitivityThreshold = totalSensitivityThreshold,
+    variationRange = variationRange,
     resultsFilePath = allResultsFileNames[mpi.comm.rank()],
     numberOfCoresToUse = 1 # Number of local cores, set to 1 when parallelizing.
   ))
@@ -187,18 +189,17 @@ runParallelSensitivityAnalysis <- function(simFilePath,
 #' @description Run a sensitivity analysis for a single individual, perturbing only the set of parameters parametersToPerturb
 #' @param simulation simulation class object
 #' @param parametersToPerturb paths of parameters to be analyzed
-#' @param totalSensitivityThreshold numeric value between 0 and 1.
-#' Close to 0, only the most sensitive output paths are returned.
-#' Close to 1, almost all the output paths are returned.
+#' @param variationRange variation range for sensitivity analysis
 #' @param resultsFilePath Path to file storing results of sensitivity analysis
 #' @param numberOfCoresToUse Number of cores to use on local node.  This parameter should be should be set to 1 when parallelizing over many nodes.
 #' @return Save sensitivity analysis results as CSV in path given by resultsFilePath.
 #' @import ospsuite
 analyzeCoreSensitivity <- function(simulation,
                                    parametersToPerturb = NULL,
-                                   totalSensitivityThreshold = 1,
+                                   variationRange = 0.1,
                                    resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv"),
                                    numberOfCoresToUse = NULL) {
+ # sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation, variationRange = variationRange)
   sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation)
   sensitivityAnalysis$addParameterPaths(parametersToPerturb)
 
@@ -264,6 +265,7 @@ getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
 #' @param pkParameterResultsFilePath path to pk parameter results CSV
 #' @param resultsFileFolder folder where results of sensitivity analysis will be saved
 #' @param popSAResultsIndexFile Names of CSV file containing index of sensitivity analysis CSV files
+#' @param variationRange variation range for sensitivity analysis
 #' @param resultsFileName root name of sensitivity analysis results CSV files
 #' @param quantileVec vector of quantiles in (0,1).  For each output and pk parameter, there will be a distribution of pk parameter values for the population.
 #' The individuals yielding pk parameters closest to these quantiles will be selected for sensitivity analysis.
@@ -275,7 +277,7 @@ populationSensitivityAnalysis <- function(simFilePath,
                                           resultsFileFolder,
                                           resultsFileName,
                                           popSAResultsIndexFile = "sensitivityAnalysesResultsIndexFile",
-                                          totalSensitivityThreshold = totalSensitivityThreshold,
+                                          variationRange,
                                           quantileVec,
                                           numberOfCores) {
   sensitivityAnalysesResultsIndexFileDF <- getSAFileIndex(pkParameterResultsFilePath, quantileVec, resultsFileFolder, resultsFileName, popSAResultsIndexFile)
@@ -286,6 +288,7 @@ populationSensitivityAnalysis <- function(simFilePath,
     parametersToPerturb = NULL,
     popFilePath = popDataFilePath,
     individualId = ids,
+    variationRange = variationRange,
     numberOfCores = numberOfCores,
     resultsFileFolder = resultsFileFolder,
     resultsFileName = resultsFileName

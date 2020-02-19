@@ -56,11 +56,7 @@ MeanModelSet <- R6::R6Class(
                           pkParametersUnits = NULL,
                           dataFilter = NULL,
                           observedDataFile = NULL,
-                          observedMetaDataFile = NULL # ,
-                          # simulationResultsFolder = NULL,
-                          # pkAnalysisResultsFolder = NULL,
-                          # sensitivityAnalysisResultsFolder = NULL
-    ) {
+                          observedMetaDataFile = NULL) {
       self$simulationFile <- simulationFile
       self$simulationName <- simulationName %||% trimFileName(simulationFile, extension = "pkml")
 

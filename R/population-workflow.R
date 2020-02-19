@@ -115,7 +115,7 @@ PopulationWorkflow <- R6::R6Class(
     #' @param simulationFileName TO DO
     #' @param resultsFolderName TO DO
     #' @param resultsFileName TO DO
-    #' @param totalSensitivityThreshold TO DO
+    #' @param variationRange TO DO
     #' @param numberOfCores TO DO
     #' @return A new `Task` object
     populationSensitivityAnalysisSettings = function(input = NULL,
@@ -123,16 +123,18 @@ PopulationWorkflow <- R6::R6Class(
                                                      settings = NULL,
                                                      active = TRUE,
                                                      message = NULL,
-                                                     totalSensitivityThreshold = NULL,
-                                                     numberOfCores = numberOfCores) {
+                                                     variationRange = 0.1,
+                                                     numberOfCores = 1,
+                                                     quantileVec = c(0.05, 0.5, 0.95)){
       self$populationSensitivityAnalysis <- SensitivityAnalysisTask$new(
         input = input,
         output = output,
         settings = settings,
         active = active,
         message = message %||% "Sensitivity analysis for population",
-        totalSensitivityThreshold = totalSensitivityThreshold,
-        numberOfCores = numberOfCores)
+        variationRange = variationRange,
+        numberOfCores = numberOfCores,
+        quantileVec = quantileVec)
     },
 
     # TO DO: Define the tasks settings for plots
@@ -310,7 +312,7 @@ PopulationWorkflow <- R6::R6Class(
             pkParameterResultsFilePath = file.path(set$pkAnalysisResultsFolder, defaultFileNames$pkAnalysisResultsFile(set$simulationSet$simulationSetName)),
             resultsFileFolder = set$sensitivityAnalysisResultsFolder,
             resultsFileName = trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName), extension = "csv"),
-            totalSensitivityThreshold = self$populationSensitivityAnalysis$totalSensitivityThreshold,
+            variationRange = self$populationSensitivityAnalysis$variationRange,
             quantileVec = self$populationSensitivityAnalysis$quantileVec,
             numberOfCores = self$populationSensitivityAnalysis$numberOfCores
           )
