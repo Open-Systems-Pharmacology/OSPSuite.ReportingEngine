@@ -6,7 +6,7 @@
 #' @field settings class
 #' @field message message or title of the task
 Task <- R6::R6Class(
-  "Tasks",
+  "Task",
   public = list(
     active = NULL,
     input = NULL,
