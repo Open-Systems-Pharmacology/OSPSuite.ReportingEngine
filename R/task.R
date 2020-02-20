@@ -20,14 +20,14 @@ Task <- R6::R6Class(
     #' @param output list of files or folders of output
     #' @param settings specific settings for task
     #' @param active logical indicating if `task` is performed in a worklfow.
-    #' Default value is `TRUE`
+    #' Default value is `FALSE`
     #' @param message title of the `task`.
     #' Default value indicates `task` name.
     #' @return A new `Task` object
     initialize = function(input = NULL,
                           output = NULL,
                           settings = NULL,
-                          active = TRUE,
+                          active = FALSE,
                           message = NULL) {
       validateIsOfType(active, "logical")
       self$active <- active
