@@ -76,6 +76,50 @@ Workflow <- R6::R6Class(
           workflowResultsFolder = self$resultsFolder
         )
       }
+    },
+    
+    #' @description
+    #' Get a vector with all the names of the tasks within the `Workflow`
+    #' @return Vector of `Task` names
+    getAllTasks = function() {
+      # get isTaskVector as a named vector
+      isTaskVector <- unlist(eapply(self, function(x){isOfType(x, "Task")}))
+      
+      taskNames <- names(isTaskVector[as.logical(isTaskVector)])
+      
+      return(taskNames)
+    },
+    
+    #' @description
+    #' Get a vector with all the names of active tasks within the `Workflow`
+    #' @return Vector of active `Task` names
+    getActiveTasks = function() {
+      taskNames <- self$getAllTasks()
+      
+      activeTasks <- NULL
+      for(taskName in taskNames){
+        if(self[[taskName]]$active){
+          activeTasks <- c(activeTasks, taskName)
+        }
+      }
+      
+      return(activeTasks)
+    },
+    
+    #' @description
+    #' Get a vector with all the names of inactive tasks within the `Workflow`
+    #' @return Vector of inactive `Task` names
+    getInactiveTasks = function() {
+      taskNames <- self$getAllTasks()
+      
+      inactiveTasks <- NULL
+      for(taskName in taskNames){
+        if(!self[[taskName]]$active){
+          inactiveTasks <- c(inactiveTasks, taskName)
+        }
+      }
+      
+      return(inactiveTasks)
     }
   )
 )
