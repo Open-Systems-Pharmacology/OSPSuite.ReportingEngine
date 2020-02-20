@@ -120,7 +120,7 @@ MeanModelWorkflow <- R6::R6Class(
     meanModelSensitivityAnalysisSettings = function(input = NULL,
                                                     output = NULL,
                                                     settings = NULL,
-                                                    active = TRUE,
+                                                    active = FALSE,
                                                     message = NULL,
                                                     variationRange = 0.1,
                                                     numberOfCores = 1) {
