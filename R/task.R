@@ -70,3 +70,31 @@ Task <- R6::R6Class(
     }
   )
 )
+
+#' @title activateWorkflowTasks
+#' @description activates a series of `Tasks` from a `Workflow`
+#' @param workflow `MeanModelWorklfow` or `PopulationWorklfow` object
+#' @param tasks names of the tasks to activate
+#' Default activates all tasks of the workflow using workflow method `workflow$getAllTasks()`
+#' @export
+activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()){
+  validateIsOfType(workflow, "Workflow")
+  
+    for(task in tasks){
+      workflow[[task]]$activate()
+    }
+}
+
+#' @title inactivateWorkflowTasks
+#' @description inactivates a series of `Tasks` from a `Workflow`
+#' @param workflow `MeanModelWorklfow` or `PopulationWorklfow` object
+#' @param tasks names of the tasks to activate
+#' Default inactivates all tasks of the workflow using workflow method `workflow$getAllTasks()`
+#' @export
+inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()){
+  validateIsOfType(workflow, "Workflow")
+  
+  for(task in tasks){
+    workflow[[task]]$inactivate()
+  }
+}
