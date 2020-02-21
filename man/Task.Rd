@@ -41,7 +41,7 @@ Create a `Task` object
   input = NULL,
   output = NULL,
   settings = NULL,
-  active = TRUE,
+  active = FALSE,
   message = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -56,7 +56,7 @@ Create a `Task` object
 \item{\code{settings}}{specific settings for task}
 
 \item{\code{active}}{logical indicating if `task` is performed in a worklfow.
-Default value is `TRUE`}
+Default value is `FALSE`}
 
 \item{\code{message}}{title of the `task`.
 Default value indicates `task` name.}

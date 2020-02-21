@@ -55,6 +55,9 @@ R6 class for Reporting Engine Population Workflow
 \if{html}{
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getActiveTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getActiveTasks}{\code{ospsuite.reportingengine::Workflow$getActiveTasks()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getAllTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getAllTasks}{\code{ospsuite.reportingengine::Workflow$getAllTasks()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getInactiveTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getInactiveTasks}{\code{ospsuite.reportingengine::Workflow$getInactiveTasks()}}\out{</span>}
 }
 \out{</details>}
 }

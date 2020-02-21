@@ -43,7 +43,6 @@ R6 class for Reporting Engine Mean Model Workflow
 \item \href{#method-plotAbsorptionSettings}{\code{MeanModelWorkflow$plotAbsorptionSettings()}}
 \item \href{#method-plotSensitivitySettings}{\code{MeanModelWorkflow$plotSensitivitySettings()}}
 \item \href{#method-runWorkflow}{\code{MeanModelWorkflow$runWorkflow()}}
-\item \href{#method-runSingleSetWorkflow}{\code{MeanModelWorkflow$runSingleSetWorkflow()}}
 \item \href{#method-print}{\code{MeanModelWorkflow$print()}}
 \item \href{#method-clone}{\code{MeanModelWorkflow$clone()}}
 }
@@ -51,6 +50,9 @@ R6 class for Reporting Engine Mean Model Workflow
 \if{html}{
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getActiveTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getActiveTasks}{\code{ospsuite.reportingengine::Workflow$getActiveTasks()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getAllTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getAllTasks}{\code{ospsuite.reportingengine::Workflow$getAllTasks()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getInactiveTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getInactiveTasks}{\code{ospsuite.reportingengine::Workflow$getInactiveTasks()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -170,7 +172,7 @@ Define mean Model Sensitivity Analysis `task` settings
   input = NULL,
   output = NULL,
   settings = NULL,
-  active = TRUE,
+  active = FALSE,
   message = NULL,
   variationRange = 0.1,
   numberOfCores = 1
@@ -217,7 +219,7 @@ Define Goodness of fit `task` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$plotGoFSettings(
   input = NULL,
-  output = NULL,
+  output = file.path(self$resultsFolder, "TimeProfile"),
   active = FALSE,
   message = NULL
 )}\if{html}{\out{</div>}}
@@ -383,18 +385,9 @@ A new `Task` object
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-runWorkflow"></a>}}
 \subsection{Method \code{runWorkflow()}}{
-Loop through all simulation sets and run active mean model workflow tasks for each
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$runWorkflow()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-runSingleSetWorkflow"></a>}}
-\subsection{Method \code{runSingleSetWorkflow()}}{
 Run population workflow tasks for a single simulation set
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$runSingleSetWorkflow(set)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$runWorkflow()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{

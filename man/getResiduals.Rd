@@ -4,12 +4,12 @@
 \alias{getResiduals}
 \title{getResiduals}
 \usage{
-getResiduals(simulatedData, observedData, dataMapping = NULL)
+getResiduals(data, metaData = NULL, dataMapping = NULL)
 }
 \arguments{
-\item{simulatedData}{data.frame of simulated data}
+\item{data}{data.frame of time profile data}
 
-\item{observedData}{data.frame of observed data}
+\item{metaData}{meta data on `data`}
 
 \item{dataMapping}{XYDataMapping class object mapping what variable is to compare}
 }
