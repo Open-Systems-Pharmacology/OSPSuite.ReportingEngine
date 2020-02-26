@@ -179,7 +179,7 @@ analyzeCoreSensitivity <- function(simulation,
   sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation, variationRange = variationRange)
   sensitivityAnalysis$addParameterPaths(parametersToPerturb)
   if (is.null(numberOfCoresToUse)) {
-    sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(showProgress = FALSE)
+    sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(showProgress = TRUE)
   }
   else {
     sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(
@@ -245,6 +245,7 @@ getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
 #' @param numberOfCores the number of cores to be used for parallelization of the sensitivity analysis.  Default is 1 core (no parallelization).
 #' @export
 populationSensitivityAnalysis <- function(simFilePath,
+                                          parametersToPerturb = NULL,
                                           popDataFilePath,
                                           pkParameterResultsFilePath,
                                           resultsFileFolder,
@@ -256,7 +257,7 @@ populationSensitivityAnalysis <- function(simFilePath,
   sensitivityAnalysesResultsIndexFileDF <- getSAFileIndex(pkParameterResultsFilePath, quantileVec, resultsFileFolder, resultsFileName, popSAResultsIndexFile)
   ids <- unique(sensitivityAnalysesResultsIndexFileDF$IndividualId)
   runSensitivity(simFilePath,
-    parametersToPerturb = NULL,
+    parametersToPerturb = parametersToPerturb,
     popFilePath = popDataFilePath,
     individualId = ids,
     variationRange = variationRange,
