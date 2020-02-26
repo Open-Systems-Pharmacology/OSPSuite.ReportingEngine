@@ -24,7 +24,7 @@ runSensitivity <- function(simFilePath,
   # If there is a population file and no individualId then do SA for entire population
   # If there is no population file and individualId then do SA for mean model
   # If there is no population file and no individualId then do SA for mean model.
-  if (!is.null(popFilePath)) {   # Determine if SA is to be done for a single individual or more
+  if (!is.null(popFilePath)) { # Determine if SA is to be done for a single individual or more
     popObject <- loadPopulation(popFilePath)
     individualSeq <- individualId %||% seq(1, popObject$count)
     allResultsFileNames <- NULL
@@ -77,11 +77,11 @@ individualSensitivityAnalysis <- function(simFilePath,
                                           resultsFileName = resultsFileName) {
   # Load simulation to determine number of perturbation parameters
   sim <- loadSimulation(simFilePath)
-  if (is.null(parametersToPerturb)) {   # If no perturbation parameters specified, perturb all parameters
+  if (is.null(parametersToPerturb)) { # If no perturbation parameters specified, perturb all parameters
     parametersToPerturb <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
   }
   totalNumberParameters <- length(parametersToPerturb)
-  numberOfCores <- min(numberOfCores, totalNumberParameters)   # In case there are more cores specified in numberOfCores than there are parameters, ensure at least one parameter per spawned core
+  numberOfCores <- min(numberOfCores, totalNumberParameters) # In case there are more cores specified in numberOfCores than there are parameters, ensure at least one parameter per spawned core
   if (totalNumberParameters == 0) {
     stop("No variable parameters found for sensitivity analysis.")
   }
@@ -142,10 +142,10 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   Rmpi::mpi.bcast.Robj2slave(obj = resultsFileFolder)
   Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
   Rmpi::mpi.bcast.Robj2slave(obj = variationRange)
-  allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFileFolder, fileName = resultsFileName)   # Generate a listcontaining names of SA CSV result files that will be output by each core
+  allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFileFolder, fileName = resultsFileName) # Generate a listcontaining names of SA CSV result files that will be output by each core
   Rmpi::mpi.bcast.Robj2slave(obj = allResultsFileNames)
-  Rmpi::mpi.bcast.cmd(sim <- loadSimulation(simFilePath))   # Load simulation on each core
-  Rmpi::mpi.bcast.cmd(updateSimulationIndividualParameters(simulation = sim, individualParameters))   # Update simulation with individual parameters
+  Rmpi::mpi.bcast.cmd(sim <- loadSimulation(simFilePath)) # Load simulation on each core
+  Rmpi::mpi.bcast.cmd(updateSimulationIndividualParameters(simulation = sim, individualParameters)) # Update simulation with individual parameters
   Rmpi::mpi.remote.exec(analyzeCoreSensitivity(
     simulation = sim,
     parametersToPerturb = listSplitParameters[[mpi.comm.rank()]],
@@ -182,7 +182,8 @@ analyzeCoreSensitivity <- function(simulation,
 
   sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(
     showProgress = FALSE,
-    numberOfCoresToUse = numberOfCoresToUse)
+    numberOfCoresToUse = numberOfCoresToUse
+  )
 
   logDebug(message = "Running sensitivity analysis...", printConsole = TRUE)
   sensitivityAnalysisResults <- runSensitivityAnalysis(
@@ -219,7 +220,7 @@ getPKResultsDataFrame <- function(pkParameterResultsFilePath) {
 getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
   rowNums <- NULL
   for (i in 1:length(quantileVec)) {
-    rowNums[i] <- which.min(abs(pkAnalysisResultsDataframe$Value - quantile(pkAnalysisResultsDataframe$Value, quantileVec[i],na.rm = TRUE)))
+    rowNums[i] <- which.min(abs(pkAnalysisResultsDataframe$Value - quantile(pkAnalysisResultsDataframe$Value, quantileVec[i], na.rm = TRUE)))
   }
   ids <- as.numeric(pkAnalysisResultsDataframe$IndividualId[rowNums])
   values <- pkAnalysisResultsDataframe$Value[rowNums]
