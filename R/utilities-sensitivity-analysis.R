@@ -178,8 +178,6 @@ analyzeCoreSensitivity <- function(simulation,
                                    numberOfCoresToUse = NULL) {
   sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation, variationRange = variationRange)
   sensitivityAnalysis$addParameterPaths(parametersToPerturb)
-
-
   sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(
     showProgress = FALSE,
     numberOfCoresToUse = numberOfCoresToUse
