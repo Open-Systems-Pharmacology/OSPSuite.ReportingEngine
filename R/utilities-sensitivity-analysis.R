@@ -178,16 +178,12 @@ analyzeCoreSensitivity <- function(simulation,
                                    numberOfCoresToUse = NULL) {
   sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation, variationRange = variationRange)
   sensitivityAnalysis$addParameterPaths(parametersToPerturb)
-  if (is.null(numberOfCoresToUse)) {
-    sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(showProgress = TRUE)
-  }
-  else {
-    sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(
-      showProgress = FALSE,
-      numberOfCoresToUse = numberOfCoresToUse
-      # The numberOfCoresToUse input in the SensitivityAnalysisRunOptions initializer should not be set to NULL.
-    )
-  }
+
+
+  sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(
+    showProgress = FALSE,
+    numberOfCoresToUse = numberOfCoresToUse)
+
   logDebug(message = "Running sensitivity analysis...", printConsole = TRUE)
   sensitivityAnalysisResults <- runSensitivityAnalysis(
     sensitivityAnalysis = sensitivityAnalysis,
