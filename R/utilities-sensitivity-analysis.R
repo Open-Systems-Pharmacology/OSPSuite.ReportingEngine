@@ -2,7 +2,7 @@
 #' @description Determine whether to run SA for individual or population.  If for individual,  pass simulation to individualSensitivityAnalysis.
 #' If SA is for population, loop thru population file, extract parameters for each individual, and pass them to individualSensitivityAnalysis.
 #' @param simFilePath path to simulation file
-#' @param variableParameterPaths paths to parameters to perturb in sensitivity analysis
+#' @param variableParameterPaths paths to parameters to vary in sensitivity analysis
 #' @param popFilePath path to the population data file
 #' @param individualId ID of individual in population data file for whom to perform sensitivity analysis
 #' @param variationRange variation range for sensitivity analysis
@@ -60,7 +60,7 @@ runSensitivity <- function(simFilePath,
 #' @description Run SA for an individual, possibly after modifying the simulation using individualParameters.  Determine whether to run SA for on single core or in parallel.
 #' If on single core, pass simulation to analyzeCoreSensitivity.  If in parallel, pass simulation to runParallelSensitivityAnalysis.
 #' @param simFilePath path to simulation file
-#' @param variableParameterPaths paths to parameters to perturb in sensitivity analysis
+#' @param variableParameterPaths paths to parameters to vary in sensitivity analysis
 #' @param individualParameters is an object storing an individual's parameters, obtained from a population object's getParameterValuesForIndividual() function.
 #' @param variationRange variation range for sensitivity analysis
 #' @param numberOfCores is the number of cores over which to parallelize the sensitivity analysis
@@ -75,15 +75,17 @@ individualSensitivityAnalysis <- function(simFilePath,
                                           numberOfCores = 1,
                                           resultsFileFolder = resultsFileFolder,
                                           resultsFileName = resultsFileName) {
-  # Load simulation to determine number of perturbation parameters
+  # Load simulation to determine number of parameters valid for sensitivity analysis
   sim <- loadSimulation(simFilePath)
-  if (is.null(variableParameterPaths)) { # If no perturbation parameters specified, perturb all parameters
+  if (is.null(variableParameterPaths)) { # If no parameters to vary specified, vary all parameters valid for sensitivity analysis
     variableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
   }
   totalNumberParameters <- length(variableParameterPaths)
   numberOfCores <- min(numberOfCores, totalNumberParameters) # In case there are more cores specified in numberOfCores than there are parameters, ensure at least one parameter per spawned core
   if (totalNumberParameters == 0) {
-    stop("No variable parameters found for sensitivity analysis.")
+    msg <- "No variable parameters found for sensitivity analysis."
+    logError(msg)
+    stop(msg)
   }
 
   # Determine if SA is to be done on a single core or more
@@ -114,7 +116,7 @@ individualSensitivityAnalysis <- function(simFilePath,
 
 #' @title runParallelSensitivityAnalysis
 #' @description Spawn cores, divide parameters among cores, run sensitivity analysis on cores for a single individual, save results as CSV.
-#' @param variableParameterPaths paths to parameters to perturb in sensitivity analysis
+#' @param variableParameterPaths paths to parameters to vary in sensitivity analysis
 #' @param individualParameters is an object storing an individual's parameters, obtained from a population object's getParameterValuesForIndividual() function.
 #' @param variationRange variation range for sensitivity analysis
 #' @param numberOfCores is the number of cores over which to parallelize the sensitivity analysis
@@ -162,7 +164,7 @@ runParallelSensitivityAnalysis <- function(simFilePath,
 }
 
 #' @title analyzeCoreSensitivity
-#' @description Run a sensitivity analysis for a single individual, perturbing only the set of parameters variableParameterPaths
+#' @description Run a sensitivity analysis for a single individual, varying only the set of parameters variableParameterPaths
 #' @param simulation simulation class object
 #' @param variableParameterPaths paths of parameters to be analyzed
 #' @param variationRange variation range for sensitivity analysis
@@ -183,12 +185,12 @@ analyzeCoreSensitivity <- function(simulation,
     numberOfCoresToUse = numberOfCoresToUse
   )
 
-  logDebug(message = "Running sensitivity analysis...", printConsole = TRUE)
+  logDebug(message = "Running sensitivity analysis...", printConsole = FALSE)
   sensitivityAnalysisResults <- runSensitivityAnalysis(
     sensitivityAnalysis = sensitivityAnalysis,
     sensitivityAnalysisRunOptions = sensitivityAnalysisRunOptions
   )
-  logDebug(message = "...done", printConsole = TRUE)
+  logDebug(message = "...done", printConsole = FALSE)
   exportSensitivityAnalysisResultsToCSV(results = sensitivityAnalysisResults, resultsFilePath)
 }
 
