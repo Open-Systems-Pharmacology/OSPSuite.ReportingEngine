@@ -27,13 +27,13 @@ print(simFilePath2)
 
 
 
-# #Single core mean model simulation
-# mm1 <- MeanModelSet$new(simulationFile = simFilePath1,simulationSetName = "SET1")
-# mm2 <- MeanModelSet$new(simulationFile = simFilePath2,simulationSetName = "SET2")
-# mmwf <- MeanModelWorkflow$new(simulationSets = list(mm1, mm2))
-# #mmwf$meanModelSensitivityAnalysis$variableParameterPaths <- "Organism|Hematocrit"
-# mmwf$meanModelSensitivityAnalysis$variableParameterPaths <- c("Organism|Hematocrit","Organism|Pancreas|Volume")
-# mmwf$runWorkflow()
+#Single core mean model simulation
+mm1 <- MeanModelSet$new(simulationFile = simFilePath1,simulationSetName = "SET1")
+mm2 <- MeanModelSet$new(simulationFile = simFilePath2,simulationSetName = "SET2")
+mmwf <- MeanModelWorkflow$new(simulationSets = list(mm1, mm2))
+#mmwf$meanModelSensitivityAnalysis$variableParameterPaths <- "Organism|Hematocrit"
+mmwf$meanModelSensitivityAnalysis$variableParameterPaths <- c("Organism|Hematocrit","Organism|Pancreas|Volume")
+mmwf$runWorkflow()
 
 
 # #Single core mean model simulation & PK analysis, parallel sensitivity analysis
@@ -58,13 +58,13 @@ print(simFilePath2)
 # ppwf_par$runWorkflow()
 
 
-#Single core population simulation and sensitivity analysis
-pp1 <- PopModelSet$new(simulationFile = simFilePath1, populationFile = popFilePath)
-ppwf_single_sa <- PopulationWorkflow$new(simulationSets = list(pp1))
-ppwf_single_sa$populationSimulation$numberOfCores <- 1
-ppwf_single_sa$populationSensitivityAnalysis$numberOfCores <- 1
-ppwf_single_sa$populationSensitivityAnalysis$variableParameterPaths <- c("Organism|Hematocrit","Organism|Pancreas|Volume")
-ppwf_single_sa$runWorkflow()
+# #Single core population simulation and sensitivity analysis
+# pp1 <- PopModelSet$new(simulationFile = simFilePath1, populationFile = popFilePath)
+# ppwf_single_sa <- PopulationWorkflow$new(simulationSets = list(pp1))
+# ppwf_single_sa$populationSimulation$numberOfCores <- 1
+# ppwf_single_sa$populationSensitivityAnalysis$numberOfCores <- 1
+# ppwf_single_sa$populationSensitivityAnalysis$variableParameterPaths <- c("Organism|Hematocrit","Organism|Pancreas|Volume")
+# ppwf_single_sa$runWorkflow()
 
 # ospsuite.reportingengine::runSensitivity(simFilePath1,
 #                variableParameterPaths = "Organism|Hematocrit",
