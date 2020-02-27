@@ -20,7 +20,7 @@ validateIsOfLength <- function(object, nbElements) {
   if (isOfLength(object, nbElements)) {
     return()
   }
-  stop(messages$errorWrongLength(object, nbElements))
+  logErrorThenStop(messages$errorWrongLength(object, nbElements))
 }
 
 #' Check if the provided object is of certain type
@@ -59,7 +59,7 @@ validateIsOfType <- function(object, type, nullAllowed = FALSE) {
   objectName <- deparse(substitute(object))
   objectTypes <- typeNamesFrom(type)
 
-  stop(messages$errorWrongType(objectName, class(object)[1], objectTypes))
+  logErrorThenStop(messages$errorWrongType(objectName, class(object)[1], objectTypes))
 }
 
 
@@ -68,7 +68,7 @@ validateIsInteger <- function(object, nullAllowed = FALSE) {
   validateIsOfType(object, c("numeric", "integer"), nullAllowed)
 
   if (isFALSE(object %% 1 == 0)) {
-    stop(messages$errorWrongType(deparse(substitute(object)), class(object)[1], "integer"))
+    logErrorThenStop(messages$errorWrongType(deparse(substitute(object)), class(object)[1], "integer"))
   }
 }
 
@@ -77,7 +77,7 @@ validateEnumValue <- function(enum, value) {
     return()
   }
 
-  stop(messages$errorValueNotInEnum(enum, value))
+  logErrorThenStop(messages$errorValueNotInEnum(enum, value))
 }
 
 typeNamesFrom <- function(type) {
@@ -114,7 +114,7 @@ validateIsSameLength <- function(...) {
   argnames <- sys.call()
   arguments <- paste(lapply(argnames[-1], as.character), collapse = ", ")
 
-  stop(messages$errorDifferentLength(arguments))
+  logErrorThenStop(messages$errorDifferentLength(arguments))
 }
 
 #' Check if the provided object is included in a parent object
@@ -140,7 +140,7 @@ validateIsIncluded <- function(values, parentValues, nullAllowed = FALSE) {
     return()
   }
 
-  stop(messages$errorNotIncluded(values, parentValues))
+  logErrorThenStop(messages$errorNotIncluded(values, parentValues))
 }
 
 validateMapping <- function(mapping, data, nullAllowed = FALSE) {
@@ -161,7 +161,7 @@ checkExisitingPath <- function(path, stopIfPathExists = FALSE) {
     return()
   }
   if (stopIfPathExists) {
-    stop(messages$warningExistingPath(path))
+    logErrorThenStop(messages$warningExistingPath(path))
   }
   else {
     warning(messages$warningExistingPath(path))
@@ -196,5 +196,10 @@ validateIsFileExtension <- function(path, extension, nullAllowed = FALSE) {
   if (isFileExtension(path, extension)) {
     return()
   }
-  stop(messages$errorExtension(path, extension))
+  logErrorThenStop(messages$errorExtension(path, extension))
+}
+
+logErrorThenStop <- function(message){
+  logError(message)
+  stop(message)
 }
