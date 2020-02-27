@@ -308,7 +308,7 @@ PopulationWorkflow <- R6::R6Class(
           createFolder(set$sensitivityAnalysisResultsFolder)
           set$sensitivityAnalysisResultsFileNames <- populationSensitivityAnalysis(
             simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
-            parametersToPerturb = self$populationSensitivityAnalysis$parametersToPerturb,
+            variableParameterPaths = self$populationSensitivityAnalysis$variableParameterPaths,
             popDataFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$populationName, ".csv")),
             pkParameterResultsFilePath = file.path(set$pkAnalysisResultsFolder, defaultFileNames$pkAnalysisResultsFile(set$simulationSet$simulationSetName)),
             resultsFileFolder = set$sensitivityAnalysisResultsFolder,

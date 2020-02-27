@@ -19,11 +19,11 @@ print(simFilePath1)
 print(simFilePath2)
 
 
-#Single core mean model simulation
-mm1 <- MeanModelSet$new(simulationFile = simFilePath1,simulationSetName = "SET1")
-mmwf <- MeanModelWorkflow$new(simulationSets = list(mm1))
-mmwf$meanModelSensitivityAnalysis$parametersToPerturb <- "Organism|Hematocrit"
-mmwf$runWorkflow()
+# #Single core mean model simulation
+# mm1 <- MeanModelSet$new(simulationFile = simFilePath1,simulationSetName = "SET1")
+# mmwf <- MeanModelWorkflow$new(simulationSets = list(mm1))
+# mmwf$meanModelSensitivityAnalysis$variableParameterPaths <- "Organism|Hematocrit"
+# mmwf$runWorkflow()
 
 
 
@@ -56,16 +56,16 @@ mmwf$runWorkflow()
 # ppwf_par$runWorkflow()
 
 
-# #Single core population simulation and sensitivity analysis
-# pp1 <- PopModelSet$new(simulationFile = simFilePath1, populationFile = popFilePath)
-# ppwf_single_sa <- PopulationWorkflow$new(simulationSets = list(pp1))
-# ppwf_single_sa$populationSimulation$numberOfCores <- 1
-# ppwf_single_sa$populationSensitivityAnalysis$numberOfCores <- 1
-# ppwf_single_sa$populationSensitivityAnalysis$parametersToPerturb <- "Organism|Hematocrit"
-# ppwf_single_sa$runWorkflow()
+#Single core population simulation and sensitivity analysis
+pp1 <- PopModelSet$new(simulationFile = simFilePath1, populationFile = popFilePath)
+ppwf_single_sa <- PopulationWorkflow$new(simulationSets = list(pp1))
+ppwf_single_sa$populationSimulation$numberOfCores <- 1
+ppwf_single_sa$populationSensitivityAnalysis$numberOfCores <- 1
+ppwf_single_sa$populationSensitivityAnalysis$variableParameterPaths <- c("Organism|Hematocrit","Organism|Pancreas|Volume")
+ppwf_single_sa$runWorkflow()
 
 # ospsuite.reportingengine::runSensitivity(simFilePath1,
-#                parametersToPerturb = "Organism|Hematocrit",
+#                variableParameterPaths = "Organism|Hematocrit",
 #                popFilePath = popFilePath,
 #                individualId = 0,
 #                variationRange = 0.1,

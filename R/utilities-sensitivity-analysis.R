@@ -2,7 +2,7 @@
 #' @description Determine whether to run SA for individual or population.  If for individual,  pass simulation to individualSensitivityAnalysis.
 #' If SA is for population, loop thru population file, extract parameters for each individual, and pass them to individualSensitivityAnalysis.
 #' @param simFilePath path to simulation file
-#' @param parametersToPerturb paths to parameters to perturb in sensitivity analysis
+#' @param variableParameterPaths paths to parameters to perturb in sensitivity analysis
 #' @param popFilePath path to the population data file
 #' @param individualId ID of individual in population data file for whom to perform sensitivity analysis
 #' @param variationRange variation range for sensitivity analysis
@@ -13,7 +13,7 @@
 #' @export
 #' @import ospsuite
 runSensitivity <- function(simFilePath,
-                           parametersToPerturb = NULL,
+                           variableParameterPaths = NULL,
                            popFilePath = NULL,
                            individualId = NULL,
                            variationRange,
@@ -31,7 +31,7 @@ runSensitivity <- function(simFilePath,
     for (ind in individualSeq) {
       resFile <- individualSensitivityAnalysis(
         simFilePath = simFilePath,
-        parametersToPerturb = parametersToPerturb,
+        variableParameterPaths = variableParameterPaths,
         individualParameters = popObject$getParameterValuesForIndividual(individualId = ind),
         variationRange = variationRange,
         numberOfCores = numberOfCores,
@@ -44,7 +44,7 @@ runSensitivity <- function(simFilePath,
   else {
     allResultsFileNames <- individualSensitivityAnalysis(
       simFilePath = simFilePath,
-      parametersToPerturb = parametersToPerturb,
+      variableParameterPaths = variableParameterPaths,
       individualParameters = NULL,
       variationRange = variationRange,
       numberOfCores = numberOfCores,
@@ -60,7 +60,7 @@ runSensitivity <- function(simFilePath,
 #' @description Run SA for an individual, possibly after modifying the simulation using individualParameters.  Determine whether to run SA for on single core or in parallel.
 #' If on single core, pass simulation to analyzeCoreSensitivity.  If in parallel, pass simulation to runParallelSensitivityAnalysis.
 #' @param simFilePath path to simulation file
-#' @param parametersToPerturb paths to parameters to perturb in sensitivity analysis
+#' @param variableParameterPaths paths to parameters to perturb in sensitivity analysis
 #' @param individualParameters is an object storing an individual's parameters, obtained from a population object's getParameterValuesForIndividual() function.
 #' @param variationRange variation range for sensitivity analysis
 #' @param numberOfCores is the number of cores over which to parallelize the sensitivity analysis
@@ -69,7 +69,7 @@ runSensitivity <- function(simFilePath,
 #' @return allResultsFileNames, the paths to CSV files containing results of sensitivity analysis
 #' @import ospsuite
 individualSensitivityAnalysis <- function(simFilePath,
-                                          parametersToPerturb = NULL,
+                                          variableParameterPaths = NULL,
                                           individualParameters,
                                           variationRange,
                                           numberOfCores = 1,
@@ -77,10 +77,10 @@ individualSensitivityAnalysis <- function(simFilePath,
                                           resultsFileName = resultsFileName) {
   # Load simulation to determine number of perturbation parameters
   sim <- loadSimulation(simFilePath)
-  if (is.null(parametersToPerturb)) { # If no perturbation parameters specified, perturb all parameters
-    parametersToPerturb <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
+  if (is.null(variableParameterPaths)) { # If no perturbation parameters specified, perturb all parameters
+    variableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
   }
-  totalNumberParameters <- length(parametersToPerturb)
+  totalNumberParameters <- length(variableParameterPaths)
   numberOfCores <- min(numberOfCores, totalNumberParameters) # In case there are more cores specified in numberOfCores than there are parameters, ensure at least one parameter per spawned core
   if (totalNumberParameters == 0) {
     stop("No variable parameters found for sensitivity analysis.")
@@ -90,7 +90,7 @@ individualSensitivityAnalysis <- function(simFilePath,
   if (numberOfCores > 1) {
     allResultsFileNames <- runParallelSensitivityAnalysis(
       simFilePath,
-      parametersToPerturb,
+      variableParameterPaths,
       individualParameters,
       variationRange,
       numberOfCores,
@@ -103,7 +103,7 @@ individualSensitivityAnalysis <- function(simFilePath,
     allResultsFileNames <- file.path(resultsFileFolder, paste0(resultsFileName, ".csv"))
     analyzeCoreSensitivity(
       simulation = sim,
-      parametersToPerturb = parametersToPerturb,
+      variableParameterPaths = variableParameterPaths,
       variationRange = variationRange,
       resultsFilePath = allResultsFileNames
     )
@@ -114,7 +114,7 @@ individualSensitivityAnalysis <- function(simFilePath,
 
 #' @title runParallelSensitivityAnalysis
 #' @description Spawn cores, divide parameters among cores, run sensitivity analysis on cores for a single individual, save results as CSV.
-#' @param parametersToPerturb paths to parameters to perturb in sensitivity analysis
+#' @param variableParameterPaths paths to parameters to perturb in sensitivity analysis
 #' @param individualParameters is an object storing an individual's parameters, obtained from a population object's getParameterValuesForIndividual() function.
 #' @param variationRange variation range for sensitivity analysis
 #' @param numberOfCores is the number of cores over which to parallelize the sensitivity analysis
@@ -123,17 +123,17 @@ individualSensitivityAnalysis <- function(simFilePath,
 #' @return Simulation results for population
 #' @import ospsuite
 runParallelSensitivityAnalysis <- function(simFilePath,
-                                           parametersToPerturb,
+                                           variableParameterPaths,
                                            individualParameters,
                                            variationRange,
                                            numberOfCores,
                                            resultsFileFolder,
                                            resultsFileName) {
-  totalNumberParameters <- length(parametersToPerturb)
+  totalNumberParameters <- length(variableParameterPaths)
   # Parallelizing among a total of min(numberOfCores,totalNumberParameters) cores
   seqVec <- (1 + ((1:totalNumberParameters) %% numberOfCores)) # Create a vector, of length totalNumberParameters, consisting of a repeating sequence of integers from 1 to numberOfCores
   sortVec <- sort(seqVec) # Sort seqVec to obtain an concatenated array of repeated integers, with the repeated integers ranging from from 1 to numberOfCores.  These are the core numbers to which each parameter will be assigned.
-  listSplitParameters <- split(x = parametersToPerturb, sortVec) # Split the parameters of the model according to sortVec
+  listSplitParameters <- split(x = variableParameterPaths, sortVec) # Split the parameters of the model according to sortVec
   Rmpi::mpi.spawn.Rslaves(nslaves = numberOfCores)
   Rmpi::mpi.bcast.cmd(library("ospsuite"))
   Rmpi::mpi.bcast.cmd(library("ospsuite.reportingengine"))
@@ -148,7 +148,7 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   Rmpi::mpi.bcast.cmd(updateSimulationIndividualParameters(simulation = sim, individualParameters)) # Update simulation with individual parameters
   Rmpi::mpi.remote.exec(analyzeCoreSensitivity(
     simulation = sim,
-    parametersToPerturb = listSplitParameters[[mpi.comm.rank()]],
+    variableParameterPaths = listSplitParameters[[mpi.comm.rank()]],
     variationRange = variationRange,
     resultsFilePath = allResultsFileNames[mpi.comm.rank()],
     numberOfCoresToUse = 1 # Number of local cores, set to 1 when parallelizing.
@@ -162,9 +162,9 @@ runParallelSensitivityAnalysis <- function(simFilePath,
 }
 
 #' @title analyzeCoreSensitivity
-#' @description Run a sensitivity analysis for a single individual, perturbing only the set of parameters parametersToPerturb
+#' @description Run a sensitivity analysis for a single individual, perturbing only the set of parameters variableParameterPaths
 #' @param simulation simulation class object
-#' @param parametersToPerturb paths of parameters to be analyzed
+#' @param variableParameterPaths paths of parameters to be analyzed
 #' @param variationRange variation range for sensitivity analysis
 #' @param resultsFilePath Path to file storing results of sensitivity analysis
 #' @param numberOfCoresToUse Number of cores to use on local node.  This parameter should be should be set to 1 when parallelizing over many nodes.
@@ -172,12 +172,12 @@ runParallelSensitivityAnalysis <- function(simFilePath,
 #' @import ospsuite
 #' @export
 analyzeCoreSensitivity <- function(simulation,
-                                   parametersToPerturb = NULL,
+                                   variableParameterPaths = NULL,
                                    variationRange = 0.1,
                                    resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv"),
                                    numberOfCoresToUse = NULL) {
   sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation, variationRange = variationRange)
-  sensitivityAnalysis$addParameterPaths(parametersToPerturb)
+  sensitivityAnalysis$addParameterPaths(variableParameterPaths)
   sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(
     showProgress = FALSE,
     numberOfCoresToUse = numberOfCoresToUse
@@ -240,7 +240,7 @@ getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
 #' @param numberOfCores the number of cores to be used for parallelization of the sensitivity analysis.  Default is 1 core (no parallelization).
 #' @export
 populationSensitivityAnalysis <- function(simFilePath,
-                                          parametersToPerturb = NULL,
+                                          variableParameterPaths = NULL,
                                           popDataFilePath,
                                           pkParameterResultsFilePath,
                                           resultsFileFolder,
@@ -252,7 +252,7 @@ populationSensitivityAnalysis <- function(simFilePath,
   sensitivityAnalysesResultsIndexFileDF <- getSAFileIndex(pkParameterResultsFilePath, quantileVec, resultsFileFolder, resultsFileName, popSAResultsIndexFile)
   ids <- unique(sensitivityAnalysesResultsIndexFileDF$IndividualId)
   runSensitivity(simFilePath,
-    parametersToPerturb = parametersToPerturb,
+    variableParameterPaths = variableParameterPaths,
     popFilePath = popDataFilePath,
     individualId = ids,
     variationRange = variationRange,

@@ -10,26 +10,26 @@ SensitivityAnalysisTask <- R6::R6Class(
     variationRange = NULL,
     numberOfCores = NULL,
     quantileVec = NULL,
-    parametersToPerturb = NULL,
+    variableParameterPaths = NULL,
 
     #' @description
     #' Create a `SensitivityAnalysisTask` object
     #' @param variationRange variation range for sensitivity analysis
     #' @param numberOfCores number of cores for parallel computation
-    #' @param parametersToPerturb parameters to perturb when performing sensitivity analysis
+    #' @param variableParameterPaths parameters to perturb when performing sensitivity analysis
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SensitivityAnalysisTask` object
     initialize = function(
       variationRange = NULL,
       numberOfCores = NULL,
       quantileVec = NULL,
-      parametersToPerturb = NULL,
+      variableParameterPaths = NULL,
       ...) {
       super$initialize(...)
       self$variationRange <- variationRange
       self$numberOfCores <- numberOfCores
       self$quantileVec <- quantileVec
-      self$parametersToPerturb <- parametersToPerturb
+      self$variableParameterPaths <- variableParameterPaths
     }
   )
 )
