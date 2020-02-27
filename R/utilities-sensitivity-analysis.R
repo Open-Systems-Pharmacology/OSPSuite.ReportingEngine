@@ -77,8 +77,17 @@ individualSensitivityAnalysis <- function(simFilePath,
                                           resultsFileName = resultsFileName) {
   # Load simulation to determine number of parameters valid for sensitivity analysis
   sim <- loadSimulation(simFilePath)
+
+  allVariableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
+
+
   if (is.null(variableParameterPaths)) { # If no parameters to vary specified, vary all parameters valid for sensitivity analysis
-    variableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
+    variableParameterPaths <- allVariableParameterPaths
+  } else {
+    #if a variableParameterPaths input is provided, ensure that all its elements exist within allVariableParameterPaths.  If not, give an error.
+
+    validateIsIncluded(variableParameterPaths,allVariableParameterPaths)
+
   }
   totalNumberParameters <- length(variableParameterPaths)
   numberOfCores <- min(numberOfCores, totalNumberParameters) # In case there are more cores specified in numberOfCores than there are parameters, ensure at least one parameter per spawned core

@@ -1,10 +1,10 @@
 rm(list = ls())
 library(ospsuite)
-setwd("C:/Users/ahamadeh/Dropbox/rproject/workflow/")
+# setwd("C:/Users/ahamadeh/Dropbox/rproject/workflow/")
 devtools::load_all("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine")
 
 
-inputFolderName <- "C:/Users/ahamadeh/Dropbox/rproject/workflow"
+inputFolderName <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data"
 simulationFileName1 <- "individualPksimSim"
 simulationFileName2 <- "simpleMobiEventSim"
 populationFileName <- "popData"
@@ -19,19 +19,21 @@ print(simFilePath1)
 print(simFilePath2)
 
 
+# # Single core mean model simulation
+# modelModelSimulationSet1 <- MeanModelSet$new(simulationFile = simFilePath1, simulationSetName = "SET1")
+# meanModelWorkflow1  <- MeanModelWorkflow$new(simulationSets = list(modelModelSimulationSet1))
+# meanModelWorkflow1 $meanModelSensitivityAnalysis$variableParameterPaths <- c("Organism|Hematocrit", "Organism|Pancreas|Volume")
+# meanModelWorkflow1 $runWorkflow()
+
+
+
 #Single core mean model simulation
 mm1 <- MeanModelSet$new(simulationFile = simFilePath1,simulationSetName = "SET1")
-mmwf <- MeanModelWorkflow$new(simulationSets = list(mm1))
-mmwf$meanModelSensitivityAnalysis$variableParameterPaths <- "Organism|Hematocrit"
+mm2 <- MeanModelSet$new(simulationFile = simFilePath2,simulationSetName = "SET2")
+mmwf <- MeanModelWorkflow$new(simulationSets = list(mm1, mm2))
+#mmwf$meanModelSensitivityAnalysis$variableParameterPaths <- "Organism|Hematocrit"
+mmwf$meanModelSensitivityAnalysis$variableParameterPaths <- c("Organism|Hematocrit","Organism|Pancreas|Volume")
 mmwf$runWorkflow()
-
-
-
-# #Single core mean model simulation
-# mm1 <- MeanModelSet$new(simulationFile = simFilePath1,simulationSetName = "SET1")
-# mm2 <- MeanModelSet$new(simulationFile = simFilePath2,simulationSetName = "SET2")
-# mmwf <- MeanModelWorkflow$new(simulationSets = list(mm1, mm2))
-# mmwf$runWorkflow()
 
 
 # #Single core mean model simulation & PK analysis, parallel sensitivity analysis
