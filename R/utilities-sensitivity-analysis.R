@@ -86,13 +86,7 @@ individualSensitivityAnalysis <- function(simFilePath,
   } else {
     #if a variableParameterPaths input is provided, ensure that all its elements exist within allVariableParameterPaths.  If not, give an error.
 
-    if(!all( variableParameterPaths %in% allVariableParameterPaths) ){
-      msg<- paste("Variable parameter path(s)",
-                  paste(setdiff(variableParameterPaths,allVariableParameterPaths),collapse = " and "),
-                  "is/are not valid for sensitivity analysis in model",simFilePath,".")
-      logError(msg)
-      stop(msg)
-    }
+    validateIsIncluded(variableParameterPaths,allVariableParameterPaths)
 
   }
   totalNumberParameters <- length(variableParameterPaths)
