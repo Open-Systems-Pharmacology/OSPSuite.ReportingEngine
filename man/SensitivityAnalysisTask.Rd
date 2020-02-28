@@ -53,6 +53,7 @@ Create a `SensitivityAnalysisTask` object
   variationRange = NULL,
   numberOfCores = NULL,
   quantileVec = NULL,
+  variableParameterPaths = NULL,
   ...
 )}\if{html}{\out{</div>}}
 }
@@ -64,9 +65,9 @@ Create a `SensitivityAnalysisTask` object
 
 \item{\code{numberOfCores}}{number of cores for parallel computation}
 
-\item{\code{...}}{parameters inherited from R6 class `Task` object}
+\item{\code{variableParameterPaths}}{vector of paths of parameters to vary when performing sensitivity analysis}
 
-\item{\code{generatedResultFileNames}}{name of files where PK parameters are saved}
+\item{\code{...}}{parameters inherited from R6 class `Task` object}
 }
 \if{html}{\out{</div>}}
 }

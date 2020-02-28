@@ -287,7 +287,7 @@ Define plot mass balance `task` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$plotMassBalanceSettings(
   input = NULL,
-  output = NULL,
+  output = file.path(self$resultsFolder, "MassBalance"),
   active = FALSE,
   message = NULL
 )}\if{html}{\out{</div>}}

@@ -15,6 +15,6 @@ plotMeanGoodnessOfFit(structureSet, plotConfigurations = NULL)
 list of `residuals` objects
 }
 \description{
-Plot goodness of fit diagnostics including time profiles, 
+Plot goodness of fit diagnostics including time profiles,
 observations vs predictions, residuals plots (residuals vs time, vs predictions, qq-plots and histogram)
 }

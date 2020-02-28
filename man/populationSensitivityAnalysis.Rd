@@ -6,6 +6,7 @@
 \usage{
 populationSensitivityAnalysis(
   simFilePath,
+  variableParameterPaths = NULL,
   popDataFilePath,
   pkParameterResultsFilePath,
   resultsFileFolder,

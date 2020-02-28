@@ -2,83 +2,34 @@
 % Please edit documentation in R/mean-model-set.R
 \name{MeanModelSet}
 \alias{MeanModelSet}
-\title{#' @title MeanModelSet
-#' @description R6 class representing Reporting Engine Mean Model Set
-#' @field simulationFile names of pkml file to be used for the simulation
-#' @field simulationName display name of simulation
-#' @field pathID path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)
-#' @field pathName display name for `pathID`
-#' @field pathUnit display unit for `pathID`
-#' @field pkParameters PK parameters function names to be calculated from the simulation (e.g. `C_max`).
-#' @field pkParametersNames display names for `pkParameters`
-#' @field pkParametersUnits display units for `pkParameters`
-#' @field dataFilter filter to compare with observed data
-#' @export
-    #' @description
-    #' Create a new `MeanModelSet` object.
-    #' @param simulationFile names of pkml file to be used for the simulation
-    #' @param simulationName display name of simulation
-    #' @param pathID path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)
-    #' @param pathName display name for `pathID`
-    #' @param pathUnit display unit for `pathID`
-    #' @param pkParameters PK parameters function names to be calculated from the simulation (e.g. `C_max`).
-    #' Default value is enum `AllPKParameters`.
-    #' @param pkParametersNames display names for `pkParameters`
-    #' @param pkParametersUnits display units for `pkParameters`
-    #' @param dataFilter filter to compare with observed data
-    #' @return A new `MeanModelSet` object}
+\title{MeanModelSet}
 \description{
-#' @title MeanModelSet
-#' @description R6 class representing Reporting Engine Mean Model Set
-#' @field simulationFile names of pkml file to be used for the simulation
-#' @field simulationName display name of simulation
-#' @field pathID path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)
-#' @field pathName display name for `pathID`
-#' @field pathUnit display unit for `pathID`
-#' @field pkParameters PK parameters function names to be calculated from the simulation (e.g. `C_max`).
-#' @field pkParametersNames display names for `pkParameters`
-#' @field pkParametersUnits display units for `pkParameters`
-#' @field dataFilter filter to compare with observed data
-#' @export
-    #' @description
-    #' Create a new `MeanModelSet` object.
-    #' @param simulationFile names of pkml file to be used for the simulation
-    #' @param simulationName display name of simulation
-    #' @param pathID path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)
-    #' @param pathName display name for `pathID`
-    #' @param pathUnit display unit for `pathID`
-    #' @param pkParameters PK parameters function names to be calculated from the simulation (e.g. `C_max`).
-    #' Default value is enum `AllPKParameters`.
-    #' @param pkParametersNames display names for `pkParameters`
-    #' @param pkParametersUnits display units for `pkParameters`
-    #' @param dataFilter filter to compare with observed data
-    #' @return A new `MeanModelSet` object
+R6 class representing Reporting Engine Mean Model Set
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{simulationFile}}{names of pkml file to be used for the simulation}
 
-#' @title MeanModelSet
-#' @description R6 class representing Reporting Engine Mean Model Set
-#' @field simulationFile names of pkml file to be used for the simulation
-#' @field simulationName display name of simulation
-#' @field pathID path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)
-#' @field pathName display name for `pathID`
-#' @field pathUnit display unit for `pathID`
-#' @field pkParameters PK parameters function names to be calculated from the simulation (e.g. `C_max`).
-#' @field pkParametersNames display names for `pkParameters`
-#' @field pkParametersUnits display units for `pkParameters`
-#' @field dataFilter filter to compare with observed data
-#' @export
-    #' @description
-    #' Create a new `MeanModelSet` object.
-    #' @param simulationFile names of pkml file to be used for the simulation
-    #' @param simulationName display name of simulation
-    #' @param pathID path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)
-    #' @param pathName display name for `pathID`
-    #' @param pathUnit display unit for `pathID`
-    #' @param pkParameters PK parameters function names to be calculated from the simulation (e.g. `C_max`).
-    #' Default value is enum `AllPKParameters`.
-    #' @param pkParametersNames display names for `pkParameters`
-    #' @param pkParametersUnits display units for `pkParameters`
-    #' @param dataFilter filter to compare with observed data
-    #' @return A new `MeanModelSet` object
+\item{\code{simulationName}}{display name of simulation}
+
+\item{\code{pathID}}{path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)}
+
+\item{\code{pathName}}{display name for `pathID`}
+
+\item{\code{pathUnit}}{display unit for `pathID`}
+
+\item{\code{pkParameters}}{PK parameters function names to be calculated from the simulation (e.g. `C_max`).}
+
+\item{\code{pkParametersNames}}{display names for `pkParameters`}
+
+\item{\code{pkParametersUnits}}{display units for `pkParameters`}
+
+\item{\code{dataFilter}}{filter to compare with observed data}
+
+\item{\code{timeUnit}}{display unit for time variable}
+}
+\if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -91,6 +42,7 @@
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
+Create a new `MeanModelSet` object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelSet$new(
   simulationSetName = NULL,
@@ -104,10 +56,40 @@
   pkParametersUnits = NULL,
   dataFilter = NULL,
   observedDataFile = NULL,
-  observedMetaDataFile = NULL
+  observedMetaDataFile = NULL,
+  timeUnit = "h"
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{simulationFile}}{names of pkml file to be used for the simulation}
+
+\item{\code{simulationName}}{display name of simulation}
+
+\item{\code{pathID}}{path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)}
+
+\item{\code{pathName}}{display name for `pathID`}
+
+\item{\code{pathUnit}}{display unit for `pathID`}
+
+\item{\code{pkParameters}}{PK parameters function names to be calculated from the simulation (e.g. `C_max`).
+Default value is enum `AllPKParameters`.}
+
+\item{\code{pkParametersNames}}{display names for `pkParameters`}
+
+\item{\code{pkParametersUnits}}{display units for `pkParameters`}
+
+\item{\code{dataFilter}}{filter to compare with observed data}
+
+\item{\code{timeUnit}}{display unit for time variable. Default is "h"}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new `MeanModelSet` object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-copyInputFiles"></a>}}

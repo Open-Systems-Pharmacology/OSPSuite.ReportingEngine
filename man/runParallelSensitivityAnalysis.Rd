@@ -6,7 +6,7 @@
 \usage{
 runParallelSensitivityAnalysis(
   simFilePath,
-  parametersToPerturb,
+  variableParameterPaths,
   individualParameters,
   variationRange,
   numberOfCores,
@@ -15,7 +15,7 @@ runParallelSensitivityAnalysis(
 )
 }
 \arguments{
-\item{parametersToPerturb}{paths to parameters to perturb in sensitivity analysis}
+\item{variableParameterPaths}{paths to parameters to vary in sensitivity analysis}
 
 \item{individualParameters}{is an object storing an individual's parameters, obtained from a population object's getParameterValuesForIndividual() function.}
 
