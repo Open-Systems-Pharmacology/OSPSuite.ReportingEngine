@@ -154,7 +154,7 @@ MeanModelWorkflow <- R6::R6Class(
         input = input,
         output = output,
         active = active,
-        message = "Plot Goodness of Fit task not available at the moment"
+        message = "Plot Goodness of Fit task in Alpha Testing"
       )
     },
 
@@ -191,14 +191,14 @@ MeanModelWorkflow <- R6::R6Class(
     #' Default value indicates `task` name.
     #' @return A new `Task` object
     plotMassBalanceSettings = function(input = NULL,
-                                           output = NULL,
+                                           output = file.path(self$resultsFolder, "MassBalance"),
                                            active = FALSE,
                                            message = NULL) {
       self$plotMassBalance <- Task$new(
         input = input,
         output = output,
         active = active,
-        message = "Plot Mass Balance task not available at the moment"
+        message = "Plot Mass Balance task in Alpha Testing"
       )
     },
 
@@ -441,6 +441,8 @@ MeanModelWorkflow <- R6::R6Class(
           self$reportFileName,
           "# Mass balance"
         )
+        dir.create(self$plotMassBalance$output[[1]])
+
         for (set in self$simulationStructures) {
           logWorkflow(
             message = c(
@@ -450,13 +452,39 @@ MeanModelWorkflow <- R6::R6Class(
             pathFolder = self$workflowFolder
           )
           if (self$plotMassBalance$validateInput()) {
+            massBalanceResults <- plotMeanMassBalance(set,
+              plotConfigurations = self$plotMassBalance$settings$plotConfigurations
+            )
 
-            # massbalancePlot <- ggplot2::ggplot() + ggplot2::ggtitle("TO DO: Mass Balance")
+            addRmdTextChunk(
+              self$reportFileName,
+              paste0("Simulation: ", set$simulationSet$simulationSetName)
+            )
 
-            # ggplot2::ggsave(filename = file.path(self$figuresFolder, paste0(set$simulationSet$simulationName, "-mass-balance.png")))
+            massBalancePlotTypes <- names(massBalanceResults$plots)
+
+            for (massBalancePlotType in massBalancePlotTypes) {
+              massBalanceFileName <- file.path(self$plotMassBalance$output[[1]], paste0(set$simulationSet$simulationSetName, massBalancePlotType, ".png"))
+
+              # TO DO: plug ggsave option to GoF settintgs/plotConfigurations
+              # Depending on the report options, it is possible to configure subplots here
+              ggplot2::ggsave(
+                filename = massBalanceFileName,
+                plot = massBalanceResults$plots[[massBalancePlotType]],
+                width = 16, height = 9, units = "cm"
+              )
+
+              addRmdFigureChunk(
+                fileName = self$reportFileName,
+                figureFile = massBalanceFileName,
+                figureCaption = massBalancePlotType
+              )
+            }
           }
         }
       }
+
+
       if (self$plotAbsorption$active) {
         logWorkflow(
           message = paste0("Starting ", self$plotAbsorption$message),
