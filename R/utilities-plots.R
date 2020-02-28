@@ -104,7 +104,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
   timeProfileMetaData <- list(
     "Time" = list(
       dimension = "Time",
-      unit = "h"
+      unit = structureSet$simulationSet$timeUnit
     ),
     "Concentration" = list(
       dimension = simulationQuantity$dimension,
