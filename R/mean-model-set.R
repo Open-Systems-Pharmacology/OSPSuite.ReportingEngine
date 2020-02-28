@@ -1,15 +1,16 @@
-#' #' @title MeanModelSet
-#' #' @description R6 class representing Reporting Engine Mean Model Set
-#' #' @field simulationFile names of pkml file to be used for the simulation
-#' #' @field simulationName display name of simulation
-#' #' @field pathID path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)
-#' #' @field pathName display name for `pathID`
-#' #' @field pathUnit display unit for `pathID`
-#' #' @field pkParameters PK parameters function names to be calculated from the simulation (e.g. `C_max`).
-#' #' @field pkParametersNames display names for `pkParameters`
-#' #' @field pkParametersUnits display units for `pkParameters`
-#' #' @field dataFilter filter to compare with observed data
-#' #' @export
+#' @title MeanModelSet
+#' @description R6 class representing Reporting Engine Mean Model Set
+#' @field simulationFile names of pkml file to be used for the simulation
+#' @field simulationName display name of simulation
+#' @field pathID path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)
+#' @field pathName display name for `pathID`
+#' @field pathUnit display unit for `pathID`
+#' @field pkParameters PK parameters function names to be calculated from the simulation (e.g. `C_max`).
+#' @field pkParametersNames display names for `pkParameters`
+#' @field pkParametersUnits display units for `pkParameters`
+#' @field dataFilter filter to compare with observed data
+#' @field timeUnit display unit for time variable
+#' @export
 MeanModelSet <- R6::R6Class(
   "MeanModelSet",
   public = list(
@@ -25,38 +26,35 @@ MeanModelSet <- R6::R6Class(
     dataFilter = NULL,
     observedDataFile = NULL,
     observedMetaDataFile = NULL,
-    # inputFilesFolder = NULL,
-    # simulationResultsFolder = NULL,
-    # simulationResultFileNames = NULL,
-    # pkAnalysisResultsFolder = NULL,
-    # pkAnalysisResultsFileNames = NULL,
-    # sensitivityAnalysisResultsFolder = NULL,
-    # sensitivityAnalysisResultsFileNames = NULL,
-    #'     #' @description
-    #'     #' Create a new `MeanModelSet` object.
-    #'     #' @param simulationFile names of pkml file to be used for the simulation
-    #'     #' @param simulationName display name of simulation
-    #'     #' @param pathID path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)
-    #'     #' @param pathName display name for `pathID`
-    #'     #' @param pathUnit display unit for `pathID`
-    #'     #' @param pkParameters PK parameters function names to be calculated from the simulation (e.g. `C_max`).
-    #'     #' Default value is enum `AllPKParameters`.
-    #'     #' @param pkParametersNames display names for `pkParameters`
-    #'     #' @param pkParametersUnits display units for `pkParameters`
-    #'     #' @param dataFilter filter to compare with observed data
-    #'     #' @return A new `MeanModelSet` object
+    timeUnit = NULL,
+    
+    #' @description
+    #' Create a new `MeanModelSet` object.
+    #' @param simulationFile names of pkml file to be used for the simulation
+    #' @param simulationName display name of simulation
+    #' @param pathID path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)
+    #' @param pathName display name for `pathID`
+    #' @param pathUnit display unit for `pathID`
+    #' @param pkParameters PK parameters function names to be calculated from the simulation (e.g. `C_max`).
+    #' Default value is enum `AllPKParameters`.
+    #' @param pkParametersNames display names for `pkParameters`
+    #' @param pkParametersUnits display units for `pkParameters`
+    #' @param timeUnit display unit for time variable. Default is "h"
+    #' @param dataFilter filter to compare with observed data
+    #' @return A new `MeanModelSet` object
     initialize = function(simulationSetName = NULL,
-                          simulationFile,
-                          simulationName = NULL,
-                          pathID = NULL,
-                          pathName = NULL,
-                          pathUnit = NULL,
-                          pkParameters = AllPKParameters,
-                          pkParametersNames = NULL,
-                          pkParametersUnits = NULL,
-                          dataFilter = NULL,
-                          observedDataFile = NULL,
-                          observedMetaDataFile = NULL) {
+                              simulationFile,
+                              simulationName = NULL,
+                              pathID = NULL,
+                              pathName = NULL,
+                              pathUnit = NULL,
+                              pkParameters = AllPKParameters,
+                              pkParametersNames = NULL,
+                              pkParametersUnits = NULL,
+                              dataFilter = NULL,
+                              observedDataFile = NULL,
+                              observedMetaDataFile = NULL,
+                              timeUnit = "h") {
       self$simulationFile <- simulationFile
       self$simulationName <- simulationName %||% trimFileName(simulationFile, extension = "pkml")
 
@@ -69,6 +67,8 @@ MeanModelSet <- R6::R6Class(
       self$pkParameters <- pkParameters
       self$pkParametersNames <- pkParametersNames %||% pkParameters
       self$pkParametersUnits <- pkParametersUnits
+      
+      self$timeUnit <- timeUnit %||% "h"
 
       self$dataFilter <- dataFilter
 
