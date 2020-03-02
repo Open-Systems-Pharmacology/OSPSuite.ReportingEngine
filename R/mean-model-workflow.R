@@ -374,7 +374,7 @@ MeanModelWorkflow <- R6::R6Class(
 
             # TO DO: save standardized names in the nomenclature file
             write.csv(gofResults$timeProfile,
-              file = file.path(self$gofResults$output[[1]], paste0(set$simulationSet$simulationSetName, "-timeProfile.csv")),
+              file = file.path(self$plotGoF$output[[1]], paste0(set$simulationSet$simulationSetName, "-timeProfile.csv")),
               row.names = FALSE
             )
 
