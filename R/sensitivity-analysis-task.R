@@ -20,35 +20,33 @@ SensitivityAnalysisTask <- R6::R6Class(
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SensitivityAnalysisTask` object
     initialize = function(
-      variationRange = NULL,
-      numberOfCores = NULL,
-      quantileVec = NULL,
-      variableParameterPaths = NULL,
-      ...) {
+                              variationRange = NULL,
+                              numberOfCores = NULL,
+                              quantileVec = NULL,
+                              variableParameterPaths = NULL,
+                              ...) {
       super$initialize(...)
 
-      if(!is.null(variationRange)){
+      if (!is.null(variationRange)) {
         validateIsNumeric(variationRange)
-        validateIsOfLength(variationRange,nbElements = 1)
+        validateIsOfLength(variationRange, nbElements = 1)
         self$variationRange <- variationRange
       }
 
-      if(!is.null(numberOfCores)){
+      if (!is.null(numberOfCores)) {
         validateIsInteger(numberOfCores)
         self$numberOfCores <- numberOfCores
       }
 
-      if(!is.null(quantileVec)){
+      if (!is.null(quantileVec)) {
         validateIsNumeric(quantileVec)
         self$quantileVec <- quantileVec
       }
 
-      if(!is.null(variableParameterPaths)){
+      if (!is.null(variableParameterPaths)) {
         validateIsString(variableParameterPaths)
         self$variableParameterPaths <- variableParameterPaths
       }
-
-
     }
   )
 )

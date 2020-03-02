@@ -27,7 +27,7 @@ MeanModelSet <- R6::R6Class(
     observedDataFile = NULL,
     observedMetaDataFile = NULL,
     timeUnit = NULL,
-    
+
     #' @description
     #' Create a new `MeanModelSet` object.
     #' @param simulationFile names of pkml file to be used for the simulation
@@ -67,7 +67,7 @@ MeanModelSet <- R6::R6Class(
       self$pkParameters <- pkParameters
       self$pkParametersNames <- pkParametersNames %||% pkParameters
       self$pkParametersUnits <- pkParametersUnits
-      
+
       self$timeUnit <- timeUnit %||% "h"
 
       self$dataFilter <- dataFilter

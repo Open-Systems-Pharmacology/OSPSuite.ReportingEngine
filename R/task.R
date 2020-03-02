@@ -25,10 +25,10 @@ Task <- R6::R6Class(
     #' Default value indicates `task` name.
     #' @return A new `Task` object
     initialize = function(input = NULL,
-                          output = NULL,
-                          settings = NULL,
-                          active = FALSE,
-                          message = NULL) {
+                              output = NULL,
+                              settings = NULL,
+                              active = FALSE,
+                              message = NULL) {
       validateIsOfType(active, "logical")
       self$active <- active
       self$input <- as.list(input)
@@ -77,12 +77,12 @@ Task <- R6::R6Class(
 #' @param tasks names of the tasks to activate
 #' Default activates all tasks of the workflow using workflow method `workflow$getAllTasks()`
 #' @export
-activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()){
+activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
-  
-    for(task in tasks){
-      workflow[[task]]$activate()
-    }
+
+  for (task in tasks) {
+    workflow[[task]]$activate()
+  }
 }
 
 #' @title inactivateWorkflowTasks
@@ -91,10 +91,10 @@ activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()){
 #' @param tasks names of the tasks to activate
 #' Default inactivates all tasks of the workflow using workflow method `workflow$getAllTasks()`
 #' @export
-inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()){
+inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
-  
-  for(task in tasks){
+
+  for (task in tasks) {
     workflow[[task]]$inactivate()
   }
 }

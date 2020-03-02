@@ -203,7 +203,7 @@ validateIsFileExtension <- function(path, extension, nullAllowed = FALSE) {
 #' Log the error with a message and then stop, displaying same message.
 #'
 #' @param message message to display and then log
-logErrorThenStop <- function(message){
+logErrorThenStop <- function(message) {
   logError(message)
   stop(message)
 }
