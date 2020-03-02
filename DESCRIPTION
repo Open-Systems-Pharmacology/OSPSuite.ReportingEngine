@@ -20,7 +20,8 @@ Depends:
 Imports: 
     R6,
     ospsuite,
-    tlf
+    tlf,
+    ggplot2
 Suggests: 
     testthat (>= 2.1.0)
 Encoding: UTF-8
