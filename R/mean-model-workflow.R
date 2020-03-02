@@ -372,6 +372,12 @@ MeanModelWorkflow <- R6::R6Class(
               plotConfigurations = self$plotGoF$settings$plotConfigurations
             )
 
+            # TO DO: save standardized names in the nomenclature file
+            write.csv(gofResults$timeProfile,
+              file = file.path(self$gofResults$output[[1]], paste0(set$simulationSet$simulationSetName, "-timeProfile.csv")),
+              row.names = FALSE
+            )
+
             residualsAcrossAllSimulations <- rbind.data.frame(
               residualsAcrossAllSimulations,
               gofResults$residuals$data
@@ -453,7 +459,14 @@ MeanModelWorkflow <- R6::R6Class(
           )
           if (self$plotMassBalance$validateInput()) {
             massBalanceResults <- plotMeanMassBalance(set,
-              plotConfigurations = self$plotMassBalance$settings$plotConfigurations
+              plotConfigurations = self$plotMassBalance$settings$plotConfigurations,
+              selectedCompoundNames = self$plotMassBalance$settings$compoundNames
+            )
+
+            # TO DO: save standardized names in the nomenclature file
+            write.csv(massBalanceResults$timeProfile,
+              file = file.path(self$plotMassBalance$output[[1]], paste0(set$simulationSet$simulationSetName, "-timeProfile.csv")),
+              row.names = FALSE
             )
 
             addRmdTextChunk(
