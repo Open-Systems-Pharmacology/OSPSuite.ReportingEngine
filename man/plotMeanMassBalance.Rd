@@ -4,12 +4,19 @@
 \alias{plotMeanMassBalance}
 \title{plotMeanMassBalance}
 \usage{
-plotMeanMassBalance(structureSet, plotConfigurations = NULL)
+plotMeanMassBalance(
+  structureSet,
+  plotConfigurations = NULL,
+  selectedCompoundNames = NULL
+)
 }
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object}
 
-\item{plotConfigurations}{List of `PlotConfiguration` R6 class objects for each goodness of fit plot}
+\item{plotConfigurations}{List of `PlotConfiguration` R6 class objects}
+
+\item{massBalanceOptions}{Options to be defined 
+(e.g. how to group the plot results, or which molecule to exclude)}
 }
 \value{
 list of `ggplot` objects
