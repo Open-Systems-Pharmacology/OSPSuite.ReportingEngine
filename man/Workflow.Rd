@@ -35,6 +35,8 @@ R6 class representing Reporting Engine generic Workflow
 \item \href{#method-getAllTasks}{\code{Workflow$getAllTasks()}}
 \item \href{#method-getActiveTasks}{\code{Workflow$getActiveTasks()}}
 \item \href{#method-getInactiveTasks}{\code{Workflow$getInactiveTasks()}}
+\item \href{#method-activateTasks}{\code{Workflow$activateTasks()}}
+\item \href{#method-inactivateTasks}{\code{Workflow$inactivateTasks()}}
 \item \href{#method-clone}{\code{Workflow$clone()}}
 }
 }
@@ -102,6 +104,46 @@ Get a vector with all the names of inactive tasks within the `Workflow`
 \if{html}{\out{<div class="r">}}\preformatted{Workflow$getInactiveTasks()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+Vector of inactive `Task` names
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-activateTasks"></a>}}
+\subsection{Method \code{activateTasks()}}{
+Activates a series of `Tasks` from current `Workflow`
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$activateTasks(tasks = self$getAllTasks())}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tasks}}{names of the worklfow tasks to activate.
+Default activates all tasks of the workflow using workflow method `workflow$getAllTasks()`}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Vector of inactive `Task` names
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-inactivateTasks"></a>}}
+\subsection{Method \code{inactivateTasks()}}{
+Inactivates a series of `Tasks` from current `Workflow`
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$inactivateTasks(tasks = self$getAllTasks())}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tasks}}{names of the worklfow tasks to inactivate.
+Default inactivates all tasks of the workflow using workflow method `workflow$getAllTasks()`}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 Vector of inactive `Task` names
 }
