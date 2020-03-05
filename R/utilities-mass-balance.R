@@ -248,12 +248,10 @@ plotMassBalanceTimeProfile <- function(data,
     color = "Legend"
   )
 
-  # TO DO: remove Testing Data Watermark when plot is complete
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
     metaData = metaData,
-    dataMapping = timeVsAmountDataMapping,
-    watermark = "Testing !"
+    dataMapping = timeVsAmountDataMapping
   )
 
   # TO DO: use the new version of tlf to get this plot
@@ -293,12 +291,10 @@ plotMassBalanceCumulativeTimeProfile <- function(data,
     fill = "Legend"
   )
 
-  # TO DO: remove Testing Data Watermark when plot is complete
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
     metaData = metaData,
-    dataMapping = timeVsAmountDataMapping,
-    watermark = "Testing !"
+    dataMapping = timeVsAmountDataMapping
   )
 
   # TO DO: use the new version of tlf to get this plot

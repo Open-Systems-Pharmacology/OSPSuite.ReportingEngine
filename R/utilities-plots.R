@@ -1,3 +1,12 @@
+# Read the json file in data folder and create the default reporting engine theme
+reThemeProperties <- jsonlite::fromJSON('./data/RE-theme.json')
+reTheme <- tlf::Theme$new(themesProperties = reThemeProperties,
+                          labelBaseSize = 11)
+reTheme$titleFont$size <- 12
+reTheme$subtitleFont$size <- 10
+tlf::useTheme(reTheme)
+
+
 #' @title plotDemography
 #' @description Plot histograms of demography parameters from a simulated population
 #' @param simulation simulation class object
@@ -243,12 +252,11 @@ plotMeanObsVsPred <- function(data,
     x = "observed",
     y = "simulated"
   )
-  # TO DO: remove Testing Data Watermark when plot is fixed
+  
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
     metaData = metaData,
-    dataMapping = obsVsPredDataMapping,
-    watermark = "Testing Data !"
+    dataMapping = obsVsPredDataMapping
   )
 
   # TO DO: use the new version of tlf to get this plot
@@ -287,12 +295,11 @@ plotMeanResVsTime <- function(data,
     x = "time",
     y = "residuals"
   )
-  # TO DO: remove Testing Data Watermark when plot is fixed
+  
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
     metaData = metaData,
-    dataMapping = resVsTimeDataMapping,
-    watermark = "Testing Data !"
+    dataMapping = resVsTimeDataMapping
   )
 
   # TO DO: use the new version of tlf to get this plot
@@ -328,12 +335,11 @@ plotMeanResVsPred <- function(data,
     x = "simulated",
     y = "residuals"
   )
-  # TO DO: remove Testing Data Watermark when plot is fixed
+  
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
     metaData = metaData,
-    dataMapping = resVsPredDataMapping,
-    watermark = "Testing Data !"
+    dataMapping = resVsPredDataMapping
   )
 
   # TO DO: use the new version of tlf to get this plot
