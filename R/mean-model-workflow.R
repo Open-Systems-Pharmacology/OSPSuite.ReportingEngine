@@ -420,7 +420,7 @@ MeanModelWorkflow <- R6::R6Class(
 
           residualHistogramPlot <- tlf::plotHistogram(
             data = residualsAcrossAllSimulations,
-            dataMapping = tlf::HistogramDataMapping$new(x = "residuals"),
+            dataMapping = tlf::HistogramDataMapping$new(x = "Residuals"),
             plotConfiguration = self$plotGoF$settings$plotConfigurations[["histogram"]]
           )
           ggplot2::ggsave(

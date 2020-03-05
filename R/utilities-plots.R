@@ -69,14 +69,20 @@ plotMeanGoodnessOfFit <- function(structureSet,
     observations <- list()
     observations$data <- read.csv(structureSet$simulationSet$observedDataFile)
     observations$metaData <- read.csv(structureSet$simulationSet$observedMetaDataFile)
+    observations$filter <- structureSet$simulationSet$dataFilter
 
     timeColumn <- as.character(observations$metaData[observations$metaData[, "matlabID"] == "time", "nonmenColumn"])
     dvColumn <- as.character(observations$metaData[observations$metaData[, "matlabID"] == "dv", "nonmenColumn"])
+    filterColumn <- as.character(observations$metaData[observations$metaData[, "matlabID"] == "dataFilter", "nonmenColumn"])
 
-    # TO DO: dataFilter
-    # rowFilter <- which(observations$data[dataFilter$condition, dataFilter$variableName])
-    rowFilter <- which(observations$data[, dvColumn] >= 0)
-
+    rowFilter <- TRUE
+    if(!is.null(observations$filter)){
+      # TO DO: replace by eval(expr)
+      # In logDebug add number of rows included by the filter
+      rowFilter <- which(observations$data[, filterColumn] == observations$filter)
+    }
+    
+    # Observed Data needs to be already in the display unit
     timeProfileData <- data.frame(
       "Time" = observations$data[rowFilter, timeColumn],
       "Concentration" = observations$data[rowFilter, dvColumn],
@@ -123,7 +129,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
     )
   )
 
-  # TO DO: work out shape/linetype in mapping
+  # TO DO: work out on tlf side shape/linetype in mapping
   timeProfileMapping <- tlf::TimeProfileDataMapping$new(
     x = "Time",
     y = "Concentration",
@@ -189,7 +195,9 @@ plotMeanTimeProfile <- function(data,
 
 
 #' @title getResiduals
-#' @description Get a data.frame matching simulated data to observed data and compute the residuals
+#' @description This function may be reshape to be more generic later on
+#' Currently, the input variable data is a data.frame with "Time", "Concentration" and "Legend"
+#' The function get the simulated data with the time the closest to the observed data times
 #' @param data data.frame of time profile data
 #' @param metaData meta data on `data`
 #' @param dataMapping XYDataMapping class object mapping what variable is to compare
@@ -198,41 +206,39 @@ plotMeanTimeProfile <- function(data,
 getResiduals <- function(data,
                          metaData = NULL,
                          dataMapping = NULL) {
-  # TO DO:
-  # Compute closest time between obs and sim to get residuals
-  # and get the residualData as the following template data.frame
-
+  
+  dataTypes <- levels(data[,"Legend"])
+  
+  # Observed Data
+  observedData <- data[data[,"Legend"] == dataTypes[1],]
+  simulatedData <- data[data[,"Legend"] == dataTypes[2],]
+  
+  # Time matrix
+  obsTimeMatrix <- matrix(observedData[, "Time"], nrow(simulatedData), nrow(observedData), byrow = TRUE)
+  simTimeMatrix <- matrix(simulatedData[, "Time"], nrow(simulatedData), nrow(observedData))
+  
+  simFilter <- as.numeric(sapply(as.data.frame(abs(obsTimeMatrix-simTimeMatrix)), which.min))
+  
+  simulatedData <- simulatedData[simFilter,]
+  
   residuals <- list()
-  residuals$data <- data.frame(
-    "time" = seq(1, 72),
-    "observed" = sample(seq(1, 500), size = 72, replace = TRUE),
-    "simulated" = sample(seq(1, 500), size = 72, replace = TRUE)
-  )
-
+  
   # TO DO: check which is the order of residuals
   # Check if residuals should be normalized
-  residuals$data$residuals <- residuals$data$observed - residuals$data$simulated
-
-  # TO DO: integrate method to get residuals metadata
-  residuals$metaData <- list(
-    "time" = list(
-      dimension = "Time",
-      unit = "h"
-    ),
-    "observed" = list(
-      dimension = "observed data",
-      unit = "ng/l"
-    ),
-    "simulated" = list(
-      dimension = "simulated data",
-      unit = "ng/l"
-    ),
-    "residuals" = list(
-      dimension = "residuals",
-      unit = "ng/l"
-    )
+  residuals$data <- data.frame(
+    "Time" = observedData[, "Time"],
+    "Observed" = observedData[, "Concentration"],
+    "Simulated" = simulatedData[, "Concentration"],
+    "Residuals" = observedData[, "Concentration"] - simulatedData[, "Concentration"]
   )
-
+  
+  # TO DO: integrate method to get residuals metadata
+  residuals$metaData <- list()
+  residuals$metaData[["Time"]] <- metaData[["Time"]]
+  residuals$metaData[["Observed"]] <- metaData[["Concentration"]]
+  residuals$metaData[["Simulated"]] <- metaData[["Concentration"]]
+  residuals$metaData[["Residuals"]] <- metaData[["Concentration"]]
+  
   return(residuals)
 }
 
@@ -251,8 +257,8 @@ plotMeanObsVsPred <- function(data,
                               metaData = NULL,
                               plotConfiguration = NULL) {
   obsVsPredDataMapping <- tlf::XYGDataMapping$new(
-    x = "observed",
-    y = "simulated"
+    x = "Observed",
+    y = "Simulated"
   )
   
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
@@ -294,8 +300,8 @@ plotMeanResVsTime <- function(data,
                               metaData = NULL,
                               plotConfiguration = NULL) {
   resVsTimeDataMapping <- tlf::XYGDataMapping$new(
-    x = "time",
-    y = "residuals"
+    x = "Time",
+    y = "Residuals"
   )
   
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
@@ -334,8 +340,8 @@ plotMeanResVsPred <- function(data,
                               metaData = NULL,
                               plotConfiguration = NULL) {
   resVsPredDataMapping <- tlf::XYGDataMapping$new(
-    x = "simulated",
-    y = "residuals"
+    x = "Simulated",
+    y = "Residuals"
   )
   
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(

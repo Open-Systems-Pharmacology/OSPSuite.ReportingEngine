@@ -17,5 +17,7 @@ getResiduals(data, metaData = NULL, dataMapping = NULL)
 residualsData data.frame with Time, Observed, Simulated, Residuals
 }
 \description{
-Get a data.frame matching simulated data to observed data and compute the residuals
+This function may be reshape to be more generic later on
+Currently, the input variable data is a data.frame with "Time", "Concentration" and "Legend"
+The function get the simulated data with the time the closest to the observed data times
 }
