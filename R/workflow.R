@@ -1,7 +1,8 @@
 #' @title Workflow
 #' @description R6 class representing Reporting Engine generic Workflow
 #' @field reportingEngineInfo R6 class object with relevant information about reporting engine
-#' @field simulationSets list of `MeanModelSet` R6 class objects
+#' @field simulationStructures `SimulationStructure` R6 class object managing the structure of the workflow output
+#' @field workflowFolder path of the folder create by the Workflow
 #' @field observedData list of observed `data` and `metaData`
 #' @field resultsFolder path where results are saved
 #' @field reportFileName name of the Rmd report file
@@ -12,18 +13,17 @@ Workflow <- R6::R6Class(
   public = list(
     reportingEngineInfo = ReportingEngineInfo$new(),
     simulationStructures = NULL,
-    workflowFolder = NULL,
     observedData = NULL,
+    workflowFolder = NULL,
     resultsFolder = NULL,
     reportFileName = NULL,
 
     #' @description
     #' Create a new `Workflow` object.
-    #' @param simulationSets names of pkml files to be used for simulations
-    #' @param observedDataFile name of csv file to be used for observations
-    #' @param observedMetaDataFile name of csv file to be used as dictionary for observed data
+    #' @param simulationSets list of `MeanModelSet` R6 class objects
+    #' @param workflowFolder path of the folder create by the Workflow
     #' @param resultsFolderName name of folder where results are saved
-    #' @param reportName name of the report, Rmd, md and html versions will be created
+    #' @param reportName name of the report. Report output includes Rmd, md and html versions.
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
                               workflowFolder = file.path(getwd(), defaultFileNames$workflowFolder()),
@@ -117,10 +117,6 @@ Workflow <- R6::R6Class(
   ),
   
   private = list(
-    #' @description
-    #' Private method to get `Tasks` with a specific status
-    #' @param status logical for `active` field of workflow tasks
-    #' @return Vector of `Task` names with status
     getTasksWithStatus = function(status){
       taskNames <- self$getAllTasks()
       

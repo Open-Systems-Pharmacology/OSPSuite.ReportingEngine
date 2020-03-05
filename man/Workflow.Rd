@@ -11,7 +11,9 @@ R6 class representing Reporting Engine generic Workflow
 \describe{
 \item{\code{reportingEngineInfo}}{R6 class object with relevant information about reporting engine}
 
-\item{\code{simulationSets}}{list of `MeanModelSet` R6 class objects}
+\item{\code{simulationStructures}}{`SimulationStructure` R6 class object managing the structure of the workflow output}
+
+\item{\code{workflowFolder}}{path of the folder create by the Workflow}
 
 \item{\code{observedData}}{list of observed `data` and `metaData`}
 
@@ -21,18 +23,12 @@ R6 class representing Reporting Engine generic Workflow
 }
 \if{html}{\out{</div>}}
 }
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{simulationSets}}{list of `MeanModelSet` R6 class objects}
-}
-\if{html}{\out{</div>}}
-}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{Workflow$new()}}
 \item \href{#method-getAllTasks}{\code{Workflow$getAllTasks()}}
+\item \href{#method-getAllPlotTasks}{\code{Workflow$getAllPlotTasks()}}
 \item \href{#method-getActiveTasks}{\code{Workflow$getActiveTasks()}}
 \item \href{#method-getInactiveTasks}{\code{Workflow$getInactiveTasks()}}
 \item \href{#method-activateTasks}{\code{Workflow$activateTasks()}}
@@ -56,15 +52,13 @@ Create a new `Workflow` object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{simulationSets}}{names of pkml files to be used for simulations}
+\item{\code{simulationSets}}{list of `MeanModelSet` R6 class objects}
+
+\item{\code{workflowFolder}}{path of the folder create by the Workflow}
 
 \item{\code{resultsFolderName}}{name of folder where results are saved}
 
-\item{\code{reportName}}{name of the report, Rmd, md and html versions will be created}
-
-\item{\code{observedDataFile}}{name of csv file to be used for observations}
-
-\item{\code{observedMetaDataFile}}{name of csv file to be used as dictionary for observed data}
+\item{\code{reportName}}{name of the report. Report output includes Rmd, md and html versions.}
 }
 \if{html}{\out{</div>}}
 }
@@ -82,6 +76,18 @@ Get a vector with all the names of the tasks within the `Workflow`
 
 \subsection{Returns}{
 Vector of `Task` names
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getAllPlotTasks"></a>}}
+\subsection{Method \code{getAllPlotTasks()}}{
+Get a vector with all the names of the plot tasks within the `Workflow`
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$getAllPlotTasks()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+Vector of `PlotTask` names
 }
 }
 \if{html}{\out{<hr>}}

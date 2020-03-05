@@ -9,6 +9,8 @@ R6 class representing Reporting Engine Mean Model Set
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
+\item{\code{simulationSetName}}{display name of simulation set}
+
 \item{\code{simulationFile}}{names of pkml file to be used for the simulation}
 
 \item{\code{simulationName}}{display name of simulation}
@@ -25,7 +27,11 @@ R6 class representing Reporting Engine Mean Model Set
 
 \item{\code{pkParametersUnits}}{display units for `pkParameters`}
 
-\item{\code{dataFilter}}{filter to compare with observed data}
+\item{\code{observedDataFile}}{name of csv file to be used for observed data}
+
+\item{\code{observedMetaDataFile}}{name of csv file to be used as dictionary of the observed data}
+
+\item{\code{dataFilter}}{vector of characters to filter the observed data}
 
 \item{\code{timeUnit}}{display unit for time variable}
 }
@@ -54,9 +60,9 @@ Create a new `MeanModelSet` object.
   pkParameters = AllPKParameters,
   pkParametersNames = NULL,
   pkParametersUnits = NULL,
-  dataFilter = NULL,
   observedDataFile = NULL,
   observedMetaDataFile = NULL,
+  dataFilter = NULL,
   timeUnit = "h"
 )}\if{html}{\out{</div>}}
 }
@@ -64,6 +70,8 @@ Create a new `MeanModelSet` object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{simulationSetName}}{display name of simulation set}
+
 \item{\code{simulationFile}}{names of pkml file to be used for the simulation}
 
 \item{\code{simulationName}}{display name of simulation}
@@ -81,7 +89,11 @@ Default value is enum `AllPKParameters`.}
 
 \item{\code{pkParametersUnits}}{display units for `pkParameters`}
 
-\item{\code{dataFilter}}{filter to compare with observed data}
+\item{\code{observedDataFile}}{name of csv file to be used for observed data}
+
+\item{\code{observedMetaDataFile}}{name of csv file to be used as dictionary of the observed data}
+
+\item{\code{dataFilter}}{vector of characters to filter the observed data}
 
 \item{\code{timeUnit}}{display unit for time variable. Default is "h"}
 }
@@ -94,10 +106,19 @@ A new `MeanModelSet` object
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-copyInputFiles"></a>}}
 \subsection{Method \code{copyInputFiles()}}{
+Create a copy of the input files (pkml simulation and data if available) within a folder dedicated to the simulation set
+Rename the input file if `simulationName` is explicitely defined
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelSet$copyInputFiles(inputFilesFolder)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{inputFilesFolder}}{path where the files are copied}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
