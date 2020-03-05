@@ -1,5 +1,7 @@
-# Read the json file in data folder and create the default reporting engine theme
-reThemeProperties <- jsonlite::fromJSON('./data/RE-theme.json')
+# Currently, need to load a RData because, jsonlite need to be in Namespace/Description otherwise
+# The code for loading the json is consequently left commented
+# reThemeProperties <- jsonlite::fromJSON('./data/RE-theme.json')
+load('./data/reThemeProperties.RData')
 reTheme <- tlf::Theme$new(themesProperties = reThemeProperties,
                           labelBaseSize = 11)
 reTheme$titleFont$size <- 12
