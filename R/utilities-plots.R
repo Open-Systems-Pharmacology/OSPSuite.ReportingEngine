@@ -99,25 +99,26 @@ plotMeanGoodnessOfFit <- function(structureSet,
     structureSet$simulationResultFileNames
   )
 
-  simulationPathResults <- getOutputValuesTLF(simulationResult,
+  simulationPathResults <- ospsuite::getOutputValues(simulationResult,
     quantitiesOrPaths = structureSet$simulationSet$pathID
   )
+  
+  molWeight <- getMolWeightForPath(structureSet$simulationSet$pathID, simulation)
 
-  # TO DO: integrate toUnit for correct time display unit
   timeProfileData <- rbind.data.frame(
     timeProfileData,
     data.frame(
-      "Time" = simulationPathResults$data[, "Time"] / 60,
+      "Time" = toUnit("Time", simulationPathResults$data[, "Time"], structureSet$simulationSet$timeUnit),
       "Concentration" = toUnit(
         simulationQuantity,
         simulationPathResults$data[, structureSet$simulationSet$pathID],
-        structureSet$simulationSet$pathUnit
+        structureSet$simulationSet$pathUnit,
+        molWeight = molWeight
       ),
       "Legend" = paste0(structureSet$simulationSet$pathName, " simulated data")
     )
   )
 
-  # TO DO: integrate method to get metaData
   timeProfileMetaData <- list(
     "Time" = list(
       dimension = "Time",
@@ -393,3 +394,22 @@ plotSensitivity <- function(pkSensitivities = NULL,
   # TO DO: create a sensitivity plot environment in tlf
   sensitivityPlot <- ggplot2::ggplot()
 }
+
+#' @title getMolWeightForPath
+#' @description Get Molecular Weight for quantity path name
+#' @param pathName List of PK senstivities computed by runSensitivityAnalysis
+#' @param simulation List of PlotConfiguration class objects for each plot
+#' @return Molecular weight value for the path
+#' @export
+#' @import ospsuite
+getMolWeightForPath <- function(pathName, simulation){
+  
+  molWeightParams <- ospsuite::getAllParametersMatching('*|Molecular *', simulation)
+  compoundNames <- sapply(molWeightParams, function(parameter){ospsuite::toPathArray(parameter$path)[1]})
+  compoundMatching <- which(as.logical(sapply(compoundNames, function(compoundName){grepl(compoundName, pathName)})))
+  
+  molWeight <- molWeightParams[[compoundMatching]]$value
+  
+  return(molWeight)
+}
+
