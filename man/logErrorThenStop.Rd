@@ -4,10 +4,12 @@
 \alias{logErrorThenStop}
 \title{Log the error with a message and then stop, displaying same message.}
 \usage{
-logErrorThenStop(message)
+logErrorThenStop(message, logFolderPath = getwd())
 }
 \arguments{
 \item{message}{message to display and then log}
+
+\item{logFolderPath}{path where logs are saved}
 }
 \description{
 Log the error with a message and then stop, displaying same message.
