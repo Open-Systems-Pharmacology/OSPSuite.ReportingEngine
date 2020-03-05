@@ -82,6 +82,20 @@ Workflow <- R6::R6Class(
 
       return(taskNames)
     },
+    
+    #' @description
+    #' Get a vector with all the names of the plot tasks within the `Workflow`
+    #' @return Vector of `PlotTask` names
+    getAllPlotTasks = function() {
+      # get isTaskVector as a named vector
+      isPlotTaskVector <- unlist(eapply(self, function(x) {
+        isOfType(x, "PlotTask")
+      }))
+      
+      taskNames <- names(isPlotTaskVector[as.logical(isPlotTaskVector)])
+      
+      return(taskNames)
+    },
 
     #' @description
     #' Get a vector with all the names of active tasks within the `Workflow`
