@@ -10,8 +10,6 @@ addRmdTextChunk(fileName, text)
 \item{fileName}{name of Rmd file}
 
 \item{text}{text to include in the document}
-
-\item{figureCaption}{caption of figure}
 }
 \value{
 R markdown text with figure and save the Rmd document

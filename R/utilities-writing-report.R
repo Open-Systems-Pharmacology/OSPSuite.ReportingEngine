@@ -75,7 +75,6 @@ addRmdTableChunk <- function(fileName,
 #' @description Add markdown text to a Rmd document
 #' @param fileName name of Rmd file
 #' @param text text to include in the document
-#' @param figureCaption caption of figure
 #' @return R markdown text with figure and save the Rmd document
 addRmdTextChunk <- function(fileName,
                             text) {

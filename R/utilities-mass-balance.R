@@ -45,7 +45,7 @@ envList2PathStringsVector <- function(envList) {
 #' normalized time profiles and cumulative normalized time profiles
 #' @param structureSet `SimulationStructure` R6 class object
 #' @param plotConfigurations List of `PlotConfiguration` R6 class objects
-#' @param massBalanceOptions Options to be defined
+#' @param selectedCompoundNames Options to be defined
 #' (e.g. how to group the plot results, or which molecule to exclude)
 #' @return list of `ggplot` objects
 #' @export
@@ -232,7 +232,7 @@ plotMeanMassBalance <- function(structureSet,
 #' @param data data.frame
 #' @param metaData meta data on `data`
 #' @param dataMapping `XYGDataMapping` R6 class object from `tlf` library
-#' @param plotCOnfiguration `PlotConfiguration` R6 class object from `tlf` library
+#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
 #' @return ggplot object of time profile for mean model workflow
 #' @export
 #' @import tlf
@@ -275,7 +275,7 @@ plotMassBalanceTimeProfile <- function(data,
 #' @param data data.frame
 #' @param metaData meta data on `data`
 #' @param dataMapping `XYGDataMapping` R6 class object from `tlf` library
-#' @param plotCOnfiguration `PlotConfiguration` R6 class object from `tlf` library
+#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
 #' @return ggplot object of time profile for mean model workflow
 #' @export
 #' @import tlf
@@ -320,7 +320,7 @@ plotMassBalanceCumulativeTimeProfile <- function(data,
 #' @param data data.frame
 #' @param metaData meta data on `data`
 #' @param dataMapping `XYGDataMapping` R6 class object from `tlf` library
-#' @param plotCOnfiguration `PlotConfiguration` R6 class object from `tlf` library
+#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
 #' @return ggplot object of piechart for mean model workflow
 #' @export
 #' @import tlf

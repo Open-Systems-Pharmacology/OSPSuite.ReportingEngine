@@ -15,7 +15,7 @@ plotMeanMassBalance(
 
 \item{plotConfigurations}{List of `PlotConfiguration` R6 class objects}
 
-\item{massBalanceOptions}{Options to be defined
+\item{selectedCompoundNames}{Options to be defined
 (e.g. how to group the plot results, or which molecule to exclude)}
 }
 \value{

@@ -18,7 +18,7 @@ plotMassBalancePieChart(
 
 \item{dataMapping}{`XYGDataMapping` R6 class object from `tlf` library}
 
-\item{plotCOnfiguration}{`PlotConfiguration` R6 class object from `tlf` library}
+\item{plotConfiguration}{`PlotConfiguration` R6 class object from `tlf` library}
 }
 \value{
 ggplot object of piechart for mean model workflow
