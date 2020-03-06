@@ -13,112 +13,110 @@
 plotMeanMassBalance <- function(structureSet,
                                 plotConfigurations = NULL,
                                 selectedCompoundNames = NULL) {
+  
   simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
-  molecules <- ospsuite::getAllMoleculesMatching(paths = "**", container = simulation)
-  moleculesPaths <- sapply(molecules, function(x) {
-    x$path
-  })
-  # TO DO: Check if Application need to be part of the paths, or need to be included as the drugmass reference
-  # applicationMolecules <- ospsuite::getAllMoleculesMatching(paths = "Applications|**", container = simulation)
-  # applicationMoleculesPaths <- sapply(newMolecules, function(x){x$path})
 
-  # Get all the compartment and coumpound names
-  # The plot will aggregate on them
-  allCompoundNames <- NULL
-  allCompartmentNames <- NULL
-  for (moleculePath in moleculesPaths) {
-    moleculeArray <- utils::tail(ospsuite::toPathArray(moleculePath), 2)
-    allCompoundNames <- cbind(allCompoundNames, moleculeArray[2])
-    allCompartmentNames <- cbind(allCompartmentNames, moleculeArray[1])
-  }
-  allCompoundNames <- levels(as.factor(allCompoundNames))
-  allCompartmentNames <- levels(as.factor(allCompartmentNames))
-
-  # TO DO: add user defined inclusion/exclusion of compound for the plot
-  selectedCompoundNames <- selectedCompoundNames %||% allCompoundNames
-  validateIsIncluded(selectedCompoundNames, allCompoundNames)
-
-  # Clear concentration output and add only molecules paths to the simulation output
+  # Get drug mass to perform the drugmass normalized plot
+  applications <- ospsuite::getContainer("Applications", simulation)
+  appliedMoleculePaths <- ospsuite::getAllMoleculePathsIn(applications)
+  
+  appliedMolecules <- ospsuite::getAllMoleculesMatching(appliedMoleculePaths, simulation)
+  drugMass <- sum(sapply(appliedMolecules, function(molecule){molecule$value}))
+  
+  # Get all the relevant compounds
+  organism <- ospsuite::getContainer("Organism", simulation)
+  allCompoundNames <- c(simulation$allFloatingMoleculeNames(), simulation$allStationaryMoleculeNames())
+  relevantCompoundNames <- allCompoundNames[!sapply(allCompoundNames, function(compoundName){compoundName %in% simulation$allEndogenousStationaryMoleculeNames()})]
+  
+  # User defined coumpound selection
+  selectedCompoundNames <- selectedCompoundNames %||% relevantCompoundNames
+  validateIsIncluded(selectedCompoundNames, relevantCompoundNames)
+  
+  # Get all the molecule paths (with dimension=amount) of the selected/relevant coumpounds
+  molecules <- ospsuite::getAllMoleculesMatching(paste0("**|", selectedCompoundNames), organism)
+  
+  # Clear concentration output in case any concentrations are still included
   ospsuite::clearOutputs(simulation)
   for (molecule in molecules) {
     addOutputs(quantitiesOrPaths = molecule, simulation = simulation)
   }
 
   simulationResults <- ospsuite::runSimulation(simulation)
-  simulationResultsOutputTLF <- getOutputValuesTLF(
+  simulationResultsOutput <- ospsuite::getOutputValues(
     simulationResults = simulationResults,
     quantitiesOrPaths = simulationResults$allQuantityPaths
   )
-
-  # TO DO: Check that the drugMass method is correct
-  # Do we need to include Applications, how ?
-  drugAmount <- sum(sapply(molecules, function(x) {
-    x$value
-  }))
-
-  # Pre-filter data to get only paths which have >0 amount all along the simulation
-  # The goal is to simplify the following loops that may take long
-  pathFilter <- sapply(simulationResultsOutputTLF$data, max)
-  pathNames <- names(simulationResultsOutputTLF$data)
-  pathNames <- pathNames[pathFilter > 0]
-
-  # TO DO: add user defined compartment grouping ?
-  # Or default grouping eg for saliva and salivagland
-  groupOfCompartments <- allCompartmentNames
-  groupOfCompartments <- groupOfCompartments[!allCompartmentNames %in% c(
-    "Caecum", "ColonAscendens", "ColonDescendens", "ColonSigmoid", "ColonTransversum",
-    "Duodenum", "LowerIleum", "LowerJejunum", "Rectum", "Stomach", "UpperIleum", "UpperJejunum"
-  )]
-  # TO DO: check that these compartments are considered as Lumen or something else
-  lumenCompartmentNames <- c(
-    "Lumen", "Caecum", "ColonAscendens", "ColonDescendens", "ColonSigmoid", "ColonTransversum",
-    "Duodenum", "LowerIleum", "LowerJejunum", "Rectum", "Stomach", "UpperIleum", "UpperJejunum"
-  )
-
-  amountGroupPaths <- list()
+  
+  # Create a data.frame with full string path and separates the last 3 elements of paths
+  # to perform filtering and grouping of for the final plot
+  pathsArray <- NULL
+  for (path in simulationResults$allQuantityPaths){
+    endOfPath <- utils::tail(ospsuite::toPathArray(path), 3)
+    pathsArray <- rbind.data.frame(pathsArray,
+                                   data.frame("parentCompartmentName" = endOfPath[1],
+                                              "subCompartmentName" = endOfPath[2],
+                                              "compoundName" = endOfPath[3],
+                                              "path" = path,
+                                              stringsAsFactors = FALSE))
+    
+  }
+  
+  # In the Matlab version, there are multiple groupings performed at that point:
+  # 1) Saliva is excluded from the mass balance calculation
+  # 2) Lumen is a parent compartment that regroups many sub-compartments but Feces
+  # 3) All the rest of the sub-compartments are used normally
+  
+  # 1) Exclude Saliva
+  salivaExclusionCondition <- !pathsArray[, "parentCompartmentName"] %in% "Saliva"
+  pathsArray <- pathsArray[salivaExclusionCondition, ]
+  
+  # 2) Regroup the lumen sub-compartment but Feces
+  lumenGroupingCondition <- pathsArray[, "parentCompartmentName"] %in% "Lumen" & !pathsArray[, "subCompartmentName"] %in% "Feces"
+  pathsArray[lumenGroupingCondition, "subCompartmentName"] <- "Lumen"
+  
+  # Factors could not be used for steps 1 and 2 but are needed in the next step
+  pathsArray <- as.data.frame(lapply(pathsArray, function(pathsArrayColumn){as.factor(pathsArrayColumn)}))
+  
+  # Aggregate Data by compound and compartment
   simulationResultsOutputByGroup <- NULL
-
-  # TO DO: Abdullah aggregation summary method might simplify the following process
-  for (compartmentName in groupOfCompartments) {
-    # Aggregation on compartment
-    compartmentAggregatedPaths <- pathNames[grepl(pattern = compartmentName, x = pathNames, fixed = TRUE)]
-    if (compartmentName %in% "Lumen") {
-      compartmentAggregatedPaths <- pathNames[grepl(pattern = lumenCompartmentNames, x = pathNames, fixed = TRUE)]
-    }
-    for (compoundName in selectedCompoundNames) {
-      # Aggregation on compound
-      aggregatedPaths <- pathNames[grepl(pattern = compoundName, x = compartmentAggregatedPaths, fixed = TRUE)]
-
-      aggregatedData <- rowSums(cbind(simulationResultsOutputTLF$data[, aggregatedPaths], 0))
-      # Add to curve only if amount is >0
-      if (max(aggregatedData) > 0) {
-        # TO DO: Parametrize displayTimeUnit and unit conversion for time
-        simulationResultsOutputByGroup <- rbind.data.frame(
-          simulationResultsOutputByGroup,
-          cbind.data.frame(
-            "Time" = simulationResultsOutputTLF$data[, "Time"] / 60,
-            "Amount" = aggregatedData,
-            "NormalizedAmount" = aggregatedData / drugAmount,
-            "Legend" = paste0(compoundName, " - ", compartmentName)
-          )
+  
+  for (compoundLevel in levels(pathsArray[,"compoundName"])){
+    for (compartmentLevel in levels(pathsArray[,"subCompartmentName"])){
+      pathFilter <- pathsArray[,"compoundName"] %in% compoundLevel & pathsArray[,"subCompartmentName"] %in% compartmentLevel
+      # as.character() ensures that levels filtered out won't still be added to the aggregation
+      pathNamesFiltered <- as.character(pathsArray[pathFilter, "path"])
+      
+      # cbind(..., 0) prevents rowSums to crash if only one column is filtered
+      aggregatedData <- rowSums(cbind.data.frame(simulationResultsOutput$data[, pathNamesFiltered, drop = FALSE], 
+                                                 data.frame(dummyVariable = 0)))
+      
+      if(max(aggregatedData)>0){
+      simulationResultsOutputByGroup <- rbind.data.frame(
+        simulationResultsOutputByGroup,
+        cbind.data.frame(
+          "Time" = toUnit("Time", simulationResultsOutput$data[, "Time"], structureSet$simulationSet$timeUnit),
+          "Amount" = aggregatedData,
+          "NormalizedAmount" = aggregatedData / drugMass,
+          "Legend" = paste0(compoundLevel, " - ", compartmentLevel)
         )
+      )
       }
     }
   }
-
+  
   # TO DO: Get meta data from input or settings
   metaDataOutputByGroup <- list(
     "Time" = list(
-      "unit" = "h",
-      "dimension" = "Time"
+      dimension = "Time",
+      unit = structureSet$simulationSet$timeUnit
     ),
     "Amount" = list(
-      "unit" = "umol",
-      "dimension" = "Amount"
+      dimension = appliedMolecules[[1]]$dimension,
+      unit = appliedMolecules[[1]]$unit
     ),
     "NormalizedAmount" = list(
-      "unit" = "fraction of drugmass",
-      "dimension" = "Amount"
+      dimension = appliedMolecules[[1]]$dimension,
+      unit = "fraction of drugmass"
     )
   )
 
@@ -322,7 +320,7 @@ plotMassBalancePieChart <- function(data,
       width = 1,
       stat = "identity",
       alpha = 0.8 # TO DO: Define this value as a setting from the plot configuration)
-    ) + coord_polar("y", start = 0) + xlab("") + ylab("")
+    ) + coord_polar("y", start = 0) + xlab("") + ylab("") +
   theme(
     axis.text.x = element_blank(),
     axis.text.y = element_blank(),
