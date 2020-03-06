@@ -1,9 +1,11 @@
 # Currently, need to load a RData because, jsonlite need to be in Namespace/Description otherwise
 # The code for loading the json is consequently left commented
 # reThemeProperties <- jsonlite::fromJSON('./data/RE-theme.json')
-load('./data/reThemeProperties.RData')
-reTheme <- tlf::Theme$new(themesProperties = reThemeProperties,
-                          labelBaseSize = 11)
+load("./data/reThemeProperties.RData")
+reTheme <- tlf::Theme$new(
+  themesProperties = reThemeProperties,
+  labelBaseSize = 11
+)
 reTheme$titleFont$size <- 12
 reTheme$subtitleFont$size <- 10
 tlf::useTheme(reTheme)
@@ -76,12 +78,12 @@ plotMeanGoodnessOfFit <- function(structureSet,
     filterColumn <- as.character(observations$metaData[observations$metaData[, "matlabID"] == "dataFilter", "nonmenColumn"])
 
     rowFilter <- TRUE
-    if(!is.null(observations$filter)){
+    if (!is.null(observations$filter)) {
       # TO DO: replace by eval(expr)
       # In logDebug add number of rows included by the filter
       rowFilter <- which(observations$data[, filterColumn] == observations$filter)
     }
-    
+
     # Observed Data needs to be already in the display unit
     timeProfileData <- data.frame(
       "Time" = observations$data[rowFilter, timeColumn],
@@ -102,7 +104,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
   simulationPathResults <- ospsuite::getOutputValues(simulationResult,
     quantitiesOrPaths = structureSet$simulationSet$pathID
   )
-  
+
   molWeight <- getMolWeightForPath(structureSet$simulationSet$pathID, simulation)
 
   timeProfileData <- rbind.data.frame(
@@ -207,23 +209,22 @@ plotMeanTimeProfile <- function(data,
 getResiduals <- function(data,
                          metaData = NULL,
                          dataMapping = NULL) {
-  
-  dataTypes <- levels(data[,"Legend"])
-  
+  dataTypes <- levels(data[, "Legend"])
+
   # Observed Data
-  observedData <- data[data[,"Legend"] == dataTypes[1],]
-  simulatedData <- data[data[,"Legend"] == dataTypes[2],]
-  
+  observedData <- data[data[, "Legend"] == dataTypes[1], ]
+  simulatedData <- data[data[, "Legend"] == dataTypes[2], ]
+
   # Time matrix
   obsTimeMatrix <- matrix(observedData[, "Time"], nrow(simulatedData), nrow(observedData), byrow = TRUE)
   simTimeMatrix <- matrix(simulatedData[, "Time"], nrow(simulatedData), nrow(observedData))
-  
-  simFilter <- as.numeric(sapply(as.data.frame(abs(obsTimeMatrix-simTimeMatrix)), which.min))
-  
-  simulatedData <- simulatedData[simFilter,]
-  
+
+  simFilter <- as.numeric(sapply(as.data.frame(abs(obsTimeMatrix - simTimeMatrix)), which.min))
+
+  simulatedData <- simulatedData[simFilter, ]
+
   residuals <- list()
-  
+
   # TO DO: check which is the order of residuals
   # Check if residuals should be normalized
   residuals$data <- data.frame(
@@ -232,14 +233,14 @@ getResiduals <- function(data,
     "Simulated" = simulatedData[, "Concentration"],
     "Residuals" = observedData[, "Concentration"] - simulatedData[, "Concentration"]
   )
-  
+
   # TO DO: integrate method to get residuals metadata
   residuals$metaData <- list()
   residuals$metaData[["Time"]] <- metaData[["Time"]]
   residuals$metaData[["Observed"]] <- metaData[["Concentration"]]
   residuals$metaData[["Simulated"]] <- metaData[["Concentration"]]
   residuals$metaData[["Residuals"]] <- metaData[["Concentration"]]
-  
+
   return(residuals)
 }
 
@@ -261,7 +262,7 @@ plotMeanObsVsPred <- function(data,
     x = "Observed",
     y = "Simulated"
   )
-  
+
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
     metaData = metaData,
@@ -304,7 +305,7 @@ plotMeanResVsTime <- function(data,
     x = "Time",
     y = "Residuals"
   )
-  
+
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
     metaData = metaData,
@@ -344,7 +345,7 @@ plotMeanResVsPred <- function(data,
     x = "Simulated",
     y = "Residuals"
   )
-  
+
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
     metaData = metaData,
@@ -402,14 +403,16 @@ plotSensitivity <- function(pkSensitivities = NULL,
 #' @return Molecular weight value for the path
 #' @export
 #' @import ospsuite
-getMolWeightForPath <- function(pathName, simulation){
-  
-  molWeightParams <- ospsuite::getAllParametersMatching('*|Molecular *', simulation)
-  compoundNames <- sapply(molWeightParams, function(parameter){ospsuite::toPathArray(parameter$path)[1]})
-  compoundMatching <- which(as.logical(sapply(compoundNames, function(compoundName){grepl(compoundName, pathName)})))
-  
+getMolWeightForPath <- function(pathName, simulation) {
+  molWeightParams <- ospsuite::getAllParametersMatching("*|Molecular *", simulation)
+  compoundNames <- sapply(molWeightParams, function(parameter) {
+    ospsuite::toPathArray(parameter$path)[1]
+  })
+  compoundMatching <- which(as.logical(sapply(compoundNames, function(compoundName) {
+    grepl(compoundName, pathName)
+  })))
+
   molWeight <- molWeightParams[[compoundMatching]]$value
-  
+
   return(molWeight)
 }
-

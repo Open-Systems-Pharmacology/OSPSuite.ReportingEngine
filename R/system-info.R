@@ -8,7 +8,7 @@ ReportingEngineInfo <- R6::R6Class(
   "ReportingEngineInfo",
   public = list(
     Date = NULL,
-    
+
     #' @description
     #' Create a new `ReportingEngineInfo` object.
     #' @return A new `ReportingEngineInfo` object
@@ -21,14 +21,14 @@ ReportingEngineInfo <- R6::R6Class(
       private$tlfVersion <- info$tlfVersion
       private$ospsuiteVersion <- info$ospsuiteVersion
       private$Rversion <- info$Rversion
-      
+
       # TO DO: define a list of validated systems that will use Reporting Engine
       validatedSystems <- info$computerName
       if (private$computerName %in% validatedSystems) {
         private$isValidatedSystem <- TRUE
       }
     },
-    
+
     #' @description
     #' Print system information
     #' @return A text with system information

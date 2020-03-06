@@ -82,7 +82,7 @@ Workflow <- R6::R6Class(
 
       return(taskNames)
     },
-    
+
     #' @description
     #' Get a vector with all the names of the plot tasks within the `Workflow`
     #' @return Vector of `PlotTask` names
@@ -91,9 +91,9 @@ Workflow <- R6::R6Class(
       isPlotTaskVector <- unlist(eapply(self, function(x) {
         isOfType(x, "PlotTask")
       }))
-      
+
       taskNames <- names(isPlotTaskVector[as.logical(isPlotTaskVector)])
-      
+
       return(taskNames)
     },
 
@@ -102,7 +102,7 @@ Workflow <- R6::R6Class(
     #' @return Vector of active `Task` names
     getActiveTasks = function() {
       return(private$getTasksWithStatus(status = TRUE))
-      },
+    },
 
     #' @description
     #' Get a vector with all the names of inactive tasks within the `Workflow`
@@ -110,33 +110,33 @@ Workflow <- R6::R6Class(
     getInactiveTasks = function() {
       return(private$getTasksWithStatus(status = FALSE))
     },
-    
+
     #' @description
     #' Activates a series of `Tasks` from current `Workflow`
     #' @param tasks names of the worklfow tasks to activate.
     #' Default activates all tasks of the workflow using workflow method `workflow$getAllTasks()`
     #' @return Vector of inactive `Task` names
-    activateTasks = function(tasks = self$getAllTasks()){
+    activateTasks = function(tasks = self$getAllTasks()) {
       activateWorkflowTasks(self, tasks = tasks)
     },
-    
+
     #' @description
     #' Inactivates a series of `Tasks` from current `Workflow`
     #' @param tasks names of the worklfow tasks to inactivate.
     #' Default inactivates all tasks of the workflow using workflow method `workflow$getAllTasks()`
     #' @return Vector of inactive `Task` names
-    inactivateTasks = function(tasks = self$getAllTasks()){
+    inactivateTasks = function(tasks = self$getAllTasks()) {
       inactivateWorkflowTasks(self, tasks = tasks)
     }
   ),
-  
+
   private = list(
-    getTasksWithStatus = function(status){
+    getTasksWithStatus = function(status) {
       taskNames <- self$getAllTasks()
-      
+
       tasksWithStatus <- NULL
       for (taskName in taskNames) {
-        if (self[[taskName]]$active==status) {
+        if (self[[taskName]]$active == status) {
           tasksWithStatus <- c(tasksWithStatus, taskName)
         }
       }

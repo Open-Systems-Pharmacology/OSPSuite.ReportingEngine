@@ -76,8 +76,8 @@ MeanModelSet <- R6::R6Class(
 
       self$timeUnit <- timeUnit %||% "h"
 
-      if (!is.null(observedDataFile) & is.null(observedMetaDataFile)){
-        
+      if (!is.null(observedDataFile) & is.null(observedMetaDataFile)) {
+
       }
       self$observedDataFile <- observedDataFile
       self$observedMetaDataFile <- observedMetaDataFile
