@@ -213,14 +213,14 @@ MeanModelWorkflow <- R6::R6Class(
     #' Default value indicates `task` name.
     #' @return A new `Task` object
     plotAbsorptionSettings = function(input = NULL,
-                                          output = NULL,
+                                          output = file.path(self$resultsFolder, "Absorption"),
                                           active = FALSE,
                                           message = NULL) {
       self$plotAbsorption <- Task$new(
         input = input,
         output = output,
         active = active,
-        message = "Plot Absorption task not available at the moment"
+        message = "Plot Absorption task in Alpha Testing"
       )
     },
 
@@ -437,7 +437,6 @@ MeanModelWorkflow <- R6::R6Class(
         }
       }
 
-      # TO DO: plug plot tasks to actual results
       if (self$plotMassBalance$active) {
         logWorkflow(
           message = paste0("Starting ", self$plotMassBalance$message),
@@ -507,6 +506,8 @@ MeanModelWorkflow <- R6::R6Class(
           self$reportFileName,
           "# Absoprtion"
         )
+        dir.create(self$plotAbsorption$output[[1]])
+
         for (set in self$simulationStructures) {
           logWorkflow(
             message = c(
@@ -516,10 +517,40 @@ MeanModelWorkflow <- R6::R6Class(
             pathFolder = self$workflowFolder
           )
           if (self$plotAbsorption$validateInput()) {
+            absorptionResults <- plotMeanAbsorption(set,
+              plotConfiguration = self$plotAbsorption$settings$plotConfiguration
+            )
 
-            # absorptionPlot <- ggplot2::ggplot() + ggplot2::ggtitle("TO DO: Absorption plot")
+            compoundNames <- names(absorptionResults$timeProfile)
 
-            # ggplot2::ggsave(filename = file.path(self$figuresFolder, paste0(set$simulationSet$simulationName, "-absorption.png")))
+            addRmdTextChunk(
+              self$reportFileName,
+              paste0("Simulation: ", set$simulationSet$simulationSetName)
+            )
+
+            # TO DO: save standardized names in the nomenclature file
+            for (compoundName in compoundNames) {
+              write.csv(absorptionResults$timeProfile[[compoundName]],
+                file = file.path(self$plotAbsorption$output[[1]], paste0(set$simulationSet$simulationSetName, compoundName, "-timeProfileAbsorption.csv")),
+                row.names = FALSE
+              )
+
+              absorptionFileName <- file.path(self$plotAbsorption$output[[1]], paste0(set$simulationSet$simulationSetName, compoundName, ".png"))
+
+              # TO DO: plug ggsave option to settintgs/plotConfigurations
+              # Depending on the report options, it is possible to configure subplots here
+              ggplot2::ggsave(
+                filename = absorptionFileName,
+                plot = absorptionResults$plots[[compoundName]],
+                width = 16, height = 9, units = "cm"
+              )
+
+              addRmdFigureChunk(
+                fileName = self$reportFileName,
+                figureFile = absorptionFileName,
+                figureCaption = compoundName
+              )
+            }
           }
         }
       }

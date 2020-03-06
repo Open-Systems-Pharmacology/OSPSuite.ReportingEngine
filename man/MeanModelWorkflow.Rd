@@ -324,7 +324,7 @@ Define plot absorption `task` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$plotAbsorptionSettings(
   input = NULL,
-  output = NULL,
+  output = file.path(self$resultsFolder, "Absorption"),
   active = FALSE,
   message = NULL
 )}\if{html}{\out{</div>}}
