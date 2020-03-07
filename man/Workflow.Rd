@@ -11,22 +11,15 @@ R6 class representing Reporting Engine generic Workflow
 \describe{
 \item{\code{reportingEngineInfo}}{R6 class object with relevant information about reporting engine}
 
-\item{\code{simulationSets}}{list of `MeanModelSet` R6 class objects}
+\item{\code{simulationStructures}}{`SimulationStructure` R6 class object managing the structure of the workflow output}
+
+\item{\code{workflowFolder}}{path of the folder create by the Workflow}
 
 \item{\code{observedData}}{list of observed `data` and `metaData`}
 
-\item{\code{reportFolder}}{path where report and logs are saved}
-
 \item{\code{resultsFolder}}{path where results are saved}
 
-\item{\code{figuresFolder}}{path where figure are saved}
-}
-\if{html}{\out{</div>}}
-}
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{simulationSets}}{list of `MeanModelSet` R6 class objects}
+\item{\code{reportFileName}}{name of the Rmd report file}
 }
 \if{html}{\out{</div>}}
 }
@@ -34,6 +27,12 @@ R6 class representing Reporting Engine generic Workflow
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{Workflow$new()}}
+\item \href{#method-getAllTasks}{\code{Workflow$getAllTasks()}}
+\item \href{#method-getAllPlotTasks}{\code{Workflow$getAllPlotTasks()}}
+\item \href{#method-getActiveTasks}{\code{Workflow$getActiveTasks()}}
+\item \href{#method-getInactiveTasks}{\code{Workflow$getInactiveTasks()}}
+\item \href{#method-activateTasks}{\code{Workflow$activateTasks()}}
+\item \href{#method-inactivateTasks}{\code{Workflow$inactivateTasks()}}
 \item \href{#method-clone}{\code{Workflow$clone()}}
 }
 }
@@ -45,31 +44,114 @@ Create a new `Workflow` object.
 \if{html}{\out{<div class="r">}}\preformatted{Workflow$new(
   simulationSets,
   workflowFolder = file.path(getwd(), defaultFileNames$workflowFolder()),
-  reportFolderName = defaultFileNames$reportFolder(),
   resultsFolderName = defaultFileNames$resultsFolder(),
-  figuresFolderName = defaultFileNames$figuresFolder()
+  reportName = defaultFileNames$reportName()
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{simulationSets}}{names of pkml files to be used for simulations}
+\item{\code{simulationSets}}{list of `MeanModelSet` R6 class objects}
 
-\item{\code{observedDataFile}}{name of csv file to be used for observations}
+\item{\code{workflowFolder}}{path of the folder create by the Workflow}
 
-\item{\code{observedMetaDataFile}}{name of csv file to be used as dictionary for observed data}
+\item{\code{resultsFolderName}}{name of folder where results are saved}
 
-\item{\code{reportFolder}}{name of folder where reports and logs are saved}
-
-\item{\code{resultsFolder}}{name of folder where results are saved}
-
-\item{\code{figuresFolder}}{name of folder where figures are saved}
+\item{\code{reportName}}{name of the report. Report output includes Rmd, md and html versions.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
 A new `Workflow` object
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getAllTasks"></a>}}
+\subsection{Method \code{getAllTasks()}}{
+Get a vector with all the names of the tasks within the `Workflow`
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$getAllTasks()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+Vector of `Task` names
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getAllPlotTasks"></a>}}
+\subsection{Method \code{getAllPlotTasks()}}{
+Get a vector with all the names of the plot tasks within the `Workflow`
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$getAllPlotTasks()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+Vector of `PlotTask` names
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getActiveTasks"></a>}}
+\subsection{Method \code{getActiveTasks()}}{
+Get a vector with all the names of active tasks within the `Workflow`
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$getActiveTasks()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+Vector of active `Task` names
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getInactiveTasks"></a>}}
+\subsection{Method \code{getInactiveTasks()}}{
+Get a vector with all the names of inactive tasks within the `Workflow`
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$getInactiveTasks()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+Vector of inactive `Task` names
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-activateTasks"></a>}}
+\subsection{Method \code{activateTasks()}}{
+Activates a series of `Tasks` from current `Workflow`
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$activateTasks(tasks = self$getAllTasks())}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tasks}}{names of the worklfow tasks to activate.
+Default activates all tasks of the workflow using workflow method `workflow$getAllTasks()`}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Vector of inactive `Task` names
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-inactivateTasks"></a>}}
+\subsection{Method \code{inactivateTasks()}}{
+Inactivates a series of `Tasks` from current `Workflow`
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$inactivateTasks(tasks = self$getAllTasks())}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tasks}}{names of the worklfow tasks to inactivate.
+Default inactivates all tasks of the workflow using workflow method `workflow$getAllTasks()`}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Vector of inactive `Task` names
 }
 }
 \if{html}{\out{<hr>}}

@@ -1,11 +1,11 @@
 #' @title Workflow
 #' @description R6 class representing Reporting Engine generic Workflow
 #' @field reportingEngineInfo R6 class object with relevant information about reporting engine
-#' @field simulationSets list of `MeanModelSet` R6 class objects
+#' @field simulationStructures `SimulationStructure` R6 class object managing the structure of the workflow output
+#' @field workflowFolder path of the folder create by the Workflow
 #' @field observedData list of observed `data` and `metaData`
-#' @field reportFolder path where report and logs are saved
 #' @field resultsFolder path where results are saved
-#' @field figuresFolder path where figure are saved
+#' @field reportFileName name of the Rmd report file
 #' @import tlf
 #' @import ospsuite
 Workflow <- R6::R6Class(
@@ -13,69 +13,134 @@ Workflow <- R6::R6Class(
   public = list(
     reportingEngineInfo = ReportingEngineInfo$new(),
     simulationStructures = NULL,
-    workflowFolder = NULL,
     observedData = NULL,
-    reportFolder = NULL,
+    workflowFolder = NULL,
     resultsFolder = NULL,
-    figuresFolder = NULL,
+    reportFileName = NULL,
 
     #' @description
     #' Create a new `Workflow` object.
-    #' @param simulationSets names of pkml files to be used for simulations
-    #' @param observedDataFile name of csv file to be used for observations
-    #' @param observedMetaDataFile name of csv file to be used as dictionary for observed data
-    #' @param reportFolder name of folder where reports and logs are saved
-    #' @param resultsFolder name of folder where results are saved
-    #' @param figuresFolder name of folder where figures are saved
+    #' @param simulationSets list of `MeanModelSet` R6 class objects
+    #' @param workflowFolder path of the folder create by the Workflow
+    #' @param resultsFolderName name of folder where results are saved
+    #' @param reportName name of the report. Report output includes Rmd, md and html versions.
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
-                          workflowFolder = file.path(getwd(), defaultFileNames$workflowFolder()),
-                          reportFolderName = defaultFileNames$reportFolder(),
-                          resultsFolderName = defaultFileNames$resultsFolder(),
-                          figuresFolderName = defaultFileNames$figuresFolder()) {
-      logInfo(message = self$reportingEngineInfo$print())
-
+                              workflowFolder = file.path(getwd(), defaultFileNames$workflowFolder()),
+                              resultsFolderName = defaultFileNames$resultsFolder(),
+                              reportName = defaultFileNames$reportName()) {
       workflowFolderCheck <- checkExisitingPath(workflowFolder, stopIfPathExists = TRUE)
       if (!is.null(workflowFolderCheck)) {
-        logDebug(message = workflowFolderCheck)
+        logWorkflow(
+          message = workflowFolderCheck,
+          pathFolder = getwd(),
+          logTypes = c(LogTypes$Debug, LogTypes$Error)
+        )
       }
       self$workflowFolder <- workflowFolder
+      dir.create(self$workflowFolder)
 
-      reportFolder <- file.path(workflowFolder, reportFolderName)
-      reportFolderCheck <- checkExisitingPath(reportFolder, stopIfPathExists = TRUE)
-      if (!is.null(reportFolderCheck)) {
-        logDebug(message = reportFolderCheck)
-      }
-      self$reportFolder <- reportFolder
+      logWorkflow(
+        message = self$reportingEngineInfo$print(),
+        pathFolder = self$workflowFolder
+      )
+
+      self$reportFileName <- file.path(self$workflowFolder, paste0(reportName, ".Rmd"))
 
       resultsFolder <- file.path(workflowFolder, resultsFolderName)
       resultsFolderCheck <- checkExisitingPath(resultsFolder, stopIfPathExists = TRUE)
       if (!is.null(resultsFolderCheck)) {
-        logDebug(message = resultsFolderCheck)
+        logWorkflow(
+          message = resultsFolderCheck,
+          pathFolder = self$workflowFolder,
+          logTypes = c(LogTypes$Debug, LogTypes$Error)
+        )
       }
       self$resultsFolder <- resultsFolder
-
-      figuresFolder <- file.path(workflowFolder, figuresFolderName)
-      figuresFolderCheck <- checkExisitingPath(figuresFolder, stopIfPathExists = TRUE)
-      if (!is.null(figuresFolderCheck)) {
-        logDebug(message = figuresFolderCheck)
-      }
-      self$figuresFolder <- figuresFolder
-
-      # Create workflow output structure
-      createFolder(self$workflowFolder)
-      createFolder(self$reportFolder)
-      createFolder(self$resultsFolder)
-      createFolder(self$figuresFolder)
+      dir.create(self$resultsFolder)
 
       self$simulationStructures <- list()
       # Check of Workflow inputs
-      for (i in 1:length(simulationSets)) {
-        self$simulationStructures[[i]] <- SimulationStructure$new(
-          simulationSet = simulationSets[[i]],
+      for (simulationSetIndex in 1:length(simulationSets)) {
+        self$simulationStructures[[simulationSetIndex]] <- SimulationStructure$new(
+          simulationSet = simulationSets[[simulationSetIndex]],
           workflowResultsFolder = self$resultsFolder
         )
       }
+    },
+
+    #' @description
+    #' Get a vector with all the names of the tasks within the `Workflow`
+    #' @return Vector of `Task` names
+    getAllTasks = function() {
+      # get isTaskVector as a named vector
+      isTaskVector <- unlist(eapply(self, function(x) {
+        isOfType(x, "Task")
+      }))
+
+      taskNames <- names(isTaskVector[as.logical(isTaskVector)])
+
+      return(taskNames)
+    },
+
+    #' @description
+    #' Get a vector with all the names of the plot tasks within the `Workflow`
+    #' @return Vector of `PlotTask` names
+    getAllPlotTasks = function() {
+      # get isTaskVector as a named vector
+      isPlotTaskVector <- unlist(eapply(self, function(x) {
+        isOfType(x, "PlotTask")
+      }))
+
+      taskNames <- names(isPlotTaskVector[as.logical(isPlotTaskVector)])
+
+      return(taskNames)
+    },
+
+    #' @description
+    #' Get a vector with all the names of active tasks within the `Workflow`
+    #' @return Vector of active `Task` names
+    getActiveTasks = function() {
+      return(private$getTasksWithStatus(status = TRUE))
+    },
+
+    #' @description
+    #' Get a vector with all the names of inactive tasks within the `Workflow`
+    #' @return Vector of inactive `Task` names
+    getInactiveTasks = function() {
+      return(private$getTasksWithStatus(status = FALSE))
+    },
+
+    #' @description
+    #' Activates a series of `Tasks` from current `Workflow`
+    #' @param tasks names of the worklfow tasks to activate.
+    #' Default activates all tasks of the workflow using workflow method `workflow$getAllTasks()`
+    #' @return Vector of inactive `Task` names
+    activateTasks = function(tasks = self$getAllTasks()) {
+      activateWorkflowTasks(self, tasks = tasks)
+    },
+
+    #' @description
+    #' Inactivates a series of `Tasks` from current `Workflow`
+    #' @param tasks names of the worklfow tasks to inactivate.
+    #' Default inactivates all tasks of the workflow using workflow method `workflow$getAllTasks()`
+    #' @return Vector of inactive `Task` names
+    inactivateTasks = function(tasks = self$getAllTasks()) {
+      inactivateWorkflowTasks(self, tasks = tasks)
+    }
+  ),
+
+  private = list(
+    getTasksWithStatus = function(status) {
+      taskNames <- self$getAllTasks()
+
+      tasksWithStatus <- NULL
+      for (taskName in taskNames) {
+        if (self[[taskName]]$active == status) {
+          tasksWithStatus <- c(tasksWithStatus, taskName)
+        }
+      }
+      return(tasksWithStatus)
     }
   )
 )

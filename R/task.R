@@ -6,7 +6,7 @@
 #' @field settings class
 #' @field message message or title of the task
 Task <- R6::R6Class(
-  "Tasks",
+  "Task",
   public = list(
     active = NULL,
     input = NULL,
@@ -20,15 +20,15 @@ Task <- R6::R6Class(
     #' @param output list of files or folders of output
     #' @param settings specific settings for task
     #' @param active logical indicating if `task` is performed in a worklfow.
-    #' Default value is `TRUE`
+    #' Default value is `FALSE`
     #' @param message title of the `task`.
     #' Default value indicates `task` name.
     #' @return A new `Task` object
     initialize = function(input = NULL,
-                          output = NULL,
-                          settings = NULL,
-                          active = TRUE,
-                          message = NULL) {
+                              output = NULL,
+                              settings = NULL,
+                              active = FALSE,
+                              message = NULL) {
       validateIsOfType(active, "logical")
       self$active <- active
       self$input <- as.list(input)
@@ -70,3 +70,31 @@ Task <- R6::R6Class(
     }
   )
 )
+
+#' @title activateWorkflowTasks
+#' @description activates a series of `Tasks` from a `Workflow`
+#' @param workflow `MeanModelWorklfow` or `PopulationWorklfow` object
+#' @param tasks names of the tasks to activate
+#' Default activates all tasks of the workflow using workflow method `workflow$getAllTasks()`
+#' @export
+activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
+  validateIsOfType(workflow, "Workflow")
+
+  for (task in tasks) {
+    workflow[[task]]$activate()
+  }
+}
+
+#' @title inactivateWorkflowTasks
+#' @description inactivates a series of `Tasks` from a `Workflow`
+#' @param workflow `MeanModelWorklfow` or `PopulationWorklfow` object
+#' @param tasks names of the tasks to activate
+#' Default inactivates all tasks of the workflow using workflow method `workflow$getAllTasks()`
+#' @export
+inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
+  validateIsOfType(workflow, "Workflow")
+
+  for (task in tasks) {
+    workflow[[task]]$inactivate()
+  }
+}

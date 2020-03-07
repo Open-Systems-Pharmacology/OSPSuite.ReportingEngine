@@ -4,12 +4,12 @@
 \alias{getResiduals}
 \title{getResiduals}
 \usage{
-getResiduals(simulatedData, observedData, dataMapping = NULL)
+getResiduals(data, metaData = NULL, dataMapping = NULL)
 }
 \arguments{
-\item{simulatedData}{data.frame of simulated data}
+\item{data}{data.frame of time profile data}
 
-\item{observedData}{data.frame of observed data}
+\item{metaData}{meta data on `data`}
 
 \item{dataMapping}{XYDataMapping class object mapping what variable is to compare}
 }
@@ -17,5 +17,7 @@ getResiduals(simulatedData, observedData, dataMapping = NULL)
 residualsData data.frame with Time, Observed, Simulated, Residuals
 }
 \description{
-Get a data.frame matching simulated data to observed data and compute the residuals
+This function may be reshape to be more generic later on
+Currently, the input variable data is a data.frame with "Time", "Concentration" and "Legend"
+The function get the simulated data with the time the closest to the observed data times
 }

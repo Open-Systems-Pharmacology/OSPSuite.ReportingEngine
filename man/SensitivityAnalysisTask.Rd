@@ -7,7 +7,7 @@
 R6 class for SensitivityAnalysisTask settings
 }
 \section{Super class}{
-\code{\link[ospsuite.reportingengine:Tasks]{ospsuite.reportingengine::Tasks}} -> \code{SensitivityAnalysisTask}
+\code{\link[ospsuite.reportingengine:Task]{ospsuite.reportingengine::Task}} -> \code{SensitivityAnalysisTask}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -37,10 +37,10 @@ R6 class for SensitivityAnalysisTask settings
 \if{html}{
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Tasks" data-id="activate">}\href{../../ospsuite.reportingengine/html/Tasks.html#method-activate}{\code{ospsuite.reportingengine::Tasks$activate()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Tasks" data-id="inactivate">}\href{../../ospsuite.reportingengine/html/Tasks.html#method-inactivate}{\code{ospsuite.reportingengine::Tasks$inactivate()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Tasks" data-id="print">}\href{../../ospsuite.reportingengine/html/Tasks.html#method-print}{\code{ospsuite.reportingengine::Tasks$print()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Tasks" data-id="validateInput">}\href{../../ospsuite.reportingengine/html/Tasks.html#method-validateInput}{\code{ospsuite.reportingengine::Tasks$validateInput()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="activate">}\href{../../ospsuite.reportingengine/html/Task.html#method-activate}{\code{ospsuite.reportingengine::Task$activate()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="inactivate">}\href{../../ospsuite.reportingengine/html/Task.html#method-inactivate}{\code{ospsuite.reportingengine::Task$inactivate()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="print">}\href{../../ospsuite.reportingengine/html/Task.html#method-print}{\code{ospsuite.reportingengine::Task$print()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="validateInput">}\href{../../ospsuite.reportingengine/html/Task.html#method-validateInput}{\code{ospsuite.reportingengine::Task$validateInput()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -53,6 +53,7 @@ Create a `SensitivityAnalysisTask` object
   variationRange = NULL,
   numberOfCores = NULL,
   quantileVec = NULL,
+  variableParameterPaths = NULL,
   ...
 )}\if{html}{\out{</div>}}
 }
@@ -64,9 +65,9 @@ Create a `SensitivityAnalysisTask` object
 
 \item{\code{numberOfCores}}{number of cores for parallel computation}
 
-\item{\code{...}}{parameters inherited from R6 class `Task` object}
+\item{\code{variableParameterPaths}}{vector of paths of parameters to vary when performing sensitivity analysis}
 
-\item{\code{generatedResultFileNames}}{name of files where PK parameters are saved}
+\item{\code{...}}{parameters inherited from R6 class `Task` object}
 }
 \if{html}{\out{</div>}}
 }

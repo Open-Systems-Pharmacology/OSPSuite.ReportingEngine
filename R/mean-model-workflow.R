@@ -59,10 +59,10 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param resultsFileName file where output is saved
     #' @return A new `Task` object
     meanModelSimulationSettings = function(input = NULL,
-                                           output = NULL,
-                                           settings = NULL,
-                                           active = TRUE,
-                                           message = NULL) {
+                                               output = NULL,
+                                               settings = NULL,
+                                               active = TRUE,
+                                               message = NULL) {
       self$meanModelSimulation <- SimulationTask$new(
         input = input,
         output = output,
@@ -88,10 +88,10 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param pkParameterResultsFilePath TO DO
     #' @return A new `Task` object
     calculatePKParametersSettings = function(input = NULL,
-                                             output = NULL,
-                                             settings = NULL,
-                                             active = TRUE,
-                                             message = NULL) {
+                                                 output = NULL,
+                                                 settings = NULL,
+                                                 active = TRUE,
+                                                 message = NULL) {
       self$meanModelPKParameters <- CalculatePKParametersTask$new(
         input = input,
         output = output,
@@ -118,12 +118,12 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param numberOfCores TO DO
     #' @return A new `Task` object
     meanModelSensitivityAnalysisSettings = function(input = NULL,
-                                                    output = NULL,
-                                                    settings = NULL,
-                                                    active = TRUE,
-                                                    message = NULL,
-                                                    variationRange = 0.1,
-                                                    numberOfCores = 1) {
+                                                        output = NULL,
+                                                        settings = NULL,
+                                                        active = FALSE,
+                                                        message = NULL,
+                                                        variationRange = 0.1,
+                                                        numberOfCores = 1) {
       self$meanModelSensitivityAnalysis <- SensitivityAnalysisTask$new(
         input = input,
         output = output,
@@ -147,14 +147,14 @@ MeanModelWorkflow <- R6::R6Class(
     #' Default value indicates `task` name.
     #' @return A new `Task` object
     plotGoFSettings = function(input = NULL,
-                               output = NULL,
-                               active = FALSE,
-                               message = NULL) {
+                                   output = file.path(self$resultsFolder, "TimeProfile"),
+                                   active = FALSE,
+                                   message = NULL) {
       self$plotGoF <- Task$new(
         input = input,
         output = output,
         active = active,
-        message = "Plot Goodness of Fit task not available at the moment"
+        message = "Plot Goodness of Fit task in Alpha Testing"
       )
     },
 
@@ -169,9 +169,9 @@ MeanModelWorkflow <- R6::R6Class(
     #' Default value indicates `task` name.
     #' @return A new `Task` object
     plotPKParametersSettings = function(input = NULL,
-                                        output = NULL,
-                                        active = FALSE,
-                                        message = NULL) {
+                                            output = NULL,
+                                            active = FALSE,
+                                            message = NULL) {
       self$plotPKParameters <- Task$new(
         input = input,
         output = output,
@@ -191,14 +191,14 @@ MeanModelWorkflow <- R6::R6Class(
     #' Default value indicates `task` name.
     #' @return A new `Task` object
     plotMassBalanceSettings = function(input = NULL,
-                                       output = NULL,
-                                       active = FALSE,
-                                       message = NULL) {
+                                           output = file.path(self$resultsFolder, "MassBalance"),
+                                           active = FALSE,
+                                           message = NULL) {
       self$plotMassBalance <- Task$new(
         input = input,
         output = output,
         active = active,
-        message = "Plot Mass Balance task not available at the moment"
+        message = "Plot Mass Balance task in Alpha Testing"
       )
     },
 
@@ -213,14 +213,14 @@ MeanModelWorkflow <- R6::R6Class(
     #' Default value indicates `task` name.
     #' @return A new `Task` object
     plotAbsorptionSettings = function(input = NULL,
-                                      output = NULL,
-                                      active = FALSE,
-                                      message = NULL) {
+                                          output = file.path(self$resultsFolder, "Absorption"),
+                                          active = FALSE,
+                                          message = NULL) {
       self$plotAbsorption <- Task$new(
         input = input,
         output = output,
         active = active,
-        message = "Plot Absorption task not available at the moment"
+        message = "Plot Absorption task in Alpha Testing"
       )
     },
 
@@ -235,9 +235,9 @@ MeanModelWorkflow <- R6::R6Class(
     #' Default value indicates `task` name.
     #' @return A new `Task` object
     plotSensitivitySettings = function(input = NULL,
-                                       output = NULL,
-                                       active = FALSE,
-                                       message = NULL) {
+                                           output = NULL,
+                                           active = FALSE,
+                                           message = NULL) {
       self$plotSensitivity <- Task$new(
         input = input,
         output = output,
@@ -247,20 +247,17 @@ MeanModelWorkflow <- R6::R6Class(
     },
 
     #' @description
-    #' Loop through all simulation sets and run active mean model workflow tasks for each
-    runWorkflow = function() {
-      logInfo(message = "Start of mean model workflow")
-
-      for (set in self$simulationStructures) {
-        # print(set)
-        self$runSingleSetWorkflow(set)
-      }
-    },
-
-    #' @description
     #' Run population workflow tasks for a single simulation set
     #' @return All results and plots as a structured output in a folder specific to simulation set.
-    runSingleSetWorkflow = function(set) {
+    runWorkflow = function() {
+      logWorkflow(
+        message = "Starting run of mean model workflow",
+        pathFolder = self$workflowFolder
+      )
+
+      initializeRmdFile(self$reportFileName,
+        title = "Mean Model Workflow Report"
+      )
 
       # MEAN MODEL WORKFLOW
       # CORE STAGE 1:  SIMULATION
@@ -275,61 +272,332 @@ MeanModelWorkflow <- R6::R6Class(
       # 3a - Plots and Tables based on sensitivity results
 
       if (self$meanModelSimulation$active) {
-        # TO DO: include simulationSets
-        # for (simulationSet in self$simulationSets){}
-        if (self$meanModelSimulation$validateInput()) {
-          logInfo(message = "Starting mean model simulation")
-          createFolder(set$simulationResultsFolder)
-          set$simulationResultFileNames <- simulateModel(
-            simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
-            resultsFilePath = file.path(set$simulationResultsFolder, defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName))
+        logWorkflow(
+          message = paste0("Starting ", self$meanModelSimulation$message),
+          pathFolder = self$workflowFolder
+        )
+        for (set in self$simulationStructures) {
+          logWorkflow(
+            message = paste0("Run simulation: ", set$simulationSet$simulationName),
+            pathFolder = self$workflowFolder
           )
+          if (self$meanModelSimulation$validateInput()) {
+            dir.create(set$simulationResultsFolder)
+            # Create the Output of Simulation
+            set$simulationResultFileNames <- simulateModel(
+              simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
+              resultsFilePath = file.path(set$simulationResultsFolder, defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName))
+            )
+          }
         }
       }
 
       if (self$meanModelPKParameters$active) {
-        if (self$meanModelPKParameters$validateInput()) {
-          logInfo(message = "Starting mean model PK parameters calculation")
-          createFolder(set$pkAnalysisResultsFolder)
-          set$pkAnalysisResultsFileNames <- calculatePKParameters(
-            simulationFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
-            simulationResultFilePaths = set$simulationResultFileNames,
-            pkParameterResultsFilePath = file.path(set$pkAnalysisResultsFolder, defaultFileNames$pkAnalysisResultsFile(set$simulationSet$simulationSetName))
+        logWorkflow(
+          message = paste0("Starting ", self$meanModelPKParameters$message),
+          pathFolder = self$workflowFolder
+        )
+        for (set in self$simulationStructures) {
+          logWorkflow(
+            message = c(
+              paste0("Simulation: ", set$simulationSet$simulationName),
+              paste0("Calculate PK parameters: ", paste0(set$simulationSet$pkParameters, collapse = ", "))
+            ),
+            pathFolder = self$workflowFolder
           )
+          if (self$meanModelPKParameters$validateInput()) {
+            dir.create(set$pkAnalysisResultsFolder)
+            # Create the Output for PK parameters
+            set$pkAnalysisResultsFileNames <- calculatePKParameters(
+              simulationFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
+              simulationResultFilePaths = set$simulationResultFileNames,
+              pkParameterResultsFilePath = file.path(set$pkAnalysisResultsFolder, defaultFileNames$pkAnalysisResultsFile(set$simulationSet$simulationSetName))
+            )
+          }
         }
       }
 
       if (self$meanModelSensitivityAnalysis$active) {
-        if (self$meanModelSensitivityAnalysis$validateInput()) {
-          logInfo(message = "Starting mean model sensitivity analysis")
-          createFolder(set$sensitivityAnalysisResultsFolder)
-          set$sensitivityAnalysisResultsFileNames <- runSensitivity(
-            simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
-            variableParameterPaths = self$meanModelSensitivityAnalysis$variableParameterPaths,
-            variationRange = self$meanModelSensitivityAnalysis$variationRange,
-            resultsFileFolder = set$sensitivityAnalysisResultsFolder,
-            resultsFileName = trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName), extension = "csv"),
-            numberOfCores = self$meanModelSensitivityAnalysis$numberOfCores
+        logWorkflow(
+          message = paste0("Starting ", self$meanModelSensitivityAnalysis$message),
+          pathFolder = self$workflowFolder
+        )
+        for (set in self$simulationStructures) {
+          logWorkflow(
+            message = c(
+              paste0("Simulation: ", set$simulationSet$simulationName),
+              paste0("Calculate sensitivity for the PK parameters: ", paste0(set$simulationSet$pkParameters, collapse = ", "))
+            ),
+            pathFolder = self$workflowFolder
+          )
+          if (self$meanModelSensitivityAnalysis$validateInput()) {
+            dir.create(set$sensitivityAnalysisResultsFolder)
+            # Create the Output of Simulation
+            set$sensitivityAnalysisResultsFileNames <- runSensitivity(
+              simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
+              variationRange = self$meanModelSensitivityAnalysis$variationRange,
+              resultsFileFolder = set$sensitivityAnalysisResultsFolder,
+              resultsFileName = trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName), extension = "csv"),
+              numberOfCores = self$meanModelSensitivityAnalysis$numberOfCores
+            )
+          }
+        }
+      }
+
+      if (self$plotGoF$active) {
+        logWorkflow(
+          message = paste0("Starting ", self$plotGoF$message),
+          pathFolder = self$workflowFolder
+        )
+
+        addRmdTextChunk(
+          self$reportFileName,
+          "# Time profiles and residuals"
+        )
+
+        dir.create(self$plotGoF$output[[1]])
+        residualsAcrossAllSimulations <- NULL
+        for (set in self$simulationStructures) {
+          logWorkflow(
+            message = c(
+              paste0("Simulation: ", set$simulationSet$simulationName),
+              paste0("Plot time profile")
+            ),
+            pathFolder = self$workflowFolder
+          )
+          if (self$plotGoF$validateInput()) {
+
+            # TO DO: Add obs vs pred, residuals vs time, residual vs sim to plot
+            gofResults <- plotMeanGoodnessOfFit(set,
+              plotConfigurations = self$plotGoF$settings$plotConfigurations
+            )
+
+            # TO DO: save standardized names in the nomenclature file
+            write.csv(gofResults$timeProfile,
+              file = file.path(self$plotGoF$output[[1]], paste0(set$simulationSet$simulationSetName, "-timeProfile.csv")),
+              row.names = FALSE
+            )
+
+            residualsAcrossAllSimulations <- rbind.data.frame(
+              residualsAcrossAllSimulations,
+              gofResults$residuals$data
+            )
+            addRmdTextChunk(
+              self$reportFileName,
+              paste0("Simulation: ", set$simulationSet$simulationSetName)
+            )
+
+            gofPlotTypes <- names(gofResults$plots)
+
+            for (gofPlotType in gofPlotTypes) {
+              gofFileName <- file.path(self$plotGoF$output[[1]], paste0(set$simulationSet$simulationSetName, gofPlotType, ".png"))
+
+              # TO DO: plug ggsave option to GoF settintgs/plotConfigurations
+              # Depending on the report options, it is possible to configure subplots here
+              ggplot2::ggsave(
+                filename = gofFileName,
+                plot = gofResults$plots[[gofPlotType]],
+                width = 16, height = 9, units = "cm"
+              )
+
+              addRmdFigureChunk(
+                fileName = self$reportFileName,
+                figureFile = gofFileName,
+                figureCaption = gofPlotType
+              )
+            }
+          }
+        }
+        # TO DO:
+        # In my understanding of the github instructions,
+        # there should be merging of all the residual here
+        # leading to a histogram and qq plot of all the the residuals
+        if (!is.null(residualsAcrossAllSimulations)) {
+          addRmdTextChunk(
+            self$reportFileName,
+            "## Residuals across all simulations"
+          )
+
+          residualHistogramPlot <- tlf::plotHistogram(
+            data = residualsAcrossAllSimulations,
+            dataMapping = tlf::HistogramDataMapping$new(x = "Residuals"),
+            plotConfiguration = self$plotGoF$settings$plotConfigurations[["histogram"]]
+          )
+          ggplot2::ggsave(
+            filename = file.path(self$plotGoF$output[[1]], paste0("residuals.png")),
+            plot = residualHistogramPlot,
+            width = 16, height = 9, units = "cm"
+          )
+
+          addRmdFigureChunk(
+            fileName = self$reportFileName,
+            figureFile = file.path(self$plotGoF$output[[1]], paste0("residuals.png")),
+            figureCaption = "Histogram of residuals"
           )
         }
       }
 
-      # TO DO: plug plot tasks to actual results
-      if (self$plotGoF$active) {
-        logInfo(message = self$plotGoF$message)
-      }
       if (self$plotMassBalance$active) {
-        logInfo(message = self$plotMassBalance$message)
+        logWorkflow(
+          message = paste0("Starting ", self$plotMassBalance$message),
+          pathFolder = self$workflowFolder
+        )
+        addRmdTextChunk(
+          self$reportFileName,
+          "# Mass balance"
+        )
+        dir.create(self$plotMassBalance$output[[1]])
+
+        for (set in self$simulationStructures) {
+          logWorkflow(
+            message = c(
+              paste0("Simulation: ", set$simulationSet$simulationName),
+              paste0("Plot Mass Balance")
+            ),
+            pathFolder = self$workflowFolder
+          )
+          if (self$plotMassBalance$validateInput()) {
+            massBalanceResults <- plotMeanMassBalance(set,
+              plotConfigurations = self$plotMassBalance$settings$plotConfigurations,
+              selectedCompoundNames = self$plotMassBalance$settings$compoundNames
+            )
+
+            # TO DO: save standardized names in the nomenclature file
+            write.csv(massBalanceResults$timeProfile,
+              file = file.path(self$plotMassBalance$output[[1]], paste0(set$simulationSet$simulationSetName, "-timeProfile.csv")),
+              row.names = FALSE
+            )
+
+            addRmdTextChunk(
+              self$reportFileName,
+              paste0("Simulation: ", set$simulationSet$simulationSetName)
+            )
+
+            massBalancePlotTypes <- names(massBalanceResults$plots)
+
+            for (massBalancePlotType in massBalancePlotTypes) {
+              massBalanceFileName <- file.path(self$plotMassBalance$output[[1]], paste0(set$simulationSet$simulationSetName, massBalancePlotType, ".png"))
+
+              # TO DO: plug ggsave option to GoF settintgs/plotConfigurations
+              # Depending on the report options, it is possible to configure subplots here
+              ggplot2::ggsave(
+                filename = massBalanceFileName,
+                plot = massBalanceResults$plots[[massBalancePlotType]],
+                width = 16, height = 9, units = "cm"
+              )
+
+              addRmdFigureChunk(
+                fileName = self$reportFileName,
+                figureFile = massBalanceFileName,
+                figureCaption = massBalancePlotType
+              )
+            }
+          }
+        }
       }
+
+
       if (self$plotAbsorption$active) {
-        logInfo(message = self$plotAbsorption$message)
+        logWorkflow(
+          message = paste0("Starting ", self$plotAbsorption$message),
+          pathFolder = self$workflowFolder
+        )
+        addRmdTextChunk(
+          self$reportFileName,
+          "# Absoprtion"
+        )
+        dir.create(self$plotAbsorption$output[[1]])
+
+        for (set in self$simulationStructures) {
+          logWorkflow(
+            message = c(
+              paste0("Simulation: ", set$simulationSet$simulationName),
+              paste0("Plot Absorption")
+            ),
+            pathFolder = self$workflowFolder
+          )
+          if (self$plotAbsorption$validateInput()) {
+            absorptionResults <- plotMeanAbsorption(set,
+              plotConfiguration = self$plotAbsorption$settings$plotConfiguration
+            )
+
+            compoundNames <- names(absorptionResults$timeProfile)
+
+            addRmdTextChunk(
+              self$reportFileName,
+              paste0("Simulation: ", set$simulationSet$simulationSetName)
+            )
+
+            # TO DO: save standardized names in the nomenclature file
+            for (compoundName in compoundNames) {
+              write.csv(absorptionResults$timeProfile[[compoundName]],
+                file = file.path(self$plotAbsorption$output[[1]], paste0(set$simulationSet$simulationSetName, compoundName, "-timeProfileAbsorption.csv")),
+                row.names = FALSE
+              )
+
+              absorptionFileName <- file.path(self$plotAbsorption$output[[1]], paste0(set$simulationSet$simulationSetName, compoundName, ".png"))
+
+              # TO DO: plug ggsave option to settintgs/plotConfigurations
+              # Depending on the report options, it is possible to configure subplots here
+              ggplot2::ggsave(
+                filename = absorptionFileName,
+                plot = absorptionResults$plots[[compoundName]],
+                width = 16, height = 9, units = "cm"
+              )
+
+              addRmdFigureChunk(
+                fileName = self$reportFileName,
+                figureFile = absorptionFileName,
+                figureCaption = compoundName
+              )
+            }
+          }
+        }
       }
+
       if (self$plotPKParameters$active) {
-        logInfo(message = self$plotPKParameters$message)
+        logWorkflow(
+          message = paste0("Starting ", self$plotPKParameters$message),
+          pathFolder = self$workflowFolder
+        )
+        addRmdTextChunk(
+          self$reportFileName,
+          "# PK parameters"
+        )
+        for (set in self$simulationStructures) {
+          logWorkflow(
+            message = c(
+              paste0("Simulation: ", set$simulationSet$simulationName),
+              paste0("Plot PK parameters")
+            ),
+            pathFolder = self$workflowFolder
+          )
+          if (self$plotPKParameters$validateInput()) {
+
+            # pkParametersPlot <- ggplot2::ggplot() + ggplot2::ggtitle("TO DO: PK parameter plot")
+
+            # ggplot2::ggsave(filename = file.path(self$figuresFolder, paste0(set$simulationSet$simulationName, "-pkParameters.png")))
+          }
+        }
       }
+
       if (self$plotSensitivity$active) {
-        logInfo(message = self$plotSensitivity$message)
+        logWorkflow(
+          message = paste0("Starting ", self$plotSensitivity$message),
+          pathFolder = self$workflowFolder
+        )
+        addRmdTextChunk(
+          self$reportFileName,
+          "# Sensititvity Analysis"
+        )
+        addRmdTextChunk(
+          self$reportFileName,
+          "TO DO: Create Sensitivity Plots for report"
+        )
       }
+
+      # Get output in final format for publication
+      renderRmdFile(self$reportFileName)
     },
 
     #' @description

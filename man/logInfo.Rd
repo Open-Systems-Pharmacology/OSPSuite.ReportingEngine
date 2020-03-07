@@ -14,9 +14,6 @@ Default is `log-info.txt`}
 
 \item{printConsole}{logical to print error on console}
 }
-\value{
-
-}
 \description{
 Save info messages into a log info file
 }

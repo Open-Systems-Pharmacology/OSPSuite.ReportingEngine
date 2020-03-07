@@ -37,19 +37,19 @@ PopModelSet <- R6::R6Class(
     #'
 
     initialize = function(simulationSetName = NULL,
-                          simulationFile,
-                          simulationName = NULL,
-                          pathID = NULL,
-                          pathName = NULL,
-                          pathUnit = NULL,
-                          pkParameters = AllPKParameters,
-                          pkParametersNames = NULL,
-                          pkParametersUnits = NULL,
-                          dataFilter = NULL,
-                          observedDataFile = NULL,
-                          observedMetaDataFile = NULL,
-                          populationFile,
-                          populationName = NULL) {
+                              simulationFile,
+                              simulationName = NULL,
+                              pathID = NULL,
+                              pathName = NULL,
+                              pathUnit = NULL,
+                              pkParameters = AllPKParameters,
+                              pkParametersNames = NULL,
+                              pkParametersUnits = NULL,
+                              dataFilter = NULL,
+                              observedDataFile = NULL,
+                              observedMetaDataFile = NULL,
+                              populationFile,
+                              populationName = NULL) {
       super$initialize(
         simulationSetName = NULL,
         simulationFile,

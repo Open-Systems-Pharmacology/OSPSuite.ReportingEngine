@@ -6,7 +6,7 @@
 \usage{
 runSensitivity(
   simFilePath,
-  parametersToPerturb = NULL,
+  variableParameterPaths = NULL,
   popFilePath = NULL,
   individualId = NULL,
   variationRange,
@@ -18,7 +18,7 @@ runSensitivity(
 \arguments{
 \item{simFilePath}{path to simulation file}
 
-\item{parametersToPerturb}{paths to parameters to perturb in sensitivity analysis}
+\item{variableParameterPaths}{paths to parameters to vary in sensitivity analysis}
 
 \item{popFilePath}{path to the population data file}
 

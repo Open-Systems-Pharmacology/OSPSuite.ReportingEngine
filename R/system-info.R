@@ -1,27 +1,17 @@
 # System Information for Reporting Engine
 
 #' @title ReportingEngineInfo
-#' @docType class
-#' @description  R6 class providing relevant information regarding the Reporting Engine
-#' @field Date (public)
-#' @field computerName (private) name of computer
-#' @field userName (private) name of user
-#' @field login (private)
-#' @field tlfVersion (private) version of tlf package
-#' @field ospsuiteVersion (private) version of osp suite package
-#' @field Rversion (private) version of R
-#' @field isValidatedSystem (private) logical for computers that are evaluatued validated for Reporting Engine
-#' @section Methods:
-#' \describe{
-#' \item{new()}{Initialize ReportingEngineInfo}
-#' \item{print()}{Print Reporting Engine Inforation}
-#' }
+#' @description R6 class representing system information for Reporting Engine
+#' @field Date Date at which the class is initialized
 #' @export
-#' @format NULL
 ReportingEngineInfo <- R6::R6Class(
   "ReportingEngineInfo",
   public = list(
     Date = NULL,
+
+    #' @description
+    #' Create a new `ReportingEngineInfo` object.
+    #' @return A new `ReportingEngineInfo` object
     initialize = function() {
       info <- getReportingEngineInfo()
       self$Date <- info$Date
@@ -31,29 +21,34 @@ ReportingEngineInfo <- R6::R6Class(
       private$tlfVersion <- info$tlfVersion
       private$ospsuiteVersion <- info$ospsuiteVersion
       private$Rversion <- info$Rversion
-      # TO DO: define validated list of systems that will use Reporting Engine
+
+      # TO DO: define a list of validated systems that will use Reporting Engine
       validatedSystems <- info$computerName
       if (private$computerName %in% validatedSystems) {
         private$isValidatedSystem <- TRUE
       }
     },
+
+    #' @description
+    #' Print system information
+    #' @return A text with system information
     print = function() {
       systemValidated <- "NOT"
       if (private$isValidatedSystem) {
         systemValidated <- ""
       }
       infoPrint <- c(
-        sprintf("\nReporting Engine Information:\n"),
-        sprintf("Date: %s \n", as.character(self$Date)),
-        sprintf("\nUser Information: \n"),
-        sprintf("Computer Name: %s \n", private$computerName),
-        sprintf("User: %s \n", private$userName),
-        sprintf("Login: %s \n", private$login),
-        sprintf("System is %s validated \n", systemValidated),
-        sprintf("\nSystem versions: \n"),
-        sprintf("R version: %s \n", private$Rversion),
-        sprintf("OSP Suite Package version: %s \n", as.character(private$ospsuiteVersion)),
-        sprintf("tlf version: %s \n", as.character(private$tlfVersion))
+        sprintf("Reporting Engine Information: "),
+        sprintf("Date: %s ", as.character(self$Date)),
+        sprintf("User Information: "),
+        sprintf("Computer Name: %s ", private$computerName),
+        sprintf("User: %s ", private$userName),
+        sprintf("Login: %s ", private$login),
+        sprintf("System is %s validated ", systemValidated),
+        sprintf("System versions: "),
+        sprintf("R version: %s ", private$Rversion),
+        sprintf("OSP Suite Package version: %s ", as.character(private$ospsuiteVersion)),
+        sprintf("tlf version: %s ", as.character(private$tlfVersion))
       )
       invisible(self)
       return(infoPrint)

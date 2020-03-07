@@ -56,5 +56,9 @@ messages <- list(
 
   errorTaskInputDoesNotExist = function(input) {
     paste0("Task input file '", input, "' does not exist.")
+  },
+
+  errorObservedMetaDataFileNotProvided = function() {
+    '"ObservedDataFile" provided while "ObservedMetaDataFile" is "NULL", path of ObservedMetaDataFile need to be input'
   }
 )

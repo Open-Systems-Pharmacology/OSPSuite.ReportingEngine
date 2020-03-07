@@ -203,7 +203,21 @@ validateIsFileExtension <- function(path, extension, nullAllowed = FALSE) {
 #' Log the error with a message and then stop, displaying same message.
 #'
 #' @param message message to display and then log
-logErrorThenStop <- function(message){
-  logError(message)
+#' @param logFolderPath path where logs are saved
+logErrorThenStop <- function(message, logFolderPath = getwd()) {
+  logWorkflow(
+    message = message,
+    pathFolder = logFolderPath
+  )
   stop(message)
+}
+
+validateMetaDataProvidedToObservedDataFile <- function(ObservedDataFile, ObservedMetaDataFile) {
+  if (is.null(ObservedDataFile)) {
+    return()
+  }
+  if (!is.null(ObservedMetaDataFile)) {
+    return()
+  }
+  logErrorThenStop(messages$errorObservedMetaDataFileNotProvided())
 }

@@ -29,11 +29,11 @@ print(simFilePath2)
 # mmwf$runWorkflow()
 
 
-#Single core mean model simulation & PK analysis, parallel sensitivity analysis
-mm1 <- MeanModelSet$new(simulationFile = simFilePath1,simulationSetName = "SET1")
-mm2 <- MeanModelSet$new(simulationFile = simFilePath2,simulationSetName = "SET2")
+# Single core mean model simulation & PK analysis, parallel sensitivity analysis
+mm1 <- MeanModelSet$new(simulationFile = simFilePath1, simulationSetName = "SET1")
+mm2 <- MeanModelSet$new(simulationFile = simFilePath2, simulationSetName = "SET2")
 mmwf <- MeanModelWorkflow$new(simulationSets = list(mm1, mm2))
-mmwf$meanModelSensitivityAnalysis$numberOfCores = 2
+mmwf$meanModelSensitivityAnalysis$numberOfCores <- 2
 mmwf$runWorkflow()
 
 

@@ -26,14 +26,23 @@ defaultFileNames <- list(
   sensitivityAnalysisResultsFolder = function(name = NULL) {
     getDefaultFolderName(name, suffix = "SensitivityAnalysisResults", sep = ifnotnull(name, "-", ""))
   },
-  reportFolder = function(name = NULL) {
-    getDefaultFolderName(name, suffix = "Report", sep = ifnotnull(name, "-", ""))
+  reportName = function(name = "Report") {
+    getDefaultFolderName(name, suffix = NULL, sep = "")
   },
   resultsFolder = function(name = NULL) {
     getDefaultFolderName(name, suffix = "Results", sep = ifnotnull(name, "-", ""))
   },
   figuresFolder = function(name = NULL) {
     getDefaultFolderName(name, suffix = "Figures", sep = ifnotnull(name, "-", ""))
+  },
+  logInfoFile = function(name = "info") {
+    getDefaultFileName("log", suffix = name, extension = "txt", sep = "-")
+  },
+  logErrorFile = function(name = "error") {
+    getDefaultFileName("log", suffix = name, extension = "txt", sep = "-")
+  },
+  logDebugFile = function(name = "debug") {
+    getDefaultFileName("log", suffix = name, extension = "txt", sep = "-")
   }
 )
 

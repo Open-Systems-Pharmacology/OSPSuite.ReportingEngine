@@ -6,7 +6,7 @@
 \usage{
 analyzeCoreSensitivity(
   simulation,
-  parametersToPerturb = NULL,
+  variableParameterPaths = NULL,
   variationRange = 0.1,
   resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv"),
   numberOfCoresToUse = NULL
@@ -15,7 +15,7 @@ analyzeCoreSensitivity(
 \arguments{
 \item{simulation}{simulation class object}
 
-\item{parametersToPerturb}{paths of parameters to be analyzed}
+\item{variableParameterPaths}{paths of parameters to be analyzed}
 
 \item{variationRange}{variation range for sensitivity analysis}
 
@@ -27,5 +27,5 @@ analyzeCoreSensitivity(
 Save sensitivity analysis results as CSV in path given by resultsFilePath.
 }
 \description{
-Run a sensitivity analysis for a single individual, perturbing only the set of parameters parametersToPerturb
+Run a sensitivity analysis for a single individual, varying only the set of parameters variableParameterPaths
 }

@@ -84,10 +84,9 @@ individualSensitivityAnalysis <- function(simFilePath,
   if (is.null(variableParameterPaths)) { # If no parameters to vary specified, vary all parameters valid for sensitivity analysis
     variableParameterPaths <- allVariableParameterPaths
   } else {
-    #if a variableParameterPaths input is provided, ensure that all its elements exist within allVariableParameterPaths.  If not, give an error.
+    # if a variableParameterPaths input is provided, ensure that all its elements exist within allVariableParameterPaths.  If not, give an error.
 
-    validateIsIncluded(variableParameterPaths,allVariableParameterPaths)
-
+    validateIsIncluded(variableParameterPaths, allVariableParameterPaths)
   }
   totalNumberParameters <- length(variableParameterPaths)
   numberOfCores <- min(numberOfCores, totalNumberParameters) # In case there are more cores specified in numberOfCores than there are parameters, ensure at least one parameter per spawned core

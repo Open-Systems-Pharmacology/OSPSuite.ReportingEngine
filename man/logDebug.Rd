@@ -4,7 +4,7 @@
 \alias{logDebug}
 \title{logDebug}
 \usage{
-logDebug(message, file = "log-debug.txt", printConsole = TRUE)
+logDebug(message, file = "log-debug.txt", printConsole = FALSE)
 }
 \arguments{
 \item{message}{message to save in log file}
@@ -13,9 +13,6 @@ logDebug(message, file = "log-debug.txt", printConsole = TRUE)
 Default is `log-debug.txt`}
 
 \item{printConsole}{logical to print error on console}
-}
-\value{
-
 }
 \description{
 Save intermediate messages into a log debug file

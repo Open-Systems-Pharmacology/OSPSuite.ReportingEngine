@@ -1,0 +1,160 @@
+{
+    "labelColors": {
+      "title": "grey10",
+      "subtitle": "grey10",
+      "xlabel": "grey10",
+      "ylabel": "grey10",
+      "watermark": "deepskyblue4"
+    },
+    "aesProperties": {
+      "color": [
+        "#000000",
+        "#E69F00",
+        "#56B4E9",
+        "#009E73",
+        "#F0E442",
+        "#0072B2",
+        "#D55E00",
+        "#CC79A7"
+      ],
+      "linetype": [
+        "solid",
+        "dashed",
+        "dotted",
+        "dotdash",
+        "longdash",
+        "twodash"
+      ],
+      "shape": [
+        16,
+        15,
+        17,
+        18,
+        19,
+        22,
+        21,
+        23,
+        24,
+        25
+      ],
+      "fill": [
+        "#000000",
+        "#E69F00",
+        "#56B4E9",
+        "#009E73",
+        "#F0E442",
+        "#0072B2",
+        "#D55E00",
+        "#CC79A7"
+      ],
+      "size": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "alpha": 0.5
+    },
+    "background": {
+      "outer": {
+        "fill": "white"
+      },
+      "inner": {
+        "fill": "white",
+        "color": "darkslategrey",
+        "linetype": "solid",
+        "size": 1
+      },
+      "grid": {
+        "color": "darkslategrey",
+        "linetype": "longdash",
+        "size": 0.25
+      },
+      "watermark": "Not QCed !"
+    },
+    "pkRatio": {
+      "lines": {
+        "linetype": [
+          "solid",
+          "dashed",
+          "dashed",
+          "dashed",
+          "dashed"
+        ],
+        "color": [
+          "#000000",
+          "#0072B2",
+          "#0072B2",
+          "#D55E00",
+          "#D55E00"
+        ],
+        "size": [
+          2,
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    "timeProfile": {
+      "lloq": {
+        "linetype": "longdash",
+        "color": "#555555",
+        "size": 1
+      }
+    },
+    "histogram": {
+      "lines": {
+        "linetype": [
+          "solid",
+          "longdash",
+          "dashed",
+          "dotdash"
+        ],
+        "size": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    "ddiRatio": {
+      "lines": {
+        "linetype": [
+          "longdash",
+          "dashed",
+          "dashed"
+        ],
+        "color": [
+          "#000000",
+          "#0072B2",
+          "#0072B2"
+        ],
+        "size": [
+          1,
+          1,
+          1
+        ]
+      },
+      "guest":{
+        "linetype": "dashed",
+        "color": "#D55E00",
+        "size": 1
+      }
+    },
+    "obsVsPred": {
+      "lines": {
+        "linetype": "dashed",
+        "color": "black",
+        "size": 1
+      }
+    }
+  }

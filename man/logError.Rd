@@ -14,9 +14,6 @@ Default is `log-error.txt`}
 
 \item{printConsole}{logical to print error on console}
 }
-\value{
-
-}
 \description{
 Save error messages into a log error file
 }
