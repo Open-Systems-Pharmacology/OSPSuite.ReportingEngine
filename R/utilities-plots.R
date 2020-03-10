@@ -75,20 +75,25 @@ plotMeanGoodnessOfFit <- function(structureSet,
 
     timeColumn <- as.character(observations$metaData[observations$metaData[, "matlabID"] == "time", "nonmenColumn"])
     dvColumn <- as.character(observations$metaData[observations$metaData[, "matlabID"] == "dv", "nonmenColumn"])
-    filterColumn <- as.character(observations$metaData[observations$metaData[, "matlabID"] == "dataFilter", "nonmenColumn"])
 
     rowFilter <- TRUE
     if (!is.null(observations$filter)) {
-      # TO DO: replace by eval(expr)
-      # In logDebug add number of rows included by the filter
-      rowFilter <- which(observations$data[, filterColumn] == observations$filter)
+      if (!isOfType(observations$filter, "expression")) {
+        observations$filter <- parse(text = observations$filter)
+      }
+      rowFilter <- evalDataFilter(observations$data, observations$filter)
+
+      logWorkflow(
+        message = paste0("Number of observations filtered: ", sum(rowFilter)),
+        logTypes = LogTypes$Debug
+      )
     }
 
     # Observed Data needs to be already in the display unit
     timeProfileData <- data.frame(
       "Time" = observations$data[rowFilter, timeColumn],
       "Concentration" = observations$data[rowFilter, dvColumn],
-      "Legend" = paste0(structureSet$simulationSet$pathName, " observed data")
+      "Legend" = structureSet$simulationSet$dataReportName
     )
   }
 

@@ -153,3 +153,23 @@ createFolder <- function(folderName, printConsole = FALSE) {
   dir.create(folderName)
   logDebug(message = paste0(folderName, " was successfully created"), printConsole = printConsole)
 }
+
+#' @title getFileExtension
+#' @param filePath character string containing the name of the path or file to trim
+#' @return extension character string of the trimmed filed name
+#' @description
+#' Get extension of a file
+#' @examples
+#' \dontrun{
+#' pathName <- "folder/subfolder/testFile.txt"
+#' getFileExtension(pathName)
+#' }
+#' @export
+getFileExtension <- function(filePath) {
+  extension <- sub(
+    pattern = "^.*[.]",
+    replacement = "",
+    x = filePath
+  )
+  return(extension)
+}
