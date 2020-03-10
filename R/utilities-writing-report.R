@@ -60,8 +60,8 @@ addRmdTableChunk <- function(fileName,
   RmdText <- c(
     "",
     '```{r, echo = FALSE, results = "as.is"}',
-    paste0("table <- read.csv(", tableFile, ")"),
-    paste0("knitr::kable(table, caption = ", tableCaption, ")"),
+    paste0('table <- read.csv("', tableFile, '")'),
+    paste0('knitr::kable(table, caption = "', tableCaption, '")'),
     "```",
     ""
   )
