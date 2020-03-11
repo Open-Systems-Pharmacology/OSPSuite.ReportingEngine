@@ -3,7 +3,6 @@
 #' @field reportingEngineInfo R6 class object with relevant information about reporting engine
 #' @field simulationStructures `SimulationStructure` R6 class object managing the structure of the workflow output
 #' @field workflowFolder path of the folder create by the Workflow
-#' @field observedData list of observed `data` and `metaData`
 #' @field resultsFolder path where results are saved
 #' @field reportFileName name of the Rmd report file
 #' @import tlf
@@ -13,7 +12,6 @@ Workflow <- R6::R6Class(
   public = list(
     reportingEngineInfo = ReportingEngineInfo$new(),
     simulationStructures = NULL,
-    observedData = NULL,
     workflowFolder = NULL,
     resultsFolder = NULL,
     reportFileName = NULL,
