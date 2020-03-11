@@ -85,7 +85,6 @@ individualSensitivityAnalysis <- function(simFilePath,
     variableParameterPaths <- allVariableParameterPaths
   } else {
     # if a variableParameterPaths input is provided, ensure that all its elements exist within allVariableParameterPaths.  If not, give an error.
-
     validateIsIncluded(variableParameterPaths, allVariableParameterPaths)
   }
   totalNumberParameters <- length(variableParameterPaths)

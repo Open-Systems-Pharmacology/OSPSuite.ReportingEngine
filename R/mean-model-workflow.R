@@ -335,6 +335,7 @@ MeanModelWorkflow <- R6::R6Class(
             # Create the Output of Simulation
             set$sensitivityAnalysisResultsFileNames <- runSensitivity(
               simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
+              variableParameterPaths = self$meanModelSensitivityAnalysis$variableParameterPaths,
               variationRange = self$meanModelSensitivityAnalysis$variationRange,
               resultsFileFolder = set$sensitivityAnalysisResultsFolder,
               resultsFileName = trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName), extension = "csv"),
