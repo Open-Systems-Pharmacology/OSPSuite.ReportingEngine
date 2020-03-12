@@ -119,13 +119,14 @@ PopulationWorkflow <- R6::R6Class(
     #' @param numberOfCores TO DO
     #' @return A new `Task` object
     populationSensitivityAnalysisSettings = function(input = NULL,
-                                                         output = NULL,
-                                                         settings = NULL,
-                                                         active = TRUE,
-                                                         message = NULL,
-                                                         variationRange = 0.1,
-                                                         numberOfCores = 1,
-                                                         quantileVec = c(0.05, 0.5, 0.95)) {
+                                                     output = NULL,
+                                                     settings = NULL,
+                                                     active = TRUE,
+                                                     message = NULL,
+                                                     variationRange = 0.1,
+                                                     numberOfCores = 1,
+                                                     quantileVec = c(0.05, 0.5, 0.95),
+                                                     variableParameterPaths = NULL) {
       self$populationSensitivityAnalysis <- SensitivityAnalysisTask$new(
         input = input,
         output = output,
@@ -134,7 +135,8 @@ PopulationWorkflow <- R6::R6Class(
         message = message %||% "Sensitivity analysis for population",
         variationRange = variationRange,
         numberOfCores = numberOfCores,
-        quantileVec = quantileVec
+        quantileVec = quantileVec,
+        variableParameterPaths = variableParameterPaths
       )
     },
 

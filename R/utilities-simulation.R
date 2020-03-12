@@ -9,9 +9,9 @@
 simulateModel <- function(simFilePath,
                           popDataFilePath = NULL,
                           resultsFilePath,
-                          debugLogFileName = defaultFileNames$logDebugFile(),
-                          infoLogFileName = defaultFileNames$logInfoFile(),
-                          errorLogFileName = defaultFileNames$logErrorFile(),
+                          debugLogFileName = file.path(defaultFileNames$workflowFolderPath(),defaultFileNames$logDebugFile()),
+                          infoLogFileName = file.path(defaultFileNames$workflowFolderPath(),defaultFileNames$logInfoFile()),
+                          errorLogFileName = file.path(defaultFileNames$workflowFolderPath(),defaultFileNames$logErrorFile()),
                           nodeName = NULL) {
 
   sim <- loadSimulation(simFilePath,
@@ -50,6 +50,8 @@ runParallelPopulationSimulation <- function(numberOfCores,
                                             resultsFolderName,
                                             resultsFileName) {
 
+
+
   # library("Rmpi")
   Rmpi::mpi.spawn.Rslaves(nslaves = numberOfCores)
 
@@ -77,7 +79,6 @@ runParallelPopulationSimulation <- function(numberOfCores,
   Rmpi::mpi.bcast.Robj2slave(obj = inputFolderName)
   Rmpi::mpi.bcast.Robj2slave(obj = allResultsFileNames)
 
-print(file.path(defaultFileNames$workflowFolderPath(),tempLogFileNamePrefix))
   Rmpi::mpi.remote.exec(simulateModel(
     simFilePath = file.path(inputFolderName, paste0(simulationFileName, ".pkml")),
     popDataFilePath = file.path(inputFolderName, paste0(populationFileName, "_", mpi.comm.rank(), ".csv")),

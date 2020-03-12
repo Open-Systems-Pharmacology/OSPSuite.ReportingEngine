@@ -138,16 +138,23 @@ runParallelSensitivityAnalysis <- function(simFilePath,
                                            numberOfCores,
                                            resultsFileFolder,
                                            resultsFileName) {
+
+
   totalNumberParameters <- length(variableParameterPaths)
   # Parallelizing among a total of min(numberOfCores,totalNumberParameters) cores
   seqVec <- (1 + ((1:totalNumberParameters) %% numberOfCores)) # Create a vector, of length totalNumberParameters, consisting of a repeating sequence of integers from 1 to numberOfCores
   sortVec <- sort(seqVec) # Sort seqVec to obtain an concatenated array of repeated integers, with the repeated integers ranging from from 1 to numberOfCores.  These are the core numbers to which each parameter will be assigned.
   listSplitParameters <- split(x = variableParameterPaths, sortVec) # Split the parameters of the model according to sortVec
+
+  tempLogFileNamePrefix <- file.path(defaultFileNames$workflowFolderPath(),"logDebug-core-sensitivity-analysis")
+  tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores))
+
   Rmpi::mpi.spawn.Rslaves(nslaves = numberOfCores)
   Rmpi::mpi.bcast.cmd(library("ospsuite"))
   Rmpi::mpi.bcast.cmd(library("ospsuite.reportingengine"))
   Rmpi::mpi.bcast.Robj2slave(obj = simFilePath)
   Rmpi::mpi.bcast.Robj2slave(obj = listSplitParameters)
+  Rmpi::mpi.bcast.Robj2slave(obj = tempLogFileNamePrefix)
   Rmpi::mpi.bcast.Robj2slave(obj = resultsFileFolder)
   Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
   Rmpi::mpi.bcast.Robj2slave(obj = variationRange)
@@ -160,9 +167,15 @@ runParallelSensitivityAnalysis <- function(simFilePath,
     variableParameterPaths = listSplitParameters[[mpi.comm.rank()]],
     variationRange = variationRange,
     resultsFilePath = allResultsFileNames[mpi.comm.rank()],
-    numberOfCoresToUse = 1 # Number of local cores, set to 1 when parallelizing.
-  ))
+    numberOfCoresToUse = 1, # Number of local cores, set to 1 when parallelizing.
+    debugLogFileName = paste0(tempLogFileNamePrefix, mpi.comm.rank()),
+    nodeName = paste("Core", mpi.comm.rank()  )))
   Rmpi::mpi.close.Rslaves()
+  for (core in seq(1, numberOfCores)) {
+    logDebug(message = readLines(tempLogFileNames[core]))
+    file.remove(tempLogFileNames[core])
+  }
+
   allSAResults <- importSensitivityAnalysisResultsFromCSV(simulation = loadSimulation(simFilePath), filePaths = allResultsFileNames)
   combinedFilePath <- file.path(resultsFileFolder, paste0(resultsFileName, ".csv"))
   exportSensitivityAnalysisResultsToCSV(results = allSAResults, filePath = combinedFilePath)
@@ -185,9 +198,9 @@ analyzeCoreSensitivity <- function(simulation,
                                    variationRange = 0.1,
                                    resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv"),
                                    numberOfCoresToUse = NULL,
-                                   debugLogFileName = defaultFileNames$logDebugFile(),
-                                   infoLogFileName = defaultFileNames$logInfoFile(),
-                                   errorLogFileName = defaultFileNames$logErrorFile(),
+                                   debugLogFileName = file.path(defaultFileNames$workflowFolderPath(),defaultFileNames$logDebugFile()),
+                                   infoLogFileName = file.path(defaultFileNames$workflowFolderPath(),defaultFileNames$logInfoFile()),
+                                   errorLogFileName = file.path(defaultFileNames$workflowFolderPath(),defaultFileNames$logErrorFile()),
                                    nodeName = NULL) {
   sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation, variationRange = variationRange)
   sensitivityAnalysis$addParameterPaths(variableParameterPaths)
@@ -196,12 +209,12 @@ analyzeCoreSensitivity <- function(simulation,
     numberOfCoresToUse = numberOfCoresToUse
   )
 
-  logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Starting sensitivity analysis"), file = debugLogFileName, printConsole = FALSE)
+  logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Starting sensitivity analysis for path(s) ",paste(variableParameterPaths,collapse = ", ")), file = debugLogFileName, printConsole = FALSE)
   sensitivityAnalysisResults <- runSensitivityAnalysis(
     sensitivityAnalysis = sensitivityAnalysis,
     sensitivityAnalysisRunOptions = sensitivityAnalysisRunOptions
   )
-  logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Sensitivity analysis completed"), file = debugLogFileName, printConsole = FALSE)
+  logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Sensitivity analysis for current path(s) completed"), file = debugLogFileName, printConsole = FALSE)
 
   exportSensitivityAnalysisResultsToCSV(results = sensitivityAnalysisResults, resultsFilePath)
 }

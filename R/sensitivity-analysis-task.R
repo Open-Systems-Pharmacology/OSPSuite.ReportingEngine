@@ -19,12 +19,11 @@ SensitivityAnalysisTask <- R6::R6Class(
     #' @param variableParameterPaths vector of paths of parameters to vary when performing sensitivity analysis
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SensitivityAnalysisTask` object
-    initialize = function(
-                              variationRange = NULL,
-                              numberOfCores = NULL,
-                              quantileVec = NULL,
-                              variableParameterPaths = NULL,
-                              ...) {
+    initialize = function(variationRange = NULL,
+                          numberOfCores = NULL,
+                          quantileVec = NULL,
+                          variableParameterPaths = NULL,
+                          ...) {
       super$initialize(...)
 
       if (!is.null(variationRange)) {
