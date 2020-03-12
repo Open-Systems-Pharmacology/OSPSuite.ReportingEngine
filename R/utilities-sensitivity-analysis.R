@@ -184,7 +184,11 @@ analyzeCoreSensitivity <- function(simulation,
                                    variableParameterPaths = NULL,
                                    variationRange = 0.1,
                                    resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv"),
-                                   numberOfCoresToUse = NULL) {
+                                   numberOfCoresToUse = NULL,
+                                   debugLogFileName = defaultFileNames$logDebugFile(),
+                                   infoLogFileName = defaultFileNames$logInfoFile(),
+                                   errorLogFileName = defaultFileNames$logErrorFile(),
+                                   nodeName = NULL) {
   sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation, variationRange = variationRange)
   sensitivityAnalysis$addParameterPaths(variableParameterPaths)
   sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(
@@ -192,12 +196,13 @@ analyzeCoreSensitivity <- function(simulation,
     numberOfCoresToUse = numberOfCoresToUse
   )
 
-  logDebug(message = "Running sensitivity analysis...", printConsole = FALSE)
+  logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Starting sensitivity analysis"), file = debugLogFileName, printConsole = FALSE)
   sensitivityAnalysisResults <- runSensitivityAnalysis(
     sensitivityAnalysis = sensitivityAnalysis,
     sensitivityAnalysisRunOptions = sensitivityAnalysisRunOptions
   )
-  logDebug(message = "...done", printConsole = FALSE)
+  logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Sensitivity analysis completed"), file = debugLogFileName, printConsole = FALSE)
+
   exportSensitivityAnalysisResultsToCSV(results = sensitivityAnalysisResults, resultsFilePath)
 }
 

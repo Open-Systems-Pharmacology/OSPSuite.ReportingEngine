@@ -29,26 +29,28 @@ print(simFilePath2)
 # mmwf$runWorkflow()
 
 
-# Single core mean model simulation & PK analysis, parallel sensitivity analysis
-mm1 <- MeanModelSet$new(simulationFile = simFilePath1, simulationSetName = "SET1")
-mm2 <- MeanModelSet$new(simulationFile = simFilePath2, simulationSetName = "SET2")
-mmwf <- MeanModelWorkflow$new(simulationSets = list(mm1, mm2))
-mmwf$meanModelSensitivityAnalysis$numberOfCores <- 2
-mmwf$runWorkflow()
+# # Single core mean model simulation & PK analysis, parallel sensitivity analysis
+# mm1 <- MeanModelSet$new(simulationFile = simFilePath1, simulationSetName = "SET1")
+# mm2 <- MeanModelSet$new(simulationFile = simFilePath2, simulationSetName = "SET2")
+# mmwf <- MeanModelWorkflow$new(simulationSets = list(mm1, mm2))
+# mmwf$meanModelSensitivityAnalysis$numberOfCores <- 2
+# mmwf$runWorkflow()
 
 
 # #Single core population simulation
 # pp1 <- PopModelSet$new(simulationFile = simFilePath1, populationFile = popFilePath)
 # ppwf<- PopulationWorkflow$new(simulationSets = list(pp1))
+# ppwf$populationSensitivityAnalysis$inactivate()
 # ppwf$runWorkflow()
 
 
 
-# #Parallel population simulation
-# pp1 <- PopModelSet$new(simulationFile = simFilePath1, populationFile = popFilePath)
-# ppwf_par<- PopulationWorkflow$new(simulationSets = list(pp1))
-# ppwf_par$populationSimulation$numberOfCores =2
-# ppwf_par$runWorkflow()
+#Parallel population simulation
+pp1 <- PopModelSet$new(simulationFile = simFilePath1, populationFile = popFilePath)
+ppwf_par<- PopulationWorkflow$new(simulationSets = list(pp1))
+ppwf_par$populationSimulation$numberOfCores =2
+ppwf_par$populationSensitivityAnalysis$inactivate()
+ppwf_par$runWorkflow()
 
 
 # #Single core population simulation and sensitivity analysis

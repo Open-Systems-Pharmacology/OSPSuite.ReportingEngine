@@ -1,6 +1,6 @@
 rm(list = ls())
 library(ospsuite)
-# setwd("C:/Users/ahamadeh/Dropbox/rproject/workflow/")
+setwd("C:/Users/ahamadeh/Dropbox/rproject/workflow/")
 devtools::load_all("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine")
 
 
@@ -17,7 +17,8 @@ simFilePath2 <- file.path(inputFolderName, paste0(simulationFileName2, ".pkml"))
 popFilePath <- file.path(inputFolderName, paste0(populationFileName, ".csv"))
 print(simFilePath1)
 print(simFilePath2)
-
+simTree1 <- getSimulationTree(simFilePath1)
+simTree2 <- getSimulationTree(simFilePath2)
 
 # # Single core mean model simulation
 # modelModelSimulationSet1 <- MeanModelSet$new(simulationFile = simFilePath1, simulationSetName = "SET1")
@@ -25,15 +26,23 @@ print(simFilePath2)
 # meanModelWorkflow1 $meanModelSensitivityAnalysis$variableParameterPaths <- c("Organism|Hematocrit", "Organism|Pancreas|Volume")
 # meanModelWorkflow1 $runWorkflow()
 
-
-
-# Single core mean model simulation
+# Single core mean model simulation, two simulation sets, two SA parameters to vary
 mm1 <- MeanModelSet$new(simulationFile = simFilePath1, simulationSetName = "SET1")
-mm2 <- MeanModelSet$new(simulationFile = simFilePath2, simulationSetName = "SET2")
-mmwf <- MeanModelWorkflow$new(simulationSets = list(mm1, mm2))
+mmwf <- MeanModelWorkflow$new(simulationSets = list(mm1))
 # mmwf$meanModelSensitivityAnalysis$variableParameterPaths <- "Organism|Hematocrit"
-mmwf$meanModelSensitivityAnalysis$variableParameterPaths <- c("Organism|Hematocrit", "Organism|Pancreas|Volume")
+mmwf$meanModelSensitivityAnalysis$variableParameterPaths <- c(simTree1$Organism$Hematocrit$path, simTree1$Organism$Pancreas$path)
+mmwf$meanModelSensitivityAnalysis$activate()
 mmwf$runWorkflow()
+
+
+# # Single core mean model simulation, two simulation sets, two SA parameters to vary, throws error since second set doesn't have SA parameters to vary
+# mm1 <- MeanModelSet$new(simulationFile = simFilePath1, simulationSetName = "SET1")
+# mm2 <- MeanModelSet$new(simulationFile = simFilePath2, simulationSetName = "SET2")
+# mmwf <- MeanModelWorkflow$new(simulationSets = list(mm1, mm2))
+# # mmwf$meanModelSensitivityAnalysis$variableParameterPaths <- "Organism|Hematocrit"
+# mmwf$meanModelSensitivityAnalysis$variableParameterPaths <- c(simTree1$Organism$Hematocrit$path, simTree1$Organism$Pancreas$path)
+# mmwf$meanModelSensitivityAnalysis$activate()
+# mmwf$runWorkflow()
 
 
 # #Single core mean model simulation & PK analysis, parallel sensitivity analysis

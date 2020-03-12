@@ -8,16 +8,23 @@
 #' @import ospsuite
 simulateModel <- function(simFilePath,
                           popDataFilePath = NULL,
-                          resultsFilePath) {
+                          resultsFilePath,
+                          debugLogFileName = defaultFileNames$logDebugFile(),
+                          infoLogFileName = defaultFileNames$logInfoFile(),
+                          errorLogFileName = defaultFileNames$logErrorFile(),
+                          nodeName = NULL) {
+
   sim <- loadSimulation(simFilePath,
     addToCache = FALSE,
     loadFromCache = FALSE
   )
+  logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Simulation loaded"), file = debugLogFileName, printConsole = FALSE)
   pop <- NULL
   if (!is.null(popDataFilePath)) {
     pop <- loadPopulation(popDataFilePath)
   }
   res <- runSimulation(sim, population = pop)
+  logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Simulation run complete"), file = debugLogFileName, printConsole = FALSE)
   exportResultsToCSV(res, resultsFilePath)
   return(resultsFilePath)
 }
@@ -59,22 +66,31 @@ runParallelPopulationSimulation <- function(numberOfCores,
     outputFolder = paste0(inputFolderName, "/"), #### USE file.path()?  Do we need "/"?
     outputFileName = populationFileName
   )
-
+  tempLogFileNamePrefix <- file.path(defaultFileNames$workflowFolderPath(),"logDebug-core-simulation")
+  tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores))
   allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFolderName, fileName = resultsFileName)
 
   Rmpi::mpi.bcast.Robj2slave(obj = simulationFileName)
   Rmpi::mpi.bcast.Robj2slave(obj = populationFileName)
   Rmpi::mpi.bcast.Robj2slave(obj = tempPopDataFiles)
+  Rmpi::mpi.bcast.Robj2slave(obj = tempLogFileNamePrefix)
   Rmpi::mpi.bcast.Robj2slave(obj = inputFolderName)
   Rmpi::mpi.bcast.Robj2slave(obj = allResultsFileNames)
 
-
+print(file.path(defaultFileNames$workflowFolderPath(),tempLogFileNamePrefix))
   Rmpi::mpi.remote.exec(simulateModel(
     simFilePath = file.path(inputFolderName, paste0(simulationFileName, ".pkml")),
     popDataFilePath = file.path(inputFolderName, paste0(populationFileName, "_", mpi.comm.rank(), ".csv")),
-    resultsFilePath = allResultsFileNames[mpi.comm.rank()]
+    resultsFilePath = allResultsFileNames[mpi.comm.rank()],
+    debugLogFileName = paste0(tempLogFileNamePrefix, mpi.comm.rank()),
+    nodeName = paste("Core", mpi.comm.rank())
   ))
   Rmpi::mpi.close.Rslaves() # Move to end of workflow
+
+  for (core in seq(1, numberOfCores)) {
+    logDebug(message = readLines(tempLogFileNames[core]))
+    file.remove(tempLogFileNames[core])
+  }
 
   return(allResultsFileNames)
 }
@@ -91,7 +107,7 @@ updateSimulationIndividualParameters <- function(simulation, individualParameter
     sapply(
       1:length(individualParameters$paths),
       function(n, sim, par) {
-        ospsuite::setSimulationParameterValues(
+        ospsuite::setParameterValuesByPath(
           parameterPaths = par$paths[n],
           values = par$values[n],
           simulation = sim
