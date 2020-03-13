@@ -9,6 +9,7 @@ runPopulationSensitivityAnalysis(
   variableParameterPaths = NULL,
   popDataFilePath,
   pkParameterResultsFilePath,
+  pkParameterSelection = NULL,
   resultsFileFolder,
   resultsFileName,
   popSAResultsIndexFile = "sensitivityAnalysesResultsIndexFile",

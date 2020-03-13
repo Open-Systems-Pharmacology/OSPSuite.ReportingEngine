@@ -188,7 +188,8 @@ Define population Sensitivity Analysis `task` settings
   variationRange = 0.1,
   numberOfCores = 1,
   quantileVec = c(0.05, 0.5, 0.95),
-  variableParameterPaths = NULL
+  variableParameterPaths = NULL,
+  pkParameterSelection = NULL
 )}\if{html}{\out{</div>}}
 }
 
