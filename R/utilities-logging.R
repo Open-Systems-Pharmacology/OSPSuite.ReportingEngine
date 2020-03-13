@@ -14,7 +14,7 @@ logError <- function(message,
     print(message)
   }
   write(c(timeStamp, message),
-    file = file, append = TRUE, sep = "\n"
+    file = file, append = TRUE, sep = " "
   )
   return()
 }
@@ -35,7 +35,7 @@ logDebug <- function(message,
     print(message)
   }
   write(c(timeStamp, message),
-    file = file, append = TRUE, sep = "\n"
+    file = file, append = TRUE, sep = " "
   )
   return()
 }
@@ -56,7 +56,7 @@ logInfo <- function(message,
     print(message)
   }
   write(c(timeStamp, message),
-    file = file, append = TRUE, sep = "\n"
+    file = file, append = TRUE, sep = " "
   )
   return()
 }
