@@ -126,7 +126,8 @@ PopulationWorkflow <- R6::R6Class(
                                                      variationRange = 0.1,
                                                      numberOfCores = 1,
                                                      quantileVec = c(0.05, 0.5, 0.95),
-                                                     variableParameterPaths = NULL) {
+                                                     variableParameterPaths = NULL,
+                                                     pkParameterSelection = NULL) {
       self$populationSensitivityAnalysis <- SensitivityAnalysisTask$new(
         input = input,
         output = output,
@@ -136,7 +137,8 @@ PopulationWorkflow <- R6::R6Class(
         variationRange = variationRange,
         numberOfCores = numberOfCores,
         quantileVec = quantileVec,
-        variableParameterPaths = variableParameterPaths
+        variableParameterPaths = variableParameterPaths,
+        pkParameterSelection = pkParameterSelection
       )
     },
 
