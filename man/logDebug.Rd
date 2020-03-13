@@ -4,13 +4,18 @@
 \alias{logDebug}
 \title{logDebug}
 \usage{
-logDebug(message, file = "log-debug.txt", printConsole = FALSE)
+logDebug(
+  message,
+  file = file.path(defaultFileNames$workflowFolderPath(),
+    defaultFileNames$logDebugFile()),
+  printConsole = FALSE
+)
 }
 \arguments{
 \item{message}{message to save in log file}
 
 \item{file}{log file name.
-Default is `log-debug.txt`}
+Default is set in function logFileName}
 
 \item{printConsole}{logical to print error on console}
 }

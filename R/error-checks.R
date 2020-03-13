@@ -117,6 +117,17 @@ validateIsSameLength <- function(...) {
   logErrorThenStop(messages$errorDifferentLength(arguments))
 }
 
+
+
+validateNoDuplicatedEntries <- function(x) {
+  if ( any(duplicated(x)) ) {
+    logErrorThenStop(messages$errorDuplicatedEntries(deparse(substitute(x))))
+  }
+  else{
+    return()
+  }
+}
+
 #' Check if the provided object is included in a parent object
 #'
 #' @param values Vector of values

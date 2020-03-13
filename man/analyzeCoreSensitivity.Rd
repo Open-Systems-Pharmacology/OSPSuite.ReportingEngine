@@ -9,7 +9,14 @@ analyzeCoreSensitivity(
   variableParameterPaths = NULL,
   variationRange = 0.1,
   resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv"),
-  numberOfCoresToUse = NULL
+  numberOfCoresToUse = NULL,
+  debugLogFileName = file.path(defaultFileNames$workflowFolderPath(),
+    defaultFileNames$logDebugFile()),
+  infoLogFileName = file.path(defaultFileNames$workflowFolderPath(),
+    defaultFileNames$logInfoFile()),
+  errorLogFileName = file.path(defaultFileNames$workflowFolderPath(),
+    defaultFileNames$logErrorFile()),
+  nodeName = NULL
 )
 }
 \arguments{

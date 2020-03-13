@@ -11,6 +11,7 @@ SensitivityAnalysisTask <- R6::R6Class(
     numberOfCores = NULL,
     quantileVec = NULL,
     variableParameterPaths = NULL,
+    pkParameterSelection = NULL,
 
     #' @description
     #' Create a `SensitivityAnalysisTask` object
@@ -23,6 +24,7 @@ SensitivityAnalysisTask <- R6::R6Class(
                           numberOfCores = NULL,
                           quantileVec = NULL,
                           variableParameterPaths = NULL,
+                          pkParameterSelection = NULL,
                           ...) {
       super$initialize(...)
 
@@ -34,18 +36,32 @@ SensitivityAnalysisTask <- R6::R6Class(
 
       if (!is.null(numberOfCores)) {
         validateIsInteger(numberOfCores)
+        validateIsOfLength(object = numberOfCores,nbElements = 1)
         self$numberOfCores <- numberOfCores
       }
 
       if (!is.null(quantileVec)) {
         validateIsNumeric(quantileVec)
+        validateNoDuplicatedEntries(quantileVec)
         self$quantileVec <- quantileVec
       }
 
       if (!is.null(variableParameterPaths)) {
         validateIsString(variableParameterPaths)
+        validateNoDuplicatedEntries(variableParameterPaths)
         self$variableParameterPaths <- variableParameterPaths
       }
+
+
+      if (!is.null(pkParameterSelection)) {
+        validateIsString(pkParameterSelection)
+        validateNoDuplicatedEntries(pkParameterSelection)
+        validateIsIncluded(values = pkParameterSelection,parentValues =  AllPKParameterNames)
+        self$pkParameterSelection <- pkParameterSelection
+      }
+
+
+
     }
   )
 )

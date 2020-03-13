@@ -15,8 +15,6 @@ R6 class representing Reporting Engine generic Workflow
 
 \item{\code{workflowFolder}}{path of the folder create by the Workflow}
 
-\item{\code{observedData}}{list of observed `data` and `metaData`}
-
 \item{\code{resultsFolder}}{path where results are saved}
 
 \item{\code{reportFileName}}{name of the Rmd report file}
@@ -43,7 +41,7 @@ Create a new `Workflow` object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Workflow$new(
   simulationSets,
-  workflowFolder = file.path(getwd(), defaultFileNames$workflowFolder()),
+  workflowFolder = defaultFileNames$workflowFolderPath(),
   resultsFolderName = defaultFileNames$resultsFolder(),
   reportName = defaultFileNames$reportName()
 )}\if{html}{\out{</div>}}

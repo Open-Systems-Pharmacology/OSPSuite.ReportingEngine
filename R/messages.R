@@ -23,6 +23,10 @@ messages <- list(
     )
   },
 
+  errorDuplicatedEntries = function(objectNames, optionalMessage = NULL) {
+    paste(objectNames,"contains duplicated elements.")
+  },
+
   errorWrongLength = function(object, nbElements, optionalMessage = NULL) {
     # Name of the calling function
     callingFunctions <- sys.calls()

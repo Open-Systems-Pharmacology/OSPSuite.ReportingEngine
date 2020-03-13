@@ -179,7 +179,7 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   allSAResults <- importSensitivityAnalysisResultsFromCSV(simulation = loadSimulation(simFilePath), filePaths = allResultsFileNames)
   combinedFilePath <- file.path(resultsFileFolder, paste0(resultsFileName, ".csv"))
   exportSensitivityAnalysisResultsToCSV(results = allSAResults, filePath = combinedFilePath)
-  file.remove(allResultsFileNames)
+  #file.remove(allResultsFileNames)
   return(combinedFilePath)
 }
 
@@ -254,7 +254,7 @@ getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
   return(quantileResults)
 }
 
-#' @title populationSensitivityAnalysis
+#' @title runPopulationSensitivityAnalysis
 #' @param simFilePath path to simulation file
 #' @param popDataFilePath path to population file
 #' @param pkParameterResultsFilePath path to pk parameter results CSV
@@ -266,17 +266,18 @@ getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
 #' The individuals yielding pk parameters closest to these quantiles will be selected for sensitivity analysis.
 #' @param numberOfCores the number of cores to be used for parallelization of the sensitivity analysis.  Default is 1 core (no parallelization).
 #' @export
-populationSensitivityAnalysis <- function(simFilePath,
+runPopulationSensitivityAnalysis <- function(simFilePath,
                                           variableParameterPaths = NULL,
                                           popDataFilePath,
                                           pkParameterResultsFilePath,
+                                          pkParameterSelection = NULL,
                                           resultsFileFolder,
                                           resultsFileName,
                                           popSAResultsIndexFile = "sensitivityAnalysesResultsIndexFile",
                                           variationRange,
                                           quantileVec,
                                           numberOfCores) {
-  sensitivityAnalysesResultsIndexFileDF <- getSAFileIndex(pkParameterResultsFilePath, quantileVec, resultsFileFolder, resultsFileName, popSAResultsIndexFile)
+  sensitivityAnalysesResultsIndexFileDF <- getSAFileIndex(pkParameterResultsFilePath, pkParameterSelection, quantileVec, resultsFileFolder, resultsFileName, popSAResultsIndexFile)
   ids <- unique(sensitivityAnalysesResultsIndexFileDF$IndividualId)
   runSensitivity(simFilePath,
     variableParameterPaths = variableParameterPaths,
@@ -298,11 +299,12 @@ populationSensitivityAnalysis <- function(simFilePath,
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
 #' @param popSAResultsIndexFile name of CSV file that will store index that identifies name of sensitivity analysis results file for each sensitivity analysis run
 getSAFileIndex <- function(pkParameterResultsFilePath,
+                           pkParameterSelection,
                            quantileVec,
                            resultsFileFolder,
                            resultsFileName,
                            popSAResultsIndexFile) {
-  allPKResultsDataframe <- getPKResultsDataFrame(pkParameterResultsFilePath)
+  allPKResultsDataframe <- getPKResultsDataFrame(pkParameterResultsFilePath,pkParameterSelection)
   outputs <- levels(allPKResultsDataframe$QuantityPath)
   pkParameters <- levels(allPKResultsDataframe$Parameter)
   outputColumn <- NULL
