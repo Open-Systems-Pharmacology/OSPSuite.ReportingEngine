@@ -12,7 +12,8 @@ simulateModel <- function(simFilePath,
                           debugLogFileName = file.path(defaultFileNames$workflowFolderPath(),defaultFileNames$logDebugFile()),
                           infoLogFileName = file.path(defaultFileNames$workflowFolderPath(),defaultFileNames$logInfoFile()),
                           errorLogFileName = file.path(defaultFileNames$workflowFolderPath(),defaultFileNames$logErrorFile()),
-                          nodeName = NULL) {
+                          nodeName = NULL,
+                          showProgress = FALSE) {
 
   sim <- loadSimulation(simFilePath,
     addToCache = FALSE,
@@ -23,7 +24,8 @@ simulateModel <- function(simFilePath,
   if (!is.null(popDataFilePath)) {
     pop <- loadPopulation(popDataFilePath)
   }
-  res <- runSimulation(sim, population = pop)
+  simRunOptions <- ospsuite::SimulationRunOptions$new(showProgress = showProgress)
+  res <- runSimulation(sim, population = pop,simulationRunOptions = simRunOptions)
   logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Simulation run complete"), file = debugLogFileName, printConsole = FALSE)
   exportResultsToCSV(res, resultsFilePath)
   return(resultsFilePath)
