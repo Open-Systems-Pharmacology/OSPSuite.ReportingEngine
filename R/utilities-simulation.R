@@ -52,8 +52,9 @@ runParallelPopulationSimulation <- function(numberOfCores,
                                             resultsFolderName,
                                             resultsFileName) {
 
-
-
+population <- loadPopulation(file.path(inputFolderName, paste0(populationFileName, ".csv")))
+numberOfIndividuals <- length(population$allIndividualIds)
+numberOfCores <- min(numberOfCores,numberOfIndividuals)
   # library("Rmpi")
   Rmpi::mpi.spawn.Rslaves(nslaves = numberOfCores)
 
