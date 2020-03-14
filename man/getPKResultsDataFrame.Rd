@@ -4,7 +4,7 @@
 \alias{getPKResultsDataFrame}
 \title{getPKResultsDataFrame}
 \usage{
-getPKResultsDataFrame(pkParameterResultsFilePath)
+getPKResultsDataFrame(pkParameterResultsFilePath, pkParameterSelection)
 }
 \arguments{
 \item{pkParameterResultsFilePath}{Path to PK parameter results CSV file}

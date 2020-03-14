@@ -6,6 +6,7 @@
 \usage{
 getSAFileIndex(
   pkParameterResultsFilePath,
+  pkParameterSelection,
   quantileVec,
   resultsFileFolder,
   resultsFileName,

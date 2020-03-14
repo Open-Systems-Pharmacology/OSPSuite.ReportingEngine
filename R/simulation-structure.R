@@ -26,8 +26,8 @@ SimulationStructure <- R6::R6Class(
     # Copy simulation set input files to inputFilesFolder
     # Build and store names of potential subfolders to hold simulation results, pkAnalysis results and sensitivityAnalysis results.
     initialize = function(simulationSet,
-                              workflowResultsFolder,
-                              workflowFiguresFolder = NULL) {
+                          workflowResultsFolder,
+                          workflowFiguresFolder = NULL) {
       self$simulationSet <- simulationSet
       simulationSetFolder <- file.path(workflowResultsFolder, self$simulationSet$simulationSetName)
 

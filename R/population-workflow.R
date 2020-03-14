@@ -119,13 +119,15 @@ PopulationWorkflow <- R6::R6Class(
     #' @param numberOfCores TO DO
     #' @return A new `Task` object
     populationSensitivityAnalysisSettings = function(input = NULL,
-                                                         output = NULL,
-                                                         settings = NULL,
-                                                         active = TRUE,
-                                                         message = NULL,
-                                                         variationRange = 0.1,
-                                                         numberOfCores = 1,
-                                                         quantileVec = c(0.05, 0.5, 0.95)) {
+                                                     output = NULL,
+                                                     settings = NULL,
+                                                     active = TRUE,
+                                                     message = NULL,
+                                                     variationRange = 0.1,
+                                                     numberOfCores = 1,
+                                                     quantileVec = c(0.05, 0.5, 0.95),
+                                                     variableParameterPaths = NULL,
+                                                     pkParameterSelection = NULL) {
       self$populationSensitivityAnalysis <- SensitivityAnalysisTask$new(
         input = input,
         output = output,
@@ -134,7 +136,9 @@ PopulationWorkflow <- R6::R6Class(
         message = message %||% "Sensitivity analysis for population",
         variationRange = variationRange,
         numberOfCores = numberOfCores,
-        quantileVec = quantileVec
+        quantileVec = quantileVec,
+        variableParameterPaths = variableParameterPaths,
+        pkParameterSelection = pkParameterSelection
       )
     },
 
@@ -307,11 +311,12 @@ PopulationWorkflow <- R6::R6Class(
         if (self$populationSensitivityAnalysis$validateInput()) {
           print("Starting population sensitivity analysis")
           createFolder(set$sensitivityAnalysisResultsFolder)
-          set$sensitivityAnalysisResultsFileNames <- populationSensitivityAnalysis(
+          set$sensitivityAnalysisResultsFileNames <- runPopulationSensitivityAnalysis(
             simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
             variableParameterPaths = self$populationSensitivityAnalysis$variableParameterPaths,
             popDataFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$populationName, ".csv")),
             pkParameterResultsFilePath = file.path(set$pkAnalysisResultsFolder, defaultFileNames$pkAnalysisResultsFile(set$simulationSet$simulationSetName)),
+            pkParameterSelection = self$populationSensitivityAnalysis$pkParameterSelection,
             resultsFileFolder = set$sensitivityAnalysisResultsFolder,
             resultsFileName = trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName), extension = "csv"),
             variationRange = self$populationSensitivityAnalysis$variationRange,

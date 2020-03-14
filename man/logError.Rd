@@ -4,13 +4,18 @@
 \alias{logError}
 \title{logError}
 \usage{
-logError(message, file = "log-error.txt", printConsole = TRUE)
+logError(
+  message,
+  file = file.path(defaultFileNames$workflowFolderPath(),
+    defaultFileNames$logErrorFile()),
+  printConsole = TRUE
+)
 }
 \arguments{
 \item{message}{message to save in log file}
 
 \item{file}{log file name.
-Default is `log-error.txt`}
+Default is set in function logFileName}
 
 \item{printConsole}{logical to print error on console}
 }

@@ -9,6 +9,6 @@
 AllPKParameters
 }
 \description{
-list of usual PK parameters from OSP Suite
+enum list of usual PK parameters from OSP Suite
 }
 \keyword{datasets}

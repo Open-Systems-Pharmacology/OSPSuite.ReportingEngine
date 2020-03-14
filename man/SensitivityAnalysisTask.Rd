@@ -54,6 +54,7 @@ Create a `SensitivityAnalysisTask` object
   numberOfCores = NULL,
   quantileVec = NULL,
   variableParameterPaths = NULL,
+  pkParameterSelection = NULL,
   ...
 )}\if{html}{\out{</div>}}
 }

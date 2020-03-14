@@ -2,11 +2,11 @@
 #' @description Save error messages into a log error file
 #' @param message message to save in log file
 #' @param file log file name.
-#' Default is `log-error.txt`
+#' Default is set in function logFileName
 #' @param printConsole logical to print error on console
 #' @export
 logError <- function(message,
-                     file = "log-error.txt",
+                     file = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logErrorFile()),
                      printConsole = TRUE) {
   timeStamp <- sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M"))
   if (printConsole) {
@@ -14,7 +14,7 @@ logError <- function(message,
     print(message)
   }
   write(c(timeStamp, message),
-    file = file, append = TRUE, sep = "\n"
+    file = file, append = TRUE, sep = " "
   )
   return()
 }
@@ -23,11 +23,11 @@ logError <- function(message,
 #' @description Save intermediate messages into a log debug file
 #' @param message message to save in log file
 #' @param file log file name.
-#' Default is `log-debug.txt`
+#' Default is set in function logFileName
 #' @param printConsole logical to print error on console
 #' @export
 logDebug <- function(message,
-                     file = "log-debug.txt",
+                     file = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logDebugFile()),
                      printConsole = FALSE) {
   timeStamp <- sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M"))
   if (printConsole) {
@@ -35,7 +35,7 @@ logDebug <- function(message,
     print(message)
   }
   write(c(timeStamp, message),
-    file = file, append = TRUE, sep = "\n"
+    file = file, append = TRUE, sep = " "
   )
   return()
 }
@@ -44,11 +44,11 @@ logDebug <- function(message,
 #' @description Save info messages into a log info file
 #' @param message message to save in log file
 #' @param file log file name.
-#' Default is `log-info.txt`
+#' Default is set in function logFileName
 #' @param printConsole logical to print error on console
 #' @export
 logInfo <- function(message,
-                    file = "log-info.txt",
+                    file = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logInfoFile()),
                     printConsole = TRUE) {
   timeStamp <- sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M"))
   if (printConsole) {
@@ -56,7 +56,7 @@ logInfo <- function(message,
     print(message)
   }
   write(c(timeStamp, message),
-    file = file, append = TRUE, sep = "\n"
+    file = file, append = TRUE, sep = " "
   )
   return()
 }

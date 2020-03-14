@@ -4,13 +4,18 @@
 \alias{logInfo}
 \title{logInfo}
 \usage{
-logInfo(message, file = "log-info.txt", printConsole = TRUE)
+logInfo(
+  message,
+  file = file.path(defaultFileNames$workflowFolderPath(),
+    defaultFileNames$logInfoFile()),
+  printConsole = TRUE
+)
 }
 \arguments{
 \item{message}{message to save in log file}
 
 \item{file}{log file name.
-Default is `log-info.txt`}
+Default is set in function logFileName}
 
 \item{printConsole}{logical to print error on console}
 }

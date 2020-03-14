@@ -1,3 +1,7 @@
+startTime <- format(Sys.time(), "%H%M%S")
+startDate <- format(Sys.Date(), "%Y%m%d")
+#defaultWorkflowFolder <- file.path(getwd(), defaultFileNames$workflowFolderName())
+
 defaultFileNames <- list(
   simulationResultsFile = function(simulationName) {
     getDefaultFileName(simulationName, suffix = "Results")
@@ -11,8 +15,8 @@ defaultFileNames <- list(
   sensitivityAnalysisResultsFile = function(simulationName) {
     getDefaultFileName(simulationName, suffix = "SensitivityAnalysisResults")
   },
-  workflowFolder = function(name = "Workflow") {
-    getDefaultFolderName(name, suffix = paste0("_", format(Sys.Date(), "%Y%m%d"), "_", format(Sys.time(), "%H%M%S")), sep = "")
+  workflowFolderPath= function(name = "Workflow",folder=getwd()) {
+    file.path(folder,getDefaultFolderName(name, suffix = paste0("_", startDate, "_", startTime), sep = ""))
   },
   inputFolder = function(name = NULL) {
     getDefaultFolderName(name, suffix = "Inputs", sep = ifnotnull(name, "-", ""))

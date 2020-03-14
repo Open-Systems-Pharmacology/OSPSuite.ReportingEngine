@@ -4,7 +4,19 @@
 \alias{simulateModel}
 \title{simulateModel}
 \usage{
-simulateModel(simFilePath, popDataFilePath = NULL, resultsFilePath)
+simulateModel(
+  simFilePath,
+  popDataFilePath = NULL,
+  resultsFilePath,
+  debugLogFileName = file.path(defaultFileNames$workflowFolderPath(),
+    defaultFileNames$logDebugFile()),
+  infoLogFileName = file.path(defaultFileNames$workflowFolderPath(),
+    defaultFileNames$logInfoFile()),
+  errorLogFileName = file.path(defaultFileNames$workflowFolderPath(),
+    defaultFileNames$logErrorFile()),
+  nodeName = NULL,
+  showProgress = FALSE
+)
 }
 \arguments{
 \item{simFilePath}{path to pkml model file}

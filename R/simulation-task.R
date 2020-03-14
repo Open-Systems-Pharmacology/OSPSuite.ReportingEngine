@@ -16,7 +16,7 @@ SimulationTask <- R6::R6Class(
     # populationFileName = NULL,
     # resultsFolderName = NULL,
     # resultsFileName = NULL,
-    numberOfCores = 1,
+    numberOfCores = NULL,
     # generatedResultFileNames = NULL,
 
     #' @description
@@ -30,20 +30,15 @@ SimulationTask <- R6::R6Class(
     #' @param generatedResultFileNames name of files where PK parameters are saved
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SimulationTask` object
-    initialize = function( # inputFolderName = getwd(),
-                              # simulationFileName,
-                              # populationFileName = NULL,
-                              # resultsFolderName = getwd(),
-                              # resultsFileName = "simulationResults",
-                              numberOfCores = 1,
-                              ...) {
+    initialize = function(numberOfCores = 1,
+                          ...) {
       super$initialize(...)
-      # self$inputFolderName <- inputFolderName
-      # self$simulationFileName <- simulationFileName
-      # self$populationFileName <- populationFileName
-      # self$resultsFolderName <- resultsFolderName
-      # self$resultsFileName <- resultsFileName
-      # self$numberOfCores <- numberOfCores
+
+      if (!is.null(numberOfCores)) {
+        validateIsInteger(numberOfCores)
+        validateIsOfLength(object = numberOfCores,nbElements = 1)
+        self$numberOfCores <- numberOfCores
+      }
     }
   )
 )

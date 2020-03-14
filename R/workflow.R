@@ -3,7 +3,6 @@
 #' @field reportingEngineInfo R6 class object with relevant information about reporting engine
 #' @field simulationStructures `SimulationStructure` R6 class object managing the structure of the workflow output
 #' @field workflowFolder path of the folder create by the Workflow
-#' @field observedData list of observed `data` and `metaData`
 #' @field resultsFolder path where results are saved
 #' @field reportFileName name of the Rmd report file
 #' @import tlf
@@ -13,7 +12,6 @@ Workflow <- R6::R6Class(
   public = list(
     reportingEngineInfo = ReportingEngineInfo$new(),
     simulationStructures = NULL,
-    observedData = NULL,
     workflowFolder = NULL,
     resultsFolder = NULL,
     reportFileName = NULL,
@@ -26,10 +24,14 @@ Workflow <- R6::R6Class(
     #' @param reportName name of the report. Report output includes Rmd, md and html versions.
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
-                              workflowFolder = file.path(getwd(), defaultFileNames$workflowFolder()),
-                              resultsFolderName = defaultFileNames$resultsFolder(),
-                              reportName = defaultFileNames$reportName()) {
+                          workflowFolder = defaultFileNames$workflowFolderPath(),
+                          resultsFolderName = defaultFileNames$resultsFolder(),
+                          reportName = defaultFileNames$reportName()) {
       workflowFolderCheck <- checkExisitingPath(workflowFolder, stopIfPathExists = TRUE)
+
+
+      #If default workflowFolder is not valid, log outcome in getwd()
+      #But can we carry on if !is.null(workflowFolderCheck) is true?  Should workflow folder be set to getwd() if so?
       if (!is.null(workflowFolderCheck)) {
         logWorkflow(
           message = workflowFolderCheck,
