@@ -177,8 +177,8 @@ Define mean Model Sensitivity Analysis `task` settings
   settings = NULL,
   active = FALSE,
   message = NULL,
-  variationRange = 0.1,
-  numberOfCores = 1
+  variationRange = NULL,
+  numberOfCores = NULL
 )}\if{html}{\out{</div>}}
 }
 

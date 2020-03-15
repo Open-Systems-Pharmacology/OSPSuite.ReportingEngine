@@ -68,7 +68,7 @@ R6 class for SimulationTask settings
 \subsection{Method \code{new()}}{
 Create a `SimulationTask` object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimulationTask$new(numberOfCores = 1, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimulationTask$new(numberOfCores = NULL, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
