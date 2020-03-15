@@ -56,12 +56,11 @@ SensitivityAnalysisTask <- R6::R6Class(
       if (!is.null(pkParameterSelection)) {
         validateIsString(pkParameterSelection)
         validateNoDuplicatedEntries(pkParameterSelection)
-        validateIsIncluded(values = pkParameterSelection,parentValues =  AllPKParameterNames)
+        validateIsIncluded(values = pkParameterSelection,parentValues =  ospsuite::allPKParameterNames())
         self$pkParameterSelection <- pkParameterSelection
       }
-
-
-
     }
+
+
   )
 )

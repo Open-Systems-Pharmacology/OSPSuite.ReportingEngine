@@ -40,7 +40,7 @@ MeanModelSet <- R6::R6Class(
     #' @param pathName display name for `pathID`
     #' @param pathUnit display unit for `pathID`
     #' @param pkParameters PK parameters function names to be calculated from the simulation (e.g. `C_max`).
-    #' Default value is enum `AllPKParameters`.
+    #' Default value is obtained from enum(ospsuite::allPKParameterNames()).
     #' @param pkParametersNames display names for `pkParameters`
     #' @param pkParametersUnits display units for `pkParameters`
     #' @param observedDataFile name of csv file to be used for observed data
@@ -54,7 +54,7 @@ MeanModelSet <- R6::R6Class(
                               pathID = NULL,
                               pathName = NULL,
                               pathUnit = NULL,
-                              pkParameters = AllPKParameters,
+                              pkParameters = enum(ospsuite::allPKParameterNames()),
                               pkParametersNames = NULL,
                               pkParametersUnits = NULL,
                               observedDataFile = NULL,
