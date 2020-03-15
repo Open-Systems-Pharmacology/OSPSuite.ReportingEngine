@@ -358,3 +358,20 @@ getSAFileIndex <- function(pkParameterResultsFilePath,
 getIndividualSAResultsFileName <- function(individualId, resultsFileName) {
   return(paste(resultsFileName, "IndividualId", individualId, sep = "-"))
 }
+
+#' @title defaultVariationRange
+#' @description default parameter variation range for sensitivity analysis
+#' @export
+defaultVariationRange <- 0.1
+
+
+#' @title defaultSensitivityAnalysisNumberOfCores
+#' @description default numberOfCores for sensitivity analysis
+#' @export
+defaultSensitivityAnalysisNumberOfCores <- 1
+
+
+#' @title defaultQuantileVec
+#' @description default quantiles for population sensitivity analysis
+#' @export
+defaultQuantileVec <- c(0.05, 0.5, 0.95)

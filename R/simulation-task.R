@@ -30,15 +30,23 @@ SimulationTask <- R6::R6Class(
     #' @param generatedResultFileNames name of files where PK parameters are saved
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SimulationTask` object
-    initialize = function(numberOfCores = 1,
+    initialize = function(numberOfCores = NULL,
                           ...) {
       super$initialize(...)
+      self$updateNumberOfCores(numberOfCores %||% defaultSimulationNumberOfCores)
+    },
 
+    #' @description
+    #' Update the `numberOfCores`
+    #' @param numberOfCores is the number of cores to use for simulation
+    updateNumberOfCores = function(numberOfCores){
       if (!is.null(numberOfCores)) {
         validateIsInteger(numberOfCores)
         validateIsOfLength(object = numberOfCores,nbElements = 1)
         self$numberOfCores <- numberOfCores
       }
     }
+
+
   )
 )

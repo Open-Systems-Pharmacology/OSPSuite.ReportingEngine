@@ -21,43 +21,54 @@ SensitivityAnalysisTask <- R6::R6Class(
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SensitivityAnalysisTask` object
     initialize = function(variationRange = NULL,
-                          numberOfCores = NULL,
-                          quantileVec = NULL,
+                          numberOfCores =  NULL,
+                          quantileVec =  NULL,
                           variableParameterPaths = NULL,
                           pkParameterSelection = NULL,
                           ...) {
       super$initialize(...)
 
-      if (!is.null(variationRange)) {
-        validateIsNumeric(variationRange)
-        validateIsOfLength(variationRange, nbElements = 1)
-        self$variationRange <- variationRange
-      }
 
-      if (!is.null(numberOfCores)) {
-        validateIsInteger(numberOfCores)
-        validateIsOfLength(object = numberOfCores,nbElements = 1)
-        self$numberOfCores <- numberOfCores
-      }
 
-      if (!is.null(quantileVec)) {
-        validateIsNumeric(quantileVec)
-        validateNoDuplicatedEntries(quantileVec)
-        self$quantileVec <- quantileVec
-      }
+      self$updateVariationRange(variationRange %||% defaultVariationRange)
+      self$updateNumberOfCores(numberOfCores %||% defaultSensitivityAnalysisNumberOfCores)
+      self$updateQuantileVec(quantileVec %||% defaultQuantileVec)
+      self$updateVariableParameterPaths(variableParameterPaths)
+      self$updatePKParameterSelection(pkParameterSelection)
+    },
 
+    updateVariationRange = function(variationRange){
+      validateIsNumeric(variationRange)
+      validateIsOfLength(variationRange, nbElements = 1)
+      self$variationRange <- variationRange
+    },
+
+    updateNumberOfCores = function(numberOfCores){
+      validateIsInteger(numberOfCores)
+      validateIsOfLength(object = numberOfCores,nbElements = 1)
+      self$numberOfCores <- numberOfCores
+    },
+
+    updateQuantileVec = function(quantileVec){
+      validateIsNumeric(quantileVec)
+      validateNoDuplicatedEntries(quantileVec)
+      self$quantileVec <- quantileVec
+    },
+
+    updateVariableParameterPaths = function(variableParameterPaths){
       if (!is.null(variableParameterPaths)) {
         validateIsString(variableParameterPaths)
         validateNoDuplicatedEntries(variableParameterPaths)
         self$variableParameterPaths <- variableParameterPaths
       }
+    },
 
-
+    updatePKParameterSelection = function(pkParameterSelection){
       if (!is.null(pkParameterSelection)) {
-        validateIsString(pkParameterSelection)
-        validateNoDuplicatedEntries(pkParameterSelection)
-        validateIsIncluded(values = pkParameterSelection,parentValues =  ospsuite::allPKParameterNames())
-        self$pkParameterSelection <- pkParameterSelection
+      validateIsString(pkParameterSelection)
+      validateNoDuplicatedEntries(pkParameterSelection)
+      validateIsIncluded(values = pkParameterSelection,parentValues =  ospsuite::allPKParameterNames())
+      self$pkParameterSelection <- pkParameterSelection
       }
     }
 

@@ -122,3 +122,8 @@ updateSimulationIndividualParameters <- function(simulation, individualParameter
     )
   }
 }
+
+#' @title defaultSimulationNumberOfCores
+#' @description default numberOfCores for simulation
+#' @export
+defaultSimulationNumberOfCores <- 1
