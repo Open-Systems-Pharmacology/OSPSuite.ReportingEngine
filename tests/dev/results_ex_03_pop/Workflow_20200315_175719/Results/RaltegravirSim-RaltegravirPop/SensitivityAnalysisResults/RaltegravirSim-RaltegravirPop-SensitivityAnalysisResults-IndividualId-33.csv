@@ -1,0 +1,45 @@
+﻿"QuantityPath","Parameter","PKParameter","Value"
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Specific blood flow rate","C_max",0.020351029504252
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Specific blood flow rate","t_max",0
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Specific blood flow rate","C_tEnd",-0.0035076637867614
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Specific blood flow rate","AUC_tEnd",0.00011812802922003
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Specific blood flow rate","AUC_inf",0
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Specific blood flow rate","MRT",-0.00671279521972879
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Specific blood flow rate","Thalf",0.000307688313669678
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Specific blood flow rate","FractionAucLastToInf",-0.00322082823023219
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Specific blood flow rate","CL",0
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Specific blood flow rate","Vss",-0.00673297295521822
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Specific blood flow rate","Vd",0.000287019807297294
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Volume","C_max",-0.0450056966813413
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Volume","t_max",0
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Volume","C_tEnd",0.00759744971176708
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Volume","AUC_tEnd",-0.000717885451348398
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Volume","AUC_inf",-0.000570642872704999
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Volume","MRT",0.0121678845937051
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Volume","Thalf",-0.00333315399492317
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Volume","FractionAucLastToInf",0.00483509402095292
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Volume","CL",0.000571213465842855
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Volume","Vss",0.0127391832077448
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Skin-Volume","Vd",-0.00276228486139338
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Pancreas-Volume","C_max",-0.00135300739201371
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Pancreas-Volume","t_max",0
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Pancreas-Volume","C_tEnd",0.00158628001427856
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Pancreas-Volume","AUC_tEnd",0.00128122318518846
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Pancreas-Volume","AUC_inf",0.00128518216930417
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Pancreas-Volume","MRT",0.000511017138482386
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Pancreas-Volume","Thalf",-0.000145135350503002
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Pancreas-Volume","FractionAucLastToInf",0.000155172475954354
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Pancreas-Volume","CL",-0.00128593543821545
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Pancreas-Volume","Vss",-0.000774842621723927
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Pancreas-Volume","Vd",-0.00143050103917802
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Heart-Volume","C_max",-0.0100130112201836
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Heart-Volume","t_max",0
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Heart-Volume","C_tEnd",0.00172734906765131
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Heart-Volume","AUC_tEnd",0
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Heart-Volume","AUC_inf",0
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Heart-Volume","MRT",0.00272512937497327
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Heart-Volume","Thalf",-0.000881809050808196
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Heart-Volume","FractionAucLastToInf",0.000890126754707689
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Heart-Volume","CL",0
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Heart-Volume","Vss",0.00277054297999415
+"Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)","Organism-Heart-Volume","Vd",-0.000837080550593699

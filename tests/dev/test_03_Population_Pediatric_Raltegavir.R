@@ -9,7 +9,7 @@ devtools::load_all(rootDir)
 dataDir <- file.path(rootDir,"data","ex_03_pop")
 
 #Where the workflow results will be stored
-workingDir <- "C:/Users/ahamadeh/Dropbox/rproject/workflow/ex_03_pop/"
+workingDir <- file.path(rootDir,"tests","dev","results_ex_03_pop")
 setwd(workingDir)
 
 #Setup first simulation set input file paths
@@ -36,15 +36,15 @@ popSimSet2 <- PopModelSet$new(simulationFile = simFilePath2, populationFile = po
 popWorkFlow <- PopulationWorkflow$new(simulationSets = list(popSimSet1,popSimSet2))
 
 #Number of cores for population simulation
-popWorkFlow$populationSimulation$numberOfCores <- 4
+popWorkFlow$populationSimulation$updateNumberOfCores(4)
 
 #Number of cores for population sensitivity analysis
-popWorkFlow$populationSensitivityAnalysis$numberOfCores <- 4
-popWorkFlow$populationSensitivityAnalysis$variableParameterPaths <- c(simTree1$Organism$Skin$Volume$path,
+popWorkFlow$populationSensitivityAnalysis$updateNumberOfCores(4)
+popWorkFlow$populationSensitivityAnalysis$updateVariableParameterPaths(c(simTree1$Organism$Skin$Volume$path,
                                                                       simTree1$Organism$Skin$`Specific blood flow rate`$path,
                                                                       simTree1$Organism$Pancreas$Volume$path,
-                                                                      simTree1$Organism$Heart$Volume$path)
-popWorkFlow$populationSensitivityAnalysis$pkParameterSelection <- c("C_max","AUC")
+                                                                      simTree1$Organism$Heart$Volume$path))
+popWorkFlow$populationSensitivityAnalysis$updatePKParameterSelection(c("C_max"))
 
-popWorkFlow$populationSensitivityAnalysis$quantileVec <- c(0.25,0.75)
+popWorkFlow$populationSensitivityAnalysis$updateQuantileVec(c(0.25,0.75))
 popWorkFlow$runWorkflow()
