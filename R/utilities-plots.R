@@ -69,8 +69,8 @@ plotMeanGoodnessOfFit <- function(structureSet,
   # Get the time profile for observed data
   if (!is.null(structureSet$simulationSet$observedDataFile)) {
     observations <- list()
-    observations$data <- read.csv(structureSet$simulationSet$observedDataFile)
-    observations$metaData <- read.csv(structureSet$simulationSet$observedMetaDataFile)
+    observations$data <- readObservedDataFile(structureSet$simulationSet$observedDataFile)
+    observations$metaData <- readObservedDataFile(structureSet$simulationSet$observedMetaDataFile)
     observations$filter <- structureSet$simulationSet$dataFilter
 
     timeColumn <- as.character(observations$metaData[observations$metaData[, "matlabID"] == "time", "nonmenColumn"])
