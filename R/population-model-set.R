@@ -1,14 +1,5 @@
 #' @title PopModelSet
 #' @description R6 class representing Reporting Engine Population Model Set
-#' @field simulationFile name of pkml file to be used for the simulation
-#' @field simulationName display name of simulation
-#' @field pathID path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)
-#' @field pathName display name for `pathID`
-#' @field pathUnit display unit for `pathID`
-#' @field pkParameters PK parameters function names to be calculated from the simulation (e.g. `C_max`).
-#' @field pkParametersNames display names for `pkParameters`
-#' @field pkParametersUnits display units for `pkParameters`
-#' @field dataFilter filter to compare with observed data
 #' @field populationFile name of csv file to be used for the population
 #' @field populationName display name of population
 #' @export
@@ -21,10 +12,9 @@ PopModelSet <- R6::R6Class(
 
     #' @description
     #' Create a new `PopModelSet` object.
+    #' @param simulationSetName display name of simulation set
     #' @param simulationFile names of pkml file to be used for the simulation
     #' @param simulationName display name of simulation
-    #' @param populationFile names of pkml file to be used for the population
-    #' @param populationName display name of population
     #' @param pathID path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)
     #' @param pathName display name for `pathID`
     #' @param pathUnit display unit for `pathID`
@@ -32,10 +22,12 @@ PopModelSet <- R6::R6Class(
     #' Default value is obtained from enum(ospsuite::allPKParameterNames()).
     #' @param pkParametersNames display names for `pkParameters`
     #' @param pkParametersUnits display units for `pkParameters`
-    #' @param dataFilter filter to compare with observed data
+    #' @param observedDataFile name of csv file to be used for observed data
+    #' @param observedMetaDataFile name of csv file to be used as dictionary of the observed data
+    #' @param dataFilter characters or expression to filter the observed data
+    #' @param populationFile name of csv file to be used for the population
+    #' @param populationName display name of population
     #' @return A new `MeanModelSet` object
-    #'
-
     initialize = function(simulationSetName = NULL,
                               simulationFile,
                               simulationName = NULL,
@@ -69,6 +61,9 @@ PopModelSet <- R6::R6Class(
       self$simulationSetName <- simulationSetName %||% paste(self$simulationName, self$populationName, sep = "-")
     },
 
+    #' @description
+    #' Copy input files into a simulation set specific filder
+    #' @param inputFilesFolder where input are located
     copyInputFiles = function(inputFilesFolder) {
       if (!is.null(self$simulationFile)) {
         file.copy(self$simulationFile, file.path(inputFilesFolder, paste0(self$simulationName, ".pkml")))

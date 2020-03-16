@@ -2,7 +2,7 @@
 #' @description R6 class for Reporting Engine Population Workflow
 #' @field populationSimulation R6 class `Task` for population simulation
 #' @field populationPKParameters R6 class `Task` for PK parameters calculation
-#' @field calculateSensitivity R6 class `Task` for sensitivity analysis
+#' @field populationSensitivityAnalysis R6 class `Task` for sensitivity analysis
 #' @field plotDemography R6 class `Task` for demography plots
 #' @field plotGoF R6 class `Task` for goodness of fit plots
 #' @field plotPKParameters R6 class `Task` for PK parameters plot
@@ -23,7 +23,6 @@ PopulationWorkflow <- R6::R6Class(
     plotGoF = NULL,
     plotPKParameters = NULL,
     plotSensitivity = NULL,
-
 
     #' @description
     #' Create a new `PopulationWorkflow` object.
@@ -51,18 +50,14 @@ PopulationWorkflow <- R6::R6Class(
     #' Default value is `TRUE`
     #' @param message title of the `task`.
     #' Default value indicates `task` name.
-    #' @param inputFolderName folder of input
-    #' @param simulationFileName name of simulation file
-    #' @param resultsFolderName folder where output is saved
-    #' @param resultsFileName file where output is saved
     #' @param numberOfCores number of cores for parallelization
     #' @return A new `Task` object
     populationSimulationSettings = function(input = NULL,
-                                            output = NULL,
-                                            settings = NULL,
-                                            active = TRUE,
-                                            message = NULL,
-                                            numberOfCores = NULL) {
+                                                output = NULL,
+                                                settings = NULL,
+                                                active = TRUE,
+                                                message = NULL,
+                                                numberOfCores = NULL) {
       self$populationSimulation <- SimulationTask$new(
         input = input,
         output = output,
@@ -82,17 +77,12 @@ PopulationWorkflow <- R6::R6Class(
     #' Default value is `TRUE`
     #' @param message title of the `task`.
     #' Default value indicates `task` name.
-    #' @param simulationFilePath TO DO
-    #' @param simulationResultFilePaths TO DO
-    #' @param pkParametersToEvaluate TO DO
-    #' @param userDefinedPKFunctions TO DO
-    #' @param pkParameterResultsFilePath TO DO
     #' @return A new `Task` object
     populationPKParameterSettings = function(input = NULL,
-                                             output = NULL,
-                                             settings = NULL,
-                                             active = TRUE,
-                                             message = NULL) {
+                                                 output = NULL,
+                                                 settings = NULL,
+                                                 active = TRUE,
+                                                 message = NULL) {
       self$populationPKParameters <- CalculatePKParametersTask$new(
         input = input,
         output = output,
@@ -111,23 +101,22 @@ PopulationWorkflow <- R6::R6Class(
     #' Default value is `TRUE`
     #' @param message title of the `task`.
     #' Default value indicates `task` name.
-    #' @param inputFolderName TO DO
-    #' @param simulationFileName TO DO
-    #' @param resultsFolderName TO DO
-    #' @param resultsFileName TO DO
-    #' @param variationRange TO DO
-    #' @param numberOfCores TO DO
-    #' @return A new `Task` object
+    #' @param variationRange variation range for sensitivity analysis
+    #' @param numberOfCores number of cores for parallel computation
+    #' @param quantileVec vector of quantiles to be calculated
+    #' @param variableParameterPaths vector of paths of parameters to vary when performing sensitivity analysis
+    #' @param pkParameterSelection list of selected PK parameters for sensitivity analysis
+    #' @return A new `SensitivityAnalysisTask` object
     populationSensitivityAnalysisSettings = function(input = NULL,
-                                                     output = NULL,
-                                                     settings = NULL,
-                                                     active = TRUE,
-                                                     message = NULL,
-                                                     variationRange =NULL,
-                                                     numberOfCores = NULL,
-                                                     quantileVec = NULL,
-                                                     variableParameterPaths = NULL,
-                                                     pkParameterSelection = NULL) {
+                                                         output = NULL,
+                                                         settings = NULL,
+                                                         active = TRUE,
+                                                         message = NULL,
+                                                         variationRange = NULL,
+                                                         numberOfCores = NULL,
+                                                         quantileVec = NULL,
+                                                         variableParameterPaths = NULL,
+                                                         pkParameterSelection = NULL) {
       self$populationSensitivityAnalysis <- SensitivityAnalysisTask$new(
         input = input,
         output = output,
@@ -154,9 +143,9 @@ PopulationWorkflow <- R6::R6Class(
     #' Default value indicates `task` name.
     #' @return A new `Task` object
     plotDemographySettings = function(input = NULL,
-                                      output = NULL,
-                                      active = FALSE,
-                                      message = NULL) {
+                                          output = NULL,
+                                          active = FALSE,
+                                          message = NULL) {
       self$plotDemography <- Task$new(
         input = input,
         output = output,
@@ -176,9 +165,9 @@ PopulationWorkflow <- R6::R6Class(
     #' Default value indicates `task` name.
     #' @return A new `Task` object
     plotGoFSettings = function(input = NULL,
-                               output = NULL,
-                               active = FALSE,
-                               message = NULL) {
+                                   output = NULL,
+                                   active = FALSE,
+                                   message = NULL) {
       self$plotGoF <- Task$new(
         input = input,
         output = output,
@@ -198,9 +187,9 @@ PopulationWorkflow <- R6::R6Class(
     #' Default value indicates `task` name.
     #' @return A new `Task` object
     plotPKParametersSettings = function(input = NULL,
-                                        output = NULL,
-                                        active = FALSE,
-                                        message = NULL) {
+                                            output = NULL,
+                                            active = FALSE,
+                                            message = NULL) {
       self$plotPKParameters <- Task$new(
         input = input,
         output = output,
@@ -220,9 +209,9 @@ PopulationWorkflow <- R6::R6Class(
     #' Default value indicates `task` name.
     #' @return A new `Task` object
     plotSensitivitySettings = function(input = NULL,
-                                       output = NULL,
-                                       active = FALSE,
-                                       message = NULL) {
+                                           output = NULL,
+                                           active = FALSE,
+                                           message = NULL) {
       self$plotSensitivity <- Task$new(
         input = input,
         output = output,
@@ -234,7 +223,16 @@ PopulationWorkflow <- R6::R6Class(
 
 
     #' @description
-    #' Loop through all simulation sets and run active population model workflow tasks for each
+    #' Loop through all simulation sets and run active population model workflow tasks for each.
+    #' # POPULATION WORKFLOW
+    #' # CORE STAGE 0:  DEMOGRAPHY SUMMARY
+    #' # 0a - Demography Plots/Tables
+    #' # CORE STAGE 1:  SIMULATION
+    #' # 1a - Time profile Plot
+    #' # CORE STAGE 2:  CALCULATE PK PARAMETER
+    #' # 2a - PK parameter Plot
+    #' # CORE STAGE 3:  CALCULATE SENSITIVITY
+    #' # 3a - Plots and Tables based on sensitivity results
     runWorkflow = function() {
       logInfo(message = "Start of population model workflow")
 
@@ -244,26 +242,12 @@ PopulationWorkflow <- R6::R6Class(
       }
     },
 
-
-
     #' @description
     #' Run population workflow tasks for a single simulation set
+    #' @param set R6 class `SimulationStructure` object
     #' @return All results and plots as a structured output in a folder specific to simulation set
     runSingleSetWorkflow = function(set) {
       logInfo(message = "Start of population workflow")
-      # POPULATION WORKFLOW
-
-      # CORE STAGE 0:  DEMOGRAPHY SUMMARY
-      # 0a - Demography Plots/Tables
-
-      # CORE STAGE 1:  SIMULATION
-      # 1a - Time profile Plot
-
-      # CORE STAGE 2:  CALCULATE PK PARAMETER
-      # 2a - PK parameter Plot
-
-      # CORE STAGE 3:  CALCULATE SENSITIVITY
-      # 3a - Plots and Tables based on sensitivity results
 
       if (self$populationSimulation$active) {
         if (self$populationSimulation$validateInput()) {
@@ -325,10 +309,6 @@ PopulationWorkflow <- R6::R6Class(
           )
         }
       }
-
-
-
-
 
       # TO DO: plug plot tasks to actual results
       if (self$plotDemography$active) {
