@@ -1,4 +1,4 @@
-#' @title MeanModelSet
+#' @title SimulationSet
 #' @description R6 class representing Reporting Engine Mean Model Set
 #' @field simulationSetName display name of simulation set
 #' @field simulationFile names of pkml file to be used for the simulation
@@ -14,8 +14,8 @@
 #' @field dataFilter vector of characters to filter the observed data
 #' @field timeUnit display unit for time variable
 #' @export
-MeanModelSet <- R6::R6Class(
-  "MeanModelSet",
+SimulationSet <- R6::R6Class(
+  "SimulationSet",
   public = list(
     simulationSetName = NULL,
     simulationFile = NULL,
@@ -32,7 +32,7 @@ MeanModelSet <- R6::R6Class(
     timeUnit = NULL,
 
     #' @description
-    #' Create a new `MeanModelSet` object.
+    #' Create a new `SimulationSet` object.
     #' @param simulationSetName display name of simulation set
     #' @param simulationFile names of pkml file to be used for the simulation
     #' @param simulationName display name of simulation
@@ -47,7 +47,7 @@ MeanModelSet <- R6::R6Class(
     #' @param observedMetaDataFile name of csv file to be used as dictionary of the observed data
     #' @param dataFilter vector of characters to filter the observed data
     #' @param timeUnit display unit for time variable. Default is "h"
-    #' @return A new `MeanModelSet` object
+    #' @return A new `SimulationSet` object
     initialize = function(simulationSetName = NULL,
                               simulationFile,
                               simulationName = NULL,

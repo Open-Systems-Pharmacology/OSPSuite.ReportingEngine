@@ -7,7 +7,7 @@ rootDir <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine"
 devtools::load_all(rootDir)
 
 #Where the sim and pop files for the workflow are located
-dataDir <- file.path(rootDir,"data","ex_03_pop")
+dataDir <- file.path(rootDir,"tests","dev","ex_03_pop")
 
 #Where the workflow results will be stored
 workingDir <- file.path(rootDir,"tests","dev","singleton_ex_03_pop")
@@ -23,7 +23,7 @@ popFilePath1 <- file.path(dataDir, paste0(populationFileName1, ".csv"))
 load(file.path(dataDir,"simTrees.Rdata"))
 
 # Setup workflow using two simulation sets
-popSimSet1 <- PopModelSet$new(simulationFile = simFilePath1, populationFile = popFilePath1)
+popSimSet1 <- PopulationSimulationSet$new(simulationFile = simFilePath1, populationFile = popFilePath1)
 
 #Setup workflow
 #popWorkFlow <- PopulationWorkflow$new(simulationSets = list(popSimSet2))

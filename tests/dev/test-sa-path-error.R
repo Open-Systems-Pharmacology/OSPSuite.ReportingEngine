@@ -6,7 +6,7 @@ rootDir <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine"
 devtools::load_all(rootDir)
 
 #Where the sim and pop files for the workflow are located
-dataDir <- file.path(rootDir,"data","ex_03_pop")
+dataDir <- file.path(rootDir,"tests","dev","ex_03_pop")
 
 #Where the workflow results will be stored
 workingDir <- file.path(rootDir,"tests","dev","sa_error")
@@ -24,8 +24,8 @@ simFilePath2 <- file.path(dataDir, paste0(simulationFileName2, ".pkml"))
 load(file.path(dataDir,"simTrees.Rdata"))
 
 # Setup workflow using two simulation sets
-meanModelSimSet1 <- MeanModelSet$new(simulationFile = simFilePath1)
-meanModelSimSet2 <- MeanModelSet$new(simulationFile = simFilePath2)
+meanModelSimSet1 <- SimulationSet$new(simulationFile = simFilePath1)
+meanModelSimSet2 <- SimulationSet$new(simulationFile = simFilePath2)
 
 #Setup workflow
 meanModelWorkflow <- MeanModelWorkflow$new(simulationSets = list(meanModelSimSet1,meanModelSimSet2))

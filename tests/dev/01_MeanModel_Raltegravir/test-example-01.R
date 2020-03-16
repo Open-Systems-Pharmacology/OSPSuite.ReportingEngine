@@ -21,7 +21,7 @@ simFiles <- simFiles[1:2]
 # Initilize list of mean model sets
 meanModelSets <- list()
 for (simFile in simFiles) {
-  modelSet <- MeanModelSet$new(
+  modelSet <- SimulationSet$new(
     simulationFile = simFile,
     pathID = "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",
     pathName = "Raltegravir",

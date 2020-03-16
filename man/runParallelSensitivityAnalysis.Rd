@@ -17,7 +17,8 @@ runParallelSensitivityAnalysis(
 \arguments{
 \item{variableParameterPaths}{paths to parameters to vary in sensitivity analysis}
 
-\item{individualParameters}{is an object storing an individual's parameters, obtained from a population object's getParameterValuesForIndividual() function.}
+\item{individualParameters}{is an object storing an individual's parameters, obtained
+from a population object's getParameterValuesForIndividual() function.}
 
 \item{variationRange}{variation range for sensitivity analysis}
 
@@ -31,5 +32,6 @@ runParallelSensitivityAnalysis(
 Simulation results for population
 }
 \description{
-Spawn cores, divide parameters among cores, run sensitivity analysis on cores for a single individual, save results as CSV.
+Spawn cores, divide parameters among cores, run sensitivity analysis on cores
+for a single individual, save results as CSV.
 }

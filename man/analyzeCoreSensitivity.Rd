@@ -28,11 +28,13 @@ analyzeCoreSensitivity(
 
 \item{resultsFilePath}{Path to file storing results of sensitivity analysis}
 
-\item{numberOfCoresToUse}{Number of cores to use on local node.  This parameter should be should be set to 1 when parallelizing over many nodes.}
+\item{numberOfCoresToUse}{Number of cores to use on local node.  This parameter
+should be should be set to 1 when parallelizing over many nodes.}
 }
 \value{
 Save sensitivity analysis results as CSV in path given by resultsFilePath.
 }
 \description{
-Run a sensitivity analysis for a single individual, varying only the set of parameters variableParameterPaths
+Run a sensitivity analysis for a single individual,
+varying only the set of parameters variableParameterPaths
 }
