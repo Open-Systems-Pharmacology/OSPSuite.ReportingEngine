@@ -188,7 +188,7 @@ plotMeanMassBalance <- function(structureSet,
 
   return(list(
     plots = massBalancePlots,
-    timeProfile = simulationResultsOutputByGroup
+    tables = simulationResultsOutputByGroup
   ))
 }
 

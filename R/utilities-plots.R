@@ -174,7 +174,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
   }
   return(list(
     plots = goodnessOfFitPlots,
-    timeProfile = timeProfileData,
+    tables = timeProfileData,
     residuals = residuals
   ))
 }
