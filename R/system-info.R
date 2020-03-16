@@ -20,6 +20,7 @@ ReportingEngineInfo <- R6::R6Class(
       private$login <- info$login
       private$tlfVersion <- info$tlfVersion
       private$ospsuiteVersion <- info$ospsuiteVersion
+      private$reportingengineVersion <- info$reportingengineVersion
       private$Rversion <- info$Rversion
 
       # TO DO: define a list of validated systems that will use Reporting Engine
@@ -48,6 +49,7 @@ ReportingEngineInfo <- R6::R6Class(
         sprintf("System versions: "),
         sprintf("R version: %s ", private$Rversion),
         sprintf("OSP Suite Package version: %s ", as.character(private$ospsuiteVersion)),
+        sprintf("OSP Reporting Engine version: %s ", as.character(private$reportingengineVersion)),
         sprintf("tlf version: %s ", as.character(private$tlfVersion))
       )
       invisible(self)
@@ -61,7 +63,7 @@ ReportingEngineInfo <- R6::R6Class(
     # Packages versions
     tlfVersion = NULL,
     ospsuiteVersion = NULL,
-    # reportingengineVersion = NULL,
+    reportingengineVersion = NULL,
     Rversion = NULL,
     isValidatedSystem = FALSE
   )
@@ -82,7 +84,7 @@ getReportingEngineInfo <- function() {
   # Packages versions
   info$tlfVersion <- utils::packageVersion(pkg = "tlf")
   info$ospsuiteVersion <- utils::packageVersion(pkg = "ospsuite")
-  # info$reportingengineVersion <- utils::packageVersion(pkg = "ospsuite.reportingengine")
+  info$reportingengineVersion <- utils::packageVersion(pkg = "ospsuite.reportingengine")
 
   # R version
   session <- sessionInfo()

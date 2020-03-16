@@ -9,7 +9,12 @@ devtools::load_all(rootDir)
 dataDir <- file.path(rootDir,"data","ex_03_pop")
 
 #Where the workflow results will be stored
-workingDir <- file.path(rootDir,"tests","dev","results_ex_03_pop")
+
+workingDir <- file.path("C:/Users/ahamadeh/Dropbox/rproject/workflow/")
+#workingDir <- file.path(rootDir,"tests","dev","results_ex_03_pop")
+if (!dir.exists(workingDir)) {
+  dir.create(workingDir)
+}
 setwd(workingDir)
 
 #Setup first simulation set input file paths
@@ -44,7 +49,7 @@ popWorkFlow$populationSensitivityAnalysis$updateVariableParameterPaths(c(simTree
                                                                       simTree1$Organism$Skin$`Specific blood flow rate`$path,
                                                                       simTree1$Organism$Pancreas$Volume$path,
                                                                       simTree1$Organism$Heart$Volume$path))
-popWorkFlow$populationSensitivityAnalysis$updatePKParameterSelection(c("C_max"))
+popWorkFlow$populationSensitivityAnalysis$updatePKParameterSelection(c("C_max","t_max"))
 
-popWorkFlow$populationSensitivityAnalysis$updateQuantileVec(c(0.25,0.75))
+popWorkFlow$populationSensitivityAnalysis$updateQuantileVec(c(0.25,0.5,0.75))
 popWorkFlow$runWorkflow()

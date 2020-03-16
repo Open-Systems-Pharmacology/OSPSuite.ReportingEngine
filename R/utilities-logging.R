@@ -8,12 +8,11 @@
 logError <- function(message,
                      file = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logErrorFile()),
                      printConsole = TRUE) {
-  timeStamp <- sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M"))
+  timeStamp <- sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M:%S"))
   if (printConsole) {
-    print(timeStamp)
-    print(message)
+    print(paste0(timeStamp,message))
   }
-  write(c(timeStamp, message),
+  write(paste0(timeStamp, message),
     file = file, append = TRUE, sep = " "
   )
   return()
@@ -29,12 +28,11 @@ logError <- function(message,
 logDebug <- function(message,
                      file = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logDebugFile()),
                      printConsole = FALSE) {
-  timeStamp <- sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M"))
+  timeStamp <- sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M:%S"))
   if (printConsole) {
-    print(timeStamp)
-    print(message)
+    print(paste0(timeStamp,message))
   }
-  write(c(timeStamp, message),
+  write(paste0(timeStamp, message),
     file = file, append = TRUE, sep = " "
   )
   return()
@@ -50,12 +48,11 @@ logDebug <- function(message,
 logInfo <- function(message,
                     file = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logInfoFile()),
                     printConsole = TRUE) {
-  timeStamp <- sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M"))
+  timeStamp <- sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M:%S"))
   if (printConsole) {
-    print(timeStamp)
-    print(message)
+    print(paste0(timeStamp,message))
   }
-  write(c(timeStamp, message),
+  write(paste0(timeStamp, message),
     file = file, append = TRUE, sep = " "
   )
   return()
