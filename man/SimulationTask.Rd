@@ -12,36 +12,7 @@ R6 class for SimulationTask settings
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{inputFolderName}}{name of input folder}
-
-\item{\code{simulationFileName}}{name of simulation files}
-
-\item{\code{populationFileName}}{name of population file}
-
-\item{\code{resultsFolderName}}{name of folder where results are saved}
-
-\item{\code{resultsFileName}}{name of file where results are saved}
-
 \item{\code{numberOfCores}}{number of cores for parallel computation}
-
-\item{\code{generatedResultFileNames}}{name of files where PK parameters are saved}
-}
-\if{html}{\out{</div>}}
-}
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{inputFolderName}}{name of input folder}
-
-\item{\code{simulationFileName}}{name of simulation files}
-
-\item{\code{populationFileName}}{name of population file}
-
-\item{\code{resultsFolderName}}{name of folder where results are saved}
-
-\item{\code{resultsFileName}}{name of file where results are saved}
-
-\item{\code{generatedResultFileNames}}{name of files where PK parameters are saved}
 }
 \if{html}{\out{</div>}}
 }
@@ -77,18 +48,6 @@ Create a `SimulationTask` object
 \item{\code{numberOfCores}}{number of cores for parallel computation}
 
 \item{\code{...}}{parameters inherited from R6 class `Task` object}
-
-\item{\code{inputFolderName}}{name of input folder}
-
-\item{\code{simulationFileName}}{name of simulation files}
-
-\item{\code{populationFileName}}{name of population file}
-
-\item{\code{resultsFolderName}}{name of folder where results are saved}
-
-\item{\code{resultsFileName}}{name of file where results are saved}
-
-\item{\code{generatedResultFileNames}}{name of files where PK parameters are saved}
 }
 \if{html}{\out{</div>}}
 }

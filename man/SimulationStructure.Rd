@@ -9,42 +9,21 @@ R6 class representing that stores file structure (file names and paths) relating
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{simulationSet:}}{the set for which the SimulationStructure object stores paths input and results}
+\item{\code{simulationSet}}{the set for which the SimulationStructure object stores paths input and results}
 
-\item{\code{inputFilesFolder:}}{path to folder storing pkml and population data files for the simulationSet}
+\item{\code{inputFilesFolder}}{path to folder storing pkml and population data files for the simulationSet}
 
-\item{\code{simulationResultsFolder:}}{path to folder storing results of simulations}
+\item{\code{simulationResultsFolder}}{path to folder storing results of simulations}
 
-\item{\code{pkAnalysisResultsFolder:}}{path to folder storing results of pk analyses}
+\item{\code{pkAnalysisResultsFolder}}{path to folder storing results of pk analyses}
 
-\item{\code{sensitivityAnalysisResultsFolder:}}{path to folder storing results of sensitivity analyses}
+\item{\code{sensitivityAnalysisResultsFolder}}{path to folder storing results of sensitivity analyses}
 
-\item{\code{simulationResultFileNames:}}{vector of names of CSV files storing simulation results}
+\item{\code{simulationResultFileNames}}{vector of names of CSV files storing simulation results}
 
-\item{\code{pkAnalysisResultsFileNames:}}{vector of names of CSV files storing results of pk analyses}
+\item{\code{pkAnalysisResultsFileNames}}{vector of names of CSV files storing results of pk analyses}
 
-\item{\code{sensitivityAnalysisResultsFileNames:}}{vector of names of CSV files storing results of sensitivity analyses}
-}
-\if{html}{\out{</div>}}
-}
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{simulationSet:}}{the set for which the SimulationStructure object stores paths input and results}
-
-\item{\code{inputFilesFolder:}}{path to folder storing pkml and population data files for the simulationSet}
-
-\item{\code{simulationResultsFolder:}}{path to folder storing results of simulations}
-
-\item{\code{pkAnalysisResultsFolder:}}{path to folder storing results of pk analyses}
-
-\item{\code{sensitivityAnalysisResultsFolder:}}{path to folder storing results of sensitivity analyses}
-
-\item{\code{simulationResultFileNames:}}{vector of names of CSV files storing simulation results}
-
-\item{\code{pkAnalysisResultsFileNames:}}{vector of names of CSV files storing results of pk analyses}
-
-\item{\code{sensitivityAnalysisResultsFileNames:}}{vector of names of CSV files storing results of sensitivity analyses}
+\item{\code{sensitivityAnalysisResultsFileNames}}{vector of names of CSV files storing results of sensitivity analyses}
 }
 \if{html}{\out{</div>}}
 }
@@ -58,6 +37,11 @@ R6 class representing that stores file structure (file names and paths) relating
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
+Create a new `SimulationStructure` object.
+Create simulationSetFolder folder to store simulationSet results.
+Create inputFilesFolder as subfolder of simulationSetFolder.
+Copy simulation set input files to inputFilesFolder.
+Build and store names of potential subfolders to hold simulation results, pkAnalysis results and sensitivityAnalysis results.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SimulationStructure$new(
   simulationSet,
@@ -66,6 +50,17 @@ R6 class representing that stores file structure (file names and paths) relating
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{simulationSet}}{`MeanModelSet` or `PopModelSet` R6 class object}
+
+\item{\code{workflowResultsFolder}}{folder to store simulationSet results}
+
+\item{\code{workflowFiguresFolder}}{figure folder to store simulationSet figures}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

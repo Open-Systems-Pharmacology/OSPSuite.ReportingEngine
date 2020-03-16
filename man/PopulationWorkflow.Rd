@@ -16,7 +16,7 @@ R6 class for Reporting Engine Population Workflow
 
 \item{\code{populationPKParameters}}{R6 class `Task` for PK parameters calculation}
 
-\item{\code{calculateSensitivity}}{R6 class `Task` for sensitivity analysis}
+\item{\code{populationSensitivityAnalysis}}{R6 class `Task` for sensitivity analysis}
 
 \item{\code{plotDemography}}{R6 class `Task` for demography plots}
 
@@ -25,13 +25,6 @@ R6 class for Reporting Engine Population Workflow
 \item{\code{plotPKParameters}}{R6 class `Task` for PK parameters plot}
 
 \item{\code{plotSensitivity}}{R6 class `Task` for sensitivity plot}
-}
-\if{html}{\out{</div>}}
-}
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{calculateSensitivity}}{R6 class `Task` for sensitivity analysis}
 }
 \if{html}{\out{</div>}}
 }
@@ -114,14 +107,6 @@ Default value is `TRUE`}
 Default value indicates `task` name.}
 
 \item{\code{numberOfCores}}{number of cores for parallelization}
-
-\item{\code{inputFolderName}}{folder of input}
-
-\item{\code{simulationFileName}}{name of simulation file}
-
-\item{\code{resultsFolderName}}{folder where output is saved}
-
-\item{\code{resultsFileName}}{file where output is saved}
 }
 \if{html}{\out{</div>}}
 }
@@ -157,16 +142,6 @@ Default value is `TRUE`}
 
 \item{\code{message}}{title of the `task`.
 Default value indicates `task` name.}
-
-\item{\code{simulationFilePath}}{TO DO}
-
-\item{\code{simulationResultFilePaths}}{TO DO}
-
-\item{\code{pkParametersToEvaluate}}{TO DO}
-
-\item{\code{userDefinedPKFunctions}}{TO DO}
-
-\item{\code{pkParameterResultsFilePath}}{TO DO}
 }
 \if{html}{\out{</div>}}
 }
@@ -208,22 +183,20 @@ Default value is `TRUE`}
 \item{\code{message}}{title of the `task`.
 Default value indicates `task` name.}
 
-\item{\code{variationRange}}{TO DO}
+\item{\code{variationRange}}{variation range for sensitivity analysis}
 
-\item{\code{numberOfCores}}{TO DO}
+\item{\code{numberOfCores}}{number of cores for parallel computation}
 
-\item{\code{inputFolderName}}{TO DO}
+\item{\code{quantileVec}}{vector of quantiles to be calculated}
 
-\item{\code{simulationFileName}}{TO DO}
+\item{\code{variableParameterPaths}}{vector of paths of parameters to vary when performing sensitivity analysis}
 
-\item{\code{resultsFolderName}}{TO DO}
-
-\item{\code{resultsFileName}}{TO DO}
+\item{\code{pkParameterSelection}}{list of selected PK parameters for sensitivity analysis}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `Task` object
+A new `SensitivityAnalysisTask` object
 }
 }
 \if{html}{\out{<hr>}}
@@ -365,7 +338,16 @@ A new `Task` object
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-runWorkflow"></a>}}
 \subsection{Method \code{runWorkflow()}}{
-Loop through all simulation sets and run active population model workflow tasks for each
+Loop through all simulation sets and run active population model workflow tasks for each.
+# POPULATION WORKFLOW
+# CORE STAGE 0:  DEMOGRAPHY SUMMARY
+# 0a - Demography Plots/Tables
+# CORE STAGE 1:  SIMULATION
+# 1a - Time profile Plot
+# CORE STAGE 2:  CALCULATE PK PARAMETER
+# 2a - PK parameter Plot
+# CORE STAGE 3:  CALCULATE SENSITIVITY
+# 3a - Plots and Tables based on sensitivity results
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$runWorkflow()}\if{html}{\out{</div>}}
 }
@@ -379,6 +361,13 @@ Run population workflow tasks for a single simulation set
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$runSingleSetWorkflow(set)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{set}}{R6 class `SimulationStructure` object}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 All results and plots as a structured output in a folder specific to simulation set
 }

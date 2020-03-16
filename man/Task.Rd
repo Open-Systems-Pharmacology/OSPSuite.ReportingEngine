@@ -70,6 +70,7 @@ A new `Task` object
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-activate"></a>}}
 \subsection{Method \code{activate()}}{
+Activate `Task`
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Task$activate()}\if{html}{\out{</div>}}
 }
@@ -78,6 +79,7 @@ A new `Task` object
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-inactivate"></a>}}
 \subsection{Method \code{inactivate()}}{
+Inactivate `Task`
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Task$inactivate()}\if{html}{\out{</div>}}
 }
@@ -86,10 +88,14 @@ A new `Task` object
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-validateInput"></a>}}
 \subsection{Method \code{validateInput()}}{
+Check if `Task` inputs exist
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Task$validateInput()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+logical indicating if input is valid
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
