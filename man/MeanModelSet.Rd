@@ -31,7 +31,9 @@ R6 class representing Reporting Engine Mean Model Set
 
 \item{\code{observedMetaDataFile}}{name of csv file to be used as dictionary of the observed data}
 
-\item{\code{dataFilter}}{vector of characters to filter the observed data}
+\item{\code{dataFilter}}{character or expression used to filter the observed data}
+
+\item{\code{dataReportName}}{display name of the observed data}
 
 \item{\code{timeUnit}}{display unit for time variable}
 }
@@ -63,6 +65,7 @@ Create a new `MeanModelSet` object.
   observedDataFile = NULL,
   observedMetaDataFile = NULL,
   dataFilter = NULL,
+  dataReportName = NULL,
   timeUnit = "h"
 )}\if{html}{\out{</div>}}
 }
@@ -93,7 +96,9 @@ Default value is obtained from enum(ospsuite::allPKParameterNames()).}
 
 \item{\code{observedMetaDataFile}}{name of csv file to be used as dictionary of the observed data}
 
-\item{\code{dataFilter}}{vector of characters to filter the observed data}
+\item{\code{dataFilter}}{characters or expression to filter the observed data}
+
+\item{\code{dataReportName}}{display name of the observed data}
 
 \item{\code{timeUnit}}{display unit for time variable. Default is "h"}
 }

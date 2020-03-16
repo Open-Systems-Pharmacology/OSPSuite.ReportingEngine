@@ -11,7 +11,8 @@
 #' @field pkParametersUnits display units for `pkParameters`
 #' @field observedDataFile name of csv file to be used for observed data
 #' @field observedMetaDataFile name of csv file to be used as dictionary of the observed data
-#' @field dataFilter vector of characters to filter the observed data
+#' @field dataFilter character or expression used to filter the observed data
+#' @field dataReportName display name of the observed data
 #' @field timeUnit display unit for time variable
 #' @export
 MeanModelSet <- R6::R6Class(
@@ -29,6 +30,7 @@ MeanModelSet <- R6::R6Class(
     observedDataFile = NULL,
     observedMetaDataFile = NULL,
     dataFilter = NULL,
+    dataReportName = NULL,
     timeUnit = NULL,
 
     #' @description
@@ -45,7 +47,8 @@ MeanModelSet <- R6::R6Class(
     #' @param pkParametersUnits display units for `pkParameters`
     #' @param observedDataFile name of csv file to be used for observed data
     #' @param observedMetaDataFile name of csv file to be used as dictionary of the observed data
-    #' @param dataFilter vector of characters to filter the observed data
+    #' @param dataFilter characters or expression to filter the observed data
+    #' @param dataReportName display name of the observed data
     #' @param timeUnit display unit for time variable. Default is "h"
     #' @return A new `MeanModelSet` object
     initialize = function(simulationSetName = NULL,
@@ -60,6 +63,7 @@ MeanModelSet <- R6::R6Class(
                               observedDataFile = NULL,
                               observedMetaDataFile = NULL,
                               dataFilter = NULL,
+                              dataReportName = NULL,
                               timeUnit = "h") {
       self$simulationFile <- simulationFile
       self$simulationName <- simulationName %||% trimFileName(simulationFile, extension = "pkml")
@@ -82,6 +86,7 @@ MeanModelSet <- R6::R6Class(
       self$observedDataFile <- observedDataFile
       self$observedMetaDataFile <- observedMetaDataFile
       self$dataFilter <- dataFilter
+      self$dataReportName <- dataReportName %||% paste0(self$pathName, " observed data")
     },
 
     # createDirectories = function(rootDirectory) {
