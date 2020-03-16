@@ -9,18 +9,23 @@ devtools::load_all(rootDir)
 dataDir <- file.path(rootDir,"data","ex_03_pop")
 
 #Where the workflow results will be stored
-workingDir <- file.path(rootDir,"tests","dev","results_ex_03_pop")
+
+workingDir <- file.path("C:/Users/ahamadeh/Dropbox/rproject/workflow/")
+#workingDir <- file.path(rootDir,"tests","dev","results_ex_03_pop")
+if (!dir.exists(workingDir)) {
+  dir.create(workingDir)
+}
 setwd(workingDir)
 
 #Setup first simulation set input file paths
 simulationFileName1 <- "LarsonSim"
-populationFileName1 <- "LarsonPop"
+populationFileName1 <- "ten_LarsonPop"
 simFilePath1 <- file.path(dataDir, paste0(simulationFileName1, ".pkml"))
 popFilePath1 <- file.path(dataDir, paste0(populationFileName1, ".csv"))
 
 #Setup Second simulation set input file paths
 simulationFileName2 <- "RaltegravirSim"
-populationFileName2 <- "RaltegravirPop"
+populationFileName2 <- "ten_RaltegravirPop"
 simFilePath2 <- file.path(dataDir, paste0(simulationFileName2, ".pkml"))
 popFilePath2 <- file.path(dataDir, paste0(populationFileName2, ".csv"))
 

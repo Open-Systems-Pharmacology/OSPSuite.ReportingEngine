@@ -277,6 +277,7 @@ PopulationWorkflow <- R6::R6Class(
               resultsFilePath = resultsFilePath
             )
             set$simulationResultFileNames <- resultsFilePath
+            logInfo(message = "Population simulation completed.")
           }
           else if (self$populationSimulation$numberOfCores > 1) {
             logInfo(message = "Starting parallel population simulation")
@@ -289,6 +290,7 @@ PopulationWorkflow <- R6::R6Class(
               resultsFolderName = set$simulationResultsFolder,
               resultsFileName = trimFileName(defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName), extension = "csv")
             )
+            logInfo(message = "Parallel population simulation completed.")
           }
         }
       }
@@ -296,20 +298,21 @@ PopulationWorkflow <- R6::R6Class(
 
       if (self$populationPKParameters$active) {
         if (self$populationPKParameters$validateInput()) {
-          print("Starting PK parameter calculation")
+          logInfo("Starting PK parameter calculation")
           createFolder(set$pkAnalysisResultsFolder)
           set$pkAnalysisResultsFileNames <- calculatePKParameters(
             simulationFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
             simulationResultFilePaths = set$simulationResultFileNames,
             pkParameterResultsFilePath = file.path(set$pkAnalysisResultsFolder, defaultFileNames$pkAnalysisResultsFile(set$simulationSet$simulationSetName))
           )
+          logInfo("PK parameter calculation completed.")
         }
       }
 
 
       if (self$populationSensitivityAnalysis$active) {
         if (self$populationSensitivityAnalysis$validateInput()) {
-          print("Starting population sensitivity analysis")
+          logInfo("Starting population sensitivity analysis")
           createFolder(set$sensitivityAnalysisResultsFolder)
           set$sensitivityAnalysisResultsFileNames <- runPopulationSensitivityAnalysis(
             simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
@@ -323,6 +326,7 @@ PopulationWorkflow <- R6::R6Class(
             quantileVec = self$populationSensitivityAnalysis$quantileVec,
             numberOfCores = self$populationSensitivityAnalysis$numberOfCores
           )
+          logInfo("Population sensitivity analysis completed.")
         }
       }
 
