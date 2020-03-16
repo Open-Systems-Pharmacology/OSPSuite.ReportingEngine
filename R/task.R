@@ -36,12 +36,20 @@ Task <- R6::R6Class(
       self$settings <- settings
       self$message <- message
     },
+
+    #' @description
+    #' Activate `Task`
     activate = function() {
       self$active <- TRUE
     },
+    #' @description
+    #' Inactivate `Task`
     inactivate = function() {
       self$active <- FALSE
     },
+    #' @description
+    #' Check if `Task` inputs exist
+    #' @return logical indicating if input is valid
     validateInput = function() {
       inputPaths <- sapply(self$input, identity)
       isValid <- TRUE
