@@ -19,13 +19,13 @@ setwd(workingDir)
 
 #Setup first simulation set input file paths
 simulationFileName1 <- "LarsonSim"
-populationFileName1 <- "ten_LarsonPop"
+populationFileName1 <- "LarsonPop"
 simFilePath1 <- file.path(dataDir, paste0(simulationFileName1, ".pkml"))
 popFilePath1 <- file.path(dataDir, paste0(populationFileName1, ".csv"))
 
 #Setup Second simulation set input file paths
 simulationFileName2 <- "RaltegravirSim"
-populationFileName2 <- "ten_RaltegravirPop"
+populationFileName2 <- "RaltegravirPop"
 simFilePath2 <- file.path(dataDir, paste0(simulationFileName2, ".pkml"))
 popFilePath2 <- file.path(dataDir, paste0(populationFileName2, ".csv"))
 
