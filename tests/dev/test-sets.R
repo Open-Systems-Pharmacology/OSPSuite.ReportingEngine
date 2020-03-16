@@ -1,14 +1,14 @@
 rm(list = ls())
 library(ospsuite)
-setwd("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine")
-devtools::load_all("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine")
+setwd("./")
+devtools::load_all("./")
 
 
 inputFolderName <- "./tests/dev"
 simulationFileName1 <- "individualPksimSim"
 simulationFileName2 <- "simpleMobiEventSim"
 populationFileName <- "popData_short" #"popData"
-# resultsFolderName = "C:/Users/ahamadeh/Dropbox/rproject/workflow/res20200212"
+# resultsFolderName = "./tests/dev/"
 # resultsFileName = "popSimRes"
 # numberOfCores = 1
 

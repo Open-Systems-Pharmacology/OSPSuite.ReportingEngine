@@ -2,7 +2,7 @@ rm(list = ls())
 library(ospsuite)
 
 #Package directory
-rootDir <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine"
+rootDir <- "./"
 devtools::load_all(rootDir)
 
 #Where the sim and pop files for the workflow are located
