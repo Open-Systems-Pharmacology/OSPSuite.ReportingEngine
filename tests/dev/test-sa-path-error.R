@@ -9,7 +9,7 @@ devtools::load_all(rootDir)
 dataDir <- file.path(rootDir,"data","ex_03_pop")
 
 #Where the workflow results will be stored
-workingDir <- "C:/Users/ahamadeh/Dropbox/rproject/workflow/"
+workingDir <- file.path(rootDir,"tests","dev","sa_error")
 setwd(workingDir)
 
 #Setup first simulation set input file paths
@@ -32,9 +32,8 @@ meanModelWorkflow <- MeanModelWorkflow$new(simulationSets = list(meanModelSimSet
 
 #Number of cores for population sensitivity analysis
 meanModelWorkflow$meanModelSensitivityAnalysis$activate()
-meanModelWorkflow$meanModelSensitivityAnalysis$numberOfCores <- 1
-meanModelWorkflow$meanModelSensitivityAnalysis$variableParameterPaths <- c(simTree1$Organism$Skin$Intracellular$CYP3A4$`Relative expression (normalized)`$path)
+meanModelWorkflow$meanModelSensitivityAnalysis$updateNumberOfCores(1)
+meanModelWorkflow$meanModelSensitivityAnalysis$updateVariableParameterPaths(c(simTree1$Organism$Skin$Intracellular$CYP3A4$`Relative expression (normalized)`$path))
 
-meanModelWorkflow$meanModelSensitivityAnalysis$pkParameterSelection <- c("C_max","AUC")
 meanModelWorkflow$meanModelSensitivityAnalysis$quantileVec <- c(0.25,0.75)
 meanModelWorkflow$runWorkflow()

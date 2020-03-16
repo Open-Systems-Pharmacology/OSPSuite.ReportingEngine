@@ -31,6 +31,11 @@ R6 class for SensitivityAnalysisTask settings
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{SensitivityAnalysisTask$new()}}
+\item \href{#method-updateVariationRange}{\code{SensitivityAnalysisTask$updateVariationRange()}}
+\item \href{#method-updateNumberOfCores}{\code{SensitivityAnalysisTask$updateNumberOfCores()}}
+\item \href{#method-updateQuantileVec}{\code{SensitivityAnalysisTask$updateQuantileVec()}}
+\item \href{#method-updateVariableParameterPaths}{\code{SensitivityAnalysisTask$updateVariableParameterPaths()}}
+\item \href{#method-updatePKParameterSelection}{\code{SensitivityAnalysisTask$updatePKParameterSelection()}}
 \item \href{#method-clone}{\code{SensitivityAnalysisTask$clone()}}
 }
 }
@@ -75,6 +80,46 @@ Create a `SensitivityAnalysisTask` object
 \subsection{Returns}{
 A new `SensitivityAnalysisTask` object
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateVariationRange"></a>}}
+\subsection{Method \code{updateVariationRange()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$updateVariationRange(variationRange)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateNumberOfCores"></a>}}
+\subsection{Method \code{updateNumberOfCores()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$updateNumberOfCores(numberOfCores)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateQuantileVec"></a>}}
+\subsection{Method \code{updateQuantileVec()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$updateQuantileVec(quantileVec)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateVariableParameterPaths"></a>}}
+\subsection{Method \code{updateVariableParameterPaths()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$updateVariableParameterPaths(variableParameterPaths)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updatePKParameterSelection"></a>}}
+\subsection{Method \code{updatePKParameterSelection()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$updatePKParameterSelection(pkParameterSelection)}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

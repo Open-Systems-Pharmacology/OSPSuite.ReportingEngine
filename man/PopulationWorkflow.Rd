@@ -94,7 +94,7 @@ Define simulate `task` settings
   settings = NULL,
   active = TRUE,
   message = NULL,
-  numberOfCores = 1
+  numberOfCores = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -185,9 +185,9 @@ Define population Sensitivity Analysis `task` settings
   settings = NULL,
   active = TRUE,
   message = NULL,
-  variationRange = 0.1,
-  numberOfCores = 1,
-  quantileVec = c(0.05, 0.5, 0.95),
+  variationRange = NULL,
+  numberOfCores = NULL,
+  quantileVec = NULL,
   variableParameterPaths = NULL,
   pkParameterSelection = NULL
 )}\if{html}{\out{</div>}}

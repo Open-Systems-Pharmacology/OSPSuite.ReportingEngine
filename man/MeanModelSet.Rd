@@ -57,7 +57,7 @@ Create a new `MeanModelSet` object.
   pathID = NULL,
   pathName = NULL,
   pathUnit = NULL,
-  pkParameters = AllPKParameters,
+  pkParameters = enum(ospsuite::allPKParameterNames()),
   pkParametersNames = NULL,
   pkParametersUnits = NULL,
   observedDataFile = NULL,
@@ -83,7 +83,7 @@ Create a new `MeanModelSet` object.
 \item{\code{pathUnit}}{display unit for `pathID`}
 
 \item{\code{pkParameters}}{PK parameters function names to be calculated from the simulation (e.g. `C_max`).
-Default value is enum `AllPKParameters`.}
+Default value is obtained from enum(ospsuite::allPKParameterNames()).}
 
 \item{\code{pkParametersNames}}{display names for `pkParameters`}
 

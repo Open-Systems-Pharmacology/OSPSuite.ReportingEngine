@@ -122,8 +122,8 @@ MeanModelWorkflow <- R6::R6Class(
                                                         settings = NULL,
                                                         active = FALSE,
                                                         message = NULL,
-                                                        variationRange = 0.1,
-                                                        numberOfCores = 1) {
+                                                        variationRange = NULL,
+                                                        numberOfCores = NULL) {
       self$meanModelSensitivityAnalysis <- SensitivityAnalysisTask$new(
         input = input,
         output = output,

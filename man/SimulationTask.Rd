@@ -49,6 +49,7 @@ R6 class for SimulationTask settings
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{SimulationTask$new()}}
+\item \href{#method-updateNumberOfCores}{\code{SimulationTask$updateNumberOfCores()}}
 \item \href{#method-clone}{\code{SimulationTask$clone()}}
 }
 }
@@ -67,7 +68,7 @@ R6 class for SimulationTask settings
 \subsection{Method \code{new()}}{
 Create a `SimulationTask` object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimulationTask$new(numberOfCores = 1, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimulationTask$new(numberOfCores = NULL, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -93,6 +94,22 @@ Create a `SimulationTask` object
 }
 \subsection{Returns}{
 A new `SimulationTask` object
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateNumberOfCores"></a>}}
+\subsection{Method \code{updateNumberOfCores()}}{
+Update the `numberOfCores`
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SimulationTask$updateNumberOfCores(numberOfCores)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{numberOfCores}}{is the number of cores to use for simulation}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
