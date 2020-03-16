@@ -24,6 +24,34 @@ runSensitivity <- function(simFilePath,
   # If there is a population file and no individualId then do SA for entire population
   # If there is no population file and individualId then do SA for mean model
   # If there is no population file and no individualId then do SA for mean model.
+
+  sim <- loadSimulation(simFilePath)
+
+  allVariableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
+
+  if (is.null(variableParameterPaths)) { # If no parameters to vary specified, vary all parameters valid for sensitivity analysis
+    variableParameterPaths <- allVariableParameterPaths
+  } else {
+    # if a variableParameterPaths input is provided, ensure that all its elements exist within allVariableParameterPaths.  If not, give an error.
+    validateIsIncluded(variableParameterPaths, allVariableParameterPaths)
+  }
+  totalNumberParameters <- length(variableParameterPaths)
+  numberOfCores <- min(numberOfCores, totalNumberParameters) # In case there are more cores specified in numberOfCores than there are parameters, ensure at least one parameter per spawned core
+  if (totalNumberParameters == 0) {
+    msg <- "No variable parameters found for sensitivity analysis."
+    logError(msg)
+    stop(msg)
+  }
+
+  if (numberOfCores > 1){
+    Rmpi::mpi.spawn.Rslaves(nslaves = numberOfCores)
+    Rmpi::mpi.bcast.cmd(library("ospsuite"))
+    Rmpi::mpi.bcast.cmd(library("ospsuite.reportingengine"))
+    Rmpi::mpi.bcast.Robj2slave(obj = simFilePath)
+    Rmpi::mpi.bcast.Robj2slave(obj = resultsFileFolder)
+    Rmpi::mpi.bcast.Robj2slave(obj = variationRange)
+  }
+
   if (!is.null(popFilePath)) { # Determine if SA is to be done for a single individual or more
     popObject <- loadPopulation(popFilePath)
     individualSeq <- individualId %||% seq(1, popObject$count)
@@ -53,6 +81,10 @@ runSensitivity <- function(simFilePath,
       resultsFileName = resultsFileName
     )
   }
+
+  if (numberOfCores > 1){
+    Rmpi::mpi.close.Rslaves()
+  }
   return(allResultsFileNames)
 }
 
@@ -78,23 +110,6 @@ individualSensitivityAnalysis <- function(simFilePath,
                                           resultsFileName = resultsFileName) {
   # Load simulation to determine number of parameters valid for sensitivity analysis
   sim <- loadSimulation(simFilePath)
-
-  allVariableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
-
-
-  if (is.null(variableParameterPaths)) { # If no parameters to vary specified, vary all parameters valid for sensitivity analysis
-    variableParameterPaths <- allVariableParameterPaths
-  } else {
-    # if a variableParameterPaths input is provided, ensure that all its elements exist within allVariableParameterPaths.  If not, give an error.
-    validateIsIncluded(variableParameterPaths, allVariableParameterPaths)
-  }
-  totalNumberParameters <- length(variableParameterPaths)
-  numberOfCores <- min(numberOfCores, totalNumberParameters) # In case there are more cores specified in numberOfCores than there are parameters, ensure at least one parameter per spawned core
-  if (totalNumberParameters == 0) {
-    msg <- "No variable parameters found for sensitivity analysis."
-    logError(msg)
-    stop(msg)
-  }
 
   # Determine if SA is to be done on a single core or more
   if (numberOfCores > 1) {
@@ -155,15 +170,10 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   tempLogFileNamePrefix <- file.path(defaultFileNames$workflowFolderPath(), "logDebug-core-sensitivity-analysis")
   tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores))
 
-  Rmpi::mpi.spawn.Rslaves(nslaves = numberOfCores)
-  Rmpi::mpi.bcast.cmd(library("ospsuite"))
-  Rmpi::mpi.bcast.cmd(library("ospsuite.reportingengine"))
-  Rmpi::mpi.bcast.Robj2slave(obj = simFilePath)
   Rmpi::mpi.bcast.Robj2slave(obj = listSplitParameters)
   Rmpi::mpi.bcast.Robj2slave(obj = tempLogFileNamePrefix)
-  Rmpi::mpi.bcast.Robj2slave(obj = resultsFileFolder)
   Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
-  Rmpi::mpi.bcast.Robj2slave(obj = variationRange)
+
 
   # Generate a listcontaining names of SA CSV result files that will be output by each core
   allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFileFolder, fileName = resultsFileName)
@@ -183,7 +193,6 @@ runParallelSensitivityAnalysis <- function(simFilePath,
     debugLogFileName = paste0(tempLogFileNamePrefix, mpi.comm.rank()),
     nodeName = paste("Core", mpi.comm.rank())
   ))
-  Rmpi::mpi.close.Rslaves()
   for (core in seq(1, numberOfCores)) {
     logDebug(message = readLines(tempLogFileNames[core]))
     file.remove(tempLogFileNames[core])

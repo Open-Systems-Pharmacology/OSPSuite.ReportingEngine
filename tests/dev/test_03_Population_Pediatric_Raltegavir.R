@@ -49,7 +49,7 @@ popWorkFlow$populationSensitivityAnalysis$updateVariableParameterPaths(c(simTree
                                                                       simTree1$Organism$Skin$`Specific blood flow rate`$path,
                                                                       simTree1$Organism$Pancreas$Volume$path,
                                                                       simTree1$Organism$Heart$Volume$path))
-popWorkFlow$populationSensitivityAnalysis$updatePKParameterSelection(c("C_max"))
+popWorkFlow$populationSensitivityAnalysis$updatePKParameterSelection(c("C_max","t_max"))
 
-popWorkFlow$populationSensitivityAnalysis$updateQuantileVec(c(0.25,0.75))
+popWorkFlow$populationSensitivityAnalysis$updateQuantileVec(c(0.25,0.5,0.75))
 popWorkFlow$runWorkflow()
