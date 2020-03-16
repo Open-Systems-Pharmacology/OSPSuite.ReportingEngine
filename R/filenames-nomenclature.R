@@ -1,6 +1,6 @@
 startTime <- format(Sys.time(), "%H%M%S")
 startDate <- format(Sys.Date(), "%Y%m%d")
-#defaultWorkflowFolder <- file.path(getwd(), defaultFileNames$workflowFolderName())
+# defaultWorkflowFolder <- file.path(getwd(), defaultFileNames$workflowFolderName())
 
 defaultFileNames <- list(
   simulationResultsFile = function(simulationName) {
@@ -15,8 +15,8 @@ defaultFileNames <- list(
   sensitivityAnalysisResultsFile = function(simulationName) {
     getDefaultFileName(simulationName, suffix = "SensitivityAnalysisResults")
   },
-  workflowFolderPath= function(name = "Workflow",folder=getwd()) {
-    file.path(folder,getDefaultFolderName(name, suffix = paste0("_", startDate, "_", startTime), sep = ""))
+  workflowFolderPath = function(name = "Workflow", folder = getwd()) {
+    file.path(folder, getDefaultFolderName(name, suffix = paste0("_", startDate, "_", startTime), sep = ""))
   },
   inputFolder = function(name = NULL) {
     getDefaultFolderName(name, suffix = "Inputs", sep = ifnotnull(name, "-", ""))
@@ -75,3 +75,19 @@ getDefaultFolderName <- function(..., suffix = "", sep = "-") {
   defaultFolderName <- paste(..., suffix, sep = sep)
   return(defaultFolderName)
 }
+
+defaultWorkflowTitles <- list(
+  "plotGoF" = "Time profiles and residual plots",
+  "plotPKParameters" = "PK parameters",
+  "plotMassBalance" = "Mass Balance",
+  "plotAbsorption" = "Absorption",
+  "plotSensitivity" = "Sensitivity Analysis"
+)
+
+defaultWorkflowMessages <- list(
+  "plotGoF" = "Plot Goodness of Fit task in Alpha Testing",
+  "plotPKParameters" = "Get tables of PK parameters task in Alpha Testing",
+  "plotMassBalance" = "Plot Mass Balance task in Alpha Testing",
+  "plotAbsorption" = "Plot Absorption task in Alpha Testing",
+  "plotSensitivity" = "Plot Sensitivity task not available at the moment"
+)
