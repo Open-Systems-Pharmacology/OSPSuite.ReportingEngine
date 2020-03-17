@@ -185,7 +185,7 @@ runParallelSensitivityAnalysis <- function(simFilePath,
 
   tempLogFileNamePrefix <- file.path(defaultFileNames$workflowFolderPath(), "logDebug-core-sensitivity-analysis")
   tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores))
-  logDebug(message = "Sending parameters to cores")
+  logDebug(message = "Starting sending of parameters to cores")
   Rmpi::mpi.bcast.Robj2slave(obj = listSplitParameters)
   Rmpi::mpi.bcast.Robj2slave(obj = tempLogFileNamePrefix)
   Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
@@ -194,7 +194,7 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   # Generate a listcontaining names of SA CSV result files that will be output by each core
   allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFileFolder, fileName = resultsFileName)
   Rmpi::mpi.bcast.Robj2slave(obj = allResultsFileNames)
-
+  logDebug(message = "Sending of parameters to cores completed")
 
 
   # Update simulation with individual parameters
@@ -257,8 +257,9 @@ analyzeCoreSensitivity <- function(simulation,
     sensitivityAnalysisRunOptions = sensitivityAnalysisRunOptions
   )
   logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Sensitivity analysis for current path(s) completed"), file = debugLogFileName, printConsole = FALSE)
-
+  logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Starting CSV export of sensitivity analysis results"), file = debugLogFileName, printConsole = FALSE)
   exportSensitivityAnalysisResultsToCSV(results = sensitivityAnalysisResults, resultsFilePath)
+  logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "CSV export of sensitivity analysis results completed"), file = debugLogFileName, printConsole = FALSE)
 }
 
 
