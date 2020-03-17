@@ -22,7 +22,7 @@ runSensitivity <- function(simFilePath,
                            resultsFileName = "sensitivityAnalysisResults") {
 
   sim <- loadSimulation(simFilePath)
-
+library(tictoc)
   allVariableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
 
   # If no parameters to vary specified, vary all parameters valid for sensitivity analysis
@@ -118,8 +118,7 @@ individualSensitivityAnalysis <- function(simFilePath,
                                           numberOfCores = 1,
                                           resultsFileFolder = resultsFileFolder,
                                           resultsFileName = resultsFileName) {
-  # Load simulation to determine number of parameters valid for sensitivity analysis
-  sim <- loadSimulation(simFilePath)
+
 
   # Determine if SA is to be done on a single core or more
   if (numberOfCores > 1) {
@@ -134,6 +133,8 @@ individualSensitivityAnalysis <- function(simFilePath,
     )
   } else {
     # No parallelization
+    # Load simulation to determine number of parameters valid for sensitivity analysis
+    sim <- loadSimulation(simFilePath)
     updateSimulationIndividualParameters(simulation = sim, individualParameters)
     allResultsFileNames <- file.path(resultsFileFolder, paste0(resultsFileName, ".csv"))
     analyzeCoreSensitivity(
