@@ -110,9 +110,8 @@ updateSimulationIndividualParameters <- function(simulation, individualParameter
   if (is.null(individualParameters)){
     return()
   }
-  else {
     ospsuite::setParameterValuesByPath(parameterPaths = individualParameters$paths , values = individualParameters$values , simulation = simulation)
-  }
+
 }
 
 #' @title defaultSimulationNumberOfCores
