@@ -107,19 +107,11 @@ numberOfCores <- min(numberOfCores,numberOfIndividuals)
 #' @export
 #' @import ospsuite
 updateSimulationIndividualParameters <- function(simulation, individualParameters = NULL) {
-  if (!is.null(individualParameters)) {
-    sapply(
-      1:length(individualParameters$paths),
-      function(n, sim, par) {
-        ospsuite::setParameterValuesByPath(
-          parameterPaths = par$paths[n],
-          values = par$values[n],
-          simulation = sim
-        )
-      },
-      simulation,
-      individualParameters
-    )
+  if (is.null(individualParameters)){
+    return()
+  }
+  else {
+    ospsuite::setParameterValuesByPath(parameterPaths = individualParameters$paths , values = individualParameters$values , simulation = simulation)
   }
 }
 
