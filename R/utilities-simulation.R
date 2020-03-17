@@ -9,12 +9,11 @@
 simulateModel <- function(simFilePath,
                           popDataFilePath = NULL,
                           resultsFilePath,
-                          debugLogFileName = file.path(defaultFileNames$workflowFolderPath(),defaultFileNames$logDebugFile()),
-                          infoLogFileName = file.path(defaultFileNames$workflowFolderPath(),defaultFileNames$logInfoFile()),
-                          errorLogFileName = file.path(defaultFileNames$workflowFolderPath(),defaultFileNames$logErrorFile()),
+                          debugLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logDebugFile()),
+                          infoLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logInfoFile()),
+                          errorLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logErrorFile()),
                           nodeName = NULL,
                           showProgress = FALSE) {
-
   sim <- loadSimulation(simFilePath,
     addToCache = FALSE,
     loadFromCache = FALSE
@@ -25,7 +24,7 @@ simulateModel <- function(simFilePath,
     pop <- loadPopulation(popDataFilePath)
   }
   simRunOptions <- ospsuite::SimulationRunOptions$new(showProgress = showProgress)
-  res <- runSimulation(sim, population = pop,simulationRunOptions = simRunOptions)
+  res <- runSimulation(sim, population = pop, simulationRunOptions = simRunOptions)
   logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Simulation run complete"), file = debugLogFileName, printConsole = FALSE)
   exportResultsToCSV(res, resultsFilePath)
   return(resultsFilePath)
@@ -51,10 +50,9 @@ runParallelPopulationSimulation <- function(numberOfCores,
                                             populationFileName,
                                             resultsFolderName,
                                             resultsFileName) {
-
-population <- loadPopulation(file.path(inputFolderName, paste0(populationFileName, ".csv")))
-numberOfIndividuals <- length(population$allIndividualIds)
-numberOfCores <- min(numberOfCores,numberOfIndividuals)
+  population <- loadPopulation(file.path(inputFolderName, paste0(populationFileName, ".csv")))
+  numberOfIndividuals <- length(population$allIndividualIds)
+  numberOfCores <- min(numberOfCores, numberOfIndividuals)
   # library("Rmpi")
   Rmpi::mpi.spawn.Rslaves(nslaves = numberOfCores)
 
@@ -71,7 +69,7 @@ numberOfCores <- min(numberOfCores,numberOfIndividuals)
     outputFolder = paste0(inputFolderName, "/"), #### USE file.path()?  Do we need "/"?
     outputFileName = populationFileName
   )
-  tempLogFileNamePrefix <- file.path(defaultFileNames$workflowFolderPath(),"logDebug-core-simulation")
+  tempLogFileNamePrefix <- file.path(defaultFileNames$workflowFolderPath(), "logDebug-core-simulation")
   tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores))
   allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFolderName, fileName = resultsFileName)
 
@@ -107,20 +105,10 @@ numberOfCores <- min(numberOfCores,numberOfIndividuals)
 #' @export
 #' @import ospsuite
 updateSimulationIndividualParameters <- function(simulation, individualParameters = NULL) {
-  if (!is.null(individualParameters)) {
-    sapply(
-      1:length(individualParameters$paths),
-      function(n, sim, par) {
-        ospsuite::setParameterValuesByPath(
-          parameterPaths = par$paths[n],
-          values = par$values[n],
-          simulation = sim
-        )
-      },
-      simulation,
-      individualParameters
-    )
+  if (is.null(individualParameters)) {
+    return()
   }
+  ospsuite::setParameterValuesByPath(parameterPaths = individualParameters$paths, values = individualParameters$values, simulation = simulation)
 }
 
 #' @title defaultSimulationNumberOfCores
