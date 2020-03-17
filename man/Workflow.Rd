@@ -50,7 +50,7 @@ Create a new `Workflow` object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{simulationSets}}{list of `MeanModelSet` R6 class objects}
+\item{\code{simulationSets}}{list of `SimulationSet` R6 class objects}
 
 \item{\code{workflowFolder}}{path of the folder create by the Workflow}
 

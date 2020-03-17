@@ -33,10 +33,12 @@ runPopulationSensitivityAnalysis(
 
 \item{variationRange}{variation range for sensitivity analysis}
 
-\item{quantileVec}{vector of quantiles in (0,1).  For each output and pk parameter, there will be a distribution of pk parameter values for the population.
+\item{quantileVec}{vector of quantiles in (0,1).  For each output and pk parameter,
+there will be a distribution of pk parameter values for the population.
 The individuals yielding pk parameters closest to these quantiles will be selected for sensitivity analysis.}
 
-\item{numberOfCores}{the number of cores to be used for parallelization of the sensitivity analysis.  Default is 1 core (no parallelization).}
+\item{numberOfCores}{the number of cores to be used for parallelization of the sensitivity analysis.
+Default is 1 core (no parallelization).}
 }
 \description{
 runPopulationSensitivityAnalysis

@@ -17,14 +17,14 @@ mpi.bcast.cmd(library("ospsuite.reportingengine"))
 
 
 # #set simulation file on the slaves
-mpi.bcast.cmd(simfile <- c("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/simpleMobiEventSim.pkml"))
+mpi.bcast.cmd(simfile <- c("./tests/dev/simpleMobiEventSim.pkml"))
 mpi.bcast.cmd(sim <- loadSimulation(simfile, addToCache = FALSE, loadFromCache = FALSE))
 mpi.bcast.cmd(LL <- getEnum(simulationFilePath = simfile))
 mpi.bcast.cmd(popsim.OutputList <- c(LL$Organism$blockA$mol1$Concentration$path))
 mpi.bcast.cmd(op <- getAllQuantitiesMatching(paths = popsim.OutputList, container = sim))
 
 # #set C:/Temp/humans-Population#I.csv on slave #I (#I=1,2) (sub-population-table, assuming the split before!)
-mpi.bcast.cmd(popsim.popFile <- paste("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/popData", mpi.comm.rank(), ".csv", sep = ""))
+mpi.bcast.cmd(popsim.popFile <- paste("./tests/dev/popData", mpi.comm.rank(), ".csv", sep = ""))
 
 mpi.bcast.cmd(print(popsim.popFile))
 
@@ -46,11 +46,11 @@ mpi.bcast.cmd(res <- runSimulation(sim, population = pop))
 # print(resNum)
 
 mpi.bcast.cmd(print(res$count))
-mpi.bcast.cmd(exportResultsToCSV(res, paste("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/results", mpi.comm.rank(), ".csv", sep = "")))
+mpi.bcast.cmd(exportResultsToCSV(res, paste("./tests/dev/results", mpi.comm.rank(), ".csv", sep = "")))
 #
 #
 
-# mpi.bcast.cmd(popsim.sourceFile<-c("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/individualPksimSim.pkml"))
+# mpi.bcast.cmd(popsim.sourceFile<-c("./tests/dev/individualPksimSim.pkml"))
 
 
 
@@ -58,7 +58,7 @@ mpi.bcast.cmd(exportResultsToCSV(res, paste("C:/Users/ahamadeh/Dropbox/GitHub/OS
 # #mpi.bcast.cmd(popsim.OutputList<-c(LL$Organism$blockA$mol1$Concentration$path))
 #
 # # #set C:/Temp/humans-Population#I.csv on slave #I (#I=1,2) (sub-population-table, assuming the split before!)
-# mpi.bcast.cmd(popsim.popFile <-paste("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/popData",mpi.comm.rank(),'.csv',sep = ''))
+# mpi.bcast.cmd(popsim.popFile <-paste("./tests/dev/data/popData",mpi.comm.rank(),'.csv',sep = ''))
 # #
 # # #execute R-code for running population simulation on the slaves
 #
@@ -68,10 +68,10 @@ mpi.bcast.cmd(exportResultsToCSV(res, paste("C:/Users/ahamadeh/Dropbox/GitHub/OS
 # mpi.bcast.cmd(res<-runSimulation(sim,population = pop))
 # #
 # # #export results on slave #I to c:/Temp/result#I.csv (I=1,2)
-# #mpi.bcast.cmd(exportResultsToCSV(res,paste("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/results",mpi.comm.rank(),".csv",sep = '')))
+# #mpi.bcast.cmd(exportResultsToCSV(res,paste("./tests/dev/results",mpi.comm.rank(),".csv",sep = '')))
 #
 # mpi.bcast.cmd(dF <- data.frame("name" = c("Joe","John","Mike"),"age" = c(3,4,5) ))
-# mpi.bcast.cmd( write.csv(x = dF , paste0("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/dFfile",mpi.comm.rank(),".csv")) )
+# mpi.bcast.cmd( write.csv(x = dF , paste0("./tests/dev/dFfile",mpi.comm.rank(),".csv")) )
 #
 
 

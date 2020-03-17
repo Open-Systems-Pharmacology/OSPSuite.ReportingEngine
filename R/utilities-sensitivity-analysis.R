@@ -50,6 +50,8 @@ runSensitivity <- function(simFilePath,
     Rmpi::mpi.bcast.Robj2slave(obj = simFilePath)
     Rmpi::mpi.bcast.Robj2slave(obj = resultsFileFolder)
     Rmpi::mpi.bcast.Robj2slave(obj = variationRange)
+    # Load simulation on each core
+    Rmpi::mpi.bcast.cmd(sim <- loadSimulation(simFilePath))
   }
 
   # If there is a population file and individualId then for each individual perform SA
@@ -182,7 +184,7 @@ runParallelSensitivityAnalysis <- function(simFilePath,
 
   tempLogFileNamePrefix <- file.path(defaultFileNames$workflowFolderPath(), "logDebug-core-sensitivity-analysis")
   tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores))
-
+  logDebug(message = "Sending parameters to cores")
   Rmpi::mpi.bcast.Robj2slave(obj = listSplitParameters)
   Rmpi::mpi.bcast.Robj2slave(obj = tempLogFileNamePrefix)
   Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
@@ -192,11 +194,13 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFileFolder, fileName = resultsFileName)
   Rmpi::mpi.bcast.Robj2slave(obj = allResultsFileNames)
 
-  # Load simulation on each core
-  Rmpi::mpi.bcast.cmd(sim <- loadSimulation(simFilePath))
+
 
   # Update simulation with individual parameters
+  logDebug(message = "Updating individual parameters on cores.")
   Rmpi::mpi.bcast.cmd(updateSimulationIndividualParameters(simulation = sim, individualParameters))
+
+  logDebug(message = "Starting analyzeCoreSensitivity function.")
   Rmpi::mpi.remote.exec(analyzeCoreSensitivity(
     simulation = sim,
     variableParameterPaths = listSplitParameters[[mpi.comm.rank()]],
