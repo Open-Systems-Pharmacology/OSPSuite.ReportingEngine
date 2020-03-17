@@ -22,7 +22,7 @@ runSensitivity <- function(simFilePath,
                            resultsFileName = "sensitivityAnalysisResults") {
 
   sim <- loadSimulation(simFilePath)
-library(tictoc)
+
   allVariableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
 
   # If no parameters to vary specified, vary all parameters valid for sensitivity analysis
