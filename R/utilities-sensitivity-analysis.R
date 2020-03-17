@@ -197,7 +197,10 @@ runParallelSensitivityAnalysis <- function(simFilePath,
 
 
   # Update simulation with individual parameters
+  logDebug(message = "Updating individual parameters on cores.")
   Rmpi::mpi.bcast.cmd(updateSimulationIndividualParameters(simulation = sim, individualParameters))
+
+  logDebug(message = "Starting analyzeCoreSensitivity function.")
   Rmpi::mpi.remote.exec(analyzeCoreSensitivity(
     simulation = sim,
     variableParameterPaths = listSplitParameters[[mpi.comm.rank()]],
