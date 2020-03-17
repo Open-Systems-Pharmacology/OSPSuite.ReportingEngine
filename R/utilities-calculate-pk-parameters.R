@@ -15,7 +15,9 @@ calculatePKParameters <- function(simulationFilePath,
                                   pkParameterResultsFilePath) {
   sim <- loadSimulation(simulationFilePath)
   res <- importResultsFromCSV(simulation = sim, filePaths = simulationResultFilePaths)
+  logDebug("Starting PK parameter calculation")
   pkAnalyses <- calculatePKAnalyses(results = res)
+  logDebug("PK parameter calculation complete")
   exportPKAnalysesToCSV(pkAnalyses = pkAnalyses, filePath = pkParameterResultsFilePath)
   return(pkParameterResultsFilePath)
 }

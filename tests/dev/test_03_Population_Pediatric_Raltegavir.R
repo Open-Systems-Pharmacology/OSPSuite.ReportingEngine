@@ -36,19 +36,19 @@ popSimSet1 <- PopulationSimulationSet$new(simulationFile = simFilePath1, populat
 popSimSet2 <- PopulationSimulationSet$new(simulationFile = simFilePath2, populationFile = popFilePath2)
 
 #Setup workflow
-#popWorkFlow <- PopulationWorkflow$new(simulationSets = list(popSimSet2))
-popWorkFlow <- PopulationWorkflow$new(simulationSets = list(popSimSet1,popSimSet2))
+popWorkFlow <- PopulationWorkflow$new(simulationSets = list(popSimSet1))
+#popWorkFlow <- PopulationWorkflow$new(simulationSets = list(popSimSet1,popSimSet2))
 
 #Number of cores for population simulation
 popWorkFlow$populationSimulation$updateNumberOfCores(4)
 
 #Number of cores for population sensitivity analysis
-popWorkFlow$populationSensitivityAnalysis$updateNumberOfCores(2)
+popWorkFlow$populationSensitivityAnalysis$updateNumberOfCores(4)
 popWorkFlow$populationSensitivityAnalysis$updateVariableParameterPaths(c(simTree1$Organism$Skin$Volume$path,
                                                                       simTree1$Organism$Skin$`Specific blood flow rate`$path,
                                                                       simTree1$Organism$Pancreas$Volume$path,
                                                                       simTree1$Organism$Heart$Volume$path))
 popWorkFlow$populationSensitivityAnalysis$updatePKParameterSelection(c("C_max","t_max"))
 
-popWorkFlow$populationSensitivityAnalysis$updateQuantileVec(c(0.25,0.5,0.75))
+popWorkFlow$populationSensitivityAnalysis$updateQuantileVec(c(0.25,0.75))
 popWorkFlow$runWorkflow()
