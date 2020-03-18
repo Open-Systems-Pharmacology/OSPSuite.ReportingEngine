@@ -63,7 +63,7 @@ messages <- list(
   },
 
   errorExtension = function(path, extension) {
-    paste0("File extension: '.", extension, "' is required. File name was : '", path, "'.")
+    paste0("File extension: '", paste0(extension, collapse = "', '."), "' is required. File path was : '", path, "'.")
   },
 
   errorTaskInputDoesNotExist = function(input) {
