@@ -9,17 +9,20 @@ initializeRmdFile <- function(fileName,
                               outputFormat = "html_document",
                               numberSections = TRUE) {
   writeSectionNumbers <- "false"
-  if(numberSections){writeSectionNumbers <- "true"}
-  
+  if (numberSections) {
+    writeSectionNumbers <- "true"
+  }
+
   RmdText <- c(
     "---",
     paste0('title: "', title, '"'),
-    'output:',
+    "output:",
     paste0(" ", outputFormat, ":"),
     paste0("  keep_md: true"),
     paste0("  number_sections: ", writeSectionNumbers),
     "---",
-    "")
+    ""
+  )
 
   # can add an option for date in the document:
   # 'date: "`r base::Sys.time()`"'
@@ -28,7 +31,6 @@ initializeRmdFile <- function(fileName,
     warning(paste0("Overwriting ", fileName))
   }
   write(RmdText, file = fileName, sep = "\n")
-
 }
 
 #' @title addRmdFigureChunk
@@ -48,7 +50,6 @@ addRmdFigureChunk <- function(fileName,
   )
 
   write(RmdText, file = fileName, append = TRUE, sep = "\n")
-
 }
 
 #' @title addRmdTableChunk

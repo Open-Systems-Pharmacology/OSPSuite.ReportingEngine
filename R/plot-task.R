@@ -156,9 +156,12 @@ PlotTask <- R6::R6Class(
         # TO DO: integrate tlf fix of mapping/plotConfig for no group variable
         residualHistogramPlot <- tlf::plotHistogram(
           data = cbind.data.frame(residualsAcrossAllSimulations,
-                                  " " = "Residuals"),
-          dataMapping = tlf::HistogramDataMapping$new(x = "Residuals",
-                                                      fill = " "),
+            " " = "Residuals"
+          ),
+          dataMapping = tlf::HistogramDataMapping$new(
+            x = "Residuals",
+            fill = " "
+          ),
           plotConfiguration = self$settings$plotConfigurations[["histogram"]]
         )
 

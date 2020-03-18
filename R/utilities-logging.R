@@ -10,7 +10,7 @@ logError <- function(message,
                      printConsole = TRUE) {
   timeStamp <- sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M:%S"))
   if (printConsole) {
-    print(paste0(timeStamp,message))
+    print(paste0(timeStamp, message))
   }
   write(paste0(timeStamp, message),
     file = file, append = TRUE, sep = " "
@@ -30,7 +30,7 @@ logDebug <- function(message,
                      printConsole = FALSE) {
   timeStamp <- sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M:%S"))
   if (printConsole) {
-    print(paste0(timeStamp,message))
+    print(paste0(timeStamp, message))
   }
   write(paste0(timeStamp, message),
     file = file, append = TRUE, sep = " "
@@ -50,7 +50,7 @@ logInfo <- function(message,
                     printConsole = TRUE) {
   timeStamp <- sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M:%S"))
   if (printConsole) {
-    print(paste0(timeStamp,message))
+    print(paste0(timeStamp, message))
   }
   write(paste0(timeStamp, message),
     file = file, append = TRUE, sep = " "
