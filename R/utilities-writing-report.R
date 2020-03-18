@@ -43,7 +43,7 @@ addRmdFigureChunk <- function(fileName,
                               figureCaption = "") {
   RmdText <- c(
     "",
-    paste0('```{r, out.width="100%", include=TRUE, fig.align="center", fig.caption= "', figureCaption, '", echo=FALSE}'),
+    paste0('```{r, out.width="100%", include=TRUE, fig.align="center", fig.cap= "', figureCaption, '", echo=FALSE}'),
     paste0('knitr::include_graphics("', figureFile, '")'),
     "```",
     ""

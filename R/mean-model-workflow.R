@@ -311,7 +311,10 @@ MeanModelWorkflow <- R6::R6Class(
             # Create the Output of Simulation
             set$simulationResultFileNames <- simulateModel(
               simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
-              resultsFilePath = file.path(set$simulationResultsFolder, defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName))
+              resultsFilePath = file.path(set$simulationResultsFolder, defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName)),
+              debugLogFileName = file.path(self$workflowFolder, defaultFileNames$logDebugFile()),
+              infoLogFileName = file.path(self$workflowFolder, defaultFileNames$logInfoFile()),
+              errorLogFileName = file.path(self$workflowFolder, defaultFileNames$logErrorFile()),
             )
           }
         }
