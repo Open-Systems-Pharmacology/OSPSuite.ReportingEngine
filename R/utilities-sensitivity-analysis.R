@@ -20,7 +20,6 @@ runSensitivity <- function(simFilePath,
                            numberOfCores = 1,
                            resultsFileFolder,
                            resultsFileName = "sensitivityAnalysisResults") {
-
   sim <- loadSimulation(simFilePath)
 
   allVariableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
@@ -41,17 +40,17 @@ runSensitivity <- function(simFilePath,
     logErrorThenStop(messages$errorNoParametersForSensitivityAnalysis())
   }
 
-#If numberOfCores > 1 then spawn cores for later use.
-# Otherwise sensitivity analysis will be run on master core only.
-  if (numberOfCores > 1){
+  # If numberOfCores > 1 then spawn cores for later use.
+  # Otherwise sensitivity analysis will be run on master core only.
+  if (numberOfCores > 1) {
     Rmpi::mpi.spawn.Rslaves(nslaves = numberOfCores)
-    Rmpi::mpi.bcast.cmd(library("ospsuite"))
-    Rmpi::mpi.bcast.cmd(library("ospsuite.reportingengine"))
+    Rmpi::mpi.remote.exec(library("ospsuite"))
+    Rmpi::mpi.remote.exec(library("ospsuite.reportingengine"))
     Rmpi::mpi.bcast.Robj2slave(obj = simFilePath)
     Rmpi::mpi.bcast.Robj2slave(obj = resultsFileFolder)
     Rmpi::mpi.bcast.Robj2slave(obj = variationRange)
     # Load simulation on each core
-    Rmpi::mpi.bcast.cmd(sim <- loadSimulation(simFilePath))
+    Rmpi::mpi.remote.exec(sim <- loadSimulation(simFilePath))
   }
 
   # If there is a population file and individualId then for each individual perform SA
@@ -88,8 +87,8 @@ runSensitivity <- function(simFilePath,
     )
   }
 
-  #If numberOfCores > 1 then close cores spawned earlier.
-  if (numberOfCores > 1){
+  # If numberOfCores > 1 then close cores spawned earlier.
+  if (numberOfCores > 1) {
     Rmpi::mpi.close.Rslaves()
   }
   return(allResultsFileNames)
@@ -170,36 +169,32 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   totalNumberParameters <- length(variableParameterPaths)
 
   # Parallelizing among a total of min(numberOfCores,totalNumberParameters) cores
-
   # Create a vector, of length totalNumberParameters, consisting of a repeating
-  #sequence of integers from 1 to numberOfCores
+  # sequence of integers from 1 to numberOfCores
   seqVec <- (1 + ((1:totalNumberParameters) %% numberOfCores))
 
   # Sort seqVec to obtain an concatenated array of repeated integers,
-  #with the repeated integers ranging from from 1 to numberOfCores.
-  #These are the core numbers to which each parameter will be assigned.
+  # with the repeated integers ranging from from 1 to numberOfCores.
+  # These are the core numbers to which each parameter will be assigned.
   sortVec <- sort(seqVec)
 
   # Split the parameters of the model according to sortVec
   listSplitParameters <- split(x = variableParameterPaths, sortVec)
-
   tempLogFileNamePrefix <- file.path(defaultFileNames$workflowFolderPath(), "logDebug-core-sensitivity-analysis")
   tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores))
+
+  # Generate a listcontaining names of SA CSV result files that will be output by each core
+  allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFileFolder, fileName = resultsFileName)
   logDebug(message = "Starting sending of parameters to cores")
   Rmpi::mpi.bcast.Robj2slave(obj = listSplitParameters)
   Rmpi::mpi.bcast.Robj2slave(obj = tempLogFileNamePrefix)
   Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
-
-
-  # Generate a listcontaining names of SA CSV result files that will be output by each core
-  allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFileFolder, fileName = resultsFileName)
   Rmpi::mpi.bcast.Robj2slave(obj = allResultsFileNames)
   logDebug(message = "Sending of parameters to cores completed")
 
-
   # Update simulation with individual parameters
   logDebug(message = "Updating individual parameters on cores.")
-  Rmpi::mpi.bcast.cmd(updateSimulationIndividualParameters(simulation = sim, individualParameters))
+  Rmpi::mpi.remote.exec(updateSimulationIndividualParameters(simulation = sim, individualParameters))
 
   logDebug(message = "Starting analyzeCoreSensitivity function.")
   Rmpi::mpi.remote.exec(analyzeCoreSensitivity(

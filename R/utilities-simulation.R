@@ -61,8 +61,8 @@ runParallelPopulationSimulation <- function(numberOfCores,
     Rmpi::mpi.close.Rslaves()
     stop(paste0(numberOfCores, " cores were not successfully spawned."))
   }
-  Rmpi::mpi.bcast.cmd(library("ospsuite"))
-  Rmpi::mpi.bcast.cmd(library("ospsuite.reportingengine"))
+  Rmpi::mpi.remote.exec(library("ospsuite"))
+  Rmpi::mpi.remote.exec(library("ospsuite.reportingengine"))
   tempPopDataFiles <- splitPopulationFile(
     csvPopulationFile = file.path(inputFolderName, paste0(populationFileName, ".csv")),
     numberOfCores = numberOfCores,
