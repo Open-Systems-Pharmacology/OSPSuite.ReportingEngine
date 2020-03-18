@@ -27,8 +27,10 @@ test_that("readObservedDataFile can correctly read csv and txt format for observ
   expect_equal(testDataFrame, txtData)
 })
 
-test_that("readObservedDataFile throw an error for unkwown file extensions or files that don't exist", {
+test_that("readObservedDataFile: unkwown file extensions throw error", {
   expect_error(readObservedDataFile("testFile.fff"))
+})
+test_that("readObservedDataFile: unexistant file throw error", {
   expect_error(readObservedDataFile("testFile10.csv"))
 })
 
@@ -51,7 +53,7 @@ test_that("filterExpression uses data.frame variable names as actual variable", 
 })
 
 test_that("evalDataFilter throw an error if variable name does not exist in data.frame", {
-  filterExpression <- parse(text = "wrong name")
+  filterExpression <- parse(text = "wrongName")
   expect_error(evalDataFilter(testDataFrame, filterExpression))
 })
 
