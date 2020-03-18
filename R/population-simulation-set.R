@@ -5,7 +5,7 @@
 #' @export
 PopulationSimulationSet <- R6::R6Class(
   "PopulationSimulationSet",
-  inherit = MeanModelSet,
+  inherit = SimulationSet,
   public = list(
     populationFile = NULL,
     populationName = NULL,
