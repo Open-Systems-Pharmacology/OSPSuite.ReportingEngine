@@ -18,9 +18,10 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(ospsuite.reportingengine)
+library(ospsuite)
 ```
 
-## Introduction
+# Introduction
 
 The R package for the OSP Suite Reporting Engine (`ospsuite.reportingengine`) aims at facilitating the design and build of reports evaluating PBPK models developed on PK-Sim.
 To this end, `Workflow` instances have been developed. They generate an organized structure in which they run `Tasks` that evaluate simulations and report corresponding tables and plots.
@@ -32,11 +33,11 @@ The general scheme of such workflows is illustrated on Figure 1.
     knitr::include_graphics("../data/mean-model-workflow-input-and-tasks.png")
 ```
 
-## Inputs
+# Inputs
 
 `MeanModelWorkflow` variable is initialized using the method `MeanModelWorkflow$new(simulationSets, workflowFolder = NULL)`.
 
-### simulationSets
+## simulationSets
 As mean model workflows evaluate one or more simulations - if available with data, `MeanModelWorkflow$new(simulationSets, workflowFolder = NULL)` requires a list of variables of class `SimulationSet`.
 
 `SimulationSet` is a class that encapsulates the information necessary to perform the workflow tasks.
@@ -58,24 +59,24 @@ SimulationSet$new(simulationSetName = NULL,
                               timeUnit = "h")
 ```
 
-#### Simulation file and name
+### Simulation file and name
 
 This method only require the path of the simulation file `simulationFile` (e.g. *mySimulation.pkml*).
 `simulationName` and `simulationSetName` are  display names that will be used in the naming of output evaluations and sections of the report.
 
-#### Path
+### Path
 
 `pathID` corresponds to the path name within the simulation (e.g. *Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)*) and which will be evaluted in the goodness of fit and pk analyses tasks.
 `pathName`, `pathUnit` and `timeUnit` are the display names and units that will be used in the naming of output evaluations and sections of the report. 
 
-#### PK paramaters
+### PK paramaters
 
 `pkParameters` are the names of the PK parameters to be analyzed (e.g. *C_max*).
 `pkParametersNames` and `pkParametersUnits` are the display names and units that will be used in the naming of output evaluations and sections of the report. 
 
 This input definition for PK parameters will soon be replaced by the instances of PK-Parameters directly.
 
-#### Data
+### Data
 
 Data and their dictionary are expected to be saved in csv or txt files.
 Consequently, if data are available the input `observedDataFile` and `observedMetaDataFile` are required.
@@ -87,7 +88,7 @@ Usually, the all the data is included into one file which needs to be filtered.
 The variable `dataFilter` can be either characters or an expression that will be evaluated within the context of the data.
 For instance, if the data contains a column named *Grouping* to which only group *A* should be used for the evaluation, the input `dataFilter = 'Grouping %in% "A"'` or `dataFilter = parse(text = 'Grouping %in% "A")'` will be evaluated.
 
-### workflowFolder
+## workflowFolder
 
 `workflowFolder` is a the name of the folder in which the results of the workflow evaluations will be saved.
 This input is not required. 
@@ -101,7 +102,7 @@ If the directory does exist, `MeanModelWorkflow` will send a warning message to 
 This functionality can be useful for updating and running only a parts of the workflow without having to perform all the simulations every time.
 
 
-## `Task` instances
+# `Task` instances
 
 As illustrated in Figure 1, the workflow is performing a series of tasks.
 Since some of the tasks are not always run, it is possible to activate/inactivate those before running the workflow.
@@ -114,7 +115,7 @@ The workflow methods `MeanModelWorkflow$getAllTasks()`, `MeanModelWorkflow$getAc
 The tasks can be activated/inactivated using the workflow methods `MeanModelWorkflow$activateTasks()` and `MeanModelWorkflow$inactivateTasks()`.
 
 
-## Outputs
+# Outputs
 
 Once the workflow and its settings have been defined, the workflow method `MeanModelWorkflow$runWorkflow()` will perform the tasks and generate the output results and report.
 The output results will follow the structure defined in Figure 2:
@@ -123,7 +124,7 @@ The output results will follow the structure defined in Figure 2:
     knitr::include_graphics("../data/mean-model-workflow-structure.png")
 ```
 
-## Example 01: Raltegravir
+# Example 01: Raltegravir
 
 The example presented in the sequel shows how to implement and run a mean model workflow.
 The data and corresponding test scripts for the following example are available in the folder *tests/dev/01_MeanModel_Raltegravir*.
@@ -134,7 +135,7 @@ testFolder <- "../tests/dev/01_MeanModel_Raltegravir"
 In this example, 2 simulations are evaluated. 
 These simulations are stored within the folder *PKML*.
 
-### Definition of the simulation files and paths to be evaluated
+## Definition of the simulation files and paths to be evaluated
 
 ```{r}
 simFolder <- file.path(testFolder, "PKML")
@@ -145,9 +146,9 @@ simFiles
 ```{r}
 simPath <- 'Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)'
 simPathName <- 'Raltegravir'
-simPathUnit <- 'µg/l'
+simPathUnit <- 'ï¿½g/l'
 ```
-### Definition of the data files and filters
+## Definition of the data files and filters
 
 ```{r}
 Raltegravir_PKFile <- file.path(testFolder, "Raltegravir_PK.csv")
@@ -173,7 +174,7 @@ names(dataFilters) <- simFiles
 dataFilters
 ```
 
-### Definition of simulation sets instances
+## Definition of simulation sets instances
 
 The following code chunk creates list of mean model sets for the mean model workflow.
 To improve the clarity of the variables, simulation files names were attributed to the elements of the simulation sets list.
@@ -196,7 +197,7 @@ for (simFile in simFiles){
 meanModelSets
 ```
 
-### Definition of the mean model workflow
+## Definition of the mean model workflow
 
 Initialize workflow structure with `meanModelSets` as the list of simulation sets.
 and `"WorkflowTest01"` as workflow folder.
@@ -206,7 +207,7 @@ meanWorkflow <- MeanModelWorkflow$new(simulationSets = meanModelSets)
 #workflowFolder = file.path(testFolder, "WorkflowTest01"))
 ```
 
-### Workflow tasks
+## Workflow tasks
 
 Check the list of tasks, which ones are active/inactive
 ```{r}
@@ -223,13 +224,15 @@ meanWorkflow$getActiveTasks()
 meanWorkflow$getInactiveTasks()
 ```
 
-### Workflow tasks
+## Workflow tasks
 
 Run the workflow.
 All the information of the run are also available within log files.
-```{r}
-meanWorkflow$runWorkflow()
+```{r, eval=FALSE}
+#meanWorkflow$runWorkflow()
 ```
 
-```{r child = meanWorkflow$reportFileName}
+```{r, echo=FALSE, eval=FALSE}
+#report <- readLines(file.path(meanWorkflow$workflowFolder, "Report.html"))
+#knitr::raw_html(report)
 ```
