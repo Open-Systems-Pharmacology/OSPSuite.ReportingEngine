@@ -120,10 +120,10 @@ validateIsSameLength <- function(...) {
 
 
 validateNoDuplicatedEntries <- function(x) {
-  if ( any(duplicated(x)) ) {
+  if (any(duplicated(x))) {
     logErrorThenStop(messages$errorDuplicatedEntries(deparse(substitute(x))))
   }
-  else{
+  else {
     return()
   }
 }
@@ -174,9 +174,8 @@ checkExisitingPath <- function(path, stopIfPathExists = FALSE) {
   if (stopIfPathExists) {
     logErrorThenStop(messages$warningExistingPath(path))
   }
-  else {
-    warning(messages$warningExistingPath(path))
-  }
+
+  warning(messages$warningExistingPath(path))
 }
 
 checkOverwriteExisitingPath <- function(path, overwrite) {

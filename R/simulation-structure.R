@@ -30,16 +30,50 @@ SimulationStructure <- R6::R6Class(
     #' @param simulationSet `MeanModelSet` or `PopModelSet` R6 class object
     #' @param workflowResultsFolder folder to store simulationSet results
     #' @param workflowFiguresFolder figure folder to store simulationSet figures
+    #' @param workflowFolder folder of the worklow
     initialize = function(simulationSet,
                               workflowResultsFolder,
-                              workflowFiguresFolder = NULL) {
+                              workflowFiguresFolder = NULL,
+                              workflowFolder = getwd()) {
       self$simulationSet <- simulationSet
       simulationSetFolder <- file.path(workflowResultsFolder, self$simulationSet$simulationSetName)
 
-      createFolder(simulationSetFolder)
+      simulationSetFolderCheck <- checkExisitingPath(simulationSetFolder, stopIfPathExists = FALSE)
+
+      if (!is.null(simulationSetFolderCheck)) {
+        logWorkflow(
+          message = simulationSetFolderCheck,
+          pathFolder = workflowFolder,
+          logTypes = c(LogTypes$Debug, LogTypes$Error)
+        )
+
+        logWorkflow(
+          message = messages$warningPathIncludes(simulationSetFolder),
+          pathFolder = workflowFolder,
+          logTypes = c(LogTypes$Debug, LogTypes$Error)
+        )
+      }
+
+      dir.create(simulationSetFolder, showWarnings = FALSE)
 
       self$inputFilesFolder <- file.path(simulationSetFolder, defaultFileNames$inputFolder())
-      createFolder(self$inputFilesFolder)
+
+      inputFilesFolderCheck <- checkExisitingPath(self$inputFilesFolder, stopIfPathExists = FALSE)
+
+      if (!is.null(inputFilesFolderCheck)) {
+        logWorkflow(
+          message = inputFilesFolderCheck,
+          pathFolder = workflowFolder,
+          logTypes = c(LogTypes$Debug, LogTypes$Error)
+        )
+        logWorkflow(
+          message = messages$warningPathIncludes(self$inputFilesFolder),
+          pathFolder = workflowFolder,
+          logTypes = c(LogTypes$Debug, LogTypes$Error)
+        )
+      }
+
+      dir.create(self$inputFilesFolder)
 
       simulationSet$copyInputFiles(self$inputFilesFolder)
       self$simulationResultsFolder <- file.path(simulationSetFolder, defaultFileNames$simulationResultsFolder())

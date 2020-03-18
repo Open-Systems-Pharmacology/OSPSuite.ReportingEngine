@@ -41,7 +41,7 @@ Create a new `Workflow` object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Workflow$new(
   simulationSets,
-  workflowFolder = defaultFileNames$workflowFolderPath(),
+  workflowFolder = NULL,
   resultsFolderName = defaultFileNames$resultsFolder(),
   reportName = defaultFileNames$reportName()
 )}\if{html}{\out{</div>}}

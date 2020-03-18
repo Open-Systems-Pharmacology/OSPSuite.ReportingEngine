@@ -46,7 +46,8 @@ Build and store names of potential subfolders to hold simulation results, pkAnal
 \if{html}{\out{<div class="r">}}\preformatted{SimulationStructure$new(
   simulationSet,
   workflowResultsFolder,
-  workflowFiguresFolder = NULL
+  workflowFiguresFolder = NULL,
+  workflowFolder = getwd()
 )}\if{html}{\out{</div>}}
 }
 
@@ -58,6 +59,8 @@ Build and store names of potential subfolders to hold simulation results, pkAnal
 \item{\code{workflowResultsFolder}}{folder to store simulationSet results}
 
 \item{\code{workflowFiguresFolder}}{figure folder to store simulationSet figures}
+
+\item{\code{workflowFolder}}{folder of the worklow}
 }
 \if{html}{\out{</div>}}
 }

@@ -24,7 +24,7 @@ messages <- list(
   },
 
   errorDuplicatedEntries = function(objectNames, optionalMessage = NULL) {
-    paste(objectNames,"contains duplicated elements.")
+    paste(objectNames, "contains duplicated elements.")
   },
 
   errorWrongLength = function(object, nbElements, optionalMessage = NULL) {
@@ -48,6 +48,14 @@ messages <- list(
 
   warningExistingPath = function(existingPath) {
     paste0("Path: '", existingPath, "' already exists.")
+  },
+
+  warningPathIncludes = function(path) {
+    paste0(
+      "Path: '", path, "' includes the following files and directories which may be used or overwritten: '",
+      paste0(list.files(path, include.dirs = TRUE), collapse = "', '"),
+      "'."
+    )
   },
 
   warningOverwriting = function(overwrittenPath) {

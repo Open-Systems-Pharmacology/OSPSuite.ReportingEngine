@@ -24,23 +24,29 @@ Workflow <- R6::R6Class(
     #' @param reportName name of the report. Report output includes Rmd, md and html versions.
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
-                          workflowFolder = defaultFileNames$workflowFolderPath(),
-                          resultsFolderName = defaultFileNames$resultsFolder(),
-                          reportName = defaultFileNames$reportName()) {
-      workflowFolderCheck <- checkExisitingPath(workflowFolder, stopIfPathExists = TRUE)
+                              workflowFolder = NULL,
+                              resultsFolderName = defaultFileNames$resultsFolder(),
+                              reportName = defaultFileNames$reportName()) {
+      self$workflowFolder <- workflowFolder %||% defaultFileNames$workflowFolderPath()
 
+      workflowFolderCheck <- checkExisitingPath(self$workflowFolder, stopIfPathExists = FALSE)
 
-      #If default workflowFolder is not valid, log outcome in getwd()
-      #But can we carry on if !is.null(workflowFolderCheck) is true?  Should workflow folder be set to getwd() if so?
+      # If default workflowFolder is not valid, log outcome in getwd()
+      # But can we carry on if !is.null(workflowFolderCheck) is true?  Should workflow folder be set to getwd() if so?
       if (!is.null(workflowFolderCheck)) {
         logWorkflow(
           message = workflowFolderCheck,
-          pathFolder = getwd(),
+          pathFolder = self$workflowFolder,
+          logTypes = c(LogTypes$Debug, LogTypes$Error)
+        )
+        logWorkflow(
+          message = messages$warningPathIncludes(self$workflowFolder),
+          pathFolder = self$workflowFolder,
           logTypes = c(LogTypes$Debug, LogTypes$Error)
         )
       }
-      self$workflowFolder <- workflowFolder
-      dir.create(self$workflowFolder)
+
+      dir.create(self$workflowFolder, showWarnings = FALSE)
 
       logWorkflow(
         message = self$reportingEngineInfo$print(),
@@ -49,24 +55,31 @@ Workflow <- R6::R6Class(
 
       self$reportFileName <- file.path(self$workflowFolder, paste0(reportName, ".Rmd"))
 
-      resultsFolder <- file.path(workflowFolder, resultsFolderName)
-      resultsFolderCheck <- checkExisitingPath(resultsFolder, stopIfPathExists = TRUE)
+      resultsFolder <- file.path(self$workflowFolder, resultsFolderName)
+      resultsFolderCheck <- checkExisitingPath(resultsFolder, stopIfPathExists = FALSE)
       if (!is.null(resultsFolderCheck)) {
         logWorkflow(
           message = resultsFolderCheck,
           pathFolder = self$workflowFolder,
           logTypes = c(LogTypes$Debug, LogTypes$Error)
         )
+
+        logWorkflow(
+          message = messages$warningPathIncludes(resultsFolder),
+          pathFolder = self$workflowFolder,
+          logTypes = c(LogTypes$Debug, LogTypes$Error)
+        )
       }
       self$resultsFolder <- resultsFolder
-      dir.create(self$resultsFolder)
+      dir.create(self$resultsFolder, showWarnings = FALSE)
 
       self$simulationStructures <- list()
       # Check of Workflow inputs
       for (simulationSetIndex in 1:length(simulationSets)) {
         self$simulationStructures[[simulationSetIndex]] <- SimulationStructure$new(
           simulationSet = simulationSets[[simulationSetIndex]],
-          workflowResultsFolder = self$resultsFolder
+          workflowResultsFolder = self$resultsFolder,
+          workflowFolder = self$workflowFolder
         )
       }
     },
