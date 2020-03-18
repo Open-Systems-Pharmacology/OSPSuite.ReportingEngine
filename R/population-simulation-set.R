@@ -1,17 +1,17 @@
-#' @title PopModelSet
+#' @title PopulationSimulationSet
 #' @description R6 class representing Reporting Engine Population Model Set
 #' @field populationFile name of csv file to be used for the population
 #' @field populationName display name of population
 #' @export
-PopModelSet <- R6::R6Class(
-  "PopModelSet",
+PopulationSimulationSet <- R6::R6Class(
+  "PopulationSimulationSet",
   inherit = MeanModelSet,
   public = list(
     populationFile = NULL,
     populationName = NULL,
 
     #' @description
-    #' Create a new `PopModelSet` object.
+    #' Create a new `PopulationSimulationSet` object.
     #' @param simulationSetName display name of simulation set
     #' @param simulationFile names of pkml file to be used for the simulation
     #' @param simulationName display name of simulation
