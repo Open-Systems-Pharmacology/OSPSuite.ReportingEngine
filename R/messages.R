@@ -64,5 +64,9 @@ messages <- list(
 
   errorObservedMetaDataFileNotProvided = function() {
     '"ObservedDataFile" provided while "ObservedMetaDataFile" is "NULL", path of ObservedMetaDataFile need to be input'
+  },
+
+  errorNoParametersForSensitivityAnalysis = function() {
+    paste0("No variable parameters found for sensitivity analysis.")
   }
 )

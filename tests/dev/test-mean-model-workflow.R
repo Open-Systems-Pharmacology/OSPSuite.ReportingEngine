@@ -4,12 +4,12 @@ library(ospsuite.reportingengine)
 library(Rmpi)
 library(tictoc)
 
-devtools::load_all("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine")
+devtools::load_all("./")
 tictoc::tic()
 
 # # SINGLE CORE SA
-# setwd("C:/Users/ahamadeh/Dropbox/rproject/workflow")
-# simFilePath <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/simpleMobiEventSim_nonzeroinitial.pkml"
+# setwd("./")
+# simFilePath <- "./tests/dev/simpleMobiEventSim.pkml"
 # mwf <- MeanModelWorkflow$new(simulationFile = simFilePath)
 # mwf$setMeanModelSimulationSettings()
 # mwf$setMeanModelPKParameterSettings()
@@ -21,8 +21,8 @@ tictoc::tic()
 
 
 # # MULTI CORE SA
-setwd("C:/Users/ahamadeh/Dropbox/rproject/workflow")
-simFilePath <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/individualPksimSim.pkml"
+setwd("./")
+simFilePath <- "./tests/dev/individualPksimSim.pkml"
 mwf <- MeanModelWorkflow$new(simulationFile = simFilePath)
 mwf$setMeanModelSimulationSettings()
 mwf$setMeanModelPKParameterSettings()

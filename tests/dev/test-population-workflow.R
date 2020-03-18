@@ -9,10 +9,10 @@ library(tictoc)
 
 
 # #SINGLE CORE
-# setwd("C:/Users/ahamadeh/Dropbox/rproject/workflow/")
-# devtools::load_all("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine")
-# simfile <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/individualPksimSim.pkml"
-# popfile <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/popData.csv"
+# setwd("./")
+# devtools::load_all("./")
+# simfile <- "./tests/dev/individualPksimSim.pkml"
+# popfile <- "./tests/dev/popData.csv"
 # pwf <- PopulationWorkflow$new(simulationFile = simfile,
 #                               populationFile = popfile)
 # pwf$setPopulationSimulationSettings()
@@ -23,13 +23,13 @@ library(tictoc)
 
 
 # MULTIPLE CORE
-setwd("C:/Users/ahamadeh/Dropbox/rproject/workflow/")
-devtools::load_all("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine")
+setwd("./")
+devtools::load_all("./")
 
 
 tictoc::tic()
-simfile <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/individualPksimSim.pkml"
-popfile <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/data/popData.csv"
+simfile <- "./tests/dev/individualPksimSim.pkml"
+popfile <- "./tests/dev/popData.csv"
 pwf <- PopulationWorkflow$new(
   simulationFile = simfile,
   populationFile = popfile

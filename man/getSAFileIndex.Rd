@@ -16,14 +16,17 @@ getSAFileIndex(
 \arguments{
 \item{pkParameterResultsFilePath}{path to pk parameter results CSV file}
 
-\item{quantileVec}{quantiles of distributions of pk parameter results for a population.  The individual in the population that yields a pk parameter closest to the quantile is selected for sensitivity analysis.}
+\item{quantileVec}{quantiles of distributions of pk parameter results for a population.
+The individual in the population that yields a pk parameter closest to the quantile is selected for sensitivity analysis.}
 
 \item{resultsFileFolder}{path to population sensitivity analysis results CSV files}
 
 \item{resultsFileName}{root name of population sensitivity analysis results CSV files}
 
-\item{popSAResultsIndexFile}{name of CSV file that will store index that identifies name of sensitivity analysis results file for each sensitivity analysis run}
+\item{popSAResultsIndexFile}{name of CSV file that will store index that identifies name of
+sensitivity analysis results file for each sensitivity analysis run}
 }
 \description{
-Function to build and write to CSV a dataframe that stores all sensitivity analysis result files that will be output by a population sensitivity analysis.
+Function to build and write to CSV a dataframe that stores all
+sensitivity analysis result files that will be output by a population sensitivity analysis.
 }

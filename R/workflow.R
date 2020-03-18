@@ -18,7 +18,7 @@ Workflow <- R6::R6Class(
 
     #' @description
     #' Create a new `Workflow` object.
-    #' @param simulationSets list of `MeanModelSet` R6 class objects
+    #' @param simulationSets list of `SimulationSet` R6 class objects
     #' @param workflowFolder path of the folder create by the Workflow
     #' @param resultsFolderName name of folder where results are saved
     #' @param reportName name of the report. Report output includes Rmd, md and html versions.

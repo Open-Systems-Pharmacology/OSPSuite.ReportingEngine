@@ -2,14 +2,18 @@ rm(list = ls())
 library(ospsuite)
 
 #Package directory
-rootDir <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine"
+rootDir <- "."
 devtools::load_all(rootDir)
 
 #Where the sim and pop files for the workflow are located
-dataDir <- file.path(rootDir,"data","ex_03_pop")
+dataDir <- file.path(rootDir,"tests","dev","ex_03_pop")
 
 #Where the workflow results will be stored
-workingDir <- file.path(rootDir,"tests","dev","results_ex_03_pop")
+
+workingDir <- file.path(rootDir)
+if (!dir.exists(workingDir)) {
+  dir.create(workingDir)
+}
 setwd(workingDir)
 
 #Setup first simulation set input file paths
@@ -28,12 +32,12 @@ popFilePath2 <- file.path(dataDir, paste0(populationFileName2, ".csv"))
 load(file.path(dataDir,"simTrees.Rdata"))
 
 # Setup workflow using two simulation sets
-popSimSet1 <- PopModelSet$new(simulationFile = simFilePath1, populationFile = popFilePath1)
-popSimSet2 <- PopModelSet$new(simulationFile = simFilePath2, populationFile = popFilePath2)
+popSimSet1 <- PopulationSimulationSet$new(simulationFile = simFilePath1, populationFile = popFilePath1)
+popSimSet2 <- PopulationSimulationSet$new(simulationFile = simFilePath2, populationFile = popFilePath2)
 
 #Setup workflow
-#popWorkFlow <- PopulationWorkflow$new(simulationSets = list(popSimSet2))
-popWorkFlow <- PopulationWorkflow$new(simulationSets = list(popSimSet1,popSimSet2))
+popWorkFlow <- PopulationWorkflow$new(simulationSets = list(popSimSet1))
+#popWorkFlow <- PopulationWorkflow$new(simulationSets = list(popSimSet1,popSimSet2))
 
 #Number of cores for population simulation
 popWorkFlow$populationSimulation$updateNumberOfCores(4)
@@ -43,8 +47,12 @@ popWorkFlow$populationSensitivityAnalysis$updateNumberOfCores(4)
 popWorkFlow$populationSensitivityAnalysis$updateVariableParameterPaths(c(simTree1$Organism$Skin$Volume$path,
                                                                       simTree1$Organism$Skin$`Specific blood flow rate`$path,
                                                                       simTree1$Organism$Pancreas$Volume$path,
-                                                                      simTree1$Organism$Heart$Volume$path))
-popWorkFlow$populationSensitivityAnalysis$updatePKParameterSelection(c("C_max"))
+                                                                      simTree1$Organism$Heart$Volume$path,
+                                                                      simTree1$Organism$Stomach$Volume$path,
+                                                                      simTree1$Organism$Spleen$Volume$path,
+                                                                      simTree1$Organism$Lung$Volume$path,
+                                                                      simTree1$Organism$Kidney$Volume$path))
+popWorkFlow$populationSensitivityAnalysis$updatePKParameterSelection(c("C_max","t_max"))
 
 popWorkFlow$populationSensitivityAnalysis$updateQuantileVec(c(0.25,0.75))
 popWorkFlow$runWorkflow()

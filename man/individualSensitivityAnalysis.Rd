@@ -19,7 +19,8 @@ individualSensitivityAnalysis(
 
 \item{variableParameterPaths}{paths to parameters to vary in sensitivity analysis}
 
-\item{individualParameters}{is an object storing an individual's parameters, obtained from a population object's getParameterValuesForIndividual() function.}
+\item{individualParameters}{is an object storing an individual's parameters, obtained from a
+population object's getParameterValuesForIndividual() function.}
 
 \item{variationRange}{variation range for sensitivity analysis}
 
@@ -33,6 +34,8 @@ individualSensitivityAnalysis(
 allResultsFileNames, the paths to CSV files containing results of sensitivity analysis
 }
 \description{
-Run SA for an individual, possibly after modifying the simulation using individualParameters.  Determine whether to run SA for on single core or in parallel.
-If on single core, pass simulation to analyzeCoreSensitivity.  If in parallel, pass simulation to runParallelSensitivityAnalysis.
+Run SA for an individual, possibly after modifying the simulation using individualParameters.
+Determine whether to run SA for on single core or in parallel.
+If on single core, pass simulation to analyzeCoreSensitivity.
+If in parallel, pass simulation to runParallelSensitivityAnalysis.
 }
