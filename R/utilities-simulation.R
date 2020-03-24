@@ -1,36 +1,59 @@
 #' @title simulateModel
 #' @description Simulate model, either for an individual or for a given population.  Calculate and save PK parameters as an option.
-#' @param simFilePath path to pkml model file
-#' @param popDataFilePath path to the population data file
-#' @param resultsFilePath path to simulation results CSV files
+#' @param structureSet `SimulationStructure` R6 class object contain paths of files to be used
+#' @param logFolder folder where the logs are saved
+#' @param nodeName node name for parallel simulations
 #' @return Simulation results for individual or population
 #' @export
 #' @import ospsuite
-simulateModel <- function(simFilePath,
-                          popDataFilePath = NULL,
-                          resultsFilePath,
-                          debugLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logDebugFile()),
-                          infoLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logInfoFile()),
-                          errorLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logErrorFile()),
+simulateModel <- function(structureSet,
+                          logFolder = getwd(),
                           nodeName = NULL,
                           showProgress = FALSE) {
-  sim <- loadSimulation(simFilePath,
+  simulation <- loadSimulation(structureSet$simulationSet$simulationFile,
     addToCache = FALSE,
     loadFromCache = FALSE
   )
-  logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Simulation loaded"), file = debugLogFileName, printConsole = FALSE)
-  pop <- NULL
-  if (!is.null(popDataFilePath)) {
-    pop <- loadPopulation(popDataFilePath)
+  logWorkflow(
+    message = paste0(
+      ifnotnull(nodeName, paste0(nodeName, ": "), ""),
+      "Simulation file '",
+      structureSet$simulationSet$simulationFile,
+      "' successfully loaded"
+    ),
+    pathFolder = logFolder,
+    logTypes = LogTypes$Debug
+  )
+
+  population <- NULL
+  if (!is.null(structureSet$simulationSet$populationFile)) {
+    population <- loadPopulation(structureSet$simulationSet$populationFile)
+    logWorkflow(
+      message = paste0(
+        ifnotnull(nodeName, paste0(nodeName, ": "), ""),
+        "Population file '",
+        structureSet$simulationSet$populationFile,
+        "' successfully loaded"
+      ),
+      pathFolder = logFolder,
+      logTypes = LogTypes$Debug
+    )
   }
+
   simRunOptions <- ospsuite::SimulationRunOptions$new(showProgress = showProgress)
-  res <- runSimulation(sim, population = pop, simulationRunOptions = simRunOptions)
-  logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Simulation run complete"), file = debugLogFileName, printConsole = FALSE)
-  exportResultsToCSV(res, resultsFilePath)
-  return(resultsFilePath)
+  simulationResult <- runSimulation(simulation, population = population, simulationRunOptions = simRunOptions)
+
+  logWorkflow(
+    message = paste0(
+      ifnotnull(nodeName, paste0(nodeName, ": "), ""),
+      "Simulation run complete"
+    ),
+    pathFolder = logFolder,
+    logTypes = LogTypes$Debug
+  )
+
+  return(simulationResult)
 }
-
-
 
 #' @title runParallelPopulationSimulation
 #' @description Spawn cores, divide population among cores, run population simulation on cores, save results as CSV.

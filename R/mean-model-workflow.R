@@ -1,6 +1,6 @@
 #' @title MeanModelWorkflow
 #' @description  R6 class for Reporting Engine Mean Model Workflow
-#' @field meanModelSimulation R6 class `Task` for simulation
+#' @field simulate R6 class `Task` for simulation
 #' @field meanModelPKParameters R6 class `Task` for PK parameters calculation
 #' @field meanModelSensitivityAnalysis R6 class `Task` for sensitivity analysis
 #' @field plotGoF R6 class `PlotTask` for goodness of fit plots
@@ -8,6 +8,7 @@
 #' @field plotAbsorption R6 class `PlotTask` for absorption plot
 #' @field plotPKParameters R6 class `PlotTask` for PK parameters plot
 #' @field plotSensitivity R6 class `PlotTask` for sensitivity plot
+#' @field renderReport R6 class `Task` for saving report in a specific format
 #' @export
 #' @import tlf
 #' @import ospsuite
@@ -292,28 +293,8 @@ MeanModelWorkflow <- R6::R6Class(
         title = "Mean Model Workflow Report"
       )
 
-      if (self$meanModelSimulation$active) {
-        logWorkflow(
-          message = paste0("Starting ", self$meanModelSimulation$message),
-          pathFolder = self$workflowFolder
-        )
-        for (set in self$simulationStructures) {
-          logWorkflow(
-            message = paste0("Run simulation: ", set$simulationSet$simulationName),
-            pathFolder = self$workflowFolder
-          )
-          if (self$meanModelSimulation$validateInput()) {
-            dir.create(set$simulationResultsFolder)
-            # Create the Output of Simulation
-            set$simulationResultFileNames <- simulateModel(
-              simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
-              resultsFilePath = file.path(set$simulationResultsFolder, defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName)),
-              debugLogFileName = file.path(self$workflowFolder, defaultFileNames$logDebugFile()),
-              infoLogFileName = file.path(self$workflowFolder, defaultFileNames$logInfoFile()),
-              errorLogFileName = file.path(self$workflowFolder, defaultFileNames$logErrorFile()),
-            )
-          }
-        }
+      if (self$simulate$active) {
+        self$simulate$runTask(self$simulationStructures)
       }
 
       if (self$meanModelPKParameters$active) {
