@@ -377,29 +377,19 @@ MeanModelWorkflow <- R6::R6Class(
           )
         }
       }
-
-      # Get output in final format for publication
-      renderRmdFile(self$reportFileName)
     },
 
     #' @description
     #' Print workflow list of tasks
-    #' TO DO: add simulationSets to print() method
     #' @return Task list information
     print = function() {
-      taskOrder <- list(
-        "Task 1" = self$meanModelSimulation$print(),
-        "Task 2" = self$meanModelPKParameters$print(),
-        "Task 3" = self$meanModelSensitivityAnalysis$print(),
-        "Task 4" = self$plotGoF$print(),
-        "Task 5" = self$plotMassBalance$print(),
-        "Task 6" = self$plotAbsorption$print(),
-        "Task 7" = self$plotPKParameters$print(),
-        "Task 8" = self$plotSensitivity$print()
-      )
-      invisible(self)
+      tasksInfo <- list()
+      for (task in self$getAllTasks()) {
+        tasksInfo[[paste0("Task: '", task, "'")]] <- self[[task]]$print()
+      }
 
-      return(taskOrder)
+      invisible(self)
+      return(tasksInfo)
     }
   )
 )
