@@ -1,38 +1,37 @@
 #' @title Task
 #' @description  R6 class for Task settings
-#' @field active logical
-#' @field input List of input files/folders to use to perform tasks
-#' @field output List of output files/folders to save the task output
-#' @field settings class
+#' @field active logical indicating if `Task` is performed in a worklfow.
+#' @field outputFolder List of output files/folders to save the task output
+#' @field workflowFolder folder where workflow is run and saved
+#' @field settings list of settings for task such as plot configurations
 #' @field message message or title of the task
 Task <- R6::R6Class(
   "Task",
   public = list(
     active = NULL,
-    input = NULL,
-    output = NULL,
+    outputFolder = NULL,
+    workflowFolder = NULL,
     settings = NULL,
     message = NULL,
 
     #' @description
     #' Create a `Task` object
-    #' @param input list of files or folders of input
-    #' @param output list of files or folders of output
-    #' @param settings specific settings for task
-    #' @param active logical indicating if `task` is performed in a worklfow.
+    #' @param outputFolder task output folder to save results
+    #' @param workflowFolder folder where workflow is run and saved
+    #' @param settings specific settings for task (e.g. plot configurations)
+    #' @param active logical indicating if `Task` is performed in a worklfow.
     #' Default value is `FALSE`
-    #' @param message title of the `task`.
-    #' Default value indicates `task` name.
+    #' @param message message of the `Task`.
     #' @return A new `Task` object
-    initialize = function(input = NULL,
-                              output = NULL,
+    initialize = function(outputFolder = NULL,
+                              workflowFolder = getwd(),
                               settings = NULL,
                               active = FALSE,
                               message = NULL) {
       validateIsOfType(active, "logical")
       self$active <- active
-      self$input <- as.list(input)
-      self$output <- as.list(output)
+      self$outputFolder <- outputFolder
+      self$workflowFolder <- workflowFolder
       self$settings <- settings
       self$message <- message
     },
@@ -49,11 +48,11 @@ Task <- R6::R6Class(
     },
     #' @description
     #' Check if `Task` inputs exist
+    #' @param inputsToCheck list of input files to check
     #' @return logical indicating if input is valid
-    validateInput = function() {
-      inputPaths <- sapply(self$input, identity)
+    validateInput = function(inputsToCheck = NULL) {
       isValid <- TRUE
-      for (inputToCheck in inputPaths) {
+      for (inputToCheck in inputsToCheck) {
         if (!file.exists(inputToCheck)) {
           isValid <- FALSE
           warning(messages$errorTaskInputDoesNotExist(inputToCheck))

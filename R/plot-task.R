@@ -2,7 +2,6 @@
 #' @description  R6 class for PlotTask settings
 #' @field title section title in the report corresponding to the task
 #' @field getTaskResults function called by task that computes and format figure results
-#' @field workflowFolder folder where workflow is run and saved
 #' @export
 PlotTask <- R6::R6Class(
   "PlotTask",
@@ -11,23 +10,19 @@ PlotTask <- R6::R6Class(
   public = list(
     title = NULL,
     getTaskResults = NULL,
-    workflowFolder = NULL,
 
     #' @description
     #' Create a `PlotTask` object
     #' @param reportTitle title to be printed in the report
     #' @param getTaskResults function called by task that computes and format figure results
-    #' @param workflowFolder folder where workflow is run and saved
     #' @param ... input parameters inherited from `Task` R6 class
     #' @return A new `PlotTask` object
     initialize = function(reportTitle = NULL,
                               getTaskResults = NULL,
-                              workflowFolder = getwd(),
                               ...) {
       super$initialize(...)
       self$title <- reportTitle
       self$getTaskResults <- getTaskResults
-      self$workflowFolder <- workflowFolder
     },
 
     #' @description
@@ -36,13 +31,13 @@ PlotTask <- R6::R6Class(
     #' @param taskResults list of results from task run.
     #' Results contains at least 2 fields: `plots` and `tables`
     #' @param reportFile name of report
-    #' @param workflowFolder path of workflow
     saveResults = function(set,
                                taskResults,
                                reportFile) {
       for (plotName in names(taskResults$plots)) {
         plotFileName <- file.path(
-          self$output[[1]],
+          self$workflowFolder,
+          self$outputFolder,
           getDefaultFileName(set$simulationSet$simulationSetName,
             suffix = plotName,
             extension = "png"
@@ -63,7 +58,8 @@ PlotTask <- R6::R6Class(
 
       for (tableName in names(taskResults$tables)) {
         tableFileName <- file.path(
-          self$output[[1]],
+          self$workflowFolder,
+          self$outputFolder,
           getDefaultFileName(set$simulationSet$simulationSetName,
             suffix = tableName,
             extension = "csv"
@@ -78,10 +74,9 @@ PlotTask <- R6::R6Class(
     },
 
     #' @description
-    #' Print `Task` features
+    #' Run task and save its output
     #' @param structureSets list of `SimulationStructure` R6 class
     #' @param reportFileName name of report file
-    #' @return List of task features
     runTask = function(structureSets,
                            reportFileName) {
       logWorkflow(
@@ -92,8 +87,8 @@ PlotTask <- R6::R6Class(
         reportFileName,
         paste0("# ", self$title)
       )
-      if (length(self$output) > 0) {
-        dir.create(self$output[[1]])
+      if (!is.null(self$outputFolder)) {
+        dir.create(file.path(self$workflowFolder, self$outputFolder))
       }
 
       # Goodness of fit task creates a histogram of residuals merged accross the simulaiton
@@ -112,6 +107,7 @@ PlotTask <- R6::R6Class(
 
           taskResults <- self$getTaskResults(
             set,
+            self$workflowFolder,
             self$settings$plotConfigurations
           )
 
@@ -132,7 +128,8 @@ PlotTask <- R6::R6Class(
 
       if (!is.null(residualsAcrossAllSimulations)) {
         plotFileName <- file.path(
-          self$output[[1]],
+          self$workflowFolder,
+          self$outputFolder,
           getDefaultFileName(
             suffix = "residuals",
             extension = "png",
@@ -140,7 +137,8 @@ PlotTask <- R6::R6Class(
           )
         )
         tableFileName <- file.path(
-          self$output[[1]],
+          self$workflowFolder,
+          self$outputFolder,
           getDefaultFileName(
             suffix = "residuals",
             extension = "csv",
@@ -206,7 +204,8 @@ PlotPKParametersTask <- R6::R6Class(
                                taskResults,
                                reportFile) {
       tableFileName <- file.path(
-        self$output[[1]],
+        self$workflowFolder,
+        self$outputFolder,
         getDefaultFileName(set$simulationSet$simulationSetName,
           suffix = "pkParametersTable",
           extension = "csv"
