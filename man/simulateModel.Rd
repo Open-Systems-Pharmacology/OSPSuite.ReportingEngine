@@ -5,25 +5,18 @@
 \title{simulateModel}
 \usage{
 simulateModel(
-  simFilePath,
-  popDataFilePath = NULL,
-  resultsFilePath,
-  debugLogFileName = file.path(defaultFileNames$workflowFolderPath(),
-    defaultFileNames$logDebugFile()),
-  infoLogFileName = file.path(defaultFileNames$workflowFolderPath(),
-    defaultFileNames$logInfoFile()),
-  errorLogFileName = file.path(defaultFileNames$workflowFolderPath(),
-    defaultFileNames$logErrorFile()),
+  structureSet,
+  logFolder = getwd(),
   nodeName = NULL,
   showProgress = FALSE
 )
 }
 \arguments{
-\item{simFilePath}{path to pkml model file}
+\item{structureSet}{`SimulationStructure` R6 class object contain paths of files to be used}
 
-\item{popDataFilePath}{path to the population data file}
+\item{logFolder}{folder where the logs are saved}
 
-\item{resultsFilePath}{path to simulation results CSV files}
+\item{nodeName}{node name for parallel simulations}
 }
 \value{
 Simulation results for individual or population

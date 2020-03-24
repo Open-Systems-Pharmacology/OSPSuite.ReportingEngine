@@ -13,6 +13,8 @@ R6 class for SimulationTask settings
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{numberOfCores}}{number of cores for parallel computation}
+
+\item{\code{getTaskResults}}{function called by task that computes and format figure results}
 }
 \if{html}{\out{</div>}}
 }
@@ -21,6 +23,8 @@ R6 class for SimulationTask settings
 \itemize{
 \item \href{#method-new}{\code{SimulationTask$new()}}
 \item \href{#method-updateNumberOfCores}{\code{SimulationTask$updateNumberOfCores()}}
+\item \href{#method-saveResults}{\code{SimulationTask$saveResults()}}
+\item \href{#method-runTask}{\code{SimulationTask$runTask()}}
 \item \href{#method-clone}{\code{SimulationTask$clone()}}
 }
 }
@@ -39,13 +43,15 @@ R6 class for SimulationTask settings
 \subsection{Method \code{new()}}{
 Create a `SimulationTask` object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimulationTask$new(numberOfCores = NULL, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimulationTask$new(numberOfCores = NULL, getTaskResults = NULL, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{numberOfCores}}{number of cores for parallel computation}
+
+\item{\code{getTaskResults}}{function called by task that computes and format figure results}
 
 \item{\code{...}}{parameters inherited from R6 class `Task` object}
 }
@@ -67,6 +73,40 @@ Update the `numberOfCores`
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{numberOfCores}}{is the number of cores to use for simulation}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-saveResults"></a>}}
+\subsection{Method \code{saveResults()}}{
+Save results from task run.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SimulationTask$saveResults(set, taskResults)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{set}}{R6 class `SimulationStructure`}
+
+\item{\code{taskResults}}{list of results from task run.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-runTask"></a>}}
+\subsection{Method \code{runTask()}}{
+Run task and save its output
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SimulationTask$runTask(structureSets)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{structureSets}}{list of `SimulationStructure` R6 class}
 }
 \if{html}{\out{</div>}}
 }

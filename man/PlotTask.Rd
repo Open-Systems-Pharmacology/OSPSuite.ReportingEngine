@@ -15,8 +15,6 @@ R6 class for PlotTask settings
 \item{\code{title}}{section title in the report corresponding to the task}
 
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
-
-\item{\code{workflowFolder}}{folder where workflow is run and saved}
 }
 \if{html}{\out{</div>}}
 }
@@ -44,12 +42,7 @@ R6 class for PlotTask settings
 \subsection{Method \code{new()}}{
 Create a `PlotTask` object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PlotTask$new(
-  reportTitle = NULL,
-  getTaskResults = NULL,
-  workflowFolder = getwd(),
-  ...
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PlotTask$new(reportTitle = NULL, getTaskResults = NULL, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -58,8 +51,6 @@ Create a `PlotTask` object
 \item{\code{reportTitle}}{title to be printed in the report}
 
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
-
-\item{\code{workflowFolder}}{folder where workflow is run and saved}
 
 \item{\code{...}}{input parameters inherited from `Task` R6 class}
 }
@@ -86,8 +77,6 @@ Save results from task run.
 Results contains at least 2 fields: `plots` and `tables`}
 
 \item{\code{reportFile}}{name of report}
-
-\item{\code{workflowFolder}}{path of workflow}
 }
 \if{html}{\out{</div>}}
 }
@@ -95,7 +84,7 @@ Results contains at least 2 fields: `plots` and `tables`}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-runTask"></a>}}
 \subsection{Method \code{runTask()}}{
-Print `Task` features
+Run task and save its output
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PlotTask$runTask(structureSets, reportFileName)}\if{html}{\out{</div>}}
 }
@@ -108,9 +97,6 @@ Print `Task` features
 \item{\code{reportFileName}}{name of report file}
 }
 \if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-List of task features
 }
 }
 \if{html}{\out{<hr>}}

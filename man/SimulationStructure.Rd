@@ -11,8 +11,6 @@ R6 class representing that stores file structure (file names and paths) relating
 \describe{
 \item{\code{simulationSet}}{the set for which the SimulationStructure object stores paths input and results}
 
-\item{\code{inputFilesFolder}}{path to folder storing pkml and population data files for the simulationSet}
-
 \item{\code{simulationResultsFolder}}{path to folder storing results of simulations}
 
 \item{\code{pkAnalysisResultsFolder}}{path to folder storing results of pk analyses}
@@ -38,17 +36,9 @@ R6 class representing that stores file structure (file names and paths) relating
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
 Create a new `SimulationStructure` object.
-Create simulationSetFolder folder to store simulationSet results.
-Create inputFilesFolder as subfolder of simulationSetFolder.
-Copy simulation set input files to inputFilesFolder.
 Build and store names of potential subfolders to hold simulation results, pkAnalysis results and sensitivityAnalysis results.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimulationStructure$new(
-  simulationSet,
-  workflowResultsFolder,
-  workflowFiguresFolder = NULL,
-  workflowFolder = getwd()
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimulationStructure$new(simulationSet, workflowFolder = getwd())}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -56,11 +46,7 @@ Build and store names of potential subfolders to hold simulation results, pkAnal
 \describe{
 \item{\code{simulationSet}}{`MeanModelSet` or `PopModelSet` R6 class object}
 
-\item{\code{workflowResultsFolder}}{folder to store simulationSet results}
-
-\item{\code{workflowFiguresFolder}}{figure folder to store simulationSet figures}
-
-\item{\code{workflowFolder}}{folder of the worklow}
+\item{\code{workflowFolder}}{output folder of the worklow}
 }
 \if{html}{\out{</div>}}
 }

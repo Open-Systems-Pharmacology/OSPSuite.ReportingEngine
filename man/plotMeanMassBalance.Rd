@@ -6,12 +6,15 @@
 \usage{
 plotMeanMassBalance(
   structureSet,
+  logFolder = getwd(),
   plotConfigurations = NULL,
   selectedCompoundNames = NULL
 )
 }
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object}
+
+\item{logFolder}{folder where the logs are saved}
 
 \item{plotConfigurations}{List of `PlotConfiguration` R6 class objects}
 
