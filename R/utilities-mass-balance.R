@@ -2,6 +2,7 @@
 #' @description Plot mass balance diagnostics time profiles, cumulative time profiles,
 #' normalized time profiles and cumulative normalized time profiles
 #' @param structureSet `SimulationStructure` R6 class object
+#' @param logFolder folder where the logs are saved
 #' @param plotConfigurations List of `PlotConfiguration` R6 class objects
 #' @param selectedCompoundNames Options to be defined
 #' (e.g. how to group the plot results, or which molecule to exclude)
@@ -11,6 +12,7 @@
 #' @import ospsuite
 #' @import utils
 plotMeanMassBalance <- function(structureSet,
+                                logFolder = getwd(),
                                 plotConfigurations = NULL,
                                 selectedCompoundNames = NULL) {
   simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)

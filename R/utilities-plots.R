@@ -54,6 +54,7 @@ plotDemography <- function(simulation,
 #' @description Plot goodness of fit diagnostics including time profiles,
 #' observations vs predictions, residuals plots (residuals vs time, vs predictions, qq-plots and histogram)
 #' @param structureSet `SimulationStructure` R6 class object
+#' @param logFolder folder where the logs are saved
 #' @param plotConfigurations List of `PlotConfiguration` R6 class objects for each goodness of fit plot
 #' @return list of `residuals` objects
 #' @export
@@ -61,6 +62,7 @@ plotDemography <- function(simulation,
 #' @import ospsuite
 #' @import utils
 plotMeanGoodnessOfFit <- function(structureSet,
+                                  logFolder = getwd(),
                                   plotConfigurations = NULL) {
   timeProfileData <- NULL
   goodnessOfFitPlots <- NULL
@@ -85,6 +87,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
 
       logWorkflow(
         message = paste0("Number of observations filtered: ", sum(rowFilter)),
+        pathFolder = logFolder,
         logTypes = LogTypes$Debug
       )
     }

@@ -1,6 +1,7 @@
 #' @title plotMeanAbsorption
 #' @description Plot absorption diagnostics time profile
 #' @param structureSet `SimulationStructure` R6 class object
+#' @param logFolder folder where the logs are saved
 #' @param plotConfigurations list of `PlotConfiguration` R6 class objects
 #' @return `ggplot` object
 #' @export
@@ -8,6 +9,7 @@
 #' @import ospsuite
 #' @import utils
 plotMeanAbsorption <- function(structureSet,
+                               logFolder = getwd(),
                                plotConfigurations = NULL) {
   simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
 
