@@ -122,55 +122,53 @@ MeanModelWorkflow <- R6::R6Class(
     #' Define Goodness of fit `PlotTask` settings
     #' @param reportTitle section title of plot task result within report
     #' @param taskFunction function called by task to get the results as a list of `plots` and `tables`
-    #' @param input file or folder of input
-    #' @param output file or folder of output
-    #' @param settings specific settings for task
+    #' @param outputFolder folder where `Task` output is saved
     #' @param active logical indicating if `task` is performed in worklfow.
     #' Default value is `FALSE`
     #' @param message message indicating what the `task` does
+    #' @param settings specific settings for task
     #' @return A `PlotTask` object for goodness of fit plots
-    plotGoFSettings = function(reportTitle = NULL,
+    plotGoFSettings = function(reportTitle = defaultWorkflowTitles$plotGoF,
                                    taskFunction = plotMeanGoodnessOfFit,
-                                   input = NULL,
-                                   output = file.path(self$resultsFolder, "TimeProfile"),
+                                   outputFolder = defaultTaskOutputFolders$plotGoF,
                                    active = FALSE,
-                                   message = NULL) {
+                                   message = defaultWorkflowMessages$plotGoF,
+                                   settings = NULL) {
       self$plotGoF <- PlotTask$new(
-        reportTitle = reportTitle %||% defaultWorkflowTitles$plotGoF,
+        reportTitle = reportTitle,
         getTaskResults = taskFunction,
+        outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
-        input = input,
-        output = output,
         active = active,
-        message = message %||% defaultWorkflowMessages$plotGoF
+        message = message,
+        settings = settings
       )
     },
 
     #' @description
-    #' Define PK parameters `PlotTask` settings
+    #' Define PK parameters `PlotPKParametersTask` settings
     #' @param reportTitle section title of plot task result within report
     #' @param taskFunction function called by task to get the results as a list of `plots` and `tables`
-    #' @param input file or folder of input
-    #' @param output file or folder of output
-    #' @param settings specific settings for task
+    #' @param outputFolder folder where `Task` output is saved
     #' @param active logical indicating if `task` is performed in worklfow.
     #' Default value is `FALSE`
     #' @param message message indicating what the `task` does
+    #' @param settings specific settings for task
     #' @return A `PlotPKParametersTask` object for PK parameters tables
-    plotPKParametersSettings = function(reportTitle = NULL,
+    plotPKParametersSettings = function(reportTitle = defaultWorkflowTitles$plotPKParameters,
                                             taskFunction = plotMeanPKParameters,
-                                            input = NULL,
-                                            output = file.path(self$resultsFolder, "PKParameters"),
+                                            outputFolder = defaultTaskOutputFolders$plotPKParameters,
                                             active = FALSE,
-                                            message = NULL) {
-      self$plotPKParameters <- PlotPKParametersTask$new(
-        reportTitle = reportTitle %||% defaultWorkflowTitles$plotPKParameters,
+                                            message = defaultWorkflowMessages$plotPKParameters,
+                                            settings = NULL) {
+      self$plotPKParameters <- PlotTask$new(
+        reportTitle = reportTitle,
         getTaskResults = taskFunction,
+        outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
-        input = input,
-        output = output,
         active = active,
-        message = message %||% defaultWorkflowMessages$plotPKParameters
+        message = message,
+        settings = settings
       )
     },
 
@@ -178,27 +176,26 @@ MeanModelWorkflow <- R6::R6Class(
     #' Define Mass Balance `PlotTask` settings
     #' @param reportTitle section title of plot task result within report
     #' @param taskFunction function called by task to get the results as a list of `plots` and `tables`
-    #' @param input file or folder of input
-    #' @param output file or folder of output
-    #' @param settings specific settings for task
+    #' @param outputFolder folder where `Task` output is saved
     #' @param active logical indicating if `task` is performed in worklfow.
     #' Default value is `FALSE`
     #' @param message message indicating what the `task` does
-    #' @return A `PlotTask` object for mass balance plots
-    plotMassBalanceSettings = function(reportTitle = NULL,
+    #' @param settings specific settings for task
+    #' @return A `PlotTask` object for goodness of fit plots
+    plotMassBalanceSettings = function(reportTitle = defaultWorkflowTitles$plotMassBalance,
                                            taskFunction = plotMeanMassBalance,
-                                           input = NULL,
-                                           output = file.path(self$resultsFolder, "MassBalance"),
+                                           outputFolder = defaultTaskOutputFolders$plotMassBalance,
                                            active = FALSE,
-                                           message = NULL) {
+                                           message = defaultWorkflowMessages$plotMassBalance,
+                                           settings = NULL) {
       self$plotMassBalance <- PlotTask$new(
-        reportTitle = reportTitle %||% defaultWorkflowTitles$plotMassBalance,
+        reportTitle = reportTitle,
         getTaskResults = taskFunction,
+        outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
-        input = input,
-        output = output,
         active = active,
-        message = message %||% defaultWorkflowMessages$plotMassBalance
+        message = message,
+        settings = settings
       )
     },
 
@@ -206,27 +203,26 @@ MeanModelWorkflow <- R6::R6Class(
     #' Define Absorption `PlotTask` settings
     #' @param reportTitle section title of plot task result within report
     #' @param taskFunction function called by task to get the results as a list of `plots` and `tables`
-    #' @param input file or folder of input
-    #' @param output file or folder of output
-    #' @param settings specific settings for task
+    #' @param outputFolder folder where `Task` output is saved
     #' @param active logical indicating if `task` is performed in worklfow.
     #' Default value is `FALSE`
     #' @param message message indicating what the `task` does
-    #' @return A `PlotTask` object for absorption plots
-    plotAbsorptionSettings = function(reportTitle = NULL,
+    #' @param settings specific settings for task
+    #' @return A `PlotTask` object for goodness of fit plots
+    plotAbsorptionSettings = function(reportTitle = defaultWorkflowTitles$plotAbsorption,
                                           taskFunction = plotMeanAbsorption,
-                                          input = NULL,
-                                          output = file.path(self$resultsFolder, "Absorption"),
+                                          outputFolder = defaultTaskOutputFolders$plotAbsorption,
                                           active = FALSE,
-                                          message = NULL) {
+                                          message = defaultWorkflowMessages$plotAbsorption,
+                                          settings = NULL) {
       self$plotAbsorption <- PlotTask$new(
-        reportTitle = reportTitle %||% defaultWorkflowTitles$plotAbsorption,
+        reportTitle = reportTitle,
         getTaskResults = taskFunction,
+        outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
-        input = input,
-        output = output,
         active = active,
-        message = message %||% defaultWorkflowMessages$plotAbsorption
+        message = message,
+        settings = settings
       )
     },
 

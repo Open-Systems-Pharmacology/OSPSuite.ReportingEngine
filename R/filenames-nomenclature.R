@@ -8,7 +8,7 @@ startDate <- function() {
 
 defaultFileNames <- list(
   simulationResultsFile = function(simulationName) {
-    getDefaultFileName(simulationName, suffix = "Results")
+    getDefaultFileName(simulationName, suffix = "SimulationResults")
   },
   popSimulationResultsFile = function(populationName, simulationName) {
     getDefaultFileName(populationName, simulationName, suffix = "SimulationResults")
@@ -89,9 +89,24 @@ defaultWorkflowTitles <- list(
 )
 
 defaultWorkflowMessages <- list(
+  "simulate" = "Perform simulation task",
+  "calculatePKParameters" = "Calculate PK parameters task",
+  "sensitivityAnalysis" = "Perform sensitivity analysis task",
   "plotGoF" = "Plot Goodness of Fit task in Alpha Testing",
   "plotPKParameters" = "Get tables of PK parameters task in Alpha Testing",
   "plotMassBalance" = "Plot Mass Balance task in Alpha Testing",
   "plotAbsorption" = "Plot Absorption task in Alpha Testing",
-  "plotSensitivity" = "Plot Sensitivity task not available at the moment"
+  "plotSensitivity" = "Plot Sensitivity task not available at the moment",
+  "renderReport" = "Render a report with a specific format"
+)
+
+defaultTaskOutputFolders <- list(
+  "simulate" = "SimulationResults",
+  "calculatePKParameters" = "PKAnalysisResults",
+  "sensitivityAnalysis" = "SensitivityResults",
+  "plotGoF" = "TimeProfiles",
+  "plotPKParameters" = "PKAnalysis",
+  "plotMassBalance" = "MassBalance",
+  "plotAbsorption" = "Absorption",
+  "plotSensitivity" = "Sensitivity"
 )
