@@ -91,9 +91,7 @@ For instance, if the data contains a column named *Grouping* to which only group
 ## workflowFolder
 
 `workflowFolder` is a the name of the folder in which the results of the workflow evaluations will be saved.
-This input is not required. 
-
-If left `NULL`, `MeanModelWorkflow` will create a new directory using a default nomenclature.
+The default value for this input is `NULL`, in which case `MeanModelWorkflow` will create a new directory using a default nomenclature:
 The folder name will be *`Workflow_<Date>_<Time>`*.
 
 If `workflowFolder` is input, `MeanModelWorkflow` will check for the existence of the directory.
@@ -101,28 +99,36 @@ If the directory does not exist, `MeanModelWorkflow` will create a new one corre
 If the directory does exist, `MeanModelWorkflow` will send a warning message to the user, since it may use and overwrite any existing files within the directory.
 This functionality can be useful for updating and running only a parts of the workflow without having to perform all the simulations every time.
 
-
 # `Task` instances
 
 As illustrated in Figure 1, the workflow is performing a series of tasks.
-Since some of the tasks are not always run, it is possible to activate/inactivate those before running the workflow.
+Since some of the tasks are not always run or can use the results from tasks run in previous workflows, it is possible to activate/inactivate those before (re)running the workflow.
 
 As a consequence, the `MeanModelWorkflow` defines a list of `Task` instances when initialized.
-Each `Task` is using a similar and common structure: `input`, `output`, `active`, `message` and `settings`.
+Each `Task` is using a similar and common structure: `outputFolder`, `active`, `message` and `settings`.
+The `Task` method `print()` shows this structure features.
 
-The workflow methods `MeanModelWorkflow$getAllTasks()`, `MeanModelWorkflow$getActiveTasks()` and `MeanModelWorkflow$getInactiveTasks()` provide the list of all available, active and inactive tasks of the workflow, respectively.
+The workflow methods `getAllTasks()`, `getActiveTasks()` and `getInactiveTasks()` provide the list of all available, active and inactive tasks of the workflow, respectively.
 
-The tasks can be activated/inactivated using the workflow methods `MeanModelWorkflow$activateTasks()` and `MeanModelWorkflow$inactivateTasks()`.
+The tasks can be activated/inactivated using the workflow methods `activateTasks(tasks = self$getAllTasks())` and `inactivateTasks(tasks = self$getAllTasks())`.
 
+`Workflow` has also a `print()` method which calls the `print()` methods from each of its tasks.
 
 # Outputs
 
-Once the workflow and its settings have been defined, the workflow method `MeanModelWorkflow$runWorkflow()` will perform the tasks and generate the output results and report.
+Once the workflow and its settings have been defined, the workflow method `runWorkflow()` will run all the active tasks and generate all the associated results and report.
 The output results will follow the structure defined in Figure 2:
 
 ```{r, out.width="100%", include=TRUE, fig.align="center", fig.cap= "Mean model workflow output structure", echo=FALSE}
     knitr::include_graphics("../data/mean-model-workflow-structure.png")
 ```
+
+From the figure, it can be noticed that log files are created during the process:
+
+- `log-info`: save relevant messages from the workflow
+- `error`: save warnings and errors messages
+- `debug`: save most of messages which can be accessed for debugging purpose. 
+
 
 # Example 01: Raltegravir
 
@@ -146,7 +152,7 @@ simFiles
 ```{r}
 simPath <- 'Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)'
 simPathName <- 'Raltegravir'
-simPathUnit <- '�g/l'
+simPathUnit <- 'mg/l'
 ```
 ## Definition of the data files and filters
 
@@ -203,8 +209,10 @@ Initialize workflow structure with `meanModelSets` as the list of simulation set
 and `"WorkflowTest01"` as workflow folder.
 
 ```{r}
-meanWorkflow <- MeanModelWorkflow$new(simulationSets = meanModelSets)
-#workflowFolder = file.path(testFolder, "WorkflowTest01"))
+meanWorkflow <- MeanModelWorkflow$new(simulationSets = meanModelSets, 
+                                      workflowFolder = file.path(testFolder, "WorkflowTest01"))
+
+meanWorkflow$print()
 ```
 
 ## Workflow tasks
@@ -216,23 +224,51 @@ meanWorkflow$getActiveTasks()
 meanWorkflow$getInactiveTasks()
 ```
 
-Set the tasks to perform, which ones are active/inactive
+## Workflow run
+As defined above, only the simulation task is active and will be run.
 ```{r}
-meanWorkflow$activateTasks(tasks = c("plotGoF", "plotAbsorption", "plotMassBalance"))
-meanWorkflow$inactivateTasks(tasks = c("meanModelPKParameters", "plotPKParameters"))
-meanWorkflow$getActiveTasks()
-meanWorkflow$getInactiveTasks()
+meanWorkflow$runWorkflow()
 ```
 
-## Workflow tasks
-
-Run the workflow.
-All the information of the run are also available within log files.
-```{r, eval=FALSE}
-#meanWorkflow$runWorkflow()
+At the workflow level, the run has created the following structure within the `workflowFolder`:
+```{r}
+list.files(meanWorkflow$workflowFolder,
+           include.dirs = TRUE)
 ```
 
-```{r, echo=FALSE, eval=FALSE}
-#report <- readLines(file.path(meanWorkflow$workflowFolder, "Report.html"))
-#knitr::raw_html(report)
+At the task level, the run has also created its specific content:
+```{r}
+list.files(file.path(meanWorkflow$workflowFolder, meanWorkflow$simulate$outputFolder))
 ```
+
+## Workflow on existing output
+
+Re-initialize workflow structure with the same `meanModelSets` as previously defined"the list of simulation sets and re-use `"WorkflowTest01"` as workflow folder.
+Since the workflow folder already exists, a warning message indicates that its content may be used or overwritten.
+```{r}
+meanWorkflow <- MeanModelWorkflow$new(simulationSets = meanModelSets, 
+                                      workflowFolder = file.path(testFolder, "WorkflowTest01"))
+
+```
+
+Since `simulate` task was alread run, we will use the result to plot goodness of fit diagnostics by activating the `plotGoF` task.
+```{r}
+meanWorkflow$activateTasks(tasks = c("plotGoF"))
+meanWorkflow$inactivateTasks(tasks = c("simulate"))
+meanWorkflow$runWorkflow()
+```
+
+## Workflow report
+
+The workflow run has created a report file using a .Rmd format.
+If the task `renderReport` is activated, the workflow can compile the .Rmd file and render the report in any targeted format such as md, pdf, html or word.
+
+The workflow is re-run below to include Mass Balance and Absorption assessments within the report.
+```{r}
+meanWorkflow$activateTasks(tasks = c("plotGoF", "plotMassBalance", "plotAbsorption"))
+meanWorkflow$runWorkflow()
+```
+---
+
+```{r child = meanWorkflow$reportFileName}
+```}
