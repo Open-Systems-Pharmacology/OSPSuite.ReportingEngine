@@ -105,3 +105,19 @@ inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
     workflow[[task]]$inactivate()
   }
 }
+
+#' @title ReportTask
+#' @description  R6 class for ReportTask settings
+ReportTask <- R6::R6Class(
+  "ReportTask",
+  inherit = Task,
+
+  public = list(
+    #' @description
+    #' Run report task to render report
+    #' @param reportFileName name of report file
+    runTask = function(reportFileName) {
+      renderRmdFile(reportFileName)
+    }
+  )
+)
