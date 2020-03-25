@@ -15,8 +15,6 @@ R6 class representing Reporting Engine generic Workflow
 
 \item{\code{workflowFolder}}{path of the folder create by the Workflow}
 
-\item{\code{resultsFolder}}{path where results are saved}
-
 \item{\code{reportFileName}}{name of the Rmd report file}
 }
 \if{html}{\out{</div>}}
@@ -39,12 +37,7 @@ R6 class representing Reporting Engine generic Workflow
 \subsection{Method \code{new()}}{
 Create a new `Workflow` object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Workflow$new(
-  simulationSets,
-  workflowFolder = defaultFileNames$workflowFolderPath(),
-  resultsFolderName = defaultFileNames$resultsFolder(),
-  reportName = defaultFileNames$reportName()
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$new(simulationSets, workflowFolder = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -52,11 +45,8 @@ Create a new `Workflow` object.
 \describe{
 \item{\code{simulationSets}}{list of `SimulationSet` R6 class objects}
 
-\item{\code{workflowFolder}}{path of the folder create by the Workflow}
-
-\item{\code{resultsFolderName}}{name of folder where results are saved}
-
-\item{\code{reportName}}{name of the report. Report output includes Rmd, md and html versions.}
+\item{\code{workflowFolder}}{path of the output folder created or used by the Workflow.
+Default input creates a new folder with default naming}
 }
 \if{html}{\out{</div>}}
 }

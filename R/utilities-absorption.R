@@ -1,14 +1,16 @@
 #' @title plotMeanAbsorption
 #' @description Plot absorption diagnostics time profile
 #' @param structureSet `SimulationStructure` R6 class object
-#' @param plotConfiguration `PlotConfiguration` R6 class object
+#' @param logFolder folder where the logs are saved
+#' @param plotConfigurations list of `PlotConfiguration` R6 class objects
 #' @return `ggplot` object
 #' @export
 #' @import tlf
 #' @import ospsuite
 #' @import utils
 plotMeanAbsorption <- function(structureSet,
-                               plotConfiguration = NULL) {
+                               logFolder = getwd(),
+                               plotConfigurations = NULL) {
   simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
 
   # Get drug mass to perform the drugmass normalized plot
@@ -166,7 +168,7 @@ plotMeanAbsorption <- function(structureSet,
         color = "Legend",
         linetype = "Legend"
       ),
-      plotConfiguration = plotConfiguration
+      plotConfiguration = plotConfigurations[["absorptionPlot"]]
     )
   }
 
@@ -177,7 +179,7 @@ plotMeanAbsorption <- function(structureSet,
 
   return(list(
     plots = absorptionPlots,
-    timeProfile = timeProfiles
+    tables = timeProfiles
   ))
 }
 
@@ -187,7 +189,7 @@ plotMeanAbsorption <- function(structureSet,
 #' @param data data.frame
 #' @param metaData meta data on `data`
 #' @param dataMapping `XYGDataMapping` R6 class object from `tlf` library
-#' @param plotCOnfiguration `PlotConfiguration` R6 class object from `tlf` library
+#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
 #' @return ggplot object of time profile for mean model workflow
 #' @export
 #' @import tlf

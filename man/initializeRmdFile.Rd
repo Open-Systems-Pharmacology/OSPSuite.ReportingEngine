@@ -4,17 +4,21 @@
 \alias{initializeRmdFile}
 \title{initializeRmdFile}
 \usage{
-initializeRmdFile(fileName, title = "", author = "")
+initializeRmdFile(
+  fileName,
+  title = "",
+  outputFormat = "html_document",
+  numberSections = TRUE
+)
 }
 \arguments{
 \item{fileName}{name of Rmd file to initialize}
 
 \item{title}{title of the document}
 
-\item{author}{author of the}
-}
-\value{
-R markdown text and save the Rmd document
+\item{outputFormat}{output format of the document}
+
+\item{numberSections}{logical to get numbered sections}
 }
 \description{
 Initialize a R markdown document by Writing its header in YAML

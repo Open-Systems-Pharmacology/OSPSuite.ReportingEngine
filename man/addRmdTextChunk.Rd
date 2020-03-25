@@ -11,9 +11,6 @@ addRmdTextChunk(fileName, text)
 
 \item{text}{text to include in the document}
 }
-\value{
-R markdown text with figure and save the Rmd document
-}
 \description{
 Add markdown text to a Rmd document
 }

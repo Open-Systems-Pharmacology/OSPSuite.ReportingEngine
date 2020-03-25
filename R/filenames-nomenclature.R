@@ -1,10 +1,14 @@
-startTime <- format(Sys.time(), "%H%M%S")
-startDate <- format(Sys.Date(), "%Y%m%d")
-#defaultWorkflowFolder <- file.path(getwd(), defaultFileNames$workflowFolderName())
+startTime <- function() {
+  return(format(Sys.time(), "%H%M%S"))
+}
+startDate <- function() {
+  return(format(Sys.Date(), "%Y%m%d"))
+}
+# defaultWorkflowFolder <- file.path(getwd(), defaultFileNames$workflowFolderName())
 
 defaultFileNames <- list(
   simulationResultsFile = function(simulationName) {
-    getDefaultFileName(simulationName, suffix = "Results")
+    getDefaultFileName(simulationName, suffix = "SimulationResults")
   },
   popSimulationResultsFile = function(populationName, simulationName) {
     getDefaultFileName(populationName, simulationName, suffix = "SimulationResults")
@@ -15,8 +19,8 @@ defaultFileNames <- list(
   sensitivityAnalysisResultsFile = function(simulationName) {
     getDefaultFileName(simulationName, suffix = "SensitivityAnalysisResults")
   },
-  workflowFolderPath= function(name = "Workflow",folder=getwd()) {
-    file.path(folder,getDefaultFolderName(name, suffix = paste0("_", startDate, "_", startTime), sep = ""))
+  workflowFolderPath = function(name = "Workflow", folder = getwd()) {
+    file.path(folder, getDefaultFolderName(name, suffix = paste0("_", startDate(), "_", startTime()), sep = ""))
   },
   inputFolder = function(name = NULL) {
     getDefaultFolderName(name, suffix = "Inputs", sep = ifnotnull(name, "-", ""))
@@ -75,3 +79,34 @@ getDefaultFolderName <- function(..., suffix = "", sep = "-") {
   defaultFolderName <- paste(..., suffix, sep = sep)
   return(defaultFolderName)
 }
+
+defaultWorkflowTitles <- list(
+  "plotGoF" = "Time profiles and residual plots",
+  "plotPKParameters" = "PK parameters",
+  "plotMassBalance" = "Mass Balance",
+  "plotAbsorption" = "Absorption",
+  "plotSensitivity" = "Sensitivity Analysis"
+)
+
+defaultWorkflowMessages <- list(
+  "simulate" = "Perform simulation task",
+  "calculatePKParameters" = "Calculate PK parameters task",
+  "sensitivityAnalysis" = "Perform sensitivity analysis task",
+  "plotGoF" = "Plot Goodness of Fit task in Alpha Testing",
+  "plotPKParameters" = "Get tables of PK parameters task in Alpha Testing",
+  "plotMassBalance" = "Plot Mass Balance task in Alpha Testing",
+  "plotAbsorption" = "Plot Absorption task in Alpha Testing",
+  "plotSensitivity" = "Plot Sensitivity task not available at the moment",
+  "renderReport" = "Render a report with a specific format"
+)
+
+defaultTaskOutputFolders <- list(
+  "simulate" = "SimulationResults",
+  "calculatePKParameters" = "PKAnalysisResults",
+  "sensitivityAnalysis" = "SensitivityResults",
+  "plotGoF" = "TimeProfiles",
+  "plotPKParameters" = "PKAnalysis",
+  "plotMassBalance" = "MassBalance",
+  "plotAbsorption" = "Absorption",
+  "plotSensitivity" = "Sensitivity"
+)

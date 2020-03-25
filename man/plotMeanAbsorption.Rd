@@ -4,12 +4,18 @@
 \alias{plotMeanAbsorption}
 \title{plotMeanAbsorption}
 \usage{
-plotMeanAbsorption(structureSet, plotConfiguration = NULL)
+plotMeanAbsorption(
+  structureSet,
+  logFolder = getwd(),
+  plotConfigurations = NULL
+)
 }
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object}
 
-\item{plotConfiguration}{`PlotConfiguration` R6 class object}
+\item{logFolder}{folder where the logs are saved}
+
+\item{plotConfigurations}{list of `PlotConfiguration` R6 class objects}
 }
 \value{
 `ggplot` object

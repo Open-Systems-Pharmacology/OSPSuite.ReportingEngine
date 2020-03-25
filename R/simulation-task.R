@@ -1,52 +1,81 @@
 #' @title SimulationTask
 #' @description  R6 class for SimulationTask settings
-#' @field inputFolderName name of input folder
-#' @field simulationFileName name of simulation files
-#' @field populationFileName name of population file
-#' @field resultsFolderName name of folder where results are saved
-#' @field resultsFileName name of file where results are saved
 #' @field numberOfCores number of cores for parallel computation
-#' @field generatedResultFileNames name of files where PK parameters are saved
+#' @field getTaskResults function called by task that computes and format figure results
 SimulationTask <- R6::R6Class(
   "SimulationTask",
   inherit = Task,
   public = list(
-    # inputFolderName = NULL,
-    # simulationFileName = NULL,
-    # populationFileName = NULL,
-    # resultsFolderName = NULL,
-    # resultsFileName = NULL,
     numberOfCores = NULL,
-    # generatedResultFileNames = NULL,
+    getTaskResults = NULL,
 
     #' @description
     #' Create a `SimulationTask` object
-    #' @param inputFolderName name of input folder
-    #' @param simulationFileName name of simulation files
-    #' @param populationFileName name of population file
-    #' @param resultsFolderName name of folder where results are saved
-    #' @param resultsFileName name of file where results are saved
     #' @param numberOfCores number of cores for parallel computation
-    #' @param generatedResultFileNames name of files where PK parameters are saved
+    #' @param getTaskResults function called by task that computes and format figure results
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SimulationTask` object
     initialize = function(numberOfCores = NULL,
-                          ...) {
+                              getTaskResults = NULL,
+                              ...) {
       super$initialize(...)
       self$updateNumberOfCores(numberOfCores %||% defaultSimulationNumberOfCores)
+      self$getTaskResults <- getTaskResults
     },
 
     #' @description
     #' Update the `numberOfCores`
     #' @param numberOfCores is the number of cores to use for simulation
-    updateNumberOfCores = function(numberOfCores){
+    updateNumberOfCores = function(numberOfCores) {
       if (!is.null(numberOfCores)) {
         validateIsInteger(numberOfCores)
-        validateIsOfLength(object = numberOfCores,nbElements = 1)
+        validateIsOfLength(object = numberOfCores, nbElements = 1)
         self$numberOfCores <- numberOfCores
       }
+    },
+
+    #' @description
+    #' Save results from task run.
+    #' @param set R6 class `SimulationStructure`
+    #' @param taskResults list of results from task run.
+    saveResults = function(set,
+                               taskResults) {
+      ospsuite::exportResultsToCSV(
+        taskResults,
+        set$simulationResultFileNames
+      )
+    },
+
+    #' @description
+    #' Run task and save its output
+    #' @param structureSets list of `SimulationStructure` R6 class
+    runTask = function(structureSets) {
+      logWorkflow(
+        message = paste0("Starting ", self$message),
+        pathFolder = self$workflowFolder
+      )
+
+      if (!is.null(self$outputFolder)) {
+        dir.create(file.path(self$workflowFolder, self$outputFolder))
+      }
+
+      for (set in structureSets) {
+        logWorkflow(
+          message = paste0("Run simulation: ", set$simulationSet$simulationName),
+          pathFolder = self$workflowFolder
+        )
+        if (self$validateInput()) {
+          taskResults <- self$getTaskResults(
+            set,
+            self$workflowFolder
+          )
+
+          self$saveResults(
+            set,
+            taskResults
+          )
+        }
+      }
     }
-
-
   )
 )

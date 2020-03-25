@@ -12,21 +12,23 @@ R6 class for Reporting Engine Mean Model Workflow
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{meanModelSimulation}}{R6 class `Task` for simulation}
+\item{\code{simulate}}{R6 class `Task` for simulation}
 
 \item{\code{meanModelPKParameters}}{R6 class `Task` for PK parameters calculation}
 
 \item{\code{meanModelSensitivityAnalysis}}{R6 class `Task` for sensitivity analysis}
 
-\item{\code{plotGoF}}{R6 class `Task` for goodness of fit plots}
+\item{\code{plotGoF}}{R6 class `PlotTask` for goodness of fit plots}
 
-\item{\code{plotMassBalance}}{R6 class `Task` for mass balance plot}
+\item{\code{plotMassBalance}}{R6 class `PlotTask` for mass balance plot}
 
-\item{\code{plotAbsorption}}{R6 class `Task` for absorption plot}
+\item{\code{plotAbsorption}}{R6 class `PlotTask` for absorption plot}
 
-\item{\code{plotPKParameters}}{R6 class `Task` for PK parameters plot}
+\item{\code{plotPKParameters}}{R6 class `PlotTask` for PK parameters plot}
 
-\item{\code{plotSensitivity}}{R6 class `Task` for sensitivity plot}
+\item{\code{plotSensitivity}}{R6 class `PlotTask` for sensitivity plot}
+
+\item{\code{renderReport}}{R6 class `Task` for saving report in a specific format}
 }
 \if{html}{\out{</div>}}
 }
@@ -34,7 +36,7 @@ R6 class for Reporting Engine Mean Model Workflow
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{MeanModelWorkflow$new()}}
-\item \href{#method-meanModelSimulationSettings}{\code{MeanModelWorkflow$meanModelSimulationSettings()}}
+\item \href{#method-simulateSettings}{\code{MeanModelWorkflow$simulateSettings()}}
 \item \href{#method-calculatePKParametersSettings}{\code{MeanModelWorkflow$calculatePKParametersSettings()}}
 \item \href{#method-meanModelSensitivityAnalysisSettings}{\code{MeanModelWorkflow$meanModelSensitivityAnalysisSettings()}}
 \item \href{#method-plotGoFSettings}{\code{MeanModelWorkflow$plotGoFSettings()}}
@@ -42,6 +44,7 @@ R6 class for Reporting Engine Mean Model Workflow
 \item \href{#method-plotMassBalanceSettings}{\code{MeanModelWorkflow$plotMassBalanceSettings()}}
 \item \href{#method-plotAbsorptionSettings}{\code{MeanModelWorkflow$plotAbsorptionSettings()}}
 \item \href{#method-plotSensitivitySettings}{\code{MeanModelWorkflow$plotSensitivitySettings()}}
+\item \href{#method-renderReportSettings}{\code{MeanModelWorkflow$renderReportSettings()}}
 \item \href{#method-runWorkflow}{\code{MeanModelWorkflow$runWorkflow()}}
 \item \href{#method-print}{\code{MeanModelWorkflow$print()}}
 \item \href{#method-clone}{\code{MeanModelWorkflow$clone()}}
@@ -79,329 +82,345 @@ A new `MeanModelWorkflow` object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-meanModelSimulationSettings"></a>}}
-\subsection{Method \code{meanModelSimulationSettings()}}{
-Define simulate `task` settings
+\if{html}{\out{<a id="method-simulateSettings"></a>}}
+\subsection{Method \code{simulateSettings()}}{
+Define simulate `SimulationTask` settings
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$meanModelSimulationSettings(
-  input = NULL,
-  output = NULL,
-  settings = NULL,
+\if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$simulateSettings(
+  taskFunction = simulateModel,
+  outputFolder = defaultTaskOutputFolders$simulate,
   active = TRUE,
-  message = NULL
+  message = defaultWorkflowMessages$simulate,
+  settings = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{file or folder of input}
+\item{\code{taskFunction}}{function performed by `Task` to get results}
 
-\item{\code{output}}{file or folder of output}
+\item{\code{outputFolder}}{folder where `Task` output is saved}
 
-\item{\code{settings}}{specific settings for task}
-
-\item{\code{active}}{logical indicating if `task` is performed in worklfow.
+\item{\code{active}}{logical defining if `Task` will be run by workflow
 Default value is `TRUE`}
 
-\item{\code{message}}{title of the `task`.
-Default value indicates `task` name.}
+\item{\code{message}}{message/title of the `Task`}
 
-\item{\code{inputFolderName}}{folder of input}
-
-\item{\code{simulationFileName}}{name of simulation file}
-
-\item{\code{resultsFolderName}}{folder where output is saved}
-
-\item{\code{resultsFileName}}{file where output is saved}
+\item{\code{settings}}{specific settings for `Task`}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `Task` object
+A new `SimulationTask` object
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-calculatePKParametersSettings"></a>}}
 \subsection{Method \code{calculatePKParametersSettings()}}{
-Define calculate PK Parameters `task` settings
+Define calculate PK Parameters `CalculatePKParametersTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$calculatePKParametersSettings(
-  input = NULL,
-  output = NULL,
-  settings = NULL,
-  active = TRUE,
-  message = NULL
+  taskFunction = NULL,
+  outputFolder = defaultTaskOutputFolders$calculatePKParameters,
+  active = FALSE,
+  message = defaultWorkflowMessages$calculatePKParameters,
+  settings = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{file or folder of input}
+\item{\code{taskFunction}}{function performed by `Task` to get results}
 
-\item{\code{output}}{file or folder of output}
+\item{\code{outputFolder}}{folder where `Task` output is saved}
 
-\item{\code{settings}}{specific settings for task}
+\item{\code{active}}{logical defining if `Task` will be run by workflow
+Default value is `FALSE`}
 
-\item{\code{active}}{logical indicating if `task` is performed in worklfow.
-Default value is `TRUE`}
+\item{\code{message}}{message/title of the `Task`}
 
-\item{\code{message}}{title of the `task`.
-Default value indicates `task` name.}
-
-\item{\code{simulationFilePath}}{TO DO}
-
-\item{\code{simulationResultFilePaths}}{TO DO}
-
-\item{\code{pkParametersToEvaluate}}{TO DO}
-
-\item{\code{userDefinedPKFunctions}}{TO DO}
-
-\item{\code{pkParameterResultsFilePath}}{TO DO}
+\item{\code{settings}}{specific settings for `Task`}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `Task` object
+A new `SimulationTask` object
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-meanModelSensitivityAnalysisSettings"></a>}}
 \subsection{Method \code{meanModelSensitivityAnalysisSettings()}}{
-Define mean Model Sensitivity Analysis `task` settings
+Define mean Model Sensitivity Analysis `SensitivityAnalysisTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$meanModelSensitivityAnalysisSettings(
-  input = NULL,
-  output = NULL,
-  settings = NULL,
+  taskFunction = NULL,
+  outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
   active = FALSE,
-  message = NULL,
-  variationRange = NULL,
-  numberOfCores = NULL
+  message = defaultWorkflowMessages$sensitivityAnalysis,
+  settings = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{file or folder of input}
+\item{\code{taskFunction}}{function performed by `Task` to get results}
 
-\item{\code{output}}{file or folder of output}
+\item{\code{outputFolder}}{folder where `Task` output is saved}
 
-\item{\code{settings}}{specific settings for task}
+\item{\code{active}}{logical defining if `Task` will be run by workflow
+Default value is `FALSE`}
 
-\item{\code{active}}{logical indicating if `task` is performed in worklfow.
-Default value is `TRUE`}
+\item{\code{message}}{message/title of the `Task`}
 
-\item{\code{message}}{title of the `task`.
-Default value indicates `task` name.}
-
-\item{\code{variationRange}}{TO DO}
-
-\item{\code{numberOfCores}}{TO DO}
-
-\item{\code{inputFolderName}}{TO DO}
-
-\item{\code{simulationFileName}}{TO DO}
-
-\item{\code{resultsFolderName}}{TO DO}
-
-\item{\code{resultsFileName}}{TO DO}
+\item{\code{settings}}{specific settings for `Task`}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `Task` object
+A new `SimulationTask` object
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotGoFSettings"></a>}}
 \subsection{Method \code{plotGoFSettings()}}{
-Define Goodness of fit `task` settings
+Define Goodness of fit `PlotTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$plotGoFSettings(
-  input = NULL,
-  output = file.path(self$resultsFolder, "TimeProfile"),
+  reportTitle = defaultWorkflowTitles$plotGoF,
+  taskFunction = plotMeanGoodnessOfFit,
+  outputFolder = defaultTaskOutputFolders$plotGoF,
   active = FALSE,
-  message = NULL
+  message = defaultWorkflowMessages$plotGoF,
+  settings = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{file or folder of input}
+\item{\code{reportTitle}}{section title of plot task result within report}
 
-\item{\code{output}}{file or folder of output}
+\item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
+
+\item{\code{outputFolder}}{folder where `Task` output is saved}
 
 \item{\code{active}}{logical indicating if `task` is performed in worklfow.
-Default value is `TRUE`}
+Default value is `FALSE`}
 
-\item{\code{message}}{title of the `task`.
-Default value indicates `task` name.}
+\item{\code{message}}{message indicating what the `task` does}
 
 \item{\code{settings}}{specific settings for task}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `Task` object
+A `PlotTask` object for goodness of fit plots
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotPKParametersSettings"></a>}}
 \subsection{Method \code{plotPKParametersSettings()}}{
-Define plot PK parameters `task` settings
+Define PK parameters `PlotPKParametersTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$plotPKParametersSettings(
-  input = NULL,
-  output = NULL,
+  reportTitle = defaultWorkflowTitles$plotPKParameters,
+  taskFunction = plotMeanPKParameters,
+  outputFolder = defaultTaskOutputFolders$plotPKParameters,
   active = FALSE,
-  message = NULL
+  message = defaultWorkflowMessages$plotPKParameters,
+  settings = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{file or folder of input}
+\item{\code{reportTitle}}{section title of plot task result within report}
 
-\item{\code{output}}{file or folder of output}
+\item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
+
+\item{\code{outputFolder}}{folder where `Task` output is saved}
 
 \item{\code{active}}{logical indicating if `task` is performed in worklfow.
-Default value is `TRUE`}
+Default value is `FALSE`}
 
-\item{\code{message}}{title of the `task`.
-Default value indicates `task` name.}
+\item{\code{message}}{message indicating what the `task` does}
 
 \item{\code{settings}}{specific settings for task}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `Task` object
+A `PlotPKParametersTask` object for PK parameters tables
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotMassBalanceSettings"></a>}}
 \subsection{Method \code{plotMassBalanceSettings()}}{
-Define plot mass balance `task` settings
+Define Mass Balance `PlotTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$plotMassBalanceSettings(
-  input = NULL,
-  output = file.path(self$resultsFolder, "MassBalance"),
+  reportTitle = defaultWorkflowTitles$plotMassBalance,
+  taskFunction = plotMeanMassBalance,
+  outputFolder = defaultTaskOutputFolders$plotMassBalance,
   active = FALSE,
-  message = NULL
+  message = defaultWorkflowMessages$plotMassBalance,
+  settings = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{file or folder of input}
+\item{\code{reportTitle}}{section title of plot task result within report}
 
-\item{\code{output}}{file or folder of output}
+\item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
+
+\item{\code{outputFolder}}{folder where `Task` output is saved}
 
 \item{\code{active}}{logical indicating if `task` is performed in worklfow.
-Default value is `TRUE`}
+Default value is `FALSE`}
 
-\item{\code{message}}{title of the `task`.
-Default value indicates `task` name.}
+\item{\code{message}}{message indicating what the `task` does}
 
 \item{\code{settings}}{specific settings for task}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `Task` object
+A `PlotTask` object for goodness of fit plots
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotAbsorptionSettings"></a>}}
 \subsection{Method \code{plotAbsorptionSettings()}}{
-Define plot absorption `task` settings
+Define Absorption `PlotTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$plotAbsorptionSettings(
-  input = NULL,
-  output = file.path(self$resultsFolder, "Absorption"),
+  reportTitle = defaultWorkflowTitles$plotAbsorption,
+  taskFunction = plotMeanAbsorption,
+  outputFolder = defaultTaskOutputFolders$plotAbsorption,
   active = FALSE,
-  message = NULL
+  message = defaultWorkflowMessages$plotAbsorption,
+  settings = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{file or folder of input}
+\item{\code{reportTitle}}{section title of plot task result within report}
 
-\item{\code{output}}{file or folder of output}
+\item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
+
+\item{\code{outputFolder}}{folder where `Task` output is saved}
 
 \item{\code{active}}{logical indicating if `task` is performed in worklfow.
-Default value is `TRUE`}
+Default value is `FALSE`}
 
-\item{\code{message}}{title of the `task`.
-Default value indicates `task` name.}
+\item{\code{message}}{message indicating what the `task` does}
 
 \item{\code{settings}}{specific settings for task}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `Task` object
+A `PlotTask` object for goodness of fit plots
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotSensitivitySettings"></a>}}
 \subsection{Method \code{plotSensitivitySettings()}}{
-Define plot sensisitivity `task` settings
+Define sensitivity analysis `PlotTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$plotSensitivitySettings(
-  input = NULL,
-  output = NULL,
+  reportTitle = defaultWorkflowTitles$plotSensitivity,
+  taskFunction = NULL,
+  outputFolder = defaultTaskOutputFolders$plotSensitivity,
   active = FALSE,
-  message = NULL
+  message = defaultWorkflowMessages$plotSensitivity,
+  settings = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{file or folder of input}
+\item{\code{reportTitle}}{section title of plot task result within report}
 
-\item{\code{output}}{file or folder of output}
+\item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
+
+\item{\code{outputFolder}}{folder where `Task` output is saved}
 
 \item{\code{active}}{logical indicating if `task` is performed in worklfow.
-Default value is `TRUE`}
+Default value is `FALSE`}
 
-\item{\code{message}}{title of the `task`.
-Default value indicates `task` name.}
+\item{\code{message}}{message indicating what the `task` does}
 
 \item{\code{settings}}{specific settings for task}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `Task` object
+A `PlotTask` object for goodness of fit plots
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-renderReportSettings"></a>}}
+\subsection{Method \code{renderReportSettings()}}{
+Define render report `ReportTask` settings
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$renderReportSettings(
+  active = FALSE,
+  message = defaultWorkflowMessages$renderReport,
+  settings = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{active}}{logical indicating if `Task` is performed in worklfow.
+Default value is `FALSE`}
+
+\item{\code{message}}{message indicating what the `task` does}
+
+\item{\code{settings}}{specific settings for task}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A `PlotTask` object for goodness of fit plots
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-runWorkflow"></a>}}
 \subsection{Method \code{runWorkflow()}}{
-Run population workflow tasks for a single simulation set
+Run mean model workflow tasks for all simulation sets if tasks are activated
+The order of tasks is as follows:
+# 1) Run simulations
+# 2) Perform PK and sensitivity analyses
+# 3) Perform plot tasks
+## 3.a) time profiles and residual plots
+## 3.b) absorption plots
+## 3.c) mass balance plots
+## 3.d) PK and sensitivity analyses tables and plots
+# 4) Render report
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$runWorkflow()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-All results and plots as a structured output in a folder specific to simulation set.
+All results and plots as a structured output in the workflow folder
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
 \subsection{Method \code{print()}}{
 Print workflow list of tasks
-TO DO: add simulationSets to print() method
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$print()}\if{html}{\out{</div>}}
 }

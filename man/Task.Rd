@@ -9,13 +9,13 @@ R6 class for Task settings
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{active}}{logical}
+\item{\code{active}}{logical indicating if `Task` is performed in a worklfow.}
 
-\item{\code{input}}{List of input files/folders to use to perform tasks}
+\item{\code{outputFolder}}{List of output files/folders to save the task output}
 
-\item{\code{output}}{List of output files/folders to save the task output}
+\item{\code{workflowFolder}}{folder where workflow is run and saved}
 
-\item{\code{settings}}{class}
+\item{\code{settings}}{list of settings for task such as plot configurations}
 
 \item{\code{message}}{message or title of the task}
 }
@@ -38,8 +38,8 @@ R6 class for Task settings
 Create a `Task` object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Task$new(
-  input = NULL,
-  output = NULL,
+  outputFolder = NULL,
+  workflowFolder = getwd(),
   settings = NULL,
   active = FALSE,
   message = NULL
@@ -49,17 +49,16 @@ Create a `Task` object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{list of files or folders of input}
+\item{\code{outputFolder}}{task output folder to save results}
 
-\item{\code{output}}{list of files or folders of output}
+\item{\code{workflowFolder}}{folder where workflow is run and saved}
 
-\item{\code{settings}}{specific settings for task}
+\item{\code{settings}}{specific settings for task (e.g. plot configurations)}
 
-\item{\code{active}}{logical indicating if `task` is performed in a worklfow.
+\item{\code{active}}{logical indicating if `Task` is performed in a worklfow.
 Default value is `FALSE`}
 
-\item{\code{message}}{title of the `task`.
-Default value indicates `task` name.}
+\item{\code{message}}{message of the `Task`.}
 }
 \if{html}{\out{</div>}}
 }
@@ -70,6 +69,7 @@ A new `Task` object
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-activate"></a>}}
 \subsection{Method \code{activate()}}{
+Activate `Task`
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Task$activate()}\if{html}{\out{</div>}}
 }
@@ -78,6 +78,7 @@ A new `Task` object
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-inactivate"></a>}}
 \subsection{Method \code{inactivate()}}{
+Inactivate `Task`
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Task$inactivate()}\if{html}{\out{</div>}}
 }
@@ -86,10 +87,21 @@ A new `Task` object
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-validateInput"></a>}}
 \subsection{Method \code{validateInput()}}{
+Check if `Task` inputs exist
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Task$validateInput()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Task$validateInput(inputsToCheck = NULL)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{inputsToCheck}}{list of input files to check}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+logical indicating if input is valid
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
@@ -100,7 +112,7 @@ Print `Task` features
 }
 
 \subsection{Returns}{
-List of task features
+Text of task features
 }
 }
 \if{html}{\out{<hr>}}

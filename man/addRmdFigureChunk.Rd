@@ -13,9 +13,6 @@ addRmdFigureChunk(fileName, figureFile, figureCaption = "")
 
 \item{figureCaption}{caption of figure}
 }
-\value{
-R markdown text with figure and save the Rmd document
-}
 \description{
 Add a figure in a Rmd document
 }

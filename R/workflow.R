@@ -3,7 +3,6 @@
 #' @field reportingEngineInfo R6 class object with relevant information about reporting engine
 #' @field simulationStructures `SimulationStructure` R6 class object managing the structure of the workflow output
 #' @field workflowFolder path of the folder create by the Workflow
-#' @field resultsFolder path where results are saved
 #' @field reportFileName name of the Rmd report file
 #' @import tlf
 #' @import ospsuite
@@ -13,60 +12,49 @@ Workflow <- R6::R6Class(
     reportingEngineInfo = ReportingEngineInfo$new(),
     simulationStructures = NULL,
     workflowFolder = NULL,
-    resultsFolder = NULL,
     reportFileName = NULL,
 
     #' @description
     #' Create a new `Workflow` object.
     #' @param simulationSets list of `SimulationSet` R6 class objects
-    #' @param workflowFolder path of the folder create by the Workflow
-    #' @param resultsFolderName name of folder where results are saved
-    #' @param reportName name of the report. Report output includes Rmd, md and html versions.
+    #' @param workflowFolder path of the output folder created or used by the Workflow.
+    #' Default input creates a new folder with default naming
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
-                          workflowFolder = defaultFileNames$workflowFolderPath(),
-                          resultsFolderName = defaultFileNames$resultsFolder(),
-                          reportName = defaultFileNames$reportName()) {
-      workflowFolderCheck <- checkExisitingPath(workflowFolder, stopIfPathExists = TRUE)
+                              workflowFolder = NULL) {
 
+      # Check workflow folder input:
+      # If workflow folder already exist throw a warning indicating the folder can be overwritten
+      self$workflowFolder <- workflowFolder %||% defaultFileNames$workflowFolderPath()
+      workflowFolderCheck <- checkExisitingPath(self$workflowFolder, stopIfPathExists = FALSE)
 
-      #If default workflowFolder is not valid, log outcome in getwd()
-      #But can we carry on if !is.null(workflowFolderCheck) is true?  Should workflow folder be set to getwd() if so?
       if (!is.null(workflowFolderCheck)) {
         logWorkflow(
           message = workflowFolderCheck,
-          pathFolder = getwd(),
+          pathFolder = self$workflowFolder,
+          logTypes = c(LogTypes$Debug, LogTypes$Error)
+        )
+        logWorkflow(
+          message = messages$warningPathIncludes(self$workflowFolder),
+          pathFolder = self$workflowFolder,
           logTypes = c(LogTypes$Debug, LogTypes$Error)
         )
       }
-      self$workflowFolder <- workflowFolder
-      dir.create(self$workflowFolder)
+      dir.create(self$workflowFolder, showWarnings = FALSE)
 
       logWorkflow(
         message = self$reportingEngineInfo$print(),
         pathFolder = self$workflowFolder
       )
 
-      self$reportFileName <- file.path(self$workflowFolder, paste0(reportName, ".Rmd"))
+      self$reportFileName <- file.path(self$workflowFolder, paste0(defaultFileNames$reportName(), ".Rmd"))
 
-      resultsFolder <- file.path(workflowFolder, resultsFolderName)
-      resultsFolderCheck <- checkExisitingPath(resultsFolder, stopIfPathExists = TRUE)
-      if (!is.null(resultsFolderCheck)) {
-        logWorkflow(
-          message = resultsFolderCheck,
-          pathFolder = self$workflowFolder,
-          logTypes = c(LogTypes$Debug, LogTypes$Error)
-        )
-      }
-      self$resultsFolder <- resultsFolder
-      dir.create(self$resultsFolder)
-
-      self$simulationStructures <- list()
       # Check of Workflow inputs
-      for (simulationSetIndex in 1:length(simulationSets)) {
+      self$simulationStructures <- list()
+      for (simulationSetIndex in seq_along(simulationSets)) {
         self$simulationStructures[[simulationSetIndex]] <- SimulationStructure$new(
           simulationSet = simulationSets[[simulationSetIndex]],
-          workflowResultsFolder = self$resultsFolder
+          workflowFolder = self$workflowFolder
         )
       }
     },

@@ -54,6 +54,7 @@ plotDemography <- function(simulation,
 #' @description Plot goodness of fit diagnostics including time profiles,
 #' observations vs predictions, residuals plots (residuals vs time, vs predictions, qq-plots and histogram)
 #' @param structureSet `SimulationStructure` R6 class object
+#' @param logFolder folder where the logs are saved
 #' @param plotConfigurations List of `PlotConfiguration` R6 class objects for each goodness of fit plot
 #' @return list of `residuals` objects
 #' @export
@@ -61,6 +62,7 @@ plotDemography <- function(simulation,
 #' @import ospsuite
 #' @import utils
 plotMeanGoodnessOfFit <- function(structureSet,
+                                  logFolder = getwd(),
                                   plotConfigurations = NULL) {
   timeProfileData <- NULL
   goodnessOfFitPlots <- NULL
@@ -69,26 +71,32 @@ plotMeanGoodnessOfFit <- function(structureSet,
   # Get the time profile for observed data
   if (!is.null(structureSet$simulationSet$observedDataFile)) {
     observations <- list()
-    observations$data <- read.csv(structureSet$simulationSet$observedDataFile)
-    observations$metaData <- read.csv(structureSet$simulationSet$observedMetaDataFile)
+    observations$data <- readObservedDataFile(structureSet$simulationSet$observedDataFile)
+    observations$metaData <- readObservedDataFile(structureSet$simulationSet$observedMetaDataFile)
     observations$filter <- structureSet$simulationSet$dataFilter
 
     timeColumn <- as.character(observations$metaData[observations$metaData[, "matlabID"] == "time", "nonmenColumn"])
     dvColumn <- as.character(observations$metaData[observations$metaData[, "matlabID"] == "dv", "nonmenColumn"])
-    filterColumn <- as.character(observations$metaData[observations$metaData[, "matlabID"] == "dataFilter", "nonmenColumn"])
 
     rowFilter <- TRUE
     if (!is.null(observations$filter)) {
-      # TO DO: replace by eval(expr)
-      # In logDebug add number of rows included by the filter
-      rowFilter <- which(observations$data[, filterColumn] == observations$filter)
+      if (!isOfType(observations$filter, "expression")) {
+        observations$filter <- parse(text = observations$filter)
+      }
+      rowFilter <- evalDataFilter(observations$data, observations$filter)
+
+      logWorkflow(
+        message = paste0("Number of observations filtered: ", sum(rowFilter)),
+        pathFolder = logFolder,
+        logTypes = LogTypes$Debug
+      )
     }
 
     # Observed Data needs to be already in the display unit
     timeProfileData <- data.frame(
       "Time" = observations$data[rowFilter, timeColumn],
       "Concentration" = observations$data[rowFilter, dvColumn],
-      "Legend" = paste0(structureSet$simulationSet$pathName, " observed data")
+      "Legend" = structureSet$simulationSet$dataReportName
     )
   }
 
@@ -169,7 +177,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
   }
   return(list(
     plots = goodnessOfFitPlots,
-    timeProfile = timeProfileData,
+    tables = timeProfileData,
     residuals = residuals
   ))
 }

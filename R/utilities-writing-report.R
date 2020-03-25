@@ -2,15 +2,24 @@
 #' @description Initialize a R markdown document by Writing its header in YAML
 #' @param fileName name of Rmd file to initialize
 #' @param title title of the document
-#' @param author author of the
-#' @return R markdown text and save the Rmd document
+#' @param outputFormat output format of the document
+#' @param numberSections logical to get numbered sections
 initializeRmdFile <- function(fileName,
                               title = "",
-                              author = "") {
+                              outputFormat = "html_document",
+                              numberSections = TRUE) {
+  writeSectionNumbers <- "false"
+  if (numberSections) {
+    writeSectionNumbers <- "true"
+  }
+
   RmdText <- c(
     "---",
     paste0('title: "', title, '"'),
-    paste0('author: "', author, '"'),
+    "output:",
+    paste0(" ", outputFormat, ":"),
+    paste0("  keep_md: true"),
+    paste0("  number_sections: ", writeSectionNumbers),
     "---",
     ""
   )
@@ -22,8 +31,6 @@ initializeRmdFile <- function(fileName,
     warning(paste0("Overwriting ", fileName))
   }
   write(RmdText, file = fileName, sep = "\n")
-
-  return()
 }
 
 #' @title addRmdFigureChunk
@@ -31,21 +38,18 @@ initializeRmdFile <- function(fileName,
 #' @param fileName name of Rmd file
 #' @param figureFile figure to include
 #' @param figureCaption caption of figure
-#' @return R markdown text with figure and save the Rmd document
 addRmdFigureChunk <- function(fileName,
                               figureFile,
                               figureCaption = "") {
   RmdText <- c(
     "",
-    paste0('```{r, out.width="100%", include=TRUE, fig.align="center", fig.caption= "', figureCaption, '", echo=FALSE}'),
+    paste0('```{r, out.width="100%", include=TRUE, fig.align="center", fig.cap= "', figureCaption, '", echo=FALSE}'),
     paste0('knitr::include_graphics("', figureFile, '")'),
     "```",
     ""
   )
 
   write(RmdText, file = fileName, append = TRUE, sep = "\n")
-
-  return()
 }
 
 #' @title addRmdTableChunk
@@ -60,22 +64,19 @@ addRmdTableChunk <- function(fileName,
   RmdText <- c(
     "",
     '```{r, echo = FALSE, results = "as.is"}',
-    paste0("table <- read.csv(", tableFile, ")"),
-    paste0("knitr::kable(table, caption = ", tableCaption, ")"),
+    paste0('table <- read.csv("', tableFile, '")'),
+    paste0('knitr::kable(table, caption = "', tableCaption, '")'),
     "```",
     ""
   )
 
   write(RmdText, file = fileName, append = TRUE, sep = "\n")
-
-  return()
 }
 
 #' @title addRmdTextChunk
 #' @description Add markdown text to a Rmd document
 #' @param fileName name of Rmd file
 #' @param text text to include in the document
-#' @return R markdown text with figure and save the Rmd document
 addRmdTextChunk <- function(fileName,
                             text) {
   write(c(
@@ -85,13 +86,11 @@ addRmdTextChunk <- function(fileName,
   ),
   file = fileName, append = TRUE, sep = "\n"
   )
-  return()
 }
 
 #' @title renderRmdFile
 #' @description Translate R markdown document into markdown and html document
 #' @param fileName name of Rmd file
 renderRmdFile <- function(fileName) {
-  rmarkdown::render(fileName, output_format = c("html_document", "md_document"))
-  return()
+  rmarkdown::render(fileName, output_format = "all")
 }

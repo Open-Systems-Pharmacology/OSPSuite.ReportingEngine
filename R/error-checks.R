@@ -62,8 +62,6 @@ validateIsOfType <- function(object, type, nullAllowed = FALSE) {
   logErrorThenStop(messages$errorWrongType(objectName, class(object)[1], objectTypes))
 }
 
-
-
 validateIsInteger <- function(object, nullAllowed = FALSE) {
   validateIsOfType(object, c("numeric", "integer"), nullAllowed)
 
@@ -96,9 +94,6 @@ validateIsNumeric <- function(object, nullAllowed = FALSE) {
   validateIsOfType(object, c("numeric", "integer"), nullAllowed)
 }
 
-
-
-
 validateIsLogical <- function(object, nullAllowed = FALSE) {
   validateIsOfType(object, "logical", nullAllowed)
 }
@@ -117,15 +112,11 @@ validateIsSameLength <- function(...) {
   logErrorThenStop(messages$errorDifferentLength(arguments))
 }
 
-
-
 validateNoDuplicatedEntries <- function(x) {
-  if ( any(duplicated(x)) ) {
+  if (any(duplicated(x))) {
     logErrorThenStop(messages$errorDuplicatedEntries(deparse(substitute(x))))
   }
-  else{
-    return()
-  }
+  return()
 }
 
 #' Check if the provided object is included in a parent object
@@ -174,9 +165,8 @@ checkExisitingPath <- function(path, stopIfPathExists = FALSE) {
   if (stopIfPathExists) {
     logErrorThenStop(messages$warningExistingPath(path))
   }
-  else {
-    warning(messages$warningExistingPath(path))
-  }
+
+  warning(messages$warningExistingPath(path))
 }
 
 checkOverwriteExisitingPath <- function(path, overwrite) {
@@ -197,7 +187,13 @@ checkOverwriteExisitingPath <- function(path, overwrite) {
 #'
 #' @return TRUE if the path includes the extension
 isFileExtension <- function(path, extension) {
-  return(grep(pattern = paste0(".", extension), x = path) == 1)
+  return(max(sapply(extension, 
+                    function(ext){
+                      grepl(pattern = paste0(".", ext), x = path)
+                    }
+                    )
+             )
+         )
 }
 
 validateIsFileExtension <- function(path, extension, nullAllowed = FALSE) {
@@ -209,7 +205,6 @@ validateIsFileExtension <- function(path, extension, nullAllowed = FALSE) {
   }
   logErrorThenStop(messages$errorExtension(path, extension))
 }
-
 
 #' Log the error with a message and then stop, displaying same message.
 #'
