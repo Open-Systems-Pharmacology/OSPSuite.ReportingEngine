@@ -10,7 +10,7 @@ simulateModel <- function(structureSet,
                           logFolder = getwd(),
                           nodeName = NULL,
                           showProgress = FALSE) {
-  simulation <- loadSimulation(structureSet$simulationSet$simulationFile,
+  simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile,
     addToCache = FALSE,
     loadFromCache = FALSE
   )
@@ -27,7 +27,7 @@ simulateModel <- function(structureSet,
 
   population <- NULL
   if (!is.null(structureSet$simulationSet$populationFile)) {
-    population <- loadPopulation(structureSet$simulationSet$populationFile)
+    population <- ospsuite::loadPopulation(structureSet$simulationSet$populationFile)
     logWorkflow(
       message = paste0(
         ifnotnull(nodeName, paste0(nodeName, ": "), ""),
@@ -41,7 +41,7 @@ simulateModel <- function(structureSet,
   }
 
   simRunOptions <- ospsuite::SimulationRunOptions$new(showProgress = showProgress)
-  simulationResult <- runSimulation(simulation, population = population, simulationRunOptions = simRunOptions)
+  simulationResult <- ospsuite::runSimulation(simulation, population = population, simulationRunOptions = simRunOptions)
 
   logWorkflow(
     message = paste0(

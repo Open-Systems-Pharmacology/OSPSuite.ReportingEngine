@@ -29,19 +29,19 @@ PopulationSimulationSet <- R6::R6Class(
     #' @param populationName display name of population
     #' @return A new `MeanModelSet` object
     initialize = function(simulationSetName = NULL,
-                              simulationFile,
-                              simulationName = NULL,
-                              pathID = NULL,
-                              pathName = NULL,
-                              pathUnit = NULL,
-                              pkParameters = NULL,
-                              pkParametersNames = NULL,
-                              pkParametersUnits = NULL,
-                              dataFilter = NULL,
-                              observedDataFile = NULL,
-                              observedMetaDataFile = NULL,
-                              populationFile,
-                              populationName = NULL) {
+                          simulationFile,
+                          simulationName = NULL,
+                          pathID = NULL,
+                          pathName = NULL,
+                          pathUnit = NULL,
+                          pkParameters = NULL,
+                          pkParametersNames = NULL,
+                          pkParametersUnits = NULL,
+                          dataFilter = NULL,
+                          observedDataFile = NULL,
+                          observedMetaDataFile = NULL,
+                          populationFile,
+                          populationName = NULL) {
       super$initialize(
         simulationSetName = NULL,
         simulationFile,
