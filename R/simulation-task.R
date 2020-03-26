@@ -6,7 +6,7 @@ SimulationTask <- R6::R6Class(
   "SimulationTask",
   inherit = Task,
   public = list(
-    numberOfCores = NULL,
+    #numberOfCores = NULL,
     getTaskResults = NULL,
 
     #' @description
@@ -15,24 +15,24 @@ SimulationTask <- R6::R6Class(
     #' @param getTaskResults function called by task that computes and format figure results
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SimulationTask` object
-    initialize = function(numberOfCores = NULL,
+    initialize = function(#numberOfCores = NULL,
                           getTaskResults = NULL,
                           ...) {
       super$initialize(...)
-      self$updateNumberOfCores(numberOfCores %||% defaultSimulationNumberOfCores)
+      #self$updateNumberOfCores(numberOfCores %||% defaultSimulationNumberOfCores)
       self$getTaskResults <- getTaskResults
     },
 
-    #' @description
-    #' Update the `numberOfCores`
-    #' @param numberOfCores is the number of cores to use for simulation
-    updateNumberOfCores = function(numberOfCores) {
-      if (!is.null(numberOfCores)) {
-        validateIsInteger(numberOfCores)
-        validateIsOfLength(object = numberOfCores, nbElements = 1)
-        self$numberOfCores <- numberOfCores
-      }
-    },
+    #' #' @description
+    #' #' Update the `numberOfCores`
+    #' #' @param numberOfCores is the number of cores to use for simulation
+    #' updateNumberOfCores = function(numberOfCores) {
+    #'   if (!is.null(numberOfCores)) {
+    #'     validateIsInteger(numberOfCores)
+    #'     validateIsOfLength(object = numberOfCores, nbElements = 1)
+    #'     self$numberOfCores <- numberOfCores
+    #'   }
+    #' },
 
     #' @description
     #' Save results from task run.
@@ -66,9 +66,9 @@ SimulationTask <- R6::R6Class(
         )
         if (self$validateInput()) {
           taskResults <- self$getTaskResults(
-            set,
-            self$workflowFolder
-          )
+            structureSet = set,
+            settings = super$settings,
+            logFolder = self$workflowFolder)
 
           self$saveResults(
             set,

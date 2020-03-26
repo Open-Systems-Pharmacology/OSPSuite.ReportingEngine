@@ -1,5 +1,48 @@
+#' @title simulatePopulationModel
+#' @description Simulate model for a population.  Run parallel workflow if numberOfCores > 1.
+#' @param structureSet `SimulationStructure` R6 class object contain paths of files to be used
+#' @param taskSettings settings for the
+#' @return Simulation results for individual or population
+#' @export
+#' @import ospsuite
+simulatePopulationModel <- function(structureSet,
+                                    settings,
+                                    logFolder = getwd()) {
+
+  if (settings$numberOfCores == 1) {
+    #logInfo(message = "Starting population simulation")
+    #createFolder(set$simulationResultsFolder)
+    #resultsFilePath <- file.path(set$simulationResultsFolder, defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName))
+    simulateModel(structureSet = structureSet,
+                  settings = settings,
+                  logFolder = logFolder)
+  }
+  else if (settings$numberOfCores > 1) {
+    logWorkflow(
+      message = "Starting parallel population simulation",
+      pathFolder = logFolder
+    )
+    #createFolder(set$simulationResultsFolder)
+    set$simulationResultFileNames <- runParallelPopulationSimulation(structureSet = structureSet,
+                                                                   settings = settings,
+                                                                   logFolder = logFolder)
+      # numberOfCores = self$simulatePopulation$numberOfCores,
+      # inputFolderName = set$inputFilesFolder,
+      # simulationFileName = set$simulationSet$simulationName,
+      # populationFileName = set$simulationSet$populationName,
+      # resultsFolderName = set$simulationResultsFolder,
+      # resultsFileName = trimFileName(defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName), extension = "csv"))
+    logWorkflow(message = "Parallel population simulation completed.",
+                pathFolder = logFolder
+    )
+  }
+
+}
+
+
+
 #' @title simulateModel
-#' @description Simulate model, either for an individual or for a given population.  Calculate and save PK parameters as an option.
+#' @description Simulate model, either for an individual or for a given population.
 #' @param structureSet `SimulationStructure` R6 class object contain paths of files to be used
 #' @param logFolder folder where the logs are saved
 #' @param nodeName node name for parallel simulations
@@ -7,13 +50,12 @@
 #' @export
 #' @import ospsuite
 simulateModel <- function(structureSet,
+                          settings,
                           logFolder = getwd(),
-                          nodeName = NULL,
-                          showProgress = FALSE) {
+                          nodeName = NULL) {
   simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile,
-    addToCache = FALSE,
-    loadFromCache = FALSE
-  )
+                                         addToCache = FALSE,
+                                         loadFromCache = FALSE)
   logWorkflow(
     message = paste0(
       ifnotnull(nodeName, paste0(nodeName, ": "), ""),
@@ -40,7 +82,7 @@ simulateModel <- function(structureSet,
     )
   }
 
-  simRunOptions <- ospsuite::SimulationRunOptions$new(showProgress = showProgress)
+  simRunOptions <- ospsuite::SimulationRunOptions$new(showProgress = settings$showProgress)
   simulationResult <- ospsuite::runSimulation(simulation, population = population, simulationRunOptions = simRunOptions)
 
   logWorkflow(
@@ -67,16 +109,23 @@ simulateModel <- function(structureSet,
 #' @export
 #' @import ospsuite
 ## #' @import Rmpi
-runParallelPopulationSimulation <- function(numberOfCores,
-                                            inputFolderName,
-                                            simulationFileName,
-                                            populationFileName,
-                                            resultsFolderName,
-                                            resultsFileName) {
-  population <- loadPopulation(file.path(inputFolderName, paste0(populationFileName, ".csv")))
+runParallelPopulationSimulation <- function(structureSet = structureSet,
+                                            settings = settings,
+                                            logFolder = logFolder) {
+                                            # numberOfCores,
+                                            # inputFolderName,
+                                            # simulationFileName,
+                                            # populationFileName,
+                                            # resultsFolderName,
+                                            # resultsFileName
+
+
+  populationFileName <- structureSet$simulationSet$populationFile
+  population <- ospsuite::loadPopulation(populationFileName)
+
   numberOfIndividuals <- length(population$allIndividualIds)
-  numberOfCores <- min(numberOfCores, numberOfIndividuals)
-  # library("Rmpi")
+  numberOfCores <- min(settings$numberOfCores, numberOfIndividuals)
+
   Rmpi::mpi.spawn.Rslaves(nslaves = numberOfCores)
 
   # Check that the correct number of slaves has been spawned.
@@ -87,16 +136,18 @@ runParallelPopulationSimulation <- function(numberOfCores,
   Rmpi::mpi.remote.exec(library("ospsuite"))
   Rmpi::mpi.remote.exec(library("ospsuite.reportingengine"))
   tempPopDataFiles <- splitPopulationFile(
-    csvPopulationFile = file.path(inputFolderName, paste0(populationFileName, ".csv")),
+    csvPopulationFile = structureSet$simulationSet$populationFile,
     numberOfCores = numberOfCores,
-    outputFolder = paste0(inputFolderName, "/"), #### USE file.path()?  Do we need "/"?
-    outputFileName = populationFileName
+    outputFolder =  paste0(structureSet$simulationResultsFolder,"/") ,
+    outputFileName = trimFileName(structureSet$simulationSet$populationFile,"csv")
   )
   tempLogFileNamePrefix <- file.path(defaultFileNames$workflowFolderPath(), "logDebug-core-simulation")
   tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores))
-  allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFolderName, fileName = resultsFileName)
+  allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores,
+                                                 folderName = structureSet$simulationResultsFolder,
+                                                 fileName = structureSet$simulationResultFileNames)
 
-  Rmpi::mpi.bcast.Robj2slave(obj = simulationFileName)
+  Rmpi::mpi.bcast.Robj2slave(obj = structureSet)
   Rmpi::mpi.bcast.Robj2slave(obj = populationFileName)
   Rmpi::mpi.bcast.Robj2slave(obj = tempPopDataFiles)
   Rmpi::mpi.bcast.Robj2slave(obj = tempLogFileNamePrefix)

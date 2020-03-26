@@ -52,19 +52,18 @@ PopulationWorkflow <- R6::R6Class(
     #' Default value indicates `task` name.
     #' @param numberOfCores number of cores for parallelization
     #' @return A new `Task` object
-    simulatePopulationSettings = function(taskFunction,
-                                          output = NULL,
+    simulatePopulationSettings = function(taskFunction = simulatePopulationModel,
+                                          outputFolder = defaultTaskOutputFolders$simulate,
                                           settings = NULL,
                                           active = TRUE,
-                                          message = NULL,
-                                          numberOfCores = NULL) {
+                                          message = defaultWorkflowMessages$simulate) {
       self$simulatePopulation <- SimulationTask$new(
-        input = input,
-        output = output,
-        settings = settings,
+        getTaskResults = taskFunction,
+        outputFolder = outputFolder,
+        workflowFolder = self$workflowFolder,
         active = active,
-        message = message %||% "Simulate population",
-        numberOfCores = numberOfCores
+        settings = settings,
+        message = message
       )
     },
 
@@ -263,31 +262,31 @@ PopulationWorkflow <- R6::R6Class(
 
       if (self$simulatePopulation$active) {
         if (self$simulatePopulation$validateInput()) {
-          if (self$simulatePopulation$numberOfCores == 1) {
-            logInfo(message = "Starting population simulation")
-            createFolder(set$simulationResultsFolder)
-            resultsFilePath <- file.path(set$simulationResultsFolder, defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName))
-            simulateModel(
-              simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
-              popDataFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$populationName, ".csv")),
-              resultsFilePath = resultsFilePath
-            )
-            set$simulationResultFileNames <- resultsFilePath
-            logInfo(message = "Population simulation completed.")
-          }
-          else if (self$simulatePopulation$numberOfCores > 1) {
-            logInfo(message = "Starting parallel population simulation")
-            createFolder(set$simulationResultsFolder)
-            set$simulationResultFileNames <- runParallelsimulatePopulation(
-              numberOfCores = self$simulatePopulation$numberOfCores,
-              inputFolderName = set$inputFilesFolder,
-              simulationFileName = set$simulationSet$simulationName,
-              populationFileName = set$simulationSet$populationName,
-              resultsFolderName = set$simulationResultsFolder,
-              resultsFileName = trimFileName(defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName), extension = "csv")
-            )
-            logInfo(message = "Parallel population simulation completed.")
-          }
+          # if (self$simulatePopulation$numberOfCores == 1) {
+          #   logInfo(message = "Starting population simulation")
+          #   createFolder(set$simulationResultsFolder)
+          #   resultsFilePath <- file.path(set$simulationResultsFolder, defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName))
+          #   simulateModel(
+          #     simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
+          #     popDataFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$populationName, ".csv")),
+          #     resultsFilePath = resultsFilePath
+          #   )
+          #   set$simulationResultFileNames <- resultsFilePath
+          #   logInfo(message = "Population simulation completed.")
+          # }
+          # else if (self$simulatePopulation$numberOfCores > 1) {
+          #   logInfo(message = "Starting parallel population simulation")
+          #   createFolder(set$simulationResultsFolder)
+          #   set$simulationResultFileNames <- runParallelsimulatePopulation(
+          #     numberOfCores = self$simulatePopulation$numberOfCores,
+          #     inputFolderName = set$inputFilesFolder,
+          #     simulationFileName = set$simulationSet$simulationName,
+          #     populationFileName = set$simulationSet$populationName,
+          #     resultsFolderName = set$simulationResultsFolder,
+          #     resultsFileName = trimFileName(defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName), extension = "csv")
+          #   )
+          #   logInfo(message = "Parallel population simulation completed.")
+          # }
         }
       }
 
