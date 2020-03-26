@@ -20,10 +20,6 @@ modelSet <- SimulationSet$new(
 )
 
 
-# Initialize workflow structure
-meanModelSets <- list()
-meanModelSets[[modelSet$simulationSetName]] <- modelSet
-
 meanModel_Raltegravir <- MeanModelWorkflow$new(simulationSets = modelSet)
 
 # Tasks to activate/inactivate (this can also be done using meanModel_Raltegravir$activateTasks() method)
