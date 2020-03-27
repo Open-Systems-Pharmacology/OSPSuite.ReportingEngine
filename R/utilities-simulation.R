@@ -177,8 +177,6 @@ runParallelPopulationSimulation <- function(structureSet = structureSet,
   Rmpi::mpi.remote.exec(library("ospsuite"))
   Rmpi::mpi.remote.exec(library("ospsuite.reportingengine"))
 
-  Rmpi::mpi.remote.exec(devtools::load_all("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine"))
-
   tempPopDataFiles <- ospsuite::splitPopulationFile(
     csvPopulationFile = structureSet$simulationSet$populationFile,
     numberOfCores = numberOfCores,

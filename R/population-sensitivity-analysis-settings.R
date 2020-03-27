@@ -86,7 +86,7 @@ PopulationSensitivityAnalysisSettings <- R6::R6Class(
         validateIsIncluded(values = pkParameterSelection, parentValues = ospsuite::allPKParameterNames())
         self$pkParameterSelection <- pkParameterSelection
       }
-    }
+    },
 
     #' @description
     #' Update `showProgress`
