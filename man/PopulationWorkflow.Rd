@@ -12,7 +12,7 @@ R6 class for Reporting Engine Population Workflow
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{populationSimulation}}{R6 class `Task` for population simulation}
+\item{\code{simulatePopulation}}{R6 class `Task` for population simulation}
 
 \item{\code{populationPKParameters}}{R6 class `Task` for PK parameters calculation}
 
@@ -32,7 +32,7 @@ R6 class for Reporting Engine Population Workflow
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{PopulationWorkflow$new()}}
-\item \href{#method-populationSimulationSettings}{\code{PopulationWorkflow$populationSimulationSettings()}}
+\item \href{#method-simulatePopulationSettings}{\code{PopulationWorkflow$simulatePopulationSettings()}}
 \item \href{#method-populationPKParameterSettings}{\code{PopulationWorkflow$populationPKParameterSettings()}}
 \item \href{#method-populationSensitivityAnalysisSettings}{\code{PopulationWorkflow$populationSensitivityAnalysisSettings()}}
 \item \href{#method-plotDemographySettings}{\code{PopulationWorkflow$plotDemographySettings()}}
@@ -40,8 +40,6 @@ R6 class for Reporting Engine Population Workflow
 \item \href{#method-plotPKParametersSettings}{\code{PopulationWorkflow$plotPKParametersSettings()}}
 \item \href{#method-plotSensitivitySettings}{\code{PopulationWorkflow$plotSensitivitySettings()}}
 \item \href{#method-runWorkflow}{\code{PopulationWorkflow$runWorkflow()}}
-\item \href{#method-runSingleSetWorkflow}{\code{PopulationWorkflow$runSingleSetWorkflow()}}
-\item \href{#method-print}{\code{PopulationWorkflow$print()}}
 \item \href{#method-clone}{\code{PopulationWorkflow$clone()}}
 }
 }
@@ -77,27 +75,22 @@ A new `PopulationWorkflow` object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-populationSimulationSettings"></a>}}
-\subsection{Method \code{populationSimulationSettings()}}{
+\if{html}{\out{<a id="method-simulatePopulationSettings"></a>}}
+\subsection{Method \code{simulatePopulationSettings()}}{
 Define simulate `task` settings
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$populationSimulationSettings(
-  input = NULL,
-  output = NULL,
+\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$simulatePopulationSettings(
+  taskFunction = simulateModelForPopulation,
+  outputFolder = defaultTaskOutputFolders$simulate,
   settings = NULL,
   active = TRUE,
-  message = NULL,
-  numberOfCores = NULL
+  message = defaultWorkflowMessages$simulate
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{file or folder of input}
-
-\item{\code{output}}{file or folder of output}
-
 \item{\code{settings}}{specific settings for task}
 
 \item{\code{active}}{logical indicating if `task` is performed in worklfow.
@@ -105,6 +98,10 @@ Default value is `TRUE`}
 
 \item{\code{message}}{title of the `task`.
 Default value indicates `task` name.}
+
+\item{\code{input}}{file or folder of input}
+
+\item{\code{output}}{file or folder of output}
 
 \item{\code{numberOfCores}}{number of cores for parallelization}
 }
@@ -120,7 +117,7 @@ A new `Task` object
 Define calculate PK parameters `task` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$populationPKParameterSettings(
-  input = NULL,
+  taskFunction,
   output = NULL,
   settings = NULL,
   active = TRUE,
@@ -131,8 +128,6 @@ Define calculate PK parameters `task` settings
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{file or folder of input}
-
 \item{\code{output}}{file or folder of output}
 
 \item{\code{settings}}{specific settings for task}
@@ -142,6 +137,8 @@ Default value is `TRUE`}
 
 \item{\code{message}}{title of the `task`.
 Default value indicates `task` name.}
+
+\item{\code{input}}{file or folder of input}
 }
 \if{html}{\out{</div>}}
 }
@@ -155,7 +152,6 @@ A new `Task` object
 Define population Sensitivity Analysis `task` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$populationSensitivityAnalysisSettings(
-  input = NULL,
   output = NULL,
   settings = NULL,
   active = TRUE,
@@ -171,8 +167,6 @@ Define population Sensitivity Analysis `task` settings
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{file or folder of input}
-
 \item{\code{output}}{file or folder of output}
 
 \item{\code{settings}}{specific settings for task}
@@ -192,6 +186,8 @@ Default value indicates `task` name.}
 \item{\code{variableParameterPaths}}{vector of paths of parameters to vary when performing sensitivity analysis}
 
 \item{\code{pkParameterSelection}}{list of selected PK parameters for sensitivity analysis}
+
+\item{\code{input}}{file or folder of input}
 }
 \if{html}{\out{</div>}}
 }
@@ -205,6 +201,7 @@ A new `SensitivityAnalysisTask` object
 Define plot demography `task` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotDemographySettings(
+  taskFunction,
   input = NULL,
   output = NULL,
   active = FALSE,
@@ -239,7 +236,7 @@ A new `Task` object
 Define plot goodness of fit `task` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotGoFSettings(
-  input = NULL,
+  taskFunction,
   output = NULL,
   active = FALSE,
   message = NULL
@@ -249,8 +246,6 @@ Define plot goodness of fit `task` settings
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{file or folder of input}
-
 \item{\code{output}}{file or folder of output}
 
 \item{\code{active}}{logical indicating if `task` is performed in worklfow.
@@ -258,6 +253,8 @@ Default value is `TRUE`}
 
 \item{\code{message}}{title of the `task`.
 Default value indicates `task` name.}
+
+\item{\code{input}}{file or folder of input}
 
 \item{\code{settings}}{specific settings for task}
 }
@@ -273,7 +270,7 @@ A new `Task` object
 Define plot PK parameters `task` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotPKParametersSettings(
-  input = NULL,
+  taskFunction,
   output = NULL,
   active = FALSE,
   message = NULL
@@ -283,8 +280,6 @@ Define plot PK parameters `task` settings
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{file or folder of input}
-
 \item{\code{output}}{file or folder of output}
 
 \item{\code{active}}{logical indicating if `task` is performed in worklfow.
@@ -292,6 +287,8 @@ Default value is `TRUE`}
 
 \item{\code{message}}{title of the `task`.
 Default value indicates `task` name.}
+
+\item{\code{input}}{file or folder of input}
 
 \item{\code{settings}}{specific settings for task}
 }
@@ -307,7 +304,7 @@ A new `Task` object
 Define plot sensisitivity `task` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotSensitivitySettings(
-  input = NULL,
+  taskFunction,
   output = NULL,
   active = FALSE,
   message = NULL
@@ -317,8 +314,6 @@ Define plot sensisitivity `task` settings
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{file or folder of input}
-
 \item{\code{output}}{file or folder of output}
 
 \item{\code{active}}{logical indicating if `task` is performed in worklfow.
@@ -326,6 +321,8 @@ Default value is `TRUE`}
 
 \item{\code{message}}{title of the `task`.
 Default value indicates `task` name.}
+
+\item{\code{input}}{file or folder of input}
 
 \item{\code{settings}}{specific settings for task}
 }
@@ -348,42 +345,116 @@ Loop through all simulation sets and run active population model workflow tasks 
 # 2a - PK parameter Plot
 # CORE STAGE 3:  CALCULATE SENSITIVITY
 # 3a - Plots and Tables based on sensitivity results
+#' @description
+#' Run population workflow tasks for a single simulation set
+#' @param set R6 class `SimulationStructure` object
+#' @return All results and plots as a structured output in a folder specific to simulation set
+runSingleSetWorkflow = function(set) {
+  logInfo(message = "Start of population workflow")
+
+  if (self$simulatePopulation$active) {
+    if (self$simulatePopulation$validateInput()) {
+      # if (self$simulatePopulation$numberOfCores == 1) {
+      #   logInfo(message = "Starting population simulation")
+      #   createFolder(set$simulationResultsFolder)
+      #   resultsFilePath <- file.path(set$simulationResultsFolder, defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName))
+      #   simulateModel(
+      #     simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
+      #     popDataFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$populationName, ".csv")),
+      #     resultsFilePath = resultsFilePath
+      #   )
+      #   set$simulationResultFileNames <- resultsFilePath
+      #   logInfo(message = "Population simulation completed.")
+      # }
+      # else if (self$simulatePopulation$numberOfCores > 1) {
+      #   logInfo(message = "Starting parallel population simulation")
+      #   createFolder(set$simulationResultsFolder)
+      #   set$simulationResultFileNames <- runParallelsimulatePopulation(
+      #     numberOfCores = self$simulatePopulation$numberOfCores,
+      #     inputFolderName = set$inputFilesFolder,
+      #     simulationFileName = set$simulationSet$simulationName,
+      #     populationFileName = set$simulationSet$populationName,
+      #     resultsFolderName = set$simulationResultsFolder,
+      #     resultsFileName = trimFileName(defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName), extension = "csv")
+      #   )
+      #   logInfo(message = "Parallel population simulation completed.")
+      # }
+    }
+  }
+
+
+  if (self$populationPKParameters$active) {
+    if (self$populationPKParameters$validateInput()) {
+      logInfo("Starting PK parameter calculation")
+      createFolder(set$pkAnalysisResultsFolder)
+      set$pkAnalysisResultsFileNames <- calculatePKParameters(
+        simulationFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
+        simulationResultFilePaths = set$simulationResultFileNames,
+        pkParameterResultsFilePath = file.path(set$pkAnalysisResultsFolder, defaultFileNames$pkAnalysisResultsFile(set$simulationSet$simulationSetName))
+      )
+      logInfo("PK parameter calculation completed.")
+    }
+  }
+
+
+  if (self$populationSensitivityAnalysis$active) {
+    if (self$populationSensitivityAnalysis$validateInput()) {
+      logInfo("Starting population sensitivity analysis")
+      createFolder(set$sensitivityAnalysisResultsFolder)
+      set$sensitivityAnalysisResultsFileNames <- runPopulationSensitivityAnalysis(
+        simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
+        variableParameterPaths = self$populationSensitivityAnalysis$variableParameterPaths,
+        popDataFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$populationName, ".csv")),
+        pkParameterResultsFilePath = file.path(set$pkAnalysisResultsFolder, defaultFileNames$pkAnalysisResultsFile(set$simulationSet$simulationSetName)),
+        pkParameterSelection = self$populationSensitivityAnalysis$pkParameterSelection,
+        resultsFileFolder = set$sensitivityAnalysisResultsFolder,
+        resultsFileName = trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName), extension = "csv"),
+        variationRange = self$populationSensitivityAnalysis$variationRange,
+        quantileVec = self$populationSensitivityAnalysis$quantileVec,
+        numberOfCores = self$populationSensitivityAnalysis$numberOfCores
+      )
+      logInfo("Population sensitivity analysis completed.")
+    }
+  }
+
+  # TO DO: plug plot tasks to actual results
+  if (self$plotDemography$active) {
+    logInfo(message = self$plotDemography$message)
+  }
+  if (self$plotGoF$active) {
+    logInfo(message = self$plotGoF$message)
+  }
+  if (self$plotPKParameters$active) {
+    logInfo(message = self$plotPKParameters$message)
+  }
+  if (self$plotSensitivity$active) {
+    logInfo(message = self$plotSensitivity$message)
+  }
+},
+
+
+#' @description
+#' Print workflow list of tasks
+#' TO DO: add simulationSets to print() method
+#' @return Task list information
+print = function() {
+  taskOrder <- list(
+    "Task 1" = self$simulatePopulation$print(),
+    "Task 2" = self$pkParametersCalculation$print(),
+    "Task 3" = self$sensitivityAnalysis$print(),
+    "Task 4" = self$plotDemography$print(),
+    "Task 5" = self$plotGoF$print(),
+    "Task 6" = self$plotPKParameters$print(),
+    "Task 7" = self$plotSensitivity$print()
+  )
+  invisible(self)
+
+  return(taskOrder)
+}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$runWorkflow()}\if{html}{\out{</div>}}
 }
 
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-runSingleSetWorkflow"></a>}}
-\subsection{Method \code{runSingleSetWorkflow()}}{
-Run population workflow tasks for a single simulation set
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$runSingleSetWorkflow(set)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{set}}{R6 class `SimulationStructure` object}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-All results and plots as a structured output in a folder specific to simulation set
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\subsection{Method \code{print()}}{
-Print workflow list of tasks
-TO DO: add simulationSets to print() method
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$print()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-Task list information
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

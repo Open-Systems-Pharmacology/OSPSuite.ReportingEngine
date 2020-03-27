@@ -4,12 +4,7 @@
 \alias{simulateModel}
 \title{simulateModel}
 \usage{
-simulateModel(
-  structureSet,
-  logFolder = getwd(),
-  nodeName = NULL,
-  showProgress = FALSE
-)
+simulateModel(structureSet, settings = NULL, logFolder = getwd())
 }
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object contain paths of files to be used}
@@ -22,5 +17,5 @@ simulateModel(
 Simulation results for individual or population
 }
 \description{
-Simulate model, either for an individual or for a given population.  Calculate and save PK parameters as an option.
+Simulate model, either for an individual or for a given population.
 }
