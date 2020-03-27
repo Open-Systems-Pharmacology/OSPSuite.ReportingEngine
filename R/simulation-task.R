@@ -28,18 +28,6 @@ SimulationTask <- R6::R6Class(
       self$settings$updateShowProgress(showProgress)
     },
 
-    #' #' @description
-    #' #' Update the `numberOfCores`
-    #' #' @param numberOfCores is the number of cores to use for simulation
-    #' updateNumberOfCores = function(numberOfCores) {
-    #'   if (!is.null(numberOfCores)) {
-    #'     validateIsInteger(numberOfCores)
-    #'     validateIsOfLength(object = numberOfCores, nbElements = 1)
-    #'     self$settings$numberOfCores <- numberOfCores
-    #'   }
-    #' },
-
-
 
     #' @description
     #' Save results from task run.

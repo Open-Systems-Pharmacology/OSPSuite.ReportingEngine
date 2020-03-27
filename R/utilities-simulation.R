@@ -183,9 +183,17 @@ runParallelPopulationSimulation <- function(structureSet = structureSet,
     outputFolder = getwd(),
     outputFileName = populationFileName
   )
+
   tempLogFileNamePrefix <- file.path(logFolder, "logDebug-core-simulation")
   tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores))
   allResultsFileNames <- paste0(structureSet$simulationSet$simulationSetName,seq(1, numberOfCores),".csv")
+
+  print("%%%%")
+  print(numberOfCores)
+  print(tempPopDataFiles)
+  print(populationFileName)
+  print(allResultsFileNames)
+  print("^^^^")
 
   Rmpi::mpi.bcast.Robj2slave(obj = structureSet)
   Rmpi::mpi.bcast.Robj2slave(obj = populationFileName)

@@ -13,11 +13,9 @@ calculatePKParameters <- function(simulationFilePath,
                                   pkParametersToEvaluate = NULL,
                                   userDefinedPKFunctions = NULL,
                                   pkParameterResultsFilePath) {
-  sim <- loadSimulation(simulationFilePath)
-  res <- importResultsFromCSV(simulation = sim, filePaths = simulationResultFilePaths)
-  logDebug("Starting PK parameter calculation")
+  sim <- ospsuite::loadSimulation(simulationFilePath)
+  res <- ospsuite::importResultsFromCSV(simulation = sim, filePaths = simulationResultFilePaths)
   pkAnalyses <- calculatePKAnalyses(results = res)
-  logDebug("PK parameter calculation complete")
   exportPKAnalysesToCSV(pkAnalyses = pkAnalyses, filePath = pkParameterResultsFilePath)
   return(pkParameterResultsFilePath)
 }
