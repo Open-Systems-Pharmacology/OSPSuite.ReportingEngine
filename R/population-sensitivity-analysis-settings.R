@@ -97,7 +97,5 @@ PopulationSensitivityAnalysisSettings <- R6::R6Class(
         self$showProgress <- showProgress
       }
     }
-
-
   )
 )

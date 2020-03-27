@@ -63,7 +63,8 @@ SimulationTask <- R6::R6Class(
           taskResults <- self$getTaskResults(
             structureSet = set,
             settings = self$settings,
-            logFolder = self$workflowFolder)
+            logFolder = self$workflowFolder
+          )
 
           self$saveResults(
             set,

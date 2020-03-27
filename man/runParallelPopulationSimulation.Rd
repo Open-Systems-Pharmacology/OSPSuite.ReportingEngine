@@ -5,10 +5,10 @@
 \title{runParallelPopulationSimulation}
 \usage{
 runParallelPopulationSimulation(
-  structureSet = structureSet,
+  structureSet,
   numberOfCores,
-  settings = settings,
-  logFolder = logFolder
+  settings,
+  logFolder
 )
 }
 \arguments{

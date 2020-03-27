@@ -38,7 +38,7 @@ runSensitivity <- function(simFilePath,
   # there are parameters, ensure at least one parameter per spawned core
   numberOfCores <- min(numberOfCores, totalNumberParameters)
   if (totalNumberParameters == 0) {
-    logErrorThenStop(messages$errorNoParametersForSensitivityAnalysis(),logFolderPath = logFolder)
+    logErrorThenStop(messages$errorNoParametersForSensitivityAnalysis(), logFolderPath = logFolder)
   }
 
   # If numberOfCores > 1 then spawn cores for later use.
@@ -126,14 +126,16 @@ individualSensitivityAnalysis <- function(simFilePath,
 
   # Determine if SA is to be done on a single core or more
   if (numberOfCores > 1) {
-    allResultsFileNames <- runParallelSensitivityAnalysis(simFilePath = simFilePath,
-                                                          variableParameterPaths =  variableParameterPaths,
-                                                          individualParameters = individualParameters,
-                                                          variationRange = variationRange,
-                                                          numberOfCores = numberOfCores,
-                                                          resultsFileFolder = resultsFileFolder,
-                                                          resultsFileName = resultsFileName,
-                                                          logFolder = logFolder)
+    allResultsFileNames <- runParallelSensitivityAnalysis(
+      simFilePath = simFilePath,
+      variableParameterPaths = variableParameterPaths,
+      individualParameters = individualParameters,
+      variationRange = variationRange,
+      numberOfCores = numberOfCores,
+      resultsFileFolder = resultsFileFolder,
+      resultsFileName = resultsFileName,
+      logFolder = logFolder
+    )
   } else {
     # No parallelization
     # Load simulation to determine number of parameters valid for sensitivity analysis
@@ -190,18 +192,18 @@ runParallelSensitivityAnalysis <- function(simFilePath,
 
   # Generate a listcontaining names of SA CSV result files that will be output by each core
   allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFileFolder, fileName = resultsFileName)
-  logWorkflow(message = "Starting sending of parameters to cores",pathFolder = logFolder)
+  logWorkflow(message = "Starting sending of parameters to cores", pathFolder = logFolder)
   Rmpi::mpi.bcast.Robj2slave(obj = listSplitParameters)
   Rmpi::mpi.bcast.Robj2slave(obj = tempLogFileNamePrefix)
   Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
   Rmpi::mpi.bcast.Robj2slave(obj = allResultsFileNames)
-  logWorkflow(message = "Sending of parameters to cores completed",pathFolder = logFolder)
+  logWorkflow(message = "Sending of parameters to cores completed", pathFolder = logFolder)
 
   # Update simulation with individual parameters
-  logWorkflow(message = "Updating individual parameters on cores.",pathFolder = logFolder)
+  logWorkflow(message = "Updating individual parameters on cores.", pathFolder = logFolder)
   Rmpi::mpi.remote.exec(updateSimulationIndividualParameters(simulation = sim, individualParameters))
 
-  logWorkflow(message = "Starting analyzeCoreSensitivity function.",pathFolder = logFolder)
+  logWorkflow(message = "Starting analyzeCoreSensitivity function.", pathFolder = logFolder)
   Rmpi::mpi.remote.exec(analyzeCoreSensitivity(
     simulation = sim,
     variableParameterPaths = listSplitParameters[[mpi.comm.rank()]],
@@ -212,7 +214,7 @@ runParallelSensitivityAnalysis <- function(simFilePath,
     nodeName = paste("Core", mpi.comm.rank())
   ))
   for (core in seq(1, numberOfCores)) {
-    logWorkflow(message = readLines(tempLogFileNames[core]),pathFolder = logFolder)
+    logWorkflow(message = readLines(tempLogFileNames[core]), pathFolder = logFolder)
     file.remove(tempLogFileNames[core])
   }
 
