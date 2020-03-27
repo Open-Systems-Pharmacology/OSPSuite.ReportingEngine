@@ -40,6 +40,7 @@ R6 class for Reporting Engine Population Workflow
 \item \href{#method-plotPKParametersSettings}{\code{PopulationWorkflow$plotPKParametersSettings()}}
 \item \href{#method-plotSensitivitySettings}{\code{PopulationWorkflow$plotSensitivitySettings()}}
 \item \href{#method-runWorkflow}{\code{PopulationWorkflow$runWorkflow()}}
+\item \href{#method-print}{\code{PopulationWorkflow$print()}}
 \item \href{#method-clone}{\code{PopulationWorkflow$clone()}}
 }
 }
@@ -117,8 +118,8 @@ A new `Task` object
 Define calculate PK parameters `task` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$populationPKParameterSettings(
-  taskFunction,
-  output = NULL,
+  taskFunction = NULL,
+  outputFolder = defaultTaskOutputFolders$calculatePKParameters,
   settings = NULL,
   active = TRUE,
   message = NULL
@@ -128,8 +129,6 @@ Define calculate PK parameters `task` settings
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{output}}{file or folder of output}
-
 \item{\code{settings}}{specific settings for task}
 
 \item{\code{active}}{logical indicating if `task` is performed in worklfow.
@@ -139,6 +138,8 @@ Default value is `TRUE`}
 Default value indicates `task` name.}
 
 \item{\code{input}}{file or folder of input}
+
+\item{\code{output}}{file or folder of output}
 }
 \if{html}{\out{</div>}}
 }
@@ -152,7 +153,8 @@ A new `Task` object
 Define population Sensitivity Analysis `task` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$populationSensitivityAnalysisSettings(
-  output = NULL,
+  taskFunction = NULL,
+  outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
   settings = NULL,
   active = TRUE,
   message = NULL,
@@ -167,8 +169,6 @@ Define population Sensitivity Analysis `task` settings
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{output}}{file or folder of output}
-
 \item{\code{settings}}{specific settings for task}
 
 \item{\code{active}}{logical indicating if `task` is performed in worklfow.
@@ -188,6 +188,8 @@ Default value indicates `task` name.}
 \item{\code{pkParameterSelection}}{list of selected PK parameters for sensitivity analysis}
 
 \item{\code{input}}{file or folder of input}
+
+\item{\code{output}}{file or folder of output}
 }
 \if{html}{\out{</div>}}
 }
@@ -345,116 +347,23 @@ Loop through all simulation sets and run active population model workflow tasks 
 # 2a - PK parameter Plot
 # CORE STAGE 3:  CALCULATE SENSITIVITY
 # 3a - Plots and Tables based on sensitivity results
-#' @description
-#' Run population workflow tasks for a single simulation set
-#' @param set R6 class `SimulationStructure` object
-#' @return All results and plots as a structured output in a folder specific to simulation set
-runSingleSetWorkflow = function(set) {
-  logInfo(message = "Start of population workflow")
-
-  if (self$simulatePopulation$active) {
-    if (self$simulatePopulation$validateInput()) {
-      # if (self$simulatePopulation$numberOfCores == 1) {
-      #   logInfo(message = "Starting population simulation")
-      #   createFolder(set$simulationResultsFolder)
-      #   resultsFilePath <- file.path(set$simulationResultsFolder, defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName))
-      #   simulateModel(
-      #     simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
-      #     popDataFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$populationName, ".csv")),
-      #     resultsFilePath = resultsFilePath
-      #   )
-      #   set$simulationResultFileNames <- resultsFilePath
-      #   logInfo(message = "Population simulation completed.")
-      # }
-      # else if (self$simulatePopulation$numberOfCores > 1) {
-      #   logInfo(message = "Starting parallel population simulation")
-      #   createFolder(set$simulationResultsFolder)
-      #   set$simulationResultFileNames <- runParallelsimulatePopulation(
-      #     numberOfCores = self$simulatePopulation$numberOfCores,
-      #     inputFolderName = set$inputFilesFolder,
-      #     simulationFileName = set$simulationSet$simulationName,
-      #     populationFileName = set$simulationSet$populationName,
-      #     resultsFolderName = set$simulationResultsFolder,
-      #     resultsFileName = trimFileName(defaultFileNames$simulationResultsFile(set$simulationSet$simulationSetName), extension = "csv")
-      #   )
-      #   logInfo(message = "Parallel population simulation completed.")
-      # }
-    }
-  }
-
-
-  if (self$populationPKParameters$active) {
-    if (self$populationPKParameters$validateInput()) {
-      logInfo("Starting PK parameter calculation")
-      createFolder(set$pkAnalysisResultsFolder)
-      set$pkAnalysisResultsFileNames <- calculatePKParameters(
-        simulationFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
-        simulationResultFilePaths = set$simulationResultFileNames,
-        pkParameterResultsFilePath = file.path(set$pkAnalysisResultsFolder, defaultFileNames$pkAnalysisResultsFile(set$simulationSet$simulationSetName))
-      )
-      logInfo("PK parameter calculation completed.")
-    }
-  }
-
-
-  if (self$populationSensitivityAnalysis$active) {
-    if (self$populationSensitivityAnalysis$validateInput()) {
-      logInfo("Starting population sensitivity analysis")
-      createFolder(set$sensitivityAnalysisResultsFolder)
-      set$sensitivityAnalysisResultsFileNames <- runPopulationSensitivityAnalysis(
-        simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
-        variableParameterPaths = self$populationSensitivityAnalysis$variableParameterPaths,
-        popDataFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$populationName, ".csv")),
-        pkParameterResultsFilePath = file.path(set$pkAnalysisResultsFolder, defaultFileNames$pkAnalysisResultsFile(set$simulationSet$simulationSetName)),
-        pkParameterSelection = self$populationSensitivityAnalysis$pkParameterSelection,
-        resultsFileFolder = set$sensitivityAnalysisResultsFolder,
-        resultsFileName = trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName), extension = "csv"),
-        variationRange = self$populationSensitivityAnalysis$variationRange,
-        quantileVec = self$populationSensitivityAnalysis$quantileVec,
-        numberOfCores = self$populationSensitivityAnalysis$numberOfCores
-      )
-      logInfo("Population sensitivity analysis completed.")
-    }
-  }
-
-  # TO DO: plug plot tasks to actual results
-  if (self$plotDemography$active) {
-    logInfo(message = self$plotDemography$message)
-  }
-  if (self$plotGoF$active) {
-    logInfo(message = self$plotGoF$message)
-  }
-  if (self$plotPKParameters$active) {
-    logInfo(message = self$plotPKParameters$message)
-  }
-  if (self$plotSensitivity$active) {
-    logInfo(message = self$plotSensitivity$message)
-  }
-},
-
-
-#' @description
-#' Print workflow list of tasks
-#' TO DO: add simulationSets to print() method
-#' @return Task list information
-print = function() {
-  taskOrder <- list(
-    "Task 1" = self$simulatePopulation$print(),
-    "Task 2" = self$pkParametersCalculation$print(),
-    "Task 3" = self$sensitivityAnalysis$print(),
-    "Task 4" = self$plotDemography$print(),
-    "Task 5" = self$plotGoF$print(),
-    "Task 6" = self$plotPKParameters$print(),
-    "Task 7" = self$plotSensitivity$print()
-  )
-  invisible(self)
-
-  return(taskOrder)
-}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$runWorkflow()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\subsection{Method \code{print()}}{
+Print workflow list of tasks
+TO DO: add simulationSets to print() method
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$print()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+Task list information
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

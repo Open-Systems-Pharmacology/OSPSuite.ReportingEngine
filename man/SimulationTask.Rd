@@ -63,16 +63,6 @@ Create a `SimulationTask` object
 }
 \subsection{Returns}{
 A new `SimulationTask` object
-#' @description
-#' Update the `numberOfCores`
-#' @param numberOfCores is the number of cores to use for simulation
-updateNumberOfCores = function(numberOfCores) {
-  if (!is.null(numberOfCores)) {
-    validateIsInteger(numberOfCores)
-    validateIsOfLength(object = numberOfCores, nbElements = 1)
-    self$settings$numberOfCores <- numberOfCores
-  }
-},
 }
 }
 \if{html}{\out{<hr>}}
