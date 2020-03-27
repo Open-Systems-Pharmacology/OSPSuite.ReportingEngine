@@ -5,8 +5,6 @@
 PopulationSimulationSettings <- R6::R6Class(
   "PopulationSimulationSettings",
   public = list(
-    numberOfCores = NULL,
-    showProgress = NULL,
 
     #' @description
     #' Create a `PopulationSimulationSettings` object
@@ -15,29 +13,45 @@ PopulationSimulationSettings <- R6::R6Class(
     #' @return A new `PopulationSimulationSettings` object
     initialize = function(numberOfCores = defaultSimulationNumberOfCores,
                           showProgress = FALSE) {
-      self$updateNumberOfCores(numberOfCores)
-      self$updateShowProgress(showProgress)
-    },
+      self$numberOfCores <- numberOfCores
+      self$showProgress <- showProgress
+    }
+  ),
+
+  active = list(
 
     #' @description
     #' Update the `numberOfCores`
-    #' @param numberOfCores is the number of cores to use for simulation
-    updateNumberOfCores = function(numberOfCores) {
-      if (!is.null(numberOfCores)) {
-        validateIsInteger(numberOfCores)
-        validateIsOfLength(object = numberOfCores, nbElements = 1)
-        self$numberOfCores <- numberOfCores
+    #' @param value is the number of cores to use for simulation
+    numberOfCores = function(value) {
+      if (missing(value)) {
+        private$.numberOfCores
+      } else {
+        if (!is.null(value)) {
+          validateIsInteger(value)
+          validateIsOfLength(object = value, nbElements = 1)
+          private$.numberOfCores <- value
+        }
       }
     },
 
     #' @description
     #' Update `showProgress`
-    #' @param showProgress is a logical input.  TRUE shows progress of simulation.
-    updateShowProgress = function(showProgress) {
-      if (!is.null(showProgress)) {
-        validateIsLogical(showProgress)
-        self$showProgress <- showProgress
+    #' @param value is a logical input.  TRUE shows progress of simulation.
+    showProgress = function(value) {
+      if (missing(value)) {
+        private$.showProgress
+      } else {
+        if (!is.null(value)) {
+          validateIsLogical(value)
+          private$.showProgress <- value
+        }
       }
     }
+  ),
+
+  private = list(
+    .numberOfCores = NULL,
+    .showProgress = NULL
   )
 )
