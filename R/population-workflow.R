@@ -248,9 +248,8 @@ PopulationWorkflow <- R6::R6Class(
 
       if (self$populationPKParameters$active) {
         if (self$populationPKParameters$validateInput()) {
-
-          if (!is.null(file.path(self$populationPKParameters$workflowFolder, self$populationPKParameters$outputFolder ))) {
-            dir.create(file.path(self$populationPKParameters$workflowFolder, self$populationPKParameters$outputFolder ))
+          if (!is.null(file.path(self$populationPKParameters$workflowFolder, self$populationPKParameters$outputFolder))) {
+            dir.create(file.path(self$populationPKParameters$workflowFolder, self$populationPKParameters$outputFolder))
           }
 
           for (set in self$simulationStructures) {
@@ -258,26 +257,26 @@ PopulationWorkflow <- R6::R6Class(
               message = "Starting PK parameter calculation",
               pathFolder = self$workflowFolder
             )
-            set$pkAnalysisResultsFileNames <- calculatePKParameters(
-              simulationFilePath = set$simulationSet$simulationFile,
-              simulationResultFilePaths = set$simulationResultFileNames,
-              pkParameterResultsFilePath = set$pkAnalysisResultsFileNames
-            )
+            pkAnalyses <- calculatePKParameters(set)
+            exportPKAnalysesToCSV(pkAnalyses = pkAnalyses,
+                                  filePath = set$pkAnalysisResultsFileNames)
+            #  simulationFilePath = set$simulationSet$simulationFile,
+            #  simulationResultFilePaths = set$simulationResultFileNames,
+            #  pkParameterResultsFilePath = set$pkAnalysisResultsFileNames
+
             logWorkflow(
               message = "PK parameter calculation completed.",
               pathFolder = self$workflowFolder
             )
           }
-
         }
       }
 
 
       if (self$populationSensitivityAnalysis$active) {
         if (self$populationSensitivityAnalysis$validateInput()) {
-
-          if (!is.null(file.path(self$populationSensitivityAnalysis$workflowFolder, self$populationSensitivityAnalysis$outputFolder ))) {
-            dir.create(file.path(self$populationSensitivityAnalysis$workflowFolder, self$populationSensitivityAnalysis$outputFolder ))
+          if (!is.null(file.path(self$populationSensitivityAnalysis$workflowFolder, self$populationSensitivityAnalysis$outputFolder))) {
+            dir.create(file.path(self$populationSensitivityAnalysis$workflowFolder, self$populationSensitivityAnalysis$outputFolder))
           }
 
           logWorkflow(
@@ -288,10 +287,10 @@ PopulationWorkflow <- R6::R6Class(
           set$sensitivityAnalysisResultsFileNames <- runPopulationSensitivityAnalysis(
             simFilePath = set$simulationSet$simulationFile,
             variableParameterPaths = self$populationSensitivityAnalysis$variableParameterPaths,
-            popDataFilePath = set$simulationSet$populationFile,# file.path(set$inputFilesFolder, paste0(set$simulationSet$populationName, ".csv")),
+            popDataFilePath = set$simulationSet$populationFile, # file.path(set$inputFilesFolder, paste0(set$simulationSet$populationName, ".csv")),
             pkParameterResultsFilePath = set$pkAnalysisResultsFileNames,
             pkParameterSelection = self$populationSensitivityAnalysis$pkParameterSelection,
-            resultsFileFolder = file.path(self$populationSensitivityAnalysis$workflowFolder, self$populationSensitivityAnalysis$outputFolder ),
+            resultsFileFolder = file.path(self$populationSensitivityAnalysis$workflowFolder, self$populationSensitivityAnalysis$outputFolder),
             resultsFileName = trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName), extension = "csv"),
             variationRange = self$populationSensitivityAnalysis$variationRange,
             quantileVec = self$populationSensitivityAnalysis$quantileVec,
@@ -303,10 +302,8 @@ PopulationWorkflow <- R6::R6Class(
             message = "Population sensitivity analysis completed.",
             pathFolder = self$workflowFolder
           )
-
         }
       }
-
     },
 
 

@@ -1,40 +1,19 @@
 #' @title calculatePKParameters
 #' @description Calculate PK parameters from simulated time profiles
-#' @param simulationFilePath path to pkml model file
-#' @param simulationResultFilePaths path to simulation CSV results files
-#' @param pkParametersToEvaluate vector of PK parameters to evaluate
-#' @param userDefinedPKFunctions vector of userDefinedPKFunction objects
-#' @param pkParameterResultsFilePath path to PK analysis result file
-#' @return pkParameterResultsFilePath, paths to pk results file CSV
-#' @export
-#' @import ospsuite
-calculatePKParameters <- function(simulationFilePath,
-                                  simulationResultFilePaths,
-                                  pkParametersToEvaluate = NULL,
-                                  userDefinedPKFunctions = NULL,
-                                  pkParameterResultsFilePath) {
-  sim <- ospsuite::loadSimulation(simulationFilePath)
-  res <- ospsuite::importResultsFromCSV(simulation = sim, filePaths = simulationResultFilePaths)
-  pkAnalyses <- calculatePKAnalyses(results = res)
-  exportPKAnalysesToCSV(pkAnalyses = pkAnalyses, filePath = pkParameterResultsFilePath)
-  return(pkParameterResultsFilePath)
-}
-
-#' @title calculateMeanPKParameters
-#' @description Calculate PK parameters from simulated time profiles
 #' @param structureSet `SimulationStructure` R6 class object
 #' @return pkAnalyses object
 #' @export
 #' @import ospsuite
-calculateMeanPKParameters <- function(structureSet) {
+calculatePKParameters <- function(structureSet){
+                                  # ,simulationFilePath,
+                                  # simulationResultFilePaths,
+                                  # pkParametersToEvaluate = NULL,
+                                  # userDefinedPKFunctions = NULL,
+                                  # pkParameterResultsFilePath) {
   simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
-  simulationResults <- ospsuite::importResultsFromCSV(
-    simulation,
-    structureSet$simulationResultFileNames
-  )
-
-  pkAnalyses <- ospsuite::calculatePKAnalyses(simulationResults)
-
+  simulationResults <- ospsuite::importResultsFromCSV(simulation = simulation,
+                                                      filePaths = structureSet$simulationResultFileNames)
+  pkAnalyses <- calculatePKAnalyses(results = simulationResults)
   return(pkAnalyses)
 }
 
