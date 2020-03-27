@@ -34,6 +34,7 @@ PopulationSensitivityAnalysisSettings <- R6::R6Class(
       self$updateQuantileVec(quantileVec %||% defaultQuantileVec)
       self$updateVariableParameterPaths(variableParameterPaths)
       self$updatePKParameterSelection(pkParameterSelection)
+      self$updateShowProgress(showProgress)
     },
 
 
@@ -84,6 +85,16 @@ PopulationSensitivityAnalysisSettings <- R6::R6Class(
         validateNoDuplicatedEntries(pkParameterSelection)
         validateIsIncluded(values = pkParameterSelection, parentValues = ospsuite::allPKParameterNames())
         self$pkParameterSelection <- pkParameterSelection
+      }
+    }
+
+    #' @description
+    #' Update `showProgress`
+    #' @param showProgress is a logical input.  TRUE shows progress of sensitivity analysis
+    updateShowProgress = function(showProgress) {
+      if (!is.null(showProgress)) {
+        validateIsLogical(showProgress)
+        self$showProgress <- showProgress
       }
     }
 

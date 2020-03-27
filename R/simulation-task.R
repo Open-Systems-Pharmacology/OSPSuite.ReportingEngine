@@ -6,8 +6,10 @@ SimulationTask <- R6::R6Class(
   "SimulationTask",
   inherit = Task,
   public = list(
-    #numberOfCores = NULL,
+    numberOfCores = NULL,
+    showProgress = NULL,
     getTaskResults = NULL,
+    settings = NULL,
 
     #' @description
     #' Create a `SimulationTask` object
@@ -15,12 +17,15 @@ SimulationTask <- R6::R6Class(
     #' @param getTaskResults function called by task that computes and format figure results
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SimulationTask` object
-    initialize = function(#numberOfCores = NULL,
+    initialize = function(numberOfCores = defaultSimulationNumberOfCores,
+                          showProgress = FALSE,
                           getTaskResults = NULL,
                           ...) {
       super$initialize(...)
-      #self$updateNumberOfCores(numberOfCores %||% defaultSimulationNumberOfCores)
       self$getTaskResults <- getTaskResults
+      self$settings <- PopulationSimulationSettings$new()
+      self$settings$updateNumberOfCores(numberOfCores)
+      self$settings$updateShowProgress(showProgress)
     },
 
     #' #' @description
@@ -30,9 +35,11 @@ SimulationTask <- R6::R6Class(
     #'   if (!is.null(numberOfCores)) {
     #'     validateIsInteger(numberOfCores)
     #'     validateIsOfLength(object = numberOfCores, nbElements = 1)
-    #'     self$numberOfCores <- numberOfCores
+    #'     self$settings$numberOfCores <- numberOfCores
     #'   }
     #' },
+
+
 
     #' @description
     #' Save results from task run.
@@ -67,7 +74,7 @@ SimulationTask <- R6::R6Class(
         if (self$validateInput()) {
           taskResults <- self$getTaskResults(
             structureSet = set,
-            settings = super$settings,
+            settings = self$settings,
             logFolder = self$workflowFolder)
 
           self$saveResults(

@@ -13,10 +13,10 @@ PopulationSimulationSettings <- R6::R6Class(
     #' @param numberOfCores number of cores for parallel computation
     #' @param showProgress option to print progress of simulation
     #' @return A new `PopulationSimulationSettings` object
-    initialize = function(numberOfCores = NULL,
-                          showProgress = NULL) {
-      self$updateNumberOfCores(numberOfCores %||% defaultSimulationNumberOfCores)
-      self$showProgress <- showProgress
+    initialize = function(numberOfCores = defaultSimulationNumberOfCores,
+                          showProgress = FALSE) {
+      self$updateNumberOfCores(numberOfCores)
+      self$updateShowProgress(showProgress)
     },
 
     #' @description
@@ -27,6 +27,16 @@ PopulationSimulationSettings <- R6::R6Class(
         validateIsInteger(numberOfCores)
         validateIsOfLength(object = numberOfCores, nbElements = 1)
         self$numberOfCores <- numberOfCores
+      }
+    },
+
+    #' @description
+    #' Update `showProgress`
+    #' @param showProgress is a logical input.  TRUE shows progress of simulation.
+    updateShowProgress = function(showProgress) {
+      if (!is.null(showProgress)) {
+        validateIsLogical(showProgress)
+        self$showProgress <- showProgress
       }
     }
 
