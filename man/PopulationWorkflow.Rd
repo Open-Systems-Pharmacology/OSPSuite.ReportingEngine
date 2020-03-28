@@ -185,6 +185,10 @@ Default value indicates `task` name.}
 \item{\code{variableParameterPaths}}{vector of paths of parameters to vary when performing sensitivity analysis}
 
 \item{\code{pkParameterSelection}}{list of selected PK parameters for sensitivity analysis}
+
+\item{\code{input}}{file or folder of input}
+
+\item{\code{output}}{file or folder of output}
 }
 \if{html}{\out{</div>}}
 }

@@ -18,6 +18,7 @@ SensitivityAnalysisTask <- R6::R6Class(
     #' @param settings instance of SensitivityAnalysisSettings class
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SensitivityAnalysisTask` object
+
     initialize = function(getTaskResults = NULL,
                           settings = NULL,
                           ...) {
