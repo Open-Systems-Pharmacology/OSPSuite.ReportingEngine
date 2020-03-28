@@ -1,16 +1,16 @@
-#' @title PopulationSimulationSettings
+#' @title SimulationSettings
 #' @description  R6 class for Population Simulation Settings
 #' @field numberOfCores number of cores for parallel computation
-#' @field showProgress
-PopulationSimulationSettings <- R6::R6Class(
-  "PopulationSimulationSettings",
+#' @field showProgress simulation progress printed to console if TRUE
+SimulationSettings <- R6::R6Class(
+  "SimulationSettings",
   public = list(
 
     #' @description
-    #' Create a `PopulationSimulationSettings` object
+    #' Create a `SimulationSettings` object
     #' @param numberOfCores number of cores for parallel computation
-    #' @param showProgress option to print progress of simulation
-    #' @return A new `PopulationSimulationSettings` object
+    #' @param showProgress simulation progress printed to console if TRUE
+    #' @return A new `SimulationSettings` object
     initialize = function(numberOfCores = defaultSimulationNumberOfCores,
                           showProgress = FALSE) {
       self$numberOfCores <- numberOfCores
