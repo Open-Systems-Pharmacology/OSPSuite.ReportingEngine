@@ -262,9 +262,6 @@ PopulationWorkflow <- R6::R6Class(
               pkAnalyses = pkAnalyses,
               filePath = set$pkAnalysisResultsFileNames
             )
-            #  simulationFilePath = set$simulationSet$simulationFile,
-            #  simulationResultFilePaths = set$simulationResultFileNames,
-            #  pkParameterResultsFilePath = set$pkAnalysisResultsFileNames
 
             logWorkflow(
               message = "PK parameter calculation completed.",
@@ -288,12 +285,12 @@ PopulationWorkflow <- R6::R6Class(
 
           set$sensitivityAnalysisResultsFileNames <- runPopulationSensitivityAnalysis(
             simFilePath = set$simulationSet$simulationFile,
-            variableParameterPaths = self$populationSensitivityAnalysis$variableParameterPaths,
-            popDataFilePath = set$simulationSet$populationFile, # file.path(set$inputFilesFolder, paste0(set$simulationSet$populationName, ".csv")),
+            popDataFilePath = set$simulationSet$populationFile,
             pkParameterResultsFilePath = set$pkAnalysisResultsFileNames,
-            pkParameterSelection = self$populationSensitivityAnalysis$pkParameterSelection,
+            variableParameterPaths = self$populationSensitivityAnalysis$variableParameterPaths,
             resultsFileFolder = file.path(self$populationSensitivityAnalysis$workflowFolder, self$populationSensitivityAnalysis$outputFolder),
             resultsFileName = trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName), extension = "csv"),
+            pkParameterSelection = self$populationSensitivityAnalysis$pkParameterSelection,
             variationRange = self$populationSensitivityAnalysis$variationRange,
             quantileVec = self$populationSensitivityAnalysis$quantileVec,
             numberOfCores = self$populationSensitivityAnalysis$numberOfCores,
