@@ -258,8 +258,10 @@ PopulationWorkflow <- R6::R6Class(
               pathFolder = self$workflowFolder
             )
             pkAnalyses <- calculatePKParameters(set)
-            exportPKAnalysesToCSV(pkAnalyses = pkAnalyses,
-                                  filePath = set$pkAnalysisResultsFileNames)
+            exportPKAnalysesToCSV(
+              pkAnalyses = pkAnalyses,
+              filePath = set$pkAnalysisResultsFileNames
+            )
             #  simulationFilePath = set$simulationSet$simulationFile,
             #  simulationResultFilePaths = set$simulationResultFileNames,
             #  pkParameterResultsFilePath = set$pkAnalysisResultsFileNames

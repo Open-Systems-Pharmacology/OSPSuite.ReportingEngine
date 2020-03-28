@@ -4,15 +4,12 @@
 #' @return pkAnalyses object
 #' @export
 #' @import ospsuite
-calculatePKParameters <- function(structureSet){
-                                  # ,simulationFilePath,
-                                  # simulationResultFilePaths,
-                                  # pkParametersToEvaluate = NULL,
-                                  # userDefinedPKFunctions = NULL,
-                                  # pkParameterResultsFilePath) {
+calculatePKParameters <- function(structureSet) {
   simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
-  simulationResults <- ospsuite::importResultsFromCSV(simulation = simulation,
-                                                      filePaths = structureSet$simulationResultFileNames)
+  simulationResults <- ospsuite::importResultsFromCSV(
+    simulation = simulation,
+    filePaths = structureSet$simulationResultFileNames
+  )
   pkAnalyses <- calculatePKAnalyses(results = simulationResults)
   return(pkAnalyses)
 }
