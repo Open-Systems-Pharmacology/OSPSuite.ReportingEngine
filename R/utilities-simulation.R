@@ -123,7 +123,7 @@ simulateModel <- function(structureSet,
     logTypes = LogTypes$Debug
   )
 
-  population <- NULL
+
   if (!is.null(structureSet$simulationSet$populationFile)) {
     population <- ospsuite::loadPopulation(structureSet$simulationSet$populationFile)
     logWorkflow(
