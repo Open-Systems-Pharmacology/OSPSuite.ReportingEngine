@@ -50,7 +50,6 @@ Workflow <- R6::R6Class(
 
       # Check of Workflow inputs
       self$simulationStructures <- list()
-      simulationSets <- c(simulationSets)
       for (simulationSetIndex in seq_along(simulationSets)) {
         self$simulationStructures[[simulationSetIndex]] <- SimulationStructure$new(
           simulationSet = simulationSets[[simulationSetIndex]],

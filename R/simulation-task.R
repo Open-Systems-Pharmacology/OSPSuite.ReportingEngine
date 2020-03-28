@@ -14,7 +14,6 @@ SimulationTask <- R6::R6Class(
     #' @param settings instance of SimulationSettings class
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SimulationTask` object
-
     initialize = function(getTaskResults = NULL,
                           settings = NULL,
                           ...) {
@@ -26,9 +25,6 @@ SimulationTask <- R6::R6Class(
         self$settings <- settings
       }
       self$getTaskResults <- getTaskResults
-      self$settings <- PopulationSimulationSettings$new()
-      self$settings$updateNumberOfCores(numberOfCores)
-      self$settings$updateShowProgress(showProgress)
     },
 
 
