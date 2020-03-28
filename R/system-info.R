@@ -39,18 +39,18 @@ ReportingEngineInfo <- R6::R6Class(
         systemValidated <- ""
       }
       infoPrint <- c(
-        sprintf("Reporting Engine Information: "),
-        sprintf("Date: %s ", as.character(self$Date)),
-        sprintf("User Information: "),
-        sprintf("Computer Name: %s ", private$computerName),
-        sprintf("User: %s ", private$userName),
-        sprintf("Login: %s ", private$login),
-        sprintf("System is %s validated ", systemValidated),
-        sprintf("System versions: "),
-        sprintf("R version: %s ", private$Rversion),
-        sprintf("OSP Suite Package version: %s ", as.character(private$ospsuiteVersion)),
-        sprintf("OSP Reporting Engine version: %s ", as.character(private$reportingengineVersion)),
-        sprintf("tlf version: %s ", as.character(private$tlfVersion))
+        sprintf("Reporting Engine Information:"),
+        sprintf("Date: %s", as.character(self$Date)),
+        sprintf("User Information:"),
+        sprintf("Computer Name: %s", private$computerName),
+        sprintf("User: %s", private$userName),
+        sprintf("Login: %s", private$login),
+        sprintf("System is %s validated", systemValidated),
+        sprintf("System versions:"),
+        sprintf("R version: %s", private$Rversion),
+        sprintf("OSP Suite Package version: %s", as.character(private$ospsuiteVersion)),
+        sprintf("OSP Reporting Engine version: %s", as.character(private$reportingengineVersion)),
+        sprintf("tlf version: %s", as.character(private$tlfVersion))
       )
       invisible(self)
       return(infoPrint)
