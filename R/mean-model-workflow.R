@@ -57,10 +57,10 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param message message/title of the `Task`
     #' @return A new `SimulationTask` object
     simulateSettings = function(taskFunction = simulateModel,
-                                    outputFolder = defaultTaskOutputFolders$simulate,
-                                    active = TRUE,
-                                    message = defaultWorkflowMessages$simulate,
-                                    settings = NULL) {
+                                outputFolder = defaultTaskOutputFolders$simulate,
+                                active = TRUE,
+                                message = defaultWorkflowMessages$simulate,
+                                settings = NULL) {
       self$simulate <- SimulationTask$new(
         getTaskResults = taskFunction,
         outputFolder = outputFolder,
@@ -81,10 +81,10 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param message message/title of the `Task`
     #' @return A new `SimulationTask` object
     calculatePKParametersSettings = function(taskFunction = NULL,
-                                                 outputFolder = defaultTaskOutputFolders$calculatePKParameters,
-                                                 active = FALSE,
-                                                 message = defaultWorkflowMessages$calculatePKParameters,
-                                                 settings = NULL) {
+                                             outputFolder = defaultTaskOutputFolders$calculatePKParameters,
+                                             active = FALSE,
+                                             message = defaultWorkflowMessages$calculatePKParameters,
+                                             settings = NULL) {
       self$meanModelPKParameters <- CalculatePKParametersTask$new(
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
@@ -104,10 +104,10 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param message message/title of the `Task`
     #' @return A new `SimulationTask` object
     meanModelSensitivityAnalysisSettings = function(taskFunction = NULL,
-                                                        outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
-                                                        active = FALSE,
-                                                        message = defaultWorkflowMessages$sensitivityAnalysis,
-                                                        settings = NULL) {
+                                                    outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
+                                                    active = FALSE,
+                                                    message = defaultWorkflowMessages$sensitivityAnalysis,
+                                                    settings = NULL) {
       self$meanModelSensitivityAnalysis <- SensitivityAnalysisTask$new(
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
@@ -130,11 +130,11 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for goodness of fit plots
     plotGoFSettings = function(reportTitle = defaultWorkflowTitles$plotGoF,
-                                   taskFunction = plotMeanGoodnessOfFit,
-                                   outputFolder = defaultTaskOutputFolders$plotGoF,
-                                   active = FALSE,
-                                   message = defaultWorkflowMessages$plotGoF,
-                                   settings = NULL) {
+                               taskFunction = plotMeanGoodnessOfFit,
+                               outputFolder = defaultTaskOutputFolders$plotGoF,
+                               active = FALSE,
+                               message = defaultWorkflowMessages$plotGoF,
+                               settings = NULL) {
       self$plotGoF <- PlotTask$new(
         reportTitle = reportTitle,
         getTaskResults = taskFunction,
@@ -157,11 +157,11 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param settings specific settings for task
     #' @return A `PlotPKParametersTask` object for PK parameters tables
     plotPKParametersSettings = function(reportTitle = defaultWorkflowTitles$plotPKParameters,
-                                            taskFunction = plotMeanPKParameters,
-                                            outputFolder = defaultTaskOutputFolders$plotPKParameters,
-                                            active = FALSE,
-                                            message = defaultWorkflowMessages$plotPKParameters,
-                                            settings = NULL) {
+                                        taskFunction = plotMeanPKParameters,
+                                        outputFolder = defaultTaskOutputFolders$plotPKParameters,
+                                        active = FALSE,
+                                        message = defaultWorkflowMessages$plotPKParameters,
+                                        settings = NULL) {
       self$plotPKParameters <- PlotTask$new(
         reportTitle = reportTitle,
         getTaskResults = taskFunction,
@@ -184,11 +184,11 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for goodness of fit plots
     plotMassBalanceSettings = function(reportTitle = defaultWorkflowTitles$plotMassBalance,
-                                           taskFunction = plotMeanMassBalance,
-                                           outputFolder = defaultTaskOutputFolders$plotMassBalance,
-                                           active = FALSE,
-                                           message = defaultWorkflowMessages$plotMassBalance,
-                                           settings = NULL) {
+                                       taskFunction = plotMeanMassBalance,
+                                       outputFolder = defaultTaskOutputFolders$plotMassBalance,
+                                       active = FALSE,
+                                       message = defaultWorkflowMessages$plotMassBalance,
+                                       settings = NULL) {
       self$plotMassBalance <- PlotTask$new(
         reportTitle = reportTitle,
         getTaskResults = taskFunction,
@@ -211,11 +211,11 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for goodness of fit plots
     plotAbsorptionSettings = function(reportTitle = defaultWorkflowTitles$plotAbsorption,
-                                          taskFunction = plotMeanAbsorption,
-                                          outputFolder = defaultTaskOutputFolders$plotAbsorption,
-                                          active = FALSE,
-                                          message = defaultWorkflowMessages$plotAbsorption,
-                                          settings = NULL) {
+                                      taskFunction = plotMeanAbsorption,
+                                      outputFolder = defaultTaskOutputFolders$plotAbsorption,
+                                      active = FALSE,
+                                      message = defaultWorkflowMessages$plotAbsorption,
+                                      settings = NULL) {
       self$plotAbsorption <- PlotTask$new(
         reportTitle = reportTitle,
         getTaskResults = taskFunction,
@@ -238,11 +238,11 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for goodness of fit plots
     plotSensitivitySettings = function(reportTitle = defaultWorkflowTitles$plotSensitivity,
-                                           taskFunction = NULL,
-                                           outputFolder = defaultTaskOutputFolders$plotSensitivity,
-                                           active = FALSE,
-                                           message = defaultWorkflowMessages$plotSensitivity,
-                                           settings = NULL) {
+                                       taskFunction = NULL,
+                                       outputFolder = defaultTaskOutputFolders$plotSensitivity,
+                                       active = FALSE,
+                                       message = defaultWorkflowMessages$plotSensitivity,
+                                       settings = NULL) {
       self$plotSensitivity <- PlotTask$new(
         reportTitle = reportTitle,
         getTaskResults = taskFunction,
@@ -262,8 +262,8 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for goodness of fit plots
     renderReportSettings = function(active = FALSE,
-                                        message = defaultWorkflowMessages$renderReport,
-                                        settings = NULL) {
+                                    message = defaultWorkflowMessages$renderReport,
+                                    settings = NULL) {
       self$renderReport <- ReportTask$new(
         active = active,
         message = message,

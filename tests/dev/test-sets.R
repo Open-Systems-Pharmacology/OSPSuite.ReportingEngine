@@ -7,7 +7,7 @@ devtools::load_all("./")
 inputFolderName <- "./tests/dev"
 simulationFileName1 <- "individualPksimSim"
 simulationFileName2 <- "simpleMobiEventSim"
-populationFileName <- "popData_short" #"popData"
+populationFileName <- "popData_short" # "popData"
 # resultsFolderName = "./tests/dev/"
 # resultsFileName = "popSimRes"
 # numberOfCores = 1
@@ -47,13 +47,13 @@ simTree2 <- getSimulationTree(simFilePath2)
 
 
 
-#Parallel population simulation
+# Parallel population simulation
 pp1 <- PopulationSimulationSet$new(simulationFile = simFilePath1, populationFile = popFilePath)
-ppwf_par<- PopulationWorkflow$new(simulationSets = list(pp1))
+ppwf_par <- PopulationWorkflow$new(simulationSets = list(pp1))
 ppwf_par$populationSimulation$numberOfCores <- 6
-ppwf_par$populationSensitivityAnalysis$variableParameterPaths <- c(simTree1$Organism$Bone$Volume$path,simTree1$Organism$`Plasma protein scale factor`$path)
+ppwf_par$populationSensitivityAnalysis$variableParameterPaths <- c(simTree1$Organism$Bone$Volume$path, simTree1$Organism$`Plasma protein scale factor`$path)
 ppwf_par$populationSensitivityAnalysis$numberOfCores <- 6
-#ppwf_par$populationSensitivityAnalysis$inactivate()
+# ppwf_par$populationSensitivityAnalysis$inactivate()
 ppwf_par$runWorkflow()
 
 

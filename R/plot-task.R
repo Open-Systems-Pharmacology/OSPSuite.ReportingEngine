@@ -18,8 +18,8 @@ PlotTask <- R6::R6Class(
     #' @param ... input parameters inherited from `Task` R6 class
     #' @return A new `PlotTask` object
     initialize = function(reportTitle = NULL,
-                              getTaskResults = NULL,
-                              ...) {
+                          getTaskResults = NULL,
+                          ...) {
       super$initialize(...)
       self$title <- reportTitle
       self$getTaskResults <- getTaskResults
@@ -32,8 +32,8 @@ PlotTask <- R6::R6Class(
     #' Results contains at least 2 fields: `plots` and `tables`
     #' @param reportFile name of report
     saveResults = function(set,
-                               taskResults,
-                               reportFile) {
+                           taskResults,
+                           reportFile) {
       for (plotName in names(taskResults$plots)) {
         plotFileName <- file.path(
           self$workflowFolder,
@@ -78,7 +78,7 @@ PlotTask <- R6::R6Class(
     #' @param structureSets list of `SimulationStructure` R6 class
     #' @param reportFileName name of report file
     runTask = function(structureSets,
-                           reportFileName) {
+                       reportFileName) {
       logWorkflow(
         message = paste0("Starting: ", self$message),
         pathFolder = self$workflowFolder
@@ -201,8 +201,8 @@ PlotPKParametersTask <- R6::R6Class(
     #' @param reportFile name of report
     #' @param workflowFolder path of workflow
     saveResults = function(set,
-                               taskResults,
-                               reportFile) {
+                           taskResults,
+                           reportFile) {
       tableFileName <- file.path(
         self$workflowFolder,
         self$outputFolder,

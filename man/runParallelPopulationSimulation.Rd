@@ -5,12 +5,10 @@
 \title{runParallelPopulationSimulation}
 \usage{
 runParallelPopulationSimulation(
+  structureSet,
   numberOfCores,
-  inputFolderName,
-  simulationFileName,
-  populationFileName,
-  resultsFolderName,
-  resultsFileName
+  settings,
+  logFolder
 )
 }
 \arguments{
@@ -22,9 +20,9 @@ runParallelPopulationSimulation(
 
 \item{populationFileName}{name of population data CSV file}
 
-\item{resultsFileName}{root name of population simulation results CSV files}
-
 \item{resultsFileFolder}{path to population simulation results CSV files}
+
+\item{resultsFileName}{root name of population simulation results CSV files}
 }
 \value{
 Simulation results for population

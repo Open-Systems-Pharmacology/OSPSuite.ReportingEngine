@@ -19,7 +19,8 @@ runSensitivity <- function(simFilePath,
                            variationRange,
                            numberOfCores = 1,
                            resultsFileFolder,
-                           resultsFileName = "sensitivityAnalysisResults") {
+                           resultsFileName = "sensitivityAnalysisResults",
+                           logFolder = getwd()) {
   sim <- loadSimulation(simFilePath)
 
   allVariableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
@@ -37,7 +38,7 @@ runSensitivity <- function(simFilePath,
   # there are parameters, ensure at least one parameter per spawned core
   numberOfCores <- min(numberOfCores, totalNumberParameters)
   if (totalNumberParameters == 0) {
-    logErrorThenStop(messages$errorNoParametersForSensitivityAnalysis())
+    logErrorThenStop(messages$errorNoParametersForSensitivityAnalysis(), logFolderPath = logFolder)
   }
 
   # If numberOfCores > 1 then spawn cores for later use.
@@ -62,7 +63,10 @@ runSensitivity <- function(simFilePath,
     individualSeq <- individualId %||% seq(1, popObject$count)
     allResultsFileNames <- NULL
     for (ind in individualSeq) {
-      logDebug(message = paste("Starting sensitivity analysis for individual", ind), printConsole = TRUE)
+      logWorkflow(
+        message = paste("Starting sensitivity analysis for individual", ind),
+        pathFolder = logFolder
+      )
       resFile <- individualSensitivityAnalysis(
         simFilePath = simFilePath,
         variableParameterPaths = variableParameterPaths,
@@ -116,19 +120,21 @@ individualSensitivityAnalysis <- function(simFilePath,
                                           variationRange,
                                           numberOfCores = 1,
                                           resultsFileFolder = resultsFileFolder,
-                                          resultsFileName = resultsFileName) {
+                                          resultsFileName = resultsFileName,
+                                          logFolder = getwd()) {
 
 
   # Determine if SA is to be done on a single core or more
   if (numberOfCores > 1) {
     allResultsFileNames <- runParallelSensitivityAnalysis(
-      simFilePath,
-      variableParameterPaths,
-      individualParameters,
-      variationRange,
-      numberOfCores,
-      resultsFileFolder,
-      resultsFileName
+      simFilePath = simFilePath,
+      variableParameterPaths = variableParameterPaths,
+      individualParameters = individualParameters,
+      variationRange = variationRange,
+      numberOfCores = numberOfCores,
+      resultsFileFolder = resultsFileFolder,
+      resultsFileName = resultsFileName,
+      logFolder = logFolder
     )
   } else {
     # No parallelization
@@ -165,7 +171,8 @@ runParallelSensitivityAnalysis <- function(simFilePath,
                                            variationRange,
                                            numberOfCores,
                                            resultsFileFolder,
-                                           resultsFileName) {
+                                           resultsFileName,
+                                           logFolder = getwd()) {
   totalNumberParameters <- length(variableParameterPaths)
 
   # Parallelizing among a total of min(numberOfCores,totalNumberParameters) cores
@@ -180,23 +187,23 @@ runParallelSensitivityAnalysis <- function(simFilePath,
 
   # Split the parameters of the model according to sortVec
   listSplitParameters <- split(x = variableParameterPaths, sortVec)
-  tempLogFileNamePrefix <- file.path(defaultFileNames$workflowFolderPath(), "logDebug-core-sensitivity-analysis")
+  tempLogFileNamePrefix <- file.path(logFolder, "logDebug-core-sensitivity-analysis")
   tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores))
 
   # Generate a listcontaining names of SA CSV result files that will be output by each core
   allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFileFolder, fileName = resultsFileName)
-  logDebug(message = "Starting sending of parameters to cores")
+  logWorkflow(message = "Starting sending of parameters to cores", pathFolder = logFolder)
   Rmpi::mpi.bcast.Robj2slave(obj = listSplitParameters)
   Rmpi::mpi.bcast.Robj2slave(obj = tempLogFileNamePrefix)
   Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
   Rmpi::mpi.bcast.Robj2slave(obj = allResultsFileNames)
-  logDebug(message = "Sending of parameters to cores completed")
+  logWorkflow(message = "Sending of parameters to cores completed", pathFolder = logFolder)
 
   # Update simulation with individual parameters
-  logDebug(message = "Updating individual parameters on cores.")
+  logWorkflow(message = "Updating individual parameters on cores.", pathFolder = logFolder)
   Rmpi::mpi.remote.exec(updateSimulationIndividualParameters(simulation = sim, individualParameters))
 
-  logDebug(message = "Starting analyzeCoreSensitivity function.")
+  logWorkflow(message = "Starting analyzeCoreSensitivity function.", pathFolder = logFolder)
   Rmpi::mpi.remote.exec(analyzeCoreSensitivity(
     simulation = sim,
     variableParameterPaths = listSplitParameters[[mpi.comm.rank()]],
@@ -207,7 +214,7 @@ runParallelSensitivityAnalysis <- function(simFilePath,
     nodeName = paste("Core", mpi.comm.rank())
   ))
   for (core in seq(1, numberOfCores)) {
-    logDebug(message = readLines(tempLogFileNames[core]))
+    logWorkflow(message = readLines(tempLogFileNames[core]), pathFolder = logFolder)
     file.remove(tempLogFileNames[core])
   }
 
@@ -235,9 +242,9 @@ analyzeCoreSensitivity <- function(simulation,
                                    variationRange = 0.1,
                                    resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv"),
                                    numberOfCoresToUse = NULL,
-                                   debugLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logDebugFile()),
-                                   infoLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logInfoFile()),
-                                   errorLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logErrorFile()),
+                                   debugLogFileName = file.path(getwd(), defaultFileNames$logDebugFile()),
+                                   infoLogFileName = file.path(getwd(), defaultFileNames$logInfoFile()),
+                                   errorLogFileName = file.path(getwd(), defaultFileNames$logErrorFile()),
                                    nodeName = NULL) {
   sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation, variationRange = variationRange)
   sensitivityAnalysis$addParameterPaths(variableParameterPaths)
@@ -321,7 +328,8 @@ runPopulationSensitivityAnalysis <- function(simFilePath,
                                              popSAResultsIndexFile = "sensitivityAnalysesResultsIndexFile",
                                              variationRange,
                                              quantileVec,
-                                             numberOfCores) {
+                                             numberOfCores,
+                                             logFolder = getwd()) {
   sensitivityAnalysesResultsIndexFileDF <- getSAFileIndex(pkParameterResultsFilePath, pkParameterSelection, quantileVec, resultsFileFolder, resultsFileName, popSAResultsIndexFile)
   ids <- unique(sensitivityAnalysesResultsIndexFileDF$IndividualId)
   allResultsFileNames <- runSensitivity(simFilePath,
@@ -331,7 +339,8 @@ runPopulationSensitivityAnalysis <- function(simFilePath,
     variationRange = variationRange,
     numberOfCores = numberOfCores,
     resultsFileFolder = resultsFileFolder,
-    resultsFileName = resultsFileName
+    resultsFileName = resultsFileName,
+    logFolder = logFolder
   )
   return(allResultsFileNames)
 }

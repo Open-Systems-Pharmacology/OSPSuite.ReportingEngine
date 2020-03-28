@@ -25,11 +25,11 @@ SensitivityAnalysisTask <- R6::R6Class(
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SensitivityAnalysisTask` object
     initialize = function(variationRange = NULL,
-                              numberOfCores = NULL,
-                              quantileVec = NULL,
-                              variableParameterPaths = NULL,
-                              pkParameterSelection = NULL,
-                              ...) {
+                          numberOfCores = NULL,
+                          quantileVec = NULL,
+                          variableParameterPaths = NULL,
+                          pkParameterSelection = NULL,
+                          ...) {
       super$initialize(...)
 
       self$updateVariationRange(variationRange %||% defaultVariationRange)

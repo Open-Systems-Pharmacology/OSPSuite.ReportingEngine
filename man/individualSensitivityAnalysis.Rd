@@ -11,7 +11,8 @@ individualSensitivityAnalysis(
   variationRange,
   numberOfCores = 1,
   resultsFileFolder = resultsFileFolder,
-  resultsFileName = resultsFileName
+  resultsFileName = resultsFileName,
+  logFolder = getwd()
 )
 }
 \arguments{

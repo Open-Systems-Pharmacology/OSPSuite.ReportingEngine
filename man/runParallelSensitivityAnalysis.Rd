@@ -11,7 +11,8 @@ runParallelSensitivityAnalysis(
   variationRange,
   numberOfCores,
   resultsFileFolder,
-  resultsFileName
+  resultsFileName,
+  logFolder = getwd()
 )
 }
 \arguments{

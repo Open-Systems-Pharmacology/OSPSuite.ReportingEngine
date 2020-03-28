@@ -187,13 +187,12 @@ checkOverwriteExisitingPath <- function(path, overwrite) {
 #'
 #' @return TRUE if the path includes the extension
 isFileExtension <- function(path, extension) {
-  return(max(sapply(extension, 
-                    function(ext){
-                      grepl(pattern = paste0(".", ext), x = path)
-                    }
-                    )
-             )
-         )
+  return(max(sapply(
+    extension,
+    function(ext) {
+      grepl(pattern = paste0(".", ext), x = path)
+    }
+  )))
 }
 
 validateIsFileExtension <- function(path, extension, nullAllowed = FALSE) {

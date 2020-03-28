@@ -15,7 +15,8 @@ runPopulationSensitivityAnalysis(
   popSAResultsIndexFile = "sensitivityAnalysesResultsIndexFile",
   variationRange,
   quantileVec,
-  numberOfCores
+  numberOfCores,
+  logFolder = getwd()
 )
 }
 \arguments{

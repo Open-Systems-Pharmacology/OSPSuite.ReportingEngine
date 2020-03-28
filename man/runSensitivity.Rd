@@ -12,7 +12,8 @@ runSensitivity(
   variationRange,
   numberOfCores = 1,
   resultsFileFolder,
-  resultsFileName = "sensitivityAnalysisResults"
+  resultsFileName = "sensitivityAnalysisResults",
+  logFolder = getwd()
 )
 }
 \arguments{

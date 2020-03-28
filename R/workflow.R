@@ -21,8 +21,7 @@ Workflow <- R6::R6Class(
     #' Default input creates a new folder with default naming
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
-                              workflowFolder = NULL) {
-
+                          workflowFolder = NULL) {
       # Check workflow folder input:
       # If workflow folder already exist throw a warning indicating the folder can be overwritten
       self$workflowFolder <- workflowFolder %||% defaultFileNames$workflowFolderPath()

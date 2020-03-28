@@ -4,27 +4,13 @@
 \alias{calculatePKParameters}
 \title{calculatePKParameters}
 \usage{
-calculatePKParameters(
-  simulationFilePath,
-  simulationResultFilePaths,
-  pkParametersToEvaluate = NULL,
-  userDefinedPKFunctions = NULL,
-  pkParameterResultsFilePath
-)
+calculatePKParameters(structureSet)
 }
 \arguments{
-\item{simulationFilePath}{path to pkml model file}
-
-\item{simulationResultFilePaths}{path to simulation CSV results files}
-
-\item{pkParametersToEvaluate}{vector of PK parameters to evaluate}
-
-\item{userDefinedPKFunctions}{vector of userDefinedPKFunction objects}
-
-\item{pkParameterResultsFilePath}{path to PK analysis result file}
+\item{structureSet}{`SimulationStructure` R6 class object}
 }
 \value{
-pkParameterResultsFilePath, paths to pk results file CSV
+pkAnalyses object
 }
 \description{
 Calculate PK parameters from simulated time profiles

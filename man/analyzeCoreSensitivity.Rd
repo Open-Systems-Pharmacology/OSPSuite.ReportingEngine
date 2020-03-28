@@ -10,12 +10,9 @@ analyzeCoreSensitivity(
   variationRange = 0.1,
   resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv"),
   numberOfCoresToUse = NULL,
-  debugLogFileName = file.path(defaultFileNames$workflowFolderPath(),
-    defaultFileNames$logDebugFile()),
-  infoLogFileName = file.path(defaultFileNames$workflowFolderPath(),
-    defaultFileNames$logInfoFile()),
-  errorLogFileName = file.path(defaultFileNames$workflowFolderPath(),
-    defaultFileNames$logErrorFile()),
+  debugLogFileName = file.path(getwd(), defaultFileNames$logDebugFile()),
+  infoLogFileName = file.path(getwd(), defaultFileNames$logInfoFile()),
+  errorLogFileName = file.path(getwd(), defaultFileNames$logErrorFile()),
   nodeName = NULL
 )
 }

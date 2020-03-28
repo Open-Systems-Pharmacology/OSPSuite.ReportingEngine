@@ -52,19 +52,19 @@ SimulationSet <- R6::R6Class(
     #' @param timeUnit display unit for time variable. Default is "h"
     #' @return A new `SimulationSet` object
     initialize = function(simulationSetName = NULL,
-                              simulationFile,
-                              simulationName = NULL,
-                              pathID = NULL,
-                              pathName = NULL,
-                              pathUnit = NULL,
-                              pkParameters = enum(ospsuite::allPKParameterNames()),
-                              pkParametersNames = NULL,
-                              pkParametersUnits = NULL,
-                              observedDataFile = NULL,
-                              observedMetaDataFile = NULL,
-                              dataFilter = NULL,
-                              dataReportName = NULL,
-                              timeUnit = "h") {
+                          simulationFile,
+                          simulationName = NULL,
+                          pathID = NULL,
+                          pathName = NULL,
+                          pathUnit = NULL,
+                          pkParameters = enum(ospsuite::allPKParameterNames()),
+                          pkParametersNames = NULL,
+                          pkParametersUnits = NULL,
+                          observedDataFile = NULL,
+                          observedMetaDataFile = NULL,
+                          dataFilter = NULL,
+                          dataReportName = NULL,
+                          timeUnit = "h") {
       self$simulationFile <- simulationFile
       self$simulationName <- simulationName %||% trimFileName(simulationFile, extension = "pkml")
 
