@@ -24,15 +24,25 @@ R6 class for SensitivityAnalysisTask settings
 }
 \if{html}{\out{</div>}}
 }
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{variationRange}}{variation range for sensitivity analysis}
+
+\item{\code{numberOfCores}}{number of cores for parallel computation}
+
+\item{\code{quantileVec}}{vector of quantiles to be calculated}
+
+\item{\code{variableParameterPaths}}{vector of paths of parameters to vary when performing sensitivity analysis}
+
+\item{\code{pkParameterSelection}}{list of selected PK parameters for sensitivity analysis}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{SensitivityAnalysisTask$new()}}
-\item \href{#method-updateVariationRange}{\code{SensitivityAnalysisTask$updateVariationRange()}}
-\item \href{#method-updateNumberOfCores}{\code{SensitivityAnalysisTask$updateNumberOfCores()}}
-\item \href{#method-updateQuantileVec}{\code{SensitivityAnalysisTask$updateQuantileVec()}}
-\item \href{#method-updateVariableParameterPaths}{\code{SensitivityAnalysisTask$updateVariableParameterPaths()}}
-\item \href{#method-updatePKParameterSelection}{\code{SensitivityAnalysisTask$updatePKParameterSelection()}}
 \item \href{#method-clone}{\code{SensitivityAnalysisTask$clone()}}
 }
 }
@@ -51,28 +61,15 @@ R6 class for SensitivityAnalysisTask settings
 \subsection{Method \code{new()}}{
 Create a `SensitivityAnalysisTask` object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$new(
-  variationRange = NULL,
-  numberOfCores = NULL,
-  quantileVec = NULL,
-  variableParameterPaths = NULL,
-  pkParameterSelection = NULL,
-  ...
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$new(getTaskResults = NULL, settings = NULL, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{variationRange}}{variation range for sensitivity analysis}
+\item{\code{getTaskResults}}{function called by task that computes and format figure results}
 
-\item{\code{numberOfCores}}{number of cores for parallel computation}
-
-\item{\code{quantileVec}}{vector of quantiles to be calculated}
-
-\item{\code{variableParameterPaths}}{vector of paths of parameters to vary when performing sensitivity analysis}
-
-\item{\code{pkParameterSelection}}{list of selected PK parameters for sensitivity analysis}
+\item{\code{settings}}{instance of SensitivityAnalysisSettings class}
 
 \item{\code{...}}{parameters inherited from R6 class `Task` object}
 }
@@ -80,86 +77,6 @@ Create a `SensitivityAnalysisTask` object
 }
 \subsection{Returns}{
 A new `SensitivityAnalysisTask` object
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateVariationRange"></a>}}
-\subsection{Method \code{updateVariationRange()}}{
-Update variation range of sensitivity analysis
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$updateVariationRange(variationRange)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{variationRange}}{variation range for sensitivity analysis}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateNumberOfCores"></a>}}
-\subsection{Method \code{updateNumberOfCores()}}{
-Update number of cores to be used during the sensitivity analysis
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$updateNumberOfCores(numberOfCores)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{numberOfCores}}{number of cores for parallel computation}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateQuantileVec"></a>}}
-\subsection{Method \code{updateQuantileVec()}}{
-Update vector of quantiles to be calculated for sensitivity analysis
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$updateQuantileVec(quantileVec)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{quantileVec}}{vector of quantiles to be calculated}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateVariableParameterPaths"></a>}}
-\subsection{Method \code{updateVariableParameterPaths()}}{
-Update vector of paths of parameters to vary during sensitivity analysis
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$updateVariableParameterPaths(variableParameterPaths)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{variableParameterPaths}}{vector of paths of parameters to vary when performing sensitivity analysis}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updatePKParameterSelection"></a>}}
-\subsection{Method \code{updatePKParameterSelection()}}{
-Update list of selected PK parameters for sensitivity analysis
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$updatePKParameterSelection(pkParameterSelection)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{pkParameterSelection}}{list of selected PK parameters for sensitivity analysis}
-}
-\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
