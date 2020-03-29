@@ -113,10 +113,7 @@ MeanModelWorkflow <- R6::R6Class(
         workflowFolder = self$workflowFolder,
         active = active,
         settings = settings,
-        message = message,
-        variationRange = NULL,
-        numberOfCores = NULL
-      )
+        message = message)
     },
 
     #' @description
@@ -311,12 +308,14 @@ MeanModelWorkflow <- R6::R6Class(
             pathFolder = self$workflowFolder
           )
           if (self$meanModelPKParameters$validateInput()) {
-            dir.create(set$pkAnalysisResultsFolder)
+            if (!is.null(file.path(self$meanModelPKParameters$workflowFolder, self$meanModelPKParameters$outputFolder))) {
+              dir.create(file.path(self$meanModelPKParameters$workflowFolder, self$meanModelPKParameters$outputFolder))
+            }
             # Create the Output for PK parameters
-            set$pkAnalysisResultsFileNames <- calculatePKParameters(
-              simulationFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
-              simulationResultFilePaths = set$simulationResultFileNames,
-              pkParameterResultsFilePath = file.path(set$pkAnalysisResultsFolder, defaultFileNames$pkAnalysisResultsFile(set$simulationSet$simulationSetName))
+            pkAnalyses <- calculatePKParameters(set)
+            exportPKAnalysesToCSV(
+              pkAnalyses = pkAnalyses,
+              filePath = set$pkAnalysisResultsFileNames
             )
           }
         }
@@ -336,15 +335,18 @@ MeanModelWorkflow <- R6::R6Class(
             pathFolder = self$workflowFolder
           )
           if (self$meanModelSensitivityAnalysis$validateInput()) {
-            dir.create(set$sensitivityAnalysisResultsFolder)
-            # Create the Output of Simulation
+
+            if (!is.null(file.path(self$meanModelSensitivityAnalysis$workflowFolder, self$meanModelSensitivityAnalysis$outputFolder))) {
+              dir.create(file.path(self$meanModelSensitivityAnalysis$workflowFolder, self$meanModelSensitivityAnalysis$outputFolder))
+            }
+
             set$sensitivityAnalysisResultsFileNames <- runSensitivity(
-              simFilePath = file.path(set$inputFilesFolder, paste0(set$simulationSet$simulationName, ".pkml")),
-              variableParameterPaths = self$meanModelSensitivityAnalysis$variableParameterPaths,
-              variationRange = self$meanModelSensitivityAnalysis$variationRange,
-              resultsFileFolder = set$sensitivityAnalysisResultsFolder,
+              simFilePath = set$simulationSet$simulationFile,
+              resultsFileFolder = file.path(self$meanModelSensitivityAnalysis$workflowFolder, self$meanModelSensitivityAnalysis$outputFolder),
               resultsFileName = trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName), extension = "csv"),
-              numberOfCores = self$meanModelSensitivityAnalysis$numberOfCores
+              variableParameterPaths = self$meanModelSensitivityAnalysis$settings$variableParameterPaths,
+              variationRange = self$meanModelSensitivityAnalysis$settings$variationRange,
+              numberOfCores = self$meanModelSensitivityAnalysis$settings$numberOfCores
             )
           }
         }

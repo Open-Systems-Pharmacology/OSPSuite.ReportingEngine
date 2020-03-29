@@ -157,12 +157,7 @@ Define population Sensitivity Analysis `task` settings
   outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
   settings = NULL,
   active = TRUE,
-  message = NULL,
-  variationRange = NULL,
-  numberOfCores = NULL,
-  quantileVec = NULL,
-  variableParameterPaths = NULL,
-  pkParameterSelection = NULL
+  message = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -177,6 +172,10 @@ Default value is `TRUE`}
 \item{\code{message}}{title of the `task`.
 Default value indicates `task` name.}
 
+\item{\code{input}}{file or folder of input}
+
+\item{\code{output}}{file or folder of output}
+
 \item{\code{variationRange}}{variation range for sensitivity analysis}
 
 \item{\code{numberOfCores}}{number of cores for parallel computation}
@@ -186,10 +185,6 @@ Default value indicates `task` name.}
 \item{\code{variableParameterPaths}}{vector of paths of parameters to vary when performing sensitivity analysis}
 
 \item{\code{pkParameterSelection}}{list of selected PK parameters for sensitivity analysis}
-
-\item{\code{input}}{file or folder of input}
-
-\item{\code{output}}{file or folder of output}
 }
 \if{html}{\out{</div>}}
 }

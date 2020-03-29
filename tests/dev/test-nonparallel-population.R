@@ -8,7 +8,9 @@ ps <- PopulationSimulationSet$new(
   populationFile = "./tests/dev/popData_short.csv"
 )
 pwf <- PopulationWorkflow$new(simulationSets = list(ps))
-pwf$simulatePopulation$settings$updateShowProgress(TRUE)
+pwf$simulatePopulation$settings$showProgress <- TRUE
 
-pwf$populationSensitivityAnalysis$updateVariableParameterPaths(tree$Organism$Heart$Volume$path)
+pwf$populationSensitivityAnalysis$settings$variableParameterPaths <-  tree$Organism$Heart$Volume$path
+pwf$populationSensitivityAnalysis$settings$pkParameterSelection <- c("C_max")
+pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.5)
 pwf$runWorkflow()

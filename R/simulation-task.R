@@ -1,31 +1,30 @@
 #' @title SimulationTask
 #' @description  R6 class for SimulationTask settings
-#' @field numberOfCores number of cores for parallel computation
 #' @field getTaskResults function called by task that computes and format figure results
 SimulationTask <- R6::R6Class(
   "SimulationTask",
   inherit = Task,
   public = list(
-    numberOfCores = NULL,
-    showProgress = NULL,
     getTaskResults = NULL,
     settings = NULL,
 
     #' @description
     #' Create a `SimulationTask` object
-    #' @param numberOfCores number of cores for parallel computation
     #' @param getTaskResults function called by task that computes and format figure results
+    #' @param settings instance of SimulationSettings class
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SimulationTask` object
-    initialize = function(numberOfCores = defaultSimulationNumberOfCores,
-                          showProgress = FALSE,
-                          getTaskResults = NULL,
+    initialize = function(getTaskResults = NULL,
+                          settings = NULL,
                           ...) {
       super$initialize(...)
+      if(is.null(settings)){
+        self$settings <- SimulationSettings$new()
+      } else{
+        validateIsOfType(object = settings,SimulationSettings)
+        self$settings <- settings
+      }
       self$getTaskResults <- getTaskResults
-      self$settings <- PopulationSimulationSettings$new()
-      self$settings$updateNumberOfCores(numberOfCores)
-      self$settings$updateShowProgress(showProgress)
     },
 
 

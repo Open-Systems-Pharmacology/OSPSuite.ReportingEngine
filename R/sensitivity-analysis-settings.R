@@ -1,28 +1,30 @@
-#' @title PopulationSensitivityAnalysisSettings
+#' @title SensitivityAnalysisSettings
 #' @description  R6 class for Population Sensitivity Analysis Settings
 #' @field variationRange variation range for sensitivity analysis
 #' @field numberOfCores number of cores for parallel computation
 #' @field quantileVec vector of quantiles to be calculated
 #' @field variableParameterPaths vector of paths of parameters to vary when performing sensitivity analysis
 #' @field pkParameterSelection list of selected PK parameters for sensitivity analysis
-PopulationSensitivityAnalysisSettings <- R6::R6Class(
-  "PopulationSensitivityAnalysisSettings",
+#' @field showProgress sensitivity analysis progress printed to console if TRUE
+SensitivityAnalysisSettings <- R6::R6Class(
+  "SensitivityAnalysisSettings",
   public = list(
 
     #' @description
-    #' Create a `PopulationSensitivityAnalysisSettings` object
+    #' Create a `SensitivityAnalysisSettings` object
     #' @param variationRange variation range for sensitivity analysis
     #' @param numberOfCores number of cores for parallel computation
     #' @param quantileVec vector of quantiles to be calculated
     #' @param variableParameterPaths vector of paths of parameters to vary when performing sensitivity analysis
     #' @param pkParameterSelection list of selected PK parameters for sensitivity analysis
-    #' @return A new `PopulationSensitivityAnalysisSettings` object
+    #' @param showProgress sensitivity analysis progress printed to console if TRUE
+    #' @return A new `SensitivityAnalysisSettings` object
     initialize = function(variationRange = NULL,
                           numberOfCores = NULL,
                           quantileVec = NULL,
                           variableParameterPaths = NULL,
                           pkParameterSelection = NULL,
-                          showProgress = NULL) {
+                          showProgress = FALSE) {
       self$variationRange <- variationRange %||% defaultVariationRange
       self$numberOfCores <- numberOfCores %||% defaultSensitivityAnalysisNumberOfCores
       self$quantileVec <- quantileVec %||% defaultQuantileVec

@@ -21,7 +21,7 @@ runSensitivity <- function(simFilePath,
                            resultsFileFolder,
                            resultsFileName = "sensitivityAnalysisResults",
                            logFolder = getwd()) {
-  sim <- loadSimulation(simFilePath)
+  sim <- ospsuite::loadSimulation(simFilePath)
 
   allVariableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
 

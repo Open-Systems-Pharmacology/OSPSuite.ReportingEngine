@@ -12,8 +12,6 @@ R6 class for SimulationTask settings
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{numberOfCores}}{number of cores for parallel computation}
-
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
 }
 \if{html}{\out{</div>}}
@@ -42,20 +40,15 @@ R6 class for SimulationTask settings
 \subsection{Method \code{new()}}{
 Create a `SimulationTask` object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimulationTask$new(
-  numberOfCores = defaultSimulationNumberOfCores,
-  showProgress = FALSE,
-  getTaskResults = NULL,
-  ...
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimulationTask$new(getTaskResults = NULL, settings = NULL, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{numberOfCores}}{number of cores for parallel computation}
-
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
+
+\item{\code{settings}}{instance of SimulationSettings class}
 
 \item{\code{...}}{parameters inherited from R6 class `Task` object}
 }
