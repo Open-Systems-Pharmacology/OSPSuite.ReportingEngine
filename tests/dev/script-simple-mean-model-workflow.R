@@ -1,9 +1,6 @@
 rm(list = ls())
 library(ospsuite.reportingengine)
 
-# Set working folder
-setwd("C:/Design2Code/R-RE-tests/01_MeanModel_Raltegravir")
-
 simFile <- "PKML/Raltegravir 50 mg  (lactose formulation).pkml"
 
 modelSet <- SimulationSet$new(simulationFile = simFile,
@@ -13,3 +10,9 @@ modelSet <- SimulationSet$new(simulationFile = simFile,
   
 workflow <- MeanModelWorkflow$new(simulationSets = modelSet,
                                   workflowFolder = "myFolder")
+
+# workflow$getAllTasks()
+# workflow$activateTasks(tasks = plotMassBalance)
+# workflow$inactivateTasks(tasks = meanModelPKParameters)
+
+# workflow$runWorkflow()
