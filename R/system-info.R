@@ -75,7 +75,7 @@ ReportingEngineInfo <- R6::R6Class(
 #' @export
 getReportingEngineInfo <- function() {
   info <- list()
-  info$Date <- Sys.time()
+  info$Date <- format(Sys.time(), "%d/%m/%Y - %H:%M:%S")
   systemInfo <- Sys.info()
   info$computerName <- systemInfo[["nodename"]]
   info$userName <- systemInfo[["user"]]

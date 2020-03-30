@@ -1,6 +1,5 @@
 #' @title Workflow
 #' @description R6 class representing Reporting Engine generic Workflow
-#' @field reportingEngineInfo R6 class object with relevant information about reporting engine
 #' @field simulationStructures `SimulationStructure` R6 class object managing the structure of the workflow output
 #' @field workflowFolder path of the folder create by the Workflow
 #' @field reportFileName name of the Rmd report file
@@ -9,7 +8,6 @@
 Workflow <- R6::R6Class(
   "Workflow",
   public = list(
-    reportingEngineInfo = ReportingEngineInfo$new(),
     simulationStructures = NULL,
     workflowFolder = NULL,
     reportFileName = NULL,
@@ -22,6 +20,8 @@ Workflow <- R6::R6Class(
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
                           workflowFolder = NULL) {
+      
+      private$reportingEngineInfo <- ReportingEngineInfo$new()
       # Check workflow folder input:
       # If workflow folder already exist throw a warning indicating the folder can be overwritten
       self$workflowFolder <- workflowFolder %||% defaultFileNames$workflowFolderPath()
@@ -42,7 +42,7 @@ Workflow <- R6::R6Class(
       dir.create(self$workflowFolder, showWarnings = FALSE)
 
       logWorkflow(
-        message = self$reportingEngineInfo$print(),
+        message = private$reportingEngineInfo$print(),
         pathFolder = self$workflowFolder
       )
 
@@ -117,10 +117,18 @@ Workflow <- R6::R6Class(
     #' @return Vector of inactive `Task` names
     inactivateTasks = function(tasks = self$getAllTasks()) {
       inactivateWorkflowTasks(self, tasks = tasks)
+    },
+    
+    #' @description
+    #' Print reporting engine information obtained from initiliazing a `Workflow`
+    printReportingEngineInfo = function(){
+      private$reportingEngineInfo$print()
     }
   ),
 
   private = list(
+    reportingEngineInfo = NULL,
+    
     getTasksWithStatus = function(status) {
       taskNames <- self$getAllTasks()
 

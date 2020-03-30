@@ -9,8 +9,6 @@ R6 class representing Reporting Engine generic Workflow
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{reportingEngineInfo}}{R6 class object with relevant information about reporting engine}
-
 \item{\code{simulationStructures}}{`SimulationStructure` R6 class object managing the structure of the workflow output}
 
 \item{\code{workflowFolder}}{path of the folder create by the Workflow}
@@ -29,6 +27,7 @@ R6 class representing Reporting Engine generic Workflow
 \item \href{#method-getInactiveTasks}{\code{Workflow$getInactiveTasks()}}
 \item \href{#method-activateTasks}{\code{Workflow$activateTasks()}}
 \item \href{#method-inactivateTasks}{\code{Workflow$inactivateTasks()}}
+\item \href{#method-printReportingEngineInfo}{\code{Workflow$printReportingEngineInfo()}}
 \item \href{#method-clone}{\code{Workflow$clone()}}
 }
 }
@@ -141,6 +140,15 @@ Default inactivates all tasks of the workflow using workflow method `workflow$ge
 \subsection{Returns}{
 Vector of inactive `Task` names
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-printReportingEngineInfo"></a>}}
+\subsection{Method \code{printReportingEngineInfo()}}{
+Print reporting engine information obtained from initiliazing a `Workflow`
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$printReportingEngineInfo()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
