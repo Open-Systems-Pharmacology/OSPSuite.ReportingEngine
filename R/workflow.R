@@ -9,7 +9,7 @@
 Workflow <- R6::R6Class(
   "Workflow",
   public = list(
-    reportingEngineInfo = ReportingEngineInfo$new(),
+    reportingEngineInfo = NULL,
     simulationStructures = NULL,
     workflowFolder = NULL,
     reportFileName = NULL,
@@ -22,6 +22,8 @@ Workflow <- R6::R6Class(
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
                           workflowFolder = NULL) {
+      
+      self$reportingEngineInfo <- ReportingEngineInfo$new()
       # Check workflow folder input:
       # If workflow folder already exist throw a warning indicating the folder can be overwritten
       self$workflowFolder <- workflowFolder %||% defaultFileNames$workflowFolderPath()
