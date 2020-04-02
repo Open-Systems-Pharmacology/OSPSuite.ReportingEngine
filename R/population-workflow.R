@@ -280,6 +280,7 @@ PopulationWorkflow <- R6::R6Class(
               pkParameterResultsFilePath = set$pkAnalysisResultsFileNames,
               resultsFileFolder = file.path(self$populationSensitivityAnalysis$workflowFolder, self$populationSensitivityAnalysis$outputFolder),
               resultsFileName = trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName), extension = "csv"),
+              popSAResultsIndexFile = paste(set$simulationSet$simulationSetName,"sensitivityAnalysesResultsIndexFile",sep = "-"),
               variableParameterPaths = self$populationSensitivityAnalysis$settings$variableParameterPaths,
               pkParameterSelection = self$populationSensitivityAnalysis$settings$pkParameterSelection,
               variationRange = self$populationSensitivityAnalysis$settings$variationRange,

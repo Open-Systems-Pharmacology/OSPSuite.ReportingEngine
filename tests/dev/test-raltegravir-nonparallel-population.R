@@ -23,15 +23,14 @@ popWorkFlow <- PopulationWorkflow$new(simulationSets = list(RaltegravirSimSet, L
 
 
 popWorkFlow$simulatePopulation$settings$showProgress <- TRUE
+popWorkFlow$simulatePopulation$settings$numberOfCores <- 1
 
-
-popWorkFlow$populationSensitivityAnalysis$settings$variableParameterPaths <- simTree1$Organism$Heart$Volume$path
-
-
-popWorkFlow$populationSensitivityAnalysis$settings$pkParameterSelection <- c("C_max")
-
-
-popWorkFlow$populationSensitivityAnalysis$settings$quantileVec <- c(0.5)
+popWorkFlow$populationSensitivityAnalysis$settings$showProgress <- FALSE
+popWorkFlow$populationSensitivityAnalysis$settings$numberOfCores <- 1
+popWorkFlow$populationSensitivityAnalysis$settings$variableParameterPaths <- "Organism|Heart|Volume"
+popWorkFlow$populationSensitivityAnalysis$settings$variationRange <- 0.1
+popWorkFlow$populationSensitivityAnalysis$settings$pkParameterSelection <- c("C_max","CL")
+popWorkFlow$populationSensitivityAnalysis$settings$quantileVec <- c(0.25,0.75)
 
 
 popWorkFlow$runWorkflow()
