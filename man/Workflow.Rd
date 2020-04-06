@@ -36,7 +36,7 @@ R6 class representing Reporting Engine generic Workflow
 \subsection{Method \code{new()}}{
 Create a new `Workflow` object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Workflow$new(simulationSets, workflowFolder = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$new(simulationSets, workflowFolder)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -44,8 +44,7 @@ Create a new `Workflow` object.
 \describe{
 \item{\code{simulationSets}}{list of `SimulationSet` R6 class objects}
 
-\item{\code{workflowFolder}}{path of the output folder created or used by the Workflow.
-Default input creates a new folder with default naming}
+\item{\code{workflowFolder}}{path of the output folder created or used by the Workflow.}
 }
 \if{html}{\out{</div>}}
 }

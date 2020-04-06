@@ -16,10 +16,9 @@ Workflow <- R6::R6Class(
     #' Create a new `Workflow` object.
     #' @param simulationSets list of `SimulationSet` R6 class objects
     #' @param workflowFolder path of the output folder created or used by the Workflow.
-    #' Default input creates a new folder with default naming
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
-                          workflowFolder = NULL) {
+                          workflowFolder) {
       
       private$reportingEngineInfo <- ReportingEngineInfo$new()
       # Check workflow folder input:
