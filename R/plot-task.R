@@ -49,10 +49,16 @@ PlotTask <- R6::R6Class(
           plot = taskResults$plots[[plotName]],
           width = 16, height = 9, units = "cm"
         )
+        logWorkflow(
+          message = paste0("Plot '", plotFileName, "' was successfully saved."),
+          pathFolder = self$workflowFolder,
+          logTypes = LogTypes$Debug
+        )
 
-        addRmdFigureChunk(
+        addFigureChunk(
           fileName = reportFile,
-          figureFile = plotFileName
+          figureFile = plotFileName,
+          logFolder = self$workflowFolder
         )
       }
 
@@ -70,6 +76,12 @@ PlotTask <- R6::R6Class(
           file = tableFileName,
           row.names = FALSE
         )
+        
+        logWorkflow(
+          message = paste0("Table '", tableFileName, "' was successfully saved."),
+          pathFolder = self$workflowFolder,
+          logTypes = LogTypes$Debug
+        )
       }
     },
 
@@ -83,9 +95,10 @@ PlotTask <- R6::R6Class(
         message = paste0("Starting: ", self$message),
         pathFolder = self$workflowFolder
       )
-      addRmdTextChunk(
+      addTextChunk(
         reportFileName,
-        paste0("# ", self$title)
+        paste0("# ", self$title),
+        logFolder = self$workflowFolder
       )
       if (!is.null(self$outputFolder)) {
         dir.create(file.path(self$workflowFolder, self$outputFolder))
@@ -100,15 +113,16 @@ PlotTask <- R6::R6Class(
           pathFolder = self$workflowFolder
         )
         if (self$validateInput()) {
-          addRmdTextChunk(
+          addTextChunk(
             reportFileName,
-            paste0("## ", self$title, " for ", set$simulationSet$simulationSetName)
+            paste0("## ", self$title, " for ", set$simulationSet$simulationSetName),
+            logFolder = self$workflowFolder
           )
 
           taskResults <- self$getTaskResults(
             set,
             self$workflowFolder,
-            self$settings$plotConfigurations
+            self$settings
           )
 
           if (!is.null(taskResults[["residuals"]])) {
@@ -150,6 +164,11 @@ PlotTask <- R6::R6Class(
           file = tableFileName,
           row.names = FALSE
         )
+        logWorkflow(
+          message = paste0("Table '", tableFileName, "' was successfully saved."),
+          pathFolder = self$workflowFolder,
+          logTypes = LogTypes$Debug
+        )
 
         # TO DO: integrate tlf fix of mapping/plotConfig for no group variable
         residualHistogramPlot <- tlf::plotHistogram(
@@ -169,15 +188,22 @@ PlotTask <- R6::R6Class(
           plot = residualHistogramPlot,
           width = 16, height = 9, units = "cm"
         )
-
-        addRmdTextChunk(
-          reportFileName,
-          "## Residuals across all simulations"
+        logWorkflow(
+          message = paste0("Plot '", plotFileName, "' was successfully saved."),
+          pathFolder = self$workflowFolder,
+          logTypes = LogTypes$Debug
         )
 
-        addRmdFigureChunk(
+        addTextChunk(
+          reportFileName,
+          "## Residuals across all simulations",
+          logFolder = self$workflowFolder
+        )
+
+        addFigureChunk(
           fileName = reportFileName,
-          figureFile = plotFileName
+          figureFile = plotFileName,
+          logFolder = self$workflowFolder
         )
       }
     }
