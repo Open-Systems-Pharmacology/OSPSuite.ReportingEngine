@@ -65,14 +65,14 @@ Task <- R6::R6Class(
     #' Print `Task` features
     #' @return Text of task features
     print = function() {
-      taskActiveMessage <- "NOT"
+      taskActiveMessage <- " NOT"
       if (self$active) {
         taskActiveMessage <- ""
       }
 
       info <- c(
         sprintf("Task: %s", self$message %||% ""),
-        sprintf("Task is %s active ", taskActiveMessage),
+        sprintf("Task is%s active ", taskActiveMessage),
         sprintf("Workflow folder of task: %s", self$workflowFolder %||% ""),
         sprintf("Task output folder: %s", self$outputFolder %||% "")
       )
