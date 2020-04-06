@@ -46,7 +46,7 @@ Workflow <- R6::R6Class(
         pathFolder = self$workflowFolder
       )
 
-      self$reportFileName <- file.path(self$workflowFolder, paste0(defaultFileNames$reportName(), ".Rmd"))
+      self$reportFileName <- file.path(self$workflowFolder, paste0(defaultFileNames$reportName(), ".md"))
 
       # Check of Workflow inputs
       self$simulationStructures <- list()

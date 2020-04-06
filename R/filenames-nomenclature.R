@@ -97,7 +97,7 @@ defaultWorkflowMessages <- list(
   "plotMassBalance" = "Plot Mass Balance task in Alpha Testing",
   "plotAbsorption" = "Plot Absorption task in Alpha Testing",
   "plotSensitivity" = "Plot Sensitivity task not available at the moment",
-  "renderReport" = "Render a report with a specific format"
+  "resetReport" = "Clear previous report"
 )
 
 defaultTaskOutputFolders <- list(
