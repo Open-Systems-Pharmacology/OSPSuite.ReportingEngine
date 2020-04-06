@@ -24,7 +24,7 @@ Workflow <- R6::R6Class(
       private$reportingEngineInfo <- ReportingEngineInfo$new()
       # Check workflow folder input:
       # If workflow folder already exist throw a warning indicating the folder can be overwritten
-      self$workflowFolder <- workflowFolder %||% defaultFileNames$workflowFolderPath()
+      self$workflowFolder <- workflowFolder %||% getwd()
       workflowFolderCheck <- checkExisitingPath(self$workflowFolder, stopIfPathExists = FALSE)
 
       if (!is.null(workflowFolderCheck)) {
