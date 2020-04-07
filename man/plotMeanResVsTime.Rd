@@ -4,19 +4,12 @@
 \alias{plotMeanResVsTime}
 \title{plotMeanResVsTime}
 \usage{
-plotMeanResVsTime(
-  data,
-  metaData = NULL,
-  caption = NULL,
-  plotConfiguration = NULL
-)
+plotMeanResVsTime(data, metaData = NULL, plotConfiguration = NULL)
 }
 \arguments{
 \item{data}{data.frame}
 
 \item{metaData}{meta data on `data`}
-
-\item{caption}{legend caption for data.frame}
 
 \item{plotConfiguration}{`PlotConfiguration` R6 class object from `tlf` library}
 }

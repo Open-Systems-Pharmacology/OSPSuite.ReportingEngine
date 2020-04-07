@@ -4,7 +4,7 @@
 \alias{readObservedDataFile}
 \title{readObservedDataFile}
 \usage{
-readObservedDataFile(fileName, header = TRUE, encoding = "ISO")
+readObservedDataFile(fileName, header = TRUE, encoding = "UTF")
 }
 \arguments{
 \item{header}{logical indicating if data has a header}

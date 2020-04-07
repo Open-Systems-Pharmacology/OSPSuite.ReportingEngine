@@ -4,19 +4,12 @@
 \alias{plotMeanResVsPred}
 \title{plotMeanResVsPred}
 \usage{
-plotMeanResVsPred(
-  data,
-  metaData = NULL,
-  caption = NULL,
-  plotConfiguration = NULL
-)
+plotMeanResVsPred(data, metaData = NULL, plotConfiguration = NULL)
 }
 \arguments{
 \item{data}{data.frame}
 
 \item{metaData}{meta data on `data`}
-
-\item{caption}{legend caption for data.frame}
 
 \item{plotCOnfiguration}{`PlotConfiguration` R6 class object from `tlf` library}
 }
