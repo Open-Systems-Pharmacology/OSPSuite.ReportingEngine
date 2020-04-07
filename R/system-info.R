@@ -15,18 +15,18 @@ ReportingEngineInfo <- R6::R6Class(
     initialize = function() {
       info <- getReportingEngineInfo()
       self$Date <- info$Date
-      private$computerName <- info$computerName
-      private$userName <- info$userName
-      private$login <- info$login
-      private$tlfVersion <- info$tlfVersion
-      private$ospsuiteVersion <- info$ospsuiteVersion
-      private$reportingengineVersion <- info$reportingengineVersion
-      private$Rversion <- info$Rversion
+      private$.computerName <- info$computerName
+      private$.userName <- info$userName
+      private$.login <- info$login
+      private$.tlfVersion <- info$tlfVersion
+      private$.ospsuiteVersion <- info$ospsuiteVersion
+      private$.reportingengineVersion <- info$reportingengineVersion
+      private$.Rversion <- info$Rversion
 
       # TO DO: define a list of validated systems that will use Reporting Engine
       validatedSystems <- info$computerName
-      if (private$computerName %in% validatedSystems) {
-        private$isValidatedSystem <- TRUE
+      if (private$.computerName %in% validatedSystems) {
+        private$.isValidatedSystem <- TRUE
       }
     },
 
@@ -35,37 +35,37 @@ ReportingEngineInfo <- R6::R6Class(
     #' @return A text with system information
     print = function() {
       systemValidated <- "NOT"
-      if (private$isValidatedSystem) {
+      if (private$.isValidatedSystem) {
         systemValidated <- ""
       }
       infoPrint <- c(
         sprintf("Reporting Engine Information:"),
         sprintf("Date: %s", as.character(self$Date)),
         sprintf("User Information:"),
-        sprintf("Computer Name: %s", private$computerName),
-        sprintf("User: %s", private$userName),
-        sprintf("Login: %s", private$login),
+        sprintf("Computer Name: %s", private$.computerName),
+        sprintf("User: %s", private$.userName),
+        sprintf("Login: %s", private$.login),
         sprintf("System is %s validated", systemValidated),
         sprintf("System versions:"),
-        sprintf("R version: %s", private$Rversion),
-        sprintf("OSP Suite Package version: %s", as.character(private$ospsuiteVersion)),
-        sprintf("OSP Reporting Engine version: %s", as.character(private$reportingengineVersion)),
-        sprintf("tlf version: %s", as.character(private$tlfVersion))
+        sprintf("R version: %s", private$.Rversion),
+        sprintf("OSP Suite Package version: %s", as.character(private$.ospsuiteVersion)),
+        sprintf("OSP Reporting Engine version: %s", as.character(private$.reportingengineVersion)),
+        sprintf("tlf version: %s", as.character(private$.tlfVersion))
       )
       invisible(self)
       return(infoPrint)
     }
   ),
   private = list(
-    computerName = NULL,
-    userName = NULL,
-    login = NULL,
+    .computerName = NULL,
+    .userName = NULL,
+    .login = NULL,
     # Packages versions
-    tlfVersion = NULL,
-    ospsuiteVersion = NULL,
-    reportingengineVersion = NULL,
-    Rversion = NULL,
-    isValidatedSystem = FALSE
+    .tlfVersion = NULL,
+    .ospsuiteVersion = NULL,
+    .reportingengineVersion = NULL,
+    .Rversion = NULL,
+    .isValidatedSystem = FALSE
   )
 )
 

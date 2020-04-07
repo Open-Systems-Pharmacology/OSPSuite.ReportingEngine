@@ -20,7 +20,7 @@ Workflow <- R6::R6Class(
     initialize = function(simulationSets,
                           workflowFolder) {
       
-      private$reportingEngineInfo <- ReportingEngineInfo$new()
+      private$.reportingEngineInfo <- ReportingEngineInfo$new()
       # Check workflow folder input:
       # If workflow folder already exist throw a warning indicating the folder can be overwritten
       self$workflowFolder <- workflowFolder %||% getwd()
@@ -41,7 +41,7 @@ Workflow <- R6::R6Class(
       dir.create(self$workflowFolder, showWarnings = FALSE)
 
       logWorkflow(
-        message = private$reportingEngineInfo$print(),
+        message = private$.reportingEngineInfo$print(),
         pathFolder = self$workflowFolder
       )
 
@@ -90,14 +90,14 @@ Workflow <- R6::R6Class(
     #' Get a vector with all the names of active tasks within the `Workflow`
     #' @return Vector of active `Task` names
     getActiveTasks = function() {
-      return(private$getTasksWithStatus(status = TRUE))
+      return(private$.getTasksWithStatus(status = TRUE))
     },
 
     #' @description
     #' Get a vector with all the names of inactive tasks within the `Workflow`
     #' @return Vector of inactive `Task` names
     getInactiveTasks = function() {
-      return(private$getTasksWithStatus(status = FALSE))
+      return(private$.getTasksWithStatus(status = FALSE))
     },
 
     #' @description
@@ -121,14 +121,14 @@ Workflow <- R6::R6Class(
     #' @description
     #' Print reporting engine information obtained from initiliazing a `Workflow`
     printReportingEngineInfo = function(){
-      private$reportingEngineInfo$print()
+      private$.reportingEngineInfo$print()
     }
   ),
 
   private = list(
-    reportingEngineInfo = NULL,
+    .reportingEngineInfo = NULL,
     
-    getTasksWithStatus = function(status) {
+    .getTasksWithStatus = function(status) {
       taskNames <- self$getAllTasks()
 
       tasksWithStatus <- NULL
