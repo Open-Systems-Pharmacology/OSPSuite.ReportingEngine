@@ -1,4 +1,6 @@
 context("Tasks in workflows")
+# It seems that the SimulationSet instance crashes if library(ospsuite) is not loaded
+library(ospsuite)
 
 # Make sure testFolder is not there
 testFolder <- "testFolder"
