@@ -31,9 +31,6 @@ test_that("readObservedDataFile can correctly read csv and txt format for observ
   expect_equal(testDataFrame, txtData)
 })
 
-test_that("readObservedDataFile: unkwown file extensions throw error", {
-  expect_error(readObservedDataFile("testFile.fff"))
-})
 test_that("readObservedDataFile: unexistant file throw error", {
   expect_error(readObservedDataFile("testFile10.csv"))
 })
@@ -80,3 +77,7 @@ test_that("Correct expressions work the way they should", {
     evalDataFilter(testDataFrame, filterExpression)
   )
 })
+
+# Remove the files created during the tests
+unlink(testCsvFile, recursive = TRUE)
+unlink(testTxtFile, recursive = TRUE)

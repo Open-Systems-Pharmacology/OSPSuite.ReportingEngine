@@ -8,17 +8,8 @@
 #' @export
 readObservedDataFile <- function(fileName,
                                  header = TRUE,
-                                 encoding = "ISO") {
-  validateIsFileExtension(fileName, c("csv", "txt", "nmdat"))
+                                 encoding = "UTF") {
   extension <- getFileExtension(fileName)
-
-  if (extension %in% c("txt", "nmdat")) {
-    observedData <- read.table(fileName,
-      header = header,
-      check.names = FALSE,
-      encoding = encoding
-    )
-  }
 
   if (extension %in% "csv") {
     observedData <- read.csv(fileName,
@@ -26,7 +17,14 @@ readObservedDataFile <- function(fileName,
       check.names = FALSE,
       encoding = encoding
     )
+    return(observedData)
   }
+
+  observedData <- read.table(fileName,
+    header = header,
+    check.names = FALSE,
+    encoding = encoding
+  )
   return(observedData)
 }
 
