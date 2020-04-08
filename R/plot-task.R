@@ -181,6 +181,7 @@ PlotTask <- R6::R6Class(
           ),
           plotConfiguration = self$settings$plotConfigurations[["histogram"]]
         )
+        residualHistogramPlot <- residualHistogramPlot + ggplot2::labs(title = NULL, subtitle = NULL)
 
         # TO DO: define parameters from settings/plotConfiguration
         ggplot2::ggsave(
