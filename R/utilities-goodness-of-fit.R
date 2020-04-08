@@ -151,7 +151,6 @@ plotMeanGoodnessOfFit <- function(structureSet,
     goodnessOfFitPlots[["obsVsPred"]] <- plotMeanObsVsPred(
       data = residuals$data,
       metaData = residuals$metaData,
-      caption = structureSet$simulationSet$dataReportName,
       plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
     )
     
@@ -162,14 +161,12 @@ plotMeanGoodnessOfFit <- function(structureSet,
     goodnessOfFitPlots[["resVsTime"]] <- plotMeanResVsTime(
       data = residuals$data,
       metaData = residuals$metaData,
-      caption = structureSet$simulationSet$dataReportName,
       plotConfiguration = settings$plotConfigurations[["resVsTime"]]
     )
     
     goodnessOfFitPlots[["resVsPred"]] <- plotMeanResVsPred(
       data = residuals$data,
       metaData = residuals$metaData,
-      caption = structureSet$simulationSet$dataReportName,
       plotConfiguration = settings$plotConfigurations[["resVsPred"]]
     )
     
