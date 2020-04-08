@@ -217,12 +217,9 @@ logErrorThenStop <- function(message, logFolderPath = getwd()) {
   stop(message)
 }
 
-validateMetaDataProvidedToObservedDataFile <- function(ObservedDataFile, ObservedMetaDataFile) {
-  if (is.null(ObservedDataFile)) {
+validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile) {
+  if (!is.null(observedMetaDataFile)) {
     return()
   }
-  if (!is.null(ObservedMetaDataFile)) {
-    return()
-  }
-  logErrorThenStop(messages$errorObservedMetaDataFileNotProvided())
+  stop(messages$errorObservedMetaDataFileNotProvided(observedDataFile))
 }

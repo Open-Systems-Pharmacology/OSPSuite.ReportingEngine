@@ -70,8 +70,9 @@ messages <- list(
     paste0("Task input file '", input, "' does not exist.")
   },
 
-  errorObservedMetaDataFileNotProvided = function() {
-    '"ObservedDataFile" provided while "ObservedMetaDataFile" is "NULL", path of ObservedMetaDataFile need to be input'
+  errorObservedMetaDataFileNotProvided = function(observedDataFile) {
+    paste0("observedDataFile '", observedDataFile, "' was input but not observedMetaDataFile.",
+           "\nobservedMetaDataFile is required when using observedDataFile.")
   },
 
   errorNoParametersForSensitivityAnalysis = function() {

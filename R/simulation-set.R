@@ -80,32 +80,14 @@ SimulationSet <- R6::R6Class(
 
       self$timeUnit <- timeUnit %||% "h"
 
-      if (!is.null(observedDataFile) & is.null(observedMetaDataFile)) {
-
+      if (!is.null(observedDataFile)){
+        validateObservedMetaDataFile(observedMetaDataFile, observedDataFile)
       }
       self$observedDataFile <- observedDataFile
       self$observedMetaDataFile <- observedMetaDataFile
       self$dataFilter <- dataFilter
       self$dataReportName <- dataReportName %||% paste0(self$pathName, " observed data")
     },
-
-    # createDirectories = function(rootDirectory) {
-    #   self$inputFilesFolder <- file.path(rootDirectory, defaultFileNames$inputFolder())
-    #   dir.create(self$inputFilesFolder)
-    #   logDebug(message = paste0(self$inputFilesFolder, " was successfully created"), printConsole = TRUE)
-    #
-    #   self$simulationResultsFolder <- file.path(rootDirectory, defaultFileNames$simulationResultsFolder())
-    #   dir.create(self$simulationResultsFolder)
-    #   logDebug(message = paste0(self$simulationResultsFolder, " was successfully created"), printConsole = TRUE)
-    #
-    #   self$pkAnalysisResultsFolder <- file.path(rootDirectory, defaultFileNames$pkAnalysisResultsFolder())
-    #   dir.create(self$pkAnalysisResultsFolder)
-    #   logDebug(message = paste0(self$pkAnalysisResultsFolder, " was successfully created"), printConsole = TRUE)
-    #
-    #   self$sensitivityAnalysisResultsFolder <- file.path(rootDirectory, defaultFileNames$sensitivityAnalysisResultsFolder())
-    #   dir.create(self$sensitivityAnalysisResultsFolder)
-    #   logDebug(message = paste0(self$sensitivityAnalysisResultsFolder, " was successfully created"), printConsole = TRUE)
-    # },
 
     #' @description
     #' Create a copy of the input files (pkml simulation and data if available) within a folder dedicated to the simulation set
