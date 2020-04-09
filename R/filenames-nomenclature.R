@@ -85,7 +85,8 @@ defaultWorkflowTitles <- list(
   "plotPKParameters" = "PK parameters",
   "plotMassBalance" = "Mass Balance",
   "plotAbsorption" = "Absorption",
-  "plotSensitivity" = "Sensitivity Analysis"
+  "plotSensitivity" = "Sensitivity Analysis",
+  "plotDemography" = "Demography"
 )
 
 defaultWorkflowMessages <- list(
@@ -97,7 +98,8 @@ defaultWorkflowMessages <- list(
   "plotMassBalance" = "Plot Mass Balance task in Alpha Testing",
   "plotAbsorption" = "Plot Absorption task in Alpha Testing",
   "plotSensitivity" = "Plot Sensitivity task not available at the moment",
-  "renderReport" = "Render a report with a specific format"
+  "plotDemography" = "Plot Demography task Not available at the moment",
+  "resetReport" = "Clear previous report"
 )
 
 defaultTaskOutputFolders <- list(
@@ -108,5 +110,6 @@ defaultTaskOutputFolders <- list(
   "plotPKParameters" = "PKAnalysis",
   "plotMassBalance" = "MassBalance",
   "plotAbsorption" = "Absorption",
-  "plotSensitivity" = "Sensitivity"
+  "plotSensitivity" = "Sensitivity",
+  "plotDemography" = "Demography"
 )

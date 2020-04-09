@@ -30,7 +30,7 @@ cache:
 build_script:
   - Rscript -e "install.packages('devtools', repos = 'http://cran.us.r-project.org', lib = 'C:/RLibrary', type='binary')"
   - Rscript -e "install.packages('./tools/rClr_0.8.3.zip', repos = NULL, type = 'binary', lib = 'C:/RLibrary')"
-  - Rscript -e "install.packages('./tools/tlf_0.1.0.zip', repos = NULL, type = 'binary', lib = 'C:/RLibrary')"
+  - Rscript -e "install.packages('./tools/tlf_1.0.62.zip', repos = NULL, type = 'binary', lib = 'C:/RLibrary')"
   - Rscript -e "devtools::install_github('Open-Systems-Pharmacology/OSPSuite-R', ref ='develop', lib = 'C:/RLibrary')"
   - travis-tool.sh install_deps
   - travis-tool.sh r_binary_install curl

@@ -65,14 +65,14 @@ Task <- R6::R6Class(
     #' Print `Task` features
     #' @return Text of task features
     print = function() {
-      taskActiveMessage <- "NOT"
+      taskActiveMessage <- " NOT"
       if (self$active) {
         taskActiveMessage <- ""
       }
 
       info <- c(
         sprintf("Task: %s", self$message %||% ""),
-        sprintf("Task is %s active ", taskActiveMessage),
+        sprintf("Task is%s active ", taskActiveMessage),
         sprintf("Workflow folder of task: %s", self$workflowFolder %||% ""),
         sprintf("Task output folder: %s", self$outputFolder %||% "")
       )
@@ -110,19 +110,3 @@ inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
     workflow[[task]]$inactivate()
   }
 }
-
-#' @title ReportTask
-#' @description  R6 class for ReportTask settings
-ReportTask <- R6::R6Class(
-  "ReportTask",
-  inherit = Task,
-
-  public = list(
-    #' @description
-    #' Run report task to render report
-    #' @param reportFileName name of report file
-    runTask = function(reportFileName) {
-      renderRmdFile(reportFileName)
-    }
-  )
-)

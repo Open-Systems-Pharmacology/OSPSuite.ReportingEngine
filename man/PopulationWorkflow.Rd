@@ -93,19 +93,16 @@ Define simulate `task` settings
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{settings}}{specific settings for task}
+\item{\code{taskFunction}}{function performed by `Task` to get results}
 
-\item{\code{active}}{logical indicating if `task` is performed in worklfow.
+\item{\code{outputFolder}}{folder where `Task` output is saved}
+
+\item{\code{settings}}{specific settings for `Task`}
+
+\item{\code{active}}{logical defining if `Task` will be run by workflow
 Default value is `TRUE`}
 
-\item{\code{message}}{title of the `task`.
-Default value indicates `task` name.}
-
-\item{\code{input}}{file or folder of input}
-
-\item{\code{output}}{file or folder of output}
-
-\item{\code{numberOfCores}}{number of cores for parallelization}
+\item{\code{message}}{message/title of the `Task`}
 }
 \if{html}{\out{</div>}}
 }
@@ -130,17 +127,16 @@ Define calculate PK parameters `task` settings
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{settings}}{specific settings for task}
+\item{\code{taskFunction}}{function performed by `Task` to get results}
 
-\item{\code{active}}{logical indicating if `task` is performed in worklfow.
-Default value is `TRUE`}
+\item{\code{outputFolder}}{folder where `Task` output is saved}
 
-\item{\code{message}}{title of the `task`.
-Default value indicates `task` name.}
+\item{\code{settings}}{specific settings for `Task`}
 
-\item{\code{input}}{file or folder of input}
+\item{\code{active}}{logical defining if `Task` will be run by workflow
+Default value is `FALSE`}
 
-\item{\code{output}}{file or folder of output}
+\item{\code{message}}{message/title of the `Task`}
 }
 \if{html}{\out{</div>}}
 }
@@ -165,27 +161,16 @@ Define population Sensitivity Analysis `task` settings
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{settings}}{specific settings for task}
+\item{\code{taskFunction}}{function performed by `Task` to get results}
 
-\item{\code{active}}{logical indicating if `task` is performed in worklfow.
-Default value is `TRUE`}
+\item{\code{outputFolder}}{folder where `Task` output is saved}
 
-\item{\code{message}}{title of the `task`.
-Default value indicates `task` name.}
+\item{\code{settings}}{specific settings for `Task`}
 
-\item{\code{input}}{file or folder of input}
+\item{\code{active}}{logical defining if `Task` will be run by workflow
+Default value is `FALSE`}
 
-\item{\code{output}}{file or folder of output}
-
-\item{\code{variationRange}}{variation range for sensitivity analysis}
-
-\item{\code{numberOfCores}}{number of cores for parallel computation}
-
-\item{\code{quantileVec}}{vector of quantiles to be calculated}
-
-\item{\code{variableParameterPaths}}{vector of paths of parameters to vary when performing sensitivity analysis}
-
-\item{\code{pkParameterSelection}}{list of selected PK parameters for sensitivity analysis}
+\item{\code{message}}{message/title of the `Task`}
 }
 \if{html}{\out{</div>}}
 }
@@ -196,138 +181,149 @@ A new `SensitivityAnalysisTask` object
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotDemographySettings"></a>}}
 \subsection{Method \code{plotDemographySettings()}}{
-Define plot demography `task` settings
+Define plot demography `PlotTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotDemographySettings(
-  taskFunction,
-  input = NULL,
-  output = NULL,
+  reportTitle = defaultWorkflowTitles$plotDemography,
+  taskFunction = NULL,
+  outputFolder = defaultTaskOutputFolders$plotDemography,
   active = FALSE,
-  message = NULL
+  message = defaultWorkflowMessages$plotDemography,
+  settings = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{file or folder of input}
+\item{\code{reportTitle}}{section title of plot task result within report}
 
-\item{\code{output}}{file or folder of output}
+\item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
+
+\item{\code{outputFolder}}{folder where `Task` output is saved}
 
 \item{\code{active}}{logical indicating if `task` is performed in worklfow.
-Default value is `TRUE`}
+Default value is `FALSE`}
 
-\item{\code{message}}{title of the `task`.
-Default value indicates `task` name.}
+\item{\code{message}}{message indicating what the `task` does}
 
 \item{\code{settings}}{specific settings for task}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `Task` object
+A `PlotTask` object for goodness of fit plots
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotGoFSettings"></a>}}
 \subsection{Method \code{plotGoFSettings()}}{
-Define plot goodness of fit `task` settings
+Define Goodness of fit `PlotTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotGoFSettings(
-  taskFunction,
-  output = NULL,
+  reportTitle = defaultWorkflowTitles$plotGoF,
+  taskFunction = NULL,
+  outputFolder = defaultTaskOutputFolders$plotGoF,
   active = FALSE,
-  message = NULL
+  message = defaultWorkflowMessages$plotGoF,
+  settings = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{output}}{file or folder of output}
+\item{\code{reportTitle}}{section title of plot task result within report}
+
+\item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
+
+\item{\code{outputFolder}}{folder where `Task` output is saved}
 
 \item{\code{active}}{logical indicating if `task` is performed in worklfow.
-Default value is `TRUE`}
+Default value is `FALSE`}
 
-\item{\code{message}}{title of the `task`.
-Default value indicates `task` name.}
-
-\item{\code{input}}{file or folder of input}
+\item{\code{message}}{message indicating what the `task` does}
 
 \item{\code{settings}}{specific settings for task}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `Task` object
+A `PlotTask` object for goodness of fit plots
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotPKParametersSettings"></a>}}
 \subsection{Method \code{plotPKParametersSettings()}}{
-Define plot PK parameters `task` settings
+Define PK parameters `PlotPKParametersTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotPKParametersSettings(
-  taskFunction,
-  output = NULL,
+  reportTitle = defaultWorkflowTitles$plotPKParameters,
+  taskFunction = plotMeanPKParameters,
+  outputFolder = defaultTaskOutputFolders$plotPKParameters,
   active = FALSE,
-  message = NULL
+  message = defaultWorkflowMessages$plotPKParameters,
+  settings = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{output}}{file or folder of output}
+\item{\code{reportTitle}}{section title of plot task result within report}
+
+\item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
+
+\item{\code{outputFolder}}{folder where `Task` output is saved}
 
 \item{\code{active}}{logical indicating if `task` is performed in worklfow.
-Default value is `TRUE`}
+Default value is `FALSE`}
 
-\item{\code{message}}{title of the `task`.
-Default value indicates `task` name.}
-
-\item{\code{input}}{file or folder of input}
+\item{\code{message}}{message indicating what the `task` does}
 
 \item{\code{settings}}{specific settings for task}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `Task` object
+A `PlotPKParametersTask` object for PK parameters tables
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotSensitivitySettings"></a>}}
 \subsection{Method \code{plotSensitivitySettings()}}{
-Define plot sensisitivity `task` settings
+Define sensitivity analysis `PlotTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotSensitivitySettings(
-  taskFunction,
-  output = NULL,
+  reportTitle = defaultWorkflowTitles$plotSensitivity,
+  taskFunction = NULL,
+  outputFolder = defaultTaskOutputFolders$plotSensitivity,
   active = FALSE,
-  message = NULL
+  message = defaultWorkflowMessages$plotSensitivity,
+  settings = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{output}}{file or folder of output}
+\item{\code{reportTitle}}{section title of plot task result within report}
+
+\item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
+
+\item{\code{outputFolder}}{folder where `Task` output is saved}
 
 \item{\code{active}}{logical indicating if `task` is performed in worklfow.
-Default value is `TRUE`}
+Default value is `FALSE`}
 
-\item{\code{message}}{title of the `task`.
-Default value indicates `task` name.}
-
-\item{\code{input}}{file or folder of input}
+\item{\code{message}}{message indicating what the `task` does}
 
 \item{\code{settings}}{specific settings for task}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `Task` object
+A `PlotTask` object for goodness of fit plots
 }
 }
 \if{html}{\out{<hr>}}

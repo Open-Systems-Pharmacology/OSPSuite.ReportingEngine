@@ -28,7 +28,7 @@ R6 class for Reporting Engine Mean Model Workflow
 
 \item{\code{plotSensitivity}}{R6 class `PlotTask` for sensitivity plot}
 
-\item{\code{renderReport}}{R6 class `Task` for saving report in a specific format}
+\item{\code{resetReport}}{R6 class `Task` for saving report in a specific format}
 }
 \if{html}{\out{</div>}}
 }
@@ -44,7 +44,7 @@ R6 class for Reporting Engine Mean Model Workflow
 \item \href{#method-plotMassBalanceSettings}{\code{MeanModelWorkflow$plotMassBalanceSettings()}}
 \item \href{#method-plotAbsorptionSettings}{\code{MeanModelWorkflow$plotAbsorptionSettings()}}
 \item \href{#method-plotSensitivitySettings}{\code{MeanModelWorkflow$plotSensitivitySettings()}}
-\item \href{#method-renderReportSettings}{\code{MeanModelWorkflow$renderReportSettings()}}
+\item \href{#method-resetReportSettings}{\code{MeanModelWorkflow$resetReportSettings()}}
 \item \href{#method-runWorkflow}{\code{MeanModelWorkflow$runWorkflow()}}
 \item \href{#method-print}{\code{MeanModelWorkflow$print()}}
 \item \href{#method-clone}{\code{MeanModelWorkflow$clone()}}
@@ -370,13 +370,13 @@ A `PlotTask` object for goodness of fit plots
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-renderReportSettings"></a>}}
-\subsection{Method \code{renderReportSettings()}}{
-Define render report `ReportTask` settings
+\if{html}{\out{<a id="method-resetReportSettings"></a>}}
+\subsection{Method \code{resetReportSettings()}}{
+Define reset report `Task` settings
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$renderReportSettings(
+\if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$resetReportSettings(
   active = FALSE,
-  message = defaultWorkflowMessages$renderReport,
+  message = defaultWorkflowMessages$resetReport,
   settings = NULL
 )}\if{html}{\out{</div>}}
 }

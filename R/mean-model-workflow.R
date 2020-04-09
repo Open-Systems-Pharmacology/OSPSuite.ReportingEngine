@@ -8,7 +8,7 @@
 #' @field plotAbsorption R6 class `PlotTask` for absorption plot
 #' @field plotPKParameters R6 class `PlotTask` for PK parameters plot
 #' @field plotSensitivity R6 class `PlotTask` for sensitivity plot
-#' @field renderReport R6 class `Task` for saving report in a specific format
+#' @field resetReport R6 class `Task` for saving report in a specific format
 #' @export
 #' @import tlf
 #' @import ospsuite
@@ -26,7 +26,7 @@ MeanModelWorkflow <- R6::R6Class(
     plotAbsorption = NULL,
     plotPKParameters = NULL,
     plotSensitivity = NULL,
-    renderReport = NULL,
+    resetReport = NULL,
 
     #' @description
     #' Create a new `MeanModelWorkflow` object.
@@ -44,7 +44,7 @@ MeanModelWorkflow <- R6::R6Class(
       self$plotPKParametersSettings()
       self$meanModelSensitivityAnalysisSettings()
       self$plotSensitivitySettings()
-      self$renderReportSettings()
+      self$resetReportSettings()
     },
 
     #' @description
@@ -252,17 +252,18 @@ MeanModelWorkflow <- R6::R6Class(
     },
 
     #' @description
-    #' Define render report `ReportTask` settings
+    #' Define reset report `Task` settings
     #' @param active logical indicating if `Task` is performed in worklfow.
     #' Default value is `FALSE`
     #' @param message message indicating what the `task` does
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for goodness of fit plots
-    renderReportSettings = function(active = FALSE,
-                                    message = defaultWorkflowMessages$renderReport,
+    resetReportSettings = function(active = FALSE,
+                                    message = defaultWorkflowMessages$resetReport,
                                     settings = NULL) {
-      self$renderReport <- ReportTask$new(
+      self$resetReport <- Task$new(
         active = active,
+        workflowFolder = self$workflowFolder,
         message = message,
         settings = settings
       )
@@ -285,10 +286,11 @@ MeanModelWorkflow <- R6::R6Class(
         message = "Starting run of mean model workflow",
         pathFolder = self$workflowFolder
       )
-
-      initializeRmdFile(self$reportFileName,
-        title = "Mean Model Workflow Report"
-      )
+      
+      if(self$resetReport$active){
+        resetReport(self$reportFileName,
+                    logFolder = self$workflowFolder)
+      }
 
       if (self$simulate$active) {
         self$simulate$runTask(self$simulationStructures)

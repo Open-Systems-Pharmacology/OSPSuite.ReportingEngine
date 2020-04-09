@@ -43,14 +43,12 @@ PopulationWorkflow <- R6::R6Class(
 
     #' @description
     #' Define simulate `task` settings
-    #' @param input file or folder of input
-    #' @param output file or folder of output
-    #' @param settings specific settings for task
-    #' @param active logical indicating if `task` is performed in worklfow.
+    #' @param taskFunction function performed by `Task` to get results
+    #' @param outputFolder folder where `Task` output is saved
+    #' @param active logical defining if `Task` will be run by workflow
     #' Default value is `TRUE`
-    #' @param message title of the `task`.
-    #' Default value indicates `task` name.
-    #' @param numberOfCores number of cores for parallelization
+    #' @param settings specific settings for `Task`
+    #' @param message message/title of the `Task`
     #' @return A new `Task` object
     simulatePopulationSettings = function(taskFunction = simulateModelForPopulation,
                                           outputFolder = defaultTaskOutputFolders$simulate,
@@ -69,13 +67,12 @@ PopulationWorkflow <- R6::R6Class(
 
     #' @description
     #' Define calculate PK parameters `task` settings
-    #' @param input file or folder of input
-    #' @param output file or folder of output
-    #' @param settings specific settings for task
-    #' @param active logical indicating if `task` is performed in worklfow.
-    #' Default value is `TRUE`
-    #' @param message title of the `task`.
-    #' Default value indicates `task` name.
+    #' @param taskFunction function performed by `Task` to get results
+    #' @param outputFolder folder where `Task` output is saved
+    #' @param active logical defining if `Task` will be run by workflow
+    #' Default value is `FALSE`
+    #' @param settings specific settings for `Task`
+    #' @param message message/title of the `Task`
     #' @return A new `Task` object
     populationPKParameterSettings = function(taskFunction = NULL,
                                              outputFolder = defaultTaskOutputFolders$calculatePKParameters,
@@ -93,18 +90,12 @@ PopulationWorkflow <- R6::R6Class(
 
     #' @description
     #' Define population Sensitivity Analysis `task` settings
-    #' @param input file or folder of input
-    #' @param output file or folder of output
-    #' @param settings specific settings for task
-    #' @param active logical indicating if `task` is performed in worklfow.
-    #' Default value is `TRUE`
-    #' @param message title of the `task`.
-    #' Default value indicates `task` name.
-    #' @param variationRange variation range for sensitivity analysis
-    #' @param numberOfCores number of cores for parallel computation
-    #' @param quantileVec vector of quantiles to be calculated
-    #' @param variableParameterPaths vector of paths of parameters to vary when performing sensitivity analysis
-    #' @param pkParameterSelection list of selected PK parameters for sensitivity analysis
+    #' @param taskFunction function performed by `Task` to get results
+    #' @param outputFolder folder where `Task` output is saved
+    #' @param active logical defining if `Task` will be run by workflow
+    #' Default value is `FALSE`
+    #' @param settings specific settings for `Task`
+    #' @param message message/title of the `Task`
     #' @return A new `SensitivityAnalysisTask` object
     populationSensitivityAnalysisSettings = function(taskFunction = NULL,
                                                      outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
@@ -121,92 +112,115 @@ PopulationWorkflow <- R6::R6Class(
 
     # TO DO: Define the tasks settings for plots
     #' @description
-    #' Define plot demography `task` settings
-    #' @param input file or folder of input
-    #' @param output file or folder of output
-    #' @param settings specific settings for task
+    #' Define plot demography `PlotTask` settings
+    #' @param reportTitle section title of plot task result within report
+    #' @param taskFunction function called by task to get the results as a list of `plots` and `tables`
+    #' @param outputFolder folder where `Task` output is saved
     #' @param active logical indicating if `task` is performed in worklfow.
-    #' Default value is `TRUE`
-    #' @param message title of the `task`.
-    #' Default value indicates `task` name.
-    #' @return A new `Task` object
-    plotDemographySettings = function(taskFunction,
-                                      input = NULL,
-                                      output = NULL,
-                                      active = FALSE,
-                                      message = NULL) {
-      self$plotDemography <- Task$new(
-        output = output,
-        active = active,
-        message = "Plot Demography task not available at the moment"
-      )
-    },
-
-    #' @description
-    #' Define plot goodness of fit `task` settings
-    #' @param input file or folder of input
-    #' @param output file or folder of output
+    #' Default value is `FALSE`
+    #' @param message message indicating what the `task` does
     #' @param settings specific settings for task
-    #' @param active logical indicating if `task` is performed in worklfow.
-    #' Default value is `TRUE`
-    #' @param message title of the `task`.
-    #' Default value indicates `task` name.
-    #' @return A new `Task` object
-    plotGoFSettings = function(taskFunction,
-                               output = NULL,
+    #' @return A `PlotTask` object for goodness of fit plots
+    plotDemographySettings = function(reportTitle = defaultWorkflowTitles$plotDemography,
+                               taskFunction = NULL,
+                               outputFolder = defaultTaskOutputFolders$plotDemography,
                                active = FALSE,
-                               message = NULL) {
-      self$plotGoF <- Task$new(
-        output = output,
+                               message = defaultWorkflowMessages$plotDemography,
+                               settings = NULL){
+      
+      self$plotDemography <- PlotTask$new(
+        reportTitle = reportTitle,
+        getTaskResults = taskFunction,
+        outputFolder = outputFolder,
+        workflowFolder = self$workflowFolder,
         active = active,
-        message = "Plot Goodness of Fit task not available at the moment"
+        message = message,
+        settings = settings
       )
     },
 
     #' @description
-    #' Define plot PK parameters `task` settings
-    #' @param input file or folder of input
-    #' @param output file or folder of output
-    #' @param settings specific settings for task
+    #' Define Goodness of fit `PlotTask` settings
+    #' @param reportTitle section title of plot task result within report
+    #' @param taskFunction function called by task to get the results as a list of `plots` and `tables`
+    #' @param outputFolder folder where `Task` output is saved
     #' @param active logical indicating if `task` is performed in worklfow.
-    #' Default value is `TRUE`
-    #' @param message title of the `task`.
-    #' Default value indicates `task` name.
-    #' @return A new `Task` object
-    plotPKParametersSettings = function(taskFunction,
-                                        output = NULL,
+    #' Default value is `FALSE`
+    #' @param message message indicating what the `task` does
+    #' @param settings specific settings for task
+    #' @return A `PlotTask` object for goodness of fit plots
+    plotGoFSettings = function(reportTitle = defaultWorkflowTitles$plotGoF,
+                               taskFunction = NULL,
+                               outputFolder = defaultTaskOutputFolders$plotGoF,
+                               active = FALSE,
+                               message = defaultWorkflowMessages$plotGoF,
+                               settings = NULL) {
+      self$plotGoF <- PlotTask$new(
+        reportTitle = reportTitle,
+        getTaskResults = taskFunction,
+        outputFolder = outputFolder,
+        workflowFolder = self$workflowFolder,
+        active = active,
+        message = message,
+        settings = settings
+      )
+    },
+
+    #' @description
+    #' Define PK parameters `PlotPKParametersTask` settings
+    #' @param reportTitle section title of plot task result within report
+    #' @param taskFunction function called by task to get the results as a list of `plots` and `tables`
+    #' @param outputFolder folder where `Task` output is saved
+    #' @param active logical indicating if `task` is performed in worklfow.
+    #' Default value is `FALSE`
+    #' @param message message indicating what the `task` does
+    #' @param settings specific settings for task
+    #' @return A `PlotPKParametersTask` object for PK parameters tables
+    plotPKParametersSettings = function(reportTitle = defaultWorkflowTitles$plotPKParameters,
+                                        taskFunction = plotMeanPKParameters,
+                                        outputFolder = defaultTaskOutputFolders$plotPKParameters,
                                         active = FALSE,
-                                        message = NULL) {
-      self$plotPKParameters <- Task$new(
-        output = output,
+                                        message = defaultWorkflowMessages$plotPKParameters,
+                                        settings = NULL) {
+      self$plotPKParameters <- PlotTask$new(
+        reportTitle = reportTitle,
+        getTaskResults = taskFunction,
+        outputFolder = outputFolder,
+        workflowFolder = self$workflowFolder,
         active = active,
-        message = "Plot PK parameters task not available at the moment"
+        message = message,
+        settings = settings
       )
     },
 
     #' @description
-    #' Define plot sensisitivity `task` settings
-    #' @param input file or folder of input
-    #' @param output file or folder of output
-    #' @param settings specific settings for task
+    #' Define sensitivity analysis `PlotTask` settings
+    #' @param reportTitle section title of plot task result within report
+    #' @param taskFunction function called by task to get the results as a list of `plots` and `tables`
+    #' @param outputFolder folder where `Task` output is saved
     #' @param active logical indicating if `task` is performed in worklfow.
-    #' Default value is `TRUE`
-    #' @param message title of the `task`.
-    #' Default value indicates `task` name.
-    #' @return A new `Task` object
-    plotSensitivitySettings = function(taskFunction,
-                                       output = NULL,
+    #' Default value is `FALSE`
+    #' @param message message indicating what the `task` does
+    #' @param settings specific settings for task
+    #' @return A `PlotTask` object for goodness of fit plots
+    plotSensitivitySettings = function(reportTitle = defaultWorkflowTitles$plotSensitivity,
+                                       taskFunction = NULL,
+                                       outputFolder = defaultTaskOutputFolders$plotSensitivity,
                                        active = FALSE,
-                                       message = NULL) {
-      self$plotSensitivity <- Task$new(
-        output = output,
+                                       message = defaultWorkflowMessages$plotSensitivity,
+                                       settings = NULL) {
+      self$plotSensitivity <- PlotTask$new(
+        reportTitle = reportTitle,
+        getTaskResults = taskFunction,
+        outputFolder = outputFolder,
+        workflowFolder = self$workflowFolder,
         active = active,
-        message = "Plot Sensitivity task not available at the moment"
+        message = message,
+        settings = settings
       )
     },
 
-
-
+    
     #' @description
     #' Loop through all simulation sets and run active population model workflow tasks for each.
     #' # POPULATION WORKFLOW
