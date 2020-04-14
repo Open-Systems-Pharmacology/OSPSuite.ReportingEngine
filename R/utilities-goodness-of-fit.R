@@ -211,9 +211,9 @@ plotMeanTimeProfile <- function(simulatedData,
   # Remove guides for unwanted aes_properties
   timeProfilePlot <- timeProfilePlot + 
     ggplot2::guides(color = ggplot2::guide_legend(title = "Legend"), 
-           shape = ggplot2::guide_none(), 
-           linetype = ggplot2::guide_none(), 
-           size = ggplot2::guide_none()) + 
+           shape = "none", 
+           linetype = "none", 
+           size = "none") + 
     ggplot2::labs(title = NULL, subtitle = NULL)
   
   return(timeProfilePlot)
@@ -309,9 +309,9 @@ plotMeanObsVsPred <- function(data,
   # Remove unwanted aes properties
   meanObsVsPredPlot <- meanObsVsPredPlot + 
     ggplot2::guides(color = ggplot2::guide_legend(title = "Legend"), 
-                    shape = ggplot2::guide_none(), 
-                    linetype = ggplot2::guide_none(), 
-                    size = ggplot2::guide_none())  + 
+                    shape = "none", 
+                    linetype = "none", 
+                    size = "none")  + 
     ggplot2::labs(title = NULL, subtitle = NULL)
   
   return(meanObsVsPredPlot)
@@ -360,9 +360,9 @@ plotMeanResVsTime <- function(data,
   meanResVsTimePlot <- meanResVsTimePlot + 
     ggplot2::scale_y_continuous(limits = c(-maxRes, maxRes)) + 
     ggplot2::guides(color = ggplot2::guide_legend(title = "Legend"), 
-                    shape = ggplot2::guide_none(), 
-                    linetype = ggplot2::guide_none(), 
-                    size = ggplot2::guide_none())  + 
+                    shape = "none", 
+                    linetype = "none", 
+                    size = "none")  + 
     ggplot2::labs(title = NULL, subtitle = NULL)
   
   return(meanResVsTimePlot)
@@ -409,9 +409,9 @@ plotMeanResVsPred <- function(data,
   meanResVsPredPlot <- meanResVsPredPlot + 
     ggplot2::scale_y_continuous(limits = c(-maxRes, maxRes)) + 
     ggplot2::guides(color = ggplot2::guide_legend(title = "Legend"), 
-                    shape = ggplot2::guide_none(), 
-                    linetype = ggplot2::guide_none(), 
-                    size = ggplot2::guide_none())  + 
+                    shape = "none", 
+                    linetype = "none", 
+                    size = "none")  + 
     ggplot2::labs(title = NULL, subtitle = NULL)
   
   return(meanResVsPredPlot)
