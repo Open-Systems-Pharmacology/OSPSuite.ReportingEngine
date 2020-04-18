@@ -25,6 +25,8 @@ R6 class for Reporting Engine Population Workflow
 \item{\code{plotPKParameters}}{R6 class `Task` for PK parameters plot}
 
 \item{\code{plotSensitivity}}{R6 class `Task` for sensitivity plot}
+
+\item{\code{resetReport}}{R6 class `Task` for saving report in a specific format}
 }
 \if{html}{\out{</div>}}
 }
@@ -39,6 +41,7 @@ R6 class for Reporting Engine Population Workflow
 \item \href{#method-plotGoFSettings}{\code{PopulationWorkflow$plotGoFSettings()}}
 \item \href{#method-plotPKParametersSettings}{\code{PopulationWorkflow$plotPKParametersSettings()}}
 \item \href{#method-plotSensitivitySettings}{\code{PopulationWorkflow$plotSensitivitySettings()}}
+\item \href{#method-resetReportSettings}{\code{PopulationWorkflow$resetReportSettings()}}
 \item \href{#method-runWorkflow}{\code{PopulationWorkflow$runWorkflow()}}
 \item \href{#method-print}{\code{PopulationWorkflow$print()}}
 \item \href{#method-clone}{\code{PopulationWorkflow$clone()}}
@@ -314,6 +317,34 @@ Define sensitivity analysis `PlotTask` settings
 \item{\code{outputFolder}}{folder where `Task` output is saved}
 
 \item{\code{active}}{logical indicating if `task` is performed in worklfow.
+Default value is `FALSE`}
+
+\item{\code{message}}{message indicating what the `task` does}
+
+\item{\code{settings}}{specific settings for task}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A `PlotTask` object for goodness of fit plots
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-resetReportSettings"></a>}}
+\subsection{Method \code{resetReportSettings()}}{
+Define reset report `Task` settings
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$resetReportSettings(
+  active = FALSE,
+  message = defaultWorkflowMessages$resetReport,
+  settings = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{active}}{logical indicating if `Task` is performed in worklfow.
 Default value is `FALSE`}
 
 \item{\code{message}}{message indicating what the `task` does}
