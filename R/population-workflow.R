@@ -7,6 +7,7 @@
 #' @field plotGoF R6 class `Task` for goodness of fit plots
 #' @field plotPKParameters R6 class `Task` for PK parameters plot
 #' @field plotSensitivity R6 class `Task` for sensitivity plot
+#' @field resetReport R6 class `Task` for saving report in a specific format
 #' @export
 #' @import tlf
 #' @import ospsuite
@@ -23,6 +24,7 @@ PopulationWorkflow <- R6::R6Class(
     plotGoF = NULL,
     plotPKParameters = NULL,
     plotSensitivity = NULL,
+    resetReport = NULL,
 
     #' @description
     #' Create a new `PopulationWorkflow` object.
@@ -219,6 +221,24 @@ PopulationWorkflow <- R6::R6Class(
         settings = settings
       )
     },
+    
+    #' @description
+    #' Define reset report `Task` settings
+    #' @param active logical indicating if `Task` is performed in worklfow.
+    #' Default value is `FALSE`
+    #' @param message message indicating what the `task` does
+    #' @param settings specific settings for task
+    #' @return A `PlotTask` object for goodness of fit plots
+    resetReportSettings = function(active = FALSE,
+                                   message = defaultWorkflowMessages$resetReport,
+                                   settings = NULL) {
+      self$resetReport <- Task$new(
+        active = active,
+        workflowFolder = self$workflowFolder,
+        message = message,
+        settings = settings
+      )
+    },
 
     
     #' @description
@@ -238,9 +258,10 @@ PopulationWorkflow <- R6::R6Class(
         pathFolder = self$workflowFolder
       )
 
-      initializeRmdFile(self$reportFileName,
-                        title = "Population Workflow Report"
-      )
+      if(self$resetReport$active){
+        resetReport(self$reportFileName,
+                    logFolder = self$workflowFolder)
+      }
 
       if (self$simulatePopulation$active) {
         self$simulatePopulation$runTask(self$simulationStructures)
