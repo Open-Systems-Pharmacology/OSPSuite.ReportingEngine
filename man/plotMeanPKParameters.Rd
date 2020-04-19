@@ -4,12 +4,14 @@
 \alias{plotMeanPKParameters}
 \title{plotMeanPKParameters}
 \usage{
-plotMeanPKParameters(structureSet, plotConfigurations)
+plotMeanPKParameters(structureSet, logFolder = getwd(), settings = NULL)
 }
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object}
 
-\item{plotConfigurations}{list of configurations for the output table/plot}
+\item{logFolder}{folder where the logs are saved}
+
+\item{settings}{list of settings for the output table/plot}
 }
 \value{
 data.frame with calculated PK parameters for the simulation set

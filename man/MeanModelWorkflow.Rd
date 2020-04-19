@@ -122,7 +122,7 @@ A new `SimulationTask` object
 Define calculate PK Parameters `CalculatePKParametersTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$calculatePKParametersSettings(
-  taskFunction = NULL,
+  taskFunction = calculatePKParameters,
   outputFolder = defaultTaskOutputFolders$calculatePKParameters,
   active = FALSE,
   message = defaultWorkflowMessages$calculatePKParameters,

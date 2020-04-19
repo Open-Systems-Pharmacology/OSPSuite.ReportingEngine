@@ -6,8 +6,8 @@
 \description{
 R6 class for CalculatePKParametersTask settings
 }
-\section{Super class}{
-\code{\link[ospsuite.reportingengine:Task]{ospsuite.reportingengine::Task}} -> \code{CalculatePKParametersTask}
+\section{Super classes}{
+\code{\link[ospsuite.reportingengine:Task]{ospsuite.reportingengine::Task}} -> \code{\link[ospsuite.reportingengine:SimulationTask]{ospsuite.reportingengine::SimulationTask}} -> \code{CalculatePKParametersTask}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -29,7 +29,8 @@ R6 class for CalculatePKParametersTask settings
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{CalculatePKParametersTask$new()}}
+\item \href{#method-saveResults}{\code{CalculatePKParametersTask$saveResults()}}
+\item \href{#method-runTask}{\code{CalculatePKParametersTask$runTask()}}
 \item \href{#method-clone}{\code{CalculatePKParametersTask$clone()}}
 }
 }
@@ -40,38 +41,42 @@ R6 class for CalculatePKParametersTask settings
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="inactivate">}\href{../../ospsuite.reportingengine/html/Task.html#method-inactivate}{\code{ospsuite.reportingengine::Task$inactivate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="print">}\href{../../ospsuite.reportingengine/html/Task.html#method-print}{\code{ospsuite.reportingengine::Task$print()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="validateInput">}\href{../../ospsuite.reportingengine/html/Task.html#method-validateInput}{\code{ospsuite.reportingengine::Task$validateInput()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="SimulationTask" data-id="initialize">}\href{../../ospsuite.reportingengine/html/SimulationTask.html#method-initialize}{\code{ospsuite.reportingengine::SimulationTask$initialize()}}\out{</span>}
 }
 \out{</details>}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\subsection{Method \code{new()}}{
-Create a `CalculatePKParametersTask` object
+\if{html}{\out{<a id="method-saveResults"></a>}}
+\subsection{Method \code{saveResults()}}{
+Save results from task run.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CalculatePKParametersTask$new(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CalculatePKParametersTask$saveResults(set, taskResults)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{parameters inherited from R6 class `Task` object}
+\item{\code{set}}{R6 class `SimulationStructure`}
 
-\item{\code{simulationFilePath}}{simulation folder}
-
-\item{\code{simulationResultFilePaths}}{simulation files}
-
-\item{\code{pkParametersToEvaluate}}{list of PK parameters to evaluate}
-
-\item{\code{userDefinedPKFunctions}}{list of user defined functions to calculate PK parameters}
-
-\item{\code{pkParameterResultsFilePath}}{files where PK parameters are saved}
-
-\item{\code{generatedResultFileNames}}{name of files where PK parameters are saved}
+\item{\code{taskResults}}{list of results from task run.}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Returns}{
-A new `CalculatePKParametersTask` object
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-runTask"></a>}}
+\subsection{Method \code{runTask()}}{
+Run task and save its output
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CalculatePKParametersTask$runTask(structureSets)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{structureSets}}{list of `SimulationStructure` R6 class}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
