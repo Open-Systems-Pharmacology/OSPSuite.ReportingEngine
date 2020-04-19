@@ -29,33 +29,12 @@ PopulationSimulationSet <- R6::R6Class(
     #' @param populationName display name of population
     #' @return A new `MeanModelSet` object
     initialize = function(simulationSetName = NULL,
-                          simulationFile,
-                          simulationName = NULL,
-                          pathID = NULL,
-                          pathName = NULL,
-                          pathUnit = NULL,
-                          pkParameters = NULL,
-                          pkParametersNames = NULL,
-                          pkParametersUnits = NULL,
-                          dataFilter = NULL,
-                          observedDataFile = NULL,
-                          observedMetaDataFile = NULL,
+                          ...,
                           populationFile,
                           populationName = NULL) {
-      super$initialize(
-        simulationSetName = NULL,
-        simulationFile,
-        simulationName = NULL,
-        pathID = NULL,
-        pathName = NULL,
-        pathUnit = NULL,
-        pkParameters = enum(ospsuite::allPKParameterNames()),
-        pkParametersNames = NULL,
-        pkParametersUnits = NULL,
-        dataFilter = NULL,
-        observedDataFile = NULL,
-        observedMetaDataFile = NULL
-      )
+
+      super$initialize(...)
+
       self$populationFile <- populationFile
       self$populationName <- populationName %||% trimFileName(populationFile, extension = "csv")
       self$simulationSetName <- simulationSetName %||% paste(self$simulationName, self$populationName, sep = "-")
