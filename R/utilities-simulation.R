@@ -104,8 +104,8 @@ simulateModelOnCore <- function(structureSet,
 #' @title simulateModel
 #' @description Simulate model, either for an individual or for a given population.
 #' @param structureSet `SimulationStructure` R6 class object contain paths of files to be used
+#' @param settings list of options to be passed on the function
 #' @param logFolder folder where the logs are saved
-#' @param nodeName node name for parallel simulations
 #' @return Simulation results for individual or population
 #' @export
 #' @import ospsuite

@@ -2,7 +2,6 @@
 
 export(LogTypes)
 export(MeanModelWorkflow)
-export(PlotPKParametersTask)
 export(PlotTask)
 export(PopulationSimulationSet)
 export(PopulationWorkflow)

@@ -77,6 +77,15 @@ PlotTask <- R6::R6Class(
           row.names = FALSE
         )
         
+        # If the task output no plot, but tables, tables will be included in the report
+        if(is.null(taskResults$plots)){
+          addTableChunk(
+            fileName = reportFile,
+            tableFile = tableFileName,
+            logFolder = self$workflowFolder
+          )
+        }
+        
         logWorkflow(
           message = paste0("Table '", tableFileName, "' was successfully saved."),
           pathFolder = self$workflowFolder,
@@ -207,46 +216,6 @@ PlotTask <- R6::R6Class(
           logFolder = self$workflowFolder
         )
       }
-    }
-  )
-)
-
-#' @title PlotPKParametersTask
-#' @description  R6 class for PlotPKParametersTask settings
-#' @export
-PlotPKParametersTask <- R6::R6Class(
-  "PlotPKParametersTask",
-  inherit = PlotTask,
-
-  public = list(
-
-    #' @description
-    #' Save results from task run.
-    #' @param set R6 class `SimulationStructure`
-    #' @param taskResults list of results from task run.
-    #' Results contains at least 2 fields: `plots` and `tables`
-    #' @param reportFile name of report
-    #' @param workflowFolder path of workflow
-    saveResults = function(set,
-                           taskResults,
-                           reportFile) {
-      tableFileName <- file.path(
-        self$workflowFolder,
-        self$outputFolder,
-        getDefaultFileName(set$simulationSet$simulationSetName,
-          suffix = "pkParametersTable",
-          extension = "csv"
-        )
-      )
-      write.csv(taskResults,
-        file = tableFileName,
-        row.names = FALSE
-      )
-
-      addRmdTableChunk(
-        fileName = reportFile,
-        tableFile = tableFileName
-      )
     }
   )
 )

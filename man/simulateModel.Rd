@@ -9,9 +9,9 @@ simulateModel(structureSet, settings = NULL, logFolder = getwd())
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object contain paths of files to be used}
 
-\item{logFolder}{folder where the logs are saved}
+\item{settings}{list of options to be passed on the function}
 
-\item{nodeName}{node name for parallel simulations}
+\item{logFolder}{folder where the logs are saved}
 }
 \value{
 Simulation results for individual or population
