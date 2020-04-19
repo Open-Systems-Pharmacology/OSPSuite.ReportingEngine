@@ -97,7 +97,7 @@ defaultWorkflowMessages <- list(
   "plotPKParameters" = "Get tables of PK parameters task in Alpha Testing",
   "plotMassBalance" = "Plot Mass Balance task in Alpha Testing",
   "plotAbsorption" = "Plot Absorption task in Alpha Testing",
-  "plotSensitivity" = "Plot Sensitivity task not available at the moment",
+  "plotSensitivity" = "Plot Sensitivity task in Alpha Testing",
   "plotDemography" = "Plot Demography task Not available at the moment",
   "resetReport" = "Clear previous report"
 )
