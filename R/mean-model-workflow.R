@@ -80,12 +80,13 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param settings specific settings for `Task`
     #' @param message message/title of the `Task`
     #' @return A new `SimulationTask` object
-    calculatePKParametersSettings = function(taskFunction = NULL,
+    calculatePKParametersSettings = function(taskFunction = calculatePKParameters,
                                              outputFolder = defaultTaskOutputFolders$calculatePKParameters,
                                              active = FALSE,
                                              message = defaultWorkflowMessages$calculatePKParameters,
                                              settings = NULL) {
       self$meanModelPKParameters <- CalculatePKParametersTask$new(
+        getTaskResults = taskFunction,
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         active = active,
@@ -297,31 +298,8 @@ MeanModelWorkflow <- R6::R6Class(
       }
 
       if (self$meanModelPKParameters$active) {
-        logWorkflow(
-          message = paste0("Starting ", self$meanModelPKParameters$message),
-          pathFolder = self$workflowFolder
-        )
-        for (set in self$simulationStructures) {
-          logWorkflow(
-            message = c(
-              paste0("Simulation: ", set$simulationSet$simulationName),
-              paste0("Calculate PK parameters: ", paste0(set$simulationSet$pkParameters, collapse = ", "))
-            ),
-            pathFolder = self$workflowFolder
-          )
-          if (self$meanModelPKParameters$validateInput()) {
-            if (!is.null(file.path(self$meanModelPKParameters$workflowFolder, self$meanModelPKParameters$outputFolder))) {
-              dir.create(file.path(self$meanModelPKParameters$workflowFolder, self$meanModelPKParameters$outputFolder))
-            }
-            # Create the Output for PK parameters
-            pkAnalyses <- calculatePKParameters(set)
-            exportPKAnalysesToCSV(
-              pkAnalyses = pkAnalyses,
-              filePath = set$pkAnalysisResultsFileNames
-            )
-          }
+        self$meanModelPKParameters$runTask(self$simulationStructures)
         }
-      }
 
       if (self$meanModelSensitivityAnalysis$active) {
         logWorkflow(
