@@ -43,6 +43,8 @@ R6 class for SensitivityAnalysisTask settings
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{SensitivityAnalysisTask$new()}}
+\item \href{#method-saveResults}{\code{SensitivityAnalysisTask$saveResults()}}
+\item \href{#method-runTask}{\code{SensitivityAnalysisTask$runTask()}}
 \item \href{#method-clone}{\code{SensitivityAnalysisTask$clone()}}
 }
 }
@@ -77,6 +79,40 @@ Create a `SensitivityAnalysisTask` object
 }
 \subsection{Returns}{
 A new `SensitivityAnalysisTask` object
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-saveResults"></a>}}
+\subsection{Method \code{saveResults()}}{
+Save results from task run.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$saveResults(set, taskResults)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{set}}{R6 class `SimulationStructure`}
+
+\item{\code{taskResults}}{list of results from task run.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-runTask"></a>}}
+\subsection{Method \code{runTask()}}{
+Run task and save its output
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$runTask(structureSets)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{structureSets}}{list of `SimulationStructure` R6 class}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
