@@ -27,7 +27,6 @@ SimulationTask <- R6::R6Class(
       self$getTaskResults <- getTaskResults
     },
 
-
     #' @description
     #' Save results from task run.
     #' @param set R6 class `SimulationStructure`
