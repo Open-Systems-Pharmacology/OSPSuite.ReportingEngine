@@ -49,8 +49,8 @@ plotMeanPKParameters <- function(structureSet,
   )
 
   pkParametersTable <- ospsuite::pkAnalysesAsDataFrame(pkAnalyses)
-  pkParametersTable <- pkParametersTable[, c("QuantityPath", "Display", "Value", "Unit")]
-  names(pkParametersTable) <- c("Path", "Parameter", "Value", "Unit")
+  #pkParametersTable <- pkParametersTable[, c("QuantityPath", "Parameters", "Value", "Unit")]
 
-  return(pkParametersTable)
+  return(list(plots = NULL,
+              tables = list(pkAnalysis = pkParametersTable)))
 }
