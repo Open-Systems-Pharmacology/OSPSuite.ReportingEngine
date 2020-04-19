@@ -299,37 +299,10 @@ MeanModelWorkflow <- R6::R6Class(
 
       if (self$meanModelPKParameters$active) {
         self$meanModelPKParameters$runTask(self$simulationStructures)
-        }
+      }
 
       if (self$meanModelSensitivityAnalysis$active) {
-        logWorkflow(
-          message = paste0("Starting ", self$meanModelSensitivityAnalysis$message),
-          pathFolder = self$workflowFolder
-        )
-        for (set in self$simulationStructures) {
-          logWorkflow(
-            message = c(
-              paste0("Simulation: ", set$simulationSet$simulationName),
-              paste0("Calculate sensitivity for the PK parameters: ", paste0(set$simulationSet$pkParameters, collapse = ", "))
-            ),
-            pathFolder = self$workflowFolder
-          )
-          if (self$meanModelSensitivityAnalysis$validateInput()) {
-
-            if (!is.null(file.path(self$meanModelSensitivityAnalysis$workflowFolder, self$meanModelSensitivityAnalysis$outputFolder))) {
-              dir.create(file.path(self$meanModelSensitivityAnalysis$workflowFolder, self$meanModelSensitivityAnalysis$outputFolder))
-            }
-
-            set$sensitivityAnalysisResultsFileNames <- runSensitivity(
-              simFilePath = set$simulationSet$simulationFile,
-              resultsFileFolder = file.path(self$meanModelSensitivityAnalysis$workflowFolder, self$meanModelSensitivityAnalysis$outputFolder),
-              resultsFileName = trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName), extension = "csv"),
-              variableParameterPaths = self$meanModelSensitivityAnalysis$settings$variableParameterPaths,
-              variationRange = self$meanModelSensitivityAnalysis$settings$variationRange,
-              numberOfCores = self$meanModelSensitivityAnalysis$settings$numberOfCores
-            )
-          }
-        }
+        self$meanModelSensitivityAnalysis$runTask(self$simulationStructures)
       }
 
       for (plotTask in self$getAllPlotTasks()) {
