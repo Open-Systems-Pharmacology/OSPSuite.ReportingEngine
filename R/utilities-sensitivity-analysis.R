@@ -416,3 +416,121 @@ defaultSensitivityAnalysisNumberOfCores <- 1
 #' @description default quantiles for population sensitivity analysis
 #' @export
 defaultQuantileVec <- c(0.05, 0.5, 0.95)
+
+
+#' @title runMeanModelSensitivity
+#' @description Run mean model sensitivity analysis
+#' @param structureSet `SimulationStructure` R6 class object
+#' @param logFolder folder where the logs are saved
+#' @param settings list of settings for the output table/plot
+#' @return data.frame with calculated PK parameters for the simulation set
+#' @export
+#' @import ospsuite
+runMeanModelSensitivity <- function(structureSet,
+                                    logFolder = getwd(), 
+                                    settings = NULL) {
+  
+  simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
+  ospsuite::clearOutputs(simulation)
+  quantitiesToSimulate <- ospsuite::getAllQuantitiesMatching(structureSet$simulationSet$pathID, simulation)
+  for (quantity in quantitiesToSimulate) {
+    ospsuite::addOutputs(quantitiesOrPaths = quantity, simulation = simulation)
+  }
+  
+  allVariableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(simulation)
+  variableParameterPaths <- structureSet$simulationSet$pk %||% allVariableParameterPaths
+  
+  validateIsIncluded(variableParameterPaths, allVariableParameterPaths)
+  
+  sensitivity <- SensitivityAnalysis$new(simulation)
+  sensitivity$clearParameterPaths()
+  sensitivity$addParameterPaths(variableParameterPaths)
+  
+  sensitivityResults <- runSensitivityAnalysis(sensitivity)
+  
+  logWorkflow(
+    message = paste0("Sensitivity analysis on '", structureSet$simulationSet$simulationName, "' successfully run"),
+    pathFolder = logFolder,
+    logTypes = LogTypes$Debug
+  )
+                                    
+  return(sensitivityResults)
+}
+
+#' @title plotMeanSensitivity
+#' @description Plot sensitivity analysis results for mean models
+#' @param structureSet `SimulationStructure` R6 class object
+#' @param logFolder folder where the logs are saved
+#' @param settings list of settings for the output table/plot
+#' @return list of plots and tables
+#' @export
+#' @import ospsuite
+plotMeanSensitivity <- function(structureSet,
+                                 logFolder = getwd(), 
+                                 settings = NULL) {
+  
+  simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
+  saResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(simulation = simulation,
+                                                                 structureSet$sensitivityAnalysisResultsFileNames)
+  
+  # TO DO: workout integration of selection of output paths and PK parameters in settings
+  allOutputPaths <- structureSet$simulationSet$pathID %||% sapply(simulation$outputSelections$allOutputs, function(output){output$path})
+  pkParameters <- saResults$allPKParameterNames
+  
+  sensitivityPlots <- list()
+  for(outputPathIndex in seq_along(allOutputPaths)){
+    for (pkParameter in pkParameters){
+      pkSensitivities <- saResults$allPKParameterSensitivitiesFor(pkParameterName = pkParameter,
+                                                                  outputPath = allOutputPaths[outputPathIndex])
+      
+      # Translate into a data.frame for plot
+      sensitivityData <- data.frame(
+        parameter = sapply(pkSensitivities, function(pkSensitivity){pkSensitivity$parameterPath}),
+        value = sapply(pkSensitivities, function(pkSensitivity){pkSensitivity$value})
+        )
+      
+      # Create the tornado plot with output path - PK parameter as its name
+      sensitivityPlots[[paste0(pkParameter, "-", outputPathIndex)]] <- plotTornado(data = sensitivityData,
+                                                                                  plotConfiguration = NULL)
+    }
+  }
+  
+  return(list(plots = sensitivityPlots))
+}
+
+
+#' @title plotTornado
+#' @description Plot sensitivity results in a tornado plot
+#' @param data data.frame
+#' @param plotCOnfiguration `PlotConfiguration` R6 class object from `tlf` library
+#' @return ggplot object of time profile for mean model workflow
+#' @export
+#' @import tlf
+#' @import ggplot2
+plotTornado <- function(data,
+                        plotConfiguration = NULL) {
+  
+  # Ensure that the plot bars are ordered by sensitivity values
+  data$parameter <- reorder(data$parameter, data$value)
+  
+  tornadoPlot <- tlf::initializePlot(plotConfiguration)
+  tornadoPlot <- tornadoPlot + ggplot2::geom_col(data = data,
+                                        mapping = ggplot2::aes_string(
+                                          x = "parameter",
+                                          y = "value",
+                                          fill = "parameter",
+                                          color = "parameter"),
+                                        alpha = 0.8,
+                                        size = 1,
+                                        show.legend = FALSE,
+                                        position="dodge") + 
+    ggplot2::coord_flip() + ggplot2::xlab(NULL) + ggplot2::ylab("Sensitivity") +ggplot2::labs(title = NULL, subtitle = NULL) +
+    ggplot2::scale_y_continuous(limits = c(-1.05*max(abs(data$value)), 1.05*max(abs(data$value)))) +
+    ggplot2::scale_fill_brewer(palette="Spectral", aesthetics = c("color", "fill")) +
+    ggplot2::geom_hline(yintercept = 0,
+                        color = 1,
+                        size = 1,
+                        linetype = "longdash")
+  
+  return(tornadoPlot)
+}
