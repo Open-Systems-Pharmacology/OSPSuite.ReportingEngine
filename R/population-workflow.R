@@ -34,6 +34,7 @@ PopulationWorkflow <- R6::R6Class(
       super$initialize(...)
 
       # TO DO: include task parameters from initialization ?
+      self$resetReportSettings()
       self$simulatePopulationSettings()
       self$populationPKParameterSettings()
       self$populationSensitivityAnalysisSettings()
@@ -129,7 +130,7 @@ PopulationWorkflow <- R6::R6Class(
                                active = FALSE,
                                message = defaultWorkflowMessages$plotDemography,
                                settings = NULL){
-      
+
       self$plotDemography <- PlotTask$new(
         reportTitle = reportTitle,
         getTaskResults = taskFunction,
@@ -221,7 +222,7 @@ PopulationWorkflow <- R6::R6Class(
         settings = settings
       )
     },
-    
+
     #' @description
     #' Define reset report `Task` settings
     #' @param active logical indicating if `Task` is performed in worklfow.
@@ -240,7 +241,7 @@ PopulationWorkflow <- R6::R6Class(
       )
     },
 
-    
+
     #' @description
     #' Loop through all simulation sets and run active population model workflow tasks for each.
     #' # POPULATION WORKFLOW
@@ -263,12 +264,10 @@ PopulationWorkflow <- R6::R6Class(
                     logFolder = self$workflowFolder)
       }
 
+
       if (self$simulatePopulation$active) {
         self$simulatePopulation$runTask(self$simulationStructures)
       }
-
-
-
 
       if (self$populationPKParameters$active) {
         if (self$populationPKParameters$validateInput()) {
