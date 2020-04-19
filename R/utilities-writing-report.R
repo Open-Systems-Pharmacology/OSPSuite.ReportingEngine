@@ -59,6 +59,9 @@ addTableChunk <- function(fileName,
                              tableCaption = "",
                              logFolder = getwd()) {
   
+  table <- read.csv(tableFile,
+                    check.names = FALSE)
+  
   # TO DO: kable has options such as number of decimals and align, 
   # should they also be defined ? as figure width for addFigureChunk ?
   mdText <- c(
