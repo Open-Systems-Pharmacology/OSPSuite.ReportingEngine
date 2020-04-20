@@ -21,7 +21,6 @@ SimulationSet <- R6::R6Class(
     simulationSetName = NULL,
     simulationFile = NULL,
     simulationName = NULL,
-    pathID = NULL,
     pathName = NULL,
     pathUnit = NULL,
     pkParameters = NULL,
@@ -38,7 +37,6 @@ SimulationSet <- R6::R6Class(
     #' @param simulationSetName display name of simulation set
     #' @param simulationFile names of pkml file to be used for the simulation
     #' @param simulationName display name of simulation
-    #' @param pathID path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)
     #' @param pathName display name for `pathID`
     #' @param pathUnit display unit for `pathID`
     #' @param pkParameters PK parameters function names to be calculated from the simulation (e.g. `C_max`).
@@ -102,5 +100,40 @@ SimulationSet <- R6::R6Class(
         file.copy(self$observedDataFile, inputFilesFolder)
       }
     }
+  ),
+
+  active = list(
+
+    #' @description
+    #' Function to either read the pathID field or to set the pathID and the corresponding quantities
+    #' @param value a vector of path strings
+    pathID = function(value){
+      if (missing(value)){
+        return(private$.pathID)
+      } else {
+        sim <- ospsuite::loadSimulation(self$simulationFile)
+        if(is.null(value)) {
+          value <- sapply(sim$outputSelections$allOutputs,function(x) x$path)
+        }
+        validateIsString(value)
+        private$.pathID <- value
+        private$.quantities <- getAllQuantitiesMatching(paths = value,
+                                                        container = sim)
+      }
+    },
+
+    #' @description
+    #' Function to read the simulationSet's quantities, which always correspond to the pathID
+    quantities = function(){
+      return(private$.quantities)
+    }
+
+  ),
+
+  private = list(
+    .quantities = NULL,
+    .pathID = NULL
   )
+
+
 )
