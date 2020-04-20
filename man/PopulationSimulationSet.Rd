@@ -39,17 +39,7 @@ Create a new `PopulationSimulationSet` object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationSimulationSet$new(
   simulationSetName = NULL,
-  simulationFile,
-  simulationName = NULL,
-  pathID = NULL,
-  pathName = NULL,
-  pathUnit = NULL,
-  pkParameters = NULL,
-  pkParametersNames = NULL,
-  pkParametersUnits = NULL,
-  dataFilter = NULL,
-  observedDataFile = NULL,
-  observedMetaDataFile = NULL,
+  ...,
   populationFile,
   populationName = NULL
 )}\if{html}{\out{</div>}}
@@ -59,6 +49,10 @@ Create a new `PopulationSimulationSet` object.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{simulationSetName}}{display name of simulation set}
+
+\item{\code{populationFile}}{name of csv file to be used for the population}
+
+\item{\code{populationName}}{display name of population}
 
 \item{\code{simulationFile}}{names of pkml file to be used for the simulation}
 
@@ -77,15 +71,11 @@ Default value is obtained from enum(ospsuite::allPKParameterNames()).}
 
 \item{\code{pkParametersUnits}}{display units for `pkParameters`}
 
-\item{\code{dataFilter}}{characters or expression to filter the observed data}
-
 \item{\code{observedDataFile}}{name of csv file to be used for observed data}
 
 \item{\code{observedMetaDataFile}}{name of csv file to be used as dictionary of the observed data}
 
-\item{\code{populationFile}}{name of csv file to be used for the population}
-
-\item{\code{populationName}}{display name of population}
+\item{\code{dataFilter}}{characters or expression to filter the observed data}
 }
 \if{html}{\out{</div>}}
 }
