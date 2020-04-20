@@ -162,3 +162,16 @@ getFileExtension <- function(filePath) {
   )
   return(extension)
 }
+
+
+#' @title loadSimulationWithUpdatedPaths
+#' @param simulationSet simulation set containing path to simulation file and pathIDs for quantities to be loaded into simulation object
+#' @return simulation object with pathIDs updated from simulationSet
+loadSimulationWithUpdatedPaths <- function(simulationSet) {
+  sim <- ospsuite::loadSimulation(filePath = simulationSet$simulationFile)
+  sim$outputSelections$clear()
+  for (quantity in simulationSet$quantities){
+    sim$outputSelections$addQuantity(quantity = quantity)
+  }
+  return(sim)
+}
