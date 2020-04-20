@@ -10,7 +10,7 @@ ps <- PopulationSimulationSet$new(simulationSetName = "nonparpopsim",
 pwf <- PopulationWorkflow$new(simulationSets = list(ps), workflowFolder = "./ex")
 pwf$simulatePopulation$settings$showProgress <- TRUE
 pwf$simulatePopulation$activate()
-pwf$populationPKParameters$inactivate()
+pwf$populationPKParameters$activate()
 pwf$populationSensitivityAnalysis$inactivate()
 
 #pwf$populationSensitivityAnalysis$settings$variableParameterPaths <-  tree$Organism$Heart$Volume$path
