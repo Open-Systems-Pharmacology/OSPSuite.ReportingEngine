@@ -77,12 +77,13 @@ PopulationWorkflow <- R6::R6Class(
     #' @param settings specific settings for `Task`
     #' @param message message/title of the `Task`
     #' @return A new `Task` object
-    populationPKParameterSettings = function(taskFunction = NULL,
+    populationPKParameterSettings = function(taskFunction = calculatePKParameters,
                                              outputFolder = defaultTaskOutputFolders$calculatePKParameters,
                                              settings = NULL,
                                              active = TRUE,
-                                             message = NULL) {
+                                             message = defaultWorkflowMessages$calculatePKParameters) {
       self$populationPKParameters <- CalculatePKParametersTask$new(
+        getTaskResults = taskFunction,
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         settings = settings,
@@ -270,28 +271,31 @@ PopulationWorkflow <- R6::R6Class(
       }
 
       if (self$populationPKParameters$active) {
-        if (self$populationPKParameters$validateInput()) {
-          if (!is.null(file.path(self$populationPKParameters$workflowFolder, self$populationPKParameters$outputFolder))) {
-            dir.create(file.path(self$populationPKParameters$workflowFolder, self$populationPKParameters$outputFolder))
-          }
 
-          for (set in self$simulationStructures) {
-            logWorkflow(
-              message = paste0("Starting PK parameter calculation: ",set$simulationSet$simulationSetName),
-              pathFolder = self$workflowFolder
-            )
-            pkAnalyses <- calculatePKParameters(set)
-            exportPKAnalysesToCSV(
-              pkAnalyses = pkAnalyses,
-              filePath = set$pkAnalysisResultsFileNames
-            )
+        self$populationPKParameters$runTask(self$simulationStructures)
 
-            logWorkflow(
-              message = "PK parameter calculation completed.",
-              pathFolder = self$workflowFolder
-            )
-          }
-        }
+        # if (self$populationPKParameters$validateInput()) {
+        #   if (!is.null(file.path(self$populationPKParameters$workflowFolder, self$populationPKParameters$outputFolder))) {
+        #     dir.create(file.path(self$populationPKParameters$workflowFolder, self$populationPKParameters$outputFolder))
+        #   }
+        #
+        #   for (set in self$simulationStructures) {
+        #     logWorkflow(
+        #       message = paste0("Starting PK parameter calculation: ",set$simulationSet$simulationSetName),
+        #       pathFolder = self$workflowFolder
+        #     )
+        #     pkAnalyses <- calculatePKParameters(set)
+        #     exportPKAnalysesToCSV(
+        #       pkAnalyses = pkAnalyses,
+        #       filePath = set$pkAnalysisResultsFileNames
+        #     )
+        #
+        #     logWorkflow(
+        #       message = "PK parameter calculation completed.",
+        #       pathFolder = self$workflowFolder
+        #     )
+        #   }
+        # }
       }
 
 
