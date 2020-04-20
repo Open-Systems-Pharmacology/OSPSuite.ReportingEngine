@@ -170,7 +170,8 @@ getFileExtension <- function(filePath) {
 loadSimulationWithUpdatedPaths <- function(simulationSet) {
   sim <- ospsuite::loadSimulation(filePath = simulationSet$simulationFile)
   sim$outputSelections$clear()
-  for (quantity in simulationSet$quantities){
+  quantities <- getAllQuantitiesMatching(paths = simulationSet$pathID, container = sim)
+  for (quantity in quantities){
     sim$outputSelections$addQuantity(quantity = quantity)
   }
   return(sim)
