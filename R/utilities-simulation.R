@@ -32,7 +32,7 @@ simulateModelForPopulation <- function(structureSet,
     )
 
     simulationResult <- ospsuite::importResultsFromCSV(
-      simulation = ospsuite::loadSimulation(structureSet$simulationSet$simulationFile),
+      simulation = loadSimulationWithUpdatedPaths(structureSet$simulationSet),
       filePaths = simulationResultFileNames
     )
     file.remove(simulationResultFileNames)
@@ -61,10 +61,7 @@ simulateModelOnCore <- function(structureSet,
                                 resultsFilePath,
                                 debugLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logDebugFile()),
                                 nodeName = NULL) {
-  simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile,
-    addToCache = FALSE,
-    loadFromCache = FALSE
-  )
+  simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
   logDebug(
     message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), ""), "Simulation file '", structureSet$simulationSet$simulationFile, "' successfully loaded"),
@@ -112,10 +109,7 @@ simulateModelOnCore <- function(structureSet,
 simulateModel <- function(structureSet,
                           settings = NULL,
                           logFolder = getwd()) {
-  simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile,
-    addToCache = FALSE,
-    loadFromCache = FALSE
-  )
+  simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
   logWorkflow(
     message = paste0("Simulation file '", structureSet$simulationSet$simulationFile, "' successfully loaded"),
@@ -138,7 +132,7 @@ simulateModel <- function(structureSet,
   for (quantity in quantitiesToSimulate) {
     ospsuite::addOutputs(quantitiesOrPaths = quantity, simulation = simulation)
   }
-  
+
   simRunOptions <- ospsuite::SimulationRunOptions$new(showProgress = ifnotnull(settings, outputIfNotNull = settings$showProgress, outputIfNull = FALSE))
   simulationResult <- ospsuite::runSimulation(simulation,
     population = population,
