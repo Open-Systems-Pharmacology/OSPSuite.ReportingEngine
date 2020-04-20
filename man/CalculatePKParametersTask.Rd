@@ -26,6 +26,23 @@ R6 class for CalculatePKParametersTask settings
 }
 \if{html}{\out{</div>}}
 }
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{simulationFilePath}}{simulation folder}
+
+\item{\code{simulationResultFilePaths}}{simulation files}
+
+\item{\code{pkParametersToEvaluate}}{list of PK parameters to evaluate}
+
+\item{\code{userDefinedPKFunctions}}{list of user defined functions to calculate PK parameters}
+
+\item{\code{pkParameterResultsFilePath}}{files where PK parameters are saved}
+
+\item{\code{generatedResultFileNames}}{name of files where PK parameters are saved}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

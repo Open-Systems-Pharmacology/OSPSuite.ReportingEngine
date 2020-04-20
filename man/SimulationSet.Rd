@@ -15,8 +15,6 @@ R6 class representing Reporting Engine Mean Model Set
 
 \item{\code{simulationName}}{display name of simulation}
 
-\item{\code{pathID}}{path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)}
-
 \item{\code{pathName}}{display name for `pathID`}
 
 \item{\code{pathUnit}}{display unit for `pathID`}
@@ -36,6 +34,13 @@ R6 class representing Reporting Engine Mean Model Set
 \item{\code{dataReportName}}{display name of the observed data}
 
 \item{\code{timeUnit}}{display unit for time variable}
+}
+\if{html}{\out{</div>}}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{pathID}}{path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)}
 }
 \if{html}{\out{</div>}}
 }
@@ -78,8 +83,6 @@ Create a new `SimulationSet` object.
 \item{\code{simulationFile}}{names of pkml file to be used for the simulation}
 
 \item{\code{simulationName}}{display name of simulation}
-
-\item{\code{pathID}}{path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)}
 
 \item{\code{pathName}}{display name for `pathID`}
 

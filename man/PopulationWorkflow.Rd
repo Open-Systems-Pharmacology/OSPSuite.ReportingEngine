@@ -119,11 +119,11 @@ A new `Task` object
 Define calculate PK parameters `task` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$populationPKParameterSettings(
-  taskFunction = NULL,
+  taskFunction = calculatePKParameters,
   outputFolder = defaultTaskOutputFolders$calculatePKParameters,
   settings = NULL,
   active = TRUE,
-  message = NULL
+  message = defaultWorkflowMessages$calculatePKParameters
 )}\if{html}{\out{</div>}}
 }
 
