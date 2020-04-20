@@ -8,7 +8,7 @@ tree <- getSimulationTree("./tests/dev/individualPksimSim.pkml")
   pathID = tree$Organism$Heart$Interstitial$smarties$Concentration$path
 )
 
-mwf <- MeanModelWorkflow$new(simulationSets = list(ms))
+mwf <- MeanModelWorkflow$new(simulationSets = list(ms) , workflowFolder = "./ex")
 mwf$simulate$settings$showProgress <- TRUE
 mwf$meanModelPKParameters$inactivate()
 mwf$meanModelSensitivityAnalysis$inactivate()
