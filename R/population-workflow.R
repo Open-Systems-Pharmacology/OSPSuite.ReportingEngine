@@ -34,6 +34,7 @@ PopulationWorkflow <- R6::R6Class(
       super$initialize(...)
 
       # TO DO: include task parameters from initialization ?
+      self$resetReportSettings()
       self$simulatePopulationSettings()
       self$populationPKParameterSettings()
       self$populationSensitivityAnalysisSettings()
@@ -76,12 +77,13 @@ PopulationWorkflow <- R6::R6Class(
     #' @param settings specific settings for `Task`
     #' @param message message/title of the `Task`
     #' @return A new `Task` object
-    populationPKParameterSettings = function(taskFunction = NULL,
+    populationPKParameterSettings = function(taskFunction = calculatePKParameters,
                                              outputFolder = defaultTaskOutputFolders$calculatePKParameters,
                                              settings = NULL,
                                              active = TRUE,
-                                             message = NULL) {
+                                             message = defaultWorkflowMessages$calculatePKParameters) {
       self$populationPKParameters <- CalculatePKParametersTask$new(
+        getTaskResults = taskFunction,
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         settings = settings,
@@ -129,7 +131,7 @@ PopulationWorkflow <- R6::R6Class(
                                active = FALSE,
                                message = defaultWorkflowMessages$plotDemography,
                                settings = NULL){
-      
+
       self$plotDemography <- PlotTask$new(
         reportTitle = reportTitle,
         getTaskResults = taskFunction,
@@ -221,7 +223,7 @@ PopulationWorkflow <- R6::R6Class(
         settings = settings
       )
     },
-    
+
     #' @description
     #' Define reset report `Task` settings
     #' @param active logical indicating if `Task` is performed in worklfow.
@@ -240,7 +242,7 @@ PopulationWorkflow <- R6::R6Class(
       )
     },
 
-    
+
     #' @description
     #' Loop through all simulation sets and run active population model workflow tasks for each.
     #' # POPULATION WORKFLOW
@@ -263,36 +265,37 @@ PopulationWorkflow <- R6::R6Class(
                     logFolder = self$workflowFolder)
       }
 
+
       if (self$simulatePopulation$active) {
         self$simulatePopulation$runTask(self$simulationStructures)
       }
 
-
-
-
       if (self$populationPKParameters$active) {
-        if (self$populationPKParameters$validateInput()) {
-          if (!is.null(file.path(self$populationPKParameters$workflowFolder, self$populationPKParameters$outputFolder))) {
-            dir.create(file.path(self$populationPKParameters$workflowFolder, self$populationPKParameters$outputFolder))
-          }
 
-          for (set in self$simulationStructures) {
-            logWorkflow(
-              message = paste0("Starting PK parameter calculation: ",set$simulationSet$simulationSetName),
-              pathFolder = self$workflowFolder
-            )
-            pkAnalyses <- calculatePKParameters(set)
-            exportPKAnalysesToCSV(
-              pkAnalyses = pkAnalyses,
-              filePath = set$pkAnalysisResultsFileNames
-            )
+        self$populationPKParameters$runTask(self$simulationStructures)
 
-            logWorkflow(
-              message = "PK parameter calculation completed.",
-              pathFolder = self$workflowFolder
-            )
-          }
-        }
+        # if (self$populationPKParameters$validateInput()) {
+        #   if (!is.null(file.path(self$populationPKParameters$workflowFolder, self$populationPKParameters$outputFolder))) {
+        #     dir.create(file.path(self$populationPKParameters$workflowFolder, self$populationPKParameters$outputFolder))
+        #   }
+        #
+        #   for (set in self$simulationStructures) {
+        #     logWorkflow(
+        #       message = paste0("Starting PK parameter calculation: ",set$simulationSet$simulationSetName),
+        #       pathFolder = self$workflowFolder
+        #     )
+        #     pkAnalyses <- calculatePKParameters(set)
+        #     exportPKAnalysesToCSV(
+        #       pkAnalyses = pkAnalyses,
+        #       filePath = set$pkAnalysisResultsFileNames
+        #     )
+        #
+        #     logWorkflow(
+        #       message = "PK parameter calculation completed.",
+        #       pathFolder = self$workflowFolder
+        #     )
+        #   }
+        # }
       }
 
 

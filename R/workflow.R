@@ -19,11 +19,12 @@ Workflow <- R6::R6Class(
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
                           workflowFolder) {
-      
+
       private$.reportingEngineInfo <- ReportingEngineInfo$new()
       # Check workflow folder input:
       # If workflow folder already exist throw a warning indicating the folder can be overwritten
-      self$workflowFolder <- workflowFolder %||% getwd()
+      validateIsString(workflowFolder)
+      self$workflowFolder <- workflowFolder
       workflowFolderCheck <- checkExisitingPath(self$workflowFolder, stopIfPathExists = FALSE)
 
       if (!is.null(workflowFolderCheck)) {
@@ -117,7 +118,7 @@ Workflow <- R6::R6Class(
     inactivateTasks = function(tasks = self$getAllTasks()) {
       inactivateWorkflowTasks(self, tasks = tasks)
     },
-    
+
     #' @description
     #' Print reporting engine information obtained from initiliazing a `Workflow`
     printReportingEngineInfo = function(){
@@ -127,7 +128,7 @@ Workflow <- R6::R6Class(
 
   private = list(
     .reportingEngineInfo = NULL,
-    
+
     .getTasksWithStatus = function(status) {
       taskNames <- self$getAllTasks()
 

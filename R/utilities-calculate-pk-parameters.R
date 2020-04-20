@@ -9,19 +9,19 @@
 calculatePKParameters <- function(structureSet,
                                   settings = NULL,
                                   logFolder = getwd()) {
-  
-  simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
+
+  simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
   simulationResults <- ospsuite::importResultsFromCSV(
     simulation = simulation,
     filePaths = structureSet$simulationResultFileNames
   )
-  
+
   logWorkflow(
     message = paste0("Simulation results '", structureSet$simulationResultFileNames, "' successfully loaded"),
     pathFolder = logFolder,
     logTypes = LogTypes$Debug
   )
-  
+
   pkAnalyses <- calculatePKAnalyses(results = simulationResults)
   logWorkflow(
     message = "Calculation of PK parameters complete",
@@ -40,7 +40,7 @@ calculatePKParameters <- function(structureSet,
 #' @export
 #' @import ospsuite
 plotMeanPKParameters <- function(structureSet,
-                                 logFolder = getwd(), 
+                                 logFolder = getwd(),
                                  settings = NULL) {
   simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
   pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
