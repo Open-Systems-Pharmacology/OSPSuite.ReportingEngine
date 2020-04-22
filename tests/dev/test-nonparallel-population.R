@@ -9,11 +9,11 @@ ps <- PopulationSimulationSet$new(
   pathID = tree$Organism$VenousBlood$Plasma$smarties$Concentration$path
 )
 pwf <- PopulationWorkflow$new(simulationSets = list(ps), workflowFolder = "./ex")
-pwf$simulatePopulation$settings$showProgress <- TRUE
+pwf$simulatePopulation$settings$showProgress <- FALSE
 pwf$simulatePopulation$activate()
 pwf$populationPKParameters$activate()
 pwf$populationSensitivityAnalysis$activate()
 pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- tree$Organism$Heart$Volume$path
-pwf$populationSensitivityAnalysis$settings$pkParameterSelection <- c("C_max")
-pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.5)
+pwf$populationSensitivityAnalysis$settings$pkParameterSelection <- c("C_max","CL")
+pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.25,0.75)
 pwf$runWorkflow()
