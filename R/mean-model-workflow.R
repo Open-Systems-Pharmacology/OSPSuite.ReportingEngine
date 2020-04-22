@@ -104,12 +104,13 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param settings specific settings for `Task`
     #' @param message message/title of the `Task`
     #' @return A new `SimulationTask` object
-    meanModelSensitivityAnalysisSettings = function(taskFunction = NULL,
+    meanModelSensitivityAnalysisSettings = function(taskFunction = runSensitivity,
                                                     outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
                                                     active = FALSE,
                                                     message = defaultWorkflowMessages$sensitivityAnalysis,
                                                     settings = NULL) {
       self$meanModelSensitivityAnalysis <- SensitivityAnalysisTask$new(
+        getTaskResults = taskFunction,
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         active = active,
@@ -237,7 +238,7 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for goodness of fit plots
     plotSensitivitySettings = function(reportTitle = defaultWorkflowTitles$plotSensitivity,
-                                       taskFunction = NULL,
+                                       taskFunction = plotMeanSensitivity,
                                        outputFolder = defaultTaskOutputFolders$plotSensitivity,
                                        active = FALSE,
                                        message = defaultWorkflowMessages$plotSensitivity,
@@ -291,7 +292,7 @@ MeanModelWorkflow <- R6::R6Class(
 
       if (self$resetReport$active) {
         resetReport(self$reportFileName,
-          logFolder = self$workflowFolder
+                    logFolder = self$workflowFolder
         )
       }
 
@@ -304,33 +305,7 @@ MeanModelWorkflow <- R6::R6Class(
       }
 
       if (self$meanModelSensitivityAnalysis$active) {
-        logWorkflow(
-          message = paste0("Starting ", self$meanModelSensitivityAnalysis$message),
-          pathFolder = self$workflowFolder
-        )
-        for (set in self$simulationStructures) {
-          logWorkflow(
-            message = c(
-              paste0("Simulation: ", set$simulationSet$simulationName),
-              paste0("Calculate sensitivity for the PK parameters: ", paste0(set$simulationSet$pkParameters, collapse = ", "))
-            ),
-            pathFolder = self$workflowFolder
-          )
-          if (self$meanModelSensitivityAnalysis$validateInput()) {
-            if (!is.null(file.path(self$meanModelSensitivityAnalysis$workflowFolder, self$meanModelSensitivityAnalysis$outputFolder))) {
-              dir.create(file.path(self$meanModelSensitivityAnalysis$workflowFolder, self$meanModelSensitivityAnalysis$outputFolder))
-            }
-
-            set$sensitivityAnalysisResultsFileNames <- runSensitivity(
-              simFilePath = set$simulationSet$simulationFile,
-              resultsFileFolder = file.path(self$meanModelSensitivityAnalysis$workflowFolder, self$meanModelSensitivityAnalysis$outputFolder),
-              resultsFileName = trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName), extension = "csv"),
-              variableParameterPaths = self$meanModelSensitivityAnalysis$settings$variableParameterPaths,
-              variationRange = self$meanModelSensitivityAnalysis$settings$variationRange,
-              numberOfCores = self$meanModelSensitivityAnalysis$settings$numberOfCores
-            )
-          }
-        }
+        self$meanModelSensitivityAnalysis$runTask(self$simulationStructures)
       }
 
       for (plotTask in self$getAllPlotTasks()) {
@@ -355,5 +330,5 @@ MeanModelWorkflow <- R6::R6Class(
       invisible(self)
       return(tasksInfo)
     }
+    )
   )
-)
