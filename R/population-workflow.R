@@ -107,7 +107,8 @@ PopulationWorkflow <- R6::R6Class(
                                                      active = TRUE,
                                                      message = NULL) {
       self$populationSensitivityAnalysis <- PopulationSensitivityAnalysisTask$new(
-        output = outputFolder,
+        getTaskResults = taskFunction,
+        outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         settings = settings,
         active = active,

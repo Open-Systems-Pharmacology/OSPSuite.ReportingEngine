@@ -48,7 +48,7 @@ runSensitivity <- function(simFilePath,
     Rmpi::mpi.remote.exec(library("ospsuite"))
     Rmpi::mpi.remote.exec(library("ospsuite.reportingengine"))
 
-    Rmpi::mpi.remote.exec(devtools::load_all("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/"))
+    #Rmpi::mpi.remote.exec(devtools::load_all("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/"))
 
     Rmpi::mpi.bcast.Robj2slave(obj = simFilePath) # Rmpi::mpi.bcast.Robj2slave(obj = resultsFileFolder)
     Rmpi::mpi.bcast.Robj2slave(obj = variationRange)
@@ -63,7 +63,6 @@ runSensitivity <- function(simFilePath,
   if (!is.null(popFilePath)) { # Determine if SA is to be done for a single individual or more
     popObject <- loadPopulation(popFilePath)
     individualSeq <- individualId %||% seq(1, popObject$count)
-    # allResultsFileNames <- NULL
     individualSensitivityAnalysisResults <- list()
     for (ind in individualSeq) {
       logWorkflow(
@@ -84,7 +83,7 @@ runSensitivity <- function(simFilePath,
     }
   }
   else {
-    individualSensitivityAnalysisResults[[resultsFileName]] <- individualSensitivityAnalysis(
+    individualSensitivityAnalysisResults <- individualSensitivityAnalysis(
       simFilePath = simFilePath,
       variableParameterPaths = variableParameterPaths,
       individualParameters = NULL,
@@ -143,7 +142,7 @@ individualSensitivityAnalysis <- function(simFilePath,
     individualSensitivityAnalysisResults <- analyzeCoreSensitivity(
       simulation = sim,
       variableParameterPaths = variableParameterPaths,
-      variationRange = variationRange # resultsFilePath = allResultsFileNames
+      variationRange = variationRange
     )
   }
   return(individualSensitivityAnalysisResults)
@@ -215,7 +214,6 @@ runParallelSensitivityAnalysis <- function(simFilePath,
     debugLogFileName = paste0(tempLogFileNamePrefix, mpi.comm.rank()),
     nodeName = paste("Core", mpi.comm.rank())
   ))
-
 
   Rmpi::mpi.remote.exec(exportSensitivityAnalysisResultsToCSV(
     results = partialIndividualSensitivityAnalysisResults,
@@ -366,8 +364,9 @@ runPopulationSensitivityAnalysis <- function(structureSet, settings, logFolder =
 
   #popSensitivityResultsDF[[popSAResultsIndexFile]] <- sensitivityAnalysesResultsIndexFileDF
 
-  return(list("index" = sensitivityAnalysesResultsIndexFileDF,
-              "results" = popSensitivityResultsDF))
+  return(list("indexDataFrame" = sensitivityAnalysesResultsIndexFileDF,
+              "indexFileName" = popSAResultsIndexFile,
+              "populationSensitivityResults" = popSensitivityResultsDF))
 }
 
 
