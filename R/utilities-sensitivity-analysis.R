@@ -14,7 +14,6 @@ runSensitivity <- function(structureSet,
                            individualId = NULL,
                            logFolder = getwd(),
                            resultsFileName = NULL) {
-
   variableParameterPaths <- settings$variableParameterPaths
   popFilePath <- structureSet$simulationSet$populationFile
   variationRange <- settings$variationRange

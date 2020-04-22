@@ -42,7 +42,7 @@ PopulationSensitivityAnalysisTask <- R6::R6Class(
           filePath = file.path(self$workflowFolder, self$outputFolder, fileName)
         )
       }
-      write.csv(x = indexDataFrame, file = file.path(self$workflowFolder, self$outputFolder, indexFileName),row.names = FALSE)
+      write.csv(x = indexDataFrame, file = file.path(self$workflowFolder, self$outputFolder, indexFileName), row.names = FALSE)
     }
   )
 )
