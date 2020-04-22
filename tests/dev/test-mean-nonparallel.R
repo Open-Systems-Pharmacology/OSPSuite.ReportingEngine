@@ -10,7 +10,7 @@ ms <- SimulationSet$new(
 
 mwf <- MeanModelWorkflow$new(simulationSets = list(ms), workflowFolder = "./ex")
 mwf$simulate$settings$showProgress <- TRUE
-mwf$meanModelPKParameters$inactivate()
-mwf$meanModelSensitivityAnalysis$inactivate()
-# mwf$meanModelSensitivityAnalysis$settings$variableParameterPaths <- c(tree$Organism$Heart$Volume$path)
+mwf$meanModelPKParameters$activate()
+mwf$meanModelSensitivityAnalysis$activate()
+mwf$meanModelSensitivityAnalysis$settings$variableParameterPaths <- c(tree$Organism$Heart$Volume$path)
 mwf$runWorkflow()

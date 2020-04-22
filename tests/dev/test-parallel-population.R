@@ -5,9 +5,10 @@ tree <- getSimulationTree("./tests/dev/individualPksimSim.pkml")
 ps <- PopulationSimulationSet$new(
   simulationSetName = "parpopsim",
   simulationFile = "./tests/dev/individualPksimSim.pkml",
-  populationFile = "./tests/dev/popData_short.csv"
+  populationFile = "./tests/dev/popData_short.csv",
+  pathID = tree$Organism$VenousBlood$Plasma$smarties$Concentration$path
 )
-pwf <- PopulationWorkflow$new(simulationSets = list(ps))
+pwf <- PopulationWorkflow$new(simulationSets = list(ps), workflowFolder = "./ex")
 pwf$simulatePopulation$settings$showProgress <- TRUE
 pwf$simulatePopulation$settings$numberOfCores <- 3
 
