@@ -80,7 +80,7 @@ SimulationSet <- R6::R6Class(
 
       self$timeUnit <- timeUnit %||% "h"
 
-      if (!is.null(observedDataFile)){
+      if (!is.null(observedDataFile)) {
         validateObservedMetaDataFile(observedMetaDataFile, observedDataFile)
       }
       self$observedDataFile <- observedDataFile
@@ -103,7 +103,4 @@ SimulationSet <- R6::R6Class(
       }
     }
   )
-
-
-
 )

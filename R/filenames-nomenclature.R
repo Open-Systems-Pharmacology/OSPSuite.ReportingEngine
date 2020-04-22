@@ -4,7 +4,6 @@ startTime <- function() {
 startDate <- function() {
   return(format(Sys.Date(), "%Y%m%d"))
 }
-# defaultWorkflowFolder <- file.path(getwd(), defaultFileNames$workflowFolderName())
 
 defaultFileNames <- list(
   simulationResultsFile = function(simulationName) {
@@ -34,6 +33,7 @@ defaultFileNames <- list(
   sensitivityAnalysisResultsFolder = function(name = NULL) {
     getDefaultFolderName(name, suffix = "SensitivityAnalysisResults", sep = ifnotnull(name, "-", ""))
   },
+  popSensitivityResultsIndexFileSuffix = "popSensitivityResultsIndex",
   reportName = function(name = "Report") {
     getDefaultFolderName(name, suffix = NULL, sep = "")
   },
@@ -97,7 +97,7 @@ defaultWorkflowMessages <- list(
   "plotPKParameters" = "Get tables of PK parameters task in Alpha Testing",
   "plotMassBalance" = "Plot Mass Balance task in Alpha Testing",
   "plotAbsorption" = "Plot Absorption task in Alpha Testing",
-  "plotSensitivity" = "Plot Sensitivity task not available at the moment",
+  "plotSensitivity" = "Plot Sensitivity task in Alpha Testing",
   "plotDemography" = "Plot Demography task Not available at the moment",
   "resetReport" = "Clear previous report"
 )

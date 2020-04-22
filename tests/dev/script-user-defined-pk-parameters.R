@@ -4,8 +4,8 @@ library(ospsuite.reportingengine)
 
 # One time initialization of PK Parameters
 ospsuite::updatePKParameter("C_max", displayName = "C max")
-ospsuite::updatePKParameter("C_max_norm", displayUnit = "kg/l" )
-ospsuite::updatePKParameter("t_max", displayUnit = "h" )
+ospsuite::updatePKParameter("C_max_norm", displayUnit = "kg/l")
+ospsuite::updatePKParameter("t_max", displayUnit = "h")
 ospsuite::updatePKParameter("AUC_tEnd", displayName = "AUC tEnd")
 myTMax <- ospsuite::addUserDefinedPKParameter("My T_MAX", standardPKParameter = StandardPKParameter$t_max, displayUnit = "min")
 myTMax$startTime <- 10

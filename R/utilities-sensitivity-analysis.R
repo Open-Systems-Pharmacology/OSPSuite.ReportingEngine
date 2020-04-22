@@ -1,26 +1,25 @@
 #' @title runSensitivity
 #' @description Determine whether to run SA for individual or population.  If for individual,  pass simulation to individualSensitivityAnalysis.
 #' If SA is for population, loop thru population file, extract parameters for each individual, and pass them to individualSensitivityAnalysis.
-#' @param simFilePath path to simulation file
-#' @param variableParameterPaths paths to parameters to vary in sensitivity analysis
-#' @param popFilePath path to the population data file
+#' @param structureSet `SimulationStructure` R6 class object
+#' @param settings list of settings for the output table/plot
+#' @param logFolder folder where the logs are saved
 #' @param individualId ID of individual in population data file for whom to perform sensitivity analysis
-#' @param variationRange variation range for sensitivity analysis
-#' @param numberOfCores number of cores over which to parallelize the sensitivity analysis
-#' @param resultsFileFolder path to population sensitivity analysis results CSV files
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
 #' @return SA results for individual or population
 #' @export
 #' @import ospsuite
-runSensitivity <- function(simFilePath,
-                           variableParameterPaths = NULL,
-                           popFilePath = NULL,
+runSensitivity <- function(structureSet,
+                           settings,
                            individualId = NULL,
-                           variationRange,
-                           numberOfCores = 1,
-                           resultsFileFolder,
-                           resultsFileName = "sensitivityAnalysisResults",
-                           logFolder = getwd()) {
+                           logFolder = getwd(),
+                           resultsFileName = NULL) {
+  simFilePath <- structureSet$simulationSet$simulationFile
+  variableParameterPaths <- settings$variableParameterPaths
+  popFilePath <- structureSet$simulationSet$populationFile
+  variationRange <- settings$variationRange
+  numberOfCores <- settings$numberOfCores
+
   sim <- ospsuite::loadSimulation(simFilePath)
 
   allVariableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
@@ -48,7 +47,6 @@ runSensitivity <- function(simFilePath,
     Rmpi::mpi.remote.exec(library("ospsuite"))
     Rmpi::mpi.remote.exec(library("ospsuite.reportingengine"))
     Rmpi::mpi.bcast.Robj2slave(obj = simFilePath)
-    Rmpi::mpi.bcast.Robj2slave(obj = resultsFileFolder)
     Rmpi::mpi.bcast.Robj2slave(obj = variationRange)
     # Load simulation on each core
     Rmpi::mpi.remote.exec(sim <- loadSimulation(simFilePath))
@@ -60,34 +58,33 @@ runSensitivity <- function(simFilePath,
   # If there is no population file and no individualId then do SA for mean model.
   if (!is.null(popFilePath)) { # Determine if SA is to be done for a single individual or more
     popObject <- loadPopulation(popFilePath)
+    resultsFileName <- resultsFileName %||% "sensitivityAnalysisResults"
     individualSeq <- individualId %||% seq(1, popObject$count)
-    allResultsFileNames <- NULL
+    individualSensitivityAnalysisResults <- list()
     for (ind in individualSeq) {
       logWorkflow(
         message = paste("Starting sensitivity analysis for individual", ind),
         pathFolder = logFolder
       )
-      resFile <- individualSensitivityAnalysis(
+
+      individualSensitivityAnalysisResults[[getIndividualSAResultsFileName(ind, resultsFileName)]] <- individualSensitivityAnalysis(
         simFilePath = simFilePath,
         variableParameterPaths = variableParameterPaths,
         individualParameters = popObject$getParameterValuesForIndividual(individualId = ind),
         variationRange = variationRange,
         numberOfCores = numberOfCores,
-        resultsFileFolder = resultsFileFolder,
-        resultsFileName = getIndividualSAResultsFileName(ind, resultsFileName)
+        logFolder = logFolder
       )
-      allResultsFileNames <- c(allResultsFileNames, resFile)
     }
   }
   else {
-    allResultsFileNames <- individualSensitivityAnalysis(
+    individualSensitivityAnalysisResults <- individualSensitivityAnalysis(
       simFilePath = simFilePath,
       variableParameterPaths = variableParameterPaths,
       individualParameters = NULL,
       variationRange = variationRange,
       numberOfCores = numberOfCores,
-      resultsFileFolder = resultsFileFolder,
-      resultsFileName = resultsFileName
+      logFolder = logFolder
     )
   }
 
@@ -95,7 +92,7 @@ runSensitivity <- function(simFilePath,
   if (numberOfCores > 1) {
     Rmpi::mpi.close.Rslaves()
   }
-  return(allResultsFileNames)
+  return(individualSensitivityAnalysisResults)
 }
 
 
@@ -110,30 +107,25 @@ runSensitivity <- function(simFilePath,
 #' population object's getParameterValuesForIndividual() function.
 #' @param variationRange variation range for sensitivity analysis
 #' @param numberOfCores is the number of cores over which to parallelize the sensitivity analysis
-#' @param resultsFileFolder path to population sensitivity analysis results CSV files
-#' @param resultsFileName root name of population sensitivity analysis results CSV files
-#' @return allResultsFileNames, the paths to CSV files containing results of sensitivity analysis
+#' @param logFolder folder where the logs are saved
+#' @return SA results for an individual
 #' @import ospsuite
 individualSensitivityAnalysis <- function(simFilePath,
                                           variableParameterPaths = NULL,
                                           individualParameters,
                                           variationRange,
                                           numberOfCores = 1,
-                                          resultsFileFolder = resultsFileFolder,
-                                          resultsFileName = resultsFileName,
                                           logFolder = getwd()) {
 
 
   # Determine if SA is to be done on a single core or more
   if (numberOfCores > 1) {
-    allResultsFileNames <- runParallelSensitivityAnalysis(
+    individualSensitivityAnalysisResults <- runParallelSensitivityAnalysis(
       simFilePath = simFilePath,
       variableParameterPaths = variableParameterPaths,
       individualParameters = individualParameters,
       variationRange = variationRange,
       numberOfCores = numberOfCores,
-      resultsFileFolder = resultsFileFolder,
-      resultsFileName = resultsFileName,
       logFolder = logFolder
     )
   } else {
@@ -141,37 +133,33 @@ individualSensitivityAnalysis <- function(simFilePath,
     # Load simulation to determine number of parameters valid for sensitivity analysis
     sim <- loadSimulation(simFilePath)
     updateSimulationIndividualParameters(simulation = sim, individualParameters)
-    allResultsFileNames <- file.path(resultsFileFolder, paste0(resultsFileName, ".csv"))
-    analyzeCoreSensitivity(
+    individualSensitivityAnalysisResults <- analyzeCoreSensitivity(
       simulation = sim,
       variableParameterPaths = variableParameterPaths,
-      variationRange = variationRange,
-      resultsFilePath = allResultsFileNames
+      variationRange = variationRange
     )
   }
-  return(allResultsFileNames)
+  return(individualSensitivityAnalysisResults)
 }
 
 
 #' @title runParallelSensitivityAnalysis
 #' @description Spawn cores, divide parameters among cores, run sensitivity analysis on cores
 #' for a single individual, save results as CSV.
+#' @param simFilePath path to simulation file
 #' @param variableParameterPaths paths to parameters to vary in sensitivity analysis
 #' @param individualParameters is an object storing an individual's parameters, obtained
 #' from a population object's getParameterValuesForIndividual() function.
 #' @param variationRange variation range for sensitivity analysis
 #' @param numberOfCores is the number of cores over which to parallelize the sensitivity analysis
-#' @param resultsFileFolder path to population sensitivity analysis results CSV files
-#' @param resultsFileName root name of population sensitivity analysis results CSV files
-#' @return Simulation results for population
+#' @param logFolder folder where the logs are saved
+#' @return SA results for population
 #' @import ospsuite
 runParallelSensitivityAnalysis <- function(simFilePath,
                                            variableParameterPaths,
                                            individualParameters,
                                            variationRange,
                                            numberOfCores,
-                                           resultsFileFolder,
-                                           resultsFileName,
                                            logFolder = getwd()) {
   totalNumberParameters <- length(variableParameterPaths)
 
@@ -191,7 +179,11 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores))
 
   # Generate a listcontaining names of SA CSV result files that will be output by each core
-  allResultsFileNames <- generateResultFileNames(numberOfCores = numberOfCores, folderName = resultsFileFolder, fileName = resultsFileName)
+  allResultsFileNames <- generateResultFileNames(
+    numberOfCores = numberOfCores,
+    folderName = getwd(),
+    fileName = "tempSAResultsCore"
+  )
   logWorkflow(message = "Starting sending of parameters to cores", pathFolder = logFolder)
   Rmpi::mpi.bcast.Robj2slave(obj = listSplitParameters)
   Rmpi::mpi.bcast.Robj2slave(obj = tempLogFileNamePrefix)
@@ -204,25 +196,29 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   Rmpi::mpi.remote.exec(updateSimulationIndividualParameters(simulation = sim, individualParameters))
 
   logWorkflow(message = "Starting analyzeCoreSensitivity function.", pathFolder = logFolder)
-  Rmpi::mpi.remote.exec(analyzeCoreSensitivity(
+
+  Rmpi::mpi.remote.exec(partialIndividualSensitivityAnalysisResults <- analyzeCoreSensitivity(
     simulation = sim,
     variableParameterPaths = listSplitParameters[[mpi.comm.rank()]],
     variationRange = variationRange,
-    resultsFilePath = allResultsFileNames[mpi.comm.rank()],
-    numberOfCoresToUse = 1, # Number of local cores, set to 1 when parallelizing.
+    numberOfCores = 1, # Number of local cores, set to 1 when parallelizing.
     debugLogFileName = paste0(tempLogFileNamePrefix, mpi.comm.rank()),
     nodeName = paste("Core", mpi.comm.rank())
   ))
+
+  Rmpi::mpi.remote.exec(exportSensitivityAnalysisResultsToCSV(
+    results = partialIndividualSensitivityAnalysisResults,
+    filePath = allResultsFileNames[mpi.comm.rank()]
+  ))
+
   for (core in seq(1, numberOfCores)) {
     logWorkflow(message = readLines(tempLogFileNames[core]), pathFolder = logFolder)
     file.remove(tempLogFileNames[core])
   }
 
   allSAResults <- importSensitivityAnalysisResultsFromCSV(simulation = loadSimulation(simFilePath), filePaths = allResultsFileNames)
-  combinedFilePath <- file.path(resultsFileFolder, paste0(resultsFileName, ".csv"))
-  exportSensitivityAnalysisResultsToCSV(results = allSAResults, filePath = combinedFilePath)
   file.remove(allResultsFileNames)
-  return(combinedFilePath)
+  return(allSAResults)
 }
 
 #' @title analyzeCoreSensitivity
@@ -231,17 +227,19 @@ runParallelSensitivityAnalysis <- function(simFilePath,
 #' @param simulation simulation class object
 #' @param variableParameterPaths paths of parameters to be analyzed
 #' @param variationRange variation range for sensitivity analysis
-#' @param resultsFilePath Path to file storing results of sensitivity analysis
-#' @param numberOfCoresToUse Number of cores to use on local node.  This parameter
+#' @param numberOfCores Number of cores to use on local node.  This parameter
 #' should be should be set to 1 when parallelizing over many nodes.
-#' @return Save sensitivity analysis results as CSV in path given by resultsFilePath.
+#' @param debugLogFileName path to debug log file
+#' @param infoLogFileName path to info log file
+#' @param errorLogFileName path to error log file
+#' @param nodeName identifier for node used in parallel computation of sensitivity
+#' @return sensitivity analysis results
 #' @import ospsuite
 #' @export
 analyzeCoreSensitivity <- function(simulation,
                                    variableParameterPaths = NULL,
-                                   variationRange = 0.1,
-                                   resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv"),
-                                   numberOfCoresToUse = NULL,
+                                   variationRange = 0.1, # resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv"),
+                                   numberOfCores = NULL,
                                    debugLogFileName = file.path(getwd(), defaultFileNames$logDebugFile()),
                                    infoLogFileName = file.path(getwd(), defaultFileNames$logInfoFile()),
                                    errorLogFileName = file.path(getwd(), defaultFileNames$logErrorFile()),
@@ -250,7 +248,7 @@ analyzeCoreSensitivity <- function(simulation,
   sensitivityAnalysis$addParameterPaths(variableParameterPaths)
   sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(
     showProgress = FALSE,
-    numberOfCoresToUse = numberOfCoresToUse
+    numberOfCores = numberOfCores
   )
 
   logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Starting sensitivity analysis for path(s) ", paste(variableParameterPaths, collapse = ", ")), file = debugLogFileName, printConsole = FALSE)
@@ -259,9 +257,7 @@ analyzeCoreSensitivity <- function(simulation,
     sensitivityAnalysisRunOptions = sensitivityAnalysisRunOptions
   )
   logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Sensitivity analysis for current path(s) completed"), file = debugLogFileName, printConsole = FALSE)
-  logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Starting CSV export of sensitivity analysis results"), file = debugLogFileName, printConsole = FALSE)
-  exportSensitivityAnalysisResultsToCSV(results = sensitivityAnalysisResults, resultsFilePath)
-  logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "CSV export of sensitivity analysis results completed"), file = debugLogFileName, printConsole = FALSE)
+  return(sensitivityAnalysisResults)
 }
 
 
@@ -269,6 +265,7 @@ analyzeCoreSensitivity <- function(simulation,
 #' @title getPKResultsDataFrame
 #' @description Read PK parameter results into a dataframe and set QuantityPath,Parameter and Unit columns as factors
 #' @param pkParameterResultsFilePath Path to PK parameter results CSV file
+#' @param pkParameterSelection PK parameters used for selection of individuals for whom to calculate sensitivity
 #' @return pkResultsDataFrame, a dataframe storing the contents of the CSV file with path pkParameterResultsFilePath
 #' @import ospsuite
 getPKResultsDataFrame <- function(pkParameterResultsFilePath, pkParameterSelection) {
@@ -318,31 +315,32 @@ getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
 #' @param numberOfCores the number of cores to be used for parallelization of the sensitivity analysis.
 #' Default is 1 core (no parallelization).
 #' @export
-runPopulationSensitivityAnalysis <- function(simFilePath,
-                                             variableParameterPaths = NULL,
-                                             popDataFilePath,
-                                             pkParameterResultsFilePath,
-                                             pkParameterSelection = NULL,
-                                             resultsFileFolder,
-                                             resultsFileName,
-                                             popSAResultsIndexFile = "sensitivityAnalysesResultsIndexFile",
-                                             variationRange,
-                                             quantileVec,
-                                             numberOfCores,
-                                             logFolder = getwd()) {
-  sensitivityAnalysesResultsIndexFileDF <- getSAFileIndex(pkParameterResultsFilePath, pkParameterSelection, quantileVec, resultsFileFolder, resultsFileName, popSAResultsIndexFile)
-  ids <- unique(sensitivityAnalysesResultsIndexFileDF$IndividualId)
-  allResultsFileNames <- runSensitivity(simFilePath,
-    variableParameterPaths = variableParameterPaths,
-    popFilePath = popDataFilePath,
-    individualId = ids,
-    variationRange = variationRange,
-    numberOfCores = numberOfCores,
-    resultsFileFolder = resultsFileFolder,
-    resultsFileName = resultsFileName,
-    logFolder = logFolder
+runPopulationSensitivityAnalysis <- function(structureSet, settings, logFolder = getwd()) {
+  resultsFileName <- trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(structureSet$simulationSet$simulationSetName), extension = "csv")
+  popSAResultsIndexFile <- paste0(structureSet$simulationSet$simulationSetName, "-", defaultFileNames$popSensitivityResultsIndexFileSuffix, ".csv")
+
+  sensitivityAnalysesResultsIndexFileDF <- getSAFileIndex(
+    pkParameterResultsFilePath = structureSet$pkAnalysisResultsFileNames,
+    pkParameterSelection = settings$pkParameterSelection,
+    quantileVec = settings$quantileVec, # resultsFileFolder = getwd(),
+    resultsFileName = resultsFileName
   )
-  return(allResultsFileNames)
+
+  ids <- unique(sensitivityAnalysesResultsIndexFileDF$IndividualId)
+
+  popSensitivityResultsDF <- runSensitivity(
+    structureSet = structureSet,
+    settings = settings,
+    individualId = ids,
+    logFolder = logFolder,
+    resultsFileName = resultsFileName
+  )
+
+  return(list(
+    "indexDataFrame" = sensitivityAnalysesResultsIndexFileDF,
+    "indexFileName" = popSAResultsIndexFile,
+    "populationSensitivityResults" = popSensitivityResultsDF
+  ))
 }
 
 
@@ -359,9 +357,7 @@ runPopulationSensitivityAnalysis <- function(simFilePath,
 getSAFileIndex <- function(pkParameterResultsFilePath,
                            pkParameterSelection,
                            quantileVec,
-                           resultsFileFolder,
-                           resultsFileName,
-                           popSAResultsIndexFile) {
+                           resultsFileName) {
   allPKResultsDataframe <- getPKResultsDataFrame(pkParameterResultsFilePath, pkParameterSelection)
   outputs <- levels(allPKResultsDataframe$QuantityPath)
   pkParameters <- levels(allPKResultsDataframe$Parameter)
@@ -385,9 +381,10 @@ getSAFileIndex <- function(pkParameterResultsFilePath,
       }
     }
   }
-  filenamesColumn <- paste0(sapply(X = individualIdColumn, FUN = getIndividualSAResultsFileName, resultsFileName), ".csv")
+  filenamesColumn <- sapply(X = individualIdColumn, FUN = getIndividualSAResultsFileName, resultsFileName)
+  # filenamesColumn <- paste0(sapply(X = individualIdColumn, FUN = getIndividualSAResultsFileName, resultsFileName), ".csv")
   sensitivityAnalysesResultsIndexFileDF <- data.frame("Outputs" = outputColumn, "pkParameters" = pkParameterColumn, "Quantile" = quantileColumn, "Value" = valuesColumn, "Unit" = unitsColumn, "IndividualId" = individualIdColumn, "Filename" = filenamesColumn)
-  write.csv(x = sensitivityAnalysesResultsIndexFileDF, file = file.path(resultsFileFolder, paste0(popSAResultsIndexFile, ".csv")))
+  # write.csv(x = sensitivityAnalysesResultsIndexFileDF, file = file.path(resultsFileFolder, paste0(popSAResultsIndexFile, ".csv")))
   return(sensitivityAnalysesResultsIndexFileDF)
 }
 
@@ -397,7 +394,7 @@ getSAFileIndex <- function(pkParameterResultsFilePath,
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
 #' @param individualId id of individual
 getIndividualSAResultsFileName <- function(individualId, resultsFileName) {
-  return(paste(resultsFileName, "IndividualId", individualId, sep = "-"))
+  return(paste0(resultsFileName, "IndividualId-", individualId, ".csv"))
 }
 
 #' @title defaultVariationRange
@@ -416,3 +413,99 @@ defaultSensitivityAnalysisNumberOfCores <- 1
 #' @description default quantiles for population sensitivity analysis
 #' @export
 defaultQuantileVec <- c(0.05, 0.5, 0.95)
+
+
+
+#' @title plotMeanSensitivity
+#' @description Plot sensitivity analysis results for mean models
+#' @param structureSet `SimulationStructure` R6 class object
+#' @param logFolder folder where the logs are saved
+#' @param settings list of settings for the output table/plot
+#' @return list of plots and tables
+#' @export
+#' @import ospsuite
+plotMeanSensitivity <- function(structureSet,
+                                logFolder = getwd(),
+                                settings = NULL) {
+  simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
+  saResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(
+    simulation = simulation,
+    structureSet$sensitivityAnalysisResultsFileNames
+  )
+
+  # TO DO: workout integration of selection of output paths and PK parameters in settings
+  allOutputPaths <- structureSet$simulationSet$pathID %||% sapply(simulation$outputSelections$allOutputs, function(output) {
+    output$path
+  })
+  pkParameters <- saResults$allPKParameterNames
+
+  sensitivityPlots <- list()
+  for (outputPathIndex in seq_along(allOutputPaths)) {
+    for (pkParameter in pkParameters) {
+      pkSensitivities <- saResults$allPKParameterSensitivitiesFor(
+        pkParameterName = pkParameter,
+        outputPath = allOutputPaths[outputPathIndex]
+      )
+
+      # Translate into a data.frame for plot
+      sensitivityData <- data.frame(
+        parameter = sapply(pkSensitivities, function(pkSensitivity) {
+          pkSensitivity$parameterPath
+        }),
+        value = sapply(pkSensitivities, function(pkSensitivity) {
+          pkSensitivity$value
+        })
+      )
+
+      # Create the tornado plot with output path - PK parameter as its name
+      sensitivityPlots[[paste0(pkParameter, "-", outputPathIndex)]] <- plotTornado(
+        data = sensitivityData,
+        plotConfiguration = NULL
+      )
+    }
+  }
+
+  return(list(plots = sensitivityPlots))
+}
+
+
+#' @title plotTornado
+#' @description Plot sensitivity results in a tornado plot
+#' @param data data.frame
+#' @param plotCOnfiguration `PlotConfiguration` R6 class object from `tlf` library
+#' @return ggplot object of time profile for mean model workflow
+#' @export
+#' @import tlf
+#' @import ggplot2
+plotTornado <- function(data,
+                        plotConfiguration = NULL) {
+
+  # Ensure that the plot bars are ordered by sensitivity values
+  data$parameter <- reorder(data$parameter, data$value)
+
+  tornadoPlot <- tlf::initializePlot(plotConfiguration)
+  tornadoPlot <- tornadoPlot + ggplot2::geom_col(
+    data = data,
+    mapping = ggplot2::aes_string(
+      x = "parameter",
+      y = "value",
+      fill = "parameter",
+      color = "parameter"
+    ),
+    alpha = 0.8,
+    size = 1,
+    show.legend = FALSE,
+    position = "dodge"
+  ) +
+    ggplot2::coord_flip() + ggplot2::xlab(NULL) + ggplot2::ylab("Sensitivity") + ggplot2::labs(title = NULL, subtitle = NULL) +
+    ggplot2::scale_y_continuous(limits = c(-1.05 * max(abs(data$value)), 1.05 * max(abs(data$value)))) +
+    ggplot2::scale_fill_brewer(palette = "Spectral", aesthetics = c("color", "fill")) +
+    ggplot2::geom_hline(
+      yintercept = 0,
+      color = 1,
+      size = 1,
+      linetype = "longdash"
+    )
+
+  return(tornadoPlot)
+}

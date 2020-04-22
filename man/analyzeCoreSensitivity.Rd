@@ -8,8 +8,7 @@ analyzeCoreSensitivity(
   simulation,
   variableParameterPaths = NULL,
   variationRange = 0.1,
-  resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv"),
-  numberOfCoresToUse = NULL,
+  numberOfCores = NULL,
   debugLogFileName = file.path(getwd(), defaultFileNames$logDebugFile()),
   infoLogFileName = file.path(getwd(), defaultFileNames$logInfoFile()),
   errorLogFileName = file.path(getwd(), defaultFileNames$logErrorFile()),
@@ -23,13 +22,19 @@ analyzeCoreSensitivity(
 
 \item{variationRange}{variation range for sensitivity analysis}
 
-\item{resultsFilePath}{Path to file storing results of sensitivity analysis}
-
-\item{numberOfCoresToUse}{Number of cores to use on local node.  This parameter
+\item{numberOfCores}{Number of cores to use on local node.  This parameter
 should be should be set to 1 when parallelizing over many nodes.}
+
+\item{debugLogFileName}{path to debug log file}
+
+\item{infoLogFileName}{path to info log file}
+
+\item{errorLogFileName}{path to error log file}
+
+\item{nodeName}{identifier for node used in parallel computation of sensitivity}
 }
 \value{
-Save sensitivity analysis results as CSV in path given by resultsFilePath.
+sensitivity analysis results
 }
 \description{
 Run a sensitivity analysis for a single individual,

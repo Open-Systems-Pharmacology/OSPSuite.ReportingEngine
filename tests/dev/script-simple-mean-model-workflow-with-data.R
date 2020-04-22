@@ -6,13 +6,15 @@ dataFile <- "Raltegravir_PK.csv"
 dataDictionary <- "tpDictionary.csv"
 dataFilter <- 'Grouping %in% "50mg"'
 
-modelSet <- SimulationSet$new(simulationFile = simFile,
-                              pathID = 'Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)',
-                              pathName = 'Raltegravir',
-                              pathUnit = 'mg/l',
-                              dataFilter = dataFilter,
-                              observedDataFile = dataFile,
-                              observedMetaDataFile = dataDictionary)
+modelSet <- SimulationSet$new(
+  simulationFile = simFile,
+  pathID = "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",
+  pathName = "Raltegravir",
+  pathUnit = "mg/l",
+  dataFilter = dataFilter,
+  observedDataFile = dataFile,
+  observedMetaDataFile = dataDictionary
+)
 
 meanModel_Raltegravir <- MeanModelWorkflow$new(simulationSets = modelSet)
 

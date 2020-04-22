@@ -8,9 +8,7 @@ getSAFileIndex(
   pkParameterResultsFilePath,
   pkParameterSelection,
   quantileVec,
-  resultsFileFolder,
-  resultsFileName,
-  popSAResultsIndexFile
+  resultsFileName
 )
 }
 \arguments{
@@ -19,9 +17,9 @@ getSAFileIndex(
 \item{quantileVec}{quantiles of distributions of pk parameter results for a population.
 The individual in the population that yields a pk parameter closest to the quantile is selected for sensitivity analysis.}
 
-\item{resultsFileFolder}{path to population sensitivity analysis results CSV files}
-
 \item{resultsFileName}{root name of population sensitivity analysis results CSV files}
+
+\item{resultsFileFolder}{path to population sensitivity analysis results CSV files}
 
 \item{popSAResultsIndexFile}{name of CSV file that will store index that identifies name of
 sensitivity analysis results file for each sensitivity analysis run}

@@ -18,9 +18,10 @@ CalculatePKParametersTask <- R6::R6Class(
     #' @param taskResults list of results from task run.
     saveResults = function(set,
                            taskResults) {
-      ospsuite::exportPKAnalysesToCSV(taskResults,
-                                      set$pkAnalysisResultsFileNames
-                                      )
+      ospsuite::exportPKAnalysesToCSV(
+        taskResults,
+        set$pkAnalysisResultsFileNames
+      )
     },
 
     #' @description
@@ -58,8 +59,6 @@ CalculatePKParametersTask <- R6::R6Class(
             message = "PK parameter calculation completed.",
             pathFolder = self$workflowFolder
           )
-
-
         }
       }
     }

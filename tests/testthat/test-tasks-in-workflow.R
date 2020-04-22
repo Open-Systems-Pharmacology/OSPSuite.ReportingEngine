@@ -37,12 +37,11 @@ test_that("Workflow tasks are defined with appropriate names and can be activate
 })
 
 test_that("Workflow and tasks print methods print give back character message of what workflow and task do", {
-  
   expect_is(mWorkflow$simulate$print(), "character")
 
   workflowPrint <- mWorkflow$print()
   expect_is(workflowPrint, "list")
-  
+
   taskNames <- mWorkflow$getAllTasks()
 
   for (taskIndex in seq_along(workflowPrint)) {

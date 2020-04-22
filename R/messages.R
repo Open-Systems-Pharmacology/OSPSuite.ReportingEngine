@@ -71,8 +71,10 @@ messages <- list(
   },
 
   errorObservedMetaDataFileNotProvided = function(observedDataFile) {
-    paste0("observedDataFile '", observedDataFile, "' was input but not observedMetaDataFile.",
-           "\nobservedMetaDataFile is required when using observedDataFile.")
+    paste0(
+      "observedDataFile '", observedDataFile, "' was input but not observedMetaDataFile.",
+      "\nobservedMetaDataFile is required when using observedDataFile."
+    )
   },
 
   errorNoParametersForSensitivityAnalysis = function() {

@@ -29,8 +29,8 @@ popWorkFlow$populationSensitivityAnalysis$settings$showProgress <- FALSE
 popWorkFlow$populationSensitivityAnalysis$settings$numberOfCores <- 1
 popWorkFlow$populationSensitivityAnalysis$settings$variableParameterPaths <- "Organism|Heart|Volume"
 popWorkFlow$populationSensitivityAnalysis$settings$variationRange <- 0.1
-popWorkFlow$populationSensitivityAnalysis$settings$pkParameterSelection <- c("C_max","CL")
-popWorkFlow$populationSensitivityAnalysis$settings$quantileVec <- c(0.25,0.75)
+popWorkFlow$populationSensitivityAnalysis$settings$pkParameterSelection <- c("C_max", "CL")
+popWorkFlow$populationSensitivityAnalysis$settings$quantileVec <- c(0.25, 0.75)
 
 
 popWorkFlow$runWorkflow()
