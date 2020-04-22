@@ -7,7 +7,7 @@ ms <- SimulationSet$new(
   simulationFile = "./tests/dev/individualPksimSim.pkml",
   pathID = tree$Organism$VenousBlood$Plasma$smarties$Concentration$path
 )
-mwf <- MeanModelWorkflow$new(simulationSets = list(ms), workflowFolder = "./ex" )
+mwf <- MeanModelWorkflow$new(simulationSets = list(ms), workflowFolder = "./ex")
 mwf$simulate$settings$showProgress <- TRUE
 mwf$meanModelPKParameters$activate()
 mwf$meanModelSensitivityAnalysis$activate()

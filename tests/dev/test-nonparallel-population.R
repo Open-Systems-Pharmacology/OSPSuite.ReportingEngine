@@ -13,7 +13,7 @@ pwf$simulatePopulation$settings$showProgress <- TRUE
 pwf$simulatePopulation$activate()
 pwf$populationPKParameters$activate()
 pwf$populationSensitivityAnalysis$activate()
-pwf$populationSensitivityAnalysis$settings$variableParameterPaths <-  tree$Organism$Heart$Volume$path
+pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- tree$Organism$Heart$Volume$path
 pwf$populationSensitivityAnalysis$settings$pkParameterSelection <- c("C_max")
 pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.5)
 pwf$runWorkflow()

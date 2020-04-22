@@ -292,7 +292,7 @@ MeanModelWorkflow <- R6::R6Class(
 
       if (self$resetReport$active) {
         resetReport(self$reportFileName,
-                    logFolder = self$workflowFolder
+          logFolder = self$workflowFolder
         )
       }
 
@@ -330,5 +330,5 @@ MeanModelWorkflow <- R6::R6Class(
       invisible(self)
       return(tasksInfo)
     }
-    )
   )
+)
