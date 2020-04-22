@@ -69,7 +69,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
   }
 
   # Get the time profile for simulated data
-  simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
+  simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
   simulationQuantity <- ospsuite::getAllQuantitiesMatching(structureSet$simulationSet$pathID, simulation)
 
   simulationResult <- ospsuite::importResultsFromCSV(
