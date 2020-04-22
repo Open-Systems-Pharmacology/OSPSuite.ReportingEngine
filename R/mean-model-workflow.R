@@ -114,7 +114,8 @@ MeanModelWorkflow <- R6::R6Class(
         workflowFolder = self$workflowFolder,
         active = active,
         settings = settings,
-        message = message)
+        message = message
+      )
     },
 
     #' @description
@@ -260,8 +261,8 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for goodness of fit plots
     resetReportSettings = function(active = FALSE,
-                                    message = defaultWorkflowMessages$resetReport,
-                                    settings = NULL) {
+                                   message = defaultWorkflowMessages$resetReport,
+                                   settings = NULL) {
       self$resetReport <- Task$new(
         active = active,
         workflowFolder = self$workflowFolder,
@@ -287,10 +288,11 @@ MeanModelWorkflow <- R6::R6Class(
         message = "Starting run of mean model workflow",
         pathFolder = self$workflowFolder
       )
-      
-      if(self$resetReport$active){
+
+      if (self$resetReport$active) {
         resetReport(self$reportFileName,
-                    logFolder = self$workflowFolder)
+          logFolder = self$workflowFolder
+        )
       }
 
       if (self$simulate$active) {
@@ -299,7 +301,7 @@ MeanModelWorkflow <- R6::R6Class(
 
       if (self$meanModelPKParameters$active) {
         self$meanModelPKParameters$runTask(self$simulationStructures)
-        }
+      }
 
       if (self$meanModelSensitivityAnalysis$active) {
         logWorkflow(
@@ -315,7 +317,6 @@ MeanModelWorkflow <- R6::R6Class(
             pathFolder = self$workflowFolder
           )
           if (self$meanModelSensitivityAnalysis$validateInput()) {
-
             if (!is.null(file.path(self$meanModelSensitivityAnalysis$workflowFolder, self$meanModelSensitivityAnalysis$outputFolder))) {
               dir.create(file.path(self$meanModelSensitivityAnalysis$workflowFolder, self$meanModelSensitivityAnalysis$outputFolder))
             }

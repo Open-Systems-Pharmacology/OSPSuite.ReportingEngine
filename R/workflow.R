@@ -19,7 +19,6 @@ Workflow <- R6::R6Class(
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
                           workflowFolder) {
-
       private$.reportingEngineInfo <- ReportingEngineInfo$new()
       # Check workflow folder input:
       # If workflow folder already exist throw a warning indicating the folder can be overwritten
@@ -121,7 +120,7 @@ Workflow <- R6::R6Class(
 
     #' @description
     #' Print reporting engine information obtained from initiliazing a `Workflow`
-    printReportingEngineInfo = function(){
+    printReportingEngineInfo = function() {
       private$.reportingEngineInfo$print()
     }
   ),

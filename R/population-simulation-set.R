@@ -32,7 +32,6 @@ PopulationSimulationSet <- R6::R6Class(
                           ...,
                           populationFile,
                           populationName = NULL) {
-
       super$initialize(...)
 
       self$populationFile <- populationFile

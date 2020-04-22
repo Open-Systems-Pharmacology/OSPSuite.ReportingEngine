@@ -9,7 +9,6 @@
 calculatePKParameters <- function(structureSet,
                                   settings = NULL,
                                   logFolder = getwd()) {
-
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
   simulationResults <- ospsuite::importResultsFromCSV(
     simulation = simulation,
@@ -49,8 +48,10 @@ plotMeanPKParameters <- function(structureSet,
   )
 
   pkParametersTable <- ospsuite::pkAnalysesAsDataFrame(pkAnalyses)
-  #pkParametersTable <- pkParametersTable[, c("QuantityPath", "Parameters", "Value", "Unit")]
+  # pkParametersTable <- pkParametersTable[, c("QuantityPath", "Parameters", "Value", "Unit")]
 
-  return(list(plots = NULL,
-              tables = list(pkAnalysis = pkParametersTable)))
+  return(list(
+    plots = NULL,
+    tables = list(pkAnalysis = pkParametersTable)
+  ))
 }
