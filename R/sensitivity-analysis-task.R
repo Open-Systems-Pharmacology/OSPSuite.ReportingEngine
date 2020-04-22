@@ -1,5 +1,7 @@
 #' @title SensitivityAnalysisTask
 #' @description  R6 class for SensitivityAnalysisTask settings
+#' @field getTaskResults function called by task that computes and format figure results
+#' @field settings instance of SensitivityAnalysisSettings class
 SensitivityAnalysisTask <- R6::R6Class(
   "SensitivityAnalysisTask",
   inherit = Task,
