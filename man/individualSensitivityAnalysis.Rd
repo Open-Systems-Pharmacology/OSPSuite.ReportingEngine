@@ -10,8 +10,6 @@ individualSensitivityAnalysis(
   individualParameters,
   variationRange,
   numberOfCores = 1,
-  resultsFileFolder = resultsFileFolder,
-  resultsFileName = resultsFileName,
   logFolder = getwd()
 )
 }

@@ -11,7 +11,6 @@ runSensitivity(
   individualId = NULL,
   variationRange,
   numberOfCores = 1,
-  resultsFileFolder,
   resultsFileName = "sensitivityAnalysisResults",
   logFolder = getwd()
 )
@@ -29,9 +28,9 @@ runSensitivity(
 
 \item{numberOfCores}{number of cores over which to parallelize the sensitivity analysis}
 
-\item{resultsFileFolder}{path to population sensitivity analysis results CSV files}
-
 \item{resultsFileName}{root name of population sensitivity analysis results CSV files}
+
+\item{resultsFileFolder}{path to population sensitivity analysis results CSV files}
 }
 \value{
 SA results for individual or population

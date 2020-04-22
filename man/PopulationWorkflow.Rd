@@ -153,7 +153,7 @@ A new `Task` object
 Define population Sensitivity Analysis `task` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$populationSensitivityAnalysisSettings(
-  taskFunction = NULL,
+  taskFunction = runPopulationSensitivityAnalysis,
   outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
   settings = NULL,
   active = TRUE,

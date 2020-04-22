@@ -10,8 +10,6 @@ runParallelSensitivityAnalysis(
   individualParameters,
   variationRange,
   numberOfCores,
-  resultsFileFolder,
-  resultsFileName,
   logFolder = getwd()
 )
 }
