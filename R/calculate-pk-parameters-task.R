@@ -1,11 +1,5 @@
 #' @title CalculatePKParametersTask
 #' @description  R6 class for CalculatePKParametersTask settings
-#' @field simulationFilePath simulation folder
-#' @field simulationResultFilePaths simulation files
-#' @field pkParametersToEvaluate list of PK parameters to evaluate
-#' @field userDefinedPKFunctions list of user defined functions to calculate PK parameters
-#' @field pkParameterResultsFilePath files where PK parameters are saved
-#' @field generatedResultFileNames name of files where PK parameters are saved
 CalculatePKParametersTask <- R6::R6Class(
   "CalculatePKParametersTask",
   inherit = SimulationTask,

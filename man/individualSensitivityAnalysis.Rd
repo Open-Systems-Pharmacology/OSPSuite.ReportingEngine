@@ -5,7 +5,7 @@
 \title{individualSensitivityAnalysis}
 \usage{
 individualSensitivityAnalysis(
-  simFilePath,
+  structureSet,
   variableParameterPaths = NULL,
   individualParameters,
   variationRange,
@@ -14,7 +14,7 @@ individualSensitivityAnalysis(
 )
 }
 \arguments{
-\item{simFilePath}{path to simulation file}
+\item{structureSet}{`SimulationStructure` R6 class object}
 
 \item{variableParameterPaths}{paths to parameters to vary in sensitivity analysis}
 

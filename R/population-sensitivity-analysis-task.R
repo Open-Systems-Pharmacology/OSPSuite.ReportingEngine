@@ -1,10 +1,7 @@
 #' @title PopulationSensitivityAnalysisTask
 #' @description  R6 class for PopulationSensitivityAnalysisTask settings
-#' @field variationRange variation range for sensitivity analysis
-#' @field numberOfCores number of cores for parallel computation
-#' @field quantileVec vector of quantiles to be calculated
-#' @field variableParameterPaths vector of paths of parameters to vary when performing sensitivity analysis
-#' @field pkParameterSelection list of selected PK parameters for sensitivity analysis
+#' @field getTaskResults function called by task that computes and format figure results
+#' @field settings instance of SensitivityAnalysisSettings class
 PopulationSensitivityAnalysisTask <- R6::R6Class(
   "PopulationSensitivityAnalysisTask",
   inherit = SensitivityAnalysisTask,
@@ -45,7 +42,7 @@ PopulationSensitivityAnalysisTask <- R6::R6Class(
           filePath = file.path(self$workflowFolder, self$outputFolder, fileName)
         )
       }
-      write.csv(x = indexDataFrame, file = file.path(self$workflowFolder, self$outputFolder, indexFileName))
+      write.csv(x = indexDataFrame, file = file.path(self$workflowFolder, self$outputFolder, indexFileName), row.names = FALSE)
     }
   )
 )

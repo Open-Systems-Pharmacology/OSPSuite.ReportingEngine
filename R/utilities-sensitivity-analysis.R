@@ -14,13 +14,12 @@ runSensitivity <- function(structureSet,
                            individualId = NULL,
                            logFolder = getwd(),
                            resultsFileName = NULL) {
-  simFilePath <- structureSet$simulationSet$simulationFile
   variableParameterPaths <- settings$variableParameterPaths
   popFilePath <- structureSet$simulationSet$populationFile
   variationRange <- settings$variationRange
   numberOfCores <- settings$numberOfCores
 
-  sim <- ospsuite::loadSimulation(simFilePath)
+  sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
   allVariableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
 
@@ -46,10 +45,11 @@ runSensitivity <- function(structureSet,
     Rmpi::mpi.spawn.Rslaves(nslaves = numberOfCores)
     Rmpi::mpi.remote.exec(library("ospsuite"))
     Rmpi::mpi.remote.exec(library("ospsuite.reportingengine"))
-    Rmpi::mpi.bcast.Robj2slave(obj = simFilePath)
+
+    Rmpi::mpi.bcast.Robj2slave(obj = structureSet)
     Rmpi::mpi.bcast.Robj2slave(obj = variationRange)
     # Load simulation on each core
-    Rmpi::mpi.remote.exec(sim <- loadSimulation(simFilePath))
+    Rmpi::mpi.remote.exec(sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet))
   }
 
   # If there is a population file and individualId then for each individual perform SA
@@ -68,7 +68,7 @@ runSensitivity <- function(structureSet,
       )
 
       individualSensitivityAnalysisResults[[getIndividualSAResultsFileName(ind, resultsFileName)]] <- individualSensitivityAnalysis(
-        simFilePath = simFilePath,
+        structureSet = structureSet,
         variableParameterPaths = variableParameterPaths,
         individualParameters = popObject$getParameterValuesForIndividual(individualId = ind),
         variationRange = variationRange,
@@ -79,7 +79,7 @@ runSensitivity <- function(structureSet,
   }
   else {
     individualSensitivityAnalysisResults <- individualSensitivityAnalysis(
-      simFilePath = simFilePath,
+      structureSet = structureSet,
       variableParameterPaths = variableParameterPaths,
       individualParameters = NULL,
       variationRange = variationRange,
@@ -101,7 +101,7 @@ runSensitivity <- function(structureSet,
 #' Determine whether to run SA for on single core or in parallel.
 #' If on single core, pass simulation to analyzeCoreSensitivity.
 #' If in parallel, pass simulation to runParallelSensitivityAnalysis.
-#' @param simFilePath path to simulation file
+#' @param structureSet `SimulationStructure` R6 class object
 #' @param variableParameterPaths paths to parameters to vary in sensitivity analysis
 #' @param individualParameters is an object storing an individual's parameters, obtained from a
 #' population object's getParameterValuesForIndividual() function.
@@ -110,7 +110,7 @@ runSensitivity <- function(structureSet,
 #' @param logFolder folder where the logs are saved
 #' @return SA results for an individual
 #' @import ospsuite
-individualSensitivityAnalysis <- function(simFilePath,
+individualSensitivityAnalysis <- function(structureSet,
                                           variableParameterPaths = NULL,
                                           individualParameters,
                                           variationRange,
@@ -121,7 +121,7 @@ individualSensitivityAnalysis <- function(simFilePath,
   # Determine if SA is to be done on a single core or more
   if (numberOfCores > 1) {
     individualSensitivityAnalysisResults <- runParallelSensitivityAnalysis(
-      simFilePath = simFilePath,
+      structureSet = structureSet,
       variableParameterPaths = variableParameterPaths,
       individualParameters = individualParameters,
       variationRange = variationRange,
@@ -131,7 +131,7 @@ individualSensitivityAnalysis <- function(simFilePath,
   } else {
     # No parallelization
     # Load simulation to determine number of parameters valid for sensitivity analysis
-    sim <- loadSimulation(simFilePath)
+    sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
     updateSimulationIndividualParameters(simulation = sim, individualParameters)
     individualSensitivityAnalysisResults <- analyzeCoreSensitivity(
       simulation = sim,
@@ -146,7 +146,7 @@ individualSensitivityAnalysis <- function(simFilePath,
 #' @title runParallelSensitivityAnalysis
 #' @description Spawn cores, divide parameters among cores, run sensitivity analysis on cores
 #' for a single individual, save results as CSV.
-#' @param simFilePath path to simulation file
+#' @param structureSet `SimulationStructure` R6 class object
 #' @param variableParameterPaths paths to parameters to vary in sensitivity analysis
 #' @param individualParameters is an object storing an individual's parameters, obtained
 #' from a population object's getParameterValuesForIndividual() function.
@@ -155,7 +155,7 @@ individualSensitivityAnalysis <- function(simFilePath,
 #' @param logFolder folder where the logs are saved
 #' @return SA results for population
 #' @import ospsuite
-runParallelSensitivityAnalysis <- function(simFilePath,
+runParallelSensitivityAnalysis <- function(structureSet,
                                            variableParameterPaths,
                                            individualParameters,
                                            variationRange,
@@ -196,7 +196,6 @@ runParallelSensitivityAnalysis <- function(simFilePath,
   Rmpi::mpi.remote.exec(updateSimulationIndividualParameters(simulation = sim, individualParameters))
 
   logWorkflow(message = "Starting analyzeCoreSensitivity function.", pathFolder = logFolder)
-
   Rmpi::mpi.remote.exec(partialIndividualSensitivityAnalysisResults <- analyzeCoreSensitivity(
     simulation = sim,
     variableParameterPaths = listSplitParameters[[mpi.comm.rank()]],
@@ -205,7 +204,6 @@ runParallelSensitivityAnalysis <- function(simFilePath,
     debugLogFileName = paste0(tempLogFileNamePrefix, mpi.comm.rank()),
     nodeName = paste("Core", mpi.comm.rank())
   ))
-
   Rmpi::mpi.remote.exec(exportSensitivityAnalysisResultsToCSV(
     results = partialIndividualSensitivityAnalysisResults,
     filePath = allResultsFileNames[mpi.comm.rank()]
@@ -216,7 +214,7 @@ runParallelSensitivityAnalysis <- function(simFilePath,
     file.remove(tempLogFileNames[core])
   }
 
-  allSAResults <- importSensitivityAnalysisResultsFromCSV(simulation = loadSimulation(simFilePath), filePaths = allResultsFileNames)
+  allSAResults <- importSensitivityAnalysisResultsFromCSV(simulation = loadSimulationWithUpdatedPaths(structureSet$simulationSet), filePaths = allResultsFileNames)
   file.remove(allResultsFileNames)
   return(allSAResults)
 }
@@ -427,7 +425,7 @@ defaultQuantileVec <- c(0.05, 0.5, 0.95)
 plotMeanSensitivity <- function(structureSet,
                                 logFolder = getwd(),
                                 settings = NULL) {
-  simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
+  simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
   saResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(
     simulation = simulation,
     structureSet$sensitivityAnalysisResultsFileNames

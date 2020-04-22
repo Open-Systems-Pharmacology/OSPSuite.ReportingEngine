@@ -1,6 +1,7 @@
 #' @title SimulationTask
 #' @description  R6 class for SimulationTask settings
 #' @field getTaskResults function called by task that computes and format figure results
+#' @field settings instance of SimulationSettings class
 SimulationTask <- R6::R6Class(
   "SimulationTask",
   inherit = Task,

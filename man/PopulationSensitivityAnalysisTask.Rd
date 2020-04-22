@@ -12,30 +12,9 @@ R6 class for PopulationSensitivityAnalysisTask settings
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{variationRange}}{variation range for sensitivity analysis}
+\item{\code{getTaskResults}}{function called by task that computes and format figure results}
 
-\item{\code{numberOfCores}}{number of cores for parallel computation}
-
-\item{\code{quantileVec}}{vector of quantiles to be calculated}
-
-\item{\code{variableParameterPaths}}{vector of paths of parameters to vary when performing sensitivity analysis}
-
-\item{\code{pkParameterSelection}}{list of selected PK parameters for sensitivity analysis}
-}
-\if{html}{\out{</div>}}
-}
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{variationRange}}{variation range for sensitivity analysis}
-
-\item{\code{numberOfCores}}{number of cores for parallel computation}
-
-\item{\code{quantileVec}}{vector of quantiles to be calculated}
-
-\item{\code{variableParameterPaths}}{vector of paths of parameters to vary when performing sensitivity analysis}
-
-\item{\code{pkParameterSelection}}{list of selected PK parameters for sensitivity analysis}
+\item{\code{settings}}{instance of SensitivityAnalysisSettings class}
 }
 \if{html}{\out{</div>}}
 }
