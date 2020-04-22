@@ -5,7 +5,7 @@
 \title{runParallelSensitivityAnalysis}
 \usage{
 runParallelSensitivityAnalysis(
-  simFilePath,
+  structureSet,
   variableParameterPaths,
   individualParameters,
   variationRange,
@@ -14,7 +14,7 @@ runParallelSensitivityAnalysis(
 )
 }
 \arguments{
-\item{simFilePath}{path to simulation file}
+\item{structureSet}{`SimulationStructure` R6 class object}
 
 \item{variableParameterPaths}{paths to parameters to vary in sensitivity analysis}
 

@@ -13,6 +13,8 @@ R6 class for SimulationTask settings
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
+
+\item{\code{settings}}{instance of SimulationSettings class}
 }
 \if{html}{\out{</div>}}
 }

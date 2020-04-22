@@ -6,23 +6,6 @@
 \description{
 R6 class for Population Sensitivity Analysis Settings
 }
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{variationRange}}{variation range for sensitivity analysis}
-
-\item{\code{numberOfCores}}{number of cores for parallel computation}
-
-\item{\code{quantileVec}}{vector of quantiles to be calculated}
-
-\item{\code{variableParameterPaths}}{vector of paths of parameters to vary when performing sensitivity analysis}
-
-\item{\code{pkParameterSelection}}{list of selected PK parameters for sensitivity analysis}
-
-\item{\code{showProgress}}{sensitivity analysis progress printed to console if TRUE}
-}
-\if{html}{\out{</div>}}
-}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

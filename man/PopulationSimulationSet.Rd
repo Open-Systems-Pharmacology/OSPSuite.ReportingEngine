@@ -50,32 +50,11 @@ Create a new `PopulationSimulationSet` object.
 \describe{
 \item{\code{simulationSetName}}{display name of simulation set}
 
+\item{\code{...}}{inputs to SimulationSet constructor}
+
 \item{\code{populationFile}}{name of csv file to be used for the population}
 
 \item{\code{populationName}}{display name of population}
-
-\item{\code{simulationFile}}{names of pkml file to be used for the simulation}
-
-\item{\code{simulationName}}{display name of simulation}
-
-\item{\code{pathID}}{path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)}
-
-\item{\code{pathName}}{display name for `pathID`}
-
-\item{\code{pathUnit}}{display unit for `pathID`}
-
-\item{\code{pkParameters}}{PK parameters function names to be calculated from the simulation (e.g. `C_max`).
-Default value is obtained from enum(ospsuite::allPKParameterNames()).}
-
-\item{\code{pkParametersNames}}{display names for `pkParameters`}
-
-\item{\code{pkParametersUnits}}{display units for `pkParameters`}
-
-\item{\code{observedDataFile}}{name of csv file to be used for observed data}
-
-\item{\code{observedMetaDataFile}}{name of csv file to be used as dictionary of the observed data}
-
-\item{\code{dataFilter}}{characters or expression to filter the observed data}
 }
 \if{html}{\out{</div>}}
 }
