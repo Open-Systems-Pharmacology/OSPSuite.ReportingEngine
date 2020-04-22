@@ -281,58 +281,6 @@ PopulationWorkflow <- R6::R6Class(
         self$populationSensitivityAnalysis$runTask(self$simulationStructures)
       }
 
-      # if (self$populationSensitivityAnalysis$active) {
-      # if (self$populationSensitivityAnalysis$validateInput()) {
-      # if (!is.null(file.path(self$populationSensitivityAnalysis$workflowFolder, self$populationSensitivityAnalysis$outputFolder))) {
-      #   dir.create(file.path(self$populationSensitivityAnalysis$workflowFolder, self$populationSensitivityAnalysis$outputFolder))
-      # }
-
-      # for (set in self$simulationStructures) {
-      #
-      #   logWorkflow(
-      #     message = paste0("Starting population sensitivity analysis: ",set$simulationSet$simulationSetName),
-      #     pathFolder = self$workflowFolder
-      #   )
-      #
-      #
-      #
-      #   set$sensitivityAnalysisResultsFileNames <- runPopulationSensitivityAnalysis(
-      #     simFilePath = set$simulationSet$simulationFile,
-      #     popDataFilePath = set$simulationSet$populationFile,
-      #     pkParameterResultsFilePath = set$pkAnalysisResultsFileNames,
-      #     resultsFileFolder = file.path(self$populationSensitivityAnalysis$workflowFolder, self$populationSensitivityAnalysis$outputFolder),
-      #     resultsFileName = trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName), extension = "csv"),
-      #     popSAResultsIndexFile = paste(set$simulationSet$simulationSetName,"sensitivityAnalysesResultsIndexFile",sep = "-"),
-      #     variableParameterPaths = self$populationSensitivityAnalysis$settings$variableParameterPaths,
-      #     pkParameterSelection = self$populationSensitivityAnalysis$settings$pkParameterSelection,
-      #     variationRange = self$populationSensitivityAnalysis$settings$variationRange,
-      #     quantileVec = self$populationSensitivityAnalysis$settings$quantileVec,
-      #     numberOfCores = self$populationSensitivityAnalysis$settings$numberOfCores,
-      #     logFolder = self$workflowFolder
-      #   )
-      #
-      #   # set$sensitivityAnalysisResultsFileNames <- runPopulationSensitivityAnalysis(
-      #   #   simFilePath = set$simulationSet$simulationFile,
-      #   #   popDataFilePath = set$simulationSet$populationFile,
-      #   #   pkParameterResultsFilePath = set$pkAnalysisResultsFileNames,
-      #   #   resultsFileFolder = file.path(self$populationSensitivityAnalysis$workflowFolder, self$populationSensitivityAnalysis$outputFolder),
-      #   #   resultsFileName = trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(set$simulationSet$simulationSetName), extension = "csv"),
-      #   #   popSAResultsIndexFile = paste(set$simulationSet$simulationSetName,"sensitivityAnalysesResultsIndexFile",sep = "-"),
-      #   #   variableParameterPaths = self$populationSensitivityAnalysis$settings$variableParameterPaths,
-      #   #   pkParameterSelection = self$populationSensitivityAnalysis$settings$pkParameterSelection,
-      #   #   variationRange = self$populationSensitivityAnalysis$settings$variationRange,
-      #   #   quantileVec = self$populationSensitivityAnalysis$settings$quantileVec,
-      #   #   numberOfCores = self$populationSensitivityAnalysis$settings$numberOfCores,
-      #   #   logFolder = self$workflowFolder
-      #   # )
-      #
-      #   # logWorkflow(
-      #   #   message = "Population sensitivity analysis completed.",
-      #   #   pathFolder = self$workflowFolder
-      #   # )
-      # }
-      # }
-      # }
     },
 
 
