@@ -47,8 +47,6 @@ runSensitivity <- function(structureSet,
     Rmpi::mpi.remote.exec(library("ospsuite"))
     Rmpi::mpi.remote.exec(library("ospsuite.reportingengine"))
 
-    #Rmpi::mpi.remote.exec(devtools::load_all("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine"))
-
     Rmpi::mpi.bcast.Robj2slave(obj = structureSet)
     Rmpi::mpi.bcast.Robj2slave(obj = variationRange)
     # Load simulation on each core
