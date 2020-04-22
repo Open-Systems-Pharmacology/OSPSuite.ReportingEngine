@@ -1,11 +1,5 @@
 #' @title SensitivityAnalysisSettings
 #' @description  R6 class for Population Sensitivity Analysis Settings
-#' @field variationRange variation range for sensitivity analysis
-#' @field numberOfCores number of cores for parallel computation
-#' @field quantileVec vector of quantiles to be calculated
-#' @field variableParameterPaths vector of paths of parameters to vary when performing sensitivity analysis
-#' @field pkParameterSelection list of selected PK parameters for sensitivity analysis
-#' @field showProgress sensitivity analysis progress printed to console if TRUE
 SensitivityAnalysisSettings <- R6::R6Class(
   "SensitivityAnalysisSettings",
   public = list(
