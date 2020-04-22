@@ -44,14 +44,16 @@ popWorkFlow$simulatePopulation$settings$numberOfCores <- 4
 
 # Number of cores for population sensitivity analysis
 popWorkFlow$populationSensitivityAnalysis$settings$numberOfCores <- 4
-popWorkFlow$populationSensitivityAnalysis$settings$variableParameterPaths <- c(simTree1$Organism$Skin$Volume$path,
-                                                                               simTree1$Organism$Skin$`Specific blood flow rate`$path,
-                                                                               simTree1$Organism$Pancreas$Volume$path,
-                                                                               simTree1$Organism$Heart$Volume$path,
-                                                                               simTree1$Organism$Stomach$Volume$path,
-                                                                               simTree1$Organism$Spleen$Volume$path,
-                                                                               simTree1$Organism$Lung$Volume$path,
-                                                                               simTree1$Organism$Kidney$Volume$path)
+popWorkFlow$populationSensitivityAnalysis$settings$variableParameterPaths <- c(
+  simTree1$Organism$Skin$Volume$path,
+  simTree1$Organism$Skin$`Specific blood flow rate`$path,
+  simTree1$Organism$Pancreas$Volume$path,
+  simTree1$Organism$Heart$Volume$path,
+  simTree1$Organism$Stomach$Volume$path,
+  simTree1$Organism$Spleen$Volume$path,
+  simTree1$Organism$Lung$Volume$path,
+  simTree1$Organism$Kidney$Volume$path
+)
 
 popWorkFlow$populationSensitivityAnalysis$settings$pkParameterSelection <- c("C_max", "t_max")
 

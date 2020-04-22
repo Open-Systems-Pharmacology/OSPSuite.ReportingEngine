@@ -35,8 +35,7 @@ SensitivityAnalysisTask <- R6::R6Class(
     #' Save results from task run.
     #' @param set R6 class `SimulationStructure`
     #' @param taskResults list of results from task run.
-    saveResults = function(set,
-                               taskResults) {
+    saveResults = function(set, taskResults) {
       ospsuite::exportSensitivityAnalysisResultsToCSV(
         taskResults,
         set$sensitivityAnalysisResultsFileNames

@@ -76,16 +76,14 @@ PlotTask <- R6::R6Class(
           file = tableFileName,
           row.names = FALSE
         )
-        
         # If the task output no plot, but tables, tables will be included in the report
-        if(is.null(taskResults$plots)){
+        if (is.null(taskResults$plots)) {
           addTableChunk(
             fileName = reportFile,
             tableFile = tableFileName,
             logFolder = self$workflowFolder
           )
         }
-        
         logWorkflow(
           message = paste0("Table '", tableFileName, "' was successfully saved."),
           pathFolder = self$workflowFolder,

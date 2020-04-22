@@ -32,12 +32,14 @@ addFigureChunk <- function(fileName,
                            figureCaption = "",
                            figureWidth = "100%",
                            logFolder = getwd()) {
-  
   mdText <- c(
     "",
-    knitr::hook_plot_md(figureFile,
-                        knitr::opts_chunk$merge(list(out.width=figureWidth, include=TRUE, fig.align="center", echo=FALSE))),
-    "")
+    knitr::hook_plot_md(
+      figureFile,
+      knitr::opts_chunk$merge(list(out.width = figureWidth, include = TRUE, fig.align = "center", echo = FALSE))
+    ),
+    ""
+  )
 
   write(mdText, file = fileName, append = TRUE, sep = "\n")
   logWorkflow(
@@ -55,14 +57,12 @@ addFigureChunk <- function(fileName,
 #' @param logFolder folder where the logs are saved
 #' @export
 addTableChunk <- function(fileName,
-                             tableFile,
-                             tableCaption = "",
-                             logFolder = getwd()) {
-  
-  table <- read.csv(tableFile,
-                    check.names = FALSE)
-  
-  # TO DO: kable has options such as number of decimals and align, 
+                          tableFile,
+                          tableCaption = "",
+                          logFolder = getwd()) {
+  table <- read.csv(tableFile, check.names = FALSE)
+
+  # TO DO: kable has options such as number of decimals and align,
   # should they also be defined ? as figure width for addFigureChunk ?
   mdText <- c(
     "",

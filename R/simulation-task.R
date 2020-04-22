@@ -18,10 +18,10 @@ SimulationTask <- R6::R6Class(
                           settings = NULL,
                           ...) {
       super$initialize(...)
-      if(is.null(settings)){
+      if (is.null(settings)) {
         self$settings <- SimulationSettings$new()
-      } else{
-        validateIsOfType(object = settings,SimulationSettings)
+      } else {
+        validateIsOfType(object = settings, SimulationSettings)
         self$settings <- settings
       }
       self$getTaskResults <- getTaskResults

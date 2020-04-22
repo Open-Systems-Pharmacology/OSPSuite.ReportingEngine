@@ -81,10 +81,10 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param message message/title of the `Task`
     #' @return A new `SimulationTask` object
     calculatePKParametersSettings = function(taskFunction = calculatePKParameters,
-                                                 outputFolder = defaultTaskOutputFolders$calculatePKParameters,
-                                                 active = FALSE,
-                                                 message = defaultWorkflowMessages$calculatePKParameters,
-                                                 settings = NULL) {
+                                             outputFolder = defaultTaskOutputFolders$calculatePKParameters,
+                                             active = FALSE,
+                                             message = defaultWorkflowMessages$calculatePKParameters,
+                                             settings = NULL) {
       self$meanModelPKParameters <- CalculatePKParametersTask$new(
         getTaskResults = taskFunction,
         outputFolder = outputFolder,
@@ -104,11 +104,11 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param settings specific settings for `Task`
     #' @param message message/title of the `Task`
     #' @return A new `SimulationTask` object
-    meanModelSensitivityAnalysisSettings = function(taskFunction = runMeanModelSensitivity,
-                                                        outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
-                                                        active = FALSE,
-                                                        message = defaultWorkflowMessages$sensitivityAnalysis,
-                                                        settings = NULL) {
+    meanModelSensitivityAnalysisSettings = function(taskFunction = runSensitivity,
+                                                    outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
+                                                    active = FALSE,
+                                                    message = defaultWorkflowMessages$sensitivityAnalysis,
+                                                    settings = NULL) {
       self$meanModelSensitivityAnalysis <- SensitivityAnalysisTask$new(
         getTaskResults = taskFunction,
         outputFolder = outputFolder,
@@ -238,11 +238,11 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for goodness of fit plots
     plotSensitivitySettings = function(reportTitle = defaultWorkflowTitles$plotSensitivity,
-                                           taskFunction = plotMeanSensitivity,
-                                           outputFolder = defaultTaskOutputFolders$plotSensitivity,
-                                           active = FALSE,
-                                           message = defaultWorkflowMessages$plotSensitivity,
-                                           settings = NULL) {
+                                       taskFunction = plotMeanSensitivity,
+                                       outputFolder = defaultTaskOutputFolders$plotSensitivity,
+                                       active = FALSE,
+                                       message = defaultWorkflowMessages$plotSensitivity,
+                                       settings = NULL) {
       self$plotSensitivity <- PlotTask$new(
         reportTitle = reportTitle,
         getTaskResults = taskFunction,
@@ -262,8 +262,8 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for goodness of fit plots
     resetReportSettings = function(active = FALSE,
-                                       message = defaultWorkflowMessages$resetReport,
-                                       settings = NULL) {
+                                   message = defaultWorkflowMessages$resetReport,
+                                   settings = NULL) {
       self$resetReport <- Task$new(
         active = active,
         workflowFolder = self$workflowFolder,

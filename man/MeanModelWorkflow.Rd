@@ -156,7 +156,7 @@ A new `SimulationTask` object
 Define mean Model Sensitivity Analysis `SensitivityAnalysisTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$meanModelSensitivityAnalysisSettings(
-  taskFunction = runMeanModelSensitivity,
+  taskFunction = runSensitivity,
   outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
   active = FALSE,
   message = defaultWorkflowMessages$sensitivityAnalysis,

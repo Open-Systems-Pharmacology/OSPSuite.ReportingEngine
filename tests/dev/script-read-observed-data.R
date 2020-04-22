@@ -9,12 +9,14 @@ dictionary <- readObservedDataFile("01_MeanModel_Raltegravir/tpDictionary.csv")
 dictionary
 
 # data filters
-dataFilters <- c('Grouping %in% "10mg_"', 
-                 'Grouping %in% "50mg"')
+dataFilters <- c(
+  'Grouping %in% "10mg_"',
+  'Grouping %in% "50mg"'
+)
 
 # Function called internally by wokflow
 rowFilter10mg <- evalDataFilter(observedData, parse(text = dataFilters[1]))
-#rowFilter50mg <- evalDataFilter(observedData, parse(text = dataFilters[2]))
+# rowFilter50mg <- evalDataFilter(observedData, parse(text = dataFilters[2]))
 
-observedData[rowFilter10mg,]
-#observedData[rowFilter50mg,]
+observedData[rowFilter10mg, ]
+# observedData[rowFilter50mg,]

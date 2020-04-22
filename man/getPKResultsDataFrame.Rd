@@ -8,6 +8,8 @@ getPKResultsDataFrame(pkParameterResultsFilePath, pkParameterSelection)
 }
 \arguments{
 \item{pkParameterResultsFilePath}{Path to PK parameter results CSV file}
+
+\item{pkParameterSelection}{PK parameters used for selection of individuals for whom to calculate sensitivity}
 }
 \value{
 pkResultsDataFrame, a dataframe storing the contents of the CSV file with path pkParameterResultsFilePath

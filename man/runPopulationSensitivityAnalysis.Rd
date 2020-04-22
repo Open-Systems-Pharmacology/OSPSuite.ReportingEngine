@@ -4,20 +4,7 @@
 \alias{runPopulationSensitivityAnalysis}
 \title{runPopulationSensitivityAnalysis}
 \usage{
-runPopulationSensitivityAnalysis(
-  simFilePath,
-  variableParameterPaths = NULL,
-  popDataFilePath,
-  pkParameterResultsFilePath,
-  pkParameterSelection = NULL,
-  resultsFileFolder,
-  resultsFileName,
-  popSAResultsIndexFile = "sensitivityAnalysesResultsIndexFile",
-  variationRange,
-  quantileVec,
-  numberOfCores,
-  logFolder = getwd()
-)
+runPopulationSensitivityAnalysis(structureSet, settings, logFolder = getwd())
 }
 \arguments{
 \item{simFilePath}{path to simulation file}
@@ -28,11 +15,11 @@ runPopulationSensitivityAnalysis(
 
 \item{resultsFileFolder}{folder where results of sensitivity analysis will be saved}
 
-\item{resultsFileName}{root name of sensitivity analysis results CSV files}
-
 \item{popSAResultsIndexFile}{Names of CSV file containing index of sensitivity analysis CSV files}
 
 \item{variationRange}{variation range for sensitivity analysis}
+
+\item{resultsFileName}{root name of sensitivity analysis results CSV files}
 
 \item{quantileVec}{vector of quantiles in (0,1).  For each output and pk parameter,
 there will be a distribution of pk parameter values for the population.
