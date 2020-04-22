@@ -1,6 +1,6 @@
 rm(list = ls())
 library(ospsuite)
-devtools::load_all(".")
+library(ospsuite.reportingengine)
 tree <- getSimulationTree("./tests/dev/individualPksimSim.pkml")
 ms <- SimulationSet$new(
   simulationSetName = "meansim",
