@@ -5,32 +5,23 @@
 \title{runSensitivity}
 \usage{
 runSensitivity(
-  simFilePath,
-  variableParameterPaths = NULL,
-  popFilePath = NULL,
+  structureSet,
+  settings,
   individualId = NULL,
-  variationRange,
-  numberOfCores = 1,
-  resultsFileName = "sensitivityAnalysisResults",
-  logFolder = getwd()
+  logFolder = getwd(),
+  resultsFileName = NULL
 )
 }
 \arguments{
-\item{simFilePath}{path to simulation file}
+\item{structureSet}{`SimulationStructure` R6 class object}
 
-\item{variableParameterPaths}{paths to parameters to vary in sensitivity analysis}
-
-\item{popFilePath}{path to the population data file}
+\item{settings}{list of settings for the output table/plot}
 
 \item{individualId}{ID of individual in population data file for whom to perform sensitivity analysis}
 
-\item{variationRange}{variation range for sensitivity analysis}
-
-\item{numberOfCores}{number of cores over which to parallelize the sensitivity analysis}
+\item{logFolder}{folder where the logs are saved}
 
 \item{resultsFileName}{root name of population sensitivity analysis results CSV files}
-
-\item{resultsFileFolder}{path to population sensitivity analysis results CSV files}
 }
 \value{
 SA results for individual or population

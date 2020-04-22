@@ -25,12 +25,10 @@ population object's getParameterValuesForIndividual() function.}
 
 \item{numberOfCores}{is the number of cores over which to parallelize the sensitivity analysis}
 
-\item{resultsFileFolder}{path to population sensitivity analysis results CSV files}
-
-\item{resultsFileName}{root name of population sensitivity analysis results CSV files}
+\item{logFolder}{folder where the logs are saved}
 }
 \value{
-allResultsFileNames, the paths to CSV files containing results of sensitivity analysis
+SA results for an individual
 }
 \description{
 Run SA for an individual, possibly after modifying the simulation using individualParameters.
