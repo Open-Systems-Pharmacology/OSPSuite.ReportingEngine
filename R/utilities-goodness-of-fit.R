@@ -247,8 +247,8 @@ getResiduals <- function(observedData,
                          simulatedData,
                          metaData = NULL,
                          dataMapping = NULL) {
-  observedDataTypes <- levels(observedData[, "Legend"])
-  simulatedDataTypes <- levels(simulatedData[, "Legend"])
+  observedDataTypes <- levels(factor(observedData[, "Legend"]))
+  simulatedDataTypes <- levels(factor(simulatedData[, "Legend"]))
 
   residuals <- list()
 
@@ -274,6 +274,9 @@ getResiduals <- function(observedData,
       )
     )
   }
+
+  # Remove Inf caused by obs = 0 which crash the axis sizing
+  residuals$data <- residuals$data[!is.infinite(residuals$data[, "Residuals"]), ]
 
   # TO DO: integrate method to get residuals metadata
   residuals$metaData <- list()
