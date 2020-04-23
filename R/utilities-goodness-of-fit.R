@@ -222,7 +222,7 @@ plotMeanTimeProfile <- function(simulatedData,
   # Remove guides for unwanted aes_properties
   timeProfilePlot <- timeProfilePlot +
     ggplot2::guides(
-      color = ggplot2::guide_legend(title = "Legend"),
+      color = ggplot2::guide_legend(title = NULL),
       shape = "none",
       linetype = "none",
       size = "none"
@@ -336,7 +336,7 @@ plotMeanObsVsPred <- function(data,
   # Remove unwanted aes properties
   meanObsVsPredPlot <- meanObsVsPredPlot +
     ggplot2::guides(
-      color = ggplot2::guide_legend(title = "Legend"),
+      color = ggplot2::guide_legend(title = NULL),
       shape = "none",
       linetype = "none",
       size = "none"
@@ -392,7 +392,7 @@ plotMeanResVsTime <- function(data,
   meanResVsTimePlot <- meanResVsTimePlot +
     ggplot2::scale_y_continuous(limits = c(-maxRes, maxRes)) +
     ggplot2::guides(
-      color = ggplot2::guide_legend(title = "Legend"),
+      color = ggplot2::guide_legend(title = NULL),
       shape = "none",
       linetype = "none",
       size = "none"
@@ -447,7 +447,7 @@ plotMeanResVsPred <- function(data,
   meanResVsPredPlot <- meanResVsPredPlot +
     ggplot2::scale_y_continuous(limits = c(-maxRes, maxRes)) +
     ggplot2::guides(
-      color = ggplot2::guide_legend(title = "Legend"),
+      color = ggplot2::guide_legend(title = NULL),
       shape = "none",
       linetype = "none",
       size = "none"
