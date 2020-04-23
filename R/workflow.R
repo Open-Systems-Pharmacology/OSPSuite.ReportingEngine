@@ -123,7 +123,7 @@ Workflow <- R6::R6Class(
     printReportingEngineInfo = function() {
       private$.reportingEngineInfo$print()
     },
-
+    
     #' @description
     #' Print workflow list of tasks
     #' @return Task list information
@@ -132,7 +132,7 @@ Workflow <- R6::R6Class(
       for (task in self$getAllTasks()) {
         tasksInfo[[paste0("Task: '", task, "'")]] <- self[[task]]$print()
       }
-
+      
       invisible(self)
       return(tasksInfo)
     }

@@ -280,7 +280,7 @@ PopulationWorkflow <- R6::R6Class(
       if (self$populationSensitivityAnalysis$active) {
         self$populationSensitivityAnalysis$runTask(self$simulationStructures)
       }
-
+      
       for (plotTask in self$getAllPlotTasks()) {
         if (self[[plotTask]]$active) {
           self[[plotTask]]$runTask(
