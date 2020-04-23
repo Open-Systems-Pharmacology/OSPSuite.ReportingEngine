@@ -122,6 +122,19 @@ Workflow <- R6::R6Class(
     #' Print reporting engine information obtained from initiliazing a `Workflow`
     printReportingEngineInfo = function() {
       private$.reportingEngineInfo$print()
+    },
+    
+    #' @description
+    #' Print workflow list of tasks
+    #' @return Task list information
+    print = function() {
+      tasksInfo <- list()
+      for (task in self$getAllTasks()) {
+        tasksInfo[[paste0("Task: '", task, "'")]] <- self[[task]]$print()
+      }
+      
+      invisible(self)
+      return(tasksInfo)
     }
   ),
 

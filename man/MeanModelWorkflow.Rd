@@ -46,7 +46,6 @@ R6 class for Reporting Engine Mean Model Workflow
 \item \href{#method-plotSensitivitySettings}{\code{MeanModelWorkflow$plotSensitivitySettings()}}
 \item \href{#method-resetReportSettings}{\code{MeanModelWorkflow$resetReportSettings()}}
 \item \href{#method-runWorkflow}{\code{MeanModelWorkflow$runWorkflow()}}
-\item \href{#method-print}{\code{MeanModelWorkflow$print()}}
 \item \href{#method-clone}{\code{MeanModelWorkflow$clone()}}
 }
 }
@@ -59,6 +58,7 @@ R6 class for Reporting Engine Mean Model Workflow
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getAllTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getAllTasks}{\code{ospsuite.reportingengine::Workflow$getAllTasks()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getInactiveTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getInactiveTasks}{\code{ospsuite.reportingengine::Workflow$getInactiveTasks()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="inactivateTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-inactivateTasks}{\code{ospsuite.reportingengine::Workflow$inactivateTasks()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="print">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-print}{\code{ospsuite.reportingengine::Workflow$print()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="printReportingEngineInfo">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-printReportingEngineInfo}{\code{ospsuite.reportingengine::Workflow$printReportingEngineInfo()}}\out{</span>}
 }
 \out{</details>}
@@ -416,18 +416,6 @@ The order of tasks is as follows:
 
 \subsection{Returns}{
 All results and plots as a structured output in the workflow folder
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\subsection{Method \code{print()}}{
-Print workflow list of tasks
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$print()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-Task list information
 }
 }
 \if{html}{\out{<hr>}}

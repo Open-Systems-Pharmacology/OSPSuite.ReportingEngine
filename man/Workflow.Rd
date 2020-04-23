@@ -28,6 +28,7 @@ R6 class representing Reporting Engine generic Workflow
 \item \href{#method-activateTasks}{\code{Workflow$activateTasks()}}
 \item \href{#method-inactivateTasks}{\code{Workflow$inactivateTasks()}}
 \item \href{#method-printReportingEngineInfo}{\code{Workflow$printReportingEngineInfo()}}
+\item \href{#method-print}{\code{Workflow$print()}}
 \item \href{#method-clone}{\code{Workflow$clone()}}
 }
 }
@@ -148,6 +149,18 @@ Print reporting engine information obtained from initiliazing a `Workflow`
 \if{html}{\out{<div class="r">}}\preformatted{Workflow$printReportingEngineInfo()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\subsection{Method \code{print()}}{
+Print workflow list of tasks
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$print()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+Task list information
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
