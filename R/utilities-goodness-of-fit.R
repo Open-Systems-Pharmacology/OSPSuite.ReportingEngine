@@ -453,3 +453,279 @@ plotMeanResVsPred <- function(data,
 
   return(meanResVsPredPlot)
 }
+
+
+#' @title plotPopulationGoodnessOfFit
+#' @description Plot goodness of fit diagnostics including time profiles,
+#' observations vs predictions, residuals plots (residuals vs time, vs predictions, qq-plots and histogram)
+#' @param structureSet `SimulationStructure` R6 class object
+#' @param logFolder folder where the logs are saved
+#' @param settings List of settings such as `PlotConfiguration` R6 class objects for each goodness of fit plot
+#' @return list with `plots`, `tables` and `residuals` objects to be saved
+#' @export
+#' @import tlf
+#' @import ospsuite
+#' @import utils
+#' @import ggplot2
+plotPopulationGoodnessOfFit <- function(structureSet,
+                                        logFolder = getwd(),
+                                        settings = NULL) {
+  observedData <- NULL
+  simulatedData <- NULL
+  goodnessOfFitPlots <- NULL
+  residuals <- NULL
+
+  aggregateNames <- c("mean", "median", "lowPerc", "highPerc")
+
+  lowPerc <- function(x) {
+    as.numeric(quantile(x, probs = 0.05))
+  }
+  highPerc <- function(x) {
+    as.numeric(quantile(x, probs = 0.95))
+  }
+
+  # Get the time profile for observed data
+  if (!is.null(structureSet$simulationSet$observedDataFile)) {
+    observations <- list()
+    observations$data <- readObservedDataFile(structureSet$simulationSet$observedDataFile)
+    observations$metaData <- readObservedDataFile(structureSet$simulationSet$observedMetaDataFile)
+    observations$filter <- structureSet$simulationSet$dataFilter
+
+    # TO DO: Agree on dictionary to replace "matlabID"
+    timeColumn <- as.character(observations$metaData[observations$metaData[, "matlabID"] == "time", "nonmenColumn"])
+    dvColumn <- as.character(observations$metaData[observations$metaData[, "matlabID"] == "dv", "nonmenColumn"])
+
+    if (is.null(observations$filter)) {
+      observedData <- data.frame(
+        "Time" = observations$data[, timeColumn],
+        "Concentration" = observations$data[, dvColumn],
+        "Legend" = structureSet$simulationSet$dataReportName
+      )
+    }
+
+    if (!is.null(observations$filter)) {
+      # Ensure that filter is used as an expression
+      if (!isOfType(observations$filter, "expression")) {
+        observations$filter <- parse(text = observations$filter)
+      }
+      for (filterIndex in seq_along(observations$filter)) {
+        rowFilter <- evalDataFilter(observations$data, observations$filter[filterIndex])
+
+        logWorkflow(
+          message = paste0("Number of observations filtered: ", sum(rowFilter)),
+          pathFolder = logFolder,
+          logTypes = LogTypes$Debug
+        )
+
+        # Observed Data needs to be already in the display unit
+        # TO DO: ensure in simulationSet that dataReportName is same length as filter
+        # orderer = TRUE ensure the same order in the legend, otherwise ggplot use alphabetical order
+        observedData <- rbind.data.frame(
+          observedData,
+          data.frame(
+            "Time" = observations$data[rowFilter, timeColumn],
+            "Concentration" = observations$data[rowFilter, dvColumn],
+            "Legend" = factor(structureSet$simulationSet$dataReportName[filterIndex],
+              ordered = TRUE
+            )
+          )
+        )
+      }
+    }
+  }
+
+  # Get the time profile for simulated data
+  simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
+  simulationQuantity <- ospsuite::getAllQuantitiesMatching(structureSet$simulationSet$pathID, simulation)
+
+  simulationResult <- ospsuite::importResultsFromCSV(
+    simulation,
+    structureSet$simulationResultFileNames
+  )
+
+  simulationPathResults <- ospsuite::getOutputValues(simulationResult,
+    quantitiesOrPaths = structureSet$simulationSet$pathID
+  )
+
+  for (quantityIndex in seq_along(simulationQuantity)) {
+    # TO DO: replace by osp built in function
+    molWeight <- getMolWeightForPath(structureSet$simulationSet$pathID[quantityIndex], simulation)
+
+    # Get the aggregation results
+    aggregateSummary <- tlf::AggregationSummary$new(
+      data = simulationPathResults$data,
+      metaData = simulationPathResults$metaData,
+      xColumnNames = "Time",
+      yColumnNames = structureSet$simulationSet$pathID[quantityIndex],
+      aggregationFunctionsVector = c(mean, median, lowPerc, highPerc),
+      aggregationFunctionNames = aggregateNames
+    )
+
+    aggregateData <- aggregateSummary$dfHelper
+    aggregateData$Time <- toUnit("Time", aggregateData$Time, structureSet$simulationSet$timeUnit)
+
+    convertExpressions <- parse(text = paste0(
+      "aggregateData$", aggregateNames, "<- toUnit(simulationQuantity[[quantityIndex]],",
+      "aggregateData$", aggregateNames, ", structureSet$simulationSet$pathUnit[quantityIndex],",
+      "molWeight = molWeight)"
+    ))
+    eval(convertExpressions)
+
+    legendExpressions <- parse(text = paste0(
+      "aggregateData$", c("legendMean", "legendMedian", "legendRange"),
+      '<- paste0("Simulated ', c("mean", "median", "5th-95th percentile"),
+      ' for ", structureSet$simulationSet$pathName[quantityIndex])'
+    ))
+    eval(legendExpressions)
+
+    simulatedData <- rbind.data.frame(
+      simulatedData,
+      aggregateData
+    )
+  }
+
+  # TO DO: so far only using the first quantity to get the ylabel and its unit
+  timeProfileMetaData <- list(
+    "Time" = list(
+      dimension = "Time",
+      unit = structureSet$simulationSet$timeUnit
+    ),
+    "Concentration" = list(
+      dimension = simulationQuantity[[1]]$dimension,
+      unit = structureSet$simulationSet$pathUnit[1]
+    )
+  )
+
+  timeProfileMapping <- tlf::XYGDataMapping$new(
+    x = "Time",
+    y = "Concentration",
+    color = "Legend"
+  )
+
+  timeProfilePlot <- plotPopulationTimeProfile(
+    simulatedData = simulatedData,
+    observedData = observedData,
+    metaData = timeProfileMetaData,
+    dataMapping = timeProfileMapping,
+    plotConfiguration = settings$plotConfigurations[["timeProfile"]]
+  )
+
+  timeProfilePlotLog <- timeProfilePlot + ggplot2::scale_y_continuous(trans = "log10")
+
+  goodnessOfFitPlots[["timeProfile"]] <- timeProfilePlot
+  goodnessOfFitPlots[["timeProfileLog"]] <- timeProfilePlotLog
+
+  if (!is.null(structureSet$simulationSet$observedDataFile)) {
+    # TO DO: Provide documentation about the settings
+    residualsAggregationType <- settings$residualsAggregationType %||% "mean"
+    simulatedDataForResiduals <- simulatedData[, c("Time", "mean", "legendMean")]
+    if (residualsAggregationType == "median") {
+      simulatedDataForResiduals <- simulatedData[, c("Time", "median", "legendMedian")]
+    }
+
+    # getResiduals is based on mean workflow whose names are c("Time", "Concentration", "Legend")
+    names(simulatedDataForResiduals) <- c("Time", "Concentration", "Legend")
+
+    residuals <- getResiduals(
+      observedData,
+      simulatedDataForResiduals,
+      timeProfileMetaData
+    )
+
+    # Smart plotConfig labels metaData$dimension [metaData$unit]
+    residuals$metaData[["Observed"]]$dimension <- paste0("Observed ", structureSet$simulationSet$pathName)
+    residuals$metaData[["Simulated"]]$dimension <- paste0("Simulated ", structureSet$simulationSet$pathName)
+
+    goodnessOfFitPlots[["obsVsPred"]] <- plotMeanObsVsPred(
+      data = residuals$data,
+      metaData = residuals$metaData,
+      plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
+    )
+
+    goodnessOfFitPlots[["obsVsPredLog"]] <- goodnessOfFitPlots[["obsVsPred"]] +
+      ggplot2::scale_y_continuous(trans = "log10") +
+      ggplot2::scale_x_continuous(trans = "log10")
+
+    goodnessOfFitPlots[["resVsTime"]] <- plotMeanResVsTime(
+      data = residuals$data,
+      metaData = residuals$metaData,
+      plotConfiguration = settings$plotConfigurations[["resVsTime"]]
+    )
+
+    goodnessOfFitPlots[["resVsPred"]] <- plotMeanResVsPred(
+      data = residuals$data,
+      metaData = residuals$metaData,
+      plotConfiguration = settings$plotConfigurations[["resVsPred"]]
+    )
+  }
+  return(list(
+    plots = goodnessOfFitPlots,
+    tables = list(
+      observedData = observedData,
+      simulatedData = simulatedData
+    ),
+    residuals = residuals
+  ))
+}
+
+#' @title plotPopulationTimeProfile
+#' @description Plot time profile for population model workflow
+#' @param simulatedData data.frame of observed data
+#' @param observedData data.frame of simulated data
+#' @param metaData meta data on `data`
+#' @param dataMapping `TimeProfileDataMapping` R6 class object from `tlf` library
+#' @param plotCOnfiguration `TimeProfilePlotConfiguration` R6 class object from `tlf` library
+#' @return ggplot object of time profile for mean model workflow
+#' @export
+#' @import tlf
+#' @import ggplot2
+plotPopulationTimeProfile <- function(simulatedData,
+                                      observedData = NULL,
+                                      dataMapping = NULL,
+                                      metaData = NULL,
+                                      plotConfiguration = NULL) {
+  timeProfilePlot <- tlf::addRibbon(
+    x = simulatedData$Time,
+    ymin = simulatedData$lowPerc,
+    ymax = simulatedData$highPerc,
+    caption = simulatedData$legendRange[1],
+    alpha = 0.6,
+    plotConfiguration = plotConfiguration
+  )
+  timeProfilePlot <- tlf::addLine(
+    x = simulatedData$Time,
+    y = simulatedData$median,
+    caption = simulatedData$legendMedian[1],
+    plotObject = timeProfilePlot
+  )
+  timeProfilePlot <- tlf::addLine(
+    x = simulatedData$Time,
+    y = simulatedData$mean,
+    caption = simulatedData$legendMean[1],
+    plotObject = timeProfilePlot
+  )
+  if (!is.null(observedData)) {
+    dataMapping$groupMapping$shape <- dataMapping$groupMapping$color
+    timeProfilePlot <- tlf::addScatter(
+      data = observedData,
+      metaData = metaData,
+      dataMapping = dataMapping,
+      plotConfiguration = plotConfiguration,
+      plotObject = timeProfilePlot
+    )
+  }
+  # Remove guides for unwanted aes_properties + labels not yet handled for ribbons
+  timeProfilePlot <- timeProfilePlot +
+    ggplot2::guides(
+      color = ggplot2::guide_legend(title = NULL),
+      shape = "none",
+      linetype = "none",
+      size = "none",
+      fill = ggplot2::guide_legend(title = NULL)
+    ) +
+    ggplot2::labs(title = NULL, subtitle = NULL) +
+    ggplot2::xlab(tlf::getLabelWithUnit(metaData$Time$dimension, metaData$Time$unit)) +
+    ggplot2::ylab(tlf::getLabelWithUnit(metaData$Concentration$dimension, metaData$Concentration$unit))
+
+  return(timeProfilePlot)
+}
