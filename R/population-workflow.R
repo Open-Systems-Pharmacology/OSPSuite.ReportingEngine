@@ -155,7 +155,7 @@ PopulationWorkflow <- R6::R6Class(
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for goodness of fit plots
     plotGoFSettings = function(reportTitle = defaultWorkflowTitles$plotGoF,
-                               taskFunction = NULL,
+                               taskFunction = plotPopulationGoodnessOfFit,
                                outputFolder = defaultTaskOutputFolders$plotGoF,
                                active = FALSE,
                                message = defaultWorkflowMessages$plotGoF,
