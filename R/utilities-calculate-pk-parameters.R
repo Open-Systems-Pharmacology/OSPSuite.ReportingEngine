@@ -41,7 +41,7 @@ calculatePKParameters <- function(structureSet,
 plotMeanPKParameters <- function(structureSet,
                                  logFolder = getwd(),
                                  settings = NULL) {
-  simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
+  simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
   pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
     structureSet$pkAnalysisResultsFileNames,
     simulation
