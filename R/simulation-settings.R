@@ -1,7 +1,5 @@
 #' @title SimulationSettings
 #' @description  R6 class for Population Simulation Settings
-#' @field numberOfCores number of cores for parallel computation
-#' @field showProgress simulation progress printed to console if TRUE
 SimulationSettings <- R6::R6Class(
   "SimulationSettings",
   public = list(
@@ -19,10 +17,7 @@ SimulationSettings <- R6::R6Class(
   ),
 
   active = list(
-
-    #' @description
-    #' Update the `numberOfCores`
-    #' @param value is the number of cores to use for simulation
+    #' @field numberOfCores is the number of cores to use for simulation
     numberOfCores = function(value) {
       if (missing(value)) {
         private$.numberOfCores
@@ -35,9 +30,7 @@ SimulationSettings <- R6::R6Class(
       }
     },
 
-    #' @description
-    #' Update `showProgress`
-    #' @param value is a logical input.  TRUE shows progress of simulation.
+    #' @field showProgress is a logical field  TRUE shows progress of simulation.
     showProgress = function(value) {
       if (missing(value)) {
         private$.showProgress
