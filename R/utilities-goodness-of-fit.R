@@ -571,9 +571,9 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     aggregateData$Time <- toUnit("Time", aggregateData$Time, structureSet$simulationSet$timeUnit)
 
     convertExpressions <- parse(text = paste0(
-      "aggregateData$", aggregateNames, "<- ifnotnull(structureSet$simulationSet$pathUnit[quantityIndex],",
-      "toUnit(simulationQuantity[[quantityIndex]], aggregateData$", aggregateNames, ", structureSet$simulationSet$pathUnit[quantityIndex], molWeight = molWeight),",
-      "aggregateData$", aggregateNames, ")"
+      "aggregateData$", aggregateNames, "<- toUnit(simulationQuantity[[quantityIndex]],",
+      "aggregateData$", aggregateNames, ", structureSet$simulationSet$pathUnit[quantityIndex],",
+      "molWeight = molWeight)"
     ))
     eval(convertExpressions)
 
@@ -598,7 +598,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     ),
     "Concentration" = list(
       dimension = simulationQuantity[[1]]$dimension,
-      unit = structureSet$simulationSet$pathUnit[1] %||% simulationQuantity[[1]]$displayUnit
+      unit = structureSet$simulationSet$pathUnit[1]
     )
   )
 
