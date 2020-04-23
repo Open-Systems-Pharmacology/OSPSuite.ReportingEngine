@@ -30,10 +30,7 @@ SensitivityAnalysisSettings <- R6::R6Class(
   ),
 
   active = list(
-
-    #' @description
-    #' Update variation range of sensitivity analysis
-    #' @param value variation range for sensitivity analysis
+    #' @field variationRange variationRange of the sensitivity analysis
     variationRange = function(value) {
       if (missing(value)) {
         private$.variationRange
@@ -44,9 +41,7 @@ SensitivityAnalysisSettings <- R6::R6Class(
       }
     },
 
-    #' @description
-    #' Update number of cores to be used during the sensitivity analysis
-    #' @param value number of cores for parallel computation
+    #' @field numberOfCores number of cores for parallel computation
     numberOfCores = function(value) {
       if (missing(value)) {
         private$.numberOfCores
@@ -57,9 +52,7 @@ SensitivityAnalysisSettings <- R6::R6Class(
       }
     },
 
-    #' @description
-    #' Update vector of quantiles to be calculated for sensitivity analysis
-    #' @param value vector of quantiles to be calculated
+    #' @field quantileVec vector of quantiles to be calculated
     quantileVec = function(value) {
       if (missing(value)) {
         private$.quantileVec
@@ -70,9 +63,7 @@ SensitivityAnalysisSettings <- R6::R6Class(
       }
     },
 
-    #' @description
-    #' Update vector of paths of parameters to vary during sensitivity analysis
-    #' @param value vector of paths of parameters to vary when performing sensitivity analysis
+    #' @field variableParameterPaths vector of paths of parameters to vary when performing sensitivity analysis
     variableParameterPaths = function(value) {
       if (missing(value)) {
         private$.variableParameterPaths
@@ -85,9 +76,8 @@ SensitivityAnalysisSettings <- R6::R6Class(
       }
     },
 
-    #' @description
-    #' Update list of selected PK parameters for sensitivity analysis
-    #' @param value list of selected PK parameters for sensitivity analysis
+
+    #' @field pkParameterSelection list of selected PK parameters for sensitivity analysis
     pkParameterSelection = function(value) {
       if (missing(value)) {
         private$.pkParameterSelection
@@ -101,9 +91,7 @@ SensitivityAnalysisSettings <- R6::R6Class(
       }
     },
 
-    #' @description
-    #' Update `showProgress`
-    #' @param value is a logical input.  TRUE shows progress of sensitivity analysis
+    #' @field showProgress is a logical input.  TRUE shows progress of sensitivity analysis
     showProgress = function(value) {
       if (missing(value)) {
         private$.

@@ -9,9 +9,9 @@ R6 class for Population Simulation Settings
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
-\item{\code{numberOfCores}}{number of cores for parallel computation}
+\item{\code{numberOfCores}}{is the number of cores to use for simulation}
 
-\item{\code{showProgress}}{simulation progress printed to console if TRUE}
+\item{\code{showProgress}}{is a logical field  TRUE shows progress of simulation.}
 }
 \if{html}{\out{</div>}}
 }
