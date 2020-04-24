@@ -1,5 +1,6 @@
 #' @title PopulationWorkflow
 #' @description R6 class for Reporting Engine Population Workflow
+#' @field workflowType Type of population workflow
 #' @field simulatePopulation R6 class `Task` for population simulation
 #' @field populationPKParameters R6 class `Task` for PK parameters calculation
 #' @field populationSensitivityAnalysis R6 class `Task` for sensitivity analysis
@@ -17,6 +18,7 @@ PopulationWorkflow <- R6::R6Class(
   inherit = Workflow,
 
   public = list(
+    workflowType = NULL,
     simulatePopulation = NULL, # TO DO: rename with simpler task name simulate
     populationPKParameters = NULL, # TO DO: rename with simpler task name calculatePKParameters
     populationSensitivityAnalysis = NULL,
@@ -28,10 +30,14 @@ PopulationWorkflow <- R6::R6Class(
 
     #' @description
     #' Create a new `PopulationWorkflow` object.
+    #' @param workflowType Type of population workflow. Use enum `PopulationWorkflowTypes` to get list of workflow types.
     #' @param ... input parameters inherited from R6 class object `Workflow`.
     #' @return A new `PopulationWorkflow` object
-    initialize = function(...) {
+    initialize = function(workflowType = PopulationWorkflowTypes$parallelComparison,
+                              ...) {
       super$initialize(...)
+      validateIsIncluded(workflowType, PopulationWorkflowTypes)
+      self$workflowType <- workflowType
 
       # TO DO: include task parameters from initialization ?
       self$resetReportSettings()
@@ -292,3 +298,11 @@ PopulationWorkflow <- R6::R6Class(
     }
   )
 )
+
+
+#' @export
+PopulationWorkflowTypes <- enum(c(
+  "pediatric",
+  "parallelComparison",
+  "ratioComparison"
+))
