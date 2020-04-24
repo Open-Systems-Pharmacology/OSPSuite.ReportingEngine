@@ -12,6 +12,8 @@ R6 class representing Reporting Engine Population Model Set
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
+\item{\code{referencePopulation}}{logical for reference population used in Pediatric and Ratio Comparison workflows}
+
 \item{\code{populationFile}}{name of csv file to be used for the population}
 
 \item{\code{populationName}}{display name of population}
@@ -38,6 +40,7 @@ R6 class representing Reporting Engine Population Model Set
 Create a new `PopulationSimulationSet` object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationSimulationSet$new(
+  referencePopulation = FALSE,
   simulationSetName = NULL,
   ...,
   populationFile,
@@ -48,6 +51,8 @@ Create a new `PopulationSimulationSet` object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{referencePopulation}}{logical for reference population used in Pediatric and Ratio Comparison workflows}
+
 \item{\code{simulationSetName}}{display name of simulation set}
 
 \item{\code{...}}{inputs to SimulationSet constructor}
