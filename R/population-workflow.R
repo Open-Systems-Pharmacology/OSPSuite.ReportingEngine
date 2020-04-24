@@ -155,7 +155,7 @@ PopulationWorkflow <- R6::R6Class(
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for goodness of fit plots
     plotGoFSettings = function(reportTitle = defaultWorkflowTitles$plotGoF,
-                               taskFunction = NULL,
+                               taskFunction = plotPopulationGoodnessOfFit,
                                outputFolder = defaultTaskOutputFolders$plotGoF,
                                active = FALSE,
                                message = defaultWorkflowMessages$plotGoF,
@@ -280,26 +280,15 @@ PopulationWorkflow <- R6::R6Class(
       if (self$populationSensitivityAnalysis$active) {
         self$populationSensitivityAnalysis$runTask(self$simulationStructures)
       }
-    },
-
-
-    #' @description
-    #' Print workflow list of tasks
-    #' TO DO: add simulationSets to print() method
-    #' @return Task list information
-    print = function() {
-      taskOrder <- list(
-        "Task 1" = self$simulatePopulation$print(),
-        "Task 2" = self$pkParametersCalculation$print(),
-        "Task 3" = self$sensitivityAnalysis$print(),
-        "Task 4" = self$plotDemography$print(),
-        "Task 5" = self$plotGoF$print(),
-        "Task 6" = self$plotPKParameters$print(),
-        "Task 7" = self$plotSensitivity$print()
-      )
-      invisible(self)
-
-      return(taskOrder)
+      
+      for (plotTask in self$getAllPlotTasks()) {
+        if (self[[plotTask]]$active) {
+          self[[plotTask]]$runTask(
+            self$simulationStructures,
+            self$reportFileName
+          )
+        }
+      }
     }
   )
 )

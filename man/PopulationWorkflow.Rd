@@ -43,7 +43,6 @@ R6 class for Reporting Engine Population Workflow
 \item \href{#method-plotSensitivitySettings}{\code{PopulationWorkflow$plotSensitivitySettings()}}
 \item \href{#method-resetReportSettings}{\code{PopulationWorkflow$resetReportSettings()}}
 \item \href{#method-runWorkflow}{\code{PopulationWorkflow$runWorkflow()}}
-\item \href{#method-print}{\code{PopulationWorkflow$print()}}
 \item \href{#method-clone}{\code{PopulationWorkflow$clone()}}
 }
 }
@@ -56,6 +55,7 @@ R6 class for Reporting Engine Population Workflow
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getAllTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getAllTasks}{\code{ospsuite.reportingengine::Workflow$getAllTasks()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getInactiveTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getInactiveTasks}{\code{ospsuite.reportingengine::Workflow$getInactiveTasks()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="inactivateTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-inactivateTasks}{\code{ospsuite.reportingengine::Workflow$inactivateTasks()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="print">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-print}{\code{ospsuite.reportingengine::Workflow$print()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="printReportingEngineInfo">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-printReportingEngineInfo}{\code{ospsuite.reportingengine::Workflow$printReportingEngineInfo()}}\out{</span>}
 }
 \out{</details>}
@@ -225,7 +225,7 @@ Define Goodness of fit `PlotTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotGoFSettings(
   reportTitle = defaultWorkflowTitles$plotGoF,
-  taskFunction = NULL,
+  taskFunction = plotPopulationGoodnessOfFit,
   outputFolder = defaultTaskOutputFolders$plotGoF,
   active = FALSE,
   message = defaultWorkflowMessages$plotGoF,
@@ -374,19 +374,6 @@ Loop through all simulation sets and run active population model workflow tasks 
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$runWorkflow()}\if{html}{\out{</div>}}
 }
 
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\subsection{Method \code{print()}}{
-Print workflow list of tasks
-TO DO: add simulationSets to print() method
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$print()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-Task list information
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
