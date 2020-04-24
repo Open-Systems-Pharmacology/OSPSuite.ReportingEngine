@@ -12,7 +12,8 @@ analyzeCoreSensitivity(
   debugLogFileName = file.path(getwd(), defaultFileNames$logDebugFile()),
   infoLogFileName = file.path(getwd(), defaultFileNames$logInfoFile()),
   errorLogFileName = file.path(getwd(), defaultFileNames$logErrorFile()),
-  nodeName = NULL
+  nodeName = NULL,
+  showProgress = FALSE
 )
 }
 \arguments{

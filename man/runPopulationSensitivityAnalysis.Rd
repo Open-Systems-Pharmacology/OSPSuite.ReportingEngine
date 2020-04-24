@@ -7,26 +7,11 @@
 runPopulationSensitivityAnalysis(structureSet, settings, logFolder = getwd())
 }
 \arguments{
-\item{simFilePath}{path to simulation file}
+\item{structureSet}{`SimulationStructure` R6 class object}
 
-\item{popDataFilePath}{path to population file}
+\item{settings}{list of settings for the population sensitivity analysis}
 
-\item{pkParameterResultsFilePath}{path to pk parameter results CSV}
-
-\item{resultsFileFolder}{folder where results of sensitivity analysis will be saved}
-
-\item{popSAResultsIndexFile}{Names of CSV file containing index of sensitivity analysis CSV files}
-
-\item{variationRange}{variation range for sensitivity analysis}
-
-\item{resultsFileName}{root name of sensitivity analysis results CSV files}
-
-\item{quantileVec}{vector of quantiles in (0,1).  For each output and pk parameter,
-there will be a distribution of pk parameter values for the population.
-The individuals yielding pk parameters closest to these quantiles will be selected for sensitivity analysis.}
-
-\item{numberOfCores}{the number of cores to be used for parallelization of the sensitivity analysis.
-Default is 1 core (no parallelization).}
+\item{logFolder}{folder where the logs are saved}
 }
 \description{
 runPopulationSensitivityAnalysis

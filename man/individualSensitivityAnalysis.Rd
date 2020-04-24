@@ -10,6 +10,7 @@ individualSensitivityAnalysis(
   individualParameters,
   variationRange,
   numberOfCores = 1,
+  showProgress = FALSE,
   logFolder = getwd()
 )
 }
