@@ -47,7 +47,7 @@ runSensitivity <- function(structureSet,
     Rmpi::mpi.remote.exec(library("ospsuite"))
     Rmpi::mpi.remote.exec(library("ospsuite.reportingengine"))
 
-    #Pass to cores the inputs that will not change from one individual to another
+    # Pass to cores the inputs that will not change from one individual to another
     Rmpi::mpi.bcast.Robj2slave(obj = structureSet)
     Rmpi::mpi.bcast.Robj2slave(obj = variationRange)
     Rmpi::mpi.bcast.Robj2slave(obj = showProgress)
