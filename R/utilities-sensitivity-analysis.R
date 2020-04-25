@@ -312,7 +312,7 @@ getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
 #' @export
 runPopulationSensitivityAnalysis <- function(structureSet, settings, logFolder = getwd()) {
   resultsFileName <- trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(structureSet$simulationSet$simulationSetName), extension = "csv")
-  popSAResultsIndexFile <- structureSet$popSensitivityAnalysisResultsIndexFileName
+  popSAResultsIndexFile <- trimFileName(structureSet$popSensitivityAnalysisResultsIndexFile)
 
   sensitivityAnalysesResultsIndexFileDF <- getSAFileIndex(
     pkParameterResultsFilePath = structureSet$pkAnalysisResultsFileNames,
