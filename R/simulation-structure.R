@@ -18,6 +18,7 @@ SimulationStructure <- R6::R6Class(
     simulationResultFileNames = NULL,
     pkAnalysisResultsFileNames = NULL,
     sensitivityAnalysisResultsFileNames = NULL,
+    popSensitivityAnalysisResultsIndexFile = NULL,
 
     #' @description
     #' Create a new `SimulationStructure` object.
@@ -48,6 +49,13 @@ SimulationStructure <- R6::R6Class(
         self$sensitivityAnalysisResultsFolder,
         defaultFileNames$sensitivityAnalysisResultsFile(self$simulationSet$simulationSetName)
       )
+
+      self$popSensitivityAnalysisResultsIndexFile <- file.path(
+        workflowFolder,
+        self$sensitivityAnalysisResultsFolder,
+        defaultFileNames$popSensitivityResultsIndexFile(self$simulationSet$simulationSetName)
+      )
+
     }
   )
 )
