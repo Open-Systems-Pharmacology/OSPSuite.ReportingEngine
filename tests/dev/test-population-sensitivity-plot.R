@@ -60,7 +60,6 @@ getPopSensDfForPkAndOutput <- function(workflow,pkParameter,output,quantiles,ran
   pkOutputIndexDf <- getPkOutputIndexDf(indexDf,pkParameter,output)
   validateIsIncluded(quantiles,unique(pkOutputIndexDf$Quantile))
   quantilePkOutputIndexDf <- pkOutputIndexDf[pkOutputIndexDf$Quantile %in% quantiles,]
-  print(quantilePkOutputIndexDf)
   individualsDfForPKParameter <- getSensitivityDataFrameForIndividuals(indexDf = quantilePkOutputIndexDf,
                                                                        structureSet = pwf$simulationStructures[[1]],
                                                                        pkParameter = pkParameter,
@@ -97,8 +96,29 @@ sortAndFilterIndividualsDF <- function(individualsDfForPKParameter,rankFilter){
   if (is.null(rankFilter)){
     return(sortedIndividualsDfForPKParameter)
   }
-  rankFilter <- min(rankFilter,nrow(sortedIndividualsDfForPKParameter))
-  sortedFilteredIndividualsDfForPKParameter <- sortedIndividualsDfForPKParameter[1:rankFilter,]
+  rankFilter <- min(rankFilter,length(unique(sortedIndividualsDfForPKParameter$Parameter)))
+  uniqueParameters <- unique(sortedIndividualsDfForPKParameter$Parameter)
+  sortedIndividualsDfForPKParameter <- cbind(sortedIndividualsDfForPKParameter , parameterRank = rep(0,nrow(sortedIndividualsDfForPKParameter)) )
+
+  #Add parameter rank to dataframe
+  for (n in 1:length(uniqueParameters)){
+    param <- uniqueParameters[n]
+    sortedIndividualsDfForPKParameter$parameterRank[ sortedIndividualsDfForPKParameter$Parameter == param ] =  rankFilter - n + 1
+  }
+
+  sortedIndividualsDfForPKParameter$parameterRank <- as.factor(sortedIndividualsDfForPKParameter$parameterRank)
+
+  #Filter out all except the 'rankFilter' most sensitive parameters from dataframe
+  sortedFilteredIndividualsDfForPKParameter <- sortedIndividualsDfForPKParameter[ sortedIndividualsDfForPKParameter$parameterRank %in%  1:rankFilter,]
+
+  sortedFilteredIndividualsDfForPKParameter <- droplevels(sortedFilteredIndividualsDfForPKParameter)
+
+  #print(sortedFilteredIndividualsDfForPKParameter$Parameter)
+  #print(sortedFilteredIndividualsDfForPKParameter$Value)
+  # sortedFilteredIndividualsDfForPKParameter$Parameter <- reorder(sortedFilteredIndividualsDfForPKParameter$Parameter$Parameter,
+  #                                                                sortedFilteredIndividualsDfForPKParameter$Parameter$Value)
+  #rankColumn <- as.numeric(sortedFilteredIndividualsDfForPKParameter$Parameter)
+  #sortedFilteredIndividualsDfForPKParameter <- cbind(sortedFilteredIndividualsDfForPKParameter,rankColumn)
   return(sortedFilteredIndividualsDfForPKParameter)
 }
 
@@ -111,10 +131,12 @@ getPkParameterPopulationSensitivityPlot <- function(data,
                                                     colorColumnName = "Quantile",
                                                     shapeColumnName = NULL){
   data[[colorColumnName]] <- as.factor(data[[colorColumnName]])
-  plt <- ggplot2::ggplot() + ggplot2::geom_point(data = data, aes_string(x = sensitivityColumnName,
-                                                                       y = parameterColumnName,
-                                                                       color = colorColumnName,
-                                                                       shape = NULL))
+  plt <- ggplot2::ggplot() + ggplot2::geom_point(data = data,
+                                                 mapping = aes_string(x = sensitivityColumnName, y = parameterColumnName, color = colorColumnName, shape = NULL),
+                                                 size = 3
+                                                 ) +
+    ggplot2::ylab("Parameter") + ggplot2::xlab("Sensitivity")
+
   plt <- plt + geom_vline(xintercept = 0)
   return(plt)
 }
@@ -123,14 +145,14 @@ getPkParameterPopulationSensitivityPlot <- function(data,
 
 
 sortedFilteredIndividualsDfForPKParameter <- getPopSensDfForPkAndOutput(workflow = pwf,
-                                 pkParameter = c("C_max"),
-                                 output = pwf$simulationStructures[[1]]$simulationSet$pathID[1],
-                                 quantiles = c(0.25,0.5),
-                                 rankFilter = 5)
+                                                                        pkParameter = c("C_max"),
+                                                                        output = pwf$simulationStructures[[1]]$simulationSet$pathID[1],
+                                                                        quantiles = c(0.25,0.5),
+                                                                        rankFilter = 10)
 
 
 plt <- getPkParameterPopulationSensitivityPlot(data = sortedFilteredIndividualsDfForPKParameter,
-                                               parameterColumnName = "Parameter",
+                                               parameterColumnName = "parameterRank",
                                                sensitivityColumnName = "Value",
                                                colorColumnName = "Quantile",
                                                shapeColumnName = NULL)
