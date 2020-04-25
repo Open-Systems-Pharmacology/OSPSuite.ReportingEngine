@@ -312,7 +312,7 @@ getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
 #' @export
 runPopulationSensitivityAnalysis <- function(structureSet, settings, logFolder = getwd()) {
   resultsFileName <- trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(structureSet$simulationSet$simulationSetName), extension = "csv")
-  popSAResultsIndexFile <- structureSet$popSensitivityAnalysisResultsIndexFile
+  popSAResultsIndexFile <- structureSet$popSensitivityAnalysisResultsIndexFileName
 
   sensitivityAnalysesResultsIndexFileDF <- getSAFileIndex(
     pkParameterResultsFilePath = structureSet$pkAnalysisResultsFileNames,
@@ -462,6 +462,61 @@ plotMeanSensitivity <- function(structureSet,
 
   return(list(plots = sensitivityPlots))
 }
+
+
+
+#' #' @title plotPopulationSensitivity
+#' #' @description Plot sensitivity analysis results for population models
+#' #' @param structureSet `SimulationStructure` R6 class object
+#' #' @param settings list of settings for the output table/plot
+#' #' @param logFolder folder where the logs are saved
+#' #' @return list of plots and tables
+#' #' @export
+#' #' @import ospsuite
+#' plotPopulationSensitivity <- function(structureSet,
+#'                                       settings = NULL,
+#'                                       logFolder = getwd()) {
+#'   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
+#'   saResultsIndexDf <- read.csv(file = structureSet$popSensitivityAnalysisResultsIndexFile)
+#'   ospsuite::importSensitivityAnalysisResultsFromCSV(
+#'     simulation = simulation,
+#'     structureSet$sensitivityAnalysisResultsFileNames
+#'   )
+#'
+#'   # TO DO: workout integration of selection of output paths and PK parameters in settings
+#'   allOutputPaths <- structureSet$simulationSet$pathID %||% sapply(simulation$outputSelections$allOutputs, function(output) {
+#'     output$path
+#'   })
+#'   pkParameters <- saResults$allPKParameterNames
+#'
+#'   sensitivityPlots <- list()
+#'   for (outputPathIndex in seq_along(allOutputPaths)) {
+#'     for (pkParameter in pkParameters) {
+#'       pkSensitivities <- saResults$allPKParameterSensitivitiesFor(
+#'         pkParameterName = pkParameter,
+#'         outputPath = allOutputPaths[outputPathIndex]
+#'       )
+#'
+#'       # Translate into a data.frame for plot
+#'       sensitivityData <- data.frame(
+#'         parameter = sapply(pkSensitivities, function(pkSensitivity) {
+#'           pkSensitivity$parameterPath
+#'         }),
+#'         value = sapply(pkSensitivities, function(pkSensitivity) {
+#'           pkSensitivity$value
+#'         })
+#'       )
+#'
+#'       # Create the tornado plot with output path - PK parameter as its name
+#'       sensitivityPlots[[paste0(pkParameter, "-", outputPathIndex)]] <- plotTornado(
+#'         data = sensitivityData,
+#'         plotConfiguration = NULL
+#'       )
+#'     }
+#'   }
+#'
+#'   return(list(plots = sensitivityPlots))
+#' }
 
 
 #' @title plotTornado

@@ -7,6 +7,7 @@
 #' @field simulationResultFileNames vector of names of CSV files storing simulation results
 #' @field pkAnalysisResultsFileNames vector of names of CSV files storing results of pk analyses
 #' @field sensitivityAnalysisResultsFileNames vector of names of CSV files storing results of sensitivity analyses
+#' @field popSensitivityAnalysisResultsIndexFile path to file containing index of population sensitivity analysis results
 #' @import ospsuite
 SimulationStructure <- R6::R6Class(
   "SimulationStructure",
@@ -18,7 +19,7 @@ SimulationStructure <- R6::R6Class(
     simulationResultFileNames = NULL,
     pkAnalysisResultsFileNames = NULL,
     sensitivityAnalysisResultsFileNames = NULL,
-    popSensitivityAnalysisResultsIndexFile = NULL,
+    popSensitivityAnalysisResultsIndexFileName = NULL,
 
     #' @description
     #' Create a new `SimulationStructure` object.
@@ -50,11 +51,7 @@ SimulationStructure <- R6::R6Class(
         defaultFileNames$sensitivityAnalysisResultsFile(self$simulationSet$simulationSetName)
       )
 
-      self$popSensitivityAnalysisResultsIndexFile <- file.path(
-        workflowFolder,
-        self$sensitivityAnalysisResultsFolder,
-        defaultFileNames$popSensitivityResultsIndexFile(self$simulationSet$simulationSetName)
-      )
+      self$popSensitivityAnalysisResultsIndexFileName <- defaultFileNames$popSensitivityResultsIndexFile(self$simulationSet$simulationSetName)
 
     }
   )
