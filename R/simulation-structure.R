@@ -1,5 +1,6 @@
 #' @title SimulationStructure
 #' @description R6 class representing that stores file structure (file names and paths) relating to a particular instance of a simulationSet object
+#' @field workflowFolder root folder storing workflow results
 #' @field simulationSet the set for which the SimulationStructure object stores paths input and results
 #' @field simulationResultsFolder path to folder storing results of simulations
 #' @field pkAnalysisResultsFolder path to folder storing results of pk analyses
@@ -12,6 +13,7 @@
 SimulationStructure <- R6::R6Class(
   "SimulationStructure",
   public = list(
+    workflowFolder = NULL,
     simulationSet = NULL,
     simulationResultsFolder = defaultTaskOutputFolders$simulate,
     pkAnalysisResultsFolder = defaultTaskOutputFolders$calculatePKParameters,
@@ -28,6 +30,7 @@ SimulationStructure <- R6::R6Class(
     #' @param workflowFolder output folder of the worklow
     initialize = function(simulationSet,
                           workflowFolder = getwd()) {
+      self$workflowFolder <- workflowFolder
       self$simulationSet <- simulationSet
       self$simulationResultFileNames <- file.path(
         workflowFolder,
