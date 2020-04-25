@@ -51,7 +51,7 @@ pwf$simulationStructures[[1]]$popSensitivityAnalysisResultsIndexFile
 
 
 
-plotPopSensForPkAndOutput <- function(workflow,pkParameter,output,quantiles,rankFilter=NULL){
+getPopSensDfForPkAndOutput <- function(workflow,pkParameter,output,quantiles,rankFilter=NULL){
   indexDf <- read.csv(file = workflow$simulationStructures[[1]]$popSensitivityAnalysisResultsIndexFile)
   validateIsIncluded(pkParameter,unique(indexDf$pkParameters))
   validateIsIncluded(output,unique(indexDf$Outputs))
@@ -66,17 +66,7 @@ plotPopSensForPkAndOutput <- function(workflow,pkParameter,output,quantiles,rank
                                                                        pkParameter = pkParameter,
                                                                        output = output)
   sortedFilteredIndividualsDfForPKParameter <- sortAndFilterIndividualsDF(individualsDfForPKParameter,rankFilter)
-  print(sortedFilteredIndividualsDfForPKParameter)
-  #   plt <- getPkParameterPopulationSensitivityPlot(data = pkDf,
-  #                                                  pkParameter = pkParameter,
-  #                                                  output = output,
-  #                                                  parameterColumnName = "Parameter",
-  #                                                  outputColumnName = "QuantityPath",
-  #                                                  sensitivityColumnName = "Value",
-  #                                                  colorColumnName = "Quantile",
-  #                                                  shapeColumnName = NULL)
-  #
-  #   return(plt)
+  return(sortedFilteredIndividualsDfForPKParameter)
 }
 
 
@@ -92,10 +82,6 @@ getSensitivityDataFrameForIndividuals <- function(indexDf,structureSet,pkParamet
     individualId <- indexDf$IndividualId[n]
     quantile <- indexDf$Quantile[n]
     resultsFile <- file.path(structureSet$workflowFolder,structureSet$sensitivityAnalysisResultsFolder,indexDf$Filename[n])
-    # sensitivityResultsForIndividual <- ospsuite::importSensitivityAnalysisResultsFromCSV(simulation = loadSimulationWithUpdatedPaths(structureSet$simulationSet),
-    #                                                                                      filePaths = resultsFile)
-    #individualsDf <- sensitivityResultsForIndividual$allPKParameterSensitivitiesFor(pkParameterName = pkParameter, outputPath = output )
-    #print(individualsDf)
     individualsDf <- read.csv(resultsFile,check.names = FALSE,encoding = "UTF-8")
     colnames(individualsDf) <- c("QuantityPath", "Parameter", "PKParameter", "Value")
     individualsDf <- individualsDf[(individualsDf$PKParameter == pkParameter) & (individualsDf$QuantityPath == output),]
@@ -117,19 +103,38 @@ sortAndFilterIndividualsDF <- function(individualsDfForPKParameter,rankFilter){
 }
 
 
-getPkParameterPopulationSensitivityPlot <- function(pkDf){
 
-  p <- ggplot2::ggplot() + ggplot2::geom_point(data = pkDf, aes(x = sens,
-                                                               y = param,
-                                                               color = quant,
-                                                               shape = pop))
-  p <- p + geom_vline(xintercept = 0)
+
+getPkParameterPopulationSensitivityPlot <- function(data,
+                                                    parameterColumnName = "Parameter",
+                                                    sensitivityColumnName = "Value",
+                                                    colorColumnName = "Quantile",
+                                                    shapeColumnName = NULL){
+  data[[colorColumnName]] <- as.factor(data[[colorColumnName]])
+  plt <- ggplot2::ggplot() + ggplot2::geom_point(data = data, aes_string(x = sensitivityColumnName,
+                                                                       y = parameterColumnName,
+                                                                       color = colorColumnName,
+                                                                       shape = NULL))
+  plt <- plt + geom_vline(xintercept = 0)
   return(plt)
 }
 
-idf <- plotPopSensForPkAndOutput(workflow = pwf,
-            pkParameter = c("C_max"),
-            output = pwf$simulationStructures[[1]]$simulationSet$pathID[1],
-            quantiles = c(0.25,0.5),
-            rankFilter = 10)
-#print(idf)
+
+
+
+sortedFilteredIndividualsDfForPKParameter <- getPopSensDfForPkAndOutput(workflow = pwf,
+                                 pkParameter = c("C_max"),
+                                 output = pwf$simulationStructures[[1]]$simulationSet$pathID[1],
+                                 quantiles = c(0.25,0.5),
+                                 rankFilter = 5)
+
+
+plt <- getPkParameterPopulationSensitivityPlot(data = sortedFilteredIndividualsDfForPKParameter,
+                                               parameterColumnName = "Parameter",
+                                               sensitivityColumnName = "Value",
+                                               colorColumnName = "Quantile",
+                                               shapeColumnName = NULL)
+
+
+
+show(plt)
