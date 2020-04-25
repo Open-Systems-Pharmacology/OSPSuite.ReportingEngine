@@ -70,6 +70,15 @@ validateIsInteger <- function(object, nullAllowed = FALSE) {
   }
 }
 
+
+validateIsPositive <- function(object, nullAllowed = FALSE) {
+  validateIsOfType(object, c("numeric", "integer"), nullAllowed)
+
+  if (isFALSE(object > 0)) {
+    logErrorThenStop(messages$errorWrongType(deparse(substitute(object)), class(object)[1], "positive"))
+  }
+}
+
 validateEnumValue <- function(enum, value) {
   if (value %in% names(enum)) {
     return()
