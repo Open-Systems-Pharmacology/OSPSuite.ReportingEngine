@@ -97,28 +97,35 @@ sortAndFilterIndividualsDF <- function(individualsDfForPKParameter,rankFilter){
     return(sortedIndividualsDfForPKParameter)
   }
   rankFilter <- min(rankFilter,length(unique(sortedIndividualsDfForPKParameter$Parameter)))
-  uniqueParameters <- unique(sortedIndividualsDfForPKParameter$Parameter)
-  sortedIndividualsDfForPKParameter <- cbind(sortedIndividualsDfForPKParameter , parameterRank = rep(0,nrow(sortedIndividualsDfForPKParameter)) )
 
-  #Add parameter rank to dataframe
-  for (n in 1:length(uniqueParameters)){
-    param <- uniqueParameters[n]
-    sortedIndividualsDfForPKParameter$parameterRank[ sortedIndividualsDfForPKParameter$Parameter == param ] =  rankFilter - n + 1
-  }
+  sortedIndividualsDfForPKParameter$Parameter <- factor(x = sortedIndividualsDfForPKParameter$Parameter,levels = unique(sortedIndividualsDfForPKParameter$Parameter))
 
-  sortedIndividualsDfForPKParameter$parameterRank <- as.factor(sortedIndividualsDfForPKParameter$parameterRank)
+  sortedFilteredIndividualsDfForPKParameter <- sortedIndividualsDfForPKParameter[ as.numeric(sortedIndividualsDfForPKParameter$Parameter) %in%  1:rankFilter  ,]
+
+  sortedFilteredIndividualsDfForPKParameter$Parameter <- factor(x = sortedFilteredIndividualsDfForPKParameter$Parameter,levels = rev(unique(sortedFilteredIndividualsDfForPKParameter$Parameter)) )
+  #uniqueParameters <- unique(sortedIndividualsDfForPKParameter$Parameter)
+
+  #sortedIndividualsDfForPKParameter <- cbind(sortedIndividualsDfForPKParameter , parameterRank = rep(0,nrow(sortedIndividualsDfForPKParameter)) )
+
+  #sortedIndividualsDfForPKParameter$Parameter <- ordered(uniqueParameters)
+
+
+
+  #sortedIndividualsDfForPKParameter <-
+  # sortedParameterNames <- rep(NA,length(uniqueParameters))
+  # #Add parameter rank to dataframe
+  # for (n in 1:length(uniqueParameters)){
+  #   param <- uniqueParameters[n]
+  #   #sortedParameterNames[n] <- param
+  #   sortedIndividualsDfForPKParameter$parameterRank[ sortedIndividualsDfForPKParameter$Parameter == param ] =  length(uniqueParameters) - n + 1
+  # }
+
+  #sortedIndividualsDfForPKParameter$parameterRank <- as.factor(sortedIndividualsDfForPKParameter$parameterRank)
 
   #Filter out all except the 'rankFilter' most sensitive parameters from dataframe
-  sortedFilteredIndividualsDfForPKParameter <- sortedIndividualsDfForPKParameter[ sortedIndividualsDfForPKParameter$parameterRank %in%  1:rankFilter,]
+  #sortedFilteredIndividualsDfForPKParameter <- sortedIndividualsDfForPKParameter[ sortedIndividualsDfForPKParameter$parameterRank %in%  1:rankFilter  ,]
 
-  sortedFilteredIndividualsDfForPKParameter <- droplevels(sortedFilteredIndividualsDfForPKParameter)
-
-  #print(sortedFilteredIndividualsDfForPKParameter$Parameter)
-  #print(sortedFilteredIndividualsDfForPKParameter$Value)
-  # sortedFilteredIndividualsDfForPKParameter$Parameter <- reorder(sortedFilteredIndividualsDfForPKParameter$Parameter$Parameter,
-  #                                                                sortedFilteredIndividualsDfForPKParameter$Parameter$Value)
-  #rankColumn <- as.numeric(sortedFilteredIndividualsDfForPKParameter$Parameter)
-  #sortedFilteredIndividualsDfForPKParameter <- cbind(sortedFilteredIndividualsDfForPKParameter,rankColumn)
+  #sortedFilteredIndividualsDfForPKParameter <- droplevels(sortedFilteredIndividualsDfForPKParameter)
   return(sortedFilteredIndividualsDfForPKParameter)
 }
 
@@ -152,7 +159,7 @@ sortedFilteredIndividualsDfForPKParameter <- getPopSensDfForPkAndOutput(workflow
 
 
 plt <- getPkParameterPopulationSensitivityPlot(data = sortedFilteredIndividualsDfForPKParameter,
-                                               parameterColumnName = "parameterRank",
+                                               parameterColumnName = "Parameter",
                                                sensitivityColumnName = "Value",
                                                colorColumnName = "Quantile",
                                                shapeColumnName = NULL)
