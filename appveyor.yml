@@ -10,14 +10,13 @@ init:
 install:
   - ps: Bootstrap
   - git submodule update --init --recursive
-  - Rscript -e "install.packages('devtools', repos = 'http://cran.us.r-project.org', lib = 'C:/RLibrary', type='binary')"
 
 environment:
   app_version: "1.0"
   USE_RTOOLS: true
   NOT_CRAN: true
   R_ARCH: x64
-  R_VERSION: "patched"
+  R_VERSION: "3.6.3"
   COVERALLS_TOKEN:
     secure: Qo8To6hV3C2ghrS0Z+pPyvaBaEpE24Pwr7LF8AbiMO9HL+pkwX1U3kYGUNzJF5EU
 
@@ -30,9 +29,10 @@ cache:
   - C:\RLibrary
 
 build_script:
+  - Rscript -e "install.packages('devtools', repos = 'http://cran.us.r-project.org', lib = 'C:/RLibrary', type='binary')"
   - Rscript -e "install.packages('./tools/rClr_0.8.3.zip', repos = NULL, type = 'binary', lib = 'C:/RLibrary')"
   - Rscript -e "install.packages('./tools/tlf_1.0.62.zip', repos = NULL, type = 'binary', lib = 'C:/RLibrary')"
-  - Rscript -e "devtools::install_github('Open-Systems-Pharmacology/OSPSuite-R', ref ='develop', lib = 'C:/RLibrary')"
+  - Rscript -e "install.packages('./tools/ospsuite_9.0.67.zip', repos = NULL, type = 'binary', lib = 'C:/RLibrary')"
   - travis-tool.sh install_deps
   - travis-tool.sh r_binary_install curl
   - Rscript -e "install.packages('covr', repos = 'http://cran.us.r-project.org', lib = 'C:/RLibrary')"
