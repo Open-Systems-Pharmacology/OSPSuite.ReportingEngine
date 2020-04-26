@@ -643,14 +643,16 @@ getPkParameterPopulationSensitivityPlot <- function(data, title, plotConfigurati
   data[["Quantile"]] <- as.factor(data[["Quantile"]])
   plt <- tlf::initializePlot(plotConfiguration) + ggplot2::geom_point(
     data = data,
-    mapping = ggplot2::aes_string(x = "Value", y = "Parameter", color = "Quantile", shape = NULL),
-    size = 3
+    mapping = ggplot2::aes_string(x = "Parameter", y ="Value", color = "Quantile", shape = NULL),
+    size = 3,
+    position = ggplot2::position_dodge(width=0.5)
   ) +
-    ggplot2::ylab("Parameter") + ggplot2::xlab("Sensitivity") + ggplot2::labs(
+    ggplot2::ylab("Sensitivity") + ggplot2::xlab("Parameter") + ggplot2::labs(
       color = "Individual quantile",
       title = title
     )
 
-  plt <- plt + ggplot2::geom_vline(xintercept = 0)
+  plt <- plt + ggplot2::geom_hline(yintercept = 0,size = 1)
+  plt <- plt + ggplot2::coord_flip()
   return(plt)
 }
