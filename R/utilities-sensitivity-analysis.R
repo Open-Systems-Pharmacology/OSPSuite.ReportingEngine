@@ -633,6 +633,7 @@ sortAndFilterIndividualsDF <- function(individualsDfForPKParameter, rankFilter) 
 #' @param data dataframe of sensitivity analysis results
 #' @param title plot title
 #' @return plt sensitivity plot based on results in input data
+#' @import ggplot2
 getPkParameterPopulationSensitivityPlot <- function(data, title) {
   data[["Quantile"]] <- as.factor(data[["Quantile"]])
   plt <- ggplot2::ggplot() + ggplot2::geom_point(
