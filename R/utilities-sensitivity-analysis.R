@@ -511,28 +511,30 @@ plotTornado <- function(data,
 #' @title plotPopulationSensitivity
 #' @description Retrieve dataframe of ranked and filtered population sensitivity results for a given PK parameter and model output pathID
 #' @param structureSet `SimulationStructure` R6 class object
-#' @param output pathID of output for which to obtain the population sensitivity results
-#' @param pkParameter name of PK parameter for which to obtain the population sensitivity results
-#' @param quantiles of population distribution of pkParameter, used to select individuals for sensitivity analysis
-#' @param rankFilter results for only the 'rankFilter' most sensitive parameters will be returned
-#' @return a list of plots for each possible combination of pathID output-pkParameter-quantile that is found in sensitivity results index file
+#' @param settings list of settings for the population sensitivity plot
+#' @param logFolder folder where the logs are saved
+#' @return a structured list of plots for each possible combination of pathID output-pkParameter that is found in sensitivity results index file
 #' @export
-plotPopulationSensitivity <- function(structureSet,rankFilter){
+plotPopulationSensitivity <- function(structureSet,
+                                      logFolder = getwd(),
+                                      settings = NULL){
   indexDf <- read.csv(file = structureSet$popSensitivityAnalysisResultsIndexFile)
 
+  #results for only the 'rankFilter' most sensitive parameters will be returned
+  #rankFilter FIXED FOR NOW TO BE LIKE PKSIM/MOBI
+  rankFilter = 12
   output=structureSet$simulationSet$pathID
   pkParameters=unique(indexDf$pkParameters)
   quantiles=unique(indexDf$Quantile)
 
   plotList <- list()
+  plotList[["plots"]] <- list()
   for (op in output){
-    plotList[[op]] <- list()
     for (pk in pkParameters){
-      dF <- getPopSensDfForPkAndOutput(indexDf,op,pk,quantiles,rankFilter=10)
+      dF <- getPopSensDfForPkAndOutput(indexDf,op,pk,quantiles,rankFilter)
       plotObject <- getPkParameterPopulationSensitivityPlot(dF,paste("Population sensitivity of",pk,"of",op))
-      plotList[[op]][[pk]]$plt <- plotObject
+      plotList[["plots"]][[paste(pk,op,sep ="-")]] <- plotObject
     }
-
   }
 
   return(plotList)
