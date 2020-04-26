@@ -299,7 +299,7 @@ Define sensitivity analysis `PlotTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotSensitivitySettings(
   reportTitle = defaultWorkflowTitles$plotSensitivity,
-  taskFunction = NULL,
+  taskFunction = plotPopulationSensitivity,
   outputFolder = defaultTaskOutputFolders$plotSensitivity,
   active = FALSE,
   message = defaultWorkflowMessages$plotSensitivity,
