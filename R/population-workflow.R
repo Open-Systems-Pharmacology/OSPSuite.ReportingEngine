@@ -209,7 +209,7 @@ PopulationWorkflow <- R6::R6Class(
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for goodness of fit plots
     plotSensitivitySettings = function(reportTitle = defaultWorkflowTitles$plotSensitivity,
-                                       taskFunction = NULL,
+                                       taskFunction = plotPopulationSensitivity,
                                        outputFolder = defaultTaskOutputFolders$plotSensitivity,
                                        active = FALSE,
                                        message = defaultWorkflowMessages$plotSensitivity,
