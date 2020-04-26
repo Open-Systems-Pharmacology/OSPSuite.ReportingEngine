@@ -25,9 +25,6 @@ version: "$(app_version).{build}"
 before_build:
   - rake "prepare_for_build[%APPVEYOR_BUILD_VERSION%]"
 
-cache:
-  - C:\RLibrary
-
 build_script:
   - Rscript -e "install.packages('devtools', repos = 'http://cran.us.r-project.org', lib = 'C:/RLibrary', type='binary')"
   - Rscript -e "install.packages('./tools/rClr_0.8.3.zip', repos = NULL, type = 'binary', lib = 'C:/RLibrary')"
