@@ -24,4 +24,7 @@ pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.05, 0.25, 0.5, 0.7
 
 pwf$simulationStructures[[1]]$popSensitivityAnalysisResultsIndexFile
 
-pL <- plotPopulationSensitivity(structureSet = pwf$simulationStructures[[1]])
+plotConfig <- tlf::PlotConfiguration$new()
+
+pL <- plotPopulationSensitivity(structureSet = pwf$simulationStructures[[1]],
+                                settings = plotConfig)
