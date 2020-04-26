@@ -33,7 +33,7 @@ defaultFileNames <- list(
   sensitivityAnalysisResultsFolder = function(name = NULL) {
     getDefaultFolderName(name, suffix = "SensitivityAnalysisResults", sep = ifnotnull(name, "-", ""))
   },
-  popSensitivityResultsIndexFile = function(name = NULL){
+  popSensitivityResultsIndexFile = function(name = NULL) {
     getDefaultFileName(name, suffix = "popSensitivityResultsIndex")
   },
   reportName = function(name = "Report") {

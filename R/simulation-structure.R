@@ -59,7 +59,6 @@ SimulationStructure <- R6::R6Class(
         self$sensitivityAnalysisResultsFolder,
         defaultFileNames$popSensitivityResultsIndexFile(self$simulationSet$simulationSetName)
       )
-
     }
   )
 )

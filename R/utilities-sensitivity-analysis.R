@@ -517,23 +517,23 @@ plotTornado <- function(data,
 #' @export
 plotPopulationSensitivity <- function(structureSet,
                                       logFolder = getwd(),
-                                      settings = NULL){
+                                      settings = NULL) {
   indexDf <- read.csv(file = structureSet$popSensitivityAnalysisResultsIndexFile)
 
-  #results for only the 'rankFilter' most sensitive parameters will be returned
-  #rankFilter FIXED FOR NOW TO BE LIKE PKSIM/MOBI
-  rankFilter = 12
-  output=structureSet$simulationSet$pathID
-  pkParameters=unique(indexDf$pkParameters)
-  quantiles=unique(indexDf$Quantile)
+  # results for only the 'rankFilter' most sensitive parameters will be returned
+  # rankFilter FIXED FOR NOW TO BE LIKE PKSIM/MOBI
+  rankFilter <- 12
+  output <- structureSet$simulationSet$pathID
+  pkParameters <- unique(indexDf$pkParameters)
+  quantiles <- unique(indexDf$Quantile)
 
   plotList <- list()
   plotList[["plots"]] <- list()
-  for (op in output){
-    for (pk in pkParameters){
-      dF <- getPopSensDfForPkAndOutput(indexDf,op,pk,quantiles,rankFilter)
-      plotObject <- getPkParameterPopulationSensitivityPlot(dF,paste("Population sensitivity of",pk,"of",op))
-      plotList[["plots"]][[paste(pk,op,sep ="-")]] <- plotObject
+  for (op in output) {
+    for (pk in pkParameters) {
+      dF <- getPopSensDfForPkAndOutput(indexDf, op, pk, quantiles, rankFilter)
+      plotObject <- getPkParameterPopulationSensitivityPlot(dF, paste("Population sensitivity of", pk, "of", op))
+      plotList[["plots"]][[paste(pk, op, sep = "-")]] <- plotObject
     }
   }
 
@@ -550,20 +550,22 @@ plotPopulationSensitivity <- function(structureSet,
 #' @param rankFilter results for only the 'rankFilter' most sensitive parameters will be returned
 #' @return sortedFilteredIndividualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
 #' @export
-getPopSensDfForPkAndOutput <- function(indexDf,output,pkParameter,quantiles,rankFilter=NULL){
-  #indexDf <- read.csv(file = structureSet$popSensitivityAnalysisResultsIndexFile)
-  validateIsIncluded(pkParameter,unique(indexDf$pkParameters))
-  validateIsIncluded(output,unique(indexDf$Outputs))
-  validateIsInteger(rankFilter,nullAllowed = TRUE)
-  validateIsPositive(rankFilter,nullAllowed = TRUE)
-  pkOutputIndexDf <- getPkOutputIndexDf(indexDf,pkParameter,output)
-  validateIsIncluded(quantiles,unique(pkOutputIndexDf$Quantile))
-  quantilePkOutputIndexDf <- pkOutputIndexDf[pkOutputIndexDf$Quantile %in% quantiles,]
-  individualsDfForPKParameter <- getSensitivityDataFrameForIndividuals(indexDf = quantilePkOutputIndexDf,
-                                                                       structureSet = pwf$simulationStructures[[1]],
-                                                                       pkParameter = pkParameter,
-                                                                       output = output)
-  sortedFilteredIndividualsDfForPKParameter <- sortAndFilterIndividualsDF(individualsDfForPKParameter,rankFilter)
+getPopSensDfForPkAndOutput <- function(indexDf, output, pkParameter, quantiles, rankFilter = NULL) {
+  # indexDf <- read.csv(file = structureSet$popSensitivityAnalysisResultsIndexFile)
+  validateIsIncluded(pkParameter, unique(indexDf$pkParameters))
+  validateIsIncluded(output, unique(indexDf$Outputs))
+  validateIsInteger(rankFilter, nullAllowed = TRUE)
+  validateIsPositive(rankFilter, nullAllowed = TRUE)
+  pkOutputIndexDf <- getPkOutputIndexDf(indexDf, pkParameter, output)
+  validateIsIncluded(quantiles, unique(pkOutputIndexDf$Quantile))
+  quantilePkOutputIndexDf <- pkOutputIndexDf[pkOutputIndexDf$Quantile %in% quantiles, ]
+  individualsDfForPKParameter <- getSensitivityDataFrameForIndividuals(
+    indexDf = quantilePkOutputIndexDf,
+    structureSet = pwf$simulationStructures[[1]],
+    pkParameter = pkParameter,
+    output = output
+  )
+  sortedFilteredIndividualsDfForPKParameter <- sortAndFilterIndividualsDF(individualsDfForPKParameter, rankFilter)
   return(sortedFilteredIndividualsDfForPKParameter)
 }
 
@@ -573,8 +575,8 @@ getPopSensDfForPkAndOutput <- function(indexDf,output,pkParameter,quantiles,rank
 #' @param output pathID of output for which to obtain the population sensitivity results
 #' @param pkParameter name of PK parameter for which to obtain the population sensitivity results
 #' @return pkOutputIndexDf dataframe containing index of files containing population sensitivity analysis results conducted for given output and pkParameter
-getPkOutputIndexDf <- function(indexDf,pkParameter,output){
-  pkOutputIndexDf <- indexDf[(indexDf$pkParameters == pkParameter) & (indexDf$Outputs == output),]
+getPkOutputIndexDf <- function(indexDf, pkParameter, output) {
+  pkOutputIndexDf <- indexDf[(indexDf$pkParameters == pkParameter) & (indexDf$Outputs == output), ]
   return(pkOutputIndexDf)
 }
 
@@ -586,18 +588,18 @@ getPkOutputIndexDf <- function(indexDf,pkParameter,output){
 #' @param output pathID of output for which to obtain the population sensitivity results
 #' @param pkParameter name of PK parameter for which to obtain the population sensitivity results
 #' @return individualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
-getSensitivityDataFrameForIndividuals <- function(indexDf,structureSet,pkParameter,output){
+getSensitivityDataFrameForIndividuals <- function(indexDf, structureSet, pkParameter, output) {
   dfList <- list()
-  for (n in 1:nrow(indexDf)){
+  for (n in 1:nrow(indexDf)) {
     individualId <- indexDf$IndividualId[n]
     quantile <- indexDf$Quantile[n]
-    resultsFile <- file.path(structureSet$workflowFolder,structureSet$sensitivityAnalysisResultsFolder,indexDf$Filename[n])
-    individualsDf <- read.csv(resultsFile,check.names = FALSE,encoding = "UTF-8")
+    resultsFile <- file.path(structureSet$workflowFolder, structureSet$sensitivityAnalysisResultsFolder, indexDf$Filename[n])
+    individualsDf <- read.csv(resultsFile, check.names = FALSE, encoding = "UTF-8")
     colnames(individualsDf) <- c("QuantityPath", "Parameter", "PKParameter", "Value")
-    individualsDf <- individualsDf[(individualsDf$PKParameter == pkParameter) & (individualsDf$QuantityPath == output),]
-    dfList[[n]] <- cbind(individualsDf , data.frame("Quantile" = rep(quantile,nrow(individualsDf)) , "individualId" = rep(individualId,nrow(individualsDf))))
+    individualsDf <- individualsDf[(individualsDf$PKParameter == pkParameter) & (individualsDf$QuantityPath == output), ]
+    dfList[[n]] <- cbind(individualsDf, data.frame("Quantile" = rep(quantile, nrow(individualsDf)), "individualId" = rep(individualId, nrow(individualsDf))))
   }
-  individualsDfForPKParameter <- do.call(rbind.data.frame,dfList)
+  individualsDfForPKParameter <- do.call(rbind.data.frame, dfList)
   return(individualsDfForPKParameter)
 }
 
@@ -606,22 +608,22 @@ getSensitivityDataFrameForIndividuals <- function(indexDf,structureSet,pkParamet
 #' @param individualsDfForPKParameter dataframe of results of sensitivity analysis possibly multiple individuals
 #' @param rankFilter results for only the 'rankFilter' most sensitive parameters will be returned
 #' @return sortedFilteredIndividualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
-sortAndFilterIndividualsDF <- function(individualsDfForPKParameter,rankFilter){
+sortAndFilterIndividualsDF <- function(individualsDfForPKParameter, rankFilter) {
   validateIsPositive(nrow(individualsDfForPKParameter))
-  sortedIndividualsDfForPKParameter <- individualsDfForPKParameter[order(-abs(individualsDfForPKParameter$Value) ),]
-  if (is.null(rankFilter)){
+  sortedIndividualsDfForPKParameter <- individualsDfForPKParameter[order(-abs(individualsDfForPKParameter$Value)), ]
+  if (is.null(rankFilter)) {
     return(sortedIndividualsDfForPKParameter)
   }
-  rankFilter <- min(rankFilter,length(unique(sortedIndividualsDfForPKParameter$Parameter)))
+  rankFilter <- min(rankFilter, length(unique(sortedIndividualsDfForPKParameter$Parameter)))
 
-  #rank Parameter column according to sorted order
-  sortedIndividualsDfForPKParameter$Parameter <- factor(x = sortedIndividualsDfForPKParameter$Parameter,levels = unique(sortedIndividualsDfForPKParameter$Parameter))
+  # rank Parameter column according to sorted order
+  sortedIndividualsDfForPKParameter$Parameter <- factor(x = sortedIndividualsDfForPKParameter$Parameter, levels = unique(sortedIndividualsDfForPKParameter$Parameter))
 
-  #Filter out all except top 'rankFilter' most sensitive parameters
-  sortedFilteredIndividualsDfForPKParameter <- sortedIndividualsDfForPKParameter[ as.numeric(sortedIndividualsDfForPKParameter$Parameter) %in%  1:rankFilter  ,]
+  # Filter out all except top 'rankFilter' most sensitive parameters
+  sortedFilteredIndividualsDfForPKParameter <- sortedIndividualsDfForPKParameter[ as.numeric(sortedIndividualsDfForPKParameter$Parameter) %in% 1:rankFilter, ]
 
-  #Reverse level order of Parameter column to make most sensitive parameter have highest factor level
-  sortedFilteredIndividualsDfForPKParameter$Parameter <- factor(x = sortedFilteredIndividualsDfForPKParameter$Parameter,levels = rev(unique(sortedFilteredIndividualsDfForPKParameter$Parameter)) )
+  # Reverse level order of Parameter column to make most sensitive parameter have highest factor level
+  sortedFilteredIndividualsDfForPKParameter$Parameter <- factor(x = sortedFilteredIndividualsDfForPKParameter$Parameter, levels = rev(unique(sortedFilteredIndividualsDfForPKParameter$Parameter)))
 
   return(sortedFilteredIndividualsDfForPKParameter)
 }
@@ -631,14 +633,17 @@ sortAndFilterIndividualsDF <- function(individualsDfForPKParameter,rankFilter){
 #' @param data dataframe of sensitivity analysis results
 #' @param title plot title
 #' @return plt sensitivity plot based on results in input data
-getPkParameterPopulationSensitivityPlot <- function(data,title){
+getPkParameterPopulationSensitivityPlot <- function(data, title) {
   data[["Quantile"]] <- as.factor(data[["Quantile"]])
-  plt <- ggplot2::ggplot() + ggplot2::geom_point(data = data,
-                                                 mapping = aes_string(x = "Value", y = "Parameter", color = "Quantile", shape = NULL),
-                                                 size = 3
+  plt <- ggplot2::ggplot() + ggplot2::geom_point(
+    data = data,
+    mapping = aes_string(x = "Value", y = "Parameter", color = "Quantile", shape = NULL),
+    size = 3
   ) +
-    ggplot2::ylab("Parameter") + ggplot2::xlab("Sensitivity") + ggplot2::labs(color = "Individual quantile",
-                                                                              title = title)
+    ggplot2::ylab("Parameter") + ggplot2::xlab("Sensitivity") + ggplot2::labs(
+      color = "Individual quantile",
+      title = title
+    )
 
   plt <- plt + geom_vline(xintercept = 0)
   return(plt)

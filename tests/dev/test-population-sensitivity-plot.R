@@ -3,8 +3,8 @@ library(ospsuite)
 library(ospsuite.reportingengine)
 load("./tests/dev/ex_03_pop/simTrees.Rdata")
 
-simulationFile = "./tests/dev/ex_03_pop/RaltegravirSim.pkml"
-populationFile = "./tests/dev/ex_03_pop/RalPop10.csv"
+simulationFile <- "./tests/dev/ex_03_pop/RaltegravirSim.pkml"
+populationFile <- "./tests/dev/ex_03_pop/RalPop10.csv"
 
 ps <- PopulationSimulationSet$new(
   simulationSetName = "ral",
@@ -18,7 +18,7 @@ pwf$simulatePopulation$activate()
 pwf$populationPKParameters$activate()
 pwf$populationSensitivityAnalysis$activate()
 pwf$populationSensitivityAnalysis$settings$showProgress <- TRUE
-#pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- simTree1$Organism$Heart$Volume$path
+# pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- simTree1$Organism$Heart$Volume$path
 pwf$populationSensitivityAnalysis$settings$pkParameterSelection <- c("C_max", "CL")
 pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.05, 0.25, 0.5, 0.75, 0.95)
 
