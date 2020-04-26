@@ -26,6 +26,8 @@ pwf$simulationStructures[[1]]$popSensitivityAnalysisResultsIndexFile
 
 plotConfig <- tlf::PlotConfiguration$new()
 
-pL <- plotPopulationSensitivity(structureSet = pwf$simulationStructures[[1]],
-                                settings = plotConfig)
+pL <- plotPopulationSensitivity(
+  structureSet = pwf$simulationStructures[[1]],
+  settings = plotConfig
+)
 show(pL$plots$`C_max-Organism|VenousBlood|Plasma|Raltegravir|Concentration`)
