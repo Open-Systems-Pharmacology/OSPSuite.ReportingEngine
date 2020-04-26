@@ -517,7 +517,7 @@ plotTornado <- function(data,
 #' @export
 plotPopulationSensitivity <- function(structureSet,
                                       logFolder = getwd(),
-                                      settings = NULL) {
+                                      settings) {
   indexDf <- read.csv(file = structureSet$popSensitivityAnalysisResultsIndexFile)
 
   # results for only the 'rankFilter' most sensitive parameters will be returned
@@ -532,7 +532,11 @@ plotPopulationSensitivity <- function(structureSet,
   for (op in output) {
     for (pk in pkParameters) {
       dF <- getPopSensDfForPkAndOutput(indexDf, op, pk, quantiles, rankFilter)
-      plotObject <- getPkParameterPopulationSensitivityPlot(dF, paste("Population sensitivity of", pk, "of", op))
+      plotObject <- getPkParameterPopulationSensitivityPlot(
+        data = dF,
+        title = paste("Population sensitivity of", pk, "of", op),
+        plotConfiguration = settings$plotConfiguration
+      )
       plotList[["plots"]][[paste(pk, op, sep = "-")]] <- plotObject
     }
   }
@@ -634,9 +638,10 @@ sortAndFilterIndividualsDF <- function(individualsDfForPKParameter, rankFilter) 
 #' @param title plot title
 #' @return plt sensitivity plot based on results in input data
 #' @import ggplot2
-getPkParameterPopulationSensitivityPlot <- function(data, title) {
+#' @import tlf
+getPkParameterPopulationSensitivityPlot <- function(data, title, plotConfiguration) {
   data[["Quantile"]] <- as.factor(data[["Quantile"]])
-  plt <- ggplot2::ggplot() + ggplot2::geom_point(
+  plt <- tlf::initializePlot(plotConfiguration) + ggplot2::geom_point(
     data = data,
     mapping = aes_string(x = "Value", y = "Parameter", color = "Quantile", shape = NULL),
     size = 3
