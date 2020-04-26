@@ -1,7 +1,6 @@
 rm(list = ls())
 library(ospsuite)
 library(ospsuite.reportingengine)
-devtools::load_all(".")
 load("./tests/dev/ex_03_pop/simTrees.Rdata")
 
 simulationFile = "./tests/dev/ex_03_pop/RaltegravirSim.pkml"
@@ -25,27 +24,4 @@ pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.05, 0.25, 0.5, 0.7
 
 pwf$simulationStructures[[1]]$popSensitivityAnalysisResultsIndexFile
 
-pL <- plotPopulationSensitivity(structureSet = pwf$simulationStructures[[1]],rankFilter = 10)
-# #pwf$runWorkflow()
-#
-#
-# structureSet = pwf$simulationStructures[[1]]
-# pkParameter = c("C_max")
-# output = pwf$simulationStructures[[1]]$simulationSet$pathID[1]
-# quantiles = c(0.25,0.5)
-# rankFilter = 10
-# title <- paste("Population sensitivity of",pkParameter,"of",output)
-#
-# sortedFilteredIndividualsDfForPKParameter <- getPopSensDfForPkAndOutput(structureSet = structureSet,
-#                                                                         pkParameter = pkParameter,
-#                                                                         output = output,
-#                                                                         quantiles = quantiles,
-#                                                                         rankFilter = rankFilter)
-#
-#
-# plt <- getPkParameterPopulationSensitivityPlot(data = sortedFilteredIndividualsDfForPKParameter,title = title)
-#
-
-
-
-#show(plt)
+pL <- plotPopulationSensitivity(structureSet = pwf$simulationStructures[[1]])
