@@ -4,7 +4,7 @@
 \alias{plotPopulationSensitivity}
 \title{plotPopulationSensitivity}
 \usage{
-plotPopulationSensitivity(structureSet, logFolder = getwd(), settings = NULL)
+plotPopulationSensitivity(structureSet, logFolder = getwd(), settings)
 }
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object}

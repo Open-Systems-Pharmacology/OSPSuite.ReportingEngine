@@ -4,7 +4,7 @@
 \alias{getPkParameterPopulationSensitivityPlot}
 \title{getPkParameterPopulationSensitivityPlot}
 \usage{
-getPkParameterPopulationSensitivityPlot(data, title)
+getPkParameterPopulationSensitivityPlot(data, title, plotConfiguration)
 }
 \arguments{
 \item{data}{dataframe of sensitivity analysis results}
