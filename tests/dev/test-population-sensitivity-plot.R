@@ -24,26 +24,28 @@ pwf$populationSensitivityAnalysis$settings$pkParameterSelection <- c("C_max", "C
 pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.05, 0.25, 0.5, 0.75, 0.95)
 
 pwf$simulationStructures[[1]]$popSensitivityAnalysisResultsIndexFile
-pwf$runWorkflow()
+
+pL <- plotPopulationSensitivity(structureSet = pwf$simulationStructures[[1]],rankFilter = 10)
+# #pwf$runWorkflow()
+#
+#
+# structureSet = pwf$simulationStructures[[1]]
+# pkParameter = c("C_max")
+# output = pwf$simulationStructures[[1]]$simulationSet$pathID[1]
+# quantiles = c(0.25,0.5)
+# rankFilter = 10
+# title <- paste("Population sensitivity of",pkParameter,"of",output)
+#
+# sortedFilteredIndividualsDfForPKParameter <- getPopSensDfForPkAndOutput(structureSet = structureSet,
+#                                                                         pkParameter = pkParameter,
+#                                                                         output = output,
+#                                                                         quantiles = quantiles,
+#                                                                         rankFilter = rankFilter)
+#
+#
+# plt <- getPkParameterPopulationSensitivityPlot(data = sortedFilteredIndividualsDfForPKParameter,title = title)
+#
 
 
-structureSet = pwf$simulationStructures[[1]]
-pkParameter = c("C_max")
-output = pwf$simulationStructures[[1]]$simulationSet$pathID[1]
-quantiles = c(0.25,0.5)
-rankFilter = 10
-title <- paste("Population sensitivity of",pkParameter,"of",output)
 
-sortedFilteredIndividualsDfForPKParameter <- getPopSensDfForPkAndOutput(structureSet = structureSet,
-                                                                        pkParameter = pkParameter,
-                                                                        output = output,
-                                                                        quantiles = quantiles,
-                                                                        rankFilter = rankFilter)
-
-
-plt <- getPkParameterPopulationSensitivityPlot(data = sortedFilteredIndividualsDfForPKParameter,title = title)
-
-
-
-
-show(plt)
+#show(plt)
