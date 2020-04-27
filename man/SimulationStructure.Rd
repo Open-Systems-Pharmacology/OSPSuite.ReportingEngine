@@ -9,6 +9,8 @@ R6 class representing that stores file structure (file names and paths) relating
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
+\item{\code{workflowFolder}}{root folder storing workflow results}
+
 \item{\code{simulationSet}}{the set for which the SimulationStructure object stores paths input and results}
 
 \item{\code{simulationResultsFolder}}{path to folder storing results of simulations}
@@ -22,6 +24,8 @@ R6 class representing that stores file structure (file names and paths) relating
 \item{\code{pkAnalysisResultsFileNames}}{vector of names of CSV files storing results of pk analyses}
 
 \item{\code{sensitivityAnalysisResultsFileNames}}{vector of names of CSV files storing results of sensitivity analyses}
+
+\item{\code{popSensitivityAnalysisResultsIndexFile}}{path to file containing index of population sensitivity analysis results}
 }
 \if{html}{\out{</div>}}
 }

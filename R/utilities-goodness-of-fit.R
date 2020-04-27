@@ -128,7 +128,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
     ),
     "Concentration" = list(
       dimension = simulationQuantity[[1]]$dimension,
-      unit = structureSet$simulationSet$pathUnit[1]  %||% simulationQuantity[[1]]$displayUnit
+      unit = structureSet$simulationSet$pathUnit[1] %||% simulationQuantity[[1]]$displayUnit
     )
   )
 

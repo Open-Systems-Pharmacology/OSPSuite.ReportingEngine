@@ -8,7 +8,6 @@ runParallelSensitivityAnalysis(
   structureSet,
   variableParameterPaths,
   individualParameters,
-  variationRange,
   numberOfCores,
   logFolder = getwd()
 )
@@ -20,8 +19,6 @@ runParallelSensitivityAnalysis(
 
 \item{individualParameters}{is an object storing an individual's parameters, obtained
 from a population object's getParameterValuesForIndividual() function.}
-
-\item{variationRange}{variation range for sensitivity analysis}
 
 \item{numberOfCores}{is the number of cores over which to parallelize the sensitivity analysis}
 

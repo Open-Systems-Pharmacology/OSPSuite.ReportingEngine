@@ -2,7 +2,7 @@
 #' @description Determine whether to run SA for individual or population.  If for individual,  pass simulation to individualSensitivityAnalysis.
 #' If SA is for population, loop thru population file, extract parameters for each individual, and pass them to individualSensitivityAnalysis.
 #' @param structureSet `SimulationStructure` R6 class object
-#' @param settings list of settings for the output table/plot
+#' @param settings list of settings for the population sensitivity analysis
 #' @param logFolder folder where the logs are saved
 #' @param individualId ID of individual in population data file for whom to perform sensitivity analysis
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
@@ -18,6 +18,7 @@ runSensitivity <- function(structureSet,
   popFilePath <- structureSet$simulationSet$populationFile
   variationRange <- settings$variationRange
   numberOfCores <- settings$numberOfCores
+  showProgress <- settings$showProgress
 
   sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
@@ -46,8 +47,10 @@ runSensitivity <- function(structureSet,
     Rmpi::mpi.remote.exec(library("ospsuite"))
     Rmpi::mpi.remote.exec(library("ospsuite.reportingengine"))
 
+    # Pass to cores the inputs that will not change from one individual to another
     Rmpi::mpi.bcast.Robj2slave(obj = structureSet)
     Rmpi::mpi.bcast.Robj2slave(obj = variationRange)
+    Rmpi::mpi.bcast.Robj2slave(obj = showProgress)
     # Load simulation on each core
     Rmpi::mpi.remote.exec(sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet))
   }
@@ -73,6 +76,7 @@ runSensitivity <- function(structureSet,
         individualParameters = popObject$getParameterValuesForIndividual(individualId = ind),
         variationRange = variationRange,
         numberOfCores = numberOfCores,
+        showProgress = showProgress,
         logFolder = logFolder
       )
     }
@@ -84,6 +88,7 @@ runSensitivity <- function(structureSet,
       individualParameters = NULL,
       variationRange = variationRange,
       numberOfCores = numberOfCores,
+      showProgress = showProgress,
       logFolder = logFolder
     )
   }
@@ -115,6 +120,7 @@ individualSensitivityAnalysis <- function(structureSet,
                                           individualParameters,
                                           variationRange,
                                           numberOfCores = 1,
+                                          showProgress = FALSE,
                                           logFolder = getwd()) {
 
 
@@ -124,7 +130,6 @@ individualSensitivityAnalysis <- function(structureSet,
       structureSet = structureSet,
       variableParameterPaths = variableParameterPaths,
       individualParameters = individualParameters,
-      variationRange = variationRange,
       numberOfCores = numberOfCores,
       logFolder = logFolder
     )
@@ -136,7 +141,8 @@ individualSensitivityAnalysis <- function(structureSet,
     individualSensitivityAnalysisResults <- analyzeCoreSensitivity(
       simulation = sim,
       variableParameterPaths = variableParameterPaths,
-      variationRange = variationRange
+      variationRange = variationRange,
+      showProgress = showProgress
     )
   }
   return(individualSensitivityAnalysisResults)
@@ -150,7 +156,6 @@ individualSensitivityAnalysis <- function(structureSet,
 #' @param variableParameterPaths paths to parameters to vary in sensitivity analysis
 #' @param individualParameters is an object storing an individual's parameters, obtained
 #' from a population object's getParameterValuesForIndividual() function.
-#' @param variationRange variation range for sensitivity analysis
 #' @param numberOfCores is the number of cores over which to parallelize the sensitivity analysis
 #' @param logFolder folder where the logs are saved
 #' @return SA results for population
@@ -158,7 +163,6 @@ individualSensitivityAnalysis <- function(structureSet,
 runParallelSensitivityAnalysis <- function(structureSet,
                                            variableParameterPaths,
                                            individualParameters,
-                                           variationRange,
                                            numberOfCores,
                                            logFolder = getwd()) {
   totalNumberParameters <- length(variableParameterPaths)
@@ -195,14 +199,15 @@ runParallelSensitivityAnalysis <- function(structureSet,
   logWorkflow(message = "Updating individual parameters on cores.", pathFolder = logFolder)
   Rmpi::mpi.remote.exec(updateSimulationIndividualParameters(simulation = sim, individualParameters))
 
-  logWorkflow(message = "Starting analyzeCoreSensitivity function.", pathFolder = logFolder)
+  logWorkflow(message = "Starting sensitivity analysis on cores.", pathFolder = logFolder)
   Rmpi::mpi.remote.exec(partialIndividualSensitivityAnalysisResults <- analyzeCoreSensitivity(
     simulation = sim,
     variableParameterPaths = listSplitParameters[[mpi.comm.rank()]],
     variationRange = variationRange,
     numberOfCores = 1, # Number of local cores, set to 1 when parallelizing.
     debugLogFileName = paste0(tempLogFileNamePrefix, mpi.comm.rank()),
-    nodeName = paste("Core", mpi.comm.rank())
+    nodeName = paste("Core", mpi.comm.rank()),
+    showProgress = showProgress
   ))
   Rmpi::mpi.remote.exec(exportSensitivityAnalysisResultsToCSV(
     results = partialIndividualSensitivityAnalysisResults,
@@ -241,11 +246,12 @@ analyzeCoreSensitivity <- function(simulation,
                                    debugLogFileName = file.path(getwd(), defaultFileNames$logDebugFile()),
                                    infoLogFileName = file.path(getwd(), defaultFileNames$logInfoFile()),
                                    errorLogFileName = file.path(getwd(), defaultFileNames$logErrorFile()),
-                                   nodeName = NULL) {
+                                   nodeName = NULL,
+                                   showProgress = FALSE) {
   sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation, variationRange = variationRange)
   sensitivityAnalysis$addParameterPaths(variableParameterPaths)
   sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(
-    showProgress = FALSE,
+    showProgress = showProgress,
     numberOfCores = numberOfCores
   )
 
@@ -300,22 +306,13 @@ getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
 }
 
 #' @title runPopulationSensitivityAnalysis
-#' @param simFilePath path to simulation file
-#' @param popDataFilePath path to population file
-#' @param pkParameterResultsFilePath path to pk parameter results CSV
-#' @param resultsFileFolder folder where results of sensitivity analysis will be saved
-#' @param popSAResultsIndexFile Names of CSV file containing index of sensitivity analysis CSV files
-#' @param variationRange variation range for sensitivity analysis
-#' @param resultsFileName root name of sensitivity analysis results CSV files
-#' @param quantileVec vector of quantiles in (0,1).  For each output and pk parameter,
-#' there will be a distribution of pk parameter values for the population.
-#' The individuals yielding pk parameters closest to these quantiles will be selected for sensitivity analysis.
-#' @param numberOfCores the number of cores to be used for parallelization of the sensitivity analysis.
-#' Default is 1 core (no parallelization).
+#' @param structureSet `SimulationStructure` R6 class object
+#' @param settings list of settings for the population sensitivity analysis
+#' @param logFolder folder where the logs are saved
 #' @export
 runPopulationSensitivityAnalysis <- function(structureSet, settings, logFolder = getwd()) {
   resultsFileName <- trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(structureSet$simulationSet$simulationSetName), extension = "csv")
-  popSAResultsIndexFile <- paste0(structureSet$simulationSet$simulationSetName, "-", defaultFileNames$popSensitivityResultsIndexFileSuffix, ".csv")
+  popSAResultsIndexFile <- trimFileName(structureSet$popSensitivityAnalysisResultsIndexFile)
 
   sensitivityAnalysesResultsIndexFileDF <- getSAFileIndex(
     pkParameterResultsFilePath = structureSet$pkAnalysisResultsFileNames,
@@ -467,6 +464,8 @@ plotMeanSensitivity <- function(structureSet,
 }
 
 
+
+
 #' @title plotTornado
 #' @description Plot sensitivity results in a tornado plot
 #' @param data data.frame
@@ -506,4 +505,154 @@ plotTornado <- function(data,
     )
 
   return(tornadoPlot)
+}
+
+
+#' @title plotPopulationSensitivity
+#' @description Retrieve dataframe of ranked and filtered population sensitivity results for a given PK parameter and model output pathID
+#' @param structureSet `SimulationStructure` R6 class object
+#' @param settings list of settings for the population sensitivity plot
+#' @param logFolder folder where the logs are saved
+#' @return a structured list of plots for each possible combination of pathID output-pkParameter that is found in sensitivity results index file
+#' @export
+plotPopulationSensitivity <- function(structureSet,
+                                      logFolder = getwd(),
+                                      settings) {
+  indexDf <- read.csv(file = structureSet$popSensitivityAnalysisResultsIndexFile)
+
+  # results for only the 'rankFilter' most sensitive parameters will be returned
+  # rankFilter FIXED FOR NOW TO BE LIKE PKSIM/MOBI
+  rankFilter <- 12
+  output <- structureSet$simulationSet$pathID
+  pkParameters <- unique(indexDf$pkParameters)
+  quantiles <- unique(indexDf$Quantile)
+
+  plotList <- list()
+  plotList[["plots"]] <- list()
+  for (op in output) {
+    for (pk in pkParameters) {
+      dF <- getPopSensDfForPkAndOutput(indexDf, op, pk, quantiles, rankFilter)
+      plotObject <- getPkParameterPopulationSensitivityPlot(
+        data = dF,
+        title = paste("Population sensitivity of", pk, "of", op),
+        plotConfiguration = settings$plotConfiguration
+      )
+      plotList[["plots"]][[paste(pk, op, sep = "-")]] <- plotObject
+    }
+  }
+
+  return(plotList)
+}
+
+
+#' @title getPopSensDfForPkAndOutput
+#' @description Retrieve dataframe of ranked and filtered population sensitivity results for a given PK parameter and model output pathID
+#' @param structureSet `SimulationStructure` R6 class object
+#' @param output pathID of output for which to obtain the population sensitivity results
+#' @param pkParameter name of PK parameter for which to obtain the population sensitivity results
+#' @param quantiles of population distribution of pkParameter, used to select individuals for sensitivity analysis
+#' @param rankFilter results for only the 'rankFilter' most sensitive parameters will be returned
+#' @return sortedFilteredIndividualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
+#' @export
+getPopSensDfForPkAndOutput <- function(indexDf, output, pkParameter, quantiles, rankFilter = NULL) {
+  # indexDf <- read.csv(file = structureSet$popSensitivityAnalysisResultsIndexFile)
+  validateIsIncluded(pkParameter, unique(indexDf$pkParameters))
+  validateIsIncluded(output, unique(indexDf$Outputs))
+  validateIsInteger(rankFilter, nullAllowed = TRUE)
+  validateIsPositive(rankFilter, nullAllowed = TRUE)
+  pkOutputIndexDf <- getPkOutputIndexDf(indexDf, pkParameter, output)
+  validateIsIncluded(quantiles, unique(pkOutputIndexDf$Quantile))
+  quantilePkOutputIndexDf <- pkOutputIndexDf[pkOutputIndexDf$Quantile %in% quantiles, ]
+  individualsDfForPKParameter <- getSensitivityDataFrameForIndividuals(
+    indexDf = quantilePkOutputIndexDf,
+    structureSet = pwf$simulationStructures[[1]],
+    pkParameter = pkParameter,
+    output = output
+  )
+  sortedFilteredIndividualsDfForPKParameter <- sortAndFilterIndividualsDF(individualsDfForPKParameter, rankFilter)
+  return(sortedFilteredIndividualsDfForPKParameter)
+}
+
+
+#' @title getPkOutputIndexDf
+#' @description Function to filter the population results index file for given pkParameter and output
+#' @param output pathID of output for which to obtain the population sensitivity results
+#' @param pkParameter name of PK parameter for which to obtain the population sensitivity results
+#' @return pkOutputIndexDf dataframe containing index of files containing population sensitivity analysis results conducted for given output and pkParameter
+getPkOutputIndexDf <- function(indexDf, pkParameter, output) {
+  pkOutputIndexDf <- indexDf[(indexDf$pkParameters == pkParameter) & (indexDf$Outputs == output), ]
+  return(pkOutputIndexDf)
+}
+
+
+#' @title getSensitivityDataFrameForIndividuals
+#' @description retrieve the dataframe of individuals' sensitivity analysis results for given output and pkParameter
+#' @param indexDf of population distribution of pkParameter, used to select individuals for sensitivity analysis
+#' @param structureSet `SimulationStructure` R6 class object
+#' @param output pathID of output for which to obtain the population sensitivity results
+#' @param pkParameter name of PK parameter for which to obtain the population sensitivity results
+#' @return individualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
+getSensitivityDataFrameForIndividuals <- function(indexDf, structureSet, pkParameter, output) {
+  dfList <- list()
+  for (n in 1:nrow(indexDf)) {
+    individualId <- indexDf$IndividualId[n]
+    quantile <- indexDf$Quantile[n]
+    resultsFile <- file.path(structureSet$workflowFolder, structureSet$sensitivityAnalysisResultsFolder, indexDf$Filename[n])
+    individualsDf <- read.csv(resultsFile, check.names = FALSE, encoding = "UTF-8")
+    colnames(individualsDf) <- c("QuantityPath", "Parameter", "PKParameter", "Value")
+    individualsDf <- individualsDf[(individualsDf$PKParameter == pkParameter) & (individualsDf$QuantityPath == output), ]
+    dfList[[n]] <- cbind(individualsDf, data.frame("Quantile" = rep(quantile, nrow(individualsDf)), "individualId" = rep(individualId, nrow(individualsDf))))
+  }
+  individualsDfForPKParameter <- do.call(rbind.data.frame, dfList)
+  return(individualsDfForPKParameter)
+}
+
+#' @title sortAndFilterIndividualsDF
+#' @description sort dataframe individualsDfForPKParameter of individuals' sensitivity analysis results and filter out all except the rankFilter most sensitive parameters
+#' @param individualsDfForPKParameter dataframe of results of sensitivity analysis possibly multiple individuals
+#' @param rankFilter results for only the 'rankFilter' most sensitive parameters will be returned
+#' @return sortedFilteredIndividualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
+sortAndFilterIndividualsDF <- function(individualsDfForPKParameter, rankFilter) {
+  validateIsPositive(nrow(individualsDfForPKParameter))
+  sortedIndividualsDfForPKParameter <- individualsDfForPKParameter[order(-abs(individualsDfForPKParameter$Value)), ]
+  if (is.null(rankFilter)) {
+    return(sortedIndividualsDfForPKParameter)
+  }
+  rankFilter <- min(rankFilter, length(unique(sortedIndividualsDfForPKParameter$Parameter)))
+
+  # rank Parameter column according to sorted order
+  sortedIndividualsDfForPKParameter$Parameter <- factor(x = sortedIndividualsDfForPKParameter$Parameter, levels = unique(sortedIndividualsDfForPKParameter$Parameter))
+
+  # Filter out all except top 'rankFilter' most sensitive parameters
+  sortedFilteredIndividualsDfForPKParameter <- sortedIndividualsDfForPKParameter[ as.numeric(sortedIndividualsDfForPKParameter$Parameter) %in% 1:rankFilter, ]
+
+  # Reverse level order of Parameter column to make most sensitive parameter have highest factor level
+  sortedFilteredIndividualsDfForPKParameter$Parameter <- factor(x = sortedFilteredIndividualsDfForPKParameter$Parameter, levels = rev(unique(sortedFilteredIndividualsDfForPKParameter$Parameter)))
+
+  return(sortedFilteredIndividualsDfForPKParameter)
+}
+
+#' @title getPkParameterPopulationSensitivityPlot
+#' @description build sensitvity plot object for a population for one output and pk parameter
+#' @param data dataframe of sensitivity analysis results
+#' @param title plot title
+#' @return plt sensitivity plot based on results in input data
+#' @import ggplot2
+#' @import tlf
+getPkParameterPopulationSensitivityPlot <- function(data, title, plotConfiguration) {
+  data[["Quantile"]] <- as.factor(data[["Quantile"]])
+  plt <- tlf::initializePlot(plotConfiguration) + ggplot2::geom_point(
+    data = data,
+    mapping = ggplot2::aes_string(x = "Parameter", y = "Value", color = "Quantile", shape = NULL),
+    size = 3,
+    position = ggplot2::position_dodge(width = 0.5)
+  ) +
+    ggplot2::ylab("Sensitivity") + ggplot2::xlab("Parameter") + ggplot2::labs(
+      color = "Individual quantile",
+      title = title
+    )
+
+  plt <- plt + ggplot2::geom_hline(yintercept = 0, size = 1)
+  plt <- plt + ggplot2::coord_flip()
+  return(plt)
 }
