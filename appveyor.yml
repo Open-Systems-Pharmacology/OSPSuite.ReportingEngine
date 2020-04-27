@@ -12,7 +12,8 @@ install:
   - git submodule update --init --recursive
 
 cache:
-
+  - C:\RLibrary\4.0
+  
 environment:
   app_version: "1.0"
   USE_RTOOLS: true
@@ -30,7 +31,7 @@ build_script:
   - Rscript -e "install.packages('devtools', repos = 'http://cran.us.r-project.org', lib = 'C:/RLibrary/4.0', type='binary')"
   - Rscript -e "install.packages('./tools/rClr_0.8.3.zip', repos = NULL, type = 'binary', lib = 'C:/RLibrary/4.0')"
   - Rscript -e "install.packages('./tools/tlf_1.0.62.zip', repos = NULL, type = 'binary', lib = 'C:/RLibrary/4.0')"
-  - Rscript -e "install.packages('./tools/ospsuite_9.0.67.zip', repos = NULL, type = 'binary', lib = 'C:/RLibrary/4.0')"
+  - Rscript -e "devtools::install_github('Open-Systems-Pharmacology/OSPSuite-R', ref ='develop', lib = 'C:/RLibrary/4.0')"
   - travis-tool.sh install_deps
   - travis-tool.sh r_binary_install curl
   - Rscript -e "install.packages('covr', repos = 'http://cran.us.r-project.org', lib = 'C:/RLibrary/4.0')"
