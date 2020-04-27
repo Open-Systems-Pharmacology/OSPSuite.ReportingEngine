@@ -12,8 +12,8 @@ install:
   - git submodule update --init --recursive
 
 cache:
-  - C:\RLibrary\4.0
   
+
 environment:
   app_version: "1.0"
   USE_RTOOLS: true
