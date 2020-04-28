@@ -537,7 +537,7 @@ plotPopulationSensitivity <- function(structureSet,
         title = paste("Population sensitivity of", pk, "of", op),
         plotConfiguration = settings$plotConfiguration
       )
-      outputName <- gsub(pattern = "|",replacement = "-",x = op,fixed = TRUE)
+      outputName <- gsub(pattern = "|", replacement = "-", x = op, fixed = TRUE)
       plotList[["plots"]][[paste(pk, outputName, sep = "-")]] <- plotObject
     }
   }
