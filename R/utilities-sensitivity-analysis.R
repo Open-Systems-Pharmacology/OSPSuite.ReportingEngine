@@ -531,13 +531,14 @@ plotPopulationSensitivity <- function(structureSet,
   plotList[["plots"]] <- list()
   for (op in output) {
     for (pk in pkParameters) {
-      dF <- getPopSensDfForPkAndOutput(indexDf, op, pk, quantiles, rankFilter)
+      dF <- getPopSensDfForPkAndOutput(structureSet, indexDf, op, pk, quantiles, rankFilter)
       plotObject <- getPkParameterPopulationSensitivityPlot(
         data = dF,
         title = paste("Population sensitivity of", pk, "of", op),
         plotConfiguration = settings$plotConfiguration
       )
-      plotList[["plots"]][[paste(pk, op, sep = "-")]] <- plotObject
+      outputName <- gsub(pattern = "|", replacement = "-", x = op, fixed = TRUE)
+      plotList[["plots"]][[paste(pk, outputName, sep = "-")]] <- plotObject
     }
   }
 
@@ -548,14 +549,13 @@ plotPopulationSensitivity <- function(structureSet,
 #' @title getPopSensDfForPkAndOutput
 #' @description Retrieve dataframe of ranked and filtered population sensitivity results for a given PK parameter and model output pathID
 #' @param structureSet `SimulationStructure` R6 class object
+#' @param indexDf dataframe with contents of population sensitivity results index file
 #' @param output pathID of output for which to obtain the population sensitivity results
 #' @param pkParameter name of PK parameter for which to obtain the population sensitivity results
 #' @param quantiles of population distribution of pkParameter, used to select individuals for sensitivity analysis
 #' @param rankFilter results for only the 'rankFilter' most sensitive parameters will be returned
 #' @return sortedFilteredIndividualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
-#' @export
-getPopSensDfForPkAndOutput <- function(indexDf, output, pkParameter, quantiles, rankFilter = NULL) {
-  # indexDf <- read.csv(file = structureSet$popSensitivityAnalysisResultsIndexFile)
+getPopSensDfForPkAndOutput <- function(structureSet, indexDf, output, pkParameter, quantiles, rankFilter = NULL) {
   validateIsIncluded(pkParameter, unique(indexDf$pkParameters))
   validateIsIncluded(output, unique(indexDf$Outputs))
   validateIsInteger(rankFilter, nullAllowed = TRUE)
@@ -565,7 +565,7 @@ getPopSensDfForPkAndOutput <- function(indexDf, output, pkParameter, quantiles, 
   quantilePkOutputIndexDf <- pkOutputIndexDf[pkOutputIndexDf$Quantile %in% quantiles, ]
   individualsDfForPKParameter <- getSensitivityDataFrameForIndividuals(
     indexDf = quantilePkOutputIndexDf,
-    structureSet = pwf$simulationStructures[[1]],
+    structureSet = structureSet,
     pkParameter = pkParameter,
     output = output
   )
@@ -649,10 +649,10 @@ getPkParameterPopulationSensitivityPlot <- function(data, title, plotConfigurati
   ) +
     ggplot2::ylab("Sensitivity") + ggplot2::xlab("Parameter") + ggplot2::labs(
       color = "Individual quantile",
-      title = title
+      title = title #paste(strwrap(title, width = 60), collapse = "\n")
     )
 
   plt <- plt + ggplot2::geom_hline(yintercept = 0, size = 1)
-  plt <- plt + ggplot2::coord_flip()
+  plt <- plt + ggplot2::coord_flip() + ggplot2::theme(legend.position="top", legend.box = "horizontal")
   return(plt)
 }
