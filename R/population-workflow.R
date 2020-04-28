@@ -131,6 +131,8 @@ PopulationWorkflow <- R6::R6Class(
     #' @param active logical indicating if `task` is performed in worklfow.
     #' Default value is `FALSE`
     #' @param message message indicating what the `task` does
+    #' @param xParameters list of parameters to be plotted along x axis
+    #' @param yParameters list of parameters to be plotted along y axis
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for goodness of fit plots
     plotDemographySettings = function(reportTitle = defaultWorkflowTitles$plotDemography,
@@ -138,9 +140,13 @@ PopulationWorkflow <- R6::R6Class(
                                           outputFolder = defaultTaskOutputFolders$plotDemography,
                                           active = FALSE,
                                           message = defaultWorkflowMessages$plotDemography,
+                                          xParameters = NULL,
+                                          yParameters = NULL,
                                           settings = NULL) {
       self$plotDemography <- PopulationPlotTask$new(
         workflowType = self$workflowType,
+        xParameters = xParameters,
+        yParameters = yParameters,
         reportTitle = reportTitle,
         getTaskResults = taskFunction,
         outputFolder = outputFolder,
@@ -186,6 +192,8 @@ PopulationWorkflow <- R6::R6Class(
     #' @param active logical indicating if `task` is performed in worklfow.
     #' Default value is `FALSE`
     #' @param message message indicating what the `task` does
+    #' @param xParameters list of parameters to be plotted along x axis
+    #' @param yParameters list of parameters to be plotted along y axis
     #' @param settings specific settings for task
     #' @return A `PlotPKParametersTask` object for PK parameters tables
     plotPKParametersSettings = function(reportTitle = defaultWorkflowTitles$plotPKParameters,
@@ -193,9 +201,13 @@ PopulationWorkflow <- R6::R6Class(
                                             outputFolder = defaultTaskOutputFolders$plotPKParameters,
                                             active = FALSE,
                                             message = defaultWorkflowMessages$plotPKParameters,
+                                            xParameters = NULL,
+                                            yParameters = NULL,
                                             settings = NULL) {
       self$plotPKParameters <- PopulationPlotTask$new(
         workflowType = self$workflowType,
+        xParameters = xParameters,
+        yParameters = yParameters,
         reportTitle = reportTitle,
         getTaskResults = taskFunction,
         outputFolder = outputFolder,
@@ -217,11 +229,11 @@ PopulationWorkflow <- R6::R6Class(
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for goodness of fit plots
     plotSensitivitySettings = function(reportTitle = defaultWorkflowTitles$plotSensitivity,
-                                       taskFunction = plotPopulationSensitivity,
-                                       outputFolder = defaultTaskOutputFolders$plotSensitivity,
-                                       active = FALSE,
-                                       message = defaultWorkflowMessages$plotSensitivity,
-                                       settings = NULL) {
+                                           taskFunction = plotPopulationSensitivity,
+                                           outputFolder = defaultTaskOutputFolders$plotSensitivity,
+                                           active = FALSE,
+                                           message = defaultWorkflowMessages$plotSensitivity,
+                                           settings = NULL) {
       self$plotSensitivity <- PlotTask$new(
         reportTitle = reportTitle,
         getTaskResults = taskFunction,
@@ -307,4 +319,14 @@ PopulationWorkflowTypes <- enum(c(
   "pediatric",
   "parallelComparison",
   "ratioComparison"
+))
+
+#' @export
+demographyPaths <- enum(c(
+  "Organism|Age",
+  "Organism|Weight",
+  "Organism|Height",
+  "Organism|BMI",
+  "Organism|BSA",
+  "Gender"
 ))

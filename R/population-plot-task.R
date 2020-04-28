@@ -8,17 +8,25 @@ PopulationPlotTask <- R6::R6Class(
 
   public = list(
     workflowType = NULL,
+    xParameters = NULL,
+    yParameters = NULL,
 
     #' @description
     #' Create a `PopulationPlotTask` object
     #' @param workflowType Type of population workflow. Use enum `PopulationWorkflowTypes` to get list of workflow types.
+    #' @param xParameters list of parameter paths to be plotted along x-axis
+    #' @param yParameters list of parameter paths to be plotted along y-axis
     #' @param ... input parameters inherited from `PlotTask` R6 class
     #' @return A new `PopulationPlotTask` object
     initialize = function(workflowType = PopulationWorkflowTypes$parallelComparison,
+                              xParameters = NULL,
+                              yParameters = NULL,
                               ...) {
       super$initialize(...)
       validateIsIncluded(workflowType, PopulationWorkflowTypes)
       self$workflowType <- workflowType
+      self$xParameters <- xParameters
+      self$yParameters <- yParameters
     },
 
     #' @description
@@ -112,7 +120,9 @@ PopulationPlotTask <- R6::R6Class(
         structureSets,
         self$workflowFolder,
         self$settings,
-        self$workflowType
+        self$workflowType,
+        self$xParameters,
+        self$yParameters
       )
 
       self$saveResults(
