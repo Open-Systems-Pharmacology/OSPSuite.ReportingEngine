@@ -241,7 +241,7 @@ runParallelSensitivityAnalysis <- function(structureSet,
 #' @export
 analyzeCoreSensitivity <- function(simulation,
                                    variableParameterPaths = NULL,
-                                   variationRange = 0.1, # resultsFilePath = paste0(getwd(), "sensitivityAnalysisResults.csv"),
+                                   variationRange = 0.1,
                                    numberOfCores = NULL,
                                    debugLogFileName = file.path(getwd(), defaultFileNames$logDebugFile()),
                                    infoLogFileName = file.path(getwd(), defaultFileNames$logInfoFile()),
@@ -317,7 +317,7 @@ runPopulationSensitivityAnalysis <- function(structureSet, settings, logFolder =
   sensitivityAnalysesResultsIndexFileDF <- getSAFileIndex(
     pkParameterResultsFilePath = structureSet$pkAnalysisResultsFileNames,
     pkParameterSelection = settings$pkParameterSelection,
-    quantileVec = settings$quantileVec, # resultsFileFolder = getwd(),
+    quantileVec = settings$quantileVec,
     resultsFileName = resultsFileName
   )
 
@@ -377,9 +377,7 @@ getSAFileIndex <- function(pkParameterResultsFilePath,
     }
   }
   filenamesColumn <- sapply(X = individualIdColumn, FUN = getIndividualSAResultsFileName, resultsFileName)
-  # filenamesColumn <- paste0(sapply(X = individualIdColumn, FUN = getIndividualSAResultsFileName, resultsFileName), ".csv")
   sensitivityAnalysesResultsIndexFileDF <- data.frame("Outputs" = outputColumn, "pkParameters" = pkParameterColumn, "Quantile" = quantileColumn, "Value" = valuesColumn, "Unit" = unitsColumn, "IndividualId" = individualIdColumn, "Filename" = filenamesColumn)
-  # write.csv(x = sensitivityAnalysesResultsIndexFileDF, file = file.path(resultsFileFolder, paste0(popSAResultsIndexFile, ".csv")))
   return(sensitivityAnalysesResultsIndexFileDF)
 }
 
