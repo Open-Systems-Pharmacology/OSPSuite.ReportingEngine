@@ -64,69 +64,192 @@ plotMeanPKParameters <- function(structureSet,
 #' @param settings list of settings for the output table/plot
 #' @param workflowType workflowType Type of population workflow.
 #' Use enum `PopulationWorkflowTypes` to get list of workflow types.
-#' @return data.frame with calculated PK parameters for the simulation set
+#' @param xParameters list of parameters to be plotted along x axis
+#' @param yParameters list of parameters to be plotted along y axis
+#' @return list of plots and tables with summary of PK parameters
 #' @export
 #' @import ospsuite
+#' @import tlf
+#' @import ggplot2
 plotPopulationPKParameters <- function(structureSets,
                                        logFolder = getwd(),
                                        settings = NULL,
-                                       workflowType = PopulationWorkflowTypes$parallelComparison) {
+                                       workflowType = PopulationWorkflowTypes$parallelComparison,
+                                       xParameters = NULL,
+                                       yParameters = NULL) {
   validateIsIncluded(workflowType, PopulationWorkflowTypes)
 
   pkParametersTableAcrossPopulations <- NULL
   pkRatioTableAcrossPopulations <- NULL
-  
-  for (index in seq_along(popW$simulationStructures))
-  {
-    structureSet <- popW$simulationStructures[[index]]
 
+  for (structureSet in structureSets)
+  {
     simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
+    population <- ospsuite::loadPopulation(structureSet$simulationSet$populationFile)
+
     pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
       structureSet$pkAnalysisResultsFileNames,
       simulation
     )
 
     pkParametersTable <- ospsuite::pkAnalysesAsDataFrame(pkAnalyses)
+    populationTable <- ospsuite::populationAsDataFrame(population)
 
-    pkParametersTable$Population <- structureSet$simulationSet$populationName
+    fullPkParametersTable <- cbind.data.frame(
+      pkParametersTable,
+      populationTable
+    )
 
     pkParametersTableAcrossPopulations <- rbind.data.frame(
       pkParametersTableAcrossPopulations,
-      pkParametersTable
+      fullPkParametersTable
     )
+
+    if (structureSet$simulationSet$referencePopulation) {
+      referencePopulationName <- levels(factor(fullPkParametersTable$`Population Name`))
+    }
   }
 
   pkParametersPlots <- NULL
   pkParametersTables <- NULL
-  
+
   pkParametersMapping <- tlf::BoxWhiskerDataMapping$new(
-    x = "Population",
+    x = "Population Name",
     y = "Value"
   )
 
-  for (parameter in levels(pkParametersTableAcrossPopulations$Parameter)) {
-    pkParameterData <- pkParametersTableAcrossPopulations[pkParametersTableAcrossPopulations$Parameter %in% parameter, ]
+  # White list of selected yParameters
+  pkParameterNames <- pkParametersTableAcrossPopulations$Parameter
+  yParameters <- yParameters %||% levels(factor(pkParameterNames))
+
+  # Enforce factors for population names
+  pkParametersTableAcrossPopulations$`Population Name` <- factor(pkParametersTableAcrossPopulations$`Population Name`)
+
+  # Standard boxplots
+  for (parameter in yParameters) {
+    pkParameterData <- pkParametersTableAcrossPopulations[pkParameterNames %in% parameter, ]
+    # remove NA value to prevent crash in computation of percentiles
     pkParameterData <- pkParameterData[!is.na(pkParameterData$Value), ]
+
     pkParameterMetaData <- list("Value" = list(
       dimension = parameter,
       unit = pkParameterData$Unit[1]
     ))
-    pkParametersPlots[[parameter]] <- tlf::plotBoxWhisker(
+
+    # TO DO: standardize this approach for names of plots to export
+    parameterLabel <- sub(
+      pattern = "^.*[|]",
+      replacement = "",
+      x = parameter
+    )
+
+    boxplotPkParameters <- tlf::plotBoxWhisker(
       data = pkParameterData,
       metaData = pkParameterMetaData,
       dataMapping = pkParametersMapping,
-      plotConfiguration = settings$plotConfiguration
+      plotConfiguration = settings$plotConfigurations[["boxplotPkParameters"]]
     ) +
       ggplot2::labs(title = NULL, subtitle = NULL)
 
-    pkParametersTables[[parameter]] <- tlf::getBoxWhiskerMeasure(
+    pkParametersPlots[[parameterLabel]] <- boxplotPkParameters
+    pkParametersPlots[[paste0(parameterLabel, "-log")]] <- boxplotPkParameters +
+      ggplot2::scale_y_continuous(trans = "log10")
+
+    pkParametersTables[[parameterLabel]] <- tlf::getBoxWhiskerMeasure(
       data = pkParameterData,
       dataMapping = pkParametersMapping
     )
   }
-  
+
+  if (workflowType %in% PopulationWorkflowTypes$ratioComparison) {
+    for (parameter in yParameters) {
+      parameterLabel <- sub(
+        pattern = "^.*[|]",
+        replacement = "",
+        x = parameter
+      )
+
+      # Get the tables and compute the ratios using reference population name
+      pkParametersTable <- pkParametersTables[[parameterLabel]]
+      pkParametersTableRows <- row.names(pkParametersTable)
+
+      pkRatiosTable <- pkParametersTable[pkParametersTableRows != referencePopulationName, ] /
+        pkParametersTable[rep(referencePopulationName, length(pkParametersTableRows) - 1), ]
+
+      pkRatiosData <- data.frame(
+        "Population Name" = row.names(pkRatiosTable),
+        check.names = FALSE
+      )
+      pkRatiosData[, c("ymin", "lower", "middle", "upper", "ymax")] <- pkRatiosTable[, c(2:6)]
+
+      boxplotPkRatios <- ratioBoxplot(
+        data = pkRatiosData,
+        plotConfiguration = settings$plotConfigurations[["boxplotPkRatios"]]
+      )
+      boxplotPkRatios <- boxplotPkRatios + ggplot2::ylab(paste0(
+        parameter,
+        " [fraction of ",
+        referencePopulationName, "]"
+      ))
+
+      pkParametersPlots[[paste0(parameterLabel, "ratio")]] <- boxplotPkRatios
+      pkParametersPlots[[paste0(parameterLabel, "ratio-log")]] <- boxplotPkRatios +
+        ggplot2::scale_y_continuous(trans = "log10")
+
+      pkParametersTables[[paste0(parameterLabel, "-ratio")]] <- pkRatiosTable
+    }
+  }
+
   return(list(
     plots = pkParametersPlots,
     tables = pkParametersTables
   ))
+}
+
+
+#' @title ratioBoxplot
+#' @description Plot box-whiskers of ratios as is
+#' @param data data.frame of the ratios
+#' @param plotConfiguration PlotConfiguration R6 class object
+#' @return ggplot object
+#' @export
+#' @import ospsuite
+#' @import tlf
+#' @import ggplot2
+ratioBoxplot <- function(data,
+                         plotConfiguration = NULL) {
+  ratioPlot <- tlf::initializePlot(plotConfiguration)
+
+  ratioPlot <- ratioPlot +
+    ggplot2::geom_boxplot(
+      data = data,
+      mapping = ggplot2::aes_string(
+        x = "`Population Name`",
+        ymin = "ymin",
+        lower = "lower",
+        middle = "middle",
+        upper = "upper",
+        ymax = "ymax"
+      ),
+      stat = "identity",
+      fill = "#999999",
+      alpha = 0.8,
+      size = 1
+    )
+  ratioPlot <- ratioPlot + ggplot2::labs(title = NULL, subtitle = NULL)
+  return(ratioPlot)
+}
+
+#' @title vpcParameterPlot
+#' @description Plot vpc like plot of yParameter along xParameter
+#' @param data data.frame
+#' @param plotConfiguration PlotConfiguration R6 class object
+#' @return ggplot object
+#' @export
+#' @import ospsuite
+#' @import tlf
+#' @import ggplot2
+vpcParameterPlot <- function(data,
+                             plotConfiguration = NULL) {
+
 }
