@@ -649,7 +649,7 @@ getPkParameterPopulationSensitivityPlot <- function(data, title, plotConfigurati
   ) +
     ggplot2::ylab("Sensitivity") + ggplot2::xlab("Parameter") + ggplot2::labs(
       color = "Individual quantile",
-      title = title#paste(strwrap(title, width = 60), collapse = "\n")
+      title = title #paste(strwrap(title, width = 60), collapse = "\n")
     )
 
   plt <- plt + ggplot2::geom_hline(yintercept = 0, size = 1)
