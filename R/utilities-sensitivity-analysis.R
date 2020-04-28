@@ -555,7 +555,6 @@ plotPopulationSensitivity <- function(structureSet,
 #' @param quantiles of population distribution of pkParameter, used to select individuals for sensitivity analysis
 #' @param rankFilter results for only the 'rankFilter' most sensitive parameters will be returned
 #' @return sortedFilteredIndividualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
-#' @export
 getPopSensDfForPkAndOutput <- function(structureSet, indexDf, output, pkParameter, quantiles, rankFilter = NULL) {
   validateIsIncluded(pkParameter, unique(indexDf$pkParameters))
   validateIsIncluded(output, unique(indexDf$Outputs))
