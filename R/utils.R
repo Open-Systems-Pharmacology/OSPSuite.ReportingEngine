@@ -174,7 +174,9 @@ loadSimulationWithUpdatedPaths <- function(simulationSet) {
     loadFromCache = FALSE,
     addToCache = FALSE
   )
-  sim$outputSelections$clear()
-  ospsuite::addOutputs(quantitiesOrPaths = simulationSet$pathID, simulation = sim)
+  if (!is.null(simulationSet$pathID)){
+    sim$outputSelections$clear()
+    ospsuite::addOutputs(quantitiesOrPaths = simulationSet$pathID, simulation = sim)
+  }
   return(sim)
 }
