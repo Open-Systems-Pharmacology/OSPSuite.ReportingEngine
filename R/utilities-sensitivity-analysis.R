@@ -104,7 +104,7 @@ runSensitivity <- function(structureSet,
 #' @title individualSensitivityAnalysis
 #' @description Run SA for an individual, possibly after modifying the simulation using individualParameters.
 #' Determine whether to run SA for on single core or in parallel.
-#' If on single core, pass simulation to analyzeCoreSensitivity.
+#' If on single core, pass simulation to analyzeSensitivity.
 #' If in parallel, pass simulation to runParallelSensitivityAnalysis.
 #' @param structureSet `SimulationStructure` R6 class object
 #' @param variableParameterPaths paths to parameters to vary in sensitivity analysis
@@ -138,11 +138,12 @@ individualSensitivityAnalysis <- function(structureSet,
     # Load simulation to determine number of parameters valid for sensitivity analysis
     sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
     updateSimulationIndividualParameters(simulation = sim, individualParameters)
-    individualSensitivityAnalysisResults <- analyzeCoreSensitivity(
+    individualSensitivityAnalysisResults <- analyzeSensitivity(
       simulation = sim,
       variableParameterPaths = variableParameterPaths,
       variationRange = variationRange,
-      showProgress = showProgress
+      showProgress = showProgress,
+      logFolder = logFolder
     )
   }
   return(individualSensitivityAnalysisResults)
@@ -223,6 +224,43 @@ runParallelSensitivityAnalysis <- function(structureSet,
   file.remove(allResultsFileNames)
   return(allSAResults)
 }
+
+
+#' @title analyzeSensitivity
+#' @description Run a sensitivity analysis for a single individual,
+#' varying only the set of parameters variableParameterPaths
+#' @param simulation simulation class object
+#' @param variableParameterPaths paths of parameters to be analyzed
+#' @param variationRange variation range for sensitivity analysis
+#' @param numberOfCores Number of cores to use on local node.  This parameter
+#' should be should be set to 1 when parallelizing over many nodes.
+#' @param logFolder folder where the logs are saved
+#' @param showProgress option to print progress of simulation to console
+#' @return sensitivity analysis results
+#' @import ospsuite
+#' @export
+analyzeSensitivity <- function(simulation,
+                               variableParameterPaths = NULL,
+                               variationRange = 0.1,
+                               numberOfCores = NULL,
+                               logFolder = getwd(),
+                               showProgress = FALSE) {
+  sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation, variationRange = variationRange)
+  sensitivityAnalysis$addParameterPaths(variableParameterPaths)
+  sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(
+    showProgress = showProgress,
+    numberOfCores = numberOfCores
+  )
+
+  logWorkflow(message = paste0("Starting sensitivity analysis for path(s) ", paste(variableParameterPaths, collapse = ", ")), pathFolder = logFolder)
+  sensitivityAnalysisResults <- runSensitivityAnalysis(
+    sensitivityAnalysis = sensitivityAnalysis,
+    sensitivityAnalysisRunOptions = sensitivityAnalysisRunOptions
+  )
+  logWorkflow(message = "Sensitivity analysis for current path(s) completed", pathFolder = logFolder)
+  return(sensitivityAnalysisResults)
+}
+
 
 #' @title analyzeCoreSensitivity
 #' @description Run a sensitivity analysis for a single individual,
