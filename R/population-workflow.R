@@ -322,7 +322,7 @@ PopulationWorkflowTypes <- enum(c(
 ))
 
 #' @export
-demographyPaths <- enum(c(
+DemographyPaths <- enum(c(
   "Organism|Age",
   "Organism|Weight",
   "Organism|Height",
