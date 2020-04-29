@@ -244,12 +244,54 @@ ratioBoxplot <- function(data,
 #' @description Plot vpc like plot of yParameter along xParameter
 #' @param data data.frame
 #' @param plotConfiguration PlotConfiguration R6 class object
+#' @param plotObject ggplot object to which layer is added
 #' @return ggplot object
 #' @export
 #' @import ospsuite
 #' @import tlf
 #' @import ggplot2
 vpcParameterPlot <- function(data,
-                             plotConfiguration = NULL) {
+                             metaData = NULL,
+                             plotConfiguration = NULL,
+                             plotObject = NULL) {
+  vpcDataMapping <- tlf::XYGDataMapping$new(
+    x = "x",
+    y = "median",
+    data = data
+  )
 
+  vpcPlotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
+    data = data,
+    metaData = metaData,
+    dataMapping = vpcDataMapping
+  )
+  vpcPlot <- plotObject %||% tlf::initializePlot(vpcPlotConfiguration)
+
+  vpcPlot <- vpcPlot +
+    ggplot2::geom_ribbon(
+      data = data,
+      mapping = ggplot2::aes_string(
+        x = "x",
+        ymin = "ymin",
+        ymax = "ymax",
+        fill = "Population",
+        color = "Population"
+      ),
+      size = 0.5,
+      alpha = 0.8
+    ) +
+    ggplot2::geom_line(
+      data = data,
+      mapping = ggplot2::aes_string(
+        x = "x",
+        y = "median",
+        color = "Population"
+      ),
+      linetype = "solid",
+      size = 1
+    )
+  vpcPlot <- vpcPlot +
+    ggplot2::labs(title = NULL, subtitle = NULL)
+
+  return(vpcPlot)
 }
