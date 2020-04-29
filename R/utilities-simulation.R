@@ -200,8 +200,9 @@ runParallelPopulationSimulation <- function(structureSet,
     Rmpi::mpi.close.Rslaves()
     stop(paste0(numberOfCores, " cores were not successfully spawned."))
   }
-  Rmpi::mpi.remote.exec(library("ospsuite"))
-  Rmpi::mpi.remote.exec(library("ospsuite.reportingengine"))
+
+  loadLibraryOnCores(libraryName = "ospsuite.reportingengine", logFolder = logFolder)
+  loadLibraryOnCores(libraryName = "ospsuite", logFolder = logFolder)
 
   tempPopDataFiles <- ospsuite::splitPopulationFile(
     csvPopulationFile = structureSet$simulationSet$populationFile,
