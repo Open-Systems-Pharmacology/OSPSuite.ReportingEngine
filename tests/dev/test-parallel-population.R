@@ -16,6 +16,6 @@ pwf$populationPKParameters$activate()
 pwf$populationSensitivityAnalysis$activate()
 pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.05, 0.25, 0.5, 0.75, 0.95)
 pwf$populationSensitivityAnalysis$settings$pkParameterSelection <- c("C_max", "CL")
-# pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- c(tree$Organism$Heart$Volume$path, tree$Organism$Pancreas$Volume$path)
+pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- c(tree$Organism$Heart$Volume$path, tree$Organism$Pancreas$Volume$path)
 pwf$populationSensitivityAnalysis$settings$numberOfCores <- 2
 pwf$runWorkflow()
