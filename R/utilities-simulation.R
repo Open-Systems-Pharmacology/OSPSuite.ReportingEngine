@@ -184,7 +184,7 @@ runParallelPopulationSimulation <- function(structureSet,
   )
 
   tempLogFileNamePrefix <- file.path(logFolder, "logDebug-core-simulation")
-  tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores))
+  tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores),".txt")
   allResultsFileNames <- paste0(structureSet$simulationSet$simulationSetName, seq(1, numberOfCores), ".csv")
 
   Rmpi::mpi.bcast.Robj2slave(obj = structureSet)

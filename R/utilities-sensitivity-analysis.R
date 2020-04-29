@@ -181,7 +181,7 @@ runParallelSensitivityAnalysis <- function(structureSet,
   # Split the parameters of the model according to sortVec
   listSplitParameters <- split(x = variableParameterPaths, sortVec)
   tempLogFileNamePrefix <- file.path(logFolder, "logDebug-core-sensitivity-analysis")
-  tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores))
+  tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores),".txt")
 
   # Generate a listcontaining names of SA CSV result files that will be output by each core
   allResultsFileNames <- generateResultFileNames(
@@ -191,7 +191,7 @@ runParallelSensitivityAnalysis <- function(structureSet,
   )
   logWorkflow(message = "Starting sending of parameters to cores", pathFolder = logFolder)
   Rmpi::mpi.bcast.Robj2slave(obj = listSplitParameters)
-  Rmpi::mpi.bcast.Robj2slave(obj = tempLogFileNamePrefix)
+  Rmpi::mpi.bcast.Robj2slave(obj = tempLogFileNames)
   Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
   Rmpi::mpi.bcast.Robj2slave(obj = allResultsFileNames)
   logWorkflow(message = "Sending of parameters to cores completed", pathFolder = logFolder)
@@ -206,7 +206,7 @@ runParallelSensitivityAnalysis <- function(structureSet,
     variableParameterPaths = listSplitParameters[[mpi.comm.rank()]],
     variationRange = variationRange,
     numberOfCores = 1, # Number of local cores, set to 1 when parallelizing.
-    debugLogFileName = paste0(tempLogFileNamePrefix, mpi.comm.rank()),
+    debugLogFileName = tempLogFileNames[mpi.comm.rank()],
     nodeName = paste("Core", mpi.comm.rank()),
     showProgress = showProgress
   ))
