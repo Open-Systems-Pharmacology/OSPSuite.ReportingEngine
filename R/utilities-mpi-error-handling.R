@@ -67,8 +67,6 @@ loadSimulationOnCores <- function(structureSet,logFolder = getwd()){
 loadLibraryOnCores <- function(libraryName, logFolder = getwd()){
   success <- FALSE
   Rmpi::mpi.bcast.Robj2slave(obj = libraryName)
-  Rmpi::mpi.remote.exec(print("11111111"))
-  Rmpi::mpi.remote.exec(print(libraryName))
   Rmpi::mpi.remote.exec(library(libraryName,character.only = TRUE))
   libraryLoaded <- Rmpi::mpi.remote.exec(checkLibraryLoaded(libraryName))
   success <- checkAllCoresSuccessful(libraryLoaded)

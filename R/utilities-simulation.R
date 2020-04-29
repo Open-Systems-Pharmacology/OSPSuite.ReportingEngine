@@ -226,7 +226,7 @@ runParallelPopulationSimulation <- function(structureSet,
     populationFilePath = tempPopDataFiles[mpi.comm.rank()],
     resultsFilePath = allResultsFileNames[mpi.comm.rank()],
     debugLogFileName = tempLogFileNames[mpi.comm.rank()],
-    errorLogFileName = tempLogFileNames[mpi.comm.rank()],
+    errorLogFileName = tempLogFileNames[mpi.comm.rank()], ###add separate error file
     nodeName = paste("Core", mpi.comm.rank())
   ))
   verifySimulationRunSuccessful(simulationRunSuccess = simulationRunSuccess, logFolder = logFolder)
