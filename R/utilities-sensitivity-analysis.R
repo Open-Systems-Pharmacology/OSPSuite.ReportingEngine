@@ -44,7 +44,6 @@ runSensitivity <- function(structureSet,
   # Otherwise sensitivity analysis will be run on master core only.
   if (numberOfCores > 1) {
     Rmpi::mpi.spawn.Rslaves(nslaves = numberOfCores)
-    Rmpi::mpi.remote.exec("HERE")
     loadLibraryOnCores(libraryName = "ospsuite.reportingengine", logFolder = logFolder)
     loadLibraryOnCores(libraryName = "ospsuite", logFolder = logFolder)
     Rmpi::mpi.bcast.Robj2slave(obj = structureSet)
@@ -219,7 +218,7 @@ runParallelSensitivityAnalysis <- function(structureSet,
     showProgress = showProgress
   ))
 
-  sensitivityRunSuccess <- Rmpi::mpi.remote.exec(checkNotNull(partialIndividualSensitivityAnalysisResults))
+  sensitivityRunSuccess <- Rmpi::mpi.remote.exec(!is.null(partialIndividualSensitivityAnalysisResults))
   verifySensitivityAnalysisRunSuccessful(sensitivityRunSuccess, logFolder = logFolder)
 
   Rmpi::mpi.remote.exec(if (file.exists(allResultsFileNames[mpi.comm.rank()])) {
