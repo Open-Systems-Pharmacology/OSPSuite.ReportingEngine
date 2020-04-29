@@ -186,7 +186,7 @@ runParallelSensitivityAnalysis <- function(structureSet,
   # Generate a listcontaining names of SA CSV result files that will be output by each core
   allResultsFileNames <- generateResultFileNames(
     numberOfCores = numberOfCores,
-    folderName = getwd(),
+    folderName = structureSet$workflowFolder,
     fileName = "tempSAResultsCore"
   )
   logWorkflow(message = "Starting sending of parameters to cores", pathFolder = logFolder)

@@ -179,7 +179,7 @@ runParallelPopulationSimulation <- function(structureSet,
   tempPopDataFiles <- ospsuite::splitPopulationFile(
     csvPopulationFile = structureSet$simulationSet$populationFile,
     numberOfCores = numberOfCores,
-    outputFolder = getwd(),
+    outputFolder = structureSet$workflowFolder,
     outputFileName = populationFileName
   )
 
