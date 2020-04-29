@@ -24,7 +24,7 @@ resetReport <- function(fileName,
 #' @param fileName name of .md file
 #' @param figureFile figure path to include
 #' @param figureCaption caption of figure
-#' @param figureWidth figure width within report. Default is "100%"
+#' @param figureWidth figure width within report. Default is 100 percent.
 #' @param logFolder folder where the logs are saved
 #' @export
 addFigureChunk <- function(fileName,
