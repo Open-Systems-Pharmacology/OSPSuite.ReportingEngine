@@ -13,6 +13,10 @@ R6 class for PopulationPlotTask settings
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{workflowType}}{Type of population workflow}
+
+\item{\code{xParameters}}{list of parameter paths to be plotted along x-axis}
+
+\item{\code{yParameters}}{list of parameter paths to be plotted along y-axis}
 }
 \if{html}{\out{</div>}}
 }
@@ -42,6 +46,8 @@ Create a `PopulationPlotTask` object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationPlotTask$new(
   workflowType = PopulationWorkflowTypes$parallelComparison,
+  xParameters = NULL,
+  yParameters = NULL,
   ...
 )}\if{html}{\out{</div>}}
 }
@@ -50,6 +56,10 @@ Create a `PopulationPlotTask` object
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{workflowType}}{Type of population workflow. Use enum `PopulationWorkflowTypes` to get list of workflow types.}
+
+\item{\code{xParameters}}{list of parameter paths to be plotted along x-axis}
+
+\item{\code{yParameters}}{list of parameter paths to be plotted along y-axis}
 
 \item{\code{...}}{input parameters inherited from `PlotTask` R6 class}
 }

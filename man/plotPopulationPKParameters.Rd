@@ -8,7 +8,9 @@ plotPopulationPKParameters(
   structureSets,
   logFolder = getwd(),
   settings = NULL,
-  workflowType = PopulationWorkflowTypes$parallelComparison
+  workflowType = PopulationWorkflowTypes$parallelComparison,
+  xParameters = NULL,
+  yParameters = NULL
 )
 }
 \arguments{
@@ -20,9 +22,13 @@ plotPopulationPKParameters(
 
 \item{workflowType}{workflowType Type of population workflow.
 Use enum `PopulationWorkflowTypes` to get list of workflow types.}
+
+\item{xParameters}{list of parameters to be plotted along x axis}
+
+\item{yParameters}{list of parameters to be plotted along y axis}
 }
 \value{
-data.frame with calculated PK parameters for the simulation set
+list of plots and tables with summary of PK parameters
 }
 \description{
 Plot PK parameters box plots and tables

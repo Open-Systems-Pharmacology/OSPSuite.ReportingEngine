@@ -199,6 +199,8 @@ Define plot demography `PlotTask` settings
   outputFolder = defaultTaskOutputFolders$plotDemography,
   active = FALSE,
   message = defaultWorkflowMessages$plotDemography,
+  xParameters = NULL,
+  yParameters = NULL,
   settings = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -216,6 +218,10 @@ Define plot demography `PlotTask` settings
 Default value is `FALSE`}
 
 \item{\code{message}}{message indicating what the `task` does}
+
+\item{\code{xParameters}}{list of parameters to be plotted along x axis}
+
+\item{\code{yParameters}}{list of parameters to be plotted along y axis}
 
 \item{\code{settings}}{specific settings for task}
 }
@@ -273,6 +279,8 @@ Define PK parameters `PlotPKParametersTask` settings
   outputFolder = defaultTaskOutputFolders$plotPKParameters,
   active = FALSE,
   message = defaultWorkflowMessages$plotPKParameters,
+  xParameters = NULL,
+  yParameters = NULL,
   settings = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -290,6 +298,10 @@ Define PK parameters `PlotPKParametersTask` settings
 Default value is `FALSE`}
 
 \item{\code{message}}{message indicating what the `task` does}
+
+\item{\code{xParameters}}{list of parameters to be plotted along x axis}
+
+\item{\code{yParameters}}{list of parameters to be plotted along y axis}
 
 \item{\code{settings}}{specific settings for task}
 }
