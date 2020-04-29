@@ -44,15 +44,10 @@ runSensitivity <- function(structureSet,
   # Otherwise sensitivity analysis will be run on master core only.
   if (numberOfCores > 1) {
     Rmpi::mpi.spawn.Rslaves(nslaves = numberOfCores)
-    Rmpi::mpi.remote.exec(library("ospsuite"))
-    Rmpi::mpi.remote.exec(library("ospsuite.reportingengine"))
-
-    # Pass to cores the inputs that will not change from one individual to another
+    Rmpi::mpi.remote.exec("HERE")
+    loadLibraryOnCores(libraryName = "ospsuite.reportingengine", logFolder = logFolder)
+    loadLibraryOnCores(libraryName = "ospsuite", logFolder = logFolder)
     Rmpi::mpi.bcast.Robj2slave(obj = structureSet)
-    Rmpi::mpi.bcast.Robj2slave(obj = variationRange)
-    Rmpi::mpi.bcast.Robj2slave(obj = showProgress)
-    # Load simulation on each core
-    Rmpi::mpi.remote.exec(sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet))
   }
 
   # If there is a population file and individualId then for each individual perform SA
@@ -129,6 +124,8 @@ individualSensitivityAnalysis <- function(structureSet,
     individualSensitivityAnalysisResults <- runParallelSensitivityAnalysis(
       structureSet = structureSet,
       variableParameterPaths = variableParameterPaths,
+      variationRange = variationRange,
+      showProgress = showProgress,
       individualParameters = individualParameters,
       numberOfCores = numberOfCores,
       logFolder = logFolder
@@ -163,6 +160,8 @@ individualSensitivityAnalysis <- function(structureSet,
 #' @import ospsuite
 runParallelSensitivityAnalysis <- function(structureSet,
                                            variableParameterPaths,
+                                           variationRange,
+                                           showProgress,
                                            individualParameters,
                                            numberOfCores,
                                            logFolder = getwd()) {
@@ -189,7 +188,16 @@ runParallelSensitivityAnalysis <- function(structureSet,
     folderName = structureSet$workflowFolder,
     fileName = "tempSAResultsCore"
   )
+
+  partialIndividualSensitivityAnalysisResults <- NULL
+
+  # Load simulation on each core
+  loadSimulationOnCores(structureSet = structureSet,logFolder = logFolder)
+
   logWorkflow(message = "Starting sending of parameters to cores", pathFolder = logFolder)
+  Rmpi::mpi.bcast.Robj2slave(obj = partialIndividualSensitivityAnalysisResults)
+  Rmpi::mpi.bcast.Robj2slave(obj = variationRange)
+  Rmpi::mpi.bcast.Robj2slave(obj = showProgress)
   Rmpi::mpi.bcast.Robj2slave(obj = listSplitParameters)
   Rmpi::mpi.bcast.Robj2slave(obj = tempLogFileNames)
   Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
@@ -198,7 +206,7 @@ runParallelSensitivityAnalysis <- function(structureSet,
 
   # Update simulation with individual parameters
   logWorkflow(message = "Updating individual parameters on cores.", pathFolder = logFolder)
-  Rmpi::mpi.remote.exec(updateSimulationIndividualParameters(simulation = sim, individualParameters))
+  updateIndividualParametersOnCores(individualParameters = individualParameters , logFolder = logFolder)
 
   logWorkflow(message = "Starting sensitivity analysis on cores.", pathFolder = logFolder)
   Rmpi::mpi.remote.exec(partialIndividualSensitivityAnalysisResults <- analyzeCoreSensitivity(
@@ -210,10 +218,20 @@ runParallelSensitivityAnalysis <- function(structureSet,
     nodeName = paste("Core", mpi.comm.rank()),
     showProgress = showProgress
   ))
-  Rmpi::mpi.remote.exec(exportSensitivityAnalysisResultsToCSV(
+
+  sensitivityRunSuccess <-   Rmpi::mpi.remote.exec(checkNotNull(partialIndividualSensitivityAnalysisResults))
+  verifySensitivityAnalysisRunSuccessful(sensitivityRunSuccess,logFolder = logFolder)
+
+  Rmpi::mpi.remote.exec( if ( file.exists( allResultsFileNames[mpi.comm.rank()] )) { file.remove(allResultsFileNames[mpi.comm.rank()]) } )
+  anyPreviousPartialResultsRemoved <- Rmpi::mpi.remote.exec( !file.exists( allResultsFileNames[mpi.comm.rank()] ) )
+  verifyAnyPreviousFilesRemoved(anyPreviousPartialResultsRemoved,logFolder = logFolder)
+
+  Rmpi::mpi.remote.exec(ospsuite::exportSensitivityAnalysisResultsToCSV(
     results = partialIndividualSensitivityAnalysisResults,
     filePath = allResultsFileNames[mpi.comm.rank()]
   ))
+  partialResultsExported <- Rmpi::mpi.remote.exec(file.exists(allResultsFileNames[mpi.comm.rank()]))
+  verifyPartialResultsExported(partialResultsExported,logFolder = logFolder)
 
   for (core in seq(1, numberOfCores)) {
     logWorkflow(message = readLines(tempLogFileNames[core]), pathFolder = logFolder)
