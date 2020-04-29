@@ -4,10 +4,7 @@
 \alias{verifyAnyPreviousFilesRemoved}
 \title{verifyAnyPreviousFilesRemoved}
 \usage{
-verifyAnyPreviousFilesRemoved(
-  anyPreviousPartialResultsRemoved,
-  logFolder = getwd()
-)
+verifyAnyPreviousFilesRemoved(anyPreviousPartialResultsRemoved, logFolder)
 }
 \arguments{
 \item{sensitivityRunSuccess}{logical vector indicating success of result file removal}

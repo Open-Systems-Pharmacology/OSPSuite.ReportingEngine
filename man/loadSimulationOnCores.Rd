@@ -4,7 +4,7 @@
 \alias{loadSimulationOnCores}
 \title{loadSimulationOnCores}
 \usage{
-loadSimulationOnCores(structureSet, logFolder = getwd())
+loadSimulationOnCores(structureSet, logFolder)
 }
 \arguments{
 \item{structureSet}{containing simulationSet which contains path to simulation file and pathIDs to be loaded in simulation object as outputs}

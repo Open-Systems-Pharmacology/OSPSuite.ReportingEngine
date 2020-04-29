@@ -4,7 +4,7 @@
 \alias{verifySimulationRunSuccessful}
 \title{verifySimulationRunSuccessful}
 \usage{
-verifySimulationRunSuccessful(simulationRunSuccess, logFolder = getwd())
+verifySimulationRunSuccessful(simulationRunSuccess, logFolder)
 }
 \arguments{
 \item{simulationRunSuccess}{logical vector indicating success of simulation run on all cores}

@@ -4,7 +4,7 @@
 \alias{verifyPartialResultsExported}
 \title{verifyPartialResultsExported}
 \usage{
-verifyPartialResultsExported(partialResultsExported, logFolder = getwd())
+verifyPartialResultsExported(partialResultsExported, logFolder)
 }
 \arguments{
 \item{sensitivityRunSuccess}{logical vector indicating success of result file export}

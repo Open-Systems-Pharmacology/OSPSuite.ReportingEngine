@@ -4,10 +4,7 @@
 \alias{verifySensitivityAnalysisRunSuccessful}
 \title{verifySensitivityAnalysisRunSuccessful}
 \usage{
-verifySensitivityAnalysisRunSuccessful(
-  sensitivityRunSuccess,
-  logFolder = getwd()
-)
+verifySensitivityAnalysisRunSuccessful(sensitivityRunSuccess, logFolder)
 }
 \arguments{
 \item{sensitivityRunSuccess}{logical vector indicating success of sensitivity analysis run on all cores}

@@ -4,7 +4,7 @@
 \alias{loadLibraryOnCores}
 \title{loadSimulationOnCores}
 \usage{
-loadLibraryOnCores(libraryName, logFolder = getwd())
+loadLibraryOnCores(libraryName, logFolder)
 }
 \arguments{
 \item{libraryName}{string containing name of library to be loaded}

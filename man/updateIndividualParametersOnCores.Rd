@@ -4,7 +4,7 @@
 \alias{updateIndividualParametersOnCores}
 \title{loadSimulationOnCores}
 \usage{
-updateIndividualParametersOnCores(individualParameters, logFolder = getwd())
+updateIndividualParametersOnCores(individualParameters, logFolder)
 }
 \arguments{
 \item{libraryName}{string containing name of library to be loaded}
