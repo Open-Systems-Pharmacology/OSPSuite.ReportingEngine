@@ -220,7 +220,7 @@ runParallelPopulationSimulation <- function(structureSet,
   Rmpi::mpi.bcast.Robj2slave(obj = tempLogFileNames)
   Rmpi::mpi.bcast.Robj2slave(obj = allResultsFileNames)
 
-  Rmpi::mpi.remote.exec(simulateModelOnCore(
+  simulationRunSuccess <- Rmpi::mpi.remote.exec(simulateModelOnCore(
     structureSet = structureSet,
     populationFilePath = tempPopDataFiles[mpi.comm.rank()],
     resultsFilePath = allResultsFileNames[mpi.comm.rank()],
@@ -228,7 +228,7 @@ runParallelPopulationSimulation <- function(structureSet,
     errorLogFileName = tempLogFileNames[mpi.comm.rank()],
     nodeName = paste("Core", mpi.comm.rank())
   ))
-
+  verifySimulationRunSuccessful(simulationRunSuccess = simulationRunSuccess, logFolder = logFolder)
   Rmpi::mpi.close.Rslaves()
 
   for (core in seq(1, numberOfCores)) {
