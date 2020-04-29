@@ -179,12 +179,12 @@ runParallelPopulationSimulation <- function(structureSet,
   tempPopDataFiles <- ospsuite::splitPopulationFile(
     csvPopulationFile = structureSet$simulationSet$populationFile,
     numberOfCores = numberOfCores,
-    outputFolder = getwd(),
+    outputFolder = structureSet$workflowFolder,
     outputFileName = populationFileName
   )
 
   tempLogFileNamePrefix <- file.path(logFolder, "logDebug-core-simulation")
-  tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores))
+  tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores),".txt")
   allResultsFileNames <- paste0(structureSet$simulationSet$simulationSetName, seq(1, numberOfCores), ".csv")
 
   Rmpi::mpi.bcast.Robj2slave(obj = structureSet)
