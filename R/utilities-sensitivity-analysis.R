@@ -180,7 +180,7 @@ runParallelSensitivityAnalysis <- function(structureSet,
   # Split the parameters of the model according to sortVec
   listSplitParameters <- split(x = variableParameterPaths, sortVec)
   tempLogFileNamePrefix <- file.path(logFolder, "logDebug-core-sensitivity-analysis")
-  tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores),".txt")
+  tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores), ".txt")
 
   # Generate a listcontaining names of SA CSV result files that will be output by each core
   allResultsFileNames <- generateResultFileNames(
@@ -192,7 +192,7 @@ runParallelSensitivityAnalysis <- function(structureSet,
   partialIndividualSensitivityAnalysisResults <- NULL
 
   # Load simulation on each core
-  loadSimulationOnCores(structureSet = structureSet,logFolder = logFolder)
+  loadSimulationOnCores(structureSet = structureSet, logFolder = logFolder)
 
   logWorkflow(message = "Starting sending of parameters to cores", pathFolder = logFolder)
   Rmpi::mpi.bcast.Robj2slave(obj = partialIndividualSensitivityAnalysisResults)
@@ -206,7 +206,7 @@ runParallelSensitivityAnalysis <- function(structureSet,
 
   # Update simulation with individual parameters
   logWorkflow(message = "Updating individual parameters on cores.", pathFolder = logFolder)
-  updateIndividualParametersOnCores(individualParameters = individualParameters , logFolder = logFolder)
+  updateIndividualParametersOnCores(individualParameters = individualParameters, logFolder = logFolder)
 
   logWorkflow(message = "Starting sensitivity analysis on cores.", pathFolder = logFolder)
   Rmpi::mpi.remote.exec(partialIndividualSensitivityAnalysisResults <- analyzeCoreSensitivity(
@@ -219,19 +219,21 @@ runParallelSensitivityAnalysis <- function(structureSet,
     showProgress = showProgress
   ))
 
-  sensitivityRunSuccess <-   Rmpi::mpi.remote.exec(checkNotNull(partialIndividualSensitivityAnalysisResults))
-  verifySensitivityAnalysisRunSuccessful(sensitivityRunSuccess,logFolder = logFolder)
+  sensitivityRunSuccess <- Rmpi::mpi.remote.exec(checkNotNull(partialIndividualSensitivityAnalysisResults))
+  verifySensitivityAnalysisRunSuccessful(sensitivityRunSuccess, logFolder = logFolder)
 
-  Rmpi::mpi.remote.exec( if ( file.exists( allResultsFileNames[mpi.comm.rank()] )) { file.remove(allResultsFileNames[mpi.comm.rank()]) } )
-  anyPreviousPartialResultsRemoved <- Rmpi::mpi.remote.exec( !file.exists( allResultsFileNames[mpi.comm.rank()] ) )
-  verifyAnyPreviousFilesRemoved(anyPreviousPartialResultsRemoved,logFolder = logFolder)
+  Rmpi::mpi.remote.exec(if (file.exists(allResultsFileNames[mpi.comm.rank()])) {
+    file.remove(allResultsFileNames[mpi.comm.rank()])
+  })
+  anyPreviousPartialResultsRemoved <- Rmpi::mpi.remote.exec(!file.exists(allResultsFileNames[mpi.comm.rank()]))
+  verifyAnyPreviousFilesRemoved(anyPreviousPartialResultsRemoved, logFolder = logFolder)
 
   Rmpi::mpi.remote.exec(ospsuite::exportSensitivityAnalysisResultsToCSV(
     results = partialIndividualSensitivityAnalysisResults,
     filePath = allResultsFileNames[mpi.comm.rank()]
   ))
   partialResultsExported <- Rmpi::mpi.remote.exec(file.exists(allResultsFileNames[mpi.comm.rank()]))
-  verifyPartialResultsExported(partialResultsExported,logFolder = logFolder)
+  verifyPartialResultsExported(partialResultsExported, logFolder = logFolder)
 
   for (core in seq(1, numberOfCores)) {
     logWorkflow(message = readLines(tempLogFileNames[core]), pathFolder = logFolder)
@@ -705,10 +707,10 @@ getPkParameterPopulationSensitivityPlot <- function(data, title, plotConfigurati
   ) +
     ggplot2::ylab("Sensitivity") + ggplot2::xlab("Parameter") + ggplot2::labs(
       color = "Individual quantile",
-      title = title #paste(strwrap(title, width = 60), collapse = "\n")
+      title = title # paste(strwrap(title, width = 60), collapse = "\n")
     )
 
   plt <- plt + ggplot2::geom_hline(yintercept = 0, size = 1)
-  plt <- plt + ggplot2::coord_flip() + ggplot2::theme(legend.position="top", legend.box = "horizontal")
+  plt <- plt + ggplot2::coord_flip() + ggplot2::theme(legend.position = "top", legend.box = "horizontal")
   return(plt)
 }

@@ -84,7 +84,7 @@ simulateModelOnCore <- function(structureSet,
   simulationResult <- NULL
   simulationResult <- ospsuite::runSimulation(simulation, population = population, simulationRunOptions = simRunOptions)
 
-  if (is.null(simulationResult)){
+  if (is.null(simulationResult)) {
     logError(
       message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), ""), "Simulation not successfully completed."),
       file = errorLogFileName,
@@ -100,14 +100,14 @@ simulateModelOnCore <- function(structureSet,
   )
 
 
-  if (file.exists(resultsFilePath)){
+  if (file.exists(resultsFilePath)) {
     file.remove(resultsFilePath)
   }
   ospsuite::exportResultsToCSV(
     results = simulationResult,
     filePath = resultsFilePath
   )
-  if (!file.exists(resultsFilePath)){
+  if (!file.exists(resultsFilePath)) {
     logError(
       message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), ""), "Simulation results not successfully exported to CSV."),
       file = errorLogFileName,
@@ -122,7 +122,6 @@ simulateModelOnCore <- function(structureSet,
     printConsole = FALSE
   )
   return(TRUE)
-
 }
 
 #' @title simulateModel
@@ -162,8 +161,8 @@ simulateModel <- function(structureSet,
 
   simRunOptions <- ospsuite::SimulationRunOptions$new(showProgress = ifnotnull(settings, outputIfNotNull = settings$showProgress, outputIfNull = FALSE))
   simulationResult <- ospsuite::runSimulation(simulation,
-                                              population = population,
-                                              simulationRunOptions = simRunOptions
+    population = population,
+    simulationRunOptions = simRunOptions
   )
 
   logWorkflow(
@@ -212,7 +211,7 @@ runParallelPopulationSimulation <- function(structureSet,
   )
 
   tempLogFileNamePrefix <- file.path(logFolder, "logDebug-core-simulation")
-  tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores),".txt")
+  tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores), ".txt")
   allResultsFileNames <- paste0(structureSet$simulationSet$simulationSetName, seq(1, numberOfCores), ".csv")
 
   Rmpi::mpi.bcast.Robj2slave(obj = structureSet)
@@ -226,7 +225,7 @@ runParallelPopulationSimulation <- function(structureSet,
     populationFilePath = tempPopDataFiles[mpi.comm.rank()],
     resultsFilePath = allResultsFileNames[mpi.comm.rank()],
     debugLogFileName = tempLogFileNames[mpi.comm.rank()],
-    errorLogFileName = tempLogFileNames[mpi.comm.rank()], ###add separate error file
+    errorLogFileName = tempLogFileNames[mpi.comm.rank()], ### add separate error file
     nodeName = paste("Core", mpi.comm.rank())
   ))
   verifySimulationRunSuccessful(simulationRunSuccess = simulationRunSuccess, logFolder = logFolder)
