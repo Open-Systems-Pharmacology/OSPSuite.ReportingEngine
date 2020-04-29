@@ -1,6 +1,8 @@
 #' @title PopulationPlotTask
 #' @description  R6 class for PopulationPlotTask settings
 #' @field workflowType Type of population workflow
+#' @field xParameters list of parameter paths to be plotted along x-axis
+#' @field yParameters list of parameter paths to be plotted along y-axis
 #' @export
 PopulationPlotTask <- R6::R6Class(
   "PopulationPlotTask",
@@ -45,6 +47,7 @@ PopulationPlotTask <- R6::R6Class(
             extension = "png"
           )
         )
+
         # TO DO: define parameters from settings/plotConfiguration
         ggplot2::ggsave(
           filename = plotFileName,
@@ -63,31 +66,33 @@ PopulationPlotTask <- R6::R6Class(
           logFolder = self$workflowFolder
         )
 
-        tableFileName <- file.path(
-          self$workflowFolder,
-          self$outputFolder,
-          getDefaultFileName(
-            suffix = plotName,
-            extension = "csv"
+        if (plotName %in% names(taskResults$tables)) {
+          tableFileName <- file.path(
+            self$workflowFolder,
+            self$outputFolder,
+            getDefaultFileName(
+              suffix = plotName,
+              extension = "csv"
+            )
           )
-        )
 
-        write.csv(taskResults$tables[[plotName]],
-          file = tableFileName,
-          row.names = FALSE
-        )
+          write.csv(taskResults$tables[[plotName]],
+            file = tableFileName,
+            row.names = FALSE
+          )
 
-        addTableChunk(
-          fileName = reportFile,
-          tableFile = tableFileName,
-          logFolder = self$workflowFolder
-        )
+          addTableChunk(
+            fileName = reportFile,
+            tableFile = tableFileName,
+            logFolder = self$workflowFolder
+          )
 
-        logWorkflow(
-          message = paste0("Table '", tableFileName, "' was successfully saved."),
-          pathFolder = self$workflowFolder,
-          logTypes = LogTypes$Debug
-        )
+          logWorkflow(
+            message = paste0("Table '", tableFileName, "' was successfully saved."),
+            pathFolder = self$workflowFolder,
+            logTypes = LogTypes$Debug
+          )
+        }
       }
     },
 
