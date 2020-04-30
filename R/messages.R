@@ -79,5 +79,9 @@ messages <- list(
 
   errorNoParametersForSensitivityAnalysis = function() {
     paste0("No variable parameters found for sensitivity analysis.")
+  },
+  
+  warningNoReferencePopulation = function(workflowType){
+    paste0("Workflow type '", workflowType, "' requires one reference population, but no reference population was provided.")
   }
 )

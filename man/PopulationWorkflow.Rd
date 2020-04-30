@@ -12,6 +12,8 @@ R6 class for Reporting Engine Population Workflow
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
+\item{\code{workflowType}}{Type of population workflow}
+
 \item{\code{simulatePopulation}}{R6 class `Task` for population simulation}
 
 \item{\code{populationPKParameters}}{R6 class `Task` for PK parameters calculation}
@@ -65,12 +67,17 @@ R6 class for Reporting Engine Population Workflow
 \subsection{Method \code{new()}}{
 Create a new `PopulationWorkflow` object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$new(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$new(
+  workflowType = PopulationWorkflowTypes$parallelComparison,
+  ...
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{workflowType}}{Type of population workflow. Use enum `PopulationWorkflowTypes` to get list of workflow types.}
+
 \item{\code{...}}{input parameters inherited from R6 class object `Workflow`.}
 }
 \if{html}{\out{</div>}}
@@ -122,7 +129,7 @@ Define calculate PK parameters `task` settings
   taskFunction = calculatePKParameters,
   outputFolder = defaultTaskOutputFolders$calculatePKParameters,
   settings = NULL,
-  active = TRUE,
+  active = FALSE,
   message = defaultWorkflowMessages$calculatePKParameters
 )}\if{html}{\out{</div>}}
 }
@@ -156,7 +163,7 @@ Define population Sensitivity Analysis `task` settings
   taskFunction = runPopulationSensitivityAnalysis,
   outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
   settings = NULL,
-  active = TRUE,
+  active = FALSE,
   message = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -192,6 +199,8 @@ Define plot demography `PlotTask` settings
   outputFolder = defaultTaskOutputFolders$plotDemography,
   active = FALSE,
   message = defaultWorkflowMessages$plotDemography,
+  xParameters = NULL,
+  yParameters = NULL,
   settings = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -209,6 +218,10 @@ Define plot demography `PlotTask` settings
 Default value is `FALSE`}
 
 \item{\code{message}}{message indicating what the `task` does}
+
+\item{\code{xParameters}}{list of parameters to be plotted along x axis}
+
+\item{\code{yParameters}}{list of parameters to be plotted along y axis}
 
 \item{\code{settings}}{specific settings for task}
 }
@@ -262,10 +275,12 @@ Define PK parameters `PlotPKParametersTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotPKParametersSettings(
   reportTitle = defaultWorkflowTitles$plotPKParameters,
-  taskFunction = plotMeanPKParameters,
+  taskFunction = plotPopulationPKParameters,
   outputFolder = defaultTaskOutputFolders$plotPKParameters,
   active = FALSE,
   message = defaultWorkflowMessages$plotPKParameters,
+  xParameters = NULL,
+  yParameters = NULL,
   settings = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -283,6 +298,10 @@ Define PK parameters `PlotPKParametersTask` settings
 Default value is `FALSE`}
 
 \item{\code{message}}{message indicating what the `task` does}
+
+\item{\code{xParameters}}{list of parameters to be plotted along x axis}
+
+\item{\code{yParameters}}{list of parameters to be plotted along y axis}
 
 \item{\code{settings}}{specific settings for task}
 }

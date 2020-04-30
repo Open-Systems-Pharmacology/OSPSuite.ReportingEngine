@@ -4,12 +4,35 @@
 load("./data/reThemeProperties.RData")
 reTheme <- tlf::Theme$new(
   themesProperties = reThemeProperties,
-  labelBaseSize = 11
+  labelBaseSize = 8
 )
-reTheme$titleFont$size <- 12
-reTheme$subtitleFont$size <- 10
+reTheme$titleFont$size <- 10
+reTheme$subtitleFont$size <- 9
 tlf::useTheme(reTheme)
 
+# Temporary fix for plot format
+# TO DO: set a similar code directly in tlfEnv
+ExportPlotConfigurationClass <- R6::R6Class(
+  "ExportPlotConfiguration",
+  public = list(format = "png", width = 16, height = 9, units = "cm"))
+
+#'@export
+ExportPlotConfiguration <- ExportPlotConfigurationClass$new()
+
+#' @title setPlotFormat
+#' @description Set plot format
+#' @param format file format of the exported plots
+#' @param width plot width in `unit`
+#' @param height plot height in `unit`
+#' @param units units of `width` and `height`
+#' @return demographyPlots list of ggplot objects
+#' @export
+setPlotFormat <- function(format, width = NULL, height = NULL, units = NULL){
+  formatInputs <- c("format", "width", "height", "units")
+  setConfigurationExpression <- parse(text = paste0("ExportPlotConfiguration$", formatInputs, " <- ", 
+                                                    formatInputs, " %||% ExportPlotConfiguration$", formatInputs))
+  eval(setConfigurationExpression)
+}
 
 #' @title plotDemography
 #' @description Plot histograms of demography parameters from a simulated population

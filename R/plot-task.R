@@ -40,14 +40,14 @@ PlotTask <- R6::R6Class(
           self$outputFolder,
           getDefaultFileName(set$simulationSet$simulationSetName,
             suffix = plotName,
-            extension = "png"
+            extension = ExportPlotConfiguration$format
           )
         )
         # TO DO: define parameters from settings/plotConfiguration
         ggplot2::ggsave(
           filename = plotFileName,
           plot = taskResults$plots[[plotName]],
-          width = 16, height = 9, units = "cm"
+          width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
         )
         logWorkflow(
           message = paste0("Plot '", plotFileName, "' was successfully saved."),
@@ -155,7 +155,7 @@ PlotTask <- R6::R6Class(
           self$outputFolder,
           getDefaultFileName(
             suffix = "residuals",
-            extension = "png",
+            extension = ExportPlotConfiguration$format,
             sep = ""
           )
         )
@@ -196,7 +196,7 @@ PlotTask <- R6::R6Class(
         ggplot2::ggsave(
           filename = plotFileName,
           plot = residualHistogramPlot,
-          width = 16, height = 9, units = "cm"
+          width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
         )
         logWorkflow(
           message = paste0("Plot '", plotFileName, "' was successfully saved."),
