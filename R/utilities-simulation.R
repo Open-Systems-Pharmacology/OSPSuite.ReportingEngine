@@ -57,71 +57,28 @@ simulateModelForPopulation <- function(structureSet,
 #' @param showProgress option to print progress of simulation to console
 #' @export
 #' @import ospsuite
-simulateModelOnCore <- function(structureSet,
-                                populationFilePath = NULL,
-                                resultsFilePath,
-                                debugLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logDebugFile()),
-                                errorLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logErrorFile()),
-                                nodeName = NULL) {
-  simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
+simulateModelOnCore <- function(simulation,
+                                population, #resultsFilePath,
+                                debugLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logDebugFile()), #errorLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logErrorFile()),
+                                nodeName = NULL,
+                                showProgress = FALSE) {
 
   logDebug(
-    message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), ""), "Simulation file '", structureSet$simulationSet$simulationFile, "' successfully loaded"),
+    message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), ""), "Starting simulation."),
     file = debugLogFileName,
-    printConsole = FALSE
+    printConsole = TRUE
   )
 
-  if (!is.null(populationFilePath)) {
-    population <- ospsuite::loadPopulation(populationFilePath)
-    logDebug(
-      message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), ""), "Population file '", populationFilePath, "' successfully loaded"),
-      file = debugLogFileName,
-      printConsole = FALSE
-    )
-  }
-
-  simRunOptions <- ospsuite::SimulationRunOptions$new(showProgress = FALSE)
+  simRunOptions <- ospsuite::SimulationRunOptions$new(showProgress = showProgress,numberOfCores = 1)
   simulationResult <- NULL
-  simulationResult <- ospsuite::runSimulation(simulation, population = population, simulationRunOptions = simRunOptions)
-
-  if (is.null(simulationResult)) {
-    logError(
-      message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), ""), "Simulation not successfully completed."),
-      file = errorLogFileName,
-      printConsole = FALSE
-    )
-    return(FALSE)
-  }
+  simulationResult <- ospsuite::runSimulation(simulation = simulation, population = population, simulationRunOptions = simRunOptions)
 
   logDebug(
     message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), ""), "Simulation run complete."),
     file = debugLogFileName,
-    printConsole = FALSE
+    printConsole = TRUE
   )
-
-
-  if (file.exists(resultsFilePath)) {
-    file.remove(resultsFilePath)
-  }
-  ospsuite::exportResultsToCSV(
-    results = simulationResult,
-    filePath = resultsFilePath
-  )
-  if (!file.exists(resultsFilePath)) {
-    logError(
-      message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), ""), "Simulation results not successfully exported to CSV."),
-      file = errorLogFileName,
-      printConsole = FALSE
-    )
-    return(FALSE)
-  }
-
-  logDebug(
-    message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), ""), "Simulation results exported to CSV."),
-    file = debugLogFileName,
-    printConsole = FALSE
-  )
-  return(TRUE)
+  return(simulationResult)
 }
 
 #' @title simulateModel
@@ -185,7 +142,6 @@ simulateModel <- function(structureSet,
 #' @return Simulation results for population
 #' @export
 #' @import ospsuite
-## #' @import Rmpi
 runParallelPopulationSimulation <- function(structureSet,
                                             numberOfCores,
                                             settings,
@@ -215,22 +171,28 @@ runParallelPopulationSimulation <- function(structureSet,
   allResultsFileNames <- paste0(structureSet$simulationSet$simulationSetName, seq(1, numberOfCores), ".csv")
 
   Rmpi::mpi.bcast.Robj2slave(obj = structureSet)
-  Rmpi::mpi.bcast.Robj2slave(obj = populationFileName)
-  Rmpi::mpi.bcast.Robj2slave(obj = tempPopDataFiles)
+  Rmpi::mpi.bcast.Robj2slave(obj = settings)
   Rmpi::mpi.bcast.Robj2slave(obj = tempLogFileNames)
   Rmpi::mpi.bcast.Robj2slave(obj = allResultsFileNames)
 
-  simulationRunSuccess <- Rmpi::mpi.remote.exec(simulateModelOnCore(
-    structureSet = structureSet,
-    populationFilePath = tempPopDataFiles[mpi.comm.rank()],
-    resultsFilePath = allResultsFileNames[mpi.comm.rank()],
-    debugLogFileName = tempLogFileNames[mpi.comm.rank()],
-    errorLogFileName = tempLogFileNames[mpi.comm.rank()], ### add separate error file
-    nodeName = paste("Core", mpi.comm.rank())
-  ))
-  verifySimulationRunSuccessful(simulationRunSuccess = simulationRunSuccess, logFolder = logFolder)
-  Rmpi::mpi.close.Rslaves()
+  #Load simulation on each core
+  loadSimulationOnCores(structureSet = structureSet, logFolder = logFolder)
+  loadPopulationOnCores(populationFiles = tempPopDataFiles, logFolder = logFolder)
 
+  #Run simulation on each core
+  Rmpi::mpi.remote.exec(simulationResult <- simulateModelOnCore(
+    simulation = sim,
+    population = population, #resultsFilePath = allResultsFileNames[mpi.comm.rank()],
+    debugLogFileName = tempLogFileNames[mpi.comm.rank()],
+    nodeName = paste("Core", mpi.comm.rank()),
+    showProgress = settings$showProgress
+  ))
+
+  #Verify simulations ran successfully
+  simulationRunSuccess <- Rmpi::mpi.remote.exec(!is.null(simulationResult))
+  verifySimulationRunSuccessful(simulationRunSuccess = simulationRunSuccess, logFolder = logFolder)
+
+  #Write core logs to workflow logs
   for (core in seq(1, numberOfCores)) {
     logWorkflow(
       message = readLines(tempLogFileNames[core]),
@@ -239,9 +201,29 @@ runParallelPopulationSimulation <- function(structureSet,
     )
   }
 
+  #Remove any previous temporary results files
+  Rmpi::mpi.remote.exec(if (file.exists(allResultsFileNames[mpi.comm.rank()])) {
+    file.remove(allResultsFileNames[mpi.comm.rank()])
+  })
+  anyPreviousPartialResultsRemoved <- Rmpi::mpi.remote.exec(!file.exists(allResultsFileNames[mpi.comm.rank()]))
+  verifyAnyPreviousFilesRemoved(anyPreviousPartialResultsRemoved, logFolder = logFolder)
+
+  #Export temporary results files to CSV
+  Rmpi::mpi.remote.exec(ospsuite::exportResultsToCSV(
+    results = simulationResult,
+    filePath = allResultsFileNames[mpi.comm.rank()]
+  ))
+  partialResultsExported <- Rmpi::mpi.remote.exec(file.exists(allResultsFileNames[mpi.comm.rank()]))
+  verifyPartialResultsExported(partialResultsExported, logFolder = logFolder)
+
+  #Close slaves
+  Rmpi::mpi.close.Rslaves()
+
+  #Remove temporary log and population date files.
   file.remove(tempLogFileNames)
   file.remove(tempPopDataFiles)
 
+  #Return names of temporary results files
   return(allResultsFileNames)
 }
 
