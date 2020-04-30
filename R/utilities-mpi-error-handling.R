@@ -12,7 +12,7 @@ checkSimulationLoaded <- function(simulation, simulationFilePath) {
 #' @param population the population object to be checked if loaded successfully
 #' @export
 checkPopulationLoaded <- function(population) {
-  return(identical(class(population)[1],"Population"))
+  return(identical(class(population)[1], "Population"))
 }
 
 #' @title checkLibraryLoaded
@@ -63,7 +63,7 @@ loadSimulationOnCores <- function(structureSet, logFolder) {
 loadPopulationOnCores <- function(populationFiles, logFolder) {
   Rmpi::mpi.bcast.Robj2slave(obj = populationFiles)
   Rmpi::mpi.remote.exec(population <- NULL)
-  Rmpi::mpi.remote.exec(population <- ospsuite::loadPopulation( populationFiles[mpi.comm.rank()] ))
+  Rmpi::mpi.remote.exec(population <- ospsuite::loadPopulation(populationFiles[mpi.comm.rank()]))
   populationLoaded <- Rmpi::mpi.remote.exec(checkPopulationLoaded(population = population))
   success <- checkAllCoresSuccessful(populationLoaded)
   validateIsLogical(success)

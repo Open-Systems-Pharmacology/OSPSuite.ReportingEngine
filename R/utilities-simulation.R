@@ -58,18 +58,17 @@ simulateModelForPopulation <- function(structureSet,
 #' @export
 #' @import ospsuite
 simulateModelOnCore <- function(simulation,
-                                population, #resultsFilePath,
-                                debugLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logDebugFile()), #errorLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logErrorFile()),
+                                population, # resultsFilePath,
+                                debugLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logDebugFile()), # errorLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logErrorFile()),
                                 nodeName = NULL,
                                 showProgress = FALSE) {
-
   logDebug(
     message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), ""), "Starting simulation."),
     file = debugLogFileName,
     printConsole = TRUE
   )
 
-  simRunOptions <- ospsuite::SimulationRunOptions$new(showProgress = showProgress,numberOfCores = 1)
+  simRunOptions <- ospsuite::SimulationRunOptions$new(showProgress = showProgress, numberOfCores = 1)
   simulationResult <- NULL
   simulationResult <- ospsuite::runSimulation(simulation = simulation, population = population, simulationRunOptions = simRunOptions)
 
@@ -175,24 +174,24 @@ runParallelPopulationSimulation <- function(structureSet,
   Rmpi::mpi.bcast.Robj2slave(obj = tempLogFileNames)
   Rmpi::mpi.bcast.Robj2slave(obj = allResultsFileNames)
 
-  #Load simulation on each core
+  # Load simulation on each core
   loadSimulationOnCores(structureSet = structureSet, logFolder = logFolder)
   loadPopulationOnCores(populationFiles = tempPopDataFiles, logFolder = logFolder)
 
-  #Run simulation on each core
+  # Run simulation on each core
   Rmpi::mpi.remote.exec(simulationResult <- simulateModelOnCore(
     simulation = sim,
-    population = population, #resultsFilePath = allResultsFileNames[mpi.comm.rank()],
+    population = population, # resultsFilePath = allResultsFileNames[mpi.comm.rank()],
     debugLogFileName = tempLogFileNames[mpi.comm.rank()],
     nodeName = paste("Core", mpi.comm.rank()),
     showProgress = settings$showProgress
   ))
 
-  #Verify simulations ran successfully
+  # Verify simulations ran successfully
   simulationRunSuccess <- Rmpi::mpi.remote.exec(!is.null(simulationResult))
   verifySimulationRunSuccessful(simulationRunSuccess = simulationRunSuccess, logFolder = logFolder)
 
-  #Write core logs to workflow logs
+  # Write core logs to workflow logs
   for (core in seq(1, numberOfCores)) {
     logWorkflow(
       message = readLines(tempLogFileNames[core]),
@@ -201,14 +200,14 @@ runParallelPopulationSimulation <- function(structureSet,
     )
   }
 
-  #Remove any previous temporary results files
+  # Remove any previous temporary results files
   Rmpi::mpi.remote.exec(if (file.exists(allResultsFileNames[mpi.comm.rank()])) {
     file.remove(allResultsFileNames[mpi.comm.rank()])
   })
   anyPreviousPartialResultsRemoved <- Rmpi::mpi.remote.exec(!file.exists(allResultsFileNames[mpi.comm.rank()]))
   verifyAnyPreviousFilesRemoved(anyPreviousPartialResultsRemoved, logFolder = logFolder)
 
-  #Export temporary results files to CSV
+  # Export temporary results files to CSV
   Rmpi::mpi.remote.exec(ospsuite::exportResultsToCSV(
     results = simulationResult,
     filePath = allResultsFileNames[mpi.comm.rank()]
@@ -216,14 +215,14 @@ runParallelPopulationSimulation <- function(structureSet,
   partialResultsExported <- Rmpi::mpi.remote.exec(file.exists(allResultsFileNames[mpi.comm.rank()]))
   verifyPartialResultsExported(partialResultsExported, logFolder = logFolder)
 
-  #Close slaves
+  # Close slaves
   Rmpi::mpi.close.Rslaves()
 
-  #Remove temporary log and population date files.
+  # Remove temporary log and population date files.
   file.remove(tempLogFileNames)
   file.remove(tempPopDataFiles)
 
-  #Return names of temporary results files
+  # Return names of temporary results files
   return(allResultsFileNames)
 }
 
