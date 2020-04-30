@@ -146,11 +146,7 @@ plotPopulationPKParameters <- function(structureSets,
     ))
 
     # TO DO: standardize this approach for names of plots to export
-    parameterLabel <- sub(
-      pattern = "^.*[|]",
-      replacement = "",
-      x = parameter
-    )
+    parameterLabel <- lastPathElement(parameter)
 
     boxplotPkParameters <- tlf::plotBoxWhisker(
       data = pkParameterData,
@@ -169,74 +165,30 @@ plotPopulationPKParameters <- function(structureSets,
       dataMapping = pkParametersMapping
     )
 
+    # Range plots on PK parameters vs xParameters
     for (demographyParameter in xParameters) {
+      
+      aggregatedData <- getPopulationPkParametersAggregatedData(data = pkParameterData, 
+                                                                xParameterName = demographyParameter, 
+                                                                xParameterBreaks = settings$xParametersBreaks[[demographyParameter]])
 
-      # Bin the population data (allow modification of bins in settings)
-      xParameterBreaks <- settings$xParametersBreaks[[demographyParameter]] %||% 10
-      xParameterBins <- cut(pkParameterData[, demographyParameter], breaks = xParameterBreaks)
-
-      xData <- stats::aggregate(
-        x = pkParameterData[, demographyParameter],
-        by = list(
-          bins = xParameterBins,
-          Population = pkParameterData[, "Population Name"]
-        ),
-        FUN = median
-      )
-      medianData <- stats::aggregate(
-        x = pkParameterData[, "Value"],
-        by = list(
-          bins = xParameterBins,
-          Population = pkParameterData[, "Population Name"]
-        ),
-        FUN = median
-      )
-      lowPercData <- stats::aggregate(
-        x = pkParameterData[, "Value"],
-        by = list(
-          bins = xParameterBins,
-          Population = pkParameterData[, "Population Name"]
-        ),
-        FUN = lowPerc
-      )
-      highPercData <- stats::aggregate(
-        x = pkParameterData[, "Value"],
-        by = list(
-          bins = xParameterBins,
-          Population = pkParameterData[, "Population Name"]
-        ),
-        FUN = highPerc
-      )
-
-      aggregatedData <- cbind.data.frame(xData,
-        median = medianData$x,
-        ymin = lowPercData$x,
-        ymax = highPercData$x
-      )
       populationNames <- levels(factor(aggregatedData$Population))
 
+      # For pediatric workflow, range plots compare reference population to the other populations
       if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
         # Get the table for reference population
         pkParametersTable <- pkParametersTables[[parameterLabel]]
-        referenceData <- data.frame(
-          x = c(-Inf, Inf),
-          "Population" = paste("Simulated median [5th-95th] percentiles for", referencePopulationName)
-        )
+        referenceData <- data.frame(x = c(-Inf, Inf),
+                                    "Population" = paste("Simulated median [5th-95th] percentiles for", referencePopulationName))
         referenceData[, c("ymin", "median", "ymax")] <- pkParametersTable[referencePopulationName, c(2, 4, 6)]
 
         # TO DO: integrate unit in the process
-        xParameterName <- sub(
-          pattern = "^.*[|]",
-          replacement = "",
-          x = demographyParameter
-        )
-        vpcMetaData <- list(
-          "x" = list(
-            dimension = xParameterName,
-            unit = ""
-          ),
-          "median" = pkParameterMetaData$Value
-        )
+        xParameterName <- lastPathElement(demographyParameter)
+        
+        vpcMetaData <- list("x" = list(dimension = xParameterName,
+                                       unit = ""),
+                            "median" = pkParameterMetaData$Value)
+        
         referenceVpcPlot <- vpcParameterPlot(
           data = referenceData,
           metaData = vpcMetaData,
@@ -257,6 +209,8 @@ plotPopulationPKParameters <- function(structureSets,
             ggplot2::scale_y_continuous(trans = "log10")
         }
       }
+      
+      # Regular range plots not associated to workflow type
       for (populationName in populationNames) {
         vpcData <- aggregatedData[aggregatedData$Population %in% populationName, ]
         vpcData$Population <- paste("Simulated median [5th-95th] percentiles for", vpcData$Population)
@@ -272,13 +226,10 @@ plotPopulationPKParameters <- function(structureSets,
     }
   }
 
+  # For Ratio Comparison create boxplots of boxplot hinges ratios 
   if (workflowType %in% PopulationWorkflowTypes$ratioComparison) {
     for (parameter in yParameters) {
-      parameterLabel <- sub(
-        pattern = "^.*[|]",
-        replacement = "",
-        x = parameter
-      )
+      parameterLabel <- lastPathElement(parameter)
 
       # Get the tables and compute the ratios using reference population name
       pkParametersTable <- pkParametersTables[[parameterLabel]]
@@ -405,4 +356,47 @@ vpcParameterPlot <- function(data,
     ggplot2::labs(title = NULL, subtitle = NULL)
 
   return(vpcPlot)
+}
+
+
+
+getPopulationPkParametersAggregatedData <- function(data, 
+                                                    xParameterName, 
+                                                    xParameterBreaks = NULL){
+  
+  # TO DO: create a global list for the lowPerc, median and highPerc
+  lowPerc <- function(x) {
+    as.numeric(quantile(x, probs = 0.05))
+  }
+  highPerc <- function(x) {
+    as.numeric(quantile(x, probs = 0.95))
+  }
+  
+  xParameterBreaks <- xParameterBreaks %||% 10
+  xParameterBins <- cut(data[, xParameterName], breaks = xParameterBreaks)
+  
+  xData <- stats::aggregate(x = data[, xParameterName],
+                            by = list(Bins = xParameterBins,
+                                      Population = data[, "Population Name"]),
+                            FUN = median)
+  
+  medianData <- stats::aggregate(x = data[, "Value"],
+                                 by = list(Bins = xParameterBins,
+                                           Population = data[, "Population Name"]),
+                                 FUN = median)
+  lowPercData <- stats::aggregate(x = data[, "Value"],
+                                  by = list(Bins = xParameterBins,
+                                            Population = data[, "Population Name"]),
+                                  FUN = lowPerc)
+  highPercData <- stats::aggregate(x = data[, "Value"],
+                                   by = list(Bins = xParameterBins,
+                                             Population = data[, "Population Name"]),
+                                   FUN = highPerc)
+  
+  aggregatedData <- cbind.data.frame(xData,
+                                     median = medianData$x,
+                                     ymin = lowPercData$x,
+                                     ymax = highPercData$x)
+  
+  return(aggregatedData)
 }
