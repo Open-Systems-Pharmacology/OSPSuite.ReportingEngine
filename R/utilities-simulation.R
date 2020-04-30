@@ -150,7 +150,8 @@ runParallelPopulationSimulation <- function(structureSet,
   Rmpi::mpi.spawn.Rslaves(nslaves = numberOfCores)
 
   # Check that the correct number of slaves has been spawned.
-  if (!(Rmpi::mpi.comm.size() - 1 == numberOfCores)) { #-1 since mpi.comm.size() counts master
+  #numberOfCores = Rmpi::mpi.comm.size() - 1 since mpi.comm.size() counts master
+  if (!(Rmpi::mpi.comm.size() - 1 == numberOfCores)) {
     Rmpi::mpi.close.Rslaves()
     stop(paste0(numberOfCores, " cores were not successfully spawned."))
   }
