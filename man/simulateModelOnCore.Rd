@@ -5,30 +5,28 @@
 \title{simulateModelOnCore}
 \usage{
 simulateModelOnCore(
-  structureSet,
-  populationFilePath = NULL,
-  resultsFilePath,
+  simulation,
+  population,
   debugLogFileName = file.path(defaultFileNames$workflowFolderPath(),
     defaultFileNames$logDebugFile()),
-  errorLogFileName = file.path(defaultFileNames$workflowFolderPath(),
-    defaultFileNames$logErrorFile()),
-  nodeName = NULL
+  nodeName = NULL,
+  showProgress = FALSE
 )
 }
 \arguments{
+\item{debugLogFileName}{path to file where core debug logs are saved}
+
+\item{nodeName}{node name for parallel simulations}
+
+\item{showProgress}{option to print progress of simulation to console}
+
 \item{structureSet}{`SimulationStructure` R6 class object contain paths of files to be used}
 
 \item{populationFilePath}{path to population file to be used for simulation}
 
 \item{resultsFilePath}{path to CSV files to which results will be saved,}
 
-\item{debugLogFileName}{path to file where core debug logs are saved}
-
 \item{errorLogFileName}{path to file where core error logs are saved}
-
-\item{nodeName}{node name for parallel simulations}
-
-\item{showProgress}{option to print progress of simulation to console}
 }
 \description{
 Simulate model, either for an individual or for a given population.

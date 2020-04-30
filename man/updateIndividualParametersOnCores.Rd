@@ -7,6 +7,8 @@
 updateIndividualParametersOnCores(individualParameters, logFolder)
 }
 \arguments{
+\item{logFolder}{folder where the logs are saved}
+
 \item{libraryName}{string containing name of library to be loaded}
 }
 \description{

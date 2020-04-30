@@ -7,6 +7,8 @@
 verifyPartialResultsExported(partialResultsExported, logFolder)
 }
 \arguments{
+\item{logFolder}{folder where the logs are saved}
+
 \item{sensitivityRunSuccess}{logical vector indicating success of result file export}
 }
 \description{
