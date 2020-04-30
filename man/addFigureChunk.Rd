@@ -19,7 +19,7 @@ addFigureChunk(
 
 \item{figureCaption}{caption of figure}
 
-\item{figureWidth}{figure width within report. Default is "100%"}
+\item{figureWidth}{figure width within report. Default is 100 percent.}
 
 \item{logFolder}{folder where the logs are saved}
 }

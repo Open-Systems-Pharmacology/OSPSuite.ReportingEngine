@@ -34,6 +34,6 @@ SA results for an individual
 \description{
 Run SA for an individual, possibly after modifying the simulation using individualParameters.
 Determine whether to run SA for on single core or in parallel.
-If on single core, pass simulation to analyzeCoreSensitivity.
+If on single core, pass simulation to analyzeSensitivity.
 If in parallel, pass simulation to runParallelSensitivityAnalysis.
 }
