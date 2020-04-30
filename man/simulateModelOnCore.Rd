@@ -10,6 +10,8 @@ simulateModelOnCore(
   resultsFilePath,
   debugLogFileName = file.path(defaultFileNames$workflowFolderPath(),
     defaultFileNames$logDebugFile()),
+  errorLogFileName = file.path(defaultFileNames$workflowFolderPath(),
+    defaultFileNames$logErrorFile()),
   nodeName = NULL
 )
 }
@@ -21,6 +23,8 @@ simulateModelOnCore(
 \item{resultsFilePath}{path to CSV files to which results will be saved,}
 
 \item{debugLogFileName}{path to file where core debug logs are saved}
+
+\item{errorLogFileName}{path to file where core error logs are saved}
 
 \item{nodeName}{node name for parallel simulations}
 

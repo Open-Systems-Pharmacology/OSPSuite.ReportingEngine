@@ -7,6 +7,8 @@
 runParallelSensitivityAnalysis(
   structureSet,
   variableParameterPaths,
+  variationRange,
+  showProgress,
   individualParameters,
   numberOfCores,
   logFolder = getwd()
