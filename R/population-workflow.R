@@ -320,13 +320,3 @@ PopulationWorkflowTypes <- enum(c(
   "parallelComparison",
   "ratioComparison"
 ))
-
-#' @export
-DemographyPaths <- enum(c(
-  "Organism|Age",
-  "Organism|Weight",
-  "Organism|Height",
-  "Organism|BMI",
-  "Organism|BSA",
-  "Gender"
-))
