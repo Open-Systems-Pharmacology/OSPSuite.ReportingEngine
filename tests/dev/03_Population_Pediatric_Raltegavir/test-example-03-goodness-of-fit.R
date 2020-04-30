@@ -4,6 +4,9 @@
 
 library(ospsuite.reportingengine)
 
+# Use of set plot format to change the properties of export
+setPlotFormat(format = "pdf")
+
 popModelSets <- list(
   Larson = PopulationSimulationSet$new(
     simulationFile = "PKML/Larson 2013 8-18y meal.pkml",

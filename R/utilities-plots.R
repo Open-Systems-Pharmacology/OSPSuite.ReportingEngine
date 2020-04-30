@@ -10,9 +10,14 @@ reTheme$titleFont$size <- 10
 reTheme$subtitleFont$size <- 9
 tlf::useTheme(reTheme)
 
-# TO DO: set the following code directly in TLF
+# Temporary fix for plot format
+# TO DO: set a similar code directly in tlfEnv
+ExportPlotConfigurationClass <- R6::R6Class(
+  "ExportPlotConfiguration",
+  public = list(format = "png", width = 16, height = 9, units = "cm"))
+
 #'@export
-ExportPlotConfiguration <- list(format = "png", width = 16, height = 9, units = "cm")
+ExportPlotConfiguration <- ExportPlotConfigurationClass$new()
 
 #' @title setPlotFormat
 #' @description Set plot format
@@ -24,7 +29,8 @@ ExportPlotConfiguration <- list(format = "png", width = 16, height = 9, units = 
 #' @export
 setPlotFormat <- function(format, width = NULL, height = NULL, units = NULL){
   formatInputs <- c("format", "width", "height", "units")
-  setConfigurationExpression <- parse(text = paste0("ExportPlotConfiguration[[", formatInputs, "]] <- ", formatInputs))
+  setConfigurationExpression <- parse(text = paste0("ExportPlotConfiguration$", formatInputs, " <- ", 
+                                                    formatInputs, " %||% ExportPlotConfiguration$", formatInputs))
   eval(setConfigurationExpression)
 }
 
