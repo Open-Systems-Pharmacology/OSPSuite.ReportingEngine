@@ -25,9 +25,9 @@ plotMeanGoodnessOfFit <- function(structureSet,
     observations$metaData <- readObservedDataFile(structureSet$simulationSet$observedMetaDataFile)
     observations$filter <- structureSet$simulationSet$dataFilter
 
-    # TO DO: Agree on dictionary to replace "matlabID"
-    timeColumn <- as.character(observations$metaData[observations$metaData[, "matlabID"] == "time", "nonmenColumn"])
-    dvColumn <- as.character(observations$metaData[observations$metaData[, "matlabID"] == "dv", "nonmenColumn"])
+    # TO DO: Agree on dictionary to replace "ID"
+    timeColumn <- as.character(observations$metaData[observations$metaData[, "ID"] == "time", "nonmenColumn"])
+    dvColumn <- as.character(observations$metaData[observations$metaData[, "ID"] == "dv", "nonmenColumn"])
 
     if (is.null(observations$filter)) {
       observedData <- data.frame(
@@ -497,9 +497,9 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     observations$metaData <- readObservedDataFile(structureSet$simulationSet$observedMetaDataFile)
     observations$filter <- structureSet$simulationSet$dataFilter
 
-    # TO DO: Agree on dictionary to replace "matlabID"
-    timeColumn <- as.character(observations$metaData[observations$metaData[, "matlabID"] == "time", "nonmenColumn"])
-    dvColumn <- as.character(observations$metaData[observations$metaData[, "matlabID"] == "dv", "nonmenColumn"])
+    # TO DO: Agree on dictionary to replace "ID"
+    timeColumn <- as.character(observations$metaData[observations$metaData[, "ID"] == "time", "nonmenColumn"])
+    dvColumn <- as.character(observations$metaData[observations$metaData[, "ID"] == "dv", "nonmenColumn"])
 
     if (is.null(observations$filter)) {
       observedData <- data.frame(
