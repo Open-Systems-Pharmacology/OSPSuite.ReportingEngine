@@ -4,7 +4,7 @@
 #' @param simulationFilePath the path to the simulation object to be checked if loaded successfully
 #' @export
 checkSimulationLoaded <- function(simulation) {
-  return(is.null(validateIsOfType(simulation,"Simulation")))
+  return(is.null(validateIsOfType(simulation, "Simulation")))
 }
 
 #' @title checkPopulationLoaded
@@ -12,7 +12,7 @@ checkSimulationLoaded <- function(simulation) {
 #' @param population the population object to be checked if loaded successfully
 #' @export
 checkPopulationLoaded <- function(population) {
-  return(is.null(validateIsOfType(population,"Population")))
+  return(is.null(validateIsOfType(population, "Population")))
 }
 
 #' @title checkLibraryLoaded
