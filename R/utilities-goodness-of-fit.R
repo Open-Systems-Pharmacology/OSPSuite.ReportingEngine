@@ -25,7 +25,6 @@ plotMeanGoodnessOfFit <- function(structureSet,
     observations$metaData <- readObservedDataFile(structureSet$simulationSet$observedMetaDataFile)
     observations$filter <- structureSet$simulationSet$dataFilter
 
-    # TO DO: Agree on dictionary to replace "ID"
     timeColumn <- as.character(observations$metaData[observations$metaData[, "ID"] == "time", "nonmenColumn"])
     dvColumn <- as.character(observations$metaData[observations$metaData[, "ID"] == "dv", "nonmenColumn"])
 
@@ -497,7 +496,6 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     observations$metaData <- readObservedDataFile(structureSet$simulationSet$observedMetaDataFile)
     observations$filter <- structureSet$simulationSet$dataFilter
 
-    # TO DO: Agree on dictionary to replace "ID"
     timeColumn <- as.character(observations$metaData[observations$metaData[, "ID"] == "time", "nonmenColumn"])
     dvColumn <- as.character(observations$metaData[observations$metaData[, "ID"] == "dv", "nonmenColumn"])
 
