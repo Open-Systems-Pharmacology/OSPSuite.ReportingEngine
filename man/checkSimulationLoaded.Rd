@@ -4,7 +4,7 @@
 \alias{checkSimulationLoaded}
 \title{checkSimulationLoaded}
 \usage{
-checkSimulationLoaded(simulation, simulationFilePath)
+checkSimulationLoaded(simulation)
 }
 \arguments{
 \item{simulation}{the simulation object to be checked if loaded successfully}

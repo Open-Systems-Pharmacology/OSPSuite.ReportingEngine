@@ -12,5 +12,5 @@ verifyPartialResultsExported(partialResultsExported, logFolder)
 \item{sensitivityRunSuccess}{logical vector indicating success of result file export}
 }
 \description{
-Check that partial sensitivity results from individual cores have been exported
+Check that results from individual cores have been exported
 }
