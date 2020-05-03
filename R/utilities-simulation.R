@@ -109,11 +109,6 @@ simulateModel <- function(structureSet,
     )
   }
 
-  ospsuite::clearOutputs(simulation)
-  quantitiesToSimulate <- ospsuite::getAllQuantitiesMatching(structureSet$simulationSet$pathID, simulation)
-  for (quantity in quantitiesToSimulate) {
-    ospsuite::addOutputs(quantitiesOrPaths = quantity, simulation = simulation)
-  }
 
   simRunOptions <- ospsuite::SimulationRunOptions$new(showProgress = ifnotnull(settings, outputIfNotNull = settings$showProgress, outputIfNull = FALSE))
   simulationResult <- ospsuite::runSimulation(simulation,
