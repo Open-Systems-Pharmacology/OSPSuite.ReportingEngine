@@ -38,12 +38,7 @@ Workflow <- R6::R6Class(
         logWorkflow(
           message = workflowFolderCheck,
           pathFolder = self$workflowFolder,
-          logTypes = c(LogTypes$Debug, LogTypes$Error)
-        )
-        logWorkflow(
-          message = messages$warningPathIncludes(self$workflowFolder),
-          pathFolder = self$workflowFolder,
-          logTypes = c(LogTypes$Debug, LogTypes$Error)
+          logTypes = c(LogTypes$Debug)
         )
       }
       dir.create(self$workflowFolder, showWarnings = FALSE)
