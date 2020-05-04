@@ -32,7 +32,7 @@ Workflow <- R6::R6Class(
       validateNoDuplicatedEntries(allSimulationSetNames)
       
       self$workflowFolder <- workflowFolder
-      workflowFolderCheck <- checkExisitingPath(self$workflowFolder, stopIfPathExists = FALSE)
+      workflowFolderCheck <- file.exists(self$workflowFolder)
 
       if (!is.null(workflowFolderCheck)) {
         logWorkflow(
