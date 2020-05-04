@@ -189,19 +189,21 @@ checkOverwriteExisitingPath <- function(path, overwrite) {
   }
 }
 
+fileExtension <- function(file) {
+  ex <- strsplit(basename(file), split = "\\.")[[1]]
+  return(ex[-1])
+}
+
 #' Check if the provided path has required extension
 #'
 #' @param path (character) file or path name to be checked
 #' @param extension extension of the file required after "."
 #'
 #' @return TRUE if the path includes the extension
-isFileExtension <- function(path, extension) {
-  return(max(sapply(
-    extension,
-    function(ext) {
-      grepl(pattern = paste0(".", ext), x = path)
-    }
-  )))
+isFileExtension <- function(file, extension) {
+  extension <- c(extension)
+  file_ext <- fileExtension(file)
+  file_ext %in% extension
 }
 
 validateIsFileExtension <- function(path, extension, nullAllowed = FALSE) {
