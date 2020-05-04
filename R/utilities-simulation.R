@@ -154,7 +154,8 @@ simulateModel <- function(structureSet,
   }
 
   ospsuite::clearOutputs(simulation)
-  quantitiesToSimulate <- ospsuite::getAllQuantitiesMatching(structureSet$simulationSet$pathID, simulation)
+  allSimulationSetPaths <- sapply(structureSet$simulationSet$outputs, function(output){output$path})
+  quantitiesToSimulate <- ospsuite::getAllQuantitiesMatching(paths = allSimulationSetPaths, simulation)
   for (quantity in quantitiesToSimulate) {
     ospsuite::addOutputs(quantitiesOrPaths = quantity, simulation = simulation)
   }

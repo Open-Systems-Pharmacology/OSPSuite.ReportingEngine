@@ -13,94 +13,81 @@
 plotMeanGoodnessOfFit <- function(structureSet,
                                   logFolder = getwd(),
                                   settings = NULL) {
+  validateIsOfType(structureSet, "SimulationStructure")
+
   observedData <- NULL
   simulatedData <- NULL
+  residualsData <- NULL
+  residualsMetaData <- NULL
   goodnessOfFitPlots <- NULL
-  residuals <- NULL
 
-  # Get the time profile for observed data
-  if (!is.null(structureSet$simulationSet$observedDataFile)) {
-    observations <- list()
-    observations$data <- readObservedDataFile(structureSet$simulationSet$observedDataFile)
-    observations$metaData <- readObservedDataFile(structureSet$simulationSet$observedMetaDataFile)
-    observations$filter <- structureSet$simulationSet$dataFilter
-
-    timeColumn <- as.character(observations$metaData[observations$metaData[, "ID"] == "time", "nonmenColumn"])
-    dvColumn <- as.character(observations$metaData[observations$metaData[, "ID"] == "dv", "nonmenColumn"])
-
-    if (is.null(observations$filter)) {
-      observedData <- data.frame(
-        "Time" = observations$data[, timeColumn],
-        "Concentration" = observations$data[, dvColumn],
-        "Legend" = structureSet$simulationSet$dataReportName
-      )
-    }
-
-    if (!is.null(observations$filter)) {
-      # Ensure that filter is used as an expression
-      if (!isOfType(observations$filter, "expression")) {
-        observations$filter <- parse(text = observations$filter)
-      }
-      for (filterIndex in seq_along(observations$filter)) {
-        rowFilter <- evalDataFilter(observations$data, observations$filter[filterIndex])
-
-        logWorkflow(
-          message = paste0("Number of observations filtered: ", sum(rowFilter)),
-          pathFolder = logFolder,
-          logTypes = LogTypes$Debug
-        )
-
-        # Observed Data needs to be already in the display unit
-        # TO DO: ensure in simulationSet that dataReportName is same length as filter
-        # orderer = TRUE ensure the same order in the legend, otherwise ggplot use alphabetical order
-        observedData <- rbind.data.frame(
-          observedData,
-          data.frame(
-            "Time" = observations$data[rowFilter, timeColumn],
-            "Concentration" = observations$data[rowFilter, dvColumn],
-            "Legend" = factor(structureSet$simulationSet$dataReportName[filterIndex],
-              ordered = TRUE
-            )
-          )
-        )
-      }
-    }
-  }
-
-  # Get the time profile for simulated data
+  # Load observed and simulated data
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
-  simulationQuantity <- ospsuite::getAllQuantitiesMatching(structureSet$simulationSet$pathID, simulation)
-
   simulationResult <- ospsuite::importResultsFromCSV(
     simulation,
     structureSet$simulationResultFileNames
   )
 
-  simulationPathResults <- ospsuite::getOutputValues(simulationResult,
-    quantitiesOrPaths = structureSet$simulationSet$pathID
-  )
+  if (!is.null(structureSet$simulationSet$observedDataFile)) {
+    observedDataset <- readObservedDataFile(structureSet$simulationSet$observedDataFile)
 
-  for (quantityIndex in seq_along(simulationQuantity)) {
-    # TO DO: replace by osp built in function
-    molWeight <- getMolWeightForPath(structureSet$simulationSet$pathID[quantityIndex], simulation)
+    dictionary <- readObservedDataFile(structureSet$simulationSet$observedMetaDataFile)
+    timeColumn <- as.character(dictionary[dictionary[, "ID"] == "time", "nonmenColumn"])
+    dvColumn <- as.character(dictionary[dictionary[, "ID"] == "dv", "nonmenColumn"])
+  }
 
+  for (output in structureSet$simulationSet$outputs) {
+    outputSimulatedData <- NULL
+    outputObservedData <- NULL
+    outputResidualsData <- NULL
+
+    simulationQuantity <- ospsuite::getQuantity(output$path, simulation)
+    simulationPathResults <- ospsuite::getOutputValues(simulationResult,
+      quantitiesOrPaths = output$path
+    )
+    molWeight <- getMolWeightForPath(output$path, simulation)
+
+    outputSimulatedData <- data.frame(
+      "Time" = toUnit("Time", simulationPathResults$data[, "Time"], structureSet$simulationSet$timeUnit),
+      "Concentration" = ifnotnull(
+        output$displayUnit,
+        toUnit(simulationQuantity,
+          simulationPathResults$data[, output$path],
+          output$displayUnit,
+          molWeight = molWeight
+        ),
+        simulationPathResults$data[, output$path]
+      ),
+      "Legend" = output$displayName %||% output$path
+    )
+
+    if (!is.null(output$dataFilter)) {
+      rowFilter <- evalDataFilter(observedDataset, output$dataFilter)
+      logWorkflow(
+        message = paste0("Output '", output$path, "'. Number of observations filtered: ", sum(rowFilter)),
+        pathFolder = logFolder,
+        logTypes = LogTypes$Debug
+      )
+
+      outputObservedData <- data.frame(
+        "Time" = observedDataset[rowFilter, timeColumn],
+        "Concentration" = observedDataset[rowFilter, dvColumn],
+        "Legend" = output$dataDisplayName
+      )
+
+      outputResiduals <- getResiduals(outputObservedData, outputSimulatedData)
+    }
     simulatedData <- rbind.data.frame(
       simulatedData,
-      data.frame(
-        "Time" = toUnit("Time", simulationPathResults$data[, "Time"], structureSet$simulationSet$timeUnit),
-        "Concentration" = ifnotnull(
-          structureSet$simulationSet$pathUnit[quantityIndex],
-          toUnit(simulationQuantity[[quantityIndex]],
-            simulationPathResults$data[, structureSet$simulationSet$pathID[quantityIndex]],
-            structureSet$simulationSet$pathUnit[quantityIndex],
-            molWeight = molWeight
-          ),
-          simulationPathResults$data[, structureSet$simulationSet$pathID[quantityIndex]]
-        ),
-        "Legend" = factor(paste0(structureSet$simulationSet$pathName[quantityIndex], " simulated data"),
-          ordered = TRUE
-        )
-      )
+      outputSimulatedData
+    )
+    observedData <- rbind.data.frame(
+      observedData,
+      outputObservedData
+    )
+    residualsData <- rbind.data.frame(
+      residualsData,
+      outputResiduals
     )
   }
 
@@ -108,26 +95,17 @@ plotMeanGoodnessOfFit <- function(structureSet,
     observedData,
     simulatedData
   )
-  # Reorder factors: observed before simulated
-  # This aims at facilitating the standaridzation of the GOF plots:
-  # Observed data are split by shapes and colors,
-  # So will the residuals with default options
-  timeProfileData$Legend <- factor(timeProfileData$Legend,
-    levels = c(
-      levels(observedData$Legend),
-      levels(simulatedData$Legend)
-    )
-  )
-
-  # TO DO: so far only using the first quantity to get the ylabel and its unit
+  
+  # TO DO: so far only using the last quantity to get the ylabel and its unit
+  # Need to document how to change that from settings
   timeProfileMetaData <- list(
     "Time" = list(
       dimension = "Time",
       unit = structureSet$simulationSet$timeUnit
     ),
     "Concentration" = list(
-      dimension = simulationQuantity[[1]]$dimension,
-      unit = structureSet$simulationSet$pathUnit[1]  %||% simulationQuantity[[1]]$displayUnit
+      dimension = simulationQuantity$dimension,
+      unit = output$displayUnit %||% simulationQuantity$displayUnit
     )
   )
 
@@ -150,19 +128,19 @@ plotMeanGoodnessOfFit <- function(structureSet,
   goodnessOfFitPlots[["timeProfile"]] <- timeProfilePlot
   goodnessOfFitPlots[["timeProfileLog"]] <- timeProfilePlotLog
 
-  if (!is.null(structureSet$simulationSet$observedDataFile)) {
-    residuals <- getResiduals(
-      observedData,
-      simulatedData,
-      timeProfileMetaData
-    )
+  if (!is.null(residualsData)) {
     # Smart plotConfig labels metaData$dimension [metaData$unit]
-    residuals$metaData[["Observed"]]$dimension <- paste0("Observed ", structureSet$simulationSet$pathName)
-    residuals$metaData[["Simulated"]]$dimension <- paste0("Simulated ", structureSet$simulationSet$pathName)
+    residualsMetaData <- timeProfileMetaData
+    residualsMetaData[["Observed"]] <- timeProfileMetaData[["Concentration"]]
+    residualsMetaData[["Simulated"]] <- timeProfileMetaData[["Concentration"]]
+    residualsMetaData[["Residuals"]] <- list(unit = "", dimension = "Residuals\nlog(Observed)-log(Simulated)")
+
+    residualsMetaData[["Observed"]]$dimension <- paste0("Observed ", output$displayName %||% output$path)
+    residualsMetaData[["Simulated"]]$dimension <- paste0("Simulated ", output$displayName %||% output$path)
 
     goodnessOfFitPlots[["obsVsPred"]] <- plotMeanObsVsPred(
-      data = residuals$data,
-      metaData = residuals$metaData,
+      data = residualsData,
+      metaData = residualsMetaData,
       plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
     )
 
@@ -171,21 +149,23 @@ plotMeanGoodnessOfFit <- function(structureSet,
       ggplot2::scale_x_continuous(trans = "log10")
 
     goodnessOfFitPlots[["resVsTime"]] <- plotMeanResVsTime(
-      data = residuals$data,
-      metaData = residuals$metaData,
+      data = residualsData,
+      metaData = residualsMetaData,
       plotConfiguration = settings$plotConfigurations[["resVsTime"]]
     )
 
     goodnessOfFitPlots[["resVsPred"]] <- plotMeanResVsPred(
-      data = residuals$data,
-      metaData = residuals$metaData,
+      data = residualsData,
+      metaData = residualsMetaData,
       plotConfiguration = settings$plotConfigurations[["resVsPred"]]
     )
   }
+
   return(list(
     plots = goodnessOfFitPlots,
-    tables = timeProfileData,
-    residuals = residuals
+    tables = list(timeProfileData = timeProfileData),
+    residuals = list(data = residualsData,
+                     metaData = residualsMetaData)
   ))
 }
 
@@ -241,56 +221,29 @@ plotMeanTimeProfile <- function(simulatedData,
 #' The function get the simulated data with the time the closest to the observed data times
 #' @param observedData data.frame of time profile observed data
 #' @param simulatedData data.frame of time profile simulated data
-#' @param metaData meta data on `data`
-#' @param dataMapping XYDataMapping class object mapping what variable is to compare
 #' @return residualsData data.frame with Time, Observed, Simulated, Residuals
 #' @export
 getResiduals <- function(observedData,
-                         simulatedData,
-                         metaData = NULL,
-                         dataMapping = NULL) {
-  observedDataTypes <- levels(factor(observedData[, "Legend"]))
-  simulatedDataTypes <- levels(factor(simulatedData[, "Legend"]))
+                         simulatedData) {
 
-  residuals <- list()
+  # Time matrix to match observed time with closest simulation time
+  obsTimeMatrix <- matrix(observedData[, "Time"], nrow(simulatedData), nrow(observedData), byrow = TRUE)
+  simTimeMatrix <- matrix(simulatedData[, "Time"], nrow(simulatedData), nrow(observedData))
 
-  # Match observed with simulation for each filter
-  for (dataIndex in seq_along(observedDataTypes)) {
-    filterObservedData <- observedData[observedData[, "Legend"] == observedDataTypes[dataIndex], ]
-    filterSimulatedData <- simulatedData[simulatedData[, "Legend"] == simulatedDataTypes[dataIndex], ]
+  timeMatchedData <- as.numeric(sapply(as.data.frame(abs(obsTimeMatrix - simTimeMatrix)), which.min))
 
-    # Time matrix
-    obsTimeMatrix <- matrix(filterObservedData[, "Time"], nrow(filterSimulatedData), nrow(filterObservedData), byrow = TRUE)
-    simTimeMatrix <- matrix(filterSimulatedData[, "Time"], nrow(filterSimulatedData), nrow(filterObservedData))
-
-    timeMatchedData <- as.numeric(sapply(as.data.frame(abs(obsTimeMatrix - simTimeMatrix)), which.min))
-
-    residuals$data <- rbind.data.frame(
-      residuals$data,
-      data.frame(
-        "Time" = filterObservedData[, "Time"],
-        "Observed" = filterObservedData[, "Concentration"],
-        "Simulated" = filterSimulatedData[timeMatchedData, "Concentration"],
-        "Residuals" = log(filterObservedData[, "Concentration"]) - log(filterSimulatedData[timeMatchedData, "Concentration"]),
-        "Legend" = observedDataTypes[dataIndex]
-      )
-    )
-  }
-
-  # Remove Inf caused by obs = 0 which crash the axis sizing
-  residuals$data <- residuals$data[!is.infinite(residuals$data[, "Residuals"]), ]
-
-  # TO DO: integrate method to get residuals metadata
-  residuals$metaData <- list()
-  residuals$metaData[["Time"]] <- metaData[["Time"]]
-  residuals$metaData[["Observed"]] <- metaData[["Concentration"]]
-  residuals$metaData[["Simulated"]] <- metaData[["Concentration"]]
-  residuals$metaData[["Residuals"]] <- list(
-    unit = "",
-    dimension = "Residuals\nlog(Observed)-log(Simulated)"
+  residualsData <- data.frame(
+    "Time" = observedData[, "Time"],
+    "Observed" = observedData[, "Concentration"],
+    "Simulated" = simulatedData[timeMatchedData, "Concentration"],
+    "Residuals" = log(observedData[, "Concentration"]) - log(simulatedData[timeMatchedData, "Concentration"]),
+    "Legend" = observedData[, "Legend"]
   )
 
-  return(residuals)
+  # Remove Inf caused by obs = 0 which crash the axis sizing
+  residualsData <- residualsData[!is.infinite(residualsData[, "Residuals"]), ]
+
+  return(residualsData)
 }
 
 
