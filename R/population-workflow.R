@@ -48,6 +48,7 @@ PopulationWorkflow <- R6::R6Class(
       self$plotGoFSettings()
       self$plotPKParametersSettings()
       self$plotSensitivitySettings()
+      self$taskNames <- enum(self$getAllTasks())
     },
 
     #' @description

@@ -45,6 +45,7 @@ MeanModelWorkflow <- R6::R6Class(
       self$meanModelSensitivityAnalysisSettings()
       self$plotSensitivitySettings()
       self$resetReportSettings()
+      self$taskNames <- enum(self$getAllTasks())
     },
 
     #' @description

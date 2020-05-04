@@ -2,6 +2,7 @@
 #' @description R6 class representing Reporting Engine generic Workflow
 #' @field simulationStructures `SimulationStructure` R6 class object managing the structure of the workflow output
 #' @field workflowFolder path of the folder create by the Workflow
+#' @field taskNames Enum of task names
 #' @field reportFileName name of the Rmd report file
 #' @import tlf
 #' @import ospsuite
@@ -10,6 +11,7 @@ Workflow <- R6::R6Class(
   public = list(
     simulationStructures = NULL,
     workflowFolder = NULL,
+    taskNames = NULL,
     reportFileName = NULL,
 
     #' @description
@@ -52,8 +54,8 @@ Workflow <- R6::R6Class(
       )
 
       self$reportFileName <- file.path(self$workflowFolder, paste0(defaultFileNames$reportName(), ".md"))
+      self$taskNames <- enum(self$getAllTasks())
 
-      # Check of Workflow inputs
       self$simulationStructures <- list()
       simulationSets <- c(simulationSets)
       for (simulationSetIndex in seq_along(simulationSets)) {
