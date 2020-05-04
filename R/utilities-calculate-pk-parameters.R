@@ -78,12 +78,22 @@ plotPopulationPKParameters <- function(structureSets,
                                        xParameters = NULL,
                                        yParameters = NULL) {
   validateIsIncluded(workflowType, PopulationWorkflowTypes)
+  validateIsOfType(structureSets, "list")
+  validateIsOfType(c(structureSets), "SimulationStructure")
+  validateIsString(xParameters, nullAllowed = TRUE)
+  validateIsString(yParameters, nullAllowed = TRUE)
 
-  pkParametersTableAcrossPopulations <- NULL
   pkRatioTableAcrossPopulations <- NULL
+  pkParametersPlots <- NULL
+  pkParametersTables <- NULL
 
+  pkParametersMapping <- tlf::BoxWhiskerDataMapping$new(
+    x = "simulationSetName",
+    y = "Value"
+  )
+
+  # TO DO: define a way to modify these function from within settings
   aggregateNames <- c("median", "lowPerc", "highPerc")
-
   lowPerc <- function(x) {
     as.numeric(quantile(x, probs = 0.05))
   }
@@ -91,48 +101,22 @@ plotPopulationPKParameters <- function(structureSets,
     as.numeric(quantile(x, probs = 0.95))
   }
 
-  for (structureSet in structureSets)
-  {
-    simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
-    population <- ospsuite::loadPopulation(structureSet$simulationSet$populationFile)
+  pkParametersTableAcrossPopulations <- getPkParametersTableAcrossPopulations(structureSets)
 
-    pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
-      structureSet$pkAnalysisResultsFileNames,
-      simulation
-    )
-
-    pkParametersTable <- ospsuite::pkAnalysesAsDataFrame(pkAnalyses)
-    populationTable <- ospsuite::populationAsDataFrame(population)
-
-    fullPkParametersTable <- cbind.data.frame(
-      pkParametersTable,
-      populationTable
-    )
-
-    pkParametersTableAcrossPopulations <- rbind.data.frame(
-      pkParametersTableAcrossPopulations,
-      fullPkParametersTable
-    )
-
-    if (structureSet$simulationSet$referencePopulation) {
-      referencePopulationName <- levels(factor(fullPkParametersTable$`Population Name`))
-    }
+  if (workflowType %in% c(PopulationWorkflowTypes$ratioComparison, PopulationWorkflowTypes$pediatric)) {
+    allSimulationReferences <- sapply(structureSets, function(structureSet) {
+      structureSet$simulationSet$referencePopulation
+    })
+    validateIsOfLength(allSimulationReferences[allSimulationReferences], 1)
+    referencePopulationName <- structureSets[[which(allSimulationReferences)]]$simulationSet$simulationSetName
   }
-
-  pkParametersPlots <- NULL
-  pkParametersTables <- NULL
-
-  pkParametersMapping <- tlf::BoxWhiskerDataMapping$new(
-    x = "Population Name",
-    y = "Value"
-  )
 
   # White list of selected yParameters
   pkParameterNames <- pkParametersTableAcrossPopulations$Parameter
   yParameters <- yParameters %||% levels(factor(pkParameterNames))
 
   # Enforce factors for population names
-  pkParametersTableAcrossPopulations$`Population Name` <- factor(pkParametersTableAcrossPopulations$`Population Name`)
+  pkParametersTableAcrossPopulations$simulationSetName <- factor(pkParametersTableAcrossPopulations$simulationSetName)
 
   # Standard boxplots
   for (parameter in yParameters) {
@@ -153,24 +137,29 @@ plotPopulationPKParameters <- function(structureSets,
       metaData = pkParameterMetaData,
       dataMapping = pkParametersMapping,
       plotConfiguration = settings$plotConfigurations[["boxplotPkParameters"]]
-    ) +
-      ggplot2::labs(title = NULL, subtitle = NULL)
+    ) + ggplot2::labs(title = NULL, subtitle = NULL) + ggplot2::xlab(NULL)
 
     pkParametersPlots[[parameterLabel]] <- boxplotPkParameters
     pkParametersPlots[[paste0(parameterLabel, "-log")]] <- boxplotPkParameters +
       ggplot2::scale_y_continuous(trans = "log10")
 
-    pkParametersTables[[parameterLabel]] <- tlf::getBoxWhiskerMeasure(
+    pkParametersTable <- tlf::getBoxWhiskerMeasure(
       data = pkParameterData,
       dataMapping = pkParametersMapping
     )
+    pkParametersTableRows <- row.names(pkParametersTable)
+    pkParametersTable <- cbind(Population = pkParametersTableRows,
+                               pkParametersTable)
+    
+    pkParametersTables[[parameterLabel]] <- pkParametersTable
 
     # Range plots on PK parameters vs xParameters
     for (demographyParameter in xParameters) {
-      
-      aggregatedData <- getPopulationPkParametersAggregatedData(data = pkParameterData, 
-                                                                xParameterName = demographyParameter, 
-                                                                xParameterBreaks = settings$xParametersBreaks[[demographyParameter]])
+      aggregatedData <- getPopulationPkParametersAggregatedData(
+        data = pkParameterData,
+        xParameterName = demographyParameter,
+        xParameterBreaks = settings$xParametersBreaks[[demographyParameter]]
+      )
 
       populationNames <- levels(factor(aggregatedData$Population))
 
@@ -178,17 +167,23 @@ plotPopulationPKParameters <- function(structureSets,
       if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
         # Get the table for reference population
         pkParametersTable <- pkParametersTables[[parameterLabel]]
-        referenceData <- data.frame(x = c(-Inf, Inf),
-                                    "Population" = paste("Simulated median [5th-95th] percentiles for", referencePopulationName))
+        referenceData <- data.frame(
+          x = c(-Inf, Inf),
+          "Population" = paste("Simulated median [5th-95th] percentiles for", referencePopulationName)
+        )
         referenceData[, c("ymin", "median", "ymax")] <- pkParametersTable[referencePopulationName, c(2, 4, 6)]
 
         # TO DO: integrate unit in the process
         xParameterName <- lastPathElement(demographyParameter)
-        
-        vpcMetaData <- list("x" = list(dimension = xParameterName,
-                                       unit = ""),
-                            "median" = pkParameterMetaData$Value)
-        
+
+        vpcMetaData <- list(
+          "x" = list(
+            dimension = xParameterName,
+            unit = ""
+          ),
+          "median" = pkParameterMetaData$Value
+        )
+
         referenceVpcPlot <- vpcParameterPlot(
           data = referenceData,
           metaData = vpcMetaData,
@@ -209,7 +204,7 @@ plotPopulationPKParameters <- function(structureSets,
             ggplot2::scale_y_continuous(trans = "log10")
         }
       }
-      
+
       # Regular range plots not associated to workflow type
       for (populationName in populationNames) {
         vpcData <- aggregatedData[aggregatedData$Population %in% populationName, ]
@@ -226,23 +221,18 @@ plotPopulationPKParameters <- function(structureSets,
     }
   }
 
-  # For Ratio Comparison create boxplots of boxplot hinges ratios 
+  # For Ratio Comparison create boxplots of boxplot hinges ratios
   if (workflowType %in% PopulationWorkflowTypes$ratioComparison) {
     for (parameter in yParameters) {
       parameterLabel <- lastPathElement(parameter)
+      
+      pkParametersTable <- pkParametersTables[[parameterLabel]]
 
       # Get the tables and compute the ratios using reference population name
-      pkParametersTable <- pkParametersTables[[parameterLabel]]
-      pkParametersTableRows <- row.names(pkParametersTable)
-
-      pkRatiosTable <- pkParametersTable[pkParametersTableRows != referencePopulationName, ] /
-        pkParametersTable[rep(referencePopulationName, length(pkParametersTableRows) - 1), ]
-
-      pkRatiosData <- data.frame(
-        "Population Name" = row.names(pkRatiosTable),
-        check.names = FALSE
-      )
-      pkRatiosData[, c("ymin", "lower", "middle", "upper", "ymax")] <- pkRatiosTable[, c(2:6)]
+      pkRatiosTable <- getPkRatiosTable(pkParametersTable, referencePopulationName)
+      
+      pkRatiosData <- pkRatiosTable
+      pkRatiosData[, c("ymin", "lower", "middle", "upper", "ymax")] <- pkRatiosTable[, c(3:7)]
 
       boxplotPkRatios <- ratioBoxplot(
         data = pkRatiosData,
@@ -254,14 +244,14 @@ plotPopulationPKParameters <- function(structureSets,
         referencePopulationName, "]"
       ))
 
-      pkParametersPlots[[paste0(parameterLabel, "ratio")]] <- boxplotPkRatios
-      pkParametersPlots[[paste0(parameterLabel, "ratio-log")]] <- boxplotPkRatios +
+      pkParametersPlots[[paste0(parameterLabel, "-ratio")]] <- boxplotPkRatios
+      pkParametersPlots[[paste0(parameterLabel, "-ratio-log")]] <- boxplotPkRatios +
         ggplot2::scale_y_continuous(trans = "log10")
 
       pkParametersTables[[paste0(parameterLabel, "-ratio")]] <- pkRatiosTable
     }
   }
-  
+
   return(list(
     plots = pkParametersPlots,
     tables = pkParametersTables
@@ -286,7 +276,7 @@ ratioBoxplot <- function(data,
     ggplot2::geom_boxplot(
       data = data,
       mapping = ggplot2::aes_string(
-        x = "`Population Name`",
+        x = "Population",
         ymin = "ymin",
         lower = "lower",
         middle = "middle",
@@ -298,7 +288,7 @@ ratioBoxplot <- function(data,
       alpha = 0.8,
       size = 1
     )
-  ratioPlot <- ratioPlot + ggplot2::labs(title = NULL, subtitle = NULL)
+  ratioPlot <- ratioPlot + ggplot2::labs(title = NULL, subtitle = NULL) + ggplot2::xlab(NULL)
   return(ratioPlot)
 }
 
@@ -402,32 +392,61 @@ getPopulationPkParametersAggregatedData <- function(data,
   highPerc <- function(x) {
     as.numeric(quantile(x, probs = 0.95))
   }
-  
+
   xParameterBreaks <- xParameterBreaks %||% 10
   xParameterBins <- cut(data[, xParameterName], breaks = xParameterBreaks)
-  
-  xData <- stats::aggregate(x = data[, xParameterName],
-                            by = list(Bins = xParameterBins,
-                                      Population = data[, "Population Name"]),
-                            FUN = median)
-  
-  medianData <- stats::aggregate(x = data[, "Value"],
-                                 by = list(Bins = xParameterBins,
-                                           Population = data[, "Population Name"]),
-                                 FUN = median)
-  lowPercData <- stats::aggregate(x = data[, "Value"],
-                                  by = list(Bins = xParameterBins,
-                                            Population = data[, "Population Name"]),
-                                  FUN = lowPerc)
-  highPercData <- stats::aggregate(x = data[, "Value"],
-                                   by = list(Bins = xParameterBins,
-                                             Population = data[, "Population Name"]),
-                                   FUN = highPerc)
-  
+
+  xData <- stats::aggregate(
+    x = data[, xParameterName],
+    by = list(
+      Bins = xParameterBins,
+      Population = data[, "simulationSetName"]
+    ),
+    FUN = median
+  )
+
+  medianData <- stats::aggregate(
+    x = data[, "Value"],
+    by = list(
+      Bins = xParameterBins,
+      Population = data[, "simulationSetName"]
+    ),
+    FUN = median
+  )
+  lowPercData <- stats::aggregate(
+    x = data[, "Value"],
+    by = list(
+      Bins = xParameterBins,
+      Population = data[, "simulationSetName"]
+    ),
+    FUN = lowPerc
+  )
+  highPercData <- stats::aggregate(
+    x = data[, "Value"],
+    by = list(
+      Bins = xParameterBins,
+      Population = data[, "simulationSetName"]
+    ),
+    FUN = highPerc
+  )
+
   aggregatedData <- cbind.data.frame(xData,
-                                     median = medianData$x,
-                                     ymin = lowPercData$x,
-                                     ymax = highPercData$x)
-  
+    median = medianData$x,
+    ymin = lowPercData$x,
+    ymax = highPercData$x
+  )
+
   return(aggregatedData)
+}
+
+getPkRatiosTable <- function(pkParametersTable, 
+                            referencePopulationName){
+  populationNames <- pkParametersTable$Population
+  
+  pkRatiosTable <- pkParametersTable[populationNames != referencePopulationName, ]
+  referencePkParametersTable <- pkParametersTable[rep(referencePopulationName, length(pkRatiosTable$Population)), ]
+  
+  pkRatiosTable[, seq(3, ncol(pkRatiosTable))] <- pkRatiosTable[,seq(3, ncol(pkRatiosTable))] / referencePkParametersTable[,seq(3, ncol(pkRatiosTable))]
+  
+  return(pkRatiosTable)
 }
