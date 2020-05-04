@@ -6,8 +6,10 @@ library(ospsuite)
 testFolder <- "testFolder"
 unlink(testFolder, recursive = TRUE)
 
-simSet <- SimulationSet$new(simulationSetName = "myTest",
-                            simulationFile = "test.pkml")
+simSet <- SimulationSet$new(
+  simulationSetName = "myTest",
+  simulationFile = "test.pkml"
+)
 
 mWorkflow <- MeanModelWorkflow$new(
   simulationSets = simSet,

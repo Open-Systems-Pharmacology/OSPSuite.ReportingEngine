@@ -20,17 +20,20 @@ Workflow <- R6::R6Class(
     #' @param workflowFolder path of the output folder created or used by the Workflow.
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
-                          workflowFolder) {
-      
+                              workflowFolder) {
       private$.reportingEngineInfo <- ReportingEngineInfo$new()
-      
+
       validateIsString(workflowFolder)
       validateIsOfType(c(simulationSets), "SimulationSet")
-      if(!isOfType(simulationSets, "list")){simulationSets <- list(simulationSets)}
-      
-      allSimulationSetNames <- sapply(simulationSets,  function(set){set$simulationSetName})
+      if (!isOfType(simulationSets, "list")) {
+        simulationSets <- list(simulationSets)
+      }
+
+      allSimulationSetNames <- sapply(simulationSets, function(set) {
+        set$simulationSetName
+      })
       validateNoDuplicatedEntries(allSimulationSetNames)
-      
+
       self$workflowFolder <- workflowFolder
       workflowFolderCheck <- file.exists(self$workflowFolder)
 
@@ -126,7 +129,7 @@ Workflow <- R6::R6Class(
     printReportingEngineInfo = function() {
       private$.reportingEngineInfo$print()
     },
-    
+
     #' @description
     #' Print workflow list of tasks
     #' @return Task list information
@@ -135,7 +138,7 @@ Workflow <- R6::R6Class(
       for (task in self$getAllTasks()) {
         tasksInfo[[paste0("Task: '", task, "'")]] <- self[[task]]$print()
       }
-      
+
       invisible(self)
       return(tasksInfo)
     }

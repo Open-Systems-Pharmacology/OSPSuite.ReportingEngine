@@ -10,7 +10,7 @@ SimulationSettings <- R6::R6Class(
     #' @param showProgress simulation progress printed to console if TRUE
     #' @return A new `SimulationSettings` object
     initialize = function(numberOfCores = defaultSimulationNumberOfCores,
-                          showProgress = FALSE) {
+                              showProgress = FALSE) {
       self$numberOfCores <- numberOfCores
       self$showProgress <- showProgress
     }

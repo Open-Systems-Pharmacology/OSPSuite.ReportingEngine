@@ -148,9 +148,11 @@ plotPopulationPKParameters <- function(structureSets,
       dataMapping = pkParametersMapping
     )
     pkParametersTableRows <- row.names(pkParametersTable)
-    pkParametersTable <- cbind(Population = pkParametersTableRows,
-                               pkParametersTable)
-    
+    pkParametersTable <- cbind(
+      Population = pkParametersTableRows,
+      pkParametersTable
+    )
+
     pkParametersTables[[parameterLabel]] <- pkParametersTable
 
     # Range plots on PK parameters vs xParameters
@@ -225,12 +227,12 @@ plotPopulationPKParameters <- function(structureSets,
   if (workflowType %in% PopulationWorkflowTypes$ratioComparison) {
     for (parameter in yParameters) {
       parameterLabel <- lastPathElement(parameter)
-      
+
       pkParametersTable <- pkParametersTables[[parameterLabel]]
 
       # Get the tables and compute the ratios using reference population name
       pkRatiosTable <- getPkRatiosTable(pkParametersTable, referencePopulationName)
-      
+
       pkRatiosData <- pkRatiosTable
       pkRatiosData[, c("ymin", "lower", "middle", "upper", "ymax")] <- pkRatiosTable[, c(3:7)]
 
@@ -377,7 +379,7 @@ getPkParametersTableAcrossPopulations <- function(structureSets) {
       fullPkParametersTable
     )
   }
-  
+
   return(pkParametersTableAcrossPopulations)
 }
 
@@ -439,14 +441,14 @@ getPopulationPkParametersAggregatedData <- function(data,
   return(aggregatedData)
 }
 
-getPkRatiosTable <- function(pkParametersTable, 
-                            referencePopulationName){
+getPkRatiosTable <- function(pkParametersTable,
+                             referencePopulationName) {
   populationNames <- pkParametersTable$Population
-  
+
   pkRatiosTable <- pkParametersTable[populationNames != referencePopulationName, ]
   referencePkParametersTable <- pkParametersTable[rep(referencePopulationName, length(pkRatiosTable$Population)), ]
-  
-  pkRatiosTable[, seq(3, ncol(pkRatiosTable))] <- pkRatiosTable[,seq(3, ncol(pkRatiosTable))] / referencePkParametersTable[,seq(3, ncol(pkRatiosTable))]
-  
+
+  pkRatiosTable[, seq(3, ncol(pkRatiosTable))] <- pkRatiosTable[, seq(3, ncol(pkRatiosTable))] / referencePkParametersTable[, seq(3, ncol(pkRatiosTable))]
+
   return(pkRatiosTable)
 }

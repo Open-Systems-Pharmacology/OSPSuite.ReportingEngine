@@ -14,9 +14,10 @@ tlf::useTheme(reTheme)
 # TO DO: set a similar code directly in tlfEnv
 ExportPlotConfigurationClass <- R6::R6Class(
   "ExportPlotConfiguration",
-  public = list(format = "png", width = 16, height = 9, units = "cm"))
+  public = list(format = "png", width = 16, height = 9, units = "cm")
+)
 
-#'@export
+#' @export
 ExportPlotConfiguration <- ExportPlotConfigurationClass$new()
 
 #' @title setPlotFormat
@@ -27,10 +28,12 @@ ExportPlotConfiguration <- ExportPlotConfigurationClass$new()
 #' @param units units of `width` and `height`
 #' @return demographyPlots list of ggplot objects
 #' @export
-setPlotFormat <- function(format, width = NULL, height = NULL, units = NULL){
+setPlotFormat <- function(format, width = NULL, height = NULL, units = NULL) {
   formatInputs <- c("format", "width", "height", "units")
-  setConfigurationExpression <- parse(text = paste0("ExportPlotConfiguration$", formatInputs, " <- ", 
-                                                    formatInputs, " %||% ExportPlotConfiguration$", formatInputs))
+  setConfigurationExpression <- parse(text = paste0(
+    "ExportPlotConfiguration$", formatInputs, " <- ",
+    formatInputs, " %||% ExportPlotConfiguration$", formatInputs
+  ))
   eval(setConfigurationExpression)
 }
 

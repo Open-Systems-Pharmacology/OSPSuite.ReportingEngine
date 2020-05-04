@@ -22,12 +22,16 @@ test_that("Workflows initialization creates correct folder and logs, and warn us
   # Make sure testFolder is not there
   testFolder <- "testFolder"
   unlink(testFolder, recursive = TRUE)
-  
-  simSet <- SimulationSet$new(simulationSetName = "myTest",
-                              simulationFile = "test.pkml")
-  popSimSet <- PopulationSimulationSet$new(simulationSetName = "myTest",
-                                           simulationFile = "test.pkml",
-                                           populationFile = "test.csv")
+
+  simSet <- SimulationSet$new(
+    simulationSetName = "myTest",
+    simulationFile = "test.pkml"
+  )
+  popSimSet <- PopulationSimulationSet$new(
+    simulationSetName = "myTest",
+    simulationFile = "test.pkml",
+    populationFile = "test.csv"
+  )
 
   # Dummy simulation set for the example
   expect_output(mWorkflow <- MeanModelWorkflow$new(
