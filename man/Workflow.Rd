@@ -13,6 +13,8 @@ R6 class representing Reporting Engine generic Workflow
 
 \item{\code{workflowFolder}}{path of the folder create by the Workflow}
 
+\item{\code{taskNames}}{Enum of task names}
+
 \item{\code{reportFileName}}{name of the Rmd report file}
 }
 \if{html}{\out{</div>}}

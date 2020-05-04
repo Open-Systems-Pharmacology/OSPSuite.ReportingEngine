@@ -3,6 +3,7 @@
 export(ExportPlotConfiguration)
 export(LogTypes)
 export(MeanModelWorkflow)
+export(Output)
 export(PlotTask)
 export(PopulationPlotTask)
 export(PopulationSimulationSet)

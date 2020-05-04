@@ -4,16 +4,12 @@
 \alias{getResiduals}
 \title{getResiduals}
 \usage{
-getResiduals(observedData, simulatedData, metaData = NULL, dataMapping = NULL)
+getResiduals(observedData, simulatedData)
 }
 \arguments{
 \item{observedData}{data.frame of time profile observed data}
 
 \item{simulatedData}{data.frame of time profile simulated data}
-
-\item{metaData}{meta data on `data`}
-
-\item{dataMapping}{XYDataMapping class object mapping what variable is to compare}
 }
 \value{
 residualsData data.frame with Time, Observed, Simulated, Residuals

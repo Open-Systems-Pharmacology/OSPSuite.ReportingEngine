@@ -4,12 +4,12 @@
 \alias{isFileExtension}
 \title{Check if the provided path has required extension}
 \usage{
-isFileExtension(path, extension)
+isFileExtension(file, extension)
 }
 \arguments{
-\item{path}{(character) file or path name to be checked}
-
 \item{extension}{extension of the file required after "."}
+
+\item{path}{(character) file or path name to be checked}
 }
 \value{
 TRUE if the path includes the extension

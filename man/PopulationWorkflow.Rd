@@ -69,7 +69,8 @@ Create a new `PopulationWorkflow` object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$new(
   workflowType = PopulationWorkflowTypes$parallelComparison,
-  ...
+  simulationSets,
+  workflowFolder
 )}\if{html}{\out{</div>}}
 }
 
@@ -78,7 +79,9 @@ Create a new `PopulationWorkflow` object.
 \describe{
 \item{\code{workflowType}}{Type of population workflow. Use enum `PopulationWorkflowTypes` to get list of workflow types.}
 
-\item{\code{...}}{input parameters inherited from R6 class object `Workflow`.}
+\item{\code{simulationSets}}{list of `SimulationSet` R6 class objects}
+
+\item{\code{workflowFolder}}{path of the output folder created or used by the Workflow.}
 }
 \if{html}{\out{</div>}}
 }

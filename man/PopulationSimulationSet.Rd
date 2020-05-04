@@ -41,10 +41,11 @@ Create a new `PopulationSimulationSet` object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationSimulationSet$new(
   referencePopulation = FALSE,
-  simulationSetName = NULL,
-  ...,
+  simulationSetName,
+  simulationFile,
   populationFile,
-  populationName = NULL
+  populationName = NULL,
+  ...
 )}\if{html}{\out{</div>}}
 }
 
@@ -55,16 +56,18 @@ Create a new `PopulationSimulationSet` object.
 
 \item{\code{simulationSetName}}{display name of simulation set}
 
-\item{\code{...}}{inputs to SimulationSet constructor}
+\item{\code{simulationFile}}{names of pkml file to be used for the simulation}
 
 \item{\code{populationFile}}{name of csv file to be used for the population}
 
 \item{\code{populationName}}{display name of population}
+
+\item{\code{...}}{inputs inherited from `SimulationSet`}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `MeanModelSet` object
+A new `PopulationSimulationSet` object
 }
 }
 \if{html}{\out{<hr>}}
