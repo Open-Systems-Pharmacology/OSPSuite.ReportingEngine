@@ -358,12 +358,43 @@ vpcParameterPlot <- function(data,
   return(vpcPlot)
 }
 
+getPkParametersTableAcrossPopulations <- function(structureSets) {
+  pkParametersTableAcrossPopulations <- NULL
+  for (structureSet in structureSets)
+  {
+    simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
+    population <- ospsuite::loadPopulation(structureSet$simulationSet$populationFile)
 
+    pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
+      structureSet$pkAnalysisResultsFileNames,
+      simulation
+    )
 
-getPopulationPkParametersAggregatedData <- function(data, 
-                                                    xParameterName, 
-                                                    xParameterBreaks = NULL){
+    pkParametersTable <- ospsuite::pkAnalysesAsDataFrame(pkAnalyses)
+    populationTable <- ospsuite::populationAsDataFrame(population)
+
+    # Use merge instead of cbind as there is a same variable IndividualId
+    fullPkParametersTable <- merge.data.frame(
+      pkParametersTable,
+      populationTable
+    )
+    fullPkParametersTable <- cbind.data.frame(
+      simulationSetName = structureSet$simulationSet$simulationSetName,
+      fullPkParametersTable
+    )
+    pkParametersTableAcrossPopulations <- rbind.data.frame(
+      pkParametersTableAcrossPopulations,
+      fullPkParametersTable
+    )
+  }
   
+  return(pkParametersTableAcrossPopulations)
+}
+
+getPopulationPkParametersAggregatedData <- function(data,
+                                                    xParameterName,
+                                                    xParameterBreaks = NULL) {
+
   # TO DO: create a global list for the lowPerc, median and highPerc
   lowPerc <- function(x) {
     as.numeric(quantile(x, probs = 0.05))
