@@ -16,22 +16,31 @@ PopulationSimulationSet <- R6::R6Class(
     #' Create a new `PopulationSimulationSet` object.
     #' @param referencePopulation logical for reference population used in Pediatric and Ratio Comparison workflows
     #' @param simulationSetName display name of simulation set
-    #' @param ... inputs to SimulationSet constructor
+    #' @param simulationFile names of pkml file to be used for the simulation
     #' @param populationFile name of csv file to be used for the population
     #' @param populationName display name of population
-    #' @return A new `MeanModelSet` object
+    #' @param ... inputs inherited from `SimulationSet`
+    #' @return A new `PopulationSimulationSet` object
     initialize = function(referencePopulation = FALSE,
-                          simulationSetName = NULL,
-                          ...,
-                          populationFile,
-                          populationName = NULL) {
+                              simulationSetName,
+                              simulationFile,
+                              populationFile,
+                              populationName = NULL,
+                              ...) {
       validateIsLogical(referencePopulation)
-      super$initialize(...)
+      validateIsString(c(simulationSetName, simulationFile, populationFile))
+      validateIsString(populationName, nullAllowed = TRUE)
+      validateIsFileExtension(populationFile, "csv")
+
+      super$initialize(
+        simulationSetName = simulationSetName,
+        simulationFile = simulationFile,
+        ...
+      )
 
       self$referencePopulation <- referencePopulation
       self$populationFile <- populationFile
       self$populationName <- populationName %||% trimFileName(populationFile, extension = "csv")
-      self$simulationSetName <- simulationSetName %||% paste(self$simulationName, self$populationName, sep = "-")
     },
 
     #' @description

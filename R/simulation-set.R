@@ -3,16 +3,9 @@
 #' @field simulationSetName display name of simulation set
 #' @field simulationFile names of pkml file to be used for the simulation
 #' @field simulationName display name of simulation
-#' @field pathID path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)
-#' @field pathName display name for `pathID`
-#' @field pathUnit display unit for `pathID`
-#' @field pkParameters PK parameters function names to be calculated from the simulation (e.g. `C_max`).
-#' @field pkParametersNames display names for `pkParameters`
-#' @field pkParametersUnits display units for `pkParameters`
+#' @field outputs list of `Output` R6 class objects
 #' @field observedDataFile name of csv file to be used for observed data
 #' @field observedMetaDataFile name of csv file to be used as dictionary of the observed data
-#' @field dataFilter character or expression used to filter the observed data
-#' @field dataReportName display name of the observed data
 #' @field timeUnit display unit for time variable
 #' @export
 SimulationSet <- R6::R6Class(
@@ -21,16 +14,9 @@ SimulationSet <- R6::R6Class(
     simulationSetName = NULL,
     simulationFile = NULL,
     simulationName = NULL,
-    pathID = NULL,
-    pathName = NULL,
-    pathUnit = NULL,
-    pkParameters = NULL,
-    pkParametersNames = NULL,
-    pkParametersUnits = NULL,
+    outputs = NULL,
     observedDataFile = NULL,
     observedMetaDataFile = NULL,
-    dataFilter = NULL,
-    dataReportName = NULL,
     timeUnit = NULL,
 
     #' @description
@@ -38,69 +24,43 @@ SimulationSet <- R6::R6Class(
     #' @param simulationSetName display name of simulation set
     #' @param simulationFile names of pkml file to be used for the simulation
     #' @param simulationName display name of simulation
-    #' @param pathID path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)
-    #' @param pathName display name for `pathID`
-    #' @param pathUnit display unit for `pathID`
-    #' @param pkParameters PK parameters function names to be calculated from the simulation (e.g. `C_max`).
-    #' Default value is obtained from enum(ospsuite::allPKParameterNames()).
-    #' @param pkParametersNames display names for `pkParameters`
-    #' @param pkParametersUnits display units for `pkParameters`
+    #' @param outputs list of `Output` R6 class objects
     #' @param observedDataFile name of csv file to be used for observed data
     #' @param observedMetaDataFile name of csv file to be used as dictionary of the observed data
-    #' @param dataFilter characters or expression to filter the observed data
-    #' @param dataReportName display name of the observed data
     #' @param timeUnit display unit for time variable. Default is "h"
     #' @return A new `SimulationSet` object
-    initialize = function(simulationSetName = NULL,
-                          simulationFile,
-                          simulationName = NULL,
-                          pathID = NULL,
-                          pathName = NULL,
-                          pathUnit = NULL,
-                          pkParameters = enum(ospsuite::allPKParameterNames()),
-                          pkParametersNames = NULL,
-                          pkParametersUnits = NULL,
-                          observedDataFile = NULL,
-                          observedMetaDataFile = NULL,
-                          dataFilter = NULL,
-                          dataReportName = NULL,
-                          timeUnit = "h") {
-      self$simulationFile <- simulationFile
-      self$simulationName <- simulationName %||% trimFileName(simulationFile, extension = "pkml")
+    initialize = function(simulationSetName,
+                              simulationFile,
+                              simulationName = NULL,
+                              outputs = NULL,
+                              observedDataFile = NULL,
+                              observedMetaDataFile = NULL,
+                              timeUnit = "h") {
+      validateIsString(c(simulationSetName, simulationFile))
+      validateIsFileExtension(simulationFile, "pkml")
 
-      self$simulationSetName <- simulationSetName %||% self$simulationName
+      # validate is applied to each element of outputs
+      validateIsOfType(c(outputs), "Output", nullAllowed = TRUE)
 
-      self$pathID <- pathID
-      self$pathName <- pathName %||% pathID
-      self$pathUnit <- pathUnit
-
-      self$pkParameters <- pkParameters
-      self$pkParametersNames <- pkParametersNames %||% pkParameters
-      self$pkParametersUnits <- pkParametersUnits
-
-      self$timeUnit <- timeUnit %||% "h"
-
+      validateIsString(c(observedDataFile, observedMetaDataFile, timeUnit), nullAllowed = TRUE)
       if (!is.null(observedDataFile)) {
         validateObservedMetaDataFile(observedMetaDataFile, observedDataFile)
       }
+
+      self$simulationSetName <- simulationSetName
+      self$simulationFile <- simulationFile
+      self$simulationName <- simulationName %||% trimFileName(simulationFile, extension = "pkml")
+
+      # Ensure outputs is a list of Outputs R6 class objects
+      if (!isOfType(outputs, "list")) {
+        outputs <- list(outputs)
+      }
+      self$outputs <- outputs
+
       self$observedDataFile <- observedDataFile
       self$observedMetaDataFile <- observedMetaDataFile
-      self$dataFilter <- dataFilter
-      self$dataReportName <- dataReportName %||% paste0(self$pathName, " observed data")
-    },
 
-    #' @description
-    #' Create a copy of the input files (pkml simulation and data if available) within a folder dedicated to the simulation set
-    #' Rename the input file if `simulationName` is explicitely defined
-    #' @param inputFilesFolder path where the files are copied
-    copyInputFiles = function(inputFilesFolder) {
-      if (!is.null(self$simulationFile)) {
-        file.copy(self$simulationFile, file.path(inputFilesFolder, paste0(self$simulationName, ".pkml")))
-      }
-
-      if (!is.null(self$observedDataFile)) {
-        file.copy(self$observedDataFile, inputFilesFolder)
-      }
+      self$timeUnit <- timeUnit %||% "h"
     }
   )
 )
