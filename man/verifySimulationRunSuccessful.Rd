@@ -8,6 +8,8 @@ verifySimulationRunSuccessful(simulationRunSuccess, logFolder)
 }
 \arguments{
 \item{simulationRunSuccess}{logical vector indicating success of simulation run on all cores}
+
+\item{logFolder}{folder where the logs are saved}
 }
 \description{
 Check that all cores ran simulation successfully

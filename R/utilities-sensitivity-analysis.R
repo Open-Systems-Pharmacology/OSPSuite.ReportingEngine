@@ -218,15 +218,24 @@ runParallelSensitivityAnalysis <- function(structureSet,
     showProgress = showProgress
   ))
 
+  # Verify sensitivity analyses ran successfully
   sensitivityRunSuccess <- Rmpi::mpi.remote.exec(!is.null(partialIndividualSensitivityAnalysisResults))
   verifySensitivityAnalysisRunSuccessful(sensitivityRunSuccess, logFolder = logFolder)
 
+  # Write core logs to workflow logs
+  for (core in seq(1, numberOfCores)) {
+    logWorkflow(message = readLines(tempLogFileNames[core]), pathFolder = logFolder)
+    file.remove(tempLogFileNames[core])
+  }
+
+  # Remove any previous temporary results files
   Rmpi::mpi.remote.exec(if (file.exists(allResultsFileNames[mpi.comm.rank()])) {
     file.remove(allResultsFileNames[mpi.comm.rank()])
   })
   anyPreviousPartialResultsRemoved <- Rmpi::mpi.remote.exec(!file.exists(allResultsFileNames[mpi.comm.rank()]))
   verifyAnyPreviousFilesRemoved(anyPreviousPartialResultsRemoved, logFolder = logFolder)
 
+  # Export temporary results files to CSV
   Rmpi::mpi.remote.exec(ospsuite::exportSensitivityAnalysisResultsToCSV(
     results = partialIndividualSensitivityAnalysisResults,
     filePath = allResultsFileNames[mpi.comm.rank()]
@@ -234,11 +243,7 @@ runParallelSensitivityAnalysis <- function(structureSet,
   partialResultsExported <- Rmpi::mpi.remote.exec(file.exists(allResultsFileNames[mpi.comm.rank()]))
   verifyPartialResultsExported(partialResultsExported, logFolder = logFolder)
 
-  for (core in seq(1, numberOfCores)) {
-    logWorkflow(message = readLines(tempLogFileNames[core]), pathFolder = logFolder)
-    file.remove(tempLogFileNames[core])
-  }
-
+  # Merge temporary results files
   allSAResults <- importSensitivityAnalysisResultsFromCSV(simulation = loadSimulationWithUpdatedPaths(structureSet$simulationSet), filePaths = allResultsFileNames)
   file.remove(allResultsFileNames)
   return(allSAResults)
