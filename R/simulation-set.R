@@ -52,7 +52,7 @@ SimulationSet <- R6::R6Class(
       self$simulationName <- simulationName %||% trimFileName(simulationFile, extension = "pkml")
 
       # Ensure outputs is a list of Outputs R6 class objects
-      if (!isOfType(outputs, "list")) {
+      if (isOfType(outputs, "Output")) {
         outputs <- list(outputs)
       }
       self$outputs <- outputs
