@@ -3,8 +3,16 @@
 #' @param simulation the simulation object to be checked if loaded successfully
 #' @param simulationFilePath the path to the simulation object to be checked if loaded successfully
 #' @export
-checkSimulationLoaded <- function(simulation, simulationFilePath) {
-  return(identical(simulation$sourceFile, simulationFilePath))
+checkSimulationLoaded <- function(simulation) {
+  return(is.null(validateIsOfType(simulation, "Simulation")))
+}
+
+#' @title checkPopulationLoaded
+#' @description Check that the population has been loaded on the core.
+#' @param population the population object to be checked if loaded successfully
+#' @export
+checkPopulationLoaded <- function(population) {
+  return(is.null(validateIsOfType(population, "Population")))
 }
 
 #' @title checkLibraryLoaded
@@ -29,12 +37,12 @@ checkAllCoresSuccessful <- function(coreResults) {
 #' @title loadSimulationOnCores
 #' @description Send structureSet to core, check its simulation has been loaded successfully
 #' @param structureSet containing simulationSet which contains path to simulation file and pathIDs to be loaded in simulation object as outputs
+#' @param logFolder folder where the logs are saved
 loadSimulationOnCores <- function(structureSet, logFolder) {
   Rmpi::mpi.bcast.Robj2slave(obj = structureSet)
   Rmpi::mpi.remote.exec(sim <- NULL)
   Rmpi::mpi.remote.exec(sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet))
-  simulationLoaded <- Rmpi::mpi.remote.exec(checkSimulationLoaded(simulation = sim, simulationFilePath = structureSet$simulationSet$simulationFile))
-  # simulationLoaded <- Rmpi::mpi.remote.exec(!is.null(sim))
+  simulationLoaded <- Rmpi::mpi.remote.exec(checkSimulationLoaded(simulation = sim))
   success <- checkAllCoresSuccessful(simulationLoaded)
   validateIsLogical(success)
   if (success) {
@@ -44,9 +52,30 @@ loadSimulationOnCores <- function(structureSet, logFolder) {
   }
 }
 
+#' @title loadPopulationOnCores
+#' @description Send population file names to cores, check that population is loaded on each core successfully
+#' @param structureSet containing simulationSet which contains path to simulation file and pathIDs to be loaded in simulation object as outputs
+#' @param logFolder folder where the logs are saved
+loadPopulationOnCores <- function(populationFiles, logFolder) {
+  Rmpi::mpi.bcast.Robj2slave(obj = populationFiles)
+  Rmpi::mpi.remote.exec(population <- ospsuite::loadPopulation(populationFiles[mpi.comm.rank()]))
+  populationLoaded <- Rmpi::mpi.remote.exec(checkPopulationLoaded(population = population))
+  success <- checkAllCoresSuccessful(populationLoaded)
+  validateIsLogical(success)
+  if (success) {
+    logWorkflow(message = paste("Population files loaded successfully on all cores"), pathFolder = logFolder)
+  } else {
+    logErrorThenStop(message = paste("Population files not loaded successfully on all cores"), logFolderPath = logFolder)
+  }
+}
+
+
+
+
 #' @title loadSimulationOnCores
 #' @description Send libraryName to core, load the library and check that it has been loaded successfully
 #' @param libraryName string containing name of library to be loaded
+#' @param logFolder folder where the logs are saved
 loadLibraryOnCores <- function(libraryName, logFolder) {
   Rmpi::mpi.bcast.Robj2slave(obj = libraryName)
   Rmpi::mpi.remote.exec(library(libraryName, character.only = TRUE))
@@ -63,6 +92,7 @@ loadLibraryOnCores <- function(libraryName, logFolder) {
 #' @title loadSimulationOnCores
 #' @description Send libraryName to core, load the library and check that it has been loaded successfully
 #' @param libraryName string containing name of library to be loaded
+#' @param logFolder folder where the logs are saved
 updateIndividualParametersOnCores <- function(individualParameters, logFolder) {
   Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
   individualParametersUpdated <- Rmpi::mpi.remote.exec(updateSimulationIndividualParameters(simulation = sim, individualParameters))
@@ -79,6 +109,7 @@ updateIndividualParametersOnCores <- function(individualParameters, logFolder) {
 #' @title verifySimulationRunSuccessful
 #' @description Check that all cores ran simulation successfully
 #' @param simulationRunSuccess logical vector indicating success of simulation run on all cores
+#' @param logFolder folder where the logs are saved
 verifySimulationRunSuccessful <- function(simulationRunSuccess, logFolder) {
   success <- checkAllCoresSuccessful(simulationRunSuccess)
   validateIsLogical(success)
@@ -93,6 +124,7 @@ verifySimulationRunSuccessful <- function(simulationRunSuccess, logFolder) {
 #' @title verifySensitivityAnalysisRunSuccessful
 #' @description Check that all cores ran sensitivity analysis successfully
 #' @param sensitivityRunSuccess logical vector indicating success of sensitivity analysis run on all cores
+#' @param logFolder folder where the logs are saved
 verifySensitivityAnalysisRunSuccessful <- function(sensitivityRunSuccess, logFolder) {
   success <- checkAllCoresSuccessful(sensitivityRunSuccess)
   validateIsLogical(success)
@@ -104,27 +136,29 @@ verifySensitivityAnalysisRunSuccessful <- function(sensitivityRunSuccess, logFol
 }
 
 #' @title verifyAnyPreviousFilesRemoved
-#' @description Check that any existing partial sensitivity results from individual cores have been removed
+#' @description Check that any existing results from individual cores have been removed
 #' @param sensitivityRunSuccess logical vector indicating success of result file removal
+#' @param logFolder folder where the logs are saved
 verifyAnyPreviousFilesRemoved <- function(anyPreviousPartialResultsRemoved, logFolder) {
   success <- checkAllCoresSuccessful(anyPreviousPartialResultsRemoved)
   validateIsLogical(success)
   if (success) {
-    logWorkflow(message = "Verified that no previous partial sensitivity analysis results exist.", pathFolder = logFolder)
+    logWorkflow(message = "Verified that no previous results exist.", pathFolder = logFolder)
   } else {
-    logErrorThenStop(message = "Previous partial sensitivity analyses not removed successfully.", logFolderPath = logFolder)
+    logErrorThenStop(message = "Previous results not removed successfully.", logFolderPath = logFolder)
   }
 }
 
 #' @title verifyPartialResultsExported
-#' @description Check that partial sensitivity results from individual cores have been exported
+#' @description Check that results from individual cores have been exported
 #' @param sensitivityRunSuccess logical vector indicating success of result file export
+#' @param logFolder folder where the logs are saved
 verifyPartialResultsExported <- function(partialResultsExported, logFolder) {
   success <- checkAllCoresSuccessful(partialResultsExported)
   validateIsLogical(success)
   if (success) {
-    logWorkflow(message = "Partial sensitivity analysis results exported successfully.", pathFolder = logFolder)
+    logWorkflow(message = "All core results exported successfully.", pathFolder = logFolder)
   } else {
-    logErrorThenStop(message = "Partial sensitivity analysis results not exported successfully.", logFolderPath = logFolder)
+    logErrorThenStop(message = "All core results not exported successfully.", logFolderPath = logFolder)
   }
 }

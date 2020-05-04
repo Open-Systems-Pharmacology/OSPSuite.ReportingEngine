@@ -7,8 +7,10 @@
 verifyAnyPreviousFilesRemoved(anyPreviousPartialResultsRemoved, logFolder)
 }
 \arguments{
+\item{logFolder}{folder where the logs are saved}
+
 \item{sensitivityRunSuccess}{logical vector indicating success of result file removal}
 }
 \description{
-Check that any existing partial sensitivity results from individual cores have been removed
+Check that any existing results from individual cores have been removed
 }
