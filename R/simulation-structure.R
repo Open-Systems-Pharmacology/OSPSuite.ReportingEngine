@@ -35,11 +35,7 @@ SimulationStructure <- R6::R6Class(
       self$simulationResultFileNames <- file.path(
         workflowFolder,
         self$simulationResultsFolder,
-        ifnotnull(
-          self$simulationSet$populationName,
-          defaultFileNames$popSimulationResultsFile(self$simulationSet$populationName, self$simulationSet$simulationSetName),
-          defaultFileNames$simulationResultsFile(self$simulationSet$simulationSetName)
-        )
+        defaultFileNames$simulationResultsFile(self$simulationSet$simulationSetName)
       )
 
       self$pkAnalysisResultsFileNames <- file.path(
