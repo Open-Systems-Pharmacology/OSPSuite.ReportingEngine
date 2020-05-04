@@ -36,8 +36,22 @@ PopulationWorkflow <- R6::R6Class(
     initialize = function(workflowType = PopulationWorkflowTypes$parallelComparison,
                               ...) {
       super$initialize(...)
+
+      validateIsOfType(c(simulationSets), "PopulationSimulationSet")
+      if (!isOfType(simulationSets, "list")) {
+        simulationSets <- list(simulationSets)
+      }
+
       validateIsIncluded(workflowType, PopulationWorkflowTypes)
       self$workflowType <- workflowType
+
+      # Pediatric and ratio comparison workflows need ONE reference population
+      if (isIncluded(self$workflowType, c(PopulationWorkflowTypes$pediatric, PopulationWorkflowTypes$ratioComparison))) {
+        allSimulationReferences <- sapply(simulationSets, function(set) {
+          set$referencePopulation
+        })
+        validateIsOfLength(allSimulationReferences[allSimulationReferences], 1)
+      }
 
       # TO DO: include task parameters from initialization ?
       self$resetReportSettings()
