@@ -19,10 +19,16 @@ Workflow <- R6::R6Class(
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
                           workflowFolder) {
+      
       private$.reportingEngineInfo <- ReportingEngineInfo$new()
-      # Check workflow folder input:
-      # If workflow folder already exist throw a warning indicating the folder can be overwritten
+      
       validateIsString(workflowFolder)
+      validateIsOfType(c(simulationSets), "SimulationSet")
+      if(!isOfType(simulationSets, "list")){simulationSets <- list(simulationSets)}
+      
+      allSimulationSetNames <- sapply(simulationSets,  function(set){set$simulationSetName})
+      validateNoDuplicatedEntries(allSimulationSetNames)
+      
       self$workflowFolder <- workflowFolder
       workflowFolderCheck <- checkExisitingPath(self$workflowFolder, stopIfPathExists = FALSE)
 
