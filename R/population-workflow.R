@@ -31,11 +31,16 @@ PopulationWorkflow <- R6::R6Class(
     #' @description
     #' Create a new `PopulationWorkflow` object.
     #' @param workflowType Type of population workflow. Use enum `PopulationWorkflowTypes` to get list of workflow types.
-    #' @param ... input parameters inherited from R6 class object `Workflow`.
+    #' @param simulationSets list of `SimulationSet` R6 class objects
+    #' @param workflowFolder path of the output folder created or used by the Workflow.
     #' @return A new `PopulationWorkflow` object
     initialize = function(workflowType = PopulationWorkflowTypes$parallelComparison,
-                              ...) {
-      super$initialize(...)
+                              simulationSets,
+                              workflowFolder) {
+      super$initialize(
+        simulationSets = simulationSets,
+        workflowFolder = workflowFolder
+      )
 
       validateIsOfType(c(simulationSets), "PopulationSimulationSet")
       if (!isOfType(simulationSets, "list")) {
