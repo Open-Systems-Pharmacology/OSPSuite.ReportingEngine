@@ -34,7 +34,7 @@ Workflow <- R6::R6Class(
       self$workflowFolder <- workflowFolder
       workflowFolderCheck <- file.exists(self$workflowFolder)
 
-      if (!is.null(workflowFolderCheck)) {
+      if (workflowFolderCheck) {
         logWorkflow(
           message = workflowFolderCheck,
           pathFolder = self$workflowFolder,
