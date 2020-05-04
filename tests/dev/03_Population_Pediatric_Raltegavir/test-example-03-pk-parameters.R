@@ -4,16 +4,22 @@
 library(ospsuite.reportingengine)
 library(ospsuite)
 
+output <- Output$new(path = "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)")
+
 popModelSets <- list(
   Larson = PopulationSimulationSet$new(
     referencePopulation = FALSE,
+    simulationSetName = "Larson",
     simulationFile = "PKML/Larson 2013 8-18y meal.pkml",
-    populationFile = "Larson 2013 8-18y meal-Population.csv"
+    populationFile = "Larson 2013 8-18y meal-Population.csv",
+    outputs = output
   ),
   Adult = PopulationSimulationSet$new(
     referencePopulation = TRUE,
+    simulationSetName = "Adults",
     simulationFile = "PKML/Raltegravir 400mg filmcoated tablet.pkml",
-    populationFile = "Raltegravir Adult Population.csv"
+    populationFile = "Raltegravir Adult Population.csv",
+    outputs = output
   )
 )
 
