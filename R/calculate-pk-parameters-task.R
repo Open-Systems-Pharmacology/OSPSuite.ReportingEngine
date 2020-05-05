@@ -11,7 +11,7 @@ CalculatePKParametersTask <- R6::R6Class(
     #' @param set R6 class `SimulationStructure`
     #' @param taskResults list of results from task run.
     saveResults = function(set,
-                           taskResults) {
+                               taskResults) {
       ospsuite::exportPKAnalysesToCSV(
         taskResults,
         set$pkAnalysisResultsFileNames

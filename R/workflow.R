@@ -2,6 +2,7 @@
 #' @description R6 class representing Reporting Engine generic Workflow
 #' @field simulationStructures `SimulationStructure` R6 class object managing the structure of the workflow output
 #' @field workflowFolder path of the folder create by the Workflow
+#' @field taskNames Enum of task names
 #' @field reportFileName name of the Rmd report file
 #' @import tlf
 #' @import ospsuite
@@ -10,6 +11,7 @@ Workflow <- R6::R6Class(
   public = list(
     simulationStructures = NULL,
     workflowFolder = NULL,
+    taskNames = NULL,
     reportFileName = NULL,
 
     #' @description
@@ -18,24 +20,28 @@ Workflow <- R6::R6Class(
     #' @param workflowFolder path of the output folder created or used by the Workflow.
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
-                          workflowFolder) {
+                              workflowFolder) {
       private$.reportingEngineInfo <- ReportingEngineInfo$new()
-      # Check workflow folder input:
-      # If workflow folder already exist throw a warning indicating the folder can be overwritten
-      validateIsString(workflowFolder)
-      self$workflowFolder <- workflowFolder
-      workflowFolderCheck <- checkExisitingPath(self$workflowFolder, stopIfPathExists = FALSE)
 
-      if (!is.null(workflowFolderCheck)) {
+      validateIsString(workflowFolder)
+      validateIsOfType(c(simulationSets), "SimulationSet")
+      if (!isOfType(simulationSets, "list")) {
+        simulationSets <- list(simulationSets)
+      }
+
+      allSimulationSetNames <- sapply(simulationSets, function(set) {
+        set$simulationSetName
+      })
+      validateNoDuplicatedEntries(allSimulationSetNames)
+
+      self$workflowFolder <- workflowFolder
+      workflowFolderCheck <- file.exists(self$workflowFolder)
+
+      if (workflowFolderCheck) {
         logWorkflow(
           message = workflowFolderCheck,
           pathFolder = self$workflowFolder,
-          logTypes = c(LogTypes$Debug, LogTypes$Error)
-        )
-        logWorkflow(
-          message = messages$warningPathIncludes(self$workflowFolder),
-          pathFolder = self$workflowFolder,
-          logTypes = c(LogTypes$Debug, LogTypes$Error)
+          logTypes = c(LogTypes$Debug)
         )
       }
       dir.create(self$workflowFolder, showWarnings = FALSE)
@@ -46,8 +52,8 @@ Workflow <- R6::R6Class(
       )
 
       self$reportFileName <- file.path(self$workflowFolder, paste0(defaultFileNames$reportName(), ".md"))
+      self$taskNames <- enum(self$getAllTasks())
 
-      # Check of Workflow inputs
       self$simulationStructures <- list()
       simulationSets <- c(simulationSets)
       for (simulationSetIndex in seq_along(simulationSets)) {
@@ -123,7 +129,7 @@ Workflow <- R6::R6Class(
     printReportingEngineInfo = function() {
       private$.reportingEngineInfo$print()
     },
-    
+
     #' @description
     #' Print workflow list of tasks
     #' @return Task list information
@@ -132,7 +138,7 @@ Workflow <- R6::R6Class(
       for (task in self$getAllTasks()) {
         tasksInfo[[paste0("Task: '", task, "'")]] <- self[[task]]$print()
       }
-      
+
       invisible(self)
       return(tasksInfo)
     }

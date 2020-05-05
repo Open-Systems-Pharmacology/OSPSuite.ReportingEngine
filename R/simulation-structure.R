@@ -29,17 +29,13 @@ SimulationStructure <- R6::R6Class(
     #' @param simulationSet `MeanModelSet` or `PopModelSet` R6 class object
     #' @param workflowFolder output folder of the worklow
     initialize = function(simulationSet,
-                          workflowFolder = getwd()) {
+                              workflowFolder = getwd()) {
       self$workflowFolder <- workflowFolder
       self$simulationSet <- simulationSet
       self$simulationResultFileNames <- file.path(
         workflowFolder,
         self$simulationResultsFolder,
-        ifnotnull(
-          self$simulationSet$populationName,
-          defaultFileNames$popSimulationResultsFile(self$simulationSet$populationName, self$simulationSet$simulationSetName),
-          defaultFileNames$simulationResultsFile(self$simulationSet$simulationSetName)
-        )
+        defaultFileNames$simulationResultsFile(self$simulationSet$simulationSetName)
       )
 
       self$pkAnalysisResultsFileNames <- file.path(

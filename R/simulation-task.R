@@ -16,8 +16,8 @@ SimulationTask <- R6::R6Class(
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SimulationTask` object
     initialize = function(getTaskResults = NULL,
-                          settings = NULL,
-                          ...) {
+                              settings = NULL,
+                              ...) {
       super$initialize(...)
       if (is.null(settings)) {
         self$settings <- SimulationSettings$new()
@@ -34,7 +34,7 @@ SimulationTask <- R6::R6Class(
     #' @param set R6 class `SimulationStructure`
     #' @param taskResults list of results from task run.
     saveResults = function(set,
-                           taskResults) {
+                               taskResults) {
       ospsuite::exportResultsToCSV(
         taskResults,
         set$simulationResultFileNames

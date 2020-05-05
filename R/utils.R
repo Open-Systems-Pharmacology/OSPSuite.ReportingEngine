@@ -175,10 +175,13 @@ loadSimulationWithUpdatedPaths <- function(simulationSet) {
     addToCache = FALSE
   )
   # Prevent loadSimulationWithUpdatedPaths from crashing if user did not submit any pathID
-  if(!is.null(simulationSet$pathID)){
+  if (!is.null(simulationSet$outputs)) {
     sim$outputSelections$clear()
-    ospsuite::addOutputs(quantitiesOrPaths = simulationSet$pathID, simulation = sim)
-    }
+    paths <- sapply(simulationSet$outputs, function(output) {
+      output$path
+    })
+    ospsuite::addOutputs(quantitiesOrPaths = paths, simulation = sim)
+  }
   return(sim)
 }
 
@@ -186,8 +189,10 @@ loadSimulationWithUpdatedPaths <- function(simulationSet) {
 #' @param path simulation path
 #' @return last path element as character string
 #' @export
-lastPathElement <- function(path){
-  return(sub(pattern = "^.*[|]",
-             replacement = "",
-             x = path))
+lastPathElement <- function(path) {
+  return(sub(
+    pattern = "^.*[|]",
+    replacement = "",
+    x = path
+  ))
 }

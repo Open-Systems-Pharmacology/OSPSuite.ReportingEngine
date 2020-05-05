@@ -1,5 +1,5 @@
 #------------------------------
-# Advanced example 01: Set/run mean model workflow
+# Advanced example 01: Mean model workflow time profile and residuals
 #------------------------------
 
 library(ospsuite.reportingengine)
@@ -38,6 +38,11 @@ meanModelSets <- list(
 
 myMeanWorkflow <- MeanModelWorkflow$new(simulationSets = meanModelSets, workflowFolder = "myTestFolder")
 
-myMeanWorkflow$getActiveTasks()
+# If results were not already exported in myTestFolder/SimulationResults
+# you need to activate and run the task "simulate"
+# Tip: use the enum taskNames to get directly the name of each task
+
+myMeanWorkflow$activateTasks(tasks = myMeanWorkflow$taskNames$plotGoF)
+myMeanWorkflow$inactivateTasks(tasks = myMeanWorkflow$taskNames$simulate)
 
 myMeanWorkflow$runWorkflow()

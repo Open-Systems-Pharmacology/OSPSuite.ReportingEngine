@@ -23,44 +23,38 @@ test_that("Workflows initialization creates correct folder and logs, and warn us
   testFolder <- "testFolder"
   unlink(testFolder, recursive = TRUE)
 
-  # Empty simulation set for the example
+  simSet <- SimulationSet$new(
+    simulationSetName = "myTest",
+    simulationFile = "test.pkml"
+  )
+  popSimSet <- PopulationSimulationSet$new(
+    simulationSetName = "myTest",
+    simulationFile = "test.pkml",
+    populationFile = "test.csv"
+  )
+
+  # Dummy simulation set for the example
   expect_output(mWorkflow <- MeanModelWorkflow$new(
-    simulationSets = list(),
+    simulationSets = simSet,
     workflowFolder = testFolder
   ))
 
   expect_true(testFolder %in% list.files())
   expect_true("log-info.txt" %in% list.files(testFolder))
   expect_true("log-debug.txt" %in% list.files(testFolder))
-
-  expect_warning(MeanModelWorkflow$new(
-    simulationSets = list(),
-    workflowFolder = "testFolder"
-  ))
-  expect_true("log-info.txt" %in% list.files(testFolder))
-  expect_true("log-debug.txt" %in% list.files(testFolder))
-  expect_true("log-error.txt" %in% list.files(testFolder))
 
   # Make sure testFolder is not there
   unlink(testFolder, recursive = TRUE)
 
-  # Empty simulation set for the example
+  # Dummy simulation set for the example
   expect_output(pWorkflow <- PopulationWorkflow$new(
-    simulationSets = list(),
+    simulationSets = popSimSet,
     workflowFolder = testFolder
   ))
 
   expect_true(testFolder %in% list.files())
   expect_true("log-info.txt" %in% list.files(testFolder))
   expect_true("log-debug.txt" %in% list.files(testFolder))
-
-  expect_warning(PopulationWorkflow$new(
-    simulationSets = list(),
-    workflowFolder = "testFolder"
-  ))
-  expect_true("log-info.txt" %in% list.files(testFolder))
-  expect_true("log-debug.txt" %in% list.files(testFolder))
-  expect_true("log-error.txt" %in% list.files(testFolder))
 
   unlink(testFolder, recursive = TRUE)
 })

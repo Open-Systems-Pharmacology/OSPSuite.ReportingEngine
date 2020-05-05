@@ -15,25 +15,11 @@ R6 class representing Reporting Engine Mean Model Set
 
 \item{\code{simulationName}}{display name of simulation}
 
-\item{\code{pathID}}{path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)}
-
-\item{\code{pathName}}{display name for `pathID`}
-
-\item{\code{pathUnit}}{display unit for `pathID`}
-
-\item{\code{pkParameters}}{PK parameters function names to be calculated from the simulation (e.g. `C_max`).}
-
-\item{\code{pkParametersNames}}{display names for `pkParameters`}
-
-\item{\code{pkParametersUnits}}{display units for `pkParameters`}
+\item{\code{outputs}}{list of `Output` R6 class objects}
 
 \item{\code{observedDataFile}}{name of csv file to be used for observed data}
 
 \item{\code{observedMetaDataFile}}{name of csv file to be used as dictionary of the observed data}
-
-\item{\code{dataFilter}}{character or expression used to filter the observed data}
-
-\item{\code{dataReportName}}{display name of the observed data}
 
 \item{\code{timeUnit}}{display unit for time variable}
 }
@@ -43,7 +29,6 @@ R6 class representing Reporting Engine Mean Model Set
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{SimulationSet$new()}}
-\item \href{#method-copyInputFiles}{\code{SimulationSet$copyInputFiles()}}
 \item \href{#method-clone}{\code{SimulationSet$clone()}}
 }
 }
@@ -53,19 +38,12 @@ R6 class representing Reporting Engine Mean Model Set
 Create a new `SimulationSet` object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SimulationSet$new(
-  simulationSetName = NULL,
+  simulationSetName,
   simulationFile,
   simulationName = NULL,
-  pathID = NULL,
-  pathName = NULL,
-  pathUnit = NULL,
-  pkParameters = enum(ospsuite::allPKParameterNames()),
-  pkParametersNames = NULL,
-  pkParametersUnits = NULL,
+  outputs = NULL,
   observedDataFile = NULL,
   observedMetaDataFile = NULL,
-  dataFilter = NULL,
-  dataReportName = NULL,
   timeUnit = "h"
 )}\if{html}{\out{</div>}}
 }
@@ -79,26 +57,11 @@ Create a new `SimulationSet` object.
 
 \item{\code{simulationName}}{display name of simulation}
 
-\item{\code{pathID}}{path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)}
-
-\item{\code{pathName}}{display name for `pathID`}
-
-\item{\code{pathUnit}}{display unit for `pathID`}
-
-\item{\code{pkParameters}}{PK parameters function names to be calculated from the simulation (e.g. `C_max`).
-Default value is obtained from enum(ospsuite::allPKParameterNames()).}
-
-\item{\code{pkParametersNames}}{display names for `pkParameters`}
-
-\item{\code{pkParametersUnits}}{display units for `pkParameters`}
+\item{\code{outputs}}{list of `Output` R6 class objects}
 
 \item{\code{observedDataFile}}{name of csv file to be used for observed data}
 
 \item{\code{observedMetaDataFile}}{name of csv file to be used as dictionary of the observed data}
-
-\item{\code{dataFilter}}{characters or expression to filter the observed data}
-
-\item{\code{dataReportName}}{display name of the observed data}
 
 \item{\code{timeUnit}}{display unit for time variable. Default is "h"}
 }
@@ -106,23 +69,6 @@ Default value is obtained from enum(ospsuite::allPKParameterNames()).}
 }
 \subsection{Returns}{
 A new `SimulationSet` object
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-copyInputFiles"></a>}}
-\subsection{Method \code{copyInputFiles()}}{
-Create a copy of the input files (pkml simulation and data if available) within a folder dedicated to the simulation set
-Rename the input file if `simulationName` is explicitely defined
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimulationSet$copyInputFiles(inputFilesFolder)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{inputFilesFolder}}{path where the files are copied}
-}
-\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
