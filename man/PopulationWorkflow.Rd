@@ -198,12 +198,12 @@ Define plot demography `PlotTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotDemographySettings(
   reportTitle = defaultWorkflowTitles$plotDemography,
-  taskFunction = NULL,
+  taskFunction = plotDemographyParameters,
   outputFolder = defaultTaskOutputFolders$plotDemography,
   active = FALSE,
   message = defaultWorkflowMessages$plotDemography,
-  xParameters = NULL,
-  yParameters = NULL,
+  xParameters = getDefaultXParametersForWorkflowType(self$workflowType),
+  yParameters = getDefaultYParametersForWorkflowType(self$workflowType),
   settings = NULL
 )}\if{html}{\out{</div>}}
 }
