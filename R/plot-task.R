@@ -110,7 +110,7 @@ PlotTask <- R6::R6Class(
         logFolder = self$workflowFolder
       )
       if (!is.null(self$outputFolder)) {
-        dir.create(file.path(self$workflowFolder, self$outputFolder))
+        dir.create(file.path(self$workflowFolder, self$outputFolder), showWarnings = FALSE)
       }
 
       # Goodness of fit task creates a histogram of residuals merged accross the simulaiton
