@@ -100,7 +100,7 @@ defaultWorkflowMessages <- list(
   "plotMassBalance" = "Plot Mass Balance task in Alpha Testing",
   "plotAbsorption" = "Plot Absorption task in Alpha Testing",
   "plotSensitivity" = "Plot Sensitivity task in Alpha Testing",
-  "plotDemography" = "Plot Demography task Not available at the moment",
+  "plotDemography" = "Plot Demography task in Alpha Testing",
   "resetReport" = "Clear previous report"
 )
 

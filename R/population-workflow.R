@@ -156,12 +156,12 @@ PopulationWorkflow <- R6::R6Class(
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for goodness of fit plots
     plotDemographySettings = function(reportTitle = defaultWorkflowTitles$plotDemography,
-                                          taskFunction = NULL,
+                                          taskFunction = plotDemographyParameters,
                                           outputFolder = defaultTaskOutputFolders$plotDemography,
                                           active = FALSE,
                                           message = defaultWorkflowMessages$plotDemography,
-                                          xParameters = NULL,
-                                          yParameters = NULL,
+                                          xParameters = getDefaultXParametersForWorkflowType(self$workflowType),
+                                          yParameters = getDefaultYParametersForWorkflowType(self$workflowType),
                                           settings = NULL) {
       self$plotDemography <- PopulationPlotTask$new(
         workflowType = self$workflowType,
