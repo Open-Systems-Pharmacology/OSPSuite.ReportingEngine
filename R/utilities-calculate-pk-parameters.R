@@ -41,6 +41,7 @@ calculatePKParameters <- function(structureSet,
 plotMeanPKParameters <- function(structureSet,
                                  logFolder = getwd(),
                                  settings = NULL) {
+  pkParametersData <- NULL
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
   pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
     structureSet$pkAnalysisResultsFileNames,
@@ -48,14 +49,56 @@ plotMeanPKParameters <- function(structureSet,
   )
 
   pkParametersTable <- ospsuite::pkAnalysesAsDataFrame(pkAnalyses)
-  # pkParametersTable <- pkParametersTable[, c("QuantityPath", "Parameters", "Value", "Unit")]
+  for (output in structureSet$simulationSet$outputs) {
+    molWeight <- simulation$molWeightFor(output$path)
+
+    pkParametersData <- rbind.data.frame(
+      pkParametersData,
+      getMeanPkAnalysesFromOuptut(pkParametersTable, output, molWeight)
+    )
+  }
 
   return(list(
     plots = NULL,
-    tables = list(pkAnalysis = pkParametersTable)
+    tables = list(pkAnalysis = pkParametersData)
   ))
 }
 
+getMeanPkAnalysesFromOuptut <- function(data, output, molWeight = NULL) {
+  pkAnalysesFromOuptut <- NULL
+  outputData <- data[output$path %in% data$QuantityPath, ]
+
+  for (pkParameterIndex in seq_along(output$pkParameters)) {
+    pkParameter <- output$pkParameters[pkParameterIndex]
+    displayName <- output$pkParametersDisplayName[pkParameterIndex]
+    displayUnit <- output$pkParametersDisplayUnit[pkParameterIndex]
+
+    selectedParameter <- outputData$Parameter %in% pkParameter
+
+    pkParameterValue <- ifnotnull(
+      displayUnit,
+      ospsuite::toUnit(
+        ospsuite::getDimensionForUnit(displayUnit),
+        outputData$Value[selectedParameter],
+        displayUnit,
+        molWeight
+      ),
+      outputData$Value[selectedParameter]
+    )
+
+    pkAnalysesFromOuptut <- rbind.data.frame(
+      pkAnalysesFromOuptut,
+      data.frame(
+        Path = output$displayName,
+        Parameter = displayName %||% outputData$Parameter[selectedParameter],
+        Value = pkParameterValue,
+        Unit = displayUnit %||% outputData$Unit[selectedParameter]
+      )
+    )
+  }
+
+  return(pkAnalysesFromOuptut)
+}
 
 #' @title plotPopulationPKParameters
 #' @description Plot PK parameters box plots and tables
