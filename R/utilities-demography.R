@@ -16,19 +16,24 @@ plotDemographyParameters <- function(structureSets,
                                      logFolder = getwd(),
                                      settings = NULL,
                                      workflowType = PopulationWorkflowTypes$parallelComparison,
-                                     xParameters = getDefaultXParametersForWorkflowType(workflowType),
+                                     xParameters = getDefaultDemographyXParameters(workflowType),
                                      yParameters = NULL) {
   validateIsIncluded(workflowType, PopulationWorkflowTypes)
   validateIsOfType(structureSets, "list")
   validateIsOfType(c(structureSets), "SimulationStructure")
-  validateIsString(xParameters, nullAllowed = TRUE)
-  validateIsString(yParameters, nullAllowed = TRUE)
+  validateIsString(c(xParameters), nullAllowed = TRUE)
+  validateIsString(c(yParameters), nullAllowed = TRUE)
 
-  demographyPlot <- list()
+  demographyPlots <- list()
 
-  yParameters <- yParameters %||% getDefaultYParametersForWorkflowType(workflowType)
+  # User defined yParameters will be used as is.
+  # Otherwise, the default is to pick from the DemographyDefaultParameters excluding xParameters
+  # This will prevent plots such as age vs age
+  yParameters <- yParameters %||% setdiff(DemographyDefaultParameters, xParameters)
 
-  demographyAcrossPopulations <- getDemographyAcrossPopulations(structureSets)
+  demographyAcrossPopulations<- getDemographyAcrossPopulations(structureSets)
+  demographyData <- demographyAcrossPopulations$data
+  demographyMetaData <- demographyAcrossPopulations$metaData
 
   if (workflowType %in% PopulationWorkflowTypes$pediatric) {
     referencePopulationName <- getReferencePopulationName(structureSets)
@@ -38,7 +43,7 @@ plotDemographyParameters <- function(structureSets,
     # Pediatric: comparison histogram
     if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
       for (parameterName in yParameters) {
-        parameterLabel <- lastPathElement(parameterName)
+        parameterLabel <- demographyMetaData[[parameterName]]$dimension
 
         histogramMapping <- tlf::HistogramDataMapping$new(
           x = parameterName,
@@ -46,57 +51,53 @@ plotDemographyParameters <- function(structureSets,
         )
 
         demographyHistogram <- plotDemographyHistogram(
-          data = demographyAcrossPopulations,
-          bins = settings$bins %||% 11,
+          data = demographyData,
+          metaData = demographyMetaData,
           dataMapping = histogramMapping,
-          plotConfiguration = settings$plotConfigurations[["histogram"]]
+          plotConfiguration = settings$plotConfigurations[["histogram"]],
+          bins = settings$bins %||% 11
         )
-        demographyPlot[[parameterLabel]] <- demographyHistogram
+        demographyPlots[[parameterLabel]] <- demographyHistogram
       }
     }
     # Parallel and Ratio: histograms per population
     if (workflowType %in% c(PopulationWorkflowTypes$parallelComparison, PopulationWorkflowTypes$ratioComparison)) {
       for (parameterName in yParameters) {
-        parameterLabel <- lastPathElement(parameterName)
+        parameterLabel <- demographyMetaData[[parameterName]]$dimension
         histogramMapping <- tlf::HistogramDataMapping$new(
           x = parameterName,
           fill = "simulationSetName"
         )
-        for (populationName in levels(factor(demographyAcrossPopulations$simulationSetName))) {
-          demographyData <- demographyAcrossPopulations[demographyAcrossPopulations$simulationSetName %in% populationName, ]
+        for (populationName in levels(factor(demographyData$simulationSetName))) {
+          demographyDataByPopulation <- demographyData[demographyData$simulationSetName %in% populationName, ]
 
           demographyHistogram <- plotDemographyHistogram(
-            data = demographyData,
-            bins = settings$bins %||% 11,
+            data = demographyDataByPopulation,
+            metaData = demographyMetaData,
             dataMapping = histogramMapping,
-            plotConfiguration = settings$plotConfigurations[["histogram"]]
+            plotConfiguration = settings$plotConfigurations[["histogram"]],
+            bins = settings$bins %||% 11
           )
 
-          demographyPlot[[paste0(parameterLabel, "-", populationName)]] <- demographyHistogram
+          demographyPlots[[paste0(parameterLabel, "-", populationName)]] <- demographyHistogram
         }
       }
     }
-    return(list(plots = demographyPlot))
+    return(list(plots = demographyPlots))
   }
 
   for (demographyParameter in xParameters) {
-    xParameterLabel <- lastPathElement(demographyParameter)
+    xParameterLabel <- demographyMetaData[[demographyParameter]]$dimension
     for (parameterName in yParameters) {
-      yParameterLabel <- lastPathElement(parameterName)
+      yParameterLabel <- demographyMetaData[[parameterName]]$dimension
 
       vpcMetaData <- list(
-        "x" = list(
-          dimension = xParameterLabel,
-          unit = ""
-        ),
-        "median" = list(
-          dimension = yParameterLabel,
-          unit = ""
-        )
+        "x" = demographyMetaData[[demographyParameter]],
+        "median" = demographyMetaData[[parameterName]]
       )
 
       aggregatedData <- getDemographyAggregatedData(
-        data = demographyAcrossPopulations,
+        data = demographyData,
         xParameterName = demographyParameter,
         yParameterName = parameterName,
         xParameterBreaks = settings$xParametersBreaks[[demographyParameter]]
@@ -105,7 +106,7 @@ plotDemographyParameters <- function(structureSets,
 
       # For pediatric workflow, range plots compare reference population to the other populations
       if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
-        referenceData <- demographyAcrossPopulations[demographyAcrossPopulations$simulationSetName %in% referencePopulationName, ]
+        referenceData <- demographyData[demographyData$simulationSetName %in% referencePopulationName, ]
 
         aggregatedReferenceData <- data.frame(
           x = c(-Inf, Inf),
@@ -131,8 +132,8 @@ plotDemographyParameters <- function(structureSets,
             plotObject = referenceVpcPlot
           )
 
-          demographyPlot[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- comparisonVpcPlot
-          demographyPlot[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- comparisonVpcPlot +
+          demographyPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- comparisonVpcPlot
+          demographyPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- comparisonVpcPlot +
             ggplot2::scale_y_continuous(trans = "log10")
         }
       }
@@ -146,14 +147,14 @@ plotDemographyParameters <- function(structureSets,
           metaData = vpcMetaData,
           plotConfiguration = settings$plotConfigurations[["vpcParameterPlot"]]
         )
-        demographyPlot[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- vpcPlot
-        demographyPlot[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- vpcPlot +
+        demographyPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- vpcPlot
+        demographyPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- vpcPlot +
           ggplot2::scale_y_continuous(trans = "log10")
       }
     }
   }
 
-  return(list(plots = demographyPlot))
+  return(list(plots = demographyPlots))
 }
 
 getDemographyAcrossPopulations <- function(structureSets) {
@@ -162,7 +163,7 @@ getDemographyAcrossPopulations <- function(structureSets) {
   {
     population <- ospsuite::loadPopulation(structureSet$simulationSet$populationFile)
     populationTable <- ospsuite::populationAsDataFrame(population)
-
+    
     fullDemographyTable <- cbind.data.frame(
       simulationSetName = structureSet$simulationSet$simulationSetName,
       populationTable
@@ -172,30 +173,33 @@ getDemographyAcrossPopulations <- function(structureSets) {
       fullDemographyTable
     )
   }
+  simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
+  allParameters <- ospsuite::getAllParametersMatching(population$allParameterPaths, simulation)
+  metaData <- lapply(allParameters, function(parameter){list(dimension = parameter$name,
+                                                             unit = parameter$displayUnit)})
+  names(metaData) <- sapply(allParameters, function(parameter){parameter$path})
 
-  return(demographyAcrossPopulations)
+  demographyAcrossPopulations$Gender <- as.numeric(demographyAcrossPopulations$Gender)
+  metaData[["Gender"]] <- list(dimension = "Gender",
+                               unit = "")
+  
+  return(list(data = demographyAcrossPopulations,
+              metaData = metaData))
 }
 
-getDefaultXParametersForWorkflowType <- function(workflowType) {
+DemographyDefaultParameters <- c(ospsuite::StandardPath[c("Age", "Height", "Weight", "BMI")], list(Gender = "Gender"))
+
+#'@title getDefaultDemographyXParameters
+#'@description Get names of default demography parameters in x axis of demography plots.
+#'@param workflowType Name of workflow type.
+#'Use enum `PopulationWorkflowTypes` to get a list of available workflow types.
+#'@return names of default demography parameters
+getDefaultDemographyXParameters <- function(workflowType) {
   validateIsIncluded(workflowType, PopulationWorkflowTypes)
   if (workflowType %in% PopulationWorkflowTypes$pediatric) {
     return(ospsuite::StandardPath$Age)
   }
   return(NULL)
-}
-
-# TO DO:
-# Default does not include gender nor BSA. BSA is not output by population class
-getDefaultYParametersForWorkflowType <- function(workflowType) {
-  validateIsIncluded(workflowType, PopulationWorkflowTypes)
-
-  defaultStandardPaths <- ospsuite::StandardPath
-  if (workflowType %in% PopulationWorkflowTypes$pediatric) {
-    defaultStandardPaths <- defaultStandardPaths[c("Height", "Weight", "BMI", "GestationalAge", "OntogenyFactorAlbumin", "OntogenyFactorAlbuminAGP")]
-    return(defaultStandardPaths)
-  }
-  defaultStandardPaths <- defaultStandardPaths[c("Age", "Height", "Weight", "BMI")]
-  return(defaultStandardPaths)
 }
 
 getDemographyAggregatedData <- function(data,
@@ -267,13 +271,15 @@ getReferencePopulationName <- function(structureSets) {
 #' @import tlf
 #' @import ggplot2
 plotDemographyHistogram <- function(data,
-                                    bins = NULL,
+                                    metaData,
                                     dataMapping = NULL,
-                                    plotConfiguration = NULL) {
+                                    plotConfiguration = NULL,
+                                    bins = NULL) {
   dataMapping <- dataMapping %||% tlf::HistogramDataMapping$new(x = ospsuite::StandardPath$Age)
 
   plotConfiguration <- PlotConfiguration$new(
     data = data,
+    metaData = metaData,
     dataMapping = dataMapping
   )
 
