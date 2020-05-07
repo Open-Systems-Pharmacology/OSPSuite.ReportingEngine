@@ -92,23 +92,10 @@ plotPopulationPKParameters <- function(structureSets,
     y = "Value"
   )
 
-  # TO DO: define a way to modify these function from within settings
-  aggregateNames <- c("median", "lowPerc", "highPerc")
-  lowPerc <- function(x) {
-    as.numeric(quantile(x, probs = 0.05))
-  }
-  highPerc <- function(x) {
-    as.numeric(quantile(x, probs = 0.95))
-  }
-
   pkParametersTableAcrossPopulations <- getPkParametersTableAcrossPopulations(structureSets)
-
+  
   if (workflowType %in% c(PopulationWorkflowTypes$ratioComparison, PopulationWorkflowTypes$pediatric)) {
-    allSimulationReferences <- sapply(structureSets, function(structureSet) {
-      structureSet$simulationSet$referencePopulation
-    })
-    validateIsOfLength(allSimulationReferences[allSimulationReferences], 1)
-    referencePopulationName <- structureSets[[which(allSimulationReferences)]]$simulationSet$simulationSetName
+    referencePopulationName <- getReferencePopulationName(structureSets)
   }
 
   # White list of selected yParameters
@@ -157,10 +144,10 @@ plotPopulationPKParameters <- function(structureSets,
 
     # Range plots on PK parameters vs xParameters
     for (demographyParameter in xParameters) {
-      aggregatedData <- getPopulationPkParametersAggregatedData(
-        data = pkParameterData,
-        xParameterName = demographyParameter,
-        xParameterBreaks = settings$xParametersBreaks[[demographyParameter]]
+      aggregatedData <- getDemographyAggregatedData(data = pkParameterData,
+                                                    xParameterName = demographyParameter,
+                                                    yParameterName = "Value",
+                                                    xParameterBreaks = settings$xParametersBreaks[[demographyParameter]]
       )
 
       populationNames <- levels(factor(aggregatedData$Population))
@@ -171,7 +158,7 @@ plotPopulationPKParameters <- function(structureSets,
         pkParametersTable <- pkParametersTables[[parameterLabel]]
         referenceData <- data.frame(
           x = c(-Inf, Inf),
-          "Population" = paste("Simulated median [5th-95th] percentiles for", referencePopulationName)
+          "Population" = paste("Simulated", AggregationConfiguration$names$middle, AggregationConfiguration$names$range, "for", referencePopulationName)
         )
         referenceData[, c("ymin", "median", "ymax")] <- pkParametersTable[referencePopulationName, c(2, 4, 6)]
 
@@ -194,7 +181,7 @@ plotPopulationPKParameters <- function(structureSets,
 
         for (populationName in populationNames[!populationNames %in% referencePopulationName]) {
           comparisonData <- aggregatedData[aggregatedData$Population %in% populationName, ]
-          comparisonData$Population <- paste("Simulated median [5th-95th] percentiles for", comparisonData$Population)
+          comparisonData$Population <- paste("Simulated", AggregationConfiguration$names$middle, AggregationConfiguration$names$range, "for", comparisonData$Population)
           comparisonVpcPlot <- vpcParameterPlot(
             data = comparisonData,
             metaData = vpcMetaData,
@@ -210,7 +197,7 @@ plotPopulationPKParameters <- function(structureSets,
       # Regular range plots not associated to workflow type
       for (populationName in populationNames) {
         vpcData <- aggregatedData[aggregatedData$Population %in% populationName, ]
-        vpcData$Population <- paste("Simulated median [5th-95th] percentiles for", vpcData$Population)
+        vpcData$Population <- paste("Simulated", AggregationConfiguration$names$middle, AggregationConfiguration$names$range, "for", vpcData$Population)
         vpcPlot <- vpcParameterPlot(
           data = vpcData,
           metaData = vpcMetaData,
@@ -381,64 +368,6 @@ getPkParametersTableAcrossPopulations <- function(structureSets) {
   }
 
   return(pkParametersTableAcrossPopulations)
-}
-
-getPopulationPkParametersAggregatedData <- function(data,
-                                                    xParameterName,
-                                                    xParameterBreaks = NULL) {
-
-  # TO DO: create a global list for the lowPerc, median and highPerc
-  lowPerc <- function(x) {
-    as.numeric(quantile(x, probs = 0.05))
-  }
-  highPerc <- function(x) {
-    as.numeric(quantile(x, probs = 0.95))
-  }
-
-  xParameterBreaks <- xParameterBreaks %||% 10
-  xParameterBins <- cut(data[, xParameterName], breaks = xParameterBreaks)
-
-  xData <- stats::aggregate(
-    x = data[, xParameterName],
-    by = list(
-      Bins = xParameterBins,
-      Population = data[, "simulationSetName"]
-    ),
-    FUN = median
-  )
-
-  medianData <- stats::aggregate(
-    x = data[, "Value"],
-    by = list(
-      Bins = xParameterBins,
-      Population = data[, "simulationSetName"]
-    ),
-    FUN = median
-  )
-  lowPercData <- stats::aggregate(
-    x = data[, "Value"],
-    by = list(
-      Bins = xParameterBins,
-      Population = data[, "simulationSetName"]
-    ),
-    FUN = lowPerc
-  )
-  highPercData <- stats::aggregate(
-    x = data[, "Value"],
-    by = list(
-      Bins = xParameterBins,
-      Population = data[, "simulationSetName"]
-    ),
-    FUN = highPerc
-  )
-
-  aggregatedData <- cbind.data.frame(xData,
-    median = medianData$x,
-    ymin = lowPercData$x,
-    ymax = highPercData$x
-  )
-
-  return(aggregatedData)
 }
 
 getPkRatiosTable <- function(pkParametersTable,
