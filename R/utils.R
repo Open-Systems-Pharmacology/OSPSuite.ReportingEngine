@@ -163,7 +163,6 @@ getFileExtension <- function(filePath) {
   return(extension)
 }
 
-
 #' @title loadSimulationWithUpdatedPaths
 #' @param simulationSet simulation set containing path to simulation file and pathIDs for quantities to be loaded into simulation object
 #' @return simulation object with pathIDs updated from simulationSet
