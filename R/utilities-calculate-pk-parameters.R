@@ -424,3 +424,16 @@ getPkRatiosTable <- function(pkParametersTable,
 
   return(pkRatiosTable)
 }
+
+#' @title getDefaultPkParametersXParameters
+#' @description Get names of default parameters in x axis of pk parameters plots.
+#' @param workflowType Name of workflow type.
+#' Use enum `PopulationWorkflowTypes` to get a list of available workflow types.
+#' @return names of default parameters
+getDefaultPkParametersXParameters <- function(workflowType) {
+  validateIsIncluded(workflowType, PopulationWorkflowTypes)
+  if (workflowType %in% PopulationWorkflowTypes$pediatric) {
+    return(DemographyDefaultParameters)
+  }
+  return(NULL)
+}
