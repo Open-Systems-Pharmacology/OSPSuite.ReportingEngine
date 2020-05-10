@@ -453,3 +453,109 @@ getDefaultPkParametersXParameters <- function(workflowType) {
   }
   return(NULL)
 }
+
+getPopulationPkAnalysesFromOuptut <- function(data, metaData, output, pkParameterIndex, molWeight = NULL) {
+  outputData <- data[output$path %in% data$QuantityPath, ]
+
+  pkParameter <- output$pkParameters[pkParameterIndex]
+  displayName <- output$pkParametersDisplayName[pkParameterIndex]
+  displayUnit <- output$pkParametersDisplayUnit[pkParameterIndex]
+
+  selectedParameter <- outputData$Parameter %in% pkParameter
+
+  pkParameterValue <- ifnotnull(
+    displayUnit,
+    ospsuite::toUnit(
+      ospsuite::getDimensionForUnit(displayUnit),
+      outputData$Value[selectedParameter],
+      displayUnit,
+      molWeight
+    ),
+    outputData$Value[selectedParameter]
+  )
+
+  pkAnalysesFromOuptut <- outputData[selectedParameter, ]
+  pkAnalysesFromOuptut$Value <- pkParameterValue
+
+  pkAnalysesFromOuptutMetaData <- metaData
+  parameterLabel <- paste0(displayName %||% pkAnalysesFromOuptut$Parameter[1], " for ", output$displayName)
+  pkAnalysesFromOuptutMetaData$Value <- list(
+    dimension = parameterLabel,
+    unit = displayUnit %||% pkAnalysesFromOuptut$Unit[1]
+  )
+
+  return(list(
+    data = pkAnalysesFromOuptut,
+    metaData = pkAnalysesFromOuptutMetaData
+  ))
+}
+
+#' @title getXParametersForPkParametersPlot
+#' @param workflow `PopulationWorkflow` R6 class object
+#' @return list of x-parameters used for PK parameters range plots
+#' @export
+getXParametersForPkParametersPlot <- function(workflow) {
+  validateIsOfType(workflow, "PopulationWorkflow")
+  return(workflow$plotPKParameters$xParameters)
+}
+
+#' @title getYParametersForPkParametersPlot
+#' @param workflow `PopulationWorkflow` R6 class object
+#' @return list of y-parameters used for PK parameters range plots and boxplots
+#' @export
+getYParametersForPkParametersPlot <- function(workflow) {
+  validateIsOfType(workflow, "PopulationWorkflow")
+  yParameters <- workflow$plotPKParameters$yParameters %||% workflow$simulationStructures[[1]]$simulationSet$outputs
+
+  return(yParameters)
+}
+
+#' @title setXParametersForPkParametersPlot
+#' @description Set x-parameters for range plots of PK parameters plot task.
+#' The method update directly the input workflow
+#' @param workflow `PopulationWorkflow` R6 class object
+#' @param parameters list of parameters to be used as x-parameters
+#' @export
+setXParametersForPkParametersPlot <- function(workflow, parameters) {
+  validateIsOfType(workflow, "PopulationWorkflow")
+  validateIsString(c(parameters))
+
+  workflow$plotPKParameters$xParameters <- parameters
+
+  logWorkflow(
+    message = paste0(
+      "X-parameters: '",
+      paste0(c(parameters), collapse = "', '"),
+      "' set for PK parameters plot."
+    ),
+    pathFolder = workflow$workflowFolder,
+    logTypes = LogTypes$Debug
+  )
+  return(invisible())
+}
+
+#' @title setYParametersForPkParametersPlot
+#' @description Set y-parameters for boxplots and range plots of PK parameters plot task.
+#' The method update directly the input workflow
+#' @param workflow `PopulationWorkflow` R6 class object
+#' @param parameters list of R6 class `Output` objects to be used as y-parameters
+#' @export
+setYParametersForPkParametersPlot <- function(workflow, parameters) {
+  validateIsOfType(workflow, "PopulationWorkflow")
+  validateIsOfType(c(parameters), "Output")
+
+  workflow$plotPKParameters$yParameters <- parameters
+
+  for (output in c(parameters)) {
+    logWorkflow(
+      message = paste0(
+        "Y-parameters: '",
+        paste0(c(output$pkParameters), collapse = "', '"),
+        "' for '", output$path, "' set for PK parameters plot."
+      ),
+      pathFolder = workflow$workflowFolder,
+      logTypes = LogTypes$Debug
+    )
+  }
+  return(invisible())
+}

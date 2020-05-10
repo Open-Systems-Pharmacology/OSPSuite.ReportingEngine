@@ -312,3 +312,72 @@ plotDemographyHistogram <- function(data,
     ggplot2::guides(fill = guide_legend(title = NULL))
   return(demographyPlot)
 }
+
+#' @title getXParametersForDemogrpahyPlot
+#' @param workflow `PopulationWorkflow` R6 class object
+#' @return list of x parameters used for demography range plots
+#' @export
+getXParametersForDemogrpahyPlot <- function(workflow) {
+  validateIsOfType(workflow, "PopulationWorkflow")
+  return(workflow$plotDemography$xParameters)
+}
+
+#' @title getYParametersForDemogrpahyPlot
+#' @param workflow `PopulationWorkflow` R6 class object
+#' @return list of y parameters used for demography histogram and range plots
+#' @export
+getYParametersForDemogrpahyPlot <- function(workflow) {
+  validateIsOfType(workflow, "PopulationWorkflow")
+  xParameters <- getXParametersForDemogrpahyPlot(workflow)
+  yParameters <- workflow$plotDemography$yParameters %||% setdiff(DemographyDefaultParameters, xParameters)
+
+  return(yParameters)
+}
+
+#' @title setXParametersForDemogrpahyPlot
+#' @description Set x parameters for range plots of demography plot task.
+#' The method update directly the input workflow
+#' @param workflow `PopulationWorkflow` R6 class object
+#' @param parameters list of demography parameters to be used as x-parameters
+#' @export
+setXParametersForDemogrpahyPlot <- function(workflow, parameters) {
+  validateIsOfType(workflow, "PopulationWorkflow")
+  validateIsString(c(parameters))
+
+  workflow$plotDemography$xParameters <- parameters
+
+  logWorkflow(
+    message = paste0(
+      "X-parameters: '",
+      paste0(c(parameters), collapse = "', '"),
+      "' set for demography plot."
+    ),
+    pathFolder = workflow$workflowFolder,
+    logTypes = LogTypes$Debug
+  )
+  return(invisible())
+}
+
+#' @title setYParametersForDemogrpahyPlot
+#' @description Set y-parameters for histograms and range plots of demography plot task.
+#' The method update directly the input workflow
+#' @param workflow `PopulationWorkflow` R6 class object
+#' @param parameters list of demography parameters to be used as y-parameters
+#' @export
+setYParametersForDemogrpahyPlot <- function(workflow, parameters) {
+  validateIsOfType(workflow, "PopulationWorkflow")
+  validateIsString(c(parameters))
+
+  workflow$plotDemography$yParameters <- parameters
+
+  logWorkflow(
+    message = paste0(
+      "Y-parameters: '",
+      paste0(c(parameters), collapse = "', '"),
+      "' set for demography plot."
+    ),
+    pathFolder = workflow$workflowFolder,
+    logTypes = LogTypes$Debug
+  )
+  return(invisible())
+}
