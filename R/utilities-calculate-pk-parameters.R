@@ -118,13 +118,20 @@ plotPopulationPKParameters <- function(structureSets,
                                        logFolder = getwd(),
                                        settings = NULL,
                                        workflowType = PopulationWorkflowTypes$parallelComparison,
-                                       xParameters = NULL,
+                                       xParameters = getDefaultPkParametersXParameters(workflowType),
                                        yParameters = NULL) {
   validateIsIncluded(workflowType, PopulationWorkflowTypes)
   validateIsOfType(structureSets, "list")
   validateIsOfType(c(structureSets), "SimulationStructure")
-  validateIsString(xParameters, nullAllowed = TRUE)
-  validateIsString(yParameters, nullAllowed = TRUE)
+  validateIsString(c(xParameters), nullAllowed = TRUE)
+  validateIsOfType(c(yParameters), "Output", nullAllowed = TRUE)
+
+  # TO DO: need a validate method to ensure that all outputs are identical
+  # validateIsIdentical(sapply(structureSets, function(set){set$simulationSet$outputs})) ?
+  yParameters <- yParameters %||% structureSets[[1]]$simulationSet$outputs
+
+  # Get first simulation, in case mol weight is needed
+  simulation <- loadSimulationWithUpdatedPaths(structureSets[[1]]$simulationSet)
 
   pkRatioTableAcrossPopulations <- NULL
   pkParametersPlots <- NULL
@@ -135,161 +142,151 @@ plotPopulationPKParameters <- function(structureSets,
     y = "Value"
   )
 
-  pkParametersTableAcrossPopulations <- getPkParametersTableAcrossPopulations(structureSets)
-  
+  pkParametersAcrossPopulations <- getPkParametersAcrossPopulations(structureSets)
+  pkParametersDataAcrossPopulations <- pkParametersAcrossPopulations$data
+  pkParametersMetaDataAcrossPopulations <- pkParametersAcrossPopulations$metaData
+
+  # Enforce factors for population names
+  pkParametersDataAcrossPopulations$simulationSetName <- factor(pkParametersDataAcrossPopulations$simulationSetName)
+
   if (workflowType %in% c(PopulationWorkflowTypes$ratioComparison, PopulationWorkflowTypes$pediatric)) {
     referencePopulationName <- getReferencePopulationName(structureSets)
   }
 
-  # White list of selected yParameters
-  pkParameterNames <- pkParametersTableAcrossPopulations$Parameter
-  yParameters <- yParameters %||% levels(factor(pkParameterNames))
+  # Standard boxplots for each pkParameters of each output
+  for (output in yParameters) {
+    molWeight <- simulation$molWeightFor(output$path)
+    pathLabel <- lastPathElement(output$path)
+    for (pkParameterIndex in seq_along(output$pkParameters)) {
+      yParameterLabel <- lastPathElement(output$pkParameters[pkParameterIndex])
 
-  # Enforce factors for population names
-  pkParametersTableAcrossPopulations$simulationSetName <- factor(pkParametersTableAcrossPopulations$simulationSetName)
-
-  # Standard boxplots
-  for (parameter in yParameters) {
-    pkParameterData <- pkParametersTableAcrossPopulations[pkParameterNames %in% parameter, ]
-    # remove NA value to prevent crash in computation of percentiles
-    pkParameterData <- pkParameterData[!is.na(pkParameterData$Value), ]
-
-    pkParameterMetaData <- list("Value" = list(
-      dimension = parameter,
-      unit = pkParameterData$Unit[1]
-    ))
-
-    # TO DO: standardize this approach for names of plots to export
-    parameterLabel <- lastPathElement(parameter)
-
-    boxplotPkParameters <- tlf::plotBoxWhisker(
-      data = pkParameterData,
-      metaData = pkParameterMetaData,
-      dataMapping = pkParametersMapping,
-      plotConfiguration = settings$plotConfigurations[["boxplotPkParameters"]]
-    ) + ggplot2::labs(title = NULL, subtitle = NULL) + ggplot2::xlab(NULL)
-
-    pkParametersPlots[[parameterLabel]] <- boxplotPkParameters
-    pkParametersPlots[[paste0(parameterLabel, "-log")]] <- boxplotPkParameters +
-      ggplot2::scale_y_continuous(trans = "log10")
-
-    pkParametersTable <- tlf::getBoxWhiskerMeasure(
-      data = pkParameterData,
-      dataMapping = pkParametersMapping
-    )
-    pkParametersTableRows <- row.names(pkParametersTable)
-    pkParametersTable <- cbind(
-      Population = pkParametersTableRows,
-      pkParametersTable
-    )
-
-    pkParametersTables[[parameterLabel]] <- pkParametersTable
-
-    # Range plots on PK parameters vs xParameters
-    for (demographyParameter in xParameters) {
-      aggregatedData <- getDemographyAggregatedData(data = pkParameterData,
-                                                    xParameterName = demographyParameter,
-                                                    yParameterName = "Value",
-                                                    xParameterBreaks = settings$xParametersBreaks[[demographyParameter]]
+      pkParameterFromOutput <- getPopulationPkAnalysesFromOuptut(
+        pkParametersDataAcrossPopulations,
+        pkParametersMetaDataAcrossPopulations,
+        output,
+        pkParameterIndex,
+        molWeight
       )
 
-      populationNames <- levels(factor(aggregatedData$Population))
+      pkParameterData <- pkParameterFromOutput$data
+      pkParameterMetaData <- pkParameterFromOutput$metaData
 
-      # For pediatric workflow, range plots compare reference population to the other populations
-      if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
-        # Get the table for reference population
-        pkParametersTable <- pkParametersTables[[parameterLabel]]
-        referenceData <- data.frame(
-          x = c(-Inf, Inf),
-          "Population" = paste("Simulated", AggregationConfiguration$names$middle, AggregationConfiguration$names$range, "for", referencePopulationName)
-        )
-        referenceData[, c("ymin", "median", "ymax")] <- pkParametersTable[referencePopulationName, c(2, 4, 6)]
+      # remove NA value to prevent crash in computation of percentiles
+      pkParameterData <- pkParameterData[!is.na(pkParameterData$Value), ]
 
-        # TO DO: integrate unit in the process
-        xParameterName <- lastPathElement(demographyParameter)
+      boxplotPkParameter <- tlf::plotBoxWhisker(
+        data = pkParameterData,
+        metaData = pkParameterMetaData,
+        dataMapping = pkParametersMapping,
+        plotConfiguration = settings$plotConfigurations[["boxplotPkParameters"]]
+      ) + ggplot2::labs(title = NULL, subtitle = NULL) + ggplot2::xlab(NULL)
 
+
+
+      pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel)]] <- boxplotPkParameter
+      pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- boxplotPkParameter +
+        ggplot2::scale_y_continuous(trans = "log10")
+
+      pkParameterTable <- tlf::getBoxWhiskerMeasure(
+        data = pkParameterData,
+        dataMapping = pkParametersMapping
+      )
+
+      pkParameterTableRows <- row.names(pkParameterTable)
+      pkParameterTable <- cbind(
+        Population = pkParameterTableRows,
+        pkParameterTable
+      )
+
+      pkParametersTables[[paste0(pathLabel, "-", yParameterLabel)]] <- pkParameterTable
+
+      # Range plots on PK parameters vs xParameters
+      for (demographyParameter in xParameters) {
+        xParameterLabel <- lastPathElement(demographyParameter)
         vpcMetaData <- list(
-          "x" = list(
-            dimension = xParameterName,
-            unit = ""
-          ),
+          "x" = pkParameterMetaData[[demographyParameter]],
           "median" = pkParameterMetaData$Value
         )
 
-        referenceVpcPlot <- vpcParameterPlot(
-          data = referenceData,
-          metaData = vpcMetaData,
-          plotConfiguration = settings$plotConfigurations[["comparisonVpcPlot"]]
+        aggregatedData <- getDemographyAggregatedData(
+          data = pkParameterData,
+          xParameterName = demographyParameter,
+          yParameterName = "Value",
+          xParameterBreaks = settings$xParametersBreaks[[demographyParameter]]
         )
 
-        for (populationName in populationNames[!populationNames %in% referencePopulationName]) {
-          comparisonData <- aggregatedData[aggregatedData$Population %in% populationName, ]
-          comparisonData$Population <- paste("Simulated", AggregationConfiguration$names$middle, AggregationConfiguration$names$range, "for", comparisonData$Population)
-          comparisonVpcPlot <- vpcParameterPlot(
-            data = comparisonData,
+        populationNames <- levels(factor(aggregatedData$Population))
+
+        # For pediatric workflow, range plots compare reference population to the other populations
+        if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
+          # Get the table for reference population
+          referenceData <- data.frame(
+            x = c(-Inf, Inf),
+            "Population" = paste("Simulated", AggregationConfiguration$names$middle, AggregationConfiguration$names$range, "for", referencePopulationName)
+          )
+          referenceData[, c("ymin", "median", "ymax")] <- pkParameterTable[referencePopulationName, c(3, 5, 7)]
+
+          referenceVpcPlot <- vpcParameterPlot(
+            data = referenceData,
             metaData = vpcMetaData,
-            plotObject = referenceVpcPlot
+            plotConfiguration = settings$plotConfigurations[["comparisonVpcPlot"]]
           )
 
-          pkParametersPlots[[paste0(populationName, "-vs-ref-", parameterLabel, "-vs-", xParameterName)]] <- comparisonVpcPlot
-          pkParametersPlots[[paste0(populationName, "-vs-ref-", parameterLabel, "-vs-", xParameterName, "-log")]] <- comparisonVpcPlot +
+          for (populationName in populationNames[!populationNames %in% referencePopulationName]) {
+            comparisonData <- aggregatedData[aggregatedData$Population %in% populationName, ]
+            comparisonData$Population <- paste("Simulated", AggregationConfiguration$names$middle, AggregationConfiguration$names$range, "for", comparisonData$Population)
+
+            comparisonVpcPlot <- vpcParameterPlot(
+              data = comparisonData,
+              metaData = vpcMetaData,
+              plotObject = referenceVpcPlot
+            )
+
+            pkParametersPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- comparisonVpcPlot
+            pkParametersPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- comparisonVpcPlot +
+              ggplot2::scale_y_continuous(trans = "log10")
+          }
+        }
+
+        # Regular range plots not associated to workflow type
+        for (populationName in populationNames) {
+          vpcData <- aggregatedData[aggregatedData$Population %in% populationName, ]
+          vpcData$Population <- paste("Simulated", AggregationConfiguration$names$middle, AggregationConfiguration$names$range, "for", vpcData$Population)
+          vpcPlot <- vpcParameterPlot(
+            data = vpcData,
+            metaData = vpcMetaData,
+            plotConfiguration = settings$plotConfigurations[["vpcParameterPlot"]]
+          )
+          pkParametersPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- vpcPlot
+          pkParametersPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- vpcPlot +
             ggplot2::scale_y_continuous(trans = "log10")
         }
       }
 
-      # Regular range plots not associated to workflow type
-      for (populationName in populationNames) {
-        vpcData <- aggregatedData[aggregatedData$Population %in% populationName, ]
-        vpcData$Population <- paste("Simulated", AggregationConfiguration$names$middle, AggregationConfiguration$names$range, "for", vpcData$Population)
-        vpcPlot <- vpcParameterPlot(
-          data = vpcData,
-          metaData = vpcMetaData,
-          plotConfiguration = settings$plotConfigurations[["vpcParameterPlot"]]
-        )
-        pkParametersPlots[[paste0(populationName, "-", parameterLabel, "-vs-", xParameterName)]] <- vpcPlot
-        pkParametersPlots[[paste0(populationName, "-", parameterLabel, "-vs-", xParameterName, "-log")]] <- vpcPlot +
+      # For Ratio Comparison create boxplots of boxplot hinges ratios
+      if (workflowType %in% PopulationWorkflowTypes$ratioComparison) {
+        # Get the tables and compute the ratios using reference population name
+        pkRatiosTable <- getPkRatiosTable(pkParameterTable, referencePopulationName)
+
+        pkRatiosData <- pkRatiosTable
+        pkRatiosData[, c("ymin", "lower", "middle", "upper", "ymax")] <- pkRatiosTable[, c(3:7)]
+
+        boxplotPkRatios <- ratioBoxplot(
+          data = pkRatiosData,
+          plotConfiguration = settings$plotConfigurations[["boxplotPkRatios"]]
+        ) + ggplot2::ylab(paste0(pkParameterMetaData$Value$dimension, " [fraction of ", referencePopulationName, "]"))
+
+        pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-ratio")]] <- boxplotPkRatios
+        pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-ratio-log")]] <- boxplotPkRatios +
           ggplot2::scale_y_continuous(trans = "log10")
+
+        pkParametersTables[[paste0(pathLabel, "-", yParameterLabel, "-ratio")]] <- pkRatiosTable
       }
     }
   }
 
-  # For Ratio Comparison create boxplots of boxplot hinges ratios
-  if (workflowType %in% PopulationWorkflowTypes$ratioComparison) {
-    for (parameter in yParameters) {
-      parameterLabel <- lastPathElement(parameter)
-
-      pkParametersTable <- pkParametersTables[[parameterLabel]]
-
-      # Get the tables and compute the ratios using reference population name
-      pkRatiosTable <- getPkRatiosTable(pkParametersTable, referencePopulationName)
-
-      pkRatiosData <- pkRatiosTable
-      pkRatiosData[, c("ymin", "lower", "middle", "upper", "ymax")] <- pkRatiosTable[, c(3:7)]
-
-      boxplotPkRatios <- ratioBoxplot(
-        data = pkRatiosData,
-        plotConfiguration = settings$plotConfigurations[["boxplotPkRatios"]]
-      )
-      boxplotPkRatios <- boxplotPkRatios + ggplot2::ylab(paste0(
-        parameter,
-        " [fraction of ",
-        referencePopulationName, "]"
-      ))
-
-      pkParametersPlots[[paste0(parameterLabel, "-ratio")]] <- boxplotPkRatios
-      pkParametersPlots[[paste0(parameterLabel, "-ratio-log")]] <- boxplotPkRatios +
-        ggplot2::scale_y_continuous(trans = "log10")
-
-      pkParametersTables[[paste0(parameterLabel, "-ratio")]] <- pkRatiosTable
-    }
-  }
-
-  return(list(
-    plots = pkParametersPlots,
-    tables = pkParametersTables
-  ))
+  return(list(plots = pkParametersPlots, tables = pkParametersTables))
 }
-
 
 #' @title ratioBoxplot
 #' @description Plot box-whiskers of ratios as is
@@ -380,7 +377,7 @@ vpcParameterPlot <- function(data,
   return(vpcPlot)
 }
 
-getPkParametersTableAcrossPopulations <- function(structureSets) {
+getPkParametersAcrossPopulations <- function(structureSets) {
   pkParametersTableAcrossPopulations <- NULL
   for (structureSet in structureSets)
   {
@@ -409,8 +406,27 @@ getPkParametersTableAcrossPopulations <- function(structureSets) {
       fullPkParametersTable
     )
   }
+  allParameters <- ospsuite::getAllParametersMatching(population$allParameterPaths, simulation)
+  metaData <- lapply(allParameters, function(parameter) {
+    list(
+      dimension = parameter$name,
+      unit = parameter$displayUnit
+    )
+  })
+  names(metaData) <- sapply(allParameters, function(parameter) {
+    parameter$path
+  })
 
-  return(pkParametersTableAcrossPopulations)
+  pkParametersTableAcrossPopulations$Gender <- as.numeric(pkParametersTableAcrossPopulations$Gender)
+  metaData[["Gender"]] <- list(
+    dimension = "Gender",
+    unit = ""
+  )
+
+  return(list(
+    data = pkParametersTableAcrossPopulations,
+    metaData = metaData
+  ))
 }
 
 getPkRatiosTable <- function(pkParametersTable,
