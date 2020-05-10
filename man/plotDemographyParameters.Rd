@@ -9,7 +9,7 @@ plotDemographyParameters(
   logFolder = getwd(),
   settings = NULL,
   workflowType = PopulationWorkflowTypes$parallelComparison,
-  xParameters = getDefaultXParametersForWorkflowType(workflowType),
+  xParameters = getDefaultDemographyXParameters(workflowType),
   yParameters = NULL
 )
 }

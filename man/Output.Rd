@@ -18,6 +18,12 @@ R6 class representing workflow output
 \item{\code{dataFilter}}{character or expression used to filter the observed data}
 
 \item{\code{dataDisplayName}}{display name of the observed data}
+
+\item{\code{pkParameters}}{pk parameters names for `path`}
+
+\item{\code{pkParametersDisplayName}}{display names for `pkParameters`}
+
+\item{\code{pkParametersDisplayUnit}}{display units for `pkParameters`}
 }
 \if{html}{\out{</div>}}
 }
@@ -38,7 +44,10 @@ Create a new `Output` object.
   displayName = NULL,
   displayUnit = NULL,
   dataFilter = NULL,
-  dataDisplayName = NULL
+  dataDisplayName = NULL,
+  pkParameters = NULL,
+  pkParametersDisplayName = NULL,
+  pkParametersDisplayUnit = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -54,6 +63,12 @@ Create a new `Output` object.
 \item{\code{dataFilter}}{characters or expression to filter the observed data}
 
 \item{\code{dataDisplayName}}{display name of the observed data}
+
+\item{\code{pkParameters}}{pk parameters names for `path`}
+
+\item{\code{pkParametersDisplayName}}{display names for `pkParameters`}
+
+\item{\code{pkParametersDisplayUnit}}{display units for `pkParameters`}
 }
 \if{html}{\out{</div>}}
 }

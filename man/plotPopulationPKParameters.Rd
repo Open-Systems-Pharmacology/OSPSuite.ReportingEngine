@@ -9,7 +9,7 @@ plotPopulationPKParameters(
   logFolder = getwd(),
   settings = NULL,
   workflowType = PopulationWorkflowTypes$parallelComparison,
-  xParameters = NULL,
+  xParameters = getDefaultPkParametersXParameters(workflowType),
   yParameters = NULL
 )
 }

@@ -6,9 +6,10 @@
 \usage{
 plotDemographyHistogram(
   data,
-  bins = NULL,
+  metaData,
   dataMapping = NULL,
-  plotConfiguration = NULL
+  plotConfiguration = NULL,
+  bins = NULL
 )
 }
 \arguments{
