@@ -31,7 +31,7 @@ plotDemographyParameters <- function(structureSets,
   # This will prevent plots such as age vs age
   yParameters <- yParameters %||% setdiff(DemographyDefaultParameters, xParameters)
 
-  demographyAcrossPopulations<- getDemographyAcrossPopulations(structureSets)
+  demographyAcrossPopulations <- getDemographyAcrossPopulations(structureSets)
   demographyData <- demographyAcrossPopulations$data
   demographyMetaData <- demographyAcrossPopulations$metaData
 
@@ -163,7 +163,7 @@ getDemographyAcrossPopulations <- function(structureSets) {
   {
     population <- ospsuite::loadPopulation(structureSet$simulationSet$populationFile)
     populationTable <- ospsuite::populationAsDataFrame(population)
-    
+
     fullDemographyTable <- cbind.data.frame(
       simulationSetName = structureSet$simulationSet$simulationSetName,
       populationTable
@@ -175,25 +175,35 @@ getDemographyAcrossPopulations <- function(structureSets) {
   }
   simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
   allParameters <- ospsuite::getAllParametersMatching(population$allParameterPaths, simulation)
-  metaData <- lapply(allParameters, function(parameter){list(dimension = parameter$name,
-                                                             unit = parameter$displayUnit)})
-  names(metaData) <- sapply(allParameters, function(parameter){parameter$path})
+  metaData <- lapply(allParameters, function(parameter) {
+    list(
+      dimension = parameter$name,
+      unit = parameter$displayUnit
+    )
+  })
+  names(metaData) <- sapply(allParameters, function(parameter) {
+    parameter$path
+  })
 
   demographyAcrossPopulations$Gender <- as.numeric(demographyAcrossPopulations$Gender)
-  metaData[["Gender"]] <- list(dimension = "Gender",
-                               unit = "")
-  
-  return(list(data = demographyAcrossPopulations,
-              metaData = metaData))
+  metaData[["Gender"]] <- list(
+    dimension = "Gender",
+    unit = ""
+  )
+
+  return(list(
+    data = demographyAcrossPopulations,
+    metaData = metaData
+  ))
 }
 
 DemographyDefaultParameters <- c(ospsuite::StandardPath[c("Age", "Height", "Weight", "BMI")], list(Gender = "Gender"))
 
-#'@title getDefaultDemographyXParameters
-#'@description Get names of default demography parameters in x axis of demography plots.
-#'@param workflowType Name of workflow type.
-#'Use enum `PopulationWorkflowTypes` to get a list of available workflow types.
-#'@return names of default demography parameters
+#' @title getDefaultDemographyXParameters
+#' @description Get names of default demography parameters in x axis of demography plots.
+#' @param workflowType Name of workflow type.
+#' Use enum `PopulationWorkflowTypes` to get a list of available workflow types.
+#' @return names of default demography parameters
 getDefaultDemographyXParameters <- function(workflowType) {
   validateIsIncluded(workflowType, PopulationWorkflowTypes)
   if (workflowType %in% PopulationWorkflowTypes$pediatric) {
