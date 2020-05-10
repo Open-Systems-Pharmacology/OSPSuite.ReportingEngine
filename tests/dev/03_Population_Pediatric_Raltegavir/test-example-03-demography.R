@@ -47,11 +47,13 @@ myPediatricWorkflow$activateTasks(tasks = "plotDemography")
 myPediatricWorkflow$inactivateTasks(tasks = "simulatePopulation")
 
 # Task "plotPKParameters": has xParameters and yParameters options
-# - xParameters are path of demography parameters for VPC like range plots (use ospsuite::StandardPath)
-# If NULL, only histograms will be output
-# - yParameters are selected PK parameters to be exported in output (use ospsuite::StandardPKParameter)
+# Use <get/set><X/Y>parametersFor to check or update these options
+# Tips: ospsuite::StandardPath to get list of usual demography parameters
 
-myPediatricWorkflow$plotDemography$xParameters <- NULL
-myPediatricWorkflow$plotDemography$yParameters <- ospsuite::StandardPath$Weight
+getXParametersForDemogrpahyPlot(myPediatricWorkflow)
+getYParametersForDemogrpahyPlot(myPediatricWorkflow)
+
+setXParametersForDemogrpahyPlot(myPediatricWorkflow, NULL)
+setYParametersForDemogrpahyPlot(myPediatricWorkflow, ospsuite::StandardPath$Weight)
 
 myPediatricWorkflow$runWorkflow()
