@@ -4,6 +4,7 @@
 #' @field displayName display name for `pkParameter`
 #' @field displayUnit display unit for `pkParameter`
 #' @export
+#' @import ospsuite
 PkParameterInfo <- R6::R6Class(
   "PkParameterInfo",
   cloneable = FALSE,

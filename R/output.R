@@ -7,6 +7,7 @@
 #' @field dataDisplayName display name of the observed data
 #' @field pkParameters R6 class `PkParameterInfo` objects
 #' @export
+#' @import ospsuite
 Output <- R6::R6Class(
   "Output",
   cloneable = FALSE,
