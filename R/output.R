@@ -34,8 +34,13 @@ Output <- R6::R6Class(
                               dataDisplayName = NULL,
                               pkParameters = NULL) {
       validateIsString(path)
+      validateIsOfLength(path, 1)
       validateIsString(c(displayName, displayUnit, dataDisplayName), nullAllowed = TRUE)
+      ifnotnull(displayName, validateIsOfLength(displayName, 1))
+      ifnotnull(displayUnit, validateIsOfLength(displayUnit, 1))
+      ifnotnull(dataDisplayName, validateIsOfLength(dataDisplayName, 1))
       validateIsOfType(dataFilter, c("character", "expression"), nullAllowed = TRUE)
+      ifnotnull(dataFilter, validateIsOfLength(dataFilter, 1))
       validateIsOfType(c(pkParameters), c("character", "PkParameterInfo"), nullAllowed = TRUE)
 
       self$path <- path

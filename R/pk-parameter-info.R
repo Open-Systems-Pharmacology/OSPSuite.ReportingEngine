@@ -23,8 +23,11 @@ PkParameterInfo <- R6::R6Class(
                               displayName = NULL,
                               displayUnit = NULL) {
       validateIsString(pkParameter)
+      validateIsOfLength(pkParameter, 1)
       validateIsString(c(displayName, displayUnit), nullAllowed = TRUE)
       validateIsIncluded(pkParameter, ospsuite::allPKParameterNames())
+      ifnotnull(displayName, validateIsOfLength(displayName, 1))
+      ifnotnull(displayUnit, validateIsOfLength(displayUnit, 1))
       # TO DO: add validateIsUnit method
       # validateIsUnit(displayUnit, nullAllowed = TRUE)
 

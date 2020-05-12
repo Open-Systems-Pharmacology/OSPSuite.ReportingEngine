@@ -58,3 +58,6 @@ test_that("Workflows initialization creates correct folder and logs, and warn us
 
   unlink(testFolder, recursive = TRUE)
 })
+
+unlink("log-debug.txt", recursive = TRUE)
+unlink("log-info.txt", recursive = TRUE)

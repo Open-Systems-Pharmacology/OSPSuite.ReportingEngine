@@ -32,7 +32,7 @@ test_that("readObservedDataFile can correctly read csv and txt format for observ
 })
 
 test_that("readObservedDataFile: unexistant file throw error", {
-  expect_error(readObservedDataFile("testFile10.csv"))
+  expect_condition(readObservedDataFile("testFile10.csv"))
 })
 
 test_that("evalDataFilter gets data.frame variable as 'data' and is consequently independent of input data.frame", {
