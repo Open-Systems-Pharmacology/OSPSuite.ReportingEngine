@@ -68,12 +68,11 @@ getMeanPkAnalysesFromOuptut <- function(data, output, molWeight = NULL) {
   pkAnalysesFromOuptut <- NULL
   outputData <- data[output$path %in% data$QuantityPath, ]
 
-  for (pkParameterIndex in seq_along(output$pkParameters)) {
-    pkParameter <- output$pkParameters[pkParameterIndex]
-    displayName <- output$pkParametersDisplayName[pkParameterIndex]
-    displayUnit <- output$pkParametersDisplayUnit[pkParameterIndex]
+  for (pkParameter in output$pkParameters) {
+    displayName <- pkParameter$displayName
+    displayUnit <- pkParameter$displayUnit
 
-    selectedParameter <- outputData$Parameter %in% pkParameter
+    selectedParameter <- outputData$Parameter %in% pkParameter$pkParameter
 
     pkParameterValue <- ifnotnull(
       displayUnit,
@@ -157,14 +156,14 @@ plotPopulationPKParameters <- function(structureSets,
   for (output in yParameters) {
     molWeight <- simulation$molWeightFor(output$path)
     pathLabel <- lastPathElement(output$path)
-    for (pkParameterIndex in seq_along(output$pkParameters)) {
-      yParameterLabel <- lastPathElement(output$pkParameters[pkParameterIndex])
+    for (pkParameter in output$pkParameters) {
+      yParameterLabel <- lastPathElement(pkParameter$pkParameter)
 
       pkParameterFromOutput <- getPopulationPkAnalysesFromOuptut(
         pkParametersDataAcrossPopulations,
         pkParametersMetaDataAcrossPopulations,
         output,
-        pkParameterIndex,
+        pkParameter,
         molWeight
       )
 
@@ -454,14 +453,13 @@ getDefaultPkParametersXParameters <- function(workflowType) {
   return(NULL)
 }
 
-getPopulationPkAnalysesFromOuptut <- function(data, metaData, output, pkParameterIndex, molWeight = NULL) {
+getPopulationPkAnalysesFromOuptut <- function(data, metaData, output, pkParameter, molWeight = NULL) {
   outputData <- data[output$path %in% data$QuantityPath, ]
 
-  pkParameter <- output$pkParameters[pkParameterIndex]
-  displayName <- output$pkParametersDisplayName[pkParameterIndex]
-  displayUnit <- output$pkParametersDisplayUnit[pkParameterIndex]
+  displayName <- pkParameter$displayName
+  displayUnit <- pkParameter$displayUnit
 
-  selectedParameter <- outputData$Parameter %in% pkParameter
+  selectedParameter <- outputData$Parameter %in% pkParameter$pkParameter
 
   pkParameterValue <- ifnotnull(
     displayUnit,

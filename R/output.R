@@ -5,12 +5,11 @@
 #' @field displayUnit display unit for `path`
 #' @field dataFilter character or expression used to filter the observed data
 #' @field dataDisplayName display name of the observed data
-#' @field pkParameters pk parameters names for `path`
-#' @field pkParametersDisplayName display names for `pkParameters`
-#' @field pkParametersDisplayUnit display units for `pkParameters`
+#' @field pkParameters R6 class `PkParameterInfo` objects
 #' @export
 Output <- R6::R6Class(
   "Output",
+  cloneable = FALSE,
   public = list(
     path = NULL,
     displayName = NULL,
@@ -18,8 +17,6 @@ Output <- R6::R6Class(
     dataFilter = NULL,
     dataDisplayName = NULL,
     pkParameters = NULL,
-    pkParametersDisplayName = NULL,
-    pkParametersDisplayUnit = NULL,
 
     #' @description
     #' Create a new `Output` object.
@@ -28,24 +25,18 @@ Output <- R6::R6Class(
     #' @param displayUnit display unit for `path`
     #' @param dataFilter characters or expression to filter the observed data
     #' @param dataDisplayName display name of the observed data
-    #' @param pkParameters pk parameters names for `path`
-    #' @param pkParametersDisplayName display names for `pkParameters`
-    #' @param pkParametersDisplayUnit display units for `pkParameters`
+    #' @param pkParameters R6 class `PkParameterInfo` objects or their names
     #' @return A new `Output` object
     initialize = function(path,
                               displayName = NULL,
                               displayUnit = NULL,
                               dataFilter = NULL,
                               dataDisplayName = NULL,
-                              pkParameters = NULL,
-                              pkParametersDisplayName = NULL,
-                              pkParametersDisplayUnit = NULL) {
+                              pkParameters = NULL) {
       validateIsString(path)
       validateIsString(c(displayName, displayUnit, dataDisplayName), nullAllowed = TRUE)
       validateIsOfType(dataFilter, c("character", "expression"), nullAllowed = TRUE)
-      validateIsString(c(pkParameters, pkParametersDisplayName, pkParametersDisplayUnit), nullAllowed = TRUE)
-      ifnotnull(pkParametersDisplayName, validateIsSameLength(pkParameters, pkParametersDisplayName))
-      ifnotnull(pkParametersDisplayUnit, validateIsSameLength(pkParameters, pkParametersDisplayUnit))
+      validateIsOfType(c(pkParameters), c("character", "PkParameterInfo"), nullAllowed = TRUE)
 
       self$path <- path
       self$displayName <- displayName %||% path
@@ -60,9 +51,13 @@ Output <- R6::R6Class(
 
       self$dataDisplayName <- dataDisplayName %||% paste0(self$displayName, " observed data")
 
-      self$pkParameters <- pkParameters
-      self$pkParametersDisplayName <- pkParametersDisplayName
-      self$pkParametersDisplayUnit <- pkParametersDisplayUnit
+      self$pkParameters <- c(pkParameters)
+
+      if (isOfType(self$pkParameters, "character")) {
+        self$pkParameters <- sapply(self$pkParameters, function(pkParameter) {
+          PkParameterInfo$new(pkParameter)
+        })
+      }
     }
   )
 )

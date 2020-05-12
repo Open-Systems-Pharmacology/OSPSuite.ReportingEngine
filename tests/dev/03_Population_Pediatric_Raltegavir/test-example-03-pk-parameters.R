@@ -4,11 +4,11 @@
 library(ospsuite.reportingengine)
 library(ospsuite)
 
+# Output will create `PkParameterInfo` objects if the names of the PK parameters are directly input
 output <- Output$new(
   path = "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",
   displayName = "Venous Blood",
-  pkParameters = c("AUC_inf", "C_max"),
-  pkParametersDisplayName = c("AUC infinity", "Cmax")
+  pkParameters = c("AUC_inf", "C_max")
 )
 
 popModelSets <- list(
@@ -68,12 +68,21 @@ getYParametersForPkParametersPlot(myPediatricWorkflow)
 
 setXParametersForPkParametersPlot(myPediatricWorkflow, c(StandardPath$Age, StandardPath$Weight))
 
+myAUC <- PkParameterInfo$new(
+  pkParameter = "AUC_inf",
+  displayName = "My AUC infinity",
+  displayUnit = "nmol*min/l"
+)
+myCmax <- PkParameterInfo$new(
+  pkParameter = "C_max",
+  displayName = "My Cmax",
+  displayUnit = "nmol"
+)
+
 myOutput <- Output$new(
   path = "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",
   displayName = "Venous Blood",
-  pkParameters = c("AUC_inf", "C_max"),
-  pkParametersDisplayName = c("My AUC infinity", "My Cmax"),
-  pkParametersDisplayUnit = c("nmol*min/l", "nmol")
+  pkParameters = c(myAUC, myCmax)
 )
 
 setYParametersForPkParametersPlot(myPediatricWorkflow, myOutput)
