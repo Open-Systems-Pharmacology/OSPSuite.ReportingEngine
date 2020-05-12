@@ -74,10 +74,12 @@ getMeanPkAnalysesFromOuptut <- function(data, output, molWeight = NULL) {
 
     selectedParameter <- outputData$Parameter %in% pkParameter$pkParameter
 
+    pkParameterObject <- ospsuite::pkParameterByName(pkParameter$pkParameter)
+
     pkParameterValue <- ifnotnull(
       displayUnit,
       ospsuite::toUnit(
-        ospsuite::getDimensionForUnit(displayUnit),
+        pkParameterObject$dimension,
         outputData$Value[selectedParameter],
         displayUnit,
         molWeight
@@ -460,11 +462,12 @@ getPopulationPkAnalysesFromOuptut <- function(data, metaData, output, pkParamete
   displayUnit <- pkParameter$displayUnit
 
   selectedParameter <- outputData$Parameter %in% pkParameter$pkParameter
+  pkParameterObject <- ospsuite::pkParameterByName(pkParameter$pkParameter)
 
   pkParameterValue <- ifnotnull(
     displayUnit,
     ospsuite::toUnit(
-      ospsuite::getDimensionForUnit(displayUnit),
+      pkParameterObject$dimension,
       outputData$Value[selectedParameter],
       displayUnit,
       molWeight
