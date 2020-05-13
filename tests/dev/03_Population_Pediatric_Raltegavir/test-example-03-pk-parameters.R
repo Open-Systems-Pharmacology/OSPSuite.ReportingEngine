@@ -4,7 +4,12 @@
 library(ospsuite.reportingengine)
 library(ospsuite)
 
-output <- Output$new(path = "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)")
+# Output will create `PkParameterInfo` objects if the names of the PK parameters are directly input
+output <- Output$new(
+  path = "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",
+  displayName = "Venous Blood",
+  pkParameters = c("AUC_inf", "C_max")
+)
 
 popModelSets <- list(
   Larson = PopulationSimulationSet$new(
@@ -55,10 +60,31 @@ myPediatricWorkflow$activateTasks(tasks = "plotPKParameters")
 myPediatricWorkflow$inactivateTasks(tasks = c("simulatePopulation", "populationPKParameters"))
 
 # Task "plotPKParameters": has xParameters and yParameters options
-# - xParameters are path of demography parameters for VPC like range plots (use ospsuite::StandardPath)
-# - yParameters are selected PK parameters to be exported in output (use ospsuite::StandardPKParameter)
+# Use <get/set><X/Y>parametersFor to check or update these options
+# Caution: yParameters are actually Output objects
 
-myPediatricWorkflow$plotPKParameters$xParameters <- c(StandardPath$Age, StandardPath$Weight)
-myPediatricWorkflow$plotPKParameters$yParameters <- "AUC_inf"
+getXParametersForPkParametersPlot(myPediatricWorkflow)
+getYParametersForPkParametersPlot(myPediatricWorkflow)
+
+setXParametersForPkParametersPlot(myPediatricWorkflow, c(StandardPath$Age, StandardPath$Weight))
+
+myAUC <- PkParameterInfo$new(
+  pkParameter = "AUC_inf",
+  displayName = "My AUC infinity",
+  displayUnit = "nmol*min/l"
+)
+myCmax <- PkParameterInfo$new(
+  pkParameter = "C_max",
+  displayName = "My Cmax",
+  displayUnit = "nmol"
+)
+
+myOutput <- Output$new(
+  path = "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",
+  displayName = "Venous Blood",
+  pkParameters = c(myAUC, myCmax)
+)
+
+setYParametersForPkParametersPlot(myPediatricWorkflow, myOutput)
 
 myPediatricWorkflow$runWorkflow()

@@ -234,3 +234,24 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile)
   }
   stop(messages$errorObservedMetaDataFileNotProvided(observedDataFile))
 }
+
+#' Check if the provided values are included all available dimensions
+#' @param values Vector of dimensions
+#' @return TRUE if the values are included all available dimensions
+#' @import ospsuite
+isDimension <- function(values) {
+  allAvailableDimensions <- ospsuite::allAvailableDimensions()
+  return(isIncluded(c(values), allAvailableDimensions))
+}
+
+validateIsDimension <- function(values, nullAllowed = FALSE) {
+  if (nullAllowed && is.null(values)) {
+    return()
+  }
+  
+  if (isDimension(values)) {
+    return()
+  }
+  
+  logErrorThenStop(messages$errorNotADimension(values))
+}

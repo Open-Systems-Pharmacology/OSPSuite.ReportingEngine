@@ -198,11 +198,11 @@ Define plot demography `PlotTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotDemographySettings(
   reportTitle = defaultWorkflowTitles$plotDemography,
-  taskFunction = NULL,
+  taskFunction = plotDemographyParameters,
   outputFolder = defaultTaskOutputFolders$plotDemography,
   active = FALSE,
   message = defaultWorkflowMessages$plotDemography,
-  xParameters = NULL,
+  xParameters = getDefaultDemographyXParameters(self$workflowType),
   yParameters = NULL,
   settings = NULL
 )}\if{html}{\out{</div>}}
@@ -282,7 +282,7 @@ Define PK parameters `PlotPKParametersTask` settings
   outputFolder = defaultTaskOutputFolders$plotPKParameters,
   active = FALSE,
   message = defaultWorkflowMessages$plotPKParameters,
-  xParameters = NULL,
+  xParameters = getDefaultPkParametersXParameters(self$workflowType),
   yParameters = NULL,
   settings = NULL
 )}\if{html}{\out{</div>}}

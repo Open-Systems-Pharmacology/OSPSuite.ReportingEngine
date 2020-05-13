@@ -59,3 +59,5 @@ test_that("Workflow and tasks print methods print give back character message of
 
 # Remove folder created  by test process
 unlink(testFolder, recursive = TRUE)
+unlink("log-debug.txt", recursive = TRUE)
+unlink("log-info.txt", recursive = TRUE)

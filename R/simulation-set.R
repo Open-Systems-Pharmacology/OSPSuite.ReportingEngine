@@ -51,11 +51,7 @@ SimulationSet <- R6::R6Class(
       self$simulationFile <- simulationFile
       self$simulationName <- simulationName %||% trimFileName(simulationFile, extension = "pkml")
 
-      # Ensure outputs is a list of Outputs R6 class objects
-      if (isOfType(outputs, "Output")) {
-        outputs <- list(outputs)
-      }
-      self$outputs <- outputs
+      self$outputs <- c(outputs)
 
       self$observedDataFile <- observedDataFile
       self$observedMetaDataFile <- observedMetaDataFile

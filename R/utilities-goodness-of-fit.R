@@ -45,7 +45,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
     simulationPathResults <- ospsuite::getOutputValues(simulationResult,
       quantitiesOrPaths = output$path
     )
-    molWeight <- getMolWeightForPath(output$path, simulation)
+    molWeight <- simulation$molWeightFor(output$path)
 
     outputSimulatedData <- data.frame(
       "Time" = toUnit("Time", simulationPathResults$data[, "Time"], structureSet$simulationSet$timeUnit),
@@ -476,7 +476,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     simulationPathResults <- ospsuite::getOutputValues(simulationResult,
       quantitiesOrPaths = output$path
     )
-    molWeight <- getMolWeightForPath(output$path, simulation)
+    molWeight <- simulation$molWeightFor(output$path)
 
     # Get the aggregation results
     aggregateSummary <- tlf::AggregationSummary$new(

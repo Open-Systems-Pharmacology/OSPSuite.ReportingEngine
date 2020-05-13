@@ -5,15 +5,19 @@
 #' @field displayUnit display unit for `path`
 #' @field dataFilter character or expression used to filter the observed data
 #' @field dataDisplayName display name of the observed data
+#' @field pkParameters R6 class `PkParameterInfo` objects
 #' @export
+#' @import ospsuite
 Output <- R6::R6Class(
   "Output",
+  cloneable = FALSE,
   public = list(
     path = NULL,
     displayName = NULL,
     displayUnit = NULL,
     dataFilter = NULL,
     dataDisplayName = NULL,
+    pkParameters = NULL,
 
     #' @description
     #' Create a new `Output` object.
@@ -22,15 +26,23 @@ Output <- R6::R6Class(
     #' @param displayUnit display unit for `path`
     #' @param dataFilter characters or expression to filter the observed data
     #' @param dataDisplayName display name of the observed data
+    #' @param pkParameters R6 class `PkParameterInfo` objects or their names
     #' @return A new `Output` object
     initialize = function(path,
                               displayName = NULL,
                               displayUnit = NULL,
                               dataFilter = NULL,
-                              dataDisplayName = NULL) {
+                              dataDisplayName = NULL,
+                              pkParameters = NULL) {
       validateIsString(path)
+      validateIsOfLength(path, 1)
       validateIsString(c(displayName, displayUnit, dataDisplayName), nullAllowed = TRUE)
+      ifnotnull(displayName, validateIsOfLength(displayName, 1))
+      ifnotnull(displayUnit, validateIsOfLength(displayUnit, 1))
+      ifnotnull(dataDisplayName, validateIsOfLength(dataDisplayName, 1))
       validateIsOfType(dataFilter, c("character", "expression"), nullAllowed = TRUE)
+      ifnotnull(dataFilter, validateIsOfLength(dataFilter, 1))
+      validateIsOfType(c(pkParameters), c("character", "PkParameterInfo"), nullAllowed = TRUE)
 
       self$path <- path
       self$displayName <- displayName %||% path
@@ -44,6 +56,14 @@ Output <- R6::R6Class(
       }
 
       self$dataDisplayName <- dataDisplayName %||% paste0(self$displayName, " observed data")
+
+      self$pkParameters <- c(pkParameters)
+
+      if (isOfType(self$pkParameters, "character")) {
+        self$pkParameters <- sapply(self$pkParameters, function(pkParameter) {
+          PkParameterInfo$new(pkParameter)
+        })
+      }
     }
   )
 )
