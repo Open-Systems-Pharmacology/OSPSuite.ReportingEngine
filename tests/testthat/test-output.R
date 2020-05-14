@@ -1,6 +1,4 @@
 context("Output class")
-# It seems that some instances crash if library(ospsuite) is not loaded
-library(ospsuite)
 
 testPath <- "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)"
 testPathName <- "Raltegravir Plasma"
