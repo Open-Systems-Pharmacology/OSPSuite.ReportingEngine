@@ -1,0 +1,8 @@
+Organism|Weight,Organism|Weight,Gender,App1|Drugmass,App2|Drugmass
+kg,kg,,mg,mg
+SOURCE_MIN,SOURCE_MAX,SOURCE_EQUALS,TARGET,TARGET
+20,40,1,2,3
+20,40,2,2.5,3.5
+40,60,1,10,12
+40,60,2,14,16
+40,,,20,20
