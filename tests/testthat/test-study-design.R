@@ -1,6 +1,6 @@
 context("Study Design")
 
-populationFile <- "../dev/03_Population_Pediatric_Raltegavir/Larson 2013 8-18y meal-Population.csv"
+populationFile <- "Larson 2013 8-18y meal-Population.csv"
 
 test_that("Empty study design does not affect a population object", {
   referencePopulation <- ospsuite::loadPopulation(populationFile)
