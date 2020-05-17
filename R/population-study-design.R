@@ -3,19 +3,22 @@
 #' @param studyDesignFile file name of study design table
 #' @export
 #' @import ospsuite
-addStudyParameters <- function(population, studyDesignFile){
+addStudyParameters <- function(population, studyDesignFile = NULL) {
   validateIsOfType(population, "Population")
-  
+  validateIsString(studyDesignFile, nullAllowed = TRUE)
+  if (is.null(studyDesignFile)) {
+    return(invisible())
+  }
   studyDesign <- loadStudyDesign(studyDesignFile)
-  
+
   initialTargetValues <- rep(NA, population$count)
   populationData <- ospsuite::populationAsDataFrame(population)
-  
-  for(target in studyDesign$targets){
+
+  for (target in studyDesign$targets) {
     parameterPath <- target$name
-    
+
     updatedTargetValues <- updateTargetValues(initialTargetValues, target$values, studyDesign$source, populationData)
-    
+
     population$setParameterValues(parameterPath, updatedTargetValues)
   }
 }
