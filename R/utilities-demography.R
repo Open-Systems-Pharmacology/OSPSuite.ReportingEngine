@@ -162,6 +162,7 @@ getDemographyAcrossPopulations <- function(structureSets) {
   for (structureSet in structureSets)
   {
     population <- ospsuite::loadPopulation(structureSet$simulationSet$populationFile)
+    addStudyParameters(population, structureSet$simulationSet$studyDesignFile)
     populationTable <- ospsuite::populationAsDataFrame(population)
 
     fullDemographyTable <- cbind.data.frame(

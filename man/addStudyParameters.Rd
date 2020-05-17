@@ -4,7 +4,7 @@
 \alias{addStudyParameters}
 \title{addStudyParameters}
 \usage{
-addStudyParameters(population, studyDesignFile)
+addStudyParameters(population, studyDesignFile = NULL)
 }
 \arguments{
 \item{population}{`Population` object}

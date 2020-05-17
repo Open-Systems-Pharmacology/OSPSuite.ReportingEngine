@@ -384,6 +384,7 @@ getPkParametersAcrossPopulations <- function(structureSets) {
   {
     simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
     population <- ospsuite::loadPopulation(structureSet$simulationSet$populationFile)
+    addStudyParameters(population, structureSet$simulationSet$studyDesignFile)
 
     pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
       structureSet$pkAnalysisResultsFileNames,

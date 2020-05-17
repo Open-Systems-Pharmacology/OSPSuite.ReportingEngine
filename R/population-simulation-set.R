@@ -3,6 +3,7 @@
 #' @field referencePopulation logical for reference population used in Pediatric and Ratio Comparison workflows
 #' @field populationFile name of csv file to be used for the population
 #' @field populationName display name of population
+#' @field studyDesignFile name of study design csv file
 #' @export
 PopulationSimulationSet <- R6::R6Class(
   "PopulationSimulationSet",
@@ -11,6 +12,7 @@ PopulationSimulationSet <- R6::R6Class(
     referencePopulation = NULL,
     populationFile = NULL,
     populationName = NULL,
+    studyDesignFile = NULL,
 
     #' @description
     #' Create a new `PopulationSimulationSet` object.
@@ -19,6 +21,7 @@ PopulationSimulationSet <- R6::R6Class(
     #' @param simulationFile names of pkml file to be used for the simulation
     #' @param populationFile name of csv file to be used for the population
     #' @param populationName display name of population
+    #' @param studyDesignFile name of study design csv file
     #' @param ... inputs inherited from `SimulationSet`
     #' @return A new `PopulationSimulationSet` object
     initialize = function(referencePopulation = FALSE,
@@ -26,10 +29,11 @@ PopulationSimulationSet <- R6::R6Class(
                               simulationFile,
                               populationFile,
                               populationName = NULL,
+                              studyDesignFile = NULL,
                               ...) {
       validateIsLogical(referencePopulation)
       validateIsString(c(simulationSetName, simulationFile, populationFile))
-      validateIsString(populationName, nullAllowed = TRUE)
+      validateIsString(c(populationName, studyDesignFile), nullAllowed = TRUE)
       validateIsFileExtension(populationFile, "csv")
 
       super$initialize(
@@ -41,6 +45,7 @@ PopulationSimulationSet <- R6::R6Class(
       self$referencePopulation <- referencePopulation
       self$populationFile <- populationFile
       self$populationName <- populationName %||% trimFileName(populationFile, extension = "csv")
+      self$studyDesignFile <- studyDesignFile
     },
 
     #' @description
