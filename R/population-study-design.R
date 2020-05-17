@@ -30,17 +30,17 @@ addStudyParameters <- function(population, studyDesignFile = NULL) {
 #' @param data population data as data.frame
 #' @export
 #' @import ospsuite
-updateTargetValues <- function(values, targetValues, sourceExpressions, data){
+updateTargetValues <- function(values, targetValues, sourceExpressions, data) {
   validateIsSameLength(targetValues, sourceExpressions)
   validateIsOfType(data, "data.frame")
   validateIsOfLength(values, nrow(data))
-  
-  for(sourceIndex in seq_along(sourceExpressions)){
+
+  for (sourceIndex in seq_along(sourceExpressions)) {
     sourceFilter <- eval(sourceExpressions[sourceIndex])
-    
+
     values[sourceFilter] <- targetValues[sourceIndex]
-    }
-  
+  }
+
   return(values)
 }
 
@@ -90,14 +90,16 @@ StudyDesign <- R6::R6Class(
         validateIsSameLength(target$values, self$source)
       }
     },
-    
+
     #' @description Print study design features
     #' @return data.frame
     print = function() {
       studyDesign <- data.frame(source = as.character(self$source))
-      for (target in self$targets){
-        studyDesign <- cbind.data.frame(studyDesign,
-                                        target$print())
+      for (target in self$targets) {
+        studyDesign <- cbind.data.frame(
+          studyDesign,
+          target$print()
+        )
       }
       print(studyDesign)
     }
@@ -154,7 +156,8 @@ StudyDesignTarget <- R6::R6Class(
 mapStudyDesignSources <- function(data) {
   sourceFilter <- grepl("SOURCE", data[studyDesignTypeLine, ])
   validateIsPositive(sum(sourceFilter))
-  sourceData <- data[, sourceFilter]
+  # Enforce data.frame with drop = FALSE
+  sourceData <- data[, sourceFilter, drop = FALSE]
 
   sourceExpressions <- NULL
   for (columnIndex in seq(1, ncol(sourceData))) {
@@ -205,7 +208,8 @@ sourceTypeToExpressionType <- function(sourceType) {
 mapStudyDesignTargets <- function(data) {
   targetFilter <- grepl("TARGET", data[studyDesignTypeLine, ])
   validateIsPositive(sum(targetFilter))
-  targetData <- data[, targetFilter]
+  # Enforce data.frame with drop = FALSE
+  targetData <- data[, targetFilter, drop = FALSE]
 
   target <- vector(mode = "list", length = ncol(targetData))
   for (columnIndex in seq(1, ncol(targetData))) {
