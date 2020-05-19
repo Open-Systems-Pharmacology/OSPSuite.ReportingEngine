@@ -7,8 +7,7 @@
 simulateModelForPopulation <- function(structureSet,
                                        settings = NULL,
                                        logFolder = getwd()) {
-  population <- ospsuite::loadPopulation(structureSet$simulationSet$populationFile)
-  addStudyParameters(population, structureSet$simulationSet$studyDesignFile)
+  population <- loadWorkflowPopulation(structureSet$simulationSet)
   numberOfIndividuals <- length(population$allIndividualIds)
   numberOfCores <- min(ifnotnull(inputToCheck = settings, outputIfNotNull = settings$numberOfCores, outputIfNull = 1), numberOfIndividuals)
 
@@ -102,8 +101,7 @@ simulateModel <- function(structureSet,
 
   population <- NULL
   if (!is.null(structureSet$simulationSet$populationFile)) {
-    population <- ospsuite::loadPopulation(structureSet$simulationSet$populationFile)
-    addStudyParameters(population, structureSet$simulationSet$studyDesignFile)
+    population <- loadWorkflowPopulation(structureSet$simulationSet)
     logWorkflow(
       message = paste0("Population file '", structureSet$simulationSet$populationFile, "' successfully loaded"),
       pathFolder = logFolder,
