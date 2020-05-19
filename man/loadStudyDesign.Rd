@@ -4,10 +4,14 @@
 \alias{loadStudyDesign}
 \title{loadStudyDesign}
 \usage{
-loadStudyDesign(studyDesignFile)
+loadStudyDesign(studyDesignFile, population, simulation)
 }
 \arguments{
 \item{studyDesignFile}{file name of study design table}
+
+\item{population}{`Population` object}
+
+\item{simulation}{`Simulation` object}
 }
 \value{
 A `StudyDesign` object`

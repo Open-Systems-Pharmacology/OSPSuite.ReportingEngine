@@ -4,10 +4,14 @@
 \alias{mapStudyDesignSources}
 \title{mapStudyDesignSources}
 \usage{
-mapStudyDesignSources(data)
+mapStudyDesignSources(data, population, simulation)
 }
 \arguments{
 \item{data}{data.frame read from a study design file}
+
+\item{population}{`Population` object}
+
+\item{simulation}{`Simulation` object}
 }
 \value{
 vector of expressions assigning target values

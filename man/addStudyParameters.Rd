@@ -4,10 +4,12 @@
 \alias{addStudyParameters}
 \title{addStudyParameters}
 \usage{
-addStudyParameters(population, studyDesignFile = NULL)
+addStudyParameters(population, simulation, studyDesignFile)
 }
 \arguments{
 \item{population}{`Population` object}
+
+\item{simulation}{`Simulation` object}
 
 \item{studyDesignFile}{file name of study design table}
 }

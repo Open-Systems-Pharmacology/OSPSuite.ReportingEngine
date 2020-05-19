@@ -11,9 +11,7 @@ StudyDesignTarget
 \describe{
 \item{\code{name}}{path name of study design target}
 
-\item{\code{unit}}{path unit of study design target}
-
-\item{\code{values}}{values assigned to study design target.}
+\item{\code{values}}{values assigned to study design target}
 }
 \if{html}{\out{</div>}}
 }
@@ -29,15 +27,13 @@ StudyDesignTarget
 \subsection{Method \code{new()}}{
 Create a new `StudyDesign` object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StudyDesignTarget$new(name, unit, values)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StudyDesignTarget$new(name, values)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{name}}{path name of study design target}
-
-\item{\code{unit}}{path unit of study design target}
 
 \item{\code{values}}{values assigned to study design target.
 `values` must be the same length as source condition expressions}

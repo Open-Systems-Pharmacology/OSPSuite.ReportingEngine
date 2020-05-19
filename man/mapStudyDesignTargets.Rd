@@ -4,10 +4,14 @@
 \alias{mapStudyDesignTargets}
 \title{mapStudyDesignTargets}
 \usage{
-mapStudyDesignTargets(data)
+mapStudyDesignTargets(data, population, simulation)
 }
 \arguments{
 \item{data}{data.frame read from a study design file}
+
+\item{population}{`Population` object}
+
+\item{simulation}{`Simulation` object}
 }
 \value{
 list of `StudyDesignTarget` objects
