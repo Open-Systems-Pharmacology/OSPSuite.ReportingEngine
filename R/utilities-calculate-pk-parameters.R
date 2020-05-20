@@ -66,7 +66,7 @@ plotMeanPKParameters <- function(structureSet,
 
 getMeanPkAnalysesFromOuptut <- function(data, output, molWeight = NULL) {
   pkAnalysesFromOuptut <- NULL
-  outputData <- data[output$path %in% data$QuantityPath, ]
+  outputData <- data[data$QuantityPath %in% output$path, ]
 
   for (pkParameter in output$pkParameters) {
     displayName <- pkParameter$displayName
@@ -456,7 +456,7 @@ getDefaultPkParametersXParameters <- function(workflowType) {
 }
 
 getPopulationPkAnalysesFromOuptut <- function(data, metaData, output, pkParameter, molWeight = NULL) {
-  outputData <- data[output$path %in% data$QuantityPath, ]
+  outputData <- data[data$QuantityPath %in% output$path, ]
 
   displayName <- pkParameter$displayName
   displayUnit <- pkParameter$displayUnit
