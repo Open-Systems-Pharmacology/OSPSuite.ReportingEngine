@@ -75,17 +75,24 @@ getMeanPkAnalysesFromOuptut <- function(data, output, molWeight = NULL) {
     selectedParameter <- outputData$Parameter %in% pkParameter$pkParameter
 
     pkParameterObject <- ospsuite::pkParameterByName(pkParameter$pkParameter)
-
-    pkParameterValue <- ifnotnull(
-      displayUnit,
-      ospsuite::toUnit(
+    
+    # Need to switch back to base unit first if a display unit is provided
+    pkParameterValue <- outputData$Value[selectedParameter]
+    
+    if (!is.null(displayUnit)) {
+      pkParameterValueInBaseUnit <- ospsuite::toBaseUnit(
         pkParameterObject$dimension,
         outputData$Value[selectedParameter],
+        pkParameterObject$displayUnit,
+        molWeight
+      )
+      pkParameterValue <- ospsuite::toUnit(
+        pkParameterObject$dimension,
+        pkParameterValueInBaseUnit,
         displayUnit,
         molWeight
-      ),
-      outputData$Value[selectedParameter]
-    )
+      )
+    }
 
     pkAnalysesFromOuptut <- rbind.data.frame(
       pkAnalysesFromOuptut,
@@ -464,16 +471,23 @@ getPopulationPkAnalysesFromOuptut <- function(data, metaData, output, pkParamete
   selectedParameter <- outputData$Parameter %in% pkParameter$pkParameter
   pkParameterObject <- ospsuite::pkParameterByName(pkParameter$pkParameter)
 
-  pkParameterValue <- ifnotnull(
-    displayUnit,
-    ospsuite::toUnit(
+  # Need to switch back to base unit first if a display unit is provided
+  pkParameterValue <- outputData$Value[selectedParameter]
+
+  if (!is.null(displayUnit)) {
+    pkParameterValueInBaseUnit <- ospsuite::toBaseUnit(
       pkParameterObject$dimension,
       outputData$Value[selectedParameter],
+      pkParameterObject$displayUnit,
+      molWeight
+    )
+    pkParameterValue <- ospsuite::toUnit(
+      pkParameterObject$dimension,
+      pkParameterValueInBaseUnit,
       displayUnit,
       molWeight
-    ),
-    outputData$Value[selectedParameter]
-  )
+    )
+  }
 
   pkAnalysesFromOuptut <- outputData[selectedParameter, ]
   pkAnalysesFromOuptut$Value <- pkParameterValue
