@@ -168,7 +168,7 @@ mapStudyDesignSources <- function(data, population, simulation) {
     if (!path %in% population$allCovariateNames) {
       pathQuantity <- ospsuite::getQuantity(path, simulation)
       unit <- sourceData[studyDesignUnitLine, columnIndex]
-      values <- ospsuite::toBaseUnit(pathQuantity, values, unit)
+      values <- ospsuite::toBaseUnit(pathQuantity, values, unit, simulation$molWeightFor(path))
     }
 
     sourceExpressionsByColumn <- paste0("data[,'", path, "']", expressionType, values)
@@ -223,7 +223,7 @@ mapStudyDesignTargets <- function(data, population, simulation) {
     if (!path %in% population$allCovariateNames) {
       pathQuantity <- ospsuite::getQuantity(path, simulation)
       unit <- targetData[studyDesignUnitLine, columnIndex]
-      values <- ospsuite::toBaseUnit(pathQuantity, values, unit)
+      values <- ospsuite::toBaseUnit(pathQuantity, values, unit, simulation$molWeightFor(path))
     }
     target[[columnIndex]] <- StudyDesignTarget$new(path, values)
   }
