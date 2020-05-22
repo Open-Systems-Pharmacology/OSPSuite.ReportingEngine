@@ -355,6 +355,7 @@ getPKResultsDataFrame <- function(pkParameterResultsFilePath, pkParameterSelecti
 #' by vector of quantiles quantileVec
 #' @param pkAnalysisResultsDataframe Dataframe storing the PK analysis results for multiple
 #' individuals for a single PK parameter and single output path
+#' @param quantileVec vector of quantiles in the pk results distribution.  Ids for individuals with pk parameter values at these quantiles will be returned.
 #' @return ids, IDs of individuals whose PK analysis results closest to quantiles given by vector of quantiles quantileVec
 getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
   rowNums <- NULL
@@ -662,6 +663,7 @@ getPopSensDfForPkAndOutput <- function(structureSet, indexDf, output, pkParamete
 
 #' @title getPkOutputIndexDf
 #' @description Function to filter the population results index file for given pkParameter and output
+#' @param indexDf dataframe containing summary of sensitivity results
 #' @param output pathID of output for which to obtain the population sensitivity results
 #' @param pkParameter name of PK parameter for which to obtain the population sensitivity results
 #' @return pkOutputIndexDf dataframe containing index of files containing population sensitivity analysis results conducted for given output and pkParameter
@@ -722,6 +724,7 @@ sortAndFilterIndividualsDF <- function(individualsDfForPKParameter, rankFilter) 
 #' @description build sensitvity plot object for a population for one output and pk parameter
 #' @param data dataframe of sensitivity analysis results
 #' @param title plot title
+#' @param plotConfiguration used to set tlf plot properties
 #' @return plt sensitivity plot based on results in input data
 #' @import ggplot2
 #' @import tlf
