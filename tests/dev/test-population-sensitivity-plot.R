@@ -1,8 +1,7 @@
 rm(list = ls())
 library(ospsuite)
 graphics.off()
-#library(ospsuite.reportingengine)
-devtools::load_all("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine")
+library(ospsuite.reportingengine)
 load("./tests/dev/ex_03_pop/simTrees.Rdata")
 
 simulationFile <- "./tests/dev/ex_03_pop/RaltegravirSim.pkml"
