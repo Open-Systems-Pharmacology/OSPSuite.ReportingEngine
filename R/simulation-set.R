@@ -60,24 +60,24 @@ SimulationSet <- R6::R6Class(
       self$timeUnit <- timeUnit %||% "h"
     }#,
 
-    # verifyOutputPathsInSimulation = function() {
-    #   allPathsInOutputs <- sapply(self$outputs, function(x) {
-    #     x$path
-    #   })
-    #   sim <- ospsuite::loadSimulation(self$simulationFile)
-    #   ospsuite::addOutputs(
-    #     quantitiesOrPaths = allPathsInOutputs,
-    #     simulation = sim
-    #   )
-    #   loadedOutputPaths <- sapply(sim$outputSelections$allOutputs, function(x) {
-    #     x$path
-    #   })
-    #   for (pth in allPathsInOutputs) {
-    #     if (!(pth %in% loadedOutputPaths)) {
-    #       logErrorThenStop(message = messages$invalidOuputPath(pth, self$simulationName))
-    #     }
-    #   }
-    # }
+    verifyOutputPathsInSimulation = function() {
+      allPathsInOutputs <- sapply(self$outputs, function(x) {
+        x$path
+      })
+      sim <- ospsuite::loadSimulation(self$simulationFile)
+      ospsuite::addOutputs(
+        quantitiesOrPaths = allPathsInOutputs,
+        simulation = sim
+      )
+      loadedOutputPaths <- sapply(sim$outputSelections$allOutputs, function(x) {
+        x$path
+      })
+      for (pth in allPathsInOutputs) {
+        if (!(pth %in% loadedOutputPaths)) {
+          logErrorThenStop(message = messages$invalidOuputPath(pth, self$simulationName))
+        }
+      }
+    }
 
   )
 )
