@@ -40,7 +40,7 @@ pwf$runWorkflow()
 
 plotConfig <- tlf::PlotConfiguration$new()
 settings <- list("plotConfiguration" = plotConfig)
-dF <- plotPopulationsSensitivity(pwf$simulationStructures,settings = settings)
+dF <- plotPopulationSensitivity(pwf$simulationStructures,settings = settings)
 
 # pL <- plotPopulationSensitivity(
 #   structureSet = pwf$simulationStructures[[1]],
