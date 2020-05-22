@@ -10,6 +10,9 @@ reTheme$titleFont$size <- 10
 reTheme$subtitleFont$size <- 9
 tlf::useTheme(reTheme)
 
+# Set default legend position to outside top
+tlf::setDefaultLegendPosition(tlf::LegendPositions$outsideTop)
+
 # Temporary fix for plot format
 # TO DO: set a similar code directly in tlfEnv
 ExportPlotConfigurationClass <- R6::R6Class(
