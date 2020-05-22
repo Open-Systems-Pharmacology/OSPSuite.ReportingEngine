@@ -325,6 +325,8 @@ Define sensitivity analysis `PlotTask` settings
   outputFolder = defaultTaskOutputFolders$plotSensitivity,
   active = FALSE,
   message = defaultWorkflowMessages$plotSensitivity,
+  xParameters = NULL,
+  yParameters = NULL,
   settings = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -348,7 +350,7 @@ Default value is `FALSE`}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A `PlotTask` object for goodness of fit plots
+A `PlotTask` object for sensitivity plots for a single population
 }
 }
 \if{html}{\out{<hr>}}

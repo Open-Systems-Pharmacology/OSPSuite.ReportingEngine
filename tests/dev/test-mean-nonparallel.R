@@ -5,7 +5,7 @@ tree <- getSimulationTree("./tests/dev/individualPksimSim.pkml")
 ms <- SimulationSet$new(
   simulationSetName = "meansim",
   simulationFile = "./tests/dev/individualPksimSim.pkml",
-  pathID = tree$Organism$Heart$Interstitial$smarties$Concentration$path
+  outputs = Output$new(path = tree$Organism$Heart$Interstitial$smarties$Concentration$path)
 )
 
 mwf <- MeanModelWorkflow$new(simulationSets = list(ms), workflowFolder = "./ex")

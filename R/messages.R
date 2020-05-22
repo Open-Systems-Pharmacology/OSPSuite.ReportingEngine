@@ -84,8 +84,12 @@ messages <- list(
   warningNoReferencePopulation = function(workflowType) {
     paste0("Workflow type '", workflowType, "' requires one reference population, but no reference population was provided.")
   },
-  
-  errorNotADimension = function(values){
+
+  errorNotADimension = function(values) {
     paste0("Expected a dimension. Check that '", paste0(values, collapse = "', '."), "' is included in ospsuite::allAvailableDimensions().")
+  },
+
+  invalidOuputPath = function(pth, simName) {
+    paste(pth, "is an invalid output path for simulation", simName, ".")
   }
 )

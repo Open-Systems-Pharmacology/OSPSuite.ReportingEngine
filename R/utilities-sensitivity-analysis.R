@@ -491,7 +491,7 @@ plotMeanSensitivity <- function(structureSet,
   )
 
   # TO DO: workout integration of selection of output paths and PK parameters in settings
-  allOutputPaths <- structureSet$simulationSet$pathID %||% sapply(simulation$outputSelections$allOutputs, function(output) {
+  allOutputPaths <- sapply(structureSet$simulationSet$outputs,function(x){x$path}) %||% sapply(simulation$outputSelections$allOutputs, function(output) {
     output$path
   })
   pkParameters <- saResults$allPKParameterNames
@@ -569,43 +569,66 @@ plotTornado <- function(data,
   return(tornadoPlot)
 }
 
-
 #' @title plotPopulationSensitivity
-#' @description Retrieve dataframe of ranked and filtered population sensitivity results for a given PK parameter and model output pathID
+#' @description Retrieve list of plots of population sensitivity analyses across all populations
 #' @param structureSet `SimulationStructure` R6 class object
 #' @param settings list of settings for the population sensitivity plot
 #' @param logFolder folder where the logs are saved
 #' @return a structured list of plots for each possible combination of pathID output-pkParameter that is found in sensitivity results index file
 #' @export
-plotPopulationSensitivity <- function(structureSet,
-                                      logFolder = getwd(),
-                                      settings) {
-  indexDf <- read.csv(file = structureSet$popSensitivityAnalysisResultsIndexFile)
-
-  # results for only the 'rankFilter' most sensitive parameters will be returned
-  # rankFilter FIXED FOR NOW TO BE LIKE PKSIM/MOBI
-  rankFilter <- 12
-  output <- structureSet$simulationSet$pathID
-  pkParameters <- unique(indexDf$pkParameters)
-  quantiles <- unique(indexDf$Quantile)
-
-  plotList <- list()
-  plotList[["plots"]] <- list()
-  for (op in output) {
-    for (pk in pkParameters) {
-      dF <- getPopSensDfForPkAndOutput(structureSet, indexDf, op, pk, quantiles, rankFilter)
-      plotObject <- getPkParameterPopulationSensitivityPlot(
-        data = dF,
-        title = paste("Population sensitivity of", pk, "of", op),
-        plotConfiguration = settings$plotConfiguration
-      )
-      outputName <- gsub(pattern = "|", replacement = "-", x = op, fixed = TRUE)
-      plotList[["plots"]][[paste(pk, outputName, sep = "-")]] <- plotObject
+plotPopulationSensitivity <- function(structureSets,
+                                      logFolder = NULL,
+                                      settings,
+                                      workflowType = NULL,
+                                      xParameters = NULL,
+                                      yParameters = NULL) {
+  dFList <- list()
+  i <- 0
+  for (structureSet in structureSets) {
+    indexDf <- read.csv(file = structureSet$popSensitivityAnalysisResultsIndexFile)
+    rankFilter <- 12
+    output <- structureSet$simulationSet$outputs
+    pkParameters <- unique(indexDf$pkParameters)
+    quantiles <- unique(indexDf$Quantile)
+    populationName <- structureSet$simulationSet$populationName
+    for (op in output) {
+      for (pk in pkParameters) {
+        i <- i + 1
+        dF <- getPopSensDfForPkAndOutput(structureSet, indexDf, op$path, pk, quantiles, rankFilter)
+        populationNameCol <- rep(populationName, nrow(dF))
+        dFList[[i]] <- cbind(dF, data.frame("Population" = populationNameCol))
+      }
     }
   }
 
+
+  # allPopsDf is a dataframe that holds the results of all sensitivity analyses for all populations
+  allPopsDf <- do.call("rbind", dFList)
+
+  plotList <- list()
+
+  # uniqueQuantitiesAndPKParameters is a dataframe where each row carries a unique combinations of QuantityPath and PKParameter
+  uniqueQuantitiesAndPKParameters <- unique(allPopsDf[, c("QuantityPath", "PKParameter")])
+  for (i in 1:nrow(uniqueQuantitiesAndPKParameters)) {
+    pk <- as.character(uniqueQuantitiesAndPKParameters$PKParameter[i])
+    op <- as.character(uniqueQuantitiesAndPKParameters$QuantityPath[i])
+    sensitivityPlotName <- paste(pk, op, sep = "_")
+    sensitivityPlotName <- gsub(pattern = "|", replacement = "-", x = sensitivityPlotName, fixed = TRUE)
+    # popDfPkOp is a dataframe containing all the rows in allPopsDf that have the same
+    # combination of QuantityPath PKParameter as the current (i'th) row of uniqueQuantitiesAndPKParameters
+    popDfPkOp <- allPopsDf[allPopsDf[, "QuantityPath"] == uniqueQuantitiesAndPKParameters$QuantityPath[i] & allPopsDf[, "PKParameter"] == uniqueQuantitiesAndPKParameters$PKParameter[i], ]
+    plotObject <- getPkParameterPopulationSensitivityPlot(
+      data = popDfPkOp,
+      title = paste("Population sensitivity of", pk, "of", op),
+      plotConfiguration = settings$plotConfiguration
+    )
+    plotList[["plots"]][[sensitivityPlotName]] <- plotObject
+  }
+
+
   return(plotList)
 }
+
 
 
 #' @title getPopSensDfForPkAndOutput
@@ -703,18 +726,23 @@ sortAndFilterIndividualsDF <- function(individualsDfForPKParameter, rankFilter) 
 #' @import tlf
 getPkParameterPopulationSensitivityPlot <- function(data, title, plotConfiguration) {
   data[["Quantile"]] <- as.factor(data[["Quantile"]])
+
+  shapeAes <- NULL
+  if ("Population" %in% colnames(data)) {
+    shapeAes <- "Population"
+  }
+
   plt <- tlf::initializePlot(plotConfiguration) + ggplot2::geom_point(
     data = data,
-    mapping = ggplot2::aes_string(x = "Parameter", y = "Value", color = "Quantile", shape = NULL),
+    mapping = ggplot2::aes_string(x = "Parameter", y = "Value", color = "Quantile", shape = shapeAes),
     size = 3,
     position = ggplot2::position_dodge(width = 0.5)
   ) +
-    ggplot2::ylab("Sensitivity") + ggplot2::xlab("Parameter") + ggplot2::labs(
-      color = "Individual quantile",
-      title = title # paste(strwrap(title, width = 60), collapse = "\n")
+    ggplot2::ylab("Sensitivity") + ggplot2::labs(
+      color = "Individual quantile"
     )
 
   plt <- plt + ggplot2::geom_hline(yintercept = 0, size = 1)
-  plt <- plt + ggplot2::coord_flip() + ggplot2::theme(legend.position = "top", legend.box = "horizontal")
+  plt <- plt + ggplot2::coord_flip() + ggplot2::theme(legend.position = "top", legend.box = "vertical")
   return(plt)
 }

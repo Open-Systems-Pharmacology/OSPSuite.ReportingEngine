@@ -29,11 +29,11 @@ Output <- R6::R6Class(
     #' @param pkParameters R6 class `PkParameterInfo` objects or their names
     #' @return A new `Output` object
     initialize = function(path,
-                              displayName = NULL,
-                              displayUnit = NULL,
-                              dataFilter = NULL,
-                              dataDisplayName = NULL,
-                              pkParameters = NULL) {
+                          displayName = NULL,
+                          displayUnit = NULL,
+                          dataFilter = NULL,
+                          dataDisplayName = NULL,
+                          pkParameters = NULL) {
       validateIsString(path)
       validateIsOfLength(path, 1)
       validateIsString(c(displayName, displayUnit, dataDisplayName), nullAllowed = TRUE)
