@@ -128,8 +128,13 @@ removeForbiddenLetters <- function(text, forbiddenLetters = "[[:punct:]]", repla
 
 #' @title generateResultFileNames
 #' @return A list of filenames to be output by each core
+#' @param numberOfCores to be used in parallel computation
+#' @param folderName where result files will be saved
+#' @param fileName prefix of result file names
+#' @param separator used between file name prefix and index
+#' @param extension for result file type.  default is CSV
 #' @description
-#' #Generate a listcontaining names of CSV result files that will be output by each corein parallel computation
+#' #Generate a listcontaining names of CSV result files that will be output by each core in parallel computation
 #' @export
 generateResultFileNames <- function(numberOfCores, folderName, fileName, separator = "-", extension = ".csv") {
   allResultsFileNames <- sapply(
