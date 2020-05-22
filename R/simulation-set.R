@@ -52,7 +52,7 @@ SimulationSet <- R6::R6Class(
       self$simulationName <- simulationName %||% trimFileName(simulationFile, extension = "pkml")
 
       self$outputs <- c(outputs)
-      #self$verifyOutputPathsInSimulation()
+      self$verifyOutputPathsInSimulation()
 
       self$observedDataFile <- observedDataFile
       self$observedMetaDataFile <- observedMetaDataFile
