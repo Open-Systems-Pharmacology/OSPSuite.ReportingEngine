@@ -58,7 +58,7 @@ SimulationSet <- R6::R6Class(
       self$observedMetaDataFile <- observedMetaDataFile
 
       self$timeUnit <- timeUnit %||% "h"
-    }#,
+    },
 
     verifyOutputPathsInSimulation = function() {
       allPathsInOutputs <- sapply(self$outputs, function(x) {
