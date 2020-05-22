@@ -10,13 +10,13 @@ ps <- PopulationSimulationSet$new(
   simulationSetName = "ral",
   simulationFile = simulationFile,
   populationFile = populationFile,
-  pathID = simTree1$Organism$VenousBlood$Plasma$Raltegravir$Concentration$path
+  outputs = Output$new(path = simTree1$Organism$VenousBlood$Plasma$Raltegravir$Concentration$path)
 )
 pwf <- PopulationWorkflow$new(simulationSets = list(ps), workflowFolder = "./tests/dev/ex_03_pop")
 pwf$simulatePopulation$settings$showProgress <- FALSE
-pwf$simulatePopulation$activate()
-pwf$populationPKParameters$activate()
-pwf$populationSensitivityAnalysis$activate()
+pwf$simulatePopulation$inactivate()
+pwf$populationPKParameters$inactivate()
+pwf$populationSensitivityAnalysis$inactivate()
 pwf$populationSensitivityAnalysis$settings$showProgress <- TRUE
 # pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- simTree1$Organism$Heart$Volume$path
 pwf$populationSensitivityAnalysis$settings$pkParameterSelection <- c("C_max", "CL")
