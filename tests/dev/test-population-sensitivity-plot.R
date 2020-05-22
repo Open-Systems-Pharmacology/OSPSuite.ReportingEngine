@@ -37,32 +37,3 @@ pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- c(simTree1$
 pwf$populationSensitivityAnalysis$settings$pkParameterSelection <- c("C_max", "CL")
 pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.05, 0.25, 0.5, 0.75, 0.95)
 pwf$runWorkflow()
-
-plotConfig <- tlf::PlotConfiguration$new()
-settings <- list("plotConfiguration" = plotConfig)
-dF <- plotPopulationSensitivity(pwf$simulationStructures,settings = settings)
-
-# pL <- plotPopulationSensitivity(
-#   structureSet = pwf$simulationStructures[[1]],
-#   settings = plotConfig
-# )
-# show(pL$plots$`C_max-Organism|VenousBlood|Plasma|Raltegravir|Concentration`)
-
-
-# plotConfig <- tlf::PlotConfiguration$new()
-# settings <-list()
-# settings$plotConfiguration <- plotConfig
-# pL <- plotPopulationSensitivity(
-#   structureSet = pwf$simulationStructures[[1]],
-#   settings = NULL
-# )
-
-# pwf$simulationStructures[[1]]$popSensitivityAnalysisResultsIndexFile
-#
-# plotConfig <- tlf::PlotConfiguration$new()
-#
-# pL <- plotPopulationSensitivity(
-#   structureSet = pwf$simulationStructures[[1]],
-#   settings = plotConfig
-# )
-# show(pL$plots$`C_max-Organism|VenousBlood|Plasma|Raltegravir|Concentration`)
