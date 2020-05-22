@@ -491,7 +491,7 @@ plotMeanSensitivity <- function(structureSet,
   )
 
   # TO DO: workout integration of selection of output paths and PK parameters in settings
-  allOutputPaths <- structureSet$simulationSet$pathID %||% sapply(simulation$outputSelections$allOutputs, function(output) {
+  allOutputPaths <- sapply(structureSet$simulationSet$outputs,function(x){x$path}) %||% sapply(simulation$outputSelections$allOutputs, function(output) {
     output$path
   })
   pkParameters <- saResults$allPKParameterNames
@@ -738,12 +738,11 @@ getPkParameterPopulationSensitivityPlot <- function(data, title, plotConfigurati
     size = 3,
     position = ggplot2::position_dodge(width = 0.5)
   ) +
-    ggplot2::ylab("Sensitivity") + ggplot2::xlab("Parameter") + ggplot2::labs(
-      color = "Individual quantile",
-      title = title # paste(strwrap(title, width = 60), collapse = "\n")
+    ggplot2::ylab("Sensitivity") + ggplot2::labs(
+      color = "Individual quantile"
     )
 
   plt <- plt + ggplot2::geom_hline(yintercept = 0, size = 1)
-  plt <- plt + ggplot2::coord_flip() + ggplot2::theme(legend.position = "top", legend.box = "horizontal")
+  plt <- plt + ggplot2::coord_flip() + ggplot2::theme(legend.position = "top", legend.box = "vertical")
   return(plt)
 }
