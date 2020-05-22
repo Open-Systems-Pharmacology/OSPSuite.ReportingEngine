@@ -298,6 +298,7 @@ analyzeSensitivity <- function(simulation,
 #' @param infoLogFileName path to info log file
 #' @param errorLogFileName path to error log file
 #' @param nodeName identifier for node used in parallel computation of sensitivity
+#' @param showProgress option to print progress of simulation to console
 #' @return sensitivity analysis results
 #' @import ospsuite
 #' @export
