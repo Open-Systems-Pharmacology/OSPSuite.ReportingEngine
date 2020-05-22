@@ -577,14 +577,13 @@ plotTornado <- function(data,
 #' @return a structured list of plots for each possible combination of pathID output-pkParameter that is found in sensitivity results index file
 #' @export
 plotPopulationSensitivity <- function(structureSets,
-                                             logFolder = NULL,
-                                             settings,
-                                             workflowType = NULL,
-                                             xParameters = NULL,
-                                             yParameters = NULL) {
-
+                                      logFolder = NULL,
+                                      settings,
+                                      workflowType = NULL,
+                                      xParameters = NULL,
+                                      yParameters = NULL) {
   dFList <- list()
-  i = 0
+  i <- 0
   for (structureSet in structureSets) {
     indexDf <- read.csv(file = structureSet$popSensitivityAnalysisResultsIndexFile)
     rankFilter <- 12
@@ -594,30 +593,30 @@ plotPopulationSensitivity <- function(structureSets,
     populationName <- structureSet$simulationSet$populationName
     for (op in output) {
       for (pk in pkParameters) {
-        i = i + 1
+        i <- i + 1
         dF <- getPopSensDfForPkAndOutput(structureSet, indexDf, op$path, pk, quantiles, rankFilter)
-        populationNameCol <- rep(populationName,nrow(dF))
-        dFList[[i]] <- cbind(dF,data.frame("Population" = populationNameCol))
+        populationNameCol <- rep(populationName, nrow(dF))
+        dFList[[i]] <- cbind(dF, data.frame("Population" = populationNameCol))
       }
     }
   }
 
 
-  #allPopsDf is a dataframe that holds the results of all sensitivity analyses for all populations
-  allPopsDf <- do.call("rbind",dFList)
+  # allPopsDf is a dataframe that holds the results of all sensitivity analyses for all populations
+  allPopsDf <- do.call("rbind", dFList)
 
   plotList <- list()
 
-  #uniqueQuantitiesAndPKParameters is a dataframe where each row carries a unique combinations of QuantityPath and PKParameter
-  uniqueQuantitiesAndPKParameters <- unique(allPopsDf[,c("QuantityPath","PKParameter")])
-  for (i in 1:nrow(uniqueQuantitiesAndPKParameters)){
+  # uniqueQuantitiesAndPKParameters is a dataframe where each row carries a unique combinations of QuantityPath and PKParameter
+  uniqueQuantitiesAndPKParameters <- unique(allPopsDf[, c("QuantityPath", "PKParameter")])
+  for (i in 1:nrow(uniqueQuantitiesAndPKParameters)) {
     pk <- as.character(uniqueQuantitiesAndPKParameters$PKParameter[i])
     op <- as.character(uniqueQuantitiesAndPKParameters$QuantityPath[i])
     sensitivityPlotName <- paste(pk, op, sep = "_")
     sensitivityPlotName <- gsub(pattern = "|", replacement = "-", x = sensitivityPlotName, fixed = TRUE)
-    #popDfPkOp is a dataframe containing all the rows in allPopsDf that have the same
-    #combination of QuantityPath PKParameter as the current (i'th) row of uniqueQuantitiesAndPKParameters
-    popDfPkOp <- allPopsDf[allPopsDf[,"QuantityPath"] == uniqueQuantitiesAndPKParameters$QuantityPath[i] & allPopsDf[,"PKParameter"] == uniqueQuantitiesAndPKParameters$PKParameter[i],]
+    # popDfPkOp is a dataframe containing all the rows in allPopsDf that have the same
+    # combination of QuantityPath PKParameter as the current (i'th) row of uniqueQuantitiesAndPKParameters
+    popDfPkOp <- allPopsDf[allPopsDf[, "QuantityPath"] == uniqueQuantitiesAndPKParameters$QuantityPath[i] & allPopsDf[, "PKParameter"] == uniqueQuantitiesAndPKParameters$PKParameter[i], ]
     plotObject <- getPkParameterPopulationSensitivityPlot(
       data = popDfPkOp,
       title = paste("Population sensitivity of", pk, "of", op),
@@ -729,7 +728,7 @@ getPkParameterPopulationSensitivityPlot <- function(data, title, plotConfigurati
   data[["Quantile"]] <- as.factor(data[["Quantile"]])
 
   shapeAes <- NULL
-  if ("Population" %in% colnames(data)){
+  if ("Population" %in% colnames(data)) {
     shapeAes <- "Population"
   }
 

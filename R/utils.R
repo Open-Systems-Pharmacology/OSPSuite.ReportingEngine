@@ -192,8 +192,8 @@ loadWorkflowPopulation <- function(simulationSet) {
   validateIsOfType(simulationSet, "PopulationSimulationSet")
   population <- ospsuite::loadPopulation(simulationSet$populationFile)
   simulation <- loadSimulationWithUpdatedPaths(simulationSet)
-  
-  if(!is.null(simulationSet$studyDesignFile)){
+
+  if (!is.null(simulationSet$studyDesignFile)) {
     addStudyParameters(population, simulation, simulationSet$studyDesignFile)
   }
   return(population)

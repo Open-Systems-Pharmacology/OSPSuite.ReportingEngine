@@ -248,10 +248,10 @@ validateIsDimension <- function(values, nullAllowed = FALSE) {
   if (nullAllowed && is.null(values)) {
     return()
   }
-  
+
   if (isDimension(values)) {
     return()
   }
-  
+
   logErrorThenStop(messages$errorNotADimension(values))
 }

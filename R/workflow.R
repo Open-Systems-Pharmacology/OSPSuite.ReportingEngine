@@ -20,7 +20,7 @@ Workflow <- R6::R6Class(
     #' @param workflowFolder path of the output folder created or used by the Workflow.
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
-                              workflowFolder) {
+                          workflowFolder) {
       private$.reportingEngineInfo <- ReportingEngineInfo$new()
 
       validateIsString(workflowFolder)

@@ -15,11 +15,11 @@ SensitivityAnalysisSettings <- R6::R6Class(
     #' @param showProgress sensitivity analysis progress printed to console if TRUE
     #' @return A new `SensitivityAnalysisSettings` object
     initialize = function(variationRange = NULL,
-                              numberOfCores = NULL,
-                              quantileVec = NULL,
-                              variableParameterPaths = NULL,
-                              pkParameterSelection = NULL,
-                              showProgress = FALSE) {
+                          numberOfCores = NULL,
+                          quantileVec = NULL,
+                          variableParameterPaths = NULL,
+                          pkParameterSelection = NULL,
+                          showProgress = FALSE) {
       self$variationRange <- variationRange %||% defaultVariationRange
       self$numberOfCores <- numberOfCores %||% defaultSensitivityAnalysisNumberOfCores
       self$quantileVec <- quantileVec %||% defaultQuantileVec
