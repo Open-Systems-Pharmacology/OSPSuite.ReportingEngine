@@ -26,7 +26,6 @@ PopulationWorkflow <- R6::R6Class(
     plotGoF = NULL,
     plotPKParameters = NULL,
     plotSensitivity = NULL,
-    plotAcrossPopulationsSensitivity = NULL,
     resetReport = NULL,
 
     #' @description
@@ -68,7 +67,6 @@ PopulationWorkflow <- R6::R6Class(
       self$plotGoFSettings()
       self$plotPKParametersSettings()
       self$plotSensitivitySettings()
-      self$plotAcrossPopulationsSensitivitySettings()
       self$taskNames <- enum(self$getAllTasks())
     },
 
@@ -250,43 +248,15 @@ PopulationWorkflow <- R6::R6Class(
     #' @param message message indicating what the `task` does
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for sensitivity plots for a single population
-    plotSensitivitySettings = function(reportTitle = defaultWorkflowTitles$plotSensitivity,
-                                           taskFunction = plotPopulationSensitivity,
-                                           outputFolder = defaultTaskOutputFolders$plotSensitivity,
-                                           active = FALSE,
-                                           message = defaultWorkflowMessages$plotSensitivity,
-                                           settings = NULL) {
-      self$plotSensitivity <- PlotTask$new(
-        reportTitle = reportTitle,
-        getTaskResults = taskFunction,
-        outputFolder = outputFolder,
-        workflowFolder = self$workflowFolder,
-        active = active,
-        message = message,
-        settings = settings
-      )
-    },
-
-
-    #' @description
-    #' Define across-population sensitivity analysis `PopulationPlotTask` settings
-    #' @param reportTitle section title of plot task result within report
-    #' @param taskFunction function called by task to get the results as a list of `plots` and `tables`
-    #' @param outputFolder folder where `Task` output is saved
-    #' @param active logical indicating if `task` is performed in worklfow.
-    #' Default value is `FALSE`
-    #' @param message message indicating what the `task` does
-    #' @param settings specific settings for task
-    #' @return A `PopulationPlotTask` object for sensitivity plots across all populations
-    plotAcrossPopulationsSensitivitySettings = function(reportTitle = defaultWorkflowTitles$plotAcrossPopulationsSensitivity,
-                                                        taskFunction = plotAcrossPopulationsSensitivity,
-                                                        outputFolder = defaultTaskOutputFolders$plotAcrossPopulationsSensitivity,
-                                                        active = FALSE,
-                                                        message = defaultWorkflowMessages$plotAcrossPopulationsSensitivity,
-                                                        xParameters = getDefaultPkParametersXParameters(self$workflowType),
-                                                        yParameters = NULL,
-                                                        settings = NULL) {
-      self$AcrossPopulationsSensitivity <- PopulationPlotTask$new(
+    plotSensitivitySettings =function(reportTitle = defaultWorkflowTitles$plotSensitivity,
+                                      taskFunction = plotPopulationSensitivity,
+                                      outputFolder = defaultTaskOutputFolders$plotSensitivity,
+                                      active = FALSE,
+                                      message = defaultWorkflowMessages$plotSensitivity,
+                                      xParameters = NULL,
+                                      yParameters = NULL,
+                                      settings = NULL) {
+      self$plotSensitivity <- PopulationPlotTask$new(
         workflowType = self$workflowType,
         xParameters = xParameters,
         yParameters = yParameters,

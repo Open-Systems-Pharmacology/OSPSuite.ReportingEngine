@@ -569,14 +569,14 @@ plotTornado <- function(data,
   return(tornadoPlot)
 }
 
-#' @title plotAcrossPopulationsSensitivity
+#' @title plotPopulationSensitivity
 #' @description Retrieve list of plots of population sensitivity analyses across all populations
 #' @param structureSet `SimulationStructure` R6 class object
 #' @param settings list of settings for the population sensitivity plot
 #' @param logFolder folder where the logs are saved
 #' @return a structured list of plots for each possible combination of pathID output-pkParameter that is found in sensitivity results index file
 #' @export
-plotAcrossPopulationsSensitivity <- function(structureSets,
+plotPopulationSensitivity <- function(structureSets,
                                              logFolder = NULL,
                                              settings,
                                              workflowType = NULL,
@@ -634,42 +634,42 @@ plotAcrossPopulationsSensitivity <- function(structureSets,
 
 
 
-#' @title plotPopulationSensitivity
-#' @description Retrieve dataframe of ranked and filtered population sensitivity results for each PK parameter and model output, for the population in structureSet
-#' @param structureSet `SimulationStructure` R6 class object
-#' @param settings list of settings for the population sensitivity plot
-#' @param logFolder folder where the logs are saved
-#' @return a structured list of plots for each possible combination of pathID output-pkParameter that is found in sensitivity results index file
-#' @export
-plotPopulationSensitivity <- function(structureSet,
-                                      logFolder = getwd(),
-                                      settings) {
-  indexDf <- read.csv(file = structureSet$popSensitivityAnalysisResultsIndexFile)
-
-  # results for only the 'rankFilter' most sensitive parameters will be returned
-  # rankFilter FIXED FOR NOW TO BE LIKE PKSIM/MOBI
-  rankFilter <- 12
-  output <- structureSet$simulationSet$outputs
-  pkParameters <- unique(indexDf$pkParameters)
-  quantiles <- unique(indexDf$Quantile)
-
-  plotList <- list()
-  plotList[["plots"]] <- list()
-  for (op in output) {
-    for (pk in pkParameters) {
-      dF <- getPopSensDfForPkAndOutput(structureSet, indexDf, op$path, pk, quantiles, rankFilter)
-      plotObject <- getPkParameterPopulationSensitivityPlot(
-        data = dF,
-        title = paste("Population sensitivity of", pk, "of", op$path),
-        plotConfiguration = settings$plotConfiguration
-      )
-      outputName <- gsub(pattern = "|", replacement = "-", x = op$path, fixed = TRUE)
-      plotList[["plots"]][[paste(pk, outputName, sep = "-")]] <- plotObject
-    }
-  }
-
-  return(plotList)
-}
+#' #' @title plotPopulationSensitivity
+#' #' @description Retrieve dataframe of ranked and filtered population sensitivity results for each PK parameter and model output, for the population in structureSet
+#' #' @param structureSet `SimulationStructure` R6 class object
+#' #' @param settings list of settings for the population sensitivity plot
+#' #' @param logFolder folder where the logs are saved
+#' #' @return a structured list of plots for each possible combination of pathID output-pkParameter that is found in sensitivity results index file
+#' #' @export
+#' plotPopulationSensitivity <- function(structureSet,
+#'                                       logFolder = getwd(),
+#'                                       settings) {
+#'   indexDf <- read.csv(file = structureSet$popSensitivityAnalysisResultsIndexFile)
+#'
+#'   # results for only the 'rankFilter' most sensitive parameters will be returned
+#'   # rankFilter FIXED FOR NOW TO BE LIKE PKSIM/MOBI
+#'   rankFilter <- 12
+#'   output <- structureSet$simulationSet$outputs
+#'   pkParameters <- unique(indexDf$pkParameters)
+#'   quantiles <- unique(indexDf$Quantile)
+#'
+#'   plotList <- list()
+#'   plotList[["plots"]] <- list()
+#'   for (op in output) {
+#'     for (pk in pkParameters) {
+#'       dF <- getPopSensDfForPkAndOutput(structureSet, indexDf, op$path, pk, quantiles, rankFilter)
+#'       plotObject <- getPkParameterPopulationSensitivityPlot(
+#'         data = dF,
+#'         title = paste("Population sensitivity of", pk, "of", op$path),
+#'         plotConfiguration = settings$plotConfiguration
+#'       )
+#'       outputName <- gsub(pattern = "|", replacement = "-", x = op$path, fixed = TRUE)
+#'       plotList[["plots"]][[paste(pk, outputName, sep = "-")]] <- plotObject
+#'     }
+#'   }
+#'
+#'   return(plotList)
+#' }
 
 
 #' @title getPopSensDfForPkAndOutput
