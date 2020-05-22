@@ -1,0 +1,8 @@
+Organism|Weight,Organism|Weight,Gender,Applications|Larson 400mg|filmcoated tablet (original Merck formulation)|Application_1|ProtocolSchemaItem|DrugMass
+kg,kg,,nmol
+SOURCE_MIN,SOURCE_MAX,SOURCE_EQUALS,TARGET
+20,40,1,2
+20,40,2,2.5
+40,60,1,10
+40,60,2,14
+60,,,20

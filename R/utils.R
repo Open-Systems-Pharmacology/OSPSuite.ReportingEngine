@@ -184,6 +184,21 @@ loadSimulationWithUpdatedPaths <- function(simulationSet) {
   return(sim)
 }
 
+#' @title loadWorkflowPopulation
+#' @param simulationSet A `PopulationSimulationSet` object
+#' @export
+#' @import ospsuite
+loadWorkflowPopulation <- function(simulationSet) {
+  validateIsOfType(simulationSet, "PopulationSimulationSet")
+  population <- ospsuite::loadPopulation(simulationSet$populationFile)
+  simulation <- loadSimulationWithUpdatedPaths(simulationSet)
+  
+  if(!is.null(simulationSet$studyDesignFile)){
+    addStudyParameters(population, simulation, simulationSet$studyDesignFile)
+  }
+  return(population)
+}
+
 #' @title lastPathElement
 #' @param path simulation path
 #' @return last path element as character string

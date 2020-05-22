@@ -17,6 +17,8 @@ R6 class representing Reporting Engine Population Model Set
 \item{\code{populationFile}}{name of csv file to be used for the population}
 
 \item{\code{populationName}}{display name of population}
+
+\item{\code{studyDesignFile}}{name of study design csv file}
 }
 \if{html}{\out{</div>}}
 }
@@ -45,6 +47,7 @@ Create a new `PopulationSimulationSet` object.
   simulationFile,
   populationFile,
   populationName = NULL,
+  studyDesignFile = NULL,
   ...
 )}\if{html}{\out{</div>}}
 }
@@ -61,6 +64,8 @@ Create a new `PopulationSimulationSet` object.
 \item{\code{populationFile}}{name of csv file to be used for the population}
 
 \item{\code{populationName}}{display name of population}
+
+\item{\code{studyDesignFile}}{name of study design csv file}
 
 \item{\code{...}}{inputs inherited from `SimulationSet`}
 }
