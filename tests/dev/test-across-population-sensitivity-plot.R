@@ -38,9 +38,9 @@ pwf$populationSensitivityAnalysis$settings$pkParameterSelection <- c("C_max", "C
 pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.05, 0.25, 0.5, 0.75, 0.95)
 pwf$runWorkflow()
 
-# plotConfig <- tlf::PlotConfiguration$new()
-# settings <- list("plotConfiguration" = plotConfig)
-# dF <- plotAcrossPopulationsSensitivity(pwf$simulationStructures,settings = settings)
+plotConfig <- tlf::PlotConfiguration$new()
+settings <- list("plotConfiguration" = plotConfig)
+dF <- plotPopulationSensitivity(pwf$simulationStructures,settings = settings)
 
 # pL <- plotPopulationSensitivity(
 #   structureSet = pwf$simulationStructures[[1]],
