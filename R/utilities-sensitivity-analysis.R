@@ -430,7 +430,7 @@ getSAFileIndex <- function(pkParameterResultsFilePath,
     for (pkParameter in pkParameters) {
       singleOuputSinglePKDataframe <- allPKResultsDataframe[ allPKResultsDataframe["QuantityPath"] == output & allPKResultsDataframe["Parameter"] == pkParameter, ]
       quantileResults <- getQuantileIndividualIds(singleOuputSinglePKDataframe, quantileVec)
-      for (i in 1:length(quantileResults$ids)) {
+      for (i in seq_along(quantileResults$ids)) {
         outputColumn <- c(outputColumn, output)
         pkParameterColumn <- c(pkParameterColumn, pkParameter)
         individualIdColumn <- c(individualIdColumn, quantileResults$ids[i])
