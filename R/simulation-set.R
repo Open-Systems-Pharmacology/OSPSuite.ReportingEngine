@@ -60,6 +60,8 @@ SimulationSet <- R6::R6Class(
       self$timeUnit <- timeUnit %||% "h"
     },
 
+
+    #' @description Ensure that output paths are in simulation
     verifyOutputPathsInSimulation = function() {
       allPathsInOutputs <- sapply(self$outputs, function(x) {
         x$path

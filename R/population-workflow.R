@@ -246,6 +246,8 @@ PopulationWorkflow <- R6::R6Class(
     #' @param active logical indicating if `task` is performed in worklfow.
     #' Default value is `FALSE`
     #' @param message message indicating what the `task` does
+    #' @param xParameters list of parameters to be plotted along x axis - unused in this task
+    #' @param yParameters list of parameters to be plotted along y axis - unused in this task
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for sensitivity plots for a single population
     plotSensitivitySettings = function(reportTitle = defaultWorkflowTitles$plotSensitivity,
