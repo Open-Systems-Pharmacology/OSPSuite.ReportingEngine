@@ -658,6 +658,15 @@ plotPopulationSensitivity <- function(structureSets,
     unsortedPopDfPkOp <- allPopsDf[allPopsDf[, "QuantityPath"] == uniqueQuantitiesAndPKParameters$QuantityPath[i] & allPopsDf[, "PKParameter"] == uniqueQuantitiesAndPKParameters$PKParameter[i], ]
     popDfPkOp <- unsortedPopDfPkOp[order(-abs(unsortedPopDfPkOp$Value)), ]
 
+
+    #   # rank Parameter column according to sorted order
+    popDfPkOp$Parameter <- factor(x = popDfPkOp$Parameter, levels = unique(popDfPkOp$Parameter))
+    # Reverse level order of Parameter column to make most sensitive parameter have highest factor level
+    popDfPkOp$Parameter <- factor(x = popDfPkOp$Parameter, levels = rev(unique(popDfPkOp$Parameter)))
+
+
+
+
     print(unsortedPopDfPkOp)
     print(popDfPkOp)
 
