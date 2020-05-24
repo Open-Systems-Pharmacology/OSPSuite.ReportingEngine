@@ -612,32 +612,8 @@ plotPopulationSensitivity <- function(structureSets,
                                                    totalSensitivityThreshold = settings$totalSensitivityThreshold)
         populationNameCol <- rep(populationName, nrow(dfForPkAndOp))
         dFList[[i]] <- cbind(dfForPkAndOp, data.frame("Population" = populationNameCol))
-
       }
     }
-
-
-
-    # quantiles <- unique(indexDf$Quantile)
-    #
-    # for (op in outputPaths) {
-    #   for (pk in pkParameters) {
-    #     i <- i + 1
-    #     #Obtain dataframe of filtered sensitivity results for one output (op) and one pkParameter (pk) for population in structureSet
-    #     dF <- getPopSensDfForPkAndOutput(
-    #       simulation = simulation,
-    #       structureSet = structureSet,
-    #       indexDf = indexDf,
-    #       output =  op,
-    #       pkParameter = pk,
-    #       quantiles = quantiles,
-    #       totalSensitivityThreshold =settings$totalSensitivityThreshold)
-    #     populationNameCol <- rep(populationName, nrow(dF))
-    #
-    #     dFList[[i]] <- cbind(dF, data.frame("Population" = populationNameCol))
-    #   }
-    # }
-
   }
 
 
@@ -654,21 +630,12 @@ plotPopulationSensitivity <- function(structureSets,
     sensitivityPlotName <- paste(pk, op, sep = "_")
     sensitivityPlotName <- gsub(pattern = "|", replacement = "-", x = sensitivityPlotName, fixed = TRUE)
     # popDfPkOp is a dataframe containing all the rows in allPopsDf that have the same
-    # combination of QuantityPath PKParameter as the current (i'th) row of uniqueQuantitiesAndPKParameters
+    # combination of (QuantityPath,PKParameter) as the current (i'th) row of uniqueQuantitiesAndPKParameters
     unsortedPopDfPkOp <- allPopsDf[allPopsDf[, "QuantityPath"] == uniqueQuantitiesAndPKParameters$QuantityPath[i] & allPopsDf[, "PKParameter"] == uniqueQuantitiesAndPKParameters$PKParameter[i], ]
     popDfPkOp <- unsortedPopDfPkOp[order(-abs(unsortedPopDfPkOp$Value)), ]
 
-
-    #   # rank Parameter column according to sorted order
-    #popDfPkOp$Parameter <- factor(x = popDfPkOp$Parameter, levels = unique(popDfPkOp$Parameter))
     # Reverse level order of Parameter column to make most sensitive parameter have highest factor level
     popDfPkOp$Parameter <- factor(x = popDfPkOp$Parameter, levels = rev(unique(popDfPkOp$Parameter)))
-
-
-
-
-    print(unsortedPopDfPkOp)
-    print(popDfPkOp)
 
     plotObject <- getPkParameterPopulationSensitivityPlot(
       data = popDfPkOp,
@@ -694,9 +661,7 @@ plotPopulationSensitivity <- function(structureSets,
 #' @param totalSensitivityThreshold cut-off used for plots of the most sensitive parameters
 #' @return sortedFilteredIndividualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
 getPopSensDfForPkAndOutput <- function(simulation, sensitivityResultsFolder, indexDf, output, pkParameter, totalSensitivityThreshold) {
-  #validateIsIncluded(pkParameter, unique(indexDf$pkParameters))
-  #validateIsIncluded(output, unique(indexDf$Outputs))
-  #validateIsInRange(variableName = "totalSensitivityThreshold" , value = totalSensitivityThreshold, lowerBound =  0 , upperBound = 1)
+
   pkOutputIndexDf <- getPkOutputIndexDf(indexDf, pkParameter, output)
   individualsDfForPKParameter <- NULL
 
@@ -746,13 +711,7 @@ getPopSensDfForPkAndOutput <- function(simulation, sensitivityResultsFolder, ind
     #Merge dFlist into one dataframe for all individuals for current output and current pkParameter
     individualsDfForPKParameter <- do.call(rbind.data.frame, dfList)
 
-
-    #sortedFilteredIndividualsDfForPKParameter <- individualsDfForPKParameter[order(-abs(individualsDfForPKParameter$Value)), ]
   }
-
-#sortedFilteredIndividualsDfForPKParameter <- individualsDfForPKParameter[order(-abs(individualsDfForPKParameter$Value)), ]
-#sortedFilteredIndividualsDfForPKParameter <- sortIndividualsDF(individualsDfForPKParameter)
-#sortedFilteredIndividualsDfForPKParameter <- individualsDfForPKParameter
 
 return(individualsDfForPKParameter)
 }
@@ -769,84 +728,6 @@ getPkOutputIndexDf <- function(indexDf, pkParameter, output) {
   return(pkOutputIndexDf)
 }
 
-
-#' #' @title getSensitivityDataFrameForIndividuals
-#' #' @description retrieve the dataframe of individuals' sensitivity analysis results for given output and pkParameter
-#' #' @param indexDf of population distribution of pkParameter, used to select individuals for sensitivity analysis
-#' #' @param structureSet `SimulationStructure` R6 class object
-#' #' @param pkParameter name of PK parameter for which to obtain the population sensitivity results
-#' #' @param output pathID of output for which to obtain the population sensitivity results
-#' #' @param totalSensitivityThreshold results for only the 'totalSensitivityThreshold' most sensitive parameters will be returned
-#' #' @return individualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
-#' getSensitivityDataFrameForIndividuals <- function(simulation, indexDf, sensitivityResultsFolder, pkParameter, output , totalSensitivityThreshold) {
-#'   dfList <- list()
-#'   for (n in 1:nrow(indexDf)) {
-#'
-#'     individualId <- indexDf$IndividualId[n]
-#'     quantile <- indexDf$Quantile[n]
-#'     resultsFile <- file.path(sensitivityResultsFolder, indexDf$Filename[n])
-#'
-#'
-#'     individualSAResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(simulation = simulation,
-#'                                                                              filePaths = resultsFile)
-#'     filteredIndividualSAResults <- individualSAResults$allPKParameterSensitivitiesFor(pkParameterName = pkParameter,
-#'                                                                                       outputPath = output ,
-#'                                                                                       totalSensitivityThreshold = totalSensitivityThreshold)
-#'
-#'     listOfFilteredIndividualSAResults <- lapply(filteredIndividualSAResults,function(x){
-#'       list("QuantityPath" = x$outputPath,
-#'            "Parameter" = x$parameterPath,
-#'            "PKParameter" = x$pkParameterName,
-#'            "Value" = x$value)
-#'     })
-#'
-#'     individualsDf <- do.call(rbind.data.frame,listOfFilteredIndividualSAResults)
-#'
-#'     #individualsDf <- read.csv(resultsFile, check.names = FALSE, encoding = "UTF-8")
-#'     #colnames(individualsDf) <- c("QuantityPath", "Parameter", "PKParameter", "Value")
-#'     #individualsDf <- individualsDf[(individualsDf$PKParameter == pkParameter) & (individualsDf$QuantityPath == output), ]
-#'     dfList[[n]] <- cbind(individualsDf, data.frame("Quantile" = rep(quantile, nrow(individualsDf)), "individualId" = rep(individualId, nrow(individualsDf))))
-#'
-#'   }
-#'   individualsDfForPKParameter <- do.call(rbind.data.frame, dfList)
-#'   return(individualsDfForPKParameter)
-#' }
-
-#' #' @title sortIndividualsDF
-#' #' @description sort dataframe individualsDfForPKParameter of individuals' sensitivity analysis results and filter out all except the totalSensitivityThreshold most sensitive parameters
-#' #' @param individualsDfForPKParameter dataframe of results of sensitivity analysis possibly multiple individuals
-#' #' @return sortedFilteredIndividualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
-#' sortIndividualsDF <- function(individualsDfForPKParameter) {
-#'
-#'   print("$$$$")
-#'   print(individualsDfForPKParameter)
-#'   print("####")
-#'
-#'   validateIsPositive(nrow(individualsDfForPKParameter))
-#'   sortedIndividualsDfForPKParameter <- individualsDfForPKParameter[order(-abs(individualsDfForPKParameter$Value)), ]
-#'   return(sortedIndividualsDfForPKParameter)
-#' }
-
-# sortIndividualsDF <- function(individualsDfForPKParameter, totalSensitivityThreshold) {
-#   validateIsPositive(nrow(individualsDfForPKParameter))
-#   sortedIndividualsDfForPKParameter <- individualsDfForPKParameter[order(-abs(individualsDfForPKParameter$Value)), ]
-#   if (is.null(totalSensitivityThreshold)) {
-#     return(sortedIndividualsDfForPKParameter)
-#   }
-#   totalSensitivityThreshold <- min(totalSensitivityThreshold, length(unique(sortedIndividualsDfForPKParameter$Parameter)))
-#
-#   # rank Parameter column according to sorted order
-#   sortedIndividualsDfForPKParameter$Parameter <- factor(x = sortedIndividualsDfForPKParameter$Parameter,
-#                                                         levels = unique(sortedIndividualsDfForPKParameter$Parameter))
-#
-#   # Filter out all except top 'totalSensitivityThreshold' most sensitive parameters
-#   sortedFilteredIndividualsDfForPKParameter <- sortedIndividualsDfForPKParameter[ as.numeric(sortedIndividualsDfForPKParameter$Parameter) %in% 1:floor(totalSensitivityThreshold*nrow(sortedIndividualsDfForPKParameter)), ]
-#
-#   # Reverse level order of Parameter column to make most sensitive parameter have highest factor level
-#   sortedFilteredIndividualsDfForPKParameter$Parameter <- factor(x = sortedFilteredIndividualsDfForPKParameter$Parameter, levels = rev(unique(sortedFilteredIndividualsDfForPKParameter$Parameter)))
-#
-#   return(sortedFilteredIndividualsDfForPKParameter)
-# }
 
 #' @title getPkParameterPopulationSensitivityPlot
 #' @description build sensitvity plot object for a population for one output and pk parameter
