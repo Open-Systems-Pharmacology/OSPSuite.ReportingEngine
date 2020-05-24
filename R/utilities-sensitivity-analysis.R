@@ -589,7 +589,7 @@ plotPopulationSensitivity <- function(structureSets,
 
   for (structureSet in structureSets) {
     sensitivityResultsFolder <- file.path(structureSet$workflowFolder, structureSet$sensitivityAnalysisResultsFolder)
-    simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
+    simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
     indexDf <- read.csv(file = structureSet$popSensitivityAnalysisResultsIndexFile)
     outputPaths <- sapply(structureSet$simulationSet$outputs,function(x){x$path})
     populationName <- structureSet$simulationSet$populationName
@@ -660,6 +660,7 @@ plotPopulationSensitivity <- function(structureSets,
 #' @param pkParameter name of PK parameter for which to obtain the population sensitivity results
 #' @param totalSensitivityThreshold cut-off used for plots of the most sensitive parameters
 #' @return sortedFilteredIndividualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
+#' @import ospsuite
 getPopSensDfForPkAndOutput <- function(simulation, sensitivityResultsFolder, indexDf, output, pkParameter, totalSensitivityThreshold) {
 
   pkOutputIndexDf <- getPkOutputIndexDf(indexDf, pkParameter, output)
