@@ -12,9 +12,20 @@ generateResultFileNames(
   extension = ".csv"
 )
 }
+\arguments{
+\item{numberOfCores}{to be used in parallel computation}
+
+\item{folderName}{where result files will be saved}
+
+\item{fileName}{prefix of result file names}
+
+\item{separator}{used between file name prefix and index}
+
+\item{extension}{for result file type.  default is CSV}
+}
 \value{
 A list of filenames to be output by each core
 }
 \description{
-#Generate a listcontaining names of CSV result files that will be output by each corein parallel computation
+#Generate a listcontaining names of CSV result files that will be output by each core in parallel computation
 }

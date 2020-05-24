@@ -8,8 +8,6 @@ checkSimulationLoaded(simulation)
 }
 \arguments{
 \item{simulation}{the simulation object to be checked if loaded successfully}
-
-\item{simulationFilePath}{the path to the simulation object to be checked if loaded successfully}
 }
 \description{
 Check that the simulation has been loaded on the core.

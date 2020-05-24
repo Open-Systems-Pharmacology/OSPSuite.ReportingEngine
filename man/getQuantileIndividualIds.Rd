@@ -9,6 +9,8 @@ getQuantileIndividualIds(pkAnalysisResultsDataframe, quantileVec)
 \arguments{
 \item{pkAnalysisResultsDataframe}{Dataframe storing the PK analysis results for multiple
 individuals for a single PK parameter and single output path}
+
+\item{quantileVec}{vector of quantiles in the pk results distribution.  Ids for individuals with pk parameter values at these quantiles will be returned.}
 }
 \value{
 ids, IDs of individuals whose PK analysis results closest to quantiles given by vector of quantiles quantileVec

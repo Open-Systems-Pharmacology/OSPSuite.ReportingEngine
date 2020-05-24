@@ -345,6 +345,10 @@ Default value is `FALSE`}
 
 \item{\code{message}}{message indicating what the `task` does}
 
+\item{\code{xParameters}}{list of parameters to be plotted along x axis - unused in this task}
+
+\item{\code{yParameters}}{list of parameters to be plotted along y axis - unused in this task}
+
 \item{\code{settings}}{specific settings for task}
 }
 \if{html}{\out{</div>}}

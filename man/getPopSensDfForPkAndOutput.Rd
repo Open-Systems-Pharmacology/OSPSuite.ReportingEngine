@@ -5,16 +5,18 @@
 \title{getPopSensDfForPkAndOutput}
 \usage{
 getPopSensDfForPkAndOutput(
-  structureSet,
+  simulation,
+  sensitivityResultsFolder,
   indexDf,
   output,
   pkParameter,
-  quantiles,
-  rankFilter = NULL
+  totalSensitivityThreshold
 )
 }
 \arguments{
-\item{structureSet}{`SimulationStructure` R6 class object}
+\item{simulation}{loaded from the used in the simulationFile path in the simulation set}
+
+\item{sensitivityResultsFolder}{location of sensitivity analysis results}
 
 \item{indexDf}{dataframe with contents of population sensitivity results index file}
 
@@ -22,9 +24,7 @@ getPopSensDfForPkAndOutput(
 
 \item{pkParameter}{name of PK parameter for which to obtain the population sensitivity results}
 
-\item{quantiles}{of population distribution of pkParameter, used to select individuals for sensitivity analysis}
-
-\item{rankFilter}{results for only the 'rankFilter' most sensitive parameters will be returned}
+\item{totalSensitivityThreshold}{cut-off used for plots of the most sensitive parameters}
 }
 \value{
 sortedFilteredIndividualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
