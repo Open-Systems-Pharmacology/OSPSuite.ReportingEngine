@@ -249,7 +249,7 @@ PopulationWorkflow <- R6::R6Class(
     #' @param xParameters list of parameters to be plotted along x axis - unused in this task
     #' @param yParameters list of parameters to be plotted along y axis - unused in this task
     #' @param settings specific settings for task
-    #' @return A `PlotTask` object for sensitivity plots for a single population
+    #' @return A `PopulationPlotTask` object for sensitivity plots for a single population
     plotSensitivitySettings = function(reportTitle = defaultWorkflowTitles$plotSensitivity,
                                        taskFunction = plotPopulationSensitivity,
                                        outputFolder = defaultTaskOutputFolders$plotSensitivity,
@@ -268,7 +268,7 @@ PopulationWorkflow <- R6::R6Class(
         workflowFolder = self$workflowFolder,
         active = active,
         message = message,
-        settings = settings
+        settings = settings %||% self$populationSensitivityAnalysis$settings %||% SensitivityPlotSettings$new()
       )
     },
 
