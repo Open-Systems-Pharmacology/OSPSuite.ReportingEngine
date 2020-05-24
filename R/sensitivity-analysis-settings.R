@@ -76,6 +76,7 @@ SensitivityAnalysisSettings <- R6::R6Class(
           validateIsString(value)
           validateNoDuplicatedEntries(value)
           private$.variableParameterPaths <- value
+          private$.totalSensitivityThreshold <- 1
         }
       }
     },
