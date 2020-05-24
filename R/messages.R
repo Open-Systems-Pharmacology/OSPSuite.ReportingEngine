@@ -84,8 +84,16 @@ messages <- list(
   warningNoReferencePopulation = function(workflowType) {
     paste0("Workflow type '", workflowType, "' requires one reference population, but no reference population was provided.")
   },
-  
-  errorNotADimension = function(values){
+
+  errorNotADimension = function(values) {
     paste0("Expected a dimension. Check that '", paste0(values, collapse = "', '."), "' is included in ospsuite::allAvailableDimensions().")
+  },
+
+  invalidOuputPath = function(path, simName) {
+    paste(path, "is an invalid output path for simulation", simName, ".")
+  },
+
+  outsideRange = function(variableName, value, lowerBound, upperBound) {
+    paste0(variableName, " has value ", value, ", which lies outside the allowable range [", lowerBound, ",", upperBound, "].")
   }
 )

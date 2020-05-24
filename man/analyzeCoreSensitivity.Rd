@@ -33,6 +33,8 @@ should be should be set to 1 when parallelizing over many nodes.}
 \item{errorLogFileName}{path to error log file}
 
 \item{nodeName}{identifier for node used in parallel computation of sensitivity}
+
+\item{showProgress}{option to print progress of simulation to console}
 }
 \value{
 sensitivity analysis results

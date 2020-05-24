@@ -6,7 +6,7 @@ ps <- PopulationSimulationSet$new(
   simulationSetName = "nonparpopsim",
   simulationFile = "./tests/dev/individualPksimSim.pkml",
   populationFile = "./tests/dev/popData_short.csv",
-  pathID = tree$Organism$VenousBlood$Plasma$smarties$Concentration$path
+  outputs = Output$new(path = tree$Organism$VenousBlood$Plasma$smarties$Concentration$path)
 )
 pwf <- PopulationWorkflow$new(simulationSets = list(ps), workflowFolder = "./exnonpar")
 pwf$simulatePopulation$settings$showProgress <- FALSE

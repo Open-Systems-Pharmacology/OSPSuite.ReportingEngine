@@ -79,6 +79,19 @@ validateIsPositive <- function(object, nullAllowed = FALSE) {
   }
 }
 
+
+validateIsInRange <- function(variableName, value, lowerBound, upperBound, nullAllowed = FALSE) {
+  validateIsOfLength(value, 1)
+  validateIsOfLength(lowerBound, 1)
+  validateIsOfLength(upperBound, 1)
+  validateIsOfType(c(value, lowerBound, upperBound), c("numeric"), nullAllowed)
+  if ((value < lowerBound) | (value > upperBound)) {
+    logErrorThenStop(messages$outsideRange(variableName, value, lowerBound, upperBound))
+  }
+}
+
+
+
 validateEnumValue <- function(enum, value) {
   if (value %in% names(enum)) {
     return()
@@ -248,10 +261,10 @@ validateIsDimension <- function(values, nullAllowed = FALSE) {
   if (nullAllowed && is.null(values)) {
     return()
   }
-  
+
   if (isDimension(values)) {
     return()
   }
-  
+
   logErrorThenStop(messages$errorNotADimension(values))
 }

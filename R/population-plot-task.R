@@ -21,9 +21,9 @@ PopulationPlotTask <- R6::R6Class(
     #' @param ... input parameters inherited from `PlotTask` R6 class
     #' @return A new `PopulationPlotTask` object
     initialize = function(workflowType = PopulationWorkflowTypes$parallelComparison,
-                              xParameters = NULL,
-                              yParameters = NULL,
-                              ...) {
+                          xParameters = NULL,
+                          yParameters = NULL,
+                          ...) {
       super$initialize(...)
       validateIsIncluded(workflowType, PopulationWorkflowTypes)
       self$workflowType <- workflowType
@@ -37,7 +37,7 @@ PopulationPlotTask <- R6::R6Class(
     #' Results contains at least 2 fields: `plots` and `tables`
     #' @param reportFile name of report
     saveResults = function(taskResults,
-                               reportFile) {
+                           reportFile) {
       for (plotName in names(taskResults$plots)) {
         plotFileName <- file.path(
           self$workflowFolder,
@@ -101,7 +101,7 @@ PopulationPlotTask <- R6::R6Class(
     #' @param structureSets list of `SimulationStructure` R6 class
     #' @param reportFileName name of report file
     runTask = function(structureSets,
-                           reportFileName) {
+                       reportFileName) {
       logWorkflow(
         message = paste0("Starting: ", self$message),
         pathFolder = self$workflowFolder

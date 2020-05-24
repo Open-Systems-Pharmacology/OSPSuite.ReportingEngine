@@ -29,6 +29,7 @@ R6 class representing Reporting Engine Mean Model Set
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{SimulationSet$new()}}
+\item \href{#method-verifyOutputPathsInSimulation}{\code{SimulationSet$verifyOutputPathsInSimulation()}}
 \item \href{#method-clone}{\code{SimulationSet$clone()}}
 }
 }
@@ -70,6 +71,15 @@ Create a new `SimulationSet` object.
 \subsection{Returns}{
 A new `SimulationSet` object
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-verifyOutputPathsInSimulation"></a>}}
+\subsection{Method \code{verifyOutputPathsInSimulation()}}{
+Ensure that output paths are in simulation
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SimulationSet$verifyOutputPathsInSimulation()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

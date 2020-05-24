@@ -7,6 +7,8 @@
 getPkOutputIndexDf(indexDf, pkParameter, output)
 }
 \arguments{
+\item{indexDf}{dataframe containing summary of sensitivity results}
+
 \item{pkParameter}{name of PK parameter for which to obtain the population sensitivity results}
 
 \item{output}{pathID of output for which to obtain the population sensitivity results}

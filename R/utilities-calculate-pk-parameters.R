@@ -75,10 +75,10 @@ getMeanPkAnalysesFromOuptut <- function(data, output, molWeight = NULL) {
     selectedParameter <- outputData$Parameter %in% pkParameter$pkParameter
 
     pkParameterObject <- ospsuite::pkParameterByName(pkParameter$pkParameter)
-    
+
     # Need to switch back to base unit first if a display unit is provided
     pkParameterValue <- outputData$Value[selectedParameter]
-    
+
     if (!is.null(displayUnit)) {
       pkParameterValueInBaseUnit <- ospsuite::toBaseUnit(
         pkParameterObject$dimension,

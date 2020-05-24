@@ -212,7 +212,7 @@ The tasks can be activated/inactivated using the workflow methods `activateTasks
 The following example shows how tasks are implemented as R objects of a `MeanModelWorkflow` implemented in the variable *myWorkflow*.
 
 ```{r, include = FALSE}
-simSets <- list(SimulationSet$new(simulationFile = "test.pkml"))
+simSets <- list(SimulationSet$new(simulationFile = "test.pkml",simulationSetName = "testSimulationSet"))
 myWorkflow <- MeanModelWorkflow$new(simulationSets = simSets,
                                     workflowFolder = "myFolder")
 ```

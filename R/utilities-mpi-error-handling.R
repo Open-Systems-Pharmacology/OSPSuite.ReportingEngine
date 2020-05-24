@@ -1,7 +1,6 @@
 #' @title checkSimulationLoaded
 #' @description Check that the simulation has been loaded on the core.
 #' @param simulation the simulation object to be checked if loaded successfully
-#' @param simulationFilePath the path to the simulation object to be checked if loaded successfully
 #' @export
 checkSimulationLoaded <- function(simulation) {
   return(is.null(validateIsOfType(simulation, "Simulation")))

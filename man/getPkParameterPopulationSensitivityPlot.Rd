@@ -10,6 +10,8 @@ getPkParameterPopulationSensitivityPlot(data, title, plotConfiguration)
 \item{data}{dataframe of sensitivity analysis results}
 
 \item{title}{plot title}
+
+\item{plotConfiguration}{used to set tlf plot properties}
 }
 \value{
 plt sensitivity plot based on results in input data

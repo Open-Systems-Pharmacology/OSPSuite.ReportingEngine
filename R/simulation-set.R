@@ -30,12 +30,12 @@ SimulationSet <- R6::R6Class(
     #' @param timeUnit display unit for time variable. Default is "h"
     #' @return A new `SimulationSet` object
     initialize = function(simulationSetName,
-                              simulationFile,
-                              simulationName = NULL,
-                              outputs = NULL,
-                              observedDataFile = NULL,
-                              observedMetaDataFile = NULL,
-                              timeUnit = "h") {
+                          simulationFile,
+                          simulationName = NULL,
+                          outputs = NULL,
+                          observedDataFile = NULL,
+                          observedMetaDataFile = NULL,
+                          timeUnit = "h") {
       validateIsString(c(simulationSetName, simulationFile))
       validateIsFileExtension(simulationFile, "pkml")
 
@@ -52,11 +52,33 @@ SimulationSet <- R6::R6Class(
       self$simulationName <- simulationName %||% trimFileName(simulationFile, extension = "pkml")
 
       self$outputs <- c(outputs)
+      self$verifyOutputPathsInSimulation()
 
       self$observedDataFile <- observedDataFile
       self$observedMetaDataFile <- observedMetaDataFile
 
       self$timeUnit <- timeUnit %||% "h"
+    },
+
+
+    #' @description Ensure that output paths are in simulation
+    verifyOutputPathsInSimulation = function() {
+      allPathsInOutputs <- sapply(self$outputs, function(x) {
+        x$path
+      })
+      sim <- ospsuite::loadSimulation(self$simulationFile)
+      ospsuite::addOutputs(
+        quantitiesOrPaths = allPathsInOutputs,
+        simulation = sim
+      )
+      loadedOutputPaths <- sapply(sim$outputSelections$allOutputs, function(x) {
+        x$path
+      })
+      for (pth in allPathsInOutputs) {
+        if (!(pth %in% loadedOutputPaths)) {
+          logErrorThenStop(message = messages$invalidOuputPath(pth, self$simulationName))
+        }
+      }
     }
   )
 )

@@ -57,17 +57,17 @@ while the simulation set *simSetBlood* will request Plasma, Plasma Unbound, Bloo
 ```{r}
 simSetPlasma <- SimulationSet$new(simulationSetName = "Plasma",
                                   simulationFile = simFile,
-                                  pathID = "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",
-                                  pathUnit = "μg/l",
-                                  pathName = "Plasma")
+                                  outputs = Output$new(path = "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",displayName = "Plasma",displayUnit = "μg/l"))
 simSetBlood <- SimulationSet$new(simulationSetName = "Blood",
                                  simulationFile = simFile,
-                                  pathID = c("Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",
-                                             "Organism|PeripheralVenousBlood|Raltegravir|Plasma Unbound (Peripheral Venous Blood)",
-                                             "Organism|PeripheralVenousBlood|Raltegravir|Blood Cells",
-                                             "Organism|PeripheralVenousBlood|Raltegravir|Whole Blood (Peripheral Venous Blood)"),
-                                 pathUnit = c("μg/l", "μg/l", "μg/l", "μg/l"),
-                                 pathName = c("Plasma", "Plasma Unbound", "Blood Cells", "Whole Blood"))
+                                 outputs = c(Output$new(path = "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",
+                                                        displayName = "Plasma",displayUnit = "μg/l"),
+                                             Output$new(path = "Organism|PeripheralVenousBlood|Raltegravir|Plasma Unbound (Peripheral Venous Blood)",
+                                                        displayName = "Plasma Unbound",displayUnit = "μg/l"),
+                                             Output$new(path = "Organism|PeripheralVenousBlood|Raltegravir|Blood Cells",
+                                                        displayName = "Blood Cells",displayUnit = "μg/l"),
+                                             Output$new(path = "Organism|PeripheralVenousBlood|Raltegravir|Whole Blood (Peripheral Venous Blood)",
+                                                        displayName = "Whole Blood",displayUnit = "μg/l")))
 ```
 
 For the example, both sets are defined in the same workflow:

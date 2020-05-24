@@ -4,18 +4,25 @@
 \alias{plotPopulationSensitivity}
 \title{plotPopulationSensitivity}
 \usage{
-plotPopulationSensitivity(structureSet, logFolder = getwd(), settings)
+plotPopulationSensitivity(
+  structureSets,
+  logFolder = NULL,
+  settings,
+  workflowType = NULL,
+  xParameters = NULL,
+  yParameters = NULL
+)
 }
 \arguments{
-\item{structureSet}{`SimulationStructure` R6 class object}
-
 \item{logFolder}{folder where the logs are saved}
 
 \item{settings}{list of settings for the population sensitivity plot}
+
+\item{structureSet}{`SimulationStructure` R6 class object}
 }
 \value{
 a structured list of plots for each possible combination of pathID output-pkParameter that is found in sensitivity results index file
 }
 \description{
-Retrieve dataframe of ranked and filtered population sensitivity results for a given PK parameter and model output pathID
+Retrieve list of plots of population sensitivity analyses across all populations
 }
