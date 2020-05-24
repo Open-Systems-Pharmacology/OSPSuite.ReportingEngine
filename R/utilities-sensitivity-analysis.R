@@ -655,7 +655,12 @@ plotPopulationSensitivity <- function(structureSets,
     sensitivityPlotName <- gsub(pattern = "|", replacement = "-", x = sensitivityPlotName, fixed = TRUE)
     # popDfPkOp is a dataframe containing all the rows in allPopsDf that have the same
     # combination of QuantityPath PKParameter as the current (i'th) row of uniqueQuantitiesAndPKParameters
-    popDfPkOp <- allPopsDf[allPopsDf[, "QuantityPath"] == uniqueQuantitiesAndPKParameters$QuantityPath[i] & allPopsDf[, "PKParameter"] == uniqueQuantitiesAndPKParameters$PKParameter[i], ]
+    unsortedPopDfPkOp <- allPopsDf[allPopsDf[, "QuantityPath"] == uniqueQuantitiesAndPKParameters$QuantityPath[i] & allPopsDf[, "PKParameter"] == uniqueQuantitiesAndPKParameters$PKParameter[i], ]
+    popDfPkOp <- unsortedPopDfPkOp[order(-abs(unsortedPopDfPkOp$Value)), ]
+
+    print(unsortedPopDfPkOp)
+    print(popDfPkOp)
+
     plotObject <- getPkParameterPopulationSensitivityPlot(
       data = popDfPkOp,
       title = paste("Population sensitivity of", pk, "of", op),
