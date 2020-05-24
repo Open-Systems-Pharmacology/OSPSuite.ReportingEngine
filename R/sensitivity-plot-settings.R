@@ -9,7 +9,8 @@ SensitivityPlotSettings <- R6::R6Class(
     #' Create a `SensitivityPlotSettings` object
     #' @param totalSensitivityThreshold cut-off used for plots of the most sensitive parameters
     #' @return A new `SensitivityAnalysisSettings` object
-    initialize = function(totalSensitivityThreshold = NULL) {
+    initialize = function(totalSensitivityThreshold = NULL,
+                          variableParameterPaths = NULL) {
       self$totalSensitivityThreshold <- getDefaultTotalSensitivityThreshold(totalSensitivityThreshold = totalSensitivityThreshold,
                                                                             variableParameterPaths = variableParameterPaths)
       }
