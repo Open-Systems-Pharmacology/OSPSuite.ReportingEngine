@@ -32,6 +32,9 @@
 "Organism|Lung|Interstitial|Raltegravir|Concentration","Organism-Heart-Volume","Vd",-0.000900498508390578
 "Organism|Lung|Interstitial|Raltegravir|Concentration","Organism-Lung-Volume","Vd",-0.00745132466031955
 "Organism|Lung|Interstitial|Raltegravir|Concentration","Organism-Kidney-Volume","Vd",0.402311989957341
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Organism-Heart-Volume","F_tend",0.00155562392274674
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Organism-Lung-Volume","F_tend",0.011507197244237
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Organism-Kidney-Volume","F_tend",-0.426220146091005
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","C_max",-0.00708674351888191
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","C_max",-0.0388390022264894
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","C_max",-0.11804437578372
@@ -65,6 +68,9 @@
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","Vd",-0.000884032946398588
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","Vd",-0.00743500879740103
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","Vd",0.40232579074329
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","F_tend",0.00154959112956777
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","F_tend",0.0114971810805011
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","F_tend",-0.426229957455677
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","C_max",-0.00704926695951468
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","C_max",-0.0384761880550619
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","C_max",-0.11882899218731
@@ -98,3 +104,6 @@
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","Vd",-0.000905767359839397
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","Vd",-0.00719496870394399
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","Vd",0.402299767757627
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","F_tend",0.00157474173560978
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","F_tend",0.0110500163720862
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","F_tend",-0.426164069383917
