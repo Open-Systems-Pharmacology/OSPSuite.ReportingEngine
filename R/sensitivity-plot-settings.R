@@ -12,10 +12,11 @@ SensitivityPlotSettings <- R6::R6Class(
     #' @return A new `SensitivityAnalysisSettings` object
     initialize = function(totalSensitivityThreshold = NULL,
                           variableParameterPaths = NULL) {
-      self$totalSensitivityThreshold <- getDefaultTotalSensitivityThreshold(totalSensitivityThreshold = totalSensitivityThreshold,
-                                                                            variableParameterPaths = variableParameterPaths)
-      }
-
+      self$totalSensitivityThreshold <- getDefaultTotalSensitivityThreshold(
+        totalSensitivityThreshold = totalSensitivityThreshold,
+        variableParameterPaths = variableParameterPaths
+      )
+    }
   ),
 
   active = list(
@@ -25,7 +26,7 @@ SensitivityPlotSettings <- R6::R6Class(
         private$.totalSensitivityThreshold
       } else {
         if (!is.null(value)) {
-          validateIsInRange('totalSensitivityThreshold',value,0,1)
+          validateIsInRange("totalSensitivityThreshold", value, 0, 1)
           private$.totalSensitivityThreshold <- value
         }
       }

@@ -493,7 +493,9 @@ plotMeanSensitivity <- function(structureSet,
   )
 
   # TO DO: workout integration of selection of output paths and PK parameters in settings
-  allOutputPaths <- sapply(structureSet$simulationSet$outputs,function(x){x$path}) %||% sapply(simulation$outputSelections$allOutputs, function(output) {
+  allOutputPaths <- sapply(structureSet$simulationSet$outputs, function(x) {
+    x$path
+  }) %||% sapply(simulation$outputSelections$allOutputs, function(output) {
     output$path
   })
   pkParameters <- saResults$allPKParameterNames
@@ -591,25 +593,29 @@ plotPopulationSensitivity <- function(structureSets,
     sensitivityResultsFolder <- file.path(structureSet$workflowFolder, structureSet$sensitivityAnalysisResultsFolder)
     simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
     indexDf <- read.csv(file = structureSet$popSensitivityAnalysisResultsIndexFile)
-    outputPaths <- sapply(structureSet$simulationSet$outputs,function(x){x$path})
+    outputPaths <- sapply(structureSet$simulationSet$outputs, function(x) {
+      x$path
+    })
     populationName <- structureSet$simulationSet$populationName
 
     for (op in outputPaths) {
-      #opIndexDf is sub-dataframe of indexDf that has only the outputs op in the Outputs column
-      opIndexDf <- indexDf[indexDf$Outputs == op,]
+      # opIndexDf is sub-dataframe of indexDf that has only the outputs op in the Outputs column
+      opIndexDf <- indexDf[indexDf$Outputs == op, ]
 
-      #pkParameters are all the entries in the pkParameters column of  opIndexDf
+      # pkParameters are all the entries in the pkParameters column of  opIndexDf
       pkParameters <- unique(opIndexDf$pkParameters)
 
       for (pk in pkParameters) {
         i <- i + 1
 
-        dfForPkAndOp <- getPopSensDfForPkAndOutput(simulation = simulation,
-                                                   sensitivityResultsFolder =sensitivityResultsFolder,
-                                                   indexDf = indexDf,
-                                                   output = op,
-                                                   pkParameter = pk,
-                                                   totalSensitivityThreshold = settings$totalSensitivityThreshold)
+        dfForPkAndOp <- getPopSensDfForPkAndOutput(
+          simulation = simulation,
+          sensitivityResultsFolder = sensitivityResultsFolder,
+          indexDf = indexDf,
+          output = op,
+          pkParameter = pk,
+          totalSensitivityThreshold = settings$totalSensitivityThreshold
+        )
         populationNameCol <- rep(populationName, nrow(dfForPkAndOp))
         dFList[[i]] <- cbind(dfForPkAndOp, data.frame("Population" = populationNameCol))
       }
@@ -662,59 +668,64 @@ plotPopulationSensitivity <- function(structureSets,
 #' @return sortedFilteredIndividualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
 #' @import ospsuite
 getPopSensDfForPkAndOutput <- function(simulation, sensitivityResultsFolder, indexDf, output, pkParameter, totalSensitivityThreshold) {
-
   pkOutputIndexDf <- getPkOutputIndexDf(indexDf, pkParameter, output)
   individualsDfForPKParameter <- NULL
 
-  #Verify that there are SA results for this output and pkParameter combination
-  if ( nrow(pkOutputIndexDf) > 0 ){
+  # Verify that there are SA results for this output and pkParameter combination
+  if (nrow(pkOutputIndexDf) > 0) {
     dfList <- list()
 
-    #Loop through the quantiles for this output and pkParameter combination
-    for (n in 1:nrow(pkOutputIndexDf)){
+    # Loop through the quantiles for this output and pkParameter combination
+    for (n in 1:nrow(pkOutputIndexDf)) {
 
-      #Current quantile
+      # Current quantile
       quantile <- pkOutputIndexDf$Quantile[n]
 
-      #Individual corresponding to current quantile
+      # Individual corresponding to current quantile
       individualId <- pkOutputIndexDf$IndividualId[n]
 
       # SA results file corresponding to individual correspinding to current quantile
       saResultsFileName <- pkOutputIndexDf$Filename[n]
 
-      #import SA results for individual corresponding to current quantile
-      individualSAResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(simulation = simulation,
-                                                                               filePaths = file.path(sensitivityResultsFolder,saResultsFileName))
+      # import SA results for individual corresponding to current quantile
+      individualSAResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(
+        simulation = simulation,
+        filePaths = file.path(sensitivityResultsFolder, saResultsFileName)
+      )
 
-      #filter out low sensitivity parameters for current individual and current output and pkParameter using totalSensitivityThreshold
-      filteredIndividualSAResults <- individualSAResults$allPKParameterSensitivitiesFor(pkParameterName = pkParameter,
-                                                                                        outputPath = output ,
-                                                                                        totalSensitivityThreshold = totalSensitivityThreshold)
+      # filter out low sensitivity parameters for current individual and current output and pkParameter using totalSensitivityThreshold
+      filteredIndividualSAResults <- individualSAResults$allPKParameterSensitivitiesFor(
+        pkParameterName = pkParameter,
+        outputPath = output,
+        totalSensitivityThreshold = totalSensitivityThreshold
+      )
 
-      #Verify that there exist SA results within the threshold given by totalSensitivityThreshold for this individual, this output and this pkParameter
-      if (length(filteredIndividualSAResults)>0){
+      # Verify that there exist SA results within the threshold given by totalSensitivityThreshold for this individual, this output and this pkParameter
+      if (length(filteredIndividualSAResults) > 0) {
 
-        #Build a list of sensitivities to parameters containing each sensitivity result falling within the threshold given by totalSensitivityThreshold
-        listOfFilteredIndividualSAResults <- lapply(filteredIndividualSAResults,function(x){
-          list("QuantityPath" = x$outputPath,
-               "Parameter" = x$parameterPath,
-               "PKParameter" = x$pkParameterName,
-               "Value" = x$value)})
+        # Build a list of sensitivities to parameters containing each sensitivity result falling within the threshold given by totalSensitivityThreshold
+        listOfFilteredIndividualSAResults <- lapply(filteredIndividualSAResults, function(x) {
+          list(
+            "QuantityPath" = x$outputPath,
+            "Parameter" = x$parameterPath,
+            "PKParameter" = x$pkParameterName,
+            "Value" = x$value
+          )
+        })
 
-        #Merge list into a dataframe
-        individualDf <- do.call(rbind.data.frame,listOfFilteredIndividualSAResults)
+        # Merge list into a dataframe
+        individualDf <- do.call(rbind.data.frame, listOfFilteredIndividualSAResults)
 
-        #Append dataframe for current individual, current output and current pkParameter to the list dFlist
+        # Append dataframe for current individual, current output and current pkParameter to the list dFlist
         dfList[[n]] <- cbind(individualDf, data.frame("Quantile" = rep(quantile, nrow(individualDf)), "individualId" = rep(individualId, nrow(individualDf))))
       }
     }
 
-    #Merge dFlist into one dataframe for all individuals for current output and current pkParameter
+    # Merge dFlist into one dataframe for all individuals for current output and current pkParameter
     individualsDfForPKParameter <- do.call(rbind.data.frame, dfList)
-
   }
 
-return(individualsDfForPKParameter)
+  return(individualsDfForPKParameter)
 }
 
 
@@ -767,9 +778,9 @@ getPkParameterPopulationSensitivityPlot <- function(data, title, plotConfigurati
 #' @description return the default totalSensitivityThreshold to be used in a population sensitivity analysis plot
 #' @param variableParameterPaths vector of paths of parameters to vary when performing sensitivity analysis
 #' @param totalSensitivityThreshold cut-off used for plots of the most sensitive parameters
-getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold,variableParameterPaths) {
-  if (is.null( totalSensitivityThreshold )){
-    if ( is.null(variableParameterPaths) ){
+getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold, variableParameterPaths) {
+  if (is.null(totalSensitivityThreshold)) {
+    if (is.null(variableParameterPaths)) {
       totalSensitivityThreshold <- 0.9
     } else {
       totalSensitivityThreshold <- 1
@@ -777,5 +788,3 @@ getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold,variab
   }
   return(totalSensitivityThreshold)
 }
-
-

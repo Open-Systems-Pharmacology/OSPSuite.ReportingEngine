@@ -80,13 +80,13 @@ validateIsPositive <- function(object, nullAllowed = FALSE) {
 }
 
 
-validateIsInRange <- function(variableName, value, lowerBound , upperBound, nullAllowed = FALSE) {
-  validateIsOfLength(value,1)
-  validateIsOfLength(lowerBound,1)
-  validateIsOfLength(upperBound,1)
-  validateIsOfType(c(value, lowerBound , upperBound), c("numeric"), nullAllowed)
-  if ( (value < lowerBound) | (value > upperBound) ) {
-    logErrorThenStop(messages$outsideRange(variableName , value, lowerBound , upperBound))
+validateIsInRange <- function(variableName, value, lowerBound, upperBound, nullAllowed = FALSE) {
+  validateIsOfLength(value, 1)
+  validateIsOfLength(lowerBound, 1)
+  validateIsOfLength(upperBound, 1)
+  validateIsOfType(c(value, lowerBound, upperBound), c("numeric"), nullAllowed)
+  if ((value < lowerBound) | (value > upperBound)) {
+    logErrorThenStop(messages$outsideRange(variableName, value, lowerBound, upperBound))
   }
 }
 

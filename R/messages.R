@@ -93,10 +93,7 @@ messages <- list(
     paste(path, "is an invalid output path for simulation", simName, ".")
   },
 
-  outsideRange = function(variableName , value , lowerBound , upperBound) {
-    paste0(variableName, " has value " , value, ", which lies outside the allowable range [",lowerBound,",",upperBound,"].")
+  outsideRange = function(variableName, value, lowerBound, upperBound) {
+    paste0(variableName, " has value ", value, ", which lies outside the allowable range [", lowerBound, ",", upperBound, "].")
   }
-
-
-
 )

@@ -27,8 +27,10 @@ SensitivityAnalysisSettings <- R6::R6Class(
       self$quantileVec <- quantileVec %||% defaultQuantileVec
       self$variableParameterPaths <- variableParameterPaths
       self$pkParameterSelection <- pkParameterSelection
-      self$totalSensitivityThreshold <- getDefaultTotalSensitivityThreshold(totalSensitivityThreshold = totalSensitivityThreshold,
-                                                                            variableParameterPaths = variableParameterPaths)
+      self$totalSensitivityThreshold <- getDefaultTotalSensitivityThreshold(
+        totalSensitivityThreshold = totalSensitivityThreshold,
+        variableParameterPaths = variableParameterPaths
+      )
       self$showProgress <- showProgress
     }
   ),
@@ -101,7 +103,7 @@ SensitivityAnalysisSettings <- R6::R6Class(
         private$.totalSensitivityThreshold
       } else {
         if (!is.null(value)) {
-          validateIsInRange('totalSensitivityThreshold',value,0,1)
+          validateIsInRange("totalSensitivityThreshold", value, 0, 1)
           private$.totalSensitivityThreshold <- value
         }
       }
