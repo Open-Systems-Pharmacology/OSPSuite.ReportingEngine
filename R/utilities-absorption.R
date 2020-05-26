@@ -21,6 +21,7 @@ plotMeanAbsorption <- function(structureSet,
 
   resultsByCompound <- list()
   absorptionPlots <- list()
+  absorptionCaptions <- list()
   for (compound in appliedMolecules) {
     fractionAbsorbedInVenousBloodPath <- paste0("Organism|VenousBlood|*|", compound$name)
     fractionAbsorbedInPortalVeinPath <- paste0("Organism|PortalVein|*|", compound$name)
@@ -169,6 +170,8 @@ plotMeanAbsorption <- function(structureSet,
       ),
       plotConfiguration = plotConfigurations[["absorptionPlot"]]
     )
+
+    absorptionCaptions[[result$compoundName]] <- paste0("Absorption of ", result$compoundName)
   }
 
   timeProfiles <- lapply(resultsByCompound, function(result) {
@@ -178,7 +181,8 @@ plotMeanAbsorption <- function(structureSet,
 
   return(list(
     plots = absorptionPlots,
-    tables = timeProfiles
+    tables = timeProfiles,
+    captions = absorptionCaptions
   ))
 }
 
@@ -210,9 +214,11 @@ plotAbsorptionTimeProfile <- function(data,
     dataMapping = timeVsFractionDataMapping
   )
 
-  timeVsFractionPlot <- tlf::addLine(data = data,
-                                     metaData = metaData,
-                                     dataMapping = timeVsFractionDataMapping, 
-                                     plotConfiguration = timeVsFractionPlotConfiguration)
+  timeVsFractionPlot <- tlf::addLine(
+    data = data,
+    metaData = metaData,
+    dataMapping = timeVsFractionDataMapping,
+    plotConfiguration = timeVsFractionPlotConfiguration
+  )
   return(timeVsFractionPlot)
 }
