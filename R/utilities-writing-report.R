@@ -136,10 +136,39 @@ mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd()) {
 renderReport <- function(fileName, logFolder = getwd()) {
   reportConfig <- file.path(logFolder, "reportConfig.txt")
 
-  # TO DO: add numbering of first '#', '##' and '###' elements
+  # Numbering of '#', '##' and figures
+  # The method below might not be the most efficient
+  fileContent <- readLines(fileName)
+  firstElements <- NULL
+  for (lineContent in fileContent) {
+    firstElements <- cbind(firstElements, unlist(strsplit(lineContent, " "))[1])
+  }
+  firstElements <- as.character(firstElements)
+
+  figureCount <- 1
+  titleCount <- 1
+  subtitleCount <- 1
+  for (lineIndex in seq_along(fileContent)) {
+    if (firstElements[lineIndex] %in% "Figure:") {
+      fileContent[lineIndex] <- gsub(pattern = "Figure:", replacement = paste0("Figure ", figureCount, ":"), x = fileContent[lineIndex])
+      figureCount <- figureCount + 1
+    }
+    if (firstElements[lineIndex] %in% "#") {
+      fileContent[lineIndex] <- gsub(pattern = "#", replacement = paste0("# ", titleCount, ". "), x = fileContent[lineIndex])
+      titleCount <- titleCount + 1
+      subtitleCount <- 1
+    }
+    if (firstElements[lineIndex] %in% "##") {
+      fileContent[lineIndex] <- gsub(pattern = "##", replacement = paste0("## ", titleCount, ".", titleCount, ". "), x = fileContent[lineIndex])
+      subtitleCount <- subtitleCount + 1
+    }
+  }
+  
+  # Update file
+  write(fileContent, file = fileName, sep = "\n")
 
   # Table of content
-  write("toc: ", file = reportConfig)
+  write(c("toc: ", "self-contained:"), file = reportConfig, sep = "\n")
   knitr::pandoc(input = fileName, format = "gfm", config = reportConfig, ext = "md")
   unlink(reportConfig, recursive = TRUE)
 
