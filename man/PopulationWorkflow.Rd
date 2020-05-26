@@ -27,8 +27,6 @@ R6 class for Reporting Engine Population Workflow
 \item{\code{plotPKParameters}}{R6 class `Task` for PK parameters plot}
 
 \item{\code{plotSensitivity}}{R6 class `Task` for sensitivity plot}
-
-\item{\code{resetReport}}{R6 class `Task` for saving report in a specific format}
 }
 \if{html}{\out{</div>}}
 }
@@ -43,7 +41,6 @@ R6 class for Reporting Engine Population Workflow
 \item \href{#method-plotGoFSettings}{\code{PopulationWorkflow$plotGoFSettings()}}
 \item \href{#method-plotPKParametersSettings}{\code{PopulationWorkflow$plotPKParametersSettings()}}
 \item \href{#method-plotSensitivitySettings}{\code{PopulationWorkflow$plotSensitivitySettings()}}
-\item \href{#method-resetReportSettings}{\code{PopulationWorkflow$resetReportSettings()}}
 \item \href{#method-runWorkflow}{\code{PopulationWorkflow$runWorkflow()}}
 \item \href{#method-clone}{\code{PopulationWorkflow$clone()}}
 }
@@ -198,6 +195,7 @@ Define plot demography `PlotTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotDemographySettings(
   reportTitle = defaultWorkflowTitles$plotDemography,
+  fileName = defaultWorkflowAppendices$plotDemography,
   taskFunction = plotDemographyParameters,
   outputFolder = defaultTaskOutputFolders$plotDemography,
   active = FALSE,
@@ -212,6 +210,8 @@ Define plot demography `PlotTask` settings
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{reportTitle}}{section title of plot task result within report}
+
+\item{\code{fileName}}{name of report appendix file associated to task}
 
 \item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
 
@@ -241,6 +241,7 @@ Define Goodness of fit `PlotTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotGoFSettings(
   reportTitle = defaultWorkflowTitles$plotGoF,
+  fileName = defaultWorkflowAppendices$plotGoF,
   taskFunction = plotPopulationGoodnessOfFit,
   outputFolder = defaultTaskOutputFolders$plotGoF,
   active = FALSE,
@@ -253,6 +254,8 @@ Define Goodness of fit `PlotTask` settings
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{reportTitle}}{section title of plot task result within report}
+
+\item{\code{fileName}}{name of report appendix file associated to task}
 
 \item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
 
@@ -278,6 +281,7 @@ Define PK parameters `PlotPKParametersTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotPKParametersSettings(
   reportTitle = defaultWorkflowTitles$plotPKParameters,
+  fileName = defaultWorkflowAppendices$plotPKParameters,
   taskFunction = plotPopulationPKParameters,
   outputFolder = defaultTaskOutputFolders$plotPKParameters,
   active = FALSE,
@@ -292,6 +296,8 @@ Define PK parameters `PlotPKParametersTask` settings
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{reportTitle}}{section title of plot task result within report}
+
+\item{\code{fileName}}{name of report appendix file associated to task}
 
 \item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
 
@@ -321,6 +327,7 @@ Define sensitivity analysis `PlotTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotSensitivitySettings(
   reportTitle = defaultWorkflowTitles$plotSensitivity,
+  fileName = defaultWorkflowAppendices$plotSensitivity,
   taskFunction = plotPopulationSensitivity,
   outputFolder = defaultTaskOutputFolders$plotSensitivity,
   active = FALSE,
@@ -335,6 +342,8 @@ Define sensitivity analysis `PlotTask` settings
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{reportTitle}}{section title of plot task result within report}
+
+\item{\code{fileName}}{name of report appendix file associated to task}
 
 \item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
 
@@ -354,35 +363,7 @@ Default value is `FALSE`}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A `PlotTask` object for sensitivity plots for a single population
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-resetReportSettings"></a>}}
-\subsection{Method \code{resetReportSettings()}}{
-Define reset report `Task` settings
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$resetReportSettings(
-  active = FALSE,
-  message = defaultWorkflowMessages$resetReport,
-  settings = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{active}}{logical indicating if `Task` is performed in worklfow.
-Default value is `FALSE`}
-
-\item{\code{message}}{message indicating what the `task` does}
-
-\item{\code{settings}}{specific settings for task}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A `PlotTask` object for goodness of fit plots
+A `PopulationPlotTask` object for sensitivity plots for a single population
 }
 }
 \if{html}{\out{<hr>}}

@@ -74,7 +74,7 @@ A new `PopulationPlotTask` object
 \subsection{Method \code{saveResults()}}{
 Save results from task run.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationPlotTask$saveResults(taskResults, reportFile)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PopulationPlotTask$saveResults(taskResults)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -83,7 +83,7 @@ Save results from task run.
 \item{\code{taskResults}}{list of results from task run.
 Results contains at least 2 fields: `plots` and `tables`}
 
-\item{\code{reportFile}}{name of report}
+\item{\code{self$fileName}}{name of report}
 }
 \if{html}{\out{</div>}}
 }
@@ -93,15 +93,13 @@ Results contains at least 2 fields: `plots` and `tables`}
 \subsection{Method \code{runTask()}}{
 Run task and save its output
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationPlotTask$runTask(structureSets, reportFileName)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PopulationPlotTask$runTask(structureSets)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{structureSets}}{list of `SimulationStructure` R6 class}
-
-\item{\code{reportFileName}}{name of report file}
 }
 \if{html}{\out{</div>}}
 }

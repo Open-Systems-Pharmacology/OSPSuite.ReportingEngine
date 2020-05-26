@@ -27,8 +27,6 @@ R6 class for Reporting Engine Mean Model Workflow
 \item{\code{plotPKParameters}}{R6 class `PlotTask` for PK parameters plot}
 
 \item{\code{plotSensitivity}}{R6 class `PlotTask` for sensitivity plot}
-
-\item{\code{resetReport}}{R6 class `Task` for saving report in a specific format}
 }
 \if{html}{\out{</div>}}
 }
@@ -44,7 +42,6 @@ R6 class for Reporting Engine Mean Model Workflow
 \item \href{#method-plotMassBalanceSettings}{\code{MeanModelWorkflow$plotMassBalanceSettings()}}
 \item \href{#method-plotAbsorptionSettings}{\code{MeanModelWorkflow$plotAbsorptionSettings()}}
 \item \href{#method-plotSensitivitySettings}{\code{MeanModelWorkflow$plotSensitivitySettings()}}
-\item \href{#method-resetReportSettings}{\code{MeanModelWorkflow$resetReportSettings()}}
 \item \href{#method-runWorkflow}{\code{MeanModelWorkflow$runWorkflow()}}
 \item \href{#method-clone}{\code{MeanModelWorkflow$clone()}}
 }
@@ -191,6 +188,7 @@ Define Goodness of fit `PlotTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$plotGoFSettings(
   reportTitle = defaultWorkflowTitles$plotGoF,
+  fileName = defaultWorkflowAppendices$plotGoF,
   taskFunction = plotMeanGoodnessOfFit,
   outputFolder = defaultTaskOutputFolders$plotGoF,
   active = FALSE,
@@ -203,6 +201,8 @@ Define Goodness of fit `PlotTask` settings
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{reportTitle}}{section title of plot task result within report}
+
+\item{\code{fileName}}{name of report appendix file associated to task}
 
 \item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
 
@@ -228,6 +228,7 @@ Define PK parameters `PlotPKParametersTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$plotPKParametersSettings(
   reportTitle = defaultWorkflowTitles$plotPKParameters,
+  fileName = defaultWorkflowAppendices$plotPKParameters,
   taskFunction = plotMeanPKParameters,
   outputFolder = defaultTaskOutputFolders$plotPKParameters,
   active = FALSE,
@@ -240,6 +241,8 @@ Define PK parameters `PlotPKParametersTask` settings
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{reportTitle}}{section title of plot task result within report}
+
+\item{\code{fileName}}{name of report appendix file associated to task}
 
 \item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
 
@@ -265,6 +268,7 @@ Define Mass Balance `PlotTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$plotMassBalanceSettings(
   reportTitle = defaultWorkflowTitles$plotMassBalance,
+  fileName = defaultWorkflowAppendices$plotMassBalance,
   taskFunction = plotMeanMassBalance,
   outputFolder = defaultTaskOutputFolders$plotMassBalance,
   active = FALSE,
@@ -277,6 +281,8 @@ Define Mass Balance `PlotTask` settings
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{reportTitle}}{section title of plot task result within report}
+
+\item{\code{fileName}}{name of report appendix file associated to task}
 
 \item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
 
@@ -302,6 +308,7 @@ Define Absorption `PlotTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$plotAbsorptionSettings(
   reportTitle = defaultWorkflowTitles$plotAbsorption,
+  fileName = defaultWorkflowAppendices$plotAbsorption,
   taskFunction = plotMeanAbsorption,
   outputFolder = defaultTaskOutputFolders$plotAbsorption,
   active = FALSE,
@@ -314,6 +321,8 @@ Define Absorption `PlotTask` settings
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{reportTitle}}{section title of plot task result within report}
+
+\item{\code{fileName}}{name of report appendix file associated to task}
 
 \item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
 
@@ -339,6 +348,7 @@ Define sensitivity analysis `PlotTask` settings
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$plotSensitivitySettings(
   reportTitle = defaultWorkflowTitles$plotSensitivity,
+  fileName = defaultWorkflowAppendices$plotSensitivity,
   taskFunction = plotMeanSensitivity,
   outputFolder = defaultTaskOutputFolders$plotSensitivity,
   active = FALSE,
@@ -352,39 +362,13 @@ Define sensitivity analysis `PlotTask` settings
 \describe{
 \item{\code{reportTitle}}{section title of plot task result within report}
 
+\item{\code{fileName}}{name of report appendix file associated to task}
+
 \item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
 
 \item{\code{outputFolder}}{folder where `Task` output is saved}
 
 \item{\code{active}}{logical indicating if `task` is performed in worklfow.
-Default value is `FALSE`}
-
-\item{\code{message}}{message indicating what the `task` does}
-
-\item{\code{settings}}{specific settings for task}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A `PlotTask` object for goodness of fit plots
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-resetReportSettings"></a>}}
-\subsection{Method \code{resetReportSettings()}}{
-Define reset report `Task` settings
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$resetReportSettings(
-  active = FALSE,
-  message = defaultWorkflowMessages$resetReport,
-  settings = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{active}}{logical indicating if `Task` is performed in worklfow.
 Default value is `FALSE`}
 
 \item{\code{message}}{message indicating what the `task` does}
