@@ -91,6 +91,15 @@ defaultWorkflowTitles <- list(
   "plotDemography" = "Demography"
 )
 
+defaultWorkflowAppendices <- list(
+  "plotGoF" = "appendix-time-profile.md",
+  "plotPKParameters" = "appendix-pk-parameters.md",
+  "plotMassBalance" = "appendix-mass-balance.md",
+  "plotAbsorption" = "appendix-absorption.md",
+  "plotSensitivity" = "appendix-sensitivity-analysis.md",
+  "plotDemography" = "appendix-demography.md"
+)
+
 defaultWorkflowMessages <- list(
   "simulate" = "Perform simulation task",
   "calculatePKParameters" = "Calculate PK parameters task",

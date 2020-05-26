@@ -1,6 +1,7 @@
 #' @title PlotTask
 #' @description  R6 class for PlotTask settings
 #' @field title section title in the report corresponding to the task
+#' @field fileName name of report appendix file associated to task
 #' @field getTaskResults function called by task that computes and format figure results
 #' @export
 PlotTask <- R6::R6Class(
@@ -9,19 +10,23 @@ PlotTask <- R6::R6Class(
 
   public = list(
     title = NULL,
+    fileName = NULL,
     getTaskResults = NULL,
 
     #' @description
     #' Create a `PlotTask` object
     #' @param reportTitle title to be printed in the report
+    #' @param fileName name of report appendix file associated to task
     #' @param getTaskResults function called by task that computes and format figure results
     #' @param ... input parameters inherited from `Task` R6 class
     #' @return A new `PlotTask` object
     initialize = function(reportTitle = NULL,
+                          fileName = NULL,
                           getTaskResults = NULL,
                           ...) {
       super$initialize(...)
       self$title <- reportTitle
+      self$fileName <- file.path(self$workflowFolder, fileName)
       self$getTaskResults <- getTaskResults
     },
 
@@ -30,13 +35,15 @@ PlotTask <- R6::R6Class(
     #' @param set R6 class `SimulationStructure`
     #' @param taskResults list of results from task run.
     #' Results contains at least 2 fields: `plots` and `tables`
-    #' @param reportFile name of report
     saveResults = function(set,
-                           taskResults,
-                           reportFile) {
+                           taskResults) {
+      addTextChunk(
+        self$fileName,
+        paste0("## ", self$title, " for ", set$simulationSet$simulationSetName),
+        logFolder = self$workflowFolder
+      )
       for (plotName in names(taskResults$plots)) {
         plotFileName <- file.path(
-          self$workflowFolder,
           self$outputFolder,
           getDefaultFileName(set$simulationSet$simulationSetName,
             suffix = plotName,
@@ -45,7 +52,7 @@ PlotTask <- R6::R6Class(
         )
         # TO DO: define parameters from settings/plotConfiguration
         ggplot2::ggsave(
-          filename = plotFileName,
+          filename = file.path(self$workflowFolder, plotFileName),
           plot = taskResults$plots[[plotName]],
           width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
         )
@@ -56,7 +63,7 @@ PlotTask <- R6::R6Class(
         )
 
         addFigureChunk(
-          fileName = reportFile,
+          fileName = self$fileName,
           figureFile = plotFileName,
           logFolder = self$workflowFolder
         )
@@ -80,7 +87,7 @@ PlotTask <- R6::R6Class(
         # If the task output no plot, but tables, tables will be included in the report
         if (is.null(taskResults$plots)) {
           addTableChunk(
-            fileName = reportFile,
+            fileName = self$fileName,
             tableFile = tableFileName,
             logFolder = self$workflowFolder
           )
@@ -97,15 +104,15 @@ PlotTask <- R6::R6Class(
     #' @description
     #' Run task and save its output
     #' @param structureSets list of `SimulationStructure` R6 class
-    #' @param reportFileName name of report file
-    runTask = function(structureSets,
-                       reportFileName) {
+    #' @param self$fileName name of report file
+    runTask = function(structureSets) {
       logWorkflow(
         message = paste0("Starting: ", self$message),
         pathFolder = self$workflowFolder
       )
+      resetReport(self$fileName, self$workflowFolder)
       addTextChunk(
-        reportFileName,
+        self$fileName,
         paste0("# ", self$title),
         logFolder = self$workflowFolder
       )
@@ -122,12 +129,6 @@ PlotTask <- R6::R6Class(
           pathFolder = self$workflowFolder
         )
         if (self$validateInput()) {
-          addTextChunk(
-            reportFileName,
-            paste0("## ", self$title, " for ", set$simulationSet$simulationSetName),
-            logFolder = self$workflowFolder
-          )
-
           taskResults <- self$getTaskResults(
             set,
             self$workflowFolder,
@@ -140,18 +141,12 @@ PlotTask <- R6::R6Class(
               taskResults$residuals$data
             )
           }
-
-          self$saveResults(
-            set,
-            taskResults,
-            reportFileName
-          )
+          self$saveResults(set, taskResults)
         }
       }
 
       if (!is.null(residualsAcrossAllSimulations)) {
         plotFileName <- file.path(
-          self$workflowFolder,
           self$outputFolder,
           getDefaultFileName(
             suffix = "residuals",
@@ -168,7 +163,6 @@ PlotTask <- R6::R6Class(
             sep = ""
           )
         )
-
         write.csv(residualsAcrossAllSimulations,
           file = tableFileName,
           row.names = FALSE
@@ -194,7 +188,7 @@ PlotTask <- R6::R6Class(
 
         # TO DO: define parameters from settings/plotConfiguration
         ggplot2::ggsave(
-          filename = plotFileName,
+          filename = file.path(self$workflowFolder, plotFileName),
           plot = residualHistogramPlot,
           width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
         )
@@ -205,13 +199,13 @@ PlotTask <- R6::R6Class(
         )
 
         addTextChunk(
-          reportFileName,
+          self$fileName,
           "## Residuals across all simulations",
           logFolder = self$workflowFolder
         )
 
         addFigureChunk(
-          fileName = reportFileName,
+          fileName = self$fileName,
           figureFile = plotFileName,
           logFolder = self$workflowFolder
         )

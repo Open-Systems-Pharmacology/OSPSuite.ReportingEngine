@@ -17,6 +17,7 @@ resetReport <- function(fileName,
     message = paste0("Report '", fileName, "' was initialized successfully."),
     pathFolder = logFolder
   )
+  return(invisible())
 }
 
 #' @title addFigureChunk
@@ -47,6 +48,7 @@ addFigureChunk <- function(fileName,
     pathFolder = logFolder,
     logTypes = LogTypes$Debug
   )
+  return(invisible())
 }
 
 #' @title addTableChunk
@@ -78,6 +80,7 @@ addTableChunk <- function(fileName,
     pathFolder = logFolder,
     logTypes = LogTypes$Debug
   )
+  return(invisible())
 }
 
 #' @title addTextChunk
@@ -101,4 +104,48 @@ addTextChunk <- function(fileName,
     pathFolder = logFolder,
     logTypes = LogTypes$Debug
   )
+  return(invisible())
+}
+
+#' @title mergeMarkdowndFiles
+#' @description Merge all appendices reports into one final report
+#' @param inputFiles name of .md files to merge
+#' @param outputFile text to include in the document
+#' @param logFolder folder where the logs are saved
+#' @export
+mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd()) {
+  resetReport(outputFile)
+
+  for (fileName in inputFiles) {
+    fileContent <- readLines(fileName)
+    addTextChunk(outputFile, fileContent, logFolder = logFolder)
+  }
+
+  logWorkflow(
+    message = paste0("Reports '", paste0(inputFiles, collapse = "', '"), "' were successfully merged into '", outputFile, "'"),
+    pathFolder = logFolder
+  )
+  return(invisible())
+}
+
+#' @title renderReport
+#' @description Render report with number sections and table of content
+#' @param fileName name of .md file to render
+#' @param logFolder folder where the logs are saved
+#' @export
+renderReport <- function(fileName, logFolder = getwd()) {
+  reportConfig <- file.path(logFolder, "reportConfig.txt")
+
+  # TO DO: add numbering of first '#', '##' and '###' elements
+
+  # Table of content
+  write("toc: ", file = reportConfig)
+  knitr::pandoc(input = fileName, format = "gfm", config = reportConfig, ext = "md")
+  unlink(reportConfig, recursive = TRUE)
+
+  logWorkflow(
+    message = paste0("Table of content added to Report '", fileName, "'"),
+    pathFolder = logFolder
+  )
+  return(invisible())
 }
