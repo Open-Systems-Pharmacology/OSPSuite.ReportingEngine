@@ -165,8 +165,7 @@ plotMeanAbsorption <- function(structureSet,
       dataMapping = tlf::XYGDataMapping$new(
         x = "Time",
         y = "Fraction",
-        color = "Legend",
-        linetype = "Legend"
+        color = "Legend"
       ),
       plotConfiguration = plotConfigurations[["absorptionPlot"]]
     )
@@ -202,29 +201,18 @@ plotAbsorptionTimeProfile <- function(data,
   timeVsFractionDataMapping <- dataMapping %||% tlf::XYGDataMapping$new(
     x = "Time",
     y = "Fraction",
-    color = "Legend",
-    linetype = "Legend"
+    color = "Legend"
   )
 
-  plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
+  timeVsFractionPlotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
     metaData = metaData,
     dataMapping = timeVsFractionDataMapping
   )
 
-  # TO DO: use the new version of tlf to get this plot
-  timeVsFractionPlot <- ggplot2::ggplot()
-  timeVsFractionPlot <- plotConfiguration$setPlotBackground(timeVsFractionPlot)
-  timeVsFractionPlot <- plotConfiguration$setPlotLabels(timeVsFractionPlot)
-
-  timeVsFractionPlot <- timeVsFractionPlot + ggplot2::geom_line(
-    data = data,
-    mapping = ggplot2::aes_string(
-      x = timeVsFractionDataMapping$x,
-      y = timeVsFractionDataMapping$y,
-      color = timeVsFractionDataMapping$groupMapping$color$label,
-      linetype = timeVsFractionDataMapping$groupMapping$linetype$label
-    )
-  )
+  timeVsFractionPlot <- tlf::addLine(data = data,
+                                     metaData = metaData,
+                                     dataMapping = timeVsFractionDataMapping, 
+                                     plotConfiguration = timeVsFractionPlotConfiguration)
   return(timeVsFractionPlot)
 }

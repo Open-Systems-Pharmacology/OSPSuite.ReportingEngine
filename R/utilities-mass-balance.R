@@ -222,10 +222,7 @@ plotMassBalanceTimeProfile <- function(data,
     dataMapping = timeVsAmountDataMapping
   )
 
-  # TO DO: use the new version of tlf to get this plot
-  timeVsAmountPlot <- ggplot2::ggplot()
-  timeVsAmountPlot <- plotConfiguration$setPlotBackground(timeVsAmountPlot)
-  timeVsAmountPlot <- plotConfiguration$setPlotLabels(timeVsAmountPlot)
+  timeVsAmountPlot <- tlf::initializePlot(plotConfiguration)
 
   timeVsAmountPlot <- timeVsAmountPlot + ggplot2::geom_line(
     data = data,
@@ -265,10 +262,7 @@ plotMassBalanceCumulativeTimeProfile <- function(data,
     dataMapping = timeVsAmountDataMapping
   )
 
-  # TO DO: use the new version of tlf to get this plot
-  timeVsAmountPlot <- ggplot2::ggplot()
-  timeVsAmountPlot <- plotConfiguration$setPlotBackground(timeVsAmountPlot)
-  timeVsAmountPlot <- plotConfiguration$setPlotLabels(timeVsAmountPlot)
+  timeVsAmountPlot <- tlf::initializePlot(plotConfiguration)
 
   timeVsAmountPlot <- timeVsAmountPlot + ggplot2::geom_area(
     data = data,

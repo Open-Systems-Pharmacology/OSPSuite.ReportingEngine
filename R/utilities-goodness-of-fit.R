@@ -160,7 +160,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
       plotConfiguration = settings$plotConfigurations[["resVsPred"]]
     )
   }
-
+  
   return(list(
     plots = goodnessOfFitPlots,
     tables = list(timeProfileData = timeProfileData),
@@ -194,25 +194,13 @@ plotMeanTimeProfile <- function(simulatedData,
     plotConfiguration = plotConfiguration
   )
   if (!is.null(observedData)) {
-    dataMapping$groupMapping$shape <- dataMapping$groupMapping$color
     timeProfilePlot <- tlf::addScatter(
       data = observedData,
       metaData = metaData,
       dataMapping = dataMapping,
-      plotConfiguration = plotConfiguration,
       plotObject = timeProfilePlot
     )
   }
-  # Remove guides for unwanted aes_properties
-  timeProfilePlot <- timeProfilePlot +
-    ggplot2::guides(
-      color = ggplot2::guide_legend(title = NULL),
-      shape = "none",
-      linetype = "none",
-      size = "none"
-    ) +
-    ggplot2::labs(title = NULL, subtitle = NULL)
-
   return(timeProfilePlot)
 }
 
@@ -270,12 +258,7 @@ plotMeanObsVsPred <- function(data,
     "Simulated" = identityMinMax
   )
 
-  meanObsVsPredPlot <- tlf::addLine(
-    data = identityLine,
-    metaData = metaData,
-    caption = "Line of identity",
-    plotConfiguration = plotConfiguration
-  )
+  meanObsVsPredPlot <- tlf::addLine(data = identityLine, metaData = metaData, caption = "Line of identity", plotConfiguration = plotConfiguration)
 
   meanObsVsPredPlot <- tlf::addScatter(
     data = data,
@@ -283,22 +266,10 @@ plotMeanObsVsPred <- function(data,
     dataMapping = tlf::XYGDataMapping$new(
       x = "Observed",
       y = "Simulated",
-      color = "Legend",
-      shape = "Legend"
+      color = "Legend"
     ),
-    plotConfiguration = plotConfiguration,
     plotObject = meanObsVsPredPlot
   )
-
-  # Remove unwanted aes properties
-  meanObsVsPredPlot <- meanObsVsPredPlot +
-    ggplot2::guides(
-      color = ggplot2::guide_legend(title = NULL),
-      shape = "none",
-      linetype = "none",
-      size = "none"
-    ) +
-    ggplot2::labs(title = NULL, subtitle = NULL)
 
   return(meanObsVsPredPlot)
 }
@@ -319,8 +290,7 @@ plotMeanResVsTime <- function(data,
   resVsTimeDataMapping <- tlf::XYGDataMapping$new(
     x = "Time",
     y = "Residuals",
-    color = "Legend",
-    shape = "Legend",
+    color = "Legend"
   )
 
   maxRes <- 1.2 * max(abs(data[, resVsTimeDataMapping$y]))
@@ -331,31 +301,17 @@ plotMeanResVsTime <- function(data,
     dataMapping = resVsTimeDataMapping
   )
 
-  meanResVsTimePlot <- tlf::addLine(
-    y = 0,
-    caption = "Line of residuals = 0",
-    plotConfiguration = plotConfiguration
-  )
+  meanResVsTimePlot <- tlf::addLine(y = 0, caption = "Line of residuals = 0", plotConfiguration = plotConfiguration)
 
   meanResVsTimePlot <- tlf::addScatter(
     data = data,
     metaData = metaData,
     dataMapping = resVsTimeDataMapping,
-    plotConfiguration = plotConfiguration,
     plotObject = meanResVsTimePlot
   )
 
-  # Remove unwanted aes properties and hide the warnings it provokes
-  meanResVsTimePlot <- meanResVsTimePlot +
-    ggplot2::scale_y_continuous(limits = c(-maxRes, maxRes)) +
-    ggplot2::guides(
-      color = ggplot2::guide_legend(title = NULL),
-      shape = "none",
-      linetype = "none",
-      size = "none"
-    ) +
-    ggplot2::labs(title = NULL, subtitle = NULL)
-
+  meanResVsTimePlot <- meanResVsTimePlot + ggplot2::scale_y_continuous(limits = c(-maxRes, maxRes))
+    
   return(meanResVsTimePlot)
 }
 
@@ -374,8 +330,7 @@ plotMeanResVsPred <- function(data,
   resVsPredDataMapping <- tlf::XYGDataMapping$new(
     x = "Simulated",
     y = "Residuals",
-    color = "Legend",
-    shape = "Legend"
+    color = "Legend"
   )
 
   maxRes <- 1.2 * max(abs(data[, resVsPredDataMapping$y]))
@@ -386,31 +341,16 @@ plotMeanResVsPred <- function(data,
     dataMapping = resVsPredDataMapping
   )
 
-  meanResVsPredPlot <- tlf::addLine(
-    y = 0,
-    caption = "Line of residuals = 0",
-    plotConfiguration = plotConfiguration
-  )
+  meanResVsPredPlot <- tlf::addLine(y = 0, caption = "Line of residuals = 0", plotConfiguration = plotConfiguration)
 
   meanResVsPredPlot <- tlf::addScatter(
     data = data,
     metaData = metaData,
     dataMapping = resVsPredDataMapping,
-    plotConfiguration = plotConfiguration,
     plotObject = meanResVsPredPlot
   )
 
-  # Remove unwanted aes properties
-  meanResVsPredPlot <- meanResVsPredPlot +
-    ggplot2::scale_y_continuous(limits = c(-maxRes, maxRes)) +
-    ggplot2::guides(
-      color = ggplot2::guide_legend(title = NULL),
-      shape = "none",
-      linetype = "none",
-      size = "none"
-    ) +
-    ggplot2::labs(title = NULL, subtitle = NULL)
-
+  meanResVsPredPlot <- meanResVsPredPlot + ggplot2::scale_y_continuous(limits = c(-maxRes, maxRes))
   return(meanResVsPredPlot)
 }
 
@@ -659,7 +599,6 @@ plotPopulationTimeProfile <- function(simulatedData,
     plotObject = timeProfilePlot
   )
   if (!is.null(observedData)) {
-    dataMapping$groupMapping$shape <- dataMapping$groupMapping$color
     timeProfilePlot <- tlf::addScatter(
       data = observedData,
       metaData = metaData,
@@ -668,16 +607,7 @@ plotPopulationTimeProfile <- function(simulatedData,
       plotObject = timeProfilePlot
     )
   }
-  # Remove guides for unwanted aes_properties + labels not yet handled for ribbons
   timeProfilePlot <- timeProfilePlot +
-    ggplot2::guides(
-      color = ggplot2::guide_legend(title = NULL),
-      shape = "none",
-      linetype = "none",
-      size = "none",
-      fill = ggplot2::guide_legend(title = NULL)
-    ) +
-    ggplot2::labs(title = NULL, subtitle = NULL) +
     ggplot2::xlab(tlf::getLabelWithUnit(metaData$Time$dimension, metaData$Time$unit)) +
     ggplot2::ylab(tlf::getLabelWithUnit(metaData$Concentration$dimension, metaData$Concentration$unit))
 
