@@ -1,16 +1,10 @@
-#------------------------------------------------------------------------------#
-# Advanced example 01: Plot time profile and residuals for mean model workflow #
-#------------------------------------------------------------------------------#
+#----------------------------------------------------------------------------------------------#
+# Advanced example 01: Set and run simulations of sensitivity analysis for mean model workflow #
+#----------------------------------------------------------------------------------------------#
 
 library(ospsuite.reportingengine)
 
 workflowFolder <- "myWorkflowResults"
-
-# Since this example focuses only on the plot, 
-# The simulation of the results is called here
-if(!dir.exists(file.path(workflowFolder, "SimulationResults"))){
-  source("test-example-01-simulations.R")
-}
 
 pkAUC <- PkParameterInfo$new("AUC_inf", displayName = "AUC infinity")
 pkCmax <- PkParameterInfo$new("C_max", displayName = "Cmax")
@@ -50,7 +44,7 @@ meanModelSets <- list(
 )
 
 myMeanWorkflow <- MeanModelWorkflow$new(simulationSets = meanModelSets, workflowFolder = workflowFolder)
-myMeanWorkflow$activateTasks(c("plotGoF"))
-myMeanWorkflow$inactivateTasks(c("simulate"))
+myMeanWorkflow$activateTasks(c("simulate", "meanModelPKParameters", "meanModelSensitivityAnalysis"))
+#myMeanWorkflow$inactivateTasks()
 
 myMeanWorkflow$runWorkflow()
