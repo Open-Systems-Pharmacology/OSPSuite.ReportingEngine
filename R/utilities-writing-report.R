@@ -171,7 +171,7 @@ renderReport <- function(fileName, logFolder = getwd()) {
 
   # Table of content
   # Format = "gfm" keep consistency in title starting with '#'
-  write(c("toc: ", "self-contained:"), file = reportConfig, sep = "\n")
+  write(c("toc: ", "self-contained:", "wrap: none"), file = reportConfig, sep = "\n")
   knitr::pandoc(input = fileName, format = "gfm", config = reportConfig, ext = "md")
   unlink(reportConfig, recursive = TRUE)
 
