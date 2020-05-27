@@ -82,7 +82,8 @@ PopulationPlotTask <- R6::R6Class(
 
           write.csv(taskResults$tables[[plotName]],
             file = tableFileName,
-            row.names = FALSE
+            row.names = FALSE,
+            fileEncoding = "UTF-8"
           )
 
           addTableChunk(

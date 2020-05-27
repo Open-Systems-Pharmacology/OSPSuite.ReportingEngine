@@ -80,7 +80,8 @@ PlotTask <- R6::R6Class(
 
         write.csv(taskResults$tables[[tableName]],
           file = tableFileName,
-          row.names = FALSE
+          row.names = FALSE,
+          fileEncoding = "UTF-8"
         )
 
         # If the task output no plot, but tables, tables will be included in the report

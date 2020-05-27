@@ -308,7 +308,7 @@ MeanModelWorkflow <- R6::R6Class(
         self[[taskName]]$fileName
       }))
       appendices <- appendices[file.exists(appendices)]
-      if (!is.null(appendices)) {
+      if (length(appendices)>0) {
         mergeMarkdowndFiles(appendices, self$reportFileName, logFolder = self$workflowFolder)
         renderReport(self$reportFileName, logFolder = self$workflowFolder)
       }

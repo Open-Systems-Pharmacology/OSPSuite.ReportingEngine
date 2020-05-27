@@ -12,7 +12,9 @@ resetReport <- function(fileName,
       logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error)
     )
   }
-  write("", file = fileName, sep = "\n")
+  fileObject <- file(fileName, encoding = "UTF-8")
+  write("", file = fileObject, sep = "\n")
+  close(fileObject)
   logWorkflow(
     message = paste0("Report '", fileName, "' was initialized successfully."),
     pathFolder = logFolder
@@ -42,7 +44,9 @@ addFigureChunk <- function(fileName,
     ""
   )
 
-  write(mdText, file = fileName, append = TRUE, sep = "\n")
+  fileObject <- file(fileName, encoding = "UTF-8", open = "at")
+  write(mdText, file = fileObject, append = TRUE, sep = "\n")
+  close(fileObject)
   logWorkflow(
     message = paste0("Figure path '", figureFile, "' added to report '", fileName, "'."),
     pathFolder = logFolder,
@@ -63,7 +67,8 @@ addTableChunk <- function(fileName,
                           tableCaption = "",
                           logFolder = getwd()) {
   table <- read.csv(tableFile,
-    check.names = FALSE
+    check.names = FALSE,
+    fileEncoding = "UTF-8"
   )
 
   # TO DO: kable has options such as number of decimals and align,
@@ -74,7 +79,9 @@ addTableChunk <- function(fileName,
     ""
   )
 
-  write(mdText, file = fileName, append = TRUE, sep = "\n")
+  fileObject <- file(fileName, encoding = "UTF-8", open = "at")
+  write(mdText, file = fileObject, append = TRUE, sep = "\n")
+  close(fileObject)
   logWorkflow(
     message = paste0("Table path '", tableFile, "' added to report '", fileName, "'."),
     pathFolder = logFolder,
@@ -92,13 +99,9 @@ addTableChunk <- function(fileName,
 addTextChunk <- function(fileName,
                          text,
                          logFolder = getwd()) {
-  write(c(
-    "",
-    text,
-    ""
-  ),
-  file = fileName, append = TRUE, sep = "\n"
-  )
+  fileObject <- file(fileName, encoding = "UTF-8", open = "at")
+  write(c("", text, ""), file = fileObject, append = TRUE, sep = "\n")
+  close(fileObject)
   logWorkflow(
     message = paste0("Text '", text, "' added to report '", fileName, "'."),
     pathFolder = logFolder,
@@ -117,13 +120,14 @@ mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd()) {
   resetReport(outputFile)
 
   for (fileName in inputFiles) {
-    fileContent <- readLines(fileName)
+    fileContent <- readLines(fileName, encoding = "UTF-8")
     addTextChunk(outputFile, fileContent, logFolder = logFolder)
   }
 
   logWorkflow(
     message = paste0("Reports '", paste0(inputFiles, collapse = "', '"), "' were successfully merged into '", outputFile, "'"),
-    pathFolder = logFolder
+    pathFolder = logFolder,
+    logTypes = LogTypes$Debug
   )
   return(invisible())
 }
@@ -137,44 +141,44 @@ renderReport <- function(fileName, logFolder = getwd()) {
   reportConfig <- file.path(logFolder, "reportConfig.txt")
 
   # Numbering of '#', '##' and figures
-  # The method below might not be the most efficient
-  fileContent <- readLines(fileName)
-  firstElements <- NULL
-  for (lineContent in fileContent) {
-    firstElements <- cbind(firstElements, unlist(strsplit(lineContent, " "))[1])
-  }
-  firstElements <- as.character(firstElements)
-
-  figureCount <- 1
-  titleCount <- 1
-  subtitleCount <- 1
+  # The method below might not be the most efficient:
+  fileContent <- readLines(fileName, encoding = "UTF-8")
+  figureCount <- 0
+  titleCount <- 0
+  subtitleCount <- 0
   for (lineIndex in seq_along(fileContent)) {
-    if (firstElements[lineIndex] %in% "Figure:") {
-      fileContent[lineIndex] <- gsub(pattern = "Figure:", replacement = paste0("Figure ", figureCount, ":"), x = fileContent[lineIndex])
+    firstElement <- as.character(unlist(strsplit(fileContent[lineIndex], " ")))
+    firstElement <- firstElement[1]
+    if (grepl(pattern = "Figure:", x = firstElement)) {
       figureCount <- figureCount + 1
+      fileContent[lineIndex] <- gsub(pattern = "Figure:", replacement = paste0("Figure ", figureCount, ":"), x = fileContent[lineIndex])
     }
-    if (firstElements[lineIndex] %in% "#") {
-      fileContent[lineIndex] <- gsub(pattern = "#", replacement = paste0("# ", titleCount, ". "), x = fileContent[lineIndex])
+    if (grepl(pattern = "#", x = firstElement) & !grepl("##", firstElement)) {
       titleCount <- titleCount + 1
-      subtitleCount <- 1
+      subtitleCount <- 0
+      fileContent[lineIndex] <- gsub(pattern = "#", replacement = paste0("# ", titleCount, ". "), x = fileContent[lineIndex])
     }
-    if (firstElements[lineIndex] %in% "##") {
-      fileContent[lineIndex] <- gsub(pattern = "##", replacement = paste0("## ", titleCount, ".", titleCount, ". "), x = fileContent[lineIndex])
+    if (grepl(pattern = "##", x = firstElement)) {
       subtitleCount <- subtitleCount + 1
+      fileContent[lineIndex] <- gsub(pattern = "##", replacement = paste0("## ", titleCount, ".", subtitleCount, ". "), x = fileContent[lineIndex])
     }
   }
-  
+
   # Update file
-  write(fileContent, file = fileName, sep = "\n")
+  fileObject <- file(fileName, encoding = "UTF-8")
+  write(fileContent, file = fileObject, sep = "\n")
+  close(fileObject)
 
   # Table of content
+  # Format = "gfm" keep consistency in title starting with '#'
   write(c("toc: ", "self-contained:"), file = reportConfig, sep = "\n")
   knitr::pandoc(input = fileName, format = "gfm", config = reportConfig, ext = "md")
   unlink(reportConfig, recursive = TRUE)
 
   logWorkflow(
-    message = paste0("Table of content added to Report '", fileName, "'"),
-    pathFolder = logFolder
+    message = paste0("Numbering of sections and table of content added to Report '", fileName, "'"),
+    pathFolder = logFolder,
+    logTypes = LogTypes$Debug
   )
   return(invisible())
 }
