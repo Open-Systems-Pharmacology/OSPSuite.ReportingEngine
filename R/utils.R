@@ -208,10 +208,11 @@ loadWorkflowPopulation <- function(simulationSet) {
 #' @param path simulation path
 #' @return last path element as character string
 #' @export
+#' @import ospsuite
+#' @import utils
 lastPathElement <- function(path) {
-  return(sub(
-    pattern = "^.*[|]",
-    replacement = "",
-    x = path
-  ))
+  pathArray <- ospsuite::toPathArray(path)
+  lastElement <- utils::tail(pathArray,1)
+  
+  return(lastElement)
 }

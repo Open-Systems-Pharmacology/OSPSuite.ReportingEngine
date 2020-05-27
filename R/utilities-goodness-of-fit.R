@@ -409,7 +409,8 @@ plotPopulationGoodnessOfFit <- function(structureSet,
   simulatedData <- NULL
   residualsData <- NULL
   residualsMetaData <- NULL
-  goodnessOfFitPlots <- NULL
+  goodnessOfFitPlots <- list()
+  goodnessOfFitCaptions <- list()
 
   residualsAggregationType <- settings$residualsAggregationType %||% "mean"
   selectedVariablesForResiduals <- c("Time", "mean", "legendMean")
@@ -549,6 +550,17 @@ plotPopulationGoodnessOfFit <- function(structureSet,
 
   goodnessOfFitPlots[["timeProfile"]] <- timeProfilePlot
   goodnessOfFitPlots[["timeProfileLog"]] <- timeProfilePlotLog
+  
+  goodnessOfFitCaptions[["timeProfile"]] <- paste0(
+    "Time profiles of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
+    ifnotnull(structureSet$simulationSet$observedDataFile, paste0(". Data source: ", structureSet$simulationSet$observedDataFile)),
+    ". Time profiles are plotted in a linear scale."
+  )
+  goodnessOfFitCaptions[["timeProfileLog"]] <- paste0(
+    "Time profiles of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
+    ifnotnull(structureSet$simulationSet$observedDataFile, paste0(". Data source: ", structureSet$simulationSet$observedDataFile)),
+    ". Time profiles are plotted in a logarithmic scale."
+  )
 
   if (!is.null(residualsData)) {
     # Smart plotConfig labels metaData$dimension [metaData$unit]
@@ -569,6 +581,17 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     goodnessOfFitPlots[["obsVsPredLog"]] <- goodnessOfFitPlots[["obsVsPred"]] +
       ggplot2::scale_y_continuous(trans = "log10") +
       ggplot2::scale_x_continuous(trans = "log10")
+    
+    goodnessOfFitCaptions[["obsVsPred"]] <- paste0(
+      "Predicted vs observed of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
+      ifnotnull(structureSet$simulationSet$observedDataFile, paste0(". Data source: ", structureSet$simulationSet$observedDataFile)),
+      ". Predictions and observations are plotted in a linear scale."
+    )
+    goodnessOfFitCaptions[["obsVsPredLog"]] <- paste0(
+      "Predicted vs observed of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
+      ifnotnull(structureSet$simulationSet$observedDataFile, paste0(". Data source: ", structureSet$simulationSet$observedDataFile)),
+      ". Predictions and observations are plotted in a logarithmic scale."
+    )
 
     goodnessOfFitPlots[["resVsTime"]] <- plotMeanResVsTime(
       data = residualsData,
@@ -580,6 +603,15 @@ plotPopulationGoodnessOfFit <- function(structureSet,
       data = residualsData,
       metaData = residualsMetaData,
       plotConfiguration = settings$plotConfigurations[["resVsPred"]]
+    )
+    
+    goodnessOfFitCaptions[["resVsTime"]] <- paste0(
+      "Logarithmic residuals vs time of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
+      ifnotnull(structureSet$simulationSet$observedDataFile, paste0(". Data source: ", structureSet$simulationSet$observedDataFile)), "."
+    )
+    goodnessOfFitCaptions[["resVsPred"]] <- paste0(
+      "Logarithmic residuals vs predicted values of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
+      ifnotnull(structureSet$simulationSet$observedDataFile, paste0(". Data source: ", structureSet$simulationSet$observedDataFile)), "."
     )
   }
   return(list(

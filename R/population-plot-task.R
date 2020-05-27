@@ -63,14 +63,18 @@ PopulationPlotTask <- R6::R6Class(
           pathFolder = self$workflowFolder,
           logTypes = LogTypes$Debug
         )
+        
+        if (!is.null(taskResults$captions[[plotName]])) {
+          addTextChunk(self$fileName, paste0("Figure: ", taskResults$captions[[plotName]]), logFolder = self$workflowFolder)
+        }
 
         addFigureChunk(
           fileName = self$fileName,
           figureFile = plotFileName,
           logFolder = self$workflowFolder
         )
-
-        if (plotName %in% names(taskResults$tables)) {
+        
+        if (!is.null(taskResults$tables[[plotName]])) {
           tableFileName <- file.path(
             self$workflowFolder,
             self$outputFolder,

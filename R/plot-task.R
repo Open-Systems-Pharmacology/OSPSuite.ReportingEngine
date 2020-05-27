@@ -203,6 +203,9 @@ PlotTask <- R6::R6Class(
           "## Residuals across all simulations",
           logFolder = self$workflowFolder
         )
+        
+        simulationNames <- paste0(as.character(sapply(structureSets, function(set){set$simulationSet$simulationName})), collapse = ", ")
+        addTextChunk(self$fileName, paste0("Figure: Distribution of residuals for ", simulationNames), logFolder = self$workflowFolder)
 
         addFigureChunk(
           fileName = self$fileName,
