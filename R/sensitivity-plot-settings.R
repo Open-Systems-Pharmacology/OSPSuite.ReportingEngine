@@ -13,7 +13,7 @@ SensitivityPlotSettings <- R6::R6Class(
     #' @return A new `SensitivityAnalysisSettings` object
     initialize = function(totalSensitivityThreshold = NULL,
                           variableParameterPaths = NULL,
-                          maximalParametersPerSensitivityPlot = 10,
+                          maximalParametersPerSensitivityPlot = 50,
                           plotFontSize = 6) {
       self$totalSensitivityThreshold <- getDefaultTotalSensitivityThreshold(
         totalSensitivityThreshold = totalSensitivityThreshold,
