@@ -2,9 +2,8 @@ rm(list = ls())
 library(ospsuite)
 library(stringr)
 graphics.off()
-#library(ospsuite.reportingengine)
+library(ospsuite.reportingengine)
 load("./tests/dev/ex_03_pop/simTrees.Rdata")
-devtools::load_all("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine")
 
 pause <- function(seconds = NULL,show = TRUE) {
   if (is.null(seconds)){
@@ -74,6 +73,6 @@ pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- c(simTree1$
 pwf$populationSensitivityAnalysis$settings$pkParameterSelection <- c("C_max", "CL")
 pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.05, 0.25, 0.5, 0.75, 0.95)
 
-pwf$plotSensitivity$settings <-  SensitivityPlotSettings$new(totalSensitivityThreshold = 1) #pwf$populationSensitivityAnalysis$settings # or use <- SensitivityPlotSettings$new(totalSensitivityThreshold = 0.8)
+pwf$plotSensitivity$settings <-  SensitivityPlotSettings$new(totalSensitivityThreshold = 1)
 
 pwf$runWorkflow()
