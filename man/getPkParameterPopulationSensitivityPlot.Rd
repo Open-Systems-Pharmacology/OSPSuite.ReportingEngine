@@ -4,14 +4,12 @@
 \alias{getPkParameterPopulationSensitivityPlot}
 \title{getPkParameterPopulationSensitivityPlot}
 \usage{
-getPkParameterPopulationSensitivityPlot(data, title, plotConfiguration)
+getPkParameterPopulationSensitivityPlot(data, settings)
 }
 \arguments{
 \item{data}{dataframe of sensitivity analysis results}
 
-\item{title}{plot title}
-
-\item{plotConfiguration}{used to set tlf plot properties}
+\item{settings}{used to set plot configuration}
 }
 \value{
 plt sensitivity plot based on results in input data

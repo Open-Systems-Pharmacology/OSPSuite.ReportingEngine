@@ -5,8 +5,8 @@
 \title{getDefaultTotalSensitivityThreshold}
 \usage{
 getDefaultTotalSensitivityThreshold(
-  totalSensitivityThreshold,
-  variableParameterPaths
+  totalSensitivityThreshold = NULL,
+  variableParameterPaths = NULL
 )
 }
 \arguments{
