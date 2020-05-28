@@ -596,7 +596,7 @@ plotPopulationSensitivity <- function(structureSets,
     outputPaths <- sapply(structureSet$simulationSet$outputs, function(x) {
       x$path
     })
-    populationName <- structureSet$simulationSet$populationName
+    populationName <- structureSet$simulationSet$simulationSetName
 
     for (op in outputPaths) {
       # opIndexDf is sub-dataframe of indexDf that has only the outputs op in the Outputs column
@@ -623,6 +623,7 @@ plotPopulationSensitivity <- function(structureSets,
   }
 
 
+
   # allPopsDf is a dataframe that holds the results of all sensitivity analyses for all populations
   allPopsDf <- do.call("rbind", dFList)
 
@@ -635,18 +636,27 @@ plotPopulationSensitivity <- function(structureSets,
     op <- as.character(uniqueQuantitiesAndPKParameters$QuantityPath[i])
     sensitivityPlotName <- paste(pk, op, sep = "_")
     sensitivityPlotName <- gsub(pattern = "|", replacement = "-", x = sensitivityPlotName, fixed = TRUE)
-    # popDfPkOp is a dataframe containing all the rows in allPopsDf that have the same
+
+    # popDfPkOp is a sorted dataframe containing all the rows in allPopsDf that have the same
     # combination of (QuantityPath,PKParameter) as the current (i'th) row of uniqueQuantitiesAndPKParameters
     unsortedPopDfPkOp <- allPopsDf[allPopsDf[, "QuantityPath"] == uniqueQuantitiesAndPKParameters$QuantityPath[i] & allPopsDf[, "PKParameter"] == uniqueQuantitiesAndPKParameters$PKParameter[i], ]
     popDfPkOp <- unsortedPopDfPkOp[order(-abs(unsortedPopDfPkOp$Value)), ]
 
-    # Reverse level order of Parameter column to make most sensitive parameter have highest factor level
+    # Set level order of Parameter column to make most sensitive parameter have highest factor level
     popDfPkOp$Parameter <- factor(x = popDfPkOp$Parameter, levels = rev(unique(popDfPkOp$Parameter)))
 
+    #Remvoe the substrings "Applications-","Neighborhoods-","Organism-","ProtocolSchemaItem-" from all parameter paths
+    for (j in seq_along(levels(popDfPkOp$Parameter))){
+      levels(popDfPkOp$Parameter)[j] <-  removePathStrings(as.character(levels(popDfPkOp$Parameter)[j]))
+    }
+
+    # Get vector of settings$maximalParametersPerSensitivityPlot most sensitive parameters
+    parameterLevels <- levels(popDfPkOp$Parameter)
+    truncParamLevels <- rev(parameterLevels)[1:min( settings$maximalParametersPerSensitivityPlot ,length(parameterLevels))]
+
     plotObject <- getPkParameterPopulationSensitivityPlot(
-      data = popDfPkOp,
-      title = paste("Population sensitivity of", pk, "of", op),
-      plotConfiguration = settings$plotConfiguration
+      data = popDfPkOp[ popDfPkOp$Parameter %in% truncParamLevels , ],  #title = paste("Population sensitivity of", pk, "of", op),
+      settings = settings
     )
     plotList[["plots"]][[sensitivityPlotName]] <- plotObject
   }
@@ -667,7 +677,12 @@ plotPopulationSensitivity <- function(structureSets,
 #' @param totalSensitivityThreshold cut-off used for plots of the most sensitive parameters
 #' @return sortedFilteredIndividualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
 #' @import ospsuite
-getPopSensDfForPkAndOutput <- function(simulation, sensitivityResultsFolder, indexDf, output, pkParameter, totalSensitivityThreshold) {
+getPopSensDfForPkAndOutput <- function(simulation,
+                                       sensitivityResultsFolder,
+                                       indexDf,
+                                       output,
+                                       pkParameter,
+                                       totalSensitivityThreshold) {
   pkOutputIndexDf <- getPkOutputIndexDf(indexDf, pkParameter, output)
   individualsDfForPKParameter <- NULL
 
@@ -678,11 +693,20 @@ getPopSensDfForPkAndOutput <- function(simulation, sensitivityResultsFolder, ind
     # Loop through the quantiles for this output and pkParameter combination
     for (n in 1:nrow(pkOutputIndexDf)) {
 
+
+
       # Current quantile
       quantile <- pkOutputIndexDf$Quantile[n]
 
+
       # Individual corresponding to current quantile
       individualId <- pkOutputIndexDf$IndividualId[n]
+
+
+      # print(paste("pkParameter",pkParameter))
+      # print(paste("output",output))
+      # print(paste("quantile",quantile))
+      # print(paste("individualId",individualId))
 
       # SA results file corresponding to individual correspinding to current quantile
       saResultsFileName <- pkOutputIndexDf$Filename[n]
@@ -700,6 +724,8 @@ getPopSensDfForPkAndOutput <- function(simulation, sensitivityResultsFolder, ind
         totalSensitivityThreshold = totalSensitivityThreshold
       )
 
+   #  print(filteredIndividualSAResults)
+    #pause()
       # Verify that there exist SA results within the threshold given by totalSensitivityThreshold for this individual, this output and this pkParameter
       if (length(filteredIndividualSAResults) > 0) {
 
@@ -729,6 +755,54 @@ getPopSensDfForPkAndOutput <- function(simulation, sensitivityResultsFolder, ind
 }
 
 
+
+
+#' @title getPkParameterPopulationSensitivityPlot
+#' @description build sensitvity plot object for a population for one output and pk parameter
+#' @param data dataframe of sensitivity analysis results
+#' @param settings used to set plot configuration
+#' @return plt sensitivity plot based on results in input data
+#' @import ggplot2
+#' @import tlf
+getPkParameterPopulationSensitivityPlot <- function(data, settings) {
+  data[["Quantile"]] <- as.factor(data[["Quantile"]])
+
+  shapeAes <- NULL
+  if ("Population" %in% colnames(data)) {
+    shapeAes <- "Population"
+  }
+
+#  plt <- tlf::initializePlot(plotConfiguration)
+  plt <-  ggplot2::ggplot() + ggplot2::geom_point(
+    data = data,
+    mapping = ggplot2::aes_string(x = "Parameter", y = "Value", color = "Quantile", shape = shapeAes),
+    size = 2,
+    position = ggplot2::position_dodge(width = 0.5)
+  ) +
+    ggplot2::ylab("Sensitivity") + ggplot2::labs(
+      color = "Individual quantile"
+    )
+
+  plt <- plt + ggplot2::geom_hline(yintercept = 0, size = 1)
+  plt <- plt + ggplot2::coord_flip()
+
+  plt <- plt + ggplot2::theme(legend.position = "top",
+                              legend.box = "vertical",
+                              text = element_text(size = settings$plotFontSize),
+                              legend.title = element_text(size = settings$plotFontSize),
+                              axis.text.x = element_text(size = settings$plotFontSize),
+                              axis.text.y = element_text(size = settings$plotFontSize),
+                              legend.spacing.y = unit(-0.1,"cm"))
+
+  # + ggplot2::theme(legend.position = "top",
+  #                                                     legend.box = "vertical",
+  #                                                     text = element_text(size = 4),
+  #                                                     legend.title = element_text(size = 4))
+
+  return(plt)
+}
+
+
 #' @title getPkOutputIndexDf
 #' @description Function to filter the population results index file for given pkParameter and output
 #' @param indexDf dataframe containing summary of sensitivity results
@@ -740,45 +814,11 @@ getPkOutputIndexDf <- function(indexDf, pkParameter, output) {
   return(pkOutputIndexDf)
 }
 
-
-#' @title getPkParameterPopulationSensitivityPlot
-#' @description build sensitvity plot object for a population for one output and pk parameter
-#' @param data dataframe of sensitivity analysis results
-#' @param title plot title
-#' @param plotConfiguration used to set tlf plot properties
-#' @return plt sensitivity plot based on results in input data
-#' @import ggplot2
-#' @import tlf
-getPkParameterPopulationSensitivityPlot <- function(data, title, plotConfiguration) {
-  data[["Quantile"]] <- as.factor(data[["Quantile"]])
-
-  shapeAes <- NULL
-  if ("Population" %in% colnames(data)) {
-    shapeAes <- "Population"
-  }
-
-  plt <- tlf::initializePlot(plotConfiguration) + ggplot2::geom_point(
-    data = data,
-    mapping = ggplot2::aes_string(x = "Parameter", y = "Value", color = "Quantile", shape = shapeAes),
-    size = 3,
-    position = ggplot2::position_dodge(width = 0.5)
-  ) +
-    ggplot2::ylab("Sensitivity") + ggplot2::labs(
-      color = "Individual quantile"
-    )
-
-  plt <- plt + ggplot2::geom_hline(yintercept = 0, size = 1)
-  plt <- plt + ggplot2::coord_flip() + ggplot2::theme(legend.position = "top", legend.box = "vertical")
-  return(plt)
-}
-
-
-
 #' @title getDefaultTotalSensitivityThreshold
 #' @description return the default totalSensitivityThreshold to be used in a population sensitivity analysis plot
 #' @param variableParameterPaths vector of paths of parameters to vary when performing sensitivity analysis
 #' @param totalSensitivityThreshold cut-off used for plots of the most sensitive parameters
-getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold, variableParameterPaths) {
+getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold = NULL, variableParameterPaths = NULL) {
   if (is.null(totalSensitivityThreshold)) {
     if (is.null(variableParameterPaths)) {
       totalSensitivityThreshold <- 0.9
@@ -787,4 +827,16 @@ getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold, varia
     }
   }
   return(totalSensitivityThreshold)
+}
+
+
+#' @title removePathStrings
+#' @description remove occurences of any of the substrings "Applications-","Neighborhoods-","Organism-","ProtocolSchemaItem-" from a path
+#' @path string from which to remove
+removePathStrings <- function(path){
+  subStringsToRemove <- c("Applications-","Neighborhoods-","Organism-","ProtocolSchemaItem-")
+  for (pat in subStringsToRemove){
+    path <- gsub(pattern =  pat ,replacement = "",x = path)
+  }
+  return(path)
 }
