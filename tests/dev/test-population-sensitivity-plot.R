@@ -43,6 +43,6 @@ pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- c(simTree1$
 pwf$populationSensitivityAnalysis$settings$pkParameterSelection <- c("C_max", "CL")
 pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.05, 0.25, 0.5, 0.75, 0.95)
 
-pwf$plotSensitivity$settings <- pwf$populationSensitivityAnalysis$settings # or use <- SensitivityPlotSettings$new(totalSensitivityThreshold = 0.8)
+pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(totalSensitivityThreshold = 1)
 
 pwf$runWorkflow()
