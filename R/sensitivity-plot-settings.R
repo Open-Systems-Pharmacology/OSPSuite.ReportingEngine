@@ -20,7 +20,7 @@ SensitivityPlotSettings <- R6::R6Class(
         variableParameterPaths = variableParameterPaths
       )
 
-      self$maximalParametersPerSensitivityPlot = maximalParametersPerSensitivityPlot
+      self$maximalParametersPerSensitivityPlot <- maximalParametersPerSensitivityPlot
       self$plotFontSize <- plotFontSize
     }
   ),
@@ -61,8 +61,6 @@ SensitivityPlotSettings <- R6::R6Class(
         }
       }
     }
-
-
   ),
 
   private = list(

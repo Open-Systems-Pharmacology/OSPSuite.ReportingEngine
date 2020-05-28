@@ -645,17 +645,17 @@ plotPopulationSensitivity <- function(structureSets,
     # Set level order of Parameter column to make most sensitive parameter have highest factor level
     popDfPkOp$Parameter <- factor(x = popDfPkOp$Parameter, levels = rev(unique(popDfPkOp$Parameter)))
 
-    #Remvoe the substrings "Applications-","Neighborhoods-","Organism-","ProtocolSchemaItem-" from all parameter paths
-    for (j in seq_along(levels(popDfPkOp$Parameter))){
-      levels(popDfPkOp$Parameter)[j] <-  removePathStrings(as.character(levels(popDfPkOp$Parameter)[j]))
+    # Remvoe the substrings "Applications-","Neighborhoods-","Organism-","ProtocolSchemaItem-" from all parameter paths
+    for (j in seq_along(levels(popDfPkOp$Parameter))) {
+      levels(popDfPkOp$Parameter)[j] <- removePathStrings(as.character(levels(popDfPkOp$Parameter)[j]))
     }
 
     # Get vector of settings$maximalParametersPerSensitivityPlot most sensitive parameters
     parameterLevels <- levels(popDfPkOp$Parameter)
-    truncParamLevels <- rev(parameterLevels)[1:min( settings$maximalParametersPerSensitivityPlot ,length(parameterLevels))]
+    truncParamLevels <- rev(parameterLevels)[1:min(settings$maximalParametersPerSensitivityPlot, length(parameterLevels))]
 
     plotObject <- getPkParameterPopulationSensitivityPlot(
-      data = popDfPkOp[ popDfPkOp$Parameter %in% truncParamLevels , ],  #title = paste("Population sensitivity of", pk, "of", op),
+      data = popDfPkOp[ popDfPkOp$Parameter %in% truncParamLevels, ], # title = paste("Population sensitivity of", pk, "of", op),
       settings = settings
     )
     plotList[["plots"]][[sensitivityPlotName]] <- plotObject
@@ -762,25 +762,27 @@ getPkParameterPopulationSensitivityPlot <- function(data, settings) {
     shapeAes <- "Population"
   }
 
-  plt <-  ggplot2::ggplot() + ggplot2::geom_point(
+  plt <- ggplot2::ggplot() + ggplot2::geom_point(
     data = data,
     mapping = ggplot2::aes_string(x = "Parameter", y = "Value", color = "Quantile", shape = shapeAes),
     size = 2,
     position = ggplot2::position_dodge(width = 0.5)
   ) + ggplot2::xlab(NULL) + ggplot2::ylab("Sensitivity") + ggplot2::labs(
-      color = "Individual quantile"
-    )
+    color = "Individual quantile"
+  )
 
   plt <- plt + ggplot2::geom_hline(yintercept = 0, size = 1)
   plt <- plt + ggplot2::coord_flip()
 
-  plt <- plt + ggplot2::theme(legend.position = "top",
-                              legend.box = "vertical",
-                              text = element_text(size = settings$plotFontSize),
-                              legend.title = element_text(size = settings$plotFontSize),
-                              axis.text.x = element_text(size = settings$plotFontSize),
-                              axis.text.y = element_text(size = settings$plotFontSize),
-                              legend.spacing.y = unit(-0.1,"cm"))
+  plt <- plt + ggplot2::theme(
+    legend.position = "top",
+    legend.box = "vertical",
+    text = element_text(size = settings$plotFontSize),
+    legend.title = element_text(size = settings$plotFontSize),
+    axis.text.x = element_text(size = settings$plotFontSize),
+    axis.text.y = element_text(size = settings$plotFontSize),
+    legend.spacing.y = unit(-0.1, "cm")
+  )
 
   return(plt)
 }
@@ -816,10 +818,10 @@ getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold = NULL
 #' @title removePathStrings
 #' @description remove occurences of any of the substrings "Applications-","Neighborhoods-","Organism-","ProtocolSchemaItem-" from a path
 #' @param pth string from which to remove
-removePathStrings <- function(pth){
-  subStringsToRemove <- c("Applications-","Neighborhoods-","Organism-","ProtocolSchemaItem-")
-  for (pattern in subStringsToRemove){
-    pth <- gsub(pattern =  pattern ,replacement = "",x = pth)
+removePathStrings <- function(pth) {
+  subStringsToRemove <- c("Applications-", "Neighborhoods-", "Organism-", "ProtocolSchemaItem-")
+  for (pattern in subStringsToRemove) {
+    pth <- gsub(pattern = pattern, replacement = "", x = pth)
   }
   return(pth)
 }

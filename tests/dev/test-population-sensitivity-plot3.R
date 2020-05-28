@@ -5,16 +5,16 @@ graphics.off()
 library(ospsuite.reportingengine)
 load("./tests/dev/ex_03_pop/simTrees.Rdata")
 
-pause <- function(seconds = NULL,show = TRUE) {
-  if (is.null(seconds)){
-    msg = NULL
-    if (show){
-      msg = "Press [enter] to continue."
+pause <- function(seconds = NULL, show = TRUE) {
+  if (is.null(seconds)) {
+    msg <- NULL
+    if (show) {
+      msg <- "Press [enter] to continue."
     }
-    line <- readline(prompt=msg)
+    line <- readline(prompt = msg)
   } else {
-    if (show){
-      disp("Pausing for ",seconds," seconds.")
+    if (show) {
+      disp("Pausing for ", seconds, " seconds.")
     }
     Sys.sleep(seconds)
   }
@@ -55,24 +55,26 @@ pwf$plotSensitivity$activate()
 
 
 pwf$populationSensitivityAnalysis$settings$showProgress <- TRUE
-pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- c(simTree1$Organism$Heart$Volume$path,
-                                                                       simTree1$Organism$Lung$Volume$path,
-                                                                       simTree1$Organism$Kidney$Volume$path,
-                                                                       "Organism|Muscle|Peripheral blood flow fraction",
-                                                                       "Organism|Muscle|Volume",
-                                                                       "Organism|LargeIntestine|Volume",
-                                                                       "Organism|PortalVein|Volume",
-                                                                       "Organism|Spleen|Volume",
-                                                                       "Organism|Skin|Volume",
-                                                                       "Organism|Pancreas|Volume",
-                                                                       "Organism|SmallIntestine|Mucosa|UpperIleum|Fraction mucosa",
-                                                                       "Organism|SmallIntestine|Intracellular|CYP3A4|Relative expression (normalized)",
-                                                                       "Organism|Lumen|Effective surface area variability factor",
-                                                                       "Organism|Bone|Volume",
-                                                                       "Organism|Acidic phospholipids (blood cells) [mg/g] - RR")
+pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- c(
+  simTree1$Organism$Heart$Volume$path,
+  simTree1$Organism$Lung$Volume$path,
+  simTree1$Organism$Kidney$Volume$path,
+  "Organism|Muscle|Peripheral blood flow fraction",
+  "Organism|Muscle|Volume",
+  "Organism|LargeIntestine|Volume",
+  "Organism|PortalVein|Volume",
+  "Organism|Spleen|Volume",
+  "Organism|Skin|Volume",
+  "Organism|Pancreas|Volume",
+  "Organism|SmallIntestine|Mucosa|UpperIleum|Fraction mucosa",
+  "Organism|SmallIntestine|Intracellular|CYP3A4|Relative expression (normalized)",
+  "Organism|Lumen|Effective surface area variability factor",
+  "Organism|Bone|Volume",
+  "Organism|Acidic phospholipids (blood cells) [mg/g] - RR"
+)
 pwf$populationSensitivityAnalysis$settings$pkParameterSelection <- c("C_max", "CL")
 pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.05, 0.25, 0.5, 0.75, 0.95)
 
-pwf$plotSensitivity$settings <-  SensitivityPlotSettings$new(totalSensitivityThreshold = 1)
+pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(totalSensitivityThreshold = 1)
 
 pwf$runWorkflow()
