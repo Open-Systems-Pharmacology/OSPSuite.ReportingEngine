@@ -33,8 +33,8 @@ ps2 <- PopulationSimulationSet$new(
 pwf <- PopulationWorkflow$new(simulationSets = list(ps1, ps2), workflowFolder = "./tests/dev/ex_03_pop3")
 pwf$simulatePopulation$settings$showProgress <- FALSE
 pwf$simulatePopulation$inactivate()
-pwf$populationPKParameters$inactivate()
-pwf$populationSensitivityAnalysis$inactivate()
+pwf$populationPKParameters$activate()
+pwf$populationSensitivityAnalysis$activate()
 pwf$plotSensitivity$activate()
 
 
@@ -44,7 +44,7 @@ pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- c(
   simTree1$Organism$Heart$Volume$path,
   simTree1$Organism$Lung$Volume$path,
   simTree1$Organism$Kidney$Volume$path,
-  "Organism|Muscle|Peripheral blood flow fraction",
+  simTree1$Organism$Brain$Volume$path,
   "Organism|Muscle|Volume",
   "Organism|LargeIntestine|Volume",
   "Organism|PortalVein|Volume",
@@ -52,14 +52,14 @@ pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- c(
   "Organism|Skin|Volume",
   "Organism|Pancreas|Volume",
   "Organism|SmallIntestine|Mucosa|UpperIleum|Fraction mucosa",
-  "Organism|SmallIntestine|Intracellular|CYP3A4|Relative expression (normalized)",
+  "Organism|SmallIntestine|Volume",
   "Organism|Lumen|Effective surface area variability factor",
   "Organism|Bone|Volume",
-  "Organism|Acidic phospholipids (blood cells) [mg/g] - RR"
-)
+  "Organism|Stomach|Volume")
+
 pwf$populationSensitivityAnalysis$settings$pkParameterSelection <- c("C_max", "CL")
 pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.05, 0.25, 0.5, 0.75, 0.95)
 
-pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(totalSensitivityThreshold = 1)
+pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(totalSensitivityThreshold = 1, maximalParametersPerSensitivityPlot = 12, plotFontSize = 6)
 
 pwf$runWorkflow()

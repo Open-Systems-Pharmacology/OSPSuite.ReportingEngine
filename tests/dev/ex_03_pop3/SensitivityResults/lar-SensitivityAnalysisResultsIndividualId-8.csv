@@ -1,23 +1,23 @@
 ﻿"QuantityPath","Parameter","PKParameter","Value"
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","C_max",-0.00508658291283829
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","C_max",-0.00508092689856885
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","C_max",-0.058317143127154
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","C_max",-0.104743033374104
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","C_max",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","C_max",-0.222012910191931
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","C_max",-0.00395578405996848
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","C_max",-0.222002244565023
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","C_max",-0.000722919423838955
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","C_max",-0.0325326507159738
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","C_max",-0.000129765127381844
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","C_max",-0.000147347251739434
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","C_max",-0.0192616697148813
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","C_max",-0.000472422631865609
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","C_max",-0.0141174924167393
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","C_max",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","C_max",-0.121451271206983
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","C_max",0.198065184174692
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","C_max",-0.0580950880069356
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","C_max",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","C_max",-0.0580725609101024
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","C_max",-0.00135826758674613
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","t_max",0
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","t_max",0
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","t_max",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","t_max",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","t_max",0
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","t_max",0
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","t_max",0
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","t_max",0
@@ -25,164 +25,164 @@
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","t_max",0
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","t_max",0
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","t_max",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","t_max",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","t_max",0
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","t_max",-0.5
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","t_max",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","t_max",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","C_tEnd",0.00131163085749011
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","C_tEnd",0.0211611149573911
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","t_max",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","C_tEnd",0.00131210369617051
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","C_tEnd",0.0211616114380055
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","C_tEnd",-0.511892412934558
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","C_tEnd",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","C_tEnd",0.140984110634416
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","C_tEnd",0.00105636889587723
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","C_tEnd",0.140986001989138
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","C_tEnd",-0.0554829143998386
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","C_tEnd",0.0093477842921288
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","C_tEnd",0.00227534701394335
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","C_tEnd",0.00227461411398873
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","C_tEnd",0.00513831429795135
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","C_tEnd",0.000893688747886293
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","C_tEnd",-0.000463500116460167
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","C_tEnd",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","C_tEnd",-0.113048281273952
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","C_tEnd",-0.110055968968921
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","C_tEnd",0.0262006768969413
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","C_tEnd",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","C_tEnd",0.0262002040582609
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","C_tEnd",-0.000804204027620966
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","AUC_tEnd",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","AUC_tEnd",-0.00134075113907457
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","AUC_tEnd",-0.0013393579785639
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","AUC_tEnd",-0.393117787077308
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","AUC_tEnd",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","AUC_tEnd",-0.00579749372635496
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","AUC_tEnd",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","AUC_tEnd",-0.00578245643830333
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","AUC_tEnd",-0.00591511627804122
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","AUC_tEnd",-0.000377966657909657
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","AUC_tEnd",0.00209712672807187
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","AUC_tEnd",0.00207580916089279
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","AUC_tEnd",-0.00064618322670127
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","AUC_tEnd",0.000716814253226161
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","AUC_tEnd",-0.0150763628869116
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","AUC_tEnd",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","AUC_tEnd",-0.189648087655005
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","AUC_tEnd",0.102855205068804
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","AUC_tEnd",-0.00140618545575809
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","AUC_tEnd",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","AUC_tEnd",-0.0013767521757629
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","AUC_tEnd",-0.000669203545615613
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","AUC_inf",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","AUC_inf",-0.00130123907315193
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","AUC_inf",-0.00129991505251738
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","AUC_inf",-0.392273856224809
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","AUC_inf",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","AUC_inf",-0.00849977113357602
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","AUC_inf",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","AUC_inf",-0.00848548011720314
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","AUC_inf",-0.00907309308453514
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","AUC_inf",-0.000292293317226517
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","AUC_inf",0.00210286001066782
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","AUC_inf",0.00208083503249315
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","AUC_inf",-0.000559577355800492
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","AUC_inf",0.000720267225193212
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","AUC_inf",-0.0140611201550827
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","AUC_inf",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","AUC_inf",-0.182809819777674
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","AUC_inf",0.084190100781088
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","AUC_inf",-0.00148378579111494
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","AUC_inf",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","MRT",0.00173057571864447
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","MRT",0.0210408642328192
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","AUC_inf",-0.00145881854486349
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","AUC_inf",-0.000662241495479205
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","MRT",0.00172181740341015
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","MRT",0.0210418074359982
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","MRT",-0.110215739312295
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","MRT",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","MRT",0.073393895660888
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","MRT",0.00139894997232372
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","MRT",0.0733903025059201
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","MRT",-0.0285169621168282
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","MRT",0.0130639928323745
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","MRT",0.000318780217310419
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","MRT",0.000315434091746541
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","MRT",0.00703811475063773
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","MRT",0.000261222366168003
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","MRT",0.00717508132657125
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","MRT",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","MRT",0.0321075794190551
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","MRT",-0.191235724619884
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","MRT",0.0287765226488235
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","MRT",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","Thalf",-0.00122656577083203
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","Thalf",-0.0217069530888471
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","MRT",0.0287383229200708
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","MRT",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","Thalf",-0.0012402838614702
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","Thalf",-0.0217064476855078
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","Thalf",0.135493051763025
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","Thalf",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","Thalf",-0.201101119848652
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","Thalf",-0.00103740052097939
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","Thalf",-0.201099194502598
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","Thalf",-0.0140665542072036
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","Thalf",-0.00800214733845455
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","Thalf",0
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","Thalf",-0.00403988142563789
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","Thalf",-0.000111838538939594
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","Thalf",0.0058501880533625
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","Thalf",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","Thalf",0.0612015526375652
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","Thalf",-0.163108097687823
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","Thalf",-0.0291742152265415
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","Thalf",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","FractionAucLastToInf",0.0001540881031899
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","Thalf",-0.0292329142143774
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","Thalf",0.000275926156432634
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","FractionAucLastToInf",0.000136260347979766
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","FractionAucLastToInf",0.000753832554516899
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","FractionAucLastToInf",0.0161210009905476
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","FractionAucLastToInf",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","FractionAucLastToInf",-0.0517450031992375
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","FractionAucLastToInf",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","FractionAucLastToInf",-0.0517555121917825
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","FractionAucLastToInf",-0.0604757616092089
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","FractionAucLastToInf",0.00163754499725415
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","FractionAucLastToInf",0.000108786838898045
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","FractionAucLastToInf",0
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","FractionAucLastToInf",0.00165816889512356
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","FractionAucLastToInf",0
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","FractionAucLastToInf",0.0194476225806422
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","FractionAucLastToInf",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","FractionAucLastToInf",0.131008347593035
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","FractionAucLastToInf",-0.357622367459835
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","FractionAucLastToInf",-0.00149297128552903
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","FractionAucLastToInf",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","FractionAucLastToInf",-0.00157719335435332
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","FractionAucLastToInf",0.000133839526482811
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","CL",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","CL",0.00130122243495665
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","CL",0.00129961333878812
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","CL",0.392365810267884
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","CL",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","CL",0.00849944518364108
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","CL",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","CL",0.00848503994175132
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","CL",0.0090730803053617
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","CL",0.000292288487833332
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","CL",-0.00210278219776913
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","CL",-0.00208094446405328
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","CL",0.000559291178732517
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","CL",-0.00072018547086077
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","CL",0.0140611558300221
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","CL",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","CL",0.182892889486785
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","CL",-0.084245731726828
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","CL",0.00148406173387866
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","CL",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","Vss",0.00179902887776812
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","CL",0.00145894450892408
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","CL",0.000662012813186816
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","Vss",0.00178540249561415
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","Vss",0.0223412387905685
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","Vss",0.282098582948638
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","Vss",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","Vss",0.081895642236796
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","Vss",0.00147157998593942
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","Vss",0.0818776276976772
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","Vss",-0.019444523995828
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","Vss",0.0133557483470505
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","Vss",-0.00178420152633956
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","Vss",-0.00176586364933914
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","Vss",0.00759760877779204
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","Vss",-0.000458770262892174
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","Vss",0.0212357465733113
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","Vss",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","Vss",0.215024310389585
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","Vss",-0.275611385743016
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","Vss",0.0302604763783201
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","Vss",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","Vd",-0.00115787776862332
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","Vd",-0.0204057621210455
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","Vss",0.0301965940511373
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","Vss",0.000682681745913702
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","Vd",-0.00117623472306801
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","Vd",-0.0204068429510736
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","Vd",0.527805450457702
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","Vd",0
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","Vd",-0.192604820268603
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","Vd",-0.000964443505666362
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","Vd",-0.192617515732424
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","Vd",-0.00499367491405171
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","Vd",-0.00770932040564545
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","Vd",-0.00216620640463504
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","Vd",-0.00217488735692384
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","Vd",-0.00348016975413484
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","Vd",-0.000832273433664554
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","Vd",0.019911222337099
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","Vd",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","Vd",0.244116527476346
 "Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","Vd",-0.247391150808797
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","Vd",-0.0276904364178918
-"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","Vd",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","C_max",-0.00505718721945102
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","Vd",-0.0277744666635648
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","Vd",0.00093797174799518
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","C_max",-0.00505185343510581
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","C_max",-0.058165419336953
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","C_max",-0.105016589039092
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","C_max",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","C_max",-0.221550127681099
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","C_max",-0.00390067730656433
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","C_max",-0.221540106631723
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","C_max",-0.000718525403230863
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","C_max",-0.0323467351615089
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","C_max",-0.000113706584450098
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","C_max",-0.000130257478903105
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","C_max",-0.019158145218841
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","C_max",-0.000465299950696437
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","C_max",-0.0141141793193729
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","C_max",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","C_max",-0.12144718241064
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","C_max",0.199876472787161
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","C_max",-0.0580765229311996
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","C_max",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","C_max",-0.0580553170976817
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","C_max",-0.0013497706989947
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","t_max",0
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","t_max",0
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","t_max",-0.166666666666667
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","t_max",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","t_max",0
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","t_max",0
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","t_max",0
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","t_max",0
@@ -190,142 +190,142 @@
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","t_max",0
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","t_max",0
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","t_max",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","t_max",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","t_max",0
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","t_max",-0.5
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","t_max",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","t_max",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","C_tEnd",0.00132710744738329
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","C_tEnd",0.0208102632985338
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","t_max",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","C_tEnd",0.00132781699138396
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","C_tEnd",0.0208112566601347
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","C_tEnd",-0.51180667026232
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","C_tEnd",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","C_tEnd",0.14097217840131
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","C_tEnd",0.001134986583469
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","C_tEnd",0.140974070518645
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","C_tEnd",-0.0554734508029152
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","C_tEnd",0.00931110940610314
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","C_tEnd",0.00229464164669458
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","C_tEnd",0.00229440513202769
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","C_tEnd",0.00516318613259636
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","C_tEnd",0.000900174822181178
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","C_tEnd",-0.000460257541766834
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","C_tEnd",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","C_tEnd",-0.112955313202655
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","C_tEnd",-0.110112430558111
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","C_tEnd",0.0262151674206912
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","C_tEnd",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","C_tEnd",0.0262146943913574
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","C_tEnd",-0.000796936170083941
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","AUC_tEnd",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","AUC_tEnd",-0.00135478617103486
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","AUC_tEnd",-0.00135339294964517
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","AUC_tEnd",-0.393143678897057
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","AUC_tEnd",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","AUC_tEnd",-0.00578284181072428
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","AUC_tEnd",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","AUC_tEnd",-0.00576824615807038
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","AUC_tEnd",-0.0059071038899095
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","AUC_tEnd",-0.000419912503927557
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","AUC_tEnd",0.00210823145272919
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","AUC_tEnd",0.00208691295400441
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","AUC_tEnd",-0.000642076029020049
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","AUC_tEnd",0.000721224272729589
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","AUC_tEnd",-0.0150763140333396
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","AUC_tEnd",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","AUC_tEnd",-0.189610907322382
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","AUC_tEnd",0.102854414291497
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","AUC_tEnd",-0.00139936925550495
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","AUC_tEnd",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","AUC_tEnd",-0.00137037698182425
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","AUC_tEnd",-0.000664610832132656
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","AUC_inf",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","AUC_inf",-0.00132825743587088
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","AUC_inf",-0.00132516787855778
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","AUC_inf",-0.39229965040503
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","AUC_inf",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","AUC_inf",-0.0084780395106881
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","AUC_inf",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","AUC_inf",-0.00846500872474171
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","AUC_inf",-0.00906280653873068
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","AUC_inf",-0.000333251841880576
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","AUC_inf",0.00211468638513219
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","AUC_inf",0.00209574971071655
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","AUC_inf",-0.00055591014239034
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","AUC_inf",0.000723755072338516
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","AUC_inf",-0.0140597976882209
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","AUC_inf",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","AUC_inf",-0.182772094580303
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","AUC_inf",0.0841977298185071
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","AUC_inf",-0.00147712365661004
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","AUC_inf",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","MRT",0.00173912425917199
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","MRT",0.0204148987450401
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","AUC_inf",-0.0014513353108742
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","AUC_inf",-0.000658580125209879
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","MRT",0.00173665206061795
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","MRT",0.020429057700395
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","MRT",-0.110204273721105
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","MRT",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","MRT",0.0735987893239139
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","MRT",0.00155175408330788
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","MRT",0.0735835066419434
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","MRT",-0.0285130345994526
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","MRT",0.0131051470095117
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","MRT",0.000338893472694612
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","MRT",0.000361030887019447
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","MRT",0.00708574807199977
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","MRT",0.000264053280104052
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","MRT",0.00719668236347935
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","MRT",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","MRT",0.0322011952495671
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","MRT",-0.191347651168649
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","MRT",0.0288417920580756
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","MRT",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","Thalf",-0.00128463877833627
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","Thalf",-0.021623842325877
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","MRT",0.0288156991260643
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","MRT",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","Thalf",-0.00128415748699695
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","Thalf",-0.0215930156155937
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","Thalf",0.135382248319764
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","Thalf",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","Thalf",-0.200946088824434
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","Thalf",-0.00104798782679441
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","Thalf",-0.200971597265418
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","Thalf",-0.0140382335914787
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","Thalf",-0.00797316858538271
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","Thalf",0
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","Thalf",-0.00406354277784804
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","Thalf",-0.000121694515146142
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","Thalf",0.00588453262471847
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","Thalf",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","Thalf",0.0611878915184722
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","Thalf",-0.162985557987039
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","Thalf",-0.0291731857578577
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","Thalf",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","FractionAucLastToInf",0.000111254503301482
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","FractionAucLastToInf",0.000512686729993823
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","Thalf",-0.0292034830476676
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","Thalf",0.000253833052355449
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","FractionAucLastToInf",0.000107312636304129
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","FractionAucLastToInf",0.000541856545774235
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","FractionAucLastToInf",0.0161224049563309
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","FractionAucLastToInf",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","FractionAucLastToInf",-0.0516227465097207
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","FractionAucLastToInf",0.000146975326615591
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","FractionAucLastToInf",-0.0516595372683627
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","FractionAucLastToInf",-0.0604482676132753
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","FractionAucLastToInf",0.00167088233699704
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","FractionAucLastToInf",0.000119607507176826
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","FractionAucLastToInf",0.000167285327049572
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","FractionAucLastToInf",0.0016550210150315
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","FractionAucLastToInf",0
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","FractionAucLastToInf",0.0194842168396258
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","FractionAucLastToInf",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","FractionAucLastToInf",0.131049902384356
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","FractionAucLastToInf",-0.35756322642039
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","FractionAucLastToInf",-0.0014846948191554
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","FractionAucLastToInf",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","FractionAucLastToInf",-0.00154111982960323
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","FractionAucLastToInf",0.000115797035746051
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","CL",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","CL",0.00132814896746348
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","CL",0.00132525275928955
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","CL",0.392391538536271
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","CL",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","CL",0.00847833529018933
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","CL",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","CL",0.00846546325386076
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","CL",0.00906280235877
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","CL",0.000333247826234864
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","CL",-0.00211435455778885
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","CL",-0.00209573607667075
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","CL",0.000555780816191305
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","CL",-0.000723577004045804
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","CL",0.0140593131174938
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","CL",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","CL",0.182855060564463
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","CL",-0.0842531782436841
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","CL",0.00147718875952492
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","CL",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","Vss",0.00180768608877228
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","Vss",0.021742732900386
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","CL",0.00145086238046245
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","CL",0.000658358686647744
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","Vss",0.00179982799085909
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","Vss",0.0217543813749397
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","Vss",0.282136176769114
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","Vss",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","Vss",0.0820786416251581
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","Vss",0.00161164965789077
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","Vss",0.0820504449208814
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","Vss",-0.0194512884368459
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","Vss",0.0134382256895643
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","Vss",-0.0017757683440131
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","Vss",-0.00173509113128598
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","Vss",0.00764093706615787
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","Vss",-0.000459906736396038
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","Vss",0.0212562704154539
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","Vss",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","Vss",0.215080415613874
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","Vss",-0.275730602031068
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","Vss",0.0303190147387409
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","Vss",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","Vd",-0.00121614501550706
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","Vd",-0.0202959916307651
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","Vss",0.0302666659394074
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","Vss",0.000676790238800199
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Heart-Volume","Vd",-0.00122077644593086
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lung-Volume","Vd",-0.020267894286194
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Kidney-Volume","Vd",0.52772087789141
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Peripheral blood flow fraction","Vd",0
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","Vd",-0.192470395382128
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Brain-Volume","Vd",-0.000988227178317823
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Muscle-Volume","Vd",-0.192509162170119
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-LargeIntestine-Volume","Vd",-0.00497527124915716
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-PortalVein-Volume","Vd",-0.00763999047366221
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","Vd",-0.00217527994938498
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Spleen-Volume","Vd",-0.00212740468155965
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Skin-Volume","Vd",-0.00350775963575961
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Pancreas-Volume","Vd",-0.000845270359236386
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","Vd",0.0199442259133541
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","CYP3A4-Organism-SmallIntestine-Intracellular-Relative expression (normalized)","Vd",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-SmallIntestine-Volume","Vd",0.244065130673922
 "Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Lumen-Effective surface area variability factor","Vd",-0.247275775471272
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","Vd",-0.0276964856911785
-"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Acidic phospholipids (blood cells) [mg/g] - RR","Vd",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Bone-Volume","Vd",-0.0277526975337667
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Organism-Stomach-Volume","Vd",0.000912752015855822
