@@ -5,21 +5,6 @@ graphics.off()
 library(ospsuite.reportingengine)
 load("./tests/dev/ex_03_pop/simTrees.Rdata")
 
-pause <- function(seconds = NULL, show = TRUE) {
-  if (is.null(seconds)) {
-    msg <- NULL
-    if (show) {
-      msg <- "Press [enter] to continue."
-    }
-    line <- readline(prompt = msg)
-  } else {
-    if (show) {
-      disp("Pausing for ", seconds, " seconds.")
-    }
-    Sys.sleep(seconds)
-  }
-}
-
 simulationFile <- "./tests/dev/ex_03_pop/RaltegravirSim.pkml"
 populationFile1 <- "./tests/dev/ex_03_pop/RalPop10.csv"
 populationFile2 <- "./tests/dev/ex_03_pop/LarPop10.csv"
