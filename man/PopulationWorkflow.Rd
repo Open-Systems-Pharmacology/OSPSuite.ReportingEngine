@@ -354,7 +354,7 @@ Default value is `FALSE`}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A `PlotTask` object for sensitivity plots for a single population
+A `PopulationPlotTask` object for sensitivity plots for a single population
 }
 }
 \if{html}{\out{<hr>}}
