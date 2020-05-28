@@ -8,6 +8,8 @@ SensitivityPlotSettings <- R6::R6Class(
     #' Create a `SensitivityPlotSettings` object
     #' @param totalSensitivityThreshold cut-off used for plots of the most sensitive parameters
     #' @param variableParameterPaths paths that were varied in the sensitivity analysis.  If supplied totalSensitivityThreshold = 1, else 0.9.
+    #' @param maximalParametersPerSensitivityPlot maximalParametersPerSensitivityPlot is the maximal number of parameters to display in a sensitivity plot
+    #' @param plotFontSize  the fontsize used in the legend and both axis
     #' @return A new `SensitivityAnalysisSettings` object
     initialize = function(totalSensitivityThreshold = NULL,
                           variableParameterPaths = NULL,
@@ -20,9 +22,6 @@ SensitivityPlotSettings <- R6::R6Class(
 
       self$maximalParametersPerSensitivityPlot = maximalParametersPerSensitivityPlot
       self$plotFontSize <- plotFontSize
-      # tlf::PlotConfiguration$new(xlabel = tlf::Label$new(size = 6),
-      #                                                                             ylabel = tlf::Label$new(size = 6),
-      #                                                                             legendTitle = tlf::LegendConfiguration$new(size = 6))
     }
   ),
 
