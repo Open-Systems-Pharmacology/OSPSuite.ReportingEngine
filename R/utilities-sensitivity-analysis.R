@@ -768,14 +768,12 @@ getPkParameterPopulationSensitivityPlot <- function(data, settings) {
     shapeAes <- "Population"
   }
 
-#  plt <- tlf::initializePlot(plotConfiguration)
   plt <-  ggplot2::ggplot() + ggplot2::geom_point(
     data = data,
     mapping = ggplot2::aes_string(x = "Parameter", y = "Value", color = "Quantile", shape = shapeAes),
     size = 2,
     position = ggplot2::position_dodge(width = 0.5)
-  ) +
-    ggplot2::ylab("Sensitivity") + ggplot2::labs(
+  ) + ggplot2::xlab(NULL) + ggplot2::ylab("Sensitivity") + ggplot2::labs(
       color = "Individual quantile"
     )
 
@@ -789,11 +787,6 @@ getPkParameterPopulationSensitivityPlot <- function(data, settings) {
                               axis.text.x = element_text(size = settings$plotFontSize),
                               axis.text.y = element_text(size = settings$plotFontSize),
                               legend.spacing.y = unit(-0.1,"cm"))
-
-  # + ggplot2::theme(legend.position = "top",
-  #                                                     legend.box = "vertical",
-  #                                                     text = element_text(size = 4),
-  #                                                     legend.title = element_text(size = 4))
 
   return(plt)
 }
