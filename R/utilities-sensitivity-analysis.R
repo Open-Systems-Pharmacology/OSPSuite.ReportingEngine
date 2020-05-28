@@ -693,20 +693,12 @@ getPopSensDfForPkAndOutput <- function(simulation,
     # Loop through the quantiles for this output and pkParameter combination
     for (n in 1:nrow(pkOutputIndexDf)) {
 
-
-
       # Current quantile
       quantile <- pkOutputIndexDf$Quantile[n]
 
 
       # Individual corresponding to current quantile
       individualId <- pkOutputIndexDf$IndividualId[n]
-
-
-      # print(paste("pkParameter",pkParameter))
-      # print(paste("output",output))
-      # print(paste("quantile",quantile))
-      # print(paste("individualId",individualId))
 
       # SA results file corresponding to individual correspinding to current quantile
       saResultsFileName <- pkOutputIndexDf$Filename[n]
@@ -724,8 +716,6 @@ getPopSensDfForPkAndOutput <- function(simulation,
         totalSensitivityThreshold = totalSensitivityThreshold
       )
 
-   #  print(filteredIndividualSAResults)
-    #pause()
       # Verify that there exist SA results within the threshold given by totalSensitivityThreshold for this individual, this output and this pkParameter
       if (length(filteredIndividualSAResults) > 0) {
 
