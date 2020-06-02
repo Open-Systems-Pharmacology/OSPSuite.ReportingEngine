@@ -17,6 +17,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
 
   observedData <- NULL
   simulatedData <- NULL
+  lloqData <- NULL
   residualsData <- NULL
   residualsMetaData <- NULL
   goodnessOfFitPlots <- list()
@@ -24,28 +25,25 @@ plotMeanGoodnessOfFit <- function(structureSet,
 
   # Load observed and simulated data
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
-  simulationResult <- ospsuite::importResultsFromCSV(
-    simulation,
-    structureSet$simulationResultFileNames
-  )
+  simulationResult <- ospsuite::importResultsFromCSV(simulation, structureSet$simulationResultFileNames)
 
   if (!is.null(structureSet$simulationSet$observedDataFile)) {
     observedDataset <- readObservedDataFile(structureSet$simulationSet$observedDataFile)
 
     dictionary <- readObservedDataFile(structureSet$simulationSet$observedMetaDataFile)
-    timeColumn <- as.character(dictionary[dictionary[, "ID"] == "time", "nonmenColumn"])
-    dvColumn <- as.character(dictionary[dictionary[, "ID"] == "dv", "nonmenColumn"])
+    timeColumn <- as.character(dictionary[dictionary[, "ID"] %in% "time", "nonmenColumn"])
+    dvColumn <- as.character(dictionary[dictionary[, "ID"] %in% "dv", "nonmenColumn"])
+    lloqColumn <- as.character(dictionary[dictionary[, "ID"] %in% "lloq", "nonmenColumn"])
   }
 
   for (output in structureSet$simulationSet$outputs) {
     outputSimulatedData <- NULL
     outputObservedData <- NULL
+    outputLloqData <- NULL
     outputResidualsData <- NULL
 
     simulationQuantity <- ospsuite::getQuantity(output$path, simulation)
-    simulationPathResults <- ospsuite::getOutputValues(simulationResult,
-      quantitiesOrPaths = output$path
-    )
+    simulationPathResults <- ospsuite::getOutputValues(simulationResult, quantitiesOrPaths = output$path)
     molWeight <- simulation$molWeightFor(output$path)
 
     outputSimulatedData <- data.frame(
@@ -75,27 +73,23 @@ plotMeanGoodnessOfFit <- function(structureSet,
         "Concentration" = observedDataset[rowFilter, dvColumn],
         "Legend" = output$dataDisplayName
       )
-
       outputResiduals <- getResiduals(outputObservedData, outputSimulatedData)
+      if (!isOfLength(lloqColumn, 0)) {
+        outputLloqData <- data.frame(
+          "Time" = observedDataset[rowFilter, timeColumn],
+          "Concentration" = observedDataset[rowFilter, lloqColumn],
+          "Legend" = "LLOQ"
+        )
+      }
     }
-    simulatedData <- rbind.data.frame(
-      simulatedData,
-      outputSimulatedData
-    )
-    observedData <- rbind.data.frame(
-      observedData,
-      outputObservedData
-    )
-    residualsData <- rbind.data.frame(
-      residualsData,
-      outputResiduals
-    )
+
+    simulatedData <- rbind.data.frame(simulatedData, outputSimulatedData)
+    observedData <- rbind.data.frame(observedData, outputObservedData)
+    lloqData <- rbind.data.frame(lloqData, outputLloqData)
+    residualsData <- rbind.data.frame(residualsData, outputResiduals)
   }
 
-  timeProfileData <- rbind.data.frame(
-    observedData,
-    simulatedData
-  )
+  timeProfileData <- rbind.data.frame(observedData, simulatedData)
 
   # TO DO: so far only using the last quantity to get the ylabel and its unit
   # Need to document how to change that from settings
@@ -119,6 +113,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
   timeProfilePlot <- plotMeanTimeProfile(
     simulatedData = simulatedData,
     observedData = observedData,
+    lloqData = lloqData,
     metaData = timeProfileMetaData,
     dataMapping = timeProfileMapping,
     plotConfiguration = settings$plotConfigurations[["timeProfile"]]
@@ -140,7 +135,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
     ". Time profiles are plotted in a logarithmic scale."
   )
 
-  if (!is.null(residualsData)) {
+  if (!isOfLength(residualsData, 0)) {
     # Smart plotConfig labels metaData$dimension [metaData$unit]
     residualsMetaData <- timeProfileMetaData
     residualsMetaData[["Observed"]] <- timeProfileMetaData[["Concentration"]]
@@ -206,17 +201,19 @@ plotMeanGoodnessOfFit <- function(structureSet,
 
 #' @title plotMeanTimeProfile
 #' @description Plot time profile for mean model workflow
-#' @param simulatedData data.frame of observed data
-#' @param observedData data.frame of simulated data
+#' @param simulatedData data.frame of simulated data
+#' @param observedData data.frame of observed data
+#' @param lloqData data.frame of lloq data
 #' @param metaData meta data on `data`
-#' @param dataMapping `TimeProfileDataMapping` R6 class object from `tlf` library
-#' @param plotCOnfiguration `TimeProfilePlotConfiguration` R6 class object from `tlf` library
+#' @param dataMapping `XYGDataMapping` R6 class object from `tlf` library
+#' @param plotConfiguration `TimeProfilePlotConfiguration` R6 class object from `tlf` library
 #' @return ggplot object of time profile for mean model workflow
 #' @export
 #' @import tlf
 #' @import ggplot2
 plotMeanTimeProfile <- function(simulatedData,
                                 observedData = NULL,
+                                lloqData = NULL,
                                 metaData = NULL,
                                 dataMapping = NULL,
                                 plotConfiguration = NULL) {
@@ -226,9 +223,17 @@ plotMeanTimeProfile <- function(simulatedData,
     dataMapping = dataMapping,
     plotConfiguration = plotConfiguration
   )
-  if (!is.null(observedData)) {
+  if (!isOfLength(observedData, 0)) {
     timeProfilePlot <- tlf::addScatter(
       data = observedData,
+      metaData = metaData,
+      dataMapping = dataMapping,
+      plotObject = timeProfilePlot
+    )
+  }
+  if (!isOfLength(lloqData, 0)) {
+    timeProfilePlot <- tlf::addLine(
+      data = lloqData,
       metaData = metaData,
       dataMapping = dataMapping,
       plotObject = timeProfilePlot
@@ -306,7 +311,6 @@ plotMeanObsVsPred <- function(data,
 
   return(meanObsVsPredPlot)
 }
-
 
 #' @title plotMeanResVsTime
 #' @description Plot Residual vs time for mean model workflow
@@ -407,6 +411,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
 
   observedData <- NULL
   simulatedData <- NULL
+  lloqData <- NULL
   residualsData <- NULL
   residualsMetaData <- NULL
   goodnessOfFitPlots <- list()
@@ -437,19 +442,19 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     observedDataset <- readObservedDataFile(structureSet$simulationSet$observedDataFile)
 
     dictionary <- readObservedDataFile(structureSet$simulationSet$observedMetaDataFile)
-    timeColumn <- as.character(dictionary[dictionary[, "ID"] == "time", "nonmenColumn"])
-    dvColumn <- as.character(dictionary[dictionary[, "ID"] == "dv", "nonmenColumn"])
+    timeColumn <- as.character(dictionary[dictionary[, "ID"] %in% "time", "nonmenColumn"])
+    dvColumn <- as.character(dictionary[dictionary[, "ID"] %in% "dv", "nonmenColumn"])
+    lloqColumn <- as.character(dictionary[dictionary[, "ID"] %in% "lloq", "nonmenColumn"])
   }
 
   for (output in structureSet$simulationSet$outputs) {
     outputSimulatedData <- NULL
     outputObservedData <- NULL
+    outputLloqData <- NULL
     outputResidualsData <- NULL
 
     simulationQuantity <- ospsuite::getQuantity(output$path, simulation)
-    simulationPathResults <- ospsuite::getOutputValues(simulationResult,
-      quantitiesOrPaths = output$path
-    )
+    simulationPathResults <- ospsuite::getOutputValues(simulationResult, quantitiesOrPaths = output$path)
     molWeight <- simulation$molWeightFor(output$path)
 
     # Get the aggregation results
@@ -499,24 +504,20 @@ plotPopulationGoodnessOfFit <- function(structureSet,
       # getResiduals is based on mean workflow whose names are c("Time", "Concentration", "Legend")
       names(simulatedDataForResiduals) <- c("Time", "Concentration", "Legend")
 
-      outputResiduals <- getResiduals(
-        outputObservedData,
-        simulatedDataForResiduals
-      )
+      outputResiduals <- getResiduals(outputObservedData, simulatedDataForResiduals)
+      if (!isOfLength(lloqColumn, 0)) {
+        outputLloqData <- data.frame(
+          "Time" = observedDataset[rowFilter, timeColumn],
+          "Concentration" = observedDataset[rowFilter, lloqColumn],
+          "Legend" = "LLOQ"
+        )
+      }
     }
 
-    simulatedData <- rbind.data.frame(
-      simulatedData,
-      outputSimulatedData
-    )
-    observedData <- rbind.data.frame(
-      observedData,
-      outputObservedData
-    )
-    residualsData <- rbind.data.frame(
-      residualsData,
-      outputResiduals
-    )
+    simulatedData <- rbind.data.frame(simulatedData, outputSimulatedData)
+    observedData <- rbind.data.frame(observedData, outputObservedData)
+    lloqData <- rbind.data.frame(lloqData, outputLloqData)
+    residualsData <- rbind.data.frame(residualsData, outputResiduals)
   }
 
   # TO DO: so far only using the last quantity to get the ylabel and its unit
@@ -541,6 +542,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
   timeProfilePlot <- plotPopulationTimeProfile(
     simulatedData = simulatedData,
     observedData = observedData,
+    lloqData = lloqData,
     metaData = timeProfileMetaData,
     dataMapping = timeProfileMapping,
     plotConfiguration = settings$plotConfigurations[["timeProfile"]]
@@ -550,7 +552,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
 
   goodnessOfFitPlots[["timeProfile"]] <- timeProfilePlot
   goodnessOfFitPlots[["timeProfileLog"]] <- timeProfilePlotLog
-  
+
   goodnessOfFitCaptions[["timeProfile"]] <- paste0(
     "Time profiles of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
     ifnotnull(structureSet$simulationSet$observedDataFile, paste0(". Data source: ", structureSet$simulationSet$observedDataFile)),
@@ -562,7 +564,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     ". Time profiles are plotted in a logarithmic scale."
   )
 
-  if (!is.null(residualsData)) {
+  if (!isOfLength(residualsData, 0)) {
     # Smart plotConfig labels metaData$dimension [metaData$unit]
     residualsMetaData <- timeProfileMetaData
     residualsMetaData[["Observed"]] <- timeProfileMetaData[["Concentration"]]
@@ -581,7 +583,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     goodnessOfFitPlots[["obsVsPredLog"]] <- goodnessOfFitPlots[["obsVsPred"]] +
       ggplot2::scale_y_continuous(trans = "log10") +
       ggplot2::scale_x_continuous(trans = "log10")
-    
+
     goodnessOfFitCaptions[["obsVsPred"]] <- paste0(
       "Predicted vs observed of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
       ifnotnull(structureSet$simulationSet$observedDataFile, paste0(". Data source: ", structureSet$simulationSet$observedDataFile)),
@@ -604,7 +606,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
       metaData = residualsMetaData,
       plotConfiguration = settings$plotConfigurations[["resVsPred"]]
     )
-    
+
     goodnessOfFitCaptions[["resVsTime"]] <- paste0(
       "Logarithmic residuals vs time of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
       ifnotnull(structureSet$simulationSet$observedDataFile, paste0(". Data source: ", structureSet$simulationSet$observedDataFile)), "."
@@ -629,17 +631,19 @@ plotPopulationGoodnessOfFit <- function(structureSet,
 
 #' @title plotPopulationTimeProfile
 #' @description Plot time profile for population model workflow
-#' @param simulatedData data.frame of observed data
-#' @param observedData data.frame of simulated data
+#' @param simulatedData data.frame of simulated data
+#' @param observedData data.frame of observed data
+#' @param lloqData data.frame of lloq data
 #' @param metaData meta data on `data`
-#' @param dataMapping `TimeProfileDataMapping` R6 class object from `tlf` library
-#' @param plotCOnfiguration `TimeProfilePlotConfiguration` R6 class object from `tlf` library
+#' @param dataMapping `XYGDataMapping` R6 class object from `tlf` library
+#' @param plotConfiguration `TimeProfilePlotConfiguration` R6 class object from `tlf` library
 #' @return ggplot object of time profile for mean model workflow
 #' @export
 #' @import tlf
 #' @import ggplot2
 plotPopulationTimeProfile <- function(simulatedData,
                                       observedData = NULL,
+                                      lloqData = NULL,
                                       dataMapping = NULL,
                                       metaData = NULL,
                                       plotConfiguration = NULL) {
@@ -663,12 +667,19 @@ plotPopulationTimeProfile <- function(simulatedData,
     caption = simulatedData$legendMean[1],
     plotObject = timeProfilePlot
   )
-  if (!is.null(observedData)) {
+  if (!isOfLength(observedData, 0)) {
     timeProfilePlot <- tlf::addScatter(
       data = observedData,
       metaData = metaData,
       dataMapping = dataMapping,
-      plotConfiguration = plotConfiguration,
+      plotObject = timeProfilePlot
+    )
+  }
+  if (!isOfLength(lloqData, 0)) {
+    timeProfilePlot <- tlf::addLine(
+      data = lloqData,
+      metaData = metaData,
+      dataMapping = dataMapping,
       plotObject = timeProfilePlot
     )
   }
