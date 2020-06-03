@@ -689,3 +689,68 @@ plotPopulationTimeProfile <- function(simulatedData,
 
   return(timeProfilePlot)
 }
+
+#' @title plotResidualsHistogram
+#' @description Plot histogram of residuals
+#' @param data data.frame
+#' @param metaData meta data on `data`
+#' @param dataMapping `HistogramDataMapping` R6 class object from `tlf` library
+#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
+#' @param bins number of bins defined in the histogram
+#' @return ggplot object of log residuals histogram
+#' @export
+#' @import tlf
+#' @import ggplot2
+#' @import stats
+plotResidualsHistogram <- function(data,
+                                   metaData = NULL,
+                                   dataMapping = NULL,
+                                   plotConfiguration = NULL,
+                                   bins = NULL) {
+  dataMapping <- dataMapping %||% tlf::HistogramDataMapping$new(x = "Residuals", fill = "Legend")
+
+  plotConfiguration <- plotConfiguration %||% tlf::HistogramPlotConfiguration$new(
+    data = data,
+    metaData = metaData,
+    dataMapping = dataMapping
+  )
+  bins <- bins %||% 15
+  xmax <- 1.1 * max(abs(data[, dataMapping$x]))
+  xDensityData <- seq(-xmax, xmax, 2 * xmax / 100)
+  yDensityData <- sqrt(2*pi)*(nrow(data)/bins)*stats::dnorm(xDensityData, sd = stats::sd(data[, dataMapping$x]))
+  densityData <- data.frame(x = xDensityData, y = yDensityData)
+
+  resHistoPlot <- tlf::initializePlot(plotConfiguration)
+
+  # TO DO: Create a place where all the default values are stored
+  resHistoPlot <- resHistoPlot +
+    ggplot2::geom_histogram(
+      data = data,
+      mapping = ggplot2::aes_string(
+        x = dataMapping$x,
+        fill = dataMapping$groupMapping$fill$label
+      ),
+      position = ggplot2::position_stack(),
+      bins = bins,
+      size = 0.5,
+      color = "black",
+      alpha = 0.8
+    ) +
+    ggplot2::geom_vline(
+      xintercept = 0,
+      size = 1
+    ) +
+    ggplot2::geom_line(
+      data = densityData,
+      mapping = ggplot2::aes_string(x = "x", y = "y"),
+      size = 1
+    )
+  # Legends and axis
+  resHistoPlot <- tlf::setLegendPosition(resHistoPlot, position = tlf::LegendPositions$outsideTop)
+
+  resHistoPlot <- resHistoPlot +
+    ggplot2::ylab("Number of residuals") +
+    ggplot2::theme(legend.title = element_blank())
+
+  return(resHistoPlot)
+}

@@ -135,10 +135,14 @@ PlotTask <- R6::R6Class(
             self$settings
           )
 
+          # Specific to goodness of fit task:
+          # taskResults include `residuals`
           if (!is.null(taskResults[["residuals"]])) {
+            residualsInSimulation <- taskResults$residuals$data
+            residualsInSimulation$Legend <- set$simulationSet$simulationSetName
             residualsAcrossAllSimulations <- rbind.data.frame(
               residualsAcrossAllSimulations,
-              taskResults$residuals$data
+              residualsInSimulation
             )
           }
           self$saveResults(set, taskResults)
@@ -174,18 +178,11 @@ PlotTask <- R6::R6Class(
         )
 
         # TO DO: integrate tlf fix of mapping/plotConfig for no group variable
-        residualHistogramPlot <- tlf::plotHistogram(
-          data = cbind.data.frame(residualsAcrossAllSimulations,
-            " " = "Residuals"
-          ),
-          dataMapping = tlf::HistogramDataMapping$new(
-            x = "Residuals",
-            fill = " "
-          ),
-          plotConfiguration = self$settings$plotConfigurations[["histogram"]]
-        )
-        residualHistogramPlot <- residualHistogramPlot + ggplot2::labs(title = NULL, subtitle = NULL)
-
+        residualHistogramPlot <- plotResidualsHistogram(data = residualsAcrossAllSimulations,
+                                                        metaData = taskResults$residuals$metaData,
+                                                        plotConfiguration = self$settings$plotConfigurations[["histogram"]],
+                                                        bins = self$settings$bins)
+          
         # TO DO: define parameters from settings/plotConfiguration
         ggplot2::ggsave(
           filename = file.path(self$workflowFolder, plotFileName),
@@ -204,7 +201,7 @@ PlotTask <- R6::R6Class(
           logFolder = self$workflowFolder
         )
         
-        simulationNames <- paste0(as.character(sapply(structureSets, function(set){set$simulationSet$simulationName})), collapse = ", ")
+        simulationNames <- paste0(as.character(sapply(structureSets, function(set){set$simulationSet$simulationSetName})), collapse = ", ")
         addTextChunk(self$fileName, paste0("Figure: Distribution of residuals for ", simulationNames), logFolder = self$workflowFolder)
 
         addFigureChunk(
