@@ -46,7 +46,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
     simulationPathResults <- ospsuite::getOutputValues(simulationResult, quantitiesOrPaths = output$path)
     molWeight <- simulation$molWeightFor(output$path)
 
-    outputSimulatedResults <- getOutputSimulatedResults(simulationPathResults, output, simulationQuantity, molWeight, structureSet$simulationSettimeUnit)
+    outputSimulatedResults <- getOutputSimulatedResults(simulationPathResults, output, simulationQuantity, molWeight, structureSet$simulationSet$timeUnit)
 
     outputSimulatedData <- outputSimulatedResults$data
     outputSimulatedMetaData[[output$path]] <- outputSimulatedResults$metaData
@@ -185,7 +185,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
       plotConfiguration = settings$plotConfigurations[["resHisto"]],
       bins = settings$bins
     )
-    goodnessOfFitCaptions[["resVsTime"]] <- getGoodnessOfFitCaptions(structureSet, "resHisto")
+    goodnessOfFitCaptions[["resHisto"]] <- getGoodnessOfFitCaptions(structureSet, "resHisto")
   }
 
   return(list(
@@ -212,7 +212,7 @@ getOutputSimulatedResults <- function(simulationPathResults, output, simulationQ
       simulationPathResults$data[, output$path]
     ),
     "Legend" = output$displayName %||% output$path,
-    "Path" = output$path,
+    "Path" = output$path
   )
 
   outputSimulatedMetaData <- list(
