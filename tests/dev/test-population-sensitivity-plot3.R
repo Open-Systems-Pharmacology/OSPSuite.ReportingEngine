@@ -3,19 +3,19 @@ library(ospsuite)
 graphics.off()
 library(ospsuite.reportingengine)
 
-simulationFile <- "./tests/dev/ex_03_pop/RaltegravirSim.pkml"
-populationFile1 <- "./tests/dev/ex_03_pop/RalPop10.csv"
-populationFile2 <- "./tests/dev/ex_03_pop/LarPop10.csv"
+simulationFile <- "./tests/dev/ex_03_pop9/RaltegravirSim.pkml"
+populationFile1 <- "./tests/dev/ex_03_pop9/RalPop10.csv"
+populationFile2 <- "./tests/dev/ex_03_pop9/LarPop10.csv"
 
 
 ps1 <- PopulationSimulationSet$new(
   simulationSetName = "ral",
   simulationFile = simulationFile,
   populationFile = populationFile1,
-  outputs = c(Output$new(path = simTree1$Organism$VenousBlood$Plasma$Raltegravir$Concentration$path),
-     Output$new(path = simTree1$Organism$ArterialBlood$Plasma$Raltegravir$Concentration$path,
+  outputs = c(Output$new(path = "Organism|VenousBlood|Plasma|Raltegravir|Concentration"),
+     Output$new(path = "Organism|ArterialBlood|Plasma|Raltegravir|Concentration",
                 pkParameters = c("t_max","AUC_tEnd")),
-    Output$new(path = simTree1$Organism$Lung$Interstitial$Raltegravir$Concentration$path,
+    Output$new(path = "Organism|Lung|Interstitial|Raltegravir|Concentration",
                pkParameters = c("C_max","MRT"))
   )
 )
@@ -24,7 +24,7 @@ ps2 <- PopulationSimulationSet$new(
   simulationSetName = "lar",
   simulationFile = simulationFile,
   populationFile = populationFile2,
-  outputs = c(Output$new(path = simTree1$Organism$Lung$Interstitial$Raltegravir$Concentration$path,
+  outputs = c(Output$new(path = "Organism|Lung|Interstitial|Raltegravir|Concentration",
               pkParameters = c("C_max","MRT"))
   )
 )
@@ -32,9 +32,9 @@ ps2 <- PopulationSimulationSet$new(
 
 pwf <- PopulationWorkflow$new(simulationSets = list(ps1, ps2), workflowFolder = "./tests/dev/ex_03_pop9")
 pwf$simulatePopulation$settings$showProgress <- FALSE
-pwf$simulatePopulation$activate()
-pwf$populationPKParameters$activate()
-pwf$populationSensitivityAnalysis$activate()
+pwf$simulatePopulation$inactivate()
+pwf$populationPKParameters$inactivate()
+pwf$populationSensitivityAnalysis$inactivate()
 pwf$plotSensitivity$activate()
 
 
