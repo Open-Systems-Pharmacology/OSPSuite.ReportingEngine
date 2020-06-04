@@ -11,20 +11,17 @@ SensitivityAnalysisSettings <- R6::R6Class(
     #' @param numberOfCores number of cores for parallel computation
     #' @param quantileVec vector of quantiles to be calculated
     #' @param variableParameterPaths vector of paths of parameters to vary when performing sensitivity analysis
-    #' @param pkParameterSelection list of selected PK parameters for sensitivity analysis
     #' @param showProgress sensitivity analysis progress printed to console if TRUE
     #' @return A new `SensitivityAnalysisSettings` object
     initialize = function(variationRange = NULL,
                           numberOfCores = NULL,
                           quantileVec = NULL,
                           variableParameterPaths = NULL,
-                          pkParameterSelection = NULL,
                           showProgress = FALSE) {
       self$variationRange <- variationRange %||% defaultVariationRange
       self$numberOfCores <- numberOfCores %||% defaultSensitivityAnalysisNumberOfCores
       self$quantileVec <- quantileVec %||% defaultQuantileVec
       self$variableParameterPaths <- variableParameterPaths
-      self$pkParameterSelection <- pkParameterSelection
       self$showProgress <- showProgress
     }
   ),
@@ -76,20 +73,6 @@ SensitivityAnalysisSettings <- R6::R6Class(
       }
     },
 
-    #' @field pkParameterSelection list of selected PK parameters for sensitivity analysis
-    pkParameterSelection = function(value) {
-      if (missing(value)) {
-        private$.pkParameterSelection
-      } else {
-        if (!is.null(value)) {
-          validateIsString(value)
-          validateNoDuplicatedEntries(value)
-          validateIsIncluded(values = value, parentValues = ospsuite::allPKParameterNames())
-          private$.pkParameterSelection <- value
-        }
-      }
-    },
-
     #' @field showProgress is a logical input.  TRUE shows progress of sensitivity analysis
     showProgress = function(value) {
       if (missing(value)) {
@@ -108,7 +91,6 @@ SensitivityAnalysisSettings <- R6::R6Class(
     .numberOfCores = NULL,
     .quantileVec = NULL,
     .variableParameterPaths = NULL,
-    .pkParameterSelection = NULL,
     .showProgress = NULL
   )
 )
