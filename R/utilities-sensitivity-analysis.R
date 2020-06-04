@@ -884,6 +884,18 @@ getPkParameterPopulationSensitivityPlot <- function(data, settings) {
   return(plt)
 }
 
+
+#' @title getPkOutputIndexDf
+#' @description Function to filter the population results index file for given pkParameter and output
+#' @param indexDf dataframe containing summary of sensitivity results
+#' @param output pathID of output for which to obtain the population sensitivity results
+#' @param pkParameter name of PK parameter for which to obtain the population sensitivity results
+#' @return pkOutputIndexDf dataframe containing index of files containing population sensitivity analysis results conducted for given output and pkParameter
+getPkOutputIndexDf <- function(indexDf, pkParameter, output) {
+  pkOutputIndexDf <- indexDf[(indexDf$pkParameters == pkParameter) & (indexDf$Outputs == output), ]
+  return(pkOutputIndexDf)
+}
+
 #' @title getDefaultTotalSensitivityThreshold
 #' @description return the default totalSensitivityThreshold to be used in a population sensitivity analysis plot
 #' @param variableParameterPaths vector of paths of parameters to vary when performing sensitivity analysis
