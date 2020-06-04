@@ -1,10 +1,7 @@
 rm(list = ls())
 library(ospsuite)
-library(stringr)
 graphics.off()
 library(ospsuite.reportingengine)
-load("./tests/dev/ex_03_pop/simTrees.Rdata")
-
 
 simulationFile <- "./tests/dev/ex_03_pop/RaltegravirSim.pkml"
 populationFile1 <- "./tests/dev/ex_03_pop/RalPop10.csv"
@@ -35,19 +32,19 @@ ps2 <- PopulationSimulationSet$new(
 
 pwf <- PopulationWorkflow$new(simulationSets = list(ps1, ps2), workflowFolder = "./tests/dev/ex_03_pop9")
 pwf$simulatePopulation$settings$showProgress <- FALSE
-pwf$simulatePopulation$inactivate()
-pwf$populationPKParameters$inactivate()
-pwf$populationSensitivityAnalysis$inactivate()
+pwf$simulatePopulation$activate()
+pwf$populationPKParameters$activate()
+pwf$populationSensitivityAnalysis$activate()
 pwf$plotSensitivity$activate()
 
 
 
 pwf$populationSensitivityAnalysis$settings$showProgress <- TRUE
 pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- c(
-  simTree1$Organism$Heart$Volume$path,
-  simTree1$Organism$Lung$Volume$path,
-  simTree1$Organism$Kidney$Volume$path,
-  simTree1$Organism$Brain$Volume$path,
+  "Organism|Heart|Volume",
+  "Organism|Lung|Volume",
+  "Organism|Kidney|Volume",
+  "Organism|Brain|Volume",
   "Organism|Muscle|Volume",
   "Organism|LargeIntestine|Volume",
   "Organism|PortalVein|Volume",
