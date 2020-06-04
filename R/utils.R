@@ -212,7 +212,7 @@ loadWorkflowPopulation <- function(simulationSet) {
 #' @import utils
 lastPathElement <- function(path) {
   pathArray <- ospsuite::toPathArray(path)
-  lastElement <- utils::tail(pathArray,1)
-  
+  lastElement <- utils::tail(pathArray, 1)
+
   return(lastElement)
 }

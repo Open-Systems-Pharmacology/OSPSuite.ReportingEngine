@@ -17,7 +17,7 @@ tlf::setDefaultLegendPosition(tlf::LegendPositions$outsideTop)
 # TO DO: set a similar code directly in tlfEnv
 ExportPlotConfigurationClass <- R6::R6Class(
   "ExportPlotConfiguration",
-  public = list(format = "png", width = 4*5, height = 3*5, units = "cm")
+  public = list(format = "png", width = 4 * 5, height = 3 * 5, units = "cm")
 )
 
 #' @export

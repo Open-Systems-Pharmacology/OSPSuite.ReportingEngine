@@ -12,11 +12,16 @@ ps1 <- PopulationSimulationSet$new(
   simulationSetName = "ral",
   simulationFile = simulationFile,
   populationFile = populationFile1,
-  outputs = c(Output$new(path = "Organism|VenousBlood|Plasma|Raltegravir|Concentration"),
-     Output$new(path = "Organism|ArterialBlood|Plasma|Raltegravir|Concentration",
-                pkParameters = c("t_max","AUC_tEnd")),
-    Output$new(path = "Organism|Lung|Interstitial|Raltegravir|Concentration",
-               pkParameters = c("C_max","MRT"))
+  outputs = c(
+    Output$new(path = "Organism|VenousBlood|Plasma|Raltegravir|Concentration"),
+    Output$new(
+      path = "Organism|ArterialBlood|Plasma|Raltegravir|Concentration",
+      pkParameters = c("t_max", "AUC_tEnd")
+    ),
+    Output$new(
+      path = "Organism|Lung|Interstitial|Raltegravir|Concentration",
+      pkParameters = c("C_max", "MRT")
+    )
   )
 )
 
@@ -24,9 +29,10 @@ ps2 <- PopulationSimulationSet$new(
   simulationSetName = "lar",
   simulationFile = simulationFile,
   populationFile = populationFile2,
-  outputs = c(Output$new(path = "Organism|Lung|Interstitial|Raltegravir|Concentration",
-              pkParameters = c("C_max","MRT"))
-  )
+  outputs = c(Output$new(
+    path = "Organism|Lung|Interstitial|Raltegravir|Concentration",
+    pkParameters = c("C_max", "MRT")
+  ))
 )
 
 
@@ -55,13 +61,11 @@ pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- c(
   "Organism|SmallIntestine|Volume",
   "Organism|Lumen|Effective surface area variability factor",
   "Organism|Bone|Volume",
-  "Organism|Stomach|Volume")
+  "Organism|Stomach|Volume"
+)
 
-pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.25,0.5,0.75)
+pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.25, 0.5, 0.75)
 
 pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(totalSensitivityThreshold = 0.9, maximalParametersPerSensitivityPlot = 12, plotFontSize = 6)
 
 pwf$runWorkflow()
-
-
-

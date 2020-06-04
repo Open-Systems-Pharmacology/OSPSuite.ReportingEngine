@@ -106,8 +106,12 @@ plotMeanGoodnessOfFit <- function(structureSet,
     selectedSimulatedData <- simulatedData[simulatedData$Path %in% selectedPaths, ]
     selectedObservedData <- observedData[observedData$Path %in% selectedPaths, ]
     selectedLloqData <- lloqData[lloqData$Path %in% selectedPaths, ]
-    if(sum(observedData$Path %in% selectedPaths)==0){selectedObservedData <- NULL}
-    if(sum(lloqData$Path %in% selectedPaths)==0){selectedLloqData <- NULL}
+    if (sum(observedData$Path %in% selectedPaths) == 0) {
+      selectedObservedData <- NULL
+    }
+    if (sum(lloqData$Path %in% selectedPaths) == 0) {
+      selectedLloqData <- NULL
+    }
 
     timeProfileMetaData <- list(
       "Time" = list(dimension = "Time", unit = structureSet$simulationSet$timeUnit),
@@ -137,35 +141,35 @@ plotMeanGoodnessOfFit <- function(structureSet,
       selectedDimension <- utils::head(metaDataFrame$dimension[metaDataFrame$unit %in% unit], 1)
       selectedPaths <- metaDataFrame$path[metaDataFrame$unit %in% unit]
       selectedResidualsData <- residualsData[residualsData$Path %in% selectedPaths, ]
-      
-      if(sum(residualsData$Path %in% selectedPaths)>0){
-      residualsMetaData <- list(
-        "Observed" = list(dimension = "Observed data", unit = unit),
-        "Simulated" = list(dimension = "Simulated data", unit = unit),
-        "Residuals" = list(unit = "", dimension = "Residuals\nlog(Observed)-log(Simulated)")
-      )
 
-      obsVsPredPlot <- plotMeanObsVsPred(
-        data = selectedResidualsData,
-        metaData = residualsMetaData,
-        plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
-      )
+      if (sum(residualsData$Path %in% selectedPaths) > 0) {
+        residualsMetaData <- list(
+          "Observed" = list(dimension = "Observed data", unit = unit),
+          "Simulated" = list(dimension = "Simulated data", unit = unit),
+          "Residuals" = list(unit = "", dimension = "Residuals\nlog(Observed)-log(Simulated)")
+        )
 
-      goodnessOfFitPlots[[paste0("obsVsPred-", selectedDimension)]] <- obsVsPredPlot
-      goodnessOfFitPlots[[paste0("obsVsPredLog-", selectedDimension)]] <- obsVsPredPlot +
-        ggplot2::scale_y_continuous(trans = "log10") +
-        ggplot2::scale_x_continuous(trans = "log10")
+        obsVsPredPlot <- plotMeanObsVsPred(
+          data = selectedResidualsData,
+          metaData = residualsMetaData,
+          plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
+        )
 
-      goodnessOfFitCaptions[[paste0("obsVsPred-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred")
-      goodnessOfFitCaptions[[paste0("obsVsPredLog-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred", "log")
+        goodnessOfFitPlots[[paste0("obsVsPred-", selectedDimension)]] <- obsVsPredPlot
+        goodnessOfFitPlots[[paste0("obsVsPredLog-", selectedDimension)]] <- obsVsPredPlot +
+          ggplot2::scale_y_continuous(trans = "log10") +
+          ggplot2::scale_x_continuous(trans = "log10")
 
-      goodnessOfFitPlots[[paste0("resVsPred-", selectedDimension)]] <- plotMeanResVsPred(
-        data = selectedResidualsData,
-        metaData = residualsMetaData,
-        plotConfiguration = settings$plotConfigurations[["resVsPred"]]
-      )
+        goodnessOfFitCaptions[[paste0("obsVsPred-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred")
+        goodnessOfFitCaptions[[paste0("obsVsPredLog-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred", "log")
 
-      goodnessOfFitCaptions[[paste0("resVsPred-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "resVsPred")
+        goodnessOfFitPlots[[paste0("resVsPred-", selectedDimension)]] <- plotMeanResVsPred(
+          data = selectedResidualsData,
+          metaData = residualsMetaData,
+          plotConfiguration = settings$plotConfigurations[["resVsPred"]]
+        )
+
+        goodnessOfFitCaptions[[paste0("resVsPred-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "resVsPred")
       }
     }
 
@@ -544,8 +548,12 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     selectedSimulatedData <- simulatedData[simulatedData$Path %in% selectedPaths, ]
     selectedObservedData <- observedData[observedData$Path %in% selectedPaths, ]
     selectedLloqData <- lloqData[lloqData$Path %in% selectedPaths, ]
-    if(sum(observedData$Path %in% selectedPaths)==0){selectedObservedData <- NULL}
-    if(sum(lloqData$Path %in% selectedPaths)==0){selectedLloqData <- NULL}
+    if (sum(observedData$Path %in% selectedPaths) == 0) {
+      selectedObservedData <- NULL
+    }
+    if (sum(lloqData$Path %in% selectedPaths) == 0) {
+      selectedLloqData <- NULL
+    }
 
     timeProfileMetaData <- list(
       "Time" = list(dimension = "Time", unit = structureSet$simulationSet$timeUnit),
@@ -575,35 +583,35 @@ plotPopulationGoodnessOfFit <- function(structureSet,
       selectedDimension <- utils::head(metaDataFrame$dimension[metaDataFrame$unit %in% unit], 1)
       selectedPaths <- metaDataFrame$path[metaDataFrame$unit %in% unit]
       selectedResidualsData <- residualsData[residualsData$Path %in% selectedPaths, ]
-      
-      if(sum(residualsData$Path %in% selectedPaths)>0){
+
+      if (sum(residualsData$Path %in% selectedPaths) > 0) {
         residualsMetaData <- list(
-        "Observed" = list(dimension = "Observed data", unit = unit),
-        "Simulated" = list(dimension = "Simulated data", unit = unit),
-        "Residuals" = list(unit = "", dimension = "Residuals\nlog(Observed)-log(Simulated)")
-      )
+          "Observed" = list(dimension = "Observed data", unit = unit),
+          "Simulated" = list(dimension = "Simulated data", unit = unit),
+          "Residuals" = list(unit = "", dimension = "Residuals\nlog(Observed)-log(Simulated)")
+        )
 
-      obsVsPredPlot <- plotMeanObsVsPred(
-        data = selectedResidualsData,
-        metaData = residualsMetaData,
-        plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
-      )
+        obsVsPredPlot <- plotMeanObsVsPred(
+          data = selectedResidualsData,
+          metaData = residualsMetaData,
+          plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
+        )
 
-      goodnessOfFitPlots[[paste0("obsVsPred-", selectedDimension)]] <- obsVsPredPlot
-      goodnessOfFitPlots[[paste0("obsVsPredLog-", selectedDimension)]] <- obsVsPredPlot +
-        ggplot2::scale_y_continuous(trans = "log10") +
-        ggplot2::scale_x_continuous(trans = "log10")
+        goodnessOfFitPlots[[paste0("obsVsPred-", selectedDimension)]] <- obsVsPredPlot
+        goodnessOfFitPlots[[paste0("obsVsPredLog-", selectedDimension)]] <- obsVsPredPlot +
+          ggplot2::scale_y_continuous(trans = "log10") +
+          ggplot2::scale_x_continuous(trans = "log10")
 
-      goodnessOfFitCaptions[[paste0("obsVsPred-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred")
-      goodnessOfFitCaptions[[paste0("obsVsPredLog-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred", "log")
+        goodnessOfFitCaptions[[paste0("obsVsPred-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred")
+        goodnessOfFitCaptions[[paste0("obsVsPredLog-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred", "log")
 
-      goodnessOfFitPlots[[paste0("resVsPred-", selectedDimension)]] <- plotMeanResVsPred(
-        data = selectedResidualsData,
-        metaData = residualsMetaData,
-        plotConfiguration = settings$plotConfigurations[["resVsPred"]]
-      )
+        goodnessOfFitPlots[[paste0("resVsPred-", selectedDimension)]] <- plotMeanResVsPred(
+          data = selectedResidualsData,
+          metaData = residualsMetaData,
+          plotConfiguration = settings$plotConfigurations[["resVsPred"]]
+        )
 
-      goodnessOfFitCaptions[[paste0("resVsPred-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "resVsPred")
+        goodnessOfFitCaptions[[paste0("resVsPred-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "resVsPred")
       }
     }
 
@@ -778,7 +786,7 @@ plotResidualsHistogram <- function(data,
   bins <- bins %||% 15
   xmax <- 1.1 * max(abs(data[, dataMapping$x]))
   xDensityData <- seq(-xmax, xmax, 2 * xmax / 100)
-  yDensityData <- (nrow(data)/bins)*stats::dnorm(xDensityData, sd = stats::sd(data[, dataMapping$x]))
+  yDensityData <- (nrow(data) / bins) * stats::dnorm(xDensityData, sd = stats::sd(data[, dataMapping$x]))
   densityData <- data.frame(x = xDensityData, y = yDensityData)
 
   resHistoPlot <- tlf::initializePlot(plotConfiguration)
