@@ -606,6 +606,7 @@ plotTornado <- function(data,
 #' @param logFolder folder where the logs are saved
 #' @return a structured list of plots for each possible combination of pathID output-pkParameter that is found in sensitivity results index file
 #' @export
+#' @import ospsuite
 plotPopulationSensitivity <- function(structureSets,
                                       logFolder = NULL,
                                       settings,
@@ -615,6 +616,9 @@ plotPopulationSensitivity <- function(structureSets,
   dFList <- list()
   i <- 0
 
+  saResultIndexFiles <- list()
+  simulationList <- list()
+
   for (structureSet in structureSets) {
     sensitivityResultsFolder <- file.path(structureSet$workflowFolder, structureSet$sensitivityAnalysisResultsFolder)
     simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
@@ -623,6 +627,10 @@ plotPopulationSensitivity <- function(structureSets,
       x$path
     })
     populationName <- structureSet$simulationSet$simulationSetName
+
+
+    saResultIndexFiles[[populationName]] <- structureSet$popSensitivityAnalysisResultsIndexFile
+    simulationList[[populationName]] <- simulation
 
     for (op in outputPaths) {
       # opIndexDf is sub-dataframe of indexDf that has only the outputs op in the Outputs column
@@ -650,46 +658,80 @@ plotPopulationSensitivity <- function(structureSets,
 
   # allPopsDf is a dataframe that holds the results of all sensitivity analyses for all populations
   allPopsDf <- do.call("rbind", dFList)
-  print(allPopsDf)
-  plotList <- list()
 
+
+  #add any missing sensitivity results omitted when applying threshold in getPopSensDfForPkAndOutput
+
+  #get set of unique combinations of outputs and pkParameters.  A plot is built for each combination.
   uniqueQuantitiesAndPKParameters <- unique(allPopsDf[, c("QuantityPath", "PKParameter")])
 
-  for (n in 1:nrow(uniqueQuantitiesAndPKParameters) ){
 
+  for (n in 1:nrow(uniqueQuantitiesAndPKParameters)) {
     op <- uniqueQuantitiesAndPKParameters$QuantityPath[n]
     pk <- uniqueQuantitiesAndPKParameters$PKParameter[n]
 
-    sensitivityThisOpPk <- allPopsDf[ (allPopsDf$QuantityPath %in% op) & (allPopsDf$PKParameter %in% pk),  ]
+    sensitivityThisOpPk <- allPopsDf[ (allPopsDf$QuantityPath %in% op) & (allPopsDf$PKParameter %in% pk), ]
+
+    #get list of all perturbation parameters used in this plot
     allParamsForThisOpPk <- unique(sensitivityThisOpPk$Parameter)
 
-    individualCombinationsThisOpPk <- unique(sensitivityThisOpPk[, c("Quantile", "individualId" , "Population")])
+    #get the sensitivity results dataframe for this combination of output and pkParameter
+    individualCombinationsThisOpPk <- unique(sensitivityThisOpPk[, c("Quantile", "individualId", "Population")])
 
-    for (m in 1:nrow(individualCombinationsThisOpPk)){
-
+    #loop thru each individual in current combination of output and pkParameter
+    for (m in 1:nrow(individualCombinationsThisOpPk)) {
       qu <- individualCombinationsThisOpPk$Quantile[m]
       id <- individualCombinationsThisOpPk$individualId[m]
-      pp <- individualCombinationsThisOpPk$Population[m]
+      pop <- individualCombinationsThisOpPk$Population[m]
 
-      print(paste("op",op))
-      print(paste("pk",pk))
-      print(paste("qu",qu))
-      print(paste("id",id))
-      print(paste("pp",pp))
+      #get list of all perturbation parameters for this one individual that are used in the plot for this combination of output and pkParameter
+      allParamsForThisIndividual <- unique(sensitivityThisOpPk[ (sensitivityThisOpPk$Quantile %in% qu) & (sensitivityThisOpPk$individualId %in% id) & (sensitivityThisOpPk$Population %in% pop), ]$Parameter)
 
-      allParamsForThisIndividual <- unique(sensitivityThisOpPk[ (sensitivityThisOpPk$Quantile %in% qu) & (sensitivityThisOpPk$individualId %in% id) & (sensitivityThisOpPk$Population %in% pp),  ]$Parameter)
+      #create list of the parameters missing for this individual but otherwise shown in this plot for this combination of output and pkParameter
+      missingParameters <- setdiff(allParamsForThisOpPk, allParamsForThisIndividual)
 
-      print(setdiff(allParamsForThisOpPk,allParamsForThisIndividual))
-      pause()
+      #loop thru the missing parameters for the current individual
+      for (parNumber in seq_along(missingParameters)) {
+
+        #load the index file of SA results for this individual's population to get the name of the individuals's sensitivity result file
+        indx <- read.csv(saResultIndexFiles[[pop]])
+
+        #get the name of the individuals's sensitivity result file
+        saResFileName <- indx[ (indx$Outputs %in% op) & (indx$pkParameters %in% pk) & (indx$Quantile %in% qu), ]$Filename
+
+        # import SA results for individual
+        individualSAResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(
+          simulation = simulationList[[pop]],
+          filePaths = file.path(structureSet$workflowFolder, structureSet$sensitivityAnalysisResultsFolder, saResFileName)
+        )
+
+        # get the sensitivity for the missing parameter for this individual and for this combination of output and pkParameter
+        missingSensivitity <- individualSAResults$pkParameterSensitivityValueFor(
+          pkParameterName = as.character(pk),
+          parameterName = missingParameters[parNumber],
+          outputPath = as.character(op)
+        )
+
+        # create a sensitivity result row for the missing parameter for this individual and this combination of output and pkParameter
+        saMissingParameter <- data.frame(
+          "QuantityPath" = op,
+          "Parameter" = missingParameters[parNumber],
+          "PKParameter" = pk,
+          "Value" = missingSensivitity,
+          "Quantile" = qu,
+          "individualId" = id,
+          "Population" = pop
+        )
+
+        #append to allPopsDf the row containing the missing parameter's sensitivity
+        allPopsDf <- rbind(allPopsDf, saMissingParameter)
+      }
     }
-
-
-
-
   }
 
 
 
+  plotList <- list()
 
   for (i in 1:nrow(uniqueQuantitiesAndPKParameters)) {
     pk <- as.character(uniqueQuantitiesAndPKParameters$PKParameter[i])
