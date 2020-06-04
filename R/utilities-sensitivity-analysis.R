@@ -641,11 +641,6 @@ plotPopulationSensitivity <- function(structureSets,
     # Set level order of Parameter column to make most sensitive parameter have highest factor level
     popDfPkOp$Parameter <- factor(x = popDfPkOp$Parameter, levels = rev(unique(popDfPkOp$Parameter)))
 
-    # Remvoe the substrings "Applications-","Neighborhoods-","Organism-","ProtocolSchemaItem-" from all parameter paths
-    for (j in seq_along(levels(popDfPkOp$Parameter))) {
-      levels(popDfPkOp$Parameter)[j] <- removePathStrings(as.character(levels(popDfPkOp$Parameter)[j]))
-    }
-
     # Get vector of settings$maximalParametersPerSensitivityPlot most sensitive parameters
     parameterLevels <- levels(popDfPkOp$Parameter)
     truncParamLevels <- rev(parameterLevels)[1:min(settings$maximalParametersPerSensitivityPlot, length(parameterLevels))]
@@ -719,7 +714,7 @@ getPopSensDfForPkAndOutput <- function(simulation,
         listOfFilteredIndividualSAResults <- lapply(filteredIndividualSAResults, function(x) {
           list(
             "QuantityPath" = x$outputPath,
-            "Parameter" = x$parameterPath,
+            "Parameter" = x$parameterName,
             "PKParameter" = x$pkParameterName,
             "Value" = x$value
           )
