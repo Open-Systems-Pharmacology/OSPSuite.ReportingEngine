@@ -32,7 +32,7 @@ Create a `SensitivityPlotSettings` object
 \if{html}{\out{<div class="r">}}\preformatted{SensitivityPlotSettings$new(
   totalSensitivityThreshold = NULL,
   variableParameterPaths = NULL,
-  maximalParametersPerSensitivityPlot = 10,
+  maximalParametersPerSensitivityPlot = 50,
   plotFontSize = 6
 )}\if{html}{\out{</div>}}
 }
