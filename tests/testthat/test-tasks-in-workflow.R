@@ -21,7 +21,7 @@ test_that("Workflow tasks are defined with appropriate names and can be activate
   expect_equal(
     taskNames,
     c(
-      "resetReport", "plotSensitivity", "plotPKParameters", "plotAbsorption", "plotMassBalance",
+      "plotSensitivity", "plotPKParameters", "plotAbsorption", "plotMassBalance",
       "plotGoF", "meanModelSensitivityAnalysis", "meanModelPKParameters", "simulate"
     )
   )

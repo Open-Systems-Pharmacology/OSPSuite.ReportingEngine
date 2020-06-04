@@ -7,21 +7,24 @@
 plotMeanTimeProfile(
   simulatedData,
   observedData = NULL,
+  lloqData = NULL,
   metaData = NULL,
   dataMapping = NULL,
   plotConfiguration = NULL
 )
 }
 \arguments{
-\item{simulatedData}{data.frame of observed data}
+\item{simulatedData}{data.frame of simulated data}
 
-\item{observedData}{data.frame of simulated data}
+\item{observedData}{data.frame of observed data}
+
+\item{lloqData}{data.frame of lloq data}
 
 \item{metaData}{meta data on `data`}
 
-\item{dataMapping}{`TimeProfileDataMapping` R6 class object from `tlf` library}
+\item{dataMapping}{`XYGDataMapping` R6 class object from `tlf` library}
 
-\item{plotCOnfiguration}{`TimeProfilePlotConfiguration` R6 class object from `tlf` library}
+\item{plotConfiguration}{`TimeProfilePlotConfiguration` R6 class object from `tlf` library}
 }
 \value{
 ggplot object of time profile for mean model workflow

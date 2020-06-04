@@ -25,6 +25,10 @@ plotDemographyParameters <- function(structureSets,
   validateIsString(c(yParameters), nullAllowed = TRUE)
 
   demographyPlots <- list()
+  demographyCaptions <- list()
+  captionSimulationNames <- paste0(as.character(sapply(structureSets, function(set) {
+    set$simulationSet$simulationSetName
+  })), collapse = ", ")
 
   # User defined yParameters will be used as is.
   # Otherwise, the default is to pick from the DemographyDefaultParameters excluding xParameters
@@ -58,6 +62,7 @@ plotDemographyParameters <- function(structureSets,
           bins = settings$bins %||% 11
         )
         demographyPlots[[parameterLabel]] <- demographyHistogram
+        demographyCaptions[[parameterLabel]] <- paste0("Distribution of ", demographyMetaData[[parameterName]]$dimension, " for ", captionSimulationNames)
       }
     }
     # Parallel and Ratio: histograms per population
@@ -80,6 +85,7 @@ plotDemographyParameters <- function(structureSets,
           )
 
           demographyPlots[[paste0(parameterLabel, "-", populationName)]] <- demographyHistogram
+          demographyCaptions[[paste0(parameterLabel, "-", populationName)]] <- paste0("Distribution of ", demographyMetaData[[parameterName]]$dimension, " for ", populationName)
         }
       }
     }
@@ -135,6 +141,9 @@ plotDemographyParameters <- function(structureSets,
           demographyPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- comparisonVpcPlot
           demographyPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- comparisonVpcPlot +
             ggplot2::scale_y_continuous(trans = "log10")
+
+          demographyCaptions[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, " in comparison to ", referencePopulationName, ". Profiles are plotted in a linear scale.")
+          demographyCaptions[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, " in comparison to ", referencePopulationName, ". Profiles are plotted in a logarithmic scale.")
         }
       }
 
@@ -150,11 +159,17 @@ plotDemographyParameters <- function(structureSets,
         demographyPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- vpcPlot
         demographyPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- vpcPlot +
           ggplot2::scale_y_continuous(trans = "log10")
+
+        demographyCaptions[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, ". Profiles are plotted in a linear scale.")
+        demographyCaptions[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, ". Profiles are plotted in a logarithmic scale.")
       }
     }
   }
 
-  return(list(plots = demographyPlots))
+  return(list(
+    plots = demographyPlots,
+    captions = demographyCaptions
+  ))
 }
 
 getDemographyAcrossPopulations <- function(structureSets) {
@@ -185,6 +200,7 @@ getDemographyAcrossPopulations <- function(structureSets) {
     parameter$path
   })
 
+  # TO DO: Issue #185, covariate from population can be categorical/factors
   demographyAcrossPopulations$Gender <- as.numeric(demographyAcrossPopulations$Gender)
   metaData[["Gender"]] <- list(
     dimension = "Gender",

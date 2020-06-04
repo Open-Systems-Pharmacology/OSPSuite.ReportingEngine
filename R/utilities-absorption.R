@@ -21,6 +21,7 @@ plotMeanAbsorption <- function(structureSet,
 
   resultsByCompound <- list()
   absorptionPlots <- list()
+  absorptionCaptions <- list()
   for (compound in appliedMolecules) {
     fractionAbsorbedInVenousBloodPath <- paste0("Organism|VenousBlood|*|", compound$name)
     fractionAbsorbedInPortalVeinPath <- paste0("Organism|PortalVein|*|", compound$name)
@@ -165,11 +166,12 @@ plotMeanAbsorption <- function(structureSet,
       dataMapping = tlf::XYGDataMapping$new(
         x = "Time",
         y = "Fraction",
-        color = "Legend",
-        linetype = "Legend"
+        color = "Legend"
       ),
       plotConfiguration = plotConfigurations[["absorptionPlot"]]
     )
+
+    absorptionCaptions[[result$compoundName]] <- paste0("Absorption of ", result$compoundName)
   }
 
   timeProfiles <- lapply(resultsByCompound, function(result) {
@@ -179,7 +181,8 @@ plotMeanAbsorption <- function(structureSet,
 
   return(list(
     plots = absorptionPlots,
-    tables = timeProfiles
+    tables = timeProfiles,
+    captions = absorptionCaptions
   ))
 }
 
@@ -202,29 +205,20 @@ plotAbsorptionTimeProfile <- function(data,
   timeVsFractionDataMapping <- dataMapping %||% tlf::XYGDataMapping$new(
     x = "Time",
     y = "Fraction",
-    color = "Legend",
-    linetype = "Legend"
+    color = "Legend"
   )
 
-  plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
+  timeVsFractionPlotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
     metaData = metaData,
     dataMapping = timeVsFractionDataMapping
   )
 
-  # TO DO: use the new version of tlf to get this plot
-  timeVsFractionPlot <- ggplot2::ggplot()
-  timeVsFractionPlot <- plotConfiguration$setPlotBackground(timeVsFractionPlot)
-  timeVsFractionPlot <- plotConfiguration$setPlotLabels(timeVsFractionPlot)
-
-  timeVsFractionPlot <- timeVsFractionPlot + ggplot2::geom_line(
+  timeVsFractionPlot <- tlf::addLine(
     data = data,
-    mapping = ggplot2::aes_string(
-      x = timeVsFractionDataMapping$x,
-      y = timeVsFractionDataMapping$y,
-      color = timeVsFractionDataMapping$groupMapping$color$label,
-      linetype = timeVsFractionDataMapping$groupMapping$linetype$label
-    )
+    metaData = metaData,
+    dataMapping = timeVsFractionDataMapping,
+    plotConfiguration = timeVsFractionPlotConfiguration
   )
   return(timeVsFractionPlot)
 }

@@ -491,46 +491,42 @@ plotMeanSensitivity <- function(structureSet,
     simulation = simulation,
     structureSet$sensitivityAnalysisResultsFileNames
   )
-
-  # TO DO: workout integration of selection of output paths and PK parameters in settings
-  allOutputPaths <- sapply(structureSet$simulationSet$outputs, function(x) {
-    x$path
-  }) %||% sapply(simulation$outputSelections$allOutputs, function(output) {
-    output$path
-  })
-  pkParameters <- saResults$allPKParameterNames
-
   sensitivityPlots <- list()
-  for (outputPathIndex in seq_along(allOutputPaths)) {
-    for (pkParameter in pkParameters) {
+  sensitivityCaptions <- list()
+
+  for (output in structureSet$simulationSet$outputs) {
+    pathLabel <- lastPathElement(output$path)
+    for (pkParameter in output$pkParameters) {
+      parameterLabel <- lastPathElement(pkParameter$pkParameter)
+
       pkSensitivities <- saResults$allPKParameterSensitivitiesFor(
-        pkParameterName = pkParameter,
-        outputPath = allOutputPaths[outputPathIndex]
+        pkParameterName = pkParameter$pkParameter,
+        outputPath = output$path
       )
 
-      # Translate into a data.frame for plot
       sensitivityData <- data.frame(
-        parameter = sapply(pkSensitivities, function(pkSensitivity) {
+        parameter = as.character(sapply(pkSensitivities, function(pkSensitivity) {
           pkSensitivity$parameterPath
-        }),
-        value = sapply(pkSensitivities, function(pkSensitivity) {
+        })),
+        value = as.numeric(sapply(pkSensitivities, function(pkSensitivity) {
           pkSensitivity$value
-        })
+        })),
+        stringsAsFactors = FALSE
       )
+      sensitivityData$parameter <- renderSaParameterDisplayName(sensitivityData$parameter)
 
-      # Create the tornado plot with output path - PK parameter as its name
-      sensitivityPlots[[paste0(pkParameter, "-", outputPathIndex)]] <- plotTornado(
+      sensitivityPlots[[paste0(parameterLabel, "-", pathLabel)]] <- plotTornado(
         data = sensitivityData,
-        plotConfiguration = NULL
+        plotConfiguration = settings$plotConfiguration
       )
+      sensitivityCaptions[[paste0(parameterLabel, "-", pathLabel)]] <- paste0("Most sensitive parameters for ", pkParameter$displayName %||% pkParameter$pkParameter, " of ", output$displayName, ".")
     }
   }
-
-  return(list(plots = sensitivityPlots))
+  return(list(
+    plots = sensitivityPlots,
+    captions = sensitivityCaptions
+  ))
 }
-
-
-
 
 #' @title plotTornado
 #' @description Plot sensitivity results in a tornado plot
@@ -560,7 +556,7 @@ plotTornado <- function(data,
     show.legend = FALSE,
     position = "dodge"
   ) +
-    ggplot2::coord_flip() + ggplot2::xlab(NULL) + ggplot2::ylab("Sensitivity") + ggplot2::labs(title = NULL, subtitle = NULL) +
+    ggplot2::coord_flip() + ggplot2::xlab(NULL) + ggplot2::ylab("Sensitivity") +
     ggplot2::scale_y_continuous(limits = c(-1.05 * max(abs(data$value)), 1.05 * max(abs(data$value)))) +
     ggplot2::scale_fill_brewer(palette = "Spectral", aesthetics = c("color", "fill")) +
     ggplot2::geom_hline(
@@ -772,8 +768,6 @@ getPkParameterPopulationSensitivityPlot <- function(data, title, plotConfigurati
   return(plt)
 }
 
-
-
 #' @title getDefaultTotalSensitivityThreshold
 #' @description return the default totalSensitivityThreshold to be used in a population sensitivity analysis plot
 #' @param variableParameterPaths vector of paths of parameters to vary when performing sensitivity analysis
@@ -787,4 +781,22 @@ getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold, varia
     }
   }
   return(totalSensitivityThreshold)
+}
+
+#' @title renderSaParameterDisplayName
+#' @description Render display names for sensitivity plots keeping elements in `depth` of parameter paths,
+#' and removing following keys `Organism`, `Applications`, `ProtocolSchemaItem`, and `Neighborhoods`
+#' @param paths vector of paths to render
+#' @param depth levels in parameter path
+#' @return Updated paths
+renderSaParameterDisplayName <- function(paths, depth = 3) {
+  updatedPaths <- paths
+  # toPathArray and toPathString do not work here as paths were separated by "-" in the SA
+  for (pathIndex in seq_along(paths)) {
+    pathArray <- as.character(unlist(strsplit(paths[pathIndex], "-")))
+    pathArray <- utils::tail(pathArray, depth)
+    pathArray <- pathArray[!pathArray %in% c("Organism", "Applications", "ProtocolSchemaItem", "Neighborhoods")]
+    updatedPaths[pathIndex] <- paste0(pathArray, collapse = " - ")
+  }
+  return(updatedPaths)
 }

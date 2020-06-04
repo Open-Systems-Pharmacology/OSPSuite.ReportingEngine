@@ -14,6 +14,8 @@ R6 class for PlotTask settings
 \describe{
 \item{\code{title}}{section title in the report corresponding to the task}
 
+\item{\code{fileName}}{name of report appendix file associated to task}
+
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
 }
 \if{html}{\out{</div>}}
@@ -42,13 +44,15 @@ R6 class for PlotTask settings
 \subsection{Method \code{new()}}{
 Create a `PlotTask` object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PlotTask$new(reportTitle = NULL, getTaskResults = NULL, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PlotTask$new(reportTitle = NULL, fileName = NULL, getTaskResults = NULL, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{reportTitle}}{title to be printed in the report}
+
+\item{\code{fileName}}{name of report appendix file associated to task}
 
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
 
@@ -65,7 +69,7 @@ A new `PlotTask` object
 \subsection{Method \code{saveResults()}}{
 Save results from task run.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PlotTask$saveResults(set, taskResults, reportFile)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PlotTask$saveResults(set, taskResults)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -75,8 +79,6 @@ Save results from task run.
 
 \item{\code{taskResults}}{list of results from task run.
 Results contains at least 2 fields: `plots` and `tables`}
-
-\item{\code{reportFile}}{name of report}
 }
 \if{html}{\out{</div>}}
 }
@@ -86,7 +88,7 @@ Results contains at least 2 fields: `plots` and `tables`}
 \subsection{Method \code{runTask()}}{
 Run task and save its output
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PlotTask$runTask(structureSets, reportFileName)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PlotTask$runTask(structureSets)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -94,7 +96,7 @@ Run task and save its output
 \describe{
 \item{\code{structureSets}}{list of `SimulationStructure` R6 class}
 
-\item{\code{reportFileName}}{name of report file}
+\item{\code{self$fileName}}{name of report file}
 }
 \if{html}{\out{</div>}}
 }

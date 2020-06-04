@@ -142,8 +142,9 @@ plotPopulationPKParameters <- function(structureSets,
   simulation <- loadSimulationWithUpdatedPaths(structureSets[[1]]$simulationSet)
 
   pkRatioTableAcrossPopulations <- NULL
-  pkParametersPlots <- NULL
-  pkParametersTables <- NULL
+  pkParametersPlots <- list()
+  pkParametersCaptions <- list()
+  pkParametersTables <- list()
 
   pkParametersMapping <- tlf::BoxWhiskerDataMapping$new(
     x = "simulationSetName",
@@ -189,11 +190,12 @@ plotPopulationPKParameters <- function(structureSets,
         plotConfiguration = settings$plotConfigurations[["boxplotPkParameters"]]
       ) + ggplot2::labs(title = NULL, subtitle = NULL) + ggplot2::xlab(NULL)
 
-
-
       pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel)]] <- boxplotPkParameter
       pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- boxplotPkParameter +
         ggplot2::scale_y_continuous(trans = "log10")
+
+      pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel)]] <- paste0(pkParameterMetaData[["Value"]]$dimension, " of ", output$displayName, " shown as box-whisker plot, which indicates the 5th, 25th, 50th, 75th, and 95th percentiles in linear scale.")
+      pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- paste0(pkParameterMetaData[["Value"]]$dimension, " of ", output$displayName, " shown as box-whisker plot, which indicates the 5th, 25th, 50th, 75th, and 95th percentiles in logarithmic scale.")
 
       pkParameterTable <- tlf::getBoxWhiskerMeasure(
         data = pkParameterData,
@@ -253,6 +255,9 @@ plotPopulationPKParameters <- function(structureSets,
             pkParametersPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- comparisonVpcPlot
             pkParametersPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- comparisonVpcPlot +
               ggplot2::scale_y_continuous(trans = "log10")
+
+            pkParametersCaptions[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, " in comparison to ", referencePopulationName, ". Profiles are plotted in a linear scale.")
+            pkParametersCaptions[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, " in comparison to ", referencePopulationName, ". Profiles are plotted in a logarithmic scale.")
           }
         }
 
@@ -268,6 +273,9 @@ plotPopulationPKParameters <- function(structureSets,
           pkParametersPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- vpcPlot
           pkParametersPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- vpcPlot +
             ggplot2::scale_y_continuous(trans = "log10")
+
+          pkParametersCaptions[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, ". Profiles are plotted in a linear scale.")
+          pkParametersCaptions[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, ". Profiles are plotted in a logarithmic scale.")
         }
       }
 
@@ -288,12 +296,17 @@ plotPopulationPKParameters <- function(structureSets,
         pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-ratio-log")]] <- boxplotPkRatios +
           ggplot2::scale_y_continuous(trans = "log10")
 
+        pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel)]] <- paste0(pkParameterMetaData[["Value"]]$dimension, " of ", output$displayName, " shown as box-whisker plot, which indicates ratios of the 5th, 25th, 50th, 75th, and 95th percentiles in linear scale.")
+        pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- paste0(pkParameterMetaData[["Value"]]$dimension, " of ", output$displayName, " shown as box-whisker plot, which indicates ratios of the 5th, 25th, 50th, 75th, and 95th percentiles in logarithmic scale.")
+
         pkParametersTables[[paste0(pathLabel, "-", yParameterLabel, "-ratio")]] <- pkRatiosTable
       }
     }
   }
 
-  return(list(plots = pkParametersPlots, tables = pkParametersTables))
+  return(list(plots = pkParametersPlots, 
+              tables = pkParametersTables,
+              captions = pkParametersCaptions))
 }
 
 #' @title ratioBoxplot
@@ -493,9 +506,8 @@ getPopulationPkAnalysesFromOuptut <- function(data, metaData, output, pkParamete
   pkAnalysesFromOuptut$Value <- pkParameterValue
 
   pkAnalysesFromOuptutMetaData <- metaData
-  parameterLabel <- paste0(displayName %||% pkAnalysesFromOuptut$Parameter[1], " for ", output$displayName)
   pkAnalysesFromOuptutMetaData$Value <- list(
-    dimension = parameterLabel,
+    dimension = displayName %||% pkAnalysesFromOuptut$Parameter[1],
     unit = displayUnit %||% pkAnalysesFromOuptut$Unit[1]
   )
 

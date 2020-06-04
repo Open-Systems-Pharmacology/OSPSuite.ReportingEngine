@@ -35,12 +35,16 @@ PopulationPlotTask <- R6::R6Class(
     #' Save results from task run.
     #' @param taskResults list of results from task run.
     #' Results contains at least 2 fields: `plots` and `tables`
-    #' @param reportFile name of report
-    saveResults = function(taskResults,
-                           reportFile) {
+    #' @param self$fileName name of report
+    saveResults = function(taskResults) {
+      resetReport(self$fileName, self$workflowFolder)
+      addTextChunk(
+        self$fileName,
+        paste0("# ", self$title),
+        logFolder = self$workflowFolder
+      )
       for (plotName in names(taskResults$plots)) {
         plotFileName <- file.path(
-          self$workflowFolder,
           self$outputFolder,
           getDefaultFileName(
             suffix = plotName,
@@ -50,7 +54,7 @@ PopulationPlotTask <- R6::R6Class(
 
         # TO DO: define parameters from settings/plotConfiguration
         ggplot2::ggsave(
-          filename = plotFileName,
+          filename = file.path(self$workflowFolder, plotFileName),
           plot = taskResults$plots[[plotName]],
           width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
         )
@@ -59,14 +63,18 @@ PopulationPlotTask <- R6::R6Class(
           pathFolder = self$workflowFolder,
           logTypes = LogTypes$Debug
         )
+        
+        if (!is.null(taskResults$captions[[plotName]])) {
+          addTextChunk(self$fileName, paste0("Figure: ", taskResults$captions[[plotName]]), logFolder = self$workflowFolder)
+        }
 
         addFigureChunk(
-          fileName = reportFile,
+          fileName = self$fileName,
           figureFile = plotFileName,
           logFolder = self$workflowFolder
         )
-
-        if (plotName %in% names(taskResults$tables)) {
+        
+        if (!is.null(taskResults$tables[[plotName]])) {
           tableFileName <- file.path(
             self$workflowFolder,
             self$outputFolder,
@@ -78,11 +86,12 @@ PopulationPlotTask <- R6::R6Class(
 
           write.csv(taskResults$tables[[plotName]],
             file = tableFileName,
-            row.names = FALSE
+            row.names = FALSE,
+            fileEncoding = "UTF-8"
           )
 
           addTableChunk(
-            fileName = reportFile,
+            fileName = self$fileName,
             tableFile = tableFileName,
             logFolder = self$workflowFolder
           )
@@ -99,28 +108,16 @@ PopulationPlotTask <- R6::R6Class(
     #' @description
     #' Run task and save its output
     #' @param structureSets list of `SimulationStructure` R6 class
-    #' @param reportFileName name of report file
-    runTask = function(structureSets,
-                       reportFileName) {
+    runTask = function(structureSets) {
       logWorkflow(
         message = paste0("Starting: ", self$message),
         pathFolder = self$workflowFolder
       )
-      addTextChunk(
-        reportFileName,
-        paste0("# ", self$title),
-        logFolder = self$workflowFolder
-      )
+      
       if (!is.null(self$outputFolder)) {
         dir.create(file.path(self$workflowFolder, self$outputFolder))
       }
-
-      addTextChunk(
-        reportFileName,
-        paste0("## ", self$title),
-        logFolder = self$workflowFolder
-      )
-
+      
       taskResults <- self$getTaskResults(
         structureSets,
         self$workflowFolder,
@@ -129,11 +126,7 @@ PopulationPlotTask <- R6::R6Class(
         self$xParameters,
         self$yParameters
       )
-
-      self$saveResults(
-        taskResults,
-        reportFileName
-      )
+      self$saveResults(taskResults)
     }
   )
 )

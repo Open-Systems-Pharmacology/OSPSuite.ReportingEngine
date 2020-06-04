@@ -133,6 +133,7 @@ plotMeanMassBalance <- function(structureSet,
   )
 
   massBalancePlots <- list()
+  massBalanceCaptions <- list()
   massBalancePlots[["timeProfile"]] <- plotMassBalanceTimeProfile(
     data = simulationResultsOutputByGroup,
     metaData = metaDataOutputByGroup,
@@ -188,9 +189,18 @@ plotMeanMassBalance <- function(structureSet,
     plotConfiguration = plotConfigurations[["pieChart"]]
   )
 
+  massBalanceCaptions <- list(
+    timeProfile = "Amount of drug vs time within the different compartments.",
+    cumulativeTimeProfile = "Cumulated amount of drug vs time within the different compartments",
+    normalizedTimeProfile = "Amount of drug vs time within the different compartments normalized to applicated drugmass.",
+    normalizedCumulativeTimeProfile = "Cumulated amount of drug vs time within the different compartments normalized to applicated drugmass.",
+    pieChart = paste0("Fraction of drug  within the different compartments at ", round(max(simulationResultsOutputByGroup[, "Time"])), metaDataOutputByGroup$Time$unit, ".")
+  )
+
   return(list(
     plots = massBalancePlots,
-    tables = simulationResultsOutputByGroup
+    tables = simulationResultsOutputByGroup,
+    captions = massBalanceCaptions
   ))
 }
 
@@ -222,10 +232,7 @@ plotMassBalanceTimeProfile <- function(data,
     dataMapping = timeVsAmountDataMapping
   )
 
-  # TO DO: use the new version of tlf to get this plot
-  timeVsAmountPlot <- ggplot2::ggplot()
-  timeVsAmountPlot <- plotConfiguration$setPlotBackground(timeVsAmountPlot)
-  timeVsAmountPlot <- plotConfiguration$setPlotLabels(timeVsAmountPlot)
+  timeVsAmountPlot <- tlf::initializePlot(plotConfiguration)
 
   timeVsAmountPlot <- timeVsAmountPlot + ggplot2::geom_line(
     data = data,
@@ -265,10 +272,7 @@ plotMassBalanceCumulativeTimeProfile <- function(data,
     dataMapping = timeVsAmountDataMapping
   )
 
-  # TO DO: use the new version of tlf to get this plot
-  timeVsAmountPlot <- ggplot2::ggplot()
-  timeVsAmountPlot <- plotConfiguration$setPlotBackground(timeVsAmountPlot)
-  timeVsAmountPlot <- plotConfiguration$setPlotLabels(timeVsAmountPlot)
+  timeVsAmountPlot <- tlf::initializePlot(plotConfiguration)
 
   timeVsAmountPlot <- timeVsAmountPlot + ggplot2::geom_area(
     data = data,
