@@ -329,23 +329,7 @@ analyzeCoreSensitivity <- function(simulation,
 
 
 
-#' @title getPKResultsDataFrame
-#' @description Read PK parameter results into a dataframe and set QuantityPath,Parameter and Unit columns as factors
-#' @param pkParameterResultsFilePath Path to PK parameter results CSV file
-#' @param pkParameterSelection PK parameters used for selection of individuals for whom to calculate sensitivity
-#' @return pkResultsDataFrame, a dataframe storing the contents of the CSV file with path pkParameterResultsFilePath
-#' @import ospsuite
-getPKResultsDataFrame <- function(pkParameterResultsFilePath, pkParameterSelection) {
-  pkResultsDataFrame <- read.csv(pkParameterResultsFilePath, encoding = "UTF-8", check.names = FALSE, stringsAsFactors = FALSE)
-  if (!is.null(pkParameterSelection)) {
-    pkResultsDataFrame <- pkResultsDataFrame[pkResultsDataFrame$Parameter %in% pkParameterSelection, ]
-  }
-  colnames(pkResultsDataFrame) <- c("IndividualId", "QuantityPath", "Parameter", "Value", "Unit")
-  pkResultsDataFrame$QuantityPath <- as.factor(pkResultsDataFrame$QuantityPath)
-  pkResultsDataFrame$Parameter <- as.factor(pkResultsDataFrame$Parameter)
-  pkResultsDataFrame$Unit <- as.factor(pkResultsDataFrame$Unit)
-  return(pkResultsDataFrame)
-}
+
 
 
 
@@ -379,9 +363,8 @@ runPopulationSensitivityAnalysis <- function(structureSet, settings, logFolder =
   popSAResultsIndexFile <- trimFileName(structureSet$popSensitivityAnalysisResultsIndexFile)
 
   sensitivityAnalysesResultsIndexFileDF <- getSAFileIndex(
-    pkParameterResultsFilePath = structureSet$pkAnalysisResultsFileNames,
-    pkParameterSelection = settings$pkParameterSelection,
-    quantileVec = settings$quantileVec, # resultsFileFolder = getwd(),
+    structureSet = structureSet,
+    settings = settings,
     resultsFileName = resultsFileName
   )
 
@@ -403,23 +386,70 @@ runPopulationSensitivityAnalysis <- function(structureSet, settings, logFolder =
 }
 
 
+#' @title getPKResultsDataFrame
+#' @description Read PK parameter results into a dataframe and set QuantityPath,Parameter and Unit columns as factors
+#' @param structureSet `SimulationStructure` R6 class object
+#' @return pkResultsDataFrame, a dataframe storing the contents of the CSV file with path pkParameterResultsFilePath
+#' @import ospsuite
+getPKResultsDataFrame <- function(structureSet) {
+  pkResultsDataFrame <- read.csv(structureSet$pkAnalysisResultsFileNames,
+    encoding = "UTF-8",
+    check.names = FALSE,
+    stringsAsFactors = FALSE
+  )
+
+  # get a list pkParameterNamesEachOutput where field names are the paths to the output andthe names of the pkParameters for each output in the current simulation set
+  pkParameterNamesEachOutput <- list()
+
+  for (n in seq_along(structureSet$simulationSet$outputs)) {
+    op <- structureSet$simulationSet$outputs[[n]]
+    if (!is.null(op$pkParameters)) {
+      # case where pkParameters are specified for each output path
+      pkParameterNamesEachOutput[[op$path]] <- unname(sapply(
+        op$pkParameters,
+        function(y) {
+          y$pkParameter
+        }
+      ))
+    } else {
+      # case where no pkParameters are specified for an output and SA performed for all pk parameters by default
+      pkResultsDataFrameThisOutput <- pkResultsDataFrame[ pkResultsDataFrame$QuantityPath == op$path, ]
+      pkParameterNamesEachOutput[[op$path]] <- unique(pkResultsDataFrameThisOutput$Parameter)
+    }
+  }
+
+  colnames(pkResultsDataFrame) <- c("IndividualId", "QuantityPath", "Parameter", "Value", "Unit")
+
+  # extract rows of pkResultsDataFrame corresponding to simulation set outputs and pkParameters
+  filteredPkResultsList <- list()
+  for (n in seq_along(pkParameterNamesEachOutput)) {
+    op <- names(pkParameterNamesEachOutput)[n]
+    filteredPkResultsList[[n]] <- pkResultsDataFrame[ (pkResultsDataFrame$QuantityPath %in% op) & (pkResultsDataFrame$Parameter %in% pkParameterNamesEachOutput[[op]]), ]
+  }
+  filteredPkResultsDf <- do.call("rbind.data.frame", filteredPkResultsList)
+
+
+  filteredPkResultsDf$QuantityPath <- as.factor(filteredPkResultsDf$QuantityPath)
+  filteredPkResultsDf$Parameter <- as.factor(filteredPkResultsDf$Parameter)
+  filteredPkResultsDf$Unit <- as.factor(filteredPkResultsDf$Unit)
+  return(filteredPkResultsDf)
+}
+
+
 #' @title getSAFileIndex
 #' @description Function to build and write to CSV a dataframe that stores all
 #' sensitivity analysis result files that will be output by a population sensitivity analysis.
-#' @param pkParameterResultsFilePath path to pk parameter results CSV file
-#' @param quantileVec quantiles of distributions of pk parameter results for a population.
-#' The individual in the population that yields a pk parameter closest to the quantile is selected for sensitivity analysis.
-#' @param resultsFileFolder path to population sensitivity analysis results CSV files
+#' @param structureSet `SimulationStructure` R6 class object
+#' @param settings list of settings for the population sensitivity analysis
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
-#' @param popSAResultsIndexFile name of CSV file that will store index that identifies name of
-#' sensitivity analysis results file for each sensitivity analysis run
-getSAFileIndex <- function(pkParameterResultsFilePath,
-                           pkParameterSelection,
-                           quantileVec,
-                           resultsFileName) {
-  allPKResultsDataframe <- getPKResultsDataFrame(pkParameterResultsFilePath, pkParameterSelection)
+getSAFileIndex <- function(structureSet = structureSet,
+                           settings = settings,
+                           resultsFileName = resultsFileName) {
+  quantileVec <- settings$quantileVec
+
+  allPKResultsDataframe <- getPKResultsDataFrame(structureSet)
+
   outputs <- levels(allPKResultsDataframe$QuantityPath)
-  pkParameters <- levels(allPKResultsDataframe$Parameter)
   outputColumn <- NULL
   pkParameterColumn <- NULL
   individualIdColumn <- NULL
@@ -427,6 +457,7 @@ getSAFileIndex <- function(pkParameterResultsFilePath,
   unitsColumn <- NULL
   quantileColumn <- NULL
   for (output in outputs) {
+    pkParameters <- unique(allPKResultsDataframe$Parameter[allPKResultsDataframe$QuantityPath == output])
     for (pkParameter in pkParameters) {
       singleOuputSinglePKDataframe <- allPKResultsDataframe[ allPKResultsDataframe["QuantityPath"] == output & allPKResultsDataframe["Parameter"] == pkParameter, ]
       quantileResults <- getQuantileIndividualIds(singleOuputSinglePKDataframe, quantileVec)
@@ -441,9 +472,8 @@ getSAFileIndex <- function(pkParameterResultsFilePath,
     }
   }
   filenamesColumn <- sapply(X = individualIdColumn, FUN = getIndividualSAResultsFileName, resultsFileName)
-  # filenamesColumn <- paste0(sapply(X = individualIdColumn, FUN = getIndividualSAResultsFileName, resultsFileName), ".csv")
   sensitivityAnalysesResultsIndexFileDF <- data.frame("Outputs" = outputColumn, "pkParameters" = pkParameterColumn, "Quantile" = quantileColumn, "Value" = valuesColumn, "Unit" = unitsColumn, "IndividualId" = individualIdColumn, "Filename" = filenamesColumn)
-  # write.csv(x = sensitivityAnalysesResultsIndexFileDF, file = file.path(resultsFileFolder, paste0(popSAResultsIndexFile, ".csv")))
+
   return(sensitivityAnalysesResultsIndexFileDF)
 }
 
