@@ -648,15 +648,49 @@ plotPopulationSensitivity <- function(structureSets,
     }
   }
 
-
-
   # allPopsDf is a dataframe that holds the results of all sensitivity analyses for all populations
   allPopsDf <- do.call("rbind", dFList)
-
+  print(allPopsDf)
   plotList <- list()
 
-  # uniqueQuantitiesAndPKParameters is a dataframe where each row carries a unique combination of QuantityPath and PKParameter
   uniqueQuantitiesAndPKParameters <- unique(allPopsDf[, c("QuantityPath", "PKParameter")])
+
+  for (n in 1:nrow(uniqueQuantitiesAndPKParameters) ){
+
+    op <- uniqueQuantitiesAndPKParameters$QuantityPath[n]
+    pk <- uniqueQuantitiesAndPKParameters$PKParameter[n]
+
+    sensitivityThisOpPk <- allPopsDf[ (allPopsDf$QuantityPath %in% op) & (allPopsDf$PKParameter %in% pk),  ]
+    allParamsForThisOpPk <- unique(sensitivityThisOpPk$Parameter)
+
+    individualCombinationsThisOpPk <- unique(sensitivityThisOpPk[, c("Quantile", "individualId" , "Population")])
+
+    for (m in 1:nrow(individualCombinationsThisOpPk)){
+
+      qu <- individualCombinationsThisOpPk$Quantile[m]
+      id <- individualCombinationsThisOpPk$individualId[m]
+      pp <- individualCombinationsThisOpPk$Population[m]
+
+      print(paste("op",op))
+      print(paste("pk",pk))
+      print(paste("qu",qu))
+      print(paste("id",id))
+      print(paste("pp",pp))
+
+      allParamsForThisIndividual <- unique(sensitivityThisOpPk[ (sensitivityThisOpPk$Quantile %in% qu) & (sensitivityThisOpPk$individualId %in% id) & (sensitivityThisOpPk$Population %in% pp),  ]$Parameter)
+
+      print(setdiff(allParamsForThisOpPk,allParamsForThisIndividual))
+      pause()
+    }
+
+
+
+
+  }
+
+
+
+
   for (i in 1:nrow(uniqueQuantitiesAndPKParameters)) {
     pk <- as.character(uniqueQuantitiesAndPKParameters$PKParameter[i])
     op <- as.character(uniqueQuantitiesAndPKParameters$QuantityPath[i])
