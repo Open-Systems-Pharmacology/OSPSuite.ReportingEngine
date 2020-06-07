@@ -400,11 +400,11 @@ getPKResultsDataFrame <- function(structureSet) {
 
   pkResultsDataFrame <- ospsuite::pkAnalysesAsDataFrame(pkAnalyses = pkResults)
 
-#   pkResultsDataFrame <- read.csv(structureSet$pkAnalysisResultsFileNames,
-#     encoding = "UTF-8",
-#     check.names = FALSE,
-#     stringsAsFactors = FALSE
-#   )
+  #   pkResultsDataFrame <- read.csv(structureSet$pkAnalysisResultsFileNames,
+  #     encoding = "UTF-8",
+  #     check.names = FALSE,
+  #     stringsAsFactors = FALSE
+  #   )
 
   # get a list pkParameterNamesEachOutput where field names are the paths to the output andthe names of the pkParameters for each output in the current simulation set
   pkParameterNamesEachOutput <- list()
@@ -455,7 +455,7 @@ getSAFileIndex <- function(structureSet = structureSet,
   quantileVec <- settings$quantileVec
 
   allPKResultsDataframe <- getPKResultsDataFrame(structureSet)
-
+  sensitivityAnalysesResultsIndexFileDF <- NULL
   outputs <- levels(allPKResultsDataframe$QuantityPath)
   outputColumn <- NULL
   pkParameterColumn <- NULL
@@ -466,20 +466,33 @@ getSAFileIndex <- function(structureSet = structureSet,
   for (output in outputs) {
     pkParameters <- unique(allPKResultsDataframe$Parameter[allPKResultsDataframe$QuantityPath == output])
     for (pkParameter in pkParameters) {
-      singleOuputSinglePKDataframe <- allPKResultsDataframe[ allPKResultsDataframe["QuantityPath"] == output & allPKResultsDataframe["Parameter"] == pkParameter, ]
+      singleOuputSinglePKDataframe <- allPKResultsDataframe[ (allPKResultsDataframe["QuantityPath"] == output) & (allPKResultsDataframe["Parameter"] == pkParameter), ]
       quantileResults <- getQuantileIndividualIds(singleOuputSinglePKDataframe, quantileVec)
-      for (i in seq_along(quantileResults$ids)) {
-        outputColumn <- c(outputColumn, output)
-        pkParameterColumn <- c(pkParameterColumn, pkParameter)
-        individualIdColumn <- c(individualIdColumn, quantileResults$ids[i])
-        valuesColumn <- c(valuesColumn, quantileResults$values[i])
-        unitsColumn <- c(unitsColumn, quantileResults$units[i])
-        quantileColumn <- c(quantileColumn, quantileVec[i])
-      }
+      saResultsByOuptut <- data.frame(
+        "Outputs" = output,
+        "pkParameters" = pkParameter,
+        "Quantile" = quantileVec,
+        "Value" = quantileResults$values,
+        "Unit" = quantileResults$units,
+        "IndividualId" = quantileResults$ids,
+        "Filename" = sapply(X = quantileResults$ids, FUN = getIndividualSAResultsFileName, resultsFileName)
+      )
+      sensitivityAnalysesResultsIndexFileDF <- rbind.data.frame(sensitivityAnalysesResultsIndexFileDF, saResultsByOuptut)
+      # for (i in seq_along(quantileResults$ids)) {
+      #   outputColumn <- c(outputColumn, output)
+      #   pkParameterColumn <- c(pkParameterColumn, pkParameter)
+      #   individualIdColumn <- c(individualIdColumn, quantileResults$ids[i])
+      #   valuesColumn <- c(valuesColumn, quantileResults$values[i])
+      #   unitsColumn <- c(unitsColumn, quantileResults$units[i])
+      #   quantileColumn <- c(quantileColumn, quantileVec[i])
+      # }
     }
+
+
+
   }
-  filenamesColumn <- sapply(X = individualIdColumn, FUN = getIndividualSAResultsFileName, resultsFileName)
-  sensitivityAnalysesResultsIndexFileDF <- data.frame("Outputs" = outputColumn, "pkParameters" = pkParameterColumn, "Quantile" = quantileColumn, "Value" = valuesColumn, "Unit" = unitsColumn, "IndividualId" = individualIdColumn, "Filename" = filenamesColumn)
+  #filenamesColumn <- sapply(X = individualIdColumn, FUN = getIndividualSAResultsFileName, resultsFileName)
+  #sensitivityAnalysesResultsIndexFileDF <- data.frame("Outputs" = outputColumn, "pkParameters" = pkParameterColumn, "Quantile" = quantileColumn, "Value" = valuesColumn, "Unit" = unitsColumn, "IndividualId" = individualIdColumn, "Filename" = filenamesColumn)
 
   return(sensitivityAnalysesResultsIndexFileDF)
 }
