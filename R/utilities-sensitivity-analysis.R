@@ -478,21 +478,8 @@ getSAFileIndex <- function(structureSet = structureSet,
         "Filename" = sapply(X = quantileResults$ids, FUN = getIndividualSAResultsFileName, resultsFileName)
       )
       sensitivityAnalysesResultsIndexFileDF <- rbind.data.frame(sensitivityAnalysesResultsIndexFileDF, saResultsByOuptut)
-      # for (i in seq_along(quantileResults$ids)) {
-      #   outputColumn <- c(outputColumn, output)
-      #   pkParameterColumn <- c(pkParameterColumn, pkParameter)
-      #   individualIdColumn <- c(individualIdColumn, quantileResults$ids[i])
-      #   valuesColumn <- c(valuesColumn, quantileResults$values[i])
-      #   unitsColumn <- c(unitsColumn, quantileResults$units[i])
-      #   quantileColumn <- c(quantileColumn, quantileVec[i])
-      # }
     }
-
-
-
   }
-  #filenamesColumn <- sapply(X = individualIdColumn, FUN = getIndividualSAResultsFileName, resultsFileName)
-  #sensitivityAnalysesResultsIndexFileDF <- data.frame("Outputs" = outputColumn, "pkParameters" = pkParameterColumn, "Quantile" = quantileColumn, "Value" = valuesColumn, "Unit" = unitsColumn, "IndividualId" = individualIdColumn, "Filename" = filenamesColumn)
 
   return(sensitivityAnalysesResultsIndexFileDF)
 }
@@ -633,8 +620,11 @@ plotPopulationSensitivity <- function(structureSets,
                                       workflowType = NULL,
                                       xParameters = NULL,
                                       yParameters = NULL) {
-  dFList <- list()
-  i <- 0
+
+  allPopsDf <- NULL
+
+
+  #i <- 0
 
   saResultIndexFiles <- list()
   simulationList <- list()
@@ -660,7 +650,7 @@ plotPopulationSensitivity <- function(structureSets,
       pkParameters <- unique(opIndexDf$pkParameters)
 
       for (pk in pkParameters) {
-        i <- i + 1
+        #i <- i + 1
 
         dfForPkAndOp <- getPopSensDfForPkAndOutput(
           simulation = simulation,
@@ -671,13 +661,13 @@ plotPopulationSensitivity <- function(structureSets,
           totalSensitivityThreshold = settings$totalSensitivityThreshold
         )
         populationNameCol <- rep(populationName, nrow(dfForPkAndOp))
-        dFList[[i]] <- cbind(dfForPkAndOp, data.frame("Population" = populationNameCol))
+        allPopsDf <- rbind.data.frame( allPopsDf , cbind(dfForPkAndOp, data.frame("Population" = populationNameCol)) )
       }
     }
   }
 
   # allPopsDf is a dataframe that holds the results of all sensitivity analyses for all populations
-  allPopsDf <- do.call("rbind", dFList)
+  #allPopsDf <- do.call("rbind", dFList)
 
 
   # add any missing sensitivity results omitted when applying threshold in getPopSensDfForPkAndOutput
