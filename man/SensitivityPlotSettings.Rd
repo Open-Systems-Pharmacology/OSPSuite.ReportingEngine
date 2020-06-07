@@ -10,6 +10,10 @@ R6 class for sensitivity analysis plot settings
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
 \item{\code{totalSensitivityThreshold}}{cut-off used for plots of the most sensitive parameters}
+
+\item{\code{maximalParametersPerSensitivityPlot}}{is the maximal number of parameters to display in a sensitivity plot}
+
+\item{\code{plotFontSize}}{the fontsize used in the legend and both axis}
 }
 \if{html}{\out{</div>}}
 }
@@ -27,7 +31,9 @@ Create a `SensitivityPlotSettings` object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SensitivityPlotSettings$new(
   totalSensitivityThreshold = NULL,
-  variableParameterPaths = NULL
+  variableParameterPaths = NULL,
+  maximalParametersPerSensitivityPlot = 50,
+  plotFontSize = 6
 )}\if{html}{\out{</div>}}
 }
 
@@ -37,6 +43,10 @@ Create a `SensitivityPlotSettings` object
 \item{\code{totalSensitivityThreshold}}{cut-off used for plots of the most sensitive parameters}
 
 \item{\code{variableParameterPaths}}{paths that were varied in the sensitivity analysis.  If supplied totalSensitivityThreshold = 1, else 0.9.}
+
+\item{\code{maximalParametersPerSensitivityPlot}}{maximalParametersPerSensitivityPlot is the maximal number of parameters to display in a sensitivity plot}
+
+\item{\code{plotFontSize}}{the fontsize used in the legend and both axis}
 }
 \if{html}{\out{</div>}}
 }

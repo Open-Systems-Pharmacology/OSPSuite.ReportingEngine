@@ -63,7 +63,7 @@ PopulationPlotTask <- R6::R6Class(
           pathFolder = self$workflowFolder,
           logTypes = LogTypes$Debug
         )
-        
+
         if (!is.null(taskResults$captions[[plotName]])) {
           addTextChunk(self$fileName, paste0("Figure: ", taskResults$captions[[plotName]]), logFolder = self$workflowFolder)
         }
@@ -73,7 +73,7 @@ PopulationPlotTask <- R6::R6Class(
           figureFile = plotFileName,
           logFolder = self$workflowFolder
         )
-        
+
         if (!is.null(taskResults$tables[[plotName]])) {
           tableFileName <- file.path(
             self$workflowFolder,
@@ -113,11 +113,11 @@ PopulationPlotTask <- R6::R6Class(
         message = paste0("Starting: ", self$message),
         pathFolder = self$workflowFolder
       )
-      
+
       if (!is.null(self$outputFolder)) {
         dir.create(file.path(self$workflowFolder, self$outputFolder))
       }
-      
+
       taskResults <- self$getTaskResults(
         structureSets,
         self$workflowFolder,

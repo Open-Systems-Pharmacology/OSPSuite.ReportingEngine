@@ -172,10 +172,10 @@ getFileExtension <- function(filePath) {
 #' @param simulationSet simulation set containing path to simulation file and pathIDs for quantities to be loaded into simulation object
 #' @return simulation object with pathIDs updated from simulationSet
 #' @export
-loadSimulationWithUpdatedPaths <- function(simulationSet) {
+loadSimulationWithUpdatedPaths <- function(simulationSet,loadFromCache = FALSE) {
   sim <- ospsuite::loadSimulation(
     filePath = simulationSet$simulationFile,
-    loadFromCache = FALSE,
+    loadFromCache = loadFromCache,
     addToCache = FALSE
   )
   # Prevent loadSimulationWithUpdatedPaths from crashing if user did not submit any pathID
@@ -212,7 +212,7 @@ loadWorkflowPopulation <- function(simulationSet) {
 #' @import utils
 lastPathElement <- function(path) {
   pathArray <- ospsuite::toPathArray(path)
-  lastElement <- utils::tail(pathArray,1)
-  
+  lastElement <- utils::tail(pathArray, 1)
+
   return(lastElement)
 }

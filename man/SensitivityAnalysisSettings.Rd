@@ -17,10 +17,6 @@ R6 class for Population Sensitivity Analysis Settings
 
 \item{\code{variableParameterPaths}}{vector of paths of parameters to vary when performing sensitivity analysis}
 
-\item{\code{pkParameterSelection}}{list of selected PK parameters for sensitivity analysis}
-
-\item{\code{totalSensitivityThreshold}}{cut-off used for plots of the most sensitive parameters}
-
 \item{\code{showProgress}}{is a logical input.  TRUE shows progress of sensitivity analysis}
 }
 \if{html}{\out{</div>}}
@@ -42,8 +38,6 @@ Create a `SensitivityAnalysisSettings` object
   numberOfCores = NULL,
   quantileVec = NULL,
   variableParameterPaths = NULL,
-  pkParameterSelection = NULL,
-  totalSensitivityThreshold = NULL,
   showProgress = FALSE
 )}\if{html}{\out{</div>}}
 }
@@ -58,10 +52,6 @@ Create a `SensitivityAnalysisSettings` object
 \item{\code{quantileVec}}{vector of quantiles to be calculated}
 
 \item{\code{variableParameterPaths}}{vector of paths of parameters to vary when performing sensitivity analysis}
-
-\item{\code{pkParameterSelection}}{list of selected PK parameters for sensitivity analysis}
-
-\item{\code{totalSensitivityThreshold}}{cut-off used for plots of the most sensitive parameters}
 
 \item{\code{showProgress}}{sensitivity analysis progress printed to console if TRUE}
 }

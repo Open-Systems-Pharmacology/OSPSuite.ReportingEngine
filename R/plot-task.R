@@ -21,9 +21,9 @@ PlotTask <- R6::R6Class(
     #' @param ... input parameters inherited from `Task` R6 class
     #' @return A new `PlotTask` object
     initialize = function(reportTitle = NULL,
-                              fileName = NULL,
-                              getTaskResults = NULL,
-                              ...) {
+                          fileName = NULL,
+                          getTaskResults = NULL,
+                          ...) {
       super$initialize(...)
       self$title <- reportTitle
       self$fileName <- file.path(self$workflowFolder, fileName)
@@ -36,7 +36,7 @@ PlotTask <- R6::R6Class(
     #' @param taskResults list of results from task run.
     #' Results contains at least 2 fields: `plots` and `tables`
     saveResults = function(set,
-                               taskResults) {
+                           taskResults) {
       addTextChunk(
         self$fileName,
         paste0("## ", self$title, " for ", set$simulationSet$simulationSetName),
@@ -178,11 +178,13 @@ PlotTask <- R6::R6Class(
         )
 
         # TO DO: integrate tlf fix of mapping/plotConfig for no group variable
-        residualHistogramPlot <- plotResidualsHistogram(data = residualsAcrossAllSimulations,
-                                                        metaData = taskResults$residuals$metaData,
-                                                        plotConfiguration = self$settings$plotConfigurations[["histogram"]],
-                                                        bins = self$settings$bins)
-          
+        residualHistogramPlot <- plotResidualsHistogram(
+          data = residualsAcrossAllSimulations,
+          metaData = taskResults$residuals$metaData,
+          plotConfiguration = self$settings$plotConfigurations[["histogram"]],
+          bins = self$settings$bins
+        )
+
         # TO DO: define parameters from settings/plotConfiguration
         ggplot2::ggsave(
           filename = file.path(self$workflowFolder, plotFileName),
@@ -200,8 +202,10 @@ PlotTask <- R6::R6Class(
           "## Residuals across all simulations",
           logFolder = self$workflowFolder
         )
-        
-        simulationNames <- paste0(as.character(sapply(structureSets, function(set){set$simulationSet$simulationSetName})), collapse = ", ")
+
+        simulationNames <- paste0(as.character(sapply(structureSets, function(set) {
+          set$simulationSet$simulationSetName
+        })), collapse = ", ")
         addTextChunk(self$fileName, paste0("Figure: Distribution of residuals for ", simulationNames), logFolder = self$workflowFolder)
 
         addFigureChunk(

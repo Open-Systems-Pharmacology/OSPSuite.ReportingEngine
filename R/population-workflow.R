@@ -33,8 +33,8 @@ PopulationWorkflow <- R6::R6Class(
     #' @param workflowFolder path of the output folder created or used by the Workflow.
     #' @return A new `PopulationWorkflow` object
     initialize = function(workflowType = PopulationWorkflowTypes$parallelComparison,
-                              simulationSets,
-                              workflowFolder) {
+                          simulationSets,
+                          workflowFolder) {
       super$initialize(
         simulationSets = simulationSets,
         workflowFolder = workflowFolder
@@ -77,10 +77,10 @@ PopulationWorkflow <- R6::R6Class(
     #' @param message message/title of the `Task`
     #' @return A new `Task` object
     simulatePopulationSettings = function(taskFunction = simulateModelForPopulation,
-                                              outputFolder = defaultTaskOutputFolders$simulate,
-                                              settings = NULL,
-                                              active = TRUE,
-                                              message = defaultWorkflowMessages$simulate) {
+                                          outputFolder = defaultTaskOutputFolders$simulate,
+                                          settings = NULL,
+                                          active = TRUE,
+                                          message = defaultWorkflowMessages$simulate) {
       self$simulatePopulation <- SimulationTask$new(
         getTaskResults = taskFunction,
         outputFolder = outputFolder,
@@ -101,10 +101,10 @@ PopulationWorkflow <- R6::R6Class(
     #' @param message message/title of the `Task`
     #' @return A new `Task` object
     populationPKParameterSettings = function(taskFunction = calculatePKParameters,
-                                                 outputFolder = defaultTaskOutputFolders$calculatePKParameters,
-                                                 settings = NULL,
-                                                 active = FALSE,
-                                                 message = defaultWorkflowMessages$calculatePKParameters) {
+                                             outputFolder = defaultTaskOutputFolders$calculatePKParameters,
+                                             settings = NULL,
+                                             active = FALSE,
+                                             message = defaultWorkflowMessages$calculatePKParameters) {
       self$populationPKParameters <- CalculatePKParametersTask$new(
         getTaskResults = taskFunction,
         outputFolder = outputFolder,
@@ -125,10 +125,10 @@ PopulationWorkflow <- R6::R6Class(
     #' @param message message/title of the `Task`
     #' @return A new `SensitivityAnalysisTask` object
     populationSensitivityAnalysisSettings = function(taskFunction = runPopulationSensitivityAnalysis,
-                                                         outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
-                                                         settings = NULL,
-                                                         active = FALSE,
-                                                         message = NULL) {
+                                                     outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
+                                                     settings = NULL,
+                                                     active = FALSE,
+                                                     message = NULL) {
       self$populationSensitivityAnalysis <- PopulationSensitivityAnalysisTask$new(
         getTaskResults = taskFunction,
         outputFolder = outputFolder,
@@ -154,14 +154,14 @@ PopulationWorkflow <- R6::R6Class(
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for goodness of fit plots
     plotDemographySettings = function(reportTitle = defaultWorkflowTitles$plotDemography,
-                                          fileName = defaultWorkflowAppendices$plotDemography,
-                                          taskFunction = plotDemographyParameters,
-                                          outputFolder = defaultTaskOutputFolders$plotDemography,
-                                          active = FALSE,
-                                          message = defaultWorkflowMessages$plotDemography,
-                                          xParameters = getDefaultDemographyXParameters(self$workflowType),
-                                          yParameters = NULL,
-                                          settings = NULL) {
+                                      fileName = defaultWorkflowAppendices$plotDemography,
+                                      taskFunction = plotDemographyParameters,
+                                      outputFolder = defaultTaskOutputFolders$plotDemography,
+                                      active = FALSE,
+                                      message = defaultWorkflowMessages$plotDemography,
+                                      xParameters = getDefaultDemographyXParameters(self$workflowType),
+                                      yParameters = NULL,
+                                      settings = NULL) {
       self$plotDemography <- PopulationPlotTask$new(
         workflowType = self$workflowType,
         xParameters = xParameters,
@@ -189,12 +189,12 @@ PopulationWorkflow <- R6::R6Class(
     #' @param settings specific settings for task
     #' @return A `PlotTask` object for goodness of fit plots
     plotGoFSettings = function(reportTitle = defaultWorkflowTitles$plotGoF,
-                                   fileName = defaultWorkflowAppendices$plotGoF,
-                                   taskFunction = plotPopulationGoodnessOfFit,
-                                   outputFolder = defaultTaskOutputFolders$plotGoF,
-                                   active = FALSE,
-                                   message = defaultWorkflowMessages$plotGoF,
-                                   settings = NULL) {
+                               fileName = defaultWorkflowAppendices$plotGoF,
+                               taskFunction = plotPopulationGoodnessOfFit,
+                               outputFolder = defaultTaskOutputFolders$plotGoF,
+                               active = FALSE,
+                               message = defaultWorkflowMessages$plotGoF,
+                               settings = NULL) {
       self$plotGoF <- PlotTask$new(
         reportTitle = reportTitle,
         fileName = fileName,
@@ -221,14 +221,14 @@ PopulationWorkflow <- R6::R6Class(
     #' @param settings specific settings for task
     #' @return A `PlotPKParametersTask` object for PK parameters tables
     plotPKParametersSettings = function(reportTitle = defaultWorkflowTitles$plotPKParameters,
-                                            fileName = defaultWorkflowAppendices$plotPKParameters,
-                                            taskFunction = plotPopulationPKParameters,
-                                            outputFolder = defaultTaskOutputFolders$plotPKParameters,
-                                            active = FALSE,
-                                            message = defaultWorkflowMessages$plotPKParameters,
-                                            xParameters = getDefaultPkParametersXParameters(self$workflowType),
-                                            yParameters = NULL,
-                                            settings = NULL) {
+                                        fileName = defaultWorkflowAppendices$plotPKParameters,
+                                        taskFunction = plotPopulationPKParameters,
+                                        outputFolder = defaultTaskOutputFolders$plotPKParameters,
+                                        active = FALSE,
+                                        message = defaultWorkflowMessages$plotPKParameters,
+                                        xParameters = getDefaultPkParametersXParameters(self$workflowType),
+                                        yParameters = NULL,
+                                        settings = NULL) {
       self$plotPKParameters <- PopulationPlotTask$new(
         workflowType = self$workflowType,
         xParameters = xParameters,
@@ -258,14 +258,14 @@ PopulationWorkflow <- R6::R6Class(
     #' @param settings specific settings for task
     #' @return A `PopulationPlotTask` object for sensitivity plots for a single population
     plotSensitivitySettings = function(reportTitle = defaultWorkflowTitles$plotSensitivity,
-                                           fileName = defaultWorkflowAppendices$plotSensitivity,
-                                           taskFunction = plotPopulationSensitivity,
-                                           outputFolder = defaultTaskOutputFolders$plotSensitivity,
-                                           active = FALSE,
-                                           message = defaultWorkflowMessages$plotSensitivity,
-                                           xParameters = NULL,
-                                           yParameters = NULL,
-                                           settings = NULL) {
+                                       fileName = defaultWorkflowAppendices$plotSensitivity,
+                                       taskFunction = plotPopulationSensitivity,
+                                       outputFolder = defaultTaskOutputFolders$plotSensitivity,
+                                       active = FALSE,
+                                       message = defaultWorkflowMessages$plotSensitivity,
+                                       xParameters = NULL,
+                                       yParameters = NULL,
+                                       settings = NULL) {
       self$plotSensitivity <- PopulationPlotTask$new(
         workflowType = self$workflowType,
         xParameters = xParameters,
@@ -277,7 +277,7 @@ PopulationWorkflow <- R6::R6Class(
         workflowFolder = self$workflowFolder,
         active = active,
         message = message,
-        settings = settings %||% self$populationSensitivityAnalysis$settings %||% SensitivityPlotSettings$new()
+        settings = settings %||% SensitivityPlotSettings$new()
       )
     },
 
@@ -321,7 +321,7 @@ PopulationWorkflow <- R6::R6Class(
         self[[taskName]]$fileName
       }))
       appendices <- appendices[file.exists(appendices)]
-      if (length(appendices)>0) {
+      if (length(appendices) > 0) {
         mergeMarkdowndFiles(appendices, self$reportFileName, logFolder = self$workflowFolder)
         renderReport(self$reportFileName, logFolder = self$workflowFolder)
       }

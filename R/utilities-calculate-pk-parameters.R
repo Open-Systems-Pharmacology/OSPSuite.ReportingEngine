@@ -304,9 +304,11 @@ plotPopulationPKParameters <- function(structureSets,
     }
   }
 
-  return(list(plots = pkParametersPlots, 
-              tables = pkParametersTables,
-              captions = pkParametersCaptions))
+  return(list(
+    plots = pkParametersPlots,
+    tables = pkParametersTables,
+    captions = pkParametersCaptions
+  ))
 }
 
 #' @title ratioBoxplot

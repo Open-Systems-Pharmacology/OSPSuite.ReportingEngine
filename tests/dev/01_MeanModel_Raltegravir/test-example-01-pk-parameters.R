@@ -6,9 +6,9 @@ library(ospsuite.reportingengine)
 
 workflowFolder <- "myWorkflowResults"
 
-# Since this example focuses only on the plot, 
+# Since this example focuses only on the plot,
 # The simulation of the results is called here
-if(!dir.exists(file.path(workflowFolder, "PKAnalysisResults"))){
+if (!dir.exists(file.path(workflowFolder, "PKAnalysisResults"))) {
   source("test-example-01-simulations.R")
 }
 

@@ -11,26 +11,17 @@ SensitivityAnalysisSettings <- R6::R6Class(
     #' @param numberOfCores number of cores for parallel computation
     #' @param quantileVec vector of quantiles to be calculated
     #' @param variableParameterPaths vector of paths of parameters to vary when performing sensitivity analysis
-    #' @param pkParameterSelection list of selected PK parameters for sensitivity analysis
-    #' @param totalSensitivityThreshold cut-off used for plots of the most sensitive parameters
     #' @param showProgress sensitivity analysis progress printed to console if TRUE
     #' @return A new `SensitivityAnalysisSettings` object
     initialize = function(variationRange = NULL,
                           numberOfCores = NULL,
                           quantileVec = NULL,
                           variableParameterPaths = NULL,
-                          pkParameterSelection = NULL,
-                          totalSensitivityThreshold = NULL,
                           showProgress = FALSE) {
       self$variationRange <- variationRange %||% defaultVariationRange
       self$numberOfCores <- numberOfCores %||% defaultSensitivityAnalysisNumberOfCores
       self$quantileVec <- quantileVec %||% defaultQuantileVec
       self$variableParameterPaths <- variableParameterPaths
-      self$pkParameterSelection <- pkParameterSelection
-      self$totalSensitivityThreshold <- getDefaultTotalSensitivityThreshold(
-        totalSensitivityThreshold = totalSensitivityThreshold,
-        variableParameterPaths = variableParameterPaths
-      )
       self$showProgress <- showProgress
     }
   ),
@@ -78,33 +69,6 @@ SensitivityAnalysisSettings <- R6::R6Class(
           validateIsString(value)
           validateNoDuplicatedEntries(value)
           private$.variableParameterPaths <- value
-          private$.totalSensitivityThreshold <- 1
-        }
-      }
-    },
-
-    #' @field pkParameterSelection list of selected PK parameters for sensitivity analysis
-    pkParameterSelection = function(value) {
-      if (missing(value)) {
-        private$.pkParameterSelection
-      } else {
-        if (!is.null(value)) {
-          validateIsString(value)
-          validateNoDuplicatedEntries(value)
-          validateIsIncluded(values = value, parentValues = ospsuite::allPKParameterNames())
-          private$.pkParameterSelection <- value
-        }
-      }
-    },
-
-    #' @field totalSensitivityThreshold cut-off used for plots of the most sensitive parameters
-    totalSensitivityThreshold = function(value) {
-      if (missing(value)) {
-        private$.totalSensitivityThreshold
-      } else {
-        if (!is.null(value)) {
-          validateIsInRange("totalSensitivityThreshold", value, 0, 1)
-          private$.totalSensitivityThreshold <- value
         }
       }
     },
@@ -112,7 +76,7 @@ SensitivityAnalysisSettings <- R6::R6Class(
     #' @field showProgress is a logical input.  TRUE shows progress of sensitivity analysis
     showProgress = function(value) {
       if (missing(value)) {
-        private$.
+        private$.showProgress
       } else {
         if (!is.null(value)) {
           validateIsLogical(value)
@@ -127,8 +91,6 @@ SensitivityAnalysisSettings <- R6::R6Class(
     .numberOfCores = NULL,
     .quantileVec = NULL,
     .variableParameterPaths = NULL,
-    .pkParameterSelection = NULL,
-    .totalSensitivityThreshold = NULL,
     .showProgress = NULL
   )
 )
