@@ -188,11 +188,14 @@ plotPopulationPKParameters <- function(structureSets,
         metaData = pkParameterMetaData,
         dataMapping = pkParametersMapping,
         plotConfiguration = settings$plotConfigurations[["boxplotPkParameters"]]
-      ) + ggplot2::labs(title = NULL, subtitle = NULL) + ggplot2::xlab(NULL)
+      ) + ggplot2::xlab(NULL)
+      
+      boxRange <- getLogLimitsForBoxPlot(pkParameterData$Value)
+      boxBreaks <- getLogBreaksForBoxPlot(boxRange)
 
       pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel)]] <- boxplotPkParameter
       pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- boxplotPkParameter +
-        ggplot2::scale_y_continuous(trans = "log10")
+        ggplot2::scale_y_continuous(trans = "log10", limits = boxRange, breaks = boxBreaks)
 
       pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel)]] <- paste0(pkParameterMetaData[["Value"]]$dimension, " of ", output$displayName, " shown as box-whisker plot, which indicates the 5th, 25th, 50th, 75th, and 95th percentiles in linear scale.")
       pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- paste0(pkParameterMetaData[["Value"]]$dimension, " of ", output$displayName, " shown as box-whisker plot, which indicates the 5th, 25th, 50th, 75th, and 95th percentiles in logarithmic scale.")
@@ -292,9 +295,12 @@ plotPopulationPKParameters <- function(structureSets,
           plotConfiguration = settings$plotConfigurations[["boxplotPkRatios"]]
         ) + ggplot2::ylab(paste0(pkParameterMetaData$Value$dimension, " [fraction of ", referencePopulationName, "]"))
 
+        ratioRange <- getLogLimitsForBoxPlot(c(pkRatiosData$ymin, pkRatiosData$ymax))
+        ratioBreaks <- getLogBreaksForBoxPlot(ratioRange)
+        
         pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-ratio")]] <- boxplotPkRatios
         pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-ratio-log")]] <- boxplotPkRatios +
-          ggplot2::scale_y_continuous(trans = "log10")
+          ggplot2::scale_y_continuous(trans = "log10", limits = ratioRange, breaks = ratioBreaks)
 
         pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel)]] <- paste0(pkParameterMetaData[["Value"]]$dimension, " of ", output$displayName, " shown as box-whisker plot, which indicates ratios of the 5th, 25th, 50th, 75th, and 95th percentiles in linear scale.")
         pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- paste0(pkParameterMetaData[["Value"]]$dimension, " of ", output$displayName, " shown as box-whisker plot, which indicates ratios of the 5th, 25th, 50th, 75th, and 95th percentiles in logarithmic scale.")
@@ -309,6 +315,23 @@ plotPopulationPKParameters <- function(structureSets,
     tables = pkParametersTables,
     captions = pkParametersCaptions
   ))
+}
+
+getLogLimitsForBoxPlot <- function(values){
+  boxRange <- c(min(values)*0.8, max(values)*1.2)
+  if(diff(log10(boxRange))>=1){return(boxRange)}
+  boxRange <- c(min(values)/3, max(values)*3)
+  return(boxRange)
+}
+
+getLogBreaksForBoxPlot <- function(limits){
+  logLimits <- round(log10(limits))
+  breakOrder <- 10^seq(min(logLimits), max(logLimits))
+  breakValues <- rep(c(1,2,5), length(breakOrder))
+  breakOrder <- sort(rep(breakOrder,3))
+  
+  breakValues <- breakValues*breakOrder
+  return(breakValues)
 }
 
 #' @title ratioBoxplot
