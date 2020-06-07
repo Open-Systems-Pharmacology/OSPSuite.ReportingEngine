@@ -10,7 +10,7 @@ SensitivityPlotSettings <- R6::R6Class(
     #' @param variableParameterPaths paths that were varied in the sensitivity analysis.  If supplied totalSensitivityThreshold = 1, else 0.9.
     #' @param maximalParametersPerSensitivityPlot maximalParametersPerSensitivityPlot is the maximal number of parameters to display in a sensitivity plot
     #' @param plotFontSize  the fontsize used in the legend and both axis
-    #' @return A new `SensitivityAnalysisSettings` object
+    #' @return A new `SensitivityPlotSettings` object
     initialize = function(totalSensitivityThreshold = NULL,
                           variableParameterPaths = NULL,
                           maximalParametersPerSensitivityPlot = 50,
