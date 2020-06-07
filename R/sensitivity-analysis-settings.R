@@ -76,7 +76,7 @@ SensitivityAnalysisSettings <- R6::R6Class(
     #' @field showProgress is a logical input.  TRUE shows progress of sensitivity analysis
     showProgress = function(value) {
       if (missing(value)) {
-        private$.
+        private$.showProgress
       } else {
         if (!is.null(value)) {
           validateIsLogical(value)
