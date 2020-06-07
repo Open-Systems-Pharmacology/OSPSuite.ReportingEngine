@@ -277,7 +277,7 @@ PopulationWorkflow <- R6::R6Class(
         workflowFolder = self$workflowFolder,
         active = active,
         message = message,
-        settings = settings %||% self$populationSensitivityAnalysis$settings %||% SensitivityPlotSettings$new()
+        settings = settings %||% SensitivityPlotSettings$new()
       )
     },
 
