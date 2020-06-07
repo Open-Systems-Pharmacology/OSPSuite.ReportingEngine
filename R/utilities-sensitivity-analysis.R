@@ -20,7 +20,7 @@ runSensitivity <- function(structureSet,
   numberOfCores <- settings$numberOfCores
   showProgress <- settings$showProgress
 
-  sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
+  sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet,loadFromCache = TRUE)
 
   allVariableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
 
@@ -132,7 +132,7 @@ individualSensitivityAnalysis <- function(structureSet,
   } else {
     # No parallelization
     # Load simulation to determine number of parameters valid for sensitivity analysis
-    sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
+    sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet,loadFromCache = TRUE)
     updateSimulationIndividualParameters(simulation = sim, individualParameters)
     individualSensitivityAnalysisResults <- analyzeSensitivity(
       simulation = sim,
@@ -244,7 +244,7 @@ runParallelSensitivityAnalysis <- function(structureSet,
   verifyPartialResultsExported(partialResultsExported, logFolder = logFolder)
 
   # Merge temporary results files
-  allSAResults <- importSensitivityAnalysisResultsFromCSV(simulation = loadSimulationWithUpdatedPaths(structureSet$simulationSet), filePaths = allResultsFileNames)
+  allSAResults <- importSensitivityAnalysisResultsFromCSV(simulation = loadSimulationWithUpdatedPaths(structureSet$simulationSet,loadFromCache = TRUE), filePaths = allResultsFileNames)
   file.remove(allResultsFileNames)
   return(allSAResults)
 }
@@ -271,13 +271,14 @@ analyzeSensitivity <- function(simulation,
                                showProgress = FALSE) {
   sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation, variationRange = variationRange)
   sensitivityAnalysis$addParameterPaths(variableParameterPaths)
+
   sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(
     showProgress = showProgress,
     numberOfCores = numberOfCores
   )
 
   logWorkflow(message = paste0("Starting sensitivity analysis for path(s) ", paste(variableParameterPaths, collapse = ", ")), pathFolder = logFolder)
-  sensitivityAnalysisResults <- runSensitivityAnalysis(
+  sensitivityAnalysisResults <- ospsuite::runSensitivityAnalysis(
     sensitivityAnalysis = sensitivityAnalysis,
     sensitivityAnalysisRunOptions = sensitivityAnalysisRunOptions
   )
@@ -392,17 +393,23 @@ runPopulationSensitivityAnalysis <- function(structureSet, settings, logFolder =
 #' @return pkResultsDataFrame, a dataframe storing the contents of the CSV file with path pkParameterResultsFilePath
 #' @import ospsuite
 getPKResultsDataFrame <- function(structureSet) {
-  pkResultsDataFrame <- read.csv(structureSet$pkAnalysisResultsFileNames,
-    encoding = "UTF-8",
-    check.names = FALSE,
-    stringsAsFactors = FALSE
-  )
+
+  pkResults <- ospsuite::importPKAnalysesFromCSV(
+    filePath = structureSet$pkAnalysisResultsFileNames,
+    simulation = loadSimulationWithUpdatedPaths(simulationSet = structureSet$simulationSet,loadFromCache = TRUE))
+
+  pkResultsDataFrame <- ospsuite::pkAnalysesAsDataFrame(pkAnalyses = pkResults)
+
+#   pkResultsDataFrame <- read.csv(structureSet$pkAnalysisResultsFileNames,
+#     encoding = "UTF-8",
+#     check.names = FALSE,
+#     stringsAsFactors = FALSE
+#   )
 
   # get a list pkParameterNamesEachOutput where field names are the paths to the output andthe names of the pkParameters for each output in the current simulation set
   pkParameterNamesEachOutput <- list()
 
-  for (n in seq_along(structureSet$simulationSet$outputs)) {
-    op <- structureSet$simulationSet$outputs[[n]]
+  for (op in structureSet$simulationSet$outputs) {
     if (!is.null(op$pkParameters)) {
       # case where pkParameters are specified for each output path
       pkParameterNamesEachOutput[[op$path]] <- unname(sapply(
@@ -413,7 +420,7 @@ getPKResultsDataFrame <- function(structureSet) {
       ))
     } else {
       # case where no pkParameters are specified for an output and SA performed for all pk parameters by default
-      pkResultsDataFrameThisOutput <- pkResultsDataFrame[ pkResultsDataFrame$QuantityPath == op$path, ]
+      pkResultsDataFrameThisOutput <- pkResultsDataFrame[ pkResultsDataFrame$QuantityPath %in% op$path, ]
       pkParameterNamesEachOutput[[op$path]] <- unique(pkResultsDataFrameThisOutput$Parameter)
     }
   }
