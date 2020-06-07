@@ -72,7 +72,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
           "Time" = observedDataset[rowFilter, timeColumn],
           "Concentration" = observedDataset[rowFilter, lloqColumn],
           "Legend" = "LLOQ",
-          "Path" = output$path,
+          "Path" = output$path
         )
       }
     }
