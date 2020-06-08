@@ -534,6 +534,7 @@ plotMeanSensitivity <- function(structureSet,
   for (output in structureSet$simulationSet$outputs) {
     pathLabel <- lastPathElement(output$path)
     for (pkParameter in output$pkParameters) {
+      validateIsIncluded(pkParameter$pkParameter, saResults$allPKParameterNames)
       parameterLabel <- lastPathElement(pkParameter$pkParameter)
 
       pkSensitivities <- saResults$allPKParameterSensitivitiesFor(
