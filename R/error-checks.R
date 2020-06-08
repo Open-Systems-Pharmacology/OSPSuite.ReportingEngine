@@ -268,3 +268,31 @@ validateIsDimension <- function(values, nullAllowed = FALSE) {
 
   logErrorThenStop(messages$errorNotADimension(values))
 }
+
+isPathInSimulation <- function(paths, simulation){
+  # Add every paths to the simulation object and 
+  # check if all of these paths are included
+  ospsuite::addOutputs(quantitiesOrPaths = paths, simulation = simulation)
+  allSimulationOutputPaths <- sapply(simulation$outputSelections$allOutputs, function(output){output$path})
+  return(isIncluded(paths, allSimulationOutputPaths))
+}
+
+validateIsPathInSimulation <- function(paths, simulation, nullAllowed = FALSE){
+  if (nullAllowed && is.null(paths)) {
+    return()
+  }
+  if(isPathInSimulation(paths, simulation)){
+    return()
+  }
+  logErrorThenStop(message = messages$invalidOuputPath(paths, simulation$name))
+}
+
+validateOutputObject <- function(outputs, simulation, nullAllowed = FALSE){
+  if (nullAllowed && is.null(outputs)) {
+    return()
+  }
+  validateIsOfType(c(outputs), "Output")
+  # Check paths existence
+  allOutputPaths <- sapply(outputs, function(output) {output$path})
+  validateIsPathInSimulation(allOutputPaths, simulation)
+}

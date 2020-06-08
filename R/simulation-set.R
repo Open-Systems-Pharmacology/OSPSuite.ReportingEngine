@@ -30,18 +30,21 @@ SimulationSet <- R6::R6Class(
     #' @param timeUnit display unit for time variable. Default is "h"
     #' @return A new `SimulationSet` object
     initialize = function(simulationSetName,
-                          simulationFile,
-                          simulationName = NULL,
-                          outputs = NULL,
-                          observedDataFile = NULL,
-                          observedMetaDataFile = NULL,
-                          timeUnit = "h") {
+                              simulationFile,
+                              simulationName = NULL,
+                              outputs = NULL,
+                              observedDataFile = NULL,
+                              observedMetaDataFile = NULL,
+                              timeUnit = "h") {
+      # Test and validate the simulation objecy
       validateIsString(c(simulationSetName, simulationFile))
       validateIsFileExtension(simulationFile, "pkml")
+      simulation <- ospsuite::loadSimulation(simulationFile)
 
-      # validate is applied to each element of outputs
-      validateIsOfType(c(outputs), "Output", nullAllowed = TRUE)
+      # Test and validate outputs and their paths
+      validateOutputObject(c(outputs), simulation, nullAllowed = TRUE)
 
+      # Test and validate observed data
       validateIsString(c(observedDataFile, observedMetaDataFile, timeUnit), nullAllowed = TRUE)
       if (!is.null(observedDataFile)) {
         validateObservedMetaDataFile(observedMetaDataFile, observedDataFile)
@@ -52,33 +55,11 @@ SimulationSet <- R6::R6Class(
       self$simulationName <- simulationName %||% trimFileName(simulationFile, extension = "pkml")
 
       self$outputs <- c(outputs)
-      self$verifyOutputPathsInSimulation()
 
       self$observedDataFile <- observedDataFile
       self$observedMetaDataFile <- observedMetaDataFile
 
       self$timeUnit <- timeUnit %||% "h"
-    },
-
-
-    #' @description Ensure that output paths are in simulation
-    verifyOutputPathsInSimulation = function() {
-      allPathsInOutputs <- sapply(self$outputs, function(x) {
-        x$path
-      })
-      sim <- ospsuite::loadSimulation(self$simulationFile)
-      ospsuite::addOutputs(
-        quantitiesOrPaths = allPathsInOutputs,
-        simulation = sim
-      )
-      loadedOutputPaths <- sapply(sim$outputSelections$allOutputs, function(x) {
-        x$path
-      })
-      for (pth in allPathsInOutputs) {
-        if (!(pth %in% loadedOutputPaths)) {
-          logErrorThenStop(message = messages$invalidOuputPath(pth, self$simulationName))
-        }
-      }
     }
   )
 )
