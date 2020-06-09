@@ -33,7 +33,6 @@ R6 class representing Reporting Engine Population Model Set
 \if{html}{
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="SimulationSet" data-id="verifyOutputPathsInSimulation">}\href{../../ospsuite.reportingengine/html/SimulationSet.html#method-verifyOutputPathsInSimulation}{\code{ospsuite.reportingengine::SimulationSet$verifyOutputPathsInSimulation()}}\out{</span>}
 }
 \out{</details>}
 }
