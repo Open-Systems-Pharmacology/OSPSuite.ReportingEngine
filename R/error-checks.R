@@ -243,6 +243,17 @@ logErrorThenStop <- function(message, logFolderPath = getwd()) {
 
 validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile) {
   if (!is.null(observedMetaDataFile)) {
+    dictionary <- readObservedDataFile(observedMetaDataFile)
+    validateIsIncluded(c(dictionaryParameters$ID, dictionaryParameters$nonmenColumn), names(dictionary))
+    validateIsIncluded(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[,dictionaryParameters$ID])
+    
+    observedDataset <- readObservedDataFile(observedDataFile)
+    timeVariable <- getDictionaryVariable(dictionary, dictionaryParameters$timeID)
+    dvVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvID)
+    lloqVariable <- getDictionaryVariable(dictionary, dictionaryParameters$lloqID)
+    
+    validateIsIncluded(c(timeVariable, dvVariable), names(observedDataset))
+    validateIsIncluded(lloqVariable, names(observedDataset), nullAllowed = TRUE)
     return()
   }
   stop(messages$errorObservedMetaDataFileNotProvided(observedDataFile))
@@ -295,4 +306,31 @@ validateOutputObject <- function(outputs, simulation, nullAllowed = FALSE){
   # Check paths existence
   allOutputPaths <- sapply(outputs, function(output) {output$path})
   validateIsPathInSimulation(allOutputPaths, simulation)
+  
+  # Check display unit
+  for(output in outputs){
+    outputQuantity <- ospsuite::getQuantity(output$path, simulation)
+    validateIsUnitFromDimension(output$displayUnit, outputQuantity$dimension, nullAllowed = TRUE)
+  }
+}
+
+isUnitFromDimension <- function(unit, dimension){
+  dimensionForUnit <- ospsuite::getDimensionForUnit(unit)
+  # Remove molar/mass for units that can cross dimensions using molar weight
+  dimension <- sub("(mass)", "", dimension)
+  dimension <- sub("(molar)", "", dimension)
+  dimensionForUnit <- sub("(mass)", "", dimensionForUnit)
+  dimensionForUnit <- sub("(molar)", "", dimensionForUnit)
+  
+  return(dimensionForUnit %in% dimension)
+}
+
+validateIsUnitFromDimension <- function(unit, dimension, nullAllowed = FALSE){
+  if (nullAllowed && is.null(unit)) {
+    return()
+  }
+  if (isUnitFromDimension(unit, dimension)) {
+    return()
+  }
+  stop(messages$errorUnitNotFromDimension(unit, dimension))
 }
