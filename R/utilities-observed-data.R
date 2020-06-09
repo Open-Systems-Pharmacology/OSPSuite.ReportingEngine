@@ -52,3 +52,21 @@ evalDataFilter <- function(data, filterExpression) {
 
   return(eval(filterExpression))
 }
+
+
+dictionaryParameters <- list(
+  ID = "ID",
+  nonmenColumn = "nonmenColumn",
+  timeID = "time",
+  dvID = "dv",
+  lloqID = "lloq"
+)
+
+getDictionaryVariable <- function(dictionary, variableID) {
+  variableMapping <- dictionary[, dictionaryParameters$ID] %in% variableID
+  variableName <- as.character(dictionary[variableMapping, dictionaryParameters$nonmenColumn])
+  if (isOfLength(variableName, 0)) {
+    return()
+  }
+  return(variableName)
+}

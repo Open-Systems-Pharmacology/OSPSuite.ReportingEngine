@@ -43,7 +43,7 @@ messages <- list(
   },
 
   errorNotIncluded = function(values, parentValues) {
-    paste0("Values '", paste0(values, collapse = ", "), "' are not in included in parent values: '", paste0(parentValues, collapse = ", "), "'.")
+    paste0("Values '", paste0(values, collapse = "', '"), "' are not included in parent values: '", paste0(parentValues, collapse = "', '"), "'.")
   },
 
   warningExistingPath = function(existingPath) {
@@ -90,10 +90,14 @@ messages <- list(
   },
 
   invalidOuputPath = function(path, simName) {
-    paste(path, "is an invalid output path for simulation", simName, ".")
+    paste0("'", path, "' is an invalid output path for simulation '", simName, "'.")
   },
 
   outsideRange = function(variableName, value, lowerBound, upperBound) {
     paste0(variableName, " has value ", value, ", which lies outside the allowable range [", lowerBound, ",", upperBound, "].")
+  },
+  
+  errorUnitNotFromDimension = function(unit, dimension) {
+    paste0("Unit '", paste0(unit, collapse = "', '"), "' is not included in available units for dimension: '", paste0(dimension, collapse = "', '"), "'.")
   }
 )

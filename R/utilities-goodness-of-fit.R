@@ -30,9 +30,10 @@ plotMeanGoodnessOfFit <- function(structureSet,
   if (!is.null(structureSet$simulationSet$observedDataFile)) {
     observedDataset <- readObservedDataFile(structureSet$simulationSet$observedDataFile)
     dictionary <- readObservedDataFile(structureSet$simulationSet$observedMetaDataFile)
-    timeColumn <- as.character(dictionary[dictionary[, "ID"] %in% "time", "nonmenColumn"])
-    dvColumn <- as.character(dictionary[dictionary[, "ID"] %in% "dv", "nonmenColumn"])
-    lloqColumn <- as.character(dictionary[dictionary[, "ID"] %in% "lloq", "nonmenColumn"])
+
+    timeColumn <- getDictionaryVariable(dictionary, dictionaryParameters$timeID)
+    dvColumn <- getDictionaryVariable(dictionary, dictionaryParameters$dvID)
+    lloqColumn <- getDictionaryVariable(dictionary, dictionaryParameters$lloqID)
   }
 
   outputSimulatedMetaData <- list()
@@ -72,7 +73,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
           "Time" = observedDataset[rowFilter, timeColumn],
           "Concentration" = observedDataset[rowFilter, lloqColumn],
           "Legend" = "LLOQ",
-          "Path" = output$path,
+          "Path" = output$path
         )
       }
     }
@@ -469,9 +470,9 @@ plotPopulationGoodnessOfFit <- function(structureSet,
   if (!is.null(structureSet$simulationSet$observedDataFile)) {
     observedDataset <- readObservedDataFile(structureSet$simulationSet$observedDataFile)
     dictionary <- readObservedDataFile(structureSet$simulationSet$observedMetaDataFile)
-    timeColumn <- as.character(dictionary[dictionary[, "ID"] %in% "time", "nonmenColumn"])
-    dvColumn <- as.character(dictionary[dictionary[, "ID"] %in% "dv", "nonmenColumn"])
-    lloqColumn <- as.character(dictionary[dictionary[, "ID"] %in% "lloq", "nonmenColumn"])
+    timeColumn <- getDictionaryVariable(dictionary, dictionaryParameters$timeID)
+    dvColumn <- getDictionaryVariable(dictionary, dictionaryParameters$dvID)
+    lloqColumn <- getDictionaryVariable(dictionary, dictionaryParameters$lloqID)
   }
 
   outputSimulatedMetaData <- list()

@@ -51,7 +51,7 @@ Create a `SensitivityPlotSettings` object
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `SensitivityAnalysisSettings` object
+A new `SensitivityPlotSettings` object
 }
 }
 \if{html}{\out{<hr>}}

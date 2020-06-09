@@ -532,8 +532,10 @@ plotMeanSensitivity <- function(structureSet,
   sensitivityCaptions <- list()
 
   for (output in structureSet$simulationSet$outputs) {
+    validateIsIncluded(output$path, saResults$allQuantityPaths)
     pathLabel <- lastPathElement(output$path)
     for (pkParameter in output$pkParameters) {
+      validateIsIncluded(pkParameter$pkParameter, saResults$allPKParameterNames)
       parameterLabel <- lastPathElement(pkParameter$pkParameter)
 
       pkSensitivities <- saResults$allPKParameterSensitivitiesFor(
@@ -543,15 +545,14 @@ plotMeanSensitivity <- function(structureSet,
 
       sensitivityData <- data.frame(
         parameter = as.character(sapply(pkSensitivities, function(pkSensitivity) {
-          pkSensitivity$parameterPath
+          pkSensitivity$parameterName
         })),
         value = as.numeric(sapply(pkSensitivities, function(pkSensitivity) {
           pkSensitivity$value
         })),
         stringsAsFactors = FALSE
       )
-      sensitivityData$parameter <- renderSaParameterDisplayName(sensitivityData$parameter)
-
+      
       sensitivityPlots[[paste0(parameterLabel, "-", pathLabel)]] <- plotTornado(
         data = sensitivityData,
         plotConfiguration = settings$plotConfiguration
@@ -919,22 +920,4 @@ getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold = NULL
     }
   }
   return(totalSensitivityThreshold)
-}
-
-#' @title renderSaParameterDisplayName
-#' @description Render display names for sensitivity plots keeping elements in `depth` of parameter paths,
-#' and removing following keys `Organism`, `Applications`, `ProtocolSchemaItem`, and `Neighborhoods`
-#' @param paths vector of paths to render
-#' @param depth levels in parameter path
-#' @return Updated paths
-renderSaParameterDisplayName <- function(paths, depth = 3) {
-  updatedPaths <- paths
-  # toPathArray and toPathString do not work here as paths were separated by "-" in the SA
-  for (pathIndex in seq_along(paths)) {
-    pathArray <- as.character(unlist(strsplit(paths[pathIndex], "-")))
-    pathArray <- utils::tail(pathArray, depth)
-    pathArray <- pathArray[!pathArray %in% c("Organism", "Applications", "ProtocolSchemaItem", "Neighborhoods")]
-    updatedPaths[pathIndex] <- paste0(pathArray, collapse = " - ")
-  }
-  return(updatedPaths)
 }
