@@ -400,12 +400,6 @@ getPKResultsDataFrame <- function(structureSet) {
 
   pkResultsDataFrame <- ospsuite::pkAnalysesAsDataFrame(pkAnalyses = pkResults)
 
-  #   pkResultsDataFrame <- read.csv(structureSet$pkAnalysisResultsFileNames,
-  #     encoding = "UTF-8",
-  #     check.names = FALSE,
-  #     stringsAsFactors = FALSE
-  #   )
-
   # get a list pkParameterNamesEachOutput where field names are the paths to the output andthe names of the pkParameters for each output in the current simulation set
   pkParameterNamesEachOutput <- list()
 
@@ -469,8 +463,8 @@ getSAFileIndex <- function(structureSet = structureSet,
       singleOuputSinglePKDataframe <- allPKResultsDataframe[ (allPKResultsDataframe["QuantityPath"] == output) & (allPKResultsDataframe["Parameter"] == pkParameter), ]
       quantileResults <- getQuantileIndividualIds(singleOuputSinglePKDataframe, quantileVec)
       saResultsByOuptut <- data.frame(
-        "Outputs" = output,
-        "pkParameters" = pkParameter,
+        "Output" = output,
+        "pkParameter" = pkParameter,
         "Quantile" = quantileVec,
         "Value" = quantileResults$values,
         "Unit" = quantileResults$units,
@@ -552,7 +546,7 @@ plotMeanSensitivity <- function(structureSet,
         })),
         stringsAsFactors = FALSE
       )
-      
+
       sensitivityPlots[[paste0(parameterLabel, "-", pathLabel)]] <- plotTornado(
         data = sensitivityData,
         plotConfiguration = settings$plotConfiguration
@@ -625,7 +619,6 @@ plotPopulationSensitivity <- function(structureSets,
   allPopsDf <- NULL
 
 
-  #i <- 0
 
   saResultIndexFiles <- list()
   simulationList <- list()
@@ -645,13 +638,12 @@ plotPopulationSensitivity <- function(structureSets,
 
     for (op in outputPaths) {
       # opIndexDf is sub-dataframe of indexDf that has only the outputs op in the Outputs column
-      opIndexDf <- indexDf[indexDf$Outputs == op, ]
+      opIndexDf <- indexDf[indexDf$Output == op, ]
 
       # pkParameters are all the entries in the pkParameters column of  opIndexDf
-      pkParameters <- unique(opIndexDf$pkParameters)
+      pkParameters <- unique(opIndexDf$pkParameter)
 
       for (pk in pkParameters) {
-        #i <- i + 1
 
         dfForPkAndOp <- getPopSensDfForPkAndOutput(
           simulation = simulation,
@@ -668,8 +660,6 @@ plotPopulationSensitivity <- function(structureSets,
   }
 
   # allPopsDf is a dataframe that holds the results of all sensitivity analyses for all populations
-  #allPopsDf <- do.call("rbind", dFList)
-
 
   # add any missing sensitivity results omitted when applying threshold in getPopSensDfForPkAndOutput
 
@@ -707,8 +697,8 @@ plotPopulationSensitivity <- function(structureSets,
         # load the index file of SA results for this individual's population to get the name of the individuals's sensitivity result file
         indx <- read.csv(saResultIndexFiles[[pop]])
 
-        # get the name of the individuals's sensitivity result file
-        saResFileName <- indx[ (indx$Outputs %in% op) & (indx$pkParameters %in% pk) & (indx$Quantile %in% qu), ]$Filename
+        # get the name of the individual's sensitivity result file
+        saResFileName <- indx[ (indx$Output %in% op) & (indx$pkParameter %in% pk) & (indx$Quantile %in% qu), ]$Filename
 
         # import SA results for individual
         individualSAResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(
@@ -903,7 +893,7 @@ getPkParameterPopulationSensitivityPlot <- function(data, settings) {
 #' @param pkParameter name of PK parameter for which to obtain the population sensitivity results
 #' @return pkOutputIndexDf dataframe containing index of files containing population sensitivity analysis results conducted for given output and pkParameter
 getPkOutputIndexDf <- function(indexDf, pkParameter, output) {
-  pkOutputIndexDf <- indexDf[(indexDf$pkParameters == pkParameter) & (indexDf$Outputs == output), ]
+  pkOutputIndexDf <- indexDf[(indexDf$pkParameter == pkParameter) & (indexDf$Output == output), ]
   return(pkOutputIndexDf)
 }
 
