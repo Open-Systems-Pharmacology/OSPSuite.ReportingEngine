@@ -104,13 +104,12 @@ defaultWorkflowMessages <- list(
   "simulate" = "Perform simulation task",
   "calculatePKParameters" = "Calculate PK parameters task",
   "sensitivityAnalysis" = "Perform sensitivity analysis task",
-  "plotGoF" = "Plot Goodness of Fit task in Alpha Testing",
-  "plotPKParameters" = "Get tables of PK parameters task in Alpha Testing",
-  "plotMassBalance" = "Plot Mass Balance task in Alpha Testing",
-  "plotAbsorption" = "Plot Absorption task in Alpha Testing",
-  "plotSensitivity" = "Plot Sensitivity task in Alpha Testing",
-  "plotDemography" = "Plot Demography task in Alpha Testing",
-  "resetReport" = "Clear previous report"
+  "plotGoF" = "Plot Goodness of Fit task",
+  "plotPKParameters" = "Plot PK parameters task",
+  "plotMassBalance" = "Plot Mass Balance task",
+  "plotAbsorption" = "Plot Absorption task",
+  "plotSensitivity" = "Plot Sensitivity task",
+  "plotDemography" = "Plot Demography task"
 )
 
 defaultTaskOutputFolders <- list(
