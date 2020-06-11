@@ -139,8 +139,7 @@ plotDemographyParameters <- function(structureSets,
           )
 
           demographyPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- comparisonVpcPlot
-          demographyPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- comparisonVpcPlot +
-            ggplot2::scale_y_continuous(trans = "log10")
+          demographyPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- tlf::setYAxis(plotObject = comparisonVpcPlot, scale = tlf::Scaling$log10)
 
           demographyCaptions[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, " in comparison to ", referencePopulationName, ". Profiles are plotted in a linear scale.")
           demographyCaptions[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, " in comparison to ", referencePopulationName, ". Profiles are plotted in a logarithmic scale.")
@@ -157,8 +156,7 @@ plotDemographyParameters <- function(structureSets,
           plotConfiguration = settings$plotConfigurations[["vpcParameterPlot"]]
         )
         demographyPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- vpcPlot
-        demographyPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- vpcPlot +
-          ggplot2::scale_y_continuous(trans = "log10")
+        demographyPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- tlf::setYAxis(plotObject = vpcPlot, scale = tlf::Scaling$log10)
 
         demographyCaptions[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, ". Profiles are plotted in a linear scale.")
         demographyCaptions[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, ". Profiles are plotted in a logarithmic scale.")
@@ -358,7 +356,7 @@ getYParametersForDemogrpahyPlot <- function(workflow) {
 #' @export
 setXParametersForDemogrpahyPlot <- function(workflow, parameters) {
   validateIsOfType(workflow, "PopulationWorkflow")
-  validateIsString(c(parameters))
+  validateIsString(c(parameters), nullAllowed = TRUE)
 
   workflow$plotDemography$xParameters <- parameters
 

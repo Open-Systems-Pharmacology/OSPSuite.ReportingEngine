@@ -127,8 +127,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
       dataMapping = timeProfileMapping,
       plotConfiguration = settings$plotConfigurations[["timeProfile"]]
     )
-
-    timeProfilePlotLog <- timeProfilePlot + ggplot2::scale_y_continuous(trans = "log10")
+    timeProfilePlotLog <- tlf::setYAxis(plotObject = timeProfilePlot, scale = tlf::Scaling$log10)
 
     goodnessOfFitPlots[[paste0("timeProfile-", selectedDimension)]] <- timeProfilePlot
     goodnessOfFitPlots[[paste0("timeProfileLog-", selectedDimension)]] <- timeProfilePlotLog
@@ -155,11 +154,11 @@ plotMeanGoodnessOfFit <- function(structureSet,
           metaData = residualsMetaData,
           plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
         )
+        obsVsPredPlotLog <- tlf::setYAxis(plotObject = obsVsPredPlot, scale = tlf::Scaling$log10)
+        obsVsPredPlotLog <- tlf::setXAxis(plotObject = obsVsPredPlotLog, scale = tlf::Scaling$log10)
 
         goodnessOfFitPlots[[paste0("obsVsPred-", selectedDimension)]] <- obsVsPredPlot
-        goodnessOfFitPlots[[paste0("obsVsPredLog-", selectedDimension)]] <- obsVsPredPlot +
-          ggplot2::scale_y_continuous(trans = "log10") +
-          ggplot2::scale_x_continuous(trans = "log10")
+        goodnessOfFitPlots[[paste0("obsVsPredLog-", selectedDimension)]] <- obsVsPredPlotLog
 
         goodnessOfFitCaptions[[paste0("obsVsPred-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred")
         goodnessOfFitCaptions[[paste0("obsVsPredLog-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred", "log")
@@ -394,7 +393,7 @@ plotMeanResVsTime <- function(data,
     plotObject = meanResVsTimePlot
   )
 
-  meanResVsTimePlot <- meanResVsTimePlot + ggplot2::scale_y_continuous(limits = c(-maxRes, maxRes))
+  meanResVsTimePlot <- tlf::setYAxis(plotObject = meanResVsTimePlot, limits = c(-maxRes, maxRes))
 
   return(meanResVsTimePlot)
 }
@@ -434,7 +433,7 @@ plotMeanResVsPred <- function(data,
     plotObject = meanResVsPredPlot
   )
 
-  meanResVsPredPlot <- meanResVsPredPlot + ggplot2::scale_y_continuous(limits = c(-maxRes, maxRes))
+  meanResVsPredPlot <- tlf::setYAxis(plotObject = meanResVsPredPlot, limits = c(-maxRes, maxRes))
   return(meanResVsPredPlot)
 }
 
@@ -577,7 +576,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
       plotConfiguration = settings$plotConfigurations[["timeProfile"]]
     )
 
-    timeProfilePlotLog <- timeProfilePlot + ggplot2::scale_y_continuous(trans = "log10")
+    timeProfilePlotLog <- tlf::setYAxis(plotObject = timeProfilePlot, scale = tlf::Scaling$log10)
 
     goodnessOfFitPlots[[paste0("timeProfile-", selectedDimension)]] <- timeProfilePlot
     goodnessOfFitPlots[[paste0("timeProfileLog-", selectedDimension)]] <- timeProfilePlotLog
@@ -604,11 +603,11 @@ plotPopulationGoodnessOfFit <- function(structureSet,
           metaData = residualsMetaData,
           plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
         )
+        obsVsPredPlotLog <- tlf::setYAxis(plotObject = obsVsPredPlot, scale = tlf::Scaling$log10)
+        obsVsPredPlotLog <- tlf::setXAxis(plotObject = obsVsPredPlotLog, scale = tlf::Scaling$log10)
 
         goodnessOfFitPlots[[paste0("obsVsPred-", selectedDimension)]] <- obsVsPredPlot
-        goodnessOfFitPlots[[paste0("obsVsPredLog-", selectedDimension)]] <- obsVsPredPlot +
-          ggplot2::scale_y_continuous(trans = "log10") +
-          ggplot2::scale_x_continuous(trans = "log10")
+        goodnessOfFitPlots[[paste0("obsVsPredLog-", selectedDimension)]] <- obsVsPredPlotLog
 
         goodnessOfFitCaptions[[paste0("obsVsPred-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred")
         goodnessOfFitCaptions[[paste0("obsVsPredLog-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred", "log")
