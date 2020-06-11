@@ -189,13 +189,16 @@ plotPopulationPKParameters <- function(structureSets,
         dataMapping = pkParametersMapping,
         plotConfiguration = settings$plotConfigurations[["boxplotPkParameters"]]
       ) + ggplot2::xlab(NULL)
-      
-      boxRange <- getLogLimitsForBoxPlot(pkParameterData$Value)
+
+      boxRange <- getLogLimitsForBoxPlot(pkParameterData$Value[pkParameterData$Value>0])
       boxBreaks <- getLogBreaksForBoxPlot(boxRange)
 
       pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel)]] <- boxplotPkParameter
-      pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- boxplotPkParameter +
-        ggplot2::scale_y_continuous(trans = "log10", limits = boxRange, breaks = boxBreaks)
+      pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- tlf::setYAxis(plotObject = boxplotPkParameter,
+        scale = tlf::Scaling$log10,
+        limits = boxRange,
+        ticks = boxBreaks
+      )
 
       pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel)]] <- paste0(pkParameterMetaData[["Value"]]$dimension, " of ", output$displayName, " shown as box-whisker plot, which indicates the 5th, 25th, 50th, 75th, and 95th percentiles in linear scale.")
       pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- paste0(pkParameterMetaData[["Value"]]$dimension, " of ", output$displayName, " shown as box-whisker plot, which indicates the 5th, 25th, 50th, 75th, and 95th percentiles in logarithmic scale.")
@@ -256,8 +259,7 @@ plotPopulationPKParameters <- function(structureSets,
             )
 
             pkParametersPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- comparisonVpcPlot
-            pkParametersPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- comparisonVpcPlot +
-              ggplot2::scale_y_continuous(trans = "log10")
+            pkParametersPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- tlf::setYAxis(plotObject = comparisonVpcPlot, scale = tlf::Scaling$log10)
 
             pkParametersCaptions[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, " in comparison to ", referencePopulationName, ". Profiles are plotted in a linear scale.")
             pkParametersCaptions[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, " in comparison to ", referencePopulationName, ". Profiles are plotted in a logarithmic scale.")
@@ -274,8 +276,7 @@ plotPopulationPKParameters <- function(structureSets,
             plotConfiguration = settings$plotConfigurations[["vpcParameterPlot"]]
           )
           pkParametersPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- vpcPlot
-          pkParametersPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- vpcPlot +
-            ggplot2::scale_y_continuous(trans = "log10")
+          pkParametersPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- tlf::setYAxis(plotObject = vpcPlot, scale = tlf::Scaling$log10)
 
           pkParametersCaptions[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, ". Profiles are plotted in a linear scale.")
           pkParametersCaptions[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, ". Profiles are plotted in a logarithmic scale.")
@@ -297,10 +298,14 @@ plotPopulationPKParameters <- function(structureSets,
 
         ratioRange <- getLogLimitsForBoxPlot(c(pkRatiosData$ymin, pkRatiosData$ymax))
         ratioBreaks <- getLogBreaksForBoxPlot(ratioRange)
-        
+
         pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-ratio")]] <- boxplotPkRatios
-        pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-ratio-log")]] <- boxplotPkRatios +
-          ggplot2::scale_y_continuous(trans = "log10", limits = ratioRange, breaks = ratioBreaks)
+        pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-ratio-log")]] <- tlf::setYAxis(
+          plotObject = boxplotPkRatios,
+          scale = tlf::Scaling$log10,
+          limits = ratioRange,
+          ticks = ratioBreaks
+        )
 
         pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel)]] <- paste0(pkParameterMetaData[["Value"]]$dimension, " of ", output$displayName, " shown as box-whisker plot, which indicates ratios of the 5th, 25th, 50th, 75th, and 95th percentiles in linear scale.")
         pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- paste0(pkParameterMetaData[["Value"]]$dimension, " of ", output$displayName, " shown as box-whisker plot, which indicates ratios of the 5th, 25th, 50th, 75th, and 95th percentiles in logarithmic scale.")
@@ -317,20 +322,22 @@ plotPopulationPKParameters <- function(structureSets,
   ))
 }
 
-getLogLimitsForBoxPlot <- function(values){
-  boxRange <- c(min(values)*0.8, max(values)*1.2)
-  if(diff(log10(boxRange))>=1){return(boxRange)}
-  boxRange <- c(min(values)/3, max(values)*3)
+getLogLimitsForBoxPlot <- function(values) {
+  boxRange <- c(min(values) * 0.8, max(values) * 1.2)
+  if (diff(log10(boxRange)) >= 1) {
+    return(boxRange)
+  }
+  boxRange <- c(min(values) / 3, max(values) * 3)
   return(boxRange)
 }
 
-getLogBreaksForBoxPlot <- function(limits){
+getLogBreaksForBoxPlot <- function(limits) {
   logLimits <- round(log10(limits))
   breakOrder <- 10^seq(min(logLimits), max(logLimits))
-  breakValues <- rep(c(1,2,5), length(breakOrder))
-  breakOrder <- sort(rep(breakOrder,3))
-  
-  breakValues <- breakValues*breakOrder
+  breakValues <- rep(c(1, 2, 5), length(breakOrder))
+  breakOrder <- sort(rep(breakOrder, 3))
+
+  breakValues <- breakValues * breakOrder
   return(breakValues)
 }
 

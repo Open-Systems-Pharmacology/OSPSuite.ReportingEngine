@@ -127,8 +127,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
       dataMapping = timeProfileMapping,
       plotConfiguration = settings$plotConfigurations[["timeProfile"]]
     )
-
-    timeProfilePlotLog <- timeProfilePlot + ggplot2::scale_y_continuous(trans = "log10")
+    timeProfilePlotLog <- tlf::setYAxis(plotObject = timeProfilePlot, scale = tlf::Scaling$log10)
 
     goodnessOfFitPlots[[paste0("timeProfile-", selectedDimension)]] <- timeProfilePlot
     goodnessOfFitPlots[[paste0("timeProfileLog-", selectedDimension)]] <- timeProfilePlotLog
@@ -155,11 +154,11 @@ plotMeanGoodnessOfFit <- function(structureSet,
           metaData = residualsMetaData,
           plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
         )
+        obsVsPredPlotLog <- tlf::setYAxis(plotObject = obsVsPredPlot, scale = tlf::Scaling$log10)
+        obsVsPredPlotLog <- tlf::setXAxis(plotObject = obsVsPredPlotLog, scale = tlf::Scaling$log10)
 
         goodnessOfFitPlots[[paste0("obsVsPred-", selectedDimension)]] <- obsVsPredPlot
-        goodnessOfFitPlots[[paste0("obsVsPredLog-", selectedDimension)]] <- obsVsPredPlot +
-          ggplot2::scale_y_continuous(trans = "log10") +
-          ggplot2::scale_x_continuous(trans = "log10")
+        goodnessOfFitPlots[[paste0("obsVsPredLog-", selectedDimension)]] <- obsVsPredPlotLog
 
         goodnessOfFitCaptions[[paste0("obsVsPred-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred")
         goodnessOfFitCaptions[[paste0("obsVsPredLog-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred", "log")
@@ -191,6 +190,13 @@ plotMeanGoodnessOfFit <- function(structureSet,
       bins = settings$bins
     )
     goodnessOfFitCaptions[["resHisto"]] <- getGoodnessOfFitCaptions(structureSet, "resHisto")
+
+    goodnessOfFitPlots[["resQQPlot"]] <- plotResidualsQQPlot(
+      data = residualsData,
+      metaData = residualsMetaData,
+      plotConfiguration = settings$plotConfigurations[["resQQPlot"]]
+    )
+    goodnessOfFitCaptions[["resQQPlot"]] <- getGoodnessOfFitCaptions(structureSet, "resQQPlot")
   }
 
   return(list(
@@ -387,7 +393,7 @@ plotMeanResVsTime <- function(data,
     plotObject = meanResVsTimePlot
   )
 
-  meanResVsTimePlot <- meanResVsTimePlot + ggplot2::scale_y_continuous(limits = c(-maxRes, maxRes))
+  meanResVsTimePlot <- tlf::setYAxis(plotObject = meanResVsTimePlot, limits = c(-maxRes, maxRes))
 
   return(meanResVsTimePlot)
 }
@@ -427,7 +433,7 @@ plotMeanResVsPred <- function(data,
     plotObject = meanResVsPredPlot
   )
 
-  meanResVsPredPlot <- meanResVsPredPlot + ggplot2::scale_y_continuous(limits = c(-maxRes, maxRes))
+  meanResVsPredPlot <- tlf::setYAxis(plotObject = meanResVsPredPlot, limits = c(-maxRes, maxRes))
   return(meanResVsPredPlot)
 }
 
@@ -570,7 +576,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
       plotConfiguration = settings$plotConfigurations[["timeProfile"]]
     )
 
-    timeProfilePlotLog <- timeProfilePlot + ggplot2::scale_y_continuous(trans = "log10")
+    timeProfilePlotLog <- tlf::setYAxis(plotObject = timeProfilePlot, scale = tlf::Scaling$log10)
 
     goodnessOfFitPlots[[paste0("timeProfile-", selectedDimension)]] <- timeProfilePlot
     goodnessOfFitPlots[[paste0("timeProfileLog-", selectedDimension)]] <- timeProfilePlotLog
@@ -597,11 +603,11 @@ plotPopulationGoodnessOfFit <- function(structureSet,
           metaData = residualsMetaData,
           plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
         )
+        obsVsPredPlotLog <- tlf::setYAxis(plotObject = obsVsPredPlot, scale = tlf::Scaling$log10)
+        obsVsPredPlotLog <- tlf::setXAxis(plotObject = obsVsPredPlotLog, scale = tlf::Scaling$log10)
 
         goodnessOfFitPlots[[paste0("obsVsPred-", selectedDimension)]] <- obsVsPredPlot
-        goodnessOfFitPlots[[paste0("obsVsPredLog-", selectedDimension)]] <- obsVsPredPlot +
-          ggplot2::scale_y_continuous(trans = "log10") +
-          ggplot2::scale_x_continuous(trans = "log10")
+        goodnessOfFitPlots[[paste0("obsVsPredLog-", selectedDimension)]] <- obsVsPredPlotLog
 
         goodnessOfFitCaptions[[paste0("obsVsPred-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred")
         goodnessOfFitCaptions[[paste0("obsVsPredLog-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred", "log")
@@ -633,6 +639,13 @@ plotPopulationGoodnessOfFit <- function(structureSet,
       bins = settings$bins
     )
     goodnessOfFitCaptions[["resHisto"]] <- getGoodnessOfFitCaptions(structureSet, "resHisto")
+
+    goodnessOfFitPlots[["resQQPlot"]] <- plotResidualsQQPlot(
+      data = residualsData,
+      metaData = residualsMetaData,
+      plotConfiguration = settings$plotConfigurations[["resQQPlot"]]
+    )
+    goodnessOfFitCaptions[["resQQPlot"]] <- getGoodnessOfFitCaptions(structureSet, "resQQPlot")
   }
   return(list(
     plots = goodnessOfFitPlots,
@@ -823,4 +836,55 @@ plotResidualsHistogram <- function(data,
     ggplot2::theme(legend.title = element_blank())
 
   return(resHistoPlot)
+}
+
+#' @title plotResidualsQQPlot
+#' @description Plot quantile-quantile plot for residuals
+#' @param data data.frame
+#' @param metaData meta data on `data`
+#' @param dataMapping `HistogramDataMapping` R6 class object from `tlf` library
+#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
+#' @return ggplot object of log residuals qq-plot
+#' @export
+#' @import tlf
+#' @import stats
+#' @import ggplot2
+plotResidualsQQPlot <- function(data,
+                                metaData = NULL,
+                                dataMapping = NULL,
+                                plotConfiguration = NULL) {
+  dataMapping <- dataMapping %||% tlf::HistogramDataMapping$new(x = "Residuals", fill = "Legend")
+
+  plotConfiguration <- plotConfiguration %||% tlf::HistogramPlotConfiguration$new(
+    data = data,
+    metaData = metaData,
+    dataMapping = dataMapping
+  )
+
+  qqPlot <- tlf::initializePlot(plotConfiguration)
+
+  qqPlot <- qqPlot +
+    ggplot2::geom_qq_line(
+      data = data,
+      mapping = ggplot2::aes_string(
+        sample = dataMapping$x
+      ),
+      size = 1
+    ) +
+    ggplot2::geom_qq(
+      data = data,
+      mapping = ggplot2::aes_string(
+        sample = dataMapping$x,
+        color = dataMapping$groupMapping$fill$label
+      )
+    )
+
+  # Legends and axis
+  qqPlot <- tlf::setLegendPosition(qqPlot, position = tlf::LegendPositions$outsideTop)
+
+  qqPlot <- qqPlot +
+    ggplot2::xlab("Standard Normal Quantiles") + ggplot2::ylab("Quantiles of residuals") +
+    ggplot2::theme(legend.title = element_blank())
+
+  return(qqPlot)
 }

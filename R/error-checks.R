@@ -321,7 +321,7 @@ isUnitFromDimension <- function(unit, dimension){
   dimension <- sub("(molar)", "", dimension)
   dimensionForUnit <- sub("(mass)", "", dimensionForUnit)
   dimensionForUnit <- sub("(molar)", "", dimensionForUnit)
-  
+  if(isOfLength(dimensionForUnit, 0)){return(FALSE)}
   return(dimensionForUnit %in% dimension)
 }
 
