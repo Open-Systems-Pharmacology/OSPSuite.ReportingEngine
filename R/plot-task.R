@@ -21,9 +21,9 @@ PlotTask <- R6::R6Class(
     #' @param ... input parameters inherited from `Task` R6 class
     #' @return A new `PlotTask` object
     initialize = function(reportTitle = NULL,
-                          fileName = NULL,
-                          getTaskResults = NULL,
-                          ...) {
+                              fileName = NULL,
+                              getTaskResults = NULL,
+                              ...) {
       super$initialize(...)
       self$title <- reportTitle
       self$fileName <- file.path(self$workflowFolder, fileName)
@@ -36,7 +36,7 @@ PlotTask <- R6::R6Class(
     #' @param taskResults list of results from task run.
     #' Results contains at least 2 fields: `plots` and `tables`
     saveResults = function(set,
-                           taskResults) {
+                               taskResults) {
       addTextChunk(
         self$fileName,
         paste0("## ", self$title, " for ", set$simulationSet$simulationSetName),
@@ -150,10 +150,18 @@ PlotTask <- R6::R6Class(
       }
 
       if (!is.null(residualsAcrossAllSimulations)) {
-        plotFileName <- file.path(
+        histogramFileName <- file.path(
           self$outputFolder,
           getDefaultFileName(
-            suffix = "residuals",
+            suffix = "residuals-histogram",
+            extension = ExportPlotConfiguration$format,
+            sep = ""
+          )
+        )
+        qqPlotFileName <- file.path(
+          self$outputFolder,
+          getDefaultFileName(
+            suffix = "residuals-qqplot",
             extension = ExportPlotConfiguration$format,
             sep = ""
           )
@@ -185,14 +193,25 @@ PlotTask <- R6::R6Class(
           bins = self$settings$bins
         )
 
-        # TO DO: define parameters from settings/plotConfiguration
+        residualQQPlot <- plotResidualsQQPlot(
+          data = residualsAcrossAllSimulations,
+          metaData = taskResults$residuals$metaData,
+          plotConfiguration = self$settings$plotConfigurations[["qqPlot"]]
+        )
+
         ggplot2::ggsave(
-          filename = file.path(self$workflowFolder, plotFileName),
+          filename = file.path(self$workflowFolder, histogramFileName),
           plot = residualHistogramPlot,
           width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
         )
+
+        ggplot2::ggsave(
+          filename = file.path(self$workflowFolder, qqPlotFileName),
+          plot = residualQQPlot,
+          width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
+        )
         logWorkflow(
-          message = paste0("Plot '", plotFileName, "' was successfully saved."),
+          message = paste0("Plots '", histogramFileName, "', '", qqPlotFileName, "' were successfully saved."),
           pathFolder = self$workflowFolder,
           logTypes = LogTypes$Debug
         )
@@ -210,7 +229,15 @@ PlotTask <- R6::R6Class(
 
         addFigureChunk(
           fileName = self$fileName,
-          figureFile = plotFileName,
+          figureFile = histogramFileName,
+          logFolder = self$workflowFolder
+        )
+
+        addTextChunk(self$fileName, paste0("Figure: Residuals for ", simulationNames, " as quantile-quantile plot."), logFolder = self$workflowFolder)
+
+        addFigureChunk(
+          fileName = self$fileName,
+          figureFile = qqPlotFileName,
           logFolder = self$workflowFolder
         )
       }

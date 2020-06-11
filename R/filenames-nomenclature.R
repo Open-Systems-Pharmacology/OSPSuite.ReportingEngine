@@ -167,4 +167,11 @@ getGoodnessOfFitCaptions <- function(structureSet, plotType, plotScale = "linear
       ifnotnull(structureSet$simulationSet$observedDataFile, paste0(". Data source: ", structureSet$simulationSet$observedDataFile)), "."
     ))
   }
+  if (plotType %in% "resQQPlot") {
+    return(paste0(
+      "Logarithmic residuals of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
+      ifnotnull(structureSet$simulationSet$observedDataFile, paste0(". Data source: ", structureSet$simulationSet$observedDataFile)), 
+      " as quantile-quantile plot."
+    ))
+  }
 }
