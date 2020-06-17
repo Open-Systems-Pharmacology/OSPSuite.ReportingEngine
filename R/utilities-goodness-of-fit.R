@@ -67,6 +67,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
         "Path" = output$path
       )
       outputResidualsData <- getResiduals(outputObservedData, outputSimulatedData)
+      outputResidualsData <- removeInf(outputResidualsData, logFolder = logFolder)
 
       if (!isOfLength(lloqColumn, 0)) {
         outputLloqData <- data.frame(
@@ -243,6 +244,33 @@ getOutputSimulatedResults <- function(simulationPathResults, output, simulationQ
   ))
 }
 
+#' @title getResiduals
+#' @description This function may be reshape to be more generic later on
+#' Currently, the input variable data is a data.frame with "Time", "Concentration" and "Legend"
+#' The function get the simulated data with the time the closest to the observed data times
+#' @param observedData data.frame of time profile observed data
+#' @param simulatedData data.frame of time profile simulated data
+#' @return residualsData data.frame with Time, Observed, Simulated, Residuals
+#' @export
+getResiduals <- function(observedData,
+                         simulatedData) {
+
+  # Time matrix to match observed time with closest simulation time
+  obsTimeMatrix <- matrix(observedData[, "Time"], nrow(simulatedData), nrow(observedData), byrow = TRUE)
+  simTimeMatrix <- matrix(simulatedData[, "Time"], nrow(simulatedData), nrow(observedData))
+
+  timeMatchedData <- as.numeric(sapply(as.data.frame(abs(obsTimeMatrix - simTimeMatrix)), which.min))
+
+  residualsData <- data.frame(
+    "Time" = observedData[, "Time"],
+    "Observed" = observedData[, "Concentration"],
+    "Simulated" = simulatedData[timeMatchedData, "Concentration"],
+    "Residuals" = log(observedData[, "Concentration"]) - log(simulatedData[timeMatchedData, "Concentration"]),
+    "Legend" = simulatedData[timeMatchedData, "Legend"],
+    "Path" = observedData[, "Path"]
+  )
+  return(residualsData)
+}
 
 #' @title plotMeanTimeProfile
 #' @description Plot time profile for mean model workflow
@@ -488,6 +516,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
       names(simulatedDataForResiduals) <- c("Time", "Concentration", "Legend", "Path")
 
       outputResidualsData <- getResiduals(outputObservedData, simulatedDataForResiduals)
+      outputResidualsData <- removeInf(outputResidualsData, logFolder = logFolder)
       if (!isOfLength(lloqColumn, 0)) {
         outputLloqData <- data.frame(
           "Time" = observedDataset[rowFilter, timeColumn],
