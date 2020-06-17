@@ -189,12 +189,13 @@ plotPopulationPKParameters <- function(structureSets,
         dataMapping = pkParametersMapping,
         plotConfiguration = settings$plotConfigurations[["boxplotPkParameters"]]
       ) + ggplot2::xlab(NULL)
-
-      boxRange <- getLogLimitsForBoxPlot(pkParameterData$Value[pkParameterData$Value>0])
+      
+      boxRange <- getLogLimitsForBoxPlot(pkParameterData$Value[pkParameterData$Value > 0])
       boxBreaks <- getLogBreaksForBoxPlot(boxRange)
 
       pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel)]] <- boxplotPkParameter
-      pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- tlf::setYAxis(plotObject = boxplotPkParameter,
+      pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- tlf::setYAxis(
+        plotObject = boxplotPkParameter,
         scale = tlf::Scaling$log10,
         limits = boxRange,
         ticks = boxBreaks
@@ -370,7 +371,7 @@ ratioBoxplot <- function(data,
       alpha = 0.8,
       size = 1
     )
-  ratioPlot <- ratioPlot + ggplot2::labs(title = NULL, subtitle = NULL) + ggplot2::xlab(NULL)
+  ratioPlot <- ratioPlot + ggplot2::xlab(NULL)
   return(ratioPlot)
 }
 
@@ -424,8 +425,7 @@ vpcParameterPlot <- function(data,
       linetype = "solid",
       size = 1
     )
-  vpcPlot <- vpcPlot +
-    ggplot2::labs(title = NULL, subtitle = NULL)
+  vpcPlot <- tlf::setLegendPosition(plotObject = vpcPlot, position = reDefaultLegendPosition)
 
   return(vpcPlot)
 }
