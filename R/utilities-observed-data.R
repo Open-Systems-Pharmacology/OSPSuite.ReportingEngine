@@ -8,7 +8,7 @@
 #' @export
 readObservedDataFile <- function(fileName,
                                  header = TRUE,
-                                 encoding = "UTF") {
+                                 encoding = "UTF-8") {
   extension <- getFileExtension(fileName)
 
   if (extension %in% "csv") {
