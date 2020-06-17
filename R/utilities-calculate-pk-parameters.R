@@ -57,7 +57,7 @@ plotMeanPKParameters <- function(structureSet,
       getMeanPkAnalysesFromOuptut(pkParametersTable, output, molWeight)
     )
   }
-
+  pkParametersData$Value <- removeInf(pkParametersData$Value, logFolder)
   return(list(
     plots = NULL,
     tables = list(pkAnalysis = pkParametersData)
@@ -104,7 +104,6 @@ getMeanPkAnalysesFromOuptut <- function(data, output, molWeight = NULL) {
       )
     )
   }
-
   return(pkAnalysesFromOuptut)
 }
 
@@ -181,6 +180,7 @@ plotPopulationPKParameters <- function(structureSets,
       pkParameterMetaData <- pkParameterFromOutput$metaData
 
       # remove NA value to prevent crash in computation of percentiles
+      pkParameterData$Value <- removeInf(pkParameterData$Value, logFolder)
       pkParameterData <- pkParameterData[!is.na(pkParameterData$Value), ]
 
       boxplotPkParameter <- tlf::plotBoxWhisker(

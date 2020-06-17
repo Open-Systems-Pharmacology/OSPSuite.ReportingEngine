@@ -216,3 +216,19 @@ lastPathElement <- function(path) {
 
   return(lastElement)
 }
+
+#' @title removeInf
+#' @param data numeric vector
+#' @param logFolder folder where the logs are saved
+#' @return numeric vector
+removeInf <- function(data, logFolder = getwd()){
+  infData <- is.infinite(data)
+  Ninf <- sum(infData)
+  if(Ninf>0){
+    logWorkflow(message = paste0(Ninf, " values were infinite and removed from the analysis"),
+                pathFolder = logFolder,
+                logTypes = c(LogTypes$Debug, LogTypes$Error))
+  }
+  data[infData] <- NA
+  return(data)
+}
