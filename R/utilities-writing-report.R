@@ -33,14 +33,13 @@ resetReport <- function(fileName,
 addFigureChunk <- function(fileName,
                            figureFile,
                            figureCaption = "",
-                           figureWidth = "100%",
                            logFolder = getwd()) {
+  # For a figure path to be valid in markdown using ![](#figurePath)
+  # %20 needs to replace spaces in that figure path
+  mdFigureFile <- gsub(pattern = "[[:space:]*]", replacement = "%20", x = figureFile)
   mdText <- c(
     "",
-    knitr::hook_plot_md(
-      figureFile,
-      knitr::opts_chunk$merge(list(out.width = figureWidth, include = TRUE, fig.align = "center", echo = FALSE))
-    ),
+    paste0("![", figureCaption, "](", mdFigureFile, ")"),
     ""
   )
 
@@ -138,12 +137,12 @@ mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd()) {
 #' @param logFolder folder where the logs are saved
 #' @export
 renderReport <- function(fileName, logFolder = getwd()) {
-  reportConfig <- file.path(logFolder, "reportConfig.txt")
-
   # Numbering of '#', '##' and figures
   # The method below might not be the most efficient:
   fileContent <- readLines(fileName, encoding = "UTF-8")
+  tocContent <- NULL
   figureCount <- 0
+  tableCount <- 0
   titleCount <- 0
   subtitleCount <- 0
   for (lineIndex in seq_along(fileContent)) {
@@ -153,30 +152,85 @@ renderReport <- function(fileName, logFolder = getwd()) {
       figureCount <- figureCount + 1
       fileContent[lineIndex] <- gsub(pattern = "Figure:", replacement = paste0("Figure ", figureCount, ":"), x = fileContent[lineIndex])
     }
+    if (grepl(pattern = "Table:", x = firstElement)) {
+      tableCount <- tableCount + 1
+      fileContent[lineIndex] <- gsub(pattern = "Table:", replacement = paste0("Table ", tableCount, ":"), x = fileContent[lineIndex])
+    }
     if (grepl(pattern = "#", x = firstElement) & !grepl("##", firstElement)) {
       titleCount <- titleCount + 1
       subtitleCount <- 0
-      fileContent[lineIndex] <- gsub(pattern = "#", replacement = paste0("# ", titleCount, ". "), x = fileContent[lineIndex])
+      fileContent[lineIndex] <- gsub(pattern = "# ", replacement = paste0("# ", titleCount, ". "), x = fileContent[lineIndex])
+      titleTocContent <- sub(pattern = "# ", replacement = "", x = fileContent[lineIndex])
+      titleTocReference <- gsub(pattern = "[[:space:]*]", replacement = "-", x = tolower(titleTocContent))
+      tocContent <- c(tocContent, paste0(" - [", titleTocContent, "](#", titleTocReference, ")"))
     }
     if (grepl(pattern = "##", x = firstElement)) {
       subtitleCount <- subtitleCount + 1
-      fileContent[lineIndex] <- gsub(pattern = "##", replacement = paste0("## ", titleCount, ".", subtitleCount, ". "), x = fileContent[lineIndex])
+      fileContent[lineIndex] <- gsub(pattern = "## ", replacement = paste0("## ", titleCount, ".", subtitleCount, ". "), x = fileContent[lineIndex])
+      titleTocContent <- sub(pattern = "## ", replacement = "", x = fileContent[lineIndex])
+      titleTocReference <- gsub(pattern = "[[:space:]*]", replacement = "-", x = tolower(titleTocContent))
+      tocContent <- c(tocContent, paste0("   - [", titleTocContent, "](#", titleTocReference, ")"))
     }
   }
-
-  # Update file
+  # Include table of content and update file
+  fileContent <- c(tocContent, fileContent)
   fileObject <- file(fileName, encoding = "UTF-8")
   write(fileContent, file = fileObject, sep = "\n")
   close(fileObject)
 
-  # Table of content
-  # Format = "gfm" keep consistency in title starting with '#'
-  write(c("toc: ", "self-contained:", "wrap: none"), file = reportConfig, sep = "\n")
-  knitr::pandoc(input = fileName, format = "gfm", config = reportConfig, ext = "md")
-  unlink(reportConfig, recursive = TRUE)
-
   logWorkflow(
     message = paste0("Numbering of sections and table of content added to Report '", fileName, "'"),
+    pathFolder = logFolder,
+    logTypes = LogTypes$Debug
+  )
+  # Render docx report in the process
+  renderWordReport(fileName, logFolder)
+
+  return(invisible())
+}
+
+#' @title renderWordReport
+#' @description Render docx report with number sections and table of content
+#' @param fileName name of .md file to render
+#' @param logFolder folder where the logs are saved
+#' @export
+renderWordReport <- function(fileName, logFolder = getwd()) {
+  reportConfig <- file.path(logFolder, "word-report-configuration.txt")
+  wordFileName <- sub(pattern = ".md", replacement = "-word.md", fileName)
+  docxWordFileName <- sub(pattern = ".md", replacement = "-word.docx", fileName)
+  docxFileName <- sub(pattern = ".md", replacement = ".docx", fileName)
+  fileContent <- readLines(fileName, encoding = "UTF-8")
+
+  wordFileContent <- NULL
+  for (lineContent in fileContent) {
+    firstElement <- as.character(unlist(strsplit(lineContent, " ")))
+    firstElement <- firstElement[1]
+    if (grepl(pattern = "Figure", x = firstElement) || grepl(pattern = "Table", x = firstElement)) {
+      wordFileContent <- c(wordFileContent, "\\newpage")
+    }
+    wordFileContent <- c(wordFileContent, lineContent)
+  }
+
+  fileObject <- file(wordFileName, encoding = "UTF-8")
+  write(wordFileContent, file = fileObject, sep = "\n")
+  close(fileObject)
+
+  templateReport <- system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
+  pageBreakCode <- system.file("extdata", "pagebreak.lua", package = "ospsuite.reportingengine")
+
+  write(c(
+    "self-contained:", "wrap: none",
+    paste0("reference-doc: ", templateReport),
+    paste0("lua-filter: ", pageBreakCode),
+    paste0("resource-path: ", logFolder)
+  ), file = reportConfig, sep = "\n")
+  knitr::pandoc(input = wordFileName, format = "docx", config = reportConfig)
+  file.copy(docxWordFileName, docxFileName)
+  unlink(reportConfig, recursive = TRUE)
+  unlink(docxWordFileName, recursive = TRUE)
+
+  logWorkflow(
+    message = paste0("Word version of report '", fileName, "' created."),
     pathFolder = logFolder,
     logTypes = LogTypes$Debug
   )
