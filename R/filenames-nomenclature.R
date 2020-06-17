@@ -132,45 +132,49 @@ getGoodnessOfFitCaptions <- function(structureSet, plotType, plotScale = "linear
   if (plotScale %in% "log") {
     plotScale <- "logarithmic"
   }
+  dataSourceText <- ""
+  if(!is.null(structureSet$simulationSet$observedDataFile)){
+    workflowSubDir <- sub(pattern = "^.*[/]", replacement = "", x = structureSet$workflowFolder)
+    workflowRootDir <- sub(pattern = workflowSubDir, replacement = "", x = structureSet$workflowFolder)
+    
+    dataSourcePath <- sub(pattern = workflowRootDir, replacement = "", x = structureSet$simulationSet$observedDataFile)
+    dataSourceText <- paste0(". Data source: ", dataSourcePath))}
 
   if (plotType %in% "timeProfile") {
     return(paste0(
       "Time profiles of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
-      ifnotnull(structureSet$simulationSet$observedDataFile, paste0(". Data source: ", structureSet$simulationSet$observedDataFile)),
-      ". Time profiles are plotted in a ", plotScale, " scale."
+      dataSourceText, ". Time profiles are plotted in a ", plotScale, " scale."
     ))
   }
   if (plotType %in% "obsVsPred") {
     return(paste0(
       "Predicted vs observed of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
-      ifnotnull(structureSet$simulationSet$observedDataFile, paste0(". Data source: ", structureSet$simulationSet$observedDataFile)),
-      ". Predictions and observations are plotted in a ", plotScale, " scale."
+      dataSourceText, ". Predictions and observations are plotted in a ", plotScale, " scale."
     ))
   }
 
   if (plotType %in% "resVsPred") {
     return(paste0(
       "Logarithmic residuals vs predicted values of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
-      ifnotnull(structureSet$simulationSet$observedDataFile, paste0(". Data source: ", structureSet$simulationSet$observedDataFile)), "."
+      dataSourceText, "."
     ))
   }
   if (plotType %in% "resVsTime") {
     return(paste0(
       "Logarithmic residuals vs time of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
-      ifnotnull(structureSet$simulationSet$observedDataFile, paste0(". Data source: ", structureSet$simulationSet$observedDataFile)), "."
+      dataSourceText, "."
     ))
   }
   if (plotType %in% "resHisto") {
     return(paste0(
       "Logarithmic residuals distribution of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
-      ifnotnull(structureSet$simulationSet$observedDataFile, paste0(". Data source: ", structureSet$simulationSet$observedDataFile)), "."
+      dataSourceText, "."
     ))
   }
   if (plotType %in% "resQQPlot") {
     return(paste0(
       "Logarithmic residuals of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
-      ifnotnull(structureSet$simulationSet$observedDataFile, paste0(". Data source: ", structureSet$simulationSet$observedDataFile)), 
-      " as quantile-quantile plot."
+      " as quantile-quantile plot", dataSourceText, "."
     ))
   }
 }
