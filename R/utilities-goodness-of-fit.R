@@ -770,6 +770,8 @@ plotPopulationTimeProfile <- function(simulatedData,
     ggplot2::xlab(tlf::getLabelWithUnit(metaData$Time$dimension, metaData$Time$unit)) +
     ggplot2::ylab(tlf::getLabelWithUnit(metaData$Concentration$dimension, metaData$Concentration$unit))
 
+  timeProfilePlot <- tlf::setLegendPosition(plotObject = timeProfilePlot, position = reDefaultLegendPosition)
+
   return(timeProfilePlot)
 }
 
