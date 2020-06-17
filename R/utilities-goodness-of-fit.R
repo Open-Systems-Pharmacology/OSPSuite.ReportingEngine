@@ -321,6 +321,7 @@ plotMeanObsVsPred <- function(data,
     ),
     plotObject = meanObsVsPredPlot
   )
+  meanObsVsPredPlot <- tlf::setLegendPosition(plotObject = meanObsVsPredPlot, position = reDefaultLegendPosition)
 
   return(meanObsVsPredPlot)
 }
@@ -361,6 +362,7 @@ plotMeanResVsTime <- function(data,
   )
 
   meanResVsTimePlot <- tlf::setYAxis(plotObject = meanResVsTimePlot, limits = c(-maxRes, maxRes))
+  meanResVsTimePlot <- tlf::setLegendPosition(plotObject = meanResVsTimePlot, position = reDefaultLegendPosition)
 
   return(meanResVsTimePlot)
 }
@@ -401,6 +403,8 @@ plotMeanResVsPred <- function(data,
   )
 
   meanResVsPredPlot <- tlf::setYAxis(plotObject = meanResVsPredPlot, limits = c(-maxRes, maxRes))
+  meanResVsPredPlot <- tlf::setLegendPosition(plotObject = meanResVsPredPlot, position = reDefaultLegendPosition)
+
   return(meanResVsPredPlot)
 }
 
@@ -798,7 +802,7 @@ plotResidualsHistogram <- function(data,
       size = 1
     )
   # Legends and axis
-  resHistoPlot <- tlf::setLegendPosition(resHistoPlot, position = tlf::LegendPositions$outsideTop)
+  resHistoPlot <- tlf::setLegendPosition(plotObject = resHistoPlot, position = reDefaultLegendPosition)
 
   resHistoPlot <- resHistoPlot +
     ggplot2::ylab("Number of residuals") +
@@ -849,8 +853,7 @@ plotResidualsQQPlot <- function(data,
     )
 
   # Legends and axis
-  qqPlot <- tlf::setLegendPosition(qqPlot, position = tlf::LegendPositions$outsideTop)
-
+  qqPlot <- tlf::setLegendPosition(plotObject = qqPlot, position = reDefaultLegendPosition)
   qqPlot <- qqPlot +
     ggplot2::xlab("Standard Normal Quantiles") + ggplot2::ylab("Quantiles of residuals") +
     ggplot2::theme(legend.title = element_blank())
