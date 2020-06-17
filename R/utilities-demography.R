@@ -306,7 +306,6 @@ plotDemographyHistogram <- function(data,
     metaData = metaData,
     dataMapping = dataMapping
   )
-
   demographyPlot <- tlf::initializePlot(plotConfiguration)
 
   demographyPlot <- demographyPlot +
@@ -321,9 +320,10 @@ plotDemographyHistogram <- function(data,
       position = ggplot2::position_dodge2(preserve = "single"),
       bins = bins
     )
-  demographyPlot <- demographyPlot + ggplot2::labs(title = NULL, subtitle = NULL) +
-    ggplot2::xlab(lastPathElement(dataMapping$x)) + ggplot2::ylab("Number of individuals") +
+  demographyPlot <- demographyPlot + 
+    ggplot2::ylab("Number of individuals") +
     ggplot2::guides(fill = guide_legend(title = NULL))
+  demographyPlot <- tlf::setLegendPosition(plotObject = demographyPlot, position = reDefaultLegendPosition)
   return(demographyPlot)
 }
 
