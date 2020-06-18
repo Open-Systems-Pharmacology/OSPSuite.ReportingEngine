@@ -133,12 +133,13 @@ getGoodnessOfFitCaptions <- function(structureSet, plotType, plotScale = "linear
     plotScale <- "logarithmic"
   }
   dataSourceText <- ""
-  if(!is.null(structureSet$simulationSet$observedDataFile)){
+  if (!is.null(structureSet$simulationSet$observedDataFile)) {
     workflowSubDir <- sub(pattern = "^.*[/]", replacement = "", x = structureSet$workflowFolder)
     workflowRootDir <- sub(pattern = workflowSubDir, replacement = "", x = structureSet$workflowFolder)
-    
+
     dataSourcePath <- sub(pattern = workflowRootDir, replacement = "", x = structureSet$simulationSet$observedDataFile)
-    dataSourceText <- paste0(". Data source: ", dataSourcePath))}
+    dataSourceText <- paste0(". Data source: ", dataSourcePath)
+  }
 
   if (plotType %in% "timeProfile") {
     return(paste0(
@@ -176,5 +177,45 @@ getGoodnessOfFitCaptions <- function(structureSet, plotType, plotScale = "linear
       "Logarithmic residuals of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
       " as quantile-quantile plot", dataSourceText, "."
     ))
+  }
+}
+
+getPkParametersCaptions <- function(plotType, populationName, metaData, referencePopulationName = NULL, plotScale = "linear") {
+  if (plotScale %in% "lin") {
+    plotScale <- "linear"
+  }
+  if (plotScale %in% "log") {
+    plotScale <- "logarithmic"
+  }
+  referencePopulationText <- ""
+  if (!is.null(referencePopulationName)) {
+    referencePopulationText <- paste0(" in comparison to ", referencePopulationName)
+  }
+  if (plotType %in% "Histogram") {
+    return(paste0("Distribution of ", metaData$dimension, " for ", populationName))
+  }
+  if (plotType %in% "rangePlot") {
+    return(
+      paste0(
+        metaData$x$dimension, "-dependence of ", metaData$median$dimension, " for ", populationName,
+        referencePopulationText, ". Profiles are plotted in a ", plotScale, " scale."
+      )
+    )
+  }
+  if (plotType %in% "boxplot") {
+    return(
+      paste0(
+        metaData$dimension, " of ", populationName,
+        " shown as box-whisker plot, which indicates the 5th, 25th, 50th, 75th, and 95th percentiles in ", plotScale, " scale."
+      )
+    )
+  }
+  if (plotType %in% "ratioPlot") {
+    return(
+      paste0(
+        metaData$dimension, " of ", populationName,
+        " shown as box-whisker plot, which indicates ratios of the 5th, 25th, 50th, 75th, and 95th percentiles in ", plotScale, " scale."
+      )
+    )
   }
 }
