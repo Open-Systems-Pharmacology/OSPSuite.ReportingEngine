@@ -62,7 +62,7 @@ plotDemographyParameters <- function(structureSets,
           bins = settings$bins %||% 11
         )
         demographyPlots[[parameterLabel]] <- demographyHistogram
-        demographyCaptions[[parameterLabel]] <- paste0("Distribution of ", demographyMetaData[[parameterName]]$dimension, " for ", captionSimulationNames)
+        demographyCaptions[[parameterLabel]] <- getPkParametersCaptions("Histogram", captionSimulationNames, demographyMetaData[[parameterName]])
       }
     }
     # Parallel and Ratio: histograms per population
@@ -85,7 +85,7 @@ plotDemographyParameters <- function(structureSets,
           )
 
           demographyPlots[[paste0(parameterLabel, "-", populationName)]] <- demographyHistogram
-          demographyCaptions[[paste0(parameterLabel, "-", populationName)]] <- paste0("Distribution of ", demographyMetaData[[parameterName]]$dimension, " for ", populationName)
+          demographyCaptions[[paste0(parameterLabel, "-", populationName)]] <- getPkParametersCaptions("Histogram", populationName, demographyMetaData[[parameterName]])
         }
       }
     }
@@ -141,8 +141,8 @@ plotDemographyParameters <- function(structureSets,
           demographyPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- comparisonVpcPlot
           demographyPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- tlf::setYAxis(plotObject = comparisonVpcPlot, scale = tlf::Scaling$log10)
 
-          demographyCaptions[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, " in comparison to ", referencePopulationName, ". Profiles are plotted in a linear scale.")
-          demographyCaptions[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, " in comparison to ", referencePopulationName, ". Profiles are plotted in a logarithmic scale.")
+          demographyCaptions[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- getPkParametersCaptions("rangePlot", populationName, vpcMetaData, referencePopulationName)
+          demographyCaptions[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- getPkParametersCaptions("rangePlot", populationName, vpcMetaData, referencePopulationName, plotScale = "log")
         }
       }
 
@@ -158,8 +158,8 @@ plotDemographyParameters <- function(structureSets,
         demographyPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- vpcPlot
         demographyPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- tlf::setYAxis(plotObject = vpcPlot, scale = tlf::Scaling$log10)
 
-        demographyCaptions[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, ". Profiles are plotted in a linear scale.")
-        demographyCaptions[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- paste0(vpcMetaData$x$dimension, "-dependence of ", vpcMetaData$median$dimension, " for ", populationName, ". Profiles are plotted in a logarithmic scale.")
+        demographyCaptions[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- getPkParametersCaptions("rangePlot", populationName, vpcMetaData)
+        demographyCaptions[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- getPkParametersCaptions("rangePlot", populationName, vpcMetaData, plotScale = "log")
       }
     }
   }
@@ -306,7 +306,6 @@ plotDemographyHistogram <- function(data,
     metaData = metaData,
     dataMapping = dataMapping
   )
-
   demographyPlot <- tlf::initializePlot(plotConfiguration)
 
   demographyPlot <- demographyPlot +
@@ -321,9 +320,10 @@ plotDemographyHistogram <- function(data,
       position = ggplot2::position_dodge2(preserve = "single"),
       bins = bins
     )
-  demographyPlot <- demographyPlot + ggplot2::labs(title = NULL, subtitle = NULL) +
-    ggplot2::xlab(lastPathElement(dataMapping$x)) + ggplot2::ylab("Number of individuals") +
+  demographyPlot <- demographyPlot +
+    ggplot2::ylab("Number of individuals") +
     ggplot2::guides(fill = guide_legend(title = NULL))
+  demographyPlot <- tlf::setLegendPosition(plotObject = demographyPlot, position = reDefaultLegendPosition)
   return(demographyPlot)
 }
 

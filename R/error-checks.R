@@ -90,8 +90,6 @@ validateIsInRange <- function(variableName, value, lowerBound, upperBound, nullA
   }
 }
 
-
-
 validateEnumValue <- function(enum, value) {
   if (value %in% names(enum)) {
     return()
@@ -165,6 +163,18 @@ validateIsIncluded <- function(values, parentValues, nullAllowed = FALSE) {
   }
 
   logErrorThenStop(messages$errorNotIncluded(values, parentValues))
+}
+
+checkIsIncluded <- function(values, parentValues, nullAllowed = FALSE) {
+  if (nullAllowed && is.null(values)) {
+    return()
+  }
+  
+  if (isIncluded(values, parentValues)) {
+    return()
+  }
+  logWorkflow(message = messages$errorNotIncluded(values, parentValues), 
+              logTypes = c(LogTypes$Debug, LogTypes$Error))
 }
 
 validateMapping <- function(mapping, data, nullAllowed = FALSE) {
@@ -252,8 +262,8 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile)
     dvVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvID)
     lloqVariable <- getDictionaryVariable(dictionary, dictionaryParameters$lloqID)
     
-    validateIsIncluded(c(timeVariable, dvVariable), names(observedDataset))
-    validateIsIncluded(lloqVariable, names(observedDataset), nullAllowed = TRUE)
+    checkIsIncluded(c(timeVariable, dvVariable), names(observedDataset))
+    checkIsIncluded(lloqVariable, names(observedDataset), nullAllowed = TRUE)
     return()
   }
   stop(messages$errorObservedMetaDataFileNotProvided(observedDataFile))

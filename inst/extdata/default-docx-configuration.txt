@@ -1,0 +1,4 @@
+self-contained:
+wrap: none
+reference-doc: ./reference.docx
+lua-filter: "./pagebreak.lua"

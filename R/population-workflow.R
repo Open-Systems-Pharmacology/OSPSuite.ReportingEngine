@@ -195,7 +195,7 @@ PopulationWorkflow <- R6::R6Class(
                                active = FALSE,
                                message = defaultWorkflowMessages$plotGoF,
                                settings = NULL) {
-      self$plotGoF <- PlotTask$new(
+      self$plotGoF <- GofPlotTask$new(
         reportTitle = reportTitle,
         fileName = fileName,
         getTaskResults = taskFunction,
