@@ -120,9 +120,6 @@ PlotTask <- R6::R6Class(
         dir.create(file.path(self$workflowFolder, self$outputFolder), showWarnings = FALSE)
       }
 
-      # Goodness of fit task creates a histogram of residuals merged accross the simulaiton
-      residualsAcrossAllSimulations <- NULL
-
       for (set in structureSets) {
         logWorkflow(
           message = paste0(self$message, " for ", set$simulationSet$simulationName),
@@ -134,112 +131,8 @@ PlotTask <- R6::R6Class(
             self$workflowFolder,
             self$settings
           )
-
-          # Specific to goodness of fit task:
-          # taskResults include `residuals`
-          if (!is.null(taskResults[["residuals"]])) {
-            residualsInSimulation <- taskResults$residuals$data
-            residualsInSimulation$Legend <- set$simulationSet$simulationSetName
-            residualsAcrossAllSimulations <- rbind.data.frame(
-              residualsAcrossAllSimulations,
-              residualsInSimulation
-            )
-          }
           self$saveResults(set, taskResults)
         }
-      }
-
-      if (!is.null(residualsAcrossAllSimulations)) {
-        histogramFileName <- file.path(
-          self$outputFolder,
-          getDefaultFileName(
-            suffix = "residuals-histogram",
-            extension = ExportPlotConfiguration$format,
-            sep = ""
-          )
-        )
-        qqPlotFileName <- file.path(
-          self$outputFolder,
-          getDefaultFileName(
-            suffix = "residuals-qqplot",
-            extension = ExportPlotConfiguration$format,
-            sep = ""
-          )
-        )
-        tableFileName <- file.path(
-          self$workflowFolder,
-          self$outputFolder,
-          getDefaultFileName(
-            suffix = "residuals",
-            extension = "csv",
-            sep = ""
-          )
-        )
-        write.csv(residualsAcrossAllSimulations,
-          file = tableFileName,
-          row.names = FALSE
-        )
-        logWorkflow(
-          message = paste0("Table '", tableFileName, "' was successfully saved."),
-          pathFolder = self$workflowFolder,
-          logTypes = LogTypes$Debug
-        )
-
-        # TO DO: integrate tlf fix of mapping/plotConfig for no group variable
-        residualHistogramPlot <- plotResidualsHistogram(
-          data = residualsAcrossAllSimulations,
-          metaData = taskResults$residuals$metaData,
-          plotConfiguration = self$settings$plotConfigurations[["histogram"]],
-          bins = self$settings$bins
-        )
-
-        residualQQPlot <- plotResidualsQQPlot(
-          data = residualsAcrossAllSimulations,
-          metaData = taskResults$residuals$metaData,
-          plotConfiguration = self$settings$plotConfigurations[["qqPlot"]]
-        )
-
-        ggplot2::ggsave(
-          filename = file.path(self$workflowFolder, histogramFileName),
-          plot = residualHistogramPlot,
-          width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
-        )
-
-        ggplot2::ggsave(
-          filename = file.path(self$workflowFolder, qqPlotFileName),
-          plot = residualQQPlot,
-          width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
-        )
-        logWorkflow(
-          message = paste0("Plots '", histogramFileName, "', '", qqPlotFileName, "' were successfully saved."),
-          pathFolder = self$workflowFolder,
-          logTypes = LogTypes$Debug
-        )
-
-        addTextChunk(
-          self$fileName,
-          "## Residuals across all simulations",
-          logFolder = self$workflowFolder
-        )
-
-        simulationNames <- paste0(as.character(sapply(structureSets, function(set) {
-          set$simulationSet$simulationSetName
-        })), collapse = ", ")
-        addTextChunk(self$fileName, paste0("Figure: Distribution of residuals for ", simulationNames), logFolder = self$workflowFolder)
-
-        addFigureChunk(
-          fileName = self$fileName,
-          figureFile = histogramFileName,
-          logFolder = self$workflowFolder
-        )
-
-        addTextChunk(self$fileName, paste0("Figure: Residuals for ", simulationNames, " as quantile-quantile plot."), logFolder = self$workflowFolder)
-
-        addFigureChunk(
-          fileName = self$fileName,
-          figureFile = qqPlotFileName,
-          logFolder = self$workflowFolder
-        )
       }
     }
   )

@@ -137,7 +137,7 @@ mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd()) {
 #' @param logFolder folder where the logs are saved
 #' @export
 renderReport <- function(fileName, logFolder = getwd()) {
-  # Numbering of '#', '##' and figures
+  # Numbering of '#', '##', '###', figures and tables
   # The method below might not be the most efficient:
   fileContent <- readLines(fileName, encoding = "UTF-8")
   tocContent <- NULL
@@ -145,6 +145,7 @@ renderReport <- function(fileName, logFolder = getwd()) {
   tableCount <- 0
   titleCount <- 0
   subtitleCount <- 0
+  subsubtitleCount <- 0
   for (lineIndex in seq_along(fileContent)) {
     firstElement <- as.character(unlist(strsplit(fileContent[lineIndex], " ")))
     firstElement <- firstElement[1]
@@ -159,15 +160,24 @@ renderReport <- function(fileName, logFolder = getwd()) {
     if (grepl(pattern = "#", x = firstElement) & !grepl("##", firstElement)) {
       titleCount <- titleCount + 1
       subtitleCount <- 0
+      subsubtitleCount <- 0
       fileContent[lineIndex] <- gsub(pattern = "# ", replacement = paste0("# ", titleCount, ". "), x = fileContent[lineIndex])
       titleTocContent <- sub(pattern = "# ", replacement = "", x = fileContent[lineIndex])
       titleTocReference <- gsub(pattern = "[[:space:]*]", replacement = "-", x = tolower(titleTocContent))
       tocContent <- c(tocContent, paste0(" - [", titleTocContent, "](#", titleTocReference, ")"))
     }
-    if (grepl(pattern = "##", x = firstElement)) {
+    if (grepl(pattern = "##", x = firstElement) & !grepl("###", firstElement)) {
       subtitleCount <- subtitleCount + 1
+      subsubtitleCount <- 0
       fileContent[lineIndex] <- gsub(pattern = "## ", replacement = paste0("## ", titleCount, ".", subtitleCount, ". "), x = fileContent[lineIndex])
       titleTocContent <- sub(pattern = "## ", replacement = "", x = fileContent[lineIndex])
+      titleTocReference <- gsub(pattern = "[[:space:]*]", replacement = "-", x = tolower(titleTocContent))
+      tocContent <- c(tocContent, paste0("   - [", titleTocContent, "](#", titleTocReference, ")"))
+    }
+    if (grepl(pattern = "###", x = firstElement) & !grepl("####", firstElement)) {
+      subsubtitleCount <- subsubtitleCount +1
+      fileContent[lineIndex] <- gsub(pattern = "### ", replacement = paste0("### ", titleCount, ".", subtitleCount, ".", subsubtitleCount, ". "), x = fileContent[lineIndex])
+      titleTocContent <- sub(pattern = "### ", replacement = "", x = fileContent[lineIndex])
       titleTocReference <- gsub(pattern = "[[:space:]*]", replacement = "-", x = tolower(titleTocContent))
       tocContent <- c(tocContent, paste0("   - [", titleTocContent, "](#", titleTocReference, ")"))
     }

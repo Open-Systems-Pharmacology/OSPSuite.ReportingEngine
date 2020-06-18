@@ -219,3 +219,15 @@ getPkParametersCaptions <- function(plotType, populationName, metaData, referenc
     )
   }
 }
+
+getTimeRangeCaption <- function(timeRange) {
+  if (timeRange %in% "totalRange") {
+    return("### For total simulation time range")
+  }
+  if (timeRange %in% "firstApplicationRange") {
+    return("### For first application range")
+  }
+  if (timeRange %in% "lastApplicationRange") {
+    return("### For last application range")
+  }
+}
