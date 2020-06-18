@@ -106,8 +106,8 @@ plotMeanGoodnessOfFit <- function(structureSet,
     for (timeRange in timeRanges) {
       if (!is.null(timeRange$values)) {
         residualsPlotResults <- getResidualsPlotResults(timeRange$values, residualsData, metaDataFrame, structureSet, settings, logFolder)
-        goodnessOfFitPlots[[timeRange$name]] <- residualsPlotResults$plots
-        goodnessOfFitCaptions[[timeRange$name]] <- residualsPlotResults$captions
+        goodnessOfFitPlots[[timeRange$name]] <- c(goodnessOfFitPlots[[timeRange$name]], residualsPlotResults$plots)
+        goodnessOfFitCaptions[[timeRange$name]] <- c(goodnessOfFitCaptions[[timeRange$name]], residualsPlotResults$captions)
         residuals[[timeRange$name]] <- residualsPlotResults$data
         residualsMetaData[[timeRange$name]] <- residualsPlotResults$metaData
       }
@@ -302,8 +302,8 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     for (timeRange in timeRanges) {
       if (!is.null(timeRange$values)) {
         residualsPlotResults <- getResidualsPlotResults(timeRange$values, residualsData, metaDataFrame, structureSet, settings, logFolder)
-        goodnessOfFitPlots[[timeRange$name]] <- residualsPlotResults$plots
-        goodnessOfFitCaptions[[timeRange$name]] <- residualsPlotResults$captions
+        goodnessOfFitPlots[[timeRange$name]] <- c(goodnessOfFitPlots[[timeRange$name]], residualsPlotResults$plots)
+        goodnessOfFitCaptions[[timeRange$name]] <- c(goodnessOfFitCaptions[[timeRange$name]], residualsPlotResults$captions)
         residuals[[timeRange$name]] <- residualsPlotResults$data
         residualsMetaData[[timeRange$name]] <- residualsPlotResults$metaData
       }
