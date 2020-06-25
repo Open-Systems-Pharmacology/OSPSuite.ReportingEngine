@@ -776,8 +776,14 @@ plotPopulationSensitivity <- function(structureSets,
       settings = settings
     )
     plotList[["plots"]][[sensitivityPlotName]] <- plotObject
-  }
 
+
+
+    plotList[["captions"]][[sensitivityPlotName]] <- getPopulationSensitivityPlotCaptions(pkParameter = pk,
+                                                                                          output = op,
+                                                                                          quantileVec = sort(unique( popDfPkOp$Quantile )),
+                                                                                          simulationSetNames = unique(popDfPkOp$Population))
+  }
 
   return(plotList)
 }
