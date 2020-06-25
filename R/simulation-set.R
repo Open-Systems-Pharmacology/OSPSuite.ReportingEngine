@@ -30,12 +30,12 @@ SimulationSet <- R6::R6Class(
     #' @param timeUnit display unit for time variable. Default is "h"
     #' @return A new `SimulationSet` object
     initialize = function(simulationSetName,
-                              simulationFile,
-                              simulationName = NULL,
-                              outputs = NULL,
-                              observedDataFile = NULL,
-                              observedMetaDataFile = NULL,
-                              timeUnit = "h") {
+                          simulationFile,
+                          simulationName = NULL,
+                          outputs = NULL,
+                          observedDataFile = NULL,
+                          observedMetaDataFile = NULL,
+                          timeUnit = "h") {
       # Test and validate the simulation objecy
       validateIsString(c(simulationSetName, simulationFile))
       validateIsFileExtension(simulationFile, "pkml")

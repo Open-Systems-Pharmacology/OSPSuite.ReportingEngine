@@ -20,7 +20,7 @@ runSensitivity <- function(structureSet,
   numberOfCores <- settings$numberOfCores
   showProgress <- settings$showProgress
 
-  sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet,loadFromCache = TRUE)
+  sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
 
   allVariableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
 
@@ -31,22 +31,21 @@ runSensitivity <- function(structureSet,
     # if a variableParameterPaths input is provided, ensure that all
     # its elements exist within allVariableParameterPaths.  If not, give an error.
 
-    validParameterPaths <- intersect(variableParameterPaths,allVariableParameterPaths)
+    validParameterPaths <- intersect(variableParameterPaths, allVariableParameterPaths)
 
-    if( length(validParameterPaths) == 0 ){
+    if (length(validParameterPaths) == 0) {
       logErrorThenStop(messages$errorNoValidParametersForSensitivityAnalysis(structureSet$simulationSet$simulationSetName), logFolderPath = logFolder)
     }
 
-    invalidParameterPaths <- setdiff(variableParameterPaths , validParameterPaths)
+    invalidParameterPaths <- setdiff(variableParameterPaths, validParameterPaths)
     variableParameterPaths <- validParameterPaths
 
-    if( length(invalidParameterPaths) != 0 ){
+    if (length(invalidParameterPaths) != 0) {
       logWorkflow(
-        message = messages$warningIgnoringInvalidParametersForSensitivityAnalysis(invalidParameterPaths,structureSet$simulationSet$simulationSetName),
+        message = messages$warningIgnoringInvalidParametersForSensitivityAnalysis(invalidParameterPaths, structureSet$simulationSet$simulationSetName),
         pathFolder = logFolder
       )
     }
-
   }
   totalNumberParameters <- length(variableParameterPaths)
   # In case there are more cores specified in numberOfCores than
@@ -148,7 +147,7 @@ individualSensitivityAnalysis <- function(structureSet,
   } else {
     # No parallelization
     # Load simulation to determine number of parameters valid for sensitivity analysis
-    sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet,loadFromCache = TRUE)
+    sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
     updateSimulationIndividualParameters(simulation = sim, individualParameters)
     individualSensitivityAnalysisResults <- analyzeSensitivity(
       simulation = sim,
@@ -260,7 +259,7 @@ runParallelSensitivityAnalysis <- function(structureSet,
   verifyPartialResultsExported(partialResultsExported, logFolder = logFolder)
 
   # Merge temporary results files
-  allSAResults <- importSensitivityAnalysisResultsFromCSV(simulation = loadSimulationWithUpdatedPaths(structureSet$simulationSet,loadFromCache = TRUE), filePaths = allResultsFileNames)
+  allSAResults <- importSensitivityAnalysisResultsFromCSV(simulation = loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE), filePaths = allResultsFileNames)
   file.remove(allResultsFileNames)
   return(allSAResults)
 }
@@ -409,10 +408,10 @@ runPopulationSensitivityAnalysis <- function(structureSet, settings, logFolder =
 #' @return pkResultsDataFrame, a dataframe storing the contents of the CSV file with path pkParameterResultsFilePath
 #' @import ospsuite
 getPKResultsDataFrame <- function(structureSet) {
-
   pkResults <- ospsuite::importPKAnalysesFromCSV(
     filePath = structureSet$pkAnalysisResultsFileNames,
-    simulation = loadSimulationWithUpdatedPaths(simulationSet = structureSet$simulationSet,loadFromCache = TRUE))
+    simulation = loadSimulationWithUpdatedPaths(simulationSet = structureSet$simulationSet, loadFromCache = TRUE)
+  )
 
   pkResultsDataFrame <- ospsuite::pkAnalysesAsDataFrame(pkAnalyses = pkResults)
 
@@ -631,7 +630,6 @@ plotPopulationSensitivity <- function(structureSets,
                                       workflowType = NULL,
                                       xParameters = NULL,
                                       yParameters = NULL) {
-
   allPopsDf <- NULL
 
 
@@ -660,7 +658,6 @@ plotPopulationSensitivity <- function(structureSets,
       pkParameters <- unique(opIndexDf$pkParameter)
 
       for (pk in pkParameters) {
-
         dfForPkAndOp <- getPopSensDfForPkAndOutput(
           simulation = simulation,
           sensitivityResultsFolder = sensitivityResultsFolder,
@@ -670,7 +667,7 @@ plotPopulationSensitivity <- function(structureSets,
           totalSensitivityThreshold = settings$totalSensitivityThreshold
         )
         populationNameCol <- rep(populationName, nrow(dfForPkAndOp))
-        allPopsDf <- rbind.data.frame( allPopsDf , cbind(dfForPkAndOp, data.frame("Population" = populationNameCol)) )
+        allPopsDf <- rbind.data.frame(allPopsDf, cbind(dfForPkAndOp, data.frame("Population" = populationNameCol)))
       }
     }
   }
@@ -729,7 +726,7 @@ plotPopulationSensitivity <- function(structureSets,
           outputPath = as.character(op)
         )
 
-        if (!is.na(missingSensivitity)){
+        if (!is.na(missingSensivitity)) {
           # create a sensitivity result row for the missing parameter for this individual and this combination of output and pkParameter
           saMissingParameter <- data.frame(
             "QuantityPath" = op,
@@ -744,7 +741,6 @@ plotPopulationSensitivity <- function(structureSets,
           # append to allPopsDf the row containing the missing parameter's sensitivity
           allPopsDf <- rbind(allPopsDf, saMissingParameter)
         }
-
       }
     }
   }
@@ -779,10 +775,12 @@ plotPopulationSensitivity <- function(structureSets,
 
 
 
-    plotList[["captions"]][[sensitivityPlotName]] <- getPopulationSensitivityPlotCaptions(pkParameter = pk,
-                                                                                          output = op,
-                                                                                          quantileVec = sort(unique( popDfPkOp$Quantile )),
-                                                                                          simulationSetNames = unique(popDfPkOp$Population))
+    plotList[["captions"]][[sensitivityPlotName]] <- getPopulationSensitivityPlotCaptions(
+      pkParameter = pk,
+      output = op,
+      quantileVec = sort(unique(popDfPkOp$Quantile)),
+      simulationSetNames = unique(popDfPkOp$Population)
+    )
   }
 
   return(plotList)

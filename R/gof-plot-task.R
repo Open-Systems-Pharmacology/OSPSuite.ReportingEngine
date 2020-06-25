@@ -13,13 +13,13 @@ GofPlotTask <- R6::R6Class(
     #' @param taskResults list of results from task run.
     #' Results contains at least 2 fields: `plots` and `tables`
     saveResults = function(set,
-                               taskResults) {
+                           taskResults) {
       addTextChunk(
         self$fileName,
         paste0("## ", self$title, " for ", set$simulationSet$simulationSetName),
         logFolder = self$workflowFolder
       )
-      
+
       for (timeRange in c("totalRange", "firstApplicationRange", "lastApplicationRange")) {
         # Captions only for multi admin
         if (length(taskResults$plots) > 1) {
