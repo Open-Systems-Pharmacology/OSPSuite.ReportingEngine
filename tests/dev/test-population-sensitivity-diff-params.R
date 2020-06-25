@@ -37,7 +37,7 @@ pwf <- PopulationWorkflow$new(simulationSets = list(ps1,ps2), workflowFolder = "
 pwf$simulatePopulation$settings$showProgress <- FALSE
 pwf$simulatePopulation$inactivate()
 pwf$populationPKParameters$inactivate()
-pwf$populationSensitivityAnalysis$activate()
+pwf$populationSensitivityAnalysis$inactivate()
 pwf$plotSensitivity$activate()
 pwf$populationSensitivityAnalysis$settings$showProgress <- TRUE
 pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- c("Organism|Stomach|Volume",
