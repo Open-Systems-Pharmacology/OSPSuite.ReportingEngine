@@ -1,0 +1,12 @@
+﻿"QuantityPath","Parameter","PKParameter","Value"
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","C_max",-0.000466101168247267
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","t_max",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","C_tEnd",-0.000266007521219464
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","AUC_tEnd",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","AUC_inf",-0.000132054188099236
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","MRT",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","Thalf",-0.000461988339427891
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","FractionAucLastToInf",-0.00059548809375872
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","CL",0.00013228512250978
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","Vss",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","Vd",-0.000329891030513935
