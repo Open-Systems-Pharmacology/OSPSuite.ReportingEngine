@@ -30,7 +30,23 @@ runSensitivity <- function(structureSet,
   } else {
     # if a variableParameterPaths input is provided, ensure that all
     # its elements exist within allVariableParameterPaths.  If not, give an error.
-    validateIsIncluded(variableParameterPaths, allVariableParameterPaths)
+
+    validParameterPaths <- intersect(variableParameterPaths,allVariableParameterPaths)
+
+    if( length(validParameterPaths) == 0 ){
+      logErrorThenStop(messages$errorNoValidParametersForSensitivityAnalysis(structureSet$simulationSet$simulationSetName), logFolderPath = logFolder)
+    }
+
+    invalidParameterPaths <- setdiff(variableParameterPaths , validParameterPaths)
+    variableParameterPaths <- validParameterPaths
+
+    if( length(invalidParameterPaths) != 0 ){
+      logWorkflow(
+        message = messages$warningIgnoringInvalidParametersForSensitivityAnalysis(invalidParameterPaths,structureSet$simulationSet$simulationSetName),
+        pathFolder = logFolder
+      )
+    }
+
   }
   totalNumberParameters <- length(variableParameterPaths)
   # In case there are more cores specified in numberOfCores than
@@ -713,19 +729,22 @@ plotPopulationSensitivity <- function(structureSets,
           outputPath = as.character(op)
         )
 
-        # create a sensitivity result row for the missing parameter for this individual and this combination of output and pkParameter
-        saMissingParameter <- data.frame(
-          "QuantityPath" = op,
-          "Parameter" = missingParameters[parNumber],
-          "PKParameter" = pk,
-          "Value" = missingSensivitity,
-          "Quantile" = qu,
-          "individualId" = id,
-          "Population" = pop
-        )
+        if (!is.na(missingSensivitity)){
+          # create a sensitivity result row for the missing parameter for this individual and this combination of output and pkParameter
+          saMissingParameter <- data.frame(
+            "QuantityPath" = op,
+            "Parameter" = missingParameters[parNumber],
+            "PKParameter" = pk,
+            "Value" = missingSensivitity,
+            "Quantile" = qu,
+            "individualId" = id,
+            "Population" = pop
+          )
 
-        # append to allPopsDf the row containing the missing parameter's sensitivity
-        allPopsDf <- rbind(allPopsDf, saMissingParameter)
+          # append to allPopsDf the row containing the missing parameter's sensitivity
+          allPopsDf <- rbind(allPopsDf, saMissingParameter)
+        }
+
       }
     }
   }

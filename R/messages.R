@@ -81,6 +81,14 @@ messages <- list(
     paste0("No variable parameters found for sensitivity analysis.")
   },
 
+  errorNoValidParametersForSensitivityAnalysis = function(simulationSetName) {
+    paste('No valid variable parameter paths for sensitivity analysis of simulation set',simulationSetName,'.')
+  },
+
+  warningIgnoringInvalidParametersForSensitivityAnalysis = function(invalidParameterPaths,simulationSetName) {
+    paste("Ignoring parameters",paste0("'",invalidParameterPaths, "'", collapse = ", "),'in sensitivity analysis for simulation set',simulationSetName,'.')
+  },
+
   warningNoReferencePopulation = function(workflowType) {
     paste0("Workflow type '", workflowType, "' requires one reference population, but no reference population was provided.")
   },
@@ -96,8 +104,9 @@ messages <- list(
   outsideRange = function(variableName, value, lowerBound, upperBound) {
     paste0(variableName, " has value ", value, ", which lies outside the allowable range [", lowerBound, ",", upperBound, "].")
   },
-  
+
   errorUnitNotFromDimension = function(unit, dimension) {
     paste0("Unit '", paste0(unit, collapse = "', '"), "' is not included in available units for dimension: '", paste0(dimension, collapse = "', '"), "'.")
   }
+
 )
