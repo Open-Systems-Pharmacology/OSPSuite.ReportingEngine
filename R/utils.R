@@ -172,7 +172,7 @@ getFileExtension <- function(filePath) {
 #' @param simulationSet simulation set containing path to simulation file and pathIDs for quantities to be loaded into simulation object
 #' @return simulation object with pathIDs updated from simulationSet
 #' @export
-loadSimulationWithUpdatedPaths <- function(simulationSet,loadFromCache = FALSE) {
+loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE) {
   sim <- ospsuite::loadSimulation(
     filePath = simulationSet$simulationFile,
     loadFromCache = loadFromCache,
@@ -221,13 +221,15 @@ lastPathElement <- function(path) {
 #' @param data numeric vector
 #' @param logFolder folder where the logs are saved
 #' @return numeric vector
-removeInf <- function(data, logFolder = getwd()){
+removeInf <- function(data, logFolder = getwd()) {
   infData <- is.infinite(data)
   Ninf <- sum(infData)
-  if(Ninf>0){
-    logWorkflow(message = paste0(Ninf, " values were infinite and removed from the analysis"),
-                pathFolder = logFolder,
-                logTypes = c(LogTypes$Debug, LogTypes$Error))
+  if (Ninf > 0) {
+    logWorkflow(
+      message = paste0(Ninf, " values were infinite and removed from the analysis"),
+      pathFolder = logFolder,
+      logTypes = c(LogTypes$Debug, LogTypes$Error)
+    )
   }
   data[infData] <- NA
   return(data)

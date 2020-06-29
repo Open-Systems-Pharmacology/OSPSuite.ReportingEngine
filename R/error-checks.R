@@ -169,12 +169,14 @@ checkIsIncluded <- function(values, parentValues, nullAllowed = FALSE) {
   if (nullAllowed && is.null(values)) {
     return()
   }
-  
+
   if (isIncluded(values, parentValues)) {
     return()
   }
-  logWorkflow(message = messages$errorNotIncluded(values, parentValues), 
-              logTypes = c(LogTypes$Debug, LogTypes$Error))
+  logWorkflow(
+    message = messages$errorNotIncluded(values, parentValues),
+    logTypes = c(LogTypes$Debug, LogTypes$Error)
+  )
 }
 
 validateMapping <- function(mapping, data, nullAllowed = FALSE) {
@@ -255,13 +257,13 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile)
   if (!is.null(observedMetaDataFile)) {
     dictionary <- readObservedDataFile(observedMetaDataFile)
     validateIsIncluded(c(dictionaryParameters$ID, dictionaryParameters$nonmenColumn), names(dictionary))
-    validateIsIncluded(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[,dictionaryParameters$ID])
-    
+    validateIsIncluded(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID])
+
     observedDataset <- readObservedDataFile(observedDataFile)
     timeVariable <- getDictionaryVariable(dictionary, dictionaryParameters$timeID)
     dvVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvID)
     lloqVariable <- getDictionaryVariable(dictionary, dictionaryParameters$lloqID)
-    
+
     checkIsIncluded(c(timeVariable, dvVariable), names(observedDataset))
     checkIsIncluded(lloqVariable, names(observedDataset), nullAllowed = TRUE)
     return()
@@ -290,52 +292,58 @@ validateIsDimension <- function(values, nullAllowed = FALSE) {
   logErrorThenStop(messages$errorNotADimension(values))
 }
 
-isPathInSimulation <- function(paths, simulation){
-  # Add every paths to the simulation object and 
+isPathInSimulation <- function(paths, simulation) {
+  # Add every paths to the simulation object and
   # check if all of these paths are included
   ospsuite::addOutputs(quantitiesOrPaths = paths, simulation = simulation)
-  allSimulationOutputPaths <- sapply(simulation$outputSelections$allOutputs, function(output){output$path})
+  allSimulationOutputPaths <- sapply(simulation$outputSelections$allOutputs, function(output) {
+    output$path
+  })
   return(isIncluded(paths, allSimulationOutputPaths))
 }
 
-validateIsPathInSimulation <- function(paths, simulation, nullAllowed = FALSE){
+validateIsPathInSimulation <- function(paths, simulation, nullAllowed = FALSE) {
   if (nullAllowed && is.null(paths)) {
     return()
   }
-  if(isPathInSimulation(paths, simulation)){
+  if (isPathInSimulation(paths, simulation)) {
     return()
   }
   logErrorThenStop(message = messages$invalidOuputPath(paths, simulation$name))
 }
 
-validateOutputObject <- function(outputs, simulation, nullAllowed = FALSE){
+validateOutputObject <- function(outputs, simulation, nullAllowed = FALSE) {
   if (nullAllowed && is.null(outputs)) {
     return()
   }
   validateIsOfType(c(outputs), "Output")
   # Check paths existence
-  allOutputPaths <- sapply(outputs, function(output) {output$path})
+  allOutputPaths <- sapply(outputs, function(output) {
+    output$path
+  })
   validateIsPathInSimulation(allOutputPaths, simulation)
-  
+
   # Check display unit
-  for(output in outputs){
+  for (output in outputs) {
     outputQuantity <- ospsuite::getQuantity(output$path, simulation)
     validateIsUnitFromDimension(output$displayUnit, outputQuantity$dimension, nullAllowed = TRUE)
   }
 }
 
-isUnitFromDimension <- function(unit, dimension){
+isUnitFromDimension <- function(unit, dimension) {
   dimensionForUnit <- ospsuite::getDimensionForUnit(unit)
   # Remove molar/mass for units that can cross dimensions using molar weight
   dimension <- sub("(mass)", "", dimension)
   dimension <- sub("(molar)", "", dimension)
   dimensionForUnit <- sub("(mass)", "", dimensionForUnit)
   dimensionForUnit <- sub("(molar)", "", dimensionForUnit)
-  if(isOfLength(dimensionForUnit, 0)){return(FALSE)}
+  if (isOfLength(dimensionForUnit, 0)) {
+    return(FALSE)
+  }
   return(dimensionForUnit %in% dimension)
 }
 
-validateIsUnitFromDimension <- function(unit, dimension, nullAllowed = FALSE){
+validateIsUnitFromDimension <- function(unit, dimension, nullAllowed = FALSE) {
   if (nullAllowed && is.null(unit)) {
     return()
   }

@@ -231,3 +231,8 @@ getTimeRangeCaption <- function(timeRange) {
     return("### For last application range")
   }
 }
+
+
+getPopulationSensitivityPlotCaptions <- function(pkParameter, output, quantileVec, simulationSetNames) {
+  paste0("Sensitivity of ", pkParameter, " of ", output, " for individuals at percentiles ", paste0(quantileVec, collapse = ", "), " in simulation sets '", paste0(simulationSetNames, collapse = "', '"), "'.")
+}

@@ -69,3 +69,19 @@
 07/06/2020 - 01:40:44 : Sensitivity analysis for current path(s) completed
 07/06/2020 - 01:40:44 : Starting: Plot Sensitivity task in Alpha Testing
 07/06/2020 - 01:41:01 : Report './tests/dev/ex_03_pop9/appendix-sensitivity-analysis.md' was initialized successfully.
+25/06/2020 - 05:45:23 : Reporting Engine Information:
+25/06/2020 - 05:45:23 : Date: 25/06/2020 - 05:45:23
+25/06/2020 - 05:45:23 : User Information:
+25/06/2020 - 05:45:23 : Computer Name: DESKTOP-5RCQJLS
+25/06/2020 - 05:45:23 : User: ahamadeh
+25/06/2020 - 05:45:23 : Login: ahamadeh
+25/06/2020 - 05:45:23 : System is  validated
+25/06/2020 - 05:45:23 : System versions:
+25/06/2020 - 05:45:23 : R version: R version 3.6.1 (2019-07-05)
+25/06/2020 - 05:45:23 : OSP Suite Package version: 9.0.0
+25/06/2020 - 05:45:23 : OSP Reporting Engine version: 0.1.0
+25/06/2020 - 05:45:23 : tlf version: 0.1.0
+25/06/2020 - 05:45:23 : Starting run of population workflow
+25/06/2020 - 05:45:23 : Starting: Plot Sensitivity task
+25/06/2020 - 05:45:45 : './tests/dev/ex_03_pop9/appendix-sensitivity-analysis.md' already exists. Overwriting './tests/dev/ex_03_pop9/appendix-sensitivity-analysis.md'.
+25/06/2020 - 05:45:45 : Report './tests/dev/ex_03_pop9/appendix-sensitivity-analysis.md' was initialized successfully.

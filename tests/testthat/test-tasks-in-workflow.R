@@ -6,7 +6,7 @@ unlink(testFolder, recursive = TRUE)
 
 simSet <- SimulationSet$new(
   simulationSetName = "myTest",
-  simulationFile = "test.pkml"
+  simulationFile = getSimulationFilePath("test")
 )
 
 mWorkflow <- MeanModelWorkflow$new(

@@ -25,11 +25,11 @@ test_that("Workflows initialization creates correct folder and logs, and warn us
 
   simSet <- SimulationSet$new(
     simulationSetName = "myTest",
-    simulationFile = "test.pkml"
+    simulationFile = getSimulationFilePath("test")
   )
   popSimSet <- PopulationSimulationSet$new(
     simulationSetName = "myTest",
-    simulationFile = "test.pkml",
+    simulationFile = getSimulationFilePath("test"),
     populationFile = "test.csv"
   )
 

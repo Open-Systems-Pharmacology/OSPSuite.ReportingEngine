@@ -175,7 +175,7 @@ renderReport <- function(fileName, logFolder = getwd()) {
       tocContent <- c(tocContent, paste0("   - [", titleTocContent, "](#", titleTocReference, ")"))
     }
     if (grepl(pattern = "###", x = firstElement) & !grepl("####", firstElement)) {
-      subsubtitleCount <- subsubtitleCount +1
+      subsubtitleCount <- subsubtitleCount + 1
       fileContent[lineIndex] <- gsub(pattern = "### ", replacement = paste0("### ", titleCount, ".", subtitleCount, ".", subsubtitleCount, ". "), x = fileContent[lineIndex])
       titleTocContent <- sub(pattern = "### ", replacement = "", x = fileContent[lineIndex])
       titleTocReference <- gsub(pattern = "[[:space:]*]", replacement = "-", x = tolower(titleTocContent))

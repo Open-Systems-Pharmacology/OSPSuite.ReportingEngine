@@ -1,0 +1,23 @@
+﻿"QuantityPath","Parameter","PKParameter","Value"
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","C_max",-0.00184119703028033
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Iwamoto 2008 400mg PO (Figure 1) omeprazole study-filmcoated tablet (original Merck formulation)-Application_1-ProtocolSchemaItem-Dose","C_max",1.05014344888315
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","t_max",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Iwamoto 2008 400mg PO (Figure 1) omeprazole study-filmcoated tablet (original Merck formulation)-Application_1-ProtocolSchemaItem-Dose","t_max",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","C_tEnd",-0.00105046397719106
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Iwamoto 2008 400mg PO (Figure 1) omeprazole study-filmcoated tablet (original Merck formulation)-Application_1-ProtocolSchemaItem-Dose","C_tEnd",1.00625575950185
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","AUC_tEnd",-0.000757691412807493
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Iwamoto 2008 400mg PO (Figure 1) omeprazole study-filmcoated tablet (original Merck formulation)-Application_1-ProtocolSchemaItem-Dose","AUC_tEnd",1.03983511793116
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","AUC_inf",-0.0007457260606015
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Iwamoto 2008 400mg PO (Figure 1) omeprazole study-filmcoated tablet (original Merck formulation)-Application_1-ProtocolSchemaItem-Dose","AUC_inf",1.03736448986675
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","MRT",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Iwamoto 2008 400mg PO (Figure 1) omeprazole study-filmcoated tablet (original Merck formulation)-Application_1-ProtocolSchemaItem-Dose","MRT",-0.0233367718987686
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","Thalf",0.000525138056406574
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Iwamoto 2008 400mg PO (Figure 1) omeprazole study-filmcoated tablet (original Merck formulation)-Application_1-ProtocolSchemaItem-Dose","Thalf",-0.0135086714278693
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","FractionAucLastToInf",0.000220423799359294
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Iwamoto 2008 400mg PO (Figure 1) omeprazole study-filmcoated tablet (original Merck formulation)-Application_1-ProtocolSchemaItem-Dose","FractionAucLastToInf",-0.0446050524368761
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","CL",0.000745648098720581
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Iwamoto 2008 400mg PO (Figure 1) omeprazole study-filmcoated tablet (original Merck formulation)-Application_1-ProtocolSchemaItem-Dose","CL",-1.04038420866711
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","Vss",0.000793562030664999
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Iwamoto 2008 400mg PO (Figure 1) omeprazole study-filmcoated tablet (original Merck formulation)-Application_1-ProtocolSchemaItem-Dose","Vss",-1.06384544898791
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","Vd",0.00127045061440148
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Iwamoto 2008 400mg PO (Figure 1) omeprazole study-filmcoated tablet (original Merck formulation)-Application_1-ProtocolSchemaItem-Dose","Vd",-1.05393157410917
