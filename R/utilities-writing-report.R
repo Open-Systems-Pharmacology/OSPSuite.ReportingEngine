@@ -235,7 +235,7 @@ renderWordReport <- function(fileName, logFolder = getwd()) {
     paste0("resource-path: ", logFolder)
   ), file = reportConfig, sep = "\n")
   knitr::pandoc(input = wordFileName, format = "docx", config = reportConfig)
-  file.copy(docxWordFileName, docxFileName)
+  file.copy(docxWordFileName, docxFileName, overwrite = TRUE)
   unlink(reportConfig, recursive = TRUE)
   unlink(docxWordFileName, recursive = TRUE)
 
