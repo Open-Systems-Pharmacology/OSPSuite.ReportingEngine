@@ -4,7 +4,7 @@
 \alias{addMarkdownToc}
 \title{addMarkdownToc}
 \usage{
-addMarkdownToc(tocContent, fileName, logFolder)
+addMarkdownToc(tocContent, fileName, logFolder = getwd())
 }
 \arguments{
 \item{tocContent}{Table of content referencing sections following a markdown format}

@@ -12,5 +12,5 @@ resetReport(fileName, logFolder = getwd())
 \item{logFolder}{folder where the logs are saved}
 }
 \description{
-Initialize a R markdown document by Writing its header in YAML
+Initialize a report, warning if a previous version already exists
 }

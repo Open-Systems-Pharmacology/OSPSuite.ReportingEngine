@@ -1,5 +1,5 @@
 #' @title resetReport
-#' @description Initialize a R markdown document by Writing its header in YAML
+#' @description Initialize a report, warning if a previous version already exists
 #' @param fileName name of .md file to reset
 #' @param logFolder folder where the logs are saved
 #' @export
@@ -8,8 +8,7 @@ resetReport <- function(fileName,
   if (file.exists(fileName)) {
     logWorkflow(
       message = paste0("'", fileName, "' already exists. Overwriting '", fileName, "'."),
-      pathFolder = logFolder,
-      logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error)
+      pathFolder = logFolder
     )
   }
   fileObject <- file(fileName, encoding = "UTF-8")
@@ -221,7 +220,7 @@ numberTablesAndFigures <- function(fileName, logFolder = getwd(), figurePattern 
   close(fileObject)
 
   logWorkflow(
-    message = paste0("In '", fileName, "', ", tableCount, "tables and ", figureCount, " figures were referenced."),
+    message = paste0("In '", fileName, "', ", tableCount, " tables and ", figureCount, " figures were referenced."),
     pathFolder = logFolder,
     logTypes = LogTypes$Debug
   )
@@ -235,7 +234,7 @@ numberTablesAndFigures <- function(fileName, logFolder = getwd(), figurePattern 
 #' @param tocPattern character pattern referencing sections in first element of line
 #' @param tocLevels levels of sections in the report
 #' @return Table of content referencing sections following a markdown format
-numberSections <- function(fileName, logFolder, tocPattern = "#", tocLevels = 3) {
+numberSections <- function(fileName, logFolder = getwd(), tocPattern = "#", tocLevels = 3) {
   fileContent <- readLines(fileName, encoding = "UTF-8")
 
   # Initialize toc content
@@ -292,7 +291,7 @@ numberSections <- function(fileName, logFolder, tocPattern = "#", tocLevels = 3)
 #' @param tocContent Table of content referencing sections following a markdown format
 #' @param fileName name of .md file to update
 #' @param logFolder folder where the logs are saved
-addMarkdownToc <- function(tocContent, fileName, logFolder) {
+addMarkdownToc <- function(tocContent, fileName, logFolder = getwd()) {
   fileContent <- readLines(fileName, encoding = "UTF-8")
   fileContent <- c(tocContent, fileContent)
   fileObject <- file(fileName, encoding = "UTF-8")

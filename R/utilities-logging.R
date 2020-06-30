@@ -10,12 +10,12 @@ logError <- function(message,
                      printConsole = TRUE) {
   timeStamp <- sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M:%S"))
   if (printConsole) {
-    print(paste0(timeStamp, message))
+    warning(paste0(timeStamp, message))
   }
   write(paste0(timeStamp, message),
     file = file, append = TRUE, sep = " "
   )
-  return()
+  return(invisible())
 }
 
 #' @title logDebug
@@ -35,7 +35,7 @@ logDebug <- function(message,
   write(paste0(timeStamp, message),
     file = file, append = TRUE, sep = " "
   )
-  return()
+  return(invisible())
 }
 
 #' @title logInfo
@@ -55,7 +55,7 @@ logInfo <- function(message,
   write(paste0(timeStamp, message),
     file = file, append = TRUE, sep = " "
   )
-  return()
+  return(invisible())
 }
 
 #' @title logWorkflow
@@ -86,7 +86,7 @@ logWorkflow <- function(message,
       file = file.path(pathFolder, defaultFileNames$logErrorFile())
     )
   }
-  return()
+  return(invisible())
 }
 
 #' @export
