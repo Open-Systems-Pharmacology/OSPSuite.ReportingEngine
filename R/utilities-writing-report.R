@@ -230,9 +230,9 @@ renderWordReport <- function(fileName, logFolder = getwd()) {
 
   write(c(
     "self-contained:", "wrap: none",
-    paste0("reference-doc: ", templateReport),
-    paste0("lua-filter: ", pageBreakCode),
-    paste0("resource-path: ", logFolder)
+    paste0('reference-doc: "', templateReport, '"'),
+    paste0('lua-filter: "', pageBreakCode, '"'),
+    paste0('resource-path: "', logFolder, '"')
   ), file = reportConfig, sep = "\n")
   knitr::pandoc(input = wordFileName, format = "docx", config = reportConfig)
   file.copy(docxWordFileName, docxFileName, overwrite = TRUE)
