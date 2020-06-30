@@ -60,13 +60,6 @@ test_that("numberSections counts correctly and update input file", {
   expect_equal(reportContent, refReportContent)
 })
 
-test_that("renderWordReport creates the correct files", {
-  renderWordReport(testReport)
-  expect_true(file.exists("testReport-word.md"))
-  expect_true(file.exists("testReport.docx"))
-  expect_false(file.exists("testReport-word.docx"))
-})
-
 addMarkdownToc(tocContent, testReport)
 test_that("Table of content has a correct format", {
   reportContent <- readLines(testReport)
