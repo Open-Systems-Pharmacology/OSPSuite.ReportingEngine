@@ -25,17 +25,17 @@ plotMeanGoodnessOfFit <- function(structureSet,
   residuals <- list()
 
   # Load observed and simulated data
-  re.tStoreFileMetadata(access = "read",filePath = structureSet$simulationSet$simulationFile)
+  re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
-  re.tStoreFileMetadata(access = "read",filePath = structureSet$simulationResultFileNames)
+  re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationResultFileNames)
   simulationResult <- ospsuite::importResultsFromCSV(simulation, structureSet$simulationResultFileNames)
 
   if (!is.null(structureSet$simulationSet$observedDataFile)) {
-    re.tStoreFileMetadata(access = "read",filePath = structureSet$simulationSet$observedDataFile)
+    re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$observedDataFile)
     observedDataset <- readObservedDataFile(structureSet$simulationSet$observedDataFile)
 
-    re.tStoreFileMetadata(access = "read",filePath = structureSet$simulationSet$observedMetaDataFile)
+    re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$observedMetaDataFile)
     dictionary <- readObservedDataFile(structureSet$simulationSet$observedMetaDataFile)
 
     timeColumn <- getDictionaryVariable(dictionary, dictionaryParameters$timeID)
@@ -226,17 +226,17 @@ plotPopulationGoodnessOfFit <- function(structureSet,
   }
 
   # Load observed and simulated data
-  re.tStoreFileMetadata(access = "read",filePath = structureSet$simulationSet$simulationFile)
+  re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
-  re.tStoreFileMetadata(access = "read",filePath = structureSet$simulationResultFileNames)
+  re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationResultFileNames)
   simulationResult <- ospsuite::importResultsFromCSV(simulation, structureSet$simulationResultFileNames)
 
   if (!is.null(structureSet$simulationSet$observedDataFile)) {
-    re.tStoreFileMetadata(access = "read",filePath = structureSet$simulationSet$observedDataFile)
+    re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$observedDataFile)
     observedDataset <- readObservedDataFile(structureSet$simulationSet$observedDataFile)
 
-    re.tStoreFileMetadata(access = "read",filePath = structureSet$simulationSet$observedMetaDataFile)
+    re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$observedMetaDataFile)
     dictionary <- readObservedDataFile(structureSet$simulationSet$observedMetaDataFile)
 
     timeColumn <- getDictionaryVariable(dictionary, dictionaryParameters$timeID)

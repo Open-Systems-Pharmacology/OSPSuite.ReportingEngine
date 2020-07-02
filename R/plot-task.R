@@ -112,7 +112,7 @@ PlotTask <- R6::R6Class(
     #' @param structureSets list of `SimulationStructure` R6 class
     #' @param self$fileName name of report file
     runTask = function(structureSets) {
-      actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults )
+      actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
       logWorkflow(
         message = paste0("Starting: ", self$message),
         pathFolder = self$workflowFolder

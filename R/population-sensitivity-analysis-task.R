@@ -44,7 +44,7 @@ PopulationSensitivityAnalysisTask <- R6::R6Class(
         )
         re.tStoreFileMetadata(access = "write", filePath = filePath)
       }
-      indexFilePath <-  file.path(self$workflowFolder, self$outputFolder, indexFileName)
+      indexFilePath <- file.path(self$workflowFolder, self$outputFolder, indexFileName)
       write.csv(x = indexDataFrame, file = indexFilePath, row.names = FALSE)
       re.tStoreFileMetadata(access = "write", filePath = indexFilePath)
     }

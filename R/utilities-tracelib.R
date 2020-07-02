@@ -1,38 +1,38 @@
-tracelibCheck <- function(){
-  return(suppressWarnings(expr = require("tracelib",quietly = TRUE)))
+tracelibCheck <- function() {
+  return(suppressWarnings(expr = require("tracelib", quietly = TRUE)))
 }
 
-re.tStartMetadataCapture <- function(...){
+re.tStartMetadataCapture <- function(...) {
   print("tStartMetadataCapture")
-  if (tracelibCheck()){
-    return(tracelib::tStartMetadataCapture(...,offset = 2))
+  if (tracelibCheck()) {
+    return(tracelib::tStartMetadataCapture(..., offset = 2))
   }
 }
 
-re.tEndMetadataCapture <- function(...,actionToken){
+re.tEndMetadataCapture <- function(..., actionToken) {
   print("tEndMetadataCapture")
-  if (tracelibCheck()){
-    tracelib::tEndMetadataCapture(...,actionToken = actionToken)
+  if (tracelibCheck()) {
+    tracelib::tEndMetadataCapture(..., actionToken = actionToken)
   }
 }
 
-re.tStoreFileMetadata <- function(...){
+re.tStoreFileMetadata <- function(...) {
   print("tStoreFileMetadata")
-  if (tracelibCheck()){
+  if (tracelibCheck()) {
     tracelib::tStoreFileMetadata(...)
   }
 }
 
-re.tStartAction <- function(...){
+re.tStartAction <- function(...) {
   print("tStartAction")
-  if (tracelibCheck()){
-    return(tracelib::tStartAction(...,offset = 1))
+  if (tracelibCheck()) {
+    return(tracelib::tStartAction(..., offset = 1))
   }
 }
 
-re.tEndAction <- function(...,actionToken){
+re.tEndAction <- function(..., actionToken) {
   print("tEndAction")
-  if (tracelibCheck()){
-    tracelib::tEndAction(...,actionToken = actionToken)
+  if (tracelibCheck()) {
+    tracelib::tEndAction(..., actionToken = actionToken)
   }
 }

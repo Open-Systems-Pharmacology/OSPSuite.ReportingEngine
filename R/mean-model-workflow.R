@@ -327,16 +327,15 @@ MeanModelWorkflow <- R6::R6Class(
 
       re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logInfoFile()))
       re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logDebugFile()))
-      if (file.exists(file.path(self$workflowFolder, defaultFileNames$logErrorFile()))){
+      if (file.exists(file.path(self$workflowFolder, defaultFileNames$logErrorFile()))) {
         re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logErrorFile()))
       }
 
-      if (file.exists(file.path(self$reportFileName))){
+      if (file.exists(file.path(self$reportFileName))) {
         re.tStoreFileMetadata(access = "write", filePath = self$reportFileName)
       }
 
-      re.tEndMetadataCapture(outputFolder = "./",actionToken = actionToken1)
-
+      re.tEndMetadataCapture(outputFolder = "./", actionToken = actionToken1)
     }
   )
 )

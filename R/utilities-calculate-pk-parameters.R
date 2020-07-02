@@ -9,10 +9,10 @@
 calculatePKParameters <- function(structureSet,
                                   settings = NULL,
                                   logFolder = getwd()) {
-  re.tStoreFileMetadata(access = "read",filePath = structureSet$simulationSet$simulationFile)
+  re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
-  re.tStoreFileMetadata(access = "read",filePath = structureSet$simulationResultFileNames)
+  re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationResultFileNames)
   simulationResults <- ospsuite::importResultsFromCSV(
     simulation = simulation,
     filePaths = structureSet$simulationResultFileNames
@@ -46,10 +46,10 @@ plotMeanPKParameters <- function(structureSet,
                                  settings = NULL) {
   pkParametersData <- NULL
 
-  re.tStoreFileMetadata(access = "read",filePath = structureSet$simulationSet$simulationFile)
+  re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
-  re.tStoreFileMetadata(access = "read",filePath = structureSet$pkAnalysisResultsFileNames)
+  re.tStoreFileMetadata(access = "read", filePath = structureSet$pkAnalysisResultsFileNames)
   pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
     structureSet$pkAnalysisResultsFileNames,
     simulation

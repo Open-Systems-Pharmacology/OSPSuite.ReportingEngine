@@ -20,7 +20,7 @@ runSensitivity <- function(structureSet,
   numberOfCores <- settings$numberOfCores
   showProgress <- settings$showProgress
 
-  re.tStoreFileMetadata(access = "read",filePath = structureSet$simulationSet$simulationFile)
+  re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
 
   allVariableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
@@ -70,7 +70,7 @@ runSensitivity <- function(structureSet,
   # If there is no population file and individualId then do SA for mean model
   # If there is no population file and no individualId then do SA for mean model.
   if (!is.null(popFilePath)) { # Determine if SA is to be done for a single individual or more
-    re.tStoreFileMetadata(access = "read",filePath = structureSet$simulationSet$populationFile)
+    re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$populationFile)
     popObject <- loadPopulation(popFilePath)
     resultsFileName <- resultsFileName %||% "sensitivityAnalysisResults"
     individualSeq <- individualId %||% seq(1, popObject$count)
@@ -410,9 +410,8 @@ runPopulationSensitivityAnalysis <- function(structureSet, settings, logFolder =
 #' @return pkResultsDataFrame, a dataframe storing the contents of the CSV file with path pkParameterResultsFilePath
 #' @import ospsuite
 getPKResultsDataFrame <- function(structureSet) {
-
-  re.tStoreFileMetadata(access = "read",filePath = structureSet$simulationSet$simulationFile)
-  re.tStoreFileMetadata(access = "read",filePath = structureSet$pkAnalysisResultsFileNames)
+  re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
+  re.tStoreFileMetadata(access = "read", filePath = structureSet$pkAnalysisResultsFileNames)
   pkResults <- ospsuite::importPKAnalysesFromCSV(
     filePath = structureSet$pkAnalysisResultsFileNames,
     simulation = loadSimulationWithUpdatedPaths(simulationSet = structureSet$simulationSet, loadFromCache = TRUE)
@@ -537,10 +536,10 @@ defaultQuantileVec <- c(0.05, 0.5, 0.95)
 plotMeanSensitivity <- function(structureSet,
                                 logFolder = getwd(),
                                 settings = NULL) {
-  re.tStoreFileMetadata(access = "read",filePath = structureSet$simulationSet$simulationFile)
+  re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
-  re.tStoreFileMetadata(access = "read",filePath = structureSet$sensitivityAnalysisResultsFileNames)
+  re.tStoreFileMetadata(access = "read", filePath = structureSet$sensitivityAnalysisResultsFileNames)
   saResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(
     simulation = simulation,
     structureSet$sensitivityAnalysisResultsFileNames
@@ -648,10 +647,10 @@ plotPopulationSensitivity <- function(structureSets,
   for (structureSet in structureSets) {
     sensitivityResultsFolder <- file.path(structureSet$workflowFolder, structureSet$sensitivityAnalysisResultsFolder)
 
-    re.tStoreFileMetadata(access = "read",filePath = structureSet$simulationSet$simulationFile)
+    re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
     simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
-    re.tStoreFileMetadata(access = "read",filePath = structureSet$popSensitivityAnalysisResultsIndexFile)
+    re.tStoreFileMetadata(access = "read", filePath = structureSet$popSensitivityAnalysisResultsIndexFile)
     indexDf <- read.csv(file = structureSet$popSensitivityAnalysisResultsIndexFile)
 
     outputPaths <- sapply(structureSet$simulationSet$outputs, function(x) {
@@ -728,7 +727,7 @@ plotPopulationSensitivity <- function(structureSets,
 
         # import SA results for individual
         individualSAResultsFilePath <- file.path(structureSet$workflowFolder, structureSet$sensitivityAnalysisResultsFolder, saResFileName)
-        re.tStoreFileMetadata(access = "read",filePath = individualSAResultsFilePath)
+        re.tStoreFileMetadata(access = "read", filePath = individualSAResultsFilePath)
         individualSAResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(
           simulation = simulationList[[pop]],
           filePaths = individualSAResultsFilePath
@@ -842,7 +841,7 @@ getPopSensDfForPkAndOutput <- function(simulation,
       # import SA results for individual corresponding to current quantile
 
       individualSAResultsFilePath <- file.path(sensitivityResultsFolder, saResultsFileName)
-      re.tStoreFileMetadata(access = "read",filePath = individualSAResultsFilePath)
+      re.tStoreFileMetadata(access = "read", filePath = individualSAResultsFilePath)
       individualSAResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(
         simulation = simulation,
         filePaths = individualSAResultsFilePath
