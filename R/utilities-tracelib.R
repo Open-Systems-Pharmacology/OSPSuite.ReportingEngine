@@ -3,35 +3,35 @@ tracelibCheck <- function() {
 }
 
 re.tStartMetadataCapture <- function(...) {
-  print("tStartMetadataCapture")
+  #print("tStartMetadataCapture")
   if (tracelibCheck()) {
     return(tracelib::tStartMetadataCapture(..., offset = 2))
   }
 }
 
 re.tEndMetadataCapture <- function(..., actionToken) {
-  print("tEndMetadataCapture")
+  #print("tEndMetadataCapture")
   if (tracelibCheck()) {
     tracelib::tEndMetadataCapture(..., actionToken = actionToken)
   }
 }
 
 re.tStoreFileMetadata <- function(...) {
-  print("tStoreFileMetadata")
+  #print("tStoreFileMetadata")
   if (tracelibCheck()) {
     tracelib::tStoreFileMetadata(...)
   }
 }
 
 re.tStartAction <- function(...) {
-  print("tStartAction")
+  #print("tStartAction")
   if (tracelibCheck()) {
     return(tracelib::tStartAction(..., offset = 1))
   }
 }
 
 re.tEndAction <- function(..., actionToken) {
-  print("tEndAction")
+  #print("tEndAction")
   if (tracelibCheck()) {
     tracelib::tEndAction(..., actionToken = actionToken)
   }
