@@ -4,10 +4,16 @@
 \alias{verifySimulationRunSuccessful}
 \title{verifySimulationRunSuccessful}
 \usage{
-verifySimulationRunSuccessful(simulationRunSuccess, logFolder)
+verifySimulationRunSuccessful(
+  simulationRunSuccess,
+  tempPopDataFiles,
+  logFolder
+)
 }
 \arguments{
 \item{simulationRunSuccess}{logical vector indicating success of simulation run on all cores}
+
+\item{tempPopDataFiles}{name of all temporary population files sent to cores}
 
 \item{logFolder}{folder where the logs are saved}
 }
