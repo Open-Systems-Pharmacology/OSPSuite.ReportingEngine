@@ -17,6 +17,8 @@ R6 class for PlotTask settings
 \item{\code{fileName}}{name of report appendix file associated to task}
 
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
+
+\item{\code{nameTaskResults}}{name of the function that returns task results,}
 }
 \if{html}{\out{</div>}}
 }
@@ -44,7 +46,13 @@ R6 class for PlotTask settings
 \subsection{Method \code{new()}}{
 Create a `PlotTask` object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PlotTask$new(reportTitle = NULL, fileName = NULL, getTaskResults = NULL, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PlotTask$new(
+  reportTitle = NULL,
+  fileName = NULL,
+  getTaskResults = NULL,
+  nameTaskResults = "none",
+  ...
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -55,6 +63,8 @@ Create a `PlotTask` object
 \item{\code{fileName}}{name of report appendix file associated to task}
 
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
+
+\item{\code{nameTaskResults}}{name of the function that returns task results,}
 
 \item{\code{...}}{input parameters inherited from `Task` R6 class}
 }

@@ -15,6 +15,8 @@ R6 class for SensitivityAnalysisTask settings
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
 
 \item{\code{settings}}{instance of SensitivityAnalysisSettings class}
+
+\item{\code{nameTaskResults}}{name of function that returns task results}
 }
 \if{html}{\out{</div>}}
 }
@@ -42,7 +44,12 @@ R6 class for SensitivityAnalysisTask settings
 \subsection{Method \code{new()}}{
 Create a `SensitivityAnalysisTask` object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$new(getTaskResults = NULL, settings = NULL, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$new(
+  getTaskResults = NULL,
+  settings = NULL,
+  nameTaskResults = "none",
+  ...
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -51,6 +58,8 @@ Create a `SensitivityAnalysisTask` object
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
 
 \item{\code{settings}}{instance of SensitivityAnalysisSettings class}
+
+\item{\code{nameTaskResults}}{name of function that returns task results}
 
 \item{\code{...}}{parameters inherited from R6 class `Task` object}
 }

@@ -15,6 +15,8 @@ R6 class for SimulationTask settings
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
 
 \item{\code{settings}}{instance of SimulationSettings class}
+
+\item{\code{nameTaskResults}}{name of function that returns task results}
 }
 \if{html}{\out{</div>}}
 }
@@ -42,7 +44,12 @@ R6 class for SimulationTask settings
 \subsection{Method \code{new()}}{
 Create a `SimulationTask` object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimulationTask$new(getTaskResults = NULL, settings = NULL, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimulationTask$new(
+  getTaskResults = NULL,
+  settings = NULL,
+  nameTaskResults = "none",
+  ...
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -51,6 +58,8 @@ Create a `SimulationTask` object
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
 
 \item{\code{settings}}{instance of SimulationSettings class}
+
+\item{\code{nameTaskResults}}{name of function that returns task results}
 
 \item{\code{...}}{parameters inherited from R6 class `Task` object}
 }
