@@ -32,9 +32,11 @@ PkParameterInfo <- R6::R6Class(
       # TO DO: add validateIsUnit method
       # validateIsUnit(displayUnit, nullAllowed = TRUE)
 
+      defaultPKParameterProperties <- ospsuite::pkParameterByName(name = pkParameter)
+
       self$pkParameter <- pkParameter
-      self$displayName <- displayName
-      self$displayUnit <- displayUnit
+      self$displayName <- displayName %||% defaultPKParameterProperties$displayName
+      self$displayUnit <- displayUnit %||% defaultPKParameterProperties$displayUnit
     }
   )
 )
