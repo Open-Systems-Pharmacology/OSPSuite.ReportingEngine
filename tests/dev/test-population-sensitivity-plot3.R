@@ -2,6 +2,8 @@ rm(list = ls())
 library(ospsuite)
 graphics.off()
 library(ospsuite.reportingengine)
+devtools::load_all("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine")
+
 
 simulationFile <- "./tests/dev/ex_03_pop9/RaltegravirSim.pkml"
 populationFile1 <- "./tests/dev/ex_03_pop9/RalPop10.csv"
@@ -13,26 +15,32 @@ ps1 <- PopulationSimulationSet$new(
   simulationFile = simulationFile,
   populationFile = populationFile1,
   outputs = c(
-    Output$new(path = "Organism|VenousBlood|Plasma|Raltegravir|Concentration"),
+    Output$new(path = "Organism|VenousBlood|Plasma|Raltegravir|Concentration",displayName = "op1"),
     Output$new(
-      path = "Organism|ArterialBlood|Plasma|Raltegravir|Concentration",
-      pkParameters = c("t_max", "AUC_tEnd")
+      path = "Organism|ArterialBlood|Plasma|Raltegravir|Concentration",displayName = "op2",
+      pkParameters = c(PkParameterInfo$new("t_max","new_t_max"),
+                       PkParameterInfo$new("AUC_tEnd","new_AUC_tEnd"))
     ),
     Output$new(
-      path = "Organism|Lung|Interstitial|Raltegravir|Concentration",
-      pkParameters = c("C_max", "MRT")
+      path = "Organism|Lung|Interstitial|Raltegravir|Concentration",displayName = "op3",
+      pkParameters = c(PkParameterInfo$new("C_max","new_C_max"),
+                       PkParameterInfo$new("MRT","new_MRT"))
     )
   )
 )
+
+
+
 
 ps2 <- PopulationSimulationSet$new(
   simulationSetName = "lar",
   simulationFile = simulationFile,
   populationFile = populationFile2,
   outputs = c(Output$new(
-    path = "Organism|Lung|Interstitial|Raltegravir|Concentration",
-    pkParameters = c("C_max", "MRT")
-  ))
+    path = "Organism|Lung|Interstitial|Raltegravir|Concentration",displayName = "op4",
+    pkParameters = c(PkParameterInfo$new("C_max","kai_C_max"),
+                     PkParameterInfo$new("MRT","kai_MRT")))
+  )
 )
 
 
