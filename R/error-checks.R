@@ -216,7 +216,6 @@ checkOverwriteExisitingPath <- function(path, overwrite) {
 
 fileExtension <- function(file) {
   ex <- strsplit(basename(file), split = "\\.")[[1]]
-  return(ex[-1])
   return(utils::tail(ex, 1))
 }
 
