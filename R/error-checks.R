@@ -217,7 +217,9 @@ checkOverwriteExisitingPath <- function(path, overwrite) {
 fileExtension <- function(file) {
   ex <- strsplit(basename(file), split = "\\.")[[1]]
   return(ex[-1])
+  return(utils::tail(ex, 1))
 }
+
 
 #' Check if the provided path has required extension
 #'
@@ -248,10 +250,28 @@ validateIsFileExtension <- function(path, extension, nullAllowed = FALSE) {
 logErrorThenStop <- function(message, logFolderPath = getwd()) {
   logWorkflow(
     message = message,
-    pathFolder = logFolderPath
+    pathFolder = logFolderPath,
+    logTypes = c(LogTypes$Info, LogTypes$Debug , LogTypes$Error)
   )
   stop(message)
 }
+
+
+
+#' Log the error with a message
+#' @param message message to display and then log
+#' @param logFolderPath path where logs are saved
+logErrorMessage <- function(message, logFolderPath = getwd()) {
+  logWorkflow(
+    message = message,
+    pathFolder = logFolderPath,
+    logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error)
+  )
+}
+
+
+
+
 
 validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile) {
   if (!is.null(observedMetaDataFile)) {
