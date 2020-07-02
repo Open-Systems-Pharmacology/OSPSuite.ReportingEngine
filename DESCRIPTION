@@ -18,8 +18,7 @@ BugReports:
 Depends: 
     R (>= 3.5),
     ospsuite,
-    tlf,
-    tracelib
+    tlf
 Imports: 
     R6,
     ggplot2
