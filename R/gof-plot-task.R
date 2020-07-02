@@ -159,6 +159,7 @@ GofPlotTask <- R6::R6Class(
           file = tableFileName,
           row.names = FALSE
         )
+        re.tStoreFileMetadata(access = "write", filePath = residualsAcrossAllSimulations)
         logWorkflow(
           message = paste0("Table '", tableFileName, "' was successfully saved."),
           pathFolder = self$workflowFolder,
@@ -178,17 +179,21 @@ GofPlotTask <- R6::R6Class(
           plotConfiguration = self$settings$plotConfigurations[["qqPlot"]]
         )
 
+        residualHistogramPlotFileName <- file.path(self$workflowFolder, histogramFileName)
         ggplot2::ggsave(
-          filename = file.path(self$workflowFolder, histogramFileName),
+          filename = residualHistogramPlotFileName,
           plot = residualHistogramPlot,
           width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
         )
+        re.tStoreFileMetadata(access = "write", filePath = residualHistogramPlotFileName)
 
         ggplot2::ggsave(
           filename = file.path(self$workflowFolder, qqPlotFileName),
           plot = residualQQPlot,
           width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
         )
+        re.tStoreFileMetadata(access = "write", filePath = qqPlotFileName)
+
         logWorkflow(
           message = paste0("Plots '", histogramFileName, "', '", qqPlotFileName, "' were successfully saved."),
           pathFolder = self$workflowFolder,

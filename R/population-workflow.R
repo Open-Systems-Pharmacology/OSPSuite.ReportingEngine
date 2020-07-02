@@ -83,6 +83,7 @@ PopulationWorkflow <- R6::R6Class(
                                           message = defaultWorkflowMessages$simulate) {
       self$simulatePopulation <- SimulationTask$new(
         getTaskResults = taskFunction,
+        nameTaskResults = deparse(substitute(taskFunction)),
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         active = active,
@@ -107,6 +108,7 @@ PopulationWorkflow <- R6::R6Class(
                                              message = defaultWorkflowMessages$calculatePKParameters) {
       self$populationPKParameters <- CalculatePKParametersTask$new(
         getTaskResults = taskFunction,
+        nameTaskResults = deparse(substitute(taskFunction)),
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         settings = settings,
@@ -131,6 +133,7 @@ PopulationWorkflow <- R6::R6Class(
                                                      message = NULL) {
       self$populationSensitivityAnalysis <- PopulationSensitivityAnalysisTask$new(
         getTaskResults = taskFunction,
+        nameTaskResults = deparse(substitute(taskFunction)),
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         settings = settings,
@@ -169,6 +172,7 @@ PopulationWorkflow <- R6::R6Class(
         reportTitle = reportTitle,
         fileName = fileName,
         getTaskResults = taskFunction,
+        nameTaskResults = deparse(substitute(taskFunction)),
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         active = active,
@@ -199,6 +203,7 @@ PopulationWorkflow <- R6::R6Class(
         reportTitle = reportTitle,
         fileName = fileName,
         getTaskResults = taskFunction,
+        nameTaskResults = deparse(substitute(taskFunction)),
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         active = active,
@@ -236,6 +241,7 @@ PopulationWorkflow <- R6::R6Class(
         reportTitle = reportTitle,
         fileName = fileName,
         getTaskResults = taskFunction,
+        nameTaskResults = deparse(substitute(taskFunction)),
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         active = active,
@@ -273,6 +279,7 @@ PopulationWorkflow <- R6::R6Class(
         reportTitle = reportTitle,
         fileName = fileName,
         getTaskResults = taskFunction,
+        nameTaskResults = deparse(substitute(taskFunction)),
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         active = active,
@@ -293,6 +300,7 @@ PopulationWorkflow <- R6::R6Class(
     #' # CORE STAGE 3:  CALCULATE SENSITIVITY
     #' # 3a - Plots and Tables based on sensitivity results
     runWorkflow = function() {
+      actionToken1 <- re.tStartMetadataCapture(metaDataCapture = TRUE)
       logWorkflow(
         message = "Starting run of population workflow",
         pathFolder = self$workflowFolder
@@ -323,8 +331,18 @@ PopulationWorkflow <- R6::R6Class(
       appendices <- appendices[file.exists(appendices)]
       if (length(appendices) > 0) {
         mergeMarkdowndFiles(appendices, self$reportFileName, logFolder = self$workflowFolder)
+        actionToken2 <- re.tStartAction(actionType = "ReportGeneration", actionNameExtension = "runWorkflow")
         renderReport(self$reportFileName, logFolder = self$workflowFolder)
+        re.tEndAction(actionToken = actionToken2)
       }
+
+      re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logInfoFile()))
+      re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logDebugFile()))
+      if (file.exists(file.path(self$workflowFolder, defaultFileNames$logErrorFile()))) {
+        re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logErrorFile()))
+      }
+
+      re.tEndMetadataCapture(outputFolder = "./", actionToken = actionToken1)
     }
   )
 )

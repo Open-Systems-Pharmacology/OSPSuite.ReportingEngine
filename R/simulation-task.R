@@ -2,21 +2,25 @@
 #' @description  R6 class for SimulationTask settings
 #' @field getTaskResults function called by task that computes and format figure results
 #' @field settings instance of SimulationSettings class
+#' @field nameTaskResults name of function that returns task results
 SimulationTask <- R6::R6Class(
   "SimulationTask",
   inherit = Task,
   public = list(
     getTaskResults = NULL,
     settings = NULL,
+    nameTaskResults = "none",
 
     #' @description
     #' Create a `SimulationTask` object
     #' @param getTaskResults function called by task that computes and format figure results
     #' @param settings instance of SimulationSettings class
+    #' @param nameTaskResults name of function that returns task results
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SimulationTask` object
     initialize = function(getTaskResults = NULL,
                           settings = NULL,
+                          nameTaskResults = "none",
                           ...) {
       super$initialize(...)
       if (is.null(settings)) {
@@ -26,6 +30,7 @@ SimulationTask <- R6::R6Class(
         self$settings <- settings
       }
       self$getTaskResults <- getTaskResults
+      self$nameTaskResults <- nameTaskResults
     },
 
 
@@ -39,12 +44,14 @@ SimulationTask <- R6::R6Class(
         taskResults,
         set$simulationResultFileNames
       )
+      re.tStoreFileMetadata(access = "write", filePath = set$simulationResultFileNames)
     },
 
     #' @description
     #' Run task and save its output
     #' @param structureSets list of `SimulationStructure` R6 class
     runTask = function(structureSets) {
+      actionToken <- re.tStartAction(actionType = "Simulation", actionNameExtension = self$nameTaskResults)
       logWorkflow(
         message = paste0("Starting ", self$message),
         pathFolder = self$workflowFolder
@@ -72,6 +79,7 @@ SimulationTask <- R6::R6Class(
           )
         }
       }
+      re.tEndAction(actionToken = actionToken)
     }
   )
 )

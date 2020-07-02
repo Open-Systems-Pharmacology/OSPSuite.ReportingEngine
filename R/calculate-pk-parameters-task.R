@@ -16,12 +16,14 @@ CalculatePKParametersTask <- R6::R6Class(
         taskResults,
         set$pkAnalysisResultsFileNames
       )
+      re.tStoreFileMetadata(access = "write", filePath = set$pkAnalysisResultsFileNames)
     },
 
     #' @description
     #' Run task and save its output
     #' @param structureSets list of `SimulationStructure` R6 class
     runTask = function(structureSets) {
+      actionToken <- re.tStartAction(actionType = "Analysis", actionNameExtension = self$nameTaskResults)
       logWorkflow(
         message = paste0("Starting ", self$message),
         pathFolder = self$workflowFolder
@@ -55,6 +57,7 @@ CalculatePKParametersTask <- R6::R6Class(
           )
         }
       }
+      re.tEndAction(actionToken = actionToken)
     }
   )
 )
