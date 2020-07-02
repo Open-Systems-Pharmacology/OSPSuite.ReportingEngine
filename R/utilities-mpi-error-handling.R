@@ -116,10 +116,10 @@ verifySimulationRunSuccessful <- function(simulationRunSuccess, tempPopDataFiles
   if (success) {
     logWorkflow(message = "Simulations completed successfully on all cores.", pathFolder = logFolder)
   } else {
-    unsuccessfulCores <- setdiff(1:length(tempPopDataFiles),which(unlist(unname(simulationRunSuccess))))
+    unsuccessfulCores <- setdiff(1:length(tempPopDataFiles), which(unlist(unname(simulationRunSuccess))))
     for (core in unsuccessfulCores) {
-      pop <- ospsuite::loadPopulation( tempPopDataFiles[core] )
-      logErrorMessage(message = paste("Simulations for individuals", paste(pop$allIndividualIds,collapse = ", ") ,"not completed successfully."), logFolderPath = logFolder)
+      pop <- ospsuite::loadPopulation(tempPopDataFiles[core])
+      logErrorMessage(message = paste("Simulations for individuals", paste(pop$allIndividualIds, collapse = ", "), "not completed successfully."), logFolderPath = logFolder)
     }
   }
 }
@@ -164,7 +164,7 @@ verifyPartialResultsExported <- function(partialResultsExported, numberOfCores, 
   if (success) {
     logWorkflow(message = "All successful core results exported successfully.", pathFolder = logFolder)
   } else {
-    unsuccessfulCores <- setdiff(1:numberOfCores,which(unlist(unname(partialResultsExported))))
-    logErrorMessage(message = paste("Results from cores", paste(unsuccessfulCores,collapse = ", ") ,"not exported successfully."), logFolderPath = logFolder)
+    unsuccessfulCores <- setdiff(1:numberOfCores, which(unlist(unname(partialResultsExported))))
+    logErrorMessage(message = paste("Results from cores", paste(unsuccessfulCores, collapse = ", "), "not exported successfully."), logFolderPath = logFolder)
   }
 }

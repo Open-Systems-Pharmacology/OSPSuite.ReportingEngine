@@ -199,9 +199,11 @@ runParallelPopulationSimulation <- function(structureSet,
   # Verify simulations ran successfully
   simulationRunSuccess <- Rmpi::mpi.remote.exec(!(simulationResult$count == 0))
   successfulCores <- which(unlist(unname(simulationRunSuccess)))
-  verifySimulationRunSuccessful(simulationRunSuccess = simulationRunSuccess,
-                                tempPopDataFiles = tempPopDataFiles,
-                                logFolder = logFolder)
+  verifySimulationRunSuccessful(
+    simulationRunSuccess = simulationRunSuccess,
+    tempPopDataFiles = tempPopDataFiles,
+    logFolder = logFolder
+  )
 
 
   # Write core logs to workflow logs
@@ -227,8 +229,9 @@ runParallelPopulationSimulation <- function(structureSet,
   ))
   partialResultsExported <- Rmpi::mpi.remote.exec(file.exists(allResultsFileNames[mpi.comm.rank()]))
   verifyPartialResultsExported(partialResultsExported,
-                               numberOfCores = numberOfCores,
-                               logFolder = logFolder)
+    numberOfCores = numberOfCores,
+    logFolder = logFolder
+  )
 
   # Close slaves
   Rmpi::mpi.close.Rslaves()
