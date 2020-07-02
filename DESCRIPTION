@@ -19,6 +19,7 @@ Depends:
     R (>= 3.5),
     ospsuite,
     tlf
+    tracelib
 Imports: 
     R6,
     ggplot2
