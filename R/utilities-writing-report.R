@@ -1,5 +1,5 @@
 #' @title resetReport
-#' @description Initialize a R markdown document by Writing its header in YAML
+#' @description Initialize a report, warning if a previous version already exists
 #' @param fileName name of .md file to reset
 #' @param logFolder folder where the logs are saved
 #' @export
@@ -8,8 +8,7 @@ resetReport <- function(fileName,
   if (file.exists(fileName)) {
     logWorkflow(
       message = paste0("'", fileName, "' already exists. Overwriting '", fileName, "'."),
-      pathFolder = logFolder,
-      logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error)
+      pathFolder = logFolder
     )
   }
   fileObject <- file(fileName, encoding = "UTF-8")
@@ -137,65 +136,10 @@ mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd()) {
 #' @param logFolder folder where the logs are saved
 #' @export
 renderReport <- function(fileName, logFolder = getwd()) {
-  # Numbering of '#', '##', '###', figures and tables
-  # The method below might not be the most efficient:
-  fileContent <- readLines(fileName, encoding = "UTF-8")
-  tocContent <- NULL
-  figureCount <- 0
-  tableCount <- 0
-  titleCount <- 0
-  subtitleCount <- 0
-  subsubtitleCount <- 0
-  for (lineIndex in seq_along(fileContent)) {
-    firstElement <- as.character(unlist(strsplit(fileContent[lineIndex], " ")))
-    firstElement <- firstElement[1]
-    if (grepl(pattern = "Figure:", x = firstElement)) {
-      figureCount <- figureCount + 1
-      fileContent[lineIndex] <- gsub(pattern = "Figure:", replacement = paste0("Figure ", figureCount, ":"), x = fileContent[lineIndex])
-    }
-    if (grepl(pattern = "Table:", x = firstElement)) {
-      tableCount <- tableCount + 1
-      fileContent[lineIndex] <- gsub(pattern = "Table:", replacement = paste0("Table ", tableCount, ":"), x = fileContent[lineIndex])
-    }
-    if (grepl(pattern = "#", x = firstElement) & !grepl("##", firstElement)) {
-      titleCount <- titleCount + 1
-      subtitleCount <- 0
-      subsubtitleCount <- 0
-      fileContent[lineIndex] <- gsub(pattern = "# ", replacement = paste0("# ", titleCount, ". "), x = fileContent[lineIndex])
-      titleTocContent <- sub(pattern = "# ", replacement = "", x = fileContent[lineIndex])
-      titleTocReference <- gsub(pattern = "[[:space:]*]", replacement = "-", x = tolower(titleTocContent))
-      tocContent <- c(tocContent, paste0(" - [", titleTocContent, "](#", titleTocReference, ")"))
-    }
-    if (grepl(pattern = "##", x = firstElement) & !grepl("###", firstElement)) {
-      subtitleCount <- subtitleCount + 1
-      subsubtitleCount <- 0
-      fileContent[lineIndex] <- gsub(pattern = "## ", replacement = paste0("## ", titleCount, ".", subtitleCount, ". "), x = fileContent[lineIndex])
-      titleTocContent <- sub(pattern = "## ", replacement = "", x = fileContent[lineIndex])
-      titleTocReference <- gsub(pattern = "[[:space:]*]", replacement = "-", x = tolower(titleTocContent))
-      tocContent <- c(tocContent, paste0("   - [", titleTocContent, "](#", titleTocReference, ")"))
-    }
-    if (grepl(pattern = "###", x = firstElement) & !grepl("####", firstElement)) {
-      subsubtitleCount <- subsubtitleCount + 1
-      fileContent[lineIndex] <- gsub(pattern = "### ", replacement = paste0("### ", titleCount, ".", subtitleCount, ".", subsubtitleCount, ". "), x = fileContent[lineIndex])
-      titleTocContent <- sub(pattern = "### ", replacement = "", x = fileContent[lineIndex])
-      titleTocReference <- gsub(pattern = "[[:space:]*]", replacement = "-", x = tolower(titleTocContent))
-      tocContent <- c(tocContent, paste0("   - [", titleTocContent, "](#", titleTocReference, ")"))
-    }
-  }
-  # Include table of content and update file
-  fileContent <- c(tocContent, fileContent)
-  fileObject <- file(fileName, encoding = "UTF-8")
-  write(fileContent, file = fileObject, sep = "\n")
-  close(fileObject)
-
-  logWorkflow(
-    message = paste0("Numbering of sections and table of content added to Report '", fileName, "'"),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
-  # Render docx report in the process
+  numberTablesAndFigures(fileName, logFolder)
+  tocContent <- numberSections(fileName, logFolder)
   renderWordReport(fileName, logFolder)
-
+  addMarkdownToc(tocContent, fileName, logFolder)
   return(invisible())
 }
 
@@ -229,18 +173,133 @@ renderWordReport <- function(fileName, logFolder = getwd()) {
   pageBreakCode <- system.file("extdata", "pagebreak.lua", package = "ospsuite.reportingengine")
 
   write(c(
-    "self-contained:", "wrap: none",
-    paste0("reference-doc: ", templateReport),
-    paste0("lua-filter: ", pageBreakCode),
-    paste0("resource-path: ", logFolder)
+    "self-contained:", "wrap: none", "toc:",
+    paste0('reference-doc: "', templateReport, '"'),
+    paste0('lua-filter: "', pageBreakCode, '"'),
+    paste0('resource-path: "', logFolder, '"')
   ), file = reportConfig, sep = "\n")
   knitr::pandoc(input = wordFileName, format = "docx", config = reportConfig)
-  file.copy(docxWordFileName, docxFileName)
+  file.copy(docxWordFileName, docxFileName, overwrite = TRUE)
   unlink(reportConfig, recursive = TRUE)
   unlink(docxWordFileName, recursive = TRUE)
 
   logWorkflow(
     message = paste0("Word version of report '", fileName, "' created."),
+    pathFolder = logFolder,
+    logTypes = LogTypes$Debug
+  )
+  return(invisible())
+}
+
+#' @title numberTablesAndFigures
+#' @description Reference tables and figures in a report
+#' @param fileName name of .md file to update
+#' @param logFolder folder where the logs are saved
+#' @param figurePattern character pattern referencing figures in first element of line
+#' @param tablePattern character pattern referencing tables in first element of line
+numberTablesAndFigures <- function(fileName, logFolder = getwd(), figurePattern = "Figure:", tablePattern = "Table:") {
+  fileContent <- readLines(fileName, encoding = "UTF-8")
+
+  figureCount <- 0
+  tableCount <- 0
+  for (lineIndex in seq_along(fileContent)) {
+    firstElement <- as.character(unlist(strsplit(fileContent[lineIndex], " ")))
+    firstElement <- firstElement[1]
+    if (grepl(pattern = figurePattern, x = firstElement)) {
+      figureCount <- figureCount + 1
+      fileContent[lineIndex] <- gsub(pattern = figurePattern, replacement = paste0("Figure ", figureCount, ":"), x = fileContent[lineIndex])
+    }
+    if (grepl(pattern = tablePattern, x = firstElement)) {
+      tableCount <- tableCount + 1
+      fileContent[lineIndex] <- gsub(pattern = tablePattern, replacement = paste0("Table ", tableCount, ":"), x = fileContent[lineIndex])
+    }
+  }
+
+  fileObject <- file(fileName, encoding = "UTF-8")
+  write(fileContent, file = fileObject, sep = "\n")
+  close(fileObject)
+
+  logWorkflow(
+    message = paste0("In '", fileName, "', ", tableCount, " tables and ", figureCount, " figures were referenced."),
+    pathFolder = logFolder,
+    logTypes = LogTypes$Debug
+  )
+  return(invisible())
+}
+
+#' @title numberSections
+#' @description Reference sections of a report
+#' @param fileName name of .md file to update
+#' @param logFolder folder where the logs are saved
+#' @param tocPattern character pattern referencing sections in first element of line
+#' @param tocLevels levels of sections in the report
+#' @return Table of content referencing sections following a markdown format
+numberSections <- function(fileName, logFolder = getwd(), tocPattern = "#", tocLevels = 3) {
+  fileContent <- readLines(fileName, encoding = "UTF-8")
+
+  # Initialize toc content
+  tocContent <- NULL
+  tocPatterns <- NULL
+  tocCounts <- rep(0, tocLevels)
+
+  for (tocLevel in seq(1, tocLevels)) {
+    tocPatterns <- c(tocPatterns, paste0(rep(tocPattern, tocLevel), collapse = ""))
+  }
+
+  for (lineIndex in seq_along(fileContent)) {
+    firstElement <- as.character(unlist(strsplit(fileContent[lineIndex], " ")))
+    firstElement <- firstElement[1]
+    for (tocLevel in rev(seq(1, tocLevels))) {
+      if (grepl(pattern = tocPatterns[tocLevel], x = firstElement)) {
+        tocCounts[tocLevel] <- tocCounts[tocLevel] + 1
+        if (tocLevel < tocLevels) {
+          tocCounts[seq(tocLevel + 1, tocLevels)] <- 0
+        }
+
+        # Number section
+        titlePattern <- paste0(tocPatterns[tocLevel], " ")
+        newTitlePattern <- paste0(tocCounts[seq(1, tocLevel)], collapse = ".")
+        newTitlePattern <- paste0(titlePattern, newTitlePattern, ". ")
+        fileContent[lineIndex] <- gsub(pattern = titlePattern, replacement = newTitlePattern, x = fileContent[lineIndex])
+
+        # Add section reference to toc content
+        titleTocContent <- sub(pattern = titlePattern, replacement = "", x = fileContent[lineIndex])
+        titleTocReference <- gsub(pattern = "[[:punct:]*]", replacement = "", x = tolower(titleTocContent))
+        titleTocReference <- gsub(pattern = "[[:space:]*]", replacement = "-", x = titleTocReference)
+        tocLevelShift <- paste0(rep(" ", tocLevel), collapse = " ")
+        tocContent <- c(tocContent, paste0(tocLevelShift, "* [", titleTocContent, "](#", titleTocReference, ")"))
+
+        break
+      }
+    }
+  }
+
+  fileObject <- file(fileName, encoding = "UTF-8")
+  write(fileContent, file = fileObject, sep = "\n")
+  close(fileObject)
+
+  logWorkflow(
+    message = paste0("In '", fileName, "', ", tocCounts[1], " main sections were referenced"),
+    pathFolder = logFolder,
+    logTypes = LogTypes$Debug
+  )
+  return(tocContent)
+}
+
+#' @title addMarkdownToc
+#' @description Add table of content to a markdown file
+#' @param tocContent Table of content referencing sections following a markdown format
+#' @param fileName name of .md file to update
+#' @param logFolder folder where the logs are saved
+addMarkdownToc <- function(tocContent, fileName, logFolder = getwd()) {
+  fileContent <- readLines(fileName, encoding = "UTF-8")
+  fileContent <- c(tocContent, fileContent)
+  fileObject <- file(fileName, encoding = "UTF-8")
+  write(fileContent, file = fileObject, sep = "\n")
+  close(fileObject)
+
+  logWorkflow(
+    message = paste0("In '", fileName, "', table of content included."),
     pathFolder = logFolder,
     logTypes = LogTypes$Debug
   )
