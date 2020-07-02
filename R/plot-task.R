@@ -3,6 +3,7 @@
 #' @field title section title in the report corresponding to the task
 #' @field fileName name of report appendix file associated to task
 #' @field getTaskResults function called by task that computes and format figure results
+#' @field nameTaskResults name of the function that returns task results,
 #' @export
 PlotTask <- R6::R6Class(
   "PlotTask",
@@ -12,22 +13,26 @@ PlotTask <- R6::R6Class(
     title = NULL,
     fileName = NULL,
     getTaskResults = NULL,
+    nameTaskResults = "none",
 
     #' @description
     #' Create a `PlotTask` object
     #' @param reportTitle title to be printed in the report
     #' @param fileName name of report appendix file associated to task
     #' @param getTaskResults function called by task that computes and format figure results
+    #' @param nameTaskResults name of the function that returns task results,
     #' @param ... input parameters inherited from `Task` R6 class
     #' @return A new `PlotTask` object
     initialize = function(reportTitle = NULL,
                           fileName = NULL,
                           getTaskResults = NULL,
+                          nameTaskResults = "none",
                           ...) {
       super$initialize(...)
       self$title <- reportTitle
       self$fileName <- file.path(self$workflowFolder, fileName)
       self$getTaskResults <- getTaskResults
+      self$nameTaskResults <- nameTaskResults
     },
 
     #' @description
@@ -56,6 +61,7 @@ PlotTask <- R6::R6Class(
           plot = taskResults$plots[[plotName]],
           width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
         )
+        re.tStoreFileMetadata(access = "write", filePath = plotFileName)
         logWorkflow(
           message = paste0("Plot '", plotFileName, "' was successfully saved."),
           pathFolder = self$workflowFolder,
@@ -83,7 +89,7 @@ PlotTask <- R6::R6Class(
           row.names = FALSE,
           fileEncoding = "UTF-8"
         )
-
+        re.tStoreFileMetadata(access = "write", filePath = tableFileName)
         # If the task output no plot, but tables, tables will be included in the report
         if (is.null(taskResults$plots)) {
           addTableChunk(
@@ -106,6 +112,7 @@ PlotTask <- R6::R6Class(
     #' @param structureSets list of `SimulationStructure` R6 class
     #' @param self$fileName name of report file
     runTask = function(structureSets) {
+      actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults )
       logWorkflow(
         message = paste0("Starting: ", self$message),
         pathFolder = self$workflowFolder
@@ -134,6 +141,7 @@ PlotTask <- R6::R6Class(
           self$saveResults(set, taskResults)
         }
       }
+      re.tEndAction(actionToken = actionToken)
     }
   )
 )

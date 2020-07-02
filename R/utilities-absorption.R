@@ -11,6 +11,7 @@
 plotMeanAbsorption <- function(structureSet,
                                logFolder = getwd(),
                                plotConfigurations = NULL) {
+  re.tStoreFileMetadata(access = "read",filePath = structureSet$simulationSet$simulationFile)
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
   # Get drug mass to perform the drugmass normalized plot

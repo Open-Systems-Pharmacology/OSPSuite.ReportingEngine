@@ -61,6 +61,7 @@ MeanModelWorkflow <- R6::R6Class(
                                 settings = NULL) {
       self$simulate <- SimulationTask$new(
         getTaskResults = taskFunction,
+        nameTaskResults = deparse(substitute(taskFunction)),
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         active = active,
@@ -85,6 +86,7 @@ MeanModelWorkflow <- R6::R6Class(
                                              settings = NULL) {
       self$meanModelPKParameters <- CalculatePKParametersTask$new(
         getTaskResults = taskFunction,
+        nameTaskResults = deparse(substitute(taskFunction)),
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         active = active,
@@ -109,6 +111,7 @@ MeanModelWorkflow <- R6::R6Class(
                                                     settings = NULL) {
       self$meanModelSensitivityAnalysis <- SensitivityAnalysisTask$new(
         getTaskResults = taskFunction,
+        nameTaskResults = deparse(substitute(taskFunction)),
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         active = active,
@@ -139,6 +142,7 @@ MeanModelWorkflow <- R6::R6Class(
         reportTitle = reportTitle,
         fileName = fileName,
         getTaskResults = taskFunction,
+        nameTaskResults = deparse(substitute(taskFunction)),
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         active = active,
@@ -169,6 +173,7 @@ MeanModelWorkflow <- R6::R6Class(
         reportTitle = reportTitle,
         fileName = fileName,
         getTaskResults = taskFunction,
+        nameTaskResults = deparse(substitute(taskFunction)),
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         active = active,
@@ -199,6 +204,7 @@ MeanModelWorkflow <- R6::R6Class(
         reportTitle = reportTitle,
         fileName = fileName,
         getTaskResults = taskFunction,
+        nameTaskResults = deparse(substitute(taskFunction)),
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         active = active,
@@ -229,6 +235,7 @@ MeanModelWorkflow <- R6::R6Class(
         reportTitle = reportTitle,
         fileName = fileName,
         getTaskResults = taskFunction,
+        nameTaskResults = deparse(substitute(taskFunction)),
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         active = active,
@@ -259,6 +266,7 @@ MeanModelWorkflow <- R6::R6Class(
         reportTitle = reportTitle,
         fileName = fileName,
         getTaskResults = taskFunction,
+        nameTaskResults = deparse(substitute(taskFunction)),
         outputFolder = outputFolder,
         workflowFolder = self$workflowFolder,
         active = active,
@@ -280,10 +288,12 @@ MeanModelWorkflow <- R6::R6Class(
     #' # 4) Render report
     #' @return All results and plots as a structured output in the workflow folder
     runWorkflow = function() {
+      actionToken1 <- re.tStartMetadataCapture(metaDataCapture = TRUE)
       logWorkflow(
         message = "Starting run of mean model workflow",
         pathFolder = self$workflowFolder
       )
+
 
       if (self$simulate$active) {
         self$simulate$runTask(self$simulationStructures)
@@ -310,8 +320,23 @@ MeanModelWorkflow <- R6::R6Class(
       appendices <- appendices[file.exists(appendices)]
       if (length(appendices) > 0) {
         mergeMarkdowndFiles(appendices, self$reportFileName, logFolder = self$workflowFolder)
+        actionToken2 <- re.tStartAction(actionType = "ReportGeneration", actionNameExtension = "runWorkflow")
         renderReport(self$reportFileName, logFolder = self$workflowFolder)
+        re.tEndAction(actionToken = actionToken2)
       }
+
+      re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logInfoFile()))
+      re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logDebugFile()))
+      if (file.exists(file.path(self$workflowFolder, defaultFileNames$logErrorFile()))){
+        re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logErrorFile()))
+      }
+
+      if (file.exists(file.path(self$reportFileName))){
+        re.tStoreFileMetadata(access = "write", filePath = self$reportFileName)
+      }
+
+      re.tEndMetadataCapture(outputFolder = "./",actionToken = actionToken1)
+
     }
   )
 )
