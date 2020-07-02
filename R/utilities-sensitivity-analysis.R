@@ -551,7 +551,19 @@ plotMeanSensitivity <- function(structureSet,
     validateIsIncluded(output$path, saResults$allQuantityPaths)
     pathLabel <- lastPathElement(output$path)
     for (pkParameter in output$pkParameters) {
-      validateIsIncluded(pkParameter$pkParameter, saResults$allPKParameterNames)
+
+
+      if(!isIncluded(pkParameter$pkParameter, saResults$allPKParameterNames)){
+        logWorkflow(
+          message = messages$errorNotIncluded(pkParameter$pkParameter, saResults$allPKParameterNames),
+          logTypes = c(LogTypes$Debug, LogTypes$Error),
+          pathFolder = logFolder
+        )
+        next
+      }
+
+
+
       parameterLabel <- lastPathElement(pkParameter$pkParameter)
 
       pkSensitivities <- saResults$allPKParameterSensitivitiesFor(
