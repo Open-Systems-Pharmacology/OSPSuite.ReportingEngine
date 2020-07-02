@@ -1,5 +1,4 @@
 tracelibCheck <- function() {
-  return(FALSE)
   return(suppressWarnings(expr = require("tracelib", quietly = TRUE)))
 }
 
