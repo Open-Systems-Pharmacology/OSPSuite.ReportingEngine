@@ -190,15 +190,19 @@ runParallelPopulationSimulation <- function(structureSet,
   # Run simulation on each core
   Rmpi::mpi.remote.exec(simulationResult <- simulateModelOnCore(
     simulation = sim,
-    population = population, # resultsFilePath = allResultsFileNames[mpi.comm.rank()],
+    population = population,
     debugLogFileName = tempLogFileNames[mpi.comm.rank()],
     nodeName = paste("Core", mpi.comm.rank()),
     showProgress = settings$showProgress
   ))
 
   # Verify simulations ran successfully
-  simulationRunSuccess <- Rmpi::mpi.remote.exec(!is.null(simulationResult))
-  verifySimulationRunSuccessful(simulationRunSuccess = simulationRunSuccess, logFolder = logFolder)
+  simulationRunSuccess <- Rmpi::mpi.remote.exec(!(simulationResult$count == 0))
+  successfulCores <- which(unlist(unname(simulationRunSuccess)))
+  verifySimulationRunSuccessful(simulationRunSuccess = simulationRunSuccess,
+                                tempPopDataFiles = tempPopDataFiles,
+                                logFolder = logFolder)
+
 
   # Write core logs to workflow logs
   for (core in seq(1, numberOfCores)) {
@@ -222,7 +226,9 @@ runParallelPopulationSimulation <- function(structureSet,
     filePath = allResultsFileNames[mpi.comm.rank()]
   ))
   partialResultsExported <- Rmpi::mpi.remote.exec(file.exists(allResultsFileNames[mpi.comm.rank()]))
-  verifyPartialResultsExported(partialResultsExported, logFolder = logFolder)
+  verifyPartialResultsExported(partialResultsExported,
+                               numberOfCores = numberOfCores,
+                               logFolder = logFolder)
 
   # Close slaves
   Rmpi::mpi.close.Rslaves()
@@ -231,8 +237,8 @@ runParallelPopulationSimulation <- function(structureSet,
   file.remove(tempLogFileNames)
   file.remove(tempPopDataFiles)
 
-  # Return names of temporary results files
-  return(allResultsFileNames)
+  # Return names of temporary results files from cores that completed simulation successfully.
+  return(allResultsFileNames[successfulCores])
 }
 
 
