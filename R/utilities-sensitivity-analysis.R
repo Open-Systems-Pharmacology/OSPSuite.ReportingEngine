@@ -258,10 +258,10 @@ runParallelSensitivityAnalysis <- function(structureSet,
     filePath = allResultsFileNames[mpi.comm.rank()]
   ))
   partialResultsExported <- Rmpi::mpi.remote.exec(file.exists(allResultsFileNames[mpi.comm.rank()]))
-  verifyPartialResultsExported(partialResultsExported, logFolder = logFolder)
+  verifyPartialResultsExported(partialResultsExported, numberOfCores, logFolder = logFolder)
 
   # Merge temporary results files
-  allSAResults <- importSensitivityAnalysisResultsFromCSV(simulation = loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE), filePaths = allResultsFileNames)
+  allSAResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(simulation = loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE), filePaths = allResultsFileNames)
   file.remove(allResultsFileNames)
   return(allSAResults)
 }

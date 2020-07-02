@@ -108,14 +108,19 @@ updateIndividualParametersOnCores <- function(individualParameters, logFolder) {
 #' @title verifySimulationRunSuccessful
 #' @description Check that all cores ran simulation successfully
 #' @param simulationRunSuccess logical vector indicating success of simulation run on all cores
+#' @param tempPopDataFiles name of all temporary population files sent to cores
 #' @param logFolder folder where the logs are saved
-verifySimulationRunSuccessful <- function(simulationRunSuccess, logFolder) {
+verifySimulationRunSuccessful <- function(simulationRunSuccess, tempPopDataFiles, logFolder) {
   success <- checkAllCoresSuccessful(simulationRunSuccess)
   validateIsLogical(success)
   if (success) {
     logWorkflow(message = "Simulations completed successfully on all cores.", pathFolder = logFolder)
   } else {
-    logErrorThenStop(message = "Simulations not completed successfully on all cores.", logFolderPath = logFolder)
+    unsuccessfulCores <- setdiff(1:length(tempPopDataFiles), which(unlist(unname(simulationRunSuccess))))
+    for (core in unsuccessfulCores) {
+      pop <- ospsuite::loadPopulation(tempPopDataFiles[core])
+      logErrorMessage(message = paste("Simulations for individuals", paste(pop$allIndividualIds, collapse = ", "), "not completed successfully."), logFolderPath = logFolder)
+    }
   }
 }
 
@@ -150,14 +155,16 @@ verifyAnyPreviousFilesRemoved <- function(anyPreviousPartialResultsRemoved, logF
 
 #' @title verifyPartialResultsExported
 #' @description Check that results from individual cores have been exported
-#' @param sensitivityRunSuccess logical vector indicating success of result file export
+#' @param partialResultsExported logical vector indicating success of result file export
+#' @param numberOfCores number of cores from which result files are to be exported
 #' @param logFolder folder where the logs are saved
-verifyPartialResultsExported <- function(partialResultsExported, logFolder) {
+verifyPartialResultsExported <- function(partialResultsExported, numberOfCores, logFolder) {
   success <- checkAllCoresSuccessful(partialResultsExported)
   validateIsLogical(success)
   if (success) {
-    logWorkflow(message = "All core results exported successfully.", pathFolder = logFolder)
+    logWorkflow(message = "All successful core results exported successfully.", pathFolder = logFolder)
   } else {
-    logErrorThenStop(message = "All core results not exported successfully.", logFolderPath = logFolder)
+    unsuccessfulCores <- setdiff(1:numberOfCores, which(unlist(unname(partialResultsExported))))
+    logErrorMessage(message = paste("Results from cores", paste(unsuccessfulCores, collapse = ", "), "not exported successfully."), logFolderPath = logFolder)
   }
 }
