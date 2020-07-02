@@ -698,7 +698,6 @@ plotPopulationSensitivity <- function(structureSets,
     simulationList[[populationName]] <- simulation
 
     for (output in structureSet$simulationSet$outputs) {
- #     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
       op <- output$path
       outputDisplayName <- output$displayName
 
@@ -707,22 +706,18 @@ plotPopulationSensitivity <- function(structureSets,
 
       # pkParameters are all the entries in the pkParameters column of  opIndexDf
       pkParameters <- unique(opIndexDf$pkParameter)
-# print("CHECK1")
+
       for (pk in pkParameters) {
-        # print("CHECK2")
-# print(pk)
         dfForPkAndOp <- getPopSensDfForPkAndOutput(
           simulation = simulation,
           sensitivityResultsFolder = sensitivityResultsFolder,
           indexDf = indexDf,
           output = op,
           pkParameter = pk,
-          totalSensitivityThreshold = settings$totalSensitivityThreshold
+          totalSensitivityThreshold = settings$totalSensitivityThreshold,
+          logFolder = logFolder
         )
-        # print("CHECK3")
         pkDisplayName <- lookupPKParameterDisplayName(output = output,pkParameter = pk)
-        # print(c(pk , pkDisplayName))
-        # print("CHECK4")
 
         populationNameCol <- rep(populationName, nrow(dfForPkAndOp))
         outputDisplayNameCol <- rep(outputDisplayName,nrow(dfForPkAndOp))
@@ -734,11 +729,18 @@ plotPopulationSensitivity <- function(structureSets,
                                             data.frame("OutputDisplayName" = outputDisplayNameCol),
                                             data.frame("PKDisplayName" = pkDisplayNameCol)))
       }
-#print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
     }
   }
 
- # print(allPopsDf)
+  if (nrow(allPopsDf) == 0){
+    logWorkflow(
+      message =  "Population sensitivity plots not available for the selected PK parameters.",
+      logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error),
+      pathFolder = logFolder
+    )
+    return()
+  }
+
 
   # allPopsDf is a dataframe that holds the results of all sensitivity analyses for all populations
 
@@ -751,13 +753,6 @@ plotPopulationSensitivity <- function(structureSets,
   for (n in 1:nrow(uniqueQuantitiesAndPKParameters)) {
     op <- uniqueQuantitiesAndPKParameters$QuantityPath[n]
     pk <- uniqueQuantitiesAndPKParameters$PKParameter[n]
-
-  #  opDisplayName <- uniqueQuantitiesAndPKParameters$OutputDisplayName[n]
-  #  pkDisplayName <- uniqueQuantitiesAndPKParameters$PKDisplayName[n]
-
-#    print(opDisplayName)
-#    print(PKDisplayName)
-
 
     sensitivityThisOpPk <- allPopsDf[ (allPopsDf$QuantityPath %in% op) & (allPopsDf$PKParameter %in% pk), ]
 
@@ -890,7 +885,8 @@ getPopSensDfForPkAndOutput <- function(simulation,
                                        indexDf,
                                        output,
                                        pkParameter,
-                                       totalSensitivityThreshold) {
+                                       totalSensitivityThreshold,
+                                       logFolder) {
   pkOutputIndexDf <- getPkOutputIndexDf(indexDf, pkParameter, output)
   individualsDfForPKParameter <- NULL
 
@@ -920,7 +916,19 @@ getPopSensDfForPkAndOutput <- function(simulation,
         filePaths = individualSAResultsFilePath
       )
 
+
+      # verify that pkParameter is included in sensitivity results for current individual.  If not, skip to next individual
+      if(!isIncluded(pkParameter, individualSAResults$allPKParameterNames)){
+        logWorkflow(
+          message = paste("For individualID",individualId,":",messages$errorNotIncluded(pkParameter, individualSAResults$allPKParameterNames)),
+          logTypes = c(LogTypes$Debug, LogTypes$Error),
+          pathFolder = logFolder
+        )
+        next
+      }
+
       # filter out low sensitivity parameters for current individual and current output and pkParameter using totalSensitivityThreshold
+
       filteredIndividualSAResults <- individualSAResults$allPKParameterSensitivitiesFor(
         pkParameterName = pkParameter,
         outputPath = output,
