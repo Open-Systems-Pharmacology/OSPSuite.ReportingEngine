@@ -623,6 +623,29 @@ plotTornado <- function(data,
   return(tornadoPlot)
 }
 
+
+#' @title lookupPKParameterDisplayName
+#' @param output an Output object
+#' @param pkParameter a string with the name of the pkParameter from the population sensitivity results index file
+#' @return the display name of the input pk parameter or the string pkParameter itself if no display name found
+lookupPKParameterDisplayName <- function(output,pkParameter){
+  pkParameterDisplayName <- NULL
+
+  for (pk in output$pkParameters){
+    # print("-----")
+    # print(paste("pkParameter is",pkParameter))
+    # print(paste("pk object is"))
+    # print(pk)
+    # print("^^^^^")
+    if ( pkParameter %in% pk$pkParameter ) {
+      pkParameterDisplayName <- pk$displayName
+      break
+    }
+  }
+  return(pkParameterDisplayName %||%  pkParameter)
+}
+
+
 #' @title plotPopulationSensitivity
 #' @description Retrieve list of plots of population sensitivity analyses across all populations
 #' @param structureSet `SimulationStructure` R6 class object
@@ -662,14 +685,20 @@ plotPopulationSensitivity <- function(structureSets,
     saResultIndexFiles[[populationName]] <- structureSet$popSensitivityAnalysisResultsIndexFile
     simulationList[[populationName]] <- simulation
 
-    for (op in outputPaths) {
+    for (output in structureSet$simulationSet$outputs) {
+ #     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+      op <- output$path
+      outputDisplayName <- output$displayName
+
       # opIndexDf is sub-dataframe of indexDf that has only the outputs op in the Outputs column
       opIndexDf <- indexDf[indexDf$Output == op, ]
 
       # pkParameters are all the entries in the pkParameters column of  opIndexDf
       pkParameters <- unique(opIndexDf$pkParameter)
-
+# print("CHECK1")
       for (pk in pkParameters) {
+        # print("CHECK2")
+# print(pk)
         dfForPkAndOp <- getPopSensDfForPkAndOutput(
           simulation = simulation,
           sensitivityResultsFolder = sensitivityResultsFolder,
@@ -678,11 +707,26 @@ plotPopulationSensitivity <- function(structureSets,
           pkParameter = pk,
           totalSensitivityThreshold = settings$totalSensitivityThreshold
         )
+        # print("CHECK3")
+        pkDisplayName <- lookupPKParameterDisplayName(output = output,pkParameter = pk)
+        # print(c(pk , pkDisplayName))
+        # print("CHECK4")
+
         populationNameCol <- rep(populationName, nrow(dfForPkAndOp))
-        allPopsDf <- rbind.data.frame(allPopsDf, cbind(dfForPkAndOp, data.frame("Population" = populationNameCol)))
+        outputDisplayNameCol <- rep(outputDisplayName,nrow(dfForPkAndOp))
+        pkDisplayNameCol <- rep(pkDisplayName,nrow(dfForPkAndOp))
+
+        allPopsDf <- rbind.data.frame(allPopsDf,
+                                      cbind(dfForPkAndOp,
+                                            data.frame("Population" = populationNameCol),
+                                            data.frame("OutputDisplayName" = outputDisplayNameCol),
+                                            data.frame("PKDisplayName" = pkDisplayNameCol)))
       }
+#print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
     }
   }
+
+ # print(allPopsDf)
 
   # allPopsDf is a dataframe that holds the results of all sensitivity analyses for all populations
 
@@ -696,19 +740,28 @@ plotPopulationSensitivity <- function(structureSets,
     op <- uniqueQuantitiesAndPKParameters$QuantityPath[n]
     pk <- uniqueQuantitiesAndPKParameters$PKParameter[n]
 
+  #  opDisplayName <- uniqueQuantitiesAndPKParameters$OutputDisplayName[n]
+  #  pkDisplayName <- uniqueQuantitiesAndPKParameters$PKDisplayName[n]
+
+#    print(opDisplayName)
+#    print(PKDisplayName)
+
+
     sensitivityThisOpPk <- allPopsDf[ (allPopsDf$QuantityPath %in% op) & (allPopsDf$PKParameter %in% pk), ]
 
     # get list of all perturbation parameters used in this plot
     allParamsForThisOpPk <- unique(sensitivityThisOpPk$Parameter)
 
     # get the sensitivity results dataframe for this combination of output and pkParameter
-    individualCombinationsThisOpPk <- unique(sensitivityThisOpPk[, c("Quantile", "individualId", "Population")])
+    individualCombinationsThisOpPk <- unique(sensitivityThisOpPk[, c("Quantile", "individualId", "Population","OutputDisplayName","PKDisplayName")])
 
     # loop thru each individual in current combination of output and pkParameter
     for (m in 1:nrow(individualCombinationsThisOpPk)) {
       qu <- individualCombinationsThisOpPk$Quantile[m]
       id <- individualCombinationsThisOpPk$individualId[m]
       pop <- individualCombinationsThisOpPk$Population[m]
+      opDN <- individualCombinationsThisOpPk$OutputDisplayName[m]
+      pkDN <- individualCombinationsThisOpPk$PKDisplayName[m]
 
       # get list of all perturbation parameters for this one individual that are used in the plot for this combination of output and pkParameter
       allParamsForThisIndividual <- unique(sensitivityThisOpPk[ (sensitivityThisOpPk$Quantile %in% qu) & (sensitivityThisOpPk$individualId %in% id) & (sensitivityThisOpPk$Population %in% pop), ]$Parameter)
@@ -749,7 +802,9 @@ plotPopulationSensitivity <- function(structureSets,
             "Value" = missingSensivitity,
             "Quantile" = qu,
             "individualId" = id,
-            "Population" = pop
+            "Population" = pop,
+            "OutputDisplayName" = opDN,
+            "PKDisplayName" = pkDN
           )
 
           # append to allPopsDf the row containing the missing parameter's sensitivity
@@ -772,7 +827,13 @@ plotPopulationSensitivity <- function(structureSets,
     # popDfPkOp is a sorted dataframe containing all the rows in allPopsDf that have the same
     # combination of (QuantityPath,PKParameter) as the current (i'th) row of uniqueQuantitiesAndPKParameters
     unsortedPopDfPkOp <- allPopsDf[allPopsDf[, "QuantityPath"] == uniqueQuantitiesAndPKParameters$QuantityPath[i] & allPopsDf[, "PKParameter"] == uniqueQuantitiesAndPKParameters$PKParameter[i], ]
+
+    opDisplayName <- unsortedPopDfPkOp[1,"OutputDisplayName"]
+    pkDisplayName <- unsortedPopDfPkOp[1,"PKDisplayName"]
+
     popDfPkOp <- unsortedPopDfPkOp[order(-abs(unsortedPopDfPkOp$Value)), ]
+
+    #print(popDfPkOp)
 
     # Set level order of Parameter column to make most sensitive parameter have highest factor level
     popDfPkOp$Parameter <- factor(x = popDfPkOp$Parameter, levels = rev(unique(popDfPkOp$Parameter)))
@@ -790,8 +851,8 @@ plotPopulationSensitivity <- function(structureSets,
 
 
     plotList[["captions"]][[sensitivityPlotName]] <- getPopulationSensitivityPlotCaptions(
-      pkParameter = pk,
-      output = op,
+      pkParameter = pkDisplayName,
+      output = opDisplayName,
       quantileVec = sort(unique(popDfPkOp$Quantile)),
       simulationSetNames = unique(popDfPkOp$Population)
     )
