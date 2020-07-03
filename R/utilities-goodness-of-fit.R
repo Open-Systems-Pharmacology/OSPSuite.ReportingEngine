@@ -733,13 +733,16 @@ plotResidualsQQPlot <- function(data,
 getSimulationTimeRanges <- function(simulation, path, timeUnit) {
   firstApplicationRange <- list(name = "firstApplicationRange", values = NULL)
   lastApplicationRange <- list(name = "lastApplicationRange", values = NULL)
+  applicationTimes <- 0
 
   applications <- simulation$allApplicationsFor(path)
-  applicationTimes <- sapply(applications, function(application) {
-    application$startTime$value
-  })
+  if (!isOfLength(applications, 0)) {
+    applicationTimes <- sapply(applications, function(application) {
+      application$startTime$value
+    })
+  }
   simulationRanges <- c(applicationTimes, simulation$outputSchema$endTime)
-  simulationRanges <- sort(ospsuite::toUnit(applications[[1]]$startTime$dimension, simulationRanges, timeUnit))
+  simulationRanges <- sort(ospsuite::toUnit("Time", simulationRanges, timeUnit))
 
   totalRange <- list(name = "totalRange", values = c(min(simulationRanges), max(simulationRanges)))
 
