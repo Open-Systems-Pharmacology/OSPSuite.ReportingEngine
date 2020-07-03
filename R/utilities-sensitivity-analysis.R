@@ -790,7 +790,7 @@ plotPopulationSensitivity <- function(structureSets,
         missingSensivitity <- individualSAResults$pkParameterSensitivityValueFor(
           pkParameterName = as.character(pk),
           parameterName = missingParameters[parNumber],
-          outputPath = as.character(op)
+          outputPath = as.character(outputPath)
         )
 
         if (!is.na(missingSensivitity)) {
