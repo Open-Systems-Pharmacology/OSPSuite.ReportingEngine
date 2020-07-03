@@ -30,14 +30,12 @@ plotDemographyParameters <- function(structureSets,
     set$simulationSet$simulationSetName
   })), collapse = ", ")
 
-  # User defined yParameters will be used as is.
-  # Otherwise, the default is to pick from the DemographyDefaultParameters excluding xParameters
-  # This will prevent plots such as age vs age
-  yParameters <- yParameters %||% setdiff(DemographyDefaultParameters, xParameters)
+  yParameters <- yParameters %||% DemographyDefaultParameters
 
   demographyAcrossPopulations <- getDemographyAcrossPopulations(structureSets)
   demographyData <- demographyAcrossPopulations$data
   demographyMetaData <- demographyAcrossPopulations$metaData
+  populationNames <- unique(demographyData$simulationSetName)
 
   if (workflowType %in% PopulationWorkflowTypes$pediatric) {
     referencePopulationName <- getReferencePopulationName(structureSets)
@@ -73,7 +71,7 @@ plotDemographyParameters <- function(structureSets,
           x = parameterName,
           fill = "simulationSetName"
         )
-        for (populationName in levels(factor(demographyData$simulationSetName))) {
+        for (populationName in populationNames) {
           demographyDataByPopulation <- demographyData[demographyData$simulationSetName %in% populationName, ]
 
           demographyHistogram <- plotDemographyHistogram(
@@ -93,22 +91,28 @@ plotDemographyParameters <- function(structureSets,
   }
 
   for (demographyParameter in xParameters) {
+    # Categorical variables won't be plotted
+    if (demographyMetaData[[demographyParameter]]$class %in% "character") {
+      next
+    }
     xParameterLabel <- demographyMetaData[[demographyParameter]]$dimension
-    for (parameterName in yParameters) {
+    # This aims at preventing plots such as age vs age
+    for (parameterName in setdiff(yParameters, demographyParameter)) {
+      # Categorical variables won't be plotted
+      if (demographyMetaData[[parameterName]]$class %in% "character") {
+        next
+      }
       yParameterLabel <- demographyMetaData[[parameterName]]$dimension
-
       vpcMetaData <- list(
         "x" = demographyMetaData[[demographyParameter]],
         "median" = demographyMetaData[[parameterName]]
       )
-
       aggregatedData <- getDemographyAggregatedData(
         data = demographyData,
         xParameterName = demographyParameter,
         yParameterName = parameterName,
         xParameterBreaks = settings$xParametersBreaks[[demographyParameter]]
       )
-      populationNames <- levels(factor(aggregatedData$Population))
 
       # For pediatric workflow, range plots compare reference population to the other populations
       if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
@@ -155,6 +159,7 @@ plotDemographyParameters <- function(structureSets,
           metaData = vpcMetaData,
           plotConfiguration = settings$plotConfigurations[["vpcParameterPlot"]]
         )
+
         demographyPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- vpcPlot
         demographyPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- tlf::setYAxis(plotObject = vpcPlot, scale = tlf::Scaling$log10)
 
@@ -186,24 +191,9 @@ getDemographyAcrossPopulations <- function(structureSets) {
       fullDemographyTable
     )
   }
-  simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
-  allParameters <- ospsuite::getAllParametersMatching(population$allParameterPaths, simulation)
-  metaData <- lapply(allParameters, function(parameter) {
-    list(
-      dimension = parameter$name,
-      unit = parameter$displayUnit
-    )
-  })
-  names(metaData) <- sapply(allParameters, function(parameter) {
-    parameter$path
-  })
 
-  # TO DO: Issue #185, covariate from population can be categorical/factors
-  demographyAcrossPopulations$Gender <- as.numeric(demographyAcrossPopulations$Gender)
-  metaData[["Gender"]] <- list(
-    dimension = "Gender",
-    unit = ""
-  )
+  simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
+  metaData <- getPopulationMetaData(population, simulation)
 
   return(list(
     data = demographyAcrossPopulations,
@@ -308,18 +298,34 @@ plotDemographyHistogram <- function(data,
   )
   demographyPlot <- tlf::initializePlot(plotConfiguration)
 
-  demographyPlot <- demographyPlot +
-    ggplot2::geom_histogram(
-      data = data,
-      mapping = ggplot2::aes_string(
-        x = paste0("`", dataMapping$x, "`"),
-        fill = paste0("`", dataMapping$groupMapping$fill$label, "`"),
-      ),
-      color = "black",
-      alpha = 0.8,
-      position = ggplot2::position_dodge2(preserve = "single"),
-      bins = bins
-    )
+  if (metaData[[dataMapping$x]]$class %in% "character") {
+    data[, dataMapping$x] <- factor(data[, dataMapping$x])
+    demographyPlot <- demographyPlot +
+      ggplot2::geom_histogram(
+        data = data,
+        mapping = ggplot2::aes_string(
+          x = paste0("`", dataMapping$x, "`"),
+          fill = paste0("`", dataMapping$groupMapping$fill$label, "`"),
+        ),
+        color = "black",
+        alpha = 0.8,
+        position = ggplot2::position_dodge2(preserve = "single"),
+        stat = "count"
+      )
+  } else {
+    demographyPlot <- demographyPlot +
+      ggplot2::geom_histogram(
+        data = data,
+        mapping = ggplot2::aes_string(
+          x = paste0("`", dataMapping$x, "`"),
+          fill = paste0("`", dataMapping$groupMapping$fill$label, "`"),
+        ),
+        color = "black",
+        alpha = 0.8,
+        position = ggplot2::position_dodge2(preserve = "single"),
+        bins = bins
+      )
+  }
   demographyPlot <- demographyPlot +
     ggplot2::ylab("Number of individuals") +
     ggplot2::guides(fill = guide_legend(title = NULL))
@@ -394,4 +400,25 @@ setYParametersForDemogrpahyPlot <- function(workflow, parameters) {
     logTypes = LogTypes$Debug
   )
   return(invisible())
+}
+
+getPopulationMetaData <- function(population, simulation) {
+  metaData <- list()
+  allParameters <- ospsuite::getAllParametersMatching(population$allParameterPaths, simulation)
+
+  for (covariate in population$allCovariateNames) {
+    metaData[[covariate]] <- list(
+      dimension = covariate,
+      unit = "",
+      class = class(population$getCovariateValues(covariate))
+    )
+  }
+  for (parameter in allParameters) {
+    metaData[[parameter$path]] <- list(
+      dimension = parameter$name,
+      unit = parameter$displayUnit,
+      class = class(population$getParameterValues(parameter$path))
+    )
+  }
+  return(metaData)
 }

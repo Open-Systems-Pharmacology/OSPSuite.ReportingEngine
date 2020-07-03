@@ -225,7 +225,10 @@ plotPopulationPKParameters <- function(structureSets,
       pkParametersTables[[paste0(pathLabel, "-", yParameterLabel)]] <- pkParameterTable
 
       # Range plots on PK parameters vs xParameters
-      for (demographyParameter in xParameters) {
+      for (demographyParameter in setdiff(xParameters, pkParameter$pkParameter)) {
+        if (pkParametersMetaDataAcrossPopulations[[demographyParameter]]$class %in% "character") {
+          next
+        }
         xParameterLabel <- lastPathElement(demographyParameter)
         vpcMetaData <- list(
           "x" = pkParameterMetaData[[demographyParameter]],
@@ -466,22 +469,7 @@ getPkParametersAcrossPopulations <- function(structureSets) {
       fullPkParametersTable
     )
   }
-  allParameters <- ospsuite::getAllParametersMatching(population$allParameterPaths, simulation)
-  metaData <- lapply(allParameters, function(parameter) {
-    list(
-      dimension = parameter$name,
-      unit = parameter$displayUnit
-    )
-  })
-  names(metaData) <- sapply(allParameters, function(parameter) {
-    parameter$path
-  })
-
-  pkParametersTableAcrossPopulations$Gender <- as.numeric(pkParametersTableAcrossPopulations$Gender)
-  metaData[["Gender"]] <- list(
-    dimension = "Gender",
-    unit = ""
-  )
+  metaData <- getPopulationMetaData(population, simulation)
 
   return(list(
     data = pkParametersTableAcrossPopulations,
