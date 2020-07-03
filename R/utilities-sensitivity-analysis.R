@@ -753,18 +753,18 @@ plotPopulationSensitivity <- function(structureSets,
     allParamsForThisOpPk <- unique(sensitivityThisOpPk$Parameter)
 
     # get the sensitivity results dataframe for this combination of output and pkParameter
-    individualCombinationsThisOpPk <- unique(sensitivityThisOpPk[, c("Quantile", "individualId", "Population","OutputDisplayName","PKDisplayName")])
+    individualCombinationsThisOpPk <- unique(sensitivityThisOpPk[, c("Quantile", "IndividualId", "Population","OutputDisplayName","PKDisplayName")])
 
     # loop thru each individual in current combination of output and pkParameter
     for (m in 1:nrow(individualCombinationsThisOpPk)) {
       qu <- individualCombinationsThisOpPk$Quantile[m]
-      id <- individualCombinationsThisOpPk$individualId[m]
+      id <- individualCombinationsThisOpPk$IndividualId[m]
       pop <- individualCombinationsThisOpPk$Population[m]
       opDN <- individualCombinationsThisOpPk$OutputDisplayName[m]
       pkDN <- individualCombinationsThisOpPk$PKDisplayName[m]
 
       # get list of all perturbation parameters for this one individual that are used in the plot for this combination of output and pkParameter
-      allParamsForThisIndividual <- unique(sensitivityThisOpPk[ (sensitivityThisOpPk$Quantile %in% qu) & (sensitivityThisOpPk$individualId %in% id) & (sensitivityThisOpPk$Population %in% pop), ]$Parameter)
+      allParamsForThisIndividual <- unique(sensitivityThisOpPk[ (sensitivityThisOpPk$Quantile %in% qu) & (sensitivityThisOpPk$IndividualId %in% id) & (sensitivityThisOpPk$Population %in% pop), ]$Parameter)
 
       # create list of the parameters missing for this individual but otherwise shown in this plot for this combination of output and pkParameter
       missingParameters <- setdiff(allParamsForThisOpPk, allParamsForThisIndividual)
@@ -772,7 +772,7 @@ plotPopulationSensitivity <- function(structureSets,
       # loop thru the missing parameters for the current individual
       for (parNumber in seq_along(missingParameters)) {
 
-        # load the index file of SA results for this individual's population to get the name of the individuals's sensitivity result file
+        # load the index file of SA results for this individual's population to get the name of the individual's sensitivity result file
         indx <- read.csv(saResultIndexFiles[[pop]])
 
         # get the name of the individual's sensitivity result file
@@ -801,7 +801,7 @@ plotPopulationSensitivity <- function(structureSets,
             "PKParameter" = pk,
             "Value" = missingSensivitity,
             "Quantile" = qu,
-            "individualId" = id,
+            "IndividualId" = id,
             "Population" = pop,
             "OutputDisplayName" = opDN,
             "PKDisplayName" = pkDN
@@ -945,7 +945,7 @@ getPopSensDfForPkAndOutput <- function(simulation,
         individualDf <- do.call(rbind.data.frame, listOfFilteredIndividualSAResults)
 
         # Append dataframe for current individual, current output and current pkParameter to the list dFlist
-        dfList[[n]] <- cbind(individualDf, data.frame("Quantile" = rep(quantile, nrow(individualDf)), "individualId" = rep(individualId, nrow(individualDf))))
+        dfList[[n]] <- cbind(individualDf, data.frame("Quantile" = rep(quantile, nrow(individualDf)), "IndividualId" = rep(individualId, nrow(individualDf))))
       }
     }
 
