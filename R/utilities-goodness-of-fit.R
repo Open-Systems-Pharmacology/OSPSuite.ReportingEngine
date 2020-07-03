@@ -20,9 +20,10 @@ plotMeanGoodnessOfFit <- function(structureSet,
   lloqData <- NULL
   residualsData <- NULL
   residualsMetaData <- NULL
+  residuals <- NULL
   goodnessOfFitPlots <- list()
   goodnessOfFitCaptions <- list()
-  residuals <- list()
+  goodnessOfFitResiduals <- list()
 
   # Load observed and simulated data
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
@@ -115,20 +116,23 @@ plotMeanGoodnessOfFit <- function(structureSet,
         residualsPlotResults <- getResidualsPlotResults(timeRange$values, residualsData, metaDataFrame, structureSet, settings, logFolder)
         goodnessOfFitPlots[[timeRange$name]] <- c(goodnessOfFitPlots[[timeRange$name]], residualsPlotResults$plots)
         goodnessOfFitCaptions[[timeRange$name]] <- c(goodnessOfFitCaptions[[timeRange$name]], residualsPlotResults$captions)
-        residuals[[timeRange$name]] <- residualsPlotResults$data
+        goodnessOfFitResiduals[[timeRange$name]] <- residualsPlotResults$data
         residualsMetaData[[timeRange$name]] <- residualsPlotResults$metaData
       }
     }
+  }
+  if (!isOfLength(goodnessOfFitResiduals[["totalRange"]], 0)) {
+    residuals <- list(
+      data = goodnessOfFitResiduals[["totalRange"]],
+      metaData = residualsMetaData[["totalRange"]]
+    )
   }
 
   return(list(
     plots = goodnessOfFitPlots,
     tables = list(timeProfileData = timeProfileData),
     captions = goodnessOfFitCaptions,
-    residuals = list(
-      data = residuals[["totalRange"]],
-      metaData = residualsMetaData[["totalRange"]]
-    )
+    residuals = residuals
   ))
 }
 
@@ -215,9 +219,10 @@ plotPopulationGoodnessOfFit <- function(structureSet,
   lloqData <- NULL
   residualsData <- NULL
   residualsMetaData <- NULL
+  residuals <- list()
   goodnessOfFitPlots <- list()
   goodnessOfFitCaptions <- list()
-  residuals <- list()
+  goodnessOfFitResiduals <- list()
 
   residualsAggregationType <- settings$residualsAggregationType %||% "mean"
   selectedVariablesForResiduals <- c("Time", "mean", "legendMean", "Path")
@@ -318,10 +323,16 @@ plotPopulationGoodnessOfFit <- function(structureSet,
         residualsPlotResults <- getResidualsPlotResults(timeRange$values, residualsData, metaDataFrame, structureSet, settings, logFolder)
         goodnessOfFitPlots[[timeRange$name]] <- c(goodnessOfFitPlots[[timeRange$name]], residualsPlotResults$plots)
         goodnessOfFitCaptions[[timeRange$name]] <- c(goodnessOfFitCaptions[[timeRange$name]], residualsPlotResults$captions)
-        residuals[[timeRange$name]] <- residualsPlotResults$data
+        goodnessOfFitResiduals[[timeRange$name]] <- residualsPlotResults$data
         residualsMetaData[[timeRange$name]] <- residualsPlotResults$metaData
       }
     }
+  }
+  if (!isOfLength(goodnessOfFitResiduals[["totalRange"]], 0)) {
+    residuals <- list(
+      data = goodnessOfFitResiduals[["totalRange"]],
+      metaData = residualsMetaData[["totalRange"]]
+    )
   }
   return(list(
     plots = goodnessOfFitPlots,
@@ -330,10 +341,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
       observedData = observedData,
       simulatedData = simulatedData
     ),
-    residuals = list(
-      data = residuals[["totalRange"]],
-      metaData = residualsMetaData[["totalRange"]]
-    )
+    residuals = residuals
   ))
 }
 
