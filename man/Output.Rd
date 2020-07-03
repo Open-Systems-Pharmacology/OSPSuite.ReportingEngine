@@ -15,7 +15,7 @@ R6 class representing workflow output
 
 \item{\code{displayUnit}}{display unit for `path`}
 
-\item{\code{dataFilter}}{character or expression used to filter the observed data}
+\item{\code{dataSelection}}{character or expression used to filter the observed data}
 
 \item{\code{dataDisplayName}}{display name of the observed data}
 
@@ -38,7 +38,7 @@ Create a new `Output` object.
   path,
   displayName = NULL,
   displayUnit = NULL,
-  dataFilter = NULL,
+  dataSelection = DataSelectionKeys$NONE,
   dataDisplayName = NULL,
   pkParameters = NULL
 )}\if{html}{\out{</div>}}
@@ -53,7 +53,7 @@ Create a new `Output` object.
 
 \item{\code{displayUnit}}{display unit for `path`}
 
-\item{\code{dataFilter}}{characters or expression to filter the observed data}
+\item{\code{dataSelection}}{characters or expression to filter the observed data}
 
 \item{\code{dataDisplayName}}{display name of the observed data}
 
