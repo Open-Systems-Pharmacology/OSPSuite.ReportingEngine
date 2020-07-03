@@ -103,9 +103,10 @@ test_that("'PkParameterInfo' works properly", {
 
   # display name is equal to path when not set
   myCmax <- PkParameterInfo$new(pkParameter = myTestCmaxName)
+  defaultPKParameterProperties <- ospsuite::pkParameterByName(name = myTestCmaxName)
   expect_equal(myCmax$pkParameter, myTestCmaxName)
-  expect_null(myCmax$displayName)
-  expect_null(myCmax$displayUnit)
+  expect_equal(myCmax$displayName, defaultPKParameterProperties$displayName)
+  expect_equal(myCmax$displayUnit, defaultPKParameterProperties$displayUnit)
 
   myCmax <- PkParameterInfo$new(
     pkParameter = myTestCmaxName,
