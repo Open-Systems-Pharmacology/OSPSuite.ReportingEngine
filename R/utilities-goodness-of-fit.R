@@ -60,8 +60,8 @@ plotMeanGoodnessOfFit <- function(structureSet,
     outputSimulatedData <- outputSimulatedResults$data
     outputSimulatedMetaData[[output$path]] <- outputSimulatedResults$metaData
 
-    if (!is.null(output$dataFilter)) {
-      rowFilter <- evalDataFilter(observedDataset, output$dataFilter)
+    if (!is.null(output$dataSelection)) {
+      rowFilter <- evalDataFilter(observedDataset, output$dataSelection)
       logWorkflow(
         message = paste0("Output '", output$path, "'. Number of observations filtered: ", sum(rowFilter)),
         pathFolder = logFolder,
@@ -265,8 +265,8 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     outputSimulatedData <- outputSimulatedResults$data
     outputSimulatedMetaData[[output$path]] <- outputSimulatedResults$metaData
 
-    if (!is.null(output$dataFilter)) {
-      rowFilter <- evalDataFilter(observedDataset, output$dataFilter)
+    if (!is.null(output$dataSelection)) {
+      rowFilter <- evalDataFilter(observedDataset, output$dataSelection)
       logWorkflow(
         message = paste0("Output '", output$path, "'. Number of observations filtered: ", sum(rowFilter)),
         pathFolder = logFolder,
