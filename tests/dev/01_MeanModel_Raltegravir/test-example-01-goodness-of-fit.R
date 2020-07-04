@@ -19,7 +19,7 @@ output10mg <- Output$new(
   path = "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",
   displayName = "Raltegravir simulated data",
   displayUnit = "mg/l",
-  dataFilter = "Grouping %in% '10mg_'",
+  dataSelection = "Grouping %in% '10mg_'",
   dataDisplayName = "Raltegravir observed data",
   pkParameters = c(pkAUC, pkCmax)
 )

@@ -3,7 +3,7 @@ context("Output class")
 testPath <- "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)"
 testPathName <- "Raltegravir Plasma"
 testPathUnit <- "nmol/l"
-testDataFilter <- "Grouping %in% '10mg_'"
+testDataSelection <- "Grouping %in% '10mg_'"
 testDataDisplayName <- "My test data"
 
 test_that("Output requires a 'path' as a single character value", {
@@ -60,23 +60,23 @@ test_that("Output 'dataDisplayName' is checked and set properly", {
   expect_error(Output$new(path = testPath, dataDisplayName = c(testDataDisplayName, testDataDisplayName)))
 })
 
-test_that("Output 'dataFilter' is checked and set properly", {
-  expect_silent(Output$new(path = testPath, dataFilter = testDataFilter))
+test_that("Output 'dataSelection' is checked and set properly", {
+  expect_silent(Output$new(path = testPath, dataSelection = testDataSelection))
 
   outputPath <- Output$new(path = testPath)
-  expect_null(outputPath$dataFilter)
+  expect_null(outputPath$dataSelection)
 
-  outputFilter <- Output$new(path = testPath, dataFilter = testDataFilter)
-  expect_is(outputFilter$dataFilter, "expression")
-  expect_equivalent(deparse(outputFilter$dataFilter), deparse(parse(text = testDataFilter)))
+  outputFilter <- Output$new(path = testPath, dataSelection = testDataSelection)
+  expect_is(outputFilter$dataSelection, "expression")
+  expect_equivalent(deparse(outputFilter$dataSelection), deparse(parse(text = testDataSelection)))
 
   # Expressions can be input
-  outputFilter <- Output$new(path = testPath, dataFilter = parse(text = testDataFilter))
-  expect_is(outputFilter$dataFilter, "expression")
-  expect_equivalent(deparse(outputFilter$dataFilter), deparse(parse(text = testDataFilter)))
+  outputFilter <- Output$new(path = testPath, dataSelection = parse(text = testDataSelection))
+  expect_is(outputFilter$dataSelection, "expression")
+  expect_equivalent(deparse(outputFilter$dataSelection), deparse(parse(text = testDataSelection)))
 
-  expect_error(Output$new(path = testPath, dataFilter = data.frame(testDataFilter)))
-  expect_error(Output$new(path = testPath, dataFilter = c(testDataFilter, testDataFilter)))
+  expect_error(Output$new(path = testPath, dataSelection = data.frame(testDataSelection)))
+  expect_error(Output$new(path = testPath, dataSelection = c(testDataSelection, testDataSelection)))
 })
 
 myTestAUCName <- "AUC_inf"
