@@ -10,7 +10,8 @@ getPopSensDfForPkAndOutput(
   indexDf,
   output,
   pkParameter,
-  totalSensitivityThreshold
+  totalSensitivityThreshold,
+  logFolder
 )
 }
 \arguments{
