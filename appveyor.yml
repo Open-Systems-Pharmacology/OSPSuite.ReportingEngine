@@ -10,6 +10,8 @@ init:
 install:
   - ps: Bootstrap
   - git submodule update --init --recursive
+  - ps: cinst pandoc
+  - ps: $env:Path += ";C:\Program Files (x86)\Pandoc\"
 
 cache:
   - C:\RLibrary\3.6

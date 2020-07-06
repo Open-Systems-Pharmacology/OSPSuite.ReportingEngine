@@ -20,9 +20,10 @@ plotMeanGoodnessOfFit <- function(structureSet,
   lloqData <- NULL
   residualsData <- NULL
   residualsMetaData <- NULL
+  residuals <- NULL
   goodnessOfFitPlots <- list()
   goodnessOfFitCaptions <- list()
-  residuals <- list()
+  goodnessOfFitResiduals <- list()
 
   # Load observed and simulated data
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
@@ -59,8 +60,8 @@ plotMeanGoodnessOfFit <- function(structureSet,
     outputSimulatedData <- outputSimulatedResults$data
     outputSimulatedMetaData[[output$path]] <- outputSimulatedResults$metaData
 
-    if (!is.null(output$dataFilter)) {
-      rowFilter <- evalDataFilter(observedDataset, output$dataFilter)
+    if (!is.null(output$dataSelection)) {
+      rowFilter <- evalDataFilter(observedDataset, output$dataSelection)
       logWorkflow(
         message = paste0("Output '", output$path, "'. Number of observations filtered: ", sum(rowFilter)),
         pathFolder = logFolder,
@@ -115,20 +116,23 @@ plotMeanGoodnessOfFit <- function(structureSet,
         residualsPlotResults <- getResidualsPlotResults(timeRange$values, residualsData, metaDataFrame, structureSet, settings, logFolder)
         goodnessOfFitPlots[[timeRange$name]] <- c(goodnessOfFitPlots[[timeRange$name]], residualsPlotResults$plots)
         goodnessOfFitCaptions[[timeRange$name]] <- c(goodnessOfFitCaptions[[timeRange$name]], residualsPlotResults$captions)
-        residuals[[timeRange$name]] <- residualsPlotResults$data
+        goodnessOfFitResiduals[[timeRange$name]] <- residualsPlotResults$data
         residualsMetaData[[timeRange$name]] <- residualsPlotResults$metaData
       }
     }
+  }
+  if (!isOfLength(goodnessOfFitResiduals[["totalRange"]], 0)) {
+    residuals <- list(
+      data = goodnessOfFitResiduals[["totalRange"]],
+      metaData = residualsMetaData[["totalRange"]]
+    )
   }
 
   return(list(
     plots = goodnessOfFitPlots,
     tables = list(timeProfileData = timeProfileData),
     captions = goodnessOfFitCaptions,
-    residuals = list(
-      data = residuals[["totalRange"]],
-      metaData = residualsMetaData[["totalRange"]]
-    )
+    residuals = residuals
   ))
 }
 
@@ -215,9 +219,10 @@ plotPopulationGoodnessOfFit <- function(structureSet,
   lloqData <- NULL
   residualsData <- NULL
   residualsMetaData <- NULL
+  residuals <- list()
   goodnessOfFitPlots <- list()
   goodnessOfFitCaptions <- list()
-  residuals <- list()
+  goodnessOfFitResiduals <- list()
 
   residualsAggregationType <- settings$residualsAggregationType %||% "mean"
   selectedVariablesForResiduals <- c("Time", "mean", "legendMean", "Path")
@@ -260,8 +265,8 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     outputSimulatedData <- outputSimulatedResults$data
     outputSimulatedMetaData[[output$path]] <- outputSimulatedResults$metaData
 
-    if (!is.null(output$dataFilter)) {
-      rowFilter <- evalDataFilter(observedDataset, output$dataFilter)
+    if (!is.null(output$dataSelection)) {
+      rowFilter <- evalDataFilter(observedDataset, output$dataSelection)
       logWorkflow(
         message = paste0("Output '", output$path, "'. Number of observations filtered: ", sum(rowFilter)),
         pathFolder = logFolder,
@@ -318,10 +323,16 @@ plotPopulationGoodnessOfFit <- function(structureSet,
         residualsPlotResults <- getResidualsPlotResults(timeRange$values, residualsData, metaDataFrame, structureSet, settings, logFolder)
         goodnessOfFitPlots[[timeRange$name]] <- c(goodnessOfFitPlots[[timeRange$name]], residualsPlotResults$plots)
         goodnessOfFitCaptions[[timeRange$name]] <- c(goodnessOfFitCaptions[[timeRange$name]], residualsPlotResults$captions)
-        residuals[[timeRange$name]] <- residualsPlotResults$data
+        goodnessOfFitResiduals[[timeRange$name]] <- residualsPlotResults$data
         residualsMetaData[[timeRange$name]] <- residualsPlotResults$metaData
       }
     }
+  }
+  if (!isOfLength(goodnessOfFitResiduals[["totalRange"]], 0)) {
+    residuals <- list(
+      data = goodnessOfFitResiduals[["totalRange"]],
+      metaData = residualsMetaData[["totalRange"]]
+    )
   }
   return(list(
     plots = goodnessOfFitPlots,
@@ -330,10 +341,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
       observedData = observedData,
       simulatedData = simulatedData
     ),
-    residuals = list(
-      data = residuals[["totalRange"]],
-      metaData = residualsMetaData[["totalRange"]]
-    )
+    residuals = residuals
   ))
 }
 
@@ -733,13 +741,16 @@ plotResidualsQQPlot <- function(data,
 getSimulationTimeRanges <- function(simulation, path, timeUnit) {
   firstApplicationRange <- list(name = "firstApplicationRange", values = NULL)
   lastApplicationRange <- list(name = "lastApplicationRange", values = NULL)
+  applicationTimes <- 0
 
   applications <- simulation$allApplicationsFor(path)
-  applicationTimes <- sapply(applications, function(application) {
-    application$startTime$value
-  })
+  if (!isOfLength(applications, 0)) {
+    applicationTimes <- sapply(applications, function(application) {
+      application$startTime$value
+    })
+  }
   simulationRanges <- c(applicationTimes, simulation$outputSchema$endTime)
-  simulationRanges <- sort(ospsuite::toUnit(applications[[1]]$startTime$dimension, simulationRanges, timeUnit))
+  simulationRanges <- sort(ospsuite::toUnit("Time", simulationRanges, timeUnit))
 
   totalRange <- list(name = "totalRange", values = c(min(simulationRanges), max(simulationRanges)))
 
