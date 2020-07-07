@@ -11,7 +11,7 @@ plotMeanResVsPred(data, metaData = NULL, plotConfiguration = NULL)
 
 \item{metaData}{meta data on `data`}
 
-\item{plotCOnfiguration}{`PlotConfiguration` R6 class object from `tlf` library}
+\item{plotConfiguration}{`PlotConfiguration` R6 class object from `tlf` library}
 }
 \value{
 ggplot object of time profile for mean model workflow

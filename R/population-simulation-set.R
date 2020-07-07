@@ -25,12 +25,12 @@ PopulationSimulationSet <- R6::R6Class(
     #' @param ... inputs inherited from `SimulationSet`
     #' @return A new `PopulationSimulationSet` object
     initialize = function(referencePopulation = FALSE,
-                          simulationSetName,
-                          simulationFile,
-                          populationFile,
-                          populationName = NULL,
-                          studyDesignFile = NULL,
-                          ...) {
+                              simulationSetName,
+                              simulationFile,
+                              populationFile,
+                              populationName = NULL,
+                              studyDesignFile = NULL,
+                              ...) {
       validateIsLogical(referencePopulation)
       validateIsString(c(simulationSetName, simulationFile, populationFile))
       validateIsString(c(populationName, studyDesignFile), nullAllowed = TRUE)

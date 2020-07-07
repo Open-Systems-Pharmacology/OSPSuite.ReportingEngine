@@ -1,6 +1,8 @@
 #' @title simulateModelForPopulation
 #' @description Simulate model for a population.  Run parallel workflow if numberOfCores > 1 AND population size is >1.
-#' @param structureSet `SimulationStructure` R6 class object contain paths of files to be used
+#' @param structureSet `SimulationStructure` object contain paths of files to be used
+#' @param settings list of simulation settings
+#' @param logFolder folder where the logs are saved
 #' @return Simulation results for individual or population
 #' @export
 #' @import ospsuite
@@ -25,7 +27,6 @@ simulateModelForPopulation <- function(structureSet,
       message = "Starting parallel population simulation",
       pathFolder = logFolder
     )
-
 
     simulationResultFileNames <- runParallelPopulationSimulation(
       numberOfCores = numberOfCores,
@@ -52,11 +53,9 @@ simulateModelForPopulation <- function(structureSet,
 
 #' @title simulateModelOnCore
 #' @description Simulate model, either for an individual or for a given population.
-#' @param structureSet `SimulationStructure` R6 class object contain paths of files to be used
-#' @param populationFilePath path to population file to be used for simulation
-#' @param resultsFilePath path to CSV files to which results will be saved,
+#' @param simulation A `Simulation` object
+#' @param population A `Population` object
 #' @param debugLogFileName path to file where core debug logs are saved
-#' @param errorLogFileName path to file where core error logs are saved
 #' @param nodeName node name for parallel simulations
 #' @param showProgress option to print progress of simulation to console
 #' @export
@@ -140,12 +139,10 @@ simulateModel <- function(structureSet,
 
 #' @title runParallelPopulationSimulation
 #' @description Spawn cores, divide population among cores, run population simulation on cores, save results as CSV.
-#' @param numberOfCores number of cores over which to parallelize the population simulation
-#' @param inputFolderName path to folder storing pkml and population data files for the simulation
-#' @param simulationFileName name of pkml model file
-#' @param populationFileName name of population data CSV file
-#' @param resultsFileFolder path to population simulation results CSV files
-#' @param resultsFileName root name of population simulation results CSV files
+#' @param structureSet `SimulationStructure` R6 class object contain paths of files to be used
+#' @param numberOfCores number of cores do be used by the parallel simulation
+#' @param settings list of options to be passed on the function
+#' @param logFolder folder where the logs are saved
 #' @return Simulation results for population
 #' @export
 #' @import ospsuite

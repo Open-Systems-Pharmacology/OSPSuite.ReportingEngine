@@ -2,6 +2,7 @@
 #' @description
 #' Read observed data file with Nonmem format.
 #' Can read csv files as well as
+#' @param fileName name of file to be read
 #' @param header logical indicating if data has a header
 #' @param encoding encoding of the file
 #' @return data.frame containing observed data
@@ -9,7 +10,7 @@
 readObservedDataFile <- function(fileName,
                                  header = TRUE,
                                  encoding = "UTF-8") {
-  extension <- getFileExtension(fileName)
+  extension <- fileExtension(fileName)
 
   if (extension %in% "csv") {
     observedData <- read.csv(fileName,

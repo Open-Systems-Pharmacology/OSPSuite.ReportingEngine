@@ -276,9 +276,12 @@ getReferencePopulationName <- function(structureSets) {
 }
 
 #' @title plotDemographyHistogram
-#' @description Plot histograms of ratios as is
-#' @param data data.frame of the ratios
-#' @param plotConfiguration PlotConfiguration R6 class object
+#' @description Plot histograms for demography parameters
+#' @param data data.frame
+#' @param metaData list of metaData about `data`
+#' @param dataMapping `HistogramDataMapping` class object
+#' @param plotConfiguration `PlotConfiguration` class object
+#' @param bins number of bins for continuous parameters
 #' @return ggplot object
 #' @export
 #' @import ospsuite

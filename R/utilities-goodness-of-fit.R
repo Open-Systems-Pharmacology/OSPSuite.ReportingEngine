@@ -403,7 +403,7 @@ getPopulationOutputSimulatedResults <- function(simulationPathResults, output, s
 #' @param lloqData data.frame of lloq data
 #' @param metaData meta data on `data`
 #' @param dataMapping `XYGDataMapping` R6 class object from `tlf` library
-#' @param plotConfiguration `TimeProfilePlotConfiguration` R6 class object from `tlf` library
+#' @param plotConfiguration `PlotConfiguration` class object from `tlf` library
 #' @return ggplot object of time profile for mean model workflow
 #' @export
 #' @import tlf
@@ -523,7 +523,7 @@ plotMeanResVsTime <- function(data,
 #' @description Plot observation vs prediction for mean model workflow
 #' @param data data.frame
 #' @param metaData meta data on `data`
-#' @param plotCOnfiguration `PlotConfiguration` R6 class object from `tlf` library
+#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
 #' @return ggplot object of time profile for mean model workflow
 #' @export
 #' @import tlf

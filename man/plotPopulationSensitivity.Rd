@@ -14,11 +14,17 @@ plotPopulationSensitivity(
 )
 }
 \arguments{
+\item{structureSets}{list of `SimulationStructure` objects}
+
 \item{logFolder}{folder where the logs are saved}
 
 \item{settings}{list of settings for the population sensitivity plot}
 
-\item{structureSet}{`SimulationStructure` R6 class object}
+\item{workflowType}{Element from `PopulationWorkflowTypes`}
+
+\item{xParameters}{selected parameters to be plotted in x axis}
+
+\item{yParameters}{selected parameters to be plotted in y axis}
 }
 \value{
 a structured list of plots for each possible combination of pathID output-pkParameter that is found in sensitivity results index file

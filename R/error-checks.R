@@ -219,10 +219,9 @@ fileExtension <- function(file) {
   return(utils::tail(ex, 1))
 }
 
-
 #' Check if the provided path has required extension
 #'
-#' @param path (character) file or path name to be checked
+#' @param file file or path name to be checked
 #' @param extension extension of the file required after "."
 #'
 #' @return TRUE if the path includes the extension
@@ -250,12 +249,10 @@ logErrorThenStop <- function(message, logFolderPath = getwd()) {
   logWorkflow(
     message = message,
     pathFolder = logFolderPath,
-    logTypes = c(LogTypes$Info, LogTypes$Debug , LogTypes$Error)
+    logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error)
   )
   stop(message, call. = FALSE)
 }
-
-
 
 #' Log the error with a message
 #' @param message message to display and then log
@@ -267,10 +264,6 @@ logErrorMessage <- function(message, logFolderPath = getwd()) {
     logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error)
   )
 }
-
-
-
-
 
 validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile) {
   if (!is.null(observedMetaDataFile)) {

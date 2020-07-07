@@ -389,6 +389,7 @@ ratioBoxplot <- function(data,
 #' @title vpcParameterPlot
 #' @description Plot vpc like plot of yParameter along xParameter
 #' @param data data.frame
+#' @param metaData list of metaData about `data`
 #' @param plotConfiguration PlotConfiguration R6 class object
 #' @param plotObject ggplot object to which layer is added
 #' @return ggplot object

@@ -1,3 +1,5 @@
+#' @title DataSelectionKeys
+#' @description List of available short keys for observed data selection
 #' @export
 DataSelectionKeys <- list(
   NONE = "NONE",

@@ -24,7 +24,7 @@ plotMeanTimeProfile(
 
 \item{dataMapping}{`XYGDataMapping` R6 class object from `tlf` library}
 
-\item{plotConfiguration}{`TimeProfilePlotConfiguration` R6 class object from `tlf` library}
+\item{plotConfiguration}{`PlotConfiguration` class object from `tlf` library}
 }
 \value{
 ggplot object of time profile for mean model workflow

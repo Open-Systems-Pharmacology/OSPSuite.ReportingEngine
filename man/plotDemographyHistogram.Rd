@@ -13,13 +13,19 @@ plotDemographyHistogram(
 )
 }
 \arguments{
-\item{data}{data.frame of the ratios}
+\item{data}{data.frame}
 
-\item{plotConfiguration}{PlotConfiguration R6 class object}
+\item{metaData}{list of metaData about `data`}
+
+\item{dataMapping}{`HistogramDataMapping` class object}
+
+\item{plotConfiguration}{`PlotConfiguration` class object}
+
+\item{bins}{number of bins for continuous parameters}
 }
 \value{
 ggplot object
 }
 \description{
-Plot histograms of ratios as is
+Plot histograms for demography parameters
 }

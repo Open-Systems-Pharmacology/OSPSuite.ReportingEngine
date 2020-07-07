@@ -21,8 +21,8 @@ PkParameterInfo <- R6::R6Class(
     #' @param displayUnit display unit for `pkParameter`
     #' @return A new `PkParameterInfo` object
     initialize = function(pkParameter,
-                          displayName = NULL,
-                          displayUnit = NULL) {
+                              displayName = NULL,
+                              displayUnit = NULL) {
       validateIsString(pkParameter)
       validateIsOfLength(pkParameter, 1)
       validateIsString(c(displayName, displayUnit), nullAllowed = TRUE)
