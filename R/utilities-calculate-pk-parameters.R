@@ -73,14 +73,15 @@ plotMeanPKParameters <- function(structureSet,
 
 getMeanPkAnalysesFromOuptut <- function(data, output, molWeight = NULL) {
   pkAnalysesFromOuptut <- NULL
+  validateIsIncluded(output$path, unique(data$QuantityPath))
   outputData <- data[data$QuantityPath %in% output$path, ]
 
   for (pkParameter in output$pkParameters) {
     displayName <- pkParameter$displayName
     displayUnit <- pkParameter$displayUnit
 
+    validateIsIncluded(pkParameter$pkParameter, unique(outputData$Parameter))
     selectedParameter <- outputData$Parameter %in% pkParameter$pkParameter
-
     pkParameterObject <- ospsuite::pkParameterByName(pkParameter$pkParameter)
 
     # Need to switch back to base unit first if a display unit is provided
@@ -503,11 +504,13 @@ getDefaultPkParametersXParameters <- function(workflowType) {
 }
 
 getPopulationPkAnalysesFromOuptut <- function(data, metaData, output, pkParameter, molWeight = NULL) {
+  validateIsIncluded(output$path, unique(data$QuantityPath))
   outputData <- data[data$QuantityPath %in% output$path, ]
 
   displayName <- pkParameter$displayName
   displayUnit <- pkParameter$displayUnit
 
+  validateIsIncluded(pkParameter$pkParameter, unique(outputData$Parameter))
   selectedParameter <- outputData$Parameter %in% pkParameter$pkParameter
   pkParameterObject <- ospsuite::pkParameterByName(pkParameter$pkParameter)
 
