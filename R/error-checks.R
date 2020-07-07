@@ -252,7 +252,7 @@ logErrorThenStop <- function(message, logFolderPath = getwd()) {
     pathFolder = logFolderPath,
     logTypes = c(LogTypes$Info, LogTypes$Debug , LogTypes$Error)
   )
-  stop(message)
+  stop(message, call. = FALSE)
 }
 
 
