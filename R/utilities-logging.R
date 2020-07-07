@@ -89,6 +89,8 @@ logWorkflow <- function(message,
   return(invisible())
 }
 
+#' @title LogTypes
+#' @description List of log types for recording workflow information
 #' @export
 LogTypes <- enum(c(
   "Info",

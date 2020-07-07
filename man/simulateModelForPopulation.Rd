@@ -7,7 +7,11 @@
 simulateModelForPopulation(structureSet, settings = NULL, logFolder = getwd())
 }
 \arguments{
-\item{structureSet}{`SimulationStructure` R6 class object contain paths of files to be used}
+\item{structureSet}{`SimulationStructure` object contain paths of files to be used}
+
+\item{settings}{list of simulation settings}
+
+\item{logFolder}{folder where the logs are saved}
 }
 \value{
 Simulation results for individual or population

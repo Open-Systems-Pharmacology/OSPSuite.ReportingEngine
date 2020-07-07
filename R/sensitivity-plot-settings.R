@@ -12,9 +12,9 @@ SensitivityPlotSettings <- R6::R6Class(
     #' @param plotFontSize  the fontsize used in the legend and both axis
     #' @return A new `SensitivityPlotSettings` object
     initialize = function(totalSensitivityThreshold = NULL,
-                          variableParameterPaths = NULL,
-                          maximalParametersPerSensitivityPlot = 50,
-                          plotFontSize = 6) {
+                              variableParameterPaths = NULL,
+                              maximalParametersPerSensitivityPlot = 50,
+                              plotFontSize = 6) {
       self$totalSensitivityThreshold <- getDefaultTotalSensitivityThreshold(
         totalSensitivityThreshold = totalSensitivityThreshold,
         variableParameterPaths = variableParameterPaths

@@ -73,14 +73,15 @@ plotMeanPKParameters <- function(structureSet,
 
 getMeanPkAnalysesFromOuptut <- function(data, output, molWeight = NULL) {
   pkAnalysesFromOuptut <- NULL
+  validateIsIncluded(output$path, unique(data$QuantityPath))
   outputData <- data[data$QuantityPath %in% output$path, ]
 
   for (pkParameter in output$pkParameters) {
     displayName <- pkParameter$displayName
     displayUnit <- pkParameter$displayUnit
 
+    validateIsIncluded(pkParameter$pkParameter, unique(outputData$Parameter))
     selectedParameter <- outputData$Parameter %in% pkParameter$pkParameter
-
     pkParameterObject <- ospsuite::pkParameterByName(pkParameter$pkParameter)
 
     # Need to switch back to base unit first if a display unit is provided
@@ -388,6 +389,7 @@ ratioBoxplot <- function(data,
 #' @title vpcParameterPlot
 #' @description Plot vpc like plot of yParameter along xParameter
 #' @param data data.frame
+#' @param metaData list of metaData about `data`
 #' @param plotConfiguration PlotConfiguration R6 class object
 #' @param plotObject ggplot object to which layer is added
 #' @return ggplot object
@@ -503,11 +505,13 @@ getDefaultPkParametersXParameters <- function(workflowType) {
 }
 
 getPopulationPkAnalysesFromOuptut <- function(data, metaData, output, pkParameter, molWeight = NULL) {
+  validateIsIncluded(output$path, unique(data$QuantityPath))
   outputData <- data[data$QuantityPath %in% output$path, ]
 
   displayName <- pkParameter$displayName
   displayUnit <- pkParameter$displayUnit
 
+  validateIsIncluded(pkParameter$pkParameter, unique(outputData$Parameter))
   selectedParameter <- outputData$Parameter %in% pkParameter$pkParameter
   pkParameterObject <- ospsuite::pkParameterByName(pkParameter$pkParameter)
 

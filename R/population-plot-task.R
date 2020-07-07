@@ -21,9 +21,9 @@ PopulationPlotTask <- R6::R6Class(
     #' @param ... input parameters inherited from `PlotTask` R6 class
     #' @return A new `PopulationPlotTask` object
     initialize = function(workflowType = PopulationWorkflowTypes$parallelComparison,
-                          xParameters = NULL,
-                          yParameters = NULL,
-                          ...) {
+                              xParameters = NULL,
+                              yParameters = NULL,
+                              ...) {
       super$initialize(...)
       validateIsIncluded(workflowType, PopulationWorkflowTypes)
       self$workflowType <- workflowType

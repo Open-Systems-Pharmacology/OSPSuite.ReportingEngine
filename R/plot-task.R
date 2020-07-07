@@ -24,10 +24,10 @@ PlotTask <- R6::R6Class(
     #' @param ... input parameters inherited from `Task` R6 class
     #' @return A new `PlotTask` object
     initialize = function(reportTitle = NULL,
-                          fileName = NULL,
-                          getTaskResults = NULL,
-                          nameTaskResults = "none",
-                          ...) {
+                              fileName = NULL,
+                              getTaskResults = NULL,
+                              nameTaskResults = "none",
+                              ...) {
       super$initialize(...)
       self$title <- reportTitle
       self$fileName <- file.path(self$workflowFolder, fileName)
@@ -41,7 +41,7 @@ PlotTask <- R6::R6Class(
     #' @param taskResults list of results from task run.
     #' Results contains at least 2 fields: `plots` and `tables`
     saveResults = function(set,
-                           taskResults) {
+                               taskResults) {
       addTextChunk(
         self$fileName,
         paste0("## ", self$title, " for ", set$simulationSet$simulationSetName),

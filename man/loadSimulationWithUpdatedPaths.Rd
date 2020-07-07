@@ -8,6 +8,8 @@ loadSimulationWithUpdatedPaths(simulationSet, loadFromCache = FALSE)
 }
 \arguments{
 \item{simulationSet}{simulation set containing path to simulation file and pathIDs for quantities to be loaded into simulation object}
+
+\item{loadFromCache}{logical allows load from Cache option}
 }
 \value{
 simulation object with pathIDs updated from simulationSet

@@ -7,9 +7,9 @@
 isFileExtension(file, extension)
 }
 \arguments{
-\item{extension}{extension of the file required after "."}
+\item{file}{file or path name to be checked}
 
-\item{path}{(character) file or path name to be checked}
+\item{extension}{extension of the file required after "."}
 }
 \value{
 TRUE if the path includes the extension

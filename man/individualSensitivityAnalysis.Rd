@@ -26,6 +26,8 @@ population object's getParameterValuesForIndividual() function.}
 
 \item{numberOfCores}{is the number of cores over which to parallelize the sensitivity analysis}
 
+\item{showProgress}{logical prints progress of sensitivity analysis}
+
 \item{logFolder}{folder where the logs are saved}
 }
 \value{

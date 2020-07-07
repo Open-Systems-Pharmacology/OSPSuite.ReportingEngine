@@ -24,10 +24,10 @@ Task <- R6::R6Class(
     #' @param message message of the `Task`.
     #' @return A new `Task` object
     initialize = function(outputFolder = NULL,
-                          workflowFolder = getwd(),
-                          settings = NULL,
-                          active = FALSE,
-                          message = NULL) {
+                              workflowFolder = getwd(),
+                              settings = NULL,
+                              active = FALSE,
+                              message = NULL) {
       validateIsOfType(active, "logical")
       self$active <- active
       self$outputFolder <- outputFolder
