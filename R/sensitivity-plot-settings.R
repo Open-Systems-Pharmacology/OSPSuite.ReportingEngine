@@ -67,7 +67,7 @@ SensitivityPlotSettings <- R6::R6Class(
         validateIsOfType(object = value, type = tlf::PlotConfiguration, nullAllowed = TRUE)
         private$.plotConfiguration <- value %||% tlf::PlotConfiguration$new()
       }
-    }, # ,
+    },
 
 
     #' @field xAxisFontSize for sensitivity plot
