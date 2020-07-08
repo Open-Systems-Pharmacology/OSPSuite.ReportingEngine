@@ -535,7 +535,7 @@ defaultQuantileVec <- c(0.05, 0.5, 0.95)
 #' @import ospsuite
 plotMeanSensitivity <- function(structureSet,
                                 logFolder = getwd(),
-                                settings = NULL) {
+                                settings) {
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
@@ -562,13 +562,12 @@ plotMeanSensitivity <- function(structureSet,
         next
       }
 
-
-
       parameterLabel <- lastPathElement(pkParameter$pkParameter)
 
       pkSensitivities <- saResults$allPKParameterSensitivitiesFor(
         pkParameterName = pkParameter$pkParameter,
-        outputPath = output$path
+        outputPath = output$path,
+        totalSensitivityThreshold = settings$totalSensitivityThreshold
       )
 
       sensitivityData <- data.frame(
