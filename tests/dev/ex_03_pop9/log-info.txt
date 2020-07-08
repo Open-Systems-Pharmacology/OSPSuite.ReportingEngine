@@ -85,3 +85,19 @@
 25/06/2020 - 05:45:23 : Starting: Plot Sensitivity task
 25/06/2020 - 05:45:45 : './tests/dev/ex_03_pop9/appendix-sensitivity-analysis.md' already exists. Overwriting './tests/dev/ex_03_pop9/appendix-sensitivity-analysis.md'.
 25/06/2020 - 05:45:45 : Report './tests/dev/ex_03_pop9/appendix-sensitivity-analysis.md' was initialized successfully.
+08/07/2020 - 03:17:14 : Reporting Engine Information:
+08/07/2020 - 03:17:14 : Date: 08/07/2020 - 03:17:14
+08/07/2020 - 03:17:14 : User Information:
+08/07/2020 - 03:17:14 : Computer Name: DESKTOP-5RCQJLS
+08/07/2020 - 03:17:14 : User: ahamadeh
+08/07/2020 - 03:17:14 : Login: ahamadeh
+08/07/2020 - 03:17:14 : System is  validated
+08/07/2020 - 03:17:14 : System versions:
+08/07/2020 - 03:17:14 : R version: R version 3.6.1 (2019-07-05)
+08/07/2020 - 03:17:14 : OSP Suite Package version: 9.0.0
+08/07/2020 - 03:17:14 : OSP Reporting Engine version: 0.1.0
+08/07/2020 - 03:17:14 : tlf version: 0.1.0
+08/07/2020 - 03:17:14 : Starting run of population workflow
+08/07/2020 - 03:17:14 : Starting: Plot Sensitivity task
+08/07/2020 - 03:17:31 : './tests/dev/ex_03_pop9/appendix-sensitivity-analysis.md' already exists. Overwriting './tests/dev/ex_03_pop9/appendix-sensitivity-analysis.md'.
+08/07/2020 - 03:17:31 : Report './tests/dev/ex_03_pop9/appendix-sensitivity-analysis.md' was initialized successfully.
