@@ -13,7 +13,7 @@ R6 class for sensitivity analysis plot settings
 
 \item{\code{maximalParametersPerSensitivityPlot}}{is the maximal number of parameters to display in a sensitivity plot}
 
-\item{\code{plotFontSize}}{the fontsize used in the legend and both axis}
+\item{\code{plotConfiguration}}{`PlotConfiguration` R6 class object from `tlf` library}
 }
 \if{html}{\out{</div>}}
 }
@@ -33,7 +33,7 @@ Create a `SensitivityPlotSettings` object
   totalSensitivityThreshold = NULL,
   variableParameterPaths = NULL,
   maximalParametersPerSensitivityPlot = 50,
-  plotFontSize = 6
+  plotConfiguration = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -46,7 +46,7 @@ Create a `SensitivityPlotSettings` object
 
 \item{\code{maximalParametersPerSensitivityPlot}}{maximalParametersPerSensitivityPlot is the maximal number of parameters to display in a sensitivity plot}
 
-\item{\code{plotFontSize}}{the fontsize used in the legend and both axis}
+\item{\code{plotConfiguration}}{`PlotConfiguration` R6 class object from `tlf` library}
 }
 \if{html}{\out{</div>}}
 }

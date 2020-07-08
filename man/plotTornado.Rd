@@ -9,7 +9,7 @@ plotTornado(data, plotConfiguration = NULL)
 \arguments{
 \item{data}{data.frame}
 
-\item{plotCOnfiguration}{`PlotConfiguration` R6 class object from `tlf` library}
+\item{plotConfiguration}{`PlotConfiguration` R6 class object from `tlf` library}
 }
 \value{
 ggplot object of time profile for mean model workflow
