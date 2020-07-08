@@ -198,19 +198,32 @@ plotPopulationPKParameters <- function(structureSets,
         plotConfiguration = settings$plotConfigurations[["boxplotPkParameters"]]
       ) + ggplot2::xlab(NULL)
 
-      boxRange <- getLogLimitsForBoxPlot(pkParameterData$Value[pkParameterData$Value > 0])
-      boxBreaks <- getLogBreaksForBoxPlot(boxRange)
-
       pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel)]] <- boxplotPkParameter
-      pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- tlf::setYAxis(
-        plotObject = boxplotPkParameter,
-        scale = tlf::Scaling$log10,
-        limits = boxRange,
-        ticks = boxBreaks
-      )
-
       pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel)]] <- getPkParametersCaptions("boxplot", output$displayName, pkParameterMetaData[["Value"]])
-      pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- getPkParametersCaptions("boxplot", output$displayName, pkParameterMetaData[["Value"]], plotScale = "log")
+
+      positiveValues <- pkParameterData$Value > 0
+      if (sum(positiveValues) == 0) {
+        logWorkflow(
+          message = paste0(
+            pkParameter$pkParameter, " of ", output$path,
+            " does not include any positive data. Logarithmic scale plot cannot be output"
+          ),
+          pathFolder = logFolder,
+          logTypes = c(LogTypes$Info, LogTypes$Error, LogTypes$Debug)
+        )
+      }
+      if (sum(positiveValues) > 0) {
+        boxRange <- getLogLimitsForBoxPlot(pkParameterData$Value[positiveValues])
+        boxBreaks <- getLogBreaksForBoxPlot(boxRange)
+
+        pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- tlf::setYAxis(
+          plotObject = boxplotPkParameter,
+          scale = tlf::Scaling$log10,
+          limits = boxRange,
+          ticks = boxBreaks
+        )
+        pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- getPkParametersCaptions("boxplot", output$displayName, pkParameterMetaData[["Value"]], plotScale = "log")
+      }
 
       pkParameterTable <- tlf::getBoxWhiskerMeasure(
         data = pkParameterData,
