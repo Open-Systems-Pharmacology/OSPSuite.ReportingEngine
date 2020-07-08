@@ -12,17 +12,13 @@ runParallelPopulationSimulation(
 )
 }
 \arguments{
-\item{numberOfCores}{number of cores over which to parallelize the population simulation}
+\item{structureSet}{`SimulationStructure` R6 class object contain paths of files to be used}
 
-\item{inputFolderName}{path to folder storing pkml and population data files for the simulation}
+\item{numberOfCores}{number of cores do be used by the parallel simulation}
 
-\item{simulationFileName}{name of pkml model file}
+\item{settings}{list of options to be passed on the function}
 
-\item{populationFileName}{name of population data CSV file}
-
-\item{resultsFileFolder}{path to population simulation results CSV files}
-
-\item{resultsFileName}{root name of population simulation results CSV files}
+\item{logFolder}{folder where the logs are saved}
 }
 \value{
 Simulation results for population

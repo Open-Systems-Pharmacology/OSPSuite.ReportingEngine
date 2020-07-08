@@ -14,8 +14,6 @@ addFigureChunk(fileName, figureFile, figureCaption = "", logFolder = getwd())
 \item{figureCaption}{caption of figure}
 
 \item{logFolder}{folder where the logs are saved}
-
-\item{figureWidth}{figure width within report. Default is 100 percent.}
 }
 \description{
 Add a figure in a .md document

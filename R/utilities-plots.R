@@ -22,6 +22,8 @@ ExportPlotConfigurationClass <- R6::R6Class(
   public = list(format = "png", width = 4 * 5, height = 3 * 5, units = "cm")
 )
 
+#' @title ExportPlotConfiguration
+#' @description Properties of exported plots
 #' @export
 ExportPlotConfiguration <- ExportPlotConfigurationClass$new()
 
@@ -42,7 +44,8 @@ setPlotFormat <- function(format, width = NULL, height = NULL, units = NULL) {
   eval(setConfigurationExpression)
 }
 
-
+#' @title AggregationConfiguration
+#' @description Aggregation default properties  (which functions and their captions)
 #' @export
 AggregationConfiguration <- list(
   functions = list(

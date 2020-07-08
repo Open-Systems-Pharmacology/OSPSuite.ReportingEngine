@@ -7,6 +7,8 @@
 readObservedDataFile(fileName, header = TRUE, encoding = "UTF-8")
 }
 \arguments{
+\item{fileName}{name of file to be read}
+
 \item{header}{logical indicating if data has a header}
 
 \item{encoding}{encoding of the file}

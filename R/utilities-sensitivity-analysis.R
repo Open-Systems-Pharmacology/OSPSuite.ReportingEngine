@@ -123,6 +123,7 @@ runSensitivity <- function(structureSet,
 #' population object's getParameterValuesForIndividual() function.
 #' @param variationRange variation range for sensitivity analysis
 #' @param numberOfCores is the number of cores over which to parallelize the sensitivity analysis
+#' @param showProgress logical prints progress of sensitivity analysis
 #' @param logFolder folder where the logs are saved
 #' @return SA results for an individual
 #' @import ospsuite
@@ -655,9 +656,12 @@ lookupPKParameterDisplayName <- function(output, pkParameter) {
 
 #' @title plotPopulationSensitivity
 #' @description Retrieve list of plots of population sensitivity analyses across all populations
-#' @param structureSet `SimulationStructure` R6 class object
-#' @param settings list of settings for the population sensitivity plot
+#' @param structureSets list of `SimulationStructure` objects
 #' @param logFolder folder where the logs are saved
+#' @param settings list of settings for the population sensitivity plot
+#' @param workflowType Element from `PopulationWorkflowTypes`
+#' @param xParameters selected parameters to be plotted in x axis
+#' @param yParameters selected parameters to be plotted in y axis
 #' @return a structured list of plots for each possible combination of pathID output-pkParameter that is found in sensitivity results index file
 #' @export
 #' @import ospsuite
@@ -668,9 +672,6 @@ plotPopulationSensitivity <- function(structureSets,
                                       xParameters = NULL,
                                       yParameters = NULL) {
   allPopsDf <- NULL
-
-
-
   saResultIndexFiles <- list()
   simulationList <- list()
 
@@ -687,7 +688,6 @@ plotPopulationSensitivity <- function(structureSets,
       x$path
     })
     populationName <- structureSet$simulationSet$simulationSetName
-
 
     saResultIndexFiles[[populationName]] <- structureSet$popSensitivityAnalysisResultsIndexFile
     simulationList[[populationName]] <- simulation
@@ -740,14 +740,10 @@ plotPopulationSensitivity <- function(structureSets,
     return()
   }
 
-
   # allPopsDf is a dataframe that holds the results of all sensitivity analyses for all populations
-
   # add any missing sensitivity results omitted when applying threshold in getPopSensDfForPkAndOutput
-
   # get set of unique combinations of outputs and pkParameters.  A plot is built for each combination.
   uniqueQuantitiesAndPKParameters <- unique(allPopsDf[, c("QuantityPath", "PKParameter")])
-
 
   for (n in 1:nrow(uniqueQuantitiesAndPKParameters)) {
     outputPath <- uniqueQuantitiesAndPKParameters$QuantityPath[n]
@@ -820,8 +816,6 @@ plotPopulationSensitivity <- function(structureSets,
     }
   }
 
-
-
   plotList <- list()
 
   for (i in 1:nrow(uniqueQuantitiesAndPKParameters)) {
@@ -839,8 +833,6 @@ plotPopulationSensitivity <- function(structureSets,
 
     popDfPkOp <- unsortedPopDfPkOp[order(-abs(unsortedPopDfPkOp$Value)), ]
 
-    # print(popDfPkOp)
-
     # Set level order of Parameter column to make most sensitive parameter have highest factor level
     popDfPkOp$Parameter <- factor(x = popDfPkOp$Parameter, levels = rev(unique(popDfPkOp$Parameter)))
 
@@ -854,8 +846,6 @@ plotPopulationSensitivity <- function(structureSets,
     )
     plotList[["plots"]][[sensitivityPlotName]] <- plotObject
 
-
-
     plotList[["captions"]][[sensitivityPlotName]] <- getPopulationSensitivityPlotCaptions(
       pkParameter = pkDisplayName,
       output = opDisplayName,
@@ -867,8 +857,6 @@ plotPopulationSensitivity <- function(structureSets,
   return(plotList)
 }
 
-
-
 #' @title getPopSensDfForPkAndOutput
 #' @description Retrieve dataframe of ranked and filtered population sensitivity results for a given PK parameter and model output pathID
 #' @param simulation loaded from the used in the simulationFile path in the simulation set
@@ -877,6 +865,7 @@ plotPopulationSensitivity <- function(structureSets,
 #' @param output pathID of output for which to obtain the population sensitivity results
 #' @param pkParameter name of PK parameter for which to obtain the population sensitivity results
 #' @param totalSensitivityThreshold cut-off used for plots of the most sensitive parameters
+#' @param logFolder folder where the logs are saved
 #' @return sortedFilteredIndividualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
 #' @import ospsuite
 getPopSensDfForPkAndOutput <- function(simulation,
@@ -899,7 +888,6 @@ getPopSensDfForPkAndOutput <- function(simulation,
       # Current quantile
       quantile <- pkOutputIndexDf$Quantile[n]
 
-
       # Individual corresponding to current quantile
       individualId <- pkOutputIndexDf$IndividualId[n]
 
@@ -914,7 +902,6 @@ getPopSensDfForPkAndOutput <- function(simulation,
         simulation = simulation,
         filePaths = individualSAResultsFilePath
       )
-
 
       # verify that pkParameter is included in sensitivity results for current individual.  If not, skip to next individual
       if (!isIncluded(pkParameter, individualSAResults$allPKParameterNames)) {
@@ -961,9 +948,6 @@ getPopSensDfForPkAndOutput <- function(simulation,
 
   return(individualsDfForPKParameter)
 }
-
-
-
 
 #' @title getPkParameterPopulationSensitivityPlot
 #' @description build sensitvity plot object for a population for one output and pk parameter
