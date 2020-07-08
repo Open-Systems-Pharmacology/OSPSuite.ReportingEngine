@@ -57,7 +57,7 @@ SensitivityPlotSettings <- R6::R6Class(
       if (missing(value)) {
         private$.plotConfiguration
       } else {
-        validateIsOfType(object = value , type = tlf::PlotConfiguration , nullAllowed = TRUE)
+        validateIsOfType(object = value, type = tlf::PlotConfiguration, nullAllowed = TRUE)
         private$.plotConfiguration <- value %||% tlf::PlotConfiguration$new()
       }
     }
