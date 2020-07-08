@@ -321,7 +321,7 @@ MeanModelWorkflow <- R6::R6Class(
       if (length(appendices) > 0) {
         mergeMarkdowndFiles(appendices, self$reportFileName, logFolder = self$workflowFolder)
         actionToken2 <- re.tStartAction(actionType = "ReportGeneration", actionNameExtension = "runWorkflow")
-        renderReport(self$reportFileName, logFolder = self$workflowFolder)
+        renderReport(self$reportFileName, logFolder = self$workflowFolder, createWordReport = self$createWordReport)
         re.tEndAction(actionToken = actionToken2)
       }
 

@@ -4,6 +4,7 @@
 #' @field workflowFolder path of the folder create by the Workflow
 #' @field taskNames Enum of task names
 #' @field reportFileName name of the Rmd report file
+#' @field createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
 #' @import tlf
 #' @import ospsuite
 Workflow <- R6::R6Class(
@@ -13,18 +14,23 @@ Workflow <- R6::R6Class(
     workflowFolder = NULL,
     taskNames = NULL,
     reportFileName = NULL,
+    createWordReport = NULL,
 
     #' @description
     #' Create a new `Workflow` object.
     #' @param simulationSets list of `SimulationSet` R6 class objects
     #' @param workflowFolder path of the output folder created or used by the Workflow.
+    #' @param createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
-                              workflowFolder) {
+                              workflowFolder,
+                              createWordReport = FALSE) {
       private$.reportingEngineInfo <- ReportingEngineInfo$new()
 
       validateIsString(workflowFolder)
       validateIsOfType(c(simulationSets), "SimulationSet")
+      validateIsOfType(createWordReport, "logical")
+      self$createWordReport <- createWordReport
       if (!isOfType(simulationSets, "list")) {
         simulationSets <- list(simulationSets)
       }

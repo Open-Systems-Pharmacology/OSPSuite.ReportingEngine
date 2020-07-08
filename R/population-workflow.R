@@ -31,13 +31,16 @@ PopulationWorkflow <- R6::R6Class(
     #' @param workflowType Type of population workflow. Use enum `PopulationWorkflowTypes` to get list of workflow types.
     #' @param simulationSets list of `SimulationSet` R6 class objects
     #' @param workflowFolder path of the output folder created or used by the Workflow.
+    #' @param createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
     #' @return A new `PopulationWorkflow` object
     initialize = function(workflowType = PopulationWorkflowTypes$parallelComparison,
                               simulationSets,
-                              workflowFolder) {
+                              workflowFolder,
+                              createWordReport = FALSE) {
       super$initialize(
         simulationSets = simulationSets,
-        workflowFolder = workflowFolder
+        workflowFolder = workflowFolder,
+        createWordReport = createWordReport
       )
 
       validateIsOfType(c(simulationSets), "PopulationSimulationSet")
@@ -332,7 +335,7 @@ PopulationWorkflow <- R6::R6Class(
       if (length(appendices) > 0) {
         mergeMarkdowndFiles(appendices, self$reportFileName, logFolder = self$workflowFolder)
         actionToken2 <- re.tStartAction(actionType = "ReportGeneration", actionNameExtension = "runWorkflow")
-        renderReport(self$reportFileName, logFolder = self$workflowFolder)
+        renderReport(self$reportFileName, logFolder = self$workflowFolder, createWordReport = self$createWordReport)
         re.tEndAction(actionToken = actionToken2)
       }
 
