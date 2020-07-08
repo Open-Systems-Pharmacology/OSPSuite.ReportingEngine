@@ -536,7 +536,7 @@ defaultQuantileVec <- c(0.05, 0.5, 0.95)
 #' @import ospsuite
 plotMeanSensitivity <- function(structureSet,
                                 logFolder = getwd(),
-                                settings = NULL) {
+                                settings) {
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
@@ -561,14 +561,17 @@ plotMeanSensitivity <- function(structureSet,
         next
       }
 
-
-
       parameterLabel <- lastPathElement(pkParameter$pkParameter)
 
       pkSensitivities <- saResults$allPKParameterSensitivitiesFor(
         pkParameterName = pkParameter$pkParameter,
-        outputPath = output$path
+        outputPath = output$path,
+        totalSensitivityThreshold = settings$totalSensitivityThreshold
       )
+
+      indx1 <- 1 + settings$maximalParametersPerSensitivityPlot
+      indx2 <- max(indx1, length(pkSensitivities))
+      pkSensitivities <- pkSensitivities[ -c(indx1:indx2)  ]
 
       sensitivityData <- data.frame(
         parameter = as.character(sapply(pkSensitivities, function(pkSensitivity) {
@@ -596,7 +599,7 @@ plotMeanSensitivity <- function(structureSet,
 #' @title plotTornado
 #' @description Plot sensitivity results in a tornado plot
 #' @param data data.frame
-#' @param plotConfiguration `PlotConfiguration` object from `tlf` library
+#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
 #' @return ggplot object of time profile for mean model workflow
 #' @export
 #' @import tlf
@@ -630,6 +633,8 @@ plotTornado <- function(data,
       size = 1,
       linetype = "longdash"
     )
+
+
 
   return(tornadoPlot)
 }
@@ -959,7 +964,8 @@ getPkParameterPopulationSensitivityPlot <- function(data, settings) {
     shapeAes <- "Population"
   }
 
-  plt <- ggplot2::ggplot() + ggplot2::geom_point(
+  plt <- tlf::initializePlot(settings$plotConfiguration)
+  plt <- plt + ggplot2::geom_point(
     data = data,
     mapping = ggplot2::aes_string(x = "Parameter", y = "Value", color = "Quantile", shape = shapeAes),
     size = 2,
@@ -973,12 +979,7 @@ getPkParameterPopulationSensitivityPlot <- function(data, settings) {
 
   plt <- plt + ggplot2::theme(
     legend.position = "top",
-    legend.box = "vertical",
-    text = element_text(size = settings$plotFontSize),
-    legend.title = element_text(size = settings$plotFontSize),
-    axis.text.x = element_text(size = settings$plotFontSize),
-    axis.text.y = element_text(size = settings$plotFontSize),
-    legend.spacing.y = unit(-0.1, "cm")
+    legend.box = "vertical"
   )
 
   return(plt)

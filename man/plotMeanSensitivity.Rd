@@ -4,7 +4,7 @@
 \alias{plotMeanSensitivity}
 \title{plotMeanSensitivity}
 \usage{
-plotMeanSensitivity(structureSet, logFolder = getwd(), settings = NULL)
+plotMeanSensitivity(structureSet, logFolder = getwd(), settings)
 }
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object}

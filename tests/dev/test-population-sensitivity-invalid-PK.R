@@ -2,8 +2,6 @@ rm(list = ls())
 library(ospsuite)
 graphics.off()
 library(ospsuite.reportingengine)
-devtools::load_all("C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine")
-
 
 simulationFile <- "./tests/dev/ex_03_pop9/RaltegravirSim.pkml"
 populationFile1 <- "./tests/dev/ex_03_pop9/RalPop10.csv"
@@ -26,7 +24,7 @@ pwf <- PopulationWorkflow$new(simulationSets = list(ps1), workflowFolder = "./te
 pwf$simulatePopulation$settings$showProgress <- FALSE
 pwf$simulatePopulation$inactivate()
 pwf$populationPKParameters$inactivate()
-pwf$populationSensitivityAnalysis$activate()
+pwf$populationSensitivityAnalysis$inactivate()
 pwf$plotSensitivity$activate()
 
 pwf$populationSensitivityAnalysis$settings$showProgress <- TRUE
@@ -34,6 +32,6 @@ pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- c("Organism
 
 pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.25,0.75)
 
-pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(totalSensitivityThreshold = 1, maximalParametersPerSensitivityPlot = 12, plotFontSize = 6)
+pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(totalSensitivityThreshold = 1, maximalParametersPerSensitivityPlot = 12)
 
 pwf$runWorkflow()

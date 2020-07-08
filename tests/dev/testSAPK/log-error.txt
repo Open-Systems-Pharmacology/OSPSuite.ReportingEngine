@@ -1,0 +1,6 @@
+08/07/2020 - 03:21:38 : For individualID 2 : Values 'C_max_norm' are not included in parent values: 'C_max', 't_max', 'C_tEnd', 'AUC_tEnd', 'AUC_inf', 'MRT', 'Thalf', 'FractionAucLastToInf', 'CL', 'Vss', 'Vd'.
+08/07/2020 - 03:21:38 : For individualID 1 : Values 'C_max_norm' are not included in parent values: 'C_max', 't_max', 'C_tEnd', 'AUC_tEnd', 'AUC_inf', 'MRT', 'Thalf', 'FractionAucLastToInf', 'CL', 'Vss', 'Vd'.
+08/07/2020 - 03:21:38 : Population sensitivity plots not available for the selected PK parameters.
+08/07/2020 - 03:26:48 : For individualID 2 : Values 'C_max_norm' are not included in parent values: 'C_max', 't_max', 'C_tEnd', 'AUC_tEnd', 'AUC_inf', 'MRT', 'Thalf', 'FractionAucLastToInf', 'CL', 'Vss', 'Vd'.
+08/07/2020 - 03:26:48 : For individualID 1 : Values 'C_max_norm' are not included in parent values: 'C_max', 't_max', 'C_tEnd', 'AUC_tEnd', 'AUC_inf', 'MRT', 'Thalf', 'FractionAucLastToInf', 'CL', 'Vss', 'Vd'.
+08/07/2020 - 03:26:48 : Population sensitivity plots not available for the selected PK parameters.

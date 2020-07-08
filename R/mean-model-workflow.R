@@ -271,7 +271,7 @@ MeanModelWorkflow <- R6::R6Class(
         workflowFolder = self$workflowFolder,
         active = active,
         message = message,
-        settings = settings
+        settings = settings %||% SensitivityPlotSettings$new()
       )
     },
 
