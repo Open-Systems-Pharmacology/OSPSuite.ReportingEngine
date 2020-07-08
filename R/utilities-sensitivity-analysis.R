@@ -600,7 +600,7 @@ plotMeanSensitivity <- function(structureSet,
 #' @title plotTornado
 #' @description Plot sensitivity results in a tornado plot
 #' @param data data.frame
-#' @param plotCOnfiguration `PlotConfiguration` R6 class object from `tlf` library
+#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
 #' @return ggplot object of time profile for mean model workflow
 #' @export
 #' @import tlf
@@ -634,6 +634,8 @@ plotTornado <- function(data,
       size = 1,
       linetype = "longdash"
     )
+
+
 
   return(tornadoPlot)
 }
@@ -977,7 +979,8 @@ getPkParameterPopulationSensitivityPlot <- function(data, settings) {
     shapeAes <- "Population"
   }
 
-  plt <- ggplot2::ggplot() + ggplot2::geom_point(
+  plt <- tlf::initializePlot(settings$plotConfiguration)
+  plt <- plt + ggplot2::geom_point(
     data = data,
     mapping = ggplot2::aes_string(x = "Parameter", y = "Value", color = "Quantile", shape = shapeAes),
     size = 2,
@@ -991,12 +994,7 @@ getPkParameterPopulationSensitivityPlot <- function(data, settings) {
 
   plt <- plt + ggplot2::theme(
     legend.position = "top",
-    legend.box = "vertical",
-    text = element_text(size = settings$plotFontSize),
-    legend.title = element_text(size = settings$plotFontSize),
-    axis.text.x = element_text(size = settings$plotFontSize),
-    axis.text.y = element_text(size = settings$plotFontSize),
-    legend.spacing.y = unit(-0.1, "cm")
+    legend.box = "vertical"
   )
 
   return(plt)

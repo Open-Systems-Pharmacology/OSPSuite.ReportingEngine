@@ -9,19 +9,20 @@ SensitivityPlotSettings <- R6::R6Class(
     #' @param totalSensitivityThreshold cut-off used for plots of the most sensitive parameters
     #' @param variableParameterPaths paths that were varied in the sensitivity analysis.  If supplied totalSensitivityThreshold = 1, else 0.9.
     #' @param maximalParametersPerSensitivityPlot maximalParametersPerSensitivityPlot is the maximal number of parameters to display in a sensitivity plot
-    #' @param plotFontSize  the fontsize used in the legend and both axis
+    #' @param  plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
     #' @return A new `SensitivityPlotSettings` object
     initialize = function(totalSensitivityThreshold = NULL,
                           variableParameterPaths = NULL,
                           maximalParametersPerSensitivityPlot = 50,
-                          plotFontSize = 6) {
+                          plotConfiguration = NULL) {
       self$totalSensitivityThreshold <- getDefaultTotalSensitivityThreshold(
         totalSensitivityThreshold = totalSensitivityThreshold,
         variableParameterPaths = variableParameterPaths
       )
 
       self$maximalParametersPerSensitivityPlot <- maximalParametersPerSensitivityPlot
-      self$plotFontSize <- plotFontSize
+
+      self$plotConfiguration <- plotConfiguration
     }
   ),
 
@@ -50,15 +51,14 @@ SensitivityPlotSettings <- R6::R6Class(
       }
     },
 
-    #' @field plotFontSize the fontsize used in the legend and both axis
-    plotFontSize = function(value) {
+
+    #' @field  plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
+    plotConfiguration = function(value) {
       if (missing(value)) {
-        private$.plotFontSize
+        private$.plotConfiguration
       } else {
-        if (!is.null(value)) {
-          validateIsInRange("plotFontSize", value, 0, Inf)
-          private$.plotFontSize <- value
-        }
+        validateIsOfType(object = value , type = tlf::PlotConfiguration , nullAllowed = TRUE)
+        private$.plotConfiguration <- value %||% tlf::PlotConfiguration$new()
       }
     }
   ),
@@ -66,6 +66,6 @@ SensitivityPlotSettings <- R6::R6Class(
   private = list(
     .totalSensitivityThreshold = NULL,
     .maximalParametersPerSensitivityPlot = NULL,
-    .plotFontSize = NULL
+    .plotConfiguration = NULL
   )
 )
