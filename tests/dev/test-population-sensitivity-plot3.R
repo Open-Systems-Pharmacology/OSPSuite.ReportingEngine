@@ -72,6 +72,9 @@ pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- c(
 
 pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.25, 0.5, 0.75)
 
-pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(totalSensitivityThreshold = 0.9, maximalParametersPerSensitivityPlot = 12)
+pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(totalSensitivityThreshold = 0.9,
+                                                            maximalParametersPerSensitivityPlot = 12,
+                                                            xAxisFontSize = 10,
+                                                            yAxisFontSize = 6)
 
 pwf$runWorkflow()

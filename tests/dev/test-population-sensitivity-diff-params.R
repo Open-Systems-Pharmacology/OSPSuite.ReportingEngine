@@ -44,6 +44,9 @@ pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- c(
   "Applications|Iwamoto 2008 400mg PO (Figure 1) omeprazole study|filmcoated tablet (original Merck formulation)|Application_1|ProtocolSchemaItem|Dose"
 )
 pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.5)
-pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(totalSensitivityThreshold = 1, maximalParametersPerSensitivityPlot = 12)
+pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(totalSensitivityThreshold = 1,
+                                                            maximalParametersPerSensitivityPlot = 12,
+                                                            xAxisFontSize = 10,
+                                                            yAxisFontSize = 5)
 
 pwf$runWorkflow()
