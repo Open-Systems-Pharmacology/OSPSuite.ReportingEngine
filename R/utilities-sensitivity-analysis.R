@@ -570,6 +570,10 @@ plotMeanSensitivity <- function(structureSet,
         totalSensitivityThreshold = settings$totalSensitivityThreshold
       )
 
+      indx1 <- 1 + settings$maximalParametersPerSensitivityPlot
+      indx2 <- max(  indx1 , length( pkSensitivities ))
+      pkSensitivities <- pkSensitivities[ - c(indx1:indx2)  ]
+
       sensitivityData <- data.frame(
         parameter = as.character(sapply(pkSensitivities, function(pkSensitivity) {
           pkSensitivity$parameterName
