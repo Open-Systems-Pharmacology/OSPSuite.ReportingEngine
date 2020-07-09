@@ -37,6 +37,11 @@ plotDemographyParameters <- function(structureSets,
   demographyMetaData <- demographyAcrossPopulations$metaData
   populationNames <- unique(demographyData$simulationSetName)
 
+  checkIsIncluded(xParameters, names(demographyData), nullAllowed = TRUE, groupName = "population variables", logFolder = logFolder)
+  checkIsIncluded(yParameters, names(demographyData), nullAllowed = TRUE, groupName = "population variables", logFolder = logFolder)
+  xParameters <- intersect(xParameters, names(demographyData))
+  yParameters <- intersect(yParameters, names(demographyData))
+
   if (workflowType %in% PopulationWorkflowTypes$pediatric) {
     referencePopulationName <- getReferencePopulationName(structureSets)
   }
@@ -351,10 +356,7 @@ getXParametersForDemogrpahyPlot <- function(workflow) {
 #' @export
 getYParametersForDemogrpahyPlot <- function(workflow) {
   validateIsOfType(workflow, "PopulationWorkflow")
-  xParameters <- getXParametersForDemogrpahyPlot(workflow)
-  yParameters <- workflow$plotDemography$yParameters %||% setdiff(DemographyDefaultParameters, xParameters)
-
-  return(yParameters)
+  return(workflow$plotDemography$yParameters %||% DemographyDefaultParameters)
 }
 
 #' @title setXParametersForDemogrpahyPlot

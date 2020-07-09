@@ -162,6 +162,9 @@ plotPopulationPKParameters <- function(structureSets,
   pkParametersDataAcrossPopulations <- pkParametersAcrossPopulations$data
   pkParametersMetaDataAcrossPopulations <- pkParametersAcrossPopulations$metaData
 
+  checkIsIncluded(xParameters, names(pkParametersDataAcrossPopulations), nullAllowed = TRUE, groupName = "population variables", logFolder = logFolder)
+  xParameters <- intersect(xParameters, names(pkParametersDataAcrossPopulations))
+
   # Enforce factors for population names
   pkParametersDataAcrossPopulations$simulationSetName <- factor(pkParametersDataAcrossPopulations$simulationSetName)
 
