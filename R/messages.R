@@ -107,5 +107,9 @@ messages <- list(
 
   errorUnitNotFromDimension = function(unit, dimension) {
     paste0("Unit '", paste0(unit, collapse = "', '"), "' is not included in available units for dimension: '", paste0(dimension, collapse = "', '"), "'.")
+  },
+  
+  warningLogScaleNoPositiveData = function(variableName){
+    paste0(variableName, " does not include any positive data. Logarithmic scale plot cannot be output")
   }
 )

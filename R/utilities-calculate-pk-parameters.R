@@ -201,18 +201,15 @@ plotPopulationPKParameters <- function(structureSets,
       pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel)]] <- boxplotPkParameter
       pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel)]] <- getPkParametersCaptions("boxplot", output$displayName, pkParameterMetaData[["Value"]])
 
-      positiveValues <- pkParameterData$Value > 0
-      if (sum(positiveValues) == 0) {
+      if (!hasPositiveValues(pkParameterData$Value)) {
         logWorkflow(
-          message = paste0(
-            pkParameter$pkParameter, " of ", output$path,
-            " does not include any positive data. Logarithmic scale plot cannot be output"
-          ),
+          message = messages$warningLogScaleNoPositiveData(paste0(pkParameter$pkParameter, " of ", output$path)),
           pathFolder = logFolder,
           logTypes = c(LogTypes$Info, LogTypes$Error, LogTypes$Debug)
         )
       }
-      if (sum(positiveValues) > 0) {
+      if (hasPositiveValues(pkParameterData$Value)) {
+        positiveValues <- pkParameterData$Value > 0
         boxRange <- getLogLimitsForBoxPlot(pkParameterData$Value[positiveValues])
         boxBreaks <- getLogBreaksForBoxPlot(boxRange)
 

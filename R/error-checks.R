@@ -70,13 +70,19 @@ validateIsInteger <- function(object, nullAllowed = FALSE) {
   }
 }
 
-
 validateIsPositive <- function(object, nullAllowed = FALSE) {
   validateIsOfType(object, c("numeric", "integer"), nullAllowed)
 
   if (isFALSE(object > 0)) {
     logErrorThenStop(messages$errorWrongType(deparse(substitute(object)), class(object)[1], "positive"))
   }
+}
+
+hasPositiveValues <- function(object){
+  object <- object[!is.na(object)]
+  object <- object[!is.infinite(object)]
+  positiveValues <- object > 0
+  return(!sum(positiveValues) == 0)
 }
 
 
