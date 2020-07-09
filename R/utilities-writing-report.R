@@ -114,7 +114,7 @@ addTextChunk <- function(fileName,
 #' @param logFolder folder where the logs are saved
 #' @export
 mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd()) {
-  resetReport(outputFile)
+  resetReport(outputFile, logFolder)
 
   for (fileName in inputFiles) {
     fileContent <- readLines(fileName, encoding = "UTF-8")

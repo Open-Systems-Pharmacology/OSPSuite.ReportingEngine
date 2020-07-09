@@ -42,10 +42,13 @@ messages <- list(
     paste0("Value '", value, "' is not in defined enumeration values: '", paste0(names(enum), collapse = ", "), "'.")
   },
 
-  errorNotIncluded = function(values, parentValues) {
-    paste0("Values '", paste0(values, collapse = "', '"), "' are not included in parent values: '", paste0(parentValues, collapse = "', '"), "'.")
+  errorNotIncluded = function(values, parentValues, groupName = NULL) {
+    if(!is.null(groupName)){
+      return(paste0("Values '", paste0(values, collapse = "', '"), "' are not all included in ", groupName, "."))
+    }
+    paste0("Values '", paste0(values, collapse = "', '"), "' are not all included in parent values: '", paste0(parentValues, collapse = "', '"), "'.")
   },
-
+  
   warningExistingPath = function(existingPath) {
     paste0("Path: '", existingPath, "' already exists.")
   },

@@ -10,7 +10,7 @@ logError <- function(message,
                      printConsole = TRUE) {
   timeStamp <- sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M:%S"))
   if (printConsole) {
-    warning(paste0(timeStamp, message))
+    warning(paste0(timeStamp, message), call. = FALSE, immediate. = TRUE)
   }
   write(paste0(timeStamp, message),
     file = file, append = TRUE, sep = " "
