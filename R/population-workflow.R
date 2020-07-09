@@ -36,7 +36,7 @@ PopulationWorkflow <- R6::R6Class(
     initialize = function(workflowType = PopulationWorkflowTypes$parallelComparison,
                               simulationSets,
                               workflowFolder,
-                              createWordReport = FALSE) {
+                              createWordReport = TRUE) {
       super$initialize(
         simulationSets = simulationSets,
         workflowFolder = workflowFolder,

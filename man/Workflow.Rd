@@ -41,7 +41,7 @@ R6 class representing Reporting Engine generic Workflow
 \subsection{Method \code{new()}}{
 Create a new `Workflow` object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Workflow$new(simulationSets, workflowFolder, createWordReport = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$new(simulationSets, workflowFolder, createWordReport = TRUE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

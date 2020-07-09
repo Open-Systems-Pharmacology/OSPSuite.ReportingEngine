@@ -68,7 +68,7 @@ Create a new `PopulationWorkflow` object.
   workflowType = PopulationWorkflowTypes$parallelComparison,
   simulationSets,
   workflowFolder,
-  createWordReport = FALSE
+  createWordReport = TRUE
 )}\if{html}{\out{</div>}}
 }
 

@@ -24,7 +24,7 @@ Workflow <- R6::R6Class(
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
                               workflowFolder,
-                              createWordReport = FALSE) {
+                              createWordReport = TRUE) {
       private$.reportingEngineInfo <- ReportingEngineInfo$new()
 
       validateIsString(workflowFolder)
