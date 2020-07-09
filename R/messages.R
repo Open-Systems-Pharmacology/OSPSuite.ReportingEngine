@@ -42,10 +42,13 @@ messages <- list(
     paste0("Value '", value, "' is not in defined enumeration values: '", paste0(names(enum), collapse = ", "), "'.")
   },
 
-  errorNotIncluded = function(values, parentValues) {
-    paste0("Values '", paste0(values, collapse = "', '"), "' are not included in parent values: '", paste0(parentValues, collapse = "', '"), "'.")
+  errorNotIncluded = function(values, parentValues, groupName = NULL) {
+    if(!is.null(groupName)){
+      return(paste0("Values '", paste0(values, collapse = "', '"), "' are not all included in ", groupName, "."))
+    }
+    paste0("Values '", paste0(values, collapse = "', '"), "' are not all included in parent values: '", paste0(parentValues, collapse = "', '"), "'.")
   },
-
+  
   warningExistingPath = function(existingPath) {
     paste0("Path: '", existingPath, "' already exists.")
   },
@@ -107,5 +110,9 @@ messages <- list(
 
   errorUnitNotFromDimension = function(unit, dimension) {
     paste0("Unit '", paste0(unit, collapse = "', '"), "' is not included in available units for dimension: '", paste0(dimension, collapse = "', '"), "'.")
+  },
+  
+  warningLogScaleNoPositiveData = function(variableName){
+    paste0(variableName, " does not include any positive data. Logarithmic scale plot cannot be output")
   }
 )

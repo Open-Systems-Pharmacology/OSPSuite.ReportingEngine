@@ -67,7 +67,8 @@ Create a new `PopulationWorkflow` object.
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$new(
   workflowType = PopulationWorkflowTypes$parallelComparison,
   simulationSets,
-  workflowFolder
+  workflowFolder,
+  createWordReport = TRUE
 )}\if{html}{\out{</div>}}
 }
 
@@ -79,6 +80,8 @@ Create a new `PopulationWorkflow` object.
 \item{\code{simulationSets}}{list of `SimulationSet` R6 class objects}
 
 \item{\code{workflowFolder}}{path of the output folder created or used by the Workflow.}
+
+\item{\code{createWordReport}}{logical of option for creating Markdwon-Report only but not a Word-Report.}
 }
 \if{html}{\out{</div>}}
 }

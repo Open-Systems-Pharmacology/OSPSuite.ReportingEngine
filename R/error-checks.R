@@ -70,13 +70,19 @@ validateIsInteger <- function(object, nullAllowed = FALSE) {
   }
 }
 
-
 validateIsPositive <- function(object, nullAllowed = FALSE) {
   validateIsOfType(object, c("numeric", "integer"), nullAllowed)
 
   if (isFALSE(object > 0)) {
     logErrorThenStop(messages$errorWrongType(deparse(substitute(object)), class(object)[1], "positive"))
   }
+}
+
+hasPositiveValues <- function(object){
+  object <- object[!is.na(object)]
+  object <- object[!is.infinite(object)]
+  positiveValues <- object > 0
+  return(!sum(positiveValues) == 0)
 }
 
 
@@ -153,7 +159,7 @@ isIncluded <- function(values, parentValues) {
   return(as.logical(min(values %in% parentValues)))
 }
 
-validateIsIncluded <- function(values, parentValues, nullAllowed = FALSE) {
+validateIsIncluded <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL, logFolder = NULL) {
   if (nullAllowed && is.null(values)) {
     return()
   }
@@ -161,20 +167,27 @@ validateIsIncluded <- function(values, parentValues, nullAllowed = FALSE) {
   if (isIncluded(values, parentValues)) {
     return()
   }
-
-  logErrorThenStop(messages$errorNotIncluded(values, parentValues))
+  if(is.null(logFolder)){
+    stop(messages$errorNotIncluded(values, parentValues, groupName))
+  }
+  logErrorThenStop(messages$errorNotIncluded(values, parentValues, groupName), logFolder)
 }
 
-checkIsIncluded <- function(values, parentValues, nullAllowed = FALSE) {
+checkIsIncluded <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL, logFolder = NULL) {
   if (nullAllowed && is.null(values)) {
     return()
   }
 
   if (isIncluded(values, parentValues)) {
+    return()
+  }
+  if(is.null(logFolder)){
+    warning(messages$errorNotIncluded(values, parentValues, groupName), call. = FALSE, immediate. = TRUE)
     return()
   }
   logWorkflow(
-    message = messages$errorNotIncluded(values, parentValues),
+    message = messages$errorNotIncluded(values, parentValues, groupName),
+    pathFolder = logFolder,
     logTypes = c(LogTypes$Debug, LogTypes$Error)
   )
 }
@@ -364,3 +377,4 @@ validateIsUnitFromDimension <- function(unit, dimension, nullAllowed = FALSE) {
   }
   stop(messages$errorUnitNotFromDimension(unit, dimension))
 }
+

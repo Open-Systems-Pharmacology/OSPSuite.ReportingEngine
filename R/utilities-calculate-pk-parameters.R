@@ -162,6 +162,9 @@ plotPopulationPKParameters <- function(structureSets,
   pkParametersDataAcrossPopulations <- pkParametersAcrossPopulations$data
   pkParametersMetaDataAcrossPopulations <- pkParametersAcrossPopulations$metaData
 
+  checkIsIncluded(xParameters, names(pkParametersDataAcrossPopulations), nullAllowed = TRUE, groupName = "population variables", logFolder = logFolder)
+  xParameters <- intersect(xParameters, names(pkParametersDataAcrossPopulations))
+
   # Enforce factors for population names
   pkParametersDataAcrossPopulations$simulationSetName <- factor(pkParametersDataAcrossPopulations$simulationSetName)
 
@@ -187,9 +190,19 @@ plotPopulationPKParameters <- function(structureSets,
       pkParameterData <- pkParameterFromOutput$data
       pkParameterMetaData <- pkParameterFromOutput$metaData
 
-      # remove NA value to prevent crash in computation of percentiles
-      pkParameterData$Value <- removeInf(pkParameterData$Value, logFolder)
-      pkParameterData <- pkParameterData[!is.na(pkParameterData$Value), ]
+      # NA and Inf values are removed to prevent crash in computation of percentiles
+      pkParameterData <- removeMissingValues(pkParameterData, "Value", logFolder)
+      if (nrow(pkParameterData) == 0) {
+        logWorkflow(
+          message = paste0(
+            pkParameter$pkParameter, " of ", output$path,
+            ": not enough available data to perform plot."
+          ),
+          pathFolder = logFolder,
+          logTypes = c(LogTypes$Info, LogTypes$Error, LogTypes$Debug)
+        )
+        next
+      }
 
       boxplotPkParameter <- tlf::plotBoxWhisker(
         data = pkParameterData,
@@ -198,19 +211,29 @@ plotPopulationPKParameters <- function(structureSets,
         plotConfiguration = settings$plotConfigurations[["boxplotPkParameters"]]
       ) + ggplot2::xlab(NULL)
 
-      boxRange <- getLogLimitsForBoxPlot(pkParameterData$Value[pkParameterData$Value > 0])
-      boxBreaks <- getLogBreaksForBoxPlot(boxRange)
-
       pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel)]] <- boxplotPkParameter
-      pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- tlf::setYAxis(
-        plotObject = boxplotPkParameter,
-        scale = tlf::Scaling$log10,
-        limits = boxRange,
-        ticks = boxBreaks
-      )
-
       pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel)]] <- getPkParametersCaptions("boxplot", output$displayName, pkParameterMetaData[["Value"]])
-      pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- getPkParametersCaptions("boxplot", output$displayName, pkParameterMetaData[["Value"]], plotScale = "log")
+
+      if (!hasPositiveValues(pkParameterData$Value)) {
+        logWorkflow(
+          message = messages$warningLogScaleNoPositiveData(paste0(pkParameter$pkParameter, " of ", output$path)),
+          pathFolder = logFolder,
+          logTypes = c(LogTypes$Info, LogTypes$Error, LogTypes$Debug)
+        )
+      }
+      if (hasPositiveValues(pkParameterData$Value)) {
+        positiveValues <- pkParameterData$Value > 0
+        boxRange <- getLogLimitsForBoxPlot(pkParameterData$Value[positiveValues])
+        boxBreaks <- getLogBreaksForBoxPlot(boxRange)
+
+        pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- tlf::setYAxis(
+          plotObject = boxplotPkParameter,
+          scale = tlf::Scaling$log10,
+          limits = boxRange,
+          ticks = boxBreaks
+        )
+        pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- getPkParametersCaptions("boxplot", output$displayName, pkParameterMetaData[["Value"]], plotScale = "log")
+      }
 
       pkParameterTable <- tlf::getBoxWhiskerMeasure(
         data = pkParameterData,

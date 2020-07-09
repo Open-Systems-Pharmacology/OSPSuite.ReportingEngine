@@ -4,12 +4,14 @@
 \alias{renderWordReport}
 \title{renderWordReport}
 \usage{
-renderWordReport(fileName, logFolder = getwd())
+renderWordReport(fileName, logFolder = getwd(), createWordReport = FALSE)
 }
 \arguments{
 \item{fileName}{name of .md file to render}
 
 \item{logFolder}{folder where the logs are saved}
+
+\item{createWordReport}{option for creating Markdwon-Report only but not a Word-Report}
 }
 \description{
 Render docx report with number sections and table of content

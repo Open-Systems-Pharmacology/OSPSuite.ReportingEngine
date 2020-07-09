@@ -114,7 +114,7 @@ addTextChunk <- function(fileName,
 #' @param logFolder folder where the logs are saved
 #' @export
 mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd()) {
-  resetReport(outputFile)
+  resetReport(outputFile, logFolder)
 
   for (fileName in inputFiles) {
     fileContent <- readLines(fileName, encoding = "UTF-8")
@@ -133,11 +133,12 @@ mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd()) {
 #' @description Render report with number sections and table of content
 #' @param fileName name of .md file to render
 #' @param logFolder folder where the logs are saved
+#' @param createWordReport option for creating Markdwon-Report only but not a Word-Report
 #' @export
-renderReport <- function(fileName, logFolder = getwd()) {
+renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE) {
   numberTablesAndFigures(fileName, logFolder)
   tocContent <- numberSections(fileName, logFolder)
-  renderWordReport(fileName, logFolder)
+  renderWordReport(fileName, logFolder, createWordReport)
   addMarkdownToc(tocContent, fileName, logFolder)
   return(invisible())
 }
@@ -146,8 +147,9 @@ renderReport <- function(fileName, logFolder = getwd()) {
 #' @description Render docx report with number sections and table of content
 #' @param fileName name of .md file to render
 #' @param logFolder folder where the logs are saved
+#' @param createWordReport option for creating Markdwon-Report only but not a Word-Report
 #' @export
-renderWordReport <- function(fileName, logFolder = getwd()) {
+renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE) {
   reportConfig <- file.path(logFolder, "word-report-configuration.txt")
   wordFileName <- sub(pattern = ".md", replacement = "-word.md", fileName)
   docxWordFileName <- sub(pattern = ".md", replacement = "-word.docx", fileName)
@@ -168,6 +170,7 @@ renderWordReport <- function(fileName, logFolder = getwd()) {
   write(wordFileContent, file = fileObject, sep = "\n")
   close(fileObject)
 
+  if(createWordReport){
   templateReport <- system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
   pageBreakCode <- system.file("extdata", "pagebreak.lua", package = "ospsuite.reportingengine")
 
@@ -181,7 +184,7 @@ renderWordReport <- function(fileName, logFolder = getwd()) {
   file.copy(docxWordFileName, docxFileName, overwrite = TRUE)
   unlink(reportConfig, recursive = TRUE)
   unlink(docxWordFileName, recursive = TRUE)
-
+}
   logWorkflow(
     message = paste0("Word version of report '", fileName, "' created."),
     pathFolder = logFolder,
