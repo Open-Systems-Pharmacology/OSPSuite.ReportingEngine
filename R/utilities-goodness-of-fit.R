@@ -75,9 +75,8 @@ plotMeanGoodnessOfFit <- function(structureSet,
         "Path" = output$path
       )
       outputResidualsData <- getResiduals(outputObservedData, outputSimulatedData)
-      outputResidualsData$Residuals <- removeInf(outputResidualsData$Residuals, logFolder = logFolder)
-      outputResidualsData <- outputResidualsData[!is.na(outputResidualsData$Residuals), ]
-
+      outputResidualsData <- removeMissingValues(outputResidualsData, "Residuals", logFolder)
+      
       if (!isOfLength(lloqColumn, 0)) {
         outputLloqData <- data.frame(
           "Time" = observedDataset[rowFilter, timeColumn],
@@ -285,8 +284,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
       names(simulatedDataForResiduals) <- c("Time", "Concentration", "Legend", "Path")
 
       outputResidualsData <- getResiduals(outputObservedData, simulatedDataForResiduals)
-      outputResidualsData$Residuals <- removeInf(outputResidualsData$Residuals, logFolder = logFolder)
-      outputResidualsData <- outputResidualsData[!is.na(outputResidualsData$Residuals), ]
+      outputResidualsData <- removeMissingValues(outputResidualsData, "Residuals", logFolder)
       if (!isOfLength(lloqColumn, 0)) {
         outputLloqData <- data.frame(
           "Time" = observedDataset[rowFilter, timeColumn],

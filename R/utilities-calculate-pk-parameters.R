@@ -187,9 +187,19 @@ plotPopulationPKParameters <- function(structureSets,
       pkParameterData <- pkParameterFromOutput$data
       pkParameterMetaData <- pkParameterFromOutput$metaData
 
-      # remove NA value to prevent crash in computation of percentiles
-      pkParameterData$Value <- removeInf(pkParameterData$Value, logFolder)
-      pkParameterData <- pkParameterData[!is.na(pkParameterData$Value), ]
+      # NA and Inf values are removed to prevent crash in computation of percentiles
+      pkParameterData <- removeMissingValues(pkParameterData, "Value", logFolder)
+      if (nrow(pkParameterData) == 0) {
+        logWorkflow(
+          message = paste0(
+            pkParameter$pkParameter, " of ", output$path,
+            ": not enough available data to perform plot."
+          ),
+          pathFolder = logFolder,
+          logTypes = c(LogTypes$Info, LogTypes$Error, LogTypes$Debug)
+        )
+        next
+      }
 
       boxplotPkParameter <- tlf::plotBoxWhisker(
         data = pkParameterData,

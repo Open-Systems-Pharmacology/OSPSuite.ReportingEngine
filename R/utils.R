@@ -207,11 +207,32 @@ removeInf <- function(data, logFolder = getwd()) {
   Ninf <- sum(infData)
   if (Ninf > 0) {
     logWorkflow(
-      message = paste0(Ninf, " values were infinite and removed from the analysis"),
+      message = paste0(Ninf, " values were infinite and transformed into missing values (NA)"),
       pathFolder = logFolder,
       logTypes = c(LogTypes$Debug, LogTypes$Error)
     )
   }
   data[infData] <- NA
+  return(data)
+}
+
+#' @title removeMissingValues
+#' @param data data.frame
+#' @param dataMapping name of variable on which the missing values ar checked
+#' @param logFolder folder where the logs are saved
+#' @return filtered data.frame
+removeMissingValues <- function(data, dataMapping = NULL, logFolder = getwd()) {
+  data[,dataMapping] <- removeInf(data[,dataMapping], logFolder)
+  naData <- is.na(data[,dataMapping])
+  Nna <- sum(naData)
+  data <- data[!naData, ]
+  
+  if (Nna > 0) {
+    logWorkflow(
+      message = paste0(Nna, " values were missing (NA) from variable '", dataMapping, "' and removed from the analysis"),
+      pathFolder = logFolder,
+      logTypes = c(LogTypes$Debug, LogTypes$Error)
+    )
+  }
   return(data)
 }
