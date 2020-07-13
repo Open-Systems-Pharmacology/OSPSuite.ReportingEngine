@@ -20,6 +20,7 @@ environment:
   app_version: "1.0"
   USE_RTOOLS: true
   NOT_CRAN: true
+  KEEP_VIGNETTES: true
   R_ARCH: x64
   R_VERSION: "3.6.3"
   COVERALLS_TOKEN:
