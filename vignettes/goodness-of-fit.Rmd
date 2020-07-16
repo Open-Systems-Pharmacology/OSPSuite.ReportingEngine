@@ -1,0 +1,583 @@
+---
+title: "Goodness of fit task"
+output: 
+  rmarkdown::html_vignette:
+   number_sections: true
+vignette: >
+  %\VignetteIndexEntry{goodness-of-fit}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r vignette setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+require(ospsuite.reportingengine)
+```
+
+This vignette focuses on goodness of fit (GOF) plots generated using either mean model or population workflows.
+
+# Overview
+
+The goodness of fit task first aims at generating time profile plots of specified simulation paths.
+The task can account for observed data, in which case residuals are calculated and plotted.
+For population workflows, aggregation functions are used, by default mean, median, 5th and 95th percentiles are computed and plotted in the time profiles.
+
+
+## Inputs
+
+Results obtained from the `simulate` task and stored as csv files within the subdirectory __SimulationResults__ from the `workflowFolder` directory are required in order to perform the goodness of fit (`plotGoF`) task.
+As a consequence, if the workflow output folder does not include the appropriate simulations, the task `simulate` needs to be __active__.
+
+
+The objects `SimulationSet` (or `PopulationSimulationSet` for population workflows) and `Output` define which and how the simulated and, if available, observed data will be plotted.
+
+## Ouptuts
+
+The GOF task generates for each simulation set plots of:
+
+- the simulated time profile 
+  - in linear and logarithmic scale
+  - if available with data
+  - for total simulated time range.
+
+### Multiple applications
+
+For a multiple applications, 
+6 time profile plots can be generated corresponding to simulated time profiles in linear and logarithmic scale for: 
+
+- the total simulated time range
+- the time range of the first application
+- the time range of the last application.
+
+### Residuals
+
+If observed data are available in the range selected in the output definition and selected in `dataSelection`, 
+they will be added to the time profile plots.
+Furthermore, residuals will be calculated as $Residuals=log(Observed)-log(Simulated)$ and 6 additional plots will be created figures:
+
+- Predicted vs observed in linear scale
+- Predicted vs observed in log scale
+- Residuals vs time
+- Residuals vs simulated output
+- Histogram of residuals
+- qq-plot of residuals
+
+A histogram and a qq-plot of residuals across all the simulation sets will also be added at the end of the analysis.
+
+For population workflows, residuals are calculated from the aggregation of the Simulated output.
+By default, $median(Simulated)$ is used instead of $Simulated$.
+It is possible to modify this agregation function by updating the fields of the object __AggregationConfiguration__.
+
+# Template examples
+
+The following sections will introduce template scripts including goodness of fit tasks as well as their associated reports.
+Table 1 shows the features tested in each template script.
+
+```{r table 1, echo = FALSE, results='asis'}
+examplesTable <- data.frame(
+  Example = seq(1, 7),
+  Workflow = c(rep("Mean model", 5), rep("Population model", 2)),
+  `Simulation Sets` = c(1, 1, 1, 1, 2, 1, 1),
+  Outputs = c(1, 1, 1, 2, 1, 1, 1),
+  `Observed Data` = c("No", "Yes", "Yes", "Yes", "Yes", "No", "Yes"),
+  check.names = FALSE
+)
+knitr::kable(examplesTable, caption = "Table 1: Features tested by each template script")
+```
+
+## Example 1
+
+Example 1 shows one of the simplest workflow including a goodness of fit.
+In this example, only a simulation time profile is performed since there is no observed data.
+Furthermore, only one simulation set and one output are requested.
+
+```{r example 1}
+# Get the pkml simulation file: "MiniModel2.pkml"
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
+
+# Define the input parameters
+outputA <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "Concentration of A",
+  displayUnit = "nmol/ml"
+)
+
+setA <- SimulationSet$new(
+  simulationSetName = "A",
+  simulationFile = simulationFile,
+  outputs = outputA
+)
+
+# Create the workflow instance
+workflow1 <-
+  MeanModelWorkflow$new(
+    simulationSets = setA,
+    workflowFolder = "Example-1"
+  )
+
+# Set the workflow tasks to be run
+workflow1$activateTasks(c("simulate", "plotGoF"))
+
+# Run the workflow
+workflow1$runWorkflow()
+```
+
+```{r example 1 render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflow1$reportFileName)
+```
+
+The output report for Example 1 is shown below. 
+There are only 2 figures in the report (linear and log scales) showing the time profile of the output path '__Organism|A|Concentration in container__' displayed as '__Concentration of A__'.
+
+```{r example 1 report, echo=FALSE}
+htmltools::includeHTML(sub(".md", ".html", workflow1$reportFileName))
+```
+
+## Example 2
+
+Example 2 shows a workflow that used the simulation results performed in Example 1.
+This example shows 3 new features: 
+
+- The presence of observed data compared to the simulation
+- The use of results obtained from a previous workflow
+- The change of display unit without re-running the `simulate` task
+
+```{r example 2}
+# Get the pkml simulation file: "MiniModel2.pkml"
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
+
+# Get the observation file and its dictionary
+observationFile <- system.file("extdata", "SimpleData.nmdat",
+  package = "ospsuite.reportingengine"
+)
+dictionaryFile <- system.file("extdata", "tpDictionary.csv",
+  package = "ospsuite.reportingengine"
+)
+
+# Define the input parameters
+outputA <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "Simulated concentration of A",
+  displayUnit = "µmol/ml",
+  dataSelection = "MDV==0",
+  dataDisplayName = "Observed concentration of A"
+)
+
+setA <- SimulationSet$new(
+  simulationSetName = "A",
+  simulationFile = simulationFile,
+  outputs = outputA,
+  observedDataFile = observationFile,
+  observedMetaDataFile = dictionaryFile
+)
+
+# Create the workflow instance
+workflow2 <-
+  MeanModelWorkflow$new(
+    simulationSets = setA,
+    workflowFolder = "Example-1"
+  )
+
+# Set the workflow tasks to be run
+workflow2$activateTasks("plotGoF")
+workflow2$inactivateTasks("simulate")
+
+# Run the workflow
+workflow2$runWorkflow()
+```
+
+It can be seen from the run results that the task `simulate` was not run.
+
+In this example, the content of the observed data file and its dictionary are respectively described Table 2 and 3. 
+
+```{r table 2 example 2 data, echo=FALSE, results='asis'}
+obsTableExample2 <- readObservedDataFile(observationFile)
+knitr::kable(obsTableExample2, caption = "Table 2: Observed data content")
+```
+
+```{r table 3 example 2 dictionary, echo=FALSE, results='asis'}
+dictTableExample2 <- readObservedDataFile(dictionaryFile)
+knitr::kable(dictTableExample2, caption = "Table 3: Dictionary content")
+```
+
+```{r example 2 render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflow2$reportFileName)
+```
+
+The output report for Example 2 is shown below. 
+There are now many more figures in the report showing not only time profiles in `µmol/ml` instead of `nmol/ml` but also residuals.
+
+```{r example 2 report, echo=FALSE}
+htmltools::includeHTML(sub(".md", ".html", workflow2$reportFileName))
+```
+
+## Example 3
+
+In example 3, the dictionary is changed and indicates that the lower limit of quantitation (LLOQ) is included in the observed data.
+Like the previous example, there is no need to re-run the `simulate` task.
+
+```{r example 3}
+# Get the pkml simulation file: "MiniModel2.pkml"
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
+
+# Get the observation file and its dictionary
+observationFile <- system.file("extdata", "SimpleData.nmdat",
+  package = "ospsuite.reportingengine"
+)
+dictionaryFile <- system.file("extdata", "tpDictionaryLoq.csv",
+  package = "ospsuite.reportingengine"
+)
+
+# Define the input parameters
+outputA <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "Simulated concentration of A",
+  displayUnit = "µmol/ml",
+  dataSelection = "MDV==0",
+  dataDisplayName = "Observed concentration of A"
+)
+
+setA <- SimulationSet$new(
+  simulationSetName = "A",
+  simulationFile = simulationFile,
+  outputs = outputA,
+  observedDataFile = observationFile,
+  observedMetaDataFile = dictionaryFile
+)
+
+# Create the workflow instance
+workflow3 <-
+  MeanModelWorkflow$new(
+    simulationSets = setA,
+    workflowFolder = "Example-1"
+  )
+
+# Set the workflow tasks to be run
+workflow3$activateTasks("plotGoF")
+workflow3$inactivateTasks("simulate")
+
+# Run the workflow
+workflow3$runWorkflow()
+```
+
+The new dictionary content is described in Table 4. 
+
+```{r table 4 example 3 dictionary, echo=FALSE, results='asis'}
+dictTableExample2 <- readObservedDataFile(dictionaryFile)
+knitr::kable(dictTableExample2, caption = "Table 4: Dictionary content")
+```
+
+```{r example 3 render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflow2$reportFileName)
+```
+
+The output report for Example 3 is shown below. 
+The time profiles now indicate the LLOQ.
+
+```{r example 3 report, echo=FALSE}
+htmltools::includeHTML(sub(".md", ".html", workflow2$reportFileName))
+```
+
+```{r delete example 3, inlcude = FALSE, echo=FALSE}
+# Remove the workflow folders
+unlink(workflow3$workflowFolder, recursive = TRUE)
+```
+
+## Example 4
+
+In example 4, the simulation set now includes 2 output paths.
+Output path __Organism|A|Concentration in container__ has observed data to be compared to whereas output path __Organism|B|Concentration in container__ does not.
+Since output path __Organism|B|Concentration in container__ was not requested by the examples 1, 2 and 3, it is not included in the simulation results.
+As a consequence, the `simulate` task needs to be re-run.
+
+```{r example 4}
+# Get the pkml simulation file: "MiniModel2.pkml"
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
+
+# Get the observation file and its dictionary
+observationFile <- system.file("extdata", "SimpleData.nmdat",
+  package = "ospsuite.reportingengine"
+)
+dictionaryFile <- system.file("extdata", "tpDictionary.csv",
+  package = "ospsuite.reportingengine"
+)
+
+# Define the input parameters
+outputA <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "Simulated concentration of A",
+  displayUnit = "µmol/ml",
+  dataSelection = "MDV==0",
+  dataDisplayName = "Observed concentration of A"
+)
+outputB <- Output$new(
+  path = "Organism|B|Concentration in container",
+  displayName = "Simulated concentration of B",
+  displayUnit = "µmol/ml"
+)
+
+setAB <- SimulationSet$new(
+  simulationSetName = "A and B",
+  simulationFile = simulationFile,
+  outputs = c(outputA, outputB),
+  observedDataFile = observationFile,
+  observedMetaDataFile = dictionaryFile
+)
+
+# Create the workflow instance
+workflow4 <-
+  MeanModelWorkflow$new(
+    simulationSets = setAB,
+    workflowFolder = "Example-4"
+  )
+
+# Set the workflow tasks to be run
+workflow4$activateTasks(c("simulate", "plotGoF"))
+
+# Run the workflow
+workflow4$runWorkflow()
+```
+
+```{r example 4 render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflow4$reportFileName)
+```
+
+The output report for Example 4 is shown below.
+
+```{r example 4 report, echo=FALSE}
+htmltools::includeHTML(sub(".md", ".html", workflow4$reportFileName))
+```
+
+```{r delete example 4, inlcude = FALSE, echo=FALSE}
+# Remove the workflow folders
+unlink(workflow4$workflowFolder, recursive = TRUE)
+```
+
+## Example 5
+
+In example 5, there are 2 simulation sets, each one includes one output path.
+Simulation set A includes output path __Organism|A|Concentration in container__ and has observed data.
+Simulation set B includes output path __Organism|B|Concentration in container__ and has no observed data.
+The `simulate` task needs to be re-run also in this case since the simulation results are saved in files that use the simulation set names.
+
+```{r example 5}
+# Get the pkml simulation file: "MiniModel2.pkml"
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
+
+# Get the observation file and its dictionary
+observationFile <- system.file("extdata", "SimpleData.nmdat",
+  package = "ospsuite.reportingengine"
+)
+dictionaryFile <- system.file("extdata", "tpDictionary.csv",
+  package = "ospsuite.reportingengine"
+)
+
+# Define the input parameters
+outputA <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "Simulated concentration of A",
+  displayUnit = "µmol/ml",
+  dataSelection = "MDV==0",
+  dataDisplayName = "Observed concentration of A"
+)
+outputB <- Output$new(
+  path = "Organism|B|Concentration in container",
+  displayName = "Simulated concentration of B",
+  displayUnit = "µmol/ml"
+)
+
+setA <- SimulationSet$new(
+  simulationSetName = "A",
+  simulationFile = simulationFile,
+  outputs = outputA,
+  observedDataFile = observationFile,
+  observedMetaDataFile = dictionaryFile
+)
+setB <- SimulationSet$new(
+  simulationSetName = "B",
+  simulationFile = simulationFile,
+  outputs = outputB
+)
+
+# Create the workflow instance
+workflow5 <-
+  MeanModelWorkflow$new(
+    simulationSets = c(setA, setB),
+    workflowFolder = "Example-5"
+  )
+
+# Set the workflow tasks to be run
+workflow5$activateTasks(c("simulate", "plotGoF"))
+
+# Run the workflow
+workflow5$runWorkflow()
+```
+
+```{r example 5 render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflow5$reportFileName)
+```
+
+The output report for Example 5 is shown below.
+
+```{r example 5 report, echo=FALSE}
+htmltools::includeHTML(sub(".md", ".html", workflow5$reportFileName))
+```
+
+```{r delete example 5, inlcude = FALSE, echo=FALSE}
+# Remove the workflow folders
+unlink(workflow5$workflowFolder, recursive = TRUE)
+```
+
+## Example 6
+
+Example 6 shows a goodness of fit for a population workflow.
+In this example, there is no observed data, only one simulation set and one output are requested.
+
+```{r example 6}
+# Get the pkml simulation file: "MiniModel2.pkml"
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
+
+populationFile <- system.file("extdata", "Pop500_p1p2p3.csv",
+  package = "ospsuite.reportingengine"
+)
+
+# Define the input parameters
+outputA <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "Concentration of A",
+  displayUnit = "µmol/ml"
+)
+
+setA <- PopulationSimulationSet$new(
+  simulationSetName = "A",
+  simulationFile = simulationFile,
+  populationFile = populationFile,
+  outputs = outputA
+)
+
+# Create the workflow instance
+workflow6 <-
+  PopulationWorkflow$new(
+    simulationSets = setA,
+    workflowFolder = "Example-6"
+  )
+
+# Set the workflow tasks to be run
+workflow6$activateTasks(c("simulatePopulation", "plotGoF"))
+
+# Run the workflow
+workflow6$runWorkflow()
+```
+
+```{r example 6 render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflow6$reportFileName)
+```
+
+The output report for Example 6 is shown below. 
+The 2 figures of the report (linear and log scales) include median, mean 5th and 95th percentiles of the population.
+
+```{r example 6 report, echo=FALSE}
+htmltools::includeHTML(sub(".md", ".html", workflow6$reportFileName))
+```
+
+## Example 7
+
+Example 7 add observed data to the previous workflow.
+
+```{r example 7}
+# Get the pkml simulation file: "MiniModel2.pkml"
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
+populationFile <- system.file("extdata", "Pop500_p1p2p3.csv",
+  package = "ospsuite.reportingengine"
+)
+
+# Get the observation file and its dictionary
+observationFile <- system.file("extdata", "SimpleData.nmdat",
+  package = "ospsuite.reportingengine"
+)
+dictionaryFile <- system.file("extdata", "tpDictionary.csv",
+  package = "ospsuite.reportingengine"
+)
+
+# Define the input parameters
+outputA <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "Simulated concentration of A",
+  displayUnit = "µmol/ml",
+  dataSelection = "MDV==0",
+  dataDisplayName = "Observed concentration of A"
+)
+
+setA <- PopulationSimulationSet$new(
+  simulationSetName = "A",
+  simulationFile = simulationFile,
+  populationFile = populationFile,
+  outputs = outputA,
+  observedDataFile = observationFile,
+  observedMetaDataFile = dictionaryFile
+)
+
+# Create the workflow instance
+workflow7 <-
+  PopulationWorkflow$new(
+    simulationSets = setA,
+    workflowFolder = "Example-6"
+  )
+
+# Set the workflow tasks to be run
+workflow7$activateTasks("plotGoF")
+workflow7$inactivateTasks("simulatePopulation")
+
+# Run the workflow
+workflow7$runWorkflow()
+```
+
+The output report for Example 7 is shown below. 
+The residuals are calculated on the median simulated values.
+
+```{r example 7 render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflow7$reportFileName)
+```
+
+```{r example 7 report, echo=FALSE}
+htmltools::includeHTML(sub(".md", ".html", workflow7$reportFileName))
+```
+
+```{r delete example 7, inlcude = FALSE, echo=FALSE}
+# Remove the workflow folders
+unlink(workflow7$workflowFolder, recursive = TRUE)
+```
