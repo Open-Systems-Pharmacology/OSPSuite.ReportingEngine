@@ -1,0 +1,657 @@
+---
+title: "PK parameters"
+output: 
+  rmarkdown::html_vignette:
+   number_sections: true
+vignette: >
+  %\VignetteIndexEntry{pk-parameters}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r vignette setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+require(ospsuite.reportingengine)
+```
+
+This vignette focuses on PK parameters plots and tables generated using either mean model or population workflows.
+
+# Overview
+
+The PK parameter task aims at generating tables and, when possible, plots of requested PK parameters.
+Depending on the workflow type, different plots and tables can be obtained.
+
+## Inputs
+
+Results obtained from the `calculatePKParameters` task and stored as csv files within the subdirectory __PKAnalysisResults__ from the `workflowFolder` directory are required in order to perform the goodness of fit (`plotPKParameters`) task.
+As a consequence, if the workflow output folder does not include the appropriate simulations, the task `calculatePKParameters` needs to be __active__.
+
+The objects `SimulationSet` (or `PopulationSimulationSet` for population workflows) and `Output` define which and how the simulated PK parameters will be reported.
+
+## Ouptuts
+
+### Mean model workflow
+
+For mean model workflows, the PK parameters task generates directly the table of PK parameters requested in the requested `Output` field `pkParameters`.
+
+### Population model workflow
+
+The distribution of the calculated PK parameters for each requested output are plotted as BoxWhisker plots along with a table.
+By default, the 5th, 25th, 50th, 75th and 95th percentiles are plotted.
+
+There exists different types of a population workflow which will lead to different output:
+
+- __Parallel Comparison__: PK parameters are plotted parallel in the BoxWhisker plots without any __reference population__.
+- __Ratio Comparison__: Same as Parallel Comparison with additional BoxWhisker plots and tables of the ratio of the PK parameters to the reference population is calculated and plotted in BoxWhisker plots.
+- __Pediatric__: PK Parameters are also  plotted as range plots of the PK parameters vs. age and weight.
+
+Regarding range, the task option __xParameters__ can be used to define which demography parameters to use in x-axis of range plots.
+Parallel and ratio use a `NULL` value by default, however it is also possible to add range plots to a Parallel or ratio comparison workflow by updating the value of __xParameters__.
+
+Regarding ratio comparison, the formula below is used to calculate the BoxWhisker plot percentile values:
+$$PK\ Parameter\ Percentile\ Ratio = \frac{PK\ Parameter\ Percentile\ in\ Population}{PK\ Parameter\ Percentile\ in\ Reference\ Population}$$
+
+# Template examples
+
+The following sections will introduce template scripts including PK parameter tasks as well as their associated reports.
+Table 1 shows the features tested in each template script.
+
+```{r table 1, echo = FALSE, results='asis'}
+examplesTable <- data.frame(
+  Example = seq(1, 4),
+  Workflow = c(rep("Mean model", 4), rep("Population model", 4)),
+  `Workflow Type` = c(rep("-", 4), c("Parallel", "Parallel", "Ratio", "Pediatric")),
+  `Simulation Sets` = c(1, 1, 2, 2, 1, 2, 2, 2),
+  check.names = FALSE
+)
+knitr::kable(examplesTable, caption = "Table 1: Features tested by each template script")
+```
+
+## Example 1
+
+Example 1 shows a basic example of PK parameters performed by a mean model workflow.
+In this example, '__C_max__' and '__AUC_tEnd__' are calculated.
+Since the task PK parameters requires results from the folder __PKAnalysisResults__, 
+the tasks `simulate` and `meanModelPKParameters` need to be performed.
+The task `simulate` needs to be performed because the task `meanModelPKParameters` is using the time profile simulation results.
+
+```{r example 1}
+# Get the pkml simulation file: "MiniModel2.pkml"
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
+
+# Define the input parameters
+outputA <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "A",
+  pkParameters = c("C_max", "AUC_tEnd")
+)
+
+setA <- SimulationSet$new(
+  simulationSetName = "A",
+  simulationFile = simulationFile,
+  outputs = outputA
+)
+
+# Create the workflow instance
+workflow1 <-
+  MeanModelWorkflow$new(
+    simulationSets = setA,
+    workflowFolder = "Example-1"
+  )
+
+# Set the workflow tasks to be run
+workflow1$activateTasks(c("simulate", 
+                          "meanModelPKParameters", 
+                          "plotPKParameters"))
+
+# Run the workflow
+workflow1$runWorkflow()
+```
+
+```{r example 1 render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflow1$reportFileName)
+```
+
+The output report for Example 1 is shown below. 
+The table indicates the requested parameters in their base unit.
+
+```{r example 1 report, echo=FALSE}
+htmltools::includeHTML(sub(".md", ".html", workflow1$reportFileName))
+```
+
+```{r delete example 1, inlcude = FALSE, echo=FALSE}
+# Remove the workflow folders
+unlink(workflow1$workflowFolder, recursive = TRUE)
+```
+
+
+## Example 2
+
+Example 2 shows how to perform workflows with user defined PK parameters.
+In this example, '__MyAUC__' is added to the list of PK parameters.
+To create user defined PK parameter, the function __addUserDefinedPKParameter()__ from the `ospsuite` package needs to be used.
+
+```{r example 2}
+# Get the pkml simulation file: "MiniModel2.pkml"
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
+
+myAUC <- addUserDefinedPKParameter(name = "MyAUC", standardPKParameter = StandardPKParameter$AUC_tEnd)
+myAUC$startTime <- 50
+myAUC$endTime <- 80
+
+# Define the input parameters
+outputA <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "A",
+  pkParameters = c("C_max", "AUC_tEnd", "MyAUC")
+)
+
+setA <- SimulationSet$new(
+  simulationSetName = "A",
+  simulationFile = simulationFile,
+  outputs = outputA
+)
+
+# Create the workflow instance
+workflow2 <-
+  MeanModelWorkflow$new(
+    simulationSets = setA,
+    workflowFolder = "Example-2"
+  )
+
+# Set the workflow tasks to be run
+workflow2$activateTasks(c("simulate", 
+                          "meanModelPKParameters", 
+                          "plotPKParameters"))
+
+# Run the workflow
+workflow2$runWorkflow()
+```
+
+```{r example 2 render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflow2$reportFileName)
+```
+
+The output report for Example 2 is shown below. 
+The table indicates the requested parameters in their base unit.
+
+```{r example 2 report, echo=FALSE}
+htmltools::includeHTML(sub(".md", ".html", workflow2$reportFileName))
+```
+
+```{r delete example 2, inlcude = FALSE, echo=FALSE}
+# Remove the workflow folders
+unlink(workflow2$workflowFolder, recursive = TRUE)
+```
+
+## Example 3
+
+Example 3 shows a similar example with 2 simulation sets.
+In this example, the names and units of the PK parameters are updated using the function __updatePKParameter__ from the `ospsuite` package.
+
+```{r example 3}
+# Get the pkml simulation file: "MiniModel2.pkml"
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
+
+updatePKParameter("C_max", 
+                  displayName = "Cmax",
+                  displayUnit = "nmol/l")
+updatePKParameter("AUC_tEnd", 
+                  displayName = "AUC",
+                  displayUnit = "nmol*min/l")
+
+# Define the input parameters
+outputA <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "A",
+  pkParameters = c("C_max", "AUC_tEnd")
+)
+outputB <- Output$new(
+  path = "Organism|B|Concentration in container",
+  displayName = "B",
+  pkParameters = c("C_max", "AUC_tEnd")
+)
+
+setA <- SimulationSet$new(
+  simulationSetName = "A",
+  simulationFile = simulationFile,
+  outputs = outputA
+)
+setB <- SimulationSet$new(
+  simulationSetName = "B",
+  simulationFile = simulationFile,
+  outputs = outputB
+)
+
+# Create the workflow instance
+workflow3 <-
+  MeanModelWorkflow$new(
+    simulationSets = c(setA, setB),
+    workflowFolder = "Example-3"
+  )
+
+# Set the workflow tasks to be run
+workflow3$activateTasks(c("simulate", 
+                          "meanModelPKParameters", 
+                          "plotPKParameters"))
+
+# Run the workflow
+workflow3$runWorkflow()
+```
+
+```{r example 3 render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflow3$reportFileName)
+```
+
+The output report for Example 3 is shown below. 
+The table indicates the requested parameters in the updated units and display names.
+
+```{r example 3 report, echo=FALSE}
+htmltools::includeHTML(sub(".md", ".html", workflow3$reportFileName))
+```
+
+```{r reset pk parameters from example 3, include=FALSE, echo=FALSE}
+# Go back to previous PK parameter settings
+updatePKParameter("C_max", 
+                  displayName = "C_max",
+                  displayUnit = "µmol/l")
+updatePKParameter("AUC_tEnd", 
+                  displayName = "AUC_tEnd",
+                  displayUnit = "µmol*min/l")
+```
+
+## Example 4
+
+Example 4 shows a different way of updating the PK parameters using the instance __PkParameterInfo__.
+Using that instance, it is possible to define different names and units for the same parameters from different paths or simulations.
+
+```{r example 4}
+# Get the pkml simulation file: "MiniModel2.pkml"
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
+
+CmaxA <- PkParameterInfo$new("C_max", 
+                  displayName = "Cmax from A",
+                  displayUnit = "µmol/l")
+CmaxB <- PkParameterInfo$new("C_max", 
+                  displayName = "Cmax from B",
+                  displayUnit = "nmol/l")
+AUCA <- PkParameterInfo$new("AUC_tEnd", 
+                  displayName = "AUC from A",
+                  displayUnit = "µmol*min/l")
+AUCB <- PkParameterInfo$new("AUC_tEnd", 
+                  displayName = "AUC from B",
+                  displayUnit = "nmol*min/l")
+
+# Define the input parameters
+outputA <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "A",
+  pkParameters = c(CmaxA, AUCA)
+)
+outputB <- Output$new(
+  path = "Organism|B|Concentration in container",
+  displayName = "B",
+  pkParameters = c(CmaxB, AUCB)
+)
+
+setA <- SimulationSet$new(
+  simulationSetName = "A",
+  simulationFile = simulationFile,
+  outputs = outputA
+)
+setB <- SimulationSet$new(
+  simulationSetName = "B",
+  simulationFile = simulationFile,
+  outputs = outputB
+)
+
+# Create the workflow instance
+workflow4 <-
+  MeanModelWorkflow$new(
+    simulationSets = c(setA, setB),
+    workflowFolder = "Example-3"
+  )
+
+# Set the workflow tasks to be run
+workflow4$activateTasks("plotPKParameters")
+workflow4$inactivateTasks(c("simulate", "meanModelPKParameters"))
+
+# Run the workflow
+workflow4$runWorkflow()
+```
+
+```{r example 4 render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflow4$reportFileName)
+```
+
+The output report for Example 4 is shown below. 
+The table indicates the requested parameters in the updated units and display names.
+
+```{r example 4 report, echo=FALSE}
+htmltools::includeHTML(sub(".md", ".html", workflow4$reportFileName))
+```
+
+```{r delete example 4, inlcude = FALSE, echo=FALSE}
+# Remove the workflow folders
+unlink(workflow4$workflowFolder, recursive = TRUE)
+```
+
+## Example 5
+
+Example 5 shows pk parameters for a population workflow.
+In this example, only one population-simulation pair is used.
+Consequently, the workflow type needs to be a parallel comparison (no reference population).
+
+
+```{r example 5}
+# Get the pkml simulation file: "MiniModel2.pkml"
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
+populationFile <- system.file("extdata", "Pop500_p1p2p3.csv",
+  package = "ospsuite.reportingengine"
+)
+
+updatePKParameter("C_max", 
+                  displayName = "Cmax")
+updatePKParameter("AUC_tEnd", 
+                  displayName = "AUC")
+
+# Define the input parameters
+outputA <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "A",
+  pkParameters = c("C_max", "AUC_tEnd")
+)
+
+set500 <- PopulationSimulationSet$new(
+  simulationSetName = "Population A",
+  simulationFile = simulationFile,
+  populationFile = populationFile,
+  outputs = outputA
+)
+
+# Create the workflow instance
+workflow5 <-
+  PopulationWorkflow$new(
+    simulationSets = set500,
+    workflowFolder = "Example-5"
+  )
+
+# Set the workflow tasks to be run
+workflow5$activateTasks(c("simulatePopulation", 
+                          "populationPKParameters", 
+                          "plotPKParameters"))
+
+# Run the workflow
+workflow5$runWorkflow()
+```
+
+```{r example 5 render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflow5$reportFileName)
+```
+
+The output report for Example 5 is shown below. 
+For the population, BoxWhisker plots in linear and log scales are.
+
+```{r example 5 report, echo=FALSE}
+htmltools::includeHTML(sub(".md", ".html", workflow5$reportFileName))
+```
+
+```{r delete example 5, inlcude = FALSE, echo=FALSE}
+# Remove the workflow folders
+unlink(workflow5$workflowFolder, recursive = TRUE)
+```
+
+## Example 6
+
+Example 6 shows pk parameters for a population workflow.
+In this example, 2 population-simulation pairs are now used.
+Consequently, the workflow type needs to be a parallel comparison (no reference population).
+
+```{r example 6}
+# Get the pkml simulation file: "MiniModel2.pkml"
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
+populationFile500 <- system.file("extdata", "Pop500_p1p2p3.csv",
+  package = "ospsuite.reportingengine"
+)
+populationFile200 <- system.file("extdata", "Pop200_p1p2p3.csv",
+  package = "ospsuite.reportingengine"
+)
+
+updatePKParameter("C_max", 
+                  displayName = "Cmax")
+updatePKParameter("AUC_tEnd", 
+                  displayName = "AUC")
+
+# Define the input parameters
+outputA <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "A",
+  pkParameters = c("C_max", "AUC_tEnd")
+)
+
+set500 <- PopulationSimulationSet$new(
+  simulationSetName = "500 individuals",
+  simulationFile = simulationFile,
+  populationFile = populationFile500,
+  outputs = outputA
+)
+set200 <- PopulationSimulationSet$new(
+  simulationSetName = "200 individuals",
+  simulationFile = simulationFile,
+  populationFile = populationFile200,
+  outputs = outputA
+)
+
+# Create the workflow instance
+workflow6 <-
+  PopulationWorkflow$new(
+    simulationSets = c(set500, set200),
+    workflowFolder = "Example-6"
+  )
+
+# Set the workflow tasks to be run
+workflow6$activateTasks(c("simulatePopulation", 
+                          "populationPKParameters", 
+                          "plotPKParameters"))
+
+# Run the workflow
+workflow6$runWorkflow()
+```
+
+```{r example 6 render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflow6$reportFileName)
+```
+
+The output report for Example 6 is shown below. 
+For the population, BoxWhisker plots in linear and log scales are.
+
+```{r example 6 report, echo=FALSE}
+htmltools::includeHTML(sub(".md", ".html", workflow6$reportFileName))
+```
+
+## Example 7
+
+Example 7 is the same as the previous example, only this time a ratio type population workflow is performed.
+As a consequence, the workflow type was specified when creating the workflow instance.
+In this workflow type, a __reference population__ is needed.
+Since the workflows can re-use the results from the previous PK analysis, only the plot task needs to be re-run.
+
+```{r example 7}
+# Get the pkml simulation file: "MiniModel2.pkml"
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
+populationFile500 <- system.file("extdata", "Pop500_p1p2p3.csv",
+  package = "ospsuite.reportingengine"
+)
+populationFile200 <- system.file("extdata", "Pop200_p1p2p3.csv",
+  package = "ospsuite.reportingengine"
+)
+
+updatePKParameter("C_max", 
+                  displayName = "Cmax")
+updatePKParameter("AUC_tEnd", 
+                  displayName = "AUC")
+
+# Define the input parameters
+outputA <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "A",
+  pkParameters = c("C_max", "AUC_tEnd")
+)
+
+set500 <- PopulationSimulationSet$new(
+  referencePopulation = TRUE,
+  simulationSetName = "500 individuals",
+  simulationFile = simulationFile,
+  populationFile = populationFile500,
+  outputs = outputA
+)
+set200 <- PopulationSimulationSet$new(
+  simulationSetName = "200 individuals",
+  simulationFile = simulationFile,
+  populationFile = populationFile200,
+  outputs = outputA
+)
+
+
+# Create the workflow instance
+workflow7 <-
+  PopulationWorkflow$new(
+    workflowType = PopulationWorkflowTypes$ratioComparison,
+    simulationSets = c(set500, set200),
+    workflowFolder = "Example-6"
+  )
+
+# Set the workflow tasks to be run
+workflow7$inactivateTasks()
+workflow7$activateTasks("plotPKParameters")
+
+# Run the workflow
+workflow7$runWorkflow()
+```
+
+```{r example 7 render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflow7$reportFileName)
+```
+
+The output report for Example 7 is shown below. 
+
+```{r example 7 report, echo=FALSE}
+htmltools::includeHTML(sub(".md", ".html", workflow7$reportFileName))
+```
+
+## Example 8
+
+Example 8 is the same as the 2 previous examples, this time a pediatric type population workflow is performed.
+As a consequence, the workflow type was specified when creating the workflow instance.
+In this workflow type, a __reference population__ is needed.
+In the test population, age and body weight are not population parameters only *p1*, *p2* and *p3*, as a consequence, *p3* was used in the x-axis in the range plots.
+These parameters will be used instead of age for the range plots.
+Since the workflows can re-use the results from the previous PK analysis, only the plot task needs to be re-run.
+
+```{r example 8}
+# Get the pkml simulation file: "MiniModel2.pkml"
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
+populationFile500 <- system.file("extdata", "Pop500_p1p2p3.csv",
+  package = "ospsuite.reportingengine"
+)
+populationFile200 <- system.file("extdata", "Pop200_p1p2p3.csv",
+  package = "ospsuite.reportingengine"
+)
+
+updatePKParameter("C_max", 
+                  displayName = "Cmax")
+updatePKParameter("AUC_tEnd", 
+                  displayName = "AUC")
+
+# Define the input parameters
+outputA <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "A",
+  pkParameters = c("C_max", "AUC_tEnd")
+)
+
+set500 <- PopulationSimulationSet$new(
+  referencePopulation = TRUE,
+  simulationSetName = "500 individuals",
+  simulationFile = simulationFile,
+  populationFile = populationFile500,
+  outputs = outputA
+)
+set200 <- PopulationSimulationSet$new(
+  simulationSetName = "200 individuals",
+  simulationFile = simulationFile,
+  populationFile = populationFile200,
+  outputs = outputA
+)
+
+
+# Create the workflow instance
+workflow8 <-
+  PopulationWorkflow$new(
+    workflowType = PopulationWorkflowTypes$pediatric,
+    simulationSets = c(set500, set200),
+    workflowFolder = "Example-6"
+  )
+
+# Set the workflow tasks to be run
+workflow8$inactivateTasks()
+workflow8$activateTasks("plotPKParameters")
+
+setXParametersForPkParametersPlot(workflow8, "Organism|p3")
+
+# Run the workflow
+workflow8$runWorkflow()
+```
+
+```{r example 8 render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflow8$reportFileName)
+```
+
+The output report for Example 8 is shown below. 
+
+```{r example 8 report, echo=FALSE}
+htmltools::includeHTML(sub(".md", ".html", workflow8$reportFileName))
+```
+
+```{r delete example 8, inlcude = FALSE, echo=FALSE}
+# Remove the workflow folders
+unlink(workflow8$workflowFolder, recursive = TRUE)
+```
