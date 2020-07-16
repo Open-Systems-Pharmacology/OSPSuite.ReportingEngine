@@ -218,7 +218,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
   lloqData <- NULL
   residualsData <- NULL
   residualsMetaData <- NULL
-  residuals <- list()
+  residuals <- NULL
   goodnessOfFitPlots <- list()
   goodnessOfFitCaptions <- list()
   goodnessOfFitResiduals <- list()

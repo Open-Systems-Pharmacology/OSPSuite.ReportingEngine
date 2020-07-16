@@ -1,5 +1,5 @@
 ---
-title: "Introduction to Reporting engine and its instances"
+title: "Introduction to Reporting Engine and its instances"
 output: 
   rmarkdown::html_vignette:
     number_sections: true
@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r vignette setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -17,64 +17,136 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(ospsuite.reportingengine)
-library(ospsuite)
+require(ospsuite.reportingengine)
 ```
 
 This vignette introduces the notions and instances implemented in the OSP-Suite Reporting Engine package (`ospsuite.reportingengine`).
 
 # Introduction
 
-The `ospsuite.reportingengine` package aims at facilitating the design and build of reports evaluating PBPK models developed on PK-Sim.
-To this end, `Workflow` instances have been developed.
-`Workflow` instances are R objects that can run evaluation tasks for which they will save the output results in an organized structure and in a report.
+The `ospsuite.reportingengine` package aims at facilitating the design and build of reports evaluating PBPK models developed on PK-Sim or/and Mobi.
+To this end, the concept of workflow implemented in the Matlab version of the reporting engine has been kept in R.
+
+In the `ospsuite.reportingengine` package, `Workflow` instances can be created, they provide a structure that uses input parameters and generates outputs like figures, tables and reports.
+The input parameters can be defined using `SimulationSet` and `Output` instances (defined in more details in section __3__).
+The input parameters are then used in `Task` instances (defined in more details in section __4__) already included within the `Workflow` instances.
+
+## General scheme
+
+An example of workflow script is provided below for reporting a time profile plot on *Minimodel2.pkml*.
+The results of this script are also provided.
+
+```{r general scheme}
+# Get the pkml simulation file: "MiniModel2.pkml"
+simulationFile <- system.file("extdata", "MiniModel2.pkml", 
+                              package = "ospsuite.reportingengine")
+
+# Define the input parameters
+outputA <- Output$new(
+    path = "Organism|A|Concentration in container",
+    displayName = "Concentration of A")
+outputB <- Output$new(
+    path = "Organism|B|Concentration in container",
+    displayName = "Concentration of B")
+
+myExampleSet <- SimulationSet$new(
+  simulationSetName = "My example",
+  simulationFile = simulationFile,
+  outputs = c(outputA, outputB)
+)
+
+# Create the workflow instance
+myExampleWorkflow <- 
+  MeanModelWorkflow$new(simulationSets = myExampleSet, 
+                        workflowFolder = "myExample-Results")
+
+# Set the workflow tasks to be run
+myExampleWorkflow$activateTasks(c("simulate", "plotGoF"))
+
+# Run the workflow
+myExampleWorkflow$runWorkflow()
+```
+
+For this example, the list of files and folders generared by the workflow are:
+```{r general scheme files}
+list.files(myExampleWorkflow$workflowFolder)
+```
+
+```{r general scheme render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(myExampleWorkflow$reportFileName)
+```
+
+The associated report will be as follows:
+```{r general scheme report, echo=FALSE}
+htmltools::includeHTML(sub(".md", ".html", myExampleWorkflow$reportFileName))
+```
+
+```{r delete general scheme, inlcude = FALSE, echo=FALSE}
+# Remove the workflow folders
+unlink(myExampleWorkflow$workflowFolder, recursive = TRUE)
+```
 
 ## Nomenclature
 
-```{r, echo=FALSE, results='asis'}
+Table 1 defines some of the main instances of the `ospsuite.reportingengine` package usually defined by users during the design of a workflow. The classes of these instances and the parent classes they are derived from are also indicated.
+All of these instances derive from the `R6` class, consequently creating them requires the call of the method `$new()` (e.g. `MeanModelWorkflow$new()`)
+
+```{r table 1, echo=FALSE, results='asis'}
 nomenclatureTable <- data.frame("Name of R object" = c("MeanModelWorkflow",
                                                        "PopulationWorkflow",
                                                        "SimulationSet",
                                                        "PopulationSimulationSet",
+                                                       "Output",
                                                        "Task",
                                                        "SimulationTask",
-                                                       "PlotTask"),
+                                                       "PlotTask",
+                                                       "GofPlotTask",
+                                                       "PopulationPlotTask"),
                                 "Object class tree" = c(paste0(c("R6", "Workflow","MeanModelWorkflow"), collapse =" > "),
                                                         paste0(c("R6", "Workflow","PopulationWorkflow"), collapse=" > "),
                                                         paste0(c("R6", "SimulationSet"), collapse=" > "),
                                                         paste0(c("R6", "SimulationSet", "PopulationSimulationSet"), collapse=" > "),
+                                                        paste0(c("R6", "Output"), collapse=" > "),
                                                         paste0(c("R6", "Task"), collapse=" > "),
                                                         paste0(c("R6", "Task", "SimulationTask"), collapse=" > "),
-                                                        paste0(c("R6", "Task", "PlotTask"), collapse=" > ")),
+                                                        paste0(c("R6", "Task", "PlotTask"), collapse=" > "),
+                                                        paste0(c("R6", "Task", "PlotTask", "GofPlotTask"), collapse=" > "),
+                                                        paste0(c("R6", "Task", "PlotTask", "PopulationPlotTask"), collapse=" > ")),
                                 "Definition" = c("Object that runs tasks on simulation sets dedicated to mean models",
                                                  "Object that runs tasks on simulation sets dedicated to population models",
                                                  "Object with information on the simulation and observation to be evaluated",
                                                  "Object with information on the simulation, population and observation to be evaluated",
-                                                 "Object with evaluation, plot, table or report to be performed",
-                                                 "Object with evaluation to be performed and saved",
-                                                 "Object with plot or table to be performed and saved"),
+                                                 "Object with information on the simulation output path and observation to be evaluated",
+                                                 "Object with evaluations to be performed and saved",
+                                                 "Object with evaluations to be performed and saved specific to model simulations",
+                                                 "Object with evaluations to be performed and saved specific to plots and tables to report",
+                                                 "Object with evaluations to be performed and saved specific to plots and tables of goodness of fit to report",
+                                                 "Object with evaluations across simulations to be performed and saved specific to plots and tables to report"),
                                 check.names = FALSE)
-knitr::kable(nomenclatureTable)
+knitr::kable(nomenclatureTable, caption = 'Table 1: Nomenclature of `ospsuite.reportingengine` main instances')
 ```
 
-# `Workflow`
+# Workflow
 
-The `Workflow` objects manage 2 other R objects: `Task`s and `SimulationSet`s.
+`Workflow` objects are central in the Reporting Engine as they summarize which evaluations are performed and how they are reported.
+As illustrated in the example from section __1.1__,  `Workflow` objects manage directly 2 other R instances: `SimulationSet` and `Task` objects.
+`Workflow` objects also require an output folder, `workflowFolder` to be provided in order to be created.
+This folder is where all the generated outputs will be saved and stored.
 
-`Task`s are R objects that correspond to the evaluations, plots and tables to be performed, saved and/or reported.
-Each active `Task` will be performed on a series of `SimulationSet`s.
+`Task` objects are R instances that correspond to the evaluations, plots and tables to be performed, saved and/or reported (see section XXX for more details on `Task`).
+Each active `Task` will be performed on a series of `SimulationSet` objects.
 
-A `SimulationSet` is an R object that includes the model to be evaluated as the name of the PK-Sim file (.pkml).
-A `SimulationSet` can optionally include observed data and a population file in the case of tin which the PK-Sim model
+`SimulationSet` objects are R objects that summarize the workflow input parameters, they include the model(s) to be evaluated (see section __3__ for more details on `SimulationSet`).
+A `SimulationSet` can optionally include observed data and a population file.
 
-In `ospsuite.reportingengine`, two types of `Workflow` can be implemented:
+In the `ospsuite.reportingengine` package, two types of `Workflow` are available and can be created:
 
-1) `MeanModelWorkflow` dedicated on mean models
-2) `PopulationWorkflow` dedicated on population models
+1) `MeanModelWorkflow` dedicated on evaluations specific to mean models
+2) `PopulationWorkflow` dedicated on evaluations specific to population models
 
-These `Workflow` objects differ mainly by what their tasks will perform and by the presence of a population file.
-
-## `MeanModelWorkflow`
+## MeanModelWorkflow
 
 The process included in `MeanModelWorkflow` can be illustrated by Figure 1.
 
@@ -87,11 +159,11 @@ These tasks are defined through the R object `Task`.
 These objects do not have to be instanciated by the user are they are created directly by the `Worklfow` object.
 The user will only have to switch them on/off and update their settings if necessary.
 
-```{r, out.width="100%", include=TRUE, fig.align="center", fig.cap= "Figure 1: Mean model workflow inputs and tasks", echo=FALSE}
-    knitr::include_graphics("../data/mean-model-workflow-input-and-tasks.png")
+```{r figure 1, out.width="100%", include=TRUE, fig.align="center", fig.cap= "Figure 1: Mean model workflow inputs and tasks", echo=FALSE}
+    knitr::include_graphics(system.file("extdata", "mean-model-workflow-input-and-tasks.png", package = "ospsuite.reportingengine"))
 ```
 
-## `PopulationWorkflow`
+## PopulationWorkflow
 
 The process included in `PopulationWorkflow` can be illustrated by Figure 2.
 
@@ -104,13 +176,27 @@ These tasks are defined through the R object `Task`.
 These objects do not have to be instanciated by the user are they are created directly by the `Worklfow` object.
 The user will only have to switch them on/off and update their settings if necessary.
 
-```{r, out.width="100%", include=TRUE, fig.align="center", fig.cap= "Figure 2: Population workflow inputs and tasks", echo=FALSE}
-    knitr::include_graphics("../data/population-workflow-input-and-tasks.png")
+In a population workflow, some tasks can compare different simulations or population, such plots of Demography or PK parameters.
+There exist different types of a population workflow
+
+1) __Pediatric__
+   - All properties (physiology and PK Parameter) are plotted vs. age and weight,
+   - The time profiles are plotted in comparison to a reference population the sensitivity analysis is done on all populations except the reference population
+2) __Parallel Comparison__
+   - PK parameter are plotted parallel in Box-Whisker plots without a reference population,
+   - If a reference population is given, the time profiles are plotted in comparison to this population
+   - The sensitivity analysis is done on all populations
+3) __Ratio Comparison__
+   - Same as parallelComparison, but for the PK Parameter additional the ratio of the PK Parameter to the reference population is calculated and plotted in BoxWhisker plots 
+
+
+```{r figure 2, out.width="100%", include=TRUE, fig.align="center", fig.cap= "Figure 2: Population workflow inputs and tasks", echo=FALSE}
+    knitr::include_graphics(system.file("extdata", "population-workflow-input-and-tasks.png", package = "ospsuite.reportingengine"))
 ```
 
-## `Workflow` initialization
+## Creation of a Workflow
 
-To initialize a `MeanModelWorkflow` or a `PopulationWorkflow` object, the method `$new()` needs to be used as follow:
+To create a `MeanModelWorkflow` or a `PopulationWorkflow` object, the method `$new()` needs to be used as follow:
 
 - For mean model workflows: 
 ```
@@ -118,142 +204,265 @@ myWorkflow <- MeanModelWorkflow$new(simulationSets, workflowFolder)
 ```
 - For population workflows: 
 ```
-myWorkflow <- PopulationWorkflow$new(simulationSets, workflowFolder)
+myWorkflow <- 
+PopulationWorkflow$new(workflowType, simulationSets, workflowFolder)
 ```
 
 where `simulationSets` is a list of `SimulationSet` objects for mean models, and a list of `PopulationSimulationSet` objects for population models.
 These objects will be further discussed in the next section.
 
-`workflowFolder` is a the name of the folder in which the results of the workflow evaluations will be saved.
-When initializing the workflow instance, the existence of the directory named `workflowFolder` will be checked.
-If the directory does not exist, `Workflow` will create such a directory for saving all its evaluation.
-If the directory does exist, `Workflow` will send a warning message to the user, since it may use and overwrite any existing files within the directory.
+`workflowFolder` is the name of the folder in which the workflow outputs are saved.
+As illustrated in Figures 1 and 2, some tasks can use the outputs obtained from previous tasks.
+If the directory specified in `workflowFolder` contains such outputs, they will be used by the current workflow.
 This latter option can be useful for updating and running only a parts of the workflow without having to perform all the simulations every time.
 
+The input `workflowType` is one of the 3 population workflow types defined in section __2.2__.
+
 # Simulation sets
-As workflows can evaluate multiple simulations, populations and datasets, a `MeanModelWorkflow` and `PopulationWorkflow` initializations requires a list of variables of class `SimulationSet` and `PopulationSimulationSet`, respectively.
 
-`SimulationSet` is a class that encapsulates the information necessary to perform the workflow tasks.
-`SimulationSet` variable is initialized using the method: 
-```{r, eval=FALSE, echo=TRUE}
-SimulationSet$new(simulationSetName = NULL,
-                              simulationFile,
-                              simulationName = NULL,
-                              pathID = NULL,
-                              pathName = NULL,
-                              pathUnit = NULL,
-                              pkParameters = enum(ospsuite::allPKParameterNames()),
-                              pkParametersNames = NULL,
-                              pkParametersUnits = NULL,
-                              observedDataFile = NULL,
-                              observedMetaDataFile = NULL,
-                              dataFilter = NULL,
-                              dataReportName = NULL,
-                              timeUnit = "h")
+As workflows can evaluate multiple simulations, populations and datasets, 
+the creation of `MeanModelWorkflow` and `PopulationWorkflow` requires input parameters summarized in `SimulationSet` and `PopulationSimulationSet` objects, respectively.
+
+Below is the synthax for creating such simulation sets, the next sub-sections will provide more details on each input:
+
+__Simulation Set__
+```
+SimulationSet$new(
+  simulationSetName, 
+  simulationFile, 
+  simulationName, 
+  outputs,
+  observedDataFile,
+  observedMetaDataFile,
+  dataReportName,
+  dataSelection
+)
 ```
 
-## Simulation file and name
-
-This method only require the path of the simulation file `simulationFile` (e.g. *mySimulation.pkml*).
-`simulationName` and `simulationSetName` are  display names that will be used in the naming of output evaluations and sections of the report.
-
-## Path
-
-`pathID` corresponds to the path name within the simulation (e.g. *Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)*) and which will be evaluted in the goodness of fit and pk analyses tasks.
-`pathName`, `pathUnit` and `timeUnit` are the display names and units that will be used in the naming of output evaluations and sections of the report. 
-
-## PK paramaters
-
-`pkParameters` are the names of the PK parameters to be analyzed (e.g. *C_max*).
-`pkParametersNames` and `pkParametersUnits` are the display names and units that will be used in the naming of output evaluations and sections of the report. 
-
-This input definition for PK parameters will soon be replaced by the instances of PK-Parameters directly.
-
-## Data
-
-Data and their dictionary are expected to be saved in csv or txt files.
-Consequently, if data are available the input `observedDataFile` and `observedMetaDataFile` are required.
-`observedDataFile` is the path of the data file. The data file is expected to be following a Nonmem format (e.g. *myDataset.csv* or *myDataset.txt*).
-`observedMetaDataFile` is the path of the metaData file or dictionary which contains information on the data as well as the mapping of the data variables (which column is *ID*, *Time*, *DV*).
-`dataReportName` is the  display name that will be used in the naming of output evaluations and sections of the report.
-
-Usually, the all the data is included into one file which needs to be filtered.
-The variable `dataFilter` can be either characters or an expression that will be evaluated within the context of the data.
-For instance, if the data contains a column named *Grouping* to which only group *A* should be used for the evaluation, the input `dataFilter = 'Grouping %in% "A"'` or `dataFilter = parse(text = 'Grouping %in% "A")'` will be evaluated.
-
-## Population file and name
-
-In the case of a population workflow, the child class `PopulationSimulationSet` should be prefered to `SimulationSet`.
-It requires the input of a population file on which the simulation will be performed (e.g. *myPopulation.csv*).
-`populationName` is the display name that will be used in the naming of output evaluations and sections of the report.
-If no `simulationSetName` is input, `populationName`-`simulationName` will be used for naming the output.
-
-```{r, eval=FALSE, echo=TRUE}
-PopulationSimulationSet$new(...,
-                            populationFile,
-                            populationName = NULL)
+__Population Simulation Set__
+```
+PopulationSimulationSet$new(
+  referencePopulation,
+  simulationSetName, 
+  simulationFile, 
+  simulationName,
+  populationFile,
+  populationName,
+  studyDesignFile, 
+  outputs, 
+  observedDataFile,
+  observedMetaDataFile,
+  dataReportName,
+  dataSelection
+)
 ```
 
-# `Task` objects
+## Simulation file
+
+A simulation file, `simulationFile` is an export of a simulation from MoBi or PK-SIM in pkml format.
+Display names for the simulation and the simulation set can be provided using `simulationName` and `simulationSetName`.
+
+## Population file
+
+A population file, `populationFile`, is collection of parameter paths and parameter values normally an export of a population from PK-SIM in csv format.
+It is also possible to use an M&S activity-specific population file, which has the “PKSIM” format, but was manipulated after the export from PK-SIM or was generated outside of PK-Sim. The generation of the population file than has to be validated.
+Display names for the population can be provided using `populationName`.
+
+### Study Design file
+
+The study design file, `studyDesignFile`, contains additional information on the study design, e.g. a body weight dependent dose in a pediatric study.
+A regular csv format is expected for such a file.
+
+The example below shows a template of such a study design content.
+
+```{r study design file, include=FALSE, echo=FALSE}
+studyDesignFile <- system.file("extdata", "StudyDesign.csv", package = "ospsuite.reportingengine")
+exampleStudyDesign <- readObservedDataFile(studyDesignFile)
+```
+
+```{r table 2, echo=FALSE, results='asis'}
+knitr::kable(exampleStudyDesign, caption = 'Table 2: Example of study design content')
+```
+
+## Format of data files
+
+__If your workflow uses data, you have to provide two files__:
+one file containing the data in the Nonmem format, `observedDataFile`, and a dictionary file, `observedMetaDataFile`, which documents the content of the data file.
+Display names for the data can be provided using `dataReportName`.
+
+### Data file
+
+The Nonmem file can be a blank separated text file or a csv file, column headers are used later on as R variable names, and they must not contain special letters like blanks.
+All data columns used for figures and tables, have to be numerical and listed in the dictionary file (details in section __3.3.2__).
+For data filtering, these columns and additional ones can be used, the additional columns may also contain strings. 
+But be careful that these strings do not contain the column separator blank. 
+A column must be either numerical or of type string, they must not contain both. 
+
+### Dictionary file
+
+```{r dictionary file, include=FALSE, echo=FALSE}
+dictionaryFile <- system.file("extdata", "tpDictionary.csv", package = "ospsuite.reportingengine")
+exampleDictionary <- readObservedDataFile(dictionaryFile)
+```
+
+The dictionary is a csv file mapping the data file.
+Unlike the Matlab version of the reporting engine, a regular csv with a comma (",") as separator is expected.
+
+The dictinary file must contain the following variables: `r paste0("'", paste0(names(exampleDictionary), collapse = "', '"), "'")`.
+For time profile plots, you have to provide '__time__' and '__dv__' in '__ID__'. 
+The variable '__lloq__', for lower limit of quantitation, can also be provided but is not necessary.
+
+The example below shows a template of a dictionary content.
+
+```{r table 3, echo=FALSE, results='asis'}
+knitr::kable(exampleDictionary, caption= 'Table 3: Template for data dictionary')
+```
+
+## Outputs
+
+An `Output` object defines simulation paths and can define associated PK parameters and observed data.
+Below is the synthax for creating such `Output` objects, the next sub-sections will provide more details on each input:
+
+__Output__
+```
+Output$new(
+  path,
+  displayName,
+  displayUnit,
+  dataSelection,
+  dataDisplayName,
+  pkParameters
+)
+```
+
+### Path
+
+The input variable `path` indicates the path name within a simulation (e.g. '*Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)*') that needs to be included in the simulation run.
+Display name and unit for this path can be provided using `displayName` and `displayUnit`.
+
+### Data selection
+
+For tasks such as goodness of fit, observed data can be used.
+Usually, the data is included into one unique Nonmem data file which needs to be filtered and associated to the correct `path`.
+
+The input variable `dataSelection` provides a filter for the Nonmem data file.
+It must be R readable code, using the Nonmem headers as variable names (e.g. '*SID>0*' or '*AGE<12 & SEX==1*').
+
+- By default, `dataSelection` = '__NONE__'. Consequently, no data is selected and no evaluation is performed.
+- If you want to use all, you can include the filter `dataSelection` = '__ALL__'.
+
+### PK parameters
+
+The input `pkParameters` indicates the `path` related PK parameters that the user wants to include in his analysis.
+A list of pk parameter names can be directly provided to this input (e.g. *c('C_max', 'AUC_inf')*).
+Display names and display units will be used as is from the PK parameter objects defined using the `ospsuite` package.
+
+In the case different display names or/and units are needed between the same PK parameters but from different paths, it is also possible to use `PkParameterInfo` instances instead of pk parameter names directly.
+```
+PkParameterInfo$new(
+  pkParameter,
+  displayName, 
+  displayUnit
+)
+```
+
+However, in the case the same display names and units are used, 
+the better practice is to define or update the PK parameters, their display names and units beforehand with the `ospsuite` package,
+then to provide direclty the list of their names to the input `pkParameters`.
+
+- Updating PK parameters, their display names and units can be done directly with: __updatePKParameter()__.
+- Users can also create their own PK parameters using: __addUserDefinedPKParameter()__.
+
+# Task objects
 
 As illustrated in Figures 1 and 2, workflows can perform tasks on a list of simulation sets.
 Some of these tasks are not necessarily run or can use the output results from other tasks run in previous workflows.
 
-Any `Workflow` defines a list of `Task` objects when initialized.
-Each `Task` is using a similar and common structure: `outputFolder`, `active`, `message` and `settings`.
-The `Task` method `print()` shows this structure features.
+When they are created, `Workflow` objects will directly include a list of `Task` objects.
+To know which tasks your workflow can perform, the workflow method __getAllTasks()__ can be used. 
+The workflow methods __getActiveTasks()__ and __getInactiveTasks()__ provide the list of active and inactive tasks of the workflow, respectively.
 
-The workflow methods `getAllTasks()`, `getActiveTasks()` and `getInactiveTasks()` provide the list of all available, active and inactive tasks of the workflow, respectively.
+Using the example from section __1.1__, this gives on a mean model workflow:
+```{r mean model tasks}
+# All workflow's tasks
+myExampleWorkflow$getAllTasks()
 
-The tasks can be activated/inactivated using the workflow methods `activateTasks(tasks = self$getAllTasks())` and `inactivateTasks(tasks = self$getAllTasks())`.
+# Only active tasks that are run
+myExampleWorkflow$getActiveTasks()
 
-`Workflow` has also a `print()` method which calls the `print()` methods from each of its tasks.
-
-The following example shows how tasks are implemented as R objects of a `MeanModelWorkflow` implemented in the variable *myWorkflow*.
-
-```{r, include = FALSE}
-simSets <- list(SimulationSet$new(simulationFile = "test.pkml",simulationSetName = "testSimulationSet"))
-myWorkflow <- MeanModelWorkflow$new(simulationSets = simSets,
-                                    workflowFolder = "myFolder")
+# Only inactive tasks that are not run
+myExampleWorkflow$getInactiveTasks()
 ```
 
-The following chunk prints the name of all the available tasks in *myWorkflow*, and only then only the active tasks.
-```{r}
-myWorkflow$getAllTasks()
-myWorkflow$getActiveTasks()
+To activate or inactivate tasks, you can use respectively the workflow methods __activateTasks()__ and __inactivateTasks()__. 
+By default, all the tasks will be activated or inactivated when using the method.
+
+```{r mean model activate tasks}
+# Inactivate all tasks
+myExampleWorkflow$inactivateTasks()
+myExampleWorkflow$getActiveTasks()
+
+# Activate only tasks "simulate" and "plotGoF" tasks
+myExampleWorkflow$activateTasks(c("simulate", "plotGoF"))
+myExampleWorkflow$getActiveTasks()
 ```
 
-Only the task named `simulate` is active. The method `$print()` shows more details about the task features.
-```{r}
-myWorkflow$simulate$print()
-```
+It is possible to modify the settings of the tasks, especially for tasks generating figures 
+(e.g plot scales, inclusion of specific demography parameters ...)
+Task details will be provided in dedicated vignettes.
 
-It means that if *myWorkflow* is run, only the simulation of the model will be performed.
-Besides, the output results of the workflow task will be saved in the subfolder `r myWorkflow$simulate$outputFolder` within the workflow folder defined by `workflowFolder`.
+# Workflow outputs
 
-The following chunk add a new task for goodness of fit to *myWorkflow*.
-```{r}
-myWorkflow$plotGoF$print()
-myWorkflow$activateTasks(tasks = "plotGoF")
-myWorkflow$getActiveTasks()
-```
+Once the workflow and its settings have been defined, the workflow method __$runWorkflow()__ will run all the active tasks and generate all the associated results and report.
+The following outputs, will be generated in `workflowFolder` directory: logs, results directories and reports.
 
-```{r, echo=FALSE}
-unlink("myFolder", recursive = TRUE)
-```
+## Logs
+ 
+Three types of logs can be generated during the creation, design and run of a workflow: 
+ 
+- __log-info.txt__ which contains information like starting time and version numbers of the used software
+- __log-error.txt__ which contains all errors and warnings that occurred during the execution
+- __log-debug.txt__ which contains information useful for debugging purpose.
 
-# Outputs
+## Result directories
 
-Once the workflow and its settings have been defined, the workflow method `runWorkflow()` will run all the active tasks and generate all the associated results and report.
-The output results will follow the structure defined in Figure 3:
+Each task will save its results in a dedicated directory. 
+The names of the results directory are as follow:
 
-```{r, out.width="100%", include=TRUE, fig.align="center", fig.cap= "Figure3: Mean model workflow output structure", echo=FALSE}
-    knitr::include_graphics("../data/mean-model-workflow-structure.png")
-```
+- __SimulationResults__ which contains the results of simulation runs, obtained from `simulate` task, as csv files.
+It is possible to load the results using the `ospsuite` method __importResultsFromCSV()__.
+- __PKAnalysisResults__ which contains the results of PK analysis runs, obtained from `calculatePKParameters` task, as csv files.
+It is possible to load the results using the `ospsuite` method __importPKAnalysesFromCSV()__.
+- __SensitivityResults__ which contains the results of sensitivity analysis runs, obtained from `sensitivityAnalysis` task, as csv files.
+It is possible to load the results using the `ospsuite` method __importSensitivityAnalysisResultsFromCSV()__.
+- __TimeProfiles__ which contains the figures obtained from `plotGoF` task and their source values as png and csv files.
+- __PKAnalysis__ which contains the figures and tables obtained from `plotPKParameters` task and their source values as png and csv files.
+- __Sensitivity__ which contains the figures obtained from `plotSensitivity` task and their source values as png and csv files.
+- __MassBalance__ which contains the figures and tables obtained from `plotMassBalance` task and their source values as png and csv files.
+This directory is specific of mean model workflows.
+- __Absorption__ which contains the figures and tables obtained from `plotAbsorption` task and their source values as png and csv files. 
+This directory is specific of mean model workflows.
+- __Demography__ which contains the figures and tables obtained from `plotDemography` task and their source values as png and csv files.
+This directory is specific of population model workflows.
 
-From the figure, it can be noticed that log files are created during the process:
+Default figure format is png, but it is possible to change this default using __setPlotFormat()__.
 
-- `log-info.txt`: save relevant messages from the workflow
-- `log-error.txt`: save warnings and errors messages
-- `log-debug.txt`: save most of messages which can be accessed for debugging purpose.
+## Reports and appendices
 
+Each plot task will save an appendix file besides its results as a markdown format report.
+These appendices are saved directly within the `workflowFolder` directory results directory with the following names:
+
+- __appendix-time-profile.md__ from `plotGoF` task.
+- __appendix-pk-parameters.md__ from `plotPKParameters` task.
+- __appendix-sensitivity-analysis.md__ from `plotSensitivity` task.
+- __appendix-mass-balance.md__ from `plotMassBalance` task.
+- __appendix-absorption.md__ from `plotAbsorption` task.
+- __appendix-demography.md__ from `plotDemography` task.
+
+At the end of the workflow run, all the avaiable appendices are combined into final reports:
+
+- __Report.md__ which contains the markdown version of the report, including a table of content and numbering the figures and tables.
+- __Report-word.md__ which contains a markdown version of the report to be translated by *pandoc* for generating the word report.
+- __Report.docx__ which contains the word version of the report, including a table of content and numbering the figures and tables.
+
+The option `createWordReport` is set to __TRUE__ as default, but can be set to __FALSE__ to prevent the conversion of __Report-word.md__ into __Report.docx__ using *pandoc* .
