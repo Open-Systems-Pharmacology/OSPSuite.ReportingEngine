@@ -29,7 +29,7 @@ Depending on the workflow type, different plots and tables can be obtained.
 
 ## Inputs
 
-Results obtained from the `calculatePKParameters` task and stored as csv files within the subdirectory __PKAnalysisResults__ from the `workflowFolder` directory are required in order to perform the goodness of fit (`plotPKParameters`) task.
+Results obtained from the `calculatePKParameters` task and stored as csv files within the subdirectory __PKAnalysisResults__ from the `workflowFolder` directory are required in order to perform the PK parameters (`plotPKParameters`) task.
 As a consequence, if the workflow output folder does not include the appropriate simulations, the task `calculatePKParameters` needs to be __active__.
 
 The objects `SimulationSet` (or `PopulationSimulationSet` for population workflows) and `Output` define which and how the simulated PK parameters will be reported.
