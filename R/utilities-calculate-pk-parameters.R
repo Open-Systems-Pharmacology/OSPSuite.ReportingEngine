@@ -343,7 +343,7 @@ plotPopulationPKParameters <- function(structureSets,
         )
 
         pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel)]] <- getPkParametersCaptions("ratioPlot", output$displayName, pkParameterMetaData[["Value"]])
-        ParametersCaptions[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- getPkParametersCaptions("ratioPlot", output$displayName, pkParameterMetaData[["Value"]], plotScale = "log")
+        pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- getPkParametersCaptions("ratioPlot", output$displayName, pkParameterMetaData[["Value"]], plotScale = "log")
 
         pkParametersTables[[paste0(pathLabel, "-", yParameterLabel, "-ratio")]] <- pkRatiosTable
       }
