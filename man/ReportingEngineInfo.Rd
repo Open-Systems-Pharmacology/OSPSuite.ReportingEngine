@@ -18,6 +18,7 @@ R6 class representing system information for Reporting Engine
 \itemize{
 \item \href{#method-new}{\code{ReportingEngineInfo$new()}}
 \item \href{#method-print}{\code{ReportingEngineInfo$print()}}
+\item \href{#method-isValidated}{\code{ReportingEngineInfo$isValidated()}}
 \item \href{#method-clone}{\code{ReportingEngineInfo$clone()}}
 }
 }
@@ -43,6 +44,18 @@ Print system information
 
 \subsection{Returns}{
 A text with system information
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-isValidated"></a>}}
+\subsection{Method \code{isValidated()}}{
+Is the system validated
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ReportingEngineInfo$isValidated()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A logical reporting if the system is included in the validated systems
 }
 }
 \if{html}{\out{<hr>}}
