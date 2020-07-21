@@ -76,9 +76,10 @@ Workflow <- R6::R6Class(
 
       self$watermark <- ""
       if (!private$.reportingEngineInfo$isValidated()) {
-        self$watermark <- workflowWatermakMessage
+        self$watermark <- workflowWatermarkMessage
       }
       self$watermark <- watermark %||% self$watermark
+      setWatermarkConfiguration(watermark = self$watermark)
     },
 
     #' @description

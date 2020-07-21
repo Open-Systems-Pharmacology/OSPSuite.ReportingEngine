@@ -63,4 +63,14 @@ AggregationConfiguration <- list(
   )
 )
 
-workflowWatermakMessage <- "preliminary analysis"
+workflowWatermarkMessage <- "preliminary analysis"
+
+#' @title setWatermarkConfiguration
+#' @description Set default watermark configuration for current theme
+#' @param watermark character or \code{Label} class object from `tlf` package
+#' @export
+#' @import tlf
+setWatermarkConfiguration <- function(watermark = NULL){
+  tlf::setDefaultWatermark(watermark)
+}
+
