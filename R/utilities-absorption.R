@@ -23,6 +23,7 @@ plotMeanAbsorption <- function(structureSet,
   resultsByCompound <- list()
   absorptionPlots <- list()
   absorptionCaptions <- list()
+  absorptionTables <- list()
   for (compound in appliedMolecules) {
     fractionAbsorbedInVenousBloodPath <- paste0("Organism|VenousBlood|*|", compound$name)
     fractionAbsorbedInPortalVeinPath <- paste0("Organism|PortalVein|*|", compound$name)
@@ -173,16 +174,20 @@ plotMeanAbsorption <- function(structureSet,
     )
 
     absorptionCaptions[[result$compoundName]] <- paste0("Absorption of ", result$compoundName)
+    absorptionTables[[result$compoundName]] <- data.frame(
+      Time = simulationResultsOutput$data[, "Time"],
+      `Fraction dissolved` = simulationResultsOutput$data[, result$fractionDissolvedPath],
+      `Fraction absorbed to mucosa` = simulationResultsOutput$data[, result$fractionAbsorbedInMucosaPath],
+      `Fraction absorbed to portal vein` = fractionAbsorbedInPortalVein,
+      `Fraction absorbed to venous blood` = fractionAbsorbedInVenousBlood,
+      `Fraction excrected to feces` = simulationResultsOutput$data[, result$fractionExcretedPath],
+      check.names = FALSE
+    )
   }
-
-  timeProfiles <- lapply(resultsByCompound, function(result) {
-    result$timeProfile
-  })
-  names(timeProfiles) <- names(resultsByCompound)
 
   return(list(
     plots = absorptionPlots,
-    tables = timeProfiles,
+    tables = absorptionTables,
     captions = absorptionCaptions
   ))
 }
