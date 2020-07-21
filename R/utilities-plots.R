@@ -62,3 +62,5 @@ AggregationConfiguration <- list(
     range = "[5-95th] percentiles"
   )
 )
+
+workflowWatermakMessage <- "preliminary analysis"
