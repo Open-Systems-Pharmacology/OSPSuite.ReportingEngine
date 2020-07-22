@@ -41,12 +41,12 @@ plotDemographyParameters <- function(structureSets,
   checkIsIncluded(yParameters, names(demographyData), nullAllowed = TRUE, groupName = "population variables", logFolder = logFolder)
   xParameters <- intersect(xParameters, names(demographyData))
   yParameters <- intersect(yParameters, names(demographyData))
-
+  
   if (workflowType %in% PopulationWorkflowTypes$pediatric) {
     referencePopulationName <- getReferencePopulationName(structureSets)
   }
 
-  if (is.null(xParameters)) {
+  if (isOfLength(xParameters, 0)) {
     # Pediatric: comparison histogram
     if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
       for (parameterName in yParameters) {

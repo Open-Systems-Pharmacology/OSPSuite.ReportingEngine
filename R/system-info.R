@@ -1,5 +1,12 @@
 # System Information for Reporting Engine
 
+#' @title isValidatedSystem
+#' @description Check if environment variable is defined and as value \code{'prodrun'}
+#' @return logical assessing if system is validated
+isValidatedSystem <- function() {
+  return(Sys.getenv("VALIDATEDR_ENVIRONMENT") %in% "prodrun")
+}
+
 #' @title ReportingEngineInfo
 #' @description R6 class representing system information for Reporting Engine
 #' @field Date Date at which the class is initialized
@@ -22,19 +29,14 @@ ReportingEngineInfo <- R6::R6Class(
       private$.ospsuiteVersion <- info$ospsuiteVersion
       private$.reportingengineVersion <- info$reportingengineVersion
       private$.Rversion <- info$Rversion
-
-      # TO DO: define a list of validated systems that will use Reporting Engine
-      validatedSystems <- info$computerName
-      if (private$.computerName %in% validatedSystems) {
-        private$.isValidatedSystem <- TRUE
-      }
+      private$.isValidatedSystem <- isValidatedSystem()
     },
 
     #' @description
     #' Print system information
     #' @return A text with system information
     print = function() {
-      systemValidated <- "NOT"
+      systemValidated <- " NOT"
       if (private$.isValidatedSystem) {
         systemValidated <- ""
       }
@@ -45,7 +47,7 @@ ReportingEngineInfo <- R6::R6Class(
         sprintf("Computer Name: %s", private$.computerName),
         sprintf("User: %s", private$.userName),
         sprintf("Login: %s", private$.login),
-        sprintf("System is %s validated", systemValidated),
+        sprintf("System is%s validated", systemValidated),
         sprintf("System versions:"),
         sprintf("R version: %s", private$.Rversion),
         sprintf("OSP Suite Package version: %s", as.character(private$.ospsuiteVersion)),
@@ -54,6 +56,13 @@ ReportingEngineInfo <- R6::R6Class(
       )
       invisible(self)
       return(infoPrint)
+    },
+
+    #' @description
+    #' Is the system validated
+    #' @return A logical reporting if the system is included in the validated systems
+    isValidated = function() {
+      return(private$.isValidatedSystem)
     }
   ),
   private = list(

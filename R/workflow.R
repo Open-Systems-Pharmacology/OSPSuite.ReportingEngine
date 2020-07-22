@@ -5,6 +5,7 @@
 #' @field taskNames Enum of task names
 #' @field reportFileName name of the Rmd report file
 #' @field createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
+#' @field watermark displayed watermark in every plot background
 #' @import tlf
 #' @import ospsuite
 Workflow <- R6::R6Class(
@@ -15,19 +16,23 @@ Workflow <- R6::R6Class(
     taskNames = NULL,
     reportFileName = NULL,
     createWordReport = NULL,
+    watermark = NULL,
 
     #' @description
     #' Create a new `Workflow` object.
     #' @param simulationSets list of `SimulationSet` R6 class objects
     #' @param workflowFolder path of the output folder created or used by the Workflow.
     #' @param createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
+    #' @param watermark displayed watermark in every plot background
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
                               workflowFolder,
-                              createWordReport = TRUE) {
+                              createWordReport = TRUE,
+                              watermark = NULL) {
       private$.reportingEngineInfo <- ReportingEngineInfo$new()
 
       validateIsString(workflowFolder)
+      validateIsString(watermark, nullAllowed = TRUE)
       validateIsOfType(c(simulationSets), "SimulationSet")
       validateIsOfType(createWordReport, "logical")
       self$createWordReport <- createWordReport
@@ -68,6 +73,13 @@ Workflow <- R6::R6Class(
           workflowFolder = self$workflowFolder
         )
       }
+
+      self$watermark <- ""
+      if (!private$.reportingEngineInfo$isValidated()) {
+        self$watermark <- workflowWatermarkMessage
+      }
+      self$watermark <- watermark %||% self$watermark
+      setWatermarkConfiguration(watermark = self$watermark)
     },
 
     #' @description

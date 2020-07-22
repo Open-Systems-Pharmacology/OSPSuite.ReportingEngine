@@ -18,6 +18,8 @@ R6 class representing Reporting Engine generic Workflow
 \item{\code{reportFileName}}{name of the Rmd report file}
 
 \item{\code{createWordReport}}{logical of option for creating Markdwon-Report only but not a Word-Report.}
+
+\item{\code{watermark}}{displayed watermark in every plot background}
 }
 \if{html}{\out{</div>}}
 }
@@ -41,7 +43,12 @@ R6 class representing Reporting Engine generic Workflow
 \subsection{Method \code{new()}}{
 Create a new `Workflow` object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Workflow$new(simulationSets, workflowFolder, createWordReport = TRUE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$new(
+  simulationSets,
+  workflowFolder,
+  createWordReport = TRUE,
+  watermark = NULL
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -52,6 +59,8 @@ Create a new `Workflow` object.
 \item{\code{workflowFolder}}{path of the output folder created or used by the Workflow.}
 
 \item{\code{createWordReport}}{logical of option for creating Markdwon-Report only but not a Word-Report.}
+
+\item{\code{watermark}}{displayed watermark in every plot background}
 }
 \if{html}{\out{</div>}}
 }
