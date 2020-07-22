@@ -4,13 +4,7 @@
 #' @description Check if environment variable is defined and as value \code{'prodrun'}
 #' @return logical assessing if system is validated
 isValidatedSystem <- function() {
-  if (!exists("VALIDATEDR_ENVIRONMENT")) {
-    return(FALSE)
-  }
-  if (!isOfLength(VALIDATEDR_ENVIRONMENT, 1)) {
-    return(FALSE)
-  }
-  return(VALIDATEDR_ENVIRONMENT %in% "prodrun")
+  return(Sys.getenv("VALIDATEDR_ENVIRONMENT") %in% "prodrun")
 }
 
 #' @title ReportingEngineInfo
