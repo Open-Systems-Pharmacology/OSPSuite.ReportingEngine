@@ -54,9 +54,11 @@ R6 class for Reporting Engine Mean Model Workflow
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getAllPlotTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getAllPlotTasks}{\code{ospsuite.reportingengine::Workflow$getAllPlotTasks()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getAllTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getAllTasks}{\code{ospsuite.reportingengine::Workflow$getAllTasks()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getInactiveTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getInactiveTasks}{\code{ospsuite.reportingengine::Workflow$getInactiveTasks()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getWatermark">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getWatermark}{\code{ospsuite.reportingengine::Workflow$getWatermark()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="inactivateTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-inactivateTasks}{\code{ospsuite.reportingengine::Workflow$inactivateTasks()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="print">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-print}{\code{ospsuite.reportingengine::Workflow$print()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="printReportingEngineInfo">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-printReportingEngineInfo}{\code{ospsuite.reportingengine::Workflow$printReportingEngineInfo()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="setWatermark">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-setWatermark}{\code{ospsuite.reportingengine::Workflow$setWatermark()}}\out{</span>}
 }
 \out{</details>}
 }
