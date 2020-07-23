@@ -1,61 +1,69 @@
 context("Tasks in workflows")
 
-# Make sure testFolder is not there
-testFolder <- "testFolder"
-unlink(testFolder, recursive = TRUE)
+meanTestFolder <- "mean-Results"
+popTestFolder <- "pop-Results"
 
-simSet <- SimulationSet$new(
+meanSimSet <- SimulationSet$new(
   simulationSetName = "myTest",
-  simulationFile = getSimulationFilePath("test")
+  simulationFile = getTestDataFilePath("input-data/MiniModel2.pkml")
+)
+popSimSet <- PopulationSimulationSet$new(
+  simulationSetName = "myTest",
+  simulationFile = getTestDataFilePath("input-data/MiniModel2.pkml"),
+  populationFile = getTestDataFilePath("input-data/Pop500_p1p2p3.csv")
 )
 
 mWorkflow <- MeanModelWorkflow$new(
-  simulationSets = simSet,
-  workflowFolder = testFolder
+  simulationSets = meanSimSet,
+  workflowFolder = meanTestFolder
+)
+pWorkflow <- PopulationWorkflow$new(
+  simulationSets = popSimSet,
+  workflowFolder = popTestFolder
 )
 
-test_that("Workflow tasks are defined with appropriate names and can be activated/inactivated through their name", {
+test_that("Mean model workflow tasks are defined with appropriate names and can be activated/inactivated using their name", {
   taskNames <- mWorkflow$getAllTasks()
+  plotTaskNames <- mWorkflow$getAllPlotTasks()
   expect_is(taskNames, "character")
-
-  expect_equal(
-    taskNames,
-    c(
-      "plotSensitivity", "plotPKParameters", "plotAbsorption", "plotMassBalance",
-      "plotGoF", "meanModelSensitivityAnalysis", "meanModelPKParameters", "simulate"
-    )
-  )
-
+  expect_is(plotTaskNames, "character")
+  expect_equal(taskNames, c("plotSensitivity", "plotPKParameters", "plotAbsorption", "plotMassBalance", "plotGoF", 
+                            "meanModelSensitivityAnalysis", "meanModelPKParameters", "simulate"))
+  expect_equal(plotTaskNames, c("plotSensitivity", "plotPKParameters", "plotAbsorption", "plotMassBalance", "plotGoF"))
   expect_equal(mWorkflow$getActiveTasks(), "simulate")
-
   # So far nothing is printed when the method activate/inactivate is called,
   # Let me know if this should change
   expect_silent(mWorkflow$inactivateTasks("simulate"))
   expect_null(mWorkflow$getActiveTasks())
-
   expect_silent(mWorkflow$activateTasks("plotGoF"))
   expect_equal(mWorkflow$getActiveTasks(), "plotGoF")
+  expect_silent(mWorkflow$activateTasks())
+  expect_equal(mWorkflow$getActiveTasks(), mWorkflow$getAllTasks())
+  expect_silent(mWorkflow$inactivateTasks())
+  expect_null(mWorkflow$getActiveTasks())
 })
 
-test_that("Workflow and tasks print methods print give back character message of what workflow and task do", {
-  expect_is(mWorkflow$simulate$print(), "character")
-
-  workflowPrint <- mWorkflow$print()
-  expect_is(workflowPrint, "list")
-
-  taskNames <- mWorkflow$getAllTasks()
-
-  for (taskIndex in seq_along(workflowPrint)) {
-    expect_true(grepl(
-      taskNames[taskIndex],
-      names(workflowPrint)[taskIndex]
-    ))
-
-    expect_is(workflowPrint[[taskIndex]], "character")
-  }
+test_that("Population workflow tasks are defined with appropriate names and can be activated/inactivated using their name", {
+  taskNames <- pWorkflow$getAllTasks()
+  plotTaskNames <- pWorkflow$getAllPlotTasks()
+  expect_is(taskNames, "character")
+  expect_is(plotTaskNames, "character")
+  expect_equal(taskNames, c("plotSensitivity", "plotPKParameters", "plotGoF", "plotDemography", 
+                            "populationSensitivityAnalysis", "populationPKParameters", "simulatePopulation"))
+  expect_equal(plotTaskNames, c("plotSensitivity", "plotPKParameters", "plotGoF", "plotDemography"))
+  expect_equal(pWorkflow$getActiveTasks(), "simulatePopulation")
+  # So far nothing is printed when the method activate/inactivate is called,
+  # Let me know if this should change
+  expect_silent(pWorkflow$inactivateTasks("simulatePopulation"))
+  expect_null(pWorkflow$getActiveTasks())
+  expect_silent(pWorkflow$activateTasks("plotGoF"))
+  expect_equal(pWorkflow$getActiveTasks(), "plotGoF")
+  expect_silent(pWorkflow$activateTasks())
+  expect_equal(pWorkflow$getActiveTasks(), pWorkflow$getAllTasks())
+  expect_silent(pWorkflow$inactivateTasks())
+  expect_null(pWorkflow$getActiveTasks())
 })
 
 # Remove folder created  by test process
-unlink(testFolder, recursive = TRUE)
-unlink("log-debug.txt", recursive = TRUE)
-unlink("log-info.txt", recursive = TRUE)
+unlink(meanTestFolder, recursive = TRUE)
+unlink(popTestFolder, recursive = TRUE)

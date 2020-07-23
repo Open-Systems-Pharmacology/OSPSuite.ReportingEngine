@@ -1,15 +1,15 @@
-context("Mean Model Goodness of Fit")
+context("Run mean model workflows with Goodness of Fit task")
 
-simulationFile <- getTestDataFilePath("MiniModel2.pkml")
-dataFile <- getTestDataFilePath("SimpleData.nmdat")
-dictFile <- getTestDataFilePath("tpDictionary.csv")
+simulationFile <- getTestDataFilePath("input-data/MiniModel2.pkml")
+dataFile <- getTestDataFilePath("input-data/SimpleData.nmdat")
+dictFile <- getTestDataFilePath("input-data/tpDictionary.csv")
 
 # Goodness of Fit without selected observed data
-refOutputTimeProfileNoObs <- getTestDataFilePath("mean-model-GoF-No-Obs-timeProfileData.csv")
-refOutputTimeProfileAllObs <- getTestDataFilePath("mean-model-GoF-All-Obs-timeProfileData.csv")
-refOutputTimeProfileSelectObs <- getTestDataFilePath("mean-model-GoF-Select-Obs-timeProfileData.csv")
-refOutputResidualsAllObs <- getTestDataFilePath("mean-model-GoF-All-Obs-residuals.csv")
-refOutputResidualsSelectObs <- getTestDataFilePath("mean-model-GoF-Select-Obs-residuals.csv")
+refOutputTimeProfileNoObs <- getTestDataFilePath("mean-goodness-of-fit-results/No-Obs-timeProfileData.csv")
+refOutputTimeProfileAllObs <- getTestDataFilePath("mean-goodness-of-fit-results/All-Obs-timeProfileData.csv")
+refOutputTimeProfileSelectObs <- getTestDataFilePath("mean-goodness-of-fit-results/Select-Obs-timeProfileData.csv")
+refOutputResidualsAllObs <- getTestDataFilePath("mean-goodness-of-fit-results/All-Obs-residuals.csv")
+refOutputResidualsSelectObs <- getTestDataFilePath("mean-goodness-of-fit-results/Select-Obs-residuals.csv")
 
 refWorkflowStructure <- sort(c(
   "appendix-time-profile.md",
@@ -112,7 +112,7 @@ workflowNoObs3$runWorkflow()
 workflowAllObs$runWorkflow()
 workflowSelectObs$runWorkflow()
 
-test_that("Workflow structure includes correct files and folders", {
+test_that("Workflow structure includes appropriate files and folders", {
   expect_equal(list.files(workflowNoObs1$workflowFolder), refWorkflowStructure)
   expect_equal(list.files(workflowNoObs2$workflowFolder), refWorkflowStructure)
   expect_equal(list.files(workflowNoObs3$workflowFolder), refWorkflowStructure)
@@ -121,7 +121,7 @@ test_that("Workflow structure includes correct files and folders", {
   expect_equal(list.files(workflowSelectObs$workflowFolder), refWorkflowStructure)
 })
 
-test_that("Time profile structure includes correct files and folders", {
+test_that("Time profile directory includes correct files and folders", {
   expect_equal(list.files(file.path(workflowNoObs1$workflowFolder, "TimeProfiles")), timeProfileStructureNoObs)
   expect_equal(list.files(file.path(workflowNoObs2$workflowFolder, "TimeProfiles")), timeProfileStructureNoObs)
   expect_equal(list.files(file.path(workflowNoObs3$workflowFolder, "TimeProfiles")), timeProfileStructureNoObs)

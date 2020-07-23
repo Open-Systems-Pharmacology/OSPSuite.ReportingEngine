@@ -18,21 +18,20 @@ test_that("Workflows can't be initialized without 'simulationSets' or/and 'workf
   unlink(testFolder, recursive = TRUE)
 })
 
-test_that("Workflows initialization creates correct folder and logs, and warn user if the folder does exist", {
+test_that("Workflows initialization creates appropriate folder and logs, and warn user if the folder does exist", {
   # Make sure testFolder is not there
   testFolder <- "testFolder"
   unlink(testFolder, recursive = TRUE)
 
   simSet <- SimulationSet$new(
     simulationSetName = "myTest",
-    simulationFile = getSimulationFilePath("test")
+    simulationFile = getTestDataFilePath("input-data/MiniModel2.pkml")
   )
   popSimSet <- PopulationSimulationSet$new(
     simulationSetName = "myTest",
-    simulationFile = getSimulationFilePath("test"),
+    simulationFile = getTestDataFilePath("input-data/MiniModel2.pkml"),
     populationFile = "test.csv"
   )
-
   # Dummy simulation set for the example
   expect_output(mWorkflow <- MeanModelWorkflow$new(
     simulationSets = simSet,

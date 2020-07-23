@@ -1,8 +1,8 @@
 context("Study Design")
 
-populationFile <- getTestDataFilePath("Larson 2013 8-18y meal-Population.csv")
-simulationFile <- getTestDataFilePath("Larson 2013 8-18y meal.pkml")
-studyDesignFile <- getTestDataFilePath("StudyDesign.csv")
+populationFile <- getTestDataFilePath("input-data/Larson 2013 8-18y meal-Population.csv")
+simulationFile <- getTestDataFilePath("input-data/Larson 2013 8-18y meal.pkml")
+studyDesignFile <- getTestDataFilePath("input-data/StudyDesign.csv")
 studyDesignTempFile <- "TestStudyDesign.csv"
 drugMassPath <- "Applications|Larson 400mg|filmcoated tablet (original Merck formulation)|Application_1|ProtocolSchemaItem|DrugMass"
 

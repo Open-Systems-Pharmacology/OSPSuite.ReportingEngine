@@ -51,8 +51,6 @@ test_that("Output 'dataDisplayName' is checked and set properly", {
 
   # display name is equal to path when not set
   outputPath <- Output$new(path = testPath)
-  # expect_null(outputPath$dataDisplayName)
-
   outputDataDisplay <- Output$new(path = testPath, dataDisplayName = testDataDisplayName)
   expect_equal(outputDataDisplay$dataDisplayName, testDataDisplayName)
 

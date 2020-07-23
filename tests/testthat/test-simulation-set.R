@@ -1,9 +1,9 @@
 context("SimulationSet class")
 
-testSimulationFile <- getTestDataFilePath("MiniModel2.pkml")
-testPopulationFile <- getTestDataFilePath("Pop500_p1p2p3.csv")
-testObservedDataFile <- getTestDataFilePath("SimpleData.nmdat")
-testObservedMetaDataFile <- getTestDataFilePath("tpDictionary.csv")
+testSimulationFile <- getTestDataFilePath("input-data/MiniModel2.pkml")
+testPopulationFile <- getTestDataFilePath("input-data/Pop500_p1p2p3.csv")
+testObservedDataFile <- getTestDataFilePath("input-data/SimpleData.nmdat")
+testObservedMetaDataFile <- getTestDataFilePath("input-data/tpDictionary.csv")
 
 testOutput <- Output$new("Organism|A|Concentration", displayName = "A", displayUnit = "µg/ml")
 testOutputWrongPath <- Output$new("Organism|C|Concentration", displayName = "C", displayUnit = "µg/ml")
