@@ -4,21 +4,14 @@
 \alias{plotMeanMassBalance}
 \title{plotMeanMassBalance}
 \usage{
-plotMeanMassBalance(
-  structureSet,
-  logFolder = getwd(),
-  plotConfigurations = NULL,
-  selectedCompoundNames = NULL
-)
+plotMeanMassBalance(structureSet, logFolder = getwd(), settings = NULL)
 }
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object}
 
 \item{logFolder}{folder where the logs are saved}
 
-\item{plotConfigurations}{List of `PlotConfiguration` R6 class objects}
-
-\item{selectedCompoundNames}{Options to be defined
+\item{settings}{Options to be defined
 (e.g. how to group the plot results, or which molecule to exclude)}
 }
 \value{

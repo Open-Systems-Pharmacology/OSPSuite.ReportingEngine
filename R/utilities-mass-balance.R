@@ -3,8 +3,7 @@
 #' normalized time profiles and cumulative normalized time profiles
 #' @param structureSet `SimulationStructure` R6 class object
 #' @param logFolder folder where the logs are saved
-#' @param plotConfigurations List of `PlotConfiguration` R6 class objects
-#' @param selectedCompoundNames Options to be defined
+#' @param settings Options to be defined
 #' (e.g. how to group the plot results, or which molecule to exclude)
 #' @return list of `ggplot` objects
 #' @export
@@ -13,8 +12,7 @@
 #' @import utils
 plotMeanMassBalance <- function(structureSet,
                                 logFolder = getwd(),
-                                plotConfigurations = NULL,
-                                selectedCompoundNames = NULL) {
+                                settings = NULL) {
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
@@ -35,7 +33,7 @@ plotMeanMassBalance <- function(structureSet,
   })]
 
   # User defined coumpound selection
-  selectedCompoundNames <- selectedCompoundNames %||% relevantCompoundNames
+  selectedCompoundNames <- settings$selectedCompoundNames %||% relevantCompoundNames
   validateIsIncluded(selectedCompoundNames, relevantCompoundNames)
 
   # Get all the molecule paths (with dimension=amount) of the selected/relevant coumpounds
@@ -143,7 +141,7 @@ plotMeanMassBalance <- function(structureSet,
       y = "Amount",
       color = "Legend"
     ),
-    plotConfiguration = plotConfigurations[["timeProfile"]]
+    plotConfiguration = settings$plotConfigurations[["timeProfile"]]
   )
 
   massBalancePlots[["cumulativeTimeProfile"]] <- plotMassBalanceCumulativeTimeProfile(
@@ -154,7 +152,7 @@ plotMeanMassBalance <- function(structureSet,
       y = "Amount",
       fill = "Legend"
     ),
-    plotConfiguration = plotConfigurations[["cumulativeTimeProfile"]]
+    plotConfiguration = settings$plotConfigurations[["cumulativeTimeProfile"]]
   )
 
   massBalancePlots[["normalizedTimeProfile"]] <- plotMassBalanceTimeProfile(
@@ -165,7 +163,7 @@ plotMeanMassBalance <- function(structureSet,
       y = "NormalizedAmount",
       color = "Legend"
     ),
-    plotConfiguration = plotConfigurations[["normalizedTimeProfile"]]
+    plotConfiguration = settings$plotConfigurations[["normalizedTimeProfile"]]
   )
 
   massBalancePlots[["normalizedCumulativeTimeProfile"]] <- plotMassBalanceCumulativeTimeProfile(
@@ -176,7 +174,7 @@ plotMeanMassBalance <- function(structureSet,
       y = "NormalizedAmount",
       fill = "Legend"
     ),
-    plotConfiguration = plotConfigurations[["normalizedCumulativeTimeProfile"]]
+    plotConfiguration = settings$plotConfigurations[["normalizedCumulativeTimeProfile"]]
   )
 
   massBalancePlots[["pieChart"]] <- plotMassBalancePieChart(
@@ -187,7 +185,7 @@ plotMeanMassBalance <- function(structureSet,
       y = "NormalizedAmount",
       fill = "Legend"
     ),
-    plotConfiguration = plotConfigurations[["pieChart"]]
+    plotConfiguration = settings$plotConfigurations[["pieChart"]]
   )
 
   massBalanceCaptions <- list(
@@ -200,7 +198,7 @@ plotMeanMassBalance <- function(structureSet,
 
   return(list(
     plots = massBalancePlots,
-    tables = simulationResultsOutputByGroup,
+    tables = list(timeProfiles = simulationResultsOutputByGroup),
     captions = massBalanceCaptions
   ))
 }
