@@ -61,7 +61,7 @@ myExampleWorkflow <-
                         workflowFolder = "myExample-Results")
 
 # Set the workflow tasks to be run
-myExampleWorkflow$activateTasks(c("simulate", "plotGoF"))
+myExampleWorkflow$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 
 # Run the workflow
 myExampleWorkflow$runWorkflow()
@@ -378,6 +378,8 @@ then to provide direclty the list of their names to the input `pkParameters`.
 As illustrated in Figures 1 and 2, workflows can perform tasks on a list of simulation sets.
 Some of these tasks are not necessarily run or can use the output results from other tasks run in previous workflows.
 
+You can use the enums `StandardSimulationTasks` and `StandardPlotTasks` respectively to get a quick access to standard simulation and plot tasks common to mean model and population workflows.
+
 When they are created, `Workflow` objects will directly include a list of `Task` objects.
 To know which tasks your workflow can perform, the workflow method __getAllTasks()__ can be used. 
 The workflow methods __getActiveTasks()__ and __getInactiveTasks()__ provide the list of active and inactive tasks of the workflow, respectively.
@@ -403,7 +405,7 @@ myExampleWorkflow$inactivateTasks()
 myExampleWorkflow$getActiveTasks()
 
 # Activate only tasks "simulate" and "plotGoF" tasks
-myExampleWorkflow$activateTasks(c("simulate", "plotGoF"))
+myExampleWorkflow$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 myExampleWorkflow$getActiveTasks()
 ```
 
@@ -433,9 +435,9 @@ The names of the results directory are as follow:
 It is possible to load the results using the `ospsuite` method __importResultsFromCSV()__.
 - __PKAnalysisResults__ which contains the results of PK analysis runs, obtained from `calculatePKParameters` task, as csv files.
 It is possible to load the results using the `ospsuite` method __importPKAnalysesFromCSV()__.
-- __SensitivityResults__ which contains the results of sensitivity analysis runs, obtained from `sensitivityAnalysis` task, as csv files.
+- __SensitivityResults__ which contains the results of sensitivity analysis runs, obtained from `calculateSensitivity` task, as csv files.
 It is possible to load the results using the `ospsuite` method __importSensitivityAnalysisResultsFromCSV()__.
-- __TimeProfiles__ which contains the figures obtained from `plotGoF` task and their source values as png and csv files.
+- __TimeProfiles__ which contains the figures obtained from `plotTimeProfilesAndResiduals` task and their source values as png and csv files.
 - __PKAnalysis__ which contains the figures and tables obtained from `plotPKParameters` task and their source values as png and csv files.
 - __Sensitivity__ which contains the figures obtained from `plotSensitivity` task and their source values as png and csv files.
 - __MassBalance__ which contains the figures and tables obtained from `plotMassBalance` task and their source values as png and csv files.
@@ -452,7 +454,7 @@ Default figure format is png, but it is possible to change this default using __
 Each plot task will save an appendix file besides its results as a markdown format report.
 These appendices are saved directly within the `workflowFolder` directory results directory with the following names:
 
-- __appendix-time-profile.md__ from `plotGoF` task.
+- __appendix-time-profile.md__ from `plotTimeProfilesAndResiduals` task.
 - __appendix-pk-parameters.md__ from `plotPKParameters` task.
 - __appendix-sensitivity-analysis.md__ from `plotSensitivity` task.
 - __appendix-mass-balance.md__ from `plotMassBalance` task.

@@ -78,8 +78,8 @@ knitr::kable(examplesTable, caption = "Table 1: Features tested by each template
 Example 1 shows a basic example of PK parameters performed by a mean model workflow.
 In this example, '__C_max__' and '__AUC_tEnd__' are calculated.
 Since the task PK parameters requires results from the folder __PKAnalysisResults__, 
-the tasks `simulate` and `meanModelPKParameters` need to be performed.
-The task `simulate` needs to be performed because the task `meanModelPKParameters` is using the time profile simulation results.
+the tasks `simulate` and `calculatePKParameters` need to be performed.
+The task `simulate` needs to be performed because the task `calculatePKParameters` is using the time profile simulation results.
 
 ```{r example 1}
 # Get the pkml simulation file: "MiniModel2.pkml"
@@ -109,7 +109,7 @@ workflow1 <-
 
 # Set the workflow tasks to be run
 workflow1$activateTasks(c("simulate", 
-                          "meanModelPKParameters", 
+                          "calculatePKParameters", 
                           "plotPKParameters"))
 
 # Run the workflow
@@ -173,7 +173,7 @@ workflow2 <-
 
 # Set the workflow tasks to be run
 workflow2$activateTasks(c("simulate", 
-                          "meanModelPKParameters", 
+                          "calculatePKParameters", 
                           "plotPKParameters"))
 
 # Run the workflow
@@ -248,7 +248,7 @@ workflow3 <-
 
 # Set the workflow tasks to be run
 workflow3$activateTasks(c("simulate", 
-                          "meanModelPKParameters", 
+                          "calculatePKParameters", 
                           "plotPKParameters"))
 
 # Run the workflow
@@ -334,7 +334,7 @@ workflow4 <-
 
 # Set the workflow tasks to be run
 workflow4$activateTasks("plotPKParameters")
-workflow4$inactivateTasks(c("simulate", "meanModelPKParameters"))
+workflow4$inactivateTasks(c("simulate", "calculatePKParameters"))
 
 # Run the workflow
 workflow4$runWorkflow()
@@ -396,13 +396,14 @@ set500 <- PopulationSimulationSet$new(
 # Create the workflow instance
 workflow5 <-
   PopulationWorkflow$new(
+    workflowType = PopulationWorkflowTypes$parallelComparison,
     simulationSets = set500,
     workflowFolder = "Example-5"
   )
 
 # Set the workflow tasks to be run
-workflow5$activateTasks(c("simulatePopulation", 
-                          "populationPKParameters", 
+workflow5$activateTasks(c("simulate", 
+                          "calculatePKParameters", 
                           "plotPKParameters"))
 
 # Run the workflow
@@ -473,13 +474,14 @@ set200 <- PopulationSimulationSet$new(
 # Create the workflow instance
 workflow6 <-
   PopulationWorkflow$new(
+    workflowType = PopulationWorkflowTypes$parallelComparison,
     simulationSets = c(set500, set200),
     workflowFolder = "Example-6"
   )
 
 # Set the workflow tasks to be run
-workflow6$activateTasks(c("simulatePopulation", 
-                          "populationPKParameters", 
+workflow6$activateTasks(c("simulate", 
+                          "calculatePKParameters", 
                           "plotPKParameters"))
 
 # Run the workflow

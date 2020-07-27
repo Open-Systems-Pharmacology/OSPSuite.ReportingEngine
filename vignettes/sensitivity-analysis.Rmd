@@ -26,8 +26,8 @@ The sensitivity task aims at generating plots showing PK parameters sensitivity 
 
 ## Inputs
 
-Results obtained from the `meanModelSensitivityAnalysis` or `populationSensitivityAnalysis` task and stored as csv files within the subdirectory __SensitivityResults__ from the `workflowFolder` directory are required in order to perform the sensitivity (`plotSensitivity`) task.
-As a consequence, if the workflow output folder does not include the appropriate simulations, the task `meanModelSensitivityAnalysis` or `populationSensitivityAnalysis` needs to be __active__.
+Results obtained from the `calculateSensitivity` task and stored as csv files within the subdirectory __SensitivityResults__ from the `workflowFolder` directory are required in order to perform the sensitivity (`plotSensitivity`) task.
+As a consequence, if the workflow output folder does not include the appropriate simulations, the task `calculateSensitivity` needs to be __active__.
 
 The objects `SimulationSet` (or `PopulationSimulationSet` for population workflows) and `Output` define which and how the simulated PK parameters will be reported.
 
