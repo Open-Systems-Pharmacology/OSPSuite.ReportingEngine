@@ -91,6 +91,7 @@ Task <- R6::R6Class(
 #' @export
 activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
+  validateIsIncluded(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
 
   for (task in tasks) {
     workflow[[task]]$activate()
@@ -105,6 +106,7 @@ activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
 #' @export
 inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
+  validateIsIncluded(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
 
   for (task in tasks) {
     workflow[[task]]$inactivate()
