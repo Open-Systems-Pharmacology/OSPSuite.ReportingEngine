@@ -2,7 +2,7 @@ context("Run workflows with PK parameters task")
 
 simulationFile <- getTestDataFilePath("input-data/MiniModel2.pkml")
 
-# Output reference absorption time profiles
+# Output reference
 refOutputPK <- getTestDataFilePath("mean-pk-parameters-results/A-pkAnalysis.csv")
 refOutputUpdatedPK <- getTestDataFilePath("mean-pk-parameters-results/A-pkAnalysis-updatedPK.csv")
 # Ensure the PK parameters are reset before test
@@ -70,6 +70,10 @@ test_that("Saved PK parameters have correct values with updated names and unit",
     readObservedDataFile(refOutputUpdatedPK)
   )
 })
+
+# Ensure the PK parameters are reset after test
+updatePKParameter("C_max", displayName = "C_max", displayUnit = "μmol/l")
+updatePKParameter("AUC_tEnd", displayName = "AUC_tEnd", displayUnit = "μmol*min/l")
 
 # Clear test workflow folders
 unlink(workflowPK$workflowFolder, recursive = TRUE)
