@@ -5,6 +5,9 @@ simulationFile <- getTestDataFilePath("input-data/MiniModel2.pkml")
 # Output reference absorption time profiles
 refOutputPK <- getTestDataFilePath("mean-pk-parameters-results/A-pkAnalysis.csv")
 refOutputUpdatedPK <- getTestDataFilePath("mean-pk-parameters-results/A-pkAnalysis-updatedPK.csv")
+# Ensure the PK parameters are reset before test
+updatePKParameter("C_max", displayName = "C_max", displayUnit = "μmol/l")
+updatePKParameter("AUC_tEnd", displayName = "AUC_tEnd", displayUnit = "μmol*min/l")
 
 refWorkflowStructure <- sort(c(
   "appendix-pk-parameters.md",

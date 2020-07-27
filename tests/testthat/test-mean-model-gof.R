@@ -1,4 +1,4 @@
-context("Run mean model workflows with Goodness of Fit task")
+context("Run mean model workflows with Time Profiles and Residuals task")
 
 simulationFile <- getTestDataFilePath("input-data/MiniModel2.pkml")
 dataFile <- getTestDataFilePath("input-data/SimpleData.nmdat")
