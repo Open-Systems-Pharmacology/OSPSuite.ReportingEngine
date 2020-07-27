@@ -18,6 +18,7 @@ mWorkflow <- MeanModelWorkflow$new(
   workflowFolder = meanTestFolder
 )
 pWorkflow <- PopulationWorkflow$new(
+  workflowType = PopulationWorkflowTypes$parallelComparison,
   simulationSets = popSimSet,
   workflowFolder = popTestFolder
 )
@@ -27,16 +28,16 @@ test_that("Mean model workflow tasks are defined with appropriate names and can 
   plotTaskNames <- mWorkflow$getAllPlotTasks()
   expect_is(taskNames, "character")
   expect_is(plotTaskNames, "character")
-  expect_equal(taskNames, c("plotSensitivity", "plotPKParameters", "plotAbsorption", "plotMassBalance", "plotGoF", 
-                            "meanModelSensitivityAnalysis", "meanModelPKParameters", "simulate"))
-  expect_equal(plotTaskNames, c("plotSensitivity", "plotPKParameters", "plotAbsorption", "plotMassBalance", "plotGoF"))
+  expect_equal(sort(taskNames), sort(c("plotSensitivity", "plotPKParameters", "plotAbsorption", "plotMassBalance", "plotTimeProfilesAndResiduals", 
+                            "calculateSensitivity", "calculatePKParameters", "simulate")))
+  expect_equal(sort(plotTaskNames), sort(c("plotSensitivity", "plotPKParameters", "plotAbsorption", "plotMassBalance", "plotTimeProfilesAndResiduals")))
   expect_equal(mWorkflow$getActiveTasks(), "simulate")
   # So far nothing is printed when the method activate/inactivate is called,
   # Let me know if this should change
   expect_silent(mWorkflow$inactivateTasks("simulate"))
   expect_null(mWorkflow$getActiveTasks())
-  expect_silent(mWorkflow$activateTasks("plotGoF"))
-  expect_equal(mWorkflow$getActiveTasks(), "plotGoF")
+  expect_silent(mWorkflow$activateTasks("plotTimeProfilesAndResiduals"))
+  expect_equal(mWorkflow$getActiveTasks(), "plotTimeProfilesAndResiduals")
   expect_silent(mWorkflow$activateTasks())
   expect_equal(mWorkflow$getActiveTasks(), mWorkflow$getAllTasks())
   expect_silent(mWorkflow$inactivateTasks())
@@ -48,16 +49,16 @@ test_that("Population workflow tasks are defined with appropriate names and can 
   plotTaskNames <- pWorkflow$getAllPlotTasks()
   expect_is(taskNames, "character")
   expect_is(plotTaskNames, "character")
-  expect_equal(taskNames, c("plotSensitivity", "plotPKParameters", "plotGoF", "plotDemography", 
-                            "populationSensitivityAnalysis", "populationPKParameters", "simulatePopulation"))
-  expect_equal(plotTaskNames, c("plotSensitivity", "plotPKParameters", "plotGoF", "plotDemography"))
-  expect_equal(pWorkflow$getActiveTasks(), "simulatePopulation")
+  expect_equal(sort(taskNames), sort(c("plotSensitivity", "plotPKParameters", "plotTimeProfilesAndResiduals", "plotDemography", 
+                            "calculateSensitivity", "calculatePKParameters", "simulate")))
+  expect_equal(sort(plotTaskNames), sort(c("plotSensitivity", "plotPKParameters", "plotTimeProfilesAndResiduals", "plotDemography")))
+  expect_equal(pWorkflow$getActiveTasks(), "simulate")
   # So far nothing is printed when the method activate/inactivate is called,
   # Let me know if this should change
-  expect_silent(pWorkflow$inactivateTasks("simulatePopulation"))
+  expect_silent(pWorkflow$inactivateTasks("simulate"))
   expect_null(pWorkflow$getActiveTasks())
-  expect_silent(pWorkflow$activateTasks("plotGoF"))
-  expect_equal(pWorkflow$getActiveTasks(), "plotGoF")
+  expect_silent(pWorkflow$activateTasks("plotTimeProfilesAndResiduals"))
+  expect_equal(pWorkflow$getActiveTasks(), "plotTimeProfilesAndResiduals")
   expect_silent(pWorkflow$activateTasks())
   expect_equal(pWorkflow$getActiveTasks(), pWorkflow$getAllTasks())
   expect_silent(pWorkflow$inactivateTasks())

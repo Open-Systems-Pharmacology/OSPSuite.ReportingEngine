@@ -47,6 +47,7 @@ test_that("Workflows initialization creates appropriate folder and logs, and war
 
   # Dummy simulation set for the example
   expect_output(pWorkflow <- PopulationWorkflow$new(
+    workflowType = PopulationWorkflowTypes$parallelComparison,
     simulationSets = popSimSet,
     workflowFolder = testFolder
   ))

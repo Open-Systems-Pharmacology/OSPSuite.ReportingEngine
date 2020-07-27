@@ -100,11 +100,11 @@ workflowNoObs3 <- MeanModelWorkflow$new(simulationSets = setNoObs3, workflowFold
 workflowAllObs <- MeanModelWorkflow$new(simulationSets = setAllObs, workflowFolder = workflowFolderAllObs)
 workflowSelectObs <- MeanModelWorkflow$new(simulationSets = setSelectObs, workflowFolder = workflowFolderSelectObs)
 
-workflowNoObs1$activateTasks(c("simulate", "plotGoF"))
-workflowNoObs2$activateTasks(c("simulate", "plotGoF"))
-workflowNoObs3$activateTasks(c("simulate", "plotGoF"))
-workflowAllObs$activateTasks(c("simulate", "plotGoF"))
-workflowSelectObs$activateTasks(c("simulate", "plotGoF"))
+workflowNoObs1$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
+workflowNoObs2$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
+workflowNoObs3$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
+workflowAllObs$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
+workflowSelectObs$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 
 workflowNoObs1$runWorkflow()
 workflowNoObs2$runWorkflow()

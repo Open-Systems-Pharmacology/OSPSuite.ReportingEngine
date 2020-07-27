@@ -25,7 +25,7 @@ setPK <- SimulationSet$new(
 workflowFolderPK <- "test-pk-parameters"
 workflowPK <- MeanModelWorkflow$new(simulationSets = setPK, workflowFolder = workflowFolderPK)
 workflowPK$inactivateTasks()
-workflowPK$activateTasks(c("simulate", "meanModelPKParameters", "plotPKParameters"))
+workflowPK$activateTasks(c("simulate", "calculatePKParameters", "plotPKParameters"))
 workflowPK$runWorkflow()
 
 test_that("Workflow generates appropriate files and folders", {
