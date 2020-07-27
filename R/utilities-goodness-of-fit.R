@@ -332,13 +332,15 @@ plotPopulationGoodnessOfFit <- function(structureSet,
       metaData = residualsMetaData[["totalRange"]]
     )
   }
+  goodnessOfFitTables <- list(simulatedData = simulatedData)
+  if(!isOfLength(observedData,0)){
+    goodnessOfFitTables <- list(observedData = observedData,
+                                simulatedData = simulatedData)
+  }
   return(list(
     plots = goodnessOfFitPlots,
     captions = goodnessOfFitCaptions,
-    tables = list(
-      observedData = observedData,
-      simulatedData = simulatedData
-    ),
+    tables = goodnessOfFitTables,
     residuals = residuals
   ))
 }
