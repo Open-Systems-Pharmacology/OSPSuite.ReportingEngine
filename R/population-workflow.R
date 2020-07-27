@@ -34,7 +34,7 @@ PopulationWorkflow <- R6::R6Class(
     #' @param createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
     #' @param watermark displayed watermark in every plot background
     #' @return A new `PopulationWorkflow` object
-    initialize = function(workflowType = PopulationWorkflowTypes$parallelComparison,
+    initialize = function(workflowType,
                               simulationSets,
                               workflowFolder,
                               createWordReport = TRUE,
