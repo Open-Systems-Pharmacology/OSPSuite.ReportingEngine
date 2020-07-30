@@ -608,7 +608,7 @@ plotTornado <- function(data,
                         plotConfiguration = NULL) {
 
   # Ensure that the plot bars are ordered by sensitivity values
-  data$parameter <- reorder(data$parameter, data$value)
+  data$parameter <- reorder(data$parameter, abs(data$value))
 
   tornadoPlot <- tlf::initializePlot(plotConfiguration)
   tornadoPlot <- tornadoPlot + ggplot2::geom_col(

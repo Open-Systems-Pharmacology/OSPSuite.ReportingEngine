@@ -1,8 +1,8 @@
 context("Study Design")
 
-populationFile <- getTestDataFilePath("Larson 2013 8-18y meal-Population.csv")
-simulationFile <- getTestDataFilePath("Larson 2013 8-18y meal.pkml")
-studyDesignFile <- getTestDataFilePath("StudyDesign.csv")
+populationFile <- getTestDataFilePath("input-data/Larson 2013 8-18y meal-Population.csv")
+simulationFile <- getTestDataFilePath("input-data/Larson 2013 8-18y meal.pkml")
+studyDesignFile <- getTestDataFilePath("input-data/StudyDesign.csv")
 studyDesignTempFile <- "TestStudyDesign.csv"
 drugMassPath <- "Applications|Larson 400mg|filmcoated tablet (original Merck formulation)|Application_1|ProtocolSchemaItem|DrugMass"
 
@@ -171,8 +171,8 @@ unlink(studyDesignElseFile, recursive = TRUE)
 
 test_that("Source expression 'MIN' include only values >=", {
   # Target base unit is umol
-  studyDesignMin <- data.frame(source = c("", "SOURCE_MIN", 2), target = c("nmol", "TARGET", 5000), check.names = FALSE)
-  names(studyDesignMin) <- c("Gender", drugMassPath)
+  studyDesignMin <- data.frame(source = c("kg", "SOURCE_MIN", 50), target = c("nmol", "TARGET", 5000), check.names = FALSE)
+  names(studyDesignMin) <- c("Organism|Weight", drugMassPath)
   studyDesignMinFile <- "studyDesignMin.csv"
   write.csv(studyDesignMin, file = studyDesignMinFile, row.names = FALSE)
 
@@ -180,16 +180,16 @@ test_that("Source expression 'MIN' include only values >=", {
   testSimulation <- ospsuite::loadSimulation(simulationFile)
   addStudyParameters(testPopulation, testSimulation, studyDesignMinFile)
   populationData <- ospsuite::populationAsDataFrame(testPopulation)
-  expect_equal(sum(populationData[, drugMassPath] %in% 5), 250)
-  expect_equal(sum(populationData[, drugMassPath] %in% NA), 250)
-  expect_equal(min(populationData[populationData[, drugMassPath] %in% 5, "Gender"] >= 2), 1)
+  expect_equal(sum(populationData[, drugMassPath] %in% 5), 42)
+  expect_equal(sum(populationData[, drugMassPath] %in% NA), 58)
+  expect_gte(min(populationData[populationData[, drugMassPath] %in% 5, "Organism|Weight"]), 50)
 
   unlink(studyDesignMinFile, recursive = TRUE)
 })
 
 test_that("Source expression 'MAX' include only values <", {
-  studyDesignMax <- data.frame(source = c("", "SOURCE_MAX", 2), target = c("nmol", "TARGET", 5000), check.names = FALSE)
-  names(studyDesignMax) <- c("Gender", drugMassPath)
+  studyDesignMax <- data.frame(source = c("kg", "SOURCE_MAX", 50), target = c("nmol", "TARGET", 5000), check.names = FALSE)
+  names(studyDesignMax) <- c("Organism|Weight", drugMassPath)
   studyDesignMaxFile <- "studyDesignMax.csv"
   write.csv(studyDesignMax, file = studyDesignMaxFile, row.names = FALSE)
 
@@ -197,15 +197,16 @@ test_that("Source expression 'MAX' include only values <", {
   testSimulation <- ospsuite::loadSimulation(simulationFile)
   addStudyParameters(testPopulation, testSimulation, studyDesignMaxFile)
   populationData <- ospsuite::populationAsDataFrame(testPopulation)
-  expect_equal(sum(populationData[, drugMassPath] %in% 5), 250)
-  expect_equal(min(populationData[populationData[, drugMassPath] %in% 5, "Gender"] < 2), 1)
+  expect_equal(sum(populationData[, drugMassPath] %in% 5), 58)
+  expect_equal(sum(populationData[, drugMassPath] %in% NA), 42)
+  expect_lte(max(populationData[populationData[, drugMassPath] %in% 5, "Organism|Weight"]), 50)
 
   unlink(studyDesignMaxFile, recursive = TRUE)
 })
 
 test_that("Source expression 'EQUALS' include only values >= and attribute correct value", {
-  studyDesignEquals <- data.frame(source = c("", "SOURCE_EQUALS", 2), target = c("nmol", "TARGET", 5000), check.names = FALSE)
-  names(studyDesignEquals) <- c("Gender", drugMassPath)
+  studyDesignEquals <- data.frame(source = c("", "SOURCE_EQUALS", 0.4), target = c("nmol", "TARGET", 5000), check.names = FALSE)
+  names(studyDesignEquals) <- c("Organism|Hematocrit", drugMassPath)
   studyDesignEqualsFile <- "studyDesignEquals.csv"
   write.csv(studyDesignEquals, file = studyDesignEqualsFile, row.names = FALSE)
 
@@ -214,9 +215,9 @@ test_that("Source expression 'EQUALS' include only values >= and attribute corre
   addStudyParameters(testPopulation, testSimulation, studyDesignEqualsFile)
 
   populationData <- ospsuite::populationAsDataFrame(testPopulation)
-  expect_equal(sum(populationData[, drugMassPath] %in% 5), 250)
-  expect_equal(sum(populationData[, drugMassPath] %in% NA), 250)
-  expect_equal(min(populationData[populationData[, drugMassPath] %in% 5, "Gender"] >= 2), 1)
+  expect_equal(sum(populationData[, drugMassPath] %in% 5), 49)
+  expect_equal(sum(populationData[, drugMassPath] %in% NA), 51)
+  expect_equal(populationData[populationData[, drugMassPath] %in% 5, "Organism|Hematocrit"], rep(0.4, 49))
 
   unlink(studyDesignEqualsFile, recursive = TRUE)
 })
@@ -224,11 +225,11 @@ test_that("Source expression 'EQUALS' include only values >= and attribute corre
 test_that("Source expressions constraints add up as &", {
   testSimulation <- ospsuite::loadSimulation(simulationFile)
 
-  studyDesign <- data.frame(source1 = c("", "SOURCE_MIN", 1), source2 = c("", "SOURCE_MAX", 2), target = c("nmol", "TARGET", 5000), check.names = FALSE)
-  names(studyDesign) <- c("Gender", "Gender", drugMassPath)
+  studyDesign <- data.frame(source1 = c("kg", "SOURCE_MIN", 45), source2 = c("kg", "SOURCE_MAX", 55), target = c("nmol", "TARGET", 5000), check.names = FALSE)
+  names(studyDesign) <- c("Organism|Weight", "Organism|Weight", drugMassPath)
 
-  studyDesignNA <- data.frame(source1 = c("", "SOURCE_MIN", 2), source2 = c("", "SOURCE_MAX", 2), target = c("nmol", "TARGET", 5000), check.names = FALSE)
-  names(studyDesignNA) <- c("Gender", "Gender", drugMassPath)
+  studyDesignNA <- data.frame(source1 = c("kg", "SOURCE_MIN", 10), source2 = c("kg", "SOURCE_MAX", 10), target = c("nmol", "TARGET", 5000), check.names = FALSE)
+  names(studyDesignNA) <- c("Organism|Weight", "Organism|Weight", drugMassPath)
 
   studyDesignFile <- "studyDesign.csv"
   studyDesignNAFile <- "studyDesignNA.csv"
@@ -239,17 +240,17 @@ test_that("Source expressions constraints add up as &", {
   addStudyParameters(testPopulation, testSimulation, studyDesignFile)
   populationData <- ospsuite::populationAsDataFrame(testPopulation)
 
-  expect_equal(sum(populationData[, drugMassPath] %in% 5), 250)
-  expect_equal(sum(populationData[, drugMassPath] %in% NA), 250)
-  expect_equal(min(populationData[populationData[, drugMassPath] %in% 5, "Gender"] >= 1 &
-    populationData[populationData[, drugMassPath] %in% 5, "Gender"] < 2), 1)
+  expect_equal(sum(populationData[, drugMassPath] %in% 5), 22)
+  expect_equal(sum(populationData[, drugMassPath] %in% NA), 78)
+  expect_gte(min(populationData[populationData[, drugMassPath] %in% 5, "Organism|Weight"]), 45)
+  expect_lte(max(populationData[populationData[, drugMassPath] %in% 5, "Organism|Weight"]),  55)
 
   testPopulation <- ospsuite::loadPopulation(populationFile)
   addStudyParameters(testPopulation, testSimulation, studyDesignNAFile)
   populationData <- ospsuite::populationAsDataFrame(testPopulation)
 
   expect_equal(sum(populationData[, drugMassPath] %in% 5), 0)
-  expect_equal(sum(populationData[, drugMassPath] %in% NA), 500)
+  expect_equal(sum(populationData[, drugMassPath] %in% NA), 100)
 
   unlink(studyDesignFile, recursive = TRUE)
   unlink(studyDesignNAFile, recursive = TRUE)

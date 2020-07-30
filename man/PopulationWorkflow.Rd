@@ -14,15 +14,15 @@ R6 class for Reporting Engine Population Workflow
 \describe{
 \item{\code{workflowType}}{Type of population workflow}
 
-\item{\code{simulatePopulation}}{R6 class `Task` for population simulation}
+\item{\code{simulate}}{`SimulationTask` object for time profile simulations}
 
-\item{\code{populationPKParameters}}{R6 class `Task` for PK parameters calculation}
+\item{\code{calculatePKParameters}}{`CalculatePKParametersTask` object for PK parameters calculation}
 
-\item{\code{populationSensitivityAnalysis}}{R6 class `Task` for sensitivity analysis}
+\item{\code{calculateSensitivity}}{`SensitivityAnalysisTask` object for sensitivity analysis}
 
 \item{\code{plotDemography}}{R6 class `Task` for demography plots}
 
-\item{\code{plotGoF}}{R6 class `Task` for goodness of fit plots}
+\item{\code{plotTimeProfilesAndResiduals}}{`PlotTask` object for goodness of fit plots}
 
 \item{\code{plotPKParameters}}{R6 class `Task` for PK parameters plot}
 
@@ -34,13 +34,6 @@ R6 class for Reporting Engine Population Workflow
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{PopulationWorkflow$new()}}
-\item \href{#method-simulatePopulationSettings}{\code{PopulationWorkflow$simulatePopulationSettings()}}
-\item \href{#method-populationPKParameterSettings}{\code{PopulationWorkflow$populationPKParameterSettings()}}
-\item \href{#method-populationSensitivityAnalysisSettings}{\code{PopulationWorkflow$populationSensitivityAnalysisSettings()}}
-\item \href{#method-plotDemographySettings}{\code{PopulationWorkflow$plotDemographySettings()}}
-\item \href{#method-plotGoFSettings}{\code{PopulationWorkflow$plotGoFSettings()}}
-\item \href{#method-plotPKParametersSettings}{\code{PopulationWorkflow$plotPKParametersSettings()}}
-\item \href{#method-plotSensitivitySettings}{\code{PopulationWorkflow$plotSensitivitySettings()}}
 \item \href{#method-runWorkflow}{\code{PopulationWorkflow$runWorkflow()}}
 \item \href{#method-clone}{\code{PopulationWorkflow$clone()}}
 }
@@ -53,9 +46,11 @@ R6 class for Reporting Engine Population Workflow
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getAllPlotTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getAllPlotTasks}{\code{ospsuite.reportingengine::Workflow$getAllPlotTasks()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getAllTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getAllTasks}{\code{ospsuite.reportingengine::Workflow$getAllTasks()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getInactiveTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getInactiveTasks}{\code{ospsuite.reportingengine::Workflow$getInactiveTasks()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getWatermark">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getWatermark}{\code{ospsuite.reportingengine::Workflow$getWatermark()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="inactivateTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-inactivateTasks}{\code{ospsuite.reportingengine::Workflow$inactivateTasks()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="print">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-print}{\code{ospsuite.reportingengine::Workflow$print()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="printReportingEngineInfo">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-printReportingEngineInfo}{\code{ospsuite.reportingengine::Workflow$printReportingEngineInfo()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="setWatermark">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-setWatermark}{\code{ospsuite.reportingengine::Workflow$setWatermark()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -65,7 +60,7 @@ R6 class for Reporting Engine Population Workflow
 Create a new `PopulationWorkflow` object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$new(
-  workflowType = PopulationWorkflowTypes$parallelComparison,
+  workflowType,
   simulationSets,
   workflowFolder,
   createWordReport = TRUE,
@@ -93,302 +88,24 @@ A new `PopulationWorkflow` object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-simulatePopulationSettings"></a>}}
-\subsection{Method \code{simulatePopulationSettings()}}{
-Define simulate `task` settings
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$simulatePopulationSettings(
-  taskFunction = simulateModelForPopulation,
-  outputFolder = defaultTaskOutputFolders$simulate,
-  settings = NULL,
-  active = TRUE,
-  message = defaultWorkflowMessages$simulate
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{taskFunction}}{function performed by `Task` to get results}
-
-\item{\code{outputFolder}}{folder where `Task` output is saved}
-
-\item{\code{settings}}{specific settings for `Task`}
-
-\item{\code{active}}{logical defining if `Task` will be run by workflow
-Default value is `TRUE`}
-
-\item{\code{message}}{message/title of the `Task`}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A new `Task` object
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-populationPKParameterSettings"></a>}}
-\subsection{Method \code{populationPKParameterSettings()}}{
-Define calculate PK parameters `task` settings
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$populationPKParameterSettings(
-  taskFunction = calculatePKParameters,
-  outputFolder = defaultTaskOutputFolders$calculatePKParameters,
-  settings = NULL,
-  active = FALSE,
-  message = defaultWorkflowMessages$calculatePKParameters
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{taskFunction}}{function performed by `Task` to get results}
-
-\item{\code{outputFolder}}{folder where `Task` output is saved}
-
-\item{\code{settings}}{specific settings for `Task`}
-
-\item{\code{active}}{logical defining if `Task` will be run by workflow
-Default value is `FALSE`}
-
-\item{\code{message}}{message/title of the `Task`}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A new `Task` object
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-populationSensitivityAnalysisSettings"></a>}}
-\subsection{Method \code{populationSensitivityAnalysisSettings()}}{
-Define population Sensitivity Analysis `task` settings
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$populationSensitivityAnalysisSettings(
-  taskFunction = runPopulationSensitivityAnalysis,
-  outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
-  settings = NULL,
-  active = FALSE,
-  message = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{taskFunction}}{function performed by `Task` to get results}
-
-\item{\code{outputFolder}}{folder where `Task` output is saved}
-
-\item{\code{settings}}{specific settings for `Task`}
-
-\item{\code{active}}{logical defining if `Task` will be run by workflow
-Default value is `FALSE`}
-
-\item{\code{message}}{message/title of the `Task`}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A new `SensitivityAnalysisTask` object
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-plotDemographySettings"></a>}}
-\subsection{Method \code{plotDemographySettings()}}{
-Define plot demography `PlotTask` settings
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotDemographySettings(
-  reportTitle = defaultWorkflowTitles$plotDemography,
-  fileName = defaultWorkflowAppendices$plotDemography,
-  taskFunction = plotDemographyParameters,
-  outputFolder = defaultTaskOutputFolders$plotDemography,
-  active = FALSE,
-  message = defaultWorkflowMessages$plotDemography,
-  xParameters = getDefaultDemographyXParameters(self$workflowType),
-  yParameters = NULL,
-  settings = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{reportTitle}}{section title of plot task result within report}
-
-\item{\code{fileName}}{name of report appendix file associated to task}
-
-\item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
-
-\item{\code{outputFolder}}{folder where `Task` output is saved}
-
-\item{\code{active}}{logical indicating if `task` is performed in worklfow.
-Default value is `FALSE`}
-
-\item{\code{message}}{message indicating what the `task` does}
-
-\item{\code{xParameters}}{list of parameters to be plotted along x axis}
-
-\item{\code{yParameters}}{list of parameters to be plotted along y axis}
-
-\item{\code{settings}}{specific settings for task}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A `PlotTask` object for goodness of fit plots
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-plotGoFSettings"></a>}}
-\subsection{Method \code{plotGoFSettings()}}{
-Define Goodness of fit `PlotTask` settings
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotGoFSettings(
-  reportTitle = defaultWorkflowTitles$plotGoF,
-  fileName = defaultWorkflowAppendices$plotGoF,
-  taskFunction = plotPopulationGoodnessOfFit,
-  outputFolder = defaultTaskOutputFolders$plotGoF,
-  active = FALSE,
-  message = defaultWorkflowMessages$plotGoF,
-  settings = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{reportTitle}}{section title of plot task result within report}
-
-\item{\code{fileName}}{name of report appendix file associated to task}
-
-\item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
-
-\item{\code{outputFolder}}{folder where `Task` output is saved}
-
-\item{\code{active}}{logical indicating if `task` is performed in worklfow.
-Default value is `FALSE`}
-
-\item{\code{message}}{message indicating what the `task` does}
-
-\item{\code{settings}}{specific settings for task}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A `PlotTask` object for goodness of fit plots
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-plotPKParametersSettings"></a>}}
-\subsection{Method \code{plotPKParametersSettings()}}{
-Define PK parameters `PlotPKParametersTask` settings
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotPKParametersSettings(
-  reportTitle = defaultWorkflowTitles$plotPKParameters,
-  fileName = defaultWorkflowAppendices$plotPKParameters,
-  taskFunction = plotPopulationPKParameters,
-  outputFolder = defaultTaskOutputFolders$plotPKParameters,
-  active = FALSE,
-  message = defaultWorkflowMessages$plotPKParameters,
-  xParameters = getDefaultPkParametersXParameters(self$workflowType),
-  yParameters = NULL,
-  settings = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{reportTitle}}{section title of plot task result within report}
-
-\item{\code{fileName}}{name of report appendix file associated to task}
-
-\item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
-
-\item{\code{outputFolder}}{folder where `Task` output is saved}
-
-\item{\code{active}}{logical indicating if `task` is performed in worklfow.
-Default value is `FALSE`}
-
-\item{\code{message}}{message indicating what the `task` does}
-
-\item{\code{xParameters}}{list of parameters to be plotted along x axis}
-
-\item{\code{yParameters}}{list of parameters to be plotted along y axis}
-
-\item{\code{settings}}{specific settings for task}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A `PlotPKParametersTask` object for PK parameters tables
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-plotSensitivitySettings"></a>}}
-\subsection{Method \code{plotSensitivitySettings()}}{
-Define sensitivity analysis `PlotTask` settings
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$plotSensitivitySettings(
-  reportTitle = defaultWorkflowTitles$plotSensitivity,
-  fileName = defaultWorkflowAppendices$plotSensitivity,
-  taskFunction = plotPopulationSensitivity,
-  outputFolder = defaultTaskOutputFolders$plotSensitivity,
-  active = FALSE,
-  message = defaultWorkflowMessages$plotSensitivity,
-  xParameters = NULL,
-  yParameters = NULL,
-  settings = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{reportTitle}}{section title of plot task result within report}
-
-\item{\code{fileName}}{name of report appendix file associated to task}
-
-\item{\code{taskFunction}}{function called by task to get the results as a list of `plots` and `tables`}
-
-\item{\code{outputFolder}}{folder where `Task` output is saved}
-
-\item{\code{active}}{logical indicating if `task` is performed in worklfow.
-Default value is `FALSE`}
-
-\item{\code{message}}{message indicating what the `task` does}
-
-\item{\code{xParameters}}{list of parameters to be plotted along x axis - unused in this task}
-
-\item{\code{yParameters}}{list of parameters to be plotted along y axis - unused in this task}
-
-\item{\code{settings}}{specific settings for task}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A `PopulationPlotTask` object for sensitivity plots for a single population
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-runWorkflow"></a>}}
 \subsection{Method \code{runWorkflow()}}{
-Loop through all simulation sets and run active population model workflow tasks for each.
-# POPULATION WORKFLOW
-# CORE STAGE 0:  DEMOGRAPHY SUMMARY
-# 0a - Demography Plots/Tables
-# CORE STAGE 1:  SIMULATION
-# 1a - Time profile Plot
-# CORE STAGE 2:  CALCULATE PK PARAMETER
-# 2a - PK parameter Plot
-# CORE STAGE 3:  CALCULATE SENSITIVITY
-# 3a - Plots and Tables based on sensitivity results
+Run population workflow tasks for all simulation sets if tasks are activated
+The order of tasks is as follows:
+# 1) Run simulations
+# 2) Perform PK and sensitivity analyses
+# 3) Perform plot tasks
+## 3.a) time profiles and residual plots
+## 3.b) demography plots
+## 3.c) PK and sensitivity analyses tables and plots
+# 4) Render report
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$runWorkflow()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+All results and plots as a structured output in the workflow folder
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

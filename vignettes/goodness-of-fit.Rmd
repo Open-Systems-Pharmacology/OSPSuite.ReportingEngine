@@ -1,5 +1,5 @@
 ---
-title: "Goodness of fit task"
+title: "Time profiles and Residuals task"
 output: 
   rmarkdown::html_vignette:
    number_sections: true
@@ -20,18 +20,18 @@ knitr::opts_chunk$set(
 require(ospsuite.reportingengine)
 ```
 
-This vignette focuses on goodness of fit (GOF) plots generated using either mean model or population workflows.
+This vignette focuses on time profiles and residuals plots (also called goodness of fit plots) generated using either mean model or population workflows.
 
 # Overview
 
-The goodness of fit task first aims at generating time profile plots of specified simulation paths.
+The time profiles and residuals task first aims at generating time profile plots of specified simulation paths.
 The task can account for observed data, in which case residuals are calculated and plotted.
 For population workflows, aggregation functions are used, by default mean, median, 5th and 95th percentiles are computed and plotted in the time profiles.
 
 
 ## Inputs
 
-Results obtained from the `simulate` task and stored as csv files within the subdirectory __SimulationResults__ from the `workflowFolder` directory are required in order to perform the goodness of fit (`plotGoF`) task.
+Results obtained from the `simulate` task and stored as csv files within the subdirectory __SimulationResults__ from the `workflowFolder` directory are required in order to perform the goodness of fit (`plotTimeProfilesAndResiduals`) task.
 As a consequence, if the workflow output folder does not include the appropriate simulations, the task `simulate` needs to be __active__.
 
 
@@ -39,7 +39,7 @@ The objects `SimulationSet` (or `PopulationSimulationSet` for population workflo
 
 ## Ouptuts
 
-The GOF task generates for each simulation set plots of:
+The time profiles and residuals task generates for each simulation set plots of:
 
 - the simulated time profile 
   - in linear and logarithmic scale
@@ -124,7 +124,7 @@ workflow1 <-
   )
 
 # Set the workflow tasks to be run
-workflow1$activateTasks(c("simulate", "plotGoF"))
+workflow1$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 
 # Run the workflow
 workflow1$runWorkflow()
@@ -191,7 +191,7 @@ workflow2 <-
   )
 
 # Set the workflow tasks to be run
-workflow2$activateTasks("plotGoF")
+workflow2$activateTasks("plotTimeProfilesAndResiduals")
 workflow2$inactivateTasks("simulate")
 
 # Run the workflow
@@ -269,7 +269,7 @@ workflow3 <-
   )
 
 # Set the workflow tasks to be run
-workflow3$activateTasks("plotGoF")
+workflow3$activateTasks("plotTimeProfilesAndResiduals")
 workflow3$inactivateTasks("simulate")
 
 # Run the workflow
@@ -352,7 +352,7 @@ workflow4 <-
   )
 
 # Set the workflow tasks to be run
-workflow4$activateTasks(c("simulate", "plotGoF"))
+workflow4$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 
 # Run the workflow
 workflow4$runWorkflow()
@@ -431,7 +431,7 @@ workflow5 <-
   )
 
 # Set the workflow tasks to be run
-workflow5$activateTasks(c("simulate", "plotGoF"))
+workflow5$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 
 # Run the workflow
 workflow5$runWorkflow()
@@ -486,12 +486,13 @@ setA <- PopulationSimulationSet$new(
 # Create the workflow instance
 workflow6 <-
   PopulationWorkflow$new(
+    workflowType = PopulationWorkflowTypes$parallelComparison,
     simulationSets = setA,
     workflowFolder = "Example-6"
   )
 
 # Set the workflow tasks to be run
-workflow6$activateTasks(c("simulatePopulation", "plotGoF"))
+workflow6$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 
 # Run the workflow
 workflow6$runWorkflow()
@@ -552,13 +553,14 @@ setA <- PopulationSimulationSet$new(
 # Create the workflow instance
 workflow7 <-
   PopulationWorkflow$new(
+    workflowType = PopulationWorkflowTypes$parallelComparison,
     simulationSets = setA,
     workflowFolder = "Example-6"
   )
 
 # Set the workflow tasks to be run
-workflow7$activateTasks("plotGoF")
-workflow7$inactivateTasks("simulatePopulation")
+workflow7$activateTasks(StandardPlotTasks$plotTimeProfilesAndResiduals)
+workflow7$inactivateTasks(StandardSimulationTasks$simulate)
 
 # Run the workflow
 workflow7$runWorkflow()

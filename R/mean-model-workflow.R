@@ -1,13 +1,13 @@
 #' @title MeanModelWorkflow
 #' @description  R6 class for Reporting Engine Mean Model Workflow
-#' @field simulate R6 class `Task` for simulation
-#' @field meanModelPKParameters R6 class `Task` for PK parameters calculation
-#' @field meanModelSensitivityAnalysis R6 class `Task` for sensitivity analysis
-#' @field plotGoF R6 class `PlotTask` for goodness of fit plots
-#' @field plotMassBalance R6 class `PlotTask` for mass balance plot
-#' @field plotAbsorption R6 class `PlotTask` for absorption plot
-#' @field plotPKParameters R6 class `PlotTask` for PK parameters plot
-#' @field plotSensitivity R6 class `PlotTask` for sensitivity plot
+#' @field simulate `SimulationTask` object for time profile simulations
+#' @field calculatePKParameters `CalculatePKParametersTask` object for PK parameters calculation
+#' @field calculateSensitivity `SensitivityAnalysisTask` object for sensitivity analysis
+#' @field plotTimeProfilesAndResiduals `PlotTask` object for goodness of fit plots
+#' @field plotMassBalance `PlotTask` object for mass balance plot
+#' @field plotAbsorption `PlotTask` object for absorption plot
+#' @field plotPKParameters `PlotTask` object for PK parameters plot
+#' @field plotSensitivity `PlotTask` object for sensitivity plot
 #' @export
 #' @import tlf
 #' @import ospsuite
@@ -17,10 +17,10 @@ MeanModelWorkflow <- R6::R6Class(
   inherit = Workflow,
 
   public = list(
-    simulate = NULL, # TO DO: rename with simpler task name simulate
-    meanModelPKParameters = NULL, # TO DO: rename with simpler task name calculatePKParameters
-    meanModelSensitivityAnalysis = NULL, # TO DO: rename with simpler task name calculateSensitivity
-    plotGoF = NULL,
+    simulate = NULL,
+    calculatePKParameters = NULL,
+    calculateSensitivity = NULL,
+    plotTimeProfilesAndResiduals = NULL,
     plotMassBalance = NULL,
     plotAbsorption = NULL,
     plotPKParameters = NULL,
@@ -33,246 +33,17 @@ MeanModelWorkflow <- R6::R6Class(
     initialize = function(...) {
       super$initialize(...)
 
-      # TO DO: include task parameters from initialization ?
-      self$simulateSettings()
-      self$calculatePKParametersSettings()
-      self$plotGoFSettings()
-      self$plotMassBalanceSettings()
-      self$plotAbsorptionSettings()
-      self$plotPKParametersSettings()
-      self$meanModelSensitivityAnalysisSettings()
-      self$plotSensitivitySettings()
+      self$simulate <- loadSimulateTask(self)
+      self$calculatePKParameters <- loadCalculatePKParametersTask(self)
+      self$calculateSensitivity <- loadCalculateSensitivityTask(self)
+      
+      self$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(self)
+      self$plotMassBalance <- loadPlotMassBalanceTask(self)
+      self$plotAbsorption <- loadPlotAbsorptionTask(self)
+      self$plotPKParameters <- loadPlotPKParametersTask(self)
+      self$plotSensitivity  <- loadPlotSensitivityTask(self)
+      
       self$taskNames <- enum(self$getAllTasks())
-    },
-
-    #' @description
-    #' Define simulate `SimulationTask` settings
-    #' @param taskFunction function performed by `Task` to get results
-    #' @param outputFolder folder where `Task` output is saved
-    #' @param active logical defining if `Task` will be run by workflow
-    #' Default value is `TRUE`
-    #' @param settings specific settings for `Task`
-    #' @param message message/title of the `Task`
-    #' @return A new `SimulationTask` object
-    simulateSettings = function(taskFunction = simulateModel,
-                                    outputFolder = defaultTaskOutputFolders$simulate,
-                                    active = TRUE,
-                                    message = defaultWorkflowMessages$simulate,
-                                    settings = NULL) {
-      self$simulate <- SimulationTask$new(
-        getTaskResults = taskFunction,
-        nameTaskResults = deparse(substitute(taskFunction)),
-        outputFolder = outputFolder,
-        workflowFolder = self$workflowFolder,
-        active = active,
-        settings = settings,
-        message = message
-      )
-    },
-
-    #' @description
-    #' Define calculate PK Parameters `CalculatePKParametersTask` settings
-    #' @param taskFunction function performed by `Task` to get results
-    #' @param outputFolder folder where `Task` output is saved
-    #' @param active logical defining if `Task` will be run by workflow
-    #' Default value is `FALSE`
-    #' @param settings specific settings for `Task`
-    #' @param message message/title of the `Task`
-    #' @return A new `SimulationTask` object
-    calculatePKParametersSettings = function(taskFunction = calculatePKParameters,
-                                                 outputFolder = defaultTaskOutputFolders$calculatePKParameters,
-                                                 active = FALSE,
-                                                 message = defaultWorkflowMessages$calculatePKParameters,
-                                                 settings = NULL) {
-      self$meanModelPKParameters <- CalculatePKParametersTask$new(
-        getTaskResults = taskFunction,
-        nameTaskResults = deparse(substitute(taskFunction)),
-        outputFolder = outputFolder,
-        workflowFolder = self$workflowFolder,
-        active = active,
-        settings = settings,
-        message = message
-      )
-    },
-
-    #' @description
-    #' Define mean Model Sensitivity Analysis `SensitivityAnalysisTask` settings
-    #' @param taskFunction function performed by `Task` to get results
-    #' @param outputFolder folder where `Task` output is saved
-    #' @param active logical defining if `Task` will be run by workflow
-    #' Default value is `FALSE`
-    #' @param settings specific settings for `Task`
-    #' @param message message/title of the `Task`
-    #' @return A new `SimulationTask` object
-    meanModelSensitivityAnalysisSettings = function(taskFunction = runSensitivity,
-                                                        outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
-                                                        active = FALSE,
-                                                        message = defaultWorkflowMessages$sensitivityAnalysis,
-                                                        settings = NULL) {
-      self$meanModelSensitivityAnalysis <- SensitivityAnalysisTask$new(
-        getTaskResults = taskFunction,
-        nameTaskResults = deparse(substitute(taskFunction)),
-        outputFolder = outputFolder,
-        workflowFolder = self$workflowFolder,
-        active = active,
-        settings = settings,
-        message = message
-      )
-    },
-
-    #' @description
-    #' Define Goodness of fit `PlotTask` settings
-    #' @param reportTitle section title of plot task result within report
-    #' @param fileName name of report appendix file associated to task
-    #' @param taskFunction function called by task to get the results as a list of `plots` and `tables`
-    #' @param outputFolder folder where `Task` output is saved
-    #' @param active logical indicating if `task` is performed in worklfow.
-    #' Default value is `FALSE`
-    #' @param message message indicating what the `task` does
-    #' @param settings specific settings for task
-    #' @return A `PlotTask` object for goodness of fit plots
-    plotGoFSettings = function(reportTitle = defaultWorkflowTitles$plotGoF,
-                                   fileName = defaultWorkflowAppendices$plotGoF,
-                                   taskFunction = plotMeanGoodnessOfFit,
-                                   outputFolder = defaultTaskOutputFolders$plotGoF,
-                                   active = FALSE,
-                                   message = defaultWorkflowMessages$plotGoF,
-                                   settings = NULL) {
-      self$plotGoF <- GofPlotTask$new(
-        reportTitle = reportTitle,
-        fileName = fileName,
-        getTaskResults = taskFunction,
-        nameTaskResults = deparse(substitute(taskFunction)),
-        outputFolder = outputFolder,
-        workflowFolder = self$workflowFolder,
-        active = active,
-        message = message,
-        settings = settings
-      )
-    },
-
-    #' @description
-    #' Define PK parameters `PlotPKParametersTask` settings
-    #' @param reportTitle section title of plot task result within report
-    #' @param fileName name of report appendix file associated to task
-    #' @param taskFunction function called by task to get the results as a list of `plots` and `tables`
-    #' @param outputFolder folder where `Task` output is saved
-    #' @param active logical indicating if `task` is performed in worklfow.
-    #' Default value is `FALSE`
-    #' @param message message indicating what the `task` does
-    #' @param settings specific settings for task
-    #' @return A `PlotPKParametersTask` object for PK parameters tables
-    plotPKParametersSettings = function(reportTitle = defaultWorkflowTitles$plotPKParameters,
-                                            fileName = defaultWorkflowAppendices$plotPKParameters,
-                                            taskFunction = plotMeanPKParameters,
-                                            outputFolder = defaultTaskOutputFolders$plotPKParameters,
-                                            active = FALSE,
-                                            message = defaultWorkflowMessages$plotPKParameters,
-                                            settings = NULL) {
-      self$plotPKParameters <- PlotTask$new(
-        reportTitle = reportTitle,
-        fileName = fileName,
-        getTaskResults = taskFunction,
-        nameTaskResults = deparse(substitute(taskFunction)),
-        outputFolder = outputFolder,
-        workflowFolder = self$workflowFolder,
-        active = active,
-        message = message,
-        settings = settings
-      )
-    },
-
-    #' @description
-    #' Define Mass Balance `PlotTask` settings
-    #' @param reportTitle section title of plot task result within report
-    #' @param fileName name of report appendix file associated to task
-    #' @param taskFunction function called by task to get the results as a list of `plots` and `tables`
-    #' @param outputFolder folder where `Task` output is saved
-    #' @param active logical indicating if `task` is performed in worklfow.
-    #' Default value is `FALSE`
-    #' @param message message indicating what the `task` does
-    #' @param settings specific settings for task
-    #' @return A `PlotTask` object for goodness of fit plots
-    plotMassBalanceSettings = function(reportTitle = defaultWorkflowTitles$plotMassBalance,
-                                           fileName = defaultWorkflowAppendices$plotMassBalance,
-                                           taskFunction = plotMeanMassBalance,
-                                           outputFolder = defaultTaskOutputFolders$plotMassBalance,
-                                           active = FALSE,
-                                           message = defaultWorkflowMessages$plotMassBalance,
-                                           settings = NULL) {
-      self$plotMassBalance <- PlotTask$new(
-        reportTitle = reportTitle,
-        fileName = fileName,
-        getTaskResults = taskFunction,
-        nameTaskResults = deparse(substitute(taskFunction)),
-        outputFolder = outputFolder,
-        workflowFolder = self$workflowFolder,
-        active = active,
-        message = message,
-        settings = settings
-      )
-    },
-
-    #' @description
-    #' Define Absorption `PlotTask` settings
-    #' @param reportTitle section title of plot task result within report
-    #' @param fileName name of report appendix file associated to task
-    #' @param taskFunction function called by task to get the results as a list of `plots` and `tables`
-    #' @param outputFolder folder where `Task` output is saved
-    #' @param active logical indicating if `task` is performed in worklfow.
-    #' Default value is `FALSE`
-    #' @param message message indicating what the `task` does
-    #' @param settings specific settings for task
-    #' @return A `PlotTask` object for goodness of fit plots
-    plotAbsorptionSettings = function(reportTitle = defaultWorkflowTitles$plotAbsorption,
-                                          fileName = defaultWorkflowAppendices$plotAbsorption,
-                                          taskFunction = plotMeanAbsorption,
-                                          outputFolder = defaultTaskOutputFolders$plotAbsorption,
-                                          active = FALSE,
-                                          message = defaultWorkflowMessages$plotAbsorption,
-                                          settings = NULL) {
-      self$plotAbsorption <- PlotTask$new(
-        reportTitle = reportTitle,
-        fileName = fileName,
-        getTaskResults = taskFunction,
-        nameTaskResults = deparse(substitute(taskFunction)),
-        outputFolder = outputFolder,
-        workflowFolder = self$workflowFolder,
-        active = active,
-        message = message,
-        settings = settings
-      )
-    },
-
-    #' @description
-    #' Define sensitivity analysis `PlotTask` settings
-    #' @param reportTitle section title of plot task result within report
-    #' @param fileName name of report appendix file associated to task
-    #' @param taskFunction function called by task to get the results as a list of `plots` and `tables`
-    #' @param outputFolder folder where `Task` output is saved
-    #' @param active logical indicating if `task` is performed in worklfow.
-    #' Default value is `FALSE`
-    #' @param message message indicating what the `task` does
-    #' @param settings specific settings for task
-    #' @return A `PlotTask` object for goodness of fit plots
-    plotSensitivitySettings = function(reportTitle = defaultWorkflowTitles$plotSensitivity,
-                                           fileName = defaultWorkflowAppendices$plotSensitivity,
-                                           taskFunction = plotMeanSensitivity,
-                                           outputFolder = defaultTaskOutputFolders$plotSensitivity,
-                                           active = FALSE,
-                                           message = defaultWorkflowMessages$plotSensitivity,
-                                           settings = NULL) {
-      self$plotSensitivity <- PlotTask$new(
-        reportTitle = reportTitle,
-        fileName = fileName,
-        getTaskResults = taskFunction,
-        nameTaskResults = deparse(substitute(taskFunction)),
-        outputFolder = outputFolder,
-        workflowFolder = self$workflowFolder,
-        active = active,
-        message = message,
-        settings = settings %||% SensitivityPlotSettings$new()
-      )
     },
 
     #' @description
@@ -299,12 +70,12 @@ MeanModelWorkflow <- R6::R6Class(
         self$simulate$runTask(self$simulationStructures)
       }
 
-      if (self$meanModelPKParameters$active) {
-        self$meanModelPKParameters$runTask(self$simulationStructures)
+      if (self$calculatePKParameters$active) {
+        self$calculatePKParameters$runTask(self$simulationStructures)
       }
 
-      if (self$meanModelSensitivityAnalysis$active) {
-        self$meanModelSensitivityAnalysis$runTask(self$simulationStructures)
+      if (self$calculateSensitivity$active) {
+        self$calculateSensitivity$runTask(self$simulationStructures)
       }
 
       for (plotTask in self$getAllPlotTasks()) {

@@ -14,9 +14,9 @@ testReportContent <- c("# Title 1",
                        "## Sub title 3",
                        "Figures: this is not a figure ")
 
-testReportNumFigs <- getTestDataFilePath("testReportNumFigs.md")
-testReportNumSecs <- getTestDataFilePath("testReportNumSecs.md")
-testReportNumToc <- getTestDataFilePath("testReportNumToc.md")
+testReportNumFigs <- getTestDataFilePath("utilities-report/testReportNumFigs.md")
+testReportNumSecs <- getTestDataFilePath("utilities-report/testReportNumSecs.md")
+testReportNumToc <- getTestDataFilePath("utilities-report/testReportNumToc.md")
 
 # Ensure testReport is not deleted before tests
 unlink(testReport, recursive = TRUE)

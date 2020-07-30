@@ -18,8 +18,6 @@ R6 class representing Reporting Engine generic Workflow
 \item{\code{reportFileName}}{name of the Rmd report file}
 
 \item{\code{createWordReport}}{logical of option for creating Markdwon-Report only but not a Word-Report.}
-
-\item{\code{watermark}}{displayed watermark in every plot background}
 }
 \if{html}{\out{</div>}}
 }
@@ -34,6 +32,8 @@ R6 class representing Reporting Engine generic Workflow
 \item \href{#method-activateTasks}{\code{Workflow$activateTasks()}}
 \item \href{#method-inactivateTasks}{\code{Workflow$inactivateTasks()}}
 \item \href{#method-printReportingEngineInfo}{\code{Workflow$printReportingEngineInfo()}}
+\item \href{#method-getWatermark}{\code{Workflow$getWatermark()}}
+\item \href{#method-setWatermark}{\code{Workflow$setWatermark()}}
 \item \href{#method-print}{\code{Workflow$print()}}
 \item \href{#method-clone}{\code{Workflow$clone()}}
 }
@@ -60,7 +60,7 @@ Create a new `Workflow` object.
 
 \item{\code{createWordReport}}{logical of option for creating Markdwon-Report only but not a Word-Report.}
 
-\item{\code{watermark}}{displayed watermark in every plot background}
+\item{\code{watermark}}{displayed watermark in figures background}
 }
 \if{html}{\out{</div>}}
 }
@@ -164,6 +164,31 @@ Print reporting engine information obtained from initiliazing a `Workflow`
 \if{html}{\out{<div class="r">}}\preformatted{Workflow$printReportingEngineInfo()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getWatermark"></a>}}
+\subsection{Method \code{getWatermark()}}{
+Get the current watermark to be reprted on figures background
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$getWatermark()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setWatermark"></a>}}
+\subsection{Method \code{setWatermark()}}{
+Set the watermark to be reprted on figures background
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$setWatermark(watermark)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{watermark}}{text to be reported on figures background}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}

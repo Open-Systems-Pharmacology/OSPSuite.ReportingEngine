@@ -5,7 +5,6 @@
 #' @field taskNames Enum of task names
 #' @field reportFileName name of the Rmd report file
 #' @field createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
-#' @field watermark displayed watermark in every plot background
 #' @import tlf
 #' @import ospsuite
 Workflow <- R6::R6Class(
@@ -16,14 +15,13 @@ Workflow <- R6::R6Class(
     taskNames = NULL,
     reportFileName = NULL,
     createWordReport = NULL,
-    watermark = NULL,
-
+    
     #' @description
     #' Create a new `Workflow` object.
     #' @param simulationSets list of `SimulationSet` R6 class objects
     #' @param workflowFolder path of the output folder created or used by the Workflow.
     #' @param createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
-    #' @param watermark displayed watermark in every plot background
+    #' @param watermark displayed watermark in figures background
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
                               workflowFolder,
@@ -73,13 +71,7 @@ Workflow <- R6::R6Class(
           workflowFolder = self$workflowFolder
         )
       }
-
-      self$watermark <- ""
-      if (!private$.reportingEngineInfo$isValidated()) {
-        self$watermark <- workflowWatermarkMessage
-      }
-      self$watermark <- watermark %||% self$watermark
-      setWatermarkConfiguration(watermark = self$watermark)
+      self$setWatermark(watermark)
     },
 
     #' @description
@@ -147,6 +139,25 @@ Workflow <- R6::R6Class(
     printReportingEngineInfo = function() {
       private$.reportingEngineInfo$print()
     },
+    
+    #' @description
+    #' Get the current watermark to be reprted on figures background
+    getWatermark = function() {
+      private$.watermark
+    },
+    
+    #' @description
+    #' Set the watermark to be reprted on figures background
+    #' @param watermark text to be reported on figures background
+    setWatermark = function(watermark) {
+      validateIsString(watermark, nullAllowed = TRUE)
+      private$.watermark <- ""
+      if (!private$.reportingEngineInfo$isValidated()) {
+        private$.watermark <- workflowWatermarkMessage
+      }
+      private$.watermark <- watermark %||% private$.watermark
+      setWatermarkConfiguration(private$.watermark)
+    },
 
     #' @description
     #' Print workflow list of tasks
@@ -164,6 +175,8 @@ Workflow <- R6::R6Class(
 
   private = list(
     .reportingEngineInfo = NULL,
+    
+    .watermark = NULL,
 
     .getTasksWithStatus = function(status) {
       taskNames <- self$getAllTasks()
