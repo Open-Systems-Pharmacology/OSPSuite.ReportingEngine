@@ -93,7 +93,7 @@ messages <- list(
   },
 
   warningNoReferencePopulation = function(workflowType) {
-    paste0("Workflow type '", workflowType, "' requires one reference population, but no reference population was provided.")
+    paste0("Workflow type '", workflowType, "' requires one unique reference population, but either none or multiple reference populations provided.")
   },
 
   errorNotADimension = function(values) {
