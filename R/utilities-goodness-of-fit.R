@@ -76,14 +76,16 @@ plotMeanGoodnessOfFit <- function(structureSet,
       )
       outputResidualsData <- getResiduals(outputObservedData, outputSimulatedData)
       outputResidualsData <- removeMissingValues(outputResidualsData, "Residuals", logFolder)
-      
+
       if (!isOfLength(lloqColumn, 0)) {
-        outputLloqData <- data.frame(
-          "Time" = observedDataset[rowFilter, timeColumn],
-          "Concentration" = observedDataset[rowFilter, lloqColumn],
-          "Legend" = "LLOQ",
-          "Path" = output$path
-        )
+        if (isIncluded(lloqColumn, names(observedDataset))) {
+          outputLloqData <- data.frame(
+            "Time" = observedDataset[rowFilter, timeColumn],
+            "Concentration" = observedDataset[rowFilter, lloqColumn],
+            "Legend" = "LLOQ",
+            "Path" = output$path
+          )
+        }
       }
     }
 
@@ -286,12 +288,14 @@ plotPopulationGoodnessOfFit <- function(structureSet,
       outputResidualsData <- getResiduals(outputObservedData, simulatedDataForResiduals)
       outputResidualsData <- removeMissingValues(outputResidualsData, "Residuals", logFolder)
       if (!isOfLength(lloqColumn, 0)) {
-        outputLloqData <- data.frame(
-          "Time" = observedDataset[rowFilter, timeColumn],
-          "Concentration" = observedDataset[rowFilter, lloqColumn],
-          "Legend" = "LLOQ",
-          "Path" = output$path
-        )
+        if (isIncluded(lloqColumn, names(observedDataset))) {
+          outputLloqData <- data.frame(
+            "Time" = observedDataset[rowFilter, timeColumn],
+            "Concentration" = observedDataset[rowFilter, lloqColumn],
+            "Legend" = "LLOQ",
+            "Path" = output$path
+          )
+        }
       }
     }
 
@@ -333,9 +337,11 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     )
   }
   goodnessOfFitTables <- list(simulatedData = simulatedData)
-  if(!isOfLength(observedData,0)){
-    goodnessOfFitTables <- list(observedData = observedData,
-                                simulatedData = simulatedData)
+  if (!isOfLength(observedData, 0)) {
+    goodnessOfFitTables <- list(
+      observedData = observedData,
+      simulatedData = simulatedData
+    )
   }
   return(list(
     plots = goodnessOfFitPlots,
