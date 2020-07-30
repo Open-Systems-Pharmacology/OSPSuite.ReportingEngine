@@ -159,7 +159,7 @@ GofPlotTask <- R6::R6Class(
           file = tableFileName,
           row.names = FALSE
         )
-        re.tStoreFileMetadata(access = "write", filePath = residualsAcrossAllSimulations)
+        re.tStoreFileMetadata(access = "write", filePath = tableFileName)
         logWorkflow(
           message = paste0("Table '", tableFileName, "' was successfully saved."),
           pathFolder = self$workflowFolder,
