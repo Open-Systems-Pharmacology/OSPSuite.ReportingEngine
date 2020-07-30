@@ -56,12 +56,14 @@ PlotTask <- R6::R6Class(
           )
         )
         # TO DO: define parameters from settings/plotConfiguration
+
+        figureFilePath <- file.path(self$workflowFolder, plotFileName)
         ggplot2::ggsave(
-          filename = file.path(self$workflowFolder, plotFileName),
+          filename = figureFilePath,
           plot = taskResults$plots[[plotName]],
           width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
         )
-        re.tStoreFileMetadata(access = "write", filePath = plotFileName)
+        re.tStoreFileMetadata(access = "write", filePath = figureFilePath)
         logWorkflow(
           message = paste0("Plot '", plotFileName, "' was successfully saved."),
           pathFolder = self$workflowFolder,
