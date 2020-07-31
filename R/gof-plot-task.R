@@ -192,7 +192,7 @@ GofPlotTask <- R6::R6Class(
           plot = residualQQPlot,
           width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
         )
-        re.tStoreFileMetadata(access = "write", filePath = qqPlotFileName)
+        re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, qqPlotFileName))
 
         logWorkflow(
           message = paste0("Plots '", histogramFileName, "', '", qqPlotFileName, "' were successfully saved."),
