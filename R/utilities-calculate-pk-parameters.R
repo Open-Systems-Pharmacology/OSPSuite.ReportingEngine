@@ -478,7 +478,7 @@ getPkParametersAcrossPopulations <- function(structureSets) {
     )
 
     pkParametersTable <- ospsuite::pkAnalysesAsDataFrame(pkAnalyses)
-    populationTable <- ospsuite::populationAsDataFrame(population)
+    populationTable <- getPopulationAsDataFrame(population, simulation)
 
     # Use merge instead of cbind as there is a same variable IndividualId
     fullPkParametersTable <- merge.data.frame(

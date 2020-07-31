@@ -11,6 +11,9 @@ readObservedDataFile <- function(fileName,
                                  header = TRUE,
                                  encoding = "UTF-8") {
   extension <- fileExtension(fileName)
+  # For some cases where data was derived from Excel,
+  # <U+FEFF> is included in first variable name and needs to be removed
+  forbiddenCharacters <- "\ufeff" 
 
   if (extension %in% "csv") {
     observedData <- read.csv(fileName,
@@ -18,6 +21,9 @@ readObservedDataFile <- function(fileName,
       check.names = FALSE,
       encoding = encoding
     )
+    variableNames <- names(observedData)
+    variableNames[1] <- gsub(forbiddenCharacters, "", variableNames[1])
+    names(observedData) <- variableNames
     return(observedData)
   }
 
@@ -26,6 +32,9 @@ readObservedDataFile <- function(fileName,
     check.names = FALSE,
     encoding = encoding
   )
+  variableNames <- names(observedData)
+  variableNames[1] <- gsub(forbiddenCharacters, "", variableNames[1])
+  names(observedData) <- variableNames
   return(observedData)
 }
 

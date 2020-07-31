@@ -55,12 +55,7 @@ PopulationWorkflow <- R6::R6Class(
       self$workflowType <- workflowType
 
       # Pediatric and ratio comparison workflows need ONE reference population
-      if (isIncluded(self$workflowType, c(PopulationWorkflowTypes$pediatric, PopulationWorkflowTypes$ratioComparison))) {
-        allSimulationReferences <- sapply(simulationSets, function(set) {
-          set$referencePopulation
-        })
-        validateIsOfLength(allSimulationReferences[allSimulationReferences], 1)
-      }
+      validateHasReferencePopulation(workflowType, simulationSets, logFolder = self$workflowFolder)
       
       self$simulate <- loadSimulateTask(self)
       self$calculatePKParameters <- loadCalculatePKParametersTask(self)

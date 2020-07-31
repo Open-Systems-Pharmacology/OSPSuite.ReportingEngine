@@ -378,3 +378,17 @@ validateIsUnitFromDimension <- function(unit, dimension, nullAllowed = FALSE) {
   stop(messages$errorUnitNotFromDimension(unit, dimension))
 }
 
+validateHasReferencePopulation <- function(workflowType, simulationSets, logFolder = NULL){
+  if(isIncluded(workflowType, PopulationWorkflowTypes$parallelComparison)){
+    return()
+  }
+  allSimulationReferences <- sapply(simulationSets, function(set) {set$referencePopulation})
+  
+  if(isOfLength(allSimulationReferences[allSimulationReferences], 1)){
+    return()
+  }
+  if(is.null(logFolder)){
+    stop(messages$warningNoReferencePopulation(workflowType))
+  }
+  logErrorThenStop(messages$warningNoReferencePopulation(workflowType), logFolder)
+}

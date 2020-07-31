@@ -41,7 +41,7 @@ plotDemographyParameters <- function(structureSets,
   checkIsIncluded(yParameters, names(demographyData), nullAllowed = TRUE, groupName = "population variables", logFolder = logFolder)
   xParameters <- intersect(xParameters, names(demographyData))
   yParameters <- intersect(yParameters, names(demographyData))
-  
+
   if (workflowType %in% PopulationWorkflowTypes$pediatric) {
     referencePopulationName <- getReferencePopulationName(structureSets)
   }
@@ -185,7 +185,8 @@ getDemographyAcrossPopulations <- function(structureSets) {
   for (structureSet in structureSets)
   {
     population <- loadWorkflowPopulation(structureSet$simulationSet)
-    populationTable <- ospsuite::populationAsDataFrame(population)
+    simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
+    populationTable <- getPopulationAsDataFrame(population, simulation)
 
     fullDemographyTable <- cbind.data.frame(
       simulationSetName = structureSet$simulationSet$simulationSetName,
@@ -197,7 +198,6 @@ getDemographyAcrossPopulations <- function(structureSets) {
     )
   }
 
-  simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
   metaData <- getPopulationMetaData(population, simulation)
 
   return(list(
@@ -405,6 +405,16 @@ setYParametersForDemogrpahyPlot <- function(workflow, parameters) {
     logTypes = LogTypes$Debug
   )
   return(invisible())
+}
+
+getPopulationAsDataFrame <- function(population, simulation) {
+  populationTable <- ospsuite::populationAsDataFrame(population)
+  allParameters <- ospsuite::getAllParametersMatching(population$allParameterPaths, simulation)
+
+  for (parameter in allParameters) {
+    populationTable[, parameter$path] <- ospsuite::toDisplayUnit(parameter, populationTable[, parameter$path])
+  }
+  return(populationTable)
 }
 
 getPopulationMetaData <- function(population, simulation) {
