@@ -2,15 +2,15 @@
 % Please edit documentation in R/utilities-mpi-error-handling.R
 \name{updateIndividualParametersOnCores}
 \alias{updateIndividualParametersOnCores}
-\title{loadSimulationOnCores}
+\title{updateIndividualParametersOnCores}
 \usage{
 updateIndividualParametersOnCores(individualParameters, logFolder)
 }
 \arguments{
-\item{logFolder}{folder where the logs are saved}
+\item{individualParameters}{parameters to update}
 
-\item{libraryName}{string containing name of library to be loaded}
+\item{logFolder}{folder where the logs are saved}
 }
 \description{
-Send libraryName to core, load the library and check that it has been loaded successfully
+Update individual parameters on core
 }

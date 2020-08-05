@@ -2,7 +2,7 @@
 % Please edit documentation in R/utilities-mpi-error-handling.R
 \name{loadLibraryOnCores}
 \alias{loadLibraryOnCores}
-\title{loadSimulationOnCores}
+\title{loadLibraryOnCores}
 \usage{
 loadLibraryOnCores(libraryName, logFolder)
 }

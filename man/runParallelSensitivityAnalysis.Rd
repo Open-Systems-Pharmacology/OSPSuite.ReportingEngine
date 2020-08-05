@@ -19,8 +19,12 @@ runParallelSensitivityAnalysis(
 
 \item{variableParameterPaths}{paths to parameters to vary in sensitivity analysis}
 
+\item{variationRange}{vector setting range of variation of sensitivity analysis}
+
+\item{showProgress}{logical option to display simulation progress}
+
 \item{individualParameters}{is an object storing an individual's parameters, obtained
-from a population object's getParameterValuesForIndividual() function.}
+from a population object's `getParameterValuesForIndividual()`` function.}
 
 \item{numberOfCores}{is the number of cores over which to parallelize the sensitivity analysis}
 

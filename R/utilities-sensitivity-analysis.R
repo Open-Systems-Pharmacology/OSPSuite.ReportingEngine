@@ -169,8 +169,10 @@ individualSensitivityAnalysis <- function(structureSet,
 #' for a single individual, save results as CSV.
 #' @param structureSet `SimulationStructure` R6 class object
 #' @param variableParameterPaths paths to parameters to vary in sensitivity analysis
+#' @param variationRange vector setting range of variation of sensitivity analysis
+#' @param showProgress logical option to display simulation progress
 #' @param individualParameters is an object storing an individual's parameters, obtained
-#' from a population object's getParameterValuesForIndividual() function.
+#' from a population object's `getParameterValuesForIndividual()`` function.
 #' @param numberOfCores is the number of cores over which to parallelize the sensitivity analysis
 #' @param logFolder folder where the logs are saved
 #' @return SA results for population
