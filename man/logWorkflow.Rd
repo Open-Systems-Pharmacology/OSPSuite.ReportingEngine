@@ -20,9 +20,6 @@ Default is `getwd()`}
 Use enum `LogTypes` to get all the logTypes.
 Default is c("Info", "Debug")}
 }
-\value{
-
-}
 \description{
 Save messages into log files
 }

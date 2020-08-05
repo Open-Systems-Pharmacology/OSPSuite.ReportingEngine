@@ -66,7 +66,6 @@ logInfo <- function(message,
 #' @param logTypes types of logs where message is saved
 #' Use enum `LogTypes` to get all the logTypes.
 #' Default is c("Info", "Debug")
-#' @return
 #' @export
 logWorkflow <- function(message,
                         pathFolder = getwd(),
