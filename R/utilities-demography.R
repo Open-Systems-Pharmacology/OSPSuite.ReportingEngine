@@ -192,6 +192,14 @@ getDemographyAcrossPopulations <- function(structureSets) {
       simulationSetName = structureSet$simulationSet$simulationSetName,
       populationTable
     )
+    # Prevent crash when merging populations with different parameters by filling unexisting with NA
+    newNamesDemographyAcrossPopulations <- setdiff(names(fullDemographyTable), names(demographyAcrossPopulations))
+    newNamesDemographyTable <- setdiff(names(demographyAcrossPopulations), names(fullDemographyTable))
+    if (!is.null(demographyAcrossPopulations)) {
+      demographyAcrossPopulations[, newNamesDemographyAcrossPopulations] <- NA
+    }
+    fullDemographyTable[, newNamesDemographyTable] <- NA
+
     demographyAcrossPopulations <- rbind.data.frame(
       demographyAcrossPopulations,
       fullDemographyTable
