@@ -114,19 +114,21 @@ PopulationPlotTask <- R6::R6Class(
         pathFolder = self$workflowFolder
       )
 
-      if (!is.null(self$outputFolder)) {
-        dir.create(file.path(self$workflowFolder, self$outputFolder))
-      }
+      if (self$validateInput()) {
+        if (!is.null(self$outputFolder)) {
+          dir.create(file.path(self$workflowFolder, self$outputFolder))
+        }
 
-      taskResults <- self$getTaskResults(
-        structureSets,
-        self$workflowFolder,
-        self$settings,
-        self$workflowType,
-        self$xParameters,
-        self$yParameters
-      )
-      self$saveResults(taskResults)
+        taskResults <- self$getTaskResults(
+          structureSets,
+          self$workflowFolder,
+          self$settings,
+          self$workflowType,
+          self$xParameters,
+          self$yParameters
+        )
+        self$saveResults(taskResults)
+      }
     }
   )
 )

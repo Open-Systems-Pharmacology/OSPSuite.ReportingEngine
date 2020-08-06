@@ -104,7 +104,7 @@ defaultWorkflowMessages <- list(
   "simulate" = "Perform simulation task",
   "calculatePKParameters" = "Calculate PK parameters task",
   "sensitivityAnalysis" = "Perform sensitivity analysis task",
-  "plotGoF" = "Plot Goodness of Fit task",
+  "plotGoF" = "Plot Time profiles and Residuals task",
   "plotPKParameters" = "Plot PK parameters task",
   "plotMassBalance" = "Plot Mass Balance task",
   "plotAbsorption" = "Plot Absorption task",

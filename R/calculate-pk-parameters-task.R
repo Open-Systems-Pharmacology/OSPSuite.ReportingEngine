@@ -38,7 +38,7 @@ CalculatePKParametersTask <- R6::R6Class(
           message = paste0("Calculate PK parameters for simulation set ", set$simulationSet$simulationSetName),
           pathFolder = self$workflowFolder
         )
-        if (self$validateInput()) {
+        if (self$validateStructureSetInput(set)) {
           taskResults <- self$getTaskResults(
             structureSet = set,
             settings = self$settings,

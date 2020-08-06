@@ -65,7 +65,7 @@ SensitivityAnalysisTask <- R6::R6Class(
           message = paste0("Run sensitivity for simulation: ", set$simulationSet$simulationName),
           pathFolder = self$workflowFolder
         )
-        if (self$validateInput()) {
+        if (self$validateStructureSetInput(set)) {
           taskResults <- self$getTaskResults(
             structureSet = set,
             settings = self$settings,

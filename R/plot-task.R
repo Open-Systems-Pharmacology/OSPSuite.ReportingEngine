@@ -112,7 +112,6 @@ PlotTask <- R6::R6Class(
     #' @description
     #' Run task and save its output
     #' @param structureSets list of `SimulationStructure` R6 class
-    #' @param self$fileName name of report file
     runTask = function(structureSets) {
       actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
       logWorkflow(
@@ -134,7 +133,7 @@ PlotTask <- R6::R6Class(
           message = paste0(self$message, " for ", set$simulationSet$simulationName),
           pathFolder = self$workflowFolder
         )
-        if (self$validateInput()) {
+        if (self$validateStructureSetInput(set)) {
           taskResults <- self$getTaskResults(
             set,
             self$workflowFolder,

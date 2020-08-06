@@ -102,13 +102,14 @@ GofPlotTask <- R6::R6Class(
 
       # Goodness of fit task creates a histogram of residuals merged accross the simulaiton
       residualsAcrossAllSimulations <- NULL
+      taskResults <- list()
 
       for (set in structureSets) {
         logWorkflow(
           message = paste0(self$message, " for ", set$simulationSet$simulationName),
           pathFolder = self$workflowFolder
         )
-        if (self$validateInput()) {
+        if (self$validateStructureSetInput(set)) {
           taskResults <- self$getTaskResults(
             set,
             self$workflowFolder,
