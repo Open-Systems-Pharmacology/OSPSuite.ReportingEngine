@@ -333,3 +333,67 @@ loadPlotDemographyTask <- function(workflow, active = FALSE, settings = NULL) {
     settings = settings
   ))
 }
+
+#' @title getSimulationResultFileNames
+#' @description
+#' Get the expected simulation result files obtained from a workflow
+#' @param workflow `Workflow` object or derived class
+#' @return Names of the the expected simulation result files
+getSimulationResultFileNames <- function(workflow){
+  validateIsOfType(workflow, "Workflow")
+  simulationResultFileNames <- NULL
+    for(structureSet in workflow$simulationStructures){
+      simulationResultFileNames <- c(simulationResultFileNames, structureSet$simulationResultFileNames)
+    }
+  return(simulationResultFileNames)
+}
+
+#' @title getPkAnalysisResultsFileNames
+#' @description
+#' Get the expected PK analysis result files obtained from a workflow
+#' @param workflow `Workflow` object or derived class
+#' @return Names of the the expected PK analysis result files
+getPkAnalysisResultsFileNames <- function(workflow){
+  validateIsOfType(workflow, "Workflow")
+  pkAnalysisResultsFileNames <- NULL
+  for(structureSet in workflow$simulationStructures){
+    pkAnalysisResultsFileNames <- c(pkAnalysisResultsFileNames, structureSet$pkAnalysisResultsFileNames)
+  }
+  return(pkAnalysisResultsFileNames)
+}
+
+#' @title getSensitivityAnalysisResultsFileNames
+#' @description
+#' Get the expected sensitivity analysis result files obtained from a workflow
+#' @param workflow `Workflow` object or derived class
+#' @return Names of the the expected sensitivity analysis result files
+getSensitivityAnalysisResultsFileNames <- function(workflow){
+  validateIsOfType(workflow, "Workflow")
+  sensitivityAnalysisResultsFileNames <- NULL
+  for(structureSet in workflow$simulationStructures){
+    sensitivityAnalysisResultsFileNames <- c(sensitivityAnalysisResultsFileNames, structureSet$sensitivityAnalysisResultsFileNames)
+  }
+  return(sensitivityAnalysisResultsFileNames)
+}
+
+#' @title getTaskInputs
+#' @description
+#' Get the names of the files required to perform the task
+#' @param task `Task` object or derived class
+#' @return Names of the files required to perform the task
+#' @export
+getTaskInputs <- function(task){
+  validateIsOfType(task, "Task")
+  return(task$getInputs())
+}
+
+#' @title checkTaskInputsExist
+#' @description
+#' Check if the files required by the task exist
+#' @param task `Task` object or derived class
+#' @return Named list of logical values assessing if the files exist
+#' @export
+checkTaskInputsExist <- function(task){
+  validateIsOfType(task, "Task")
+  return(sapply(task$getInputs(), file.exists))
+}
