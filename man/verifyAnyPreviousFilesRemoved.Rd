@@ -7,9 +7,9 @@
 verifyAnyPreviousFilesRemoved(anyPreviousPartialResultsRemoved, logFolder)
 }
 \arguments{
-\item{logFolder}{folder where the logs are saved}
+\item{anyPreviousPartialResultsRemoved}{result files to be removed}
 
-\item{sensitivityRunSuccess}{logical vector indicating success of result file removal}
+\item{logFolder}{folder where the logs are saved}
 }
 \description{
 Check that any existing results from individual cores have been removed

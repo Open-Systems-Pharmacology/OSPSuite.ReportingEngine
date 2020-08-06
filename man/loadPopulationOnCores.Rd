@@ -7,9 +7,9 @@
 loadPopulationOnCores(populationFiles, logFolder)
 }
 \arguments{
-\item{logFolder}{folder where the logs are saved}
+\item{populationFiles}{population files to be loaded on cores}
 
-\item{structureSet}{containing simulationSet which contains path to simulation file and pathIDs to be loaded in simulation object as outputs}
+\item{logFolder}{folder where the logs are saved}
 }
 \description{
 Send population file names to cores, check that population is loaded on each core successfully

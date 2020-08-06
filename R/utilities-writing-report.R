@@ -266,7 +266,7 @@ numberSections <- function(fileName, logFolder = getwd(), tocPattern = "#", tocL
 
         # Add section reference to toc content
         titleTocContent <- sub(pattern = titlePattern, replacement = "", x = fileContent[lineIndex])
-        titleTocReference <- gsub(pattern = "[[:punct:]*]", replacement = "", x = tolower(titleTocContent))
+        titleTocReference <- gsub(pattern = "[^[:alnum:][:space:]\\_'-]", replacement = "", x = tolower(titleTocContent))
         titleTocReference <- gsub(pattern = "[[:space:]*]", replacement = "-", x = titleTocReference)
         tocLevelShift <- paste0(rep(" ", tocLevel), collapse = " ")
         tocContent <- c(tocContent, paste0(tocLevelShift, "* [", titleTocContent, "](#", titleTocReference, ")"))

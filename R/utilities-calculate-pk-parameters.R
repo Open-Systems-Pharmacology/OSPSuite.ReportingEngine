@@ -489,6 +489,14 @@ getPkParametersAcrossPopulations <- function(structureSets) {
       simulationSetName = structureSet$simulationSet$simulationSetName,
       fullPkParametersTable
     )
+    # Prevent crash when merging populations with different parameters by filling unexisting with NA
+    newNamesPkParametersTableAcrossPopulations <- setdiff(names(fullPkParametersTable), names(pkParametersTableAcrossPopulations))
+    newNamesPkParametersTable <- setdiff(names(pkParametersTableAcrossPopulations), names(fullPkParametersTable))
+    if (!is.null(pkParametersTableAcrossPopulations)) {
+      pkParametersTableAcrossPopulations[, newNamesPkParametersTableAcrossPopulations] <- NA
+    }
+    fullPkParametersTable[, newNamesPkParametersTable] <- NA
+
     pkParametersTableAcrossPopulations <- rbind.data.frame(
       pkParametersTableAcrossPopulations,
       fullPkParametersTable

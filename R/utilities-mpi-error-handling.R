@@ -53,7 +53,7 @@ loadSimulationOnCores <- function(structureSet, logFolder) {
 
 #' @title loadPopulationOnCores
 #' @description Send population file names to cores, check that population is loaded on each core successfully
-#' @param structureSet containing simulationSet which contains path to simulation file and pathIDs to be loaded in simulation object as outputs
+#' @param populationFiles population files to be loaded on cores
 #' @param logFolder folder where the logs are saved
 loadPopulationOnCores <- function(populationFiles, logFolder) {
   Rmpi::mpi.bcast.Robj2slave(obj = populationFiles)
@@ -68,10 +68,7 @@ loadPopulationOnCores <- function(populationFiles, logFolder) {
   }
 }
 
-
-
-
-#' @title loadSimulationOnCores
+#' @title loadLibraryOnCores
 #' @description Send libraryName to core, load the library and check that it has been loaded successfully
 #' @param libraryName string containing name of library to be loaded
 #' @param logFolder folder where the logs are saved
@@ -88,9 +85,9 @@ loadLibraryOnCores <- function(libraryName, logFolder) {
   }
 }
 
-#' @title loadSimulationOnCores
-#' @description Send libraryName to core, load the library and check that it has been loaded successfully
-#' @param libraryName string containing name of library to be loaded
+#' @title updateIndividualParametersOnCores
+#' @description Update individual parameters on core
+#' @param individualParameters parameters to update
 #' @param logFolder folder where the logs are saved
 updateIndividualParametersOnCores <- function(individualParameters, logFolder) {
   Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
@@ -103,7 +100,6 @@ updateIndividualParametersOnCores <- function(individualParameters, logFolder) {
     logErrorThenStop(message = "Individual parameters updated successfully on all cores.", logFolderPath = logFolder)
   }
 }
-
 
 #' @title verifySimulationRunSuccessful
 #' @description Check that all cores ran simulation successfully
@@ -141,7 +137,7 @@ verifySensitivityAnalysisRunSuccessful <- function(sensitivityRunSuccess, logFol
 
 #' @title verifyAnyPreviousFilesRemoved
 #' @description Check that any existing results from individual cores have been removed
-#' @param sensitivityRunSuccess logical vector indicating success of result file removal
+#' @param anyPreviousPartialResultsRemoved result files to be removed
 #' @param logFolder folder where the logs are saved
 verifyAnyPreviousFilesRemoved <- function(anyPreviousPartialResultsRemoved, logFolder) {
   success <- checkAllCoresSuccessful(anyPreviousPartialResultsRemoved)

@@ -1,6 +1,10 @@
+#' @title StandardSimulationTasks
+#' @description Names of simulation tasks performed by both `MeanModelWorkflow` and `PopulationWorkflow` objects
 #' @export
 StandardSimulationTasks <- enum(c("simulate", "calculatePKParameters", "calculateSensitivity"))
 
+#' @title StandardPlotTasks
+#' @description Names of plot tasks performed by both `MeanModelWorkflow` and `PopulationWorkflow` objects
 #' @export
 StandardPlotTasks <- enum(c("plotTimeProfilesAndResiduals", "plotPKParameters", "plotSensitivity"))
 
