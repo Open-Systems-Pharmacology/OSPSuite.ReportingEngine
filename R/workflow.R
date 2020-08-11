@@ -15,7 +15,7 @@ Workflow <- R6::R6Class(
     taskNames = NULL,
     reportFileName = NULL,
     createWordReport = NULL,
-    
+
     #' @description
     #' Create a new `Workflow` object.
     #' @param simulationSets list of `SimulationSet` R6 class objects
@@ -139,22 +139,32 @@ Workflow <- R6::R6Class(
     printReportingEngineInfo = function() {
       private$.reportingEngineInfo$print()
     },
-    
+
     #' @description
     #' Get the current watermark to be reprted on figures background
     getWatermark = function() {
       private$.watermark
     },
-    
+
     #' @description
-    #' Set the watermark to be reprted on figures background
-    #' @param watermark text to be reported on figures background
+    #' Set the watermark to be reported on figure background.
+    #' The default value `NULL` leads to check if the computer has a validated environment.
+    #' If the environment is validated, no watermark is reported on the background.
+    #' If the environment is NOT validated, \code{workflowWatermarkMessage} is reported on the background.
+    #' Any user-defined text will overwrite this default feature and be reported on the figure background.
+    #' @param watermark text to be reported on figures background.
+    #' Default value is `NULL`, which leads to check if the computer has a validated environment.
+    #' If the environment is validated, no watermark is reported on the background.
+    #' If the environment is NOT validated, \code{workflowWatermarkMessage} is reported on the background.
+    #' Any user-defined text will overwrite this default feature and be reported on the figure background.
     setWatermark = function(watermark) {
       validateIsString(watermark, nullAllowed = TRUE)
+      # Define default feature based on validated system
       private$.watermark <- ""
       if (!private$.reportingEngineInfo$isValidated()) {
         private$.watermark <- workflowWatermarkMessage
       }
+      # Non-NULL user-defined watermark overwrite default feature
       private$.watermark <- watermark %||% private$.watermark
       setWatermarkConfiguration(private$.watermark)
     },
@@ -175,7 +185,7 @@ Workflow <- R6::R6Class(
 
   private = list(
     .reportingEngineInfo = NULL,
-    
+
     .watermark = NULL,
 
     .getTasksWithStatus = function(status) {
