@@ -7,9 +7,9 @@
 getPkParameterPopulationSensitivityPlot(data, settings)
 }
 \arguments{
-\item{data}{dataframe of sensitivity analysis results}
+\item{data}{data.frame of sensitivity analysis results}
 
-\item{settings}{used to set plot configuration}
+\item{settings}{`SensitivityPlotSettings` object}
 }
 \value{
 plt sensitivity plot based on results in input data

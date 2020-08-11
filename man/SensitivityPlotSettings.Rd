@@ -15,9 +15,20 @@ R6 class for sensitivity analysis plot settings
 
 \item{\code{plotConfiguration}}{`PlotConfiguration` R6 class object from `tlf` library}
 
-\item{\code{xAxisFontSize}}{for sensitivity plot}
+\item{\code{xAxisFontSize}}{for sensitivity plot.
+This Value will overwrite values defined by plot configuration object}
 
-\item{\code{yAxisFontSize}}{for sensitivity plot}
+\item{\code{yAxisFontSize}}{for sensitivity plot.
+This Value will overwrite values defined by plot configuration object}
+
+\item{\code{xLabel}}{for sensitivity plot.
+This Value will overwrite values defined by plot configuration object}
+
+\item{\code{yLabel}}{for sensitivity plot.
+This Value will overwrite values defined by plot configuration object}
+
+\item{\code{colorPalette}}{for sensitivity plot.
+This Value will overwrite values defined by plot configuration object}
 }
 \if{html}{\out{</div>}}
 }
@@ -39,7 +50,10 @@ Create a `SensitivityPlotSettings` object
   maximalParametersPerSensitivityPlot = 50,
   plotConfiguration = NULL,
   xAxisFontSize = 6,
-  yAxisFontSize = 6
+  yAxisFontSize = 6,
+  xLabel = "Sensitivity",
+  yLabel = NULL,
+  colorPalette = "Spectral"
 )}\if{html}{\out{</div>}}
 }
 
@@ -52,11 +66,17 @@ Create a `SensitivityPlotSettings` object
 
 \item{\code{maximalParametersPerSensitivityPlot}}{maximalParametersPerSensitivityPlot is the maximal number of parameters to display in a sensitivity plot}
 
-\item{\code{plotConfiguration}}{`PlotConfiguration` R6 class object from `tlf` library}
+\item{\code{plotConfiguration}}{`PlotConfiguration` object from `tlf` library}
 
-\item{\code{xAxisFontSize}}{for sensitivity plot}
+\item{\code{xAxisFontSize}}{Font size of x-axis labels for sensitivity plot}
 
-\item{\code{yAxisFontSize}}{for sensitivity plot}
+\item{\code{yAxisFontSize}}{Font size of y-axis labels for sensitivity plot}
+
+\item{\code{xLabel}}{Label of x-axis for sensitivity plot}
+
+\item{\code{yLabel}}{Label of y-axis for sensitivity plot}
+
+\item{\code{colorPalette}}{Name of a color palette to be used by `ggplot2::scale_fill_brewer()` for sensitivity plot}
 }
 \if{html}{\out{</div>}}
 }

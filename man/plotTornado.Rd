@@ -4,12 +4,12 @@
 \alias{plotTornado}
 \title{plotTornado}
 \usage{
-plotTornado(data, plotConfiguration = NULL)
+plotTornado(data, settings = NULL)
 }
 \arguments{
 \item{data}{data.frame}
 
-\item{plotConfiguration}{`PlotConfiguration` R6 class object from `tlf` library}
+\item{settings}{`SensitivityPlotSettings` object}
 }
 \value{
 ggplot object of time profile for mean model workflow

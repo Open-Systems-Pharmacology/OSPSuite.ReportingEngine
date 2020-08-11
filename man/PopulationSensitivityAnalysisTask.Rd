@@ -56,9 +56,9 @@ Create a `PopulationSensitivityAnalysisTask` object
 \describe{
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
 
-\item{\code{settings}}{instance of SensitivityAnalysisSettings class}
+\item{\code{settings}}{`SensitivityAnalysisSettings` object}
 
-\item{\code{...}}{parameters inherited from R6 class `Task` object}
+\item{\code{...}}{parameters inherited from R6 class `SensitivityAnalysisTask` object}
 }
 \if{html}{\out{</div>}}
 }

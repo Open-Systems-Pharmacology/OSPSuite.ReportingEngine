@@ -59,7 +59,7 @@ Create a `SensitivityAnalysisTask` object
 \describe{
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
 
-\item{\code{settings}}{instance of SensitivityAnalysisSettings class}
+\item{\code{settings}}{`SensitivityAnalysisSettings` object}
 
 \item{\code{nameTaskResults}}{name of function that returns task results}
 

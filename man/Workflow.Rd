@@ -177,7 +177,11 @@ Get the current watermark to be reprted on figures background
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-setWatermark"></a>}}
 \subsection{Method \code{setWatermark()}}{
-Set the watermark to be reprted on figures background
+Set the watermark to be reported on figure background.
+The default value `NULL` leads to check if the computer has a validated environment.
+If the environment is validated, no watermark is reported on the background.
+If the environment is NOT validated, \code{workflowWatermarkMessage} is reported on the background.
+Any user-defined text will overwrite this default feature and be reported on the figure background.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Workflow$setWatermark(watermark)}\if{html}{\out{</div>}}
 }
@@ -185,7 +189,11 @@ Set the watermark to be reprted on figures background
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{watermark}}{text to be reported on figures background}
+\item{\code{watermark}}{text to be reported on figures background.
+Default value is `NULL`, which leads to check if the computer has a validated environment.
+If the environment is validated, no watermark is reported on the background.
+If the environment is NOT validated, \code{workflowWatermarkMessage} is reported on the background.
+Any user-defined text will overwrite this default feature and be reported on the figure background.}
 }
 \if{html}{\out{</div>}}
 }
