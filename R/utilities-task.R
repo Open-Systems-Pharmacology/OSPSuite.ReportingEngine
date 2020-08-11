@@ -17,7 +17,7 @@ StandardPlotTasks <- enum(c("plotTimeProfilesAndResiduals", "plotPKParameters", 
 activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
   validateIsIncluded(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
-  
+
   for (task in tasks) {
     workflow[[task]]$activate()
   }
@@ -32,7 +32,7 @@ activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
 inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
   validateIsIncluded(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
-  
+
   for (task in tasks) {
     workflow[[task]]$inactivate()
   }
@@ -110,7 +110,9 @@ loadCalculateSensitivityTask <- function(workflow, active = FALSE, settings = NU
       getTaskResults = runPopulationSensitivityAnalysis,
       nameTaskResults = deparse(substitute(runPopulationSensitivityAnalysis)),
       outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
-      outputs = getSensitivityAnalysisResultsFileNames(workflow),
+      outputs = getPopulationSensitivityAnalysisResultsFileNames(workflow),
+      inputFolder = defaultTaskOutputFolders$calculatePKParameters,
+      inputs = getPkAnalysisResultsFileNames(workflow),
       workflowFolder = workflow$workflowFolder,
       settings = settings,
       active = active,
@@ -122,7 +124,7 @@ loadCalculateSensitivityTask <- function(workflow, active = FALSE, settings = NU
     getTaskResults = runSensitivity,
     nameTaskResults = deparse(substitute(runSensitivity)),
     outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
-    outputs = getSensitivityAnalysisResultsFileNames(workflow),
+    outputs = getMeanSensitivityAnalysisResultsFileNames(workflow),
     workflowFolder = workflow$workflowFolder,
     active = active,
     settings = settings,
@@ -233,7 +235,7 @@ loadPlotSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
       nameTaskResults = deparse(substitute(plotPopulationSensitivity)),
       outputFolder = defaultTaskOutputFolders$plotSensitivity,
       inputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
-      inputs = getSensitivityAnalysisResultsFileNames(workflow),
+      inputs = getPopulationSensitivityAnalysisResultsFileNames(workflow),
       workflowFolder = workflow$workflowFolder,
       active = active,
       message = defaultWorkflowMessages$plotSensitivity,
@@ -247,7 +249,7 @@ loadPlotSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
     nameTaskResults = deparse(substitute(plotMeanSensitivity)),
     outputFolder = defaultTaskOutputFolders$plotSensitivity,
     inputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
-    inputs = getSensitivityAnalysisResultsFileNames(workflow),
+    inputs = getMeanSensitivityAnalysisResultsFileNames(workflow),
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotSensitivity,
@@ -339,12 +341,12 @@ loadPlotDemographyTask <- function(workflow, active = FALSE, settings = NULL) {
 #' Get the expected simulation result files obtained from a workflow
 #' @param workflow `Workflow` object or derived class
 #' @return Names of the the expected simulation result files
-getSimulationResultFileNames <- function(workflow){
+getSimulationResultFileNames <- function(workflow) {
   validateIsOfType(workflow, "Workflow")
   simulationResultFileNames <- NULL
-    for(structureSet in workflow$simulationStructures){
-      simulationResultFileNames <- c(simulationResultFileNames, structureSet$simulationResultFileNames)
-    }
+  for (structureSet in workflow$simulationStructures) {
+    simulationResultFileNames <- c(simulationResultFileNames, structureSet$simulationResultFileNames)
+  }
   return(simulationResultFileNames)
 }
 
@@ -353,25 +355,39 @@ getSimulationResultFileNames <- function(workflow){
 #' Get the expected PK analysis result files obtained from a workflow
 #' @param workflow `Workflow` object or derived class
 #' @return Names of the the expected PK analysis result files
-getPkAnalysisResultsFileNames <- function(workflow){
+getPkAnalysisResultsFileNames <- function(workflow) {
   validateIsOfType(workflow, "Workflow")
   pkAnalysisResultsFileNames <- NULL
-  for(structureSet in workflow$simulationStructures){
+  for (structureSet in workflow$simulationStructures) {
     pkAnalysisResultsFileNames <- c(pkAnalysisResultsFileNames, structureSet$pkAnalysisResultsFileNames)
   }
   return(pkAnalysisResultsFileNames)
 }
 
-#' @title getSensitivityAnalysisResultsFileNames
+#' @title getMeanSensitivityAnalysisResultsFileNames
 #' @description
-#' Get the expected sensitivity analysis result files obtained from a workflow
-#' @param workflow `Workflow` object or derived class
+#' Get the expected sensitivity analysis result files obtained from a mean model workflow
+#' @param workflow `MeanModelWorkflow` object or derived class
 #' @return Names of the the expected sensitivity analysis result files
-getSensitivityAnalysisResultsFileNames <- function(workflow){
-  validateIsOfType(workflow, "Workflow")
+getMeanSensitivityAnalysisResultsFileNames <- function(workflow) {
+  validateIsOfType(workflow, "MeanModelWorkflow")
   sensitivityAnalysisResultsFileNames <- NULL
-  for(structureSet in workflow$simulationStructures){
+  for (structureSet in workflow$simulationStructures) {
     sensitivityAnalysisResultsFileNames <- c(sensitivityAnalysisResultsFileNames, structureSet$sensitivityAnalysisResultsFileNames)
+  }
+  return(sensitivityAnalysisResultsFileNames)
+}
+
+#' @title getPopulationSensitivityAnalysisResultsFileNames
+#' @description
+#' Get the expected sensitivity analysis result files obtained from a population workflow
+#' @param workflow `PopulationWorkflow` object or derived class
+#' @return Names of the the expected sensitivity analysis result files
+getPopulationSensitivityAnalysisResultsFileNames <- function(workflow) {
+  validateIsOfType(workflow, "PopulationWorkflow")
+  sensitivityAnalysisResultsFileNames <- NULL
+  for (structureSet in workflow$simulationStructures) {
+    sensitivityAnalysisResultsFileNames <- c(sensitivityAnalysisResultsFileNames, structureSet$popSensitivityAnalysisResultsIndexFile)
   }
   return(sensitivityAnalysisResultsFileNames)
 }
@@ -382,7 +398,7 @@ getSensitivityAnalysisResultsFileNames <- function(workflow){
 #' @param task `Task` object or derived class
 #' @return Names of the files required to perform the task
 #' @export
-getTaskInputs <- function(task){
+getTaskInputs <- function(task) {
   validateIsOfType(task, "Task")
   return(task$getInputs())
 }
@@ -393,7 +409,7 @@ getTaskInputs <- function(task){
 #' @param task `Task` object or derived class
 #' @return Named list of logical values assessing if the files exist
 #' @export
-checkTaskInputsExist <- function(task){
+checkTaskInputsExist <- function(task) {
   validateIsOfType(task, "Task")
   return(sapply(task$getInputs(), file.exists))
 }
