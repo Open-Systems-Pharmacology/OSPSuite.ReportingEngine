@@ -36,13 +36,13 @@ MeanModelWorkflow <- R6::R6Class(
       self$simulate <- loadSimulateTask(self)
       self$calculatePKParameters <- loadCalculatePKParametersTask(self)
       self$calculateSensitivity <- loadCalculateSensitivityTask(self)
-      
+
       self$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(self)
       self$plotMassBalance <- loadPlotMassBalanceTask(self)
       self$plotAbsorption <- loadPlotAbsorptionTask(self)
       self$plotPKParameters <- loadPlotPKParametersTask(self)
-      self$plotSensitivity  <- loadPlotSensitivityTask(self)
-      
+      self$plotSensitivity <- loadPlotSensitivityTask(self)
+
       self$taskNames <- enum(self$getAllTasks())
     },
 

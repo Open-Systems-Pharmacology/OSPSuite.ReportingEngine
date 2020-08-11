@@ -13,7 +13,7 @@ readObservedDataFile <- function(fileName,
   extension <- fileExtension(fileName)
   # For some cases where data was derived from Excel,
   # <U+FEFF> is included in first variable name and needs to be removed
-  forbiddenCharacters <- "\ufeff" 
+  forbiddenCharacters <- "\ufeff"
 
   if (extension %in% "csv") {
     observedData <- read.csv(fileName,

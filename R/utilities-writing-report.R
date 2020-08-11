@@ -170,21 +170,21 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
   write(wordFileContent, file = fileObject, sep = "\n")
   close(fileObject)
 
-  if(createWordReport){
-  templateReport <- system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
-  pageBreakCode <- system.file("extdata", "pagebreak.lua", package = "ospsuite.reportingengine")
+  if (createWordReport) {
+    templateReport <- system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
+    pageBreakCode <- system.file("extdata", "pagebreak.lua", package = "ospsuite.reportingengine")
 
-  write(c(
-    "self-contained:", "wrap: none", "toc:",
-    paste0('reference-doc: "', templateReport, '"'),
-    paste0('lua-filter: "', pageBreakCode, '"'),
-    paste0('resource-path: "', logFolder, '"')
-  ), file = reportConfig, sep = "\n")
-  knitr::pandoc(input = wordFileName, format = "docx", config = reportConfig)
-  file.copy(docxWordFileName, docxFileName, overwrite = TRUE)
-  unlink(reportConfig, recursive = TRUE)
-  unlink(docxWordFileName, recursive = TRUE)
-}
+    write(c(
+      "self-contained:", "wrap: none", "toc:",
+      paste0('reference-doc: "', templateReport, '"'),
+      paste0('lua-filter: "', pageBreakCode, '"'),
+      paste0('resource-path: "', logFolder, '"')
+    ), file = reportConfig, sep = "\n")
+    knitr::pandoc(input = wordFileName, format = "docx", config = reportConfig)
+    file.copy(docxWordFileName, docxFileName, overwrite = TRUE)
+    unlink(reportConfig, recursive = TRUE)
+    unlink(docxWordFileName, recursive = TRUE)
+  }
   logWorkflow(
     message = paste0("Word version of report '", fileName, "' created."),
     pathFolder = logFolder,

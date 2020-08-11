@@ -57,7 +57,7 @@ loadSimulationOnCores <- function(structureSet, logFolder) {
 #' @param logFolder folder where the logs are saved
 loadPopulationOnCores <- function(populationFiles, logFolder) {
   Rmpi::mpi.bcast.Robj2slave(obj = populationFiles)
-  Rmpi::mpi.remote.exec(population <- ospsuite::loadPopulation(populationFiles[mpi.comm.rank()]))
+  Rmpi::mpi.remote.exec(population <- ospsuite::loadPopulation(populationFiles[Rmpi::mpi.comm.rank()]))
   populationLoaded <- Rmpi::mpi.remote.exec(checkPopulationLoaded(population = population))
   success <- checkAllCoresSuccessful(populationLoaded)
   validateIsLogical(success)

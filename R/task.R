@@ -130,7 +130,7 @@ Task <- R6::R6Class(
       invisible(self)
       return(info)
     },
-    
+
     #' @description
     #' Get `Task` required input files
     #' @return Required file names
