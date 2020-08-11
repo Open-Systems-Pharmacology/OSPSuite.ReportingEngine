@@ -17,7 +17,7 @@ StandardPlotTasks <- enum(c("plotTimeProfilesAndResiduals", "plotPKParameters", 
 activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
   validateIsIncluded(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
-  
+
   for (task in tasks) {
     workflow[[task]]$activate()
   }
@@ -32,7 +32,7 @@ activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
 inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
   validateIsIncluded(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
-  
+
   for (task in tasks) {
     workflow[[task]]$inactivate()
   }
@@ -50,13 +50,15 @@ loadSimulateTask <- function(workflow, active = TRUE, settings = NULL) {
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
   taskFunction <- simulateModel
+  nameFunction <- deparse(substitute(simulateModel)) #change add
   if (isOfType(workflow, "PopulationWorkflow")) {
     taskFunction <- simulateModelForPopulation
+    nameFunction <- deparse(substitute(simulateModelForPopulation)) #change add
   }
 
   return(SimulationTask$new(
     getTaskResults = taskFunction,
-    nameTaskResults = deparse(substitute(taskFunction)),
+    nameTaskResults = nameFunction, #change modify: deparse(substitute(taskFunction)),
     outputFolder = defaultTaskOutputFolders$simulate,
     workflowFolder = workflow$workflowFolder,
     active = active,
