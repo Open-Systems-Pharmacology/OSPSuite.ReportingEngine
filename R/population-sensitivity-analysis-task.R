@@ -12,19 +12,15 @@ PopulationSensitivityAnalysisTask <- R6::R6Class(
     #' @description
     #' Create a `PopulationSensitivityAnalysisTask` object
     #' @param getTaskResults function called by task that computes and format figure results
-    #' @param settings instance of SensitivityAnalysisSettings class
-    #' @param ... parameters inherited from R6 class `Task` object
+    #' @param settings `SensitivityAnalysisSettings` object
+    #' @param ... parameters inherited from R6 class `SensitivityAnalysisTask` object
     #' @return A new `PopulationSensitivityAnalysisTask` object
     initialize = function(getTaskResults = NULL,
                               settings = NULL,
                               ...) {
+      validateIsOfType(settings, "SensitivityAnalysisSettings", nullAllowed = TRUE)
       super$initialize(...)
-      if (is.null(settings)) {
-        self$settings <- SensitivityAnalysisSettings$new()
-      } else {
-        validateIsOfType(object = settings, SensitivityAnalysisSettings)
-        self$settings <- settings
-      }
+      self$settings <- settings %||% SensitivityAnalysisSettings$new()
       self$getTaskResults <- getTaskResults
     },
 
