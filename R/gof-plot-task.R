@@ -46,6 +46,7 @@ GofPlotTask <- R6::R6Class(
               plot = listOfPlots[[plotName]],
               width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
             )
+            re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, plotFileName))
             logWorkflow(
               message = paste0("Plot '", plotFileName, "' was successfully saved."),
               pathFolder = self$workflowFolder,
@@ -73,6 +74,7 @@ GofPlotTask <- R6::R6Class(
           row.names = FALSE,
           fileEncoding = "UTF-8"
         )
+        re.tStoreFileMetadata(access = "write", filePath = tableFileName)
         logWorkflow(
           message = paste0("Table '", tableFileName, "' was successfully saved."),
           pathFolder = self$workflowFolder,
@@ -86,6 +88,7 @@ GofPlotTask <- R6::R6Class(
     #' @param structureSets list of `SimulationStructure` R6 class
     #' @param self$fileName name of report file
     runTask = function(structureSets) {
+      actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
       logWorkflow(
         message = paste0("Starting: ", self$message),
         pathFolder = self$workflowFolder
@@ -226,6 +229,7 @@ GofPlotTask <- R6::R6Class(
           logFolder = self$workflowFolder
         )
       }
+      re.tEndAction(actionToken = actionToken)
     }
   )
 )
