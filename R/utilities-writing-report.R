@@ -46,12 +46,10 @@ addFigureChunk <- function(fileName,
   write(mdText, file = fileObject, append = TRUE, sep = "\n")
   close(fileObject)
 
-  #change add start
   usedFilesFileName <- sub(pattern = ".md", replacement = "-usedFiles.txt", fileName)
   fileObject <- file(usedFilesFileName, encoding = "UTF-8")
   write(figureFile, file = fileObject, append = TRUE, sep = "\n")
   close(fileObject)
-  #change add end
 
   logWorkflow(
     message = paste0("Figure path '", figureFile, "' added to report '", fileName, "'."),
@@ -89,12 +87,10 @@ addTableChunk <- function(fileName,
   write(mdText, file = fileObject, append = TRUE, sep = "\n")
   close(fileObject)
 
-  #change add start
   usedFilesFileName <- sub(pattern = ".md", replacement = "-usedFiles.txt", fileName)
   fileObject <- file(usedFilesFileName, encoding = "UTF-8")
   write(tableFile, file = fileObject, append = TRUE, sep = "\n")
   close(fileObject)
-  #change add end
 
     logWorkflow(
     message = paste0("Table path '", tableFile, "' added to report '", fileName, "'."),
@@ -133,20 +129,18 @@ addTextChunk <- function(fileName,
 mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd()) {
   resetReport(outputFile, logFolder)
 
-  usedFilesOutputFile <- sub(pattern = ".md", replacement = "-usedFiles.txt", outputFile) #change add
-  file.create(usedFilesOutputFile) #change add
+  usedFilesOutputFile <- sub(pattern = ".md", replacement = "-usedFiles.txt", outputFile)
+  file.create(usedFilesOutputFile)
 
   for (fileName in inputFiles) {
     fileContent <- readLines(fileName, encoding = "UTF-8")
     addTextChunk(outputFile, fileContent, logFolder = logFolder)
 
-    #change add start
     usedFilesFileName <- sub(pattern = ".md", replacement = "-usedFiles.txt", fileName)
     if (file.exists(usedFilesFileName)) {
       file.append(usedFilesOutputFile,usedFilesFileName)
       file.remove(usedFilesFileName)
     }
-    #change add end
   }
 
   logWorkflow(
@@ -164,12 +158,12 @@ mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd()) {
 #' @param createWordReport option for creating Markdwon-Report only but not a Word-Report
 #' @export
 renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE) {
-  actionToken2 <- re.tStartAction(actionType = "ReportGeneration") #change add
+  actionToken2 <- re.tStartAction(actionType = "ReportGeneration")
   numberTablesAndFigures(fileName, logFolder)
   tocContent <- numberSections(fileName, logFolder)
   renderWordReport(fileName, logFolder, createWordReport)
   addMarkdownToc(tocContent, fileName, logFolder)
-  re.tEndAction(actionToken = actionToken2) #change add
+  re.tEndAction(actionToken = actionToken2)
   return(invisible())
 }
 
@@ -196,7 +190,6 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
     wordFileContent <- c(wordFileContent, lineContent)
   }
 
-  #change add start
   usedFilesFileName <- sub(pattern = ".md", replacement = "-usedFiles.txt", fileName)
   usedFiles <- readLines(usedFilesFileName, encoding = "UTF-8")
 
@@ -205,12 +198,11 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
       re.tStoreFileMetadata(access = "read", filePath = file.path(logFolder, usedFile))
     }
   file.remove(usedFilesFileName)
-  #change add end
 
   fileObject <- file(wordFileName, encoding = "UTF-8")
   write(wordFileContent, file = fileObject, sep = "\n")
   close(fileObject)
-  re.tStoreFileMetadata(access = "write", filePath = wordFileName) #change add
+  re.tStoreFileMetadata(access = "write", filePath = wordFileName)
 
   if(createWordReport){
   templateReport <- system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
@@ -224,7 +216,7 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
   ), file = reportConfig, sep = "\n")
   knitr::pandoc(input = wordFileName, format = "docx", config = reportConfig)
   file.copy(docxWordFileName, docxFileName, overwrite = TRUE)
-  re.tStoreFileMetadata(access = "write", filePath = docxFileName) #change add
+  re.tStoreFileMetadata(access = "write", filePath = docxFileName)
   unlink(reportConfig, recursive = TRUE)
   unlink(docxWordFileName, recursive = TRUE)
 }
@@ -342,7 +334,7 @@ addMarkdownToc <- function(tocContent, fileName, logFolder = getwd()) {
   fileObject <- file(fileName, encoding = "UTF-8")
   write(fileContent, file = fileObject, sep = "\n")
   close(fileObject)
-  re.tStoreFileMetadata(access = "write", filePath = fileName) #change add
+  re.tStoreFileMetadata(access = "write", filePath = fileName)
 
   logWorkflow(
     message = paste0("In '", fileName, "', table of content included."),

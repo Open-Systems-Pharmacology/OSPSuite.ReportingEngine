@@ -60,7 +60,7 @@ MeanModelWorkflow <- R6::R6Class(
     #' @return All results and plots as a structured output in the workflow folder
     runWorkflow = function() {
       actionToken1 <- re.tStartMetadataCapture(metaDataCapture = TRUE)
-      actionToken2 <- re.tStartAction(actionType = "Run")  #change add
+      actionToken2 <- re.tStartAction(actionType = "Run")
       logWorkflow(
         message = "Starting run of mean model workflow",
         pathFolder = self$workflowFolder
@@ -92,9 +92,7 @@ MeanModelWorkflow <- R6::R6Class(
       appendices <- appendices[file.exists(appendices)]
       if (length(appendices) > 0) {
         mergeMarkdowndFiles(appendices, self$reportFileName, logFolder = self$workflowFolder)
-        # actionToken2 <- re.tStartAction(actionType = "ReportGeneration", actionNameExtension = "runWorkflow") #change delete
         renderReport(self$reportFileName, logFolder = self$workflowFolder, createWordReport = self$createWordReport)
-        # re.tEndAction(actionToken = actionToken2) #change delete
       }
 
       re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logInfoFile()))
@@ -103,11 +101,7 @@ MeanModelWorkflow <- R6::R6Class(
         re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logErrorFile()))
       }
 
-      # if (file.exists(file.path(self$reportFileName))) {
-      #   re.tStoreFileMetadata(access = "write", filePath = self$reportFileName) #change delete (moved inside renderWordReport)
-      # }
-
-      re.tEndAction(actionToken = actionToken2) #change add
+      re.tEndAction(actionToken = actionToken2)
       re.tEndMetadataCapture(outputFolder = "./", actionToken = actionToken1)
     }
   )

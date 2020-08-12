@@ -50,15 +50,15 @@ loadSimulateTask <- function(workflow, active = TRUE, settings = NULL) {
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
   taskFunction <- simulateModel
-  nameFunction <- deparse(substitute(simulateModel)) #change add
+  nameFunction <- deparse(substitute(simulateModel))
   if (isOfType(workflow, "PopulationWorkflow")) {
     taskFunction <- simulateModelForPopulation
-    nameFunction <- deparse(substitute(simulateModelForPopulation)) #change add
+    nameFunction <- deparse(substitute(simulateModelForPopulation))
   }
 
   return(SimulationTask$new(
     getTaskResults = taskFunction,
-    nameTaskResults = nameFunction, #change modify: deparse(substitute(taskFunction)),
+    nameTaskResults = nameFunction,
     outputFolder = defaultTaskOutputFolders$simulate,
     workflowFolder = workflow$workflowFolder,
     active = active,
