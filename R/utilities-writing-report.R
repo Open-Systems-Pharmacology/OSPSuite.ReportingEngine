@@ -15,14 +15,6 @@ resetReport <- function(fileName,
   write("", file = fileObject, sep = "\n")
   close(fileObject)
 
-  #change add start
-  usedFilesFileName <- sub(pattern = ".md", replacement = "-usedFiles.txt", fileName)
-  file.create(usedFilesFileName)
-  # fileObject <- file(usedFilesFileName, encoding = "UTF-8")
-  # write("", file = fileObject, sep = "\n")
-  # close(fileObject)
-  #change add end
-
   logWorkflow(
     message = paste0("Report '", fileName, "' was initialized successfully."),
     pathFolder = logFolder
@@ -142,6 +134,7 @@ mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd()) {
   resetReport(outputFile, logFolder)
 
   usedFilesOutputFile <- sub(pattern = ".md", replacement = "-usedFiles.txt", outputFile) #change add
+  file.create(usedFilesOutputFile) #change add
 
   for (fileName in inputFiles) {
     fileContent <- readLines(fileName, encoding = "UTF-8")
@@ -150,8 +143,8 @@ mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd()) {
     #change add start
     usedFilesFileName <- sub(pattern = ".md", replacement = "-usedFiles.txt", fileName)
     if (file.exists(usedFilesFileName)) {
-      usedFiles <- readLines(usedFilesFileName, encoding = "UTF-8")
-      addTextChunk(usedFilesOutputFile, usedFiles, logFolder = logFolder)
+      file.append(usedFilesOutputFile,usedFilesFileName)
+      file.remove(usedFilesFileName)
     }
     #change add end
   }
@@ -211,6 +204,7 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
     if (usedFile != '') {
       re.tStoreFileMetadata(access = "read", filePath = file.path(logFolder, usedFile))
     }
+  file.remove(usedFilesFileName)
   #change add end
 
   fileObject <- file(wordFileName, encoding = "UTF-8")
