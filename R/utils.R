@@ -222,11 +222,11 @@ removeInf <- function(data, logFolder = getwd()) {
 #' @param logFolder folder where the logs are saved
 #' @return filtered data.frame
 removeMissingValues <- function(data, dataMapping = NULL, logFolder = getwd()) {
-  data[,dataMapping] <- removeInf(data[,dataMapping], logFolder)
-  naData <- is.na(data[,dataMapping])
+  data[, dataMapping] <- removeInf(data[, dataMapping], logFolder)
+  naData <- is.na(data[, dataMapping])
   Nna <- sum(naData)
   data <- data[!naData, ]
-  
+
   if (Nna > 0) {
     logWorkflow(
       message = paste0(Nna, " values were missing (NA) from variable '", dataMapping, "' and removed from the analysis"),

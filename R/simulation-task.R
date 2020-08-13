@@ -56,7 +56,6 @@ SimulationTask <- R6::R6Class(
         message = paste0("Starting ", self$message),
         pathFolder = self$workflowFolder
       )
-
       if (!is.null(self$outputFolder)) {
         dir.create(file.path(self$workflowFolder, self$outputFolder))
       }
@@ -66,7 +65,7 @@ SimulationTask <- R6::R6Class(
           message = paste0("Run simulation: ", set$simulationSet$simulationName),
           pathFolder = self$workflowFolder
         )
-        if (self$validateInput()) {
+        if (self$validateStructureSetInput(set)) {
           taskResults <- self$getTaskResults(
             structureSet = set,
             settings = self$settings,

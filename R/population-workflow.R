@@ -56,15 +56,15 @@ PopulationWorkflow <- R6::R6Class(
 
       # Pediatric and ratio comparison workflows need ONE reference population
       validateHasReferencePopulation(workflowType, simulationSets, logFolder = self$workflowFolder)
-      
+
       self$simulate <- loadSimulateTask(self)
       self$calculatePKParameters <- loadCalculatePKParametersTask(self)
       self$calculateSensitivity <- loadCalculateSensitivityTask(self)
-      
+
       self$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(self)
       self$plotDemography <- loadPlotDemographyTask(self)
       self$plotPKParameters <- loadPlotPKParametersTask(self)
-      self$plotSensitivity  <- loadPlotSensitivityTask(self)
+      self$plotSensitivity <- loadPlotSensitivityTask(self)
 
       self$taskNames <- enum(self$getAllTasks())
     },

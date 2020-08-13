@@ -204,9 +204,9 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
   close(fileObject)
   re.tStoreFileMetadata(access = "write", filePath = wordFileName)
 
-  if(createWordReport){
-  templateReport <- system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
-  pageBreakCode <- system.file("extdata", "pagebreak.lua", package = "ospsuite.reportingengine")
+  if (createWordReport) {
+    templateReport <- system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
+    pageBreakCode <- system.file("extdata", "pagebreak.lua", package = "ospsuite.reportingengine")
 
   write(c(
     "self-contained:", "wrap: none", "toc:",

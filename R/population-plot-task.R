@@ -58,6 +58,7 @@ PopulationPlotTask <- R6::R6Class(
           plot = taskResults$plots[[plotName]],
           width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
         )
+        re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, plotFileName))
         logWorkflow(
           message = paste0("Plot '", plotFileName, "' was successfully saved."),
           pathFolder = self$workflowFolder,
@@ -96,6 +97,7 @@ PopulationPlotTask <- R6::R6Class(
             logFolder = self$workflowFolder
           )
 
+          re.tStoreFileMetadata(access = "write", filePath = tableFileName)
           logWorkflow(
             message = paste0("Table '", tableFileName, "' was successfully saved."),
             pathFolder = self$workflowFolder,
@@ -109,24 +111,28 @@ PopulationPlotTask <- R6::R6Class(
     #' Run task and save its output
     #' @param structureSets list of `SimulationStructure` R6 class
     runTask = function(structureSets) {
+      actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
       logWorkflow(
         message = paste0("Starting: ", self$message),
         pathFolder = self$workflowFolder
       )
 
-      if (!is.null(self$outputFolder)) {
-        dir.create(file.path(self$workflowFolder, self$outputFolder))
-      }
+      if (self$validateInput()) {
+        if (!is.null(self$outputFolder)) {
+          dir.create(file.path(self$workflowFolder, self$outputFolder))
+        }
 
-      taskResults <- self$getTaskResults(
-        structureSets,
-        self$workflowFolder,
-        self$settings,
-        self$workflowType,
-        self$xParameters,
-        self$yParameters
-      )
-      self$saveResults(taskResults)
+        taskResults <- self$getTaskResults(
+          structureSets,
+          self$workflowFolder,
+          self$settings,
+          self$workflowType,
+          self$xParameters,
+          self$yParameters
+        )
+        self$saveResults(taskResults)
+      }
+      re.tEndAction(actionToken = actionToken)
     }
   )
 )

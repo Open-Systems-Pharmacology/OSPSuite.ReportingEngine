@@ -78,7 +78,7 @@ validateIsPositive <- function(object, nullAllowed = FALSE) {
   }
 }
 
-hasPositiveValues <- function(object){
+hasPositiveValues <- function(object) {
   object <- object[!is.na(object)]
   object <- object[!is.infinite(object)]
   positiveValues <- object > 0
@@ -90,7 +90,7 @@ validateIsInRange <- function(variableName, value, lowerBound, upperBound, nullA
   validateIsOfLength(value, 1)
   validateIsOfLength(lowerBound, 1)
   validateIsOfLength(upperBound, 1)
-  validateIsOfType(c(value, lowerBound, upperBound), c("numeric"), nullAllowed)
+  validateIsNumeric(c(value, lowerBound, upperBound), nullAllowed)
   if ((value < lowerBound) | (value > upperBound)) {
     logErrorThenStop(messages$outsideRange(variableName, value, lowerBound, upperBound))
   }
@@ -167,7 +167,7 @@ validateIsIncluded <- function(values, parentValues, nullAllowed = FALSE, groupN
   if (isIncluded(values, parentValues)) {
     return()
   }
-  if(is.null(logFolder)){
+  if (is.null(logFolder)) {
     stop(messages$errorNotIncluded(values, parentValues, groupName))
   }
   logErrorThenStop(messages$errorNotIncluded(values, parentValues, groupName), logFolder)
@@ -181,7 +181,7 @@ checkIsIncluded <- function(values, parentValues, nullAllowed = FALSE, groupName
   if (isIncluded(values, parentValues)) {
     return()
   }
-  if(is.null(logFolder)){
+  if (is.null(logFolder)) {
     warning(messages$errorNotIncluded(values, parentValues, groupName), call. = FALSE, immediate. = TRUE)
     return()
   }
@@ -378,16 +378,18 @@ validateIsUnitFromDimension <- function(unit, dimension, nullAllowed = FALSE) {
   stop(messages$errorUnitNotFromDimension(unit, dimension))
 }
 
-validateHasReferencePopulation <- function(workflowType, simulationSets, logFolder = NULL){
-  if(isIncluded(workflowType, PopulationWorkflowTypes$parallelComparison)){
+validateHasReferencePopulation <- function(workflowType, simulationSets, logFolder = NULL) {
+  if (isIncluded(workflowType, PopulationWorkflowTypes$parallelComparison)) {
     return()
   }
-  allSimulationReferences <- sapply(simulationSets, function(set) {set$referencePopulation})
-  
-  if(isOfLength(allSimulationReferences[allSimulationReferences], 1)){
+  allSimulationReferences <- sapply(simulationSets, function(set) {
+    set$referencePopulation
+  })
+
+  if (isOfLength(allSimulationReferences[allSimulationReferences], 1)) {
     return()
   }
-  if(is.null(logFolder)){
+  if (is.null(logFolder)) {
     stop(messages$warningNoReferencePopulation(workflowType))
   }
   logErrorThenStop(messages$warningNoReferencePopulation(workflowType), logFolder)

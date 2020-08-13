@@ -27,12 +27,14 @@ R6 class for PopulationSensitivityAnalysisTask settings
 }
 }
 \if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
+\out{<details ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="activate">}\href{../../ospsuite.reportingengine/html/Task.html#method-activate}{\code{ospsuite.reportingengine::Task$activate()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="getInputs">}\href{../../ospsuite.reportingengine/html/Task.html#method-getInputs}{\code{ospsuite.reportingengine::Task$getInputs()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="inactivate">}\href{../../ospsuite.reportingengine/html/Task.html#method-inactivate}{\code{ospsuite.reportingengine::Task$inactivate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="print">}\href{../../ospsuite.reportingengine/html/Task.html#method-print}{\code{ospsuite.reportingengine::Task$print()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="validateInput">}\href{../../ospsuite.reportingengine/html/Task.html#method-validateInput}{\code{ospsuite.reportingengine::Task$validateInput()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="validateStructureSetInput">}\href{../../ospsuite.reportingengine/html/Task.html#method-validateStructureSetInput}{\code{ospsuite.reportingengine::Task$validateStructureSetInput()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="SensitivityAnalysisTask" data-id="runTask">}\href{../../ospsuite.reportingengine/html/SensitivityAnalysisTask.html#method-runTask}{\code{ospsuite.reportingengine::SensitivityAnalysisTask$runTask()}}\out{</span>}
 }
 \out{</details>}
@@ -54,9 +56,9 @@ Create a `PopulationSensitivityAnalysisTask` object
 \describe{
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
 
-\item{\code{settings}}{instance of SensitivityAnalysisSettings class}
+\item{\code{settings}}{`SensitivityAnalysisSettings` object}
 
-\item{\code{...}}{parameters inherited from R6 class `Task` object}
+\item{\code{...}}{parameters inherited from R6 class `SensitivityAnalysisTask` object}
 }
 \if{html}{\out{</div>}}
 }

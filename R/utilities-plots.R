@@ -70,7 +70,6 @@ workflowWatermarkMessage <- "preliminary analysis"
 #' @param watermark character or \code{Label} class object from `tlf` package
 #' @export
 #' @import tlf
-setWatermarkConfiguration <- function(watermark = NULL){
+setWatermarkConfiguration <- function(watermark = NULL) {
   tlf::setDefaultWatermark(watermark)
 }
-

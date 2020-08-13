@@ -32,12 +32,14 @@ R6 class for PlotTask settings
 }
 }
 \if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
+\out{<details ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="activate">}\href{../../ospsuite.reportingengine/html/Task.html#method-activate}{\code{ospsuite.reportingengine::Task$activate()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="getInputs">}\href{../../ospsuite.reportingengine/html/Task.html#method-getInputs}{\code{ospsuite.reportingengine::Task$getInputs()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="inactivate">}\href{../../ospsuite.reportingengine/html/Task.html#method-inactivate}{\code{ospsuite.reportingengine::Task$inactivate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="print">}\href{../../ospsuite.reportingengine/html/Task.html#method-print}{\code{ospsuite.reportingengine::Task$print()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="validateInput">}\href{../../ospsuite.reportingengine/html/Task.html#method-validateInput}{\code{ospsuite.reportingengine::Task$validateInput()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="validateStructureSetInput">}\href{../../ospsuite.reportingengine/html/Task.html#method-validateStructureSetInput}{\code{ospsuite.reportingengine::Task$validateStructureSetInput()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -105,8 +107,6 @@ Run task and save its output
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{structureSets}}{list of `SimulationStructure` R6 class}
-
-\item{\code{self$fileName}}{name of report file}
 }
 \if{html}{\out{</div>}}
 }

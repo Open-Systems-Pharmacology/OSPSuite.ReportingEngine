@@ -230,11 +230,11 @@ runParallelSensitivityAnalysis <- function(structureSet,
   logWorkflow(message = "Starting sensitivity analysis on cores.", pathFolder = logFolder)
   Rmpi::mpi.remote.exec(partialIndividualSensitivityAnalysisResults <- analyzeCoreSensitivity(
     simulation = sim,
-    variableParameterPaths = listSplitParameters[[mpi.comm.rank()]],
+    variableParameterPaths = listSplitParameters[[Rmpi::mpi.comm.rank()]],
     variationRange = variationRange,
     numberOfCores = 1, # Number of local cores, set to 1 when parallelizing.
-    debugLogFileName = tempLogFileNames[mpi.comm.rank()],
-    nodeName = paste("Core", mpi.comm.rank()),
+    debugLogFileName = tempLogFileNames[Rmpi::mpi.comm.rank()],
+    nodeName = paste("Core", Rmpi::mpi.comm.rank()),
     showProgress = showProgress
   ))
 
@@ -249,18 +249,18 @@ runParallelSensitivityAnalysis <- function(structureSet,
   }
 
   # Remove any previous temporary results files
-  Rmpi::mpi.remote.exec(if (file.exists(allResultsFileNames[mpi.comm.rank()])) {
-    file.remove(allResultsFileNames[mpi.comm.rank()])
+  Rmpi::mpi.remote.exec(if (file.exists(allResultsFileNames[Rmpi::mpi.comm.rank()])) {
+    file.remove(allResultsFileNames[Rmpi::mpi.comm.rank()])
   })
-  anyPreviousPartialResultsRemoved <- Rmpi::mpi.remote.exec(!file.exists(allResultsFileNames[mpi.comm.rank()]))
+  anyPreviousPartialResultsRemoved <- Rmpi::mpi.remote.exec(!file.exists(allResultsFileNames[Rmpi::mpi.comm.rank()]))
   verifyAnyPreviousFilesRemoved(anyPreviousPartialResultsRemoved, logFolder = logFolder)
 
   # Export temporary results files to CSV
   Rmpi::mpi.remote.exec(ospsuite::exportSensitivityAnalysisResultsToCSV(
     results = partialIndividualSensitivityAnalysisResults,
-    filePath = allResultsFileNames[mpi.comm.rank()]
+    filePath = allResultsFileNames[Rmpi::mpi.comm.rank()]
   ))
-  partialResultsExported <- Rmpi::mpi.remote.exec(file.exists(allResultsFileNames[mpi.comm.rank()]))
+  partialResultsExported <- Rmpi::mpi.remote.exec(file.exists(allResultsFileNames[Rmpi::mpi.comm.rank()]))
   verifyPartialResultsExported(partialResultsExported, numberOfCores, logFolder = logFolder)
 
   # Merge temporary results files
@@ -347,13 +347,6 @@ analyzeCoreSensitivity <- function(simulation,
   logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Sensitivity analysis for current path(s) completed"), file = debugLogFileName, printConsole = FALSE)
   return(sensitivityAnalysisResults)
 }
-
-
-
-
-
-
-
 
 #' @title getQuantileIndividualIds
 #' @description Find IDs of individuals whose PK analysis results closest toquantiles given
@@ -536,6 +529,7 @@ defaultQuantileVec <- c(0.05, 0.5, 0.95)
 #' @return list of plots and tables
 #' @export
 #' @import ospsuite
+#' @import tlf
 plotMeanSensitivity <- function(structureSet,
                                 logFolder = getwd(),
                                 settings) {
@@ -587,7 +581,7 @@ plotMeanSensitivity <- function(structureSet,
 
       sensitivityPlots[[paste0(parameterLabel, "-", pathLabel)]] <- plotTornado(
         data = sensitivityData,
-        plotConfiguration = settings$plotConfiguration
+        settings = settings
       )
       sensitivityCaptions[[paste0(parameterLabel, "-", pathLabel)]] <- paste0("Most sensitive parameters for ", pkParameter$displayName %||% pkParameter$pkParameter, " of ", output$displayName, ".")
     }
@@ -601,18 +595,29 @@ plotMeanSensitivity <- function(structureSet,
 #' @title plotTornado
 #' @description Plot sensitivity results in a tornado plot
 #' @param data data.frame
-#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
+#' @param settings `SensitivityPlotSettings` object
 #' @return ggplot object of time profile for mean model workflow
 #' @export
 #' @import tlf
 #' @import ggplot2
 plotTornado <- function(data,
-                        plotConfiguration = NULL) {
+                        settings = NULL) {
 
   # Ensure that the plot bars are ordered by sensitivity values
   data$parameter <- reorder(data$parameter, abs(data$value))
 
-  tornadoPlot <- tlf::initializePlot(plotConfiguration)
+  # Plot Configuration using settings
+  tornadoPlotConfiguration <- settings$plotConfiguration %||% tlf::PlotConfiguration$new()
+  # Warning: Tornado plot uses ggplot::coord_flip()
+  # Consequently, x and y-axes need to be switched at this stage
+  if (!isOfLength(settings$xAxisFontSize, 0)) {
+    tornadoPlotConfiguration$labels$ylabel$font$size <- settings$xAxisFontSize
+  }
+  if (!isOfLength(settings$yAxisFontSize, 0)) {
+    tornadoPlotConfiguration$labels$xlabel$font$size <- settings$yAxisFontSize
+  }
+
+  tornadoPlot <- tlf::initializePlot(tornadoPlotConfiguration)
   tornadoPlot <- tornadoPlot + ggplot2::geom_col(
     data = data,
     mapping = ggplot2::aes_string(
@@ -626,17 +631,11 @@ plotTornado <- function(data,
     show.legend = FALSE,
     position = "dodge"
   ) +
-    ggplot2::coord_flip() + ggplot2::xlab(NULL) + ggplot2::ylab("Sensitivity") +
+    ggplot2::coord_flip() +
+    ggplot2::xlab(settings$yLabel) + ggplot2::ylab(settings$xLabel) +
     ggplot2::scale_y_continuous(limits = c(-1.05 * max(abs(data$value)), 1.05 * max(abs(data$value)))) +
-    ggplot2::scale_fill_brewer(palette = "Spectral", aesthetics = c("color", "fill")) +
-    ggplot2::geom_hline(
-      yintercept = 0,
-      color = 1,
-      size = 1,
-      linetype = "longdash"
-    )
-
-
+    ggplot2::scale_fill_brewer(palette = settings$colorPalette, aesthetics = c("color", "fill")) +
+    ggplot2::geom_hline(yintercept = 0, color = 1, size = 1, linetype = "longdash")
 
   return(tornadoPlot)
 }
@@ -953,8 +952,8 @@ getPopSensDfForPkAndOutput <- function(simulation,
 
 #' @title getPkParameterPopulationSensitivityPlot
 #' @description build sensitvity plot object for a population for one output and pk parameter
-#' @param data dataframe of sensitivity analysis results
-#' @param settings used to set plot configuration
+#' @param data data.frame of sensitivity analysis results
+#' @param settings `SensitivityPlotSettings` object
 #' @return plt sensitivity plot based on results in input data
 #' @import ggplot2
 #' @import tlf
@@ -966,25 +965,32 @@ getPkParameterPopulationSensitivityPlot <- function(data, settings) {
     shapeAes <- "Population"
   }
 
-  plt <- tlf::initializePlot(settings$plotConfiguration)
-  plt <- plt + ggplot2::geom_point(
+  # Plot Configuration using settings
+  populationSensitivityPlotConfiguration <- settings$plotConfiguration %||% tlf::PlotConfiguration$new()
+  # Warning: Sensitivity plot uses ggplot::coord_flip()
+  # Consequently, x and y-axes need to be switched at this stage
+  if (!isOfLength(settings$xAxisFontSize, 0)) {
+    populationSensitivityPlotConfiguration$labels$ylabel$font$size <- settings$xAxisFontSize
+  }
+  if (!isOfLength(settings$yAxisFontSize, 0)) {
+    populationSensitivityPlotConfiguration$labels$xlabel$font$size <- settings$yAxisFontSize
+  }
+
+  sensitivityPlot <- tlf::initializePlot(populationSensitivityPlotConfiguration)
+  sensitivityPlot <- sensitivityPlot + ggplot2::geom_point(
     data = data,
     mapping = ggplot2::aes_string(x = "Parameter", y = "Value", color = "Quantile", shape = shapeAes),
     size = 2,
     position = ggplot2::position_dodge(width = 0.5)
-  ) + ggplot2::xlab(NULL) + ggplot2::ylab("Sensitivity") + ggplot2::labs(
-    color = "Individual quantile"
-  )
+  ) +
+    ggplot2::scale_colour_brewer(palette = settings$colorPalette) +
+    ggplot2::xlab(settings$yLabel) + ggplot2::ylab(settings$xLabel) +
+    ggplot2::labs(color = "Individual quantile") +
+    ggplot2::geom_hline(yintercept = 0, color = 1, size = 1, linetype = "longdash") +
+    ggplot2::coord_flip() +
+    ggplot2::theme(legend.position = "top", legend.box = "vertical")
 
-  plt <- plt + ggplot2::geom_hline(yintercept = 0, size = 1)
-  plt <- plt + ggplot2::coord_flip()
-
-  plt <- plt + ggplot2::theme(
-    legend.position = "top",
-    legend.box = "vertical"
-  )
-
-  return(plt)
+  return(sensitivityPlot)
 }
 
 
@@ -1004,12 +1010,6 @@ getPkOutputIndexDf <- function(indexDf, pkParameter, output) {
 #' @param variableParameterPaths vector of paths of parameters to vary when performing sensitivity analysis
 #' @param totalSensitivityThreshold cut-off used for plots of the most sensitive parameters
 getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold = NULL, variableParameterPaths = NULL) {
-  if (is.null(totalSensitivityThreshold)) {
-    if (is.null(variableParameterPaths)) {
-      totalSensitivityThreshold <- 0.9
-    } else {
-      totalSensitivityThreshold <- 1
-    }
-  }
+  totalSensitivityThreshold <- totalSensitivityThreshold %||% ifnotnull(variableParameterPaths, 1, 0.9)
   return(totalSensitivityThreshold)
 }

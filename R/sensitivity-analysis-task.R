@@ -14,7 +14,7 @@ SensitivityAnalysisTask <- R6::R6Class(
     #' @description
     #' Create a `SensitivityAnalysisTask` object
     #' @param getTaskResults function called by task that computes and format figure results
-    #' @param settings instance of SensitivityAnalysisSettings class
+    #' @param settings `SensitivityAnalysisSettings` object
     #' @param nameTaskResults name of function that returns task results
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SensitivityAnalysisTask` object
@@ -22,13 +22,9 @@ SensitivityAnalysisTask <- R6::R6Class(
                               settings = NULL,
                               nameTaskResults = "none",
                               ...) {
+      validateIsOfType(settings, "SensitivityAnalysisSettings", nullAllowed = TRUE)
       super$initialize(...)
-      if (is.null(settings)) {
-        self$settings <- SensitivityAnalysisSettings$new()
-      } else {
-        validateIsOfType(object = settings, SensitivityAnalysisSettings)
-        self$settings <- settings
-      }
+      self$settings <- settings %||% SensitivityAnalysisSettings$new()
       self$getTaskResults <- getTaskResults
       self$nameTaskResults <- nameTaskResults
     },
@@ -65,7 +61,7 @@ SensitivityAnalysisTask <- R6::R6Class(
           message = paste0("Run sensitivity for simulation: ", set$simulationSet$simulationName),
           pathFolder = self$workflowFolder
         )
-        if (self$validateInput()) {
+        if (self$validateStructureSetInput(set)) {
           taskResults <- self$getTaskResults(
             structureSet = set,
             settings = self$settings,
