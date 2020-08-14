@@ -3,14 +3,13 @@ context("Run workflows with PK parameters task")
 simulationFile <- getTestDataFilePath("input-data/MiniModel2.pkml")
 
 # Output reference
-refOutputPK <- getTestDataFilePath("mean-pk-parameters-results/A-pkAnalysis.csv")
-refOutputUpdatedPK <- getTestDataFilePath("mean-pk-parameters-results/A-pkAnalysis-updatedPK.csv")
+refOutputPK <- getTestDataFilePath("mean-pk/A-pkAnalysis.csv")
+refOutputUpdatedPK <- getTestDataFilePath("mean-pk/A-pkAnalysis-updatedPK.csv")
 # Ensure the PK parameters are reset before test
 updatePKParameter("C_max", displayName = "C_max", displayUnit = "μmol/l")
 updatePKParameter("AUC_tEnd", displayName = "AUC_tEnd", displayUnit = "μmol*min/l")
 
 refWorkflowStructure <- sort(c(
-  "appendix-pk-parameters.md",
   "log-debug.txt", "log-info.txt",
   "Report-word.md", "Report.docx", "Report.md",
   "SimulationResults", "PKAnalysisResults", "PKAnalysis"

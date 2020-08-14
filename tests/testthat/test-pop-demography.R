@@ -5,7 +5,6 @@ populationFilePeds <- getTestDataFilePath("input-data/Larson 2013 8-18y meal-Pop
 populationFileAdults <- getTestDataFilePath("input-data/Raltegravir Adult Population.csv")
 
 refWorkflowStructure <- sort(c(
-  "appendix-demography.md",
   "log-debug.txt", "log-info.txt",
   "Report-word.md", "Report.docx", "Report.md",
   "Demography"
