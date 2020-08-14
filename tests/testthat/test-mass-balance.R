@@ -3,10 +3,9 @@ context("Run workflow with mass balance task")
 simulationFile <- getTestDataFilePath("input-data/Larson 2013 8-18y meal.pkml")
 
 # Output reference absorption time profiles
-refOutputMassBalance <- getTestDataFilePath("mass-balance-results/Larson-timeProfiles.csv")
+refOutputMassBalance <- getTestDataFilePath("mass-balance/Larson-timeProfiles.csv")
 
 refWorkflowStructure <- sort(c(
-  "appendix-mass-balance.md",
   "log-debug.txt", "log-info.txt",
   "Report-word.md", "Report.docx", "Report.md",
   "MassBalance"

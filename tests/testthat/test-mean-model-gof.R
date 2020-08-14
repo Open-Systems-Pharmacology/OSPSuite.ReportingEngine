@@ -5,14 +5,13 @@ dataFile <- getTestDataFilePath("input-data/SimpleData.nmdat")
 dictFile <- getTestDataFilePath("input-data/tpDictionary.csv")
 
 # Goodness of Fit without selected observed data
-refOutputTimeProfileNoObs <- getTestDataFilePath("mean-goodness-of-fit-results/No-Obs-timeProfileData.csv")
-refOutputTimeProfileAllObs <- getTestDataFilePath("mean-goodness-of-fit-results/All-Obs-timeProfileData.csv")
-refOutputTimeProfileSelectObs <- getTestDataFilePath("mean-goodness-of-fit-results/Select-Obs-timeProfileData.csv")
-refOutputResidualsAllObs <- getTestDataFilePath("mean-goodness-of-fit-results/All-Obs-residuals.csv")
-refOutputResidualsSelectObs <- getTestDataFilePath("mean-goodness-of-fit-results/Select-Obs-residuals.csv")
+refOutputTimeProfileNoObs <- getTestDataFilePath("mean-gof/No-Obs-timeProfileData.csv")
+refOutputTimeProfileAllObs <- getTestDataFilePath("mean-gof/All-Obs-timeProfileData.csv")
+refOutputTimeProfileSelectObs <- getTestDataFilePath("mean-gof/Select-Obs-timeProfileData.csv")
+refOutputResidualsAllObs <- getTestDataFilePath("mean-gof/All-Obs-residuals.csv")
+refOutputResidualsSelectObs <- getTestDataFilePath("mean-gof/Select-Obs-residuals.csv")
 
 refWorkflowStructure <- sort(c(
-  "appendix-time-profile.md",
   "log-debug.txt", "log-info.txt",
   "Report-word.md", "Report.docx", "Report.md",
   "SimulationResults", "TimeProfiles"

@@ -4,15 +4,22 @@
 \alias{mergeMarkdowndFiles}
 \title{mergeMarkdowndFiles}
 \usage{
-mergeMarkdowndFiles(inputFiles, outputFile, logFolder = getwd())
+mergeMarkdowndFiles(
+  inputFiles,
+  outputFile,
+  logFolder = getwd(),
+  keepInputFiles = FALSE
+)
 }
 \arguments{
-\item{inputFiles}{name of .md files to merge}
+\item{inputFiles}{names of .md files to merge}
 
-\item{outputFile}{text to include in the document}
+\item{outputFile}{name of merged .md file}
 
 \item{logFolder}{folder where the logs are saved}
+
+\item{keepInputFiles}{logical option to prevent the input files to be deleted after merging them}
 }
 \description{
-Merge all appendices reports into one final report
+Merge markdown files into one unique file
 }

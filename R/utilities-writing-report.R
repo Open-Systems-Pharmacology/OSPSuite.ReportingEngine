@@ -121,12 +121,14 @@ addTextChunk <- function(fileName,
 }
 
 #' @title mergeMarkdowndFiles
-#' @description Merge all appendices reports into one final report
-#' @param inputFiles name of .md files to merge
-#' @param outputFile text to include in the document
+#' @description Merge markdown files into one unique file
+#' @param inputFiles names of .md files to merge
+#' @param outputFile name of merged .md file
 #' @param logFolder folder where the logs are saved
+#' @param keepInputFiles logical option to prevent the input files to be deleted after merging them
 #' @export
-mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd()) {
+mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd(), keepInputFiles = FALSE) {
+  validateIsLogical(keepInputFiles)
   resetReport(outputFile, logFolder)
 
   usedFilesOutputFile <- sub(pattern = ".md", replacement = "-usedFiles.txt", outputFile)
@@ -142,6 +144,7 @@ mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd()) {
       file.remove(usedFilesFileName)
     }
   }
+  if(!keepInputFiles){file.remove(inputFiles)}
 
   logWorkflow(
     message = paste0("Reports '", paste0(inputFiles, collapse = "', '"), "' were successfully merged into '", outputFile, "'"),

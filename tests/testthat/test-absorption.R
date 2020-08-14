@@ -3,10 +3,9 @@ context("Run workflow with absorption task")
 simulationFile <- getTestDataFilePath("input-data/Larson 2013 8-18y meal.pkml")
 
 # Output reference absorption time profiles
-refOutputAbsorption <- getTestDataFilePath("absorption-results/Larson-Raltegravir.csv")
+refOutputAbsorption <- getTestDataFilePath("absorption/Larson-Raltegravir.csv")
 
 refWorkflowStructure <- sort(c(
-  "appendix-absorption.md",
   "log-debug.txt", "log-info.txt",
   "Report-word.md", "Report.docx", "Report.md",
   "Absorption"

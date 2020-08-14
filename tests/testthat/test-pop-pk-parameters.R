@@ -5,17 +5,16 @@ populationFilePeds <- getTestDataFilePath("input-data/Larson 2013 8-18y meal-Pop
 populationFileAdults <- getTestDataFilePath("input-data/Raltegravir Adult Population.csv")
 
 # Output reference
-refOutputParallelCmax <- getTestDataFilePath("pop-pk-parameters-results/Plasma (Peripheral Venous Blood)-C_max.csv")
-refOutputParallelAUC <- getTestDataFilePath("pop-pk-parameters-results/Plasma (Peripheral Venous Blood)-AUC_tEnd.csv")
-refOutputRatioCmax <- getTestDataFilePath("pop-pk-parameters-results/Plasma (Peripheral Venous Blood)-C_max-ratio.csv")
-refOutputRatioAUC <- getTestDataFilePath("pop-pk-parameters-results/Plasma (Peripheral Venous Blood)-AUC_tEnd-ratio.csv")
+refOutputParallelCmax <- getTestDataFilePath("pop-pk/Plasma-C_max.csv")
+refOutputParallelAUC <- getTestDataFilePath("pop-pk/Plasma-AUC_tEnd.csv")
+refOutputRatioCmax <- getTestDataFilePath("pop-pk/Plasma-C_max-ratio.csv")
+refOutputRatioAUC <- getTestDataFilePath("pop-pk/Plasma-AUC_tEnd-ratio.csv")
 
 # Ensure the PK parameters are reset before test
 updatePKParameter("C_max", displayName = "C_max", displayUnit = "μmol/l")
 updatePKParameter("AUC_tEnd", displayName = "AUC_tEnd", displayUnit = "μmol*min/l")
 
 refWorkflowStructure <- sort(c(
-  "appendix-pk-parameters.md",
   "log-debug.txt", "log-info.txt",
   "Report-word.md", "Report.docx", "Report.md",
   "SimulationResults", "PKAnalysisResults", "PKAnalysis"
