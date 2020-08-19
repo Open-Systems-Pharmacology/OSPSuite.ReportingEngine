@@ -134,10 +134,17 @@ getGoodnessOfFitCaptions <- function(structureSet, plotType, plotScale = "linear
   }
   dataSourceText <- ""
   if (!is.null(structureSet$simulationSet$observedDataFile)) {
+    # Caption for data source: path of observed data file from workflow folder last element of path
     workflowSubDir <- sub(pattern = "^.*[/]", replacement = "", x = structureSet$workflowFolder)
-    workflowRootDir <- sub(pattern = workflowSubDir, replacement = "", x = structureSet$workflowFolder)
+    workflowRootDir <- sub(pattern = paste0("/", workflowSubDir), replacement = "", x = structureSet$workflowFolder)
 
-    dataSourcePath <- sub(pattern = workflowRootDir, replacement = "", x = structureSet$simulationSet$observedDataFile)
+    # If workflow folder was "./something", the previous method does not work
+    firstDirElement <- unlist(strsplit(structureSet$workflowFolder, "/"))[1]
+    if (firstDirElement == ".") {
+      workflowRootDir <- getwd()
+    }
+
+    dataSourcePath <- sub(pattern = workflowRootDir, replacement = ".", x = structureSet$simulationSet$observedDataFile)
     dataSourceText <- paste0(". Data source: ", dataSourcePath)
   }
 
