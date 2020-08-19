@@ -907,7 +907,7 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
   # Residuals can contain Inf values
   # They need to be removed from the plot and translated to NA in csv output file
   csvResidualsData <- residualsData
-  csvResidualsData[,"Residuals"] <- removeInf(csvResidualsData[,"Residuals"], logFolder)
+  csvResidualsData[,"Residuals"] <- replaceInfWithNA(csvResidualsData[,"Residuals"], logFolder)
   residualsData <- removeMissingValues(csvResidualsData, "Residuals", logFolder)
 
   refLengthResidualsData <- nrow(residualsData) %||% 0

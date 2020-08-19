@@ -64,7 +64,7 @@ plotMeanPKParameters <- function(structureSet,
       getMeanPkAnalysesFromOuptut(pkParametersTable, output, molWeight)
     )
   }
-  pkParametersData$Value <- removeInf(pkParametersData$Value, logFolder)
+  pkParametersData$Value <- replaceInfWithNA(pkParametersData$Value, logFolder)
   return(list(
     plots = NULL,
     tables = list(pkAnalysis = pkParametersData)
