@@ -64,7 +64,7 @@ plotMeanPKParameters <- function(structureSet,
       getMeanPkAnalysesFromOuptut(pkParametersTable, output, molWeight)
     )
   }
-  pkParametersData$Value <- removeInf(pkParametersData$Value, logFolder)
+  pkParametersData$Value <- replaceInfWithNA(pkParametersData$Value, logFolder)
   return(list(
     plots = NULL,
     tables = list(pkAnalysis = pkParametersData)
@@ -358,17 +358,17 @@ plotPopulationPKParameters <- function(structureSets,
 }
 
 getLogLimitsForBoxPlot <- function(values) {
-  boxRange <- c(min(values) * 0.8, max(values) * 1.2)
+  boxRange <- c(min(values, na.rm = TRUE) * 0.8, max(values, na.rm = TRUE) * 1.2)
   if (diff(log10(boxRange)) >= 1) {
     return(boxRange)
   }
-  boxRange <- c(min(values) / 3, max(values) * 3)
+  boxRange <- c(min(values, na.rm = TRUE) / 3, max(values, na.rm = TRUE) * 3)
   return(boxRange)
 }
 
 getLogBreaksForBoxPlot <- function(limits) {
   logLimits <- round(log10(limits))
-  breakOrder <- 10^seq(min(logLimits), max(logLimits))
+  breakOrder <- 10^seq(min(logLimits, na.rm = TRUE), max(logLimits, na.rm = TRUE))
   breakValues <- rep(c(1, 2, 5), length(breakOrder))
   breakOrder <- sort(rep(breakOrder, 3))
 

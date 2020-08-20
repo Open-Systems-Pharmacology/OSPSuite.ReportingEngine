@@ -75,7 +75,6 @@ plotMeanGoodnessOfFit <- function(structureSet,
         "Path" = output$path
       )
       outputResidualsData <- getResiduals(outputObservedData, outputSimulatedData)
-      outputResidualsData <- removeMissingValues(outputResidualsData, "Residuals", logFolder)
 
       if (!isOfLength(lloqColumn, 0)) {
         if (isIncluded(lloqColumn, names(observedDataset))) {
@@ -104,22 +103,24 @@ plotMeanGoodnessOfFit <- function(structureSet,
   timeRanges <- getSimulationTimeRanges(simulation, output$path, structureSet$simulationSet$timeUnit)
 
   for (timeRange in timeRanges) {
-    if (!is.null(timeRange$values)) {
-      timeProfilePlotResults <- getTimeProfilePlotResults("mean", timeRange$values, simulatedData, observedData, lloqData, metaDataFrame, timeProfileMapping, structureSet, settings, logFolder)
-      goodnessOfFitPlots[[timeRange$name]] <- timeProfilePlotResults$plots
-      goodnessOfFitCaptions[[timeRange$name]] <- timeProfilePlotResults$captions
+    if (is.null(timeRange$values)) {
+      next
     }
+    timeProfilePlotResults <- getTimeProfilePlotResults("mean", timeRange$values, simulatedData, observedData, lloqData, metaDataFrame, timeProfileMapping, structureSet, settings, logFolder)
+    goodnessOfFitPlots[[timeRange$name]] <- timeProfilePlotResults$plots
+    goodnessOfFitCaptions[[timeRange$name]] <- timeProfilePlotResults$captions
   }
 
   if (!isOfLength(residualsData, 0)) {
     for (timeRange in timeRanges) {
-      if (!is.null(timeRange$values)) {
-        residualsPlotResults <- getResidualsPlotResults(timeRange$values, residualsData, metaDataFrame, structureSet, settings, logFolder)
-        goodnessOfFitPlots[[timeRange$name]] <- c(goodnessOfFitPlots[[timeRange$name]], residualsPlotResults$plots)
-        goodnessOfFitCaptions[[timeRange$name]] <- c(goodnessOfFitCaptions[[timeRange$name]], residualsPlotResults$captions)
-        goodnessOfFitResiduals[[timeRange$name]] <- residualsPlotResults$data
-        residualsMetaData[[timeRange$name]] <- residualsPlotResults$metaData
+      if (is.null(timeRange$values)) {
+        next
       }
+      residualsPlotResults <- getResidualsPlotResults(timeRange$values, residualsData, metaDataFrame, structureSet, settings, logFolder)
+      goodnessOfFitPlots[[timeRange$name]] <- c(goodnessOfFitPlots[[timeRange$name]], residualsPlotResults$plots)
+      goodnessOfFitCaptions[[timeRange$name]] <- c(goodnessOfFitCaptions[[timeRange$name]], residualsPlotResults$captions)
+      goodnessOfFitResiduals[[timeRange$name]] <- residualsPlotResults$data
+      residualsMetaData[[timeRange$name]] <- residualsPlotResults$metaData
     }
   }
   if (!isOfLength(goodnessOfFitResiduals[["totalRange"]], 0)) {
@@ -284,9 +285,8 @@ plotPopulationGoodnessOfFit <- function(structureSet,
       simulatedDataForResiduals <- outputSimulatedData[, selectedVariablesForResiduals]
       # getResiduals is based on mean workflow whose names are c("Time", "Concentration", "Legend", "Path")
       names(simulatedDataForResiduals) <- c("Time", "Concentration", "Legend", "Path")
-
       outputResidualsData <- getResiduals(outputObservedData, simulatedDataForResiduals)
-      outputResidualsData <- removeMissingValues(outputResidualsData, "Residuals", logFolder)
+
       if (!isOfLength(lloqColumn, 0)) {
         if (isIncluded(lloqColumn, names(observedDataset))) {
           outputLloqData <- data.frame(
@@ -312,22 +312,24 @@ plotPopulationGoodnessOfFit <- function(structureSet,
   timeRanges <- getSimulationTimeRanges(simulation, output$path, structureSet$simulationSet$timeUnit)
 
   for (timeRange in timeRanges) {
-    if (!is.null(timeRange$values)) {
-      timeProfilePlotResults <- getTimeProfilePlotResults("population", timeRange$values, simulatedData, observedData, lloqData, metaDataFrame, timeProfileMapping, structureSet, settings, logFolder)
-      goodnessOfFitPlots[[timeRange$name]] <- timeProfilePlotResults$plots
-      goodnessOfFitCaptions[[timeRange$name]] <- timeProfilePlotResults$captions
+    if (is.null(timeRange$values)) {
+      next
     }
+    timeProfilePlotResults <- getTimeProfilePlotResults("population", timeRange$values, simulatedData, observedData, lloqData, metaDataFrame, timeProfileMapping, structureSet, settings, logFolder)
+    goodnessOfFitPlots[[timeRange$name]] <- timeProfilePlotResults$plots
+    goodnessOfFitCaptions[[timeRange$name]] <- timeProfilePlotResults$captions
   }
 
   if (!isOfLength(residualsData, 0)) {
     for (timeRange in timeRanges) {
-      if (!is.null(timeRange$values)) {
-        residualsPlotResults <- getResidualsPlotResults(timeRange$values, residualsData, metaDataFrame, structureSet, settings, logFolder)
-        goodnessOfFitPlots[[timeRange$name]] <- c(goodnessOfFitPlots[[timeRange$name]], residualsPlotResults$plots)
-        goodnessOfFitCaptions[[timeRange$name]] <- c(goodnessOfFitCaptions[[timeRange$name]], residualsPlotResults$captions)
-        goodnessOfFitResiduals[[timeRange$name]] <- residualsPlotResults$data
-        residualsMetaData[[timeRange$name]] <- residualsPlotResults$metaData
+      if (is.null(timeRange$values)) {
+        next
       }
+      residualsPlotResults <- getResidualsPlotResults(timeRange$values, residualsData, metaDataFrame, structureSet, settings, logFolder)
+      goodnessOfFitPlots[[timeRange$name]] <- c(goodnessOfFitPlots[[timeRange$name]], residualsPlotResults$plots)
+      goodnessOfFitCaptions[[timeRange$name]] <- c(goodnessOfFitCaptions[[timeRange$name]], residualsPlotResults$captions)
+      goodnessOfFitResiduals[[timeRange$name]] <- residualsPlotResults$data
+      residualsMetaData[[timeRange$name]] <- residualsPlotResults$metaData
     }
   }
   if (!isOfLength(goodnessOfFitResiduals[["totalRange"]], 0)) {
@@ -459,8 +461,8 @@ plotMeanObsVsPred <- function(data,
                               metaData = NULL,
                               plotConfiguration = NULL) {
   identityMinMax <- c(
-    0.8 * min(cbind(data[, "Observed"], data[, "Simulated"])),
-    1.2 * max(cbind(data[, "Observed"], data[, "Simulated"]))
+    0.8 * min(cbind(data[, "Observed"], data[, "Simulated"]), na.rm = TRUE),
+    1.2 * max(cbind(data[, "Observed"], data[, "Simulated"]), na.rm = TRUE)
   )
   identityLine <- data.frame(
     "Observed" = identityMinMax,
@@ -502,7 +504,7 @@ plotMeanResVsTime <- function(data,
     color = "Legend"
   )
 
-  maxRes <- 1.2 * max(abs(data[, resVsTimeDataMapping$y]))
+  maxRes <- 1.2 * max(abs(data[, resVsTimeDataMapping$y]), na.rm = TRUE)
 
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
@@ -543,7 +545,7 @@ plotMeanResVsPred <- function(data,
     color = "Legend"
   )
 
-  maxRes <- 1.2 * max(abs(data[, resVsPredDataMapping$y]))
+  maxRes <- 1.2 * max(abs(data[, resVsPredDataMapping$y]), na.rm = TRUE)
 
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
@@ -654,9 +656,9 @@ plotResidualsHistogram <- function(data,
     dataMapping = dataMapping
   )
   bins <- bins %||% 15
-  xmax <- 1.1 * max(abs(data[, dataMapping$x]))
+  xmax <- 1.1 * max(abs(data[, dataMapping$x]), na.rm = TRUE)
   xDensityData <- seq(-xmax, xmax, 2 * xmax / 100)
-  yDensityData <- (nrow(data) / bins) * stats::dnorm(xDensityData, sd = stats::sd(data[, dataMapping$x]))
+  yDensityData <- (nrow(data) / bins) * stats::dnorm(xDensityData, sd = stats::sd(data[, dataMapping$x], na.rm = TRUE))
   densityData <- data.frame(x = xDensityData, y = yDensityData)
 
   resHistoPlot <- tlf::initializePlot(plotConfiguration)
@@ -902,6 +904,12 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
   goodnessOfFitPlots <- list()
   goodnessOfFitCaptions <- list()
 
+  # Residuals can contain Inf values
+  # They need to be removed from the plot and translated to NA in csv output file
+  csvResidualsData <- residualsData
+  csvResidualsData[,"Residuals"] <- replaceInfWithNA(csvResidualsData[,"Residuals"], logFolder)
+  residualsData <- removeMissingValues(csvResidualsData, "Residuals", logFolder)
+
   refLengthResidualsData <- nrow(residualsData) %||% 0
   residualsData <- asTimeAfterDose(residualsData, min(timeRange), max(timeRange))
   newLengthResidualsData <- nrow(residualsData) %||% 0
@@ -983,7 +991,7 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
   return(list(
     plots = goodnessOfFitPlots,
     captions = goodnessOfFitCaptions,
-    data = residualsData,
+    data = csvResidualsData,
     metaData = residualsMetaData
   ))
 }

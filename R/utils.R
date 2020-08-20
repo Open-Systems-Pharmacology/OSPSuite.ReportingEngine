@@ -202,7 +202,7 @@ lastPathElement <- function(path) {
 #' @param data numeric vector
 #' @param logFolder folder where the logs are saved
 #' @return numeric vector
-removeInf <- function(data, logFolder = getwd()) {
+replaceInfWithNA <- function(data, logFolder = getwd()) {
   infData <- is.infinite(data)
   Ninf <- sum(infData)
   if (Ninf > 0) {
@@ -222,7 +222,7 @@ removeInf <- function(data, logFolder = getwd()) {
 #' @param logFolder folder where the logs are saved
 #' @return filtered data.frame
 removeMissingValues <- function(data, dataMapping = NULL, logFolder = getwd()) {
-  data[, dataMapping] <- removeInf(data[, dataMapping], logFolder)
+  data[, dataMapping] <- replaceInfWithNA(data[, dataMapping], logFolder)
   naData <- is.na(data[, dataMapping])
   Nna <- sum(naData)
   data <- data[!naData, ]
