@@ -114,5 +114,9 @@ messages <- list(
 
   warningLogScaleNoPositiveData = function(variableName) {
     paste0(variableName, " does not include any positive data. Logarithmic scale plot cannot be output")
+  },
+  
+  errorNotSameOutputsBetweenSets = function(setNames) {
+    paste0("Simulation sets '", paste0(setNames, collapse = "', '"), "' require same outputs and PK parameters.")
   }
 )
