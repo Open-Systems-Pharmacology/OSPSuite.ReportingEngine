@@ -47,7 +47,7 @@ addFigureChunk <- function(fileName,
   close(fileObject)
 
   usedFilesFileName <- sub(pattern = ".md", replacement = "-usedFiles.txt", fileName)
-  fileObject <- file(usedFilesFileName, encoding = "UTF-8")
+  fileObject <- file(usedFilesFileName, open = "at", encoding = "UTF-8")
   write(figureFile, file = fileObject, append = TRUE, sep = "\n")
   close(fileObject)
 
@@ -88,7 +88,7 @@ addTableChunk <- function(fileName,
   close(fileObject)
 
   usedFilesFileName <- sub(pattern = ".md", replacement = "-usedFiles.txt", fileName)
-  fileObject <- file(usedFilesFileName, encoding = "UTF-8")
+  fileObject <- file(usedFilesFileName, open = "at", encoding = "UTF-8")
   write(tableFile, file = fileObject, append = TRUE, sep = "\n")
   close(fileObject)
 
