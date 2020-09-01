@@ -1,0 +1,357 @@
+---
+title: "Plot settings"
+output: 
+  rmarkdown::html_vignette:
+   number_sections: true
+vignette: >
+  %\VignetteIndexEntry{plot-settings}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+require(ospsuite.reportingengine)
+```
+
+
+# Overview
+
+This vignette provides some guidance to define and set plot properties for the reporting engine.
+
+Plot configuration can be set at 2 levels:
+
+- Global or workflow plot configuration, affecting every plot of the workflow output
+- Local or task plot configuration, affecting specific plots within a task
+
+
+# How to set global workflow properties
+
+Most of the global settings can be managed using the notion of __theme__ from the `tlf` package,
+the `reporting.engine` functions generate their plots using the `tlf` package.
+
+Some shortkey methods were added to the `reporting.engine` package to simplify their use.
+
+## Notion of theme
+
+A `Theme` is an R6 class which defines the default properties to be used by each plot created from the `tlf` package.
+More information can be found on this notion within the `tlf` vignettes __"theme"__ and __"plot-configuration"__.
+
+The method __`Theme$new()`__ creates a `Theme` object, which can be set as the current default using the tlf method __`useTheme()`__.
+
+The best workflow to set a `Theme` is to load and update the Json template file available in the package external data, as shown in the example below.
+
+```{r theme definition}
+# Get the path of the Json template
+jsonFile <- system.file("extdata", "RE-theme.json", 
+                        package = "ospsuite.reportingengine")
+
+# Read the Json file as a list of properties
+reThemeProperties <- jsonlite::fromJSON(jsonFile)
+
+# Create a Theme object from properties and base label size
+reTheme <- Theme$new(
+  themesProperties = reThemeProperties,
+  labelBaseSize = 8
+)
+```
+
+The template list `reThemeProperties` includes the following fields:
+
+- `$labelColors` defining the default colors of the plot labels (e.g. title, xlabel ...)
+- `$aesProperties` defining the default aesthetic properties used by the plots and in which order they appear (e.g. color, linetype, shape ...)
+- `$background` defining the default background properties (e.g. grid, color fill of inner/outer background ...)
+- `$defaultCaption`defining the default captions for specific `tlf` plots (e.g. pkRatio)
+
+The size of the labels was defined as an independent input, `labelBaseSize`, simplifying the customization of the settings of `Theme` objects.
+The default sizes and properties can also be updated after the creation of the `Theme` object, as illustrated below:
+
+```{r title size update}
+reTheme$titleFont$size <- 10
+```
+
+Finally, the important step is to define a `Theme` object as the current default for the workflow.
+
+The example below set the __`reTheme`__ `Theme` object as current default. 
+As a consequence, the properties defined by the object will be used if no specific plot configurations are provided for the workflow plots.
+
+```{r current theme}
+# Set reTheme as current default Theme
+useTheme(reTheme)
+```
+
+## Exporting plots in a specific format
+
+One important global setting is the format of the figure files (e.g. png, jpg or pdf) as well as the quality of the figures.
+By default, the figures are saved as png files with a size of 20 x 15 cm.
+The format settings can be managed using the function __`setPlotFormat(format)`__ as illustrated below, input arguments `width`, `height` and `units` can also be defined.
+
+```{r set plot format}
+setPlotFormat("png")
+```
+
+## Watermark
+
+Watermark corresponds to text in the background of plots.
+Most of watermark properties can be set using the notion of `Theme` using the R6 object `$watermarkFont` as shown in the example below.
+
+```{r watermark font}
+# Set the watermark color property
+reTheme$watermarkFont$color <- "firebrick"
+
+# Print watermark font properties
+reTheme$watermarkFont
+```
+
+However, `Workflow` objects do not use the `tlf` Watermark default text but generate their own default based on the notion of validated system.
+
+- If a system is validated, no text is printed in background by default.
+- If a system is __NOT__ validated, the text __*"preliminary results"*__ is printed in background by default.
+
+It is possible to overwrite this default feature either upon creation of a `Workflow` object, using the input argument `watermark` (e.g. `MeanModelWorkflow$new(..., watermark = "new watermark")`) or directly from the `Workflow` object using the method __`$setWatermark(watermark)`__ (e.g. `myWorkflow$setWatermark("new watermark")`).
+
+The workflow method __`$getWatermark()`__ prints the watermark text which will be in the background of the figures output by the workflow (e.g. `myWorkflow$getWatermark()`).
+
+__Note__: The __NULL__ input argument for watermark leads to using the default watermark feature.
+
+# How to set task specific properties
+
+Each task of `Workflow` objects includes a field named __`settings`__.
+This optional field can be updated and will overwrite the default behaviour of a task.
+
+Two usual subfields of __`settings`__ are: __`plotConfigurations`__ and __`bins`__.
+Other settings can also be provided and will be detailed in the next sections.
+
+- __`plotConfigurations`__ is a list of `PlotConfiguration` objects from the `tlf` package.
+`PlotConfiguration` is an R6 class in which plot properties are stored and used to create plots with a desired configuration.
+More information can be found on this notion within the `tlf` vignette __"plot-configuration"__.
+Providing a user-defined `PlotConfiguration` object to this input list will overwrite the default configuration and will be used to generate the task corresponding task plot(s).
+- __`bins`__ can be a number, a vector or a function which will be used to bin histograms.
+
+The next section will provide the names of the plots and options that can be accessed through the field __`settings`__.
+
+## Time profiles and residuals
+
+Regardless of the workflow subclass (`MeanModelWorkflow` or `PopulationWorkflow`), 
+the names in the __`plotConfigurations`__ list available for the __"plotTimeProfilesAndResiduals"__ task are the following:
+
+- __"timeProfile"__: for time profile plots in linear and log scale
+- __"obsVsPred"__: for observed vs simulated data in linear and log scale
+- __"resVsPred"__: for residuals vs simulated data plots
+- __"resVsTime"__: for residuals vs time plots
+- __"resHisto"__: for histograms of residuals
+- __"resQQPlot"__: for qq-plots of residuals
+- __"histogram"__: for histograms of residuals across all simulations
+- __"qqPlot"__: for qq-plots of residuals across all simulations
+
+Since histograms are performed by the task, __`bins`__ can also be defined.
+
+Displayed names and units are usually managed through the __`SimulationSet`__ and __`Output`__ objects. 
+The vignette __"goodness-of-fit"__ provides more details about the __"plotTimeProfilesAndResiduals"__ task.
+
+__Example__: below shows a typical mean model workflow example in which __`plotConfigurations`__ and __`bins`__ are set for a __"plotTimeProfilesAndResiduals"__ task.
+
+```{r example time profile}
+# Get the pkml simulation file: "MiniModel2.pkml"
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
+
+# Get the observation file and its dictionary
+observationFile <- system.file("extdata", "SimpleData.nmdat",
+  package = "ospsuite.reportingengine"
+)
+dictionaryFile <- system.file("extdata", "tpDictionary.csv",
+  package = "ospsuite.reportingengine"
+)
+
+# Define the output object
+outputA <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "Simulated concentration of A",
+  displayUnit = "µmol/ml",
+  dataSelection = "MDV==0",
+  dataDisplayName = "Observed concentration of A"
+)
+
+# Define the simulation set object
+setA <- SimulationSet$new(
+  simulationSetName = "A",
+  simulationFile = simulationFile,
+  outputs = outputA,
+  observedDataFile = observationFile,
+  observedMetaDataFile = dictionaryFile
+)
+
+# Create the workflow object
+workflowA <-
+  MeanModelWorkflow$new(
+    simulationSets = setA,
+    workflowFolder = "Example-A"
+  )
+
+# Set the workflow tasks to be run
+workflowA$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
+```
+
+The next chunk of code will define `PlotConfiguration` objects to be included in __`settings`__:
+
+```{r example create time profile configurations}
+# Define plot configuration for obsVsPred
+obsVsPredConfiguration <- PlotConfiguration$new(
+  xlabel = "My observed data [µmol/ml]",
+  ylabel = "My simulated data [µmol/ml]",
+  watermark = "")
+
+# Define plot configuration for resHisto
+resHistoConfiguration <- PlotConfiguration$new(
+  xlabel = "Residuals",
+  ylabel = "Count",
+  watermark = "")
+
+# Update some fields of the configuration if necessary
+resHistoConfiguration$background$outerBackground$fill <- "lemonchiffon"
+resHistoConfiguration$background$innerBackground$fill <- "lemonchiffon"
+resHistoConfiguration$background$innerBackground$color <- "goldenrod3"
+resHistoConfiguration$background$grid$color <- "goldenrod3"
+
+# Define plotConfigurations list
+plotConfigurations <- list(resHisto = resHistoConfiguration,
+                           obsVsPred = obsVsPredConfiguration)
+
+# Define list to update task settings with plotConfigurations field and and bins field  
+mySettings <- list(plotConfigurations = plotConfigurations, 
+                     bins = 3)
+```
+
+Then, the __`settings`__ field of the __"plotTimeProfilesAndResiduals"__ task can be updated as shown below:
+
+```{r example set time profile configurations}
+# Run the workflow
+workflowA$plotTimeProfilesAndResiduals$settings <- mySettings
+```
+
+__Note__: currently the settings are allowed to be updated directly allocating the list.
+However, this method may lead to errors if the settings are not correctly defined.
+Relevant method will replace this process which may become deprecated in later versions.
+
+The run of the workflow with updated settings and get the resulting report as shown below.
+
+Since the histogram accross the all simulations did not get the plot configuration settings defined for individual simulations, the plots are quite different.
+However, the option __`bins`__ is currently set among all plots of the task.
+Regarding observed vs simulated plots, the got the updated xlabel, ylabel and watermark as defined in the plot configuration.
+
+```{r example run time profile}
+# Run the workflow
+workflowA$runWorkflow()
+```
+
+```{r example render time profile, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflowA$reportFileName)
+```
+
+```{r example time profile report, echo=FALSE}
+htmltools::includeHTML(sub(".md", ".html", workflowA$reportFileName))
+```
+
+```{r delete example time profile, inlcude = FALSE, echo=FALSE}
+# Remove the workflow folders
+unlink(workflowA$workflowFolder, recursive = TRUE)
+```
+
+
+## PK parameters plots
+
+Selection, displayed names and units are usually managed through the `ospsuite` __`PKParameters`__ objects or __`PkParametersInfo`__ objects. 
+The vignette __"pk-parameters"__ provides more details about the __"plotPKParameters"__ task.
+
+For mean model workflows, the PK parameters are only summarized as tables.
+In the current version, there is no option for number of decimal numbers to set.
+
+For population workflows, the parameters are described using plots which depends on the population workflow type.
+The names in the __`plotConfigurations`__ list available for the __"plotPKParameters"__ task are the following:
+
+- __"boxplotPkParameters"__: for boxplots of PK parameters performed by parallel comparison and ratio types of population workflows
+- __"boxplotPkRatios"__: for boxplots of PK parameters ratios performed by ratio type of population workflows
+- __"vpcParameterPlot"__: for VPC like plots of PK parameters vs Demography parameters performed by pediatric type of population workflows
+- __"comparisonVpcPlot"__: for VPC like plots of PK parameters vs Demography parameters comparing to reference population performed by pediatric type
+
+Since pediatric workflows perform VPC like plot, aggregation of the data is performed along the demography parameters.
+The binning of the demography parameters can be set by the __`settings`__ optional field __`xParametersBreaks`__.
+This field is a list vectors corresponding of the edges of the bins and whose names are the demography parameter path.
+Below shows an example of how to set such an option:
+
+```{r PK parameter settings}
+# Create an empty list
+myParameterSettings <- list()
+
+# Associate the bin edges for Age demography parameter field
+myParameterSettings[[StandardPath$Age]]$xParametersBreaks <- c(0, 1, 2, 3, 5, 10)
+
+workflowA$plotPKParameters$settings <- myParameterSettings
+```
+
+## Sensitivity plots
+
+Settings for the sensitivity plots are currently the only settings managed by R6 objects.
+To define settings, it is consequently necessary to create __`SensitivityPlotSettings`__ objects.
+The vignette __"sensitivity-analysis"__ provides more details about the __"plotSensitivity"__ task.
+
+The input argument of the __`SensitivityPlotSettings`__ settings object are then (to be created using `SensitivityPlotSettings$new()`): 
+
+- __`totalSensitivityThreshold`__: cut-off used for plots of the most sensitive parameters, default is __0.9__.
+- __`variableParameterPaths`__: paths that were varied in the sensitivity analysis.
+If supplied __`totalSensitivityThreshold`__ is 1, else it uses the default or user-provided value.
+- __`maximalParametersPerSensitivityPlot`__: maximal number of parameters to display in a sensitivity plot.
+By default the maximal number of parameters to display is __50__.
+- __`plotConfiguration`__: `PlotConfiguration` object from `tlf` library
+- __`xAxisFontSize`__: Font size of x-axis labels for sensitivity plot, that can overwrite behaviour of __`plotConfiguration`__.
+Default font size is 6.
+- __`yAxisFontSize`__: Font size of y-axis labels for sensitivity plot, that can overwrite behaviour of __`plotConfiguration`__.
+Default font size is 6.
+- __`xLabel`__ Label of x-axis for sensitivity plot, that can overwrite behaviour of __`plotConfiguration`__.
+Default xLabel is __"Sensitivity"__.
+- __`yLabel`__ Label of y-axis for sensitivity plot, that can overwrite behaviour of __`plotConfiguration`__.
+Default yLabel is __NULL__.
+- __`colorPalette`__ Name of a color palette to be used by `ggplot2::scale_fill_brewer()` for sensitivity plot.
+Default color palette is __"Spectral"__.
+
+## Absorption
+
+The name in the __`plotConfigurations`__ list available for the __"plotAbsorption"__ task is the following:
+
+- __"absorptionPlot"__
+
+## Mass Balance
+
+The name in the __`plotConfigurations`__ list available for the __"plotMassBalance"__ task is the following:
+
+- __"timeProfile"__: for time profile plots of mass balance in linear and log scales
+- __"cumulativeTimeProfile"__: for cumulative time profile plots of mass balance in linear and log scales
+- __"normalizedTimeProfile"__: for normalized time profile plots (as fraction of drugmass) of mass balance in linear and log scales
+- __"normalizedCumulativeTimeProfile"__: for cumulative normalized time profile plots of mass balance in linear and log scales
+- __"pieChart"__: for pie chart of mass balance at last simulated time point
+
+Another field of __`settings`__ is __`selectedCompoundNames`__ which allows to keep only a selected list of compounds to be kept in the mass balance plots.
+
+## Demography plots
+
+The names in the __`plotConfigurations`__ list available for the __"plotDemography"__ task are the following:
+
+- __"histogram"__: for histogram of Demography parameters performed by parallel comparison and ratio types of population workflows
+- __"vpcParameterPlot"__: for VPC like plots of Demography parameters vs Demography parameters performed by pediatric type of population workflows
+- __"comparisonVpcPlot"__: for VPC like plots of Demography parameters vs Demography parameters comparing to reference population performed by pediatric type
+
+Since pediatric workflows perform VPC like plot, aggregation of the data is performed along the demography parameters.
+The binning of the demography parameters can be set by the __`settings`__ optional field __`xParametersBreaks`__.
+This field is a list vectors corresponding of the edges of the bins and whose names are the demography parameter path.
+
+Similarly, parallel comparison and ratio types of population workflows perform histograms, whose binning can set using the __`settings`__ field __`bins`__.
