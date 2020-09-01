@@ -2,15 +2,16 @@
 #' @description Plot absorption diagnostics time profile
 #' @param structureSet `SimulationStructure` R6 class object
 #' @param logFolder folder where the logs are saved
-#' @param plotConfigurations list of `PlotConfiguration` R6 class objects
-#' @return `ggplot` object
+#' @param settings Options to be defined
+#' (e.g. plotConfigurations list of `PlotConfiguration` objects)
+#' @return list of `ggplot` objects
 #' @export
 #' @import tlf
 #' @import ospsuite
 #' @import utils
 plotMeanAbsorption <- function(structureSet,
                                logFolder = getwd(),
-                               plotConfigurations = NULL) {
+                               settings = NULL) {
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
@@ -170,7 +171,7 @@ plotMeanAbsorption <- function(structureSet,
         y = "Fraction",
         color = "Legend"
       ),
-      plotConfiguration = plotConfigurations[["absorptionPlot"]]
+      plotConfiguration = settings$plotConfigurations[["absorptionPlot"]]
     )
 
     absorptionCaptions[[result$compoundName]] <- paste0("Absorption of ", result$compoundName)

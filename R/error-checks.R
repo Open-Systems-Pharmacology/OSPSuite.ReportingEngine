@@ -394,3 +394,29 @@ validateHasReferencePopulation <- function(workflowType, simulationSets, logFold
   }
   logErrorThenStop(messages$warningNoReferencePopulation(workflowType), logFolder)
 }
+
+
+validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
+  pkParametersTableRef <- NULL
+  for (set in simulationSets) {
+    pkParametersTable <- getPKParametersInSimulationSet(set)
+    # In case output or pkParameters are in different orders
+    pkParametersTable <- pkParametersTable[order(pkParametersTable$path, pkParametersTable$pkParameter), ]
+    if (is.null(pkParametersTableRef) ||
+      all(
+        pkParametersTable$path == pkParametersTableRef$path,
+        pkParametersTable$pkParameter == pkParametersTableRef$pkParameter
+      )) {
+      pkParametersTableRef <- pkParametersTable
+      next
+    }
+    if (is.null(logFolder)) {
+      stop(messages$errorNotSameOutputsBetweenSets(sapply(simulationSets, function(set) {
+        set$simulationSetName
+      })))
+    }
+    logErrorThenStop(messages$errorNotSameOutputsBetweenSets(sapply(simulationSets, function(set) {
+      set$simulationSetName
+    })), logFolder)
+  }
+}

@@ -140,11 +140,12 @@ plotPopulationPKParameters <- function(structureSets,
   validateIsOfType(c(structureSets), "SimulationStructure")
   validateIsString(c(xParameters), nullAllowed = TRUE)
   validateIsOfType(c(yParameters), "Output", nullAllowed = TRUE)
+  validateSameOutputsBetweenSets(c(lapply(structureSets, function(set) {
+    set$simulationSet
+  })), logFolder)
 
-  # TO DO: need a validate method to ensure that all outputs are identical
-  # validateIsIdentical(sapply(structureSets, function(set){set$simulationSet$outputs})) ?
+  # Use first structure set as reference
   yParameters <- yParameters %||% structureSets[[1]]$simulationSet$outputs
-
   # Get first simulation, in case mol weight is needed
   simulation <- loadSimulationWithUpdatedPaths(structureSets[[1]]$simulationSet)
 

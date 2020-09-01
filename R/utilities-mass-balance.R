@@ -240,7 +240,7 @@ plotMassBalanceTimeProfile <- function(data,
       y = timeVsAmountDataMapping$y,
       color = timeVsAmountDataMapping$groupMapping$color$label
     )
-  )
+  ) + ggplot2::theme(legend.title = ggplot2::element_blank())
   return(timeVsAmountPlot)
 }
 
@@ -282,7 +282,7 @@ plotMassBalanceCumulativeTimeProfile <- function(data,
     ),
     position = ggplot2::position_stack(),
     alpha = 0.8 # TO DO: Define this value as a setting from the plot configuration
-  )
+  ) + ggplot2::theme(legend.title = ggplot2::element_blank())
   return(timeVsAmountPlot)
 }
 
@@ -303,28 +303,23 @@ plotMassBalancePieChart <- function(data,
                                     plotConfiguration = NULL) {
   pieChartDataMapping <- dataMapping %||% tlf::XYGDataMapping$new(
     x = "Time",
-    y = "Amount",
+    y = "NormalizedAmount",
     fill = "Legend"
   )
 
   timeFilter <- data[, pieChartDataMapping$x] == max(data[, pieChartDataMapping$x])
   pieChartData <- data[timeFilter, ]
+  # Legend captions need to includes normalized amount as percent
+  pieChartData$Legend <- paste(pieChartData$Legend, 
+                               " (", round(100 * pieChartData[, pieChartDataMapping$y], digits = 1), "%)")
+  # Ensure that the colors and legend match previous mass balance plots by re-ordering Legend
+  pieChartData$Legend <- reorder(pieChartData$Legend, as.numeric(factor(data[timeFilter, "Legend"])))
 
-  # TO DO: remove Testing Data Watermark when plot is complete
-  # plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
-  #  data = data,
-  #  metaData = metaData,
-  #  dataMapping = pieChartDataMapping,
-  #  watermark = "Testing !"
-  # )
-  # TO DO: watermark can't be used for polar plots...
-  # Need to check if there are other ways
-
-  # TO DO: use the new version of tlf to get this plot
-  pieChartPlot <- ggplot2::ggplot()
-  # pieChartPlot <- plotConfiguration$setPlotBackground(pieChartPlot)
-
-  pieChartPlot <- pieChartPlot +
+  # Caution:
+  # Watermark relies on ggplot2::annotation_custom which is not compatible with ggplot2::coord_polar
+  # As a consequence, the polar plot needs to be saved as a grob first, ie as a ggplot grid image
+  # Then, the grob is added as a layer of a tlf empty plot which can include a Watermark
+  pieChartCorePlot <- ggplot2::ggplot() +
     ggplot2::geom_bar(
       data = pieChartData,
       mapping = ggplot2::aes_string(
@@ -334,13 +329,14 @@ plotMassBalancePieChart <- function(data,
       ),
       width = 1,
       stat = "identity",
-      alpha = 0.8 # TO DO: Define this value as a setting from the plot configuration)
-    ) + coord_polar("y", start = 0) + xlab("") + ylab("") +
-    theme(
-      axis.text.x = element_blank(),
-      axis.text.y = element_blank(),
-      axis.ticks = element_blank()
-    )
+      alpha = 0.8
+    ) + coord_polar("y", start = 0) + ggplot2::theme_void() +
+    xlab("") + ylab("") + ggplot2::theme(legend.title = ggplot2::element_blank())
 
+  pieChartGrob <- ggplot2::ggplotGrob(pieChartCorePlot)
+
+  pieChartPlot <- tlf::initializePlot(plotConfiguration)
+  pieChartPlot <- pieChartPlot + ggplot2::annotation_custom(pieChartGrob)
+  
   return(pieChartPlot)
 }

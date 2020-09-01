@@ -655,15 +655,21 @@ plotResidualsHistogram <- function(data,
     metaData = metaData,
     dataMapping = dataMapping
   )
+
   bins <- bins %||% 15
+
+  # To fit normal distribution density curve to histogram, the density curve needs to be scaled
+  # graphics::hist provides density and counts for histograms from which the scaling factor can be directly obtained
+  histResult <- graphics::hist(data[, dataMapping$x], breaks = bins, plot = FALSE)
+  scalingFactor <- mean(histResult$counts[histResult$counts > 0] / histResult$density[histResult$counts > 0])
+
   xmax <- 1.1 * max(abs(data[, dataMapping$x]), na.rm = TRUE)
   xDensityData <- seq(-xmax, xmax, 2 * xmax / 100)
-  yDensityData <- (nrow(data) / bins) * stats::dnorm(xDensityData, sd = stats::sd(data[, dataMapping$x], na.rm = TRUE))
+  yDensityData <- scalingFactor * stats::dnorm(xDensityData, sd = stats::sd(data[, dataMapping$x], na.rm = TRUE))
   densityData <- data.frame(x = xDensityData, y = yDensityData)
 
   resHistoPlot <- tlf::initializePlot(plotConfiguration)
 
-  # TO DO: Create a place where all the default values are stored
   resHistoPlot <- resHistoPlot +
     ggplot2::geom_histogram(
       data = data,
@@ -907,7 +913,7 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
   # Residuals can contain Inf values
   # They need to be removed from the plot and translated to NA in csv output file
   csvResidualsData <- residualsData
-  csvResidualsData[,"Residuals"] <- replaceInfWithNA(csvResidualsData[,"Residuals"], logFolder)
+  csvResidualsData[, "Residuals"] <- replaceInfWithNA(csvResidualsData[, "Residuals"], logFolder)
   residualsData <- removeMissingValues(csvResidualsData, "Residuals", logFolder)
 
   refLengthResidualsData <- nrow(residualsData) %||% 0
