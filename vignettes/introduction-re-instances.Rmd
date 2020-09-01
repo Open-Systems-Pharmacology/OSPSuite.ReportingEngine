@@ -20,45 +20,108 @@ knitr::opts_chunk$set(
 require(ospsuite.reportingengine)
 ```
 
-This vignette introduces the notions and instances implemented in the OSP-Suite Reporting Engine package (`ospsuite.reportingengine`).
+This vignette introduces the notions and objects implemented in the OSP-Suite Reporting Engine package (`ospsuite.reportingengine`).
 
 # Introduction
 
 The `ospsuite.reportingengine` package aims at facilitating the design and build of reports evaluating PBPK models developed on PK-Sim or/and Mobi.
-To this end, the concept of workflow implemented in the Matlab version of the reporting engine has been kept in R.
 
-In the `ospsuite.reportingengine` package, `Workflow` instances can be created, they provide a structure that uses input parameters and generates outputs like figures, tables and reports.
-The input parameters can be defined using `SimulationSet` and `Output` instances (defined in more details in section __3__).
-The input parameters are then used in `Task` instances (defined in more details in section __4__) already included within the `Workflow` instances.
+To this end, the package benefits from the concept of R6 classes (similar to reference classes) which allows to define structured objects whose fields can be any object such as properties, methods or even other R6 objects.
+R6 objects, or objects from R6 class, presents some peculiarities.
+
+- They are created using the method `$new(...)` (e.g. `r6Object <- R6Class$new()`).
+- Like for objects of class list, fields of R6 objects can be called using either `$fieldName` or `[[fieldName]]` (e.g. `r6Object$method()` or `r6Object[[property]]`).
+- The R6 classes also integrate the concept of inheritance: an R6 object will get the attributes from its class but will also inherit properties and methods from a parent class.
+
+The `ospsuite.reportingengine` package is built around two central R6 classes __`MeanModelWorkflow`__ and __`PopulationWorkflow`__ derived from the parent R6 class `Workflow`.
+The creation of `MeanModelWorkflow` or `PopulationWorkflow` objects provides a structured environment with methods and properties that help in designing, runnning and reporting the evaluation of PBPK models developed on PK-Sim or/and Mobi.
+Such structured environment works with 2 types of objects:
+
+- `SimulationSet` R6 objects and their `Output` R6 objects (defined in more details in section __3__), defining on which model(s) and/or data the workflow is performed. These objects need to be created before the creation of workflow objects as they are required by them.
+- `Task` R6 objects (defined in more details in section __4__), defining the settings of the evaluations to be performed by the workflow. These objects are directly included upon creation of `Workflow` objects. Their settings can be updated after creation.
+
+## Nomenclature
+
+Table 1 defines some of the main instances of the `ospsuite.reportingengine` package usually defined by users during the design of a workflow. The classes of these instances and the parent classes they are derived from are also indicated.
+All of these instances derive from the `R6` class, consequently creating them requires the call of the method `$new()` (e.g. `MeanModelWorkflow$new()`)
+
+```{r table 1, echo=FALSE, results='asis'}
+nomenclatureTable <- data.frame(
+  "Object creation" = c(
+    "workflow <- MeanModelWorkflow$new(simulationSets, workflowFolder)",
+    "workflow <- PopulationWorkflow$new(workflowType, simulationSets, workflowFolder)",
+    "simulationSet <- SimulationSet$new(simulationSetName, simulationFile)",
+    "simulationSet <- PopulationSimulationSet$new(simulationSetName, simulationFile, populationFile)",
+    "output <- Output$new(path)",
+    "task <- Task$new(settings)",
+    "task <- SimulationTask$new(settings)",
+    "task <- PlotTask$new(settings)",
+    "task <- GofPlotTask$new(settings)",
+    "task <- PopulationPlotTask$new(settings)"
+  ),
+  "Object class tree" = c(
+    paste0(c("R6", "Workflow", "MeanModelWorkflow"), collapse = " > "),
+    paste0(c("R6", "Workflow", "PopulationWorkflow"), collapse = " > "),
+    paste0(c("R6", "SimulationSet"), collapse = " > "),
+    paste0(c("R6", "SimulationSet", "PopulationSimulationSet"), collapse = " > "),
+    paste0(c("R6", "Output"), collapse = " > "),
+    paste0(c("R6", "Task"), collapse = " > "),
+    paste0(c("R6", "Task", "SimulationTask"), collapse = " > "),
+    paste0(c("R6", "Task", "PlotTask"), collapse = " > "),
+    paste0(c("R6", "Task", "PlotTask", "GofPlotTask"), collapse = " > "),
+    paste0(c("R6", "Task", "PlotTask", "PopulationPlotTask"), collapse = " > ")
+  ),
+  "Definition" = c(
+    "Object that runs tasks on simulation sets dedicated to mean models",
+    "Object that runs tasks on simulation sets dedicated to population models",
+    "Object with information on the simulation and observation to be evaluated",
+    "Object with information on the simulation, population and observation to be evaluated",
+    "Object with information on the simulation output path and observation to be evaluated",
+    "Object with evaluations to be performed and saved",
+    "Object with evaluations to be performed and saved specific to model simulations",
+    "Object with evaluations to be performed and saved specific to plots and tables to report",
+    "Object with evaluations to be performed and saved specific to plots and tables of goodness of fit to report",
+    "Object with evaluations across simulations to be performed and saved specific to plots and tables to report"
+  ),
+  check.names = FALSE
+)
+knitr::kable(nomenclatureTable, caption = "Table 1: Nomenclature of `ospsuite.reportingengine` main instances")
+```
+
 
 ## General scheme
 
-An example of workflow script is provided below for reporting a time profile plot on *Minimodel2.pkml*.
-The results of this script are also provided.
+A working example of workflow script is provided below for reporting a time profile plot on *Minimodel2.pkml*.
 
-```{r general scheme}
+```{r general scheme, warning=FALSE, results='hide',message=FALSE}
 # Get the pkml simulation file: "MiniModel2.pkml"
-simulationFile <- system.file("extdata", "MiniModel2.pkml", 
-                              package = "ospsuite.reportingengine")
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
 
-# Define the input parameters
+# Create Output objects which define output paths that will be plotted by the workflow
 outputA <- Output$new(
-    path = "Organism|A|Concentration in container",
-    displayName = "Concentration of A")
+  path = "Organism|A|Concentration in container",
+  displayName = "Concentration of A"
+)
 outputB <- Output$new(
-    path = "Organism|B|Concentration in container",
-    displayName = "Concentration of B")
+  path = "Organism|B|Concentration in container",
+  displayName = "Concentration of B"
+)
 
+# Create a SimulationSet object which defines the model and outputs to evaluate
 myExampleSet <- SimulationSet$new(
   simulationSetName = "My example",
   simulationFile = simulationFile,
   outputs = c(outputA, outputB)
 )
 
-# Create the workflow instance
-myExampleWorkflow <- 
-  MeanModelWorkflow$new(simulationSets = myExampleSet, 
-                        workflowFolder = "myExample-Results")
+# Create the workflow object
+myExampleWorkflow <-
+  MeanModelWorkflow$new(
+    simulationSets = myExampleSet,
+    workflowFolder = "myExample-Results"
+  )
 
 # Set the workflow tasks to be run
 myExampleWorkflow$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
@@ -73,59 +136,21 @@ list.files(myExampleWorkflow$workflowFolder)
 ```
 
 ```{r general scheme render, include=FALSE, echo=FALSE}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
+# Convert the markdown document into html with specific format
 rmarkdown::render(myExampleWorkflow$reportFileName)
 ```
 
 The associated report will be as follows:
+
 ```{r general scheme report, echo=FALSE}
+# TO DO: customize the HTML output:
+# The chunk needs to get a special source tag/type to be output differently
 htmltools::includeHTML(sub(".md", ".html", myExampleWorkflow$reportFileName))
 ```
 
 ```{r delete general scheme, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
 unlink(myExampleWorkflow$workflowFolder, recursive = TRUE)
-```
-
-## Nomenclature
-
-Table 1 defines some of the main instances of the `ospsuite.reportingengine` package usually defined by users during the design of a workflow. The classes of these instances and the parent classes they are derived from are also indicated.
-All of these instances derive from the `R6` class, consequently creating them requires the call of the method `$new()` (e.g. `MeanModelWorkflow$new()`)
-
-```{r table 1, echo=FALSE, results='asis'}
-nomenclatureTable <- data.frame("Name of R object" = c("MeanModelWorkflow",
-                                                       "PopulationWorkflow",
-                                                       "SimulationSet",
-                                                       "PopulationSimulationSet",
-                                                       "Output",
-                                                       "Task",
-                                                       "SimulationTask",
-                                                       "PlotTask",
-                                                       "GofPlotTask",
-                                                       "PopulationPlotTask"),
-                                "Object class tree" = c(paste0(c("R6", "Workflow","MeanModelWorkflow"), collapse =" > "),
-                                                        paste0(c("R6", "Workflow","PopulationWorkflow"), collapse=" > "),
-                                                        paste0(c("R6", "SimulationSet"), collapse=" > "),
-                                                        paste0(c("R6", "SimulationSet", "PopulationSimulationSet"), collapse=" > "),
-                                                        paste0(c("R6", "Output"), collapse=" > "),
-                                                        paste0(c("R6", "Task"), collapse=" > "),
-                                                        paste0(c("R6", "Task", "SimulationTask"), collapse=" > "),
-                                                        paste0(c("R6", "Task", "PlotTask"), collapse=" > "),
-                                                        paste0(c("R6", "Task", "PlotTask", "GofPlotTask"), collapse=" > "),
-                                                        paste0(c("R6", "Task", "PlotTask", "PopulationPlotTask"), collapse=" > ")),
-                                "Definition" = c("Object that runs tasks on simulation sets dedicated to mean models",
-                                                 "Object that runs tasks on simulation sets dedicated to population models",
-                                                 "Object with information on the simulation and observation to be evaluated",
-                                                 "Object with information on the simulation, population and observation to be evaluated",
-                                                 "Object with information on the simulation output path and observation to be evaluated",
-                                                 "Object with evaluations to be performed and saved",
-                                                 "Object with evaluations to be performed and saved specific to model simulations",
-                                                 "Object with evaluations to be performed and saved specific to plots and tables to report",
-                                                 "Object with evaluations to be performed and saved specific to plots and tables of goodness of fit to report",
-                                                 "Object with evaluations across simulations to be performed and saved specific to plots and tables to report"),
-                                check.names = FALSE)
-knitr::kable(nomenclatureTable, caption = 'Table 1: Nomenclature of `ospsuite.reportingengine` main instances')
 ```
 
 # Workflow
@@ -156,11 +181,11 @@ Since multiple simulations and observed datasets can be evaluated by the workflo
 
 The black frames correspond to the tasks of the workflow. 
 These tasks are defined through the R object `Task`.
-These objects do not have to be instanciated by the user are they are created directly by the `Worklfow` object.
+These objects do not have to be instanciated by the user, they are created directly by the `Worklfow` object.
 The user will only have to switch them on/off and update their settings if necessary.
 
 ```{r figure 1, out.width="100%", include=TRUE, fig.align="center", fig.cap= "Figure 1: Mean model workflow inputs and tasks", echo=FALSE}
-    knitr::include_graphics(system.file("extdata", "mean-model-workflow-input-and-tasks.png", package = "ospsuite.reportingengine"))
+knitr::include_graphics(system.file("extdata", "mean-model-workflow-input-and-tasks.png", package = "ospsuite.reportingengine"))
 ```
 
 ## PopulationWorkflow
@@ -173,7 +198,7 @@ Since multiple simulations, population and observed datasets can be evaluated by
 
 The black frames correspond to the tasks of the workflow. 
 These tasks are defined through the R object `Task`.
-These objects do not have to be instanciated by the user are they are created directly by the `Worklfow` object.
+These objects do not have to be instanciated by the user, they are created directly by the `Worklfow` object.
 The user will only have to switch them on/off and update their settings if necessary.
 
 In a population workflow, some tasks can compare different simulations or population, such plots of Demography or PK parameters.
@@ -187,11 +212,11 @@ There exist different types of a population workflow
    - If a reference population is given, the time profiles are plotted in comparison to this population
    - The sensitivity analysis is done on all populations
 3) __Ratio Comparison__
-   - Same as parallelComparison, but for the PK Parameter additional the ratio of the PK Parameter to the reference population is calculated and plotted in BoxWhisker plots 
+   - Same as parallel comparison, but for the PK Parameter additional the ratio of the PK Parameter to the reference population is calculated and plotted in box-whisker plots 
 
 
 ```{r figure 2, out.width="100%", include=TRUE, fig.align="center", fig.cap= "Figure 2: Population workflow inputs and tasks", echo=FALSE}
-    knitr::include_graphics(system.file("extdata", "population-workflow-input-and-tasks.png", package = "ospsuite.reportingengine"))
+knitr::include_graphics(system.file("extdata", "population-workflow-input-and-tasks.png", package = "ospsuite.reportingengine"))
 ```
 
 ## Creation of a Workflow
@@ -281,7 +306,7 @@ exampleStudyDesign <- readObservedDataFile(studyDesignFile)
 ```
 
 ```{r table 2, echo=FALSE, results='asis'}
-knitr::kable(exampleStudyDesign, caption = 'Table 2: Example of study design content')
+knitr::kable(exampleStudyDesign, caption = "Table 2: Example of study design content")
 ```
 
 ## Format of data files
@@ -315,7 +340,7 @@ The variable '__lloq__', for lower limit of quantitation, can also be provided b
 The example below shows a template of a dictionary content.
 
 ```{r table 3, echo=FALSE, results='asis'}
-knitr::kable(exampleDictionary, caption= 'Table 3: Template for data dictionary')
+knitr::kable(exampleDictionary, caption = "Table 3: Template for data dictionary")
 ```
 
 ## Outputs
