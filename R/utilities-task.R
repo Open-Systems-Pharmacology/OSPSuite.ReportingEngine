@@ -147,15 +147,17 @@ loadPlotTimeProfilesAndResidualsTask <- function(workflow, active = FALSE, setti
   validateIsLogical(active)
 
   taskFunction <- plotMeanGoodnessOfFit
+  nameFunction <- deparse(substitute(plotMeanGoodnessOfFit))
   if (isOfType(workflow, "PopulationWorkflow")) {
     taskFunction <- plotPopulationGoodnessOfFit
+    nameFunction <- deparse(substitute(plotPopulationGoodnessOfFit))
   }
 
   return(GofPlotTask$new(
     reportTitle = defaultWorkflowTitles$plotGoF,
     fileName = defaultWorkflowAppendices$plotGoF,
     getTaskResults = taskFunction,
-    nameTaskResults = deparse(substitute(taskFunction)),
+    nameTaskResults = nameFunction,
     outputFolder = defaultTaskOutputFolders$plotGoF,
     inputFolder = defaultTaskOutputFolders$simulate,
     inputs = getSimulationResultFileNames(workflow),
