@@ -4,7 +4,9 @@
 \name{AggregationConfiguration}
 \alias{AggregationConfiguration}
 \title{AggregationConfiguration}
-\format{An object of class \code{list} of length 2.}
+\format{
+An object of class \code{list} of length 2.
+}
 \usage{
 AggregationConfiguration
 }

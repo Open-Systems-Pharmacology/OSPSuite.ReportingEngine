@@ -133,6 +133,7 @@ Task <- R6::R6Class(
 
     #' @description
     #' Get the relative path to a file to be output by this task
+    #' @param fileName name (with extension) of the file to be output
     #' @return Output file's relative path
     getRelativePath = function(fileName){
       return(file.path(self$outputFolder, fileName))
@@ -140,6 +141,7 @@ Task <- R6::R6Class(
 
     #' @description
     #' Get the absolute path to a file to be output by this task
+    #' @param fileName name (with extension) of the file to be output
     #' @return Output file's absolute path
     getAbsolutePath = function(fileName){
       return(file.path(self$workflowFolder,self$outputFolder, fileName))

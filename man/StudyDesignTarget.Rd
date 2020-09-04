@@ -24,6 +24,7 @@ StudyDesignTarget
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `StudyDesign` object.
 \subsection{Usage}{
@@ -46,6 +47,7 @@ Create a new `StudyDesign` object.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
 Print study design target features
 \subsection{Usage}{

@@ -41,6 +41,7 @@ This Value will overwrite values defined by plot configuration object}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a `SensitivityPlotSettings` object
 \subsection{Usage}{
@@ -86,6 +87,7 @@ A new `SensitivityPlotSettings` object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

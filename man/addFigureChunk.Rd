@@ -4,12 +4,20 @@
 \alias{addFigureChunk}
 \title{addFigureChunk}
 \usage{
-addFigureChunk(fileName, figureFile, figureCaption = "", logFolder = getwd())
+addFigureChunk(
+  fileName,
+  figureFileRelativePath,
+  figureFileRootDirectory,
+  figureCaption = "",
+  logFolder = getwd()
+)
 }
 \arguments{
 \item{fileName}{name of .md file}
 
-\item{figureFile}{figure path to include}
+\item{figureFileRelativePath}{path to figure relative to working directory}
+
+\item{figureFileRootDirectory}{working directory}
 
 \item{figureCaption}{caption of figure}
 

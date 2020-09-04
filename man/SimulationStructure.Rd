@@ -38,6 +38,7 @@ R6 class representing that stores file structure (file names and paths) relating
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `SimulationStructure` object.
 Build and store names of potential subfolders to hold simulation results, pkAnalysis results and sensitivityAnalysis results.
@@ -57,6 +58,7 @@ Build and store names of potential subfolders to hold simulation results, pkAnal
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -4,7 +4,9 @@
 \name{defaultVariationRange}
 \alias{defaultVariationRange}
 \title{defaultVariationRange}
-\format{An object of class \code{numeric} of length 1.}
+\format{
+An object of class \code{numeric} of length 1.
+}
 \usage{
 defaultVariationRange
 }

@@ -4,12 +4,20 @@
 \alias{addTableChunk}
 \title{addTableChunk}
 \usage{
-addTableChunk(fileName, tableFile, tableCaption = "", logFolder = getwd())
+addTableChunk(
+  fileName,
+  tableFileRelativePath,
+  tableFileRootDirectory,
+  tableCaption = "",
+  logFolder = getwd()
+)
 }
 \arguments{
 \item{fileName}{name of .md file}
 
-\item{tableFile}{table path to include}
+\item{tableFileRelativePath}{path to table relative to working directory}
+
+\item{tableFileRootDirectory}{working directory}
 
 \item{tableCaption}{caption of the table}
 
