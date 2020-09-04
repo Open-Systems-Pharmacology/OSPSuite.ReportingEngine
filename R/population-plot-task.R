@@ -68,7 +68,8 @@ PopulationPlotTask <- R6::R6Class(
 
         addFigureChunk(
           fileName = self$fileName,
-          figureFile = self$getRelativePath(plotFileName),
+          figureFileRelativePath = self$getRelativePath(plotFileName),
+          figureFileRootDirectory = self$workflowFolder,
           logFolder = self$workflowFolder
         )
 
@@ -86,7 +87,8 @@ PopulationPlotTask <- R6::R6Class(
 
           addTableChunk(
             fileName = self$fileName,
-            tableFile = self$getAbsolutePath(tableFileName),
+            tableFileRelativePath = self$getRelativePath(tableFileName),
+            tableFileRootDirectory = self$workflowFolder,
             logFolder = self$workflowFolder
           )
 

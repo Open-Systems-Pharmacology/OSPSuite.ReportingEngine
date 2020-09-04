@@ -25,17 +25,19 @@ resetReport <- function(fileName,
 #' @title addFigureChunk
 #' @description Add a figure in a .md document
 #' @param fileName name of .md file
-#' @param figureFile figure path to include
+#' @param figureFileRelativePath path to figure relative to working directory
+#' @param figureFileRootDirectory working directory
 #' @param figureCaption caption of figure
 #' @param logFolder folder where the logs are saved
 #' @export
 addFigureChunk <- function(fileName,
-                           figureFile,
+                           figureFileRelativePath,
+                           figureFileRootDirectory,
                            figureCaption = "",
                            logFolder = getwd()) {
   # For a figure path to be valid in markdown using ![](#figurePath)
   # %20 needs to replace spaces in that figure path
-  mdFigureFile <- gsub(pattern = "[[:space:]*]", replacement = "%20", x = figureFile)
+  mdFigureFile <- gsub(pattern = "[[:space:]*]", replacement = "%20", x = figureFileRelativePath)
   mdText <- c(
     "",
     paste0("![", figureCaption, "](", mdFigureFile, ")"),
@@ -48,11 +50,11 @@ addFigureChunk <- function(fileName,
 
   usedFilesFileName <- sub(pattern = ".md", replacement = "-usedFiles.txt", fileName)
   fileObject <- file(usedFilesFileName, open = "at", encoding = "UTF-8")
-  write(figureFile, file = fileObject, append = TRUE, sep = "\n")
+  write(file.path(figureFileRootDirectory, figureFileRelativePath), file = fileObject, append = TRUE, sep = "\n")
   close(fileObject)
 
   logWorkflow(
-    message = paste0("Figure path '", figureFile, "' added to report '", fileName, "'."),
+    message = paste0("Figure path '", figureFileRelativePath, "' added to report '", fileName, "'."),
     pathFolder = logFolder,
     logTypes = LogTypes$Debug
   )
@@ -62,15 +64,17 @@ addFigureChunk <- function(fileName,
 #' @title addTableChunk
 #' @description Add a table in a .md document
 #' @param fileName name of .md file
-#' @param tableFile table path to include
+#' @param tableFileRelativePath path to table relative to working directory
+#' @param tableFileRootDirectory working directory
 #' @param tableCaption caption of the table
 #' @param logFolder folder where the logs are saved
 #' @export
 addTableChunk <- function(fileName,
-                          tableFile,
+                          tableFileRelativePath,
+                          tableFileRootDirectory,
                           tableCaption = "",
                           logFolder = getwd()) {
-  table <- read.csv(tableFile,
+  table <- read.csv(file.path(tableFileRootDirectory, tableFileRelativePath),
     check.names = FALSE,
     fileEncoding = "UTF-8"
   )
@@ -89,11 +93,11 @@ addTableChunk <- function(fileName,
 
   usedFilesFileName <- sub(pattern = ".md", replacement = "-usedFiles.txt", fileName)
   fileObject <- file(usedFilesFileName, open = "at", encoding = "UTF-8")
-  write(tableFile, file = fileObject, append = TRUE, sep = "\n")
+  write(file.path(tableFileRootDirectory, tableFileRelativePath), file = fileObject, append = TRUE, sep = "\n")
   close(fileObject)
 
-    logWorkflow(
-    message = paste0("Table path '", tableFile, "' added to report '", fileName, "'."),
+  logWorkflow(
+    message = paste0("Table path '", file.path(tableFileRootDirectory, tableFileRelativePath), "' added to report '", fileName, "'."),
     pathFolder = logFolder,
     logTypes = LogTypes$Debug
   )
@@ -140,11 +144,13 @@ mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd(), kee
 
     usedFilesFileName <- sub(pattern = ".md", replacement = "-usedFiles.txt", fileName)
     if (file.exists(usedFilesFileName)) {
-      file.append(usedFilesOutputFile,usedFilesFileName)
+      file.append(usedFilesOutputFile, usedFilesFileName)
       file.remove(usedFilesFileName)
     }
   }
-  if(!keepInputFiles){file.remove(inputFiles)}
+  if (!keepInputFiles) {
+    file.remove(inputFiles)
+  }
 
   logWorkflow(
     message = paste0("Reports '", paste0(inputFiles, collapse = "', '"), "' were successfully merged into '", outputFile, "'"),
@@ -196,10 +202,11 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
   usedFilesFileName <- sub(pattern = ".md", replacement = "-usedFiles.txt", fileName)
   usedFiles <- readLines(usedFilesFileName, encoding = "UTF-8")
 
-  for (usedFile in usedFiles)
-    if (usedFile != '') {
-      re.tStoreFileMetadata(access = "read", filePath = file.path(logFolder, usedFile))
+  for (usedFile in usedFiles) {
+    if (usedFile != "") {
+      re.tStoreFileMetadata(access = "read", filePath = usedFile)
     }
+  }
   file.remove(usedFilesFileName)
 
   fileObject <- file(wordFileName, encoding = "UTF-8")
@@ -211,18 +218,18 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
     templateReport <- system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
     pageBreakCode <- system.file("extdata", "pagebreak.lua", package = "ospsuite.reportingengine")
 
-  write(c(
-    "self-contained:", "wrap: none", "toc:",
-    paste0('reference-doc: "', templateReport, '"'),
-    paste0('lua-filter: "', pageBreakCode, '"'),
-    paste0('resource-path: "', logFolder, '"')
-  ), file = reportConfig, sep = "\n")
-  knitr::pandoc(input = wordFileName, format = "docx", config = reportConfig)
-  file.copy(docxWordFileName, docxFileName, overwrite = TRUE)
-  re.tStoreFileMetadata(access = "write", filePath = docxFileName)
-  unlink(reportConfig, recursive = TRUE)
-  unlink(docxWordFileName, recursive = TRUE)
-}
+    write(c(
+      "self-contained:", "wrap: none", "toc:",
+      paste0('reference-doc: "', templateReport, '"'),
+      paste0('lua-filter: "', pageBreakCode, '"'),
+      paste0('resource-path: "', logFolder, '"')
+    ), file = reportConfig, sep = "\n")
+    knitr::pandoc(input = wordFileName, format = "docx", config = reportConfig)
+    file.copy(docxWordFileName, docxFileName, overwrite = TRUE)
+    re.tStoreFileMetadata(access = "write", filePath = docxFileName)
+    unlink(reportConfig, recursive = TRUE)
+    unlink(docxWordFileName, recursive = TRUE)
+  }
   logWorkflow(
     message = paste0("Word version of report '", fileName, "' created."),
     pathFolder = logFolder,
