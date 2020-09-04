@@ -13,7 +13,7 @@ GofPlotTask <- R6::R6Class(
     #' @param taskResults list of results from task run.
     #' Results contains at least 2 fields: `plots` and `tables`
     saveResults = function(set,
-                               taskResults) {
+                           taskResults) {
       addTextChunk(
         self$fileName,
         paste0("## ", self$title, " for ", set$simulationSet$simulationSetName),
@@ -34,49 +34,50 @@ GofPlotTask <- R6::R6Class(
 
         if (!isOfLength(listOfPlots, 0)) {
           for (plotName in names(listOfPlots)) {
-            plotFileName <- file.path(
-              self$outputFolder,
-              getDefaultFileName(set$simulationSet$simulationSetName,
-                suffix = paste0(plotName, "-", timeRange),
-                extension = ExportPlotConfiguration$format
-              )
+            plotFileName <- getDefaultFileName(set$simulationSet$simulationSetName,
+              suffix = paste0(plotName, "-", timeRange),
+              extension = ExportPlotConfiguration$format
             )
+
             ggplot2::ggsave(
-              filename = file.path(self$workflowFolder, plotFileName),
+              filename = self$getAbsolutePath(plotFileName),
               plot = listOfPlots[[plotName]],
               width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
             )
-            re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, plotFileName))
+
+            re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(plotFileName))
+
             logWorkflow(
-              message = paste0("Plot '", plotFileName, "' was successfully saved."),
+              message = paste0("Plot '", self$getRelativePath(plotFileName), "' was successfully saved."),
               pathFolder = self$workflowFolder,
               logTypes = LogTypes$Debug
             )
+
             if (!isOfLength(listOfPlotCaptions[[plotName]], 0)) {
               addTextChunk(self$fileName, paste0("Figure: ", listOfPlotCaptions[[plotName]]), logFolder = self$workflowFolder)
             }
-            addFigureChunk(fileName = self$fileName, figureFile = plotFileName, logFolder = self$workflowFolder)
+
+            addFigureChunk(fileName = self$fileName, figureFile = self$getRelativePath(plotFileName), logFolder = self$workflowFolder)
           }
         }
       }
 
       for (tableName in names(taskResults$tables)) {
-        tableFileName <- file.path(
-          self$workflowFolder,
-          self$outputFolder,
-          getDefaultFileName(set$simulationSet$simulationSetName,
-            suffix = tableName,
-            extension = "csv"
-          )
+        tableFileName <- getDefaultFileName(set$simulationSet$simulationSetName,
+          suffix = tableName,
+          extension = "csv"
         )
+
         write.csv(taskResults$tables[[tableName]],
-          file = tableFileName,
+          file = self$getAbsolutePath(tableFileName),
           row.names = FALSE,
           fileEncoding = "UTF-8"
         )
-        re.tStoreFileMetadata(access = "write", filePath = tableFileName)
+
+        re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(tableFileName))
+
         logWorkflow(
-          message = paste0("Table '", tableFileName, "' was successfully saved."),
+          message = paste0("Table '", self$getAbsolutePath(tableFileName), "' was successfully saved."),
           pathFolder = self$workflowFolder,
           logTypes = LogTypes$Debug
         )
