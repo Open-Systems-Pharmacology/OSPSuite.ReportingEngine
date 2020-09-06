@@ -4,11 +4,11 @@ output:
   rmarkdown::html_vignette:
    number_sections: true
 vignette: >
-  %\VignetteIndexEntry{sensitivity-analysis}
+  %\VignetteIndexEntry{Sensitivity Analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
+  
 ```{r vignette setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, echo=FALSE, results='hide', message=F, warning=F}
 require(ospsuite.reportingengine)
 ```
 
@@ -31,10 +31,234 @@ As a consequence, if the workflow output folder does not include the appropriate
 
 The objects `SimulationSet` (or `PopulationSimulationSet` for population workflows) and `Output` define which and how the simulated PK parameters will be reported.
 
-## Ouptuts
+```{r}
+simulationFile <- system.file("extdata", "RaltegravirSim.pkml",
+  package = "ospsuite.reportingengine"
+)
+```
+
+
+## Outputs
+
+```{r} 
+output1 <- Output$new(path = "Organism|VenousBlood|Plasma|Raltegravir|Concentration", displayName = "op1")
+
+output2 <- Output$new(
+  path = "Organism|ArterialBlood|Plasma|Raltegravir|Concentration", displayName = "op2",
+  pkParameters = c(
+    PkParameterInfo$new("t_max", "new_t_max"),
+    PkParameterInfo$new("AUC_tEnd", "new_AUC_tEnd")
+  )
+)
+
+output3 <- Output$new(
+  path = "Organism|Lung|Interstitial|Raltegravir|Concentration", displayName = "op3",
+  pkParameters = c(
+    PkParameterInfo$new("C_max", "new_C_max"),
+    PkParameterInfo$new("MRT", "new_MRT")
+  )
+)
+```
+
+
+
+
+
 
 ### Mean model workflow
 
+
+```{r echo=T, results='hide'}
+ms <- SimulationSet$new(
+  simulationSetName = "ral",
+  simulationFile = simulationFile,
+  outputs = c(output1, output2, output3)
+)
+```
+
+
+
+```{r echo=T, results='hide'}
+mwf <- MeanModelWorkflow$new(
+  simulationSets = ms,
+  workflowFolder = "meanSensitivityExample"
+)
+```
+
+
+
+```{r echo=T, results='hide'}
+mwf$calculateSensitivity$inactivate()
+mwf$plotSensitivity$inactivate()
+```
+
+
+
+```{r echo=T, results='hide'}
+mwf$calculateSensitivity$settings$variableParameterPaths <- c(
+  "Organism|Heart|Volume",
+  "Organism|Lung|Volume",
+  "Organism|Kidney|Volume",
+  "Organism|Brain|Volume",
+  "Organism|Muscle|Volume",
+  "Organism|LargeIntestine|Volume",
+  "Organism|PortalVein|Volume",
+  "Organism|Spleen|Volume",
+  "Organism|Skin|Volume",
+  "Organism|Pancreas|Volume",
+  "Organism|SmallIntestine|Mucosa|UpperIleum|Fraction mucosa",
+  "Organism|SmallIntestine|Volume",
+  "Organism|Lumen|Effective surface area variability factor",
+  "Organism|Bone|Volume",
+  "Organism|Stomach|Volume"
+)
+```
+
+
+
+```{r echo=T, results='hide'}
+mwf$plotSensitivity$settings <- SensitivityPlotSettings$new(
+  totalSensitivityThreshold = 0.9,
+  maximalParametersPerSensitivityPlot = 12,
+  xAxisFontSize = 10,
+  yAxisFontSize = 10
+)
+```
+
+
+```{r echo=T, results='hide', message=F, warning=F}
+mwf$runWorkflow()
+```
+
+
+The output report for the mean model sensitivity analysis is shown below.  
+
+```{r mwf render, include=F, echo=F}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(mwf$reportFileName)
+```
+
+```{r mwf report,echo=F}
+htmltools::includeHTML(sub(".md", ".html", mwf$reportFileName))
+```
+
+```{r delete mwf, inlcude = FALSE, echo=FALSE}
+# Remove the workflow folders
+#unlink(mwf$workflowFolder, recursive = TRUE)
+```
+
 ### Population model workflow
 
-# Template examples
+
+Unlike the mean model sensitivity analysis, a population sensitivity analysis depends on the pk parameter calcufor the population, which in turn depend on the simulation results for he population.  The 
+
+
+1) Model is simulatiod for the entire population
+
+2) User specified PK parameters  (such as C_max and AUC) are calculated for each individual in the population based on their simulation results evaluated in step1 .  For each user-specified  pk parameter, the computations in step 2 result in a distribution of that parameter over the entire population.  
+
+3) The population sensitivity analysis of a pk parameter quantity is composed of sensitivity analyses conducted for a selection of individuals within the population.  The individuals chosen for the sensitivity analysis are those with pk parameters values that lie closest to user-specified quantiles of the pk parameter distributions computed in step 2. 
+
+
+
+
+```{r echo=T, results='hide'}
+simulationFile <- system.file("extdata", "RaltegravirSim.pkml",
+  package = "ospsuite.reportingengine"
+)
+
+populationFile1 <- system.file("extdata", "RalPop10.csv",
+  package = "ospsuite.reportingengine"
+) 
+
+populationFile2 <- system.file("extdata", "LarPop10.csv",
+  package = "ospsuite.reportingengine"
+)
+```
+
+```{r echo=T, results='hide'} 
+outputsForPopulation1 <- c(output1,output2,output3)
+outputsForPopulation2 <- c(output3)
+
+ps1 <- PopulationSimulationSet$new(
+  simulationSetName = "ral",
+  simulationFile = simulationFile,
+  populationFile = populationFile1,
+  outputs = outputsForPopulation1
+)
+
+ps2 <- PopulationSimulationSet$new(
+  simulationSetName = "lar",
+  simulationFile = simulationFile,
+  populationFile = populationFile2,
+  outputs = outputsForPopulation2
+)
+```
+
+```{r echo=T, results='hide'}
+pwf <- PopulationWorkflow$new(simulationSets = list(ps1,ps2),
+                              workflowFolder = "popSensitivityExample",
+                              workflowType = PopulationWorkflowTypes$parallelComparison)
+```
+
+```{r echo=T, results='hide'}
+pwf$simulate$settings$showProgress <- TRUE
+pwf$simulate$inactivate()
+pwf$calculatePKParameters$inactivate()
+pwf$calculateSensitivity$inactivate()
+pwf$plotSensitivity$inactivate()
+```
+
+
+```{r echo=T, results='hide'}
+pwf$calculateSensitivity$settings$variableParameterPaths <- c(
+  "Organism|Heart|Volume",
+  "Organism|Lung|Volume",
+  "Organism|Kidney|Volume",
+  "Organism|Brain|Volume",
+  "Organism|Muscle|Volume",
+  "Organism|LargeIntestine|Volume",
+  "Organism|PortalVein|Volume",
+  "Organism|Spleen|Volume",
+  "Organism|Skin|Volume",
+  "Organism|Pancreas|Volume",
+  "Organism|SmallIntestine|Mucosa|UpperIleum|Fraction mucosa",
+  "Organism|SmallIntestine|Volume",
+  "Organism|Lumen|Effective surface area variability factor",
+  "Organism|Bone|Volume",
+  "Organism|Stomach|Volume"
+)
+
+pwf$calculateSensitivity$settings$showProgress <- TRUE
+
+pwf$calculateSensitivity$settings$quantileVec <- c(0.25, 0.5, 0.75)
+```
+
+```{r echo=T, results='hide'}
+pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(totalSensitivityThreshold = 0.9,
+                                                            maximalParametersPerSensitivityPlot = 12,
+                                                            xAxisFontSize = 10,
+                                                            yAxisFontSize = 10)
+```
+
+```{r echo=T, results='hide', message=F, warning=F}
+pwf$runWorkflow()
+```
+
+The output report for the population sensitivity analysis is shown below.  
+
+```{r pwf render, include=F, echo=F}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(pwf$reportFileName)
+```
+
+```{r pwf report,echo=F}
+htmltools::includeHTML(sub(".md", ".html", pwf$reportFileName))
+```
+
+```{r delete pwf, inlcude = FALSE, echo=FALSE}
+# Remove the workflow folders
+#unlink(pwf$workflowFolder, recursive = TRUE)
+```
