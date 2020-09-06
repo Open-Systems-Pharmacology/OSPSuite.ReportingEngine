@@ -22,14 +22,11 @@ require(ospsuite.reportingengine)
 
 # Overview
 
-The sensitivity task aims at generating plots showing PK parameters sensitivity to variations of model input parameters.
+The sensitivity task aims at generating plots showing PK parameter sensitivity to variations of model input parameters.  This vignette presents example workflows for setting up, evaluating and visualizeig sensitivity analyses for both a mean model and a population.
 
-## Inputs
+## Inputs files required for sensitivity analysis
 
-Results obtained from the `calculateSensitivity` task and stored as csv files within the subdirectory __SensitivityResults__ from the `workflowFolder` directory are required in order to perform the sensitivity (`plotSensitivity`) task.
-As a consequence, if the workflow output folder does not include the appropriate simulations, the task `calculateSensitivity` needs to be __active__.
-
-The objects `SimulationSet` (or `PopulationSimulationSet` for population workflows) and `Output` define which and how the simulated PK parameters will be reported.
+The only input file required for running a sensitivity analysis on a mean model is the `.pkml` simulation file. The path to this file (either the absolute path or the relative path with respect to the `workflowFolder` directory) is specified as a string:     
 
 ```{r}
 simulationFile <- system.file("extdata", "RaltegravirSim.pkml",
@@ -37,12 +34,38 @@ simulationFile <- system.file("extdata", "RaltegravirSim.pkml",
 )
 ```
 
+For population sensitivity analyses, the user needs to similarly specifiy paths to `.csv` files containing data on the populations to be studied: 
 
-## Outputs
+```{r echo=T, results='hide'}
+populationFile1 <- system.file("extdata", "RalPop10.csv",
+  package = "ospsuite.reportingengine"
+) 
+
+populationFile2 <- system.file("extdata", "LarPop10.csv",
+  package = "ospsuite.reportingengine"
+)
+```
+
+Results obtained from the `calculateSensitivity` task are stored as csv files within the `SensitivityResults` subdirectory of the `workflowFolder` directory.   These results are required in order to perform the  `plotSensitivity` task, which generates plots of the sensitivity analysis results.
+
+<!-- As a consequence, if the workflow output folder does not include the appropriate simulations, the task `calculateSensitivity` needs to be __active__.
+
+The objects `SimulationSet` (or `PopulationSimulationSet` for population workflows) and `Output` define which and how the simulated PK parameters will be reported. -->
+
+## Specification of quantities analyzed: model outputs and PK parameters
+
+A sensitivity analysis will compute the variation in a scalar function of a time-series trajectory of a model output in response to variations in model variables.  The model outputs are specified using paths to simulated quantities within the model.  The scalar functions are specified using standard names of PK parameter quantities such as `C_max` or `AUC`.  Optionally the user can provide custom display names for both the model outputs and the PK parameters used in the sensitivity analysis.  
+
+The simplest qay to define a set of output and PK parameter combinations for the sensitivity analysis are as follows:
 
 ```{r} 
 output1 <- Output$new(path = "Organism|VenousBlood|Plasma|Raltegravir|Concentration", displayName = "op1")
+```
 
+Here, `output1` is an `Output` object.  The `path` input to the constructor of this object is given the path to the model output that simulates the concentration of Raltegravir in venous blood plasma, `Organism|VenousBlood|Plasma|Raltegravir|Concentration`.  This model output is given the display name `op1`.  If specific PK parameters of this output are to be analyzed, these would also be specified at this stage.  However, in this case, no PK parameters are specified and therefore the reporting engine will, by default, analyze sensitivity of __all__ valid PK parameters of the model output `op1`.    
+ 
+Specific PK parameters are assigned to a model output for sensitivity analysis as follows: 
+```{r} 
 output2 <- Output$new(
   path = "Organism|ArterialBlood|Plasma|Raltegravir|Concentration", displayName = "op2",
   pkParameters = c(
@@ -60,9 +83,7 @@ output3 <- Output$new(
 )
 ```
 
-
-
-
+Here, `output2` points to the model output with path `Organism|ArterialBlood|Plasma|Raltegravir|Concentration`, while `output3` points to `Organism|Lung|Interstitial|Raltegravir|Concentration`.  The PK parameters selected for `output2` are `t_max` and `AUC_tEnd`, for which the respective display names `new_t_max` and `new_AUC_tEnd` will be used.  Similarly, the PK parameters selected for `output3` are `C_max` and `MRT`, for which the display names will be `new_C_max` and `new_MRT`.
 
 
 ### Mean model workflow
@@ -163,19 +184,7 @@ Unlike the mean model sensitivity analysis, a population sensitivity analysis de
 
 
 
-```{r echo=T, results='hide'}
-simulationFile <- system.file("extdata", "RaltegravirSim.pkml",
-  package = "ospsuite.reportingengine"
-)
 
-populationFile1 <- system.file("extdata", "RalPop10.csv",
-  package = "ospsuite.reportingengine"
-) 
-
-populationFile2 <- system.file("extdata", "LarPop10.csv",
-  package = "ospsuite.reportingengine"
-)
-```
 
 ```{r echo=T, results='hide'} 
 outputsForPopulation1 <- c(output1,output2,output3)
