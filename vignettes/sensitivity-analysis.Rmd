@@ -22,7 +22,7 @@ require(ospsuite.reportingengine)
 
 # Overview
 
-The sensitivity task aims at generating plots showing PK parameter sensitivity to variations of model input parameters.  This vignette presents example workflows for setting up, evaluating and visualizeig sensitivity analyses for both a mean model and a population.
+The sensitivity task aims at generating plots showing PK parameter sensitivity to variations of model input parameters.  This vignette presents example workflows for setting up, evaluating and visualizing sensitivity analyses for both a mean model and a population.
 
 ## Inputs files required for sensitivity analysis
 
@@ -54,15 +54,15 @@ The objects `SimulationSet` (or `PopulationSimulationSet` for population workflo
 
 ## Specification of quantities analyzed: model outputs and PK parameters
 
-A sensitivity analysis will compute the variation in a scalar function of a time-series trajectory of a model output in response to variations in model variables.  The model outputs are specified using paths to simulated quantities within the model.  The scalar functions are specified using standard names of PK parameter quantities such as `C_max` or `AUC`.  Optionally the user can provide custom display names for both the model outputs and the PK parameters used in the sensitivity analysis.  
+A sensitivity analysis will compute the variation in a scalar function of a time-series trajectory of a model output in response to variations in model variables.  The model outputs are specified using paths to simulated quantities within the model.  The scalar functions are standard PK parameter quantities such as `C_max` or `AUC`.  Although the sensitivity analysis for a mean model or an individual within a population is evaluated for all PK parameters, the user has the option of specifying the subset of PK parameters for which sensitivity plots are to be generated.  In addition, the user has the option to set custom display names for both the selected model outputs and PK parameters used in the sensitivity analysis.  
 
-The simplest qay to define a set of output and PK parameter combinations for the sensitivity analysis are as follows:
+The simplest way of defining a set of output and PK parameter combinations for the sensitivity analysis are as follows:
 
 ```{r} 
 output1 <- Output$new(path = "Organism|VenousBlood|Plasma|Raltegravir|Concentration", displayName = "op1")
 ```
 
-Here, `output1` is an `Output` object.  The `path` input to the constructor of this object is given the path to the model output that simulates the concentration of Raltegravir in venous blood plasma, `Organism|VenousBlood|Plasma|Raltegravir|Concentration`.  This model output is given the display name `op1`.  If specific PK parameters of this output are to be analyzed, these would also be specified at this stage.  However, in this case, no PK parameters are specified and therefore the reporting engine will, by default, analyze sensitivity of __all__ valid PK parameters of the model output `op1`.    
+Here, `output1` is an `Output` object.  The `path` input to the constructor of this object gives the path to the model output that simulates the concentration of Raltegravir in venous blood plasma, `Organism|VenousBlood|Plasma|Raltegravir|Concentration`.  This model output is given the display name `op1`.  If sensitivity plots for specific PK parameters of this output are to be generated, these would also be specified at this stage.  However, in this case, no PK parameters are specified and therefore the reporting engine will, by default, generate sensitivity plots for __all__ PK parameters that can be evaluated for the model output `op1`. VERIFY IF THIS IS TRUE FOR MEAN MODEL - CURRENTLY ONLY TRUE FOR POPULATION.  IF NO PK PARAMETERS SELECTED FOR MEAN MODEL, NO PLOTS ARE GENERATED.
  
 Specific PK parameters are assigned to a model output for sensitivity analysis as follows: 
 ```{r} 
@@ -88,6 +88,7 @@ Here, `output2` points to the model output with path `Organism|ArterialBlood|Pla
 
 ### Mean model workflow
 
+The mean model workflow operates on `SimulationSet` objects, which combine the path to a `.pkml` file with `Output` objects (specified above) and which are given descriptive names (`simulationSetName`).  These objects are created as follows:   
 
 ```{r echo=T, results='hide'}
 ms <- SimulationSet$new(
@@ -97,7 +98,7 @@ ms <- SimulationSet$new(
 )
 ```
 
-
+A mean model workflow object is then instantiated thus:
 
 ```{r echo=T, results='hide'}
 mwf <- MeanModelWorkflow$new(
@@ -106,11 +107,12 @@ mwf <- MeanModelWorkflow$new(
 )
 ```
 
-
+In this workflow, the activities will consist of a sensitivity analysis and the generation of plots of the sensitivity analysis results.  To set this, the 
 
 ```{r echo=T, results='hide'}
 mwf$calculateSensitivity$inactivate()
-mwf$plotSensitivity$inactivate()
+mwf$calculateSensitivity$activate()
+mwf$plotSensitivity$activate()
 ```
 
 
