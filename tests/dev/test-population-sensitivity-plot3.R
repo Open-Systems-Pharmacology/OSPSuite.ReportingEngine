@@ -42,17 +42,20 @@ ps2 <- PopulationSimulationSet$new(
 )
 
 
-pwf <- PopulationWorkflow$new(simulationSets = list(ps1, ps2), workflowFolder = "./tests/dev/ex_03_pop9")
-pwf$simulatePopulation$settings$showProgress <- FALSE
-pwf$simulatePopulation$inactivate()
-pwf$populationPKParameters$inactivate()
-pwf$populationSensitivityAnalysis$inactivate()
-pwf$plotSensitivity$activate()
+pwf <- PopulationWorkflow$new(simulationSets = list(ps1, ps2),
+                              workflowFolder = "./tests/dev/popsens2",
+                              workflowType = PopulationWorkflowTypes$parallelComparison)
+
+pwf$simulate$settings$showProgress <- FALSE
+pwf$simulate$inactivate()
+pwf$calculatePKParameters$inactivate()
+pwf$calculateSensitivity$inactivate()
+pwf$plotSensitivity$inactivate()
 
 
 
-pwf$populationSensitivityAnalysis$settings$showProgress <- TRUE
-pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- c(
+pwf$calculateSensitivity$settings$showProgress <- TRUE
+pwf$calculateSensitivity$settings$variableParameterPaths <- c(
   "Organism|Heart|Volume",
   "Organism|Lung|Volume",
   "Organism|Kidney|Volume",
@@ -70,7 +73,7 @@ pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- c(
   "Organism|Stomach|Volume"
 )
 
-pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.25, 0.5, 0.75)
+pwf$calculateSensitivity$settings$quantileVec <- c(0.25, 0.5, 0.75)
 
 pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(totalSensitivityThreshold = 0.9,
                                                             maximalParametersPerSensitivityPlot = 12,
