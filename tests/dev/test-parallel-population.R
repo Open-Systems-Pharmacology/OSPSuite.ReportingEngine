@@ -1,14 +1,14 @@
 rm(list = ls())
 library(ospsuite)
 library(ospsuite.reportingengine)
-tree <- ospsuite::getSimulationTree("./tests/dev/individualPksimSim.pkml")
+tree <- ospsuite::getSimulationTree("./tests/data/input-data/individualPksimSim.pkml")
 ps <- PopulationSimulationSet$new(
   simulationSetName = "parpopsim",
-  simulationFile = "./tests/dev/individualPksimSim.pkml",
-  populationFile = "./tests/dev/popData_short.csv",
+  simulationFile = "./tests/data/input-data/individualPksimSim.pkml",
+  populationFile = "./tests/data/input-data/popData_short.csv",
   outputs = Output$new(path = tree$Organism$VenousBlood$Plasma$smarties$Concentration$path)
 )
-pwf <- PopulationWorkflow$new(simulationSets = list(ps), workflowFolder = "./expar",workflowType = PopulationWorkflowTypes$parallelComparison )
+pwf <- PopulationWorkflow$new(simulationSets = list(ps), workflowFolder = "./expar", workflowType = PopulationWorkflowTypes$parallelComparison )
 pwf$simulate$settings$showProgress <- TRUE
 pwf$simulate$settings$numberOfCores <- 3
 

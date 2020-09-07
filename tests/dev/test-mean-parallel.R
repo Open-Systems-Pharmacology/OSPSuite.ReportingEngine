@@ -1,10 +1,10 @@
 rm(list = ls())
 library(ospsuite)
 library(ospsuite.reportingengine)
-tree <- ospsuite::getSimulationTree("./tests/dev/individualPksimSim.pkml")
+tree <- ospsuite::getSimulationTree("./tests/data/input-data/individualPksimSim.pkml")
 ms <- SimulationSet$new(
   simulationSetName = "meansim-par-sa",
-  simulationFile = "./tests/dev/individualPksimSim.pkml",
+  simulationFile = "./tests/data/input-data/individualPksimSim.pkml",
   outputs = Output$new(path = tree$Organism$VenousBlood$Plasma$smarties$Concentration$path)
 )
 mwf <- MeanModelWorkflow$new(simulationSets = list(ms), workflowFolder = "./ex")

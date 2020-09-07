@@ -2,14 +2,14 @@ rm(list = ls())
 library(ospsuite)
 library(ospsuite.reportingengine)
 
-rootDir <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine"
+rootDir <- "."
 setwd(rootDir)
 
 
 runscript <- function() {
   workflowFolder <- file.path(rootDir, paste0("tests/dev/tracelib_par_pop_ex_", format(Sys.Date(), "%Y%m%d"), "_", format(Sys.time(), "%H%M%S")))
-  simulationFile <- file.path(rootDir, "tests/dev/individualPksimSim.pkml")
-  populationFile <- file.path(rootDir, "tests/dev/popData_short.csv")
+  simulationFile <- file.path(rootDir, "tests/data/input-data/individualPksimSim.pkml")
+  populationFile <- file.path(rootDir, "tests/data/input-data/popData_short.csv")
 
   tree <- ospsuite::getSimulationTree(simulationFile)
   ps <- PopulationSimulationSet$new(

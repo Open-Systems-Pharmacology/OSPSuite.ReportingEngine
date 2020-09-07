@@ -3,9 +3,9 @@ library(ospsuite)
 graphics.off()
 library(ospsuite.reportingengine)
 
-simulationFile <- "./tests/dev/ex_03_pop9/RaltegravirSim.pkml"
-populationFile1 <- "./tests/dev/ex_03_pop9/RalPop10.csv"
-populationFile2 <- "./tests/dev/ex_03_pop9/LarPop10.csv"
+simulationFile <- "./tests/data/input-data/RaltegravirSim.pkml"
+populationFile1 <- "./tests/data/input-data/RalPop10.csv"
+populationFile2 <- "./tests/data/input-data/LarPop10.csv"
 
 simTree1 <- ospsuite::getSimulationTree(simulationFile)
 
