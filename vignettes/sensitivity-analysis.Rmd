@@ -153,8 +153,7 @@ With the `calculateSensitivity` and `plotSensitivity` tasks now set up, the sens
 mwf$runWorkflow()
 ```
 
-
-The output report for the mean model sensitivity analysis is shown below.  
+The output report, containing the mean model sensitivity plots from this example, is shown below.  
 
 ```{r mwf render, include=F, echo=F}
 # Convert the markdown document into html
@@ -207,7 +206,7 @@ ps2 <- PopulationSimulationSet$new(
 )
 ```
 
-With this setup, the sensitivity of PK parameters of `output1`, `output2` and `output3` will be analyzed for first population (given in `populationFile1`).  For the second population (given in `populationFile2`), sensitivity will only be analyzed for `output3`.
+With this setup, the sensitivity of PK parameters of `output1`, `output2` and `output3` will be analyzed for the first population (given in `populationFile1`).  For the second population (given in `populationFile2`), sensitivity will only be analyzed for PK parameters of `output3`.  The two `PopulationSimulationSet` are then used to create a `PopulationWorkflow`, the results of which are to be placed in the root directory `./popSensitivityExample`:
 
 ```{r echo=T, results='hide'}
 pwf <- PopulationWorkflow$new(simulationSets = list(ps1,ps2),
@@ -215,13 +214,21 @@ pwf <- PopulationWorkflow$new(simulationSets = list(ps1,ps2),
                               workflowType = PopulationWorkflowTypes$parallelComparison)
 ```
 
+Next, the required tasks of the workflow are activated. The sensitivity analysis and sensitivity plot tasks are activated using the commands
+
 ```{r echo=T, results='hide'}
-pwf$simulate$settings$showProgress <- TRUE
-pwf$simulate$inactivate()
-pwf$calculatePKParameters$inactivate()
 pwf$calculateSensitivity$inactivate()
 pwf$plotSensitivity$inactivate()
 ```
+
+The population sensitivity analysis depends on the PK parameter calculations for the population, which in turn depend on population simulation results.  If these pre-requisite tasks (`simulate` and `calculatePKParameters`) have not previously been run, they must also be activated:  
+
+```{r echo=T, results='hide'}
+pwf$simulate$inactivate()
+pwf$calculatePKParameters$inactivate()
+```
+
+The variables to be perturbed in the sensitivity analysis are specified as follows:
 
 
 ```{r echo=T, results='hide'}
@@ -242,12 +249,16 @@ pwf$calculateSensitivity$settings$variableParameterPaths <- c(
   "Organism|Bone|Volume",
   "Organism|Stomach|Volume"
 )
+```
 
-pwf$calculateSensitivity$settings$showProgress <- TRUE
+The individuals within the population for which sensitivity will be evaluated are those with PK parameter values (as evaluated in the `calculatePKParameters` task) that lie closes to user-specified quantiles of the population's PK parameter distributions.  These quantiles are specified as follows:
 
+```{r echo=T, results='hide'}
 pwf$calculateSensitivity$settings$quantileVec <- c(0.25, 0.5, 0.75)
 ```
 
+
+As with the mean model sensitivity plot, the population sensitivity plot is configured using an instance of a `SensitivityPlotSettings` object:
 ```{r echo=T, results='hide'}
 pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(totalSensitivityThreshold = 0.9,
                                                             maximalParametersPerSensitivityPlot = 12,
@@ -255,11 +266,29 @@ pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(totalSensitivityThre
                                                             yAxisFontSize = 10)
 ```
 
+The population sensitivity workflow is run using the command:
+
 ```{r echo=T, results='hide', message=F, warning=F}
 pwf$runWorkflow()
 ```
 
-The output report for the population sensitivity analysis is shown below.  
+The results of the population sensitivity analysis are found in multiple `.csv` files within the `SensitivityResults` sub-directory of the workflow folder, as shown in the following figure:
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics(system.file("extdata", "sa-file-outputs.png",
+  package = "ospsuite.reportingengine"
+))
+```
+Two sets of files make up the population sensitivity analysis results for this example, each corresponding to one of the `PopulationSimulationSet` objects (named `ral` and `lar`). For each set, there is one index file.  The name of the index file is prefixed with the name of the `PopulationSimulationSet` object and carries the suffix `-popSensitivityResultsIndex.csv`).  The index file `ral-popSensitivityResultsIndex.csv` contains the names of the individual sensitivity analysis results files (found within the `SensitivityResults` sub-directory of the workflow folder) obtained for the `PopulationSimulationSet` object `ral`.  Its contents are partly shown in the following figure:
+
+```{r echo=FALSE, out.width='67%'}
+knitr::include_graphics(system.file("extdata", "ral-index.png",
+  package = "ospsuite.reportingengine"
+))
+```
+
+Three output paths are shown corresponding to `output2` (pink), `output3` (green) and `output1` (blue).  Note that, as per the definitions of `output2` and `output3`, the only PK parameters analyzed for those two outputs are `t_max` and `AUC_tEnd` for `output2` and `C_max` and `MRT` for `output3`.  For each model output and PK parameter combination, there are sensitivity analysis result files for three individuals given under the `Filename` column, each corresponding to one of the quantiles specified using `pwf$calculateSensitivity$settings$quantileVec`.
+
+The output report, containing the population sensitivity plots from this example, is shown below.  
 
 ```{r pwf render, include=F, echo=F}
 # Convert the markdown document into html
