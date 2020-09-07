@@ -1,0 +1,496 @@
+﻿"QuantityPath","Parameter","PKParameter","Value"
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Heart-Volume","C_max",-0.00873995515291738
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lung-Volume","C_max",-0.0360735696851089
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Kidney-Volume","C_max",-0.127601130791585
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Brain-Volume","C_max",-0.0029647767415462
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Muscle-Volume","C_max",-0.242817193862835
+"Organism|Lung|Interstitial|Raltegravir|Concentration","LargeIntestine-Volume","C_max",-0.000481067149667058
+"Organism|Lung|Interstitial|Raltegravir|Concentration","PortalVein-Volume","C_max",-0.0429947523330717
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Spleen-Volume","C_max",0.00145411858114499
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Skin-Volume","C_max",-0.0476455746846592
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Pancreas-Volume","C_max",-0.000868439253292972
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","C_max",-0.0143606344342475
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Volume","C_max",-0.116804242174246
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lumen-Effective surface area variability factor","C_max",0.238923080740256
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Bone-Volume","C_max",-0.0876254927441389
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","C_max",-0.000835439740221878
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Heart-Volume","t_max",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lung-Volume","t_max",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Kidney-Volume","t_max",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Brain-Volume","t_max",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Muscle-Volume","t_max",0.192307692307692
+"Organism|Lung|Interstitial|Raltegravir|Concentration","LargeIntestine-Volume","t_max",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","PortalVein-Volume","t_max",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Spleen-Volume","t_max",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Skin-Volume","t_max",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Pancreas-Volume","t_max",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","t_max",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Volume","t_max",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lumen-Effective surface area variability factor","t_max",-0.615384615384615
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Bone-Volume","t_max",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","t_max",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Heart-Volume","C_tEnd",0.00157797450881588
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lung-Volume","C_tEnd",0.00872010263543141
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Kidney-Volume","C_tEnd",-0.47889964613803
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Brain-Volume","C_tEnd",0.000591068771747151
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Muscle-Volume","C_tEnd",0.155489831668893
+"Organism|Lung|Interstitial|Raltegravir|Concentration","LargeIntestine-Volume","C_tEnd",-0.0818496543520321
+"Organism|Lung|Interstitial|Raltegravir|Concentration","PortalVein-Volume","C_tEnd",0.0089644801919374
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Spleen-Volume","C_tEnd",0.00266791663623862
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Skin-Volume","C_tEnd",0.00859486581513379
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Pancreas-Volume","C_tEnd",0.00129928291197242
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","C_tEnd",-0.000166102579875356
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Volume","C_tEnd",-0.0994726007415603
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lumen-Effective surface area variability factor","C_tEnd",-0.158727009435858
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Bone-Volume","C_tEnd",0.0305277907904383
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","C_tEnd",-0.00027664909444242
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Heart-Volume","AUC_tEnd",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lung-Volume","AUC_tEnd",-0.000530377994799884
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Kidney-Volume","AUC_tEnd",-0.386166653940758
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Brain-Volume","AUC_tEnd",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Muscle-Volume","AUC_tEnd",-0.0065503213328749
+"Organism|Lung|Interstitial|Raltegravir|Concentration","LargeIntestine-Volume","AUC_tEnd",-0.00991051295416598
+"Organism|Lung|Interstitial|Raltegravir|Concentration","PortalVein-Volume","AUC_tEnd",0.000116822739271728
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Spleen-Volume","AUC_tEnd",0.00299521366065253
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Skin-Volume","AUC_tEnd",-0.00108481016401416
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Pancreas-Volume","AUC_tEnd",0.00116759293628204
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","AUC_tEnd",-0.0137394851259137
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Volume","AUC_tEnd",-0.170202455600187
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lumen-Effective surface area variability factor","AUC_tEnd",0.101839554022365
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Bone-Volume","AUC_tEnd",-0.00187029481590612
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","AUC_tEnd",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Heart-Volume","AUC_inf",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lung-Volume","AUC_inf",-0.00036368905594273
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Kidney-Volume","AUC_inf",-0.387498604963007
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Brain-Volume","AUC_inf",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Muscle-Volume","AUC_inf",-0.00552336705493343
+"Organism|Lung|Interstitial|Raltegravir|Concentration","LargeIntestine-Volume","AUC_inf",-0.0133118294689838
+"Organism|Lung|Interstitial|Raltegravir|Concentration","PortalVein-Volume","AUC_inf",0.000336450098335548
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Spleen-Volume","AUC_inf",0.00299554414066462
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Skin-Volume","AUC_inf",-0.000825718954947346
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Pancreas-Volume","AUC_inf",0.00117254579903801
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","AUC_inf",-0.0130992120661647
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Volume","AUC_inf",-0.166192848219763
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lumen-Effective surface area variability factor","AUC_inf",0.0913648374863964
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Bone-Volume","AUC_inf",-0.00122763255392678
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","AUC_inf",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Heart-Volume","MRT",0.00292635475591041
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lung-Volume","MRT",0.0135002615928425
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Kidney-Volume","MRT",-0.117388344770362
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Brain-Volume","MRT",0.00124334723163376
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Muscle-Volume","MRT",0.128743243155923
+"Organism|Lung|Interstitial|Raltegravir|Concentration","LargeIntestine-Volume","MRT",-0.0406816593598279
+"Organism|Lung|Interstitial|Raltegravir|Concentration","PortalVein-Volume","MRT",0.016403815028914
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Spleen-Volume","MRT",-0.000177988003063057
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Skin-Volume","MRT",0.0162886167231076
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Pancreas-Volume","MRT",0.000395911418805638
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","MRT",0.00640928946426485
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Volume","MRT",0.0220729222754117
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lumen-Effective surface area variability factor","MRT",-0.168863184983692
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Bone-Volume","MRT",0.0513670040061468
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","MRT",-0.000100209284866925
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Heart-Volume","Thalf",-0.000727779227424266
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lung-Volume","Thalf",-0.00512002119785603
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Kidney-Volume","Thalf",0.0596634873994198
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Brain-Volume","Thalf",-0.000459049530028595
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Muscle-Volume","Thalf",-0.136520489223732
+"Organism|Lung|Interstitial|Raltegravir|Concentration","LargeIntestine-Volume","Thalf",-0.0123080780494653
+"Organism|Lung|Interstitial|Raltegravir|Concentration","PortalVein-Volume","Thalf",-0.00341546867120817
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Spleen-Volume","Thalf",0.000335253333106074
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Skin-Volume","Thalf",-0.00326327447893182
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Pancreas-Volume","Thalf",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","Thalf",0.00228767858918983
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Volume","Thalf",0.0285740741384474
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lumen-Effective surface area variability factor","Thalf",0.00107895562209103
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Bone-Volume","Thalf",-0.0164870126688139
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","Thalf",0.000236210768856241
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Heart-Volume","FractionAucLastToInf",0.000905305856273376
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lung-Volume","FractionAucLastToInf",0.00396352720890661
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Kidney-Volume","FractionAucLastToInf",-0.0316259171388644
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Brain-Volume","FractionAucLastToInf",0.000204021359017988
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Muscle-Volume","FractionAucLastToInf",0.0244123031545646
+"Organism|Lung|Interstitial|Raltegravir|Concentration","LargeIntestine-Volume","FractionAucLastToInf",-0.0808451185173798
+"Organism|Lung|Interstitial|Raltegravir|Concentration","PortalVein-Volume","FractionAucLastToInf",0.00521282068836091
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Spleen-Volume","FractionAucLastToInf",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Skin-Volume","FractionAucLastToInf",0.00615770830292427
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Pancreas-Volume","FractionAucLastToInf",0.000126541681805843
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","FractionAucLastToInf",0.0152209852333285
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Volume","FractionAucLastToInf",0.0953274518592631
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lumen-Effective surface area variability factor","FractionAucLastToInf",-0.249150168577694
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Bone-Volume","FractionAucLastToInf",0.0152664950288448
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","FractionAucLastToInf",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Heart-Volume","CL",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lung-Volume","CL",0.000363762885727119
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Kidney-Volume","CL",0.387585468712255
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Brain-Volume","CL",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Muscle-Volume","CL",0.00552353989335253
+"Organism|Lung|Interstitial|Raltegravir|Concentration","LargeIntestine-Volume","CL",0.0133125155332347
+"Organism|Lung|Interstitial|Raltegravir|Concentration","PortalVein-Volume","CL",-0.00033572251246621
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Spleen-Volume","CL",-0.00299509502464505
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Skin-Volume","CL",0.000825667077867419
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Pancreas-Volume","CL",-0.00117273200839957
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","CL",0.01309899070331
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Volume","CL",0.166264021710564
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lumen-Effective surface area variability factor","CL",-0.0914294250800413
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Bone-Volume","CL",0.00122739767397266
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","CL",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Heart-Volume","Vss",0.00298141461851914
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lung-Volume","Vss",0.0138637830359063
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Kidney-Volume","Vss",0.270165367180838
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Brain-Volume","Vss",0.00131482017416927
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Muscle-Volume","Vss",0.134268006184294
+"Organism|Lung|Interstitial|Raltegravir|Concentration","LargeIntestine-Volume","Vss",-0.0273704525089259
+"Organism|Lung|Interstitial|Raltegravir|Concentration","PortalVein-Volume","Vss",0.016068059731983
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Spleen-Volume","Vss",-0.00317355177488923
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Skin-Volume","Vss",0.01711427092345
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Pancreas-Volume","Vss",-0.000777021850861947
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","Vss",0.0195080151295436
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Volume","Vss",0.188353919272989
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lumen-Effective surface area variability factor","Vss",-0.260449769636603
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Bone-Volume","Vss",0.0525951283983824
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","Vss",0
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Heart-Volume","Vd",-0.000673190555880011
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lung-Volume","Vd",-0.00475645054126076
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Kidney-Volume","Vd",0.447242732079981
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Brain-Volume","Vd",-0.000386829777523765
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Muscle-Volume","Vd",-0.130997011309874
+"Organism|Lung|Interstitial|Raltegravir|Concentration","LargeIntestine-Volume","Vd",0.00100440610074789
+"Organism|Lung|Interstitial|Raltegravir|Concentration","PortalVein-Volume","Vd",-0.00375170377140012
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Spleen-Volume","Vd",-0.00265988765414
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Skin-Volume","Vd",-0.00243774300353648
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Pancreas-Volume","Vd",-0.00117263986425926
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","Vd",0.0153872289281675
+"Organism|Lung|Interstitial|Raltegravir|Concentration","SmallIntestine-Volume","Vd",0.194847686271909
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Lumen-Effective surface area variability factor","Vd",-0.0903216586406916
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Bone-Volume","Vd",-0.0152593360654239
+"Organism|Lung|Interstitial|Raltegravir|Concentration","Stomach-Volume","Vd",0.000280484236161367
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Heart-Volume","C_max",-0.00875376517017576
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lung-Volume","C_max",-0.0361626565195403
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","C_max",-0.127322609241033
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Brain-Volume","C_max",-0.0029729807066782
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","C_max",-0.242600323754997
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","C_max",-0.000492289795761052
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","C_max",-0.0430619841322677
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","C_max",0.00144378727941855
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Skin-Volume","C_max",-0.0477334522303706
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","C_max",-0.000874909338089214
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","C_max",-0.0143620146156928
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","C_max",-0.116827201025925
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","C_max",0.238007604505006
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Bone-Volume","C_max",-0.0876927843046566
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","C_max",-0.000840659282903703
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Heart-Volume","t_max",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lung-Volume","t_max",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","t_max",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Brain-Volume","t_max",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","t_max",0.192307692307692
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","t_max",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","t_max",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","t_max",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Skin-Volume","t_max",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","t_max",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","t_max",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","t_max",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","t_max",-0.615384615384615
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Bone-Volume","t_max",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","t_max",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Heart-Volume","C_tEnd",0.00157045921757253
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lung-Volume","C_tEnd",0.00870964963589315
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","C_tEnd",-0.478907304426259
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Brain-Volume","C_tEnd",0.000569508488885607
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","C_tEnd",0.155459786637364
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","C_tEnd",-0.0818661576080063
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","C_tEnd",0.00899844116461187
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","C_tEnd",0.00265644432203438
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Skin-Volume","C_tEnd",0.00858477480649429
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","C_tEnd",0.00129512530310688
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","C_tEnd",-0.000166223718906108
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","C_tEnd",-0.0995179038916935
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","C_tEnd",-0.15872785734432
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Bone-Volume","C_tEnd",0.0305167818520138
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","C_tEnd",-0.000280924000386159
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Heart-Volume","AUC_tEnd",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lung-Volume","AUC_tEnd",-0.000540998010195088
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","AUC_tEnd",-0.386148041194581
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Brain-Volume","AUC_tEnd",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","AUC_tEnd",-0.00657330499667777
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","AUC_tEnd",-0.00992617353255133
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","AUC_tEnd",0.000158425115685909
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","AUC_tEnd",0.00298442172937178
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Skin-Volume","AUC_tEnd",-0.00109090272661543
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","AUC_tEnd",0.00116306522399146
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","AUC_tEnd",-0.0137388150725774
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","AUC_tEnd",-0.170240835258965
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","AUC_tEnd",0.10183972041979
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Bone-Volume","AUC_tEnd",-0.001877912791557
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","AUC_tEnd",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Heart-Volume","AUC_inf",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lung-Volume","AUC_inf",-0.000375123757947645
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","AUC_inf",-0.387480265759259
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Brain-Volume","AUC_inf",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","AUC_inf",-0.00554734129603738
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","AUC_inf",-0.0133297015386403
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","AUC_inf",0.000377690367956188
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","AUC_inf",0.00298322314187153
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Skin-Volume","AUC_inf",-0.000830236041404253
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","AUC_inf",0.00117029940826432
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","AUC_inf",-0.0130998778094288
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","AUC_inf",-0.166231904527291
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","AUC_inf",0.0913622957912878
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Bone-Volume","AUC_inf",-0.00123615911945441
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","AUC_inf",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Heart-Volume","MRT",0.00290992540610654
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lung-Volume","MRT",0.0134901990935543
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","MRT",-0.11740791409481
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Brain-Volume","MRT",0.00121674696238195
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","MRT",0.128653206173387
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","MRT",-0.0406933908853031
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","MRT",0.0163868866146555
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","MRT",-0.000199574354340692
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Skin-Volume","MRT",0.0162881849440556
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","MRT",0.000409950822845751
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","MRT",0.00639718145306651
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","MRT",0.0220483858464346
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","MRT",-0.168829392891531
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Bone-Volume","MRT",0.0513349030287857
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","MRT",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Heart-Volume","Thalf",-0.000741438637654721
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lung-Volume","Thalf",-0.00513868445999786
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","Thalf",0.0596777085554079
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Brain-Volume","Thalf",-0.000441448662551002
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","Thalf",-0.136541386113478
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","Thalf",-0.0123496573930022
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","Thalf",-0.00340683877342815
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","Thalf",0.00028743082092687
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Skin-Volume","Thalf",-0.00321786275042336
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","Thalf",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","Thalf",0.00226263815349933
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","Thalf",0.0285634693676623
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","Thalf",0.00104972662533957
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Bone-Volume","Thalf",-0.0165041022458683
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","Thalf",0.000241315176683751
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Heart-Volume","FractionAucLastToInf",0.000888670710068424
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lung-Volume","FractionAucLastToInf",0.00394622382065578
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","FractionAucLastToInf",-0.0316371616304969
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Brain-Volume","FractionAucLastToInf",0.000208801867071099
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","FractionAucLastToInf",0.024384912091946
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","FractionAucLastToInf",-0.080886402097272
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","FractionAucLastToInf",0.00521414219450969
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","FractionAucLastToInf",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Skin-Volume","FractionAucLastToInf",0.00619710010579171
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","FractionAucLastToInf",0.000165094859659221
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","FractionAucLastToInf",0.0151966612366956
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","FractionAucLastToInf",0.0953103142171721
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","FractionAucLastToInf",-0.249176463109948
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Bone-Volume","FractionAucLastToInf",0.0152469185291233
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","FractionAucLastToInf",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Heart-Volume","CL",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lung-Volume","CL",0.000375305890026771
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","CL",0.387567462783245
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Brain-Volume","CL",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","CL",0.00554644657848597
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","CL",0.0133302509591022
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","CL",-0.000378289280451558
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","CL",-0.00298290475657893
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Skin-Volume","CL",0.000829590681608965
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","CL",-0.001170414128819
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","CL",0.0130995816870337
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","CL",0.166303248084224
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","CL",-0.0914271096663792
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Bone-Volume","CL",0.00123623373462478
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","CL",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Heart-Volume","Vss",0.00296902446356664
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lung-Volume","Vss",0.0138647272604148
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","Vss",0.270127232341342
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Brain-Volume","Vss",0.00129798897999631
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","Vss",0.134201224780889
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","Vss",-0.0273641126181721
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","Vss",0.0160089690594733
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","Vss",-0.00318271927458573
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Skin-Volume","Vss",0.0171181439530101
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","Vss",-0.000760084562412362
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","Vss",0.0194977972648708
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","Vss",0.18836851397931
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","Vss",-0.260413785145924
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Bone-Volume","Vss",0.0525709986165412
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","Vss",0
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Heart-Volume","Vd",-0.000682393864336106
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lung-Volume","Vd",-0.00476374370556726
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","Vd",0.447238833630343
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Brain-Volume","Vd",-0.000360679251360219
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","Vd",-0.130994560331404
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","Vd",0.000979680182349681
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","Vd",-0.00378459129502232
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","Vd",-0.00269555679473024
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Skin-Volume","Vd",-0.00238792614934374
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","Vd",-0.00112976340442369
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","Vd",0.0153628491474374
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","Vd",0.194876014339711
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","Vd",-0.0903477020966413
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Bone-Volume","Vd",-0.0152677899058063
+"Organism|ArterialBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","Vd",0.000289595928858773
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Heart-Volume","C_max",-0.00871474328996731
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lung-Volume","C_max",-0.0357122756574291
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","C_max",-0.128201789124084
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Brain-Volume","C_max",-0.0029595418258052
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","C_max",-0.242557897936252
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","C_max",-0.000473693668636172
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","C_max",-0.0428117547724629
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","C_max",0.00146524804360165
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Skin-Volume","C_max",-0.047464239879151
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","C_max",-0.000858060744185101
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","C_max",-0.0143567101611277
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","C_max",-0.116796534688669
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","C_max",0.240857671326946
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Bone-Volume","C_max",-0.087489705548022
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","C_max",-0.000828343596550195
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Heart-Volume","t_max",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lung-Volume","t_max",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","t_max",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Brain-Volume","t_max",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","t_max",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","t_max",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","t_max",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","t_max",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Skin-Volume","t_max",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","t_max",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","t_max",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","t_max",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","t_max",-0.615384615384615
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Bone-Volume","t_max",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","t_max",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Heart-Volume","C_tEnd",0.00159486980684834
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lung-Volume","C_tEnd",0.0083619840140151
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","C_tEnd",-0.478861153938346
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Brain-Volume","C_tEnd",0.000638758763142864
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","C_tEnd",0.15554503863329
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","C_tEnd",-0.0818208989675101
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","C_tEnd",0.00890619405127233
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","C_tEnd",0.002689711500617
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Skin-Volume","C_tEnd",0.00861654055237762
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","C_tEnd",0.00130832354307664
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","C_tEnd",-0.00016512735225097
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","C_tEnd",-0.0993810683562134
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","C_tEnd",-0.15873091639762
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Bone-Volume","C_tEnd",0.0305493295770313
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","C_tEnd",-0.000268228372903726
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Heart-Volume","AUC_tEnd",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lung-Volume","AUC_tEnd",-0.000618617672721825
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","AUC_tEnd",-0.386200657455611
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Brain-Volume","AUC_tEnd",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","AUC_tEnd",-0.00651279563868177
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","AUC_tEnd",-0.00988455932989933
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","AUC_tEnd",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","AUC_tEnd",0.00301293998886545
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Skin-Volume","AUC_tEnd",-0.00107522446998965
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","AUC_tEnd",0.00117485154889981
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","AUC_tEnd",-0.0137395766856845
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","AUC_tEnd",-0.170136377939635
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","AUC_tEnd",0.101840483021998
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Bone-Volume","AUC_tEnd",-0.00185668410954324
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","AUC_tEnd",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Heart-Volume","AUC_inf",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lung-Volume","AUC_inf",-0.000460156475632567
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","AUC_inf",-0.387531232469665
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Brain-Volume","AUC_inf",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","AUC_inf",-0.00548299756341127
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","AUC_inf",-0.0132862175770751
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","AUC_inf",0.000266403757137871
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","AUC_inf",0.00301303671172875
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Skin-Volume","AUC_inf",-0.000816956567987863
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","AUC_inf",0.00118036130021981
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","AUC_inf",-0.0131002408874164
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","AUC_inf",-0.166127254512514
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","AUC_inf",0.0913714542180819
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Bone-Volume","AUC_inf",-0.00121343434594176
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","AUC_inf",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Heart-Volume","MRT",0.00294678530969969
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lung-Volume","MRT",0.0129200880834639
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","MRT",-0.117346726251043
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Brain-Volume","MRT",0.00132383815977804
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","MRT",0.128958053514859
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","MRT",-0.0406979541877802
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","MRT",0.0164566650216732
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","MRT",-0.000173111182902921
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Skin-Volume","MRT",0.0163227443239246
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","MRT",0.000402875007631413
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","MRT",0.00640468980002306
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","MRT",0.0221224326654999
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","MRT",-0.168935475131769
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Bone-Volume","MRT",0.0514359351363818
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","MRT",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Heart-Volume","Thalf",-0.000749315745862238
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lung-Volume","Thalf",-0.00505067012615392
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","Thalf",0.0596039735515172
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Brain-Volume","Thalf",-0.000454001639294632
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","Thalf",-0.136466316531871
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","Thalf",-0.0123266658967289
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","Thalf",-0.00337888673729911
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","Thalf",0.000320290363705882
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Skin-Volume","Thalf",-0.00328767154007357
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","Thalf",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","Thalf",0.00226560721738146
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","Thalf",0.028546712608777
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","Thalf",0.00117298707065225
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Bone-Volume","Thalf",-0.0164694168394354
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","Thalf",0.000239194615219875
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Heart-Volume","FractionAucLastToInf",0.000895180834741708
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lung-Volume","FractionAucLastToInf",0.00377153929392144
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","FractionAucLastToInf",-0.0316146116619624
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Brain-Volume","FractionAucLastToInf",0.000239771517330823
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","FractionAucLastToInf",0.0244809187736322
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","FractionAucLastToInf",-0.0808623155491909
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","FractionAucLastToInf",0.00526099266930826
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","FractionAucLastToInf",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Skin-Volume","FractionAucLastToInf",0.0061456072233863
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","FractionAucLastToInf",0.000133370455276579
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","FractionAucLastToInf",0.0152008174702238
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","FractionAucLastToInf",0.0953261234078829
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","FractionAucLastToInf",-0.249065853121501
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Bone-Volume","FractionAucLastToInf",0.0152913921817644
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","FractionAucLastToInf",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Heart-Volume","CL",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lung-Volume","CL",0.00045954186400021
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","CL",0.387618567766586
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Brain-Volume","CL",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","CL",0.00548330975581895
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","CL",0.0132863185827039
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","CL",-0.000266073675608857
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","CL",-0.00301312771952639
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Skin-Volume","CL",0.000817158572696359
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","CL",-0.00118030162261702
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","CL",0.0131004577845337
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","CL",0.166198677285258
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","CL",-0.0914356047135297
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Bone-Volume","CL",0.00121302033739816
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","CL",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Heart-Volume","Vss",0.00299618753762298
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lung-Volume","Vss",0.0133798432910201
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","Vss",0.270239931842778
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Brain-Volume","Vss",0.00137932438166729
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","Vss",0.134442464383575
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","Vss",-0.0274130312858754
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","Vss",0.0161903418716263
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","Vss",-0.00318604997319105
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Skin-Volume","Vss",0.0171389139251915
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","Vss",-0.000777665023042535
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","Vss",0.0195051117916599
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","Vss",0.188338725275737
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","Vss",-0.26052876122933
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Bone-Volume","Vss",0.0526491514886365
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","Vss",0
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Heart-Volume","Vd",-0.000699476984962488
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lung-Volume","Vd",-0.0045906276988484
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Kidney-Volume","Vd",0.447215635673661
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Brain-Volume","Vd",-0.000399072280564818
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Muscle-Volume","Vd",-0.130984305327802
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","LargeIntestine-Volume","Vd",0.000958876982381603
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","PortalVein-Volume","Vd",-0.0036453787514332
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Spleen-Volume","Vd",-0.00269233589464009
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Skin-Volume","Vd",-0.00247082002539638
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Pancreas-Volume","Vd",-0.00117469440337609
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Mucosa-UpperIleum-Fraction mucosa","Vd",0.015365669725658
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","SmallIntestine-Volume","Vd",0.194754976373449
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Lumen-Effective surface area variability factor","Vd",-0.090234189338752
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Bone-Volume","Vd",-0.0152561479623495
+"Organism|VenousBlood|Plasma|Raltegravir|Concentration","Stomach-Volume","Vd",0.000276570718466385
