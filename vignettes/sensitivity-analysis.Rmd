@@ -88,7 +88,7 @@ Here, `output2` points to the model output with path `Organism|ArterialBlood|Pla
 
 ### Mean model workflow
 
-The mean model workflow operates on `SimulationSet` objects, which combine the path to a `.pkml` file with `Output` objects (specified above) and which are given descriptive names (`simulationSetName`).  These objects are created as follows:   
+The mean model workflow operates on `SimulationSet` objects.  These objects store the path to the model simulation (`.pkml`) file as well as the `Output` objects (described above). A descriptive name for the ` SimulationSet` object can be provided using the `simulationSetName` field of the `SimulationSet` constructor.  For the mean model workflow, a `SimulationSet` object is created as follows:   
 
 ```{r echo=T, results='hide'}
 ms <- SimulationSet$new(
@@ -98,7 +98,7 @@ ms <- SimulationSet$new(
 )
 ```
 
-A mean model workflow object is then instantiated thus:
+A mean model workflow object is then instantiated using the `SimulationSet` object `ms` as follows:
 
 ```{r echo=T, results='hide'}
 mwf <- MeanModelWorkflow$new(
@@ -107,15 +107,14 @@ mwf <- MeanModelWorkflow$new(
 )
 ```
 
-In this workflow, the activities will consist of a sensitivity analysis and the generation of plots of the sensitivity analysis results.  To set this, the 
+In this mean model workflow, the tasks will consist of a sensitivity analysis followed by generation of plots of the sensitivity analysis results.  These two task are activated as follows: 
 
 ```{r echo=T, results='hide'}
 mwf$calculateSensitivity$inactivate()
-mwf$calculateSensitivity$activate()
-mwf$plotSensitivity$activate()
+mwf$plotSensitivity$inactivate()
 ```
 
-
+The model parameters to be perturbed in the sensitivity analysis are next set:
 
 ```{r echo=T, results='hide'}
 mwf$calculateSensitivity$settings$variableParameterPaths <- c(
@@ -138,7 +137,7 @@ mwf$calculateSensitivity$settings$variableParameterPaths <- c(
 ```
 
 
-
+The properties of the sensitivity plots to be generated are set next.  The field `totalSensitivityThreshold` is used to filter out from the sensitivity plots any model variables that contribute little to the total sensitivity of the model. The `maximalParametersPerSensitivityPlot` field limits the number of model variables to be displayeed in sensitivity plots. The axis font size is set using the parameters `xAxisFontSize` and `yAxisFontSize`.   
 ```{r echo=T, results='hide'}
 mwf$plotSensitivity$settings <- SensitivityPlotSettings$new(
   totalSensitivityThreshold = 0.9,
@@ -148,6 +147,7 @@ mwf$plotSensitivity$settings <- SensitivityPlotSettings$new(
 )
 ```
 
+With the `calculateSensitivity` and `plotSensitivity` tasks now set up, the sensitivity evaluation and plot are started with the command `runWorkflow`:
 
 ```{r echo=T, results='hide', message=F, warning=F}
 mwf$runWorkflow()
@@ -174,24 +174,24 @@ htmltools::includeHTML(sub(".md", ".html", mwf$reportFileName))
 ### Population model workflow
 
 
-Unlike the mean model sensitivity analysis, a population sensitivity analysis depends on the pk parameter calcufor the population, which in turn depend on the simulation results for he population.  The 
+Unlike the mean model sensitivity analysis, a population sensitivity analysis depends on the outcomes of the `calculatePKParameters` task for the population.  This task, in turn, turn depends on the results of the `simulate` task for the population.  The population sensitivity analysis proceeds as follows:
 
+- Step 1) The model is simulated for the entire population using the `simulate` task.
 
-1) Model is simulatiod for the entire population
+- Step 2)  Using the `calculatePKParameters` task, the PK parameters of each user-specified model output are calculated for each individual in the population based on their simulation results (evaluated in Step 1).  For each PK parameter, the computations in Step 2 result in a distribution of that parameter over the entire population.  
 
-2) User specified PK parameters  (such as C_max and AUC) are calculated for each individual in the population based on their simulation results evaluated in step1 .  For each user-specified  pk parameter, the computations in step 2 result in a distribution of that parameter over the entire population.  
+- Step 3)  The population sensitivity analysis of a PK parameter of a model output is composed of sensitivity analyses, similar to the mean model sensitivity analysis, conducted for a selection of individuals within the population.  The individuals chosen for the sensitivity analysis are those with PK parameters values that lie closest to user-specified quantiles of the pk parameter distributions computed in Step 2. 
 
-3) The population sensitivity analysis of a pk parameter quantity is composed of sensitivity analyses conducted for a selection of individuals within the population.  The individuals chosen for the sensitivity analysis are those with pk parameters values that lie closest to user-specified quantiles of the pk parameter distributions computed in step 2. 
-
-
-
-
-
+In this example, the sensitivity analysis will be conducted for two populations in parallel.  In the first step, the model output to be analyzed are chosen:
 
 ```{r echo=T, results='hide'} 
 outputsForPopulation1 <- c(output1,output2,output3)
 outputsForPopulation2 <- c(output3)
+```
 
+Next, `PopulationSimulationSet` objects are defined for each of the two populations:
+
+```{r echo=T, results='hide'} 
 ps1 <- PopulationSimulationSet$new(
   simulationSetName = "ral",
   simulationFile = simulationFile,
@@ -206,6 +206,8 @@ ps2 <- PopulationSimulationSet$new(
   outputs = outputsForPopulation2
 )
 ```
+
+With this setup, the sensitivity of PK parameters of `output1`, `output2` and `output3` will be analyzed for first population (given in `populationFile1`).  For the second population (given in `populationFile2`), sensitivity will only be analyzed for `output3`.
 
 ```{r echo=T, results='hide'}
 pwf <- PopulationWorkflow$new(simulationSets = list(ps1,ps2),
