@@ -1,0 +1,25 @@
+07/09/2020 - 00:09:53 : Reporting Engine Information:
+07/09/2020 - 00:09:53 : Date: 07/09/2020 - 00:09:53
+07/09/2020 - 00:09:53 : User Information:
+07/09/2020 - 00:09:53 : Computer Name: DESKTOP-R53CCDG
+07/09/2020 - 00:09:53 : User: ahamadeh
+07/09/2020 - 00:09:53 : Login: ahamadeh
+07/09/2020 - 00:09:53 : System is NOT validated
+07/09/2020 - 00:09:53 : System versions:
+07/09/2020 - 00:09:53 : R version: R version 3.6.2 (2019-12-12)
+07/09/2020 - 00:09:53 : OSP Suite Package version: 9.0.0
+07/09/2020 - 00:09:53 : OSP Reporting Engine version: 0.1.0
+07/09/2020 - 00:09:53 : tlf version: 0.1.0
+07/09/2020 - 00:10:28 : TRUE
+07/09/2020 - 00:10:28 : Reporting Engine Information:
+07/09/2020 - 00:10:28 : Date: 07/09/2020 - 00:10:28
+07/09/2020 - 00:10:28 : User Information:
+07/09/2020 - 00:10:28 : Computer Name: DESKTOP-R53CCDG
+07/09/2020 - 00:10:28 : User: ahamadeh
+07/09/2020 - 00:10:28 : Login: ahamadeh
+07/09/2020 - 00:10:28 : System is NOT validated
+07/09/2020 - 00:10:28 : System versions:
+07/09/2020 - 00:10:28 : R version: R version 3.6.2 (2019-12-12)
+07/09/2020 - 00:10:28 : OSP Suite Package version: 9.0.0
+07/09/2020 - 00:10:28 : OSP Reporting Engine version: 0.1.0
+07/09/2020 - 00:10:28 : tlf version: 0.1.0

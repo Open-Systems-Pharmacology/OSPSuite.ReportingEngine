@@ -1,0 +1,12 @@
+07/09/2020 - 00:03:32 : Reporting Engine Information:
+07/09/2020 - 00:03:32 : Date: 07/09/2020 - 00:03:32
+07/09/2020 - 00:03:32 : User Information:
+07/09/2020 - 00:03:32 : Computer Name: DESKTOP-R53CCDG
+07/09/2020 - 00:03:32 : User: ahamadeh
+07/09/2020 - 00:03:32 : Login: ahamadeh
+07/09/2020 - 00:03:32 : System is NOT validated
+07/09/2020 - 00:03:32 : System versions:
+07/09/2020 - 00:03:32 : R version: R version 3.6.2 (2019-12-12)
+07/09/2020 - 00:03:32 : OSP Suite Package version: 9.0.0
+07/09/2020 - 00:03:32 : OSP Reporting Engine version: 0.1.0
+07/09/2020 - 00:03:32 : tlf version: 0.1.0

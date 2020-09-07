@@ -19,9 +19,9 @@ runscript <- function() {
   setwd(workflowFolder)
 
   mwf$simulate$settings$showProgress <- TRUE
-  mwf$meanModelPKParameters$activate()
-  mwf$meanModelSensitivityAnalysis$activate()
-  mwf$meanModelSensitivityAnalysis$settings$variableParameterPaths <- c(tree$Organism$Heart$Volume$path)
+  mwf$calculatePKParameters$activate()
+  mwf$calculateSensitivity$activate()
+  mwf$calculateSensitivity$settings$variableParameterPaths <- c(tree$Organism$Heart$Volume$path)
   mwf$runWorkflow()
 }
 

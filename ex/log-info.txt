@@ -1,0 +1,48 @@
+07/09/2020 - 00:06:45 : Reporting Engine Information:
+07/09/2020 - 00:06:45 : Date: 07/09/2020 - 00:06:44
+07/09/2020 - 00:06:45 : User Information:
+07/09/2020 - 00:06:45 : Computer Name: DESKTOP-R53CCDG
+07/09/2020 - 00:06:45 : User: ahamadeh
+07/09/2020 - 00:06:45 : Login: ahamadeh
+07/09/2020 - 00:06:45 : System is NOT validated
+07/09/2020 - 00:06:45 : System versions:
+07/09/2020 - 00:06:45 : R version: R version 3.6.2 (2019-12-12)
+07/09/2020 - 00:06:45 : OSP Suite Package version: 9.0.0
+07/09/2020 - 00:06:45 : OSP Reporting Engine version: 0.1.0
+07/09/2020 - 00:06:45 : tlf version: 0.1.0
+07/09/2020 - 00:14:33 : Reporting Engine Information:
+07/09/2020 - 00:14:33 : Date: 07/09/2020 - 00:14:33
+07/09/2020 - 00:14:33 : User Information:
+07/09/2020 - 00:14:33 : Computer Name: DESKTOP-R53CCDG
+07/09/2020 - 00:14:33 : User: ahamadeh
+07/09/2020 - 00:14:33 : Login: ahamadeh
+07/09/2020 - 00:14:33 : System is NOT validated
+07/09/2020 - 00:14:33 : System versions:
+07/09/2020 - 00:14:33 : R version: R version 3.6.2 (2019-12-12)
+07/09/2020 - 00:14:33 : OSP Suite Package version: 9.0.0
+07/09/2020 - 00:14:33 : OSP Reporting Engine version: 0.1.0
+07/09/2020 - 00:14:33 : tlf version: 0.1.0
+07/09/2020 - 00:15:33 : Reporting Engine Information:
+07/09/2020 - 00:15:33 : Date: 07/09/2020 - 00:15:33
+07/09/2020 - 00:15:33 : User Information:
+07/09/2020 - 00:15:33 : Computer Name: DESKTOP-R53CCDG
+07/09/2020 - 00:15:33 : User: ahamadeh
+07/09/2020 - 00:15:33 : Login: ahamadeh
+07/09/2020 - 00:15:33 : System is NOT validated
+07/09/2020 - 00:15:33 : System versions:
+07/09/2020 - 00:15:33 : R version: R version 3.6.2 (2019-12-12)
+07/09/2020 - 00:15:33 : OSP Suite Package version: 9.0.0
+07/09/2020 - 00:15:33 : OSP Reporting Engine version: 0.1.0
+07/09/2020 - 00:15:33 : tlf version: 0.1.0
+07/09/2020 - 00:17:06 : Reporting Engine Information:
+07/09/2020 - 00:17:06 : Date: 07/09/2020 - 00:17:06
+07/09/2020 - 00:17:06 : User Information:
+07/09/2020 - 00:17:06 : Computer Name: DESKTOP-R53CCDG
+07/09/2020 - 00:17:06 : User: ahamadeh
+07/09/2020 - 00:17:06 : Login: ahamadeh
+07/09/2020 - 00:17:06 : System is NOT validated
+07/09/2020 - 00:17:06 : System versions:
+07/09/2020 - 00:17:06 : R version: R version 3.6.2 (2019-12-12)
+07/09/2020 - 00:17:06 : OSP Suite Package version: 9.0.0
+07/09/2020 - 00:17:06 : OSP Reporting Engine version: 0.1.0
+07/09/2020 - 00:17:06 : tlf version: 0.1.0

@@ -21,17 +21,17 @@ runscript <- function() {
       pkParameters = c("C_max", "CL")
     )
   )
-  pwf <- PopulationWorkflow$new(simulationSets = list(ps), workflowFolder = workflowFolder)
+  pwf <- PopulationWorkflow$new(simulationSets = list(ps), workflowFolder = workflowFolder, workflowType = PopulationWorkflowTypes$parallelComparison)
   setwd(workflowFolder)
-  pwf$simulatePopulation$settings$showProgress <- FALSE
-  pwf$simulatePopulation$settings$numberOfCores <- 2
-  pwf$simulatePopulation$activate()
-  pwf$populationPKParameters$activate()
-  pwf$populationSensitivityAnalysis$activate()
-  pwf$populationSensitivityAnalysis$settings$showProgress <- TRUE
-  pwf$populationSensitivityAnalysis$settings$variableParameterPaths <- c(tree$Organism$Heart$Volume$path, tree$Organism$Liver$Volume$path)
-  pwf$populationSensitivityAnalysis$settings$numberOfCores <- 2
-  pwf$populationSensitivityAnalysis$settings$quantileVec <- c(0.25, 0.75)
+  pwf$simulate$settings$showProgress <- FALSE
+  pwf$simulate$settings$numberOfCores <- 2
+  pwf$simulate$activate()
+  pwf$calculatePKParameters$activate()
+  pwf$calculateSensitivity$activate()
+  pwf$calculateSensitivity$settings$showProgress <- TRUE
+  pwf$calculateSensitivity$settings$variableParameterPaths <- c(tree$Organism$Heart$Volume$path, tree$Organism$Liver$Volume$path)
+  pwf$calculateSensitivity$settings$numberOfCores <- 2
+  pwf$calculateSensitivity$settings$quantileVec <- c(0.25, 0.75)
   pwf$plotSensitivity$activate()
   pwf$runWorkflow()
 }

@@ -1,19 +1,19 @@
 rm(list = ls())
 library(ospsuite)
 library(ospsuite.reportingengine)
-tree <- getSimulationTree("./tests/dev/individualPksimSim.pkml")
+tree <- ospsuite::getSimulationTree("./tests/dev/individualPksimSim.pkml")
 ms <- SimulationSet$new(
   simulationSetName = "meansim-par-sa",
   simulationFile = "./tests/dev/individualPksimSim.pkml",
-  pathID = tree$Organism$VenousBlood$Plasma$smarties$Concentration$path
+  outputs = Output$new(path = tree$Organism$VenousBlood$Plasma$smarties$Concentration$path)
 )
 mwf <- MeanModelWorkflow$new(simulationSets = list(ms), workflowFolder = "./ex")
 mwf$simulate$settings$showProgress <- TRUE
-mwf$meanModelPKParameters$activate()
-mwf$meanModelSensitivityAnalysis$activate()
-mwf$meanModelSensitivityAnalysis$settings$variableParameterPaths <- c(
+mwf$calculatePKParameters$activate()
+mwf$calculateSensitivity$activate()
+mwf$calculateSensitivity$settings$variableParameterPaths <- c(
   tree$Organism$Heart$Volume$path,
   tree$Organism$Pancreas$Volume$path
 )
-mwf$meanModelSensitivityAnalysis$settings$numberOfCores <- 2
+mwf$calculateSensitivity$settings$numberOfCores <- 2
 mwf$runWorkflow()
