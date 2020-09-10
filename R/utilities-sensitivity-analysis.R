@@ -669,9 +669,17 @@ lookupPKParameterDisplayName <- function(output, pkParameter) {
 plotPopulationSensitivity <- function(structureSets,
                                       logFolder = NULL,
                                       settings,
-                                      workflowType = NULL,
+                                      workflowType = PopulationWorkflowTypes$parallelComparison,
                                       xParameters = NULL,
                                       yParameters = NULL) {
+  validateIsIncluded(workflowType, PopulationWorkflowTypes)
+  validateIsOfType(structureSets, "list")
+  validateIsOfType(c(structureSets), "SimulationStructure")
+
+  validateSameOutputsBetweenSets(c(lapply(structureSets, function(set) {
+    set$simulationSet
+  })), logFolder)
+
   allPopsDf <- NULL
   saResultIndexFiles <- list()
   simulationList <- list()
