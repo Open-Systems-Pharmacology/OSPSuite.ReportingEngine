@@ -54,17 +54,22 @@ The objects `SimulationSet` (or `PopulationSimulationSet` for population workflo
 
 ## Specification of quantities analyzed: model outputs and PK parameters
 
-A sensitivity analysis will compute the variation in a scalar function of a time-series trajectory of a model output in response to variations in model variables.  The model outputs are specified using paths to simulated quantities within the model.  The scalar functions are standard PK parameter quantities such as `C_max` or `AUC`.  Although the sensitivity analysis for a mean model or an individual within a population is evaluated for all PK parameters, the user has the option of specifying the subset of PK parameters for which sensitivity plots are to be generated.  In addition, the user has the option to set custom display names for both the selected model outputs and PK parameters used in the sensitivity analysis.  
+A sensitivity analysis will compute the variation in a scalar function of a time-series trajectory of a model output in response to variations in model variables.  The model outputs are specified using paths to simulated quantities within the model.  The scalar functions are PK parameter quantities such as `C_max` or `AUC`.  Although the sensitivity analysis for a mean model or an individual within a population is evaluated for all PK parameters, the user has the option of specifying the subset of PK parameters for which sensitivity plots are to be generated.  In addition, the user has the option to set custom display names for both the selected model outputs and PK parameters used in the sensitivity analysis.  
 
-The simplest way of defining a set of output and PK parameter combinations for the sensitivity analysis are as follows:
+Sets of output and PK parameter combinations for the sensitivity analysis are defined as follows:
 
 ```{r} 
-output1 <- Output$new(path = "Organism|VenousBlood|Plasma|Raltegravir|Concentration", displayName = "op1")
+output1 <- Output$new(
+  path = "Organism|Lung|Interstitial|Raltegravir|Concentration", displayName = "op1",
+  pkParameters = c(
+    PkParameterInfo$new("C_max", "new_C_max"),
+    PkParameterInfo$new("MRT", "new_MRT")
+  )
+)
 ```
 
-Here, `output1` is an `Output` object.  The `path` input to the constructor of this object gives the path to the model output that simulates the concentration of Raltegravir in venous blood plasma, `Organism|VenousBlood|Plasma|Raltegravir|Concentration`.  This model output is given the display name `op1`.  If sensitivity plots for specific PK parameters of this output are to be generated, these would also be specified at this stage.  However, in this case, no PK parameters are specified and therefore the reporting engine will, by default, generate sensitivity plots for __all__ PK parameters that can be evaluated for the model output `op1`. VERIFY IF THIS IS TRUE FOR MEAN MODEL - CURRENTLY ONLY TRUE FOR POPULATION.  IF NO PK PARAMETERS SELECTED FOR MEAN MODEL, NO PLOTS ARE GENERATED.
- 
-Specific PK parameters are assigned to a model output for sensitivity analysis as follows: 
+and
+
 ```{r} 
 output2 <- Output$new(
   path = "Organism|ArterialBlood|Plasma|Raltegravir|Concentration", displayName = "op2",
@@ -73,17 +78,10 @@ output2 <- Output$new(
     PkParameterInfo$new("AUC_tEnd", "new_AUC_tEnd")
   )
 )
-
-output3 <- Output$new(
-  path = "Organism|Lung|Interstitial|Raltegravir|Concentration", displayName = "op3",
-  pkParameters = c(
-    PkParameterInfo$new("C_max", "new_C_max"),
-    PkParameterInfo$new("MRT", "new_MRT")
-  )
-)
 ```
 
-Here, `output2` points to the model output with path `Organism|ArterialBlood|Plasma|Raltegravir|Concentration`, while `output3` points to `Organism|Lung|Interstitial|Raltegravir|Concentration`.  The PK parameters selected for `output2` are `t_max` and `AUC_tEnd`, for which the respective display names `new_t_max` and `new_AUC_tEnd` will be used.  Similarly, the PK parameters selected for `output3` are `C_max` and `MRT`, for which the display names will be `new_C_max` and `new_MRT`.
+
+Here, `output1` and `output2` are `Output` objects.  The `path` input to the constructors of these objects gives the path to the model output.  For example, the `path` input for `output1` points to the concentration of Raltegravir in lung interstitial tissue, `Organism|Lung|Interstitial|Raltegravir|Concentration`.  This model output is given the display name `op1`. The PK parameters chosen for this example are the `C_max` and `MRT`, which are given the display names `new_C_max` and `new_MRT`, respectively.  Similarly, `output2` points to the model output with path `Organism|ArterialBlood|Plasma|Raltegravir|Concentration`.  The PK parameters selected for `output2` are `t_max` and `AUC_tEnd`, for which the respective display names `new_t_max` and `new_AUC_tEnd` will be used.
 
 
 ### Mean model workflow
@@ -94,7 +92,7 @@ The mean model workflow operates on `SimulationSet` objects.  These objects stor
 ms <- SimulationSet$new(
   simulationSetName = "ral",
   simulationFile = simulationFile,
-  outputs = c(output1, output2, output3)
+  outputs = c(output1, output2)
 )
 ```
 
@@ -110,6 +108,7 @@ mwf <- MeanModelWorkflow$new(
 In this mean model workflow, the tasks will consist of a sensitivity analysis followed by generation of plots of the sensitivity analysis results.  These two task are activated as follows: 
 
 ```{r echo=T, results='hide'}
+mwf$simulate$activate()
 mwf$calculateSensitivity$activate()
 mwf$plotSensitivity$activate()
 ```
@@ -186,11 +185,10 @@ Unlike the mean model sensitivity analysis, a population sensitivity analysis de
 
 - Step 3)  The population sensitivity analysis of a PK parameter of a model output is composed of sensitivity analyses, similar to the mean model sensitivity analysis, conducted for a selection of individuals within the population.  The individuals chosen for the sensitivity analysis are those with PK parameters values that lie closest to user-specified quantiles of the pk parameter distributions computed in Step 2. 
 
-In this example, the sensitivity analysis will be conducted for two populations in parallel.  In the first step, the model output to be analyzed are chosen:
+In this example, the sensitivity analysis will be conducted for two populations in parallel.  In the first step, the model outputs to be analyzed are defined:
 
 ```{r echo=T, results='hide'} 
-outputsForPopulation1 <- c(output1,output2,output3)
-outputsForPopulation2 <- c(output3)
+populationOutputs <- c(output1,output2)
 ```
 
 Next, `PopulationSimulationSet` objects are defined for each of the two populations:
@@ -200,18 +198,18 @@ ps1 <- PopulationSimulationSet$new(
   simulationSetName = "ral",
   simulationFile = simulationFile,
   populationFile = populationFile1,
-  outputs = outputsForPopulation1
+  outputs = populationOutputs
 )
 
 ps2 <- PopulationSimulationSet$new(
   simulationSetName = "lar",
   simulationFile = simulationFile,
   populationFile = populationFile2,
-  outputs = outputsForPopulation2
+  outputs = populationOutputs
 )
 ```
 
-With this setup, the sensitivity of PK parameters of `output1`, `output2` and `output3` will be analyzed for the first population (given in `populationFile1`).  For the second population (given in `populationFile2`), sensitivity will only be analyzed for PK parameters of `output3`.  The two `PopulationSimulationSet` are then used to create a `PopulationWorkflow`, the results of which are to be placed in the root directory `./popSensitivityExample`:
+With this setup, the sensitivity of PK parameters of `output1` and `output2` will be analyzed for the two populations.  The two `PopulationSimulationSet` objects are then used to create a `PopulationWorkflow`, the results of which are to be placed in the root directory `./popSensitivityExample`:
 
 ```{r echo=T, results='hide'}
 pwf <- PopulationWorkflow$new(simulationSets = list(ps1,ps2),
@@ -297,7 +295,7 @@ knitr::include_graphics(system.file("extdata", "ral-index.png",
 ))
 ```
 
-Three output paths are shown corresponding to `output2` (pink), `output3` (green) and `output1` (blue).  Note that, as per the definitions of `output2` and `output3`, the only PK parameters analyzed for those two outputs are `t_max` and `AUC_tEnd` for `output2` and `C_max` and `MRT` for `output3`.  For each model output and PK parameter combination, there are sensitivity analysis result files for three individuals given under the `Filename` column, each corresponding to one of the quantiles specified using `pwf$calculateSensitivity$settings$quantileVec`.
+Two output paths are shown corresponding to `output1` (pink), `output2` (blue).  Note that, as per the definitions of `output1` and `output2`, the only PK parameters analyzed for those two outputs are `C_max` and `MRT` for `output1` and `t_max` and `AUC_tEnd`  for `output2`.  For each model output and PK parameter combination, there are sensitivity analysis result files for three individuals given under the `Filename` column, each corresponding to one of the quantiles specified using `pwf$calculateSensitivity$settings$quantileVec`.
 
 The output report, containing the population sensitivity plots from this example, is shown below.  
 
