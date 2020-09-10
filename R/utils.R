@@ -241,32 +241,44 @@ removeMissingValues <- function(data, dataMapping = NULL, logFolder = getwd()) {
 #' @param output Output object
 #' @return Names of pkParameters in `output`
 #' @export
-getPKParametersInOutput <- function(output){
+getPKParametersInOutput <- function(output) {
   validateIsOfType(output, "Output")
-  return(sapply(output$pkParameters, function(pkParameterInfo){pkParameterInfo$pkParameter}))
+  pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
+    pkParameterInfo$pkParameter
+  })
+  if (isOfLength(pkParameters, 0)) {
+    return(NA)
+  }
+  return(pkParameters)
 }
 
 #' @title getOutputPathsInSimulationSet
 #' @param simulationSet SimulationSet object or derived class
 #' @return Path names of outputs in `simulationSet`
 #' @export
-getOutputPathsInSimulationSet <- function(simulationSet){
+getOutputPathsInSimulationSet <- function(simulationSet) {
   validateIsOfType(simulationSet, "SimulationSet")
-  return(sapply(simulationSet$outputs, function(output){output$path})) 
+  return(sapply(simulationSet$outputs, function(output) {
+    output$path
+  }))
 }
 
 #' @title getPKParametersInSimulationSet
 #' @param simulationSet SimulationSet object or derived class
 #' @return Data.frame with \code{path} and \code{pkParameter} in `simulationSet`
 #' @export
-getPKParametersInSimulationSet <- function(simulationSet){
+getPKParametersInSimulationSet <- function(simulationSet) {
   validateIsOfType(simulationSet, "SimulationSet")
   pkParametersTable <- data.frame()
-  for(output in simulationSet$outputs){
-    pkParametersTable <- rbind.data.frame(pkParametersTable,
-                                          data.frame(path = output$path,
-                                                     pkParameter = getPKParametersInOutput(output),
-                                                     stringsAsFactors = FALSE))
+  for (output in simulationSet$outputs) {
+    pkParametersTable <- rbind.data.frame(
+      pkParametersTable,
+      data.frame(
+        path = output$path,
+        pkParameter = getPKParametersInOutput(output),
+        stringsAsFactors = FALSE
+      )
+    )
   }
   return(pkParametersTable)
 }
