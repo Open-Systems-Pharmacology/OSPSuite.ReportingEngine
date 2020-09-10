@@ -30,12 +30,15 @@ R6 class for Task settings
 \item \href{#method-validateInput}{\code{Task$validateInput()}}
 \item \href{#method-validateStructureSetInput}{\code{Task$validateStructureSetInput()}}
 \item \href{#method-print}{\code{Task$print()}}
+\item \href{#method-getRelativePath}{\code{Task$getRelativePath()}}
+\item \href{#method-getAbsolutePath}{\code{Task$getAbsolutePath()}}
 \item \href{#method-getInputs}{\code{Task$getInputs()}}
 \item \href{#method-clone}{\code{Task$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a `Task` object
 \subsection{Usage}{
@@ -79,6 +82,7 @@ A new `Task` object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-activate"></a>}}
+\if{latex}{\out{\hypertarget{method-activate}{}}}
 \subsection{Method \code{activate()}}{
 Activate `Task`
 \subsection{Usage}{
@@ -88,6 +92,7 @@ Activate `Task`
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-inactivate"></a>}}
+\if{latex}{\out{\hypertarget{method-inactivate}{}}}
 \subsection{Method \code{inactivate()}}{
 Inactivate `Task`
 \subsection{Usage}{
@@ -97,6 +102,7 @@ Inactivate `Task`
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-validateInput"></a>}}
+\if{latex}{\out{\hypertarget{method-validateInput}{}}}
 \subsection{Method \code{validateInput()}}{
 Check if `Task` inputs exist
 \subsection{Usage}{
@@ -109,6 +115,7 @@ logical indicating if input is valid
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-validateStructureSetInput"></a>}}
+\if{latex}{\out{\hypertarget{method-validateStructureSetInput}{}}}
 \subsection{Method \code{validateStructureSetInput()}}{
 Check if a task input from a specific `SimulationStructure` is valid
 \subsection{Usage}{
@@ -128,6 +135,7 @@ logical indicating if input is valid
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
 Print `Task` features
 \subsection{Usage}{
@@ -139,7 +147,48 @@ Text of task features
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getRelativePath"></a>}}
+\if{latex}{\out{\hypertarget{method-getRelativePath}{}}}
+\subsection{Method \code{getRelativePath()}}{
+Get the relative path to a file to be output by this task
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Task$getRelativePath(fileName)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{fileName}}{name (with extension) of the file to be output}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Output file's relative path
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getAbsolutePath"></a>}}
+\if{latex}{\out{\hypertarget{method-getAbsolutePath}{}}}
+\subsection{Method \code{getAbsolutePath()}}{
+Get the absolute path to a file to be output by this task
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Task$getAbsolutePath(fileName)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{fileName}}{name (with extension) of the file to be output}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Output file's absolute path
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-getInputs"></a>}}
+\if{latex}{\out{\hypertarget{method-getInputs}{}}}
 \subsection{Method \code{getInputs()}}{
 Get `Task` required input files
 \subsection{Usage}{
@@ -152,6 +201,7 @@ Required file names
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

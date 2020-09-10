@@ -4,7 +4,9 @@
 \name{ExportPlotConfiguration}
 \alias{ExportPlotConfiguration}
 \title{ExportPlotConfiguration}
-\format{An object of class \code{ExportPlotConfiguration} (inherits from \code{R6}) of length 6.}
+\format{
+An object of class \code{ExportPlotConfiguration} (inherits from \code{R6}) of length 6.
+}
 \usage{
 ExportPlotConfiguration
 }

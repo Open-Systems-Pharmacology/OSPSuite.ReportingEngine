@@ -4,7 +4,9 @@
 \name{StandardPlotTasks}
 \alias{StandardPlotTasks}
 \title{StandardPlotTasks}
-\format{An object of class \code{list} of length 3.}
+\format{
+An object of class \code{list} of length 3.
+}
 \usage{
 StandardPlotTasks
 }

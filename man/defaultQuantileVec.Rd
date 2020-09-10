@@ -4,7 +4,9 @@
 \name{defaultQuantileVec}
 \alias{defaultQuantileVec}
 \title{defaultQuantileVec}
-\format{An object of class \code{numeric} of length 3.}
+\format{
+An object of class \code{numeric} of length 3.
+}
 \usage{
 defaultQuantileVec
 }

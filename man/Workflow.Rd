@@ -40,6 +40,7 @@ R6 class representing Reporting Engine generic Workflow
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `Workflow` object.
 \subsection{Usage}{
@@ -70,6 +71,7 @@ A new `Workflow` object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-getAllTasks"></a>}}
+\if{latex}{\out{\hypertarget{method-getAllTasks}{}}}
 \subsection{Method \code{getAllTasks()}}{
 Get a vector with all the names of the tasks within the `Workflow`
 \subsection{Usage}{
@@ -82,6 +84,7 @@ Vector of `Task` names
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-getAllPlotTasks"></a>}}
+\if{latex}{\out{\hypertarget{method-getAllPlotTasks}{}}}
 \subsection{Method \code{getAllPlotTasks()}}{
 Get a vector with all the names of the plot tasks within the `Workflow`
 \subsection{Usage}{
@@ -94,6 +97,7 @@ Vector of `PlotTask` names
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-getActiveTasks"></a>}}
+\if{latex}{\out{\hypertarget{method-getActiveTasks}{}}}
 \subsection{Method \code{getActiveTasks()}}{
 Get a vector with all the names of active tasks within the `Workflow`
 \subsection{Usage}{
@@ -106,6 +110,7 @@ Vector of active `Task` names
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-getInactiveTasks"></a>}}
+\if{latex}{\out{\hypertarget{method-getInactiveTasks}{}}}
 \subsection{Method \code{getInactiveTasks()}}{
 Get a vector with all the names of inactive tasks within the `Workflow`
 \subsection{Usage}{
@@ -118,6 +123,7 @@ Vector of inactive `Task` names
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-activateTasks"></a>}}
+\if{latex}{\out{\hypertarget{method-activateTasks}{}}}
 \subsection{Method \code{activateTasks()}}{
 Activates a series of `Tasks` from current `Workflow`
 \subsection{Usage}{
@@ -138,6 +144,7 @@ Vector of inactive `Task` names
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-inactivateTasks"></a>}}
+\if{latex}{\out{\hypertarget{method-inactivateTasks}{}}}
 \subsection{Method \code{inactivateTasks()}}{
 Inactivates a series of `Tasks` from current `Workflow`
 \subsection{Usage}{
@@ -158,6 +165,7 @@ Vector of inactive `Task` names
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-printReportingEngineInfo"></a>}}
+\if{latex}{\out{\hypertarget{method-printReportingEngineInfo}{}}}
 \subsection{Method \code{printReportingEngineInfo()}}{
 Print reporting engine information obtained from initiliazing a `Workflow`
 \subsection{Usage}{
@@ -167,6 +175,7 @@ Print reporting engine information obtained from initiliazing a `Workflow`
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-getWatermark"></a>}}
+\if{latex}{\out{\hypertarget{method-getWatermark}{}}}
 \subsection{Method \code{getWatermark()}}{
 Get the current watermark to be reprted on figures background
 \subsection{Usage}{
@@ -176,6 +185,7 @@ Get the current watermark to be reprted on figures background
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-setWatermark"></a>}}
+\if{latex}{\out{\hypertarget{method-setWatermark}{}}}
 \subsection{Method \code{setWatermark()}}{
 Set the watermark to be reported on figure background.
 The default value `NULL` leads to check if the computer has a validated environment.
@@ -200,6 +210,7 @@ Any user-defined text will overwrite this default feature and be reported on the
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
 Print workflow list of tasks
 \subsection{Usage}{
@@ -212,6 +223,7 @@ Task list information
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

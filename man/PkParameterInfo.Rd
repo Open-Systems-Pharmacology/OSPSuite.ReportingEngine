@@ -25,6 +25,7 @@ R6 class representing workflow selected PK parameter
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `PkParameterInfo` object.
 \subsection{Usage}{

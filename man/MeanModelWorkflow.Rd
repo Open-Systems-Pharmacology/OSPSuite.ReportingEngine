@@ -56,6 +56,7 @@ R6 class for Reporting Engine Mean Model Workflow
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `MeanModelWorkflow` object.
 \subsection{Usage}{
@@ -75,6 +76,7 @@ A new `MeanModelWorkflow` object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-runWorkflow"></a>}}
+\if{latex}{\out{\hypertarget{method-runWorkflow}{}}}
 \subsection{Method \code{runWorkflow()}}{
 Run mean model workflow tasks for all simulation sets if tasks are activated
 The order of tasks is as follows:
@@ -96,6 +98,7 @@ All results and plots as a structured output in the workflow folder
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -21,7 +21,9 @@ R6 class for CalculatePKParametersTask settings
 \out{<details ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="activate">}\href{../../ospsuite.reportingengine/html/Task.html#method-activate}{\code{ospsuite.reportingengine::Task$activate()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="getAbsolutePath">}\href{../../ospsuite.reportingengine/html/Task.html#method-getAbsolutePath}{\code{ospsuite.reportingengine::Task$getAbsolutePath()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="getInputs">}\href{../../ospsuite.reportingengine/html/Task.html#method-getInputs}{\code{ospsuite.reportingengine::Task$getInputs()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="getRelativePath">}\href{../../ospsuite.reportingengine/html/Task.html#method-getRelativePath}{\code{ospsuite.reportingengine::Task$getRelativePath()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="inactivate">}\href{../../ospsuite.reportingengine/html/Task.html#method-inactivate}{\code{ospsuite.reportingengine::Task$inactivate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="print">}\href{../../ospsuite.reportingengine/html/Task.html#method-print}{\code{ospsuite.reportingengine::Task$print()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="validateInput">}\href{../../ospsuite.reportingengine/html/Task.html#method-validateInput}{\code{ospsuite.reportingengine::Task$validateInput()}}\out{</span>}
@@ -32,6 +34,7 @@ R6 class for CalculatePKParametersTask settings
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-saveResults"></a>}}
+\if{latex}{\out{\hypertarget{method-saveResults}{}}}
 \subsection{Method \code{saveResults()}}{
 Save results from task run.
 \subsection{Usage}{
@@ -50,6 +53,7 @@ Save results from task run.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-runTask"></a>}}
+\if{latex}{\out{\hypertarget{method-runTask}{}}}
 \subsection{Method \code{runTask()}}{
 Run task and save its output
 \subsection{Usage}{
@@ -66,6 +70,7 @@ Run task and save its output
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

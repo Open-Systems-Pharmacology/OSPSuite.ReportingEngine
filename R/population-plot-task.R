@@ -21,9 +21,9 @@ PopulationPlotTask <- R6::R6Class(
     #' @param ... input parameters inherited from `PlotTask` R6 class
     #' @return A new `PopulationPlotTask` object
     initialize = function(workflowType = PopulationWorkflowTypes$parallelComparison,
-                              xParameters = NULL,
-                              yParameters = NULL,
-                              ...) {
+                          xParameters = NULL,
+                          yParameters = NULL,
+                          ...) {
       super$initialize(...)
       validateIsIncluded(workflowType, PopulationWorkflowTypes)
       self$workflowType <- workflowType
@@ -44,23 +44,20 @@ PopulationPlotTask <- R6::R6Class(
         logFolder = self$workflowFolder
       )
       for (plotName in names(taskResults$plots)) {
-        plotFileName <- file.path(
-          self$outputFolder,
-          getDefaultFileName(
-            suffix = plotName,
-            extension = ExportPlotConfiguration$format
-          )
+        plotFileName <- getDefaultFileName(
+          suffix = plotName,
+          extension = ExportPlotConfiguration$format
         )
 
         # TO DO: define parameters from settings/plotConfiguration
         ggplot2::ggsave(
-          filename = file.path(self$workflowFolder, plotFileName),
+          filename = self$getAbsolutePath(plotFileName),
           plot = taskResults$plots[[plotName]],
           width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
         )
-        re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, plotFileName))
+        re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(plotFileName))
         logWorkflow(
-          message = paste0("Plot '", plotFileName, "' was successfully saved."),
+          message = paste0("Plot '", self$getRelativePath(plotFileName), "' was successfully saved."),
           pathFolder = self$workflowFolder,
           logTypes = LogTypes$Debug
         )
@@ -71,35 +68,33 @@ PopulationPlotTask <- R6::R6Class(
 
         addFigureChunk(
           fileName = self$fileName,
-          figureFile = plotFileName,
+          figureFileRelativePath = self$getRelativePath(plotFileName),
+          figureFileRootDirectory = self$workflowFolder,
           logFolder = self$workflowFolder
         )
 
         if (!is.null(taskResults$tables[[plotName]])) {
-          tableFileName <- file.path(
-            self$workflowFolder,
-            self$outputFolder,
-            getDefaultFileName(
-              suffix = plotName,
-              extension = "csv"
-            )
+          tableFileName <- getDefaultFileName(
+            suffix = plotName,
+            extension = "csv"
           )
 
           write.csv(taskResults$tables[[plotName]],
-            file = tableFileName,
+            file = self$getAbsolutePath(tableFileName),
             row.names = FALSE,
             fileEncoding = "UTF-8"
           )
 
           addTableChunk(
             fileName = self$fileName,
-            tableFile = tableFileName,
+            tableFileRelativePath = self$getRelativePath(tableFileName),
+            tableFileRootDirectory = self$workflowFolder,
             logFolder = self$workflowFolder
           )
 
-          re.tStoreFileMetadata(access = "write", filePath = tableFileName)
+          re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(tableFileName))
           logWorkflow(
-            message = paste0("Table '", tableFileName, "' was successfully saved."),
+            message = paste0("Table '", self$getAbsolutePath(tableFileName), "' was successfully saved."),
             pathFolder = self$workflowFolder,
             logTypes = LogTypes$Debug
           )

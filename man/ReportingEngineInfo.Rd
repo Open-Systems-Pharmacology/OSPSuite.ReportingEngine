@@ -24,6 +24,7 @@ R6 class representing system information for Reporting Engine
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `ReportingEngineInfo` object.
 \subsection{Usage}{
@@ -36,6 +37,7 @@ A new `ReportingEngineInfo` object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
 Print system information
 \subsection{Usage}{
@@ -48,6 +50,7 @@ A text with system information
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-isValidated"></a>}}
+\if{latex}{\out{\hypertarget{method-isValidated}{}}}
 \subsection{Method \code{isValidated()}}{
 Is the system validated
 \subsection{Usage}{
@@ -60,6 +63,7 @@ A logical reporting if the system is included in the validated systems
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

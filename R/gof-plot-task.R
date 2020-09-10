@@ -13,7 +13,7 @@ GofPlotTask <- R6::R6Class(
     #' @param taskResults list of results from task run.
     #' Results contains at least 2 fields: `plots` and `tables`
     saveResults = function(set,
-                               taskResults) {
+                           taskResults) {
       addTextChunk(
         self$fileName,
         paste0("## ", self$title, " for ", set$simulationSet$simulationSetName),
@@ -34,49 +34,55 @@ GofPlotTask <- R6::R6Class(
 
         if (!isOfLength(listOfPlots, 0)) {
           for (plotName in names(listOfPlots)) {
-            plotFileName <- file.path(
-              self$outputFolder,
-              getDefaultFileName(set$simulationSet$simulationSetName,
-                suffix = paste0(plotName, "-", timeRange),
-                extension = ExportPlotConfiguration$format
-              )
+            plotFileName <- getDefaultFileName(set$simulationSet$simulationSetName,
+              suffix = paste0(plotName, "-", timeRange),
+              extension = ExportPlotConfiguration$format
             )
+
             ggplot2::ggsave(
-              filename = file.path(self$workflowFolder, plotFileName),
+              filename = self$getAbsolutePath(plotFileName),
               plot = listOfPlots[[plotName]],
               width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
             )
-            re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, plotFileName))
+
+            re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(plotFileName))
+
             logWorkflow(
-              message = paste0("Plot '", plotFileName, "' was successfully saved."),
+              message = paste0("Plot '", self$getRelativePath(plotFileName), "' was successfully saved."),
               pathFolder = self$workflowFolder,
               logTypes = LogTypes$Debug
             )
+
             if (!isOfLength(listOfPlotCaptions[[plotName]], 0)) {
               addTextChunk(self$fileName, paste0("Figure: ", listOfPlotCaptions[[plotName]]), logFolder = self$workflowFolder)
             }
-            addFigureChunk(fileName = self$fileName, figureFile = plotFileName, logFolder = self$workflowFolder)
+
+            addFigureChunk(
+              fileName = self$fileName,
+              figureFileRelativePath = self$getRelativePath(plotFileName),
+              figureFileRootDirectory = self$workflowFolder,
+              logFolder = self$workflowFolder
+            )
           }
         }
       }
 
       for (tableName in names(taskResults$tables)) {
-        tableFileName <- file.path(
-          self$workflowFolder,
-          self$outputFolder,
-          getDefaultFileName(set$simulationSet$simulationSetName,
-            suffix = tableName,
-            extension = "csv"
-          )
+        tableFileName <- getDefaultFileName(set$simulationSet$simulationSetName,
+          suffix = tableName,
+          extension = "csv"
         )
+
         write.csv(taskResults$tables[[tableName]],
-          file = tableFileName,
+          file = self$getAbsolutePath(tableFileName),
           row.names = FALSE,
           fileEncoding = "UTF-8"
         )
-        re.tStoreFileMetadata(access = "write", filePath = tableFileName)
+
+        re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(tableFileName))
+
         logWorkflow(
-          message = paste0("Table '", tableFileName, "' was successfully saved."),
+          message = paste0("Table '", self$getAbsolutePath(tableFileName), "' was successfully saved."),
           pathFolder = self$workflowFolder,
           logTypes = LogTypes$Debug
         )
@@ -134,38 +140,33 @@ GofPlotTask <- R6::R6Class(
       }
 
       if (!is.null(residualsAcrossAllSimulations)) {
-        histogramFileName <- file.path(
-          self$outputFolder,
-          getDefaultFileName(
-            suffix = "residuals-histogram",
-            extension = ExportPlotConfiguration$format,
-            sep = ""
-          )
+        histogramFileName <- getDefaultFileName(
+          suffix = "residuals-histogram",
+          extension = ExportPlotConfiguration$format,
+          sep = ""
         )
-        qqPlotFileName <- file.path(
-          self$outputFolder,
-          getDefaultFileName(
-            suffix = "residuals-qqplot",
-            extension = ExportPlotConfiguration$format,
-            sep = ""
-          )
+
+        qqPlotFileName <- getDefaultFileName(
+          suffix = "residuals-qqplot",
+          extension = ExportPlotConfiguration$format,
+          sep = ""
         )
-        tableFileName <- file.path(
-          self$workflowFolder,
-          self$outputFolder,
-          getDefaultFileName(
-            suffix = "residuals",
-            extension = "csv",
-            sep = ""
-          )
+
+
+        tableFileName <- getDefaultFileName(
+          suffix = "residuals",
+          extension = "csv",
+          sep = ""
         )
+
+
         write.csv(residualsAcrossAllSimulations,
-          file = tableFileName,
+          file = self$getAbsolutePath(tableFileName),
           row.names = FALSE
         )
-        re.tStoreFileMetadata(access = "write", filePath = tableFileName)
+        re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(tableFileName))
         logWorkflow(
-          message = paste0("Table '", tableFileName, "' was successfully saved."),
+          message = paste0("Table '", self$getAbsolutePath(tableFileName), "' was successfully saved."),
           pathFolder = self$workflowFolder,
           logTypes = LogTypes$Debug
         )
@@ -183,7 +184,7 @@ GofPlotTask <- R6::R6Class(
           plotConfiguration = self$settings$plotConfigurations[["qqPlot"]]
         )
 
-        residualHistogramPlotFileName <- file.path(self$workflowFolder, histogramFileName)
+        residualHistogramPlotFileName <- self$getAbsolutePath(histogramFileName)
         ggplot2::ggsave(
           filename = residualHistogramPlotFileName,
           plot = residualHistogramPlot,
@@ -192,14 +193,14 @@ GofPlotTask <- R6::R6Class(
         re.tStoreFileMetadata(access = "write", filePath = residualHistogramPlotFileName)
 
         ggplot2::ggsave(
-          filename = file.path(self$workflowFolder, qqPlotFileName),
+          filename = self$getAbsolutePath(qqPlotFileName),
           plot = residualQQPlot,
           width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
         )
-        re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, qqPlotFileName))
+        re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(qqPlotFileName))
 
         logWorkflow(
-          message = paste0("Plots '", histogramFileName, "', '", qqPlotFileName, "' were successfully saved."),
+          message = paste0("Plots '", self$getRelativePath(histogramFileName), "', '", self$getRelativePath(qqPlotFileName), "' were successfully saved."),
           pathFolder = self$workflowFolder,
           logTypes = LogTypes$Debug
         )
@@ -217,7 +218,8 @@ GofPlotTask <- R6::R6Class(
 
         addFigureChunk(
           fileName = self$fileName,
-          figureFile = histogramFileName,
+          figureFileRelativePath = self$getRelativePath(histogramFileName),
+          figureFileRootDirectory = self$workflowFolder,
           logFolder = self$workflowFolder
         )
 
@@ -225,7 +227,8 @@ GofPlotTask <- R6::R6Class(
 
         addFigureChunk(
           fileName = self$fileName,
-          figureFile = qqPlotFileName,
+          figureFileRelativePath = self$getRelativePath(qqPlotFileName),
+          figureFileRootDirectory = self$workflowFolder,
           logFolder = self$workflowFolder
         )
       }

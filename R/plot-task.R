@@ -24,10 +24,10 @@ PlotTask <- R6::R6Class(
     #' @param ... input parameters inherited from `Task` R6 class
     #' @return A new `PlotTask` object
     initialize = function(reportTitle = NULL,
-                              fileName = NULL,
-                              getTaskResults = NULL,
-                              nameTaskResults = "none",
-                              ...) {
+                          fileName = NULL,
+                          getTaskResults = NULL,
+                          nameTaskResults = "none",
+                          ...) {
       super$initialize(...)
       self$title <- reportTitle
       self$fileName <- file.path(self$workflowFolder, fileName)
@@ -41,23 +41,21 @@ PlotTask <- R6::R6Class(
     #' @param taskResults list of results from task run.
     #' Results contains at least 2 fields: `plots` and `tables`
     saveResults = function(set,
-                               taskResults) {
+                           taskResults) {
       addTextChunk(
         self$fileName,
         paste0("## ", self$title, " for ", set$simulationSet$simulationSetName),
         logFolder = self$workflowFolder
       )
       for (plotName in names(taskResults$plots)) {
-        plotFileName <- file.path(
-          self$outputFolder,
-          getDefaultFileName(set$simulationSet$simulationSetName,
-            suffix = plotName,
-            extension = ExportPlotConfiguration$format
-          )
+        plotFileName <- getDefaultFileName(set$simulationSet$simulationSetName,
+          suffix = plotName,
+          extension = ExportPlotConfiguration$format
         )
+
         # TO DO: define parameters from settings/plotConfiguration
 
-        figureFilePath <- file.path(self$workflowFolder, plotFileName)
+        figureFilePath <- self$getAbsolutePath(plotFileName)
         ggplot2::ggsave(
           filename = figureFilePath,
           plot = taskResults$plots[[plotName]],
@@ -65,7 +63,7 @@ PlotTask <- R6::R6Class(
         )
         re.tStoreFileMetadata(access = "write", filePath = figureFilePath)
         logWorkflow(
-          message = paste0("Plot '", plotFileName, "' was successfully saved."),
+          message = paste0("Plot '", self$getRelativePath(plotFileName), "' was successfully saved."),
           pathFolder = self$workflowFolder,
           logTypes = LogTypes$Debug
         )
@@ -73,36 +71,40 @@ PlotTask <- R6::R6Class(
         if (!is.null(taskResults$captions[[plotName]])) {
           addTextChunk(self$fileName, paste0("Figure: ", taskResults$captions[[plotName]]), logFolder = self$workflowFolder)
         }
-        addFigureChunk(fileName = self$fileName, figureFile = plotFileName, logFolder = self$workflowFolder)
+        addFigureChunk(
+          fileName = self$fileName,
+          figureFileRelativePath = self$getRelativePath(plotFileName),
+          figureFileRootDirectory = self$workflowFolder,
+          logFolder = self$workflowFolder
+        )
       }
 
       for (tableName in names(taskResults$tables)) {
-        tableFileName <- file.path(
-          self$workflowFolder,
-          self$outputFolder,
-          getDefaultFileName(set$simulationSet$simulationSetName,
-            suffix = tableName,
-            extension = "csv"
-          )
+        tableFileName <- getDefaultFileName(set$simulationSet$simulationSetName,
+          suffix = tableName,
+          extension = "csv"
         )
 
+
         write.csv(taskResults$tables[[tableName]],
-          file = tableFileName,
+          file = self$getAbsolutePath(tableFileName),
           row.names = FALSE,
           fileEncoding = "UTF-8"
         )
-        re.tStoreFileMetadata(access = "write", filePath = tableFileName)
+
+        re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(tableFileName))
         # If the task output no plot, but tables, tables will be included in the report
         if (is.null(taskResults$plots)) {
           addTableChunk(
             fileName = self$fileName,
-            tableFile = tableFileName,
+            tableFileRelativePath = self$getRelativePath(tableFileName),
+            tableFileRootDirectory = self$workflowFolder,
             logFolder = self$workflowFolder
           )
         }
 
         logWorkflow(
-          message = paste0("Table '", tableFileName, "' was successfully saved."),
+          message = paste0("Table '", self$getAbsolutePath(tableFileName), "' was successfully saved."),
           pathFolder = self$workflowFolder,
           logTypes = LogTypes$Debug
         )

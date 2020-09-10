@@ -38,6 +38,7 @@ R6 class representing Reporting Engine Population Model Set
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `PopulationSimulationSet` object.
 \subsection{Usage}{
@@ -77,6 +78,7 @@ A new `PopulationSimulationSet` object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-copyInputFiles"></a>}}
+\if{latex}{\out{\hypertarget{method-copyInputFiles}{}}}
 \subsection{Method \code{copyInputFiles()}}{
 Copy input files into a simulation set specific filder
 \subsection{Usage}{
@@ -93,6 +95,7 @@ Copy input files into a simulation set specific filder
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

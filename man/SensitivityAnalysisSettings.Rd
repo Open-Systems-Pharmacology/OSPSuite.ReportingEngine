@@ -30,6 +30,7 @@ R6 class for Population Sensitivity Analysis Settings
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a `SensitivityAnalysisSettings` object
 \subsection{Usage}{
@@ -63,6 +64,7 @@ A new `SensitivityAnalysisSettings` object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
