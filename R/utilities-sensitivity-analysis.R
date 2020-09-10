@@ -703,7 +703,8 @@ plotPopulationSensitivity <- function(structureSets,
       # pkParameters are all the entries in the pkParameters column of  opIndexDf
       pkParameters <- unique(opIndexDf$pkParameter)
 
-      for (pk in pkParameters) {
+      for (pkParameter in output$pkParameters) {
+        pk <- pkParameter$pkParameter
         dfForPkAndOp <- getPopSensDfForPkAndOutput(
           simulation = simulation,
           sensitivityResultsFolder = sensitivityResultsFolder,
@@ -732,7 +733,7 @@ plotPopulationSensitivity <- function(structureSets,
     }
   }
 
-  if (nrow(allPopsDf) == 0) {
+  if (isOfLength(allPopsDf, 0)) {
     logWorkflow(
       message = "Population sensitivity plots not available for the selected PK parameters.",
       logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error),
