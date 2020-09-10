@@ -2,14 +2,14 @@ rm(list = ls())
 library(ospsuite)
 library(ospsuite.reportingengine)
 
-rootDir <- "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine"
+rootDir <- "."
 setwd(rootDir)
 
 
 
 runscript <- function() {
   workflowFolder <- file.path(rootDir, paste0("tests/dev/tracelib_par_mean_ex_", format(Sys.Date(), "%Y%m%d"), "_", format(Sys.time(), "%H%M%S")))
-  simulationFile <- file.path(rootDir, "tests/dev/individualPksimSim.pkml")
+  simulationFile <- file.path(rootDir, "tests/data/input-data/individualPksimSim.pkml")
 
   tree <- ospsuite::getSimulationTree(simulationFile)
   ms <- SimulationSet$new(
@@ -25,10 +25,10 @@ runscript <- function() {
   setwd(workflowFolder)
 
   mwf$simulate$settings$showProgress <- TRUE
-  mwf$meanModelPKParameters$activate()
-  mwf$meanModelSensitivityAnalysis$activate()
-  mwf$meanModelSensitivityAnalysis$settings$variableParameterPaths <- c(tree$Organism$Heart$Volume$path, tree$Organism$Liver$Volume$path)
-  mwf$meanModelSensitivityAnalysis$settings$numberOfCores <- 2
+  mwf$calculatePKParameters$activate()
+  mwf$calculateSensitivity$activate()
+  mwf$calculateSensitivity$settings$variableParameterPaths <- c(tree$Organism$Heart$Volume$path, tree$Organism$Liver$Volume$path)
+  mwf$calculateSensitivity$settings$numberOfCores <- 2
   mwf$runWorkflow()
 }
 
