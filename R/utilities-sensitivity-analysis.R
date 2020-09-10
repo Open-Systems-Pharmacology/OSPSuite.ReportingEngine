@@ -669,9 +669,17 @@ lookupPKParameterDisplayName <- function(output, pkParameter) {
 plotPopulationSensitivity <- function(structureSets,
                                       logFolder = NULL,
                                       settings,
-                                      workflowType = NULL,
+                                      workflowType = PopulationWorkflowTypes$parallelComparison,
                                       xParameters = NULL,
                                       yParameters = NULL) {
+  validateIsIncluded(workflowType, PopulationWorkflowTypes)
+  validateIsOfType(structureSets, "list")
+  validateIsOfType(c(structureSets), "SimulationStructure")
+
+  validateSameOutputsBetweenSets(c(lapply(structureSets, function(set) {
+    set$simulationSet
+  })), logFolder)
+
   allPopsDf <- NULL
   saResultIndexFiles <- list()
   simulationList <- list()
@@ -703,7 +711,8 @@ plotPopulationSensitivity <- function(structureSets,
       # pkParameters are all the entries in the pkParameters column of  opIndexDf
       pkParameters <- unique(opIndexDf$pkParameter)
 
-      for (pk in pkParameters) {
+      for (pkParameter in output$pkParameters) {
+        pk <- pkParameter$pkParameter
         dfForPkAndOp <- getPopSensDfForPkAndOutput(
           simulation = simulation,
           sensitivityResultsFolder = sensitivityResultsFolder,
@@ -732,7 +741,7 @@ plotPopulationSensitivity <- function(structureSets,
     }
   }
 
-  if (nrow(allPopsDf) == 0) {
+  if (isOfLength(allPopsDf, 0)) {
     logWorkflow(
       message = "Population sensitivity plots not available for the selected PK parameters.",
       logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error),
