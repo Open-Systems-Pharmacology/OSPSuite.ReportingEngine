@@ -29,7 +29,7 @@ The sensitivity task aims at generating plots showing PK parameter sensitivity t
 The only input file required for running a sensitivity analysis on a mean model is the `.pkml` simulation file. The path to this file (either the absolute path or the relative path with respect to the `workflowFolder` directory) is specified as a string:     
 
 ```{r}
-simulationFile <- system.file("extdata", "RaltegravirSim.pkml",
+simulationFile <- system.file("extdata", "caffeine-simulation.pkml",
   package = "ospsuite.reportingengine"
 )
 ```
@@ -37,11 +37,11 @@ simulationFile <- system.file("extdata", "RaltegravirSim.pkml",
 For population sensitivity analyses, the user needs to similarly specifiy paths to `.csv` files containing data on the populations to be studied: 
 
 ```{r echo=T, results='hide'}
-populationFile1 <- system.file("extdata", "RalPop10.csv",
+populationFile1 <- system.file("extdata", "pop1.csv",
   package = "ospsuite.reportingengine"
 ) 
 
-populationFile2 <- system.file("extdata", "LarPop10.csv",
+populationFile2 <- system.file("extdata", "pop2.csv",
   package = "ospsuite.reportingengine"
 )
 ```
@@ -60,7 +60,7 @@ Sets of output and PK parameter combinations for the sensitivity analysis are de
 
 ```{r} 
 output1 <- Output$new(
-  path = "Organism|Lung|Interstitial|Raltegravir|Concentration", displayName = "op1",
+  path = "Organism|Lung|Interstitial|Caffeine|Concentration", displayName = "op1",
   pkParameters = c(
     PkParameterInfo$new("C_max", "new_C_max"),
     PkParameterInfo$new("MRT", "new_MRT")
@@ -72,7 +72,7 @@ and
 
 ```{r} 
 output2 <- Output$new(
-  path = "Organism|ArterialBlood|Plasma|Raltegravir|Concentration", displayName = "op2",
+  path = "Organism|ArterialBlood|Plasma|Caffeine|Concentration", displayName = "op2",
   pkParameters = c(
     PkParameterInfo$new("t_max", "new_t_max"),
     PkParameterInfo$new("AUC_tEnd", "new_AUC_tEnd")
@@ -81,7 +81,7 @@ output2 <- Output$new(
 ```
 
 
-Here, `output1` and `output2` are `Output` objects.  The `path` input to the constructors of these objects gives the path to the model output.  For example, the `path` input for `output1` points to the concentration of Raltegravir in lung interstitial tissue, `Organism|Lung|Interstitial|Raltegravir|Concentration`.  This model output is given the display name `op1`. The PK parameters chosen for this example are the `C_max` and `MRT`, which are given the display names `new_C_max` and `new_MRT`, respectively.  Similarly, `output2` points to the model output with path `Organism|ArterialBlood|Plasma|Raltegravir|Concentration`.  The PK parameters selected for `output2` are `t_max` and `AUC_tEnd`, for which the respective display names `new_t_max` and `new_AUC_tEnd` will be used.
+Here, `output1` and `output2` are `Output` objects.  The `path` input to the constructors of these objects gives the path to the model output.  For example, the `path` input for `output1` points to the concentration of caffeine in lung interstitial tissue, `Organism|Lung|Interstitial|Caffeine|Concentration`.  This model output is given the display name `op1`. The PK parameters chosen for this example are the `C_max` and `MRT`, which are given the display names `new_C_max` and `new_MRT`, respectively.  Similarly, `output2` points to the model output with path `Organism|ArterialBlood|Plasma|Caffeine|Concentration`.  The PK parameters selected for `output2` are `t_max` and `AUC_tEnd`, for which the respective display names `new_t_max` and `new_AUC_tEnd` will be used.
 
 
 ### Mean model workflow
@@ -90,7 +90,7 @@ The mean model workflow operates on `SimulationSet` objects.  These objects stor
 
 ```{r echo=T, results='hide'}
 ms <- SimulationSet$new(
-  simulationSetName = "ral",
+  simulationSetName = "simulationSet1",
   simulationFile = simulationFile,
   outputs = c(output1, output2)
 )
@@ -195,14 +195,14 @@ Next, `PopulationSimulationSet` objects are defined for each of the two populati
 
 ```{r echo=T, results='hide'} 
 ps1 <- PopulationSimulationSet$new(
-  simulationSetName = "ral",
+  simulationSetName = "popSimulationSet1",
   simulationFile = simulationFile,
   populationFile = populationFile1,
   outputs = populationOutputs
 )
 
 ps2 <- PopulationSimulationSet$new(
-  simulationSetName = "lar",
+  simulationSetName = "popSimulationSet2",
   simulationFile = simulationFile,
   populationFile = populationFile2,
   outputs = populationOutputs
@@ -287,10 +287,10 @@ knitr::include_graphics(system.file("extdata", "sa-file-outputs.png",
 ))
 ```
 
-Two sets of files make up the population sensitivity analysis results for this example, each corresponding to one of the `PopulationSimulationSet` objects (named `ral` and `lar`). For each set, there is one index file.  The name of the index file is prefixed with the name of the `PopulationSimulationSet` object and carries the suffix `-popSensitivityResultsIndex.csv`).  The index file `ral-popSensitivityResultsIndex.csv` contains the names of the individual sensitivity analysis results files (found within the `SensitivityResults` sub-directory of the workflow folder) obtained for the `PopulationSimulationSet` object `ral`.  Its contents are partly shown in the following figure:
+Two sets of files make up the population sensitivity analysis results for this example, each corresponding to one of the `PopulationSimulationSet` objects (named `popSimulationSet1` and `popSimulationSet2`). For each set, there is one index file.  The name of the index file is prefixed with the name of the `PopulationSimulationSet` object and carries the suffix `-popSensitivityResultsIndex.csv`).  The index file `popSimulationSet1-popSensitivityResultsIndex.csv` contains the names of the individual sensitivity analysis results files (found within the `SensitivityResults` sub-directory of the workflow folder) obtained for the `PopulationSimulationSet` object `popSimulationSet1`.  Its contents are shown in the following figure:
 
 ```{r echo=FALSE, out.width='100%'}
-knitr::include_graphics(system.file("extdata", "ral-index.png",
+knitr::include_graphics(system.file("extdata", "sa-file-index.png",
   package = "ospsuite.reportingengine"
 ))
 ```
