@@ -462,6 +462,7 @@ vpcParameterPlot <- function(data,
       size = 1
     )
   vpcPlot <- tlf::setLegendPosition(plotObject = vpcPlot, position = reDefaultLegendPosition)
+  vpcPlot <- vpcPlot + ggplot2::theme(legend.title = ggplot2::element_blank())
 
   return(vpcPlot)
 }
