@@ -274,7 +274,7 @@ plotPopulationPKParameters <- function(structureSets,
           # Get the table for reference population
           referenceData <- data.frame(
             x = c(-Inf, Inf),
-            "Population" = paste("Simulated", AggregationConfiguration$names$middle, AggregationConfiguration$names$range, "for", referencePopulationName)
+            "Population" = paste("Simulated", AggregationConfiguration$names$middle, "and", AggregationConfiguration$names$range, "of", referencePopulationName)
           )
           referenceData[, c("ymin", "median", "ymax")] <- pkParameterTable[referencePopulationName, c(3, 5, 7)]
 
@@ -286,7 +286,7 @@ plotPopulationPKParameters <- function(structureSets,
 
           for (populationName in populationNames[!populationNames %in% referencePopulationName]) {
             comparisonData <- aggregatedData[aggregatedData$Population %in% populationName, ]
-            comparisonData$Population <- paste("Simulated", AggregationConfiguration$names$middle, AggregationConfiguration$names$range, "for", comparisonData$Population)
+            comparisonData$Population <- paste("Simulated", AggregationConfiguration$names$middle, "and", AggregationConfiguration$names$range)
 
             comparisonVpcPlot <- vpcParameterPlot(
               data = comparisonData,
@@ -305,7 +305,7 @@ plotPopulationPKParameters <- function(structureSets,
         # Regular range plots not associated to workflow type
         for (populationName in populationNames) {
           vpcData <- aggregatedData[aggregatedData$Population %in% populationName, ]
-          vpcData$Population <- paste("Simulated", AggregationConfiguration$names$middle, AggregationConfiguration$names$range, "for", vpcData$Population)
+          vpcData$Population <- paste("Simulated", AggregationConfiguration$names$middle, "and", AggregationConfiguration$names$range)
           vpcPlot <- vpcParameterPlot(
             data = vpcData,
             metaData = vpcMetaData,
