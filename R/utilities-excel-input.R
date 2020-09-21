@@ -35,6 +35,7 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
     simulationSetInfo <- getMeanModelSimulationSetContent(excelFile, meanModelTable)
 
     workflowContent <- getMeanModelWorkflowContent(
+      workflowTable = meanModelTable,
       simulationSetNames = simulationSetInfo$simulationSetNames,
       workflowFolder = workflowFolder
     )
@@ -59,9 +60,9 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
     outputInfo <- getOutputContent(excelFile, outputSheet)
     outputContent <- c(outputContent, outputInfo)
   }
-  
+
   taskContent <- ""
-  
+
   runWorkflowContent <- "workflow$runWorkflow()"
 
   scriptContent <- c(
@@ -72,13 +73,14 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
     taskContent,
     runWorkflowContent
   )
-  
+
   # Write the script
   fileObject <- file(workflowFile, encoding = "UTF-8")
   write(scriptContent, file = fileObject, sep = "\n")
   close(fileObject)
-  
-  return(workflowFile)
+
+  print(paste0("Script '", workflowFile, "' successfully created"))
+  return(invisible(workflowFile))
 }
 
 getScriptDocumentation <- function(excelFile, colSep = "\t") {
@@ -206,7 +208,7 @@ getPopulationSimulationSetContent <- function(excelFile, workflowTable) {
   ))
 }
 
-getMeanModelWorkflowContent <- function(simulationSetNames, workflowFolder = "Output") {
+getMeanModelWorkflowContent <- function(workflowTable, simulationSetNames, workflowFolder = "Output") {
   workflowContent <- paste0(
     "simulationSets <- list(",
     paste0(simulationSetNames, collapse = ", "),
@@ -218,6 +220,26 @@ getMeanModelWorkflowContent <- function(simulationSetNames, workflowFolder = "Ou
     "",
     paste0('workflow <- MeanModelWorkflow$new(simulationSets, workflowFolder = "', workflowFolder, '")')
   )
+
+  activateTaskContent <- NULL
+  for (taskName in AllAvailableTasks) {
+    activeTaskName <- getIdentifierInfo(workflowTable, 1, taskName)
+    if (isOfLength(activeTaskName, 0)) {
+      next
+    }
+    activateTaskContent <- c(
+      activateTaskContent,
+      paste0("workflow$activateTasks(", activeTaskName, ")")
+    )
+  }
+
+  workflowContent <- c(
+    workflowContent,
+    "",
+    "workflow$inactivateTasks()",
+    activateTaskContent
+  )
+
   return(workflowContent)
 }
 
@@ -236,6 +258,26 @@ getPopulationWorkflowContent <- function(workflowTable, simulationSetNames, work
       ', simulationSets, workflowFolder = "', workflowFolder, '")'
     )
   )
+
+  activateTaskContent <- NULL
+  for (taskName in AllAvailableTasks) {
+    activeTaskName <- getIdentifierInfo(workflowTable, 1, taskName)
+    if (isOfLength(activeTaskName, 0)) {
+      next
+    }
+    activateTaskContent <- c(
+      activateTaskContent,
+      "workflow$activateTasks(", activeTaskName, ")"
+    )
+  }
+
+  workflowContent <- c(
+    workflowContent,
+    "",
+    "workflow$inactivateTasks()",
+    activateTaskContent
+  )
+
   return(workflowContent)
 }
 
@@ -260,7 +302,10 @@ WorkflowCodeIdentifiers <- enum(c(
   "dataFileTimeProfile",
   "sheetDataDictTimeProfile",
   "dataSelection",
-  "dataReportName"
+  "dataReportName",
+  "simulate", "calculatePKParameters", "calculateSensitivity",
+  "plotTimeProfilesAndResiduals", "plotPKParameters", "plotSensitivity",
+  "plotDemography", "plotAbsorption", "plotMassBalance"
 ))
 
 OutputCodeIdentifiers <- enum(c(
@@ -280,17 +325,28 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
   # Shift of columns because Code identifier and Description are part of the table
   workflowInfo <- as.character(workflowTable[workflowID, simulationIndex + 2])
 
+  # For tasks return the task name if it is activated
+  if (isIncluded(codeId, AllAvailableTasks)) {
+    # If input is not included in 1, TRUE or true, assume task is not activated
+    if (isIncluded(workflowInfo, c("1", "TRUE", "true"))) {
+      return(paste0('"', codeId, '"'))
+    }
+    return()
+  }
   # readxl::read_excel returns na for missing values which need to be passed on as NULL to simulation sets
   if (is.na(workflowInfo)) {
     return("NULL")
   }
+  # For info of type sheet, return directly sheet name
   if (isIncluded(codeId, c(WorkflowCodeIdentifiers$sheetOutput, WorkflowCodeIdentifiers$sheetDataDictTimeProfile))) {
     return(workflowInfo)
   }
+  # For info about reference population, return logical value as character
   if (isIncluded(codeId, WorkflowCodeIdentifiers$isReference)) {
-    # Allows 1/0 and TRUE/FALSE for reference population
-    return(as.character(workflowInfo == "1" | workflowInfo == "TRUE"))
+    # Will return false if input is not included in 1, TRUE or true
+    return(as.character(isIncluded(workflowInfo, c("1", "TRUE", "true"))))
   }
+  # For any other info, it needs to be returned in between quotes
   return(paste0("'", workflowInfo, "'"))
 }
 
