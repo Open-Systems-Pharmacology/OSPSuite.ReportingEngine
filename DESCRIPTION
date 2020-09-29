@@ -17,8 +17,8 @@ BugReports:
     https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues
 Depends: 
     R (>= 3.5),
-    ospsuite (>= 9.1.1),
-    tlf (>= 1.0.68)
+    ospsuite,
+    tlf
 Imports: 
     R6,
     ggplot2
