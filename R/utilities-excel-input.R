@@ -1,8 +1,11 @@
 StandardExcelSheetNames <- enum(c(
-  "Documentation",
-  "MeanModelSimulation",
-  "PopulationSimulation",
-  "SensitivityParameter"
+  "_Documentation",
+  "Workflow and Tasks",
+  "SimulationSets",
+  "Userdef PK Parameter",
+  "PK Parameter",
+  "SensitivityParameter",
+  "tpDictionary"
 ))
 
 #' @title createWorkflowFromExcelInput
@@ -19,40 +22,42 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
   scriptContent <- NULL
 
   inputSections <- readxl::excel_sheets(excelFile)
+  # Check for mandotory input sections
+  validateIsIncluded(c(StandardExcelSheetNames$`Workflow and Tasks`, StandardExcelSheetNames$SimulationSets), inputSections, groupName = paste0("Sheet names of '", excelFile, "'"))
 
-  if (isIncluded(StandardExcelSheetNames$Documentation, inputSections)) {
+  if (isIncluded(StandardExcelSheetNames$`_Documentation`, inputSections)) {
     scriptDocumentation <- getScriptDocumentation(excelFile)
     scriptContent <- c(scriptContent, scriptDocumentation)
   }
 
   scriptContent <- c(scriptContent, "require(ospsuite.reportingengine)", "")
 
-  if (isIncluded(StandardExcelSheetNames$MeanModelSimulation, inputSections)) {
-    meanModelTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$MeanModelSimulation)
-    validateIsIncluded(WorkflowMandatoryVariables$`Code Identifier`, names(meanModelTable)[1])
-    validateIsIncluded(WorkflowMandatoryVariables$Description, names(meanModelTable)[2])
+  if (isIncluded(StandardExcelSheetNames$`Userdef PK Parameter`, inputSections)) {}
 
-    simulationSetInfo <- getMeanModelSimulationSetContent(excelFile, meanModelTable)
-
-    workflowContent <- getMeanModelWorkflowContent(
-      workflowTable = meanModelTable,
-      simulationSetNames = simulationSetInfo$simulationSetNames,
-      workflowFolder = workflowFolder
-    )
+  pkParametersContent <- NULL
+  if (isIncluded(StandardExcelSheetNames$`PK Parameter`, inputSections)) {
+    pkParametersTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$`PK Parameter`)
+    validateIsIncluded(c("Name", "Display name", "Unit"), names(pkParametersTable))
+    pkParametersContent <- getPKParametersContent(pkParametersTable)
   }
 
-  if (isIncluded(StandardExcelSheetNames$PopulationSimulation, inputSections)) {
-    populationTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$PopulationSimulation)
-    validateIsIncluded(WorkflowMandatoryVariables$`Code Identifier`, names(populationTable)[1])
-    validateIsIncluded(WorkflowMandatoryVariables$Description, names(populationTable)[2])
+  if (isIncluded(StandardExcelSheetNames$`Workflow and Tasks`, inputSections)) {
+    workflowTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$`Workflow and Tasks`)
+    validateIsIncluded(WorkflowMandatoryVariables$`Code Identifier`, names(workflowTable)[1])
+    validateIsIncluded(WorkflowMandatoryVariables$Description, names(workflowTable)[2])
 
-    simulationSetInfo <- getPopulationSimulationSetContent(excelFile, populationTable)
+    workflowInfo <- getWorkflowContent(workflowTable = workflowTable)
+    workflowContent <- workflowInfo$workflowContent
+  }
 
-    workflowContent <- getPopulationWorkflowContent(
-      workflowTable = populationTable,
-      simulationSetNames = simulationSetInfo$simulationSetNames,
-      workflowFolder = workflowFolder
-    )
+  simulationSetContent <- NULL
+  if (isIncluded(StandardExcelSheetNames$SimulationSets, inputSections)) {
+    simulationSetTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$SimulationSets)
+    validateIsIncluded(WorkflowMandatoryVariables$`Code Identifier`, names(simulationSetTable)[1])
+    validateIsIncluded(WorkflowMandatoryVariables$Description, names(simulationSetTable)[2])
+
+    simulationSetInfo <- getSimulationSetContent(excelFile, simulationSetTable, workflowMode = workflowInfo$workflowMode)
+    simulationSetContent <- simulationSetInfo$simulationSetContent
   }
 
   outputContent <- NULL
@@ -67,12 +72,16 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
 
   scriptContent <- c(
     scriptContent,
+    pkParametersContent,
     outputContent,
-    simulationSetInfo$simulationSetContent,
+    simulationSetContent,
     workflowContent,
     taskContent,
     runWorkflowContent
   )
+
+  # Use styler to get a clean formatting of the text
+  scriptContent <- styler:::style_text(scriptContent)
 
   # Write the script
   fileObject <- file(workflowFile, encoding = "UTF-8")
@@ -87,7 +96,7 @@ getScriptDocumentation <- function(excelFile, colSep = "\t") {
   docContent <- NULL
   # Check behaviour for empty Documentation sheet
   suppressMessages(
-    docTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$Documentation, col_names = FALSE)
+    docTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$`_Documentation`, col_names = FALSE)
   )
   if (isOfLength(docTable, 0)) {
     return(docContent)
@@ -106,17 +115,18 @@ getOutputContent <- function(excelFile, outputSheet) {
   outputContent <- NULL
   outputTable <- readxl::read_excel(excelFile, sheet = outputSheet)
   validateIsIncluded(WorkflowMandatoryVariables$`Code Identifier`, names(outputTable)[1])
-  # validateIsIncluded(WorkflowMandatoryVariables$Description, names(meanModelTable)[2])
+  validateIsIncluded(WorkflowMandatoryVariables$Description, names(outputTable)[2])
 
   outputNames <- getOutputNames(excelFile, outputSheet)
 
   for (outputIndex in seq_along(outputNames)) {
+    # Add dataDisplayName and pkParameters
     outputContent <- c(
       outputContent,
       paste0(
         outputNames[outputIndex], " <- Output$new(
           path = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$path), ", 
-          displayName = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$reportName), ", 
+          displayName = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$displayName), ", 
           displayUnit = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$displayUnit), ", 
           dataSelection = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$dataSelection), "
         )"
@@ -127,99 +137,82 @@ getOutputContent <- function(excelFile, outputSheet) {
   return(outputContent)
 }
 
-getMeanModelSimulationSetContent <- function(excelFile, workflowTable) {
+getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
   simulationSetContent <- NULL
   outputSheets <- NULL
 
-  simulationSetNames <- names(workflowTable[, 3:ncol(workflowTable)])
+  simulationSetNames <- names(simulationTable[, 3:ncol(simulationTable)])
   simulationSetNames <- gsub(pattern = "[[:space:]*]", replacement = "", x = simulationSetNames)
 
+  simulationType <- getSimulationSetType(workflowMode)
+
   for (simulationIndex in seq_along(simulationSetNames)) {
-    outputSheet <- getIdentifierInfo(workflowTable, simulationIndex, WorkflowCodeIdentifiers$sheetOutput)
+    outputSheet <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$outputs)
     outputSheets <- c(outputSheets, outputSheet)
     outputs <- paste0(getOutputNames(excelFile, outputSheet), collapse = ", ")
 
-    observedMetaDataSheet <- getIdentifierInfo(workflowTable, simulationIndex, WorkflowCodeIdentifiers$sheetDataDictTimeProfile)
-    observedMetaDataFile <- getObservedMetaDataFile(excelFile, observedMetaDataSheet)
+    # Function for dictionary
+    # observedMetaDataSheet <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$sheetDataDictTimeProfile)
+    # observedMetaDataFile <- getObservedMetaDataFile(excelFile, observedMetaDataSheet)
+    observedMetaDataFile <- NULL
+
+    # MeanModelWorkflow doesn't use population fields, which are set to NULL
+    populationFileContent <- NULL
+    populationNameContent <- NULL
+    referencePopulationContent <- NULL
+    if (isIncluded(workflowMode, "PopulationWorkflow")) {
+      referencePopulation <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$referencePopulation)
+      populationFile <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$populationFile)
+      populationName <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$populationName)
+
+      referencePopulationContent <- paste0("referencePopulation = ", referencePopulation, ", ")
+      populationFileContent <- paste0("populationFile = ", populationFile, ", ")
+      populationNameContent <- paste0("populationName = ", populationName, ", ")
+    }
 
     simulationSetContent <- c(
       simulationSetContent,
       paste0(
         simulationSetNames[simulationIndex],
-        " <- SimulationSet$new(
-    simulationSetName = ", getIdentifierInfo(workflowTable, simulationIndex, WorkflowCodeIdentifiers$name), ", 
-    simulationFile = ", getIdentifierInfo(workflowTable, simulationIndex, WorkflowCodeIdentifiers$pkml), ", 
-    simulationName = ", getIdentifierInfo(workflowTable, simulationIndex, WorkflowCodeIdentifiers$reportName), ", 
+        " <- ", simulationType, "$new(
+    simulationSetName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationSetName), ", ",
+        referencePopulationContent, populationFileContent, populationNameContent, "
+    simulationFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationFile), ", 
+    simulationName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationName), ", 
     outputs = c(", outputs, "), 
-    observedDataFile = ", getIdentifierInfo(workflowTable, simulationIndex, WorkflowCodeIdentifiers$dataFileTimeProfile), ", 
-    observedMetaDataFile = ", observedMetaDataFile, ", 
-    dataReportName = ", getIdentifierInfo(workflowTable, simulationIndex, WorkflowCodeIdentifiers$dataReportName), ")"
+    observedDataFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$observedDataFile), ", 
+    observedMetaDataFile = ", observedMetaDataFile, ")"
       ),
       ""
     )
   }
-  simulationSetContent <- c(simulationSetContent, "")
-  return(list(
-    simulationSetContent = simulationSetContent,
-    simulationSetNames = simulationSetNames,
-    outputSheets = unique(outputSheets)
-  ))
-}
-
-getPopulationSimulationSetContent <- function(excelFile, workflowTable) {
-  simulationSetContent <- NULL
-  outputSheets <- NULL
-
-  simulationSetNames <- names(workflowTable[, 3:ncol(workflowTable)])
-  simulationSetNames <- gsub(pattern = "[[:space:]*]", replacement = "", x = simulationSetNames)
-
-  for (simulationIndex in seq_along(simulationSetNames)) {
-    outputSheet <- getIdentifierInfo(workflowTable, simulationIndex, WorkflowCodeIdentifiers$sheetOutput)
-    outputSheets <- c(outputSheets, outputSheet)
-    outputs <- paste0(getOutputNames(excelFile, outputSheet), collapse = ", ")
-
-    observedMetaDataSheet <- getIdentifierInfo(workflowTable, simulationIndex, WorkflowCodeIdentifiers$sheetDataDictTimeProfile)
-    observedMetaDataFile <- getObservedMetaDataFile(excelFile, observedMetaDataSheet)
-
-    simulationSetContent <- c(
-      simulationSetContent,
-      paste0(
-        simulationSetNames[simulationIndex],
-        " <- PopulationSimulationSet$new(
-    referencePopulation = ", getIdentifierInfo(workflowTable, simulationIndex, WorkflowCodeIdentifiers$isReference), ",     
-    simulationSetName = ", getIdentifierInfo(workflowTable, simulationIndex, WorkflowCodeIdentifiers$name), ", 
-    simulationFile = ", getIdentifierInfo(workflowTable, simulationIndex, WorkflowCodeIdentifiers$pkml), ", 
-    simulationName = ", getIdentifierInfo(workflowTable, simulationIndex, WorkflowCodeIdentifiers$reportName), ", 
-    populationFile = ", getIdentifierInfo(workflowTable, simulationIndex, WorkflowCodeIdentifiers$popcsv), ", 
-    populationName = ", getIdentifierInfo(workflowTable, simulationIndex, WorkflowCodeIdentifiers$popReportName), ", 
-    outputs = c(", outputs, "), 
-    observedDataFile = ", getIdentifierInfo(workflowTable, simulationIndex, WorkflowCodeIdentifiers$dataFileTimeProfile), ", 
-    observedMetaDataFile = ", observedMetaDataFile, ", 
-    dataReportName = ", getIdentifierInfo(workflowTable, simulationIndex, WorkflowCodeIdentifiers$dataReportName), ")"
-      ),
-      ""
-    )
-  }
-  simulationSetContent <- c(simulationSetContent, "")
-  return(list(
-    simulationSetContent = simulationSetContent,
-    simulationSetNames = simulationSetNames,
-    outputSheets = unique(outputSheets)
-  ))
-}
-
-getMeanModelWorkflowContent <- function(workflowTable, simulationSetNames, workflowFolder = "Output") {
-  workflowContent <- paste0(
-    "simulationSets <- list(",
-    paste0(simulationSetNames, collapse = ", "),
-    ")"
-  )
-
-  workflowContent <- c(
-    workflowContent,
+  simulationSetContent <- c(
+    simulationSetContent,
     "",
-    paste0('workflow <- MeanModelWorkflow$new(simulationSets, workflowFolder = "', workflowFolder, '")')
+    "simulationSets <- list(", paste0(simulationSetNames, collapse = ", "), ")",
+    ""
   )
+
+  return(list(
+    simulationSetContent = simulationSetContent,
+    simulationSetNames = simulationSetNames,
+    outputSheets = unique(outputSheets)
+  ))
+}
+
+getWorkflowContent <- function(workflowTable) {
+  workflowMode <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$`Workflow Mode`)
+  workflowTypeContent <- NULL
+  if (workflowMode == "PopulationWorkflow") {
+    workflowType <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$`Population Workflow type`)
+    workflowTypeContent <- paste0("workflowType = ", workflowType, ", ")
+  }
+  workflowFolder <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$workflowFolder)
+  createWordReport <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$createWordReport)
+
+  workflowContent <- NULL
+
+  workflowContent <- paste0("workflow <- ", workflowMode, "$new(", workflowTypeContent, "simulationSets = simulationSets, workflowFolder = ", workflowFolder, ", createWordReport = ", createWordReport, ")")
 
   activateTaskContent <- NULL
   for (taskName in AllAvailableTasks) {
@@ -240,47 +233,8 @@ getMeanModelWorkflowContent <- function(workflowTable, simulationSetNames, workf
     activateTaskContent
   )
 
-  return(workflowContent)
+  return(list(workflowMode = workflowMode, workflowContent = workflowContent))
 }
-
-getPopulationWorkflowContent <- function(workflowTable, simulationSetNames, workflowFolder = "Output") {
-  workflowContent <- paste0(
-    "simulationSets <- list(",
-    paste0(simulationSetNames, collapse = ", "),
-    ")"
-  )
-
-  workflowContent <- c(
-    workflowContent,
-    "",
-    paste0(
-      "workflow <- PopulationWorkflow$new(workflowType = ", getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$WorkflowMode),
-      ', simulationSets, workflowFolder = "', workflowFolder, '")'
-    )
-  )
-
-  activateTaskContent <- NULL
-  for (taskName in AllAvailableTasks) {
-    activeTaskName <- getIdentifierInfo(workflowTable, 1, taskName)
-    if (isOfLength(activeTaskName, 0)) {
-      next
-    }
-    activateTaskContent <- c(
-      activateTaskContent,
-      "workflow$activateTasks(", activeTaskName, ")"
-    )
-  }
-
-  workflowContent <- c(
-    workflowContent,
-    "",
-    "workflow$inactivateTasks()",
-    activateTaskContent
-  )
-
-  return(workflowContent)
-}
-
 
 # Might be extended to output
 WorkflowMandatoryVariables <- enum(c(
@@ -289,36 +243,67 @@ WorkflowMandatoryVariables <- enum(c(
 ))
 
 WorkflowCodeIdentifiers <- enum(c(
-  "WorkflowType",
-  "WorkflowMode",
-  "isReference",
-  "name",
-  "reportName",
-  "popcsv",
-  "popReportName",
-  "pkml",
-  "studyDesign",
-  "sheetOutput",
-  "dataFileTimeProfile",
-  "sheetDataDictTimeProfile",
-  "dataSelection",
-  "dataReportName",
-  "simulate", "calculatePKParameters", "calculateSensitivity",
-  "plotTimeProfilesAndResiduals", "plotPKParameters", "plotSensitivity",
-  "plotDemography", "plotAbsorption", "plotMassBalance"
+  "Workflow Mode",
+  "Population Workflow type",
+  "workflowFolder",
+  "createWordReport",
+  "plotFormat",
+  "simulate",
+  "calculatePKParameters",
+  "calculateSensitivity",
+  "plotTimeProfilesAndResiduals",
+  "plotPKParameters",
+  "plotSensitivity",
+  "plotDemography",
+  "plotAbsorption",
+  "plotMassBalance",
+  "simulate: numberOfCores",
+  "simulate: showProgress",
+  "calculateSensitivity: numberOfCores",
+  "calculateSensitivity: showProgress",
+  "calculateSensitivity: quantileVec",
+  "calculateSensitivity: variationRange",
+  "calculateSensitivity: variableParameterPaths",
+  "plotSensitivity: maximalParametersPerSensitivityPlot",
+  "plotSensitivity: totalSensitivityThreshold",
+  "plotSensitivity: xAxisFontSize",
+  "plotSensitivity: yAxisFontSize"
 ))
+
+SimulationCodeIdentifiers <- enum(c(
+  "simulationSetName",
+  "simulationFile",
+  "simulationName",
+  "outputs",
+  "observedDataFile",
+  "DictionaryType",
+  "DictionaryLocation",
+  "dataSelection",
+  "dataDisplayName",
+  "timeUnit",
+  "timeOffset",
+  "populationFile",
+  "populationName",
+  "referencePopulation",
+  "plotReferenceObsData",
+  "StudyDesignType",
+  "StudyDesignLocation"
+))
+
 
 OutputCodeIdentifiers <- enum(c(
   "path",
-  "reportName",
+  "displayName",
   "displayUnit",
-  "dataSelection"
+  "dataSelection",
+  "dataDisplayName",
+  "pkParameters"
 ))
 
 getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
   validateIsOfType(workflowTable, "data.frame")
   validateIsInteger(simulationIndex)
-  validateIsIncluded(codeId, c(WorkflowCodeIdentifiers, OutputCodeIdentifiers))
+  validateIsIncluded(codeId, c(WorkflowCodeIdentifiers, SimulationCodeIdentifiers, OutputCodeIdentifiers))
 
   # Which is necessary because of NAs
   workflowID <- which(workflowTable[, WorkflowMandatoryVariables$`Code Identifier`] == codeId)
@@ -328,7 +313,7 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
   # For tasks return the task name if it is activated
   if (isIncluded(codeId, AllAvailableTasks)) {
     # If input is not included in 1, TRUE or true, assume task is not activated
-    if (isIncluded(workflowInfo, c("1", "TRUE", "true"))) {
+    if (isIncluded(workflowInfo, c("Yes", "YES", "1", "TRUE", "true"))) {
       return(paste0('"', codeId, '"'))
     }
     return()
@@ -338,13 +323,13 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
     return("NULL")
   }
   # For info of type sheet, return directly sheet name
-  if (isIncluded(codeId, c(WorkflowCodeIdentifiers$sheetOutput, WorkflowCodeIdentifiers$sheetDataDictTimeProfile))) {
+  if (isIncluded(codeId, c(WorkflowCodeIdentifiers$`Workflow Mode`, SimulationCodeIdentifiers$outputs, SimulationCodeIdentifiers$DictionaryLocation))) {
     return(workflowInfo)
   }
   # For info about reference population, return logical value as character
-  if (isIncluded(codeId, WorkflowCodeIdentifiers$isReference)) {
+  if (isIncluded(codeId, c(SimulationCodeIdentifiers$referencePopulation, WorkflowCodeIdentifiers$createWordReport))) {
     # Will return false if input is not included in 1, TRUE or true
-    return(as.character(isIncluded(workflowInfo, c("1", "TRUE", "true"))))
+    return(as.character(isIncluded(workflowInfo, c("Yes", "YES", "1", "TRUE", "true"))))
   }
   # For any other info, it needs to be returned in between quotes
   return(paste0("'", workflowInfo, "'"))
@@ -368,4 +353,28 @@ getObservedMetaDataFile <- function(excelFile, observedMetaDataSheet, format = "
   # row numbers are not printed in the file (row.names = FALSE), file uses UTF-8 encoding (fileEncoding = "UTF-8")
   write.csv(observedMetaDataTable, file = observedMetaDataFilename, na = "", row.names = FALSE, fileEncoding = "UTF-8")
   return(paste0('"', observedMetaDataFilename, '"'))
+}
+
+getPKParametersContent <- function(pkParametersTable) {
+  pkParametersContent <- NULL
+  if (nrow(pkParametersTable) == 0) {
+    return(pkParametersContent)
+  }
+  for (parameterIndex in seq(1, nrow(pkParametersTable))) {
+    pkParametersContent <- c(
+      pkParametersContent,
+      paste0('updatePKParameter("', pkParametersTable$Name[parameterIndex], '", displayName = "', pkParametersTable$`Display name`[parameterIndex], '", displayUnit = "', pkParametersTable$Unit[parameterIndex], '")')
+    )
+  }
+  pkParametersContent <- c(pkParametersContent, "")
+  return(pkParametersContent)
+}
+
+getSimulationSetType <- function(workflowMode) {
+  validateIsIncluded(workflowMode, c("MeanModelWorkflow", "PopulationWorkflow"))
+  simulationType <- "SimulationSet"
+  if (isIncluded(workflowMode, "PopulationWorkflow")) {
+    simulationType <- paste0("Population", simulationType)
+  }
+  return(simulationType)
 }
