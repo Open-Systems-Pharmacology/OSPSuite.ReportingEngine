@@ -8,7 +8,7 @@ plotPopulationSensitivity(
   structureSets,
   logFolder = NULL,
   settings,
-  workflowType = NULL,
+  workflowType = PopulationWorkflowTypes$parallelComparison,
   xParameters = NULL,
   yParameters = NULL
 )

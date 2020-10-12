@@ -12,10 +12,9 @@ StandardExcelSheetNames <- enum(c(
 #' @description Creates an R script for running mean model or population workflows from an Excel file
 #' @param excelFile name of the Excel file from which the R script is created
 #' @param workflowFile name of the R script file created from the Excel file
-#' @param workflowFolder name of the folder in which the wrokflow results will be stored
 #' @return An R script of name `workflowFile` to be run
 #' @export
-createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R", workflowFolder = "Output") {
+createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R") {
   validateIsFileExtension(excelFile, c("xls", "xlsx"))
   validateIsFileExtension(workflowFile, "R")
 
@@ -23,7 +22,10 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
 
   inputSections <- readxl::excel_sheets(excelFile)
   # Check for mandotory input sections
-  validateIsIncluded(c(StandardExcelSheetNames$`Workflow and Tasks`, StandardExcelSheetNames$SimulationSets), inputSections, groupName = paste0("Sheet names of '", excelFile, "'"))
+  validateIsIncluded(c(StandardExcelSheetNames$`Workflow and Tasks`, StandardExcelSheetNames$SimulationSets),
+    inputSections,
+    groupName = paste0("Sheet names of '", excelFile, "'")
+  )
 
   if (isIncluded(StandardExcelSheetNames$`_Documentation`, inputSections)) {
     scriptDocumentation <- getScriptDocumentation(excelFile)
@@ -66,9 +68,7 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
     outputContent <- c(outputContent, outputInfo)
   }
 
-  taskContent <- ""
-
-  runWorkflowContent <- "workflow$runWorkflow()"
+  runWorkflowContent <- c("", "workflow$runWorkflow()", "")
 
   scriptContent <- c(
     scriptContent,
@@ -76,11 +76,10 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
     outputContent,
     simulationSetContent,
     workflowContent,
-    taskContent,
     runWorkflowContent
   )
 
-  # Use styler to get a clean formatting of the text
+  # Use styler to beautify and standardize the formatof the output file
   scriptContent <- styler:::style_text(scriptContent)
 
   # Write the script
@@ -282,6 +281,10 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
   ))
 }
 
+#' @title getWorkflowContent
+#' @description Creates a character vector to be written in a workflow .R script defining `Workflow` object
+#' @param workflowTable Data.frame read from the Excel sheet "Workflow and Tasks"
+#' @return Character vector defining the `Workflow` object
 getWorkflowContent <- function(workflowTable) {
   workflowMode <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$`Workflow Mode`)
   workflowTypeContent <- NULL
@@ -318,7 +321,6 @@ getWorkflowContent <- function(workflowTable) {
   return(list(workflowMode = workflowMode, workflowContent = workflowContent))
 }
 
-# Might be extended to output
 WorkflowMandatoryVariables <- enum(c(
   "Code Identifier",
   "Description"
@@ -382,6 +384,12 @@ OutputCodeIdentifiers <- enum(c(
   "pkParameters"
 ))
 
+#' @title getIdentifierInfo
+#' @description Get and format the information from a data.frame matching a certain `simulationIndex` column and `codeId` line
+#' @param workflowTable Data.frame read from one of the available Excel sheets
+#' @param simulationIndex Column to read after removing "Code Identifier" and "Description"
+#' @param codeId Line to read in the data.frame corresponding to a specific value of "Code Identifier"
+#' @return Information from a data.frame matching a certain `simulationIndex` column and `codeId` line
 getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
   validateIsOfType(workflowTable, "data.frame")
   validateIsInteger(simulationIndex)
@@ -400,13 +408,18 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
     }
     return()
   }
+  # For info of type sheet, return directly sheet name
+  if (isIncluded(codeId, c(
+    WorkflowCodeIdentifiers$`Workflow Mode`,
+    SimulationCodeIdentifiers$outputs,
+    SimulationCodeIdentifiers$DictionaryLocation,
+    OutputCodeIdentifiers$pkParameters
+  ))) {
+    return(workflowInfo)
+  }
   # readxl::read_excel returns na for missing values which need to be passed on as NULL to simulation sets
   if (is.na(workflowInfo)) {
     return("NULL")
-  }
-  # For info of type sheet, return directly sheet name
-  if (isIncluded(codeId, c(WorkflowCodeIdentifiers$`Workflow Mode`, SimulationCodeIdentifiers$outputs, SimulationCodeIdentifiers$DictionaryLocation))) {
-    return(workflowInfo)
   }
   # For info about reference population, return logical value as character
   if (isIncluded(codeId, c(SimulationCodeIdentifiers$referencePopulation, WorkflowCodeIdentifiers$createWordReport))) {
@@ -417,6 +430,11 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
   return(paste0("'", workflowInfo, "'"))
 }
 
+#' @title getOutputNames
+#' @description Get the names of `Output` objets
+#' @param excelFile name of the Excel file from which the R script is created
+#' @param outputSheet name of sheet defining an `Output` object
+#' @return Name of `Output` object
 getOutputNames <- function(excelFile, outputSheet) {
   outputTable <- readxl::read_excel(excelFile, sheet = outputSheet)
   outputNames <- paste(outputSheet, names(outputTable)[3:ncol(outputTable)], sep = "")
@@ -437,6 +455,10 @@ getObservedMetaDataFile <- function(excelFile, observedMetaDataSheet, format = "
   return(paste0('"', observedMetaDataFilename, '"'))
 }
 
+#' @title getPKParametersContent
+#' @description Creates a character vector to be written in a workflow .R script updating the PKParameters objects
+#' @param pkParametersTable Data.frame read from the Excel sheet "PK Parameters"
+#' @return Character vector updating the PKParameters objects
 getPKParametersContent <- function(pkParametersTable) {
   pkParametersContent <- NULL
   if (nrow(pkParametersTable) == 0) {
@@ -452,6 +474,10 @@ getPKParametersContent <- function(pkParametersTable) {
   return(pkParametersContent)
 }
 
+#' @title getSimulationSetType
+#' @description Output the SimulationSet object matching the appropriate workflow type
+#' @param workflowMode Either `PopulationWorkflow` or `MeanModelWorkflow`
+#' @return `PopulationSimulationSet` or `SimulationSet` as character
 getSimulationSetType <- function(workflowMode) {
   validateIsIncluded(workflowMode, c("MeanModelWorkflow", "PopulationWorkflow"))
   simulationType <- "SimulationSet"
