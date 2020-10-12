@@ -111,6 +111,67 @@ getScriptDocumentation <- function(excelFile, colSep = "\t") {
   return(docContent)
 }
 
+#' @title getPKParametersInfoContent
+#' @description Creates a character vector to be written in a workflow .R script defining `pkParameters` input of `Output` object.
+#' @param excelFile name of the Excel file from which the R script is created
+#' @param pkParametersSheet name of the Excel sheet that defines the `pkParameters` information
+#' @return Character vector defining `pkParameters` input of `Output` object
+getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
+  pkParametersContent <- NULL
+  pkParametersTable <- readxl::read_excel(excelFile, sheet = pkParametersSheet)
+  validateIsIncluded("Name", names(pkParametersTable)[1])
+
+  if (all(is.na(pkParametersTable$`Display name`)) && all(is.na(pkParametersTable$Unit))) {
+    pkParametersContent <- c(
+      paste0(
+        "pkParameters <- c('",
+        paste0(pkParametersTable$Name, collapse = "', '"),
+        "')"
+      ),
+      ""
+    )
+    return(pkParametersContent)
+  }
+
+  for (pkParameterIndex in seq_along(pkParametersTable$Name)) {
+    pkParameter <- pkParametersTable$Name[pkParameterIndex]
+    displayName <- pkParametersTable$`Display name`[pkParameterIndex]
+    displayUnit <- pkParametersTable$Unit[pkParameterIndex]
+    displayNameContent <- NULL
+    displayUnitContent <- NULL
+    # Any prevent crash from missing "Unit" or "Display name" column
+    if (any(!is.na(displayName))) {
+      displayNameContent <- paste0(", displayName = '", displayName, "'")
+    }
+    if (any(!is.na(displayUnit))) {
+      displayUnitContent <- paste0(", displayUnit = '", displayUnit, "'")
+    }
+    pkParametersContent <- c(
+      pkParametersContent,
+      paste0(
+        "pk", pkParameter, " <- PkParameterInfo$new(pkParameter = '", pkParameter, "'",
+        displayNameContent, displayUnitContent, ")"
+      )
+    )
+  }
+  pkParametersContent <- c(
+    pkParametersContent,
+    "",
+    paste0(
+      "pkParameters <- c(pk",
+      paste0(pkParametersTable$Name, collapse = ", pk"),
+      ")"
+    ),
+    ""
+  )
+  return(pkParametersContent)
+}
+
+#' @title getOutputContent
+#' @description Creates a character vector to be written in a workflow .R script defining `Output` object.
+#' @param excelFile name of the Excel file from which the R script is created
+#' @param outputSheet name of the Excel sheet that defines the `Output` information
+#' @return Character vector defining the `Output` object
 getOutputContent <- function(excelFile, outputSheet) {
   outputContent <- NULL
   outputTable <- readxl::read_excel(excelFile, sheet = outputSheet)
@@ -120,6 +181,19 @@ getOutputContent <- function(excelFile, outputSheet) {
   outputNames <- getOutputNames(excelFile, outputSheet)
 
   for (outputIndex in seq_along(outputNames)) {
+    pkParametersOutputContent <- NULL
+    pkParametersSheet <- getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$pkParameters)
+    if (!is.na(pkParametersSheet)) {
+      validateIsIncluded(pkParametersSheet, readxl::excel_sheets(excelFile), groupName = paste0("Sheet names of '", excelFile, "'"))
+      pkParametersContent <- getPKParametersInfoContent(excelFile, pkParametersSheet)
+      outputContent <- c(
+        outputContent,
+        pkParametersContent
+      )
+      pkParametersOutputContent <- paste0(", 
+                                          pkParameters = pkParameters")
+    }
+
     # Add dataDisplayName and pkParameters
     outputContent <- c(
       outputContent,
@@ -128,8 +202,10 @@ getOutputContent <- function(excelFile, outputSheet) {
           path = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$path), ", 
           displayName = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$displayName), ", 
           displayUnit = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$displayUnit), ", 
-          dataSelection = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$dataSelection), "
-        )"
+          dataSelection = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$dataSelection), ",
+          dataDisplayName = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$dataDisplayName),
+        pkParametersOutputContent,
+        ")"
       ),
       ""
     )
@@ -137,6 +213,12 @@ getOutputContent <- function(excelFile, outputSheet) {
   return(outputContent)
 }
 
+#' @title getSimulationSetContent
+#' @description Creates a character vector to be written in a workflow .R script defining `SimulationSet` objects.
+#' @param excelFile name of the Excel file from which the R script is created
+#' @param simulationTable Data.frame read from the Excel sheet "SimulationSets
+#' @param workflowMode Either `PopulationWorkflow` or `MeanModelWorkflow`
+#' @return Character vector defining the `SimulationSet` objects
 getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
   simulationSetContent <- NULL
   outputSheets <- NULL
