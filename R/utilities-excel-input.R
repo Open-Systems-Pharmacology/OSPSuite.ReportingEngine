@@ -48,7 +48,7 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R")
     validateIsIncluded(WorkflowMandatoryVariables$`Code Identifier`, names(workflowTable)[1])
     validateIsIncluded(WorkflowMandatoryVariables$Description, names(workflowTable)[2])
 
-    workflowInfo <- getWorkflowContent(workflowTable = workflowTable)
+    workflowInfo <- getWorkflowContent(workflowTable = workflowTable, excelFile = excelFile)
     workflowContent <- workflowInfo$workflowContent
   }
 
@@ -298,8 +298,9 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
 #' @title getWorkflowContent
 #' @description Creates a character vector to be written in a workflow .R script defining `Workflow` object
 #' @param workflowTable Data.frame read from the Excel sheet "Workflow and Tasks"
+#' @param excelFile name of the Excel file from which the R script is created
 #' @return Character vector defining the `Workflow` object
-getWorkflowContent <- function(workflowTable) {
+getWorkflowContent <- function(workflowTable, excelFile) {
   workflowMode <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$`Workflow Mode`)
   workflowTypeContent <- NULL
   if (workflowMode == "PopulationWorkflow") {
@@ -314,6 +315,9 @@ getWorkflowContent <- function(workflowTable) {
   workflowContent <- paste0("workflow <- ", workflowMode, "$new(", workflowTypeContent, "simulationSets = simulationSets, workflowFolder = ", workflowFolder, ", createWordReport = ", createWordReport, ")")
 
   activateTaskContent <- NULL
+  isActive <- lapply(AllAvailableTasks, function(x) {
+    FALSE
+  })
   for (taskName in AllAvailableTasks) {
     activeTaskName <- getIdentifierInfo(workflowTable, 1, taskName)
     if (isOfLength(activeTaskName, 0)) {
@@ -323,14 +327,29 @@ getWorkflowContent <- function(workflowTable) {
       activateTaskContent,
       paste0("workflow$activateTasks(", activeTaskName, ")")
     )
+    isActive[[taskName]] <- TRUE
   }
 
   workflowContent <- c(
     workflowContent,
     "",
     "workflow$inactivateTasks()",
-    activateTaskContent
+    activateTaskContent,
+    ""
   )
+
+  # Optional fields: task settings
+  for (optionalSettingName in names(OptionalSettings)) {
+    settingValue <- getIdentifierInfo(workflowTable, 1, optionalSettingName)
+    if (is.na(settingValue)) {
+      next
+    }
+    if (isIncluded(optionalSettingName, "calculateSensitivity: variableParameterPaths")) {
+      settingValue <- getSensitivityVariableParameterPaths(excelFile, sensitivityParametersSheet = settingValue)
+    }
+    settingContent <- paste0(OptionalSettings[[optionalSettingName]], settingValue)
+    workflowContent <- c(workflowContent, settingContent)
+  }
 
   return(list(workflowMode = workflowMode, workflowContent = workflowContent))
 }
@@ -339,6 +358,20 @@ WorkflowMandatoryVariables <- enum(c(
   "Code Identifier",
   "Description"
 ))
+
+OptionalSettings <- list(
+  "simulate: numberOfCores" = "workflow$simulate$settings$numberOfCores <- ",
+  "simulate: showProgress" = "workflow$simulate$settings$showProgress <- ",
+  "calculateSensitivity: numberOfCores" = "workflow$calculateSensitivity$settings$numberOfCores <- ",
+  "calculateSensitivity: showProgress" = "workflow$calculateSensitivity$settings$showProgress <- ",
+  "calculateSensitivity: quantileVec" = "workflow$calculateSensitivity$settings$quantileVec <- ",
+  "calculateSensitivity: variationRange" = "workflow$calculateSensitivity$settings$variationRange <- ",
+  "calculateSensitivity: variableParameterPaths" = "workflow$calculateSensitivity$settings$variableParameterPaths <- ",
+  "plotSensitivity: maximalParametersPerSensitivityPlot" = "workflow$plotSensitivity$settings$maximalParametersPerSensitivityPlot <- ",
+  "plotSensitivity: totalSensitivityThreshold" = "workflow$plotSensitivity$settings$totalSensitivityThreshold <- ",
+  "plotSensitivity: xAxisFontSize" = "workflow$plotSensitivity$settings$xAxisFontSize <- ",
+  "plotSensitivity: yAxisFontSize" = "workflow$plotSensitivity$settings$yAxisFontSize <- "
+)
 
 WorkflowCodeIdentifiers <- enum(c(
   "Workflow Mode",
@@ -355,17 +388,7 @@ WorkflowCodeIdentifiers <- enum(c(
   "plotDemography",
   "plotAbsorption",
   "plotMassBalance",
-  "simulate: numberOfCores",
-  "simulate: showProgress",
-  "calculateSensitivity: numberOfCores",
-  "calculateSensitivity: showProgress",
-  "calculateSensitivity: quantileVec",
-  "calculateSensitivity: variationRange",
-  "calculateSensitivity: variableParameterPaths",
-  "plotSensitivity: maximalParametersPerSensitivityPlot",
-  "plotSensitivity: totalSensitivityThreshold",
-  "plotSensitivity: xAxisFontSize",
-  "plotSensitivity: yAxisFontSize"
+  names(OptionalSettings)
 ))
 
 SimulationCodeIdentifiers <- enum(c(
@@ -426,8 +449,12 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
   if (isIncluded(codeId, c(
     WorkflowCodeIdentifiers$`Workflow Mode`,
     SimulationCodeIdentifiers$outputs,
+    SimulationCodeIdentifiers$DictionaryType,
     SimulationCodeIdentifiers$DictionaryLocation,
-    OutputCodeIdentifiers$pkParameters
+    SimulationCodeIdentifiers$StudyDesignType,
+    SimulationCodeIdentifiers$StudyDesignLocation,
+    OutputCodeIdentifiers$pkParameters,
+    names(OptionalSettings)
   ))) {
     return(workflowInfo)
   }
@@ -457,8 +484,19 @@ getOutputNames <- function(excelFile, outputSheet) {
   return(outputNames)
 }
 
+#' @title getSensitivityVariableParameterPaths
+#' @description Get the variable paths for sensitivity analysis settings
+#' @param excelFile name of the Excel file from which the R script is created
+#' @param sensitivityParametersSheet name of sheet defining the parameters to vary
+#' @return Text of vector of paths to vary
+getSensitivityVariableParameterPaths <- function(excelFile, sensitivityParametersSheet) {
+  sensitivityParametersTable <- readxl::read_excel(excelFile, sheet = sensitivityParametersSheet)
+  sensitivityParametersContent <- paste0("c('", paste0(sensitivityParametersTable$Path, collapse = "', '"), "')")
+  return(sensitivityParametersContent)
+}
+
 getObservedMetaDataFile <- function(excelFile, observedMetaDataSheet, format = "csv") {
-  if (observedMetaDataSheet == "NULL") {
+  if (is.na(observedMetaDataSheet)) {
     return(observedMetaDataSheet)
   }
   observedMetaDataFilename <- paste0(observedMetaDataSheet, ".", format)

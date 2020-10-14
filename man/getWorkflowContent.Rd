@@ -4,10 +4,12 @@
 \alias{getWorkflowContent}
 \title{getWorkflowContent}
 \usage{
-getWorkflowContent(workflowTable)
+getWorkflowContent(workflowTable, excelFile)
 }
 \arguments{
 \item{workflowTable}{Data.frame read from the Excel sheet "Workflow and Tasks"}
+
+\item{excelFile}{name of the Excel file from which the R script is created}
 }
 \value{
 Character vector defining the `Workflow` object
