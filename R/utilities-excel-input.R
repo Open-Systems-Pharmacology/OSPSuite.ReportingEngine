@@ -233,22 +233,36 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
     outputs <- paste0(getOutputNames(excelFile, outputSheet), collapse = ", ")
 
     # Function for dictionary
-    # observedMetaDataSheet <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$sheetDataDictTimeProfile)
-    # observedMetaDataFile <- getObservedMetaDataFile(excelFile, observedMetaDataSheet)
-    observedMetaDataFile <- NULL
+    dictionaryType <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$DictionaryType)
+    dictionaryLocation <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$DictionaryLocation)
+    dictionaryLocation <- getFileLocationFromType(
+      location = dictionaryLocation,
+      type = dictionaryType,
+      excelFile = excelFile
+    )
 
     # MeanModelWorkflow doesn't use population fields, which are set to NULL
     populationFileContent <- NULL
     populationNameContent <- NULL
     referencePopulationContent <- NULL
+    studyDesignFileContent <- NULL
     if (isIncluded(workflowMode, "PopulationWorkflow")) {
       referencePopulation <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$referencePopulation)
       populationFile <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$populationFile)
       populationName <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$populationName)
 
+      studyDesignType <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$StudyDesignType)
+      studyDesignLocation <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$StudyDesignLocation)
+      studyDesignLocation <- getFileLocationFromType(
+        location = studyDesignLocation,
+        type = studyDesignType,
+        excelFile = excelFile
+      )
+
       referencePopulationContent <- paste0("referencePopulation = ", referencePopulation, ", ")
       populationFileContent <- paste0("populationFile = ", populationFile, ", ")
       populationNameContent <- paste0("populationName = ", populationName, ", ")
+      studyDesignFileContent <- paste0("studyDesignFile = ", studyDesignLocation, ", ")
     }
 
     simulationSetContent <- c(
@@ -257,12 +271,12 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
         simulationSetNames[simulationIndex],
         " <- ", simulationType, "$new(
     simulationSetName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationSetName), ", ",
-        referencePopulationContent, populationFileContent, populationNameContent, "
+        referencePopulationContent, populationFileContent, populationNameContent, studyDesignFileContent, "
     simulationFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationFile), ", 
     simulationName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationName), ", 
     outputs = c(", outputs, "), 
     observedDataFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$observedDataFile), ", 
-    observedMetaDataFile = ", observedMetaDataFile, ")"
+    observedMetaDataFile = ", dictionaryLocation, ")"
       ),
       ""
     )
@@ -452,7 +466,7 @@ getObservedMetaDataFile <- function(excelFile, observedMetaDataSheet, format = "
   # Save the data dictionary as a csv file, missing values stay missing (na = ""),
   # row numbers are not printed in the file (row.names = FALSE), file uses UTF-8 encoding (fileEncoding = "UTF-8")
   write.csv(observedMetaDataTable, file = observedMetaDataFilename, na = "", row.names = FALSE, fileEncoding = "UTF-8")
-  return(paste0('"', observedMetaDataFilename, '"'))
+  return(observedMetaDataFilename)
 }
 
 #' @title getPKParametersContent
@@ -485,4 +499,21 @@ getSimulationSetType <- function(workflowMode) {
     simulationType <- paste0("Population", simulationType)
   }
   return(simulationType)
+}
+
+#' @title getFileLocationFromType
+#' @description Get the right path text and copy the sheet content as a file if type is SHEET
+#' @param location Path of the file if type is FILE or sheetname if type is SHEET
+#' @param type Location type: either "SHEET" or "FILE"
+#' @param excelFile name of the Excel file from which the R script is created
+#' @return Character of location to provide
+getFileLocationFromType <- function(location, type, excelFile) {
+  validateIsIncluded(type, c("SHEET", "FILE"))
+  if (isIncluded(type, "SHEET")) {
+    location <- getObservedMetaDataFile(excelFile, location)
+  }
+  if (is.na(location)) {
+    return("NULL")
+  }
+  return(paste0("'", location, "'"))
 }
