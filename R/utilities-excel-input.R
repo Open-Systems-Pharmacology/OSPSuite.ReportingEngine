@@ -63,8 +63,8 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R")
   }
 
   outputContent <- NULL
-  for (outputSheet in simulationSetInfo$outputSheets) {
-    outputInfo <- getOutputContent(excelFile, outputSheet)
+  for (outputInfo in simulationSetInfo$outputInfo) {
+    outputInfo <- getOutputContent(excelFile, outputInfo)
     outputContent <- c(outputContent, outputInfo)
   }
 
@@ -169,15 +169,15 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
 #' @title getOutputContent
 #' @description Creates a character vector to be written in a workflow .R script defining `Output` object.
 #' @param excelFile name of the Excel file from which the R script is created
-#' @param outputSheet name of the Excel sheet that defines the `Output` information
+#' @param outputInfo list of information about `Output` object. Include sheetName, dataSelection and dataDisplayName
 #' @return Character vector defining the `Output` object
-getOutputContent <- function(excelFile, outputSheet) {
+getOutputContent <- function(excelFile, outputInfo) {
   outputContent <- NULL
-  outputTable <- readxl::read_excel(excelFile, sheet = outputSheet)
+  outputTable <- readxl::read_excel(excelFile, sheet = outputInfo$sheetName)
   validateIsIncluded(WorkflowMandatoryVariables$`Code Identifier`, names(outputTable)[1])
   validateIsIncluded(WorkflowMandatoryVariables$Description, names(outputTable)[2])
 
-  outputNames <- getOutputNames(excelFile, outputSheet)
+  outputNames <- getOutputNames(excelFile, outputInfo$sheetName)
 
   for (outputIndex in seq_along(outputNames)) {
     pkParametersOutputContent <- NULL
@@ -194,6 +194,14 @@ getOutputContent <- function(excelFile, outputSheet) {
     }
 
     # Add dataDisplayName and pkParameters
+    dataSelection <- concatenateDataSelection(c(
+      outputInfo$dataSelection,
+      getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$dataSelection)
+    ))
+    dataDisplayName <- concatenateDataDisplayName(c(
+      outputInfo$dataDisplayName,
+      getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$dataDisplayName)
+    ))
     outputContent <- c(
       outputContent,
       paste0(
@@ -201,8 +209,8 @@ getOutputContent <- function(excelFile, outputSheet) {
           path = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$path), ", 
           displayName = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$displayName), ", 
           displayUnit = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$displayUnit), ", 
-          dataSelection = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$dataSelection), ",
-          dataDisplayName = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$dataDisplayName),
+          dataSelection = ", dataSelection, ",
+          dataDisplayName = ", dataDisplayName,
         pkParametersOutputContent,
         ")"
       ),
@@ -227,10 +235,15 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
 
   simulationType <- getSimulationSetType(workflowMode)
 
+  allOutputInfo <- list()
   for (simulationIndex in seq_along(simulationSetNames)) {
-    outputSheet <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$outputs)
-    outputSheets <- c(outputSheets, outputSheet)
-    outputs <- paste0(getOutputNames(excelFile, outputSheet), collapse = ", ")
+    outputInfo <- list(
+      dataSelection = getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$dataSelection),
+      dataDisplayName = getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$dataDisplayName),
+      sheetName = getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$outputs)
+    )
+    outputNames <- paste0(getOutputNames(excelFile, outputInfo$sheetName), collapse = ", ")
+    allOutputInfo[[simulationIndex]] <- outputInfo
 
     # Function for dictionary
     dictionaryType <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$DictionaryType)
@@ -274,7 +287,7 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
         referencePopulationContent, populationFileContent, populationNameContent, studyDesignFileContent, "
     simulationFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationFile), ", 
     simulationName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationName), ", 
-    outputs = c(", outputs, "), 
+    outputs = c(", outputNames, "), 
     observedDataFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$observedDataFile), ", 
     observedMetaDataFile = ", dictionaryLocation, ")"
       ),
@@ -291,7 +304,7 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
   return(list(
     simulationSetContent = simulationSetContent,
     simulationSetNames = simulationSetNames,
-    outputSheets = unique(outputSheets)
+    outputInfo = unique(allOutputInfo)
   ))
 }
 
@@ -453,7 +466,11 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
     SimulationCodeIdentifiers$DictionaryLocation,
     SimulationCodeIdentifiers$StudyDesignType,
     SimulationCodeIdentifiers$StudyDesignLocation,
+    SimulationCodeIdentifiers$dataSelection,
+    SimulationCodeIdentifiers$dataDisplayName,
     OutputCodeIdentifiers$pkParameters,
+    OutputCodeIdentifiers$dataSelection,
+    OutputCodeIdentifiers$dataDisplayName,
     names(OptionalSettings)
   ))) {
     return(workflowInfo)
@@ -554,4 +571,40 @@ getFileLocationFromType <- function(location, type, excelFile) {
     return("NULL")
   }
   return(paste0("'", location, "'"))
+}
+
+#' @title concatenateDataSelection
+#' @description Concatenate inputs for dataSelection
+#' @param inputs Vector of inputs to concatenate
+#' @param sep Separator character corresponding to logical &
+#' @return Character of concatenated inputs
+concatenateDataSelection <- function(inputs, sep = " & ") {
+  validateIsString(inputs)
+
+  # Account for ALL and NONE
+  inputs[inputs == "ALL"] <- "TRUE"
+  if (isIncluded("NONE", inputs)) {
+    inputs <- "NONE"
+  }
+  # Remove NAs from expression
+  inputs <- inputs[!is.na(inputs)]
+  if (isOfLength(inputs, 0)) {
+    return("NULL")
+  }
+  return(paste0("'", paste0(inputs, collapse = sep), "'"))
+}
+
+#' @title concatenateDataDisplayName
+#' @description Concatenate inputs for dataDisplayName
+#' @param inputs Vector of inputs to concatenate
+#' @param sep Separator for display names
+#' @return Character of concatenated inputs
+concatenateDataDisplayName <- function(inputs, sep = " - ") {
+  validateIsString(inputs)
+  # Remove NAs
+  inputs <- inputs[!is.na(inputs)]
+  if (isOfLength(inputs, 0)) {
+    return("NULL")
+  }
+  return(paste0("'", paste0(inputs, collapse = sep), "'"))
 }
