@@ -295,11 +295,6 @@ getAllowedCores <- function() {
     cfs_quota_us / cfs_period_us
   },
   error = function(cond) {
-    message("Error getting allowed cpu cores")
-    return(NULL)
-  },
-  warning = function(cond) {
-    message("Warning getting allowed cpu cores")
     return(NULL)
   })
 }
@@ -309,6 +304,7 @@ getAllowedCores <- function() {
 #' @title setNumberOfLocalCores
 #' @return Settings for simulation or sensitivity analysis updated with available number of local cores
 setNumberOfLocalCores <- function(settings,task){
+  validateEnumValue(enum = parallelizableTasksEnum,value = task)
   allowedCores <- getAllowedCores()
   if(is.null(allowedCores)){
     return(settings)
@@ -319,6 +315,10 @@ setNumberOfLocalCores <- function(settings,task){
   settings$allowedCores <- allowedCores
   return(settings)
 }
+
+
+
+parallelizableTasksEnum <- enum(c("simulation","sensitivity"))
 
 
 
