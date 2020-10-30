@@ -4,12 +4,12 @@
 \alias{getOutputContent}
 \title{getOutputContent}
 \usage{
-getOutputContent(excelFile, outputSheet)
+getOutputContent(excelFile, outputInfo)
 }
 \arguments{
 \item{excelFile}{name of the Excel file from which the R script is created}
 
-\item{outputSheet}{name of the Excel sheet that defines the `Output` information}
+\item{outputInfo}{list of information about `Output` object. Include sheetName, dataSelection and dataDisplayName}
 }
 \value{
 Character vector defining the `Output` object
