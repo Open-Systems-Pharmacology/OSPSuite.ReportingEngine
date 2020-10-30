@@ -4,28 +4,14 @@
 \alias{analyzeSensitivity}
 \title{analyzeSensitivity}
 \usage{
-analyzeSensitivity(
-  simulation,
-  variableParameterPaths = NULL,
-  variationRange = 0.1,
-  numberOfCores = NULL,
-  logFolder = getwd(),
-  showProgress = FALSE
-)
+analyzeSensitivity(simulation, settings = settings, logFolder = getwd())
 }
 \arguments{
 \item{simulation}{simulation class object}
 
-\item{variableParameterPaths}{paths of parameters to be analyzed}
-
-\item{variationRange}{variation range for sensitivity analysis}
-
-\item{numberOfCores}{Number of cores to use on local node.  This parameter
-should be should be set to 1 when parallelizing over many nodes.}
+\item{settings}{list of settings for the sensitivity analysis}
 
 \item{logFolder}{folder where the logs are saved}
-
-\item{showProgress}{option to print progress of simulation to console}
 }
 \value{
 sensitivity analysis results

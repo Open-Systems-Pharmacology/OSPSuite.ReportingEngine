@@ -15,7 +15,7 @@ runSensitivity(
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object}
 
-\item{settings}{list of settings for the population sensitivity analysis}
+\item{settings}{list of settings for the sensitivity analysis}
 
 \item{individualId}{ID of individual in population data file for whom to perform sensitivity analysis}
 

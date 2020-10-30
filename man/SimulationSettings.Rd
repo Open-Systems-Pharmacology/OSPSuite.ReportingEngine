@@ -12,6 +12,8 @@ R6 class for Population Simulation Settings
 \item{\code{numberOfCores}}{is the number of cores to use for simulation}
 
 \item{\code{showProgress}}{is a logical field  TRUE shows progress of simulation.}
+
+\item{\code{allowedCores}}{is the number of cores assigned to the user session.}
 }
 \if{html}{\out{</div>}}
 }
