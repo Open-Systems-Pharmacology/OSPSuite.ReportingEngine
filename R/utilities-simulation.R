@@ -16,6 +16,7 @@ simulateModelForPopulation <- function(structureSet,
   numberOfCores <- min(ifnotnull(inputToCheck = settings, outputIfNotNull = settings$numberOfCores, outputIfNull = 1), numberOfIndividuals)
 
   if (numberOfCores == 1) {
+    settings <- setNumberOfLocalCores(settings = settings,"simulation")
     simulationResult <- simulateModel(
       structureSet = structureSet,
       settings = settings,
@@ -122,7 +123,9 @@ simulateModel <- function(structureSet,
     ospsuite::addOutputs(quantitiesOrPaths = quantity, simulation = simulation)
   }
 
-  simRunOptions <- ospsuite::SimulationRunOptions$new(showProgress = ifnotnull(settings, outputIfNotNull = settings$showProgress, outputIfNull = FALSE))
+  simRunOptions <- ospsuite::SimulationRunOptions$new(showProgress = ifnotnull(settings, outputIfNotNull = settings$showProgress, outputIfNull = FALSE),
+                                                      numberOfCores = settings$allowedCores)
+
   simulationResult <- ospsuite::runSimulation(simulation,
     population = population,
     simulationRunOptions = simRunOptions
