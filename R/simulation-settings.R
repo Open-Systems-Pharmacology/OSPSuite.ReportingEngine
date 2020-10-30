@@ -40,11 +40,25 @@ SimulationSettings <- R6::R6Class(
           private$.showProgress <- value
         }
       }
+    },
+
+    #' @field allowedCores is the number of cores assigned to the user session.
+    allowedCores = function(value) {
+      if (missing(value)) {
+        private$.allowedCores
+      } else {
+        if (!is.null(value)) {
+          validateIsInteger(value)
+          validateIsOfLength(object = value, nbElements = 1)
+          private$.allowedCores <- value
+        }
+      }
     }
   ),
 
   private = list(
     .numberOfCores = NULL,
-    .showProgress = NULL
+    .showProgress = NULL,
+    .allowedCores = NULL
   )
 )

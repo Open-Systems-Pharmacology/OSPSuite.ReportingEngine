@@ -282,3 +282,45 @@ getPKParametersInSimulationSet <- function(simulationSet) {
   }
   return(pkParametersTable)
 }
+
+
+
+#' @title getAllowedCores
+#' @return Allowed number of CPU cores for computation
+getAllowedCores <- function() {
+  cores <- tryCatch({
+    # get cpu allowance from files
+    cfs_quota_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us", intern = T))
+    cfs_period_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_period_us", intern = T))
+    cfs_quota_us / cfs_period_us
+  },
+  error = function(cond) {
+    message("Error getting allowed cpu cores")
+    return(NULL)
+  },
+  warning = function(cond) {
+    message("Warning getting allowed cpu cores")
+    return(NULL)
+  })
+}
+
+
+
+#' @title setNumberOfLocalCores
+#' @return Settings for simulation or sensitivity analysis updated with available number of local cores
+setNumberOfLocalCores <- function(settings,task){
+  allowedCores <- getAllowedCores()
+  if(is.null(allowedCores)){
+    return(settings)
+  }
+  if(is.null(settings)){
+    settings <- createSettings[[task]]()
+  }
+  settings$allowedCores <- allowedCores
+  return(settings)
+}
+
+
+
+createSettings <- list(simulation =  function(){SimulationSettings$new()},
+                       sensitivity = function(){SensitivityAnalysisSettings$new()} )
