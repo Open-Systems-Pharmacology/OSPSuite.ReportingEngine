@@ -16,7 +16,13 @@ simulateModelForPopulation <- function(structureSet,
   numberOfCores <- min(ifnotnull(inputToCheck = settings, outputIfNotNull = settings$numberOfCores, outputIfNull = 1), numberOfIndividuals)
 
   if (numberOfCores == 1) {
-    settings <- setNumberOfLocalCores(settings = settings,"simulation")
+
+    if (is.null(settings)){
+      settings <-SimulationSettings$new()
+    }
+
+    settings$allowedCores <-  getAllowedCores()
+
     simulationResult <- simulateModel(
       structureSet = structureSet,
       settings = settings,

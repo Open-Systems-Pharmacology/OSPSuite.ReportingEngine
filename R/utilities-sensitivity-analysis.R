@@ -130,7 +130,8 @@ individualSensitivityAnalysis <- function(structureSet,
   } else {
     # No parallelization
 
-    settings <- setNumberOfLocalCores(settings = settings,"sensitivity")
+    #Get allowable number of cores
+    settings$allowedCores <-  getAllowedCores()
 
     # Load simulation to determine number of parameters valid for sensitivity analysis
     sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)

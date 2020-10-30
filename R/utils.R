@@ -296,31 +296,9 @@ getAllowedCores <- function() {
   },
   error = function(cond) {
     return(NULL)
-  })
-}
-
-
-
-#' @title setNumberOfLocalCores
-#' @return Settings for simulation or sensitivity analysis updated with available number of local cores
-setNumberOfLocalCores <- function(settings,task){
-  validateEnumValue(enum = parallelizableTasksEnum,value = task)
-  allowedCores <- getAllowedCores()
-  if(is.null(allowedCores)){
-    return(settings)
+  },
+  warning = function(cond) {
+    return(NULL)
   }
-  if(is.null(settings)){
-    settings <- createSettings[[task]]()
-  }
-  settings$allowedCores <- allowedCores
-  return(settings)
+  )
 }
-
-
-
-parallelizableTasksEnum <- enum(c("simulation","sensitivity"))
-
-
-
-createSettings <- list(simulation =  function(){SimulationSettings$new()},
-                       sensitivity = function(){SensitivityAnalysisSettings$new()} )
