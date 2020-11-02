@@ -10,6 +10,9 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r report output style, child="reportOutputStyle.css", eval=TRUE}
+```
+
 ```{r vignette setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -140,9 +143,11 @@ rmarkdown::render(workflow1$reportFileName)
 The output report for Example 1 is shown below. 
 There are only 2 figures in the report (linear and log scales) showing the time profile of the output path '__Organism|A|Concentration in container__' displayed as '__Concentration of A__'.
 
+<div class = "reportOutput">
 ```{r example 1 report, echo=FALSE}
 htmltools::includeHTML(sub(".md", ".html", workflow1$reportFileName))
 ```
+</div>
 
 ## Example 2
 
@@ -222,9 +227,11 @@ rmarkdown::render(workflow2$reportFileName)
 The output report for Example 2 is shown below. 
 There are now many more figures in the report showing not only time profiles in `µmol/ml` instead of `nmol/ml` but also residuals.
 
+<div class = "reportOutput">
 ```{r example 2 report, echo=FALSE}
 htmltools::includeHTML(sub(".md", ".html", workflow2$reportFileName))
 ```
+</div>
 
 ## Example 3
 
@@ -293,9 +300,11 @@ rmarkdown::render(workflow2$reportFileName)
 The output report for Example 3 is shown below. 
 The time profiles now indicate the LLOQ.
 
+<div class = "reportOutput">
 ```{r example 3 report, echo=FALSE}
 htmltools::includeHTML(sub(".md", ".html", workflow2$reportFileName))
 ```
+</div>
 
 ```{r delete example 3, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
@@ -367,9 +376,11 @@ rmarkdown::render(workflow4$reportFileName)
 
 The output report for Example 4 is shown below.
 
+<div class = "reportOutput">
 ```{r example 4 report, echo=FALSE}
 htmltools::includeHTML(sub(".md", ".html", workflow4$reportFileName))
 ```
+</div>
 
 ```{r delete example 4, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
@@ -446,9 +457,11 @@ rmarkdown::render(workflow5$reportFileName)
 
 The output report for Example 5 is shown below.
 
+<div class = "reportOutput">
 ```{r example 5 report, echo=FALSE}
 htmltools::includeHTML(sub(".md", ".html", workflow5$reportFileName))
 ```
+</div>
 
 ```{r delete example 5, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
@@ -508,9 +521,11 @@ rmarkdown::render(workflow6$reportFileName)
 The output report for Example 6 is shown below. 
 The 2 figures of the report (linear and log scales) include median, mean 5th and 95th percentiles of the population.
 
+<div class = "reportOutput">
 ```{r example 6 report, echo=FALSE}
 htmltools::includeHTML(sub(".md", ".html", workflow6$reportFileName))
 ```
+</div>
 
 ## Example 7
 
@@ -576,9 +591,11 @@ The residuals are calculated on the median simulated values.
 rmarkdown::render(workflow7$reportFileName)
 ```
 
+<div class = "reportOutput">
 ```{r example 7 report, echo=FALSE}
 htmltools::includeHTML(sub(".md", ".html", workflow7$reportFileName))
 ```
+</div>
 
 ```{r delete example 7, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders

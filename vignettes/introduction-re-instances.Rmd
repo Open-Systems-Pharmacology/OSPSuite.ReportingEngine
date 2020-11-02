@@ -10,6 +10,9 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r report output style, child="reportOutputStyle.css", eval=TRUE}
+```
+
 ```{r vignette setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -143,11 +146,11 @@ rmarkdown::render(myExampleWorkflow$reportFileName)
 
 The associated report will be as follows:
 
+<div class = "reportOutput">
 ```{r general scheme report, echo=FALSE}
-# TO DO: customize the HTML output:
-# The chunk needs to get a special source tag/type to be output differently
 htmltools::includeHTML(sub(".md", ".html", myExampleWorkflow$reportFileName))
 ```
+</div>
 
 ```{r delete general scheme, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
