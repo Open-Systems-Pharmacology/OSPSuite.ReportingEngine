@@ -3,6 +3,7 @@ title: "Sensitivity Analysis"
 output: 
   rmarkdown::html_vignette:
    number_sections: true
+   toc: true
 vignette: >
   %\VignetteIndexEntry{Sensitivity Analysis}
   %\VignetteEngine{knitr::rmarkdown}
@@ -34,7 +35,7 @@ simulationFile <- system.file("extdata", "caffeine-simulation.pkml",
 )
 ```
 
-For population sensitivity analyses, the user needs to similarly specifiy paths to `.csv` files containing data on the populations to be studied: 
+For population sensitivity analyses, the user needs to similarly specify paths to `.csv` files containing data on the populations to be studied: 
 
 ```{r echo=T, results='hide'}
 populationFile1 <- system.file("extdata", "pop1.csv",
@@ -105,7 +106,7 @@ mwf <- MeanModelWorkflow$new(
 )
 ```
 
-In this mean model workflow, the tasks will consist of a sensitivity analysis followed by generation of plots of the sensitivity analysis results.  These two task are activated as follows: 
+In this mean model workflow, the tasks will consist of a sensitivity analysis followed by generation of plots of the sensitivity analysis results.  These two tasks are activated as follows: 
 
 ```{r echo=T, results='hide'}
 mwf$simulate$activate()
