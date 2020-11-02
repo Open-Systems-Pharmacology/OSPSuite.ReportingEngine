@@ -3,6 +3,9 @@ title: "PK parameters"
 output: 
   rmarkdown::html_vignette:
    number_sections: true
+   toc: true
+#   self_contained: false
+#   keep_md: true
 vignette: >
   %\VignetteIndexEntry{pk-parameters}
   %\VignetteEngine{knitr::rmarkdown}
