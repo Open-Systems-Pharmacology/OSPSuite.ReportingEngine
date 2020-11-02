@@ -4,12 +4,18 @@
 \alias{createWorkflowFromExcelInput}
 \title{createWorkflowFromExcelInput}
 \usage{
-createWorkflowFromExcelInput(excelFile, workflowFile = "workflow.R")
+createWorkflowFromExcelInput(
+  excelFile,
+  workflowFile = "workflow.R",
+  keepComments = TRUE
+)
 }
 \arguments{
 \item{excelFile}{name of the Excel file from which the R script is created}
 
 \item{workflowFile}{name of the R script file created from the Excel file}
+
+\item{keepComments}{logical to keep comments and information in `workflowFile`}
 }
 \value{
 An R script of name `workflowFile` to be run

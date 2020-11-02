@@ -12,11 +12,13 @@ StandardExcelSheetNames <- enum(c(
 #' @description Creates an R script for running mean model or population workflows from an Excel file
 #' @param excelFile name of the Excel file from which the R script is created
 #' @param workflowFile name of the R script file created from the Excel file
+#' @param removeComments logical to remove comments and information in `workflowFile`
 #' @return An R script of name `workflowFile` to be run
 #' @export
-createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R") {
+createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R", removeComments = FALSE) {
   validateIsFileExtension(excelFile, c("xls", "xlsx"))
   validateIsFileExtension(workflowFile, "R")
+  validateIsLogical(removeComments)
 
   scriptContent <- NULL
 
@@ -81,7 +83,11 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R")
 
   # Use styler to beautify and standardize the formatof the output file
   scriptContent <- styler:::style_text(scriptContent)
-
+  
+  if(removeComments){
+    scriptContent <- removeCommentsFromWorkflowContent(scriptContent)
+  }
+  
   # Write the script
   fileObject <- file(workflowFile, encoding = "UTF-8")
   write(scriptContent, file = fileObject, sep = "\n")
@@ -607,4 +613,14 @@ concatenateDataDisplayName <- function(inputs, sep = " - ") {
     return("NULL")
   }
   return(paste0("'", paste0(inputs, collapse = sep), "'"))
+}
+
+
+#' @title removeCommentsFromWorkflowContent
+#' @description Remove comments from workflow file content
+#' @param workflowContent Character vector with content of the workflow file
+#' @param commentPattern Character starting a comment
+#' @return Workflow content without its comments
+removeCommentsFromWorkflowContent <- function(workflowContent, commentPattern = "#") {
+  return(workflowContent[!grepl(commentPattern, workflowContent)])
 }
