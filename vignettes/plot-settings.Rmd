@@ -3,6 +3,7 @@ title: "Plot settings"
 output: 
   rmarkdown::html_vignette:
    number_sections: true
+   toc: true
 vignette: >
   %\VignetteIndexEntry{plot-settings}
   %\VignetteEngine{knitr::rmarkdown}
@@ -65,9 +66,9 @@ reTheme <- Theme$new(
 The template list `reThemeProperties` includes the following fields:
 
 - `$labelColors` defining the default colors of the plot labels (e.g. title, xlabel ...)
-- `$aesProperties` defining the default aesthetic properties used by the plots and in which order they appear (e.g. color, linetype, shape ...)
+- `$aesProperties` defining the default aesthetic properties used by the plots and in which order they appear (e.g. color, line type, shape ...)
 - `$background` defining the default background properties (e.g. grid, color fill of inner/outer background ...)
-- `$defaultCaption`defining the default captions for specific `tlf` plots (e.g. pkRatio)
+- `$defaultCaption` defining the default captions for specific `tlf` plots (e.g. pkRatio)
 
 The size of the labels was defined as an independent input, `labelBaseSize`, simplifying the customization of the settings of `Theme` objects.
 The default sizes and properties can also be updated after the creation of the `Theme` object, as illustrated below:
@@ -123,7 +124,7 @@ __Note__: The __NULL__ input argument for watermark leads to using the default w
 # How to set task specific properties
 
 Each task of `Workflow` objects includes a field named __`settings`__.
-This optional field can be updated and will overwrite the default behaviour of a task.
+This optional field can be updated and will overwrite the default behavior of a task.
 
 Two usual subfields of __`settings`__ are: __`plotConfigurations`__ and __`bins`__.
 Other settings can also be provided and will be detailed in the next sections.
@@ -237,13 +238,13 @@ Then, the __`settings`__ field of the __"plotTimeProfilesAndResiduals"__ task ca
 workflowA$plotTimeProfilesAndResiduals$settings <- mySettings
 ```
 
-__Note__: currently the settings are allowed to be updated directly allocating the list.
+__Note__: currently the settings can be updated directly allocating the list.
 However, this method may lead to errors if the settings are not correctly defined.
 Relevant method will replace this process which may become deprecated in later versions.
 
 The run of the workflow with updated settings and get the resulting report as shown below.
 
-Since the histogram accross the all simulations did not get the plot configuration settings defined for individual simulations, the plots are quite different.
+Since the histogram across the all simulations did not get the plot configuration settings defined for individual simulations, the plots are quite different.
 However, the option __`bins`__ is currently set among all plots of the task.
 Regarding observed vs simulated plots, the got the updated xlabel, ylabel and watermark as defined in the plot configuration.
 
@@ -307,19 +308,19 @@ The vignette __"sensitivity-analysis"__ provides more details about the __"plotS
 
 The input argument of the __`SensitivityPlotSettings`__ settings object are then (to be created using `SensitivityPlotSettings$new()`): 
 
-- __`totalSensitivityThreshold`__: cut-off used for plots of the most sensitive parameters, default is __0.9__.
+- __`totalSensitivityThreshold`__: cut-off used for plots of the most sensitive parameters; default is __0.9__.
 - __`variableParameterPaths`__: paths that were varied in the sensitivity analysis.
 If supplied __`totalSensitivityThreshold`__ is 1, else it uses the default or user-provided value.
 - __`maximalParametersPerSensitivityPlot`__: maximal number of parameters to display in a sensitivity plot.
-By default the maximal number of parameters to display is __50__.
+By default, the maximal number of parameters to display is __50__.
 - __`plotConfiguration`__: `PlotConfiguration` object from `tlf` library
-- __`xAxisFontSize`__: Font size of x-axis labels for sensitivity plot, that can overwrite behaviour of __`plotConfiguration`__.
+- __`xAxisFontSize`__: Font size of x-axis labels for sensitivity plot, that can overwrite behavior of __`plotConfiguration`__.
 Default font size is 6.
-- __`yAxisFontSize`__: Font size of y-axis labels for sensitivity plot, that can overwrite behaviour of __`plotConfiguration`__.
+- __`yAxisFontSize`__: Font size of y-axis labels for sensitivity plot, that can overwrite behavior of __`plotConfiguration`__.
 Default font size is 6.
-- __`xLabel`__ Label of x-axis for sensitivity plot, that can overwrite behaviour of __`plotConfiguration`__.
+- __`xLabel`__ Label of x-axis for sensitivity plot, that can overwrite behavior of __`plotConfiguration`__.
 Default xLabel is __"Sensitivity"__.
-- __`yLabel`__ Label of y-axis for sensitivity plot, that can overwrite behaviour of __`plotConfiguration`__.
+- __`yLabel`__ Label of y-axis for sensitivity plot, that can overwrite behavior of __`plotConfiguration`__.
 Default yLabel is __NULL__.
 - __`colorPalette`__ Name of a color palette to be used by `ggplot2::scale_fill_brewer()` for sensitivity plot.
 Default color palette is __"Spectral"__.
@@ -336,7 +337,7 @@ The name in the __`plotConfigurations`__ list available for the __"plotMassBalan
 
 - __"timeProfile"__: for time profile plots of mass balance in linear and log scales
 - __"cumulativeTimeProfile"__: for cumulative time profile plots of mass balance in linear and log scales
-- __"normalizedTimeProfile"__: for normalized time profile plots (as fraction of drugmass) of mass balance in linear and log scales
+- __"normalizedTimeProfile"__: for normalized time profile plots (as fraction of drug mass) of mass balance in linear and log scales
 - __"normalizedCumulativeTimeProfile"__: for cumulative normalized time profile plots of mass balance in linear and log scales
 - __"pieChart"__: for pie chart of mass balance at last simulated time point
 
