@@ -3,6 +3,7 @@ title: "Time profiles and Residuals task"
 output: 
   rmarkdown::html_vignette:
    number_sections: true
+   toc: true
 vignette: >
   %\VignetteIndexEntry{goodness-of-fit}
   %\VignetteEngine{knitr::rmarkdown}
@@ -37,7 +38,7 @@ As a consequence, if the workflow output folder does not include the appropriate
 
 The objects `SimulationSet` (or `PopulationSimulationSet` for population workflows) and `Output` define which and how the simulated and, if available, observed data will be plotted.
 
-## Ouptuts
+## Outputs
 
 The time profiles and residuals task generates for each simulation set plots of:
 
@@ -48,7 +49,7 @@ The time profiles and residuals task generates for each simulation set plots of:
 
 ### Multiple applications
 
-For a multiple applications, 
+For a multiple application, 
 6 time profile plots can be generated corresponding to simulated time profiles in linear and logarithmic scale for: 
 
 - the total simulated time range
@@ -72,7 +73,7 @@ A histogram and a qq-plot of residuals across all the simulation sets will also 
 
 For population workflows, residuals are calculated from the aggregation of the Simulated output.
 By default, $median(Simulated)$ is used instead of $Simulated$.
-It is possible to modify this agregation function by updating the fields of the object __AggregationConfiguration__.
+It is possible to modify this aggregation function by updating the fields of the object __AggregationConfiguration__.
 
 # Template examples
 
@@ -93,7 +94,7 @@ knitr::kable(examplesTable, caption = "Table 1: Features tested by each template
 
 ## Example 1
 
-Example 1 shows one of the simplest workflow including a goodness of fit.
+Example 1 shows one of the simplest workflows including a goodness of fit.
 In this example, only a simulation time profile is performed since there is no observed data.
 Furthermore, only one simulation set and one output are requested.
 
