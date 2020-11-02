@@ -342,6 +342,14 @@ getWorkflowContent <- function(workflowTable, excelFile) {
     if (isOfLength(activeTaskName, 0)) {
       next
     }
+    if(workflowMode == "PopulationWorkflow" & isIncluded(taskName, c("plotAbsorption", "plotMassBalance"))){
+      print(paste0("Task '", taskName, "' defined as active, was not printed because '", taskName,"' is not available for '", workflowMode, "'."))
+      next
+    }
+    if(workflowMode == "MeanModelWorkflow" & isIncluded(taskName, "plotDemography")){
+      print(paste0("Task '", taskName, "' defined as active, was not printed because '", taskName,"' is not available for '", workflowMode, "'."))
+      next
+    } 
     activateTaskContent <- c(
       activateTaskContent,
       paste0("workflow$activateTasks(", activeTaskName, ")")
