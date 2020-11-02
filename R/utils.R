@@ -282,3 +282,23 @@ getPKParametersInSimulationSet <- function(simulationSet) {
   }
   return(pkParametersTable)
 }
+
+
+
+#' @title getAllowedCores
+#' @return Allowed number of CPU cores for computation
+getAllowedCores <- function() {
+  cores <- tryCatch({
+    # get cpu allowance from files
+    cfs_quota_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us", intern = T))
+    cfs_period_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_period_us", intern = T))
+    cfs_quota_us / cfs_period_us
+  },
+  error = function(cond) {
+    return(NULL)
+  },
+  warning = function(cond) {
+    return(NULL)
+  }
+  )
+}

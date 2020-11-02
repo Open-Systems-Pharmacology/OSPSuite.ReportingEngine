@@ -6,27 +6,18 @@
 \usage{
 individualSensitivityAnalysis(
   structureSet,
-  variableParameterPaths = NULL,
+  settings,
   individualParameters,
-  variationRange,
-  numberOfCores = 1,
-  showProgress = FALSE,
   logFolder = getwd()
 )
 }
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object}
 
-\item{variableParameterPaths}{paths to parameters to vary in sensitivity analysis}
+\item{settings}{list of settings for the sensitivity analysis}
 
 \item{individualParameters}{is an object storing an individual's parameters, obtained from a
 population object's getParameterValuesForIndividual() function.}
-
-\item{variationRange}{variation range for sensitivity analysis}
-
-\item{numberOfCores}{is the number of cores over which to parallelize the sensitivity analysis}
-
-\item{showProgress}{logical prints progress of sensitivity analysis}
 
 \item{logFolder}{folder where the logs are saved}
 }

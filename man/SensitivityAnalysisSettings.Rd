@@ -18,6 +18,8 @@ R6 class for Population Sensitivity Analysis Settings
 \item{\code{variableParameterPaths}}{vector of paths of parameters to vary when performing sensitivity analysis}
 
 \item{\code{showProgress}}{is a logical input.  TRUE shows progress of sensitivity analysis}
+
+\item{\code{allowedCores}}{is the number of cores assigned to the user session.}
 }
 \if{html}{\out{</div>}}
 }

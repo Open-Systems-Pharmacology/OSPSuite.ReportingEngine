@@ -83,6 +83,19 @@ SensitivityAnalysisSettings <- R6::R6Class(
           private$.showProgress <- value
         }
       }
+    },
+
+    #' @field allowedCores is the number of cores assigned to the user session.
+    allowedCores = function(value) {
+      if (missing(value)) {
+        private$.allowedCores
+      } else {
+        if (!is.null(value)) {
+          validateIsInteger(value)
+          validateIsOfLength(object = value, nbElements = 1)
+          private$.allowedCores <- value
+        }
+      }
     }
   ),
 
@@ -91,6 +104,7 @@ SensitivityAnalysisSettings <- R6::R6Class(
     .numberOfCores = NULL,
     .quantileVec = NULL,
     .variableParameterPaths = NULL,
-    .showProgress = NULL
+    .showProgress = NULL,
+    .allowedCores = NULL
   )
 )
