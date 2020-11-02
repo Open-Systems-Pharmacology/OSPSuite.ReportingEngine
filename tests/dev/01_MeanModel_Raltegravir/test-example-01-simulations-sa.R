@@ -44,7 +44,7 @@ meanModelSets <- list(
 )
 
 myMeanWorkflow <- MeanModelWorkflow$new(simulationSets = meanModelSets, workflowFolder = workflowFolder)
-myMeanWorkflow$activateTasks(c("simulate", "meanModelPKParameters", "meanModelSensitivityAnalysis"))
+myMeanWorkflow$activateTasks(c("simulate", "calculatePKParameters", "calculateSensitivity"))
 # myMeanWorkflow$inactivateTasks()
 
 myMeanWorkflow$runWorkflow()
