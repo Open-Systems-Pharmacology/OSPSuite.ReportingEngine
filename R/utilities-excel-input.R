@@ -43,13 +43,17 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
     "require(ospsuite.reportingengine)", ""
   )
 
+  # TO DO: issue #340
   if (isIncluded(StandardExcelSheetNames$`Userdef PK Parameter`, inputSections)) {}
 
   pkParametersContent <- NULL
   if (isIncluded(StandardExcelSheetNames$`PK Parameter`, inputSections)) {
     pkParametersTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$`PK Parameter`)
     validateIsIncluded(c("Name", "Display name", "Unit"), names(pkParametersTable))
-    pkParametersContent <- getPKParametersContent(pkParametersTable)
+    pkParametersInfo <- getPKParametersContent(pkParametersTable)
+    pkParametersContent <- pkParametersInfo$content
+    scriptWarnings$messages[["PK Parameters"]] <- pkParametersInfo$warnings
+    scriptErrors$messages[["PK Parameters"]] <- pkParametersInfo$errors
   }
 
   if (isIncluded(StandardExcelSheetNames$`Workflow and Tasks`, inputSections)) {
@@ -106,7 +110,14 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
   write(scriptContent, file = fileObject, sep = "\n")
   close(fileObject)
 
-  print(paste0("Script '", workflowFile, "' successfully created"))
+  # This chunk of code aims at printing warnings and potential errors
+  cat(paste0("Script '", workflowFile, "' successfully created\n\n"))
+  # The weird characters are only meant to write the content in bold
+  cat("\033[1m# Warnings\033[22m\n")
+  scriptWarnings$displayMessage()
+  cat("\033[1m# Errors\033[22m\n")
+  scriptErrors$displayMessage()
+
   return(invisible(workflowFile))
 }
 
