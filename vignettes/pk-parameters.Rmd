@@ -3,11 +3,17 @@ title: "PK parameters"
 output: 
   rmarkdown::html_vignette:
    number_sections: true
+   toc: true
+#   self_contained: false
+#   keep_md: true
 vignette: >
   %\VignetteIndexEntry{pk-parameters}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
+```{r report output style, child="reportOutputStyle.css", eval=TRUE}
+```
 
 ```{r vignette setup, include = FALSE}
 knitr::opts_chunk$set(
@@ -34,7 +40,7 @@ As a consequence, if the workflow output folder does not include the appropriate
 
 The objects `SimulationSet` (or `PopulationSimulationSet` for population workflows) and `Output` define which and how the simulated PK parameters will be reported.
 
-## Ouptuts
+## Outputs
 
 ### Mean model workflow
 
@@ -42,19 +48,19 @@ For mean model workflows, the PK parameters task generates directly the table of
 
 ### Population model workflow
 
-The distribution of the calculated PK parameters for each requested output are plotted as BoxWhisker plots along with a table.
+The distribution of the calculated PK parameters for each requested output are plotted as Box Whisker plots along with a table.
 By default, the 5th, 25th, 50th, 75th and 95th percentiles are plotted.
 
-There exists different types of a population workflow which will lead to different output:
+Different types of a population workflow will lead to different output:
 
-- __Parallel Comparison__: PK parameters are plotted parallel in the BoxWhisker plots without any __reference population__.
-- __Ratio Comparison__: Same as Parallel Comparison with additional BoxWhisker plots and tables of the ratio of the PK parameters to the reference population is calculated and plotted in BoxWhisker plots.
+- __Parallel Comparison__: PK parameters are plotted parallel in the Box Whisker plots without any __reference population__.
+- __Ratio Comparison__: Same as Parallel Comparison with additional Box Whisker plots and tables of the ratio of the PK parameters to the reference population is calculated and plotted in Box Whisker plots.
 - __Pediatric__: PK Parameters are also  plotted as range plots of the PK parameters vs. age and weight.
 
 Regarding range, the task option __xParameters__ can be used to define which demography parameters to use in x-axis of range plots.
 Parallel and ratio use a `NULL` value by default, however it is also possible to add range plots to a Parallel or ratio comparison workflow by updating the value of __xParameters__.
 
-Regarding ratio comparison, the formula below is used to calculate the BoxWhisker plot percentile values:
+Regarding ratio comparison, the formula below is used to calculate the Box Whisker plot percentile values:
 $$PK\ Parameter\ Percentile\ Ratio = \frac{PK\ Parameter\ Percentile\ in\ Population}{PK\ Parameter\ Percentile\ in\ Reference\ Population}$$
 
 # Template examples
@@ -125,9 +131,11 @@ rmarkdown::render(workflow1$reportFileName)
 The output report for Example 1 is shown below. 
 The table indicates the requested parameters in their base unit.
 
+<div class = "reportOutput">
 ```{r example 1 report, echo=FALSE}
 htmltools::includeHTML(sub(".md", ".html", workflow1$reportFileName))
 ```
+</div>
 
 ```{r delete example 1, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
@@ -189,9 +197,11 @@ rmarkdown::render(workflow2$reportFileName)
 The output report for Example 2 is shown below. 
 The table indicates the requested parameters in their base unit.
 
+<div class = "reportOutput">
 ```{r example 2 report, echo=FALSE}
 htmltools::includeHTML(sub(".md", ".html", workflow2$reportFileName))
 ```
+</div>
 
 ```{r delete example 2, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
@@ -264,9 +274,11 @@ rmarkdown::render(workflow3$reportFileName)
 The output report for Example 3 is shown below. 
 The table indicates the requested parameters in the updated units and display names.
 
+<div class = "reportOutput">
 ```{r example 3 report, echo=FALSE}
 htmltools::includeHTML(sub(".md", ".html", workflow3$reportFileName))
 ```
+</div>
 
 ```{r reset pk parameters from example 3, include=FALSE, echo=FALSE}
 # Go back to previous PK parameter settings
@@ -349,9 +361,11 @@ rmarkdown::render(workflow4$reportFileName)
 The output report for Example 4 is shown below. 
 The table indicates the requested parameters in the updated units and display names.
 
+<div class = "reportOutput">
 ```{r example 4 report, echo=FALSE}
 htmltools::includeHTML(sub(".md", ".html", workflow4$reportFileName))
 ```
+</div>
 
 ```{r delete example 4, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
@@ -416,12 +430,14 @@ workflow5$runWorkflow()
 rmarkdown::render(workflow5$reportFileName)
 ```
 
-The output report for Example 5 is shown below. 
-For the population, BoxWhisker plots in linear and log scales are.
+The output report for Example 6 is shown below. 
+For the population, Box Whisker plots in linear and log scales are.
 
+<div class = "reportOutput">
 ```{r example 5 report, echo=FALSE}
 htmltools::includeHTML(sub(".md", ".html", workflow5$reportFileName))
 ```
+</div>
 
 ```{r delete example 5, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
@@ -497,9 +513,11 @@ rmarkdown::render(workflow6$reportFileName)
 The output report for Example 6 is shown below. 
 For the population, BoxWhisker plots in linear and log scales are.
 
+<div class = "reportOutput">
 ```{r example 6 report, echo=FALSE}
 htmltools::includeHTML(sub(".md", ".html", workflow6$reportFileName))
 ```
+</div>
 
 ## Example 7
 
@@ -571,9 +589,11 @@ rmarkdown::render(workflow7$reportFileName)
 
 The output report for Example 7 is shown below. 
 
+<div class = "reportOutput">
 ```{r example 7 report, echo=FALSE}
 htmltools::includeHTML(sub(".md", ".html", workflow7$reportFileName))
 ```
+</div>
 
 ## Example 8
 
@@ -649,9 +669,11 @@ rmarkdown::render(workflow8$reportFileName)
 
 The output report for Example 8 is shown below. 
 
+<div class = "reportOutput">
 ```{r example 8 report, echo=FALSE}
 htmltools::includeHTML(sub(".md", ".html", workflow8$reportFileName))
 ```
+</div>
 
 ```{r delete example 8, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
