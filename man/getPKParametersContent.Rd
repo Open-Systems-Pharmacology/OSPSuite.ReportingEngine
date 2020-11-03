@@ -10,7 +10,7 @@ getPKParametersContent(pkParametersTable)
 \item{pkParametersTable}{Data.frame read from the Excel sheet "PK Parameters"}
 }
 \value{
-Character vector updating the PKParameters objects
+A list of script content, associated with its potential warnings and errors for updating the PKParameters objects
 }
 \description{
 Creates a character vector to be written in a workflow .R script updating the PKParameters objects
