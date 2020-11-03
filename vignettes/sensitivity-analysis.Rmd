@@ -3,12 +3,16 @@ title: "Sensitivity Analysis"
 output: 
   rmarkdown::html_vignette:
    number_sections: true
+   toc: true
 vignette: >
   %\VignetteIndexEntry{Sensitivity Analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-  
+
+```{r report output style, child="reportOutputStyle.css", eval=TRUE}
+```
+
 ```{r vignette setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -34,7 +38,7 @@ simulationFile <- system.file("extdata", "caffeine-simulation.pkml",
 )
 ```
 
-For population sensitivity analyses, the user needs to similarly specifiy paths to `.csv` files containing data on the populations to be studied: 
+For population sensitivity analyses, the user needs to similarly specify paths to `.csv` files containing data on the populations to be studied: 
 
 ```{r echo=T, results='hide'}
 populationFile1 <- system.file("extdata", "pop1.csv",
@@ -105,7 +109,7 @@ mwf <- MeanModelWorkflow$new(
 )
 ```
 
-In this mean model workflow, the tasks will consist of a sensitivity analysis followed by generation of plots of the sensitivity analysis results.  These two task are activated as follows: 
+In this mean model workflow, the tasks will consist of a sensitivity analysis followed by generation of plots of the sensitivity analysis results.  These two tasks are activated as follows: 
 
 ```{r echo=T, results='hide'}
 mwf$simulate$activate()
@@ -165,9 +169,11 @@ The output report, containing the mean model sensitivity plots from this example
 rmarkdown::render(mwf$reportFileName)
 ```
 
+<div class = "reportOutput">
 ```{r mwf report,echo=F}
 htmltools::includeHTML(sub(".md", ".html", mwf$reportFileName))
 ```
+</div>
 
 ```{r delete mwf, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
@@ -305,9 +311,11 @@ The output report, containing the population sensitivity plots from this example
 rmarkdown::render(pwf$reportFileName)
 ```
 
+<div class = "reportOutput">
 ```{r pwf report,echo=F}
 htmltools::includeHTML(sub(".md", ".html", pwf$reportFileName))
 ```
+</div>
 
 ```{r delete pwf, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
