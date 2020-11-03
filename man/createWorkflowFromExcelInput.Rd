@@ -7,7 +7,7 @@
 createWorkflowFromExcelInput(
   excelFile,
   workflowFile = "workflow.R",
-  keepComments = TRUE
+  removeComments = FALSE
 )
 }
 \arguments{
@@ -15,7 +15,7 @@ createWorkflowFromExcelInput(
 
 \item{workflowFile}{name of the R script file created from the Excel file}
 
-\item{keepComments}{logical to keep comments and information in `workflowFile`}
+\item{removeComments}{logical to remove comments and information in `workflowFile`}
 }
 \value{
 An R script of name `workflowFile` to be run

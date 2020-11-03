@@ -37,7 +37,11 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
     scriptContent <- c(scriptContent, scriptDocumentation)
   }
 
-  scriptContent <- c(scriptContent, "require(ospsuite.reportingengine)", "")
+  scriptContent <- c(
+    scriptContent,
+    '# Load package "ospsuite.reportingengine" (require() function install the package if not installed yet)',
+    "require(ospsuite.reportingengine)", ""
+  )
 
   if (isIncluded(StandardExcelSheetNames$`Userdef PK Parameter`, inputSections)) {}
 
@@ -92,11 +96,11 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
 
   # Use styler to beautify and standardize the formatof the output file
   scriptContent <- styler:::style_text(scriptContent)
-  
-  if(removeComments){
+
+  if (removeComments) {
     scriptContent <- removeCommentsFromWorkflowContent(scriptContent)
   }
-  
+
   # Write the script
   fileObject <- file(workflowFile, encoding = "UTF-8")
   write(scriptContent, file = fileObject, sep = "\n")
@@ -251,6 +255,9 @@ getOutputContent <- function(excelFile, outputInfo) {
     ))
     outputContent <- c(
       outputContent,
+      paste0("# Create an Output object of name '", outputNames[outputIndex], "' defining which path, its PK parameters and their display to use in a simulation set"),
+      "# The 'dataSelection' input is a character expression selecting which observed data to be compared to the path",
+      "# The 'pkParameters' input can be a character array using defined PK Parameter names or an array of PkParameterInfo objects",
       paste0(
         outputNames[outputIndex], " <- Output$new(
           path = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$path), ", 
@@ -333,6 +340,8 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
 
     simulationSetContent <- c(
       simulationSetContent,
+      paste0("# Create a SimulationSet object of name '", simulationSetNames[simulationIndex], "' defining which simulation, its Output objects, observed dataset and potentially its population to use in the workflow"),
+      "# Note that workflows of type 'MeanModelWorkflow' require SimulationSet objects, while workflows of type 'PopulationWorkflow' require PopulationSimulationSet objects",
       paste0(
         simulationSetNames[simulationIndex],
         " <- ", simulationType, "$new(
@@ -416,8 +425,10 @@ getWorkflowContent <- function(workflowTable, excelFile) {
   }
 
   workflowContent <- c(
+    paste0("# Create a ", workflowMode, " object of name 'workflow' defining which tasks to perform on its list of simulation sets"),
     workflowContent,
     "",
+    "# The workflow method $inactivateTasks() prevents running tasks that could be active by default (such as 'simulate')",
     "workflow$inactivateTasks()",
     activateTaskContent,
     ""
@@ -433,10 +444,19 @@ getWorkflowContent <- function(workflowTable, excelFile) {
       settingValue <- getSensitivityVariableParameterPaths(excelFile, sensitivityParametersSheet = settingValue)
     }
     settingContent <- paste0(OptionalSettings[[optionalSettingName]], settingValue)
-    workflowContent <- c(workflowContent, settingContent)
+    workflowContent <- c(
+      workflowContent,
+      "# The following code chunk defines tasks optional settings",
+      settingContent
+    )
   }
 
-  return(list(workflowMode = workflowMode, workflowContent = workflowContent))
+  return(list(
+    workflowMode = workflowMode,
+    content = workflowContent,
+    warnings = workflowWarnings,
+    errors = workflowErrors
+  ))
 }
 
 WorkflowMandatoryVariables <- enum(c(
@@ -638,8 +658,12 @@ getPKParametersContent <- function(pkParametersTable) {
       paste0('updatePKParameter("', pkParametersTable$Name[parameterIndex], '", displayName = "', pkParametersTable$`Display name`[parameterIndex], '", displayUnit = "', pkParametersTable$Unit[parameterIndex], '")')
     )
   }
-  pkParametersContent <- c(pkParametersContent, "")
-  return(pkParametersContent)
+  pkParametersContent <- c(
+    '# Update PK parameters display names and units using "ospsuite" package.',
+    "# This method should be preferred as it centralizes the names and units among the different paths.",
+    pkParametersContent,
+    ""
+  )
   return(list(
     content = pkParametersContent,
     warnings = pkParametersWarnings,
