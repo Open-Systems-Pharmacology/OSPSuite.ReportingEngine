@@ -12,13 +12,18 @@ StandardExcelSheetNames <- enum(c(
 #' @description Creates an R script for running mean model or population workflows from an Excel file
 #' @param excelFile name of the Excel file from which the R script is created
 #' @param workflowFile name of the R script file created from the Excel file
+#' @param removeComments logical to remove comments and information in `workflowFile`
 #' @return An R script of name `workflowFile` to be run
 #' @export
-createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R") {
+createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R", removeComments = FALSE) {
   validateIsFileExtension(excelFile, c("xls", "xlsx"))
   validateIsFileExtension(workflowFile, "R")
+  validateIsLogical(removeComments)
 
   scriptContent <- NULL
+  # Initialize warnings and errors
+  scriptWarnings <- ExcelMessaging$new("warnings")
+  scriptErrors <- ExcelMessaging$new("errors")
 
   inputSections <- readxl::excel_sheets(excelFile)
   # Check for mandotory input sections
@@ -32,15 +37,23 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R")
     scriptContent <- c(scriptContent, scriptDocumentation)
   }
 
-  scriptContent <- c(scriptContent, "require(ospsuite.reportingengine)", "")
+  scriptContent <- c(
+    scriptContent,
+    '# Load package "ospsuite.reportingengine" (require() function install the package if not installed yet)',
+    "require(ospsuite.reportingengine)", ""
+  )
 
+  # TO DO: issue #340
   if (isIncluded(StandardExcelSheetNames$`Userdef PK Parameter`, inputSections)) {}
 
   pkParametersContent <- NULL
   if (isIncluded(StandardExcelSheetNames$`PK Parameter`, inputSections)) {
     pkParametersTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$`PK Parameter`)
     validateIsIncluded(c("Name", "Display name", "Unit"), names(pkParametersTable))
-    pkParametersContent <- getPKParametersContent(pkParametersTable)
+    pkParametersInfo <- getPKParametersContent(pkParametersTable)
+    pkParametersContent <- pkParametersInfo$content
+    scriptWarnings$messages[["PK Parameters"]] <- pkParametersInfo$warnings
+    scriptErrors$messages[["PK Parameters"]] <- pkParametersInfo$errors
   }
 
   if (isIncluded(StandardExcelSheetNames$`Workflow and Tasks`, inputSections)) {
@@ -49,7 +62,9 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R")
     validateIsIncluded(WorkflowMandatoryVariables$Description, names(workflowTable)[2])
 
     workflowInfo <- getWorkflowContent(workflowTable = workflowTable, excelFile = excelFile)
-    workflowContent <- workflowInfo$workflowContent
+    workflowContent <- workflowInfo$content
+    scriptWarnings$messages[["Workflow and Tasks"]] <- workflowInfo$warnings
+    scriptErrors$messages[["Workflow and Tasks"]] <- workflowInfo$errors
   }
 
   simulationSetContent <- NULL
@@ -59,13 +74,17 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R")
     validateIsIncluded(WorkflowMandatoryVariables$Description, names(simulationSetTable)[2])
 
     simulationSetInfo <- getSimulationSetContent(excelFile, simulationSetTable, workflowMode = workflowInfo$workflowMode)
-    simulationSetContent <- simulationSetInfo$simulationSetContent
+    simulationSetContent <- simulationSetInfo$content
+    scriptWarnings$messages[["Simulation Sets"]] <- simulationSetInfo$warnings
+    scriptErrors$messages[["Simulation Sets"]] <- simulationSetInfo$errors
   }
 
   outputContent <- NULL
-  for (outputInfo in simulationSetInfo$outputInfo) {
-    outputInfo <- getOutputContent(excelFile, outputInfo)
-    outputContent <- c(outputContent, outputInfo)
+  for (outputName in simulationSetInfo$outputInfo) {
+    outputInfo <- getOutputContent(excelFile, outputName)
+    outputContent <- c(outputContent, outputInfo$content)
+    scriptWarnings$messages[[outputName$sheetName]] <- outputInfo$warnings
+    scriptErrors$messages[[outputName$sheetName]] <- outputInfo$errors
   }
 
   runWorkflowContent <- c("", "workflow$runWorkflow()", "")
@@ -82,12 +101,23 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R")
   # Use styler to beautify and standardize the formatof the output file
   scriptContent <- styler:::style_text(scriptContent)
 
+  if (removeComments) {
+    scriptContent <- removeCommentsFromWorkflowContent(scriptContent)
+  }
+
   # Write the script
   fileObject <- file(workflowFile, encoding = "UTF-8")
   write(scriptContent, file = fileObject, sep = "\n")
   close(fileObject)
 
-  print(paste0("Script '", workflowFile, "' successfully created"))
+  # This chunk of code aims at printing warnings and potential errors
+  cat(paste0("Script '", workflowFile, "' successfully created\n\n"))
+  # The weird characters are only meant to write the content in bold
+  cat("\033[1m# Warnings\033[22m\n")
+  scriptWarnings$displayMessage()
+  cat("\033[1m# Errors\033[22m\n")
+  scriptErrors$displayMessage()
+
   return(invisible(workflowFile))
 }
 
@@ -117,19 +147,46 @@ getScriptDocumentation <- function(excelFile, colSep = "\t") {
 #' @return Character vector defining `pkParameters` input of `Output` object
 getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
   pkParametersContent <- NULL
+  pkParametersWarnings <- NULL
   pkParametersTable <- readxl::read_excel(excelFile, sheet = pkParametersSheet)
   validateIsIncluded("Name", names(pkParametersTable)[1])
 
+  # Check for duplicate PK parameters as input of Output object
+  if (any(duplicated(pkParametersTable$Name))) {
+    pkParametersWarnings <- c(
+      pkParametersWarnings,
+      paste0(
+        "PK parameters '",
+        paste0(pkParametersTable$Name[duplicated(pkParametersTable$Name)], collapse = "', '"),
+        "' selected multiple times from Excel sheet '",
+        pkParametersSheet, "'"
+      )
+    )
+  }
+
   if (all(is.na(pkParametersTable$`Display name`)) && all(is.na(pkParametersTable$Unit))) {
     pkParametersContent <- c(
-      paste0(
-        "pkParameters <- c('",
-        paste0(pkParametersTable$Name, collapse = "', '"),
-        "')"
-      ),
+      paste0("pkParameters <- c('", paste0(pkParametersTable$Name, collapse = "', '"), "')"),
       ""
     )
-    return(pkParametersContent)
+    return(list(
+      content = pkParametersContent,
+      warnings = pkParametersWarnings
+    ))
+  }
+
+  # Check for duplicate PK parameter display names as input of Output object
+  # Undefined display names are NAs.
+  # Consequently, NAs need to be removed from this check
+  if (any(duplicated(pkParametersTable$`Display name`[!is.na(pkParametersTable$`Display name`)]))) {
+    pkParametersWarnings <- c(
+      pkParametersWarnings,
+      paste0(
+        "PK parameters '",
+        paste0(pkParametersTable$Name[duplicated(pkParametersTable$`Display name`[!is.na(pkParametersTable$`Display name`)])], collapse = "', '"),
+        "' from Excel sheet '", pkParametersSheet, "' used a display name already assigned to a previous PK parameter"
+      )
+    )
   }
 
   for (pkParameterIndex in seq_along(pkParametersTable$Name)) {
@@ -163,7 +220,10 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
     ),
     ""
   )
-  return(pkParametersContent)
+  return(list(
+    content = pkParametersContent,
+    warnings = pkParametersWarnings
+  ))
 }
 
 #' @title getOutputContent
@@ -173,6 +233,8 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
 #' @return Character vector defining the `Output` object
 getOutputContent <- function(excelFile, outputInfo) {
   outputContent <- NULL
+  outputWarnings <- NULL
+  outputErrors <- NULL
   outputTable <- readxl::read_excel(excelFile, sheet = outputInfo$sheetName)
   validateIsIncluded(WorkflowMandatoryVariables$`Code Identifier`, names(outputTable)[1])
   validateIsIncluded(WorkflowMandatoryVariables$Description, names(outputTable)[2])
@@ -184,11 +246,11 @@ getOutputContent <- function(excelFile, outputInfo) {
     pkParametersSheet <- getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$pkParameters)
     if (!is.na(pkParametersSheet)) {
       validateIsIncluded(pkParametersSheet, readxl::excel_sheets(excelFile), groupName = paste0("Sheet names of '", excelFile, "'"))
-      pkParametersContent <- getPKParametersInfoContent(excelFile, pkParametersSheet)
-      outputContent <- c(
-        outputContent,
-        pkParametersContent
-      )
+      pkParametersInfo <- getPKParametersInfoContent(excelFile, pkParametersSheet)
+      pkParametersContent <- pkParametersInfo$content
+      outputWarnings <- c(outputWarnings, pkParametersInfo$warnings)
+      outputContent <- c(outputContent, pkParametersContent)
+      # The line break within paste0 is needed to ensure a nice structure in the output script
       pkParametersOutputContent <- paste0(", 
                                           pkParameters = pkParameters")
     }
@@ -204,6 +266,9 @@ getOutputContent <- function(excelFile, outputInfo) {
     ))
     outputContent <- c(
       outputContent,
+      paste0("# Create an Output object of name '", outputNames[outputIndex], "' defining which path, its PK parameters and their display to use in a simulation set"),
+      "# The 'dataSelection' input is a character expression selecting which observed data to be compared to the path",
+      "# The 'pkParameters' input can be a character array using defined PK Parameter names or an array of PkParameterInfo objects",
       paste0(
         outputNames[outputIndex], " <- Output$new(
           path = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$path), ", 
@@ -217,7 +282,11 @@ getOutputContent <- function(excelFile, outputInfo) {
       ""
     )
   }
-  return(outputContent)
+  return(list(
+    content = outputContent,
+    warnings = outputWarnings,
+    errors = outputErrors
+  ))
 }
 
 #' @title getSimulationSetContent
@@ -229,6 +298,8 @@ getOutputContent <- function(excelFile, outputInfo) {
 getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
   simulationSetContent <- NULL
   outputSheets <- NULL
+  simulationSetWarnings <- NULL
+  simulationSetErrors <- NULL
 
   simulationSetNames <- names(simulationTable[, 3:ncol(simulationTable)])
   simulationSetNames <- gsub(pattern = "[[:space:]*]", replacement = "", x = simulationSetNames)
@@ -280,6 +351,8 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
 
     simulationSetContent <- c(
       simulationSetContent,
+      paste0("# Create a SimulationSet object of name '", simulationSetNames[simulationIndex], "' defining which simulation, its Output objects, observed dataset and potentially its population to use in the workflow"),
+      "# Note that workflows of type 'MeanModelWorkflow' require SimulationSet objects, while workflows of type 'PopulationWorkflow' require PopulationSimulationSet objects",
       paste0(
         simulationSetNames[simulationIndex],
         " <- ", simulationType, "$new(
@@ -302,9 +375,11 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
   )
 
   return(list(
-    simulationSetContent = simulationSetContent,
+    content = simulationSetContent,
     simulationSetNames = simulationSetNames,
-    outputInfo = unique(allOutputInfo)
+    outputInfo = unique(allOutputInfo),
+    warnings = simulationSetWarnings,
+    errors = simulationSetErrors
   ))
 }
 
@@ -316,6 +391,11 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
 getWorkflowContent <- function(workflowTable, excelFile) {
   workflowMode <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$`Workflow Mode`)
   workflowTypeContent <- NULL
+  workflowContent <- NULL
+  activateTaskContent <- NULL
+  workflowWarnings <- NULL
+  workflowErrors <- NULL
+
   if (workflowMode == "PopulationWorkflow") {
     workflowType <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$`Population Workflow type`)
     workflowTypeContent <- paste0("workflowType = ", workflowType, ", ")
@@ -323,17 +403,29 @@ getWorkflowContent <- function(workflowTable, excelFile) {
   workflowFolder <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$workflowFolder)
   createWordReport <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$createWordReport)
 
-  workflowContent <- NULL
-
   workflowContent <- paste0("workflow <- ", workflowMode, "$new(", workflowTypeContent, "simulationSets = simulationSets, workflowFolder = ", workflowFolder, ", createWordReport = ", createWordReport, ")")
 
-  activateTaskContent <- NULL
+  # Activate tasks as defined by user
   isActive <- lapply(AllAvailableTasks, function(x) {
     FALSE
   })
   for (taskName in AllAvailableTasks) {
     activeTaskName <- getIdentifierInfo(workflowTable, 1, taskName)
     if (isOfLength(activeTaskName, 0)) {
+      next
+    }
+    if (workflowMode == "PopulationWorkflow" & isIncluded(taskName, c("plotAbsorption", "plotMassBalance"))) {
+      workflowWarnings <- c(
+        workflowWarnings,
+        paste0("Task '", taskName, "' defined as active, was not printed because '", taskName, "' is not available for '", workflowMode, "'.")
+      )
+      next
+    }
+    if (workflowMode == "MeanModelWorkflow" & isIncluded(taskName, "plotDemography")) {
+      workflowWarnings <- c(
+        workflowWarnings,
+        paste0("Task '", taskName, "' defined as active, was not printed because '", taskName, "' is not available for '", workflowMode, "'.")
+      )
       next
     }
     activateTaskContent <- c(
@@ -344,8 +436,10 @@ getWorkflowContent <- function(workflowTable, excelFile) {
   }
 
   workflowContent <- c(
+    paste0("# Create a ", workflowMode, " object of name 'workflow' defining which tasks to perform on its list of simulation sets"),
     workflowContent,
     "",
+    "# The workflow method $inactivateTasks() prevents running tasks that could be active by default (such as 'simulate')",
     "workflow$inactivateTasks()",
     activateTaskContent,
     ""
@@ -361,10 +455,19 @@ getWorkflowContent <- function(workflowTable, excelFile) {
       settingValue <- getSensitivityVariableParameterPaths(excelFile, sensitivityParametersSheet = settingValue)
     }
     settingContent <- paste0(OptionalSettings[[optionalSettingName]], settingValue)
-    workflowContent <- c(workflowContent, settingContent)
+    workflowContent <- c(
+      workflowContent,
+      "# The following code chunk defines tasks optional settings",
+      settingContent
+    )
   }
 
-  return(list(workflowMode = workflowMode, workflowContent = workflowContent))
+  return(list(
+    workflowMode = workflowMode,
+    content = workflowContent,
+    warnings = workflowWarnings,
+    errors = workflowErrors
+  ))
 }
 
 WorkflowMandatoryVariables <- enum(c(
@@ -495,7 +598,7 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
 #' @return Name of `Output` object
 getOutputNames <- function(excelFile, outputSheet) {
   outputTable <- readxl::read_excel(excelFile, sheet = outputSheet)
-  outputNames <- paste(outputSheet, names(outputTable)[3:ncol(outputTable)], sep = "")
+  outputNames <- paste(outputSheet, names(outputTable)[3:ncol(outputTable)], sep = ".")
   # Remove spaces in the name
   outputNames <- gsub(pattern = "[[:space:]*]", replacement = "", x = outputNames)
   return(outputNames)
@@ -527,20 +630,56 @@ getObservedMetaDataFile <- function(excelFile, observedMetaDataSheet, format = "
 #' @title getPKParametersContent
 #' @description Creates a character vector to be written in a workflow .R script updating the PKParameters objects
 #' @param pkParametersTable Data.frame read from the Excel sheet "PK Parameters"
-#' @return Character vector updating the PKParameters objects
+#' @return A list of script content, associated with its potential warnings and errors for updating the PKParameters objects
 getPKParametersContent <- function(pkParametersTable) {
   pkParametersContent <- NULL
+  pkParametersWarnings <- NULL
+  pkParametersErrors <- NULL
   if (nrow(pkParametersTable) == 0) {
     return(pkParametersContent)
   }
+  # Check for duplicate PK parameters as input of Output object
+  if (any(duplicated(pkParametersTable$Name))) {
+    pkParametersWarnings <- c(
+      pkParametersWarnings,
+      paste0(
+        "PK parameters '",
+        paste0(pkParametersTable$Name[duplicated(pkParametersTable$Name)], collapse = "', '"),
+        "' is updated multiple times"
+      )
+    )
+  }
+  # Check for duplicate PK parameter display names as input of Output object
+  # Undefined display names are NAs.
+  # Consequently, NAs need to be removed from this check
+  if (any(duplicated(pkParametersTable$`Display name`[!is.na(pkParametersTable$`Display name`)]))) {
+    pkParametersWarnings <- c(
+      pkParametersWarnings,
+      paste0(
+        "PK parameters '",
+        paste0(pkParametersTable$Name[duplicated(pkParametersTable$`Display name`[!is.na(pkParametersTable$`Display name`)])], collapse = "', '"),
+        "' used a display name already assigned to a previous PK parameter"
+      )
+    )
+  }
+
   for (parameterIndex in seq(1, nrow(pkParametersTable))) {
     pkParametersContent <- c(
       pkParametersContent,
       paste0('updatePKParameter("', pkParametersTable$Name[parameterIndex], '", displayName = "', pkParametersTable$`Display name`[parameterIndex], '", displayUnit = "', pkParametersTable$Unit[parameterIndex], '")')
     )
   }
-  pkParametersContent <- c(pkParametersContent, "")
-  return(pkParametersContent)
+  pkParametersContent <- c(
+    '# Update PK parameters display names and units using "ospsuite" package.',
+    "# This method should be preferred as it centralizes the names and units among the different paths.",
+    pkParametersContent,
+    ""
+  )
+  return(list(
+    content = pkParametersContent,
+    warnings = pkParametersWarnings,
+    errors = pkParametersErrors
+  ))
 }
 
 #' @title getSimulationSetType
@@ -607,4 +746,14 @@ concatenateDataDisplayName <- function(inputs, sep = " - ") {
     return("NULL")
   }
   return(paste0("'", paste0(inputs, collapse = sep), "'"))
+}
+
+
+#' @title removeCommentsFromWorkflowContent
+#' @description Remove comments from workflow file content
+#' @param workflowContent Character vector with content of the workflow file
+#' @param commentPattern Character starting a comment
+#' @return Workflow content without its comments
+removeCommentsFromWorkflowContent <- function(workflowContent, commentPattern = "#") {
+  return(workflowContent[!grepl(commentPattern, workflowContent)])
 }

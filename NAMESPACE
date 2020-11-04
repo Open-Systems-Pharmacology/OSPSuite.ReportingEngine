@@ -3,6 +3,7 @@
 export(AggregationConfiguration)
 export(AllAvailableTasks)
 export(DataSelectionKeys)
+export(ExcelMessaging)
 export(ExportPlotConfiguration)
 export(GofPlotTask)
 export(LogTypes)
