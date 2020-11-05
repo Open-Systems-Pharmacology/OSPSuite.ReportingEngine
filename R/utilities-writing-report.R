@@ -306,7 +306,7 @@ numberSections <- function(fileName, logFolder = getwd(), tocPattern = "#", tocL
         # Number section
         titlePattern <- paste0(tocPatterns[tocLevel], " ")
         newTitlePattern <- paste0(tocCounts[seq(1, tocLevel)], collapse = ".")
-        newTitlePattern <- paste0(titlePattern, newTitlePattern, ". ")
+        newTitlePattern <- paste0(titlePattern, newTitlePattern, " ")
         fileContent[lineIndex] <- gsub(pattern = titlePattern, replacement = newTitlePattern, x = fileContent[lineIndex])
 
         # Add section reference to toc content
