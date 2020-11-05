@@ -169,8 +169,8 @@ mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd(), kee
 renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE) {
   actionToken2 <- re.tStartAction(actionType = "ReportGeneration")
   numberTablesAndFigures(fileName, logFolder)
-  tocContent <- numberSections(fileName, logFolder)
   renderWordReport(fileName, logFolder, createWordReport)
+  tocContent <- numberSections(fileName, logFolder)
   addMarkdownToc(tocContent, fileName, logFolder)
   re.tEndAction(actionToken = actionToken2)
   return(invisible())
@@ -306,7 +306,7 @@ numberSections <- function(fileName, logFolder = getwd(), tocPattern = "#", tocL
         # Number section
         titlePattern <- paste0(tocPatterns[tocLevel], " ")
         newTitlePattern <- paste0(tocCounts[seq(1, tocLevel)], collapse = ".")
-        newTitlePattern <- paste0(titlePattern, newTitlePattern, ". ")
+        newTitlePattern <- paste0(titlePattern, newTitlePattern, " ")
         fileContent[lineIndex] <- gsub(pattern = titlePattern, replacement = newTitlePattern, x = fileContent[lineIndex])
 
         # Add section reference to toc content
