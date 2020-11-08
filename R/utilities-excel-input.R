@@ -1,5 +1,5 @@
 StandardExcelSheetNames <- enum(c(
-  "_Documentation",
+  "Documentation",
   "Workflow and Tasks",
   "SimulationSets",
   "Userdef PK Parameter",
@@ -32,7 +32,7 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
     groupName = paste0("Sheet names of '", excelFile, "'")
   )
 
-  if (isIncluded(StandardExcelSheetNames$`_Documentation`, inputSections)) {
+  if (isIncluded(StandardExcelSheetNames$`Documentation`, inputSections)) {
     scriptDocumentation <- getScriptDocumentation(excelFile)
     scriptContent <- c(scriptContent, scriptDocumentation)
   }
@@ -125,7 +125,7 @@ getScriptDocumentation <- function(excelFile, colSep = "\t") {
   docContent <- NULL
   # Check behaviour for empty Documentation sheet
   suppressMessages(
-    docTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$`_Documentation`, col_names = FALSE)
+    docTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$`Documentation`, col_names = FALSE)
   )
   if (isOfLength(docTable, 0)) {
     return(docContent)
