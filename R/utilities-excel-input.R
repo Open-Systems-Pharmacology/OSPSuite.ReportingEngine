@@ -362,7 +362,8 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
     simulationName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationName), ", 
     outputs = c(", outputNames, "), 
     observedDataFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$observedDataFile), ", 
-    observedMetaDataFile = ", dictionaryLocation, ")"
+    observedMetaDataFile = ", dictionaryLocation, ",
+    timeUnit = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$timeUnit), ")"
       ),
       ""
     )
