@@ -776,10 +776,10 @@ concatenateDataSelection <- function(inputs, sep = ") & (") {
   }
   # Deal with NONE and ALL inputs
   if (isIncluded("NONE", inputs)) {
-    return("NONE")
+    return('"NONE"')
   }
   if (all(inputs == "ALL")) {
-    return("ALL")
+    return('"ALL"')
   }
   # Remove NAs and ALLs from expression
   inputs[inputs == "ALL"] <- NA
