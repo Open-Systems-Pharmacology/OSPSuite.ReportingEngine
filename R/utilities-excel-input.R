@@ -352,6 +352,15 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
       type = dictionaryType,
       excelFile = excelFile
     )
+    # Throw an error if file already exists and sheet tried to overwrite it
+    # The simulation set input will still have the aimed dictionary file path
+    if (is.null(dictionaryLocation)) {
+      simulationSetErrors <- c(
+        simulationSetErrors,
+        paste0("Dictionary file '", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$DictionaryLocation), ".csv' already exists and was not overwritten")
+      )
+      dictionaryLocation <- paste0("'", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$DictionaryLocation), ".csv'")
+    }
 
     # MeanModelWorkflow doesn't use population fields, which are set to NULL
     populationFileContent <- NULL
@@ -370,6 +379,16 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
         type = studyDesignType,
         excelFile = excelFile
       )
+      # Same behaviour as dictionary:
+      # Throw an error if file already exists and sheet tried to overwrite it
+      # The simulation set input will still have the aimed study design file path
+      if (is.null(studyDesignLocation)) {
+        simulationSetErrors <- c(
+          simulationSetErrors,
+          paste0("Study design file '", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$StudyDesignLocation), ".csv' already exists and was not overwritten")
+        )
+        studyDesignLocation <- paste0("'", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$StudyDesignLocation), ".csv'")
+      }
 
       referencePopulationContent <- paste0("referencePopulation = ", referencePopulation, ", ")
       populationFileContent <- paste0("populationFile = ", populationFile, ", ")
@@ -651,6 +670,10 @@ getObservedMetaDataFile <- function(excelFile, observedMetaDataSheet, format = "
   }
   observedMetaDataFilename <- paste0(observedMetaDataSheet, ".", format)
   observedMetaDataTable <- readxl::read_excel(excelFile, sheet = observedMetaDataSheet)
+  # Return NULL in order to throw an error if dictionary already exists
+  if (file.exists(observedMetaDataFilename)) {
+    return(NULL)
+  }
   # Save the data dictionary as a csv file, missing values stay missing (na = ""),
   # row numbers are not printed in the file (row.names = FALSE), file uses UTF-8 encoding (fileEncoding = "UTF-8")
   write.csv(observedMetaDataTable, file = observedMetaDataFilename, na = "", row.names = FALSE, fileEncoding = "UTF-8")
@@ -725,6 +748,9 @@ getFileLocationFromType <- function(location, type, excelFile) {
   validateIsIncluded(type, c("SHEET", "FILE"))
   if (isIncluded(type, "SHEET")) {
     location <- getObservedMetaDataFile(excelFile, location)
+  }
+  if (is.null(location)) {
+    return(location)
   }
   if (is.na(location)) {
     return("NULL")
