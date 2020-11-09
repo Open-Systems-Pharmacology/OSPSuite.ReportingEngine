@@ -1,5 +1,5 @@
 StandardExcelSheetNames <- enum(c(
-  "_Documentation",
+  "Documentation",
   "Workflow and Tasks",
   "SimulationSets",
   "Userdef PK Parameter",
@@ -32,7 +32,7 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
     groupName = paste0("Sheet names of '", excelFile, "'")
   )
 
-  if (isIncluded(StandardExcelSheetNames$`_Documentation`, inputSections)) {
+  if (isIncluded(StandardExcelSheetNames$`Documentation`, inputSections)) {
     scriptDocumentation <- getScriptDocumentation(excelFile)
     scriptContent <- c(scriptContent, scriptDocumentation)
   }
@@ -80,11 +80,11 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
   }
 
   outputContent <- NULL
-  for (outputName in simulationSetInfo$outputInfo) {
-    outputInfo <- getOutputContent(excelFile, outputName)
+  for (output in simulationSetInfo$outputInfo) {
+    outputInfo <- getOutputContent(excelFile, output)
     outputContent <- c(outputContent, outputInfo$content)
-    scriptWarnings$messages[[outputName$sheetName]] <- outputInfo$warnings
-    scriptErrors$messages[[outputName$sheetName]] <- outputInfo$errors
+    scriptWarnings$messages[[output$sheetName]] <- outputInfo$warnings
+    scriptErrors$messages[[output$sheetName]] <- outputInfo$errors
   }
 
   runWorkflowContent <- c("", "workflow$runWorkflow()", "")
@@ -125,7 +125,7 @@ getScriptDocumentation <- function(excelFile, colSep = "\t") {
   docContent <- NULL
   # Check behaviour for empty Documentation sheet
   suppressMessages(
-    docTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$`_Documentation`, col_names = FALSE)
+    docTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$`Documentation`, col_names = FALSE)
   )
   if (isOfLength(docTable, 0)) {
     return(docContent)
@@ -148,22 +148,17 @@ getScriptDocumentation <- function(excelFile, colSep = "\t") {
 getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
   pkParametersContent <- NULL
   pkParametersWarnings <- NULL
+  pkParametersErrors <- NULL
   pkParametersTable <- readxl::read_excel(excelFile, sheet = pkParametersSheet)
   validateIsIncluded("Name", names(pkParametersTable)[1])
 
   # Check for duplicate PK parameters as input of Output object
-  if (any(duplicated(pkParametersTable$Name))) {
-    pkParametersWarnings <- c(
-      pkParametersWarnings,
-      paste0(
-        "PK parameters '",
-        paste0(pkParametersTable$Name[duplicated(pkParametersTable$Name)], collapse = "', '"),
-        "' selected multiple times from Excel sheet '",
-        pkParametersSheet, "'"
-      )
+  if (!hasUniqueValues(pkParametersTable$Name)) {
+    pkParametersWarnings <- messages$errorHasNoUniqueValues(pkParametersTable$Name,
+      dataName = paste0("selected PK parameters from Excel sheet '", pkParametersSheet, "'")
     )
   }
-
+  # If none of the PK Parameters are updated, their names can directly be used as is
   if (all(is.na(pkParametersTable$`Display name`)) && all(is.na(pkParametersTable$Unit))) {
     pkParametersContent <- c(
       paste0("pkParameters <- c('", paste0(pkParametersTable$Name, collapse = "', '"), "')"),
@@ -171,21 +166,15 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
     )
     return(list(
       content = pkParametersContent,
-      warnings = pkParametersWarnings
+      warnings = pkParametersWarnings,
+      errors = pkParametersErrors
     ))
   }
 
   # Check for duplicate PK parameter display names as input of Output object
-  # Undefined display names are NAs.
-  # Consequently, NAs need to be removed from this check
-  if (any(duplicated(pkParametersTable$`Display name`[!is.na(pkParametersTable$`Display name`)]))) {
-    pkParametersWarnings <- c(
-      pkParametersWarnings,
-      paste0(
-        "PK parameters '",
-        paste0(pkParametersTable$Name[duplicated(pkParametersTable$`Display name`[!is.na(pkParametersTable$`Display name`)])], collapse = "', '"),
-        "' from Excel sheet '", pkParametersSheet, "' used a display name already assigned to a previous PK parameter"
-      )
+  if (!hasUniqueValues(pkParametersTable$`Display name`)) {
+    pkParametersErrors <- messages$errorHasNoUniqueValues(pkParametersTable$`Display name`,
+      dataName = paste0("display names of selected PK parameters from Excel sheet '", pkParametersSheet, "'")
     )
   }
 
@@ -222,7 +211,8 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
   )
   return(list(
     content = pkParametersContent,
-    warnings = pkParametersWarnings
+    warnings = pkParametersWarnings,
+    errors = pkParametersErrors
   ))
 }
 
@@ -235,11 +225,16 @@ getOutputContent <- function(excelFile, outputInfo) {
   outputContent <- NULL
   outputWarnings <- NULL
   outputErrors <- NULL
+  allOutputPaths <- NULL
+  allDisplayNames <- NULL
+  allDataDisplayNames <- NULL
+  outputErrors <- NULL
+
   outputTable <- readxl::read_excel(excelFile, sheet = outputInfo$sheetName)
   validateIsIncluded(WorkflowMandatoryVariables$`Code Identifier`, names(outputTable)[1])
   validateIsIncluded(WorkflowMandatoryVariables$Description, names(outputTable)[2])
 
-  outputNames <- getOutputNames(excelFile, outputInfo$sheetName)
+  outputNames <- getOutputNames(excelFile, outputInfo$sheetName, outputInfo$simulationSetName)
 
   for (outputIndex in seq_along(outputNames)) {
     pkParametersOutputContent <- NULL
@@ -249,6 +244,7 @@ getOutputContent <- function(excelFile, outputInfo) {
       pkParametersInfo <- getPKParametersInfoContent(excelFile, pkParametersSheet)
       pkParametersContent <- pkParametersInfo$content
       outputWarnings <- c(outputWarnings, pkParametersInfo$warnings)
+      outputErrors <- c(outputErrors, pkParametersInfo$errors)
       outputContent <- c(outputContent, pkParametersContent)
       # The line break within paste0 is needed to ensure a nice structure in the output script
       pkParametersOutputContent <- paste0(", 
@@ -281,7 +277,38 @@ getOutputContent <- function(excelFile, outputInfo) {
       ),
       ""
     )
+
+    allOutputPaths <- c(allOutputPaths, getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$path))
+    allDisplayNames <- c(allDisplayNames, getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$displayName))
+    allDataDisplayNames <- c(allDataDisplayNames, dataDisplayName)
   }
+  # Check for duplicate output paths, display names and data display names
+  if (!hasUniqueValues(allOutputPaths)) {
+    outputWarnings <- c(
+      outputWarnings,
+      messages$errorHasNoUniqueValues(gsub("'", "", allOutputPaths),
+        dataName = paste0("paths of Outputs defined in Excel sheet '", outputInfo$sheetName, "'")
+      )
+    )
+  }
+  if (!hasUniqueValues(allDisplayNames)) {
+    outputErrors <- c(
+      outputErrors,
+      messages$errorHasNoUniqueValues(gsub("'", "", allDisplayNames),
+        dataName = paste0("path display names of Outputs defined in Excel sheet '", outputInfo$sheetName, "'")
+      )
+    )
+  }
+  # TO DO: Check if no values are flagged because NAs are removed
+  if (!hasUniqueValues(allDataDisplayNames)) {
+    outputErrors <- c(
+      outputErrors,
+      messages$errorHasNoUniqueValues(gsub("'", "", allDataDisplayNames),
+        dataName = paste0("data display names of Outputs defined in Excel sheet '", outputInfo$sheetName, "'")
+      )
+    )
+  }
+
   return(list(
     content = outputContent,
     warnings = outputWarnings,
@@ -311,9 +338,10 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
     outputInfo <- list(
       dataSelection = getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$dataSelection),
       dataDisplayName = getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$dataDisplayName),
-      sheetName = getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$outputs)
+      sheetName = getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$outputs),
+      simulationSetName = simulationSetNames[simulationIndex]
     )
-    outputNames <- paste0(getOutputNames(excelFile, outputInfo$sheetName), collapse = ", ")
+    outputNames <- paste0(getOutputNames(excelFile, outputInfo$sheetName, simulationSetNames[simulationIndex]), collapse = ", ")
     allOutputInfo[[simulationIndex]] <- outputInfo
 
     # Function for dictionary
@@ -324,6 +352,15 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
       type = dictionaryType,
       excelFile = excelFile
     )
+    # Throw an error if file already exists and sheet tried to overwrite it
+    # The simulation set input will still have the aimed dictionary file path
+    if (is.null(dictionaryLocation)) {
+      simulationSetErrors <- c(
+        simulationSetErrors,
+        paste0("Dictionary file '", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$DictionaryLocation), ".csv' already exists and was not overwritten")
+      )
+      dictionaryLocation <- paste0("'", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$DictionaryLocation), ".csv'")
+    }
 
     # MeanModelWorkflow doesn't use population fields, which are set to NULL
     populationFileContent <- NULL
@@ -342,6 +379,16 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
         type = studyDesignType,
         excelFile = excelFile
       )
+      # Same behaviour as dictionary:
+      # Throw an error if file already exists and sheet tried to overwrite it
+      # The simulation set input will still have the aimed study design file path
+      if (is.null(studyDesignLocation)) {
+        simulationSetErrors <- c(
+          simulationSetErrors,
+          paste0("Study design file '", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$StudyDesignLocation), ".csv' already exists and was not overwritten")
+        )
+        studyDesignLocation <- paste0("'", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$StudyDesignLocation), ".csv'")
+      }
 
       referencePopulationContent <- paste0("referencePopulation = ", referencePopulation, ", ")
       populationFileContent <- paste0("populationFile = ", populationFile, ", ")
@@ -362,10 +409,16 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
     simulationName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationName), ", 
     outputs = c(", outputNames, "), 
     observedDataFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$observedDataFile), ", 
-    observedMetaDataFile = ", dictionaryLocation, ")"
+    observedMetaDataFile = ", dictionaryLocation, ",
+    timeUnit = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$timeUnit), ")"
       ),
       ""
     )
+    # Check that pkml file has correct extension
+    simulationFile <- gsub("'", "", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationFile))
+    if (!isFileExtension(simulationFile, "pkml")) {
+      simulationSetErrors <- c(simulationSetErrors, paste0("In simulation set '", simulationSetNames[simulationIndex], "', ", messages$errorExtension(simulationFile, "pkml")))
+    }
   }
   simulationSetContent <- c(
     simulationSetContent,
@@ -595,10 +648,11 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
 #' @description Get the names of `Output` objets
 #' @param excelFile name of the Excel file from which the R script is created
 #' @param outputSheet name of sheet defining an `Output` object
+#' @param simulationSetName name of simulation set
 #' @return Name of `Output` object
-getOutputNames <- function(excelFile, outputSheet) {
+getOutputNames <- function(excelFile, outputSheet, simulationSetName) {
   outputTable <- readxl::read_excel(excelFile, sheet = outputSheet)
-  outputNames <- paste(outputSheet, names(outputTable)[3:ncol(outputTable)], sep = ".")
+  outputNames <- paste(simulationSetName, outputSheet, names(outputTable)[3:ncol(outputTable)], sep = ".")
   # Remove spaces in the name
   outputNames <- gsub(pattern = "[[:space:]*]", replacement = "", x = outputNames)
   return(outputNames)
@@ -621,6 +675,10 @@ getObservedMetaDataFile <- function(excelFile, observedMetaDataSheet, format = "
   }
   observedMetaDataFilename <- paste0(observedMetaDataSheet, ".", format)
   observedMetaDataTable <- readxl::read_excel(excelFile, sheet = observedMetaDataSheet)
+  # Return NULL in order to throw an error if dictionary already exists
+  if (file.exists(observedMetaDataFilename)) {
+    return(NULL)
+  }
   # Save the data dictionary as a csv file, missing values stay missing (na = ""),
   # row numbers are not printed in the file (row.names = FALSE), file uses UTF-8 encoding (fileEncoding = "UTF-8")
   write.csv(observedMetaDataTable, file = observedMetaDataFilename, na = "", row.names = FALSE, fileEncoding = "UTF-8")
@@ -639,27 +697,17 @@ getPKParametersContent <- function(pkParametersTable) {
     return(pkParametersContent)
   }
   # Check for duplicate PK parameters as input of Output object
-  if (any(duplicated(pkParametersTable$Name))) {
+  if (!hasUniqueValues(pkParametersTable$Name)) {
     pkParametersWarnings <- c(
       pkParametersWarnings,
-      paste0(
-        "PK parameters '",
-        paste0(pkParametersTable$Name[duplicated(pkParametersTable$Name)], collapse = "', '"),
-        "' is updated multiple times"
-      )
+      messages$errorHasNoUniqueValues(pkParametersTable$Name, dataName = "PK parameters update")
     )
   }
   # Check for duplicate PK parameter display names as input of Output object
-  # Undefined display names are NAs.
-  # Consequently, NAs need to be removed from this check
-  if (any(duplicated(pkParametersTable$`Display name`[!is.na(pkParametersTable$`Display name`)]))) {
+  if (!hasUniqueValues(pkParametersTable$`Display name`)) {
     pkParametersWarnings <- c(
       pkParametersWarnings,
-      paste0(
-        "PK parameters '",
-        paste0(pkParametersTable$Name[duplicated(pkParametersTable$`Display name`[!is.na(pkParametersTable$`Display name`)])], collapse = "', '"),
-        "' used a display name already assigned to a previous PK parameter"
-      )
+      messages$errorHasNoUniqueValues(pkParametersTable$`Display name`, dataName = "PK parameters display names")
     )
   }
 
@@ -706,6 +754,9 @@ getFileLocationFromType <- function(location, type, excelFile) {
   if (isIncluded(type, "SHEET")) {
     location <- getObservedMetaDataFile(excelFile, location)
   }
+  if (is.null(location)) {
+    return(location)
+  }
   if (is.na(location)) {
     return("NULL")
   }
@@ -717,20 +768,23 @@ getFileLocationFromType <- function(location, type, excelFile) {
 #' @param inputs Vector of inputs to concatenate
 #' @param sep Separator character corresponding to logical &
 #' @return Character of concatenated inputs
-concatenateDataSelection <- function(inputs, sep = " & ") {
+concatenateDataSelection <- function(inputs, sep = ") & (") {
   validateIsString(inputs)
-
-  # Account for ALL and NONE
-  inputs[inputs == "ALL"] <- "TRUE"
-  if (isIncluded("NONE", inputs)) {
-    inputs <- "NONE"
-  }
-  # Remove NAs from expression
-  inputs <- inputs[!is.na(inputs)]
+  # No data selection to concatenate
   if (isOfLength(inputs, 0)) {
     return("NULL")
   }
-  return(paste0("'", paste0(inputs, collapse = sep), "'"))
+  # Deal with NONE and ALL inputs
+  if (isIncluded("NONE", inputs)) {
+    return("NONE")
+  }
+  if (all(inputs == "ALL")) {
+    return("ALL")
+  }
+  # Remove NAs and ALLs from expression
+  inputs[inputs == "ALL"] <- NA
+  inputs <- inputs[!is.na(inputs)]
+  return(paste0("'(", paste0(inputs, collapse = sep), ")'"))
 }
 
 #' @title concatenateDataDisplayName

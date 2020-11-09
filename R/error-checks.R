@@ -357,15 +357,19 @@ validateOutputObject <- function(outputs, simulation, nullAllowed = FALSE) {
 
 isUnitFromDimension <- function(unit, dimension) {
   dimensionForUnit <- ospsuite::getDimensionForUnit(unit)
+  # Units can be switched between Mass/Amount and Concentration (molar)/Concentration (mass)
+  # using molar weight as an input
   # Remove molar/mass for units that can cross dimensions using molar weight
-  dimension <- sub("(mass)", "", dimension)
-  dimension <- sub("(molar)", "", dimension)
-  dimensionForUnit <- sub("(mass)", "", dimensionForUnit)
-  dimensionForUnit <- sub("(molar)", "", dimensionForUnit)
+  if(isIncluded(dimension, c("Mass", "Amount"))){
+    dimension <- c("Mass", "Amount")
+  }
+  if(isIncluded(dimension, c("Concentration (mass)", "Concentration (molar)"))){
+    dimension <- c("Concentration (mass)", "Concentration (molar)")
+  }
   if (isOfLength(dimensionForUnit, 0)) {
     return(FALSE)
   }
-  return(dimensionForUnit %in% dimension)
+  return(isIncluded(dimensionForUnit, dimension))
 }
 
 validateIsUnitFromDimension <- function(unit, dimension, nullAllowed = FALSE) {
@@ -420,3 +424,10 @@ validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
     })), logFolder)
   }
 }
+
+hasUniqueValues <- function(data, na.rm = TRUE){
+  # na.rm is the usual tidyverse input to remove NA values
+  if(na.rm){data <- data[!is.na(data)]}
+  return(!any(duplicated(data)))
+}
+
