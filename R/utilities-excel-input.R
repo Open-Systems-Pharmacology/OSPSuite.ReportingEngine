@@ -239,6 +239,7 @@ getOutputContent <- function(excelFile, outputInfo) {
       pkParametersInfo <- getPKParametersInfoContent(excelFile, pkParametersSheet)
       pkParametersContent <- pkParametersInfo$content
       outputWarnings <- c(outputWarnings, pkParametersInfo$warnings)
+      outputErrors <- c(outputErrors, pkParametersInfo$errors)
       outputContent <- c(outputContent, pkParametersContent)
       # The line break within paste0 is needed to ensure a nice structure in the output script
       pkParametersOutputContent <- paste0(", 
@@ -271,7 +272,38 @@ getOutputContent <- function(excelFile, outputInfo) {
       ),
       ""
     )
+
+    allOutputPaths <- c(allOutputPaths, getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$path))
+    allDisplayNames <- c(allDisplayNames, getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$displayName))
+    allDataDisplayNames <- c(allDataDisplayNames, dataDisplayName)
   }
+  # Check for duplicate output paths, display names and data display names
+  if (!hasUniqueValues(allOutputPaths)) {
+    outputWarnings <- c(
+      outputWarnings,
+      messages$errorHasNoUniqueValues(gsub("'", "", allOutputPaths),
+        dataName = paste0("paths of Outputs defined in Excel sheet '", outputInfo$sheetName, "'")
+      )
+    )
+  }
+  if (!hasUniqueValues(allDisplayNames)) {
+    outputErrors <- c(
+      outputErrors,
+      messages$errorHasNoUniqueValues(gsub("'", "", allDisplayNames),
+        dataName = paste0("path display names of Outputs defined in Excel sheet '", outputInfo$sheetName, "'")
+      )
+    )
+  }
+  # TO DO: Check if no values are flagged because NAs are removed
+  if (!hasUniqueValues(allDataDisplayNames)) {
+    outputErrors <- c(
+      outputErrors,
+      messages$errorHasNoUniqueValues(gsub("'", "", allDataDisplayNames),
+        dataName = paste0("data display names of Outputs defined in Excel sheet '", outputInfo$sheetName, "'")
+      )
+    )
+  }
+
   return(list(
     content = outputContent,
     warnings = outputWarnings,
