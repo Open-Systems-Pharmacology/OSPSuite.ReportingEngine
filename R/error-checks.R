@@ -424,3 +424,10 @@ validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
     })), logFolder)
   }
 }
+
+hasUniqueValues <- function(data, na.rm = TRUE){
+  # na.rm is the usual tidyverse input to remove NA values
+  if(na.rm){data <- data[!is.na(data)]}
+  return(!any(duplicated(data)))
+}
+

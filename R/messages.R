@@ -118,5 +118,10 @@ messages <- list(
   
   errorNotSameOutputsBetweenSets = function(setNames) {
     paste0("Simulation sets '", paste0(setNames, collapse = "', '"), "' require same outputs and PK parameters.")
-  }
+  },
+  
+  errorHasNoUniqueValues = function(data, dataName = "dataset", na.rm = TRUE){
+    if(na.rm){data <- data[!is.na(data)]}
+    return(paste0("Values '", paste0(data[duplicated(data)], collapse = "', '"), "' in ", dataName, " are not unique"))
+    }
 )
