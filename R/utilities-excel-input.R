@@ -148,22 +148,17 @@ getScriptDocumentation <- function(excelFile, colSep = "\t") {
 getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
   pkParametersContent <- NULL
   pkParametersWarnings <- NULL
+  pkParametersErrors <- NULL
   pkParametersTable <- readxl::read_excel(excelFile, sheet = pkParametersSheet)
   validateIsIncluded("Name", names(pkParametersTable)[1])
 
   # Check for duplicate PK parameters as input of Output object
-  if (any(duplicated(pkParametersTable$Name))) {
-    pkParametersWarnings <- c(
-      pkParametersWarnings,
-      paste0(
-        "PK parameters '",
-        paste0(pkParametersTable$Name[duplicated(pkParametersTable$Name)], collapse = "', '"),
-        "' selected multiple times from Excel sheet '",
-        pkParametersSheet, "'"
-      )
+  if (!hasUniqueValues(pkParametersTable$Name)) {
+    pkParametersWarnings <- messages$errorHasNoUniqueValues(pkParametersTable$Name,
+      dataName = paste0("selected PK parameters from Excel sheet '", pkParametersSheet, "'")
     )
   }
-
+  # If none of the PK Parameters are updated, their names can directly be used as is
   if (all(is.na(pkParametersTable$`Display name`)) && all(is.na(pkParametersTable$Unit))) {
     pkParametersContent <- c(
       paste0("pkParameters <- c('", paste0(pkParametersTable$Name, collapse = "', '"), "')"),
@@ -171,21 +166,15 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
     )
     return(list(
       content = pkParametersContent,
-      warnings = pkParametersWarnings
+      warnings = pkParametersWarnings,
+      errors = pkParametersErrors
     ))
   }
 
   # Check for duplicate PK parameter display names as input of Output object
-  # Undefined display names are NAs.
-  # Consequently, NAs need to be removed from this check
-  if (any(duplicated(pkParametersTable$`Display name`[!is.na(pkParametersTable$`Display name`)]))) {
-    pkParametersWarnings <- c(
-      pkParametersWarnings,
-      paste0(
-        "PK parameters '",
-        paste0(pkParametersTable$Name[duplicated(pkParametersTable$`Display name`[!is.na(pkParametersTable$`Display name`)])], collapse = "', '"),
-        "' from Excel sheet '", pkParametersSheet, "' used a display name already assigned to a previous PK parameter"
-      )
+  if (!hasUniqueValues(pkParametersTable$`Display name`)) {
+    pkParametersErrors <- messages$errorHasNoUniqueValues(pkParametersTable$`Display name`,
+      dataName = paste0("display names of selected PK parameters from Excel sheet '", pkParametersSheet, "'")
     )
   }
 
@@ -222,7 +211,8 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
   )
   return(list(
     content = pkParametersContent,
-    warnings = pkParametersWarnings
+    warnings = pkParametersWarnings,
+    errors = pkParametersErrors
   ))
 }
 
@@ -640,27 +630,17 @@ getPKParametersContent <- function(pkParametersTable) {
     return(pkParametersContent)
   }
   # Check for duplicate PK parameters as input of Output object
-  if (any(duplicated(pkParametersTable$Name))) {
+  if (!hasUniqueValues(pkParametersTable$Name)) {
     pkParametersWarnings <- c(
       pkParametersWarnings,
-      paste0(
-        "PK parameters '",
-        paste0(pkParametersTable$Name[duplicated(pkParametersTable$Name)], collapse = "', '"),
-        "' is updated multiple times"
-      )
+      messages$errorHasNoUniqueValues(pkParametersTable$Name, dataName = "PK parameters update")
     )
   }
   # Check for duplicate PK parameter display names as input of Output object
-  # Undefined display names are NAs.
-  # Consequently, NAs need to be removed from this check
-  if (any(duplicated(pkParametersTable$`Display name`[!is.na(pkParametersTable$`Display name`)]))) {
+  if (!hasUniqueValues(pkParametersTable$`Display name`)) {
     pkParametersWarnings <- c(
       pkParametersWarnings,
-      paste0(
-        "PK parameters '",
-        paste0(pkParametersTable$Name[duplicated(pkParametersTable$`Display name`[!is.na(pkParametersTable$`Display name`)])], collapse = "', '"),
-        "' used a display name already assigned to a previous PK parameter"
-      )
+      messages$errorHasNoUniqueValues(pkParametersTable$`Display name`, dataName = "PK parameters display names")
     )
   }
 
