@@ -414,6 +414,11 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
       ),
       ""
     )
+    # Check that pkml file has correct extension
+    simulationFile <- gsub("'", "", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationFile))
+    if (!isFileExtension(simulationFile, "pkml")) {
+      simulationSetErrors <- c(simulationSetErrors, paste0("In simulation set '", simulationSetNames[simulationIndex], "', ", messages$errorExtension(simulationFile, "pkml")))
+    }
   }
   simulationSetContent <- c(
     simulationSetContent,
