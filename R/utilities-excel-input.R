@@ -737,20 +737,23 @@ getFileLocationFromType <- function(location, type, excelFile) {
 #' @param inputs Vector of inputs to concatenate
 #' @param sep Separator character corresponding to logical &
 #' @return Character of concatenated inputs
-concatenateDataSelection <- function(inputs, sep = " & ") {
+concatenateDataSelection <- function(inputs, sep = ") & (") {
   validateIsString(inputs)
-
-  # Account for ALL and NONE
-  inputs[inputs == "ALL"] <- "TRUE"
-  if (isIncluded("NONE", inputs)) {
-    inputs <- "NONE"
-  }
-  # Remove NAs from expression
-  inputs <- inputs[!is.na(inputs)]
+  # No data selection to concatenate
   if (isOfLength(inputs, 0)) {
     return("NULL")
   }
-  return(paste0("'", paste0(inputs, collapse = sep), "'"))
+  # Deal with NONE and ALL inputs
+  if (isIncluded("NONE", inputs)) {
+    return("NONE")
+  }
+  if (all(inputs == "ALL")) {
+    return("ALL")
+  }
+  # Remove NAs and ALLs from expression
+  inputs[inputs == "ALL"] <- NA
+  inputs <- inputs[!is.na(inputs)]
+  return(paste0("'(", paste0(inputs, collapse = sep), ")'"))
 }
 
 #' @title concatenateDataDisplayName

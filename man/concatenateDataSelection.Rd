@@ -4,7 +4,7 @@
 \alias{concatenateDataSelection}
 \title{concatenateDataSelection}
 \usage{
-concatenateDataSelection(inputs, sep = " & ")
+concatenateDataSelection(inputs, sep = ") & (")
 }
 \arguments{
 \item{inputs}{Vector of inputs to concatenate}
