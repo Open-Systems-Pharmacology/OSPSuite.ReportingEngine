@@ -4,12 +4,14 @@
 \alias{getOutputNames}
 \title{getOutputNames}
 \usage{
-getOutputNames(excelFile, outputSheet)
+getOutputNames(excelFile, outputSheet, simulationSetName)
 }
 \arguments{
 \item{excelFile}{name of the Excel file from which the R script is created}
 
 \item{outputSheet}{name of sheet defining an `Output` object}
+
+\item{simulationSetName}{name of simulation set}
 }
 \value{
 Name of `Output` object

@@ -80,11 +80,11 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
   }
 
   outputContent <- NULL
-  for (outputName in simulationSetInfo$outputInfo) {
-    outputInfo <- getOutputContent(excelFile, outputName)
+  for (output in simulationSetInfo$outputInfo) {
+    outputInfo <- getOutputContent(excelFile, output)
     outputContent <- c(outputContent, outputInfo$content)
-    scriptWarnings$messages[[outputName$sheetName]] <- outputInfo$warnings
-    scriptErrors$messages[[outputName$sheetName]] <- outputInfo$errors
+    scriptWarnings$messages[[output$sheetName]] <- outputInfo$warnings
+    scriptErrors$messages[[output$sheetName]] <- outputInfo$errors
   }
 
   runWorkflowContent <- c("", "workflow$runWorkflow()", "")
@@ -225,11 +225,16 @@ getOutputContent <- function(excelFile, outputInfo) {
   outputContent <- NULL
   outputWarnings <- NULL
   outputErrors <- NULL
+  allOutputPaths <- NULL
+  allDisplayNames <- NULL
+  allDataDisplayNames <- NULL
+  outputErrors <- NULL
+
   outputTable <- readxl::read_excel(excelFile, sheet = outputInfo$sheetName)
   validateIsIncluded(WorkflowMandatoryVariables$`Code Identifier`, names(outputTable)[1])
   validateIsIncluded(WorkflowMandatoryVariables$Description, names(outputTable)[2])
 
-  outputNames <- getOutputNames(excelFile, outputInfo$sheetName)
+  outputNames <- getOutputNames(excelFile, outputInfo$sheetName, outputInfo$simulationSetName)
 
   for (outputIndex in seq_along(outputNames)) {
     pkParametersOutputContent <- NULL
@@ -333,9 +338,10 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
     outputInfo <- list(
       dataSelection = getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$dataSelection),
       dataDisplayName = getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$dataDisplayName),
-      sheetName = getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$outputs)
+      sheetName = getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$outputs),
+      simulationSetName = simulationSetNames[simulationIndex]
     )
-    outputNames <- paste0(getOutputNames(excelFile, outputInfo$sheetName), collapse = ", ")
+    outputNames <- paste0(getOutputNames(excelFile, outputInfo$sheetName, simulationSetNames[simulationIndex]), collapse = ", ")
     allOutputInfo[[simulationIndex]] <- outputInfo
 
     # Function for dictionary
@@ -618,10 +624,11 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
 #' @description Get the names of `Output` objets
 #' @param excelFile name of the Excel file from which the R script is created
 #' @param outputSheet name of sheet defining an `Output` object
+#' @param simulationSetName name of simulation set
 #' @return Name of `Output` object
-getOutputNames <- function(excelFile, outputSheet) {
+getOutputNames <- function(excelFile, outputSheet, simulationSetName) {
   outputTable <- readxl::read_excel(excelFile, sheet = outputSheet)
-  outputNames <- paste(outputSheet, names(outputTable)[3:ncol(outputTable)], sep = ".")
+  outputNames <- paste(simulationSetName, outputSheet, names(outputTable)[3:ncol(outputTable)], sep = ".")
   # Remove spaces in the name
   outputNames <- gsub(pattern = "[[:space:]*]", replacement = "", x = outputNames)
   return(outputNames)
