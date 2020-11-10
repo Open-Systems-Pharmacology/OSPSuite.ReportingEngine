@@ -392,10 +392,15 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
         studyDesignLocation <- paste0("'", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$StudyDesignLocation), ".csv'")
       }
 
-      referencePopulationContent <- paste0("referencePopulation = ", referencePopulation, ", ")
-      populationFileContent <- paste0("populationFile = ", populationFile, ", ")
-      populationNameContent <- paste0("populationName = ", populationName, ", ")
-      studyDesignFileContent <- paste0("studyDesignFile = ", studyDesignLocation, ", ")
+      # These contents breaks lines to beautify final workflow script
+      referencePopulationContent <- paste0("referencePopulation = ", referencePopulation, ", 
+                                           ")
+      populationFileContent <- paste0("populationFile = ", populationFile, ", 
+                                      ")
+      populationNameContent <- paste0("populationName = ", populationName, ", 
+                                      ")
+      studyDesignFileContent <- paste0("studyDesignFile = ", studyDesignLocation, ", 
+                                       ")
     }
 
     simulationSetContent <- c(
@@ -405,9 +410,9 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
       paste0(
         simulationSetNames[simulationIndex],
         " <- ", simulationType, "$new(
-    simulationSetName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationSetName), ", ",
-        referencePopulationContent, populationFileContent, populationNameContent, studyDesignFileContent, "
-    simulationFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationFile), ", 
+    simulationSetName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationSetName), ", 
+        ", referencePopulationContent, populationFileContent, populationNameContent, studyDesignFileContent,
+        "simulationFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationFile), ", 
     simulationName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationName), ", 
     outputs = c(", outputNames, "), 
     observedDataFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$observedDataFile), ", 
