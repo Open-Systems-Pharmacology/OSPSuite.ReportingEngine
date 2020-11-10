@@ -63,6 +63,7 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
 
     workflowInfo <- getWorkflowContent(workflowTable = workflowTable, excelFile = excelFile)
     workflowContent <- workflowInfo$content
+    plotFormatContent <- workflowInfo$plotFormatContent
     scriptWarnings$messages[["Workflow and Tasks"]] <- workflowInfo$warnings
     scriptErrors$messages[["Workflow and Tasks"]] <- workflowInfo$errors
   }
@@ -91,6 +92,7 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
 
   scriptContent <- c(
     scriptContent,
+    plotFormatContent,
     pkParametersContent,
     outputContent,
     simulationSetContent,
@@ -515,9 +517,17 @@ getWorkflowContent <- function(workflowTable, excelFile) {
     )
   }
 
+  # Optional field: plot format
+  plotFormatContent <- NULL
+  plotFormat <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$plotFormat)
+  if (!isIncluded(plotFormat, "NULL")) {
+    plotFormatContent <- paste0("setPlotFormat(", plotFormat, ")")
+  }
+
   return(list(
     workflowMode = workflowMode,
     content = workflowContent,
+    plotFormatContent = plotFormatContent,
     warnings = workflowWarnings,
     errors = workflowErrors
   ))
