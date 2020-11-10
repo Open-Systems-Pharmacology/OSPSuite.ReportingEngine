@@ -652,7 +652,7 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
 #' @return Name of `Output` object
 getOutputNames <- function(excelFile, outputSheet, simulationSetName) {
   outputTable <- readxl::read_excel(excelFile, sheet = outputSheet)
-  outputNames <- paste(simulationSetName, outputSheet, names(outputTable)[3:ncol(outputTable)], sep = ".")
+  outputNames <- paste(simulationSetName, names(outputTable)[3:ncol(outputTable)], sep = ".")
   # Remove spaces in the name
   outputNames <- gsub(pattern = "[[:space:]*]", replacement = "", x = outputNames)
   return(outputNames)
