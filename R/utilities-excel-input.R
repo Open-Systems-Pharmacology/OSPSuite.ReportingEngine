@@ -63,6 +63,7 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
 
     workflowInfo <- getWorkflowContent(workflowTable = workflowTable, excelFile = excelFile)
     workflowContent <- workflowInfo$content
+    plotFormatContent <- workflowInfo$plotFormatContent
     scriptWarnings$messages[["Workflow and Tasks"]] <- workflowInfo$warnings
     scriptErrors$messages[["Workflow and Tasks"]] <- workflowInfo$errors
   }
@@ -91,6 +92,7 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
 
   scriptContent <- c(
     scriptContent,
+    plotFormatContent,
     pkParametersContent,
     outputContent,
     simulationSetContent,
@@ -390,10 +392,15 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
         studyDesignLocation <- paste0("'", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$StudyDesignLocation), ".csv'")
       }
 
-      referencePopulationContent <- paste0("referencePopulation = ", referencePopulation, ", ")
-      populationFileContent <- paste0("populationFile = ", populationFile, ", ")
-      populationNameContent <- paste0("populationName = ", populationName, ", ")
-      studyDesignFileContent <- paste0("studyDesignFile = ", studyDesignLocation, ", ")
+      # These contents breaks lines to beautify final workflow script
+      referencePopulationContent <- paste0("referencePopulation = ", referencePopulation, ", 
+                                           ")
+      populationFileContent <- paste0("populationFile = ", populationFile, ", 
+                                      ")
+      populationNameContent <- paste0("populationName = ", populationName, ", 
+                                      ")
+      studyDesignFileContent <- paste0("studyDesignFile = ", studyDesignLocation, ", 
+                                       ")
     }
 
     simulationSetContent <- c(
@@ -403,9 +410,9 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
       paste0(
         simulationSetNames[simulationIndex],
         " <- ", simulationType, "$new(
-    simulationSetName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationSetName), ", ",
-        referencePopulationContent, populationFileContent, populationNameContent, studyDesignFileContent, "
-    simulationFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationFile), ", 
+    simulationSetName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationSetName), ", 
+        ", referencePopulationContent, populationFileContent, populationNameContent, studyDesignFileContent,
+        "simulationFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationFile), ", 
     simulationName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationName), ", 
     outputs = c(", outputNames, "), 
     observedDataFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$observedDataFile), ", 
@@ -515,9 +522,17 @@ getWorkflowContent <- function(workflowTable, excelFile) {
     )
   }
 
+  # Optional field: plot format
+  plotFormatContent <- NULL
+  plotFormat <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$plotFormat)
+  if (!isIncluded(plotFormat, "NULL")) {
+    plotFormatContent <- paste0("setPlotFormat(", plotFormat, ")")
+  }
+
   return(list(
     workflowMode = workflowMode,
     content = workflowContent,
+    plotFormatContent = plotFormatContent,
     warnings = workflowWarnings,
     errors = workflowErrors
   ))
@@ -652,7 +667,7 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
 #' @return Name of `Output` object
 getOutputNames <- function(excelFile, outputSheet, simulationSetName) {
   outputTable <- readxl::read_excel(excelFile, sheet = outputSheet)
-  outputNames <- paste(simulationSetName, outputSheet, names(outputTable)[3:ncol(outputTable)], sep = ".")
+  outputNames <- paste(simulationSetName, names(outputTable)[3:ncol(outputTable)], sep = ".")
   # Remove spaces in the name
   outputNames <- gsub(pattern = "[[:space:]*]", replacement = "", x = outputNames)
   return(outputNames)
@@ -776,10 +791,10 @@ concatenateDataSelection <- function(inputs, sep = ") & (") {
   }
   # Deal with NONE and ALL inputs
   if (isIncluded("NONE", inputs)) {
-    return("NONE")
+    return('"NONE"')
   }
   if (all(inputs == "ALL")) {
-    return("ALL")
+    return('"ALL"')
   }
   # Remove NAs and ALLs from expression
   inputs[inputs == "ALL"] <- NA
