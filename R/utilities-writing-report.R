@@ -190,11 +190,23 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
   fileContent <- readLines(fileName, encoding = "UTF-8")
 
   wordFileContent <- NULL
+  figureContent <- NULL
   for (lineContent in fileContent) {
     firstElement <- as.character(unlist(strsplit(lineContent, " ")))
     firstElement <- firstElement[1]
     if (grepl(pattern = "Figure", x = firstElement) || grepl(pattern = "Table", x = firstElement)) {
       wordFileContent <- c(wordFileContent, "\\newpage")
+    }
+    # Markdown needs to cut/paste figure content within ![]
+    # The reports are currently built to print "Figure xx:" and below add figure path as "![](path)"
+    # Consequently, the strategy is to read the figure content with key "Figure" and paste within key "![]"
+    if (grepl(pattern = "Figure", x = firstElement)) {
+      figureContent <- lineContent
+      next
+    }
+    if (grepl(pattern = "\\!\\[\\]", x = lineContent)) {
+      lineContent <- paste0("![", figureContent, "]", gsub(pattern = "\\!\\[\\]", replacement = "", x = lineContent))
+      figureContent <- NULL
     }
     wordFileContent <- c(wordFileContent, lineContent)
   }
