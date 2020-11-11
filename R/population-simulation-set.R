@@ -32,7 +32,9 @@ PopulationSimulationSet <- R6::R6Class(
                               studyDesignFile = NULL,
                               ...) {
       validateIsLogical(referencePopulation)
-      validateIsString(c(simulationSetName, simulationFile, populationFile))
+      validateIsString(simulationSetName)
+      validateIsString(simulationFile)
+      validateIsString(populationFile)
       validateIsString(c(populationName, studyDesignFile), nullAllowed = TRUE)
       validateIsFileExtension(populationFile, "csv")
 

@@ -58,6 +58,14 @@ validateIsOfType <- function(object, type, nullAllowed = FALSE) {
   # Name of the variable in the calling function
   objectName <- deparse(substitute(object))
   objectTypes <- typeNamesFrom(type)
+  # When called from validateIsString... objectName is "object"
+  # Need to get the name from parent frame
+  if (isIncluded(
+    as.character(sys.call(-1)[[1]]),
+    c("validateIsString", "validateIsLogical", "validateIsPositive", "validateIsNumeric")
+  )) {
+    objectName <- deparse(substitute(object, sys.frame(-1)))
+  }
 
   logErrorThenStop(messages$errorWrongType(objectName, class(object)[1], objectTypes))
 }
@@ -360,10 +368,10 @@ isUnitFromDimension <- function(unit, dimension) {
   # Units can be switched between Mass/Amount and Concentration (molar)/Concentration (mass)
   # using molar weight as an input
   # Remove molar/mass for units that can cross dimensions using molar weight
-  if(isIncluded(dimension, c("Mass", "Amount"))){
+  if (isIncluded(dimension, c("Mass", "Amount"))) {
     dimension <- c("Mass", "Amount")
   }
-  if(isIncluded(dimension, c("Concentration (mass)", "Concentration (molar)"))){
+  if (isIncluded(dimension, c("Concentration (mass)", "Concentration (molar)"))) {
     dimension <- c("Concentration (mass)", "Concentration (molar)")
   }
   if (isOfLength(dimensionForUnit, 0)) {
@@ -425,9 +433,10 @@ validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
   }
 }
 
-hasUniqueValues <- function(data, na.rm = TRUE){
+hasUniqueValues <- function(data, na.rm = TRUE) {
   # na.rm is the usual tidyverse input to remove NA values
-  if(na.rm){data <- data[!is.na(data)]}
+  if (na.rm) {
+    data <- data[!is.na(data)]
+  }
   return(!any(duplicated(data)))
 }
-

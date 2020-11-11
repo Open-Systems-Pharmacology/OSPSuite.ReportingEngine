@@ -36,8 +36,9 @@ SimulationSet <- R6::R6Class(
                               observedDataFile = NULL,
                               observedMetaDataFile = NULL,
                               timeUnit = "h") {
-      # Test and validate the simulation objecy
-      validateIsString(c(simulationSetName, simulationFile))
+      # Test and validate the simulation object
+      validateIsString(simulationSetName)
+      validateIsString(simulationFile)
       validateIsFileExtension(simulationFile, "pkml")
       simulation <- ospsuite::loadSimulation(simulationFile)
 
