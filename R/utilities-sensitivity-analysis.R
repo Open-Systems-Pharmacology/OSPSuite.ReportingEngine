@@ -68,7 +68,7 @@ runSensitivity <- function(structureSet,
     re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$populationFile)
     popObject <- loadPopulation(structureSet$simulationSet$populationFile)
     resultsFileName <- resultsFileName %||% "sensitivityAnalysisResults"
-    individualSeq <- individualId %||% seq(1, popObject$count)
+    individualSeq <- individualId %||% seq(0, popObject$count-1)
     individualSensitivityAnalysisResults <- list()
     for (ind in individualSeq) {
       logWorkflow(
@@ -406,8 +406,6 @@ getPKResultsDataFrame <- function(structureSet) {
     }
   }
 
-  colnames(pkResultsDataFrame) <- c("IndividualId", "QuantityPath", "Parameter", "Value", "Unit")
-
   # extract rows of pkResultsDataFrame corresponding to simulation set outputs and pkParameters
   filteredPkResultsList <- list()
   for (n in seq_along(pkParameterNamesEachOutput)) {
@@ -438,18 +436,15 @@ getSAFileIndex <- function(structureSet = structureSet,
   allPKResultsDataframe <- getPKResultsDataFrame(structureSet)
   sensitivityAnalysesResultsIndexFileDF <- NULL
   outputs <- levels(allPKResultsDataframe$QuantityPath)
-  outputColumn <- NULL
-  pkParameterColumn <- NULL
-  individualIdColumn <- NULL
-  valuesColumn <- NULL
-  unitsColumn <- NULL
-  quantileColumn <- NULL
+
   for (output in outputs) {
     pkParameters <- unique(allPKResultsDataframe$Parameter[allPKResultsDataframe$QuantityPath == output])
     for (pkParameter in pkParameters) {
       singleOuputSinglePKDataframe <- allPKResultsDataframe[ (allPKResultsDataframe["QuantityPath"] == output) & (allPKResultsDataframe["Parameter"] == pkParameter), ]
       quantileResults <- getQuantileIndividualIds(singleOuputSinglePKDataframe, quantileVec)
-      saResultsByOuptut <- data.frame(
+
+      if (!isOfLength(quantileResults$ids, length(quantileVec))) next
+      saResultsByOutput <- data.frame(
         "Output" = output,
         "pkParameter" = pkParameter,
         "Quantile" = quantileVec,
@@ -458,7 +453,7 @@ getSAFileIndex <- function(structureSet = structureSet,
         "IndividualId" = quantileResults$ids,
         "Filename" = sapply(X = quantileResults$ids, FUN = getIndividualSAResultsFileName, resultsFileName)
       )
-      sensitivityAnalysesResultsIndexFileDF <- rbind.data.frame(sensitivityAnalysesResultsIndexFileDF, saResultsByOuptut)
+      sensitivityAnalysesResultsIndexFileDF <- rbind.data.frame(sensitivityAnalysesResultsIndexFileDF, saResultsByOutput)
     }
   }
 
