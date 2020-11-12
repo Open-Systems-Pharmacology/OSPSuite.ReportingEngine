@@ -631,10 +631,6 @@ plotPopulationSensitivity <- function(structureSets,
   validateIsOfType(structureSets, "list")
   validateIsOfType(c(structureSets), "SimulationStructure")
 
-#   validateSameOutputsBetweenSets(c(lapply(structureSets, function(set) {
-#     set$simulationSet
-#   })), logFolder)
-
   allPopsDf <- NULL
   saResultIndexFiles <- list()
   simulationList <- list()
