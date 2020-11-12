@@ -414,14 +414,34 @@ validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
     pkParametersTable <- getPKParametersInSimulationSet(set)
     # In case output or pkParameters are in different orders
     pkParametersTable <- pkParametersTable[order(pkParametersTable$path, pkParametersTable$pkParameter), ]
-    if (is.null(pkParametersTableRef) ||
-      all(
-        pkParametersTable$path == pkParametersTableRef$path,
-        pkParametersTable$pkParameter == pkParametersTableRef$pkParameter
-      )) {
+
+
+    pkParametersTableTest <- all(pkParametersTable$path == pkParametersTableRef$path,
+                                 pkParametersTable$pkParameter == pkParametersTableRef$pkParameter)
+
+
+    if (is.null(pkParametersTableRef)) {
       pkParametersTableRef <- pkParametersTable
       next
     }
+
+    if(all(pkParametersTable$path == pkParametersTableRef$path)){
+
+      pkParametersTableTest <- NULL
+      for (n in seq_along(pkParametersTable)){
+        if( is.na(pkParametersTable$pkParameter[n]) && is.na(pkParametersTableRef$pkParameter[n]) ) pkParametersTableTest <- c(pkParametersTableTest,TRUE); next
+        if( xor(is.na(pkParametersTable$pkParameter[n]),is.na(pkParametersTableRef$pkParameter[n]) ))  pkParametersTableTest <- c(pkParametersTableTest,FALSE); next
+        pkParametersTableTest <- c(pkParametersTableTest, pkParametersTable$pkParameter == pkParametersTableRef$pkParameter )
+      }
+
+      if(all(pkParametersTableTest)){
+        pkParametersTableRef <- pkParametersTable
+        next
+      }
+
+    }
+
+
     if (is.null(logFolder)) {
       stop(messages$errorNotSameOutputsBetweenSets(sapply(simulationSets, function(set) {
         set$simulationSetName
