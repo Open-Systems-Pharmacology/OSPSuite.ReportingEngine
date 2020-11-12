@@ -30,6 +30,7 @@ PopulationSensitivityAnalysisTask <- R6::R6Class(
     #' @param taskResults list of results from task run.
     saveResults = function(set, taskResults) {
       results <- taskResults$populationSensitivityResults
+      if(is.null(results)) return()
       indexDataFrame <- taskResults$indexDataFrame
       indexFileName <- taskResults$indexFileName
       for (fileName in names(results)) {
