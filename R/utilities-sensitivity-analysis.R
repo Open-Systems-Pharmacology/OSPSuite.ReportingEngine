@@ -390,37 +390,22 @@ getPKResultsDataFrame <- function(structureSet) {
 
   pkResultsDataFrame <- ospsuite::pkAnalysesAsDataFrame(pkAnalyses = pkResults)
 
-  # get a list pkParameterNamesEachOutput where field names are the paths to the output andthe names of the pkParameters for each output in the current simulation set
-  pkParameterNamesEachOutput <- list()
+  filteredPkResultsDf <- NULL
 
   for (op in structureSet$simulationSet$outputs) {
-    if (!is.null(op$pkParameters)) {
-      # case where pkParameters are specified for each output path
-      pkParameterNamesEachOutput[[op$path]] <- unname(sapply(
-        op$pkParameters,
-        function(y) {
-          y$pkParameter
-        }
-      ))
-    } else {
-      # case where no pkParameters are specified for an output and SA performed for all pk parameters by default
-      pkResultsDataFrameThisOutput <- pkResultsDataFrame[ pkResultsDataFrame$QuantityPath %in% op$path, ]
-      pkParameterNamesEachOutput[[op$path]] <- unique(pkResultsDataFrameThisOutput$Parameter)
-    }
+    # skip cases where pkParameters are not specified for the output
+    if (is.null(op$pkParameters)) next
+
+    pkParametersThisOutput <- unname(sapply(
+      op$pkParameters,
+      function(y) {
+        y$pkParameter
+      }
+    ))
+
+    filteredPkResultsDf <- rbind.data.frame( pkResultsDataFrame[ (pkResultsDataFrame$QuantityPath %in% op$path) & (pkResultsDataFrame$Parameter %in% pkParametersThisOutput), ] , filteredPkResultsDf )
   }
 
-  # extract rows of pkResultsDataFrame corresponding to simulation set outputs and pkParameters
-  filteredPkResultsList <- list()
-  for (n in seq_along(pkParameterNamesEachOutput)) {
-    op <- names(pkParameterNamesEachOutput)[n]
-    filteredPkResultsList[[n]] <- pkResultsDataFrame[ (pkResultsDataFrame$QuantityPath %in% op) & (pkResultsDataFrame$Parameter %in% pkParameterNamesEachOutput[[op]]), ]
-  }
-  filteredPkResultsDf <- do.call("rbind.data.frame", filteredPkResultsList)
-
-
-  filteredPkResultsDf$QuantityPath <- as.factor(filteredPkResultsDf$QuantityPath)
-  filteredPkResultsDf$Parameter <- as.factor(filteredPkResultsDf$Parameter)
-  filteredPkResultsDf$Unit <- as.factor(filteredPkResultsDf$Unit)
   return(filteredPkResultsDf)
 }
 
@@ -438,7 +423,7 @@ getSAFileIndex <- function(structureSet = structureSet,
 
   allPKResultsDataframe <- getPKResultsDataFrame(structureSet)
   sensitivityAnalysesResultsIndexFileDF <- NULL
-  outputs <- levels(allPKResultsDataframe$QuantityPath)
+  outputs <- unique(allPKResultsDataframe$QuantityPath)
 
   for (output in outputs) {
     pkParameters <- unique(allPKResultsDataframe$Parameter[allPKResultsDataframe$QuantityPath == output])
@@ -646,9 +631,9 @@ plotPopulationSensitivity <- function(structureSets,
   validateIsOfType(structureSets, "list")
   validateIsOfType(c(structureSets), "SimulationStructure")
 
-  validateSameOutputsBetweenSets(c(lapply(structureSets, function(set) {
-    set$simulationSet
-  })), logFolder)
+#   validateSameOutputsBetweenSets(c(lapply(structureSets, function(set) {
+#     set$simulationSet
+#   })), logFolder)
 
   allPopsDf <- NULL
   saResultIndexFiles <- list()
@@ -725,6 +710,8 @@ plotPopulationSensitivity <- function(structureSets,
   # add any missing sensitivity results omitted when applying threshold in getPopSensDfForPkAndOutput
   # get set of unique combinations of outputs and pkParameters.  A plot is built for each combination.
   uniqueQuantitiesAndPKParameters <- unique(allPopsDf[, c("QuantityPath", "PKParameter")])
+
+  if(is.null(allPopsDf)) return(NULL)
 
   for (n in 1:nrow(uniqueQuantitiesAndPKParameters)) {
     outputPath <- uniqueQuantitiesAndPKParameters$QuantityPath[n]
