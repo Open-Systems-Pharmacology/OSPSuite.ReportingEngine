@@ -355,6 +355,9 @@ runPopulationSensitivityAnalysis <- function(structureSet, settings, logFolder =
   )
 
   ids <- unique(sensitivityAnalysesResultsIndexFileDF$IndividualId)
+  if(is.null(ids)){
+    return(NULL)
+  }
 
   popSensitivityResultsDF <- runSensitivity(
     structureSet = structureSet,
@@ -658,6 +661,7 @@ plotPopulationSensitivity <- function(structureSets,
     simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
     re.tStoreFileMetadata(access = "read", filePath = structureSet$popSensitivityAnalysisResultsIndexFile)
+    if (!(file.exists(structureSet$popSensitivityAnalysisResultsIndexFile))) next
     indexDf <- read.csv(file = structureSet$popSensitivityAnalysisResultsIndexFile)
 
     outputPaths <- sapply(structureSet$simulationSet$outputs, function(x) {
