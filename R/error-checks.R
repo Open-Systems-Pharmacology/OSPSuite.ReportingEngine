@@ -420,12 +420,11 @@ validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
       next
     }
 
+
     if(all(pkParametersTable$path == pkParametersTableRef$path)){
       pkParametersTableTest <- NULL
-      for (n in seq_along(pkParametersTable$pkParameter)){
-        if( is.na(pkParametersTable$pkParameter[n]) && is.na(pkParametersTableRef$pkParameter[n]) ) {pkParametersTableTest <- c(pkParametersTableTest,TRUE); next}
-        if( xor(is.na(pkParametersTable$pkParameter[n]),is.na(pkParametersTableRef$pkParameter[n]) ))  {pkParametersTableTest <- c(pkParametersTableTest,FALSE); next}
-        pkParametersTableTest <- c(pkParametersTableTest, pkParametersTable$pkParameter[n] == pkParametersTableRef$pkParameter[n] )
+      for (pkParameterIndex in seq_along(pkParametersTable$pkParameter)){
+        pkParametersTableTest[pkParameterIndex] <- isIncluded(pkParametersTable$pkParameter[pkParameterIndex], pkParametersTableRef$pkParameter[pkParameterIndex])
       }
 
       if(all(pkParametersTableTest)){

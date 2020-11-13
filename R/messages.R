@@ -111,7 +111,7 @@ messages <- list(
   },
 
   errorNotSameOutputsBetweenSets = function(setNames) {
-    paste0(callingFunction(), ": Simulation sets '", paste0(setNames, collapse = "', '"), "' require same outputs and PK parameters.")
+    paste0(callingFunction(), ": Simulation sets '", paste0(setNames, collapse = "', '"), "' require same outputs and PK parameters.  Verify the outputs and PK parameters of simulation sets using the function: 'getPKParametersInSimulationSet'.")
   },
 
   errorHasNoUniqueValues = function(data, dataName = "dataset", na.rm = TRUE) {
