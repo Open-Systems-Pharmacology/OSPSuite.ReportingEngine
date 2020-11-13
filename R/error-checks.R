@@ -416,9 +416,6 @@ validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
     pkParametersTable <- pkParametersTable[order(pkParametersTable$path, pkParametersTable$pkParameter), ]
 
 
-    pkParametersTableTest <- all(pkParametersTable$path == pkParametersTableRef$path,
-                                 pkParametersTable$pkParameter == pkParametersTableRef$pkParameter)
-
 
     if (is.null(pkParametersTableRef)) {
       pkParametersTableRef <- pkParametersTable
