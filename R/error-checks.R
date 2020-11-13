@@ -429,8 +429,8 @@ validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
 
       pkParametersTableTest <- NULL
       for (n in seq_along(pkParametersTable)){
-        if( is.na(pkParametersTable$pkParameter[n]) && is.na(pkParametersTableRef$pkParameter[n]) ) pkParametersTableTest <- c(pkParametersTableTest,TRUE); next
-        if( xor(is.na(pkParametersTable$pkParameter[n]),is.na(pkParametersTableRef$pkParameter[n]) ))  pkParametersTableTest <- c(pkParametersTableTest,FALSE); next
+        if( is.na(pkParametersTable$pkParameter[n]) && is.na(pkParametersTableRef$pkParameter[n]) ) {pkParametersTableTest <- c(pkParametersTableTest,TRUE); next}
+        if( xor(is.na(pkParametersTable$pkParameter[n]),is.na(pkParametersTableRef$pkParameter[n]) ))  {pkParametersTableTest <- c(pkParametersTableTest,FALSE); next}
         pkParametersTableTest <- c(pkParametersTableTest, pkParametersTable$pkParameter == pkParametersTableRef$pkParameter )
       }
 
