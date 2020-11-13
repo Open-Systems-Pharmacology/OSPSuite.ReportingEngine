@@ -415,20 +415,17 @@ validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
     # In case output or pkParameters are in different orders
     pkParametersTable <- pkParametersTable[order(pkParametersTable$path, pkParametersTable$pkParameter), ]
 
-
-
     if (is.null(pkParametersTableRef)) {
       pkParametersTableRef <- pkParametersTable
       next
     }
 
     if(all(pkParametersTable$path == pkParametersTableRef$path)){
-
       pkParametersTableTest <- NULL
-      for (n in seq_along(pkParametersTable)){
+      for (n in seq_along(pkParametersTable$pkParameter)){
         if( is.na(pkParametersTable$pkParameter[n]) && is.na(pkParametersTableRef$pkParameter[n]) ) {pkParametersTableTest <- c(pkParametersTableTest,TRUE); next}
         if( xor(is.na(pkParametersTable$pkParameter[n]),is.na(pkParametersTableRef$pkParameter[n]) ))  {pkParametersTableTest <- c(pkParametersTableTest,FALSE); next}
-        pkParametersTableTest <- c(pkParametersTableTest, pkParametersTable$pkParameter == pkParametersTableRef$pkParameter )
+        pkParametersTableTest <- c(pkParametersTableTest, pkParametersTable$pkParameter[n] == pkParametersTableRef$pkParameter[n] )
       }
 
       if(all(pkParametersTableTest)){
