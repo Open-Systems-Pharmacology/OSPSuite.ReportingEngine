@@ -78,6 +78,18 @@ messages <- list(
     paste0(callingFunction(), ": No variable parameters found for sensitivity analysis.")
   },
 
+  warningNoFinitePKParametersForSomeIndividuals = function(pkParameter,output,simulationSetName) {
+    paste0(callingFunction(), ": PK parameter '",pkParameter,"' of output path '",output,"' could not be computed for some individuals in simulation set '",simulationSetName,"'.  See PK parameter calculation results.  Sensitivity analysis for this output and PK parameter combination will not be performed for simulation set '",simulationSetName,"'.")
+  },
+
+  warningPopulationSensitivityPlotsNotAvailable = function() {
+    paste(callingFunction(), ": Population sensitivity plots not available for the selected PK parameters.")
+  },
+
+  warningPopulationSensitivityPlotsNotAvailableForPKParameterOutputSimulationSet = function(pkParameter,output,simulationSetName) {
+    paste0(callingFunction(), ": No sensitivity analysis results found for PK parameter '",pkParameter,"' of output path '",output,"' in simulation set '",simulationSetName,"'.  No population sensitivity analysis plots will be generated for this output and PK parameter combination for simulation set '",simulationSetName,"'.")
+  },
+
   errorNoValidParametersForSensitivityAnalysis = function(simulationSetName) {
     paste(callingFunction(), ": No valid variable parameter paths for sensitivity analysis of simulation set", simulationSetName, ".")
   },
