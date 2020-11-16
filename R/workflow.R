@@ -5,6 +5,7 @@
 #' @field taskNames Enum of task names
 #' @field reportFileName name of the Rmd report file
 #' @field createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
+#' @field userDefinedTask Empty slot in workflow object for user-defined task (to update with loadUserDefinedTask)
 #' @import tlf
 #' @import ospsuite
 Workflow <- R6::R6Class(
@@ -15,6 +16,7 @@ Workflow <- R6::R6Class(
     taskNames = NULL,
     reportFileName = NULL,
     createWordReport = NULL,
+    userDefinedTask = NULL,
 
     #' @description
     #' Create a new `Workflow` object.
