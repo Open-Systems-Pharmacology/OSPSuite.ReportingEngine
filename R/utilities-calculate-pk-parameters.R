@@ -467,6 +467,11 @@ vpcParameterPlot <- function(data,
   return(vpcPlot)
 }
 
+#' @title getPkParametersAcrossPopulations
+#' @description Get the values of PK parameters across Population Simulation sets
+#' @param structureSets list of `SimulationStructures` objects
+#' @return list of data.frame and its metaData including the values of PK parameters across Population Simulation sets
+#' @export
 getPkParametersAcrossPopulations <- function(structureSets) {
   pkParametersTableAcrossPopulations <- NULL
   for (structureSet in structureSets)
@@ -537,6 +542,15 @@ getDefaultPkParametersXParameters <- function(workflowType) {
   return(NULL)
 }
 
+#' @title getPopulationPkAnalysesFromOuptut
+#' @description Get the values of PK parameters specified by an `Output` object from a data.frame
+#' @param data data.frame of the PK Analyses across Population Simulation sets
+#' @param metaData metaData (dimension and unit) of the PK Analyses across Population Simulation sets
+#' @param output `Output ` object
+#' @param pkParameter `pkParameter` from `Output ` object
+#' @param molWeight Molecular weight of compound (if unit conversion needed)
+#' @return list of data.frame and its metaData including the values of PK parameters specified by `pkParameter` and `Output` objects
+#' @export
 getPopulationPkAnalysesFromOuptut <- function(data, metaData, output, pkParameter, molWeight = NULL) {
   validateIsIncluded(output$path, unique(data$QuantityPath))
   outputData <- data[data$QuantityPath %in% output$path, ]
