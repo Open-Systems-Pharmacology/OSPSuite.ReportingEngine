@@ -9,8 +9,7 @@ loadUserDefinedTask(
   taskFunction,
   taskName = "userDefinedTask",
   active = TRUE,
-  settings = NULL,
-  taskFunctionUsesAllSimulationSets = FALSE
+  settings = NULL
 )
 }
 \arguments{
@@ -23,9 +22,6 @@ loadUserDefinedTask(
 \item{active}{logical to set if task is run by workflow}
 
 \item{settings}{list of input arguments that can be used by `settings` input argument of `taskFunction`}
-
-\item{taskFunctionUsesAllSimulationSets}{logical if `taskFunction` requires all simulation sets as input, 
-`PopulationPlotTask` object is preferred to `PlotTask` object.}
 }
 \value{
 Updated `Workflow` object

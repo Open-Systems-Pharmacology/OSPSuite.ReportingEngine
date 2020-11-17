@@ -19,7 +19,7 @@ R6 class representing Reporting Engine generic Workflow
 
 \item{\code{createWordReport}}{logical of option for creating Markdwon-Report only but not a Word-Report.}
 
-\item{\code{userDefinedTask}}{Empty slot in workflow object for user-defined task (to update with loadUserDefinedTask)}
+\item{\code{userDefinedTasks}}{List of user-defined tasks (to update with loadUserDefinedTask)}
 }
 \if{html}{\out{</div>}}
 }
