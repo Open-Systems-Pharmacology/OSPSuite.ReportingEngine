@@ -39,15 +39,14 @@ loadUserDefinedTask(userTestWorkflow,
                     plotAUCRatios,
                     taskName = "AUCRatios",
                     active = TRUE,
-                    settings = NULL,
-                    taskFunctionUsesAllSimulationSets = TRUE)
+                    settings = NULL)
 
-# Title within the report
-userTestWorkflow$userDefinedTask$title <- "AUC Ratios across populations"
+# Title within the report of user defined task #1
+userTestWorkflow$userDefinedTasks[[1]]$title <- "AUC Ratios across populations"
 
 # Since user defined task will require simulated PK Parameters from task calculatePKParameters
 # simulate and calculatePKParameters task need to be run
 userTestWorkflow$inactivateTasks()
-userTestWorkflow$activateTasks(c("simulate", "calculatePKParameters", "userDefinedTask"))
+userTestWorkflow$activateTasks(c("simulate", "calculatePKParameters"))
 
 userTestWorkflow$runWorkflow()
