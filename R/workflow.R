@@ -87,7 +87,7 @@ Workflow <- R6::R6Class(
         isOfType(x, "Task")
       }))
 
-      taskNames <- names(isTaskVector[as.logical(isTaskVector)])
+      taskNames <- setdiff(names(isTaskVector[as.logical(isTaskVector)]), "userDefinedTasks")
 
       return(taskNames)
     },
@@ -101,7 +101,7 @@ Workflow <- R6::R6Class(
         isOfType(x, "PlotTask")
       }))
 
-      taskNames <- names(isPlotTaskVector[as.logical(isPlotTaskVector)])
+      taskNames <- setdiff(names(isPlotTaskVector[as.logical(isPlotTaskVector)]), "userDefinedTasks")
 
       return(taskNames)
     },
