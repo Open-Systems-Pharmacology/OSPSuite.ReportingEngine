@@ -35,7 +35,7 @@ userTestWorkflow <- PopulationWorkflow$new(
 )
 
 # load user defined task
-loadUserDefinedTask(userTestWorkflow,
+addUserDefinedTask(userTestWorkflow,
                     plotAUCRatios,
                     taskName = "AUCRatios",
                     active = TRUE,

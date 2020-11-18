@@ -428,17 +428,19 @@ checkTaskInputsExist <- function(task) {
 }
 
 
-#' @title loadUserDefinedTask
+#' @title addUserDefinedTask
 #' @description
-#' Upload a user-defined function as workflow task
+#' Add a user-defined function as a task accessible in the `Workflow` field `$userDefinedTasks`
 #' @param workflow `Workflow` object or derived class
-#' @param taskFunction Function to be called by `Task` object
+#' @param taskFunction Function to be called by `Task` object.
+#' For `MeanModelWorkflow`, input arguments of `taskFunction` should include: `simulationSet`, `logFolder` and `settings`.
+#' For `PopulationWorkflow`, input arguments of `taskFunction` should include: `simulationSets`, `logFolder`, `xParameters`, `yParameters` and `settings`
 #' @param taskName character name of task to initialize reporting of task
 #' @param active logical to set if task is run by workflow
 #' @param settings list of input arguments that can be used by `settings` input argument of `taskFunction`
 #' @return Updated `Workflow` object
 #' @export
-loadUserDefinedTask <- function(workflow,
+addUserDefinedTask <- function(workflow,
                                 taskFunction,
                                 taskName = "userDefinedTask",
                                 active = TRUE,

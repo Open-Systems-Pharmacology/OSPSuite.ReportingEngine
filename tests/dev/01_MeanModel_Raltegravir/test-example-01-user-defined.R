@@ -21,7 +21,7 @@ myMeanWorkflow$inactivateTasks()
 myMeanWorkflow$activateTasks(c("plotAbsorption"))
 
 # load user defined task
-loadUserDefinedTask(workflow = myMeanWorkflow,
+addUserDefinedTask(workflow = myMeanWorkflow,
                     taskFunction =plotApplicationProfile ,
                     taskName = "Application Profile",
                     active = TRUE,
