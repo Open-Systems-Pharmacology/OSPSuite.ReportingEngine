@@ -426,3 +426,81 @@ checkTaskInputsExist <- function(task) {
   validateIsOfType(task, "Task")
   return(sapply(task$getInputs(), file.exists))
 }
+
+
+#' @title addUserDefinedTask
+#' @description
+#' Add a user-defined function as a task accessible in the `Workflow` field `$userDefinedTasks`
+#' @param workflow `Workflow` object or derived class
+#' @param taskFunction Function to be called by `Task` object.
+#' For `MeanModelWorkflow`, input arguments of `taskFunction` should include: `simulationSet`, `logFolder` and `settings`.
+#' For `PopulationWorkflow`, input arguments of `taskFunction` should include: `simulationSets`, `logFolder`, `xParameters`, `yParameters` and `settings`
+#' @param taskName character name of task to initialize reporting of task
+#' @param active logical to set if task is run by workflow
+#' @param settings list of input arguments that can be used by `settings` input argument of `taskFunction`
+#' @return Updated `Workflow` object
+#' @export
+addUserDefinedTask <- function(workflow,
+                                taskFunction,
+                                taskName = "userDefinedTask",
+                                active = TRUE,
+                                settings = NULL) {
+  validateIsOfType(workflow, "Workflow")
+  validateIsOfType(taskFunction, "function")
+  validateIsString(taskName)
+  validateIsLogical(active)
+
+  # Get the names of input arguments of the function
+  argumentNames <- names(formals(taskFunction))
+  if (isOfType(workflow, "MeanModelWorkflow")) {
+    # PlotTask arguments
+    validateIsIncluded(c("structureSet", "logFolder", "settings"), argumentNames,
+      groupName = "Task function arguments", logFolder = workflow$workflowFolder
+    )
+
+    workflow$userDefinedTasks <- c(
+      workflow$userDefinedTasks,
+      PlotTask$new(
+        reportTitle = taskName,
+        fileName = paste0("appendix-", taskName, ".md"),
+        getTaskResults = taskFunction,
+        nameTaskResults = deparse(substitute(taskFunction)),
+        outputFolder = taskName,
+        workflowFolder = workflow$workflowFolder,
+        active = active,
+        message = paste0(taskName, " (user defined)"),
+        settings = settings
+      )
+    )
+  }
+
+  if (isOfType(workflow, "PopulationWorkflow")) {
+    # PopulationPlotTask arguments
+    validateIsIncluded(c("structureSets", "logFolder", "settings", "workflowType", "xParameters", "yParameters"), argumentNames,
+      groupName = "Task function arguments", logFolder = workflow$workflowFolder
+    )
+
+    workflow$userDefinedTasks <- c(
+      workflow$userDefinedTasks,
+      PopulationPlotTask$new(
+        workflowType = workflow$workflowType,
+        xParameters = NULL,
+        yParameters = NULL,
+        reportTitle = taskName,
+        fileName = paste0("appendix-", taskName, ".md"),
+        getTaskResults = taskFunction,
+        nameTaskResults = deparse(substitute(taskFunction)),
+        outputFolder = taskName,
+        workflowFolder = workflow$workflowFolder,
+        active = active,
+        message = paste0(taskName, " (user defined)"),
+        settings = settings
+      )
+    )
+  }
+  logWorkflow(
+    message = paste0("User defined task '", taskName, "' successfully loaded on workflow"),
+    pathFolder = workflow$workflowFolder
+  )
+  return(invisible())
+}

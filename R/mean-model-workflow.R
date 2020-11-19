@@ -84,11 +84,22 @@ MeanModelWorkflow <- R6::R6Class(
           self[[plotTask]]$runTask(self$simulationStructures)
         }
       }
+      
+      for (userDefinedTask in self$userDefinedTasks) {
+        if (userDefinedTask$active) {
+          userDefinedTask$runTask(self$simulationStructures)
+        }
+      }
 
       # Merge appendices into final report
-      appendices <- as.character(sapply(self$getAllPlotTasks(), function(taskName) {
-        self[[taskName]]$fileName
-      }))
+      appendices <- c(
+        as.character(sapply(self$getAllPlotTasks(), function(taskName) {
+          self[[taskName]]$fileName
+        })),
+        as.character(sapply(self$userDefinedTasks, function(userDefinedTask) {
+          userDefinedTask$fileName
+        }))
+      )
       appendices <- appendices[file.exists(appendices)]
       if (length(appendices) > 0) {
         mergeMarkdowndFiles(appendices, self$reportFileName, logFolder = self$workflowFolder)

@@ -18,6 +18,8 @@ R6 class representing Reporting Engine generic Workflow
 \item{\code{reportFileName}}{name of the Rmd report file}
 
 \item{\code{createWordReport}}{logical of option for creating Markdwon-Report only but not a Word-Report.}
+
+\item{\code{userDefinedTasks}}{List of user-defined tasks (to update with loadUserDefinedTask)}
 }
 \if{html}{\out{</div>}}
 }

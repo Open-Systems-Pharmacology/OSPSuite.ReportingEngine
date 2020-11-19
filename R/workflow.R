@@ -5,6 +5,7 @@
 #' @field taskNames Enum of task names
 #' @field reportFileName name of the Rmd report file
 #' @field createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
+#' @field userDefinedTasks List of user-defined tasks (to update with loadUserDefinedTask)
 #' @import tlf
 #' @import ospsuite
 Workflow <- R6::R6Class(
@@ -15,6 +16,7 @@ Workflow <- R6::R6Class(
     taskNames = NULL,
     reportFileName = NULL,
     createWordReport = NULL,
+    userDefinedTasks = NULL,
 
     #' @description
     #' Create a new `Workflow` object.
@@ -28,6 +30,8 @@ Workflow <- R6::R6Class(
                               createWordReport = TRUE,
                               watermark = NULL) {
       private$.reportingEngineInfo <- ReportingEngineInfo$new()
+      # Empty list on which users can load tasks
+      self$userDefinedTasks <- list()
 
       validateIsString(workflowFolder)
       validateIsString(watermark, nullAllowed = TRUE)
@@ -83,7 +87,7 @@ Workflow <- R6::R6Class(
         isOfType(x, "Task")
       }))
 
-      taskNames <- names(isTaskVector[as.logical(isTaskVector)])
+      taskNames <- setdiff(names(isTaskVector[as.logical(isTaskVector)]), "userDefinedTasks")
 
       return(taskNames)
     },
@@ -97,7 +101,7 @@ Workflow <- R6::R6Class(
         isOfType(x, "PlotTask")
       }))
 
-      taskNames <- names(isPlotTaskVector[as.logical(isPlotTaskVector)])
+      taskNames <- setdiff(names(isPlotTaskVector[as.logical(isPlotTaskVector)]), "userDefinedTasks")
 
       return(taskNames)
     },
