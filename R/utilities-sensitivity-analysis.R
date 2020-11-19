@@ -351,6 +351,7 @@ runPopulationSensitivityAnalysis <- function(structureSet, settings, logFolder =
   sensitivityAnalysesResultsIndexFileDF <- getSAFileIndex(
     structureSet = structureSet,
     settings = settings,
+    logFolder = logFolder,
     resultsFileName = resultsFileName
   )
 
@@ -415,10 +416,12 @@ getPKResultsDataFrame <- function(structureSet) {
 #' sensitivity analysis result files that will be output by a population sensitivity analysis.
 #' @param structureSet `SimulationStructure` R6 class object
 #' @param settings list of settings for the population sensitivity analysis
+#' @param logFolder folder where the logs are saved
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
-getSAFileIndex <- function(structureSet = structureSet,
-                           settings = settings,
-                           resultsFileName = resultsFileName) {
+getSAFileIndex <- function(structureSet,
+                           settings,
+                           logFolder,
+                           resultsFileName) {
   quantileVec <- settings$quantileVec
 
   allPKResultsDataframe <- getPKResultsDataFrame(structureSet)
@@ -431,7 +434,13 @@ getSAFileIndex <- function(structureSet = structureSet,
       singleOuputSinglePKDataframe <- allPKResultsDataframe[ (allPKResultsDataframe["QuantityPath"] == output) & (allPKResultsDataframe["Parameter"] == pkParameter), ]
       quantileResults <- getQuantileIndividualIds(singleOuputSinglePKDataframe, quantileVec)
 
-      if (!isOfLength(quantileResults$ids, length(quantileVec))) next
+      if (!isOfLength(quantileResults$ids, length(quantileVec))) {
+        logWorkflow(
+          message = messages$warningNoFinitePKParametersForSomeIndividuals(pkParameter,output,structureSet$simulationSet$simulationSetName),
+          logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error),
+          pathFolder = logFolder
+        )
+        next}
       saResultsByOutput <- data.frame(
         "Output" = output,
         "pkParameter" = pkParameter,
@@ -674,6 +683,16 @@ plotPopulationSensitivity <- function(structureSets,
           totalSensitivityThreshold = settings$totalSensitivityThreshold,
           logFolder = logFolder
         )
+
+        if(is.null(dfForPkAndOp)){
+          logWorkflow(message = messages$warningPopulationSensitivityPlotsNotAvailableForPKParameterOutputSimulationSet(pkParameter = pkParameter$pkParameter,
+                                                                                                                        output = outputPath,
+                                                                                                                        simulationSetName = structureSet$simulationSet$simulationSetName),
+                      logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error),
+                      pathFolder = logFolder)
+          next
+        }
+
         pkDisplayName <- lookupPKParameterDisplayName(output = output, pkParameter = pk)
 
         populationNameCol <- rep(populationName, nrow(dfForPkAndOp))
@@ -695,7 +714,7 @@ plotPopulationSensitivity <- function(structureSets,
 
   if (isOfLength(allPopsDf, 0)) {
     logWorkflow(
-      message = "Population sensitivity plots not available for the selected PK parameters.",
+      message = messages$warningPopulationSensitivityPlotsNotAvailable(),
       logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error),
       pathFolder = logFolder
     )
@@ -706,8 +725,6 @@ plotPopulationSensitivity <- function(structureSets,
   # add any missing sensitivity results omitted when applying threshold in getPopSensDfForPkAndOutput
   # get set of unique combinations of outputs and pkParameters.  A plot is built for each combination.
   uniqueQuantitiesAndPKParameters <- unique(allPopsDf[, c("QuantityPath", "PKParameter")])
-
-  if(is.null(allPopsDf)) return(NULL)
 
   for (n in 1:nrow(uniqueQuantitiesAndPKParameters)) {
     outputPath <- uniqueQuantitiesAndPKParameters$QuantityPath[n]

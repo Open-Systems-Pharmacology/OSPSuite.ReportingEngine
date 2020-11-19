@@ -414,14 +414,27 @@ validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
     pkParametersTable <- getPKParametersInSimulationSet(set)
     # In case output or pkParameters are in different orders
     pkParametersTable <- pkParametersTable[order(pkParametersTable$path, pkParametersTable$pkParameter), ]
-    if (is.null(pkParametersTableRef) ||
-      all(
-        pkParametersTable$path == pkParametersTableRef$path,
-        pkParametersTable$pkParameter == pkParametersTableRef$pkParameter
-      )) {
+
+    if (is.null(pkParametersTableRef)) {
       pkParametersTableRef <- pkParametersTable
       next
     }
+
+
+    if(all(pkParametersTable$path == pkParametersTableRef$path)){
+      pkParametersTableTest <- NULL
+      for (pkParameterIndex in seq_along(pkParametersTable$pkParameter)){
+        pkParametersTableTest[pkParameterIndex] <- isIncluded(pkParametersTable$pkParameter[pkParameterIndex], pkParametersTableRef$pkParameter[pkParameterIndex])
+      }
+
+      if(all(pkParametersTableTest)){
+        pkParametersTableRef <- pkParametersTable
+        next
+      }
+
+    }
+
+
     if (is.null(logFolder)) {
       stop(messages$errorNotSameOutputsBetweenSets(sapply(simulationSets, function(set) {
         set$simulationSetName
