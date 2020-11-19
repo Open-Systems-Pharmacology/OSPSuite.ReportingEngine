@@ -291,18 +291,23 @@ The names in the __`plotConfigurations`__ list available for the __"plotPKParame
 - __"comparisonVpcPlot"__: for VPC like plots of PK parameters vs Demography parameters comparing to reference population performed by pediatric type
 
 Since pediatric workflows perform VPC like plot, aggregation of the data is performed along the demography parameters.
-The binning of the demography parameters can be set by the __`settings`__ optional field __`xParametersBreaks`__.
-This field is a list vectors corresponding of the edges of the bins and whose names are the demography parameter path.
-Below shows an example of how to set such an option:
+The binning of the demography parameters can be set by the optional field __`bins`__ from the task field __`settings`__.
+This field can be either a unique value corresponding to the number of bins or a vector defining the bin edges for all the demography parameter paths.
+
+Besides, the final plot can either link the aggregated values or plot them as stairstep. 
+The default behaviour is to perform a stairstep plot, but this can be tuned with the optional field __`stairstep`__ (`TRUE`/`FALSE`) from the task field __`settings`__.
+
+Below shows examples of how to set such options:
 
 ```{r PK parameter settings}
-# Create an empty list
-myParameterSettings <- list()
+# Associate the bin edges
+workflowA$plotPKParameters$settings$bins <- c(0, 1, 2, 3, 5, 10)
 
-# Associate the bin edges for Age demography parameter field
-myParameterSettings[[StandardPath$Age]]$xParametersBreaks <- c(0, 1, 2, 3, 5, 10)
+# Associate the number of bins
+workflowA$plotPKParameters$settings$bins <- 15
 
-workflowA$plotPKParameters$settings <- myParameterSettings
+# Set VPC as stair step 
+workflowA$plotPKParameters$settings$stairstep <- TRUE
 ```
 
 ## Sensitivity plots
@@ -357,7 +362,10 @@ The names in the __`plotConfigurations`__ list available for the __"plotDemograp
 - __"comparisonVpcPlot"__: for VPC like plots of Demography parameters vs Demography parameters comparing to reference population performed by pediatric type
 
 Since pediatric workflows perform VPC like plot, aggregation of the data is performed along the demography parameters.
-The binning of the demography parameters can be set by the __`settings`__ optional field __`xParametersBreaks`__.
-This field is a list vectors corresponding of the edges of the bins and whose names are the demography parameter path.
+The binning of the demography parameters can be set by the optional field __`bins`__ from the task field __`settings`__.
+This field can be either a unique value corresponding to the number of bins or a vector defining the bin edges for all the demography parameter paths.
+
+Besides, the final plot can either link the aggregated values or plot them as stairstep. 
+The default behaviour is to perform a stairstep plot, but this can be tuned with the optional field __`stairstep`__ (`TRUE`/`FALSE`) from the task field __`settings`__.
 
 Similarly, parallel comparison and ratio types of population workflows perform histograms, whose binning can set using the __`settings`__ field __`bins`__.
