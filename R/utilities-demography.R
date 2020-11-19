@@ -253,7 +253,8 @@ getDemographyAggregatedData <- function(data,
   xData <- stats::aggregate(
     x = data[, xParameterName],
     by = list(Bins = xParameterBins, Population = data[, "simulationSetName"]),
-    FUN = AggregationConfiguration$functions$middle
+    FUN = AggregationConfiguration$functions$middle,
+    drop = FALSE
   )
 
   medianData <- stats::aggregate(
@@ -262,7 +263,8 @@ getDemographyAggregatedData <- function(data,
       Bins = xParameterBins,
       Population = data[, "simulationSetName"]
     ),
-    FUN = AggregationConfiguration$functions$middle
+    FUN = AggregationConfiguration$functions$middle,
+    drop = FALSE
   )
   lowPercData <- stats::aggregate(
     x = data[, yParameterName],
@@ -270,7 +272,8 @@ getDemographyAggregatedData <- function(data,
       Bins = xParameterBins,
       Population = data[, "simulationSetName"]
     ),
-    FUN = AggregationConfiguration$functions$ymin
+    FUN = AggregationConfiguration$functions$ymin,
+    drop = FALSE
   )
   highPercData <- stats::aggregate(
     x = data[, yParameterName],
@@ -278,7 +281,8 @@ getDemographyAggregatedData <- function(data,
       Bins = xParameterBins,
       Population = data[, "simulationSetName"]
     ),
-    FUN = AggregationConfiguration$functions$ymax
+    FUN = AggregationConfiguration$functions$ymax,
+    drop = FALSE
   )
 
   aggregatedData <- cbind.data.frame(xData,
@@ -292,7 +296,7 @@ getDemographyAggregatedData <- function(data,
     labs <- levels(xParameterBins)
     xminValues <- as.numeric(sub("\\((.+),.*", "\\1", labs))
     xmaxValues <- as.numeric(sub("[^,]*,([^]]*)\\]", "\\1", labs))
-
+    
     xData <- rbind.data.frame(xData, xData)
     xData$x <- sort(c(xminValues, xmaxValues))
 
