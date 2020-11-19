@@ -62,7 +62,7 @@ plotDemographyParameters <- function(structureSets,
           metaData = demographyMetaData,
           dataMapping = histogramMapping,
           plotConfiguration = settings$plotConfigurations[["histogram"]],
-          bins = settings$bins %||% 11
+          bins = settings$bins %||% AggregationConfiguration$bins
         )
         demographyPlots[[parameterLabel]] <- demographyHistogram
         demographyCaptions[[parameterLabel]] <- getPkParametersCaptions("Histogram", captionSimulationNames, demographyMetaData[[parameterName]])
@@ -84,7 +84,7 @@ plotDemographyParameters <- function(structureSets,
             metaData = demographyMetaData,
             dataMapping = histogramMapping,
             plotConfiguration = settings$plotConfigurations[["histogram"]],
-            bins = settings$bins %||% 11
+            bins = settings$bins %||% AggregationConfiguration$bins
           )
 
           demographyPlots[[paste0(parameterLabel, "-", populationName)]] <- demographyHistogram
@@ -232,16 +232,19 @@ getDefaultDemographyXParameters <- function(workflowType) {
 getDemographyAggregatedData <- function(data,
                                         xParameterName,
                                         yParameterName,
-                                        xParameterBreaks = NULL) {
-  xParameterBreaks <- xParameterBreaks %||% 10
+                                        bins = NULL,
+                                        stairstep = TRUE) {
+  stairstep <- stairstep %||% TRUE
+  xParameterBreaks <- bins %||% AggregationConfiguration$bins
+  # binningOnQuantiles use data distribution to improve the binning
+  if (isOfLength(bins, 1) & AggregationConfiguration$binUsingQuantiles) {
+    xParameterBreaks <- unique(unname(quantile(x = data[, xParameterName], probs = seq(0, 1, length.out = xParameterBreaks))))
+  }
   xParameterBins <- cut(data[, xParameterName], breaks = xParameterBreaks)
 
   xData <- stats::aggregate(
     x = data[, xParameterName],
-    by = list(
-      Bins = xParameterBins,
-      Population = data[, "simulationSetName"]
-    ),
+    by = list(Bins = xParameterBins, Population = data[, "simulationSetName"]),
     FUN = AggregationConfiguration$functions$middle
   )
 
@@ -275,6 +278,22 @@ getDemographyAggregatedData <- function(data,
     ymin = lowPercData$x,
     ymax = highPercData$x
   )
+
+  if (stairstep) {
+    # Method in documentation of cut to get the bin edges
+    labs <- levels(xParameterBins)
+    xminValues <- as.numeric(sub("\\((.+),.*", "\\1", labs))
+    xmaxValues <- as.numeric(sub("[^,]*,([^]]*)\\]", "\\1", labs))
+
+    xData <- rbind.data.frame(xData, xData)
+    xData$x <- sort(c(xminValues, xmaxValues))
+
+    aggregatedData <- cbind.data.frame(xData,
+      median = rep(medianData$x, each = 2),
+      ymin = rep(lowPercData$x, each = 2),
+      ymax = rep(highPercData$x, each = 2)
+    )
+  }
 
   return(aggregatedData)
 }
