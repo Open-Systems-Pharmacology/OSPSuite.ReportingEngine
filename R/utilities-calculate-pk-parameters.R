@@ -260,14 +260,7 @@ plotPopulationPKParameters <- function(structureSets,
           "median" = pkParameterMetaData$Value
         )
 
-        aggregatedData <- getDemographyAggregatedData(
-          data = pkParameterData,
-          xParameterName = demographyParameter,
-          yParameterName = "Value",
-          xParameterBreaks = settings$xParametersBreaks[[demographyParameter]]
-        )
-
-        populationNames <- levels(factor(aggregatedData$Population))
+        populationNames <- levels(factor(pkParameterData$simulationSetName))
 
         # For pediatric workflow, range plots compare reference population to the other populations
         if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
@@ -285,7 +278,14 @@ plotPopulationPKParameters <- function(structureSets,
           )
 
           for (populationName in populationNames[!populationNames %in% referencePopulationName]) {
-            comparisonData <- aggregatedData[aggregatedData$Population %in% populationName, ]
+            comparisonData <- pkParameterData[pkParameterData$simulationSetName %in% populationName, ]
+            comparisonData <- getDemographyAggregatedData(
+              data = comparisonData,
+              xParameterName = demographyParameter,
+              yParameterName = "Value",
+              bins = settings$bins,
+              stairstep = settings$stairstep
+            )
             comparisonData$Population <- paste("Simulated", AggregationConfiguration$names$middle, "and", AggregationConfiguration$names$range)
 
             comparisonVpcPlot <- vpcParameterPlot(
@@ -304,7 +304,15 @@ plotPopulationPKParameters <- function(structureSets,
 
         # Regular range plots not associated to workflow type
         for (populationName in populationNames) {
-          vpcData <- aggregatedData[aggregatedData$Population %in% populationName, ]
+          vpcData <- pkParameterData[pkParameterData$simulationSetName %in% populationName, ]
+          vpcData <- getDemographyAggregatedData(
+            data = vpcData,
+            xParameterName = demographyParameter,
+            yParameterName = "Value",
+            bins = settings$bins,
+            stairstep = settings$stairstep
+          )
+
           vpcData$Population <- paste("Simulated", AggregationConfiguration$names$middle, "and", AggregationConfiguration$names$range)
           vpcPlot <- vpcParameterPlot(
             data = vpcData,
