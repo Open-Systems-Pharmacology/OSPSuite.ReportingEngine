@@ -250,37 +250,31 @@ getDemographyAggregatedData <- function(data,
   }
   xParameterBins <- cut(data[, xParameterName], breaks = xParameterBreaks)
 
+  # simulationSetName was removed from "by" input because
+  # it is a factor class that messes up the aggregation now that
+  # simulationSetName filtering is performed before aggregation
   xData <- stats::aggregate(
     x = data[, xParameterName],
-    by = list(Bins = xParameterBins, Population = data[, "simulationSetName"]),
+    by = list(Bins = xParameterBins),
     FUN = AggregationConfiguration$functions$middle,
     drop = FALSE
   )
 
   medianData <- stats::aggregate(
     x = data[, yParameterName],
-    by = list(
-      Bins = xParameterBins,
-      Population = data[, "simulationSetName"]
-    ),
+    by = list(Bins = xParameterBins),
     FUN = AggregationConfiguration$functions$middle,
     drop = FALSE
   )
   lowPercData <- stats::aggregate(
     x = data[, yParameterName],
-    by = list(
-      Bins = xParameterBins,
-      Population = data[, "simulationSetName"]
-    ),
+    by = list(Bins = xParameterBins),
     FUN = AggregationConfiguration$functions$ymin,
     drop = FALSE
   )
   highPercData <- stats::aggregate(
     x = data[, yParameterName],
-    by = list(
-      Bins = xParameterBins,
-      Population = data[, "simulationSetName"]
-    ),
+    by = list(Bins = xParameterBins),
     FUN = AggregationConfiguration$functions$ymax,
     drop = FALSE
   )
@@ -296,7 +290,7 @@ getDemographyAggregatedData <- function(data,
     labs <- levels(xParameterBins)
     xminValues <- as.numeric(sub("\\((.+),.*", "\\1", labs))
     xmaxValues <- as.numeric(sub("[^,]*,([^]]*)\\]", "\\1", labs))
-    
+
     xData <- rbind.data.frame(xData, xData)
     xData$x <- sort(c(xminValues, xmaxValues))
 
