@@ -5,12 +5,24 @@
 \alias{AggregationConfiguration}
 \title{AggregationConfiguration}
 \format{
-An object of class \code{list} of length 2.
+An object of class \code{list} of length 4.
 }
 \usage{
 AggregationConfiguration
 }
 \description{
-Aggregation default properties  (which functions and their captions)
+Aggregation default properties  (which functions and their captions).
 }
+\section{Fields}{
+
+\describe{
+\item{\code{functions}}{list of `middle`, `ymin` and `ymax` functions for aggregation}
+
+\item{\code{names}}{list of legend captions for `middle` and `range` from aggregation}
+
+\item{\code{bins}}{default number of bins in plots}
+
+\item{\code{binUsingQuantiles}}{logical to choose a binning based on the quantiles rather thanon a constant interval width}
+}}
+
 \keyword{datasets}

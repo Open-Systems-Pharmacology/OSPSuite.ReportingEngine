@@ -62,7 +62,7 @@ plotDemographyParameters <- function(structureSets,
           metaData = demographyMetaData,
           dataMapping = histogramMapping,
           plotConfiguration = settings$plotConfigurations[["histogram"]],
-          bins = settings$bins %||% 11
+          bins = settings$bins %||% AggregationConfiguration$bins
         )
         demographyPlots[[parameterLabel]] <- demographyHistogram
         demographyCaptions[[parameterLabel]] <- getPkParametersCaptions("Histogram", captionSimulationNames, demographyMetaData[[parameterName]])
@@ -84,7 +84,7 @@ plotDemographyParameters <- function(structureSets,
             metaData = demographyMetaData,
             dataMapping = histogramMapping,
             plotConfiguration = settings$plotConfigurations[["histogram"]],
-            bins = settings$bins %||% 11
+            bins = settings$bins %||% AggregationConfiguration$bins
           )
 
           demographyPlots[[paste0(parameterLabel, "-", populationName)]] <- demographyHistogram
@@ -112,12 +112,6 @@ plotDemographyParameters <- function(structureSets,
         "x" = demographyMetaData[[demographyParameter]],
         "median" = demographyMetaData[[parameterName]]
       )
-      aggregatedData <- getDemographyAggregatedData(
-        data = demographyData,
-        xParameterName = demographyParameter,
-        yParameterName = parameterName,
-        xParameterBreaks = settings$xParametersBreaks[[demographyParameter]]
-      )
 
       # For pediatric workflow, range plots compare reference population to the other populations
       if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
@@ -138,7 +132,14 @@ plotDemographyParameters <- function(structureSets,
         )
 
         for (populationName in populationNames[!populationNames %in% referencePopulationName]) {
-          comparisonData <- aggregatedData[aggregatedData$Population %in% populationName, ]
+          comparisonData <- demographyData[demographyData$simulationSetName %in% populationName, ]
+          comparisonData <- getDemographyAggregatedData(
+            data = comparisonData,
+            xParameterName = demographyParameter,
+            yParameterName = parameterName,
+            bins = settings$bins,
+            stairstep = settings$stairstep
+          )
           comparisonData$Population <- paste("Simulated", AggregationConfiguration$names$middle, "and", AggregationConfiguration$names$range)
 
           comparisonVpcPlot <- vpcParameterPlot(
@@ -156,7 +157,14 @@ plotDemographyParameters <- function(structureSets,
       }
 
       for (populationName in populationNames) {
-        vpcData <- aggregatedData[aggregatedData$Population %in% populationName, ]
+        vpcData <- demographyData[demographyData$simulationSetName %in% populationName, ]
+        vpcData <- getDemographyAggregatedData(
+          data = vpcData,
+          xParameterName = demographyParameter,
+          yParameterName = parameterName,
+          bins = settings$bins,
+          stairstep = settings$stairstep
+        )
         vpcData$Population <- paste("Simulated", AggregationConfiguration$names$middle, "and", AggregationConfiguration$names$range)
 
         vpcPlot <- vpcParameterPlot(
@@ -232,42 +240,43 @@ getDefaultDemographyXParameters <- function(workflowType) {
 getDemographyAggregatedData <- function(data,
                                         xParameterName,
                                         yParameterName,
-                                        xParameterBreaks = NULL) {
-  xParameterBreaks <- xParameterBreaks %||% 10
+                                        bins = NULL,
+                                        stairstep = TRUE) {
+  stairstep <- stairstep %||% TRUE
+  xParameterBreaks <- bins %||% AggregationConfiguration$bins
+  # binningOnQuantiles use data distribution to improve the binning
+  if (isOfLength(bins, 1) & AggregationConfiguration$binUsingQuantiles) {
+    xParameterBreaks <- unique(unname(quantile(x = data[, xParameterName], probs = seq(0, 1, length.out = xParameterBreaks))))
+  }
   xParameterBins <- cut(data[, xParameterName], breaks = xParameterBreaks)
 
+  # simulationSetName was removed from "by" input because
+  # it is a factor class that messes up the aggregation now that
+  # simulationSetName filtering is performed before aggregation
   xData <- stats::aggregate(
     x = data[, xParameterName],
-    by = list(
-      Bins = xParameterBins,
-      Population = data[, "simulationSetName"]
-    ),
-    FUN = AggregationConfiguration$functions$middle
+    by = list(Bins = xParameterBins),
+    FUN = AggregationConfiguration$functions$middle,
+    drop = FALSE
   )
 
   medianData <- stats::aggregate(
     x = data[, yParameterName],
-    by = list(
-      Bins = xParameterBins,
-      Population = data[, "simulationSetName"]
-    ),
-    FUN = AggregationConfiguration$functions$middle
+    by = list(Bins = xParameterBins),
+    FUN = AggregationConfiguration$functions$middle,
+    drop = FALSE
   )
   lowPercData <- stats::aggregate(
     x = data[, yParameterName],
-    by = list(
-      Bins = xParameterBins,
-      Population = data[, "simulationSetName"]
-    ),
-    FUN = AggregationConfiguration$functions$ymin
+    by = list(Bins = xParameterBins),
+    FUN = AggregationConfiguration$functions$ymin,
+    drop = FALSE
   )
   highPercData <- stats::aggregate(
     x = data[, yParameterName],
-    by = list(
-      Bins = xParameterBins,
-      Population = data[, "simulationSetName"]
-    ),
-    FUN = AggregationConfiguration$functions$ymax
+    by = list(Bins = xParameterBins),
+    FUN = AggregationConfiguration$functions$ymax,
+    drop = FALSE
   )
 
   aggregatedData <- cbind.data.frame(xData,
@@ -275,6 +284,22 @@ getDemographyAggregatedData <- function(data,
     ymin = lowPercData$x,
     ymax = highPercData$x
   )
+
+  if (stairstep) {
+    # Method in documentation of cut to get the bin edges
+    labs <- levels(xParameterBins)
+    xminValues <- as.numeric(sub("\\((.+),.*", "\\1", labs))
+    xmaxValues <- as.numeric(sub("[^,]*,([^]]*)\\]", "\\1", labs))
+
+    xData <- rbind.data.frame(xData, xData)
+    xData$x <- sort(c(xminValues, xmaxValues))
+
+    aggregatedData <- cbind.data.frame(xData,
+      median = rep(medianData$x, each = 2),
+      ymin = rep(lowPercData$x, each = 2),
+      ymax = rep(highPercData$x, each = 2)
+    )
+  }
 
   return(aggregatedData)
 }
