@@ -64,6 +64,7 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
     workflowInfo <- getWorkflowContent(workflowTable = workflowTable, excelFile = excelFile)
     workflowContent <- workflowInfo$content
     plotFormatContent <- workflowInfo$plotFormatContent
+    activitySpecificContent <- workflowInfo$activitySpecificContent
     scriptWarnings$messages[["Workflow and Tasks"]] <- workflowInfo$warnings
     scriptErrors$messages[["Workflow and Tasks"]] <- workflowInfo$errors
   }
@@ -92,6 +93,7 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
 
   scriptContent <- c(
     scriptContent,
+    activitySpecificContent,
     plotFormatContent,
     pkParametersContent,
     outputContent,
@@ -517,6 +519,7 @@ getWorkflowContent <- function(workflowTable, excelFile) {
     settingContent <- paste0(OptionalSettings[[optionalSettingName]], settingValue)
     workflowContent <- c(
       workflowContent,
+      "",
       "# The following code chunk defines tasks optional settings",
       settingContent
     )
@@ -526,13 +529,33 @@ getWorkflowContent <- function(workflowTable, excelFile) {
   plotFormatContent <- NULL
   plotFormat <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$plotFormat)
   if (!isIncluded(plotFormat, "NULL")) {
-    plotFormatContent <- paste0("setPlotFormat(", plotFormat, ")")
+    plotFormatContent <- c(
+      paste0("# Figures exported by the workflow will be saved as ", plotFormat, " files"),
+      paste0("setPlotFormat(", plotFormat, ")")
+    )
+  }
+
+  # Optional field: Activity specific code
+  activitySpecificContent <- NULL
+  activitySpecificCode <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$activitySpecificCode)
+  if (!isIncluded(activitySpecificCode, "NULL")) {
+    activitySpecificContent <- c(
+      paste0("# Load the function ", activitySpecificCode, " from the file '", activitySpecificCode, ".R'"),
+      paste0('source("', activitySpecificCode, '.R")')
+    )
+    workflowContent <- c(
+      workflowContent,
+      "",
+      paste0("# Update 'workflow' (workflow is an R6 object, so updates from ", activitySpecificCode, " does not need to be returned as a new variable)"),
+      paste0(activitySpecificCode, "(workflow)")
+    )
   }
 
   return(list(
     workflowMode = workflowMode,
     content = workflowContent,
     plotFormatContent = plotFormatContent,
+    activitySpecificContent = activitySpecificContent,
     warnings = workflowWarnings,
     errors = workflowErrors
   ))
@@ -572,6 +595,7 @@ WorkflowCodeIdentifiers <- enum(c(
   "plotDemography",
   "plotAbsorption",
   "plotMassBalance",
+  "activitySpecificCode",
   names(OptionalSettings)
 ))
 
@@ -632,6 +656,7 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
   # For info of type sheet, return directly sheet name
   if (isIncluded(codeId, c(
     WorkflowCodeIdentifiers$`Workflow Mode`,
+    WorkflowCodeIdentifiers$activitySpecificCode,
     SimulationCodeIdentifiers$outputs,
     SimulationCodeIdentifiers$DictionaryType,
     SimulationCodeIdentifiers$DictionaryLocation,
