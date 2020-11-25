@@ -9,16 +9,21 @@ refWorkflowStructure <- sort(c(
   "Report-word.md", "Report.docx", "Report.md",
   "Demography"
 ))
+
 demographyStructure <- sort(c(
-  "Age-Adults.png", "Age-Pediatric.png", "BMI-Adults.png", "BMI-Pediatric.png", "Gender-Adults.png", 
-  "Gender-Pediatric.png", "Height-Adults.png", "Height-Pediatric.png", "Weight-Adults.png", "Weight-Pediatric.png"
+  paste(c("Gender", "Age", "BMI", "Height", "Weight"), "Adults.png", sep = "-"),
+  paste(c("Gender", "Age", "BMI", "Height", "Weight"), "Pediatric.png", sep = "-")
 ))
-demographyStructurePeds <- sort(c(
-  "Adults-BMI-vs-Age.png", "Adults-BMI-vs-Age-log.png", "Adults-Height-vs-Age.png", "Adults-Height-vs-Age-log.png", "Adults-Weight-vs-Age.png", "Adults-Weight-vs-Age-log.png",
-  "Pediatric-BMI-vs-Age.png", "Pediatric-BMI-vs-Age-log.png", "Pediatric-Height-vs-Age.png", "Pediatric-Height-vs-Age-log.png", "Pediatric-Weight-vs-Age.png", "Pediatric-Weight-vs-Age-log.png",
-  "Pediatric-vs-ref-BMI-vs-Age.png", "Pediatric-vs-ref-BMI-vs-Age-log.png", "Pediatric-vs-ref-Height-vs-Age.png", 
-  "Pediatric-vs-ref-Height-vs-Age-log.png", "Pediatric-vs-ref-Weight-vs-Age.png", "Pediatric-vs-ref-Weight-vs-Age-log.png"
-))
+
+demographyStructurePeds <- NULL
+for (popName in c("Adults", "Pediatric", "Pediatric-vs-ref")){
+  for(parName in c("BMI", "Height", "Weight")){
+    demographyStructurePeds <- c(demographyStructurePeds, 
+                                 paste(popName, parName, c("vs-Age.png", "vs-Age-log.png"), sep = "-"))
+  }
+}
+demographyStructurePeds <- sort(demographyStructurePeds)
+
 
 setPeds <- PopulationSimulationSet$new(
   simulationSetName = "Pediatric",
