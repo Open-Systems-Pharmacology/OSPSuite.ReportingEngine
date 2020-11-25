@@ -655,7 +655,7 @@ workflow8 <-
 workflow8$inactivateTasks()
 workflow8$activateTasks("plotPKParameters")
 
-setXParametersForPKParametersPlot(workflow8, "Organism|p3")
+setXParametersForPkParametersPlot(workflow8, "Organism|p3")
 
 # Run the workflow
 workflow8$runWorkflow()
