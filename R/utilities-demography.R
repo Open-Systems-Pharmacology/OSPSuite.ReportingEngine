@@ -419,6 +419,17 @@ setXParametersForDemogrpahyPlot <- function(workflow, parameters) {
   return(invisible())
 }
 
+#' @title addXParametersForDemogrpahyPlot
+#' @description Append x parameters for range plots of demography plot task.
+#' The method update directly the input workflow
+#' @param workflow `PopulationWorkflow` R6 class object
+#' @param parameters list of demography parameters to be used as x-parameters
+#' @export
+addXParametersForDemogrpahyPlot <- function(workflow, parameters) {
+  updatedParameters <- c(getXParametersForDemogrpahyPlot(workflow), parameters)
+  setXParametersForDemogrpahyPlot(workflow, updatedParameters)
+}
+
 #' @title setYParametersForDemogrpahyPlot
 #' @description Set y-parameters for histograms and range plots of demography plot task.
 #' The method update directly the input workflow
@@ -441,6 +452,17 @@ setYParametersForDemogrpahyPlot <- function(workflow, parameters) {
     logTypes = LogTypes$Debug
   )
   return(invisible())
+}
+
+#' @title addYParametersForDemogrpahyPlot
+#' @description Append y parameters for range plots of demography plot task.
+#' The method update directly the input workflow
+#' @param workflow `PopulationWorkflow` R6 class object
+#' @param parameters list of demography parameters to be used as x-parameters
+#' @export
+addYParametersForDemogrpahyPlot <- function(workflow, parameters) {
+  updatedParameters <- c(getYParametersForDemogrpahyPlot(workflow), parameters)
+  setYParametersForDemogrpahyPlot(workflow, updatedParameters)
 }
 
 getPopulationAsDataFrame <- function(population, simulation) {
