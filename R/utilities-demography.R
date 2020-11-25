@@ -92,7 +92,10 @@ plotDemographyParameters <- function(structureSets,
         }
       }
     }
-    return(list(plots = demographyPlots))
+    return(list(
+      plots = demographyPlots,
+      captions = demographyCaptions
+    ))
   }
 
   for (demographyParameter in xParameters) {
