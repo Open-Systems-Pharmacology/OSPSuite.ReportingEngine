@@ -466,7 +466,7 @@ getPopulationMetaData <- function(population, simulation) {
   }
   for (parameter in allParameters) {
     metaData[[parameter$path]] <- list(
-      dimension = parameter$name,
+      dimension = ospsuite::getParameterDisplayPaths(parameter$path, simulation),
       unit = parameter$displayUnit,
       class = class(population$getParameterValues(parameter$path))
     )
