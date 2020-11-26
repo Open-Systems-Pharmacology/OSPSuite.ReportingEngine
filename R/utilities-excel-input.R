@@ -714,14 +714,19 @@ getObservedMetaDataFile <- function(excelFile, observedMetaDataSheet, format = "
     return(observedMetaDataSheet)
   }
   observedMetaDataFilename <- paste0(observedMetaDataSheet, ".", format)
-  observedMetaDataTable <- readxl::read_excel(excelFile, sheet = observedMetaDataSheet)
+  # Read sheet from excel file
+  # Caution: Study Design file can have multiple columns with same header name and special characters
+  # To prevent R to modify them giving R valid unique names, col_name need to be set to FALSE in the sequel
+  # Besides, default .name_repair will send warnings which is silented by overwriting with base function make.names
+  observedMetaDataTable <- readxl::read_excel(excelFile, sheet = observedMetaDataSheet, col_names = FALSE, .name_repair = ~make.names(.x))
   # Return NULL in order to throw an error if dictionary already exists
   if (file.exists(observedMetaDataFilename)) {
     return(NULL)
   }
   # Save the data dictionary as a csv file, missing values stay missing (na = ""),
-  # row numbers are not printed in the file (row.names = FALSE), file uses UTF-8 encoding (fileEncoding = "UTF-8")
-  write.csv(observedMetaDataTable, file = observedMetaDataFilename, na = "", row.names = FALSE, fileEncoding = "UTF-8")
+  # Column names need to be removed from the previous step, write.csv is replaced by write.table with option col.names = FALSE,
+  # row numbers are also removed (row.names = FALSE), file uses UTF-8 encoding (fileEncoding = "UTF-8")
+  write.table(observedMetaDataTable, file = observedMetaDataFilename, na = "", row.names = FALSE, col.names = FALSE, sep = ",", fileEncoding = "UTF-8")
   return(observedMetaDataFilename)
 }
 
