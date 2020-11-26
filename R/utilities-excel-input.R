@@ -538,7 +538,7 @@ getWorkflowContent <- function(workflowTable, excelFile) {
   # Optional field: Activity specific code
   activitySpecificContent <- NULL
   activitySpecificCode <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$activitySpecificCode)
-  if (!isIncluded(activitySpecificCode, "NULL")) {
+  if (!is.na(activitySpecificCode)) {
     activitySpecificContent <- c(
       paste0("# Load the function ", activitySpecificCode, " from the file '", activitySpecificCode, ".R'"),
       paste0('source("', activitySpecificCode, '.R")')
