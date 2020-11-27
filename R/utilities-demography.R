@@ -50,7 +50,7 @@ plotDemographyParameters <- function(structureSets,
     # Pediatric: comparison histogram
     if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
       for (parameterName in yParameters) {
-        parameterLabel <- demographyMetaData[[parameterName]]$dimension
+        parameterLabel <- lastPathElement(parameterName)
 
         histogramMapping <- tlf::HistogramDataMapping$new(
           x = parameterName,
@@ -71,7 +71,7 @@ plotDemographyParameters <- function(structureSets,
     # Parallel and Ratio: histograms per population
     if (workflowType %in% c(PopulationWorkflowTypes$parallelComparison, PopulationWorkflowTypes$ratioComparison)) {
       for (parameterName in yParameters) {
-        parameterLabel <- demographyMetaData[[parameterName]]$dimension
+        parameterLabel <- lastPathElement(parameterName)
         histogramMapping <- tlf::HistogramDataMapping$new(
           x = parameterName,
           fill = "simulationSetName"
@@ -92,7 +92,10 @@ plotDemographyParameters <- function(structureSets,
         }
       }
     }
-    return(list(plots = demographyPlots))
+    return(list(
+      plots = demographyPlots,
+      captions = demographyCaptions
+    ))
   }
 
   for (demographyParameter in xParameters) {
@@ -100,14 +103,14 @@ plotDemographyParameters <- function(structureSets,
     if (demographyMetaData[[demographyParameter]]$class %in% "character") {
       next
     }
-    xParameterLabel <- demographyMetaData[[demographyParameter]]$dimension
+    xParameterLabel <- lastPathElement(demographyParameter)
     # This aims at preventing plots such as age vs age
     for (parameterName in setdiff(yParameters, demographyParameter)) {
       # Categorical variables won't be plotted
       if (demographyMetaData[[parameterName]]$class %in% "character") {
         next
       }
-      yParameterLabel <- demographyMetaData[[parameterName]]$dimension
+      yParameterLabel <-lastPathElement(parameterName)
       vpcMetaData <- list(
         "x" = demographyMetaData[[demographyParameter]],
         "median" = demographyMetaData[[parameterName]]
@@ -416,6 +419,17 @@ setXParametersForDemogrpahyPlot <- function(workflow, parameters) {
   return(invisible())
 }
 
+#' @title addXParametersForDemogrpahyPlot
+#' @description Append x parameters for range plots of demography plot task.
+#' The method update directly the input workflow
+#' @param workflow `PopulationWorkflow` R6 class object
+#' @param parameters list of demography parameters to be used as x-parameters
+#' @export
+addXParametersForDemogrpahyPlot <- function(workflow, parameters) {
+  updatedParameters <- c(getXParametersForDemogrpahyPlot(workflow), parameters)
+  setXParametersForDemogrpahyPlot(workflow, updatedParameters)
+}
+
 #' @title setYParametersForDemogrpahyPlot
 #' @description Set y-parameters for histograms and range plots of demography plot task.
 #' The method update directly the input workflow
@@ -438,6 +452,17 @@ setYParametersForDemogrpahyPlot <- function(workflow, parameters) {
     logTypes = LogTypes$Debug
   )
   return(invisible())
+}
+
+#' @title addYParametersForDemogrpahyPlot
+#' @description Append y parameters for range plots of demography plot task.
+#' The method update directly the input workflow
+#' @param workflow `PopulationWorkflow` R6 class object
+#' @param parameters list of demography parameters to be used as x-parameters
+#' @export
+addYParametersForDemogrpahyPlot <- function(workflow, parameters) {
+  updatedParameters <- c(getYParametersForDemogrpahyPlot(workflow), parameters)
+  setYParametersForDemogrpahyPlot(workflow, updatedParameters)
 }
 
 getPopulationAsDataFrame <- function(population, simulation) {
@@ -463,7 +488,7 @@ getPopulationMetaData <- function(population, simulation) {
   }
   for (parameter in allParameters) {
     metaData[[parameter$path]] <- list(
-      dimension = parameter$name,
+      dimension = ospsuite::getParameterDisplayPaths(parameter$path, simulation),
       unit = parameter$displayUnit,
       class = class(population$getParameterValues(parameter$path))
     )

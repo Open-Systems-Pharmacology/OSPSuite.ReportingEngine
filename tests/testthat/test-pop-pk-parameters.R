@@ -19,30 +19,25 @@ refWorkflowStructure <- sort(c(
   "Report-word.md", "Report.docx", "Report.md",
   "SimulationResults", "PKAnalysisResults", "PKAnalysis"
 ))
+
 pkParametersStructure <- sort(c(
-  "Plasma (Peripheral Venous Blood)-AUC_tEnd.csv", "Plasma (Peripheral Venous Blood)-AUC_tEnd.png", "Plasma (Peripheral Venous Blood)-AUC_tEnd-log.png",
-  "Plasma (Peripheral Venous Blood)-C_max.csv", "Plasma (Peripheral Venous Blood)-C_max.png", "Plasma (Peripheral Venous Blood)-C_max-log.png"
-))
-pkParametersStructurePeds <- sort(c(
-  pkParametersStructure, 
-  "Adults-AUC_tEnd-vs-Age.png", "Adults-AUC_tEnd-vs-Age-log.png", "Adults-AUC_tEnd-vs-BMI.png", "Adults-AUC_tEnd-vs-BMI-log.png", 
-  "Adults-AUC_tEnd-vs-Height.png", "Adults-AUC_tEnd-vs-Height-log.png", "Adults-AUC_tEnd-vs-Weight.png", "Adults-AUC_tEnd-vs-Weight-log.png", 
-  "Adults-C_max-vs-Age.png", "Adults-C_max-vs-Age-log.png", "Adults-C_max-vs-BMI.png", "Adults-C_max-vs-BMI-log.png", 
-  "Adults-C_max-vs-Height.png", "Adults-C_max-vs-Height-log.png", "Adults-C_max-vs-Weight.png", "Adults-C_max-vs-Weight-log.png", 
-  "Pediatric-AUC_tEnd-vs-Age.png", "Pediatric-AUC_tEnd-vs-Age-log.png", "Pediatric-AUC_tEnd-vs-BMI.png", "Pediatric-AUC_tEnd-vs-BMI-log.png", 
-  "Pediatric-AUC_tEnd-vs-Height.png", "Pediatric-AUC_tEnd-vs-Height-log.png", "Pediatric-AUC_tEnd-vs-Weight.png", "Pediatric-AUC_tEnd-vs-Weight-log.png", 
-  "Pediatric-C_max-vs-Age.png", "Pediatric-C_max-vs-Age-log.png", "Pediatric-C_max-vs-BMI.png", "Pediatric-C_max-vs-BMI-log.png", 
-  "Pediatric-C_max-vs-Height.png", "Pediatric-C_max-vs-Height-log.png", "Pediatric-C_max-vs-Weight.png", "Pediatric-C_max-vs-Weight-log.png", 
-  "Pediatric-vs-ref-AUC_tEnd-vs-Age.png", "Pediatric-vs-ref-AUC_tEnd-vs-Age-log.png", "Pediatric-vs-ref-AUC_tEnd-vs-BMI.png", "Pediatric-vs-ref-AUC_tEnd-vs-BMI-log.png", 
-  "Pediatric-vs-ref-AUC_tEnd-vs-Height.png", "Pediatric-vs-ref-AUC_tEnd-vs-Height-log.png", "Pediatric-vs-ref-AUC_tEnd-vs-Weight.png", "Pediatric-vs-ref-AUC_tEnd-vs-Weight-log.png", 
-  "Pediatric-vs-ref-C_max-vs-Age.png", "Pediatric-vs-ref-C_max-vs-Age-log.png", "Pediatric-vs-ref-C_max-vs-BMI.png", "Pediatric-vs-ref-C_max-vs-BMI-log.png", 
-  "Pediatric-vs-ref-C_max-vs-Height.png", "Pediatric-vs-ref-C_max-vs-Height-log.png", "Pediatric-vs-ref-C_max-vs-Weight.png", "Pediatric-vs-ref-C_max-vs-Weight-log.png"
-  ))
+  paste("Plasma (Peripheral Venous Blood)-AUC_tEnd", c(".csv", ".png", "-log.png"), sep = ""),
+  paste("Plasma (Peripheral Venous Blood)-C_max", c(".csv", ".png", "-log.png"), sep = "")))
+
+pkParametersStructurePeds <- pkParametersStructure
+for (popName in c("Adults", "Pediatric", "Pediatric-vs-ref")){
+  for(parName in c("Age", "BMI", "Height", "Weight")){
+    pkParametersStructurePeds <- c(pkParametersStructurePeds, 
+                                 paste(popName, "-", c("AUC_tEnd", "C_max"), "-vs-", parName, ".png", sep=""),
+                                 paste(popName, "-", c("AUC_tEnd", "C_max"), "-vs-", parName, "-log.png", sep=""))
+  }
+}
+pkParametersStructurePeds <- sort(pkParametersStructurePeds)
+
 pkParametersStructureRatio <- sort(c(
   pkParametersStructure,
-  "Plasma (Peripheral Venous Blood)-AUC_tEnd-ratio.csv", "Plasma (Peripheral Venous Blood)-AUC_tEnd-ratio.png", "Plasma (Peripheral Venous Blood)-AUC_tEnd-ratio-log.png",
-  "Plasma (Peripheral Venous Blood)-C_max-ratio.csv", "Plasma (Peripheral Venous Blood)-C_max-ratio.png", "Plasma (Peripheral Venous Blood)-C_max-ratio-log.png"
-))
+  paste("Plasma (Peripheral Venous Blood)-AUC_tEnd", "-ratio", c(".csv", ".png", "-log.png"), sep = ""),
+  paste("Plasma (Peripheral Venous Blood)-C_max", "-ratio", c(".csv", ".png", "-log.png"), sep = "")))
 
 setPeds <- PopulationSimulationSet$new(
   simulationSetName = "Pediatric",

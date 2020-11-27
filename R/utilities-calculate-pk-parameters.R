@@ -647,6 +647,17 @@ setXParametersForPkParametersPlot <- function(workflow, parameters) {
   return(invisible())
 }
 
+#' @title addXParametersForPkParametersPlot
+#' @description Apppend x-parameters for range plots of PK parameters plot task.
+#' The method update directly the input workflow
+#' @param workflow `PopulationWorkflow` R6 class object
+#' @param parameters list of parameters to be used as x-parameters
+#' @export
+addXParametersForPkParametersPlot <- function(workflow, parameters) {
+  updatedParameters <- c(getXParametersForPkParametersPlot(workflow), parameters)
+  setXParametersForPkParametersPlot(workflow, updatedParameters)
+}
+
 #' @title setYParametersForPkParametersPlot
 #' @description Set y-parameters for boxplots and range plots of PK parameters plot task.
 #' The method update directly the input workflow
@@ -671,4 +682,15 @@ setYParametersForPkParametersPlot <- function(workflow, parameters) {
     )
   }
   return(invisible())
+}
+
+#' @title addYParametersForPkParametersPlot
+#' @description Apppend y-parameters for range plots of PK parameters plot task.
+#' The method update directly the input workflow
+#' @param workflow `PopulationWorkflow` R6 class object
+#' @param parameters list of parameters to be used as y-parameters
+#' @export
+addYParametersForPkParametersPlot <- function(workflow, parameters) {
+  updatedParameters <- c(getYParametersForPkParametersPlot(workflow), parameters)
+  setYParametersForPkParametersPlot(workflow, updatedParameters)
 }
