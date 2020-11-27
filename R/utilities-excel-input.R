@@ -43,8 +43,15 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
     "require(ospsuite.reportingengine)", ""
   )
 
-  # TO DO: issue #340
-  if (isIncluded(StandardExcelSheetNames$`Userdef PK Parameter`, inputSections)) {}
+  userDefPKParametersContent <- NULL
+  if (isIncluded(StandardExcelSheetNames$`Userdef PK Parameter`, inputSections)) {
+    userDefPKParametersTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$`Userdef PK Parameter`)
+    validateIsIncluded(c("Name", "Standard PK parameter", "Display Unit"), names(userDefPKParametersTable))
+    userDefPKParametersInfo <- getUserDefPKParametersContent(userDefPKParametersTable)
+    userDefPKParametersContent <- userDefPKParametersInfo$content
+    scriptWarnings$messages[["User Defined PK Parameters"]] <- userDefPKParametersInfo$warnings
+    scriptErrors$messages[["User DefinedPK Parameters"]] <- userDefPKParametersInfo$errors
+  }
 
   pkParametersContent <- NULL
   if (isIncluded(StandardExcelSheetNames$`PK Parameter`, inputSections)) {
@@ -95,6 +102,7 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
     scriptContent,
     activitySpecificContent,
     plotFormatContent,
+    userDefPKParametersContent,
     pkParametersContent,
     outputContent,
     simulationSetContent,
@@ -538,7 +546,7 @@ getWorkflowContent <- function(workflowTable, excelFile) {
   # Optional field: Activity specific code
   activitySpecificContent <- NULL
   activitySpecificCode <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$activitySpecificCode)
-  if (!isIncluded(activitySpecificCode, "NULL")) {
+  if (!is.na(activitySpecificCode)) {
     activitySpecificContent <- c(
       paste0("# Load the function ", activitySpecificCode, " from the file '", activitySpecificCode, ".R'"),
       paste0('source("', activitySpecificCode, '.R")')
@@ -629,6 +637,17 @@ OutputCodeIdentifiers <- enum(c(
   "pkParameters"
 ))
 
+UserDefPKParametersOptionalSettings <- list(
+  "StartTime [min]" = " $startTime <- ",
+  "StartApplicationIndex" = " $startApplicationIndex <- ",
+  "StartTimeOffset [min]" = " $startTimeOffset <- ",
+  "EndTime [min]" = " $endTime <- ",
+  "EndApplicationIndex" = " $endApplicationIndex <- ",
+  "EndTimeOffset [min]" = " $endTimeOffset <- ",
+  "NormalizationFactor" = " $normalizationFactor <- ",
+  "ConcentrationThreshold [µmol/l]" = " $concentrationThreshold <- "
+)
+
 #' @title getIdentifierInfo
 #' @description Get and format the information from a data.frame matching a certain `simulationIndex` column and `codeId` line
 #' @param workflowTable Data.frame read from one of the available Excel sheets
@@ -714,14 +733,19 @@ getObservedMetaDataFile <- function(excelFile, observedMetaDataSheet, format = "
     return(observedMetaDataSheet)
   }
   observedMetaDataFilename <- paste0(observedMetaDataSheet, ".", format)
-  observedMetaDataTable <- readxl::read_excel(excelFile, sheet = observedMetaDataSheet)
+  # Read sheet from excel file
+  # Caution: Study Design file can have multiple columns with same header name and special characters
+  # To prevent R to modify them giving R valid unique names, col_name need to be set to FALSE in the sequel
+  # Besides, default .name_repair will send warnings which is silented by overwriting with base function make.names
+  observedMetaDataTable <- readxl::read_excel(excelFile, sheet = observedMetaDataSheet, col_names = FALSE, .name_repair = ~ make.names(.x))
   # Return NULL in order to throw an error if dictionary already exists
   if (file.exists(observedMetaDataFilename)) {
     return(NULL)
   }
   # Save the data dictionary as a csv file, missing values stay missing (na = ""),
-  # row numbers are not printed in the file (row.names = FALSE), file uses UTF-8 encoding (fileEncoding = "UTF-8")
-  write.csv(observedMetaDataTable, file = observedMetaDataFilename, na = "", row.names = FALSE, fileEncoding = "UTF-8")
+  # Column names need to be removed from the previous step, write.csv is replaced by write.table with option col.names = FALSE,
+  # row numbers are also removed (row.names = FALSE), file uses UTF-8 encoding (fileEncoding = "UTF-8")
+  write.table(observedMetaDataTable, file = observedMetaDataFilename, na = "", row.names = FALSE, col.names = FALSE, sep = ",", fileEncoding = "UTF-8")
   return(observedMetaDataFilename)
 }
 
@@ -850,4 +874,70 @@ concatenateDataDisplayName <- function(inputs, sep = " - ") {
 #' @return Workflow content without its comments
 removeCommentsFromWorkflowContent <- function(workflowContent, commentPattern = "#") {
   return(workflowContent[!grepl(commentPattern, workflowContent)])
+}
+
+
+#' @title getUserDefPKParametersContent
+#' @description Creates a character vector to be written in a workflow .R script updating the PKParameters objects
+#' @param userDefPKParametersTable Data.frame read from the Excel sheet "PK Parameters"
+#' @return A list of script content, associated with its potential warnings and errors for updating the PKParameters objects
+getUserDefPKParametersContent <- function(userDefPKParametersTable) {
+  userDefPKParametersContent <- NULL
+  userDefPKParametersWarnings <- NULL
+  userDefPKParametersErrors <- NULL
+  if (nrow(userDefPKParametersTable) == 0) {
+    return(userDefPKParametersContent)
+  }
+  # Check for duplicate PK parameters as input of Output object
+  if (!hasUniqueValues(userDefPKParametersTable$Name)) {
+    userDefPKParametersErrors <- c(
+      userDefPKParametersErrors,
+      messages$errorHasNoUniqueValues(userDefPKParametersTable$Name, dataName = "User Defined PK parameters")
+    )
+  }
+
+  # User defined parameters currently need to be set in 2 steps:
+  # 1- create the parameter
+  # 2- set some of its fields
+  for (parameterIndex in seq(1, nrow(userDefPKParametersTable))) {
+    userDefPKParametersContent <- c(
+      userDefPKParametersContent,
+      paste0("# Create user defined parameter ", userDefPKParametersTable$Name[parameterIndex], " and then set its properties"),
+      "# The dimension of the PK parameter can only be defined from 'displayUnit' at the time of the PK parameter creation",
+      paste0(
+        userDefPKParametersTable$Name[parameterIndex], ' <- addUserDefinedPKParameter(name = "', userDefPKParametersTable$Name[parameterIndex], '",
+             standardPKParameter = StandardPKParameter$', userDefPKParametersTable$`Standard PK parameter`[parameterIndex], ', 
+        displayUnit = "', userDefPKParametersTable$`Display Unit`[parameterIndex], '")'
+      )
+    )
+
+    columnNames <- names(UserDefPKParametersOptionalSettings)
+    for (userDefPKParameterIndex in seq_along(UserDefPKParametersOptionalSettings)) {
+      userDefinedSetting <- userDefPKParametersTable[parameterIndex, columnNames[userDefPKParameterIndex]]
+      # If setting is not defined (column does not exist) or not filled
+      if (isOfLength(userDefinedSetting, 0)) {
+        next
+      }
+      if (is.na(userDefinedSetting)) {
+        next
+      }
+
+      userDefPKParametersContent <- c(
+        userDefPKParametersContent,
+        paste0(
+          userDefPKParametersTable$Name[parameterIndex],
+          UserDefPKParametersOptionalSettings[[userDefPKParameterIndex]],
+          userDefinedSetting
+        )
+      )
+    }
+  }
+
+  userDefPKParametersContent <- c(userDefPKParametersContent, "")
+
+  return(list(
+    content = userDefPKParametersContent,
+    warnings = userDefPKParametersWarnings,
+    errors = userDefPKParametersErrors
+  ))
 }
