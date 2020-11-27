@@ -46,7 +46,7 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
   userDefPKParametersContent <- NULL
   if (isIncluded(StandardExcelSheetNames$`Userdef PK Parameter`, inputSections)) {
     userDefPKParametersTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$`Userdef PK Parameter`)
-    validateIsIncluded(c("Name", "Standard PK parameter"), names(userDefPKParametersTable))
+    validateIsIncluded(c("Name", "Standard PK parameter", "Display Unit"), names(userDefPKParametersTable))
     userDefPKParametersInfo <- getUserDefPKParametersContent(userDefPKParametersTable)
     userDefPKParametersContent <- userDefPKParametersInfo$content
     scriptWarnings$messages[["User Defined PK Parameters"]] <- userDefPKParametersInfo$warnings
@@ -737,7 +737,7 @@ getObservedMetaDataFile <- function(excelFile, observedMetaDataSheet, format = "
   # Caution: Study Design file can have multiple columns with same header name and special characters
   # To prevent R to modify them giving R valid unique names, col_name need to be set to FALSE in the sequel
   # Besides, default .name_repair will send warnings which is silented by overwriting with base function make.names
-  observedMetaDataTable <- readxl::read_excel(excelFile, sheet = observedMetaDataSheet, col_names = FALSE, .name_repair = ~make.names(.x))
+  observedMetaDataTable <- readxl::read_excel(excelFile, sheet = observedMetaDataSheet, col_names = FALSE, .name_repair = ~ make.names(.x))
   # Return NULL in order to throw an error if dictionary already exists
   if (file.exists(observedMetaDataFilename)) {
     return(NULL)
@@ -903,9 +903,11 @@ getUserDefPKParametersContent <- function(userDefPKParametersTable) {
     userDefPKParametersContent <- c(
       userDefPKParametersContent,
       paste0("# Create user defined parameter ", userDefPKParametersTable$Name[parameterIndex], " and then set its properties"),
+      "# The dimension of the PK parameter can only be defined from 'displayUnit' at the time of the PK parameter creation",
       paste0(
         userDefPKParametersTable$Name[parameterIndex], ' <- addUserDefinedPKParameter(name = "', userDefPKParametersTable$Name[parameterIndex], '",
-             standardPKParameter = StandardPKParameter$', userDefPKParametersTable$`Standard PK parameter`[parameterIndex], ")"
+             standardPKParameter = StandardPKParameter$', userDefPKParametersTable$`Standard PK parameter`[parameterIndex], ', 
+        displayUnit = "', userDefPKParametersTable$`Display Unit`[parameterIndex], '")'
       )
     )
 
@@ -913,8 +915,12 @@ getUserDefPKParametersContent <- function(userDefPKParametersTable) {
     for (userDefPKParameterIndex in seq_along(UserDefPKParametersOptionalSettings)) {
       userDefinedSetting <- userDefPKParametersTable[parameterIndex, columnNames[userDefPKParameterIndex]]
       # If setting is not defined (column does not exist) or not filled
-      if (isOfLength(userDefinedSetting, 0)) {next}
-      if (is.na(userDefinedSetting)) {next}
+      if (isOfLength(userDefinedSetting, 0)) {
+        next
+      }
+      if (is.na(userDefinedSetting)) {
+        next
+      }
 
       userDefPKParametersContent <- c(
         userDefPKParametersContent,
@@ -926,8 +932,8 @@ getUserDefPKParametersContent <- function(userDefPKParametersTable) {
       )
     }
   }
-  
-  userDefPKParametersContent <- c(userDefPKParametersContent,"")
+
+  userDefPKParametersContent <- c(userDefPKParametersContent, "")
 
   return(list(
     content = userDefPKParametersContent,
