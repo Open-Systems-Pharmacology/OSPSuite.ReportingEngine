@@ -13,7 +13,7 @@ GofPlotTask <- R6::R6Class(
     #' @param taskResults list of results from task run.
     #' Results contains at least 2 fields: `plots` and `tables`
     saveResults = function(set,
-                           taskResults) {
+                               taskResults) {
       addTextChunk(
         self$fileName,
         paste0("## ", self$title, " for ", set$simulationSet$simulationSetName),
@@ -113,6 +113,18 @@ GofPlotTask <- R6::R6Class(
       residualsAcrossAllSimulations <- NULL
       taskResults <- list()
 
+      # Check if a reference population is defined and get it as first set to be run
+      referencePopulationIndex <- which(sapply(structureSets, function(structureSet) {
+        isTRUE(structureSet$simulationSet$referencePopulation)
+      }))
+      if (isOfLength(referencePopulationIndex, 1)) {
+        referenceSet <- structureSets[referencePopulationIndex]
+        structureSets <- c(
+          referenceSet,
+          structureSets[setdiff(seq_along(structureSets), referencePopulationIndex)]
+        )
+      }
+
       for (set in structureSets) {
         logWorkflow(
           message = paste0(self$message, " for ", set$simulationSet$simulationName),
@@ -124,6 +136,11 @@ GofPlotTask <- R6::R6Class(
             self$workflowFolder,
             self$settings
           )
+          # If first simulation set was a reference population,
+          # its data will be added to next plots through settings
+          if (isTRUE(set$simulationSet$referencePopulation)) {
+            self$settings$referenceData <- taskResults$referenceData
+          }
 
           # Specific to goodness of fit task:
           # taskResults include `residuals`
