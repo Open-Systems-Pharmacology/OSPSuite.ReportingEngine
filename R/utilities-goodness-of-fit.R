@@ -349,7 +349,10 @@ plotPopulationGoodnessOfFit <- function(structureSet,
   simulatedData$legendRange <- paste(simulatedData$legendRange, "(reference population)")
   simulatedData$legendMedian <- paste(simulatedData$legendMedian, "(reference population)")
   simulatedData$legendMean <- paste(simulatedData$legendMean, "(reference population)")
-  residualsData$Legend <- paste(residualsData$Legend, "(reference population)")
+  if (!isOfLength(residualsData, 0)) {
+    residualsData$Legend <- paste(residualsData$Legend, "(reference population)")
+  }
+  
   referenceData <- list(
     simulatedData = simulatedData,
     observedData = observedData,
