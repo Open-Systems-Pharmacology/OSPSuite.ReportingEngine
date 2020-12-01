@@ -346,13 +346,13 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     )
   }
   # For reference population, update the legend with reference and export
-  simulatedData$legendRange <- paste(simulatedData$legendRange, "(reference population)")
-  simulatedData$legendMedian <- paste(simulatedData$legendMedian, "(reference population)")
-  simulatedData$legendMean <- paste(simulatedData$legendMean, "(reference population)")
+  simulatedData$legendRange <- paste(simulatedData$legendRange, paste0("(", structureSet$simulationSet$simulationSetName, ")"))
+  simulatedData$legendMedian <- paste(simulatedData$legendMedian, paste0("(", structureSet$simulationSet$simulationSetName, ")"))
+  simulatedData$legendMean <- paste(simulatedData$legendMean, paste0("(", structureSet$simulationSet$simulationSetName, ")"))
   if (!isOfLength(residualsData, 0)) {
-    residualsData$Legend <- paste(residualsData$Legend, "(reference population)")
+    residualsData$Legend <- paste(residualsData$Legend, paste0("(", structureSet$simulationSet$simulationSetName, ")"))
   }
-  
+
   referenceData <- list(
     simulatedData = simulatedData,
     observedData = observedData,
