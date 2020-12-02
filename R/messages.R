@@ -78,16 +78,16 @@ messages <- list(
     paste0(callingFunction(), ": No variable parameters found for sensitivity analysis.")
   },
 
-  warningNoFinitePKParametersForSomeIndividuals = function(pkParameter,output,simulationSetName) {
-    paste0(callingFunction(), ": PK parameter '",pkParameter,"' of output path '",output,"' could not be computed for some individuals in simulation set '",simulationSetName,"'.  See PK parameter calculation results.  Sensitivity analysis for this output and PK parameter combination will not be performed for simulation set '",simulationSetName,"'.")
+  warningNoFinitePKParametersForSomeIndividuals = function(pkParameter, output, simulationSetName) {
+    paste0(callingFunction(), ": PK parameter '", pkParameter, "' of output path '", output, "' could not be computed for some individuals in simulation set '", simulationSetName, "'.  See PK parameter calculation results.  Sensitivity analysis for this output and PK parameter combination will not be performed for simulation set '", simulationSetName, "'.")
   },
 
   warningPopulationSensitivityPlotsNotAvailable = function() {
     paste(callingFunction(), ": Population sensitivity plots not available for the selected PK parameters.")
   },
 
-  warningPopulationSensitivityPlotsNotAvailableForPKParameterOutputSimulationSet = function(pkParameter,output,simulationSetName) {
-    paste0(callingFunction(), ": No sensitivity analysis results found for PK parameter '",pkParameter,"' of output path '",output,"' in simulation set '",simulationSetName,"'.  No population sensitivity analysis plots will be generated for this output and PK parameter combination for simulation set '",simulationSetName,"'.")
+  warningPopulationSensitivityPlotsNotAvailableForPKParameterOutputSimulationSet = function(pkParameter, output, simulationSetName) {
+    paste0(callingFunction(), ": No sensitivity analysis results found for PK parameter '", pkParameter, "' of output path '", output, "' in simulation set '", simulationSetName, "'.  No population sensitivity analysis plots will be generated for this output and PK parameter combination for simulation set '", simulationSetName, "'.")
   },
 
   errorNoValidParametersForSensitivityAnalysis = function(simulationSetName) {
@@ -131,6 +131,14 @@ messages <- list(
       data <- data[!is.na(data)]
     }
     return(paste0(callingFunction(), ": Values '", paste0(data[duplicated(data)], collapse = "', '"), "' in ", dataName, " are not unique"))
+  },
+
+  dataIncludedInTimeRange = function(finalSize, initialSize, timeRange, timeUnit, dataType) {
+    paste0(
+      finalSize, " ", dataType,
+      " data were included in the analysis between ", min(timeRange), " and ", max(timeRange), " ", timeUnit,
+      ". Initial size was ", initialSize, "."
+    )
   }
 )
 
