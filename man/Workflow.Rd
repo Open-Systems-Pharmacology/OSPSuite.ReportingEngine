@@ -36,6 +36,8 @@ R6 class representing Reporting Engine generic Workflow
 \item \href{#method-printReportingEngineInfo}{\code{Workflow$printReportingEngineInfo()}}
 \item \href{#method-getWatermark}{\code{Workflow$getWatermark()}}
 \item \href{#method-setWatermark}{\code{Workflow$setWatermark()}}
+\item \href{#method-setParameterDisplayPaths}{\code{Workflow$setParameterDisplayPaths()}}
+\item \href{#method-getParameterDisplayPaths}{\code{Workflow$getParameterDisplayPaths()}}
 \item \href{#method-print}{\code{Workflow$print()}}
 \item \href{#method-clone}{\code{Workflow$clone()}}
 }
@@ -208,6 +210,39 @@ If the environment is NOT validated, \code{workflowWatermarkMessage} is reported
 Any user-defined text will overwrite this default feature and be reported on the figure background.}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setParameterDisplayPaths"></a>}}
+\if{latex}{\out{\hypertarget{method-setParameterDisplayPaths}{}}}
+\subsection{Method \code{setParameterDisplayPaths()}}{
+Set mapping between parameters and their display paths in workflow
+to replace standard display of parameter paths.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$setParameterDisplayPaths(parameterDisplayPaths)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{parameterDisplayPaths}}{data.frame mapping Parameters with their display paths
+Variables of the data.frame should include `parameter` and `displayPath`.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getParameterDisplayPaths"></a>}}
+\if{latex}{\out{\hypertarget{method-getParameterDisplayPaths}{}}}
+\subsection{Method \code{getParameterDisplayPaths()}}{
+Get mapping between parameters and their display paths in workflow
+to replace standard display of parameter paths.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$getParameterDisplayPaths()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A data.frame with `parameter` and `displayPath` variables.
 }
 }
 \if{html}{\out{<hr>}}

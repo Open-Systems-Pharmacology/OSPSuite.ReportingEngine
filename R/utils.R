@@ -283,8 +283,6 @@ getPKParametersInSimulationSet <- function(simulationSet) {
   return(pkParametersTable)
 }
 
-
-
 #' @title getAllowedCores
 #' @return Allowed number of CPU cores for computation
 getAllowedCores <- function() {
@@ -301,4 +299,65 @@ getAllowedCores <- function() {
     return(NULL)
   }
   )
+}
+
+#' @title getSimulationParameterDisplayPaths
+#' @param parameterPaths Paths of a parameter in simulation
+#' @param simulation Simulation object
+#' @param dictionary parameterDisplayPaths data.frame mapping user defined display names
+#' @return parameterDisplayPath
+getSimulationParameterDisplayPaths <- function(parameterPaths, simulation, dictionary) {
+  parameterDisplayPaths <- ospsuite::getParameterDisplayPaths(parameterPaths, simulation)
+
+  for (parameterIndex in seq_along(parameterPaths)) {
+    # Get the index of parameter in dictionary if defined
+    dictionaryIndex <- which(parameterPaths[parameterIndex] %in% dictionary$parameter)
+    if (!isOfLength(dictionaryIndex, 0)) {
+      # Since dictionaryIndex is not null, use first element
+      # user should already have a warning if a parameter path is defined
+      # more than once in workflow$parameterDisplayPaths
+      # as.character enforces character is used instead of levels
+      parameterDisplayPaths[parameterIndex] <- as.character(dictionary$displayPath[dictionaryIndex[1]])
+    }
+  }
+  return(parameterDisplayPaths)
+}
+
+#' @title setWorkflowParameterDisplayPathsFromFile
+#' @description Set mapping between parameters and their display paths in a workflow
+#' to replace standard display of parameter paths.
+#' @param fileName name of file that includes mapping of Parameters with their display paths
+#' Names in header should include `parameter` and `displayPath`.
+#' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
+#' @export
+setWorkflowParameterDisplayPathsFromFile <- function(fileName, workflow) {
+  validateIsOfType(workflow, "Workflow")
+  validateIsString(fileName)
+  validateIsFileExtension(fileName, "csv")
+  parameterDisplayPaths <- readObservedDataFile(fileName)
+  workflow$setParameterDisplayPaths(parameterDisplayPaths)
+  return(invisible())
+}
+
+#' @title setWorkflowParameterDisplayPaths
+#' @description Set mapping between parameters and their display paths in a workflow
+#' to replace standard display of parameter paths.
+#' @param parameterDisplayPaths data.frame mapping Parameters with their display paths
+#' Variables of the data.frame should include `parameter` and `displayPath`.
+#' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
+#' @export
+setWorkflowParameterDisplayPaths <- function(parameterDisplayPaths, workflow) {
+  validateIsOfType(workflow, "Workflow")
+  workflow$setParameterDisplayPaths(parameterDisplayPaths)
+  return(invisible())
+}
+
+#' @title getWorkflowParameterDisplayPaths
+#' @description Get mapping between parameters and their display paths in a workflow
+#' to replace standard display of parameter paths.
+#' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
+#' @export
+getWorkflowParameterDisplayPaths <- function(workflow) {
+  validateIsOfType(workflow, "Workflow")
+  return(workflow$getParameterDisplayPaths())
 }

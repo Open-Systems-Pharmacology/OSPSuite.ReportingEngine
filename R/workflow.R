@@ -17,7 +17,7 @@ Workflow <- R6::R6Class(
     reportFileName = NULL,
     createWordReport = NULL,
     userDefinedTasks = NULL,
-
+    
     #' @description
     #' Create a new `Workflow` object.
     #' @param simulationSets list of `SimulationSet` R6 class objects
@@ -173,6 +173,39 @@ Workflow <- R6::R6Class(
       setWatermarkConfiguration(private$.watermark)
     },
 
+    #' @description Set mapping between parameters and their display paths in workflow
+    #' to replace standard display of parameter paths.
+    #' @param parameterDisplayPaths data.frame mapping Parameters with their display paths
+    #' Variables of the data.frame should include `parameter` and `displayPath`.
+    setParameterDisplayPaths = function(parameterDisplayPaths) {
+      validateIsOfType(parameterDisplayPaths, "data.frame", nullAllowed = TRUE)
+      if (!isOfLength(parameterDisplayPaths, 0)) {
+        validateIsIncluded(c("parameter", "displayPath"), names(parameterDisplayPaths))
+      }
+      # In case the same parameter is defined more than once, throw a warning
+      if (!hasUniqueValues(parameterDisplayPaths$parameter)) {
+        logWorkflow(
+          message = messages$errorHasNoUniqueValues(parameterDisplayPaths$parameter, dataName = "parameter variable"),
+          pathFolder = self$workflowFolder,
+          logTypes = LogTypes$Error
+        )
+      }
+
+      # parameterDisplayPaths are centralized in the central private field .parameterDisplayPaths
+      # However, they need to be send to the task using the field simulationStructures commmon among all tasks
+      private$.parameterDisplayPaths <- parameterDisplayPaths
+      for (structureSet in self$simulationStructures) {
+        structureSet$parameterDisplayPaths <- parameterDisplayPaths
+      }
+    },
+
+    #' @description Get mapping between parameters and their display paths in workflow
+    #' to replace standard display of parameter paths.
+    #' @return A data.frame with `parameter` and `displayPath` variables.
+    getParameterDisplayPaths = function() {
+      return(private$.parameterDisplayPaths)
+    },
+
     #' @description
     #' Print workflow list of tasks
     #' @return Task list information
@@ -189,8 +222,8 @@ Workflow <- R6::R6Class(
 
   private = list(
     .reportingEngineInfo = NULL,
-
     .watermark = NULL,
+    .parameterDisplayPaths = NULL,
 
     .getTasksWithStatus = function(status) {
       taskNames <- self$getAllTasks()
