@@ -517,7 +517,7 @@ getPkParametersAcrossPopulations <- function(structureSets) {
       fullPkParametersTable
     )
   }
-  metaData <- getPopulationMetaData(population, simulation)
+  metaData <- getPopulationMetaData(population, simulation, structureSet$parameterDisplayPaths)
 
   return(list(
     data = pkParametersTableAcrossPopulations,

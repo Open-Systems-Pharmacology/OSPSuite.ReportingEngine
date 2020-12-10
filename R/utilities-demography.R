@@ -110,7 +110,7 @@ plotDemographyParameters <- function(structureSets,
       if (demographyMetaData[[parameterName]]$class %in% "character") {
         next
       }
-      yParameterLabel <-lastPathElement(parameterName)
+      yParameterLabel <- lastPathElement(parameterName)
       vpcMetaData <- list(
         "x" = demographyMetaData[[demographyParameter]],
         "median" = demographyMetaData[[parameterName]]
@@ -217,7 +217,7 @@ getDemographyAcrossPopulations <- function(structureSets) {
     )
   }
 
-  metaData <- getPopulationMetaData(population, simulation)
+  metaData <- getPopulationMetaData(population, simulation, structureSet$parameterDisplayPaths)
 
   return(list(
     data = demographyAcrossPopulations,
@@ -475,7 +475,7 @@ getPopulationAsDataFrame <- function(population, simulation) {
   return(populationTable)
 }
 
-getPopulationMetaData <- function(population, simulation) {
+getPopulationMetaData <- function(population, simulation, parameterDisplayPaths) {
   metaData <- list()
   allParameters <- ospsuite::getAllParametersMatching(population$allParameterPaths, simulation)
 
@@ -488,7 +488,7 @@ getPopulationMetaData <- function(population, simulation) {
   }
   for (parameter in allParameters) {
     metaData[[parameter$path]] <- list(
-      dimension = ospsuite::getParameterDisplayPaths(parameter$path, simulation),
+      dimension = getSimulationParameterDisplayPaths(parameter$path, simulation, parameterDisplayPaths),
       unit = parameter$displayUnit,
       class = class(population$getParameterValues(parameter$path))
     )
