@@ -1,6 +1,6 @@
 Type: Package
 Package: ospsuite.reportingengine
-Title: R package to run the qualification scenario of the Open Systems Pharmacology platform
+Title: R package to create reports for the Open Systems Pharmacology models.
 Version: 1.1.0
 Authors@R: 
     c(person(given = "Open-Systems-Pharmacology Community",
@@ -9,8 +9,7 @@ Authors@R:
              family = "Sevestre",
              role = c("aut", "cre"),
              email = "michael@design2code.ca"))
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: Creates tables and figures and combines them into (Markdown and MS-Word) reports.
 License: GPL-2 | file LICENSE
 URL: https://github.com/open-systems-pharmacology/ospsuite.reportingengine
 BugReports: 
