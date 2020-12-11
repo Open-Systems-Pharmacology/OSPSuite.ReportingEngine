@@ -17,4 +17,3 @@ The input needs to be a csv file with `parameter` and `displayPath` in its heade
 
 * Default `settings` in workflow `plotDemography` and `plotPKParameters` tasks improved the binning (#383).
 * `bins` and `stairstep` are now included in `settings` options of workflow `plotDemography` and `plotPKParameters` tasks (#383).
-In addit
