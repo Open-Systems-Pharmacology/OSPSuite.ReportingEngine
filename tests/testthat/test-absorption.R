@@ -38,7 +38,8 @@ test_that("Absorption directory includes appropriate files and folders", {
 test_that("Saved absorption time profiles have correct values", {
   expect_equal(
     readObservedDataFile(file.path(workflowAbs$workflowFolder, "Absorption", "Larson-Raltegravir.csv")),
-    readObservedDataFile(refOutputAbsorption)
+    readObservedDataFile(refOutputAbsorption),
+    tolerance = 1e-4
   )
 })
 

@@ -41,7 +41,8 @@ test_that("MassBalance directory includes appropriate files and folders", {
 test_that("Saved mass balance time profiles have correct values", {
   expect_equal(
     readObservedDataFile(file.path(workflowMB$workflowFolder, "MassBalance", "Larson-timeProfiles.csv")),
-    readObservedDataFile(refOutputMassBalance)
+    readObservedDataFile(refOutputMassBalance),
+    tolerance = 1e-4
   )
 })
 
