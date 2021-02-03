@@ -524,7 +524,8 @@ plotMeanResVsTime <- function(data,
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
     metaData = metaData,
-    dataMapping = resVsTimeDataMapping
+    dataMapping = resVsTimeDataMapping,
+    yLimits = c(-maxRes, maxRes)
   )
 
   meanResVsTimePlot <- tlf::addLine(y = 0, caption = "Line of residuals = 0", plotConfiguration = plotConfiguration)
@@ -536,7 +537,6 @@ plotMeanResVsTime <- function(data,
     plotObject = meanResVsTimePlot
   )
 
-  meanResVsTimePlot <- tlf::setYAxis(plotObject = meanResVsTimePlot, limits = c(-maxRes, maxRes))
   meanResVsTimePlot <- tlf::setLegendPosition(plotObject = meanResVsTimePlot, position = reDefaultLegendPosition)
 
   return(meanResVsTimePlot)
@@ -565,7 +565,8 @@ plotMeanResVsPred <- function(data,
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
     metaData = metaData,
-    dataMapping = resVsPredDataMapping
+    dataMapping = resVsPredDataMapping,
+    yLimits = c(-maxRes, maxRes)
   )
 
   meanResVsPredPlot <- tlf::addLine(y = 0, caption = "Line of residuals = 0", plotConfiguration = plotConfiguration)
@@ -577,7 +578,6 @@ plotMeanResVsPred <- function(data,
     plotObject = meanResVsPredPlot
   )
 
-  meanResVsPredPlot <- tlf::setYAxis(plotObject = meanResVsPredPlot, limits = c(-maxRes, maxRes))
   meanResVsPredPlot <- tlf::setLegendPosition(plotObject = meanResVsPredPlot, position = reDefaultLegendPosition)
 
   return(meanResVsPredPlot)
@@ -672,7 +672,8 @@ plotResidualsHistogram <- function(data,
   plotConfiguration <- plotConfiguration %||% tlf::HistogramPlotConfiguration$new(
     data = data,
     metaData = metaData,
-    dataMapping = dataMapping
+    dataMapping = dataMapping,
+    ylabel = "Number of residuals"
   )
 
   bins <- bins %||% 15
@@ -689,6 +690,7 @@ plotResidualsHistogram <- function(data,
 
   resHistoPlot <- tlf::initializePlot(plotConfiguration)
 
+  # TO DO: transfer the histogram wrapper into TLF
   resHistoPlot <- resHistoPlot +
     ggplot2::geom_histogram(
       data = data,
@@ -714,9 +716,8 @@ plotResidualsHistogram <- function(data,
   # Legends and axis
   resHistoPlot <- tlf::setLegendPosition(plotObject = resHistoPlot, position = reDefaultLegendPosition)
 
-  resHistoPlot <- resHistoPlot +
-    ggplot2::ylab("Number of residuals") +
-    ggplot2::theme(legend.title = element_blank())
+  # Ensure that the legend has no title
+  resHistoPlot <- resHistoPlot + ggplot2::theme(legend.title = element_blank())
 
   return(resHistoPlot)
 }
@@ -741,7 +742,9 @@ plotResidualsQQPlot <- function(data,
   plotConfiguration <- plotConfiguration %||% tlf::HistogramPlotConfiguration$new(
     data = data,
     metaData = metaData,
-    dataMapping = dataMapping
+    dataMapping = dataMapping,
+    xlabel = "Standard Normal Quantiles",
+    ylabel = "Quantiles of residuals"
   )
 
   qqPlot <- tlf::initializePlot(plotConfiguration)
@@ -764,9 +767,7 @@ plotResidualsQQPlot <- function(data,
 
   # Legends and axis
   qqPlot <- tlf::setLegendPosition(plotObject = qqPlot, position = reDefaultLegendPosition)
-  qqPlot <- qqPlot +
-    ggplot2::xlab("Standard Normal Quantiles") + ggplot2::ylab("Quantiles of residuals") +
-    ggplot2::theme(legend.title = element_blank())
+  qqPlot <- qqPlot + ggplot2::theme(legend.title = element_blank())
 
   return(qqPlot)
 }
