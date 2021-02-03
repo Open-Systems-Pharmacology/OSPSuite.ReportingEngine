@@ -601,10 +601,18 @@ plotPopulationTimeProfile <- function(simulatedData,
                                       dataMapping = NULL,
                                       metaData = NULL,
                                       plotConfiguration = NULL) {
+
+  # metaData needs to be transfered to ymin and ymax
+  # so that y label shows dimension [unit] by default
+  metaData$x <- metaData$Time
+  metaData$ymin <- metaData$Concentration
+  metaData$ymax <- metaData$Concentration
+
   timeProfilePlot <- tlf::addRibbon(
     x = simulatedData$Time,
     ymin = simulatedData$lowPerc,
     ymax = simulatedData$highPerc,
+    metaData = metaData,
     caption = simulatedData$legendRange,
     alpha = 0.6,
     plotConfiguration = plotConfiguration
@@ -637,10 +645,6 @@ plotPopulationTimeProfile <- function(simulatedData,
       plotObject = timeProfilePlot
     )
   }
-  timeProfilePlot <- timeProfilePlot +
-    ggplot2::xlab(tlf::getLabelWithUnit(metaData$Time$dimension, metaData$Time$unit)) +
-    ggplot2::ylab(tlf::getLabelWithUnit(metaData$Concentration$dimension, metaData$Concentration$unit))
-
   timeProfilePlot <- tlf::setLegendPosition(plotObject = timeProfilePlot, position = reDefaultLegendPosition)
 
   return(timeProfilePlot)
