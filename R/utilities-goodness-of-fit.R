@@ -814,7 +814,7 @@ asTimeAfterDose <- function(data, doseTime, maxTime = NULL) {
 }
 
 getMetaDataFrame <- function(listOfMetaData) {
-  return(data.frame(
+  metaDataFrame <- data.frame(
     path = as.character(sapply(listOfMetaData, function(metaData) {
       metaData$Path
     })),
@@ -825,7 +825,11 @@ getMetaDataFrame <- function(listOfMetaData) {
       metaData$Concentration$unit
     })),
     stringsAsFactors = FALSE
-  ))
+  )
+  # Update dimension name for better caption in plot label
+  selectedDimensions <- metaDataFrame$dimension %in% c("Concentration (mass)", "Concentration (molar)")
+  metaDataFrame$dimension[selectedDimensions] <- "Concentration"
+  return(metaDataFrame)
 }
 
 
