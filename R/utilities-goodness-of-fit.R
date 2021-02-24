@@ -524,7 +524,8 @@ plotMeanResVsTime <- function(data,
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
     metaData = metaData,
-    dataMapping = resVsTimeDataMapping
+    dataMapping = resVsTimeDataMapping,
+    yLimits = c(-maxRes, maxRes)
   )
 
   meanResVsTimePlot <- tlf::addLine(y = 0, caption = "Line of residuals = 0", plotConfiguration = plotConfiguration)
@@ -536,7 +537,6 @@ plotMeanResVsTime <- function(data,
     plotObject = meanResVsTimePlot
   )
 
-  meanResVsTimePlot <- tlf::setYAxis(plotObject = meanResVsTimePlot, limits = c(-maxRes, maxRes))
   meanResVsTimePlot <- tlf::setLegendPosition(plotObject = meanResVsTimePlot, position = reDefaultLegendPosition)
 
   return(meanResVsTimePlot)
@@ -565,7 +565,8 @@ plotMeanResVsPred <- function(data,
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
     metaData = metaData,
-    dataMapping = resVsPredDataMapping
+    dataMapping = resVsPredDataMapping,
+    yLimits = c(-maxRes, maxRes)
   )
 
   meanResVsPredPlot <- tlf::addLine(y = 0, caption = "Line of residuals = 0", plotConfiguration = plotConfiguration)
@@ -577,7 +578,6 @@ plotMeanResVsPred <- function(data,
     plotObject = meanResVsPredPlot
   )
 
-  meanResVsPredPlot <- tlf::setYAxis(plotObject = meanResVsPredPlot, limits = c(-maxRes, maxRes))
   meanResVsPredPlot <- tlf::setLegendPosition(plotObject = meanResVsPredPlot, position = reDefaultLegendPosition)
 
   return(meanResVsPredPlot)
@@ -601,10 +601,18 @@ plotPopulationTimeProfile <- function(simulatedData,
                                       dataMapping = NULL,
                                       metaData = NULL,
                                       plotConfiguration = NULL) {
+
+  # metaData needs to be transfered to ymin and ymax
+  # so that y label shows dimension [unit] by default
+  metaData$x <- metaData$Time
+  metaData$ymin <- metaData$Concentration
+  metaData$ymax <- metaData$Concentration
+
   timeProfilePlot <- tlf::addRibbon(
     x = simulatedData$Time,
     ymin = simulatedData$lowPerc,
     ymax = simulatedData$highPerc,
+    metaData = metaData,
     caption = simulatedData$legendRange,
     alpha = 0.6,
     plotConfiguration = plotConfiguration
@@ -637,10 +645,6 @@ plotPopulationTimeProfile <- function(simulatedData,
       plotObject = timeProfilePlot
     )
   }
-  timeProfilePlot <- timeProfilePlot +
-    ggplot2::xlab(tlf::getLabelWithUnit(metaData$Time$dimension, metaData$Time$unit)) +
-    ggplot2::ylab(tlf::getLabelWithUnit(metaData$Concentration$dimension, metaData$Concentration$unit))
-
   timeProfilePlot <- tlf::setLegendPosition(plotObject = timeProfilePlot, position = reDefaultLegendPosition)
 
   return(timeProfilePlot)
@@ -668,7 +672,8 @@ plotResidualsHistogram <- function(data,
   plotConfiguration <- plotConfiguration %||% tlf::HistogramPlotConfiguration$new(
     data = data,
     metaData = metaData,
-    dataMapping = dataMapping
+    dataMapping = dataMapping,
+    ylabel = "Number of residuals"
   )
 
   bins <- bins %||% 15
@@ -685,6 +690,7 @@ plotResidualsHistogram <- function(data,
 
   resHistoPlot <- tlf::initializePlot(plotConfiguration)
 
+  # TO DO: transfer the histogram wrapper into TLF
   resHistoPlot <- resHistoPlot +
     ggplot2::geom_histogram(
       data = data,
@@ -710,9 +716,8 @@ plotResidualsHistogram <- function(data,
   # Legends and axis
   resHistoPlot <- tlf::setLegendPosition(plotObject = resHistoPlot, position = reDefaultLegendPosition)
 
-  resHistoPlot <- resHistoPlot +
-    ggplot2::ylab("Number of residuals") +
-    ggplot2::theme(legend.title = element_blank())
+  # Ensure that the legend has no title
+  resHistoPlot <- resHistoPlot + ggplot2::theme(legend.title = element_blank())
 
   return(resHistoPlot)
 }
@@ -737,7 +742,9 @@ plotResidualsQQPlot <- function(data,
   plotConfiguration <- plotConfiguration %||% tlf::HistogramPlotConfiguration$new(
     data = data,
     metaData = metaData,
-    dataMapping = dataMapping
+    dataMapping = dataMapping,
+    xlabel = "Standard Normal Quantiles",
+    ylabel = "Quantiles of residuals"
   )
 
   qqPlot <- tlf::initializePlot(plotConfiguration)
@@ -760,9 +767,7 @@ plotResidualsQQPlot <- function(data,
 
   # Legends and axis
   qqPlot <- tlf::setLegendPosition(plotObject = qqPlot, position = reDefaultLegendPosition)
-  qqPlot <- qqPlot +
-    ggplot2::xlab("Standard Normal Quantiles") + ggplot2::ylab("Quantiles of residuals") +
-    ggplot2::theme(legend.title = element_blank())
+  qqPlot <- qqPlot + ggplot2::theme(legend.title = element_blank())
 
   return(qqPlot)
 }
@@ -809,7 +814,7 @@ asTimeAfterDose <- function(data, doseTime, maxTime = NULL) {
 }
 
 getMetaDataFrame <- function(listOfMetaData) {
-  return(data.frame(
+  metaDataFrame <- data.frame(
     path = as.character(sapply(listOfMetaData, function(metaData) {
       metaData$Path
     })),
@@ -820,7 +825,11 @@ getMetaDataFrame <- function(listOfMetaData) {
       metaData$Concentration$unit
     })),
     stringsAsFactors = FALSE
-  ))
+  )
+  # Update dimension name for better caption in plot label
+  selectedDimensions <- metaDataFrame$dimension %in% c("Concentration (mass)", "Concentration (molar)")
+  metaDataFrame$dimension[selectedDimensions] <- "Concentration"
+  return(metaDataFrame)
 }
 
 
