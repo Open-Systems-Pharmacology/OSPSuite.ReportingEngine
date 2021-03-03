@@ -74,7 +74,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
         "Legend" = output$dataDisplayName,
         "Path" = output$path
       )
-      outputResidualsData <- getResiduals(outputObservedData, outputSimulatedData)
+      outputResidualsData <- getResiduals(outputObservedData, outputSimulatedData, output$residualScale)
 
       if (!isOfLength(lloqColumn, 0)) {
         if (isIncluded(lloqColumn, names(observedDataset))) {
@@ -177,22 +177,33 @@ getOutputSimulatedResults <- function(simulationPathResults, output, simulationQ
 #' The function get the simulated data with the time the closest to the observed data times
 #' @param observedData data.frame of time profile observed data
 #' @param simulatedData data.frame of time profile simulated data
+#' @param residualScale Scale for calculation of residuals as included in enum `ResidualScales`
 #' @return residualsData data.frame with Time, Observed, Simulated, Residuals
 #' @export
 getResiduals <- function(observedData,
-                         simulatedData) {
+                         simulatedData,
+                         residualScale = ResidualScales$Logarithmic) {
 
   # Time matrix to match observed time with closest simulation time
+  # This method assumes that there simulated data are dense enough to capture observed data
   obsTimeMatrix <- matrix(observedData[, "Time"], nrow(simulatedData), nrow(observedData), byrow = TRUE)
   simTimeMatrix <- matrix(simulatedData[, "Time"], nrow(simulatedData), nrow(observedData))
 
   timeMatchedData <- as.numeric(sapply(as.data.frame(abs(obsTimeMatrix - simTimeMatrix)), which.min))
 
+  residualValues <- rep(NA, nrow(observedData))
+  if (isIncluded(residualScale, ResidualScales$Logarithmic)) {
+    residualValues <- log(observedData[, "Concentration"]) - log(simulatedData[timeMatchedData, "Concentration"])
+  }
+  if (isIncluded(residualScale, ResidualScales$Linear)) {
+    residualValues <- (observedData[, "Concentration"] - simulatedData[timeMatchedData, "Concentration"]) / simulatedData[timeMatchedData, "Concentration"]
+  }
+
   residualsData <- data.frame(
     "Time" = observedData[, "Time"],
     "Observed" = observedData[, "Concentration"],
     "Simulated" = simulatedData[timeMatchedData, "Concentration"],
-    "Residuals" = log(observedData[, "Concentration"]) - log(simulatedData[timeMatchedData, "Concentration"]),
+    "Residuals" = residualValues,
     "Legend" = simulatedData[timeMatchedData, "Legend"],
     "Path" = observedData[, "Path"]
   )
@@ -285,7 +296,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
       simulatedDataForResiduals <- outputSimulatedData[, selectedVariablesForResiduals]
       # getResiduals is based on mean workflow whose names are c("Time", "Concentration", "Legend", "Path")
       names(simulatedDataForResiduals) <- c("Time", "Concentration", "Legend", "Path")
-      outputResidualsData <- getResiduals(outputObservedData, simulatedDataForResiduals)
+      outputResidualsData <- getResiduals(outputObservedData, simulatedDataForResiduals, output$residualScale)
 
       if (!isOfLength(lloqColumn, 0)) {
         if (isIncluded(lloqColumn, names(observedDataset))) {
