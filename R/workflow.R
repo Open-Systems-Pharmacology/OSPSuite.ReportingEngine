@@ -57,7 +57,7 @@ Workflow <- R6::R6Class(
           logTypes = c(LogTypes$Debug)
         )
       }
-      dir.create(self$workflowFolder, showWarnings = FALSE)
+      dir.create(self$workflowFolder, showWarnings = FALSE, recursive = TRUE)
 
       logWorkflow(
         message = private$.reportingEngineInfo$print(),
