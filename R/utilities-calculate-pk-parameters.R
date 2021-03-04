@@ -166,8 +166,9 @@ plotPopulationPKParameters <- function(structureSets,
   checkIsIncluded(xParameters, names(pkParametersDataAcrossPopulations), nullAllowed = TRUE, groupName = "population variables", logFolder = logFolder)
   xParameters <- intersect(xParameters, names(pkParametersDataAcrossPopulations))
 
-  # Enforce factors for population names
-  pkParametersDataAcrossPopulations$simulationSetName <- factor(pkParametersDataAcrossPopulations$simulationSetName)
+  # Enforce factors for population names with order as input by the user
+  pkParametersDataAcrossPopulations$simulationSetName <- factor(pkParametersDataAcrossPopulations$simulationSetName,
+                                                                levels = unique(pkParametersDataAcrossPopulations$simulationSetName))
 
   if (workflowType %in% c(PopulationWorkflowTypes$ratioComparison, PopulationWorkflowTypes$pediatric)) {
     referencePopulationName <- getReferencePopulationName(structureSets)
@@ -241,7 +242,10 @@ plotPopulationPKParameters <- function(structureSets,
         dataMapping = pkParametersMapping
       )
 
-      pkParameterTableRows <- row.names(pkParameterTable)
+      # Row names are added as factor to data.frames by default
+      # This line ensures that the order of the rows is kept for the tables and plots
+      pkParameterTableRows <- factor(row.names(pkParameterTable), 
+                                     levels = row.names(pkParameterTable))
       pkParameterTable <- cbind(
         Population = pkParameterTableRows,
         pkParameterTable
