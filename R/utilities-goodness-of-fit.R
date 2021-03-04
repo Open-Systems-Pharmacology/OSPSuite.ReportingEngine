@@ -196,7 +196,7 @@ getResiduals <- function(observedData,
     residualValues <- log(observedData[, "Concentration"]) - log(simulatedData[timeMatchedData, "Concentration"])
   }
   if (isIncluded(residualScale, ResidualScales$Linear)) {
-    residualValues <- (observedData[, "Concentration"] - simulatedData[timeMatchedData, "Concentration"]) / simulatedData[timeMatchedData, "Concentration"]
+    residualValues <- (observedData[, "Concentration"] - simulatedData[timeMatchedData, "Concentration"])
   }
 
   residualsData <- data.frame(
