@@ -4,12 +4,18 @@
 \alias{getResiduals}
 \title{getResiduals}
 \usage{
-getResiduals(observedData, simulatedData)
+getResiduals(
+  observedData,
+  simulatedData,
+  residualScale = ResidualScales$Logarithmic
+)
 }
 \arguments{
 \item{observedData}{data.frame of time profile observed data}
 
 \item{simulatedData}{data.frame of time profile simulated data}
+
+\item{residualScale}{Scale for calculation of residuals as included in enum `ResidualScales`}
 }
 \value{
 residualsData data.frame with Time, Observed, Simulated, Residuals

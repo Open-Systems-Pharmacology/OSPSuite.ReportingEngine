@@ -20,6 +20,8 @@ R6 class representing workflow output
 \item{\code{dataDisplayName}}{display name of the observed data}
 
 \item{\code{pkParameters}}{R6 class `PkParameterInfo` objects}
+
+\item{\code{residualScale}}{Scale for calculation of residuals as included in enum `ResidualScales`}
 }
 \if{html}{\out{</div>}}
 }
@@ -41,7 +43,8 @@ Create a new `Output` object.
   displayUnit = NULL,
   dataSelection = DataSelectionKeys$NONE,
   dataDisplayName = NULL,
-  pkParameters = NULL
+  pkParameters = NULL,
+  residualScale = ResidualScales$Logarithmic
 )}\if{html}{\out{</div>}}
 }
 
@@ -59,6 +62,8 @@ Create a new `Output` object.
 \item{\code{dataDisplayName}}{display name of the observed data}
 
 \item{\code{pkParameters}}{R6 class `PkParameterInfo` objects or their names}
+
+\item{\code{residualScale}}{Scale for calculation of residuals as included in enum `ResidualScales`}
 }
 \if{html}{\out{</div>}}
 }

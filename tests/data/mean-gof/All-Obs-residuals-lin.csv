@@ -1,0 +1,6 @@
+Time,Observed,Simulated,Residuals,Legend,Path
+0,0,1,-1,A,Organism|A|Concentration in container
+2,0.00559,1.388885975,-1.383295975,A,Organism|A|Concentration in container
+4,0.0047,1.702023983,-1.697323983,A,Organism|A|Concentration in container
+6,0.00269,1.954087973,-1.951397973,A,Organism|A|Concentration in container
+8,0.00163,2.157193899,-2.155563899,A,Organism|A|Concentration in container
