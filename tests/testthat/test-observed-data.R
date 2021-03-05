@@ -24,8 +24,8 @@ context("Reading of Observed Data")
 test_that("readObservedDataFile can correctly read csv and txt format for observed data", {
   csvData <- readObservedDataFile(testCsvFile)
   txtData <- readObservedDataFile(testTxtFile)
-  expect_equal(testDataFrame, csvData)
-  expect_equal(testDataFrame, txtData)
+  expect_equal(testDataFrame, csvData, tolerance = comparisonTolerance())
+  expect_equal(testDataFrame, txtData, tolerance = comparisonTolerance())
 })
 
 test_that("readObservedDataFile: unexistant file throw error", {
