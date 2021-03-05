@@ -21,6 +21,6 @@ executeWithTestFile <- function(actionWithFile) {
   file.remove(newFile)
 }
 
-comparisonTolerance <- function() {
-  1e-4
+comparisonTolerance <- function(tolerance = 1e-4) {
+  tolerance
 }
