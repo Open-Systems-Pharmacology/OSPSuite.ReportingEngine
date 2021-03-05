@@ -98,35 +98,50 @@ test_that("PKAnalysis directory includes appropriate files and folders", {
 test_that("Saved PK parameters data have correct values", {
   expect_equal(
     readObservedDataFile(file.path(workflowParallel$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-AUC_tEnd.csv")),
-    readObservedDataFile(refOutputParallelAUC)
+    readObservedDataFile(refOutputParallelAUC),
+    tolerance = comparisonTolerance()
   )
+  
   expect_equal(
     readObservedDataFile(file.path(workflowParallel$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-C_max.csv")),
-    readObservedDataFile(refOutputParallelCmax)
+    readObservedDataFile(refOutputParallelCmax),
+    tolerance = comparisonTolerance()
   )
+  
   expect_equal(
     readObservedDataFile(file.path(workflowPediatric$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-AUC_tEnd.csv")),
-    readObservedDataFile(refOutputParallelAUC)
+    readObservedDataFile(refOutputParallelAUC),
+    tolerance = comparisonTolerance()
   )
+  
   expect_equal(
     readObservedDataFile(file.path(workflowPediatric$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-C_max.csv")),
-    readObservedDataFile(refOutputParallelCmax)
+    readObservedDataFile(refOutputParallelCmax),
+    tolerance = comparisonTolerance()
   )
+  
   expect_equal(
     readObservedDataFile(file.path(workflowRatio$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-AUC_tEnd.csv")),
-    readObservedDataFile(refOutputParallelAUC)
+    readObservedDataFile(refOutputParallelAUC),
+    tolerance = comparisonTolerance()
   )
+  
   expect_equal(
     readObservedDataFile(file.path(workflowRatio$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-C_max.csv")),
-    readObservedDataFile(refOutputParallelCmax)
+    readObservedDataFile(refOutputParallelCmax),
+    tolerance = comparisonTolerance()
   )
+  
   expect_equal(
     readObservedDataFile(file.path(workflowRatio$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-AUC_tEnd-ratio.csv")),
-    readObservedDataFile(refOutputRatioAUC)
+    readObservedDataFile(refOutputRatioAUC),
+    tolerance = comparisonTolerance()
   )
+  
   expect_equal(
     readObservedDataFile(file.path(workflowRatio$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-C_max-ratio.csv")),
-    readObservedDataFile(refOutputRatioCmax)
+    readObservedDataFile(refOutputRatioCmax),
+    tolerance = comparisonTolerance()
   )
 })
 

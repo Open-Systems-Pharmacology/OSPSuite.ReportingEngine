@@ -39,7 +39,7 @@ test_that("Saved absorption time profiles have correct values", {
   expect_equal(
     readObservedDataFile(file.path(workflowAbs$workflowFolder, "Absorption", "Larson-Raltegravir.csv")),
     readObservedDataFile(refOutputAbsorption),
-    tolerance = 1e-4
+    tolerance = comparisonTolerance()
   )
 })
 

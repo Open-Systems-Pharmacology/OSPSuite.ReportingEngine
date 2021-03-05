@@ -20,3 +20,7 @@ executeWithTestFile <- function(actionWithFile) {
   actionWithFile(newFile)
   file.remove(newFile)
 }
+
+comparisonTolerance <- function(tolerance = 1e-4) {
+  tolerance
+}

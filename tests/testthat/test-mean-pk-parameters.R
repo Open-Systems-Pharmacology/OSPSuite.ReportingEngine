@@ -41,7 +41,8 @@ test_that("PKAnalysis directory includes appropriate files and folders", {
 test_that("Saved PK parameters have correct values", {
   expect_equal(
     readObservedDataFile(file.path(workflowPK$workflowFolder, "PKAnalysis", "A-pkAnalysis.csv")),
-    readObservedDataFile(refOutputPK)
+    readObservedDataFile(refOutputPK),
+    tolerance = comparisonTolerance()
   )
 })
 
@@ -66,7 +67,8 @@ test_that("PKAnalysis directory includes appropriate files and folders, overwrit
 test_that("Saved PK parameters have correct values with updated names and unit", {
   expect_equal(
     readObservedDataFile(file.path(workflowPK$workflowFolder, "PKAnalysis", "A-pkAnalysis.csv")),
-    readObservedDataFile(refOutputUpdatedPK)
+    readObservedDataFile(refOutputUpdatedPK),
+    tolerance = comparisonTolerance()
   )
 })
 
