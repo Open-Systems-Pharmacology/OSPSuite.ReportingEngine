@@ -74,8 +74,12 @@ addTableChunk <- function(fileName,
                           tableFileRootDirectory,
                           tableCaption = "",
                           logFolder = getwd()) {
+  # It is expected that the tables used `formatNumerics` before being saved
+  # As a consequence, the table content is 'character' and not 'numeric'
+  # If not enforced by colClasses = "character", the format can be lost while loading the table
   table <- read.csv(file.path(tableFileRootDirectory, tableFileRelativePath),
     check.names = FALSE,
+    colClasses = "character",
     fileEncoding = "UTF-8"
   )
 
