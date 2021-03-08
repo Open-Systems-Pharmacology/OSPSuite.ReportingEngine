@@ -4,7 +4,6 @@ reEnv <- new.env(parent = emptyenv())
 
 # name of the package. This will be used to retrieve information on the package at run time
 reEnv$packageName <- "ospsuite.reportingengine"
-reEnv$packageVersion <- "1.2"
 
 # Default format values for numerics
 reEnv$formatNumericsDigits <- 5
