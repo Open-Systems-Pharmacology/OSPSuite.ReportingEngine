@@ -65,6 +65,10 @@ plotMeanPKParameters <- function(structureSet,
     )
   }
   pkParametersData$Value <- replaceInfWithNA(pkParametersData$Value, logFolder)
+  pkParametersData$Value <- formatNumerics(numerics = pkParametersData$Value,  
+                                           digits = settings$digits,
+                                           nsmall = settings$nsmall,
+                                           scientific = settings$scientific)
   return(list(
     plots = NULL,
     tables = list(pkAnalysis = pkParametersData)
@@ -251,7 +255,15 @@ plotPopulationPKParameters <- function(structureSets,
         pkParameterTable
       )
 
-      pkParametersTables[[paste0(pathLabel, "-", yParameterLabel)]] <- pkParameterTable
+      # A different table needs to be created here because of ratio comparison of the table values 
+      savedPKParameterTable <- pkParameterTable 
+      savedPKParameterTable[, 3:ncol(pkParameterTable)] <- sapply(
+        pkParameterTable[, 3:ncol(pkParameterTable)], 
+        function(values) {
+          formatNumerics(values, digits = settings$digits, nsmall = settings$nsmall, scientific = settings$scientific)
+          }
+        ) 
+      pkParametersTables[[paste0(pathLabel, "-", yParameterLabel)]] <- savedPKParameterTable
 
       # Range plots on PK parameters vs xParameters
       for (demographyParameter in setdiff(xParameters, pkParameter$pkParameter)) {
@@ -358,6 +370,12 @@ plotPopulationPKParameters <- function(structureSets,
         pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel, "-ratio")]] <- getPkParametersCaptions("ratioPlot", output$displayName, pkParameterMetaData[["Value"]])
         pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel, "-ratio-log")]] <- getPkParametersCaptions("ratioPlot", output$displayName, pkParameterMetaData[["Value"]], plotScale = "log")
 
+        pkRatiosTable[, 3:ncol(pkRatiosTable)] <- sapply(
+          pkRatiosTable[, 3:ncol(pkRatiosTable)], 
+          function(values) {
+            formatNumerics(values, digits = settings$digits, nsmall = settings$nsmall, scientific = settings$scientific)
+          }
+        ) 
         pkParametersTables[[paste0(pathLabel, "-", yParameterLabel, "-ratio")]] <- pkRatiosTable
       }
     }

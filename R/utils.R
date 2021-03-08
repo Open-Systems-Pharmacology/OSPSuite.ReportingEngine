@@ -361,3 +361,19 @@ getWorkflowParameterDisplayPaths <- function(workflow) {
   validateIsOfType(workflow, "Workflow")
   return(workflow$getParameterDisplayPaths())
 }
+
+
+formatNumerics <- function(numerics,  
+                           digits = NULL, 
+                           nsmall = NULL, 
+                           scientific = NULL) { 
+  validateIsInteger(digits, nullAllowed = TRUE)
+  validateIsInteger(nsmall, nullAllowed = TRUE)
+  validateIsLogical(scientific, nullAllowed = TRUE)
+  
+  digits <- digits %||% reEnv$formatNumericsDigits
+  nsmall <- nsmall %||% reEnv$formatNumericsSmall
+  scientific <- scientific %||% reEnv$formatNumericsScientific
+  
+  return(format(numerics, digits = digits, nsmall = nsmall, scientific = scientific)) 
+}
