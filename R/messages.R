@@ -31,16 +31,16 @@ messages <- list(
   },
 
   errorNotIncluded = function(values, parentValues, groupName = NULL) {
-    if (!is.null(groupName)) {
-      return(paste0(
-        callingFunction(), ": Values '", paste0(values, collapse = "', '"),
-        "' are not all included in ", groupName, "."
-      ))
+    if(isOfLength(values, 1)){
+      if (!is.null(groupName)) {
+        return(paste0(callingFunction(), ": '", values, "' is not included in ", groupName, "."))
+      }
+      return(paste0(callingFunction(), ": '", values, "' is not included in expected values: '", paste0(parentValues, collapse = "', '"), "'."))
     }
-    paste0(
-      callingFunction(), ": Values '", paste0(values, collapse = "', '"),
-      "' are not all included in parent values: '", paste0(parentValues, collapse = "', '"), "'."
-    )
+    if (!is.null(groupName)) {
+      return(paste0(callingFunction(), ": Values '", paste0(values, collapse = "', '"), "' are not all included in ", groupName, "."))
+    }
+    paste0(callingFunction(), ": Values '", paste0(values, collapse = "', '"), "' are not all included in expected values: '", paste0(parentValues, collapse = "', '"), "'.")
   },
 
   warningExistingPath = function(existingPath) {
@@ -69,9 +69,17 @@ messages <- list(
 
   errorObservedMetaDataFileNotProvided = function(observedDataFile) {
     paste0(
-      callingFunction(), ": observedDataFile '", observedDataFile, "' was input but not observedMetaDataFile.",
-      "\nobservedMetaDataFile is required when using observedDataFile."
+      callingFunction(), ": Argument 'observedMetaDataFile' is required when argument 'observedDataFile' is defined.",
+      "\nPlease provide a dictionary for observedDataFile '", observedDataFile, "'."
     )
+  },
+  
+  errorUnitNotProvidedInMetaDataFile = function(observedMetaDataFile) {
+    paste0(
+      callingFunction(), ": No time or dv unit provided in dictionary '", observedMetaDataFile, "'.",
+      "\nPlease define unit either in column '", dictionaryParameters$nonmemUnit, "' at the corresponding row.",
+      "\nor in column '", dictionaryParameters$nonmenColumn, "' using ID '", 
+      dictionaryParameters$timeUnitID,"' or '", dictionaryParameters$dvUnitID, "'")
   },
 
   errorNoParametersForSensitivityAnalysis = function() {

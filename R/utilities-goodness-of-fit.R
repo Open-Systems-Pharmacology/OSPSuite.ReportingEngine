@@ -15,12 +15,11 @@ plotMeanGoodnessOfFit <- function(structureSet,
                                   settings = NULL) {
   validateIsOfType(structureSet, "SimulationStructure")
 
-  observedData <- NULL
-  simulatedData <- NULL
-  lloqData <- NULL
-  residualsData <- NULL
-  residualsMetaData <- NULL
-  residuals <- NULL
+  initializeExpression <- parse(text = paste0(
+    c("observedData", "simulatedData", "lloqData", "residualsData", "residualsMetaData", "residuals"),
+    " <- NULL"
+  ))
+  eval(initializeExpression)
   goodnessOfFitPlots <- list()
   goodnessOfFitCaptions <- list()
   goodnessOfFitResiduals <- list()
@@ -32,65 +31,27 @@ plotMeanGoodnessOfFit <- function(structureSet,
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationResultFileNames)
   simulationResult <- ospsuite::importResultsFromCSV(simulation, structureSet$simulationResultFileNames)
 
-  if (!is.null(structureSet$simulationSet$observedDataFile)) {
-    re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$observedDataFile)
-    observedDataset <- readObservedDataFile(structureSet$simulationSet$observedDataFile)
-
-    re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$observedMetaDataFile)
-    dictionary <- readObservedDataFile(structureSet$simulationSet$observedMetaDataFile)
-
-    timeColumn <- getDictionaryVariable(dictionary, dictionaryParameters$timeID)
-    dvColumn <- getDictionaryVariable(dictionary, dictionaryParameters$dvID)
-    lloqColumn <- getDictionaryVariable(dictionary, dictionaryParameters$lloqID)
-  }
+  observedResult <- loadObservedDataFromSimulationSet(structureSet$simulationSet, logFolder)
 
   outputSimulatedMetaData <- list()
   for (output in structureSet$simulationSet$outputs) {
     outputSimulatedData <- NULL
-    outputObservedData <- NULL
-    outputLloqData <- NULL
-    outputResidualsData <- NULL
 
     simulationQuantity <- ospsuite::getQuantity(output$path, simulation)
     simulationPathResults <- ospsuite::getOutputValues(simulationResult, quantitiesOrPaths = output$path)
     molWeight <- simulation$molWeightFor(output$path)
 
-    outputSimulatedResults <- getOutputSimulatedResults(simulationPathResults, output, simulationQuantity, molWeight, structureSet$simulationSet$timeUnit)
-
+    outputSimulatedResults <- getSimulatedResultsFromOutput(simulationPathResults, output, simulationQuantity, molWeight, structureSet$simulationSet$timeUnit)
     outputSimulatedData <- outputSimulatedResults$data
     outputSimulatedMetaData[[output$path]] <- outputSimulatedResults$metaData
 
-    if (!is.null(output$dataSelection)) {
-      rowFilter <- evalDataFilter(observedDataset, output$dataSelection)
-      logWorkflow(
-        message = paste0("Output '", output$path, "'. Number of observations filtered: ", sum(rowFilter)),
-        pathFolder = logFolder,
-        logTypes = LogTypes$Debug
-      )
+    outputObservedResults <- getObservedDataFromOutput(output, observedResult$data, observedResult$dataMapping, simulationQuantity, molWeight, structureSet$simulationSet$timeUnit, logFolder)
+    outputResidualsData <- getResiduals(outputObservedResults$data, outputSimulatedData, output$residualScale)
 
-      outputObservedData <- data.frame(
-        "Time" = observedDataset[rowFilter, timeColumn],
-        "Concentration" = observedDataset[rowFilter, dvColumn],
-        "Legend" = output$dataDisplayName,
-        "Path" = output$path
-      )
-      outputResidualsData <- getResiduals(outputObservedData, outputSimulatedData, output$residualScale)
-
-      if (!isOfLength(lloqColumn, 0)) {
-        if (isIncluded(lloqColumn, names(observedDataset))) {
-          outputLloqData <- data.frame(
-            "Time" = observedDataset[rowFilter, timeColumn],
-            "Concentration" = observedDataset[rowFilter, lloqColumn],
-            "Legend" = "LLOQ",
-            "Path" = output$path
-          )
-        }
-      }
-    }
-
+    # Build data.frames to be plotted
     simulatedData <- rbind.data.frame(simulatedData, outputSimulatedData)
-    observedData <- rbind.data.frame(observedData, outputObservedData)
-    lloqData <- rbind.data.frame(lloqData, outputLloqData)
+    observedData <- rbind.data.frame(observedData, outputObservedResults$data)
+    lloqData <- rbind.data.frame(lloqData, outputObservedResults$lloq)
     residualsData <- rbind.data.frame(residualsData, outputResidualsData)
   }
 
@@ -138,18 +99,28 @@ plotMeanGoodnessOfFit <- function(structureSet,
   ))
 }
 
-getOutputSimulatedResults <- function(simulationPathResults, output, simulationQuantity, molWeight, timeUnit) {
+#' @title getSimulatedResultsFromOutput
+#' @description
+#' Get simulated data from an Output object
+#' @param simulationPathResults list with simulated data included
+#' @param output An `Output` object
+#' @param simulationQuantity Dimension/quantity for unit conversion of dependent variable
+#' @param molWeight Molar weight for unit conversion of dependent variable
+#' @param timeUnit time unit for unit conversion of time
+#' @return list of data and metaData
+getSimulatedResultsFromOutput <- function(simulationPathResults, output, simulationQuantity, molWeight, timeUnit) {
+  outputConcentration <- simulationPathResults$data[, output$path]
+  if (!isOfLength(output$displayUnit, 0)) {
+    outputConcentration <- ospsuite::toUnit(simulationQuantity,
+      simulationPathResults$data[, output$path],
+      output$displayUnit,
+      molWeight = molWeight
+    )
+  }
+
   outputSimulatedData <- data.frame(
     "Time" = ospsuite::toUnit("Time", simulationPathResults$data[, "Time"], timeUnit),
-    "Concentration" = ifnotnull(
-      output$displayUnit,
-      ospsuite::toUnit(simulationQuantity,
-        simulationPathResults$data[, output$path],
-        output$displayUnit,
-        molWeight = molWeight
-      ),
-      simulationPathResults$data[, output$path]
-    ),
+    "Concentration" = outputConcentration,
     "Legend" = output$displayName %||% output$path,
     "Path" = output$path
   )
@@ -183,7 +154,9 @@ getOutputSimulatedResults <- function(simulationPathResults, output, simulationQ
 getResiduals <- function(observedData,
                          simulatedData,
                          residualScale = ResidualScales$Logarithmic) {
-
+  if (isOfLength(observedData, 0)) {
+    return()
+  }
   # Time matrix to match observed time with closest simulation time
   # This method assumes that there simulated data are dense enough to capture observed data
   obsTimeMatrix <- matrix(observedData[, "Time"], nrow(simulatedData), nrow(observedData), byrow = TRUE)
@@ -227,12 +200,11 @@ plotPopulationGoodnessOfFit <- function(structureSet,
                                         settings = NULL) {
   validateIsOfType(structureSet, "SimulationStructure")
 
-  observedData <- NULL
-  simulatedData <- NULL
-  lloqData <- NULL
-  residualsData <- NULL
-  residualsMetaData <- NULL
-  residuals <- NULL
+  initializeExpression <- parse(text = paste0(
+    c("observedData", "simulatedData", "lloqData", "residualsData", "residualsMetaData", "residuals"),
+    " <- NULL"
+  ))
+  eval(initializeExpression)
   goodnessOfFitPlots <- list()
   goodnessOfFitCaptions <- list()
   goodnessOfFitResiduals <- list()
@@ -250,69 +222,31 @@ plotPopulationGoodnessOfFit <- function(structureSet,
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationResultFileNames)
   simulationResult <- ospsuite::importResultsFromCSV(simulation, structureSet$simulationResultFileNames)
 
-  if (!is.null(structureSet$simulationSet$observedDataFile)) {
-    re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$observedDataFile)
-    observedDataset <- readObservedDataFile(structureSet$simulationSet$observedDataFile)
-
-    re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$observedMetaDataFile)
-    dictionary <- readObservedDataFile(structureSet$simulationSet$observedMetaDataFile)
-
-    timeColumn <- getDictionaryVariable(dictionary, dictionaryParameters$timeID)
-    dvColumn <- getDictionaryVariable(dictionary, dictionaryParameters$dvID)
-    lloqColumn <- getDictionaryVariable(dictionary, dictionaryParameters$lloqID)
-  }
+  observedResult <- loadObservedDataFromSimulationSet(structureSet$simulationSet, logFolder)
 
   outputSimulatedMetaData <- list()
   for (output in structureSet$simulationSet$outputs) {
     outputSimulatedData <- NULL
-    outputObservedData <- NULL
-    outputLloqData <- NULL
-    outputResidualsData <- NULL
 
     simulationQuantity <- ospsuite::getQuantity(output$path, simulation)
     simulationPathResults <- ospsuite::getOutputValues(simulationResult, quantitiesOrPaths = output$path)
     molWeight <- simulation$molWeightFor(output$path)
 
-    outputSimulatedResults <- getPopulationOutputSimulatedResults(simulationPathResults, output, simulationQuantity, molWeight, structureSet$simulationSet$timeUnit, settings)
-
+    outputSimulatedResults <- getPopulationResultsFromOutput(simulationPathResults, output, simulationQuantity, molWeight, structureSet$simulationSet$timeUnit, settings)
     outputSimulatedData <- outputSimulatedResults$data
     outputSimulatedMetaData[[output$path]] <- outputSimulatedResults$metaData
 
-    if (!is.null(output$dataSelection)) {
-      rowFilter <- evalDataFilter(observedDataset, output$dataSelection)
-      logWorkflow(
-        message = paste0("Output '", output$path, "'. Number of observations filtered: ", sum(rowFilter)),
-        pathFolder = logFolder,
-        logTypes = LogTypes$Debug
-      )
+    outputObservedResults <- getObservedDataFromOutput(output, observedResult$data, observedResult$dataMapping, simulationQuantity, molWeight, structureSet$simulationSet$timeUnit, logFolder)
+    
+    simulatedDataForResiduals <- outputSimulatedData[, selectedVariablesForResiduals]
+    # getResiduals is based on mean workflow whose names are c("Time", "Concentration", "Legend", "Path")
+    names(simulatedDataForResiduals) <- c("Time", "Concentration", "Legend", "Path")
+    outputResidualsData <- getResiduals(outputObservedResults$data, simulatedDataForResiduals, output$residualScale)
 
-      outputObservedData <- data.frame(
-        "Time" = observedDataset[rowFilter, timeColumn],
-        "Concentration" = observedDataset[rowFilter, dvColumn],
-        "Legend" = output$dataDisplayName,
-        "Path" = output$path
-      )
-
-      simulatedDataForResiduals <- outputSimulatedData[, selectedVariablesForResiduals]
-      # getResiduals is based on mean workflow whose names are c("Time", "Concentration", "Legend", "Path")
-      names(simulatedDataForResiduals) <- c("Time", "Concentration", "Legend", "Path")
-      outputResidualsData <- getResiduals(outputObservedData, simulatedDataForResiduals, output$residualScale)
-
-      if (!isOfLength(lloqColumn, 0)) {
-        if (isIncluded(lloqColumn, names(observedDataset))) {
-          outputLloqData <- data.frame(
-            "Time" = observedDataset[rowFilter, timeColumn],
-            "Concentration" = observedDataset[rowFilter, lloqColumn],
-            "Legend" = "LLOQ",
-            "Path" = output$path
-          )
-        }
-      }
-    }
-
+    # Build data.frames to be plotted
     simulatedData <- rbind.data.frame(simulatedData, outputSimulatedData)
-    observedData <- rbind.data.frame(observedData, outputObservedData)
-    lloqData <- rbind.data.frame(lloqData, outputLloqData)
+    observedData <- rbind.data.frame(observedData, outputObservedResults$data)
+    lloqData <- rbind.data.frame(lloqData, outputObservedResults$lloq)
     residualsData <- rbind.data.frame(residualsData, outputResidualsData)
   }
 
@@ -379,7 +313,17 @@ plotPopulationGoodnessOfFit <- function(structureSet,
   ))
 }
 
-getPopulationOutputSimulatedResults <- function(simulationPathResults, output, simulationQuantity, molWeight, timeUnit, settings = NULL) {
+#' @title getPopulationResultsFromOutput
+#' @description
+#' Get simulated population data from an Output object
+#' @param simulationPathResults list with simulated data included
+#' @param output An `Output` object
+#' @param simulationQuantity Dimension/quantity for unit conversion of dependent variable
+#' @param molWeight Molar weight for unit conversion of dependent variable
+#' @param timeUnit time unit for unit conversion of time
+#' @param settings TaskSetting object
+#' @return list of data and metaData
+getPopulationResultsFromOutput <- function(simulationPathResults, output, simulationQuantity, molWeight, timeUnit, settings = NULL) {
   aggregateNames <- c("mean", "median", "lowPerc", "highPerc")
   aggregateFunctions <- c(mean, median, AggregationConfiguration$functions$ymin, AggregationConfiguration$functions$ymax)
 
