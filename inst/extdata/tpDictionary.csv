@@ -2,7 +2,7 @@ ID,type,nonmenColumn,nonmemUnit,reportName,pathID,comment
 sid,identifier,SID,,,,
 stud,identifier,STUD,,,,
 time,timeprofile,TIME,h,,,
-dv,timeprofile,DV,,,,units are defined in corresponding output definitions
+dv,timeprofile,DV,mg/ml,,,
 tad,timeprofile,TAD,h,,,
 age,covariate,AGE,year(s),Age,Organism|Age,
 wght,covariate,WGHT,kg,Body weight,Organism|Weight,
