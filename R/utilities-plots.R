@@ -1,19 +1,11 @@
-# Currently, need to load a RData because, jsonlite need to be in Namespace/Description otherwise
-# The code for loading the json is consequently left commented
-# reThemeProperties <- jsonlite::fromJSON('./data/RE-theme.json')
-load("./data/reThemeProperties.RData")
-reTheme <- tlf::Theme$new(
-  themesProperties = reThemeProperties,
-  labelBaseSize = 8
-)
-reTheme$titleFont$size <- 10
-reTheme$subtitleFont$size <- 9
+# Use theme as define by tlf package
+# TO DO: create a RE theme in tlf package extdata directory
+reTheme <-   tlf::loadThemeFromJson(system.file("extdata", "template-theme.json", package = "tlf"))
 tlf::useTheme(reTheme)
 
 # Set default legend position to outside top
 reDefaultLegendPosition <- tlf::LegendPositions$outsideTop
 tlf::setDefaultLegendPosition(reDefaultLegendPosition)
-
 
 # Plot format
 # TO DO: set default formats according to task or according to legend size
