@@ -287,21 +287,46 @@ logErrorMessage <- function(message, logFolderPath = getwd()) {
 }
 
 validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile) {
-  if (!is.null(observedMetaDataFile)) {
-    dictionary <- readObservedDataFile(observedMetaDataFile)
-    validateIsIncluded(c(dictionaryParameters$ID, dictionaryParameters$nonmenColumn), names(dictionary))
-    validateIsIncluded(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID])
-
-    observedDataset <- readObservedDataFile(observedDataFile)
-    timeVariable <- getDictionaryVariable(dictionary, dictionaryParameters$timeID)
-    dvVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvID)
-    lloqVariable <- getDictionaryVariable(dictionary, dictionaryParameters$lloqID)
-
-    checkIsIncluded(c(timeVariable, dvVariable), names(observedDataset))
-    checkIsIncluded(lloqVariable, names(observedDataset), nullAllowed = TRUE)
-    return()
+  # Check that dictionary is provided
+  if (isOfLength(observedMetaDataFile, 0)) {
+    stop(messages$errorObservedMetaDataFileNotProvided(observedDataFile))
   }
-  stop(messages$errorObservedMetaDataFileNotProvided(observedDataFile))
+  # Read dictionary and check that mandatory variables are included
+  dictionary <- readObservedDataFile(observedMetaDataFile)
+  if(!isIncluded(dictionaryParameters$nonmemUnit, names(dictionary))){
+    dictionary[,dictionaryParameters$nonmemUnit] <- NA
+  }
+  validateIsIncluded(c(dictionaryParameters$ID, dictionaryParameters$nonmenColumn), names(dictionary))
+  validateIsIncluded(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID])
+
+  # Check that dictionary and observed data are consitent
+  observedDataset <- readObservedDataFile(observedDataFile)
+  timeVariable <- getDictionaryVariable(dictionary, dictionaryParameters$timeID)
+  dvVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvID)
+  lloqVariable <- getDictionaryVariable(dictionary, dictionaryParameters$lloqID)
+  
+  checkIsIncluded(c(timeVariable, dvVariable), names(observedDataset))
+  checkIsIncluded(lloqVariable, names(observedDataset), nullAllowed = TRUE)
+  
+  # Units
+  # If unit is defined as a value in nonmemUnit
+  timeMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$timeID
+  dvMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$dvID
+  
+  timeUnit <- as.character(dictionary[timeMapping, dictionaryParameters$nonmemUnit])
+  dvUnit <- as.character(dictionary[dvMapping, dictionaryParameters$nonmemUnit])
+  
+  # If unit is defined as a nonmemColumn
+  timeUnitVariable <- getDictionaryVariable(dictionary, dictionaryParameters$timeUnitID)
+  dvUnitVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvUnitID)
+  
+  # If unit is missing somewhere throw error
+  if(any(all(is.null(timeUnitVariable), is.na(timeUnit)), all(is.null(dvUnitVariable), is.na(dvUnit)))){
+    stop(messages$errorUnitNotProvidedInMetaDataFile(observedMetaDataFile))
+  }
+  checkIsIncluded(timeUnitVariable, names(observedDataset), nullAllowed = TRUE)
+  checkIsIncluded(dvUnitVariable, names(observedDataset), nullAllowed = TRUE)
+  return(invisible())
 }
 
 #' Check if the provided values are included all available dimensions

@@ -67,9 +67,12 @@ evalDataFilter <- function(data, filterExpression) {
 dictionaryParameters <- list(
   ID = "ID",
   nonmenColumn = "nonmenColumn",
+  nonmemUnit = "nonmemUnit",
   timeID = "time",
   dvID = "dv",
-  lloqID = "lloq"
+  lloqID = "lloq",
+  timeUnitID = "time_unit",
+  dvUnitID = "dv_unit"
 )
 
 getDictionaryVariable <- function(dictionary, variableID) {
@@ -79,4 +82,160 @@ getDictionaryVariable <- function(dictionary, variableID) {
     return()
   }
   return(variableName)
+}
+
+#' @title loadObservedDataFromSimulationSet
+#' @description
+#' Load observed data and its dataMapping from a simulationSet
+#' @param simulationSet A `SimulationSet` object
+#' @param logFolder folder where the logs are saved
+#' @return list of data and dataMapping
+loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
+  validateIsOfType(simulationSet, "SimulationSet")
+  # Observed data and dictionary are already checked when creating the simulationSet
+  # No observed data return NULL
+  if (isOfLength(simulationSet$observedDataFile, 0)) {
+    return()
+  }
+
+  re.tStoreFileMetadata(access = "read", filePath = simulationSet$observedDataFile)
+  observedDataset <- readObservedDataFile(simulationSet$observedDataFile)
+  re.tStoreFileMetadata(access = "read", filePath = simulationSet$observedMetaDataFile)
+  dictionary <- readObservedDataFile(simulationSet$observedMetaDataFile)
+
+  # Enforce nonmemUnit column to exist
+  if (!isIncluded(dictionaryParameters$nonmemUnit, names(dictionary))) {
+    dictionary[, dictionaryParameters$nonmemUnit] <- NA
+  }
+  # Use dictionary to map the data and get the unit
+  # Note that lloqColumn, timeUnitColumn and dvUnitColumn can be NULL
+  timeColumn <- getDictionaryVariable(dictionary, dictionaryParameters$timeID)
+  dvColumn <- getDictionaryVariable(dictionary, dictionaryParameters$dvID)
+  lloqColumn <- getDictionaryVariable(dictionary, dictionaryParameters$lloqID)
+  timeUnitColumn <- getDictionaryVariable(dictionary, dictionaryParameters$timeUnitID)
+  dvUnitColumn <- getDictionaryVariable(dictionary, dictionaryParameters$dvUnitID)
+
+  # Units: convert the observed data into base unit
+  # Get values of unit column using nonmemUnit
+  timeMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$timeID
+  timeUnit <- as.character(dictionary[timeMapping, dictionaryParameters$nonmemUnit])
+  if (!is.na(timeUnit)) {
+    timeUnitColumn <- "timeUnit"
+    observedDataset[, timeUnitColumn] <- timeUnit
+  }
+  dvMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$dvID
+  dvUnit <- as.character(dictionary[dvMapping, dictionaryParameters$nonmemUnit])
+  if (!is.na(dvUnit)) {
+    dvUnitColumn <- "dvUnit"
+    observedDataset[, dvUnitColumn] <- dvUnit
+  }
+
+  # Parse the data.frame with the appropriate columns and ensure units are "character" type
+  observedDataset[, timeUnitColumn] <- as.character(observedDataset[, timeUnitColumn])
+  observedDataset[, dvUnitColumn] <- as.character(observedDataset[, dvUnitColumn])
+
+  # Convert observed data to base unit, 
+  # as.numeric needs to be enforced because toBaseUnit could think values are integer and crash
+  for (timeUnit in unique(observedDataset[, timeUnitColumn])) {
+    selectedRows <- observedDataset[, timeUnitColumn] %in% timeUnit
+    observedDataset[selectedRows, timeColumn] <- ospsuite::toBaseUnit(
+      "Time",
+      as.numeric(observedDataset[selectedRows, timeColumn]),
+      timeUnit
+    )
+  }
+  for (dvUnit in unique(observedDataset[, dvUnitColumn])) {
+    dvDimension <- ospsuite::getDimensionForUnit(dvUnit)
+    if(isOfLength(dvDimension,0)){
+      logWorkflow(
+        message = paste0("In loadObservedDataFromSimulationSet: unit '", dvUnit, "' is unknown."),
+        pathFolder = logFolder,
+        logTypes = LogTypes$Debug
+      )
+      next
+    }
+    selectedRows <- observedDataset[, dvUnitColumn] %in% dvUnit
+    observedDataset[selectedRows, dvColumn] <- ospsuite::toBaseUnit(
+      dvDimension,
+      as.numeric(observedDataset[selectedRows, dvColumn]),
+      dvUnit
+    )
+    if (isOfLength(lloqColumn, 0)) {
+      next
+    }
+    observedDataset[selectedRows, lloqColumn] <- ospsuite::toBaseUnit(
+      ospsuite::getDimensionForUnit(dvUnit),
+      as.numeric(observedDataset[selectedRows, lloqColumn]),
+      dvUnit
+    )
+  }
+  # Create a dataMapping variable
+  dataMapping <- list(
+    time = timeColumn,
+    dv = dvColumn,
+    lloq = lloqColumn
+  )
+
+  return(list(
+    data = observedDataset,
+    dataMapping = dataMapping
+  ))
+}
+
+#' @title getObservedDataFromOutput
+#' @description
+#' Get selected observed data from an Output object
+#' @param output An `Output` object
+#' @param data A data.frame
+#' @param dataMapping A list mapping the variable of data
+#' @param simulationQuantity Dimension/quantity for unit conversion of dependent variable
+#' @param molWeight Molar weight for unit conversion of dependent variable
+#' @param timeUnit time unit for unit conversion of time
+#' @param logFolder folder where the logs are saved
+#' @return list of data and lloq data.frames
+getObservedDataFromOutput <- function(output, data, dataMapping, simulationQuantity, molWeight, timeUnit, logFolder) {
+  if (isOfLength(output$dataSelection, 0)) {
+    return()
+  }
+
+  selectedRows <- evalDataFilter(data, output$dataSelection)
+  logWorkflow(
+    message = paste0("Output '", output$path, "'. Number of selected observations: ", sum(selectedRows)),
+    pathFolder = logFolder,
+    logTypes = LogTypes$Debug
+  )
+
+  outputConcentration <- data[selectedRows, dataMapping$dv]
+  if (!isOfLength(output$displayUnit, 0)) {
+    outputConcentration <- ospsuite::toUnit(simulationQuantity,
+      data[selectedRows, dataMapping$dv],
+      output$displayUnit,
+      molWeight = molWeight
+    )
+  }
+  outputData <- data.frame(
+    "Time" = ospsuite::toUnit("Time", data[selectedRows, dataMapping$time], timeUnit),
+    "Concentration" = outputConcentration,
+    "Legend" = output$dataDisplayName,
+    "Path" = output$path
+  )
+  if (isOfLength(dataMapping$lloq, 0)) {
+    return(list(data = outputData, lloq = NULL))
+  }
+
+  lloqConcentration <- data[selectedRows, dataMapping$lloq]
+  if (!isOfLength(output$displayUnit, 0)) {
+    lloqConcentration <- ospsuite::toUnit(simulationQuantity,
+      data[selectedRows, dataMapping$lloq],
+      output$displayUnit,
+      molWeight = molWeight
+    )
+  }
+  lloqOutput <- data.frame(
+    "Time" = ospsuite::toUnit("Time", data[selectedRows, dataMapping$time], timeUnit),
+    "Concentration" = lloqConcentration,
+    "Legend" = "LLOQ",
+    "Path" = output$path
+  )
+  return(list(data = outputData, lloq = lloqOutput))
 }
