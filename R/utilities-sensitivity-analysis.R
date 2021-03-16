@@ -507,7 +507,21 @@ plotMeanSensitivity <- function(structureSet,
   )
   sensitivityPlots <- list()
   sensitivityCaptions <- list()
-
+  
+  # It is possible to add options to SensitivityPlotSettings
+  # That the mapping could account for (e.g. how to sort the sensitivities)
+  sensitivityMapping <- tlf::TornadoDataMapping$new(x = "value",
+                                                    y = "parameter",
+                                                    fill = "parameter",
+                                                    color = "parameter")
+  # Plot Configuration overwritten by SensitivityPlotSettings object: settings
+  sensitivityPlotConfiguration <- settings$plotConfiguration %||% tlf::TornadoPlotConfiguration$new()
+  sensitivityPlotConfiguration$labels$xlabel$font$size <- settings$xAxisFontSize %||% sensitivityPlotConfiguration$labels$xlabel$font$size
+  sensitivityPlotConfiguration$labels$ylabel$font$size <- settings$yAxisFontSize %||% sensitivityPlotConfiguration$labels$ylabel$font$size
+  sensitivityPlotConfiguration$labels$xlabel$text <- settings$xLabel %||% sensitivityPlotConfiguration$labels$xlabel$text
+  sensitivityPlotConfiguration$labels$ylabel$text <- settings$yLabel %||% sensitivityPlotConfiguration$labels$ylabel$text
+  sensitivityPlotConfiguration$colorPalette <- settings$colorPalette %||% sensitivityPlotConfiguration$colorPalette
+  
   for (output in structureSet$simulationSet$outputs) {
     validateIsIncluded(output$path, saResults$allQuantityPaths)
     pathLabel <- lastPathElement(output$path)
@@ -542,11 +556,14 @@ plotMeanSensitivity <- function(structureSet,
         })),
         stringsAsFactors = FALSE
       )
-
-      sensitivityPlots[[paste0(parameterLabel, "-", pathLabel)]] <- plotTornado(
-        data = sensitivityData,
-        settings = settings
-      )
+      
+      sensitivityPlot <- tlf::plotTornado(data = sensitivityData,
+                                          dataMapping = sensitivityMapping,
+                                          plotConfiguration = sensitivityPlotConfiguration)
+      
+      # Remove legend which is redundant from y axis
+      sensitivityPlots[[paste0(parameterLabel, "-", pathLabel)]] <- tlf::setLegendPosition(sensitivityPlot, 
+                                                                                           position = tlf::LegendPositions$none)
       sensitivityCaptions[[paste0(parameterLabel, "-", pathLabel)]] <- paste0("Most sensitive parameters for ", pkParameter$displayName %||% pkParameter$pkParameter, " of ", output$displayName, ".")
     }
   }
@@ -555,55 +572,6 @@ plotMeanSensitivity <- function(structureSet,
     captions = sensitivityCaptions
   ))
 }
-
-#' @title plotTornado
-#' @description Plot sensitivity results in a tornado plot
-#' @param data data.frame
-#' @param settings `SensitivityPlotSettings` object
-#' @return ggplot object of time profile for mean model workflow
-#' @export
-#' @import tlf
-#' @import ggplot2
-plotTornado <- function(data,
-                        settings = NULL) {
-
-  # Ensure that the plot bars are ordered by sensitivity values
-  data$parameter <- reorder(data$parameter, abs(data$value))
-
-  # Plot Configuration using settings
-  tornadoPlotConfiguration <- settings$plotConfiguration %||% tlf::PlotConfiguration$new()
-  # Warning: Tornado plot uses ggplot::coord_flip()
-  # Consequently, x and y-axes need to be switched at this stage
-  if (!isOfLength(settings$xAxisFontSize, 0)) {
-    tornadoPlotConfiguration$labels$ylabel$font$size <- settings$xAxisFontSize
-  }
-  if (!isOfLength(settings$yAxisFontSize, 0)) {
-    tornadoPlotConfiguration$labels$xlabel$font$size <- settings$yAxisFontSize
-  }
-
-  tornadoPlot <- tlf::initializePlot(tornadoPlotConfiguration)
-  tornadoPlot <- tornadoPlot + ggplot2::geom_col(
-    data = data,
-    mapping = ggplot2::aes_string(
-      x = "parameter",
-      y = "value",
-      fill = "parameter",
-      color = "parameter"
-    ),
-    alpha = 0.8,
-    size = 1,
-    show.legend = FALSE,
-    position = "dodge"
-  ) +
-    ggplot2::coord_flip() +
-    ggplot2::xlab(settings$yLabel) + ggplot2::ylab(settings$xLabel) +
-    ggplot2::scale_y_continuous(limits = c(-1.05 * max(abs(data$value)), 1.05 * max(abs(data$value)))) +
-    ggplot2::scale_fill_brewer(palette = settings$colorPalette, aesthetics = c("color", "fill")) +
-    ggplot2::geom_hline(yintercept = 0, color = 1, size = 1, linetype = "longdash")
-
-  return(tornadoPlot)
-}
-
 
 #' @title lookupPKParameterDisplayName
 #' @param output an Output object
