@@ -1,8 +1,3 @@
-# Use theme as define by tlf package
-# TO DO: create a RE theme in tlf package extdata directory
-reTheme <-   tlf::loadThemeFromJson(system.file("extdata", "template-theme.json", package = "tlf"))
-tlf::useTheme(reTheme)
-
 # Set default legend position to outside top
 reDefaultLegendPosition <- tlf::LegendPositions$outsideTop
 tlf::setDefaultLegendPosition(reDefaultLegendPosition)

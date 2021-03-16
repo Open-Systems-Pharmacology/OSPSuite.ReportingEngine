@@ -75,6 +75,8 @@ Workflow <- R6::R6Class(
           workflowFolder = self$workflowFolder
         )
       }
+      # Define workflow theme and watermark
+      tlf::useTheme(reEnv$theme)
       self$setWatermark(watermark)
     },
 

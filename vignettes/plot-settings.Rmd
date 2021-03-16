@@ -74,13 +74,18 @@ tlf::saveThemeToJson("my-new-theme.json", theme = reTheme)
 
 In addition, the `tlf` package provides a Shiny app to define and save your own theme with a few clicks: __`tlf::runThemeMaker()`__.
 
-Then, the most important step is then to define the `Theme` object as the current default for the workflow.
-The example below set the __`reTheme`__ `Theme` object as current default. 
-As a consequence, the properties defined by the object will be used if no specific plot configurations are provided for the workflow plots.
+Then, the most important step is to define the `Theme` object as the current default for the workflow.
+In `ospsuite.reportingengine`, this can be either achieved using the function `setDefaultTheme` with a `Theme` object as shown in the example below with __`reTheme`__.
+Or it can be achieved, directly from a json file using the function `setDefaultThemeFromJson`, also illustrated below.
+
+The properties defined by the `Theme` object will be used by default if no specific plot configurations are provided for the workflow plots.
 
 ```{r current theme}
 # Set reTheme as current default Theme
-useTheme(reTheme)
+setDefaultTheme(reTheme)
+
+# Set current default Theme from json file
+setDefaultThemeFromJson(jsonFile)
 ```
 
 ## Exporting plots in a specific format

@@ -30,3 +30,25 @@ setDefaultNumericFormat <- function(digits = NULL,
   reEnv$formatNumericsScientific <- scientific %||% reEnv$formatNumericsScientific
   return(invisible())
 }
+
+# Default theme
+reEnv$theme <- tlf::loadThemeFromJson(system.file("extdata", "template-theme.json", package = "tlf"))
+
+#' @title setDefaultTheme
+#' @param theme `Theme` object from `tlf` package
+#' @export
+setDefaultTheme <- function(theme){
+  validateIsOfType(theme,  "Theme")
+  reEnv$theme <- theme
+  tlf::useTheme(reEnv$theme)
+}
+
+#' @title setDefaultThemeFromJson
+#' @param jsonFile path to json file where theme properties are stored
+#' @export
+setDefaultThemeFromJson <- function(jsonFile){
+  validateIsString(jsonFile)
+  validateIsFileExtension(jsonFile, "json")
+  newTheme <- tlf::loadThemeFromJson(jsonFile)
+  setDefaultTheme(newTheme)
+}
