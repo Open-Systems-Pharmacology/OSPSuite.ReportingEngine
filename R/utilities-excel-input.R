@@ -839,15 +839,24 @@ concatenateDataSelection <- function(inputs, sep = ") & (") {
     return("NULL")
   }
   # Deal with NONE and ALL inputs
-  if (isIncluded("NONE", inputs)) {
+
+  #Assume NA = NONE
+  inputs[is.na(inputs)] <- "NONE"
+
+  #If all are NONE then return NONE
+  if (all(inputs == "NONE")) {
     return('"NONE"')
   }
-  if (all(inputs == "ALL")) {
+
+  #If only some are NONE, remove any NONE
+  if (isIncluded("NONE", inputs)) {
+    inputs <- inputs[!(inputs == "NONE")]
+  }
+
+  #Assume ALL in any is ALL in all
+  if (isIncluded("ALL", inputs)) {
     return('"ALL"')
   }
-  # Remove NAs and ALLs from expression
-  inputs[inputs == "ALL"] <- NA
-  inputs <- inputs[!is.na(inputs)]
   return(paste0("'(", paste0(inputs, collapse = sep), ")'"))
 }
 
