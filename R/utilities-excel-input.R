@@ -28,8 +28,8 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
   inputSections <- readxl::excel_sheets(excelFile)
   # Check for mandotory input sections
   validateIsIncluded(c(StandardExcelSheetNames$`Workflow and Tasks`, StandardExcelSheetNames$SimulationSets),
-    inputSections,
-    groupName = paste0("Sheet names of '", excelFile, "'")
+                     inputSections,
+                     groupName = paste0("Sheet names of '", excelFile, "'")
   )
 
   if (isIncluded(StandardExcelSheetNames$`Documentation`, inputSections)) {
@@ -167,7 +167,7 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
   # Check for duplicate PK parameters as input of Output object
   if (!hasUniqueValues(pkParametersTable$Name)) {
     pkParametersWarnings <- messages$errorHasNoUniqueValues(pkParametersTable$Name,
-      dataName = paste0("selected PK parameters from Excel sheet '", pkParametersSheet, "'")
+                                                            dataName = paste0("selected PK parameters from Excel sheet '", pkParametersSheet, "'")
     )
   }
   # If none of the PK Parameters are updated, their names can directly be used as is
@@ -186,7 +186,7 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
   # Check for duplicate PK parameter display names as input of Output object
   if (!hasUniqueValues(pkParametersTable$`Display name`)) {
     pkParametersErrors <- messages$errorHasNoUniqueValues(pkParametersTable$`Display name`,
-      dataName = paste0("display names of selected PK parameters from Excel sheet '", pkParametersSheet, "'")
+                                                          dataName = paste0("display names of selected PK parameters from Excel sheet '", pkParametersSheet, "'")
     )
   }
 
@@ -259,7 +259,7 @@ getOutputContent <- function(excelFile, outputInfo) {
       outputErrors <- c(outputErrors, pkParametersInfo$errors)
       outputContent <- c(outputContent, pkParametersContent)
       # The line break within paste0 is needed to ensure a nice structure in the output script
-      pkParametersOutputContent <- paste0(", 
+      pkParametersOutputContent <- paste0(",
                                           pkParameters = pkParameters")
     }
 
@@ -279,9 +279,9 @@ getOutputContent <- function(excelFile, outputInfo) {
       "# The 'pkParameters' input can be a character array using defined PK Parameter names or an array of PkParameterInfo objects",
       paste0(
         outputNames[outputIndex], " <- Output$new(
-          path = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$path), ", 
-          displayName = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$displayName), ", 
-          displayUnit = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$displayUnit), ", 
+          path = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$path), ",
+          displayName = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$displayName), ",
+          displayUnit = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$displayUnit), ",
           dataSelection = ", dataSelection, ",
           dataDisplayName = ", dataDisplayName,
         pkParametersOutputContent,
@@ -299,7 +299,7 @@ getOutputContent <- function(excelFile, outputInfo) {
     outputWarnings <- c(
       outputWarnings,
       messages$errorHasNoUniqueValues(gsub("'", "", allOutputPaths),
-        dataName = paste0("paths of Outputs defined in Excel sheet '", outputInfo$sheetName, "'")
+                                      dataName = paste0("paths of Outputs defined in Excel sheet '", outputInfo$sheetName, "'")
       )
     )
   }
@@ -307,7 +307,7 @@ getOutputContent <- function(excelFile, outputInfo) {
     outputErrors <- c(
       outputErrors,
       messages$errorHasNoUniqueValues(gsub("'", "", allDisplayNames),
-        dataName = paste0("path display names of Outputs defined in Excel sheet '", outputInfo$sheetName, "'")
+                                      dataName = paste0("path display names of Outputs defined in Excel sheet '", outputInfo$sheetName, "'")
       )
     )
   }
@@ -316,7 +316,7 @@ getOutputContent <- function(excelFile, outputInfo) {
     outputErrors <- c(
       outputErrors,
       messages$errorHasNoUniqueValues(gsub("'", "", allDataDisplayNames),
-        dataName = paste0("data display names of Outputs defined in Excel sheet '", outputInfo$sheetName, "'")
+                                      dataName = paste0("data display names of Outputs defined in Excel sheet '", outputInfo$sheetName, "'")
       )
     )
   }
@@ -403,13 +403,13 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
       }
 
       # These contents breaks lines to beautify final workflow script
-      referencePopulationContent <- paste0("referencePopulation = ", referencePopulation, ", 
+      referencePopulationContent <- paste0("referencePopulation = ", referencePopulation, ",
                                            ")
-      populationFileContent <- paste0("populationFile = ", populationFile, ", 
+      populationFileContent <- paste0("populationFile = ", populationFile, ",
                                       ")
-      populationNameContent <- paste0("populationName = ", populationName, ", 
+      populationNameContent <- paste0("populationName = ", populationName, ",
                                       ")
-      studyDesignFileContent <- paste0("studyDesignFile = ", studyDesignLocation, ", 
+      studyDesignFileContent <- paste0("studyDesignFile = ", studyDesignLocation, ",
                                        ")
     }
 
@@ -420,12 +420,12 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
       paste0(
         simulationSetNames[simulationIndex],
         " <- ", simulationType, "$new(
-    simulationSetName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationSetName), ", 
+    simulationSetName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationSetName), ",
         ", referencePopulationContent, populationFileContent, populationNameContent, studyDesignFileContent,
-        "simulationFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationFile), ", 
-    simulationName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationName), ", 
-    outputs = c(", outputNames, "), 
-    observedDataFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$observedDataFile), ", 
+        "simulationFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationFile), ",
+    simulationName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationName), ",
+    outputs = c(", outputNames, "),
+    observedDataFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$observedDataFile), ",
     observedMetaDataFile = ", dictionaryLocation, ",
     timeUnit = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$timeUnit), ")"
       ),
@@ -839,15 +839,24 @@ concatenateDataSelection <- function(inputs, sep = ") & (") {
     return("NULL")
   }
   # Deal with NONE and ALL inputs
-  if (isIncluded("NONE", inputs)) {
+
+  #Assume NA = NONE
+  inputs[is.na(inputs)] <- "NONE"
+
+  #If all are NONE then return NONE
+  if (all(inputs == "NONE")) {
     return('"NONE"')
   }
-  if (all(inputs == "ALL")) {
+
+  #If only some are NONE, remove any NONE
+  if (isIncluded("NONE", inputs)) {
+    inputs <- inputs[!(inputs == "NONE")]
+  }
+
+  #Assume ALL in any is ALL in all
+  if (isIncluded("ALL", inputs)) {
     return('"ALL"')
   }
-  # Remove NAs and ALLs from expression
-  inputs[inputs == "ALL"] <- NA
-  inputs <- inputs[!is.na(inputs)]
   return(paste0("'(", paste0(inputs, collapse = sep), ")'"))
 }
 
@@ -906,7 +915,7 @@ getUserDefPKParametersContent <- function(userDefPKParametersTable) {
       "# The dimension of the PK parameter can only be defined from 'displayUnit' at the time of the PK parameter creation",
       paste0(
         userDefPKParametersTable$Name[parameterIndex], ' <- addUserDefinedPKParameter(name = "', userDefPKParametersTable$Name[parameterIndex], '",
-             standardPKParameter = StandardPKParameter$', userDefPKParametersTable$`Standard PK parameter`[parameterIndex], ', 
+             standardPKParameter = StandardPKParameter$', userDefPKParametersTable$`Standard PK parameter`[parameterIndex], ',
         displayUnit = "', userDefPKParametersTable$`Display Unit`[parameterIndex], '")'
       )
     )
