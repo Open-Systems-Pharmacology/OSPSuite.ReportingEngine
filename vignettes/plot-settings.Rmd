@@ -170,18 +170,18 @@ dictionaryFile <- system.file("extdata", "tpDictionary.csv",
 outputA <- Output$new(
   path = "Organism|A|Concentration in container",
   displayName = "Simulated concentration of A",
-  displayUnit = "µmol/ml",
-  dataSelection = "MDV==0",
-  dataDisplayName = "Observed concentration of A"
+  displayUnit = "µmol/ml"#,
+  #dataSelection = "MDV==0",
+  #dataDisplayName = "Observed concentration of A"
 )
 
 # Define the simulation set object
 setA <- SimulationSet$new(
   simulationSetName = "A",
   simulationFile = simulationFile,
-  outputs = outputA,
-  observedDataFile = observationFile,
-  observedMetaDataFile = dictionaryFile
+  outputs = outputA#,
+  #observedDataFile = observationFile,
+  #observedMetaDataFile = dictionaryFile
 )
 
 # Create the workflow object
