@@ -487,14 +487,16 @@ plotMeanResVsTime <- function(data,
     dataMapping = resVsTimeDataMapping
   )
   meanResVsTimePlot <- tlf::initializePlot(plotConfiguration)
-  #meanResVsTimePlot <- tlf::addLine(y = 0, caption = "Line of residuals = 0", plotConfiguration = plotConfiguration)
-
+  
   meanResVsTimePlot <- tlf::addScatter(
     data = data,
     metaData = metaData,
     dataMapping = resVsTimeDataMapping,
     plotObject = meanResVsTimePlot
   )
+  
+  meanResVsTimePlot <- meanResVsTimePlot + ggplot2::geom_hline(yintercept = 0,
+                                                               size = 1)
 
   meanResVsTimePlot <- tlf::setLegendPosition(plotObject = meanResVsTimePlot, position = reDefaultLegendPosition)
   meanResVsTimePlot <- tlf::setYAxis(plotObject = meanResVsTimePlot, 
@@ -529,14 +531,16 @@ plotMeanResVsPred <- function(data,
     dataMapping = resVsPredDataMapping
   )
   meanResVsPredPlot <- tlf::initializePlot(plotConfiguration)
-  #meanResVsPredPlot <- tlf::addLine(y = 0, caption = "Line of residuals = 0", plotConfiguration = plotConfiguration)
-
+  
   meanResVsPredPlot <- tlf::addScatter(
     data = data,
     metaData = metaData,
     dataMapping = resVsPredDataMapping,
     plotObject = meanResVsPredPlot
   )
+  
+  meanResVsPredPlot <- meanResVsPredPlot + ggplot2::geom_hline(yintercept = 0,
+                                                               size = 1)
 
   meanResVsPredPlot <- tlf::setLegendPosition(plotObject = meanResVsPredPlot, position = reDefaultLegendPosition)
   meanResVsTimePlot <- tlf::setYAxis(plotObject = meanResVsPredPlot, 
