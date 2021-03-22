@@ -20,7 +20,7 @@ GofPlotTask <- R6::R6Class(
         logFolder = self$workflowFolder
       )
 
-      for (timeRange in c("totalRange", "firstApplicationRange", "lastApplicationRange")) {
+      for (timeRange in ApplicationRanges) {
         # Captions only for multi admin
         if (length(taskResults$plots) > 1) {
           addTextChunk(

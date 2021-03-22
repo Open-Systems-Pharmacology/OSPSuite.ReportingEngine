@@ -227,14 +227,16 @@ getPkParametersCaptions <- function(plotType, populationName, metaData, referenc
   }
 }
 
-getTimeRangeCaption <- function(timeRange) {
-  if (timeRange %in% "totalRange") {
+ApplicationRanges <- enum(c("total", "firstApplication", "lastApplication"))
+
+getTimeRangeCaption <- function(timeRangeName) {
+  if (isIncluded(timeRangeName, ApplicationRanges$total)) {
     return("### For total simulation time range")
   }
-  if (timeRange %in% "firstApplicationRange") {
+  if (isIncluded(timeRangeName, ApplicationRanges$firstApplication)) {
     return("### For first application range")
   }
-  if (timeRange %in% "lastApplicationRange") {
+  if (isIncluded(timeRangeName, ApplicationRanges$lastApplication)) {
     return("### For last application range")
   }
 }

@@ -60,13 +60,15 @@ plotMeanGoodnessOfFit <- function(structureSet,
   
   # metaDataFrame summarizes paths, dimensions and units
   metaDataFrame <- getMetaDataFrame(outputSimulatedMetaData)
-
-  timeRanges <- getSimulationTimeRanges(simulation, output$path, structureSet$simulationSet$timeUnit)
-
+  
+  # Get list of total, first application, and last application ranges
+  # Note: it could be possible to define in getSimulationTimeRanges a setting to 
+  # get a specific application other than first or last
+  timeRanges <- getSimulationTimeRanges(simulation, output$path, structureSet$simulationSet$timeUnit, settings, logFolder)
+  
+  # If one or no application, field 'keep' for time range other than total is FALSE
   for (timeRange in timeRanges) {
-    if (is.null(timeRange$values)) {
-      next
-    }
+    if (!timeRange$keep) {next}
     timeProfilePlotResults <- getTimeProfilePlotResults("mean", timeRange$values, simulatedData, observedData, lloqData, metaDataFrame, timeProfileMapping, structureSet, settings, logFolder)
     goodnessOfFitPlots[[timeRange$name]] <- timeProfilePlotResults$plots
     goodnessOfFitCaptions[[timeRange$name]] <- timeProfilePlotResults$captions
@@ -74,9 +76,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
 
   if (!isOfLength(residualsData, 0)) {
     for (timeRange in timeRanges) {
-      if (is.null(timeRange$values)) {
-        next
-      }
+      if (!timeRange$keep) {next}
       residualsPlotResults <- getResidualsPlotResults(timeRange$values, residualsData, metaDataFrame, structureSet, settings, logFolder)
       goodnessOfFitPlots[[timeRange$name]] <- c(goodnessOfFitPlots[[timeRange$name]], residualsPlotResults$plots)
       goodnessOfFitCaptions[[timeRange$name]] <- c(goodnessOfFitCaptions[[timeRange$name]], residualsPlotResults$captions)
@@ -84,10 +84,11 @@ plotMeanGoodnessOfFit <- function(structureSet,
       residualsMetaData[[timeRange$name]] <- residualsPlotResults$metaData
     }
   }
-  if (!isOfLength(goodnessOfFitResiduals[["totalRange"]], 0)) {
+  allResiduals <- goodnessOfFitResiduals[[ApplicationRanges$total]]
+  if (!isOfLength(allResiduals, 0)) {
     residuals <- list(
-      data = goodnessOfFitResiduals[["totalRange"]],
-      metaData = residualsMetaData[["totalRange"]]
+      data = allResiduals,
+      metaData = residualsMetaData[[ApplicationRanges$total]]
     )
   }
 
@@ -254,12 +255,10 @@ plotPopulationGoodnessOfFit <- function(structureSet,
   # metaDataFrame summarizes paths, dimensions and units
   metaDataFrame <- getMetaDataFrame(outputSimulatedMetaData)
 
-  timeRanges <- getSimulationTimeRanges(simulation, output$path, structureSet$simulationSet$timeUnit)
+  timeRanges <- getSimulationTimeRanges(simulation, output$path, structureSet$simulationSet$timeUnit, settings, logFolder)
 
   for (timeRange in timeRanges) {
-    if (is.null(timeRange$values)) {
-      next
-    }
+    if (!timeRange$keep) {next}
     timeProfilePlotResults <- getTimeProfilePlotResults("population", timeRange$values, simulatedData, observedData, lloqData, metaDataFrame, timeProfileMapping, structureSet, settings, logFolder)
     goodnessOfFitPlots[[timeRange$name]] <- timeProfilePlotResults$plots
     goodnessOfFitCaptions[[timeRange$name]] <- timeProfilePlotResults$captions
@@ -267,9 +266,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
 
   if (!isOfLength(residualsData, 0)) {
     for (timeRange in timeRanges) {
-      if (is.null(timeRange$values)) {
-        next
-      }
+      if (!timeRange$keep) {next}
       residualsPlotResults <- getResidualsPlotResults(timeRange$values, residualsData, metaDataFrame, structureSet, settings, logFolder)
       goodnessOfFitPlots[[timeRange$name]] <- c(goodnessOfFitPlots[[timeRange$name]], residualsPlotResults$plots)
       goodnessOfFitCaptions[[timeRange$name]] <- c(goodnessOfFitCaptions[[timeRange$name]], residualsPlotResults$captions)
@@ -277,10 +274,11 @@ plotPopulationGoodnessOfFit <- function(structureSet,
       residualsMetaData[[timeRange$name]] <- residualsPlotResults$metaData
     }
   }
-  if (!isOfLength(goodnessOfFitResiduals[["totalRange"]], 0)) {
+  allResiduals <- goodnessOfFitResiduals[[ApplicationRanges$total]]
+  if (!isOfLength(allResiduals, 0)) {
     residuals <- list(
-      data = goodnessOfFitResiduals[["totalRange"]],
-      metaData = residualsMetaData[["totalRange"]]
+      data = allResiduals,
+      metaData = residualsMetaData[[ApplicationRanges$total]]
     )
   }
   goodnessOfFitTables <- list(simulatedData = simulatedData)
@@ -738,32 +736,58 @@ plotResidualsQQPlot <- function(data,
   return(qqPlot)
 }
 
-getSimulationTimeRanges <- function(simulation, path, timeUnit) {
-  firstApplicationRange <- list(name = "firstApplicationRange", values = NULL)
-  lastApplicationRange <- list(name = "lastApplicationRange", values = NULL)
-  applicationTimes <- 0
+getSimulationTimeRanges <- function(simulation, path, timeUnit, settings, logFolder) {
+  # Initialize output
+  timeRanges <- list(total = list(name = ApplicationRanges$total,
+                                  keep = isTRUE(settings$applicationRanges[[ApplicationRanges$total]]),
+                                  values = NULL),
+                     firstApplication = list(name = ApplicationRanges$firstApplication,
+                                             keep = FALSE,
+                                             values = NULL),
+                     lastApplication = list(name = ApplicationRanges$lastApplication,
+                                            keep = FALSE,
+                                            values = NULL))
 
+  # Get applications
   applications <- simulation$allApplicationsFor(path)
+  applicationTimes <- 0
   if (!isOfLength(applications, 0)) {
     applicationTimes <- sapply(applications, function(application) {
       application$startTime$value
     })
   }
+  # Get all ranges of simulation ranked defined by application intervals
   simulationRanges <- c(applicationTimes, simulation$outputSchema$endTime)
   simulationRanges <- sort(ospsuite::toUnit("Time", simulationRanges, timeUnit))
-
-  totalRange <- list(name = "totalRange", values = c(min(simulationRanges), max(simulationRanges)))
-
+  
+  # Store number of applications and their ranges
+  logWorkflow(
+    message = paste0("'", length(applications), "' applications identified for path '",
+                     path, "' in simulation '", simulation$name,"'"),
+    pathFolder = logFolder,
+    logTypes = LogTypes$Debug
+    )
+  logWorkflow(
+    message = paste0("Corresponding time ranges: '", 
+                     paste0(simulationRanges, collapse = "', '"), "'"),
+    pathFolder = logFolder,
+    logTypes = LogTypes$Debug
+  )
+  
+  # Define ranges for output
+  # Depending on expected behaviour of settings$applicationRange
+  # It would be possible to set these values 
+  timeRanges$total$values <- c(min(simulationRanges), max(simulationRanges))
+  
+  # Case of multiple applications, get first and last
   if (!isOfLength(simulationRanges, 2)) {
-    firstApplicationRange$values <- utils::head(simulationRanges, 2)
-    lastApplicationRange$values <- utils::tail(simulationRanges, 2)
+    timeRanges$firstApplication$values <- utils::head(simulationRanges, 2)
+    timeRanges$lastApplication$values <- utils::tail(simulationRanges, 2)
+    timeRanges$firstApplication$keep <- isTRUE(settings$applicationRanges[[ApplicationRanges$firstApplication]])
+    timeRanges$lastApplication$keep <- isTRUE(settings$applicationRanges[[ApplicationRanges$lastApplication]])
   }
-
-  return(list(
-    totalRange = totalRange,
-    firstApplicationRange = firstApplicationRange,
-    lastApplicationRange = lastApplicationRange
-  ))
+  
+  return(timeRanges)
 }
 
 asTimeAfterDose <- function(data, doseTime, maxTime = NULL) {
