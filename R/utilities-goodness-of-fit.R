@@ -436,19 +436,24 @@ plotMeanObsVsPred <- function(data,
   )
   identityLine <- data.frame(
     "Observed" = identityMinMax,
-    "Simulated" = identityMinMax
+    "Simulated" = identityMinMax,
+    "Legend" = "Line of identity"
+  )
+  obsVsPredDataMapping <- tlf::XYGDataMapping$new(
+    x = "Observed",
+    y = "Simulated",
+    color = "Legend"
   )
 
-  meanObsVsPredPlot <- tlf::addLine(data = identityLine, metaData = metaData, caption = "Line of identity", plotConfiguration = plotConfiguration)
+  meanObsVsPredPlot <- tlf::addLine(data = identityLine, 
+                                    metaData = metaData, 
+                                    dataMapping = obsVsPredDataMapping,
+                                    plotConfiguration = plotConfiguration)
 
   meanObsVsPredPlot <- tlf::addScatter(
     data = data,
     metaData = metaData,
-    dataMapping = tlf::XYGDataMapping$new(
-      x = "Observed",
-      y = "Simulated",
-      color = "Legend"
-    ),
+    dataMapping = obsVsPredDataMapping,
     plotObject = meanObsVsPredPlot
   )
   meanObsVsPredPlot <- tlf::setLegendPosition(plotObject = meanObsVsPredPlot, position = reDefaultLegendPosition)
@@ -479,11 +484,10 @@ plotMeanResVsTime <- function(data,
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
     metaData = metaData,
-    dataMapping = resVsTimeDataMapping,
-    yLimits = c(-maxRes, maxRes)
+    dataMapping = resVsTimeDataMapping
   )
-
-  meanResVsTimePlot <- tlf::addLine(y = 0, caption = "Line of residuals = 0", plotConfiguration = plotConfiguration)
+  meanResVsTimePlot <- tlf::initializePlot(plotConfiguration)
+  #meanResVsTimePlot <- tlf::addLine(y = 0, caption = "Line of residuals = 0", plotConfiguration = plotConfiguration)
 
   meanResVsTimePlot <- tlf::addScatter(
     data = data,
@@ -493,6 +497,8 @@ plotMeanResVsTime <- function(data,
   )
 
   meanResVsTimePlot <- tlf::setLegendPosition(plotObject = meanResVsTimePlot, position = reDefaultLegendPosition)
+  meanResVsTimePlot <- tlf::setYAxis(plotObject = meanResVsTimePlot, 
+                                     limits = c(-maxRes, maxRes))
 
   return(meanResVsTimePlot)
 }
@@ -520,11 +526,10 @@ plotMeanResVsPred <- function(data,
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
     metaData = metaData,
-    dataMapping = resVsPredDataMapping,
-    yLimits = c(-maxRes, maxRes)
+    dataMapping = resVsPredDataMapping
   )
-
-  meanResVsPredPlot <- tlf::addLine(y = 0, caption = "Line of residuals = 0", plotConfiguration = plotConfiguration)
+  meanResVsPredPlot <- tlf::initializePlot(plotConfiguration)
+  #meanResVsPredPlot <- tlf::addLine(y = 0, caption = "Line of residuals = 0", plotConfiguration = plotConfiguration)
 
   meanResVsPredPlot <- tlf::addScatter(
     data = data,
@@ -534,6 +539,8 @@ plotMeanResVsPred <- function(data,
   )
 
   meanResVsPredPlot <- tlf::setLegendPosition(plotObject = meanResVsPredPlot, position = reDefaultLegendPosition)
+  meanResVsTimePlot <- tlf::setYAxis(plotObject = meanResVsPredPlot, 
+                                     limits = c(-maxRes, maxRes))
 
   return(meanResVsPredPlot)
 }
