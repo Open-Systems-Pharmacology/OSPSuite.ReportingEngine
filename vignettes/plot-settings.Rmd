@@ -44,50 +44,48 @@ Some shortkey methods were added to the `reporting.engine` package to simplify t
 
 ## Notion of theme
 
-A `Theme` is an R6 class which defines the default properties to be used by each plot created from the `tlf` package.
-More information can be found on this notion within the `tlf` vignettes __"theme"__ and __"plot-configuration"__.
+A theme is an object of R6 class `Theme` which defines the default properties used to build every plot in `tlf` package.
+More information can be found direcctly within the documentation of the the `tlf` package (vignettes __"theme"__ and __"plot-configuration"__).
 
-The method __`Theme$new()`__ creates a `Theme` object, which can be set as the current default using the tlf method __`useTheme()`__.
-
-The best workflow to set a `Theme` is to load and update the Json template file available in the package external data, as shown in the example below.
+The best workflow to set a `Theme` object is to use json files.
+Templates of json files are available in the `tlf` package at the location defined below:
 
 ```{r theme definition}
 # Get the path of the Json template
-jsonFile <- system.file("extdata", "RE-theme.json", 
-                        package = "ospsuite.reportingengine")
+jsonFile <- system.file("extdata", "template-theme.json", 
+                        package = "tlf")
 
-# Read the Json file as a list of properties
-reThemeProperties <- jsonlite::fromJSON(jsonFile)
-
-# Create a Theme object from properties and base label size
-reTheme <- Theme$new(
-  themesProperties = reThemeProperties,
-  labelBaseSize = 8
-)
+# Load the theme from the json file
+reTheme <- tlf::loadThemeFromJson(jsonFile)
 ```
 
-The template list `reThemeProperties` includes the following fields:
-
-- `$labelColors` defining the default colors of the plot labels (e.g. title, xlabel ...)
-- `$aesProperties` defining the default aesthetic properties used by the plots and in which order they appear (e.g. color, line type, shape ...)
-- `$background` defining the default background properties (e.g. grid, color fill of inner/outer background ...)
-- `$defaultCaption` defining the default captions for specific `tlf` plots (e.g. pkRatio)
-
-The size of the labels was defined as an independent input, `labelBaseSize`, simplifying the customization of the settings of `Theme` objects.
-The default sizes and properties can also be updated after the creation of the `Theme` object, as illustrated below:
-
-```{r title size update}
-reTheme$titleFont$size <- 10
+Modifications of the theme properties can be done directly by updating the properties of the `Theme` object as shown below:
+```{r theme modifications}
+# Overwrite the current background fill
+reTheme$background$panel$fill <- "white"
+reTheme$background$panel$fill
 ```
 
-Finally, the important step is to define a `Theme` object as the current default for the workflow.
+To save the updated `Theme` object, the function `saveThemeToJson` provided by `tlf` package can be used.
+```{r theme save}
+# Save your updated theme in "my-new-theme.json"
+tlf::saveThemeToJson("my-new-theme.json", theme = reTheme)
+```
 
-The example below set the __`reTheme`__ `Theme` object as current default. 
-As a consequence, the properties defined by the object will be used if no specific plot configurations are provided for the workflow plots.
+In addition, the `tlf` package provides a Shiny app to define and save your own theme with a few clicks: __`tlf::runThemeMaker()`__.
+
+Then, the most important step is to define the `Theme` object as the current default for the workflow.
+In `ospsuite.reportingengine`, this can be either achieved using the function `setDefaultTheme` with a `Theme` object as shown in the example below with __`reTheme`__.
+Or it can be achieved, directly from a json file using the function `setDefaultThemeFromJson`, also illustrated below.
+
+The properties defined by the `Theme` object will be used by default if no specific plot configurations are provided for the workflow plots.
 
 ```{r current theme}
 # Set reTheme as current default Theme
-useTheme(reTheme)
+setDefaultTheme(reTheme)
+
+# Set current default Theme from json file
+setDefaultThemeFromJson(jsonFile)
 ```
 
 ## Exporting plots in a specific format
@@ -103,22 +101,15 @@ setPlotFormat("png")
 ## Watermark
 
 Watermark corresponds to text in the background of plots.
-Most of watermark properties can be set using the notion of `Theme` using the R6 object `$watermarkFont` as shown in the example below.
+Watermark font properties can be set in the `Theme` object: `reTheme$fonts$watermark`.
 
-```{r watermark font}
-# Set the watermark color property
-reTheme$watermarkFont$color <- "firebrick"
-
-# Print watermark font properties
-reTheme$watermarkFont
-```
-
-However, `Workflow` objects do not use the `tlf` Watermark default text but generate their own default based on the notion of validated system.
+Regarding the content of the watermark, the default content available in the `Theme` object (i.e. at `reTheme$background$watermark` in the example) is overwritten by the `Workflow` objects:
 
 - If a system is validated, no text is printed in background by default.
 - If a system is __NOT__ validated, the text __*"preliminary results"*__ is printed in background by default.
 
-It is possible to overwrite this default feature either upon creation of a `Workflow` object, using the input argument `watermark` (e.g. `MeanModelWorkflow$new(..., watermark = "new watermark")`) or directly from the `Workflow` object using the method __`$setWatermark(watermark)`__ (e.g. `myWorkflow$setWatermark("new watermark")`).
+As a consequence, setting the watermark content needs to be performed directly with the `Workflow` objects:
+either when initializing the workflow using the input argument `watermark` (e.g. `MeanModelWorkflow$new(..., watermark = "vignette example")`); or using the workflow method __`$setWatermark(watermark)`__ (e.g. `myWorkflow$setWatermark("vignette example")`).
 
 The workflow method __`$getWatermark()`__ prints the watermark text which will be in the background of the figures output by the workflow (e.g. `myWorkflow$getWatermark()`).
 
@@ -127,7 +118,7 @@ __Note__: The __NULL__ input argument for watermark leads to using the default w
 # How to set task specific properties
 
 Each task of `Workflow` objects includes a field named __`settings`__.
-This optional field can be updated and will overwrite the default behavior of a task.
+This optional field of class `TaskSettings` can be updated and will overwrite the default behavior of a task.
 
 Two usual subfields of __`settings`__ are: __`plotConfigurations`__ and __`bins`__.
 Other settings can also be provided and will be detailed in the next sections.
@@ -179,18 +170,18 @@ dictionaryFile <- system.file("extdata", "tpDictionary.csv",
 outputA <- Output$new(
   path = "Organism|A|Concentration in container",
   displayName = "Simulated concentration of A",
-  displayUnit = "µmol/ml",
-  dataSelection = "MDV==0",
-  dataDisplayName = "Observed concentration of A"
+  displayUnit = "µmol/ml"#,
+  #dataSelection = "MDV==0",
+  #dataDisplayName = "Observed concentration of A"
 )
 
 # Define the simulation set object
 setA <- SimulationSet$new(
   simulationSetName = "A",
   simulationFile = simulationFile,
-  outputs = outputA,
-  observedDataFile = observationFile,
-  observedMetaDataFile = dictionaryFile
+  outputs = outputA#,
+  #observedDataFile = observationFile,
+  #observedMetaDataFile = dictionaryFile
 )
 
 # Create the workflow object
@@ -209,21 +200,22 @@ The next chunk of code will define `PlotConfiguration` objects to be included in
 ```{r example create time profile configurations}
 # Define plot configuration for obsVsPred
 obsVsPredConfiguration <- PlotConfiguration$new(
-  xlabel = "My observed data [µmol/ml]",
-  ylabel = "My simulated data [µmol/ml]",
-  watermark = "")
+  xlabel = "Observed values [µmol/ml]",
+  ylabel = "Simulated values [µmol/ml]",
+  watermark = "vignette")
 
 # Define plot configuration for resHisto
 resHistoConfiguration <- PlotConfiguration$new(
   xlabel = "Residuals",
   ylabel = "Count",
-  watermark = "")
+  watermark = "vignette")
 
 # Update some fields of the configuration if necessary
-resHistoConfiguration$background$outerBackground$fill <- "lemonchiffon"
-resHistoConfiguration$background$innerBackground$fill <- "lemonchiffon"
-resHistoConfiguration$background$innerBackground$color <- "goldenrod3"
-resHistoConfiguration$background$grid$color <- "goldenrod3"
+resHistoConfiguration$background$plot$fill <- "lemonchiffon"
+resHistoConfiguration$background$panel$fill <- "lemonchiffon"
+resHistoConfiguration$background$panel$color <- "goldenrod3"
+resHistoConfiguration$background$xGrid$color <- "goldenrod3"
+resHistoConfiguration$background$yGrid$color <- "goldenrod3"
 
 # Define plotConfigurations list
 plotConfigurations <- list(resHisto = resHistoConfiguration,
@@ -231,7 +223,7 @@ plotConfigurations <- list(resHisto = resHistoConfiguration,
 
 # Define list to update task settings with plotConfigurations field and and bins field  
 mySettings <- list(plotConfigurations = plotConfigurations, 
-                     bins = 3)
+                   bins = 3)
 ```
 
 Then, the __`settings`__ field of the __"plotTimeProfilesAndResiduals"__ task can be updated as shown below:
@@ -243,7 +235,7 @@ workflowA$plotTimeProfilesAndResiduals$settings <- mySettings
 
 __Note__: currently the settings can be updated directly allocating the list.
 However, this method may lead to errors if the settings are not correctly defined.
-Relevant method will replace this process which may become deprecated in later versions.
+Relevant methods and `TaskSettings` class will replace this process which may become deprecated in later versions.
 
 The run of the workflow with updated settings and get the resulting report as shown below.
 

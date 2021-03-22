@@ -57,7 +57,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
 
   timeProfileData <- rbind.data.frame(observedData, lloqData, simulatedData)
   timeProfileMapping <- tlf::XYGDataMapping$new(x = "Time", y = "Concentration", color = "Legend")
-
+  
   # metaDataFrame summarizes paths, dimensions and units
   metaDataFrame <- getMetaDataFrame(outputSimulatedMetaData)
 
@@ -436,19 +436,24 @@ plotMeanObsVsPred <- function(data,
   )
   identityLine <- data.frame(
     "Observed" = identityMinMax,
-    "Simulated" = identityMinMax
+    "Simulated" = identityMinMax,
+    "Legend" = "Line of identity"
+  )
+  obsVsPredDataMapping <- tlf::XYGDataMapping$new(
+    x = "Observed",
+    y = "Simulated",
+    color = "Legend"
   )
 
-  meanObsVsPredPlot <- tlf::addLine(data = identityLine, metaData = metaData, caption = "Line of identity", plotConfiguration = plotConfiguration)
+  meanObsVsPredPlot <- tlf::addLine(data = identityLine, 
+                                    metaData = metaData, 
+                                    dataMapping = obsVsPredDataMapping,
+                                    plotConfiguration = plotConfiguration)
 
   meanObsVsPredPlot <- tlf::addScatter(
     data = data,
     metaData = metaData,
-    dataMapping = tlf::XYGDataMapping$new(
-      x = "Observed",
-      y = "Simulated",
-      color = "Legend"
-    ),
+    dataMapping = obsVsPredDataMapping,
     plotObject = meanObsVsPredPlot
   )
   meanObsVsPredPlot <- tlf::setLegendPosition(plotObject = meanObsVsPredPlot, position = reDefaultLegendPosition)
@@ -479,20 +484,23 @@ plotMeanResVsTime <- function(data,
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
     metaData = metaData,
-    dataMapping = resVsTimeDataMapping,
-    yLimits = c(-maxRes, maxRes)
+    dataMapping = resVsTimeDataMapping
   )
-
-  meanResVsTimePlot <- tlf::addLine(y = 0, caption = "Line of residuals = 0", plotConfiguration = plotConfiguration)
-
+  meanResVsTimePlot <- tlf::initializePlot(plotConfiguration)
+  
   meanResVsTimePlot <- tlf::addScatter(
     data = data,
     metaData = metaData,
     dataMapping = resVsTimeDataMapping,
     plotObject = meanResVsTimePlot
   )
+  
+  meanResVsTimePlot <- meanResVsTimePlot + ggplot2::geom_hline(yintercept = 0,
+                                                               size = 1)
 
   meanResVsTimePlot <- tlf::setLegendPosition(plotObject = meanResVsTimePlot, position = reDefaultLegendPosition)
+  meanResVsTimePlot <- tlf::setYAxis(plotObject = meanResVsTimePlot, 
+                                     limits = c(-maxRes, maxRes))
 
   return(meanResVsTimePlot)
 }
@@ -520,20 +528,23 @@ plotMeanResVsPred <- function(data,
   plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
     metaData = metaData,
-    dataMapping = resVsPredDataMapping,
-    yLimits = c(-maxRes, maxRes)
+    dataMapping = resVsPredDataMapping
   )
-
-  meanResVsPredPlot <- tlf::addLine(y = 0, caption = "Line of residuals = 0", plotConfiguration = plotConfiguration)
-
+  meanResVsPredPlot <- tlf::initializePlot(plotConfiguration)
+  
   meanResVsPredPlot <- tlf::addScatter(
     data = data,
     metaData = metaData,
     dataMapping = resVsPredDataMapping,
     plotObject = meanResVsPredPlot
   )
+  
+  meanResVsPredPlot <- meanResVsPredPlot + ggplot2::geom_hline(yintercept = 0,
+                                                               size = 1)
 
   meanResVsPredPlot <- tlf::setLegendPosition(plotObject = meanResVsPredPlot, position = reDefaultLegendPosition)
+  meanResVsTimePlot <- tlf::setYAxis(plotObject = meanResVsPredPlot, 
+                                     limits = c(-maxRes, maxRes))
 
   return(meanResVsPredPlot)
 }
@@ -651,7 +662,7 @@ plotResidualsHistogram <- function(data,
       data = data,
       mapping = ggplot2::aes_string(
         x = dataMapping$x,
-        fill = dataMapping$groupMapping$fill$label
+        fill = "Legend"
       ),
       position = ggplot2::position_stack(),
       bins = bins,
@@ -716,7 +727,7 @@ plotResidualsQQPlot <- function(data,
       data = data,
       mapping = ggplot2::aes_string(
         sample = dataMapping$x,
-        color = dataMapping$groupMapping$fill$label
+        color = "Legend"
       )
     )
 
@@ -858,7 +869,7 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
       )
     }
 
-    timeProfilePlotLog <- tlf::setYAxis(plotObject = timeProfilePlot, scale = tlf::Scaling$log10)
+    timeProfilePlotLog <- tlf::setYAxis(plotObject = timeProfilePlot, scale = tlf::Scaling$log)
 
     goodnessOfFitPlots[[paste0("timeProfile-", selectedDimension)]] <- timeProfilePlot
     goodnessOfFitPlots[[paste0("timeProfileLog-", selectedDimension)]] <- timeProfilePlotLog
@@ -922,8 +933,8 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
       metaData = residualsMetaData,
       plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
     )
-    obsVsPredPlotLog <- tlf::setYAxis(plotObject = obsVsPredPlot, scale = tlf::Scaling$log10)
-    obsVsPredPlotLog <- tlf::setXAxis(plotObject = obsVsPredPlotLog, scale = tlf::Scaling$log10)
+    obsVsPredPlotLog <- tlf::setYAxis(plotObject = obsVsPredPlot, scale = tlf::Scaling$log)
+    obsVsPredPlotLog <- tlf::setXAxis(plotObject = obsVsPredPlotLog, scale = tlf::Scaling$log)
 
     goodnessOfFitPlots[[paste0("obsVsPred-", selectedDimension)]] <- obsVsPredPlot
     goodnessOfFitPlots[[paste0("obsVsPredLog-", selectedDimension)]] <- obsVsPredPlotLog
