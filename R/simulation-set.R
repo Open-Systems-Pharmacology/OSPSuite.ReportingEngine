@@ -2,7 +2,6 @@
 #' @description R6 class representing Reporting Engine Mean Model Set
 #' @field simulationSetName display name of simulation set
 #' @field simulationFile names of pkml file to be used for the simulation
-#' @field simulationName display name of simulation
 #' @field outputs list of `Output` R6 class objects
 #' @field observedDataFile name of csv file to be used for observed data
 #' @field observedMetaDataFile name of csv file to be used as dictionary of the observed data
@@ -13,7 +12,6 @@ SimulationSet <- R6::R6Class(
   public = list(
     simulationSetName = NULL,
     simulationFile = NULL,
-    simulationName = NULL,
     outputs = NULL,
     observedDataFile = NULL,
     observedMetaDataFile = NULL,
@@ -23,7 +21,6 @@ SimulationSet <- R6::R6Class(
     #' Create a new `SimulationSet` object.
     #' @param simulationSetName display name of simulation set
     #' @param simulationFile names of pkml file to be used for the simulation
-    #' @param simulationName display name of simulation
     #' @param outputs list of `Output` R6 class objects
     #' @param observedDataFile name of csv file to be used for observed data
     #' @param observedMetaDataFile name of csv file to be used as dictionary of the observed data
@@ -31,7 +28,6 @@ SimulationSet <- R6::R6Class(
     #' @return A new `SimulationSet` object
     initialize = function(simulationSetName,
                               simulationFile,
-                              simulationName = NULL,
                               outputs = NULL,
                               observedDataFile = NULL,
                               observedMetaDataFile = NULL,
@@ -53,7 +49,6 @@ SimulationSet <- R6::R6Class(
 
       self$simulationSetName <- simulationSetName
       self$simulationFile <- simulationFile
-      self$simulationName <- simulationName %||% trimFileName(simulationFile, extension = "pkml")
 
       self$outputs <- c(outputs)
 

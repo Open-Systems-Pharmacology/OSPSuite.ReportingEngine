@@ -127,7 +127,7 @@ GofPlotTask <- R6::R6Class(
 
       for (set in structureSets) {
         logWorkflow(
-          message = paste0(self$message, " for ", set$simulationSet$simulationName),
+          message = paste0(self$message, " for ", set$simulationSet$simulationSetName),
           pathFolder = self$workflowFolder
         )
         if (self$validateStructureSetInput(set)) {
@@ -228,10 +228,10 @@ GofPlotTask <- R6::R6Class(
           logFolder = self$workflowFolder
         )
 
-        simulationNames <- paste0(as.character(sapply(structureSets, function(set) {
+        simulationSetNames <- paste0(as.character(sapply(structureSets, function(set) {
           set$simulationSet$simulationSetName
         })), collapse = ", ")
-        addTextChunk(self$fileName, paste0("Figure: Distribution of residuals for ", simulationNames), logFolder = self$workflowFolder)
+        addTextChunk(self$fileName, paste0("Figure: Distribution of residuals for ", simulationSetNames), logFolder = self$workflowFolder)
 
         addFigureChunk(
           fileName = self$fileName,
@@ -240,7 +240,7 @@ GofPlotTask <- R6::R6Class(
           logFolder = self$workflowFolder
         )
 
-        addTextChunk(self$fileName, paste0("Figure: Residuals for ", simulationNames, " as quantile-quantile plot."), logFolder = self$workflowFolder)
+        addTextChunk(self$fileName, paste0("Figure: Residuals for ", simulationSetNames, " as quantile-quantile plot."), logFolder = self$workflowFolder)
 
         addFigureChunk(
           fileName = self$fileName,

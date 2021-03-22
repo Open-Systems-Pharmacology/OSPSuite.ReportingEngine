@@ -51,11 +51,11 @@ PopulationSimulationSet <- R6::R6Class(
     },
 
     #' @description
-    #' Copy input files into a simulation set specific filder
+    #' Copy input files into a simulation set specific folder
     #' @param inputFilesFolder where input are located
     copyInputFiles = function(inputFilesFolder) {
       if (!is.null(self$simulationFile)) {
-        file.copy(self$simulationFile, file.path(inputFilesFolder, paste0(self$simulationName, ".pkml")))
+        file.copy(self$simulationFile, file.path(inputFilesFolder, paste0(self$simulationSetName, ".pkml")))
       }
 
       if (!is.null(self$populationFile)) {

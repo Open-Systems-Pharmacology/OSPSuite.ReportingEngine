@@ -132,7 +132,7 @@ PlotTask <- R6::R6Class(
 
       for (set in structureSets) {
         logWorkflow(
-          message = paste0(self$message, " for ", set$simulationSet$simulationName),
+          message = paste0(self$message, " for ", set$simulationSet$simulationSetName),
           pathFolder = self$workflowFolder
         )
         if (self$validateStructureSetInput(set)) {

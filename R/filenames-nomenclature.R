@@ -6,17 +6,14 @@ startDate <- function() {
 }
 
 defaultFileNames <- list(
-  simulationResultsFile = function(simulationName) {
-    getDefaultFileName(simulationName, suffix = "SimulationResults")
+  simulationResultsFile = function(simulationSetName) {
+    getDefaultFileName(simulationSetName, suffix = "SimulationResults")
   },
-  popSimulationResultsFile = function(populationName, simulationName) {
-    getDefaultFileName(populationName, simulationName, suffix = "SimulationResults")
+  pkAnalysisResultsFile = function(simulationSetName) {
+    getDefaultFileName(simulationSetName, suffix = "PKAnalysisResults")
   },
-  pkAnalysisResultsFile = function(simulationName) {
-    getDefaultFileName(simulationName, suffix = "PKAnalysisResults")
-  },
-  sensitivityAnalysisResultsFile = function(simulationName) {
-    getDefaultFileName(simulationName, suffix = "SensitivityAnalysisResults")
+  sensitivityAnalysisResultsFile = function(simulationSetName) {
+    getDefaultFileName(simulationSetName, suffix = "SensitivityAnalysisResults")
   },
   workflowFolderPath = function(name = "Workflow", folder = getwd()) {
     file.path(folder, getDefaultFolderName(name, suffix = paste0("_", startDate(), "_", startTime()), sep = ""))
@@ -150,39 +147,33 @@ getGoodnessOfFitCaptions <- function(structureSet, plotType, plotScale = "linear
 
   if (plotType %in% "timeProfile") {
     return(paste0(
-      "Time profiles of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
-      dataSourceText, ". Time profiles are plotted in a ", plotScale, " scale."
+      "Time profiles for ", structureSet$simulationSet$simulationSetName, dataSourceText, ". Time profiles are plotted in a ", plotScale, " scale."
     ))
   }
   if (plotType %in% "obsVsPred") {
     return(paste0(
-      "Predicted vs observed of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
-      dataSourceText, ". Predictions and observations are plotted in a ", plotScale, " scale."
+      "Predicted vs observed of ", structureSet$simulationSet$simulationSetName, dataSourceText, ". Predictions and observations are plotted in a ", plotScale, " scale."
     ))
   }
 
   if (plotType %in% "resVsPred") {
     return(paste0(
-      "Logarithmic residuals vs predicted values of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
-      dataSourceText, "."
+      "Logarithmic residuals vs predicted values for ", structureSet$simulationSet$simulationSetName, dataSourceText, "."
     ))
   }
   if (plotType %in% "resVsTime") {
     return(paste0(
-      "Logarithmic residuals vs time of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
-      dataSourceText, "."
+      "Logarithmic residuals vs time for ", structureSet$simulationSet$simulationSetName, dataSourceText, "."
     ))
   }
   if (plotType %in% "resHisto") {
     return(paste0(
-      "Logarithmic residuals distribution of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
-      dataSourceText, "."
+      "Logarithmic residuals distribution for ", structureSet$simulationSet$simulationSetName, dataSourceText, "."
     ))
   }
   if (plotType %in% "resQQPlot") {
     return(paste0(
-      "Logarithmic residuals of ", structureSet$simulationSet$simulationSetName, " for ", structureSet$simulationSet$simulationName,
-      " as quantile-quantile plot", dataSourceText, "."
+      "Logarithmic residuals for ", structureSet$simulationSet$simulationSetName, " as quantile-quantile plot", dataSourceText, "."
     ))
   }
 }
