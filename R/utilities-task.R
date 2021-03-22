@@ -513,3 +513,20 @@ addUserDefinedTask <- function(workflow,
   )
   return(invisible())
 }
+
+#' @title setApplicationRangeInclusion
+#' @description
+#' For multiple applications only, 
+#' set whether range (as defined in enum `ApplicationRanges`) is kept in the report
+#' @param workflow `Workflow` object
+#' @param applicationRange name of range (as defined in enum `ApplicationRanges`)
+#' @param keep logical defining if the application is kept in the report
+#' @export
+setApplicationRangeInclusion <- function(workflow, applicationRange, keep) {
+  validateIsOfType(workflow, "Workflow")
+  validateIsIncluded(applicationRange, ApplicationRanges)
+  validateIsLogical(keep)
+  
+  workflow$plotTimeProfilesAndResiduals$settings$applicationRanges[[applicationRange]] <- keep
+  return(invisible())
+}
