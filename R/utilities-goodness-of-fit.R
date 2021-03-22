@@ -651,7 +651,7 @@ plotResidualsHistogram <- function(data,
       data = data,
       mapping = ggplot2::aes_string(
         x = dataMapping$x,
-        fill = dataMapping$groupMapping$fill$label
+        fill = "Legend"
       ),
       position = ggplot2::position_stack(),
       bins = bins,
@@ -716,7 +716,7 @@ plotResidualsQQPlot <- function(data,
       data = data,
       mapping = ggplot2::aes_string(
         sample = dataMapping$x,
-        color = dataMapping$groupMapping$fill$label
+        color = "Legend"
       )
     )
 
