@@ -11,6 +11,7 @@ An object of class \code{list} of length 4.
 AggregationConfiguration
 }
 \description{
+To be deprecated:
 Aggregation default properties  (which functions and their captions).
 }
 \section{Fields}{

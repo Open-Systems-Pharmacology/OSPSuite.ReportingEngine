@@ -32,7 +32,8 @@ setPlotFormat <- function(format, width = NULL, height = NULL, units = NULL) {
 }
 
 #' @title AggregationConfiguration
-#' @description Aggregation default properties  (which functions and their captions).
+#' @description To be deprecated:
+#' Aggregation default properties  (which functions and their captions).
 #' @field functions list of `middle`, `ymin` and `ymax` functions for aggregation
 #' @field names list of legend captions for `middle` and `range` from aggregation
 #' @field bins default number of bins in plots

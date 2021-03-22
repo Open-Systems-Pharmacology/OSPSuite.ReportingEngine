@@ -10,6 +10,13 @@ reEnv$formatNumericsDigits <- 5
 reEnv$formatNumericsSmall <- 2
 reEnv$formatNumericsScientific <- NA
 
+# Default binning properties
+reEnv$defaultBins <- 11
+reEnv$binUsingQuantiles <- TRUE
+reEnv$defaultStairstep <- TRUE
+
+reEnv$defaultWatermarkMessage <- "preliminary analysis"
+
 
 #' @title setDefaultNumericFormat
 #' @description Set default format for numeric values output in reports
@@ -51,4 +58,20 @@ setDefaultThemeFromJson <- function(jsonFile){
   validateIsFileExtension(jsonFile, "json")
   newTheme <- tlf::loadThemeFromJson(jsonFile)
   setDefaultTheme(newTheme)
+}
+
+#' @title setDefaultBins
+#' @param bins number or edges of bins
+#' @export
+setDefaultBins <- function(bins){
+  validateIsNumeric(bins)
+  reEnv$defaultBins <- bins
+}
+
+#' @title setDefaultStairstep
+#' @param stairstep logical defining if stairstep should be plotted by default when aggregation is performed
+#' @export
+setDefaultStairstep <- function(stairstep){
+  validateIsLogical(stairstep)
+  reEnv$defaultStairstep <- stairstep
 }
