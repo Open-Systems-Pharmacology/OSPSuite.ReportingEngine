@@ -57,7 +57,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
 
   timeProfileData <- rbind.data.frame(observedData, lloqData, simulatedData)
   timeProfileMapping <- tlf::XYGDataMapping$new(x = "Time", y = "Concentration", color = "Legend")
-
+  
   # metaDataFrame summarizes paths, dimensions and units
   metaDataFrame <- getMetaDataFrame(outputSimulatedMetaData)
 
@@ -858,7 +858,7 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
       )
     }
 
-    timeProfilePlotLog <- tlf::setYAxis(plotObject = timeProfilePlot, scale = tlf::Scaling$log10)
+    timeProfilePlotLog <- tlf::setYAxis(plotObject = timeProfilePlot, scale = tlf::Scaling$log)
 
     goodnessOfFitPlots[[paste0("timeProfile-", selectedDimension)]] <- timeProfilePlot
     goodnessOfFitPlots[[paste0("timeProfileLog-", selectedDimension)]] <- timeProfilePlotLog
@@ -922,8 +922,8 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
       metaData = residualsMetaData,
       plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
     )
-    obsVsPredPlotLog <- tlf::setYAxis(plotObject = obsVsPredPlot, scale = tlf::Scaling$log10)
-    obsVsPredPlotLog <- tlf::setXAxis(plotObject = obsVsPredPlotLog, scale = tlf::Scaling$log10)
+    obsVsPredPlotLog <- tlf::setYAxis(plotObject = obsVsPredPlot, scale = tlf::Scaling$log)
+    obsVsPredPlotLog <- tlf::setXAxis(plotObject = obsVsPredPlotLog, scale = tlf::Scaling$log)
 
     goodnessOfFitPlots[[paste0("obsVsPred-", selectedDimension)]] <- obsVsPredPlot
     goodnessOfFitPlots[[paste0("obsVsPredLog-", selectedDimension)]] <- obsVsPredPlotLog

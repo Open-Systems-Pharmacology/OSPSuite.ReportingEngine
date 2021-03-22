@@ -234,7 +234,7 @@ plotPopulationPKParameters <- function(structureSets,
 
         pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- tlf::setYAxis(
           plotObject = boxplotPkParameter,
-          scale = tlf::Scaling$log10,
+          scale = tlf::Scaling$log,
           limits = boxRange,
           ticks = boxBreaks
         )
@@ -311,7 +311,7 @@ plotPopulationPKParameters <- function(structureSets,
             )
 
             pkParametersPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- comparisonVpcPlot
-            pkParametersPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- tlf::setYAxis(plotObject = comparisonVpcPlot, scale = tlf::Scaling$log10)
+            pkParametersPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- tlf::setYAxis(plotObject = comparisonVpcPlot, scale = tlf::Scaling$log)
 
             pkParametersCaptions[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- getPkParametersCaptions("rangePlot", populationName, vpcMetaData, referencePopulationName)
             pkParametersCaptions[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- getPkParametersCaptions("rangePlot", populationName, vpcMetaData, referencePopulationName, plotScale = "log")
@@ -336,7 +336,7 @@ plotPopulationPKParameters <- function(structureSets,
             plotConfiguration = settings$plotConfigurations[["vpcParameterPlot"]]
           )
           pkParametersPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- vpcPlot
-          pkParametersPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- tlf::setYAxis(plotObject = vpcPlot, scale = tlf::Scaling$log10)
+          pkParametersPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- tlf::setYAxis(plotObject = vpcPlot, scale = tlf::Scaling$log)
 
           pkParametersCaptions[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- getPkParametersCaptions("rangePlot", populationName, vpcMetaData)
           pkParametersCaptions[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- getPkParametersCaptions("rangePlot", populationName, vpcMetaData, plotScale = "log")
@@ -362,7 +362,7 @@ plotPopulationPKParameters <- function(structureSets,
         pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-ratio")]] <- boxplotPkRatios
         pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-ratio-log")]] <- tlf::setYAxis(
           plotObject = boxplotPkRatios,
-          scale = tlf::Scaling$log10,
+          scale = tlf::Scaling$log,
           limits = ratioRange,
           ticks = ratioBreaks
         )
