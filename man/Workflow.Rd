@@ -38,6 +38,8 @@ R6 class representing Reporting Engine generic Workflow
 \item \href{#method-setWatermark}{\code{Workflow$setWatermark()}}
 \item \href{#method-setParameterDisplayPaths}{\code{Workflow$setParameterDisplayPaths()}}
 \item \href{#method-getParameterDisplayPaths}{\code{Workflow$getParameterDisplayPaths()}}
+\item \href{#method-setSimulationDescriptor}{\code{Workflow$setSimulationDescriptor()}}
+\item \href{#method-getSimulationDescriptor}{\code{Workflow$getSimulationDescriptor()}}
 \item \href{#method-print}{\code{Workflow$print()}}
 \item \href{#method-clone}{\code{Workflow$clone()}}
 }
@@ -52,7 +54,8 @@ Create a new `Workflow` object.
   simulationSets,
   workflowFolder,
   createWordReport = TRUE,
-  watermark = NULL
+  watermark = NULL,
+  simulationSetDescriptor = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -66,6 +69,8 @@ Create a new `Workflow` object.
 \item{\code{createWordReport}}{logical of option for creating Markdwon-Report only but not a Word-Report.}
 
 \item{\code{watermark}}{displayed watermark in figures background}
+
+\item{\code{simulationSetDescriptor}}{character Descriptor of simulation sets indicated in reports}
 }
 \if{html}{\out{</div>}}
 }
@@ -243,6 +248,36 @@ to replace standard display of parameter paths.
 
 \subsection{Returns}{
 A data.frame with `parameter` and `displayPath` variables.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setSimulationDescriptor"></a>}}
+\if{latex}{\out{\hypertarget{method-setSimulationDescriptor}{}}}
+\subsection{Method \code{setSimulationDescriptor()}}{
+Set descriptor of simulation sets indicated in reports
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$setSimulationDescriptor(text)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{text}}{character describing what simulation sets refer to}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getSimulationDescriptor"></a>}}
+\if{latex}{\out{\hypertarget{method-getSimulationDescriptor}{}}}
+\subsection{Method \code{getSimulationDescriptor()}}{
+Get descriptor of simulation sets indicated in reports
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Workflow$getSimulationDescriptor()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+character Descriptor of simulation sets
 }
 }
 \if{html}{\out{<hr>}}

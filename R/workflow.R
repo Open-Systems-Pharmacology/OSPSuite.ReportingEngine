@@ -17,26 +17,30 @@ Workflow <- R6::R6Class(
     reportFileName = NULL,
     createWordReport = NULL,
     userDefinedTasks = NULL,
-    
+
     #' @description
     #' Create a new `Workflow` object.
     #' @param simulationSets list of `SimulationSet` R6 class objects
     #' @param workflowFolder path of the output folder created or used by the Workflow.
     #' @param createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
     #' @param watermark displayed watermark in figures background
+    #' @param simulationSetDescriptor character Descriptor of simulation sets indicated in reports
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
                               workflowFolder,
                               createWordReport = TRUE,
-                              watermark = NULL) {
+                              watermark = NULL,
+                              simulationSetDescriptor = NULL) {
       private$.reportingEngineInfo <- ReportingEngineInfo$new()
       # Empty list on which users can load tasks
       self$userDefinedTasks <- list()
 
       validateIsString(workflowFolder)
       validateIsString(watermark, nullAllowed = TRUE)
+      validateIsString(simulationSetDescriptor, nullAllowed = TRUE)
       validateIsOfType(c(simulationSets), "SimulationSet")
       validateIsOfType(createWordReport, "logical")
+
       self$createWordReport <- createWordReport
       if (!isOfType(simulationSets, "list")) {
         simulationSets <- list(simulationSets)
@@ -75,6 +79,8 @@ Workflow <- R6::R6Class(
           workflowFolder = self$workflowFolder
         )
       }
+      self$setSimulationDescriptor(simulationSetDescriptor %||% reEnv$defaultDescriptor)
+
       # Define workflow theme and watermark
       tlf::useTheme(reEnv$theme)
       self$setWatermark(watermark)
@@ -208,6 +214,24 @@ Workflow <- R6::R6Class(
       return(private$.parameterDisplayPaths)
     },
 
+    #' @description Set descriptor of simulation sets indicated in reports
+    #' @param text character describing what simulation sets refer to
+    setSimulationDescriptor = function(text) {
+      validateIsString(text, nullAllowed = TRUE)
+
+      # simulationSetDescriptor needs to be send to the tasks using the field simulationStructures commmon among all tasks
+      private$.simulationSetDescriptor <- text %||% ""
+      for (structureSet in self$simulationStructures) {
+        structureSet$simulationSetDescriptor <- text %||% ""
+      }
+    },
+
+    #' @description Get descriptor of simulation sets indicated in reports
+    #' @return character Descriptor of simulation sets
+    getSimulationDescriptor = function() {
+      return(private$.simulationSetDescriptor)
+    },
+
     #' @description
     #' Print workflow list of tasks
     #' @return Task list information
@@ -226,6 +250,7 @@ Workflow <- R6::R6Class(
     .reportingEngineInfo = NULL,
     .watermark = NULL,
     .parameterDisplayPaths = NULL,
+    .simulationSetDescriptor = NULL,
 
     .getTasksWithStatus = function(status) {
       taskNames <- self$getAllTasks()

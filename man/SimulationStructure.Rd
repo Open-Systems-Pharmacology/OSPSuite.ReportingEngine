@@ -28,6 +28,8 @@ R6 class representing that stores file structure (file names and paths) relating
 \item{\code{popSensitivityAnalysisResultsIndexFile}}{path to file containing index of population sensitivity analysis results}
 
 \item{\code{parameterDisplayPaths}}{data.frame mapping parameters to user-defined display paths}
+
+\item{\code{simulationSetDescriptor}}{Descriptor of simulation sets indicated in reports}
 }
 \if{html}{\out{</div>}}
 }
