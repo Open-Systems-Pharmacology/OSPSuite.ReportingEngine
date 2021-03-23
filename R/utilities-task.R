@@ -154,6 +154,8 @@ loadCalculateSensitivityTask <- function(workflow, active = FALSE, settings = NU
 loadPlotTimeProfilesAndResidualsTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
+  validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
+  settings <- settings %||% TaskSettings$new(AllAvailableTasks$plotTimeProfilesAndResiduals)
 
   taskFunction <- plotMeanGoodnessOfFit
   nameFunction <- deparse(substitute(plotMeanGoodnessOfFit))
@@ -190,6 +192,8 @@ loadPlotTimeProfilesAndResidualsTask <- function(workflow, active = FALSE, setti
 loadPlotPKParametersTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
+  validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
+  settings <- settings %||% TaskSettings$new(AllAvailableTasks$plotPKParameters)
 
   if (isOfType(workflow, "PopulationWorkflow")) {
     return(PopulationPlotTask$new(
@@ -236,6 +240,8 @@ loadPlotPKParametersTask <- function(workflow, active = FALSE, settings = NULL) 
 loadPlotSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
+  validateIsOfType(settings, "SensitivityPlotSettings", nullAllowed = TRUE)
+  settings <- settings %||% SensitivityPlotSettings$new()
 
   if (isOfType(workflow, "PopulationWorkflow")) {
     return(PopulationPlotTask$new(
@@ -252,7 +258,7 @@ loadPlotSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
       workflowFolder = workflow$workflowFolder,
       active = active,
       message = defaultWorkflowMessages$plotSensitivity,
-      settings = settings %||% SensitivityPlotSettings$new()
+      settings = settings
     ))
   }
   return(PlotTask$new(
@@ -266,7 +272,7 @@ loadPlotSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotSensitivity,
-    settings = settings %||% SensitivityPlotSettings$new()
+    settings = settings
   ))
 }
 
@@ -282,7 +288,8 @@ loadPlotSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
 loadPlotMassBalanceTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "MeanModelWorkflow")
   validateIsLogical(active)
-
+  validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
+  
   return(PlotTask$new(
     reportTitle = defaultWorkflowTitles$plotMassBalance,
     fileName = defaultWorkflowAppendices$plotMassBalance,
@@ -292,7 +299,7 @@ loadPlotMassBalanceTask <- function(workflow, active = FALSE, settings = NULL) {
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotMassBalance,
-    settings = settings
+    settings = settings %||% TaskSettings$new(AllAvailableTasks$plotMassBalance)
   ))
 }
 
@@ -307,7 +314,8 @@ loadPlotMassBalanceTask <- function(workflow, active = FALSE, settings = NULL) {
 loadPlotAbsorptionTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "MeanModelWorkflow")
   validateIsLogical(active)
-
+  validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
+  
   return(PlotTask$new(
     reportTitle = defaultWorkflowTitles$plotAbsorption,
     fileName = defaultWorkflowAppendices$plotAbsorption,
@@ -317,7 +325,7 @@ loadPlotAbsorptionTask <- function(workflow, active = FALSE, settings = NULL) {
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotAbsorption,
-    settings = settings
+    settings = settings %||% TaskSettings$new(AllAvailableTasks$plotAbsorption)
   ))
 }
 
@@ -332,7 +340,8 @@ loadPlotAbsorptionTask <- function(workflow, active = FALSE, settings = NULL) {
 loadPlotDemographyTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "PopulationWorkflow")
   validateIsLogical(active)
-
+  validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
+  
   return(PopulationPlotTask$new(
     workflowType = workflow$workflowType,
     xParameters = getDefaultDemographyXParameters(workflow$workflowType),
@@ -345,7 +354,7 @@ loadPlotDemographyTask <- function(workflow, active = FALSE, settings = NULL) {
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotDemography,
-    settings = settings
+    settings = settings %||% TaskSettings$new(AllAvailableTasks$plotDemography)
   ))
 }
 
@@ -502,5 +511,22 @@ addUserDefinedTask <- function(workflow,
     message = paste0("User defined task '", taskName, "' successfully loaded on workflow"),
     pathFolder = workflow$workflowFolder
   )
+  return(invisible())
+}
+
+#' @title setApplicationRangeInclusion
+#' @description
+#' For multiple applications only, 
+#' set whether range (as defined in enum `ApplicationRanges`) is kept in the report
+#' @param workflow `Workflow` object
+#' @param applicationRange name of range (as defined in enum `ApplicationRanges`)
+#' @param keep logical defining if the application is kept in the report
+#' @export
+setApplicationRangeInclusion <- function(workflow, applicationRange, keep) {
+  validateIsOfType(workflow, "Workflow")
+  validateIsIncluded(applicationRange, ApplicationRanges)
+  validateIsLogical(keep)
+  
+  workflow$plotTimeProfilesAndResiduals$settings$applicationRanges[[applicationRange]] <- keep
   return(invisible())
 }

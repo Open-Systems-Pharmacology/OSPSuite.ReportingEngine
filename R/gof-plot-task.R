@@ -20,50 +20,51 @@ GofPlotTask <- R6::R6Class(
         logFolder = self$workflowFolder
       )
 
-      for (timeRange in c("totalRange", "firstApplicationRange", "lastApplicationRange")) {
-        # Captions only for multi admin
-        if (length(taskResults$plots) > 1) {
-          addTextChunk(
-            self$fileName,
-            getTimeRangeCaption(timeRange),
-            logFolder = self$workflowFolder
-          )
-        }
+      # For mutliple applications, taskResults$plots has 3 fields named as ApplicationRanges
+      # Sub sections are created if more than one field are kept
+      hasMultipleApplications <- (length(taskResults$plots) > 1)
+
+      for (timeRange in ApplicationRanges) {
         listOfPlots <- taskResults$plots[[timeRange]]
         listOfPlotCaptions <- taskResults$captions[[timeRange]]
+        
+        if (isOfLength(listOfPlots, 0)) {
+          next
+        }
+        if (hasMultipleApplications) {
+          addTextChunk(self$fileName, getTimeRangeCaption(timeRange), logFolder = self$workflowFolder)
+        }
+        # Save and include plot paths to report
+        for (plotName in names(listOfPlots)) {
+          plotFileName <- getDefaultFileName(set$simulationSet$simulationSetName,
+            suffix = paste0(plotName, "-", timeRange),
+            extension = ExportPlotConfiguration$format
+          )
 
-        if (!isOfLength(listOfPlots, 0)) {
-          for (plotName in names(listOfPlots)) {
-            plotFileName <- getDefaultFileName(set$simulationSet$simulationSetName,
-              suffix = paste0(plotName, "-", timeRange),
-              extension = ExportPlotConfiguration$format
-            )
+          ggplot2::ggsave(
+            filename = self$getAbsolutePath(plotFileName),
+            plot = listOfPlots[[plotName]],
+            width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
+          )
 
-            ggplot2::ggsave(
-              filename = self$getAbsolutePath(plotFileName),
-              plot = listOfPlots[[plotName]],
-              width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
-            )
+          re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(plotFileName))
 
-            re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(plotFileName))
+          logWorkflow(
+            message = paste0("Plot '", self$getRelativePath(plotFileName), "' was successfully saved."),
+            pathFolder = self$workflowFolder,
+            logTypes = LogTypes$Debug
+          )
 
-            logWorkflow(
-              message = paste0("Plot '", self$getRelativePath(plotFileName), "' was successfully saved."),
-              pathFolder = self$workflowFolder,
-              logTypes = LogTypes$Debug
-            )
-
-            if (!isOfLength(listOfPlotCaptions[[plotName]], 0)) {
-              addTextChunk(self$fileName, paste0("Figure: ", listOfPlotCaptions[[plotName]]), logFolder = self$workflowFolder)
-            }
-
-            addFigureChunk(
-              fileName = self$fileName,
-              figureFileRelativePath = self$getRelativePath(plotFileName),
-              figureFileRootDirectory = self$workflowFolder,
-              logFolder = self$workflowFolder
-            )
+          if (!isOfLength(listOfPlotCaptions[[plotName]], 0)) {
+            addTextChunk(self$fileName, paste0("Figure: ", listOfPlotCaptions[[plotName]]), logFolder = self$workflowFolder)
           }
+
+          addFigureChunk(
+            fileName = self$fileName,
+            figureFileRelativePath = self$getRelativePath(plotFileName),
+            figureFileRootDirectory = self$workflowFolder,
+            logFolder = self$workflowFolder
+          )
         }
       }
 

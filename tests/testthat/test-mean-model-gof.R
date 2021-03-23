@@ -17,18 +17,18 @@ refWorkflowStructure <- sort(c(
   "SimulationResults", "TimeProfiles"
 ))
 timeProfileStructureNoObs <- sort(c(
-  "A-timeProfile-Concentration-totalRange.png",
+  "A-timeProfile-Concentration-total.png",
   "A-timeProfileData.csv",
-  "A-timeProfileLog-Concentration-totalRange.png"
+  "A-timeProfileLog-Concentration-total.png"
 ))
 timeProfileStructureObs <- sort(c(
   timeProfileStructureNoObs,
-  "A-obsVsPred-Concentration-totalRange.png",
-  "A-obsVsPredLog-Concentration-totalRange.png",
-  "A-resHisto-totalRange.png",
-  "A-resQQPlot-totalRange.png",
-  "A-resVsPred-Concentration-totalRange.png",
-  "A-resVsTime-totalRange.png",
+  "A-obsVsPred-Concentration-total.png",
+  "A-obsVsPredLog-Concentration-total.png",
+  "A-resHisto-total.png",
+  "A-resQQPlot-total.png",
+  "A-resVsPred-Concentration-total.png",
+  "A-resVsTime-total.png",
   "residuals-histogram.png",
   "residuals-qqplot.png",
   "residuals.csv"
