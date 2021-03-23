@@ -62,7 +62,7 @@ SimulationTask <- R6::R6Class(
 
       for (set in structureSets) {
         logWorkflow(
-          message = paste0("Run simulation: ", set$simulationSet$simulationName),
+          message = paste0("Run simulation in simulation set: ", set$simulationSet$simulationSetName),
           pathFolder = self$workflowFolder
         )
         if (self$validateStructureSetInput(set)) {

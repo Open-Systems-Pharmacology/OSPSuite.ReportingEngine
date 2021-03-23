@@ -423,7 +423,6 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
     simulationSetName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationSetName), ",
         ", referencePopulationContent, populationFileContent, populationNameContent, studyDesignFileContent,
         "simulationFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationFile), ",
-    simulationName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationName), ",
     outputs = c(", outputNames, "),
     observedDataFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$observedDataFile), ",
     observedMetaDataFile = ", dictionaryLocation, ",
@@ -610,7 +609,6 @@ WorkflowCodeIdentifiers <- enum(c(
 SimulationCodeIdentifiers <- enum(c(
   "simulationSetName",
   "simulationFile",
-  "simulationName",
   "outputs",
   "observedDataFile",
   "DictionaryType",

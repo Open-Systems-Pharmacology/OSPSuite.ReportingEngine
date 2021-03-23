@@ -80,7 +80,7 @@ A new `PopulationSimulationSet` object
 \if{html}{\out{<a id="method-copyInputFiles"></a>}}
 \if{latex}{\out{\hypertarget{method-copyInputFiles}{}}}
 \subsection{Method \code{copyInputFiles()}}{
-Copy input files into a simulation set specific filder
+Copy input files into a simulation set specific folder
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationSimulationSet$copyInputFiles(inputFilesFolder)}\if{html}{\out{</div>}}
 }

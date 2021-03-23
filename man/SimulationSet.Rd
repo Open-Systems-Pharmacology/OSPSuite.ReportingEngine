@@ -13,8 +13,6 @@ R6 class representing Reporting Engine Mean Model Set
 
 \item{\code{simulationFile}}{names of pkml file to be used for the simulation}
 
-\item{\code{simulationName}}{display name of simulation}
-
 \item{\code{outputs}}{list of `Output` R6 class objects}
 
 \item{\code{observedDataFile}}{name of csv file to be used for observed data}
@@ -41,7 +39,6 @@ Create a new `SimulationSet` object.
 \if{html}{\out{<div class="r">}}\preformatted{SimulationSet$new(
   simulationSetName,
   simulationFile,
-  simulationName = NULL,
   outputs = NULL,
   observedDataFile = NULL,
   observedMetaDataFile = NULL,
@@ -55,8 +52,6 @@ Create a new `SimulationSet` object.
 \item{\code{simulationSetName}}{display name of simulation set}
 
 \item{\code{simulationFile}}{names of pkml file to be used for the simulation}
-
-\item{\code{simulationName}}{display name of simulation}
 
 \item{\code{outputs}}{list of `Output` R6 class objects}
 
