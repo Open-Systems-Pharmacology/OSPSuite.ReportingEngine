@@ -16,7 +16,7 @@ reEnv$binUsingQuantiles <- TRUE
 reEnv$defaultStairstep <- TRUE
 
 reEnv$defaultWatermarkMessage <- "preliminary analysis"
-reEnv$defaultDescriptor <- ""
+reEnv$defaultSimulationSetDescriptor <- ""
 
 
 #' @title ApplicationRanges

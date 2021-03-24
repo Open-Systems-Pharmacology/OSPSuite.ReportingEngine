@@ -79,7 +79,7 @@ Workflow <- R6::R6Class(
           workflowFolder = self$workflowFolder
         )
       }
-      self$setSimulationDescriptor(simulationSetDescriptor %||% reEnv$defaultDescriptor)
+      self$setSimulationDescriptor(simulationSetDescriptor %||% reEnv$defaultSimulationSetDescriptor)
 
       # Define workflow theme and watermark
       tlf::useTheme(reEnv$theme)

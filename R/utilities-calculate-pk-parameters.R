@@ -159,7 +159,7 @@ plotPopulationPKParameters <- function(structureSets,
   yParameters <- yParameters %||% structureSets[[1]]$simulationSet$outputs
   # Get first simulation, in case mol weight is needed
   simulation <- loadSimulationWithUpdatedPaths(structureSets[[1]]$simulationSet)
-  setDescriptor <- structureSets[[1]]$simulationSetDescriptor
+  simulationSetDescriptor <- structureSets[[1]]$simulationSetDescriptor
 
   pkRatioTableAcrossPopulations <- NULL
   pkParametersPlots <- list()
@@ -228,7 +228,7 @@ plotPopulationPKParameters <- function(structureSets,
 
       pkParametersPlots[[plotID]] <- boxplotPkParameter
       parameterCaption <- pkParameterMetaData$Value$dimension
-      pkParametersCaptions[[plotID]] <- captions$plotPKParameters$boxplot(parameterCaption, output$displayName, simulationSetNames, setDescriptor)
+      pkParametersCaptions[[plotID]] <- captions$plotPKParameters$boxplot(parameterCaption, output$displayName, simulationSetNames, simulationSetDescriptor)
 
       if (!hasPositiveValues(pkParameterData$Value)) {
         logWorkflow(
@@ -252,7 +252,7 @@ plotPopulationPKParameters <- function(structureSets,
           parameterCaption,
           output$displayName,
           simulationSetNames,
-          setDescriptor,
+          simulationSetDescriptor,
           plotScale = "logarithmic"
         )
       }
@@ -281,13 +281,13 @@ plotPopulationPKParameters <- function(structureSets,
           formatNumerics(values, digits = settings$digits, nsmall = settings$nsmall, scientific = settings$scientific)
         }
       )
-      savedPKParameterTable <- addDescriptorToTable(savedPKParameterTable, setDescriptor)
+      savedPKParameterTable <- addDescriptorToTable(savedPKParameterTable, simulationSetDescriptor)
       pkParametersTables[[paste0(plotID)]] <- savedPKParameterTable
       pkParametersCaptionTables[[plotID]] <- captions$plotPKParameters$summaryTable(
         parameterCaption,
         output$displayName,
         simulationSetNames,
-        setDescriptor,
+        simulationSetDescriptor,
         pkParameterMetaData$Value$unit
         )
 
@@ -344,14 +344,14 @@ plotPopulationPKParameters <- function(structureSets,
               xParameterCaption,
               yParameterCaption,
               simulationSetName,
-              setDescriptor,
+              simulationSetDescriptor,
               referenceSetName = referenceSimulationSetName
             )
             pkParametersCaptions[[paste0(plotID, "-log")]] <- captions$plotPKParameters$rangePlot(
               xParameterCaption,
               yParameterCaption,
               simulationSetName,
-              setDescriptor,
+              simulationSetDescriptor,
               referenceSetName = referenceSimulationSetName,
               plotScale = "logarithmic"
             )
@@ -385,13 +385,13 @@ plotPopulationPKParameters <- function(structureSets,
             xParameterCaption,
             yParameterCaption,
             simulationSetName,
-            setDescriptor
+            simulationSetDescriptor
           )
           pkParametersCaptions[[paste0(plotID, "-log")]] <- captions$plotPKParameters$rangePlot(
             xParameterCaption,
             yParameterCaption,
             simulationSetName,
-            setDescriptor,
+            simulationSetDescriptor,
             plotScale = "logarithmic"
           )
         }
@@ -427,14 +427,14 @@ plotPopulationPKParameters <- function(structureSets,
           parameterCaption,
           output$displayName,
           setdiff(simulationSetNames, referenceSimulationSetName),
-          setDescriptor,
+          simulationSetDescriptor,
           referenceSetName = referenceSimulationSetName
         )
         pkParametersCaptions[[paste0(plotID, "-log")]] <- captions$plotPKParameters$ratioPlot(
           parameterCaption,
           output$displayName,
           setdiff(simulationSetNames, referenceSimulationSetName),
-          setDescriptor,
+          simulationSetDescriptor,
           referenceSetName = referenceSimulationSetName,
           plotScale = "logarithmic"
         )
@@ -445,13 +445,13 @@ plotPopulationPKParameters <- function(structureSets,
             formatNumerics(values, digits = settings$digits, nsmall = settings$nsmall, scientific = settings$scientific)
           }
         )
-        pkRatiosTable <- addDescriptorToTable(pkRatiosTable, setDescriptor)
+        pkRatiosTable <- addDescriptorToTable(pkRatiosTable, simulationSetDescriptor)
         pkParametersTables[[plotID]] <- pkRatiosTable
         pkParametersCaptionTables[[plotID]] <- captions$plotPKParameters$ratioTable(
           parameterCaption,
           output$displayName,
           setdiff(simulationSetNames, referenceSimulationSetName),
-          setDescriptor,
+          simulationSetDescriptor,
           referenceSetName = referenceSimulationSetName
         )
       }

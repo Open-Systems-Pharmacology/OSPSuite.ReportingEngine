@@ -612,7 +612,7 @@ plotPopulationSensitivity <- function(structureSets,
   allPopsDf <- NULL
   saResultIndexFiles <- list()
   simulationList <- list()
-  setDescriptor <- structureSets[[1]]$simulationSetDescriptor
+  simulationSetDescriptor <- structureSets[[1]]$simulationSetDescriptor
 
   for (structureSet in structureSets) {
     sensitivityResultsFolder <- file.path(structureSet$workflowFolder, structureSet$sensitivityAnalysisResultsFolder)
@@ -802,7 +802,7 @@ plotPopulationSensitivity <- function(structureSets,
       pathName = opDisplayName,
       quantiles = sort(unique(popDfPkOp$Quantile)),
       simulationSetName = unique(popDfPkOp$Population),
-      descriptor = setDescriptor
+      descriptor = simulationSetDescriptor
     )
   }
   return(plotList)

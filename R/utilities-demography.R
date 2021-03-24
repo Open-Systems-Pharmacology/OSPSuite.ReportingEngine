@@ -26,7 +26,7 @@ plotDemographyParameters <- function(structureSets,
 
   demographyPlots <- list()
   demographyCaptions <- list()
-  setDescriptor <- structureSets[[1]]$simulationSetDescriptor
+  simulationSetDescriptor <- structureSets[[1]]$simulationSetDescriptor
 
   yParameters <- yParameters %||% DemographyDefaultParameters
 
@@ -64,7 +64,7 @@ plotDemographyParameters <- function(structureSets,
         )
 
         demographyPlots[[parameterLabel]] <- demographyHistogram
-        demographyCaptions[[parameterLabel]] <- captions$demography$histogram(parameterCaption, simulationSetNames, setDescriptor)
+        demographyCaptions[[parameterLabel]] <- captions$demography$histogram(parameterCaption, simulationSetNames, simulationSetDescriptor)
       }
     }
     # Parallel and Ratio: histograms per population
@@ -90,7 +90,7 @@ plotDemographyParameters <- function(structureSets,
           )
 
           demographyPlots[[plotID]] <- demographyHistogram
-          demographyCaptions[[plotID]] <- captions$demography$histogram(parameterCaption, simulationSetName, setDescriptor)
+          demographyCaptions[[plotID]] <- captions$demography$histogram(parameterCaption, simulationSetName, simulationSetDescriptor)
         }
       }
     }
@@ -163,14 +163,14 @@ plotDemographyParameters <- function(structureSets,
           demographyCaptions[[plotID]] <- captions$demography$rangePlot(xParameterCaption,
             yParameterCaption,
             simulationSetName,
-            setDescriptor,
+            simulationSetDescriptor,
             referenceSetName = referenceSimulationSetName
           )
           demographyCaptions[[paste0(plotID, "-log")]] <- captions$demography$rangePlot(
             xParameterCaption,
             yParameterCaption,
             simulationSetName,
-            setDescriptor,
+            simulationSetDescriptor,
             referenceSetName = referenceSimulationSetName,
             plotScale = "logarithmic"
           )
@@ -201,12 +201,12 @@ plotDemographyParameters <- function(structureSets,
 
         xParameterCaption <- vpcMetaData$x$dimension
         yParameterCaption <- vpcMetaData$median$dimension
-        demographyCaptions[[plotID]] <- captions$demography$rangePlot(xParameterCaption, yParameterCaption, simulationSetName, setDescriptor)
+        demographyCaptions[[plotID]] <- captions$demography$rangePlot(xParameterCaption, yParameterCaption, simulationSetName, simulationSetDescriptor)
         demographyCaptions[[paste0(plotID, "-log")]] <- captions$demography$rangePlot(
           xParameterCaption,
           yParameterCaption,
           simulationSetName,
-          setDescriptor,
+          simulationSetDescriptor,
           plotScale = "logarithmic"
         )
       }

@@ -389,5 +389,5 @@ setSimulationDescriptor <- function(workflow, text){
 #' @return character describing simulation sets 
 getSimulationDescriptor <- function(workflow){
   validateIsOfType(workflow, "Workflow")
-  retrun(workflow$getSimulationDescriptor())
+  return(workflow$getSimulationDescriptor())
 }
