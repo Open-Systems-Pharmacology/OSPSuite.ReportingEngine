@@ -26,24 +26,22 @@ plotDemographyParameters <- function(structureSets,
 
   demographyPlots <- list()
   demographyCaptions <- list()
-  captionSimulationNames <- paste0(as.character(sapply(structureSets, function(set) {
-    set$simulationSet$simulationSetName
-  })), collapse = ", ")
+  setDescriptor <- structureSets[[1]]$simulationSetDescriptor
 
   yParameters <- yParameters %||% DemographyDefaultParameters
 
   demographyAcrossPopulations <- getDemographyAcrossPopulations(structureSets)
   demographyData <- demographyAcrossPopulations$data
   demographyMetaData <- demographyAcrossPopulations$metaData
-  populationNames <- unique(demographyData$simulationSetName)
+  simulationSetNames <- unique(as.character(demographyData$simulationSetName))
 
-  checkIsIncluded(xParameters, names(demographyData), nullAllowed = TRUE, groupName = "population variables", logFolder = logFolder)
-  checkIsIncluded(yParameters, names(demographyData), nullAllowed = TRUE, groupName = "population variables", logFolder = logFolder)
+  checkIsIncluded(xParameters, names(demographyData), nullAllowed = TRUE, groupName = "demography variable names across simulation sets", logFolder = logFolder)
+  checkIsIncluded(yParameters, names(demographyData), nullAllowed = TRUE, groupName = "demography variable names across simulation sets", logFolder = logFolder)
   xParameters <- intersect(xParameters, names(demographyData))
   yParameters <- intersect(yParameters, names(demographyData))
 
   if (workflowType %in% PopulationWorkflowTypes$pediatric) {
-    referencePopulationName <- getReferencePopulationName(structureSets)
+    referenceSimulationSetName <- getReferencePopulationName(structureSets)
   }
 
   if (isOfLength(xParameters, 0)) {
@@ -51,12 +49,12 @@ plotDemographyParameters <- function(structureSets,
     if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
       for (parameterName in yParameters) {
         parameterLabel <- lastPathElement(parameterName)
+        parameterCaption <- demographyMetaData[[parameterName]]$dimension
 
         histogramMapping <- tlf::HistogramDataMapping$new(
           x = parameterName,
           fill = "simulationSetName"
         )
-
         demographyHistogram <- plotDemographyHistogram(
           data = demographyData,
           metaData = demographyMetaData,
@@ -64,20 +62,24 @@ plotDemographyParameters <- function(structureSets,
           plotConfiguration = settings$plotConfigurations[["histogram"]],
           bins = settings$bins %||% AggregationConfiguration$bins
         )
+
         demographyPlots[[parameterLabel]] <- demographyHistogram
-        demographyCaptions[[parameterLabel]] <- getPkParametersCaptions("Histogram", captionSimulationNames, demographyMetaData[[parameterName]])
+        demographyCaptions[[parameterLabel]] <- captions$demography$histogram(parameterCaption, simulationSetNames, setDescriptor)
       }
     }
     # Parallel and Ratio: histograms per population
     if (workflowType %in% c(PopulationWorkflowTypes$parallelComparison, PopulationWorkflowTypes$ratioComparison)) {
       for (parameterName in yParameters) {
         parameterLabel <- lastPathElement(parameterName)
+        parameterCaption <- demographyMetaData[[parameterName]]$dimension
+
         histogramMapping <- tlf::HistogramDataMapping$new(
           x = parameterName,
           fill = "simulationSetName"
         )
-        for (populationName in populationNames) {
-          demographyDataByPopulation <- demographyData[demographyData$simulationSetName %in% populationName, ]
+        for (simulationSetName in simulationSetNames) {
+          plotID <- paste0(parameterLabel, "-", simulationSetName)
+          demographyDataByPopulation <- demographyData[demographyData$simulationSetName %in% simulationSetName, ]
 
           demographyHistogram <- plotDemographyHistogram(
             data = demographyDataByPopulation,
@@ -87,8 +89,8 @@ plotDemographyParameters <- function(structureSets,
             bins = settings$bins %||% AggregationConfiguration$bins
           )
 
-          demographyPlots[[paste0(parameterLabel, "-", populationName)]] <- demographyHistogram
-          demographyCaptions[[paste0(parameterLabel, "-", populationName)]] <- getPkParametersCaptions("Histogram", populationName, demographyMetaData[[parameterName]])
+          demographyPlots[[plotID]] <- demographyHistogram
+          demographyCaptions[[plotID]] <- captions$demography$histogram(parameterCaption, simulationSetName, setDescriptor)
         }
       }
     }
@@ -118,14 +120,14 @@ plotDemographyParameters <- function(structureSets,
 
       # For pediatric workflow, range plots compare reference population to the other populations
       if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
-        referenceData <- demographyData[demographyData$simulationSetName %in% referencePopulationName, ]
+        referenceData <- demographyData[demographyData$simulationSetName %in% referenceSimulationSetName, ]
 
         aggregatedReferenceData <- data.frame(
           x = c(-Inf, Inf),
           ymin = rep(AggregationConfiguration$functions$ymin(referenceData[, parameterName]), 2),
           median = rep(AggregationConfiguration$functions$middle(referenceData[, parameterName]), 2),
           ymax = rep(AggregationConfiguration$functions$ymax(referenceData[, parameterName]), 2),
-          "Population" = paste("Simulated", AggregationConfiguration$names$middle, "and", AggregationConfiguration$names$range, "of", referencePopulationName)
+          "Population" = paste("Simulated", AggregationConfiguration$names$middle, "and", AggregationConfiguration$names$range, "of", referenceSimulationSetName)
         )
 
         referenceVpcPlot <- vpcParameterPlot(
@@ -134,8 +136,10 @@ plotDemographyParameters <- function(structureSets,
           plotConfiguration = settings$plotConfigurations[["comparisonVpcPlot"]]
         )
 
-        for (populationName in populationNames[!populationNames %in% referencePopulationName]) {
-          comparisonData <- demographyData[demographyData$simulationSetName %in% populationName, ]
+        # Range plot comparisons with reference
+        for (simulationSetName in simulationSetNames[!simulationSetNames %in% referenceSimulationSetName]) {
+          plotID <- paste0(simulationSetName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)
+          comparisonData <- demographyData[demographyData$simulationSetName %in% simulationSetName, ]
           comparisonData <- getDemographyAggregatedData(
             data = comparisonData,
             xParameterName = demographyParameter,
@@ -151,16 +155,32 @@ plotDemographyParameters <- function(structureSets,
             plotObject = referenceVpcPlot
           )
 
-          demographyPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- comparisonVpcPlot
-          demographyPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- tlf::setYAxis(plotObject = comparisonVpcPlot, scale = tlf::Scaling$log)
+          demographyPlots[[plotID]] <- comparisonVpcPlot
+          demographyPlots[[paste0(plotID, "-log")]] <- tlf::setYAxis(plotObject = comparisonVpcPlot, scale = tlf::Scaling$log)
 
-          demographyCaptions[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- getPkParametersCaptions("rangePlot", populationName, vpcMetaData, referencePopulationName)
-          demographyCaptions[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- getPkParametersCaptions("rangePlot", populationName, vpcMetaData, referencePopulationName, plotScale = "log")
+          xParameterCaption <- vpcMetaData$x$dimension
+          yParameterCaption <- vpcMetaData$median$dimension
+          demographyCaptions[[plotID]] <- captions$demography$rangePlot(xParameterCaption,
+            yParameterCaption,
+            simulationSetName,
+            setDescriptor,
+            referenceSetName = referenceSimulationSetName
+          )
+          demographyCaptions[[paste0(plotID, "-log")]] <- captions$demography$rangePlot(
+            xParameterCaption,
+            yParameterCaption,
+            simulationSetName,
+            setDescriptor,
+            referenceSetName = referenceSimulationSetName,
+            plotScale = "logarithmic"
+          )
         }
       }
 
-      for (populationName in populationNames) {
-        vpcData <- demographyData[demographyData$simulationSetName %in% populationName, ]
+      # Simple range plots
+      for (simulationSetName in simulationSetNames) {
+        plotID <- paste0(simulationSetName, "-", yParameterLabel, "-vs-", xParameterLabel)
+        vpcData <- demographyData[demographyData$simulationSetName %in% simulationSetName, ]
         vpcData <- getDemographyAggregatedData(
           data = vpcData,
           xParameterName = demographyParameter,
@@ -176,11 +196,19 @@ plotDemographyParameters <- function(structureSets,
           plotConfiguration = settings$plotConfigurations[["vpcParameterPlot"]]
         )
 
-        demographyPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- vpcPlot
-        demographyPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- tlf::setYAxis(plotObject = vpcPlot, scale = tlf::Scaling$log)
+        demographyPlots[[plotID]] <- vpcPlot
+        demographyPlots[[paste0(plotID, "-log")]] <- tlf::setYAxis(plotObject = vpcPlot, scale = tlf::Scaling$log)
 
-        demographyCaptions[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- getPkParametersCaptions("rangePlot", populationName, vpcMetaData)
-        demographyCaptions[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- getPkParametersCaptions("rangePlot", populationName, vpcMetaData, plotScale = "log")
+        xParameterCaption <- vpcMetaData$x$dimension
+        yParameterCaption <- vpcMetaData$median$dimension
+        demographyCaptions[[plotID]] <- captions$demography$rangePlot(xParameterCaption, yParameterCaption, simulationSetName, setDescriptor)
+        demographyCaptions[[paste0(plotID, "-log")]] <- captions$demography$rangePlot(
+          xParameterCaption,
+          yParameterCaption,
+          simulationSetName,
+          setDescriptor,
+          plotScale = "logarithmic"
+        )
       }
     }
   }

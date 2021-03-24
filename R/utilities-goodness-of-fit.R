@@ -898,8 +898,8 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
     goodnessOfFitPlots[[paste0("timeProfile-", selectedDimension)]] <- timeProfilePlot
     goodnessOfFitPlots[[paste0("timeProfileLog-", selectedDimension)]] <- timeProfilePlotLog
 
-    goodnessOfFitCaptions[[paste0("timeProfile-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "timeProfile")
-    goodnessOfFitCaptions[[paste0("timeProfileLog-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "timeProfile", "log")
+    goodnessOfFitCaptions[[paste0("timeProfile-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "timeProfile", "linear")
+    goodnessOfFitCaptions[[paste0("timeProfileLog-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "timeProfile", "logarithmic")
   }
   return(list(
     plots = goodnessOfFitPlots,
@@ -936,6 +936,20 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
       metaData = list()
     ))
   }
+  
+  # Get residual scale for legends and captions
+  residualsLegend <- "Residuals"
+  residualScale  <- ""
+  residualScales <- sapply(structureSet$simulationSet$outputs, function(output){output$residualScale})
+  if(all(residualScales %in% ResidualScales$Logarithmic)){
+    residualsLegend <- "Residuals\nlog(Observed)-log(Simulated)"
+    residualScale <- ResidualScales$Logarithmic
+  }
+  if(all(residualScales %in% ResidualScales$Linear)){
+    residualsLegend <- "Residuals\nObserved-Simulated"
+    residualScale <- ResidualScales$Linear
+  }
+  
 
   for (unit in unique(metaDataFrame$unit)) {
     selectedDimension <- utils::head(metaDataFrame$dimension[metaDataFrame$unit %in% unit], 1)
@@ -949,7 +963,7 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
     residualsMetaData <- list(
       "Observed" = list(dimension = "Observed data", unit = unit),
       "Simulated" = list(dimension = "Simulated value", unit = unit),
-      "Residuals" = list(unit = "", dimension = "Residuals\nlog(Observed)-log(Simulated)")
+      "Residuals" = list(unit = "", dimension = residualsLegend)
     )
 
     obsVsPredPlot <- plotMeanObsVsPred(
@@ -963,8 +977,8 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
     goodnessOfFitPlots[[paste0("obsVsPred-", selectedDimension)]] <- obsVsPredPlot
     goodnessOfFitPlots[[paste0("obsVsPredLog-", selectedDimension)]] <- obsVsPredPlotLog
 
-    goodnessOfFitCaptions[[paste0("obsVsPred-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred")
-    goodnessOfFitCaptions[[paste0("obsVsPredLog-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred", "log")
+    goodnessOfFitCaptions[[paste0("obsVsPred-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred", "linear")
+    goodnessOfFitCaptions[[paste0("obsVsPredLog-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred", "logarithmic")
 
     goodnessOfFitPlots[[paste0("resVsPred-", selectedDimension)]] <- plotMeanResVsPred(
       data = selectedResidualsData,
@@ -972,12 +986,12 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
       plotConfiguration = settings$plotConfigurations[["resVsPred"]]
     )
 
-    goodnessOfFitCaptions[[paste0("resVsPred-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "resVsPred")
+    goodnessOfFitCaptions[[paste0("resVsPred-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "resVsPred", residualScale)
   }
 
   residualsMetaData <- list(
     "Time" = list(dimension = "Time", unit = structureSet$simulationSet$timeUnit),
-    "Residuals" = list(dimension = "Residuals\nlog(Observed)-log(Simulated)", unit = "")
+    "Residuals" = list(dimension = residualsLegend, unit = "")
   )
 
   goodnessOfFitPlots[["resVsTime"]] <- plotMeanResVsTime(
@@ -985,7 +999,7 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
     metaData = residualsMetaData,
     plotConfiguration = settings$plotConfigurations[["resVsTime"]]
   )
-  goodnessOfFitCaptions[["resVsTime"]] <- getGoodnessOfFitCaptions(structureSet, "resVsTime")
+  goodnessOfFitCaptions[["resVsTime"]] <- getGoodnessOfFitCaptions(structureSet, "resVsTime", residualScale)
 
   goodnessOfFitPlots[["resHisto"]] <- plotResidualsHistogram(
     data = residualsData,
@@ -993,14 +1007,14 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
     plotConfiguration = settings$plotConfigurations[["resHisto"]],
     bins = settings$bins
   )
-  goodnessOfFitCaptions[["resHisto"]] <- getGoodnessOfFitCaptions(structureSet, "resHisto")
+  goodnessOfFitCaptions[["resHisto"]] <- getGoodnessOfFitCaptions(structureSet, "resHisto", residualScale)
 
   goodnessOfFitPlots[["resQQPlot"]] <- plotResidualsQQPlot(
     data = residualsData,
     metaData = residualsMetaData,
     plotConfiguration = settings$plotConfigurations[["resQQPlot"]]
   )
-  goodnessOfFitCaptions[["resQQPlot"]] <- getGoodnessOfFitCaptions(structureSet, "resQQPlot")
+  goodnessOfFitCaptions[["resQQPlot"]] <- getGoodnessOfFitCaptions(structureSet, "resQQPlot", residualScale)
 
   return(list(
     plots = goodnessOfFitPlots,

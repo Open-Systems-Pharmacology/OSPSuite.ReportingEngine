@@ -65,13 +65,20 @@ plotMeanPKParameters <- function(structureSet,
     )
   }
   pkParametersData$Value <- replaceInfWithNA(pkParametersData$Value, logFolder)
-  pkParametersData$Value <- formatNumerics(numerics = pkParametersData$Value,  
-                                           digits = settings$digits,
-                                           nsmall = settings$nsmall,
-                                           scientific = settings$scientific)
+  pkParametersData$Value <- formatNumerics(
+    numerics = pkParametersData$Value,
+    digits = settings$digits,
+    nsmall = settings$nsmall,
+    scientific = settings$scientific
+  )
+  pkParameterCaptions <- captions$plotPKParameters$mean(
+    structureSet$simulationSet$simulationSetName,
+    structureSet$simulationSetDescriptor
+  )
   return(list(
     plots = NULL,
-    tables = list(pkAnalysis = pkParametersData)
+    tables = list(pkAnalysis = pkParametersData),
+    captions = list(pkAnalysis = pkParameterCaptions)
   ))
 }
 
@@ -152,11 +159,13 @@ plotPopulationPKParameters <- function(structureSets,
   yParameters <- yParameters %||% structureSets[[1]]$simulationSet$outputs
   # Get first simulation, in case mol weight is needed
   simulation <- loadSimulationWithUpdatedPaths(structureSets[[1]]$simulationSet)
+  setDescriptor <- structureSets[[1]]$simulationSetDescriptor
 
   pkRatioTableAcrossPopulations <- NULL
   pkParametersPlots <- list()
   pkParametersCaptions <- list()
   pkParametersTables <- list()
+  pkParametersCaptionTables <- list()
 
   pkParametersMapping <- tlf::BoxWhiskerDataMapping$new(
     x = "simulationSetName",
@@ -166,16 +175,18 @@ plotPopulationPKParameters <- function(structureSets,
   pkParametersAcrossPopulations <- getPkParametersAcrossPopulations(structureSets)
   pkParametersDataAcrossPopulations <- pkParametersAcrossPopulations$data
   pkParametersMetaDataAcrossPopulations <- pkParametersAcrossPopulations$metaData
+  simulationSetNames <- unique(as.character(pkParametersDataAcrossPopulations$simulationSetName))
 
-  checkIsIncluded(xParameters, names(pkParametersDataAcrossPopulations), nullAllowed = TRUE, groupName = "population variables", logFolder = logFolder)
+  checkIsIncluded(xParameters, names(pkParametersDataAcrossPopulations), nullAllowed = TRUE, groupName = "PK parameters variable names across simulation sets", logFolder = logFolder)
   xParameters <- intersect(xParameters, names(pkParametersDataAcrossPopulations))
 
   # Enforce factors for population names with order as input by the user
   pkParametersDataAcrossPopulations$simulationSetName <- factor(pkParametersDataAcrossPopulations$simulationSetName,
-                                                                levels = unique(pkParametersDataAcrossPopulations$simulationSetName))
+    levels = unique(pkParametersDataAcrossPopulations$simulationSetName)
+  )
 
   if (workflowType %in% c(PopulationWorkflowTypes$ratioComparison, PopulationWorkflowTypes$pediatric)) {
-    referencePopulationName <- getReferencePopulationName(structureSets)
+    referenceSimulationSetName <- getReferencePopulationName(structureSets)
   }
 
   # Standard boxplots for each pkParameters of each output
@@ -184,6 +195,7 @@ plotPopulationPKParameters <- function(structureSets,
     pathLabel <- lastPathElement(output$path)
     for (pkParameter in output$pkParameters) {
       yParameterLabel <- lastPathElement(pkParameter$pkParameter)
+      plotID <- paste0(pathLabel, "-", yParameterLabel)
 
       pkParameterFromOutput <- getPopulationPkAnalysesFromOuptut(
         pkParametersDataAcrossPopulations,
@@ -200,10 +212,7 @@ plotPopulationPKParameters <- function(structureSets,
       pkParameterData <- removeMissingValues(pkParameterData, "Value", logFolder)
       if (nrow(pkParameterData) == 0) {
         logWorkflow(
-          message = paste0(
-            pkParameter$pkParameter, " of ", output$path,
-            ": not enough available data to perform plot."
-          ),
+          message = paste0(pkParameter$pkParameter, " of ", output$path, ": not enough available data to perform plot."),
           pathFolder = logFolder,
           logTypes = c(LogTypes$Info, LogTypes$Error, LogTypes$Debug)
         )
@@ -217,8 +226,9 @@ plotPopulationPKParameters <- function(structureSets,
         plotConfiguration = settings$plotConfigurations[["boxplotPkParameters"]]
       ) + ggplot2::xlab(NULL)
 
-      pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel)]] <- boxplotPkParameter
-      pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel)]] <- getPkParametersCaptions("boxplot", output$displayName, pkParameterMetaData[["Value"]])
+      pkParametersPlots[[plotID]] <- boxplotPkParameter
+      parameterCaption <- pkParameterMetaData$Value$dimension
+      pkParametersCaptions[[plotID]] <- captions$plotPKParameters$boxplot(parameterCaption, output$displayName, simulationSetNames, setDescriptor)
 
       if (!hasPositiveValues(pkParameterData$Value)) {
         logWorkflow(
@@ -232,15 +242,22 @@ plotPopulationPKParameters <- function(structureSets,
         boxRange <- getLogLimitsForBoxPlot(pkParameterData$Value[positiveValues])
         boxBreaks <- getLogBreaksForBoxPlot(boxRange)
 
-        pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- tlf::setYAxis(
+        pkParametersPlots[[paste0(plotID, "-log")]] <- tlf::setYAxis(
           plotObject = boxplotPkParameter,
           scale = tlf::Scaling$log,
           limits = boxRange,
           ticks = boxBreaks
         )
-        pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel, "-log")]] <- getPkParametersCaptions("boxplot", output$displayName, pkParameterMetaData[["Value"]], plotScale = "log")
+        pkParametersCaptions[[paste0(plotID, "-log")]] <- captions$plotPKParameters$boxplot(
+          parameterCaption,
+          output$displayName,
+          simulationSetNames,
+          setDescriptor,
+          plotScale = "logarithmic"
+        )
       }
 
+      # Report tables summarizing the distributions
       pkParameterTable <- tlf::getBoxWhiskerMeasure(
         data = pkParameterData,
         dataMapping = pkParametersMapping
@@ -248,22 +265,31 @@ plotPopulationPKParameters <- function(structureSets,
 
       # Row names are added as factor to data.frames by default
       # This line ensures that the order of the rows is kept for the tables and plots
-      pkParameterTableRows <- factor(row.names(pkParameterTable), 
-                                     levels = row.names(pkParameterTable))
+      pkParameterTableRows <- factor(row.names(pkParameterTable),
+        levels = row.names(pkParameterTable)
+      )
       pkParameterTable <- cbind(
         Population = pkParameterTableRows,
         pkParameterTable
       )
 
-      # A different table needs to be created here because of ratio comparison of the table values 
-      savedPKParameterTable <- pkParameterTable 
+      # A different table needs to be created here because of ratio comparison of the table values
+      savedPKParameterTable <- pkParameterTable
       savedPKParameterTable[, 3:ncol(pkParameterTable)] <- sapply(
-        pkParameterTable[, 3:ncol(pkParameterTable)], 
+        pkParameterTable[, 3:ncol(pkParameterTable)],
         function(values) {
           formatNumerics(values, digits = settings$digits, nsmall = settings$nsmall, scientific = settings$scientific)
-          }
-        ) 
-      pkParametersTables[[paste0(pathLabel, "-", yParameterLabel)]] <- savedPKParameterTable
+        }
+      )
+      savedPKParameterTable <- addDescriptorToTable(savedPKParameterTable, setDescriptor)
+      pkParametersTables[[paste0(plotID)]] <- savedPKParameterTable
+      pkParametersCaptionTables[[plotID]] <- captions$plotPKParameters$summaryTable(
+        parameterCaption,
+        output$displayName,
+        simulationSetNames,
+        setDescriptor,
+        pkParameterMetaData$Value$unit
+        )
 
       # Range plots on PK parameters vs xParameters
       for (demographyParameter in setdiff(xParameters, pkParameter$pkParameter)) {
@@ -276,16 +302,14 @@ plotPopulationPKParameters <- function(structureSets,
           "median" = pkParameterMetaData$Value
         )
 
-        populationNames <- levels(factor(pkParameterData$simulationSetName))
-
         # For pediatric workflow, range plots compare reference population to the other populations
         if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
           # Get the table for reference population
           referenceData <- data.frame(
             x = c(-Inf, Inf),
-            "Population" = paste("Simulated", AggregationConfiguration$names$middle, "and", AggregationConfiguration$names$range, "of", referencePopulationName)
+            "Population" = paste("Simulated", AggregationConfiguration$names$middle, "and", AggregationConfiguration$names$range, "of", referenceSimulationSetName)
           )
-          referenceData[, c("ymin", "median", "ymax")] <- pkParameterTable[referencePopulationName, c(3, 5, 7)]
+          referenceData[, c("ymin", "median", "ymax")] <- pkParameterTable[referenceSimulationSetName, c(3, 5, 7)]
 
           referenceVpcPlot <- vpcParameterPlot(
             data = referenceData,
@@ -293,8 +317,9 @@ plotPopulationPKParameters <- function(structureSets,
             plotConfiguration = settings$plotConfigurations[["comparisonVpcPlot"]]
           )
 
-          for (populationName in populationNames[!populationNames %in% referencePopulationName]) {
-            comparisonData <- pkParameterData[pkParameterData$simulationSetName %in% populationName, ]
+          for (simulationSetName in simulationSetNames[!simulationSetNames %in% referenceSimulationSetName]) {
+            plotID <- paste0(simulationSetName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)
+            comparisonData <- pkParameterData[pkParameterData$simulationSetName %in% simulationSetName, ]
             comparisonData <- getDemographyAggregatedData(
               data = comparisonData,
               xParameterName = demographyParameter,
@@ -310,17 +335,33 @@ plotPopulationPKParameters <- function(structureSets,
               plotObject = referenceVpcPlot
             )
 
-            pkParametersPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- comparisonVpcPlot
-            pkParametersPlots[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- tlf::setYAxis(plotObject = comparisonVpcPlot, scale = tlf::Scaling$log)
+            pkParametersPlots[[plotID]] <- comparisonVpcPlot
+            pkParametersPlots[[paste0(plotID, "-log")]] <- tlf::setYAxis(plotObject = comparisonVpcPlot, scale = tlf::Scaling$log)
 
-            pkParametersCaptions[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel)]] <- getPkParametersCaptions("rangePlot", populationName, vpcMetaData, referencePopulationName)
-            pkParametersCaptions[[paste0(populationName, "-vs-ref-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- getPkParametersCaptions("rangePlot", populationName, vpcMetaData, referencePopulationName, plotScale = "log")
+            xParameterCaption <- vpcMetaData$x$dimension
+            yParameterCaption <- vpcMetaData$median$dimension
+            pkParametersCaptions[[plotID]] <- captions$plotPKParameters$rangePlot(
+              xParameterCaption,
+              yParameterCaption,
+              simulationSetName,
+              setDescriptor,
+              referenceSetName = referenceSimulationSetName
+            )
+            pkParametersCaptions[[paste0(plotID, "-log")]] <- captions$plotPKParameters$rangePlot(
+              xParameterCaption,
+              yParameterCaption,
+              simulationSetName,
+              setDescriptor,
+              referenceSetName = referenceSimulationSetName,
+              plotScale = "logarithmic"
+            )
           }
         }
 
         # Regular range plots not associated to workflow type
-        for (populationName in populationNames) {
-          vpcData <- pkParameterData[pkParameterData$simulationSetName %in% populationName, ]
+        for (simulationSetName in simulationSetNames) {
+          plotID <- paste0(simulationSetName, "-", yParameterLabel, "-vs-", xParameterLabel)
+          vpcData <- pkParameterData[pkParameterData$simulationSetName %in% simulationSetName, ]
           vpcData <- getDemographyAggregatedData(
             data = vpcData,
             xParameterName = demographyParameter,
@@ -335,18 +376,32 @@ plotPopulationPKParameters <- function(structureSets,
             metaData = vpcMetaData,
             plotConfiguration = settings$plotConfigurations[["vpcParameterPlot"]]
           )
-          pkParametersPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- vpcPlot
-          pkParametersPlots[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- tlf::setYAxis(plotObject = vpcPlot, scale = tlf::Scaling$log)
+          pkParametersPlots[[plotID]] <- vpcPlot
+          pkParametersPlots[[paste0(plotID, "-log")]] <- tlf::setYAxis(plotObject = vpcPlot, scale = tlf::Scaling$log)
 
-          pkParametersCaptions[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel)]] <- getPkParametersCaptions("rangePlot", populationName, vpcMetaData)
-          pkParametersCaptions[[paste0(populationName, "-", yParameterLabel, "-vs-", xParameterLabel, "-log")]] <- getPkParametersCaptions("rangePlot", populationName, vpcMetaData, plotScale = "log")
+          xParameterCaption <- vpcMetaData$x$dimension
+          yParameterCaption <- vpcMetaData$median$dimension
+          pkParametersCaptions[[plotID]] <- captions$plotPKParameters$rangePlot(
+            xParameterCaption,
+            yParameterCaption,
+            simulationSetName,
+            setDescriptor
+          )
+          pkParametersCaptions[[paste0(plotID, "-log")]] <- captions$plotPKParameters$rangePlot(
+            xParameterCaption,
+            yParameterCaption,
+            simulationSetName,
+            setDescriptor,
+            plotScale = "logarithmic"
+          )
         }
       }
 
       # For Ratio Comparison create boxplots of boxplot hinges ratios
       if (workflowType %in% PopulationWorkflowTypes$ratioComparison) {
+        plotID <- paste0(pathLabel, "-", yParameterLabel, "-ratio")
         # Get the tables and compute the ratios using reference population name
-        pkRatiosTable <- getPkRatiosTable(pkParameterTable, referencePopulationName)
+        pkRatiosTable <- getPkRatiosTable(pkParameterTable, referenceSimulationSetName)
 
         pkRatiosData <- pkRatiosTable
         pkRatiosData[, c("ymin", "lower", "middle", "upper", "ymax")] <- pkRatiosTable[, c(3:7)]
@@ -354,29 +409,51 @@ plotPopulationPKParameters <- function(structureSets,
         boxplotPkRatios <- ratioBoxplot(
           data = pkRatiosData,
           plotConfiguration = settings$plotConfigurations[["boxplotPkRatios"]]
-        ) + ggplot2::ylab(paste0(pkParameterMetaData$Value$dimension, " [fraction of ", referencePopulationName, "]"))
+        ) + ggplot2::ylab(paste0(pkParameterMetaData$Value$dimension, " [fraction of ", referenceSimulationSetName, "]"))
 
         ratioRange <- getLogLimitsForBoxPlot(c(pkRatiosData$ymin, pkRatiosData$ymax))
         ratioBreaks <- getLogBreaksForBoxPlot(ratioRange)
 
-        pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-ratio")]] <- boxplotPkRatios
-        pkParametersPlots[[paste0(pathLabel, "-", yParameterLabel, "-ratio-log")]] <- tlf::setYAxis(
+        pkParametersPlots[[plotID]] <- boxplotPkRatios
+        pkParametersPlots[[paste0(plotID, "-log")]] <- tlf::setYAxis(
           plotObject = boxplotPkRatios,
           scale = tlf::Scaling$log,
           limits = ratioRange,
           ticks = ratioBreaks
         )
 
-        pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel, "-ratio")]] <- getPkParametersCaptions("ratioPlot", output$displayName, pkParameterMetaData[["Value"]])
-        pkParametersCaptions[[paste0(pathLabel, "-", yParameterLabel, "-ratio-log")]] <- getPkParametersCaptions("ratioPlot", output$displayName, pkParameterMetaData[["Value"]], plotScale = "log")
+        parameterCaption <- pkParameterMetaData$Value$dimension
+        pkParametersCaptions[[plotID]] <- captions$plotPKParameters$ratioPlot(
+          parameterCaption,
+          output$displayName,
+          setdiff(simulationSetNames, referenceSimulationSetName),
+          setDescriptor,
+          referenceSetName = referenceSimulationSetName
+        )
+        pkParametersCaptions[[paste0(plotID, "-log")]] <- captions$plotPKParameters$ratioPlot(
+          parameterCaption,
+          output$displayName,
+          setdiff(simulationSetNames, referenceSimulationSetName),
+          setDescriptor,
+          referenceSetName = referenceSimulationSetName,
+          plotScale = "logarithmic"
+        )
 
         pkRatiosTable[, 3:ncol(pkRatiosTable)] <- sapply(
-          pkRatiosTable[, 3:ncol(pkRatiosTable)], 
+          pkRatiosTable[, 3:ncol(pkRatiosTable)],
           function(values) {
             formatNumerics(values, digits = settings$digits, nsmall = settings$nsmall, scientific = settings$scientific)
           }
-        ) 
-        pkParametersTables[[paste0(pathLabel, "-", yParameterLabel, "-ratio")]] <- pkRatiosTable
+        )
+        pkRatiosTable <- addDescriptorToTable(pkRatiosTable, setDescriptor)
+        pkParametersTables[[plotID]] <- pkRatiosTable
+        pkParametersCaptionTables[[plotID]] <- captions$plotPKParameters$ratioTable(
+          parameterCaption,
+          output$displayName,
+          setdiff(simulationSetNames, referenceSimulationSetName),
+          setDescriptor,
+          referenceSetName = referenceSimulationSetName
+        )
       }
     }
   }
@@ -384,7 +461,8 @@ plotPopulationPKParameters <- function(structureSets,
   return(list(
     plots = pkParametersPlots,
     tables = pkParametersTables,
-    captions = pkParametersCaptions
+    captions = pkParametersCaptions,
+    tableCaptions = pkParametersCaptionTables
   ))
 }
 
@@ -548,11 +626,11 @@ getPkParametersAcrossPopulations <- function(structureSets) {
 }
 
 getPkRatiosTable <- function(pkParametersTable,
-                             referencePopulationName) {
-  populationNames <- pkParametersTable$Population
+                             referenceSimulationSetName) {
+  simulationSetNames <- pkParametersTable$Population
 
-  pkRatiosTable <- pkParametersTable[populationNames != referencePopulationName, ]
-  referencePkParametersTable <- pkParametersTable[rep(referencePopulationName, length(pkRatiosTable$Population)), ]
+  pkRatiosTable <- pkParametersTable[simulationSetNames != referenceSimulationSetName, ]
+  referencePkParametersTable <- pkParametersTable[rep(referenceSimulationSetName, length(pkRatiosTable$Population)), ]
 
   pkRatiosTable[, seq(3, ncol(pkRatiosTable))] <- pkRatiosTable[, seq(3, ncol(pkRatiosTable))] / referencePkParametersTable[, seq(3, ncol(pkRatiosTable))]
 
