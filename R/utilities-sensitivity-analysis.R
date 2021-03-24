@@ -801,7 +801,7 @@ plotPopulationSensitivity <- function(structureSets,
       parameterName = pkDisplayName,
       pathName = opDisplayName,
       quantiles = sort(unique(popDfPkOp$Quantile)),
-      simulationSetNames = unique(popDfPkOp$Population),
+      simulationSetName = unique(popDfPkOp$Population),
       descriptor = setDescriptor
     )
   }

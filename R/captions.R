@@ -103,7 +103,7 @@ captions <- list(
     mean = function(parameterName, pathName){
       paste0("Most sensitive parameters for ", parameterName, " of ", pathName, ".")
     },
-    population = function(parameterName, pathName, quantiles, simulationSetNames, descriptor){
+    population = function(parameterName, pathName, quantiles, simulationSetName, descriptor){
       quantileText <- paste0(quantiles, collapse = ", ")
       return(paste0("Most sensitive parameters for ", parameterName, " of ", pathName, 
                     " for individuals at percentiles ", quantileText, " for ", 
