@@ -85,7 +85,6 @@ PlotTask <- R6::R6Class(
           extension = "csv"
         )
 
-
         write.csv(taskResults$tables[[tableName]],
           file = self$getAbsolutePath(tableFileName),
           row.names = FALSE,
@@ -95,6 +94,10 @@ PlotTask <- R6::R6Class(
         re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(tableFileName))
         # If the task output no plot, but tables, tables will be included in the report
         if (is.null(taskResults$plots)) {
+          if (!is.null(taskResults$captions[[tableName]])) {
+            addTextChunk(self$fileName, paste0("Table: ", taskResults$captions[[tableName]]), logFolder = self$workflowFolder)
+          }
+          
           addTableChunk(
             fileName = self$fileName,
             tableFileRelativePath = self$getRelativePath(tableFileName),
