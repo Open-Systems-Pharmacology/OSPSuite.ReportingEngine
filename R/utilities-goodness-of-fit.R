@@ -948,7 +948,7 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
 
     residualsMetaData <- list(
       "Observed" = list(dimension = "Observed data", unit = unit),
-      "Simulated" = list(dimension = "Simulated data", unit = unit),
+      "Simulated" = list(dimension = "Simulated value", unit = unit),
       "Residuals" = list(unit = "", dimension = "Residuals\nlog(Observed)-log(Simulated)")
     )
 
