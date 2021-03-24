@@ -174,7 +174,7 @@ plotMeanAbsorption <- function(structureSet,
       plotConfiguration = settings$plotConfigurations[["absorptionPlot"]]
     )
 
-    absorptionCaptions[[result$compoundName]] <- paste0("Absorption of ", result$compoundName)
+    absorptionCaptions[[result$compoundName]] <- captions$absorption(result$compoundName)
     absorptionTables[[result$compoundName]] <- data.frame(
       Time = simulationResultsOutput$data[, "Time"],
       `Fraction dissolved` = simulationResultsOutput$data[, result$fractionDissolvedPath],

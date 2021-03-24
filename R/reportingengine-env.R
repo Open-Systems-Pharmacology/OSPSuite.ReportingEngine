@@ -16,6 +16,7 @@ reEnv$binUsingQuantiles <- TRUE
 reEnv$defaultStairstep <- TRUE
 
 reEnv$defaultWatermarkMessage <- "preliminary analysis"
+reEnv$defaultSimulationSetDescriptor <- ""
 
 
 #' @title ApplicationRanges
@@ -23,7 +24,6 @@ reEnv$defaultWatermarkMessage <- "preliminary analysis"
 #' Keys of reported ranges when simulation includes multiple applications
 #' @export
 ApplicationRanges <- enum(c("total", "firstApplication", "lastApplication"))
-
 
 #' @title setDefaultNumericFormat
 #' @description Set default format for numeric values output in reports

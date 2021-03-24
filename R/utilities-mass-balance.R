@@ -188,12 +188,17 @@ plotMeanMassBalance <- function(structureSet,
     plotConfiguration = settings$plotConfigurations[["pieChart"]]
   )
 
+  timeCaption <- formatNumerics(numerics = max(simulationResultsOutputByGroup$Time),  
+                                digits = settings$digits,
+                                nsmall = settings$nsmall,
+                                scientific = settings$scientific)
+  
   massBalanceCaptions <- list(
-    timeProfile = "Amount of drug vs time within the different compartments.",
-    cumulativeTimeProfile = "Cumulated amount of drug vs time within the different compartments",
-    normalizedTimeProfile = "Amount of drug vs time within the different compartments normalized to applicated drugmass.",
-    normalizedCumulativeTimeProfile = "Cumulated amount of drug vs time within the different compartments normalized to applicated drugmass.",
-    pieChart = paste0("Fraction of drug  within the different compartments at ", round(max(simulationResultsOutputByGroup[, "Time"])), metaDataOutputByGroup$Time$unit, ".")
+    timeProfile = captions$massBalance$timeProfile(),
+    cumulativeTimeProfile = captions$massBalance$cumulativeTimeProfile(),
+    normalizedTimeProfile = captions$massBalance$normalizedTimeProfile(),
+    normalizedCumulativeTimeProfile = captions$massBalance$normalizedCumulativeTimeProfile(),
+    pieChart = captions$massBalance$pieChart(timeCaption, metaDataOutputByGroup$Time$unit)
   )
 
   return(list(

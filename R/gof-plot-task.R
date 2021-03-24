@@ -229,11 +229,10 @@ GofPlotTask <- R6::R6Class(
           logFolder = self$workflowFolder
         )
 
-        simulationSetNames <- paste0(as.character(sapply(structureSets, function(set) {
-          set$simulationSet$simulationSetName
-        })), collapse = ", ")
-        addTextChunk(self$fileName, paste0("Figure: Distribution of residuals for ", simulationSetNames), logFolder = self$workflowFolder)
-
+        simulationSetNames <- as.character(sapply(structureSets, function(set) {set$simulationSet$simulationSetName}))
+        histogramCaption <- captions$plotGoF$histogram(simulationSetNames, structureSets[[1]]$simulationSetDescriptor)
+        addTextChunk(self$fileName, paste0("Figure: ", histogramCaption), logFolder = self$workflowFolder)
+        
         addFigureChunk(
           fileName = self$fileName,
           figureFileRelativePath = self$getRelativePath(histogramFileName),
@@ -241,7 +240,8 @@ GofPlotTask <- R6::R6Class(
           logFolder = self$workflowFolder
         )
 
-        addTextChunk(self$fileName, paste0("Figure: Residuals for ", simulationSetNames, " as quantile-quantile plot."), logFolder = self$workflowFolder)
+        qqPlotCaption <- captions$plotGoF$qqPlot(simulationSetNames, structureSets[[1]]$simulationSetDescriptor)
+        addTextChunk(self$fileName, paste0("Figure: ", qqPlotCaption), logFolder = self$workflowFolder)
 
         addFigureChunk(
           fileName = self$fileName,

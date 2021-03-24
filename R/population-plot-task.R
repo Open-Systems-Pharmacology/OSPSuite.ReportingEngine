@@ -84,6 +84,10 @@ PopulationPlotTask <- R6::R6Class(
             row.names = FALSE,
             fileEncoding = "UTF-8"
           )
+          
+          if (!is.null(taskResults$tableCaptions[[plotName]])) {
+            addTextChunk(self$fileName, paste0("Table: ", taskResults$tableCaptions[[plotName]]), logFolder = self$workflowFolder)
+          }
 
           addTableChunk(
             fileName = self$fileName,

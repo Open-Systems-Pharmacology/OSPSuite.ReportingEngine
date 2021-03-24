@@ -10,6 +10,7 @@
 #' @field sensitivityAnalysisResultsFileNames vector of names of CSV files storing results of sensitivity analyses
 #' @field popSensitivityAnalysisResultsIndexFile path to file containing index of population sensitivity analysis results
 #' @field parameterDisplayPaths data.frame mapping parameters to user-defined display paths
+#' @field simulationSetDescriptor Descriptor of simulation sets indicated in reports 
 #' @import ospsuite
 SimulationStructure <- R6::R6Class(
   "SimulationStructure",
@@ -24,6 +25,7 @@ SimulationStructure <- R6::R6Class(
     sensitivityAnalysisResultsFileNames = NULL,
     popSensitivityAnalysisResultsIndexFile = NULL,
     parameterDisplayPaths = NULL,
+    simulationSetDescriptor = NULL,
 
     #' @description
     #' Create a new `SimulationStructure` object.

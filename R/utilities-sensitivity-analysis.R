@@ -534,9 +534,9 @@ plotMeanSensitivity <- function(structureSet,
         )
         next
       }
-
       parameterLabel <- lastPathElement(pkParameter$pkParameter)
-
+      plotID <- paste0(parameterLabel, "-", pathLabel)
+      
       pkSensitivities <- saResults$allPKParameterSensitivitiesFor(
         pkParameterName = pkParameter$pkParameter,
         outputPath = output$path,
@@ -560,11 +560,12 @@ plotMeanSensitivity <- function(structureSet,
       sensitivityPlot <- tlf::plotTornado(data = sensitivityData,
                                           dataMapping = sensitivityMapping,
                                           plotConfiguration = sensitivityPlotConfiguration)
-      
       # Remove legend which is redundant from y axis
-      sensitivityPlots[[paste0(parameterLabel, "-", pathLabel)]] <- tlf::setLegendPosition(sensitivityPlot, 
-                                                                                           position = tlf::LegendPositions$none)
-      sensitivityCaptions[[paste0(parameterLabel, "-", pathLabel)]] <- paste0("Most sensitive parameters for ", pkParameter$displayName %||% pkParameter$pkParameter, " of ", output$displayName, ".")
+      sensitivityPlot <- tlf::setLegendPosition(sensitivityPlot, position = tlf::LegendPositions$none)
+      sensitivityPlots[[plotID]] <- sensitivityPlot
+      
+      pkParameterCaption <- pkParameter$displayName %||% pkParameter$pkParameter
+      sensitivityCaptions[[plotID]] <- captions$plotSensitivity$mean(pkParameterCaption, output$displayName)
     }
   }
   return(list(
@@ -611,6 +612,7 @@ plotPopulationSensitivity <- function(structureSets,
   allPopsDf <- NULL
   saResultIndexFiles <- list()
   simulationList <- list()
+  simulationSetDescriptor <- structureSets[[1]]$simulationSetDescriptor
 
   for (structureSet in structureSets) {
     sensitivityResultsFolder <- file.path(structureSet$workflowFolder, structureSet$sensitivityAnalysisResultsFolder)
@@ -795,14 +797,14 @@ plotPopulationSensitivity <- function(structureSets,
     )
     plotList[["plots"]][[sensitivityPlotName]] <- plotObject
 
-    plotList[["captions"]][[sensitivityPlotName]] <- getPopulationSensitivityPlotCaptions(
-      pkParameter = pkDisplayName,
-      output = opDisplayName,
-      quantileVec = sort(unique(popDfPkOp$Quantile)),
-      simulationSetNames = unique(popDfPkOp$Population)
+    plotList[["captions"]][[sensitivityPlotName]] <- captions$plotSensitivity$population(
+      parameterName = pkDisplayName,
+      pathName = opDisplayName,
+      quantiles = sort(unique(popDfPkOp$Quantile)),
+      simulationSetName = unique(popDfPkOp$Population),
+      descriptor = simulationSetDescriptor
     )
   }
-
   return(plotList)
 }
 
