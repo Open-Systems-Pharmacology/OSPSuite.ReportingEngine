@@ -26,6 +26,7 @@ Workflow <- R6::R6Class(
     #' @param watermark displayed watermark in figures background
     #' @param simulationSetDescriptor character Descriptor of simulation sets indicated in reports
     #' @return A new `Workflow` object
+    #' @import ospsuite
     initialize = function(simulationSets,
                               workflowFolder,
                               createWordReport = TRUE,
@@ -69,7 +70,7 @@ Workflow <- R6::R6Class(
       )
 
       self$reportFileName <- file.path(self$workflowFolder, paste0(defaultFileNames$reportName(), ".md"))
-      self$taskNames <- enum(self$getAllTasks())
+      self$taskNames <- ospsuite::enum(self$getAllTasks())
 
       self$simulationStructures <- list()
       simulationSets <- c(simulationSets)

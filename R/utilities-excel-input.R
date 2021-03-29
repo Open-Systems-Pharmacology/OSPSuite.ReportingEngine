@@ -1,4 +1,4 @@
-StandardExcelSheetNames <- enum(c(
+StandardExcelSheetNames <- ospsuite::enum(c(
   "Documentation",
   "Workflow and Tasks",
   "SimulationSets",
@@ -568,7 +568,7 @@ getWorkflowContent <- function(workflowTable, excelFile) {
   ))
 }
 
-WorkflowMandatoryVariables <- enum(c(
+WorkflowMandatoryVariables <- ospsuite::enum(c(
   "Code Identifier",
   "Description"
 ))
@@ -587,7 +587,7 @@ OptionalSettings <- list(
   "plotSensitivity: yAxisFontSize" = "workflow$plotSensitivity$settings$yAxisFontSize <- "
 )
 
-WorkflowCodeIdentifiers <- enum(c(
+WorkflowCodeIdentifiers <- ospsuite::enum(c(
   "Workflow Mode",
   "Population Workflow type",
   "workflowFolder",
@@ -606,7 +606,7 @@ WorkflowCodeIdentifiers <- enum(c(
   names(OptionalSettings)
 ))
 
-SimulationCodeIdentifiers <- enum(c(
+SimulationCodeIdentifiers <- ospsuite::enum(c(
   "simulationSetName",
   "simulationFile",
   "outputs",
@@ -626,7 +626,7 @@ SimulationCodeIdentifiers <- enum(c(
 ))
 
 
-OutputCodeIdentifiers <- enum(c(
+OutputCodeIdentifiers <- ospsuite::enum(c(
   "path",
   "displayName",
   "displayUnit",

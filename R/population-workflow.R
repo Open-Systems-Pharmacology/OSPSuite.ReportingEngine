@@ -11,7 +11,6 @@
 #' @export
 #' @import tlf
 #' @import ospsuite
-#' @format NULL
 PopulationWorkflow <- R6::R6Class(
   "PopulationWorkflow",
   inherit = Workflow,
@@ -34,6 +33,7 @@ PopulationWorkflow <- R6::R6Class(
     #' @param createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
     #' @param watermark displayed watermark in every plot background
     #' @return A new `PopulationWorkflow` object
+    #' @import ospsuite
     initialize = function(workflowType,
                               simulationSets,
                               workflowFolder,
@@ -66,7 +66,7 @@ PopulationWorkflow <- R6::R6Class(
       self$plotPKParameters <- loadPlotPKParametersTask(self)
       self$plotSensitivity <- loadPlotSensitivityTask(self)
 
-      self$taskNames <- enum(self$getAllTasks())
+      self$taskNames <- ospsuite::enum(self$getAllTasks())
     },
 
     #' @description
@@ -142,7 +142,8 @@ PopulationWorkflow <- R6::R6Class(
 #' @title PopulationWorkflowTypes
 #' @description List of population workflow available types
 #' @export
-PopulationWorkflowTypes <- enum(c(
+#' @import ospsuite
+PopulationWorkflowTypes <- ospsuite::enum(c(
   "pediatric",
   "parallelComparison",
   "ratioComparison"

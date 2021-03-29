@@ -11,7 +11,6 @@
 #' @export
 #' @import tlf
 #' @import ospsuite
-#' @format NULL
 MeanModelWorkflow <- R6::R6Class(
   "MeanModelWorkflow",
   inherit = Workflow,
@@ -30,6 +29,7 @@ MeanModelWorkflow <- R6::R6Class(
     #' Create a new `MeanModelWorkflow` object.
     #' @param ... input parameters inherited from R6 class object `Workflow`.
     #' @return A new `MeanModelWorkflow` object
+    #' @import ospsuite
     initialize = function(...) {
       super$initialize(...)
 
@@ -43,7 +43,7 @@ MeanModelWorkflow <- R6::R6Class(
       self$plotPKParameters <- loadPlotPKParametersTask(self)
       self$plotSensitivity  <- loadPlotSensitivityTask(self)
 
-      self$taskNames <- enum(self$getAllTasks())
+      self$taskNames <- ospsuite::enum(self$getAllTasks())
     },
 
     #' @description

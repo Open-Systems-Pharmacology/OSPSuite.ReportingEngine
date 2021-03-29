@@ -23,7 +23,8 @@ reEnv$defaultSimulationSetDescriptor <- ""
 #' @description 
 #' Keys of reported ranges when simulation includes multiple applications
 #' @export
-ApplicationRanges <- enum(c("total", "firstApplication", "lastApplication"))
+#' @import ospsuite
+ApplicationRanges <- ospsuite::enum(c("total", "firstApplication", "lastApplication"))
 
 #' @title setDefaultNumericFormat
 #' @description Set default format for numeric values output in reports
