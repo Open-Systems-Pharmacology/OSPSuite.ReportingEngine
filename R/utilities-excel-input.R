@@ -471,8 +471,8 @@ getWorkflowContent <- function(workflowTable, excelFile) {
   }
   workflowFolder <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$workflowFolder)
   createWordReport <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$createWordReport)
-
-  workflowContent <- paste0("workflow <- ", workflowMode, "$new(", workflowTypeContent, "simulationSets = simulationSets, workflowFolder = ", workflowFolder, ", createWordReport = ", createWordReport, ")")
+  simulationSetDescriptor <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$simulationSetDescriptor)
+  workflowContent <- paste0("workflow <- ", workflowMode, "$new(", workflowTypeContent, "simulationSets = simulationSets, workflowFolder = ", workflowFolder, ", createWordReport = ", createWordReport, ", simulationSetDescriptor = ", simulationSetDescriptor, ")")
 
   # Activate tasks as defined by user
   isActive <- lapply(AllAvailableTasks, function(x) {
@@ -592,6 +592,7 @@ WorkflowCodeIdentifiers <- enum(c(
   "Population Workflow type",
   "workflowFolder",
   "createWordReport",
+  "simulationSetDescriptor",
   "plotFormat",
   "simulate",
   "calculatePKParameters",
