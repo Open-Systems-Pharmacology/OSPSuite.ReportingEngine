@@ -23,9 +23,6 @@ R6 class defining properties of plot task settings
 
 \item{\code{plotConfigurations}}{named list of `PlotConfiguration` objects
 defining aesthetic properties of reported plots}
-
-\item{\code{applicationRanges}}{named list of logicals defining which Application ranges are included in
-time profiles and residual plots when applicable}
 }
 \if{html}{\out{</div>}}
 }

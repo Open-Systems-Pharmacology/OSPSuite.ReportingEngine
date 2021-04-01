@@ -139,7 +139,7 @@ GofPlotTask <- R6::R6Class(
           )
           # If first simulation set was a reference population,
           # its data will be added to next plots through settings
-          if (isTRUE(set$simulationSet$referencePopulation)) {
+          if (all(isTRUE(set$simulationSet$referencePopulation), isTRUE(self$settings$includeReferenceData))) {
             self$settings$referenceData <- taskResults$referenceData
           }
 
