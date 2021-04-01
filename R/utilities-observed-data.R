@@ -119,13 +119,13 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   # Get values of unit column using nonmemUnit
   timeMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$timeID
   timeUnit <- as.character(dictionary[timeMapping, dictionaryParameters$nonmemUnit])
-  if (!is.na(timeUnit)) {
+  if (!any(is.na(timeUnit), isIncluded(timeUnit, ""))) {
     timeUnitColumn <- "timeUnit"
     observedDataset[, timeUnitColumn] <- timeUnit
   }
   dvMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$dvID
   dvUnit <- as.character(dictionary[dvMapping, dictionaryParameters$nonmemUnit])
-  if (!is.na(dvUnit)) {
+  if (!any(is.na(dvUnit), isIncluded(dvUnit, ""))) {
     dvUnitColumn <- "dvUnit"
     observedDataset[, dvUnitColumn] <- dvUnit
   }
@@ -134,7 +134,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   observedDataset[, timeUnitColumn] <- as.character(observedDataset[, timeUnitColumn])
   observedDataset[, dvUnitColumn] <- as.character(observedDataset[, dvUnitColumn])
 
-  # Convert observed data to base unit, 
+  # Convert observed data to base unit,
   # as.numeric needs to be enforced because toBaseUnit could think values are integer and crash
   for (timeUnit in unique(observedDataset[, timeUnitColumn])) {
     selectedRows <- observedDataset[, timeUnitColumn] %in% timeUnit
@@ -144,9 +144,11 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
       timeUnit
     )
   }
+  # Initialize a dimension column for dV
+  observedDataset$dimension <- NA
   for (dvUnit in unique(observedDataset[, dvUnitColumn])) {
     dvDimension <- ospsuite::getDimensionForUnit(dvUnit)
-    if(isOfLength(dvDimension,0)){
+    if (isOfLength(dvDimension, 0)) {
       logWorkflow(
         message = paste0("In loadObservedDataFromSimulationSet: unit '", dvUnit, "' is unknown."),
         pathFolder = logFolder,
@@ -160,6 +162,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
       as.numeric(observedDataset[selectedRows, dvColumn]),
       dvUnit
     )
+    observedDataset$dimension[selectedRows] <- dvDimension
     if (isOfLength(lloqColumn, 0)) {
       next
     }
@@ -170,10 +173,12 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
     )
   }
   # Create a dataMapping variable
+  # Dimension will be used to find which base unit is in the data
   dataMapping <- list(
     time = timeColumn,
     dv = dvColumn,
-    lloq = lloqColumn
+    lloq = lloqColumn,
+    dimension = "dimension"
   )
 
   return(list(
@@ -188,12 +193,11 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
 #' @param output An `Output` object
 #' @param data A data.frame
 #' @param dataMapping A list mapping the variable of data
-#' @param simulationQuantity Dimension/quantity for unit conversion of dependent variable
 #' @param molWeight Molar weight for unit conversion of dependent variable
 #' @param timeUnit time unit for unit conversion of time
 #' @param logFolder folder where the logs are saved
 #' @return list of data and lloq data.frames
-getObservedDataFromOutput <- function(output, data, dataMapping, simulationQuantity, molWeight, timeUnit, logFolder) {
+getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, timeUnit, logFolder) {
   if (isOfLength(output$dataSelection, 0)) {
     return()
   }
@@ -205,13 +209,20 @@ getObservedDataFromOutput <- function(output, data, dataMapping, simulationQuant
     logTypes = LogTypes$Debug
   )
 
+  # Get dimensions of observed data
+  dvDimensions <- unique(as.character(data[selectedRows, dataMapping$dimension]))
   outputConcentration <- data[selectedRows, dataMapping$dv]
   if (!isOfLength(output$displayUnit, 0)) {
-    outputConcentration <- ospsuite::toUnit(simulationQuantity,
-      data[selectedRows, dataMapping$dv],
-      output$displayUnit,
-      molWeight = molWeight
-    )
+    for (dvDimension in dvDimensions) {
+      if(is.na(dvDimension)){next}
+      dvSelectedRows <- data[selectedRows, dataMapping$dimension] %in% dvDimension
+      outputConcentration[dvSelectedRows] <- ospsuite::toUnit(
+        dvDimension,
+        outputConcentration[dvSelectedRows],
+        output$displayUnit,
+        molWeight = molWeight
+      )
+    }
   }
   outputData <- data.frame(
     "Time" = ospsuite::toUnit("Time", data[selectedRows, dataMapping$time], timeUnit),
@@ -225,11 +236,16 @@ getObservedDataFromOutput <- function(output, data, dataMapping, simulationQuant
 
   lloqConcentration <- data[selectedRows, dataMapping$lloq]
   if (!isOfLength(output$displayUnit, 0)) {
-    lloqConcentration <- ospsuite::toUnit(simulationQuantity,
-      data[selectedRows, dataMapping$lloq],
-      output$displayUnit,
-      molWeight = molWeight
-    )
+    for (dvDimension in dvDimensions) {
+      if(is.na(dvDimension)){next}
+      dvSelectedRows <- data[selectedRows, dataMapping$dimension] %in% dvDimension
+      lloqConcentration[dvSelectedRows] <- ospsuite::toUnit(
+        dvDimension,
+        lloqConcentration[dvSelectedRows],
+        output$displayUnit,
+        molWeight = molWeight
+      )
+    }
   }
   lloqOutput <- data.frame(
     "Time" = ospsuite::toUnit("Time", data[selectedRows, dataMapping$time], timeUnit),

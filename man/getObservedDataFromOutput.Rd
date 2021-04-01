@@ -8,7 +8,6 @@ getObservedDataFromOutput(
   output,
   data,
   dataMapping,
-  simulationQuantity,
   molWeight,
   timeUnit,
   logFolder
@@ -20,8 +19,6 @@ getObservedDataFromOutput(
 \item{data}{A data.frame}
 
 \item{dataMapping}{A list mapping the variable of data}
-
-\item{simulationQuantity}{Dimension/quantity for unit conversion of dependent variable}
 
 \item{molWeight}{Molar weight for unit conversion of dependent variable}
 
