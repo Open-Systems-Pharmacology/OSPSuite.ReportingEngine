@@ -45,7 +45,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
     outputSimulatedData <- outputSimulatedResults$data
     outputSimulatedMetaData[[output$path]] <- outputSimulatedResults$metaData
 
-    outputObservedResults <- getObservedDataFromOutput(output, observedResult$data, observedResult$dataMapping, simulationQuantity, molWeight, structureSet$simulationSet$timeUnit, logFolder)
+    outputObservedResults <- getObservedDataFromOutput(output, observedResult$data, observedResult$dataMapping, molWeight, structureSet$simulationSet$timeUnit, logFolder)
     outputResidualsData <- getResiduals(outputObservedResults$data, outputSimulatedData, output$residualScale)
 
     # Build data.frames to be plotted
@@ -237,7 +237,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     outputSimulatedData <- outputSimulatedResults$data
     outputSimulatedMetaData[[output$path]] <- outputSimulatedResults$metaData
 
-    outputObservedResults <- getObservedDataFromOutput(output, observedResult$data, observedResult$dataMapping, simulationQuantity, molWeight, structureSet$simulationSet$timeUnit, logFolder)
+    outputObservedResults <- getObservedDataFromOutput(output, observedResult$data, observedResult$dataMapping, molWeight, structureSet$simulationSet$timeUnit, logFolder)
     
     simulatedDataForResiduals <- outputSimulatedData[, selectedVariablesForResiduals]
     # getResiduals is based on mean workflow whose names are c("Time", "Concentration", "Legend", "Path")

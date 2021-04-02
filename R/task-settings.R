@@ -2,7 +2,7 @@
 #' @description  R6 class defining properties of plot task settings
 #' @export
 TaskSettings <- R6::R6Class(
-  "PlotTaskSettings",
+  "TaskSettings",
   public = list(
     #' @description
     #' Create a `TaskSettings` object
@@ -18,8 +18,7 @@ TaskSettings <- R6::R6Class(
       private$.scientific <- reEnv$formatNumericsScientific
       private$.scales <- list(Linear = TRUE, Logarithmic = TRUE)
       private$.plotConfigurations <- list()
-      private$.applicationRanges <- NULL
-
+      
       # Plot configurations fields depend on the task
       if (isIncluded(taskName, AllAvailableTasks$plotAbsorption)) {
         private$.plotConfigurations <- list(absorptionPlot = NULL)
@@ -58,11 +57,6 @@ TaskSettings <- R6::R6Class(
           resQQPlot = NULL,
           histogram = NULL,
           qqPlot = NULL
-        )
-        private$.applicationRanges <- list(
-          firstApplication = TRUE,
-          lastApplication = TRUE,
-          total = TRUE
         )
       }
     }
@@ -129,15 +123,6 @@ TaskSettings <- R6::R6Class(
       }
       private$.plotConfigurations <- value %||% private$.plotConfigurations
       return(invisible())
-    },
-    #' @field applicationRanges named list of logicals defining which Application ranges are included in
-    #' time profiles and residual plots when applicable
-    applicationRanges = function(value) {
-      if (missing(value)) {
-        return(private$.applicationRanges)
-      }
-      private$.applicationRanges <- value %||% private$.applicationRanges
-      return(invisible())
     }
   ),
   private = list(
@@ -147,7 +132,61 @@ TaskSettings <- R6::R6Class(
     .digits = NULL,
     .nsmall = NULL,
     .scientific = NULL,
-    .scales = NULL,
+    .scales = NULL
+  )
+)
+
+
+#' @title GofTaskSettings
+#' @description  R6 class defining properties of time profiles and residuals plot task settings
+#' @export
+GofTaskSettings <- R6::R6Class(
+  "GofTaskSettings",
+  inherit = TaskSettings,
+  public = list(
+    #' @field referenceData Data results obtained by TimeProfilesAndResiduals task corresponding to referencePopulation
+    referenceData = NULL,
+    
+    #' @description
+    #' Create a `GofTaskSettings` object
+    #' @param taskName name of the task using the settings
+    #' @return A new `GofTaskSettings` object
+    initialize = function(taskName = AllAvailableTasks$plotTimeProfilesAndResiduals) {
+      validateIsIncluded(taskName, AllAvailableTasks$plotTimeProfilesAndResiduals)
+      
+      super$initialize(taskName)
+      
+      private$.includeReferenceData <- TRUE
+      private$.applicationRanges <- list(
+        firstApplication = TRUE,
+        lastApplication = TRUE,
+        total = TRUE
+      )
+      }
+  ),
+  active = list(
+    #' @field applicationRanges named list of logicals defining which Application ranges are included in
+    #' time profiles and residual plots when applicable
+    applicationRanges = function(value) {
+      if (missing(value)) {
+        return(private$.applicationRanges)
+      }
+      private$.applicationRanges <- value %||% private$.applicationRanges
+      return(invisible())
+    },
+    #' @field includeReferenceData logical defining if reference population should be included in 
+    #' time profiles and residual plots when applicable
+    includeReferenceData = function(value) {
+      if (missing(value)) {
+        return(private$.includeReferenceData)
+      }
+      validateIsLogical(value, nullAllowed = TRUE)
+      private$.includeReferenceData <- value %||% private$.includeReferenceData
+      return(invisible())
+    }
+  ),
+  private = list(
+    .includeReferenceData = NULL,
     .applicationRanges = NULL
   )
 )

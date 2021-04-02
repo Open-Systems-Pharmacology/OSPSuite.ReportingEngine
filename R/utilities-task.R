@@ -155,7 +155,7 @@ loadPlotTimeProfilesAndResidualsTask <- function(workflow, active = FALSE, setti
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
   validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
-  settings <- settings %||% TaskSettings$new(AllAvailableTasks$plotTimeProfilesAndResiduals)
+  settings <- settings %||% GofTaskSettings$new(AllAvailableTasks$plotTimeProfilesAndResiduals)
 
   taskFunction <- plotMeanGoodnessOfFit
   nameFunction <- deparse(substitute(plotMeanGoodnessOfFit))
