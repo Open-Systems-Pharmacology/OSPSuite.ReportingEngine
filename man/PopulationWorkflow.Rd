@@ -69,7 +69,8 @@ Create a new `PopulationWorkflow` object.
   simulationSets,
   workflowFolder,
   createWordReport = TRUE,
-  watermark = NULL
+  watermark = NULL,
+  simulationSetDescriptor = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -85,6 +86,8 @@ Create a new `PopulationWorkflow` object.
 \item{\code{createWordReport}}{logical of option for creating Markdwon-Report only but not a Word-Report.}
 
 \item{\code{watermark}}{displayed watermark in every plot background}
+
+\item{\code{simulationSetDescriptor}}{character Descriptor of simulation sets indicated in reports}
 }
 \if{html}{\out{</div>}}
 }

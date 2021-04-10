@@ -32,18 +32,21 @@ PopulationWorkflow <- R6::R6Class(
     #' @param workflowFolder path of the output folder created or used by the Workflow.
     #' @param createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
     #' @param watermark displayed watermark in every plot background
+    #' @param simulationSetDescriptor character Descriptor of simulation sets indicated in reports
     #' @return A new `PopulationWorkflow` object
     #' @import ospsuite
     initialize = function(workflowType,
                               simulationSets,
                               workflowFolder,
                               createWordReport = TRUE,
-                              watermark = NULL) {
+                              watermark = NULL,
+                          simulationSetDescriptor = NULL) {
       super$initialize(
         simulationSets = simulationSets,
         workflowFolder = workflowFolder,
         createWordReport = createWordReport,
-        watermark = watermark
+        watermark = watermark,
+        simulationSetDescriptor = simulationSetDescriptor
       )
 
       validateIsOfType(c(simulationSets), "PopulationSimulationSet")
