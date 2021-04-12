@@ -1,3 +1,19 @@
+# ospsuite.reportingengine 1.2.0
+
+## New features
+
+* Descriptor of simulation sets is now available and can be defined in Excel template (#445) as well as using the function `setSimulationDescriptor` (#423).
+* Each task property `settings` is now an R6 object (#396). This allows users to have an easy and direct access to setting properties.
+
+## Minor improvements and bug fixes
+
+* Calculation of time profile residuals can use __Linear__ or __Logarithmic__ scale (#395).
+* Units for observed data is appropriately taken into account within dictionary (#414).
+* Settings for number format within reports are now available (#424).
+They can be updated in global settings using `setDefaultNumericFormat` or within specific tasks through their `settings` property.
+* The `settings` property for task `plotTimeProfilesAndResiduals` include 
+* Application Ranges can be switched on/off from SimulationSet objects regarding simulations with multiple administrations (#419)
+
 # ospsuite.reportingengine 1.1.0
 
 ## New features
