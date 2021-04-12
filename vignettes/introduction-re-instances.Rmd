@@ -2,10 +2,9 @@
 title: "Introduction to Reporting Engine and its instances"
 output: 
   rmarkdown::html_vignette:
-    number_sections: true
     toc: true
 vignette: >
-  %\VignetteIndexEntry{introduction-re-instances}
+  %\VignetteIndexEntry{Introduction to Reporting Engine and its instances}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -26,28 +25,32 @@ require(ospsuite.reportingengine)
 
 This vignette introduces the notions and objects implemented in the OSP-Suite Reporting Engine package (`ospsuite.reportingengine`).
 
-# Introduction
+# 1. Introduction
+## 1.1. Notion of R6 objects
 
 The `ospsuite.reportingengine` package aims at facilitating the design and build of reports evaluating PBPK models developed on PK-Sim or/and Mobi.
 
 To this end, the package benefits from the concept of R6 classes (similar to reference classes) which allows to define structured objects whose fields can be any object such as properties, methods or even other R6 objects.
 R6 objects, or objects from R6 class, presents some peculiarities.
 
-- They are created using the method `$new(...)` (e.g. `r6Object <- R6Class$new()`).
-- Like for objects of class list, fields of R6 objects can be called using either `$fieldName` or `[[fieldName]]` (e.g. `r6Object$method()` or `r6Object[[property]]`).
-- The R6 classes also integrate the concept of inheritance: an R6 object will get the attributes from its class but will also inherit properties and methods from a parent class.
+- They are usually initialized using the method `$new(...)` (e.g. `r6Object <- R6Class$new()`).
+- Similarly to objects of class list, fields from R6 objects can be called using either `$fieldName` or `[[fieldName]]` (e.g. `r6Object$method()` or `r6Object[[property]]`).
+- The R6 class also integrates the concept of inheritance: an R6 object will get the attributes from its class but will also inherit properties and methods from a parent class.
+
+## 1.2. Notion of workflow
 
 The `ospsuite.reportingengine` package is built around two central R6 classes __`MeanModelWorkflow`__ and __`PopulationWorkflow`__ derived from the parent R6 class `Workflow`.
-The creation of `MeanModelWorkflow` or `PopulationWorkflow` objects provides a structured environment with methods and properties that help in designing, running and reporting the evaluation of PBPK models developed on PK-Sim or/and Mobi.
-Such structured environment works with 2 types of objects:
+The creation of `MeanModelWorkflow` or `PopulationWorkflow` objects provides a structured environment with methods and properties that facilitate the design, run and report of the evaluations of PBPK models developed on PK-Sim or/and Mobi.
+The `Worklow` objects combine 2 features defined as R6 objects:
 
-- `SimulationSet` R6 objects and their `Output` R6 objects (defined in more details in section __3__), defining on which model(s) and/or data the workflow is performed. These objects need to be created before the creation of workflow objects as they are required by them.
-- `Task` R6 objects (defined in more details in section __4__), defining the settings of the evaluations to be performed by the workflow. These objects are directly included upon creation of `Workflow` objects. Their settings can be updated after creation.
+- `SimulationSet` and `PopulationSimulationSet` objects defines which and how model(s) and/or data can be used by the workflow (developed in more details in section [3](#3-simulation-sets)).
+These objects need to be created before the creation of workflow objects as they are required to create the workflow.
+- `Task` objects define the evaluations to be performed by the workflow. These objects are directly created and included upon creation of the `Workflow` objects (developed in more details in section [4](#4-tasks)). Their settings can be checked and updated after creation.
 
-## Nomenclature
+## 1.3. Nomenclature
 
 Table 1 defines some of the main instances of the `ospsuite.reportingengine` package usually defined by users during the design of a workflow. The classes of these instances and the parent classes they are derived from are also indicated.
-All these instances derive from the `R6` class, consequently creating them requires the call of the method `$new()` (e.g. `MeanModelWorkflow$new()`)
+As mentioned above all these instances derive from the `R6` class, consequently creating them requires the call of the method `$new()` (e.g. `MeanModelWorkflow$new()`)
 
 ```{r table 1, echo=FALSE, results='asis'}
 nomenclatureTable <- data.frame(
@@ -93,7 +96,7 @@ knitr::kable(nomenclatureTable, caption = "Table 1: Nomenclature of `ospsuite.re
 ```
 
 
-## General scheme
+## 1.4. General scheme
 
 A working example of workflow script is provided below for reporting a time profile plot on *Minimodel2.pkml*.
 
@@ -157,65 +160,59 @@ htmltools::includeHTML(sub(".md", ".html", myExampleWorkflow$reportFileName))
 unlink(myExampleWorkflow$workflowFolder, recursive = TRUE)
 ```
 
-# Workflow
+# 2. Workflow
 
-`Workflow` objects are central in the Reporting Engine as they summarize which evaluations are performed and how they are reported.
-As illustrated in the example from section __1.1__,  `Workflow` objects manage directly 2 other R instances: `SimulationSet` and `Task` objects.
-`Workflow` objects also require an output folder, `workflowFolder` to be provided in order to be created.
-This folder is where all the generated outputs will be saved and stored.
-
-`Task` objects are R instances that correspond to the evaluations, plots and tables to be performed, saved and/or reported (see section XXX for more details on `Task`).
-Each active `Task` will be performed on a series of `SimulationSet` objects.
-
-`SimulationSet` objects are R objects that summarize the workflow input parameters, they include the model(s) to be evaluated (see section __3__ for more details on `SimulationSet`).
-A `SimulationSet` can optionally include observed data and a population file.
+`Workflow` objects define which models are evaluated, how they are evaluated and how the evaluations are reported.
 
 In the `ospsuite.reportingengine` package, two types of `Workflow` are available and can be created:
 
 1) `MeanModelWorkflow` dedicated on evaluations specific to mean models
 2) `PopulationWorkflow` dedicated on evaluations specific to population models
 
-## MeanModelWorkflow
+## 2.1. MeanModelWorkflow
 
-The process included in `MeanModelWorkflow` can be illustrated by Figure 1.
+Workflows defined by `MeanModelWorkflow` objects can be illustrated by Figure 1.
 
 The blue frame corresponds to the inputs of the workflow. 
-These inputs need to be defined through the R object `SimulationSet`.
-Since multiple simulations and observed datasets can be evaluated by the workflow tasks, it is possible to define a list of such inputs by workflow.
+These inputs need to be defined using `SimulationSet` objects.
+For workflows with multiple simulations and observed datasets,
+a list of `SimulationSet` objects can be input instead of one unique `SimulationSet` object.
+Within a `Workflow` object, the simulation sets are accessible from the `simulationStructures` lists which also provides relevant information about input/output files and folders
 
-The black frames correspond to the tasks of the workflow. 
-These tasks are defined through the R object `Task`.
-These objects do not have to be instantiated by the user; they are created directly by the `Workflow` object.
-The user will only have to switch them on/off and update their settings if necessary.
+The black frames correspond to the tasks or evaluations performed by the workflow. 
+These tasks are defined using `Task` objects built in every `Workflow` object, meaning there is no need to input them when creating a `Workflow` object.
+Users access, update and switch the task on/off tasks after creation of their `Workflow`.
 
 ```{r figure 1, out.width="100%", include=TRUE, fig.align="center", fig.cap= "Figure 1: Mean model workflow inputs and tasks", echo=FALSE}
 knitr::include_graphics(system.file("extdata", "mean-model-workflow-input-and-tasks.png", package = "ospsuite.reportingengine"))
 ```
 
-## PopulationWorkflow
+## 2.2. PopulationWorkflow
 
-The process included in `PopulationWorkflow` can be illustrated by Figure 2.
+Workflows defined by `PopulationWorkflow` objects can be illustrated by Figure 2.
 
 The blue frame corresponds to the inputs of the workflow. 
-These inputs need to be defined through the R object `PopulationSimulationSet`.
-Since multiple simulations, population and observed datasets can be evaluated by the workflow tasks, it is possible to define a list of such inputs by workflow.
+These inputs need to be defined using `PopulationSimulationSet` objects.
+For workflows with multiple simulations and observed datasets,
+a list of `PopulationSimulationSet` objects can be input instead of one unique `PopulationSimulationSet` object.
+Within a `Workflow` object, the simulation sets are accessible from the `simulationStructures` lists which also provides relevant information about input/output files and folders
 
-The black frames correspond to the tasks of the workflow. 
-These tasks are defined through the R object `Task`.
-These objects do not have to be instantiated by the user; they are created directly by the `Workflow` object.
-The user will only have to switch them on/off and update their settings if necessary.
+The black frames correspond to the tasks or evaluations performed by the workflow. 
+These tasks are defined using `Task` objects built in every `Workflow` object, meaning there is no need to input them when creating a `Workflow` object.
+Users access, update and switch the task on/off tasks after creation of their `Workflow`.
 
-In a population workflow, some tasks can compare different simulations or population, such plots of Demography or PK parameters.
-There exist different types of a population workflow
+Some tasks of population workflows perform a direct comparison of the simulation sets (e.g. `plotDemography` or `plotPKParameters`).
+Such comparisons can be different according to the selected population workflow types.
+Three population workflow types are available in `ospsuite.reportingengine` and defined in `PopulationWorkflowTypes`: 
 
-1) __Pediatric__
+1) __Pediatric__ (`workflowType = "pediatric"`)
    - All properties (physiology and PK Parameter) are plotted vs. age and weight,
    - The time profiles are plotted in comparison to a reference population the sensitivity analysis is done on all populations except the reference population
-2) __Parallel Comparison__
+2) __Parallel Comparison__ (`workflowType = "parallelComparison"`)
    - PK parameter are plotted parallel in Box-Whisker plots without a reference population,
    - If a reference population is given, the time profiles are plotted in comparison to this population
    - The sensitivity analysis is done on all populations
-3) __Ratio Comparison__
+3) __Ratio Comparison__ (`workflowType = "ratioComparison"`)
    - Same as parallel comparison, but for the PK Parameter additional the ratio of the PK Parameter to the reference population is calculated and plotted in box-whisker plots 
 
 
@@ -223,9 +220,9 @@ There exist different types of a population workflow
 knitr::include_graphics(system.file("extdata", "population-workflow-input-and-tasks.png", package = "ospsuite.reportingengine"))
 ```
 
-## Creation of a Workflow
+## 2.3. Creation of a Workflow
 
-To create a `MeanModelWorkflow` or a `PopulationWorkflow` object, the method `$new()` needs to be used as follow:
+To create a `MeanModelWorkflow` or a `PopulationWorkflow` object, the method `$new()` needs to be used with at least the inputs defined below.
 
 - For mean model workflows: 
 ```
@@ -237,20 +234,56 @@ myWorkflow <-
 PopulationWorkflow$new(workflowType, simulationSets, workflowFolder)
 ```
 
-where `simulationSets` is a list of `SimulationSet` objects for mean models, and a list of `PopulationSimulationSet` objects for population models.
-These objects will be further discussed in the next section.
+where the input `simulationSets` is a list of `SimulationSet` objects for a mean model workflow, and a list of `PopulationSimulationSet` objects for a population workflow.
 
-`workflowFolder` is the name of the folder in which the workflow outputs are saved.
-As illustrated in Figures 1 and 2, some tasks can use the outputs obtained from previous tasks.
+The input `workflowFolder` is the name of the folder in which the workflow outputs are saved.
+As illustrated in Figures 1 and 2, some tasks use outputs obtained from previous tasks.
 If the directory specified in `workflowFolder` contains such outputs, they will be used by the current workflow.
-This latter option can be useful for updating and running only a part of the workflow without having to perform all the simulations every time.
+This latter option can be useful for updating and running only parts of the workflow without having to perform all the simulations every time.
 
-The input `workflowType` is one of the 3 population workflow types defined in section __2.2__.
+The input `workflowType` is one of the 3 population workflow types as defined by `PopulationWorkflowTypes`.
 
-# Simulation sets
+Other optional inputs can be added when creating a workflow: 
 
-As workflows can evaluate multiple simulations, populations and datasets, 
-the creation of `MeanModelWorkflow` and `PopulationWorkflow` requires input parameters summarized in `SimulationSet` and `PopulationSimulationSet` objects, respectively.
+- `createWordReport`: logical defining if a word version (.docx) of the report should be saved besides its markdown version (.md). The default value for this option is `TRUE`, meaning that a report in word is also created. 
+- `watermark`: character defining the text to display in figures background.
+The default value is `NULL`, in which case the text "preliminary results" will be displayed in the figures for all computers using an unvalidated environment.
+- `simulationSetDescriptor`: character defining a descriptor of how simulation sets should be indicated in reports (e.g. "scenario", "set", "simulation", or "population").
+The default value for this option is `NULL`, meaning that there won't be any descriptor of the simulation sets.
+
+## 2.4. Workflow built in methods and properties
+
+After creation of a `Workflow` object, some built in methods and properties are available 
+(using the character `$` after the name of the object).
+
+Most of the workflow properties correspond to the inputs used to create the workflow and includes `createWordReport`, `workflowFolder`, `reportFileName`, the list `simulationStructures` and the workflow tasks (developed in section [4](#4-tasks)).
+
+Additionally, the methods listed below can be used to access relevant information about the workflow:
+
+- `printReportingEngineInfo()`: prints information about the environment and pacakges currently used.
+- `getWatermark()`: prints the watermark to be displayed by the workflow.
+- `getParameterDisplayPaths()`: prints the mapping between parameters and their display paths
+- `getSimulationDescriptor()`: prints the simulation descriptor to be used by the workflow
+- `getAllTasks()`: prints the names of all the workflow available tasks
+- `getAllPlotTasks()`: prints the names of all the workflow plot tasks
+- `getActiveTasks()`: prints the names of all the workflow active tasks
+- `getInactiveTasks()`: prints the names of all the workflow inactive tasks
+
+To update some of the workflow properties, the methods listed below can be used:
+
+- `setWatermark(watermark)`: set the watermark to be displayed by the workflow. 
+The input `watermark` is of type character.
+- `setParameterDisplayPaths(parameterDisplayPaths)`: set the the mapping between parameters and their display paths. The input `parameterDisplayPaths` is of type data.frame and includes "parameter" and "displayPath" in its variables. External functions can also be used instead:
+   - `setWorkflowParameterDisplayPaths(parameterDisplayPaths, workflow)`
+   - `setWorkflowParameterDisplayPathsFromFile(fileName, workflow)`
+- `setSimulationDescriptor(text)`: set the simulation descriptor of the workflow. 
+The input `text` is of type character. 
+
+Finally, the method `runWorkflow()` runs the simulations and analyses of the models, and also saves the evaluations and their report.
+
+# 3. Simulation sets
+
+`SimulationSet` and `PopulationSimulationSet` objects includes all the relevant information needed to report the evaluations of a model.
 
 Below is the syntax for creating such simulation sets, the next sub-sections will provide more details on each input:
 
@@ -259,12 +292,12 @@ __Simulation Set__
 SimulationSet$new(
   simulationSetName, 
   simulationFile, 
-  simulationName, 
   outputs,
   observedDataFile,
   observedMetaDataFile,
   dataReportName,
-  dataSelection
+  dataSelection,
+  applicationRanges
 )
 ```
 
@@ -273,31 +306,31 @@ __Population Simulation Set__
 PopulationSimulationSet$new(
   referencePopulation,
   simulationSetName, 
-  simulationFile, 
-  simulationName,
+  simulationFile,
   populationFile,
-  populationName,
   studyDesignFile, 
   outputs, 
   observedDataFile,
   observedMetaDataFile,
   dataReportName,
-  dataSelection
+  dataSelection,
+  applicationRanges
 )
 ```
 
-## Simulation file
+## 3.1. Simulation file
 
 A simulation file, `simulationFile` is an export of a simulation from MoBi or PK-SIM in pkml format.
-Display names for the simulation and the simulation set can be provided using `simulationName` and `simulationSetName`.
+Display names for the simulation set can be provided using `simulationSetName`.
 
-## Population file
+## 3.2. Population file
 
 A population file, `populationFile`, is collection of parameter paths and parameter values normally an export of a population from PK-SIM in csv format.
-It is also possible to use an M&S activity-specific population file, which has the “PKSIM” format, but was manipulated after the export from PK-SIM or was generated outside of PK-Sim. The generation of the population file than must be validated.
-Display names for the population can be provided using `populationName`.
+It is also possible to use an M&S activity-specific population file, which has the “PKSIM” format, but was manipulated after the export from PK-SIM or was generated outside of PK-Sim. 
+The generation of the population file than must be validated.
+Display names for the population can be provided using `simulationSetName`.
 
-### Study Design file
+### 3.2.1. Study Design file
 
 The study design file, `studyDesignFile`, contains additional information on the study design, e.g. a body weight dependent dose in a pediatric study.
 A regular csv format is expected for such a file.
@@ -313,13 +346,13 @@ exampleStudyDesign <- readObservedDataFile(studyDesignFile)
 knitr::kable(exampleStudyDesign, caption = "Table 2: Example of study design content")
 ```
 
-## Format of data files
+## 3.3. Format of data files
 
-__If your workflow uses data, you must provide two files__:
+__If the workflow uses data, two files must be provided__:
 one file containing the data in the Nonmem format, `observedDataFile`, and a dictionary file, `observedMetaDataFile`, which documents the content of the data file.
 Display names for the data can be provided using `dataReportName`.
 
-### Data file
+### 3.3.1. Data file
 
 The Nonmem file can be a blank separated text file or a csv file, column headers are used later as R variable names, and they must not contain special letters like blanks.
 All data columns used for figures and tables, must be numerical and listed in the dictionary file (details in section __3.3.2__).
@@ -327,7 +360,7 @@ For data filtering, these columns and additional ones can be used, the additiona
 But be careful that these strings do not contain the column separator blank. 
 A column must be either numerical or of type string, they must not contain both. 
 
-### Dictionary file
+### 3.3.2. Dictionary file
 
 ```{r dictionary file, include=FALSE, echo=FALSE}
 dictionaryFile <- system.file("extdata", "tpDictionary.csv", package = "ospsuite.reportingengine")
@@ -340,6 +373,14 @@ Unlike the Matlab version of the reporting engine, a regular csv with a comma ("
 The dictionary file must contain the following variables: `r paste0("'", paste0(names(exampleDictionary), collapse = "', '"), "'")`.
 For time profile plots, you must provide '__time__' and '__dv__' in '__ID__'. 
 The variable '__lloq__', for lower limit of quantitation, can also be provided but is not necessary.
+These variables need to be mapped to the variable names of the dataset using the dictionary variable '__nonmenColumn__'.
+
+Regarding units, two options are possible:
+
+- Providing units using only the dictionary: for '__time__' and '__dv__' the column '__nonmemUnit__' should be filled with the corresponding unit ('__lloq__' is assumed with the same unit as '__dv__').
+- Providing units within the observed data: 
+   - the dictionary must include the follwoing new variables in '__ID__': '__time_unit__' and '__dv_unit__'.
+   - the dictionary must also include the mapping to the variable names in the dataset using '__nonmenColumn__'.
 
 The example below shows a template of a dictionary content.
 
@@ -347,9 +388,10 @@ The example below shows a template of a dictionary content.
 knitr::kable(exampleDictionary, caption = "Table 3: Template for data dictionary")
 ```
 
-## Outputs
+## 3.4. Outputs
 
-An `Output` object defines simulation paths and can define associated PK parameters and observed data.
+For any simulation set, `Output` objects define which simulation paths, associated PK parameters and associated observed data are evaluated.
+`Output` objects are also R6 objects created using the method `$new()`.
 Below is the syntax for creating such `Output` objects, the next sub-sections will provide more details on each input:
 
 __Output__
@@ -364,12 +406,12 @@ Output$new(
 )
 ```
 
-### Path
+### 3.4.1. Path
 
 The input variable `path` indicates the path name within a simulation (e.g. '*Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)*') that needs to be included in the simulation run.
 Display name and unit for this path can be provided using `displayName` and `displayUnit`.
 
-### Data selection
+### 3.4.2. Data selection
 
 For tasks such as goodness of fit, observed data can be used.
 Usually, the data is included into one unique Nonmem data file which needs to be filtered and associated to the correct `path`.
@@ -380,7 +422,7 @@ It must be R readable code, using the Nonmem headers as variable names (e.g. '*S
 - By default, `dataSelection` = '__NONE__'. Consequently, no data is selected and no evaluation is performed.
 - If you want to use all, you can include the filter `dataSelection` = '__ALL__'.
 
-### PK parameters
+### 3.4.3. PK parameters
 
 The input `pkParameters` indicates the `path` related PK parameters that the user wants to include in his analysis.
 A list of pk parameter names can be directly provided to this input (e.g. *c('C_max', 'AUC_inf')*).
@@ -402,18 +444,36 @@ then to provide directly the list of their names to the input `pkParameters`.
 - Updating PK parameters, their display names and units can be done directly with: __updatePKParameter()__.
 - Users can also create their own PK parameters using: __addUserDefinedPKParameter()__.
 
-# Task objects
+## 3.5. Application Ranges
+If the simulation set corresponds to multiple administrations, evaluations on some application ranges can be switched on/off.
+The input `applicationRanges` is a logical value or a list of logical values that can switch on/off the presence of some application ranges in the reported plots.
+The field includes the following elements: `total`, `firstApplication` and `lastApplication`.
 
-As illustrated in Figures 1 and 2, workflows can perform tasks on a list of simulation sets.
-Some of these tasks are not necessarily run or can use the output results from other tasks run in previous workflows.
+# 4. Tasks
+## 4.1. Task names and activation
 
-You can use the enums `StandardSimulationTasks` and `StandardPlotTasks` respectively to get a quick access to standard simulation and plot tasks common to mean model and population workflows.
+As illustrated in Figures 1 and 2, workflows perform multiple evaluations or tasks on a list of simulation sets.
+Such evaluations are defined using `Task` objects which are built-in properties of `Workflow` objects.
+To know which tasks your workflow can perform, the workflow method `getAllTasks()` can be used.
 
-When they are created, `Workflow` objects will directly include a list of `Task` objects.
-To know which tasks your workflow can perform, the workflow method __getAllTasks()__ can be used. 
-The workflow methods __getActiveTasks()__ and __getInactiveTasks()__ provide the list of active and inactive tasks of the workflow, respectively.
+Usually, not all the tasks are required to run in a workflow, which led `Task` objects to include the logical field `active` defining if a task should be performed or not.
+The workflow methods `getActiveTasks()` and `getInactiveTasks()` provide the names of active and inactive tasks of the workflow, respectively.
+To modify which tasks should be run, the `active` field of any task can be updated.
+The workflow methods `activateTasks(taskNames)` and `inactivateTasks(inactivateTasks)` provide a fast and easy way to update which tasks will be run.
+In particular, their default value for the input `taskNames` is `getAllTasks()`, meaning that using `activateTasks()` without argument will activate every task of the workflow.
 
-Using the example from section __1.1__, this gives on a mean model workflow:
+Additionally, the enums `StandardSimulationTasks` and `StandardPlotTasks` respectively provide a quick access to standard simulation and plot tasks common to mean model and population workflows.
+```{r standard task names}
+# Names of standard simulation tasks
+StandardSimulationTasks
+
+# Names of standard plot tasks
+StandardPlotTasks
+```
+
+
+Using the example shown in section [1.4.](#14-general-scheme).
+The task names in the mean model workflow were:
 ```{r mean model tasks}
 # All workflow's tasks
 myExampleWorkflow$getAllTasks()
@@ -425,29 +485,55 @@ myExampleWorkflow$getActiveTasks()
 myExampleWorkflow$getInactiveTasks()
 ```
 
-To activate or inactivate tasks, you can use respectively the workflow methods __activateTasks()__ and __inactivateTasks()__. 
-By default, all the tasks will be activated or inactivated when using the method.
-
+The activation/inactivation of tasks can be done as follows:
 ```{r mean model activate tasks}
 # Inactivate all tasks
 myExampleWorkflow$inactivateTasks()
 myExampleWorkflow$getActiveTasks()
 
-# Activate only tasks "simulate" and "plotGoF" tasks
+# Activate only tasks "simulate" and "plotTimeProfilesAndResiduals" tasks
 myExampleWorkflow$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 myExampleWorkflow$getActiveTasks()
 ```
 
-It is possible to modify the settings of the tasks, especially for tasks generating figures 
-(e.g. plot scales, inclusion of specific demography parameters ...)
-Task details will be provided in dedicated vignettes.
+## 4.2. Required inputs to run a task
+As mentioned above, some tasks can be inactivated.
+Because some evaluations can take a lot of time, especially sensitivity analyses, 
+the use of simulation results as an input of subsequent tasks is essential.
 
-# Workflow outputs
+Before running any task, workflows will check if the task required input files are available.
+This feature can also be accessed by users from the task method `getInputs()` which can be combined with the function `file.exists`
+
+```{r get time profile inputs}
+# Get list of files or folders required to run task "plotTimeProfilesAndResiduals"
+myExampleWorkflow$plotTimeProfilesAndResiduals$getInputs()
+```
+
+
+## 4.3. Task settings
+
+`Task` objects include many properties necessary to log the evaluations, to ensure a continuity between input and output files of different tasks and to build the final report of the workflow.
+
+Among the `Task` properties, the field `settings` includes the task properties that can be updated for the evaluation, log or report of the workflow.
+The task `settings` are R6 objects whose properties can be directly accessed as shown below (using the character `$` after `settings`).
+
+```{r task settings example}
+# Get value of settings property "showProgress" for the task "simulate"
+myExampleWorkflow$simulate$settings$showProgress
+
+# Get value of settings property "digits" for the task "plotPKParameters"
+myExampleWorkflow$plotPKParameters$settings$digits
+
+# Get the names of the "plotConfigurations" list used during the task "plotTimeProfilesAndResiduals"
+names(myExampleWorkflow$plotTimeProfilesAndResiduals$settings$plotConfigurations)
+```
+
+# 5. Workflow outputs
 
 Once the workflow and its settings have been defined, the workflow method __$runWorkflow()__ will run all the active tasks and generate all the associated results and report.
 The following outputs will be generated in `workflowFolder` directory: logs, results directories and reports.
 
-## Logs
+## 5.1. Logs
  
 Three types of logs can be generated during the creation, design and run of a workflow: 
  
@@ -455,7 +541,7 @@ Three types of logs can be generated during the creation, design and run of a wo
 - __log-error.txt__ which contains all errors and warnings that occurred during the execution
 - __log-debug.txt__ which contains information useful for debugging purpose.
 
-## Result directories
+## 5.2. Result directories
 
 Each task will save its results in a dedicated directory. 
 The names of the results directory are as follow:
@@ -478,7 +564,7 @@ This directory is specific of population model workflows.
 
 Default figure format is png, but it is possible to change this default using __setPlotFormat()__.
 
-## Reports and appendices
+## 5.3. Reports and appendices
 
 Each plot task will save an appendix file besides its results as a markdown format report.
 These appendices are saved directly within the `workflowFolder` directory results directory with the following names:
