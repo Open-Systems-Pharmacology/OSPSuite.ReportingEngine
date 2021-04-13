@@ -20,6 +20,9 @@ R6 class representing Reporting Engine Mean Model Set
 \item{\code{observedMetaDataFile}}{name of csv file to be used as dictionary of the observed data}
 
 \item{\code{timeUnit}}{display unit for time variable}
+
+\item{\code{applicationRanges}}{named list of logicals defining which Application ranges are included in
+time profiles and residual plots when applicable}
 }
 \if{html}{\out{</div>}}
 }
@@ -42,7 +45,9 @@ Create a new `SimulationSet` object.
   outputs = NULL,
   observedDataFile = NULL,
   observedMetaDataFile = NULL,
-  timeUnit = "h"
+  timeUnit = "h",
+  applicationRanges = list(total = TRUE, firstApplication = TRUE, lastApplication =
+    TRUE)
 )}\if{html}{\out{</div>}}
 }
 
@@ -60,6 +65,9 @@ Create a new `SimulationSet` object.
 \item{\code{observedMetaDataFile}}{name of csv file to be used as dictionary of the observed data}
 
 \item{\code{timeUnit}}{display unit for time variable. Default is "h"}
+
+\item{\code{applicationRanges}}{named list of logicals defining which application ranges are included in
+time profiles and residual plots when applicable. Names are available in enum `ApplicationRanges`.}
 }
 \if{html}{\out{</div>}}
 }

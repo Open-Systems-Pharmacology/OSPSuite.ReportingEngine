@@ -19,10 +19,7 @@ R6 class defining properties of time profiles and residuals plot task settings
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
-\item{\code{applicationRanges}}{named list of logicals defining which Application ranges are included in
-time profiles and residual plots when applicable}
-
-\item{\code{includeReferenceData}}{logical defining if reference population should be included in 
+\item{\code{includeReferenceData}}{logical defining if reference population should be included in
 time profiles and residual plots when applicable}
 }
 \if{html}{\out{</div>}}

@@ -18,7 +18,7 @@ TaskSettings <- R6::R6Class(
       private$.scientific <- reEnv$formatNumericsScientific
       private$.scales <- list(Linear = TRUE, Logarithmic = TRUE)
       private$.plotConfigurations <- list()
-      
+
       # Plot configurations fields depend on the task
       if (isIncluded(taskName, AllAvailableTasks$plotAbsorption)) {
         private$.plotConfigurations <- list(absorptionPlot = NULL)
@@ -146,35 +146,19 @@ GofTaskSettings <- R6::R6Class(
   public = list(
     #' @field referenceData Data results obtained by TimeProfilesAndResiduals task corresponding to referencePopulation
     referenceData = NULL,
-    
+
     #' @description
     #' Create a `GofTaskSettings` object
     #' @param taskName name of the task using the settings
     #' @return A new `GofTaskSettings` object
     initialize = function(taskName = AllAvailableTasks$plotTimeProfilesAndResiduals) {
       validateIsIncluded(taskName, AllAvailableTasks$plotTimeProfilesAndResiduals)
-      
       super$initialize(taskName)
-      
       private$.includeReferenceData <- TRUE
-      private$.applicationRanges <- list(
-        firstApplication = TRUE,
-        lastApplication = TRUE,
-        total = TRUE
-      )
-      }
+    }
   ),
   active = list(
-    #' @field applicationRanges named list of logicals defining which Application ranges are included in
-    #' time profiles and residual plots when applicable
-    applicationRanges = function(value) {
-      if (missing(value)) {
-        return(private$.applicationRanges)
-      }
-      private$.applicationRanges <- value %||% private$.applicationRanges
-      return(invisible())
-    },
-    #' @field includeReferenceData logical defining if reference population should be included in 
+    #' @field includeReferenceData logical defining if reference population should be included in
     #' time profiles and residual plots when applicable
     includeReferenceData = function(value) {
       if (missing(value)) {
@@ -186,7 +170,6 @@ GofTaskSettings <- R6::R6Class(
     }
   ),
   private = list(
-    .includeReferenceData = NULL,
-    .applicationRanges = NULL
+    .includeReferenceData = NULL
   )
 )
