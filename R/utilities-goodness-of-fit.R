@@ -62,9 +62,9 @@ plotMeanGoodnessOfFit <- function(structureSet,
   metaDataFrame <- getMetaDataFrame(outputSimulatedMetaData)
   
   # Get list of total, first application, and last application ranges
-  # Note: it could be possible to define in getSimulationTimeRanges a setting to 
-  # get a specific application other than first or last
-  timeRanges <- getSimulationTimeRanges(simulation, output$path, structureSet$simulationSet$timeUnit, settings, logFolder)
+  # Note: currently simulationSet$applicationRanges includes only logicals
+  # timeOffset could also be included into the process
+  timeRanges <- getSimulationTimeRanges(simulation, output$path, structureSet$simulationSet, logFolder)
   
   # If one or no application, field 'keep' for time range other than total is FALSE
   for (timeRange in timeRanges) {
@@ -255,7 +255,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
   # metaDataFrame summarizes paths, dimensions and units
   metaDataFrame <- getMetaDataFrame(outputSimulatedMetaData)
 
-  timeRanges <- getSimulationTimeRanges(simulation, output$path, structureSet$simulationSet$timeUnit, settings, logFolder)
+  timeRanges <- getSimulationTimeRanges(simulation, output$path, structureSet$simulationSet, logFolder)
 
   for (timeRange in timeRanges) {
     if (!timeRange$keep) {next}
@@ -736,10 +736,12 @@ plotResidualsQQPlot <- function(data,
   return(qqPlot)
 }
 
-getSimulationTimeRanges <- function(simulation, path, timeUnit, settings, logFolder) {
+getSimulationTimeRanges <- function(simulation, path, simulationSet, logFolder) {
+  timeUnit <- simulationSet$timeUnit
+  applicationRanges <- simulationSet$applicationRanges
   # Initialize output
   timeRanges <- list(total = list(name = ApplicationRanges$total,
-                                  keep = isTRUE(settings$applicationRanges[[ApplicationRanges$total]]),
+                                  keep = applicationRanges[[ApplicationRanges$total]],
                                   values = NULL),
                      firstApplication = list(name = ApplicationRanges$firstApplication,
                                              keep = FALSE,
@@ -783,8 +785,8 @@ getSimulationTimeRanges <- function(simulation, path, timeUnit, settings, logFol
   if (!isOfLength(simulationRanges, 2)) {
     timeRanges$firstApplication$values <- utils::head(simulationRanges, 2)
     timeRanges$lastApplication$values <- utils::tail(simulationRanges, 2)
-    timeRanges$firstApplication$keep <- isTRUE(settings$applicationRanges[[ApplicationRanges$firstApplication]])
-    timeRanges$lastApplication$keep <- isTRUE(settings$applicationRanges[[ApplicationRanges$lastApplication]])
+    timeRanges$firstApplication$keep <- applicationRanges[[ApplicationRanges$firstApplication]]
+    timeRanges$lastApplication$keep <- applicationRanges[[ApplicationRanges$lastApplication]]
   }
   
   return(timeRanges)
