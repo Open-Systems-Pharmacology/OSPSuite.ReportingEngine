@@ -128,7 +128,7 @@ SensitivityPlotSettings <- R6::R6Class(
       if (missing(value)) {
         private$.colorPalette
       } else {
-        validateIsOfType(value, c("character", "numeric"))
+        validateIsOfType(value, c("character", "numeric"), nullAllowed = TRUE)
         private$.colorPalette <- value
       }
     }

@@ -14,7 +14,6 @@ runSensitivity <- function(structureSet,
                            individualId = NULL,
                            logFolder = getwd(),
                            resultsFileName = NULL) {
-
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
 
@@ -68,7 +67,7 @@ runSensitivity <- function(structureSet,
     re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$populationFile)
     popObject <- loadPopulation(structureSet$simulationSet$populationFile)
     resultsFileName <- resultsFileName %||% "sensitivityAnalysisResults"
-    individualSeq <- individualId %||% seq(0, popObject$count-1)
+    individualSeq <- individualId %||% seq(0, popObject$count - 1)
     individualSensitivityAnalysisResults <- list()
     for (ind in individualSeq) {
       logWorkflow(
@@ -130,8 +129,8 @@ individualSensitivityAnalysis <- function(structureSet,
   } else {
     # No parallelization
 
-    #Get allowable number of cores
-    settings$allowedCores <-  getAllowedCores()
+    # Get allowable number of cores
+    settings$allowedCores <- getAllowedCores()
 
     # Load simulation to determine number of parameters valid for sensitivity analysis
     sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
@@ -260,7 +259,7 @@ runParallelSensitivityAnalysis <- function(structureSet,
 #' @export
 analyzeSensitivity <- function(simulation,
                                settings = settings,
-                               logFolder = getwd()){
+                               logFolder = getwd()) {
   sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation, variationRange = settings$variationRange)
   sensitivityAnalysis$addParameterPaths(settings$variableParameterPaths)
 
@@ -356,7 +355,7 @@ runPopulationSensitivityAnalysis <- function(structureSet, settings, logFolder =
   )
 
   ids <- unique(sensitivityAnalysesResultsIndexFileDF$IndividualId)
-  if(is.null(ids)){
+  if (is.null(ids)) {
     return(NULL)
   }
 
@@ -404,7 +403,7 @@ getPKResultsDataFrame <- function(structureSet) {
       }
     ))
 
-    filteredPkResultsDf <- rbind.data.frame( pkResultsDataFrame[ (pkResultsDataFrame$QuantityPath %in% op$path) & (pkResultsDataFrame$Parameter %in% pkParametersThisOutput), ] , filteredPkResultsDf )
+    filteredPkResultsDf <- rbind.data.frame(pkResultsDataFrame[ (pkResultsDataFrame$QuantityPath %in% op$path) & (pkResultsDataFrame$Parameter %in% pkParametersThisOutput), ], filteredPkResultsDf)
   }
 
   return(filteredPkResultsDf)
@@ -436,11 +435,12 @@ getSAFileIndex <- function(structureSet,
 
       if (!isOfLength(quantileResults$ids, length(quantileVec))) {
         logWorkflow(
-          message = messages$warningNoFinitePKParametersForSomeIndividuals(pkParameter,output,structureSet$simulationSet$simulationSetName),
+          message = messages$warningNoFinitePKParametersForSomeIndividuals(pkParameter, output, structureSet$simulationSet$simulationSetName),
           logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error),
           pathFolder = logFolder
         )
-        next}
+        next
+      }
       saResultsByOutput <- data.frame(
         "Output" = output,
         "pkParameter" = pkParameter,
@@ -507,13 +507,15 @@ plotMeanSensitivity <- function(structureSet,
   )
   sensitivityPlots <- list()
   sensitivityCaptions <- list()
-  
+
   # It is possible to add options to SensitivityPlotSettings
   # That the mapping could account for (e.g. how to sort the sensitivities)
-  sensitivityMapping <- tlf::TornadoDataMapping$new(x = "value",
-                                                    y = "parameter",
-                                                    fill = "parameter",
-                                                    color = "parameter")
+  sensitivityMapping <- tlf::TornadoDataMapping$new(
+    x = "value",
+    y = "parameter",
+    fill = "parameter",
+    color = "parameter"
+  )
   # Plot Configuration overwritten by SensitivityPlotSettings object: settings
   sensitivityPlotConfiguration <- settings$plotConfiguration %||% tlf::TornadoPlotConfiguration$new()
   sensitivityPlotConfiguration$labels$xlabel$font$size <- settings$xAxisFontSize %||% sensitivityPlotConfiguration$labels$xlabel$font$size
@@ -521,7 +523,7 @@ plotMeanSensitivity <- function(structureSet,
   sensitivityPlotConfiguration$labels$xlabel$text <- settings$xLabel %||% sensitivityPlotConfiguration$labels$xlabel$text
   sensitivityPlotConfiguration$labels$ylabel$text <- settings$yLabel %||% sensitivityPlotConfiguration$labels$ylabel$text
   sensitivityPlotConfiguration$colorPalette <- settings$colorPalette %||% sensitivityPlotConfiguration$colorPalette
-  
+
   for (output in structureSet$simulationSet$outputs) {
     validateIsIncluded(output$path, saResults$allQuantityPaths)
     pathLabel <- lastPathElement(output$path)
@@ -536,7 +538,7 @@ plotMeanSensitivity <- function(structureSet,
       }
       parameterLabel <- lastPathElement(pkParameter$pkParameter)
       plotID <- paste0(parameterLabel, "-", pathLabel)
-      
+
       pkSensitivities <- saResults$allPKParameterSensitivitiesFor(
         pkParameterName = pkParameter$pkParameter,
         outputPath = output$path,
@@ -556,14 +558,16 @@ plotMeanSensitivity <- function(structureSet,
         })),
         stringsAsFactors = FALSE
       )
-      
-      sensitivityPlot <- tlf::plotTornado(data = sensitivityData,
-                                          dataMapping = sensitivityMapping,
-                                          plotConfiguration = sensitivityPlotConfiguration)
+
+      sensitivityPlot <- tlf::plotTornado(
+        data = sensitivityData,
+        dataMapping = sensitivityMapping,
+        plotConfiguration = sensitivityPlotConfiguration
+      )
       # Remove legend which is redundant from y axis
       sensitivityPlot <- tlf::setLegendPosition(sensitivityPlot, position = tlf::LegendPositions$none)
       sensitivityPlots[[plotID]] <- sensitivityPlot
-      
+
       pkParameterCaption <- pkParameter$displayName %||% pkParameter$pkParameter
       sensitivityCaptions[[plotID]] <- captions$plotSensitivity$mean(pkParameterCaption, output$displayName)
     }
@@ -654,12 +658,16 @@ plotPopulationSensitivity <- function(structureSets,
           logFolder = logFolder
         )
 
-        if(is.null(dfForPkAndOp)){
-          logWorkflow(message = messages$warningPopulationSensitivityPlotsNotAvailableForPKParameterOutputSimulationSet(pkParameter = pkParameter$pkParameter,
-                                                                                                                        output = outputPath,
-                                                                                                                        simulationSetName = structureSet$simulationSet$simulationSetName),
-                      logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error),
-                      pathFolder = logFolder)
+        if (is.null(dfForPkAndOp)) {
+          logWorkflow(
+            message = messages$warningPopulationSensitivityPlotsNotAvailableForPKParameterOutputSimulationSet(
+              pkParameter = pkParameter$pkParameter,
+              output = outputPath,
+              simulationSetName = structureSet$simulationSet$simulationSetName
+            ),
+            logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error),
+            pathFolder = logFolder
+          )
           next
         }
 
@@ -767,45 +775,81 @@ plotPopulationSensitivity <- function(structureSets,
     }
   }
 
-  plotList <- list()
+  #----- Population sensitivity plots
+  sensitivityPlots <- list()
+  sensitivityCaptions <- list()
 
-  for (i in 1:nrow(uniqueQuantitiesAndPKParameters)) {
-    pk <- as.character(uniqueQuantitiesAndPKParameters$PKParameter[i])
-    outputPath <- as.character(uniqueQuantitiesAndPKParameters$QuantityPath[i])
-    sensitivityPlotName <- paste(pk, outputPath, sep = "_")
-    sensitivityPlotName <- gsub(pattern = "|", replacement = "-", x = sensitivityPlotName, fixed = TRUE)
+  # Translate quantile numeric values into sorted percentile names
+  # to ensure binning by Percentiles is appropriate
+  allPopsDf$Percentile <- factor(as.character(100 * allPopsDf$Quantile),
+    levels = sort(unique(100 * allPopsDf$Quantile))
+  )
 
-    # popDfPkOp is a sorted dataframe containing all the rows in allPopsDf that have the same
-    # combination of (QuantityPath,PKParameter) as the current (i'th) row of uniqueQuantitiesAndPKParameters
-    unsortedPopDfPkOp <- allPopsDf[allPopsDf[, "QuantityPath"] == uniqueQuantitiesAndPKParameters$QuantityPath[i] & allPopsDf[, "PKParameter"] == uniqueQuantitiesAndPKParameters$PKParameter[i], ]
+  # It is possible to add options to SensitivityPlotSettings
+  # That the mapping could account for (e.g. how to sort the sensitivities)
+  sensitivityMapping <- tlf::TornadoDataMapping$new(
+    x = "Value",
+    y = "Parameter",
+    color = "Percentile",
+    shape = "Population"
+  )
 
-    opDisplayName <- unsortedPopDfPkOp[1, "OutputDisplayName"]
-    pkDisplayName <- unsortedPopDfPkOp[1, "PKDisplayName"]
+  # Plot Configuration overwritten by SensitivityPlotSettings object: settings
+  # Bar option to FALSE makes a tornado plot with dots instead
+  sensitivityPlotConfiguration <- settings$plotConfiguration %||% tlf::TornadoPlotConfiguration$new(bar = FALSE)
+  sensitivityPlotConfiguration$labels$xlabel$font$size <- settings$xAxisFontSize %||% sensitivityPlotConfiguration$labels$xlabel$font$size
+  sensitivityPlotConfiguration$labels$ylabel$font$size <- settings$yAxisFontSize %||% sensitivityPlotConfiguration$labels$ylabel$font$size
+  sensitivityPlotConfiguration$labels$xlabel$text <- settings$xLabel %||% sensitivityPlotConfiguration$labels$xlabel$text
+  sensitivityPlotConfiguration$labels$ylabel$text <- settings$yLabel %||% sensitivityPlotConfiguration$labels$ylabel$text
+  sensitivityPlotConfiguration$colorPalette <- settings$colorPalette %||% sensitivityPlotConfiguration$colorPalette
 
-    popDfPkOp <- unsortedPopDfPkOp[order(-abs(unsortedPopDfPkOp$Value)), ]
+  # Create plots and captions per unique output path and PK parameter
+  for (outputIndex in 1:nrow(uniqueQuantitiesAndPKParameters)) {
+    selectedPath <- uniqueQuantitiesAndPKParameters$QuantityPath[outputIndex]
+    selectedPKParameter <- uniqueQuantitiesAndPKParameters$PKParameter[outputIndex]
+    plotID <- paste(as.character(selectedPKParameter), as.character(selectedPath), sep = "_")
+    plotID <- gsub(pattern = "|", replacement = "-", x = plotID, fixed = TRUE)
 
-    # Set level order of Parameter column to make most sensitive parameter have highest factor level
-    popDfPkOp$Parameter <- factor(x = popDfPkOp$Parameter, levels = rev(unique(popDfPkOp$Parameter)))
+    outputRows <- allPopsDf$QuantityPath == selectedPath & allPopsDf$PKParameter == selectedPKParameter
+    outputSensitivityData <- allPopsDf[outputRows, ]
 
-    # Get vector of settings$maximalParametersPerSensitivityPlot most sensitive parameters
-    parameterLevels <- levels(popDfPkOp$Parameter)
-    truncParamLevels <- rev(parameterLevels)[1:min(settings$maximalParametersPerSensitivityPlot, length(parameterLevels))]
+    # Because of option `maximalParametersPerSensitivityPlot` available from settings
+    # Parameters must first be ranked and selected according to their sensitivity
+    # This must be done using levels because sensitivities are split between simulation sets and percentiles
+    outputSensitivityData <- outputSensitivityData[order(-abs(outputSensitivityData$Value)), ]
+    outputSensitivityData$Parameter <- factor(x = outputSensitivityData$Parameter, levels = rev(unique(outputSensitivityData$Parameter)))
 
-    plotObject <- getPkParameterPopulationSensitivityPlot(
-      data = popDfPkOp[ popDfPkOp$Parameter %in% truncParamLevels, ], # title = paste("Population sensitivity of", pk, "of", op),
-      settings = settings
+    # Select most sensitive parameters
+    allAvailableParameters <- levels(outputSensitivityData$Parameter)
+    selectedParameters <- rev(allAvailableParameters)[1:min(settings$maximalParametersPerSensitivityPlot, length(allAvailableParameters))]
+    selectedSensitivityData <- outputSensitivityData[outputSensitivityData$Parameter %in% selectedParameters, ]
+
+    tornadoPlot <- tlf::plotTornado(
+      data = selectedSensitivityData,
+      dataMapping = sensitivityMapping,
+      plotConfiguration = sensitivityPlotConfiguration
     )
-    plotList[["plots"]][[sensitivityPlotName]] <- plotObject
+    # Legends currently left aligned. This option may be changed on later version and use reEnv instead
+    tornadoPlot <- tlf::setLegendPosition(tornadoPlot, position = tlf::LegendPositions$outsideTopLeft)
+    # Legend titles are not currently handled by tlf, ggplot2 is needed to print descriptor and quantiles
+    tornadoPlot <- tornadoPlot +
+      ggplot2::theme(legend.title = ggplot2::element_text()) +
+      ggplot2::labs(color = "Individual Percentile", shape = simulationSetDescriptor)
 
-    plotList[["captions"]][[sensitivityPlotName]] <- captions$plotSensitivity$population(
-      parameterName = pkDisplayName,
-      pathName = opDisplayName,
-      quantiles = sort(unique(popDfPkOp$Quantile)),
-      simulationSetName = unique(popDfPkOp$Population),
+    sensitivityPlots[[plotID]] <- tornadoPlot
+
+    sensitivityCaptions[[plotID]] <- captions$plotSensitivity$population(
+      parameterName = selectedSensitivityData$PKDisplayName[1],
+      pathName = selectedSensitivityData$OutputDisplayName[1],
+      quantiles = levels(selectedSensitivityData$Percentile),
+      simulationSetName = unique(selectedSensitivityData$Population),
       descriptor = simulationSetDescriptor
     )
   }
-  return(plotList)
+  return(list(
+    plots = sensitivityPlots,
+    captions = sensitivityCaptions
+  ))
 }
 
 #' @title getPopSensDfForPkAndOutput
@@ -899,50 +943,6 @@ getPopSensDfForPkAndOutput <- function(simulation,
 
   return(individualsDfForPKParameter)
 }
-
-#' @title getPkParameterPopulationSensitivityPlot
-#' @description build sensitvity plot object for a population for one output and pk parameter
-#' @param data data.frame of sensitivity analysis results
-#' @param settings `SensitivityPlotSettings` object
-#' @return plt sensitivity plot based on results in input data
-#' @import ggplot2
-#' @import tlf
-getPkParameterPopulationSensitivityPlot <- function(data, settings) {
-  data[["Quantile"]] <- as.factor(data[["Quantile"]])
-
-  shapeAes <- NULL
-  if ("Population" %in% colnames(data)) {
-    shapeAes <- "Population"
-  }
-
-  # Plot Configuration using settings
-  populationSensitivityPlotConfiguration <- settings$plotConfiguration %||% tlf::PlotConfiguration$new()
-  # Warning: Sensitivity plot uses ggplot::coord_flip()
-  # Consequently, x and y-axes need to be switched at this stage
-  if (!isOfLength(settings$xAxisFontSize, 0)) {
-    populationSensitivityPlotConfiguration$labels$ylabel$font$size <- settings$xAxisFontSize
-  }
-  if (!isOfLength(settings$yAxisFontSize, 0)) {
-    populationSensitivityPlotConfiguration$labels$xlabel$font$size <- settings$yAxisFontSize
-  }
-
-  sensitivityPlot <- tlf::initializePlot(populationSensitivityPlotConfiguration)
-  sensitivityPlot <- sensitivityPlot + ggplot2::geom_point(
-    data = data,
-    mapping = ggplot2::aes_string(x = "Parameter", y = "Value", color = "Quantile", shape = shapeAes),
-    size = 2,
-    position = ggplot2::position_dodge(width = 0.5)
-  ) +
-    ggplot2::scale_colour_brewer(palette = settings$colorPalette) +
-    ggplot2::xlab(settings$yLabel) + ggplot2::ylab(settings$xLabel) +
-    ggplot2::labs(color = "Individual quantile") +
-    ggplot2::geom_hline(yintercept = 0, color = 1, size = 1, linetype = "longdash") +
-    ggplot2::coord_flip() +
-    ggplot2::theme(legend.position = "top", legend.box = "vertical")
-
-  return(sensitivityPlot)
-}
-
 
 #' @title getPkOutputIndexDf
 #' @description Function to filter the population results index file for given pkParameter and output
