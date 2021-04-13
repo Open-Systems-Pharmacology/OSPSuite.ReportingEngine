@@ -46,7 +46,8 @@ Create a new `SimulationSet` object.
   observedDataFile = NULL,
   observedMetaDataFile = NULL,
   timeUnit = "h",
-  applicationRanges = TRUE
+  applicationRanges = list(total = TRUE, firstApplication = TRUE, lastApplication =
+    TRUE)
 )}\if{html}{\out{</div>}}
 }
 
@@ -66,8 +67,7 @@ Create a new `SimulationSet` object.
 \item{\code{timeUnit}}{display unit for time variable. Default is "h"}
 
 \item{\code{applicationRanges}}{named list of logicals defining which application ranges are included in
-time profiles and residual plots when applicable. Names are available in enum `ApplicationRanges`.
-Providing directly a logical value will associate the value to all application ranges.}
+time profiles and residual plots when applicable. Names are available in enum `ApplicationRanges`.}
 }
 \if{html}{\out{</div>}}
 }

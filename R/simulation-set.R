@@ -30,7 +30,6 @@ SimulationSet <- R6::R6Class(
     #' @param timeUnit display unit for time variable. Default is "h"
     #' @param applicationRanges named list of logicals defining which application ranges are included in
     #' time profiles and residual plots when applicable. Names are available in enum `ApplicationRanges`.
-    #' Providing directly a logical value will associate the value to all application ranges.
     #' @return A new `SimulationSet` object
     initialize = function(simulationSetName,
                               simulationFile,
@@ -38,15 +37,16 @@ SimulationSet <- R6::R6Class(
                               observedDataFile = NULL,
                               observedMetaDataFile = NULL,
                               timeUnit = "h",
-                              applicationRanges = TRUE) {
+                              applicationRanges = list(total = TRUE,
+                                                       firstApplication = TRUE,
+                                                       lastApplication = TRUE)
+                          ) {
       # Test and validate the simulation object
       validateIsString(simulationSetName)
       validateIsString(simulationFile)
       validateIsLogical(c(applicationRanges))
-      # Is of type does not work for this test because values in list are logicals
-      if (!is.logical(applicationRanges)) {
-        validateIsIncluded(ApplicationRanges, names(applicationRanges), groupName = "'applicationRanges' variables")
-      }
+      validateIsIncluded(ApplicationRanges, names(applicationRanges), groupName = "'applicationRanges' variables")
+      
       validateIsFileExtension(simulationFile, "pkml")
       simulation <- ospsuite::loadSimulation(simulationFile)
       # Test and validate outputs and their paths
@@ -67,14 +67,8 @@ SimulationSet <- R6::R6Class(
 
       self$timeUnit <- timeUnit %||% "h"
 
-      self$applicationRanges <- applicationRanges
-      if (is.logical(applicationRanges)) {
-        self$applicationRanges <- list(
-          total = applicationRanges,
-          firstApplication = applicationRanges,
-          lastApplication = applicationRanges
-        )
-      }
+      # In case applicationRanges is provided as a named vector
+      self$applicationRanges <- as.list(applicationRanges)
     }
   )
 )
