@@ -22,7 +22,7 @@ Workflow <- R6::R6Class(
     #' Create a new `Workflow` object.
     #' @param simulationSets list of `SimulationSet` R6 class objects
     #' @param workflowFolder path of the output folder created or used by the Workflow.
-    #' @param createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
+    #' @param createWordReport logical of option for creating Markdown-Report only but not a Word-Report.
     #' @param watermark displayed watermark in figures background
     #' @param simulationSetDescriptor character Descriptor of simulation sets indicated in reports
     #' @return A new `Workflow` object
