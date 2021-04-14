@@ -4,6 +4,7 @@
 
 * Descriptor of simulation sets is now available and can be defined in Excel template (#445) as well as using the function `setSimulationDescriptor` (#423).
 * Each task property `settings` is now an R6 object (#396). This allows users to have an easy and direct access to setting properties.
+* Posibility to read time and measurement units from nonmem columns (#414)
 
 ## Minor improvements and bug fixes
 
@@ -13,6 +14,10 @@
 They can be updated in global settings using `setDefaultNumericFormat` or within specific tasks through their `settings` property.
 * The `settings` property for task `plotTimeProfilesAndResiduals` include 
 * Application Ranges can be switched on/off from SimulationSet objects regarding simulations with multiple administrations (#419)
+* Population workflows: captions for tables (PK parameters) missing (#421)
+* Population workflows: units for tables (PK parameters) missing (#422)
+* Population/RatioComparison: box-Whisker Ratio plots (#425)
+
 
 # ospsuite.reportingengine 1.1.0
 
