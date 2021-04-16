@@ -445,9 +445,17 @@ then to provide directly the list of their names to the input `pkParameters`.
 - Users can also create their own PK parameters using: __addUserDefinedPKParameter()__.
 
 ## 3.5. Application Ranges
-If the simulation set corresponds to multiple administrations, evaluations on some application ranges can be switched on/off.
-The input `applicationRanges` is a logical value or a list of logical values that can switch on/off the presence of some application ranges in the reported plots.
-The field includes the following elements: `total`, `firstApplication` and `lastApplication`.
+
+If the simulation set corresponds to multiple administrations, the reported evaluations on some application ranges can be switched on/off.
+The input `applicationRanges` corresponds to the names of application ranges to include in the report for the simulation set.
+By default, all application ranges are included into the report.
+The enum `ApplicationRanges` provide the names of application ranges.
+
+```{r application ranges}
+ApplicationRanges
+```
+
+This input is then translated in the `SimulationSet` objects as a list of logical values defining whether the corresponding application range is included in the report or not.
 
 # 4. Tasks
 ## 4.1. Task names and activation

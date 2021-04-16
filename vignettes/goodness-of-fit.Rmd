@@ -5,7 +5,7 @@ output:
    number_sections: true
    toc: true
 vignette: >
-  %\VignetteIndexEntry{goodness-of-fit}
+  %\VignetteIndexEntry{Time profiles and Residuals task}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -52,18 +52,22 @@ The time profiles and residuals task generates for each simulation set plots of:
 
 ### Multiple applications
 
-For a multiple application, 
-6 time profile plots can be generated corresponding to simulated time profiles in linear and logarithmic scale for: 
+For simulations with multiple applications, 
+up to 6 time profile plots can be generated corresponding to simulated time profiles in linear and logarithmic scale for: 
 
 - the total simulated time range
 - the time range of the first application
-- the time range of the last application.
+- the time range of the last application
+
+The input `applicationRanges` from `SimulationSet` objects can be used to select which ranges to include in the evaluation.
 
 ### Residuals
 
 If observed data are available in the range selected in the output definition and selected in `dataSelection`, 
 they will be added to the time profile plots.
-Furthermore, residuals will be calculated as $Residuals=log(Observed)-log(Simulated)$ and 6 additional plots will be created figures:
+
+Furthermore, residuals will be calculated according to the residual scale defined by the `Output` objects included within the simulation sets
+and 6 additional plots will be created figures:
 
 - Predicted vs observed in linear scale
 - Predicted vs observed in log scale
@@ -71,6 +75,15 @@ Furthermore, residuals will be calculated as $Residuals=log(Observed)-log(Simula
 - Residuals vs simulated output
 - Histogram of residuals
 - qq-plot of residuals
+
+The residual scale corresponds to one element from the enum `ResidualScales`:
+```{r residual scales}
+ResidualScales
+```
+
+The default uses "Logarithmic" and calculate residuals as: $Residuals=log(Observed)-log(Simulated)$
+
+If the option "Linear" is used instead, the residuals are calculated as: $Residuals=Observed-Simulated$
 
 A histogram and a qq-plot of residuals across all the simulation sets will also be added at the end of the analysis.
 

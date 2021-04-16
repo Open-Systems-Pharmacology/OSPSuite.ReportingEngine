@@ -7,7 +7,7 @@
 #' @field observedMetaDataFile name of csv file to be used as dictionary of the observed data
 #' @field timeUnit display unit for time variable
 #' @field applicationRanges named list of logicals defining which Application ranges are included in
-#' time profiles and residual plots when applicable
+#' reported time profiles and residual plots when applicable
 #' @export
 SimulationSet <- R6::R6Class(
   "SimulationSet",
@@ -28,8 +28,7 @@ SimulationSet <- R6::R6Class(
     #' @param observedDataFile name of csv file to be used for observed data
     #' @param observedMetaDataFile name of csv file to be used as dictionary of the observed data
     #' @param timeUnit display unit for time variable. Default is "h"
-    #' @param applicationRanges named list of logicals defining which application ranges are included in
-    #' time profiles and residual plots when applicable. Names are available in enum `ApplicationRanges`.
+    #' @param applicationRanges names of application ranges to include in the report. Names are available in enum `ApplicationRanges`.
     #' @return A new `SimulationSet` object
     initialize = function(simulationSetName,
                               simulationFile,
@@ -37,16 +36,14 @@ SimulationSet <- R6::R6Class(
                               observedDataFile = NULL,
                               observedMetaDataFile = NULL,
                               timeUnit = "h",
-                              applicationRanges = list(total = TRUE,
-                                                       firstApplication = TRUE,
-                                                       lastApplication = TRUE)
-                          ) {
+                              applicationRanges = ApplicationRanges) {
       # Test and validate the simulation object
       validateIsString(simulationSetName)
       validateIsString(simulationFile)
-      validateIsLogical(c(applicationRanges))
-      validateIsIncluded(ApplicationRanges, names(applicationRanges), groupName = "'applicationRanges' variables")
-      
+      # For optional input, usually null is allowed
+      # but not here as it would mean that nothing would be reported
+      validateIsIncluded(c(applicationRanges), ApplicationRanges)
+
       validateIsFileExtension(simulationFile, "pkml")
       simulation <- ospsuite::loadSimulation(simulationFile)
       # Test and validate outputs and their paths
@@ -67,8 +64,11 @@ SimulationSet <- R6::R6Class(
 
       self$timeUnit <- timeUnit %||% "h"
 
-      # In case applicationRanges is provided as a named vector
-      self$applicationRanges <- as.list(applicationRanges)
+      self$applicationRanges <- list(
+        total = isIncluded(ApplicationRanges$total, applicationRanges),
+        firstApplication = isIncluded(ApplicationRanges$firstApplication, applicationRanges),
+        lastApplication = isIncluded(ApplicationRanges$lastApplication, applicationRanges)
+      )
     }
   )
 )
