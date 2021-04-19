@@ -9,7 +9,7 @@ getSimulatedResultsFromOutput(
   output,
   simulationQuantity,
   molWeight,
-  timeUnit
+  simulationSet
 )
 }
 \arguments{
@@ -21,7 +21,7 @@ getSimulatedResultsFromOutput(
 
 \item{molWeight}{Molar weight for unit conversion of dependent variable}
 
-\item{timeUnit}{time unit for unit conversion of time}
+\item{simulationSet}{`SimulationSet` object}
 }
 \value{
 list of data and metaData

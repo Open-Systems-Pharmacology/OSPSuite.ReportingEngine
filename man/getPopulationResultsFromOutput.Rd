@@ -9,7 +9,7 @@ getPopulationResultsFromOutput(
   output,
   simulationQuantity,
   molWeight,
-  timeUnit,
+  simulationSet,
   settings = NULL
 )
 }
@@ -22,7 +22,7 @@ getPopulationResultsFromOutput(
 
 \item{molWeight}{Molar weight for unit conversion of dependent variable}
 
-\item{timeUnit}{time unit for unit conversion of time}
+\item{simulationSet}{`SimulationSet` object}
 
 \item{settings}{TaskSetting object}
 }

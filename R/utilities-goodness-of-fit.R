@@ -41,7 +41,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
     simulationPathResults <- ospsuite::getOutputValues(simulationResult, quantitiesOrPaths = output$path)
     molWeight <- simulation$molWeightFor(output$path)
 
-    outputSimulatedResults <- getSimulatedResultsFromOutput(simulationPathResults, output, simulationQuantity, molWeight, structureSet$simulationSet$timeUnit)
+    outputSimulatedResults <- getSimulatedResultsFromOutput(simulationPathResults, output, simulationQuantity, molWeight, structureSet$simulationSet)
     outputSimulatedData <- outputSimulatedResults$data
     outputSimulatedMetaData[[output$path]] <- outputSimulatedResults$metaData
 
@@ -107,9 +107,9 @@ plotMeanGoodnessOfFit <- function(structureSet,
 #' @param output An `Output` object
 #' @param simulationQuantity Dimension/quantity for unit conversion of dependent variable
 #' @param molWeight Molar weight for unit conversion of dependent variable
-#' @param timeUnit time unit for unit conversion of time
+#' @param simulationSet `SimulationSet` object
 #' @return list of data and metaData
-getSimulatedResultsFromOutput <- function(simulationPathResults, output, simulationQuantity, molWeight, timeUnit) {
+getSimulatedResultsFromOutput <- function(simulationPathResults, output, simulationQuantity, molWeight, simulationSet) {
   outputConcentration <- simulationPathResults$data[, output$path]
   if (!isOfLength(output$displayUnit, 0)) {
     outputConcentration <- ospsuite::toUnit(simulationQuantity,
@@ -120,16 +120,16 @@ getSimulatedResultsFromOutput <- function(simulationPathResults, output, simulat
   }
 
   outputSimulatedData <- data.frame(
-    "Time" = ospsuite::toUnit("Time", simulationPathResults$data[, "Time"], timeUnit),
+    "Time" = ospsuite::toUnit("Time", simulationPathResults$data[, "Time"], simulationSet$timeUnit),
     "Concentration" = outputConcentration,
-    "Legend" = output$displayName %||% output$path,
+    "Legend" = paste0("Simulated ", output$displayName %||% output$path, " (", simulationSet$simulationSetName, ")"),
     "Path" = output$path
   )
-
+  
   outputSimulatedMetaData <- list(
     "Time" = list(
       dimension = "Time",
-      unit = timeUnit
+      unit = simulationSet$timeUnit
     ),
     "Concentration" = list(
       dimension = simulationQuantity$dimension,
@@ -233,7 +233,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     simulationPathResults <- ospsuite::getOutputValues(simulationResult, quantitiesOrPaths = output$path)
     molWeight <- simulation$molWeightFor(output$path)
 
-    outputSimulatedResults <- getPopulationResultsFromOutput(simulationPathResults, output, simulationQuantity, molWeight, structureSet$simulationSet$timeUnit, settings)
+    outputSimulatedResults <- getPopulationResultsFromOutput(simulationPathResults, output, simulationQuantity, molWeight, structureSet$simulationSet, settings)
     outputSimulatedData <- outputSimulatedResults$data
     outputSimulatedMetaData[[output$path]] <- outputSimulatedResults$metaData
 
@@ -288,14 +288,6 @@ plotPopulationGoodnessOfFit <- function(structureSet,
       simulatedData = simulatedData
     )
   }
-  # For reference population, update the legend with reference and export
-  simulatedData$legendRange <- paste(simulatedData$legendRange, paste0("(", structureSet$simulationSet$simulationSetName, ")"))
-  simulatedData$legendMedian <- paste(simulatedData$legendMedian, paste0("(", structureSet$simulationSet$simulationSetName, ")"))
-  simulatedData$legendMean <- paste(simulatedData$legendMean, paste0("(", structureSet$simulationSet$simulationSetName, ")"))
-  if (!isOfLength(residualsData, 0)) {
-    residualsData$Legend <- paste(residualsData$Legend, paste0("(", structureSet$simulationSet$simulationSetName, ")"))
-  }
-
   referenceData <- list(
     simulatedData = simulatedData,
     observedData = observedData,
@@ -318,14 +310,14 @@ plotPopulationGoodnessOfFit <- function(structureSet,
 #' @param output An `Output` object
 #' @param simulationQuantity Dimension/quantity for unit conversion of dependent variable
 #' @param molWeight Molar weight for unit conversion of dependent variable
-#' @param timeUnit time unit for unit conversion of time
+#' @param simulationSet `SimulationSet` object
 #' @param settings TaskSetting object
 #' @return list of data and metaData
-getPopulationResultsFromOutput <- function(simulationPathResults, output, simulationQuantity, molWeight, timeUnit, settings = NULL) {
+getPopulationResultsFromOutput <- function(simulationPathResults, output, simulationQuantity, molWeight, simulationSet, settings = NULL) {
   aggregateNames <- c("mean", "median", "lowPerc", "highPerc")
   aggregateFunctions <- c(mean, median, AggregationConfiguration$functions$ymin, AggregationConfiguration$functions$ymax)
 
-  # Get the aggregation results
+  # Get the aggregated results: mean, median and range along time bins
   aggregateSummary <- tlf::AggregationSummary$new(
     data = simulationPathResults$data,
     metaData = simulationPathResults$metaData,
@@ -335,8 +327,10 @@ getPopulationResultsFromOutput <- function(simulationPathResults, output, simula
     aggregationFunctionNames = aggregateNames
   )
 
+  # Conversion to user-defined units
+  # Expressions are used to prevent copy/paste of the code for mean, median and range conversions
   aggregateData <- aggregateSummary$dfHelper
-  aggregateData$Time <- toUnit("Time", aggregateData$Time, timeUnit)
+  aggregateData$Time <- toUnit("Time", aggregateData$Time, simulationSet$timeUnit)
 
   convertExpressions <- parse(text = paste0(
     "aggregateData$", aggregateNames, "<- ifnotnull(output$displayUnit,",
@@ -345,10 +339,14 @@ getPopulationResultsFromOutput <- function(simulationPathResults, output, simula
   ))
   eval(convertExpressions)
 
+  # Legend using expressions
+  # The generated code to eval follows the example below
+  # aggregateData$legendMean <- paste0("Simulated mean for ", 
+  # output$displayName %||% output$path, " (", simulationSet$simulationSetName, ")")
   legendExpressions <- parse(text = paste0(
     "aggregateData$", c("legendMean", "legendMedian", "legendRange"),
     '<- paste0("Simulated ', c("mean", "median", AggregationConfiguration$names$range),
-    ' for ", output$displayName)'
+    ' for ", output$displayName %||% output$path, " (", simulationSet$simulationSetName, ")")'
   ))
   eval(legendExpressions)
 
@@ -358,7 +356,7 @@ getPopulationResultsFromOutput <- function(simulationPathResults, output, simula
   outputSimulatedMetaData <- list(
     "Time" = list(
       dimension = "Time",
-      unit = timeUnit
+      unit = simulationSet$timeUnit
     ),
     "Concentration" = list(
       dimension = simulationQuantity$dimension,
