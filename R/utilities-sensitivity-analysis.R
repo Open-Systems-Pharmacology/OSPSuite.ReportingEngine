@@ -834,7 +834,7 @@ plotPopulationSensitivity <- function(structureSets,
     # Legend titles are not currently handled by tlf, ggplot2 is needed to print descriptor and quantiles
     tornadoPlot <- tornadoPlot +
       ggplot2::theme(legend.title = ggplot2::element_text()) +
-      ggplot2::labs(color = "Individual Percentile", shape = simulationSetDescriptor)
+      ggplot2::labs(color = "Individual Percentile", shape = translateDescriptor(simulationSetDescriptor))
 
     sensitivityPlots[[plotID]] <- tornadoPlot
 

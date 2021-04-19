@@ -165,12 +165,16 @@ reportUnit <- function(displayUnit) {
 
 # For the reported tables, first column is simulation set names
 # Consequently, the descriptor should be used
-# However, expression "" is not accepted and needs to be replaced by " "
-addDescriptorToTable <- function(data, descriptor) {
+# However, expression "" is not accepted and needs to be replaced by "Population"
+translateDescriptor <- function(descriptor) {
   if (descriptor == "") {
-    descriptor <- " "
+    descriptor <- "Population"
   }
-  names(data)[1] <- descriptor
+  return(descriptor)
+}
+
+addDescriptorToTable <- function(data, descriptor) {
+  names(data)[1] <- translateDescriptor(descriptor)
   return(data)
 }
 
