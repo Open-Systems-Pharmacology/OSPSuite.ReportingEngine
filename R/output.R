@@ -81,7 +81,7 @@ Output <- R6::R6Class(
         }
       }
 
-      self$dataDisplayName <- dataDisplayName %||% paste0(self$displayName, " observed data")
+      self$dataDisplayName <- dataDisplayName %||% self$displayName
 
       self$pkParameters <- c(pkParameters)
 

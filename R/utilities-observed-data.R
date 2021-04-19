@@ -227,7 +227,7 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
   outputData <- data.frame(
     "Time" = ospsuite::toUnit("Time", data[selectedRows, dataMapping$time], timeUnit),
     "Concentration" = outputConcentration,
-    "Legend" = output$dataDisplayName,
+    "Legend" = paste0("Observed data ", output$dataDisplayName),
     "Path" = output$path
   )
   if (isOfLength(dataMapping$lloq, 0)) {
