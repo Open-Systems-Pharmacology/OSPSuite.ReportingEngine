@@ -27,9 +27,9 @@ require(ospsuite.reportingengine)
 
 # Overview
 
-This vignette provides some guidance to define and set plot properties for the reporting engine.
+This vignette provides some guidance to define properties and settings for the reporting engine.
 
-Plot configuration can be set at 2 levels:
+These properties can at 2 levels:
 
 - Global or workflow plot configuration, affecting every plot of the workflow output
 - Local or task plot configuration, affecting specific plots within a task
@@ -233,10 +233,6 @@ Then, the __`settings`__ field of the __"plotTimeProfilesAndResiduals"__ task ca
 workflowA$plotTimeProfilesAndResiduals$settings <- mySettings
 ```
 
-__Note__: currently the settings can be updated directly allocating the list.
-However, this method may lead to errors if the settings are not correctly defined.
-Relevant methods and `TaskSettings` class will replace this process which may become deprecated in later versions.
-
 The run of the workflow with updated settings and get the resulting report as shown below.
 
 Since the histogram across the all simulations did not get the plot configuration settings defined for individual simulations, the plots are quite different.
@@ -304,8 +300,7 @@ workflowA$plotPKParameters$settings$stairstep <- TRUE
 
 ## Sensitivity plots
 
-Settings for the sensitivity plots are currently the only settings managed by R6 objects.
-To define settings, it is consequently necessary to create __`SensitivityPlotSettings`__ objects.
+Settings for the sensitivity plots are __`SensitivityPlotSettings`__ objects.
 The vignette __"sensitivity-analysis"__ provides more details about the __"plotSensitivity"__ task.
 
 The input argument of the __`SensitivityPlotSettings`__ settings object are then (to be created using `SensitivityPlotSettings$new()`): 
@@ -326,6 +321,15 @@ Default xLabel is __"Sensitivity"__.
 Default yLabel is __NULL__.
 - __`colorPalette`__ Name of a color palette to be used by `ggplot2::scale_fill_brewer()` for sensitivity plot.
 Default color palette is __"Spectral"__.
+
+Since displayed sensitivity parameters can include long strings of characters shrinking the actual plot even using small `yAxisFontSize`, an algorithm providing line breaks is included in the task to prevent the shrinking issue as much as possible.
+Two fields are available in settings to tune the algorithm:
+
+- __`maxWidthPerParameter`__ is the maximum width for the display parameters. Parameters longer than that will have line breaks. 
+The default maximum width is 25 characters.
+- __`maxLinesPerParameter`__ is the maximum number of lines for the display parameters.
+The default maximum number of lines is 3. For parameters longer than `maxLinesPerParameter*maxWidthPerParameter`, only `maxLinesPerParameter` setting will be respected.
+
 
 ## Absorption
 
