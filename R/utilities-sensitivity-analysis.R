@@ -558,6 +558,12 @@ plotMeanSensitivity <- function(structureSet,
         })),
         stringsAsFactors = FALSE
       )
+      # Add line breaks for display based on allowed size if parameters are too long
+      sensitivityData$parameter <- getDisplaySensitivityParameters(sensitivityData$parameter,
+        settings$maxLinesPerParameter,
+        settings$maxWidthPerParameter,
+        logFolder = logFolder
+      )
 
       sensitivityPlot <- tlf::plotTornado(
         data = sensitivityData,
@@ -779,6 +785,13 @@ plotPopulationSensitivity <- function(structureSets,
   sensitivityPlots <- list()
   sensitivityCaptions <- list()
 
+  # Add line breaks for display based on allowed size if parameters are too long
+  allPopsDf$Parameter <- getDisplaySensitivityParameters(as.character(allPopsDf$Parameter),
+    settings$maxLinesPerParameter,
+    settings$maxWidthPerParameter,
+    logFolder = logFolder
+  )
+
   # Translate quantile numeric values into sorted percentile names
   # to ensure binning by Percentiles is appropriate
   allPopsDf$Percentile <- factor(as.character(100 * allPopsDf$Quantile),
@@ -962,4 +975,96 @@ getPkOutputIndexDf <- function(indexDf, pkParameter, output) {
 getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold = NULL, variableParameterPaths = NULL) {
   totalSensitivityThreshold <- totalSensitivityThreshold %||% ifnotnull(variableParameterPaths, 1, 0.9)
   return(totalSensitivityThreshold)
+}
+
+#' @title getDisplaySensitivityParameters
+#' @description Displayed parameter names for sensitivity breaking lines when too long
+#' @param parameterNames vector parameters displayed in the sensitivity plots
+#' @param maxLinesPerParameter maxLinesPerParameter maximum number of lines allowed per displayed parameters
+#' @param maxWidthPerParameter maximum number of characters allowed per lines of displayed parameters
+#' @param logFolder folder where the logs are saved
+#' @return Displayed parameter names for sensitivity breaking lines when too long
+getDisplaySensitivityParameters <- function(parameterNames, maxLinesPerParameter, maxWidthPerParameter, logFolder = getwd()) {
+  # Get total parameters lengths
+  parametersTotalLengths <- nchar(parameterNames)
+
+  # Check parameters to split
+  parametersToSplit <- parametersTotalLengths > maxWidthPerParameter
+  if (sum(parametersToSplit) == 0) {
+    return(parameterNames)
+  }
+
+  logWorkflow(
+    message = paste0(
+      "Parameters '", paste0(parameterNames[parametersToSplit], collapse = "', '"),
+      "' were split for display due to number of characters higher than ", maxWidthPerParameter
+    ),
+    pathFolder = logFolder,
+    logTypes = LogTypes$Debug
+  )
+
+  # Check how many line break required
+  numberOfSplits <- floor(parametersTotalLengths / maxWidthPerParameter)
+  numberOfLines <- numberOfSplits + 1
+
+  # Flag parameters reaching maximum allowed number of lines
+  if (sum(numberOfLines > maxLinesPerParameter) > 0) {
+    logWorkflow(
+      message = paste0(
+        "Maximum allowed number of lines (", maxLinesPerParameter,
+        ") reached for parameters '", paste0(parameterNames[numberOfLines > maxLinesPerParameter], collapse = "', '")
+      ),
+      pathFolder = logFolder,
+      logTypes = LogTypes$Debug
+    )
+  }
+
+  # Splits cannot create more lines than max lines
+  numberOfSplits[numberOfLines > maxLinesPerParameter] <- maxLinesPerParameter - 1
+  numberOfLines <- numberOfSplits + 1
+
+  # displayParameterNames <- parameterNames
+  for (parameterIndex in seq_along(parameterNames)) {
+    if (numberOfSplits[parameterIndex] == 0) {
+      next
+    }
+    dashSplits <- as.numeric(gregexpr(pattern = "-", parameterNames[parameterIndex])[[1]])
+    spaceSplits <- as.numeric(gregexpr(pattern = " ", parameterNames[parameterIndex])[[1]])
+    possibleSplits <- sort(c(dashSplits[dashSplits > 0], spaceSplits[spaceSplits > 0]))
+
+    # Optimal splits are at equal width
+    splitWidth <- parametersTotalLengths[parameterIndex] / numberOfLines[parameterIndex]
+
+    # Select breaks from possible splits and optimal splits
+    actualSplits <- getSplitValues(possibleSplits, splitWidth, numberOfSplits[parameterIndex])
+    splitFirst <- c(1, actualSplits + 1)
+    splitLast <- c(actualSplits, parametersTotalLengths[parameterIndex])
+
+    # Split the display parameter at selected values and add line breaks
+    parameterNames[parameterIndex] <- paste0(substring(parameterNames[parameterIndex], first = splitFirst, last = splitLast),
+      collapse = "\n"
+    )
+  }
+  return(parameterNames)
+}
+
+getSplitValues <- function(possibleSplits, splitWidth, numberOfSplits) {
+  # Optimal splits are at equal width
+  optimalSplits <- floor(cumsum(rep(splitWidth, numberOfSplits)))
+  for (splitIndex in seq_along(optimalSplits)) {
+    if (isOfLength(possibleSplits, 0)) {
+      return(optimalSplits)
+    }
+    positionDifference <- min(abs(possibleSplits - optimalSplits[splitIndex]))
+    # If closest possible split too far, use optimal split
+    if (positionDifference > splitWidth) {
+      next
+    }
+
+    # If available use the available split and remove it from other loops
+    closestAvailableSplitIndex <- which.min(abs(possibleSplits - optimalSplits[splitIndex]))
+    optimalSplits[splitIndex] <- possibleSplits[closestAvailableSplitIndex]
+    possibleSplits <- possibleSplits[-closestAvailableSplitIndex]
+  }
+  return(optimalSplits)
 }

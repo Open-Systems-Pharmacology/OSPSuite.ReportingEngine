@@ -14,29 +14,41 @@ SensitivityPlotSettings <- R6::R6Class(
     #' @param yAxisFontSize Font size of y-axis labels for sensitivity plot
     #' @param xLabel Label of x-axis for sensitivity plot
     #' @param yLabel Label of y-axis for sensitivity plot
+    #' @param maxLinesPerParameter maxLinesPerParameter maximum number of lines allowed per displayed parameters
+    #' @param maxWidthPerParameter maximum number of characters allowed per lines of displayed parameters
     #' @param colorPalette Name of a color palette to be used by `ggplot2::scale_fill_brewer()` for sensitivity plot
     #' @return A new `SensitivityPlotSettings` object
     initialize = function(totalSensitivityThreshold = NULL,
                               variableParameterPaths = NULL,
-                              maximalParametersPerSensitivityPlot = 50,
+                              maximalParametersPerSensitivityPlot = NULL,
                               plotConfiguration = NULL,
                               xAxisFontSize = 6,
                               yAxisFontSize = 6,
+                              maxLinesPerParameter = NULL,
+                              maxWidthPerParameter = NULL,
                               xLabel = "Sensitivity",
                               yLabel = NULL,
                               colorPalette = "Spectral") {
-      self$totalSensitivityThreshold <- getDefaultTotalSensitivityThreshold(
+      validateIsInteger(maximalParametersPerSensitivityPlot, nullAllowed = TRUE)
+      validateIsInteger(maxLinesPerParameter, nullAllowed = TRUE)
+      validateIsInteger(maxWidthPerParameter, nullAllowed = TRUE)
+      validateIsNumeric(xAxisFontSize, nullAllowed = TRUE)
+      validateIsNumeric(yAxisFontSize, nullAllowed = TRUE)
+
+      private$.totalSensitivityThreshold <- getDefaultTotalSensitivityThreshold(
         totalSensitivityThreshold = totalSensitivityThreshold,
         variableParameterPaths = variableParameterPaths
       )
 
-      self$maximalParametersPerSensitivityPlot <- maximalParametersPerSensitivityPlot
-      self$plotConfiguration <- plotConfiguration
-      self$xAxisFontSize <- xAxisFontSize
-      self$yAxisFontSize <- yAxisFontSize
-      self$xLabel <- xLabel
-      self$yLabel <- yLabel
-      self$colorPalette <- colorPalette
+      private$.maximalParametersPerSensitivityPlot <- maximalParametersPerSensitivityPlot %||% reEnv$maximalParametersPerSensitivityPlot
+      private$.plotConfiguration <- plotConfiguration
+      private$.xAxisFontSize <- xAxisFontSize
+      private$.yAxisFontSize <- yAxisFontSize
+      private$.maxLinesPerParameter <- maxLinesPerParameter %||% reEnv$maxLinesPerParameter
+      private$.maxWidthPerParameter <- maxWidthPerParameter %||% reEnv$maxWidthPerParameter
+      private$.xLabel <- xLabel
+      private$.yLabel <- yLabel
+      private$.colorPalette <- colorPalette
     }
   ),
 
@@ -131,6 +143,26 @@ SensitivityPlotSettings <- R6::R6Class(
         validateIsOfType(value, c("character", "numeric"), nullAllowed = TRUE)
         private$.colorPalette <- value
       }
+    },
+
+    #' @field maxLinesPerParameter maximum number of lines allowed per displayed parameters
+    maxLinesPerParameter = function(value) {
+      if (missing(value)) {
+        private$.maxLinesPerParameter
+      } else {
+        validateIsInteger(value, nullAllowed = TRUE)
+        private$.maxLinesPerParameter <- value %||% private$.maxLinesPerParameter
+      }
+    },
+
+    #' @field maxWidthPerParameter maximum number of characters allowed per lines of displayed parameters
+    maxWidthPerParameter = function(value) {
+      if (missing(value)) {
+        private$.maxWidthPerParameter
+      } else {
+        validateIsInteger(value, nullAllowed = TRUE)
+        private$.maxWidthPerParameter <- value %||% private$.maxWidthPerParameter
+      }
     }
   ),
 
@@ -140,6 +172,8 @@ SensitivityPlotSettings <- R6::R6Class(
     .plotConfiguration = NULL,
     .xAxisFontSize = NULL,
     .yAxisFontSize = NULL,
+    .maxLinesPerParameter = NULL,
+    .maxWidthPerParameter = NULL,
     .xLabel = NULL,
     .yLabel = NULL,
     .colorPalette = NULL

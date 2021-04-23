@@ -18,6 +18,9 @@ reEnv$defaultStairstep <- TRUE
 reEnv$defaultWatermarkMessage <- "preliminary analysis"
 reEnv$defaultSimulationSetDescriptor <- ""
 
+reEnv$maximalParametersPerSensitivityPlot <- 15
+reEnv$maxWidthPerParameter <- 25
+reEnv$maxLinesPerParameter <- 3
 
 #' @title ApplicationRanges
 #' @description 
