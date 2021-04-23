@@ -520,6 +520,8 @@ plotMeanSensitivity <- function(structureSet,
   sensitivityPlotConfiguration <- settings$plotConfiguration %||% tlf::TornadoPlotConfiguration$new()
   sensitivityPlotConfiguration$labels$xlabel$font$size <- settings$xAxisFontSize %||% sensitivityPlotConfiguration$labels$xlabel$font$size
   sensitivityPlotConfiguration$labels$ylabel$font$size <- settings$yAxisFontSize %||% sensitivityPlotConfiguration$labels$ylabel$font$size
+  sensitivityPlotConfiguration$xAxis$font$size <- settings$xAxisFontSize %||% sensitivityPlotConfiguration$xAxis$font$size
+  sensitivityPlotConfiguration$yAxis$font$size <- settings$yAxisFontSize %||% sensitivityPlotConfiguration$yAxis$font$size
   sensitivityPlotConfiguration$labels$xlabel$text <- settings$xLabel %||% sensitivityPlotConfiguration$labels$xlabel$text
   sensitivityPlotConfiguration$labels$ylabel$text <- settings$yLabel %||% sensitivityPlotConfiguration$labels$ylabel$text
   sensitivityPlotConfiguration$colorPalette <- settings$colorPalette %||% sensitivityPlotConfiguration$colorPalette
@@ -812,6 +814,8 @@ plotPopulationSensitivity <- function(structureSets,
   sensitivityPlotConfiguration <- settings$plotConfiguration %||% tlf::TornadoPlotConfiguration$new(bar = FALSE)
   sensitivityPlotConfiguration$labels$xlabel$font$size <- settings$xAxisFontSize %||% sensitivityPlotConfiguration$labels$xlabel$font$size
   sensitivityPlotConfiguration$labels$ylabel$font$size <- settings$yAxisFontSize %||% sensitivityPlotConfiguration$labels$ylabel$font$size
+  sensitivityPlotConfiguration$xAxis$font$size <- settings$xAxisFontSize %||% sensitivityPlotConfiguration$xAxis$font$size
+  sensitivityPlotConfiguration$yAxis$font$size <- settings$yAxisFontSize %||% sensitivityPlotConfiguration$yAxis$font$size
   sensitivityPlotConfiguration$labels$xlabel$text <- settings$xLabel %||% sensitivityPlotConfiguration$labels$xlabel$text
   sensitivityPlotConfiguration$labels$ylabel$text <- settings$yLabel %||% sensitivityPlotConfiguration$labels$ylabel$text
   sensitivityPlotConfiguration$colorPalette <- settings$colorPalette %||% sensitivityPlotConfiguration$colorPalette
