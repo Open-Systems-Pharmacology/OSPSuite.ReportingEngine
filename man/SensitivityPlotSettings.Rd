@@ -29,6 +29,10 @@ This Value will overwrite values defined by plot configuration object}
 
 \item{\code{colorPalette}}{for sensitivity plot.
 This Value will overwrite values defined by plot configuration object}
+
+\item{\code{maxLinesPerParameter}}{maximum number of lines allowed per displayed parameters}
+
+\item{\code{maxWidthPerParameter}}{maximum number of characters allowed per lines of displayed parameters}
 }
 \if{html}{\out{</div>}}
 }
@@ -48,10 +52,12 @@ Create a `SensitivityPlotSettings` object
 \if{html}{\out{<div class="r">}}\preformatted{SensitivityPlotSettings$new(
   totalSensitivityThreshold = NULL,
   variableParameterPaths = NULL,
-  maximalParametersPerSensitivityPlot = 50,
+  maximalParametersPerSensitivityPlot = NULL,
   plotConfiguration = NULL,
   xAxisFontSize = 6,
   yAxisFontSize = 6,
+  maxLinesPerParameter = NULL,
+  maxWidthPerParameter = NULL,
   xLabel = "Sensitivity",
   yLabel = NULL,
   colorPalette = "Spectral"
@@ -72,6 +78,10 @@ Create a `SensitivityPlotSettings` object
 \item{\code{xAxisFontSize}}{Font size of x-axis labels for sensitivity plot}
 
 \item{\code{yAxisFontSize}}{Font size of y-axis labels for sensitivity plot}
+
+\item{\code{maxLinesPerParameter}}{maxLinesPerParameter maximum number of lines allowed per displayed parameters}
+
+\item{\code{maxWidthPerParameter}}{maximum number of characters allowed per lines of displayed parameters}
 
 \item{\code{xLabel}}{Label of x-axis for sensitivity plot}
 
