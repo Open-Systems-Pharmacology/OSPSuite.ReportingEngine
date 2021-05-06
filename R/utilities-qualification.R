@@ -15,12 +15,17 @@ loadQualificationWorkflow <- function(workflowFolder, jsonFile) {
   simulationSets <- list()
   for (simulationIndex in 1:nrow(configurationPlan$simulationMappings)) {
     project <- configurationPlan$simulationMappings$project[simulationIndex]
-    simulation <- configurationPlan$simulationMappings$simulation[simulationIndex]
+    simulationName <- configurationPlan$simulationMappings$simulation[simulationIndex]
+    simulationFile <- configurationPlan$getSimulationPath(project = project, simulation = simulationName)
+    
+    simulation <- loadSimulation(simulationFile) 
+    outputs <- lapply(simulation$outputSelections$allOutputs, function(output){Output$new(output$path)})
 
     # simulationSetName defined as project-simulation uniquely identifies the simulation
     simulationSets[[simulationIndex]] <- SimulationSet$new(
-      simulationSetName = paste(project, simulation, sep = "-"),
-      simulationFile = configurationPlan$getSimulationPath(project = project, simulation = simulation)
+      simulationSetName = paste(project, simulationName, sep = "-"),
+      simulationFile = simulationFile,
+      outputs = c(outputs)
     )
   }
   workflow <- QualificationWorkflow$new(simulationSets = simulationSets, workflowFolder = workflowFolder)
