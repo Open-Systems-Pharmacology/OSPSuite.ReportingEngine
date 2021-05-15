@@ -34,10 +34,11 @@ plotMeanGoodnessOfFit <- function(structureSet,
   observedResult <- loadObservedDataFromSimulationSet(structureSet$simulationSet, logFolder)
 
 
+  outputSelections <- structureSet$simulationSet$outputs
   if (!is.null(settings$outputSelections)) {
     outputSelections <- NULL
     for (output in structureSet$simulationSet$outputs) {
-      if (output$path %in% outputSelections) {
+      if (output$path %in% settings$outputSelections) {
         outputSelections <- c(outputSelections, output)
       }
     }
