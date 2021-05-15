@@ -18,7 +18,7 @@ ConfigurationPlan <- R6::R6Class(
     markdownIntro = "000_Intro.md",
     referenceFolder = NULL,
     workflowFolder = NULL,
-    
+
     #' @description Get location of directory corresponding to a specific section Id
     #' @param id section identifier
     #' @return The section path corresponding to the id in the configuration plan field `sections`
@@ -27,7 +27,7 @@ ConfigurationPlan <- R6::R6Class(
       selectedId <- private$.sections$id %in% id
       return(file.path(self$workflowFolder, private$.sections$path[selectedId]))
     },
-    
+
     #' @description Get markdown title to a specific section Id
     #' @param id section identifier
     #' @return The title associated with "#" corresponding to the subection level
@@ -38,7 +38,7 @@ ConfigurationPlan <- R6::R6Class(
       sectionTitle <- paste0(sectionTitle, private$.sections$title[selectedId], sep = " ")
       return(sectionTitle)
     },
-    
+
     #' @description Get location of .md file corresponding to a specific section Id
     #' @param id section identifier
     #' @return The markdown file corresponding to the id in the configuration plan field `sections`
@@ -47,13 +47,13 @@ ConfigurationPlan <- R6::R6Class(
       selectedId <- private$.sections$id %in% id
       return(file.path(self$workflowFolder, private$.sections$md[selectedId]))
     },
-    
+
     #' @description Get location of .md intro file
     #' @return The markdown file corresponding to introduction
     getIntroMarkdown = function() {
       return(file.path(self$workflowFolder, self$markdownIntro))
     },
-    
+
     #' @description Copy content to section markdown
     #' @param id section identifier
     #' @param logFolder path where logs are saved
@@ -62,20 +62,24 @@ ConfigurationPlan <- R6::R6Class(
       selectedId <- private$.sections$id %in% id
       sectionContent <- private$.sections$content[selectedId]
       # Case in which no content was defined
-      if(is.na(sectionContent)){return(invisible())}
+      if (is.na(sectionContent)) {
+        return(invisible())
+      }
       # Get location of content
       markdownLocation <- file.path(self$referenceFolder, sectionContent)
       # In case file does not exist
-      if(!file.exists(markdownLocation)){
-        logWorkflow(message = paste0("Section content '", sectionContent,"' not found"),
-                    pathFolder = logFolder,
-                    logTypes = c(LogTypes$Error, LogTypes$Debug))
+      if (!file.exists(markdownLocation)) {
+        logWorkflow(
+          message = paste0("Section content '", sectionContent, "' not found"),
+          pathFolder = logFolder,
+          logTypes = c(LogTypes$Error, LogTypes$Debug)
+        )
         return(invisible())
       }
       addTextChunk(fileName = self$getSectionMarkdown(id), text = readLines(markdownLocation), logFolder = logFolder)
       return(invisible())
     },
-    
+
     #' @description Copy input to section markdown
     #' @param input list including SectionId and Path
     #' @param logFolder path where logs are saved
@@ -84,16 +88,18 @@ ConfigurationPlan <- R6::R6Class(
       # Get location of input
       inputLocation <- file.path(self$referenceFolder, input$Path)
       # In case file does not exist
-      if(!file.exists(inputLocation)){
-        logWorkflow(message = paste0("Input '", input$Path,"' not found"),
-                    pathFolder = logFolder,
-                    logTypes = c(LogTypes$Error, LogTypes$Debug))
+      if (!file.exists(inputLocation)) {
+        logWorkflow(
+          message = paste0("Input '", input$Path, "' not found"),
+          pathFolder = logFolder,
+          logTypes = c(LogTypes$Error, LogTypes$Debug)
+        )
         return(invisible())
       }
       addTextChunk(fileName = self$getSectionMarkdown(input$SectionId), text = readLines(inputLocation), logFolder = logFolder)
       return(invisible())
     },
-    
+
     #' @description Copy intro to intro markdown
     #' @param intro list including Path
     #' @param logFolder path where logs are saved
@@ -102,10 +108,12 @@ ConfigurationPlan <- R6::R6Class(
       # Get location of intro
       introLocation <- file.path(self$referenceFolder, intro$Path)
       # In case file does not exist
-      if(!file.exists(introLocation)){
-        logWorkflow(message = paste0("Input '", intro$Path,"' not found"),
-                    pathFolder = logFolder,
-                    logTypes = c(LogTypes$Error, LogTypes$Debug))
+      if (!file.exists(introLocation)) {
+        logWorkflow(
+          message = paste0("Input '", intro$Path, "' not found"),
+          pathFolder = logFolder,
+          logTypes = c(LogTypes$Error, LogTypes$Debug)
+        )
         return(invisible())
       }
       addTextChunk(fileName = self$getIntroMarkdown(), text = readLines(introLocation), logFolder = logFolder)
@@ -133,7 +141,7 @@ ConfigurationPlan <- R6::R6Class(
       simulationPath <- file.path(self$referenceFolder, private$.simulationMappings$path[selectedId], paste0(simulation, ".pkml"))
       return(simulationPath)
     },
-    
+
     #' @description Get location of simulation result file corresponding to a specific simulation and project names
     #' @param project name of simulation project
     #' @param simulation name of the simulation
@@ -142,12 +150,12 @@ ConfigurationPlan <- R6::R6Class(
       # Since data is imported from json, simulationMappings fields have a first upper case letter
       validateIsIncluded(project, private$.simulationMappings$project, groupName = "'project' variable of simulationMappings")
       validateIsIncluded(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
-      
+
       selectedId <- (private$.simulationMappings$project %in% project) & (private$.simulationMappings$simulation %in% simulation)
-      simulationResultsPath <- file.path(self$workflowFolder, "SimulationResults",  paste(project, simulation, "SimulationResults.csv", sep = "-"))
+      simulationResultsPath <- file.path(self$workflowFolder, "SimulationResults", paste(project, simulation, "SimulationResults.csv", sep = "-"))
       return(simulationResultsPath)
     },
-    
+
     #' @description Get location of PK Analysis result file corresponding to a specific simulation and project names
     #' @param project name of simulation project
     #' @param simulation name of the simulation
@@ -156,9 +164,9 @@ ConfigurationPlan <- R6::R6Class(
       # Since data is imported from json, simulationMappings fields have a first upper case letter
       validateIsIncluded(project, private$.simulationMappings$project, groupName = "'project' variable of simulationMappings")
       validateIsIncluded(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
-      
+
       selectedId <- (private$.simulationMappings$project %in% project) & (private$.simulationMappings$simulation %in% simulation)
-      pkAnalysisResultsPath <- file.path(self$workflowFolder, "SimulationResults",  paste(project, simulation, "PKAnalysisResults.csv", sep = "-"))
+      pkAnalysisResultsPath <- file.path(self$workflowFolder, "SimulationResults", paste(project, simulation, "PKAnalysisResults.csv", sep = "-"))
       return(pkAnalysisResultsPath)
     }
   ),

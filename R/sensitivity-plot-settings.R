@@ -19,16 +19,16 @@ SensitivityPlotSettings <- R6::R6Class(
     #' @param colorPalette Name of a color palette to be used by `ggplot2::scale_fill_brewer()` for sensitivity plot
     #' @return A new `SensitivityPlotSettings` object
     initialize = function(totalSensitivityThreshold = NULL,
-                              variableParameterPaths = NULL,
-                              maximalParametersPerSensitivityPlot = NULL,
-                              plotConfiguration = NULL,
-                              xAxisFontSize = 6,
-                              yAxisFontSize = 6,
-                              maxLinesPerParameter = NULL,
-                              maxWidthPerParameter = NULL,
-                              xLabel = "Sensitivity",
-                              yLabel = NULL,
-                              colorPalette = "Spectral") {
+                          variableParameterPaths = NULL,
+                          maximalParametersPerSensitivityPlot = NULL,
+                          plotConfiguration = NULL,
+                          xAxisFontSize = 6,
+                          yAxisFontSize = 6,
+                          maxLinesPerParameter = NULL,
+                          maxWidthPerParameter = NULL,
+                          xLabel = "Sensitivity",
+                          yLabel = NULL,
+                          colorPalette = "Spectral") {
       validateIsInteger(maximalParametersPerSensitivityPlot, nullAllowed = TRUE)
       validateIsInteger(maxLinesPerParameter, nullAllowed = TRUE)
       validateIsInteger(maxWidthPerParameter, nullAllowed = TRUE)

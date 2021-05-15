@@ -13,16 +13,20 @@ ps1 <- PopulationSimulationSet$new(
   simulationFile = simulationFile,
   populationFile = populationFile1,
   outputs = c(
-    Output$new(path = "Organism|VenousBlood|Plasma|Raltegravir|Concentration",displayName = "op1"),
+    Output$new(path = "Organism|VenousBlood|Plasma|Raltegravir|Concentration", displayName = "op1"),
     Output$new(
-      path = "Organism|ArterialBlood|Plasma|Raltegravir|Concentration",displayName = "op2",
-      pkParameters = c(PkParameterInfo$new("t_max","new_t_max"),
-                       PkParameterInfo$new("AUC_tEnd","new_AUC_tEnd"))
+      path = "Organism|ArterialBlood|Plasma|Raltegravir|Concentration", displayName = "op2",
+      pkParameters = c(
+        PkParameterInfo$new("t_max", "new_t_max"),
+        PkParameterInfo$new("AUC_tEnd", "new_AUC_tEnd")
+      )
     ),
     Output$new(
-      path = "Organism|Lung|Interstitial|Raltegravir|Concentration",displayName = "op3",
-      pkParameters = c(PkParameterInfo$new("C_max","new_C_max"),
-                       PkParameterInfo$new("MRT","new_MRT"))
+      path = "Organism|Lung|Interstitial|Raltegravir|Concentration", displayName = "op3",
+      pkParameters = c(
+        PkParameterInfo$new("C_max", "new_C_max"),
+        PkParameterInfo$new("MRT", "new_MRT")
+      )
     )
   )
 )
@@ -35,16 +39,20 @@ ps2 <- PopulationSimulationSet$new(
   simulationFile = simulationFile,
   populationFile = populationFile2,
   outputs = c(Output$new(
-    path = "Organism|Lung|Interstitial|Raltegravir|Concentration",displayName = "op4",
-    pkParameters = c(PkParameterInfo$new("C_max","kai_C_max"),
-                     PkParameterInfo$new("MRT","kai_MRT")))
-  )
+    path = "Organism|Lung|Interstitial|Raltegravir|Concentration", displayName = "op4",
+    pkParameters = c(
+      PkParameterInfo$new("C_max", "kai_C_max"),
+      PkParameterInfo$new("MRT", "kai_MRT")
+    )
+  ))
 )
 
 
-pwf <- PopulationWorkflow$new(simulationSets = list(ps1, ps2),
-                              workflowFolder = "./tests/dev/popsens2",
-                              workflowType = PopulationWorkflowTypes$parallelComparison)
+pwf <- PopulationWorkflow$new(
+  simulationSets = list(ps1, ps2),
+  workflowFolder = "./tests/dev/popsens2",
+  workflowType = PopulationWorkflowTypes$parallelComparison
+)
 
 pwf$simulate$settings$showProgress <- FALSE
 pwf$simulate$inactivate()
@@ -75,9 +83,11 @@ pwf$calculateSensitivity$settings$variableParameterPaths <- c(
 
 pwf$calculateSensitivity$settings$quantileVec <- c(0.25, 0.5, 0.75)
 
-pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(totalSensitivityThreshold = 0.9,
-                                                            maximalParametersPerSensitivityPlot = 12,
-                                                            xAxisFontSize = 10,
-                                                            yAxisFontSize = 6)
+pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(
+  totalSensitivityThreshold = 0.9,
+  maximalParametersPerSensitivityPlot = 12,
+  xAxisFontSize = 10,
+  yAxisFontSize = 6
+)
 
 pwf$runWorkflow()

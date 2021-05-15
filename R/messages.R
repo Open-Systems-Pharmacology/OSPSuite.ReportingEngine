@@ -31,7 +31,7 @@ messages <- list(
   },
 
   errorNotIncluded = function(values, parentValues, groupName = NULL) {
-    if(isOfLength(values, 1)){
+    if (isOfLength(values, 1)) {
       if (!is.null(groupName)) {
         return(paste0(callingFunction(), ": '", values, "' is not included in ", groupName, "."))
       }
@@ -73,13 +73,14 @@ messages <- list(
       "\nPlease provide a dictionary for observedDataFile '", observedDataFile, "'."
     )
   },
-  
+
   errorUnitNotProvidedInMetaDataFile = function(observedMetaDataFile) {
     paste0(
       callingFunction(), ": No time or dv unit provided in dictionary '", observedMetaDataFile, "'.",
       "\nPlease define unit either in column '", dictionaryParameters$nonmemUnit, "' at the corresponding row.",
-      "\nor in column '", dictionaryParameters$nonmenColumn, "' using ID '", 
-      dictionaryParameters$timeUnitID,"' or '", dictionaryParameters$dvUnitID, "'")
+      "\nor in column '", dictionaryParameters$nonmenColumn, "' using ID '",
+      dictionaryParameters$timeUnitID, "' or '", dictionaryParameters$dvUnitID, "'"
+    )
   },
 
   errorNoParametersForSensitivityAnalysis = function() {

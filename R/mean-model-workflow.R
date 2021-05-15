@@ -41,7 +41,7 @@ MeanModelWorkflow <- R6::R6Class(
       self$plotMassBalance <- loadPlotMassBalanceTask(self)
       self$plotAbsorption <- loadPlotAbsorptionTask(self)
       self$plotPKParameters <- loadPlotPKParametersTask(self)
-      self$plotSensitivity  <- loadPlotSensitivityTask(self)
+      self$plotSensitivity <- loadPlotSensitivityTask(self)
 
       self$taskNames <- ospsuite::enum(self$getAllTasks())
     },
@@ -84,7 +84,7 @@ MeanModelWorkflow <- R6::R6Class(
           self[[plotTask]]$runTask(self$simulationStructures)
         }
       }
-      
+
       for (userDefinedTask in self$userDefinedTasks) {
         if (userDefinedTask$active) {
           userDefinedTask$runTask(self$simulationStructures)

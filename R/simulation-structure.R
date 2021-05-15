@@ -10,7 +10,7 @@
 #' @field sensitivityAnalysisResultsFileNames vector of names of CSV files storing results of sensitivity analyses
 #' @field popSensitivityAnalysisResultsIndexFile path to file containing index of population sensitivity analysis results
 #' @field parameterDisplayPaths data.frame mapping parameters to user-defined display paths
-#' @field simulationSetDescriptor Descriptor of simulation sets indicated in reports 
+#' @field simulationSetDescriptor Descriptor of simulation sets indicated in reports
 #' @import ospsuite
 SimulationStructure <- R6::R6Class(
   "SimulationStructure",
@@ -33,7 +33,7 @@ SimulationStructure <- R6::R6Class(
     #' @param simulationSet `MeanModelSet` or `PopModelSet` R6 class object
     #' @param workflowFolder output folder of the worklow
     initialize = function(simulationSet,
-                              workflowFolder = getwd()) {
+                          workflowFolder = getwd()) {
       self$workflowFolder <- workflowFolder
       self$simulationSet <- simulationSet
       self$simulationResultFileNames <- file.path(

@@ -8,7 +8,7 @@ ps <- PopulationSimulationSet$new(
   populationFile = "./tests/dev/popData_short.csv",
   outputs = Output$new(path = tree$Organism$VenousBlood$Plasma$smarties$Concentration$path)
 )
-pwf <- PopulationWorkflow$new(simulationSets = list(ps), workflowFolder = "./exnonpar",workflowType = PopulationWorkflowTypes$parallelComparison)
+pwf <- PopulationWorkflow$new(simulationSets = list(ps), workflowFolder = "./exnonpar", workflowType = PopulationWorkflowTypes$parallelComparison)
 pwf$simulate$settings$showProgress <- FALSE
 pwf$simulate$activate()
 pwf$calculatePKParameters$activate()

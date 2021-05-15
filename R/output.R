@@ -46,12 +46,12 @@ Output <- R6::R6Class(
     #' @param residualScale Scale for calculation of residuals as included in enum `ResidualScales`
     #' @return A new `Output` object
     initialize = function(path,
-                              displayName = NULL,
-                              displayUnit = NULL,
-                              dataSelection = DataSelectionKeys$NONE,
-                              dataDisplayName = NULL,
-                              pkParameters = NULL,
-                              residualScale = ResidualScales$Logarithmic) {
+                          displayName = NULL,
+                          displayUnit = NULL,
+                          dataSelection = DataSelectionKeys$NONE,
+                          dataDisplayName = NULL,
+                          pkParameters = NULL,
+                          residualScale = ResidualScales$Logarithmic) {
       validateIsString(path)
       validateIsOfLength(path, 1)
       validateIsString(c(displayName, displayUnit, dataDisplayName), nullAllowed = TRUE)

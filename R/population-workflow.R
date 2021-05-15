@@ -36,10 +36,10 @@ PopulationWorkflow <- R6::R6Class(
     #' @return A new `PopulationWorkflow` object
     #' @import ospsuite
     initialize = function(workflowType,
-                              simulationSets,
-                              workflowFolder,
-                              createWordReport = TRUE,
-                              watermark = NULL,
+                          simulationSets,
+                          workflowFolder,
+                          createWordReport = TRUE,
+                          watermark = NULL,
                           simulationSetDescriptor = NULL) {
       super$initialize(
         simulationSets = simulationSets,

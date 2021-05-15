@@ -97,7 +97,7 @@ PlotTask <- R6::R6Class(
           if (!is.null(taskResults$captions[[tableName]])) {
             addTextChunk(self$fileName, paste0("Table: ", taskResults$captions[[tableName]]), logFolder = self$workflowFolder)
           }
-          
+
           addTableChunk(
             fileName = self$fileName,
             tableFileRelativePath = self$getRelativePath(tableFileName),
