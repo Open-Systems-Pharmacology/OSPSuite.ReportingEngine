@@ -19,12 +19,12 @@ QualificationWorkflow <- R6::R6Class(
     configurationPlan = NULL,
     simulate = NULL,
     calculatePKParameters = NULL,
-    plotTimeProfiles = NULL,
+    plotTimeProfilesAndResiduals = NULL,
     plotObsVsPred = NULL,
     plotComparisonTimeProfiles = NULL,
     plotPKRatio = NULL,
     plotDDIRatio = NULL,
-
+    appendices = NULL,
     #' @description
     #' Create a new `QualificationWorkflow` object.
     #' @param ... input parameters inherited from R6 class object `Workflow`.
@@ -36,7 +36,7 @@ QualificationWorkflow <- R6::R6Class(
       self$simulate <- loadSimulateTask(self)
       self$calculatePKParameters <- loadCalculatePKParametersTask(self)
 
-      # self$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(self)
+      self$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(self)
       # self$plotObsVsPred <- loadPlotMassBalanceTask(self)
       # self$plotComparisonTimeProfiles <- loadPlotAbsorptionTask(self)
       # self$plotPKRatio <- loadPlotPKParametersTask(self)
@@ -65,7 +65,18 @@ QualificationWorkflow <- R6::R6Class(
 
       # Before running the actual workflow,
       # Create Outputs for sections and copy intro and section content
-      appendices <- createSectionOutput(self$configurationPlan, logFolder = self$workflowFolder)
+      # self$appendices <- createSectionOutput(self$configurationPlan, logFolder = self$workflowFolder)
+
+
+
+      # TODO Include plot tasks
+
+      # Merge appendices into final report
+      mergeMarkdowndFiles(self$appendices, self$reportFileName, logFolder = self$workflowFolder)
+      renderReport(self$reportFileName, logFolder = self$workflowFolder, createWordReport = self$createWordReport)
+    },
+
+    simModel = function(){
 
       if (self$simulate$active) {
         self$simulate$runTask(self$simulationStructures)
@@ -74,11 +85,7 @@ QualificationWorkflow <- R6::R6Class(
         self$calculatePKParameters$runTask(self$simulationStructures)
       }
 
-      # TODO Include plot tasks
-
-      # Merge appendices into final report
-      mergeMarkdowndFiles(appendices, self$reportFileName, logFolder = self$workflowFolder)
-      renderReport(self$reportFileName, logFolder = self$workflowFolder, createWordReport = self$createWordReport)
     }
+
   )
 )
