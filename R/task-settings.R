@@ -150,8 +150,9 @@ GofTaskSettings <- R6::R6Class(
     #' @description
     #' Create a `GofTaskSettings` object
     #' @param taskName name of the task using the settings
+    #' @param outputSelections subset of simulationSet outputs to be used in GoF plot
     #' @return A new `GofTaskSettings` object
-    initialize = function(taskName = AllAvailableTasks$plotTimeProfilesAndResiduals,outputSelections = NULL) {
+    initialize = function(taskName = AllAvailableTasks$plotTimeProfilesAndResiduals, outputSelections = NULL) {
       validateIsIncluded(taskName, AllAvailableTasks$plotTimeProfilesAndResiduals)
       super$initialize(taskName)
       private$.includeReferenceData <- TRUE
@@ -179,7 +180,6 @@ GofTaskSettings <- R6::R6Class(
       private$.outputSelections <- value %||% private$.outputSelections
       return(invisible())
     }
-
   ),
   private = list(
     .includeReferenceData = NULL,
