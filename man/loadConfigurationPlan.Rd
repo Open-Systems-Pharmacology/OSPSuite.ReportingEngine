@@ -4,7 +4,6 @@
 \alias{loadConfigurationPlan}
 \title{loadConfigurationPlan}
 \usage{
-
 loadConfigurationPlan(configurationPlanFile, workflowFolder)
 }
 \arguments{

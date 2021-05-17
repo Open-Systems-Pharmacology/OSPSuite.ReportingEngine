@@ -4,12 +4,12 @@
 \alias{getScheduleOfPlotsOfType}
 \title{getScheduleOfPlotsOfType}
 \usage{
-getScheduleOfPlotsOfType(pltList, plotType)
+getScheduleOfPlotsOfType(plotList, plotType)
 }
 \arguments{
-\item{pltList}{is a list of plots that is to be generated, all of the plot type `plotType`}
+\item{plotList}{is a list of plots that is to be generated, all of the plot type `plotType`}
 
-\item{plotType}{describes the type of the plots described in `pltList`}
+\item{plotType}{describes the type of the plots described in `plotList`}
 }
 \value{
 A dataframe describing the the the order of each plot among its plot type `plotType`, and the section id of each plot

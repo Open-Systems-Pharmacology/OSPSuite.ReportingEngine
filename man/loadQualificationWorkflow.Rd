@@ -9,9 +9,7 @@ loadQualificationWorkflow(workflowFolder, configurationPlanFile)
 \arguments{
 \item{workflowFolder}{path of the output folder created or used by the Workflow.}
 
-
 \item{configurationPlanFile}{path to the json file corresponding to the Configuration Plan of a Qualification workflow}
-
 }
 \value{
 A `QualificationWorkflow` object
