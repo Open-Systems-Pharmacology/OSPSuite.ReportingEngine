@@ -19,6 +19,10 @@ configurationPlan <- loadConfigurationPlan(
   jsonFile = configurationFile
 )
 
+configurationPlan$sections
+configurationPlan$simulationMappings
+configurationPlan$observedDataSets
+
 schedule <- getScheduleOfPlots(configurationPlan)
 
 outputsTimeProfile1 <- getOutputsTimeProfile(plot = configurationPlan$plots$TimeProfile[[1]])
@@ -27,14 +31,25 @@ outputsTimeProfile3 <- getOutputsTimeProfile(plot = configurationPlan$plots$Time
 
 outputsGOF <- getOutputsGOFMergedPlotsPlot(plot = configurationPlan$plots$GOFMergedPlots[[1]])
 
-gofTaskSettings <- GofTaskSettings$new(taskName = "plotTimeProfilesAndResiduals",outputsTimeProfile3)
+
 
 workflow$simModel()
+
+#Time profile plot 1
+gofTaskSettings1 <- GofTaskSettings$new(taskName = "plotTimeProfilesAndResiduals",outputsTimeProfile1)
+workflow$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(workflow = workflow,active = TRUE,settings = gofTaskSettings1)
+workflow$plotTimeProfilesAndResiduals$runTask(structureSets = workflow$simulationStructures[2])
+
+#Time profile plot 2
+gofTaskSettings2 <- GofTaskSettings$new(taskName = "plotTimeProfilesAndResiduals",outputsTimeProfile2)
+workflow$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(workflow = workflow,active = TRUE,settings = gofTaskSettings2)
 workflow$plotTimeProfilesAndResiduals$runTask(structureSets = workflow$simulationStructures[3])
 
-
-workflow$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(workflow = workflow,active = TRUE,settings = gofTaskSettings)
+#Time profile plot 3
+gofTaskSettings3 <- GofTaskSettings$new(taskName = "plotTimeProfilesAndResiduals",outputsTimeProfile3)
+workflow$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(workflow = workflow,active = TRUE,settings = gofTaskSettings3)
 workflow$plotTimeProfilesAndResiduals$runTask(structureSets = workflow$simulationStructures[3])
+
 
 
 
