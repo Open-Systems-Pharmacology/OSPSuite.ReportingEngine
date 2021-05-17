@@ -36,12 +36,9 @@ plotMeanGoodnessOfFit <- function(structureSet,
 
   outputSelections <- structureSet$simulationSet$outputs
   if (!is.null(settings$outputSelections)) {
-    outputSelections <- NULL
-    for (output in structureSet$simulationSet$outputs) {
-      if (output$path %in% settings$outputSelections) {
-        outputSelections <- c(outputSelections, output)
-      }
-    }
+    availableOutputs <- sapply(structureSet$simulationSet$outputs, function(output){output$path})
+    selectedOutputs <- availableOutputs %in% settings$outputSelections
+    outputSelections <- structureSet$simulationSet$outputs[selectedOutputs]
   }
 
   outputSimulatedMetaData <- list()
