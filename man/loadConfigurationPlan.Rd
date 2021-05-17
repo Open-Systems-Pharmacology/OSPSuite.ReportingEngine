@@ -4,10 +4,10 @@
 \alias{loadConfigurationPlan}
 \title{loadConfigurationPlan}
 \usage{
-loadConfigurationPlan(jsonFile, workflowFolder)
+loadConfigurationPlan(configurationPlanFile, workflowFolder)
 }
 \arguments{
-\item{jsonFile}{name of the JSON snapshot file including the configuration plan}
+\item{configurationPlanFile}{path to the json file corresponding to the Configuration Plan of a Qualification workflow}
 
 \item{workflowFolder}{path of the output folder created or used by the Workflow.}
 }

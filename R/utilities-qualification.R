@@ -1,13 +1,13 @@
 #' @title loadQualificationWorkflow
 #' @description Load a `ConfigurationPlan` object from json file
 #' @param workflowFolder path of the output folder created or used by the Workflow.
-#' @param jsonFile name of the JSON snapshot file including the configuration plan
+#' @param configurationPlanFile path to the json file corresponding to the Configuration Plan of a Qualification workflow
 #' @return A `QualificationWorkflow` object
 #' @export
-loadQualificationWorkflow <- function(workflowFolder, jsonFile) {
+loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
   configurationPlan <- loadConfigurationPlan(
     workflowFolder = workflowFolder,
-    jsonFile = jsonFile
+    configurationPlanFile = configurationPlanFile
   )
   # TODO outputs and pk parameters may need to be defined
   # Either as part of simulationSets or as a settings for the task
@@ -35,12 +35,12 @@ loadQualificationWorkflow <- function(workflowFolder, jsonFile) {
 
 #' @title loadConfigurationPlan
 #' @description Load a `ConfigurationPlan` object from json file
-#' @param jsonFile name of the JSON snapshot file including the configuration plan
+#' @param configurationPlanFile path to the json file corresponding to the Configuration Plan of a Qualification workflow
 #' @param workflowFolder path of the output folder created or used by the Workflow.
 #' @return A `ConfigurationPlan` object including the content of json file
 #' @export
-loadConfigurationPlan <- function(jsonFile, workflowFolder) {
-  jsonConfigurationPlan <- jsonlite::fromJSON(jsonFile, simplifyDataFrame = FALSE)
+loadConfigurationPlan <- function(configurationPlanFile, workflowFolder) {
+  jsonConfigurationPlan <- jsonlite::fromJSON(configurationPlanFile, simplifyDataFrame = FALSE)
 
   # Check if mandatory variables were input
   # Matlab version had as well ObservedDataSets and Inputs, but they don't need to be mandatory in R
@@ -50,7 +50,7 @@ loadConfigurationPlan <- function(jsonFile, workflowFolder) {
   configurationPlan <- ConfigurationPlan$new()
   # The workflow and reference folders are required to know from where accessing the files
   configurationPlan$workflowFolder <- workflowFolder
-  configurationPlan$referenceFolder <- normalizePath(path = dirname(jsonFile), winslash = .Platform$file.sep)
+  configurationPlan$referenceFolder <- normalizePath(path = dirname(configurationPlanFile), winslash = .Platform$file.sep)
 
   # Assiociate fields defined in json to ConfigurationPlan object using expression
   jsonFieldNames <- names(jsonConfigurationPlan)

@@ -4,12 +4,12 @@
 \alias{loadQualificationWorkflow}
 \title{loadQualificationWorkflow}
 \usage{
-loadQualificationWorkflow(workflowFolder, jsonFile)
+loadQualificationWorkflow(workflowFolder, configurationPlanFile)
 }
 \arguments{
 \item{workflowFolder}{path of the output folder created or used by the Workflow.}
 
-\item{jsonFile}{name of the JSON snapshot file including the configuration plan}
+\item{configurationPlanFile}{path to the json file corresponding to the Configuration Plan of a Qualification workflow}
 }
 \value{
 A `QualificationWorkflow` object
