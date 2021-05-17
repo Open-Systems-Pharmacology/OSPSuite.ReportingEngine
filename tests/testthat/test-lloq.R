@@ -50,8 +50,9 @@ test_that("Ill defined variables and units in dictionary are flagged by simulati
       path = "Organism|A|Concentration in container",
       displayName = "Concentration of A",
       dataSelection = DataSelectionKeys$ALL
-    )))
-  
+    )
+  ))
+
   expect_error(SimulationSet$new(
     simulationSetName = "A",
     simulationFile = simulationFile,
@@ -61,8 +62,9 @@ test_that("Ill defined variables and units in dictionary are flagged by simulati
       path = "Organism|A|Concentration in container",
       displayName = "Concentration of A",
       dataSelection = DataSelectionKeys$ALL
-    )))
-  
+    )
+  ))
+
   expect_warning(SimulationSet$new(
     simulationSetName = "A",
     simulationFile = simulationFile,
@@ -72,7 +74,8 @@ test_that("Ill defined variables and units in dictionary are flagged by simulati
       path = "Organism|A|Concentration in container",
       displayName = "Concentration of A",
       dataSelection = DataSelectionKeys$ALL
-    )))
+    )
+  ))
 })
 
 
@@ -138,29 +141,29 @@ test_that("Time profile directory includes correct files and folders", {
 })
 
 test_that("Saved time profile data and residuals includes the correct data", {
-  expect_equal(readObservedDataFile(file.path(workflowUnitInObs$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")), 
-               readObservedDataFile(refOutputTimeProfile),
-               tolerance = comparisonTolerance()
+  expect_equal(readObservedDataFile(file.path(workflowUnitInObs$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")),
+    readObservedDataFile(refOutputTimeProfile),
+    tolerance = comparisonTolerance()
   )
-  expect_equal(readObservedDataFile(file.path(workflowLLOQ$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")), 
-               readObservedDataFile(refOutputTimeProfileLLOQ),
-               tolerance = comparisonTolerance()
+  expect_equal(readObservedDataFile(file.path(workflowLLOQ$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")),
+    readObservedDataFile(refOutputTimeProfileLLOQ),
+    tolerance = comparisonTolerance()
   )
-  expect_equal(readObservedDataFile(file.path(workflowMissingLLOQ$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")), 
-               readObservedDataFile(refOutputTimeProfile),
-               tolerance = comparisonTolerance()
+  expect_equal(readObservedDataFile(file.path(workflowMissingLLOQ$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")),
+    readObservedDataFile(refOutputTimeProfile),
+    tolerance = comparisonTolerance()
   )
-  expect_equal(readObservedDataFile(file.path(workflowUnitInObs$workflowFolder, "TimeProfiles", "residuals.csv")), 
-               readObservedDataFile(refOutputResiduals),
-               tolerance = comparisonTolerance()
+  expect_equal(readObservedDataFile(file.path(workflowUnitInObs$workflowFolder, "TimeProfiles", "residuals.csv")),
+    readObservedDataFile(refOutputResiduals),
+    tolerance = comparisonTolerance()
   )
-  expect_equal(readObservedDataFile(file.path(workflowLLOQ$workflowFolder, "TimeProfiles", "residuals.csv")), 
-               readObservedDataFile(refOutputResiduals),
-               tolerance = comparisonTolerance()
+  expect_equal(readObservedDataFile(file.path(workflowLLOQ$workflowFolder, "TimeProfiles", "residuals.csv")),
+    readObservedDataFile(refOutputResiduals),
+    tolerance = comparisonTolerance()
   )
-  expect_equal(readObservedDataFile(file.path(workflowMissingLLOQ$workflowFolder, "TimeProfiles", "residuals.csv")), 
-               readObservedDataFile(refOutputResiduals),
-               tolerance = comparisonTolerance()
+  expect_equal(readObservedDataFile(file.path(workflowMissingLLOQ$workflowFolder, "TimeProfiles", "residuals.csv")),
+    readObservedDataFile(refOutputResiduals),
+    tolerance = comparisonTolerance()
   )
 })
 

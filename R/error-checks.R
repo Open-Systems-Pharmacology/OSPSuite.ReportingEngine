@@ -321,7 +321,7 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile)
   dvUnitVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvUnitID)
 
   # If unit is missing somewhere throw error
-  if(any(all(is.null(timeUnitVariable), is.na(timeUnit)|timeUnit %in% ""), all(is.null(dvUnitVariable), is.na(dvUnit)|dvUnit %in% ""))){
+  if (any(all(is.null(timeUnitVariable), is.na(timeUnit) | timeUnit %in% ""), all(is.null(dvUnitVariable), is.na(dvUnit) | dvUnit %in% ""))) {
     stop(messages$errorUnitNotProvidedInMetaDataFile(observedMetaDataFile))
   }
   checkIsIncluded(timeUnitVariable, names(observedDataset), nullAllowed = TRUE)

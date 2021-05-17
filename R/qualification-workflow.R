@@ -76,16 +76,13 @@ QualificationWorkflow <- R6::R6Class(
       renderReport(self$reportFileName, logFolder = self$workflowFolder, createWordReport = self$createWordReport)
     },
 
-    simModel = function(){
-
+    simModel = function() {
       if (self$simulate$active) {
         self$simulate$runTask(self$simulationStructures)
       }
       if (self$calculatePKParameters$active) {
         self$calculatePKParameters$runTask(self$simulationStructures)
       }
-
     }
-
   )
 )
