@@ -9,14 +9,14 @@ workflowFolder <- "tests/dev/Qualification-Minimal/reporting engine output"
 #-------- Workflow Definition --------#
 workflow <- loadQualificationWorkflow(
   workflowFolder = workflowFolder,
-  jsonFile = configurationFile
+  configurationPlanFile = configurationFile
 )
 
 
 #-------- Configuration Plan --------#
 configurationPlan <- loadConfigurationPlan(
   workflowFolder = workflowFolder,
-  jsonFile = configurationFile
+  configurationPlanFile = configurationFile
 )
 
 configurationPlan$sections
@@ -25,11 +25,11 @@ configurationPlan$observedDataSets
 
 schedule <- getScheduleOfPlots(configurationPlan)
 
-outputsTimeProfile1 <- getOutputsTimeProfile(plot = configurationPlan$plots$TimeProfile[[1]])
-outputsTimeProfile2 <- getOutputsTimeProfile(plot = configurationPlan$plots$TimeProfile[[2]])
-outputsTimeProfile3 <- getOutputsTimeProfile(plot = configurationPlan$plots$TimeProfile[[3]])
+outputsTimeProfile1 <- getOutputsFromTimeProfileConfiguration(plot = configurationPlan$plots$TimeProfile[[1]])
+outputsTimeProfile2 <- getOutputsFromTimeProfileConfiguration(plot = configurationPlan$plots$TimeProfile[[2]])
+outputsTimeProfile3 <- getOutputsFromTimeProfileConfiguration(plot = configurationPlan$plots$TimeProfile[[3]])
 
-outputsGOF <- getOutputsGOFMergedPlotsPlot(plot = configurationPlan$plots$GOFMergedPlots[[1]])
+outputsGOF <- getOutputsFromGOFMergedPlotsConfiguration(plot = configurationPlan$plots$GOFMergedPlots[[1]])
 
 
 
