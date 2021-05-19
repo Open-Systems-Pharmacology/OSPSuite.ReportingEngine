@@ -292,7 +292,7 @@ getAllowedCores <- function() {
     cfs_period_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_period_us", intern = T))
     cores <- floor(cfs_quota_us / cfs_period_us)
     if (cores < 1) {
-      return()
+      return(NULL)
     }
     return(cores)
   },
