@@ -291,7 +291,9 @@ getAllowedCores <- function() {
     cfs_quota_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us", intern = T))
     cfs_period_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_period_us", intern = T))
     cores <- floor(cfs_quota_us / cfs_period_us)
-    if(cores < 1){return()}
+    if (cores < 1) {
+      return()
+    }
     return(cores)
   },
   error = function(cond) {
@@ -365,17 +367,17 @@ getWorkflowParameterDisplayPaths <- function(workflow) {
 }
 
 
-formatNumerics <- function(numerics,  
-                           digits = NULL, 
-                           nsmall = NULL, 
-                           scientific = NULL) { 
+formatNumerics <- function(numerics,
+                           digits = NULL,
+                           nsmall = NULL,
+                           scientific = NULL) {
   validateIsInteger(digits, nullAllowed = TRUE)
   validateIsInteger(nsmall, nullAllowed = TRUE)
   validateIsLogical(scientific, nullAllowed = TRUE)
-  
+
   digits <- digits %||% reEnv$formatNumericsDigits
   nsmall <- nsmall %||% reEnv$formatNumericsSmall
   scientific <- scientific %||% reEnv$formatNumericsScientific
-  
-  return(format(numerics, digits = digits, nsmall = nsmall, scientific = scientific)) 
+
+  return(format(numerics, digits = digits, nsmall = nsmall, scientific = scientific))
 }
