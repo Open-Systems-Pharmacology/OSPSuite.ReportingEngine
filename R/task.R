@@ -27,13 +27,13 @@ Task <- R6::R6Class(
     #' @param message message of the `Task`.
     #' @return A new `Task` object
     initialize = function(outputFolder = NULL,
-                              inputFolder = NULL,
-                              inputs = NULL,
-                              outputs = NULL,
-                              workflowFolder = getwd(),
-                              settings = NULL,
-                              active = FALSE,
-                              message = NULL) {
+                          inputFolder = NULL,
+                          inputs = NULL,
+                          outputs = NULL,
+                          workflowFolder = getwd(),
+                          settings = NULL,
+                          active = FALSE,
+                          message = NULL) {
       validateIsOfType(active, "logical")
       validateIsString(c(outputFolder, inputFolder, inputs, outputs), nullAllowed = TRUE)
 
@@ -135,7 +135,7 @@ Task <- R6::R6Class(
     #' Get the relative path to a file to be output by this task
     #' @param fileName name (with extension) of the file to be output
     #' @return Output file's relative path
-    getRelativePath = function(fileName){
+    getRelativePath = function(fileName) {
       return(file.path(self$outputFolder, fileName))
     },
 
@@ -143,8 +143,8 @@ Task <- R6::R6Class(
     #' Get the absolute path to a file to be output by this task
     #' @param fileName name (with extension) of the file to be output
     #' @return Output file's absolute path
-    getAbsolutePath = function(fileName){
-      return(file.path(self$workflowFolder,self$outputFolder, fileName))
+    getAbsolutePath = function(fileName) {
+      return(file.path(self$workflowFolder, self$outputFolder, fileName))
     },
 
     #' @description

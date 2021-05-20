@@ -23,7 +23,7 @@ reEnv$maxWidthPerParameter <- 25
 reEnv$maxLinesPerParameter <- 3
 
 #' @title ApplicationRanges
-#' @description 
+#' @description
 #' Keys of reported ranges when simulation includes multiple applications
 #' @export
 #' @import ospsuite
@@ -38,11 +38,11 @@ ApplicationRanges <- ospsuite::enum(c("total", "firstApplication", "lastApplicat
 #' @export
 setDefaultNumericFormat <- function(digits = NULL,
                                     nsmall = NULL,
-                                    scientific = NULL){
+                                    scientific = NULL) {
   validateIsInteger(digits, nullAllowed = TRUE)
   validateIsInteger(nsmall, nullAllowed = TRUE)
   validateIsLogical(scientific, nullAllowed = TRUE)
-  
+
   reEnv$formatNumericsDigits <- digits %||% reEnv$formatNumericsDigits
   reEnv$formatNumericsSmall <- nsmall %||% reEnv$formatNumericsSmall
   reEnv$formatNumericsScientific <- scientific %||% reEnv$formatNumericsScientific
@@ -55,8 +55,8 @@ reEnv$theme <- tlf::loadThemeFromJson(system.file("extdata", "template-theme.jso
 #' @title setDefaultTheme
 #' @param theme `Theme` object from `tlf` package
 #' @export
-setDefaultTheme <- function(theme){
-  validateIsOfType(theme,  "Theme")
+setDefaultTheme <- function(theme) {
+  validateIsOfType(theme, "Theme")
   reEnv$theme <- theme
   tlf::useTheme(reEnv$theme)
 }
@@ -64,7 +64,7 @@ setDefaultTheme <- function(theme){
 #' @title setDefaultThemeFromJson
 #' @param jsonFile path to json file where theme properties are stored
 #' @export
-setDefaultThemeFromJson <- function(jsonFile){
+setDefaultThemeFromJson <- function(jsonFile) {
   validateIsString(jsonFile)
   validateIsFileExtension(jsonFile, "json")
   newTheme <- tlf::loadThemeFromJson(jsonFile)
@@ -74,7 +74,7 @@ setDefaultThemeFromJson <- function(jsonFile){
 #' @title setDefaultBins
 #' @param bins number or edges of bins
 #' @export
-setDefaultBins <- function(bins){
+setDefaultBins <- function(bins) {
   validateIsNumeric(bins)
   reEnv$defaultBins <- bins
 }
@@ -82,7 +82,7 @@ setDefaultBins <- function(bins){
 #' @title setDefaultStairstep
 #' @param stairstep logical defining if stairstep should be plotted by default when aggregation is performed
 #' @export
-setDefaultStairstep <- function(stairstep){
+setDefaultStairstep <- function(stairstep) {
   validateIsLogical(stairstep)
   reEnv$defaultStairstep <- stairstep
 }

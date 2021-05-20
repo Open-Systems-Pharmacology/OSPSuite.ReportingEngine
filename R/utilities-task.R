@@ -292,7 +292,7 @@ loadPlotMassBalanceTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "MeanModelWorkflow")
   validateIsLogical(active)
   validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
-  
+
   return(PlotTask$new(
     reportTitle = defaultWorkflowTitles$plotMassBalance,
     fileName = defaultWorkflowAppendices$plotMassBalance,
@@ -318,7 +318,7 @@ loadPlotAbsorptionTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "MeanModelWorkflow")
   validateIsLogical(active)
   validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
-  
+
   return(PlotTask$new(
     reportTitle = defaultWorkflowTitles$plotAbsorption,
     fileName = defaultWorkflowAppendices$plotAbsorption,
@@ -344,7 +344,7 @@ loadPlotDemographyTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "PopulationWorkflow")
   validateIsLogical(active)
   validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
-  
+
   return(PopulationPlotTask$new(
     workflowType = workflow$workflowType,
     xParameters = getDefaultDemographyXParameters(workflow$workflowType),
@@ -453,10 +453,10 @@ checkTaskInputsExist <- function(task) {
 #' @return Updated `Workflow` object
 #' @export
 addUserDefinedTask <- function(workflow,
-                                taskFunction,
-                                taskName = "userDefinedTask",
-                                active = TRUE,
-                                settings = NULL) {
+                               taskFunction,
+                               taskName = "userDefinedTask",
+                               active = TRUE,
+                               settings = NULL) {
   validateIsOfType(workflow, "Workflow")
   validateIsOfType(taskFunction, "function")
   validateIsString(taskName)

@@ -28,10 +28,10 @@ Workflow <- R6::R6Class(
     #' @return A new `Workflow` object
     #' @import ospsuite
     initialize = function(simulationSets,
-                              workflowFolder,
-                              createWordReport = TRUE,
-                              watermark = NULL,
-                              simulationSetDescriptor = NULL) {
+                          workflowFolder,
+                          createWordReport = TRUE,
+                          watermark = NULL,
+                          simulationSetDescriptor = NULL) {
       private$.reportingEngineInfo <- ReportingEngineInfo$new()
       # Empty list on which users can load tasks
       self$userDefinedTasks <- list()

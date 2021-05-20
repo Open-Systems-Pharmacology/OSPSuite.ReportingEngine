@@ -373,11 +373,11 @@ addMarkdownToc <- function(tocContent, fileName, logFolder = getwd()) {
 #' @title setSimulationDescriptor
 #' @description Set workflow simulation set descriptor
 #' @param workflow A `Workflow` object
-#' @param text Character describing simulation sets 
-setSimulationDescriptor <- function(workflow, text){
+#' @param text Character describing simulation sets
+setSimulationDescriptor <- function(workflow, text) {
   validateIsOfType(workflow, "Workflow")
   validateIsString(text, nullAllowed = TRUE)
-  
+
   # Allows NULL which is translated by ""
   workflow$setSimulationDescriptor(text %||% "")
   return(invisible())
@@ -386,8 +386,8 @@ setSimulationDescriptor <- function(workflow, text){
 #' @title getSimulationDescriptor
 #' @description Get workflow simulation set descriptor
 #' @param workflow A `Workflow` object
-#' @return character describing simulation sets 
-getSimulationDescriptor <- function(workflow){
+#' @return character describing simulation sets
+getSimulationDescriptor <- function(workflow) {
   validateIsOfType(workflow, "Workflow")
   return(workflow$getSimulationDescriptor())
 }

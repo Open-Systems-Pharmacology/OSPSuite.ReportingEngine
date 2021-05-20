@@ -120,4 +120,3 @@ defaultTaskOutputFolders <- list(
   "plotSensitivity" = "Sensitivity",
   "plotDemography" = "Demography"
 )
-

@@ -188,11 +188,13 @@ plotMeanMassBalance <- function(structureSet,
     plotConfiguration = settings$plotConfigurations[["pieChart"]]
   )
 
-  timeCaption <- formatNumerics(numerics = max(simulationResultsOutputByGroup$Time),  
-                                digits = settings$digits,
-                                nsmall = settings$nsmall,
-                                scientific = settings$scientific)
-  
+  timeCaption <- formatNumerics(
+    numerics = max(simulationResultsOutputByGroup$Time),
+    digits = settings$digits,
+    nsmall = settings$nsmall,
+    scientific = settings$scientific
+  )
+
   massBalanceCaptions <- list(
     timeProfile = captions$massBalance$timeProfile(),
     cumulativeTimeProfile = captions$massBalance$cumulativeTimeProfile(),
@@ -315,8 +317,10 @@ plotMassBalancePieChart <- function(data,
   timeFilter <- data[, pieChartDataMapping$x] == max(data[, pieChartDataMapping$x])
   pieChartData <- data[timeFilter, ]
   # Legend captions need to includes normalized amount as percent
-  pieChartData$Legend <- paste(pieChartData$Legend, 
-                               " (", round(100 * pieChartData[, pieChartDataMapping$y], digits = 1), "%)")
+  pieChartData$Legend <- paste(
+    pieChartData$Legend,
+    " (", round(100 * pieChartData[, pieChartDataMapping$y], digits = 1), "%)"
+  )
   # Ensure that the colors and legend match previous mass balance plots by re-ordering Legend
   pieChartData$Legend <- reorder(pieChartData$Legend, as.numeric(factor(data[timeFilter, "Legend"])))
 
@@ -335,13 +339,17 @@ plotMassBalancePieChart <- function(data,
       width = 1,
       stat = "identity",
       alpha = 0.8
-    ) + coord_polar("y", start = 0) + ggplot2::theme_void() +
-    xlab("") + ylab("") + ggplot2::theme(legend.title = ggplot2::element_blank())
+    ) +
+    coord_polar("y", start = 0) +
+    ggplot2::theme_void() +
+    xlab("") +
+    ylab("") +
+    ggplot2::theme(legend.title = ggplot2::element_blank())
 
   pieChartGrob <- ggplot2::ggplotGrob(pieChartCorePlot)
 
   pieChartPlot <- tlf::initializePlot(plotConfiguration)
   pieChartPlot <- pieChartPlot + ggplot2::annotation_custom(pieChartGrob)
-  
+
   return(pieChartPlot)
 }

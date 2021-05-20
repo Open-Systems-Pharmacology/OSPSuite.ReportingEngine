@@ -16,10 +16,12 @@ demographyStructure <- sort(c(
 ))
 
 demographyStructurePeds <- NULL
-for (popName in c("Adults", "Pediatric", "Pediatric-vs-ref")){
-  for(parName in c("BMI", "Height", "Weight")){
-    demographyStructurePeds <- c(demographyStructurePeds, 
-                                 paste(popName, parName, c("vs-Age.png", "vs-Age-log.png"), sep = "-"))
+for (popName in c("Adults", "Pediatric", "Pediatric-vs-ref")) {
+  for (parName in c("BMI", "Height", "Weight")) {
+    demographyStructurePeds <- c(
+      demographyStructurePeds,
+      paste(popName, parName, c("vs-Age.png", "vs-Age-log.png"), sep = "-")
+    )
   }
 }
 demographyStructurePeds <- sort(demographyStructurePeds)
@@ -41,15 +43,21 @@ workflowFolderPediatric <- "test-demography-pediatric"
 workflowFolderParallel <- "test-demography-parallel"
 workflowFolderRatio <- "test-demography-ratio"
 
-workflowPediatric <- PopulationWorkflow$new(workflowType = PopulationWorkflowTypes$pediatric, 
-                                            simulationSets = c(setAdults, setPeds), 
-                                            workflowFolder = workflowFolderPediatric)
-workflowParallel <- PopulationWorkflow$new(workflowType = PopulationWorkflowTypes$parallelComparison, 
-                                            simulationSets = c(setAdults, setPeds), 
-                                            workflowFolder = workflowFolderParallel)
-workflowRatio <- PopulationWorkflow$new(workflowType = PopulationWorkflowTypes$ratioComparison, 
-                                            simulationSets = c(setAdults, setPeds), 
-                                            workflowFolder = workflowFolderRatio)
+workflowPediatric <- PopulationWorkflow$new(
+  workflowType = PopulationWorkflowTypes$pediatric,
+  simulationSets = c(setAdults, setPeds),
+  workflowFolder = workflowFolderPediatric
+)
+workflowParallel <- PopulationWorkflow$new(
+  workflowType = PopulationWorkflowTypes$parallelComparison,
+  simulationSets = c(setAdults, setPeds),
+  workflowFolder = workflowFolderParallel
+)
+workflowRatio <- PopulationWorkflow$new(
+  workflowType = PopulationWorkflowTypes$ratioComparison,
+  simulationSets = c(setAdults, setPeds),
+  workflowFolder = workflowFolderRatio
+)
 
 workflowPediatric$inactivateTasks()
 workflowParallel$inactivateTasks()

@@ -28,8 +28,8 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
   inputSections <- readxl::excel_sheets(excelFile)
   # Check for mandotory input sections
   validateIsIncluded(c(StandardExcelSheetNames$`Workflow and Tasks`, StandardExcelSheetNames$SimulationSets),
-                     inputSections,
-                     groupName = paste0("Sheet names of '", excelFile, "'")
+    inputSections,
+    groupName = paste0("Sheet names of '", excelFile, "'")
   )
 
   if (isIncluded(StandardExcelSheetNames$`Documentation`, inputSections)) {
@@ -167,7 +167,7 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
   # Check for duplicate PK parameters as input of Output object
   if (!hasUniqueValues(pkParametersTable$Name)) {
     pkParametersWarnings <- messages$errorHasNoUniqueValues(pkParametersTable$Name,
-                                                            dataName = paste0("selected PK parameters from Excel sheet '", pkParametersSheet, "'")
+      dataName = paste0("selected PK parameters from Excel sheet '", pkParametersSheet, "'")
     )
   }
   # If none of the PK Parameters are updated, their names can directly be used as is
@@ -186,7 +186,7 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
   # Check for duplicate PK parameter display names as input of Output object
   if (!hasUniqueValues(pkParametersTable$`Display name`)) {
     pkParametersErrors <- messages$errorHasNoUniqueValues(pkParametersTable$`Display name`,
-                                                          dataName = paste0("display names of selected PK parameters from Excel sheet '", pkParametersSheet, "'")
+      dataName = paste0("display names of selected PK parameters from Excel sheet '", pkParametersSheet, "'")
     )
   }
 
@@ -299,7 +299,7 @@ getOutputContent <- function(excelFile, outputInfo) {
     outputWarnings <- c(
       outputWarnings,
       messages$errorHasNoUniqueValues(gsub("'", "", allOutputPaths),
-                                      dataName = paste0("paths of Outputs defined in Excel sheet '", outputInfo$sheetName, "'")
+        dataName = paste0("paths of Outputs defined in Excel sheet '", outputInfo$sheetName, "'")
       )
     )
   }
@@ -307,7 +307,7 @@ getOutputContent <- function(excelFile, outputInfo) {
     outputErrors <- c(
       outputErrors,
       messages$errorHasNoUniqueValues(gsub("'", "", allDisplayNames),
-                                      dataName = paste0("path display names of Outputs defined in Excel sheet '", outputInfo$sheetName, "'")
+        dataName = paste0("path display names of Outputs defined in Excel sheet '", outputInfo$sheetName, "'")
       )
     )
   }
@@ -316,7 +316,7 @@ getOutputContent <- function(excelFile, outputInfo) {
     outputErrors <- c(
       outputErrors,
       messages$errorHasNoUniqueValues(gsub("'", "", allDataDisplayNames),
-                                      dataName = paste0("data display names of Outputs defined in Excel sheet '", outputInfo$sheetName, "'")
+        dataName = paste0("data display names of Outputs defined in Excel sheet '", outputInfo$sheetName, "'")
       )
     )
   }
@@ -839,20 +839,20 @@ concatenateDataSelection <- function(inputs, sep = ") & (") {
   }
   # Deal with NONE and ALL inputs
 
-  #Assume NA = NONE
+  # Assume NA = NONE
   inputs[is.na(inputs)] <- "NONE"
 
-  #If all are NONE then return NONE
+  # If all are NONE then return NONE
   if (all(inputs == "NONE")) {
     return('"NONE"')
   }
 
-  #If only some are NONE, remove any NONE
+  # If only some are NONE, remove any NONE
   if (isIncluded("NONE", inputs)) {
     inputs <- inputs[!(inputs == "NONE")]
   }
 
-  #Assume ALL in any is ALL in all
+  # Assume ALL in any is ALL in all
   if (isIncluded("ALL", inputs)) {
     return('"ALL"')
   }

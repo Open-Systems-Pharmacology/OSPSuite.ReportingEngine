@@ -30,11 +30,19 @@ R6 class for Reporting Engine Qualification Workflow
 }
 \if{html}{\out{</div>}}
 }
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{plotTimeProfiles}}{`PlotTask` object for time profile plots}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{QualificationWorkflow$new()}}
 \item \href{#method-runWorkflow}{\code{QualificationWorkflow$runWorkflow()}}
+\item \href{#method-simModel}{\code{QualificationWorkflow$simModel()}}
 \item \href{#method-clone}{\code{QualificationWorkflow$clone()}}
 }
 }
@@ -99,6 +107,15 @@ The order of tasks is as follows:
 \subsection{Returns}{
 All results and plots as a structured output in the workflow folder
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-simModel"></a>}}
+\if{latex}{\out{\hypertarget{method-simModel}{}}}
+\subsection{Method \code{simModel()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{QualificationWorkflow$simModel()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

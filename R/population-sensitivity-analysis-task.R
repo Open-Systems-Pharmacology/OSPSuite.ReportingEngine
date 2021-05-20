@@ -16,8 +16,8 @@ PopulationSensitivityAnalysisTask <- R6::R6Class(
     #' @param ... parameters inherited from R6 class `SensitivityAnalysisTask` object
     #' @return A new `PopulationSensitivityAnalysisTask` object
     initialize = function(getTaskResults = NULL,
-                              settings = NULL,
-                              ...) {
+                          settings = NULL,
+                          ...) {
       validateIsOfType(settings, "SensitivityAnalysisSettings", nullAllowed = TRUE)
       super$initialize(...)
       self$settings <- settings %||% SensitivityAnalysisSettings$new()
@@ -30,7 +30,9 @@ PopulationSensitivityAnalysisTask <- R6::R6Class(
     #' @param taskResults list of results from task run.
     saveResults = function(set, taskResults) {
       results <- taskResults$populationSensitivityResults
-      if(is.null(results)) return()
+      if (is.null(results)) {
+        return()
+      }
       indexDataFrame <- taskResults$indexDataFrame
       indexFileName <- taskResults$indexFileName
       for (fileName in names(results)) {
