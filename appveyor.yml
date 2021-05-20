@@ -82,6 +82,7 @@ skip_tags: true
 branches:
   only:
     - develop
+    - v1.2_Fixes
 
 pull_requests:
   do_not_increment_build_number: true
