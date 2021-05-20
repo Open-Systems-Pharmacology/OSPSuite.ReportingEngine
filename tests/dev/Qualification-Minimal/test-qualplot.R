@@ -23,7 +23,6 @@ configurationPlan$sections
 configurationPlan$simulationMappings
 configurationPlan$observedDataSets
 
-schedule <- getScheduleOfPlots(configurationPlan)
 
 outputsTimeProfile1 <- getOutputsFromTimeProfileConfiguration(plot = configurationPlan$plots$TimeProfile[[1]])
 outputsTimeProfile2 <- getOutputsFromTimeProfileConfiguration(plot = configurationPlan$plots$TimeProfile[[2]])
