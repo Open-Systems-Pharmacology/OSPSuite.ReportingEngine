@@ -22,18 +22,11 @@ R6 class for Reporting Engine Qualification Workflow
 
 \item{\code{plotComparisonTimeProfiles}}{`PlotTask` object for comparison of time profiles plots}
 
-\item{\code{plotObsVsPred}}{`PlotTask` object for goodness of fit plots}
+\item{\code{plotGOFMerged}}{`PlotTask` object for goodness of fit plots}
 
 \item{\code{plotPKRatio}}{`PlotTask` object for PK ratio plot}
 
 \item{\code{plotDDIRatio}}{`PlotTask` object for DDI ratio plot}
-}
-\if{html}{\out{</div>}}
-}
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{plotTimeProfiles}}{`PlotTask` object for time profile plots}
 }
 \if{html}{\out{</div>}}
 }
@@ -42,7 +35,6 @@ R6 class for Reporting Engine Qualification Workflow
 \itemize{
 \item \href{#method-new}{\code{QualificationWorkflow$new()}}
 \item \href{#method-runWorkflow}{\code{QualificationWorkflow$runWorkflow()}}
-\item \href{#method-simModel}{\code{QualificationWorkflow$simModel()}}
 \item \href{#method-clone}{\code{QualificationWorkflow$clone()}}
 }
 }
@@ -72,18 +64,20 @@ R6 class for Reporting Engine Qualification Workflow
 \subsection{Method \code{new()}}{
 Create a new `QualificationWorkflow` object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{QualificationWorkflow$new(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{QualificationWorkflow$new(configurationPlan, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{configurationPlan}}{A `ConfigurationPlan` object}
+
 \item{\code{...}}{input parameters inherited from R6 class object `Workflow`.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `MeanModelWorkflow` object
+A new `QualificationWorkflow` object
 }
 }
 \if{html}{\out{<hr>}}
@@ -107,15 +101,6 @@ The order of tasks is as follows:
 \subsection{Returns}{
 All results and plots as a structured output in the workflow folder
 }
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-simModel"></a>}}
-\if{latex}{\out{\hypertarget{method-simModel}{}}}
-\subsection{Method \code{simModel()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{QualificationWorkflow$simModel()}\if{html}{\out{</div>}}
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

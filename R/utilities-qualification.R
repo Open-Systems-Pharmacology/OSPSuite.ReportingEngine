@@ -30,8 +30,11 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
       outputs = c(outputs)
     )
   }
-  workflow <- QualificationWorkflow$new(simulationSets = simulationSets, workflowFolder = workflowFolder)
-  workflow$configurationPlan <- configurationPlan
+  workflow <- QualificationWorkflow$new(
+    simulationSets = simulationSets,
+    workflowFolder = workflowFolder,
+    configurationPlan = configurationPlan
+  )
   return(workflow)
 }
 
@@ -197,4 +200,5 @@ getOutputsFromGOFMergedPlotsConfiguration <- function(plot) {
 
 
 # Vector of allowable plot types in configuration plan.
-qualificationPlotTypes <- c("GOFMergedPlots", "ComparisonTimeProfilePlots", "DDIRatioPlots", "TimeProfile")
+# TODO deprecate vector using enum ConfigurationPlots
+QualificationPlotTypes <- c("GOFMergedPlots", "ComparisonTimeProfilePlots", "DDIRatioPlots", "TimeProfile")
