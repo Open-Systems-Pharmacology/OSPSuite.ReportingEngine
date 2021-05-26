@@ -126,7 +126,9 @@ ConfigurationPlan <- R6::R6Class(
     getObservedDataPath = function(id) {
       validateIsIncluded(id, private$.observedDataSets$id, groupName = "'id' variable of observedDataSets")
       selectedId <- private$.observedDataSets$id %in% id
-      return(file.path(self$referenceFolder, private$.observedDataSets$path[selectedId]))
+      # Minimal example includes a case where multiple same ids were used
+      # What should be done in such cases ? (Currently, firt value is used)
+      return(file.path(self$referenceFolder, private$.observedDataSets$path[selectedId])[1])
     },
 
     #' @description Get location of simulation file corresponding to a specific simulation and project names
