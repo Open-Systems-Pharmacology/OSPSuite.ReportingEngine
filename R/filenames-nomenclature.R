@@ -106,7 +106,12 @@ defaultWorkflowMessages <- list(
   "plotMassBalance" = "Plot Mass Balance task",
   "plotAbsorption" = "Plot Absorption task",
   "plotSensitivity" = "Plot Sensitivity task",
-  "plotDemography" = "Plot Demography task"
+  "plotDemography" = "Plot Demography task",
+  "plotTimeProfiles" = "Plot Time Profiles task",
+  "plotGOFMerged" = "Plot merged Goodness of fit task",
+  "plotComparisonTimeProfiles" = "Plot Comparison Time Profiles task",
+  "plotPKRatio" = "Plot PK Ratio task",
+  "plotDDIRatio" = "Plot DDI Ratio task"
 )
 
 defaultTaskOutputFolders <- list(

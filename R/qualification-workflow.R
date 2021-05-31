@@ -40,7 +40,15 @@ QualificationWorkflow <- R6::R6Class(
       self$simulate <- loadSimulateTask(self)
       self$calculatePKParameters <- loadCalculatePKParametersTask(self)
 
-      self$plotTimeProfiles <- PlotTask$new(workflowFolder = self$workflowFolder)
+      # TODO: include global plot & axes settings at this stage
+      # -> could be including using the concept of Themes
+      # -> updated using setting$plotConfigurations
+
+      self$plotTimeProfiles <- loadPlotTimeProfilesTask(self, configurationPlan)
+      self$plotGOFMerged <- PlotTask$new()#loadGOFMergedTask(self, configurationPlan)
+      self$plotComparisonTimeProfiles <- PlotTask$new()#loadComparisonPlotTimeProfilesTask(self, configurationPlan)
+      self$plotPKRatio <- PlotTask$new()#loadPlotPKRatioTask(self, configurationPlan)
+      self$plotDDIRatio <- PlotTask$new()#loadPlotDDIRatioTask(self, configurationPlan)
 
       self$taskNames <- ospsuite::enum(self$getAllTasks())
     },
@@ -74,46 +82,11 @@ QualificationWorkflow <- R6::R6Class(
         self$calculatePKParameters$runTask(self$simulationStructures)
       }
 
-      # The Configuration Plan becomes an inpuut of the task to run
-      # This will indicates where the files need to be saved
-      # and in which sections to drop each result
-      # TODO: the following lines will be wrapped by a QualificationTask object
-      if (self$plotTimeProfiles$active) {
-        taskResults <- plotQualificationTimeProfiles(self$configurationPlan,
-          logFolder = self$workflowFolder,
-          settings = NULL
-        )
-        # TODO A TaskResult class should be created at some point
-        # improving all the task saving workflows
-        for (resultIndex in seq_along(taskResults$plots)) {
-          plotName <- names(taskResults$plots)[resultIndex]
-          plotSection <- taskResults$sections[[resultIndex]]
-          # Get files for save
-
-          figureFilePath <- file.path(
-            self$configurationPlan$getSectionPath(plotSection),
-            paste0(plotName, ".png")
-          )
-          # A file relative to the md is necessary for the report
-          figureFileRelativePath <- gsub(pattern = paste0(self$workflowFolder, "/"),
-                                         replacement = "", 
-                                         x= figureFilePath)
-
-          ggplot2::ggsave(
-            filename = figureFilePath,
-            plot = taskResults$plots[[plotName]],
-            width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
-          )
-          addTextChunk(self$configurationPlan$getSectionMarkdown(plotSection),
-            paste0("Figure: ", taskResults$captions[[plotName]]),
-            logFolder = self$workflowFolder
-          )
-          addFigureChunk(
-            fileName = self$configurationPlan$getSectionMarkdown(plotSection),
-            figureFileRelativePath = figureFileRelativePath,
-            figureFileRootDirectory = self$workflowFolder,
-            logFolder = self$workflowFolder
-          )
+      # The Configuration Plan replaces SimulationStructures for Qualification Workflows
+      # since it directly indicates where to save and include results
+      for (plotTask in self$getAllPlotTasks()) {
+        if (self[[plotTask]]$active) {
+          self[[plotTask]]$runTask(self$configurationPlan)
         }
       }
 

@@ -10,13 +10,10 @@
 plotQualificationTimeProfiles <- function(configurationPlan,
                                           logFolder = getwd(),
                                           settings) {
-  timeProfilePlots <- list()
-  timeProfileCaptions <- list()
-  timeProfileSections <- list()
-
+  timeProfileResults <- list()
   for (timeProfilePlan in configurationPlan$plots$TimeProfile) {
     # Create a unique ID for the plot name as <Plot index>-<Project>-<Simulation>
-    plotID <- paste(length(timeProfilePlots) + 1, timeProfilePlan$Project, timeProfilePlan$Simulation, sep = "-")
+    plotID <- paste(length(timeProfileResults) + 1, timeProfilePlan$Project, timeProfilePlan$Simulation, sep = "-")
     # Get simulation and simulation results
     simulationFile <- configurationPlan$getSimulationPath(
       project = timeProfilePlan$Project,
@@ -55,14 +52,12 @@ plotQualificationTimeProfiles <- function(configurationPlan,
     timeProfilePlot <- updatePlotAxes(timeProfilePlot, axesProperties)
 
     # Save results
-    timeProfilePlots[[plotID]] <- timeProfilePlot
-    timeProfileCaptions[[plotID]] <- timeProfilePlan$Plot$Name
-    timeProfileSections[[plotID]] <- timeProfilePlan$SectionId
+    timeProfileResults[[plotID]] <- saveTaskResults(
+      id = plotID,
+      sectionId = timeProfilePlan$SectionId,
+      plot = timeProfilePlot,
+      plotCaption = timeProfilePlan$Plot$Name
+    )
   }
-
-  return(list(
-    plots = timeProfilePlots,
-    captions = timeProfileCaptions,
-    sections = timeProfileSections
-  ))
+  return(timeProfileResults)
 }
