@@ -9,7 +9,7 @@ workflowFolder <- "reporting engine output"
 # For ths reason, configurationPlan has become a field of workflow
 workflow <- loadQualificationWorkflow(
   workflowFolder = workflowFolder,
-  jsonFile = configurationFile
+  configurationPlanFile = configurationFile
 )
 
 # Workflow works as mean model and population workflows
@@ -25,7 +25,7 @@ list.dir(workflow$workflowFolder)
 #-------- Configuration Plan --------#
 configurationPlan <- loadConfigurationPlan(
   workflowFolder = workflowFolder,
-  jsonFile = configurationFile
+  configurationPlanFile = configurationFile
 )
 
 # The json fields are also within the ConfigurationPlan object
