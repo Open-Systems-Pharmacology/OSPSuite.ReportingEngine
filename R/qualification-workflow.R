@@ -5,7 +5,7 @@
 #' @field calculatePKParameters `CalculatePKParametersTask` object for PK parameters calculation
 #' @field plotTimeProfiles `PlotTask` object for time profile plots
 #' @field plotComparisonTimeProfiles `PlotTask` object for comparison of time profiles plots
-#' @field plotObsVsPred `PlotTask` object for goodness of fit plots
+#' @field plotGOFMerged `PlotTask` object for goodness of fit plots
 #' @field plotPKRatio `PlotTask` object for PK ratio plot
 #' @field plotDDIRatio `PlotTask` object for DDI ratio plot
 #' @export
@@ -19,28 +19,36 @@ QualificationWorkflow <- R6::R6Class(
     configurationPlan = NULL,
     simulate = NULL,
     calculatePKParameters = NULL,
-    plotTimeProfilesAndResiduals = NULL,
-    plotObsVsPred = NULL,
+    plotTimeProfiles = NULL,
+    plotGOFMerged = NULL,
     plotComparisonTimeProfiles = NULL,
     plotPKRatio = NULL,
     plotDDIRatio = NULL,
-    appendices = NULL,
+
     #' @description
     #' Create a new `QualificationWorkflow` object.
     #' @param ... input parameters inherited from R6 class object `Workflow`.
-    #' @return A new `MeanModelWorkflow` object
+    #' @param configurationPlan A `ConfigurationPlan` object
+    #' @return A new `QualificationWorkflow` object
     #' @import ospsuite
-    initialize = function(...) {
+    initialize = function(configurationPlan,
+                              ...) {
       super$initialize(...)
+      validateIsOfType(configurationPlan, "ConfigurationPlan")
+      self$configurationPlan <- configurationPlan
 
       self$simulate <- loadSimulateTask(self)
       self$calculatePKParameters <- loadCalculatePKParametersTask(self)
 
-      self$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(self)
-      # self$plotObsVsPred <- loadPlotMassBalanceTask(self)
-      # self$plotComparisonTimeProfiles <- loadPlotAbsorptionTask(self)
-      # self$plotPKRatio <- loadPlotPKParametersTask(self)
-      # self$plotDDIRatio  <- loadPlotSensitivityTask(self)
+      # TODO: include global plot & axes settings at this stage
+      # -> could be including using the concept of Themes
+      # -> updated using setting$plotConfigurations
+
+      self$plotTimeProfiles <- loadPlotTimeProfilesTask(self, configurationPlan)
+      self$plotGOFMerged <- PlotTask$new()#loadGOFMergedTask(self, configurationPlan)
+      self$plotComparisonTimeProfiles <- PlotTask$new()#loadComparisonPlotTimeProfilesTask(self, configurationPlan)
+      self$plotPKRatio <- PlotTask$new()#loadPlotPKRatioTask(self, configurationPlan)
+      self$plotDDIRatio <- PlotTask$new()#loadPlotDDIRatioTask(self, configurationPlan)
 
       self$taskNames <- ospsuite::enum(self$getAllTasks())
     },
@@ -65,24 +73,26 @@ QualificationWorkflow <- R6::R6Class(
 
       # Before running the actual workflow,
       # Create Outputs for sections and copy intro and section content
-      # self$appendices <- createSectionOutput(self$configurationPlan, logFolder = self$workflowFolder)
-
-
-
-      # TODO Include plot tasks
-
-      # Merge appendices into final report
-      mergeMarkdowndFiles(self$appendices, self$reportFileName, logFolder = self$workflowFolder)
-      renderReport(self$reportFileName, logFolder = self$workflowFolder, createWordReport = self$createWordReport)
-    },
-
-    simModel = function() {
+      appendices <- createSectionOutput(self$configurationPlan, logFolder = self$workflowFolder)
       if (self$simulate$active) {
         self$simulate$runTask(self$simulationStructures)
       }
+
       if (self$calculatePKParameters$active) {
         self$calculatePKParameters$runTask(self$simulationStructures)
       }
+
+      # The Configuration Plan replaces SimulationStructures for Qualification Workflows
+      # since it directly indicates where to save and include results
+      for (plotTask in self$getAllPlotTasks()) {
+        if (self[[plotTask]]$active) {
+          self[[plotTask]]$runTask(self$configurationPlan)
+        }
+      }
+
+      # Merge appendices into final report
+      mergeMarkdowndFiles(appendices, self$reportFileName, logFolder = self$workflowFolder)
+      renderReport(self$reportFileName, logFolder = self$workflowFolder, createWordReport = self$createWordReport)
     }
   )
 )
