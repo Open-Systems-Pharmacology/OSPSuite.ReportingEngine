@@ -70,3 +70,28 @@ test_that("observedDataSets field works appropriately", {
   )
   expect_error(minimalPlan$getSectionPath(id = "wrong id"))
 })
+
+test_that("Duplicated Ids for Sections is correctly handled", {
+  expect_error(loadConfigurationPlan(
+    workflowFolder = workflowFolder,
+    configurationPlanFile = getTestDataFilePath("configuration-plan/duplicated-sections.json")
+  ))
+})
+
+test_that("Duplicated Ids for SimulationMappings is correctly handled", {
+  expect_error(loadConfigurationPlan(
+    workflowFolder = workflowFolder,
+    configurationPlanFile = getTestDataFilePath("configuration-plan/duplicated-mappings.json")
+  ))
+})
+
+test_that("Duplicated Ids for ObservedDataSets is correctly handled", {
+  expect_warning(loadConfigurationPlan(
+    workflowFolder = workflowFolder,
+    configurationPlanFile = minimalFile
+  ))
+  expect_error(loadConfigurationPlan(
+    workflowFolder = workflowFolder,
+    configurationPlanFile = getTestDataFilePath("configuration-plan/duplicated-obs-data.json")
+  ))
+})
