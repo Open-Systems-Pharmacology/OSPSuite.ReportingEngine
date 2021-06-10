@@ -1,0 +1,421 @@
+{
+  "SimulationMappings": [
+    {
+      "Project": "Midazolam",
+      "Simulation": "S1",
+      "Path": "Midazolam/S1/"
+    },
+    {
+      "Project": "Midazolam",
+      "Simulation": "S2",
+      "Path": "Midazolam/S2/"
+    },
+    {
+      "Project": "Itraconazole",
+      "Simulation": "S1",
+      "Path": "Itraconazole/S1/"
+    }
+  ],
+  "ObservedDataSets": [
+    {
+      "Id": "Midazolam 600mg SD",
+      "Path": "ObservedData/Midazolam 600mg SD.csv"
+    },
+    {
+      "Id": "Itraconazole 600mg MD",
+      "Path": "ObservedData/Itraconazole 600mg MD.csv"
+    },
+    {
+      "Id": "Midazolam 600mg SD",
+      "Path": "ObservedData/Itraconazole 600mg SD.csv"
+    },
+    {
+      "Id": "DDI_Ratio_CYP3A4",
+      "Path": "ObservedData/DDI_Ratio_CYP3A4.csv",
+      "Type": "DDIRatio"
+    }
+  ],
+  "Plots": {
+    "PlotSettings": {
+      "ChartWidth": 500,
+      "ChartHeight": 400,
+      "Fonts": {
+        "AxisSize": 11,
+        "LegendSize": 9,
+        "OriginSize": 9,
+        "FontFamilyName": "Arial",
+        "WatermarkSize": 40
+      }
+    },
+    "AxesSettings": {
+      "GOFMergedPlotsPredictedVsObserved": [
+        {
+          "Unit": "µg/ml",
+          "Dimension": "Concentration (mass)",
+          "Type": "X",
+          "GridLines": false,
+          "Scaling": "Log"
+        },
+        {
+          "Unit": "µg/ml",
+          "Dimension": "Concentration (mass)",
+          "Type": "Y",
+          "GridLines": false,
+          "Scaling": "Log"
+        }
+      ],
+      "GOFMergedPlotsResidualsOverTime": [
+        {
+          "Unit": "h",
+          "Dimension": "Time",
+          "Type": "X",
+          "GridLines": false,
+          "Scaling": "Linear"
+        },
+        {
+          "Unit": "",
+          "Dimension": "Dimensionless",
+          "Type": "Y",
+          "GridLines": false,
+          "Scaling": "Linear"
+        }
+      ]
+    },
+    "GOFMergedPlots": [
+      {
+        "Title": "Midazolam concentration in plasma/blood",
+        "PlotType": "predictedVsObserved|residualsOverTime",
+        "SectionId": 1,
+        "PlotSettings": {
+          "ChartWidth": 300,
+          "ChartHeight": 300,
+          "Fonts": {
+            "AxisSize": 10,
+            "LegendSize": 10,
+            "OriginSize": 10,
+            "WatermarkSize": 40
+          }
+        },
+        "Groups": [
+          {
+            "Caption": "Midazolam iv",
+            "Symbol": "Circle",
+            "OutputMappings": [
+              {
+                "Project": "Midazolam",
+                "Simulation": "S1",
+                "Output": "Organism|ArterialBlood|Midazolam|Whole Blood",
+                "ObservedData": "Midazolam 600mg SD",
+                "Color": "#FF0000"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "TimeProfile": [
+      {
+        "SectionId": 3,
+        "Project": "Midazolam",
+        "Simulation": "S2",
+        "Plot": {
+          "Axes": [
+            {
+              "Unit": "h",
+              "Dimension": "Time",
+              "Type": "X",
+              "GridLines": true,
+              "Visible": true,
+              "Min": -0.8087273,
+              "Max": 18.53812,
+              "DefaultColor": "#FFFFFF",
+              "DefaultLineStyle": "None",
+              "Scaling": "Linear",
+              "NumberMode": "Normal"
+            },
+            {
+              "Unit": "µmol/l",
+              "Dimension": "Concentration (molar)",
+              "Type": "Y",
+              "GridLines": true,
+              "Visible": true,
+              "Min": 0.0121767,
+              "Max": 18.33021,
+              "DefaultColor": "#FFFFFF",
+              "DefaultLineStyle": "Solid",
+              "Scaling": "Log",
+              "NumberMode": "Normal"
+            }
+          ],
+          "Curves": [
+            {
+              "Name": "S2-Midazolam-Peripheral Venous Blood-Plasma-Concentration",
+              "X": "Time",
+              "Y": "S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)",
+              "CurveOptions": {
+                "Color": "#FF0000",
+                "LegendIndex": 1
+              }
+            },
+            {
+              "Name": "S2-Midazolam-Arterial Blood-Plasma-Concentration",
+              "X": "Time",
+              "Y": "S2|Organism|ArterialBlood|Plasma|Midazolam|Concentration in container",
+              "CurveOptions": {
+                "Color": "#0000FF",
+                "LegendIndex": 2
+              }
+            },
+            {
+              "Name": "S2-Midazolam-Arterial Blood-Blood Cells-Concentration",
+              "X": "Time",
+              "Y": "S2|Organism|ArterialBlood|BloodCells|Midazolam|Concentration in container",
+              "CurveOptions": {
+                "Color": "#008000",
+                "LegendIndex": 3
+              }
+            },
+            {
+              "Name": "S2-Midazolam-Fat-Plasma-Concentration",
+              "X": "Time",
+              "Y": "S2|Organism|Fat|Plasma|Midazolam|Concentration in container",
+              "CurveOptions": {
+                "Color": "#FF00FF",
+                "LegendIndex": 4
+              }
+            },
+            {
+              "Name": "S2-Midazolam-Fat-Blood Cells-Concentration",
+              "X": "Time",
+              "Y": "S2|Organism|Fat|BloodCells|Midazolam|Concentration in container",
+              "CurveOptions": {
+                "Color": "#FF8000",
+                "LegendIndex": 5
+              }
+            },
+            {
+              "Name": "S2-Midazolam-Fat-Interstitial Unbound-Concentration",
+              "X": "Time",
+              "Y": "S2|Organism|Fat|Midazolam|Interstitial Unbound",
+              "CurveOptions": {
+                "Color": "#00C0C0",
+                "LegendIndex": 6
+              }
+            },
+            {
+              "Name": "S2-Midazolam-Fat-Intracellular Unbound-Concentration",
+              "X": "Time",
+              "Y": "S2|Organism|Fat|Midazolam|Intracellular Unbound",
+              "CurveOptions": {
+                "Color": "#C000C0",
+                "LegendIndex": 7
+              }
+            },
+            {
+              "Name": "S2-Midazolam-Fat-Tissue-Concentration",
+              "X": "Time",
+              "Y": "S2|Organism|Fat|Midazolam|Tissue",
+              "CurveOptions": {
+                "Color": "#C04000",
+                "LegendIndex": 8
+              }
+            },
+            {
+              "Name": "Midazolam 600mg SD-Rifampicin-Peripheral Venous Blood-Plasma-Conc",
+              "X": "Rifampin, Peloquin, 600mg po SD|Time",
+              "Y": "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampicin|Conc",
+              "CurveOptions": {
+                "Color": "#C04000",
+                "LegendIndex": 9,
+                "LineStyle": "None",
+                "Symbol": "Circle"
+              }
+            }
+          ],
+          "Name": "Time Profile Analysis",
+          "OriginText": "Midazolam\nS2\n2019-01-08 10:33"
+        }
+      },
+      {
+        "SectionId": 2,
+        "Project": "Itraconazole",
+        "Simulation": "S1",
+        "Plot": {
+          "Axes": [
+            {
+              "Unit": "h",
+              "Dimension": "Time",
+              "Type": "X",
+              "GridLines": true,
+              "Visible": true,
+              "DefaultColor": "#FFFFFF",
+              "DefaultLineStyle": "None",
+              "Scaling": "Linear",
+              "NumberMode": "Normal"
+            },
+            {
+              "Unit": "µmol/l",
+              "Dimension": "Concentration (molar)",
+              "Type": "Y",
+              "GridLines": true,
+              "Visible": true,
+              "DefaultColor": "#FFFFFF",
+              "DefaultLineStyle": "Solid",
+              "Scaling": "Log",
+              "NumberMode": "Normal"
+            }
+          ],
+          "Curves": [
+            {
+              "Name": "S1-Hydroxy-Itraconazole-Peripheral Venous Blood-Plasma-Concentration",
+              "X": "Time",
+              "Y": "S1|Organism|PeripheralVenousBlood|Hydroxy-Itraconazole|Plasma (Peripheral Venous Blood)",
+              "CurveOptions": {
+                "Color": "#FF0000",
+                "LegendIndex": 1
+              }
+            },
+            {
+              "Name": "S1-Midazolam-Arterial Blood-Plasma Unbound-Concentration",
+              "X": "Time",
+              "Y": "S1|Organism|ArterialBlood|Plasma|Midazolam|Plasma Unbound",
+              "CurveOptions": {
+                "Color": "#008000",
+                "LegendIndex": 9
+              }
+            },
+            {
+              "Name": "Itraconazole 600mg MD-Rifampicin-Peripheral Venous Blood-Plasma-Conc ",
+              "X": "Itraconazole 600mg MD|Time ",
+              "Y": "Itraconazole 600mg MD|ObservedData|Peripheral Venous Blood|Plasma|Rifampicin|Conc ",
+              "CurveOptions": {
+                "Color": "#0000FF",
+                "LegendIndex": 10,
+                "LineStyle": "None",
+                "Symbol": "Circle"
+              }
+            }
+          ],
+          "Name": "Chart 1",
+          "OriginText": "Itraconazole\nS1\n2019-02-02 14:40"
+        }
+      },
+      {
+        "SectionId": 2,
+        "Project": "Itraconazole",
+        "Simulation": "S1",
+        "Plot": {
+          "Axes": [
+            {
+              "Unit": "h",
+              "Dimension": "Time",
+              "Type": "X",
+              "GridLines": true,
+              "Visible": true,
+              "Min": 0.0,
+              "Max": 12.0,
+              "DefaultColor": "#FFFFFF",
+              "DefaultLineStyle": "None",
+              "Scaling": "Linear",
+              "NumberMode": "Normal"
+            },
+            {
+              "Unit": "µmol/l",
+              "Dimension": "Concentration (molar)",
+              "Type": "Y",
+              "GridLines": true,
+              "Visible": true,
+              "DefaultColor": "#FFFFFF",
+              "DefaultLineStyle": "Solid",
+              "Scaling": "Log",
+              "NumberMode": "Normal"
+            },
+            {
+              "Unit": "",
+              "Dimension": "Fraction",
+              "Type": "Y2",
+              "GridLines": true,
+              "Visible": true,
+              "DefaultColor": "#FFFFFF",
+              "DefaultLineStyle": "Dash",
+              "Scaling": "Log",
+              "NumberMode": "Normal"
+            }
+          ],
+          "Curves": [
+            {
+              "Name": "Hidro - Venous Blood Plasma",
+              "X": "Time",
+              "Y": "S1|Organism|PeripheralVenousBlood|Hydroxy-Itraconazole|Plasma (Peripheral Venous Blood)",
+              "CurveOptions": {
+                "Color": "#FF0000",
+                "LegendIndex": 1
+              }
+            },
+            {
+              "Name": "Intra - Venous Blood Plasma",
+              "X": "Time",
+              "Y": "S1|Organism|PeripheralVenousBlood|Itraconazole|Plasma (Peripheral Venous Blood)",
+              "CurveOptions": {
+                "Color": "#0000FF",
+                "LegendIndex": 2
+              }
+            },
+            {
+              "Name": "Mida - Fraction Excreted",
+              "X": "Time",
+              "Y": "S1|Organism|Kidney|Urine|Midazolam|Fraction excreted to urine",
+              "CurveOptions": {
+                "yAxisType": "Y2",
+                "Color": "#008000",
+                "LegendIndex": 3,
+                "LineStyle": "Dash"
+              }
+            }
+          ],
+          "Name": "Chat 2",
+          "OriginText": "Itraconazole\nS1\n2019-02-02 14:40"
+        }
+      }
+    ]
+  },
+  "Inputs": [
+    {
+      "SectionId": 1,
+      "Path": "Inputs/Midazolam/Compound/Midazolam.md"
+    },
+    {
+      "SectionId": 2,
+      "Path": "Inputs/Midazolam/Simulation/S1.md"
+    }
+  ],
+  "Sections": [
+    {
+      "Id": 1,
+      "Title": "Chapter 1",
+      "Content": "Content/Section1.md",
+      "Sections": []
+    },
+    {
+      "Id": 2,
+      "Title": "Chapter 2",
+      "Content": "Content/Section2.md",
+      "Sections": [
+        {
+          "Id": 3,
+          "Title": "Chapter 2.1",
+          "Content": "Content/Section2.1.md",
+          "Sections": []
+        }
+      ]
+    }
+  ],
+  "Intro": [
+    {
+      "Path": "Intro/intro.md"
+    },
+    {
+      "Path": "Intro/remote_intro.md"
+    }
+  ]
+}

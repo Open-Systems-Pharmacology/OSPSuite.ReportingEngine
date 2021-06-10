@@ -35,7 +35,7 @@ ConfigurationPlan <- R6::R6Class(
       validateIsIncluded(id, private$.sections$id, groupName = "'id' variable of sections")
       selectedId <- private$.sections$id %in% id
       sectionTitle <- paste0(rep("#", private$.sections$level[selectedId]), collapse = "")
-      sectionTitle <- paste0(sectionTitle, private$.sections$title[selectedId], sep = " ")
+      sectionTitle <- paste(sectionTitle, private$.sections$title[selectedId], sep = " ")
       return(sectionTitle)
     },
 
@@ -186,9 +186,7 @@ ConfigurationPlan <- R6::R6Class(
         return(private$.sections)
       }
       private$.sections <- sectionsAsDataFrame(value)
-      if (!hasUniqueValues(private$.sections$id)) {
-        warning(messages$errorHasNoUniqueValues(private$.sections$id, dataName = "Sections Id"))
-      }
+      validateHasUniqueValues(private$.sections$id, dataName = "Sections Id")
     },
 
     #' @field simulationMappings data.frame mapping simulations to their paths
@@ -209,6 +207,11 @@ ConfigurationPlan <- R6::R6Class(
         }),
         stringsAsFactors = FALSE
       )
+      simulationMappingsId <- paste0(
+        "project: '", private$.simulationMappings$project,
+        "' - simulation: '", private$.simulationMappings$simulation, "'"
+      )
+      validateHasUniqueValues(simulationMappingsId, dataName = "SimulationMappings combinations")
     },
 
     #' @field observedDataSets data.frame mapping observed datasets to their paths
@@ -233,13 +236,26 @@ ConfigurationPlan <- R6::R6Class(
         }),
         stringsAsFactors = FALSE
       )
-      unexistingFiles <- !file.exists(file.path(self$referenceFolder, private$.observedDataSets$path))
+      # Checks if field observedDataSets is appropriate
+      dataPaths <- private$.observedDataSets$path
+      dataIds <- private$.observedDataSets$id
+      unexistingFiles <- !file.exists(file.path(self$referenceFolder, dataPaths))
       if (any(unexistingFiles)) {
-        unexistingFiles <- paste0(private$.observedDataSets$path[unexistingFiles], collapse = "', '")
+        unexistingFiles <- paste0(dataPaths[unexistingFiles], collapse = "', '")
         warning(paste0("Observed datasets '", unexistingFiles, "' not found"))
       }
-      if (!hasUniqueValues(private$.observedDataSets$id)) {
-        warning(messages$errorHasNoUniqueValues(private$.observedDataSets$id, dataName = "ObservedDataSets Id"))
+      if (!hasUniqueValues(dataIds)) {
+        # Check if the id reference same paths
+        duplicatedIds <- unique(dataIds[duplicated(dataIds)])
+        for (observedDataSetsId in duplicatedIds) {
+          selectedRows <- dataIds %in% observedDataSetsId
+          selectedPaths <- dataPaths[selectedRows]
+          if (isOfLength(unique(selectedPaths), 1)) {
+            warning(messages$errorHasNoUniqueValues(dataIds[selectedRows], dataName = "ObservedDataSets Id"))
+            next
+          }
+          stop(paste0("Inconsistent ObservedDataSets Paths '", paste0(selectedPaths, collapse = "', '"), "' for non unique Id '", observedDataSetsId, "'"))
+        }
       }
     }
   ),
