@@ -69,17 +69,17 @@ parseObservationsDataFrame <- function(observationsDataFrame){
 
 getQualificationGOFPlotData <- function(configurationPlan){
 
-  plotGOFDataframe <- list()
-  plotGOFMetadata <- list()
-
+  plotGOFdata <- list()
   for (plt in seq_along(configurationPlan$plots$GOFMergedPlots)){
 
     gofPlotConfiguration <- configurationPlan$plots$GOFMergedPlots[[plt]]
-    pltDf <- NULL
-    plotGOFMetadata[[plt]] <- list()
-    plotGOFMetadata[[plt]]$title <- gofPlotConfiguration$Title
-    plotGOFMetadata[[plt]]$plotTypes <-  ospsuite::toPathArray(gofPlotConfiguration$PlotType)
-    plotGOFMetadata[[plt]]$groups <- list()
+
+
+    plotGOFDataframe <- NULL
+    plotGOFMetadata <- list()
+    plotGOFMetadata$title <- gofPlotConfiguration$Title
+    plotGOFMetadata$plotTypes <-  ospsuite::toPathArray(gofPlotConfiguration$PlotType)
+    plotGOFMetadata$groups <- list()
 
 
     for (group in seq_along(gofPlotConfiguration$Groups)) {
@@ -88,9 +88,9 @@ getQualificationGOFPlotData <- function(configurationPlan){
       symbol <- gofPlotConfiguration$Groups[[1]]$Symbol
       outputMappings <- gofPlotGroup$OutputMappings
 
-      plotGOFMetadata[[plt]]$groups[[caption]] <- list()
-      plotGOFMetadata[[plt]]$groups[[caption]]$outputMappings <- list()
-      plotGOFMetadata[[plt]]$groups[[caption]]$symbol <- symbol
+      plotGOFMetadata$groups[[caption]] <- list()
+      plotGOFMetadata$groups[[caption]]$outputMappings <- list()
+      plotGOFMetadata$groups[[caption]]$symbol <- symbol
 
 
       for (omap in seq_along(outputMappings)) {
@@ -151,31 +151,32 @@ getQualificationGOFPlotData <- function(configurationPlan){
         outputResidualsData <- getResiduals(observedData = observedDataStandardized,
                                             simulatedData = simulatedDataStandardized)
 
-        #plotGOFDataframe[[plt]] <- rbind.data.frame(plotGOFDataframe[[plt]],outputResidualsData)
-        pltDf <- rbind.data.frame(pltDf,outputResidualsData)
+        plotGOFDataframe <- rbind.data.frame(plotGOFDataframe,outputResidualsData)
 
-        plotGOFMetadata[[plt]]$groups[[caption]]$outputMappings[[outputPath]] <- list(molWeight = simulation$molWeightFor(outputPath),
-                                                                                      displayTimeUnit =  observedDataFileMetaData$time$unit,
-                                                                                      displayOutputUnit =  observedDataFileMetaData$output$unit,
-                                                                                      color = color)
+        plotGOFMetadata$groups[[caption]]$outputMappings[[outputPath]] <- list(molWeight = simulation$molWeightFor(outputPath),
+                                                                               displayTimeUnit =  observedDataFileMetaData$time$unit,
+                                                                               displayOutputUnit =  observedDataFileMetaData$output$unit,
+                                                                               color = color)
 
       }
     }
-    plotGOFDataframe[[plt]]  <- pltDf
+    plotGOFdata[[plt]] <- list(dataframe  = plotGOFDataframe, metadata = plotGOFMetadata)
   }
-
-  return(list(data = plotGOFDataframe, metaData = plotGOFMetadata))
+  return(plotGOFdata)
 }
 
 dd <- getQualificationGOFPlotData(configurationPlan)
 
-plotQualificationGOF <- function(plotData){
-
-  gofPlotFunctions<-list("predictedVsObserved" = plotMeanObsVsPred,
-                         "residualsOverTime" = plotMeanResVsTime)
-
-
-}
+# plotQualificationGOF <- function(plotData){
+#
+#   gofPlotFunctions<-list("predictedVsObserved" = plotMeanObsVsPred,
+#                          "residualsOverTime" = plotMeanResVsTime)
+#
+#   for (plotSet in plotData){
+#
+#   }
+#
+# }
 
 
 # outputObservedResults <- getObservedDataFromOutput(output = output,
