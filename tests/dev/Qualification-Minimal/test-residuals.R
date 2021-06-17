@@ -165,19 +165,21 @@ getQualificationGOFPlotData <- function(configurationPlan){
   return(plotGOFdata)
 }
 
-dd <- getQualificationGOFPlotData(configurationPlan)
+plotData <- getQualificationGOFPlotData(configurationPlan)
 
-# plotQualificationGOF <- function(plotData){
-#
-#   gofPlotFunctions<-list("predictedVsObserved" = plotMeanObsVsPred,
-#                          "residualsOverTime" = plotMeanResVsTime)
-#
-#   for (plotSet in plotData){
-#
-#   }
-#
-# }
+plotQualificationGOF <- function(plotData){
 
+  gofPlotFunctions<-list("predictedVsObserved" = plotMeanObsVsPred,
+                         "residualsOverTime" = plotMeanResVsTime)
+
+  for (plotSet in seq_along(plotData)){
+    print(plotSet)
+  }
+
+}
+
+
+plotQualificationGOF(plotData)
 
 # outputObservedResults <- getObservedDataFromOutput(output = output,
 #                                                    data = observedResult$data,
