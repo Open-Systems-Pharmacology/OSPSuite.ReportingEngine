@@ -132,13 +132,17 @@ getQualificationGOFPlotData <- function(configurationPlan){
         observedDataFileMetaData <- parseObservationsDataFrame(observedDataFileData)
         observedDataStandardized <- observedDataFileData[,c(1,2)]
         names(observedDataStandardized) <-c("Time","Concentration")
-        observedDataStandardized$Time <- ospsuite::toBaseUnit(quantityOrDimension = ospDimensions$Time,
-                                                              values = observedDataStandardized$Time,
-                                                              unit = observedDataFileMetaData$time$unit)
-        observedDataStandardized$Concentration <- ospsuite::toBaseUnit(quantityOrDimension = ospsuite::getDimensionForUnit(observedDataFileMetaData$output$unit),
-                                                                       values = observedDataStandardized$Concentration,
-                                                                       unit = observedDataFileMetaData$output$unit,
-                                                                       molWeight = simulation$molWeightFor(outputPath))
+
+        observedDataStandardized$Time <-  observedDataStandardized$Time
+        observedDataStandardized$Concentration <- observedDataStandardized$Concentration
+
+        # observedDataStandardized$Time <- ospsuite::toBaseUnit(quantityOrDimension = ospDimensions$Time,
+        #                                                       values = observedDataStandardized$Time,
+        #                                                       unit = observedDataFileMetaData$time$unit)
+        # observedDataStandardized$Concentration <- ospsuite::toBaseUnit(quantityOrDimension = ospsuite::getDimensionForUnit(observedDataFileMetaData$output$unit),
+        #                                                                values = observedDataStandardized$Concentration,
+        #                                                                unit = observedDataFileMetaData$output$unit,
+        #                                                                molWeight = simulation$molWeightFor(outputPath))
         observedDataStandardized$Path <- outputPath
 
         #Setup simulations dataframe
