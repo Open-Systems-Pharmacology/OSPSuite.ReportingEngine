@@ -13,10 +13,10 @@ configurationFile <- file.path(inputFolder, "/report-configuration-plan.json")
 workflowFolder <- "reporting engine output"
 
 #-------- Workflow Definition --------#
-workflow <- loadQualificationWorkflow(
-  workflowFolder = workflowFolder,
-  configurationPlanFile = configurationFile
-)
+# workflow <- loadQualificationWorkflow(
+#   workflowFolder = workflowFolder,
+#   configurationPlanFile = configurationFile
+# )
 
 
 #-------- Configuration Plan --------#
@@ -60,16 +60,20 @@ parseObservationsDataFrame <- function(observationsDataFrame){
 gofPlotConfiguration <- configurationPlan$plots$GOFMergedPlots[[1]]
 
 
-simDf <- NULL
-obsDf <- NULL
+plotResidualsDataframe <- NULL
 for (group in seq_along(gofPlotConfiguration$Groups)) {
   gofPlotGroup <- gofPlotConfiguration$Groups[[group]]
+  caption <- gofPlotGroup$Caption
+  symbol <- gofPlotConfiguration$Groups[[1]]$Symbol
+  outputMappings <- gofPlotGroup$OutputMappings
   for (omap in seq_along(outputMappings)) {
-    outputMapping <- gofPlotGroup$OutputMappings[[omap]]
+    outputMapping <- outputMappings[[omap]]
 
     projectName <- outputMapping$Project
     simulationName <- outputMapping$Simulation
     outputPath <- outputMapping$Output
+
+
     observedDataPathInSimulation <- outputMapping$Output
     observedDataSet <- outputMapping$ObservedData
     observedDataSetFilePath <- configurationPlan$observedDataSets[configurationPlan$observedDataSets$id == outputMapping$ObservedData, ]$path
@@ -114,14 +118,18 @@ for (group in seq_along(gofPlotConfiguration$Groups)) {
 
 
     #Setup simulations dataframe
-
-
     simulatedDataStandardized <- data.frame(Time = simulationResults$timeValues,
                                             Concentration = simulationResults$getValuesByPath(path = outputPath,individualIds = 0),
                                             Path = outputPath,
-                                            Legend = gofPlotGroup$Caption
-                                            )
+                                            Legend = caption)
 
+
+    outputResidualsData <- getResiduals(observedData = observedDataStandardized,
+                                        simulatedData = simulatedDataStandardized)
+
+    outputResidualsData$outputMapping <- omap
+
+    plotResidualsDataframe <- rbind.data.frame(plotResidualsDataframe,outputResidualsData)
 
     #    observedDataFieldNames <- names(observedData)
 #    observedDataTimeColumnName <- parseColHead(observedDataFieldNames[1])[[1]][1]
