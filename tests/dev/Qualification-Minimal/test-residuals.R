@@ -68,15 +68,18 @@ parseObservationsDataFrame <- function(observationsDataFrame){
 
 gofPlotConfiguration <- configurationPlan$plots$GOFMergedPlots[[1]]
 
-plotGOFGroupMetadata <- list()
-plotGOFDataframe <- NULL
+
+
+
+groupGOFMetadata <- list()
+groupGOFDataframe <- list()
 for (group in seq_along(gofPlotConfiguration$Groups)) {
   gofPlotGroup <- gofPlotConfiguration$Groups[[group]]
   caption <- gofPlotGroup$Caption
   symbol <- gofPlotConfiguration$Groups[[1]]$Symbol
   outputMappings <- gofPlotGroup$OutputMappings
-
-  plotGOFOutputMappingtMetadata <- list()
+  groupGOFDataframe[[caption]] <- NULL
+  outputMappingGOFMetadata <- list()
 
   for (omap in seq_along(outputMappings)) {
 
@@ -139,16 +142,16 @@ for (group in seq_along(gofPlotConfiguration$Groups)) {
                                         simulatedData = simulatedDataStandardized)
     outputResidualsData$outputMapping <- omap
 
-    plotGOFDataframe <- rbind.data.frame(plotGOFDataframe,outputResidualsData)
+    groupGOFDataframe[[caption]] <- rbind.data.frame(groupGOFDataframe[[caption]],outputResidualsData)
 
-    plotGOFOutputMappingtMetadata[[outputPath]] <- list(molWeight = simulation$molWeightFor(outputPath),
+    outputMappingGOFMetadata[[outputPath]] <- list(molWeight = simulation$molWeightFor(outputPath),
                                                         displayTimeUnit =  observedDataFileMetaData$time$unit,
                                                         displayOutputUnit =  observedDataFileMetaData$output$unit)
 
   }
 
 
-  plotGOFGroupMetadata[[caption]] <- plotGOFOutputMappingtMetadata
+  groupGOFMetadata[[caption]] <- outputMappingGOFMetadata
 }
 
 
