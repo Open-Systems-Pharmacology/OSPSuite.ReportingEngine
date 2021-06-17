@@ -67,105 +67,109 @@ parseObservationsDataFrame <- function(observationsDataFrame){
 }
 
 
-plotGOFDataframe <- list()
-plotGOFMetadata <- list()
+getQualificationGOFPlotData <- function(configurationPlan){
 
-for (plt in seq_along(configurationPlan$plots$GOFMergedPlots)){
+  plotGOFDataframe <- list()
+  plotGOFMetadata <- list()
 
-  gofPlotConfiguration <- configurationPlan$plots$GOFMergedPlots[[plt]]
+  for (plt in seq_along(configurationPlan$plots$GOFMergedPlots)){
 
-  groupGOFDataframe <- list()
-  groupGOFMetadata <- list()
-  for (group in seq_along(gofPlotConfiguration$Groups)) {
-    gofPlotGroup <- gofPlotConfiguration$Groups[[group]]
-    caption <- gofPlotGroup$Caption
-    symbol <- gofPlotConfiguration$Groups[[1]]$Symbol
-    outputMappings <- gofPlotGroup$OutputMappings
-    groupGOFDataframe[[caption]] <- NULL
-    outputMappingGOFMetadata <- list()
+    gofPlotConfiguration <- configurationPlan$plots$GOFMergedPlots[[plt]]
 
-    for (omap in seq_along(outputMappings)) {
+    groupGOFDataframe <- list()
+    groupGOFMetadata <- list()
+    for (group in seq_along(gofPlotConfiguration$Groups)) {
+      gofPlotGroup <- gofPlotConfiguration$Groups[[group]]
+      caption <- gofPlotGroup$Caption
+      symbol <- gofPlotConfiguration$Groups[[1]]$Symbol
+      outputMappings <- gofPlotGroup$OutputMappings
+      groupGOFDataframe[[caption]] <- NULL
+      outputMappingGOFMetadata <- list()
 
-      outputMapping <- outputMappings[[omap]]
+      for (omap in seq_along(outputMappings)) {
 
-      projectName <- outputMapping$Project
-      simulationName <- outputMapping$Simulation
-      outputPath <- outputMapping$Output
+        outputMapping <- outputMappings[[omap]]
+
+        projectName <- outputMapping$Project
+        simulationName <- outputMapping$Simulation
+        outputPath <- outputMapping$Output
 
 
 
 
-      observedDataPathInSimulation <- outputMapping$Output
-      observedDataSet <- outputMapping$ObservedData
-      observedDataSetFilePath <- configurationPlan$observedDataSets[configurationPlan$observedDataSets$id == outputMapping$ObservedData, ]$path
+        observedDataPathInSimulation <- outputMapping$Output
+        observedDataSet <- outputMapping$ObservedData
+        observedDataSetFilePath <- configurationPlan$observedDataSets[configurationPlan$observedDataSets$id == outputMapping$ObservedData, ]$path
 
-      simulationFile <- configurationPlan$getSimulationPath(
-        project = projectName,
-        simulation = simulationName
-      )
+        simulationFile <- configurationPlan$getSimulationPath(
+          project = projectName,
+          simulation = simulationName
+        )
 
-      simulationResultsFile <- configurationPlan$getSimulationResultsPath(
-        project = projectName,
-        simulation = simulationName
-      )
+        simulationResultsFile <- configurationPlan$getSimulationResultsPath(
+          project = projectName,
+          simulation = simulationName
+        )
 
-      simulation <- loadSimulation(simulationFile,loadFromCache = TRUE)
-      simulationResults <- importResultsFromCSV(simulation = simulation, filePaths = simulationResultsFile)
+        simulation <- loadSimulation(simulationFile,loadFromCache = TRUE)
+        simulationResults <- importResultsFromCSV(simulation = simulation, filePaths = simulationResultsFile)
 
-      outputs <- lapply(simulation$outputSelections$allOutputs, function(output) {
-        Output$new(output$path)
-      })
-      names(outputs) <- lapply(simulation$outputSelections$allOutputs, function(output) {
-        output$path
-      })
-      output <- outputs[[outputPath]]
+        outputs <- lapply(simulation$outputSelections$allOutputs, function(output) {
+          Output$new(output$path)
+        })
+        names(outputs) <- lapply(simulation$outputSelections$allOutputs, function(output) {
+          output$path
+        })
+        output <- outputs[[outputPath]]
 
-      #Setup observations dataframe
-      observedDataFileData <- read.csv(file.path(inputFolder, observedDataSetFilePath),check.names = FALSE ,fileEncoding = "UTF-8-BOM")
-      observedDataFileMetaData <- parseObservationsDataFrame(observedDataFileData)
-      observedDataStandardized <- observedDataFileData[,c(1,2)]
-      names(observedDataStandardized) <-c("Time","Concentration")
-      observedDataStandardized$Time <- ospsuite::toBaseUnit(quantityOrDimension = ospDimensions$Time,
-                                                            values = observedDataStandardized$Time,
-                                                            unit = observedDataFileMetaData$time$unit)
-      observedDataStandardized$Concentration <- ospsuite::toBaseUnit(quantityOrDimension = ospsuite::getDimensionForUnit(observedDataFileMetaData$output$unit),
-                                                                     values = observedDataStandardized$Concentration,
-                                                                     unit = observedDataFileMetaData$output$unit,
-                                                                     molWeight = simulation$molWeightFor(outputPath))
-      observedDataStandardized$Path <- outputPath
+        #Setup observations dataframe
+        observedDataFileData <- read.csv(file.path(inputFolder, observedDataSetFilePath),check.names = FALSE ,fileEncoding = "UTF-8-BOM")
+        observedDataFileMetaData <- parseObservationsDataFrame(observedDataFileData)
+        observedDataStandardized <- observedDataFileData[,c(1,2)]
+        names(observedDataStandardized) <-c("Time","Concentration")
+        observedDataStandardized$Time <- ospsuite::toBaseUnit(quantityOrDimension = ospDimensions$Time,
+                                                              values = observedDataStandardized$Time,
+                                                              unit = observedDataFileMetaData$time$unit)
+        observedDataStandardized$Concentration <- ospsuite::toBaseUnit(quantityOrDimension = ospsuite::getDimensionForUnit(observedDataFileMetaData$output$unit),
+                                                                       values = observedDataStandardized$Concentration,
+                                                                       unit = observedDataFileMetaData$output$unit,
+                                                                       molWeight = simulation$molWeightFor(outputPath))
+        observedDataStandardized$Path <- outputPath
 
-      #Setup simulations dataframe
-      simulatedDataStandardized <- data.frame(Time = simulationResults$timeValues,
-                                              Concentration = simulationResults$getValuesByPath(path = outputPath,individualIds = 0),
-                                              Path = outputPath,
-                                              Legend = caption)
+        #Setup simulations dataframe
+        simulatedDataStandardized <- data.frame(Time = simulationResults$timeValues,
+                                                Concentration = simulationResults$getValuesByPath(path = outputPath,individualIds = 0),
+                                                Path = outputPath,
+                                                Legend = caption)
 
-      #Setup dataframe of residuals
-      outputResidualsData <- getResiduals(observedData = observedDataStandardized,
-                                          simulatedData = simulatedDataStandardized)
-      outputResidualsData$outputMapping <- omap
+        #Setup dataframe of residuals
+        outputResidualsData <- getResiduals(observedData = observedDataStandardized,
+                                            simulatedData = simulatedDataStandardized)
+        outputResidualsData$outputMapping <- omap
 
-      groupGOFDataframe[[caption]] <- rbind.data.frame(groupGOFDataframe[[caption]],outputResidualsData)
+        groupGOFDataframe[[caption]] <- rbind.data.frame(groupGOFDataframe[[caption]],outputResidualsData)
 
-      outputMappingGOFMetadata[[outputPath]] <- list(molWeight = simulation$molWeightFor(outputPath),
-                                                     displayTimeUnit =  observedDataFileMetaData$time$unit,
-                                                     displayOutputUnit =  observedDataFileMetaData$output$unit)
+        outputMappingGOFMetadata[[outputPath]] <- list(molWeight = simulation$molWeightFor(outputPath),
+                                                       displayTimeUnit =  observedDataFileMetaData$time$unit,
+                                                       displayOutputUnit =  observedDataFileMetaData$output$unit)
 
+      }
+
+
+      groupGOFMetadata[[caption]] <- outputMappingGOFMetadata
     }
 
+    plotGOFDataframe[[plt]] <- groupGOFDataframe
+    plotGOFMetadata[[plt]] <- groupGOFMetadata
 
-    groupGOFMetadata[[caption]] <- outputMappingGOFMetadata
+
   }
 
-  plotGOFDataframe[[plt]] <- groupGOFDataframe
-  plotGOFMetadata[[plt]] <- groupGOFMetadata
-
-
+  return(list(data = plotGOFDataframe, metaData = plotGOFMetadata))
 }
 
 
-
-
+dd <- getQualificationGOFPlotData(configurationPlan)
 
 # outputObservedResults <- getObservedDataFromOutput(output = output,
 #                                                    data = observedResult$data,
