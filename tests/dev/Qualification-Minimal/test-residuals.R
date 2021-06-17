@@ -95,6 +95,8 @@ for (group in seq_along(gofPlotConfiguration$Groups)) {
     })
     output <- outputs[[outputPath]]
 
+
+    #Setup observations dataframe
     observedDataFileData <- read.csv(file.path(inputFolder, observedDataSetFilePath),check.names = FALSE ,fileEncoding = "UTF-8-BOM")
     observedDataFileMetaData <- parseObservationsDataFrame(observedDataFileData)
     observedDataStandardized <- observedDataFileData[,c(1,2)]
@@ -106,29 +108,43 @@ for (group in seq_along(gofPlotConfiguration$Groups)) {
                                                                    values = observedDataStandardized$Concentration,
                                                                    unit = observedDataFileMetaData$output$unit,
                                                                    molWeight = simulation$molWeightFor(outputPath))
+    observedDataStandardized$Path <- outputPath
+
+
+
+
+    #Setup simulations dataframe
+
+
+    simulatedDataStandardized <- data.frame(Time = simulationResults$timeValues,
+                                            Concentration = simulationResults$getValuesByPath(path = outputPath,individualIds = 0),
+                                            Path = outputPath,
+                                            Legend = gofPlotGroup$Caption
+                                            )
+
 
     #    observedDataFieldNames <- names(observedData)
 #    observedDataTimeColumnName <- parseColHead(observedDataFieldNames[1])[[1]][1]
 #    observedDataTimeColumnUnit <- parseColHead(observedDataFieldNames[1])[[1]][2]
 
 
-     observedDataFileTimeUnits <-
-    observedMetaData <-
+    #  observedDataFileTimeUnits <-
+    # observedMetaData <-
+    #
+    # colheads <- names(datFile)
+    # parseColHead(colheads[1])
+    # parseColHead(colheads[2])
+    # ospsuite::getDimensionForUnit(parseColHead(colheads[2])[2])
+    #
 
-    colheads <- names(datFile)
-    parseColHead(colheads[1])
-    parseColHead(colheads[2])
-    ospsuite::getDimensionForUnit(parseColHead(colheads[2])[2])
 
-
-
-    outputData <- data.frame(
-      "Time" = ospsuite::toBaseUnit(quantityOrDimension = ospDimensions$Time,
-                                    data[selectedRows, dataMapping$time], timeUnit),
-      "Concentration" = outputConcentration,
-      "Legend" = paste0("Observed data ", output$dataDisplayName),
-      "Path" = output$path
-    )
+    # outputData <- data.frame(
+    #   "Time" = ospsuite::toBaseUnit(quantityOrDimension = ospDimensions$Time,
+    #                                 data[selectedRows, dataMapping$time], timeUnit),
+    #   "Concentration" = outputConcentration,
+    #   "Legend" = paste0("Observed data ", output$dataDisplayName),
+    #   "Path" = output$path
+    # )
 
     #
     # outputResidualsData <- getResiduals(outputObservedResults$data, outputSimulatedData, output$residualScale)
