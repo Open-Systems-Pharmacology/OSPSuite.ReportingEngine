@@ -172,10 +172,15 @@ plotQualificationGOF <- function(plotData){
   gofPlotFunctions<-list("predictedVsObserved" = plotMeanObsVsPred,
                          "residualsOverTime" = plotMeanResVsTime)
 
-  for (plotSet in seq_along(plotData)){
-    print(plotSet)
-  }
+  gofPlotList <- list()
 
+  for (plotSet in seq_along(plotData)){
+    gofPlotList[[plotSet]] <- list()
+    for (plotType in plotData[[plotSet]]$metadata$plotTypes){
+
+      gofPlotList[[plotSet]][[plotType]] <- gofPlotFunctions[[plotType]]( plotData[[plotType]]$dataframe )
+    }
+  }
 }
 
 
