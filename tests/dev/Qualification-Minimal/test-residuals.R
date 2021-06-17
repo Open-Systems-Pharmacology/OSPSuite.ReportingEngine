@@ -171,6 +171,9 @@ dd <- getQualificationGOFPlotData(configurationPlan)
 
 plotQualificationGOF <- function(plotData){
 
+  gofPlotFunctions<-list("predictedVsObserved" = plotMeanObsVsPred,
+                         "residualsOverTime" = plotMeanResVsTime)
+
 
 }
 
@@ -194,11 +197,8 @@ plotQualificationGOF <- function(plotData){
 #   "Path" = output$path
 # )
 #
-# odatg <- data.frame(Time = c(1,2,3),Concentration = c(110,180,330), Legend = "theOleg" , Path = "theOpath")
-# sdatg <- data.frame(Time = c(1,2,3),Concentration = c(100,200,300),Legend = "theSleg" , Path = "theSpath")
-# getResiduals(odatg,sdatg)
-#
-#
+
+
 # dataMapping <- list(
 #   time = timeColumn,
 #   dv = dvColumn,
