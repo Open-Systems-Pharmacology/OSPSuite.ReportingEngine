@@ -9,7 +9,7 @@ re.example.dir <- "tests/dev/Qualification-Minimal"
 minimal.example.dir <-"../QualificationPlan/examples/minimal"
 advanced.example.dir <-"../QualificationPlan/examples/advanced_01/"
 example.dirs <- c(re.example.dir,minimal.example.dir,advanced.example.dir)
-example.number <- 3
+example.number <- 1
 
 setwd(dir = example.dirs[example.number])
 
@@ -68,19 +68,25 @@ parseObservationsDataFrame <- function(observationsDataFrame){
 
 gofPlotConfiguration <- configurationPlan$plots$GOFMergedPlots[[1]]
 
-
-plotResidualsDataframe <- NULL
+plotGOFGroupMetadata <- list()
+plotGOFDataframe <- NULL
 for (group in seq_along(gofPlotConfiguration$Groups)) {
   gofPlotGroup <- gofPlotConfiguration$Groups[[group]]
   caption <- gofPlotGroup$Caption
   symbol <- gofPlotConfiguration$Groups[[1]]$Symbol
   outputMappings <- gofPlotGroup$OutputMappings
+
+  plotGOFOutputMappingtMetadata <- list()
+
   for (omap in seq_along(outputMappings)) {
+
     outputMapping <- outputMappings[[omap]]
 
     projectName <- outputMapping$Project
     simulationName <- outputMapping$Simulation
     outputPath <- outputMapping$Output
+
+
 
 
     observedDataPathInSimulation <- outputMapping$Output
@@ -108,7 +114,6 @@ for (group in seq_along(gofPlotConfiguration$Groups)) {
     })
     output <- outputs[[outputPath]]
 
-
     #Setup observations dataframe
     observedDataFileData <- read.csv(file.path(inputFolder, observedDataSetFilePath),check.names = FALSE ,fileEncoding = "UTF-8-BOM")
     observedDataFileMetaData <- parseObservationsDataFrame(observedDataFileData)
@@ -123,65 +128,27 @@ for (group in seq_along(gofPlotConfiguration$Groups)) {
                                                                    molWeight = simulation$molWeightFor(outputPath))
     observedDataStandardized$Path <- outputPath
 
-
-
-
     #Setup simulations dataframe
     simulatedDataStandardized <- data.frame(Time = simulationResults$timeValues,
                                             Concentration = simulationResults$getValuesByPath(path = outputPath,individualIds = 0),
                                             Path = outputPath,
                                             Legend = caption)
 
-
+    #Setup dataframe of residuals
     outputResidualsData <- getResiduals(observedData = observedDataStandardized,
                                         simulatedData = simulatedDataStandardized)
-
     outputResidualsData$outputMapping <- omap
 
-    plotResidualsDataframe <- rbind.data.frame(plotResidualsDataframe,outputResidualsData)
+    plotGOFDataframe <- rbind.data.frame(plotGOFDataframe,outputResidualsData)
 
-    #    observedDataFieldNames <- names(observedData)
-#    observedDataTimeColumnName <- parseColHead(observedDataFieldNames[1])[[1]][1]
-#    observedDataTimeColumnUnit <- parseColHead(observedDataFieldNames[1])[[1]][2]
-
-
-    #  observedDataFileTimeUnits <-
-    # observedMetaData <-
-    #
-    # colheads <- names(datFile)
-    # parseColHead(colheads[1])
-    # parseColHead(colheads[2])
-    # ospsuite::getDimensionForUnit(parseColHead(colheads[2])[2])
-    #
-
-
-    # outputData <- data.frame(
-    #   "Time" = ospsuite::toBaseUnit(quantityOrDimension = ospDimensions$Time,
-    #                                 data[selectedRows, dataMapping$time], timeUnit),
-    #   "Concentration" = outputConcentration,
-    #   "Legend" = paste0("Observed data ", output$dataDisplayName),
-    #   "Path" = output$path
-    # )
-
-    #
-    # outputResidualsData <- getResiduals(outputObservedResults$data, outputSimulatedData, output$residualScale)
-
-
-
-    # outputData <- data.frame(
-    #   "Time" = ospsuite::toUnit("Time", data[selectedRows, dataMapping$time], timeUnit),
-    #   "Concentration" = outputConcentration,
-    #   "Legend" = paste0("Observed data ", output$dataDisplayName),
-    #   "Path" = output$path
-    # )
-    #
-    # odatg <- data.frame(Time = c(1,2,3),Concentration = c(110,180,330), Legend = "theOleg" , Path = "theOpath")
-    # sdatg <- data.frame(Time = c(1,2,3),Concentration = c(100,200,300),Legend = "theSleg" , Path = "theSpath")
-    # getResiduals(odatg,sdatg)
-
-
+    plotGOFOutputMappingtMetadata[[outputPath]] <- list(molWeight = simulation$molWeightFor(outputPath),
+                                                        displayTimeUnit =  observedDataFileMetaData$time$unit,
+                                                        displayOutputUnit =  observedDataFileMetaData$output$unit)
 
   }
+
+
+  plotGOFGroupMetadata[[caption]] <- plotGOFOutputMappingtMetadata
 }
 
 
