@@ -84,6 +84,10 @@ getQualificationGOFPlotData <- function(configurationPlan){
       symbol <- gofPlotConfiguration$Groups[[1]]$Symbol
       outputMappings <- gofPlotGroup$OutputMappings
       groupGOFDataframe[[caption]] <- NULL
+      groupGOFMetadata[[caption]] <- list()
+      groupGOFMetadata[[caption]]$symbol <- symbol
+
+
       outputMappingGOFMetadata <- list()
 
       for (omap in seq_along(outputMappings)) {
@@ -93,9 +97,7 @@ getQualificationGOFPlotData <- function(configurationPlan){
         projectName <- outputMapping$Project
         simulationName <- outputMapping$Simulation
         outputPath <- outputMapping$Output
-
-
-
+        color <- outputMapping$Color
 
         observedDataPathInSimulation <- outputMapping$Output
         observedDataSet <- outputMapping$ObservedData
@@ -145,18 +147,18 @@ getQualificationGOFPlotData <- function(configurationPlan){
         #Setup dataframe of residuals
         outputResidualsData <- getResiduals(observedData = observedDataStandardized,
                                             simulatedData = simulatedDataStandardized)
-        outputResidualsData$outputMapping <- omap
 
         groupGOFDataframe[[caption]] <- rbind.data.frame(groupGOFDataframe[[caption]],outputResidualsData)
 
         outputMappingGOFMetadata[[outputPath]] <- list(molWeight = simulation$molWeightFor(outputPath),
                                                        displayTimeUnit =  observedDataFileMetaData$time$unit,
-                                                       displayOutputUnit =  observedDataFileMetaData$output$unit)
+                                                       displayOutputUnit =  observedDataFileMetaData$output$unit,
+                                                       color = color)
 
       }
 
 
-      groupGOFMetadata[[caption]] <- outputMappingGOFMetadata
+      groupGOFMetadata[[caption]][[outputPath]] <- outputMappingGOFMetadata
     }
 
     plotGOFDataframe[[plt]] <- groupGOFDataframe
@@ -170,6 +172,13 @@ getQualificationGOFPlotData <- function(configurationPlan){
 
 
 dd <- getQualificationGOFPlotData(configurationPlan)
+
+
+
+plotQualificationGOF <- function(dd){
+
+}
+
 
 # outputObservedResults <- getObservedDataFromOutput(output = output,
 #                                                    data = observedResult$data,
