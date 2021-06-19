@@ -222,3 +222,12 @@ parseObservationsDataFrame <- function(observationsDataFrame){
 }
 
 
+
+massMoleConversion <- function(dimension){
+  massMoleConversionList <- list()
+  massMoleConversionList[[ospDimensions$Mass]] <- ospDimensions$Amount
+  massMoleConversionList[[ospDimensions$`Concentration (mass)`]] <- ospDimensions$`Concentration (molar)`
+  return(ifelse(test = dimension %in% c(ospDimensions$Mass,ospDimensions$`Concentration (mass)`),
+                yes = massMoleConversionList[[dimension]],
+                no = dimension))
+}
