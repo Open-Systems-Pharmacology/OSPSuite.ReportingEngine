@@ -202,3 +202,23 @@ getOutputsFromGOFMergedPlotsConfiguration <- function(plot) {
 # Vector of allowable plot types in configuration plan.
 # TODO deprecate vector using enum ConfigurationPlots
 QualificationPlotTypes <- c("GOFMergedPlots", "ComparisonTimeProfilePlots", "DDIRatioPlots", "TimeProfile")
+
+
+
+gofPlotFunctions<-list("predictedVsObserved" = plotMeanObsVsPred,
+                       "residualsOverTime" = plotMeanResVsTime)
+
+
+separateVariableFromUnit <- function(variableUnitString) {
+  splitVariableUnitString <- strsplit(x = sub("[ []", replacement = "", x = variableUnitString), split = "[][]")[[1]]
+  return(list(name = splitVariableUnitString[1],
+              unit = ifelse(test = is.na(x = splitVariableUnitString[2] ) , yes = "",no = splitVariableUnitString[2])))
+}
+
+parseObservationsDataFrame <- function(observationsDataFrame){
+  namesObservationsDataFrame <- names(observationsDataFrame)
+  return(list(time = separateVariableFromUnit(namesObservationsDataFrame[1]),
+              output = separateVariableFromUnit(namesObservationsDataFrame[2])))
+}
+
+

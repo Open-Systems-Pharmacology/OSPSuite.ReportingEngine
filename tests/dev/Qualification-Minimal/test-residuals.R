@@ -1,6 +1,7 @@
 # library(ospsuite.reportingengine)
 rm(list = ls())
 library(ospsuite)
+graphics.off()
 setwd(dir = "C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/")
 devtools::load_all(".")
 
@@ -55,16 +56,7 @@ configurationPlan$observedDataSets
 #                                              settings = NULL
 # )
 
-parseColHead <- function(colHead) {
-  colHeadData <- strsplit(x = sub("[ []", replacement = "", x = colHead), split = "[][]")[[1]]
-  return(list(name = colHeadData[1],unit = colHeadData[2]))
-}
 
-parseObservationsDataFrame <- function(observationsDataFrame){
-  namesObservationsDataFrame <- names(observationsDataFrame)
-  return(list(time = parseColHead(namesObservationsDataFrame[1]),
-              output = parseColHead(namesObservationsDataFrame[2])))
-}
 
 
 getQualificationGOFPlotData <- function(configurationPlan){
@@ -133,23 +125,47 @@ getQualificationGOFPlotData <- function(configurationPlan){
         observedDataStandardized <- observedDataFileData[,c(1,2)]
         names(observedDataStandardized) <-c("Time","Concentration")
 
-        observedDataStandardized$Time <-  observedDataStandardized$Time
-        observedDataStandardized$Concentration <- observedDataStandardized$Concentration
+        #observedDataStandardized$Time <-  observedDataStandardized$Time
+        #$Concentration <- observedDataStandardized$Concentration
 
-        # observedDataStandardized$Time <- ospsuite::toBaseUnit(quantityOrDimension = ospDimensions$Time,
-        #                                                       values = observedDataStandardized$Time,
-        #                                                       unit = observedDataFileMetaData$time$unit)
-        # observedDataStandardized$Concentration <- ospsuite::toBaseUnit(quantityOrDimension = ospsuite::getDimensionForUnit(observedDataFileMetaData$output$unit),
-        #                                                                values = observedDataStandardized$Concentration,
-        #                                                                unit = observedDataFileMetaData$output$unit,
-        #                                                                molWeight = simulation$molWeightFor(outputPath))
+        observedDataStandardized$Time <- ospsuite::toBaseUnit(quantityOrDimension = ospDimensions$Time,
+                                                              values = observedDataStandardized$Time,
+                                                              unit = observedDataFileMetaData$time$unit)
+        observedDataStandardized$Concentration <- ospsuite::toBaseUnit(quantityOrDimension = ospsuite::getDimensionForUnit(observedDataFileMetaData$output$unit),
+                                                                       values = observedDataStandardized$Concentration,
+                                                                       unit = observedDataFileMetaData$output$unit,
+                                                                       molWeight = simulation$molWeightFor(outputPath))
         observedDataStandardized$Path <- outputPath
 
         #Setup simulations dataframe
-        simulatedDataStandardized <- data.frame(Time = simulationResults$timeValues,
-                                                Concentration = simulationResults$getValuesByPath(path = outputPath,individualIds = 0),
+        simulatedDataStandardized <- data.frame(Time = ospsuite::toBaseUnit(quantityOrDimension = ospDimensions$Time,
+                                                                            values = simulationResults$timeValues,
+                                                                            unit = observedDataFileMetaData$time$unit),
+                                                Concentration = ospsuite::toUnit(quantityOrDimension = ospsuite::getDimensionForUnit(observedDataFileMetaData$output$unit),
+                                                                                 values = simulationResults$getValuesByPath(path = outputPath,individualIds = 0),
+                                                                                 targetUnit = observedDataFileMetaData$output$unit,
+                                                                                 sourceUnit = ospsuite::getQuantity(path = outputPath,container = simulation)$unit,
+                                                                                 molWeight = simulation$molWeightFor(outputPath)),
                                                 Path = outputPath,
                                                 Legend = caption)
+
+
+
+        # simulatedDataStandardized <- data.frame(Time = ospsuite::toBaseUnit(quantityOrDimension = ospDimensions$Time,
+        #                                                                     values = simulationResults$timeValues,
+        #                                                                     unit = observedDataFileMetaData$time$unit),
+        #                                         Concentration = ospsuite::toBaseUnit(quantityOrDimension = ospsuite::getDimensionForUnit(observedDataFileMetaData$output$unit),
+        #                                                                              values = simulationResults$getValuesByPath(path = outputPath,individualIds = 0),
+        #                                                                              unit = observedDataFileMetaData$output$unit,
+        #                                                                              molWeight = simulation$molWeightFor(outputPath)),
+        #                                         Path = outputPath,
+        #                                         Legend = caption)
+        # simulatedDataStandardized <- data.frame(Time = simulationResults$timeValues,
+        #                                         Concentration = simulationResults$getValuesByPath(path = outputPath,individualIds = 0),
+        #                                         Path = outputPath,
+        #                                         Legend = caption)
+
+        #print(simulatedDataStandardized)
 
         #Setup dataframe of residuals
         outputResidualsData <- getResiduals(observedData = observedDataStandardized,
@@ -171,20 +187,31 @@ getQualificationGOFPlotData <- function(configurationPlan){
 
 plotData <- getQualificationGOFPlotData(configurationPlan)
 
-plotQualificationGOF <- function(plotData){
 
-  gofPlotFunctions<-list("predictedVsObserved" = plotMeanObsVsPred,
-                         "residualsOverTime" = plotMeanResVsTime)
+
+
+plotQualificationGOF <- function(plotData){
 
   gofPlotList <- list()
 
   for (plotSet in seq_along(plotData)){
     gofPlotList[[plotSet]] <- list()
+
+    #plotDataframeWithDisplayUnits <- scaleToDisplayUnits(plotData)
+
     for (plotType in plotData[[plotSet]]$metadata$plotTypes){
 
-      gofPlotList[[plotSet]][[plotType]] <- gofPlotFunctions[[plotType]]( plotData[[plotType]]$dataframe )
+      #Remove Inf values before plotting
+      for (col in c("Observed","Simulated","Residuals")){
+        plotData[[plotSet]]$dataframe[[col]] <- replaceInfWithNA(plotData[[plotSet]]$dataframe[[col]])
+      }
+
+      #print(plotData[[plotSet]]$dataframe)
+      gofPlotList[[plotSet]][[plotType]] <- gofPlotFunctions[[plotType]]( plotData[[plotSet]]$dataframe )
+      show(gofPlotList[[plotSet]][[plotType]])
     }
   }
+  return(gofPlotList)
 }
 
 
