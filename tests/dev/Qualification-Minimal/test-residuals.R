@@ -120,6 +120,10 @@ getQualificationGOFPlotData <- function(configurationPlan){
         output <- outputs[[outputPath]]
         molWeight <- simulation$molWeightFor(outputPath)
         simulationDimension <- getQuantity(path = outputPath,container = simulation)$dimension
+
+
+
+        #Setup simulations dataframe
         simulatedDataStandardized <- data.frame(Time = simulationResults$timeValues,
                                                 Concentration = simulationResults$getValuesByPath(path = outputPath,individualIds = 0),
                                                 Path = outputPath,
@@ -132,7 +136,6 @@ getQualificationGOFPlotData <- function(configurationPlan){
         if (simulationDimension %in% c(ospDimensions$Amount,ospDimensions$`Concentration (molar)`)){
           observationsDimension <- massMoleConversion(ospsuite::getDimensionForUnit(observedDataFileMetaData$output$unit))
         }
-
         #Verify that simulations and observations have same dimensions
         validateIsIncluded(values = observationsDimension,parentValues = simulationDimension,nullAllowed = FALSE)
 
@@ -147,22 +150,6 @@ getQualificationGOFPlotData <- function(configurationPlan){
                                                                        unit = observedDataFileMetaData$output$unit,
                                                                        molWeight = molWeight)
 
-        #Setup simulations dataframe
-        # simulatedDataStandardized <- data.frame(Time = ospsuite::toBaseUnit(quantityOrDimension = ospDimensions$Time,
-        #                                                                     values = simulationResults$timeValues,
-        #                                                                     unit = observedDataFileMetaData$time$unit),
-        #                                         Concentration = ospsuite::toUnit(quantityOrDimension = ospsuite::getDimensionForUnit(observedDataFileMetaData$output$unit),
-        #                                                                          values = simulationResults$getValuesByPath(path = outputPath,individualIds = 0),
-        #                                                                          targetUnit = observedDataFileMetaData$output$unit,
-        #                                                                          sourceUnit = ospsuite::getQuantity(path = outputPath,container = simulation)$unit,
-        #                                                                          molWeight = simulation$molWeightFor(outputPath)),
-        #                                         Path = outputPath,
-        #                                         Legend = caption)
-
-
-
-
-        #print(simulatedDataStandardized)
 
         #Setup dataframe of residuals
         outputResidualsData <- getResiduals(observedData = observedDataStandardized,
@@ -196,15 +183,37 @@ plotQualificationGOF <- function(plotData){
 
     #plotDataframeWithDisplayUnits <- scaleToDisplayUnits(plotData)
 
+
+
     for (plotType in plotData[[plotSet]]$metadata$plotTypes){
+
+      dataframe <- plotData[[plotSet]]$dataframe
+      plotUnits <- ospUnits[["Concentration (mass)"]]$`µg/ml`
+      molWeight <- 3.2577e-07
+
+
+      print("33333")
+      print(molWeight)
+      #print(dataframe)
+
+
+      #Remove Inf values before plotting
+      for (col in c("Observed","Simulated")){
+        dataframe[[col]] <- toUnit(quantityOrDimension = ospDimensions$`Concentration (molar)`,
+                                   targetUnit = plotUnits,
+                                   values = dataframe[[col]],
+                                   molWeight = molWeight)
+
+        dataframe[[col]] <- log10(dataframe[[col]])
+      }
 
       #Remove Inf values before plotting
       for (col in c("Observed","Simulated","Residuals")){
-        plotData[[plotSet]]$dataframe[[col]] <- replaceInfWithNA(plotData[[plotSet]]$dataframe[[col]])
+        dataframe[[col]] <- replaceInfWithNA(dataframe[[col]])
       }
 
       #print(plotData[[plotSet]]$dataframe)
-      gofPlotList[[plotSet]][[plotType]] <- gofPlotFunctions[[plotType]]( plotData[[plotSet]]$dataframe )
+      gofPlotList[[plotSet]][[plotType]] <- gofPlotFunctions[[plotType]]( dataframe )
       show(gofPlotList[[plotSet]][[plotType]])
     }
   }
