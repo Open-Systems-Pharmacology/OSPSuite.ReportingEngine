@@ -89,8 +89,8 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
     # Actual section path will be relative to the workflowFolder
     # and is wrapped in method configurationPlan$getSectionPath(id)
     sectionPath <- paste0(parentFolder,
-      sprintf("%0.3d_%s", sectionIndex, removeForbiddenLetters(section$Title)),
-      sep = .Platform$file.sep
+                          sprintf("%0.3d_%s", sectionIndex, removeForbiddenLetters(section$Title)),
+                          sep = .Platform$file.sep
     )
 
     sectionMarkdown <- sprintf("%0.3d_%s.md", sectionIndex, removeForbiddenLetters(section$Title))
@@ -349,8 +349,6 @@ getQualificationGOFPlotData <- function(configurationPlan){
         plotGOFDataframe <- rbind.data.frame(plotGOFDataframe,gofData)
 
         plotGOFMetadata$groups[[caption]]$outputMappings[[outputPath]] <- list(molWeight = simulation$molWeightFor(outputPath),
-                                                                               displayTimeUnit =  observedDataFileMetaData$time$unit,
-                                                                               displayOutputUnit =  observedDataFileMetaData$output$unit,
                                                                                color = color)
 
       }
@@ -363,68 +361,7 @@ getQualificationGOFPlotData <- function(configurationPlan){
 
 
 
-#' @title buildQualificationGOFResidualsOverTime
-#' @description Build dataframe for residuals vs time
-#' @param dataframe data.frame
-#' @param metadata meta data on `data`
-#' @return dataframe for plotting goodness of fit of residuals vs time type
-buildQualificationGOFResidualsOverTime <- function(dataframe,
-                                                   metadata) {
 
-  axesSettings <- metadata$axesSettings[["residualsOverTime"]]
-
-  xUnit <- axesSettings$X$unit
-  xDimension <- axesSettings$X$dimension
-  xScaling <- axesSettings$X$scaling
-  xGridlines <- axesSettings$X$gridLines
-
-  yUnit <- axesSettings$Y$unit
-  yDimension <- axesSettings$Y$dimension
-  yScaling <- axesSettings$Y$scaling
-  yGridlines <- axesSettings$Y$gridLines
-
-  #function to do obs vs sim
-  #predictedVsObserved|residualsOverTime
-  gofPlotDataframe <- NULL
-  for (grp in unique(dataframe$group)){
-    for (omap in unique( dataframe[dataframe$group == grp,]$outputMapping )){
-
-      molWeight <- metadata$groups[[grp]]$outputMappings[[omap]]$molWeight
-
-      xData <-  dataframe[dataframe$group == grp & dataframe$outputMapping == omap,]$time
-      xData <- ospsuite::toUnit(quantityOrDimension = xDimension,
-                                values = xData,
-                                targetUnit = xUnit,
-                                molWeight = molWeight)
-      if(xScaling == "Log"){
-        xData <- log10(xData)
-      }
-      xData <- replaceInfWithNA(xData)
-
-      simulated <-  dataframe[dataframe$group == grp & dataframe$outputMapping == omap,]$simulated
-      observed  <-  dataframe[dataframe$group == grp & dataframe$outputMapping == omap,]$observed
-      if (yScaling == "Log"){
-        residualValues <-  log10(simulated) - log10(observed)
-      } else {
-        residualValues <-  simulated - observed
-      }
-      yData <- residualValues
-      yData <- ospsuite::toUnit(quantityOrDimension = yDimension,
-                                values = yData,
-                                targetUnit = yUnit,
-                                molWeight = molWeight)
-      yData <- replaceInfWithNA(yData)
-
-      df <- data.frame(Time = xData,
-                       Residuals = yData,
-                       Group = grp,
-                       Output = omap)
-
-      gofPlotDataframe <- rbind.data.frame(gofPlotDataframe,df)
-    }
-  }
-  return(gofPlotDataframe)
-}
 
 #' @title buildQualificationGOFPredictedVsObserved
 #' @description Build dataframe for observation vs prediction
@@ -432,17 +369,17 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
 #' @param metadata meta data on `data`
 #' @return dataframe for plotting goodness of fit of predictedVsObserved type
 buildQualificationGOFPredictedVsObserved <- function(dataframe,
-                                               metadata) {
+                                                     metadata) {
 
   axesSettings <- metadata$axesSettings[["predictedVsObserved"]]
 
   xUnit <- axesSettings$X$unit
-  xDimension <- axesSettings$X$dimension
+  xDimension <- massMoleConversion(axesSettings$X$dimension)
   xScaling <- axesSettings$X$scaling
   xGridlines <- axesSettings$X$gridLines
 
   yUnit <- axesSettings$Y$unit
-  yDimension <- axesSettings$Y$dimension
+  yDimension <- massMoleConversion(axesSettings$Y$dimension)
   yScaling <- axesSettings$Y$scaling
   yGridlines <- axesSettings$Y$gridLines
 
@@ -451,9 +388,7 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
   gofPlotDataframe <- NULL
   for (grp in unique(dataframe$group)){
     for (omap in unique( dataframe[dataframe$group == grp,]$outputMapping )){
-
       molWeight <- metadata$groups[[grp]]$outputMappings[[omap]]$molWeight
-
       xData <-  dataframe[dataframe$group == grp & dataframe$outputMapping == omap,]$observed
       xData <- ospsuite::toUnit(quantityOrDimension = xDimension,
                                 values = xData,
@@ -488,6 +423,70 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
 
 
 
+#' @title buildQualificationGOFResidualsOverTime
+#' @description Build dataframe for residuals vs time
+#' @param dataframe data.frame
+#' @param metadata meta data on `data`
+#' @return dataframe for plotting goodness of fit of residuals vs time type
+buildQualificationGOFResidualsOverTime <- function(dataframe,
+                                                   metadata) {
+
+  axesSettings <- metadata$axesSettings[["residualsOverTime"]]
+
+  xUnit <- axesSettings$X$unit
+  xDimension <- massMoleConversion(axesSettings$X$dimension)
+  xScaling <- axesSettings$X$scaling
+  xGridlines <- axesSettings$X$gridLines
+
+  yUnit <- axesSettings$Y$unit;print(yUnit)
+  yDimension <- massMoleConversion(axesSettings$Y$dimension);print(yDimension)
+  yScaling <- axesSettings$Y$scaling
+  yGridlines <- axesSettings$Y$gridLines
+
+  #function to do obs vs sim
+  #predictedVsObserved|residualsOverTime
+  gofPlotDataframe <- NULL
+  for (grp in unique(dataframe$group)){
+    for (omap in unique( dataframe[dataframe$group == grp,]$outputMapping )){
+
+      molWeight <- metadata$groups[[grp]]$outputMappings[[omap]]$molWeight
+
+      xData <-  dataframe[dataframe$group == grp & dataframe$outputMapping == omap,]$time
+      xData <- ospsuite::toUnit(quantityOrDimension = xDimension,
+                                values = xData,
+                                targetUnit = xUnit,
+                                molWeight = molWeight)
+      if(xScaling == "Log"){
+        xData <- log10(xData)
+      }
+      xData <- replaceInfWithNA(xData)
+
+      simulated <-  dataframe[dataframe$group == grp & dataframe$outputMapping == omap,]$simulated
+      observed  <-  dataframe[dataframe$group == grp & dataframe$outputMapping == omap,]$observed
+      if (yScaling == "Log"){
+        residualValues <-  log10(simulated) - log10(observed)
+      } else {
+        residualValues <- (simulated - observed)/observed
+      }
+      yData <- residualValues
+      yData <- ospsuite::toUnit(quantityOrDimension = yDimension,
+                                values = yData,
+                                targetUnit = yUnit,
+                                molWeight = molWeight)
+      yData <- replaceInfWithNA(yData)
+
+      df <- data.frame(Time = xData,
+                       Residuals = yData,
+                       Group = grp,
+                       Output = omap)
+      print(df)
+      gofPlotDataframe <- rbind.data.frame(gofPlotDataframe,df)
+    }
+  }
+  return(gofPlotDataframe)
+}
+
+
 
 #' @title plotQualificationGOFPredictedVsObserved
 #' @description Plot observation vs prediction for qualification workflow
@@ -506,9 +505,6 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
     "Simulated" = identityMinMax,
     "Legend" = "Line of identity"
   )
-
-print(data)
-
 
 
 
