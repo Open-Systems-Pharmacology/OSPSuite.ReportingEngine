@@ -206,15 +206,6 @@ QualificationPlotTypes <- c("GOFMergedPlots", "ComparisonTimeProfilePlots", "DDI
 
 
 
-gofPlotAxesSettings <-list("predictedVsObserved" = "GOFMergedPlotsPredictedVsObserved",
-                           "residualsOverTime" = "GOFMergedPlotsResidualsOverTime")
-
-buildGOFDataFrameFunctions <- list("predictedVsObserved" = buildQualificationGOFPredictedVsObserved,
-                                   "residualsOverTime" = buildQualificationGOFResidualsOverTime)
-
-plotGOFFunctions <- list("predictedVsObserved" = plotQualificationGOFPredictedVsObserved,
-                         "residualsOverTime" = plotQualificationGOFResidualsOverTime)
-
 
 separateVariableFromUnit <- function(variableUnitString) {
   splitVariableUnitString <- strsplit(x = sub("[ []", replacement = "", x = variableUnitString), split = "[][]")[[1]]
@@ -374,10 +365,10 @@ getQualificationGOFPlotData <- function(configurationPlan){
 
 #' @title buildQualificationGOFResidualsOverTime
 #' @description Build dataframe for residuals vs time
-#' @param data data.frame
+#' @param dataframe data.frame
 #' @param metadata meta data on `data`
 #' @return dataframe for plotting goodness of fit of residuals vs time type
-buildQualificationGOFResidualsOverTime <- function(data,
+buildQualificationGOFResidualsOverTime <- function(dataframe,
                                                    metadata) {
 
   axesSettings <- metadata$axesSettings[["residualsOverTime"]]
@@ -405,14 +396,18 @@ buildQualificationGOFResidualsOverTime <- function(data,
                                 values = xData,
                                 targetUnit = xUnit,
                                 molWeight = molWeight)
-      xData <-  ifelse(test = isTRUE(xScaling == "Log"),yes = log10(xData),no = xData )
+      if(xScaling == "Log"){
+        xData <- log10(xData)
+      }
       xData <- replaceInfWithNA(xData)
 
       simulated <-  dataframe[dataframe$group == grp & dataframe$outputMapping == omap,]$simulated
       observed  <-  dataframe[dataframe$group == grp & dataframe$outputMapping == omap,]$observed
-      residualValues <-  ifelse(test = isTRUE(yScaling == "Log"),
-                                yes = log10(simulated) - log10(observed),
-                                no =  simulated - observed )
+      if (yScaling == "Log"){
+        residualValues <-  log10(simulated) - log10(observed)
+      } else {
+        residualValues <-  simulated - observed
+      }
       yData <- residualValues
       yData <- ospsuite::toUnit(quantityOrDimension = yDimension,
                                 values = yData,
@@ -420,8 +415,8 @@ buildQualificationGOFResidualsOverTime <- function(data,
                                 molWeight = molWeight)
       yData <- replaceInfWithNA(yData)
 
-      df <- data.frame(Observed = xData,
-                       Simulated = yData,
+      df <- data.frame(Time = xData,
+                       Residuals = yData,
                        Group = grp,
                        Output = omap)
 
@@ -433,10 +428,10 @@ buildQualificationGOFResidualsOverTime <- function(data,
 
 #' @title buildQualificationGOFPredictedVsObserved
 #' @description Build dataframe for observation vs prediction
-#' @param data data.frame
+#' @param dataframe data.frame
 #' @param metadata meta data on `data`
 #' @return dataframe for plotting goodness of fit of predictedVsObserved type
-buildQualificationGOFPredictedVsObserved <- function(data,
+buildQualificationGOFPredictedVsObserved <- function(dataframe,
                                                metadata) {
 
   axesSettings <- metadata$axesSettings[["predictedVsObserved"]]
@@ -464,7 +459,9 @@ buildQualificationGOFPredictedVsObserved <- function(data,
                                 values = xData,
                                 targetUnit = xUnit,
                                 molWeight = molWeight)
-      xData <-  ifelse(test = isTRUE(xScaling == "Log"),yes = log10(xData),no = xData )
+      if (xScaling == "Log"){
+        xData <- log10(xData)
+      }
       xData <- replaceInfWithNA(xData)
 
       yData <-  dataframe[dataframe$group == grp & dataframe$outputMapping == omap,]$simulated
@@ -472,7 +469,9 @@ buildQualificationGOFPredictedVsObserved <- function(data,
                                 values = yData,
                                 targetUnit = yUnit,
                                 molWeight = molWeight)
-      yData <-  ifelse(test = isTRUE(yScaling == "Log"),yes = log10(yData),no = yData )
+      if (yScaling == "Log"){
+        yData <- log10(yData)
+      }
       yData <- replaceInfWithNA(yData)
 
       df <- data.frame(Observed = xData,
@@ -507,11 +506,11 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
     "Simulated" = identityMinMax,
     "Legend" = "Line of identity"
   )
-
+print(data)
   obsVsPredDataMapping <- tlf::XYGDataMapping$new(
     x = "Observed",
     y = "Simulated",
-    linetype = "Legend"
+    linetype = "Legend"#,    shape = "Group",vcolor = "Output"
   )
 
   qualificationGOFPredictedVsObservedPlot <- tlf::addLine(
@@ -519,15 +518,13 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
     dataMapping = obsVsPredDataMapping
   )
 
-  qualificationGOFPredictedVsObservedPlot <- tlf::addScatter(
-    data = data,
-    dataMapping = obsVsPredDataMapping,
-    plotObject = qualificationGOFPredictedVsObservedPlot,
-    shape = "Group",
-    color = "Output"
-  )
-  qualificationGOFPredictedVsObservedPlot <- tlf::setLegendPosition(plotObject = qualificationGOFPredictedVsObservedPlot,
-                                                                    position = reDefaultLegendPosition)
+  # qualificationGOFPredictedVsObservedPlot <- tlf::addScatter(
+  #   data = data,
+  #   dataMapping = obsVsPredDataMapping,
+  #   plotObject = qualificationGOFPredictedVsObservedPlot#,# shape = "square",     color = "blue"
+  # )
+  # qualificationGOFPredictedVsObservedPlot <- tlf::setLegendPosition(plotObject = qualificationGOFPredictedVsObservedPlot,
+  #                                                                   position = reDefaultLegendPosition)
 
   return(qualificationGOFPredictedVsObservedPlot)
 }
@@ -540,37 +537,47 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
 #' @import tlf
 #' @import ggplot2
 plotQualificationGOFResidualsOverTime <- function(data) {
-  identityMinMax <- c(
-    0.8 * min(cbind(data[, "Observed"], data[, "Simulated"]), na.rm = TRUE),
-    1.2 * max(cbind(data[, "Observed"], data[, "Simulated"]), na.rm = TRUE)
-  )
 
-  identityLine <- data.frame(
-    "Observed" = identityMinMax,
-    "Simulated" = identityMinMax,
-    "Legend" = "Line of identity"
-  )
-
-  obsVsPredDataMapping <- tlf::XYGDataMapping$new(
-    x = "Observed",
-    y = "Simulated",
-    linetype = "Legend"
-  )
-
-  qualificationGOFObsVsPredPlot <- tlf::addLine(
-    data = identityLine,
-    dataMapping = obsVsPredDataMapping
-  )
-
-  qualificationGOFObsVsPredPlot <- tlf::addScatter(
-    data = data,
-    dataMapping = obsVsPredDataMapping,
-    plotObject = qualificationGOFObsVsPredPlot,
+  resVsTimeDataMapping <- tlf::XYGDataMapping$new(
+    x = "Time",
+    y = "Residuals",
     shape = "Group",
     color = "Output"
   )
-  qualificationGOFObsVsPredPlot <- tlf::setLegendPosition(plotObject = qualificationGOFObsVsPredPlot,
-                                                          position = reDefaultLegendPosition)
 
-  return(qualificationGOFObsVsPredPlot)
+  maxRes <- 1.2 * max(abs(data[, resVsTimeDataMapping$y]), na.rm = TRUE)
+
+  qualificationGOFResVsTimePlot <- tlf::initializePlot()
+
+  qualificationGOFResVsTimePlot <- tlf::addScatter(
+    data = data,
+    dataMapping = resVsTimeDataMapping,
+    plotObject = qualificationGOFResVsTimePlot
+  )
+
+  qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::geom_hline(
+    yintercept = 0,
+    size = 1
+  )
+
+  qualificationGOFResVsTimePlot <- tlf::setLegendPosition(plotObject = qualificationGOFResVsTimePlot,
+                                                          position = reDefaultLegendPosition)
+  qualificationGOFResVsTimePlot <- tlf::setYAxis(
+    plotObject = qualificationGOFResVsTimePlot,
+    limits = c(-maxRes, maxRes)
+  )
+
+  return(qualificationGOFResVsTimePlot)
 }
+
+
+
+gofPlotAxesSettings <-list("predictedVsObserved" = "GOFMergedPlotsPredictedVsObserved",
+                           "residualsOverTime" = "GOFMergedPlotsResidualsOverTime")
+
+buildGOFDataFrameFunctions <- list("predictedVsObserved" = buildQualificationGOFPredictedVsObserved,
+                                   "residualsOverTime" = buildQualificationGOFResidualsOverTime)
+
+plotGOFFunctions <- list("predictedVsObserved" = plotQualificationGOFPredictedVsObserved,
+                         "residualsOverTime" = plotQualificationGOFResidualsOverTime)
+
