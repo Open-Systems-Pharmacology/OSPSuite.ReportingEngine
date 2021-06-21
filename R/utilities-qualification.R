@@ -506,25 +506,31 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
     "Simulated" = identityMinMax,
     "Legend" = "Line of identity"
   )
+
 print(data)
-  obsVsPredDataMapping <- tlf::XYGDataMapping$new(
-    x = "Observed",
-    y = "Simulated",
-    linetype = "Legend"#,    shape = "Group",vcolor = "Output"
-  )
+
+
+
 
   qualificationGOFPredictedVsObservedPlot <- tlf::addLine(
     data = identityLine,
-    dataMapping = obsVsPredDataMapping
+    dataMapping = tlf::XYGDataMapping$new(x = "Observed", y = "Simulated", linetype = "Legend")
   )
 
-  # qualificationGOFPredictedVsObservedPlot <- tlf::addScatter(
-  #   data = data,
-  #   dataMapping = obsVsPredDataMapping,
-  #   plotObject = qualificationGOFPredictedVsObservedPlot#,# shape = "square",     color = "blue"
-  # )
-  # qualificationGOFPredictedVsObservedPlot <- tlf::setLegendPosition(plotObject = qualificationGOFPredictedVsObservedPlot,
-  #                                                                   position = reDefaultLegendPosition)
+  obsVsPredDataMapping <- tlf::XYGDataMapping$new(
+    x = "Observed",
+    y = "Simulated",
+    shape = "Group",
+    color = "Output"
+  )
+
+  qualificationGOFPredictedVsObservedPlot <- tlf::addScatter(
+    data = data,
+    dataMapping = obsVsPredDataMapping,
+    plotObject = qualificationGOFPredictedVsObservedPlot
+  )
+  qualificationGOFPredictedVsObservedPlot <- tlf::setLegendPosition(plotObject = qualificationGOFPredictedVsObservedPlot,
+                                                                    position = reDefaultLegendPosition)
 
   return(qualificationGOFPredictedVsObservedPlot)
 }
