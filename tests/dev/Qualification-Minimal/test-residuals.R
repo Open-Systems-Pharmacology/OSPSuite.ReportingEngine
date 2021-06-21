@@ -39,6 +39,9 @@ configurationPlan$sections
 configurationPlan$simulationMappings
 configurationPlan$observedDataSets
 
+source('C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/R/utilities-qualification.R')
+gofPlots <- plotQualificationGOFs(configurationPlan)
+
 
 # outputsTimeProfile1 <- getOutputsFromTimeProfileConfiguration(plot = configurationPlan$plots$TimeProfile[[1]])
 # outputsTimeProfile2 <- getOutputsFromTimeProfileConfiguration(plot = configurationPlan$plots$TimeProfile[[2]])
@@ -171,26 +174,7 @@ configurationPlan$observedDataSets
 
 
 
-source('C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/R/utilities-qualification.R')
 
-plotQualificationGOF <- function(gofPlotsData){
-  gofPlotList <- list()
-  for (plotIndex in seq_along(gofPlotsData)){
-    gofPlotList[[plotIndex]] <- list()
-    dataframe <- gofPlotsData[[plotIndex]]$dataframe
-    metadata <- gofPlotsData[[plotIndex]]$metadata
-    for (plotType in metadata$plotTypes){
-      plotGOFDataframe <- buildGOFDataFrameFunctions[[plotType]](dataframe,metadata)
-      gofPlotList[[plotIndex]][[plotType]] <- plotGOFFunctions[[plotType]]( plotGOFDataframe )
-      show(gofPlotList[[plotIndex]][[plotType]])
-    }
-  }
-  return(gofPlotList)
-}
-
-plotData <- getQualificationGOFPlotData(configurationPlan)
-
-plotQualificationGOF(gofPlotsData = plotData)
 
 # outputObservedResults <- getObservedDataFromOutput(output = output,
 #                                                    data = observedResult$data,
