@@ -251,6 +251,7 @@ getQualificationGOFPlotData <- function(configurationPlan){
     plotGOFDataframe <- NULL
     plotGOFMetadata <- list()
     plotGOFMetadata$title <- gofPlotConfiguration$Title
+    plotGOFMetadata$sectionID <- gofPlotConfiguration$SectionId
     plotGOFMetadata$plotTypes <-  ospsuite::toPathArray(gofPlotConfiguration$PlotType)
 
 
@@ -349,7 +350,9 @@ getQualificationGOFPlotData <- function(configurationPlan){
         plotGOFDataframe <- rbind.data.frame(plotGOFDataframe,gofData)
 
         plotGOFMetadata$groups[[caption]]$outputMappings[[outputPath]] <- list(molWeight = simulation$molWeightFor(outputPath),
-                                                                               color = color)
+                                                                               color = color,
+                                                                               project = projectName,
+                                                                               simulation = simulationName)
 
       }
     }
@@ -438,8 +441,8 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
   xScaling <- axesSettings$X$scaling
   xGridlines <- axesSettings$X$gridLines
 
-  yUnit <- axesSettings$Y$unit;print(yUnit)
-  yDimension <- massMoleConversion(axesSettings$Y$dimension);print(yDimension)
+  yUnit <- axesSettings$Y$unit
+  yDimension <- massMoleConversion(axesSettings$Y$dimension)
   yScaling <- axesSettings$Y$scaling
   yGridlines <- axesSettings$Y$gridLines
 
@@ -479,7 +482,6 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
                        Residuals = yData,
                        Group = grp,
                        Output = omap)
-      print(df)
       gofPlotDataframe <- rbind.data.frame(gofPlotDataframe,df)
     }
   }
@@ -574,12 +576,48 @@ plotQualificationGOFResidualsOverTime <- function(data) {
 
 
 
+#' @title plotQualificationGOFs
+#' @description Plot observation vs prediction for qualification workflow
+#' @param configurationPlan A `ConfigurationPlan` object
+#' @return list of qualification GOF ggplot objects
+plotQualificationGOFs <- function(configurationPlan){
+  gofPlotsData <- getQualificationGOFPlotData(configurationPlan)
+  gofPlotList <- list()
+  gofPlotResults <- list()
+
+  for (plotIndex in seq_along(gofPlotsData)){
+    gofPlotList[[plotIndex]] <- list()
+    dataframe <- gofPlotsData[[plotIndex]]$dataframe
+    metadata <- gofPlotsData[[plotIndex]]$metadata
+    for (plotType in metadata$plotTypes){
+
+      plotID <- paste("GOFMergedPlot",plotIndex,plotType, sep = "-")
+
+      plotGOFDataframe <- buildGOFDataFrameFunctions[[plotType]](dataframe,metadata)
+      gofPlotList[[plotIndex]][[plotType]] <- plotGOFFunctions[[plotType]]( plotGOFDataframe )
+      show(gofPlotList[[plotIndex]][[plotType]])
+
+
+      gofPlotResults[[plotID]] <- saveTaskResults(
+        id = plotID,
+        sectionId = metadata$sectionID,
+        plot = gofPlotList[[plotIndex]][[plotType]],
+        plotCaption = metadata$title
+      )
+    }
+  }
+  return(gofPlotList)
+}
+
+#' Names of fields in configuration plane containing axes settings data for each GOF plot type
 gofPlotAxesSettings <-list("predictedVsObserved" = "GOFMergedPlotsPredictedVsObserved",
                            "residualsOverTime" = "GOFMergedPlotsResidualsOverTime")
 
+#' Names of functions for extracting data for each GOF plot type
 buildGOFDataFrameFunctions <- list("predictedVsObserved" = buildQualificationGOFPredictedVsObserved,
                                    "residualsOverTime" = buildQualificationGOFResidualsOverTime)
 
+#' Names of functions for plotting GOF plots for each GOF plot type
 plotGOFFunctions <- list("predictedVsObserved" = plotQualificationGOFPredictedVsObserved,
                          "residualsOverTime" = plotQualificationGOFResidualsOverTime)
 
