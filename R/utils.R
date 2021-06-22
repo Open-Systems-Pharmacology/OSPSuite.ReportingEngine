@@ -385,8 +385,8 @@ formatNumerics <- function(numerics,
 #' @param variableName Name of the variable and field of `objectName`
 #' @param keepIfNull logical `objectName$variableName <- variableName %||% objectName$variableName`
 #' @return An expression to `eval()`
-parseVariableToObject <- function(objectName, variableName, keepIfNull = FALSE){
-  if(keepIfNull){
+parseVariableToObject <- function(objectName, variableName, keepIfNull = FALSE) {
+  if (keepIfNull) {
     return(parse(text = paste0(objectName, "$", variableName, " <- ", variableName, " %||% ", objectName, "$", variableName)))
   }
   return(parse(text = paste0(objectName, "$", variableName, " <- ", variableName)))
@@ -398,8 +398,8 @@ parseVariableToObject <- function(objectName, variableName, keepIfNull = FALSE){
 #' @param variableName Name of the variable and field of `objectName`
 #' @param keepIfNull logical `variableName <- objectName$variableName %||% variableName`
 #' @return An expression to `eval()`
-parseVariableFromObject <- function(objectName, variableName, keepIfNull = FALSE){
-  if(keepIfNull){
+parseVariableFromObject <- function(objectName, variableName, keepIfNull = FALSE) {
+  if (keepIfNull) {
     return(parse(text = paste0(variableName, " <- ", objectName, "$", variableName)))
   }
   return(parse(text = paste0(variableName, " <- ", objectName, "$", variableName)))

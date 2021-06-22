@@ -7,9 +7,9 @@ devtools::load_all(".")
 
 
 re.example.dir <- "tests/dev/Qualification-Minimal"
-minimal.example.dir <-"../QualificationPlan/examples/minimal"
-advanced.example.dir <-"../QualificationPlan/examples/advanced_01/"
-example.dirs <- c(re.example.dir,minimal.example.dir,advanced.example.dir)
+minimal.example.dir <- "../QualificationPlan/examples/minimal"
+advanced.example.dir <- "../QualificationPlan/examples/advanced_01/"
+example.dirs <- c(re.example.dir, minimal.example.dir, advanced.example.dir)
 example.number <- 1
 
 setwd(dir = example.dirs[example.number])

@@ -478,11 +478,11 @@ hasUniqueValues <- function(data, na.rm = TRUE) {
   return(!any(duplicated(data)))
 }
 
-validateHasUniqueValues <- function(data, dataName = "dataset", na.rm = TRUE, nullAllowed = FALSE){
+validateHasUniqueValues <- function(data, dataName = "dataset", na.rm = TRUE, nullAllowed = FALSE) {
   if (nullAllowed && is.null(data)) {
     return()
   }
-  if(hasUniqueValues(data, na.rm)){
+  if (hasUniqueValues(data, na.rm)) {
     return()
   }
   stop(messages$errorHasNoUniqueValues(data, dataName, na.rm))

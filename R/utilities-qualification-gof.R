@@ -2,11 +2,9 @@
 #' @description Build dataframes and metadata for each GOF plot
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @return plotGOFdata, a list of lists of the form list(dataframe,metadata) specific to each GOF plot
-getQualificationGOFPlotData <- function(configurationPlan){
-
+getQualificationGOFPlotData <- function(configurationPlan) {
   plotGOFdata <- list()
-  for (plt in seq_along(configurationPlan$plots$GOFMergedPlots)){
-
+  for (plt in seq_along(configurationPlan$plots$GOFMergedPlots)) {
     gofPlotConfiguration <- configurationPlan$plots$GOFMergedPlots[[plt]]
 
 
@@ -14,10 +12,12 @@ getQualificationGOFPlotData <- function(configurationPlan){
     plotGOFMetadata <- list()
     plotGOFMetadata$title <- gofPlotConfiguration$Title
     plotGOFMetadata$sectionID <- gofPlotConfiguration$SectionId
-    plotGOFMetadata$plotTypes <-  ospsuite::toPathArray(gofPlotConfiguration$PlotType)
+    plotGOFMetadata$plotTypes <- ospsuite::toPathArray(gofPlotConfiguration$PlotType)
 
 
-    plotGOFMetadata$axesSettings <- lapply(plotGOFMetadata$plotTypes,function(pltType){ getAxesSettings( configurationPlan$plots$AxesSettings[[ gofPlotAxesSettings[[pltType]]  ]] ) } )
+    plotGOFMetadata$axesSettings <- lapply(plotGOFMetadata$plotTypes, function(pltType) {
+      getAxesSettings(configurationPlan$plots$AxesSettings[[gofPlotAxesSettings[[pltType]]]])
+    })
     names(plotGOFMetadata$axesSettings) <- plotGOFMetadata$plotTypes
 
     plotGOFMetadata$groups <- list()
@@ -35,7 +35,6 @@ getQualificationGOFPlotData <- function(configurationPlan){
 
 
       for (omap in seq_along(outputMappings)) {
-
         outputMapping <- outputMappings[[omap]]
 
         projectName <- outputMapping$Project
@@ -57,7 +56,7 @@ getQualificationGOFPlotData <- function(configurationPlan){
           simulation = simulationName
         )
 
-        simulation <- loadSimulation(simulationFile,loadFromCache = TRUE)
+        simulation <- loadSimulation(simulationFile, loadFromCache = TRUE)
         simulationResults <- importResultsFromCSV(simulation = simulation, filePaths = simulationResultsFile)
 
         outputs <- lapply(simulation$outputSelections$allOutputs, function(output) {
@@ -68,57 +67,66 @@ getQualificationGOFPlotData <- function(configurationPlan){
         })
         output <- outputs[[outputPath]]
         molWeight <- simulation$molWeightFor(outputPath)
-        simulationDimension <- getQuantity(path = outputPath,container = simulation)$dimension
+        simulationDimension <- getQuantity(path = outputPath, container = simulation)$dimension
 
 
 
-        #Setup simulations dataframe
-        simulatedDataStandardized <- data.frame(Time = simulationResults$timeValues,
-                                                Concentration = simulationResults$getValuesByPath(path = outputPath,individualIds = 0))
+        # Setup simulations dataframe
+        simulatedDataStandardized <- data.frame(
+          Time = simulationResults$timeValues,
+          Concentration = simulationResults$getValuesByPath(path = outputPath, individualIds = 0)
+        )
 
-        #Setup observations dataframe
-        observedDataFileData <- read.csv(file.path(inputFolder, observedDataSetFilePath),check.names = FALSE ,fileEncoding = "UTF-8-BOM")
+        # Setup observations dataframe
+        observedDataFileData <- read.csv(file.path(inputFolder, observedDataSetFilePath), check.names = FALSE, fileEncoding = "UTF-8-BOM")
         observedDataFileMetaData <- parseObservationsDataFrame(observedDataFileData)
-        #If simulation in c("Amount","'"Concentration (molar)") and observations in c("Mass","'"Concentration (mass)"), convert observations to c("Amount","'"Concentration (molar)")
-        if (simulationDimension %in% c(ospDimensions$Amount,ospDimensions$`Concentration (molar)`)){
+        # If simulation in c("Amount","'"Concentration (molar)") and observations in c("Mass","'"Concentration (mass)"), convert observations to c("Amount","'"Concentration (molar)")
+        if (simulationDimension %in% c(ospDimensions$Amount, ospDimensions$`Concentration (molar)`)) {
           observationsDimension <- massMoleConversion(ospsuite::getDimensionForUnit(observedDataFileMetaData$output$unit))
         }
-        #Verify that simulations and observations have same dimensions
-        validateIsIncluded(values = observationsDimension,parentValues = simulationDimension,nullAllowed = FALSE)
+        # Verify that simulations and observations have same dimensions
+        validateIsIncluded(values = observationsDimension, parentValues = simulationDimension, nullAllowed = FALSE)
 
-        observedDataStandardized <- observedDataFileData[,c(1,2)]
-        names(observedDataStandardized) <-c("Time","Concentration")
-        observedDataStandardized$Time <- ospsuite::toBaseUnit(quantityOrDimension = ospDimensions$Time,
-                                                              values = observedDataStandardized$Time,
-                                                              unit = observedDataFileMetaData$time$unit)
-        observedDataStandardized$Concentration <- ospsuite::toBaseUnit(quantityOrDimension = observationsDimension,
-                                                                       values = observedDataStandardized$Concentration,
-                                                                       unit = observedDataFileMetaData$output$unit,
-                                                                       molWeight = molWeight)
-
-
-        commonTimePoints <- intersect(observedDataStandardized$Time,simulatedDataStandardized$Time)
-
-
-
-        #Setup dataframe of GOF data
-        gofData <- data.frame(time = commonTimePoints,
-                              observed  = observedDataStandardized$Concentration[observedDataStandardized$Time %in%  commonTimePoints ] ,
-                              simulated  = simulatedDataStandardized$Concentration[simulatedDataStandardized$Time %in%  commonTimePoints ] ,
-                              group = caption,
-                              outputMapping = outputPath)
+        observedDataStandardized <- observedDataFileData[, c(1, 2)]
+        names(observedDataStandardized) <- c("Time", "Concentration")
+        observedDataStandardized$Time <- ospsuite::toBaseUnit(
+          quantityOrDimension = ospDimensions$Time,
+          values = observedDataStandardized$Time,
+          unit = observedDataFileMetaData$time$unit
+        )
+        observedDataStandardized$Concentration <- ospsuite::toBaseUnit(
+          quantityOrDimension = observationsDimension,
+          values = observedDataStandardized$Concentration,
+          unit = observedDataFileMetaData$output$unit,
+          molWeight = molWeight
+        )
 
 
-        plotGOFDataframe <- rbind.data.frame(plotGOFDataframe,gofData)
+        commonTimePoints <- intersect(observedDataStandardized$Time, simulatedDataStandardized$Time)
 
-        plotGOFMetadata$groups[[caption]]$outputMappings[[outputPath]] <- list(molWeight = simulation$molWeightFor(outputPath),
-                                                                               color = color,
-                                                                               project = projectName,
-                                                                               simulation = simulationName)
 
+
+        # Setup dataframe of GOF data
+        gofData <- data.frame(
+          time = commonTimePoints,
+          observed = observedDataStandardized$Concentration[observedDataStandardized$Time %in% commonTimePoints],
+          simulated = simulatedDataStandardized$Concentration[simulatedDataStandardized$Time %in% commonTimePoints],
+          group = caption,
+          outputMapping = outputPath
+        )
+
+
+        plotGOFDataframe <- rbind.data.frame(plotGOFDataframe, gofData)
+
+        plotGOFMetadata$groups[[caption]]$outputMappings[[outputPath]] <- list(
+          molWeight = simulation$molWeightFor(outputPath),
+          color = color,
+          project = projectName,
+          simulation = simulationName
+        )
       }
     }
-    plotGOFdata[[plt]] <- list(dataframe  = plotGOFDataframe, metadata = plotGOFMetadata)
+    plotGOFdata[[plt]] <- list(dataframe = plotGOFDataframe, metadata = plotGOFMetadata)
   }
   return(plotGOFdata)
 }
@@ -135,7 +143,6 @@ getQualificationGOFPlotData <- function(configurationPlan){
 #' @return dataframe for plotting goodness of fit of predictedVsObserved type
 buildQualificationGOFPredictedVsObserved <- function(dataframe,
                                                      metadata) {
-
   axesSettings <- metadata$axesSettings[["predictedVsObserved"]]
 
   xUnit <- axesSettings$X$unit
@@ -148,38 +155,44 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
   yScaling <- axesSettings$Y$scaling
   yGridlines <- axesSettings$Y$gridLines
 
-  #function to do obs vs sim
-  #predictedVsObserved|residualsOverTime
+  # function to do obs vs sim
+  # predictedVsObserved|residualsOverTime
   gofPlotDataframe <- NULL
-  for (grp in unique(dataframe$group)){
-    for (omap in unique( dataframe[dataframe$group == grp,]$outputMapping )){
+  for (grp in unique(dataframe$group)) {
+    for (omap in unique(dataframe[dataframe$group == grp, ]$outputMapping)) {
       molWeight <- metadata$groups[[grp]]$outputMappings[[omap]]$molWeight
-      xData <-  dataframe[dataframe$group == grp & dataframe$outputMapping == omap,]$observed
-      xData <- ospsuite::toUnit(quantityOrDimension = xDimension,
-                                values = xData,
-                                targetUnit = xUnit,
-                                molWeight = molWeight)
-      if (xScaling == "Log"){
+      xData <- dataframe[dataframe$group == grp & dataframe$outputMapping == omap, ]$observed
+      xData <- ospsuite::toUnit(
+        quantityOrDimension = xDimension,
+        values = xData,
+        targetUnit = xUnit,
+        molWeight = molWeight
+      )
+      if (xScaling == "Log") {
         xData <- log10(xData)
       }
       xData <- replaceInfWithNA(xData)
 
-      yData <-  dataframe[dataframe$group == grp & dataframe$outputMapping == omap,]$simulated
-      yData <- ospsuite::toUnit(quantityOrDimension = yDimension,
-                                values = yData,
-                                targetUnit = yUnit,
-                                molWeight = molWeight)
-      if (yScaling == "Log"){
+      yData <- dataframe[dataframe$group == grp & dataframe$outputMapping == omap, ]$simulated
+      yData <- ospsuite::toUnit(
+        quantityOrDimension = yDimension,
+        values = yData,
+        targetUnit = yUnit,
+        molWeight = molWeight
+      )
+      if (yScaling == "Log") {
         yData <- log10(yData)
       }
       yData <- replaceInfWithNA(yData)
 
-      df <- data.frame(Observed = xData,
-                       Simulated = yData,
-                       Group = grp,
-                       Output = omap)
+      df <- data.frame(
+        Observed = xData,
+        Simulated = yData,
+        Group = grp,
+        Output = omap
+      )
 
-      gofPlotDataframe <- rbind.data.frame(gofPlotDataframe,df)
+      gofPlotDataframe <- rbind.data.frame(gofPlotDataframe, df)
     }
   }
   return(gofPlotDataframe)
@@ -195,7 +208,6 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
 #' @return dataframe for plotting goodness of fit of residuals vs time type
 buildQualificationGOFResidualsOverTime <- function(dataframe,
                                                    metadata) {
-
   axesSettings <- metadata$axesSettings[["residualsOverTime"]]
 
   xUnit <- axesSettings$X$unit
@@ -208,43 +220,48 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
   yScaling <- axesSettings$Y$scaling
   yGridlines <- axesSettings$Y$gridLines
 
-  #function to do obs vs sim
-  #predictedVsObserved|residualsOverTime
+  # function to do obs vs sim
+  # predictedVsObserved|residualsOverTime
   gofPlotDataframe <- NULL
-  for (grp in unique(dataframe$group)){
-    for (omap in unique( dataframe[dataframe$group == grp,]$outputMapping )){
-
+  for (grp in unique(dataframe$group)) {
+    for (omap in unique(dataframe[dataframe$group == grp, ]$outputMapping)) {
       molWeight <- metadata$groups[[grp]]$outputMappings[[omap]]$molWeight
 
-      xData <-  dataframe[dataframe$group == grp & dataframe$outputMapping == omap,]$time
-      xData <- ospsuite::toUnit(quantityOrDimension = xDimension,
-                                values = xData,
-                                targetUnit = xUnit,
-                                molWeight = molWeight)
-      if(xScaling == "Log"){
+      xData <- dataframe[dataframe$group == grp & dataframe$outputMapping == omap, ]$time
+      xData <- ospsuite::toUnit(
+        quantityOrDimension = xDimension,
+        values = xData,
+        targetUnit = xUnit,
+        molWeight = molWeight
+      )
+      if (xScaling == "Log") {
         xData <- log10(xData)
       }
       xData <- replaceInfWithNA(xData)
 
-      simulated <-  dataframe[dataframe$group == grp & dataframe$outputMapping == omap,]$simulated
-      observed  <-  dataframe[dataframe$group == grp & dataframe$outputMapping == omap,]$observed
-      if (yScaling == "Log"){
-        residualValues <-  log10(simulated) - log10(observed)
+      simulated <- dataframe[dataframe$group == grp & dataframe$outputMapping == omap, ]$simulated
+      observed <- dataframe[dataframe$group == grp & dataframe$outputMapping == omap, ]$observed
+      if (yScaling == "Log") {
+        residualValues <- log10(simulated) - log10(observed)
       } else {
-        residualValues <- (simulated - observed)/observed
+        residualValues <- (simulated - observed) / observed
       }
       yData <- residualValues
-      yData <- ospsuite::toUnit(quantityOrDimension = yDimension,
-                                values = yData,
-                                targetUnit = yUnit,
-                                molWeight = molWeight)
+      yData <- ospsuite::toUnit(
+        quantityOrDimension = yDimension,
+        values = yData,
+        targetUnit = yUnit,
+        molWeight = molWeight
+      )
       yData <- replaceInfWithNA(yData)
 
-      df <- data.frame(Time = xData,
-                       Residuals = yData,
-                       Group = grp,
-                       Output = omap)
-      gofPlotDataframe <- rbind.data.frame(gofPlotDataframe,df)
+      df <- data.frame(
+        Time = xData,
+        Residuals = yData,
+        Group = grp,
+        Output = omap
+      )
+      gofPlotDataframe <- rbind.data.frame(gofPlotDataframe, df)
     }
   }
   return(gofPlotDataframe)
@@ -289,8 +306,10 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
     dataMapping = obsVsPredDataMapping,
     plotObject = qualificationGOFPredictedVsObservedPlot
   )
-  qualificationGOFPredictedVsObservedPlot <- tlf::setLegendPosition(plotObject = qualificationGOFPredictedVsObservedPlot,
-                                                                    position = reDefaultLegendPosition)
+  qualificationGOFPredictedVsObservedPlot <- tlf::setLegendPosition(
+    plotObject = qualificationGOFPredictedVsObservedPlot,
+    position = reDefaultLegendPosition
+  )
 
   return(qualificationGOFPredictedVsObservedPlot)
 }
@@ -303,7 +322,6 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
 #' @import tlf
 #' @import ggplot2
 plotQualificationGOFResidualsOverTime <- function(data) {
-
   resVsTimeDataMapping <- tlf::XYGDataMapping$new(
     x = "Time",
     y = "Residuals",
@@ -326,8 +344,10 @@ plotQualificationGOFResidualsOverTime <- function(data) {
     size = 1
   )
 
-  qualificationGOFResVsTimePlot <- tlf::setLegendPosition(plotObject = qualificationGOFResVsTimePlot,
-                                                          position = reDefaultLegendPosition)
+  qualificationGOFResVsTimePlot <- tlf::setLegendPosition(
+    plotObject = qualificationGOFResVsTimePlot,
+    position = reDefaultLegendPosition
+  )
   qualificationGOFResVsTimePlot <- tlf::setYAxis(
     plotObject = qualificationGOFResVsTimePlot,
     limits = c(-maxRes, maxRes)
@@ -344,21 +364,20 @@ plotQualificationGOFResidualsOverTime <- function(data) {
 #' @return list of qualification GOF ggplot objects
 plotQualificationGOFs <- function(configurationPlan,
                                   logFolder = getwd(),
-                                  settings){
+                                  settings) {
   gofPlotsData <- getQualificationGOFPlotData(configurationPlan)
   gofPlotList <- list()
   gofPlotResults <- list()
 
-  for (plotIndex in seq_along(gofPlotsData)){
+  for (plotIndex in seq_along(gofPlotsData)) {
     gofPlotList[[plotIndex]] <- list()
     dataframe <- gofPlotsData[[plotIndex]]$dataframe
     metadata <- gofPlotsData[[plotIndex]]$metadata
-    for (plotType in metadata$plotTypes){
+    for (plotType in metadata$plotTypes) {
+      plotID <- paste("GOFMergedPlot", plotIndex, plotType, sep = "-")
 
-      plotID <- paste("GOFMergedPlot",plotIndex,plotType, sep = "-")
-
-      plotGOFDataframe <- buildGOFDataFrameFunctions[[plotType]](dataframe,metadata)
-      gofPlotList[[plotIndex]][[plotType]] <- plotGOFFunctions[[plotType]]( plotGOFDataframe )
+      plotGOFDataframe <- buildGOFDataFrameFunctions[[plotType]](dataframe, metadata)
+      gofPlotList[[plotIndex]][[plotType]] <- plotGOFFunctions[[plotType]](plotGOFDataframe)
 
       gofPlotResults[[plotID]] <- saveTaskResults(
         id = plotID,
@@ -372,14 +391,19 @@ plotQualificationGOFs <- function(configurationPlan,
 }
 
 #' Names of fields in configuration plane containing axes settings data for each GOF plot type
-gofPlotAxesSettings <-list("predictedVsObserved" = "GOFMergedPlotsPredictedVsObserved",
-                           "residualsOverTime" = "GOFMergedPlotsResidualsOverTime")
+gofPlotAxesSettings <- list(
+  "predictedVsObserved" = "GOFMergedPlotsPredictedVsObserved",
+  "residualsOverTime" = "GOFMergedPlotsResidualsOverTime"
+)
 
 #' Names of functions for extracting data for each GOF plot type
-buildGOFDataFrameFunctions <- list("predictedVsObserved" = buildQualificationGOFPredictedVsObserved,
-                                   "residualsOverTime" = buildQualificationGOFResidualsOverTime)
+buildGOFDataFrameFunctions <- list(
+  "predictedVsObserved" = buildQualificationGOFPredictedVsObserved,
+  "residualsOverTime" = buildQualificationGOFResidualsOverTime
+)
 
 #' Names of functions for plotting GOF plots for each GOF plot type
-plotGOFFunctions <- list("predictedVsObserved" = plotQualificationGOFPredictedVsObserved,
-                         "residualsOverTime" = plotQualificationGOFResidualsOverTime)
-
+plotGOFFunctions <- list(
+  "predictedVsObserved" = plotQualificationGOFPredictedVsObserved,
+  "residualsOverTime" = plotQualificationGOFResidualsOverTime
+)
