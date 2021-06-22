@@ -580,7 +580,9 @@ plotQualificationGOFResidualsOverTime <- function(data) {
 #' @description Plot observation vs prediction for qualification workflow
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @return list of qualification GOF ggplot objects
-plotQualificationGOFs <- function(configurationPlan){
+plotQualificationGOFs <- function(configurationPlan,
+                                  logFolder = getwd(),
+                                  settings){
   gofPlotsData <- getQualificationGOFPlotData(configurationPlan)
   gofPlotList <- list()
   gofPlotResults <- list()
@@ -606,7 +608,7 @@ plotQualificationGOFs <- function(configurationPlan){
       )
     }
   }
-  return(gofPlotList)
+  return(gofPlotResults)
 }
 
 #' Names of fields in configuration plane containing axes settings data for each GOF plot type
