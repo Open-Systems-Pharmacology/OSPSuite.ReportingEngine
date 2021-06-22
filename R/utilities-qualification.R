@@ -239,7 +239,10 @@ getAxesSettings <- function(axesSettingsFromConfigurationPlot){
 }
 
 
-
+#' @title getQualificationGOFPlotData
+#' @description Build dataframes and metadata for each GOF plot
+#' @param configurationPlan A `ConfigurationPlan` object
+#' @return plotGOFdata, a list of lists of the form list(dataframe,metadata) specific to each GOF plot
 getQualificationGOFPlotData <- function(configurationPlan){
 
   plotGOFdata <- list()
