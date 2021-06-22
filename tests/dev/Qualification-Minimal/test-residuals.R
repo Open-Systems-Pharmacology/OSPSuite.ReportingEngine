@@ -38,7 +38,3 @@ configurationPlan <- loadConfigurationPlan(
 configurationPlan$sections
 configurationPlan$simulationMappings
 configurationPlan$observedDataSets
-
-# source('C:/Users/ahamadeh/Dropbox/GitHub/OSP/OSPSuite.ReportingEngine/R/utilities-qualification.R')
-# gofPlots <- plotQualificationGOFs(configurationPlan)
-#
