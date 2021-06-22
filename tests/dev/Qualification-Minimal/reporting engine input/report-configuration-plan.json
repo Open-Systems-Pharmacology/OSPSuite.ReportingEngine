@@ -26,10 +26,6 @@
       "Path": "ObservedData/Itraconazole 600mg MD.csv"
     },
     {
-      "Id": "Midazolam 600mg SD",
-      "Path": "ObservedData/Midazolam 600mg SD.csv"
-    },
-    {
       "Id": "DDI_Ratio_CYP3A4",
       "Path": "ObservedData/DDI_Ratio_CYP3A4.csv",
       "Type": "DDIRatio"
