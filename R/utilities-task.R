@@ -526,13 +526,13 @@ addUserDefinedTask <- function(workflow,
 loadPlotTimeProfilesTask <- function(workflow, configurationPlan) {
   validateIsOfType(workflow, "QualificationWorkflow")
   validateIsOfType(configurationPlan, "ConfigurationPlan")
-  
+
   # Time Profiles task is only active if the field is defined & not empty
   active <- !isOfLength(configurationPlan$plots$TimeProfile, 0)
-  
+
   taskFunction <- plotQualificationTimeProfiles
   nameFunction <- deparse(substitute(plotQualificationTimeProfiles))
-  
+
   return(QualificationTask$new(
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
@@ -541,5 +541,32 @@ loadPlotTimeProfilesTask <- function(workflow, configurationPlan) {
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotTimeProfiles
+  ))
+}
+
+
+
+#' @title loadGOFMergedTask
+#' @param workflow `QualificationWorkflow` object
+#' @param configurationPlan A `ConfigurationPlan` object
+#' @return A `QualificationTask` object
+loadGOFMergedTask <- function(workflow, configurationPlan) {
+  validateIsOfType(workflow, "QualificationWorkflow")
+  validateIsOfType(configurationPlan, "ConfigurationPlan")
+
+  # Time Profiles task is only active if the field is defined & not empty
+  active <- !isOfLength(configurationPlan$plots$GOFMergedPlots, 0)
+
+  taskFunction <- plotQualificationGOFs
+  nameFunction <- deparse(substitute(plotQualificationGOFs))
+
+  return(QualificationTask$new(
+    getTaskResults = taskFunction,
+    nameTaskResults = nameFunction,
+    inputFolder = defaultTaskOutputFolders$simulate,
+    inputs = getSimulationResultFileNames(workflow),
+    workflowFolder = workflow$workflowFolder,
+    active = active,
+    message = defaultWorkflowMessages$plotGOFMerged
   ))
 }
