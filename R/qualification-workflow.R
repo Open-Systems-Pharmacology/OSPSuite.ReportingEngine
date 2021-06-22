@@ -45,7 +45,7 @@ QualificationWorkflow <- R6::R6Class(
       # -> updated using setting$plotConfigurations
 
       self$plotTimeProfiles <- loadPlotTimeProfilesTask(self, configurationPlan)
-      self$plotGOFMerged <- PlotTask$new()#loadGOFMergedTask(self, configurationPlan)
+      self$plotGOFMerged <- loadGOFMergedTask(self, configurationPlan)
       self$plotComparisonTimeProfiles <- PlotTask$new()#loadComparisonPlotTimeProfilesTask(self, configurationPlan)
       self$plotPKRatio <- PlotTask$new()#loadPlotPKRatioTask(self, configurationPlan)
       self$plotDDIRatio <- PlotTask$new()#loadPlotDDIRatioTask(self, configurationPlan)
