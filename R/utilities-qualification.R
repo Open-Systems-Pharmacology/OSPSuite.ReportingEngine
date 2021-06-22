@@ -597,8 +597,6 @@ plotQualificationGOFs <- function(configurationPlan,
 
       plotGOFDataframe <- buildGOFDataFrameFunctions[[plotType]](dataframe,metadata)
       gofPlotList[[plotIndex]][[plotType]] <- plotGOFFunctions[[plotType]]( plotGOFDataframe )
-      show(gofPlotList[[plotIndex]][[plotType]])
-
 
       gofPlotResults[[plotID]] <- saveTaskResults(
         id = plotID,
