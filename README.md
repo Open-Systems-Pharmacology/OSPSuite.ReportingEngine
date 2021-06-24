@@ -9,6 +9,18 @@ OSPSuite.ReportingEngine implementation in R
 
 <!-- badges: end -->
 
+# Installation
+
+The **OSPSuite.ReportingEngine** package is compatible with version 3.6.x **AND** version 4.x.x of R. One of its indirect dependency, **rClr** needs to be installed specifically for the targeted R version. Please follow the installation instructions below:
+
+**OSPSuite.ReportingEngine** requires following packages to be installed:
+- [ospsuite v10.x](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases)
+- rClr
+  - [For R 4.x.x](https://github.com/Open-Systems-Pharmacology/rClr/releases/download/v0.9.1/rClr_0.9.1.zip)
+  - [For R 3.6.x](https://github.com/Open-Systems-Pharmacology/rClr/releases/download/v0.9.1-R3/rClr_0.9.1.zip)
+- [tlf v1.2.x](https://github.com/Open-Systems-Pharmacology/TLF-Library/releases)
+- [ggplot2](https://cran.r-project.org/web/packages/ggplot2)
+- [R6](https://github.com/r-lib/R6)
 
 # Development tasks
 
