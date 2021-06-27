@@ -56,8 +56,8 @@ getQualificationGOFPlotData <- function(configurationPlan) {
           simulation = simulationName
         )
 
-        simulation <- loadSimulation(simulationFile, loadFromCache = TRUE)
-        simulationResults <- importResultsFromCSV(simulation = simulation, filePaths = simulationResultsFile)
+        simulation <- ospsuite::loadSimulation(simulationFile, loadFromCache = TRUE)
+        simulationResults <- ospsuite::importResultsFromCSV(simulation = simulation, filePaths = simulationResultsFile)
 
         outputs <- lapply(simulation$outputSelections$allOutputs, function(output) {
           Output$new(output$path)
@@ -67,7 +67,7 @@ getQualificationGOFPlotData <- function(configurationPlan) {
         })
         output <- outputs[[outputPath]]
         molWeight <- simulation$molWeightFor(outputPath)
-        simulationDimension <- getQuantity(path = outputPath, container = simulation)$dimension
+        simulationDimension <- ospsuite::getQuantity(path = outputPath, container = simulation)$dimension
         simulationBaseUnit <- ospsuite::getBaseUnit(dimension = simulationDimension)
 
         # Setup simulations dataframe
@@ -79,7 +79,7 @@ getQualificationGOFPlotData <- function(configurationPlan) {
         # Setup observations dataframe
         observedDataFileData <- read.csv(file.path(inputFolder, observedDataSetFilePath), check.names = FALSE, fileEncoding = "UTF-8-BOM")
         observedDataFileMetaData <- parseObservationsDataFrame(observedDataFileData)
-        observationsDimension <- getDimensionForUnit(observedDataFileMetaData$output$unit)
+        observationsDimension <- ospsuite::getDimensionForUnit(observedDataFileMetaData$output$unit)
         observationsBaseUnit <- ospsuite::getBaseUnit(dimension = observationsDimension)
 
         # Verify that simulations and observations have same dimensions
