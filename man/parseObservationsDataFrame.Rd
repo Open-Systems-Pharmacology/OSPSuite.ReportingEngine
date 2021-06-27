@@ -6,6 +6,9 @@
 \usage{
 parseObservationsDataFrame(observationsDataFrame)
 }
+\arguments{
+\item{observationsDataFrame}{from CSV}
+}
 \value{
 A named list with `time` and `output` fields.  Each field contains a list that is output by `separateVariableFromUnit` with fields that store the variable name and the unit.
 }
