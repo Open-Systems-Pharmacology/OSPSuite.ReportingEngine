@@ -88,7 +88,7 @@ getQualificationGOFPlotData <- function(configurationPlan) {
         observedDataStandardized <- observedDataFileData[, c(1, 2)]
         names(observedDataStandardized) <- c("Time", "Concentration")
         observedDataStandardized$Time <- ospsuite::toBaseUnit(
-          quantityOrDimension = ospDimensions$Time,
+          quantityOrDimension = ospsuite::ospDimensions$Time,
           values = observedDataStandardized$Time,
           unit = observedDataFileMetaData$time$unit
         )
@@ -232,7 +232,7 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
     for (omap in unique(dataframe[dataframe$group == grp, ]$outputMapping)) {
       molWeight <- metadata$groups[[grp]]$outputMappings[[omap]]$molWeight
 
-      xDataDimension <- ospDimensions$Time
+      xDataDimension <- ospsuite::ospDimensions$Time
       xDataUnit <- ospsuite::getBaseUnit(dimension = xDataDimension)
       xData <- dataframe[dataframe$group == grp & dataframe$outputMapping == omap, ]$time
       xData <- ospsuite::toUnit(

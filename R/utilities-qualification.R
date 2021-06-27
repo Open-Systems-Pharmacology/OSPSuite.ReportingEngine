@@ -239,9 +239,9 @@ parseObservationsDataFrame <- function(observationsDataFrame) {
 #' @return If `dimension` is `Concentration (mass)` or `Mass`, then return `Concentration (molar)` or `Amount` respectively, otherwise return `dimension`.
 massMoleConversion <- function(dimension) {
   massMoleConversionList <- list()
-  massMoleConversionList[[ospDimensions$Mass]] <- ospDimensions$Amount
-  massMoleConversionList[[ospDimensions$`Concentration (mass)`]] <- ospDimensions$`Concentration (molar)`
-  return(ifelse(test = dimension %in% c(ospDimensions$Mass, ospDimensions$`Concentration (mass)`),
+  massMoleConversionList[[ospDimensions$Mass]] <- ospsuite::ospDimensions$Amount
+  massMoleConversionList[[ospDimensions$`Concentration (mass)`]] <- ospsuite::ospDimensions$`Concentration (molar)`
+  return(ifelse(test = dimension %in% c(ospsuite::ospDimensions$Mass, ospsuite::ospDimensions$`Concentration (mass)`),
     yes = massMoleConversionList[[dimension]],
     no = dimension
   ))
