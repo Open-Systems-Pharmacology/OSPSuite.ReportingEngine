@@ -76,7 +76,7 @@ getQualificationGOFPlotData <- function(configurationPlan) {
         )
 
         # Setup observations dataframe
-        observedDataFileData <- read.csv(file.path(inputFolder, observedDataSetFilePath), check.names = FALSE, fileEncoding = "UTF-8-BOM")
+        observedDataFileData <- readObservedDataFile(file.path(inputFolder, observedDataSetFilePath))
         observedDataFileMetaData <- parseObservationsDataFrame(observedDataFileData)
         observationsDimension <- ospsuite::getDimensionForUnit(observedDataFileMetaData$output$unit)
         observationsBaseUnit <- ospsuite::getBaseUnit(dimension = observationsDimension)
