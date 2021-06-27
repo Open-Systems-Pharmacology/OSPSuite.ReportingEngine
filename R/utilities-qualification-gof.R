@@ -23,10 +23,9 @@ getQualificationGOFPlotData <- function(configurationPlan) {
     plotGOFMetadata$groups <- list()
 
 
-    for (group in seq_along(gofPlotConfiguration$Groups)) {
-      gofPlotGroup <- gofPlotConfiguration$Groups[[group]]
+    for (gofPlotGroup in gofPlotConfiguration$Groups) {
       caption <- gofPlotGroup$Caption
-      symbol <- gofPlotConfiguration$Groups[[group]]$Symbol
+      symbol <- gofPlotGroup$Symbol
       outputMappings <- gofPlotGroup$OutputMappings
 
       plotGOFMetadata$groups[[caption]] <- list()
