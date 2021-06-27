@@ -225,10 +225,15 @@ separateVariableFromUnit <- function(variableUnitString) {
 #' @return A named list with `time` and `output` fields.  Each field contains a list that is output by `separateVariableFromUnit` with fields that store the variable name and the unit.
 parseObservationsDataFrame <- function(observationsDataFrame) {
   namesObservationsDataFrame <- names(observationsDataFrame)
-  return(list(
+  validateIsIncluded(length(namesObservationsDataFrame),c(2,3))
+  dataFrameFields <- list(
     time = separateVariableFromUnit(namesObservationsDataFrame[1]),
     output = separateVariableFromUnit(namesObservationsDataFrame[2])
-  ))
+  )
+  if(length(namesObservationsDataFrame) == 3){
+    dataFrameFields$uncertainty <- separateVariableFromUnit(namesObservationsDataFrame[3])
+  }
+  return(dataFrameFields)
 }
 
 
