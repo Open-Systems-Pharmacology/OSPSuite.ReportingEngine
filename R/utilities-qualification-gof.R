@@ -68,8 +68,7 @@ getQualificationGOFPlotData <- function(configurationPlan) {
         output <- outputs[[outputPath]]
         molWeight <- simulation$molWeightFor(outputPath)
         simulationDimension <- getQuantity(path = outputPath, container = simulation)$dimension
-
-
+        simulationBaseUnit <- ospsuite::getBaseUnit(dimension = simulationDimension)
 
         # Setup simulations dataframe
         simulatedDataStandardized <- data.frame(
@@ -80,12 +79,11 @@ getQualificationGOFPlotData <- function(configurationPlan) {
         # Setup observations dataframe
         observedDataFileData <- read.csv(file.path(inputFolder, observedDataSetFilePath), check.names = FALSE, fileEncoding = "UTF-8-BOM")
         observedDataFileMetaData <- parseObservationsDataFrame(observedDataFileData)
-        # If simulation in c("Amount","'"Concentration (molar)") and observations in c("Mass","'"Concentration (mass)"), convert observations to c("Amount","'"Concentration (molar)")
-        if (simulationDimension %in% c(ospDimensions$Amount, ospDimensions$`Concentration (molar)`)) {
-          observationsDimension <- massMoleConversion(ospsuite::getDimensionForUnit(observedDataFileMetaData$output$unit))
-        }
+        observationsDimension <- getDimensionForUnit(observedDataFileMetaData$output$unit)
+        observationsBaseUnit <- ospsuite::getBaseUnit(dimension = observationsDimension)
+
         # Verify that simulations and observations have same dimensions
-        validateIsIncluded(values = observationsDimension, parentValues = simulationDimension, nullAllowed = FALSE)
+        validateIsIncluded(values = massMoleConversion(observationsDimension), parentValues = massMoleConversion(simulationDimension), nullAllowed = FALSE)
 
         observedDataStandardized <- observedDataFileData[, c(1, 2)]
         names(observedDataStandardized) <- c("Time", "Concentration")
@@ -101,10 +99,7 @@ getQualificationGOFPlotData <- function(configurationPlan) {
           molWeight = molWeight
         )
 
-
         commonTimePoints <- intersect(observedDataStandardized$Time, simulatedDataStandardized$Time)
-
-
 
         # Setup dataframe of GOF data
         gofData <- data.frame(
@@ -115,14 +110,17 @@ getQualificationGOFPlotData <- function(configurationPlan) {
           outputMapping = outputPath
         )
 
-
         plotGOFDataframe <- rbind.data.frame(plotGOFDataframe, gofData)
 
         plotGOFMetadata$groups[[caption]]$outputMappings[[outputPath]] <- list(
           molWeight = simulation$molWeightFor(outputPath),
           color = color,
           project = projectName,
-          simulation = simulationName
+          simulation = simulationName,
+          simulatedDataDimension = simulationDimension,
+          simulatedDataUnit = simulationBaseUnit,
+          observedDataDimension = observationsDimension,
+          observedDataUnit = observationsBaseUnit
         )
       }
     }
@@ -146,12 +144,12 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
   axesSettings <- metadata$axesSettings[["predictedVsObserved"]]
 
   xUnit <- axesSettings$X$unit
-  xDimension <- massMoleConversion(axesSettings$X$dimension)
+  xDimension <- axesSettings$X$dimension
   xScaling <- axesSettings$X$scaling
   xGridlines <- axesSettings$X$gridLines
 
   yUnit <- axesSettings$Y$unit
-  yDimension <- massMoleConversion(axesSettings$Y$dimension)
+  yDimension <- axesSettings$Y$dimension
   yScaling <- axesSettings$Y$scaling
   yGridlines <- axesSettings$Y$gridLines
 
@@ -161,23 +159,30 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
   for (grp in unique(dataframe$group)) {
     for (omap in unique(dataframe[dataframe$group == grp, ]$outputMapping)) {
       molWeight <- metadata$groups[[grp]]$outputMappings[[omap]]$molWeight
+      xDataDimension <- metadata$groups[[grp]]$outputMappings[[omap]]$observedDataDimension
+      xDataUnit <- metadata$groups[[grp]]$outputMappings[[omap]]$observedDataUnit
       xData <- dataframe[dataframe$group == grp & dataframe$outputMapping == omap, ]$observed
       xData <- ospsuite::toUnit(
-        quantityOrDimension = xDimension,
+        quantityOrDimension = xDataDimension,
         values = xData,
         targetUnit = xUnit,
+        sourceUnit = xDataUnit,
         molWeight = molWeight
       )
+
       if (xScaling == "Log") {
         xData <- log10(xData)
       }
       xData <- replaceInfWithNA(xData)
 
+      yDataDimension <- metadata$groups[[grp]]$outputMappings[[omap]]$simulatedDataDimension
+      yDataUnit <- metadata$groups[[grp]]$outputMappings[[omap]]$simulatedDataUnit
       yData <- dataframe[dataframe$group == grp & dataframe$outputMapping == omap, ]$simulated
       yData <- ospsuite::toUnit(
-        quantityOrDimension = yDimension,
+        quantityOrDimension = yDataDimension,
         values = yData,
         targetUnit = yUnit,
+        sourceUnit = yDataUnit,
         molWeight = molWeight
       )
       if (yScaling == "Log") {
@@ -211,12 +216,12 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
   axesSettings <- metadata$axesSettings[["residualsOverTime"]]
 
   xUnit <- axesSettings$X$unit
-  xDimension <- massMoleConversion(axesSettings$X$dimension)
+  xDimension <- axesSettings$X$dimension
   xScaling <- axesSettings$X$scaling
   xGridlines <- axesSettings$X$gridLines
 
   yUnit <- axesSettings$Y$unit
-  yDimension <- massMoleConversion(axesSettings$Y$dimension)
+  yDimension <- axesSettings$Y$dimension
   yScaling <- axesSettings$Y$scaling
   yGridlines <- axesSettings$Y$gridLines
 
@@ -227,11 +232,14 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
     for (omap in unique(dataframe[dataframe$group == grp, ]$outputMapping)) {
       molWeight <- metadata$groups[[grp]]$outputMappings[[omap]]$molWeight
 
+      xDataDimension <- ospDimensions$Time
+      xDataUnit <- ospsuite::getBaseUnit(dimension = xDataDimension)
       xData <- dataframe[dataframe$group == grp & dataframe$outputMapping == omap, ]$time
       xData <- ospsuite::toUnit(
-        quantityOrDimension = xDimension,
+        quantityOrDimension = xDataDimension,
         values = xData,
         targetUnit = xUnit,
+        sourceUnit = xDataUnit,
         molWeight = molWeight
       )
       if (xScaling == "Log") {
@@ -240,19 +248,29 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
       xData <- replaceInfWithNA(xData)
 
       simulated <- dataframe[dataframe$group == grp & dataframe$outputMapping == omap, ]$simulated
+      simulatedDimension <- metadata$groups[[grp]]$outputMappings[[omap]]$simulatedDataDimension
+      simulatedUnit <- metadata$groups[[grp]]$outputMappings[[omap]]$simulatedDataUnit
+
       observed <- dataframe[dataframe$group == grp & dataframe$outputMapping == omap, ]$observed
-      if (yScaling == "Log") {
-        residualValues <- log10(simulated) - log10(observed)
-      } else {
-        residualValues <- (simulated - observed) / observed
-      }
-      yData <- residualValues
-      yData <- ospsuite::toUnit(
-        quantityOrDimension = yDimension,
-        values = yData,
-        targetUnit = yUnit,
+      observedDimension <- metadata$groups[[grp]]$outputMappings[[omap]]$observedDataDimension
+      observedUnit <- metadata$groups[[grp]]$outputMappings[[omap]]$observedDataUnit
+
+      #Convert observed data to base units of simulated data for subsequent calculation of residuals
+      observedDataInSimulatedDataUnit <- ospsuite::toUnit(
+        quantityOrDimension = observedDimension,
+        values = observed,
+        targetUnit = simulatedUnit,
+        sourceUnit = observedUnit,
         molWeight = molWeight
       )
+
+      if (yScaling == "Log") {
+        residualValues <- log10(simulated) - log10(observedDataInSimulatedDataUnit)
+      } else {
+        residualValues <- (simulated - observedDataInSimulatedDataUnit) / observedDataInSimulatedDataUnit
+      }
+
+      yData <- residualValues
       yData <- replaceInfWithNA(yData)
 
       df <- data.frame(
