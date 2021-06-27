@@ -43,7 +43,7 @@ getQualificationGOFPlotData <- function(configurationPlan) {
 
         observedDataPathInSimulation <- outputMapping$Output
         observedDataSet <- outputMapping$ObservedData
-        observedDataSetFilePath <- configurationPlan$observedDataSets[configurationPlan$observedDataSets$id == outputMapping$ObservedData, ]$path
+        observedDataSetFilePath <- configurationPlan$getObservedDataPath(id = configurationPlan$observedDataSets$id)
 
         simulationFile <- configurationPlan$getSimulationPath(
           project = projectName,
@@ -76,7 +76,7 @@ getQualificationGOFPlotData <- function(configurationPlan) {
         )
 
         # Setup observations dataframe
-        observedDataFileData <- readObservedDataFile(file.path(inputFolder, observedDataSetFilePath))
+        observedDataFileData <- readObservedDataFile(observedDataSetFilePath)
         observedDataFileMetaData <- parseObservationsDataFrame(observedDataFileData)
         observationsDimension <- ospsuite::getDimensionForUnit(observedDataFileMetaData$output$unit)
         observationsBaseUnit <- ospsuite::getBaseUnit(dimension = observationsDimension)
