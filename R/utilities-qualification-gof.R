@@ -255,7 +255,7 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
       observedDimension <- metadata$groups[[grp]]$outputMappings[[omap]]$observedDataDimension
       observedUnit <- metadata$groups[[grp]]$outputMappings[[omap]]$observedDataUnit
 
-      #Convert observed data to base units of simulated data for subsequent calculation of residuals
+      # Convert observed data to base units of simulated data for subsequent calculation of residuals
       observedDataInSimulatedDataUnit <- ospsuite::toUnit(
         quantityOrDimension = observedDimension,
         values = observed,
