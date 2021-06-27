@@ -34,8 +34,8 @@ getQualificationGOFPlotData <- function(configurationPlan) {
       plotGOFMetadata$groups[[caption]]$symbol <- symbol
 
 
-      for (omap in seq_along(outputMappings)) {
-        outputMapping <- outputMappings[[omap]]
+      for (mappingIndex in seq_along(outputMappings)) {
+        outputMapping <- outputMappings[[mappingIndex]]
 
         projectName <- outputMapping$Project
         simulationName <- outputMapping$Simulation
@@ -157,11 +157,11 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
   # predictedVsObserved|residualsOverTime
   gofPlotDataframe <- NULL
   for (grp in unique(dataframe$group)) {
-    for (omap in unique(dataframe[dataframe$group == grp, ]$outputMapping)) {
-      molWeight <- metadata$groups[[grp]]$outputMappings[[omap]]$molWeight
-      xDataDimension <- metadata$groups[[grp]]$outputMappings[[omap]]$observedDataDimension
-      xDataUnit <- metadata$groups[[grp]]$outputMappings[[omap]]$observedDataUnit
-      xData <- dataframe[dataframe$group == grp & dataframe$outputMapping == omap, ]$observed
+    for (mappingIndex in unique(dataframe[dataframe$group == grp, ]$outputMapping)) {
+      molWeight <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$molWeight
+      xDataDimension <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$observedDataDimension
+      xDataUnit <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$observedDataUnit
+      xData <- dataframe[dataframe$group == grp & dataframe$outputMapping == mappingIndex, ]$observed
       xData <- ospsuite::toUnit(
         quantityOrDimension = xDataDimension,
         values = xData,
@@ -175,9 +175,9 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
       }
       xData <- replaceInfWithNA(xData)
 
-      yDataDimension <- metadata$groups[[grp]]$outputMappings[[omap]]$simulatedDataDimension
-      yDataUnit <- metadata$groups[[grp]]$outputMappings[[omap]]$simulatedDataUnit
-      yData <- dataframe[dataframe$group == grp & dataframe$outputMapping == omap, ]$simulated
+      yDataDimension <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$simulatedDataDimension
+      yDataUnit <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$simulatedDataUnit
+      yData <- dataframe[dataframe$group == grp & dataframe$outputMapping == mappingIndex, ]$simulated
       yData <- ospsuite::toUnit(
         quantityOrDimension = yDataDimension,
         values = yData,
@@ -194,7 +194,7 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
         Observed = xData,
         Simulated = yData,
         Group = grp,
-        Output = omap
+        Output = mappingIndex
       )
 
       gofPlotDataframe <- rbind.data.frame(gofPlotDataframe, df)
@@ -229,12 +229,12 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
   # predictedVsObserved|residualsOverTime
   gofPlotDataframe <- NULL
   for (grp in unique(dataframe$group)) {
-    for (omap in unique(dataframe[dataframe$group == grp, ]$outputMapping)) {
-      molWeight <- metadata$groups[[grp]]$outputMappings[[omap]]$molWeight
+    for (mappingIndex in unique(dataframe[dataframe$group == grp, ]$outputMapping)) {
+      molWeight <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$molWeight
 
       xDataDimension <- ospsuite::ospDimensions$Time
       xDataUnit <- ospsuite::getBaseUnit(dimension = xDataDimension)
-      xData <- dataframe[dataframe$group == grp & dataframe$outputMapping == omap, ]$time
+      xData <- dataframe[dataframe$group == grp & dataframe$outputMapping == mappingIndex, ]$time
       xData <- ospsuite::toUnit(
         quantityOrDimension = xDataDimension,
         values = xData,
@@ -247,13 +247,13 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
       }
       xData <- replaceInfWithNA(xData)
 
-      simulated <- dataframe[dataframe$group == grp & dataframe$outputMapping == omap, ]$simulated
-      simulatedDimension <- metadata$groups[[grp]]$outputMappings[[omap]]$simulatedDataDimension
-      simulatedUnit <- metadata$groups[[grp]]$outputMappings[[omap]]$simulatedDataUnit
+      simulated <- dataframe[dataframe$group == grp & dataframe$outputMapping == mappingIndex, ]$simulated
+      simulatedDimension <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$simulatedDataDimension
+      simulatedUnit <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$simulatedDataUnit
 
-      observed <- dataframe[dataframe$group == grp & dataframe$outputMapping == omap, ]$observed
-      observedDimension <- metadata$groups[[grp]]$outputMappings[[omap]]$observedDataDimension
-      observedUnit <- metadata$groups[[grp]]$outputMappings[[omap]]$observedDataUnit
+      observed <- dataframe[dataframe$group == grp & dataframe$outputMapping == mappingIndex, ]$observed
+      observedDimension <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$observedDataDimension
+      observedUnit <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$observedDataUnit
 
       # Convert observed data to base units of simulated data for subsequent calculation of residuals
       observedDataInSimulatedDataUnit <- ospsuite::toUnit(
@@ -277,7 +277,7 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
         Time = xData,
         Residuals = yData,
         Group = grp,
-        Output = omap
+        Output = mappingIndex
       )
       gofPlotDataframe <- rbind.data.frame(gofPlotDataframe, df)
     }
