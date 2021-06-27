@@ -28,7 +28,7 @@
 #' Calculate residuals between vectors `simulatedData` and `observedData` according the the residual scale specified in `residualScale`
 calculateResiduals <- function(simulatedData, observedData, residualScale) {
   validateIsOfLength(object = simulatedData, nbElements = length(observedData))
-  residualValues <- rep(NA, nrow(observedData))
+  residualValues <- rep(NA, length(observedData))
   if (isIncluded(residualScale, ResidualScales$Logarithmic)) {
     residualValues <- log(observedData) - log(simulatedData)
   }
