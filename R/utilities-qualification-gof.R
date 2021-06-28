@@ -155,7 +155,11 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
   # function to do obs vs sim
   # predictedVsObserved|residualsOverTime
   gofPlotDataframe <- NULL
+  aestheticsList <- list(shape = list(),color = list())
   for (grp in unique(dataframe$group)) {
+
+    aestheticsList$shape[[grp]] <- metadata$groups[[grp]]$symbol
+
     for (mappingIndex in unique(dataframe[dataframe$group == grp, ]$outputMapping)) {
       molWeight <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$molWeight
       xDataDimension <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$observedDataDimension
@@ -196,10 +200,11 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
         Output = mappingIndex
       )
 
+      aestheticsList$color[[mappingIndex]] <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$color
       gofPlotDataframe <- rbind.data.frame(gofPlotDataframe, df)
     }
   }
-  return(gofPlotDataframe)
+  return(list(gofPlotDataframe=gofPlotDataframe,aestheticsList=aestheticsList))
 }
 
 
@@ -227,7 +232,9 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
   # function to do obs vs sim
   # predictedVsObserved|residualsOverTime
   gofPlotDataframe <- NULL
+  aestheticsList <- list(shape = list(),color = list())
   for (grp in unique(dataframe$group)) {
+    aestheticsList$shape[[grp]] <- metadata$groups[[grp]]$symbol
     for (mappingIndex in unique(dataframe[dataframe$group == grp, ]$outputMapping)) {
       molWeight <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$molWeight
 
@@ -278,10 +285,11 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
         Group = grp,
         Output = mappingIndex
       )
+      aestheticsList$color[[mappingIndex]] <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$color
       gofPlotDataframe <- rbind.data.frame(gofPlotDataframe, df)
     }
   }
-  return(gofPlotDataframe)
+  return(list(gofPlotDataframe=gofPlotDataframe,aestheticsList=aestheticsList))
 }
 
 
@@ -294,8 +302,8 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
 #' @import ggplot2
 plotQualificationGOFPredictedVsObserved <- function(data) {
   identityMinMax <- c(
-    0.8 * min(cbind(data[, "Observed"], data[, "Simulated"]), na.rm = TRUE),
-    1.2 * max(cbind(data[, "Observed"], data[, "Simulated"]), na.rm = TRUE)
+    0.8 * min(cbind(data$gofPlotDataframe[, "Observed"], data$gofPlotDataframe[, "Simulated"]), na.rm = TRUE),
+    1.2 * max(cbind(data$gofPlotDataframe[, "Observed"], data$gofPlotDataframe[, "Simulated"]), na.rm = TRUE)
   )
 
   identityLine <- data.frame(
@@ -304,8 +312,6 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
     "Legend" = "Line of identity"
   )
 
-
-
   qualificationGOFPredictedVsObservedPlot <- tlf::addLine(
     data = identityLine,
     dataMapping = tlf::XYGDataMapping$new(x = "Observed", y = "Simulated", linetype = "Legend")
@@ -313,13 +319,11 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
 
   obsVsPredDataMapping <- tlf::XYGDataMapping$new(
     x = "Observed",
-    y = "Simulated",
-    shape = "Group",
-    color = "Output"
+    y = "Simulated", shape = "Group", color = "Output"
   )
 
   qualificationGOFPredictedVsObservedPlot <- tlf::addScatter(
-    data = data,
+    data = data$gofPlotDataframe,
     dataMapping = obsVsPredDataMapping,
     plotObject = qualificationGOFPredictedVsObservedPlot
   )
@@ -341,17 +345,15 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
 plotQualificationGOFResidualsOverTime <- function(data) {
   resVsTimeDataMapping <- tlf::XYGDataMapping$new(
     x = "Time",
-    y = "Residuals",
-    shape = "Group",
-    color = "Output"
+    y = "Residuals", shape = "Group", color = "Output"
   )
 
-  maxRes <- 1.2 * max(abs(data[, resVsTimeDataMapping$y]), na.rm = TRUE)
+  maxRes <- 1.2 * max(abs(data$gofPlotDataframe[, resVsTimeDataMapping$y]), na.rm = TRUE)
 
   qualificationGOFResVsTimePlot <- tlf::initializePlot()
 
   qualificationGOFResVsTimePlot <- tlf::addScatter(
-    data = data,
+    data = data$gofPlotDataframe,
     dataMapping = resVsTimeDataMapping,
     plotObject = qualificationGOFResVsTimePlot
   )
