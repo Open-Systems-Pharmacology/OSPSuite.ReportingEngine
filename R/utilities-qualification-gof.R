@@ -30,7 +30,7 @@ getQualificationGOFPlotData <- function(configurationPlan) {
 
       plotGOFMetadata$groups[[caption]] <- list()
       plotGOFMetadata$groups[[caption]]$outputMappings <- list()
-      plotGOFMetadata$groups[[caption]]$symbol <- symbol
+      plotGOFMetadata$groups[[caption]]$symbol <- tlfShape(symbol)
 
 
       for (mappingIndex in seq_along(outputMappings)) {
@@ -155,9 +155,8 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
   # function to do obs vs sim
   # predictedVsObserved|residualsOverTime
   gofPlotDataframe <- NULL
-  aestheticsList <- list(shape = list(),color = list())
+  aestheticsList <- list(shape = list(), color = list())
   for (grp in unique(dataframe$group)) {
-
     aestheticsList$shape[[grp]] <- metadata$groups[[grp]]$symbol
 
     for (mappingIndex in unique(dataframe[dataframe$group == grp, ]$outputMapping)) {
@@ -204,7 +203,7 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
       gofPlotDataframe <- rbind.data.frame(gofPlotDataframe, df)
     }
   }
-  return(list(gofPlotDataframe=gofPlotDataframe,aestheticsList=aestheticsList))
+  return(list(gofPlotDataframe = gofPlotDataframe, aestheticsList = aestheticsList))
 }
 
 
@@ -232,7 +231,7 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
   # function to do obs vs sim
   # predictedVsObserved|residualsOverTime
   gofPlotDataframe <- NULL
-  aestheticsList <- list(shape = list(),color = list())
+  aestheticsList <- list(shape = list(), color = list())
   for (grp in unique(dataframe$group)) {
     aestheticsList$shape[[grp]] <- metadata$groups[[grp]]$symbol
     for (mappingIndex in unique(dataframe[dataframe$group == grp, ]$outputMapping)) {
@@ -289,7 +288,7 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
       gofPlotDataframe <- rbind.data.frame(gofPlotDataframe, df)
     }
   }
-  return(list(gofPlotDataframe=gofPlotDataframe,aestheticsList=aestheticsList))
+  return(list(gofPlotDataframe = gofPlotDataframe, aestheticsList = aestheticsList))
 }
 
 
@@ -306,31 +305,39 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
     1.2 * max(cbind(data$gofPlotDataframe[, "Observed"], data$gofPlotDataframe[, "Simulated"]), na.rm = TRUE)
   )
 
+  qualificationGOFPredictedVsObservedPlot <- tlf::initializePlot()
+  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::geom_point(
+    data = data$gofPlotDataframe,
+    mapping = aes(
+      x = Observed,
+      y = Simulated,
+      shape = Group,
+      color = Output
+    )
+  )
+
+  qualificationGOFPredictedVsObservedPlot <- tlf::setLegendPosition(
+    plotObject = qualificationGOFPredictedVsObservedPlot,
+    position = reDefaultLegendPosition
+  )
+
   identityLine <- data.frame(
     "Observed" = identityMinMax,
     "Simulated" = identityMinMax,
     "Legend" = "Line of identity"
   )
 
-  qualificationGOFPredictedVsObservedPlot <- tlf::addLine(
+  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::geom_line(
     data = identityLine,
-    dataMapping = tlf::XYGDataMapping$new(x = "Observed", y = "Simulated", linetype = "Legend")
+    mapping = aes(
+      x = Observed,
+      y = Simulated
+    ),
+    color = "black"
   )
 
-  obsVsPredDataMapping <- tlf::XYGDataMapping$new(
-    x = "Observed",
-    y = "Simulated", shape = "Group", color = "Output"
-  )
-
-  qualificationGOFPredictedVsObservedPlot <- tlf::addScatter(
-    data = data$gofPlotDataframe,
-    dataMapping = obsVsPredDataMapping,
-    plotObject = qualificationGOFPredictedVsObservedPlot
-  )
-  qualificationGOFPredictedVsObservedPlot <- tlf::setLegendPosition(
-    plotObject = qualificationGOFPredictedVsObservedPlot,
-    position = reDefaultLegendPosition
-  )
+  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::scale_color_discrete(data$aestheticsList$color)
+  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::scale_shape_discrete(data$aestheticsList$shape)
 
   return(qualificationGOFPredictedVsObservedPlot)
 }
@@ -343,24 +350,23 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
 #' @import tlf
 #' @import ggplot2
 plotQualificationGOFResidualsOverTime <- function(data) {
-  resVsTimeDataMapping <- tlf::XYGDataMapping$new(
-    x = "Time",
-    y = "Residuals", shape = "Group", color = "Output"
-  )
-
-  maxRes <- 1.2 * max(abs(data$gofPlotDataframe[, resVsTimeDataMapping$y]), na.rm = TRUE)
+  maxRes <- 1.2 * max(abs(data$gofPlotDataframe[, "Residuals"]), na.rm = TRUE)
 
   qualificationGOFResVsTimePlot <- tlf::initializePlot()
-
-  qualificationGOFResVsTimePlot <- tlf::addScatter(
+  qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::geom_point(
     data = data$gofPlotDataframe,
-    dataMapping = resVsTimeDataMapping,
-    plotObject = qualificationGOFResVsTimePlot
+    mapping = aes(
+      x = Time,
+      y = Residuals,
+      shape = Group,
+      color = Output
+    )
   )
 
   qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::geom_hline(
     yintercept = 0,
-    size = 1
+    size = 1,
+    color = "black"
   )
 
   qualificationGOFResVsTimePlot <- tlf::setLegendPosition(
@@ -371,6 +377,10 @@ plotQualificationGOFResidualsOverTime <- function(data) {
     plotObject = qualificationGOFResVsTimePlot,
     limits = c(-maxRes, maxRes)
   )
+
+  qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::scale_color_discrete(data$aestheticsList$color)
+  qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::scale_shape_discrete(data$aestheticsList$shape)
+
 
   return(qualificationGOFResVsTimePlot)
 }
