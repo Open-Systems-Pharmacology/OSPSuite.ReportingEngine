@@ -94,17 +94,19 @@ getQualificationGOFPlotData <- function(configurationPlan) {
         observedDataStandardized$Concentration <- ospsuite::toBaseUnit(
           quantityOrDimension = observationsDimension,
           values = observedDataStandardized$Concentration,
-          unit = observedDataFileMetaData$output$unit,
+          unit = tolower(observedDataFileMetaData$output$unit),
           molWeight = molWeight
         )
 
-        commonTimePoints <- intersect(observedDataStandardized$Time, simulatedDataStandardized$Time)
+        obsTimeMatrix <- matrix(observedDataStandardized$Time, length(simulatedDataStandardized$Time), length(observedDataStandardized$Time), byrow = TRUE)
+        simTimeMatrix <- matrix(simulatedDataStandardized$Time, length(simulatedDataStandardized$Time), length(observedDataStandardized$Time))
+        timeMatchedData <- as.numeric(sapply(as.data.frame(abs(obsTimeMatrix - simTimeMatrix)), which.min))
 
         # Setup dataframe of GOF data
         gofData <- data.frame(
-          time = commonTimePoints,
-          observed = observedDataStandardized$Concentration[observedDataStandardized$Time %in% commonTimePoints],
-          simulated = simulatedDataStandardized$Concentration[simulatedDataStandardized$Time %in% commonTimePoints],
+          time = observedDataStandardized$Time,
+          observed = observedDataStandardized$Concentration,
+          simulated = simulatedDataStandardized$Concentration[timeMatchedData],
           group = caption,
           outputMapping = outputPath
         )
