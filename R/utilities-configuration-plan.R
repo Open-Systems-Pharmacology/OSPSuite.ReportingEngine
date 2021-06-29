@@ -27,10 +27,13 @@ ConfigurationScales <- list(
 #' @import tlf
 ConfigurationShapes <- list(
   none = tlf::Shapes$blank,
-  circle = tlf::Shapes$circle,
+  circle = 1,
   dot = tlf::Shapes$dot,
   square = tlf::Shapes$square,
-  diamond = tlf::Shapes$diamond
+  diamond = 5,
+  asterisk = 8,
+  cross = 4,
+  point = 16
 )
 
 #' @title ConfigurationLinetypes

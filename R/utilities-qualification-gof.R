@@ -43,7 +43,7 @@ getQualificationGOFPlotData <- function(configurationPlan) {
 
         observedDataPathInSimulation <- outputMapping$Output
         observedDataSet <- outputMapping$ObservedData
-        observedDataSetFilePath <- configurationPlan$getObservedDataPath(id = configurationPlan$observedDataSets$id)
+        observedDataSetFilePath <- configurationPlan$getObservedDataPath(id = observedDataSet)
 
         simulationFile <- configurationPlan$getSimulationPath(
           project = projectName,
@@ -86,11 +86,13 @@ getQualificationGOFPlotData <- function(configurationPlan) {
 
         observedDataStandardized <- observedDataFileData[, c(1, 2)]
         names(observedDataStandardized) <- c("Time", "Concentration")
+        observedDataStandardized$Time <- as.numeric(observedDataStandardized$Time)
         observedDataStandardized$Time <- ospsuite::toBaseUnit(
           quantityOrDimension = ospsuite::ospDimensions$Time,
           values = observedDataStandardized$Time,
           unit = observedDataFileMetaData$time$unit
         )
+
         observedDataStandardized$Concentration <- ospsuite::toBaseUnit(
           quantityOrDimension = observationsDimension,
           values = observedDataStandardized$Concentration,
@@ -205,7 +207,7 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
       gofPlotDataframe <- rbind.data.frame(gofPlotDataframe, df)
     }
   }
-  return(list(gofPlotDataframe = gofPlotDataframe, aestheticsList = aestheticsList))
+  return(list(gofPlotDataframe = gofPlotDataframe, aestheticsList = aestheticsList, axesSettings = axesSettings))
 }
 
 
@@ -230,8 +232,7 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
   yScaling <- axesSettings$Y$scaling
   yGridlines <- axesSettings$Y$gridLines
 
-  # function to do obs vs sim
-  # predictedVsObserved|residualsOverTime
+
   gofPlotDataframe <- NULL
   aestheticsList <- list(shape = list(), color = list())
   for (grp in unique(dataframe$group)) {
@@ -290,7 +291,7 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
       gofPlotDataframe <- rbind.data.frame(gofPlotDataframe, df)
     }
   }
-  return(list(gofPlotDataframe = gofPlotDataframe, aestheticsList = aestheticsList))
+  return(list(gofPlotDataframe = gofPlotDataframe, aestheticsList = aestheticsList, axesSettings = axesSettings))
 }
 
 
@@ -302,12 +303,34 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
 #' @import tlf
 #' @import ggplot2
 plotQualificationGOFPredictedVsObserved <- function(data) {
-  identityMinMax <- c(
-    0.8 * min(cbind(data$gofPlotDataframe[, "Observed"], data$gofPlotDataframe[, "Simulated"]), na.rm = TRUE),
-    1.2 * max(cbind(data$gofPlotDataframe[, "Observed"], data$gofPlotDataframe[, "Simulated"]), na.rm = TRUE)
+
+
+  if (data$axesSettings$X$scaling == "Log") {
+    xmin <- log10(0.8) + min(na.omit(data$gofPlotDataframe[, "Observed"]))
+    xmax <- log10(1.2) + max(na.omit(data$gofPlotDataframe[, "Observed"]))
+  } else {
+    xmin <- 0.8*min(na.omit(data$gofPlotDataframe[, "Observed"]))
+    xmax <- 1.2*max(na.omit(data$gofPlotDataframe[, "Observed"]))
+  }
+
+  if (data$axesSettings$Y$scaling == "Log") {
+    ymin <- log10(0.8) + min(na.omit(data$gofPlotDataframe[, "Simulated"]))
+    ymax <- log10(1.2) + max(na.omit(data$gofPlotDataframe[, "Simulated"]))
+  } else {
+    ymin <- 0.8*min(na.omit(data$gofPlotDataframe[, "Simulated"]))
+    ymax <- 1.2*max(na.omit(data$gofPlotDataframe[, "Simulated"]))
+  }
+
+  identityMinMax <- c(min(xmin,ymin),max(xmax,ymax))
+
+  identityLine <- data.frame(
+    "Observed" = identityMinMax,
+    "Simulated" = identityMinMax,
+    "Legend" = "Line of identity"
   )
 
-  qualificationGOFPredictedVsObservedPlot <- tlf::initializePlot()
+
+  qualificationGOFPredictedVsObservedPlot <- ggplot2::ggplot() #tlf::initializePlot()
   qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::geom_point(
     data = data$gofPlotDataframe,
     mapping = aes(
@@ -318,16 +341,6 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
     )
   )
 
-  qualificationGOFPredictedVsObservedPlot <- tlf::setLegendPosition(
-    plotObject = qualificationGOFPredictedVsObservedPlot,
-    position = reDefaultLegendPosition
-  )
-
-  identityLine <- data.frame(
-    "Observed" = identityMinMax,
-    "Simulated" = identityMinMax,
-    "Legend" = "Line of identity"
-  )
 
   qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::geom_line(
     data = identityLine,
@@ -338,8 +351,10 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
     color = "black"
   )
 
-  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::scale_color_discrete(data$aestheticsList$color)
-  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::scale_shape_discrete(data$aestheticsList$shape)
+  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::scale_color_manual(values = data$aestheticsList$color)
+  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::scale_shape_manual(values = data$aestheticsList$shape)
+  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::theme(legend.direction = "vertical",legend.box = "vertical",legend.position = "top",legend.title = element_text())
+  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::xlab(paste("Observed",data$axesSettings$X$unit)) + ggplot2::ylab(paste("Predicted",data$axesSettings$Y$unit))
 
   return(qualificationGOFPredictedVsObservedPlot)
 }
@@ -354,7 +369,7 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
 plotQualificationGOFResidualsOverTime <- function(data) {
   maxRes <- 1.2 * max(abs(data$gofPlotDataframe[, "Residuals"]), na.rm = TRUE)
 
-  qualificationGOFResVsTimePlot <- tlf::initializePlot()
+  qualificationGOFResVsTimePlot <- ggplot2::ggplot()
   qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::geom_point(
     data = data$gofPlotDataframe,
     mapping = aes(
@@ -371,18 +386,10 @@ plotQualificationGOFResidualsOverTime <- function(data) {
     color = "black"
   )
 
-  qualificationGOFResVsTimePlot <- tlf::setLegendPosition(
-    plotObject = qualificationGOFResVsTimePlot,
-    position = reDefaultLegendPosition
-  )
-  qualificationGOFResVsTimePlot <- tlf::setYAxis(
-    plotObject = qualificationGOFResVsTimePlot,
-    limits = c(-maxRes, maxRes)
-  )
-
-  qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::scale_color_discrete(data$aestheticsList$color)
-  qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::scale_shape_discrete(data$aestheticsList$shape)
-
+  qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::scale_color_manual(values = data$aestheticsList$color)
+  qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::scale_shape_manual(values = data$aestheticsList$shape)
+  qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::theme(legend.direction = "vertical",legend.box = "vertical",legend.position = "top")
+  qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::xlab(paste("Time",data$axesSettings$X$unit)) + ggplot2::ylab("Residuals")
 
   return(qualificationGOFResVsTimePlot)
 }
