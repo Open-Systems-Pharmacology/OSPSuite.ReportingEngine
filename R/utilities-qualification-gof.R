@@ -110,16 +110,17 @@ getQualificationGOFPlotData <- function(configurationPlan) {
           observed = observedDataStandardized$Concentration,
           simulated = simulatedDataStandardized$Concentration[timeMatchedData],
           group = caption,
-          outputMapping = outputPath
+          outputMappingNumber = mappingIndex
         )
 
         plotGOFDataframe <- rbind.data.frame(plotGOFDataframe, gofData)
 
-        plotGOFMetadata$groups[[caption]]$outputMappings[[outputPath]] <- list(
+        plotGOFMetadata$groups[[caption]]$outputMappings[[mappingIndex]] <- list(
           molWeight = simulation$molWeightFor(outputPath),
           color = color,
           project = projectName,
           simulation = simulationName,
+          outputPath = outputPath,
           simulatedDataDimension = simulationDimension,
           simulatedDataUnit = simulationBaseUnit,
           observedDataDimension = observationsDimension,
@@ -160,14 +161,17 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
   # predictedVsObserved|residualsOverTime
   gofPlotDataframe <- NULL
   aestheticsList <- list(shape = list(), color = list())
+  uniqueGroupOutputMappingID <- 0
   for (grp in unique(dataframe$group)) {
     aestheticsList$shape[[grp]] <- metadata$groups[[grp]]$symbol
-    for (outputMapping in unique(dataframe[dataframe$group == grp, ]$outputMapping)) {
+    for (mappingIndex in unique(dataframe[dataframe$group == grp, ]$outputMappingNumber)) {
 
-      molWeight <- metadata$groups[[grp]]$outputMappings[[outputMapping]]$molWeight
-      xDataDimension <- metadata$groups[[grp]]$outputMappings[[outputMapping]]$observedDataDimension
-      xDataUnit <- metadata$groups[[grp]]$outputMappings[[outputMapping]]$observedDataUnit
-      xData <- dataframe[dataframe$group == grp & dataframe$outputMapping == outputMapping, ]$observed
+      uniqueGroupOutputMappingID <- uniqueGroupOutputMappingID + 1
+
+      molWeight <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$molWeight
+      xDataDimension <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$observedDataDimension
+      xDataUnit <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$observedDataUnit
+      xData <- dataframe[dataframe$group == grp & dataframe$outputMappingNumber == mappingIndex, ]$observed
       xData <- ospsuite::toUnit(
         quantityOrDimension = xDataDimension,
         values = xData,
@@ -181,9 +185,9 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
       }
       xData <- replaceInfWithNA(xData)
 
-      yDataDimension <- metadata$groups[[grp]]$outputMappings[[outputMapping]]$simulatedDataDimension
-      yDataUnit <- metadata$groups[[grp]]$outputMappings[[outputMapping]]$simulatedDataUnit
-      yData <- dataframe[dataframe$group == grp & dataframe$outputMapping == outputMapping, ]$simulated
+      yDataDimension <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$simulatedDataDimension
+      yDataUnit <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$simulatedDataUnit
+      yData <- dataframe[dataframe$group == grp & dataframe$outputMappingNumber == mappingIndex, ]$simulated
       yData <- ospsuite::toUnit(
         quantityOrDimension = yDataDimension,
         values = yData,
@@ -200,10 +204,14 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
         Observed = xData,
         Simulated = yData,
         Group = grp,
-        Output = outputMapping
+        OutputMapping = mappingIndex,
+        uniqueGroupOutputMappingID = uniqueGroupOutputMappingID
       )
 
-      aestheticsList$color[[outputMapping]] <- metadata$groups[[grp]]$outputMappings[[outputMapping]]$color
+      df$OutputMapping <- as.factor(df$OutputMapping)
+      df$uniqueGroupOutputMappingID <- as.factor(df$uniqueGroupOutputMappingID)
+
+      aestheticsList$color[[uniqueGroupOutputMappingID]] <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$color
       gofPlotDataframe <- rbind.data.frame(gofPlotDataframe, df)
     }
   }
@@ -235,14 +243,18 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
 
   gofPlotDataframe <- NULL
   aestheticsList <- list(shape = list(), color = list())
+  uniqueGroupOutputMappingID <- 0
   for (grp in unique(dataframe$group)) {
     aestheticsList$shape[[grp]] <- metadata$groups[[grp]]$symbol
-    for (outputMapping in unique(dataframe[dataframe$group == grp, ]$outputMapping)) {
-      molWeight <- metadata$groups[[grp]]$outputMappings[[outputMapping]]$molWeight
+    for (mappingIndex in unique(dataframe[dataframe$group == grp, ]$outputMappingNumber)) {
+
+      uniqueGroupOutputMappingID <- uniqueGroupOutputMappingID + 1
+
+      molWeight <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$molWeight
 
       xDataDimension <- ospsuite::ospDimensions$Time
       xDataUnit <- ospsuite::getBaseUnit(dimension = xDataDimension)
-      xData <- dataframe[dataframe$group == grp & dataframe$outputMapping == outputMapping, ]$time
+      xData <- dataframe[dataframe$group == grp & dataframe$outputMappingNumber == mappingIndex, ]$time
       xData <- ospsuite::toUnit(
         quantityOrDimension = xDataDimension,
         values = xData,
@@ -255,13 +267,13 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
       }
       xData <- replaceInfWithNA(xData)
 
-      simulated <- dataframe[dataframe$group == grp & dataframe$outputMapping == outputMapping, ]$simulated
-      simulatedDimension <- metadata$groups[[grp]]$outputMappings[[outputMapping]]$simulatedDataDimension
-      simulatedUnit <- metadata$groups[[grp]]$outputMappings[[outputMapping]]$simulatedDataUnit
+      simulated <- dataframe[dataframe$group == grp & dataframe$outputMappingNumber == mappingIndex, ]$simulated
+      simulatedDimension <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$simulatedDataDimension
+      simulatedUnit <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$simulatedDataUnit
 
-      observed <- dataframe[dataframe$group == grp & dataframe$outputMapping == outputMapping, ]$observed
-      observedDimension <- metadata$groups[[grp]]$outputMappings[[outputMapping]]$observedDataDimension
-      observedUnit <- metadata$groups[[grp]]$outputMappings[[outputMapping]]$observedDataUnit
+      observed <- dataframe[dataframe$group == grp & dataframe$outputMappingNumber == mappingIndex, ]$observed
+      observedDimension <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$observedDataDimension
+      observedUnit <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$observedDataUnit
 
       # Convert observed data to base units of simulated data for subsequent calculation of residuals
       observedDataInSimulatedDataUnit <- ospsuite::toUnit(
@@ -285,9 +297,14 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
         Time = xData,
         Residuals = yData,
         Group = grp,
-        Output = outputMapping
+        OutputMapping = mappingIndex,
+        uniqueGroupOutputMappingID = uniqueGroupOutputMappingID
       )
-      aestheticsList$color[[outputMapping]] <- metadata$groups[[grp]]$outputMappings[[outputMapping]]$color
+
+      df$OutputMapping <- as.factor(df$OutputMapping)
+      df$uniqueGroupOutputMappingID <- as.factor(df$uniqueGroupOutputMappingID)
+
+      aestheticsList$color[[uniqueGroupOutputMappingID]] <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$color
       gofPlotDataframe <- rbind.data.frame(gofPlotDataframe, df)
     }
   }
@@ -337,7 +354,7 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
       x = Observed,
       y = Simulated,
       shape = Group,
-      color = Output
+      color = uniqueGroupOutputMappingID
     )
   )
 
@@ -353,7 +370,7 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
 
   qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::scale_color_manual(values = data$aestheticsList$color)
   qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::scale_shape_manual(values = data$aestheticsList$shape)
-  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::theme(legend.direction = "vertical",legend.box = "vertical",legend.position = "top",legend.title = element_text())
+  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::theme(legend.direction = "vertical",legend.box = "vertical",legend.title = element_text())
   qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::xlab(paste("Observed",data$axesSettings$X$unit)) + ggplot2::ylab(paste("Predicted",data$axesSettings$Y$unit))
 
   return(qualificationGOFPredictedVsObservedPlot)
@@ -376,7 +393,7 @@ plotQualificationGOFResidualsOverTime <- function(data) {
       x = Time,
       y = Residuals,
       shape = Group,
-      color = Output
+      color = uniqueGroupOutputMappingID
     )
   )
 
@@ -388,7 +405,7 @@ plotQualificationGOFResidualsOverTime <- function(data) {
 
   qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::scale_color_manual(values = data$aestheticsList$color)
   qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::scale_shape_manual(values = data$aestheticsList$shape)
-  qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::theme(legend.direction = "vertical",legend.box = "vertical",legend.position = "top")
+  qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::theme(legend.direction = "vertical",legend.box = "vertical")
   qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::xlab(paste("Time",data$axesSettings$X$unit)) + ggplot2::ylab("Residuals")
 
   return(qualificationGOFResVsTimePlot)
