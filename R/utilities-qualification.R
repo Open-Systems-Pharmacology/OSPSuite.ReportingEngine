@@ -214,7 +214,7 @@ separateVariableFromUnit <- function(variableUnitString) {
   splitVariableUnitString <- strsplit(x = sub("[ []", replacement = "", x = variableUnitString), split = "[][]")[[1]]
   return(list(
     name = trimws(splitVariableUnitString[1]),
-    unit = ifelse(test = is.na(x = splitVariableUnitString[2]), yes = "", no = splitVariableUnitString[2])
+    unit = ifelse(test = is.na(x = tail(splitVariableUnitString,1)), yes = "", no = tail(splitVariableUnitString,1))
   ))
 }
 
