@@ -372,7 +372,7 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
   qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::scale_shape_manual(values = data$aestheticsList$shape)
   qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::theme(legend.direction = "vertical",legend.box = "vertical",legend.title = element_text())
   qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::xlab(paste("Observed",data$axesSettings$X$unit)) + ggplot2::ylab(paste("Predicted",data$axesSettings$Y$unit))
-
+  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::guides(color = FALSE)
   return(qualificationGOFPredictedVsObservedPlot)
 }
 
@@ -407,7 +407,7 @@ plotQualificationGOFResidualsOverTime <- function(data) {
   qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::scale_shape_manual(values = data$aestheticsList$shape)
   qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::theme(legend.direction = "vertical",legend.box = "vertical")
   qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::xlab(paste("Time",data$axesSettings$X$unit)) + ggplot2::ylab("Residuals")
-
+  qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::guides(color = FALSE)
   return(qualificationGOFResVsTimePlot)
 }
 
