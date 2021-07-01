@@ -32,7 +32,7 @@ QualificationWorkflow <- R6::R6Class(
     #' @return A new `QualificationWorkflow` object
     #' @import ospsuite
     initialize = function(configurationPlan,
-                              ...) {
+                          ...) {
       super$initialize(...)
       validateIsOfType(configurationPlan, "ConfigurationPlan")
       self$configurationPlan <- configurationPlan
@@ -45,10 +45,10 @@ QualificationWorkflow <- R6::R6Class(
       # -> updated using setting$plotConfigurations
 
       self$plotTimeProfiles <- loadPlotTimeProfilesTask(self, configurationPlan)
-      self$plotGOFMerged <- PlotTask$new()#loadGOFMergedTask(self, configurationPlan)
-      self$plotComparisonTimeProfiles <- PlotTask$new()#loadComparisonPlotTimeProfilesTask(self, configurationPlan)
-      self$plotPKRatio <- PlotTask$new()#loadPlotPKRatioTask(self, configurationPlan)
-      self$plotDDIRatio <- PlotTask$new()#loadPlotDDIRatioTask(self, configurationPlan)
+      self$plotGOFMerged <- loadGOFMergedTask(self, configurationPlan)
+      self$plotComparisonTimeProfiles <- PlotTask$new() # loadComparisonPlotTimeProfilesTask(self, configurationPlan)
+      self$plotPKRatio <- PlotTask$new() # loadPlotPKRatioTask(self, configurationPlan)
+      self$plotDDIRatio <- PlotTask$new() # loadPlotDDIRatioTask(self, configurationPlan)
 
       self$taskNames <- ospsuite::enum(self$getAllTasks())
     },

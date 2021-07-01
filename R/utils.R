@@ -16,6 +16,29 @@
   }
 }
 
+
+
+
+#' @title calculateResiduals
+#' @param simulatedData, vector of simulated data
+#' @param observedData, vector of observed data
+#' @param residualScale, must be selected from enum ResidualScales
+#' @return residuals between simulatedData and observedData
+#' @description
+#' Calculate residuals between vectors `simulatedData` and `observedData` according the the residual scale specified in `residualScale`
+calculateResiduals <- function(simulatedData, observedData, residualScale) {
+  validateIsOfLength(object = simulatedData, nbElements = length(observedData))
+  residualValues <- rep(NA, length(observedData))
+  if (isIncluded(residualScale, ResidualScales$Logarithmic)) {
+    residualValues <- log(observedData) - log(simulatedData)
+  }
+  if (isIncluded(residualScale, ResidualScales$Linear)) {
+    residualValues <- (observedData - simulatedData)
+  }
+}
+
+
+
 #' Shortkey checking if argument 1 is not null,
 #' output the argument 2 if not null, or output argument 3 otherwise
 #'
@@ -385,8 +408,8 @@ formatNumerics <- function(numerics,
 #' @param variableName Name of the variable and field of `objectName`
 #' @param keepIfNull logical `objectName$variableName <- variableName %||% objectName$variableName`
 #' @return An expression to `eval()`
-parseVariableToObject <- function(objectName, variableName, keepIfNull = FALSE){
-  if(keepIfNull){
+parseVariableToObject <- function(objectName, variableName, keepIfNull = FALSE) {
+  if (keepIfNull) {
     return(parse(text = paste0(objectName, "$", variableName, " <- ", variableName, " %||% ", objectName, "$", variableName)))
   }
   return(parse(text = paste0(objectName, "$", variableName, " <- ", variableName)))
@@ -398,8 +421,8 @@ parseVariableToObject <- function(objectName, variableName, keepIfNull = FALSE){
 #' @param variableName Name of the variable and field of `objectName`
 #' @param keepIfNull logical `variableName <- objectName$variableName %||% variableName`
 #' @return An expression to `eval()`
-parseVariableFromObject <- function(objectName, variableName, keepIfNull = FALSE){
-  if(keepIfNull){
+parseVariableFromObject <- function(objectName, variableName, keepIfNull = FALSE) {
+  if (keepIfNull) {
     return(parse(text = paste0(variableName, " <- ", objectName, "$", variableName)))
   }
   return(parse(text = paste0(variableName, " <- ", objectName, "$", variableName)))

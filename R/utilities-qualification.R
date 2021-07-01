@@ -202,3 +202,70 @@ getOutputsFromGOFMergedPlotsConfiguration <- function(plot) {
 # Vector of allowable plot types in configuration plan.
 # TODO deprecate vector using enum ConfigurationPlots
 QualificationPlotTypes <- c("GOFMergedPlots", "ComparisonTimeProfilePlots", "DDIRatioPlots", "TimeProfile")
+
+
+
+
+#' @title separateVariableFromUnit
+#' @description Split a string containing a varialbe and unit description into a list of two strings that separates the variable and the unit.
+#' @param variableUnitString is a string that has the format 'Variable [unit]' or 'Variable'
+#' @return A named list, with fields 'name' and 'unit'.  If variableUnitString lacks a '[unit]' substring, then the unit field is returned as an empty string.
+separateVariableFromUnit <- function(variableUnitString) {
+  splitVariableUnitString <- strsplit(x = sub("[ []", replacement = "", x = variableUnitString), split = "[][]")[[1]]
+  return(list(
+    name = trimws(splitVariableUnitString[1]),
+    unit = ifelse(test = is.na(x = tail(splitVariableUnitString,1)), yes = "", no = tail(splitVariableUnitString,1))
+  ))
+}
+
+
+#' @title parseObservationsDataFrame
+#' @description Function to read the variable names and units in the first two columns of an observations data frame used for qualification. First column stores timepoints.  Second column stores measurements of a quantity corresponding to timepoints in first column.
+#' @param observationsDataFrame from CSV
+#' @return A named list with `time` and `output` fields.  Each field contains a list that is output by `separateVariableFromUnit` with fields that store the variable name and the unit.
+parseObservationsDataFrame <- function(observationsDataFrame) {
+  namesObservationsDataFrame <- names(observationsDataFrame)
+  validateIsIncluded(length(namesObservationsDataFrame), c(2, 3))
+  dataFrameFields <- list(
+    time = separateVariableFromUnit(namesObservationsDataFrame[1]),
+    output = separateVariableFromUnit(namesObservationsDataFrame[2])
+  )
+  if (length(namesObservationsDataFrame) == 3) {
+    dataFrameFields$uncertainty <- separateVariableFromUnit(namesObservationsDataFrame[3])
+  }
+  return(dataFrameFields)
+}
+
+
+
+#' @title massMoleConversion
+#' @description Function to map `Concentration (mass)` or `Mass` dimensions to `Concentration (molar)` and `Amount` respectively.
+#' @param dimension is string that is from among the valid OSP dimensions
+#' @return If `dimension` is `Concentration (mass)` or `Mass`, then return `Concentration (molar)` or `Amount` respectively, otherwise return `dimension`.
+massMoleConversion <- function(dimension) {
+  massMoleConversionList <- list()
+  massMoleConversionList[[ospDimensions$Mass]] <- ospsuite::ospDimensions$Amount
+  massMoleConversionList[[ospDimensions$`Concentration (mass)`]] <- ospsuite::ospDimensions$`Concentration (molar)`
+  return(ifelse(test = dimension %in% c(ospsuite::ospDimensions$Mass, ospsuite::ospDimensions$`Concentration (mass)`),
+    yes = massMoleConversionList[[dimension]],
+    no = dimension
+  ))
+}
+
+
+#' @title getAxesSettings
+#' @description Read axes settings for plots.
+#' @param axesSettingsFromConfigurationPlot is a field from the `configurationPlan$plots` list
+#' @return `axesSettings`, a list of settings for each of the X and Y axis.  Each list contains the unit, dimensions, and scaling type for each axes and option to plot grid lines.
+getAxesSettings <- function(axesSettingsFromConfigurationPlot) {
+  axesSettings <- lapply(axesSettingsFromConfigurationPlot, function(x) {
+    list(
+      unit = x$Unit,
+      dimension = x$Dimension,
+      gridLines = x$GridLines,
+      scaling = x$Scaling
+    )
+  })
+  names(axesSettings) <- sapply(axesSettingsFromConfigurationPlot, function(x) x$Type)
+  return(axesSettings)
+}
