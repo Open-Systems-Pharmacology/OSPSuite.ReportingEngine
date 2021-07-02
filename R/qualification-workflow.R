@@ -37,8 +37,8 @@ QualificationWorkflow <- R6::R6Class(
       validateIsOfType(configurationPlan, "ConfigurationPlan")
       self$configurationPlan <- configurationPlan
 
-      self$simulate <- loadSimulateTask(self)
-      self$calculatePKParameters <- loadCalculatePKParametersTask(self)
+      self$simulate <- loadSimulateTask(self, active = TRUE)
+      self$calculatePKParameters <- loadCalculatePKParametersTask(self, active = TRUE)
 
       # TODO: include global plot & axes settings at this stage
       # -> could be including using the concept of Themes
