@@ -27,15 +27,32 @@ plotQualificationTimeProfiles <- function(configurationPlan,
     simulation <- loadSimulation(simulationFile)
     simulationResults <- importResultsFromCSV(simulation, simulationResultsFile)
 
+    # Get mol weight for observed data as first molecule path
+    moleculePath <- utils::head(ospsuite::getAllMoleculePathsIn(simulation), 1)
+    molWeightForObservedData <- simulation$molWeightFor(moleculePath)
+
     # Get axes properties (with scale, limits and display units)
     axesProperties <- getAxesPropertiesForTimeProfiles(timeProfilePlan$Plot$Axes)
 
     timeProfilePlot <- tlf::initializePlot()
     for (curve in timeProfilePlan$Plot$Curves) {
       # TODO handle Observed data and Y2 axis
-      curveOutput <- getCurvePropertiesForTimeProfiles(curve, simulation, simulationResults, axesProperties, configurationPlan, logFolder)
+      curveOutput <- getCurvePropertiesForTimeProfiles(curve, simulation, simulationResults, molWeightForObservedData, axesProperties, configurationPlan, logFolder)
+      # Update mol weight obtained from latest path in case next curve is observed data
+      molWeightForObservedData <- curveOutput$molWeight
       if (is.null(curveOutput)) {
         next
+      }
+      if (!isOfLength(curveOutput$uncertainty, 0)) {
+        timeProfilePlot <- addErrorbar(
+          x = curveOutput$x,
+          ymin = curveOutput$uncertainty$ymin,
+          ymax = curveOutput$uncertainty$ymax,
+          caption = curveOutput$caption,
+          color = curveOutput$color,
+          size = curveOutput$size,
+          plotObject = timeProfilePlot
+        )
       }
       timeProfilePlot <- addLine(
         x = curveOutput$x,

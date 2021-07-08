@@ -95,6 +95,7 @@ updatePlotAxes <- function(plotObject, axesProperties) {
 #' that includes required information to identify and convert the data requested from `configurationPlanCurve` properties
 #' @param simulationResults A `SimulationResults` object from `ospsuite` package
 #' that includes the data requested from `configurationPlanCurve` properties
+#' @param molWeight molecular weight for observed data
 #' @param axesProperties list of axes properties obtained from `getAxesForTimeProfiles`
 #' @param configurationPlan A `ConfigurationPlan` object that includes methods to find observed data
 #' @param logFolder folder where the logs are saved
@@ -103,6 +104,7 @@ updatePlotAxes <- function(plotObject, axesProperties) {
 getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
                                               simulation,
                                               simulationResults,
+                                              molWeight,
                                               axesProperties,
                                               configurationPlan,
                                               logFolder) {
@@ -117,19 +119,58 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
 
   # Observed Data
   if (pathArray[2] %in% "ObservedData") {
-    observedData <- getObservedDataFromConfigurationPlan(pathArray[1], configurationPlan, logFolder)
+    observedResults <- getObservedDataFromConfigurationPlan(pathArray[1], configurationPlan, logFolder)
+
+    time <- ospsuite::toUnit(
+      quantityOrDimension = "Time",
+      values = as.numeric(observedResults$data[, 1]),
+      targetUnit = axesProperties$x$unit,
+      sourceUnit = observedResults$metaData$time$unit
+    )
+    outputValues <- ospsuite::toUnit(
+      quantityOrDimension = ospsuite::getDimensionForUnit(observedResults$metaData$output$unit),
+      values = observedResults$data[, 2],
+      targetUnit = axesProperties$y$unit,
+      sourceUnit = observedResults$metaData$output$unit,
+      molWeight = molWeight
+    )
+
+    outputUncertainty <- NULL
+    if (!isOfLength(observedResults$metaData$uncertainty, 0)) {
+      # No unit means that uncertainty is geometric
+      outputUncertainty$ymin <- outputValues / observedResults$data[, 3]
+      outputUncertainty$ymax <- outputValues * observedResults$data[, 3]
+
+      if (!isIncluded(observedResults$metaData$uncertainty$unit, "")) {
+        outputUncertainty$ymin <- outputValues - ospsuite::toUnit(
+          ospsuite::getDimensionForUnit(observedResults$metaData$uncertainty$unit),
+          observedResults$data[, 3],
+          axesProperties$y$unit,
+          sourceUnit = observedResults$metaData$uncertainty$unit,
+          molWeight = molWeight
+        )
+        outputUncertainty$ymax <- outputValues + ospsuite::toUnit(
+          ospsuite::getDimensionForUnit(observedResults$metaData$uncertainty$unit),
+          observedResults$data[, 3],
+          axesProperties$y$unit,
+          sourceUnit = observedResults$metaData$uncertainty$unit,
+          molWeight = molWeight
+        )
+      }
+    }
 
     outputCurve <- list(
-      x = observedData$x,
-      y = observedData$y,
-      uncertainty = observedData$uncertainty,
+      x = time,
+      y = outputValues,
+      uncertainty = outputUncertainty,
       caption = configurationPlanCurve$Name,
       color = configurationPlanCurve$CurveOptions$Color,
       linetype = tlfLinetype(configurationPlanCurve$CurveOptions$LineStyle),
       shape = tlfShape(configurationPlanCurve$CurveOptions$Symbol),
       size = configurationPlanCurve$CurveOptions$Size,
       id = configurationPlanCurve$CurveOptions$LegendIndex,
-      secondAxis = curveOnSecondAxis
+      secondAxis = curveOnSecondAxis,
+      molWeight = molWeight
     )
     return(outputCurve)
   }
@@ -164,7 +205,8 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
     shape = tlfShape(configurationPlanCurve$CurveOptions$Symbol),
     size = configurationPlanCurve$CurveOptions$Size,
     id = configurationPlanCurve$CurveOptions$LegendIndex,
-    secondAxis = curveOnSecondAxis
+    secondAxis = curveOnSecondAxis,
+    molWeight = molWeight
   )
 
   return(outputCurve)
