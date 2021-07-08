@@ -19,9 +19,9 @@ SensitivityAnalysisTask <- R6::R6Class(
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SensitivityAnalysisTask` object
     initialize = function(getTaskResults = NULL,
-                              settings = NULL,
-                              nameTaskResults = "none",
-                              ...) {
+                          settings = NULL,
+                          nameTaskResults = "none",
+                          ...) {
       validateIsOfType(settings, "SensitivityAnalysisSettings", nullAllowed = TRUE)
       super$initialize(...)
       self$settings <- settings %||% SensitivityAnalysisSettings$new()
@@ -34,7 +34,7 @@ SensitivityAnalysisTask <- R6::R6Class(
     #' @param set R6 class `SimulationStructure`
     #' @param taskResults list of results from task run.
     saveResults = function(set,
-                               taskResults) {
+                           taskResults) {
       ospsuite::exportSensitivityAnalysisResultsToCSV(
         results = taskResults,
         filePath = set$sensitivityAnalysisResultsFileNames

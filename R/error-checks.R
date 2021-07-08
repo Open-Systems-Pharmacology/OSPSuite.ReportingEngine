@@ -293,8 +293,8 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile)
   }
   # Read dictionary and check that mandatory variables are included
   dictionary <- readObservedDataFile(observedMetaDataFile)
-  if(!isIncluded(dictionaryParameters$nonmemUnit, names(dictionary))){
-    dictionary[,dictionaryParameters$nonmemUnit] <- NA
+  if (!isIncluded(dictionaryParameters$nonmemUnit, names(dictionary))) {
+    dictionary[, dictionaryParameters$nonmemUnit] <- NA
   }
   validateIsIncluded(c(dictionaryParameters$ID, dictionaryParameters$nonmenColumn), names(dictionary))
   validateIsIncluded(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID])
@@ -304,24 +304,24 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile)
   timeVariable <- getDictionaryVariable(dictionary, dictionaryParameters$timeID)
   dvVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvID)
   lloqVariable <- getDictionaryVariable(dictionary, dictionaryParameters$lloqID)
-  
+
   checkIsIncluded(c(timeVariable, dvVariable), names(observedDataset))
   checkIsIncluded(lloqVariable, names(observedDataset), nullAllowed = TRUE)
-  
+
   # Units
   # If unit is defined as a value in nonmemUnit
   timeMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$timeID
   dvMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$dvID
-  
+
   timeUnit <- as.character(dictionary[timeMapping, dictionaryParameters$nonmemUnit])
   dvUnit <- as.character(dictionary[dvMapping, dictionaryParameters$nonmemUnit])
-  
+
   # If unit is defined as a nonmemColumn
   timeUnitVariable <- getDictionaryVariable(dictionary, dictionaryParameters$timeUnitID)
   dvUnitVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvUnitID)
-  
+
   # If unit is missing somewhere throw error
-  if(any(all(is.null(timeUnitVariable), is.na(timeUnit)), all(is.null(dvUnitVariable), is.na(dvUnit)))){
+  if (any(all(is.null(timeUnitVariable), is.na(timeUnit) | timeUnit %in% ""), all(is.null(dvUnitVariable), is.na(dvUnit) | dvUnit %in% ""))) {
     stop(messages$errorUnitNotProvidedInMetaDataFile(observedMetaDataFile))
   }
   checkIsIncluded(timeUnitVariable, names(observedDataset), nullAllowed = TRUE)
@@ -446,17 +446,16 @@ validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
     }
 
 
-    if(all(pkParametersTable$path == pkParametersTableRef$path)){
+    if (all(pkParametersTable$path == pkParametersTableRef$path)) {
       pkParametersTableTest <- NULL
-      for (pkParameterIndex in seq_along(pkParametersTable$pkParameter)){
+      for (pkParameterIndex in seq_along(pkParametersTable$pkParameter)) {
         pkParametersTableTest[pkParameterIndex] <- isIncluded(pkParametersTable$pkParameter[pkParameterIndex], pkParametersTableRef$pkParameter[pkParameterIndex])
       }
 
-      if(all(pkParametersTableTest)){
+      if (all(pkParametersTableTest)) {
         pkParametersTableRef <- pkParametersTable
         next
       }
-
     }
 
 
@@ -477,4 +476,14 @@ hasUniqueValues <- function(data, na.rm = TRUE) {
     data <- data[!is.na(data)]
   }
   return(!any(duplicated(data)))
+}
+
+validateHasUniqueValues <- function(data, dataName = "dataset", na.rm = TRUE, nullAllowed = FALSE) {
+  if (nullAllowed && is.null(data)) {
+    return()
+  }
+  if (hasUniqueValues(data, na.rm)) {
+    return()
+  }
+  stop(messages$errorHasNoUniqueValues(data, dataName, na.rm))
 }

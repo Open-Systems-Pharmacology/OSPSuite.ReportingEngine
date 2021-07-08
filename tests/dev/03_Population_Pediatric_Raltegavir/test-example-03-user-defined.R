@@ -36,10 +36,11 @@ userTestWorkflow <- PopulationWorkflow$new(
 
 # load user defined task
 addUserDefinedTask(userTestWorkflow,
-                    plotAUCRatios,
-                    taskName = "AUCRatios",
-                    active = TRUE,
-                    settings = NULL)
+  plotAUCRatios,
+  taskName = "AUCRatios",
+  active = TRUE,
+  settings = NULL
+)
 
 # Title within the report of user defined task #1
 userTestWorkflow$userDefinedTasks[[1]]$title <- "AUC Ratios across populations"

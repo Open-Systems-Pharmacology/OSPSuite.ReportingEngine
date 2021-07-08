@@ -13,7 +13,7 @@ GofPlotTask <- R6::R6Class(
     #' @param taskResults list of results from task run.
     #' Results contains at least 2 fields: `plots` and `tables`
     saveResults = function(set,
-                               taskResults) {
+                           taskResults) {
       addTextChunk(
         self$fileName,
         paste0("## ", self$title, " for ", set$simulationSet$simulationSetName),
@@ -27,7 +27,7 @@ GofPlotTask <- R6::R6Class(
       for (timeRange in ApplicationRanges) {
         listOfPlots <- taskResults$plots[[timeRange]]
         listOfPlotCaptions <- taskResults$captions[[timeRange]]
-        
+
         if (isOfLength(listOfPlots, 0)) {
           next
         }
@@ -229,10 +229,12 @@ GofPlotTask <- R6::R6Class(
           logFolder = self$workflowFolder
         )
 
-        simulationSetNames <- as.character(sapply(structureSets, function(set) {set$simulationSet$simulationSetName}))
+        simulationSetNames <- as.character(sapply(structureSets, function(set) {
+          set$simulationSet$simulationSetName
+        }))
         histogramCaption <- captions$plotGoF$histogram(simulationSetNames, structureSets[[1]]$simulationSetDescriptor)
         addTextChunk(self$fileName, paste0("Figure: ", histogramCaption), logFolder = self$workflowFolder)
-        
+
         addFigureChunk(
           fileName = self$fileName,
           figureFileRelativePath = self$getRelativePath(histogramFileName),

@@ -243,7 +243,7 @@ test_that("Source expressions constraints add up as &", {
   expect_equal(sum(populationData[, drugMassPath] %in% 5), 22)
   expect_equal(sum(populationData[, drugMassPath] %in% NA), 78)
   expect_gte(min(populationData[populationData[, drugMassPath] %in% 5, "Organism|Weight"]), 45)
-  expect_lte(max(populationData[populationData[, drugMassPath] %in% 5, "Organism|Weight"]),  55)
+  expect_lte(max(populationData[populationData[, drugMassPath] %in% 5, "Organism|Weight"]), 55)
 
   testPopulation <- ospsuite::loadPopulation(populationFile)
   addStudyParameters(testPopulation, testSimulation, studyDesignNAFile)

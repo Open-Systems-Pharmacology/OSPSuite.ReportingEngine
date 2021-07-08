@@ -31,12 +31,12 @@ SimulationSet <- R6::R6Class(
     #' @param applicationRanges names of application ranges to include in the report. Names are available in enum `ApplicationRanges`.
     #' @return A new `SimulationSet` object
     initialize = function(simulationSetName,
-                              simulationFile,
-                              outputs = NULL,
-                              observedDataFile = NULL,
-                              observedMetaDataFile = NULL,
-                              timeUnit = "h",
-                              applicationRanges = ApplicationRanges) {
+                          simulationFile,
+                          outputs = NULL,
+                          observedDataFile = NULL,
+                          observedMetaDataFile = NULL,
+                          timeUnit = "h",
+                          applicationRanges = ApplicationRanges) {
       # Test and validate the simulation object
       validateIsString(simulationSetName)
       validateIsString(simulationFile)

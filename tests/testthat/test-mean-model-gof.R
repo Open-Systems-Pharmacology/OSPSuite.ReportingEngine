@@ -129,40 +129,40 @@ test_that("Time profile directory includes correct files and folders", {
 })
 
 test_that("Saved time profile data and residuals includes the correct data", {
-  expect_equal(readObservedDataFile(file.path(workflowNoObs1$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")), 
-               readObservedDataFile(refOutputTimeProfileNoObs),
-               tolerance = comparisonTolerance()
-               )
-  
-  expect_equal(readObservedDataFile(file.path(workflowNoObs2$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")), 
-               readObservedDataFile(refOutputTimeProfileNoObs),
-               tolerance = comparisonTolerance()
-               )
-  
-  expect_equal(readObservedDataFile(file.path(workflowNoObs3$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")), 
-               readObservedDataFile(refOutputTimeProfileNoObs),
-               tolerance = comparisonTolerance()
-               )
+  expect_equal(readObservedDataFile(file.path(workflowNoObs1$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")),
+    readObservedDataFile(refOutputTimeProfileNoObs),
+    tolerance = comparisonTolerance()
+  )
 
-  expect_equal(readObservedDataFile(file.path(workflowAllObs$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")), 
-               readObservedDataFile(refOutputTimeProfileAllObs),
-               tolerance = comparisonTolerance()
-               )
-  
-  expect_equal(readObservedDataFile(file.path(workflowSelectObs$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")), 
-               readObservedDataFile(refOutputTimeProfileSelectObs),
-               tolerance = comparisonTolerance()
-               )
-  
-  expect_equal(readObservedDataFile(file.path(workflowAllObs$workflowFolder, "TimeProfiles", "residuals.csv")), 
-               readObservedDataFile(refOutputResidualsAllObs),
-               tolerance = comparisonTolerance()
-               )
-  
-  expect_equal(readObservedDataFile(file.path(workflowSelectObs$workflowFolder, "TimeProfiles", "residuals.csv")), 
-               readObservedDataFile(refOutputResidualsSelectObs),
-               tolerance = comparisonTolerance()
-               )
+  expect_equal(readObservedDataFile(file.path(workflowNoObs2$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")),
+    readObservedDataFile(refOutputTimeProfileNoObs),
+    tolerance = comparisonTolerance()
+  )
+
+  expect_equal(readObservedDataFile(file.path(workflowNoObs3$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")),
+    readObservedDataFile(refOutputTimeProfileNoObs),
+    tolerance = comparisonTolerance()
+  )
+
+  expect_equal(readObservedDataFile(file.path(workflowAllObs$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")),
+    readObservedDataFile(refOutputTimeProfileAllObs),
+    tolerance = comparisonTolerance()
+  )
+
+  expect_equal(readObservedDataFile(file.path(workflowSelectObs$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")),
+    readObservedDataFile(refOutputTimeProfileSelectObs),
+    tolerance = comparisonTolerance()
+  )
+
+  expect_equal(readObservedDataFile(file.path(workflowAllObs$workflowFolder, "TimeProfiles", "residuals.csv")),
+    readObservedDataFile(refOutputResidualsAllObs),
+    tolerance = comparisonTolerance()
+  )
+
+  expect_equal(readObservedDataFile(file.path(workflowSelectObs$workflowFolder, "TimeProfiles", "residuals.csv")),
+    readObservedDataFile(refOutputResidualsSelectObs),
+    tolerance = comparisonTolerance()
+  )
 })
 
 # Clear test workflow folders

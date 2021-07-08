@@ -292,7 +292,7 @@ loadPlotMassBalanceTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "MeanModelWorkflow")
   validateIsLogical(active)
   validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
-  
+
   return(PlotTask$new(
     reportTitle = defaultWorkflowTitles$plotMassBalance,
     fileName = defaultWorkflowAppendices$plotMassBalance,
@@ -318,7 +318,7 @@ loadPlotAbsorptionTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "MeanModelWorkflow")
   validateIsLogical(active)
   validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
-  
+
   return(PlotTask$new(
     reportTitle = defaultWorkflowTitles$plotAbsorption,
     fileName = defaultWorkflowAppendices$plotAbsorption,
@@ -344,7 +344,7 @@ loadPlotDemographyTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "PopulationWorkflow")
   validateIsLogical(active)
   validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
-  
+
   return(PopulationPlotTask$new(
     workflowType = workflow$workflowType,
     xParameters = getDefaultDemographyXParameters(workflow$workflowType),
@@ -453,10 +453,10 @@ checkTaskInputsExist <- function(task) {
 #' @return Updated `Workflow` object
 #' @export
 addUserDefinedTask <- function(workflow,
-                                taskFunction,
-                                taskName = "userDefinedTask",
-                                active = TRUE,
-                                settings = NULL) {
+                               taskFunction,
+                               taskName = "userDefinedTask",
+                               active = TRUE,
+                               settings = NULL) {
   validateIsOfType(workflow, "Workflow")
   validateIsOfType(taskFunction, "function")
   validateIsString(taskName)
@@ -515,4 +515,58 @@ addUserDefinedTask <- function(workflow,
     pathFolder = workflow$workflowFolder
   )
   return(invisible())
+}
+
+#' @title loadPlotTimeProfilesTask
+#' @description
+#' Define `plotTimeProfiles` task and its settings
+#' @param workflow `QualificationWorkflow` object
+#' @param configurationPlan A `ConfigurationPlan` object
+#' @return A `QualificationTask` object
+loadPlotTimeProfilesTask <- function(workflow, configurationPlan) {
+  validateIsOfType(workflow, "QualificationWorkflow")
+  validateIsOfType(configurationPlan, "ConfigurationPlan")
+
+  # Time Profiles task is only active if the field is defined & not empty
+  active <- !isOfLength(configurationPlan$plots$TimeProfile, 0)
+
+  taskFunction <- plotQualificationTimeProfiles
+  nameFunction <- deparse(substitute(plotQualificationTimeProfiles))
+
+  return(QualificationTask$new(
+    getTaskResults = taskFunction,
+    nameTaskResults = nameFunction,
+    inputFolder = defaultTaskOutputFolders$simulate,
+    inputs = getSimulationResultFileNames(workflow),
+    workflowFolder = workflow$workflowFolder,
+    active = active,
+    message = defaultWorkflowMessages$plotTimeProfiles
+  ))
+}
+
+
+
+#' @title loadGOFMergedTask
+#' @param workflow `QualificationWorkflow` object
+#' @param configurationPlan A `ConfigurationPlan` object
+#' @return A `QualificationTask` object
+loadGOFMergedTask <- function(workflow, configurationPlan) {
+  validateIsOfType(workflow, "QualificationWorkflow")
+  validateIsOfType(configurationPlan, "ConfigurationPlan")
+
+  # Time Profiles task is only active if the field is defined & not empty
+  active <- !isOfLength(configurationPlan$plots$GOFMergedPlots, 0)
+
+  taskFunction <- plotQualificationGOFs
+  nameFunction <- deparse(substitute(plotQualificationGOFs))
+
+  return(QualificationTask$new(
+    getTaskResults = taskFunction,
+    nameTaskResults = nameFunction,
+    inputFolder = defaultTaskOutputFolders$simulate,
+    inputs = getSimulationResultFileNames(workflow),
+    workflowFolder = workflow$workflowFolder,
+    active = active,
+    message = defaultWorkflowMessages$plotGOFMerged
+  ))
 }

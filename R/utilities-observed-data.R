@@ -166,6 +166,17 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
     if (isOfLength(lloqColumn, 0)) {
       next
     }
+    # Case where dictionary defined an lloq column missing from dataset
+    if (!isIncluded(lloqColumn, names(observedDataset))) {
+      logWorkflow(
+        message = paste0("lloq variable '", lloqColumn, "' defined in dictionary is missing from observed dataset"),
+        pathFolder = logFolder,
+        logTypes = LogTypes$Debug
+      )
+      lloqColumn <- NULL
+      next
+    }
+
     observedDataset[selectedRows, lloqColumn] <- ospsuite::toBaseUnit(
       ospsuite::getDimensionForUnit(dvUnit),
       as.numeric(observedDataset[selectedRows, lloqColumn]),
@@ -214,7 +225,9 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
   outputConcentration <- data[selectedRows, dataMapping$dv]
   if (!isOfLength(output$displayUnit, 0)) {
     for (dvDimension in dvDimensions) {
-      if(is.na(dvDimension)){next}
+      if (is.na(dvDimension)) {
+        next
+      }
       dvSelectedRows <- data[selectedRows, dataMapping$dimension] %in% dvDimension
       outputConcentration[dvSelectedRows] <- ospsuite::toUnit(
         dvDimension,
@@ -237,7 +250,9 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
   lloqConcentration <- data[selectedRows, dataMapping$lloq]
   if (!isOfLength(output$displayUnit, 0)) {
     for (dvDimension in dvDimensions) {
-      if(is.na(dvDimension)){next}
+      if (is.na(dvDimension)) {
+        next
+      }
       dvSelectedRows <- data[selectedRows, dataMapping$dimension] %in% dvDimension
       lloqConcentration[dvSelectedRows] <- ospsuite::toUnit(
         dvDimension,
@@ -254,4 +269,42 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
     "Path" = output$path
   )
   return(list(data = outputData, lloq = lloqOutput))
+}
+
+
+#' @title getObservedDataFromConfigurationPlan
+#' @description
+#' Get selected observed data from a `ConfigurationPlan` object
+#' @param observedDataId Identifier of observed data
+#' @param configurationPlan A `ConfigurationPlan` object that includes methods to find the data
+#' @param logFolder folder where the logs are saved
+#' @return list of including x, y and uncertainty to plot observed data
+getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPlan, logFolder) {
+  uncertainty <- NULL
+  observedDataFile <- configurationPlan$getObservedDataPath(observedDataId)
+  observedData <- readObservedDataFile(observedDataFile)
+
+  # In qualification workflow, observed data expected as:
+  # Column 1: Time
+  # Column 2: Observed variable
+  # Column 3: uncertainty around observed variable
+  numberOfColumns <- ncol(observedData)
+  numberOfRows <- nrow(observedData)
+
+  # Log the description of the observed data for debugging
+  logWorkflow(
+    message = paste0("Observed data Id '", observedDataId, "' included ", numberOfColumns, " columns and ", numberOfRows, " rows"),
+    pathFolder = logFolder,
+    logTypes = LogTypes$Debug
+  )
+
+  if (numberOfColumns > 2) {
+    uncertainty <- observedData[, 3]
+  }
+
+  return(list(
+    x = observedData[, 1],
+    y = observedData[, 2],
+    uncertainty = uncertainty
+  ))
 }

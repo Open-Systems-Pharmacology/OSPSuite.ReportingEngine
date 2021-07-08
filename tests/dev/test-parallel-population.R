@@ -8,7 +8,7 @@ ps <- PopulationSimulationSet$new(
   populationFile = "./tests/data/input-data/popData_short.csv",
   outputs = Output$new(path = tree$Organism$VenousBlood$Plasma$smarties$Concentration$path)
 )
-pwf <- PopulationWorkflow$new(simulationSets = list(ps), workflowFolder = "./expar", workflowType = PopulationWorkflowTypes$parallelComparison )
+pwf <- PopulationWorkflow$new(simulationSets = list(ps), workflowFolder = "./expar", workflowType = PopulationWorkflowTypes$parallelComparison)
 pwf$simulate$settings$showProgress <- TRUE
 pwf$simulate$settings$numberOfCores <- 3
 

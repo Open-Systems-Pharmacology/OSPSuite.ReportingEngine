@@ -10,4 +10,4 @@ workflowFile <- createWorkflowFromExcelInput(excelFile)
 # createWorkflowFromExcelInput(excelFile, workflowFile = "workflow.R")
 
 # Run the resulting file:
-source(workflowFile, encoding = 'UTF-8')
+source(workflowFile, encoding = "UTF-8")
