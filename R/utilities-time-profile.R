@@ -43,11 +43,11 @@ plotQualificationTimeProfiles <- function(configurationPlan,
       if (is.null(curveOutput)) {
         next
       }
-      if (!isOfLength(curveOutput$uncertainty, 0)) {
+      if (!isOfLength(curveOutput$error, 0)) {
         timeProfilePlot <- addErrorbar(
           x = curveOutput$x,
-          ymin = curveOutput$uncertainty$ymin,
-          ymax = curveOutput$uncertainty$ymax,
+          ymin = curveOutput$error$ymin,
+          ymax = curveOutput$error$ymax,
           caption = curveOutput$caption,
           color = curveOutput$color,
           size = curveOutput$size,

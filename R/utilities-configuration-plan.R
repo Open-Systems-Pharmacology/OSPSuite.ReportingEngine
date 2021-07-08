@@ -135,25 +135,25 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
       molWeight = molWeight
     )
 
-    outputUncertainty <- NULL
-    if (!isOfLength(observedResults$metaData$uncertainty, 0)) {
-      # No unit means that uncertainty is geometric
-      outputUncertainty$ymin <- outputValues / observedResults$data[, 3]
-      outputUncertainty$ymax <- outputValues * observedResults$data[, 3]
+    outputError <- NULL
+    if (!isOfLength(observedResults$metaData$error, 0)) {
+      # No unit means that error is geometric
+      outputError$ymin <- outputValues / observedResults$data[, 3]
+      outputError$ymax <- outputValues * observedResults$data[, 3]
 
-      if (!isIncluded(observedResults$metaData$uncertainty$unit, "")) {
-        outputUncertainty$ymin <- outputValues - ospsuite::toUnit(
-          ospsuite::getDimensionForUnit(observedResults$metaData$uncertainty$unit),
+      if (!isIncluded(observedResults$metaData$error$unit, "")) {
+        outputError$ymin <- outputValues - ospsuite::toUnit(
+          ospsuite::getDimensionForUnit(observedResults$metaData$error$unit),
           observedResults$data[, 3],
           axesProperties$y$unit,
-          sourceUnit = observedResults$metaData$uncertainty$unit,
+          sourceUnit = observedResults$metaData$error$unit,
           molWeight = molWeight
         )
-        outputUncertainty$ymax <- outputValues + ospsuite::toUnit(
-          ospsuite::getDimensionForUnit(observedResults$metaData$uncertainty$unit),
+        outputError$ymax <- outputValues + ospsuite::toUnit(
+          ospsuite::getDimensionForUnit(observedResults$metaData$error$unit),
           observedResults$data[, 3],
           axesProperties$y$unit,
-          sourceUnit = observedResults$metaData$uncertainty$unit,
+          sourceUnit = observedResults$metaData$error$unit,
           molWeight = molWeight
         )
       }
@@ -162,7 +162,7 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
     outputCurve <- list(
       x = time,
       y = outputValues,
-      uncertainty = outputUncertainty,
+      error = outputError,
       caption = configurationPlanCurve$Name,
       color = configurationPlanCurve$CurveOptions$Color,
       linetype = tlfLinetype(configurationPlanCurve$CurveOptions$LineStyle),
