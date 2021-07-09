@@ -1,0 +1,7 @@
+#options(error = function() {print(rlang::trace_back(bottom = sys.frame(-1))) })
+library('ospsuite')
+#files.sources = list.files(path='R', pattern = '*.R', full.names = TRUE)
+#sapply(files.sources, source)
+setwd('tests')
+library(testthat)
+test_local(reporter = "summary")
