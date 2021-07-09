@@ -1,4 +1,4 @@
-name: Create ospsuite-R Linux images
+name: Run Reporting Engine Tests under Linux
 on: 
   pull_request:
 #  push:
