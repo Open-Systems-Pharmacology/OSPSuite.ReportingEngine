@@ -1,13 +1,14 @@
 name: Create ospsuite-R Linux images
 on: 
-  push:
   pull_request:
+#  push:
 
 jobs:
   build:
     strategy:
+        fail-fast: false
         matrix:
-            r_version: [3.6.3] #[3.6.3, 4.1.0]
+            r_version: [3.6.3, 4.1.0]
             os_version: [centos7, bionic]
     runs-on: ubuntu-latest
     steps:
