@@ -17,6 +17,7 @@ RUN mkdir -p /RE_Source
 COPY R /RE_Source/
 COPY tests /RE_Source/
 COPY .github/workflows/testRE.R /RE_Source/
+RUN ls -la /RE_Source/
 
 # Install OSP R packages
 RUN /tmp_setup/install_packages_${os_version}.sh 
