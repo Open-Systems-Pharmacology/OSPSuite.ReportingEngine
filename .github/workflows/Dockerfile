@@ -11,9 +11,12 @@ ENTRYPOINT ["sh"]
 
 # Copy installation scripts
 RUN mkdir -p /tmp_setup 
-COPY .github/workflows/*.R /tmp_setup/
 COPY .github/workflows/*.sh /tmp_setup/
 RUN chmod ugo+x /tmp_setup/*.sh
+RUN mkdir -p /RE_Source
+COPY R /RE_Source/
+COPY tests /RE_Source/
+COPY .github/workflows/testRE.R /RE_Source/
 
 # Install OSP R packages
 RUN /tmp_setup/install_packages_${os_version}.sh 
@@ -22,3 +25,5 @@ RUN /tmp_setup/install_packages_${os_version}.sh
 RUN rm -rf /tmp_setup
 
 # run package tests
+RUN R --no-save -e "setwd('/RE_Source/'); source('testRE.R')"
+
