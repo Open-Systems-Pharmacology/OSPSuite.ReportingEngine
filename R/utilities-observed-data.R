@@ -280,11 +280,10 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
 #' @param logFolder folder where the logs are saved
 #' @return list of including data and metaData to perform time profile plot
 getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPlan, logFolder) {
-  uncertainty <- NULL
   observedDataFile <- configurationPlan$getObservedDataPath(observedDataId)
   observedData <- readObservedDataFile(observedDataFile)
   observedMetaData <- parseObservationsDataFrame(observedData)
-
+  
   # In qualification workflow, observed data expected as:
   # Column 1: Time
   # Column 2: Observed variable

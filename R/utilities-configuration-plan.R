@@ -95,7 +95,6 @@ updatePlotAxes <- function(plotObject, axesProperties) {
 #' that includes required information to identify and convert the data requested from `configurationPlanCurve` properties
 #' @param simulationResults A `SimulationResults` object from `ospsuite` package
 #' that includes the data requested from `configurationPlanCurve` properties
-#' @param molWeight molecular weight for observed data
 #' @param axesProperties list of axes properties obtained from `getAxesForTimeProfiles`
 #' @param configurationPlan A `ConfigurationPlan` object that includes methods to find observed data
 #' @param logFolder folder where the logs are saved
@@ -104,7 +103,6 @@ updatePlotAxes <- function(plotObject, axesProperties) {
 getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
                                               simulation,
                                               simulationResults,
-                                              molWeight,
                                               axesProperties,
                                               configurationPlan,
                                               logFolder) {
@@ -120,6 +118,7 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
   # Observed Data
   if (pathArray[2] %in% "ObservedData") {
     observedResults <- getObservedDataFromConfigurationPlan(pathArray[1], configurationPlan, logFolder)
+    molWeight <- getMolWeightForObservedData(pathArray, configurationPlan, simulation)
 
     time <- ospsuite::toUnit(
       quantityOrDimension = "Time",
@@ -127,13 +126,30 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
       targetUnit = axesProperties$x$unit,
       sourceUnit = observedResults$metaData$time$unit
     )
-    outputValues <- ospsuite::toUnit(
-      quantityOrDimension = ospsuite::getDimensionForUnit(observedResults$metaData$output$unit),
-      values = observedResults$data[, 2],
-      targetUnit = axesProperties$y$unit,
-      sourceUnit = observedResults$metaData$output$unit,
-      molWeight = molWeight
+    # Convert output values, if molWeight is NA but not required, then toUnit works without any issue
+    # if molWeight is NA and required, then toUnit crashes, error is caught
+    # and the error message indictes which observed data Id need molWeight
+    outputValues <- tryCatch({
+      ospsuite::toUnit(
+        quantityOrDimension = ospsuite::getDimensionForUnit(observedResults$metaData$output$unit),
+        values = observedResults$data[, 2],
+        targetUnit = axesProperties$y$unit,
+        sourceUnit = observedResults$metaData$output$unit,
+        molWeight = molWeight
+      )
+    },
+    error = function(e) {
+      NULL
+    }
     )
+    if (isOfLength(outputValues, 0)) {
+      logErrorThenStop(
+        message = paste0(
+          "Molecular weight not found but required for observed data Id '", pathArray[1], "' in Time Profile plot."
+        ),
+        logFolderPath = logFolder
+      )
+    }
 
     outputError <- NULL
     if (!isOfLength(observedResults$metaData$error, 0)) {
@@ -145,14 +161,15 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
         outputError$ymin <- outputValues - ospsuite::toUnit(
           ospsuite::getDimensionForUnit(observedResults$metaData$error$unit),
           observedResults$data[, 3],
-          axesProperties$y$unit,
+          targetUnit = axesProperties$y$unit,
           sourceUnit = observedResults$metaData$error$unit,
           molWeight = molWeight
         )
+
         outputError$ymax <- outputValues + ospsuite::toUnit(
           ospsuite::getDimensionForUnit(observedResults$metaData$error$unit),
           observedResults$data[, 3],
-          axesProperties$y$unit,
+          targetUnit = axesProperties$y$unit,
           sourceUnit = observedResults$metaData$error$unit,
           molWeight = molWeight
         )
@@ -169,8 +186,7 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
       shape = tlfShape(configurationPlanCurve$CurveOptions$Symbol),
       size = configurationPlanCurve$CurveOptions$Size,
       id = configurationPlanCurve$CurveOptions$LegendIndex,
-      secondAxis = curveOnSecondAxis,
-      molWeight = molWeight
+      secondAxis = curveOnSecondAxis
     )
     return(outputCurve)
   }
@@ -255,4 +271,29 @@ tlfScale <- function(configurationScale) {
   }
   # tolower is used to ensure that there is no issue with caps from field values
   ConfigurationScales[[tolower(configurationScale)]]
+}
+
+#' @title get
+#' @description Translate value of `Scaling` property from configuration plan into tlf `scale`
+#' @param pathArray Configuration plan path as an array for observed data
+#' @param configurationPlan configuration plan object
+#' @param simulation simulation object
+#' @return molecular weight in base unit or NA if not found
+getMolWeightForObservedData <- function(pathArray, configurationPlan, simulation) {
+  # pathArray is assumed to include the Observed data id as first value
+  molWeight <- configurationPlan$getMolWeightForObservedData(pathArray[1])
+  if (!is.na(molWeight)) {
+    return(molWeight)
+  }
+  # pathArray is assumed to include the compound name as before the last value
+  compoundName <- utils::head(utils::tail(pathArray, 2), 1)
+  # In the current version, getAllMoleculePathsIn is faster and lighter than getAllMoleculesMatching
+  # since only a path name for the molecule is necessary
+  allMoleculePaths <- ospsuite::getAllMoleculePathsIn(simulation)
+  pathForCompoundName <- utils::head(allMoleculePaths[grepl(compoundName, allMoleculePaths)], 1)
+  # When compound is not found in simulation, return NA
+  if (isOfLength(pathForCompoundName, 0)) {
+    return(NA)
+  }
+  return(simulation$molWeightFor(pathForCompoundName))
 }

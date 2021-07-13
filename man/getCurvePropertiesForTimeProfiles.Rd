@@ -8,7 +8,6 @@ getCurvePropertiesForTimeProfiles(
   configurationPlanCurve,
   simulation,
   simulationResults,
-  molWeight,
   axesProperties,
   configurationPlan,
   logFolder
@@ -22,8 +21,6 @@ that includes required information to identify and convert the data requested fr
 
 \item{simulationResults}{A `SimulationResults` object from `ospsuite` package
 that includes the data requested from `configurationPlanCurve` properties}
-
-\item{molWeight}{molecular weight for observed data}
 
 \item{axesProperties}{list of axes properties obtained from `getAxesForTimeProfiles`}
 
