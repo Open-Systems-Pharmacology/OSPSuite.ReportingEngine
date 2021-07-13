@@ -132,9 +132,18 @@ ConfigurationPlan <- R6::R6Class(
     getObservedDataPath = function(id) {
       validateIsIncluded(id, private$.observedDataSets$id, groupName = "'id' variable of observedDataSets")
       selectedId <- private$.observedDataSets$id %in% id
-      # Minimal example includes a case where multiple same ids were used
-      # What should be done in such cases ? (Currently, firt value is used)
-      return(file.path(self$referenceFolder, private$.observedDataSets$path[selectedId])[1])
+      # In case of duplicate observed data, use first
+      return(utils::head(file.path(self$referenceFolder, private$.observedDataSets$path[selectedId]), 1))
+    },
+    
+    #' @description Get molecular weight of observed data corresponding to a specific observedDataSet Id
+    #' @param id observedDataSet identifier
+    #' @return The observed data file path corresponding to the id in the configuration plan field `observedDataSet`
+    getMolWeightForObservedData = function(id) {
+      validateIsIncluded(id, private$.observedDataSets$id, groupName = "'id' variable of observedDataSets")
+      selectedId <- private$.observedDataSets$id %in% id
+      # In case of duplicate observed data, use first
+      return(utils::head(private$.observedDataSets$molWeight[selectedId], 1))
     },
 
     #' @description Get location of simulation file corresponding to a specific simulation and project names
@@ -230,6 +239,9 @@ ConfigurationPlan <- R6::R6Class(
         }),
         path = sapply(value, function(mapping) {
           mapping$Path
+        }),
+        molWeight = sapply(value, function(mapping) {
+          mapping$MolWeight %||% mapping$MW %||% NA
         }),
         type = sapply(value, function(mapping) {
           mapping$Type %||% NA

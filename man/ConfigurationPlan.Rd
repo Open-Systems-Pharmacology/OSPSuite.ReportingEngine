@@ -45,6 +45,7 @@ R6 class for ConfigurationPlan guiding Qualification Workflow
 \item \href{#method-copyInput}{\code{ConfigurationPlan$copyInput()}}
 \item \href{#method-copyIntro}{\code{ConfigurationPlan$copyIntro()}}
 \item \href{#method-getObservedDataPath}{\code{ConfigurationPlan$getObservedDataPath()}}
+\item \href{#method-getMolWeightForObservedData}{\code{ConfigurationPlan$getMolWeightForObservedData()}}
 \item \href{#method-getSimulationPath}{\code{ConfigurationPlan$getSimulationPath()}}
 \item \href{#method-getSimulationResultsPath}{\code{ConfigurationPlan$getSimulationResultsPath()}}
 \item \href{#method-getPKAnalysisResultsPath}{\code{ConfigurationPlan$getPKAnalysisResultsPath()}}
@@ -187,6 +188,26 @@ Copy intro to intro markdown
 Get location of observed data corresponding to a specific observedDataSet Id
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$getObservedDataPath(id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id}}{observedDataSet identifier}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The observed data file path corresponding to the id in the configuration plan field `observedDataSet`
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getMolWeightForObservedData"></a>}}
+\if{latex}{\out{\hypertarget{method-getMolWeightForObservedData}{}}}
+\subsection{Method \code{getMolWeightForObservedData()}}{
+Get molecular weight of observed data corresponding to a specific observedDataSet Id
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$getMolWeightForObservedData(id)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
