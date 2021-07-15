@@ -278,11 +278,11 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
 #' @param observedDataId Identifier of observed data
 #' @param configurationPlan A `ConfigurationPlan` object that includes methods to find the data
 #' @param logFolder folder where the logs are saved
-#' @return list of including x, y and uncertainty to plot observed data
+#' @return list of including data and metaData to perform time profile plot
 getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPlan, logFolder) {
-  uncertainty <- NULL
   observedDataFile <- configurationPlan$getObservedDataPath(observedDataId)
   observedData <- readObservedDataFile(observedDataFile)
+  observedMetaData <- parseObservationsDataFrame(observedData)
 
   # In qualification workflow, observed data expected as:
   # Column 1: Time
@@ -298,13 +298,49 @@ getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPl
     logTypes = LogTypes$Debug
   )
 
-  if (numberOfColumns > 2) {
-    uncertainty <- observedData[, 3]
-  }
-
   return(list(
-    x = observedData[, 1],
-    y = observedData[, 2],
-    uncertainty = uncertainty
+    data = observedData,
+    metaData = observedMetaData
   ))
+}
+
+#' @title isObservedData
+#' @description
+#' Check if a configuration plan quantitiy path corresponds to observed data
+#' @param path A quantitiy path from the configuration plan
+#' For instance, "S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
+#' or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
+#' @return A logical checking if path corresponds to observed data
+#' @import ospsuite
+#' @examples \dontrun{
+#' isObservedData("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)")
+#' # > FALSE
+#' isObservedData("Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc")
+#' # > TRUE
+#' }
+isObservedData <- function(path) {
+  pathArray <- ospsuite::toPathArray(path)
+  isIncluded(pathArray[2], "ObservedData")
+}
+
+#' @title getObservedDataIdFromPath
+#' @description
+#' Get an observed dataset id from a configuration plan quantity path
+#' @param path A quantitiy path from the configuration plan
+#' For instance, "S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
+#' or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
+#' @return A string corresponding to the `id` of a configuration plan observed dataset
+#' @import ospsuite
+#' @examples \dontrun{
+#' getObservedDataIdFromPath("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)")
+#' # > NULL
+#' getObservedDataIdFromPath("Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc")
+#' # > "Midazolam 600mg SD"
+#' }
+getObservedDataIdFromPath <- function(path) {
+  if (!isObservedData(path)) {
+    return(NULL)
+  }
+  pathArray <- ospsuite::toPathArray(path)
+  return(pathArray[1])
 }

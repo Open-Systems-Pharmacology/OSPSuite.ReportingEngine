@@ -37,6 +37,17 @@ plotQualificationTimeProfiles <- function(configurationPlan,
       if (is.null(curveOutput)) {
         next
       }
+      if (!isOfLength(curveOutput$error, 0)) {
+        timeProfilePlot <- addErrorbar(
+          x = curveOutput$x,
+          ymin = curveOutput$error$ymin,
+          ymax = curveOutput$error$ymax,
+          caption = curveOutput$caption,
+          color = curveOutput$color,
+          size = curveOutput$size,
+          plotObject = timeProfilePlot
+        )
+      }
       timeProfilePlot <- addLine(
         x = curveOutput$x,
         y = curveOutput$y,

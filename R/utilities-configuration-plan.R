@@ -113,16 +113,84 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
     return()
   }
 
+  # configurationPlanCurve$Y is a quantity path from the cnofiguration plan
+  # e.g. "S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
+  # or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
   pathArray <- ospsuite::toPathArray(configurationPlanCurve$Y)
 
-  # Observed Data
-  if (pathArray[2] %in% "ObservedData") {
-    observedData <- getObservedDataFromConfigurationPlan(pathArray[1], configurationPlan, logFolder)
+  # Case path is Observed Data
+  if (isObservedData(configurationPlanCurve$Y)) {
+    observedDataId <- getObservedDataIdFromPath(configurationPlanCurve$Y)
+    molWeight <- configurationPlan$getMolWeightForObservedData(observedDataId)
+    if (is.na(molWeight)) {
+      compoundName <- getCompoundNameFromPath(configurationPlanCurve$Y)
+      molWeight <- getMolWeightForCompound(compoundName, simulation)
+    }
+    # observedResults is a list that includes
+    # data: a data.frame with column 1 = Time, column 2 = Concentration, column 3 = Error
+    # metaData: a list for each column of data that includes their unit
+    observedResults <- getObservedDataFromConfigurationPlan(observedDataId, configurationPlan, logFolder)
+
+    time <- ospsuite::toUnit(
+      quantityOrDimension = "Time",
+      values = as.numeric(observedResults$data[, 1]),
+      targetUnit = axesProperties$x$unit,
+      sourceUnit = observedResults$metaData$time$unit
+    )
+    # Convert output values, if molWeight is NA but not required, then toUnit works without any issue
+    # if molWeight is NA and required, then toUnit crashes, error is caught
+    # and the error message indictes which observed data Id need molWeight
+    outputValues <- tryCatch({
+      ospsuite::toUnit(
+        quantityOrDimension = ospsuite::getDimensionForUnit(observedResults$metaData$output$unit),
+        values = observedResults$data[, 2],
+        targetUnit = axesProperties$y$unit,
+        sourceUnit = observedResults$metaData$output$unit,
+        molWeight = molWeight
+      )
+    },
+    error = function(e) {
+      NULL
+    }
+    )
+    if (isOfLength(outputValues, 0)) {
+      logErrorThenStop(
+        message = paste0(
+          "Molecular weight not found but required for observed data Id '", pathArray[1], "' in Time Profile plot."
+        ),
+        logFolderPath = logFolder
+      )
+    }
+
+    outputError <- NULL
+    if (!isOfLength(observedResults$metaData$error, 0)) {
+      # No unit means that error is geometric
+      outputError$ymin <- outputValues / observedResults$data[, 3]
+      outputError$ymax <- outputValues * observedResults$data[, 3]
+
+      if (!isIncluded(observedResults$metaData$error$unit, "")) {
+        outputError$ymin <- outputValues - ospsuite::toUnit(
+          ospsuite::getDimensionForUnit(observedResults$metaData$error$unit),
+          observedResults$data[, 3],
+          targetUnit = axesProperties$y$unit,
+          sourceUnit = observedResults$metaData$error$unit,
+          molWeight = molWeight
+        )
+
+        outputError$ymax <- outputValues + ospsuite::toUnit(
+          ospsuite::getDimensionForUnit(observedResults$metaData$error$unit),
+          observedResults$data[, 3],
+          targetUnit = axesProperties$y$unit,
+          sourceUnit = observedResults$metaData$error$unit,
+          molWeight = molWeight
+        )
+      }
+    }
 
     outputCurve <- list(
-      x = observedData$x,
-      y = observedData$y,
-      uncertainty = observedData$uncertainty,
+      x = time,
+      y = outputValues,
+      error = outputError,
       caption = configurationPlanCurve$Name,
       color = configurationPlanCurve$CurveOptions$Color,
       linetype = tlfLinetype(configurationPlanCurve$CurveOptions$LineStyle),
@@ -164,7 +232,8 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
     shape = tlfShape(configurationPlanCurve$CurveOptions$Symbol),
     size = configurationPlanCurve$CurveOptions$Size,
     id = configurationPlanCurve$CurveOptions$LegendIndex,
-    secondAxis = curveOnSecondAxis
+    secondAxis = curveOnSecondAxis,
+    molWeight = molWeight
   )
 
   return(outputCurve)
@@ -213,4 +282,43 @@ tlfScale <- function(configurationScale) {
   }
   # tolower is used to ensure that there is no issue with caps from field values
   ConfigurationScales[[tolower(configurationScale)]]
+}
+
+#' @title getCompoundNameFromPath
+#' @description
+#' Get the compound name from a configuration plan quantity path
+#' @param path A quantitiy path from the configuration plan
+#' For instance, "S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
+#' or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
+#' @return A string corresponding to the compound name of a configuration plan quantity path
+#' @import ospsuite
+#' @examples \dontrun{
+#' getCompoundNameFromPath("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)")
+#' #> "Midazolam"
+#' getCompoundNameFromPath("Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc")
+#' #> "Rifampin"
+#' }
+getCompoundNameFromPath <- function(path) {
+  pathArray <- ospsuite::toPathArray(path)
+  # As shown in the doc examples, pathArray is assumed to include the compound name as before the last value
+  compoundName <- utils::head(utils::tail(pathArray, 2), 1)
+  return(compoundName)
+}
+
+#' @title getMolWeightForCompound
+#' @description
+#' Get molecular weight in base unit for a requested compound in a simulation
+#' @param compoundName Name of a compound e.g. "Midazolam"
+#' @param simulation A `Simulation` object
+#' @return molecular weight in base unit or NA if not found
+getMolWeightForCompound <- function(compoundName, simulation) {
+  # In the current version, getAllMoleculePathsIn is faster and lighter than getAllMoleculesMatching
+  # since only a path name for the molecule is necessary
+  allMoleculePaths <- ospsuite::getAllMoleculePathsIn(simulation)
+  pathForCompoundName <- utils::head(allMoleculePaths[grepl(compoundName, allMoleculePaths)], 1)
+  # When compound is not found in simulation, return NA
+  if (isOfLength(pathForCompoundName, 0)) {
+    return(NA)
+  }
+  return(simulation$molWeightFor(pathForCompoundName))
 }

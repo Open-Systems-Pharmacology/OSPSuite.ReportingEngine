@@ -18,7 +18,7 @@ getObservedDataFromConfigurationPlan(
 \item{logFolder}{folder where the logs are saved}
 }
 \value{
-list of including x, y and uncertainty to plot observed data
+list of including data and metaData to perform time profile plot
 }
 \description{
 Get selected observed data from a `ConfigurationPlan` object

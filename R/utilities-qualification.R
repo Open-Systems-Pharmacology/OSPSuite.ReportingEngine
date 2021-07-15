@@ -231,7 +231,7 @@ parseObservationsDataFrame <- function(observationsDataFrame) {
     output = separateVariableFromUnit(namesObservationsDataFrame[2])
   )
   if (length(namesObservationsDataFrame) == 3) {
-    dataFrameFields$uncertainty <- separateVariableFromUnit(namesObservationsDataFrame[3])
+    dataFrameFields$error <- separateVariableFromUnit(namesObservationsDataFrame[3])
   }
   return(dataFrameFields)
 }
