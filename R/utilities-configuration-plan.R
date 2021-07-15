@@ -113,12 +113,23 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
     return()
   }
 
+  # configurationPlanCurve$Y is a quantity path from the cnofiguration plan
+  # e.g. "S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
+  # or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
   pathArray <- ospsuite::toPathArray(configurationPlanCurve$Y)
 
-  # Observed Data
-  if (pathArray[2] %in% "ObservedData") {
-    observedResults <- getObservedDataFromConfigurationPlan(pathArray[1], configurationPlan, logFolder)
-    molWeight <- getMolWeightForObservedData(pathArray, configurationPlan, simulation)
+  # Case path is Observed Data
+  if (isObservedData(configurationPlanCurve$Y)) {
+    observedDataId <- getObservedDataIdFromPath(configurationPlanCurve$Y)
+    molWeight <- configurationPlan$getMolWeightForObservedData(observedDataId)
+    if (is.na(molWeight)) {
+      compoundName <- getCompoundNameFromPath(configurationPlanCurve$Y)
+      molWeight <- getMolWeightForCompound(compoundName, simulation)
+    }
+    # observedResults is a list that includes
+    # data: a data.frame with column 1 = Time, column 2 = Concentration, column 3 = Error
+    # metaData: a list for each column of data that includes their unit
+    observedResults <- getObservedDataFromConfigurationPlan(observedDataId, configurationPlan, logFolder)
 
     time <- ospsuite::toUnit(
       quantityOrDimension = "Time",
@@ -273,20 +284,33 @@ tlfScale <- function(configurationScale) {
   ConfigurationScales[[tolower(configurationScale)]]
 }
 
-#' @title get
-#' @description Translate value of `Scaling` property from configuration plan into tlf `scale`
-#' @param pathArray Configuration plan path as an array for observed data
-#' @param configurationPlan configuration plan object
-#' @param simulation simulation object
-#' @return molecular weight in base unit or NA if not found
-getMolWeightForObservedData <- function(pathArray, configurationPlan, simulation) {
-  # pathArray is assumed to include the Observed data id as first value
-  molWeight <- configurationPlan$getMolWeightForObservedData(pathArray[1])
-  if (!is.na(molWeight)) {
-    return(molWeight)
-  }
-  # pathArray is assumed to include the compound name as before the last value
+#' @title getCompoundNameFromPath
+#' @description
+#' Get the compound name from a configuration plan quantity path
+#' @param path A quantitiy path from the configuration plan
+#' For instance, "S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
+#' or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
+#' @return A string corresponding to the compound name of a configuration plan quantity path
+#' @import ospsuite
+#' @examples 
+#' getCompoundNameFromPath("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)")
+#' #> "Midazolam"
+#' getCompoundNameFromPath("Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc")
+#' #> "Rifampin"
+getCompoundNameFromPath <- function(path) {
+  pathArray <- ospsuite::toPathArray(path)
+  # As shown in the doc examples, pathArray is assumed to include the compound name as before the last value
   compoundName <- utils::head(utils::tail(pathArray, 2), 1)
+  return(compoundName)
+}
+
+#' @title getMolWeightForCompound
+#' @description
+#' Get molecular weight in base unit for a requested compound in a simulation
+#' @param compoundName Name of a compound e.g. "Midazolam"
+#' @param simulation A `Simulation` object
+#' @return molecular weight in base unit or NA if not found
+getMolWeightForCompound <- function(compoundName, simulation) {
   # In the current version, getAllMoleculePathsIn is faster and lighter than getAllMoleculesMatching
   # since only a path name for the molecule is necessary
   allMoleculePaths <- ospsuite::getAllMoleculePathsIn(simulation)

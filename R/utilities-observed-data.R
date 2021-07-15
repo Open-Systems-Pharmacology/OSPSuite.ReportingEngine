@@ -283,7 +283,7 @@ getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPl
   observedDataFile <- configurationPlan$getObservedDataPath(observedDataId)
   observedData <- readObservedDataFile(observedDataFile)
   observedMetaData <- parseObservationsDataFrame(observedData)
-  
+
   # In qualification workflow, observed data expected as:
   # Column 1: Time
   # Column 2: Observed variable
@@ -302,4 +302,43 @@ getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPl
     data = observedData,
     metaData = observedMetaData
   ))
+}
+
+#' @title isObservedData
+#' @description
+#' Check if a configuration plan quantitiy path corresponds to observed data
+#' @param path A quantitiy path from the configuration plan
+#' For instance, "S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
+#' or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
+#' @return A logical checking if path corresponds to observed data
+#' @import ospsuite
+#' @examples
+#' isObservedData("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)")
+#' # > FALSE
+#' isObservedData("Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc")
+#' # > TRUE
+isObservedData <- function(path) {
+  pathArray <- ospsuite::toPathArray(path)
+  isIncluded(pathArray[2], "ObservedData")
+}
+
+#' @title getObservedDataIdFromPath
+#' @description
+#' Get an observed dataset id from a configuration plan quantity path
+#' @param path A quantitiy path from the configuration plan
+#' For instance, "S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
+#' or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
+#' @return A string corresponding to the `id` of a configuration plan observed dataset
+#' @import ospsuite
+#' @examples
+#' getObservedDataIdFromPath("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)")
+#' # > NULL
+#' getObservedDataIdFromPath("Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc")
+#' # > "Midazolam 600mg SD"
+getObservedDataIdFromPath <- function(path) {
+  if (!isObservedData(path)) {
+    return(NULL)
+  }
+  pathArray <- ospsuite::toPathArray(path)
+  return(pathArray[1])
 }
