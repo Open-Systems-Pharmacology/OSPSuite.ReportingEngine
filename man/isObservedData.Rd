@@ -18,8 +18,10 @@ A logical checking if path corresponds to observed data
 Check if a configuration plan quantitiy path corresponds to observed data
 }
 \examples{
+\dontrun{
 isObservedData("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)")
 # > FALSE
 isObservedData("Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc")
 # > TRUE
+}
 }

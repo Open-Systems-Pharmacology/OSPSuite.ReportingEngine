@@ -292,11 +292,12 @@ tlfScale <- function(configurationScale) {
 #' or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
 #' @return A string corresponding to the compound name of a configuration plan quantity path
 #' @import ospsuite
-#' @examples 
+#' @examples \dontrun{
 #' getCompoundNameFromPath("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)")
 #' #> "Midazolam"
 #' getCompoundNameFromPath("Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc")
 #' #> "Rifampin"
+#' }
 getCompoundNameFromPath <- function(path) {
   pathArray <- ospsuite::toPathArray(path)
   # As shown in the doc examples, pathArray is assumed to include the compound name as before the last value

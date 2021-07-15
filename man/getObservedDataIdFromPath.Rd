@@ -18,8 +18,10 @@ A string corresponding to the `id` of a configuration plan observed dataset
 Get an observed dataset id from a configuration plan quantity path
 }
 \examples{
+\dontrun{
 getObservedDataIdFromPath("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)")
 # > NULL
 getObservedDataIdFromPath("Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc")
 # > "Midazolam 600mg SD"
+}
 }
