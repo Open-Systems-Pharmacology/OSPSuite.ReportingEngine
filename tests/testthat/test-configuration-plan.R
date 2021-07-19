@@ -46,11 +46,11 @@ test_that("Sections field works appropriately", {
     minimalPlan$sections
   )
   expect_equal(
-    file.path("test-configuration-plan/002_Chapter 2/003_Chapter 2_1"),
+    file.path("test-configuration-plan/002_Chapter 2/003_Chapter 2_1/"),
     file.path(minimalPlan$getSectionPath(id = "3"))
   )
   expect_equal(
-    file.path("test-configuration-plan/002_Chapter 2/003_Chapter 2_1"),
+    file.path("test-configuration-plan/002_Chapter 2/003_Chapter 2_1/"),
     file.path(minimalPlan$getSectionPath(id = 3))
   )
   expect_error(minimalPlan$getSectionPath(id = 10))
