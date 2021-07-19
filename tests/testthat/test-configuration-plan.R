@@ -12,11 +12,12 @@ sections <- read.csv(getTestDataFilePath("configuration-plan/sections.csv"),
 observedDataSets <- read.csv(getTestDataFilePath("configuration-plan/observed-datasets.csv"),
   stringsAsFactors = FALSE
 )
-
+suppressWarnings({
 minimalPlan <- loadConfigurationPlan(
   workflowFolder = workflowFolder,
   configurationPlanFile = minimalFile
 )
+})
 referenceFolder <- minimalPlan$referenceFolder
 
 test_that("A configuration plan requires correct fields", {
@@ -45,16 +46,16 @@ test_that("Sections field works appropriately", {
     minimalPlan$sections
   )
   expect_equal(
-    "test-configuration-plan/002_Chapter 2/003_Chapter 2_1",
+    file.path("test-configuration-plan/002_Chapter 2/003_Chapter 2_1"),
     minimalPlan$getSectionPath(id = "3")
   )
   expect_equal(
-    "test-configuration-plan/002_Chapter 2/003_Chapter 2_1",
+    file.path("test-configuration-plan/002_Chapter 2/003_Chapter 2_1"),
     minimalPlan$getSectionPath(id = 3)
   )
   expect_error(minimalPlan$getSectionPath(id = 10))
   expect_equal(
-    "test-configuration-plan/003_Chapter 2_1.md",
+    file.path("test-configuration-plan/003_Chapter 2_1.md"),
     minimalPlan$getSectionMarkdown(id = 3)
   )
 })
