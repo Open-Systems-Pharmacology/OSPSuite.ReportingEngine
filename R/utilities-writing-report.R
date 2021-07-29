@@ -297,7 +297,7 @@ numberTablesAndFigures <- function(fileName, logFolder = getwd(), figurePattern 
 #' @param tocPattern character pattern referencing sections in first element of line
 #' @param tocLevels levels of sections in the report
 #' @return Table of content referencing sections following a markdown format
-numberSections <- function(fileName, logFolder = getwd(), tocPattern = "#", tocLevels = 3) {
+numberSections <- function(fileName, logFolder = getwd(), tocPattern = "#", tocLevels = 6) {
   fileContent <- readLines(fileName, encoding = "UTF-8")
 
   # Initialize toc content
