@@ -16,7 +16,7 @@ QualificationTask <- R6::R6Class(
           configurationPlan$getSectionPath(result$sectionId),
           getDefaultFileName(
             suffix = result$id,
-            extension = ExportPlotConfiguration$format
+            extension = reEnv$defaultPlotFormat$format
           )
         )
         tableFilePath <- file.path(

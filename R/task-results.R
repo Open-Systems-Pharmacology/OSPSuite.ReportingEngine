@@ -32,7 +32,10 @@ TaskResults <- R6::R6Class(
       ggplot2::ggsave(
         filename = fileName,
         plot = self$plot,
-        width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
+        width = self$plot$plotConfiguration$export$width, 
+        height = self$plot$plotConfiguration$export$height, 
+        dpi = reEnv$defaultPlotFormat$dpi, 
+        units = self$plot$plotConfiguration$export$units
       )
       logWorkflow(
         message = paste0("Figure '", fileName, "' was successfully saved."),
