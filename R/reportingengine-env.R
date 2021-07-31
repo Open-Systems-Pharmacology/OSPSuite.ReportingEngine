@@ -31,7 +31,7 @@ reEnv$defaultPlotFormat <- list(
   width = 8,
   height = 5,
   units = "in",
-  dpi = 300
+  dpi = 72
 )
 
 reEnv$workflowWatermarkMessage <- "preliminary analysis"
@@ -53,7 +53,6 @@ setWatermarkConfiguration <- function(watermark = NULL) {
 #' @param units units of `width` and `height` included in "in", "cm", "mm", or "px"
 #' @param dpi Plot resolution in dots per inch. Caution, font sizes depend on resolution.
 #' @export
-#' @import grDevices
 setDefaultPlotFormat <- function(format = NULL, width = NULL, height = NULL, units = NULL, dpi = NULL) {
   validateIsNumeric(c(width, height, dpi), nullAllowed = TRUE)
   validateIsIncluded(units, c("in", "cm", "mm", "px"), nullAllowed = TRUE)
