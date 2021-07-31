@@ -92,10 +92,10 @@ setDefaultThemeFromJson(jsonFile)
 
 One important global setting is the format of the figure files (e.g. png, jpg or pdf) as well as the quality of the figures.
 By default, the figures are saved as png files with a size of 20 x 15 cm.
-The format settings can be managed using the function __`setPlotFormat(format)`__ as illustrated below, input arguments `width`, `height` and `units` can also be defined.
+The format settings can be managed using the function __`setDefaultPlotFormat()`__ as illustrated below, input arguments are `format`, `width`, `height`, their `units` and the plot resolution `dpi`.
 
 ```{r set plot format}
-setPlotFormat("png")
+setDefaultPlotFormat(format = "png")
 ```
 
 ## Watermark
