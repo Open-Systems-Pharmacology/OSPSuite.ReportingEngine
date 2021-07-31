@@ -49,6 +49,7 @@ R6 class for ConfigurationPlan guiding Qualification Workflow
 \item \href{#method-getSimulationPath}{\code{ConfigurationPlan$getSimulationPath()}}
 \item \href{#method-getSimulationResultsPath}{\code{ConfigurationPlan$getSimulationResultsPath()}}
 \item \href{#method-getPKAnalysisResultsPath}{\code{ConfigurationPlan$getPKAnalysisResultsPath()}}
+\item \href{#method-updateTheme}{\code{ConfigurationPlan$updateTheme()}}
 }
 }
 \if{html}{\out{<hr>}}
@@ -286,5 +287,15 @@ Get location of PK Analysis result file corresponding to a specific simulation a
 \subsection{Returns}{
 The PKAnalysis results file path corresponding to the project and simulation in the configuration plan field `simulationMappings`
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateTheme"></a>}}
+\if{latex}{\out{\hypertarget{method-updateTheme}{}}}
+\subsection{Method \code{updateTheme()}}{
+Update environment theme that will be used as default during workflow
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$updateTheme()}\if{html}{\out{</div>}}
+}
+
 }
 }

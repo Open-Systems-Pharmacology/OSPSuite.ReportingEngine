@@ -146,7 +146,7 @@ ConfigurationPlan <- R6::R6Class(
       # In case of duplicate observed data, use first
       return(utils::head(file.path(self$referenceFolder, private$.observedDataSets$path[selectedId]), 1))
     },
-    
+
     #' @description Get molecular weight of observed data corresponding to a specific observedDataSet Id
     #' @param id observedDataSet identifier
     #' @return The observed data file path corresponding to the id in the configuration plan field `observedDataSet`
@@ -196,6 +196,23 @@ ConfigurationPlan <- R6::R6Class(
       selectedId <- (private$.simulationMappings$project %in% project) & (private$.simulationMappings$simulation %in% simulation)
       pkAnalysisResultsPath <- file.path(self$workflowFolder, "SimulationResults", paste(project, simulation, "PKAnalysisResults.csv", sep = "-"))
       return(pkAnalysisResultsPath)
+    },
+
+    #' @description Update environment theme that will be used as default during workflow
+    updateTheme = function() {
+      setDefaultPlotFormat(
+        format = self$plots$PlotSettings$ChartFormat,
+        width = self$plots$PlotSettings$ChartWidth,
+        height = self$plots$PlotSettings$ChartHeight,
+        units = self$plots$PlotSettings$ChartUnits %||% "px"
+      )
+
+      reEnv$theme$fonts$legend$size <- self$plots$PlotSettings$Fonts$LegendSize %||% reEnv$theme$fonts$legend$size
+      reEnv$theme$fonts$xAxis$size <- self$plots$PlotSettings$Fonts$AxisSize %||% reEnv$theme$xAxis$legend$size
+      reEnv$theme$fonts$yAxis$size <- self$plots$PlotSettings$Fonts$AxisSize %||% reEnv$theme$yAxis$legend$size
+      # TODO resizing of the input: normal size always appears bigger in background due to annotation_custom()
+      reEnv$theme$fonts$watermark$size <- self$plots$PlotSettings$Fonts$WatermarkSize %||% reEnv$theme$fonts$watermark$size
+      return(invisible())
     }
   ),
 

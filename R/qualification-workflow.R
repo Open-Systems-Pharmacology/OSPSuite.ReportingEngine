@@ -33,6 +33,10 @@ QualificationWorkflow <- R6::R6Class(
     #' @import ospsuite
     initialize = function(configurationPlan,
                           ...) {
+      # Include global plot & axes settings at this stage
+      # Global settings are included using theme concept,
+      # they can be updated using setting$plotConfigurations within tasks
+      configurationPlan$updateTheme()
       super$initialize(...)
       validateIsOfType(configurationPlan, "ConfigurationPlan")
       self$configurationPlan <- configurationPlan
@@ -40,11 +44,7 @@ QualificationWorkflow <- R6::R6Class(
       self$simulate <- loadSimulateTask(self, active = TRUE)
       self$calculatePKParameters <- loadCalculatePKParametersTask(self, active = TRUE)
 
-      # TODO: include global plot & axes settings at this stage
-      # -> could be including using the concept of Themes
-      # -> updated using setting$plotConfigurations
-
-      self$plotTimeProfiles <- loadPlotTimeProfilesTask(self, configurationPlan)
+      self$plotTimeProfiles <- loadQualificationTimeProfilesTask(self, configurationPlan)
       self$plotGOFMerged <- loadGOFMergedTask(self, configurationPlan)
       self$plotComparisonTimeProfiles <- PlotTask$new() # loadComparisonPlotTimeProfilesTask(self, configurationPlan)
       self$plotPKRatio <- PlotTask$new() # loadPlotPKRatioTask(self, configurationPlan)
