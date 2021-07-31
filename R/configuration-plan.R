@@ -61,8 +61,19 @@ ConfigurationPlan <- R6::R6Class(
       validateIsIncluded(id, private$.sections$id, groupName = "'id' variable of sections")
       selectedId <- private$.sections$id %in% id
       sectionContent <- private$.sections$content[selectedId]
-      # Case in which no content was defined
+      # Case in which no content was defined: use title 
       if (is.na(sectionContent)) {
+        markdownContent <- private$.sections$title[selectedId]
+        # In case no title nor content was defined
+        if(is.na(markdownContent)){
+          logWorkflow(
+            message = paste0("Section id '", id, "': no content or title defined"),
+            pathFolder = logFolder,
+            logTypes = c(LogTypes$Error, LogTypes$Debug)
+          )
+          return(invisible())
+        }
+        addTextChunk(fileName = self$getSectionMarkdown(id), text = markdownContent, logFolder = logFolder)
         return(invisible())
       }
       # Get location of content
