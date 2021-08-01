@@ -24,7 +24,7 @@ reEnv$maxLinesPerParameter <- 3
 
 # Default plot properties
 reEnv$theme$background$legendPosition <- tlf::LegendPositions$outsideTop
-#reEnv$defaultLegendPosition <- tlf::LegendPositions$outsideTop
+# reEnv$defaultLegendPosition <- tlf::LegendPositions$outsideTop
 
 reEnv$defaultPlotFormat <- list(
   format = "png",
@@ -54,7 +54,9 @@ setWatermarkConfiguration <- function(watermark = NULL) {
 #' @param dpi Plot resolution in dots per inch. Caution, font sizes depend on resolution.
 #' @export
 setDefaultPlotFormat <- function(format = NULL, width = NULL, height = NULL, units = NULL, dpi = NULL) {
-  validateIsNumeric(c(width, height, dpi), nullAllowed = TRUE)
+  validateIsNumeric(width, nullAllowed = TRUE)
+  validateIsNumeric(height, nullAllowed = TRUE)
+  validateIsNumeric(dpi, nullAllowed = TRUE)
   validateIsIncluded(units, c("in", "cm", "mm", "px"), nullAllowed = TRUE)
   reEnv$defaultPlotFormat$format <- format %||% reEnv$defaultPlotFormat$format
   reEnv$defaultPlotFormat$width <- width %||% reEnv$defaultPlotFormat$width
@@ -64,7 +66,7 @@ setDefaultPlotFormat <- function(format = NULL, width = NULL, height = NULL, uni
   # Convert width and height back into inches in case of units as pixels
   if (isIncluded(units, "px")) {
     units <- "in"
-    unitConversionFactor <- grDevices::dev.size("in")/grDevices::dev.size("px")
+    unitConversionFactor <- grDevices::dev.size("in") / grDevices::dev.size("px")
     reEnv$defaultPlotFormat$width <- reEnv$defaultPlotFormat$width * unitConversionFactor[1]
     reEnv$defaultPlotFormat$height <- reEnv$defaultPlotFormat$height * unitConversionFactor[2]
   }
