@@ -72,6 +72,14 @@ setDefaultPlotFormat <- function(format = NULL, width = NULL, height = NULL, uni
   return(invisible())
 }
 
+#' @title setPlotFormat
+#' @description Set default plot format to be exported by reporting engine
+#' @inheritParams setDefaultPlotFormat
+#' @export
+setPlotFormat <- function(format = NULL, width = NULL, height = NULL, units = NULL, dpi = NULL) {
+  setDefaultPlotFormat(format, width, height, units, dpi)
+}
+
 
 #' @title ApplicationRanges
 #' @description
