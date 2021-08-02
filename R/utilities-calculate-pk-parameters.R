@@ -65,12 +65,10 @@ plotMeanPKParameters <- function(structureSet,
     )
   }
   pkParametersData$Value <- replaceInfWithNA(pkParametersData$Value, logFolder)
-  warning(settings$digits)
-  warning(settings$nsmall)
   pkParametersData$Value <- formatNumerics(
     numerics = pkParametersData$Value,
-    digits = NULL, #settings$digits,
-    nsmall = NULL, #settings$nsmall,
+    digits = settings$digits,
+    nsmall = settings$nsmall,
     scientific = settings$scientific
   )
   pkParameterCaptions <- captions$plotPKParameters$mean(
