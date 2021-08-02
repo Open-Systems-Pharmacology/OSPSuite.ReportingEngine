@@ -62,11 +62,10 @@ validateIsOfType <- function(object, type, nullAllowed = FALSE) {
   # Need to get the name from parent frame
   if (isIncluded(
     as.character(sys.call(-1)[[1]]),
-    c("validateIsString", "validateIsLogical", "validateIsPositive", "validateIsNumeric")
+    c("validateIsString", "validateIsLogical", "validateIsPositive", "validateIsNumeric", "validateIsInteger")
   )) {
     objectName <- deparse(substitute(object, sys.frame(-1)))
   }
-
   logErrorThenStop(messages$errorWrongType(objectName, class(object)[1], objectTypes))
 }
 
