@@ -114,18 +114,18 @@ workflow1 <-
   )
 
 # Set the workflow tasks to be run
-#workflow1$activateTasks(c("simulate", 
-#                          "calculatePKParameters", 
-#                          "plotPKParameters"))
+workflow1$activateTasks(c("simulate", 
+                          "calculatePKParameters", 
+                          "plotPKParameters"))
 
 # Run the workflow
-#workflow1$runWorkflow()
+workflow1$runWorkflow()
 ```
 
 ```{r example 1 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-#rmarkdown::render(workflow1$reportFileName)
+rmarkdown::render(workflow1$reportFileName)
 ```
 
 The output report for Example 1 is shown below. 
@@ -133,7 +133,7 @@ The table indicates the requested parameters in their base unit.
 
 <div class = "reportOutput">
 ```{r example 1 report, echo=FALSE}
-#htmltools::includeHTML(sub(".md", ".html", workflow1$reportFileName))
+htmltools::includeHTML(sub(".md", ".html", workflow1$reportFileName))
 ```
 </div>
 
