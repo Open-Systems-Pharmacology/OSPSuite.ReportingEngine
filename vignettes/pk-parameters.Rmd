@@ -115,7 +115,8 @@ workflow1 <-
 
 # Set the workflow tasks to be run
 workflow1$activateTasks(c("simulate", 
-                          "calculatePKParameters"))
+                          "calculatePKParameters", 
+                          "plotPKParameters"))
 
 # Run the workflow
 workflow1$runWorkflow()
