@@ -29,10 +29,14 @@ TaskResults <- R6::R6Class(
       if (isOfLength(self$plot, 0)) {
         return()
       }
+      # TODO once every plot will use tlf, deprecate the condition for null values
       ggplot2::ggsave(
         filename = fileName,
         plot = self$plot,
-        width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
+        width = self$plot$plotConfiguration$export$width %||% reEnv$defaultPlotFormat$width, 
+        height = self$plot$plotConfiguration$export$height %||% reEnv$defaultPlotFormat$height, 
+        dpi = reEnv$defaultPlotFormat$dpi, 
+        units = self$plot$plotConfiguration$export$units %||% reEnv$defaultPlotFormat$units
       )
       logWorkflow(
         message = paste0("Figure '", fileName, "' was successfully saved."),

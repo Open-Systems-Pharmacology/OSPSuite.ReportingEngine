@@ -99,17 +99,12 @@ getMeanPkAnalysesFromOuptut <- function(data, output, molWeight = NULL) {
     pkParameterValue <- outputData$Value[selectedParameter]
 
     if (!is.null(displayUnit)) {
-      pkParameterValueInBaseUnit <- ospsuite::toBaseUnit(
-        pkParameterObject$dimension,
-        outputData$Value[selectedParameter],
-        pkParameterObject$displayUnit,
-        molWeight
-      )
       pkParameterValue <- ospsuite::toUnit(
-        pkParameterObject$dimension,
-        pkParameterValueInBaseUnit,
-        displayUnit,
-        molWeight
+        quantityOrDimension = pkParameterObject$dimension,
+        values = as.numeric(outputData$Value[selectedParameter]),
+        targetUnit = displayUnit,
+        molWeight = molWeight,
+        sourceUnit = pkParameterObject$displayUnit
       )
     }
 
@@ -674,17 +669,12 @@ getPopulationPkAnalysesFromOuptut <- function(data, metaData, output, pkParamete
   pkParameterValue <- outputData$Value[selectedParameter]
 
   if (!is.null(displayUnit)) {
-    pkParameterValueInBaseUnit <- ospsuite::toBaseUnit(
-      pkParameterObject$dimension,
-      outputData$Value[selectedParameter],
-      pkParameterObject$displayUnit,
-      molWeight
-    )
     pkParameterValue <- ospsuite::toUnit(
-      pkParameterObject$dimension,
-      pkParameterValueInBaseUnit,
-      displayUnit,
-      molWeight
+      quantityOrDimension = pkParameterObject$dimension,
+      values = as.numeric(outputData$Value[selectedParameter]),
+      targetUnit = displayUnit,
+      molWeight = molWeight,
+      sourceUnit = pkParameterObject$displayUnit
     )
   }
 

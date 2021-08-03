@@ -22,6 +22,67 @@ reEnv$maximalParametersPerSensitivityPlot <- 25
 reEnv$maxWidthPerParameter <- 25
 reEnv$maxLinesPerParameter <- 3
 
+# Default plot properties
+reEnv$theme$background$legendPosition <- tlf::LegendPositions$outsideTop
+# reEnv$defaultLegendPosition <- tlf::LegendPositions$outsideTop
+
+reEnv$defaultPlotFormat <- list(
+  format = "png",
+  width = 8,
+  height = 5,
+  units = "in",
+  dpi = 72
+)
+
+reEnv$workflowWatermarkMessage <- "preliminary analysis"
+
+#' @title setWatermarkConfiguration
+#' @description Set default watermark configuration for current theme
+#' @param watermark character or \code{Label} class object from `tlf` package
+#' @export
+#' @import tlf
+setWatermarkConfiguration <- function(watermark = NULL) {
+  tlf::setDefaultWatermark(watermark)
+}
+
+#' @title setDefaultPlotFormat
+#' @description Set default plot format to be exported by reporting engine
+#' @param format file format of the exported plots. E.g. "png" or "pdf"
+#' @param width plot width in `unit`
+#' @param height plot height in `unit`
+#' @param units units of `width` and `height` included in "in", "cm", "mm", or "px"
+#' @param dpi Plot resolution in dots per inch. Caution, font sizes depend on resolution.
+#' @export
+setDefaultPlotFormat <- function(format = NULL, width = NULL, height = NULL, units = NULL, dpi = NULL) {
+  validateIsNumeric(width, nullAllowed = TRUE)
+  validateIsNumeric(height, nullAllowed = TRUE)
+  validateIsNumeric(dpi, nullAllowed = TRUE)
+  validateIsIncluded(units, c("in", "cm", "mm", "px"), nullAllowed = TRUE)
+  reEnv$defaultPlotFormat$format <- format %||% reEnv$defaultPlotFormat$format
+  reEnv$defaultPlotFormat$width <- width %||% reEnv$defaultPlotFormat$width
+  reEnv$defaultPlotFormat$height <- height %||% reEnv$defaultPlotFormat$height
+  reEnv$defaultPlotFormat$dpi <- dpi %||% reEnv$defaultPlotFormat$dpi
+  # ggplot2 version 3.3.0 does not include pixels yet
+  # Convert width and height back into inches in case of units as pixels
+  if (isIncluded(units, "px")) {
+    units <- "in"
+    unitConversionFactor <- grDevices::dev.size("in") / grDevices::dev.size("px")
+    reEnv$defaultPlotFormat$width <- reEnv$defaultPlotFormat$width * unitConversionFactor[1]
+    reEnv$defaultPlotFormat$height <- reEnv$defaultPlotFormat$height * unitConversionFactor[2]
+  }
+  reEnv$defaultPlotFormat$units <- units %||% reEnv$defaultPlotFormat$units
+  return(invisible())
+}
+
+#' @title setPlotFormat
+#' @description Set default plot format to be exported by reporting engine
+#' @inheritParams setDefaultPlotFormat
+#' @export
+setPlotFormat <- function(format = NULL, width = NULL, height = NULL, units = NULL, dpi = NULL) {
+  setDefaultPlotFormat(format, width, height, units, dpi)
+}
+
+
 #' @title ApplicationRanges
 #' @description
 #' Keys of reported ranges when simulation includes multiple applications

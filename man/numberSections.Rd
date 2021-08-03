@@ -4,7 +4,7 @@
 \alias{numberSections}
 \title{numberSections}
 \usage{
-numberSections(fileName, logFolder = getwd(), tocPattern = "#", tocLevels = 3)
+numberSections(fileName, logFolder = getwd(), tocPattern = "#", tocLevels = 6)
 }
 \arguments{
 \item{fileName}{name of .md file to update}

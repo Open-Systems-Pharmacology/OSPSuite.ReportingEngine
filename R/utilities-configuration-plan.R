@@ -12,7 +12,6 @@ ConfigurationPlotSettings <- ospsuite::enum(c("ChartWidth", "ChartHeight", "Font
 #' @description Enum defining possible fonts fields defined in configuration plan
 #' Note that some fields might not be used/converted by the current `opsuite.reportingengine` or `tlf` version (e.g. FontFamilyName)
 ConfigurationFontsFields <- c("AxisSize", "LegendSize", "OriginSize", "FontFamilyName", "WatermarkSize")
-# TODO the value of watermark font size might need a scaling
 
 #' @title ConfigurationScales
 #' @description List defining scale following tlf nomenclature from a Scaling field of configuration plan
@@ -27,13 +26,13 @@ ConfigurationScales <- list(
 #' @import tlf
 ConfigurationShapes <- list(
   none = tlf::Shapes$blank,
-  circle = 1,
+  circle = tlf::Shapes$circle,
   dot = tlf::Shapes$dot,
   square = tlf::Shapes$square,
-  diamond = 5,
-  asterisk = 8,
-  cross = 4,
-  point = 16
+  diamond = tlf::Shapes$diamond,
+  asterisk = tlf::Shapes$star,
+  cross = tlf::Shapes$cross,
+  point = tlf::Shapes$dot
 )
 
 #' @title ConfigurationLinetypes
@@ -45,20 +44,31 @@ ConfigurationLinetypes <- list(
   dash = tlf::Linetypes$dashed
 )
 
-#' @title getAxesPropertiesForTimeProfiles
-#' @description Identify and convert properties from `Axes` field of configuration plan
-#' @param configurationPlanAxes list of axes properties defined in `Axes` field of configuration plan
-#' @return A list of properties for identified `x` and `y` axes that follows `tlf` package nomenclature
-getAxesPropertiesForTimeProfiles <- function(configurationPlanAxes) {
-  # Identify X and Y Axes
-  # TODO handle Y2 axis
-  xAxis <- configurationPlanAxes[sapply(configurationPlanAxes, function(axis) {
-    axis$Type == "X"
-  })][[1]]
-  yAxis <- configurationPlanAxes[sapply(configurationPlanAxes, function(axis) {
-    axis$Type == "Y"
-  })][[1]]
+#' @title getAxesProperties
+#' @description Get identified axes properties from global field `AxesSettings` of configuration plan or
+#' from plot specific field `Axes`. The identified properties are directly compatible with `tlf` package nomenclature
+#' @param axesSettings list of axes properties defined in `Axes` field of configuration plan
+#' @return A list of properties for axes identified for `x`, `y` and `y2` axes.
+#' The identified properties are directly compatible with `tlf` package nomenclature
+getAxesProperties <- function(axesSettings) {
+  # Hanlde when properties are left undefined globally or locally
+  if (isOfLength(axesSettings, 0)) {
+    return(NULL)
+  }
+  # Get axes types for identification of X, Y and Y2 axes
+  axisTypes <- sapply(axesSettings, function(axis) {
+    axis$Type
+  })
 
+  xAxisIndex <- which(axisTypes %in% "X")
+  yAxisIndex <- which(axisTypes %in% "Y")
+  y2AxisIndex <- which(axisTypes %in% "Y2")
+
+  # X and Y axes are mandatory, while Y2 is not
+  validateIsOfLength(xAxisIndex, 1)
+  validateIsOfLength(yAxisIndex, 1)
+  xAxis <- axesSettings[[xAxisIndex]]
+  yAxis <- axesSettings[[yAxisIndex]]
   xAxis <- list(
     dimension = xAxis$Dimension, unit = xAxis$Unit,
     min = xAxis$Min, max = xAxis$Max, scale = tlfScale(xAxis$Scaling)
@@ -67,7 +77,16 @@ getAxesPropertiesForTimeProfiles <- function(configurationPlanAxes) {
     dimension = yAxis$Dimension, unit = yAxis$Unit,
     min = yAxis$Min, max = yAxis$Max, scale = tlfScale(yAxis$Scaling)
   )
-  return(list(x = xAxis, y = yAxis))
+
+  y2Axis <- NULL
+  if (isOfLength(y2AxisIndex, 1)) {
+    y2Axis <- axesSettings[[y2AxisIndex]]
+    y2Axis <- list(
+      dimension = y2Axis$Dimension, unit = y2Axis$Unit,
+      min = y2Axis$Min, max = y2Axis$Max, scale = tlfScale(y2Axis$Scaling)
+    )
+  }
+  return(list(x = xAxis, y = yAxis, y2 = y2Axis))
 }
 
 #' @title updatePlotAxes
@@ -82,8 +101,12 @@ updatePlotAxes <- function(plotObject, axesProperties) {
     ylabel = tlf::getLabelWithUnit(axesProperties$y$dimension, axesProperties$y$unit)
   )
 
-  try(plotObject <- tlf::setXAxis(plotObject, scale = axesProperties$x$scale, limits = c(axesProperties$x$min, axesProperties$x$max)))
-  try(plotObject <- tlf::setYAxis(plotObject, scale = axesProperties$y$scale, limits = c(axesProperties$y$min, axesProperties$y$max)))
+  try({
+    plotObject <- tlf::setXAxis(plotObject, scale = axesProperties$x$scale, limits = c(axesProperties$x$min, axesProperties$x$max))
+  })
+  try({
+    plotObject <- tlf::setYAxis(plotObject, scale = axesProperties$y$scale, limits = c(axesProperties$y$min, axesProperties$y$max))
+  })
   plotObject <- tlf::setLegendPosition(plotObject, position = tlf::LegendPositions$outsideTop)
   return(plotObject)
 }
@@ -232,8 +255,7 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
     shape = tlfShape(configurationPlanCurve$CurveOptions$Symbol),
     size = configurationPlanCurve$CurveOptions$Size,
     id = configurationPlanCurve$CurveOptions$LegendIndex,
-    secondAxis = curveOnSecondAxis,
-    molWeight = molWeight
+    secondAxis = curveOnSecondAxis
   )
 
   return(outputCurve)
@@ -292,11 +314,12 @@ tlfScale <- function(configurationScale) {
 #' or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
 #' @return A string corresponding to the compound name of a configuration plan quantity path
 #' @import ospsuite
-#' @examples \dontrun{
+#' @examples
+#' \dontrun{
 #' getCompoundNameFromPath("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)")
-#' #> "Midazolam"
+#' # > "Midazolam"
 #' getCompoundNameFromPath("Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc")
-#' #> "Rifampin"
+#' # > "Rifampin"
 #' }
 getCompoundNameFromPath <- function(path) {
   pathArray <- ospsuite::toPathArray(path)
@@ -321,4 +344,34 @@ getMolWeightForCompound <- function(compoundName, simulation) {
     return(NA)
   }
   return(simulation$molWeightFor(pathForCompoundName))
+}
+
+getPlotConfigurationFromPlan <- function(plotProperties) {
+  plotConfiguration <- tlf::PlotConfiguration$new()
+  # Get properties from FontAndSize
+  fonts <- plotProperties$FontAndSize$Fonts
+  plotConfiguration$labels$title$font$size <- fonts$TitleSize %||% plotConfiguration$labels$title$font$size
+  plotConfiguration$labels$subtitle$font$size <- fonts$DescriptionSize %||% plotConfiguration$labels$subtitle$font$size
+  plotConfiguration$labels$xlabel$font$size <- fonts$AxisSize %||% plotConfiguration$labels$xlabel$font$size
+  plotConfiguration$labels$ylabel$font$size <- fonts$AxisSize %||% plotConfiguration$labels$ylabel$font$size
+  plotConfiguration$xAxis$font$size <- fonts$AxisSize %||% plotConfiguration$xAxis$font$size
+  plotConfiguration$yAxis$font$size <- fonts$AxisSize %||% plotConfiguration$yAxis$font$size
+  plotConfiguration$legend$font$size <- fonts$LegendSize %||% plotConfiguration$legend$font$size
+  plotConfiguration$background$watermark$font$size <- fonts$WatermarkSize %||% plotConfiguration$background$watermark$font$size
+
+  # Get size of exported plot
+  plotConfiguration$export$units <- reEnv$defaultPlotFormat$units
+  plotConfiguration$export$width <- reEnv$defaultPlotFormat$width
+  plotConfiguration$export$height <- reEnv$defaultPlotFormat$height
+  # If chart size is defined, it is in pixel and updated accordingly
+  unitConversionFactor <- grDevices::dev.size("in") / grDevices::dev.size("px")
+  if (!isOfLength(plotProperties$FontAndSize$ChartWidth, 0)) {
+    plotConfiguration$export$units <- "in"
+    plotConfiguration$export$width <- plotProperties$FontAndSize$ChartWidth * unitConversionFactor[1]
+  }
+  if (!isOfLength(plotProperties$FontAndSize$ChartHeight, 0)) {
+    plotConfiguration$export$units <- "in"
+    plotConfiguration$export$height <- plotProperties$FontAndSize$ChartHeight * unitConversionFactor[2]
+  }
+  return(plotConfiguration)
 }

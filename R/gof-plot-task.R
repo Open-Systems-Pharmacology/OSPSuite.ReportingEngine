@@ -38,13 +38,16 @@ GofPlotTask <- R6::R6Class(
         for (plotName in names(listOfPlots)) {
           plotFileName <- getDefaultFileName(set$simulationSet$simulationSetName,
             suffix = paste0(plotName, "-", timeRange),
-            extension = ExportPlotConfiguration$format
+            extension = reEnv$defaultPlotFormat$format
           )
 
           ggplot2::ggsave(
             filename = self$getAbsolutePath(plotFileName),
             plot = listOfPlots[[plotName]],
-            width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
+            width = reEnv$defaultPlotFormat$width, 
+            height = reEnv$defaultPlotFormat$height, 
+            units = reEnv$defaultPlotFormat$units,
+            dpi = reEnv$defaultPlotFormat$dpi
           )
 
           re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(plotFileName))
@@ -160,13 +163,13 @@ GofPlotTask <- R6::R6Class(
       if (!is.null(residualsAcrossAllSimulations)) {
         histogramFileName <- getDefaultFileName(
           suffix = "residuals-histogram",
-          extension = ExportPlotConfiguration$format,
+          extension = reEnv$defaultPlotFormat$format,
           sep = ""
         )
 
         qqPlotFileName <- getDefaultFileName(
           suffix = "residuals-qqplot",
-          extension = ExportPlotConfiguration$format,
+          extension = reEnv$defaultPlotFormat$format,
           sep = ""
         )
 
@@ -206,14 +209,20 @@ GofPlotTask <- R6::R6Class(
         ggplot2::ggsave(
           filename = residualHistogramPlotFileName,
           plot = residualHistogramPlot,
-          width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
+          width = reEnv$defaultPlotFormat$width, 
+          height = reEnv$defaultPlotFormat$height, 
+          units = reEnv$defaultPlotFormat$units,
+          dpi = reEnv$defaultPlotFormat$dpi
         )
         re.tStoreFileMetadata(access = "write", filePath = residualHistogramPlotFileName)
 
         ggplot2::ggsave(
           filename = self$getAbsolutePath(qqPlotFileName),
           plot = residualQQPlot,
-          width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
+          width = reEnv$defaultPlotFormat$width, 
+          height = reEnv$defaultPlotFormat$height, 
+          units = reEnv$defaultPlotFormat$units,
+          dpi = reEnv$defaultPlotFormat$dpi
         )
         re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(qqPlotFileName))
 

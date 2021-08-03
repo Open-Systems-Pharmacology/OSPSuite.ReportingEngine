@@ -142,12 +142,8 @@ createSectionOutput <- function(configurationPlan, logFolder = getwd()) {
     # Initialize markdown appendices
     resetReport(configurationPlan$getSectionMarkdown(sectionId), logFolder = logFolder)
     appendices <- c(appendices, configurationPlan$getSectionMarkdown(sectionId))
-    # Possibility to add title to section content if not defined in sections
-    # addTextChunk(configurationPlan$getSectionTitle(sectionId),
-    #             fileName = configurationPlan$getSectionMarkdown(sectionId),
-    #             logFolder = logFolder)
-
-    # Add info from content to section content
+    
+    # Add info from content or title to section content
     configurationPlan$copySectionContent(sectionId, logFolder = logFolder)
   }
   # Inputs

@@ -50,7 +50,7 @@ PlotTask <- R6::R6Class(
       for (plotName in names(taskResults$plots)) {
         plotFileName <- getDefaultFileName(set$simulationSet$simulationSetName,
           suffix = plotName,
-          extension = ExportPlotConfiguration$format
+          extension = reEnv$defaultPlotFormat$format
         )
 
         # TO DO: define parameters from settings/plotConfiguration
@@ -59,7 +59,10 @@ PlotTask <- R6::R6Class(
         ggplot2::ggsave(
           filename = figureFilePath,
           plot = taskResults$plots[[plotName]],
-          width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
+          width = reEnv$defaultPlotFormat$width, 
+          height = reEnv$defaultPlotFormat$height, 
+          dpi = reEnv$defaultPlotFormat$dpi, 
+          units = reEnv$defaultPlotFormat$units
         )
         re.tStoreFileMetadata(access = "write", filePath = figureFilePath)
         logWorkflow(

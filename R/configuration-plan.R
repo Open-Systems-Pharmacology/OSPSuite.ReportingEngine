@@ -61,8 +61,19 @@ ConfigurationPlan <- R6::R6Class(
       validateIsIncluded(id, private$.sections$id, groupName = "'id' variable of sections")
       selectedId <- private$.sections$id %in% id
       sectionContent <- private$.sections$content[selectedId]
-      # Case in which no content was defined
+      # Case in which no content was defined: use title 
       if (is.na(sectionContent)) {
+        markdownContent <- private$.sections$title[selectedId]
+        # In case no title nor content was defined
+        if(is.na(markdownContent)){
+          logWorkflow(
+            message = paste0("Section id '", id, "': no content or title defined"),
+            pathFolder = logFolder,
+            logTypes = c(LogTypes$Error, LogTypes$Debug)
+          )
+          return(invisible())
+        }
+        addTextChunk(fileName = self$getSectionMarkdown(id), text = markdownContent, logFolder = logFolder)
         return(invisible())
       }
       # Get location of content
@@ -135,7 +146,7 @@ ConfigurationPlan <- R6::R6Class(
       # In case of duplicate observed data, use first
       return(utils::head(file.path(self$referenceFolder, private$.observedDataSets$path[selectedId]), 1))
     },
-    
+
     #' @description Get molecular weight of observed data corresponding to a specific observedDataSet Id
     #' @param id observedDataSet identifier
     #' @return The observed data file path corresponding to the id in the configuration plan field `observedDataSet`
@@ -185,6 +196,23 @@ ConfigurationPlan <- R6::R6Class(
       selectedId <- (private$.simulationMappings$project %in% project) & (private$.simulationMappings$simulation %in% simulation)
       pkAnalysisResultsPath <- file.path(self$workflowFolder, "SimulationResults", paste(project, simulation, "PKAnalysisResults.csv", sep = "-"))
       return(pkAnalysisResultsPath)
+    },
+
+    #' @description Update environment theme that will be used as default during workflow
+    updateTheme = function() {
+      setDefaultPlotFormat(
+        format = self$plots$PlotSettings$ChartFormat,
+        width = self$plots$PlotSettings$ChartWidth,
+        height = self$plots$PlotSettings$ChartHeight,
+        units = self$plots$PlotSettings$ChartUnits %||% "px"
+      )
+
+      reEnv$theme$fonts$legend$size <- self$plots$PlotSettings$Fonts$LegendSize %||% reEnv$theme$fonts$legend$size
+      reEnv$theme$fonts$xAxis$size <- self$plots$PlotSettings$Fonts$AxisSize %||% reEnv$theme$xAxis$legend$size
+      reEnv$theme$fonts$yAxis$size <- self$plots$PlotSettings$Fonts$AxisSize %||% reEnv$theme$yAxis$legend$size
+      # TODO resizing of the input: normal size always appears bigger in background due to annotation_custom()
+      reEnv$theme$fonts$watermark$size <- self$plots$PlotSettings$Fonts$WatermarkSize %||% reEnv$theme$fonts$watermark$size
+      return(invisible())
     }
   ),
 

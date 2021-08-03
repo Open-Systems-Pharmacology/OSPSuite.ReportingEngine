@@ -28,9 +28,23 @@ plotQualificationTimeProfiles <- function(configurationPlan,
     simulationResults <- importResultsFromCSV(simulation, simulationResultsFile)
 
     # Get axes properties (with scale, limits and display units)
-    axesProperties <- getAxesPropertiesForTimeProfiles(timeProfilePlan$Plot$Axes)
+    axesProperties <- getAxesProperties(timeProfilePlan$Plot$Axes) %||% settings$axes
+    if (isOfLength(axesProperties, 0)) {
+      # TODO Centralize messaging of configurtion plan errors and warnings
+      logWorkflow(
+        message = paste0(
+          "In Time Profile Plots,\n",
+          "No axes settings defined for plot: '", timeProfilePlan$Plot$Title %||% timeProfilePlan$Plot$Name, "'\n",
+          "From Project: '", timeProfilePlan$Project, "' and Simulation: '", timeProfilePlan$Simulation, "'"
+        ),
+        pathFolder = logFolder,
+        logTypes = LogTypes$Error
+      )
+      next
+    }
 
-    timeProfilePlot <- tlf::initializePlot()
+    plotConfiguration <- getPlotConfigurationFromPlan(timeProfilePlan$Plot)
+    timeProfilePlot <- tlf::initializePlot(plotConfiguration)
     for (curve in timeProfilePlan$Plot$Curves) {
       # TODO handle Observed data and Y2 axis
       curveOutput <- getCurvePropertiesForTimeProfiles(curve, simulation, simulationResults, axesProperties, configurationPlan, logFolder)
@@ -67,7 +81,7 @@ plotQualificationTimeProfiles <- function(configurationPlan,
       id = plotID,
       sectionId = timeProfilePlan$SectionId,
       plot = timeProfilePlot,
-      plotCaption = timeProfilePlan$Plot$Name
+      plotCaption = timeProfilePlan$Plot$Title %||% timeProfilePlan$Plot$Name
     )
   }
   return(timeProfileResults)

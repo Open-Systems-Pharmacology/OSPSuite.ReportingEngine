@@ -175,7 +175,7 @@ Workflow <- R6::R6Class(
       # Define default feature based on validated system
       private$.watermark <- ""
       if (!private$.reportingEngineInfo$isValidated()) {
-        private$.watermark <- workflowWatermarkMessage
+        private$.watermark <- reEnv$workflowWatermarkMessage
       }
       # Non-NULL user-defined watermark overwrite default feature
       private$.watermark <- watermark %||% private$.watermark

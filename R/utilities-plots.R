@@ -2,35 +2,6 @@
 reDefaultLegendPosition <- tlf::LegendPositions$outsideTop
 tlf::setDefaultLegendPosition(reDefaultLegendPosition)
 
-# Plot format
-# TO DO: set default formats according to task or according to legend size
-ExportPlotConfigurationClass <- R6::R6Class(
-  "ExportPlotConfiguration",
-  public = list(format = "png", width = 4 * 5, height = 3 * 5, units = "cm")
-)
-
-#' @title ExportPlotConfiguration
-#' @description Properties of exported plots
-#' @export
-ExportPlotConfiguration <- ExportPlotConfigurationClass$new()
-
-#' @title setPlotFormat
-#' @description Set plot format
-#' @param format file format of the exported plots
-#' @param width plot width in `unit`
-#' @param height plot height in `unit`
-#' @param units units of `width` and `height`
-#' @return demographyPlots list of ggplot objects
-#' @export
-setPlotFormat <- function(format, width = NULL, height = NULL, units = NULL) {
-  formatInputs <- c("format", "width", "height", "units")
-  setConfigurationExpression <- parse(text = paste0(
-    "ExportPlotConfiguration$", formatInputs, " <- ",
-    formatInputs, " %||% ExportPlotConfiguration$", formatInputs
-  ))
-  eval(setConfigurationExpression)
-}
-
 #' @title AggregationConfiguration
 #' @description To be deprecated:
 #' Aggregation default properties  (which functions and their captions).
@@ -56,14 +27,3 @@ AggregationConfiguration <- list(
   bins = 11,
   binUsingQuantiles = TRUE
 )
-
-workflowWatermarkMessage <- "preliminary analysis"
-
-#' @title setWatermarkConfiguration
-#' @description Set default watermark configuration for current theme
-#' @param watermark character or \code{Label} class object from `tlf` package
-#' @export
-#' @import tlf
-setWatermarkConfiguration <- function(watermark = NULL) {
-  tlf::setDefaultWatermark(watermark)
-}
