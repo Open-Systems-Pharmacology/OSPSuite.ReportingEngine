@@ -6,7 +6,7 @@ getQualificationGOFPlotData <- function(configurationPlan) {
   plotGOFdata <- list()
   for (plt in seq_along(configurationPlan$plots$GOFMergedPlots)) {
     gofPlotConfiguration <- configurationPlan$plots$GOFMergedPlots[[plt]]
-    
+
     plotGOFDataframe <- NULL
     plotGOFMetadata <- list()
     plotGOFMetadata$title <- gofPlotConfiguration$Title
@@ -320,57 +320,65 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
 #' @import ggplot2
 plotQualificationGOFPredictedVsObserved <- function(data) {
 
-
   if (data$axesSettings$X$scaling == "Log") {
-    xmin <- log10(0.8) + min(na.omit(data$gofPlotDataframe[, "Observed"]))
-    xmax <- log10(1.2) + max(na.omit(data$gofPlotDataframe[, "Observed"]))
+
+    xlabel <- bquote(log[10]*.(paste0("(Observed ",data$axesSettings$X$unit,")")))
   } else {
-    xmin <- 0.8*min(na.omit(data$gofPlotDataframe[, "Observed"]))
-    xmax <- 1.2*max(na.omit(data$gofPlotDataframe[, "Observed"]))
+    xlabel <- paste("Observed",data$axesSettings$X$unit)
   }
 
   if (data$axesSettings$Y$scaling == "Log") {
-    ymin <- log10(0.8) + min(na.omit(data$gofPlotDataframe[, "Simulated"]))
-    ymax <- log10(1.2) + max(na.omit(data$gofPlotDataframe[, "Simulated"]))
+    ylabel <- bquote(log[10]*.(paste0("(Predicted ",data$axesSettings$Y$unit,")")))
   } else {
-    ymin <- 0.8*min(na.omit(data$gofPlotDataframe[, "Simulated"]))
-    ymax <- 1.2*max(na.omit(data$gofPlotDataframe[, "Simulated"]))
+    ylabel <- paste("Predicted",data$axesSettings$Y$unit)
   }
 
-  identityMinMax <- c(min(xmin,ymin),max(xmax,ymax))
+  gofData <- data$gofPlotDataframe
 
-  identityLine <- data.frame(
-    "Observed" = identityMinMax,
-    "Simulated" = identityMinMax,
-    "Legend" = "Line of identity"
-  )
-
-
-  qualificationGOFPredictedVsObservedPlot <- ggplot2::ggplot() #tlf::initializePlot()
-  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::geom_point(
-    data = data$gofPlotDataframe,
-    mapping = aes(
-      x = Observed,
-      y = Simulated,
-      shape = Group,
-      color = uniqueGroupOutputMappingID
-    )
-  )
-
-
-  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::geom_line(
-    data = identityLine,
-    mapping = aes(
-      x = Observed,
-      y = Simulated
+  gofMetaData <- list(
+    Obs = list(
+      dimension = "Observed values",
+      unit = data$axesSettings$X$unit
     ),
-    color = "black"
+    Pred = list(
+      dimension = "Simulated values",
+      unit = data$axesSettings$Y$unit
+    ))
+
+
+  gofDataMapping <- tlf::ObsVsPredDataMapping$new(
+    x = "Observed",
+    y = "Simulated",
+    uncertainty = NULL,
+    color = "uniqueGroupOutputMappingID",
+    shape = "Group"
   )
 
-  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::scale_color_manual(values = data$aestheticsList$color)
-  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::scale_shape_manual(values = data$aestheticsList$shape)
+  gofPlotConfiguration <- tlf::ObsVsPredPlotConfiguration$new(
+    data = gofData,
+    metaData = gofMetaData,
+    dataMapping = gofDataMapping
+  )
+
+  gofPlotConfiguration$points$color <- sapply(data$aestheticsList$color,function(x){x})
+  gofPlotConfiguration$points$shape <- sapply(data$aestheticsList$shape,function(x){x})
+
+  #To be used when 'language' types are allowed:
+  #gofPlotConfiguration$labels$xlabel <- xlabel
+  #gofPlotConfiguration$labels$ylabel <- ylabel
+
+
+  qualificationGOFPredictedVsObservedPlot <- tlf::plotObsVsPred(
+    data = gofData,
+    metaData = gofMetaData,
+    dataMapping = gofDataMapping,
+    plotConfiguration = gofPlotConfiguration
+  )
+
+  #qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::scale_color_manual(values = data$aestheticsList$color)
+  #qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::scale_shape_manual(values = data$aestheticsList$shape)
   qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::theme(legend.direction = "vertical",legend.box = "vertical",legend.title = element_text())
-  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::xlab(paste("Observed",data$axesSettings$X$unit)) + ggplot2::ylab(paste("Predicted",data$axesSettings$Y$unit))
+  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::xlab(xlabel) + ggplot2::ylab(ylabel)
   qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::guides(color = FALSE)
   return(qualificationGOFPredictedVsObservedPlot)
 }
