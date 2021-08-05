@@ -20,7 +20,7 @@ R6 class for Reporting Engine Qualification Workflow
 
 \item{\code{plotTimeProfiles}}{`PlotTask` object for time profile plots}
 
-\item{\code{plotComparisonTimeProfiles}}{`PlotTask` object for comparison of time profiles plots}
+\item{\code{plotComparisonTimeProfile}}{`PlotTask` object for comparison of time profiles plots}
 
 \item{\code{plotGOFMerged}}{`PlotTask` object for goodness of fit plots}
 

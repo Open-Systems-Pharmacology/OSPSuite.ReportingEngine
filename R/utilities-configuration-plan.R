@@ -118,7 +118,7 @@ updatePlotAxes <- function(plotObject, axesProperties) {
 #' that includes required information to identify and convert the data requested from `configurationPlanCurve` properties
 #' @param simulationResults A `SimulationResults` object from `ospsuite` package
 #' that includes the data requested from `configurationPlanCurve` properties
-#' @param axesProperties list of axes properties obtained from `getAxesForTimeProfiles`
+#' @param axesProperties list of axes properties obtained from `getAxesProperties`
 #' @param configurationPlan A `ConfigurationPlan` object that includes methods to find observed data
 #' @param logFolder folder where the logs are saved
 #' @return A list of data and properties to be plotted and that follows `tlf` package nomenclature

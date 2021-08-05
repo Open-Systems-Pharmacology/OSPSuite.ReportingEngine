@@ -18,6 +18,10 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
     simulationName <- configurationPlan$simulationMappings$simulation[simulationIndex]
     simulationFile <- configurationPlan$getSimulationPath(project = project, simulation = simulationName)
 
+    cat(paste0(
+      "Loading simulation ", simulationIndex , "/" , nrow(configurationPlan$simulationMappings), 
+      ": Project '", project, "' - Simulation '", simulationName, "'\n"
+      ))
     simulation <- loadSimulation(simulationFile)
     outputs <- lapply(simulation$outputSelections$allOutputs, function(output) {
       Output$new(output$path)

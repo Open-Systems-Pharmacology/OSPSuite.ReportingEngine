@@ -543,7 +543,7 @@ loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotTimeProfiles,
-    settings = list(axes = getAxesProperties(configurationPlan$AxesSettings$TimeProfile))
+    settings = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$TimeProfile))
   ))
 }
 
@@ -574,14 +574,14 @@ loadGOFMergedTask <- function(workflow, configurationPlan) {
     active = active,
     message = defaultWorkflowMessages$plotGOFMerged,
     settings = list(
-      predictedVsObserved = list(axes = getAxesProperties(configurationPlan$AxesSettings$GOFMergedPlotsPredictedVsObserved)),
-      residualsOverTime = list(axes = getAxesProperties(configurationPlan$AxesSettings$GOFMergedPlotsResidualsOverTime))
+      predictedVsObserved = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$GOFMergedPlotsPredictedVsObserved)),
+      residualsOverTime = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$GOFMergedPlotsResidualsOverTime))
     )
   ))
 }
 
 
-#' @title loadQualificationcomparisonTimeProfileTask
+#' @title loadQualificationComparisonTimeProfileTask
 #' @description
 #' Define `plotComparisonTimeProfileTask` task and its settings
 #' @param workflow `QualificationWorkflow` object
@@ -606,7 +606,7 @@ loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPl
     inputs = getSimulationResultFileNames(workflow),
     workflowFolder = workflow$workflowFolder,
     active = active,
-    message = defaultWorkflowMessages$plotTimeProfiles,
-    settings = list(axes = getAxesProperties(configurationPlan$AxesSettings$ComparisonTimeProfile))
+    message = defaultWorkflowMessages$plotComparisonTimeProfiles,
+    settings = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$ComparisonTimeProfile))
   ))
 }

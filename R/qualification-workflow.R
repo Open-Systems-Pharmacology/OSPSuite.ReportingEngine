@@ -4,7 +4,7 @@
 #' @field simulate `SimulationTask` object for time profile simulations
 #' @field calculatePKParameters `CalculatePKParametersTask` object for PK parameters calculation
 #' @field plotTimeProfiles `PlotTask` object for time profile plots
-#' @field plotComparisonTimeProfiles `PlotTask` object for comparison of time profiles plots
+#' @field plotComparisonTimeProfile `PlotTask` object for comparison of time profiles plots
 #' @field plotGOFMerged `PlotTask` object for goodness of fit plots
 #' @field plotPKRatio `PlotTask` object for PK ratio plot
 #' @field plotDDIRatio `PlotTask` object for DDI ratio plot
@@ -21,7 +21,7 @@ QualificationWorkflow <- R6::R6Class(
     calculatePKParameters = NULL,
     plotTimeProfiles = NULL,
     plotGOFMerged = NULL,
-    plotComparisonTimeProfiles = NULL,
+    plotComparisonTimeProfile = NULL,
     plotPKRatio = NULL,
     plotDDIRatio = NULL,
 
@@ -46,7 +46,7 @@ QualificationWorkflow <- R6::R6Class(
 
       self$plotTimeProfiles <- loadQualificationTimeProfilesTask(self, configurationPlan)
       self$plotGOFMerged <- loadGOFMergedTask(self, configurationPlan)
-      self$plotComparisonTimeProfiles <- PlotTask$new() # loadComparisonPlotTimeProfilesTask(self, configurationPlan)
+      self$plotComparisonTimeProfile <- loadQualificationComparisonTimeProfileTask(self, configurationPlan)
       self$plotPKRatio <- PlotTask$new() # loadPlotPKRatioTask(self, configurationPlan)
       self$plotDDIRatio <- PlotTask$new() # loadPlotDDIRatioTask(self, configurationPlan)
 
