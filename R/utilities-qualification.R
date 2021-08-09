@@ -23,9 +23,13 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
       ": Project '", project, "' - Simulation '", simulationName, "'\n"
       ))
     simulation <- loadSimulation(simulationFile)
-    outputs <- lapply(simulation$outputSelections$allOutputs, function(output) {
-      Output$new(output$path)
-    })
+
+    updateSimulationTimesFromConfigurationPlan(simulation = simulation,
+                                               configurationPlan = configurationPlan)
+
+    outputs <- getOutputsFromConfigurationPlan(simulation = simulation,
+                                               configurationPlan = configurationPlan)
+
 
     # simulationSetName defined as project-simulation uniquely identifies the simulation
     simulationSets[[simulationIndex]] <- SimulationSet$new(
@@ -146,7 +150,7 @@ createSectionOutput <- function(configurationPlan, logFolder = getwd()) {
     # Initialize markdown appendices
     resetReport(configurationPlan$getSectionMarkdown(sectionId), logFolder = logFolder)
     appendices <- c(appendices, configurationPlan$getSectionMarkdown(sectionId))
-    
+
     # Add info from content or title to section content
     configurationPlan$copySectionContent(sectionId, logFolder = logFolder)
   }
