@@ -319,13 +319,13 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
 #' @import ggplot2
 plotQualificationGOFPredictedVsObserved <- function(data) {
   if (data$axesSettings$X$scaling == "Log") {
-    xlabel <- bquote(log[10]*.(paste0("(Observed ",data$axesSettings$X$unit,")")))
+    xlabel <- paste0("log10(Observed ",data$axesSettings$X$unit,")") #bquote(log[10]*.(paste0("(Observed ",data$axesSettings$X$unit,")")))
   } else {
     xlabel <- paste("Observed",data$axesSettings$X$unit)
   }
 
   if (data$axesSettings$Y$scaling == "Log") {
-    ylabel <- bquote(log[10]*.(paste0("(Predicted ",data$axesSettings$Y$unit,")")))
+    ylabel <- paste0("log10(Predicted ",data$axesSettings$Y$unit,")")#bquote(log[10]*.(paste0("(Predicted ",data$axesSettings$Y$unit,")")))
   } else {
     ylabel <- paste("Predicted",data$axesSettings$Y$unit)
   }
