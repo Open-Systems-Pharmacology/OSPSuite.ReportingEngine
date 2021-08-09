@@ -157,7 +157,6 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
   yGridlines <- axesSettings$Y$gridLines
 
   # function to do obs vs sim
-  # predictedVsObserved|residualsOverTime
   gofPlotDataframe <- NULL
   aestheticsList <- list(shape = list(), color = list())
   uniqueGroupOutputMappingID <- 0
