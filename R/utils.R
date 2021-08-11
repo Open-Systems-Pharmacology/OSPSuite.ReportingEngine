@@ -192,7 +192,6 @@ loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE)
   }
 
   if (!is.null(simulationSet$outputInterval)) {
-    simulation$outputSchema$clear()
     simulationSet$outputInterval$addOutputIntervalToSimulation(simulation = simulation,
                                                                intervalName = "Output interval")
   }
