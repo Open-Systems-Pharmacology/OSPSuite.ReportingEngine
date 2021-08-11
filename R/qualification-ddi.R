@@ -23,6 +23,7 @@ getOutputsFromConfigurationPlan <- function(configurationPlan){
 getTimeProfileOutputsDataframe <- function(configurationPlan){
   timeProfileOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$TimeProfile){
+
     validateIsIncluded(values = "Plot", parentValues = names(plot), nullAllowed = TRUE)
     validateIsIncluded(values = "Curves", parentValues = names(plot[["Plot"]]), nullAllowed = FALSE)
 
@@ -34,9 +35,15 @@ getTimeProfileOutputsDataframe <- function(configurationPlan){
       }
       paths <- c(paths, ospsuite::toPathString(tail(ospsuite::toPathArray(curve$Y), -1)))
     }
-    #return(unique(paths))
+    df <- data.frame(project = plot$Project,
+                     simulation = plot$Simulation,
+                     outputPath = paths,
+                     pkParameter = NA,
+                     startTime = NA,
+                     endTime = NA)
+    timeProfileOutputsDataframe <- rbind.data.frame(timeProfileOutputsDataframe,df)
   }
-  return(timeProfileOutputsDataframe)
+  return(timeProfileOutputsDataframe[!duplicated(timeProfileOutputsDataframe),])
 }
 
 
@@ -57,11 +64,19 @@ gofOutputsDataframe <- function(configurationPlan){
         validateIsIncluded(values = "Output", parentValues = names(outputMapping), nullAllowed = TRUE)
         validateIsString(object = outputMapping$Output)
         paths <- c(paths, outputMapping$Output)
+        print(paths)
+        df <- data.frame(project = outputMapping$Project,
+                         simulation = outputMapping$Simulation,
+                         outputPath = paths,
+                         pkParameter = NA,
+                         startTime = NA,
+                         endTime = NA)
+        gofOutputsDataframe <- rbind.data.frame(gofOutputsDataframe,df)
       }
     }
-    #return(unique(paths))
   }
-  return(gofOutputsDataframe)
+
+  return(gofOutputsDataframe[!duplicated(gofOutputsDataframe),])
 }
 
 
@@ -120,7 +135,7 @@ getDDIOutputsDataframe <- function(configurationPlan){
       }
     }
   }
-  return(ddiOutputsDataframe)
+  return(ddiOutputsDataframe[!duplicated(ddiOutputsDataframe),])
 }
 
 #' @title addNewPkParameter
