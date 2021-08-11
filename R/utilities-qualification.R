@@ -22,23 +22,34 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
     simulationFile <- configurationPlan$getSimulationPath(project = project, simulation = simulationName)
 
     cat(paste0(
-      "Loading simulation ", simulationIndex, "/", nrow(configurationPlan$simulationMappings),
+      "Creating output objects for ", simulationIndex, "/", nrow(configurationPlan$simulationMappings),
       ": Project '", project, "' - Simulation '", simulationName, "'\n"
     ))
 
     outputsDataframeSubset <- outputsDataframe[outputsDataframe$project == project & outputsDataframe$simulation == simulationName  ,  ]
 
     outputs <- lapply( unique(outputsDataframeSubset$outputPath) , function(outputPath) {
-      Output$new(path = outputPath,
+      Output$new(path = as.character(outputPath),
                  pkParameters = outputsDataframeSubset$pkParameter[ outputsDataframeSubset$outputPath == outputPath & !(is.na( outputsDataframeSubset$pkParameter ))])
     })
+
+
+    #TODO: either make defaultResolution an input to this function or move it out of this function or systematically calculate it as, eg (endTime - startTime)/1000
+    defaultResolution <- 1
+
+    outputInterval <- NULL
+    if( any(!is.na(outputsDataframeSubset$endTime)) ){
+      outputInterval = OutputInterval$new(startTime = max(outputsDataframeSubset$startTime,na.rm = TRUE),
+                                          endTime = max(outputsDataframeSubset$endTime,na.rm = TRUE),
+                                          resolution = defaultResolution)
+    }
 
     # simulationSetName defined as project-simulation uniquely identifies the simulation
     simulationSets[[simulationIndex]] <- SimulationSet$new(
       simulationSetName = paste(project, simulationName, sep = "-"),
       simulationFile = simulationFile,
       outputs = c(outputs),
-      outputInterval = OutputInterval$new(startTime = 0,endTime = max(outputsDataframeSubset$endTime,na.rm = TRUE),resolution = 0.2)
+      outputInterval = outputInterval
     )
   }
   workflow <- QualificationWorkflow$new(
