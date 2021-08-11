@@ -29,6 +29,7 @@ SimulationSet <- R6::R6Class(
     #' @param observedMetaDataFile name of csv file to be used as dictionary of the observed data
     #' @param timeUnit display unit for time variable. Default is "h"
     #' @param applicationRanges names of application ranges to include in the report. Names are available in enum `ApplicationRanges`.
+    #' @param outputInterval an `OutputInterval` object defining the start and end times of the simulation together with the resolution
     #' @return A new `SimulationSet` object
     initialize = function(simulationSetName,
                           simulationFile,
@@ -36,7 +37,8 @@ SimulationSet <- R6::R6Class(
                           observedDataFile = NULL,
                           observedMetaDataFile = NULL,
                           timeUnit = "h",
-                          applicationRanges = ApplicationRanges) {
+                          applicationRanges = ApplicationRanges,
+                          outputInterval = NULL) {
       # Test and validate the simulation object
       validateIsString(simulationSetName)
       validateIsString(simulationFile)
@@ -48,6 +50,11 @@ SimulationSet <- R6::R6Class(
       simulation <- ospsuite::loadSimulation(simulationFile)
       # Test and validate outputs and their paths
       validateOutputObject(c(outputs), simulation, nullAllowed = TRUE)
+
+      # # Test and validate output intervals
+      private$.validateOutputInterval(outputInterval)
+      private$.outputInterval <- outputInterval
+
       # Test and validate observed data
       validateIsString(c(observedDataFile, observedMetaDataFile, timeUnit), nullAllowed = TRUE)
       if (!is.null(observedDataFile)) {
@@ -69,6 +76,26 @@ SimulationSet <- R6::R6Class(
         firstApplication = isIncluded(ApplicationRanges$firstApplication, applicationRanges),
         lastApplication = isIncluded(ApplicationRanges$lastApplication, applicationRanges)
       )
+    }
+  ),
+  active = list(
+    #' @field outputInterval an `OutputInterval` object defining the start and end times of the simulation together with the resolution
+    outputInterval = function(value) {
+      if (missing(value)) {
+        return(private$.outputInterval)
+      } else {
+        private$.validateOutputInterval(value)
+        private$.outputInterval <- value
+      }
+    }
+  ),
+
+  private = list(
+    .outputInterval = NULL,
+    .validateOutputInterval = function(value) {
+      if (!is.null(value)) {
+        validateIsIncluded("OutputInterval", parentValues = class(value), nullAllowed = TRUE)
+      }
     }
   )
 )
