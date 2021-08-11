@@ -104,26 +104,8 @@ getDDIOutputsDataframe <- function(configurationPlan){
                                outputIfNull = NULL)
 
           for (pkParameter in  pkParameters){
-            pkParameterName <- paste(pkParameter,
-                                     ifnotnull(startTime,startTime,"0"),
-                                     ifnotnull(endTime,endTime,"tEnd"),
-                                     sep = "_")
-
+            pkParameterName <- addNewPkParameter(pkParameter,startTime,endTime)
             df$pkParameters <- c(df$pkParameters,pkParameterName)
-
-            if (!(pkParameterName %in% ospsuite::allPKParameterNames())){
-              standardPKParameter <- pkDictionaryQualificationOSP[[pkParameter]]
-              newPKParameter <- ospsuite::addUserDefinedPKParameter(name = pkParameterName,
-                                                                    standardPKParameter = StandardPKParameter[[standardPKParameter]],
-                                                                    displayName = pkParameterName)
-              if(!is.null(startTime)){
-                newPKParameter$startTime <- startTime
-              }
-
-              if(!is.null(endTime)){
-                newPKParameter$endTime <- endTime
-              }
-            }
           }
 
           counter <- counter + 1
@@ -133,6 +115,33 @@ getDDIOutputsDataframe <- function(configurationPlan){
     }
   }
   return(ddiOutputsDataframe)
+}
+
+#' @title addNewPkParameter
+#' @description Create a PK parameter calculated between a start and end time as specified in a qualification `ConfigurationPlan` and return ther PK parameter name
+#' @param pkParameter the name of the PK parameter from the qualification `ConfigurationPlan`
+#' @param startTime the starting time of the interval over which the PK parameter is calculated (from the qualification `ConfigurationPlan`)
+#' @param endTime the ending time of the interval over which the PK parameter is calculated (from the qualification `ConfigurationPlan`)
+#' @return String `pkParameterName`
+addNewPkParameter <- function(pkParameter,startTime,endTime){
+  pkParameterName <- paste(pkParameter,
+                           ifnotnull(startTime,startTime,"0"),
+                           ifnotnull(endTime,endTime,"tEnd"),
+                           sep = "_")
+  if (!(pkParameterName %in% ospsuite::allPKParameterNames())){
+    standardPKParameter <- pkDictionaryQualificationOSP[[pkParameter]]
+    newPKParameter <- ospsuite::addUserDefinedPKParameter(name = pkParameterName,
+                                                          standardPKParameter = StandardPKParameter[[standardPKParameter]],
+                                                          displayName = pkParameterName)
+    if(!is.null(startTime)){
+      newPKParameter$startTime <- startTime
+    }
+
+    if(!is.null(endTime)){
+      newPKParameter$endTime <- endTime
+    }
+  }
+  return(pkParameterName)
 }
 
 pkDictionaryQualificationOSP <- list(AUC = "AUC_tEnd",
