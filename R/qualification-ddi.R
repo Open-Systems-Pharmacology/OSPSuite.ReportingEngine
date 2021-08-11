@@ -108,6 +108,9 @@ getDDIOutputsDataframe <- function(configurationPlan){
             df$pkParameters <- c(df$pkParameters,pkParameterName)
           }
 
+          df$startTime <- startTime
+          df$endTime <- endTime
+
           counter <- counter + 1
           ddiOutputsDataframe[[counter]] <- df
         }
