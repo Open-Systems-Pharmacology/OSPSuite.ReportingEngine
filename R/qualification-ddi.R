@@ -11,7 +11,7 @@ getOutputsFromConfigurationPlan <- function(configurationPlan){
 
   outputs <- rbind.data.frame(outputsTimeProfile,outputsGOF,outputsDDI)
 
-  return(outputs)
+  return(outputs[!duplicated(outputs),])
 }
 
 #' @title getTimeProfileOutputsDataframe
