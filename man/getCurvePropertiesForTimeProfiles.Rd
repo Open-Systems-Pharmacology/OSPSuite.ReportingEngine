@@ -22,7 +22,7 @@ that includes required information to identify and convert the data requested fr
 \item{simulationResults}{A `SimulationResults` object from `ospsuite` package
 that includes the data requested from `configurationPlanCurve` properties}
 
-\item{axesProperties}{list of axes properties obtained from `getAxesForTimeProfiles`}
+\item{axesProperties}{list of axes properties obtained from `getAxesProperties`}
 
 \item{configurationPlan}{A `ConfigurationPlan` object that includes methods to find observed data}
 

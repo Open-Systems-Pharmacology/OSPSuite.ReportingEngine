@@ -2,7 +2,7 @@
 % Please edit documentation in R/utilities-task.R
 \name{loadQualificationComparisonTimeProfileTask}
 \alias{loadQualificationComparisonTimeProfileTask}
-\title{loadQualificationcomparisonTimeProfileTask}
+\title{loadQualificationComparisonTimeProfileTask}
 \usage{
 loadQualificationComparisonTimeProfileTask(workflow, configurationPlan)
 }
