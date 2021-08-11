@@ -72,7 +72,7 @@ gofOutputsDataframe <- function(configurationPlan){
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return A list containing data for generating DDI plots
 getDDIOutputsDataframe <- function(configurationPlan){
-  ddiOutputsDataframe <- list()
+  ddiOutputsDataframe <- NULL
   counter <- 0
   for (plot in configurationPlan$plots$DDIRatioPlots){
 
@@ -86,9 +86,7 @@ getDDIOutputsDataframe <- function(configurationPlan){
         outputPath <- ddiRatio$Output
         for (simulationType in c("SimulationControl","SimulationDDI")){
           plotComponent <- ddiRatio[[simulationType]]
-          df <- list(project = plotComponent$Project,
-                     simulation = plotComponent$Simulation,
-                     outputPath = outputPath)
+
 
           startTime <- ifnotnull(inputToCheck = plotComponent$StartTime,
                                  outputIfNotNull = toBaseUnit(quantityOrDimension = ospDimensions$Time,
@@ -103,16 +101,21 @@ getDDIOutputsDataframe <- function(configurationPlan){
                                                             unit = plotComponent$TimeUnit),
                                outputIfNull = NULL)
 
+          newPKParameterNames <- NULL
           for (pkParameter in  pkParameters){
-            pkParameterName <- addNewPkParameter(pkParameter,startTime,endTime)
-            df$pkParameters <- c(df$pkParameters,pkParameterName)
+            newPKParameterNames <- c(newPKParameterNames,
+                                     addNewPkParameter(pkParameter,startTime,endTime))
           }
 
-          df$startTime <- startTime
-          df$endTime <- endTime
+          df <- data.frame(project = plotComponent$Project,
+                           simulation = plotComponent$Simulation,
+                           outputPath = outputPath,
+                           pkParameter = newPKParameterNames,
+                           startTime = startTime,
+                           endTime = endTime)
 
-          counter <- counter + 1
-          ddiOutputsDataframe[[counter]] <- df
+
+          ddiOutputsDataframe <- rbind.data.frame(ddiOutputsDataframe,df)
         }
       }
     }
