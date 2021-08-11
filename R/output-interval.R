@@ -19,7 +19,7 @@ OutputInterval <- R6::R6Class(
       validateIsNumeric(object = startTime)
       validateIsNumeric(object = endTime)
       validateIsNumeric(object = resolution)
-      validateIsPositive(object = startTime)
+      validateIsNonNegative(object = startTime)
 
       validateIsPositive(object = endTime - startTime)
       validateIsPositive(object = resolution)
@@ -45,6 +45,7 @@ OutputInterval <- R6::R6Class(
         return(private$.startTime)
       } else {
         validateIsNumeric(object = value)
+        validateIsNonNegative(object = value)
         validateIsPositive(object = private$.endTime - value)
         private$.startTime <- value
       }
