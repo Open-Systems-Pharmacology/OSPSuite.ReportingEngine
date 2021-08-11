@@ -201,11 +201,11 @@ getTimeProfileOutputsDataframe <- function(configurationPlan){
 
 
 
-#' @title gofOutputsDataframe
+#' @title getGOFOutputsDataframe
 #' @description Get a dataframe relating project, simulation, output, pk parameter, start time, end time for each DDI plot component
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return A dataframe containing data for generating GOF plots
-gofOutputsDataframe <- function(configurationPlan){
+getGOFOutputsDataframe <- function(configurationPlan){
   gofOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$GOFMergedPlots){
 
@@ -217,7 +217,6 @@ gofOutputsDataframe <- function(configurationPlan){
         validateIsIncluded(values = "Output", parentValues = names(outputMapping), nullAllowed = TRUE)
         validateIsString(object = outputMapping$Output)
         paths <- c(paths, outputMapping$Output)
-        print(paths)
         df <- data.frame(project = outputMapping$Project,
                          simulation = outputMapping$Simulation,
                          outputPath = paths,
