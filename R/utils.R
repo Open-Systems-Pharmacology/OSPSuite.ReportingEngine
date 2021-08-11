@@ -177,20 +177,27 @@ generateResultFileNames <- function(numberOfCores, folderName, fileName, separat
 #' @return simulation object with pathIDs updated from simulationSet
 #' @export
 loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE) {
-  sim <- ospsuite::loadSimulation(
+  simulation <- ospsuite::loadSimulation(
     filePath = simulationSet$simulationFile,
     loadFromCache = loadFromCache,
     addToCache = FALSE
   )
   # Prevent loadSimulationWithUpdatedPaths from crashing if user did not submit any pathID
   if (!is.null(simulationSet$outputs)) {
-    sim$outputSelections$clear()
+    simulation$outputSelections$clear()
     paths <- sapply(simulationSet$outputs, function(output) {
       output$path
     })
-    ospsuite::addOutputs(quantitiesOrPaths = paths, simulation = sim)
+    ospsuite::addOutputs(quantitiesOrPaths = paths, simulation = simulation)
   }
-  return(sim)
+
+  if (!is.null(simulationSet$outputInterval)) {
+    simulation$outputSchema$clear()
+    simulationSet$outputInterval$addOutputIntervalToSimulation(simulation = simulation,
+                                                               intervalName = "Output interval")
+  }
+
+  return(simulation)
 }
 
 #' @title loadWorkflowPopulation
