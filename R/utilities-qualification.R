@@ -9,6 +9,9 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
     workflowFolder = workflowFolder,
     configurationPlanFile = configurationPlanFile
   )
+
+  outputsDataframe <- getOutputsFromConfigurationPlan(configurationPlan = configurationPlan)
+
   # TODO outputs and pk parameters may need to be defined
   # Either as part of simulationSets or as a settings for the task
   # Currently, no output is saved as simulationResults
@@ -19,23 +22,23 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
     simulationFile <- configurationPlan$getSimulationPath(project = project, simulation = simulationName)
 
     cat(paste0(
-      "Loading simulation ", simulationIndex , "/" , nrow(configurationPlan$simulationMappings), 
+      "Loading simulation ", simulationIndex, "/", nrow(configurationPlan$simulationMappings),
       ": Project '", project, "' - Simulation '", simulationName, "'\n"
-      ))
-    simulation <- loadSimulation(simulationFile)
+    ))
 
-    updateSimulationTimesFromConfigurationPlan(simulation = simulation,
-                                               configurationPlan = configurationPlan)
+    outputsDataframeSubset <- outputsDataframe[outputsDataframe$project == project & outputsDataframe$simulation == simulationName  ,  ]
 
-    outputs <- getOutputsFromConfigurationPlan(simulation = simulation,
-                                               configurationPlan = configurationPlan)
-
+    outputs <- lapply( unique(outputsDataframeSubset$outputPath) , function(outputPath) {
+      Output$new(path = outputPath,
+                 pkParameters = outputsDataframeSubset$pkParameter[ outputsDataframeSubset$outputPath == outputPath & !(is.na( outputsDataframeSubset$pkParameter ))])
+    })
 
     # simulationSetName defined as project-simulation uniquely identifies the simulation
     simulationSets[[simulationIndex]] <- SimulationSet$new(
       simulationSetName = paste(project, simulationName, sep = "-"),
       simulationFile = simulationFile,
-      outputs = c(outputs)
+      outputs = c(outputs),
+      outputInterval = OutputInterval$new(startTime = 0,endTime = max(outputsDataframeSubset$endTime,na.rm = TRUE),resolution = 0.2)
     )
   }
   workflow <- QualificationWorkflow$new(
@@ -97,8 +100,8 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
     # Actual section path will be relative to the workflowFolder
     # and is wrapped in method configurationPlan$getSectionPath(id)
     sectionPath <- paste0(parentFolder,
-      sprintf("%0.3d_%s", sectionIndex, removeForbiddenLetters(section$Title)),
-      sep = .Platform$file.sep
+                          sprintf("%0.3d_%s", sectionIndex, removeForbiddenLetters(section$Title)),
+                          sep = .Platform$file.sep
     )
 
     sectionMarkdown <- sprintf("%0.3d_%s.md", sectionIndex, removeForbiddenLetters(section$Title))
@@ -218,7 +221,7 @@ separateVariableFromUnit <- function(variableUnitString) {
   splitVariableUnitString <- strsplit(x = sub("[ []", replacement = "", x = variableUnitString), split = "[][]")[[1]]
   return(list(
     name = trimws(splitVariableUnitString[1]),
-    unit = ifelse(test = is.na(x = tail(splitVariableUnitString,1)), yes = "", no = tail(splitVariableUnitString,1))
+    unit = ifelse(test = is.na(x = tail(splitVariableUnitString, 1)), yes = "", no = tail(splitVariableUnitString, 1))
   ))
 }
 
@@ -251,8 +254,8 @@ massMoleConversion <- function(dimension) {
   massMoleConversionList[[ospDimensions$Mass]] <- ospsuite::ospDimensions$Amount
   massMoleConversionList[[ospDimensions$`Concentration (mass)`]] <- ospsuite::ospDimensions$`Concentration (molar)`
   return(ifelse(test = dimension %in% c(ospsuite::ospDimensions$Mass, ospsuite::ospDimensions$`Concentration (mass)`),
-    yes = massMoleConversionList[[dimension]],
-    no = dimension
+                yes = massMoleConversionList[[dimension]],
+                no = dimension
   ))
 }
 
