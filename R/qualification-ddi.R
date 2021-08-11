@@ -1,31 +1,67 @@
-#' @title updateSimulationTimesFromConfigurationPlan
-#' @description Read simulation run times from `ConfigurationPlan` and update them accordingly in simulation object
-#' @param simulation path of the output folder created or used by the Workflow.
-#' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
-updateSimulationTimesFromConfigurationPlan <- function(simulation,
-                                                       configurationPlan){
-
-}
-
-
 #' @title getOutputsFromConfigurationPlan
 #' @description Get a list of outputs from simulation and from `ConfigurationPlan`
 #' @param simulation path of the output folder created or used by the Workflow.
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return A list of `outputs`
-getOutputsFromConfigurationPlan <- function(simulation,
-                                            configurationPlan){
+getOutputsFromConfigurationPlan <- function(configurationPlan){
 
-  outputs <- lapply(simulation$outputSelections$allOutputs, function(output) {
-    Output$new(output$path)
-  })
-
-  outputsDDI <- getDDIOutputs(simulation = simulation,
-                              configurationPlan = configurationPlan)
+  # outputs <- lapply(simulation$outputSelections$allOutputs, function(output) {
+  #   Output$new(output$path)
+  # })
+  outputsTimeProfile <- getDDIOutputs(configurationPlan = configurationPlan)
+  outputsDDI <- getDDIOutputs(configurationPlan = configurationPlan)
 
   outputs <- c(outputs,outputsDDI)
 
   return(outputs)
+}
+
+#' @title getTimeProfileOutputsDataframe
+#' @description Get a dataframe relating project, simulation, output, pk parameter, start time, end time for each DDI plot component
+#' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
+#' @return A dataframe containing data for generating time profile plots
+getTimeProfileOutputsDataframe <- function(configurationPlan){
+  timeProfileOutputsDataframe <- NULL
+  for (plot in configurationPlan$plots$TimeProfile){
+    validateIsIncluded(values = "Plot", parentValues = names(plot), nullAllowed = TRUE)
+    validateIsIncluded(values = "Curves", parentValues = names(plot[["Plot"]]), nullAllowed = FALSE)
+
+    paths <- NULL
+    for (curve in plot$Plot$Curves) {
+      validateIsString(object = curve$Y)
+      if (ospsuite::toPathArray(curve$Y)[2] == "ObservedData") {
+        next
+      }
+      paths <- c(paths, ospsuite::toPathString(tail(ospsuite::toPathArray(curve$Y), -1)))
+    }
+    #return(unique(paths))
+  }
+  return(timeProfileOutputsDataframe)
+}
+
+
+
+#' @title gofOutputsDataframe
+#' @description Get a dataframe relating project, simulation, output, pk parameter, start time, end time for each DDI plot component
+#' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
+#' @return A dataframe containing data for generating GOF plots
+gofOutputsDataframe <- function(configurationPlan){
+  gofOutputsDataframe <- NULL
+  for (plot in configurationPlan$plots$GOFMergedPlots){
+
+    validateIsIncluded(values = "Groups", parentValues = names(plot), nullAllowed = TRUE)
+    paths <- NULL
+    for (group in plot$Groups) {
+      validateIsIncluded(values = "OutputMappings", parentValues = names(group), nullAllowed = TRUE)
+      for (outputMapping in group$OutputMappings) {
+        validateIsIncluded(values = "Output", parentValues = names(outputMapping), nullAllowed = TRUE)
+        validateIsString(object = outputMapping$Output)
+        paths <- c(paths, outputMapping$Output)
+      }
+    }
+    #return(unique(paths))
+  }
+  return(gofOutputsDataframe)
 }
 
 
@@ -34,28 +70,64 @@ getOutputsFromConfigurationPlan <- function(simulation,
 #' @title getDDIOutputsDataframe
 #' @description Get a dataframe relating project, simulation, output, pk parameter, start time, end time for each DDI plot component
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
-#' @return A dataframe containing data for generating DDI plots
+#' @return A list containing data for generating DDI plots
 getDDIOutputsDataframe <- function(configurationPlan){
-  ddiOutputsDataframe <- NULL
+  ddiOutputsDataframe <- list()
+  counter <- 0
   for (plot in configurationPlan$plots$DDIRatioPlots){
-    pkParameters <- toPathArray(plot$PKParameter)
+
+    pkParameters <- NULL
+    if(!is.null(plot$PKParameter)){
+      pkParameters <- toPathArray(plot$PKParameter)
+    }
+
     for (group in plot$Groups){
       for (ddiRatio in group$DDIRatios){
         outputPath <- ddiRatio$Output
         for (simulationType in c("SimulationControl","SimulationDDI")){
           plotComponent <- ddiRatio[[simulationType]]
-          df <- data.frame(
-            project = plotComponent$Project,
-            simulation = plotComponent$Simulation,
-            outputPath = outputPath,
-            startTime = toBaseUnit(quantityOrDimension = ospDimensions$Time,
-                                   values = plotComponent$StartTime,
-                                   unit = plotComponent$TimeUnit),
-            endTime = toBaseUnit(quantityOrDimension = ospDimensions$Time,
-                                 values = plotComponent$EndTime,
-                                 unit = plotComponent$TimeUnit),
-            pkParameter = pkParameters)
-          ddiOutputsDataframe <- rbind.data.frame(ddiOutputsDataframe,df)
+          df <- list(project = plotComponent$Project,
+                     simulation = plotComponent$Simulation,
+                     outputPath = outputPath)
+
+          startTime <- ifnotnull(inputToCheck = plotComponent$StartTime,
+                                 outputIfNotNull = toBaseUnit(quantityOrDimension = ospDimensions$Time,
+                                                              values = plotComponent$StartTime,
+                                                              unit = plotComponent$TimeUnit),
+                                 outputIfNull = NULL)
+
+
+          endTime <- ifnotnull(inputToCheck = plotComponent$EndTime,
+                               outputIfNotNull = toBaseUnit(quantityOrDimension = ospDimensions$Time,
+                                                            values = plotComponent$EndTime,
+                                                            unit = plotComponent$TimeUnit),
+                               outputIfNull = NULL)
+
+          for (pkParameter in  pkParameters){
+            pkParameterName <- paste(pkParameter,
+                                     ifnotnull(startTime,startTime,"0"),
+                                     ifnotnull(endTime,endTime,"tEnd"),
+                                     sep = "_")
+
+            df$pkParameters <- c(df$pkParameters,pkParameterName)
+
+            if (!(pkParameterName %in% ospsuite::allPKParameterNames())){
+              standardPKParameter <- pkDictionaryQualificationOSP[[pkParameter]]
+              newPKParameter <- ospsuite::addUserDefinedPKParameter(name = pkParameterName,
+                                                                    standardPKParameter = StandardPKParameter[[standardPKParameter]],
+                                                                    displayName = pkParameterName)
+              if(!is.null(startTime)){
+                newPKParameter$startTime <- startTime
+              }
+
+              if(!is.null(endTime)){
+                newPKParameter$endTime <- endTime
+              }
+            }
+          }
+
+          counter <- counter + 1
+          ddiOutputsDataframe[[counter]] <- df
         }
       }
     }
@@ -63,3 +135,6 @@ getDDIOutputsDataframe <- function(configurationPlan){
   return(ddiOutputsDataframe)
 }
 
+pkDictionaryQualificationOSP <- list(AUC = "AUC_tEnd",
+                                     CMAX = "C_max",
+                                     CL = "CL")
