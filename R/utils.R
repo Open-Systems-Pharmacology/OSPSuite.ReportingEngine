@@ -191,12 +191,16 @@ loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE)
     ospsuite::addOutputs(quantitiesOrPaths = paths, simulation = simulation)
   }
 
-  if (!is.null(simulationSet$outputInterval)) {
-    simulationSet$outputInterval$addOutputIntervalToSimulation(simulation = simulation,
-                                                               intervalName = "Output interval")
+  if(is.null(simulationSet$minimumSimulationEndTime)){
+    return(simulation)
   }
 
+  if (simulationSet$minimumSimulationEndTime > simulation$outputSchema$endTime) {
+    intervalIndex <- which(sapply(simulation$outputSchema$intervals,function(x){x$endTime$value}) ==  simulation$outputSchema$endTime)[1]
+    sim$outputSchema$intervals[[intervalIndex]]$endTime$setValue(value = simulationSet$minimumSimulationEndTime,unit = ospUnits$Time$min)
+  }
   return(simulation)
+
 }
 
 #' @title loadWorkflowPopulation

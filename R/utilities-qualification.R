@@ -33,15 +33,9 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
                  pkParameters = outputsDataframeSubset$pkParameter[ outputsDataframeSubset$outputPath == outputPath & !(is.na( outputsDataframeSubset$pkParameter ))])
     })
 
-
-    #TODO: either make defaultResolution an input to this function or move it out of this function or systematically calculate it as, eg (endTime - startTime)/1000
-    defaultResolution <- 1
-
-    outputInterval <- NULL
+    minimumSimulationEndTime <- NULL
     if( any(!is.na(outputsDataframeSubset$endTime)) ){
-      outputInterval = OutputInterval$new(startTime = max(outputsDataframeSubset$startTime,na.rm = TRUE),
-                                          endTime = max(outputsDataframeSubset$endTime,na.rm = TRUE),
-                                          resolution = defaultResolution)
+      minimumSimulationEndTime <- max(outputsDataframeSubset$endTime,na.rm = TRUE)
     }
 
     # simulationSetName defined as project-simulation uniquely identifies the simulation
@@ -49,7 +43,7 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
       simulationSetName = paste(project, simulationName, sep = "-"),
       simulationFile = simulationFile,
       outputs = c(outputs),
-      outputInterval = outputInterval
+      minimumSimulationEndTime = minimumSimulationEndTime
     )
   }
   workflow <- QualificationWorkflow$new(
