@@ -22,6 +22,7 @@ environment:
   NOT_CRAN: true
   KEEP_VIGNETTES: true
   R_ARCH: x64
+  GITHUB_PAT: "b2b7441daeeb010b1df26f1f60a7f1edc485e443"
   CI: true
   R_VERSION: "3.6.3"
   COVERALLS_TOKEN:
