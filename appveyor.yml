@@ -22,7 +22,6 @@ environment:
   NOT_CRAN: true
   KEEP_VIGNETTES: true
   R_ARCH: x64
-  CI: true
   R_VERSION: "3.6.3"
   COVERALLS_TOKEN:
     secure: Qo8To6hV3C2ghrS0Z+pPyvaBaEpE24Pwr7LF8AbiMO9HL+pkwX1U3kYGUNzJF5EU
