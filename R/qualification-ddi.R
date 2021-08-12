@@ -2,7 +2,7 @@
 #' @description Get a list of outputs from simulation and from `ConfigurationPlan`
 #' @param simulation path of the output folder created or used by the Workflow.
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
-#' @return A list of `outputs`
+#' @return A dataframe of project, simulation, output paths and (if applicable) pk parameters and start and end times of interval over which the pk parameter is evaluated
 getOutputsFromConfigurationPlan <- function(configurationPlan){
 
   outputsTimeProfile <- getTimeProfileOutputsDataframe(configurationPlan = configurationPlan)
@@ -15,7 +15,7 @@ getOutputsFromConfigurationPlan <- function(configurationPlan){
 }
 
 #' @title getTimeProfileOutputsDataframe
-#' @description Get a dataframe relating project, simulation, output, pk parameter, start time, end time for each DDI plot component
+#' @description Get a dataframe relating project, simulation and output path for each time profile plot component
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return A dataframe containing data for generating time profile plots
 getTimeProfileOutputsDataframe <- function(configurationPlan){
@@ -46,8 +46,33 @@ getTimeProfileOutputsDataframe <- function(configurationPlan){
 
 
 
+#' @title getComparisonTimeProfileOutputsDataframe
+#' @description Get a dataframe relating project, simulation and output path for each comparison time profile plot
+#' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
+#' @return A dataframe containing data for generating time profile plots
+getComparisonTimeProfileOutputsDataframe <- function(configurationPlan){
+  comparisonTimeProfileOutputsDataframe <- NULL
+  for (plot in configurationPlan$plots$ComparisonTimeProfilePlots){
+
+    paths <- NULL
+    for (outputMapping in plot$OutputMappings) {
+      df <- data.frame(project = outputMapping$Project,
+                       simulation = outputMapping$Simulation,
+                       outputPath = outputMapping$Output,
+                       pkParameter = NA,
+                       startTime = NA,
+                       endTime = NA)
+      comparisonTimeProfileOutputsDataframe <- rbind.data.frame(comparisonTimeProfileOutputsDataframe,df)
+    }
+  }
+  return(comparisonTimeProfileOutputsDataframe[!duplicated(comparisonTimeProfileOutputsDataframe),])
+}
+
+
+
+
 #' @title getGOFOutputsDataframe
-#' @description Get a dataframe relating project, simulation, output, pk parameter, start time, end time for each DDI plot component
+#' @description Get a dataframe relating project, simulation and output path for each GOF plot component
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return A dataframe containing data for generating GOF plots
 getGOFOutputsDataframe <- function(configurationPlan){
@@ -85,7 +110,6 @@ getGOFOutputsDataframe <- function(configurationPlan){
 #' @return A list containing data for generating DDI plots
 getDDIOutputsDataframe <- function(configurationPlan){
   ddiOutputsDataframe <- NULL
-  counter <- 0
   for (plot in configurationPlan$plots$DDIRatioPlots){
 
     pkParameters <- NULL
@@ -134,6 +158,51 @@ getDDIOutputsDataframe <- function(configurationPlan){
   }
   return(ddiOutputsDataframe[!duplicated(ddiOutputsDataframe),])
 }
+
+
+
+
+#' @title getPKRatioOutputsDataframe
+#' @description Get a dataframe relating project, simulation, output path and pk parameter for each PK ratio plot
+#' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
+#' @return A list containing data for generating DDI plots
+getPKRatioOutputsDataframe <- function(configurationPlan){
+  pkRatioOutputsDataframe <- NULL
+  for (plot in configurationPlan$plots$PKRatioPlots){
+
+    pkParameters <- NULL
+    if(!is.null(plot$PKParameter)){
+      pkParameters <- toPathArray(plot$PKParameter)
+    }
+
+    for (group in plot$Groups){
+      for (plotComponent in group$PKRatios){
+        outputPath <- plotComponent$Output
+        startTime <- NULL
+        endTime <- NULL
+        newPKParameterNames <- NULL
+        for (pkParameter in  pkParameters){
+          newPKParameterNames <- c(newPKParameterNames,
+                                   addNewPkParameter(pkParameter,startTime,endTime))
+        }
+
+        df <- data.frame(project = plotComponent$Project,
+                         simulation = plotComponent$Simulation,
+                         outputPath = outputPath,
+                         pkParameter = newPKParameterNames,
+                         startTime = startTime,
+                         endTime = endTime)
+
+        pkRatioOutputsDataframe <- rbind.data.frame(pkRatioOutputsDataframe,df)
+      }
+    }
+  }
+  return(pkRatioOutputsDataframe[!duplicated(pkRatioOutputsDataframe),])
+}
+
+
+
+
 
 #' @title addNewPkParameter
 #' @description Create a PK parameter calculated between a start and end time as specified in a qualification `ConfigurationPlan` and return ther PK parameter name
