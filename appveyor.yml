@@ -17,6 +17,8 @@ install:
 #   - C:\RLibrary\3.6
 
 environment:
+  GITHUB_PAT:
+    secure: w0ccGTFfKg6H4/esXhDG7sZEceJZfDFeXmtQhBBjsGfO/keHhxZNvvkCqHe7YKK5
   app_version: "1.2"
   USE_RTOOLS: true
   NOT_CRAN: true
@@ -25,8 +27,6 @@ environment:
   R_VERSION: "3.6.3"
   COVERALLS_TOKEN:
     secure: Qo8To6hV3C2ghrS0Z+pPyvaBaEpE24Pwr7LF8AbiMO9HL+pkwX1U3kYGUNzJF5EU
-  GITHUB_PAT:
-    secure: w0ccGTFfKg6H4/esXhDG7sZEceJZfDFeXmtQhBBjsGfO/keHhxZNvvkCqHe7YKK5
 
 version: "$(app_version).{build}"
 
