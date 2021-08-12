@@ -170,7 +170,7 @@ buildQualificationDDIPredictedVsObserved <- function(dataframe,
 }
 
 #' @title getTimeProfileOutputsDataframe
-#' @description Get a dataframe relating project, simulation, output, pk parameter, start time, end time for each DDI plot component
+#' @description Get a dataframe relating project, simulation and output path for each time profile plot component
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return A dataframe containing data for generating time profile plots
 getTimeProfileOutputsDataframe <- function(configurationPlan){
@@ -201,8 +201,33 @@ getTimeProfileOutputsDataframe <- function(configurationPlan){
 
 
 
+#' @title getComparisonTimeProfileOutputsDataframe
+#' @description Get a dataframe relating project, simulation and output path for each comparison time profile plot
+#' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
+#' @return A dataframe containing data for generating time profile plots
+getComparisonTimeProfileOutputsDataframe <- function(configurationPlan){
+  comparisonTimeProfileOutputsDataframe <- NULL
+  for (plot in configurationPlan$plots$ComparisonTimeProfilePlots){
+
+    paths <- NULL
+    for (outputMapping in plot$OutputMappings) {
+      df <- data.frame(project = outputMapping$Project,
+                       simulation = outputMapping$Simulation,
+                       outputPath = outputMapping$Output,
+                       pkParameter = NA,
+                       startTime = NA,
+                       endTime = NA)
+      comparisonTimeProfileOutputsDataframe <- rbind.data.frame(comparisonTimeProfileOutputsDataframe,df)
+    }
+  }
+  return(comparisonTimeProfileOutputsDataframe[!duplicated(comparisonTimeProfileOutputsDataframe),])
+}
+
+
+
+
 #' @title getGOFOutputsDataframe
-#' @description Get a dataframe relating project, simulation, output, pk parameter, start time, end time for each DDI plot component
+#' @description Get a dataframe relating project, simulation and output path for each GOF plot component
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return A dataframe containing data for generating GOF plots
 getGOFOutputsDataframe <- function(configurationPlan){
