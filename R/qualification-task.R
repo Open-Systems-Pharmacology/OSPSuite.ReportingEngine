@@ -40,7 +40,7 @@ QualificationTask <- R6::R6Class(
         )
 
         result$saveFigure(fileName = figureFilePath, logFolder = self$workflowFolder)
-        result$saveTable(fileName = figureFilePath, logFolder = self$workflowFolder)
+        result$saveTable(fileName = tableFilePath, logFolder = self$workflowFolder)
 
         result$addFigureToReport(
           reportFile = configurationPlan$getSectionMarkdown(result$sectionId),
