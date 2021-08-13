@@ -123,19 +123,13 @@ getDDIOutputsDataframe <- function(configurationPlan){
         for (simulationType in c("SimulationControl","SimulationDDI")){
           plotComponent <- ddiRatio[[simulationType]]
 
+          startTime <-  ospsuite::toBaseUnit(quantityOrDimension = ospDimensions$Time,
+                                             values = plotComponent$StartTime,
+                                             unit = plotComponent$TimeUnit)
 
-          startTime <- ifnotnull(inputToCheck = plotComponent$StartTime,
-                                 outputIfNotNull = toBaseUnit(quantityOrDimension = ospDimensions$Time,
-                                                              values = plotComponent$StartTime,
-                                                              unit = plotComponent$TimeUnit),
-                                 outputIfNull = NULL)
-
-
-          endTime <- ifnotnull(inputToCheck = plotComponent$EndTime,
-                               outputIfNotNull = toBaseUnit(quantityOrDimension = ospDimensions$Time,
-                                                            values = plotComponent$EndTime,
-                                                            unit = plotComponent$TimeUnit),
-                               outputIfNull = NULL)
+          endTime <- ospsuite::toBaseUnit(quantityOrDimension = ospDimensions$Time,
+                                          values = plotComponent$EndTime,
+                                          unit = plotComponent$TimeUnit)
 
           newPKParameterNames <- NULL
           for (pkParameter in  pkParameters){
@@ -146,9 +140,9 @@ getDDIOutputsDataframe <- function(configurationPlan){
           df <- data.frame(project = plotComponent$Project,
                            simulation = plotComponent$Simulation,
                            outputPath = outputPath,
-                           pkParameter = newPKParameterNames,
-                           startTime = startTime,
-                           endTime = endTime)
+                           pkParameter = newPKParameterNames %||% NA,
+                           startTime = startTime %||% NA,
+                           endTime = endTime %||% NA)
 
 
           ddiOutputsDataframe <- rbind.data.frame(ddiOutputsDataframe,df)
@@ -189,9 +183,9 @@ getPKRatioOutputsDataframe <- function(configurationPlan){
         df <- data.frame(project = plotComponent$Project,
                          simulation = plotComponent$Simulation,
                          outputPath = outputPath,
-                         pkParameter = newPKParameterNames,
-                         startTime = startTime,
-                         endTime = endTime)
+                         pkParameter = newPKParameterNames %||% NA,
+                         startTime = startTime %||% NA,
+                         endTime = endTime %||% NA)
 
         pkRatioOutputsDataframe <- rbind.data.frame(pkRatioOutputsDataframe,df)
       }
@@ -211,22 +205,26 @@ getPKRatioOutputsDataframe <- function(configurationPlan){
 #' @param endTime the ending time of the interval over which the PK parameter is calculated (from the qualification `ConfigurationPlan`)
 #' @return String `pkParameterName`
 addNewPkParameter <- function(pkParameter,startTime,endTime){
-  pkParameterName <- paste(pkParameter,
-                           ifnotnull(startTime,startTime,"0"),
-                           ifnotnull(endTime,endTime,"tEnd"),
-                           sep = "_")
-  if (!(pkParameterName %in% ospsuite::allPKParameterNames())){
-    standardPKParameter <- pkDictionaryQualificationOSP[[pkParameter]]
-    newPKParameter <- ospsuite::addUserDefinedPKParameter(name = pkParameterName,
-                                                          standardPKParameter = StandardPKParameter[[standardPKParameter]],
-                                                          displayName = pkParameterName)
-    if(!is.null(startTime)){
-      newPKParameter$startTime <- startTime
-    }
 
-    if(!is.null(endTime)){
-      newPKParameter$endTime <- endTime
-    }
+  validateIsIncluded(values = pkParameter,parentValues = names(pkDictionaryQualificationOSP) )
+  standardPKParameter <- pkDictionaryQualificationOSP[[pkParameter]]
+  pkParameterName <- standardPKParameter
+  pkParameterName <- ifnotnull(startTime, paste0(pkParameterName,"_tStartTime_",startTime) , pkParameterName)
+  pkParameterName <- ifnotnull(endTime, paste0(pkParameterName,"_tEndTime_",endTime) , pkParameterName)
+
+  if ( pkParameterName %in% ospsuite::allPKParameterNames() ){
+    return(pkParameterName)
+  }
+
+  newPKParameter <- ospsuite::addUserDefinedPKParameter(name = pkParameterName,
+                                                        standardPKParameter = StandardPKParameter[[standardPKParameter]],
+                                                        displayName = pkParameterName)
+  if(!is.null(startTime)){
+    newPKParameter$startTime <- startTime
+  }
+
+  if(!is.null(endTime)){
+    newPKParameter$endTime <- endTime
   }
   return(pkParameterName)
 }
