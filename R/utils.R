@@ -430,3 +430,17 @@ parseVariableFromObject <- function(objectName, variableName, keepIfNull = FALSE
   }
   return(parse(text = paste0(variableName, " <- ", objectName, "$", variableName)))
 }
+
+#' @title calculateGMFE
+#' @description Calculate Geometric Mean Fold Error between `x` and `y`.
+#' Strictly positive pairs of values are kept in the calculation
+#' @param x x values to compare
+#' @param y y values to compare
+#' @return GMFE
+#' @export
+calculateGMFE <- function(x, y) {
+  positiveValues <- (y > 0 & x >0)
+  log10Error <- log10(y[positiveValues])-log10(x[positiveValues])
+  return(10^(sum(abs(log10Error))/length(log10Error)))
+}
+
