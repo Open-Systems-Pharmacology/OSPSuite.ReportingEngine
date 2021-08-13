@@ -196,8 +196,8 @@ loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE)
   }
 
   if (simulationSet$minimumSimulationEndTime > simulation$outputSchema$endTime) {
-    intervalIndex <- which(sapply(simulation$outputSchema$intervals,function(x){x$endTime$value}) ==  simulation$outputSchema$endTime)[1]
-    sim$outputSchema$intervals[[intervalIndex]]$endTime$setValue(value = simulationSet$minimumSimulationEndTime,unit = ospUnits$Time$min)
+    maximalIntervalIndex <- which(sapply(simulation$outputSchema$intervals,function(x){x$endTime$value}) ==  simulation$outputSchema$endTime)[1]
+    simulation$outputSchema$intervals[[maximalIntervalIndex]]$endTime$setValue(value = simulationSet$minimumSimulationEndTime,unit = ospUnits$Time$min)
   }
   return(simulation)
 
