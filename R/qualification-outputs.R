@@ -206,18 +206,16 @@ getPKRatioOutputsDataframe <- function(configurationPlan){
 #' @return String `pkParameterName`
 addNewPkParameter <- function(pkParameter,startTime,endTime){
 
-  validateIsIncluded(values = pkParameter,parentValues = names(pkDictionaryQualificationOSP) )
-  standardPKParameter <- pkDictionaryQualificationOSP[[pkParameter]]
-  pkParameterName <- standardPKParameter
-  pkParameterName <- ifnotnull(startTime, paste0(pkParameterName,"_tStartTime_",startTime) , pkParameterName)
-  pkParameterName <- ifnotnull(endTime, paste0(pkParameterName,"_tEndTime_",endTime) , pkParameterName)
+
+  pkParameterName <- generateDDIPlotPKParameterName(pkParameter,startTime,endTime)
+
 
   if ( pkParameterName %in% ospsuite::allPKParameterNames() ){
     return(pkParameterName)
   }
 
   newPKParameter <- ospsuite::addUserDefinedPKParameter(name = pkParameterName,
-                                                        standardPKParameter = StandardPKParameter[[standardPKParameter]],
+                                                        standardPKParameter = StandardPKParameter[[pkDictionaryQualificationOSP[[pkParameter]]]],
                                                         displayName = pkParameterName)
   if(!is.null(startTime)){
     newPKParameter$startTime <- startTime
@@ -232,3 +230,24 @@ addNewPkParameter <- function(pkParameter,startTime,endTime){
 pkDictionaryQualificationOSP <- list(AUC = "AUC_tEnd",
                                      CMAX = "C_max",
                                      CL = "CL")
+
+ddiPKRatioColumnName <- list(AUC = "AUCR Avg",
+                             CMAX = "CmaxR Avg")
+
+
+#' @title generateDDIPlotPKParameterName
+#' @description Generate name for a PK parameter calculated between a start and end time
+#' @param pkParameter the name of the PK parameter from the qualification `ConfigurationPlan`
+#' @param startTime the starting time of the interval over which the PK parameter is calculated (from the qualification `ConfigurationPlan`)
+#' @param endTime the ending time of the interval over which the PK parameter is calculated (from the qualification `ConfigurationPlan`)
+#' @return String `pkParameterName`
+generateDDIPlotPKParameterName <- function(pkParameter,startTime,endTime){
+  validateIsIncluded(values = pkParameter,parentValues = names(pkDictionaryQualificationOSP) )
+  standardPKParameter <- pkDictionaryQualificationOSP[[pkParameter]]
+  pkParameterName <- standardPKParameter
+  pkParameterName <- ifnotnull(startTime, paste0(pkParameterName,"_tStartTime_",startTime) , pkParameterName)
+  pkParameterName <- ifnotnull(endTime, paste0(pkParameterName,"_tEndTime_",endTime) , pkParameterName)
+  return(pkParameterName)
+}
+
+
