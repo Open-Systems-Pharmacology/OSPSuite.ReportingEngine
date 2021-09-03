@@ -359,7 +359,7 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
 
 
 #' @title plotQualificationGOFResidualsOverTime
-#' @description Plot observation vs prediction for qualification workflow
+#' @description Plot residuals vs time for qualification workflow
 #' @param data data.frame
 #' @return ggplot object of residuals over time profile for qualification workflow
 #' @import tlf
