@@ -132,44 +132,36 @@ buildQualificationDDIPredictedVsObserved <- function(dataframe,
   # function to do obs vs sim
   ddiPlotDataframe <- NULL
   aestheticsList <- list(shape = list(), color = list())
-  uniqueGroupPKParameterID <- 0
+
   for (grp in unique(dataframe$groupNumber)) {
     aestheticsList$shape[[grp]] <- metadata$groups[[grp]]$symbol
     aestheticsList$color[[grp]] <- metadata$groups[[grp]]$color
 
-    for (pkParameter in unique(dataframe[dataframe$group == grp, ]$pkParameter )) {
+    xDataDimension <- ""
+    xDataUnit <- ""
+    xData <- dataframe[dataframe$group == grp, ]$observedRatio
 
-      uniqueGroupPKParameterID <- uniqueGroupPKParameterID + 1
-
-      xDataDimension <- ""
-      xDataUnit <- ""
-      xData <- dataframe[dataframe$group == grp & dataframe$pkParameter == pkParameter, ]$observedRatio
-
-      if (xScaling == "Log") {
-        xData <- log10(xData)
-      }
-      xData <- replaceInfWithNA(xData)
-
-      yDataDimension <- ""
-      yDataUnit <- ""
-      yData <- dataframe[dataframe$group == grp & dataframe$pkParameter == pkParameter, ]$simulatedRatio
-      if (yScaling == "Log") {
-        yData <- log10(yData)
-      }
-      yData <- replaceInfWithNA(yData)
-
-      df <- data.frame(
-        Observed = xData,
-        Simulated = yData,
-        Group = grp,
-        pkParameter = pkParameter,
-        uniqueGroupPKParameterID = uniqueGroupPKParameterID
-      )
-
-      df$uniqueGroupPKParameterID <- as.factor(df$uniqueGroupPKParameterID)
-
-      ddiPlotDataframe <- rbind.data.frame(ddiPlotDataframe, df)
+    if (xScaling == "Log") {
+      xData <- log10(xData)
     }
+    xData <- replaceInfWithNA(xData)
+
+    yDataDimension <- ""
+    yDataUnit <- ""
+    yData <- dataframe[dataframe$group == grp, ]$simulatedRatio
+    if (yScaling == "Log") {
+      yData <- log10(yData)
+    }
+    yData <- replaceInfWithNA(yData)
+
+    df <- data.frame(
+      Observed = xData,
+      Simulated = yData,
+      Group = grp
+    )
+
+    ddiPlotDataframe <- rbind.data.frame(ddiPlotDataframe, df)
+
   }
   return(list(ddiPlotDataframe = ddiPlotDataframe, aestheticsList = aestheticsList, axesSettings = axesSettings))
 }
@@ -199,49 +191,41 @@ buildQualificationDDIResidualsVsObserved <- function(dataframe,
   # function to do obs vs sim
   ddiPlotDataframe <- NULL
   aestheticsList <- list(shape = list(), color = list())
-  uniqueGroupPKParameterID <- 0
+
   for (grp in unique(dataframe$groupNumber)) {
     aestheticsList$shape[[grp]] <- metadata$groups[[grp]]$symbol
     aestheticsList$color[[grp]] <- metadata$groups[[grp]]$color
 
-    for (pkParameter in unique(dataframe[dataframe$group == grp, ]$pkParameter )) {
+    observedRatio <- dataframe[dataframe$group == grp , ]$observedRatio
+    simulatedRatio <- dataframe[dataframe$group == grp , ]$simulatedRatio
 
-      observedRatio <- dataframe[dataframe$group == grp & dataframe$pkParameter == pkParameter, ]$observedRatio
-      simulatedRatio <- dataframe[dataframe$group == grp & dataframe$pkParameter == pkParameter, ]$simulatedRatio
+    xDataDimension <- ""
+    xDataUnit <- ""
+    xData <- observedRatio
 
-      uniqueGroupPKParameterID <- uniqueGroupPKParameterID + 1
-
-      xDataDimension <- ""
-      xDataUnit <- ""
-      xData <- observedRatio
-
-      if (xScaling == "Log") {
-        xData <- log10(xData)
-      }
-      xData <- replaceInfWithNA(xData)
-
-      yDataDimension <- ""
-      yDataUnit <- ""
-      if (yScaling == "Log") {
-        residualValues <- log10(simulatedRatio) - log10(observedRatio)
-      } else {
-        residualValues <- (simulatedRatio - observedRatio)/observedRatio
-      }
-      yData <- residualValues
-      yData <- replaceInfWithNA(yData)
-
-      df <- data.frame(
-        Observed = xData,
-        Residual = yData,
-        Group = grp,
-        pkParameter = pkParameter,
-        uniqueGroupPKParameterID = uniqueGroupPKParameterID
-      )
-
-      df$uniqueGroupPKParameterID <- as.factor(df$uniqueGroupPKParameterID)
-
-      ddiPlotDataframe <- rbind.data.frame(ddiPlotDataframe, df)
+    if (xScaling == "Log") {
+      xData <- log10(xData)
     }
+    xData <- replaceInfWithNA(xData)
+
+    yDataDimension <- ""
+    yDataUnit <- ""
+    if (yScaling == "Log") {
+      residualValues <- log10(simulatedRatio) - log10(observedRatio)
+    } else {
+      residualValues <- (simulatedRatio - observedRatio)/observedRatio
+    }
+    yData <- residualValues
+    yData <- replaceInfWithNA(yData)
+
+    df <- data.frame(
+      Observed = xData,
+      Residual = yData,
+      Group = grp
+    )
+
+    ddiPlotDataframe <- rbind.data.frame(ddiPlotDataframe, df)
+
   }
   return(list(ddiPlotDataframe = ddiPlotDataframe, aestheticsList = aestheticsList, axesSettings = axesSettings))
 }
@@ -267,31 +251,30 @@ plotQualificationDDIPredictedVsObserved <- function(data) {
     ylabel <- paste("Predicted",data$axesSettings$Y$unit)
   }
 
-  gofData <- data$gofPlotDataframe
+  ddiData <- data$ddiPlotDataframe
 
-  gofDataMapping <- tlf::ObsVsPredDataMapping$new(
+  ddiDataMapping <- tlf::ObsVsPredDataMapping$new(
     x = "Observed",
     y = "Simulated",
     shape = "Group",
-    color = "uniqueGroupOutputMappingID"
+    color = "Group"
   )
 
-  gofPlotConfiguration <- tlf::ObsVsPredPlotConfiguration$new(
+  ddiPlotConfiguration <- tlf::DDIRatioPlotConfiguration$new(
+    data = ddiData,
+    dataMapping = ddiDataMapping
+  )
+
+  qualificationDDIPredictedVsObservedPlot <- tlf::plotDDIRatio(
     data = gofData,
-    dataMapping = gofDataMapping
+    plotConfiguration = ddiPlotConfiguration
   )
 
-  qualificationGOFPredictedVsObservedPlot <- tlf::plotObsVsPred(
-    data = gofData,
-    dataMapping = gofDataMapping,
-    plotConfiguration = gofPlotConfiguration
-  )
-
-  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::scale_color_manual(values = data$aestheticsList$color)
-  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::scale_shape_manual(values = data$aestheticsList$shape)
-  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::xlab(xlabel) + ggplot2::ylab(ylabel)
-  qualificationGOFPredictedVsObservedPlot <- qualificationGOFPredictedVsObservedPlot + ggplot2::guides(color = FALSE)
-  return(qualificationGOFPredictedVsObservedPlot)
+  qualificationDDIPredictedVsObservedPlot <- qualificationDDIPredictedVsObservedPlot + ggplot2::scale_color_manual(values = data$aestheticsList$color)
+  qualificationDDIPredictedVsObservedPlot <- qualificationDDIPredictedVsObservedPlot + ggplot2::scale_shape_manual(values = data$aestheticsList$shape)
+  qualificationDDIPredictedVsObservedPlot <- qualificationDDIPredictedVsObservedPlot + ggplot2::xlab(xlabel) + ggplot2::ylab(ylabel)
+  qualificationDDIPredictedVsObservedPlot <- qualificationDDIPredictedVsObservedPlot + ggplot2::guides(color = FALSE)
+  return(qualificationDDIPredictedVsObservedPlot)
 }
 
 #'
@@ -362,14 +345,14 @@ plotQualificationDDIs <- function(configurationPlan,
       for (pkParameter in unique(dataframe$pkParameter)){
         plotID <- paste("DDIRatioPlot", plotIndex, plotType , pkParameter , sep = "-")
 
-        plotDDIDataframe <- buildGOFDataFrameFunctions[[plotType]](dataframe[dataframe$pkParameter == pkParameter,], metadata)
+        plotDDIDataframe <- buildDDIDataFrameFunctions[[plotType]](dataframe[dataframe$pkParameter == pkParameter,], metadata)
         ddiPlotList[[plotIndex]][[plotType]] <- plotDDIFunctions[[plotType]](plotDDIDataframe)
 
         ddiPlotResults[[plotID]] <- saveTaskResults(
           id = plotID,
           sectionId = metadata$sectionID,
           plot = ddiPlotList[[plotIndex]][[plotType]],
-          plotCaption = metadata$title
+          plotCaption = paste(metadata$title,pkParameter," - ")
         )
       }
     }
@@ -391,6 +374,6 @@ buildDDIDataFrameFunctions <- list(
 
 #' Names of functions for plotting DDI plots for each DDI plot type
 plotDDIFunctions <- list(
-   "predictedVsObserved" = plotQualificationDDIPredictedVsObserved,
-   "residualsOverTime" = plotQualificationDDIResidualsVsObserved
+  "predictedVsObserved" = plotQualificationDDIPredictedVsObserved,
+  "residualsOverTime" = plotQualificationDDIResidualsVsObserved
 )
