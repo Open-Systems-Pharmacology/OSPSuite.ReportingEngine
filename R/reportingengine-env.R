@@ -36,6 +36,19 @@ reEnv$defaultPlotFormat <- list(
 
 reEnv$workflowWatermarkMessage <- "preliminary analysis"
 
+# Default values for qualification pk ratio
+reEnv$pkRatio <- list()
+reEnv$pkRatio$dictionary <- list(
+  id = "ID",
+  study = "Study",
+  parameterColumn = "Avg",
+  unitColumn = "AvgUnit",
+  prefixObserved = "Observed",
+  prefixSimulated = "Predicted",
+  prefixRatio = "Pred/Obs",
+  suffixRatio = "Ratio"
+)
+
 #' @title setWatermarkConfiguration
 #' @description Set default watermark configuration for current theme
 #' @param watermark character or \code{Label} class object from `tlf` package

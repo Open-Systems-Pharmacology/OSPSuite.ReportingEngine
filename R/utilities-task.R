@@ -610,3 +610,33 @@ loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPl
     settings = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$ComparisonTimeProfile))
   ))
 }
+
+#' @title loadPlotPKRatioTask
+#' @description
+#' Define `plotPKRatio` task and its settings
+#' @param workflow `QualificationWorkflow` object
+#' @param configurationPlan A `ConfigurationPlan` object
+#' @return A `QualificationTask` object
+loadPlotPKRatioTask <- function(workflow, configurationPlan) {
+  validateIsOfType(workflow, "QualificationWorkflow")
+  validateIsOfType(configurationPlan, "ConfigurationPlan")
+  
+  # Time Profiles task is only active if the field is defined & not empty
+  active <- !isOfLength(configurationPlan$plots$PKRatioPlots, 0)
+  
+  taskFunction <- plotQualificationPKRatio
+  nameFunction <- deparse(substitute(plotQualificationPKRatio))
+  
+  return(QualificationTask$new(
+    getTaskResults = taskFunction,
+    nameTaskResults = nameFunction,
+    inputFolder = defaultTaskOutputFolders$simulate,
+    # TODO: only get simulations results from configuraiton plan
+    # also include observed data
+    inputs = getSimulationResultFileNames(workflow),
+    workflowFolder = workflow$workflowFolder,
+    active = active,
+    message = defaultWorkflowMessages$plotPKRatio,
+    settings = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$PKRatioPlots))
+  ))
+}

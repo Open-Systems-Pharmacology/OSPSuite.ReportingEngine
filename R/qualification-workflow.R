@@ -47,7 +47,7 @@ QualificationWorkflow <- R6::R6Class(
       self$plotTimeProfiles <- loadQualificationTimeProfilesTask(self, configurationPlan)
       self$plotGOFMerged <- loadGOFMergedTask(self, configurationPlan)
       self$plotComparisonTimeProfile <- loadQualificationComparisonTimeProfileTask(self, configurationPlan)
-      self$plotPKRatio <- PlotTask$new() # loadPlotPKRatioTask(self, configurationPlan)
+      self$plotPKRatio <- loadPlotPKRatioTask(self, configurationPlan)
       self$plotDDIRatio <- PlotTask$new() # loadPlotDDIRatioTask(self, configurationPlan)
 
       self$taskNames <- ospsuite::enum(self$getAllTasks())
