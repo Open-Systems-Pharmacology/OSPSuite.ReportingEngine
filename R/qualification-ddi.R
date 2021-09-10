@@ -118,6 +118,8 @@ getQualificationDDIPlotData <- function(configurationPlan){
 buildQualificationDDIPredictedVsObserved <- function(dataframe,
                                                      metadata) {
   axesSettings <- metadata$axesSettings[["predictedVsObserved"]]
+  axesSettings$X$label <- "Observed"
+  axesSettings$Y$label <- "Predicted"
 
   xUnit <- axesSettings$X$unit
   xDimension <- axesSettings$X$dimension
@@ -177,11 +179,14 @@ buildQualificationDDIPredictedVsObserved <- function(dataframe,
 buildQualificationDDIResidualsVsObserved <- function(dataframe,
                                                      metadata) {
   axesSettings <- metadata$axesSettings[["residualsVsObserved"]]
+  axesSettings$X$label <- "Observed"
+  axesSettings$Y$label <- "Residuals"
 
   xUnit <- axesSettings$X$unit
   xDimension <- axesSettings$X$dimension
   xScaling <- axesSettings$X$scaling
   xGridlines <- axesSettings$X$gridLines
+
 
   yUnit <- axesSettings$Y$unit
   yDimension <- axesSettings$Y$dimension
@@ -238,17 +243,17 @@ buildQualificationDDIResidualsVsObserved <- function(dataframe,
 #' @return ggplot object of time profile for qualification workflow
 #' @import tlf
 #' @import ggplot2
-plotQualificationDDIPredictedVsObserved <- function(data) {
+generateDDIQualificationDDIPlotData <- function(data) {
   if (data$axesSettings$X$scaling == "Log") {
-    xlabel <- bquote(log[10]*.(paste0("(Observed ",data$axesSettings$X$unit,")")))
+    xlabel <- bquote(log[10]*.(paste0(axesSettings$X$label)))
   } else {
-    xlabel <- paste("Observed",data$axesSettings$X$unit)
+    xlabel <- paste(axesSettings$X$label)
   }
 
   if (data$axesSettings$Y$scaling == "Log") {
-    ylabel <- bquote(log[10]*.(paste0("(Predicted ",data$axesSettings$Y$unit,")")))
+    ylabel <- bquote(log[10]*.(paste0(axesSettings$Y$label)))
   } else {
-    ylabel <- paste("Predicted",data$axesSettings$Y$unit)
+    ylabel <- paste(axesSettings$Y$label)
   }
 
   ddiData <- data$ddiPlotDataframe
@@ -369,11 +374,23 @@ ddiPlotAxesSettings <- list(
 #' Names of functions for extracting data for each DDI plot type
 buildDDIDataFrameFunctions <- list(
   "predictedVsObserved" = buildQualificationDDIPredictedVsObserved,
-  "residualsOverTime" = buildQualificationDDIResidualsVsObserved
+  "residualsVsObserved" = buildQualificationDDIResidualsVsObserved
 )
 
 #' Names of functions for plotting DDI plots for each DDI plot type
 plotDDIFunctions <- list(
   "predictedVsObserved" = plotQualificationDDIPredictedVsObserved,
-  "residualsOverTime" = plotQualificationDDIResidualsVsObserved
+  "residualsVsObserved" = plotQualificationDDIResidualsVsObserved
+)
+
+#'Labels for DDI plot X-axis
+plotDDIXLabel <- list(
+  "predictedVsObserved" = "Observed",
+  "residualsVsObserved" = "Observed"
+)
+
+#'Labels for DDI plot Y-axis
+plotDDIYLabel <- list(
+  "predictedVsObserved" = "Predicted",
+  "residualsVsObserved" = "Residual"
 )
