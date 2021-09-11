@@ -12,7 +12,7 @@ getQualificationDDIPlotData <- function(configurationPlan){
     plotDDIMetadata$title <- plot$Title
     plotDDIMetadata$sectionID <- plot$SectionId
     # Pipes in configuration plan will be deprecated moving forward
-    #browser()
+
     plotDDIMetadata$plotTypes <- plot$PlotTypes %||% ospsuite::toPathArray(plot$PlotType)
     plotDDIMetadata$axesSettings <- lapply(plotDDIMetadata$plotTypes, function(pltType) {
       getAxesSettings(configurationPlan$plots$AxesSettings[[ddiPlotAxesSettings[[pltType]]]])
@@ -257,7 +257,7 @@ generateDDIQualificationDDIPlot <- function(data) {
     ylabel <- paste(data$axesSettings$Y$label)
   }
 
-  ddiData <- data$ddiPlotDataframe
+  ddiData <- na.omit(data$ddiPlotDataframe)
 
   ddiDataMapping <- tlf::DDIRatioDataMapping$new(
     x = data$axesSettings$X$label,
@@ -311,7 +311,7 @@ plotQualificationDDIs <- function(configurationPlan,
           id = plotID,
           sectionId = metadata$sectionID,
           plot = ddiPlotList[[plotIndex]][[plotType]],
-          plotCaption = paste(metadata$title,pkParameter," - ")
+          plotCaption = paste(metadata$title," - ",pkParameter)
         )
       }
     }
