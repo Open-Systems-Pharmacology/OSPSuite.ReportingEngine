@@ -1,7 +1,7 @@
 #' @title getQualificationDDIPlotData
 #' @description Build dataframes and metadata for each DDI plot
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
-#' @return  plotDDIDataFrame, a list of lists of the form list(dataframe,metadata) specific to each DID plot
+#' @return  plotDDIdata, a list of lists of the form list(dataframe,metadata) specific to each DID plot
 getQualificationDDIPlotData <- function(configurationPlan){
   plotDDIdata <- list()
   for (plotNumber in seq_along(configurationPlan$plots$DDIRatioPlots)){
@@ -32,7 +32,7 @@ getQualificationDDIPlotData <- function(configurationPlan){
       plotDDIMetadata$groups[[groupNumber]] <- list()
       plotDDIMetadata$groups[[groupNumber]]$caption <- group$Caption
       plotDDIMetadata$groups[[groupNumber]]$color <- group$Color
-      plotDDIMetadata$groups[[groupNumber]]$symbol <- group$Symbol
+      plotDDIMetadata$groups[[groupNumber]]$symbol <- tlfShape(group$Symbol)
 
       for (ddiRatio in group$DDIRatios){
         outputPath <- ddiRatio$Output
@@ -117,9 +117,9 @@ getQualificationDDIPlotData <- function(configurationPlan){
 #' @return dataframe for plotting goodness of fit of predictedVsObserved type
 buildQualificationDDIPredictedVsObserved <- function(dataframe,
                                                      metadata) {
-  axesSettings <- metadata$axesSettings[["predictedVsObserved"]]
-  axesSettings$X$label <- "Observed"
-  axesSettings$Y$label <- "Predicted"
+  axesSettings <- metadata$axesSettings$predictedVsObserved
+  axesSettings$X$label <- plotDDIXLabel$predictedVsObserved
+  axesSettings$Y$label <- plotDDIYLabel$predictedVsObserved
 
   xUnit <- axesSettings$X$unit
   xDimension <- axesSettings$X$dimension
@@ -156,15 +156,16 @@ buildQualificationDDIPredictedVsObserved <- function(dataframe,
     }
     yData <- replaceInfWithNA(yData)
 
-    df <- data.frame(
-      Observed = xData,
-      Simulated = yData,
-      Group = grp
-    )
-
-    ddiPlotDataframe <- rbind.data.frame(ddiPlotDataframe, df)
+    df <- list()
+    df[[axesSettings$X$label]] <- xData
+    df[[axesSettings$Y$label]] <- yData
+    df$Group <- grp
+    ddiPlotDataframe <- rbind.data.frame(ddiPlotDataframe, as.data.frame(df))
 
   }
+
+  ddiPlotDataframe$Group <- as.factor(ddiPlotDataframe$Group)
+
   return(list(ddiPlotDataframe = ddiPlotDataframe, aestheticsList = aestheticsList, axesSettings = axesSettings))
 }
 
@@ -178,9 +179,9 @@ buildQualificationDDIPredictedVsObserved <- function(dataframe,
 #' #' @return dataframe for plotting goodness of fit of residuals vs time type
 buildQualificationDDIResidualsVsObserved <- function(dataframe,
                                                      metadata) {
-  axesSettings <- metadata$axesSettings[["residualsVsObserved"]]
-  axesSettings$X$label <- "Observed"
-  axesSettings$Y$label <- "Residuals"
+  axesSettings <- metadata$axesSettings$residualsVsObserved
+  axesSettings$X$label <- plotDDIXLabel$residualsVsObserved
+  axesSettings$Y$label <- plotDDIYLabel$residualsVsObserved
 
   xUnit <- axesSettings$X$unit
   xDimension <- axesSettings$X$dimension
@@ -223,44 +224,44 @@ buildQualificationDDIResidualsVsObserved <- function(dataframe,
     yData <- residualValues
     yData <- replaceInfWithNA(yData)
 
-    df <- data.frame(
-      Observed = xData,
-      Residual = yData,
-      Group = grp
-    )
-
-    ddiPlotDataframe <- rbind.data.frame(ddiPlotDataframe, df)
-
+    df <- list()
+    df[[axesSettings$X$label]] <- xData
+    df[[axesSettings$Y$label]] <- yData
+    df$Group <- grp
+    ddiPlotDataframe <- rbind.data.frame(ddiPlotDataframe, as.data.frame(df))
   }
+
+  ddiPlotDataframe$Group <- as.factor(ddiPlotDataframe$Group)
+
   return(list(ddiPlotDataframe = ddiPlotDataframe, aestheticsList = aestheticsList, axesSettings = axesSettings))
 }
 
 
 
-#' @title plotQualificationDDIPredictedVsObserved
+#' @title generateDDIQualificationDDIPlot
 #' @description Plot observation vs prediction for qualification workflow
 #' @param data data.frame
-#' @return ggplot object of time profile for qualification workflow
+#' @return ggplot DDI plot object for DDI qualification workflow
 #' @import tlf
 #' @import ggplot2
-generateDDIQualificationDDIPlotData <- function(data) {
+generateDDIQualificationDDIPlot <- function(data) {
   if (data$axesSettings$X$scaling == "Log") {
-    xlabel <- bquote(log[10]*.(paste0(axesSettings$X$label)))
+    xlabel <- bquote(log[10]*.(paste0(data$axesSettings$X$label)))
   } else {
-    xlabel <- paste(axesSettings$X$label)
+    xlabel <- paste(data$axesSettings$X$label)
   }
 
   if (data$axesSettings$Y$scaling == "Log") {
-    ylabel <- bquote(log[10]*.(paste0(axesSettings$Y$label)))
+    ylabel <- bquote(log[10]*.(paste0(data$axesSettings$Y$label)))
   } else {
-    ylabel <- paste(axesSettings$Y$label)
+    ylabel <- paste(data$axesSettings$Y$label)
   }
 
   ddiData <- data$ddiPlotDataframe
 
-  ddiDataMapping <- tlf::ObsVsPredDataMapping$new(
-    x = "Observed",
-    y = "Simulated",
+  ddiDataMapping <- tlf::DDIRatioDataMapping$new(
+    x = data$axesSettings$X$label,
+    y = data$axesSettings$Y$label,
     shape = "Group",
     color = "Group"
   )
@@ -271,8 +272,9 @@ generateDDIQualificationDDIPlotData <- function(data) {
   )
 
   qualificationDDIPredictedVsObservedPlot <- tlf::plotDDIRatio(
-    data = gofData,
-    plotConfiguration = ddiPlotConfiguration
+    data = ddiData,
+    plotConfiguration = ddiPlotConfiguration,
+    dataMapping = ddiDataMapping
   )
 
   qualificationDDIPredictedVsObservedPlot <- qualificationDDIPredictedVsObservedPlot + ggplot2::scale_color_manual(values = data$aestheticsList$color)
@@ -282,58 +284,10 @@ generateDDIQualificationDDIPlotData <- function(data) {
   return(qualificationDDIPredictedVsObservedPlot)
 }
 
-#'
-#' #' @title plotQualificationDDIResidualsVsObserved
-#' #' @description Plot DDI residual vs observation for qualification workflow
-#' #' @param data data.frame
-#' #' @return ggplot object of residuals over time profile for qualification workflow
-#' #' @import tlf
-#' #' @import ggplot2
-#' plotQualificationDDIResidualsVsObserved <- function(data) {
-#'   maxRes <- 1.2 * max(abs(data$gofPlotDataframe[, "Residuals"]), na.rm = TRUE)
-#'
-#'   resVsTimeDataMapping <- tlf::ResVsPredDataMapping$new(
-#'     x = "Time",
-#'     y = "Residuals",
-#'     shape = "Group",
-#'     color = "uniqueGroupOutputMappingID"
-#'   )
-#'
-#'   metaData <- NULL
-#'
-#'   gofPlotConfiguration <- tlf::ResVsPredPlotConfiguration$new(
-#'     data = data$gofPlotDataframe,
-#'     metaData = metaData,
-#'     dataMapping = resVsTimeDataMapping
-#'   )
-#'
-#'   gofPlotConfiguration$labels$ylabel$font$angle <- 90
-#'   gofPlotConfiguration$labels$xlabel$text <- paste0("Time (",data$axesSettings$X$unit,")")
-#'   gofPlotConfiguration$labels$ylabel$text <- paste0("Residuals")
-#'   gofPlotConfiguration$legend$position <- "outsideRight"
-#'
-#'   qualificationGOFResVsTimePlot <- tlf::plotResVsPred(data = data$gofPlotDataframe,
-#'                                                       metaData = metaData,
-#'                                                       dataMapping = resVsTimeDataMapping,
-#'                                                       plotConfiguration = gofPlotConfiguration)
-#'
-#'   qualificationGOFResVsTimePlot <- tlf::setYAxis(
-#'     plotObject = qualificationGOFResVsTimePlot,
-#'     limits = c(-maxRes, maxRes)
-#'   )
-#'
-#'   qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::scale_color_manual(values = data$aestheticsList$color)
-#'   qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::scale_shape_manual(values = data$aestheticsList$shape)
-#'   qualificationGOFResVsTimePlot <- qualificationGOFResVsTimePlot + ggplot2::guides(color = FALSE)
-#'   return(qualificationGOFResVsTimePlot)
-#' }
-#'
-#'
-#'
-#' @title plotQualificationGOFs
-#' @description Plot observation vs prediction for qualification workflow
+#' @title plotQualificationDDIs
+#' @description Plot observation vs prediction for DDI qualification workflow
 #' @param configurationPlan A `ConfigurationPlan` object
-#' @return list of qualification GOF ggplot objects
+#' @return list of qualification DDI ggplot objects
 plotQualificationDDIs <- function(configurationPlan,
                                   logFolder = getwd(),
                                   settings) {
@@ -350,8 +304,8 @@ plotQualificationDDIs <- function(configurationPlan,
       for (pkParameter in unique(dataframe$pkParameter)){
         plotID <- paste("DDIRatioPlot", plotIndex, plotType , pkParameter , sep = "-")
 
-        plotDDIDataframe <- buildDDIDataFrameFunctions[[plotType]](dataframe[dataframe$pkParameter == pkParameter,], metadata)
-        ddiPlotList[[plotIndex]][[plotType]] <- plotDDIFunctions[[plotType]](plotDDIDataframe)
+        plotDDIData <- buildDDIDataFrameFunctions[[plotType]](dataframe[dataframe$pkParameter == pkParameter,], metadata)
+        ddiPlotList[[plotIndex]][[plotType]] <- generateDDIQualificationDDIPlot(plotDDIData)
 
         ddiPlotResults[[plotID]] <- saveTaskResults(
           id = plotID,
@@ -365,7 +319,7 @@ plotQualificationDDIs <- function(configurationPlan,
   return(ddiPlotResults)
 }
 
-#' Names of fields in configuration plane containing axes settings data for each GOF plot type
+#' Names of fields in configuration plane containing axes settings data for each DDI plot type
 ddiPlotAxesSettings <- list(
   "predictedVsObserved" = "DDIRatioPlotsPredictedVsObserved",
   "residualsVsObserved" = "DDIRatioPlotsResidualsVsObserved"
@@ -375,12 +329,6 @@ ddiPlotAxesSettings <- list(
 buildDDIDataFrameFunctions <- list(
   "predictedVsObserved" = buildQualificationDDIPredictedVsObserved,
   "residualsVsObserved" = buildQualificationDDIResidualsVsObserved
-)
-
-#' Names of functions for plotting DDI plots for each DDI plot type
-plotDDIFunctions <- list(
-  "predictedVsObserved" = plotQualificationDDIPredictedVsObserved,
-  "residualsVsObserved" = plotQualificationDDIResidualsVsObserved
 )
 
 #'Labels for DDI plot X-axis
