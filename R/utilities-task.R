@@ -63,7 +63,7 @@ loadSimulateTask <- function(workflow, active = TRUE, settings = NULL) {
   validateIsLogical(active)
 
   taskFunction <- simulateModelParallel
-  nameFunction <- deparse(substitute(simulateModelParallel))#deparse(substitute(simulateModel))
+  nameFunction <- deparse(substitute(simulateModelParallel)) # deparse(substitute(simulateModel))
   simulationTaskInitializer <- ParallelSimulationTask$new
 
   if (isOfType(workflow, "PopulationWorkflow")) {
@@ -471,7 +471,7 @@ addUserDefinedTask <- function(workflow,
   if (isOfType(workflow, "MeanModelWorkflow")) {
     # PlotTask arguments
     validateIsIncluded(c("structureSet", "logFolder", "settings"), argumentNames,
-                       groupName = "Task function arguments", logFolder = workflow$workflowFolder
+      groupName = "Task function arguments", logFolder = workflow$workflowFolder
     )
 
     workflow$userDefinedTasks <- c(
@@ -493,7 +493,7 @@ addUserDefinedTask <- function(workflow,
   if (isOfType(workflow, "PopulationWorkflow")) {
     # PopulationPlotTask arguments
     validateIsIncluded(c("structureSets", "logFolder", "settings", "workflowType", "xParameters", "yParameters"), argumentNames,
-                       groupName = "Task function arguments", logFolder = workflow$workflowFolder
+      groupName = "Task function arguments", logFolder = workflow$workflowFolder
     )
 
     workflow$userDefinedTasks <- c(
@@ -675,11 +675,6 @@ loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
     settings = list(
       predictedVsObserved = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$DDIRatioPlotsPredictedVsObserved)),
       residualsOverTime = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$DDIRatioPlotsResidualsVsObserved))
-    ))
-  )
+    )
+  ))
 }
-
-
-
-
-

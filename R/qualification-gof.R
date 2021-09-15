@@ -163,7 +163,6 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
   for (grp in unique(dataframe$group)) {
     aestheticsList$shape[[grp]] <- metadata$groups[[grp]]$symbol
     for (mappingIndex in unique(dataframe[dataframe$group == grp, ]$outputMappingNumber)) {
-
       uniqueGroupOutputMappingID <- uniqueGroupOutputMappingID + 1
 
       molWeight <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$molWeight
@@ -245,7 +244,6 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
   for (grp in unique(dataframe$group)) {
     aestheticsList$shape[[grp]] <- metadata$groups[[grp]]$symbol
     for (mappingIndex in unique(dataframe[dataframe$group == grp, ]$outputMappingNumber)) {
-
       uniqueGroupOutputMappingID <- uniqueGroupOutputMappingID + 1
 
       molWeight <- metadata$groups[[grp]]$outputMappings[[mappingIndex]]$molWeight
@@ -319,15 +317,15 @@ buildQualificationGOFResidualsOverTime <- function(dataframe,
 #' @import ggplot2
 plotQualificationGOFPredictedVsObserved <- function(data) {
   if (data$axesSettings$X$scaling == "Log") {
-    xlabel <- bquote(log[10]*.(paste0("(Observed ",data$axesSettings$X$unit,")")))
+    xlabel <- bquote(log[10] * .(paste0("(Observed ", data$axesSettings$X$unit, ")")))
   } else {
-    xlabel <- paste("Observed",data$axesSettings$X$unit)
+    xlabel <- paste("Observed", data$axesSettings$X$unit)
   }
 
   if (data$axesSettings$Y$scaling == "Log") {
-    ylabel <- bquote(log[10]*.(paste0("(Predicted ",data$axesSettings$Y$unit,")")))
+    ylabel <- bquote(log[10] * .(paste0("(Predicted ", data$axesSettings$Y$unit, ")")))
   } else {
-    ylabel <- paste("Predicted",data$axesSettings$Y$unit)
+    ylabel <- paste("Predicted", data$axesSettings$Y$unit)
   }
 
   gofData <- data$gofPlotDataframe
@@ -383,14 +381,16 @@ plotQualificationGOFResidualsOverTime <- function(data) {
   )
 
   gofPlotConfiguration$labels$ylabel$font$angle <- 90
-  gofPlotConfiguration$labels$xlabel$text <- paste0("Time (",data$axesSettings$X$unit,")")
+  gofPlotConfiguration$labels$xlabel$text <- paste0("Time (", data$axesSettings$X$unit, ")")
   gofPlotConfiguration$labels$ylabel$text <- paste0("Residuals")
   gofPlotConfiguration$legend$position <- "outsideRight"
 
-  qualificationGOFResVsTimePlot <- tlf::plotResVsPred(data = data$gofPlotDataframe,
-                                                      metaData = metaData,
-                                                      dataMapping = resVsTimeDataMapping,
-                                                      plotConfiguration = gofPlotConfiguration)
+  qualificationGOFResVsTimePlot <- tlf::plotResVsPred(
+    data = data$gofPlotDataframe,
+    metaData = metaData,
+    dataMapping = resVsTimeDataMapping,
+    plotConfiguration = gofPlotConfiguration
+  )
 
   qualificationGOFResVsTimePlot <- tlf::setYAxis(
     plotObject = qualificationGOFResVsTimePlot,

@@ -53,7 +53,7 @@ SimulationSet <- R6::R6Class(
       # Test and validate outputs and their paths
       validateOutputObject(c(outputs), simulation, nullAllowed = TRUE)
 
-      validateIsPositive(object = minimumSimulationEndTime,nullAllowed = TRUE)
+      validateIsPositive(object = minimumSimulationEndTime, nullAllowed = TRUE)
       self$minimumSimulationEndTime <- minimumSimulationEndTime
 
       # Test and validate observed data

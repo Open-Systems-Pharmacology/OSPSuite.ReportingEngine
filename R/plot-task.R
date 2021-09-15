@@ -59,9 +59,9 @@ PlotTask <- R6::R6Class(
         ggplot2::ggsave(
           filename = figureFilePath,
           plot = taskResults$plots[[plotName]],
-          width = reEnv$defaultPlotFormat$width, 
-          height = reEnv$defaultPlotFormat$height, 
-          dpi = reEnv$defaultPlotFormat$dpi, 
+          width = reEnv$defaultPlotFormat$width,
+          height = reEnv$defaultPlotFormat$height,
+          dpi = reEnv$defaultPlotFormat$dpi,
           units = reEnv$defaultPlotFormat$units
         )
         re.tStoreFileMetadata(access = "write", filePath = figureFilePath)

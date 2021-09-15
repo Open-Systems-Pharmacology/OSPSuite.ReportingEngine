@@ -65,7 +65,7 @@ ConfigurationPlan <- R6::R6Class(
       if (is.na(sectionContent)) {
         markdownContent <- private$.sections$title[selectedId]
         # In case no title nor content was defined
-        if(is.na(markdownContent)){
+        if (is.na(markdownContent)) {
           logWorkflow(
             message = paste0("Section id '", id, "': no content or title defined"),
             pathFolder = logFolder,

@@ -100,8 +100,7 @@ simulateModelOnCore <- function(simulation,
 simulateModelParallel <- function(structureSets,
                                   settings = NULL,
                                   logFolder = getwd()) {
-
-  simulations <- lapply(structureSets,function(set){
+  simulations <- lapply(structureSets, function(set) {
     re.tStoreFileMetadata(access = "read", filePath = set$simulationSet$simulationFile)
     simulation <- loadSimulationWithUpdatedPaths(set$simulationSet)
     logWorkflow(
@@ -117,8 +116,10 @@ simulateModelParallel <- function(structureSets,
     numberOfCores = settings$allowedCores
   )
 
-  simulationResults <- ospsuite::runSimulations(simulations = simulations,
-                                                simulationRunOptions = simRunOptions)
+  simulationResults <- ospsuite::runSimulations(
+    simulations = simulations,
+    simulationRunOptions = simRunOptions
+  )
 
   logWorkflow(
     message = "Parallel simulation run complete",

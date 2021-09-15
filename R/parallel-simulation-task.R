@@ -27,7 +27,9 @@ ParallelSimulationTask <- R6::R6Class(
         dir.create(file.path(self$workflowFolder, self$outputFolder))
       }
 
-      sapply(structureSets,function(set){self$validateStructureSetInput(set)})
+      sapply(structureSets, function(set) {
+        self$validateStructureSetInput(set)
+      })
 
       taskResults <- self$getTaskResults(
         structureSets = structureSets,
@@ -35,8 +37,8 @@ ParallelSimulationTask <- R6::R6Class(
         logFolder = self$workflowFolder
       )
 
-      for (setNumber in seq_along(structureSets)){
-        if(is.null(taskResults[[setNumber]])){
+      for (setNumber in seq_along(structureSets)) {
+        if (is.null(taskResults[[setNumber]])) {
           next
         }
         self$saveResults(

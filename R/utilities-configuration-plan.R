@@ -163,18 +163,19 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
     # Convert output values, if molWeight is NA but not required, then toUnit works without any issue
     # if molWeight is NA and required, then toUnit crashes, error is caught
     # and the error message indictes which observed data Id need molWeight
-    outputValues <- tryCatch({
-      ospsuite::toUnit(
-        quantityOrDimension = ospsuite::getDimensionForUnit(observedResults$metaData$output$unit),
-        values = observedResults$data[, 2],
-        targetUnit = axesProperties$y$unit,
-        sourceUnit = observedResults$metaData$output$unit,
-        molWeight = molWeight
-      )
-    },
-    error = function(e) {
-      NULL
-    }
+    outputValues <- tryCatch(
+      {
+        ospsuite::toUnit(
+          quantityOrDimension = ospsuite::getDimensionForUnit(observedResults$metaData$output$unit),
+          values = observedResults$data[, 2],
+          targetUnit = axesProperties$y$unit,
+          sourceUnit = observedResults$metaData$output$unit,
+          molWeight = molWeight
+        )
+      },
+      error = function(e) {
+        NULL
+      }
     )
     if (isOfLength(outputValues, 0)) {
       logErrorThenStop(

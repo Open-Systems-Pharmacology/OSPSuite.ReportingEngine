@@ -312,7 +312,8 @@ getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPl
 #' or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
 #' @return A logical checking if path corresponds to observed data
 #' @import ospsuite
-#' @examples \dontrun{
+#' @examples
+#' \dontrun{
 #' isObservedData("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)")
 #' # > FALSE
 #' isObservedData("Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc")
@@ -331,7 +332,8 @@ isObservedData <- function(path) {
 #' or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
 #' @return A string corresponding to the `id` of a configuration plan observed dataset
 #' @import ospsuite
-#' @examples \dontrun{
+#' @examples
+#' \dontrun{
 #' getObservedDataIdFromPath("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)")
 #' # > NULL
 #' getObservedDataIdFromPath("Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc")
