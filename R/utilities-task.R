@@ -61,14 +61,18 @@ inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
 loadSimulateTask <- function(workflow, active = TRUE, settings = NULL) {
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
-  taskFunction <- simulateModel
-  nameFunction <- deparse(substitute(simulateModel))
+
+  taskFunction <- simulateModelParallel
+  nameFunction <- deparse(substitute(simulateModelParallel))#deparse(substitute(simulateModel))
+  simulationTaskInitializer <- ParallelSimulationTask$new
+
   if (isOfType(workflow, "PopulationWorkflow")) {
     taskFunction <- simulateModelForPopulation
     nameFunction <- deparse(substitute(simulateModelForPopulation))
+    simulationTaskInitializer <- SimulationTask$new
   }
 
-  return(SimulationTask$new(
+  return(simulationTaskInitializer(
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
     outputFolder = defaultTaskOutputFolders$simulate,
