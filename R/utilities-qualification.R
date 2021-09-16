@@ -281,3 +281,29 @@ getAxesSettings <- function(axesSettingsFromConfigurationPlot) {
   names(axesSettings) <- sapply(axesSettingsFromConfigurationPlot, function(x) x$Type)
   return(axesSettings)
 }
+
+
+#' @title startQualificationRunner
+#' @description Starts the qualification runner and creates inputs for the reporting engine
+#' @param qualificationRunnerFolder Folder where QualificationRunner.exe is located
+#' @param qualificationPlanFile full path of the input qualification plan
+#' @param outputFolder Name of output folder created by the qualification runner
+#' @param options List or array of options inspired from Matlab version of `startQualificationRunner`
+#' \itemize{
+#' \item `'-f'` or `'--force'`:    If set to true, the contents of the output folder will be deleted, even if it not empty. Default is false
+#' \item `'-n <name>'`:          Name of the report qualification plan to be generated. Default is 'report-configuration-plan.json'
+#' \item `'-p <PKSim Folder>'`:  Path of PK-Sim installation folder. If not specified, installation path will be read
+#' from the registry (available only in case of full (non-portable) installation). This option is MANDATORY for the portable version of PK-Sim
+#' \item `'-l <logFile>'`:       Full path of log file where log output will be written. A log file will not be created if this value is not provided.
+#' \item `'-a'` or `'--append'`:   true to append data to the file; false to overwrite the file (default). If the specified file does not exist, this parameter has no effect, and a new file is created.
+#' \item `'--logLevel <Level>'`: Log verbosity (Debug, Information, Warning, Error). Default is Information.
+#' \item `'--version'`:          Display version information.
+#' } 
+#' @export
+startQualificationRunner <- function(qualificationRunnerFolder, qualificationPlanFile, outputFolder, options = NULL){
+  optionalArguments <- paste0(options, collapse = ' ')
+  qualificationRunner <- paste0(file.path(qualificationRunnerFolder, 'QualificationRunner.exe'))
+  arguments <- paste0(' -i "', qualificationPlanFile,  '" -o "', outputFolder, '" ', optionalArguments)
+  shell(paste0(qualificationRunner, arguments))
+  return(invisible())
+}
