@@ -660,7 +660,7 @@ loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
   active <- !isOfLength(configurationPlan$plots$DDIRatioPlots, 0)
 
   taskFunction <- plotQualificationDDIs
-  nameFunction <- getObjectNameAsString(substitute(plotQualificationDDIs)
+  nameFunction <- getObjectNameAsString(substitute(plotQualificationDDIs))
 
   return(QualificationTask$new(
     getTaskResults = taskFunction,
