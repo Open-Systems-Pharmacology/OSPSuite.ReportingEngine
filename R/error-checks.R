@@ -86,7 +86,7 @@ validateIsPositive <- function(object, nullAllowed = FALSE) {
 }
 
 validateIsNonNegative <- function(object, nullAllowed = FALSE) {
-  validateIsOfType(object, c("numeric", "integer"), nullAllowed)
+  validateIsNumeric(object, nullAllowed)
   if (isFALSE(object >= 0)) {
     logErrorThenStop(messages$errorWrongType(deparse(substitute(object)), class(object)[1], "non-negative"))
   }
