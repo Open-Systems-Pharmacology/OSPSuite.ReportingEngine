@@ -177,7 +177,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
     # Case where dictionary defined an lloq column missing from dataset
     if (!isIncluded(lloqColumn, names(observedDataset))) {
       logWorkflow(
-        message = paste0("lloq variable '", lloqColumn, "' defined in dictionary is missing from observed dataset"),
+        message = paste0("lloq column '", lloqColumn, "' defined in dictionary is not present in the dataset columns"),
         pathFolder = logFolder,
         logTypes = LogTypes$Debug
       )
