@@ -85,6 +85,14 @@ validateIsPositive <- function(object, nullAllowed = FALSE) {
   }
 }
 
+validateIsNonNegative <- function(object, nullAllowed = FALSE) {
+  validateIsOfType(object, c("numeric", "integer"), nullAllowed)
+  if (isFALSE(object >= 0)) {
+    logErrorThenStop(messages$errorWrongType(deparse(substitute(object)), class(object)[1], "non-negative"))
+  }
+}
+
+
 hasPositiveValues <- function(object) {
   object <- object[!is.na(object)]
   object <- object[!is.infinite(object)]

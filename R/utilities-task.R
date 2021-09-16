@@ -467,7 +467,7 @@ addUserDefinedTask <- function(workflow,
   if (isOfType(workflow, "MeanModelWorkflow")) {
     # PlotTask arguments
     validateIsIncluded(c("structureSet", "logFolder", "settings"), argumentNames,
-      groupName = "Task function arguments", logFolder = workflow$workflowFolder
+                       groupName = "Task function arguments", logFolder = workflow$workflowFolder
     )
 
     workflow$userDefinedTasks <- c(
@@ -489,7 +489,7 @@ addUserDefinedTask <- function(workflow,
   if (isOfType(workflow, "PopulationWorkflow")) {
     # PopulationPlotTask arguments
     validateIsIncluded(c("structureSets", "logFolder", "settings", "workflowType", "xParameters", "yParameters"), argumentNames,
-      groupName = "Task function arguments", logFolder = workflow$workflowFolder
+                       groupName = "Task function arguments", logFolder = workflow$workflowFolder
     )
 
     workflow$userDefinedTasks <- c(
@@ -620,13 +620,13 @@ loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPl
 loadPlotPKRatioTask <- function(workflow, configurationPlan) {
   validateIsOfType(workflow, "QualificationWorkflow")
   validateIsOfType(configurationPlan, "ConfigurationPlan")
-  
+
   # Time Profiles task is only active if the field is defined & not empty
   active <- !isOfLength(configurationPlan$plots$PKRatioPlots, 0)
-  
+
   taskFunction <- plotQualificationPKRatio
   nameFunction <- deparse(substitute(plotQualificationPKRatio))
-  
+
   return(QualificationTask$new(
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
@@ -640,3 +640,42 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
     settings = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$PKRatioPlots))
   ))
 }
+
+
+#' @title loadPlotDDIRatioTask
+#' @description
+#' Define `plotDDIRatio` task and its settings
+#' @param workflow `QualificationWorkflow` object
+#' @param configurationPlan A `ConfigurationPlan` object
+#' @return A `QualificationTask` object
+loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
+  validateIsOfType(workflow, "QualificationWorkflow")
+  validateIsOfType(configurationPlan, "ConfigurationPlan")
+
+  # Time Profiles task is only active if the field is defined & not empty
+  active <- !isOfLength(configurationPlan$plots$DDIRatioPlots, 0)
+
+  taskFunction <- plotQualificationDDIs
+  nameFunction <- deparse(substitute(plotQualificationDDIs))
+
+  return(QualificationTask$new(
+    getTaskResults = taskFunction,
+    nameTaskResults = nameFunction,
+    inputFolder = defaultTaskOutputFolders$simulate,
+    # TODO: only get simulations results from configuraiton plan
+    # also include observed data
+    inputs = getSimulationResultFileNames(workflow),
+    workflowFolder = workflow$workflowFolder,
+    active = active,
+    message = defaultWorkflowMessages$plotDDIRatio,
+    settings = list(
+      predictedVsObserved = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$DDIRatioPlotsPredictedVsObserved)),
+      residualsOverTime = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$DDIRatioPlotsResidualsVsObserved))
+    ))
+  )
+}
+
+
+
+
+

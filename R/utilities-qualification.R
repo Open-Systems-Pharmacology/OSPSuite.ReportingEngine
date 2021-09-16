@@ -9,6 +9,9 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
     workflowFolder = workflowFolder,
     configurationPlanFile = configurationPlanFile
   )
+
+  outputsDataframe <- getOutputsFromConfigurationPlan(configurationPlan = configurationPlan)
+
   # TODO outputs and pk parameters may need to be defined
   # Either as part of simulationSets or as a settings for the task
   # Currently, no output is saved as simulationResults
@@ -19,19 +22,28 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
     simulationFile <- configurationPlan$getSimulationPath(project = project, simulation = simulationName)
 
     cat(paste0(
-      "Loading simulation ", simulationIndex , "/" , nrow(configurationPlan$simulationMappings), 
+      "Creating output objects for ", simulationIndex, "/", nrow(configurationPlan$simulationMappings),
       ": Project '", project, "' - Simulation '", simulationName, "'\n"
-      ))
-    simulation <- loadSimulation(simulationFile)
-    outputs <- lapply(simulation$outputSelections$allOutputs, function(output) {
-      Output$new(output$path)
+    ))
+
+    outputsDataframeSubset <- outputsDataframe[outputsDataframe$project == project & outputsDataframe$simulation == simulationName  ,  ]
+
+    outputs <- lapply( unique(outputsDataframeSubset$outputPath) , function(outputPath) {
+      Output$new(path = as.character(outputPath),
+                 pkParameters = outputsDataframeSubset$pkParameter[ outputsDataframeSubset$outputPath == outputPath & !(is.na( outputsDataframeSubset$pkParameter ))])
     })
+
+    minimumSimulationEndTime <- NULL
+    if( any(!is.na(outputsDataframeSubset$endTime)) ){
+      minimumSimulationEndTime <- max(outputsDataframeSubset$endTime,na.rm = TRUE)
+    }
 
     # simulationSetName defined as project-simulation uniquely identifies the simulation
     simulationSets[[simulationIndex]] <- SimulationSet$new(
       simulationSetName = paste(project, simulationName, sep = "-"),
       simulationFile = simulationFile,
-      outputs = c(outputs)
+      outputs = c(outputs),
+      minimumSimulationEndTime = minimumSimulationEndTime
     )
   }
   workflow <- QualificationWorkflow$new(
@@ -93,8 +105,8 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
     # Actual section path will be relative to the workflowFolder
     # and is wrapped in method configurationPlan$getSectionPath(id)
     sectionPath <- paste0(parentFolder,
-      sprintf("%0.3d_%s", sectionIndex, removeForbiddenLetters(section$Title)),
-      sep = .Platform$file.sep
+                          sprintf("%0.3d_%s", sectionIndex, removeForbiddenLetters(section$Title)),
+                          sep = .Platform$file.sep
     )
 
     sectionMarkdown <- sprintf("%0.3d_%s.md", sectionIndex, removeForbiddenLetters(section$Title))
@@ -146,7 +158,7 @@ createSectionOutput <- function(configurationPlan, logFolder = getwd()) {
     # Initialize markdown appendices
     resetReport(configurationPlan$getSectionMarkdown(sectionId), logFolder = logFolder)
     appendices <- c(appendices, configurationPlan$getSectionMarkdown(sectionId))
-    
+
     # Add info from content or title to section content
     configurationPlan$copySectionContent(sectionId, logFolder = logFolder)
   }
@@ -214,7 +226,7 @@ separateVariableFromUnit <- function(variableUnitString) {
   splitVariableUnitString <- strsplit(x = sub("[ []", replacement = "", x = variableUnitString), split = "[][]")[[1]]
   return(list(
     name = trimws(splitVariableUnitString[1]),
-    unit = ifelse(test = is.na(x = tail(splitVariableUnitString,1)), yes = "", no = tail(splitVariableUnitString,1))
+    unit = ifelse(test = is.na(x = tail(splitVariableUnitString, 1)), yes = "", no = tail(splitVariableUnitString, 1))
   ))
 }
 
@@ -247,8 +259,8 @@ massMoleConversion <- function(dimension) {
   massMoleConversionList[[ospDimensions$Mass]] <- ospsuite::ospDimensions$Amount
   massMoleConversionList[[ospDimensions$`Concentration (mass)`]] <- ospsuite::ospDimensions$`Concentration (molar)`
   return(ifelse(test = dimension %in% c(ospsuite::ospDimensions$Mass, ospsuite::ospDimensions$`Concentration (mass)`),
-    yes = massMoleConversionList[[dimension]],
-    no = dimension
+                yes = massMoleConversionList[[dimension]],
+                no = dimension
   ))
 }
 

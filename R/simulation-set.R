@@ -19,6 +19,7 @@ SimulationSet <- R6::R6Class(
     observedMetaDataFile = NULL,
     timeUnit = NULL,
     applicationRanges = NULL,
+    minimumSimulationEndTime = NULL,
 
     #' @description
     #' Create a new `SimulationSet` object.
@@ -36,7 +37,8 @@ SimulationSet <- R6::R6Class(
                           observedDataFile = NULL,
                           observedMetaDataFile = NULL,
                           timeUnit = "h",
-                          applicationRanges = ApplicationRanges) {
+                          applicationRanges = ApplicationRanges,
+                          minimumSimulationEndTime = NULL) {
       # Test and validate the simulation object
       validateIsString(simulationSetName)
       validateIsString(simulationFile)
@@ -48,6 +50,10 @@ SimulationSet <- R6::R6Class(
       simulation <- ospsuite::loadSimulation(simulationFile)
       # Test and validate outputs and their paths
       validateOutputObject(c(outputs), simulation, nullAllowed = TRUE)
+
+      validateIsPositive(object = minimumSimulationEndTime,nullAllowed = TRUE)
+      self$minimumSimulationEndTime <- minimumSimulationEndTime
+
       # Test and validate observed data
       validateIsString(c(observedDataFile, observedMetaDataFile, timeUnit), nullAllowed = TRUE)
       if (!is.null(observedDataFile)) {
