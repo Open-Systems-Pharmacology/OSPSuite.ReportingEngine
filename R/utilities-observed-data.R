@@ -102,9 +102,9 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   re.tStoreFileMetadata(access = "read", filePath = simulationSet$observedMetaDataFile)
   dictionary <- readObservedDataFile(simulationSet$observedMetaDataFile)
 
-  # Enforce nonmemUnit column to exist
-  if (!isIncluded(dictionaryParameters$nonmemUnit, names(dictionary))) {
-    dictionary[, dictionaryParameters$nonmemUnit] <- NA
+  # Enforce datasetUnit column to exist
+  if (!isIncluded(dictionaryParameters$datasetUnit, names(dictionary))) {
+    dictionary[, dictionaryParameters$datasetUnit] <- NA
   }
   # Use dictionary to map the data and get the unit
   # Note that lloqColumn, timeUnitColumn and dvUnitColumn can be NULL

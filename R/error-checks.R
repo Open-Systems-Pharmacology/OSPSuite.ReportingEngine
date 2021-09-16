@@ -302,8 +302,8 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile,
   }
   # Read dictionary and check that mandatory variables are included
   dictionary <- readObservedDataFile(observedMetaDataFile)
-  if (!isIncluded(dictionaryParameters$nonmemUnit, names(dictionary))) {
-    dictionary[, dictionaryParameters$nonmemUnit] <- NA
+  if (!isIncluded(dictionaryParameters$datasetUnit, names(dictionary))) {
+    dictionary[, dictionaryParameters$datasetUnit] <- NA
   }
   validateIsIncludedInDataset(c(dictionaryParameters$ID, dictionaryParameters$datasetColumn), dictionary, datasetName = "dictionary")
   validateIsIncluded(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID], groupName = paste0("Column '", dictionaryParameters$ID, "'"))
