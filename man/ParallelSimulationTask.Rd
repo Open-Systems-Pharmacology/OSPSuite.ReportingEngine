@@ -12,7 +12,6 @@ R6 class for ParallelSimulationTask settings
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{ParallelSimulationTask$new()}}
 \item \href{#method-runTask}{\code{ParallelSimulationTask$runTask()}}
 \item \href{#method-clone}{\code{ParallelSimulationTask$clone()}}
 }
@@ -28,29 +27,10 @@ R6 class for ParallelSimulationTask settings
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="print">}\href{../../ospsuite.reportingengine/html/Task.html#method-print}{\code{ospsuite.reportingengine::Task$print()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="validateInput">}\href{../../ospsuite.reportingengine/html/Task.html#method-validateInput}{\code{ospsuite.reportingengine::Task$validateInput()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="validateStructureSetInput">}\href{../../ospsuite.reportingengine/html/Task.html#method-validateStructureSetInput}{\code{ospsuite.reportingengine::Task$validateStructureSetInput()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="SimulationTask" data-id="initialize">}\href{../../ospsuite.reportingengine/html/SimulationTask.html#method-initialize}{\code{ospsuite.reportingengine::SimulationTask$initialize()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="SimulationTask" data-id="saveResults">}\href{../../ospsuite.reportingengine/html/SimulationTask.html#method-saveResults}{\code{ospsuite.reportingengine::SimulationTask$saveResults()}}\out{</span>}
 }
 \out{</details>}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
-\subsection{Method \code{new()}}{
-Create a `ParallelSimulationTask` object
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ParallelSimulationTask$new(...)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{parameters inherited from R6 class `SimulationTask` object}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A new `SimulationTask` object
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-runTask"></a>}}
