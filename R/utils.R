@@ -461,6 +461,6 @@ calculateGMFE <- function(x, y) {
 #' @description Return the name of an object as a string
 #' @param object, the name of which is to be returned
 #' @return the name of the `object` as a string
-getObjectNameAsString <- function(object){
+getObjectNameAsString <- function(object) {
   return(deparse(substitute(object)))
 }
