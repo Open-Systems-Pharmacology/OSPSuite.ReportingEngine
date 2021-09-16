@@ -63,7 +63,7 @@ loadSimulateTask <- function(workflow, active = TRUE, settings = NULL) {
   validateIsLogical(active)
 
   taskFunction <- simulateModelParallel
-  nameFunction <- deparse(substitute(simulateModelParallel)) # deparse(substitute(simulateModel))
+  nameFunction <- deparse(substitute(simulateModelParallel))
   simulationTaskInitializer <- ParallelSimulationTask$new
 
   if (isOfType(workflow, "PopulationWorkflow")) {
