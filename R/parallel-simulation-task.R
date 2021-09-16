@@ -6,14 +6,6 @@ ParallelSimulationTask <- R6::R6Class(
   public = list(
 
     #' @description
-    #' Create a `ParallelSimulationTask` object
-    #' @param ... parameters inherited from R6 class `SimulationTask` object
-    #' @return A new `SimulationTask` object
-    initialize = function(...) {
-      super$initialize(...)
-    },
-
-    #' @description
     #' Run task and save its output
     #' @param structureSets list of `SimulationStructure` R6 class
     runTask = function(structureSets) {
