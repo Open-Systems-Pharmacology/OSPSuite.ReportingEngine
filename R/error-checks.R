@@ -295,8 +295,8 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile)
   if (!isIncluded(dictionaryParameters$nonmemUnit, names(dictionary))) {
     dictionary[, dictionaryParameters$nonmemUnit] <- NA
   }
-  validateIsIncluded(c(dictionaryParameters$ID, dictionaryParameters$nonmenColumn), names(dictionary))
-  validateIsIncluded(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID])
+  validateIsIncludedInDataset(c(dictionaryParameters$ID, dictionaryParameters$datasetColumn), dictionary, datasetName = "dictionary")
+  validateIsIncluded(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID], groupName = paste0("Column '", dictionaryParameters$ID, "'"))
 
   # Check that dictionary and observed data are consitent
   observedDataset <- readObservedDataFile(observedDataFile)
@@ -304,8 +304,8 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile)
   dvVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvID)
   lloqVariable <- getDictionaryVariable(dictionary, dictionaryParameters$lloqID)
 
-  checkIsIncluded(c(timeVariable, dvVariable), names(observedDataset))
-  checkIsIncluded(lloqVariable, names(observedDataset), nullAllowed = TRUE)
+  checkIsIncludedInDataset(c(timeVariable, dvVariable), observedDataset, datasetName = "observed dataset")
+  checkIsIncludedInDataset(lloqVariable, observedDataset, datasetName = "observed dataset", nullAllowed = TRUE)
 
   # Units
   # If unit is defined as a value in nonmemUnit
@@ -486,3 +486,35 @@ validateHasUniqueValues <- function(data, dataName = "dataset", na.rm = TRUE, nu
   }
   stop(messages$errorHasNoUniqueValues(data, dataName, na.rm))
 }
+
+validateIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, nullAllowed = FALSE, logFolder = NULL) {
+  if (nullAllowed && is.null(columnNames)) {
+    return()
+  }
+  if (isIncluded(columnNames, names(dataset))) {
+    return()
+  }
+  if (is.null(logFolder)) {
+    stop(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName), call. = FALSE, immediate. = TRUE)
+  }
+  logErrorThenStop(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName))
+}
+
+checkIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, nullAllowed = FALSE, logFolder = NULL) {
+  if (nullAllowed && is.null(columnNames)) {
+    return()
+  }
+  if (isIncluded(columnNames, names(dataset))) {
+    return()
+  }
+  if (is.null(logFolder)) {
+    warning(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName), call. = FALSE, immediate. = TRUE)
+    return()
+  }
+  logWorkflow(
+    message = messages$errorNotIncludedInDataset(columnNames, dataset, datasetName),
+    pathFolder = logFolder,
+    logTypes = c(LogTypes$Debug, LogTypes$Error)
+  )
+}
+}
