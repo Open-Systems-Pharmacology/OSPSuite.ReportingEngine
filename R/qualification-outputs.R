@@ -123,13 +123,24 @@ getDDIOutputsDataframe <- function(configurationPlan){
         for (simulationType in c("SimulationControl","SimulationDDI")){
           plotComponent <- ddiRatio[[simulationType]]
 
-          startTime <-  ospsuite::toBaseUnit(quantityOrDimension = ospDimensions$Time,
-                                             values = plotComponent$StartTime,
-                                             unit = plotComponent$TimeUnit)
+          startTime <- NULL
+          endTime <- NULL
 
-          endTime <- ospsuite::toBaseUnit(quantityOrDimension = ospDimensions$Time,
-                                          values = plotComponent$EndTime,
-                                          unit = plotComponent$TimeUnit)
+          if (is.numeric(plotComponent$StartTime)) {
+            startTime <- ospsuite::toBaseUnit(
+              quantityOrDimension = ospDimensions$Time,
+              values = plotComponent$StartTime,
+              unit = plotComponent$TimeUnit
+            )
+          }
+
+          if (is.numeric(plotComponent$EndTime)) {
+            endTime <- ospsuite::toBaseUnit(
+              quantityOrDimension = ospDimensions$Time,
+              values = plotComponent$EndTime,
+              unit = plotComponent$TimeUnit
+            )
+          }
 
           newPKParameterNames <- NULL
           for (pkParameter in  pkParameters){
