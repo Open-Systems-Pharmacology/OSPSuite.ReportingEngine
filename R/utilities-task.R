@@ -66,7 +66,7 @@ loadSimulateTask <- function(workflow, active = TRUE, settings = NULL) {
   nameFunction <- getObjectNameAsString(simulateModelParallel)
   simulationTaskInitializer <- ParallelSimulationTask$new
 
-  if (isOfType(workflow, "PopulationWorkflow")) {
+  if (isOfType(workflow, PopulationWorkflow)) {
     taskFunction <- simulateModelForPopulation
     nameFunction <- getObjectNameAsString(simulateModelForPopulation)
     simulationTaskInitializer <- SimulationTask$new
