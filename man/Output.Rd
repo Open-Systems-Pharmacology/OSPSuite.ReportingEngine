@@ -29,6 +29,7 @@ R6 class representing workflow output
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{Output$new()}}
+\item \href{#method-clone}{\code{Output$clone()}}
 }
 }
 \if{html}{\out{<hr>}}

@@ -25,7 +25,6 @@ DataSelectionKeys <- list(
 #' @import ospsuite
 Output <- R6::R6Class(
   "Output",
-  cloneable = FALSE,
   public = list(
     path = NULL,
     displayName = NULL,
