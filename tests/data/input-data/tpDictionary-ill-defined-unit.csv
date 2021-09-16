@@ -1,4 +1,4 @@
-ID,type,nonmenColumn,nonmemUnit,reportName,pathID,comment
+ID,type,datasetColumn,datasetUnit,reportName,pathID,comment
 sid,identifier,SID,,,,
 stud,identifier,STUD,,,,
 time,timeprofile,TIME,h,,,
