@@ -56,7 +56,7 @@ validateIsOfType <- function(object, type, nullAllowed = FALSE) {
     return()
   }
   # Name of the variable in the calling function
-  objectName <- deparse(substitute(object))
+  objectName <- getObjectNameAsString(object)
   objectTypes <- typeNamesFrom(type)
   # When called from validateIsString... objectName is "object"
   # Need to get the name from parent frame
@@ -73,7 +73,7 @@ validateIsInteger <- function(object, nullAllowed = FALSE) {
   validateIsOfType(object, c("numeric", "integer"), nullAllowed)
 
   if (isFALSE(object %% 1 == 0)) {
-    logErrorThenStop(messages$errorWrongType(deparse(substitute(object)), class(object)[1], "integer"))
+    logErrorThenStop(messages$errorWrongType(getObjectNameAsString(object), class(object)[1], "integer"))
   }
 }
 
@@ -81,14 +81,14 @@ validateIsPositive <- function(object, nullAllowed = FALSE) {
   validateIsOfType(object, c("numeric", "integer"), nullAllowed)
 
   if (isFALSE(object > 0)) {
-    logErrorThenStop(messages$errorWrongType(deparse(substitute(object)), class(object)[1], "positive"))
+    logErrorThenStop(messages$errorWrongType(getObjectNameAsString(object), class(object)[1], "positive"))
   }
 }
 
 validateIsNonNegative <- function(object, nullAllowed = FALSE) {
   validateIsNumeric(object, nullAllowed)
   if (isFALSE(object >= 0)) {
-    logErrorThenStop(messages$errorWrongType(deparse(substitute(object)), class(object)[1], "non-negative"))
+    logErrorThenStop(messages$errorWrongType(getObjectNameAsString(object), class(object)[1], "non-negative"))
   }
 }
 
@@ -144,7 +144,7 @@ validateIsSameLength <- function(...) {
     return()
   }
   # Name of the variable in the calling function
-  objectName <- deparse(substitute(list(...)))
+  objectName <- getObjectNameAsString(list(...))
 
   # Name of the arguments
   argnames <- sys.call()
@@ -155,7 +155,7 @@ validateIsSameLength <- function(...) {
 
 validateNoDuplicatedEntries <- function(x) {
   if (any(duplicated(x))) {
-    logErrorThenStop(messages$errorDuplicatedEntries(deparse(substitute(x))))
+    logErrorThenStop(messages$errorDuplicatedEntries(getObjectNameAsString(x)))
   }
   return()
 }

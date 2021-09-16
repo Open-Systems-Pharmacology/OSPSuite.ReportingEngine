@@ -63,12 +63,12 @@ loadSimulateTask <- function(workflow, active = TRUE, settings = NULL) {
   validateIsLogical(active)
 
   taskFunction <- simulateModelParallel
-  nameFunction <- deparse(substitute(simulateModelParallel))
+  nameFunction <- getObjectNameAsString(simulateModelParallel)
   simulationTaskInitializer <- ParallelSimulationTask$new
 
   if (isOfType(workflow, "PopulationWorkflow")) {
     taskFunction <- simulateModelForPopulation
-    nameFunction <- deparse(substitute(simulateModelForPopulation))
+    nameFunction <- getObjectNameAsString(simulateModelForPopulation)
     simulationTaskInitializer <- SimulationTask$new
   }
 
@@ -98,7 +98,7 @@ loadCalculatePKParametersTask <- function(workflow, active = FALSE, settings = N
 
   return(CalculatePKParametersTask$new(
     getTaskResults = calculatePKParameters,
-    nameTaskResults = deparse(substitute(calculatePKParameters)),
+    nameTaskResults = getObjectNameAsString(calculatePKParameters),
     outputFolder = defaultTaskOutputFolders$calculatePKParameters,
     inputFolder = defaultTaskOutputFolders$simulate,
     inputs = getSimulationResultFileNames(workflow),
@@ -126,7 +126,7 @@ loadCalculateSensitivityTask <- function(workflow, active = FALSE, settings = NU
   if (isOfType(workflow, "PopulationWorkflow")) {
     return(PopulationSensitivityAnalysisTask$new(
       getTaskResults = runPopulationSensitivityAnalysis,
-      nameTaskResults = deparse(substitute(runPopulationSensitivityAnalysis)),
+      nameTaskResults = getObjectNameAsString(runPopulationSensitivityAnalysis),
       outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
       outputs = getPopulationSensitivityAnalysisResultsFileNames(workflow),
       inputFolder = defaultTaskOutputFolders$calculatePKParameters,
@@ -140,7 +140,7 @@ loadCalculateSensitivityTask <- function(workflow, active = FALSE, settings = NU
 
   return(SensitivityAnalysisTask$new(
     getTaskResults = runSensitivity,
-    nameTaskResults = deparse(substitute(runSensitivity)),
+    nameTaskResults = getObjectNameAsString(runSensitivity),
     outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
     outputs = getMeanSensitivityAnalysisResultsFileNames(workflow),
     workflowFolder = workflow$workflowFolder,
@@ -165,10 +165,10 @@ loadPlotTimeProfilesAndResidualsTask <- function(workflow, active = FALSE, setti
   settings <- settings %||% GofTaskSettings$new(AllAvailableTasks$plotTimeProfilesAndResiduals)
 
   taskFunction <- plotMeanGoodnessOfFit
-  nameFunction <- deparse(substitute(plotMeanGoodnessOfFit))
+  nameFunction <- getObjectNameAsString(plotMeanGoodnessOfFit)
   if (isOfType(workflow, "PopulationWorkflow")) {
     taskFunction <- plotPopulationGoodnessOfFit
-    nameFunction <- deparse(substitute(plotPopulationGoodnessOfFit))
+    nameFunction <- getObjectNameAsString(plotPopulationGoodnessOfFit)
   }
 
   return(GofPlotTask$new(
@@ -210,7 +210,7 @@ loadPlotPKParametersTask <- function(workflow, active = FALSE, settings = NULL) 
       reportTitle = defaultWorkflowTitles$plotPKParameters,
       fileName = defaultWorkflowAppendices$plotPKParameters,
       getTaskResults = plotPopulationPKParameters,
-      nameTaskResults = deparse(substitute(plotPopulationPKParameters)),
+      nameTaskResults = getObjectNameAsString(plotPopulationPKParameters),
       outputFolder = defaultTaskOutputFolders$plotPKParameters,
       inputFolder = defaultTaskOutputFolders$calculatePKParameters,
       inputs = getPkAnalysisResultsFileNames(workflow),
@@ -224,7 +224,7 @@ loadPlotPKParametersTask <- function(workflow, active = FALSE, settings = NULL) 
     reportTitle = defaultWorkflowTitles$plotPKParameters,
     fileName = defaultWorkflowAppendices$plotPKParameters,
     getTaskResults = plotMeanPKParameters,
-    nameTaskResults = deparse(substitute(plotMeanPKParameters)),
+    nameTaskResults = getObjectNameAsString(plotMeanPKParameters),
     outputFolder = defaultTaskOutputFolders$plotPKParameters,
     inputFolder = defaultTaskOutputFolders$calculatePKParameters,
     inputs = getPkAnalysisResultsFileNames(workflow),
@@ -258,7 +258,7 @@ loadPlotSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
       reportTitle = defaultWorkflowTitles$plotSensitivity,
       fileName = defaultWorkflowAppendices$plotSensitivity,
       getTaskResults = plotPopulationSensitivity,
-      nameTaskResults = deparse(substitute(plotPopulationSensitivity)),
+      nameTaskResults = getObjectNameAsString(plotPopulationSensitivity),
       outputFolder = defaultTaskOutputFolders$plotSensitivity,
       inputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
       inputs = getPopulationSensitivityAnalysisResultsFileNames(workflow),
@@ -272,7 +272,7 @@ loadPlotSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
     reportTitle = defaultWorkflowTitles$plotSensitivity,
     fileName = defaultWorkflowAppendices$plotSensitivity,
     getTaskResults = plotMeanSensitivity,
-    nameTaskResults = deparse(substitute(plotMeanSensitivity)),
+    nameTaskResults = getObjectNameAsString(plotMeanSensitivity),
     outputFolder = defaultTaskOutputFolders$plotSensitivity,
     inputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
     inputs = getMeanSensitivityAnalysisResultsFileNames(workflow),
@@ -301,7 +301,7 @@ loadPlotMassBalanceTask <- function(workflow, active = FALSE, settings = NULL) {
     reportTitle = defaultWorkflowTitles$plotMassBalance,
     fileName = defaultWorkflowAppendices$plotMassBalance,
     getTaskResults = plotMeanMassBalance,
-    nameTaskResults = deparse(substitute(plotMeanMassBalance)),
+    nameTaskResults = getObjectNameAsString(plotMeanMassBalance),
     outputFolder = defaultTaskOutputFolders$plotMassBalance,
     workflowFolder = workflow$workflowFolder,
     active = active,
@@ -327,7 +327,7 @@ loadPlotAbsorptionTask <- function(workflow, active = FALSE, settings = NULL) {
     reportTitle = defaultWorkflowTitles$plotAbsorption,
     fileName = defaultWorkflowAppendices$plotAbsorption,
     getTaskResults = plotMeanAbsorption,
-    nameTaskResults = deparse(substitute(plotMeanAbsorption)),
+    nameTaskResults = getObjectNameAsString(plotMeanAbsorption),
     outputFolder = defaultTaskOutputFolders$plotAbsorption,
     workflowFolder = workflow$workflowFolder,
     active = active,
@@ -356,7 +356,7 @@ loadPlotDemographyTask <- function(workflow, active = FALSE, settings = NULL) {
     reportTitle = defaultWorkflowTitles$plotDemography,
     fileName = defaultWorkflowAppendices$plotDemography,
     getTaskResults = plotDemographyParameters,
-    nameTaskResults = deparse(substitute(plotDemographyParameters)),
+    nameTaskResults = getObjectNameAsString(plotDemographyParameters),
     outputFolder = defaultTaskOutputFolders$plotDemography,
     workflowFolder = workflow$workflowFolder,
     active = active,
@@ -480,7 +480,7 @@ addUserDefinedTask <- function(workflow,
         reportTitle = taskName,
         fileName = paste0("appendix-", taskName, ".md"),
         getTaskResults = taskFunction,
-        nameTaskResults = deparse(substitute(taskFunction)),
+        nameTaskResults = getObjectNameAsString(taskFunction),
         outputFolder = taskName,
         workflowFolder = workflow$workflowFolder,
         active = active,
@@ -505,7 +505,7 @@ addUserDefinedTask <- function(workflow,
         reportTitle = taskName,
         fileName = paste0("appendix-", taskName, ".md"),
         getTaskResults = taskFunction,
-        nameTaskResults = deparse(substitute(taskFunction)),
+        nameTaskResults = getObjectNameAsString(taskFunction),
         outputFolder = taskName,
         workflowFolder = workflow$workflowFolder,
         active = active,
@@ -535,7 +535,7 @@ loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
   active <- !isOfLength(configurationPlan$plots$TimeProfile, 0)
 
   taskFunction <- plotQualificationTimeProfiles
-  nameFunction <- deparse(substitute(plotQualificationTimeProfiles))
+  nameFunction <- getObjectNameAsString(plotQualificationTimeProfiles)
 
   return(QualificationTask$new(
     getTaskResults = taskFunction,
@@ -565,7 +565,7 @@ loadGOFMergedTask <- function(workflow, configurationPlan) {
   active <- !isOfLength(configurationPlan$plots$GOFMergedPlots, 0)
 
   taskFunction <- plotQualificationGOFs
-  nameFunction <- deparse(substitute(plotQualificationGOFs))
+  nameFunction <- getObjectNameAsString(plotQualificationGOFs)
 
   return(QualificationTask$new(
     getTaskResults = taskFunction,
@@ -599,7 +599,7 @@ loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPl
   active <- !isOfLength(configurationPlan$plots$ComparisonTimeProfilePlots, 0)
 
   taskFunction <- plotQualificationComparisonTimeProfile
-  nameFunction <- deparse(substitute(plotQualificationComparisonTimeProfile))
+  nameFunction <- getObjectNameAsString(plotQualificationComparisonTimeProfile)
 
   return(QualificationTask$new(
     getTaskResults = taskFunction,
@@ -629,7 +629,7 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
   active <- !isOfLength(configurationPlan$plots$PKRatioPlots, 0)
 
   taskFunction <- plotQualificationPKRatio
-  nameFunction <- deparse(substitute(plotQualificationPKRatio))
+  nameFunction <- getObjectNameAsString(plotQualificationPKRatio)
 
   return(QualificationTask$new(
     getTaskResults = taskFunction,
@@ -660,7 +660,7 @@ loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
   active <- !isOfLength(configurationPlan$plots$DDIRatioPlots, 0)
 
   taskFunction <- plotQualificationDDIs
-  nameFunction <- deparse(substitute(plotQualificationDDIs))
+  nameFunction <- getObjectNameAsString(substitute(plotQualificationDDIs)
 
   return(QualificationTask$new(
     getTaskResults = taskFunction,

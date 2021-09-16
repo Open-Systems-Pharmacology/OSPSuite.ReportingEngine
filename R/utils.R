@@ -455,3 +455,12 @@ calculateGMFE <- function(x, y) {
   log10Error <- log10(y[positiveValues]) - log10(x[positiveValues])
   return(10^(sum(abs(log10Error)) / length(log10Error)))
 }
+
+
+#' @title getObjectNameAsString
+#' @description Return the name of an object as a string
+#' @param object, the name of which is to be returned
+#' @return the name of the `object` as a string
+getObjectNameAsString <- function(object){
+  return(deparse(substitute(object)))
+}
