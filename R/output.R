@@ -18,6 +18,7 @@ DataSelectionKeys <- list(
 #' @field displayName display name for `path`
 #' @field displayUnit display unit for `path`
 #' @field dataSelection character or expression used to filter the observed data
+#' @field dataUnit Unit of the observed data
 #' @field dataDisplayName display name of the observed data
 #' @field pkParameters R6 class `PkParameterInfo` objects
 #' @field residualScale Scale for calculation of residuals as included in enum `ResidualScales`
@@ -31,6 +32,7 @@ Output <- R6::R6Class(
     displayUnit = NULL,
     dataSelection = NULL,
     dataDisplayName = NULL,
+    dataUnit = NULL,
     pkParameters = NULL,
     residualScale = NULL,
 
@@ -40,6 +42,7 @@ Output <- R6::R6Class(
     #' @param displayName display name for `path`
     #' @param displayUnit display unit for `path`
     #' @param dataSelection characters or expression to filter the observed data
+    #' @param dataUnit Unit of the observed data
     #' @param dataDisplayName display name of the observed data
     #' @param pkParameters R6 class `PkParameterInfo` objects or their names
     #' @param residualScale Scale for calculation of residuals as included in enum `ResidualScales`
@@ -48,23 +51,28 @@ Output <- R6::R6Class(
                           displayName = NULL,
                           displayUnit = NULL,
                           dataSelection = DataSelectionKeys$NONE,
+                          dataUnit = NULL,
                           dataDisplayName = NULL,
                           pkParameters = NULL,
                           residualScale = ResidualScales$Logarithmic) {
+      
       validateIsString(path)
       validateIsOfLength(path, 1)
-      validateIsString(c(displayName, displayUnit, dataDisplayName), nullAllowed = TRUE)
+      validateIsString(c(displayName, dataUnit, displayUnit, dataDisplayName), nullAllowed = TRUE)
       validateIsIncluded(residualScale, ResidualScales)
       ifnotnull(displayName, validateIsOfLength(displayName, 1))
       ifnotnull(displayUnit, validateIsOfLength(displayUnit, 1))
+      ifnotnull(dataUnit, validateIsOfLength(dataUnit, 1))
       ifnotnull(dataDisplayName, validateIsOfLength(dataDisplayName, 1))
       validateIsOfType(dataSelection, c("character", "expression"), nullAllowed = TRUE)
       ifnotnull(dataSelection, validateIsOfLength(dataSelection, 1))
       validateIsOfType(c(pkParameters), c("character", "PkParameterInfo"), nullAllowed = TRUE)
-
+      
       self$path <- path
       self$displayName <- displayName %||% path
       self$displayUnit <- displayUnit
+      self$dataUnit <- dataUnit
+      self$dataDisplayName <- dataDisplayName %||% self$displayName
       self$residualScale <- residualScale
 
       # If filter is null, assumes that user won't get any observed data
@@ -80,10 +88,7 @@ Output <- R6::R6Class(
         }
       }
 
-      self$dataDisplayName <- dataDisplayName %||% self$displayName
-
       self$pkParameters <- c(pkParameters)
-
       if (isOfType(self$pkParameters, "character")) {
         self$pkParameters <- sapply(self$pkParameters, function(pkParameter) {
           PkParameterInfo$new(pkParameter)

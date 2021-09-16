@@ -17,6 +17,8 @@ R6 class representing workflow output
 
 \item{\code{dataSelection}}{character or expression used to filter the observed data}
 
+\item{\code{dataUnit}}{Unit of the observed data}
+
 \item{\code{dataDisplayName}}{display name of the observed data}
 
 \item{\code{pkParameters}}{R6 class `PkParameterInfo` objects}
@@ -43,6 +45,7 @@ Create a new `Output` object.
   displayName = NULL,
   displayUnit = NULL,
   dataSelection = DataSelectionKeys$NONE,
+  dataUnit = NULL,
   dataDisplayName = NULL,
   pkParameters = NULL,
   residualScale = ResidualScales$Logarithmic
@@ -60,6 +63,8 @@ Create a new `Output` object.
 
 \item{\code{dataSelection}}{characters or expression to filter the observed data}
 
+\item{\code{dataUnit}}{Unit of the observed data}
+
 \item{\code{dataDisplayName}}{display name of the observed data}
 
 \item{\code{pkParameters}}{R6 class `PkParameterInfo` objects or their names}
@@ -70,6 +75,23 @@ Create a new `Output` object.
 }
 \subsection{Returns}{
 A new `Output` object
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Output$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
 }
 }
 }

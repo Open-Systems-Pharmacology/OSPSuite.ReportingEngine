@@ -283,6 +283,7 @@ getOutputContent <- function(excelFile, outputInfo) {
           displayName = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$displayName), ",
           displayUnit = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$displayUnit), ",
           dataSelection = ", dataSelection, ",
+          dataUnit = ", getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$dataUnit), ",
           dataDisplayName = ", dataDisplayName,
         pkParametersOutputContent,
         ")"
@@ -632,6 +633,7 @@ OutputCodeIdentifiers <- ospsuite::enum(c(
   "displayName",
   "displayUnit",
   "dataSelection",
+  "dataUnit",
   "dataDisplayName",
   "pkParameters"
 ))
