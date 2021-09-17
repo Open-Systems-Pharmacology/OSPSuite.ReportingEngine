@@ -127,7 +127,11 @@ simulateModelParallel <- function(structureSets,
     logTypes = LogTypes$Debug
   )
 
-  return(simulationResults)
+  if (is.list(simulationResults)) {
+    return(simulationResults)
+  }
+
+  return(list(simulationResults))
 }
 
 #' @title simulateModel
