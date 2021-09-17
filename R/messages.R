@@ -42,6 +42,13 @@ messages <- list(
     }
     paste0(callingFunction(), "Values '", paste0(values, collapse = "', '"), "' are not all included in expected values: '", paste0(parentValues, collapse = "', '"), "'.")
   },
+  
+  errorNotIncludedInDataset = function(columnNames, dataset, datasetName = NULL) {
+    if (isOfLength(columnNames, 1)) {
+      return(paste0(callingFunction(), "'", columnNames, "' column is not present in ", datasetName, " columns: '", paste0(names(dataset), collapse = "', '"), "'."))
+    }
+    paste0(callingFunction(), "'", paste0(columnNames, collapse = "', '"), "' columns are not all present in ", datasetName, " columns: '", paste0(names(dataset), collapse = "', '"), "'.")
+  },
 
   warningExistingPath = function(existingPath) {
     paste0(callingFunction(), "Path: '", existingPath, "' already exists.")
@@ -74,12 +81,43 @@ messages <- list(
     )
   },
 
-  errorUnitNotProvidedInMetaDataFile = function(observedMetaDataFile) {
+  errorNoDataUnit = function() {
     paste0(
-      callingFunction(), "No time or dv unit provided in dictionary '", observedMetaDataFile, "'.",
-      "\nPlease define unit either in column '", dictionaryParameters$nonmemUnit, "' at the corresponding row.",
-      "\nor in column '", dictionaryParameters$nonmenColumn, "' using ID '",
-      dictionaryParameters$timeUnitID, "' or '", dictionaryParameters$dvUnitID, "'"
+      callingFunction(),
+      "No definition provided for units of observed dataset.\n",
+      "Please provide units for both '", dictionaryParameters$timeID, "' and '", dictionaryParameters$dvID, "' using methods available among the methods below:\n",
+      "1) Define units in dictionary by filling the column '", 
+      dictionaryParameters$datasetUnit, "' for ID '", dictionaryParameters$timeID, "' and '", dictionaryParameters$dvID, "'\n",
+      "2) Define units in dictionary by filling the column '", 
+      dictionaryParameters$datasetColumn, "' for ID '", dictionaryParameters$timeUnitID, "' and '", dictionaryParameters$dvUnitID, "'\n",
+      "3) Define units for '", dictionaryParameters$dvID, "' in every 'Output' object using the field 'dataUnit'"
+      )
+  },
+  
+  errorNoDataUnitInOutputs = function() {
+    paste0(
+      callingFunction(), 
+      "Units for '", dictionaryParameters$dvID, "' were not defined in every 'Output' object, and neither defined using the dictionary\n",
+      "Please provide units for both '", dictionaryParameters$timeID, "' and '", dictionaryParameters$dvID, "' using methods available among the methods below:\n",
+      "1) Define units in dictionary by filling the column '", 
+      dictionaryParameters$datasetUnit, "' for ID '", dictionaryParameters$timeID, "' and '", dictionaryParameters$dvID, "'\n",
+      "2) Define units in dictionary by filling the column '", 
+      dictionaryParameters$datasetColumn, "' for ID '", dictionaryParameters$timeUnitID, "' and '", dictionaryParameters$dvUnitID, "'\n",
+      "3) Define units for '", dictionaryParameters$dvID, "' in 'Output' objects using the field 'dataUnit'"
+      )
+  },
+  
+  warningMultipleDataUnit = function() {
+    paste0(
+      callingFunction(), 
+      "Multiple definitions provided for units of observed dataset.\n",
+      "Among the methods available below, the definition for units will use in priority method 3), then 2) and then 1).\n",
+      "1) Define units in dictionary by filling the column '", 
+      dictionaryParameters$datasetUnit, "' for ID '", dictionaryParameters$timeID, "' and '", dictionaryParameters$dvID, "'\n",
+      "2) Define units in dictionary by filling the column '", 
+      dictionaryParameters$datasetColumn, "' for ID '", dictionaryParameters$timeUnitID, "' and '", dictionaryParameters$dvUnitID, "'\n",
+      "3) Define units for '", dictionaryParameters$dvID, "' in every 'Output' object using the field 'dataUnit'"
+      
     )
   },
 

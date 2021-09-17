@@ -63,11 +63,10 @@ evalDataFilter <- function(data, filterExpression) {
   return(eval(filterExpression))
 }
 
-
 dictionaryParameters <- list(
   ID = "ID",
-  nonmenColumn = "nonmenColumn",
-  nonmemUnit = "nonmemUnit",
+  datasetColumn = "datasetColumn",
+  datasetUnit = "datasetUnit",
   timeID = "time",
   dvID = "dv",
   lloqID = "lloq",
@@ -77,7 +76,7 @@ dictionaryParameters <- list(
 
 getDictionaryVariable <- function(dictionary, variableID) {
   variableMapping <- dictionary[, dictionaryParameters$ID] %in% variableID
-  variableName <- as.character(dictionary[variableMapping, dictionaryParameters$nonmenColumn])
+  variableName <- as.character(dictionary[variableMapping, dictionaryParameters$datasetColumn])
   if (isOfLength(variableName, 0)) {
     return()
   }
@@ -103,9 +102,9 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   re.tStoreFileMetadata(access = "read", filePath = simulationSet$observedMetaDataFile)
   dictionary <- readObservedDataFile(simulationSet$observedMetaDataFile)
 
-  # Enforce nonmemUnit column to exist
-  if (!isIncluded(dictionaryParameters$nonmemUnit, names(dictionary))) {
-    dictionary[, dictionaryParameters$nonmemUnit] <- NA
+  # Enforce datasetUnit column to exist
+  if (!isIncluded(dictionaryParameters$datasetUnit, names(dictionary))) {
+    dictionary[, dictionaryParameters$datasetUnit] <- NA
   }
   # Use dictionary to map the data and get the unit
   # Note that lloqColumn, timeUnitColumn and dvUnitColumn can be NULL
@@ -116,23 +115,32 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   dvUnitColumn <- getDictionaryVariable(dictionary, dictionaryParameters$dvUnitID)
 
   # Units: convert the observed data into base unit
-  # Get values of unit column using nonmemUnit
+  # Get values of unit column using datasetUnit
   timeMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$timeID
-  timeUnit <- as.character(dictionary[timeMapping, dictionaryParameters$nonmemUnit])
+  timeUnit <- as.character(dictionary[timeMapping, dictionaryParameters$datasetUnit])
   if (!any(is.na(timeUnit), isIncluded(timeUnit, ""))) {
     timeUnitColumn <- "timeUnit"
     observedDataset[, timeUnitColumn] <- timeUnit
   }
   dvMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$dvID
-  dvUnit <- as.character(dictionary[dvMapping, dictionaryParameters$nonmemUnit])
+  dvUnit <- as.character(dictionary[dvMapping, dictionaryParameters$datasetUnit])
   if (!any(is.na(dvUnit), isIncluded(dvUnit, ""))) {
     dvUnitColumn <- "dvUnit"
     observedDataset[, dvUnitColumn] <- dvUnit
   }
-
+  
   # Parse the data.frame with the appropriate columns and ensure units are "character" type
   observedDataset[, timeUnitColumn] <- as.character(observedDataset[, timeUnitColumn])
   observedDataset[, dvUnitColumn] <- as.character(observedDataset[, dvUnitColumn])
+  
+  # If unit was actually defined using output objects, overwrite current dvUnit
+  for(output in simulationSet$outputs){
+    if(isOfLength(output$dataUnit, 0)){
+      next
+    }
+    selectedRows <- evalDataFilter(observedDataset, output$dataSelection)
+    observedDataset[selectedRows, dvUnitColumn] <- output$dataUnit
+  }
 
   # Convert observed data to base unit,
   # as.numeric needs to be enforced because toBaseUnit could think values are integer and crash
@@ -169,7 +177,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
     # Case where dictionary defined an lloq column missing from dataset
     if (!isIncluded(lloqColumn, names(observedDataset))) {
       logWorkflow(
-        message = paste0("lloq variable '", lloqColumn, "' defined in dictionary is missing from observed dataset"),
+        message = paste0("lloq column '", lloqColumn, "' defined in dictionary is not present in the dataset columns"),
         pathFolder = logFolder,
         logTypes = LogTypes$Debug
       )

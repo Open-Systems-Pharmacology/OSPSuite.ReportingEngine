@@ -285,18 +285,28 @@ logErrorMessage <- function(message, logFolderPath = getwd()) {
   )
 }
 
-validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile) {
+#' Check the consistency between observed data and its dictionary.
+#' Units for `dv `and `time` need to be defined at least once in either
+#' the observed dataset, its dictionary or outputs
+#' In case of multiple definitions, warnings will thrown and the following priorities will be applied:
+#' 1. Use units from outputs
+#' 2. Use units from observed dataset
+#' 3. Use units from dictionary
+#' @param observedMetaDataFile Path of meta data file on observed dataset (also called dictionary)
+#' @param observedDataFile Path of observed dataset
+#' @param outputs list or array of `Output` objects
+validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile, outputs) {
   # Check that dictionary is provided
   if (isOfLength(observedMetaDataFile, 0)) {
     stop(messages$errorObservedMetaDataFileNotProvided(observedDataFile))
   }
   # Read dictionary and check that mandatory variables are included
   dictionary <- readObservedDataFile(observedMetaDataFile)
-  if (!isIncluded(dictionaryParameters$nonmemUnit, names(dictionary))) {
-    dictionary[, dictionaryParameters$nonmemUnit] <- NA
+  if (!isIncluded(dictionaryParameters$datasetUnit, names(dictionary))) {
+    dictionary[, dictionaryParameters$datasetUnit] <- NA
   }
-  validateIsIncluded(c(dictionaryParameters$ID, dictionaryParameters$nonmenColumn), names(dictionary))
-  validateIsIncluded(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID])
+  validateIsIncludedInDataset(c(dictionaryParameters$ID, dictionaryParameters$datasetColumn), dictionary, datasetName = "dictionary")
+  validateIsIncluded(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID], groupName = paste0("Column '", dictionaryParameters$ID, "'"))
 
   # Check that dictionary and observed data are consitent
   observedDataset <- readObservedDataFile(observedDataFile)
@@ -304,27 +314,31 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile)
   dvVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvID)
   lloqVariable <- getDictionaryVariable(dictionary, dictionaryParameters$lloqID)
 
-  checkIsIncluded(c(timeVariable, dvVariable), names(observedDataset))
-  checkIsIncluded(lloqVariable, names(observedDataset), nullAllowed = TRUE)
+  checkIsIncludedInDataset(c(timeVariable, dvVariable), observedDataset, datasetName = "observed dataset")
+  checkIsIncludedInDataset(lloqVariable, observedDataset, datasetName = "observed dataset", nullAllowed = TRUE)
 
-  # Units
-  # If unit is defined as a value in nonmemUnit
-  timeMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$timeID
-  dvMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$dvID
+  # Check of unit definitions:
+  # 1) unit defined in outptuts
+  dataUnit <- NULL
+  if (!isOfLength(outputs, 0)) {
+    dataUnit <- unlist(lapply(outputs, function(output) {
+      output$dataUnit
+    }))
+  }
 
-  timeUnit <- as.character(dictionary[timeMapping, dictionaryParameters$nonmemUnit])
-  dvUnit <- as.character(dictionary[dvMapping, dictionaryParameters$nonmemUnit])
-
-  # If unit is defined as a nonmemColumn
+  # 2) If unit is defined as a datasetColumn
   timeUnitVariable <- getDictionaryVariable(dictionary, dictionaryParameters$timeUnitID)
   dvUnitVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvUnitID)
 
-  # If unit is missing somewhere throw error
-  if (any(all(is.null(timeUnitVariable), is.na(timeUnit) | timeUnit %in% ""), all(is.null(dvUnitVariable), is.na(dvUnit) | dvUnit %in% ""))) {
-    stop(messages$errorUnitNotProvidedInMetaDataFile(observedMetaDataFile))
-  }
-  checkIsIncluded(timeUnitVariable, names(observedDataset), nullAllowed = TRUE)
-  checkIsIncluded(dvUnitVariable, names(observedDataset), nullAllowed = TRUE)
+  # 3) If unit is defined as a value in datasetUnit
+  timeMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$timeID
+  dvMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$dvID
+
+  timeUnit <- as.character(dictionary[timeMapping, dictionaryParameters$datasetUnit])
+  dvUnit <- as.character(dictionary[dvMapping, dictionaryParameters$datasetUnit])
+
+  validateUnitDataDefinition(timeUnit, timeUnitVariable, observedDataset)
+  validateUnitDataDefinition(dvUnit, dvUnitVariable, observedDataset, dataUnit)
   return(invisible())
 }
 
@@ -485,4 +499,72 @@ validateHasUniqueValues <- function(data, dataName = "dataset", na.rm = TRUE, nu
     return()
   }
   stop(messages$errorHasNoUniqueValues(data, dataName, na.rm))
+}
+
+validateIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, nullAllowed = FALSE, logFolder = NULL) {
+  if (nullAllowed && is.null(columnNames)) {
+    return()
+  }
+  if (isIncluded(columnNames, names(dataset))) {
+    return()
+  }
+  if (is.null(logFolder)) {
+    stop(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName), call. = FALSE, immediate. = TRUE)
+  }
+  logErrorThenStop(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName))
+}
+
+checkIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, nullAllowed = FALSE, logFolder = NULL) {
+  if (nullAllowed && is.null(columnNames)) {
+    return()
+  }
+  if (isIncluded(columnNames, names(dataset))) {
+    return()
+  }
+  if (is.null(logFolder)) {
+    warning(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName), call. = FALSE, immediate. = TRUE)
+    return()
+  }
+  logWorkflow(
+    message = messages$errorNotIncludedInDataset(columnNames, dataset, datasetName),
+    pathFolder = logFolder,
+    logTypes = c(LogTypes$Debug, LogTypes$Error)
+  )
+}
+
+validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, outputs = NULL) {
+  # In case, value from reading from Excel/csv file is not an actual NULL
+  if (any(isOfLength(unit, 0), is.na(unit), unit %in% "")) {
+    unit <- NULL
+  }
+  # Case unit is defined using outputs
+  dataUnit <- NULL
+  if (!isOfLength(outputs, 0)) {
+    dataUnit <- unlist(lapply(outputs, function(output) {
+      output$dataUnit
+    }))
+  }
+
+  # Checks for errors
+  # If no unit defined at all
+  if (isOfLength(c(unit, unitColumn, dataUnit), 0)) {
+    stop(messages$errorNoDataUnit())
+  }
+  # If no unit defined by dictionray, all outputs need to define dataUnit
+  if (isOfLength(c(unit, unitColumn), 0)) {
+    if (!isSameLength(dataUnit, outputs)) {
+      stop(messages$errorNoDataUnitInOutputs())
+    }
+    return(invisible())
+  }
+  # Checks for warnings
+  # Only one of unit, unitColumn and dataUnit should be defined
+  # in the case dataUnit was defined, code has already returned
+  if (!isOfLength(c(unit, unitColumn, dataUnit), 1)) {
+    warning(messages$warningMultipleDataUnit())
+  }
+  # If defined, check that unitColumn refers an actual column from observed data
+  checkIsIncludedInDataset(unitColumn, observedDataset, datasetName = "observed dataset", nullAllowed = TRUE)
+
+  return(invisible())
 }

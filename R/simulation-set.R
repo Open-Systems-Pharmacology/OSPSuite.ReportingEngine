@@ -59,7 +59,7 @@ SimulationSet <- R6::R6Class(
       # Test and validate observed data
       validateIsString(c(observedDataFile, observedMetaDataFile, timeUnit), nullAllowed = TRUE)
       if (!is.null(observedDataFile)) {
-        validateObservedMetaDataFile(observedMetaDataFile, observedDataFile)
+        validateObservedMetaDataFile(observedMetaDataFile, observedDataFile, c(outputs))
       }
 
       self$simulationSetName <- simulationSetName
