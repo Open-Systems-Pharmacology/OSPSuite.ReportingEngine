@@ -89,6 +89,51 @@ simulateModelOnCore <- function(simulation,
   return(simulationResult)
 }
 
+#' @title simulateModelParallel
+#' @description Simulate models within a list of structure sets in parallel for an individual.
+#' @param structureSets, a list of `SimulationStructure` R6 class objects contain paths of files to be used
+#' @param settings list of options to be passed to the function
+#' @param logFolder folder where the logs are saved
+#' @return List of simulation results for each simulation set
+#' @export
+#' @import ospsuite
+simulateModelParallel <- function(structureSets,
+                                  settings = NULL,
+                                  logFolder = getwd()) {
+  simulations <- lapply(structureSets, function(set) {
+    re.tStoreFileMetadata(access = "read", filePath = set$simulationSet$simulationFile)
+    simulation <- loadSimulationWithUpdatedPaths(set$simulationSet)
+    logWorkflow(
+      message = paste0("Simulation file '", set$simulationSet$simulationFile, "' successfully loaded"),
+      pathFolder = logFolder,
+      logTypes = LogTypes$Debug
+    )
+    return(simulation)
+  })
+
+  simRunOptions <- ospsuite::SimulationRunOptions$new(
+    showProgress = ifnotnull(settings, outputIfNotNull = settings$showProgress, outputIfNull = FALSE),
+    numberOfCores = settings$allowedCores
+  )
+
+  simulationResults <- ospsuite::runSimulations(
+    simulations = simulations,
+    simulationRunOptions = simRunOptions
+  )
+
+  logWorkflow(
+    message = "Parallel simulation run complete",
+    pathFolder = logFolder,
+    logTypes = LogTypes$Debug
+  )
+
+  if (is.list(simulationResults)) {
+    return(simulationResults)
+  }
+
+  return(list(simulationResults))
+}
+
 #' @title simulateModel
 #' @description Simulate model, either for an individual or for a given population.
 #' @param structureSet `SimulationStructure` R6 class object contain paths of files to be used

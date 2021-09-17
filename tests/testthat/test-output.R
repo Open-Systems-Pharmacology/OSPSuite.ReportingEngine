@@ -126,7 +126,7 @@ test_that("Output 'pkParameters' are checked and set properly", {
 
   expect_silent(Output$new(path = testPath, pkParameters = myTestAUCName))
   expect_silent(Output$new(path = testPath, pkParameters = myTestAUC))
-  
+
   outputAUCName <- Output$new(path = testPath, pkParameters = myTestAUCName)
   outputAUC <- Output$new(path = testPath, pkParameters = myTestAUC)
 

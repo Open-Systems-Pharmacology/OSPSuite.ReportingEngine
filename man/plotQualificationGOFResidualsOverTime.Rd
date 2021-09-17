@@ -13,5 +13,5 @@ plotQualificationGOFResidualsOverTime(data)
 ggplot object of residuals over time profile for qualification workflow
 }
 \description{
-Plot observation vs prediction for qualification workflow
+Plot residuals vs time for qualification workflow
 }

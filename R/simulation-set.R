@@ -7,6 +7,7 @@
 #' @field observedMetaDataFile name of csv file to be used as dictionary of the observed data
 #' @field timeUnit display unit for time variable
 #' @field applicationRanges named list of logicals defining which Application ranges are included in
+#' @field minimumSimulationEndTime is the minimum length of time for which a simulation must be run
 #' reported time profiles and residual plots when applicable
 #' @export
 SimulationSet <- R6::R6Class(
@@ -30,6 +31,7 @@ SimulationSet <- R6::R6Class(
     #' @param observedMetaDataFile name of csv file to be used as dictionary of the observed data
     #' @param timeUnit display unit for time variable. Default is "h"
     #' @param applicationRanges names of application ranges to include in the report. Names are available in enum `ApplicationRanges`.
+    #' @param minimumSimulationEndTime is the minimum length of time for which a simulation must be run
     #' @return A new `SimulationSet` object
     initialize = function(simulationSetName,
                           simulationFile,
@@ -51,7 +53,7 @@ SimulationSet <- R6::R6Class(
       # Test and validate outputs and their paths
       validateOutputObject(c(outputs), simulation, nullAllowed = TRUE)
 
-      validateIsPositive(object = minimumSimulationEndTime,nullAllowed = TRUE)
+      validateIsPositive(object = minimumSimulationEndTime, nullAllowed = TRUE)
       self$minimumSimulationEndTime <- minimumSimulationEndTime
 
       # Test and validate observed data

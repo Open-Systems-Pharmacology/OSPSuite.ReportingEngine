@@ -26,16 +26,18 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
       ": Project '", project, "' - Simulation '", simulationName, "'\n"
     ))
 
-    outputsDataframeSubset <- outputsDataframe[outputsDataframe$project == project & outputsDataframe$simulation == simulationName  ,  ]
+    outputsDataframeSubset <- outputsDataframe[outputsDataframe$project == project & outputsDataframe$simulation == simulationName, ]
 
-    outputs <- lapply( unique(outputsDataframeSubset$outputPath) , function(outputPath) {
-      Output$new(path = as.character(outputPath),
-                 pkParameters = outputsDataframeSubset$pkParameter[ outputsDataframeSubset$outputPath == outputPath & !(is.na( outputsDataframeSubset$pkParameter ))])
+    outputs <- lapply(unique(outputsDataframeSubset$outputPath), function(outputPath) {
+      Output$new(
+        path = as.character(outputPath),
+        pkParameters = outputsDataframeSubset$pkParameter[outputsDataframeSubset$outputPath == outputPath & !(is.na(outputsDataframeSubset$pkParameter))]
+      )
     })
 
     minimumSimulationEndTime <- NULL
-    if( any(!is.na(outputsDataframeSubset$endTime)) ){
-      minimumSimulationEndTime <- max(outputsDataframeSubset$endTime,na.rm = TRUE)
+    if (any(!is.na(outputsDataframeSubset$endTime))) {
+      minimumSimulationEndTime <- max(outputsDataframeSubset$endTime, na.rm = TRUE)
     }
 
     # simulationSetName defined as project-simulation uniquely identifies the simulation
@@ -105,8 +107,8 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
     # Actual section path will be relative to the workflowFolder
     # and is wrapped in method configurationPlan$getSectionPath(id)
     sectionPath <- paste0(parentFolder,
-                          sprintf("%0.3d_%s", sectionIndex, removeForbiddenLetters(section$Title)),
-                          sep = .Platform$file.sep
+      sprintf("%0.3d_%s", sectionIndex, removeForbiddenLetters(section$Title)),
+      sep = .Platform$file.sep
     )
 
     sectionMarkdown <- sprintf("%0.3d_%s.md", sectionIndex, removeForbiddenLetters(section$Title))
@@ -259,8 +261,8 @@ massMoleConversion <- function(dimension) {
   massMoleConversionList[[ospDimensions$Mass]] <- ospsuite::ospDimensions$Amount
   massMoleConversionList[[ospDimensions$`Concentration (mass)`]] <- ospsuite::ospDimensions$`Concentration (molar)`
   return(ifelse(test = dimension %in% c(ospsuite::ospDimensions$Mass, ospsuite::ospDimensions$`Concentration (mass)`),
-                yes = massMoleConversionList[[dimension]],
-                no = dimension
+    yes = massMoleConversionList[[dimension]],
+    no = dimension
   ))
 }
 

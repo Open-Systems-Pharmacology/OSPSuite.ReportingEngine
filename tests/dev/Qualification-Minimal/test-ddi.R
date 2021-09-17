@@ -19,7 +19,7 @@ setwd(dir = example.dirs[example.number])
 
 inputFolder <- "reporting engine input"
 configurationFile <- file.path(inputFolder, "colored-report-configuration-plan.json")
-#configurationFile <- file.path(inputFolder, "updated-paths-report-configuration-plan.json")
+# configurationFile <- file.path(inputFolder, "updated-paths-report-configuration-plan.json")
 workflowFolder <- "reporting engine output"
 
 
@@ -44,5 +44,3 @@ workflow <- loadQualificationWorkflow(
 # workflow$inactivateTasks("calculatePKParameters")
 # # # Workflow works as mean model and population workflows
 # workflow$runWorkflow()
-
-

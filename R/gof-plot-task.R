@@ -44,8 +44,8 @@ GofPlotTask <- R6::R6Class(
           ggplot2::ggsave(
             filename = self$getAbsolutePath(plotFileName),
             plot = listOfPlots[[plotName]],
-            width = reEnv$defaultPlotFormat$width, 
-            height = reEnv$defaultPlotFormat$height, 
+            width = reEnv$defaultPlotFormat$width,
+            height = reEnv$defaultPlotFormat$height,
             units = reEnv$defaultPlotFormat$units,
             dpi = reEnv$defaultPlotFormat$dpi
           )
@@ -209,8 +209,8 @@ GofPlotTask <- R6::R6Class(
         ggplot2::ggsave(
           filename = residualHistogramPlotFileName,
           plot = residualHistogramPlot,
-          width = reEnv$defaultPlotFormat$width, 
-          height = reEnv$defaultPlotFormat$height, 
+          width = reEnv$defaultPlotFormat$width,
+          height = reEnv$defaultPlotFormat$height,
           units = reEnv$defaultPlotFormat$units,
           dpi = reEnv$defaultPlotFormat$dpi
         )
@@ -219,8 +219,8 @@ GofPlotTask <- R6::R6Class(
         ggplot2::ggsave(
           filename = self$getAbsolutePath(qqPlotFileName),
           plot = residualQQPlot,
-          width = reEnv$defaultPlotFormat$width, 
-          height = reEnv$defaultPlotFormat$height, 
+          width = reEnv$defaultPlotFormat$width,
+          height = reEnv$defaultPlotFormat$height,
           units = reEnv$defaultPlotFormat$units,
           dpi = reEnv$defaultPlotFormat$dpi
         )

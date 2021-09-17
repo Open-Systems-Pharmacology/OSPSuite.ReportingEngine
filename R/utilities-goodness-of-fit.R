@@ -179,9 +179,11 @@ getResiduals <- function(observedData,
 
   timeMatchedData <- as.numeric(sapply(as.data.frame(abs(obsTimeMatrix - simTimeMatrix)), which.min))
 
-  residualValues <- calculateResiduals(simulatedData = simulatedData[timeMatchedData, "Concentration"],
-                                       observedData = observedData[, "Concentration"],
-                                       residualScale = residualScale)
+  residualValues <- calculateResiduals(
+    simulatedData = simulatedData[timeMatchedData, "Concentration"],
+    observedData = observedData[, "Concentration"],
+    residualScale = residualScale
+  )
 
   residualValues <- rep(NA, nrow(observedData))
   if (isIncluded(residualScale, ResidualScales$Logarithmic)) {

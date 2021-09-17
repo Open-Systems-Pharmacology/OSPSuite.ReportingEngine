@@ -33,9 +33,9 @@ TaskResults <- R6::R6Class(
       ggplot2::ggsave(
         filename = fileName,
         plot = self$plot,
-        width = self$plot$plotConfiguration$export$width %||% reEnv$defaultPlotFormat$width, 
-        height = self$plot$plotConfiguration$export$height %||% reEnv$defaultPlotFormat$height, 
-        dpi = reEnv$defaultPlotFormat$dpi, 
+        width = self$plot$plotConfiguration$export$width %||% reEnv$defaultPlotFormat$width,
+        height = self$plot$plotConfiguration$export$height %||% reEnv$defaultPlotFormat$height,
+        dpi = reEnv$defaultPlotFormat$dpi,
         units = self$plot$plotConfiguration$export$units %||% reEnv$defaultPlotFormat$units
       )
       logWorkflow(

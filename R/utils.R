@@ -191,16 +191,17 @@ loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE)
     ospsuite::addOutputs(quantitiesOrPaths = paths, simulation = simulation)
   }
 
-  if(is.null(simulationSet$minimumSimulationEndTime)){
+  if (is.null(simulationSet$minimumSimulationEndTime)) {
     return(simulation)
   }
 
   if (simulationSet$minimumSimulationEndTime > simulation$outputSchema$endTime) {
-    maximalIntervalIndex <- which(sapply(simulation$outputSchema$intervals,function(x){x$endTime$value}) ==  simulation$outputSchema$endTime)[1]
-    simulation$outputSchema$intervals[[maximalIntervalIndex]]$endTime$setValue(value = simulationSet$minimumSimulationEndTime,unit = ospUnits$Time$min)
+    maximalIntervalIndex <- which(sapply(simulation$outputSchema$intervals, function(x) {
+      x$endTime$value
+    }) == simulation$outputSchema$endTime)[1]
+    simulation$outputSchema$intervals[[maximalIntervalIndex]]$endTime$setValue(value = simulationSet$minimumSimulationEndTime, unit = ospUnits$Time$min)
   }
   return(simulation)
-
 }
 
 #' @title loadWorkflowPopulation
@@ -319,22 +320,23 @@ getPKParametersInSimulationSet <- function(simulationSet) {
 #' @title getAllowedCores
 #' @return Allowed number of CPU cores for computation
 getAllowedCores <- function() {
-  cores <- tryCatch({
-    # get cpu allowance from files
-    cfs_quota_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us", intern = T))
-    cfs_period_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_period_us", intern = T))
-    cores <- floor(cfs_quota_us / cfs_period_us)
-    if (cores < 1) {
+  cores <- tryCatch(
+    {
+      # get cpu allowance from files
+      cfs_quota_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us", intern = T))
+      cfs_period_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_period_us", intern = T))
+      cores <- floor(cfs_quota_us / cfs_period_us)
+      if (cores < 1) {
+        return(NULL)
+      }
+      return(cores)
+    },
+    error = function(cond) {
+      return(NULL)
+    },
+    warning = function(cond) {
       return(NULL)
     }
-    return(cores)
-  },
-  error = function(cond) {
-    return(NULL)
-  },
-  warning = function(cond) {
-    return(NULL)
-  }
   )
 }
 
@@ -449,8 +451,16 @@ parseVariableFromObject <- function(objectName, variableName, keepIfNull = FALSE
 #' @return GMFE
 #' @export
 calculateGMFE <- function(x, y) {
-  positiveValues <- (y > 0 & x >0)
-  log10Error <- log10(y[positiveValues])-log10(x[positiveValues])
-  return(10^(sum(abs(log10Error))/length(log10Error)))
+  positiveValues <- (y > 0 & x > 0)
+  log10Error <- log10(y[positiveValues]) - log10(x[positiveValues])
+  return(10^(sum(abs(log10Error)) / length(log10Error)))
 }
 
+
+#' @title getObjectNameAsString
+#' @description Return the name of an object as a string
+#' @param object, the name of which is to be returned
+#' @return the name of the `object` as a string
+getObjectNameAsString <- function(object) {
+  return(deparse(substitute(object)))
+}
