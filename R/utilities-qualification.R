@@ -305,7 +305,7 @@ getAxesSettings <- function(axesSettingsFromConfigurationPlot) {
 startQualificationRunner <- function(qualificationRunnerFolder, qualificationPlanFile, outputFolder, options = NULL){
   optionalArguments <- paste0(options, collapse = ' ')
   qualificationRunner <- paste0(file.path(qualificationRunnerFolder, 'QualificationRunner.exe'))
-  arguments <- paste0(' -i "', qualificationPlanFile,  '" -o "', outputFolder, '" ', optionalArguments)
+  arguments <- paste0(' -i "', qualificationPlanFile,  '" -o "', outputFolder, '" ', '--norun ',  optionalArguments)
   shell(paste0(qualificationRunner, arguments))
   return(invisible())
 }
