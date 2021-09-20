@@ -20,7 +20,8 @@ Depends:
     tlf (>= 1.2.0)
 Imports: 
     R6,
-    ggplot2
+    ggplot2,
+    jsonlite
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
