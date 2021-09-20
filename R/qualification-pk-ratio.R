@@ -250,7 +250,7 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
   for (pkParameterName in pkParameterNames) {
     # TODO: we may need dictionaries for catching the appropriate PK parameter
     # in observed data and pk analysis (e.g. AUC_tEnd)
-    pkParameter <- pkAnalyses$pKParameterFor(quantityPath = pkRatioMapping$Output, pkParameter = pkParameterName)
+    pkParameter <- pkAnalyses$pKParameterFor(quantityPath = pkRatioMapping$Output, pkParameter = pkDictionaryQualificationOSP[[pkParameterName]])
 
     pkParameterObservedValue <- as.numeric(
       observedData[selectedRow, paste(pkParameterName, reEnv$pkRatio$dictionary$parameterColumn, sep = " ")]
