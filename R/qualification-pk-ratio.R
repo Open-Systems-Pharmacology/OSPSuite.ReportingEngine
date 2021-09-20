@@ -244,8 +244,6 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
       pathFolder = logFolder,
       logTypes = c(LogTypes$Error, LogTypes$Debug)
     )
-    "ObservedDataRecordId":96
-    warning()
     return()
   }
 
@@ -267,7 +265,8 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
       quantityOrDimension = pkParameter$dimension,
       values = pkParameterObservedValue,
       targetUnit = pkParameter$unit,
-      sourceUnit = pkParameterObservedUnit
+      sourceUnit = pkParameterObservedUnit,
+      molWeight = simulation$molWeightFor(pkRatioMapping$Output)
     )
     # Values
     data[1, paste0("obs", pkParameterName)] <- pkParameterObservedValue
