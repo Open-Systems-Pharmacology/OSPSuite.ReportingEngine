@@ -100,7 +100,11 @@ getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData) {
     color = "Groups",
     shape = "Groups"
   )
-  return(tlf::getPKRatioMeasure(data, dataMapping))
+  pkRatioMeasure <-  tlf::getPKRatioMeasure(data, dataMapping)
+  # Export row names for report
+  qualificationMeasure <- cbind(row.names(pkRatioMeasure), pkRatioMeasure)
+  names(qualificationMeasure) <- c(" ", names(pkRatioMeasure))
+  return(qualificationMeasure)
 }
 
 #' @title getQualificationPKRatioPlot
