@@ -18,7 +18,7 @@ isOfLength <- function(object, nbElements) {
 
 validateIsOfLength <- function(object, nbElements) {
   if (isOfLength(object, nbElements)) {
-    return()
+    return(invisible())
   }
   logErrorThenStop(messages$errorWrongLength(object, nbElements))
 }
@@ -49,11 +49,11 @@ isOfType <- function(object, type) {
 
 validateIsOfType <- function(object, type, nullAllowed = FALSE) {
   if (nullAllowed && is.null(object)) {
-    return()
+    return(invisible())
   }
 
   if (isOfType(object, type)) {
-    return()
+    return(invisible())
   }
   # Name of the variable in the calling function
   objectName <- getObjectNameAsString(object)
@@ -105,7 +105,7 @@ validateIsInRange <- function(variableName, value, lowerBound, upperBound, nullA
 
 validateEnumValue <- function(enum, value) {
   if (value %in% names(enum)) {
-    return()
+    return(invisible())
   }
 
   logErrorThenStop(messages$errorValueNotInEnum(enum, value))
@@ -133,7 +133,7 @@ validateIsLogical <- function(object, nullAllowed = FALSE) {
 
 validateIsSameLength <- function(...) {
   if (isSameLength(...)) {
-    return()
+    return(invisible())
   }
   # Name of the variable in the calling function
   objectName <- getObjectNameAsString(list(...))
@@ -149,7 +149,7 @@ validateNoDuplicatedEntries <- function(x) {
   if (any(duplicated(x))) {
     logErrorThenStop(messages$errorDuplicatedEntries(getObjectNameAsString(x)))
   }
-  return()
+  return(invisible())
 }
 
 #' Check if the provided object is included in a parent object
@@ -168,11 +168,11 @@ isIncluded <- function(values, parentValues) {
 
 validateIsIncluded <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL, logFolder = NULL) {
   if (nullAllowed && is.null(values)) {
-    return()
+    return(invisible())
   }
 
   if (isIncluded(values, parentValues)) {
-    return()
+    return(invisible())
   }
   if (is.null(logFolder)) {
     stop(messages$errorNotIncluded(values, parentValues, groupName))
@@ -182,15 +182,15 @@ validateIsIncluded <- function(values, parentValues, nullAllowed = FALSE, groupN
 
 checkIsIncluded <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL, logFolder = NULL) {
   if (nullAllowed && is.null(values)) {
-    return()
+    return(invisible())
   }
 
   if (isIncluded(values, parentValues)) {
-    return()
+    return(invisible())
   }
   if (is.null(logFolder)) {
     warning(messages$errorNotIncluded(values, parentValues, groupName), call. = FALSE, immediate. = TRUE)
-    return()
+    return(invisible())
   }
   logWorkflow(
     message = messages$errorNotIncluded(values, parentValues, groupName),
@@ -201,7 +201,7 @@ checkIsIncluded <- function(values, parentValues, nullAllowed = FALSE, groupName
 
 validateMapping <- function(mapping, data, nullAllowed = FALSE) {
   if (nullAllowed && is.null(mapping)) {
-    return()
+    return(invisible())
   }
 
   validateIsString(mapping)
@@ -209,12 +209,12 @@ validateMapping <- function(mapping, data, nullAllowed = FALSE) {
 
   validateIsIncluded(mapping, variableNames)
 
-  return()
+  return(invisible())
 }
 
 checkExisitingPath <- function(path, stopIfPathExists = FALSE) {
   if (!dir.exists(path)) {
-    return()
+    return(invisible())
   }
   if (stopIfPathExists) {
     logErrorThenStop(messages$warningExistingPath(path))
@@ -225,7 +225,7 @@ checkExisitingPath <- function(path, stopIfPathExists = FALSE) {
 
 checkOverwriteExisitingPath <- function(path, overwrite) {
   if (!dir.exists(path)) {
-    return()
+    return(invisible())
   }
   warning(messages$warningExistingPath(path))
   if (overwrite) {
@@ -253,10 +253,10 @@ isFileExtension <- function(file, extension) {
 
 validateIsFileExtension <- function(path, extension, nullAllowed = FALSE) {
   if (nullAllowed && is.null(path)) {
-    return()
+    return(invisible())
   }
   if (isFileExtension(path, extension)) {
-    return()
+    return(invisible())
   }
   logErrorThenStop(messages$errorExtension(path, extension))
 }
@@ -353,11 +353,11 @@ isDimension <- function(values) {
 
 validateIsDimension <- function(values, nullAllowed = FALSE) {
   if (nullAllowed && is.null(values)) {
-    return()
+    return(invisible())
   }
 
   if (isDimension(values)) {
-    return()
+    return(invisible())
   }
 
   logErrorThenStop(messages$errorNotADimension(values))
@@ -375,17 +375,17 @@ isPathInSimulation <- function(paths, simulation) {
 
 validateIsPathInSimulation <- function(paths, simulation, nullAllowed = FALSE) {
   if (nullAllowed && is.null(paths)) {
-    return()
+    return(invisible())
   }
   if (isPathInSimulation(paths, simulation)) {
-    return()
+    return(invisible())
   }
   logErrorThenStop(message = messages$invalidOuputPath(paths, simulation$name))
 }
 
 validateOutputObject <- function(outputs, simulation, nullAllowed = FALSE) {
   if (nullAllowed && is.null(outputs)) {
-    return()
+    return(invisible())
   }
   validateIsOfType(c(outputs), "Output")
   # Check paths existence
@@ -420,24 +420,24 @@ isUnitFromDimension <- function(unit, dimension) {
 
 validateIsUnitFromDimension <- function(unit, dimension, nullAllowed = FALSE) {
   if (nullAllowed && is.null(unit)) {
-    return()
+    return(invisible())
   }
   if (isUnitFromDimension(unit, dimension)) {
-    return()
+    return(invisible())
   }
   stop(messages$errorUnitNotFromDimension(unit, dimension))
 }
 
 validateHasReferencePopulation <- function(workflowType, simulationSets, logFolder = NULL) {
   if (isIncluded(workflowType, PopulationWorkflowTypes$parallelComparison)) {
-    return()
+    return(invisible())
   }
   allSimulationReferences <- sapply(simulationSets, function(set) {
     set$referencePopulation
   })
 
   if (isOfLength(allSimulationReferences[allSimulationReferences], 1)) {
-    return()
+    return(invisible())
   }
   if (is.null(logFolder)) {
     stop(messages$warningNoReferencePopulation(workflowType))
@@ -493,20 +493,20 @@ hasUniqueValues <- function(data, na.rm = TRUE) {
 
 validateHasUniqueValues <- function(data, dataName = "dataset", na.rm = TRUE, nullAllowed = FALSE) {
   if (nullAllowed && is.null(data)) {
-    return()
+    return(invisible())
   }
   if (hasUniqueValues(data, na.rm)) {
-    return()
+    return(invisible())
   }
   stop(messages$errorHasNoUniqueValues(data, dataName, na.rm))
 }
 
 validateIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, nullAllowed = FALSE, logFolder = NULL) {
   if (nullAllowed && is.null(columnNames)) {
-    return()
+    return(invisible())
   }
   if (isIncluded(columnNames, names(dataset))) {
-    return()
+    return(invisible())
   }
   if (is.null(logFolder)) {
     stop(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName), call. = FALSE, immediate. = TRUE)
@@ -516,14 +516,15 @@ validateIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL
 
 checkIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, nullAllowed = FALSE, logFolder = NULL) {
   if (nullAllowed && is.null(columnNames)) {
-    return()
+    return(invisible())
   }
   if (isIncluded(columnNames, names(dataset))) {
-    return()
+    return(invisible())
   }
+  #TODO this check should be ion logWorkflow and not in the caller!!
   if (is.null(logFolder)) {
     warning(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName), call. = FALSE, immediate. = TRUE)
-    return()
+    return(invisible())
   }
   logWorkflow(
     message = messages$errorNotIncludedInDataset(columnNames, dataset, datasetName),
