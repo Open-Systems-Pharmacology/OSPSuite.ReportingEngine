@@ -5,7 +5,7 @@
 #' @return A dataframe of project, simulation, output paths and (if applicable) pk parameters and start and end times of interval over which the pk parameter is evaluated
 getOutputsFromConfigurationPlan <- function(configurationPlan) {
   outputsTimeProfile <- getTimeProfileOutputsDataframe(configurationPlan)
-  outputsComparisonTimeProfile <- getComparisonTimeProfileOutputsDataframe
+  outputsComparisonTimeProfile <- getComparisonTimeProfileOutputsDataframe(configurationPlan)
   outputsGOF <- getGOFOutputsDataframe(configurationPlan)
   outputsDDI <- getDDIOutputsDataframe(configurationPlan)
   outputsPKRatio <- getPKRatioOutputsDataframe(configurationPlan)
