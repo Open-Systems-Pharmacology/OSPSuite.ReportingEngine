@@ -681,7 +681,12 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotPKRatio,
-    settings = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$PKRatioPlots))
+    settings = list(
+      axes = getAxesProperties(configurationPlan$plots$AxesSettings$PKRatioPlots),
+      digits = reEnv$formatNumericsDigits,
+      nsmall = reEnv$formatNumericsSmall,
+      scientific = reEnv$formatNumericsScientific
+    )
   ))
 }
 

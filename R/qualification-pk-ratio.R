@@ -103,6 +103,12 @@ getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData) {
     shape = "Groups"
   )
   pkRatioMeasure <-  tlf::getPKRatioMeasure(data, dataMapping)
+  pkRatioMeasure$Ratio <- formatNumerics(
+    pkRatioMeasure$Ratio,
+    digits = settings$digits,
+    nsmall = settings$nsmall,
+    scientific = settings$scientific
+  )
   # Export row names for report
   qualificationMeasure <- cbind(row.names(pkRatioMeasure), pkRatioMeasure)
   names(qualificationMeasure) <- c(" ", names(pkRatioMeasure))
