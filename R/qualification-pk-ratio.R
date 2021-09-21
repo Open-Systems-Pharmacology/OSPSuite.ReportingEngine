@@ -12,6 +12,8 @@ plotQualificationPKRatio <- function(configurationPlan,
                                      settings) {
   pkRatioResults <- list()
   for (pkRatioPlan in configurationPlan$plots$PKRatioPlots) {
+    # If field artifacts is null, output them all
+    pkRatioPlan$Artifacts <- pkRatioPlan$Artifacts %||% c("Table", "Plot", "Measure", "GMFE")
     tableID <- paste(length(pkRatioResults) + 1, "pk-ratio-table", sep = "-")
     gmfeID <- paste(length(pkRatioResults) + 2, "pk-ratio-gmfe", sep = "-")
 
