@@ -43,7 +43,7 @@ plotQualificationPKRatio <- function(configurationPlan,
       measureID <- paste(length(pkRatioResults) + 2, "pk-ratio-measure", pkParameterName, sep = "-")
 
       pkRatioPlot <- getQualificationPKRatioPlot(pkParameterName, pkRatioData$data, pkRatioData$metaData, axesProperties)
-      pkRatioMeasure <- getQualificationPKRatioMeasure(pkParameterName, pkRatioData$data, pkRatioData$metaData)
+      pkRatioMeasure <- getQualificationPKRatioMeasure(pkParameterName, pkRatioData$data, pkRatioData$metaData, settings)
 
       pkRatioResults[[plotID]] <- saveTaskResults(
         id = plotID,
@@ -92,8 +92,9 @@ getQualificationPKRatioGMFE <- function(pkParameterNames, data, settings) {
 #' @param pkParameterName Name of PK Parameter as defined by users
 #' @param data data.frame with PK Ratios
 #' @param metaData metaData with units and dimension for labeling the table header
+#' @param settings settings for the task
 #' @return A data.frame
-getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData) {
+getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData, settings) {
   # Prepare data, dataMapping and plotCOnfiguration to follow tlf nomenclature
   data$Groups <- metaData$caption
   dataMapping <- tlf::PKRatioDataMapping$new(
