@@ -536,14 +536,14 @@ loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
 
   taskFunction <- plotQualificationTimeProfiles
   nameFunction <- getObjectNameAsString(plotQualificationTimeProfiles)
-  
+
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getTimeProfileOutputsDataframe(configurationPlan)
-  if(!isOfLength(outputs,0)){
+  if (!isOfLength(outputs, 0)) {
     # data.frame to list
     outputs <- split(outputs, 1:nrow(outputs))
-    inputFiles <- as.character(sapply(outputs, function(output){
+    inputFiles <- as.character(sapply(outputs, function(output) {
       configurationPlan$getSimulationResultsPath(project = output$project, simulation = output$simulation)
     }))
   }
@@ -576,14 +576,14 @@ loadGOFMergedTask <- function(workflow, configurationPlan) {
 
   taskFunction <- plotQualificationGOFs
   nameFunction <- getObjectNameAsString(plotQualificationGOFs)
-  
+
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getGOFOutputsDataframe(configurationPlan)
-  if(!isOfLength(outputs,0)){
+  if (!isOfLength(outputs, 0)) {
     # data.frame to list
     outputs <- split(outputs, 1:nrow(outputs))
-    inputFiles <- as.character(sapply(outputs, function(output){
+    inputFiles <- as.character(sapply(outputs, function(output) {
       configurationPlan$getSimulationResultsPath(project = output$project, simulation = output$simulation)
     }))
   }
@@ -620,14 +620,14 @@ loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPl
 
   taskFunction <- plotQualificationComparisonTimeProfile
   nameFunction <- getObjectNameAsString(plotQualificationComparisonTimeProfile)
-  
+
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getComparisonTimeProfileOutputsDataframe(configurationPlan)
-  if(!isOfLength(outputs,0)){
+  if (!isOfLength(outputs, 0)) {
     # data.frame to list
     outputs <- split(outputs, 1:nrow(outputs))
-    inputFiles <- as.character(sapply(outputs, function(output){
+    inputFiles <- as.character(sapply(outputs, function(output) {
       configurationPlan$getSimulationResultsPath(project = output$project, simulation = output$simulation)
     }))
   }
@@ -660,18 +660,18 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
 
   taskFunction <- plotQualificationPKRatio
   nameFunction <- getObjectNameAsString(plotQualificationPKRatio)
-  
+
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getPKRatioOutputsDataframe(configurationPlan)
-  if(!isOfLength(outputs,0)){
+  if (!isOfLength(outputs, 0)) {
     # data.frame to list
     outputs <- split(outputs, 1:nrow(outputs))
-    inputFiles <- as.character(sapply(outputs, function(output){
+    inputFiles <- as.character(sapply(outputs, function(output) {
       configurationPlan$getPKAnalysisResultsPath(project = output$project, simulation = output$simulation)
-      }))
+    }))
   }
-  
+
   return(QualificationTask$new(
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
@@ -706,14 +706,14 @@ loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
 
   taskFunction <- plotQualificationDDIs
   nameFunction <- getObjectNameAsString(substitute(plotQualificationDDIs))
-  
+
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getDDIOutputsDataframe(configurationPlan)
-  if(!isOfLength(outputs,0)){
+  if (!isOfLength(outputs, 0)) {
     # data.frame to list
     outputs <- split(outputs, 1:nrow(outputs))
-    inputFiles <- as.character(sapply(outputs, function(output){
+    inputFiles <- as.character(sapply(outputs, function(output) {
       configurationPlan$getPKAnalysisResultsPath(project = output$project, simulation = output$simulation)
     }))
   }
