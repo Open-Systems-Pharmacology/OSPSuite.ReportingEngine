@@ -537,13 +537,23 @@ loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
   taskFunction <- plotQualificationTimeProfiles
   nameFunction <- getObjectNameAsString(plotQualificationTimeProfiles)
 
+  # Get list of task required input files
+  inputFiles <- NULL
+  outputs <- getTimeProfileOutputsDataframe(configurationPlan)
+  if (!isOfLength(outputs, 0)) {
+    # data.frame to list
+    outputs <- split(outputs, 1:nrow(outputs))
+    inputFiles <- as.character(sapply(outputs, function(output) {
+      configurationPlan$getSimulationResultsPath(project = output$project, simulation = output$simulation)
+    }))
+  }
+
   return(QualificationTask$new(
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
     inputFolder = defaultTaskOutputFolders$simulate,
-    # TODO: only get simulations results from configuraiton plan
-    # also include observed data
-    inputs = getSimulationResultFileNames(workflow),
+    # TODO: add observed data
+    inputs = inputFiles,
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotTimeProfiles,
@@ -567,13 +577,23 @@ loadGOFMergedTask <- function(workflow, configurationPlan) {
   taskFunction <- plotQualificationGOFs
   nameFunction <- getObjectNameAsString(plotQualificationGOFs)
 
+  # Get list of task required input files
+  inputFiles <- NULL
+  outputs <- getGOFOutputsDataframe(configurationPlan)
+  if (!isOfLength(outputs, 0)) {
+    # data.frame to list
+    outputs <- split(outputs, 1:nrow(outputs))
+    inputFiles <- as.character(sapply(outputs, function(output) {
+      configurationPlan$getSimulationResultsPath(project = output$project, simulation = output$simulation)
+    }))
+  }
+
   return(QualificationTask$new(
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
     inputFolder = defaultTaskOutputFolders$simulate,
-    # TODO: only get simulations results from configuraiton plan
-    # also include observed data
-    inputs = getSimulationResultFileNames(workflow),
+    # TODO: add observed data
+    inputs = inputFiles,
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotGOFMerged,
@@ -601,13 +621,23 @@ loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPl
   taskFunction <- plotQualificationComparisonTimeProfile
   nameFunction <- getObjectNameAsString(plotQualificationComparisonTimeProfile)
 
+  # Get list of task required input files
+  inputFiles <- NULL
+  outputs <- getComparisonTimeProfileOutputsDataframe(configurationPlan)
+  if (!isOfLength(outputs, 0)) {
+    # data.frame to list
+    outputs <- split(outputs, 1:nrow(outputs))
+    inputFiles <- as.character(sapply(outputs, function(output) {
+      configurationPlan$getSimulationResultsPath(project = output$project, simulation = output$simulation)
+    }))
+  }
+
   return(QualificationTask$new(
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
     inputFolder = defaultTaskOutputFolders$simulate,
-    # TODO: only get simulations results from configuraiton plan
-    # also include observed data
-    inputs = getSimulationResultFileNames(workflow),
+    # TODO: add observed data
+    inputs = inputFiles,
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotComparisonTimeProfiles,
@@ -631,17 +661,32 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
   taskFunction <- plotQualificationPKRatio
   nameFunction <- getObjectNameAsString(plotQualificationPKRatio)
 
+  # Get list of task required input files
+  inputFiles <- NULL
+  outputs <- getPKRatioOutputsDataframe(configurationPlan)
+  if (!isOfLength(outputs, 0)) {
+    # data.frame to list
+    outputs <- split(outputs, 1:nrow(outputs))
+    inputFiles <- as.character(sapply(outputs, function(output) {
+      configurationPlan$getPKAnalysisResultsPath(project = output$project, simulation = output$simulation)
+    }))
+  }
+
   return(QualificationTask$new(
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
     inputFolder = defaultTaskOutputFolders$simulate,
-    # TODO: only get simulations results from configuraiton plan
-    # also include observed data
-    inputs = getSimulationResultFileNames(workflow),
+    # TODO: add observed data
+    inputs = inputFiles,
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotPKRatio,
-    settings = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$PKRatioPlots))
+    settings = list(
+      axes = getAxesProperties(configurationPlan$plots$AxesSettings$PKRatioPlots),
+      digits = reEnv$formatNumericsDigits,
+      nsmall = reEnv$formatNumericsSmall,
+      scientific = reEnv$formatNumericsScientific
+    )
   ))
 }
 
@@ -662,13 +707,23 @@ loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
   taskFunction <- plotQualificationDDIs
   nameFunction <- getObjectNameAsString(substitute(plotQualificationDDIs))
 
+  # Get list of task required input files
+  inputFiles <- NULL
+  outputs <- getDDIOutputsDataframe(configurationPlan)
+  if (!isOfLength(outputs, 0)) {
+    # data.frame to list
+    outputs <- split(outputs, 1:nrow(outputs))
+    inputFiles <- as.character(sapply(outputs, function(output) {
+      configurationPlan$getPKAnalysisResultsPath(project = output$project, simulation = output$simulation)
+    }))
+  }
+
   return(QualificationTask$new(
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
     inputFolder = defaultTaskOutputFolders$simulate,
-    # TODO: only get simulations results from configuraiton plan
-    # also include observed data
-    inputs = getSimulationResultFileNames(workflow),
+    # TODO: add observed data
+    inputs = inputFiles,
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotDDIRatio,

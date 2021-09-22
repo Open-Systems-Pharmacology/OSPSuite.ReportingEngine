@@ -12,6 +12,8 @@ plotQualificationPKRatio <- function(configurationPlan,
                                      settings) {
   pkRatioResults <- list()
   for (pkRatioPlan in configurationPlan$plots$PKRatioPlots) {
+    # If field artifacts is null, output them all
+    pkRatioPlan$Artifacts <- pkRatioPlan$Artifacts %||% c("Table", "Plot", "Measure", "GMFE")
     tableID <- paste(length(pkRatioResults) + 1, "pk-ratio-table", sep = "-")
     gmfeID <- paste(length(pkRatioResults) + 2, "pk-ratio-gmfe", sep = "-")
 
@@ -41,7 +43,7 @@ plotQualificationPKRatio <- function(configurationPlan,
       measureID <- paste(length(pkRatioResults) + 2, "pk-ratio-measure", pkParameterName, sep = "-")
 
       pkRatioPlot <- getQualificationPKRatioPlot(pkParameterName, pkRatioData$data, pkRatioData$metaData, axesProperties)
-      pkRatioMeasure <- getQualificationPKRatioMeasure(pkParameterName, pkRatioData$data, pkRatioData$metaData)
+      pkRatioMeasure <- getQualificationPKRatioMeasure(pkParameterName, pkRatioData$data, pkRatioData$metaData, settings)
 
       pkRatioResults[[plotID]] <- saveTaskResults(
         id = plotID,
@@ -90,8 +92,9 @@ getQualificationPKRatioGMFE <- function(pkParameterNames, data, settings) {
 #' @param pkParameterName Name of PK Parameter as defined by users
 #' @param data data.frame with PK Ratios
 #' @param metaData metaData with units and dimension for labeling the table header
+#' @param settings settings for the task
 #' @return A data.frame
-getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData) {
+getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData, settings) {
   # Prepare data, dataMapping and plotCOnfiguration to follow tlf nomenclature
   data$Groups <- metaData$caption
   dataMapping <- tlf::PKRatioDataMapping$new(
@@ -100,7 +103,17 @@ getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData) {
     color = "Groups",
     shape = "Groups"
   )
-  return(tlf::getPKRatioMeasure(data, dataMapping))
+  pkRatioMeasure <-  tlf::getPKRatioMeasure(data, dataMapping)
+  pkRatioMeasure$Ratio <- formatNumerics(
+    pkRatioMeasure$Ratio,
+    digits = settings$digits,
+    nsmall = settings$nsmall,
+    scientific = settings$scientific
+  )
+  # Export row names for report
+  qualificationMeasure <- cbind(row.names(pkRatioMeasure), pkRatioMeasure)
+  names(qualificationMeasure) <- c(" ", names(pkRatioMeasure))
+  return(qualificationMeasure)
 }
 
 #' @title getQualificationPKRatioPlot
@@ -240,18 +253,13 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
       pathFolder = logFolder,
       logTypes = c(LogTypes$Error, LogTypes$Debug)
     )
-    "ObservedDataRecordId":96
-    warning()
     return()
   }
 
   metaData <- list()
   data <- data.frame()
   for (pkParameterName in pkParameterNames) {
-    # TODO: we may need dictionaries for catching the appropriate PK parameter
-    # in observed data and pk analysis (e.g. AUC_tEnd)
-    pkParameter <- pkAnalyses$pKParameterFor(quantityPath = pkRatioMapping$Output, pkParameter = pkParameterName)
-
+    pkParameter <- pkAnalyses$pKParameterFor(quantityPath = pkRatioMapping$Output, pkParameter = pkDictionaryQualificationOSP[[pkParameterName]])
     pkParameterObservedValue <- as.numeric(
       observedData[selectedRow, paste(pkParameterName, reEnv$pkRatio$dictionary$parameterColumn, sep = " ")]
     )
@@ -263,7 +271,8 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
       quantityOrDimension = pkParameter$dimension,
       values = pkParameterObservedValue,
       targetUnit = pkParameter$unit,
-      sourceUnit = pkParameterObservedUnit
+      sourceUnit = pkParameterObservedUnit,
+      molWeight = simulation$molWeightFor(pkRatioMapping$Output)
     )
     # Values
     data[1, paste0("obs", pkParameterName)] <- pkParameterObservedValue

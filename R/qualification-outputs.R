@@ -4,11 +4,13 @@
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return A dataframe of project, simulation, output paths and (if applicable) pk parameters and start and end times of interval over which the pk parameter is evaluated
 getOutputsFromConfigurationPlan <- function(configurationPlan) {
-  outputsTimeProfile <- getTimeProfileOutputsDataframe(configurationPlan = configurationPlan)
-  outputsGOF <- getGOFOutputsDataframe(configurationPlan = configurationPlan)
-  outputsDDI <- getDDIOutputsDataframe(configurationPlan = configurationPlan)
+  outputsTimeProfile <- getTimeProfileOutputsDataframe(configurationPlan)
+  outputsComparisonTimeProfile <- getComparisonTimeProfileOutputsDataframe(configurationPlan)
+  outputsGOF <- getGOFOutputsDataframe(configurationPlan)
+  outputsDDI <- getDDIOutputsDataframe(configurationPlan)
+  outputsPKRatio <- getPKRatioOutputsDataframe(configurationPlan)
 
-  outputs <- rbind.data.frame(outputsTimeProfile, outputsGOF, outputsDDI)
+  outputs <- rbind.data.frame(outputsTimeProfile, outputsComparisonTimeProfile, outputsGOF, outputsDDI, outputsPKRatio)
 
   return(outputs[!duplicated(outputs), ])
 }
@@ -21,12 +23,11 @@ getTimeProfileOutputsDataframe <- function(configurationPlan) {
   timeProfileOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$TimeProfile) {
     validateIsIncluded(values = "Plot", parentValues = names(plot), nullAllowed = TRUE)
-    validateIsIncluded(values = "Curves", parentValues = names(plot[["Plot"]]), nullAllowed = FALSE)
-
-    paths <- NULL
+    
+    # Accounts for paths of both mean and pop time profiles
+    paths <- plot$Plot$Analysis$Fields[[1]]$QuantityPath
     for (curve in plot$Plot$Curves) {
-      validateIsString(object = curve$Y)
-      if (ospsuite::toPathArray(curve$Y)[2] == "ObservedData") {
+      if (isObservedData(curve$Y)) {
         next
       }
       paths <- c(paths, ospsuite::toPathString(tail(ospsuite::toPathArray(curve$Y), -1)))
@@ -43,8 +44,6 @@ getTimeProfileOutputsDataframe <- function(configurationPlan) {
   }
   return(timeProfileOutputsDataframe[!duplicated(timeProfileOutputsDataframe), ])
 }
-
-
 
 #' @title getComparisonTimeProfileOutputsDataframe
 #' @description Get a dataframe relating project, simulation and output path for each comparison time profile plot
@@ -68,9 +67,6 @@ getComparisonTimeProfileOutputsDataframe <- function(configurationPlan) {
   }
   return(comparisonTimeProfileOutputsDataframe[!duplicated(comparisonTimeProfileOutputsDataframe), ])
 }
-
-
-
 
 #' @title getGOFOutputsDataframe
 #' @description Get a dataframe relating project, simulation and output path for each GOF plot component
@@ -99,12 +95,8 @@ getGOFOutputsDataframe <- function(configurationPlan) {
       }
     }
   }
-
   return(gofOutputsDataframe[!duplicated(gofOutputsDataframe), ])
 }
-
-
-
 
 #' @title getDDIOutputsDataframe
 #' @description Get a dataframe relating project, simulation, output, pk parameter, start time, end time for each DDI plot component
@@ -159,8 +151,6 @@ getDDIOutputsDataframe <- function(configurationPlan) {
             startTime = startTime %||% NA,
             endTime = endTime %||% NA
           )
-
-
           ddiOutputsDataframe <- rbind.data.frame(ddiOutputsDataframe, df)
         }
       }
@@ -168,9 +158,6 @@ getDDIOutputsDataframe <- function(configurationPlan) {
   }
   return(ddiOutputsDataframe[!duplicated(ddiOutputsDataframe), ])
 }
-
-
-
 
 #' @title getPKRatioOutputsDataframe
 #' @description Get a dataframe relating project, simulation, output path and pk parameter for each PK ratio plot
@@ -213,10 +200,6 @@ getPKRatioOutputsDataframe <- function(configurationPlan) {
   return(pkRatioOutputsDataframe[!duplicated(pkRatioOutputsDataframe), ])
 }
 
-
-
-
-
 #' @title addNewPkParameter
 #' @description Create a PK parameter calculated between a start and end time as specified in a qualification `ConfigurationPlan` and return ther PK parameter name
 #' @param pkParameter the name of the PK parameter from the qualification `ConfigurationPlan`
@@ -225,8 +208,7 @@ getPKRatioOutputsDataframe <- function(configurationPlan) {
 #' @return String `pkParameterName`
 addNewPkParameter <- function(pkParameter, startTime, endTime) {
   pkParameterName <- generateDDIPlotPKParameterName(pkParameter, startTime, endTime)
-
-
+  
   if (pkParameterName %in% ospsuite::allPKParameterNames()) {
     return(pkParameterName)
   }
@@ -256,7 +238,6 @@ ddiPKRatioColumnName <- list(
   AUC = "AUCR Avg",
   CMAX = "CmaxR Avg"
 )
-
 
 #' @title generateDDIPlotPKParameterName
 #' @description Generate name for a PK parameter calculated between a start and end time
