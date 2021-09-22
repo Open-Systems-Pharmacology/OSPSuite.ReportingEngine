@@ -1,0 +1,11 @@
+pandoc: 2.14.2
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  goodness-of-fit: goodness-of-fit.html
+  introduction-re-instances: introduction-re-instances.html
+  pk-parameters: pk-parameters.html
+  plot-settings: plot-settings.html
+  sensitivity-analysis: sensitivity-analysis.html
+last_built: 2021-09-22T11:33Z
+
