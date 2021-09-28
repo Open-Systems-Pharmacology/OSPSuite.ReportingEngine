@@ -75,15 +75,12 @@ getQualificationPKRatioGMFE <- function(pkParameterNames, data, settings) {
   gmfe <- sapply(pkParameterNames, FUN = function(pkParameterName) {
     calculateGMFE(data[, paste0("obs", pkParameterName)], data[, paste0("pred", pkParameterName)])
   })
-  gmfe <- formatNumerics(
-    gmfe,
-    digits = settings$digits,
-    nsmall = settings$nsmall,
-    scientific = settings$scientific
-  )
-  data.frame(
-    Parameter = pkParameterNames,
-    GMFE = gmfe
+
+  return(
+    data.frame(
+      Parameter = pkParameterNames,
+      GMFE = formatNumerics(gmfe, digits = settings$digits, scientific = settings$scientific)
+    )
   )
 }
 
@@ -103,11 +100,10 @@ getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData, sett
     color = "Groups",
     shape = "Groups"
   )
-  pkRatioMeasure <-  tlf::getPKRatioMeasure(data, dataMapping)
+  pkRatioMeasure <- tlf::getPKRatioMeasure(data, dataMapping)
   pkRatioMeasure$Ratio <- formatNumerics(
     pkRatioMeasure$Ratio,
     digits = settings$digits,
-    nsmall = settings$nsmall,
     scientific = settings$scientific
   )
   # Export row names for report
@@ -160,18 +156,11 @@ getQualificationPKRatioPlot <- function(pkParameterName, data, metaData, axesPro
 #' @return A data.frame with correct numeric format
 getQualificationPKRatioTable <- function(data, metaData, settings) {
   # Update the digits based on settings
-  for (variableName in names(data)) {
-    if (!is.numeric(data[, variableName])) {
-      next
-    }
-    data[, variableName] <- formatNumerics(
-      data[, variableName],
-      digits = settings$digits,
-      nsmall = settings$nsmall,
-      scientific = settings$scientific
-    )
-  }
-
+  data <- formatNumerics(
+    data,
+    digits = settings$digits,
+    scientific = settings$scientific
+  )
   # Update names of variables
   metaData <- metaData[sapply(metaData, function(metaDataVariable) {
     is.list(metaDataVariable)

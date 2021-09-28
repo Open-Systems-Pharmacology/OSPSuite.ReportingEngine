@@ -6,8 +6,7 @@ reEnv <- new.env(parent = emptyenv())
 reEnv$packageName <- "ospsuite.reportingengine"
 
 # Default format values for numerics
-reEnv$formatNumericsDigits <- 5
-reEnv$formatNumericsSmall <- 2
+reEnv$formatNumericsDigits <- 2
 reEnv$formatNumericsScientific <- NA
 
 # Default binning properties
@@ -106,19 +105,14 @@ ApplicationRanges <- ospsuite::enum(c("total", "firstApplication", "lastApplicat
 #' @title setDefaultNumericFormat
 #' @description Set default format for numeric values output in reports
 #' @param digits Number of significant digits
-#' @param nsmall Number of decimal digits
-#' (Note: `nsmall` needs to be consistent with `digits` for being correctly used)
 #' @param scientific Logical defining if numeric format uses a scientific expression
 #' @export
 setDefaultNumericFormat <- function(digits = NULL,
-                                    nsmall = NULL,
                                     scientific = NULL) {
   validateIsInteger(digits, nullAllowed = TRUE)
-  validateIsInteger(nsmall, nullAllowed = TRUE)
   validateIsLogical(scientific, nullAllowed = TRUE)
 
   reEnv$formatNumericsDigits <- digits %||% reEnv$formatNumericsDigits
-  reEnv$formatNumericsSmall <- nsmall %||% reEnv$formatNumericsSmall
   reEnv$formatNumericsScientific <- scientific %||% reEnv$formatNumericsScientific
   return(invisible())
 }

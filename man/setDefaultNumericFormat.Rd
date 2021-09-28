@@ -4,13 +4,10 @@
 \alias{setDefaultNumericFormat}
 \title{setDefaultNumericFormat}
 \usage{
-setDefaultNumericFormat(digits = NULL, nsmall = NULL, scientific = NULL)
+setDefaultNumericFormat(digits = NULL, scientific = NULL)
 }
 \arguments{
 \item{digits}{Number of significant digits}
-
-\item{nsmall}{Number of decimal digits
-(Note: `nsmall` needs to be consistent with `digits` for being correctly used)}
 
 \item{scientific}{Logical defining if numeric format uses a scientific expression}
 }

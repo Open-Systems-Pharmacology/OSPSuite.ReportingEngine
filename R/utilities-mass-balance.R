@@ -189,9 +189,8 @@ plotMeanMassBalance <- function(structureSet,
   )
 
   timeCaption <- formatNumerics(
-    numerics = max(simulationResultsOutputByGroup$Time),
+    max(simulationResultsOutputByGroup$Time),
     digits = settings$digits,
-    nsmall = settings$nsmall,
     scientific = settings$scientific
   )
 

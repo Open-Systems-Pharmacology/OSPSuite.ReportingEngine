@@ -402,19 +402,29 @@ getWorkflowParameterDisplayPaths <- function(workflow) {
 }
 
 
-formatNumerics <- function(numerics,
+formatNumerics <- function(value,
                            digits = NULL,
-                           nsmall = NULL,
                            scientific = NULL) {
   validateIsInteger(digits, nullAllowed = TRUE)
-  validateIsInteger(nsmall, nullAllowed = TRUE)
   validateIsLogical(scientific, nullAllowed = TRUE)
 
-  digits <- digits %||% reEnv$formatNumericsDigits
-  nsmall <- nsmall %||% reEnv$formatNumericsSmall
-  scientific <- scientific %||% reEnv$formatNumericsScientific
-
-  return(format(numerics, digits = digits, nsmall = nsmall, scientific = scientific))
+  # Method for numerics
+  if(is.numeric(value)){
+    # Scientific writing
+    if(isTRUE(scientific %||% reEnv$formatNumericsScientific)){
+      return(sprintf(paste0('%.', digits %||% reEnv$formatNumericsDigits, 'e'), value))
+    }
+    # Decimal writing
+    return(sprintf(paste0('%.', digits %||% reEnv$formatNumericsDigits, 'f'), value))
+  }
+  # If data.frame or list, update each field
+  if(isOfType(value, c("list", "data.frame"))){
+    for(field in 1:length(value)){
+      value[[field]] <- formatNumerics(value[[field]], digits, scientific)
+    }
+  }
+  # Return the value as.is if not numeric
+  return(value)
 }
 
 #' @title parseVariableToObject
