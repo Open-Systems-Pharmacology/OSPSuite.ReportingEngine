@@ -409,6 +409,9 @@ formatNumerics <- function(value,
   validateIsLogical(scientific, nullAllowed = TRUE)
 
   # Method for numerics
+  if(is.integer(value)){
+    return(value)
+  }
   if(is.numeric(value)){
     # Scientific writing
     if(isTRUE(scientific %||% reEnv$formatNumericsScientific)){

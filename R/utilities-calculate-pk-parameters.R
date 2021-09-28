@@ -65,11 +65,6 @@ plotMeanPKParameters <- function(structureSet,
     )
   }
   pkParametersData$Value <- replaceInfWithNA(pkParametersData$Value, logFolder)
-  pkParametersData$Value <- formatNumerics(
-    pkParametersData$Value,
-    digits = settings$digits,
-    scientific = settings$scientific
-  )
   pkParameterCaptions <- captions$plotPKParameters$mean(
     structureSet$simulationSet$simulationSetName,
     structureSet$simulationSetDescriptor
@@ -268,12 +263,7 @@ plotPopulationPKParameters <- function(structureSets,
       )
 
       # A different table needs to be created here because of ratio comparison of the table values
-      savedPKParameterTable <- formatNumerics(
-        pkParameterTable,
-        digits = settings$digits,
-        scientific = settings$scientific
-        )
-      savedPKParameterTable <- addDescriptorToTable(savedPKParameterTable, simulationSetDescriptor)
+      savedPKParameterTable <- addDescriptorToTable(pkParameterTable, simulationSetDescriptor)
       pkParametersTables[[paste0(plotID)]] <- savedPKParameterTable
       pkParametersCaptionTables[[plotID]] <- captions$plotPKParameters$summaryTable(
         parameterCaption,
@@ -431,11 +421,6 @@ plotPopulationPKParameters <- function(structureSets,
           plotScale = "logarithmic"
         )
 
-        pkRatiosTable <- formatNumerics(
-          pkRatiosTable,
-          digits = settings$digits,
-          scientific = settings$scientific
-          )
         pkRatiosTable <- addDescriptorToTable(pkRatiosTable, simulationSetDescriptor)
         pkParametersTables[[plotID]] <- pkRatiosTable
         pkParametersCaptionTables[[plotID]] <- captions$plotPKParameters$ratioTable(

@@ -4,12 +4,10 @@
 \alias{getQualificationPKRatioGMFE}
 \title{getQualificationPKRatioGMFE}
 \usage{
-getQualificationPKRatioGMFE(pkParameterNames, data, settings)
+getQualificationPKRatioGMFE(pkParameterNames, data)
 }
 \arguments{
 \item{data}{data.frame with PK Ratios}
-
-\item{settings}{settings for the task}
 
 \item{pkParameterName}{Name of PK Parameter as defined by users}
 
