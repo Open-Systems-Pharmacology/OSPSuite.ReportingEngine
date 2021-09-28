@@ -166,7 +166,7 @@ ConfigurationPlan <- R6::R6Class(
       validateIsIncluded(project, private$.simulationMappings$project, groupName = "'project' variable of simulationMappings")
       validateIsIncluded(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
       selectedId <- (private$.simulationMappings$project %in% project) & (private$.simulationMappings$simulation %in% simulation)
-      simulationPath <- file.path(self$referenceFolder, private$.simulationMappings$path[selectedId], paste0(simulation, ".pkml"))
+      simulationPath <- file.path(self$referenceFolder, private$.simulationMappings$path[selectedId], paste0(private$.simulationMappings$simulationFile[selectedId], ".pkml"))
       return(simulationPath)
     },
 
@@ -241,6 +241,9 @@ ConfigurationPlan <- R6::R6Class(
         }),
         path = sapply(value, function(mapping) {
           mapping$Path
+        }),
+        simulationFile = sapply(value, function(mapping) {
+          mapping$SimulationFile
         }),
         stringsAsFactors = FALSE
       )
