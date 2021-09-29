@@ -94,8 +94,10 @@ TaskResults <- R6::R6Class(
     #' @param reportFile file in which the table and its caption should be added
     #' @param fileRelativePath path of file relative to reportFile corresponding saved figure
     #' @param fileRootDirectory root directory of figure file path
+    #' @param digits number of decimal digits in displayed numbers
+    #' @param scientific logical defining if displayed numbers use scientific writing
     #' @param logFolder folder were logs are saved
-    addTableToReport = function(reportFile, fileRelativePath, fileRootDirectory, logFolder = getwd()) {
+    addTableToReport = function(reportFile, fileRelativePath, fileRootDirectory, digits = NULL, scientific = NULL, logFolder = getwd()) {
       if (isOfLength(self$table, 0)) {
         return()
       }
@@ -111,6 +113,8 @@ TaskResults <- R6::R6Class(
         fileName = reportFile,
         tableFileRelativePath = fileRelativePath,
         tableFileRootDirectory = fileRootDirectory,
+        digits = digits,
+        scientific = scientific,
         logFolder = logFolder
       )
     }

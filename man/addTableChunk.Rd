@@ -8,7 +8,8 @@ addTableChunk(
   fileName,
   tableFileRelativePath,
   tableFileRootDirectory,
-  tableCaption = "",
+  digits = NULL,
+  scientific = NULL,
   logFolder = getwd()
 )
 }
@@ -19,7 +20,9 @@ addTableChunk(
 
 \item{tableFileRootDirectory}{working directory}
 
-\item{tableCaption}{caption of the table}
+\item{digits}{number of decimal digits in displayed numbers}
+
+\item{scientific}{logical defining if displayed numbers use scientific writing}
 
 \item{logFolder}{folder where the logs are saved}
 }

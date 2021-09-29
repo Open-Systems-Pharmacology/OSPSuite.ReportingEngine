@@ -19,7 +19,7 @@ plotQualificationPKRatio <- function(configurationPlan,
 
     pkRatioData <- getQualificationPKRatioData(pkRatioPlan, configurationPlan, logFolder)
 
-    pkRatioTable <- getQualificationPKRatioTable(pkRatioData$data, pkRatioData$metaData, settings)
+    pkRatioTable <- getQualificationPKRatioTable(pkRatioData$data, pkRatioData$metaData)
     pkRatioResults[[tableID]] <- saveTaskResults(
       id = tableID,
       sectionId = pkRatioPlan$SectionId,
@@ -30,7 +30,7 @@ plotQualificationPKRatio <- function(configurationPlan,
 
     axesProperties <- getAxesProperties(pkRatioPlan$Axes) %||% settings$axes
     pkParameterNames <- pkRatioPlan$PKParameters %||% ospsuite::toPathArray(pkRatioPlan$PKParameter)
-    pkRatioGMFE <- getQualificationPKRatioGMFE(pkParameterNames, pkRatioData$data, settings)
+    pkRatioGMFE <- getQualificationPKRatioGMFE(pkParameterNames, pkRatioData$data)
     pkRatioResults[[gmfeID]] <- saveTaskResults(
       id = gmfeID,
       sectionId = pkRatioPlan$SectionId,
@@ -43,7 +43,7 @@ plotQualificationPKRatio <- function(configurationPlan,
       measureID <- paste(length(pkRatioResults) + 2, "pk-ratio-measure", pkParameterName, sep = "-")
 
       pkRatioPlot <- getQualificationPKRatioPlot(pkParameterName, pkRatioData$data, pkRatioData$metaData, axesProperties)
-      pkRatioMeasure <- getQualificationPKRatioMeasure(pkParameterName, pkRatioData$data, pkRatioData$metaData, settings)
+      pkRatioMeasure <- getQualificationPKRatioMeasure(pkParameterName, pkRatioData$data, pkRatioData$metaData)
 
       pkRatioResults[[plotID]] <- saveTaskResults(
         id = plotID,
@@ -69,21 +69,17 @@ plotQualificationPKRatio <- function(configurationPlan,
 #' @param pkParameterName Name of PK Parameter as defined by users
 #' @param data data.frame with PK Ratios
 #' @param metaData metaData with units and dimension for labeling the table header
-#' @param settings settings for the task
 #' @return A data.frame
-getQualificationPKRatioGMFE <- function(pkParameterNames, data, settings) {
+getQualificationPKRatioGMFE <- function(pkParameterNames, data) {
   gmfe <- sapply(pkParameterNames, FUN = function(pkParameterName) {
     calculateGMFE(data[, paste0("obs", pkParameterName)], data[, paste0("pred", pkParameterName)])
   })
-  gmfe <- formatNumerics(
-    gmfe,
-    digits = settings$digits,
-    nsmall = settings$nsmall,
-    scientific = settings$scientific
-  )
-  data.frame(
-    Parameter = pkParameterNames,
-    GMFE = gmfe
+
+  return(
+    data.frame(
+      Parameter = pkParameterNames,
+      GMFE = gmfe
+    )
   )
 }
 
@@ -92,9 +88,8 @@ getQualificationPKRatioGMFE <- function(pkParameterNames, data, settings) {
 #' @param pkParameterName Name of PK Parameter as defined by users
 #' @param data data.frame with PK Ratios
 #' @param metaData metaData with units and dimension for labeling the table header
-#' @param settings settings for the task
 #' @return A data.frame
-getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData, settings) {
+getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData) {
   # Prepare data, dataMapping and plotCOnfiguration to follow tlf nomenclature
   data$Groups <- metaData$caption
   dataMapping <- tlf::PKRatioDataMapping$new(
@@ -103,13 +98,7 @@ getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData, sett
     color = "Groups",
     shape = "Groups"
   )
-  pkRatioMeasure <-  tlf::getPKRatioMeasure(data, dataMapping)
-  pkRatioMeasure$Ratio <- formatNumerics(
-    pkRatioMeasure$Ratio,
-    digits = settings$digits,
-    nsmall = settings$nsmall,
-    scientific = settings$scientific
-  )
+  pkRatioMeasure <- tlf::getPKRatioMeasure(data, dataMapping)
   # Export row names for report
   qualificationMeasure <- cbind(row.names(pkRatioMeasure), pkRatioMeasure)
   names(qualificationMeasure) <- c(" ", names(pkRatioMeasure))
@@ -156,22 +145,8 @@ getQualificationPKRatioPlot <- function(pkParameterName, data, metaData, axesPro
 #' @description Get data of pk ratio from field `PKRatioPlots` of configuration plan
 #' @param data data.frame with PK Ratios
 #' @param metaData metaData with units and dimension for labeling the table header
-#' @param settings settings for the task
 #' @return A data.frame with correct numeric format
-getQualificationPKRatioTable <- function(data, metaData, settings) {
-  # Update the digits based on settings
-  for (variableName in names(data)) {
-    if (!is.numeric(data[, variableName])) {
-      next
-    }
-    data[, variableName] <- formatNumerics(
-      data[, variableName],
-      digits = settings$digits,
-      nsmall = settings$nsmall,
-      scientific = settings$scientific
-    )
-  }
-
+getQualificationPKRatioTable <- function(data, metaData) {
   # Update names of variables
   metaData <- metaData[sapply(metaData, function(metaDataVariable) {
     is.list(metaDataVariable)

@@ -96,6 +96,8 @@ PopulationPlotTask <- R6::R6Class(
             fileName = self$fileName,
             tableFileRelativePath = self$getRelativePath(tableFileName),
             tableFileRootDirectory = self$workflowFolder,
+            digits = self$settings$digits,
+            scientific = self$settings$scientific,
             logFolder = self$workflowFolder
           )
 

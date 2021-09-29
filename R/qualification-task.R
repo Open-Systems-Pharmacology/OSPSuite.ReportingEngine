@@ -39,19 +39,21 @@ QualificationTask <- R6::R6Class(
           x = tableFilePath
         )
 
-        result$saveFigure(fileName = figureFilePath, logFolder = self$workflowFolder)
+          result$saveFigure(fileName = figureFilePath, logFolder = self$workflowFolder)
+          result$addFigureToReport(
+            reportFile = configurationPlan$getSectionMarkdown(result$sectionId),
+            fileRelativePath = figureFileRelativePath,
+            fileRootDirectory = self$workflowFolder,
+            logFolder = self$workflowFolder
+          )
         result$saveTable(fileName = tableFilePath, logFolder = self$workflowFolder)
 
-        result$addFigureToReport(
-          reportFile = configurationPlan$getSectionMarkdown(result$sectionId),
-          fileRelativePath = figureFileRelativePath,
-          fileRootDirectory = self$workflowFolder,
-          logFolder = self$workflowFolder
-        )
         result$addTableToReport(
           reportFile = configurationPlan$getSectionMarkdown(result$sectionId),
           fileRelativePath = tableFileRelativePath,
           fileRootDirectory = self$workflowFolder,
+          digits = self$settings$digits,
+          scientific = self$settings$scientific,
           logFolder = self$workflowFolder
         )
       }

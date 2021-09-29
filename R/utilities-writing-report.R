@@ -66,25 +66,32 @@ addFigureChunk <- function(fileName,
 #' @param fileName name of .md file
 #' @param tableFileRelativePath path to table relative to working directory
 #' @param tableFileRootDirectory working directory
-#' @param tableCaption caption of the table
+#' @param digits number of decimal digits in displayed numbers
+#' @param scientific logical defining if displayed numbers use scientific writing
 #' @param logFolder folder where the logs are saved
 #' @export
 addTableChunk <- function(fileName,
                           tableFileRelativePath,
                           tableFileRootDirectory,
-                          tableCaption = "",
+                          digits = NULL,
+                          scientific = NULL,
                           logFolder = getwd()) {
-  # It is expected that the tables used `formatNumerics` before being saved
-  # As a consequence, the table content is 'character' and not 'numeric'
-  # If not enforced by colClasses = "character", the format can be lost while loading the table
-  table <- read.csv(file.path(tableFileRootDirectory, tableFileRelativePath),
+  # The function `formatNumerics` is now used by addTableChunk
+  # colClasses = "character" is not needed anymore to enforce all table elements to be 'character'
+  table <- read.csv(
+    file.path(tableFileRootDirectory, tableFileRelativePath),
     check.names = FALSE,
-    colClasses = "character",
-    fileEncoding = "UTF-8"
+    #colClasses = "character",
+    fileEncoding = "UTF-8",
+    stringsAsFactors = FALSE
   )
+  table <- formatNumerics(
+    table,
+    digits = digits %||% reEnv$formatNumericsDigits,
+    scientific = scientific %||% reEnv$formatNumericsScientific
+    )
 
-  # TO DO: kable has options such as number of decimals and align,
-  # should they also be defined ? as figure width for addFigureChunk ?
+  # Currently using default options from kable
   mdText <- c(
     "",
     knitr::kable(table),

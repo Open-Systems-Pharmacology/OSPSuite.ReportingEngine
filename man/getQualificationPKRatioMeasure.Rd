@@ -4,7 +4,7 @@
 \alias{getQualificationPKRatioMeasure}
 \title{getQualificationPKRatioMeasure}
 \usage{
-getQualificationPKRatioMeasure(pkParameterName, data, metaData, settings)
+getQualificationPKRatioMeasure(pkParameterName, data, metaData)
 }
 \arguments{
 \item{pkParameterName}{Name of PK Parameter as defined by users}
@@ -12,8 +12,6 @@ getQualificationPKRatioMeasure(pkParameterName, data, metaData, settings)
 \item{data}{data.frame with PK Ratios}
 
 \item{metaData}{metaData with units and dimension for labeling the table header}
-
-\item{settings}{settings for the task}
 }
 \value{
 A data.frame

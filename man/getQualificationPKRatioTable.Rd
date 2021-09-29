@@ -4,14 +4,12 @@
 \alias{getQualificationPKRatioTable}
 \title{getQualificationPKRatioTable}
 \usage{
-getQualificationPKRatioTable(data, metaData, settings)
+getQualificationPKRatioTable(data, metaData)
 }
 \arguments{
 \item{data}{data.frame with PK Ratios}
 
 \item{metaData}{metaData with units and dimension for labeling the table header}
-
-\item{settings}{settings for the task}
 }
 \value{
 A data.frame with correct numeric format

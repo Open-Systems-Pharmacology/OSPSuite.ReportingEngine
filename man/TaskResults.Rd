@@ -112,6 +112,8 @@ Add table results to a
   reportFile,
   fileRelativePath,
   fileRootDirectory,
+  digits = NULL,
+  scientific = NULL,
   logFolder = getwd()
 )}\if{html}{\out{</div>}}
 }
@@ -124,6 +126,10 @@ Add table results to a
 \item{\code{fileRelativePath}}{path of file relative to reportFile corresponding saved figure}
 
 \item{\code{fileRootDirectory}}{root directory of figure file path}
+
+\item{\code{digits}}{number of decimal digits in displayed numbers}
+
+\item{\code{scientific}}{logical defining if displayed numbers use scientific writing}
 
 \item{\code{logFolder}}{folder were logs are saved}
 }
