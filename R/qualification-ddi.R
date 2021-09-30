@@ -55,18 +55,24 @@ getQualificationDDIPlotData <- function(configurationPlan) {
             projectName <- plotComponent$Project
             simulationName <- plotComponent$Simulation
 
-            startTime <- ospsuite::toBaseUnit(
-              quantityOrDimension = ospDimensions$Time,
-              values = plotComponent$StartTime,
-              unit = plotComponent$TimeUnit
-            )
+            startTime <- NULL
+            endTime <- NULL
 
-            endTime <- ospsuite::toBaseUnit(
-              quantityOrDimension = ospDimensions$Time,
-              values = plotComponent$EndTime,
-              unit = plotComponent$TimeUnit
-            )
+            if (is.numeric(plotComponent$StartTime)) {
+              startTime <- ospsuite::toBaseUnit(
+                quantityOrDimension = ospDimensions$Time,
+                values = plotComponent$StartTime,
+                unit = plotComponent$TimeUnit
+              )
+            }
 
+            if (is.numeric(plotComponent$EndTime)) {
+              endTime <- ospsuite::toBaseUnit(
+                quantityOrDimension = ospDimensions$Time,
+                values = plotComponent$EndTime,
+                unit = plotComponent$TimeUnit
+              )
+            }
             pkParameterName <- generateDDIPlotPKParameterName(pkParameter, startTime, endTime)
 
             simulationResultsFile <- configurationPlan$getSimulationResultsPath(

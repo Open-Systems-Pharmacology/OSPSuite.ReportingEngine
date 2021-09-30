@@ -3,17 +3,20 @@
     {
       "Project": "Midazolam",
       "Simulation": "S1",
-      "Path": "Midazolam/S1/"
+      "Path": "Midazolam/S1/",
+      "SimulationFile": "S1"
     },
     {
       "Project": "Midazolam",
       "Simulation": "S2",
-      "Path": "Midazolam/S2/"
+      "Path": "Midazolam/S2/",
+      "SimulationFile": "S2"
     },
     {
       "Project": "Itraconazole",
       "Simulation": "S1",
-      "Path": "Itraconazole/S1/"
+      "Path": "Itraconazole/S1/",
+      "SimulationFile": "S1"
     }
   ],
   "ObservedDataSets": [
