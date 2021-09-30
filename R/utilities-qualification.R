@@ -107,7 +107,7 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
     # Actual section path will be relative to the workflowFolder
     # and is wrapped in method configurationPlan$getSectionPath(id)
     sectionPath <- paste0(parentFolder,
-      sprintf("%0.3d_%s", sectionIndex, removeForbiddenLetters(section$Title)),
+      sprintf("%0.3d_section_%d", sectionIndex, section$Id),
       sep = .Platform$file.sep
     )
 
@@ -300,7 +300,7 @@ getAxesSettings <- function(axesSettingsFromConfigurationPlot) {
 #' \item `'-a'` or `'--append'`:   true to append data to the file; false to overwrite the file (default). If the specified file does not exist, this parameter has no effect, and a new file is created.
 #' \item `'--logLevel <Level>'`: Log verbosity (Debug, Information, Warning, Error). Default is Information.
 #' \item `'--version'`:          Display version information.
-#' } 
+#' }
 #' @export
 startQualificationRunner <- function(qualificationRunnerFolder, qualificationPlanFile, outputFolder, options = NULL){
   optionalArguments <- paste0(options, collapse = ' ')
