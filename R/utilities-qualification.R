@@ -20,6 +20,7 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
     project <- configurationPlan$simulationMappings$project[simulationIndex]
     simulationName <- configurationPlan$simulationMappings$simulation[simulationIndex]
     simulationFile <- configurationPlan$getSimulationPath(project = project, simulation = simulationName)
+    populationFile <- configurationPlan$getPopulationPath(project = project, simulation = simulationName)
 
     cat(paste0(
       "Creating output objects for ", simulationIndex, "/", nrow(configurationPlan$simulationMappings),
@@ -41,6 +42,16 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
     }
 
     # simulationSetName defined as project-simulation uniquely identifies the simulation
+    if (!is.null(populationFile)) {
+      simulationSets[[simulationIndex]] <- PopulationSimulationSet$new(
+        simulationSetName = paste(project, simulationName, sep = "-"),
+        simulationFile = simulationFile,
+        populationFile = populationFile,
+        outputs = c(outputs),
+        minimumSimulationEndTime = minimumSimulationEndTime
+      )
+      next
+    }
     simulationSets[[simulationIndex]] <- SimulationSet$new(
       simulationSetName = paste(project, simulationName, sep = "-"),
       simulationFile = simulationFile,
