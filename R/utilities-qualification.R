@@ -19,6 +19,7 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
   for (simulationIndex in 1:nrow(configurationPlan$simulationMappings)) {
     project <- configurationPlan$simulationMappings$project[simulationIndex]
     simulationName <- configurationPlan$simulationMappings$simulation[simulationIndex]
+    simulationSetName <- paste(project, configurationPlan$simulationMappings$simulationFile[simulationIndex], sep = "-")
     simulationFile <- configurationPlan$getSimulationPath(project = project, simulation = simulationName)
     populationFile <- configurationPlan$getPopulationPath(project = project, simulation = simulationName)
 
@@ -44,7 +45,7 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
     # simulationSetName defined as project-simulation uniquely identifies the simulation
     if (!is.null(populationFile)) {
       simulationSets[[simulationIndex]] <- PopulationSimulationSet$new(
-        simulationSetName = paste(project, simulationName, sep = "-"),
+        simulationSetName = simulationSetName,
         simulationFile = simulationFile,
         populationFile = populationFile,
         outputs = c(outputs),
@@ -53,7 +54,7 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
       next
     }
     simulationSets[[simulationIndex]] <- SimulationSet$new(
-      simulationSetName = paste(project, simulationName, sep = "-"),
+      simulationSetName = simulationSetName,
       simulationFile = simulationFile,
       outputs = c(outputs),
       minimumSimulationEndTime = minimumSimulationEndTime

@@ -196,7 +196,8 @@ ConfigurationPlan <- R6::R6Class(
       validateIsIncluded(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
 
       selectedId <- (private$.simulationMappings$project %in% project) & (private$.simulationMappings$simulation %in% simulation)
-      simulationResultsPath <- file.path(self$workflowFolder, "SimulationResults", paste(project, simulation, "SimulationResults.csv", sep = "-"))
+      simulationFile <- private$.simulationMappings$simulationFile[selectedId]
+      simulationResultsPath <- file.path(self$workflowFolder, "SimulationResults", paste(project, simulationFile, "SimulationResults.csv", sep = "-"))
       return(simulationResultsPath)
     },
 
@@ -210,7 +211,8 @@ ConfigurationPlan <- R6::R6Class(
       validateIsIncluded(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
 
       selectedId <- (private$.simulationMappings$project %in% project) & (private$.simulationMappings$simulation %in% simulation)
-      pkAnalysisResultsPath <- file.path(self$workflowFolder, "PKAnalysisResults", paste(project, simulation, "PKAnalysisResults.csv", sep = "-"))
+      simulationFile <- private$.simulationMappings$simulationFile[selectedId]
+      pkAnalysisResultsPath <- file.path(self$workflowFolder, "PKAnalysisResults", paste(project, simulationFile, "PKAnalysisResults.csv", sep = "-"))
       return(pkAnalysisResultsPath)
     },
 
