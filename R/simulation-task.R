@@ -19,9 +19,9 @@ SimulationTask <- R6::R6Class(
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SimulationTask` object
     initialize = function(getTaskResults = NULL,
-                          settings = NULL,
-                          nameTaskResults = "none",
-                          ...) {
+                              settings = NULL,
+                              nameTaskResults = "none",
+                              ...) {
       super$initialize(...)
       if (is.null(settings)) {
         self$settings <- SimulationSettings$new()
@@ -39,7 +39,7 @@ SimulationTask <- R6::R6Class(
     #' @param set R6 class `SimulationStructure`
     #' @param taskResults list of results from task run.
     saveResults = function(set,
-                           taskResults) {
+                               taskResults) {
       ospsuite::exportResultsToCSV(
         taskResults,
         set$simulationResultFileNames
@@ -60,23 +60,24 @@ SimulationTask <- R6::R6Class(
         dir.create(file.path(self$workflowFolder, self$outputFolder))
       }
 
-      for (set in structureSets) {
-        logWorkflow(
-          message = paste0("Run simulation in simulation set: ", set$simulationSet$simulationSetName),
-          pathFolder = self$workflowFolder
-        )
-        if (self$validateStructureSetInput(set)) {
-          taskResults <- self$getTaskResults(
-            structureSet = set,
-            settings = self$settings,
-            logFolder = self$workflowFolder
-          )
+      sapply(structureSets, function(set) {
+        self$validateStructureSetInput(set)
+      })
 
-          self$saveResults(
-            set,
-            taskResults
-          )
+      taskResults <- self$getTaskResults(
+        structureSets = structureSets,
+        settings = self$settings,
+        logFolder = self$workflowFolder
+      )
+
+      for (setNumber in seq_along(structureSets)) {
+        if (is.null(taskResults[[setNumber]])) {
+          next
         }
+        self$saveResults(
+          structureSets[[setNumber]],
+          taskResults[[setNumber]]
+        )
       }
       re.tEndAction(actionToken = actionToken)
     }
