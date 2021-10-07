@@ -183,6 +183,8 @@ buildQualificationDDIPredictedVsObserved <- function(dataframe,
   }
 
   ddiPlotDataframe$Group <- as.factor(ddiPlotDataframe$Group)
+  ddiPlotDataframe$Caption <- sapply(ddiPlotDataframe$Group,function(groupNumber){metadata$groups[[groupNumber]]$caption})
+  ddiPlotDataframe$Caption <- as.factor(ddiPlotDataframe$Caption)
 
   return(list(ddiPlotDataframe = ddiPlotDataframe, aestheticsList = aestheticsList, axesSettings = axesSettings))
 }
@@ -250,6 +252,8 @@ buildQualificationDDIResidualsVsObserved <- function(dataframe,
   }
 
   ddiPlotDataframe$Group <- as.factor(ddiPlotDataframe$Group)
+  ddiPlotDataframe$Caption <- sapply(ddiPlotDataframe$Group,function(groupNumber){metadata$groups[[groupNumber]]$caption})
+  ddiPlotDataframe$Caption <- as.factor(ddiPlotDataframe$Caption)
 
   return(list(ddiPlotDataframe = ddiPlotDataframe, aestheticsList = aestheticsList, axesSettings = axesSettings))
 }
@@ -280,8 +284,8 @@ generateDDIQualificationDDIPlot <- function(data) {
   ddiDataMapping <- tlf::DDIRatioDataMapping$new(
     x = data$axesSettings$X$label,
     y = data$axesSettings$Y$label,
-    shape = "Group",
-    color = "Group"
+    shape = "Caption",
+    color = "Caption"
   )
 
   ddiPlotConfiguration <- tlf::DDIRatioPlotConfiguration$new(
@@ -294,11 +298,9 @@ generateDDIQualificationDDIPlot <- function(data) {
     plotConfiguration = ddiPlotConfiguration,
     dataMapping = ddiDataMapping
   )
-
   qualificationDDIPredictedVsObservedPlot <- qualificationDDIPredictedVsObservedPlot + ggplot2::scale_color_manual(values = data$aestheticsList$color)
   qualificationDDIPredictedVsObservedPlot <- qualificationDDIPredictedVsObservedPlot + ggplot2::scale_shape_manual(values = data$aestheticsList$shape)
   qualificationDDIPredictedVsObservedPlot <- qualificationDDIPredictedVsObservedPlot + ggplot2::xlab(xlabel) + ggplot2::ylab(ylabel)
-  qualificationDDIPredictedVsObservedPlot <- qualificationDDIPredictedVsObservedPlot + ggplot2::guides(color = FALSE)
   return(qualificationDDIPredictedVsObservedPlot)
 }
 
