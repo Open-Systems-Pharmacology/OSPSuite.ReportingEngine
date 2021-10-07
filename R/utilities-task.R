@@ -62,19 +62,9 @@ loadSimulateTask <- function(workflow, active = TRUE, settings = NULL) {
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
 
-  taskFunction <- simulateModelParallel
-  nameFunction <- getObjectNameAsString(simulateModelParallel)
-  simulationTaskInitializer <- ParallelSimulationTask$new
-
-  if (isOfType(workflow, PopulationWorkflow)) {
-    taskFunction <- simulateModelForPopulation
-    nameFunction <- getObjectNameAsString(simulateModelForPopulation)
-    simulationTaskInitializer <- SimulationTask$new
-  }
-
-  return(simulationTaskInitializer(
-    getTaskResults = taskFunction,
-    nameTaskResults = nameFunction,
+  return(SimulationTask$new(
+    getTaskResults = simulateWorkflowModels,
+    nameTaskResults = getObjectNameAsString(simulateWorkflowModels),
     outputFolder = defaultTaskOutputFolders$simulate,
     outputs = getSimulationResultFileNames(workflow),
     workflowFolder = workflow$workflowFolder,

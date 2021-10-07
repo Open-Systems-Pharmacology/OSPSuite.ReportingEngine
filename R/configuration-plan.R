@@ -170,6 +170,22 @@ ConfigurationPlan <- R6::R6Class(
       return(simulationPath)
     },
 
+    #' @description Get location of population file corresponding to a specific simulation and project names
+    #' @param project name of simulation project
+    #' @param simulation name of the simulation
+    #' @return The population file path corresponding to the project and simulation in the configuration plan field `simulationMappings`
+    getPopulationPath = function(project, simulation) {
+      # Since data is imported from json, simulationMappings fields have a first upper case letter
+      validateIsIncluded(project, private$.simulationMappings$project, groupName = "'project' variable of simulationMappings")
+      validateIsIncluded(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
+      selectedId <- (private$.simulationMappings$project %in% project) & (private$.simulationMappings$simulation %in% simulation)
+      populationPath <- file.path(self$referenceFolder, private$.simulationMappings$path[selectedId], paste0(private$.simulationMappings$simulationFile[selectedId], "-Population.csv"))
+      if(file.exists(populationPath)){
+        return(populationPath)
+      }
+      return()
+    },
+
     #' @description Get location of simulation result file corresponding to a specific simulation and project names
     #' @param project name of simulation project
     #' @param simulation name of the simulation
@@ -180,7 +196,8 @@ ConfigurationPlan <- R6::R6Class(
       validateIsIncluded(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
 
       selectedId <- (private$.simulationMappings$project %in% project) & (private$.simulationMappings$simulation %in% simulation)
-      simulationResultsPath <- file.path(self$workflowFolder, "SimulationResults", paste(project, simulation, "SimulationResults.csv", sep = "-"))
+      simulationFile <- private$.simulationMappings$simulationFile[selectedId]
+      simulationResultsPath <- file.path(self$workflowFolder, "SimulationResults", paste(project, simulationFile, "SimulationResults.csv", sep = "-"))
       return(simulationResultsPath)
     },
 
@@ -194,7 +211,8 @@ ConfigurationPlan <- R6::R6Class(
       validateIsIncluded(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
 
       selectedId <- (private$.simulationMappings$project %in% project) & (private$.simulationMappings$simulation %in% simulation)
-      pkAnalysisResultsPath <- file.path(self$workflowFolder, "PKAnalysisResults", paste(project, simulation, "PKAnalysisResults.csv", sep = "-"))
+      simulationFile <- private$.simulationMappings$simulationFile[selectedId]
+      pkAnalysisResultsPath <- file.path(self$workflowFolder, "PKAnalysisResults", paste(project, simulationFile, "PKAnalysisResults.csv", sep = "-"))
       return(pkAnalysisResultsPath)
     },
 

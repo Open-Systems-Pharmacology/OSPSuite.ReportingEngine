@@ -30,7 +30,7 @@ reEnv$defaultPlotFormat <- list(
   width = 8,
   height = 5,
   units = "in",
-  dpi = 72
+  dpi = 300
 )
 
 reEnv$workflowWatermarkMessage <- "preliminary analysis"

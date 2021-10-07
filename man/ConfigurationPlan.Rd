@@ -47,6 +47,7 @@ R6 class for ConfigurationPlan guiding Qualification Workflow
 \item \href{#method-getObservedDataPath}{\code{ConfigurationPlan$getObservedDataPath()}}
 \item \href{#method-getMolWeightForObservedData}{\code{ConfigurationPlan$getMolWeightForObservedData()}}
 \item \href{#method-getSimulationPath}{\code{ConfigurationPlan$getSimulationPath()}}
+\item \href{#method-getPopulationPath}{\code{ConfigurationPlan$getPopulationPath()}}
 \item \href{#method-getSimulationResultsPath}{\code{ConfigurationPlan$getSimulationResultsPath()}}
 \item \href{#method-getPKAnalysisResultsPath}{\code{ConfigurationPlan$getPKAnalysisResultsPath()}}
 \item \href{#method-updateTheme}{\code{ConfigurationPlan$updateTheme()}}
@@ -242,6 +243,28 @@ Get location of simulation file corresponding to a specific simulation and proje
 }
 \subsection{Returns}{
 The simulation file path corresponding to the project and simulation in the configuration plan field `simulationMappings`
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getPopulationPath"></a>}}
+\if{latex}{\out{\hypertarget{method-getPopulationPath}{}}}
+\subsection{Method \code{getPopulationPath()}}{
+Get location of population file corresponding to a specific simulation and project names
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$getPopulationPath(project, simulation)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{project}}{name of simulation project}
+
+\item{\code{simulation}}{name of the simulation}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The population file path corresponding to the project and simulation in the configuration plan field `simulationMappings`
 }
 }
 \if{html}{\out{<hr>}}
