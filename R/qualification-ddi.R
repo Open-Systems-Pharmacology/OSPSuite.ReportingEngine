@@ -133,12 +133,14 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 #' @description Build dataframe for observation vs prediction
 #' @param dataframe data.frame
 #' @param metadata meta data on `data`
+#' @param pkParameter for which DDI rations are to be evaluated
 #' @return dataframe for plotting goodness of fit of predictedVsObserved type
 buildQualificationDDIPredictedVsObserved <- function(dataframe,
-                                                     metadata) {
+                                                     metadata,
+                                                     pkParameter) {
   axesSettings <- metadata$axesSettings$predictedVsObserved
-  axesSettings$X$label <- plotDDIXLabel$predictedVsObserved
-  axesSettings$Y$label <- plotDDIYLabel$predictedVsObserved
+  axesSettings$X$label <- plotDDIXLabel$predictedVsObserved(pkParameter)
+  axesSettings$Y$label <- plotDDIYLabel$predictedVsObserved(pkParameter)
 
   xUnit <- axesSettings$X$unit
   xDimension <- axesSettings$X$dimension
@@ -185,16 +187,21 @@ buildQualificationDDIPredictedVsObserved <- function(dataframe,
 
 
 
-#' #' @title buildQualificationGOFResidualsVsObserved
-#' #' @description Build dataframe for residuals vs observed
-#' #' @param dataframe data.frame
-#' #' @param metadata meta data on `data`
-#' #' @return dataframe for plotting goodness of fit of residuals vs time type
+#' @title buildQualificationGOFResidualsVsObserved
+#' @description Build dataframe for residuals vs observed
+#' @param dataframe data.frame
+#' @param metadata meta data on `data`
+#' @param pkParameter for which DDI rations are to be evaluated
+#' @return dataframe for plotting goodness of fit of residuals vs time type
 buildQualificationDDIResidualsVsObserved <- function(dataframe,
-                                                     metadata) {
+                                                     metadata,
+                                                     pkParameter) {
+
+
+
   axesSettings <- metadata$axesSettings$residualsVsObserved
-  axesSettings$X$label <- plotDDIXLabel$residualsVsObserved
-  axesSettings$Y$label <- plotDDIYLabel$residualsVsObserved
+  axesSettings$X$label <- plotDDIXLabel$residualsVsObserved(pkParameter)
+  axesSettings$Y$label <- plotDDIYLabel$residualsVsObserved(pkParameter)
 
   xUnit <- axesSettings$X$unit
   xDimension <- axesSettings$X$dimension
@@ -321,7 +328,7 @@ plotQualificationDDIs <- function(configurationPlan,
       for (pkParameter in unique(dataframe$pkParameter)) {
         plotID <- paste("DDIRatioPlot", plotIndex, plotType, pkParameter, sep = "-")
 
-        plotDDIData <- buildDDIDataFrameFunctions[[plotType]](dataframe[dataframe$pkParameter == pkParameter, ], metadata)
+        plotDDIData <- buildDDIDataFrameFunctions[[plotType]](dataframe[dataframe$pkParameter == pkParameter, ], metadata, pkParameter)
         ddiPlotList[[plotIndex]][[plotType]] <- generateDDIQualificationDDIPlot(plotDDIData)
 
         ddiPlotResults[[plotID]] <- saveTaskResults(
@@ -350,12 +357,12 @@ buildDDIDataFrameFunctions <- list(
 
 #' Labels for DDI plot X-axis
 plotDDIXLabel <- list(
-  "predictedVsObserved" = "Observed",
-  "residualsVsObserved" = "Observed"
+  "predictedVsObserved" = function(pk){return(paste("Observed",pk,"Ratio"))},
+  "residualsVsObserved" = function(pk){return(paste("Observed",pk,"Ratio"))}
 )
 
 #' Labels for DDI plot Y-axis
 plotDDIYLabel <- list(
-  "predictedVsObserved" = "Predicted",
-  "residualsVsObserved" = "Residual"
+  "predictedVsObserved" = function(pk){return(paste("Predicted",pk,"Ratio"))},
+  "residualsVsObserved" = function(pk){return(paste("Predicted",pk,"Ratio / Observed",pk,"Ratio"))}
 )
