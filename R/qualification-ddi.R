@@ -48,7 +48,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
           ratioList[[pkParameter]] <- list()
 
           validateIsIncluded(ddiPKRatioColumnName[[pkParameter]], names(observedDataFrame))
-          ratioList[[pkParameter]]$observedRatio <- observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]][observedDataFrame$ID == observedDataRecordId]
+          ratioList[[pkParameter]]$observedRatio <- observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]][observedDataFrame$ID %in% observedDataRecordId]
 
           for (simulationType in c("SimulationControl", "SimulationDDI")) {
             plotComponent <- ddiRatio[[simulationType]]
@@ -161,18 +161,11 @@ buildQualificationDDIPredictedVsObserved <- function(dataframe,
     xDataDimension <- ""
     xDataUnit <- ""
     xData <- dataframe[dataframe$group == grp, ]$observedRatio
-
-    if (xScaling == "Log") {
-      xData <- log10(xData)
-    }
     xData <- replaceInfWithNA(xData)
 
     yDataDimension <- ""
     yDataUnit <- ""
     yData <- dataframe[dataframe$group == grp, ]$simulatedRatio
-    if (yScaling == "Log") {
-      yData <- log10(yData)
-    }
     yData <- replaceInfWithNA(yData)
 
     df <- list()
@@ -267,17 +260,6 @@ buildQualificationDDIResidualsVsObserved <- function(dataframe,
 #' @import tlf
 #' @import ggplot2
 generateDDIQualificationDDIPlot <- function(data) {
-  if (data$axesSettings$X$scaling == "Log") {
-    xlabel <- bquote(log[10] * .(paste0(data$axesSettings$X$label)))
-  } else {
-    xlabel <- paste(data$axesSettings$X$label)
-  }
-
-  if (data$axesSettings$Y$scaling == "Log") {
-    ylabel <- bquote(log[10] * .(paste0(data$axesSettings$Y$label)))
-  } else {
-    ylabel <- paste(data$axesSettings$Y$label)
-  }
 
   ddiData <- na.omit(data$ddiPlotDataframe)
 
@@ -285,7 +267,8 @@ generateDDIQualificationDDIPlot <- function(data) {
     x = data$axesSettings$X$label,
     y = data$axesSettings$Y$label,
     shape = "Caption",
-    color = "Caption"
+    color = "Caption",
+    minRange = c(0.5, 2)
   )
 
   ddiPlotConfiguration <- tlf::DDIRatioPlotConfiguration$new(
@@ -293,15 +276,29 @@ generateDDIQualificationDDIPlot <- function(data) {
     dataMapping = ddiDataMapping
   )
 
-  qualificationDDIPredictedVsObservedPlot <- tlf::plotDDIRatio(
+  qualificationDDIPlot <- tlf::plotDDIRatio(
     data = ddiData,
     plotConfiguration = ddiPlotConfiguration,
     dataMapping = ddiDataMapping
   )
-  qualificationDDIPredictedVsObservedPlot <- qualificationDDIPredictedVsObservedPlot + ggplot2::scale_color_manual(values = data$aestheticsList$color)
-  qualificationDDIPredictedVsObservedPlot <- qualificationDDIPredictedVsObservedPlot + ggplot2::scale_shape_manual(values = data$aestheticsList$shape)
-  qualificationDDIPredictedVsObservedPlot <- qualificationDDIPredictedVsObservedPlot + ggplot2::xlab(xlabel) + ggplot2::ylab(ylabel)
-  return(qualificationDDIPredictedVsObservedPlot)
+
+  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_color_manual(values = data$aestheticsList$color)
+  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_shape_manual(values = data$aestheticsList$shape)
+
+  xlabel <- paste(data$axesSettings$X$label)
+  ylabel <- paste(data$axesSettings$Y$label)
+
+  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::xlab(xlabel) + ggplot2::ylab(ylabel)
+
+  if (data$axesSettings$X$scaling == "Log") {
+    qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_x_continuous(trans='log10',labels = function(x) format(x, scientific = FALSE))
+  }
+
+  if (data$axesSettings$Y$scaling == "Log") {
+    qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_y_continuous(trans='log10',labels = function(x) format(x, scientific = FALSE),)
+  }
+
+  return(qualificationDDIPlot)
 }
 
 #' @title plotQualificationDDIs
@@ -311,6 +308,7 @@ generateDDIQualificationDDIPlot <- function(data) {
 plotQualificationDDIs <- function(configurationPlan,
                                   logFolder = getwd(),
                                   settings) {
+
   ddiPlotsData <- getQualificationDDIPlotData(configurationPlan)
   ddiPlotList <- list()
   ddiPlotResults <- list()
