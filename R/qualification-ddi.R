@@ -139,6 +139,7 @@ buildQualificationDDIPredictedVsObserved <- function(dataframe,
                                                      metadata,
                                                      pkParameter) {
   axesSettings <- metadata$axesSettings$predictedVsObserved
+  axesSettings$plotType <- "predictedVsObserved"
   axesSettings$X$label <- plotDDIXLabel$predictedVsObserved(pkParameter)
   axesSettings$Y$label <- plotDDIYLabel$predictedVsObserved(pkParameter)
 
@@ -174,7 +175,7 @@ buildQualificationDDIPredictedVsObserved <- function(dataframe,
     df[[axesSettings$X$label]] <- xData
     df[[axesSettings$Y$label]] <- yData
     df$Group <- grp
-    ddiPlotDataframe <- rbind.data.frame(ddiPlotDataframe, as.data.frame(df))
+    ddiPlotDataframe <- rbind.data.frame(ddiPlotDataframe, as.data.frame(df,check.names = FALSE))
   }
 
   ddiPlotDataframe$Group <- as.factor(ddiPlotDataframe$Group)
@@ -197,9 +198,8 @@ buildQualificationDDIResidualsVsObserved <- function(dataframe,
                                                      metadata,
                                                      pkParameter) {
 
-
-
   axesSettings <- metadata$axesSettings$residualsVsObserved
+  axesSettings$plotType <- "residualsVsObserved"
   axesSettings$X$label <- plotDDIXLabel$residualsVsObserved(pkParameter)
   axesSettings$Y$label <- plotDDIYLabel$residualsVsObserved(pkParameter)
 
@@ -228,19 +228,11 @@ buildQualificationDDIResidualsVsObserved <- function(dataframe,
     xDataDimension <- ""
     xDataUnit <- ""
     xData <- observedRatio
-
-    if (xScaling == "Log") {
-      xData <- log10(xData)
-    }
     xData <- replaceInfWithNA(xData)
 
     yDataDimension <- ""
     yDataUnit <- ""
-    if (yScaling == "Log") {
-      residualValues <- log10(simulatedRatio) - log10(observedRatio)
-    } else {
-      residualValues <- (simulatedRatio - observedRatio) / observedRatio
-    }
+    residualValues <- simulatedRatio / observedRatio
     yData <- residualValues
     yData <- replaceInfWithNA(yData)
 
@@ -248,7 +240,7 @@ buildQualificationDDIResidualsVsObserved <- function(dataframe,
     df[[axesSettings$X$label]] <- xData
     df[[axesSettings$Y$label]] <- yData
     df$Group <- grp
-    ddiPlotDataframe <- rbind.data.frame(ddiPlotDataframe, as.data.frame(df))
+    ddiPlotDataframe <- rbind.data.frame(ddiPlotDataframe, as.data.frame(df,check.names = FALSE))
   }
 
   ddiPlotDataframe$Group <- as.factor(ddiPlotDataframe$Group)
@@ -275,7 +267,8 @@ generateDDIQualificationDDIPlot <- function(data) {
     y = data$axesSettings$Y$label,
     shape = "Caption",
     color = "Caption",
-    minRange = c(0.5, 2)
+    minRange = c(0.01, 100),
+    residualsVsObserved = residualsVsObservedFlag[[data$axesSettings$plotType]]
   )
 
   ddiPlotConfiguration <- tlf::DDIRatioPlotConfiguration$new(
@@ -289,8 +282,8 @@ generateDDIQualificationDDIPlot <- function(data) {
     dataMapping = ddiDataMapping
   )
 
-  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_color_manual(values = data$aestheticsList$color)
-  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_shape_manual(values = data$aestheticsList$shape)
+  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_color_manual(values = sapply(data$aestheticsList$color,function(x){x}))
+  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_shape_manual(values = sapply(data$aestheticsList$shape,function(x){x}))
 
   xlabel <- paste(data$axesSettings$X$label)
   ylabel <- paste(data$axesSettings$Y$label)
@@ -365,4 +358,10 @@ plotDDIXLabel <- list(
 plotDDIYLabel <- list(
   "predictedVsObserved" = function(pk){return(paste("Predicted",pk,"Ratio"))},
   "residualsVsObserved" = function(pk){return(paste("Predicted",pk,"Ratio / Observed",pk,"Ratio"))}
+)
+
+#' DDI plot type identifier
+residualsVsObservedFlag <- list(
+  "predictedVsObserved" = FALSE,
+  "residualsVsObserved" = TRUE
 )
