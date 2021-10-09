@@ -267,7 +267,7 @@ generateDDIQualificationDDIPlot <- function(data) {
     y = data$axesSettings$Y$label,
     shape = "Caption",
     color = "Caption",
-    minRange = c(0.01, 100),
+    minRange = c(0.1, 10),
     residualsVsObserved = residualsVsObservedFlag[[data$axesSettings$plotType]]
   )
 
