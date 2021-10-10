@@ -2,18 +2,20 @@
 % Please edit documentation in R/qualification-ddi.R
 \name{buildQualificationDDIResidualsVsObserved}
 \alias{buildQualificationDDIResidualsVsObserved}
-\title{#' @title buildQualificationGOFResidualsVsObserved
-#' @description Build dataframe for residuals vs observed
-#' @param dataframe data.frame
-#' @param metadata meta data on `data`
-#' @return dataframe for plotting goodness of fit of residuals vs time type}
+\title{buildQualificationGOFResidualsVsObserved}
 \usage{
-buildQualificationDDIResidualsVsObserved(dataframe, metadata)
+buildQualificationDDIResidualsVsObserved(dataframe, metadata, pkParameter)
+}
+\arguments{
+\item{dataframe}{data.frame}
+
+\item{metadata}{meta data on `data`}
+
+\item{pkParameter}{for which DDI rations are to be evaluated}
+}
+\value{
+dataframe for plotting goodness of fit of residuals vs time type
 }
 \description{
-#' @title buildQualificationGOFResidualsVsObserved
-#' @description Build dataframe for residuals vs observed
-#' @param dataframe data.frame
-#' @param metadata meta data on `data`
-#' @return dataframe for plotting goodness of fit of residuals vs time type
+Build dataframe for residuals vs observed
 }
