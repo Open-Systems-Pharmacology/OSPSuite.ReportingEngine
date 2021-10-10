@@ -11,6 +11,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 
     plotDDIMetadata$title <- plot$Title
     plotDDIMetadata$sectionID <- plot$SectionId
+    plotDDIMetadata$plotSettings <- getPlotSettings(configurationPlan$plots$PlotSettings)
     # Pipes in configuration plan will be deprecated moving forward
 
     plotDDIMetadata$plotTypes <- plot$PlotTypes %||% ospsuite::toPathArray(plot$PlotType)
@@ -138,6 +139,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 buildQualificationDDIPredictedVsObserved <- function(dataframe,
                                                      metadata,
                                                      pkParameter) {
+  plotSettings <- metadata$plotSettings
   axesSettings <- metadata$axesSettings$predictedVsObserved
   axesSettings$plotType <- "predictedVsObserved"
   axesSettings$X$label <- plotDDIXLabel$predictedVsObserved(pkParameter)
@@ -182,7 +184,7 @@ buildQualificationDDIPredictedVsObserved <- function(dataframe,
   ddiPlotDataframe$Caption <- sapply(ddiPlotDataframe$Group,function(groupNumber){metadata$groups[[groupNumber]]$caption})
   ddiPlotDataframe$Caption <- as.factor(ddiPlotDataframe$Caption)
 
-  return(list(ddiPlotDataframe = ddiPlotDataframe, aestheticsList = aestheticsList, axesSettings = axesSettings))
+  return(list(ddiPlotDataframe = ddiPlotDataframe, aestheticsList = aestheticsList, axesSettings = axesSettings, plotSettings = plotSettings))
 }
 
 
@@ -197,7 +199,7 @@ buildQualificationDDIPredictedVsObserved <- function(dataframe,
 buildQualificationDDIResidualsVsObserved <- function(dataframe,
                                                      metadata,
                                                      pkParameter) {
-
+  plotSettings <- metadata$plotSettings
   axesSettings <- metadata$axesSettings$residualsVsObserved
   axesSettings$plotType <- "residualsVsObserved"
   axesSettings$X$label <- plotDDIXLabel$residualsVsObserved(pkParameter)
@@ -247,7 +249,7 @@ buildQualificationDDIResidualsVsObserved <- function(dataframe,
   ddiPlotDataframe$Caption <- sapply(ddiPlotDataframe$Group,function(groupNumber){metadata$groups[[groupNumber]]$caption})
   ddiPlotDataframe$Caption <- as.factor(ddiPlotDataframe$Caption)
 
-  return(list(ddiPlotDataframe = ddiPlotDataframe, aestheticsList = aestheticsList, axesSettings = axesSettings))
+  return(list(ddiPlotDataframe = ddiPlotDataframe, aestheticsList = aestheticsList, axesSettings = axesSettings, plotSettings = plotSettings))
 }
 
 
@@ -275,6 +277,11 @@ generateDDIQualificationDDIPlot <- function(data) {
     data = ddiData,
     dataMapping = ddiDataMapping
   )
+
+  ddiPlotConfiguration$labels$xlabel$font$size <- data$plotSettings$axisFontSize
+  ddiPlotConfiguration$labels$ylabel$font$size <- data$plotSettings$axisFontSize
+  ddiPlotConfiguration$background$watermark$font$size <- data$plotSettings$watermarkFontSize
+  ddiPlotConfiguration$legend$font$size <- data$plotSettings$legendFontSize
 
   qualificationDDIPlot <- tlf::plotDDIRatio(
     data = ddiData,

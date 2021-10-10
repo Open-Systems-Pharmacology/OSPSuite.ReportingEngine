@@ -297,6 +297,25 @@ getAxesSettings <- function(axesSettingsFromConfigurationPlot) {
 }
 
 
+#' @title getPlotSettings
+#' @description Read plot settings from configuration plan.
+#' @param plotSettingsFromConfigurationPlot is a field from the `configurationPlan$plots` list
+#' @return `plotSettings`, a list of settings for each of the X and Y axis.  Each list contains the unit, dimensions, and scaling type for each axes and option to plot grid lines.
+getPlotSettings <- function(plotSettingsFromConfigurationPlot) {
+  plotSettings <- list(
+    width = plotSettingsFromConfigurationPlot$ChartWidth,
+    height = plotSettingsFromConfigurationPlot$ChartHeight,
+    axisFontSize = plotSettingsFromConfigurationPlot$Fonts$AxisSize,
+    legendFontSize = plotSettingsFromConfigurationPlot$Fonts$LegendSize,
+    originFontSize = plotSettingsFromConfigurationPlot$Fonts$OriginSize,
+    font = plotSettingsFromConfigurationPlot$Fonts$FontFamilyName,
+    watermarkFontSize = plotSettingsFromConfigurationPlot$Fonts$WatermarkSize
+  )
+  return(plotSettings)
+}
+
+
+
 #' @title startQualificationRunner
 #' @description Starts the qualification runner and creates inputs for the reporting engine
 #' @param qualificationRunnerFolder Folder where QualificationRunner.exe is located
