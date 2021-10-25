@@ -8,7 +8,12 @@ startQualificationRunner(
   qualificationRunnerFolder,
   qualificationPlanFile,
   outputFolder,
-  options = NULL
+  pkSimPortableFolder = NULL,
+  configurationPlanFile = NULL,
+  overwrite = TRUE,
+  logFile = NULL,
+  logLevel = NULL,
+  displayVersion = FALSE
 )
 }
 \arguments{
@@ -18,17 +23,19 @@ startQualificationRunner(
 
 \item{outputFolder}{Name of output folder created by the qualification runner}
 
-\item{options}{List or array of options inspired from Matlab version of `startQualificationRunner`
-\itemize{
-\item `'-f'` or `'--force'`:    If set to true, the contents of the output folder will be deleted, even if it not empty. Default is false
-\item `'-n <name>'`:          Name of the report qualification plan to be generated. Default is 'report-configuration-plan.json'
-\item `'-p <PKSim Folder>'`:  Path of PK-Sim installation folder. If not specified, installation path will be read
-from the registry (available only in case of full (non-portable) installation). This option is MANDATORY for the portable version of PK-Sim
-\item `'-l <logFile>'`:       Full path of log file where log output will be written. A log file will not be created if this value is not provided.
-\item `'-a'` or `'--append'`:   true to append data to the file; false to overwrite the file (default). If the specified file does not exist, this parameter has no effect, and a new file is created.
-\item `'--logLevel <Level>'`: Log verbosity (Debug, Information, Warning, Error). Default is Information.
-\item `'--version'`:          Display version information.
-}}
+\item{pkSimPortableFolder}{Folder where PK-Sim is located.
+If not specified, installation path will be read from the registry (available only in case of full **non-portable** installation).
+This option is **MANDATORY** for the portable version of PK-Sim.}
+
+\item{configurationPlanFile}{Name of the configuration plan to be generated. Default is 'report-configuration-plan.json'}
+
+\item{overwrite}{Logical defining if the contents of the output folder will be deleted, even if it not empty. Default is false.}
+
+\item{logFile}{Full path of log file where log output will be written. A log file will not be created if this value is not provided.}
+
+\item{logLevel}{Log verbosity (Debug, Information, Warning, Error). Default is Information.}
+
+\item{version}{Logical defining if version information is displayed}
 }
 \description{
 Starts the qualification runner and creates inputs for the reporting engine
