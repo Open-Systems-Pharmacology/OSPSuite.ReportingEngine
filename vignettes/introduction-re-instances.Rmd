@@ -591,3 +591,38 @@ At the end of the workflow run, all the available appendices are combined into f
 - __Report.docx__ which contains the word version of the report, including a table of content and numbering the figures and tables.
 
 The option `createWordReport` is set to __TRUE__ as default but can be set to __FALSE__ to prevent the conversion of __Report-word.md__ into __Report.docx__ using *pandoc* .
+
+# 6. Excel Template
+
+Writing a workflow R script can be challenging, especially for R beginners.
+The Excel template provides a simple interface to define the workflow features which can be translated into a documented R script using the function `createWorkflowFromExcelInput(excelFile)`.
+
+The Excel template can be found using the function `system.file("extdata", "WorkflowInput.xlsx", package = "ospsuite.reportingengine")` as illustrated below.
+
+```{r Excel template} 
+excelFile <- system.file("extdata", "WorkflowInput.xlsx", package = "ospsuite.reportingengine")
+```
+
+Within the template, the following sheets are available and need to be updated:
+
+- **Documentation** defines commented lines to appear at the beginning of the R sccript.
+- **Workflow and Tasks** defines the workflow mode and type, as well as the active tasks and their settings.
+- **SimulationSets** defines the simulation sets, their attached dataset and the sheet in which their outputs are defined (e.g. **Outputs_1**).
+- **Outputs_1** (optional) defines an output and the sheet in which its PK parameters are defined (e.g. **PK Parameter**).
+- **PK Parameter** defines the PK parameters of the output. A template for user-defined PK parameters is available in sheet **Userdef PK Parameter**.
+
+The default file created by the function is `workflow.R`, but a different filename can be specified with the argument.
+The example below also generates warnings in case of ill constructed workflows.
+
+```{r Excel template call} 
+createWorkflowFromExcelInput(excelFile, workflowFile = "excel-workflow.R")
+```
+
+The corresponding R script is printed below.
+Note that the R script is commented to guide users if they wish to update the workflow settings.
+The argument `removeComments` can be used to remove all the comments from the generated R script.
+
+```{r Excel template script output, echo=FALSE, comment=NA} 
+cat(readLines("excel-workflow.R", encoding = "UTF-8"), sep = "\n")
+unlink("excel-workflow.R", recursive = TRUE)
+```
