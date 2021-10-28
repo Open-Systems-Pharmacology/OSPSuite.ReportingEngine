@@ -35,6 +35,7 @@ R6 class for Reporting Engine Qualification Workflow
 \itemize{
 \item \href{#method-new}{\code{QualificationWorkflow$new()}}
 \item \href{#method-runWorkflow}{\code{QualificationWorkflow$runWorkflow()}}
+\item \href{#method-updateConfigurationPlan}{\code{QualificationWorkflow$updateConfigurationPlan()}}
 \item \href{#method-clone}{\code{QualificationWorkflow$clone()}}
 }
 }
@@ -100,6 +101,25 @@ The order of tasks is as follows:
 
 \subsection{Returns}{
 All results and plots as a structured output in the workflow folder
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateConfigurationPlan"></a>}}
+\if{latex}{\out{\hypertarget{method-updateConfigurationPlan}{}}}
+\subsection{Method \code{updateConfigurationPlan()}}{
+Update the content of the workflow `configurationPlan`. 
+Caution, updating the `configurationPlan` using this method won't update the workflow simulations and their results.
+Use the method only to bypass reloading a full workflow if only plot aesthetics or section content is changed.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{QualificationWorkflow$updateConfigurationPlan(configurationPlanFile)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{configurationPlanFile}}{path to the json file corresponding to the Configuration Plan of a Qualification workflow}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

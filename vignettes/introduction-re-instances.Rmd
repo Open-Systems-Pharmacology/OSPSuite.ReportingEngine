@@ -220,7 +220,12 @@ Three population workflow types are available in `ospsuite.reportingengine` and 
 knitr::include_graphics(system.file("extdata", "population-workflow-input-and-tasks.png", package = "ospsuite.reportingengine"))
 ```
 
-## 2.3. Creation of a Workflow
+## 2.3. Qualification Workflow
+
+Another type of workflow can be defined by `QualificationWorkflow` objects using a configuration plan for qualification purposes.
+The vignette *qualification-workflow* details how to build and use such `QualificationWorkflow` objects.
+
+## 2.4. Creation of a Workflow
 
 To create a `MeanModelWorkflow` or a `PopulationWorkflow` object, the method `$new()` needs to be used with at least the inputs defined below.
 
@@ -251,7 +256,7 @@ The default value is `NULL`, in which case the text "preliminary results" will b
 - `simulationSetDescriptor`: character defining a descriptor of how simulation sets should be indicated in reports (e.g. "scenario", "set", "simulation", or "population").
 The default value for this option is `NULL`, meaning that there won't be any descriptor of the simulation sets.
 
-## 2.4. Workflow built in methods and properties
+## 2.5. Workflow built in methods and properties
 
 After creation of a `Workflow` object, some built in methods and properties are available 
 (using the character `$` after the name of the object).
