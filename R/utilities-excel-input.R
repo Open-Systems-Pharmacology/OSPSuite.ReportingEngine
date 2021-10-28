@@ -582,6 +582,7 @@ OptionalSettings <- list(
   "calculateSensitivity: quantileVec" = "workflow$calculateSensitivity$settings$quantileVec <- ",
   "calculateSensitivity: variationRange" = "workflow$calculateSensitivity$settings$variationRange <- ",
   "calculateSensitivity: variableParameterPaths" = "workflow$calculateSensitivity$settings$variableParameterPaths <- ",
+  "plotTimeProfilesAndResiduals: includeReferenceData" = "workflow$plotTimeProfilesAndResiduals$settings$includeReferenceData <- ",
   "plotSensitivity: maximalParametersPerSensitivityPlot" = "workflow$plotSensitivity$settings$maximalParametersPerSensitivityPlot <- ",
   "plotSensitivity: totalSensitivityThreshold" = "workflow$plotSensitivity$settings$totalSensitivityThreshold <- ",
   "plotSensitivity: xAxisFontSize" = "workflow$plotSensitivity$settings$xAxisFontSize <- ",
@@ -622,7 +623,6 @@ SimulationCodeIdentifiers <- ospsuite::enum(c(
   "populationFile",
   "populationName",
   "referencePopulation",
-  "plotReferenceObsData",
   "StudyDesignType",
   "StudyDesignLocation"
 ))
