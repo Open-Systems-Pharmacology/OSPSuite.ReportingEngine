@@ -54,41 +54,29 @@ As mentioned above all these instances derive from the `R6` class, consequently 
 
 ```{r table 1, echo=FALSE, results='asis'}
 nomenclatureTable <- data.frame(
-  "Object creation" = c(
-    "workflow <- MeanModelWorkflow$new(simulationSets, workflowFolder)",
-    "workflow <- PopulationWorkflow$new(workflowType, simulationSets, workflowFolder)",
-    "simulationSet <- SimulationSet$new(simulationSetName, simulationFile)",
-    "simulationSet <- PopulationSimulationSet$new(simulationSetName, simulationFile, populationFile)",
-    "output <- Output$new(path)",
-    "task <- Task$new(settings)",
-    "task <- SimulationTask$new(settings)",
-    "task <- PlotTask$new(settings)",
-    "task <- GofPlotTask$new(settings)",
-    "task <- PopulationPlotTask$new(settings)"
+  "R6 object" = c(
+    "MeanModelWorkflow", "PopulationWorkflow", "SimulationSet", "PopulationSimulationSet",
+    "Output", "Task", "SimulationTask", "PlotTask", "PopulationPlotTask", "GofPlotTask"
   ),
-  "Object class tree" = c(
-    paste0(c("R6", "Workflow", "MeanModelWorkflow"), collapse = " > "),
-    paste0(c("R6", "Workflow", "PopulationWorkflow"), collapse = " > "),
-    paste0(c("R6", "SimulationSet"), collapse = " > "),
-    paste0(c("R6", "SimulationSet", "PopulationSimulationSet"), collapse = " > "),
-    paste0(c("R6", "Output"), collapse = " > "),
-    paste0(c("R6", "Task"), collapse = " > "),
-    paste0(c("R6", "Task", "SimulationTask"), collapse = " > "),
-    paste0(c("R6", "Task", "PlotTask"), collapse = " > "),
-    paste0(c("R6", "Task", "PlotTask", "GofPlotTask"), collapse = " > "),
-    paste0(c("R6", "Task", "PlotTask", "PopulationPlotTask"), collapse = " > ")
+  "Mandatory Inputs" = c(
+    "simulationSets<br>workflowFolder",
+    "workflowType<br>simulationSets<br>workflowFolder",
+    "simulationSetName<br>simulationFile",
+    "simulationSetName<br>simulationFile<br>populationFile",
+    "path",
+    rep("settings", 5)
   ),
-  "Definition" = c(
-    "Object that runs tasks on simulation sets dedicated to mean models",
-    "Object that runs tasks on simulation sets dedicated to population models",
-    "Object with information on the simulation and observation to be evaluated",
-    "Object with information on the simulation, population and observation to be evaluated",
-    "Object with information on the simulation output path and observation to be evaluated",
-    "Object with evaluations to be performed and saved",
-    "Object with evaluations to be performed and saved specific to model simulations",
-    "Object with evaluations to be performed and saved specific to plots and tables to report",
-    "Object with evaluations to be performed and saved specific to plots and tables of goodness of fit to report",
-    "Object with evaluations across simulations to be performed and saved specific to plots and tables to report"
+  "Role" = c(
+    "Runs tasks on simulation sets dedicated to mean models",
+    "Runs tasks on simulation sets dedicated to population models",
+    "Defines the simulation and observation to be evaluated",
+    "Defines the simulation, population and observation to be evaluated",
+    "Defines the simulation output path and observation to be evaluated",
+    "Defines evaluations to be performed and saved",
+    "Defines evaluations to be performed and saved<br>specific to model simulations",
+    "Defines evaluations to be performed and saved<br>specific to plots and tables to report",
+    "Defines evaluations to be performed and saved<br>across simulations and specific to plots and tables to report",
+    "Defines evaluations to be performed and saved<br>specific to plots and tables of goodness of fit to report"
   ),
   check.names = FALSE
 )
@@ -225,13 +213,12 @@ knitr::include_graphics(system.file("extdata", "population-workflow-input-and-ta
 To create a `MeanModelWorkflow` or a `PopulationWorkflow` object, the method `$new()` needs to be used with at least the inputs defined below.
 
 - For mean model workflows: 
-```
+```{r, eval = FALSE}
 myWorkflow <- MeanModelWorkflow$new(simulationSets, workflowFolder)
 ```
 - For population workflows: 
-```
-myWorkflow <- 
-PopulationWorkflow$new(workflowType, simulationSets, workflowFolder)
+```{r, eval = FALSE}
+myWorkflow <- PopulationWorkflow$new(workflowType, simulationSets, workflowFolder)
 ```
 
 where the input `simulationSets` is a list of `SimulationSet` objects for a mean model workflow, and a list of `PopulationSimulationSet` objects for a population workflow.
@@ -288,7 +275,7 @@ Finally, the method `runWorkflow()` runs the simulations and analyses of the mod
 Below is the syntax for creating such simulation sets, the next sub-sections will provide more details on each input:
 
 __Simulation Set__
-```
+```{r, eval = FALSE}
 SimulationSet$new(
   simulationSetName, 
   simulationFile, 
@@ -302,7 +289,7 @@ SimulationSet$new(
 ```
 
 __Population Simulation Set__
-```
+```{r, eval = FALSE}
 PopulationSimulationSet$new(
   referencePopulation,
   simulationSetName, 
@@ -395,7 +382,7 @@ For any simulation set, `Output` objects define which simulation paths, associat
 Below is the syntax for creating such `Output` objects, the next sub-sections will provide more details on each input:
 
 __Output__
-```
+```{r, eval = FALSE}
 Output$new(
   path,
   displayName,
@@ -429,7 +416,7 @@ A list of pk parameter names can be directly provided to this input (e.g. *c('C_
 Display names and display units will be used as is from the PK parameter objects defined using the `ospsuite` package.
 
 In the case different display names or/and units are needed between the same PK parameters but from different paths, it is also possible to use `PkParameterInfo` instances instead of pk parameter names directly.
-```
+```{r, eval = FALSE}
 PkParameterInfo$new(
   pkParameter,
   displayName, 
