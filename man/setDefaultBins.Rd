@@ -12,3 +12,6 @@ setDefaultBins(bins)
 \description{
 setDefaultBins
 }
+\examples{
+setDefaultBins(10)
+}

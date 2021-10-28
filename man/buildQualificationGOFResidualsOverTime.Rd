@@ -17,3 +17,4 @@ dataframe for plotting goodness of fit of residuals vs time type
 \description{
 Build dataframe for residuals vs time
 }
+\keyword{internal}

@@ -2,11 +2,17 @@
 #' @description List of available scales for calculation of residuals
 #' @export
 #' @import ospsuite
+#' @examples 
+#' ResidualScales$Linear
+#' ResidualScales$Logarithmic
 ResidualScales <- ospsuite::enum(c("Linear", "Logarithmic"))
 
 #' @title DataSelectionKeys
 #' @description List of available short keys for observed data selection
 #' @export
+#' @examples 
+#' DataSelectionKeys$NONE
+#' DataSelectionKeys$ALL
 DataSelectionKeys <- list(
   NONE = "NONE",
   ALL = "ALL"

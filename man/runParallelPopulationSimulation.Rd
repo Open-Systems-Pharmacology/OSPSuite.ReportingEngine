@@ -26,3 +26,4 @@ Simulation results for population
 \description{
 Spawn cores, divide population among cores, run population simulation on cores, save results as CSV.
 }
+\keyword{internal}

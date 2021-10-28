@@ -12,3 +12,7 @@ setWatermarkConfiguration(watermark = NULL)
 \description{
 Set default watermark configuration for current theme
 }
+\examples{
+setWatermarkConfiguration("Confidential")
+setWatermarkConfiguration(Label$new(text = "test", color = "blue"))
+}

@@ -4,9 +4,9 @@
 #' @param logFolder folder where the logs are saved
 #' @param settings `ConfigurationPlan` object
 #' @return list with `plots` and `tables`
-#' @export
 #' @import tlf
 #' @import ospsuite
+#' @keywords internal
 plotQualificationTimeProfiles <- function(configurationPlan,
                                           logFolder = getwd(),
                                           settings) {
@@ -99,8 +99,8 @@ plotQualificationTimeProfiles <- function(configurationPlan,
 #' @param plotObject A `ggplot` object
 #' @param logFolder folder where the logs are saved
 #' @return Mean time profile plot as a `ggplot` object
-#' @export
 #' @import tlf
+#' @keywords internal
 plotQualificationMeanTimeProfile <- function(configurationPlanCurves, simulation, simulationResults, axesProperties, configurationPlan, plotObject, logFolder) {
   for (curve in configurationPlanCurves) {
     # TODO handle Observed data and Y2 axis
@@ -145,6 +145,7 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves, simulation
 #' @param logFolder folder where the logs are saved
 #' @return A list of data and properties to be plotted and that follows `tlf` package nomenclature
 #' @import ospsuite
+#' @keywords internal
 getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
                                               simulation,
                                               simulationResults,
@@ -241,8 +242,8 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
 #' @param plotObject A `ggplot` object
 #' @param logFolder folder where the logs are saved
 #' @return Population time profile plot as a `ggplot` object
-#' @export
 #' @import tlf
+#' @keywords internal
 plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedDataCollection, simulation, simulationResults, axesProperties, configurationPlan, plotObject, logFolder) {
 
   # Get simulation results from configuration plan field "Fields"
@@ -324,6 +325,7 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
 #' @param plotObject A `ggplot` object with previous statistics displayed
 #' @return A `ggplot` object updated with new displayed statistic
 #' @import tlf
+#' @keywords internal
 plotStatisticsFromPlan <- function(time, outputValues, statisticId, outputName, color, linetype, plotObject) {
   # Format the data for plots
   aggregatedData <- getAggregateFromStat(statisticId, time, outputValues)
@@ -378,6 +380,7 @@ plotStatisticsFromPlan <- function(time, outputValues, statisticId, outputName, 
 #' @param time Time values on which output values are aggregated
 #' @param outputValues Output values to be aggregated
 #' @return A data.frame of aggregated data to display
+#' @keywords internal
 getAggregateFromStat <- function(statisticId, time, outputValues) {
   # Range plots use data.frame with x, ymin and ymax
   if (grepl(pattern = "Range", statisticId)) {
@@ -481,6 +484,7 @@ getAggregateFromStat <- function(statisticId, time, outputValues) {
 #' @param statisticId Statistic Id as defined in `ConfigurationPlan` used for data aggregation
 #' @param outputName Display name of output values
 #' @return A character value used as caption for the time profile plot
+#' @keywords internal
 getCaptionFromStat <- function(statisticId, outputName) {
   if (grepl(pattern = "Percentile", statisticId)) {
     percentileValue <- as.numeric(gsub(pattern = "Percentile_", "", statisticId))
@@ -518,6 +522,7 @@ getCaptionFromStat <- function(statisticId, outputName) {
 #' @param axesProperties list of axes properties obtained from `getAxesProperties`
 #' @param logFolder folder where the logs are saved
 #' @return List with `time`, `y` and `error` values
+#' @keywords internal
 getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, axesProperties, logFolder) {
   time <- ospsuite::toUnit(
     quantityOrDimension = "Time",

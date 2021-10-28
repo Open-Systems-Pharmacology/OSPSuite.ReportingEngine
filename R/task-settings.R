@@ -1,6 +1,6 @@
 #' @title TaskSettings
 #' @description  R6 class defining properties of plot task settings
-#' @export
+#' @keywords internal
 TaskSettings <- R6::R6Class(
   "TaskSettings",
   public = list(
@@ -139,7 +139,7 @@ TaskSettings <- R6::R6Class(
 
 #' @title GofTaskSettings
 #' @description  R6 class defining properties of time profiles and residuals plot task settings
-#' @export
+#' @keywords internal
 GofTaskSettings <- R6::R6Class(
   "GofTaskSettings",
   inherit = TaskSettings,

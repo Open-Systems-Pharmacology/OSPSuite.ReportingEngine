@@ -34,26 +34,24 @@ PlotTask <- R6::R6Class(
       self$getTaskResults <- getTaskResults
       self$nameTaskResults <- nameTaskResults
     },
-
+    
     #' @description
-    #' Save results from task run.
-    #' @param set R6 class `SimulationStructure`
+    #' Save the task results related to a `structureSet`.
+    #' @param structureSet A `SimulationStructure` object defining the properties of a simulation set
     #' @param taskResults list of results from task run.
-    #' Results contains at least 2 fields: `plots` and `tables`
-    saveResults = function(set,
-                           taskResults) {
+    #' Currently, results contains at least 2 fields: `plots` and `tables`
+    #' They are to be deprecated and replaced using `TaskResults` objects
+    saveResults = function(structureSet, taskResults) {
       addTextChunk(
         self$fileName,
-        paste0("## ", self$title, " for ", set$simulationSet$simulationSetName),
+        paste0("## ", self$title, " for ", structureSet$simulationSet$simulationSetName),
         logFolder = self$workflowFolder
       )
       for (plotName in names(taskResults$plots)) {
-        plotFileName <- getDefaultFileName(set$simulationSet$simulationSetName,
+        plotFileName <- getDefaultFileName(structureSet$simulationSet$simulationSetName,
           suffix = plotName,
           extension = reEnv$defaultPlotFormat$format
         )
-
-        # TO DO: define parameters from settings/plotConfiguration
 
         figureFilePath <- self$getAbsolutePath(plotFileName)
         ggplot2::ggsave(
@@ -83,7 +81,7 @@ PlotTask <- R6::R6Class(
       }
 
       for (tableName in names(taskResults$tables)) {
-        tableFileName <- getDefaultFileName(set$simulationSet$simulationSetName,
+        tableFileName <- getDefaultFileName(structureSet$simulationSet$simulationSetName,
           suffix = tableName,
           extension = "csv"
         )
@@ -120,8 +118,8 @@ PlotTask <- R6::R6Class(
     },
 
     #' @description
-    #' Run task and save its output
-    #' @param structureSets list of `SimulationStructure` R6 class
+    #' Run task and save its output results
+    #' @param structureSets list of `SimulationStructure` objects
     runTask = function(structureSets) {
       actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
       logWorkflow(

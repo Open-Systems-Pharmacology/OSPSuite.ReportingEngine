@@ -13,4 +13,4 @@ ConfigurationScales
 \description{
 List defining scale following tlf nomenclature from a Scaling field of configuration plan
 }
-\keyword{datasets}
+\keyword{internal}

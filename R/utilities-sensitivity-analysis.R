@@ -7,8 +7,8 @@
 #' @param individualId ID of individual in population data file for whom to perform sensitivity analysis
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
 #' @return SA results for individual or population
-#' @export
 #' @import ospsuite
+#' @keywords internal
 runSensitivity <- function(structureSet,
                            settings,
                            individualId = NULL,
@@ -112,6 +112,7 @@ runSensitivity <- function(structureSet,
 #' @param logFolder folder where the logs are saved
 #' @return SA results for an individual
 #' @import ospsuite
+#' @keywords internal
 individualSensitivityAnalysis <- function(structureSet,
                                           settings,
                                           individualParameters,
@@ -155,6 +156,7 @@ individualSensitivityAnalysis <- function(structureSet,
 #' @param logFolder folder where the logs are saved
 #' @return SA results for population
 #' @import ospsuite
+#' @keywords internal
 runParallelSensitivityAnalysis <- function(structureSet,
                                            settings = settings,
                                            individualParameters,
@@ -326,6 +328,7 @@ analyzeCoreSensitivity <- function(simulation,
 #' individuals for a single PK parameter and single output path
 #' @param quantileVec vector of quantiles in the pk results distribution.  Ids for individuals with pk parameter values at these quantiles will be returned.
 #' @return ids, IDs of individuals whose PK analysis results closest to quantiles given by vector of quantiles quantileVec
+#' @keywords internal
 getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
   rowNums <- NULL
   for (i in 1:length(quantileVec)) {
@@ -342,7 +345,7 @@ getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
 #' @param structureSet `SimulationStructure` R6 class object
 #' @param settings list of settings for the population sensitivity analysis
 #' @param logFolder folder where the logs are saved
-#' @export
+#' @keywords internal
 runPopulationSensitivityAnalysis <- function(structureSet, settings, logFolder = getwd()) {
   resultsFileName <- trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(structureSet$simulationSet$simulationSetName), extension = "csv")
   popSAResultsIndexFile <- trimFileName(structureSet$popSensitivityAnalysisResultsIndexFile)
@@ -380,6 +383,7 @@ runPopulationSensitivityAnalysis <- function(structureSet, settings, logFolder =
 #' @param structureSet `SimulationStructure` R6 class object
 #' @return pkResultsDataFrame, a dataframe storing the contents of the CSV file with path pkParameterResultsFilePath
 #' @import ospsuite
+#' @keywords internal
 getPKResultsDataFrame <- function(structureSet) {
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   re.tStoreFileMetadata(access = "read", filePath = structureSet$pkAnalysisResultsFileNames)
@@ -417,6 +421,7 @@ getPKResultsDataFrame <- function(structureSet) {
 #' @param settings list of settings for the population sensitivity analysis
 #' @param logFolder folder where the logs are saved
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
+#' @keywords internal
 getSAFileIndex <- function(structureSet,
                            settings,
                            logFolder,
@@ -462,6 +467,7 @@ getSAFileIndex <- function(structureSet,
 #' @description Function to build name of inidividual SA results file
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
 #' @param individualId id of individual
+#' @keywords internal
 getIndividualSAResultsFileName <- function(individualId, resultsFileName) {
   return(paste0(resultsFileName, "IndividualId-", individualId, ".csv"))
 }
@@ -491,9 +497,9 @@ defaultQuantileVec <- c(0.05, 0.5, 0.95)
 #' @param logFolder folder where the logs are saved
 #' @param settings list of settings for the output table/plot
 #' @return list of plots and tables
-#' @export
 #' @import ospsuite
 #' @import tlf
+#' @keywords internal
 plotMeanSensitivity <- function(structureSet,
                                 logFolder = getwd(),
                                 settings) {
@@ -590,6 +596,7 @@ plotMeanSensitivity <- function(structureSet,
 #' @param output an Output object
 #' @param pkParameter a string with the name of the pkParameter from the population sensitivity results index file
 #' @return the display name of the input pk parameter or the string pkParameter itself if no display name found
+#' @keywords internal
 lookupPKParameterDisplayName <- function(output, pkParameter) {
   for (pk in output$pkParameters) {
     if (pkParameter == pk$pkParameter) {
@@ -598,7 +605,6 @@ lookupPKParameterDisplayName <- function(output, pkParameter) {
   }
   return(pkParameter)
 }
-
 
 #' @title plotPopulationSensitivity
 #' @description Retrieve list of plots of population sensitivity analyses across all populations
@@ -609,8 +615,8 @@ lookupPKParameterDisplayName <- function(output, pkParameter) {
 #' @param xParameters selected parameters to be plotted in x axis
 #' @param yParameters selected parameters to be plotted in y axis
 #' @return a structured list of plots for each possible combination of pathID output-pkParameter that is found in sensitivity results index file
-#' @export
 #' @import ospsuite
+#' @keywords internal
 plotPopulationSensitivity <- function(structureSets,
                                       logFolder = NULL,
                                       settings,
@@ -880,6 +886,7 @@ plotPopulationSensitivity <- function(structureSets,
 #' @param logFolder folder where the logs are saved
 #' @return sortedFilteredIndividualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
 #' @import ospsuite
+#' @keywords internal
 getPopSensDfForPkAndOutput <- function(simulation,
                                        sensitivityResultsFolder,
                                        indexDf,
@@ -967,6 +974,7 @@ getPopSensDfForPkAndOutput <- function(simulation,
 #' @param output pathID of output for which to obtain the population sensitivity results
 #' @param pkParameter name of PK parameter for which to obtain the population sensitivity results
 #' @return pkOutputIndexDf dataframe containing index of files containing population sensitivity analysis results conducted for given output and pkParameter
+#' @keywords internal
 getPkOutputIndexDf <- function(indexDf, pkParameter, output) {
   pkOutputIndexDf <- indexDf[(indexDf$pkParameter == pkParameter) & (indexDf$Output == output), ]
   return(pkOutputIndexDf)
@@ -976,6 +984,7 @@ getPkOutputIndexDf <- function(indexDf, pkParameter, output) {
 #' @description return the default totalSensitivityThreshold to be used in a population sensitivity analysis plot
 #' @param variableParameterPaths vector of paths of parameters to vary when performing sensitivity analysis
 #' @param totalSensitivityThreshold cut-off used for plots of the most sensitive parameters
+#' @keywords internal
 getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold = NULL, variableParameterPaths = NULL) {
   totalSensitivityThreshold <- totalSensitivityThreshold %||% ifnotnull(variableParameterPaths, 1, 0.9)
   return(totalSensitivityThreshold)
@@ -988,6 +997,7 @@ getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold = NULL
 #' @param maxWidthPerParameter maximum number of characters allowed per lines of displayed parameters
 #' @param logFolder folder where the logs are saved
 #' @return Displayed parameter names for sensitivity breaking lines when too long
+#' @export
 getDisplaySensitivityParameters <- function(parameterNames, maxLinesPerParameter, maxWidthPerParameter, logFolder = getwd()) {
   # Get total parameters lengths
   parametersTotalLengths <- nchar(parameterNames)

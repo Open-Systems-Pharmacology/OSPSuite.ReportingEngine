@@ -13,4 +13,9 @@ LogTypes
 \description{
 List of log types for recording workflow information
 }
+\examples{
+LogTypes$Info
+LogTypes$Error
+LogTypes$Debug
+}
 \keyword{datasets}

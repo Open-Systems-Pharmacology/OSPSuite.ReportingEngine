@@ -30,21 +30,20 @@ SensitivityAnalysisTask <- R6::R6Class(
     },
 
     #' @description
-    #' Save results from task run.
-    #' @param set R6 class `SimulationStructure`
+    #' Save the task results related to a `structureSet`.
+    #' @param structureSet A `SimulationStructure` object defining the properties of a simulation set
     #' @param taskResults list of results from task run.
-    saveResults = function(set,
-                           taskResults) {
+    saveResults = function(structureSet, taskResults) {
       ospsuite::exportSensitivityAnalysisResultsToCSV(
         results = taskResults,
-        filePath = set$sensitivityAnalysisResultsFileNames
+        filePath = structureSet$sensitivityAnalysisResultsFileNames
       )
-      re.tStoreFileMetadata(access = "write", filePath = set$sensitivityAnalysisResultsFileNames)
+      re.tStoreFileMetadata(access = "write", filePath = structureSet$sensitivityAnalysisResultsFileNames)
     },
 
     #' @description
-    #' Run task and save its output
-    #' @param structureSets list of `SimulationStructure` R6 class
+    #' Run task and save its output results
+    #' @param structureSets list of `SimulationStructure` objects
     runTask = function(structureSets) {
       actionToken <- re.tStartAction(actionType = "Analysis", actionNameExtension = self$nameTaskResults)
       logWorkflow(

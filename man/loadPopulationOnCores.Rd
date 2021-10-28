@@ -14,3 +14,4 @@ loadPopulationOnCores(populationFiles, logFolder)
 \description{
 Send population file names to cores, check that population is loaded on each core successfully
 }
+\keyword{internal}

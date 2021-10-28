@@ -19,3 +19,4 @@ String `pkParameterName`
 \description{
 Generate name for a PK parameter calculated between a start and end time
 }
+\keyword{internal}

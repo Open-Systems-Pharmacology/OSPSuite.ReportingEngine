@@ -8,6 +8,7 @@
 #' @description
 #' Check if lhs argument is not null, output lhs if not null,
 #' output rhs otherwise
+#' @keywords internal
 `%||%` <- function(lhs, rhs) {
   if (!is.null(lhs)) {
     lhs
@@ -16,9 +17,6 @@
   }
 }
 
-
-
-
 #' @title calculateResiduals
 #' @param simulatedData, vector of simulated data
 #' @param observedData, vector of observed data
@@ -26,6 +24,7 @@
 #' @return residuals between simulatedData and observedData
 #' @description
 #' Calculate residuals between vectors `simulatedData` and `observedData` according the the residual scale specified in `residualScale`
+#' @export
 calculateResiduals <- function(simulatedData, observedData, residualScale) {
   validateIsOfLength(object = simulatedData, nbElements = length(observedData))
   residualValues <- rep(NA, length(observedData))
@@ -36,8 +35,6 @@ calculateResiduals <- function(simulatedData, observedData, residualScale) {
     residualValues <- (observedData - simulatedData)
   }
 }
-
-
 
 #' Shortkey checking if argument 1 is not null,
 #' output the argument 2 if not null, or output argument 3 otherwise
@@ -50,6 +47,7 @@ calculateResiduals <- function(simulatedData, observedData, residualScale) {
 #' @description
 #' Check if inputToCheck is not null, if so output outputIfNotNull,
 #' otherwise, output outputIfNull
+#' @keywords internal
 ifnotnull <- function(inputToCheck, outputIfNotNull, outputIfNull = NULL) {
   if (!is.null(inputToCheck)) {
     outputIfNotNull
@@ -70,6 +68,7 @@ ifnotnull <- function(inputToCheck, outputIfNotNull, outputIfNull = NULL) {
 #' @description
 #' Check if x=y, if so output outputIfEqual,
 #' otherwise, output outputIfNotEqual
+#' @keywords internal
 ifEqual <- function(x, y, outputIfEqual, outputIfNotEqual = NULL) {
   if (x == y) {
     outputIfEqual
@@ -90,6 +89,7 @@ ifEqual <- function(x, y, outputIfEqual, outputIfNotEqual = NULL) {
 #' @description
 #' Check if x is in y, if so output outputIfIncluded,
 #' otherwise, output outputIfNotIncluded
+#' @keywords internal
 ifIncluded <- function(x, y, outputIfIncluded, outputIfNotIncluded = NULL) {
   if (isIncluded(x, y)) {
     outputIfIncluded
@@ -110,6 +110,7 @@ ifIncluded <- function(x, y, outputIfIncluded, outputIfNotIncluded = NULL) {
 #' pathName <- "folder/subfolder/testFile.txt"
 #' trimFileName(pathName, extension = "txt")
 #' }
+#' @export
 trimFileName <- function(path, extension = NULL, sep = "/") {
   fileName <- sub(
     pattern = paste0("^.*[", sep, "]"),
@@ -141,6 +142,7 @@ trimFileName <- function(path, extension = NULL, sep = "/") {
 #' \dontrun{
 #' removeForbiddenLetters(text)
 #' }
+#' @export
 removeForbiddenLetters <- function(text, forbiddenLetters = "[[:punct:]]", replacement = "_") {
   text <- gsub(
     pattern = forbiddenLetters,
@@ -232,10 +234,11 @@ lastPathElement <- function(path) {
   return(lastElement)
 }
 
-#' @title removeInf
+#' @title replaceInfWithNA
 #' @param data numeric vector
 #' @param logFolder folder where the logs are saved
 #' @return numeric vector
+#' @keywords internal
 replaceInfWithNA <- function(data, logFolder = getwd()) {
   infData <- is.infinite(data)
   Ninf <- sum(infData)
@@ -255,6 +258,7 @@ replaceInfWithNA <- function(data, logFolder = getwd()) {
 #' @param dataMapping name of variable on which the missing values ar checked
 #' @param logFolder folder where the logs are saved
 #' @return filtered data.frame
+#' @keywords internal
 removeMissingValues <- function(data, dataMapping = NULL, logFolder = getwd()) {
   data[, dataMapping] <- replaceInfWithNA(data[, dataMapping], logFolder)
   naData <- is.na(data[, dataMapping])
@@ -319,6 +323,7 @@ getPKParametersInSimulationSet <- function(simulationSet) {
 
 #' @title getAllowedCores
 #' @return Allowed number of CPU cores for computation
+#' @export
 getAllowedCores <- function() {
   cores <- tryCatch(
     {
@@ -342,9 +347,10 @@ getAllowedCores <- function() {
 
 #' @title getSimulationParameterDisplayPaths
 #' @param parameterPaths Paths of a parameter in simulation
-#' @param simulation Simulation object
+#' @param simulation `Simulation` object from `ospsuite`
 #' @param dictionary parameterDisplayPaths data.frame mapping user defined display names
 #' @return parameterDisplayPath
+#' @export
 getSimulationParameterDisplayPaths <- function(parameterPaths, simulation, dictionary) {
   parameterDisplayPaths <- ospsuite::getParameterDisplayPaths(parameterPaths, simulation)
 
@@ -434,8 +440,9 @@ formatNumerics <- function(value,
 #' @description Create an expression of type `objectName$variableName <- variableName`
 #' @param objectName Name of the object whose field is updated
 #' @param variableName Name of the variable and field of `objectName`
-#' @param keepIfNull logical `objectName$variableName <- variableName %||% objectName$variableName`
+#' @param keepIfNull logical `objectName$variableName <- variableName \%||\% objectName$variableName`
 #' @return An expression to `eval()`
+#' @keywords internal
 parseVariableToObject <- function(objectName, variableName, keepIfNull = FALSE) {
   if (keepIfNull) {
     return(parse(text = paste0(objectName, "$", variableName, " <- ", variableName, " %||% ", objectName, "$", variableName)))
@@ -447,8 +454,9 @@ parseVariableToObject <- function(objectName, variableName, keepIfNull = FALSE) 
 #' @description Create an expression of type `variableName <- objectName$variableName`
 #' @param objectName Name of the object whose field is updated
 #' @param variableName Name of the variable and field of `objectName`
-#' @param keepIfNull logical `variableName <- objectName$variableName %||% variableName`
+#' @param keepIfNull logical `variableName <- objectName$variableName \%||\% variableName`
 #' @return An expression to `eval()`
+#' @keywords internal
 parseVariableFromObject <- function(objectName, variableName, keepIfNull = FALSE) {
   if (keepIfNull) {
     return(parse(text = paste0(variableName, " <- ", objectName, "$", variableName)))
@@ -472,8 +480,9 @@ calculateGMFE <- function(x, y) {
 
 #' @title getObjectNameAsString
 #' @description Return the name of an object as a string
-#' @param object, the name of which is to be returned
+#' @param object the name of which is to be returned
 #' @return the name of the `object` as a string
+#' @keywords internal
 getObjectNameAsString <- function(object) {
   return(deparse(substitute(object)))
 }

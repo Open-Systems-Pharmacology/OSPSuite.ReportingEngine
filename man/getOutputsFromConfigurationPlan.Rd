@@ -17,3 +17,4 @@ A dataframe of project, simulation, output paths and (if applicable) pk paramete
 \description{
 Get a list of outputs from simulation and from `ConfigurationPlan`
 }
+\keyword{internal}

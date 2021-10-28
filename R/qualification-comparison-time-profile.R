@@ -4,9 +4,9 @@
 #' @param logFolder folder where the logs are saved
 #' @param settings `ConfigurationPlan` object
 #' @return list with `plots` and `tables`
-#' @export
 #' @import tlf
 #' @import ospsuite
+#' @keywords internal
 plotQualificationComparisonTimeProfile <- function(configurationPlan,
                                                    logFolder = getwd(),
                                                    settings) {
@@ -76,6 +76,7 @@ plotQualificationComparisonTimeProfile <- function(configurationPlan,
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @param logFolder folder where the logs are saved
 #' @return A ggplot object
+#' @keywords internal
 addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, axesProperties, plotObject, configurationPlan, logFolder) {
   # Get simulation output
   simulationFile <- configurationPlan$getSimulationPath(

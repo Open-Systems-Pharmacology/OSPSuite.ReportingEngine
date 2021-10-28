@@ -19,3 +19,4 @@ Information from a data.frame matching a certain `simulationIndex` column and `c
 \description{
 Get and format the information from a data.frame matching a certain `simulationIndex` column and `codeId` line
 }
+\keyword{internal}

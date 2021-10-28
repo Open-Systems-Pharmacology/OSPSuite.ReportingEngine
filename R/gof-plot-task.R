@@ -4,22 +4,19 @@
 GofPlotTask <- R6::R6Class(
   "GofPlotTask",
   inherit = PlotTask,
-
   public = list(
-
     #' @description
-    #' Save results from task run.
-    #' @param set R6 class `SimulationStructure`
+    #' Save the task results related to a `structureSet`.
+    #' @param structureSet A `SimulationStructure` object defining the properties of a simulation set
     #' @param taskResults list of results from task run.
-    #' Results contains at least 2 fields: `plots` and `tables`
-    saveResults = function(set,
-                           taskResults) {
+    #' Currently, results contains at least 2 fields: `plots` and `tables`
+    #' They are to be deprecated and replaced using `TaskResults` objects
+    saveResults = function(structureSet, taskResults) {
       addTextChunk(
         self$fileName,
-        paste0("## ", self$title, " for ", set$simulationSet$simulationSetName),
+        paste0("## ", self$title, " for ", structureSet$simulationSet$simulationSetName),
         logFolder = self$workflowFolder
       )
-
       # For mutliple applications, taskResults$plots has 3 fields named as ApplicationRanges
       # Sub sections are created if more than one field are kept
       hasMultipleApplications <- (length(taskResults$plots) > 1)
@@ -36,7 +33,7 @@ GofPlotTask <- R6::R6Class(
         }
         # Save and include plot paths to report
         for (plotName in names(listOfPlots)) {
-          plotFileName <- getDefaultFileName(set$simulationSet$simulationSetName,
+          plotFileName <- getDefaultFileName(structureSet$simulationSet$simulationSetName,
             suffix = paste0(plotName, "-", timeRange),
             extension = reEnv$defaultPlotFormat$format
           )
@@ -72,7 +69,7 @@ GofPlotTask <- R6::R6Class(
       }
 
       for (tableName in names(taskResults$tables)) {
-        tableFileName <- getDefaultFileName(set$simulationSet$simulationSetName,
+        tableFileName <- getDefaultFileName(structureSet$simulationSet$simulationSetName,
           suffix = tableName,
           extension = "csv"
         )
@@ -94,9 +91,8 @@ GofPlotTask <- R6::R6Class(
     },
 
     #' @description
-    #' Run task and save its output
-    #' @param structureSets list of `SimulationStructure` R6 class
-    #' @param self$fileName name of report file
+    #' Run task and save its output results
+    #' @param structureSets list of `SimulationStructure` objects
     runTask = function(structureSets) {
       actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
       logWorkflow(
@@ -166,20 +162,16 @@ GofPlotTask <- R6::R6Class(
           extension = reEnv$defaultPlotFormat$format,
           sep = ""
         )
-
         qqPlotFileName <- getDefaultFileName(
           suffix = "residuals-qqplot",
           extension = reEnv$defaultPlotFormat$format,
           sep = ""
         )
-
-
         tableFileName <- getDefaultFileName(
           suffix = "residuals",
           extension = "csv",
           sep = ""
         )
-
 
         write.csv(residualsAcrossAllSimulations,
           file = self$getAbsolutePath(tableFileName),

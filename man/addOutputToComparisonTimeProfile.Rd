@@ -32,3 +32,4 @@ A ggplot object
 \description{
 Add plot layers for an output mapping from comparison time profile plot
 }
+\keyword{internal}

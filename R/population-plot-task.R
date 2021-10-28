@@ -32,10 +32,10 @@ PopulationPlotTask <- R6::R6Class(
     },
 
     #' @description
-    #' Save results from task run.
+    #' Save the task results
     #' @param taskResults list of results from task run.
-    #' Results contains at least 2 fields: `plots` and `tables`
-    #' @param self$fileName name of report
+    #' Currently, results contains at least 2 fields: `plots` and `tables`
+    #' They are to be deprecated and replaced using `TaskResults` objects
     saveResults = function(taskResults) {
       resetReport(self$fileName, self$workflowFolder)
       addTextChunk(

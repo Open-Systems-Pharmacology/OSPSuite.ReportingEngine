@@ -13,4 +13,4 @@ buildDDIDataFrameFunctions
 \description{
 Names of functions for extracting data for each DDI plot type
 }
-\keyword{datasets}
+\keyword{internal}

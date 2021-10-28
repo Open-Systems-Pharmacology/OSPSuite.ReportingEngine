@@ -9,7 +9,7 @@ getSimulationParameterDisplayPaths(parameterPaths, simulation, dictionary)
 \arguments{
 \item{parameterPaths}{Paths of a parameter in simulation}
 
-\item{simulation}{Simulation object}
+\item{simulation}{`Simulation` object from `ospsuite`}
 
 \item{dictionary}{parameterDisplayPaths data.frame mapping user defined display names}
 }

@@ -53,6 +53,9 @@ reEnv$pkRatio$dictionary <- list(
 #' @param watermark character or \code{Label} class object from `tlf` package
 #' @export
 #' @import tlf
+#' @examples 
+#' setWatermarkConfiguration("Confidential")
+#' setWatermarkConfiguration(Label$new(text = "test", color = "blue"))
 setWatermarkConfiguration <- function(watermark = NULL) {
   tlf::setDefaultWatermark(watermark)
 }
@@ -65,6 +68,9 @@ setWatermarkConfiguration <- function(watermark = NULL) {
 #' @param units units of `width` and `height` included in "in", "cm", "mm", or "px"
 #' @param dpi Plot resolution in dots per inch. Caution, font sizes depend on resolution.
 #' @export
+#' @examples 
+#' setDefaultPlotFormat(format = "pdf")
+#' setDefaultPlotFormat(width = 16, height = 9, units = "cm", dpi = 300)
 setDefaultPlotFormat <- function(format = NULL, width = NULL, height = NULL, units = NULL, dpi = NULL) {
   validateIsNumeric(width, nullAllowed = TRUE)
   validateIsNumeric(height, nullAllowed = TRUE)
@@ -94,12 +100,15 @@ setPlotFormat <- function(format = NULL, width = NULL, height = NULL, units = NU
   setDefaultPlotFormat(format, width, height, units, dpi)
 }
 
-
 #' @title ApplicationRanges
 #' @description
 #' Keys of reported ranges when simulation includes multiple applications
 #' @export
 #' @import ospsuite
+#' @examples
+#' ApplicationRanges$total
+#' ApplicationRanges$firstApplication
+#' ApplicationRanges$lastApplication
 ApplicationRanges <- ospsuite::enum(c("total", "firstApplication", "lastApplication"))
 
 #' @title setDefaultNumericFormat
@@ -107,8 +116,9 @@ ApplicationRanges <- ospsuite::enum(c("total", "firstApplication", "lastApplicat
 #' @param digits Number of significant digits
 #' @param scientific Logical defining if numeric format uses a scientific expression
 #' @export
-setDefaultNumericFormat <- function(digits = NULL,
-                                    scientific = NULL) {
+#' @examples 
+#' setDefaultNumericFormat(digits = 2, scientific = TRUE)
+setDefaultNumericFormat <- function(digits = NULL, scientific = NULL) {
   validateIsInteger(digits, nullAllowed = TRUE)
   validateIsLogical(scientific, nullAllowed = TRUE)
 
@@ -142,6 +152,8 @@ setDefaultThemeFromJson <- function(jsonFile) {
 #' @title setDefaultBins
 #' @param bins number or edges of bins
 #' @export
+#' @examples 
+#' setDefaultBins(10)
 setDefaultBins <- function(bins) {
   validateIsNumeric(bins)
   reEnv$defaultBins <- bins
@@ -150,6 +162,8 @@ setDefaultBins <- function(bins) {
 #' @title setDefaultStairstep
 #' @param stairstep logical defining if stairstep should be plotted by default when aggregation is performed
 #' @export
+#' @examples 
+#' setDefaultStairstep(TRUE)
 setDefaultStairstep <- function(stairstep) {
   validateIsLogical(stairstep)
   reEnv$defaultStairstep <- stairstep

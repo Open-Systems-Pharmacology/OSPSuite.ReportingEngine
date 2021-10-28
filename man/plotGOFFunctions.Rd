@@ -13,4 +13,4 @@ plotGOFFunctions
 \description{
 Names of functions for plotting GOF plots for each GOF plot type
 }
-\keyword{datasets}
+\keyword{internal}

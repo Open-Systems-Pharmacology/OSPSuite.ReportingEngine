@@ -6,10 +6,10 @@
 #' @param settings Options to be defined
 #' (e.g. how to group the plot results, or which molecule to exclude)
 #' @return list of `ggplot` objects
-#' @export
 #' @import tlf
 #' @import ospsuite
 #' @import utils
+#' @keywords internal
 plotMeanMassBalance <- function(structureSet,
                                 logFolder = getwd(),
                                 settings = NULL) {

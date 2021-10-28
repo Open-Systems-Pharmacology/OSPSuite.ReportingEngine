@@ -13,4 +13,4 @@ ddiPlotAxesSettings
 \description{
 Names of fields in configuration plane containing axes settings data for each DDI plot type
 }
-\keyword{datasets}
+\keyword{internal}

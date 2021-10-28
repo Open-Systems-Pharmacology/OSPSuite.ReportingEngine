@@ -19,3 +19,4 @@ String `pkParameterName`
 \description{
 Create a PK parameter calculated between a start and end time as specified in a qualification `ConfigurationPlan` and return ther PK parameter name
 }
+\keyword{internal}

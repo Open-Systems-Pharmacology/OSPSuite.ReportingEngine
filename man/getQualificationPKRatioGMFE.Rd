@@ -19,3 +19,4 @@ A data.frame
 \description{
 Get plot of pk ratio from field `PKRatioPlots` of configuration plan
 }
+\keyword{internal}

@@ -60,7 +60,8 @@ defaultFileNames <- list(
 #' @param suffix Suffix to be added at the end of the file name
 #' @param extension file format. Default is `csv`
 #' @param sep separation between names and suffix. Default is `-`
-#' @return default filename adding default suffix and fileextension
+#' @return default filename adding default suffix and file extension
+#' @keywords internal
 getDefaultFileName <- function(..., suffix, extension = "csv", sep = "-") {
   defaultName <- paste(..., suffix, sep = sep)
   defaultFileName <- paste0(defaultName, ".", extension)
@@ -73,7 +74,8 @@ getDefaultFileName <- function(..., suffix, extension = "csv", sep = "-") {
 #' @param suffix Suffix to be added at the end of the folder name.
 #' Dafault `suffix` is the curent date
 #' @param sep separation between names and suffix. Default is `-`
-#' @return default filename adding default suffix and fileextension
+#' @return default filename adding default suffix and file extension
+#' @keywords internal
 getDefaultFolderName <- function(..., suffix = "", sep = "-") {
   defaultFolderName <- paste(..., suffix, sep = sep)
   return(defaultFolderName)

@@ -19,3 +19,4 @@ list with `plots` and `tables`
 \description{
 Plot PK Ratio plots for qualification workflow
 }
+\keyword{internal}

@@ -2,6 +2,7 @@
 #' @description Build dataframes and metadata for each GOF plot
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @return plotGOFdata, a list of lists of the form list(dataframe,metadata) specific to each GOF plot
+#' @keywords internal
 getQualificationGOFPlotData <- function(configurationPlan) {
   plotGOFdata <- list()
   for (plt in seq_along(configurationPlan$plots$GOFMergedPlots)) {
@@ -132,16 +133,12 @@ getQualificationGOFPlotData <- function(configurationPlan) {
   return(plotGOFdata)
 }
 
-
-
-
-
-
 #' @title buildQualificationGOFPredictedVsObserved
 #' @description Build dataframe for observation vs prediction
 #' @param dataframe data.frame
 #' @param metadata meta data on `data`
 #' @return dataframe for plotting goodness of fit of predictedVsObserved type
+#' @keywords internal
 buildQualificationGOFPredictedVsObserved <- function(dataframe,
                                                      metadata) {
   axesSettings <- metadata$axesSettings[["predictedVsObserved"]]
@@ -215,14 +212,12 @@ buildQualificationGOFPredictedVsObserved <- function(dataframe,
   return(list(gofPlotDataframe = gofPlotDataframe, aestheticsList = aestheticsList, axesSettings = axesSettings))
 }
 
-
-
-
 #' @title buildQualificationGOFResidualsOverTime
 #' @description Build dataframe for residuals vs time
 #' @param dataframe data.frame
 #' @param metadata meta data on `data`
 #' @return dataframe for plotting goodness of fit of residuals vs time type
+#' @keywords internal
 buildQualificationGOFResidualsOverTime <- function(dataframe,
                                                    metadata) {
   axesSettings <- metadata$axesSettings[["residualsOverTime"]]
@@ -355,13 +350,13 @@ plotQualificationGOFPredictedVsObserved <- function(data) {
   return(qualificationGOFPredictedVsObservedPlot)
 }
 
-
 #' @title plotQualificationGOFResidualsOverTime
 #' @description Plot residuals vs time for qualification workflow
 #' @param data data.frame
 #' @return ggplot object of residuals over time profile for qualification workflow
 #' @import tlf
 #' @import ggplot2
+#' @keywords internal
 plotQualificationGOFResidualsOverTime <- function(data) {
   maxRes <- 1.2 * max(abs(data$gofPlotDataframe[, "Residuals"]), na.rm = TRUE)
 
@@ -403,12 +398,11 @@ plotQualificationGOFResidualsOverTime <- function(data) {
   return(qualificationGOFResVsTimePlot)
 }
 
-
-
 #' @title plotQualificationGOFs
 #' @description Plot observation vs prediction for qualification workflow
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @return list of qualification GOF ggplot objects
+#' @keywords internal
 plotQualificationGOFs <- function(configurationPlan,
                                   logFolder = getwd(),
                                   settings) {
@@ -438,18 +432,21 @@ plotQualificationGOFs <- function(configurationPlan,
 }
 
 #' Names of fields in configuration plane containing axes settings data for each GOF plot type
+#' @keywords internal
 gofPlotAxesSettings <- list(
   "predictedVsObserved" = "GOFMergedPlotsPredictedVsObserved",
   "residualsOverTime" = "GOFMergedPlotsResidualsOverTime"
 )
 
 #' Names of functions for extracting data for each GOF plot type
+#' @keywords internal
 buildGOFDataFrameFunctions <- list(
   "predictedVsObserved" = buildQualificationGOFPredictedVsObserved,
   "residualsOverTime" = buildQualificationGOFResidualsOverTime
 )
 
 #' Names of functions for plotting GOF plots for each GOF plot type
+#' @keywords internal
 plotGOFFunctions <- list(
   "predictedVsObserved" = plotQualificationGOFPredictedVsObserved,
   "residualsOverTime" = plotQualificationGOFResidualsOverTime

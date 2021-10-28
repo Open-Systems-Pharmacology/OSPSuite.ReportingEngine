@@ -13,4 +13,4 @@ ConfigurationLinetypes
 \description{
 List defining linetype following tlf nomenclature from a LineStyle field of configuration plan
 }
-\keyword{datasets}
+\keyword{internal}

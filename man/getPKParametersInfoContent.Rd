@@ -17,3 +17,4 @@ Character vector defining `pkParameters` input of `Output` object
 \description{
 Creates a character vector to be written in a workflow .R script defining `pkParameters` input of `Output` object.
 }
+\keyword{internal}

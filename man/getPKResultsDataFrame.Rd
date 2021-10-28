@@ -15,3 +15,4 @@ pkResultsDataFrame, a dataframe storing the contents of the CSV file with path p
 \description{
 Read PK parameter results into a dataframe and set QuantityPath,Parameter and Unit columns as factors
 }
+\keyword{internal}

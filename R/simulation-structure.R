@@ -12,6 +12,7 @@
 #' @field parameterDisplayPaths data.frame mapping parameters to user-defined display paths
 #' @field simulationSetDescriptor Descriptor of simulation sets indicated in reports
 #' @import ospsuite
+#' @keywords internal
 SimulationStructure <- R6::R6Class(
   "SimulationStructure",
   public = list(
@@ -30,7 +31,7 @@ SimulationStructure <- R6::R6Class(
     #' @description
     #' Create a new `SimulationStructure` object.
     #' Build and store names of potential subfolders to hold simulation results, pkAnalysis results and sensitivityAnalysis results.
-    #' @param simulationSet `MeanModelSet` or `PopModelSet` R6 class object
+    #' @param simulationSet A `SimulationSet` or `PopulationSimulationSet` object
     #' @param workflowFolder output folder of the worklow
     initialize = function(simulationSet,
                           workflowFolder = getwd()) {

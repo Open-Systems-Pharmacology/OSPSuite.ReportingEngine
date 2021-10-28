@@ -19,3 +19,4 @@ list of `StudyDesignTarget` objects
 \description{
 mapStudyDesignTargets
 }
+\keyword{internal}

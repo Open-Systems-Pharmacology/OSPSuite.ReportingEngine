@@ -1,5 +1,6 @@
 #' @title SimulationSettings
 #' @description  R6 class for Population Simulation Settings
+#' @keywords internal
 SimulationSettings <- R6::R6Class(
   "SimulationSettings",
   public = list(

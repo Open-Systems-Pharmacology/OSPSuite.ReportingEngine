@@ -15,3 +15,4 @@ A named list, with fields 'name' and 'unit'.  If variableUnitString lacks a '[un
 \description{
 Split a string containing a varialbe and unit description into a list of two strings that separates the variable and the unit.
 }
+\keyword{internal}
