@@ -309,13 +309,9 @@ startQualificationRunner <- function(
                                      logLevel = NULL,
                                      displayVersion = FALSE) {
   validateIsFileExtension(qualificationPlanFile, "json")
-  validateIsLogical(overwrite, nullAllowed = TRUE)
-  validateIsLogical(displayVersion, nullAllowed = TRUE)
+  validateIsLogical(overwrite)
+  validateIsLogical(displayVersion)
   validateIsFileExtension(configurationPlanFile, "json", nullAllowed = TRUE)
-
-  # In case overwrite and displayVersion are entered null by users
-  overwrite <- overwrite %||% TRUE
-  displayVersion <- displayVersion %||% FALSE
 
   options <- c(
     ifnotnull(pkSimPortableFolder, paste0("-p ", pkSimPortableFolder)),
