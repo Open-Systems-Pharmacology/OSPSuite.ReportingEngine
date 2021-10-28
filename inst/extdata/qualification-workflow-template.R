@@ -31,7 +31,11 @@ require(ospsuite.reportingengine)
 workingDirectory <- getwd()
 
 qualificationRunnerFolder <- "C:/Software/QualificationRunner9.1.1"
-pkSimPortableFolder <- "C:/Software/PKSim9.1.2"
+#' `pkSimPortableFolder` is an optional input of the qualification runner
+#' if set to `NULL`, the installed (non portable) PK-Sim version will be found and used.
+#' if set to a path (e.g. `"C:/Software/PKSim9.1.2"`) - then PK-Sim portable version which is stored in this folder will be used
+#' (even if another version is installed as part of the OSP Suite installation)
+pkSimPortableFolder <- NULL
 
 qualificationPlanName <- "qualification_plan.json"
 qualificationPlanFile <- file.path(workingDirectory, "input", qualificationPlanName)
@@ -54,7 +58,9 @@ watermark <- ""
 
 #' If not set, report created will be named `report.md` and located in  `reOutputFolder`
 reportName <- file.path(reOutputFolder, "report.md")
-#' Define if a `docx` version of the report should also be created
+#' Define if a `docx` version of the report should also be created.
+#' Note that `pandoc` installation is required for this feature
+#' [https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/wiki/Installing-pandoc
 createWordReport <- TRUE
 
 #' Option for DDI Plots in case sub-units are required
