@@ -315,14 +315,14 @@ startQualificationRunner <- function(
 
   options <- c(
     ifnotnull(pkSimPortableFolder, paste0("-p ", pkSimPortableFolder)),
-    ifnotnull(configurationPlanFile, paste0("-n ", configurationPlanFile)),
+    ifnotnull(configurationPlanFile, paste0('-n "', configurationPlanFile, '"')),
     switch(as.character(overwrite), "TRUE" = "-f", NULL),
-    ifnotnull(logFile, paste0("-l ", logFile)),
+    ifnotnull(logFile, paste0('-l "', logFile, '"')),
     ifnotnull(logLevel, paste0("--logLevel ", logLevel)),
     switch(as.character(displayVersion), "TRUE" = "--version", NULL)
   )
   optionalArguments <- paste0(options, collapse = " ")
-  qualificationRunner <- paste0(file.path(qualificationRunnerFolder, "QualificationRunner.exe"))
+  qualificationRunner <- paste0('"', file.path(qualificationRunnerFolder, 'QualificationRunner.exe"'))
 
   arguments <- paste0(' -i "', qualificationPlanFile, '" -o "', outputFolder, '" ', "--norun ", optionalArguments)
   shell(paste0(qualificationRunner, arguments))
