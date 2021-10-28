@@ -146,7 +146,7 @@ Then, you can also `inactivate` the tasks corresponding to the re-run of the sim
 # Reload Configuration Plan
 workflow$updateConfigurationPlan(
   configurationPlanFile = newConfigurationPlanFile
-  )
+)
 
 # Inactivate simulations already performed
 workflow$simulate$inactivate()
@@ -156,3 +156,19 @@ workflow$calculatePKParameters$inactivate()
 workflow$runWorkflow()
 ```
 
+## Template
+
+A template R script for qualification workflows is available and can be found using the function `system.file("extdata", "qualification-workflow-template.R", package = "ospsuite.reportingengine")`.
+The content of the file is defined below.
+
+```{r template, echo=FALSE, comment=NA}
+cat(
+  readLines(
+    system.file(
+      "extdata", "qualification-workflow-template.R",
+      package = "ospsuite.reportingengine"
+    )
+  ),
+  sep = "\n"
+)
+```
