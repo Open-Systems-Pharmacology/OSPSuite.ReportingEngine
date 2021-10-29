@@ -39,3 +39,4 @@ A `TaskResults` object
 \description{
 Save task results within a `TaskResults` object
 }
+\keyword{internal}

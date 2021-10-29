@@ -13,4 +13,9 @@ StandardPlotTasks
 \description{
 Names of plot tasks performed by both `MeanModelWorkflow` and `PopulationWorkflow` objects
 }
+\examples{
+StandardPlotTasks$plotTimeProfilesAndResiduals
+StandardPlotTasks$plotPKParameters
+StandardPlotTasks$plotSensitivity
+}
 \keyword{datasets}

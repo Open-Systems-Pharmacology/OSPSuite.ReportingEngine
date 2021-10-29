@@ -17,3 +17,4 @@ Character of concatenated inputs
 \description{
 Concatenate inputs for dataSelection
 }
+\keyword{internal}

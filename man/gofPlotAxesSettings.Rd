@@ -13,4 +13,4 @@ gofPlotAxesSettings
 \description{
 Names of fields in configuration plane containing axes settings data for each GOF plot type
 }
-\keyword{datasets}
+\keyword{internal}

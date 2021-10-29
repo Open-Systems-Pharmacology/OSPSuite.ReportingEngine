@@ -17,3 +17,4 @@ TRUE if the path includes the extension
 \description{
 Check if the provided path has required extension
 }
+\keyword{internal}

@@ -4,8 +4,8 @@
 #' @param settings list of simulation settings
 #' @param logFolder folder where the logs are saved
 #' @return Simulation results for individual or population
-#' @export
 #' @import ospsuite
+#' @keywords internal
 simulateWorkflowModels <- function(structureSets,
                                    settings = NULL,
                                    logFolder = getwd()) {
@@ -45,8 +45,8 @@ simulateWorkflowModels <- function(structureSets,
 #' @param settings list of simulation settings
 #' @param logFolder folder where the logs are saved
 #' @return Simulation results for individual or population
-#' @export
 #' @import ospsuite
+#' @keywords internal
 simulateModelForPopulation <- function(structureSets,
                                        settings = NULL,
                                        logFolder = getwd()) {
@@ -139,8 +139,8 @@ simulateModelOnCore <- function(simulation,
 #' @param settings list of options to be passed to the function
 #' @param logFolder folder where the logs are saved
 #' @return List of simulation results for each simulation set
-#' @export
 #' @import ospsuite
+#' @keywords internal
 simulateModelParallel <- function(structureSets,
                                   settings = NULL,
                                   logFolder = getwd()) {
@@ -180,8 +180,8 @@ simulateModelParallel <- function(structureSets,
 #' @param settings list of options to be passed on the function
 #' @param logFolder folder where the logs are saved
 #' @return Simulation results for individual or population
-#' @export
 #' @import ospsuite
+#' @keywords internal
 simulateModel <- function(structureSet,
                           settings = NULL,
                           logFolder = getwd()) {
@@ -239,8 +239,8 @@ simulateModel <- function(structureSet,
 #' @param settings list of options to be passed on the function
 #' @param logFolder folder where the logs are saved
 #' @return Simulation results for population
-#' @export
 #' @import ospsuite
+#' @keywords internal
 runParallelPopulationSimulation <- function(structureSet,
                                             numberOfCores,
                                             settings,

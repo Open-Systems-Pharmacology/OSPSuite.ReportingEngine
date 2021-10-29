@@ -16,3 +16,6 @@ names of default parameters
 \description{
 Get names of default parameters in x axis of pk parameters plots.
 }
+\examples{
+getDefaultPkParametersXParameters(PopulationWorkflowTypes$pediatric)
+}

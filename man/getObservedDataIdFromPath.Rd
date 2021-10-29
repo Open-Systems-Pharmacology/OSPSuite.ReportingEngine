@@ -25,3 +25,4 @@ getObservedDataIdFromPath("Midazolam 600mg SD|ObservedData|Peripheral Venous Blo
 # > "Midazolam 600mg SD"
 }
 }
+\keyword{internal}

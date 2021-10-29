@@ -19,3 +19,4 @@ list with `plots` and `tables`
 \description{
 Plot time profile for qualification workflow
 }
+\keyword{internal}

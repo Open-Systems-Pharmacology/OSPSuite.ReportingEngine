@@ -17,3 +17,4 @@ Names of created appendices
 \description{
 Create the Sections output and their markdown content
 }
+\keyword{internal}

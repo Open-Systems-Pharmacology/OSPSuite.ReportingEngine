@@ -146,6 +146,10 @@ PopulationWorkflow <- R6::R6Class(
 #' @description List of population workflow available types
 #' @export
 #' @import ospsuite
+#' @examples 
+#' PopulationWorkflowTypes$pediatric
+#' PopulationWorkflowTypes$parallelComparison
+#' PopulationWorkflowTypes$ratioComparison
 PopulationWorkflowTypes <- ospsuite::enum(c(
   "pediatric",
   "parallelComparison",

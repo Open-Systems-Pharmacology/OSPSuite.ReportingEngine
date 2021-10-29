@@ -17,3 +17,4 @@ Character vector defining the `Workflow` object
 \description{
 Creates a character vector to be written in a workflow .R script defining `Workflow` object
 }
+\keyword{internal}

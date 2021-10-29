@@ -17,3 +17,4 @@ A character value used as caption for the time profile plot
 \description{
 Get display legend caption for time profile plot
 }
+\keyword{internal}

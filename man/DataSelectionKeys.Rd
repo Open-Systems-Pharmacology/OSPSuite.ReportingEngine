@@ -13,4 +13,8 @@ DataSelectionKeys
 \description{
 List of available short keys for observed data selection
 }
+\examples{
+DataSelectionKeys$NONE
+DataSelectionKeys$ALL
+}
 \keyword{datasets}

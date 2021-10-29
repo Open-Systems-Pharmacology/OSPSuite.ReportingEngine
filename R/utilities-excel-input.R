@@ -1,3 +1,6 @@
+#' @title StandardExcelSheetNames
+#' @description Enum defining the standard names for the Excel sheets of template
+#' @keywords internal
 StandardExcelSheetNames <- ospsuite::enum(c(
   "Documentation",
   "Workflow and Tasks",
@@ -157,6 +160,7 @@ getScriptDocumentation <- function(excelFile, colSep = "\t") {
 #' @param excelFile name of the Excel file from which the R script is created
 #' @param pkParametersSheet name of the Excel sheet that defines the `pkParameters` information
 #' @return Character vector defining `pkParameters` input of `Output` object
+#' @keywords internal
 getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
   pkParametersContent <- NULL
   pkParametersWarnings <- NULL
@@ -233,6 +237,7 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
 #' @param excelFile name of the Excel file from which the R script is created
 #' @param outputInfo list of information about `Output` object. Include sheetName, dataSelection and dataDisplayName
 #' @return Character vector defining the `Output` object
+#' @keywords internal
 getOutputContent <- function(excelFile, outputInfo) {
   outputContent <- NULL
   outputWarnings <- NULL
@@ -335,6 +340,7 @@ getOutputContent <- function(excelFile, outputInfo) {
 #' @param simulationTable Data.frame read from the Excel sheet "SimulationSets
 #' @param workflowMode Either `PopulationWorkflow` or `MeanModelWorkflow`
 #' @return Character vector defining the `SimulationSet` objects
+#' @keywords internal
 getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
   simulationSetContent <- NULL
   outputSheets <- NULL
@@ -458,6 +464,7 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
 #' @param workflowTable Data.frame read from the Excel sheet "Workflow and Tasks"
 #' @param excelFile name of the Excel file from which the R script is created
 #' @return Character vector defining the `Workflow` object
+#' @keywords internal
 getWorkflowContent <- function(workflowTable, excelFile) {
   workflowMode <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$`Workflow Mode`)
   workflowTypeContent <- NULL
@@ -655,6 +662,7 @@ UserDefPKParametersOptionalSettings <- list(
 #' @param simulationIndex Column to read after removing "Code Identifier" and "Description"
 #' @param codeId Line to read in the data.frame corresponding to a specific value of "Code Identifier"
 #' @return Information from a data.frame matching a certain `simulationIndex` column and `codeId` line
+#' @keywords internal
 getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
   validateIsOfType(workflowTable, "data.frame")
   validateIsInteger(simulationIndex)
@@ -710,6 +718,7 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
 #' @param outputSheet name of sheet defining an `Output` object
 #' @param simulationSetName name of simulation set
 #' @return Name of `Output` object
+#' @keywords internal
 getOutputNames <- function(excelFile, outputSheet, simulationSetName) {
   outputTable <- readxl::read_excel(excelFile, sheet = outputSheet)
   outputNames <- paste(simulationSetName, names(outputTable)[3:ncol(outputTable)], sep = ".")
@@ -723,6 +732,7 @@ getOutputNames <- function(excelFile, outputSheet, simulationSetName) {
 #' @param excelFile name of the Excel file from which the R script is created
 #' @param sensitivityParametersSheet name of sheet defining the parameters to vary
 #' @return Text of vector of paths to vary
+#' @keywords internal
 getSensitivityVariableParameterPaths <- function(excelFile, sensitivityParametersSheet) {
   sensitivityParametersTable <- readxl::read_excel(excelFile, sheet = sensitivityParametersSheet)
   sensitivityParametersContent <- paste0("c('", paste0(sensitivityParametersTable$Path, collapse = "', '"), "')")
@@ -754,6 +764,7 @@ getObservedMetaDataFile <- function(excelFile, observedMetaDataSheet, format = "
 #' @description Creates a character vector to be written in a workflow .R script updating the PKParameters objects
 #' @param pkParametersTable Data.frame read from the Excel sheet "PK Parameters"
 #' @return A list of script content, associated with its potential warnings and errors for updating the PKParameters objects
+#' @keywords internal
 getPKParametersContent <- function(pkParametersTable) {
   pkParametersContent <- NULL
   pkParametersWarnings <- NULL
@@ -799,6 +810,7 @@ getPKParametersContent <- function(pkParametersTable) {
 #' @description Output the SimulationSet object matching the appropriate workflow type
 #' @param workflowMode Either `PopulationWorkflow` or `MeanModelWorkflow`
 #' @return `PopulationSimulationSet` or `SimulationSet` as character
+#' @keywords internal
 getSimulationSetType <- function(workflowMode) {
   validateIsIncluded(workflowMode, c("MeanModelWorkflow", "PopulationWorkflow"))
   simulationType <- "SimulationSet"
@@ -814,6 +826,7 @@ getSimulationSetType <- function(workflowMode) {
 #' @param type Location type: either "SHEET" or "FILE"
 #' @param excelFile name of the Excel file from which the R script is created
 #' @return Character of location to provide
+#' @keywords internal
 getFileLocationFromType <- function(location, type, excelFile) {
   validateIsIncluded(type, c("SHEET", "FILE"))
   if (isIncluded(type, "SHEET")) {
@@ -833,6 +846,7 @@ getFileLocationFromType <- function(location, type, excelFile) {
 #' @param inputs Vector of inputs to concatenate
 #' @param sep Separator character corresponding to logical &
 #' @return Character of concatenated inputs
+#' @keywords internal
 concatenateDataSelection <- function(inputs, sep = ") & (") {
   validateIsString(inputs)
   # No data selection to concatenate
@@ -866,6 +880,7 @@ concatenateDataSelection <- function(inputs, sep = ") & (") {
 #' @param inputs Vector of inputs to concatenate
 #' @param sep Separator for display names
 #' @return Character of concatenated inputs
+#' @keywords internal
 concatenateDataDisplayName <- function(inputs, sep = " - ") {
   validateIsString(inputs)
   # Remove NAs
@@ -882,6 +897,7 @@ concatenateDataDisplayName <- function(inputs, sep = " - ") {
 #' @param workflowContent Character vector with content of the workflow file
 #' @param commentPattern Character starting a comment
 #' @return Workflow content without its comments
+#' @keywords internal
 removeCommentsFromWorkflowContent <- function(workflowContent, commentPattern = "#") {
   return(workflowContent[!grepl(commentPattern, workflowContent)])
 }
@@ -891,6 +907,7 @@ removeCommentsFromWorkflowContent <- function(workflowContent, commentPattern = 
 #' @description Creates a character vector to be written in a workflow .R script updating the PKParameters objects
 #' @param userDefPKParametersTable Data.frame read from the Excel sheet "PK Parameters"
 #' @return A list of script content, associated with its potential warnings and errors for updating the PKParameters objects
+#' @keywords internal
 getUserDefPKParametersContent <- function(userDefPKParametersTable) {
   userDefPKParametersContent <- NULL
   userDefPKParametersWarnings <- NULL

@@ -12,3 +12,6 @@ setDefaultStairstep(stairstep)
 \description{
 setDefaultStairstep
 }
+\examples{
+setDefaultStairstep(TRUE)
+}

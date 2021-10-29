@@ -19,3 +19,4 @@ pkAnalysis object
 \description{
 Calculate PK parameters from simulated time profiles
 }
+\keyword{internal}

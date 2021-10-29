@@ -4,7 +4,7 @@
 \alias{PkParameterInfo}
 \title{PkParameterInfo}
 \description{
-R6 class representing workflow selected PK parameter
+R6 class representing workflow selected PK parameter.
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

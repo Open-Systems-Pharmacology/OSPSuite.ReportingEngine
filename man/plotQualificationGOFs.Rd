@@ -15,3 +15,4 @@ list of qualification GOF ggplot objects
 \description{
 Plot observation vs prediction for qualification workflow
 }
+\keyword{internal}

@@ -15,3 +15,4 @@ getAxesSettings(axesSettingsFromConfigurationPlot)
 \description{
 Read axes settings for plots.
 }
+\keyword{internal}

@@ -30,3 +30,4 @@ List with `time`, `y` and `error` values
 \description{
 Get the time profile observed data in appropriate unit from the results from the observed data file
 }
+\keyword{internal}

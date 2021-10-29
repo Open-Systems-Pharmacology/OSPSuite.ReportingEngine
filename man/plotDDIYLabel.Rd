@@ -13,4 +13,4 @@ plotDDIYLabel
 \description{
 Labels for DDI plot Y-axis
 }
-\keyword{datasets}
+\keyword{internal}

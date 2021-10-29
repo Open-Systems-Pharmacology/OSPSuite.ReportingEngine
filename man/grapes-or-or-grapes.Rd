@@ -22,3 +22,4 @@ output rhs otherwise
 Shortkey checking if argument 1 is not null,
 output argument 1 if not null, or output argument 2 otherwise
 }
+\keyword{internal}

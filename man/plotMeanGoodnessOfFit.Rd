@@ -20,3 +20,4 @@ list with `plots`, `tables` and `residuals` objects to be saved
 Plot goodness of fit diagnostics including time profiles,
 observations vs predictions, residuals plots (residuals vs time, vs predictions, qq-plots and histogram)
 }
+\keyword{internal}

@@ -14,3 +14,4 @@ loadLibraryOnCores(libraryName, logFolder)
 \description{
 Send libraryName to core, load the library and check that it has been loaded successfully
 }
+\keyword{internal}

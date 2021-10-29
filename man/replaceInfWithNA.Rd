@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{replaceInfWithNA}
 \alias{replaceInfWithNA}
-\title{removeInf}
+\title{replaceInfWithNA}
 \usage{
 replaceInfWithNA(data, logFolder = getwd())
 }
@@ -15,5 +15,6 @@ replaceInfWithNA(data, logFolder = getwd())
 numeric vector
 }
 \description{
-removeInf
+replaceInfWithNA
 }
+\keyword{internal}

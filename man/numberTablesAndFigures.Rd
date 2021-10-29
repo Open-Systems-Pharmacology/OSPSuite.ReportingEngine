@@ -23,3 +23,4 @@ numberTablesAndFigures(
 \description{
 Reference tables and figures in a report
 }
+\keyword{internal}

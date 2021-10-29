@@ -19,3 +19,4 @@ A data.frame of aggregated data to display
 \description{
 Get summary statistics of output values
 }
+\keyword{internal}

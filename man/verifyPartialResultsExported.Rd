@@ -16,3 +16,4 @@ verifyPartialResultsExported(partialResultsExported, numberOfCores, logFolder)
 \description{
 Check that results from individual cores have been exported
 }
+\keyword{internal}

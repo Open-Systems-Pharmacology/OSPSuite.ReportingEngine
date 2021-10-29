@@ -15,3 +15,4 @@ tlfLinetype(configurationLinetype)
 \description{
 Translate value of `LineStyle` property from configuration plan into tlf `linetype`
 }
+\keyword{internal}

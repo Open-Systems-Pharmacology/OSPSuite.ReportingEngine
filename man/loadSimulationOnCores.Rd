@@ -14,3 +14,4 @@ loadSimulationOnCores(structureSet, logFolder)
 \description{
 Send structureSet to core, check its simulation has been loaded successfully
 }
+\keyword{internal}

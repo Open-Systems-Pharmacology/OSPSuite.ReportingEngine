@@ -16,3 +16,4 @@ addMarkdownToc(tocContent, fileName, logFolder = getwd())
 \description{
 Add table of content to a markdown file
 }
+\keyword{internal}

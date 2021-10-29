@@ -6,6 +6,7 @@
 \description{
 R6 class for TaskResults settings
 }
+\keyword{internal}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{

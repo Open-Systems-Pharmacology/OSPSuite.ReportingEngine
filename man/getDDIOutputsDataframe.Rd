@@ -15,3 +15,4 @@ A list containing data for generating DDI plots
 \description{
 Get a dataframe relating project, simulation, output, pk parameter, start time, end time for each DDI plot component
 }
+\keyword{internal}

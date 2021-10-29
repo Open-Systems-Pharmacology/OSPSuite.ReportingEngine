@@ -8,10 +8,10 @@
 #' @param xParameters list of parameters to be plotted along x axis
 #' @param yParameters list of parameters to be plotted along y axis
 #' @return list of plots and tables with summary of demography parameters
-#' @export
 #' @import ospsuite
 #' @import tlf
 #' @import ggplot2
+#' @keywords internal
 plotDemographyParameters <- function(structureSets,
                                      logFolder = getwd(),
                                      settings = NULL,
@@ -260,6 +260,9 @@ DemographyDefaultParameters <- c(ospsuite::StandardPath[c("Age", "Height", "Weig
 #' @param workflowType Name of workflow type.
 #' Use enum `PopulationWorkflowTypes` to get a list of available workflow types.
 #' @return names of default demography parameters
+#' @export
+#' @examples 
+#' getDefaultDemographyXParameters(PopulationWorkflowTypes$pediatric)
 getDefaultDemographyXParameters <- function(workflowType) {
   validateIsIncluded(workflowType, PopulationWorkflowTypes)
   if (workflowType %in% PopulationWorkflowTypes$pediatric) {

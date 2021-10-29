@@ -14,3 +14,4 @@ getIndividualSAResultsFileName(individualId, resultsFileName)
 \description{
 Function to build name of inidividual SA results file
 }
+\keyword{internal}

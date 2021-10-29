@@ -33,3 +33,4 @@ list of plots and tables with summary of PK parameters
 \description{
 Plot PK parameters box plots and tables
 }
+\keyword{internal}

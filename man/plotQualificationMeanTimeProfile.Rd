@@ -37,3 +37,4 @@ Mean time profile plot as a `ggplot` object
 \description{
 Plot mean time profile for qualification workflow
 }
+\keyword{internal}

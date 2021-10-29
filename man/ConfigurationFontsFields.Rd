@@ -14,4 +14,4 @@ ConfigurationFontsFields
 Enum defining possible fonts fields defined in configuration plan
 Note that some fields might not be used/converted by the current `opsuite.reportingengine` or `tlf` version (e.g. FontFamilyName)
 }
-\keyword{datasets}
+\keyword{internal}

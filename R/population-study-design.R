@@ -56,6 +56,7 @@ studyDesignTypeLine <- 3
 #' @param sourceExpressions study design expressions to be evaluated
 #' @param data population data as data.frame
 #' @import ospsuite
+#' @keywords internal
 updateTargetValues <- function(values, targetValues, sourceExpressions, data) {
   validateIsSameLength(targetValues, sourceExpressions)
   validateIsOfType(data, "data.frame")
@@ -73,6 +74,7 @@ updateTargetValues <- function(values, targetValues, sourceExpressions, data) {
 #' @description StudyDesign
 #' @field source expressions used on source data
 #' @field targets list of targets of expressions and associated values
+#' @keywords internal
 StudyDesign <- R6::R6Class(
   "StudyDesign",
   cloneable = FALSE,
@@ -112,6 +114,7 @@ StudyDesign <- R6::R6Class(
 #' @description StudyDesignTarget
 #' @field name path name of study design target
 #' @field values values assigned to study design target
+#' @keywords internal
 StudyDesignTarget <- R6::R6Class(
   "StudyDesign",
   cloneable = FALSE,
@@ -149,6 +152,7 @@ StudyDesignTarget <- R6::R6Class(
 #' @return vector of expressions assigning target values
 #' Must be the same length as target values
 #' @import utils
+#' @keywords internal
 mapStudyDesignSources <- function(data, population, simulation) {
   sourceFilter <- grepl("SOURCE", data[studyDesignTypeLine, ])
   validateIsPositive(sum(sourceFilter))
@@ -207,6 +211,7 @@ sourceTypeToExpressionType <- function(sourceType) {
 #' @param simulation `Simulation` object
 #' @return list of `StudyDesignTarget` objects
 #' @import utils
+#' @keywords internal
 mapStudyDesignTargets <- function(data, population, simulation) {
   targetFilter <- grepl("TARGET", data[studyDesignTypeLine, ])
   validateIsPositive(sum(targetFilter))

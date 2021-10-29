@@ -2,6 +2,7 @@
 #' @description Build dataframes and metadata for each DDI plot
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return  plotDDIdata, a list of lists of the form list(dataframe,metadata) specific to each DID plot
+#' @keywords internal
 getQualificationDDIPlotData <- function(configurationPlan) {
   plotDDIdata <- list()
   for (plotNumber in seq_along(configurationPlan$plots$DDIRatioPlots)) {
@@ -125,15 +126,12 @@ getQualificationDDIPlotData <- function(configurationPlan) {
   return(plotDDIdata)
 }
 
-
-
-
-
 #' @title buildQualificationDDIPredictedVsObserved
 #' @description Build dataframe for observation vs prediction
 #' @param dataframe data.frame
 #' @param metadata meta data on `data`
-#' @return dataframe for plotting goodness of fit of predictedVsObserved type
+#' @return data.frame for plotting goodness of fit of predictedVsObserved type
+#' @keywords internal
 buildQualificationDDIPredictedVsObserved <- function(dataframe,
                                                      metadata) {
   axesSettings <- metadata$axesSettings$predictedVsObserved
@@ -189,14 +187,12 @@ buildQualificationDDIPredictedVsObserved <- function(dataframe,
   return(list(ddiPlotDataframe = ddiPlotDataframe, aestheticsList = aestheticsList, axesSettings = axesSettings))
 }
 
-
-
-
-#' #' @title buildQualificationGOFResidualsVsObserved
-#' #' @description Build dataframe for residuals vs observed
-#' #' @param dataframe data.frame
-#' #' @param metadata meta data on `data`
-#' #' @return dataframe for plotting goodness of fit of residuals vs time type
+#' @title buildQualificationDDIResidualsVsObserved
+#' @description Build dataframe for residuals vs observed
+#' @param dataframe data.frame
+#' @param metadata meta data on `data`
+#' @return dataframe for plotting goodness of fit of residuals vs time type
+#' @keywords internal
 buildQualificationDDIResidualsVsObserved <- function(dataframe,
                                                      metadata) {
   axesSettings <- metadata$axesSettings$residualsVsObserved
@@ -258,14 +254,13 @@ buildQualificationDDIResidualsVsObserved <- function(dataframe,
   return(list(ddiPlotDataframe = ddiPlotDataframe, aestheticsList = aestheticsList, axesSettings = axesSettings))
 }
 
-
-
 #' @title generateDDIQualificationDDIPlot
 #' @description Plot observation vs prediction for qualification workflow
 #' @param data data.frame
 #' @return ggplot DDI plot object for DDI qualification workflow
 #' @import tlf
 #' @import ggplot2
+#' @keywords internal
 generateDDIQualificationDDIPlot <- function(data) {
   if (data$axesSettings$X$scaling == "Log") {
     xlabel <- bquote(log[10] * .(paste0(data$axesSettings$X$label)))
@@ -307,7 +302,10 @@ generateDDIQualificationDDIPlot <- function(data) {
 #' @title plotQualificationDDIs
 #' @description Plot observation vs prediction for DDI qualification workflow
 #' @param configurationPlan A `ConfigurationPlan` object
+#' @param logFolder Folder where logs are saved
+#' @param settings A `TaskSettings` object
 #' @return list of qualification DDI ggplot objects
+#' @keywords internal
 plotQualificationDDIs <- function(configurationPlan,
                                   logFolder = getwd(),
                                   settings) {
@@ -339,24 +337,28 @@ plotQualificationDDIs <- function(configurationPlan,
 }
 
 #' Names of fields in configuration plane containing axes settings data for each DDI plot type
+#' @keywords internal
 ddiPlotAxesSettings <- list(
   "predictedVsObserved" = "DDIRatioPlotsPredictedVsObserved",
   "residualsVsObserved" = "DDIRatioPlotsResidualsVsObserved"
 )
 
 #' Names of functions for extracting data for each DDI plot type
+#' @keywords internal
 buildDDIDataFrameFunctions <- list(
   "predictedVsObserved" = buildQualificationDDIPredictedVsObserved,
   "residualsVsObserved" = buildQualificationDDIResidualsVsObserved
 )
 
 #' Labels for DDI plot X-axis
+#' @keywords internal
 plotDDIXLabel <- list(
   "predictedVsObserved" = "Observed",
   "residualsVsObserved" = "Observed"
 )
 
 #' Labels for DDI plot Y-axis
+#' @keywords internal
 plotDDIYLabel <- list(
   "predictedVsObserved" = "Predicted",
   "residualsVsObserved" = "Residual"

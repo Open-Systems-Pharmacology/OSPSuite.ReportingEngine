@@ -14,3 +14,6 @@ setDefaultNumericFormat(digits = NULL, scientific = NULL)
 \description{
 Set default format for numeric values output in reports
 }
+\examples{
+setDefaultNumericFormat(digits = 2, scientific = TRUE)
+}

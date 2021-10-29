@@ -13,4 +13,9 @@ ApplicationRanges
 \description{
 Keys of reported ranges when simulation includes multiple applications
 }
+\examples{
+ApplicationRanges$total
+ApplicationRanges$firstApplication
+ApplicationRanges$lastApplication
+}
 \keyword{datasets}

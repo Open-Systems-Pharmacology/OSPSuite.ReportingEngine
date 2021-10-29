@@ -12,6 +12,7 @@ isSameLength <- function(...) {
 #'
 #' @return TRUE if the object or all objects inside the list have nbElements.
 #' Only the first level of the given list is considered.
+#' @keywords internal
 isOfLength <- function(object, nbElements) {
   return(length(object) == nbElements)
 }
@@ -30,6 +31,7 @@ validateIsOfLength <- function(object, nbElements) {
 #'
 #' @return TRUE if the object or all objects inside the list are of the given type.
 #' Only the first level of the given list is considered.
+#' @keywords internal
 isOfType <- function(object, type) {
   if (is.null(object)) {
     return(FALSE)
@@ -158,6 +160,7 @@ validateNoDuplicatedEntries <- function(x) {
 #' @param parentValues Vector of values
 #'
 #' @return TRUE if the values are inside the parent values.
+#' @keywords internal
 isIncluded <- function(values, parentValues) {
   if (is.null(values)) {
     return(FALSE)
@@ -245,6 +248,7 @@ fileExtension <- function(file) {
 #' @param extension extension of the file required after "."
 #'
 #' @return TRUE if the path includes the extension
+#' @keywords internal
 isFileExtension <- function(file, extension) {
   extension <- c(extension)
   file_ext <- fileExtension(file)
@@ -265,6 +269,7 @@ validateIsFileExtension <- function(path, extension, nullAllowed = FALSE) {
 #'
 #' @param message message to display and then log
 #' @param logFolderPath path where logs are saved
+#' @keywords internal
 logErrorThenStop <- function(message, logFolderPath = getwd()) {
   logWorkflow(
     message = message,
@@ -277,6 +282,7 @@ logErrorThenStop <- function(message, logFolderPath = getwd()) {
 #' Log the error with a message
 #' @param message message to display and then log
 #' @param logFolderPath path where logs are saved
+#' @keywords internal
 logErrorMessage <- function(message, logFolderPath = getwd()) {
   logWorkflow(
     message = message,
@@ -295,6 +301,7 @@ logErrorMessage <- function(message, logFolderPath = getwd()) {
 #' @param observedMetaDataFile Path of meta data file on observed dataset (also called dictionary)
 #' @param observedDataFile Path of observed dataset
 #' @param outputs list or array of `Output` objects
+#' @keywords internal
 validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile, outputs) {
   # Check that dictionary is provided
   if (isOfLength(observedMetaDataFile, 0)) {
@@ -346,6 +353,7 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile,
 #' @param values Vector of dimensions
 #' @return TRUE if the values are included all available dimensions
 #' @import ospsuite
+#' @keywords internal
 isDimension <- function(values) {
   allAvailableDimensions <- ospsuite::allAvailableDimensions()
   return(isIncluded(c(values), allAvailableDimensions))

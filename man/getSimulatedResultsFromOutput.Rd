@@ -29,3 +29,4 @@ list of data and metaData
 \description{
 Get simulated data from an Output object
 }
+\keyword{internal}

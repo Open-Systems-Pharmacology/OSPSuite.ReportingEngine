@@ -12,8 +12,9 @@ buildQualificationDDIPredictedVsObserved(dataframe, metadata)
 \item{metadata}{meta data on `data`}
 }
 \value{
-dataframe for plotting goodness of fit of predictedVsObserved type
+data.frame for plotting goodness of fit of predictedVsObserved type
 }
 \description{
 Build dataframe for observation vs prediction
 }
+\keyword{internal}

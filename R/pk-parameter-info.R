@@ -1,5 +1,5 @@
 #' @title PkParameterInfo
-#' @description R6 class representing workflow selected PK parameter
+#' @description R6 class representing workflow selected PK parameter.
 #' @field pkParameter PK Parameter name for the simulation (e.g. `AUC_inf`)
 #' @field displayName display name for `pkParameter`
 #' @field displayUnit display unit for `pkParameter`

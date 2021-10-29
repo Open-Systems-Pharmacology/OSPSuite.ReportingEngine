@@ -14,3 +14,4 @@ logErrorMessage(message, logFolderPath = getwd())
 \description{
 Log the error with a message
 }
+\keyword{internal}

@@ -13,4 +13,9 @@ PopulationWorkflowTypes
 \description{
 List of population workflow available types
 }
+\examples{
+PopulationWorkflowTypes$pediatric
+PopulationWorkflowTypes$parallelComparison
+PopulationWorkflowTypes$ratioComparison
+}
 \keyword{datasets}

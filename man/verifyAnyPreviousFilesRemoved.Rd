@@ -14,3 +14,4 @@ verifyAnyPreviousFilesRemoved(anyPreviousPartialResultsRemoved, logFolder)
 \description{
 Check that any existing results from individual cores have been removed
 }
+\keyword{internal}

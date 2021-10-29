@@ -14,3 +14,4 @@ verifySensitivityAnalysisRunSuccessful(sensitivityRunSuccess, logFolder)
 \description{
 Check that all cores ran sensitivity analysis successfully
 }
+\keyword{internal}

@@ -15,3 +15,4 @@ tlfShape(configurationShape)
 \description{
 Translate value of `Symbol` property from configuration plan into tlf `shape`
 }
+\keyword{internal}

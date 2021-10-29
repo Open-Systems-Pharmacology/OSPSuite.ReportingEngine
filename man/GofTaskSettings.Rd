@@ -6,6 +6,7 @@
 \description{
 R6 class defining properties of time profiles and residuals plot task settings
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[ospsuite.reportingengine:TaskSettings]{ospsuite.reportingengine::TaskSettings}} -> \code{GofTaskSettings}
 }

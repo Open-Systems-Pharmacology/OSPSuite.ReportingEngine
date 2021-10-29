@@ -13,4 +13,4 @@ buildGOFDataFrameFunctions
 \description{
 Names of functions for extracting data for each GOF plot type
 }
-\keyword{datasets}
+\keyword{internal}

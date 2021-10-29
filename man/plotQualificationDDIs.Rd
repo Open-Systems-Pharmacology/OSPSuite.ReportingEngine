@@ -8,6 +8,10 @@ plotQualificationDDIs(configurationPlan, logFolder = getwd(), settings)
 }
 \arguments{
 \item{configurationPlan}{A `ConfigurationPlan` object}
+
+\item{logFolder}{Folder where logs are saved}
+
+\item{settings}{A `TaskSettings` object}
 }
 \value{
 list of qualification DDI ggplot objects
@@ -15,3 +19,4 @@ list of qualification DDI ggplot objects
 \description{
 Plot observation vs prediction for DDI qualification workflow
 }
+\keyword{internal}
