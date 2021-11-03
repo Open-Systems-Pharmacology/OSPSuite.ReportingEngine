@@ -15,3 +15,4 @@ tlfScale(configurationScale)
 \description{
 Translate value of `Scaling` property from configuration plan into tlf `scale`
 }
+\keyword{internal}

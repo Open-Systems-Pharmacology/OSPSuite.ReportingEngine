@@ -35,3 +35,4 @@ A `ggplot` object updated with new displayed statistic
 \description{
 Add summary statistics to a time profile plot from configuration plan
 }
+\keyword{internal}

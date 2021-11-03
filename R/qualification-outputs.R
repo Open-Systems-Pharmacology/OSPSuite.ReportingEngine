@@ -3,6 +3,7 @@
 #' @param simulation path of the output folder created or used by the Workflow.
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return A dataframe of project, simulation, output paths and (if applicable) pk parameters and start and end times of interval over which the pk parameter is evaluated
+#' @keywords internal
 getOutputsFromConfigurationPlan <- function(configurationPlan) {
   outputsTimeProfile <- getTimeProfileOutputsDataframe(configurationPlan)
   outputsComparisonTimeProfile <- getComparisonTimeProfileOutputsDataframe(configurationPlan)
@@ -19,6 +20,7 @@ getOutputsFromConfigurationPlan <- function(configurationPlan) {
 #' @description Get a dataframe relating project, simulation and output path for each time profile plot component
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return A dataframe containing data for generating time profile plots
+#' @keywords internal
 getTimeProfileOutputsDataframe <- function(configurationPlan) {
   timeProfileOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$TimeProfile) {
@@ -49,6 +51,7 @@ getTimeProfileOutputsDataframe <- function(configurationPlan) {
 #' @description Get a dataframe relating project, simulation and output path for each comparison time profile plot
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return A dataframe containing data for generating time profile plots
+#' @keywords internal
 getComparisonTimeProfileOutputsDataframe <- function(configurationPlan) {
   comparisonTimeProfileOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$ComparisonTimeProfilePlots) {
@@ -72,6 +75,7 @@ getComparisonTimeProfileOutputsDataframe <- function(configurationPlan) {
 #' @description Get a dataframe relating project, simulation and output path for each GOF plot component
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return A dataframe containing data for generating GOF plots
+#' @keywords internal
 getGOFOutputsDataframe <- function(configurationPlan) {
   gofOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$GOFMergedPlots) {
@@ -102,6 +106,7 @@ getGOFOutputsDataframe <- function(configurationPlan) {
 #' @description Get a dataframe relating project, simulation, output, pk parameter, start time, end time for each DDI plot component
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return A list containing data for generating DDI plots
+#' @keywords internal
 getDDIOutputsDataframe <- function(configurationPlan) {
   ddiOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$DDIRatioPlots) {
@@ -163,6 +168,7 @@ getDDIOutputsDataframe <- function(configurationPlan) {
 #' @description Get a dataframe relating project, simulation, output path and pk parameter for each PK ratio plot
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return A list containing data for generating DDI plots
+#' @keywords internal
 getPKRatioOutputsDataframe <- function(configurationPlan) {
   pkRatioOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$PKRatioPlots) {
@@ -206,6 +212,7 @@ getPKRatioOutputsDataframe <- function(configurationPlan) {
 #' @param startTime the starting time of the interval over which the PK parameter is calculated (from the qualification `ConfigurationPlan`)
 #' @param endTime the ending time of the interval over which the PK parameter is calculated (from the qualification `ConfigurationPlan`)
 #' @return String `pkParameterName`
+#' @keywords internal
 addNewPkParameter <- function(pkParameter, startTime, endTime) {
   pkParameterName <- generateDDIPlotPKParameterName(pkParameter, startTime, endTime)
   
@@ -228,23 +235,13 @@ addNewPkParameter <- function(pkParameter, startTime, endTime) {
   return(pkParameterName)
 }
 
-pkDictionaryQualificationOSP <- list(
-  AUC = "AUC_tEnd",
-  CMAX = "C_max",
-  CL = "CL"
-)
-
-ddiPKRatioColumnName <- list(
-  AUC = "AUCR Avg",
-  CMAX = "CmaxR Avg"
-)
-
 #' @title generateDDIPlotPKParameterName
 #' @description Generate name for a PK parameter calculated between a start and end time
 #' @param pkParameter the name of the PK parameter from the qualification `ConfigurationPlan`
 #' @param startTime the starting time of the interval over which the PK parameter is calculated (from the qualification `ConfigurationPlan`)
 #' @param endTime the ending time of the interval over which the PK parameter is calculated (from the qualification `ConfigurationPlan`)
 #' @return String `pkParameterName`
+#' @keywords internal
 generateDDIPlotPKParameterName <- function(pkParameter, startTime, endTime) {
   validateIsIncluded(values = pkParameter, parentValues = names(pkDictionaryQualificationOSP))
   standardPKParameter <- pkDictionaryQualificationOSP[[pkParameter]]
@@ -253,3 +250,18 @@ generateDDIPlotPKParameterName <- function(pkParameter, startTime, endTime) {
   pkParameterName <- ifnotnull(endTime, paste0(pkParameterName, "_tEndTime_", endTime), pkParameterName)
   return(pkParameterName)
 }
+
+#' Dictionary for `ospsuite` PK parameters defined by Configuration Plan
+#' @keywords internal
+pkDictionaryQualificationOSP <- list(
+  AUC = "AUC_tEnd",
+  CMAX = "C_max",
+  CL = "CL"
+)
+
+#' Column names to check in observed data based on Configuration Plan PK Parameter
+#' @keywords internal
+ddiPKRatioColumnName <- list(
+  AUC = "AUCR Avg",
+  CMAX = "CmaxR Avg"
+)

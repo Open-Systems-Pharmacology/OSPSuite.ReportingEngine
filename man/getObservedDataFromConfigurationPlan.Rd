@@ -23,3 +23,4 @@ list of including data and metaData to perform time profile plot
 \description{
 Get selected observed data from a `ConfigurationPlan` object
 }
+\keyword{internal}

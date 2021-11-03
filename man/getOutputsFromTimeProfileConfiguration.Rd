@@ -15,3 +15,4 @@ A vector of output paths that are to be used in the time profile plot descriptor
 \description{
 Get a vector of output paths that are to be used in a time profile plot
 }
+\keyword{internal}

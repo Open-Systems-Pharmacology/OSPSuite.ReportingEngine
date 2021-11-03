@@ -78,7 +78,7 @@ A new `PopulationPlotTask` object
 \if{html}{\out{<a id="method-saveResults"></a>}}
 \if{latex}{\out{\hypertarget{method-saveResults}{}}}
 \subsection{Method \code{saveResults()}}{
-Save results from task run.
+Save the task results
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationPlotTask$saveResults(taskResults)}\if{html}{\out{</div>}}
 }
@@ -87,9 +87,8 @@ Save results from task run.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{taskResults}}{list of results from task run.
-Results contains at least 2 fields: `plots` and `tables`}
-
-\item{\code{self$fileName}}{name of report}
+Currently, results contains at least 2 fields: `plots` and `tables`
+They are to be deprecated and replaced using `TaskResults` objects}
 }
 \if{html}{\out{</div>}}
 }

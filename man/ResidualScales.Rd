@@ -13,4 +13,8 @@ ResidualScales
 \description{
 List of available scales for calculation of residuals
 }
+\examples{
+ResidualScales$Linear
+ResidualScales$Logarithmic
+}
 \keyword{datasets}

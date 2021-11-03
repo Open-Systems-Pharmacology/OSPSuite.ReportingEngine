@@ -16,3 +16,7 @@ addTextChunk(fileName, text, logFolder = getwd())
 \description{
 Add a text chunk to a .md document
 }
+\examples{
+resetReport("report.md")
+addTextChunk(fileName = "report.md", text = "new text")
+}

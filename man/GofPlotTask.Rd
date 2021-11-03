@@ -36,18 +36,19 @@ R6 class for GofPlotTask settings
 \if{html}{\out{<a id="method-saveResults"></a>}}
 \if{latex}{\out{\hypertarget{method-saveResults}{}}}
 \subsection{Method \code{saveResults()}}{
-Save results from task run.
+Save the task results related to a `structureSet`.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{GofPlotTask$saveResults(set, taskResults)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{GofPlotTask$saveResults(structureSet, taskResults)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{set}}{R6 class `SimulationStructure`}
+\item{\code{structureSet}}{A `SimulationStructure` object defining the properties of a simulation set}
 
 \item{\code{taskResults}}{list of results from task run.
-Results contains at least 2 fields: `plots` and `tables`}
+Currently, results contains at least 2 fields: `plots` and `tables`
+They are to be deprecated and replaced using `TaskResults` objects}
 }
 \if{html}{\out{</div>}}
 }
@@ -56,7 +57,7 @@ Results contains at least 2 fields: `plots` and `tables`}
 \if{html}{\out{<a id="method-runTask"></a>}}
 \if{latex}{\out{\hypertarget{method-runTask}{}}}
 \subsection{Method \code{runTask()}}{
-Run task and save its output
+Run task and save its output results
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{GofPlotTask$runTask(structureSets)}\if{html}{\out{</div>}}
 }
@@ -64,9 +65,7 @@ Run task and save its output
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{structureSets}}{list of `SimulationStructure` R6 class}
-
-\item{\code{self$fileName}}{name of report file}
+\item{\code{structureSets}}{list of `SimulationStructure` objects}
 }
 \if{html}{\out{</div>}}
 }

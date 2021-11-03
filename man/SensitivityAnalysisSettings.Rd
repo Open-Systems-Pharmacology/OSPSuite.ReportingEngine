@@ -6,6 +6,7 @@
 \description{
 R6 class for Population Sensitivity Analysis Settings
 }
+\keyword{internal}
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{

@@ -19,3 +19,4 @@ Character of location to provide
 \description{
 Get the right path text and copy the sheet content as a file if type is SHEET
 }
+\keyword{internal}

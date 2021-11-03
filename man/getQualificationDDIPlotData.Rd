@@ -15,3 +15,4 @@ plotDDIdata, a list of lists of the form list(dataframe,metadata) specific to ea
 \description{
 Build dataframes and metadata for each DDI plot
 }
+\keyword{internal}

@@ -13,4 +13,4 @@ ConfigurationPlotSettings
 \description{
 Enum defining possible plot settings fields defined in configuration plan
 }
-\keyword{datasets}
+\keyword{internal}

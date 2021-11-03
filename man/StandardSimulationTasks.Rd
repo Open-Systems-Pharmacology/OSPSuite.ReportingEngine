@@ -13,4 +13,9 @@ StandardSimulationTasks
 \description{
 Names of simulation tasks performed by both `MeanModelWorkflow` and `PopulationWorkflow` objects
 }
+\examples{
+StandardSimulationTasks$simulate
+StandardSimulationTasks$calculatePKParameters
+StandardSimulationTasks$calculateSensitivity
+}
 \keyword{datasets}

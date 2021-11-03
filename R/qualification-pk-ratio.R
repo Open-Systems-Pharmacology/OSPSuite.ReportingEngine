@@ -4,9 +4,9 @@
 #' @param logFolder folder where the logs are saved
 #' @param settings settings for the task
 #' @return list with `plots` and `tables`
-#' @export
 #' @import tlf
 #' @import ospsuite
+#' @keywords internal
 plotQualificationPKRatio <- function(configurationPlan,
                                      logFolder = getwd(),
                                      settings) {
@@ -70,6 +70,7 @@ plotQualificationPKRatio <- function(configurationPlan,
 #' @param data data.frame with PK Ratios
 #' @param metaData metaData with units and dimension for labeling the table header
 #' @return A data.frame
+#' @keywords internal
 getQualificationPKRatioGMFE <- function(pkParameterNames, data) {
   gmfe <- sapply(pkParameterNames, FUN = function(pkParameterName) {
     calculateGMFE(data[, paste0("obs", pkParameterName)], data[, paste0("pred", pkParameterName)])
@@ -89,6 +90,7 @@ getQualificationPKRatioGMFE <- function(pkParameterNames, data) {
 #' @param data data.frame with PK Ratios
 #' @param metaData metaData with units and dimension for labeling the table header
 #' @return A data.frame
+#' @keywords internal
 getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData) {
   # Prepare data, dataMapping and plotCOnfiguration to follow tlf nomenclature
   data$Groups <- metaData$caption
@@ -112,6 +114,7 @@ getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData) {
 #' @param metaData metaData with units and dimension for labeling the table header
 #' @param axesProperties list of axes properties obtained from `getAxesProperties`
 #' @return A ggplot object
+#' @keywords internal
 getQualificationPKRatioPlot <- function(pkParameterName, data, metaData, axesProperties) {
   # Prepare data, dataMapping and plotCOnfiguration to follow tlf nomenclature
   data$Groups <- metaData$caption
@@ -146,6 +149,7 @@ getQualificationPKRatioPlot <- function(pkParameterName, data, metaData, axesPro
 #' @param data data.frame with PK Ratios
 #' @param metaData metaData with units and dimension for labeling the table header
 #' @return A data.frame with correct numeric format
+#' @keywords internal
 getQualificationPKRatioTable <- function(data, metaData) {
   # Update names of variables
   metaData <- metaData[sapply(metaData, function(metaDataVariable) {
@@ -166,6 +170,7 @@ getQualificationPKRatioTable <- function(data, metaData) {
 #' @return list with `data` and `metaData`
 #' @import tlf
 #' @import ospsuite
+#' @keywords internal
 getQualificationPKRatioData <- function(pkRatioPlan, configurationPlan, logFolder) {
   # Get PK parameters from new or deprecated method
   pkParameterNames <- pkRatioPlan$PKParameters %||% ospsuite::toPathArray(pkRatioPlan$PKParameter)
@@ -211,6 +216,7 @@ getQualificationPKRatioData <- function(pkRatioPlan, configurationPlan, logFolde
 #' @return list with `data` and `metaData`
 #' @import tlf
 #' @import ospsuite
+#' @keywords internal
 getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configurationPlan, logFolder) {
   # Load required inputs
   simulation <- ospsuite::loadSimulation(

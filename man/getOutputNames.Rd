@@ -19,3 +19,4 @@ Name of `Output` object
 \description{
 Get the names of `Output` objets
 }
+\keyword{internal}

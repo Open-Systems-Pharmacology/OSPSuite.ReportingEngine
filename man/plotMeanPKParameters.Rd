@@ -19,3 +19,4 @@ data.frame with calculated PK parameters for the simulation set
 \description{
 Plot PK parameters table
 }
+\keyword{internal}

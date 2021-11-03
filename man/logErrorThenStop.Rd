@@ -14,3 +14,4 @@ logErrorThenStop(message, logFolderPath = getwd())
 \description{
 Log the error with a message and then stop, displaying same message.
 }
+\keyword{internal}

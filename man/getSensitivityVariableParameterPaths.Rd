@@ -17,3 +17,4 @@ Text of vector of paths to vary
 \description{
 Get the variable paths for sensitivity analysis settings
 }
+\keyword{internal}

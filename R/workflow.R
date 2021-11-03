@@ -8,6 +8,7 @@
 #' @field userDefinedTasks List of user-defined tasks (to update with loadUserDefinedTask)
 #' @import tlf
 #' @import ospsuite
+#' @keywords internal
 Workflow <- R6::R6Class(
   "Workflow",
   public = list(

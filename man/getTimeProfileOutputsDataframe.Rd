@@ -15,3 +15,4 @@ A dataframe containing data for generating time profile plots
 \description{
 Get a dataframe relating project, simulation and output path for each time profile plot component
 }
+\keyword{internal}

@@ -26,3 +26,7 @@ setDefaultPlotFormat(
 \description{
 Set default plot format to be exported by reporting engine
 }
+\examples{
+setDefaultPlotFormat(format = "pdf")
+setDefaultPlotFormat(width = 16, height = 9, units = "cm", dpi = 300)
+}

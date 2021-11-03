@@ -2,20 +2,24 @@
 
 #' @title ConfigurationPlots
 #' @description Enum defining possible plots defined in configuration plan
+#' @keywords internal
 ConfigurationPlots <- ospsuite::enum(c("TimeProfile", "GOFMergedPlots", "ComparisonTimeProfilePlots", "PKRatioPlots", "DDIRatioPlots"))
 
 #' @title ConfigurationPlotSettings
 #' @description Enum defining possible plot settings fields defined in configuration plan
+#' @keywords internal
 ConfigurationPlotSettings <- ospsuite::enum(c("ChartWidth", "ChartHeight", "Fonts"))
 
 #' @title ConfigurationFontsFields
 #' @description Enum defining possible fonts fields defined in configuration plan
 #' Note that some fields might not be used/converted by the current `opsuite.reportingengine` or `tlf` version (e.g. FontFamilyName)
+#' @keywords internal
 ConfigurationFontsFields <- c("AxisSize", "LegendSize", "OriginSize", "FontFamilyName", "WatermarkSize")
 
 #' @title ConfigurationScales
 #' @description List defining scale following tlf nomenclature from a Scaling field of configuration plan
 #' @import tlf
+#' @keywords internal
 ConfigurationScales <- list(
   linear = tlf::Scaling$lin,
   log = tlf::Scaling$log
@@ -24,6 +28,7 @@ ConfigurationScales <- list(
 #' @title ConfigurationShapes
 #' @description List defining shape following tlf nomenclature from a Symbol field of configuration plan
 #' @import tlf
+#' @keywords internal
 ConfigurationShapes <- list(
   none = tlf::Shapes$blank,
   circle = tlf::Shapes$circle,
@@ -38,6 +43,7 @@ ConfigurationShapes <- list(
 #' @title ConfigurationLinetypes
 #' @description List defining linetype following tlf nomenclature from a LineStyle field of configuration plan
 #' @import tlf
+#' @keywords internal
 ConfigurationLinetypes <- list(
   none = tlf::Linetypes$blank,
   solid = tlf::Linetypes$solid,
@@ -50,6 +56,7 @@ ConfigurationLinetypes <- list(
 #' @param axesSettings list of axes properties defined in `Axes` field of configuration plan
 #' @return A list of properties for axes identified for `x`, `y` and `y2` axes.
 #' The identified properties are directly compatible with `tlf` package nomenclature
+#' @keywords internal
 getAxesProperties <- function(axesSettings) {
   # Hanlde when properties are left undefined globally or locally
   if (isOfLength(axesSettings, 0)) {
@@ -95,6 +102,7 @@ getAxesProperties <- function(axesSettings) {
 #' @param axesProperties list of axes properties obtained from `getAxesForTimeProfiles`
 #' @return A ggplot object
 #' @import tlf
+#' @keywords internal
 updatePlotAxes <- function(plotObject, axesProperties) {
   plotObject <- tlf::setPlotLabels(plotObject,
     xlabel = tlf::getLabelWithUnit(axesProperties$x$dimension, axesProperties$x$unit),
@@ -116,6 +124,7 @@ updatePlotAxes <- function(plotObject, axesProperties) {
 #' @param configurationLinetype Value of the configuration plan plot property
 #' @return `linetype` values that follows `tlf` package nomenclature
 #' @import tlf
+#' @keywords internal
 tlfLinetype <- function(configurationLinetype) {
   # Unknown or NULL value will translate as NULL
   # which will lead to use default behaviour
@@ -131,6 +140,7 @@ tlfLinetype <- function(configurationLinetype) {
 #' @param configurationShape Value of the configuration plan plot property
 #' @return `shape` values that follows `tlf` package nomenclature
 #' @import tlf
+#' @keywords internal
 tlfShape <- function(configurationShape) {
   # Unknown or NULL value will translate as NULL
   # which will lead to use default behaviour
@@ -146,6 +156,7 @@ tlfShape <- function(configurationShape) {
 #' @param configurationScale Value of the configuration plan plot property
 #' @return `scale` values that follows `tlf` package nomenclature
 #' @import tlf
+#' @keywords internal
 tlfScale <- function(configurationScale) {
   # Unknown or NULL value will translate as NULL
   # which will lead to use default behaviour
@@ -171,6 +182,7 @@ tlfScale <- function(configurationScale) {
 #' getCompoundNameFromPath("Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc")
 #' # > "Rifampin"
 #' }
+#' @keywords internal
 getCompoundNameFromPath <- function(path) {
   pathArray <- ospsuite::toPathArray(path)
   # As shown in the doc examples, pathArray is assumed to include the compound name as before the last value
@@ -184,6 +196,7 @@ getCompoundNameFromPath <- function(path) {
 #' @param compoundName Name of a compound e.g. "Midazolam"
 #' @param simulation A `Simulation` object
 #' @return molecular weight in base unit or NA if not found
+#' @export
 getMolWeightForCompound <- function(compoundName, simulation) {
   # In the current version, getAllMoleculePathsIn is faster and lighter than getAllMoleculesMatching
   # since only a path name for the molecule is necessary

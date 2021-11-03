@@ -15,3 +15,4 @@ getSimulationSetType(workflowMode)
 \description{
 Output the SimulationSet object matching the appropriate workflow type
 }
+\keyword{internal}

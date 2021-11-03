@@ -32,3 +32,4 @@ list of data and metaData
 \description{
 Get simulated population data from an Output object
 }
+\keyword{internal}

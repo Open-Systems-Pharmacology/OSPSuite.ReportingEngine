@@ -11,7 +11,7 @@ parseVariableToObject(objectName, variableName, keepIfNull = FALSE)
 
 \item{variableName}{Name of the variable and field of `objectName`}
 
-\item{keepIfNull}{logical `objectName$variableName <- variableName %||% objectName$variableName`}
+\item{keepIfNull}{logical `objectName$variableName <- variableName \%||\% objectName$variableName`}
 }
 \value{
 An expression to `eval()`
@@ -19,3 +19,4 @@ An expression to `eval()`
 \description{
 Create an expression of type `objectName$variableName <- variableName`
 }
+\keyword{internal}

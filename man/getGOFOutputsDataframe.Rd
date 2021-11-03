@@ -15,3 +15,4 @@ A dataframe containing data for generating GOF plots
 \description{
 Get a dataframe relating project, simulation and output path for each GOF plot component
 }
+\keyword{internal}

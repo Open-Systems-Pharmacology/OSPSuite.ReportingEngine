@@ -15,3 +15,4 @@ If `dimension` is `Concentration (mass)` or `Mass`, then return `Concentration (
 \description{
 Function to map `Concentration (mass)` or `Mass` dimensions to `Concentration (molar)` and `Amount` respectively.
 }
+\keyword{internal}

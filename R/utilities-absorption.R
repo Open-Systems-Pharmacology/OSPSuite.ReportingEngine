@@ -5,10 +5,10 @@
 #' @param settings Options to be defined
 #' (e.g. plotConfigurations list of `PlotConfiguration` objects)
 #' @return list of `ggplot` objects
-#' @export
 #' @import tlf
 #' @import ospsuite
 #' @import utils
+#' @keywords internal
 plotMeanAbsorption <- function(structureSet,
                                logFolder = getwd(),
                                settings = NULL) {

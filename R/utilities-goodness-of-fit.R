@@ -5,11 +5,11 @@
 #' @param logFolder folder where the logs are saved
 #' @param settings List of settings such as `PlotConfiguration` R6 class objects for each goodness of fit plot
 #' @return list with `plots`, `tables` and `residuals` objects to be saved
-#' @export
 #' @import tlf
 #' @import ospsuite
 #' @import utils
 #' @import ggplot2
+#' @keywords internal
 plotMeanGoodnessOfFit <- function(structureSet,
                                   logFolder = getwd(),
                                   settings = NULL) {
@@ -123,6 +123,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
 #' @param molWeight Molar weight for unit conversion of dependent variable
 #' @param simulationSet `SimulationSet` object
 #' @return list of data and metaData
+#' @keywords internal
 getSimulatedResultsFromOutput <- function(simulationPathResults, output, simulationQuantity, molWeight, simulationSet) {
   outputConcentration <- simulationPathResults$data[, output$path]
   if (!isOfLength(output$displayUnit, 0)) {
@@ -211,11 +212,11 @@ getResiduals <- function(observedData,
 #' @param logFolder folder where the logs are saved
 #' @param settings List of settings such as `PlotConfiguration` R6 class objects for each goodness of fit plot
 #' @return list with `plots`, `tables` and `residuals` objects to be saved
-#' @export
 #' @import tlf
 #' @import ospsuite
 #' @import utils
 #' @import ggplot2
+#' @keywords internal
 plotPopulationGoodnessOfFit <- function(structureSet,
                                         logFolder = getwd(),
                                         settings = NULL) {
@@ -337,6 +338,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
 #' @param simulationSet `SimulationSet` object
 #' @param settings TaskSetting object
 #' @return list of data and metaData
+#' @keywords internal
 getPopulationResultsFromOutput <- function(simulationPathResults, output, simulationQuantity, molWeight, simulationSet, settings = NULL) {
   aggregateNames <- c("mean", "median", "lowPerc", "highPerc")
   aggregateFunctions <- c(mean, median, AggregationConfiguration$functions$ymin, AggregationConfiguration$functions$ymax)

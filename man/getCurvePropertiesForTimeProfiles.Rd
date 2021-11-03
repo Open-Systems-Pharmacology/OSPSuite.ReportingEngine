@@ -34,3 +34,4 @@ A list of data and properties to be plotted and that follows `tlf` package nomen
 \description{
 Identify and convert properties from `Curves` field of configuration plan
 }
+\keyword{internal}

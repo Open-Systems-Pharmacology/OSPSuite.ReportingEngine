@@ -15,3 +15,4 @@ A list containing data for generating DDI plots
 \description{
 Get a dataframe relating project, simulation, output path and pk parameter for each PK ratio plot
 }
+\keyword{internal}

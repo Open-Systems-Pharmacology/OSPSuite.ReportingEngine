@@ -29,3 +29,4 @@ list of data.frame and its metaData including the values of PK parameters specif
 \description{
 Get the values of PK parameters specified by an `Output` object from a data.frame
 }
+\keyword{internal}

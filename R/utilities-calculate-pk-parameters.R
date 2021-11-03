@@ -4,8 +4,8 @@
 #' @param settings list of options to be passed on the function
 #' @param logFolder folder where the logs are saved
 #' @return pkAnalysis object
-#' @export
 #' @import ospsuite
+#' @keywords internal
 calculatePKParameters <- function(structureSet,
                                   settings = NULL,
                                   logFolder = getwd()) {
@@ -39,8 +39,8 @@ calculatePKParameters <- function(structureSet,
 #' @param logFolder folder where the logs are saved
 #' @param settings list of settings for the output table/plot
 #' @return data.frame with calculated PK parameters for the simulation set
-#' @export
 #' @import ospsuite
+#' @keywords internal
 plotMeanPKParameters <- function(structureSet,
                                  logFolder = getwd(),
                                  settings = NULL) {
@@ -125,10 +125,10 @@ getMeanPkAnalysesFromOuptut <- function(data, output, molWeight = NULL) {
 #' @param xParameters list of parameters to be plotted along x axis
 #' @param yParameters list of parameters to be plotted along y axis
 #' @return list of plots and tables with summary of PK parameters
-#' @export
 #' @import ospsuite
 #' @import tlf
 #' @import ggplot2
+#' @keywords internal
 plotPopulationPKParameters <- function(structureSets,
                                        logFolder = getwd(),
                                        settings = NULL,
@@ -555,7 +555,7 @@ vpcParameterPlot <- function(data,
 #' @description Get the values of PK parameters across Population Simulation sets
 #' @param structureSets list of `SimulationStructures` objects
 #' @return list of data.frame and its metaData including the values of PK parameters across Population Simulation sets
-#' @export
+#' @keywords internal
 getPkParametersAcrossPopulations <- function(structureSets) {
   pkParametersTableAcrossPopulations <- NULL
   for (structureSet in structureSets)
@@ -618,6 +618,9 @@ getPkRatiosTable <- function(pkParametersTable,
 #' @param workflowType Name of workflow type.
 #' Use enum `PopulationWorkflowTypes` to get a list of available workflow types.
 #' @return names of default parameters
+#' @export
+#' @examples 
+#' getDefaultPkParametersXParameters(PopulationWorkflowTypes$pediatric)
 getDefaultPkParametersXParameters <- function(workflowType) {
   validateIsIncluded(workflowType, PopulationWorkflowTypes)
   if (workflowType %in% PopulationWorkflowTypes$pediatric) {
@@ -634,7 +637,7 @@ getDefaultPkParametersXParameters <- function(workflowType) {
 #' @param pkParameter `pkParameter` from `Output ` object
 #' @param molWeight Molecular weight of compound (if unit conversion needed)
 #' @return list of data.frame and its metaData including the values of PK parameters specified by `pkParameter` and `Output` objects
-#' @export
+#' @keywords internal
 getPopulationPkAnalysesFromOuptut <- function(data, metaData, output, pkParameter, molWeight = NULL) {
   validateIsIncluded(output$path, unique(data$QuantityPath))
   outputData <- data[data$QuantityPath %in% output$path, ]

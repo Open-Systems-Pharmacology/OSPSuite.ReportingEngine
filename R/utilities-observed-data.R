@@ -89,6 +89,7 @@ getDictionaryVariable <- function(dictionary, variableID) {
 #' @param simulationSet A `SimulationSet` object
 #' @param logFolder folder where the logs are saved
 #' @return list of data and dataMapping
+#' @keywords internal
 loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   validateIsOfType(simulationSet, "SimulationSet")
   # Observed data and dictionary are already checked when creating the simulationSet
@@ -216,6 +217,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
 #' @param timeUnit time unit for unit conversion of time
 #' @param logFolder folder where the logs are saved
 #' @return list of data and lloq data.frames
+#' @keywords internal
 getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, timeUnit, logFolder) {
   if (isOfLength(output$dataSelection, 0)) {
     return()
@@ -287,6 +289,7 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
 #' @param configurationPlan A `ConfigurationPlan` object that includes methods to find the data
 #' @param logFolder folder where the logs are saved
 #' @return list of including data and metaData to perform time profile plot
+#' @keywords internal
 getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPlan, logFolder) {
   observedDataFile <- configurationPlan$getObservedDataPath(observedDataId)
   observedData <- readObservedDataFile(observedDataFile)
@@ -327,6 +330,7 @@ getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPl
 #' isObservedData("Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc")
 #' # > TRUE
 #' }
+#' @keywords internal
 isObservedData <- function(path) {
   pathArray <- ospsuite::toPathArray(path)
   isIncluded(pathArray[2], "ObservedData")
@@ -347,6 +351,7 @@ isObservedData <- function(path) {
 #' getObservedDataIdFromPath("Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc")
 #' # > "Midazolam 600mg SD"
 #' }
+#' @keywords internal
 getObservedDataIdFromPath <- function(path) {
   if (!isObservedData(path)) {
     return(NULL)

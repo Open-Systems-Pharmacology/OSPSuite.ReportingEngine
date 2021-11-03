@@ -7,7 +7,7 @@
 getObjectNameAsString(object)
 }
 \arguments{
-\item{object, }{the name of which is to be returned}
+\item{object}{the name of which is to be returned}
 }
 \value{
 the name of the `object` as a string
@@ -15,3 +15,4 @@ the name of the `object` as a string
 \description{
 Return the name of an object as a string
 }
+\keyword{internal}

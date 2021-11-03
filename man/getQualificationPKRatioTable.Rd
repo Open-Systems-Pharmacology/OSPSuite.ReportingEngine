@@ -17,3 +17,4 @@ A data.frame with correct numeric format
 \description{
 Get data of pk ratio from field `PKRatioPlots` of configuration plan
 }
+\keyword{internal}

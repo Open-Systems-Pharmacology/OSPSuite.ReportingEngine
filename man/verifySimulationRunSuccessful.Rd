@@ -20,3 +20,4 @@ verifySimulationRunSuccessful(
 \description{
 Check that all cores ran simulation successfully
 }
+\keyword{internal}

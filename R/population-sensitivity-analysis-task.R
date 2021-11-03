@@ -1,7 +1,7 @@
 #' @title PopulationSensitivityAnalysisTask
 #' @description  R6 class for PopulationSensitivityAnalysisTask settings
 #' @field getTaskResults function called by task that computes and format figure results
-#' @field settings instance of SensitivityAnalysisSettings class
+#' @field settings A `SensitivityAnalysisSettings` object
 PopulationSensitivityAnalysisTask <- R6::R6Class(
   "PopulationSensitivityAnalysisTask",
   inherit = SensitivityAnalysisTask,
@@ -25,10 +25,10 @@ PopulationSensitivityAnalysisTask <- R6::R6Class(
     },
 
     #' @description
-    #' Save results from task run.
-    #' @param set R6 class `SimulationStructure`
-    #' @param taskResults list of results from task run.
-    saveResults = function(set, taskResults) {
+    #' Save the task results related to a `structureSet`.
+    #' @param structureSet A `SimulationStructure` object defining the properties of a simulation set
+    #' @param taskResults list of results from task run
+    saveResults = function(structureSet, taskResults) {
       results <- taskResults$populationSensitivityResults
       if (is.null(results)) {
         return()

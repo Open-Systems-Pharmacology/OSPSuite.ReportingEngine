@@ -13,4 +13,11 @@ AllAvailableTasks
 \description{
 Names of all existing tasks that can be performed by `MeanModelWorkflow` or `PopulationWorkflow` objects
 }
+\examples{
+AllAvailableTasks$simulate
+AllAvailableTasks$plotTimeProfilesAndResiduals
+AllAvailableTasks$plotDemography
+AllAvailableTasks$plotAbsorption
+AllAvailableTasks$plotMassBalance
+}
 \keyword{datasets}

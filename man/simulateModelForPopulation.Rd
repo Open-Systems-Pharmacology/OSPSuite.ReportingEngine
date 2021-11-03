@@ -19,3 +19,4 @@ Simulation results for individual or population
 \description{
 Simulate model for a population.  Run parallel workflow if numberOfCores > 1 AND population size is >1.
 }
+\keyword{internal}

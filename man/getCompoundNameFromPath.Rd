@@ -25,3 +25,4 @@ getCompoundNameFromPath("Midazolam 600mg SD|ObservedData|Peripheral Venous Blood
 # > "Rifampin"
 }
 }
+\keyword{internal}

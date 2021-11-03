@@ -19,3 +19,4 @@ List of simulation results for each simulation set
 \description{
 Simulate models within a list of structure sets in parallel for an individual.
 }
+\keyword{internal}

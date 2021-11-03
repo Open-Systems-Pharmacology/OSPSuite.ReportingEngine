@@ -14,3 +14,6 @@ resetReport(fileName, logFolder = getwd())
 \description{
 Initialize a report, warning if a previous version already exists
 }
+\examples{
+resetReport("report.md")
+}

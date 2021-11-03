@@ -8,6 +8,7 @@
 #' @field table data.frame corresponding to the table to be saved
 #' @field tableCaption text included into the report explaining the table
 #' @field includeTable logical indicating if the table should be included in final report
+#' @keywords internal
 TaskResults <- R6::R6Class(
   "TaskResults",
   cloneable = FALSE,
@@ -132,7 +133,7 @@ TaskResults <- R6::R6Class(
 #' @param tableCaption text included into the report explaining the table
 #' @param includeTable logical indicating if the table should be included in final report
 #' @return A `TaskResults` object
-#' @export
+#' @keywords internal
 saveTaskResults <- function(id = NULL, sectionId = NULL, plot = NULL, plotCaption = NULL, includePlot = NULL, table = NULL, tableCaption = NULL, includeTable = NULL, taskResults = NULL) {
   taskResults <- taskResults %||% TaskResults$new()
   eval(parseVariableToObject(

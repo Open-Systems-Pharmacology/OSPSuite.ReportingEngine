@@ -17,3 +17,4 @@ The identified properties are directly compatible with `tlf` package nomenclatur
 Get identified axes properties from global field `AxesSettings` of configuration plan or
 from plot specific field `Axes`. The identified properties are directly compatible with `tlf` package nomenclature
 }
+\keyword{internal}

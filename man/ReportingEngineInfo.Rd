@@ -6,6 +6,7 @@
 \description{
 R6 class representing system information for Reporting Engine
 }
+\keyword{internal}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{

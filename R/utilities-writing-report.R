@@ -3,8 +3,9 @@
 #' @param fileName name of .md file to reset
 #' @param logFolder folder where the logs are saved
 #' @export
-resetReport <- function(fileName,
-                        logFolder = getwd()) {
+#' @examples 
+#' resetReport("report.md")
+resetReport <- function(fileName, logFolder = getwd()) {
   if (file.exists(fileName)) {
     logWorkflow(
       message = paste0("'", fileName, "' already exists. Overwriting '", fileName, "'."),
@@ -14,11 +15,6 @@ resetReport <- function(fileName,
   fileObject <- file(fileName, encoding = "UTF-8")
   write("", file = fileObject, sep = "\n")
   close(fileObject)
-
-  logWorkflow(
-    message = paste0("Report '", fileName, "' was initialized successfully."),
-    pathFolder = logFolder
-  )
   return(invisible())
 }
 
@@ -121,6 +117,9 @@ addTableChunk <- function(fileName,
 #' @param text text to include in the document
 #' @param logFolder folder where the logs are saved
 #' @export
+#' @examples 
+#' resetReport("report.md")
+#' addTextChunk(fileName = "report.md", text = "new text")
 addTextChunk <- function(fileName,
                          text,
                          logFolder = getwd()) {
@@ -142,6 +141,12 @@ addTextChunk <- function(fileName,
 #' @param logFolder folder where the logs are saved
 #' @param keepInputFiles logical option to prevent the input files to be deleted after merging them
 #' @export
+#' @examples 
+#' resetReport("chapter-1.md")
+#' addTextChunk(fileName = "chapter-1.md", text = "Chapter 1")
+#' resetReport("chapter-2.md")
+#' addTextChunk(fileName = "chapter-2.md", text = "Chapter 2")
+#' mergeMarkdowndFiles(inputFiles = c("chapter-1.md", "chapter-2.md"), outputFile = "chapters-1and2.md")
 mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd(), keepInputFiles = FALSE) {
   validateIsLogical(keepInputFiles)
   resetReport(outputFile, logFolder)
@@ -267,6 +272,7 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
 #' @param logFolder folder where the logs are saved
 #' @param figurePattern character pattern referencing figures in first element of line
 #' @param tablePattern character pattern referencing tables in first element of line
+#' @keywords internal
 numberTablesAndFigures <- function(fileName, logFolder = getwd(), figurePattern = "Figure:", tablePattern = "Table:") {
   fileContent <- readLines(fileName, encoding = "UTF-8")
 
@@ -304,6 +310,7 @@ numberTablesAndFigures <- function(fileName, logFolder = getwd(), figurePattern 
 #' @param tocPattern character pattern referencing sections in first element of line
 #' @param tocLevels levels of sections in the report
 #' @return Table of content referencing sections following a markdown format
+#' @keywords internal
 numberSections <- function(fileName, logFolder = getwd(), tocPattern = "#", tocLevels = 6) {
   fileContent <- readLines(fileName, encoding = "UTF-8")
 
@@ -361,6 +368,7 @@ numberSections <- function(fileName, logFolder = getwd(), tocPattern = "#", tocL
 #' @param tocContent Table of content referencing sections following a markdown format
 #' @param fileName name of .md file to update
 #' @param logFolder folder where the logs are saved
+#' @keywords internal
 addMarkdownToc <- function(tocContent, fileName, logFolder = getwd()) {
   fileContent <- readLines(fileName, encoding = "UTF-8")
   fileContent <- c(tocContent, fileContent)
@@ -381,6 +389,7 @@ addMarkdownToc <- function(tocContent, fileName, logFolder = getwd()) {
 #' @description Set workflow simulation set descriptor
 #' @param workflow A `Workflow` object
 #' @param text Character describing simulation sets
+#' @export
 setSimulationDescriptor <- function(workflow, text) {
   validateIsOfType(workflow, "Workflow")
   validateIsString(text, nullAllowed = TRUE)
@@ -394,6 +403,7 @@ setSimulationDescriptor <- function(workflow, text) {
 #' @description Get workflow simulation set descriptor
 #' @param workflow A `Workflow` object
 #' @return character describing simulation sets
+#' @export
 getSimulationDescriptor <- function(workflow) {
   validateIsOfType(workflow, "Workflow")
   return(workflow$getSimulationDescriptor())

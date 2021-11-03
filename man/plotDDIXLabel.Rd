@@ -13,4 +13,4 @@ plotDDIXLabel
 \description{
 Labels for DDI plot X-axis
 }
-\keyword{datasets}
+\keyword{internal}

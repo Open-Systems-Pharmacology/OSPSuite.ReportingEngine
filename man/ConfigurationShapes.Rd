@@ -13,4 +13,4 @@ ConfigurationShapes
 \description{
 List defining shape following tlf nomenclature from a Symbol field of configuration plan
 }
-\keyword{datasets}
+\keyword{internal}

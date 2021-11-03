@@ -21,3 +21,4 @@ Table of content referencing sections following a markdown format
 \description{
 Reference sections of a report
 }
+\keyword{internal}

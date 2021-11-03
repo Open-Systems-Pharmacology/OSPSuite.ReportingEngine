@@ -16,9 +16,10 @@ getDefaultFileName(..., suffix, extension = "csv", sep = "-")
 \item{sep}{separation between names and suffix. Default is `-`}
 }
 \value{
-default filename adding default suffix and fileextension
+default filename adding default suffix and file extension
 }
 \description{
 Add suffix and extension to create a default file name
 for population files, results files and PK-analysis files.
 }
+\keyword{internal}

@@ -28,3 +28,4 @@ In case of multiple definitions, warnings will thrown and the following prioriti
 2. Use units from observed dataset
 3. Use units from dictionary
 }
+\keyword{internal}

@@ -26,3 +26,4 @@ list with `data` and `metaData`
 \description{
 Get data of pk ratio from field `PKRatios` of configuration plan
 }
+\keyword{internal}
