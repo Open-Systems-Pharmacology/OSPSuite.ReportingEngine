@@ -19,4 +19,3 @@ ggplot object of time profile for mean model workflow
 \description{
 Plot Residual vs time for mean model workflow
 }
-\keyword{internal}

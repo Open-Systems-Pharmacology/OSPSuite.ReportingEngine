@@ -19,4 +19,3 @@ ggplot object of time profile for mean model workflow
 \description{
 Plot observation vs prediction for mean model workflow
 }
-\keyword{internal}

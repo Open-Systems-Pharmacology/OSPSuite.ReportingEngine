@@ -188,7 +188,7 @@ getResiduals <- function(observedData,
 
   residualValues <- rep(NA, nrow(observedData))
   if (isIncluded(residualScale, ResidualScales$Logarithmic)) {
-    residualValues <- log10(observedData[, "Concentration"]) - log10(simulatedData[timeMatchedData, "Concentration"])
+    residualValues <- log(observedData[, "Concentration"]) - log(simulatedData[timeMatchedData, "Concentration"])
   }
   if (isIncluded(residualScale, ResidualScales$Linear)) {
     residualValues <- (observedData[, "Concentration"] - simulatedData[timeMatchedData, "Concentration"])
@@ -446,25 +446,43 @@ plotMeanTimeProfile <- function(simulatedData,
 #' @param metaData meta data on `data`
 #' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
 #' @return ggplot object of time profile for mean model workflow
+#' @export
 #' @import tlf
-#' @keywords internal
+#' @import ggplot2
 plotMeanObsVsPred <- function(data,
                               metaData = NULL,
                               plotConfiguration = NULL) {
-  obsVsPredDataMapping <- tlf::ObsVsPredDataMapping$new(
+  identityMinMax <- c(
+    0.8 * min(cbind(data[, "Observed"], data[, "Simulated"]), na.rm = TRUE),
+    1.2 * max(cbind(data[, "Observed"], data[, "Simulated"]), na.rm = TRUE)
+  )
+  identityLine <- data.frame(
+    "Observed" = identityMinMax,
+    "Simulated" = identityMinMax,
+    "Legend" = "Line of identity"
+  )
+  obsVsPredDataMapping <- tlf::XYGDataMapping$new(
     x = "Observed",
     y = "Simulated",
     color = "Legend"
   )
-  obsVsPredPlot <- tlf::plotObsVsPred(
-    data = data,
+
+  meanObsVsPredPlot <- tlf::addLine(
+    data = identityLine,
     metaData = metaData,
     dataMapping = obsVsPredDataMapping,
     plotConfiguration = plotConfiguration
   )
-  # It is possible to define axes limits
-  # in settings$plotConfigurations$plotMeanObsVsTime
-  return(obsVsPredPlot)
+
+  meanObsVsPredPlot <- tlf::addScatter(
+    data = data,
+    metaData = metaData,
+    dataMapping = obsVsPredDataMapping,
+    plotObject = meanObsVsPredPlot
+  )
+  meanObsVsPredPlot <- tlf::setLegendPosition(plotObject = meanObsVsPredPlot, position = reDefaultLegendPosition)
+
+  return(meanObsVsPredPlot)
 }
 
 #' @title plotMeanResVsTime
@@ -473,25 +491,46 @@ plotMeanObsVsPred <- function(data,
 #' @param metaData meta data on `data`
 #' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
 #' @return ggplot object of time profile for mean model workflow
+#' @export
 #' @import tlf
-#' @keywords internal
+#' @import ggplot2
 plotMeanResVsTime <- function(data,
                               metaData = NULL,
                               plotConfiguration = NULL) {
-  resVsTimeDataMapping <- tlf::ResVsPredDataMapping$new(
+  resVsTimeDataMapping <- tlf::XYGDataMapping$new(
     x = "Time",
     y = "Residuals",
     color = "Legend"
   )
-  resVsTimePlot <- tlf::plotResVsPred(
+
+  maxRes <- 1.2 * max(abs(data[, resVsTimeDataMapping$y]), na.rm = TRUE)
+
+  plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
+    data = data,
+    metaData = metaData,
+    dataMapping = resVsTimeDataMapping
+  )
+  meanResVsTimePlot <- tlf::initializePlot(plotConfiguration)
+
+  meanResVsTimePlot <- tlf::addScatter(
     data = data,
     metaData = metaData,
     dataMapping = resVsTimeDataMapping,
-    plotConfiguration = plotConfiguration
+    plotObject = meanResVsTimePlot
   )
-  # It is possible to define axes limits
-  # in settings$plotConfigurations$plotMeanResVsTime
-  return(resVsTimePlot)
+
+  meanResVsTimePlot <- meanResVsTimePlot + ggplot2::geom_hline(
+    yintercept = 0,
+    size = 1
+  )
+
+  meanResVsTimePlot <- tlf::setLegendPosition(plotObject = meanResVsTimePlot, position = reDefaultLegendPosition)
+  meanResVsTimePlot <- tlf::setYAxis(
+    plotObject = meanResVsTimePlot,
+    limits = c(-maxRes, maxRes)
+  )
+
+  return(meanResVsTimePlot)
 }
 
 #' @title plotMeanResVsPred
@@ -500,30 +539,46 @@ plotMeanResVsTime <- function(data,
 #' @param metaData meta data on `data`
 #' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
 #' @return ggplot object of time profile for mean model workflow
+#' @export
 #' @import tlf
-#' @keywords internal
+#' @import ggplot2
 plotMeanResVsPred <- function(data,
                               metaData = NULL,
                               plotConfiguration = NULL) {
-  resVsPredDataMapping <- tlf::ResVsPredDataMapping$new(
-    x = "Simulated",
-    y = "Residuals",
-    color = "Residuals"
-  )
-  resVsPredPlot <- tlf::plotResVsPred(
-    data = data,
-    metaData = metaData,
-    dataMapping = resVsTimeDataMapping,
-    plotConfiguration = plotConfiguration
-  )
-  # It is possible to define axes limits
-  # in settings$plotConfigurations$plotMeanResVsPred
-  return(resVsPredPlot)
   resVsPredDataMapping <- tlf::XYGDataMapping$new(
     x = "Simulated",
     y = "Residuals",
     color = "Legend"
   )
+
+  maxRes <- 1.2 * max(abs(data[, resVsPredDataMapping$y]), na.rm = TRUE)
+
+  plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
+    data = data,
+    metaData = metaData,
+    dataMapping = resVsPredDataMapping
+  )
+  meanResVsPredPlot <- tlf::initializePlot(plotConfiguration)
+
+  meanResVsPredPlot <- tlf::addScatter(
+    data = data,
+    metaData = metaData,
+    dataMapping = resVsPredDataMapping,
+    plotObject = meanResVsPredPlot
+  )
+
+  meanResVsPredPlot <- meanResVsPredPlot + ggplot2::geom_hline(
+    yintercept = 0,
+    size = 1
+  )
+
+  meanResVsPredPlot <- tlf::setLegendPosition(plotObject = meanResVsPredPlot, position = reDefaultLegendPosition)
+  meanResVsTimePlot <- tlf::setYAxis(
+    plotObject = meanResVsPredPlot,
+    limits = c(-maxRes, maxRes)
+  )
+
+  return(meanResVsPredPlot)
 }
 
 #' @title plotPopulationTimeProfile
@@ -601,19 +656,16 @@ plotPopulationTimeProfile <- function(simulatedData,
 #' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
 #' @param bins number of bins defined in the histogram
 #' @return ggplot object of log residuals histogram
+#' @export
 #' @import tlf
-#' @keywords internal
+#' @import ggplot2
+#' @import stats
 plotResidualsHistogram <- function(data,
                                    metaData = NULL,
                                    dataMapping = NULL,
                                    plotConfiguration = NULL,
                                    bins = NULL) {
-  dataMapping <- dataMapping %||% tlf::HistogramDataMapping$new(
-    x = "Residuals",
-    fill = "Legend",
-    stack = TRUE,
-    bins = bins %||% reEnv$defaultBins
-  )
+  dataMapping <- dataMapping %||% tlf::HistogramDataMapping$new(x = "Residuals", fill = "Legend")
 
   plotConfiguration <- plotConfiguration %||% tlf::HistogramPlotConfiguration$new(
     data = data,
@@ -622,12 +674,48 @@ plotResidualsHistogram <- function(data,
     ylabel = "Number of residuals"
   )
 
-  resHistoPlot <- tlf::plotHistogram(
-    data = data,
-    metaData = metaData,
-    dataMapping = dataMapping,
-    plotConfiguration = plotConfiguration
-  )
+  bins <- bins %||% 15
+
+  # To fit normal distribution density curve to histogram, the density curve needs to be scaled
+  # graphics::hist provides density and counts for histograms from which the scaling factor can be directly obtained
+  histResult <- graphics::hist(data[, dataMapping$x], breaks = bins, plot = FALSE)
+  scalingFactor <- mean(histResult$counts[histResult$counts > 0] / histResult$density[histResult$counts > 0])
+
+  xmax <- 1.1 * max(abs(data[, dataMapping$x]), na.rm = TRUE)
+  xDensityData <- seq(-xmax, xmax, 2 * xmax / 100)
+  yDensityData <- scalingFactor * stats::dnorm(xDensityData, sd = stats::sd(data[, dataMapping$x], na.rm = TRUE))
+  densityData <- data.frame(x = xDensityData, y = yDensityData)
+
+  resHistoPlot <- tlf::initializePlot(plotConfiguration)
+
+  # TO DO: transfer the histogram wrapper into TLF
+  resHistoPlot <- resHistoPlot +
+    ggplot2::geom_histogram(
+      data = data,
+      mapping = ggplot2::aes_string(
+        x = dataMapping$x,
+        fill = "Legend"
+      ),
+      position = ggplot2::position_stack(),
+      bins = bins,
+      size = 0.5,
+      color = "black",
+      alpha = 0.8
+    ) +
+    ggplot2::geom_vline(
+      xintercept = 0,
+      size = 1
+    ) +
+    ggplot2::geom_line(
+      data = densityData,
+      mapping = ggplot2::aes_string(x = "x", y = "y"),
+      size = 1
+    )
+  # Legends and axis
+  resHistoPlot <- tlf::setLegendPosition(plotObject = resHistoPlot, position = reDefaultLegendPosition)
+
+  # Ensure that the legend has no title
+  resHistoPlot <- resHistoPlot + ggplot2::theme(legend.title = element_blank())
 
   return(resHistoPlot)
 }
