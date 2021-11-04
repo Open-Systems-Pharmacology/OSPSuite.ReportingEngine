@@ -29,3 +29,4 @@ ggplot object of log residuals histogram
 \description{
 Plot histogram of residuals
 }
+\keyword{internal}
