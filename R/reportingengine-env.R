@@ -20,6 +20,8 @@ reEnv$defaultSimulationSetDescriptor <- ""
 reEnv$maximalParametersPerSensitivityPlot <- 25
 reEnv$maxWidthPerParameter <- 25
 reEnv$maxLinesPerParameter <- 3
+# If plot limits are left undefined, an auto margin is added
+reEnv$autoAxisLimitMargin <- 0.05
 
 # Default plot properties
 reEnv$theme$background$legendPosition <- tlf::LegendPositions$outsideTop
@@ -167,4 +169,15 @@ setDefaultBins <- function(bins) {
 setDefaultStairstep <- function(stairstep) {
   validateIsLogical(stairstep)
   reEnv$defaultStairstep <- stairstep
+}
+
+#' @title setDefaultAutoAxisLimitMargin
+#' @param margin numeric value between 0 and 1
+#' defining the margin of automated axis limits
+#' @export
+#' @examples 
+#' setDefaultAutoAxisLimitMargin(0.1)
+setDefaultAutoAxisLimitMargin <- function(margin) {
+  validateIsNumeric(margin)
+  reEnv$autoAxisLimitMargin <- margin
 }

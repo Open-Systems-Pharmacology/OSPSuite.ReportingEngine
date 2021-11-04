@@ -211,11 +211,22 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties) {
   plotConfiguration$points$color <- metaData$color
   plotConfiguration$points$shape <- metaData$shape
   
-  resVsTimeDataMapping <- tlf::ResVsPredDataMapping$new(
-    x = "Time",
-
-  metaData <- NULL
-
+  positiveRows <- (data[,"Observed"] > 0) & (data[,"Simulated"] > 0)
+  dataForLimit <- c(data[positiveRows,"Observed"], data[positiveRows,"Simulated"])
+  
+  plotConfiguration$xAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||% 
+    autoAxesLimits(switch(
+      plotType,
+      "predictedVsObserved" = dataForLimit,
+      "residualsOverTime" = data[,"Time"]
+    ))
+  plotConfiguration$yAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||% 
+    autoAxesLimits(switch(
+      plotType,
+      "predictedVsObserved" = dataForLimit,
+      "residualsOverTime" = c(0, data[,"Residuals"])
+    ))
+  
   gofPlot <- switch(
     plotType,
     "predictedVsObserved" = tlf::plotObsVsPred(

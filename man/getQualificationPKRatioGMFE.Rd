@@ -10,13 +10,11 @@ getQualificationPKRatioGMFE(pkParameterNames, data)
 \item{data}{data.frame with PK Ratios}
 
 \item{pkParameterName}{Name of PK Parameter as defined by users}
-
-\item{metaData}{metaData with units and dimension for labeling the table header}
 }
 \value{
 A data.frame
 }
 \description{
-Get plot of pk ratio from field `PKRatioPlots` of configuration plan
+Get Geometric Mean Fold Error for PK ratio plots
 }
 \keyword{internal}
