@@ -8,6 +8,10 @@ plotQualificationGOFs(configurationPlan, logFolder = getwd(), settings)
 }
 \arguments{
 \item{configurationPlan}{A `ConfigurationPlan` object}
+
+\item{logFolder}{folder where the logs are saved}
+
+\item{settings}{settings for the task}
 }
 \value{
 list of qualification GOF ggplot objects

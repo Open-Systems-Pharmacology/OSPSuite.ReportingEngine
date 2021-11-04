@@ -617,7 +617,10 @@ loadGOFMergedTask <- function(workflow, configurationPlan) {
     message = defaultWorkflowMessages$plotGOFMerged,
     settings = list(
       predictedVsObserved = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$GOFMergedPlotsPredictedVsObserved)),
-      residualsOverTime = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$GOFMergedPlotsResidualsOverTime))
+      residualsOverTime = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$GOFMergedPlotsResidualsOverTime)),
+      digits = reEnv$formatNumericsDigits,
+      nsmall = reEnv$formatNumericsSmall,
+      scientific = reEnv$formatNumericsScientific
     )
   ))
 }
