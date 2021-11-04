@@ -87,8 +87,8 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
     project = outputMapping$Project,
     simulation = outputMapping$Simulation
   )
-  simulation <- loadSimulation(simulationFile)
-  simulationResults <- importResultsFromCSV(simulation, simulationResultsFile)
+  simulation <- ospsuite::loadSimulation(simulationFile)
+  simulationResults <- ospsuite::importResultsFromCSV(simulation, simulationResultsFile)
   # Get and convert output path values into display unit
   simulationQuantity <- ospsuite::getQuantity(outputMapping$Output, simulation)
   simulationPathResults <- ospsuite::getOutputValues(simulationResults, quantitiesOrPaths = simulationQuantity)
@@ -120,7 +120,8 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
     LogTypes$Debug
   )
 
-  simulatedValues <- ospsuite::toUnit(simulationQuantity,
+  simulatedValues <- ospsuite::toUnit(
+    simulationQuantity,
     simulationPathResults$data[, outputMapping$Output],
     axesProperties$y$unit,
     molWeight = molWeight
@@ -164,7 +165,7 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
     quantityOrDimension = ospsuite::getDimensionForUnit(observedResults$metaData$output$unit),
     values = observedResults$data[, 2],
     targetUnit = axesProperties$y$unit,
-    sourceUnit = observedResults$metaData$output$unit,
+    sourceUnit = tolower(observedResults$metaData$output$unit),
     molWeight = molWeight
   )
   observedValues <- observedValues[selectedObservedTimeValues]
