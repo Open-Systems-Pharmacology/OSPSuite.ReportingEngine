@@ -140,7 +140,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 #' @param dataframe data.frame
 #' @param metadata meta data on `data`
 #' @param pkParameter for which DDI ratios are to be evaluated
-#' @param plotType for which DDI ratios are to be evaluated.  `plotType` is either `predictedVsObserved` or `residualValues`.
+#' @param plotType for which DDI ratios are to be evaluated.  `plotType` is either `predictedVsObserved` or `residualsVsObserved`.
 #' @return dataframe for plotting goodness of fit of residuals vs time type
 #' @keywords internal
 buildQualificationDDIDataframe <- function(dataframe,
@@ -148,7 +148,7 @@ buildQualificationDDIDataframe <- function(dataframe,
                                            pkParameter,
                                            plotType) {
   plotSettings <- metadata$plotSettings
-  axesSettings <- metadata$axesSettings$residualsVsObserved
+  axesSettings <- metadata$axesSettings[[plotType]]
   axesSettings$plotType <- plotType
   axesSettings$X$label <- plotDDIXLabel[[plotType]](pkParameter)
   axesSettings$Y$label <- plotDDIYLabel[[plotType]](pkParameter)
@@ -181,8 +181,8 @@ buildQualificationDDIDataframe <- function(dataframe,
     ddiPlotDataframe <- rbind.data.frame(ddiPlotDataframe, as.data.frame(df,check.names = FALSE))
   }
 
-  ddiPlotDataframe$Group <- as.factor(ddiPlotDataframe$Group)
   ddiPlotDataframe$Caption <- sapply(ddiPlotDataframe$Group,function(groupNumber){metadata$groups[[groupNumber]]$caption})
+  ddiPlotDataframe$Group <- as.factor(ddiPlotDataframe$Group)
   ddiPlotDataframe$Caption <- as.factor(ddiPlotDataframe$Caption)
 
   return(list(ddiPlotDataframe = ddiPlotDataframe, aestheticsList = aestheticsList, axesSettings = axesSettings, plotSettings = plotSettings))
@@ -256,30 +256,46 @@ plotQualificationDDIs <- function(configurationPlan,
                                   logFolder = getwd(),
                                   settings) {
 
-
   ddiPlotsData <- getQualificationDDIPlotData(configurationPlan)
-
-
-  ddiPlotList <- list()
   ddiPlotResults <- list()
+  subplotTypes <- c("mechanism", "perpetrator", "victim")
 
   for (plotIndex in seq_along(ddiPlotsData)) {
-    ddiPlotList[[plotIndex]] <- list()
+
     dataframe <- ddiPlotsData[[plotIndex]]$dataframe
     metadata <- ddiPlotsData[[plotIndex]]$metadata
     for (plotType in metadata$plotTypes) {
       for (pkParameter in unique(dataframe$pkParameter)) {
-        plotID <- paste("DDIRatioPlot", plotIndex, plotType, pkParameter, sep = "-")
 
-        plotDDIData <- buildQualificationDDIDataframe(dataframe[dataframe$pkParameter == pkParameter, ], metadata, pkParameter,plotType)
-        ddiPlotList[[plotIndex]][[plotType]] <- generateDDIQualificationDDIPlot(plotDDIData)
+        pkDataframe <- dataframe[dataframe$pkParameter == pkParameter, ]
 
+        plotDDIData <- buildQualificationDDIDataframe(pkDataframe, metadata, pkParameter, plotType)
+        plotID <- paste("DDIRatioPlot", plotIndex, plotType, pkParameter,"all", sep = "-")
+        ddiPlot <- generateDDIQualificationDDIPlot(plotDDIData)
         ddiPlotResults[[plotID]] <- saveTaskResults(
           id = plotID,
           sectionId = metadata$sectionID,
-          plot = ddiPlotList[[plotIndex]][[plotType]],
+          plot = ddiPlot,
           plotCaption = paste(metadata$title, " - ", pkParameter)
         )
+
+
+        for (subplotType in subplotTypes){
+          subplotTypeLevels <- unique(pkDataframe[[subplotType]])
+          for (subplotTypeLevel in subplotTypeLevels){
+            subplotDataframe <- droplevels(pkDataframe[pkDataframe[[subplotType]] == subplotTypeLevel,])
+            plotDDIData <- buildQualificationDDIDataframe(subplotDataframe, metadata, pkParameter, plotType)
+            plotID <- paste("DDIRatioPlot", plotIndex, plotType, pkParameter, subplotType, subplotTypeLevel, sep = "-")
+            ddiSubplot <- generateDDIQualificationDDIPlot(plotDDIData)
+            ddiPlotResults[[plotID]] <- saveTaskResults(
+              id = plotID,
+              sectionId = metadata$sectionID,
+              plot = ddiSubplot,
+              plotCaption = paste(metadata$title, pkParameter , subplotType, subplotTypeLevel , sep = "-")
+            )
+          }
+        }
+
       }
     }
   }
