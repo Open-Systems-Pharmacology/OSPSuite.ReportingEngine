@@ -4,12 +4,14 @@
 \alias{buildQualificationDDIPredictedVsObserved}
 \title{buildQualificationDDIPredictedVsObserved}
 \usage{
-buildQualificationDDIPredictedVsObserved(dataframe, metadata)
+buildQualificationDDIPredictedVsObserved(dataframe, metadata, pkParameter)
 }
 \arguments{
 \item{dataframe}{data.frame}
 
 \item{metadata}{meta data on `data`}
+
+\item{pkParameter}{for which DDI rations are to be evaluated}
 }
 \value{
 data.frame for plotting goodness of fit of predictedVsObserved type

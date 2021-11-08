@@ -1,4 +1,3 @@
-
 #' @title getQualificationDDIPlotData
 #' @description Build dataframes and metadata for each DDI plot
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.

@@ -1,4 +1,3 @@
-
 #' @title loadQualificationWorkflow
 #' @description Load a `ConfigurationPlan` object from json file
 #' @param workflowFolder path of the output folder created or used by the Workflow.
