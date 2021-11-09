@@ -247,6 +247,44 @@ generateDDIQualificationDDIPlot <- function(data) {
 }
 
 
+#' @title getDDISummaryTable
+#' @description Plot observation vs prediction for DDI qualification workflow
+#' @param summaryDataFrame of DDI data for current DDI section
+#' @param pkParameter for current DDI section
+#' @return A `data.frame` of DDI ratio summaries
+#' @keywords internal
+getDDISummaryTable <- function(summaryDataFrame,pkParameter){
+
+  guestValues <- tlf::getGuestValues(x = ddiSummary[["observedRatio"]])
+  ddiSummary[["guestLowerBound"]] <- guestValues$ymin
+  ddiSummary[["guestUpperBound"]] <- guestValues$ymax
+  ddiSummary[["withinTwoFold"]] <- sapply(ddiSummary[["simulatedObservedRatio"]],function(ratio){
+    withinLimits <- 0
+    if( ratio > 0.5 & ratio < 2){
+      withinLimits <- 1
+    }
+    return(withinLimits)
+  })
+
+  ddiSummary[["withinGuest"]] <- sapply(seq_along(ddiSummary[["simulatedRatio"]]),function(rowNumber){
+    withinLimits <- 0
+    if( ddiSummary[["simulatedRatio"]][rowNumber] > ddiSummary[["guestLowerBound"]][rowNumber] & ddiSummary[["simulatedRatio"]][rowNumber] < ddiSummary[["guestUpperBound"]][rowNumber]){
+      withinLimits <- 1
+    }
+    return(withinLimits)
+  })
+
+  pointsTotal <- nrow(ddiSummary)
+  numberWithinGuest <- sum(ddiSummary[["withinGuest"]])
+  numberWithinTwoFold <- sum(ddiSummary[["withinTwoFold"]])
+
+  ddiTable <- list()
+  ddiTable[[pkParameter]] <- c("Points total","Points within Guest et al.","Points within 2-fold")
+  ddiTable[["Number"]] <- c(pointsTotal,numberWithinGuest,numberWithinTwoFold)
+  ddiTable[["Ratio [%]"]] <- c("-",100*numberWithinGuest/pointsTotal, 100*numberWithinTwoFold/pointsTotal)
+  return(as.data.frame(ddiTable,check.names = FALSE))
+}
+
 #' @title getDDISection
 #' @description Plot observation vs prediction for DDI qualification workflow
 #' @param dataframe of DDI data for current DDI section
@@ -274,29 +312,9 @@ getDDISection <- function(dataframe,metadata,sectionID,idPrefix,captionSuffix){
         plotCaption = paste(metadata$title, " - ", captionSuffix)
       )
     }
-    #browser()
+
     ddiSummary <- na.omit(pkDataframe[,c("observedRatio","simulatedRatio")])
     ddiSummary[["simulatedObservedRatio"]] <- ddiSummary[["simulatedRatio"]]/ddiSummary[["observedRatio"]]
-    guestValues <- tlf::getGuestValues(x = ddiSummary[["observedRatio"]])
-    ddiSummary[["guestLowerBound"]] <- guestValues$ymin
-    ddiSummary[["guestUpperBound"]] <- guestValues$ymax
-    ddiSummary[["withinTwoFold"]] <- sapply(ddiSummary[["simulatedObservedRatio"]],function(ratio){
-      withinLimits <- 0
-      if( ratio > 0.5 & ratio < 2){
-        withinLimits <- 1
-      }
-      return(withinLimits)
-    })
-
-    ddiSummary[["withinGuest"]] <- sapply(seq_along(ddiSummary[["simulatedRatio"]]),function(rowNumber){
-      withinLimits <- 0
-      if( ddiSummary[["simulatedRatio"]][rowNumber] > ddiSummary[["guestLowerBound"]][rowNumber] & ddiSummary[["simulatedRatio"]][rowNumber] < ddiSummary[["guestUpperBound"]][rowNumber]){
-        withinLimits <- 1
-      }
-      return(withinLimits)
-    })
-
-
     gmfeDDI <- rbind.data.frame(gmfeDDI,
                                 data.frame("PK parameter" = pkParameter,
                                            GMFE = calculateGMFE(x = ddiSummary$observedRatio,
@@ -304,17 +322,7 @@ getDDISection <- function(dataframe,metadata,sectionID,idPrefix,captionSuffix){
                                            check.names = FALSE))
 
 
-
-    pointsTotal <- nrow(ddiSummary)
-    numberWithinGuest <- sum(ddiSummary[["withinGuest"]])
-    numberWithinTwoFold <- sum(ddiSummary[["withinTwoFold"]])
-
-    ddiTable <- list()
-    ddiTable[[pkParameter]] <- c("Points total","Points within Guest et al.","Points within 2-fold")
-    ddiTable[["Number"]] <- c(pointsTotal,numberWithinGuest,numberWithinTwoFold)
-    ddiTable[["Ratio [%]"]] <- c("-",100*numberWithinGuest/pointsTotal, 100*numberWithinTwoFold/pointsTotal)
-
-    ddiTableList[[pkParameter]] <- as.data.frame(ddiTable,check.names = FALSE)
+    ddiTableList[[pkParameter]] <- getDDISummaryTable(summaryDataFrame = ddiSummary,pkParameter = pkParameter)
 
   }
 
