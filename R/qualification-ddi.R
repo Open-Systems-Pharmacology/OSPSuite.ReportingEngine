@@ -113,6 +113,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
             groupNumber = groupNumber,
             outputPath = outputPath,
             pkParameter = pkParameter,
+            pkParameterName = pkParameterName,
             observedRatio = ratioList[[pkParameter]]$observedRatio,
             simulatedRatio = ratioList[[pkParameter]][["SimulationDDI"]] / ratioList[[pkParameter]][["SimulationControl"]],
             mechanism = ratioList[[pkParameter]]$mechanism,
@@ -164,13 +165,9 @@ buildQualificationDDIDataframe <- function(dataframe,
     observedRatio <- dataframe[dataframe$group == grp, ]$observedRatio
     simulatedRatio <- dataframe[dataframe$group == grp, ]$simulatedRatio
 
-    xDataDimension <- ""
-    xDataUnit <- ""
     xData <- observedRatio
     xData <- replaceInfWithNA(xData)
 
-    yDataDimension <- ""
-    yDataUnit <- ""
     yData <- getYAxisDDIValues[[plotType]](observedRatio,simulatedRatio)
     yData <- replaceInfWithNA(yData)
 
@@ -215,10 +212,14 @@ generateDDIQualificationDDIPlot <- function(data) {
     dataMapping = ddiDataMapping
   )
 
-  ddiPlotConfiguration$labels$xlabel$font$size <- data$plotSettings$axisFontSize
-  ddiPlotConfiguration$labels$ylabel$font$size <- data$plotSettings$axisFontSize
-  ddiPlotConfiguration$background$watermark$font$size <- data$plotSettings$watermarkFontSize
-  ddiPlotConfiguration$legend$font$size <- data$plotSettings$legendFontSize
+  ddiPlotConfiguration$export$width <- 2*1.6*(data$plotSettings$width/96)
+  ddiPlotConfiguration$export$height <- 2*1.2*(data$plotSettings$height/96)
+  ddiPlotConfiguration$export$units <- "in"
+
+  ddiPlotConfiguration$labels$xlabel$font$size <- 2*data$plotSettings$axisFontSize
+  ddiPlotConfiguration$labels$ylabel$font$size <- 2*data$plotSettings$axisFontSize
+  ddiPlotConfiguration$background$watermark$font$size <- 2*data$plotSettings$watermarkFontSize
+  ddiPlotConfiguration$legend$font$size <- 2*data$plotSettings$legendFontSize
 
   qualificationDDIPlot <- tlf::plotDDIRatio(
     data = ddiData,
@@ -245,6 +246,51 @@ generateDDIQualificationDDIPlot <- function(data) {
   return(qualificationDDIPlot)
 }
 
+
+#' @title getDDISection
+#' @description Plot observation vs prediction for DDI qualification workflow
+#' @param dataframe of DDI data for current DDI section
+#' @param metadata for DDI plots
+#' @param sectionID of report
+#' @param idPrefix unique ID to index task results
+#' @param captionSuffix to append to qualification plan title
+#' @return a `list` of DDI results for the current DDI section
+#' @keywords internal
+getDDISection <- function(dataframe,metadata,sectionID,idPrefix,captionSuffix){
+  ddiPlotResults <- list()
+
+  for (pkParameter in unique(dataframe$pkParameter)) {
+    for (plotType in metadata$plotTypes) {
+        pkDataframe <- dataframe[dataframe$pkParameter == pkParameter, ]
+        plotDDIData <- buildQualificationDDIDataframe(pkDataframe, metadata, pkParameter, plotType)
+
+        plotID <- paste("plot",idPrefix, pkParameter, plotType, sep = "-")
+        ddiPlot <- generateDDIQualificationDDIPlot(plotDDIData)
+        ddiPlotResults[[plotID]] <- saveTaskResults(
+          id = plotID,
+          sectionId = sectionID,
+          plot = ddiPlot,
+          plotCaption = paste(metadata$title, " - ", captionSuffix)
+        )
+    }
+    # gmfeID <- paste("gmfe", pkParameter, idPrefix,sep = "-")
+    # gmfeDDI <- calculateGMFE(x = pkDataframe$observedRatio,y = pkDataframe$simulatedRatio)
+    #
+    # ddiPlotResults[[gmfeID]] <- saveTaskResults(
+    #   id = gmfeID,
+    #   sectionId = sectionID,
+    #   table = gmfeDDI,
+    #   tableCaption = paste("GMFE for", metadata$title,idPrefix,pkDataframe),
+    #   includeTable = TRUE
+    # )
+
+  }
+
+  return(ddiPlotResults)
+
+}
+
+
 #' @title plotQualificationDDIs
 #' @description Plot observation vs prediction for DDI qualification workflow
 #' @param configurationPlan A `ConfigurationPlan` object
@@ -256,50 +302,37 @@ plotQualificationDDIs <- function(configurationPlan,
                                   logFolder = getwd(),
                                   settings) {
 
+
   ddiPlotsData <- getQualificationDDIPlotData(configurationPlan)
-  ddiPlotResults <- list()
-  subplotTypes <- c("mechanism", "perpetrator", "victim")
+  ddiResults <- list()
+  subsectionLevel1Counter <- 0
+  subsectionLevel2Counter <- 0
+  for (plotIndex in seq_along(ddiData)) {
 
-  for (plotIndex in seq_along(ddiPlotsData)) {
+    dataframe <- ddiData[[plotIndex]]$dataframe
+    metadata <- ddiData[[plotIndex]]$metadata
+    sectionID <- metadata$sectionID
+    idPrefix <-  paste("DDIRatio",plotIndex,"all",sep = "-")
+    ddiResults <- c(ddiResults,getDDISection(dataframe,metadata,sectionID,idPrefix,captionSuffix = ""))
 
-    dataframe <- ddiPlotsData[[plotIndex]]$dataframe
-    metadata <- ddiPlotsData[[plotIndex]]$metadata
-    for (plotType in metadata$plotTypes) {
-      for (pkParameter in unique(dataframe$pkParameter)) {
-
-        pkDataframe <- dataframe[dataframe$pkParameter == pkParameter, ]
-
-        plotDDIData <- buildQualificationDDIDataframe(pkDataframe, metadata, pkParameter, plotType)
-        plotID <- paste("DDIRatioPlot", plotIndex, plotType, pkParameter,"all", sep = "-")
-        ddiPlot <- generateDDIQualificationDDIPlot(plotDDIData)
-        ddiPlotResults[[plotID]] <- saveTaskResults(
-          id = plotID,
-          sectionId = metadata$sectionID,
-          plot = ddiPlot,
-          plotCaption = paste(metadata$title, " - ", pkParameter)
-        )
-
-
-        for (subplotType in subplotTypes){
-          subplotTypeLevels <- unique(pkDataframe[[subplotType]])
-          for (subplotTypeLevel in subplotTypeLevels){
-            subplotDataframe <- droplevels(pkDataframe[pkDataframe[[subplotType]] == subplotTypeLevel,])
-            plotDDIData <- buildQualificationDDIDataframe(subplotDataframe, metadata, pkParameter, plotType)
-            plotID <- paste("DDIRatioPlot", plotIndex, plotType, pkParameter, subplotType, subplotTypeLevel, sep = "-")
-            ddiSubplot <- generateDDIQualificationDDIPlot(plotDDIData)
-            ddiPlotResults[[plotID]] <- saveTaskResults(
-              id = plotID,
-              sectionId = metadata$sectionID,
-              plot = ddiSubplot,
-              plotCaption = paste(metadata$title, pkParameter , subplotType, subplotTypeLevel , sep = "-")
-            )
-          }
-        }
-
+    for (subplotType in ddiSubplotTypes){
+      subsectionLevel1Counter <- subsectionLevel1Counter + 1
+      subplotTypeLevels <- unique(dataframe[[subplotType]])
+      for (subplotTypeLevel in subplotTypeLevels){
+        subsectionLevel2Counter <- subsectionLevel2Counter + 1
+        subplotDataframe <- droplevels(dataframe[dataframe[[subplotType]] == subplotTypeLevel,])
+        sectionID <- metadata$sectionID#paste0(metadata$sectionID,subsectionLevel1Counter,subsectionLevel2Counter)
+        idPrefix <- paste("DDIRatio", plotIndex, subplotType, subplotTypeLevel, sep = "-")
+        ddiResults <- c(ddiResults,getDDISection(subplotDataframe,metadata,sectionID,idPrefix,captionSuffix = subplotTypeLevel))
       }
+      subsectionLevel2Counter <- 0
     }
+    subsectionLevel1Counter <- 0
+
   }
-  return(ddiPlotResults)
+
+return(ddiResults)
+
 }
 
 #' Names of fields in configuration plane containing axes settings data for each DDI plot type
@@ -336,3 +369,7 @@ getYAxisDDIValues <- list(
   "predictedVsObserved" = function(observedRatio,simulatedRatio){return(simulatedRatio)},
   "residualsVsObserved" = function(observedRatio,simulatedRatio){return(simulatedRatio / observedRatio)}
 )
+
+#' Names of DDI subplot types
+#' @keywords internal
+ddiSubplotTypes <- c("mechanism", "perpetrator", "victim")
