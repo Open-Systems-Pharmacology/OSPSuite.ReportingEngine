@@ -258,32 +258,84 @@ generateDDIQualificationDDIPlot <- function(data) {
 #' @keywords internal
 getDDISection <- function(dataframe,metadata,sectionID,idPrefix,captionSuffix){
   ddiPlotResults <- list()
-
+  gmfeDDI <- NULL
+  ddiTableList <- list()
   for (pkParameter in unique(dataframe$pkParameter)) {
     for (plotType in metadata$plotTypes) {
-        pkDataframe <- dataframe[dataframe$pkParameter == pkParameter, ]
-        plotDDIData <- buildQualificationDDIDataframe(pkDataframe, metadata, pkParameter, plotType)
+      pkDataframe <- dataframe[dataframe$pkParameter == pkParameter, ]
+      plotDDIData <- buildQualificationDDIDataframe(pkDataframe, metadata, pkParameter, plotType)
 
-        plotID <- paste("plot",idPrefix, pkParameter, plotType, sep = "-")
-        ddiPlot <- generateDDIQualificationDDIPlot(plotDDIData)
-        ddiPlotResults[[plotID]] <- saveTaskResults(
-          id = plotID,
-          sectionId = sectionID,
-          plot = ddiPlot,
-          plotCaption = paste(metadata$title, " - ", captionSuffix)
-        )
+      plotID <- paste("plot",idPrefix, pkParameter, plotType, sep = "-")
+      ddiPlot <- generateDDIQualificationDDIPlot(plotDDIData)
+      ddiPlotResults[[plotID]] <- saveTaskResults(
+        id = plotID,
+        sectionId = sectionID,
+        plot = ddiPlot,
+        plotCaption = paste(metadata$title, " - ", captionSuffix)
+      )
     }
-    # gmfeID <- paste("gmfe", pkParameter, idPrefix,sep = "-")
-    # gmfeDDI <- calculateGMFE(x = pkDataframe$observedRatio,y = pkDataframe$simulatedRatio)
-    #
-    # ddiPlotResults[[gmfeID]] <- saveTaskResults(
-    #   id = gmfeID,
-    #   sectionId = sectionID,
-    #   table = gmfeDDI,
-    #   tableCaption = paste("GMFE for", metadata$title,idPrefix,pkDataframe),
-    #   includeTable = TRUE
-    # )
+    #browser()
+    ddiSummary <- na.omit(pkDataframe[,c("observedRatio","simulatedRatio")])
+    ddiSummary[["simulatedObservedRatio"]] <- ddiSummary[["simulatedRatio"]]/ddiSummary[["observedRatio"]]
+    guestValues <- tlf::getGuestValues(x = ddiSummary[["observedRatio"]])
+    ddiSummary[["guestLowerBound"]] <- guestValues$ymin
+    ddiSummary[["guestUpperBound"]] <- guestValues$ymax
+    ddiSummary[["withinTwoFold"]] <- sapply(ddiSummary[["simulatedObservedRatio"]],function(ratio){
+      withinLimits <- 0
+      if( ratio > 0.5 & ratio < 2){
+        withinLimits <- 1
+      }
+      return(withinLimits)
+    })
 
+    ddiSummary[["withinGuest"]] <- sapply(seq_along(ddiSummary[["simulatedRatio"]]),function(rowNumber){
+      withinLimits <- 0
+      if( ddiSummary[["simulatedRatio"]][rowNumber] > ddiSummary[["guestLowerBound"]][rowNumber] & ddiSummary[["simulatedRatio"]][rowNumber] < ddiSummary[["guestUpperBound"]][rowNumber]){
+        withinLimits <- 1
+      }
+      return(withinLimits)
+    })
+
+
+    gmfeDDI <- rbind.data.frame(gmfeDDI,
+                                data.frame("PK parameter" = pkParameter,
+                                           GMFE = calculateGMFE(x = ddiSummary$observedRatio,
+                                                                y = ddiSummary$simulatedRatio),
+                                           check.names = FALSE))
+
+
+
+    pointsTotal <- nrow(ddiSummary)
+    numberWithinGuest <- sum(ddiSummary[["withinGuest"]])
+    numberWithinTwoFold <- sum(ddiSummary[["withinTwoFold"]])
+
+    ddiTable <- list()
+    ddiTable[[pkParameter]] <- c("Points total","Points within Guest et al.","Points within 2-fold")
+    ddiTable[["Number"]] <- c(pointsTotal,numberWithinGuest,numberWithinTwoFold)
+    ddiTable[["Ratio [%]"]] <- c("-",100*numberWithinGuest/pointsTotal, 100*numberWithinTwoFold/pointsTotal)
+
+    ddiTableList[[pkParameter]] <- as.data.frame(ddiTable,check.names = FALSE)
+
+  }
+
+  gmfeID <- paste("gmfe",idPrefix,sep = "-")
+  ddiPlotResults[[gmfeID]] <- saveTaskResults(
+    id = gmfeID,
+    sectionId = sectionID,
+    table = gmfeDDI,
+    tableCaption = paste("GMFE for", metadata$title,idPrefix),
+    includeTable = TRUE
+  )
+
+  for (pkParameter in unique(dataframe$pkParameter)){
+    tableID <- paste("table",pkParameter,idPrefix,sep = "-")
+    ddiPlotResults[[tableID]] <- saveTaskResults(
+      id = tableID,
+      sectionId = sectionID,
+      table = ddiTableList[[pkParameter]],
+      tableCaption = paste("Summary table for", metadata$title,idPrefix,pkParameter),
+      includeTable = TRUE
+    )
   }
 
   return(ddiPlotResults)
@@ -304,6 +356,7 @@ plotQualificationDDIs <- function(configurationPlan,
 
 
   ddiData <- getQualificationDDIPlotData(configurationPlan)
+
   ddiResults <- list()
   subsectionLevel1Counter <- 0
   subsectionLevel2Counter <- 0
@@ -331,7 +384,7 @@ plotQualificationDDIs <- function(configurationPlan,
 
   }
 
-return(ddiResults)
+  return(ddiResults)
 
 }
 
