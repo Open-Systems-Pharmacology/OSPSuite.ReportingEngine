@@ -255,10 +255,10 @@ generateDDIQualificationDDIPlot <- function(data) {
 #' @keywords internal
 getDDISummaryTable <- function(summaryDataFrame,pkParameter){
 
-  guestValues <- tlf::getGuestValues(x = ddiSummary[["observedRatio"]])
-  ddiSummary[["guestLowerBound"]] <- guestValues$ymin
-  ddiSummary[["guestUpperBound"]] <- guestValues$ymax
-  ddiSummary[["withinTwoFold"]] <- sapply(ddiSummary[["simulatedObservedRatio"]],function(ratio){
+  guestValues <- tlf::getGuestValues(x = summaryDataFrame[["observedRatio"]])
+  summaryDataFrame[["guestLowerBound"]] <- guestValues$ymin
+  summaryDataFrame[["guestUpperBound"]] <- guestValues$ymax
+  summaryDataFrame[["withinTwoFold"]] <- sapply(summaryDataFrame[["simulatedObservedRatio"]],function(ratio){
     withinLimits <- 0
     if( ratio > 0.5 & ratio < 2){
       withinLimits <- 1
@@ -266,17 +266,17 @@ getDDISummaryTable <- function(summaryDataFrame,pkParameter){
     return(withinLimits)
   })
 
-  ddiSummary[["withinGuest"]] <- sapply(seq_along(ddiSummary[["simulatedRatio"]]),function(rowNumber){
+  summaryDataFrame[["withinGuest"]] <- sapply(seq_along(summaryDataFrame[["simulatedRatio"]]),function(rowNumber){
     withinLimits <- 0
-    if( ddiSummary[["simulatedRatio"]][rowNumber] > ddiSummary[["guestLowerBound"]][rowNumber] & ddiSummary[["simulatedRatio"]][rowNumber] < ddiSummary[["guestUpperBound"]][rowNumber]){
+    if( summaryDataFrame[["simulatedRatio"]][rowNumber] > summaryDataFrame[["guestLowerBound"]][rowNumber] & summaryDataFrame[["simulatedRatio"]][rowNumber] < summaryDataFrame[["guestUpperBound"]][rowNumber]){
       withinLimits <- 1
     }
     return(withinLimits)
   })
 
-  pointsTotal <- nrow(ddiSummary)
-  numberWithinGuest <- sum(ddiSummary[["withinGuest"]])
-  numberWithinTwoFold <- sum(ddiSummary[["withinTwoFold"]])
+  pointsTotal <- nrow(summaryDataFrame)
+  numberWithinGuest <- sum(summaryDataFrame[["withinGuest"]])
+  numberWithinTwoFold <- sum(summaryDataFrame[["withinTwoFold"]])
 
   ddiTable <- list()
   ddiTable[[pkParameter]] <- c("Points total","Points within Guest et al.","Points within 2-fold")
