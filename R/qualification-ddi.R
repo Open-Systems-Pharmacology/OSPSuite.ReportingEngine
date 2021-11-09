@@ -12,6 +12,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 
     plotDDIMetadata$title <- plot$Title
     plotDDIMetadata$sectionID <- plot$SectionId
+    plotDDIMetadata$plotSettings <- getPlotSettings(configurationPlan$plots$PlotSettings)
     # Pipes in configuration plan will be deprecated moving forward
 
     plotDDIMetadata$plotTypes <- plot$PlotTypes %||% ospsuite::toPathArray(plot$PlotType)
@@ -49,7 +50,10 @@ getQualificationDDIPlotData <- function(configurationPlan) {
           ratioList[[pkParameter]] <- list()
 
           validateIsIncluded(ddiPKRatioColumnName[[pkParameter]], names(observedDataFrame))
-          ratioList[[pkParameter]]$observedRatio <- observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]][observedDataFrame$ID == observedDataRecordId]
+          ratioList[[pkParameter]]$observedRatio <- observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]][observedDataFrame$ID %in% observedDataRecordId]
+          ratioList[[pkParameter]]$mechanism <- observedDataFrame[["Mechanism"]][observedDataFrame$ID %in% observedDataRecordId]
+          ratioList[[pkParameter]]$perpetrator <- observedDataFrame[["Perpetrator"]][observedDataFrame$ID %in% observedDataRecordId]
+          ratioList[[pkParameter]]$victim <- observedDataFrame[["Victim"]][observedDataFrame$ID %in% observedDataRecordId]
 
           for (simulationType in c("SimulationControl", "SimulationDDI")) {
             plotComponent <- ddiRatio[[simulationType]]
@@ -110,7 +114,10 @@ getQualificationDDIPlotData <- function(configurationPlan) {
             outputPath = outputPath,
             pkParameter = pkParameter,
             observedRatio = ratioList[[pkParameter]]$observedRatio,
-            simulatedRatio = ratioList[[pkParameter]][["SimulationDDI"]] / ratioList[[pkParameter]][["SimulationControl"]]
+            simulatedRatio = ratioList[[pkParameter]][["SimulationDDI"]] / ratioList[[pkParameter]][["SimulationControl"]],
+            mechanism = ratioList[[pkParameter]]$mechanism,
+            perpetrator = ratioList[[pkParameter]]$perpetrator,
+            victim = ratioList[[pkParameter]]$victim
           )
 
           plotDDIDataFrame <- rbind.data.frame(plotDDIDataFrame, df)
@@ -126,97 +133,33 @@ getQualificationDDIPlotData <- function(configurationPlan) {
   return(plotDDIdata)
 }
 
-#' @title buildQualificationDDIPredictedVsObserved
-#' @description Build dataframe for observation vs prediction
+
+
+#' @title buildQualificationDDIDataframe
+#' @description Build dataframe for DDI
 #' @param dataframe data.frame
 #' @param metadata meta data on `data`
-#' @return data.frame for plotting goodness of fit of predictedVsObserved type
-#' @keywords internal
-buildQualificationDDIPredictedVsObserved <- function(dataframe,
-                                                     metadata) {
-  axesSettings <- metadata$axesSettings$predictedVsObserved
-  axesSettings$X$label <- plotDDIXLabel$predictedVsObserved
-  axesSettings$Y$label <- plotDDIYLabel$predictedVsObserved
-
-  xUnit <- axesSettings$X$unit
-  xDimension <- axesSettings$X$dimension
-  xScaling <- axesSettings$X$scaling
-  xGridlines <- axesSettings$X$gridLines
-
-  yUnit <- axesSettings$Y$unit
-  yDimension <- axesSettings$Y$dimension
-  yScaling <- axesSettings$Y$scaling
-  yGridlines <- axesSettings$Y$gridLines
-
-  # function to do obs vs sim
-  ddiPlotDataframe <- NULL
-  aestheticsList <- list(shape = list(), color = list())
-
-  for (grp in unique(dataframe$groupNumber)) {
-    aestheticsList$shape[[grp]] <- metadata$groups[[grp]]$symbol
-    aestheticsList$color[[grp]] <- metadata$groups[[grp]]$color
-
-    xDataDimension <- ""
-    xDataUnit <- ""
-    xData <- dataframe[dataframe$group == grp, ]$observedRatio
-
-    if (xScaling == "Log") {
-      xData <- log10(xData)
-    }
-    xData <- replaceInfWithNA(xData)
-
-    yDataDimension <- ""
-    yDataUnit <- ""
-    yData <- dataframe[dataframe$group == grp, ]$simulatedRatio
-    if (yScaling == "Log") {
-      yData <- log10(yData)
-    }
-    yData <- replaceInfWithNA(yData)
-
-    df <- list()
-    df[[axesSettings$X$label]] <- xData
-    df[[axesSettings$Y$label]] <- yData
-    df$Group <- grp
-    ddiPlotDataframe <- rbind.data.frame(ddiPlotDataframe, as.data.frame(df))
-  }
-
-  ddiPlotDataframe$Group <- as.factor(ddiPlotDataframe$Group)
-  ddiPlotDataframe$Caption <- sapply(ddiPlotDataframe$Group,function(groupNumber){metadata$groups[[groupNumber]]$caption})
-  ddiPlotDataframe$Caption <- as.factor(ddiPlotDataframe$Caption)
-
-  return(list(ddiPlotDataframe = ddiPlotDataframe, aestheticsList = aestheticsList, axesSettings = axesSettings))
-}
-
-#' @title buildQualificationDDIResidualsVsObserved
-#' @description Build dataframe for residuals vs observed
-#' @param dataframe data.frame
-#' @param metadata meta data on `data`
+#' @param pkParameter for which DDI ratios are to be evaluated
+#' @param plotType for which DDI ratios are to be evaluated.  `plotType` is either `predictedVsObserved` or `residualsVsObserved`.
 #' @return dataframe for plotting goodness of fit of residuals vs time type
 #' @keywords internal
-buildQualificationDDIResidualsVsObserved <- function(dataframe,
-                                                     metadata) {
-  axesSettings <- metadata$axesSettings$residualsVsObserved
-  axesSettings$X$label <- plotDDIXLabel$residualsVsObserved
-  axesSettings$Y$label <- plotDDIYLabel$residualsVsObserved
+buildQualificationDDIDataframe <- function(dataframe,
+                                           metadata,
+                                           pkParameter,
+                                           plotType) {
+  plotSettings <- metadata$plotSettings
+  axesSettings <- metadata$axesSettings[[plotType]]
+  axesSettings$plotType <- plotType
+  axesSettings$X$label <- plotDDIXLabel[[plotType]](pkParameter)
+  axesSettings$Y$label <- plotDDIYLabel[[plotType]](pkParameter)
 
-  xUnit <- axesSettings$X$unit
-  xDimension <- axesSettings$X$dimension
-  xScaling <- axesSettings$X$scaling
-  xGridlines <- axesSettings$X$gridLines
-
-
-  yUnit <- axesSettings$Y$unit
-  yDimension <- axesSettings$Y$dimension
-  yScaling <- axesSettings$Y$scaling
-  yGridlines <- axesSettings$Y$gridLines
-
-  # function to do obs vs sim
   ddiPlotDataframe <- NULL
   aestheticsList <- list(shape = list(), color = list())
 
   for (grp in unique(dataframe$groupNumber)) {
-    aestheticsList$shape[[grp]] <- metadata$groups[[grp]]$symbol
-    aestheticsList$color[[grp]] <- metadata$groups[[grp]]$color
+    caption <- metadata$groups[[grp]]$caption
+    aestheticsList$shape[[caption]] <- metadata$groups[[grp]]$symbol
+    aestheticsList$color[[caption]] <- metadata$groups[[grp]]$color
 
     observedRatio <- dataframe[dataframe$group == grp, ]$observedRatio
     simulatedRatio <- dataframe[dataframe$group == grp, ]$simulatedRatio
@@ -224,35 +167,28 @@ buildQualificationDDIResidualsVsObserved <- function(dataframe,
     xDataDimension <- ""
     xDataUnit <- ""
     xData <- observedRatio
-
-    if (xScaling == "Log") {
-      xData <- log10(xData)
-    }
     xData <- replaceInfWithNA(xData)
 
     yDataDimension <- ""
     yDataUnit <- ""
-    if (yScaling == "Log") {
-      residualValues <- log10(simulatedRatio) - log10(observedRatio)
-    } else {
-      residualValues <- (simulatedRatio - observedRatio) / observedRatio
-    }
-    yData <- residualValues
+    yData <- getYAxisDDIValues[[plotType]](observedRatio,simulatedRatio)
     yData <- replaceInfWithNA(yData)
 
     df <- list()
     df[[axesSettings$X$label]] <- xData
     df[[axesSettings$Y$label]] <- yData
     df$Group <- grp
-    ddiPlotDataframe <- rbind.data.frame(ddiPlotDataframe, as.data.frame(df))
+    ddiPlotDataframe <- rbind.data.frame(ddiPlotDataframe, as.data.frame(df,check.names = FALSE))
   }
 
-  ddiPlotDataframe$Group <- as.factor(ddiPlotDataframe$Group)
   ddiPlotDataframe$Caption <- sapply(ddiPlotDataframe$Group,function(groupNumber){metadata$groups[[groupNumber]]$caption})
+  ddiPlotDataframe$Group <- as.factor(ddiPlotDataframe$Group)
   ddiPlotDataframe$Caption <- as.factor(ddiPlotDataframe$Caption)
 
-  return(list(ddiPlotDataframe = ddiPlotDataframe, aestheticsList = aestheticsList, axesSettings = axesSettings))
+  return(list(ddiPlotDataframe = ddiPlotDataframe, aestheticsList = aestheticsList, axesSettings = axesSettings, plotSettings = plotSettings))
 }
+
+
 
 #' @title generateDDIQualificationDDIPlot
 #' @description Plot observation vs prediction for qualification workflow
@@ -262,17 +198,6 @@ buildQualificationDDIResidualsVsObserved <- function(dataframe,
 #' @import ggplot2
 #' @keywords internal
 generateDDIQualificationDDIPlot <- function(data) {
-  if (data$axesSettings$X$scaling == "Log") {
-    xlabel <- bquote(log[10] * .(paste0(data$axesSettings$X$label)))
-  } else {
-    xlabel <- paste(data$axesSettings$X$label)
-  }
-
-  if (data$axesSettings$Y$scaling == "Log") {
-    ylabel <- bquote(log[10] * .(paste0(data$axesSettings$Y$label)))
-  } else {
-    ylabel <- paste(data$axesSettings$Y$label)
-  }
 
   ddiData <- na.omit(data$ddiPlotDataframe)
 
@@ -280,7 +205,9 @@ generateDDIQualificationDDIPlot <- function(data) {
     x = data$axesSettings$X$label,
     y = data$axesSettings$Y$label,
     shape = "Caption",
-    color = "Caption"
+    color = "Caption",
+    minRange = c(0.1, 10),
+    residualsVsObserved = residualsVsObservedFlag[[data$axesSettings$plotType]]
   )
 
   ddiPlotConfiguration <- tlf::DDIRatioPlotConfiguration$new(
@@ -288,15 +215,34 @@ generateDDIQualificationDDIPlot <- function(data) {
     dataMapping = ddiDataMapping
   )
 
-  qualificationDDIPredictedVsObservedPlot <- tlf::plotDDIRatio(
+  ddiPlotConfiguration$labels$xlabel$font$size <- data$plotSettings$axisFontSize
+  ddiPlotConfiguration$labels$ylabel$font$size <- data$plotSettings$axisFontSize
+  ddiPlotConfiguration$background$watermark$font$size <- data$plotSettings$watermarkFontSize
+  ddiPlotConfiguration$legend$font$size <- data$plotSettings$legendFontSize
+
+  qualificationDDIPlot <- tlf::plotDDIRatio(
     data = ddiData,
     plotConfiguration = ddiPlotConfiguration,
     dataMapping = ddiDataMapping
   )
-  qualificationDDIPredictedVsObservedPlot <- qualificationDDIPredictedVsObservedPlot + ggplot2::scale_color_manual(values = data$aestheticsList$color)
-  qualificationDDIPredictedVsObservedPlot <- qualificationDDIPredictedVsObservedPlot + ggplot2::scale_shape_manual(values = data$aestheticsList$shape)
-  qualificationDDIPredictedVsObservedPlot <- qualificationDDIPredictedVsObservedPlot + ggplot2::xlab(xlabel) + ggplot2::ylab(ylabel)
-  return(qualificationDDIPredictedVsObservedPlot)
+
+  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_color_manual(values = sapply(data$aestheticsList$color,function(x){x}))
+  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_shape_manual(values = sapply(data$aestheticsList$shape,function(x){x}))
+
+  xlabel <- paste(data$axesSettings$X$label)
+  ylabel <- paste(data$axesSettings$Y$label)
+
+  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::xlab(xlabel) + ggplot2::ylab(ylabel)
+
+  if (data$axesSettings$X$scaling == "Log") {
+    qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_x_continuous(trans='log10',labels = function(x) format(x, scientific = FALSE))
+  }
+
+  if (data$axesSettings$Y$scaling == "Log") {
+    qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_y_continuous(trans='log10',labels = function(x) format(x, scientific = FALSE),)
+  }
+
+  return(qualificationDDIPlot)
 }
 
 #' @title plotQualificationDDIs
@@ -309,27 +255,47 @@ generateDDIQualificationDDIPlot <- function(data) {
 plotQualificationDDIs <- function(configurationPlan,
                                   logFolder = getwd(),
                                   settings) {
+
   ddiPlotsData <- getQualificationDDIPlotData(configurationPlan)
-  ddiPlotList <- list()
   ddiPlotResults <- list()
+  subplotTypes <- c("mechanism", "perpetrator", "victim")
 
   for (plotIndex in seq_along(ddiPlotsData)) {
-    ddiPlotList[[plotIndex]] <- list()
+
     dataframe <- ddiPlotsData[[plotIndex]]$dataframe
     metadata <- ddiPlotsData[[plotIndex]]$metadata
     for (plotType in metadata$plotTypes) {
       for (pkParameter in unique(dataframe$pkParameter)) {
-        plotID <- paste("DDIRatioPlot", plotIndex, plotType, pkParameter, sep = "-")
 
-        plotDDIData <- buildDDIDataFrameFunctions[[plotType]](dataframe[dataframe$pkParameter == pkParameter, ], metadata)
-        ddiPlotList[[plotIndex]][[plotType]] <- generateDDIQualificationDDIPlot(plotDDIData)
+        pkDataframe <- dataframe[dataframe$pkParameter == pkParameter, ]
 
+        plotDDIData <- buildQualificationDDIDataframe(pkDataframe, metadata, pkParameter, plotType)
+        plotID <- paste("DDIRatioPlot", plotIndex, plotType, pkParameter,"all", sep = "-")
+        ddiPlot <- generateDDIQualificationDDIPlot(plotDDIData)
         ddiPlotResults[[plotID]] <- saveTaskResults(
           id = plotID,
           sectionId = metadata$sectionID,
-          plot = ddiPlotList[[plotIndex]][[plotType]],
+          plot = ddiPlot,
           plotCaption = paste(metadata$title, " - ", pkParameter)
         )
+
+
+        for (subplotType in subplotTypes){
+          subplotTypeLevels <- unique(pkDataframe[[subplotType]])
+          for (subplotTypeLevel in subplotTypeLevels){
+            subplotDataframe <- droplevels(pkDataframe[pkDataframe[[subplotType]] == subplotTypeLevel,])
+            plotDDIData <- buildQualificationDDIDataframe(subplotDataframe, metadata, pkParameter, plotType)
+            plotID <- paste("DDIRatioPlot", plotIndex, plotType, pkParameter, subplotType, subplotTypeLevel, sep = "-")
+            ddiSubplot <- generateDDIQualificationDDIPlot(plotDDIData)
+            ddiPlotResults[[plotID]] <- saveTaskResults(
+              id = plotID,
+              sectionId = metadata$sectionID,
+              plot = ddiSubplot,
+              plotCaption = paste(metadata$title, pkParameter , subplotType, subplotTypeLevel , sep = "-")
+            )
+          }
+        }
+
       }
     }
   }
@@ -343,23 +309,30 @@ ddiPlotAxesSettings <- list(
   "residualsVsObserved" = "DDIRatioPlotsResidualsVsObserved"
 )
 
-#' Names of functions for extracting data for each DDI plot type
-#' @keywords internal
-buildDDIDataFrameFunctions <- list(
-  "predictedVsObserved" = buildQualificationDDIPredictedVsObserved,
-  "residualsVsObserved" = buildQualificationDDIResidualsVsObserved
-)
-
 #' Labels for DDI plot X-axis
 #' @keywords internal
 plotDDIXLabel <- list(
-  "predictedVsObserved" = "Observed",
-  "residualsVsObserved" = "Observed"
+  "predictedVsObserved" = function(pk){return(paste("Observed",pk,"Ratio"))},
+  "residualsVsObserved" = function(pk){return(paste("Observed",pk,"Ratio"))}
 )
 
 #' Labels for DDI plot Y-axis
 #' @keywords internal
 plotDDIYLabel <- list(
-  "predictedVsObserved" = "Predicted",
-  "residualsVsObserved" = "Residual"
+  "predictedVsObserved" = function(pk){return(paste("Predicted",pk,"Ratio"))},
+  "residualsVsObserved" = function(pk){return(paste("Predicted",pk,"Ratio / Observed",pk,"Ratio"))}
+)
+
+#' DDI plot type identifier
+#' @keywords internal
+residualsVsObservedFlag <- list(
+  "predictedVsObserved" = FALSE,
+  "residualsVsObserved" = TRUE
+)
+
+#' Computation of Y-Axis values
+#' @keywords internal
+getYAxisDDIValues <- list(
+  "predictedVsObserved" = function(observedRatio,simulatedRatio){return(simulatedRatio)},
+  "residualsVsObserved" = function(observedRatio,simulatedRatio){return(simulatedRatio / observedRatio)}
 )
