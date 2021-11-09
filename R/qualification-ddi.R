@@ -303,7 +303,7 @@ plotQualificationDDIs <- function(configurationPlan,
                                   settings) {
 
 
-  ddiPlotsData <- getQualificationDDIPlotData(configurationPlan)
+  ddiData <- getQualificationDDIPlotData(configurationPlan)
   ddiResults <- list()
   subsectionLevel1Counter <- 0
   subsectionLevel2Counter <- 0
