@@ -61,7 +61,7 @@ plotMeanPKParameters <- function(structureSet,
 
     pkParametersData <- rbind.data.frame(
       pkParametersData,
-      getMeanPkAnalysesFromOuptut(pkParametersTable, output, molWeight)
+      getMeanPKAnalysesFromOuptut(pkParametersTable, output, molWeight)
     )
   }
   pkParametersData$Value <- replaceInfWithNA(pkParametersData$Value, logFolder)
@@ -76,7 +76,15 @@ plotMeanPKParameters <- function(structureSet,
   ))
 }
 
-getMeanPkAnalysesFromOuptut <- function(data, output, molWeight = NULL) {
+#' @title getMeanPKAnalysesFromOuptut
+#' @description Get PK analyses from an `Output` object
+#' @param data A data.frame of PK Analyses
+#' @param output An `Output` object defining `pkParameters`
+#' @param molWeight Molecular weight for converting into PK Parameter `displayUnit`
+#' @return A data.frame with `Path`, `Parameter`, `Value` and `Unit` to display in final report
+#' @import ospsuite
+#' @keywords internal
+getMeanPKAnalysesFromOuptut <- function(data, output, molWeight = NULL) {
   pkAnalysesFromOuptut <- NULL
   validateIsIncluded(output$path, unique(data$QuantityPath))
   outputData <- data[data$QuantityPath %in% output$path, ]
@@ -140,9 +148,11 @@ plotPopulationPKParameters <- function(structureSets,
   validateIsOfType(c(structureSets), "SimulationStructure")
   validateIsString(c(xParameters), nullAllowed = TRUE)
   validateIsOfType(c(yParameters), "Output", nullAllowed = TRUE)
-  validateSameOutputsBetweenSets(c(lapply(structureSets, function(set) {
-    set$simulationSet
-  })), logFolder)
+  validateSameOutputsBetweenSets(
+    c(lapply(structureSets, function(set) {
+      set$simulationSet
+    })), logFolder
+  )
 
   # Use first structure set as reference
   yParameters <- yParameters %||% structureSets[[1]]$simulationSet$outputs
@@ -161,7 +171,7 @@ plotPopulationPKParameters <- function(structureSets,
     y = "Value"
   )
 
-  pkParametersAcrossPopulations <- getPkParametersAcrossPopulations(structureSets)
+  pkParametersAcrossPopulations <- getPKParametersAcrossPopulations(structureSets)
   pkParametersDataAcrossPopulations <- pkParametersAcrossPopulations$data
   pkParametersMetaDataAcrossPopulations <- pkParametersAcrossPopulations$metaData
   simulationSetNames <- unique(as.character(pkParametersDataAcrossPopulations$simulationSetName))
@@ -186,7 +196,7 @@ plotPopulationPKParameters <- function(structureSets,
       yParameterLabel <- lastPathElement(pkParameter$pkParameter)
       plotID <- paste0(pathLabel, "-", yParameterLabel)
 
-      pkParameterFromOutput <- getPopulationPkAnalysesFromOuptut(
+      pkParameterFromOutput <- getPopulationPKAnalysesFromOuptut(
         pkParametersDataAcrossPopulations,
         pkParametersMetaDataAcrossPopulations,
         output,
@@ -383,7 +393,7 @@ plotPopulationPKParameters <- function(structureSets,
       if (workflowType %in% PopulationWorkflowTypes$ratioComparison) {
         plotID <- paste0(pathLabel, "-", yParameterLabel, "-ratio")
         # Get the tables and compute the ratios using reference population name
-        pkRatiosTable <- getPkRatiosTable(pkParameterTable, referenceSimulationSetName)
+        pkRatiosTable <- getPKRatiosTable(pkParameterTable, referenceSimulationSetName)
 
         pkRatiosData <- pkRatiosTable
         pkRatiosData[, c("ymin", "lower", "middle", "upper", "ymax")] <- pkRatiosTable[, c(3:7)]
@@ -551,46 +561,31 @@ vpcParameterPlot <- function(data,
   return(vpcPlot)
 }
 
-#' @title getPkParametersAcrossPopulations
+#' @title getPKParametersAcrossPopulations
 #' @description Get the values of PK parameters across Population Simulation sets
 #' @param structureSets list of `SimulationStructures` objects
 #' @return list of data.frame and its metaData including the values of PK parameters across Population Simulation sets
 #' @keywords internal
-getPkParametersAcrossPopulations <- function(structureSets) {
+getPKParametersAcrossPopulations <- function(structureSets) {
   pkParametersTableAcrossPopulations <- NULL
-  for (structureSet in structureSets)
-  {
+  for (structureSet in structureSets) {
     simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
     population <- loadWorkflowPopulation(structureSet$simulationSet)
-
     pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
       structureSet$pkAnalysisResultsFileNames,
       simulation
     )
-
     pkParametersTable <- ospsuite::pkAnalysesAsDataFrame(pkAnalyses)
     populationTable <- getPopulationAsDataFrame(population, simulation)
 
-    # Use merge instead of cbind as there is a same variable IndividualId
-    fullPkParametersTable <- merge.data.frame(
+    pkParametersTable <- formatPKParametersTable(
+      structureSet,
       pkParametersTable,
       populationTable
     )
-    fullPkParametersTable <- cbind.data.frame(
-      simulationSetName = structureSet$simulationSet$simulationSetName,
-      fullPkParametersTable
-    )
-    # Prevent crash when merging populations with different parameters by filling unexisting with NA
-    newNamesPkParametersTableAcrossPopulations <- setdiff(names(fullPkParametersTable), names(pkParametersTableAcrossPopulations))
-    newNamesPkParametersTable <- setdiff(names(pkParametersTableAcrossPopulations), names(fullPkParametersTable))
-    if (!is.null(pkParametersTableAcrossPopulations)) {
-      pkParametersTableAcrossPopulations[, newNamesPkParametersTableAcrossPopulations] <- NA
-    }
-    fullPkParametersTable[, newNamesPkParametersTable] <- NA
-
-    pkParametersTableAcrossPopulations <- rbind.data.frame(
+    pkParametersTableAcrossPopulations <- rbindPKParametersTables(
       pkParametersTableAcrossPopulations,
-      fullPkParametersTable
+      pkParametersTable
     )
   }
   metaData <- getPopulationMetaData(population, simulation, structureSet$parameterDisplayPaths)
@@ -601,7 +596,68 @@ getPkParametersAcrossPopulations <- function(structureSets) {
   ))
 }
 
-getPkRatiosTable <- function(pkParametersTable,
+#' @title formatPKParametersTable
+#' @description Format data.frame of PK and Population Parameters from a simulation set
+#' @param structureSets A `SimulationStructure` objects
+#' @param pkParametersTable A data.frame of PK parameters
+#' @param populationTable A data.frame of population parameters
+#' @return A data.frame and its metaData including the values of PK parameters across Population Simulation sets
+#' @keywords internal
+formatPKParametersTable <- function(structureSet, pkParametersTable, populationTable) {
+  # Use merge instead of cbind which uses the intersect in names
+  # Data conseuently match by IndividualId
+  pkParametersTable <- merge.data.frame(
+    pkParametersTable,
+    populationTable
+  )
+  # Add the simulationSetName for the legend captions
+  # And group identifier to get the appropriate PK parameters
+  pkParametersTable <- cbind.data.frame(
+    simulationSetName = structureSet$simulationSet$simulationSetName,
+    group = NA,
+    pkParametersTable
+  )
+  # Map groups of pkParameter objects
+  for (output in structureSet$simulationSet$outputs) {
+    for (pkParameter in output$pkParameters) {
+      selectedRows <- (pkParametersTable$QuantityPath %in% output$path) & (pkParametersTable$Parameter %in% pkParameter$pkParameter)
+      pkParametersTable$group[selectedRows] <- pkParameter$group
+    }
+  }
+  return(pkParametersTable)
+}
+
+#' @title rbindPKParametersTables
+#' @description Concatenate data.frames of PK and Population Parameters across simulation sets
+#' @param pkParametersTableAcrossPopulations A data.frame of PK and Population Parameters across simulation sets
+#' @param pkParametersTable A data.frame of PK and Population Parameters for a simulation set
+#' @return A data.frame of PK and Population Parameters across simulation sets
+#' @keywords internal
+rbindPKParametersTables <- function(pkParametersTableAcrossPopulations, pkParametersTable) {
+  if (isOfLength(pkParametersTableAcrossPopulations, 0)) {
+    return(pkParametersTable)
+  }
+  # Prevent crash when merging populations with different columns
+  # Unmatched variables are filled with NAs
+  naVariablesForPKParametersTableAcrossPopulations <- setdiff(
+    names(pkParametersTable),
+    names(pkParametersTableAcrossPopulations)
+  )
+  naVariablesForPKParametersTable <- setdiff(
+    names(pkParametersTableAcrossPopulations),
+    names(pkParametersTable)
+  )
+  pkParametersTableAcrossPopulations[, naVariablesForPKParametersTableAcrossPopulations] <- NA
+  pkParametersTable[, naVariablesForPKParametersTable] <- NA
+
+  pkParametersTableAcrossPopulations <- rbind.data.frame(
+    pkParametersTableAcrossPopulations,
+    pkParametersTable
+  )
+  return(pkParametersTableAcrossPopulations)
+}
+
+getPKRatiosTable <- function(pkParametersTable,
                              referenceSimulationSetName) {
   simulationSetNames <- pkParametersTable$Population
 
@@ -619,7 +675,7 @@ getPkRatiosTable <- function(pkParametersTable,
 #' Use enum `PopulationWorkflowTypes` to get a list of available workflow types.
 #' @return names of default parameters
 #' @export
-#' @examples 
+#' @examples
 #' getDefaultPkParametersXParameters(PopulationWorkflowTypes$pediatric)
 getDefaultPkParametersXParameters <- function(workflowType) {
   validateIsIncluded(workflowType, PopulationWorkflowTypes)
@@ -629,24 +685,25 @@ getDefaultPkParametersXParameters <- function(workflowType) {
   return(NULL)
 }
 
-#' @title getPopulationPkAnalysesFromOuptut
+#' @title getPopulationPKAnalysesFromOuptut
 #' @description Get the values of PK parameters specified by an `Output` object from a data.frame
 #' @param data data.frame of the PK Analyses across Population Simulation sets
 #' @param metaData metaData (dimension and unit) of the PK Analyses across Population Simulation sets
-#' @param output `Output ` object
+#' @param output An `Output ` object
 #' @param pkParameter `pkParameter` from `Output ` object
 #' @param molWeight Molecular weight of compound (if unit conversion needed)
 #' @return list of data.frame and its metaData including the values of PK parameters specified by `pkParameter` and `Output` objects
 #' @keywords internal
-getPopulationPkAnalysesFromOuptut <- function(data, metaData, output, pkParameter, molWeight = NULL) {
+getPopulationPKAnalysesFromOuptut <- function(data, metaData, output, pkParameter, molWeight = NULL) {
   validateIsIncluded(output$path, unique(data$QuantityPath))
   outputData <- data[data$QuantityPath %in% output$path, ]
 
   displayName <- pkParameter$displayName
   displayUnit <- pkParameter$displayUnit
 
-  validateIsIncluded(pkParameter$pkParameter, unique(outputData$Parameter))
-  selectedParameter <- outputData$Parameter %in% pkParameter$pkParameter
+  # Caution: now using group instead of pkParameter and Parameter
+  validateIsIncluded(pkParameter$group, unique(outputData$group))
+  selectedParameter <- outputData$group %in% pkParameter$group
   pkParameterObject <- ospsuite::pkParameterByName(pkParameter$pkParameter)
 
   # Need to switch back to base unit first if a display unit is provided
