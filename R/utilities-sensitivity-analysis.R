@@ -504,7 +504,7 @@ plotMeanSensitivity <- function(structureSet,
                                 logFolder = getwd(),
                                 settings) {
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
-  simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
+  simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
 
   re.tStoreFileMetadata(access = "read", filePath = structureSet$sensitivityAnalysisResultsFileNames)
   saResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(
@@ -636,7 +636,7 @@ plotPopulationSensitivity <- function(structureSets,
     sensitivityResultsFolder <- file.path(structureSet$workflowFolder, structureSet$sensitivityAnalysisResultsFolder)
 
     re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
-    simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
+    simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
 
     re.tStoreFileMetadata(access = "read", filePath = structureSet$popSensitivityAnalysisResultsIndexFile)
     if (!(file.exists(structureSet$popSensitivityAnalysisResultsIndexFile))) next

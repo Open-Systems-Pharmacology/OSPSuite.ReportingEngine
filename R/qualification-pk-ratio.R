@@ -221,7 +221,8 @@ getQualificationPKRatioData <- function(pkRatioPlan, configurationPlan, logFolde
 getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configurationPlan, logFolder) {
   # Load required inputs
   simulation <- ospsuite::loadSimulation(
-    configurationPlan$getSimulationPath(project = pkRatioMapping$Project, simulation = pkRatioMapping$Simulation)
+    configurationPlan$getSimulationPath(project = pkRatioMapping$Project, simulation = pkRatioMapping$Simulation),
+    loadFromCache = TRUE
   )
   pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
     filePath = configurationPlan$getPKAnalysisResultsPath(project = pkRatioMapping$Project, simulation = pkRatioMapping$Simulation),

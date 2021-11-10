@@ -14,7 +14,7 @@ plotMeanMassBalance <- function(structureSet,
                                 logFolder = getwd(),
                                 settings = NULL) {
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
-  simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
+  simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
 
   # Get drug mass to perform the drugmass normalized plot
   applications <- ospsuite::getContainer("Applications", simulation)

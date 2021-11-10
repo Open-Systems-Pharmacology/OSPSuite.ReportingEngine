@@ -105,7 +105,7 @@ getGOFDataForMapping <- function(outputMapping, configurationPlan, axesUnits, lo
     project = outputMapping$Project,
     simulation = outputMapping$Simulation
   )
-  simulation <- ospsuite::loadSimulation(simulationFile)
+  simulation <- ospsuite::loadSimulation(simulationFile, loadFromCache = TRUE)
   simulationResults <- ospsuite::importResultsFromCSV(simulation, simulationResultsFile)
   # Get and convert output path values into display unit
   simulationQuantity <- ospsuite::getQuantity(outputMapping$Output, simulation)
