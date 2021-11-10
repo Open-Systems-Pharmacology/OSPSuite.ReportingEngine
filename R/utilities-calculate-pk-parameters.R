@@ -47,7 +47,7 @@ plotMeanPKParameters <- function(structureSet,
   pkParametersData <- NULL
 
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
-  simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
+  simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
 
   re.tStoreFileMetadata(access = "read", filePath = structureSet$pkAnalysisResultsFileNames)
   pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
@@ -157,7 +157,7 @@ plotPopulationPKParameters <- function(structureSets,
   # Use first structure set as reference
   yParameters <- yParameters %||% structureSets[[1]]$simulationSet$outputs
   # Get first simulation, in case mol weight is needed
-  simulation <- loadSimulationWithUpdatedPaths(structureSets[[1]]$simulationSet)
+  simulation <- loadSimulationWithUpdatedPaths(structureSets[[1]]$simulationSet, loadFromCache = TRUE)
   simulationSetDescriptor <- structureSets[[1]]$simulationSetDescriptor
 
   pkRatioTableAcrossPopulations <- NULL
@@ -569,7 +569,7 @@ vpcParameterPlot <- function(data,
 getPKParametersAcrossPopulations <- function(structureSets) {
   pkParametersTableAcrossPopulations <- NULL
   for (structureSet in structureSets) {
-    simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
+    simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
     population <- loadWorkflowPopulation(structureSet$simulationSet)
     pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
       structureSet$pkAnalysisResultsFileNames,

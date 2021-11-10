@@ -26,7 +26,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
 
   # Load observed and simulated data
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
-  simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
+  simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
 
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationResultFileNames)
   simulationResult <- ospsuite::importResultsFromCSV(simulation, structureSet$simulationResultFileNames)
@@ -239,7 +239,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
 
   # Load observed and simulated data
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
-  simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
+  simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
 
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationResultFileNames)
   simulationResult <- ospsuite::importResultsFromCSV(simulation, structureSet$simulationResultFileNames)

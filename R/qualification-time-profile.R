@@ -24,7 +24,7 @@ plotQualificationTimeProfiles <- function(configurationPlan,
       simulation = timeProfilePlan$Simulation
     )
 
-    simulation <- ospsuite::loadSimulation(simulationFile)
+    simulation <- ospsuite::loadSimulation(simulationFile, loadFromCache = TRUE)
     simulationResults <- ospsuite::importResultsFromCSV(simulation, simulationResultsFile)
 
     # Get axes properties (with scale, limits and display units)
