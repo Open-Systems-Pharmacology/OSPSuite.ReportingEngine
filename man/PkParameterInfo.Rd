@@ -14,6 +14,8 @@ R6 class representing workflow selected PK parameter.
 \item{\code{displayName}}{display name for `pkParameter`}
 
 \item{\code{displayUnit}}{display unit for `pkParameter`}
+
+\item{\code{group}}{Grouping identifier}
 }
 \if{html}{\out{</div>}}
 }
@@ -29,7 +31,12 @@ R6 class representing workflow selected PK parameter.
 \subsection{Method \code{new()}}{
 Create a new `PkParameterInfo` object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PkParameterInfo$new(pkParameter, displayName = NULL, displayUnit = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PkParameterInfo$new(
+  pkParameter,
+  displayName = NULL,
+  displayUnit = NULL,
+  group = NULL
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -41,6 +48,8 @@ Tips: use ospsuite::allPKParameterNames() to get a list of available PK paramete
 \item{\code{displayName}}{display name for `pkParameter`}
 
 \item{\code{displayUnit}}{display unit for `pkParameter`}
+
+\item{\code{group}}{Grouping identifier. Default group associate `pkParameter`.}
 }
 \if{html}{\out{</div>}}
 }

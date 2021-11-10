@@ -290,6 +290,21 @@ getPKParametersInOutput <- function(output) {
   return(pkParameters)
 }
 
+#' @title getPKParametersInOutput
+#' @param output Output object
+#' @return Names of pkParameters in `output`
+#' @keywords internal
+getPKParameterGroupsInOutput <- function(output) {
+  validateIsOfType(output, "Output")
+  pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
+    pkParameterInfo$group
+  })
+  if (isOfLength(pkParameters, 0)) {
+    return(NA)
+  }
+  return(pkParameters)
+}
+
 #' @title getOutputPathsInSimulationSet
 #' @param simulationSet SimulationSet object or derived class
 #' @return Path names of outputs in `simulationSet`
@@ -314,6 +329,7 @@ getPKParametersInSimulationSet <- function(simulationSet) {
       data.frame(
         path = output$path,
         pkParameter = getPKParametersInOutput(output),
+        group = getPKParameterGroupsInOutput(output),
         stringsAsFactors = FALSE
       )
     )
