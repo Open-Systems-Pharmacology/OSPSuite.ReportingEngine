@@ -27,3 +27,26 @@ AggregationConfiguration <- list(
   bins = 11,
   binUsingQuantiles = TRUE
 )
+
+displayDimension <- function(dimension){
+  if (isIncluded(dimension, c("Concentration (mass)", "Concentration (molar)"))) {
+    return("Concentration")
+  }
+  return(dimension)
+}
+
+#' @title autoAxesLimits
+#' @description Defines auto axis limits
+#' @param x Values from which the limits are calculated
+#' @return A list of units for goodness of fit results
+#' @keywords internal
+autoAxesLimits <- function(x) {
+  minX <- min(x, na.rm = TRUE)
+  maxX <- max(x, na.rm = TRUE)
+  minX[minX<0] <- (1+reEnv$autoAxisLimitMargin)*minX
+  minX[minX>0] <- (1-reEnv$autoAxisLimitMargin)*minX
+  maxX[maxX<0] <- (1-reEnv$autoAxisLimitMargin)*maxX
+  maxX[maxX<0] <- (1+reEnv$autoAxisLimitMargin)*maxX
+  return(c(minX, maxX))
+}
+

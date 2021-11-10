@@ -65,10 +65,9 @@ plotQualificationPKRatio <- function(configurationPlan,
 }
 
 #' @title getQualificationPKRatioGMFE
-#' @description Get plot of pk ratio from field `PKRatioPlots` of configuration plan
+#' @description Get Geometric Mean Fold Error for PK ratio plots
 #' @param pkParameterName Name of PK Parameter as defined by users
 #' @param data data.frame with PK Ratios
-#' @param metaData metaData with units and dimension for labeling the table header
 #' @return A data.frame
 #' @keywords internal
 getQualificationPKRatioGMFE <- function(pkParameterNames, data) {
@@ -132,6 +131,8 @@ getQualificationPKRatioPlot <- function(pkParameterName, data, metaData, axesPro
   )
   plotConfiguration$points$color <- metaData$color
   plotConfiguration$points$shape <- metaData$shape
+  plotConfiguration$xAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||% autoAxesLimits(data[,"age"])
+  plotConfiguration$yAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||% autoAxesLimits(c(0.5, 2, data[,paste0("ratio", pkParameterName)]))
 
   pkRatioPlot <- tlf::plotPKRatio(
     data = data,

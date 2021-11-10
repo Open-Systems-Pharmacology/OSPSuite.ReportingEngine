@@ -105,8 +105,8 @@ getAxesProperties <- function(axesSettings) {
 #' @keywords internal
 updatePlotAxes <- function(plotObject, axesProperties) {
   plotObject <- tlf::setPlotLabels(plotObject,
-    xlabel = tlf::getLabelWithUnit(axesProperties$x$dimension, axesProperties$x$unit),
-    ylabel = tlf::getLabelWithUnit(axesProperties$y$dimension, axesProperties$y$unit)
+    xlabel = tlf::getLabelWithUnit(displayDimension(axesProperties$x$dimension), axesProperties$x$unit),
+    ylabel = tlf::getLabelWithUnit(displayDimension(axesProperties$y$dimension), axesProperties$y$unit)
   )
 
   try({
