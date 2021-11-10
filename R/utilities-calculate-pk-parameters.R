@@ -61,7 +61,7 @@ plotMeanPKParameters <- function(structureSet,
 
     pkParametersData <- rbind.data.frame(
       pkParametersData,
-      getMeanPKAnalysesFromOuptut(pkParametersTable, output, molWeight)
+      getMeanPKAnalysesFromOutput(pkParametersTable, output, molWeight)
     )
   }
   pkParametersData$Value <- replaceInfWithNA(pkParametersData$Value, logFolder)
@@ -76,7 +76,7 @@ plotMeanPKParameters <- function(structureSet,
   ))
 }
 
-#' @title getMeanPKAnalysesFromOuptut
+#' @title getMeanPKAnalysesFromOutput
 #' @description Get PK analyses from an `Output` object
 #' @param data A data.frame of PK Analyses
 #' @param output An `Output` object defining `pkParameters`
@@ -84,8 +84,8 @@ plotMeanPKParameters <- function(structureSet,
 #' @return A data.frame with `Path`, `Parameter`, `Value` and `Unit` to display in final report
 #' @import ospsuite
 #' @keywords internal
-getMeanPKAnalysesFromOuptut <- function(data, output, molWeight = NULL) {
-  pkAnalysesFromOuptut <- NULL
+getMeanPKAnalysesFromOutput <- function(data, output, molWeight = NULL) {
+  pkAnalysesFromOutput <- NULL
   validateIsIncluded(output$path, unique(data$QuantityPath))
   outputData <- data[data$QuantityPath %in% output$path, ]
 
@@ -110,8 +110,8 @@ getMeanPKAnalysesFromOuptut <- function(data, output, molWeight = NULL) {
       )
     }
 
-    pkAnalysesFromOuptut <- rbind.data.frame(
-      pkAnalysesFromOuptut,
+    pkAnalysesFromOutput <- rbind.data.frame(
+      pkAnalysesFromOutput,
       data.frame(
         Path = output$displayName,
         Parameter = displayName %||% outputData$Parameter[selectedParameter],
@@ -120,7 +120,7 @@ getMeanPKAnalysesFromOuptut <- function(data, output, molWeight = NULL) {
       )
     )
   }
-  return(pkAnalysesFromOuptut)
+  return(pkAnalysesFromOutput)
 }
 
 #' @title plotPopulationPKParameters
@@ -196,7 +196,7 @@ plotPopulationPKParameters <- function(structureSets,
       yParameterLabel <- lastPathElement(pkParameter$pkParameter)
       plotID <- paste0(pathLabel, "-", yParameterLabel)
 
-      pkParameterFromOutput <- getPopulationPKAnalysesFromOuptut(
+      pkParameterFromOutput <- getPopulationPKAnalysesFromOutput(
         pkParametersDataAcrossPopulations,
         pkParametersMetaDataAcrossPopulations,
         output,
@@ -685,7 +685,7 @@ getDefaultPkParametersXParameters <- function(workflowType) {
   return(NULL)
 }
 
-#' @title getPopulationPKAnalysesFromOuptut
+#' @title getPopulationPKAnalysesFromOutput
 #' @description Get the values of PK parameters specified by an `Output` object from a data.frame
 #' @param data data.frame of the PK Analyses across Population Simulation sets
 #' @param metaData metaData (dimension and unit) of the PK Analyses across Population Simulation sets
@@ -694,7 +694,7 @@ getDefaultPkParametersXParameters <- function(workflowType) {
 #' @param molWeight Molecular weight of compound (if unit conversion needed)
 #' @return list of data.frame and its metaData including the values of PK parameters specified by `pkParameter` and `Output` objects
 #' @keywords internal
-getPopulationPKAnalysesFromOuptut <- function(data, metaData, output, pkParameter, molWeight = NULL) {
+getPopulationPKAnalysesFromOutput <- function(data, metaData, output, pkParameter, molWeight = NULL) {
   validateIsIncluded(output$path, unique(data$QuantityPath))
   outputData <- data[data$QuantityPath %in% output$path, ]
 
@@ -719,18 +719,18 @@ getPopulationPKAnalysesFromOuptut <- function(data, metaData, output, pkParamete
     )
   }
 
-  pkAnalysesFromOuptut <- outputData[selectedParameter, ]
-  pkAnalysesFromOuptut$Value <- pkParameterValue
+  pkAnalysesFromOutput <- outputData[selectedParameter, ]
+  pkAnalysesFromOutput$Value <- pkParameterValue
 
-  pkAnalysesFromOuptutMetaData <- metaData
-  pkAnalysesFromOuptutMetaData$Value <- list(
-    dimension = displayName %||% pkAnalysesFromOuptut$Parameter[1],
-    unit = displayUnit %||% pkAnalysesFromOuptut$Unit[1]
+  pkAnalysesFromOutputMetaData <- metaData
+  pkAnalysesFromOutputMetaData$Value <- list(
+    dimension = displayName %||% pkAnalysesFromOutput$Parameter[1],
+    unit = displayUnit %||% pkAnalysesFromOutput$Unit[1]
   )
 
   return(list(
-    data = pkAnalysesFromOuptut,
-    metaData = pkAnalysesFromOuptutMetaData
+    data = pkAnalysesFromOutput,
+    metaData = pkAnalysesFromOutputMetaData
   ))
 }
 
