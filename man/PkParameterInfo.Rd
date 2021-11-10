@@ -11,11 +11,11 @@ R6 class representing workflow selected PK parameter.
 \describe{
 \item{\code{pkParameter}}{PK Parameter name for the simulation (e.g. `AUC_inf`)}
 
-\item{\code{group}}{Grouping identifier}
-
 \item{\code{displayName}}{display name for `pkParameter`}
 
 \item{\code{displayUnit}}{display unit for `pkParameter`}
+
+\item{\code{group}}{Grouping identifier}
 }
 \if{html}{\out{</div>}}
 }
@@ -33,9 +33,9 @@ Create a new `PkParameterInfo` object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PkParameterInfo$new(
   pkParameter,
-  group = NULL,
   displayName = NULL,
-  displayUnit = NULL
+  displayUnit = NULL,
+  group = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -45,11 +45,11 @@ Create a new `PkParameterInfo` object.
 \item{\code{pkParameter}}{PK Parameter name for the simulation (e.g. `AUC_inf`)
 Tips: use ospsuite::allPKParameterNames() to get a list of available PK parameters}
 
-\item{\code{group}}{Grouping identifier. Default group associate `pkParameter`.}
-
 \item{\code{displayName}}{display name for `pkParameter`}
 
 \item{\code{displayUnit}}{display unit for `pkParameter`}
+
+\item{\code{group}}{Grouping identifier. Default group associate `pkParameter`.}
 }
 \if{html}{\out{</div>}}
 }
