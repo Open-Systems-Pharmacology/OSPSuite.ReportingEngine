@@ -22,6 +22,8 @@ environment:
   R_VERSION: "4.0.5"
   COVERALLS_TOKEN:
     secure: Qo8To6hV3C2ghrS0Z+pPyvaBaEpE24Pwr7LF8AbiMO9HL+pkwX1U3kYGUNzJF5EU
+  GITHUB_PAT:
+    secure: TkniRDnGsTYgB9/9xAOiUW1UQ0Bby7nYuiyh48Tq/O7F++w2E6yNfWhytF+9kR4u
 
 version: "$(app_version).{build}"
 
