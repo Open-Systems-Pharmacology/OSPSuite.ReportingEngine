@@ -10,7 +10,7 @@ init:
 install:
   - ps: Bootstrap
   - git submodule update --init --recursive
-  - ps: cinst pandoc
+  - ps: cinst pandoc --no-progress
   - ps: $env:Path += ";C:\Program Files (x86)\Pandoc\"
 
 environment:
@@ -35,6 +35,7 @@ build_script:
   - Rscript -e "install.packages('https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/download/v10.0.72/ospsuite_10.0.72.zip', repos = NULL, type = 'binary')"
   - Rscript -e "install.packages('https://ci.appveyor.com/api/buildjobs/lq7s2r98966wqpjh/artifacts/tlf_1.2.33.zip', repos = NULL, type = 'binary')"
   - Rscript -e "install.packages('covr', repos = 'http://cran.us.r-project.org')"
+  - Rscript -e "install.packages('readr', repos = 'http://cran.us.r-project.org', type='win.binary')"
 
 on_success:
   - Rscript -e "covr::codecov(function_exclusions = c('print.*', '\\.onLoad'))"
