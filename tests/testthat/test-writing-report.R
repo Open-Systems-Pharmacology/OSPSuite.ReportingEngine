@@ -55,7 +55,7 @@ test_that("numberTablesAndFigures counts correctly and update input file", {
   expect_equal(reportContent, refReportContent)
 })
 
-tocContent <- numberSections(testReport)
+tocContent <- getSectionTOC(testReport)
 test_that("numberSections counts correctly and update input file", {
   reportContent <- readLines(testReport)
   refReportContent <- readLines(testReportNumSecs)
