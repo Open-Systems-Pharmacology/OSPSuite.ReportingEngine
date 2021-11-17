@@ -4,7 +4,13 @@
 \alias{renderReport}
 \title{renderReport}
 \usage{
-renderReport(fileName, logFolder = getwd(), createWordReport = FALSE)
+renderReport(
+  fileName,
+  logFolder = getwd(),
+  createWordReport = FALSE,
+  numberSections = TRUE,
+  intro = NULL
+)
 }
 \arguments{
 \item{fileName}{name of .md file to render}
@@ -12,6 +18,10 @@ renderReport(fileName, logFolder = getwd(), createWordReport = FALSE)
 \item{logFolder}{folder where the logs are saved}
 
 \item{createWordReport}{option for creating Markdwon-Report only but not a Word-Report}
+
+\item{numberSections}{logical defining if sections are numbered}
+
+\item{intro}{name of .md file that include introduction (before toc)}
 }
 \description{
 Render report with number sections and table of content

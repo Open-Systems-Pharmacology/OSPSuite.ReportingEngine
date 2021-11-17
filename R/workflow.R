@@ -6,6 +6,7 @@
 #' @field reportFileName name of the Rmd report file
 #' @field createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
 #' @field userDefinedTasks List of user-defined tasks (to update with loadUserDefinedTask)
+#' @field numberSections logical defining if the report sections should be numbered
 #' @import tlf
 #' @import ospsuite
 #' @keywords internal
@@ -18,6 +19,7 @@ Workflow <- R6::R6Class(
     reportFileName = NULL,
     createWordReport = NULL,
     userDefinedTasks = NULL,
+    numberSections = NULL,
 
     #' @description
     #' Create a new `Workflow` object.
@@ -26,13 +28,15 @@ Workflow <- R6::R6Class(
     #' @param createWordReport logical of option for creating Markdown-Report only but not a Word-Report.
     #' @param watermark displayed watermark in figures background
     #' @param simulationSetDescriptor character Descriptor of simulation sets indicated in reports
+    #' @param numberSections logical defining if the report sections should be numbered
     #' @return A new `Workflow` object
     #' @import ospsuite
     initialize = function(simulationSets,
                           workflowFolder,
                           createWordReport = TRUE,
                           watermark = NULL,
-                          simulationSetDescriptor = NULL) {
+                          simulationSetDescriptor = NULL, 
+                          numberSections = TRUE) {
       private$.reportingEngineInfo <- ReportingEngineInfo$new()
       # Empty list on which users can load tasks
       self$userDefinedTasks <- list()
@@ -41,9 +45,11 @@ Workflow <- R6::R6Class(
       validateIsString(watermark, nullAllowed = TRUE)
       validateIsString(simulationSetDescriptor, nullAllowed = TRUE)
       validateIsOfType(c(simulationSets), "SimulationSet")
-      validateIsOfType(createWordReport, "logical")
+      validateIsLogical(createWordReport)
+      validateIsLogical(numberSections)
 
       self$createWordReport <- createWordReport
+      self$numberSections <- numberSections
       if (!isOfType(simulationSets, "list")) {
         simulationSets <- list(simulationSets)
       }

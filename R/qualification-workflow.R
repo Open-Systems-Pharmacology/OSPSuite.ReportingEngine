@@ -73,7 +73,7 @@ QualificationWorkflow <- R6::R6Class(
 
       # Before running the actual workflow,
       # Create Outputs for sections and copy intro and section content
-      appendices <- createSectionOutput(self$configurationPlan, logFolder = self$workflowFolder)
+      mdFiles <- createSectionOutput(self$configurationPlan, logFolder = self$workflowFolder)
       if (self$simulate$active) {
         self$simulate$runTask(self$simulationStructures)
       }
@@ -91,8 +91,14 @@ QualificationWorkflow <- R6::R6Class(
       }
 
       # Merge appendices into final report
-      mergeMarkdowndFiles(appendices, self$reportFileName, logFolder = self$workflowFolder)
-      renderReport(self$reportFileName, logFolder = self$workflowFolder, createWordReport = self$createWordReport)
+      mergeMarkdowndFiles(mdFiles$appendices, self$reportFileName, logFolder = self$workflowFolder)
+      renderReport(
+        fileName = self$reportFileName,
+        logFolder = self$workflowFolder,
+        createWordReport = self$createWordReport,
+        numberSections = self$numberSections,
+        intro = mdFiles$intro
+        )
     },
     
     #' @description 

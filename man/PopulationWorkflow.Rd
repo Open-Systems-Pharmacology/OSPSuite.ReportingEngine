@@ -70,7 +70,8 @@ Create a new `PopulationWorkflow` object.
   workflowFolder,
   createWordReport = TRUE,
   watermark = NULL,
-  simulationSetDescriptor = NULL
+  simulationSetDescriptor = NULL,
+  numberSections = TRUE
 )}\if{html}{\out{</div>}}
 }
 
@@ -88,6 +89,8 @@ Create a new `PopulationWorkflow` object.
 \item{\code{watermark}}{displayed watermark in every plot background}
 
 \item{\code{simulationSetDescriptor}}{character Descriptor of simulation sets indicated in reports}
+
+\item{\code{numberSections}}{logical defining if the report sections should be numbered}
 }
 \if{html}{\out{</div>}}
 }
