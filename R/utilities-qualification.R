@@ -336,18 +336,17 @@ getPlotSettings <- function(plotSettingsFromConfigurationPlot) {
 #' @param pkSimPortableFolder Folder where PK-Sim is located.
 #' If not specified, installation path will be read from the registry (available only in case of full **non-portable** installation).
 #' This option is **MANDATORY** for the portable version of PK-Sim.
-#' @param configurationPlanFile Name of the configuration plan to be generated. Default is 'report-configuration-plan.json'
+#' @param configurationPlanName Name of the configuration plan to be generated. Default is `"report-configuration-plan"`
 #' @param overwrite Logical defining if the contents of the output folder will be deleted, even if it not empty. Default is false.
 #' @param logFile Full path of log file where log output will be written. A log file will not be created if this value is not provided.
 #' @param logLevel Log verbosity (Debug, Information, Warning, Error). Default is Information.
 #' @param version Logical defining if version information is displayed
 #' @export
-startQualificationRunner <- function(
-                                     qualificationRunnerFolder,
+startQualificationRunner <- function(qualificationRunnerFolder,
                                      qualificationPlanFile,
                                      outputFolder,
                                      pkSimPortableFolder = NULL,
-                                     configurationPlanFile = NULL,
+                                     configurationPlanName = NULL,
                                      overwrite = TRUE,
                                      logFile = NULL,
                                      logLevel = NULL,
@@ -355,11 +354,10 @@ startQualificationRunner <- function(
   validateIsFileExtension(qualificationPlanFile, "json")
   validateIsLogical(overwrite)
   validateIsLogical(displayVersion)
-  validateIsFileExtension(configurationPlanFile, "json", nullAllowed = TRUE)
-
+  
   options <- c(
     ifnotnull(pkSimPortableFolder, paste0("-p ", pkSimPortableFolder)),
-    ifnotnull(configurationPlanFile, paste0('-n "', configurationPlanFile, '"')),
+    ifnotnull(configurationPlanFile, paste0('-n "', configurationPlanName, '"')),
     switch(as.character(overwrite), "TRUE" = "-f", NULL),
     ifnotnull(logFile, paste0('-l "', logFile, '"')),
     ifnotnull(logLevel, paste0("--logLevel ", logLevel)),
@@ -369,6 +367,6 @@ startQualificationRunner <- function(
   qualificationRunner <- paste0('"', file.path(qualificationRunnerFolder, 'QualificationRunner.exe"'))
 
   arguments <- paste0(' -i "', qualificationPlanFile, '" -o "', outputFolder, '" ', "--norun ", optionalArguments)
-  shell(paste0(qualificationRunner, arguments))
+  system(paste0(qualificationRunner, arguments))
   return(invisible())
 }

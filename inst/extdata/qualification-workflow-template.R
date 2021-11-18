@@ -46,7 +46,8 @@ reInputFolder <- file.path(workingDirectory, "re_input")
 reOutputFolder <- file.path(workingDirectory, "re_output")
 
 #' Configuration Plan created from the Qualification Plan by the Qualification Runner
-configurationPlanFile <- file.path(reInputFolder, "report-configuration-plan.json")
+configurationPlanName <- "report-configuration-plan"
+configurationPlanFile <- file.path(reInputFolder, paste0(configurationPlanName, "json"))
 
 #' Option to record the time require to run the workflow.
 #' The timer will calculate calculation time form internal `Sys.time` function
@@ -90,7 +91,7 @@ startQualificationRunner(
   qualificationPlanFile = qualificationPlanFile,
   outputFolder = reInputFolder,
   pkSimPortableFolder = pkSimPortableFolder,
-  configurationPlanFile = configurationPlanFile,
+  configurationPlanName = configurationPlanName,
   overwrite = overwrite,
   logFile = logFile,
   logLevel = logLevel
