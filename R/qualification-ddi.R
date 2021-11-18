@@ -295,7 +295,7 @@ getDDISummaryTable <- function(summaryDataFrame,pkParameter){
 #' @param captionSuffix to append to qualification plan title
 #' @return a `list` of DDI results for the current DDI section
 #' @keywords internal
-getDDISection <- function(dataframe,metadata,sectionID,idPrefix,captionSuffix){
+getDDISection <- function(dataframe,metadata,sectionID,idPrefix,captionSuffix = NULL){
   ddiPlotResults <- list()
   gmfeDDI <- NULL
   ddiTableList <- list()
@@ -310,7 +310,9 @@ getDDISection <- function(dataframe,metadata,sectionID,idPrefix,captionSuffix){
         id = plotID,
         sectionId = sectionID,
         plot = ddiPlot,
-        plotCaption = paste(metadata$title, " - ", captionSuffix)
+        plotCaption = ifnotnull(inputToCheck = captionSuffix,
+                                outputIfNotNull = paste(metadata$title, captionSuffix,sep = " - "),
+                                outputIfNull = metadata$title)
       )
     }
 
@@ -375,7 +377,7 @@ plotQualificationDDIs <- function(configurationPlan,
     metadata <- ddiData[[plotIndex]]$metadata
     sectionID <- metadata$sectionID
     idPrefix <-  paste("DDIRatio",plotIndex,"all",sep = "-")
-    ddiResults <- c(ddiResults,getDDISection(dataframe,metadata,sectionID,idPrefix,captionSuffix = ""))
+    ddiResults <- c(ddiResults,getDDISection(dataframe,metadata,sectionID,idPrefix))
 
     for (subplotType in ddiSubplotTypes){
       subsectionLevel1Counter <- subsectionLevel1Counter + 1
