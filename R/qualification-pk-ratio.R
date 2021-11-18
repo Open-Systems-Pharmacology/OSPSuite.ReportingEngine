@@ -14,37 +14,14 @@ plotQualificationPKRatio <- function(configurationPlan,
   for (pkRatioPlan in configurationPlan$plots$PKRatioPlots) {
     # If field artifacts is null, output them all
     pkRatioPlan$Artifacts <- pkRatioPlan$Artifacts %||% c("Table", "Plot", "Measure", "GMFE")
-    tableID <- paste(length(pkRatioResults) + 1, "pk-ratio-table", sep = "-")
-    gmfeID <- paste(length(pkRatioResults) + 2, "pk-ratio-gmfe", sep = "-")
-
     pkRatioData <- getQualificationPKRatioData(pkRatioPlan, configurationPlan, logFolder)
-
-    pkRatioTable <- getQualificationPKRatioTable(pkRatioData$data, pkRatioData$metaData)
-    pkRatioResults[[tableID]] <- saveTaskResults(
-      id = tableID,
-      sectionId = pkRatioPlan$SectionId,
-      table = pkRatioTable,
-      tableCaption = pkRatioPlan$Title,
-      includeTable = isIncluded("Table", pkRatioPlan$Artifacts)
-    )
-
     axesProperties <- getAxesProperties(pkRatioPlan$Axes) %||% settings$axes
     pkParameterNames <- pkRatioPlan$PKParameters %||% ospsuite::toPathArray(pkRatioPlan$PKParameter)
-    pkRatioGMFE <- getQualificationPKRatioGMFE(pkParameterNames, pkRatioData$data)
-    pkRatioResults[[gmfeID]] <- saveTaskResults(
-      id = gmfeID,
-      sectionId = pkRatioPlan$SectionId,
-      table = pkRatioGMFE,
-      tableCaption = paste0("GMFE for ", pkRatioPlan$Title),
-      includeTable = isIncluded("GMFE", pkRatioPlan$Artifacts)
-    )
+    
     for (pkParameterName in pkParameterNames) {
+      #----- Plot artifact -----#
       plotID <- paste(length(pkRatioResults) + 1, "pk-ratio-plot", pkParameterName, sep = "-")
-      measureID <- paste(length(pkRatioResults) + 2, "pk-ratio-measure", pkParameterName, sep = "-")
-
       pkRatioPlot <- getQualificationPKRatioPlot(pkParameterName, pkRatioData$data, pkRatioData$metaData, axesProperties)
-      pkRatioMeasure <- getQualificationPKRatioMeasure(pkParameterName, pkRatioData$data, pkRatioData$metaData)
-
       pkRatioResults[[plotID]] <- saveTaskResults(
         id = plotID,
         sectionId = pkRatioPlan$SectionId,
@@ -52,6 +29,9 @@ plotQualificationPKRatio <- function(configurationPlan,
         plotCaption = pkRatioPlan$Title,
         includePlot = isIncluded("Plot", pkRatioPlan$Artifacts)
       )
+      #----- Measure artifact -----#
+      measureID <- paste(length(pkRatioResults) + 2, "pk-ratio-measure", pkParameterName, sep = "-")
+      pkRatioMeasure <- getQualificationPKRatioMeasure(pkParameterName, pkRatioData$data, pkRatioData$metaData)
       pkRatioResults[[measureID]] <- saveTaskResults(
         id = measureID,
         sectionId = pkRatioPlan$SectionId,
@@ -60,6 +40,26 @@ plotQualificationPKRatio <- function(configurationPlan,
         includeTable = isIncluded("Measure", pkRatioPlan$Artifacts)
       )
     }
+    #----- GMFE artifact -----#
+    gmfeID <- paste(length(pkRatioResults) + 2, "pk-ratio-gmfe", sep = "-")
+    pkRatioGMFE <- getQualificationPKRatioGMFE(pkParameterNames, pkRatioData$data)
+    pkRatioResults[[gmfeID]] <- saveTaskResults(
+      id = gmfeID,
+      sectionId = pkRatioPlan$SectionId,
+      table = pkRatioGMFE,
+      tableCaption = paste0("GMFE for ", pkRatioPlan$Title),
+      includeTable = isIncluded("GMFE", pkRatioPlan$Artifacts)
+    )
+    #----- Table artifact -----#
+    tableID <- paste(length(pkRatioResults) + 1, "pk-ratio-table", sep = "-")
+    pkRatioTable <- getQualificationPKRatioTable(pkRatioData$data, pkRatioData$metaData)
+    pkRatioResults[[tableID]] <- saveTaskResults(
+      id = tableID,
+      sectionId = pkRatioPlan$SectionId,
+      table = pkRatioTable,
+      tableCaption = pkRatioPlan$Title,
+      includeTable = isIncluded("Table", pkRatioPlan$Artifacts)
+    )
   }
   return(pkRatioResults)
 }
