@@ -258,16 +258,16 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
       molWeight = simulation$molWeightFor(pkRatioMapping$Output)
     )
     # Values
-    data[1, paste0("obs", pkParameterName)] <- pkParameterObservedValue
     data[1, paste0("pred", pkParameterName)] <- pkParameter$values
+    data[1, paste0("obs", pkParameterName)] <- pkParameterObservedValue
     data[1, paste0("ratio", pkParameterName)] <- pkParameter$values / pkParameterObservedValue
     # MetaData for tables and plot labels
-    metaData[[paste0("obs", pkParameterName)]] <- list(
-      dimension = paste(reEnv$pkRatio$dictionary$prefixObserved, pkParameterName, sep = " "),
-      unit = pkParameter$unit
-    )
     metaData[[paste0("pred", pkParameterName)]] <- list(
       dimension = paste(reEnv$pkRatio$dictionary$prefixSimulated, pkParameterName, sep = " "),
+      unit = pkParameter$unit
+    )
+    metaData[[paste0("obs", pkParameterName)]] <- list(
+      dimension = paste(reEnv$pkRatio$dictionary$prefixObserved, pkParameterName, sep = " "),
       unit = pkParameter$unit
     )
     metaData[[paste0("ratio", pkParameterName)]] <- list(
