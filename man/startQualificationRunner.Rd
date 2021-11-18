@@ -9,7 +9,7 @@ startQualificationRunner(
   qualificationPlanFile,
   outputFolder,
   pkSimPortableFolder = NULL,
-  configurationPlanFile = NULL,
+  configurationPlanName = NULL,
   overwrite = TRUE,
   logFile = NULL,
   logLevel = NULL,
@@ -27,7 +27,7 @@ startQualificationRunner(
 If not specified, installation path will be read from the registry (available only in case of full **non-portable** installation).
 This option is **MANDATORY** for the portable version of PK-Sim.}
 
-\item{configurationPlanFile}{Name of the configuration plan to be generated. Default is 'report-configuration-plan.json'}
+\item{configurationPlanName}{Name of the configuration plan to be generated. Default is `"report-configuration-plan"`}
 
 \item{overwrite}{Logical defining if the contents of the output folder will be deleted, even if it not empty. Default is false.}
 
