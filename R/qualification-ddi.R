@@ -282,7 +282,7 @@ getDDISummaryTable <- function(summaryDataFrame,pkParameter){
   ddiTable <- list()
   ddiTable[[pkParameter]] <- c("Points total","Points within Guest et al.","Points within 2-fold")
   ddiTable[["Number"]] <- c(pointsTotal,numberWithinGuest,numberWithinTwoFold)
-  ddiTable[["Ratio [%]"]] <- c("-",100*numberWithinGuest/pointsTotal, 100*numberWithinTwoFold/pointsTotal)
+  ddiTable[["Ratio [%]"]] <- c("-",round(100*numberWithinGuest/pointsTotal,2), round(100*numberWithinTwoFold/pointsTotal,2))
   return(as.data.frame(ddiTable,check.names = FALSE))
 }
 
