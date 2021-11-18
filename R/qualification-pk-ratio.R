@@ -91,18 +91,24 @@ getQualificationPKRatioGMFE <- function(pkParameterNames, data) {
 #' @return A data.frame
 #' @keywords internal
 getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData) {
-  # Prepare data, dataMapping and plotCOnfiguration to follow tlf nomenclature
-  data$Groups <- metaData$caption
-  dataMapping <- tlf::PKRatioDataMapping$new(
-    x = "age",
-    y = paste0("ratio", pkParameterName),
-    color = "Groups",
-    shape = "Groups"
+  # TODO: use tlf::getPKRatioMeasure once updated on tlf
+  ratios <- data[,paste0("ratio", pkParameterName)]
+  ratios <- ratios[!is.na(ratios)]
+  
+  qualificationMeasure <- data.frame(
+    " " = c("Points total", "Points within 1.5 fold", "Points within 2 fold"),
+    "Number" = c(
+      length(ratios), 
+      measureValuesBetween(ratios, 1/1.5,1.5, method = "count"),
+      measureValuesBetween(ratios, 1/2,2, method = "count")
+    ),
+    "Ratio [%]" = c(
+      NA, 
+      measureValuesBetween(ratios, 1/1.5,1.5, method = "percent"),
+      measureValuesBetween(ratios, 1/2,2, method = "percent")
+    ),
+    check.names = FALSE
   )
-  pkRatioMeasure <- tlf::getPKRatioMeasure(data, dataMapping)
-  # Export row names for report
-  qualificationMeasure <- cbind(row.names(pkRatioMeasure), pkRatioMeasure)
-  names(qualificationMeasure) <- c(" ", names(pkRatioMeasure))
   return(qualificationMeasure)
 }
 
@@ -299,4 +305,63 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
     data = data,
     metaData = metaData
   ))
+}
+
+
+#' @title isBetween
+#' @description Assess if `x` is between `left` and `right` bounds.
+#' Shortcut for `x >= left & x <= right` if `strict=FALSE` (default).
+#' Shortcut for `x > left & x < right` if `strict=TRUE`.
+#' @param x Numeric values to assess
+#' @param left Numeric value(s) used as lower bound
+#' @param right Numeric value(s) used as upper bound
+#' @param strict Logical value defining if `x` is strictly between `left` and `right`.
+#' Default value is `FALSE`.
+#' @return Logical values
+#' @export
+#' @examples 
+#' isBetween(1:12, 7, 9)
+#' 
+#' x <- rnorm(1e2)
+#' x[isBetween(x, -1, 1)]
+#' 
+#' isBetween(x, cos(x)+1, cos(x)-1)
+isBetween <- function(x, left, right, strict = FALSE){
+  if(strict){
+    return(x > left & x < right)
+  }
+  return(x >= left & x <= right)
+}
+
+#' @title measureValuesBetween
+#' @description Measure the values of `x` between `left` and `right` bounds according to `method`.
+#' @param x Numeric values to assess
+#' @param left Numeric value(s) used as lower bound
+#' @param right Numeric value(s) used as upper bound
+#' @param method One of the following methods `"count"`, `"ratio"`, and `"percent"`.
+#' @param strict Logical value defining if `x` is strictly between `left` and `right`.
+#' Default value is `FALSE`.
+#' @return Measure of `x` values between `left` and `right` bounds
+#' @export
+#' @examples 
+#' measureValuesBetween(1:12, 7, 9)
+#' measureValuesBetween(1:12, 7, 9, method = "percent")
+#' 
+#' x <- rnorm(1e2)
+#' measureValuesBetween(x, -1, 1)
+#' measureValuesBetween(x, -1, 1, method = "ratio")
+#' 
+#' measureValuesBetween(x, cos(x)+1, cos(x)-1)
+measureValuesBetween <- function(x, left, right, method = "count", strict = FALSE){
+  # Remove NA values from counting
+  if(isOfLength(left, 1)){left <- rep(left, length(x))}
+  if(isOfLength(right, 1)){right <- rep(right, length(x))}
+  naRows <- (is.na(x) | is.na(left) | is.na(right))
+  measure <- switch(
+    method,
+    "count" = sum(isBetween(x[!naRows], left[!naRows], right[!naRows], strict)),
+    "ratio" = sum(isBetween(x[!naRows], left[!naRows], right[!naRows], strict))/length(x[!naRows]),
+    "percent" = 100*sum(isBetween(x[!naRows], left[!naRows], right[!naRows], strict))/length(x[!naRows]),
+  )
+  return(measure)
 }
