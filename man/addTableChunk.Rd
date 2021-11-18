@@ -11,7 +11,7 @@ addTableChunk(
   digits = NULL,
   scientific = NULL,
   logFolder = getwd(),
-  na = ""
+  na = "-"
 )
 }
 \arguments{

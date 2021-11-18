@@ -65,13 +65,15 @@ addFigureChunk <- function(fileName,
 #' @param digits number of decimal digits in displayed numbers
 #' @param scientific logical defining if displayed numbers use scientific writing
 #' @param logFolder folder where the logs are saved
+#' @param na character string replacing `NA` values in table
 #' @export
 addTableChunk <- function(fileName,
                           tableFileRelativePath,
                           tableFileRootDirectory,
                           digits = NULL,
                           scientific = NULL,
-                          logFolder = getwd()) {
+                          logFolder = getwd(),
+                          na = "-") {
   # The function `formatNumerics` is now used by addTableChunk
   # colClasses = "character" is not needed anymore to enforce all table elements to be 'character'
   table <- read.csv(
@@ -93,6 +95,7 @@ addTableChunk <- function(fileName,
     knitr::kable(table),
     ""
   )
+  mdText <- gsub("NA", na, mdText)
 
   fileObject <- file(fileName, encoding = "UTF-8", open = "at")
   write(mdText, file = fileObject, append = TRUE, sep = "\n")
