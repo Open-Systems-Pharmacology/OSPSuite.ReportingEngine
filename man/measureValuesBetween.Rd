@@ -32,5 +32,5 @@ x <- rnorm(1e2)
 measureValuesBetween(x, -1, 1)
 measureValuesBetween(x, -1, 1, method = "ratio")
 
-measureValuesBetween(x, cos(x)+1, cos(x)-1)
+measureValuesBetween(x, cos(x) + 1, cos(x) - 1)
 }

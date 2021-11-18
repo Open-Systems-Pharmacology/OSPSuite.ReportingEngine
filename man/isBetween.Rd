@@ -30,5 +30,5 @@ isBetween(1:12, 7, 9)
 x <- rnorm(1e2)
 x[isBetween(x, -1, 1)]
 
-isBetween(x, cos(x)+1, cos(x)-1)
+isBetween(x, cos(x) + 1, cos(x) - 1)
 }

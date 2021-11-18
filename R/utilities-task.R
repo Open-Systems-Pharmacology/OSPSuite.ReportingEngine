@@ -708,7 +708,15 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
       axes = getAxesProperties(configurationPlan$plots$AxesSettings$PKRatioPlots),
       digits = reEnv$formatNumericsDigits,
       nsmall = reEnv$formatNumericsSmall,
-      scientific = reEnv$formatNumericsScientific
+      scientific = reEnv$formatNumericsScientific,
+      # Reference unit for table artifact
+      # Note that 
+      # 1) it can be updated before running workflows
+      # 2) configuration plan inputs could override these
+      units = list(
+        AUC = ospsuite::ospUnits$`AUC [mass]`$`µg*h/l`,
+        CL = ospsuite::ospUnits$Flow$`l/h`
+      )
     )
   ))
 }
