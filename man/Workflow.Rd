@@ -21,6 +21,8 @@ R6 class representing Reporting Engine generic Workflow
 \item{\code{createWordReport}}{logical of option for creating Markdwon-Report only but not a Word-Report.}
 
 \item{\code{userDefinedTasks}}{List of user-defined tasks (to update with loadUserDefinedTask)}
+
+\item{\code{numberSections}}{logical defining if the report sections should be numbered}
 }
 \if{html}{\out{</div>}}
 }
@@ -56,7 +58,8 @@ Create a new `Workflow` object.
   workflowFolder,
   createWordReport = TRUE,
   watermark = NULL,
-  simulationSetDescriptor = NULL
+  simulationSetDescriptor = NULL,
+  numberSections = TRUE
 )}\if{html}{\out{</div>}}
 }
 
@@ -72,6 +75,8 @@ Create a new `Workflow` object.
 \item{\code{watermark}}{displayed watermark in figures background}
 
 \item{\code{simulationSetDescriptor}}{character Descriptor of simulation sets indicated in reports}
+
+\item{\code{numberSections}}{logical defining if the report sections should be numbered}
 }
 \if{html}{\out{</div>}}
 }

@@ -63,7 +63,8 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
   workflow <- QualificationWorkflow$new(
     simulationSets = simulationSets,
     workflowFolder = workflowFolder,
-    configurationPlan = configurationPlan
+    configurationPlan = configurationPlan,
+    numberSections = FALSE
   )
   return(workflow)
 }
@@ -158,12 +159,11 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @param logFolder path where logs are saved
 #' @return Names of created appendices
-
 #' @keywords internal
 createSectionOutput <- function(configurationPlan, logFolder = getwd()) {
   # Intro
   resetReport(configurationPlan$getIntroMarkdown())
-  appendices <- configurationPlan$getIntroMarkdown()
+  appendices <- NULL
   for (intro in configurationPlan$intro) {
     configurationPlan$copyIntro(intro, logFolder = logFolder)
   }
@@ -183,7 +183,9 @@ createSectionOutput <- function(configurationPlan, logFolder = getwd()) {
   for (input in configurationPlan$inputs) {
     configurationPlan$copyInput(input, logFolder = logFolder)
   }
-  return(appendices)
+  return(list(
+    intro = configurationPlan$getIntroMarkdown(),
+    appendices = appendices))
 }
 
 

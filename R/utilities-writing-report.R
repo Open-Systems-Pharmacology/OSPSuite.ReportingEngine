@@ -149,23 +149,25 @@ addTextChunk <- function(fileName,
 #' mergeMarkdowndFiles(inputFiles = c("chapter-1.md", "chapter-2.md"), outputFile = "chapters-1and2.md")
 mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd(), keepInputFiles = FALSE) {
   validateIsLogical(keepInputFiles)
+  # Read all files contents first in case outputFile is within inputFiles
+  filesContent <- lapply(inputFiles, function(fileName){readLines(fileName, encoding = "UTF-8")})
   resetReport(outputFile, logFolder)
-
+  
+  # tracelib chunk of code
   usedFilesOutputFile <- sub(pattern = ".md", replacement = "-usedFiles.txt", outputFile)
   file.create(usedFilesOutputFile)
-
   for (fileName in inputFiles) {
-    fileContent <- readLines(fileName, encoding = "UTF-8")
-    addTextChunk(outputFile, fileContent, logFolder = logFolder)
-
     usedFilesFileName <- sub(pattern = ".md", replacement = "-usedFiles.txt", fileName)
     if (file.exists(usedFilesFileName)) {
       file.append(usedFilesOutputFile, usedFilesFileName)
       file.remove(usedFilesFileName)
     }
   }
+  # Merge input files content
+  invisible(lapply(filesContent, function(fileContent){addTextChunk(outputFile, fileContent, logFolder = logFolder)}))
   if (!keepInputFiles) {
-    file.remove(inputFiles)
+    # Use setdiff to prevent erasing output file its name is included in inputFiles
+    file.remove(setdiff(inputFiles, outputFile))
   }
 
   logWorkflow(
@@ -181,13 +183,17 @@ mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd(), kee
 #' @param fileName name of .md file to render
 #' @param logFolder folder where the logs are saved
 #' @param createWordReport option for creating Markdwon-Report only but not a Word-Report
+#' @param numberSections logical defining if sections are numbered
+#' @param intro name of .md file that include introduction (before toc)
 #' @export
-renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE) {
+renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE, numberSections = TRUE, intro = NULL) {
   actionToken2 <- re.tStartAction(actionType = "ReportGeneration")
   numberTablesAndFigures(fileName, logFolder)
+  # TODO: number sections and intro in word report
   renderWordReport(fileName, logFolder, createWordReport)
-  tocContent <- numberSections(fileName, logFolder)
+  tocContent <- getSectionTOC(fileName, logFolder, numberSections = numberSections)
   addMarkdownToc(tocContent, fileName, logFolder)
+  mergeMarkdowndFiles(inputFiles = c(intro, fileName), outputFile = fileName, logFolder = logFolder)
   re.tEndAction(actionToken = actionToken2)
   return(invisible())
 }
@@ -303,15 +309,16 @@ numberTablesAndFigures <- function(fileName, logFolder = getwd(), figurePattern 
   return(invisible())
 }
 
-#' @title numberSections
+#' @title getSectionTOC
 #' @description Reference sections of a report
 #' @param fileName name of .md file to update
 #' @param logFolder folder where the logs are saved
+#' @param numberSections logical defining if sections are numbered
 #' @param tocPattern character pattern referencing sections in first element of line
 #' @param tocLevels levels of sections in the report
 #' @return Table of content referencing sections following a markdown format
 #' @keywords internal
-numberSections <- function(fileName, logFolder = getwd(), tocPattern = "#", tocLevels = 6) {
+getSectionTOC <- function(fileName, logFolder = getwd(), numberSections = TRUE, tocPattern = "#", tocLevels = 6) {
   fileContent <- readLines(fileName, encoding = "UTF-8")
 
   # Initialize toc content
@@ -333,12 +340,14 @@ numberSections <- function(fileName, logFolder = getwd(), tocPattern = "#", tocL
           tocCounts[seq(tocLevel + 1, tocLevels)] <- 0
         }
 
-        # Number section
+        # Number section if option is true
         titlePattern <- paste0(tocPatterns[tocLevel], " ")
-        newTitlePattern <- paste0(tocCounts[seq(1, tocLevel)], collapse = ".")
-        newTitlePattern <- paste0(titlePattern, newTitlePattern, " ")
-        fileContent[lineIndex] <- gsub(pattern = titlePattern, replacement = newTitlePattern, x = fileContent[lineIndex])
-
+        if(numberSections){
+          newTitlePattern <- paste0(tocCounts[seq(1, tocLevel)], collapse = ".")
+          newTitlePattern <- paste0(titlePattern, newTitlePattern, " ")
+          fileContent[lineIndex] <- gsub(pattern = titlePattern, replacement = newTitlePattern, x = fileContent[lineIndex])
+        }
+        
         # Add section reference to toc content
         titleTocContent <- sub(pattern = titlePattern, replacement = "", x = fileContent[lineIndex])
         titleTocReference <- gsub(pattern = "[^[:alnum:][:space:]\\_'-]", replacement = "", x = tolower(titleTocContent))
@@ -371,7 +380,7 @@ numberSections <- function(fileName, logFolder = getwd(), tocPattern = "#", tocL
 #' @keywords internal
 addMarkdownToc <- function(tocContent, fileName, logFolder = getwd()) {
   fileContent <- readLines(fileName, encoding = "UTF-8")
-  fileContent <- c(tocContent, fileContent)
+  fileContent <- c("# Table of Contents", "", tocContent, fileContent)
   fileObject <- file(fileName, encoding = "UTF-8")
   write(fileContent, file = fileObject, sep = "\n")
   close(fileObject)
