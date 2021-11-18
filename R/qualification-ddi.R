@@ -230,6 +230,9 @@ generateDDIQualificationDDIPlot <- function(data) {
   qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_color_manual(values = sapply(data$aestheticsList$color,function(x){x}))
   qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_shape_manual(values = sapply(data$aestheticsList$shape,function(x){x}))
 
+  #Force legend to be only one column to maintain plot panel width, and left-justify legend entries
+  qualificationDDIPlot  <- qualificationDDIPlot + ggplot2::guides(col = guide_legend(ncol = 1,label.hjust = 0))
+
   xlabel <- paste(data$axesSettings$X$label)
   ylabel <- paste(data$axesSettings$Y$label)
 
@@ -281,7 +284,7 @@ getDDISummaryTable <- function(summaryDataFrame,pkParameter){
   ddiTable <- list()
   ddiTable[[pkParameter]] <- c("Points total","Points within Guest et al.","Points within 2-fold")
   ddiTable[["Number"]] <- c(pointsTotal,numberWithinGuest,numberWithinTwoFold)
-  ddiTable[["Ratio [%]"]] <- c("-",100*numberWithinGuest/pointsTotal, 100*numberWithinTwoFold/pointsTotal)
+  ddiTable[["Ratio [%]"]] <- c("-",round(100*numberWithinGuest/pointsTotal,2), round(100*numberWithinTwoFold/pointsTotal,2))
   return(as.data.frame(ddiTable,check.names = FALSE))
 }
 
@@ -294,7 +297,7 @@ getDDISummaryTable <- function(summaryDataFrame,pkParameter){
 #' @param captionSuffix to append to qualification plan title
 #' @return a `list` of DDI results for the current DDI section
 #' @keywords internal
-getDDISection <- function(dataframe,metadata,sectionID,idPrefix,captionSuffix){
+getDDISection <- function(dataframe,metadata,sectionID,idPrefix,captionSuffix = NULL){
   ddiPlotResults <- list()
   gmfeDDI <- NULL
   ddiTableList <- list()
@@ -309,7 +312,9 @@ getDDISection <- function(dataframe,metadata,sectionID,idPrefix,captionSuffix){
         id = plotID,
         sectionId = sectionID,
         plot = ddiPlot,
-        plotCaption = paste(metadata$title, " - ", captionSuffix)
+        plotCaption = ifnotnull(inputToCheck = captionSuffix,
+                                outputIfNotNull = paste(metadata$title, captionSuffix,sep = " - "),
+                                outputIfNull = metadata$title)
       )
     }
 
@@ -374,7 +379,7 @@ plotQualificationDDIs <- function(configurationPlan,
     metadata <- ddiData[[plotIndex]]$metadata
     sectionID <- metadata$sectionID
     idPrefix <-  paste("DDIRatio",plotIndex,"all",sep = "-")
-    ddiResults <- c(ddiResults,getDDISection(dataframe,metadata,sectionID,idPrefix,captionSuffix = ""))
+    ddiResults <- c(ddiResults,getDDISection(dataframe,metadata,sectionID,idPrefix))
 
     for (subplotType in ddiSubplotTypes){
       subsectionLevel1Counter <- subsectionLevel1Counter + 1
