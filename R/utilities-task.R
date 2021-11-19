@@ -761,7 +761,10 @@ loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
     message = defaultWorkflowMessages$plotDDIRatio,
     settings = list(
       predictedVsObserved = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$DDIRatioPlotsPredictedVsObserved)),
-      residualsOverTime = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$DDIRatioPlotsResidualsVsObserved))
+      residualsOverTime = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$DDIRatioPlotsResidualsVsObserved)),
+      digits = reEnv$formatNumericsDigits,
+      nsmall = reEnv$formatNumericsSmall,
+      scientific = reEnv$formatNumericsScientific
     )
   ))
 }

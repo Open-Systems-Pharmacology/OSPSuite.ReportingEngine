@@ -84,7 +84,7 @@ getQualificationPKRatioGMFE <- function(pkParameterNames, data) {
 }
 
 #' @title getQualificationPKRatioMeasure
-#' @description Get plot of pk ratio from field `PKRatioPlots` of configuration plan
+#' @description Get qualification measure of pk ratio from field `PKRatioPlots` of configuration plan
 #' @param pkParameterName Name of PK Parameter as defined by users
 #' @param data data.frame with PK Ratios
 #' @param metaData metaData with units and dimension for labeling the table header
