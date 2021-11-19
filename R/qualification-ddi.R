@@ -168,17 +168,19 @@ buildQualificationDDIDataframe <- function(dataframe,
     xData <- observedRatio
     xData <- replaceInfWithNA(xData)
 
-    yData <- getYAxisDDIValues[[plotType]](observedRatio,simulatedRatio)
+    yData <- getYAxisDDIValues[[plotType]](observedRatio, simulatedRatio)
     yData <- replaceInfWithNA(yData)
 
     df <- list()
     df[[axesSettings$X$label]] <- xData
     df[[axesSettings$Y$label]] <- yData
     df$Group <- grp
-    ddiPlotDataframe <- rbind.data.frame(ddiPlotDataframe, as.data.frame(df,check.names = FALSE))
+    ddiPlotDataframe <- rbind.data.frame(ddiPlotDataframe, as.data.frame(df, check.names = FALSE))
   }
 
-  ddiPlotDataframe$Caption <- sapply(ddiPlotDataframe$Group,function(groupNumber){metadata$groups[[groupNumber]]$caption})
+  ddiPlotDataframe$Caption <- sapply(ddiPlotDataframe$Group, function(groupNumber) {
+    metadata$groups[[groupNumber]]$caption
+  })
   ddiPlotDataframe$Group <- as.factor(ddiPlotDataframe$Group)
   ddiPlotDataframe$Caption <- as.factor(ddiPlotDataframe$Caption)
 
@@ -195,7 +197,6 @@ buildQualificationDDIDataframe <- function(dataframe,
 #' @import ggplot2
 #' @keywords internal
 generateDDIQualificationDDIPlot <- function(data) {
-
   ddiData <- na.omit(data$ddiPlotDataframe)
 
   ddiDataMapping <- tlf::DDIRatioDataMapping$new(
@@ -212,14 +213,14 @@ generateDDIQualificationDDIPlot <- function(data) {
     dataMapping = ddiDataMapping
   )
 
-  ddiPlotConfiguration$export$width <- 2*1.6*(data$plotSettings$width/96)
-  ddiPlotConfiguration$export$height <- 2*1.2*(data$plotSettings$height/96)
+  ddiPlotConfiguration$export$width <- 2 * 1.6 * (data$plotSettings$width / 96)
+  ddiPlotConfiguration$export$height <- 2 * 1.2 * (data$plotSettings$height / 96)
   ddiPlotConfiguration$export$units <- "in"
 
-  ddiPlotConfiguration$labels$xlabel$font$size <- 2*data$plotSettings$axisFontSize
-  ddiPlotConfiguration$labels$ylabel$font$size <- 2*data$plotSettings$axisFontSize
-  ddiPlotConfiguration$background$watermark$font$size <- 2*data$plotSettings$watermarkFontSize
-  ddiPlotConfiguration$legend$font$size <- 2*data$plotSettings$legendFontSize
+  ddiPlotConfiguration$labels$xlabel$font$size <- 2 * data$plotSettings$axisFontSize
+  ddiPlotConfiguration$labels$ylabel$font$size <- 2 * data$plotSettings$axisFontSize
+  ddiPlotConfiguration$background$watermark$font$size <- 2 * data$plotSettings$watermarkFontSize
+  ddiPlotConfiguration$legend$font$size <- 2 * data$plotSettings$legendFontSize
 
   qualificationDDIPlot <- tlf::plotDDIRatio(
     data = ddiData,
@@ -227,11 +228,15 @@ generateDDIQualificationDDIPlot <- function(data) {
     dataMapping = ddiDataMapping
   )
 
-  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_color_manual(values = sapply(data$aestheticsList$color,function(x){x}))
-  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_shape_manual(values = sapply(data$aestheticsList$shape,function(x){x}))
+  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_color_manual(values = sapply(data$aestheticsList$color, function(x) {
+    x
+  }))
+  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_shape_manual(values = sapply(data$aestheticsList$shape, function(x) {
+    x
+  }))
 
-  #Force legend to be only one column to maintain plot panel width, and left-justify legend entries
-  qualificationDDIPlot  <- qualificationDDIPlot + ggplot2::guides(col = guide_legend(ncol = 1,label.hjust = 0))
+  # Force legend to be only one column to maintain plot panel width, and left-justify legend entries
+  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::guides(col = guide_legend(ncol = 1, label.hjust = 0))
 
   xlabel <- paste(data$axesSettings$X$label)
   ylabel <- paste(data$axesSettings$Y$label)
@@ -239,53 +244,40 @@ generateDDIQualificationDDIPlot <- function(data) {
   qualificationDDIPlot <- qualificationDDIPlot + ggplot2::xlab(xlabel) + ggplot2::ylab(ylabel)
 
   if (data$axesSettings$X$scaling == "Log") {
-    qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_x_continuous(trans='log10',labels = function(x) format(x, scientific = FALSE))
+    qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_x_continuous(trans = "log10", labels = function(x) format(x, scientific = FALSE))
   }
 
   if (data$axesSettings$Y$scaling == "Log") {
-    qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_y_continuous(trans='log10',labels = function(x) format(x, scientific = FALSE),)
+    qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_y_continuous(trans = "log10", labels = function(x) format(x, scientific = FALSE), )
   }
 
   return(qualificationDDIPlot)
 }
 
-
-#' @title getDDISummaryTable
-#' @description Plot observation vs prediction for DDI qualification workflow
-#' @param summaryDataFrame of DDI data for current DDI section
-#' @param pkParameter for current DDI section
-#' @return A `data.frame` of DDI ratio summaries
+#' @title getQualificationDDIRatioMeasure
+#' @description Get qualification measure of DDI ratio from field `DDIRatioPlots` of configuration plan
+#' @param summaryDataFrame data.frame with DDI Ratios
+#' @param pkParameterName Name of PK Parameter as defined by users
+#' @return A data.frame
 #' @keywords internal
-getDDISummaryTable <- function(summaryDataFrame,pkParameter){
-
+getQualificationDDIRatioMeasure <- function(summaryDataFrame, pkParameterName) {
   guestValues <- tlf::getGuestValues(x = summaryDataFrame[["observedRatio"]])
-  summaryDataFrame[["guestLowerBound"]] <- guestValues$ymin
-  summaryDataFrame[["guestUpperBound"]] <- guestValues$ymax
-  summaryDataFrame[["withinTwoFold"]] <- sapply(summaryDataFrame[["simulatedObservedRatio"]],function(ratio){
-    withinLimits <- 0
-    if( ratio > 0.5 & ratio < 2){
-      withinLimits <- 1
-    }
-    return(withinLimits)
-  })
 
-  summaryDataFrame[["withinGuest"]] <- sapply(seq_along(summaryDataFrame[["simulatedRatio"]]),function(rowNumber){
-    withinLimits <- 0
-    if( summaryDataFrame[["simulatedRatio"]][rowNumber] > summaryDataFrame[["guestLowerBound"]][rowNumber] & summaryDataFrame[["simulatedRatio"]][rowNumber] < summaryDataFrame[["guestUpperBound"]][rowNumber]){
-      withinLimits <- 1
-    }
-    return(withinLimits)
-  })
-
-  pointsTotal <- nrow(summaryDataFrame)
-  numberWithinGuest <- sum(summaryDataFrame[["withinGuest"]])
-  numberWithinTwoFold <- sum(summaryDataFrame[["withinTwoFold"]])
-
-  ddiTable <- list()
-  ddiTable[[pkParameter]] <- c("Points total","Points within Guest et al.","Points within 2-fold")
-  ddiTable[["Number"]] <- c(pointsTotal,numberWithinGuest,numberWithinTwoFold)
-  ddiTable[["Ratio [%]"]] <- c("-",round(100*numberWithinGuest/pointsTotal,2), round(100*numberWithinTwoFold/pointsTotal,2))
-  return(as.data.frame(ddiTable,check.names = FALSE))
+  qualificationMeasure <- data.frame(
+    parameter = c("Points total", "Points within Guest *et al.*", "Points within 2 fold"),
+    number = c(
+      nrow(summaryDataFrame),
+      measureValuesBetween(summaryDataFrame[["simulatedRatio"]], guestValues$ymin, guestValues$ymax, method = "count"),
+      measureValuesBetween(summaryDataFrame[["simulatedObservedRatio"]], 1 / 2, 2, method = "count")
+    ),
+    ratio = c(
+      NA,
+      measureValuesBetween(summaryDataFrame[["simulatedRatio"]], guestValues$ymin, guestValues$ymax, method = "percent"),
+      measureValuesBetween(summaryDataFrame[["simulatedObservedRatio"]], 1 / 2, 2, method = "percent")
+    )
+  )
+  names(qualificationMeasure) <- c(pkParameterName, "Number", "Ratio [%]")
+  return(qualificationMeasure)
 }
 
 #' @title getDDISection
@@ -297,7 +289,7 @@ getDDISummaryTable <- function(summaryDataFrame,pkParameter){
 #' @param captionSuffix to append to qualification plan title
 #' @return a `list` of DDI results for the current DDI section
 #' @keywords internal
-getDDISection <- function(dataframe,metadata,sectionID,idPrefix,captionSuffix = NULL){
+getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffix = NULL) {
   ddiPlotResults <- list()
   gmfeDDI <- NULL
   ddiTableList <- list()
@@ -306,53 +298,58 @@ getDDISection <- function(dataframe,metadata,sectionID,idPrefix,captionSuffix = 
       pkDataframe <- dataframe[dataframe$pkParameter == pkParameter, ]
       plotDDIData <- buildQualificationDDIDataframe(pkDataframe, metadata, pkParameter, plotType)
 
-      plotID <- paste("plot",idPrefix, pkParameter, plotType, sep = "-")
+      plotID <- paste("plot", idPrefix, pkParameter, plotType, sep = "-")
       ddiPlot <- generateDDIQualificationDDIPlot(plotDDIData)
       ddiPlotResults[[plotID]] <- saveTaskResults(
         id = plotID,
         sectionId = sectionID,
         plot = ddiPlot,
-        plotCaption = ifnotnull(inputToCheck = captionSuffix,
-                                outputIfNotNull = paste(metadata$title, captionSuffix,sep = " - "),
-                                outputIfNull = metadata$title)
+        plotCaption = ifnotnull(
+          inputToCheck = captionSuffix,
+          outputIfNotNull = paste(metadata$title, captionSuffix, sep = " - "),
+          outputIfNull = metadata$title
+        )
       )
     }
 
-    ddiSummary <- na.omit(pkDataframe[,c("observedRatio","simulatedRatio")])
-    ddiSummary[["simulatedObservedRatio"]] <- ddiSummary[["simulatedRatio"]]/ddiSummary[["observedRatio"]]
-    gmfeDDI <- rbind.data.frame(gmfeDDI,
-                                data.frame("PK parameter" = pkParameter,
-                                           GMFE = calculateGMFE(x = ddiSummary$observedRatio,
-                                                                y = ddiSummary$simulatedRatio),
-                                           check.names = FALSE))
+    ddiSummary <- na.omit(pkDataframe[, c("observedRatio", "simulatedRatio")])
+    ddiSummary[["simulatedObservedRatio"]] <- ddiSummary[["simulatedRatio"]] / ddiSummary[["observedRatio"]]
+    gmfeDDI <- rbind.data.frame(
+      gmfeDDI,
+      data.frame(
+        "PK parameter" = pkParameter,
+        GMFE = calculateGMFE(
+          x = ddiSummary$observedRatio,
+          y = ddiSummary$simulatedRatio
+        ),
+        check.names = FALSE
+      )
+    )
 
-
-    ddiTableList[[pkParameter]] <- getDDISummaryTable(summaryDataFrame = ddiSummary,pkParameter = pkParameter)
-
+    ddiTableList[[pkParameter]] <- getQualificationDDIRatioMeasure(summaryDataFrame = ddiSummary, pkParameterName = pkParameter)
   }
 
-  gmfeID <- paste("gmfe",idPrefix,sep = "-")
+  gmfeID <- paste("gmfe", idPrefix, sep = "-")
   ddiPlotResults[[gmfeID]] <- saveTaskResults(
     id = gmfeID,
     sectionId = sectionID,
     table = gmfeDDI,
-    tableCaption = paste("GMFE for", metadata$title,idPrefix),
+    tableCaption = paste("GMFE for", metadata$title, idPrefix),
     includeTable = TRUE
   )
 
-  for (pkParameter in unique(dataframe$pkParameter)){
-    tableID <- paste("table",pkParameter,idPrefix,sep = "-")
+  for (pkParameter in unique(dataframe$pkParameter)) {
+    tableID <- paste("table", pkParameter, idPrefix, sep = "-")
     ddiPlotResults[[tableID]] <- saveTaskResults(
       id = tableID,
       sectionId = sectionID,
       table = ddiTableList[[pkParameter]],
-      tableCaption = paste("Summary table for", metadata$title,idPrefix,pkParameter),
+      tableCaption = paste("Summary table for", metadata$title, idPrefix, pkParameter),
       includeTable = TRUE
     )
   }
 
   return(ddiPlotResults)
-
 }
 
 
@@ -366,39 +363,34 @@ getDDISection <- function(dataframe,metadata,sectionID,idPrefix,captionSuffix = 
 plotQualificationDDIs <- function(configurationPlan,
                                   logFolder = getwd(),
                                   settings) {
-
-
   ddiData <- getQualificationDDIPlotData(configurationPlan)
 
   ddiResults <- list()
   subsectionLevel1Counter <- 0
   subsectionLevel2Counter <- 0
   for (plotIndex in seq_along(ddiData)) {
-
     dataframe <- ddiData[[plotIndex]]$dataframe
     metadata <- ddiData[[plotIndex]]$metadata
     sectionID <- metadata$sectionID
-    idPrefix <-  paste("DDIRatio",plotIndex,"all",sep = "-")
-    ddiResults <- c(ddiResults,getDDISection(dataframe,metadata,sectionID,idPrefix))
+    idPrefix <- paste("DDIRatio", plotIndex, "all", sep = "-")
+    ddiResults <- c(ddiResults, getDDISection(dataframe, metadata, sectionID, idPrefix))
 
-    for (subplotType in ddiSubplotTypes){
+    for (subplotType in ddiSubplotTypes) {
       subsectionLevel1Counter <- subsectionLevel1Counter + 1
       subplotTypeLevels <- unique(dataframe[[subplotType]])
-      for (subplotTypeLevel in subplotTypeLevels){
+      for (subplotTypeLevel in subplotTypeLevels) {
         subsectionLevel2Counter <- subsectionLevel2Counter + 1
-        subplotDataframe <- droplevels(dataframe[dataframe[[subplotType]] == subplotTypeLevel,])
-        sectionID <- metadata$sectionID#paste0(metadata$sectionID,subsectionLevel1Counter,subsectionLevel2Counter)
+        subplotDataframe <- droplevels(dataframe[dataframe[[subplotType]] == subplotTypeLevel, ])
+        sectionID <- metadata$sectionID # paste0(metadata$sectionID,subsectionLevel1Counter,subsectionLevel2Counter)
         idPrefix <- paste("DDIRatio", plotIndex, subplotType, subplotTypeLevel, sep = "-")
-        ddiResults <- c(ddiResults,getDDISection(subplotDataframe,metadata,sectionID,idPrefix,captionSuffix = subplotTypeLevel))
+        ddiResults <- c(ddiResults, getDDISection(subplotDataframe, metadata, sectionID, idPrefix, captionSuffix = subplotTypeLevel))
       }
       subsectionLevel2Counter <- 0
     }
     subsectionLevel1Counter <- 0
-
   }
 
   return(ddiResults)
-
 }
 
 #' Names of fields in configuration plane containing axes settings data for each DDI plot type
@@ -411,15 +403,23 @@ ddiPlotAxesSettings <- list(
 #' Labels for DDI plot X-axis
 #' @keywords internal
 plotDDIXLabel <- list(
-  "predictedVsObserved" = function(pk){return(paste("Observed",pk,"Ratio"))},
-  "residualsVsObserved" = function(pk){return(paste("Observed",pk,"Ratio"))}
+  "predictedVsObserved" = function(pk) {
+    return(paste("Observed", pk, "Ratio"))
+  },
+  "residualsVsObserved" = function(pk) {
+    return(paste("Observed", pk, "Ratio"))
+  }
 )
 
 #' Labels for DDI plot Y-axis
 #' @keywords internal
 plotDDIYLabel <- list(
-  "predictedVsObserved" = function(pk){return(paste("Predicted",pk,"Ratio"))},
-  "residualsVsObserved" = function(pk){return(paste("Predicted",pk,"Ratio / Observed",pk,"Ratio"))}
+  "predictedVsObserved" = function(pk) {
+    return(paste("Predicted", pk, "Ratio"))
+  },
+  "residualsVsObserved" = function(pk) {
+    return(paste("Predicted", pk, "Ratio / Observed", pk, "Ratio"))
+  }
 )
 
 #' DDI plot type identifier
@@ -432,8 +432,12 @@ residualsVsObservedFlag <- list(
 #' Computation of Y-Axis values
 #' @keywords internal
 getYAxisDDIValues <- list(
-  "predictedVsObserved" = function(observedRatio,simulatedRatio){return(simulatedRatio)},
-  "residualsVsObserved" = function(observedRatio,simulatedRatio){return(simulatedRatio / observedRatio)}
+  "predictedVsObserved" = function(observedRatio, simulatedRatio) {
+    return(simulatedRatio)
+  },
+  "residualsVsObserved" = function(observedRatio, simulatedRatio) {
+    return(simulatedRatio / observedRatio)
+  }
 )
 
 #' Names of DDI subplot types

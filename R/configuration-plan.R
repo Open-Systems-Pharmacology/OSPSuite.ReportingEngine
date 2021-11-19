@@ -66,7 +66,7 @@ ConfigurationPlan <- R6::R6Class(
       # If available, add title at appropriate level
       if(!is.na(sectionTitle)){
         markdownContent <- paste(
-          paste0(rep("#", sectionLevel, collapse = "")),
+          paste0(rep("#", sectionLevel), collapse = ""),
           sectionTitle,
           sep = " "
         )
