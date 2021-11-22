@@ -247,7 +247,11 @@ generateDDIQualificationDDIPlot <- function(data) {
   # Set y axis ticks and limits
   if (residualsVsObservedFlag[[data$axesSettings$plotType]] & data$axesSettings$Y$scaling == "Log" ) {
     log10Limit <- max(abs(sapply(c(floor, ceiling), function(fn) fn(log10(ddiData[[data$axesSettings$Y$label]])))))
+
+    #Set lower and upper log scale y axis limits to be equal
     ddiPlotConfiguration$yAxis$limits <- 10^(c(-log10Limit, log10Limit))
+
+    #Include ticks at each order of magnitude and at 1/2 and 2
     ddiPlotConfiguration$yAxis$ticks <- unique(c(10^seq(-log10Limit, log10Limit, 1), 0.5, 2))
   }
 
