@@ -240,7 +240,7 @@ QualificationPlotTypes <- c("GOFMergedPlots", "ComparisonTimeProfilePlots", "DDI
 
 
 #' @title separateVariableFromUnit
-#' @description Split a string containing a varialbe and unit description into a list of two strings that separates the variable and the unit.
+#' @description Split a string containing a variable and unit description into a list of two strings that separates the variable and the unit.
 #' @param variableUnitString is a string that has the format 'Variable [unit]' or 'Variable'
 #' @return A named list, with fields 'name' and 'unit'.  If variableUnitString lacks a '[unit]' substring, then the unit field is returned as an empty string.
 #' @keywords internal

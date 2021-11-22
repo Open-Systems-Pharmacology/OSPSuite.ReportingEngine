@@ -48,6 +48,15 @@ ConfigurationPlan <- R6::R6Class(
       return(file.path(self$workflowFolder, private$.sections$md[selectedId]))
     },
 
+    #' @description Get section level
+    #' @param id section identifier
+    #' @return Section level
+    getSectionLevel = function(id) {
+      validateIsIncluded(id, private$.sections$id, groupName = "'id' variable of sections")
+      selectedId <- private$.sections$id %in% id
+      return(private$.sections$level[selectedId])
+    },
+
     #' @description Get location of .md intro file
     #' @return The markdown file corresponding to introduction
     getIntroMarkdown = function() {

@@ -21,6 +21,8 @@ TaskResults <- R6::R6Class(
     table = NULL,
     tableCaption = NULL,
     includeTable = FALSE,
+    textChunk = NULL,
+    includeTextChunk = FALSE,
 
     #' @description
     #' If table is not null, save table as a csv file at `tableFileName`
@@ -118,6 +120,21 @@ TaskResults <- R6::R6Class(
         scientific = scientific,
         logFolder = logFolder
       )
+    },
+
+
+    #' @description
+    #' Add a text chunk generated from a task to a
+    #' @param reportFile file to which the text chunk should be added
+    #' @param logFolder folder were logs are saved
+    addTextChunkToReport = function(reportFile , logFolder = getwd()) {
+      if (isOfLength(self$textChunk, 0)) {
+        return()
+      }
+      if (isFALSE(self$includeTextChunk)) {
+        return()
+      }
+      addTextChunk(reportFile, self$textChunk, logFolder = logFolder)
     }
   )
 )
@@ -134,12 +151,14 @@ TaskResults <- R6::R6Class(
 #' @param includeTable logical indicating if the table should be included in final report
 #' @return A `TaskResults` object
 #' @keywords internal
-saveTaskResults <- function(id = NULL, sectionId = NULL, plot = NULL, plotCaption = NULL, includePlot = NULL, table = NULL, tableCaption = NULL, includeTable = NULL, taskResults = NULL) {
+saveTaskResults <- function(id = NULL, sectionId = NULL, plot = NULL, plotCaption = NULL, includePlot = NULL, table = NULL, tableCaption = NULL, includeTable = NULL , textChunk = NULL, includeTextChunk = NULL , taskResults = NULL) {
   taskResults <- taskResults %||% TaskResults$new()
   eval(parseVariableToObject(
     objectName = "taskResults",
-    variableName = c("id", "sectionId", "plot", "plotCaption", "includePlot", "table", "tableCaption", "includeTable"),
+    variableName = c("id", "sectionId", "plot", "plotCaption", "includePlot", "table", "tableCaption", "includeTable", "textChunk", "includeTextChunk"),
     keepIfNull = TRUE
   ))
   return(taskResults)
 }
+
+
