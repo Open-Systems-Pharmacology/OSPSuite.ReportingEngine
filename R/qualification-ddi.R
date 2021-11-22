@@ -217,10 +217,36 @@ generateDDIQualificationDDIPlot <- function(data) {
   ddiPlotConfiguration$export$height <- 2 * 1.2 * (data$plotSettings$height / 96)
   ddiPlotConfiguration$export$units <- "in"
 
+  #Set axis label font size
   ddiPlotConfiguration$labels$xlabel$font$size <- 2 * data$plotSettings$axisFontSize
   ddiPlotConfiguration$labels$ylabel$font$size <- 2 * data$plotSettings$axisFontSize
+
+  #Set axis tick font size
+  ddiPlotConfiguration$xAxis$font$size <- 2 * data$plotSettings$axisFontSize
+  ddiPlotConfiguration$yAxis$font$size <- 2 * data$plotSettings$axisFontSize
+
+  #Set watermark font size
   ddiPlotConfiguration$background$watermark$font$size <- 2 * data$plotSettings$watermarkFontSize
+
+  #Set legend font size
   ddiPlotConfiguration$legend$font$size <- 2 * data$plotSettings$legendFontSize
+
+  #Set line color and type
+  ddiPlotConfiguration$lines$color <- "black"
+  ddiPlotConfiguration$lines$linetype <- "solid"
+
+  #Set axes scaling
+  if (data$axesSettings$X$scaling == "Log") {
+    ddiPlotConfiguration$xAxis$scale <- tlf::Scaling$log
+  }
+  if (data$axesSettings$Y$scaling == "Log") {
+    ddiPlotConfiguration$yAxis$scale <- tlf::Scaling$log
+  }
+
+  #Set y axis ticks
+  if(residualsVsObservedFlag[[data$axesSettings$plotType]]){
+    ddiPlotConfiguration$yAxis$ticks <- c(0.5,2)
+  }
 
   qualificationDDIPlot <- tlf::plotDDIRatio(
     data = ddiData,
@@ -243,13 +269,7 @@ generateDDIQualificationDDIPlot <- function(data) {
 
   qualificationDDIPlot <- qualificationDDIPlot + ggplot2::xlab(xlabel) + ggplot2::ylab(ylabel)
 
-  if (data$axesSettings$X$scaling == "Log") {
-    qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_x_continuous(trans = "log10", labels = function(x) format(x, scientific = FALSE))
-  }
 
-  if (data$axesSettings$Y$scaling == "Log") {
-    qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_y_continuous(trans = "log10", labels = function(x) format(x, scientific = FALSE), )
-  }
 
   return(qualificationDDIPlot)
 }
