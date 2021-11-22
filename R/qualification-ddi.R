@@ -197,6 +197,7 @@ buildQualificationDDIDataframe <- function(dataframe,
 #' @import ggplot2
 #' @keywords internal
 generateDDIQualificationDDIPlot <- function(data) {
+
   ddiData <- na.omit(data$ddiPlotDataframe)
 
   ddiDataMapping <- tlf::DDIRatioDataMapping$new(
@@ -217,25 +218,25 @@ generateDDIQualificationDDIPlot <- function(data) {
   ddiPlotConfiguration$export$height <- 2 * 1.2 * (data$plotSettings$height / 96)
   ddiPlotConfiguration$export$units <- "in"
 
-  #Set axis label font size
+  # Set axis label font size
   ddiPlotConfiguration$labels$xlabel$font$size <- 2 * data$plotSettings$axisFontSize
   ddiPlotConfiguration$labels$ylabel$font$size <- 2 * data$plotSettings$axisFontSize
 
-  #Set axis tick font size
+  # Set axis tick font size
   ddiPlotConfiguration$xAxis$font$size <- 2 * data$plotSettings$axisFontSize
   ddiPlotConfiguration$yAxis$font$size <- 2 * data$plotSettings$axisFontSize
 
-  #Set watermark font size
+  # Set watermark font size
   ddiPlotConfiguration$background$watermark$font$size <- 2 * data$plotSettings$watermarkFontSize
 
-  #Set legend font size
+  # Set legend font size
   ddiPlotConfiguration$legend$font$size <- 2 * data$plotSettings$legendFontSize
 
-  #Set line color and type
+  # Set line color and type
   ddiPlotConfiguration$lines$color <- "black"
   ddiPlotConfiguration$lines$linetype <- "solid"
 
-  #Set axes scaling
+  # Set axes scaling
   if (data$axesSettings$X$scaling == "Log") {
     ddiPlotConfiguration$xAxis$scale <- tlf::Scaling$log
   }
@@ -243,9 +244,11 @@ generateDDIQualificationDDIPlot <- function(data) {
     ddiPlotConfiguration$yAxis$scale <- tlf::Scaling$log
   }
 
-  #Set y axis ticks
-  if(residualsVsObservedFlag[[data$axesSettings$plotType]]){
-    ddiPlotConfiguration$yAxis$ticks <- c(0.5,2)
+  # Set y axis ticks and limits
+  if (residualsVsObservedFlag[[data$axesSettings$plotType]] & data$axesSettings$Y$scaling == "Log" ) {
+    log10Limit <- max(abs(sapply(c(floor, ceiling), function(fn) fn(log10(ddiData[[data$axesSettings$Y$label]])))))
+    ddiPlotConfiguration$yAxis$limits <- 10^(c(-log10Limit, log10Limit))
+    ddiPlotConfiguration$yAxis$ticks <- unique(c(10^seq(-log10Limit, log10Limit, 1), 0.5, 2))
   }
 
   qualificationDDIPlot <- tlf::plotDDIRatio(
@@ -396,11 +399,11 @@ plotQualificationDDIs <- function(configurationPlan,
     ddiResults <- c(ddiResults, getDDISection(dataframe, metadata, sectionID, idPrefix))
 
     for (subplotType in names(ddiSubplotTypes)) {
-      subheading <- saveTaskResults(id = subplotType, sectionId = sectionID, textChunk = paste( paste0(rep("#",sectionLevel+1),collapse = "") , ddiSubplotTypes[[subplotType]]), includeTextChunk = TRUE)
+      subheading <- saveTaskResults(id = subplotType, sectionId = sectionID, textChunk = paste(paste0(rep("#", sectionLevel + 1), collapse = ""), ddiSubplotTypes[[subplotType]]), includeTextChunk = TRUE)
       ddiResults <- c(ddiResults, subheading)
       subplotTypeLevels <- unique(dataframe[[subplotType]])
       for (subplotTypeLevel in subplotTypeLevels) {
-        subsubheading <- saveTaskResults(id = paste(subplotType, subplotTypeLevel, sep = " - "), sectionId = sectionID, textChunk = paste( paste0(rep("#",sectionLevel+2),collapse = "") , subplotTypeLevel), includeTextChunk = TRUE)
+        subsubheading <- saveTaskResults(id = paste(subplotType, subplotTypeLevel, sep = " - "), sectionId = sectionID, textChunk = paste(paste0(rep("#", sectionLevel + 2), collapse = ""), subplotTypeLevel), includeTextChunk = TRUE)
         ddiResults <- c(ddiResults, subsubheading)
         subplotDataframe <- droplevels(dataframe[dataframe[[subplotType]] == subplotTypeLevel, ])
         sectionID <- metadata$sectionID
