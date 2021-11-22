@@ -246,7 +246,15 @@ generateDDIQualificationDDIPlot <- function(data) {
 
   # Set y axis ticks and limits
   if (residualsVsObservedFlag[[data$axesSettings$plotType]] & data$axesSettings$Y$scaling == "Log" ) {
-    log10Limit <- max(abs(sapply(c(floor, ceiling), function(fn) fn(log10(ddiData[[data$axesSettings$Y$label]])))))
+
+    #Minimum log10 predict/observed fold error among all data points, rounded DOWN to nearest whole number
+    lowerBoundLog10 <- min(floor(log10(ddiData[[data$axesSettings$Y$label]])))
+
+    #Maximum log10 predict/observed fold error among all data points, rounded UP to nearest whole number
+    upperBoundLog10 <- max(ceiling(log10(ddiData[[data$axesSettings$Y$label]])))
+
+    #Maximum log10 scale axis limit given by larger of the two fold error bounds, lowerBoundLog10 and upperBoundLog10
+    log10Limit <- max(abs(c(lowerBoundLog10,upperBoundLog10)))
 
     #Set lower and upper log scale y axis limits to be equal
     ddiPlotConfiguration$yAxis$limits <- 10^(c(-log10Limit, log10Limit))
