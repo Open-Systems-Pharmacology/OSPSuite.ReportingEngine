@@ -363,31 +363,31 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
 plotQualificationDDIs <- function(configurationPlan,
                                   logFolder = getwd(),
                                   settings) {
+
   ddiData <- getQualificationDDIPlotData(configurationPlan)
 
   ddiResults <- list()
-  subsectionLevel1Counter <- 0
-  subsectionLevel2Counter <- 0
   for (plotIndex in seq_along(ddiData)) {
     dataframe <- ddiData[[plotIndex]]$dataframe
     metadata <- ddiData[[plotIndex]]$metadata
     sectionID <- metadata$sectionID
-    idPrefix <- paste("DDIRatio", plotIndex, "all", sep = "-")
+    sectionLevel <- configurationPlan$getSectionLevel(id = sectionID)
+    idPrefix <- paste("DDIRatio", plotIndex, sep = "-")
     ddiResults <- c(ddiResults, getDDISection(dataframe, metadata, sectionID, idPrefix))
 
-    for (subplotType in ddiSubplotTypes) {
-      subsectionLevel1Counter <- subsectionLevel1Counter + 1
+    for (subplotType in names(ddiSubplotTypes)) {
+      subheading <- saveTaskResults(id = subplotType, sectionId = sectionID, textChunk = paste( paste0(rep("#",sectionLevel+1),collapse = "") , ddiSubplotTypes[[subplotType]]), includeTextChunk = TRUE)
+      ddiResults <- c(ddiResults, subheading)
       subplotTypeLevels <- unique(dataframe[[subplotType]])
       for (subplotTypeLevel in subplotTypeLevels) {
-        subsectionLevel2Counter <- subsectionLevel2Counter + 1
+        subsubheading <- saveTaskResults(id = paste(subplotType, subplotTypeLevel, sep = " - "), sectionId = sectionID, textChunk = paste( paste0(rep("#",sectionLevel+2),collapse = "") , subplotTypeLevel), includeTextChunk = TRUE)
+        ddiResults <- c(ddiResults, subsubheading)
         subplotDataframe <- droplevels(dataframe[dataframe[[subplotType]] == subplotTypeLevel, ])
-        sectionID <- metadata$sectionID # paste0(metadata$sectionID,subsectionLevel1Counter,subsectionLevel2Counter)
+        sectionID <- metadata$sectionID
         idPrefix <- paste("DDIRatio", plotIndex, subplotType, subplotTypeLevel, sep = "-")
         ddiResults <- c(ddiResults, getDDISection(subplotDataframe, metadata, sectionID, idPrefix, captionSuffix = subplotTypeLevel))
       }
-      subsectionLevel2Counter <- 0
     }
-    subsectionLevel1Counter <- 0
   }
 
   return(ddiResults)
@@ -440,6 +440,10 @@ getYAxisDDIValues <- list(
   }
 )
 
-#' Names of DDI subplot types
+#' Named list of of DDI subplot types
 #' @keywords internal
-ddiSubplotTypes <- c("mechanism", "perpetrator", "victim")
+ddiSubplotTypes <- list(
+  "mechanism" = "Mechanism",
+  "perpetrator" = "Perpetrator",
+  "victim" = "Victim"
+)
