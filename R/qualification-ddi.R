@@ -234,7 +234,7 @@ generateDDIQualificationDDIPlot <- function(data) {
 
   # Set line color and type
   ddiPlotConfiguration$lines$color <- "black"
-  ddiPlotConfiguration$lines$linetype <- "solid"
+  ddiPlotConfiguration$lines$linetype <- c("solid","dotted","solid")
 
   # Set axes scaling
   if (data$axesSettings$X$scaling == "Log") {
