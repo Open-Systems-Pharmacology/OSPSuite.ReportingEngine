@@ -144,6 +144,28 @@ ConfigurationPlan <- R6::R6Class(
       addTextChunk(fileName = self$getIntroMarkdown(), text = markdownContent, logFolder = logFolder)
       return(invisible())
     },
+    
+    #' @description If available, copy files within subfolders of `Content` directory into `<workflowFolder>`
+    copyContentSubFolders = function() {
+      inputContentFolder <- file.path(self$referenceFolder, "Content")
+      # Get only sub folder names and remove "" from the values returned by list.dirs
+      subFolders <- setdiff(list.dirs(inputContentFolder, full.names = FALSE), "")
+      for(subFolder in subFolders){
+        inputContentSubFolder <- file.path(inputContentFolder, subFolder)
+        outputContentSubFolder <- file.path(self$workflowFolder, subFolder)
+        dir.create(outputContentSubFolder, showWarnings = FALSE, recursive = TRUE)
+        # Copy all files from subfolder into report subfolder
+        for(fileName in list.files(inputContentSubFolder)){
+          # With recursive=TRUE, overwrite images
+          file.copy(
+            from = file.path(inputContentSubFolder, fileName),
+            to = file.path(outputContentSubFolder, fileName),
+            recursive = TRUE
+          )
+        }
+      }
+      return(invisible())
+    },
 
     #' @description Get location of observed data corresponding to a specific observedDataSet Id
     #' @param id observedDataSet identifier
