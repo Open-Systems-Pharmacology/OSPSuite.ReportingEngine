@@ -40,10 +40,12 @@ R6 class for ConfigurationPlan guiding Qualification Workflow
 \item \href{#method-getSectionPath}{\code{ConfigurationPlan$getSectionPath()}}
 \item \href{#method-getSectionTitle}{\code{ConfigurationPlan$getSectionTitle()}}
 \item \href{#method-getSectionMarkdown}{\code{ConfigurationPlan$getSectionMarkdown()}}
+\item \href{#method-getSectionLevel}{\code{ConfigurationPlan$getSectionLevel()}}
 \item \href{#method-getIntroMarkdown}{\code{ConfigurationPlan$getIntroMarkdown()}}
 \item \href{#method-copySectionContent}{\code{ConfigurationPlan$copySectionContent()}}
 \item \href{#method-copyInput}{\code{ConfigurationPlan$copyInput()}}
 \item \href{#method-copyIntro}{\code{ConfigurationPlan$copyIntro()}}
+\item \href{#method-copyContentSubFolders}{\code{ConfigurationPlan$copyContentSubFolders()}}
 \item \href{#method-getObservedDataPath}{\code{ConfigurationPlan$getObservedDataPath()}}
 \item \href{#method-getMolWeightForObservedData}{\code{ConfigurationPlan$getMolWeightForObservedData()}}
 \item \href{#method-getSimulationPath}{\code{ConfigurationPlan$getSimulationPath()}}
@@ -111,6 +113,26 @@ Get location of .md file corresponding to a specific section Id
 }
 \subsection{Returns}{
 The markdown file corresponding to the id in the configuration plan field `sections`
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getSectionLevel"></a>}}
+\if{latex}{\out{\hypertarget{method-getSectionLevel}{}}}
+\subsection{Method \code{getSectionLevel()}}{
+Get section level
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$getSectionLevel(id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id}}{section identifier}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Section level
 }
 }
 \if{html}{\out{<hr>}}
@@ -182,6 +204,16 @@ Copy intro to intro markdown
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-copyContentSubFolders"></a>}}
+\if{latex}{\out{\hypertarget{method-copyContentSubFolders}{}}}
+\subsection{Method \code{copyContentSubFolders()}}{
+If available, copy files within subfolders of `Content` directory into `<workflowFolder>`
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$copyContentSubFolders()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-getObservedDataPath"></a>}}
