@@ -197,6 +197,7 @@ buildQualificationDDIDataframe <- function(dataframe,
 #' @import ggplot2
 #' @keywords internal
 generateDDIQualificationDDIPlot <- function(data) {
+
   ddiData <- na.omit(data$ddiPlotDataframe)
 
   ddiDataMapping <- tlf::DDIRatioDataMapping$new(
@@ -217,10 +218,50 @@ generateDDIQualificationDDIPlot <- function(data) {
   ddiPlotConfiguration$export$height <- 2 * 1.2 * (data$plotSettings$height / 96)
   ddiPlotConfiguration$export$units <- "in"
 
+  # Set axis label font size
   ddiPlotConfiguration$labels$xlabel$font$size <- 2 * data$plotSettings$axisFontSize
   ddiPlotConfiguration$labels$ylabel$font$size <- 2 * data$plotSettings$axisFontSize
+
+  # Set axis tick font size
+  ddiPlotConfiguration$xAxis$font$size <- 2 * data$plotSettings$axisFontSize
+  ddiPlotConfiguration$yAxis$font$size <- 2 * data$plotSettings$axisFontSize
+
+  # Set watermark font size
   ddiPlotConfiguration$background$watermark$font$size <- 2 * data$plotSettings$watermarkFontSize
+
+  # Set legend font size
   ddiPlotConfiguration$legend$font$size <- 2 * data$plotSettings$legendFontSize
+
+  # Set line color and type
+  ddiPlotConfiguration$lines$color <- "black"
+  ddiPlotConfiguration$lines$linetype <- c("solid","dotted","solid")
+
+  # Set axes scaling
+  if (data$axesSettings$X$scaling == "Log") {
+    ddiPlotConfiguration$xAxis$scale <- tlf::Scaling$log
+  }
+  if (data$axesSettings$Y$scaling == "Log") {
+    ddiPlotConfiguration$yAxis$scale <- tlf::Scaling$log
+  }
+
+  # Set y axis ticks and limits
+  if (residualsVsObservedFlag[[data$axesSettings$plotType]] & data$axesSettings$Y$scaling == "Log" ) {
+
+    #Minimum log10 predict/observed fold error among all data points, rounded DOWN to nearest whole number
+    lowerBoundLog10 <- min(floor(log10(ddiData[[data$axesSettings$Y$label]])))
+
+    #Maximum log10 predict/observed fold error among all data points, rounded UP to nearest whole number
+    upperBoundLog10 <- max(ceiling(log10(ddiData[[data$axesSettings$Y$label]])))
+
+    #Maximum log10 scale axis limit given by larger of the two fold error bounds, lowerBoundLog10 and upperBoundLog10
+    log10Limit <- max(abs(c(lowerBoundLog10,upperBoundLog10)))
+
+    #Set lower and upper log scale y axis limits to be equal
+    ddiPlotConfiguration$yAxis$limits <- 10^(c(-log10Limit, log10Limit))
+
+    #Include ticks at each order of magnitude and at 1/2 and 2
+    ddiPlotConfiguration$yAxis$ticks <- unique(c(10^seq(-log10Limit, log10Limit, 1), 0.5, 2))
+  }
 
   qualificationDDIPlot <- tlf::plotDDIRatio(
     data = ddiData,
@@ -243,13 +284,7 @@ generateDDIQualificationDDIPlot <- function(data) {
 
   qualificationDDIPlot <- qualificationDDIPlot + ggplot2::xlab(xlabel) + ggplot2::ylab(ylabel)
 
-  if (data$axesSettings$X$scaling == "Log") {
-    qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_x_continuous(trans = "log10", labels = function(x) format(x, scientific = FALSE))
-  }
 
-  if (data$axesSettings$Y$scaling == "Log") {
-    qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_y_continuous(trans = "log10", labels = function(x) format(x, scientific = FALSE), )
-  }
 
   return(qualificationDDIPlot)
 }
@@ -376,11 +411,11 @@ plotQualificationDDIs <- function(configurationPlan,
     ddiResults <- c(ddiResults, getDDISection(dataframe, metadata, sectionID, idPrefix))
 
     for (subplotType in names(ddiSubplotTypes)) {
-      subheading <- saveTaskResults(id = subplotType, sectionId = sectionID, textChunk = paste( paste0(rep("#",sectionLevel+1),collapse = "") , ddiSubplotTypes[[subplotType]]), includeTextChunk = TRUE)
+      subheading <- saveTaskResults(id = subplotType, sectionId = sectionID, textChunk = paste(paste0(rep("#", sectionLevel + 1), collapse = ""), ddiSubplotTypes[[subplotType]]), includeTextChunk = TRUE)
       ddiResults <- c(ddiResults, subheading)
       subplotTypeLevels <- unique(dataframe[[subplotType]])
       for (subplotTypeLevel in subplotTypeLevels) {
-        subsubheading <- saveTaskResults(id = paste(subplotType, subplotTypeLevel, sep = " - "), sectionId = sectionID, textChunk = paste( paste0(rep("#",sectionLevel+2),collapse = "") , subplotTypeLevel), includeTextChunk = TRUE)
+        subsubheading <- saveTaskResults(id = paste(subplotType, subplotTypeLevel, sep = " - "), sectionId = sectionID, textChunk = paste(paste0(rep("#", sectionLevel + 2), collapse = ""), subplotTypeLevel), includeTextChunk = TRUE)
         ddiResults <- c(ddiResults, subsubheading)
         subplotDataframe <- droplevels(dataframe[dataframe[[subplotType]] == subplotTypeLevel, ])
         sectionID <- metadata$sectionID
