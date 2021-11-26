@@ -4,7 +4,7 @@
 \alias{autoAxesLimits}
 \title{autoAxesLimits}
 \usage{
-autoAxesLimits(x)
+autoAxesLimits(x, scale = NULL)
 }
 \arguments{
 \item{x}{Values from which the limits are calculated}
