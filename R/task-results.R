@@ -8,6 +8,8 @@
 #' @field table data.frame corresponding to the table to be saved
 #' @field tableCaption text included into the report explaining the table
 #' @field includeTable logical indicating if the table should be included in final report
+#' @field textChunk text included into the report explaining the table
+#' @field includeTextChunk logical indicating if the text chunk should be included in final report
 #' @keywords internal
 TaskResults <- R6::R6Class(
   "TaskResults",
@@ -149,6 +151,8 @@ TaskResults <- R6::R6Class(
 #' @param table data.frame corresponding to the table to be saved
 #' @param tableCaption text included into the report explaining the table
 #' @param includeTable logical indicating if the table should be included in final report
+#' @param textChunk text included into the report explaining the table
+#' @param includeTextChunk logical indicating if the text chunk should be included in final report
 #' @return A `TaskResults` object
 #' @keywords internal
 saveTaskResults <- function(id = NULL, sectionId = NULL, plot = NULL, plotCaption = NULL, includePlot = NULL, table = NULL, tableCaption = NULL, includeTable = NULL , textChunk = NULL, includeTextChunk = NULL , taskResults = NULL) {

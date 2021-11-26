@@ -342,7 +342,7 @@ getPlotSettings <- function(plotSettingsFromConfigurationPlot) {
 #' @param overwrite Logical defining if the contents of the output folder will be deleted, even if it not empty. Default is false.
 #' @param logFile Full path of log file where log output will be written. A log file will not be created if this value is not provided.
 #' @param logLevel Log verbosity (Debug, Information, Warning, Error). Default is Information.
-#' @param version Logical defining if version information is displayed
+#' @param displayVersion Logical defining if version information is displayed
 #' @export
 startQualificationRunner <- function(qualificationRunnerFolder,
                                      qualificationPlanFile,

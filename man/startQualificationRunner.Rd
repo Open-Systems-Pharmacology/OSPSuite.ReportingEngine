@@ -35,7 +35,7 @@ This option is **MANDATORY** for the portable version of PK-Sim.}
 
 \item{logLevel}{Log verbosity (Debug, Information, Warning, Error). Default is Information.}
 
-\item{version}{Logical defining if version information is displayed}
+\item{displayVersion}{Logical defining if version information is displayed}
 }
 \description{
 Starts the qualification runner and creates inputs for the reporting engine
