@@ -4,10 +4,13 @@
 \alias{autoAxesLimits}
 \title{autoAxesLimits}
 \usage{
-autoAxesLimits(x, scale = NULL)
+autoAxesLimits(x, scale = tlf::Scaling$lin)
 }
 \arguments{
 \item{x}{Values from which the limits are calculated}
+
+\item{scale}{Name of the scale of the axis
+Use helper enum `Scaling` from `tlf` package to find scales.}
 }
 \value{
 A list of units for goodness of fit results

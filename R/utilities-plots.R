@@ -38,9 +38,11 @@ displayDimension <- function(dimension){
 #' @title autoAxesLimits
 #' @description Defines auto axis limits
 #' @param x Values from which the limits are calculated
+#' @param scale Name of the scale of the axis
+#' Use helper enum `Scaling` from `tlf` package to find scales.
 #' @return A list of units for goodness of fit results
 #' @keywords internal
-autoAxesLimits <- function(x, scale = NULL) {
+autoAxesLimits <- function(x, scale = tlf::Scaling$lin) {
   minX <- min(x, na.rm = TRUE)
   maxX <- max(x, na.rm = TRUE)
   minX[minX<0] <- (1+reEnv$autoAxisLimitMargin)*minX
