@@ -154,9 +154,17 @@ plotDemographyParameters <- function(structureSets,
             metaData = vpcMetaData,
             plotObject = referenceVpcPlot
           )
+          
+          vpcLogLimits <- autoAxesLimits(c(comparisonData$ymin, comparisonData$median, comparisonData$ymax), scale = "log")
+          vpcLogTicks <- autoAxesTicksFromLimits(vpcLogLimits)
 
           demographyPlots[[plotID]] <- comparisonVpcPlot
-          demographyPlots[[paste0(plotID, "-log")]] <- tlf::setYAxis(plotObject = comparisonVpcPlot, scale = tlf::Scaling$log)
+          demographyPlots[[paste0(plotID, "-log")]] <- tlf::setYAxis(
+            plotObject = comparisonVpcPlot,
+            scale = tlf::Scaling$log,
+            limits = vpcLogLimits,
+            ticks = vpcLogTicks
+            )
 
           xParameterCaption <- vpcMetaData$x$dimension
           yParameterCaption <- vpcMetaData$median$dimension
@@ -195,9 +203,16 @@ plotDemographyParameters <- function(structureSets,
           metaData = vpcMetaData,
           plotConfiguration = settings$plotConfigurations[["vpcParameterPlot"]]
         )
+        
+        vpcLogLimits <- autoAxesLimits(c(vpcData$ymin, vpcData$median, vpcData$ymax), scale = "log")
+        vpcLogTicks <- autoAxesTicksFromLimits(vpcLogLimits)
 
         demographyPlots[[plotID]] <- vpcPlot
-        demographyPlots[[paste0(plotID, "-log")]] <- tlf::setYAxis(plotObject = vpcPlot, scale = tlf::Scaling$log)
+        demographyPlots[[paste0(plotID, "-log")]] <- tlf::setYAxis(
+          plotObject = vpcPlot, 
+          scale = tlf::Scaling$log,
+          limits = vpcLogLimits,
+          ticks = vpcLogTicks)
 
         xParameterCaption <- vpcMetaData$x$dimension
         yParameterCaption <- vpcMetaData$median$dimension

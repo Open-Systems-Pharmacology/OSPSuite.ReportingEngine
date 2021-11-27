@@ -238,8 +238,8 @@ plotPopulationPKParameters <- function(structureSets,
       }
       if (hasPositiveValues(pkParameterData$Value)) {
         positiveValues <- pkParameterData$Value > 0
-        boxRange <- getLogLimitsForBoxPlot(pkParameterData$Value[positiveValues])
-        boxBreaks <- getLogBreaksForBoxPlot(boxRange)
+        boxRange <- autoAxesLimits(pkParameterData$Value[positiveValues], scale = "log")
+        boxBreaks <- autoAxesTicksFromLimits(boxRange)
 
         pkParametersPlots[[paste0(plotID, "-log")]] <- tlf::setYAxis(
           plotObject = boxplotPkParameter,
@@ -403,8 +403,8 @@ plotPopulationPKParameters <- function(structureSets,
           plotConfiguration = settings$plotConfigurations[["boxplotPkRatios"]]
         ) + ggplot2::ylab(paste0(pkParameterMetaData$Value$dimension, " [fraction of ", referenceSimulationSetName, "]"))
 
-        ratioRange <- getLogLimitsForBoxPlot(c(pkRatiosData$ymin, pkRatiosData$ymax))
-        ratioBreaks <- getLogBreaksForBoxPlot(ratioRange)
+        ratioRange <- autoAxesLimits(c(pkRatiosData$ymin, pkRatiosData$ymax), scale = "log")
+        ratioBreaks <- autoAxesTicksFromLimits(ratioRange)
 
         pkParametersPlots[[plotID]] <- boxplotPkRatios
         pkParametersPlots[[paste0(plotID, "-log")]] <- tlf::setYAxis(
@@ -450,25 +450,6 @@ plotPopulationPKParameters <- function(structureSets,
     captions = pkParametersCaptions,
     tableCaptions = pkParametersCaptionTables
   ))
-}
-
-getLogLimitsForBoxPlot <- function(values) {
-  boxRange <- c(min(values, na.rm = TRUE) * 0.8, max(values, na.rm = TRUE) * 1.2)
-  if (diff(log10(boxRange)) >= 1) {
-    return(boxRange)
-  }
-  boxRange <- c(min(values, na.rm = TRUE) / 3, max(values, na.rm = TRUE) * 3)
-  return(boxRange)
-}
-
-getLogBreaksForBoxPlot <- function(limits) {
-  logLimits <- round(log10(limits))
-  breakOrder <- 10^seq(min(logLimits, na.rm = TRUE), max(logLimits, na.rm = TRUE))
-  breakValues <- rep(c(1, 2, 5), length(breakOrder))
-  breakOrder <- sort(rep(breakOrder, 3))
-
-  breakValues <- breakValues * breakOrder
-  return(breakValues)
 }
 
 #' @title ratioBoxplot

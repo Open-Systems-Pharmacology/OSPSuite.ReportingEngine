@@ -13,6 +13,8 @@ saveTaskResults(
   table = NULL,
   tableCaption = NULL,
   includeTable = NULL,
+  textChunk = NULL,
+  includeTextChunk = NULL,
   taskResults = NULL
 )
 }
@@ -32,6 +34,10 @@ saveTaskResults(
 \item{tableCaption}{text included into the report explaining the table}
 
 \item{includeTable}{logical indicating if the table should be included in final report}
+
+\item{textChunk}{text included into the report explaining the table}
+
+\item{includeTextChunk}{logical indicating if the text chunk should be included in final report}
 }
 \value{
 A `TaskResults` object

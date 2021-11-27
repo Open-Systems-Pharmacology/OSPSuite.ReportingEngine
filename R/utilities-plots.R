@@ -38,15 +38,43 @@ displayDimension <- function(dimension){
 #' @title autoAxesLimits
 #' @description Defines auto axis limits
 #' @param x Values from which the limits are calculated
+#' @param scale Name of the scale of the axis
+#' Use helper enum `Scaling` from `tlf` package to find scales.
 #' @return A list of units for goodness of fit results
 #' @keywords internal
-autoAxesLimits <- function(x) {
+autoAxesLimits <- function(x, scale = tlf::Scaling$lin) {
   minX <- min(x, na.rm = TRUE)
   maxX <- max(x, na.rm = TRUE)
   minX[minX<0] <- (1+reEnv$autoAxisLimitMargin)*minX
   minX[minX>0] <- (1-reEnv$autoAxisLimitMargin)*minX
   maxX[maxX<0] <- (1-reEnv$autoAxisLimitMargin)*maxX
   maxX[maxX<0] <- (1+reEnv$autoAxisLimitMargin)*maxX
-  return(c(minX, maxX))
+  if(!isIncluded(scale, "log")){
+    return(c(minX, maxX))
+  }
+  # For log plots, 
+  # wider range for pretty axes limits
+  if ((log10(maxX)-log10(minX)) > 1) {
+    return(c(minX, maxX))
+  }
+  return(c(minX/2, maxX*2))
 }
 
+#' @title autoAxesTicksFromLimits
+#' @description Defines auto axis ticks from limits for log scale plots.
+#' For wide range, log tick labels display every factor of 10
+#' For small range, log tick labels displayed at 1,2,5 of every factor of 10
+#' @param limits Min and max values of axis range
+#' @return Numeric values of ticks to display
+#' @keywords internal
+autoAxesTicksFromLimits <- function(limits) {
+  minLogRange <- log10(min(limits))
+  maxLogRange <- log10(max(limits))
+  logTicks <- seq(floor(minLogRange),ceiling(maxLogRange))
+  logRange <- maxLogRange - minLogRange
+  # If range is wide enough, use one tick every factor 10
+  if(logRange > 1){
+    return(10^logTicks)
+  }
+  return(rep(c(1, 2, 5), length(logTicks)) * 10^rep(logTicks, each = 3))
+}

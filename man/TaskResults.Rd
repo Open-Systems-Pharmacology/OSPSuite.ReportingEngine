@@ -25,6 +25,10 @@ R6 class for TaskResults settings
 \item{\code{tableCaption}}{text included into the report explaining the table}
 
 \item{\code{includeTable}}{logical indicating if the table should be included in final report}
+
+\item{\code{textChunk}}{text included into the report explaining the table}
+
+\item{\code{includeTextChunk}}{logical indicating if the text chunk should be included in final report}
 }
 \if{html}{\out{</div>}}
 }
@@ -35,6 +39,7 @@ R6 class for TaskResults settings
 \item \href{#method-saveTable}{\code{TaskResults$saveTable()}}
 \item \href{#method-addFigureToReport}{\code{TaskResults$addFigureToReport()}}
 \item \href{#method-addTableToReport}{\code{TaskResults$addTableToReport()}}
+\item \href{#method-addTextChunkToReport}{\code{TaskResults$addTextChunkToReport()}}
 }
 }
 \if{html}{\out{<hr>}}
@@ -131,6 +136,25 @@ Add table results to a
 \item{\code{digits}}{number of decimal digits in displayed numbers}
 
 \item{\code{scientific}}{logical defining if displayed numbers use scientific writing}
+
+\item{\code{logFolder}}{folder were logs are saved}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-addTextChunkToReport"></a>}}
+\if{latex}{\out{\hypertarget{method-addTextChunkToReport}{}}}
+\subsection{Method \code{addTextChunkToReport()}}{
+Add a text chunk generated from a task to a
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TaskResults$addTextChunkToReport(reportFile, logFolder = getwd())}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{reportFile}}{file to which the text chunk should be added}
 
 \item{\code{logFolder}}{folder were logs are saved}
 }
