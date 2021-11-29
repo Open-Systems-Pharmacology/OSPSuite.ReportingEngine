@@ -338,8 +338,12 @@ getPKParametersInSimulationSet <- function(simulationSet) {
 }
 
 #' @title getAllowedCores
+#'
+#' @description
+#' Relevant only when reporting engine is executed on a Linux Kubernetes cluster.
+#'
 #' @return Allowed number of CPU cores for computation
-#' @export
+#' @keywords internal
 getAllowedCores <- function() {
   cores <- tryCatch(
     {
