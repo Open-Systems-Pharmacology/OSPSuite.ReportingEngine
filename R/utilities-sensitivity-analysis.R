@@ -794,7 +794,7 @@ plotPopulationSensitivity <- function(structureSets,
   sensitivityCaptions <- list()
 
   # Add line breaks for display based on allowed size if parameters are too long
-  allPopsDf$Parameter <- sensitivityData$parameter <- prettyCaption(
+  allPopsDf$Parameter <- prettyCaption(
     captions = as.character(allPopsDf$Parameter),
     maxLines = settings$maxLinesPerParameter,
     width = settings$maxWidthPerParameter
