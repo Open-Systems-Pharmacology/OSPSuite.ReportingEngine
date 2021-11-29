@@ -274,7 +274,7 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
     # Values
     data[1, paste0("pred", pkParameterName)] <- pkParameterSimulatedValue
     data[1, paste0("obs", pkParameterName)] <- pkParameterObservedValue
-    data[1, paste0("ratio", pkParameterName)] <- pkParameter$values / pkParameterObservedValue
+    data[1, paste0("ratio", pkParameterName)] <- pkParameterSimulatedValue / pkParameterObservedValue
     # MetaData for tables and plot labels
     metaData[[paste0("pred", pkParameterName)]] <- list(
       dimension = paste(reEnv$pkRatio$dictionary$prefixSimulated, pkParameterName, sep = " "),
