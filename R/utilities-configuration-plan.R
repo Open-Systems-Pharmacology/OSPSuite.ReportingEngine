@@ -209,32 +209,3 @@ getMolWeightForCompound <- function(compoundName, simulation) {
   return(simulation$molWeightFor(pathForCompoundName))
 }
 
-getPlotConfigurationFromPlan <- function(plotProperties) {
-  plotConfiguration <- tlf::PlotConfiguration$new()
-  # Get properties from FontAndSize
-  fonts <- plotProperties$FontAndSize$Fonts
-  plotConfiguration$labels$title$font$size <- fonts$TitleSize %||% plotConfiguration$labels$title$font$size
-  plotConfiguration$labels$subtitle$font$size <- fonts$DescriptionSize %||% plotConfiguration$labels$subtitle$font$size
-  plotConfiguration$labels$xlabel$font$size <- fonts$AxisSize %||% plotConfiguration$labels$xlabel$font$size
-  plotConfiguration$labels$ylabel$font$size <- fonts$AxisSize %||% plotConfiguration$labels$ylabel$font$size
-  plotConfiguration$xAxis$font$size <- fonts$AxisSize %||% plotConfiguration$xAxis$font$size
-  plotConfiguration$yAxis$font$size <- fonts$AxisSize %||% plotConfiguration$yAxis$font$size
-  plotConfiguration$legend$font$size <- fonts$LegendSize %||% plotConfiguration$legend$font$size
-  plotConfiguration$background$watermark$font$size <- fonts$WatermarkSize %||% plotConfiguration$background$watermark$font$size
-
-  # Get size of exported plot
-  plotConfiguration$export$units <- reEnv$defaultPlotFormat$units
-  plotConfiguration$export$width <- reEnv$defaultPlotFormat$width
-  plotConfiguration$export$height <- reEnv$defaultPlotFormat$height
-  # If chart size is defined, it is in pixel and updated accordingly
-  unitConversionFactor <- grDevices::dev.size("in") / grDevices::dev.size("px")
-  if (!isOfLength(plotProperties$FontAndSize$ChartWidth, 0)) {
-    plotConfiguration$export$units <- "in"
-    plotConfiguration$export$width <- plotProperties$FontAndSize$ChartWidth * unitConversionFactor[1]
-  }
-  if (!isOfLength(plotProperties$FontAndSize$ChartHeight, 0)) {
-    plotConfiguration$export$units <- "in"
-    plotConfiguration$export$height <- plotProperties$FontAndSize$ChartHeight * unitConversionFactor[2]
-  }
-  return(plotConfiguration)
-}

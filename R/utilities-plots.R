@@ -78,3 +78,76 @@ autoAxesTicksFromLimits <- function(limits) {
   }
   return(rep(c(1, 2, 5), length(logTicks)) * 10^rep(logTicks, each = 3))
 }
+
+#' @title getPlotConfigurationFromPlan
+#' @description Get the appropriate `PlotConfiguration` object with scaled dimensions for exporting it
+#' @param plotProperties Plot properties from configuration plan
+#' @param plotType Name of plot type to call the appropriate `PlotConfiguration` object.
+#' E.g. for pk ratio plots, use "PKRatio" to create a `PKRatioPlotConfiguration` object
+#' @param legendPosition Legend position in order to add scale factor in the final plot dimensions 
+#' that accounts for possible shrinking of the plot panel due to the addition of the legend
+#' @return A `PlotConfiguration` object
+#' @keywords internal
+getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legendPosition = reEnv$theme$background$legendPosition) {
+  # Define the appropriate configuration from plotType
+  # by creating expression: "tlf::<plotType>PlotCOnfiguration$new()"
+  plotConfiguration <- eval(parse(text = paste0("tlf::", plotType, "PlotConfiguration$new()")))
+  
+  # Set properties from FontAndSize
+  fonts <- plotProperties$FontAndSize$Fonts
+  plotConfiguration$labels$title$font$size <- reEnv$fontScaleFactor*fonts$TitleSize %||% plotConfiguration$labels$title$font$size
+  plotConfiguration$labels$subtitle$font$size <- reEnv$fontScaleFactor*fonts$DescriptionSize %||% plotConfiguration$labels$subtitle$font$size
+  plotConfiguration$labels$xlabel$font$size <- reEnv$fontScaleFactor*fonts$AxisSize %||% plotConfiguration$labels$xlabel$font$size
+  plotConfiguration$labels$ylabel$font$size <- reEnv$fontScaleFactor*fonts$AxisSize %||% plotConfiguration$labels$ylabel$font$size
+  plotConfiguration$xAxis$font$size <- reEnv$fontScaleFactor*fonts$AxisSize %||% plotConfiguration$xAxis$font$size
+  plotConfiguration$yAxis$font$size <- reEnv$fontScaleFactor*fonts$AxisSize %||% plotConfiguration$yAxis$font$size
+  plotConfiguration$legend$font$size <- reEnv$fontScaleFactor*fonts$LegendSize %||% plotConfiguration$legend$font$size
+  plotConfiguration$background$watermark$font$size <- reEnv$fontScaleFactor*fonts$WatermarkSize %||% plotConfiguration$background$watermark$font$size
+  
+  # If chart size is defined, it is in pixel and updated accordingly
+  # Get conversion factor between pixels and inches, dev.size provides an array c(width, height)
+  unitConversionFactor <- grDevices::dev.size("in") / grDevices::dev.size("px")
+  width <- ifnotnull(
+    plotProperties$FontAndSize$ChartWidth, 
+    plotProperties$FontAndSize$ChartWidth * unitConversionFactor[1],
+    reEnv$defaultPlotFormat$width
+  )
+  height <- ifnotnull(
+    plotProperties$FontAndSize$ChartHeight, 
+    plotProperties$FontAndSize$ChartHeight * unitConversionFactor[2],
+    reEnv$defaultPlotFormat$height
+    )
+  
+  legendScaling <- getLegendScalingFactors(legendPosition)
+  
+  # Get dimensions of exported based on legend position and default/specific plot properties
+  plotConfiguration$export$units <- reEnv$defaultPlotFormat$units
+  plotConfiguration$export$width <- reEnv$fontScaleFactor*legendScaling$width*width
+  plotConfiguration$export$height <- reEnv$fontScaleFactor*legendScaling$height*height
+  return(plotConfiguration)
+}
+
+#' @title getLegendScalingFactors
+#' @description Get factors to scale plot dimensions accounting for the location of the legend.
+#' Initial estimates based on Abdullah's tests
+#' TODO: improve this directly from tlf
+#' @param legendPosition The name of the legend position as defined by `tlf` enum `LegendPositions`
+#' @return A list of scaling values for `width` and `height`
+#' @keywords internal
+getLegendScalingFactors <- function(legendPosition = tlf::LegendPositions$outsideTop){
+  # Legend on the left/right sides: increase width
+  if(isIncluded(legendPosition, c(tlf::LegendPositions$outsideRight, tlf::LegendPositions$outsideLeft))){
+    return(list(width = 1.6, height = 1.2))
+  }
+  # Legend on the top/bottom sides: increase height
+  if(isIncluded(legendPosition, c(tlf::LegendPositions$outsideTopLeft,
+                                  tlf::LegendPositions$outsideTop,
+                                  tlf::LegendPositions$outsideTopRight,
+                                  tlf::LegendPositions$outsideBottomLeft,
+                                  tlf::LegendPositions$outsideBottom,
+                                  tlf::LegendPositions$outsideBottomRight))){
+    return(list(width = 1.2, height = 1.4))
+  }
+  # Otherwise use these default values
+  return(list(width = 1.2, height = 1.2))
+}
