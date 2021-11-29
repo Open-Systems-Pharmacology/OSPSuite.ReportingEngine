@@ -51,11 +51,6 @@ plotQualificationComparisonTimeProfile <- function(configurationPlan,
     }
     # Set axes based on Axes properties
     timeProfilePlot <- updatePlotAxes(timeProfilePlot, axesProperties)
-    # Remove the legend of observed data
-    legendCaption <- tlf::getLegendCaption(timeProfilePlot)
-    legendLabelsToKeep <- !grepl(pattern = "observedDataToRemove", x = legendCaption$name)
-    timeProfilePlot <- tlf::setCaptionVisibility(timeProfilePlot, legendLabelsToKeep)
-
     # Save results
     timeProfileResults[[plotID]] <- saveTaskResults(
       id = plotID,
@@ -132,7 +127,7 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
   plotObject <- tlf::addLine(
     x = simulatedTime,
     y = simulatedValues,
-    caption = outputMapping$Caption,
+    caption = paste(outputMapping$Caption, "Simulated Data"),
     linetype = tlfLinetype(outputMapping$LineStyle),
     color = outputMapping$Color,
     size = outputMapping$Size,
@@ -197,7 +192,7 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
       x = observedTime,
       ymin = observedError$ymin[selectedObservedTimeValues],
       ymax = observedError$ymax[selectedObservedTimeValues],
-      caption = paste("observedDataToRemove", outputMapping$Caption),
+      caption = paste(outputMapping$Caption, "Observed Data"),
       color = outputMapping$Color,
       size = outputMapping$Size,
       plotObject = plotObject
@@ -208,7 +203,7 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
   plotObject <- tlf::addScatter(
     x = observedTime,
     y = observedValues,
-    caption = paste("observedDataToRemove", outputMapping$Caption),
+    caption = paste(outputMapping$Caption, "Observed Data"),
     shape = tlfShape(outputMapping$Symbol),
     color = outputMapping$Color,
     size = outputMapping$Size,
