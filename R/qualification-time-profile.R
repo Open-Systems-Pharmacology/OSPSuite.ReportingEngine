@@ -578,10 +578,14 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
         sourceUnit = observedResults$metaData$error$unit,
         molWeight = molWeight
       )
-      # In case of log scale, ymin<0 are replaced by y so upper branch is still plotted
-      if(isIncluded(axesProperties$y$scale, tlf::Scaling$log)){
-        outputError$ymin[outputError$ymin<=0] <- outputValues[outputError$ymin<=0]
-      }
+    }
+    # Caution: error NA values cause ymin and ymax NA values which breaks the plot,
+    # they need to be replaced by y (no error bar)
+    outputError$ymin[is.na(outputError$ymin)] <- outputValues[is.na(outputError$ymin)]
+    outputError$ymax[is.na(outputError$ymax)] <- outputValues[is.na(outputError$ymax)]
+    # In case of log scale, ymin<0 are replaced by y so upper branch is still plotted
+    if(isIncluded(axesProperties$y$scale, tlf::Scaling$log)){
+      outputError$ymin[outputError$ymin<=0] <- outputValues[outputError$ymin<=0]
     }
   }
   return(list(

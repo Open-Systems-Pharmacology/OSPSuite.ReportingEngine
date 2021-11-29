@@ -187,6 +187,15 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
         molWeight = molWeight
       )
     }
+    # Caution: error NA values cause ymin and ymax NA values which breaks the plot,
+    # they need to be replaced by y (no error bar)
+    observedError$ymin[is.na(observedError$ymin)] <- observedValues[is.na(observedError$ymin)]
+    observedError$ymax[is.na(observedError$ymax)] <- observedValues[is.na(observedError$ymax)]
+    # In case of log scale, ymin<0 are replaced by y so upper branch is still plotted
+    if(isIncluded(axesProperties$y$scale, tlf::Scaling$log)){
+      observedError$ymin[observedError$ymin<=0] <- observedValues[observedError$ymin<=0]
+    }
+    
     # Add error bars for observed data
     plotObject <- tlf::addErrorbar(
       x = observedTime,
