@@ -10,5 +10,6 @@ getAllowedCores()
 Allowed number of CPU cores for computation
 }
 \description{
-getAllowedCores
+Relevant only when reporting engine is executed on a Linux Kubernetes cluster.
 }
+\keyword{internal}
