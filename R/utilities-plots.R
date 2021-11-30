@@ -78,3 +78,90 @@ autoAxesTicksFromLimits <- function(limits) {
   }
   return(rep(c(1, 2, 5), length(logTicks)) * 10^rep(logTicks, each = 3))
 }
+
+#' @title prettyCaption
+#' @description Get prettied captions with line breaks to prevent cropping of long captions
+#' @param captions Array of character strings to render
+#' @param maxLines Maximum number of lines directly setting the maximum number of line breaks allowed.
+#' @param width Maximum number of characters per line desired.
+#' Due to `maxLines`, the returned width can be wider than `width`.
+#' @return A character vector of wrapped strings with line breaks at sensible places.
+#' @export
+#' @examples 
+#' 
+#' cat(prettyCaption("this-is-a-long-sentence-with-dashes", maxLines = 2, width = 25))
+#' 
+#' cat(prettyCaption("this is a sentence with spaces", maxLines = 2, width = 25))
+#' 
+#' cat(prettyCaption("this_is_a_long_sentence_without_preferential_splits", maxLines = 2, width = 25))
+#' 
+#' cat(prettyCaption("this too short to split", maxLines = 3, width = 40))
+#' 
+#' cat(prettyCaption("this forces the sentence to use one line", maxLines = 1, width = 5))
+#' 
+prettyCaption <- function(captions, maxLines = reEnv$maxLinesPerLegendCaption, width = reEnv$maxWidthPerLegendCaption) {
+  # Get number of characters for each caption
+  totalWidths <- nchar(captions)
+  # Check which captions need line breaks to split
+  captionsToSplit <- totalWidths > width
+  if (sum(captionsToSplit) == 0) {
+    return(captions)
+  }
+  # Check how many line breaks are required
+  numberOfSplits <- floor(totalWidths / width)
+  numberOfLines <- numberOfSplits + 1
+  
+  # Splits cannot create more lines than max lines
+  numberOfSplits[numberOfLines > maxLines] <- maxLines - 1
+  numberOfLines <- numberOfSplits + 1
+  # 
+  for (captionIndex in seq_along(captions)) {
+    if (numberOfSplits[captionIndex] == 0) {
+      next
+    }
+    # dashes and spaces provides preferential sites for line breaks
+    # TODO: improve the preferental site using input arguments
+    dashSplits <- as.numeric(gregexpr(pattern = "-", captions[captionIndex])[[1]])
+    spaceSplits <- as.numeric(gregexpr(pattern = " ", captions[captionIndex])[[1]])
+    possibleSplits <- sort(c(dashSplits[dashSplits > 0], spaceSplits[spaceSplits > 0]))
+    # Recalculate width accounting for maxLines
+    splitWidth <- totalWidths[captionIndex] / numberOfLines[captionIndex]
+    # Get split positions (actualSplits is a vector)
+    actualSplits <- getSplitPositions(possibleSplits, splitWidth, numberOfSplits[captionIndex])
+    splitFirst <- c(1, actualSplits + 1)
+    splitLast <- c(actualSplits, totalWidths[captionIndex])
+    # Update captions with sensible line breaks
+    captions[captionIndex] <- paste0(
+      substring(captions[captionIndex], first = splitFirst, last = splitLast),
+      collapse = "\n"
+    )
+  }
+  return(captions)
+}
+
+#' @title getSplitPositions
+#' @description Algorithm that gets positions where splitting a character string for sensible line breaks
+#' @param possibleSplits Positions where a space or a dash was flaged
+#' @param splitWidth Maximum number of characters desired per lines
+#' @param numberOfSplits Maximum number of line breaks to use
+#' @return Position where to insert a line break character
+#' @keywords internal
+getSplitPositions <- function(possibleSplits, splitWidth, numberOfSplits) {
+  # Optimal splits are at equal width
+  optimalSplits <- floor(cumsum(rep(splitWidth, numberOfSplits)))
+  for (splitIndex in seq_along(optimalSplits)) {
+    if (isOfLength(possibleSplits, 0)) {
+      return(optimalSplits)
+    }
+    positionDifference <- min(abs(possibleSplits - optimalSplits[splitIndex]))
+    # If closest possible split too far, use optimal split
+    if (positionDifference > splitWidth) {
+      next
+    }
+    # If available use the available split and remove it from other loops
+    closestAvailableSplitIndex <- which.min(abs(possibleSplits - optimalSplits[splitIndex]))
+    optimalSplits[splitIndex] <- possibleSplits[closestAvailableSplitIndex]
+    possibleSplits <- possibleSplits[-closestAvailableSplitIndex]
+  }
+  return(optimalSplits)
+}
