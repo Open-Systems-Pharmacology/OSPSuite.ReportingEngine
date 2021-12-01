@@ -76,13 +76,24 @@ getAxesProperties <- function(axesSettings) {
   validateIsOfLength(yAxisIndex, 1)
   xAxis <- axesSettings[[xAxisIndex]]
   yAxis <- axesSettings[[yAxisIndex]]
+  # GridLines field defines if grid is present
+  # ifFALSE is used to ensure a value in *if* in case field is empty
+  if (isFALSE(xAxis$GridLines)) {
+    # This will translate as a "blank" tlf linetype below
+    xAxis$DefaultLineStyle <- "none"
+  }
+  if (isFALSE(yAxis$GridLines)) {
+    yAxis$DefaultLineStyle <- "none"
+  }
   xAxis <- list(
     dimension = xAxis$Dimension, unit = xAxis$Unit,
-    min = xAxis$Min, max = xAxis$Max, scale = tlfScale(xAxis$Scaling)
+    min = xAxis$Min, max = xAxis$Max, scale = tlfScale(xAxis$Scaling),
+    grid = list(color = xAxis$DefaultColor, linetype = tlfLinetype(xAxis$DefaultLineStyle))
   )
   yAxis <- list(
     dimension = yAxis$Dimension, unit = yAxis$Unit,
-    min = yAxis$Min, max = yAxis$Max, scale = tlfScale(yAxis$Scaling)
+    min = yAxis$Min, max = yAxis$Max, scale = tlfScale(yAxis$Scaling),
+    grid = list(color = yAxis$DefaultColor, linetype = tlfLinetype(yAxis$DefaultLineStyle))
   )
 
   y2Axis <- NULL
@@ -97,16 +108,28 @@ getAxesProperties <- function(axesSettings) {
 }
 
 #' @title updatePlotAxes
-#' @description Update the axes of a plot object based on the identified axes properties
+#' @description Update the axes and grid properties of a plot object based on the identified axes properties
 #' @param plotObject A ggplot object
 #' @param axesProperties list of axes properties obtained from `getAxesForTimeProfiles`
 #' @return A ggplot object
 #' @import tlf
 #' @keywords internal
 updatePlotAxes <- function(plotObject, axesProperties) {
-  plotObject <- tlf::setPlotLabels(plotObject,
+  plotObject <- tlf::setPlotLabels(
+    plotObject,
     xlabel = tlf::getLabelWithUnit(displayDimension(axesProperties$x$dimension), axesProperties$x$unit),
     ylabel = tlf::getLabelWithUnit(displayDimension(axesProperties$y$dimension), axesProperties$y$unit)
+  )
+  # Update grid properties based on axes settings
+  plotObject <- tlf::setXGrid(
+    plotObject,
+    color = axesProperties$x$grid$color,
+    linetype = axesProperties$x$grid$linetype
+  )
+  plotObject <- tlf::setYGrid(
+    plotObject,
+    color = axesProperties$y$grid$color,
+    linetype = axesProperties$y$grid$linetype
   )
 
   try({
