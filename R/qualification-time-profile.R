@@ -113,7 +113,7 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves, simulation
         x = curveOutput$x,
         ymin = curveOutput$error$ymin,
         ymax = curveOutput$error$ymax,
-        caption = curveOutput$caption,
+        caption = prettyCaption(curveOutput$caption),
         color = curveOutput$color,
         size = curveOutput$size,
         plotObject = plotObject
@@ -122,7 +122,7 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves, simulation
     plotObject <- tlf::addLine(
       x = curveOutput$x,
       y = curveOutput$y,
-      caption = curveOutput$caption,
+      caption = prettyCaption(curveOutput$caption),
       color = curveOutput$color,
       linetype = curveOutput$linetype,
       size = curveOutput$size,
@@ -294,7 +294,7 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
         x = observedData$time,
         ymin = observedData$error$ymin,
         ymax = observedData$error$ymax,
-        caption = observedDataCollection$CurveOptions[[1]]$CurveOptions$Caption,
+        caption = prettyCaption(observedDataCollection$CurveOptions[[1]]$CurveOptions$Caption),
         color = observedDataCollection$CurveOptions[[1]]$CurveOptions$Color,
         size = observedDataCollection$CurveOptions[[1]]$CurveOptions$Size,
         plotObject = plotObject
@@ -303,7 +303,7 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
     plotObject <- tlf::addScatter(
       x = observedData$time,
       y = observedData$y,
-      caption = observedDataCollection$CurveOptions[[1]]$CurveOptions$Caption,
+      caption = prettyCaption(observedDataCollection$CurveOptions[[1]]$CurveOptions$Caption),
       color = observedDataCollection$CurveOptions[[1]]$CurveOptions$Color,
       linetype = tlfLinetype(observedDataCollection$CurveOptions[[1]]$CurveOptions$LineStyle),
       size = observedDataCollection$CurveOptions[[1]]$CurveOptions$Size,
@@ -329,7 +329,7 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
 plotStatisticsFromPlan <- function(time, outputValues, statisticId, outputName, color, linetype, plotObject) {
   # Format the data for plots
   aggregatedData <- getAggregateFromStat(statisticId, time, outputValues)
-  caption <- getCaptionFromStat(statisticId, outputName)
+  caption <- prettyCaption(getCaptionFromStat(statisticId, outputName))
   # Range plots use addRibbon
   if (grepl(pattern = "Range", statisticId)) {
     plotObject <- tlf::addRibbon(
@@ -578,10 +578,14 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
         sourceUnit = observedResults$metaData$error$unit,
         molWeight = molWeight
       )
-      # In case of log scale, ymin<0 are replaced by y so upper branch is still plotted
-      if(isIncluded(axesProperties$y$scale, tlf::Scaling$log)){
-        outputError$ymin[outputError$ymin<=0] <- outputValues[outputError$ymin<=0]
-      }
+    }
+    # Caution: error NA values cause ymin and ymax NA values which breaks the plot,
+    # they need to be replaced by y (no error bar)
+    outputError$ymin[is.na(outputError$ymin)] <- outputValues[is.na(outputError$ymin)]
+    outputError$ymax[is.na(outputError$ymax)] <- outputValues[is.na(outputError$ymax)]
+    # In case of log scale, ymin<0 are replaced by y so upper branch is still plotted
+    if(isIncluded(axesProperties$y$scale, tlf::Scaling$log)){
+      outputError$ymin[outputError$ymin<=0] <- outputValues[outputError$ymin<=0]
     }
   }
   return(list(

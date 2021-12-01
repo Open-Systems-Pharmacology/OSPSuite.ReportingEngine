@@ -15,6 +15,6 @@ updatePlotAxes(plotObject, axesProperties)
 A ggplot object
 }
 \description{
-Update the axes of a plot object based on the identified axes properties
+Update the axes and grid properties of a plot object based on the identified axes properties
 }
 \keyword{internal}

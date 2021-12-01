@@ -51,11 +51,6 @@ plotQualificationComparisonTimeProfile <- function(configurationPlan,
     }
     # Set axes based on Axes properties
     timeProfilePlot <- updatePlotAxes(timeProfilePlot, axesProperties)
-    # Remove the legend of observed data
-    legendCaption <- tlf::getLegendCaption(timeProfilePlot)
-    legendLabelsToKeep <- !grepl(pattern = "observedDataToRemove", x = legendCaption$name)
-    timeProfilePlot <- tlf::setCaptionVisibility(timeProfilePlot, legendLabelsToKeep)
-
     # Save results
     timeProfileResults[[plotID]] <- saveTaskResults(
       id = plotID,
@@ -132,7 +127,7 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
   plotObject <- tlf::addLine(
     x = simulatedTime,
     y = simulatedValues,
-    caption = outputMapping$Caption,
+    caption = prettyCaption(paste(outputMapping$Caption, "Simulated Data")),
     linetype = tlfLinetype(outputMapping$LineStyle),
     color = outputMapping$Color,
     size = outputMapping$Size,
@@ -192,12 +187,21 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
         molWeight = molWeight
       )
     }
+    # Caution: error NA values cause ymin and ymax NA values which breaks the plot,
+    # they need to be replaced by y (no error bar)
+    observedError$ymin[is.na(observedError$ymin)] <- observedValues[is.na(observedError$ymin)]
+    observedError$ymax[is.na(observedError$ymax)] <- observedValues[is.na(observedError$ymax)]
+    # In case of log scale, ymin<0 are replaced by y so upper branch is still plotted
+    if(isIncluded(axesProperties$y$scale, tlf::Scaling$log)){
+      observedError$ymin[observedError$ymin<=0] <- observedValues[observedError$ymin<=0]
+    }
+    
     # Add error bars for observed data
     plotObject <- tlf::addErrorbar(
       x = observedTime,
       ymin = observedError$ymin[selectedObservedTimeValues],
       ymax = observedError$ymax[selectedObservedTimeValues],
-      caption = paste("observedDataToRemove", outputMapping$Caption),
+      caption = prettyCaption(paste(outputMapping$Caption, "Observed Data")),
       color = outputMapping$Color,
       size = outputMapping$Size,
       plotObject = plotObject
@@ -208,7 +212,7 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
   plotObject <- tlf::addScatter(
     x = observedTime,
     y = observedValues,
-    caption = paste("observedDataToRemove", outputMapping$Caption),
+    caption = prettyCaption(paste(outputMapping$Caption, "Observed Data")),
     shape = tlfShape(outputMapping$Symbol),
     color = outputMapping$Color,
     size = outputMapping$Size,

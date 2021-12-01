@@ -20,6 +20,9 @@ reEnv$defaultSimulationSetDescriptor <- ""
 reEnv$maximalParametersPerSensitivityPlot <- 25
 reEnv$maxWidthPerParameter <- 25
 reEnv$maxLinesPerParameter <- 3
+
+reEnv$maxWidthPerLegendCaption <- 50
+reEnv$maxLinesPerLegendCaption <- 2
 # If plot limits are left undefined, an auto margin is added
 reEnv$autoAxisLimitMargin <- 0.05
 
