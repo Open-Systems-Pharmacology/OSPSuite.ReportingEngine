@@ -137,7 +137,7 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
 getLegendScalingFactors <- function(legendPosition = tlf::LegendPositions$outsideTop){
   # Legend on the left/right sides: increase width
   if(isIncluded(legendPosition, c(tlf::LegendPositions$outsideRight, tlf::LegendPositions$outsideLeft))){
-    return(list(width = 1.6, height = 1.2))
+    return(list(width = 4/3, height = 1))
   }
   # Legend on the top/bottom sides: increase height
   if(isIncluded(legendPosition, c(tlf::LegendPositions$outsideTopLeft,
@@ -146,8 +146,8 @@ getLegendScalingFactors <- function(legendPosition = tlf::LegendPositions$outsid
                                   tlf::LegendPositions$outsideBottomLeft,
                                   tlf::LegendPositions$outsideBottom,
                                   tlf::LegendPositions$outsideBottomRight))){
-    return(list(width = 1.2, height = 1.4))
+    return(list(width = 1, height = 7/6))
   }
   # Otherwise use these default values
-  return(list(width = 1.2, height = 1.2))
+  return(list(width = 1, height = 1))
 }
