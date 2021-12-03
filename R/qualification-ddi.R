@@ -12,6 +12,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 
     plotDDIMetadata$title <- plot$Title
     plotDDIMetadata$sectionID <- plot$SectionId
+    plotDDIMetadata$artifacts <- plot$Artifacts
     plotDDIMetadata$plotSettings <- getPlotSettings(configurationPlan$plots$PlotSettings)
     # Pipes in configuration plan will be deprecated moving forward
 
@@ -48,12 +49,18 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 
         for (pkParameter in pkParameters) {
           ratioList[[pkParameter]] <- list()
-
           validateIsIncluded(ddiPKRatioColumnName[[pkParameter]], names(observedDataFrame))
-          ratioList[[pkParameter]]$observedRatio <- observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]][observedDataFrame$ID %in% observedDataRecordId]
+          ratioList[[pkParameter]]$id <- observedDataFrame[["ID"]][observedDataFrame$ID %in% observedDataRecordId]
+          ratioList[[pkParameter]]$studyId <- observedDataFrame[["Study ID"]][observedDataFrame$ID %in% observedDataRecordId]
           ratioList[[pkParameter]]$mechanism <- observedDataFrame[["Mechanism"]][observedDataFrame$ID %in% observedDataRecordId]
           ratioList[[pkParameter]]$perpetrator <- observedDataFrame[["Perpetrator"]][observedDataFrame$ID %in% observedDataRecordId]
+          ratioList[[pkParameter]]$routePerpetrator <- observedDataFrame[["Route Perpetrator"]][observedDataFrame$ID %in% observedDataRecordId]
+          ratioList[[pkParameter]]$routeVictim <- observedDataFrame[["Route Victim"]][observedDataFrame$ID %in% observedDataRecordId]
           ratioList[[pkParameter]]$victim <- observedDataFrame[["Victim"]][observedDataFrame$ID %in% observedDataRecordId]
+          ratioList[[pkParameter]]$dose <- observedDataFrame[["Dose"]][observedDataFrame$ID %in% observedDataRecordId]
+          ratioList[[pkParameter]]$doseUnit <- observedDataFrame[["Dose Unit"]][observedDataFrame$ID %in% observedDataRecordId]
+          ratioList[[pkParameter]]$description <- observedDataFrame[["Description"]][observedDataFrame$ID %in% observedDataRecordId]
+          ratioList[[pkParameter]]$observedRatio <- observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]][observedDataFrame$ID %in% observedDataRecordId]
 
           for (simulationType in c("SimulationControl", "SimulationDDI")) {
             plotComponent <- ddiRatio[[simulationType]]
@@ -116,9 +123,16 @@ getQualificationDDIPlotData <- function(configurationPlan) {
             pkParameterName = pkParameterName,
             observedRatio = ratioList[[pkParameter]]$observedRatio,
             simulatedRatio = ratioList[[pkParameter]][["SimulationDDI"]] / ratioList[[pkParameter]][["SimulationControl"]],
+            id = ratioList[[pkParameter]]$id,
+            studyId = ratioList[[pkParameter]]$studyId,
             mechanism = ratioList[[pkParameter]]$mechanism,
             perpetrator = ratioList[[pkParameter]]$perpetrator,
-            victim = ratioList[[pkParameter]]$victim
+            victim = ratioList[[pkParameter]]$victim,
+            routePerpetrator = ratioList[[pkParameter]]$routePerpetrator,
+            routeVictim = ratioList[[pkParameter]]$routeVictim,
+            dose = ratioList[[pkParameter]]$dose,
+            doseUnit = ratioList[[pkParameter]]$doseUnit,
+            description = ratioList[[pkParameter]]$description
           )
 
           plotDDIDataFrame <- rbind.data.frame(plotDDIDataFrame, df)
@@ -133,6 +147,8 @@ getQualificationDDIPlotData <- function(configurationPlan) {
   }
   return(plotDDIdata)
 }
+
+
 
 
 
@@ -210,8 +226,8 @@ generateDDIQualificationDDIPlot <- function(data) {
   )
 
   ddiPlotConfiguration <- getPlotConfigurationFromPlan(plotProperties =  NULL,
-                               plotType = "DDIRatio",
-                               legendPosition = reEnv$theme$background$legendPosition)
+                                                       plotType = "DDIRatio",
+                                                       legendPosition = reEnv$theme$background$legendPosition)
 
   # Set line color and type
   ddiPlotConfiguration$lines$color <- "black"
@@ -302,9 +318,16 @@ getQualificationDDIRatioMeasure <- function(summaryDataFrame, pkParameterName) {
 #' @return a `list` of DDI results for the current DDI section
 #' @keywords internal
 getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffix = NULL) {
-  ddiPlotResults <- list()
+
+  ddiArtifacts <- list(
+    "Plot" = list(),
+    "GMFE" = list(),
+    "Measure" = list()
+  )
+
   gmfeDDI <- NULL
   ddiTableList <- list()
+
   for (pkParameter in unique(dataframe$pkParameter)) {
     for (plotType in metadata$plotTypes) {
       pkDataframe <- dataframe[dataframe$pkParameter == pkParameter, ]
@@ -312,7 +335,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
 
       plotID <- paste("plot", idPrefix, pkParameter, plotType, sep = "-")
       ddiPlot <- generateDDIQualificationDDIPlot(plotDDIData)
-      ddiPlotResults[[plotID]] <- saveTaskResults(
+      ddiArtifacts[["Plot"]][[plotID]] <- saveTaskResults(
         id = plotID,
         sectionId = sectionID,
         plot = ddiPlot,
@@ -342,7 +365,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
   }
 
   gmfeID <- paste("gmfe", idPrefix, sep = "-")
-  ddiPlotResults[[gmfeID]] <- saveTaskResults(
+  ddiArtifacts[["GMFE"]][[gmfeID]] <- saveTaskResults(
     id = gmfeID,
     sectionId = sectionID,
     table = gmfeDDI,
@@ -350,9 +373,10 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
     includeTable = TRUE
   )
 
+
   for (pkParameter in unique(dataframe$pkParameter)) {
     tableID <- paste("table", pkParameter, idPrefix, sep = "-")
-    ddiPlotResults[[tableID]] <- saveTaskResults(
+    ddiArtifacts[["Measure"]][[tableID]] <- saveTaskResults(
       id = tableID,
       sectionId = sectionID,
       table = ddiTableList[[pkParameter]],
@@ -361,7 +385,53 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
     )
   }
 
+  #Ensure artifacts will appear in same order as in configuration plan
+  ddiPlotResults <- unlist(ddiArtifacts[metadata$artifacts])
+
   return(ddiPlotResults)
+}
+
+#' @title getDDITable
+#' @description Summary table for DDI plot
+#' @param dataframe
+#' @return Summary table for DDI plot
+#' @keywords internal
+getDDITable <- function(dataframe){
+
+  dataframe$simObsRatio <- dataframe$simulatedRatio / dataframe$observedRatio
+
+  ddiTable <- list()
+
+  pkParameters <- unique(dataframe$pkParameter)
+
+  for (pk in pkParameters){
+    pkDataframe <- dataframe[dataframe$pkParameter == pk,]
+
+    ddiTable[[pk]] <- data.frame(
+      "DataID" = pkDataframe$id,
+      "Perpetrator" = paste(pkDataframe$perpetrator,paste(pkDataframe$dose,pkDataframe$doseUnit),pkDataframe$routePerpetrator,pkDataframe$description,sep = ", "),
+      "Victim" =  paste(pkDataframe$victim , pkDataframe$routeVictim, sep = ", ")
+    )
+
+    ddiTable[[pk]][[paste("Predicted",pk,"Ratio")]] <- pkDataframe$simulatedRatio
+    ddiTable[[pk]][[paste("Observed",pk,"Ratio")]] <- pkDataframe$observedRatio
+    ddiTable[[pk]][[paste("Pred/Obs",pk,"Ratio")]] <- pkDataframe$simObsRatio
+    ddiTable[[pk]][["Reference"]] <- pkDataframe$studyId
+  }
+
+  #Merge together all dataframes (each of which corresponds to a different PK parameter) by combining together all rows that share common values in the columns named "DataID","Perpetrator","Victim","Reference"
+  mergedDDITable <- Reduce(
+    function(x, y) merge(x, y, by=c("DataID","Perpetrator","Victim","Reference")),
+    ddiTable
+  )
+
+  #Move reference column to the end
+  mergedDDITable <- cbind(mergedDDITable[, names(mergedDDITable) != "Reference"], data.frame("Reference" = mergedDDITable$Reference))
+
+  #Order rows by Data ID
+  mergedDDITable <- mergedDDITable[order(mergedDDITable$DataID),]
+
+  return(mergedDDITable)
 }
 
 
@@ -386,6 +456,20 @@ plotQualificationDDIs <- function(configurationPlan,
     sectionLevel <- configurationPlan$getSectionLevel(id = sectionID)
     idPrefix <- paste("DDIRatio", plotIndex, sep = "-")
     ddiResults <- c(ddiResults, getDDISection(dataframe, metadata, sectionID, idPrefix))
+
+    if ("Table" %in% metadata$artifacts){
+
+      dd <- getDDITable(dataframe)
+
+      ddiTable <- saveTaskResults(
+        id = "DDI Table",
+        sectionId = sectionID,
+        table = getDDITable(dataframe),
+        tableCaption = NULL,
+        includeTable = TRUE
+      )
+      ddiResults <- c(ddiResults, ddiTable)
+    }
 
     for (subplotType in names(ddiSubplotTypes)) {
       subheading <- saveTaskResults(id = subplotType, sectionId = sectionID, textChunk = paste(paste0(rep("#", sectionLevel + 1), collapse = ""), ddiSubplotTypes[[subplotType]]), includeTextChunk = TRUE)
