@@ -132,26 +132,23 @@ setDefaultNumericFormat <- function(digits = NULL, scientific = NULL) {
   return(invisible())
 }
 
-# Default theme
+# Initialize a theme for reporting engine using a tlf template
+# This theme is updated every time a new Workflow object is loaded
+# TODO use themes instead of extdata in later versions
 reEnv$theme <- tlf::loadThemeFromJson(system.file("extdata", "template-theme.json", package = "tlf"))
 
 #' @title setDefaultTheme
+#' @description Set the default plot settings for a workflow
 #' @param theme `Theme` object from `tlf` package
+#' If `NULL`, the current theme is re-initialized to the reporting engine default
 #' @export
-setDefaultTheme <- function(theme) {
-  validateIsOfType(theme, "Theme")
-  reEnv$theme <- theme
+setDefaultTheme <- function(theme = NULL) {
+  validateIsOfType(theme, "Theme", nullAllowed = TRUE)
+  reThemeFile <- system.file("extdata", "re-theme.json", package = "ospsuite.reportingengine")
+  # If the RE default is not found, the template theme from tlf will be used instead
+  reEnv$theme <- ifEqual(reThemeFile, "", reEnv$theme, tlf::loadThemeFromJson(reThemeFile))
+  reEnv$theme <- theme %||% reEnv$theme 
   tlf::useTheme(reEnv$theme)
-}
-
-#' @title setDefaultThemeFromJson
-#' @param jsonFile path to json file where theme properties are stored
-#' @export
-setDefaultThemeFromJson <- function(jsonFile) {
-  validateIsString(jsonFile)
-  validateIsFileExtension(jsonFile, "json")
-  newTheme <- tlf::loadThemeFromJson(jsonFile)
-  setDefaultTheme(newTheme)
 }
 
 #' @title setDefaultBins

@@ -29,6 +29,7 @@ Workflow <- R6::R6Class(
     #' @param watermark displayed watermark in figures background
     #' @param simulationSetDescriptor character Descriptor of simulation sets indicated in reports
     #' @param numberSections logical defining if the report sections should be numbered
+    #' @param theme A `Theme` object from `{tlf}` package
     #' @return A new `Workflow` object
     #' @import ospsuite
     initialize = function(simulationSets,
@@ -36,7 +37,8 @@ Workflow <- R6::R6Class(
                           createWordReport = TRUE,
                           watermark = NULL,
                           simulationSetDescriptor = NULL, 
-                          numberSections = TRUE) {
+                          numberSections = TRUE,
+                          theme = NULL) {
       private$.reportingEngineInfo <- ReportingEngineInfo$new()
       # Empty list on which users can load tasks
       self$userDefinedTasks <- list()
@@ -89,8 +91,8 @@ Workflow <- R6::R6Class(
       }
       self$setSimulationDescriptor(simulationSetDescriptor %||% reEnv$defaultSimulationSetDescriptor)
 
-      # Define workflow theme and watermark
-      tlf::useTheme(reEnv$theme)
+      # Load default workflow theme, and sync the watermark
+      setDefaultTheme(theme)
       self$setWatermark(watermark)
     },
 

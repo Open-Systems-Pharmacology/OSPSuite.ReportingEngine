@@ -33,12 +33,12 @@ QualificationWorkflow <- R6::R6Class(
     #' @import ospsuite
     initialize = function(configurationPlan,
                           ...) {
+      super$initialize(...)
+      validateIsOfType(configurationPlan, "ConfigurationPlan")
       # Include global plot & axes settings at this stage
       # Global settings are included using theme concept,
       # they can be updated using setting$plotConfigurations within tasks
       configurationPlan$updateTheme()
-      super$initialize(...)
-      validateIsOfType(configurationPlan, "ConfigurationPlan")
       self$configurationPlan <- configurationPlan
 
       self$simulate <- loadSimulateTask(self, active = TRUE)

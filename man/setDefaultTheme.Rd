@@ -4,11 +4,12 @@
 \alias{setDefaultTheme}
 \title{setDefaultTheme}
 \usage{
-setDefaultTheme(theme)
+setDefaultTheme(theme = NULL)
 }
 \arguments{
-\item{theme}{`Theme` object from `tlf` package}
+\item{theme}{`Theme` object from `tlf` package
+If `NULL`, the current theme is re-initialized to the reporting engine default}
 }
 \description{
-setDefaultTheme
+Set the default plot settings for a workflow
 }
