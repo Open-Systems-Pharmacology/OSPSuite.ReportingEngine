@@ -209,28 +209,9 @@ generateDDIQualificationDDIPlot <- function(data) {
     residualsVsObserved = residualsVsObservedFlag[[data$axesSettings$plotType]]
   )
 
-  ddiPlotConfiguration <- tlf::DDIRatioPlotConfiguration$new(
-    data = ddiData,
-    dataMapping = ddiDataMapping
-  )
-
-  ddiPlotConfiguration$export$width <- 2 * 1.6 * (data$plotSettings$width / 96)
-  ddiPlotConfiguration$export$height <- 2 * 1.2 * (data$plotSettings$height / 96)
-  ddiPlotConfiguration$export$units <- "in"
-
-  # Set axis label font size
-  ddiPlotConfiguration$labels$xlabel$font$size <- 2 * data$plotSettings$axisFontSize
-  ddiPlotConfiguration$labels$ylabel$font$size <- 2 * data$plotSettings$axisFontSize
-
-  # Set axis tick font size
-  ddiPlotConfiguration$xAxis$font$size <- 2 * data$plotSettings$axisFontSize
-  ddiPlotConfiguration$yAxis$font$size <- 2 * data$plotSettings$axisFontSize
-
-  # Set watermark font size
-  ddiPlotConfiguration$background$watermark$font$size <- 2 * data$plotSettings$watermarkFontSize
-
-  # Set legend font size
-  ddiPlotConfiguration$legend$font$size <- 2 * data$plotSettings$legendFontSize
+  ddiPlotConfiguration <- getPlotConfigurationFromPlan(plotProperties =  NULL,
+                               plotType = "DDIRatio",
+                               legendPosition = reEnv$theme$background$legendPosition)
 
   # Set line color and type
   ddiPlotConfiguration$lines$color <- "black"
@@ -260,7 +241,7 @@ generateDDIQualificationDDIPlot <- function(data) {
     ddiPlotConfiguration$yAxis$limits <- 10^(c(-log10Limit, log10Limit))
 
     #Include ticks at each order of magnitude and at 1/2 and 2
-    ddiPlotConfiguration$yAxis$ticks <- unique(c(10^seq(-log10Limit, log10Limit, 1), 0.5, 2))
+    ddiPlotConfiguration$yAxis$ticks <- 10^seq(-log10Limit, log10Limit, 1)
   }
 
   qualificationDDIPlot <- tlf::plotDDIRatio(
@@ -269,12 +250,8 @@ generateDDIQualificationDDIPlot <- function(data) {
     dataMapping = ddiDataMapping
   )
 
-  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_color_manual(values = sapply(data$aestheticsList$color, function(x) {
-    x
-  }))
-  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_shape_manual(values = sapply(data$aestheticsList$shape, function(x) {
-    x
-  }))
+  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_color_manual(values = sapply(data$aestheticsList$color, function(x) {x}))
+  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_shape_manual(values = sapply(data$aestheticsList$shape, function(x) {x}))
 
   # Force legend to be only one column to maintain plot panel width, and left-justify legend entries
   qualificationDDIPlot <- qualificationDDIPlot + ggplot2::guides(col = guide_legend(ncol = 1, label.hjust = 0))
