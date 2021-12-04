@@ -50,17 +50,20 @@ getQualificationDDIPlotData <- function(configurationPlan) {
         for (pkParameter in pkParameters) {
           ratioList[[pkParameter]] <- list()
           validateIsIncluded(ddiPKRatioColumnName[[pkParameter]], names(observedDataFrame))
-          ratioList[[pkParameter]]$id <- observedDataFrame[["ID"]][observedDataFrame$ID %in% observedDataRecordId]
-          ratioList[[pkParameter]]$studyId <- observedDataFrame[["Study ID"]][observedDataFrame$ID %in% observedDataRecordId]
-          ratioList[[pkParameter]]$mechanism <- observedDataFrame[["Mechanism"]][observedDataFrame$ID %in% observedDataRecordId]
-          ratioList[[pkParameter]]$perpetrator <- observedDataFrame[["Perpetrator"]][observedDataFrame$ID %in% observedDataRecordId]
-          ratioList[[pkParameter]]$routePerpetrator <- observedDataFrame[["Route Perpetrator"]][observedDataFrame$ID %in% observedDataRecordId]
-          ratioList[[pkParameter]]$routeVictim <- observedDataFrame[["Route Victim"]][observedDataFrame$ID %in% observedDataRecordId]
-          ratioList[[pkParameter]]$victim <- observedDataFrame[["Victim"]][observedDataFrame$ID %in% observedDataRecordId]
-          ratioList[[pkParameter]]$dose <- observedDataFrame[["Dose"]][observedDataFrame$ID %in% observedDataRecordId]
-          ratioList[[pkParameter]]$doseUnit <- observedDataFrame[["Dose Unit"]][observedDataFrame$ID %in% observedDataRecordId]
-          ratioList[[pkParameter]]$description <- observedDataFrame[["Description"]][observedDataFrame$ID %in% observedDataRecordId]
-          ratioList[[pkParameter]]$observedRatio <- observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]][observedDataFrame$ID %in% observedDataRecordId]
+
+          observedDataSelection <- observedDataFrame$ID %in% observedDataRecordId
+
+          ratioList[[pkParameter]]$id <- observedDataFrame[["ID"]][observedDataSelection]
+          ratioList[[pkParameter]]$studyId <- observedDataFrame[["Study ID"]][observedDataSelection]
+          ratioList[[pkParameter]]$mechanism <- observedDataFrame[["Mechanism"]][observedDataSelection]
+          ratioList[[pkParameter]]$perpetrator <- observedDataFrame[["Perpetrator"]][observedDataSelection]
+          ratioList[[pkParameter]]$routePerpetrator <- observedDataFrame[["Route Perpetrator"]][observedDataSelection]
+          ratioList[[pkParameter]]$routeVictim <- observedDataFrame[["Route Victim"]][observedDataSelection]
+          ratioList[[pkParameter]]$victim <- observedDataFrame[["Victim"]][observedDataSelection]
+          ratioList[[pkParameter]]$dose <- observedDataFrame[["Dose"]][observedDataSelection]
+          ratioList[[pkParameter]]$doseUnit <- observedDataFrame[["Dose Unit"]][observedDataSelection]
+          ratioList[[pkParameter]]$description <- observedDataFrame[["Description"]][observedDataSelection]
+          ratioList[[pkParameter]]$observedRatio <- observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]][observedDataSelection]
 
           for (simulationType in c("SimulationControl", "SimulationDDI")) {
             plotComponent <- ddiRatio[[simulationType]]
