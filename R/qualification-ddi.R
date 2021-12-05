@@ -13,12 +13,12 @@ getQualificationDDIPlotData <- function(configurationPlan) {
     plotDDIMetadata$title <- plot$Title
     plotDDIMetadata$sectionID <- plot$SectionId
     plotDDIMetadata$artifacts <- plot$Artifacts
-    plotDDIMetadata$plotSettings <- getPlotSettings(configurationPlan$plots$PlotSettings)
-    # Pipes in configuration plan will be deprecated moving forward
+    plotDDIMetadata$plotSettings <- plot
 
+    # Pipes in configuration plan will be deprecated moving forward
     plotDDIMetadata$plotTypes <- plot$PlotTypes %||% ospsuite::toPathArray(plot$PlotType)
-    plotDDIMetadata$axesSettings <- lapply(plotDDIMetadata$plotTypes, function(pltType) {
-      getAxesSettings(configurationPlan$plots$AxesSettings[[ddiPlotAxesSettings[[pltType]]]])
+    plotDDIMetadata$axesSettings <- lapply(plotDDIMetadata$plotTypes, function(plotType) {
+      getAxesSettings(configurationPlan$plots$AxesSettings[[ddiPlotAxesSettings[[plotType]]]])
     })
     names(plotDDIMetadata$axesSettings) <- plotDDIMetadata$plotTypes
 
@@ -58,8 +58,8 @@ getQualificationDDIPlotData <- function(configurationPlan) {
           ratioList[[pkParameter]]$mechanism <- observedDataFrame[["Mechanism"]][observedDataSelection]
           ratioList[[pkParameter]]$perpetrator <- observedDataFrame[["Perpetrator"]][observedDataSelection]
           ratioList[[pkParameter]]$routePerpetrator <- observedDataFrame[["Route Perpetrator"]][observedDataSelection]
-          ratioList[[pkParameter]]$routeVictim <- observedDataFrame[["Route Victim"]][observedDataSelection]
           ratioList[[pkParameter]]$victim <- observedDataFrame[["Victim"]][observedDataSelection]
+          ratioList[[pkParameter]]$routeVictim <- observedDataFrame[["Route Victim"]][observedDataSelection]
           ratioList[[pkParameter]]$dose <- observedDataFrame[["Dose"]][observedDataSelection]
           ratioList[[pkParameter]]$doseUnit <- observedDataFrame[["Dose Unit"]][observedDataSelection]
           ratioList[[pkParameter]]$description <- observedDataFrame[["Description"]][observedDataSelection]
@@ -130,8 +130,8 @@ getQualificationDDIPlotData <- function(configurationPlan) {
             studyId = ratioList[[pkParameter]]$studyId,
             mechanism = ratioList[[pkParameter]]$mechanism,
             perpetrator = ratioList[[pkParameter]]$perpetrator,
-            victim = ratioList[[pkParameter]]$victim,
             routePerpetrator = ratioList[[pkParameter]]$routePerpetrator,
+            victim = ratioList[[pkParameter]]$victim,
             routeVictim = ratioList[[pkParameter]]$routeVictim,
             dose = ratioList[[pkParameter]]$dose,
             doseUnit = ratioList[[pkParameter]]$doseUnit,
@@ -210,25 +210,25 @@ buildQualificationDDIDataframe <- function(dataframe,
 
 #' @title generateDDIQualificationDDIPlot
 #' @description Plot observation vs prediction for qualification workflow
-#' @param data data.frame
+#' @param ddiPlotData a list containing the plot data.frame, aesthetics list, axes settings and plot settings
 #' @return ggplot DDI plot object for DDI qualification workflow
 #' @import tlf
 #' @import ggplot2
 #' @keywords internal
-generateDDIQualificationDDIPlot <- function(data) {
+generateDDIQualificationDDIPlot <- function(ddiPlotData) {
 
-  ddiData <- na.omit(data$ddiPlotDataframe)
+  ddiData <- na.omit(ddiPlotData$ddiPlotDataframe)
 
   ddiDataMapping <- tlf::DDIRatioDataMapping$new(
-    x = data$axesSettings$X$label,
-    y = data$axesSettings$Y$label,
+    x = ddiPlotData$axesSettings$X$label,
+    y = ddiPlotData$axesSettings$Y$label,
     shape = "Caption",
     color = "Caption",
     minRange = c(0.1, 10),
-    residualsVsObserved = residualsVsObservedFlag[[data$axesSettings$plotType]]
+    residualsVsObserved = residualsVsObservedFlag[[ddiPlotData$axesSettings$plotType]]
   )
 
-  ddiPlotConfiguration <- getPlotConfigurationFromPlan(plotProperties =  NULL,
+  ddiPlotConfiguration <- getPlotConfigurationFromPlan(plotProperties = ddiPlotData$plotSettings,
                                                        plotType = "DDIRatio",
                                                        legendPosition = reEnv$theme$background$legendPosition)
 
@@ -237,21 +237,21 @@ generateDDIQualificationDDIPlot <- function(data) {
   ddiPlotConfiguration$lines$linetype <- c("solid","dotted","solid")
 
   # Set axes scaling
-  if (data$axesSettings$X$scaling == "Log") {
+  if (ddiPlotData$axesSettings$X$scaling == "Log") {
     ddiPlotConfiguration$xAxis$scale <- tlf::Scaling$log
   }
-  if (data$axesSettings$Y$scaling == "Log") {
+  if (ddiPlotData$axesSettings$Y$scaling == "Log") {
     ddiPlotConfiguration$yAxis$scale <- tlf::Scaling$log
   }
 
   # Set y axis ticks and limits
-  if (residualsVsObservedFlag[[data$axesSettings$plotType]] & data$axesSettings$Y$scaling == "Log" ) {
+  if (residualsVsObservedFlag[[ddiPlotData$axesSettings$plotType]] & ddiPlotData$axesSettings$Y$scaling == "Log" ) {
 
     #Minimum log10 predict/observed fold error among all data points, rounded DOWN to nearest whole number
-    lowerBoundLog10 <- min(floor(log10(ddiData[[data$axesSettings$Y$label]])))
+    lowerBoundLog10 <- min(floor(log10(ddiData[[ddiPlotData$axesSettings$Y$label]])))
 
     #Maximum log10 predict/observed fold error among all data points, rounded UP to nearest whole number
-    upperBoundLog10 <- max(ceiling(log10(ddiData[[data$axesSettings$Y$label]])))
+    upperBoundLog10 <- max(ceiling(log10(ddiData[[ddiPlotData$axesSettings$Y$label]])))
 
     #Maximum log10 scale axis limit given by larger of the two fold error bounds, lowerBoundLog10 and upperBoundLog10
     log10Limit <- max(abs(c(lowerBoundLog10,upperBoundLog10)))
@@ -269,14 +269,14 @@ generateDDIQualificationDDIPlot <- function(data) {
     dataMapping = ddiDataMapping
   )
 
-  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_color_manual(values = sapply(data$aestheticsList$color, function(x) {x}))
-  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_shape_manual(values = sapply(data$aestheticsList$shape, function(x) {x}))
+  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_color_manual(values = sapply(ddiPlotData$aestheticsList$color, function(x) {x}))
+  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_shape_manual(values = sapply(ddiPlotData$aestheticsList$shape, function(x) {x}))
 
   # Force legend to be only one column to maintain plot panel width, and left-justify legend entries
   qualificationDDIPlot <- qualificationDDIPlot + ggplot2::guides(col = guide_legend(ncol = 1, label.hjust = 0))
 
-  xlabel <- paste(data$axesSettings$X$label)
-  ylabel <- paste(data$axesSettings$Y$label)
+  xlabel <- paste(ddiPlotData$axesSettings$X$label)
+  ylabel <- paste(ddiPlotData$axesSettings$Y$label)
 
   qualificationDDIPlot <- qualificationDDIPlot + ggplot2::xlab(xlabel) + ggplot2::ylab(ylabel)
 
@@ -461,8 +461,6 @@ plotQualificationDDIs <- function(configurationPlan,
     ddiResults <- c(ddiResults, getDDISection(dataframe, metadata, sectionID, idPrefix))
 
     if ("Table" %in% metadata$artifacts){
-
-      dd <- getDDITable(dataframe)
 
       ddiTable <- saveTaskResults(
         id = "DDI Table",
