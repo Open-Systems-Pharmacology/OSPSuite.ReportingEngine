@@ -17,8 +17,11 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 
     # Pipes in configuration plan will be deprecated moving forward
     plotDDIMetadata$plotTypes <- plot$PlotTypes %||% ospsuite::toPathArray(plot$PlotType)
+
+    validateIsIncluded(plotDDIMetadata$plotTypes, names(ddiPlotTypeSpecifications))
+
     plotDDIMetadata$axesSettings <- lapply(plotDDIMetadata$plotTypes, function(plotType) {
-      getAxesSettings(configurationPlan$plots$AxesSettings[[ddiPlotAxesSettings[[plotType]]]])
+      getAxesSettings(configurationPlan$plots$AxesSettings[[ ddiPlotTypeSpecifications[[plotType]]$ddiPlotAxesSettings ]])
     })
     names(plotDDIMetadata$axesSettings) <- plotDDIMetadata$plotTypes
 
@@ -170,8 +173,8 @@ buildQualificationDDIDataframe <- function(dataframe,
   plotSettings <- metadata$plotSettings
   axesSettings <- metadata$axesSettings[[plotType]]
   axesSettings$plotType <- plotType
-  axesSettings$X$label <- plotDDIXLabel[[plotType]](pkParameter)
-  axesSettings$Y$label <- plotDDIYLabel[[plotType]](pkParameter)
+  axesSettings$X$label <- ddiPlotTypeSpecifications[[plotType]]$plotDDIXLabel(pkParameter)
+  axesSettings$Y$label <- ddiPlotTypeSpecifications[[plotType]]$plotDDIYLabel(pkParameter)
 
   ddiPlotDataframe <- NULL
   aestheticsList <- list(shape = list(), color = list())
@@ -187,7 +190,7 @@ buildQualificationDDIDataframe <- function(dataframe,
     xData <- observedRatio
     xData <- replaceInfWithNA(xData)
 
-    yData <- getYAxisDDIValues[[plotType]](observedRatio, simulatedRatio)
+    yData <- ddiPlotTypeSpecifications[[plotType]]$getYAxisDDIValues(observedRatio, simulatedRatio)
     yData <- replaceInfWithNA(yData)
 
     df <- list()
@@ -219,13 +222,15 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
 
   ddiData <- na.omit(ddiPlotData$ddiPlotDataframe)
 
+  residualsVsObserved <- ddiPlotTypeSpecifications[[ddiPlotData$axesSettings$plotType]]$residualsVsObservedFlag
+
   ddiDataMapping <- tlf::DDIRatioDataMapping$new(
     x = ddiPlotData$axesSettings$X$label,
     y = ddiPlotData$axesSettings$Y$label,
     shape = "Caption",
     color = "Caption",
     minRange = c(0.1, 10),
-    residualsVsObserved = residualsVsObservedFlag[[ddiPlotData$axesSettings$plotType]]
+    residualsVsObserved = residualsVsObserved
   )
 
   ddiPlotConfiguration <- getPlotConfigurationFromPlan(plotProperties = ddiPlotData$plotSettings,
@@ -245,7 +250,7 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
   }
 
   # Set y axis ticks and limits
-  if (residualsVsObservedFlag[[ddiPlotData$axesSettings$plotType]] & ddiPlotData$axesSettings$Y$scaling == "Log" ) {
+  if (residualsVsObserved & ddiPlotData$axesSettings$Y$scaling == "Log" ) {
 
     #Minimum log10 predict/observed fold error among all data points, rounded DOWN to nearest whole number
     lowerBoundLog10 <- min(floor(log10(ddiData[[ddiPlotData$axesSettings$Y$label]])))
@@ -490,52 +495,38 @@ plotQualificationDDIs <- function(configurationPlan,
   return(ddiResults)
 }
 
-#' Names of fields in configuration plane containing axes settings data for each DDI plot type
+
+
+#' Specifications of each DDI plot type
 #' @keywords internal
-ddiPlotAxesSettings <- list(
-  "predictedVsObserved" = "DDIRatioPlotsPredictedVsObserved",
-  "residualsVsObserved" = "DDIRatioPlotsResidualsVsObserved"
+ddiPlotTypeSpecifications <- list(
+  predictedVsObserved = list(ddiPlotAxesSettings = "DDIRatioPlotsPredictedVsObserved",
+                             plotDDIXLabel = function(pk) {
+                               return(paste("Observed", pk, "Ratio"))
+                             },
+                             plotDDIYLabel = function(pk) {
+                               return(paste("Predicted", pk, "Ratio"))
+                             },
+                             residualsVsObservedFlag = FALSE,
+                             getYAxisDDIValues = function(observedRatio, simulatedRatio) {
+                               return(simulatedRatio)
+                             }
+
+  ),
+  residualsVsObserved = list(ddiPlotAxesSettings = "DDIRatioPlotsResidualsVsObserved",
+                             plotDDIXLabel = function(pk) {
+                               return(paste("Observed", pk, "Ratio"))
+                             },
+                             plotDDIYLabel = function(pk) {
+                               return(paste("Predicted", pk, "Ratio / Observed", pk, "Ratio"))
+                             },
+                             residualsVsObservedFlag = TRUE,
+                             getYAxisDDIValues = function(observedRatio, simulatedRatio) {
+                               return(simulatedRatio / observedRatio)
+                             }
+  )
 )
 
-#' Labels for DDI plot X-axis
-#' @keywords internal
-plotDDIXLabel <- list(
-  "predictedVsObserved" = function(pk) {
-    return(paste("Observed", pk, "Ratio"))
-  },
-  "residualsVsObserved" = function(pk) {
-    return(paste("Observed", pk, "Ratio"))
-  }
-)
-
-#' Labels for DDI plot Y-axis
-#' @keywords internal
-plotDDIYLabel <- list(
-  "predictedVsObserved" = function(pk) {
-    return(paste("Predicted", pk, "Ratio"))
-  },
-  "residualsVsObserved" = function(pk) {
-    return(paste("Predicted", pk, "Ratio / Observed", pk, "Ratio"))
-  }
-)
-
-#' DDI plot type identifier
-#' @keywords internal
-residualsVsObservedFlag <- list(
-  "predictedVsObserved" = FALSE,
-  "residualsVsObserved" = TRUE
-)
-
-#' Computation of Y-Axis values
-#' @keywords internal
-getYAxisDDIValues <- list(
-  "predictedVsObserved" = function(observedRatio, simulatedRatio) {
-    return(simulatedRatio)
-  },
-  "residualsVsObserved" = function(observedRatio, simulatedRatio) {
-    return(simulatedRatio / observedRatio)
-  }
-)
 
 #' Named list of of DDI subplot types
 #' @keywords internal
