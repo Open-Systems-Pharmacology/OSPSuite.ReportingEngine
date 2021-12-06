@@ -151,6 +151,15 @@ setDefaultTheme <- function(theme = NULL) {
   tlf::useTheme(reEnv$theme)
 }
 
+#' @title setDefaultThemeFromJson
+#' @description Set the default plot settings for a workflow from a json file
+#' @param jsonFile path to json file that includes `Theme` properties to be loaded
+#' @export
+setDefaultThemeFromJson <- function(jsonFile) {
+  newTheme <- tlf::loadThemeFromJson(jsonFile)
+  setDefaultTheme(newTheme)
+}
+
 #' @title setDefaultBins
 #' @param bins number or edges of bins
 #' @export
