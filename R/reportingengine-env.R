@@ -132,10 +132,24 @@ setDefaultNumericFormat <- function(digits = NULL, scientific = NULL) {
   return(invisible())
 }
 
-# Initialize a theme for reporting engine using a tlf template
+#' @title getDefaultRETheme
+#' @description Get default plot settings for RE package
+#' @return A `Theme` object from `tlf` package
+#' @keywords internal
+getDefaultRETheme <- function(){
+  # Get reporting engine theme from its json file properties
+  reThemeFile <- system.file("extdata", "re-theme.json", package = "ospsuite.reportingengine")
+  if(!isIncluded(reThemeFile, "")){
+    return(tlf::loadThemeFromJson(reThemeFile))
+  }
+  # If not found, e.g. before the package is built, use a tlf template theme
+  # TODO use themes instead of extdata in later versions of tlf
+  return(tlf::loadThemeFromJson(system.file("extdata", "template-theme.json", package = "tlf")))
+}
+
+# Initialize a theme for reporting engine
 # This theme is updated every time a new Workflow object is loaded
-# TODO use themes instead of extdata in later versions
-reEnv$theme <- tlf::loadThemeFromJson(system.file("extdata", "template-theme.json", package = "tlf"))
+reEnv$theme <- getDefaultRETheme()
 
 #' @title setDefaultTheme
 #' @description Set the default plot settings for a workflow
@@ -144,10 +158,7 @@ reEnv$theme <- tlf::loadThemeFromJson(system.file("extdata", "template-theme.jso
 #' @export
 setDefaultTheme <- function(theme = NULL) {
   validateIsOfType(theme, "Theme", nullAllowed = TRUE)
-  reThemeFile <- system.file("extdata", "re-theme.json", package = "ospsuite.reportingengine")
-  # If the RE default is not found, the template theme from tlf will be used instead
-  reEnv$theme <- ifEqual(reThemeFile, "", reEnv$theme, tlf::loadThemeFromJson(reThemeFile))
-  reEnv$theme <- theme %||% reEnv$theme 
+  reEnv$theme <- theme %||% getDefaultRETheme()
   tlf::useTheme(reEnv$theme)
 }
 
