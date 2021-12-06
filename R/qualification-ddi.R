@@ -12,12 +12,16 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 
     plotDDIMetadata$title <- plot$Title
     plotDDIMetadata$sectionID <- plot$SectionId
-    plotDDIMetadata$plotSettings <- getPlotSettings(configurationPlan$plots$PlotSettings)
-    # Pipes in configuration plan will be deprecated moving forward
+    plotDDIMetadata$artifacts <- plot$Artifacts
+    plotDDIMetadata$plotSettings <- plot
 
+    # Pipes in configuration plan will be deprecated moving forward
     plotDDIMetadata$plotTypes <- plot$PlotTypes %||% ospsuite::toPathArray(plot$PlotType)
-    plotDDIMetadata$axesSettings <- lapply(plotDDIMetadata$plotTypes, function(pltType) {
-      getAxesSettings(configurationPlan$plots$AxesSettings[[ddiPlotAxesSettings[[pltType]]]])
+
+    validateIsIncluded(plotDDIMetadata$plotTypes, names(ddiPlotTypeSpecifications))
+
+    plotDDIMetadata$axesSettings <- lapply(plotDDIMetadata$plotTypes, function(plotType) {
+      getAxesSettings(configurationPlan$plots$AxesSettings[[ ddiPlotTypeSpecifications[[plotType]]$ddiPlotAxesSettings ]])
     })
     names(plotDDIMetadata$axesSettings) <- plotDDIMetadata$plotTypes
 
@@ -48,12 +52,21 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 
         for (pkParameter in pkParameters) {
           ratioList[[pkParameter]] <- list()
-
           validateIsIncluded(ddiPKRatioColumnName[[pkParameter]], names(observedDataFrame))
-          ratioList[[pkParameter]]$observedRatio <- observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]][observedDataFrame$ID %in% observedDataRecordId]
-          ratioList[[pkParameter]]$mechanism <- observedDataFrame[["Mechanism"]][observedDataFrame$ID %in% observedDataRecordId]
-          ratioList[[pkParameter]]$perpetrator <- observedDataFrame[["Perpetrator"]][observedDataFrame$ID %in% observedDataRecordId]
-          ratioList[[pkParameter]]$victim <- observedDataFrame[["Victim"]][observedDataFrame$ID %in% observedDataRecordId]
+
+          observedDataSelection <- observedDataFrame$ID %in% observedDataRecordId
+
+          ratioList[[pkParameter]]$id <- observedDataFrame[["ID"]][observedDataSelection]
+          ratioList[[pkParameter]]$studyId <- observedDataFrame[["Study ID"]][observedDataSelection]
+          ratioList[[pkParameter]]$mechanism <- observedDataFrame[["Mechanism"]][observedDataSelection]
+          ratioList[[pkParameter]]$perpetrator <- observedDataFrame[["Perpetrator"]][observedDataSelection]
+          ratioList[[pkParameter]]$routePerpetrator <- observedDataFrame[["Route Perpetrator"]][observedDataSelection]
+          ratioList[[pkParameter]]$victim <- observedDataFrame[["Victim"]][observedDataSelection]
+          ratioList[[pkParameter]]$routeVictim <- observedDataFrame[["Route Victim"]][observedDataSelection]
+          ratioList[[pkParameter]]$dose <- observedDataFrame[["Dose"]][observedDataSelection]
+          ratioList[[pkParameter]]$doseUnit <- observedDataFrame[["Dose Unit"]][observedDataSelection]
+          ratioList[[pkParameter]]$description <- observedDataFrame[["Description"]][observedDataSelection]
+          ratioList[[pkParameter]]$observedRatio <- observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]][observedDataSelection]
 
           for (simulationType in c("SimulationControl", "SimulationDDI")) {
             plotComponent <- ddiRatio[[simulationType]]
@@ -116,9 +129,16 @@ getQualificationDDIPlotData <- function(configurationPlan) {
             pkParameterName = pkParameterName,
             observedRatio = ratioList[[pkParameter]]$observedRatio,
             simulatedRatio = ratioList[[pkParameter]][["SimulationDDI"]] / ratioList[[pkParameter]][["SimulationControl"]],
+            id = ratioList[[pkParameter]]$id,
+            studyId = ratioList[[pkParameter]]$studyId,
             mechanism = ratioList[[pkParameter]]$mechanism,
             perpetrator = ratioList[[pkParameter]]$perpetrator,
-            victim = ratioList[[pkParameter]]$victim
+            routePerpetrator = ratioList[[pkParameter]]$routePerpetrator,
+            victim = ratioList[[pkParameter]]$victim,
+            routeVictim = ratioList[[pkParameter]]$routeVictim,
+            dose = ratioList[[pkParameter]]$dose,
+            doseUnit = ratioList[[pkParameter]]$doseUnit,
+            description = ratioList[[pkParameter]]$description
           )
 
           plotDDIDataFrame <- rbind.data.frame(plotDDIDataFrame, df)
@@ -133,6 +153,8 @@ getQualificationDDIPlotData <- function(configurationPlan) {
   }
   return(plotDDIdata)
 }
+
+
 
 
 
@@ -151,8 +173,8 @@ buildQualificationDDIDataframe <- function(dataframe,
   plotSettings <- metadata$plotSettings
   axesSettings <- metadata$axesSettings[[plotType]]
   axesSettings$plotType <- plotType
-  axesSettings$X$label <- plotDDIXLabel[[plotType]](pkParameter)
-  axesSettings$Y$label <- plotDDIYLabel[[plotType]](pkParameter)
+  axesSettings$X$label <- ddiPlotTypeSpecifications[[plotType]]$plotDDIXLabel(pkParameter)
+  axesSettings$Y$label <- ddiPlotTypeSpecifications[[plotType]]$plotDDIYLabel(pkParameter)
 
   ddiPlotDataframe <- NULL
   aestheticsList <- list(shape = list(), color = list())
@@ -168,7 +190,7 @@ buildQualificationDDIDataframe <- function(dataframe,
     xData <- observedRatio
     xData <- replaceInfWithNA(xData)
 
-    yData <- getYAxisDDIValues[[plotType]](observedRatio, simulatedRatio)
+    yData <- ddiPlotTypeSpecifications[[plotType]]$getYAxisDDIValues(observedRatio, simulatedRatio)
     yData <- replaceInfWithNA(yData)
 
     df <- list()
@@ -191,67 +213,50 @@ buildQualificationDDIDataframe <- function(dataframe,
 
 #' @title generateDDIQualificationDDIPlot
 #' @description Plot observation vs prediction for qualification workflow
-#' @param data data.frame
+#' @param ddiPlotData a list containing the plot data.frame, aesthetics list, axes settings and plot settings
 #' @return ggplot DDI plot object for DDI qualification workflow
 #' @import tlf
 #' @import ggplot2
 #' @keywords internal
-generateDDIQualificationDDIPlot <- function(data) {
+generateDDIQualificationDDIPlot <- function(ddiPlotData) {
 
-  ddiData <- na.omit(data$ddiPlotDataframe)
+  ddiData <- na.omit(ddiPlotData$ddiPlotDataframe)
+
+  residualsVsObserved <- ddiPlotTypeSpecifications[[ddiPlotData$axesSettings$plotType]]$residualsVsObservedFlag
 
   ddiDataMapping <- tlf::DDIRatioDataMapping$new(
-    x = data$axesSettings$X$label,
-    y = data$axesSettings$Y$label,
+    x = ddiPlotData$axesSettings$X$label,
+    y = ddiPlotData$axesSettings$Y$label,
     shape = "Caption",
     color = "Caption",
     minRange = c(0.1, 10),
-    residualsVsObserved = residualsVsObservedFlag[[data$axesSettings$plotType]]
+    residualsVsObserved = residualsVsObserved
   )
 
-  ddiPlotConfiguration <- tlf::DDIRatioPlotConfiguration$new(
-    data = ddiData,
-    dataMapping = ddiDataMapping
-  )
-
-  ddiPlotConfiguration$export$width <- 2 * 1.6 * (data$plotSettings$width / 96)
-  ddiPlotConfiguration$export$height <- 2 * 1.2 * (data$plotSettings$height / 96)
-  ddiPlotConfiguration$export$units <- "in"
-
-  # Set axis label font size
-  ddiPlotConfiguration$labels$xlabel$font$size <- 2 * data$plotSettings$axisFontSize
-  ddiPlotConfiguration$labels$ylabel$font$size <- 2 * data$plotSettings$axisFontSize
-
-  # Set axis tick font size
-  ddiPlotConfiguration$xAxis$font$size <- 2 * data$plotSettings$axisFontSize
-  ddiPlotConfiguration$yAxis$font$size <- 2 * data$plotSettings$axisFontSize
-
-  # Set watermark font size
-  ddiPlotConfiguration$background$watermark$font$size <- 2 * data$plotSettings$watermarkFontSize
-
-  # Set legend font size
-  ddiPlotConfiguration$legend$font$size <- 2 * data$plotSettings$legendFontSize
+  ddiPlotConfiguration <- getPlotConfigurationFromPlan(plotProperties = ddiPlotData$plotSettings,
+                                                       plotType = "DDIRatio",
+                                                       legendPosition = reEnv$theme$background$legendPosition)
 
   # Set line color and type
   ddiPlotConfiguration$lines$color <- "black"
   ddiPlotConfiguration$lines$linetype <- c("solid","dotted","solid")
 
   # Set axes scaling
-  if (data$axesSettings$X$scaling == "Log") {
+  if (ddiPlotData$axesSettings$X$scaling == "Log") {
     ddiPlotConfiguration$xAxis$scale <- tlf::Scaling$log
   }
-  if (data$axesSettings$Y$scaling == "Log") {
+  if (ddiPlotData$axesSettings$Y$scaling == "Log") {
     ddiPlotConfiguration$yAxis$scale <- tlf::Scaling$log
   }
 
   # Set y axis ticks and limits
-  if (residualsVsObservedFlag[[data$axesSettings$plotType]] & data$axesSettings$Y$scaling == "Log" ) {
+  if (residualsVsObserved & ddiPlotData$axesSettings$Y$scaling == "Log" ) {
 
     #Minimum log10 predict/observed fold error among all data points, rounded DOWN to nearest whole number
-    lowerBoundLog10 <- min(floor(log10(ddiData[[data$axesSettings$Y$label]])))
+    lowerBoundLog10 <- min(floor(log10(ddiData[[ddiPlotData$axesSettings$Y$label]])))
 
     #Maximum log10 predict/observed fold error among all data points, rounded UP to nearest whole number
-    upperBoundLog10 <- max(ceiling(log10(ddiData[[data$axesSettings$Y$label]])))
+    upperBoundLog10 <- max(ceiling(log10(ddiData[[ddiPlotData$axesSettings$Y$label]])))
 
     #Maximum log10 scale axis limit given by larger of the two fold error bounds, lowerBoundLog10 and upperBoundLog10
     log10Limit <- max(abs(c(lowerBoundLog10,upperBoundLog10)))
@@ -260,7 +265,7 @@ generateDDIQualificationDDIPlot <- function(data) {
     ddiPlotConfiguration$yAxis$limits <- 10^(c(-log10Limit, log10Limit))
 
     #Include ticks at each order of magnitude and at 1/2 and 2
-    ddiPlotConfiguration$yAxis$ticks <- unique(c(10^seq(-log10Limit, log10Limit, 1), 0.5, 2))
+    ddiPlotConfiguration$yAxis$ticks <- 10^seq(-log10Limit, log10Limit, 1)
   }
 
   qualificationDDIPlot <- tlf::plotDDIRatio(
@@ -269,18 +274,14 @@ generateDDIQualificationDDIPlot <- function(data) {
     dataMapping = ddiDataMapping
   )
 
-  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_color_manual(values = sapply(data$aestheticsList$color, function(x) {
-    x
-  }))
-  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_shape_manual(values = sapply(data$aestheticsList$shape, function(x) {
-    x
-  }))
+  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_color_manual(values = sapply(ddiPlotData$aestheticsList$color, function(x) {x}))
+  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_shape_manual(values = sapply(ddiPlotData$aestheticsList$shape, function(x) {x}))
 
   # Force legend to be only one column to maintain plot panel width, and left-justify legend entries
   qualificationDDIPlot <- qualificationDDIPlot + ggplot2::guides(col = guide_legend(ncol = 1, label.hjust = 0))
 
-  xlabel <- paste(data$axesSettings$X$label)
-  ylabel <- paste(data$axesSettings$Y$label)
+  xlabel <- paste(ddiPlotData$axesSettings$X$label)
+  ylabel <- paste(ddiPlotData$axesSettings$Y$label)
 
   qualificationDDIPlot <- qualificationDDIPlot + ggplot2::xlab(xlabel) + ggplot2::ylab(ylabel)
 
@@ -325,9 +326,16 @@ getQualificationDDIRatioMeasure <- function(summaryDataFrame, pkParameterName) {
 #' @return a `list` of DDI results for the current DDI section
 #' @keywords internal
 getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffix = NULL) {
-  ddiPlotResults <- list()
+
+  ddiArtifacts <- list(
+    "Plot" = list(),
+    "GMFE" = list(),
+    "Measure" = list()
+  )
+
   gmfeDDI <- NULL
   ddiTableList <- list()
+
   for (pkParameter in unique(dataframe$pkParameter)) {
     for (plotType in metadata$plotTypes) {
       pkDataframe <- dataframe[dataframe$pkParameter == pkParameter, ]
@@ -335,7 +343,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
 
       plotID <- paste("plot", idPrefix, pkParameter, plotType, sep = "-")
       ddiPlot <- generateDDIQualificationDDIPlot(plotDDIData)
-      ddiPlotResults[[plotID]] <- saveTaskResults(
+      ddiArtifacts[["Plot"]][[plotID]] <- saveTaskResults(
         id = plotID,
         sectionId = sectionID,
         plot = ddiPlot,
@@ -365,7 +373,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
   }
 
   gmfeID <- paste("gmfe", idPrefix, sep = "-")
-  ddiPlotResults[[gmfeID]] <- saveTaskResults(
+  ddiArtifacts[["GMFE"]][[gmfeID]] <- saveTaskResults(
     id = gmfeID,
     sectionId = sectionID,
     table = gmfeDDI,
@@ -373,9 +381,10 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
     includeTable = TRUE
   )
 
+
   for (pkParameter in unique(dataframe$pkParameter)) {
     tableID <- paste("table", pkParameter, idPrefix, sep = "-")
-    ddiPlotResults[[tableID]] <- saveTaskResults(
+    ddiArtifacts[["Measure"]][[tableID]] <- saveTaskResults(
       id = tableID,
       sectionId = sectionID,
       table = ddiTableList[[pkParameter]],
@@ -384,7 +393,53 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
     )
   }
 
+  #Ensure artifacts will appear in same order as in configuration plan
+  ddiPlotResults <- unlist(ddiArtifacts[metadata$artifacts])
+
   return(ddiPlotResults)
+}
+
+#' @title getDDITable
+#' @description Summary table for DDI plot
+#' @param dataframe
+#' @return Summary table for DDI plot
+#' @keywords internal
+getDDITable <- function(dataframe){
+
+  dataframe$simObsRatio <- dataframe$simulatedRatio / dataframe$observedRatio
+
+  ddiTable <- list()
+
+  pkParameters <- unique(dataframe$pkParameter)
+
+  for (pk in pkParameters){
+    pkDataframe <- dataframe[dataframe$pkParameter == pk,]
+
+    ddiTable[[pk]] <- data.frame(
+      "DataID" = pkDataframe$id,
+      "Perpetrator" = paste(pkDataframe$perpetrator,paste(pkDataframe$dose,pkDataframe$doseUnit),pkDataframe$routePerpetrator,pkDataframe$description,sep = ", "),
+      "Victim" =  paste(pkDataframe$victim , pkDataframe$routeVictim, sep = ", ")
+    )
+
+    ddiTable[[pk]][[paste("Predicted",pk,"Ratio")]] <- pkDataframe$simulatedRatio
+    ddiTable[[pk]][[paste("Observed",pk,"Ratio")]] <- pkDataframe$observedRatio
+    ddiTable[[pk]][[paste("Pred/Obs",pk,"Ratio")]] <- pkDataframe$simObsRatio
+    ddiTable[[pk]][["Reference"]] <- pkDataframe$studyId
+  }
+
+  #Merge together all dataframes (each of which corresponds to a different PK parameter) by combining together all rows that share common values in the columns named "DataID","Perpetrator","Victim","Reference"
+  mergedDDITable <- Reduce(
+    function(x, y) merge(x, y, by=c("DataID","Perpetrator","Victim","Reference")),
+    ddiTable
+  )
+
+  #Move reference column to the end
+  mergedDDITable <- cbind(mergedDDITable[, names(mergedDDITable) != "Reference"], data.frame("Reference" = mergedDDITable$Reference))
+
+  #Order rows by Data ID
+  mergedDDITable <- mergedDDITable[order(mergedDDITable$DataID),]
+
+  return(mergedDDITable)
 }
 
 
@@ -410,6 +465,18 @@ plotQualificationDDIs <- function(configurationPlan,
     idPrefix <- paste("DDIRatio", plotIndex, sep = "-")
     ddiResults <- c(ddiResults, getDDISection(dataframe, metadata, sectionID, idPrefix))
 
+    if ("Table" %in% metadata$artifacts){
+
+      ddiTable <- saveTaskResults(
+        id = "DDI Table",
+        sectionId = sectionID,
+        table = getDDITable(dataframe),
+        tableCaption = NULL,
+        includeTable = TRUE
+      )
+      ddiResults <- c(ddiResults, ddiTable)
+    }
+
     for (subplotType in names(ddiSubplotTypes)) {
       subheading <- saveTaskResults(id = subplotType, sectionId = sectionID, textChunk = paste(paste0(rep("#", sectionLevel + 1), collapse = ""), ddiSubplotTypes[[subplotType]]), includeTextChunk = TRUE)
       ddiResults <- c(ddiResults, subheading)
@@ -428,52 +495,38 @@ plotQualificationDDIs <- function(configurationPlan,
   return(ddiResults)
 }
 
-#' Names of fields in configuration plane containing axes settings data for each DDI plot type
+
+
+#' Specifications of each DDI plot type
 #' @keywords internal
-ddiPlotAxesSettings <- list(
-  "predictedVsObserved" = "DDIRatioPlotsPredictedVsObserved",
-  "residualsVsObserved" = "DDIRatioPlotsResidualsVsObserved"
+ddiPlotTypeSpecifications <- list(
+  predictedVsObserved = list(ddiPlotAxesSettings = "DDIRatioPlotsPredictedVsObserved",
+                             plotDDIXLabel = function(pk) {
+                               return(paste("Observed", pk, "Ratio"))
+                             },
+                             plotDDIYLabel = function(pk) {
+                               return(paste("Predicted", pk, "Ratio"))
+                             },
+                             residualsVsObservedFlag = FALSE,
+                             getYAxisDDIValues = function(observedRatio, simulatedRatio) {
+                               return(simulatedRatio)
+                             }
+
+  ),
+  residualsVsObserved = list(ddiPlotAxesSettings = "DDIRatioPlotsResidualsVsObserved",
+                             plotDDIXLabel = function(pk) {
+                               return(paste("Observed", pk, "Ratio"))
+                             },
+                             plotDDIYLabel = function(pk) {
+                               return(paste("Predicted", pk, "Ratio / Observed", pk, "Ratio"))
+                             },
+                             residualsVsObservedFlag = TRUE,
+                             getYAxisDDIValues = function(observedRatio, simulatedRatio) {
+                               return(simulatedRatio / observedRatio)
+                             }
+  )
 )
 
-#' Labels for DDI plot X-axis
-#' @keywords internal
-plotDDIXLabel <- list(
-  "predictedVsObserved" = function(pk) {
-    return(paste("Observed", pk, "Ratio"))
-  },
-  "residualsVsObserved" = function(pk) {
-    return(paste("Observed", pk, "Ratio"))
-  }
-)
-
-#' Labels for DDI plot Y-axis
-#' @keywords internal
-plotDDIYLabel <- list(
-  "predictedVsObserved" = function(pk) {
-    return(paste("Predicted", pk, "Ratio"))
-  },
-  "residualsVsObserved" = function(pk) {
-    return(paste("Predicted", pk, "Ratio / Observed", pk, "Ratio"))
-  }
-)
-
-#' DDI plot type identifier
-#' @keywords internal
-residualsVsObservedFlag <- list(
-  "predictedVsObserved" = FALSE,
-  "residualsVsObserved" = TRUE
-)
-
-#' Computation of Y-Axis values
-#' @keywords internal
-getYAxisDDIValues <- list(
-  "predictedVsObserved" = function(observedRatio, simulatedRatio) {
-    return(simulatedRatio)
-  },
-  "residualsVsObserved" = function(observedRatio, simulatedRatio) {
-    return(simulatedRatio / observedRatio)
-  }
-)
 
 #' Named list of of DDI subplot types
 #' @keywords internal

@@ -38,6 +38,9 @@ reEnv$defaultPlotFormat <- list(
   dpi = 300
 )
 
+# Scale factor for font size when exporting plot as png
+reEnv$fontScaleFactor <- 2
+
 reEnv$workflowWatermarkMessage <- "preliminary analysis"
 
 # Default values for qualification pk ratio
