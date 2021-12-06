@@ -71,7 +71,8 @@ Create a new `PopulationWorkflow` object.
   createWordReport = TRUE,
   watermark = NULL,
   simulationSetDescriptor = NULL,
-  numberSections = TRUE
+  numberSections = TRUE,
+  theme = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -91,6 +92,8 @@ Create a new `PopulationWorkflow` object.
 \item{\code{simulationSetDescriptor}}{character Descriptor of simulation sets indicated in reports}
 
 \item{\code{numberSections}}{logical defining if the report sections should be numbered}
+
+\item{\code{theme}}{A `Theme` object from `{tlf}` package}
 }
 \if{html}{\out{</div>}}
 }

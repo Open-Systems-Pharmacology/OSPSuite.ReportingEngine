@@ -7,8 +7,8 @@
 setDefaultThemeFromJson(jsonFile)
 }
 \arguments{
-\item{jsonFile}{path to json file where theme properties are stored}
+\item{jsonFile}{path to json file that includes `Theme` properties to be loaded}
 }
 \description{
-setDefaultThemeFromJson
+Set the default plot settings for a workflow from a json file
 }

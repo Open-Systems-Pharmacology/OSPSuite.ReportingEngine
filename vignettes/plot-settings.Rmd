@@ -45,15 +45,15 @@ Some shortkey methods were added to the `reporting.engine` package to simplify t
 ## Notion of theme
 
 A theme is an object of R6 class `Theme` which defines the default properties used to build every plot in `tlf` package.
-More information can be found direcctly within the documentation of the the `tlf` package (vignettes __"theme"__ and __"plot-configuration"__).
+More information can be found directly within the documentation of the the `tlf` package (vignettes __"theme-maker"__ and __"plot-configuration"__).
 
 The best workflow to set a `Theme` object is to use json files.
 Templates of json files are available in the `tlf` package at the location defined below:
 
 ```{r theme definition}
 # Get the path of the Json template
-jsonFile <- system.file("extdata", "template-theme.json", 
-                        package = "tlf")
+jsonFile <- system.file("extdata", "re-theme.json", 
+                        package = "ospsuite.reportingengine")
 
 # Load the theme from the json file
 reTheme <- tlf::loadThemeFromJson(jsonFile)
@@ -76,17 +76,18 @@ In addition, the `tlf` package provides a Shiny app to define and save your own 
 
 Then, the most important step is to define the `Theme` object as the current default for the workflow.
 In `ospsuite.reportingengine`, this can be either achieved using the function `setDefaultTheme` with a `Theme` object as shown in the example below with __`reTheme`__.
-Or it can be achieved, directly from a json file using the function `setDefaultThemeFromJson`, also illustrated below.
 
 The properties defined by the `Theme` object will be used by default if no specific plot configurations are provided for the workflow plots.
 
 ```{r current theme}
 # Set reTheme as current default Theme
 setDefaultTheme(reTheme)
-
-# Set current default Theme from json file
-setDefaultThemeFromJson(jsonFile)
 ```
+
+**Caution**: loading a workflow re-initialize the default theme.
+The function `setDefaultTheme()` needs to be called after initialization of the workflow.
+
+Additionally, `Workflow` objects have a `theme` input argument available in method `$new()` to use the input theme instead of the reporting engine default.
 
 ## Exporting plots in a specific format
 

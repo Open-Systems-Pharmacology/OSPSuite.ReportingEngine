@@ -34,6 +34,7 @@ PopulationWorkflow <- R6::R6Class(
     #' @param watermark displayed watermark in every plot background
     #' @param simulationSetDescriptor character Descriptor of simulation sets indicated in reports
     #' @param numberSections logical defining if the report sections should be numbered
+    #' @param theme A `Theme` object from `{tlf}` package
     #' @return A new `PopulationWorkflow` object
     #' @import ospsuite
     initialize = function(workflowType,
@@ -42,14 +43,16 @@ PopulationWorkflow <- R6::R6Class(
                           createWordReport = TRUE,
                           watermark = NULL,
                           simulationSetDescriptor = NULL,
-                          numberSections = TRUE) {
+                          numberSections = TRUE, 
+                          theme = NULL) {
       super$initialize(
         simulationSets = simulationSets,
         workflowFolder = workflowFolder,
         createWordReport = createWordReport,
         watermark = watermark,
         simulationSetDescriptor = simulationSetDescriptor,
-        numberSections = numberSections
+        numberSections = numberSections,
+        theme = theme
       )
 
       validateIsOfType(c(simulationSets), "PopulationSimulationSet")

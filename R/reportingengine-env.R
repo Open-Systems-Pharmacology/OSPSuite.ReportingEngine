@@ -135,24 +135,41 @@ setDefaultNumericFormat <- function(digits = NULL, scientific = NULL) {
   return(invisible())
 }
 
-# Default theme
-reEnv$theme <- tlf::loadThemeFromJson(system.file("extdata", "template-theme.json", package = "tlf"))
+#' @title getDefaultRETheme
+#' @description Get default plot settings for RE package
+#' @return A `Theme` object from `tlf` package
+#' @keywords internal
+getDefaultRETheme <- function(){
+  # Get reporting engine theme from its json file properties
+  reThemeFile <- system.file("extdata", "re-theme.json", package = "ospsuite.reportingengine")
+  if(!isIncluded(reThemeFile, "")){
+    return(tlf::loadThemeFromJson(reThemeFile))
+  }
+  # If not found, e.g. before the package is built, use a tlf template theme
+  # TODO use themes instead of extdata in later versions of tlf
+  return(tlf::loadThemeFromJson(system.file("extdata", "template-theme.json", package = "tlf")))
+}
+
+# Initialize a theme for reporting engine
+# This theme is updated every time a new Workflow object is loaded
+reEnv$theme <- getDefaultRETheme()
 
 #' @title setDefaultTheme
+#' @description Set the default plot settings for a workflow
 #' @param theme `Theme` object from `tlf` package
+#' If `NULL`, the current theme is re-initialized to the reporting engine default
 #' @export
-setDefaultTheme <- function(theme) {
-  validateIsOfType(theme, "Theme")
-  reEnv$theme <- theme
+setDefaultTheme <- function(theme = NULL) {
+  validateIsOfType(theme, "Theme", nullAllowed = TRUE)
+  reEnv$theme <- theme %||% getDefaultRETheme()
   tlf::useTheme(reEnv$theme)
 }
 
 #' @title setDefaultThemeFromJson
-#' @param jsonFile path to json file where theme properties are stored
+#' @description Set the default plot settings for a workflow from a json file
+#' @param jsonFile path to json file that includes `Theme` properties to be loaded
 #' @export
 setDefaultThemeFromJson <- function(jsonFile) {
-  validateIsString(jsonFile)
-  validateIsFileExtension(jsonFile, "json")
   newTheme <- tlf::loadThemeFromJson(jsonFile)
   setDefaultTheme(newTheme)
 }
