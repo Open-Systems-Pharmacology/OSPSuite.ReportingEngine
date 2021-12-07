@@ -575,7 +575,7 @@ loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotTimeProfiles,
-    settings = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$TimeProfile))
+    settings = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$TimeProfile) %||% getDefaultTimeProfileAxesSettings())
   ))
 }
 
