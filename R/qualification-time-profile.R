@@ -29,20 +29,6 @@ plotQualificationTimeProfiles <- function(configurationPlan,
 
     # Get axes properties (with scale, limits and display units)
     axesProperties <- getAxesProperties(timeProfilePlan$Plot$Axes) %||% settings$axes
-    if (isOfLength(axesProperties, 0)) {
-      # TODO Centralize messaging of configurtion plan errors and warnings
-      logWorkflow(
-        message = paste0(
-          "In Time Profile Plots,\n",
-          "No axes settings defined for plot: '", timeProfilePlan$Plot$Title %||% timeProfilePlan$Plot$Name, "'\n",
-          "From Project: '", timeProfilePlan$Project, "' and Simulation: '", timeProfilePlan$Simulation, "'"
-        ),
-        pathFolder = logFolder,
-        logTypes = LogTypes$Error
-      )
-      next
-    }
-
     plotConfiguration <- getPlotConfigurationFromPlan(timeProfilePlan$Plot)
     timeProfilePlot <- tlf::initializePlot(plotConfiguration)
 
@@ -251,7 +237,11 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
   simulationQuantity <- ospsuite::getQuantity(outputPath, simulation)
   simulationPathResults <- ospsuite::getOutputValues(simulationResults, quantitiesOrPaths = outputPath)
   molWeight <- simulation$molWeightFor(outputPath)
-
+  # Overwrite dimension and unit if found in Analysis field
+  # Keep compatibility with Config Plan from Matlab version
+  axesProperties$y$dimension <- simulationAnalysis$Fields[[1]]$Dimension %||% axesProperties$y$dimension
+  axesProperties$y$unit <- simulationAnalysis$Fields[[1]]$Unit %||% axesProperties$y$unit
+  
   # Get and convert output path values into display unit
   time <- ospsuite::toUnit(
     "Time",
@@ -261,7 +251,7 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
   outputValues <- ospsuite::toUnit(
     simulationQuantity,
     simulationPathResults$data[, outputPath],
-    simulationAnalysis$Fields[[1]]$Unit %||% axesProperties$y$unit,
+    axesProperties$y$unit,
     molWeight = molWeight
   )
 
@@ -294,7 +284,7 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
         x = observedData$time,
         ymin = observedData$error$ymin,
         ymax = observedData$error$ymax,
-        caption = prettyCaption(observedDataCollection$CurveOptions[[1]]$CurveOptions$Caption),
+        caption = prettyCaption(observedDataCollection$CurveOptions[[1]]$Caption %||% "Observed data"),
         color = observedDataCollection$CurveOptions[[1]]$CurveOptions$Color,
         size = observedDataCollection$CurveOptions[[1]]$CurveOptions$Size,
         plotObject = plotObject
@@ -303,7 +293,7 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
     plotObject <- tlf::addScatter(
       x = observedData$time,
       y = observedData$y,
-      caption = prettyCaption(observedDataCollection$CurveOptions[[1]]$CurveOptions$Caption),
+      caption = prettyCaption(observedDataCollection$CurveOptions[[1]]$Caption  %||% "Observed data"),
       color = observedDataCollection$CurveOptions[[1]]$CurveOptions$Color,
       linetype = tlfLinetype(observedDataCollection$CurveOptions[[1]]$CurveOptions$LineStyle),
       size = observedDataCollection$CurveOptions[[1]]$CurveOptions$Size,
@@ -593,4 +583,23 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
     y = outputValues,
     error = outputError
   ))
+}
+
+#' @title getDefaultTimeProfileAxesSettings
+#' @description Get the default axes settings for mean and population time profiles
+#' for keeping compatibility with configuration plan from Matlab version
+#' @return List of `x` and `y` axes settings
+#' @keywords internal
+getDefaultTimeProfileAxesSettings <- function(){
+  xAxis <- list(
+    dimension = ospsuite::ospDimensions$Time, unit = ospsuite::ospUnits$Time$h,
+    min = NULL, max = NULL, scale = tlf::Scaling$lin,
+    grid = list(color = reEnv$theme$background$xGrid$color, linetype = reEnv$theme$background$xGrid$linetype)
+  )
+  yAxis <- list(
+    dimension = ospsuite::ospDimensions$`Concentration (mass)`, unit = ospsuite::ospUnits$`Concentration [mass]`$`µg/l`,
+    min = NULL, max = NULL, scale = tlf::Scaling$log,
+    grid = list(color = reEnv$theme$background$yGrid$color, linetype = reEnv$theme$background$yGrid$linetype)
+  )
+  return(list(x = xAxis, y = yAxis))
 }
