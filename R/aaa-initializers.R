@@ -1,22 +1,17 @@
-exec <- function(text){
-  eval(parse(text = text))
-}
 
-makeChildInitializer <- function(parentInitializerName, extendedInitializerName){
+makeChildInitializer <- function(parentInitializer, extendedInitializer){
+  parentInitializerBody <- paste(tail(as.character(body(parentInitializer)),-1),collapse = ';')
+  extendedInitializerBody <- paste(tail(as.character(body(extendedInitializer)),-1),collapse = ';')
 
-  #Get a list of arguments for the `parentInitializer` function and the `extendedInitializer` function
-  parentInitializer.formals <- formals(eval(parse(text = parentInitializerName)))
-  extendedInitializer.formals <- formals(eval(parse(text = extendedInitializerName)))
+  childInitializerBody <- paste0("function(){
+       eval(parse(text = '",parentInitializerBody,"' ))
+       eval(parse(text = '",extendedInitializerBody,"' ))
+     }")
 
-  childInitializer <- eval(parse(text = paste0("function(){
-  eval(parse(text = (paste(tail(as.character(body(",parentInitializerName,")),-1),collapse = ';') )))
-  eval(parse(text = (paste(tail(as.character(body(",extendedInitializerName,")),-1),collapse = ';') )))
-  }")))
-
+  childInitializer <- eval(parse(text = childInitializerBody))
 
   #Set the arguments to the childInitializer function to be the union of the arguments of the `parentInitializer` function and the `extendedInitializer` function
-  formals(childInitializer) <- c( formals(eval(parse(text = parentInitializerName))) , formals(eval(parse(text = extendedInitializerName))) )
-
+  formals(childInitializer) <- c(formals(parentInitializer) , formals(extendedInitializer))
   return(childInitializer)
 }
 
