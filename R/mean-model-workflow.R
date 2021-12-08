@@ -30,8 +30,8 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param ... input parameters inherited from R6 class object `Workflow`.
     #' @return A new `MeanModelWorkflow` object
     #' @import ospsuite
-    initialize = makeChildInitializer(parentInitializerName = "workflowInitializeFunction",
-                                      extendedInitializerName = "meanModelWorkflowExtensionInitializeFunction"),
+    initialize = makeChildInitializer(parentInitializer = workflowInitializeFunction,
+                                      extendedInitializer = meanModelWorkflowExtensionInitializeFunction),
 
     #' @description
     #' Run mean model workflow tasks for all simulation sets if tasks are activated
