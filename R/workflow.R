@@ -32,69 +32,7 @@ Workflow <- R6::R6Class(
     #' @param theme A `Theme` object from `{tlf}` package
     #' @return A new `Workflow` object
     #' @import ospsuite
-    initialize = function(simulationSets,
-                          workflowFolder,
-                          createWordReport = TRUE,
-                          watermark = NULL,
-                          simulationSetDescriptor = NULL, 
-                          numberSections = TRUE,
-                          theme = NULL) {
-      private$.reportingEngineInfo <- ReportingEngineInfo$new()
-      # Empty list on which users can load tasks
-      self$userDefinedTasks <- list()
-
-      validateIsString(workflowFolder)
-      validateIsString(watermark, nullAllowed = TRUE)
-      validateIsString(simulationSetDescriptor, nullAllowed = TRUE)
-      validateIsOfType(c(simulationSets), "SimulationSet")
-      validateIsLogical(createWordReport)
-      validateIsLogical(numberSections)
-
-      self$createWordReport <- createWordReport
-      self$numberSections <- numberSections
-      if (!isOfType(simulationSets, "list")) {
-        simulationSets <- list(simulationSets)
-      }
-
-      allSimulationSetNames <- sapply(simulationSets, function(set) {
-        set$simulationSetName
-      })
-      validateNoDuplicatedEntries(allSimulationSetNames)
-
-      self$workflowFolder <- workflowFolder
-      workflowFolderCheck <- file.exists(self$workflowFolder)
-
-      if (workflowFolderCheck) {
-        logWorkflow(
-          message = workflowFolderCheck,
-          pathFolder = self$workflowFolder,
-          logTypes = c(LogTypes$Debug)
-        )
-      }
-      dir.create(self$workflowFolder, showWarnings = FALSE, recursive = TRUE)
-
-      logWorkflow(
-        message = private$.reportingEngineInfo$print(),
-        pathFolder = self$workflowFolder
-      )
-
-      self$reportFileName <- file.path(self$workflowFolder, paste0(defaultFileNames$reportName(), ".md"))
-      self$taskNames <- ospsuite::enum(self$getAllTasks())
-
-      self$simulationStructures <- list()
-      simulationSets <- c(simulationSets)
-      for (simulationSetIndex in seq_along(simulationSets)) {
-        self$simulationStructures[[simulationSetIndex]] <- SimulationStructure$new(
-          simulationSet = simulationSets[[simulationSetIndex]],
-          workflowFolder = self$workflowFolder
-        )
-      }
-      self$setSimulationDescriptor(simulationSetDescriptor %||% reEnv$defaultSimulationSetDescriptor)
-
-      # Load default workflow theme, and sync the watermark
-      setDefaultTheme(theme)
-      self$setWatermark(watermark)
-    },
+    initialize = workflowInitializeFunction,
 
     #' @description
     #' Get a vector with all the names of the tasks within the `Workflow`

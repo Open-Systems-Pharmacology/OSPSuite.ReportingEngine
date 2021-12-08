@@ -1,6 +1,7 @@
 rm(list = ls())
 library(ospsuite)
-library(ospsuite.reportingengine)
+#library(ospsuite.reportingengine)
+devtools::load_all(".")
 tree <- ospsuite::getSimulationTree("./tests/data/input-data/individualPksimSim.pkml")
 ms <- SimulationSet$new(
   simulationSetName = "meansim",
@@ -10,7 +11,7 @@ ms <- SimulationSet$new(
 
 mwf <- MeanModelWorkflow$new(simulationSets = list(ms), workflowFolder = "./ex")
 mwf$simulate$settings$showProgress <- TRUE
-mwf$calculatePKParameters$activate()
-mwf$calculateSensitivity$activate()
+mwf$calculatePKParameters$inactivate()
+mwf$calculateSensitivity$inactivate()
 mwf$calculateSensitivity$settings$variableParameterPaths <- c(tree$Organism$Heart$Volume$path)
 mwf$runWorkflow()

@@ -30,21 +30,8 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param ... input parameters inherited from R6 class object `Workflow`.
     #' @return A new `MeanModelWorkflow` object
     #' @import ospsuite
-    initialize = function(...) {
-      super$initialize(...)
-
-      self$simulate <- loadSimulateTask(self)
-      self$calculatePKParameters <- loadCalculatePKParametersTask(self)
-      self$calculateSensitivity <- loadCalculateSensitivityTask(self)
-
-      self$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(self)
-      self$plotMassBalance <- loadPlotMassBalanceTask(self)
-      self$plotAbsorption <- loadPlotAbsorptionTask(self)
-      self$plotPKParameters <- loadPlotPKParametersTask(self)
-      self$plotSensitivity <- loadPlotSensitivityTask(self)
-
-      self$taskNames <- ospsuite::enum(self$getAllTasks())
-    },
+    initialize = makeChildInitializer(parentInitializerName = "workflowInitializeFunction",
+                                      extendedInitializerName = "meanModelWorkflowExtensionInitializeFunction"),
 
     #' @description
     #' Run mean model workflow tasks for all simulation sets if tasks are activated
@@ -103,7 +90,7 @@ MeanModelWorkflow <- R6::R6Class(
       appendices <- appendices[file.exists(appendices)]
       if (length(appendices) > 0) {
         mergeMarkdowndFiles(appendices, self$reportFileName, logFolder = self$workflowFolder)
-        renderReport(self$reportFileName, logFolder = self$workflowFolder, 
+        renderReport(self$reportFileName, logFolder = self$workflowFolder,
                      createWordReport = self$createWordReport, numberSections = self$numberSections)
       }
 
