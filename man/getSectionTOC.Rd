@@ -17,7 +17,9 @@ getSectionTOC(
 
 \item{logFolder}{folder where the logs are saved}
 
-\item{numberSections}{logical defining if sections are numbered}
+\item{numberSections}{logical defining if numbering of section titles is performed automatically when getting the table of content.
+When this option is `FALSE`, such as in qualification workflows, 
+all unnumbered section titles are skipped from the the table of content}
 
 \item{tocPattern}{character pattern referencing sections in first element of line}
 
