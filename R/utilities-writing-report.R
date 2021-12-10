@@ -316,7 +316,9 @@ numberTablesAndFigures <- function(fileName, logFolder = getwd(), figurePattern 
 #' @description Reference sections of a report
 #' @param fileName name of .md file to update
 #' @param logFolder folder where the logs are saved
-#' @param numberSections logical defining if sections are numbered
+#' @param numberSections logical defining if numbering of section titles is performed automatically when getting the table of content.
+#' When this option is `FALSE`, such as in qualification workflows, 
+#' all unnumbered section titles are skipped from the the table of content
 #' @param tocPattern character pattern referencing sections in first element of line
 #' @param tocLevels levels of sections in the report
 #' @return Table of content referencing sections following a markdown format
@@ -334,10 +336,15 @@ getSectionTOC <- function(fileName, logFolder = getwd(), numberSections = TRUE, 
   }
 
   for (lineIndex in seq_along(fileContent)) {
-    firstElement <- as.character(unlist(strsplit(fileContent[lineIndex], " ")))
-    firstElement <- firstElement[1]
+    lineElements <- as.character(unlist(strsplit(fileContent[lineIndex], " ")))
+    firstElement <- lineElements[1]
+    secondElement <- lineElements[2]
     for (tocLevel in rev(seq(1, tocLevels))) {
       if (grepl(pattern = tocPatterns[tocLevel], x = firstElement)) {
+        # Skip the section title if unnumbered and numberSection is FALSE
+        if(!grepl(pattern = "[[:digit:]]", x = secondElement) & !numberSections){
+          next
+        }
         tocCounts[tocLevel] <- tocCounts[tocLevel] + 1
         if (tocLevel < tocLevels) {
           tocCounts[seq(tocLevel + 1, tocLevels)] <- 0
