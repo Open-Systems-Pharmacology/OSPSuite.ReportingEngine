@@ -11,7 +11,10 @@ makeChildInitializer <- function(parentInitializer, extendedInitializer){
   childInitializer <- eval(parse(text = childInitializerBody))
 
   #Set the arguments to the childInitializer function to be the union of the arguments of the `parentInitializer` function and the `extendedInitializer` function
-  formals(childInitializer) <- c(formals(parentInitializer) , formals(extendedInitializer))
+  #Remove any duplicated arguments.  Arguments of the extendedInitializer overwrite arguments of the parentInitializer with the same name.
+  childInitializerFormals <- c(formals(parentInitializer) , formals(extendedInitializer))
+  formals(childInitializer) <- childInitializerFormals[!duplicated(names(childInitializerFormals),fromLast = TRUE)]
+
   return(childInitializer)
 }
 
