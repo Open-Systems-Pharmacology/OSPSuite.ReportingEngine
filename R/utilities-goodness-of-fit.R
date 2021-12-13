@@ -870,17 +870,36 @@ getMetaDataFrame <- function(listOfMetaData) {
   return(metaDataFrame)
 }
 
-
+#' @title getTimeProfilePlotResults
+#' @description Get plots and their captions for mean or population time profiles
+#' @param workflowType `"mean"` or `"population"` workflow
+#' @param timeRange array of time values defining range of simulated data
+#' @param simulatedData data.frame of simulated data
+#' @param observedData data.frame of observed data
+#' @param lloqData data.frame of observed lloq data
+#' @param metaDataFrame metaData represented as a data.frame
+#' @param timeProfileMapping list of variables to map in the time profile plots
+#' @param structureSet A `SimulationStructure` object
+#' @param settings Optional settings for the plots. In particular, includes reference data for population time profile.
+#' @param logFolder Folder where the logs are saved
+#' @return List of `plots` and their `captions`
+#' @keywords internal
 getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, observedData = NULL, lloqData = NULL, metaDataFrame, timeProfileMapping, structureSet, settings = NULL, logFolder) {
   goodnessOfFitPlots <- list()
   goodnessOfFitCaptions <- list()
 
-  # Add reference data, if any, to the existing data
+  # Add reference simulated data, if any, to the existing data
   # rbind.data.frame enforces data.frame type and nrow can be used as is
   refSimulatedData <- rbind.data.frame(settings$referenceData$simulatedData, simulatedData)
-  refObservedData <- rbind.data.frame(settings$referenceData$observedData, observedData)
-  refLloqData <- rbind.data.frame(settings$referenceData$lloqData, lloqData)
-
+  refObservedData <- observedData
+  refLloqData <- lloqData
+  # Add reference observed data only if option is set to true
+  # isTRUE is used for mean model workflows that have a NULL field
+  if(isTRUE(structureSet$simulationSet$plotReferenceObsData)){
+    refObservedData <- rbind.data.frame(settings$referenceData$observedData, observedData)
+    refLloqData <- rbind.data.frame(settings$referenceData$lloqData, lloqData)
+  }
+  # Reset time for multiple dosing
   simulatedData <- asTimeAfterDose(refSimulatedData, min(timeRange), max(timeRange))
   observedData <- asTimeAfterDose(refObservedData, min(timeRange), max(timeRange))
   lloqData <- asTimeAfterDose(refLloqData, min(timeRange), max(timeRange))
@@ -955,6 +974,16 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
   ))
 }
 
+#' @title getResidualsPlotResults
+#' @description Get plots and their captions for residuals
+#' @param timeRange array of time values defining range of simulated data
+#' @param residualsData data.frame of residuals data
+#' @param metaDataFrame metaData represented as a data.frame
+#' @param structureSet A `SimulationStructure` object
+#' @param settings Optional settings for the plots. In particular, includes reference data for population time profile.
+#' @param logFolder Folder where the logs are saved
+#' @return List of `plots`, their `captions` and `data` to export
+#' @keywords internal
 getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, structureSet, settings = NULL, logFolder) {
   residualsMetaData <- NULL
   goodnessOfFitPlots <- list()
@@ -966,7 +995,12 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
   csvResidualsData[, "Residuals"] <- replaceInfWithNA(csvResidualsData[, "Residuals"], logFolder)
 
   # rbind.data.frame enforces data.frame type and nrow can be used as is
-  refResidualsData <- rbind.data.frame(settings$referenceData$residualsData, csvResidualsData)
+  refResidualsData <- csvResidualsData
+  # Add reference residuals data only if option is set to true
+  # isTRUE is used for mean model workflows that have a NULL field
+  if(isTRUE(structureSet$simulationSet$plotReferenceObsData)){
+    refResidualsData <- rbind.data.frame(settings$referenceData$residualsData, csvResidualsData)
+  }
   refResidualsData <- removeMissingValues(refResidualsData, "Residuals", logFolder)
   residualsData <- asTimeAfterDose(refResidualsData, min(timeRange), max(timeRange))
 

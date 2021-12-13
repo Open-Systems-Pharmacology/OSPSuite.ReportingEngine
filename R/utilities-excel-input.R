@@ -385,9 +385,11 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
     populationFileContent <- NULL
     populationNameContent <- NULL
     referencePopulationContent <- NULL
+    plotReferenceObsDataContent <- NULL
     studyDesignFileContent <- NULL
     if (isIncluded(workflowMode, "PopulationWorkflow")) {
       referencePopulation <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$referencePopulation)
+      plotReferenceObsData <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$plotReferenceObsData)
       populationFile <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$populationFile)
       populationName <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$populationName)
 
@@ -412,6 +414,8 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
       # These contents breaks lines to beautify final workflow script
       referencePopulationContent <- paste0("referencePopulation = ", referencePopulation, ",
                                            ")
+      plotReferenceObsDataContent <- paste0("plotReferenceObsData = ", plotReferenceObsData, ",
+                                           ")
       populationFileContent <- paste0("populationFile = ", populationFile, ",
                                       ")
       populationNameContent <- paste0("populationName = ", populationName, ",
@@ -428,7 +432,7 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
         simulationSetNames[simulationIndex],
         " <- ", simulationType, "$new(
     simulationSetName = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationSetName), ",
-        ", referencePopulationContent, populationFileContent, populationNameContent, studyDesignFileContent,
+        ", referencePopulationContent, populationFileContent, populationNameContent, plotReferenceObsDataContent, studyDesignFileContent,
         "simulationFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationFile), ",
     outputs = c(", outputNames, "),
     observedDataFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$observedDataFile), ",
@@ -704,7 +708,7 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
     return("NULL")
   }
   # For info about reference population, return logical value as character
-  if (isIncluded(codeId, c(SimulationCodeIdentifiers$referencePopulation, WorkflowCodeIdentifiers$createWordReport))) {
+  if (isIncluded(codeId, c(SimulationCodeIdentifiers$referencePopulation, SimulationCodeIdentifiers$plotReferenceObsData, WorkflowCodeIdentifiers$createWordReport))) {
     # Will return false if input is not included in 1, TRUE or true
     return(as.character(isIncluded(workflowInfo, c("Yes", "YES", "1", "TRUE", "true"))))
   }
