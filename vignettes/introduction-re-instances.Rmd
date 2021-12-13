@@ -314,6 +314,7 @@ PopulationSimulationSet$new(
   simulationFile,
   populationFile,
   studyDesignFile, 
+  plotReferenceObsData,
   outputs, 
   observedDataFile,
   observedMetaDataFile,

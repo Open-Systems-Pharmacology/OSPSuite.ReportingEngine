@@ -136,10 +136,19 @@ GofPlotTask <- R6::R6Class(
             self$workflowFolder,
             self$settings
           )
-          # If first simulation set was a reference population,
-          # its data will be added to next plots through settings
-          if (all(isTRUE(set$simulationSet$referencePopulation), isTRUE(self$settings$includeReferenceData))) {
+          # If first simulation set was a reference population, 
+          # - its simulated data are always added to the next plots through settings
+          # - its observed data, and corresponding lloq, residuals are added if 
+          #   optional setting includeReferenceData is TRUE
+          # Note that isTRUE is used below to ensure a logical value for referencePopulation
+          # that can be NULL for mean simulation sets
+          if (isTRUE(set$simulationSet$referencePopulation)) {
             self$settings$referenceData <- taskResults$referenceData
+            if(!self$settings$includeReferenceData){
+              self$settings$referenceData$observedData <- NULL
+              self$settings$referenceData$lloqData <- NULL
+              self$settings$referenceData$simulatedData <- NULL
+            }
           }
 
           # Specific to goodness of fit task:

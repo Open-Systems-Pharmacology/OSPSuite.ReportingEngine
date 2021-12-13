@@ -4,6 +4,7 @@
 #' @field populationFile name of csv file to be used for the population
 #' @field populationName display name of population
 #' @field studyDesignFile name of study design csv file
+#' @field plotReferenceObsData logical for plotting reference observed data in Pediatric and Ratio Comparison workflows
 #' @export
 PopulationSimulationSet <- R6::R6Class(
   "PopulationSimulationSet",
@@ -13,6 +14,7 @@ PopulationSimulationSet <- R6::R6Class(
     populationFile = NULL,
     populationName = NULL,
     studyDesignFile = NULL,
+    plotReferenceObsData = NULL,
 
     #' @description
     #' Create a new `PopulationSimulationSet` object.
@@ -22,6 +24,7 @@ PopulationSimulationSet <- R6::R6Class(
     #' @param populationFile name of csv file to be used for the population
     #' @param populationName display name of population
     #' @param studyDesignFile name of study design csv file
+    #' @param plotReferenceObsData logical for plotting reference observed data in Pediatric and Ratio Comparison workflows
     #' @param ... inputs inherited from `SimulationSet`
     #' @return A new `PopulationSimulationSet` object
     initialize = function(referencePopulation = FALSE,
@@ -30,8 +33,10 @@ PopulationSimulationSet <- R6::R6Class(
                           populationFile,
                           populationName = NULL,
                           studyDesignFile = NULL,
+                          plotReferenceObsData = FALSE,
                           ...) {
       validateIsLogical(referencePopulation)
+      validateIsLogical(plotReferenceObsData)
       validateIsString(simulationSetName)
       validateIsString(simulationFile)
       validateIsString(populationFile)
@@ -45,6 +50,7 @@ PopulationSimulationSet <- R6::R6Class(
       )
 
       self$referencePopulation <- referencePopulation
+      self$plotReferenceObsData <- plotReferenceObsData
       self$populationFile <- populationFile
       self$populationName <- populationName %||% trimFileName(populationFile, extension = "csv")
       self$studyDesignFile <- studyDesignFile
