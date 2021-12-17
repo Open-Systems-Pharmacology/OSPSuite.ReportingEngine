@@ -1,23 +1,58 @@
 
-makeChildInitializer <- function(parentInitializer, extendedInitializer){
-  parentInitializerBody <- paste(tail(as.character(body(parentInitializer)),-1),collapse = ';')
-  extendedInitializerBody <- paste(tail(as.character(body(extendedInitializer)),-1),collapse = ';')
+parseFunctionBody <- function(functionToParse) {
+  validateIsIncluded(values = typeof(functionToParse),parentValues= c("closure","function"))
+  #read body of functionToParse, convert to character, removing first element (curly brackets), paste together all function commands into a string (separated by `;`)
+  return(paste(tail(as.character(body(functionToParse)), -1), collapse = ";"))
+}
 
+
+
+#' @param parentInitializersList is an list of parent initializers. ordered from the most to the least superior.
+#' @param extendedInitializer is an initializer function to be called after calling all parent classes by order of superiority
+makeChildInitializer <- function(parentInitializersList, extendedInitializer) {
+
+  validateIsOfType(parentInitializersList,"list")
+  sapply(parentInitializersList,function(fn){ validateIsIncluded(values = typeof(fn),parentValues= c("closure","function")) })
+  validateIsIncluded(values = typeof(extendedInitializer),parentValues= c("closure","function"))
+
+  #Recursive application of this function for cases in which there is multilevel inheritance, where parentInitializersList
+  #Each recursion will return an `extendedInitializer` that is an amalgamation of the all but the first elements of parentInitializersList with extendedInitializer
+  if (length(parentInitializersList) > 1) {
+    extendedInitializer <- makeChildInitializer(tail(parentInitializersList, -1), extendedInitializer)
+  }
+
+  #If parentInitializersList includes only one element, amalgamate that function with extendedInitializer
+  parentInitializer <- parentInitializersList[[1]]
+
+  #Parse the body of the parent and child initializers into a series of commands (as strings) separated by semicolons (';')
+  parentInitializerBody <- parseFunctionBody(parentInitializer)
+  extendedInitializerBody <- parseFunctionBody(extendedInitializer)
+
+  #amalgamate (as a string) the bodies of the parent and child classes into a new function with no input arguments
   childInitializerBody <- paste0("function(){
-       eval(parse(text = '",parentInitializerBody,"' ))
-       eval(parse(text = '",extendedInitializerBody,"' ))
+       eval(parse(text = '", parentInitializerBody, "' ))
+       eval(parse(text = '", extendedInitializerBody, "' ))
      }")
 
+  #create a function object based on the string `childInitializerBody``
   childInitializer <- eval(parse(text = childInitializerBody))
 
-  #Set the arguments to the childInitializer function to be the union of the arguments of the `parentInitializer` function and the `extendedInitializer` function
-  #Remove any duplicated arguments.  Arguments of the extendedInitializer overwrite arguments of the parentInitializer with the same name.
-  childInitializerFormals <- c(formals(parentInitializer) , formals(extendedInitializer))
-  formals(childInitializer) <- childInitializerFormals[!duplicated(names(childInitializerFormals),fromLast = TRUE)]
+  # Set the arguments to the childInitializer function to be the union of the arguments of the `parentInitializer` function and the `extendedInitializer` function
+  # Remove any duplicated arguments.  Arguments of the extendedInitializer overwrite arguments of the parentInitializer with the same name.
+  childInitializerFormals <- c(formals(parentInitializer), formals(extendedInitializer))
+  formals(childInitializer) <- childInitializerFormals[!duplicated(names(childInitializerFormals), fromLast = TRUE)]
 
   return(childInitializer)
 }
 
+
+#' @param simulationSets list of `SimulationSet` R6 class objects
+#' @param workflowFolder path of the output folder created or used by the Workflow.
+#' @param createWordReport logical of option for creating Markdown-Report only but not a Word-Report.
+#' @param watermark displayed watermark in figures background
+#' @param simulationSetDescriptor character Descriptor of simulation sets indicated in reports
+#' @param numberSections logical defining if the report sections should be numbered
+#' @param theme A `Theme` object from `{tlf}` package
 workflowInitializeFunction <- function(simulationSets,
                                        workflowFolder,
                                        createWordReport = TRUE,
@@ -84,8 +119,6 @@ workflowInitializeFunction <- function(simulationSets,
 
 
 meanModelWorkflowExtensionInitializeFunction <- function() {
-
-
   self$simulate <- loadSimulateTask(self)
   self$calculatePKParameters <- loadCalculatePKParametersTask(self)
   self$calculateSensitivity <- loadCalculateSensitivityTask(self)

@@ -26,10 +26,11 @@ MeanModelWorkflow <- R6::R6Class(
 
     #' @description
     #' Create a new `MeanModelWorkflow` object.
-    #' @param ... input parameters inherited from R6 class object `Workflow`.
+    #' @inheritParams workflowInitializeFunction
+    #' @inheritParams meanModelWorkflowExtensionInitializeFunction
     #' @return A new `MeanModelWorkflow` object
     #' @import ospsuite
-    initialize = makeChildInitializer(parentInitializer = workflowInitializeFunction,
+    initialize = makeChildInitializer(parentInitializersList = list(workflowInitializeFunction),
                                       extendedInitializer = meanModelWorkflowExtensionInitializeFunction),
 
     #' @description
