@@ -23,13 +23,7 @@ Workflow <- R6::R6Class(
 
     #' @description
     #' Create a new `Workflow` object.
-    #' @param simulationSets list of `SimulationSet` R6 class objects
-    #' @param workflowFolder path of the output folder created or used by the Workflow.
-    #' @param createWordReport logical of option for creating Markdown-Report only but not a Word-Report.
-    #' @param watermark displayed watermark in figures background
-    #' @param simulationSetDescriptor character Descriptor of simulation sets indicated in reports
-    #' @param numberSections logical defining if the report sections should be numbered
-    #' @param theme A `Theme` object from `{tlf}` package
+    #' @inheritParams workflowInitializeFunction
     #' @return A new `Workflow` object
     #' @import ospsuite
     initialize = workflowInitializeFunction,
