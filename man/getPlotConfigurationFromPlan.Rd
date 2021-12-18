@@ -16,7 +16,7 @@ getPlotConfigurationFromPlan(
 \item{plotType}{Name of plot type to call the appropriate `PlotConfiguration` object.
 E.g. for pk ratio plots, use "PKRatio" to create a `PKRatioPlotConfiguration` object}
 
-\item{legendPosition}{Legend position in order to add scale factor in the final plot dimensions 
+\item{legendPosition}{Legend position in order to add scale factor in the final plot dimensions
 that accounts for possible shrinking of the plot panel due to the addition of the legend}
 }
 \value{

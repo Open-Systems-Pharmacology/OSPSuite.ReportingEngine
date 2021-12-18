@@ -13,6 +13,6 @@ separateVariableFromUnit(variableUnitString)
 A named list, with fields 'name' and 'unit'.  If variableUnitString lacks a '[unit]' substring, then the unit field is returned as an empty string.
 }
 \description{
-Split a string containing a varialbe and unit description into a list of two strings that separates the variable and the unit.
+Split a string containing a variable and unit description into a list of two strings that separates the variable and the unit.
 }
 \keyword{internal}

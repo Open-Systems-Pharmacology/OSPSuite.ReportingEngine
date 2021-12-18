@@ -4,10 +4,10 @@
 \alias{generateDDIQualificationDDIPlot}
 \title{generateDDIQualificationDDIPlot}
 \usage{
-generateDDIQualificationDDIPlot(data)
+generateDDIQualificationDDIPlot(ddiPlotData)
 }
 \arguments{
-\item{data}{data.frame}
+\item{ddiPlotData}{a list containing the plot data.frame, aesthetics list, axes settings and plot settings}
 }
 \value{
 ggplot DDI plot object for DDI qualification workflow
