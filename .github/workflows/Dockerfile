@@ -18,6 +18,7 @@ COPY . /RE_Source/
 COPY .github/workflows/testRE.R /RE_Source/
 
 # Install OSP R packages
+RUN /tmp_setup/install_packages_cran.sh 
 RUN /tmp_setup/install_packages_${os_version}.sh 
 
 # Cleanup
