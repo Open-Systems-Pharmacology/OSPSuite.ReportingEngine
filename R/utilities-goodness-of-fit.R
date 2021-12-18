@@ -7,6 +7,7 @@
 #' @return list with `plots`, `tables` and `residuals` objects to be saved
 #' @import tlf
 #' @import ospsuite
+#' @import ospsuite.utils
 #' @import utils
 #' @import ggplot2
 #' @keywords internal
@@ -123,6 +124,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
 #' @param molWeight Molar weight for unit conversion of dependent variable
 #' @param simulationSet `SimulationSet` object
 #' @return list of data and metaData
+#' @import ospsuite.utils
 #' @keywords internal
 getSimulatedResultsFromOutput <- function(simulationPathResults, output, simulationQuantity, molWeight, simulationSet) {
   outputConcentration <- simulationPathResults$data[, output$path]
@@ -215,6 +217,7 @@ getResiduals <- function(observedData,
 #' @return list with `plots`, `tables` and `residuals` objects to be saved
 #' @import tlf
 #' @import ospsuite
+#' @import ospsuite.utils
 #' @import utils
 #' @import ggplot2
 #' @keywords internal
@@ -409,6 +412,7 @@ getPopulationResultsFromOutput <- function(simulationPathResults, output, simula
 #' @export
 #' @import tlf
 #' @import ggplot2
+#' @import ospsuite.utils
 plotMeanTimeProfile <- function(simulatedData,
                                 observedData = NULL,
                                 lloqData = NULL,
@@ -593,6 +597,7 @@ plotMeanResVsPred <- function(data,
 #' @return ggplot object of time profile for mean model workflow
 #' @export
 #' @import tlf
+#' @import ospsuite.utils
 #' @import ggplot2
 plotPopulationTimeProfile <- function(simulatedData,
                                       observedData = NULL,
@@ -732,6 +737,7 @@ plotResidualsHistogram <- function(data,
 #' @import tlf
 #' @import stats
 #' @import ggplot2
+#' @import ospsuite.utils
 plotResidualsQQPlot <- function(data,
                                 metaData = NULL,
                                 dataMapping = NULL,
@@ -796,7 +802,7 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet, logFolder) 
   # Get applications
   applications <- simulation$allApplicationsFor(path)
   applicationTimes <- 0
-  if (!isOfLength(applications, 0)) {
+  if (!ospsuite.utils::isOfLength(applications, 0)) {
     applicationTimes <- sapply(applications, function(application) {
       application$startTime$value
     })
@@ -829,7 +835,7 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet, logFolder) 
   timeRanges$total$values <- c(min(simulationRanges), max(simulationRanges))
 
   # Case of multiple applications, get first and last
-  if (!isOfLength(simulationRanges, 2)) {
+  if (!ospsuite.utils::isOfLength(simulationRanges, 2)) {
     timeRanges$firstApplication$values <- utils::head(simulationRanges, 2)
     timeRanges$lastApplication$values <- utils::tail(simulationRanges, 2)
     timeRanges$firstApplication$keep <- applicationRanges[[ApplicationRanges$firstApplication]]

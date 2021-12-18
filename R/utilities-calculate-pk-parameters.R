@@ -613,6 +613,7 @@ formatPKParametersTable <- function(structureSet, pkParametersTable, populationT
 #' @param pkParametersTableAcrossPopulations A data.frame of PK and Population Parameters across simulation sets
 #' @param pkParametersTable A data.frame of PK and Population Parameters for a simulation set
 #' @return A data.frame of PK and Population Parameters across simulation sets
+#' @import ospsuite.utils
 #' @keywords internal
 rbindPKParametersTables <- function(pkParametersTableAcrossPopulations, pkParametersTable) {
   if (isOfLength(pkParametersTableAcrossPopulations, 0)) {

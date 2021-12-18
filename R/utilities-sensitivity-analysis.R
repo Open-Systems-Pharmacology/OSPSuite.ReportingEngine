@@ -421,6 +421,7 @@ getPKResultsDataFrame <- function(structureSet) {
 #' @param settings list of settings for the population sensitivity analysis
 #' @param logFolder folder where the logs are saved
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
+#' @import ospsuite.utils
 #' @keywords internal
 getSAFileIndex <- function(structureSet,
                            settings,
@@ -617,6 +618,7 @@ lookupPKParameterDisplayName <- function(output, pkParameter) {
 #' @param yParameters selected parameters to be plotted in y axis
 #' @return a structured list of plots for each possible combination of pathID output-pkParameter that is found in sensitivity results index file
 #' @import ospsuite
+#' @import ospsuite.utils
 #' @keywords internal
 plotPopulationSensitivity <- function(structureSets,
                                       logFolder = NULL,

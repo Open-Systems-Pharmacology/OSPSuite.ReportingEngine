@@ -87,6 +87,7 @@ plotQualificationTimeProfiles <- function(configurationPlan,
 #' @param logFolder folder where the logs are saved
 #' @return Mean time profile plot as a `ggplot` object
 #' @import tlf
+#' @import ospsuite.utils
 #' @keywords internal
 plotQualificationMeanTimeProfile <- function(configurationPlanCurves, simulation, simulationResults, axesProperties, configurationPlan, plotObject, logFolder) {
   for (curve in configurationPlanCurves) {
@@ -230,6 +231,7 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
 #' @param logFolder folder where the logs are saved
 #' @return Population time profile plot as a `ggplot` object
 #' @import tlf
+#' @import ospsuite.utils
 #' @keywords internal
 plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedDataCollection, simulation, simulationResults, axesProperties, configurationPlan, plotObject, logFolder) {
 

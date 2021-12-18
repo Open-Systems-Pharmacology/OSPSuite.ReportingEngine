@@ -144,7 +144,7 @@ getScriptDocumentation <- function(excelFile, colSep = "\t") {
   suppressMessages(
     docTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$`Documentation`, col_names = FALSE)
   )
-  if (isOfLength(docTable, 0)) {
+  if (ospsuite.utils::isOfLength(docTable, 0)) {
     return(docContent)
   }
   for (lineIndex in 1:nrow(docTable)) {
@@ -894,6 +894,7 @@ concatenateDataSelection <- function(inputs, sep = ") & (") {
 #' @param inputs Vector of inputs to concatenate
 #' @param sep Separator for display names
 #' @return Character of concatenated inputs
+#' @import ospsuite.utils
 #' @keywords internal
 concatenateDataDisplayName <- function(inputs, sep = " - ") {
   validateIsString(inputs)

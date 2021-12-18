@@ -224,6 +224,7 @@ prettyCaption <- function(captions, maxLines = reEnv$maxLinesPerLegendCaption, w
 #' @param splitWidth Maximum number of characters desired per lines
 #' @param numberOfSplits Maximum number of line breaks to use
 #' @return Position where to insert a line break character
+#' @import ospsuite.utils
 #' @keywords internal
 getSplitPositions <- function(possibleSplits, splitWidth, numberOfSplits) {
   # Optimal splits are at equal width

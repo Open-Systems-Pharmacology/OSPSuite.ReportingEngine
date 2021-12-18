@@ -120,7 +120,7 @@ captions <- list(
 
 getDataSource <- function(structureSet) {
   # If no observed data, return null
-  if (isOfLength(structureSet$simulationSet$observedDataFile, 0)) {
+  if (ospsuite.utils::isOfLength(structureSet$simulationSet$observedDataFile, 0)) {
     return()
   }
   # Use strplit combined with normalizePath to get a vector of path elements
@@ -168,7 +168,7 @@ reportSimulationSet <- function(simulationSetNames, descriptor) {
 }
 
 reportUnit <- function(displayUnit) {
-  if (isOfLength(displayUnit, 0)) {
+  if (ospsuite.utils::isOfLength(displayUnit, 0)) {
     return("")
   }
   if (displayUnit == "") {

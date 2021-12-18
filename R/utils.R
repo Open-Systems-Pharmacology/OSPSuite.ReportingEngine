@@ -262,6 +262,7 @@ removeMissingValues <- function(data, dataMapping = NULL, logFolder = getwd()) {
 #' @param output Output object
 #' @return Names of pkParameters in `output`
 #' @export
+#' @import ospsuite.utils
 getPKParametersInOutput <- function(output) {
   validateIsOfType(output, "Output")
   pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
@@ -276,6 +277,7 @@ getPKParametersInOutput <- function(output) {
 #' @title getPKParametersInOutput
 #' @param output Output object
 #' @return Names of pkParameters in `output`
+#' @import ospsuite.utils
 #' @keywords internal
 getPKParameterGroupsInOutput <- function(output) {
   validateIsOfType(output, "Output")
@@ -354,6 +356,7 @@ getAllowedCores <- function() {
 #' @param dictionary parameterDisplayPaths data.frame mapping user defined display names
 #' @return parameterDisplayPath
 #' @export
+#' @import ospsuite.utils
 getSimulationParameterDisplayPaths <- function(parameterPaths, simulation, dictionary) {
   parameterDisplayPaths <- ospsuite::getParameterDisplayPaths(parameterPaths, simulation)
 

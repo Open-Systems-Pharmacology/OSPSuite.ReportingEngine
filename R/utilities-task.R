@@ -544,6 +544,7 @@ addUserDefinedTask <- function(workflow,
 #' @param workflow `QualificationWorkflow` object
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @return A `QualificationTask` object
+#' @import ospsuite.utils
 #' @export
 loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
   validateIsOfType(workflow, "QualificationWorkflow")
@@ -584,6 +585,7 @@ loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
 #' @param workflow `QualificationWorkflow` object
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @return A `QualificationTask` object
+#' @import ospsuite.utils
 #' @export
 loadGOFMergedTask <- function(workflow, configurationPlan) {
   validateIsOfType(workflow, "QualificationWorkflow")
@@ -633,6 +635,7 @@ loadGOFMergedTask <- function(workflow, configurationPlan) {
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @return A `QualificationTask` object
 #' @export
+#' @import ospsuite.utils
 loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPlan) {
   validateIsOfType(workflow, "QualificationWorkflow")
   validateIsOfType(configurationPlan, "ConfigurationPlan")
@@ -674,6 +677,7 @@ loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPl
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @return A `QualificationTask` object
 #' @export
+#' @import ospsuite.utils
 loadPlotPKRatioTask <- function(workflow, configurationPlan) {
   validateIsOfType(workflow, "QualificationWorkflow")
   validateIsOfType(configurationPlan, "ConfigurationPlan")
@@ -728,6 +732,7 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
 #' @param workflow `QualificationWorkflow` object
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @return A `QualificationTask` object
+#' @import ospsuite.utils
 #' @export
 loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
   validateIsOfType(workflow, "QualificationWorkflow")

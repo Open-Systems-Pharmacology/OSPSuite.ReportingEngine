@@ -9,6 +9,7 @@
 #' @param yParameters list of parameters to be plotted along y axis
 #' @return list of plots and tables with summary of demography parameters
 #' @import ospsuite
+#' @import ospsuite.utils
 #' @import tlf
 #' @import ggplot2
 #' @keywords internal
@@ -154,7 +155,7 @@ plotDemographyParameters <- function(structureSets,
             metaData = vpcMetaData,
             plotObject = referenceVpcPlot
           )
-          
+
           vpcLogLimits <- autoAxesLimits(c(comparisonData$ymin, comparisonData$median, comparisonData$ymax), scale = "log")
           vpcLogTicks <- autoAxesTicksFromLimits(vpcLogLimits)
 
@@ -203,13 +204,13 @@ plotDemographyParameters <- function(structureSets,
           metaData = vpcMetaData,
           plotConfiguration = settings$plotConfigurations[["vpcParameterPlot"]]
         )
-        
+
         vpcLogLimits <- autoAxesLimits(c(vpcData$ymin, vpcData$median, vpcData$ymax), scale = "log")
         vpcLogTicks <- autoAxesTicksFromLimits(vpcLogLimits)
 
         demographyPlots[[plotID]] <- vpcPlot
         demographyPlots[[paste0(plotID, "-log")]] <- tlf::setYAxis(
-          plotObject = vpcPlot, 
+          plotObject = vpcPlot,
           scale = tlf::Scaling$log,
           limits = vpcLogLimits,
           ticks = vpcLogTicks)
@@ -276,7 +277,7 @@ DemographyDefaultParameters <- c(ospsuite::StandardPath[c("Age", "Height", "Weig
 #' Use enum `PopulationWorkflowTypes` to get a list of available workflow types.
 #' @return names of default demography parameters
 #' @export
-#' @examples 
+#' @examples
 #' getDefaultDemographyXParameters(PopulationWorkflowTypes$pediatric)
 getDefaultDemographyXParameters <- function(workflowType) {
   validateIsIncluded(workflowType, PopulationWorkflowTypes)
@@ -294,7 +295,7 @@ getDemographyAggregatedData <- function(data,
   stairstep <- stairstep %||% TRUE
   xParameterBreaks <- bins %||% AggregationConfiguration$bins
   # binningOnQuantiles use data distribution to improve the binning
-  if (isOfLength(bins, 1) & AggregationConfiguration$binUsingQuantiles) {
+  if (ospsuite.utils::isOfLength(bins, 1) & AggregationConfiguration$binUsingQuantiles) {
     xParameterBreaks <- unique(unname(quantile(x = data[, xParameterName], probs = seq(0, 1, length.out = xParameterBreaks))))
   }
   xParameterBins <- cut(data[, xParameterName], breaks = xParameterBreaks)

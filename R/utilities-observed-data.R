@@ -77,7 +77,7 @@ dictionaryParameters <- list(
 getDictionaryVariable <- function(dictionary, variableID) {
   variableMapping <- dictionary[, dictionaryParameters$ID] %in% variableID
   variableName <- as.character(dictionary[variableMapping, dictionaryParameters$datasetColumn])
-  if (isOfLength(variableName, 0)) {
+  if (ospsuite.utils::isOfLength(variableName, 0)) {
     return()
   }
   return(variableName)
@@ -218,6 +218,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
 #' @param timeUnit time unit for unit conversion of time
 #' @param logFolder folder where the logs are saved
 #' @return list of data and lloq data.frames
+#' @import ospsuite.utils
 #' @keywords internal
 getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, timeUnit, logFolder) {
   if (isOfLength(output$dataSelection, 0)) {

@@ -253,6 +253,7 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties) {
 #' @description Get Geometric Mean Fold Error for GOF plots
 #' @param data data.frame with residuals values
 #' @return A data.frame
+#' @import ospsuite.utils
 #' @keywords internal
 getQualificationGOFGMFE <- function(data) {
   gmfe <- data.frame()

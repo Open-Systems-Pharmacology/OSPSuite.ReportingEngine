@@ -5,20 +5,8 @@ isSameLength <- function(...) {
   return(nrOfLengths == 1)
 }
 
-#' Check if the provided object has nbElements elements
-#'
-#' @param object An object or a list of objects
-#' @param nbElements number of elements that are supposed in object
-#'
-#' @return TRUE if the object or all objects inside the list have nbElements.
-#' Only the first level of the given list is considered.
-#' @keywords internal
-isOfLength <- function(object, nbElements) {
-  return(length(object) == nbElements)
-}
-
 validateIsOfLength <- function(object, nbElements) {
-  if (isOfLength(object, nbElements)) {
+  if (ospsuite.utils::isOfLength(object, nbElements)) {
     return(invisible())
   }
   logErrorThenStop(messages$errorWrongLength(object, nbElements))
@@ -394,7 +382,7 @@ isUnitFromDimension <- function(unit, dimension) {
   if (ospsuite.utils::isIncluded(dimension, c("Concentration (mass)", "Concentration (molar)"))) {
     dimension <- c("Concentration (mass)", "Concentration (molar)")
   }
-  if (isOfLength(dimensionForUnit, 0)) {
+  if (ospsuite.utils::isOfLength(dimensionForUnit, 0)) {
     return(FALSE)
   }
   return(ospsuite.utils::isIncluded(dimensionForUnit, dimension))
@@ -418,7 +406,7 @@ validateHasReferencePopulation <- function(workflowType, simulationSets, logFold
     set$referencePopulation
   })
 
-  if (isOfLength(allSimulationReferences[allSimulationReferences], 1)) {
+  if (ospsuite.utils::isOfLength(allSimulationReferences[allSimulationReferences], 1)) {
     return(invisible())
   }
   if (is.null(logFolder)) {
@@ -503,12 +491,12 @@ checkIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, n
 
 validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, outputs = NULL) {
   # In case, value from reading from Excel/csv file is not an actual NULL
-  if (any(isOfLength(unit, 0), is.na(unit), unit %in% "")) {
+  if (any(ospsuite.utils::isOfLength(unit, 0), is.na(unit), unit %in% "")) {
     unit <- NULL
   }
   # Case unit is defined using outputs
   dataUnit <- NULL
-  if (!isOfLength(outputs, 0)) {
+  if (!ospsuite.utils::isOfLength(outputs, 0)) {
     dataUnit <- unlist(lapply(outputs, function(output) {
       output$dataUnit
     }))
@@ -516,11 +504,11 @@ validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, output
 
   # Checks for errors
   # If no unit defined at all
-  if (isOfLength(c(unit, unitColumn, dataUnit), 0)) {
+  if (ospsuite.utils::isOfLength(c(unit, unitColumn, dataUnit), 0)) {
     stop(messages$errorNoDataUnit())
   }
   # If no unit defined by dictionray, all outputs need to define dataUnit
-  if (isOfLength(c(unit, unitColumn), 0)) {
+  if (ospsuite.utils::isOfLength(c(unit, unitColumn), 0)) {
     if (!isSameLength(dataUnit, outputs)) {
       stop(messages$errorNoDataUnitInOutputs())
     }
@@ -529,7 +517,7 @@ validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, output
   # Checks for warnings
   # Only one of unit, unitColumn and dataUnit should be defined
   # in the case dataUnit was defined, code has already returned
-  if (!isOfLength(c(unit, unitColumn, dataUnit), 1)) {
+  if (!ospsuite.utils::isOfLength(c(unit, unitColumn, dataUnit), 1)) {
     warning(messages$warningMultipleDataUnit())
   }
   # If defined, check that unitColumn refers an actual column from observed data

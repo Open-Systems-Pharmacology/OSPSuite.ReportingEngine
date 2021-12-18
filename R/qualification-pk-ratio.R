@@ -226,6 +226,7 @@ getQualificationPKRatioData <- function(pkRatioPlan, configurationPlan, logFolde
 #' @return list with `data` and `metaData`
 #' @import tlf
 #' @import ospsuite
+#' @import ospsuite.utils
 #' @keywords internal
 getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configurationPlan, logFolder, settings) {
   # Load required inputs
@@ -352,6 +353,7 @@ isBetween <- function(x, left, right, strict = FALSE) {
 #' Default value is `FALSE`.
 #' @return Measure of `x` values between `left` and `right` bounds
 #' @export
+#' @import ospsuite.utils
 #' @examples
 #' measureValuesBetween(1:12, 7, 9)
 #' measureValuesBetween(1:12, 7, 9, method = "percent")

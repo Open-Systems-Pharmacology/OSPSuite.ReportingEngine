@@ -58,6 +58,7 @@ ConfigurationLinetypes <- list(
 #' @param axesSettings list of axes properties defined in `Axes` field of configuration plan
 #' @return A list of properties for axes identified for `x`, `y` and `y2` axes.
 #' The identified properties are directly compatible with `tlf` package nomenclature
+#' @import ospsuite.utils
 #' @keywords internal
 getAxesProperties <- function(axesSettings) {
   # Hanlde when properties are left undefined globally or locally
@@ -149,6 +150,7 @@ updatePlotAxes <- function(plotObject, axesProperties) {
 #' @param configurationLinetype Value of the configuration plan plot property
 #' @return `linetype` values that follows `tlf` package nomenclature
 #' @import tlf
+#' @import ospsuite.utils
 #' @keywords internal
 tlfLinetype <- function(configurationLinetype) {
   # Unknown or NULL value will translate as NULL
@@ -165,6 +167,7 @@ tlfLinetype <- function(configurationLinetype) {
 #' @param configurationShape Value of the configuration plan plot property
 #' @return `shape` values that follows `tlf` package nomenclature
 #' @import tlf
+#' @import ospsuite.utils
 #' @keywords internal
 tlfShape <- function(configurationShape) {
   # Unknown or NULL value will translate as NULL
@@ -181,6 +184,7 @@ tlfShape <- function(configurationShape) {
 #' @param configurationScale Value of the configuration plan plot property
 #' @return `scale` values that follows `tlf` package nomenclature
 #' @import tlf
+#' @import ospsuite.utils
 #' @keywords internal
 tlfScale <- function(configurationScale) {
   # Unknown or NULL value will translate as NULL
@@ -221,6 +225,7 @@ getCompoundNameFromPath <- function(path) {
 #' @param compoundName Name of a compound e.g. "Midazolam"
 #' @param simulation A `Simulation` object
 #' @return molecular weight in base unit or NA if not found
+#' @import ospsuite.utils
 #' @export
 getMolWeightForCompound <- function(compoundName, simulation) {
   # In the current version, getAllMoleculePathsIn is faster and lighter than getAllMoleculesMatching
