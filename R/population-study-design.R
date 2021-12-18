@@ -152,6 +152,7 @@ StudyDesignTarget <- R6::R6Class(
 #' @return vector of expressions assigning target values
 #' Must be the same length as target values
 #' @import utils
+#' @import ospsuite.utils
 #' @keywords internal
 mapStudyDesignSources <- function(data, population, simulation) {
   sourceFilter <- grepl("SOURCE", data[studyDesignTypeLine, ])
@@ -178,7 +179,7 @@ mapStudyDesignSources <- function(data, population, simulation) {
     sourceExpressionsByColumn <- paste0("data[,'", path, "']", expressionType, values)
     sourceExpressionsByColumn[values %in% NA] <- "TRUE"
 
-    ifnotnull(
+    ifNotNull(
       sourceExpressions,
       sourceExpressions <- paste(sourceExpressions, sourceExpressionsByColumn, sep = " & "),
       sourceExpressions <- sourceExpressionsByColumn

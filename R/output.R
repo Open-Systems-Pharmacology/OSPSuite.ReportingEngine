@@ -1,16 +1,16 @@
 #' @title ResidualScales
 #' @description List of available scales for calculation of residuals
 #' @export
-#' @import ospsuite
-#' @examples 
+#' @import ospsuite.utils
+#' @examples
 #' ResidualScales$Linear
 #' ResidualScales$Logarithmic
-ResidualScales <- ospsuite::enum(c("Linear", "Logarithmic"))
+ResidualScales <- enum(c("Linear", "Logarithmic"))
 
 #' @title DataSelectionKeys
 #' @description List of available short keys for observed data selection
 #' @export
-#' @examples 
+#' @examples
 #' DataSelectionKeys$NONE
 #' DataSelectionKeys$ALL
 DataSelectionKeys <- list(
@@ -30,6 +30,7 @@ DataSelectionKeys <- list(
 #' @field residualScale Scale for calculation of residuals as included in enum `ResidualScales`
 #' @export
 #' @import ospsuite
+#' @import ospsuite.utils
 Output <- R6::R6Class(
   "Output",
   public = list(
@@ -61,19 +62,19 @@ Output <- R6::R6Class(
                           dataDisplayName = NULL,
                           pkParameters = NULL,
                           residualScale = ResidualScales$Logarithmic) {
-      
+
       validateIsString(path)
       validateIsOfLength(path, 1)
       validateIsString(c(displayName, dataUnit, displayUnit, dataDisplayName), nullAllowed = TRUE)
       validateIsIncluded(residualScale, ResidualScales)
-      ifnotnull(displayName, validateIsOfLength(displayName, 1))
-      ifnotnull(displayUnit, validateIsOfLength(displayUnit, 1))
-      ifnotnull(dataUnit, validateIsOfLength(dataUnit, 1))
-      ifnotnull(dataDisplayName, validateIsOfLength(dataDisplayName, 1))
+      ifNotNull(displayName, validateIsOfLength(displayName, 1))
+      ifNotNull(displayUnit, validateIsOfLength(displayUnit, 1))
+      ifNotNull(dataUnit, validateIsOfLength(dataUnit, 1))
+      ifNotNull(dataDisplayName, validateIsOfLength(dataDisplayName, 1))
       validateIsOfType(dataSelection, c("character", "expression"), nullAllowed = TRUE)
-      ifnotnull(dataSelection, validateIsOfLength(dataSelection, 1))
+      ifNotNull(dataSelection, validateIsOfLength(dataSelection, 1))
       validateIsOfType(c(pkParameters), c("character", "PkParameterInfo"), nullAllowed = TRUE)
-      
+
       self$path <- path
       self$displayName <- displayName %||% path
       self$displayUnit <- displayUnit

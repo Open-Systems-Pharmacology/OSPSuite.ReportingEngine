@@ -6,6 +6,7 @@
 #' @field group Grouping identifier
 #' @export
 #' @import ospsuite
+#' @import ospsuite.utils
 PkParameterInfo <- R6::R6Class(
   "PkParameterInfo",
   cloneable = FALSE,
@@ -31,8 +32,8 @@ PkParameterInfo <- R6::R6Class(
       validateIsOfLength(pkParameter, 1)
       validateIsString(c(displayName, displayUnit), nullAllowed = TRUE)
       validateIsIncluded(pkParameter, ospsuite::allPKParameterNames())
-      ifnotnull(displayName, validateIsOfLength(displayName, 1))
-      ifnotnull(displayUnit, validateIsOfLength(displayUnit, 1))
+      ifNotNull(displayName, validateIsOfLength(displayName, 1))
+      ifNotNull(displayUnit, validateIsOfLength(displayUnit, 1))
       # TO DO: add validateIsUnit method
       # validateIsUnit(displayUnit, nullAllowed = TRUE)
 

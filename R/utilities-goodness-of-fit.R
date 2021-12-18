@@ -166,6 +166,7 @@ getSimulatedResultsFromOutput <- function(simulationPathResults, output, simulat
 #' @param simulatedData data.frame of time profile simulated data
 #' @param residualScale Scale for calculation of residuals as included in enum `ResidualScales`
 #' @return residualsData data.frame with Time, Observed, Simulated, Residuals
+#' @import ospsuite.utils
 #' @export
 getResiduals <- function(observedData,
                          simulatedData,
@@ -359,7 +360,7 @@ getPopulationResultsFromOutput <- function(simulationPathResults, output, simula
   aggregateData$Time <- toUnit("Time", aggregateData$Time, simulationSet$timeUnit)
 
   convertExpressions <- parse(text = paste0(
-    "aggregateData$", aggregateNames, "<- ifnotnull(output$displayUnit,",
+    "aggregateData$", aggregateNames, "<- ospsuite.utils::ifNotNull(output$displayUnit,",
     "toUnit(simulationQuantity, aggregateData$", aggregateNames, ", output$displayUnit, molWeight = molWeight),",
     "aggregateData$", aggregateNames, ")"
   ))

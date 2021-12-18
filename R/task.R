@@ -6,6 +6,7 @@
 #' @field settings list of settings for task such as plot configurations
 #' @field message message or title of the task
 #' @export
+#' @import ospsuite.utils
 Task <- R6::R6Class(
   "Task",
   public = list(
@@ -116,13 +117,13 @@ Task <- R6::R6Class(
         sprintf("Task is%s active", taskActiveMessage),
         sprintf("Workflow folder: %s", self$workflowFolder %||% ""),
         sprintf("Expected input folder: %s", private$.inputFolder %||% "none"),
-        sprintf("Expected input files: %s", ifnotnull(
+        sprintf("Expected input files: %s", ifNotNull(
           private$.inputs,
           paste0(private$.inputs, collapse = ", "),
           "none"
         )),
         sprintf("Expected output folder: %s", self$outputFolder %||% "none"),
-        sprintf("Expected output files: %s", ifnotnull(
+        sprintf("Expected output files: %s", ifNotNull(
           private$.outputs,
           paste0(private$.outputs, collapse = ", "),
           "none"

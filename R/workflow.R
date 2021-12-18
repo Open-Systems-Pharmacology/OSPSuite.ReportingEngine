@@ -9,6 +9,7 @@
 #' @field numberSections logical defining if the report sections should be numbered
 #' @import tlf
 #' @import ospsuite
+#' @import ospsuite.utils
 #' @keywords internal
 Workflow <- R6::R6Class(
   "Workflow",
@@ -36,7 +37,7 @@ Workflow <- R6::R6Class(
                           workflowFolder,
                           createWordReport = TRUE,
                           watermark = NULL,
-                          simulationSetDescriptor = NULL, 
+                          simulationSetDescriptor = NULL,
                           numberSections = TRUE,
                           theme = NULL) {
       private$.reportingEngineInfo <- ReportingEngineInfo$new()

@@ -10,6 +10,7 @@
 #' @field minimumSimulationEndTime is the minimum length of time for which a simulation must be run
 #' reported time profiles and residual plots when applicable
 #' @export
+#' @import ospsuite.utils
 SimulationSet <- R6::R6Class(
   "SimulationSet",
   public = list(

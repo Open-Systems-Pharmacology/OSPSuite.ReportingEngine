@@ -6,6 +6,7 @@
 #' @return list with `plots` and `tables`
 #' @import tlf
 #' @import ospsuite
+#' @import ospsuite.utils
 #' @keywords internal
 plotQualificationPKRatio <- function(configurationPlan,
                                      logFolder = getwd(),

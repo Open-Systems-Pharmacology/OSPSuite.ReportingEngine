@@ -1,7 +1,8 @@
 #' @title StandardExcelSheetNames
 #' @description Enum defining the standard names for the Excel sheets of template
+#' @import ospsuite.utils
 #' @keywords internal
-StandardExcelSheetNames <- ospsuite::enum(c(
+StandardExcelSheetNames <- enum(c(
   "Documentation",
   "Workflow and Tasks",
   "SimulationSets",
@@ -18,6 +19,7 @@ StandardExcelSheetNames <- ospsuite::enum(c(
 #' @param removeComments logical to remove comments and information in `workflowFile`
 #' @return An R script of name `workflowFile` to be run
 #' @export
+#' @import ospsuite.utils
 createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R", removeComments = FALSE) {
   validateIsFileExtension(excelFile, c("xls", "xlsx"))
   validateIsFileExtension(workflowFile, "R")
@@ -160,6 +162,7 @@ getScriptDocumentation <- function(excelFile, colSep = "\t") {
 #' @param excelFile name of the Excel file from which the R script is created
 #' @param pkParametersSheet name of the Excel sheet that defines the `pkParameters` information
 #' @return Character vector defining `pkParameters` input of `Output` object
+#' @import ospsuite.utils
 #' @keywords internal
 getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
   pkParametersContent <- NULL
@@ -237,6 +240,7 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
 #' @param excelFile name of the Excel file from which the R script is created
 #' @param outputInfo list of information about `Output` object. Include sheetName, dataSelection and dataDisplayName
 #' @return Character vector defining the `Output` object
+#' @import ospsuite.utils
 #' @keywords internal
 getOutputContent <- function(excelFile, outputInfo) {
   outputContent <- NULL
@@ -340,6 +344,7 @@ getOutputContent <- function(excelFile, outputInfo) {
 #' @param simulationTable Data.frame read from the Excel sheet "SimulationSets
 #' @param workflowMode Either `PopulationWorkflow` or `MeanModelWorkflow`
 #' @return Character vector defining the `SimulationSet` objects
+#' @import ospsuite.utils
 #' @keywords internal
 getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
   simulationSetContent <- NULL
@@ -468,6 +473,7 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
 #' @param workflowTable Data.frame read from the Excel sheet "Workflow and Tasks"
 #' @param excelFile name of the Excel file from which the R script is created
 #' @return Character vector defining the `Workflow` object
+#' @import ospsuite.utils
 #' @keywords internal
 getWorkflowContent <- function(workflowTable, excelFile) {
   workflowMode <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$`Workflow Mode`)
@@ -580,7 +586,7 @@ getWorkflowContent <- function(workflowTable, excelFile) {
   ))
 }
 
-WorkflowMandatoryVariables <- ospsuite::enum(c(
+WorkflowMandatoryVariables <- ospsuite.utils::enum(c(
   "Code Identifier",
   "Description"
 ))
@@ -599,7 +605,7 @@ OptionalSettings <- list(
   "plotSensitivity: yAxisFontSize" = "workflow$plotSensitivity$settings$yAxisFontSize <- "
 )
 
-WorkflowCodeIdentifiers <- ospsuite::enum(c(
+WorkflowCodeIdentifiers <- ospsuite.utils::enum(c(
   "Workflow Mode",
   "Population Workflow type",
   "workflowFolder",
@@ -619,7 +625,7 @@ WorkflowCodeIdentifiers <- ospsuite::enum(c(
   names(OptionalSettings)
 ))
 
-SimulationCodeIdentifiers <- ospsuite::enum(c(
+SimulationCodeIdentifiers <- ospsuite.utils::enum(c(
   "simulationSetName",
   "simulationFile",
   "outputs",
@@ -638,8 +644,7 @@ SimulationCodeIdentifiers <- ospsuite::enum(c(
   "StudyDesignLocation"
 ))
 
-
-OutputCodeIdentifiers <- ospsuite::enum(c(
+OutputCodeIdentifiers <- ospsuite.utils::enum(c(
   "path",
   "displayName",
   "displayUnit",
@@ -666,6 +671,7 @@ UserDefPKParametersOptionalSettings <- list(
 #' @param simulationIndex Column to read after removing "Code Identifier" and "Description"
 #' @param codeId Line to read in the data.frame corresponding to a specific value of "Code Identifier"
 #' @return Information from a data.frame matching a certain `simulationIndex` column and `codeId` line
+#' @import ospsuite.utils
 #' @keywords internal
 getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
   validateIsOfType(workflowTable, "data.frame")
@@ -768,6 +774,7 @@ getObservedMetaDataFile <- function(excelFile, observedMetaDataSheet, format = "
 #' @description Creates a character vector to be written in a workflow .R script updating the PKParameters objects
 #' @param pkParametersTable Data.frame read from the Excel sheet "PK Parameters"
 #' @return A list of script content, associated with its potential warnings and errors for updating the PKParameters objects
+#' @import ospsuite.utils
 #' @keywords internal
 getPKParametersContent <- function(pkParametersTable) {
   pkParametersContent <- NULL
@@ -814,6 +821,7 @@ getPKParametersContent <- function(pkParametersTable) {
 #' @description Output the SimulationSet object matching the appropriate workflow type
 #' @param workflowMode Either `PopulationWorkflow` or `MeanModelWorkflow`
 #' @return `PopulationSimulationSet` or `SimulationSet` as character
+#' @import ospsuite.utils
 #' @keywords internal
 getSimulationSetType <- function(workflowMode) {
   validateIsIncluded(workflowMode, c("MeanModelWorkflow", "PopulationWorkflow"))
@@ -830,6 +838,7 @@ getSimulationSetType <- function(workflowMode) {
 #' @param type Location type: either "SHEET" or "FILE"
 #' @param excelFile name of the Excel file from which the R script is created
 #' @return Character of location to provide
+#' @import ospsuite.utils
 #' @keywords internal
 getFileLocationFromType <- function(location, type, excelFile) {
   validateIsIncluded(type, c("SHEET", "FILE"))
@@ -850,6 +859,7 @@ getFileLocationFromType <- function(location, type, excelFile) {
 #' @param inputs Vector of inputs to concatenate
 #' @param sep Separator character corresponding to logical &
 #' @return Character of concatenated inputs
+#' @import ospsuite.utils
 #' @keywords internal
 concatenateDataSelection <- function(inputs, sep = ") & (") {
   validateIsString(inputs)
@@ -911,6 +921,7 @@ removeCommentsFromWorkflowContent <- function(workflowContent, commentPattern = 
 #' @description Creates a character vector to be written in a workflow .R script updating the PKParameters objects
 #' @param userDefPKParametersTable Data.frame read from the Excel sheet "PK Parameters"
 #' @return A list of script content, associated with its potential warnings and errors for updating the PKParameters objects
+#' @import ospsuite.utils
 #' @keywords internal
 getUserDefPKParametersContent <- function(userDefPKParametersTable) {
   userDefPKParametersContent <- NULL

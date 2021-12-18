@@ -324,6 +324,7 @@ getQualificationDDIRatioMeasure <- function(summaryDataFrame, pkParameterName) {
 #' @param idPrefix unique ID to index task results
 #' @param captionSuffix to append to qualification plan title
 #' @return a `list` of DDI results for the current DDI section
+#' @import ospsuite.utils
 #' @keywords internal
 getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffix = NULL) {
 
@@ -347,7 +348,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
         id = plotID,
         sectionId = sectionID,
         plot = ddiPlot,
-        plotCaption = ifnotnull(
+        plotCaption = ifNotNull(
           inputToCheck = captionSuffix,
           outputIfNotNull = paste(metadata$title, captionSuffix, sep = " - "),
           outputIfNull = metadata$title

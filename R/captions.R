@@ -24,7 +24,7 @@ captions <- list(
       paste0("Distribution of ", parameterName, " for ", reportSimulationSet(simulationSetName, descriptor))
     },
     rangePlot = function(xParameterName, yParameterName, simulationSetName, descriptor, referenceSetName = NULL, plotScale = "linear") {
-      referenceSetText <- ifnotnull(referenceSetName, paste0(" in comparison to ", referenceSetName), "")
+      referenceSetText <- ospsuite.utils::ifNotNull(referenceSetName, paste0(" in comparison to ", referenceSetName), "")
       return(paste0(
         xParameterName, "-dependence of ", yParameterName, " for ", reportSimulationSet(simulationSetName, descriptor),
         referenceSetText, ". Profiles are plotted in a ", plotScale, " scale."
@@ -33,33 +33,33 @@ captions <- list(
   ),
   plotGoF = list(
     timeProfile = function(simulationSetName, descriptor, dataSource, plotScale = "linear") {
-      dataSourceText <- ifnotnull(dataSource, paste0(". Data source: ", dataSource), "")
+      dataSourceText <- ospsuite.utils::ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
       return(paste0(
         "Time profiles for ", reportSimulationSet(simulationSetName, descriptor),
         dataSourceText, ". Time profiles are plotted in a ", plotScale, " scale."
       ))
     },
     obsVsPred = function(simulationSetName, descriptor, dataSource, plotScale = "linear") {
-      dataSourceText <- ifnotnull(dataSource, paste0(". Data source: ", dataSource), "")
+      dataSourceText <- ospsuite.utils::ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
       return(paste0(
         "Predicted vs observed for ", reportSimulationSet(simulationSetName, descriptor),
         dataSourceText, ". Predictions and observations are plotted in a ", plotScale, " scale."
       ))
     },
     resVsPred = function(simulationSetName, descriptor, dataSource, plotScale = ResidualScales$Linear) {
-      dataSourceText <- ifnotnull(dataSource, paste0(". Data source: ", dataSource), "")
+      dataSourceText <- ospsuite.utils::ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
       return(paste0(plotScale, " residuals vs predicted values for ", reportSimulationSet(simulationSetName, descriptor), dataSourceText, "."))
     },
     resVsTime = function(simulationSetName, descriptor, dataSource, plotScale = ResidualScales$Linear) {
-      dataSourceText <- ifnotnull(dataSource, paste0(". Data source: ", dataSource), "")
+      dataSourceText <- ospsuite.utils::ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
       return(paste0(plotScale, " residuals vs time values for ", reportSimulationSet(simulationSetName, descriptor), dataSourceText, "."))
     },
     resHisto = function(simulationSetName, descriptor, dataSource, plotScale = ResidualScales$Linear) {
-      dataSourceText <- ifnotnull(dataSource, paste0(". Data source: ", dataSource), "")
+      dataSourceText <- ospsuite.utils::ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
       return(paste0(plotScale, " residuals distribution for ", reportSimulationSet(simulationSetName, descriptor), dataSourceText, "."))
     },
     resQQPlot = function(simulationSetName, descriptor, dataSource, plotScale = ResidualScales$Linear) {
-      dataSourceText <- ifnotnull(dataSource, paste0(". Data source: ", dataSource), "")
+      dataSourceText <- ospsuite.utils::ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
       return(paste0(plotScale, " residuals for ", reportSimulationSet(simulationSetName, descriptor), dataSourceText, "."))
     },
     histogram = function(simulationSetName, descriptor) {
@@ -96,7 +96,7 @@ captions <- list(
       ))
     },
     rangePlot = function(xParameterName, yParameterName, simulationSetName, descriptor, referenceSetName = NULL, plotScale = "linear") {
-      referenceSetText <- ifnotnull(referenceSetName, paste0(" in comparison to ", referenceSetName), "")
+      referenceSetText <- ospsuite.utils::ifNotNull(referenceSetName, paste0(" in comparison to ", referenceSetName), "")
       return(paste0(
         xParameterName, "-dependence of ", yParameterName, " for ", reportSimulationSet(simulationSetName, descriptor),
         referenceSetText, ". Profiles are plotted in a ", plotScale, " scale."
@@ -193,13 +193,13 @@ addDescriptorToTable <- function(data, descriptor) {
 }
 
 getTimeRangeCaption <- function(timeRangeName) {
-  if (isIncluded(timeRangeName, ApplicationRanges$total)) {
+  if (ospsuite.utils::isIncluded(timeRangeName, ApplicationRanges$total)) {
     return("### For total simulation time range")
   }
-  if (isIncluded(timeRangeName, ApplicationRanges$firstApplication)) {
+  if (ospsuite.utils::isIncluded(timeRangeName, ApplicationRanges$firstApplication)) {
     return("### For first application range")
   }
-  if (isIncluded(timeRangeName, ApplicationRanges$lastApplication)) {
+  if (ospsuite.utils::isIncluded(timeRangeName, ApplicationRanges$lastApplication)) {
     return("### For last application range")
   }
 }

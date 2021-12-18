@@ -43,7 +43,7 @@ PopulationWorkflow <- R6::R6Class(
                           createWordReport = TRUE,
                           watermark = NULL,
                           simulationSetDescriptor = NULL,
-                          numberSections = TRUE, 
+                          numberSections = TRUE,
                           theme = NULL) {
       super$initialize(
         simulationSets = simulationSets,
@@ -133,7 +133,7 @@ PopulationWorkflow <- R6::R6Class(
       appendices <- appendices[file.exists(appendices)]
       if (length(appendices) > 0) {
         mergeMarkdowndFiles(appendices, self$reportFileName, logFolder = self$workflowFolder)
-        renderReport(self$reportFileName, logFolder = self$workflowFolder, 
+        renderReport(self$reportFileName, logFolder = self$workflowFolder,
                      createWordReport = self$createWordReport, numberSections = self$numberSections)
       }
 
@@ -152,12 +152,12 @@ PopulationWorkflow <- R6::R6Class(
 #' @title PopulationWorkflowTypes
 #' @description List of population workflow available types
 #' @export
-#' @import ospsuite
-#' @examples 
+#' @import ospsuite.utils
+#' @examples
 #' PopulationWorkflowTypes$pediatric
 #' PopulationWorkflowTypes$parallelComparison
 #' PopulationWorkflowTypes$ratioComparison
-PopulationWorkflowTypes <- ospsuite::enum(c(
+PopulationWorkflowTypes <- enum(c(
   "pediatric",
   "parallelComparison",
   "ratioComparison"

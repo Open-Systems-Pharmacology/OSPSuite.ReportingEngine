@@ -25,7 +25,7 @@ getTimeProfileOutputsDataframe <- function(configurationPlan) {
   timeProfileOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$TimeProfile) {
     validateIsIncluded(values = "Plot", parentValues = names(plot), nullAllowed = TRUE)
-    
+
     # Accounts for paths of both mean and pop time profiles
     paths <- plot$Plot$Analysis$Fields[[1]]$QuantityPath
     for (curve in plot$Plot$Curves) {
@@ -215,7 +215,7 @@ getPKRatioOutputsDataframe <- function(configurationPlan) {
 #' @keywords internal
 addNewPkParameter <- function(pkParameter, startTime, endTime) {
   pkParameterName <- generateDDIPlotPKParameterName(pkParameter, startTime, endTime)
-  
+
   if (pkParameterName %in% ospsuite::allPKParameterNames()) {
     return(pkParameterName)
   }
@@ -241,13 +241,14 @@ addNewPkParameter <- function(pkParameter, startTime, endTime) {
 #' @param startTime the starting time of the interval over which the PK parameter is calculated (from the qualification `ConfigurationPlan`)
 #' @param endTime the ending time of the interval over which the PK parameter is calculated (from the qualification `ConfigurationPlan`)
 #' @return String `pkParameterName`
+#' @import ospsuite.utils
 #' @keywords internal
 generateDDIPlotPKParameterName <- function(pkParameter, startTime, endTime) {
   validateIsIncluded(values = pkParameter, parentValues = names(pkDictionaryQualificationOSP))
   standardPKParameter <- pkDictionaryQualificationOSP[[pkParameter]]
   pkParameterName <- standardPKParameter
-  pkParameterName <- ifnotnull(startTime, paste0(pkParameterName, "_tStartTime_", startTime), pkParameterName)
-  pkParameterName <- ifnotnull(endTime, paste0(pkParameterName, "_tEndTime_", endTime), pkParameterName)
+  pkParameterName <- ifNotNull(startTime, paste0(pkParameterName, "_tStartTime_", startTime), pkParameterName)
+  pkParameterName <- ifNotNull(endTime, paste0(pkParameterName, "_tEndTime_", endTime), pkParameterName)
   return(pkParameterName)
 }
 

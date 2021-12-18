@@ -344,6 +344,7 @@ getPlotSettings <- function(plotSettingsFromConfigurationPlot) {
 #' @param logLevel Log verbosity (Debug, Information, Warning, Error). Default is Information.
 #' @param displayVersion Logical defining if version information is displayed
 #' @export
+#' @import ospsuite.utils
 startQualificationRunner <- function(qualificationRunnerFolder,
                                      qualificationPlanFile,
                                      outputFolder,
@@ -356,13 +357,13 @@ startQualificationRunner <- function(qualificationRunnerFolder,
   validateIsFileExtension(qualificationPlanFile, "json")
   validateIsLogical(overwrite)
   validateIsLogical(displayVersion)
-  
+
   options <- c(
-    ifnotnull(pkSimPortableFolder, paste0("-p ", pkSimPortableFolder)),
-    ifnotnull(configurationPlanFile, paste0('-n "', configurationPlanName, '"')),
+    ifNotNull(pkSimPortableFolder, paste0("-p ", pkSimPortableFolder)),
+    ifNotNull(configurationPlanFile, paste0('-n "', configurationPlanName, '"')),
     switch(as.character(overwrite), "TRUE" = "-f", NULL),
-    ifnotnull(logFile, paste0('-l "', logFile, '"')),
-    ifnotnull(logLevel, paste0("--logLevel ", logLevel)),
+    ifNotNull(logFile, paste0('-l "', logFile, '"')),
+    ifNotNull(logLevel, paste0("--logLevel ", logLevel)),
     switch(as.character(displayVersion), "TRUE" = "--version", NULL)
   )
   optionalArguments <- paste0(options, collapse = " ")

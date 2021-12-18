@@ -6,6 +6,7 @@
 #' @return list with `plots` and `tables`
 #' @import tlf
 #' @import ospsuite
+#' @import ospsuite.utils
 #' @keywords internal
 plotQualificationTimeProfiles <- function(configurationPlan,
                                           logFolder = getwd(),
@@ -32,10 +33,10 @@ plotQualificationTimeProfiles <- function(configurationPlan,
     plotConfiguration <- getPlotConfigurationFromPlan(timeProfilePlan$Plot)
     timeProfilePlot <- tlf::initializePlot(plotConfiguration)
 
-    # Currently use ifnotnull to select if mean or population time profile
+    # Currently use ospsuite.utils::ifNotNull to select if mean or population time profile
     # So far only population defines "Type" but this might not be always true
     # Function switch could be used instead
-    timeProfilePlot <- ifnotnull(
+    timeProfilePlot <- ifNotNull(
       timeProfilePlan$Plot$Type,
       plotQualificationPopulationTimeProfile(
         simulationAnalysis = timeProfilePlan$Plot$Analysis,
@@ -241,7 +242,7 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
   # Keep compatibility with Config Plan from Matlab version
   axesProperties$y$dimension <- simulationAnalysis$Fields[[1]]$Dimension %||% axesProperties$y$dimension
   axesProperties$y$unit <- simulationAnalysis$Fields[[1]]$Unit %||% axesProperties$y$unit
-  
+
   # Get and convert output path values into display unit
   time <- ospsuite::toUnit(
     "Time",
@@ -512,6 +513,7 @@ getCaptionFromStat <- function(statisticId, outputName) {
 #' @param axesProperties list of axes properties obtained from `getAxesProperties`
 #' @param logFolder folder where the logs are saved
 #' @return List with `time`, `y` and `error` values
+#' @import ospsuite.utils
 #' @keywords internal
 getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, axesProperties, logFolder) {
   time <- ospsuite::toUnit(

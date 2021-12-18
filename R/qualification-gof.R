@@ -4,6 +4,7 @@
 #' @param logFolder folder where the logs are saved
 #' @param settings settings for the task
 #' @return list of qualification GOF ggplot objects
+#' @import ospsuite.utils
 #' @keywords internal
 plotQualificationGOFs <- function(configurationPlan,
                                   logFolder = getwd(),
@@ -210,23 +211,23 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties) {
   # Update shapes and colors from config plan
   plotConfiguration$points$color <- metaData$color
   plotConfiguration$points$shape <- metaData$shape
-  
+
   positiveRows <- (data[,"Observed"] > 0) & (data[,"Simulated"] > 0)
   dataForLimit <- c(data[positiveRows,"Observed"], data[positiveRows,"Simulated"])
-  
-  plotConfiguration$xAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||% 
+
+  plotConfiguration$xAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||%
     autoAxesLimits(switch(
       plotType,
       "predictedVsObserved" = dataForLimit,
       "residualsOverTime" = data[,"Time"]
     ))
-  plotConfiguration$yAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||% 
+  plotConfiguration$yAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||%
     autoAxesLimits(switch(
       plotType,
       "predictedVsObserved" = dataForLimit,
       "residualsOverTime" = c(0, data[,"Residuals"])
     ))
-  
+
   gofPlot <- switch(
     plotType,
     "predictedVsObserved" = tlf::plotObsVsPred(

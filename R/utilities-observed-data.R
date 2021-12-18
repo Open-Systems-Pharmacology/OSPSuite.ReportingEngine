@@ -89,6 +89,7 @@ getDictionaryVariable <- function(dictionary, variableID) {
 #' @param simulationSet A `SimulationSet` object
 #' @param logFolder folder where the logs are saved
 #' @return list of data and dataMapping
+#' @import ospsuite.utils
 #' @keywords internal
 loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   validateIsOfType(simulationSet, "SimulationSet")
@@ -129,11 +130,11 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
     dvUnitColumn <- "dvUnit"
     observedDataset[, dvUnitColumn] <- dvUnit
   }
-  
+
   # Parse the data.frame with the appropriate columns and ensure units are "character" type
   observedDataset[, timeUnitColumn] <- as.character(observedDataset[, timeUnitColumn])
   observedDataset[, dvUnitColumn] <- as.character(observedDataset[, dvUnitColumn])
-  
+
   # If unit was actually defined using output objects, overwrite current dvUnit
   for(output in simulationSet$outputs){
     if(isOfLength(output$dataUnit, 0)){
@@ -323,6 +324,7 @@ getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPl
 #' or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
 #' @return A logical checking if path corresponds to observed data
 #' @import ospsuite
+#' @import ospsuite.utils
 #' @examples
 #' \dontrun{
 #' isObservedData("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)")

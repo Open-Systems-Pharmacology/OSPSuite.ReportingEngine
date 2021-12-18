@@ -25,6 +25,7 @@
 #' @description
 #' Calculate residuals between vectors `simulatedData` and `observedData` according the the residual scale specified in `residualScale`
 #' @export
+#' @import ospsuite.utils
 calculateResiduals <- function(simulatedData, observedData, residualScale) {
   validateIsOfLength(object = simulatedData, nbElements = length(observedData))
   residualValues <- rep(NA, length(observedData))
@@ -36,25 +37,6 @@ calculateResiduals <- function(simulatedData, observedData, residualScale) {
   }
 }
 
-#' Shortkey checking if argument 1 is not null,
-#' output the argument 2 if not null, or output argument 3 otherwise
-#'
-#' @title ifnotnull
-#' @param inputToCheck argument 1
-#' @param outputIfNotNull argument 2
-#' @param outputIfNull argument 3
-#' @return outputIfNotNull if inputToCheck is not null, outputIfNull otherwise
-#' @description
-#' Check if inputToCheck is not null, if so output outputIfNotNull,
-#' otherwise, output outputIfNull
-#' @keywords internal
-ifnotnull <- function(inputToCheck, outputIfNotNull, outputIfNull = NULL) {
-  if (!is.null(inputToCheck)) {
-    outputIfNotNull
-  } else {
-    outputIfNull
-  }
-}
 
 #' Shortkey checking if arguments 1 and 2 are equal,
 #' output argument 3 if equal, or output argument 4 otherwise
@@ -89,6 +71,7 @@ ifEqual <- function(x, y, outputIfEqual, outputIfNotEqual = NULL) {
 #' @description
 #' Check if x is in y, if so output outputIfIncluded,
 #' otherwise, output outputIfNotIncluded
+#' @import ospsuite.utils
 #' @keywords internal
 ifIncluded <- function(x, y, outputIfIncluded, outputIfNotIncluded = NULL) {
   if (isIncluded(x, y)) {
@@ -425,35 +408,6 @@ setWorkflowParameterDisplayPaths <- function(parameterDisplayPaths, workflow) {
 getWorkflowParameterDisplayPaths <- function(workflow) {
   validateIsOfType(workflow, "Workflow")
   return(workflow$getParameterDisplayPaths())
-}
-
-
-formatNumerics <- function(value,
-                           digits = NULL,
-                           scientific = NULL) {
-  validateIsInteger(digits, nullAllowed = TRUE)
-  validateIsLogical(scientific, nullAllowed = TRUE)
-
-  # Method for numerics
-  if(is.integer(value)){
-    return(value)
-  }
-  if(is.numeric(value)){
-    # Scientific writing
-    if(isTRUE(scientific %||% reEnv$formatNumericsScientific)){
-      return(sprintf(paste0('%.', digits %||% reEnv$formatNumericsDigits, 'e'), value))
-    }
-    # Decimal writing
-    return(sprintf(paste0('%.', digits %||% reEnv$formatNumericsDigits, 'f'), value))
-  }
-  # If data.frame or list, update each field
-  if(isOfType(value, c("list", "data.frame"))){
-    for(field in 1:length(value)){
-      value[[field]] <- formatNumerics(value[[field]], digits, scientific)
-    }
-  }
-  # Return the value as.is if not numeric
-  return(value)
 }
 
 #' @title parseVariableToObject

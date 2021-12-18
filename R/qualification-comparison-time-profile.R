@@ -70,6 +70,7 @@ plotQualificationComparisonTimeProfile <- function(configurationPlan,
 #' @param plotObject ggplot object
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @param logFolder folder where the logs are saved
+#' @import ospsuite.utils
 #' @return A ggplot object
 #' @keywords internal
 addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, axesProperties, plotObject, configurationPlan, logFolder) {
@@ -195,7 +196,7 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
     if(isIncluded(axesProperties$y$scale, tlf::Scaling$log)){
       observedError$ymin[observedError$ymin<=0] <- observedValues[observedError$ymin<=0]
     }
-    
+
     # Add error bars for observed data
     plotObject <- tlf::addErrorbar(
       x = observedTime,

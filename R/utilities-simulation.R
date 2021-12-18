@@ -110,13 +110,14 @@ simulateModelForPopulation <- function(structureSets,
 #' @param showProgress option to print progress of simulation to console
 #' @export
 #' @import ospsuite
+#' @import ospsuite.utils
 simulateModelOnCore <- function(simulation,
                                 population, # resultsFilePath,
                                 debugLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logDebugFile()), # errorLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logErrorFile()),
                                 nodeName = NULL,
                                 showProgress = FALSE) {
   logDebug(
-    message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), ""), "Starting simulation."),
+    message = paste0(ifNotNull(nodeName, paste0(nodeName, ": "), ""), "Starting simulation."),
     file = debugLogFileName,
     printConsole = TRUE
   )
@@ -126,7 +127,7 @@ simulateModelOnCore <- function(simulation,
   simulationResult <- ospsuite::runSimulation(simulation = simulation, population = population, simulationRunOptions = simRunOptions)
 
   logDebug(
-    message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), ""), "Simulation run complete."),
+    message = paste0(ifNotNull(nodeName, paste0(nodeName, ": "), ""), "Simulation run complete."),
     file = debugLogFileName,
     printConsole = TRUE
   )
@@ -140,6 +141,7 @@ simulateModelOnCore <- function(simulation,
 #' @param logFolder folder where the logs are saved
 #' @return List of simulation results for each simulation set
 #' @import ospsuite
+#' @import ospsuite.utils
 #' @keywords internal
 simulateModelParallel <- function(structureSets,
                                   settings = NULL,
@@ -156,7 +158,7 @@ simulateModelParallel <- function(structureSets,
   })
 
   simRunOptions <- ospsuite::SimulationRunOptions$new(
-    showProgress = ifnotnull(settings, outputIfNotNull = settings$showProgress, outputIfNull = FALSE),
+    showProgress = ifNotNull(settings, outputIfNotNull = settings$showProgress, outputIfNull = FALSE),
     numberOfCores = settings$allowedCores
   )
 
@@ -181,6 +183,7 @@ simulateModelParallel <- function(structureSets,
 #' @param logFolder folder where the logs are saved
 #' @return Simulation results for individual or population
 #' @import ospsuite
+#' @import ospsuite.utils
 #' @keywords internal
 simulateModel <- function(structureSet,
                           settings = NULL,
@@ -214,7 +217,7 @@ simulateModel <- function(structureSet,
   }
 
   simRunOptions <- ospsuite::SimulationRunOptions$new(
-    showProgress = ifnotnull(settings, outputIfNotNull = settings$showProgress, outputIfNull = FALSE),
+    showProgress = ifNotNull(settings, outputIfNotNull = settings$showProgress, outputIfNull = FALSE),
     numberOfCores = settings$allowedCores
   )
 

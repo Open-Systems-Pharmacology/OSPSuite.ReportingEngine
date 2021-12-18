@@ -29,7 +29,7 @@ AggregationConfiguration <- list(
 )
 
 displayDimension <- function(dimension){
-  if (isIncluded(dimension, c("Concentration (mass)", "Concentration (molar)"))) {
+  if (ospsuite.utils::isIncluded(dimension, c("Concentration (mass)", "Concentration (molar)"))) {
     return("Concentration")
   }
   return(dimension)
@@ -41,6 +41,7 @@ displayDimension <- function(dimension){
 #' @param scale Name of the scale of the axis
 #' Use helper enum `Scaling` from `tlf` package to find scales.
 #' @return A list of units for goodness of fit results
+#' @import ospsuite.utils
 #' @keywords internal
 autoAxesLimits <- function(x, scale = tlf::Scaling$lin) {
   minX <- min(x, na.rm = TRUE)
@@ -52,7 +53,7 @@ autoAxesLimits <- function(x, scale = tlf::Scaling$lin) {
   if(!isIncluded(scale, "log")){
     return(c(minX, maxX))
   }
-  # For log plots, 
+  # For log plots,
   # wider range for pretty axes limits
   if ((log10(maxX)-log10(minX)) > 1) {
     return(c(minX, maxX))
@@ -84,15 +85,16 @@ autoAxesTicksFromLimits <- function(limits) {
 #' @param plotProperties Plot properties from configuration plan
 #' @param plotType Name of plot type to call the appropriate `PlotConfiguration` object.
 #' E.g. for pk ratio plots, use "PKRatio" to create a `PKRatioPlotConfiguration` object
-#' @param legendPosition Legend position in order to add scale factor in the final plot dimensions 
+#' @param legendPosition Legend position in order to add scale factor in the final plot dimensions
 #' that accounts for possible shrinking of the plot panel due to the addition of the legend
 #' @return A `PlotConfiguration` object
+#' @import ospsuite.utils
 #' @keywords internal
 getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legendPosition = reEnv$theme$background$legendPosition) {
   # Define the appropriate configuration from plotType
   # by creating expression: "tlf::<plotType>PlotCOnfiguration$new()"
   plotConfiguration <- eval(parse(text = paste0("tlf::", plotType, "PlotConfiguration$new()")))
-  
+
   # Set properties from FontAndSize field
   fonts <- plotProperties$FontAndSize$Fonts
   # plotConfiguration initial font and size properties were defined from current theme
@@ -105,23 +107,23 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
   plotConfiguration$yAxis$font$size <- reEnv$fontScaleFactor*(fonts$AxisSize %||% plotConfiguration$yAxis$font$size)
   plotConfiguration$legend$font$size <- reEnv$fontScaleFactor*(fonts$LegendSize %||% plotConfiguration$legend$font$size)
   plotConfiguration$background$watermark$font$size <- reEnv$fontScaleFactor*(fonts$WatermarkSize %||% plotConfiguration$background$watermark$font$size)
-  
+
   # If chart size is defined, it is in pixel and updated accordingly
   # Get conversion factor between pixels and inches, dev.size provides an array c(width, height)
   unitConversionFactor <- grDevices::dev.size("in") / grDevices::dev.size("px")
-  width <- ifnotnull(
-    plotProperties$FontAndSize$ChartWidth, 
+  width <- ifNotNull(
+    plotProperties$FontAndSize$ChartWidth,
     plotProperties$FontAndSize$ChartWidth * unitConversionFactor[1],
     reEnv$defaultPlotFormat$width
   )
-  height <- ifnotnull(
-    plotProperties$FontAndSize$ChartHeight, 
+  height <- ifNotNull(
+    plotProperties$FontAndSize$ChartHeight,
     plotProperties$FontAndSize$ChartHeight * unitConversionFactor[2],
     reEnv$defaultPlotFormat$height
     )
-  
+
   legendScaling <- getLegendScalingFactors(legendPosition)
-  
+
   # Get dimensions of exported based on legend position and default/specific plot properties
   plotConfiguration$export$units <- reEnv$defaultPlotFormat$units
   plotConfiguration$export$width <- reEnv$fontScaleFactor*legendScaling$width*width
@@ -134,7 +136,9 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
 #' Initial estimates based on Abdullah's tests
 #' TODO: improve this directly from tlf
 #' @param legendPosition The name of the legend position as defined by `tlf` enum `LegendPositions`
+#' @import ospsuite.utils
 #' @return A list of scaling values for `width` and `height`
+#' @import ospsuite.utils
 #' @keywords internal
 getLegendScalingFactors <- function(legendPosition = tlf::LegendPositions$outsideTop){
   # Legend on the left/right sides: increase width
@@ -162,18 +166,18 @@ getLegendScalingFactors <- function(legendPosition = tlf::LegendPositions$outsid
 #' Due to `maxLines`, the returned width can be wider than `width`.
 #' @return A character vector of wrapped strings with line breaks at sensible places.
 #' @export
-#' @examples 
-#' 
+#' @examples
+#'
 #' cat(prettyCaption("this-is-a-long-sentence-with-dashes", maxLines = 2, width = 25))
-#' 
+#'
 #' cat(prettyCaption("this is a sentence with spaces", maxLines = 2, width = 25))
-#' 
+#'
 #' cat(prettyCaption("this_is_a_long_sentence_without_preferential_splits", maxLines = 2, width = 25))
-#' 
+#'
 #' cat(prettyCaption("this too short to split", maxLines = 3, width = 40))
-#' 
+#'
 #' cat(prettyCaption("this forces the sentence to use one line", maxLines = 1, width = 5))
-#' 
+#'
 prettyCaption <- function(captions, maxLines = reEnv$maxLinesPerLegendCaption, width = reEnv$maxWidthPerLegendCaption) {
   # Get number of characters for each caption
   totalWidths <- nchar(captions)
@@ -185,11 +189,11 @@ prettyCaption <- function(captions, maxLines = reEnv$maxLinesPerLegendCaption, w
   # Check how many line breaks are required
   numberOfSplits <- floor(totalWidths / width)
   numberOfLines <- numberOfSplits + 1
-  
+
   # Splits cannot create more lines than max lines
   numberOfSplits[numberOfLines > maxLines] <- maxLines - 1
   numberOfLines <- numberOfSplits + 1
-  # 
+  #
   for (captionIndex in seq_along(captions)) {
     if (numberOfSplits[captionIndex] == 0) {
       next

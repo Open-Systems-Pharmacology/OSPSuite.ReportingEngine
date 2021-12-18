@@ -294,7 +294,7 @@ analyzeSensitivity <- function(simulation,
 #' @param nodeName identifier for node used in parallel computation of sensitivity
 #' @param showProgress option to print progress of simulation to console
 #' @return sensitivity analysis results
-#' @import ospsuite
+#' @import ospsuite.utils
 #' @export
 analyzeCoreSensitivity <- function(simulation,
                                    variableParameterPaths = NULL,
@@ -312,12 +312,12 @@ analyzeCoreSensitivity <- function(simulation,
     numberOfCores = numberOfCores
   )
 
-  logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Starting sensitivity analysis for path(s) ", paste(variableParameterPaths, collapse = ", ")), file = debugLogFileName, printConsole = FALSE)
+  logDebug(message = paste0(ifNotNull(nodeName, paste0(nodeName, ": "), NULL), "Starting sensitivity analysis for path(s) ", paste(variableParameterPaths, collapse = ", ")), file = debugLogFileName, printConsole = FALSE)
   sensitivityAnalysisResults <- runSensitivityAnalysis(
     sensitivityAnalysis = sensitivityAnalysis,
     sensitivityAnalysisRunOptions = sensitivityAnalysisRunOptions
   )
-  logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Sensitivity analysis for current path(s) completed"), file = debugLogFileName, printConsole = FALSE)
+  logDebug(message = paste0(ifNotNull(nodeName, paste0(nodeName, ": "), NULL), "Sensitivity analysis for current path(s) completed"), file = debugLogFileName, printConsole = FALSE)
   return(sensitivityAnalysisResults)
 }
 
@@ -498,6 +498,7 @@ defaultQuantileVec <- c(0.05, 0.5, 0.95)
 #' @param settings list of settings for the output table/plot
 #' @return list of plots and tables
 #' @import ospsuite
+#' @import ospsuite.utils
 #' @import tlf
 #' @keywords internal
 plotMeanSensitivity <- function(structureSet,
@@ -572,7 +573,7 @@ plotMeanSensitivity <- function(structureSet,
         maxLines = settings$maxLinesPerParameter,
         width = settings$maxWidthPerParameter
         )
-      
+
       sensitivityPlot <- tlf::plotTornado(
         data = sensitivityData,
         dataMapping = sensitivityMapping,
@@ -886,6 +887,7 @@ plotPopulationSensitivity <- function(structureSets,
 #' @param logFolder folder where the logs are saved
 #' @return sortedFilteredIndividualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
 #' @import ospsuite
+#' @import ospsuite.utils
 #' @keywords internal
 getPopSensDfForPkAndOutput <- function(simulation,
                                        sensitivityResultsFolder,
@@ -984,9 +986,10 @@ getPkOutputIndexDf <- function(indexDf, pkParameter, output) {
 #' @description return the default totalSensitivityThreshold to be used in a population sensitivity analysis plot
 #' @param variableParameterPaths vector of paths of parameters to vary when performing sensitivity analysis
 #' @param totalSensitivityThreshold cut-off used for plots of the most sensitive parameters
+#' @import ospsuite.utils
 #' @keywords internal
 getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold = NULL, variableParameterPaths = NULL) {
-  totalSensitivityThreshold <- totalSensitivityThreshold %||% ifnotnull(variableParameterPaths, 1, 0.9)
+  totalSensitivityThreshold <- totalSensitivityThreshold %||% ifNotNull(variableParameterPaths, 1, 0.9)
   return(totalSensitivityThreshold)
 }
 

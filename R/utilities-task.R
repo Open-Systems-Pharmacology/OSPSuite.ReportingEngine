@@ -1,28 +1,28 @@
 #' @title StandardSimulationTasks
 #' @description Names of simulation tasks performed by both `MeanModelWorkflow` and `PopulationWorkflow` objects
 #' @export
-#' @import ospsuite
-#' @examples 
+#' @import ospsuite.utils
+#' @examples
 #' StandardSimulationTasks$simulate
 #' StandardSimulationTasks$calculatePKParameters
 #' StandardSimulationTasks$calculateSensitivity
-StandardSimulationTasks <- ospsuite::enum(c("simulate", "calculatePKParameters", "calculateSensitivity"))
+StandardSimulationTasks <- enum(c("simulate", "calculatePKParameters", "calculateSensitivity"))
 
 #' @title StandardPlotTasks
 #' @description Names of plot tasks performed by both `MeanModelWorkflow` and `PopulationWorkflow` objects
 #' @export
-#' @import ospsuite
-#' @examples 
+#' @import ospsuite.utils
+#' @examples
 #' StandardPlotTasks$plotTimeProfilesAndResiduals
 #' StandardPlotTasks$plotPKParameters
 #' StandardPlotTasks$plotSensitivity
-StandardPlotTasks <- ospsuite::enum(c("plotTimeProfilesAndResiduals", "plotPKParameters", "plotSensitivity"))
+StandardPlotTasks <- enum(c("plotTimeProfilesAndResiduals", "plotPKParameters", "plotSensitivity"))
 
 #' @title AllAvailableTasks
 #' @description Names of all existing tasks that can be performed by `MeanModelWorkflow` or `PopulationWorkflow` objects
 #' @export
-#' @import ospsuite
-#' @examples 
+#' @import ospsuite.utils
+#' @examples
 #' AllAvailableTasks$simulate
 #' AllAvailableTasks$plotTimeProfilesAndResiduals
 #' AllAvailableTasks$plotDemography
@@ -31,7 +31,7 @@ StandardPlotTasks <- ospsuite::enum(c("plotTimeProfilesAndResiduals", "plotPKPar
 AllAvailableTasks <- c(
   StandardSimulationTasks,
   StandardPlotTasks,
-  ospsuite::enum(c("plotDemography", "plotAbsorption", "plotMassBalance"))
+  enum(c("plotDemography", "plotAbsorption", "plotMassBalance"))
 )
 
 #' @title activateWorkflowTasks
@@ -710,7 +710,7 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
       nsmall = reEnv$formatNumericsSmall,
       scientific = reEnv$formatNumericsScientific,
       # Reference unit for table artifact
-      # Note that 
+      # Note that
       # 1) it can be updated before running workflows
       # 2) configuration plan inputs could override these
       units = list(

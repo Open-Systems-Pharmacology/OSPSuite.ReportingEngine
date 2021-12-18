@@ -61,7 +61,7 @@ reEnv$pkRatio$dictionary <- list(
 #' @param watermark character or \code{Label} class object from `tlf` package
 #' @export
 #' @import tlf
-#' @examples 
+#' @examples
 #' setWatermarkConfiguration("Confidential")
 #' setWatermarkConfiguration(Label$new(text = "test", color = "blue"))
 setWatermarkConfiguration <- function(watermark = NULL) {
@@ -76,7 +76,8 @@ setWatermarkConfiguration <- function(watermark = NULL) {
 #' @param units units of `width` and `height` included in "in", "cm", "mm", or "px"
 #' @param dpi Plot resolution in dots per inch. Caution, font sizes depend on resolution.
 #' @export
-#' @examples 
+#' @import ospsuite.utils
+#' @examples
 #' setDefaultPlotFormat(format = "pdf")
 #' setDefaultPlotFormat(width = 16, height = 9, units = "cm", dpi = 300)
 setDefaultPlotFormat <- function(format = NULL, width = NULL, height = NULL, units = NULL, dpi = NULL) {
@@ -112,19 +113,19 @@ setPlotFormat <- function(format = NULL, width = NULL, height = NULL, units = NU
 #' @description
 #' Keys of reported ranges when simulation includes multiple applications
 #' @export
-#' @import ospsuite
+#' @import ospsuite.utils
 #' @examples
 #' ApplicationRanges$total
 #' ApplicationRanges$firstApplication
 #' ApplicationRanges$lastApplication
-ApplicationRanges <- ospsuite::enum(c("total", "firstApplication", "lastApplication"))
+ApplicationRanges <- enum(c("total", "firstApplication", "lastApplication"))
 
 #' @title setDefaultNumericFormat
 #' @description Set default format for numeric values output in reports
 #' @param digits Number of significant digits
 #' @param scientific Logical defining if numeric format uses a scientific expression
 #' @export
-#' @examples 
+#' @examples
 #' setDefaultNumericFormat(digits = 2, scientific = TRUE)
 setDefaultNumericFormat <- function(digits = NULL, scientific = NULL) {
   validateIsInteger(digits, nullAllowed = TRUE)
@@ -138,6 +139,7 @@ setDefaultNumericFormat <- function(digits = NULL, scientific = NULL) {
 #' @title getDefaultRETheme
 #' @description Get default plot settings for RE package
 #' @return A `Theme` object from `tlf` package
+#' @import ospsuite.utils
 #' @keywords internal
 getDefaultRETheme <- function(){
   # Get reporting engine theme from its json file properties
@@ -177,7 +179,7 @@ setDefaultThemeFromJson <- function(jsonFile) {
 #' @title setDefaultBins
 #' @param bins number or edges of bins
 #' @export
-#' @examples 
+#' @examples
 #' setDefaultBins(10)
 setDefaultBins <- function(bins) {
   validateIsNumeric(bins)
@@ -187,7 +189,7 @@ setDefaultBins <- function(bins) {
 #' @title setDefaultStairstep
 #' @param stairstep logical defining if stairstep should be plotted by default when aggregation is performed
 #' @export
-#' @examples 
+#' @examples
 #' setDefaultStairstep(TRUE)
 setDefaultStairstep <- function(stairstep) {
   validateIsLogical(stairstep)
@@ -198,7 +200,7 @@ setDefaultStairstep <- function(stairstep) {
 #' @param margin numeric value between 0 and 1
 #' defining the margin of automated axis limits
 #' @export
-#' @examples 
+#' @examples
 #' setDefaultAutoAxisLimitMargin(0.1)
 setDefaultAutoAxisLimitMargin <- function(margin) {
   validateIsNumeric(margin)
