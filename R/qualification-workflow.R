@@ -10,7 +10,7 @@
 #' @field plotDDIRatio `PlotTask` object for DDI ratio plot
 #' @export
 #' @import tlf
-#' @import ospsuite
+#' @import ospsuite.utils
 QualificationWorkflow <- R6::R6Class(
   "QualificationWorkflow",
   inherit = Workflow,
@@ -30,7 +30,6 @@ QualificationWorkflow <- R6::R6Class(
     #' @param ... input parameters inherited from R6 class object `Workflow`.
     #' @param configurationPlan A `ConfigurationPlan` object
     #' @return A new `QualificationWorkflow` object
-    #' @import ospsuite
     initialize = function(configurationPlan,
                           ...) {
       super$initialize(...)
@@ -50,7 +49,7 @@ QualificationWorkflow <- R6::R6Class(
       self$plotPKRatio <- loadPlotPKRatioTask(self, configurationPlan)
       self$plotDDIRatio <- loadPlotDDIRatioTask(self, configurationPlan)
 
-      self$taskNames <- ospsuite::enum(self$getAllTasks())
+      self$taskNames <- enum(self$getAllTasks())
     },
 
     #' @description
@@ -100,9 +99,9 @@ QualificationWorkflow <- R6::R6Class(
         intro = mdFiles$intro
         )
     },
-    
-    #' @description 
-    #' Update the content of the workflow `configurationPlan`. 
+
+    #' @description
+    #' Update the content of the workflow `configurationPlan`.
     #' Caution, updating the `configurationPlan` using this method won't update the workflow simulations and their results.
     #' Use the method only to bypass reloading a full workflow if only plot aesthetics or section content is changed.
     #' @param configurationPlanFile path to the json file corresponding to the Configuration Plan of a Qualification workflow

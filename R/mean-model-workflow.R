@@ -10,7 +10,7 @@
 #' @field plotSensitivity `PlotTask` object for sensitivity plot
 #' @export
 #' @import tlf
-#' @import ospsuite
+#' @import ospsuite.utils
 MeanModelWorkflow <- R6::R6Class(
   "MeanModelWorkflow",
   inherit = Workflow,
@@ -29,7 +29,6 @@ MeanModelWorkflow <- R6::R6Class(
     #' Create a new `MeanModelWorkflow` object.
     #' @param ... input parameters inherited from R6 class object `Workflow`.
     #' @return A new `MeanModelWorkflow` object
-    #' @import ospsuite
     initialize = function(...) {
       super$initialize(...)
 
@@ -43,7 +42,7 @@ MeanModelWorkflow <- R6::R6Class(
       self$plotPKParameters <- loadPlotPKParametersTask(self)
       self$plotSensitivity <- loadPlotSensitivityTask(self)
 
-      self$taskNames <- ospsuite::enum(self$getAllTasks())
+      self$taskNames <- enum(self$getAllTasks())
     },
 
     #' @description
@@ -103,7 +102,7 @@ MeanModelWorkflow <- R6::R6Class(
       appendices <- appendices[file.exists(appendices)]
       if (length(appendices) > 0) {
         mergeMarkdowndFiles(appendices, self$reportFileName, logFolder = self$workflowFolder)
-        renderReport(self$reportFileName, logFolder = self$workflowFolder, 
+        renderReport(self$reportFileName, logFolder = self$workflowFolder,
                      createWordReport = self$createWordReport, numberSections = self$numberSections)
       }
 

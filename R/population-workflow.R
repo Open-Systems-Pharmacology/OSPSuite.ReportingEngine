@@ -11,6 +11,7 @@
 #' @export
 #' @import tlf
 #' @import ospsuite
+#' @import ospsuite.utils
 PopulationWorkflow <- R6::R6Class(
   "PopulationWorkflow",
   inherit = Workflow,
@@ -36,7 +37,6 @@ PopulationWorkflow <- R6::R6Class(
     #' @param numberSections logical defining if the report sections should be numbered
     #' @param theme A `Theme` object from `{tlf}` package
     #' @return A new `PopulationWorkflow` object
-    #' @import ospsuite
     initialize = function(workflowType,
                           simulationSets,
                           workflowFolder,
@@ -75,7 +75,7 @@ PopulationWorkflow <- R6::R6Class(
       self$plotPKParameters <- loadPlotPKParametersTask(self)
       self$plotSensitivity <- loadPlotSensitivityTask(self)
 
-      self$taskNames <- ospsuite::enum(self$getAllTasks())
+      self$taskNames <- enum(self$getAllTasks())
     },
 
     #' @description
