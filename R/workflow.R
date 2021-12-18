@@ -8,7 +8,6 @@
 #' @field userDefinedTasks List of user-defined tasks (to update with loadUserDefinedTask)
 #' @field numberSections logical defining if the report sections should be numbered
 #' @import tlf
-#' @import ospsuite
 #' @import ospsuite.utils
 #' @keywords internal
 Workflow <- R6::R6Class(
@@ -32,7 +31,6 @@ Workflow <- R6::R6Class(
     #' @param numberSections logical defining if the report sections should be numbered
     #' @param theme A `Theme` object from `{tlf}` package
     #' @return A new `Workflow` object
-    #' @import ospsuite
     initialize = function(simulationSets,
                           workflowFolder,
                           createWordReport = TRUE,
@@ -80,7 +78,7 @@ Workflow <- R6::R6Class(
       )
 
       self$reportFileName <- file.path(self$workflowFolder, paste0(defaultFileNames$reportName(), ".md"))
-      self$taskNames <- ospsuite::enum(self$getAllTasks())
+      self$taskNames <- enum(self$getAllTasks())
 
       self$simulationStructures <- list()
       simulationSets <- c(simulationSets)
