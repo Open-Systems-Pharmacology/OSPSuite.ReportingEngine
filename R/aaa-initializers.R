@@ -64,12 +64,12 @@ workflowInitializeFunction <- function(simulationSets,
   # Empty list on which users can load tasks
   self$userDefinedTasks <- list()
 
-  validateIsString(workflowFolder)
-  validateIsString(watermark, nullAllowed = TRUE)
-  validateIsString(simulationSetDescriptor, nullAllowed = TRUE)
-  validateIsOfType(c(simulationSets), "SimulationSet")
-  validateIsLogical(createWordReport)
-  validateIsLogical(numberSections)
+  ospsuite.utils::validateIsString(workflowFolder)
+  ospsuite.utils::validateIsString(watermark, nullAllowed = TRUE)
+  ospsuite.utils::validateIsString(simulationSetDescriptor, nullAllowed = TRUE)
+  ospsuite.utils::validateIsOfType(c(simulationSets), "SimulationSet")
+  ospsuite.utils::validateIsLogical(createWordReport)
+  ospsuite.utils::validateIsLogical(numberSections)
 
   self$createWordReport <- createWordReport
   self$numberSections <- numberSections
