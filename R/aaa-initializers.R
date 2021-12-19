@@ -1,14 +1,14 @@
 getClassAncestry <- function(clsVec){
   clsVec <- c(clsVec)
-  nv <- clsVec[[length(clsVec)]]$get_inherit()
-  if(is.null( nv )){
+  nextParent <- clsVec[[length(clsVec)]]$get_inherit()
+  if(is.null( nextParent )){
     return(clsVec)
   }
-  return(getClassAncestry( c(clsVec,nv) ))
+  return(getClassAncestry( c(clsVec,nextParent) ))
 }
 
-getAncestralInitializerList <- function(childClass){
-  return(lapply(getClassAncestry(childClass),function(cls){ cls$public_methods$initialize }))
+getAncestralInitializerList <- function(classObject){
+  return(lapply(getClassAncestry(classObject),function(cls){ cls$public_methods$initialize }))
 }
 
 parseFunctionBody <- function(functionToParse) {
