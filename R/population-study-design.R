@@ -58,7 +58,7 @@ studyDesignTypeLine <- 3
 #' @import ospsuite
 #' @keywords internal
 updateTargetValues <- function(values, targetValues, sourceExpressions, data) {
-  validateIsSameLength(targetValues, sourceExpressions)
+  ospsuite.utils::validateIsSameLength(targetValues, sourceExpressions)
   ospsuite.utils::validateIsOfType(data, "data.frame")
   ospsuite.utils::validateIsOfLength(values, nrow(data))
 
@@ -94,7 +94,7 @@ StudyDesign <- R6::R6Class(
       self$source <- mapStudyDesignSources(data, population, simulation)
 
       for (target in self$targets) {
-        validateIsSameLength(target$values, self$source)
+        ospsuite.utils::validateIsSameLength(target$values, self$source)
       }
     },
 
