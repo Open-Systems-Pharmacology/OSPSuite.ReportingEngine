@@ -195,7 +195,7 @@ ConfigurationPlan <- R6::R6Class(
     getSimulationPath = function(project, simulation) {
       # Since data is imported from json, simulationMappings fields have a first upper case letter
       validateIsIncludedAndLog(project, private$.simulationMappings$project, groupName = "'project' variable of simulationMappings")
-      validateIsIncluded(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
+      validateIsIncludedAndLog(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
       selectedId <- (private$.simulationMappings$project %in% project) & (private$.simulationMappings$simulation %in% simulation)
       simulationPath <- file.path(self$referenceFolder, private$.simulationMappings$path[selectedId], paste0(private$.simulationMappings$simulationFile[selectedId], ".pkml"))
       return(simulationPath)
