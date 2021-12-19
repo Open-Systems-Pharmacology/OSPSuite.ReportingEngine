@@ -802,7 +802,7 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet, logFolder) 
   # Get applications
   applications <- simulation$allApplicationsFor(path)
   applicationTimes <- 0
-  if (!ospsuite.utils::ospsuite.utils::isOfLength(applications, 0)) {
+  if (!ospsuite.utils::isOfLength(applications, 0)) {
     applicationTimes <- sapply(applications, function(application) {
       application$startTime$value
     })
