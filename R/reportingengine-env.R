@@ -113,12 +113,11 @@ setPlotFormat <- function(format = NULL, width = NULL, height = NULL, units = NU
 #' @description
 #' Keys of reported ranges when simulation includes multiple applications
 #' @export
-#' @import ospsuite.utils
 #' @examples
 #' ApplicationRanges$total
 #' ApplicationRanges$firstApplication
 #' ApplicationRanges$lastApplication
-ApplicationRanges <- enum(c("total", "firstApplication", "lastApplication"))
+ApplicationRanges <- ospsuite.utils::enum(c("total", "firstApplication", "lastApplication"))
 
 #' @title setDefaultNumericFormat
 #' @description Set default format for numeric values output in reports

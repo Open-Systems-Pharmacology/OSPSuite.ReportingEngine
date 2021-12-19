@@ -78,7 +78,7 @@ Workflow <- R6::R6Class(
       )
 
       self$reportFileName <- file.path(self$workflowFolder, paste0(defaultFileNames$reportName(), ".md"))
-      self$taskNames <- enum(self$getAllTasks())
+      self$taskNames <- ospsuite.utils::enum(self$getAllTasks())
 
       self$simulationStructures <- list()
       simulationSets <- c(simulationSets)

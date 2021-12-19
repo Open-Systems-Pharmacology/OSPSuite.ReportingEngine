@@ -2,7 +2,7 @@
 #' @description Enum defining the standard names for the Excel sheets of template
 #' @import ospsuite.utils
 #' @keywords internal
-StandardExcelSheetNames <- enum(c(
+StandardExcelSheetNames <- ospsuite.utils::enum(c(
   "Documentation",
   "Workflow and Tasks",
   "SimulationSets",

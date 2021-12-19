@@ -2,15 +2,13 @@
 
 #' @title ConfigurationPlots
 #' @description Enum defining possible plots defined in configuration plan
-#' @import ospsuite.utils
 #' @keywords internal
-ConfigurationPlots <- enum(c("TimeProfile", "GOFMergedPlots", "ComparisonTimeProfilePlots", "PKRatioPlots", "DDIRatioPlots"))
+ConfigurationPlots <- ospsuite.utils::enum(c("TimeProfile", "GOFMergedPlots", "ComparisonTimeProfilePlots", "PKRatioPlots", "DDIRatioPlots"))
 
 #' @title ConfigurationPlotSettings
 #' @description Enum defining possible plot settings fields defined in configuration plan
-#' @import ospsuite.utils
 #' @keywords internal
-ConfigurationPlotSettings <- enum(c("ChartWidth", "ChartHeight", "Fonts"))
+ConfigurationPlotSettings <- ospsuite.utils::enum(c("ChartWidth", "ChartHeight", "Fonts"))
 
 #' @title ConfigurationFontsFields
 #' @description Enum defining possible fonts fields defined in configuration plan

@@ -10,7 +10,6 @@
 #' @field plotSensitivity `PlotTask` object for sensitivity plot
 #' @export
 #' @import tlf
-#' @import ospsuite.utils
 MeanModelWorkflow <- R6::R6Class(
   "MeanModelWorkflow",
   inherit = Workflow,
@@ -42,7 +41,7 @@ MeanModelWorkflow <- R6::R6Class(
       self$plotPKParameters <- loadPlotPKParametersTask(self)
       self$plotSensitivity <- loadPlotSensitivityTask(self)
 
-      self$taskNames <- enum(self$getAllTasks())
+      self$taskNames <- ospsuite.utils::enum(self$getAllTasks())
     },
 
     #' @description

@@ -6,7 +6,7 @@
 #' StandardSimulationTasks$simulate
 #' StandardSimulationTasks$calculatePKParameters
 #' StandardSimulationTasks$calculateSensitivity
-StandardSimulationTasks <- enum(c("simulate", "calculatePKParameters", "calculateSensitivity"))
+StandardSimulationTasks <- ospsuite.utils::enum(c("simulate", "calculatePKParameters", "calculateSensitivity"))
 
 #' @title StandardPlotTasks
 #' @description Names of plot tasks performed by both `MeanModelWorkflow` and `PopulationWorkflow` objects
@@ -16,7 +16,7 @@ StandardSimulationTasks <- enum(c("simulate", "calculatePKParameters", "calculat
 #' StandardPlotTasks$plotTimeProfilesAndResiduals
 #' StandardPlotTasks$plotPKParameters
 #' StandardPlotTasks$plotSensitivity
-StandardPlotTasks <- enum(c("plotTimeProfilesAndResiduals", "plotPKParameters", "plotSensitivity"))
+StandardPlotTasks <- ospsuite.utils::enum(c("plotTimeProfilesAndResiduals", "plotPKParameters", "plotSensitivity"))
 
 #' @title AllAvailableTasks
 #' @description Names of all existing tasks that can be performed by `MeanModelWorkflow` or `PopulationWorkflow` objects
@@ -31,7 +31,7 @@ StandardPlotTasks <- enum(c("plotTimeProfilesAndResiduals", "plotPKParameters", 
 AllAvailableTasks <- c(
   StandardSimulationTasks,
   StandardPlotTasks,
-  enum(c("plotDemography", "plotAbsorption", "plotMassBalance"))
+  ospsuite.utils::enum(c("plotDemography", "plotAbsorption", "plotMassBalance"))
 )
 
 #' @title activateWorkflowTasks

@@ -10,7 +10,6 @@
 #' @field plotDDIRatio `PlotTask` object for DDI ratio plot
 #' @export
 #' @import tlf
-#' @import ospsuite.utils
 QualificationWorkflow <- R6::R6Class(
   "QualificationWorkflow",
   inherit = Workflow,
@@ -49,7 +48,7 @@ QualificationWorkflow <- R6::R6Class(
       self$plotPKRatio <- loadPlotPKRatioTask(self, configurationPlan)
       self$plotDDIRatio <- loadPlotDDIRatioTask(self, configurationPlan)
 
-      self$taskNames <- enum(self$getAllTasks())
+      self$taskNames <- ospsuite.utils::enum(self$getAllTasks())
     },
 
     #' @description

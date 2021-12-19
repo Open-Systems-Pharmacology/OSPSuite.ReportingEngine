@@ -11,7 +11,6 @@
 #' @export
 #' @import tlf
 #' @import ospsuite
-#' @import ospsuite.utils
 PopulationWorkflow <- R6::R6Class(
   "PopulationWorkflow",
   inherit = Workflow,
@@ -75,7 +74,7 @@ PopulationWorkflow <- R6::R6Class(
       self$plotPKParameters <- loadPlotPKParametersTask(self)
       self$plotSensitivity <- loadPlotSensitivityTask(self)
 
-      self$taskNames <- enum(self$getAllTasks())
+      self$taskNames <- ospsuite.utils::enum(self$getAllTasks())
     },
 
     #' @description
@@ -152,12 +151,11 @@ PopulationWorkflow <- R6::R6Class(
 #' @title PopulationWorkflowTypes
 #' @description List of population workflow available types
 #' @export
-#' @import ospsuite.utils
 #' @examples
 #' PopulationWorkflowTypes$pediatric
 #' PopulationWorkflowTypes$parallelComparison
 #' PopulationWorkflowTypes$ratioComparison
-PopulationWorkflowTypes <- enum(c(
+PopulationWorkflowTypes <- ospsuite.utils::enum(c(
   "pediatric",
   "parallelComparison",
   "ratioComparison"

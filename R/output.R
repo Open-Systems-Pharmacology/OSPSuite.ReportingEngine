@@ -1,11 +1,10 @@
 #' @title ResidualScales
 #' @description List of available scales for calculation of residuals
 #' @export
-#' @import ospsuite.utils
 #' @examples
 #' ResidualScales$Linear
 #' ResidualScales$Logarithmic
-ResidualScales <- enum(c("Linear", "Logarithmic"))
+ResidualScales <- ospsuite.utils::enum(c("Linear", "Logarithmic"))
 
 #' @title DataSelectionKeys
 #' @description List of available short keys for observed data selection
@@ -30,7 +29,6 @@ DataSelectionKeys <- list(
 #' @field residualScale Scale for calculation of residuals as included in enum `ResidualScales`
 #' @export
 #' @import ospsuite
-#' @import ospsuite.utils
 Output <- R6::R6Class(
   "Output",
   public = list(
