@@ -84,7 +84,7 @@ addTableChunk <- function(fileName,
     fileEncoding = "UTF-8",
     stringsAsFactors = FALSE
   )
-  table <- formatNumerics(
+  table <- ospsuite.utils::formatNumerics(
     table,
     digits = digits %||% reEnv$formatNumericsDigits,
     scientific = scientific %||% reEnv$formatNumericsScientific

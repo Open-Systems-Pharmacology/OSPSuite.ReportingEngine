@@ -189,7 +189,7 @@ plotMeanMassBalance <- function(structureSet,
     plotConfiguration = settings$plotConfigurations[["pieChart"]]
   )
 
-  timeCaption <- formatNumerics(
+  timeCaption <- ospsuite.utils::formatNumerics(
     max(simulationResultsOutputByGroup$Time),
     digits = settings$digits,
     scientific = settings$scientific
