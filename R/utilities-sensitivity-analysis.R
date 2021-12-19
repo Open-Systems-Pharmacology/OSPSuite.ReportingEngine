@@ -294,7 +294,6 @@ analyzeSensitivity <- function(simulation,
 #' @param nodeName identifier for node used in parallel computation of sensitivity
 #' @param showProgress option to print progress of simulation to console
 #' @return sensitivity analysis results
-#' @import ospsuite.utils
 #' @export
 analyzeCoreSensitivity <- function(simulation,
                                    variableParameterPaths = NULL,
@@ -421,7 +420,6 @@ getPKResultsDataFrame <- function(structureSet) {
 #' @param settings list of settings for the population sensitivity analysis
 #' @param logFolder folder where the logs are saved
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
-#' @import ospsuite.utils
 #' @keywords internal
 getSAFileIndex <- function(structureSet,
                            settings,
@@ -499,7 +497,6 @@ defaultQuantileVec <- c(0.05, 0.5, 0.95)
 #' @param settings list of settings for the output table/plot
 #' @return list of plots and tables
 #' @import ospsuite
-#' @import ospsuite.utils
 #' @import tlf
 #' @keywords internal
 plotMeanSensitivity <- function(structureSet,
@@ -618,7 +615,6 @@ lookupPKParameterDisplayName <- function(output, pkParameter) {
 #' @param yParameters selected parameters to be plotted in y axis
 #' @return a structured list of plots for each possible combination of pathID output-pkParameter that is found in sensitivity results index file
 #' @import ospsuite
-#' @import ospsuite.utils
 #' @keywords internal
 plotPopulationSensitivity <- function(structureSets,
                                       logFolder = NULL,
@@ -889,7 +885,6 @@ plotPopulationSensitivity <- function(structureSets,
 #' @param logFolder folder where the logs are saved
 #' @return sortedFilteredIndividualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
 #' @import ospsuite
-#' @import ospsuite.utils
 #' @keywords internal
 getPopSensDfForPkAndOutput <- function(simulation,
                                        sensitivityResultsFolder,
@@ -988,7 +983,6 @@ getPkOutputIndexDf <- function(indexDf, pkParameter, output) {
 #' @description return the default totalSensitivityThreshold to be used in a population sensitivity analysis plot
 #' @param variableParameterPaths vector of paths of parameters to vary when performing sensitivity analysis
 #' @param totalSensitivityThreshold cut-off used for plots of the most sensitive parameters
-#' @import ospsuite.utils
 #' @keywords internal
 getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold = NULL, variableParameterPaths = NULL) {
   totalSensitivityThreshold <- totalSensitivityThreshold %||% ospsuite.utils::ifNotNull(variableParameterPaths, 1, 0.9)

@@ -66,7 +66,6 @@ addFigureChunk <- function(fileName,
 #' @param scientific logical defining if displayed numbers use scientific writing
 #' @param logFolder folder where the logs are saved
 #' @param na character string replacing `NA` values in table
-#' @import ospsuite.utils
 #' @export
 addTableChunk <- function(fileName,
                           tableFileRelativePath,

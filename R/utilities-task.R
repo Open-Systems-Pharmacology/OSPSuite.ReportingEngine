@@ -1,7 +1,6 @@
 #' @title StandardSimulationTasks
 #' @description Names of simulation tasks performed by both `MeanModelWorkflow` and `PopulationWorkflow` objects
 #' @export
-#' @import ospsuite.utils
 #' @examples
 #' StandardSimulationTasks$simulate
 #' StandardSimulationTasks$calculatePKParameters
@@ -11,7 +10,6 @@ StandardSimulationTasks <- ospsuite.utils::enum(c("simulate", "calculatePKParame
 #' @title StandardPlotTasks
 #' @description Names of plot tasks performed by both `MeanModelWorkflow` and `PopulationWorkflow` objects
 #' @export
-#' @import ospsuite.utils
 #' @examples
 #' StandardPlotTasks$plotTimeProfilesAndResiduals
 #' StandardPlotTasks$plotPKParameters
@@ -21,7 +19,6 @@ StandardPlotTasks <- ospsuite.utils::enum(c("plotTimeProfilesAndResiduals", "plo
 #' @title AllAvailableTasks
 #' @description Names of all existing tasks that can be performed by `MeanModelWorkflow` or `PopulationWorkflow` objects
 #' @export
-#' @import ospsuite.utils
 #' @examples
 #' AllAvailableTasks$simulate
 #' AllAvailableTasks$plotTimeProfilesAndResiduals
@@ -544,7 +541,6 @@ addUserDefinedTask <- function(workflow,
 #' @param workflow `QualificationWorkflow` object
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @return A `QualificationTask` object
-#' @import ospsuite.utils
 #' @export
 loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
   ospsuite.utils::validateIsOfType(workflow, "QualificationWorkflow")
@@ -585,7 +581,6 @@ loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
 #' @param workflow `QualificationWorkflow` object
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @return A `QualificationTask` object
-#' @import ospsuite.utils
 #' @export
 loadGOFMergedTask <- function(workflow, configurationPlan) {
   ospsuite.utils::validateIsOfType(workflow, "QualificationWorkflow")
@@ -635,7 +630,6 @@ loadGOFMergedTask <- function(workflow, configurationPlan) {
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @return A `QualificationTask` object
 #' @export
-#' @import ospsuite.utils
 loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPlan) {
   ospsuite.utils::validateIsOfType(workflow, "QualificationWorkflow")
   ospsuite.utils::validateIsOfType(configurationPlan, "ConfigurationPlan")
@@ -677,7 +671,6 @@ loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPl
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @return A `QualificationTask` object
 #' @export
-#' @import ospsuite.utils
 loadPlotPKRatioTask <- function(workflow, configurationPlan) {
   ospsuite.utils::validateIsOfType(workflow, "QualificationWorkflow")
   ospsuite.utils::validateIsOfType(configurationPlan, "ConfigurationPlan")
@@ -732,7 +725,6 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
 #' @param workflow `QualificationWorkflow` object
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @return A `QualificationTask` object
-#' @import ospsuite.utils
 #' @export
 loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
   ospsuite.utils::validateIsOfType(workflow, "QualificationWorkflow")

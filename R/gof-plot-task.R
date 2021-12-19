@@ -1,6 +1,5 @@
 #' @title GofPlotTask
 #' @description  R6 class for GofPlotTask settings
-#' @import ospsuite.utils
 #' @export
 GofPlotTask <- R6::R6Class(
   "GofPlotTask",

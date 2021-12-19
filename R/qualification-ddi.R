@@ -2,7 +2,6 @@
 #' @description Build dataframes and metadata for each DDI plot
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return  plotDDIdata, a list of lists of the form list(dataframe,metadata) specific to each DID plot
-#' @import ospsuite.utils
 #' @keywords internal
 getQualificationDDIPlotData <- function(configurationPlan) {
   plotDDIdata <- list()
@@ -325,7 +324,6 @@ getQualificationDDIRatioMeasure <- function(summaryDataFrame, pkParameterName) {
 #' @param idPrefix unique ID to index task results
 #' @param captionSuffix to append to qualification plan title
 #' @return a `list` of DDI results for the current DDI section
-#' @import ospsuite.utils
 #' @keywords internal
 getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffix = NULL) {
 

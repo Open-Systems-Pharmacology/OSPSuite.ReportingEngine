@@ -6,7 +6,6 @@
 #' @field group Grouping identifier
 #' @export
 #' @import ospsuite
-#' @import ospsuite.utils
 PkParameterInfo <- R6::R6Class(
   "PkParameterInfo",
   cloneable = FALSE,

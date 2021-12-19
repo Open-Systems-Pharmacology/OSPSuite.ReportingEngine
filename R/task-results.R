@@ -10,7 +10,6 @@
 #' @field includeTable logical indicating if the table should be included in final report
 #' @field textChunk text included into the report explaining the table
 #' @field includeTextChunk logical indicating if the text chunk should be included in final report
-#' @import ospsuite.utils
 #' @keywords internal
 TaskResults <- R6::R6Class(
   "TaskResults",

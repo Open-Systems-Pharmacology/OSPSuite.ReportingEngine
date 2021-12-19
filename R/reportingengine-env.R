@@ -76,7 +76,6 @@ setWatermarkConfiguration <- function(watermark = NULL) {
 #' @param units units of `width` and `height` included in "in", "cm", "mm", or "px"
 #' @param dpi Plot resolution in dots per inch. Caution, font sizes depend on resolution.
 #' @export
-#' @import ospsuite.utils
 #' @examples
 #' setDefaultPlotFormat(format = "pdf")
 #' setDefaultPlotFormat(width = 16, height = 9, units = "cm", dpi = 300)
@@ -138,7 +137,6 @@ setDefaultNumericFormat <- function(digits = NULL, scientific = NULL) {
 #' @title getDefaultRETheme
 #' @description Get default plot settings for RE package
 #' @return A `Theme` object from `tlf` package
-#' @import ospsuite.utils
 #' @keywords internal
 getDefaultRETheme <- function(){
   # Get reporting engine theme from its json file properties

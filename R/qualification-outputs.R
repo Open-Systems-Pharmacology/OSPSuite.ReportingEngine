@@ -241,7 +241,6 @@ addNewPkParameter <- function(pkParameter, startTime, endTime) {
 #' @param startTime the starting time of the interval over which the PK parameter is calculated (from the qualification `ConfigurationPlan`)
 #' @param endTime the ending time of the interval over which the PK parameter is calculated (from the qualification `ConfigurationPlan`)
 #' @return String `pkParameterName`
-#' @import ospsuite.utils
 #' @keywords internal
 generateDDIPlotPKParameterName <- function(pkParameter, startTime, endTime) {
   ospsuite.utils::validateIsIncluded(values = pkParameter, parentValues = names(pkDictionaryQualificationOSP))

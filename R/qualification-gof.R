@@ -4,7 +4,6 @@
 #' @param logFolder folder where the logs are saved
 #' @param settings settings for the task
 #' @return list of qualification GOF ggplot objects
-#' @import ospsuite.utils
 #' @keywords internal
 plotQualificationGOFs <- function(configurationPlan,
                                   logFolder = getwd(),
@@ -253,7 +252,6 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties) {
 #' @description Get Geometric Mean Fold Error for GOF plots
 #' @param data data.frame with residuals values
 #' @return A data.frame
-#' @import ospsuite.utils
 #' @keywords internal
 getQualificationGOFGMFE <- function(data) {
   gmfe <- data.frame()

@@ -144,7 +144,6 @@ logErrorMessage <- function(message, logFolderPath = getwd()) {
 #' @param observedMetaDataFile Path of meta data file on observed dataset (also called dictionary)
 #' @param observedDataFile Path of observed dataset
 #' @param outputs list or array of `Output` objects
-#' @import ospsuite.utils
 #' @keywords internal
 validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile, outputs) {
   # Check that dictionary is provided
@@ -197,7 +196,6 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile,
 #' @param values Vector of dimensions
 #' @return TRUE if the values are included all available dimensions
 #' @import ospsuite
-#' @import ospsuite.utils
 #' @keywords internal
 isDimension <- function(values) {
   allAvailableDimensions <- ospsuite::allAvailableDimensions()

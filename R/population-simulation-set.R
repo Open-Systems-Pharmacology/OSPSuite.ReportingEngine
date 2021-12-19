@@ -6,7 +6,6 @@
 #' @field studyDesignFile name of study design csv file
 #' @field plotReferenceObsData logical for plotting reference observed data in Pediatric and Ratio Comparison workflows
 #' @export
-#' @import ospsuite.utils
 PopulationSimulationSet <- R6::R6Class(
   "PopulationSimulationSet",
   inherit = SimulationSet,

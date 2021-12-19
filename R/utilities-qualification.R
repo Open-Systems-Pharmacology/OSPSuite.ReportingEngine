@@ -104,7 +104,6 @@ loadConfigurationPlan <- function(configurationPlanFile, workflowFolder) {
 #' @param sectionsOut data.frame including id, path, title
 #' @param parentFolder For subsections only, path of parent section
 #' @param sectionLevel Section level defining the level of markdown title
-#' @import ospsuite.utils
 #' @return A data.frame including information about every section and subsection
 #' @keywords internal
 sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFolder = NULL, sectionLevel = 1) {
@@ -345,7 +344,6 @@ getPlotSettings <- function(plotSettingsFromConfigurationPlot) {
 #' @param logLevel Log verbosity (Debug, Information, Warning, Error). Default is Information.
 #' @param displayVersion Logical defining if version information is displayed
 #' @export
-#' @import ospsuite.utils
 startQualificationRunner <- function(qualificationRunnerFolder,
                                      qualificationPlanFile,
                                      outputFolder,

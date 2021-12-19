@@ -6,7 +6,6 @@
 #' @description
 #' Calculate residuals between vectors `simulatedData` and `observedData` according the the residual scale specified in `residualScale`
 #' @export
-#' @import ospsuite.utils
 calculateResiduals <- function(simulatedData, observedData, residualScale) {
   ospsuite.utils::validateIsOfLength(object = simulatedData, nbElements = length(observedData))
   residualValues <- rep(NA, length(observedData))
@@ -51,7 +50,6 @@ ifEqual <- function(x, y, outputIfEqual, outputIfNotEqual = NULL) {
 #' @description
 #' Check if x is in y, if so output outputIfIncluded,
 #' otherwise, output outputIfNotIncluded
-#' @import ospsuite.utils
 #' @keywords internal
 ifIncluded <- function(x, y, outputIfIncluded, outputIfNotIncluded = NULL) {
   if (ospsuite.utils::isIncluded(x, y)) {
@@ -242,7 +240,6 @@ removeMissingValues <- function(data, dataMapping = NULL, logFolder = getwd()) {
 #' @param output Output object
 #' @return Names of pkParameters in `output`
 #' @export
-#' @import ospsuite.utils
 getPKParametersInOutput <- function(output) {
   ospsuite.utils::validateIsOfType(output, "Output")
   pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
@@ -257,7 +254,6 @@ getPKParametersInOutput <- function(output) {
 #' @title getPKParametersInOutput
 #' @param output Output object
 #' @return Names of pkParameters in `output`
-#' @import ospsuite.utils
 #' @keywords internal
 getPKParameterGroupsInOutput <- function(output) {
   ospsuite.utils::validateIsOfType(output, "Output")
@@ -336,7 +332,6 @@ getAllowedCores <- function() {
 #' @param dictionary parameterDisplayPaths data.frame mapping user defined display names
 #' @return parameterDisplayPath
 #' @export
-#' @import ospsuite.utils
 getSimulationParameterDisplayPaths <- function(parameterPaths, simulation, dictionary) {
   parameterDisplayPaths <- ospsuite::getParameterDisplayPaths(parameterPaths, simulation)
 

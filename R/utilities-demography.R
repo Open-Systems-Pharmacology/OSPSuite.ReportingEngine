@@ -9,7 +9,6 @@
 #' @param yParameters list of parameters to be plotted along y axis
 #' @return list of plots and tables with summary of demography parameters
 #' @import ospsuite
-#' @import ospsuite.utils
 #' @import tlf
 #' @import ggplot2
 #' @keywords internal

@@ -8,7 +8,6 @@
 #' @return list of `ggplot` objects
 #' @import tlf
 #' @import ospsuite
-#' @import ospsuite.utils
 #' @import utils
 #' @keywords internal
 plotMeanMassBalance <- function(structureSet,

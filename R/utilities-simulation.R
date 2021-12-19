@@ -110,7 +110,6 @@ simulateModelForPopulation <- function(structureSets,
 #' @param showProgress option to print progress of simulation to console
 #' @export
 #' @import ospsuite
-#' @import ospsuite.utils
 simulateModelOnCore <- function(simulation,
                                 population, # resultsFilePath,
                                 debugLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logDebugFile()), # errorLogFileName = file.path(defaultFileNames$workflowFolderPath(), defaultFileNames$logErrorFile()),
@@ -141,7 +140,6 @@ simulateModelOnCore <- function(simulation,
 #' @param logFolder folder where the logs are saved
 #' @return List of simulation results for each simulation set
 #' @import ospsuite
-#' @import ospsuite.utils
 #' @keywords internal
 simulateModelParallel <- function(structureSets,
                                   settings = NULL,
@@ -183,7 +181,6 @@ simulateModelParallel <- function(structureSets,
 #' @param logFolder folder where the logs are saved
 #' @return Simulation results for individual or population
 #' @import ospsuite
-#' @import ospsuite.utils
 #' @keywords internal
 simulateModel <- function(structureSet,
                           settings = NULL,

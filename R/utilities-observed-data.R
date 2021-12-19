@@ -89,7 +89,6 @@ getDictionaryVariable <- function(dictionary, variableID) {
 #' @param simulationSet A `SimulationSet` object
 #' @param logFolder folder where the logs are saved
 #' @return list of data and dataMapping
-#' @import ospsuite.utils
 #' @keywords internal
 loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   ospsuite.utils::validateIsOfType(simulationSet, "SimulationSet")
@@ -218,7 +217,6 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
 #' @param timeUnit time unit for unit conversion of time
 #' @param logFolder folder where the logs are saved
 #' @return list of data and lloq data.frames
-#' @import ospsuite.utils
 #' @keywords internal
 getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, timeUnit, logFolder) {
   if (ospsuite.utils::isOfLength(output$dataSelection, 0)) {
@@ -325,7 +323,6 @@ getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPl
 #' or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
 #' @return A logical checking if path corresponds to observed data
 #' @import ospsuite
-#' @import ospsuite.utils
 #' @examples
 #' \dontrun{
 #' isObservedData("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)")

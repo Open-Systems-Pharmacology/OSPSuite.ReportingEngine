@@ -41,7 +41,6 @@ displayDimension <- function(dimension){
 #' @param scale Name of the scale of the axis
 #' Use helper enum `Scaling` from `tlf` package to find scales.
 #' @return A list of units for goodness of fit results
-#' @import ospsuite.utils
 #' @keywords internal
 autoAxesLimits <- function(x, scale = tlf::Scaling$lin) {
   minX <- min(x, na.rm = TRUE)
@@ -88,7 +87,6 @@ autoAxesTicksFromLimits <- function(limits) {
 #' @param legendPosition Legend position in order to add scale factor in the final plot dimensions
 #' that accounts for possible shrinking of the plot panel due to the addition of the legend
 #' @return A `PlotConfiguration` object
-#' @import ospsuite.utils
 #' @keywords internal
 getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legendPosition = reEnv$theme$background$legendPosition) {
   # Define the appropriate configuration from plotType
@@ -136,9 +134,7 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
 #' Initial estimates based on Abdullah's tests
 #' TODO: improve this directly from tlf
 #' @param legendPosition The name of the legend position as defined by `tlf` enum `LegendPositions`
-#' @import ospsuite.utils
 #' @return A list of scaling values for `width` and `height`
-#' @import ospsuite.utils
 #' @keywords internal
 getLegendScalingFactors <- function(legendPosition = tlf::LegendPositions$outsideTop){
   # Legend on the left/right sides: increase width
@@ -224,7 +220,6 @@ prettyCaption <- function(captions, maxLines = reEnv$maxLinesPerLegendCaption, w
 #' @param splitWidth Maximum number of characters desired per lines
 #' @param numberOfSplits Maximum number of line breaks to use
 #' @return Position where to insert a line break character
-#' @import ospsuite.utils
 #' @keywords internal
 getSplitPositions <- function(possibleSplits, splitWidth, numberOfSplits) {
   # Optimal splits are at equal width
