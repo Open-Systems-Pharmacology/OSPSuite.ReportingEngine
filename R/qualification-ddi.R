@@ -2,6 +2,7 @@
 #' @description Build dataframes and metadata for each DDI plot
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return  plotDDIdata, a list of lists of the form list(dataframe,metadata) specific to each DID plot
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getQualificationDDIPlotData <- function(configurationPlan) {
   plotDDIdata <- list()
@@ -18,7 +19,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
     # Pipes in configuration plan will be deprecated moving forward
     plotDDIMetadata$plotTypes <- plot$PlotTypes %||% ospsuite::toPathArray(plot$PlotType)
 
-    validateIsIncluded(plotDDIMetadata$plotTypes, names(ddiPlotTypeSpecifications))
+    ospsuite.utils::validateIsIncluded(plotDDIMetadata$plotTypes, names(ddiPlotTypeSpecifications))
 
     plotDDIMetadata$axesSettings <- lapply(plotDDIMetadata$plotTypes, function(plotType) {
       getAxesSettings(configurationPlan$plots$AxesSettings[[ ddiPlotTypeSpecifications[[plotType]]$ddiPlotAxesSettings ]])
@@ -46,13 +47,13 @@ getQualificationDDIPlotData <- function(configurationPlan) {
         observedDataSetFilePath <- configurationPlan$getObservedDataPath(id = observedDataSet)
         observedDataRecordId <- ddiRatio$ObservedDataRecordId
         observedDataFrame <- readObservedDataFile(file = observedDataSetFilePath)
-        validateIsIncluded(observedDataRecordId, observedDataFrame$ID)
+        ospsuite.utils::validateIsIncluded(observedDataRecordId, observedDataFrame$ID)
 
         ratioList <- list()
 
         for (pkParameter in pkParameters) {
           ratioList[[pkParameter]] <- list()
-          validateIsIncluded(ddiPKRatioColumnName[[pkParameter]], names(observedDataFrame))
+          ospsuite.utils::validateIsIncluded(ddiPKRatioColumnName[[pkParameter]], names(observedDataFrame))
 
           observedDataSelection <- observedDataFrame$ID %in% observedDataRecordId
 
@@ -347,7 +348,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
         id = plotID,
         sectionId = sectionID,
         plot = ddiPlot,
-        plotCaption = ifnotnull(
+        plotCaption = ospsuite.utils::ifNotNull(
           inputToCheck = captionSuffix,
           outputIfNotNull = paste(metadata$title, captionSuffix, sep = " - "),
           outputIfNull = metadata$title
@@ -400,8 +401,8 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
 }
 
 #' @title getDDITable
-#' @description Summary table for DDI plot
-#' @param dataframe
+#' @description Summary table for DDI
+#' @param dataframe for generating DDI summary table
 #' @return Summary table for DDI plot
 #' @keywords internal
 getDDITable <- function(dataframe){

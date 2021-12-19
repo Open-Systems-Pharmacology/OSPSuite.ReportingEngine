@@ -80,7 +80,7 @@ loadConfigurationPlan <- function(configurationPlanFile, workflowFolder) {
 
   # Check if mandatory variables were input
   # Matlab version had as well ObservedDataSets and Inputs, but they don't need to be mandatory in R
-  validateIsIncluded(c("SimulationMappings", "Plots", "Sections"), names(jsonConfigurationPlan))
+  ospsuite.utils::validateIsIncluded(c("SimulationMappings", "Plots", "Sections"), names(jsonConfigurationPlan))
 
   # Create `ConfigurationPlan` object
   configurationPlan <- ConfigurationPlan$new()
@@ -105,19 +105,20 @@ loadConfigurationPlan <- function(configurationPlanFile, workflowFolder) {
 #' @param parentFolder For subsections only, path of parent section
 #' @param sectionLevel Section level defining the level of markdown title
 #' @return A data.frame including information about every section and subsection
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFolder = NULL, sectionLevel = 1) {
   # If sections are already as a data.frame format,
   # return them after checking that every field is present
-  if (isOfType(sectionsIn, "data.frame")) {
-    validateIsIncluded(c("id", "title", "content", "index", "path", "md"), names(sectionsIn))
+  if (ospsuite.utils::isOfType(sectionsIn, "data.frame")) {
+    ospsuite.utils::validateIsIncluded(c("id", "title", "content", "index", "path", "md"), names(sectionsIn))
     return(sectionsIn)
   }
   # Parse every section
   for (section in sectionsIn) {
     # sectionIndex ensures that folder names are in correct order and have unique names
     sectionIndex <- nrow(sectionsOut) + 1
-    validateIsIncluded(c("Id", "Title"), names(section))
+    ospsuite.utils::validateIsIncluded(c("Id", "Title"), names(section))
     # Actual section path will be relative to the workflowFolder
     # and is wrapped in method configurationPlan$getSectionPath(id)
     sectionPath <- paste0(parentFolder,
@@ -142,7 +143,7 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
 
     # If subsections are included and not empty
     # Update sectionsOut data.frame
-    if (!isOfLength(section$Sections, 0)) {
+    if (!ospsuite.utils::isOfLength(section$Sections, 0)) {
       sectionsOut <- sectionsAsDataFrame(
         sectionsIn = section$Sections,
         sectionsOut = sectionsOut,
@@ -198,12 +199,12 @@ createSectionOutput <- function(configurationPlan, logFolder = getwd()) {
 #' @return A vector of output paths that are to be used in the time profile plot descriptor `plot`
 #' @keywords internal
 getOutputsFromTimeProfileConfiguration <- function(plot) {
-  validateIsIncluded(values = "Plot", parentValues = names(plot), nullAllowed = TRUE)
-  validateIsIncluded(values = "Curves", parentValues = names(plot[["Plot"]]), nullAllowed = FALSE)
+  ospsuite.utils::validateIsIncluded(values = "Plot", parentValues = names(plot), nullAllowed = TRUE)
+  ospsuite.utils::validateIsIncluded(values = "Curves", parentValues = names(plot[["Plot"]]), nullAllowed = FALSE)
 
   paths <- NULL
   for (curve in plot$Plot$Curves) {
-    validateIsString(object = curve$Y)
+    ospsuite.utils::validateIsString(object = curve$Y)
     if (ospsuite::toPathArray(curve$Y)[2] == "ObservedData") {
       next
     }
@@ -220,13 +221,13 @@ getOutputsFromTimeProfileConfiguration <- function(plot) {
 #' @return A vector of output paths that are to be used in the GOF merged plot descriptor `plot`
 #' @keywords internal
 getOutputsFromGOFMergedPlotsConfiguration <- function(plot) {
-  validateIsIncluded(values = "Groups", parentValues = names(plot), nullAllowed = TRUE)
+  ospsuite.utils::validateIsIncluded(values = "Groups", parentValues = names(plot), nullAllowed = TRUE)
   paths <- NULL
   for (group in plot$Groups) {
-    validateIsIncluded(values = "OutputMappings", parentValues = names(group), nullAllowed = TRUE)
+    ospsuite.utils::validateIsIncluded(values = "OutputMappings", parentValues = names(group), nullAllowed = TRUE)
     for (outputMapping in group$OutputMappings) {
-      validateIsIncluded(values = "Output", parentValues = names(outputMapping), nullAllowed = TRUE)
-      validateIsString(object = outputMapping$Output)
+      ospsuite.utils::validateIsIncluded(values = "Output", parentValues = names(outputMapping), nullAllowed = TRUE)
+      ospsuite.utils::validateIsString(object = outputMapping$Output)
       paths <- c(paths, outputMapping$Output)
     }
   }
@@ -262,7 +263,7 @@ separateVariableFromUnit <- function(variableUnitString) {
 #' @keywords internal
 parseObservationsDataFrame <- function(observationsDataFrame) {
   namesObservationsDataFrame <- names(observationsDataFrame)
-  validateIsIncluded(length(namesObservationsDataFrame), c(2, 3))
+  ospsuite.utils::validateIsIncluded(length(namesObservationsDataFrame), c(2, 3))
   dataFrameFields <- list(
     time = separateVariableFromUnit(namesObservationsDataFrame[1]),
     output = separateVariableFromUnit(namesObservationsDataFrame[2])
@@ -354,15 +355,15 @@ startQualificationRunner <- function(qualificationRunnerFolder,
                                      logLevel = NULL,
                                      displayVersion = FALSE) {
   validateIsFileExtension(qualificationPlanFile, "json")
-  validateIsLogical(overwrite)
-  validateIsLogical(displayVersion)
-  
+  ospsuite.utils::validateIsLogical(overwrite)
+  ospsuite.utils::validateIsLogical(displayVersion)
+
   options <- c(
-    ifnotnull(pkSimPortableFolder, paste0("-p ", pkSimPortableFolder)),
-    ifnotnull(configurationPlanFile, paste0('-n "', configurationPlanName, '"')),
+    ospsuite.utils::ifNotNull(pkSimPortableFolder, paste0("-p ", pkSimPortableFolder)),
+    ospsuite.utils::ifNotNull(configurationPlanFile, paste0('-n "', configurationPlanName, '"')),
     switch(as.character(overwrite), "TRUE" = "-f", NULL),
-    ifnotnull(logFile, paste0('-l "', logFile, '"')),
-    ifnotnull(logLevel, paste0("--logLevel ", logLevel)),
+    ospsuite.utils::ifNotNull(logFile, paste0('-l "', logFile, '"')),
+    ospsuite.utils::ifNotNull(logLevel, paste0("--logLevel ", logLevel)),
     switch(as.character(displayVersion), "TRUE" = "--version", NULL)
   )
   optionalArguments <- paste0(options, collapse = " ")

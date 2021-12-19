@@ -1,5 +1,6 @@
 #' @title TaskSettings
 #' @description  R6 class defining properties of plot task settings
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 TaskSettings <- R6::R6Class(
   "TaskSettings",
@@ -9,7 +10,7 @@ TaskSettings <- R6::R6Class(
     #' @param taskName name of the task using the settings
     #' @return A new `TaskSettings` object
     initialize = function(taskName) {
-      validateIsIncluded(taskName, AllAvailableTasks)
+      ospsuite.utils::validateIsIncluded(taskName, AllAvailableTasks)
 
       private$.bins <- reEnv$defaultBins
       private$.stairstep <- reEnv$defaultStairstep
@@ -20,10 +21,10 @@ TaskSettings <- R6::R6Class(
       private$.plotConfigurations <- list()
 
       # Plot configurations fields depend on the task
-      if (isIncluded(taskName, AllAvailableTasks$plotAbsorption)) {
+      if (ospsuite.utils::isIncluded(taskName, AllAvailableTasks$plotAbsorption)) {
         private$.plotConfigurations <- list(absorptionPlot = NULL)
       }
-      if (isIncluded(taskName, AllAvailableTasks$plotMassBalance)) {
+      if (ospsuite.utils::isIncluded(taskName, AllAvailableTasks$plotMassBalance)) {
         private$.plotConfigurations <- list(
           timeProfile = NULL,
           cumulativeTimeProfile = NULL,
@@ -32,14 +33,14 @@ TaskSettings <- R6::R6Class(
           pieChart = NULL
         )
       }
-      if (isIncluded(taskName, AllAvailableTasks$plotDemography)) {
+      if (ospsuite.utils::isIncluded(taskName, AllAvailableTasks$plotDemography)) {
         private$.plotConfigurations <- list(
           histogram = NULL,
           vpcParameterPlot = NULL,
           comparisonVpcPlot = NULL
         )
       }
-      if (isIncluded(taskName, AllAvailableTasks$plotPKParameters)) {
+      if (ospsuite.utils::isIncluded(taskName, AllAvailableTasks$plotPKParameters)) {
         private$.plotConfigurations <- list(
           boxplotPkParameters = NULL,
           boxplotPkRatios = NULL,
@@ -47,7 +48,7 @@ TaskSettings <- R6::R6Class(
           comparisonVpcPlot = NULL
         )
       }
-      if (isIncluded(taskName, AllAvailableTasks$plotTimeProfilesAndResiduals)) {
+      if (ospsuite.utils::isIncluded(taskName, AllAvailableTasks$plotTimeProfilesAndResiduals)) {
         private$.plotConfigurations <- list(
           timeProfile = NULL,
           obsVsPred = NULL,
@@ -67,7 +68,7 @@ TaskSettings <- R6::R6Class(
       if (missing(value)) {
         return(private$.bins)
       }
-      validateIsNumeric(value, nullAllowed = TRUE)
+      ospsuite.utils::validateIsNumeric(value, nullAllowed = TRUE)
       private$.bins <- value %||% private$.bins
       return(invisible())
     },
@@ -76,7 +77,7 @@ TaskSettings <- R6::R6Class(
       if (missing(value)) {
         return(private$.stairstep)
       }
-      validateIsLogical(value, nullAllowed = TRUE)
+      ospsuite.utils::validateIsLogical(value, nullAllowed = TRUE)
       private$.stairstep <- value %||% private$.stairstep
       return(invisible())
     },
@@ -85,7 +86,7 @@ TaskSettings <- R6::R6Class(
       if (missing(value)) {
         return(private$.digits)
       }
-      validateIsInteger(value, nullAllowed = TRUE)
+      ospsuite.utils::validateIsInteger(value, nullAllowed = TRUE)
       private$.digits <- value %||% private$.digits
       return(invisible())
     },
@@ -94,7 +95,7 @@ TaskSettings <- R6::R6Class(
       if (missing(value)) {
         return(private$.nsmall)
       }
-      validateIsInteger(value, nullAllowed = TRUE)
+      ospsuite.utils::validateIsInteger(value, nullAllowed = TRUE)
       private$.nsmall <- value %||% private$.nsmall
       return(invisible())
     },
@@ -103,7 +104,7 @@ TaskSettings <- R6::R6Class(
       if (missing(value)) {
         return(private$.scientific)
       }
-      validateIsLogical(value, nullAllowed = TRUE)
+      ospsuite.utils::validateIsLogical(value, nullAllowed = TRUE)
       private$.scientific <- value %||% private$.scientific
       return(invisible())
     },
@@ -153,7 +154,7 @@ GofTaskSettings <- R6::R6Class(
     #' @param outputSelections subset of simulationSet outputs to be used in GoF plot
     #' @return A new `GofTaskSettings` object
     initialize = function(taskName = AllAvailableTasks$plotTimeProfilesAndResiduals, outputSelections = NULL) {
-      validateIsIncluded(taskName, AllAvailableTasks$plotTimeProfilesAndResiduals)
+      ospsuite.utils::validateIsIncluded(taskName, AllAvailableTasks$plotTimeProfilesAndResiduals)
       super$initialize(taskName)
       private$.includeReferenceData <- TRUE
       private$.outputSelections <- outputSelections
@@ -166,7 +167,7 @@ GofTaskSettings <- R6::R6Class(
       if (missing(value)) {
         return(private$.includeReferenceData)
       }
-      validateIsLogical(value, nullAllowed = TRUE)
+      ospsuite.utils::validateIsLogical(value, nullAllowed = TRUE)
       private$.includeReferenceData <- value %||% private$.includeReferenceData
       return(invisible())
     },
@@ -176,7 +177,7 @@ GofTaskSettings <- R6::R6Class(
       if (missing(value)) {
         return(private$.outputSelections)
       }
-      validateIsString(value, nullAllowed = TRUE)
+      ospsuite.utils::validateIsString(value, nullAllowed = TRUE)
       private$.outputSelections <- value %||% private$.outputSelections
       return(invisible())
     }

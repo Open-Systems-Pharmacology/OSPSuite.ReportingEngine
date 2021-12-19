@@ -3,7 +3,7 @@
 #' @param fileName name of .md file to reset
 #' @param logFolder folder where the logs are saved
 #' @export
-#' @examples 
+#' @examples
 #' resetReport("report.md")
 resetReport <- function(fileName, logFolder = getwd()) {
   if (file.exists(fileName)) {
@@ -67,6 +67,7 @@ addFigureChunk <- function(fileName,
 #' @param logFolder folder where the logs are saved
 #' @param na character string replacing `NA` values in table
 #' @export
+#' @importFrom ospsuite.utils %||%
 addTableChunk <- function(fileName,
                           tableFileRelativePath,
                           tableFileRootDirectory,
@@ -83,7 +84,7 @@ addTableChunk <- function(fileName,
     fileEncoding = "UTF-8",
     stringsAsFactors = FALSE
   )
-  table <- formatNumerics(
+  table <- ospsuite.utils::formatNumerics(
     table,
     digits = digits %||% reEnv$formatNumericsDigits,
     scientific = scientific %||% reEnv$formatNumericsScientific
@@ -120,7 +121,7 @@ addTableChunk <- function(fileName,
 #' @param text text to include in the document
 #' @param logFolder folder where the logs are saved
 #' @export
-#' @examples 
+#' @examples
 #' resetReport("report.md")
 #' addTextChunk(fileName = "report.md", text = "new text")
 addTextChunk <- function(fileName,
@@ -144,18 +145,18 @@ addTextChunk <- function(fileName,
 #' @param logFolder folder where the logs are saved
 #' @param keepInputFiles logical option to prevent the input files to be deleted after merging them
 #' @export
-#' @examples 
+#' @examples
 #' resetReport("chapter-1.md")
 #' addTextChunk(fileName = "chapter-1.md", text = "Chapter 1")
 #' resetReport("chapter-2.md")
 #' addTextChunk(fileName = "chapter-2.md", text = "Chapter 2")
 #' mergeMarkdowndFiles(inputFiles = c("chapter-1.md", "chapter-2.md"), outputFile = "chapters-1and2.md")
 mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd(), keepInputFiles = FALSE) {
-  validateIsLogical(keepInputFiles)
+  ospsuite.utils::validateIsLogical(keepInputFiles)
   # Read all files contents first in case outputFile is within inputFiles
   filesContent <- lapply(inputFiles, function(fileName){readLines(fileName, encoding = "UTF-8")})
   resetReport(outputFile, logFolder)
-  
+
   # tracelib chunk of code
   usedFilesOutputFile <- sub(pattern = ".md", replacement = "-usedFiles.txt", outputFile)
   file.create(usedFilesOutputFile)
@@ -317,7 +318,7 @@ numberTablesAndFigures <- function(fileName, logFolder = getwd(), figurePattern 
 #' @param fileName name of .md file to update
 #' @param logFolder folder where the logs are saved
 #' @param numberSections logical defining if numbering of section titles is performed automatically when getting the table of content.
-#' When this option is `FALSE`, such as in qualification workflows, 
+#' When this option is `FALSE`, such as in qualification workflows,
 #' all unnumbered section titles are skipped from the the table of content
 #' @param tocPattern character pattern referencing sections in first element of line
 #' @param tocLevels levels of sections in the report
@@ -357,7 +358,7 @@ getSectionTOC <- function(fileName, logFolder = getwd(), numberSections = TRUE, 
           newTitlePattern <- paste0(titlePattern, newTitlePattern, " ")
           fileContent[lineIndex] <- gsub(pattern = titlePattern, replacement = newTitlePattern, x = fileContent[lineIndex])
         }
-        
+
         # Add section reference to toc content
         titleTocContent <- sub(pattern = titlePattern, replacement = "", x = fileContent[lineIndex])
         titleTocReference <- gsub(pattern = "[^[:alnum:][:space:]\\_'-]", replacement = "", x = tolower(titleTocContent))
@@ -409,9 +410,10 @@ addMarkdownToc <- function(tocContent, fileName, logFolder = getwd()) {
 #' @param workflow A `Workflow` object
 #' @param text Character describing simulation sets
 #' @export
+#' @importFrom ospsuite.utils %||%
 setSimulationDescriptor <- function(workflow, text) {
-  validateIsOfType(workflow, "Workflow")
-  validateIsString(text, nullAllowed = TRUE)
+  ospsuite.utils::validateIsOfType(workflow, "Workflow")
+  ospsuite.utils::validateIsString(text, nullAllowed = TRUE)
 
   # Allows NULL which is translated by ""
   workflow$setSimulationDescriptor(text %||% "")
@@ -424,6 +426,6 @@ setSimulationDescriptor <- function(workflow, text) {
 #' @return character describing simulation sets
 #' @export
 getSimulationDescriptor <- function(workflow) {
-  validateIsOfType(workflow, "Workflow")
+  ospsuite.utils::validateIsOfType(workflow, "Workflow")
   return(workflow$getSimulationDescriptor())
 }

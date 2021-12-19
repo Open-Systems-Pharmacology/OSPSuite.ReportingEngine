@@ -36,14 +36,13 @@ PopulationWorkflow <- R6::R6Class(
     #' @param numberSections logical defining if the report sections should be numbered
     #' @param theme A `Theme` object from `{tlf}` package
     #' @return A new `PopulationWorkflow` object
-    #' @import ospsuite
     initialize = function(workflowType,
                           simulationSets,
                           workflowFolder,
                           createWordReport = TRUE,
                           watermark = NULL,
                           simulationSetDescriptor = NULL,
-                          numberSections = TRUE, 
+                          numberSections = TRUE,
                           theme = NULL) {
       super$initialize(
         simulationSets = simulationSets,
@@ -55,12 +54,12 @@ PopulationWorkflow <- R6::R6Class(
         theme = theme
       )
 
-      validateIsOfType(c(simulationSets), "PopulationSimulationSet")
-      if (!isOfType(simulationSets, "list")) {
+      ospsuite.utils::validateIsOfType(c(simulationSets), "PopulationSimulationSet")
+      if (!ospsuite.utils::isOfType(simulationSets, "list")) {
         simulationSets <- list(simulationSets)
       }
 
-      validateIsIncluded(workflowType, PopulationWorkflowTypes)
+      ospsuite.utils::validateIsIncluded(workflowType, PopulationWorkflowTypes)
       self$workflowType <- workflowType
 
       # Pediatric and ratio comparison workflows need ONE reference population
@@ -75,7 +74,7 @@ PopulationWorkflow <- R6::R6Class(
       self$plotPKParameters <- loadPlotPKParametersTask(self)
       self$plotSensitivity <- loadPlotSensitivityTask(self)
 
-      self$taskNames <- ospsuite::enum(self$getAllTasks())
+      self$taskNames <- ospsuite.utils::enum(self$getAllTasks())
     },
 
     #' @description
@@ -133,7 +132,7 @@ PopulationWorkflow <- R6::R6Class(
       appendices <- appendices[file.exists(appendices)]
       if (length(appendices) > 0) {
         mergeMarkdowndFiles(appendices, self$reportFileName, logFolder = self$workflowFolder)
-        renderReport(self$reportFileName, logFolder = self$workflowFolder, 
+        renderReport(self$reportFileName, logFolder = self$workflowFolder,
                      createWordReport = self$createWordReport, numberSections = self$numberSections)
       }
 
@@ -152,12 +151,11 @@ PopulationWorkflow <- R6::R6Class(
 #' @title PopulationWorkflowTypes
 #' @description List of population workflow available types
 #' @export
-#' @import ospsuite
-#' @examples 
+#' @examples
 #' PopulationWorkflowTypes$pediatric
 #' PopulationWorkflowTypes$parallelComparison
 #' PopulationWorkflowTypes$ratioComparison
-PopulationWorkflowTypes <- ospsuite::enum(c(
+PopulationWorkflowTypes <- ospsuite.utils::enum(c(
   "pediatric",
   "parallelComparison",
   "ratioComparison"

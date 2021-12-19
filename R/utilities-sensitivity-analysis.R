@@ -8,6 +8,7 @@
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
 #' @return SA results for individual or population
 #' @import ospsuite
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 runSensitivity <- function(structureSet,
                            settings,
@@ -294,7 +295,6 @@ analyzeSensitivity <- function(simulation,
 #' @param nodeName identifier for node used in parallel computation of sensitivity
 #' @param showProgress option to print progress of simulation to console
 #' @return sensitivity analysis results
-#' @import ospsuite
 #' @export
 analyzeCoreSensitivity <- function(simulation,
                                    variableParameterPaths = NULL,
@@ -312,12 +312,12 @@ analyzeCoreSensitivity <- function(simulation,
     numberOfCores = numberOfCores
   )
 
-  logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Starting sensitivity analysis for path(s) ", paste(variableParameterPaths, collapse = ", ")), file = debugLogFileName, printConsole = FALSE)
+  logDebug(message = paste0(ospsuite.utils::ifNotNull(nodeName, paste0(nodeName, ": "), NULL), "Starting sensitivity analysis for path(s) ", paste(variableParameterPaths, collapse = ", ")), file = debugLogFileName, printConsole = FALSE)
   sensitivityAnalysisResults <- runSensitivityAnalysis(
     sensitivityAnalysis = sensitivityAnalysis,
     sensitivityAnalysisRunOptions = sensitivityAnalysisRunOptions
   )
-  logDebug(message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), NULL), "Sensitivity analysis for current path(s) completed"), file = debugLogFileName, printConsole = FALSE)
+  logDebug(message = paste0(ospsuite.utils::ifNotNull(nodeName, paste0(nodeName, ": "), NULL), "Sensitivity analysis for current path(s) completed"), file = debugLogFileName, printConsole = FALSE)
   return(sensitivityAnalysisResults)
 }
 
@@ -438,7 +438,7 @@ getSAFileIndex <- function(structureSet,
       singleOuputSinglePKDataframe <- allPKResultsDataframe[(allPKResultsDataframe["QuantityPath"] == output) & (allPKResultsDataframe["Parameter"] == pkParameter), ]
       quantileResults <- getQuantileIndividualIds(singleOuputSinglePKDataframe, quantileVec)
 
-      if (!isOfLength(quantileResults$ids, length(quantileVec))) {
+      if (!ospsuite.utils::isOfLength(quantileResults$ids, length(quantileVec))) {
         logWorkflow(
           message = messages$warningNoFinitePKParametersForSomeIndividuals(pkParameter, output, structureSet$simulationSet$simulationSetName),
           logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error),
@@ -499,6 +499,7 @@ defaultQuantileVec <- c(0.05, 0.5, 0.95)
 #' @return list of plots and tables
 #' @import ospsuite
 #' @import tlf
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotMeanSensitivity <- function(structureSet,
                                 logFolder = getwd(),
@@ -533,10 +534,10 @@ plotMeanSensitivity <- function(structureSet,
   sensitivityPlotConfiguration$colorPalette <- settings$colorPalette %||% sensitivityPlotConfiguration$colorPalette
 
   for (output in structureSet$simulationSet$outputs) {
-    validateIsIncluded(output$path, saResults$allQuantityPaths)
+    ospsuite.utils::validateIsIncluded(output$path, saResults$allQuantityPaths)
     pathLabel <- lastPathElement(output$path)
     for (pkParameter in output$pkParameters) {
-      if (!isIncluded(pkParameter$pkParameter, saResults$allPKParameterNames)) {
+      if (!ospsuite.utils::isIncluded(pkParameter$pkParameter, saResults$allPKParameterNames)) {
         logWorkflow(
           message = messages$errorNotIncluded(pkParameter$pkParameter, saResults$allPKParameterNames),
           logTypes = c(LogTypes$Debug, LogTypes$Error),
@@ -572,7 +573,7 @@ plotMeanSensitivity <- function(structureSet,
         maxLines = settings$maxLinesPerParameter,
         width = settings$maxWidthPerParameter
         )
-      
+
       sensitivityPlot <- tlf::plotTornado(
         data = sensitivityData,
         dataMapping = sensitivityMapping,
@@ -623,9 +624,9 @@ plotPopulationSensitivity <- function(structureSets,
                                       workflowType = PopulationWorkflowTypes$parallelComparison,
                                       xParameters = NULL,
                                       yParameters = NULL) {
-  validateIsIncluded(workflowType, PopulationWorkflowTypes)
-  validateIsOfType(structureSets, "list")
-  validateIsOfType(c(structureSets), "SimulationStructure")
+  ospsuite.utils::validateIsIncluded(workflowType, PopulationWorkflowTypes)
+  ospsuite.utils::validateIsOfType(structureSets, "list")
+  ospsuite.utils::validateIsOfType(c(structureSets), "SimulationStructure")
 
   allPopsDf <- NULL
   saResultIndexFiles <- list()
@@ -704,7 +705,7 @@ plotPopulationSensitivity <- function(structureSets,
     }
   }
 
-  if (isOfLength(allPopsDf, 0)) {
+  if (ospsuite.utils::isOfLength(allPopsDf, 0)) {
     logWorkflow(
       message = messages$warningPopulationSensitivityPlotsNotAvailable(),
       logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error),
@@ -923,7 +924,7 @@ getPopSensDfForPkAndOutput <- function(simulation,
       )
 
       # verify that pkParameter is included in sensitivity results for current individual.  If not, skip to next individual
-      if (!isIncluded(pkParameter, individualSAResults$allPKParameterNames)) {
+      if (!ospsuite.utils::isIncluded(pkParameter, individualSAResults$allPKParameterNames)) {
         logWorkflow(
           message = paste("For individualID", individualId, ":", messages$errorNotIncluded(pkParameter, individualSAResults$allPKParameterNames)),
           logTypes = c(LogTypes$Debug, LogTypes$Error),
@@ -986,7 +987,7 @@ getPkOutputIndexDf <- function(indexDf, pkParameter, output) {
 #' @param totalSensitivityThreshold cut-off used for plots of the most sensitive parameters
 #' @keywords internal
 getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold = NULL, variableParameterPaths = NULL) {
-  totalSensitivityThreshold <- totalSensitivityThreshold %||% ifnotnull(variableParameterPaths, 1, 0.9)
+  totalSensitivityThreshold <- totalSensitivityThreshold %||% ospsuite.utils::ifNotNull(variableParameterPaths, 1, 0.9)
   return(totalSensitivityThreshold)
 }
 

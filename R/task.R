@@ -6,6 +6,7 @@
 #' @field settings list of settings for task such as plot configurations
 #' @field message message or title of the task
 #' @export
+#' @importFrom ospsuite.utils %||%
 Task <- R6::R6Class(
   "Task",
   public = list(
@@ -35,8 +36,8 @@ Task <- R6::R6Class(
                           settings = NULL,
                           active = FALSE,
                           message = NULL) {
-      validateIsOfType(active, "logical")
-      validateIsString(c(outputFolder, inputFolder, inputs, outputs), nullAllowed = TRUE)
+      ospsuite.utils::validateIsOfType(active, "logical")
+      ospsuite.utils::validateIsString(c(outputFolder, inputFolder, inputs, outputs), nullAllowed = TRUE)
 
       self$active <- active
       self$outputFolder <- outputFolder
@@ -80,7 +81,7 @@ Task <- R6::R6Class(
     #' @param structureSet `SimulationStructure` object
     #' @return logical indicating if input is valid
     validateStructureSetInput = function(structureSet) {
-      validateIsOfType(structureSet, "SimulationStructure")
+      ospsuite.utils::validateIsOfType(structureSet, "SimulationStructure")
       isValid <- TRUE
       # Get only the input from the structure set
       structureSetInputs <- c(
@@ -116,13 +117,13 @@ Task <- R6::R6Class(
         sprintf("Task is%s active", taskActiveMessage),
         sprintf("Workflow folder: %s", self$workflowFolder %||% ""),
         sprintf("Expected input folder: %s", private$.inputFolder %||% "none"),
-        sprintf("Expected input files: %s", ifnotnull(
+        sprintf("Expected input files: %s", ospsuite.utils::ifNotNull(
           private$.inputs,
           paste0(private$.inputs, collapse = ", "),
           "none"
         )),
         sprintf("Expected output folder: %s", self$outputFolder %||% "none"),
-        sprintf("Expected output files: %s", ifnotnull(
+        sprintf("Expected output files: %s", ospsuite.utils::ifNotNull(
           private$.outputs,
           paste0(private$.outputs, collapse = ", "),
           "none"

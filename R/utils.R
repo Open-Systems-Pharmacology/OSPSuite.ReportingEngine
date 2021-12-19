@@ -1,22 +1,3 @@
-#' Shortkey checking if argument 1 is not null,
-#' output argument 1 if not null, or output argument 2 otherwise
-#'
-#' @title \%||\%
-#' @param lhs argument 1
-#' @param rhs argument 2
-#' @return lhs if lhs is not null, rhs otherwise
-#' @description
-#' Check if lhs argument is not null, output lhs if not null,
-#' output rhs otherwise
-#' @keywords internal
-`%||%` <- function(lhs, rhs) {
-  if (!is.null(lhs)) {
-    lhs
-  } else {
-    rhs
-  }
-}
-
 #' @title calculateResiduals
 #' @param simulatedData, vector of simulated data
 #' @param observedData, vector of observed data
@@ -26,33 +7,13 @@
 #' Calculate residuals between vectors `simulatedData` and `observedData` according the the residual scale specified in `residualScale`
 #' @export
 calculateResiduals <- function(simulatedData, observedData, residualScale) {
-  validateIsOfLength(object = simulatedData, nbElements = length(observedData))
+  ospsuite.utils::validateIsOfLength(object = simulatedData, nbElements = length(observedData))
   residualValues <- rep(NA, length(observedData))
-  if (isIncluded(residualScale, ResidualScales$Logarithmic)) {
+  if (ospsuite.utils::isIncluded(residualScale, ResidualScales$Logarithmic)) {
     residualValues <- log(observedData) - log(simulatedData)
   }
-  if (isIncluded(residualScale, ResidualScales$Linear)) {
+  if (ospsuite.utils::isIncluded(residualScale, ResidualScales$Linear)) {
     residualValues <- (observedData - simulatedData)
-  }
-}
-
-#' Shortkey checking if argument 1 is not null,
-#' output the argument 2 if not null, or output argument 3 otherwise
-#'
-#' @title ifnotnull
-#' @param inputToCheck argument 1
-#' @param outputIfNotNull argument 2
-#' @param outputIfNull argument 3
-#' @return outputIfNotNull if inputToCheck is not null, outputIfNull otherwise
-#' @description
-#' Check if inputToCheck is not null, if so output outputIfNotNull,
-#' otherwise, output outputIfNull
-#' @keywords internal
-ifnotnull <- function(inputToCheck, outputIfNotNull, outputIfNull = NULL) {
-  if (!is.null(inputToCheck)) {
-    outputIfNotNull
-  } else {
-    outputIfNull
   }
 }
 
@@ -91,7 +52,7 @@ ifEqual <- function(x, y, outputIfEqual, outputIfNotEqual = NULL) {
 #' otherwise, output outputIfNotIncluded
 #' @keywords internal
 ifIncluded <- function(x, y, outputIfIncluded, outputIfNotIncluded = NULL) {
-  if (isIncluded(x, y)) {
+  if (ospsuite.utils::isIncluded(x, y)) {
     outputIfIncluded
   } else {
     outputIfNotIncluded
@@ -211,7 +172,7 @@ loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE)
 #' @export
 #' @import ospsuite
 loadWorkflowPopulation <- function(simulationSet) {
-  validateIsOfType(simulationSet, "PopulationSimulationSet")
+  ospsuite.utils::validateIsOfType(simulationSet, "PopulationSimulationSet")
   population <- ospsuite::loadPopulation(simulationSet$populationFile)
   simulation <- loadSimulationWithUpdatedPaths(simulationSet)
 
@@ -280,11 +241,11 @@ removeMissingValues <- function(data, dataMapping = NULL, logFolder = getwd()) {
 #' @return Names of pkParameters in `output`
 #' @export
 getPKParametersInOutput <- function(output) {
-  validateIsOfType(output, "Output")
+  ospsuite.utils::validateIsOfType(output, "Output")
   pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
     pkParameterInfo$pkParameter
   })
-  if (isOfLength(pkParameters, 0)) {
+  if (ospsuite.utils::isOfLength(pkParameters, 0)) {
     return(NA)
   }
   return(pkParameters)
@@ -295,11 +256,11 @@ getPKParametersInOutput <- function(output) {
 #' @return Names of pkParameters in `output`
 #' @keywords internal
 getPKParameterGroupsInOutput <- function(output) {
-  validateIsOfType(output, "Output")
+  ospsuite.utils::validateIsOfType(output, "Output")
   pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
     pkParameterInfo$group
   })
-  if (isOfLength(pkParameters, 0)) {
+  if (ospsuite.utils::isOfLength(pkParameters, 0)) {
     return(NA)
   }
   return(pkParameters)
@@ -310,7 +271,7 @@ getPKParameterGroupsInOutput <- function(output) {
 #' @return Path names of outputs in `simulationSet`
 #' @export
 getOutputPathsInSimulationSet <- function(simulationSet) {
-  validateIsOfType(simulationSet, "SimulationSet")
+  ospsuite.utils::validateIsOfType(simulationSet, "SimulationSet")
   return(sapply(simulationSet$outputs, function(output) {
     output$path
   }))
@@ -321,7 +282,7 @@ getOutputPathsInSimulationSet <- function(simulationSet) {
 #' @return Data.frame with \code{path} and \code{pkParameter} in `simulationSet`
 #' @export
 getPKParametersInSimulationSet <- function(simulationSet) {
-  validateIsOfType(simulationSet, "SimulationSet")
+  ospsuite.utils::validateIsOfType(simulationSet, "SimulationSet")
   pkParametersTable <- data.frame()
   for (output in simulationSet$outputs) {
     pkParametersTable <- rbind.data.frame(
@@ -377,7 +338,7 @@ getSimulationParameterDisplayPaths <- function(parameterPaths, simulation, dicti
   for (parameterIndex in seq_along(parameterPaths)) {
     # Get the index of parameter in dictionary if defined
     dictionaryIndex <- which(parameterPaths[parameterIndex] %in% dictionary$parameter)
-    if (!isOfLength(dictionaryIndex, 0)) {
+    if (!ospsuite.utils::isOfLength(dictionaryIndex, 0)) {
       # Since dictionaryIndex is not null, use first element
       # user should already have a warning if a parameter path is defined
       # more than once in workflow$parameterDisplayPaths
@@ -396,8 +357,8 @@ getSimulationParameterDisplayPaths <- function(parameterPaths, simulation, dicti
 #' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
 #' @export
 setWorkflowParameterDisplayPathsFromFile <- function(fileName, workflow) {
-  validateIsOfType(workflow, "Workflow")
-  validateIsString(fileName)
+  ospsuite.utils::validateIsOfType(workflow, "Workflow")
+  ospsuite.utils::validateIsString(fileName)
   validateIsFileExtension(fileName, "csv")
   parameterDisplayPaths <- readObservedDataFile(fileName)
   workflow$setParameterDisplayPaths(parameterDisplayPaths)
@@ -412,7 +373,7 @@ setWorkflowParameterDisplayPathsFromFile <- function(fileName, workflow) {
 #' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
 #' @export
 setWorkflowParameterDisplayPaths <- function(parameterDisplayPaths, workflow) {
-  validateIsOfType(workflow, "Workflow")
+  ospsuite.utils::validateIsOfType(workflow, "Workflow")
   workflow$setParameterDisplayPaths(parameterDisplayPaths)
   return(invisible())
 }
@@ -423,37 +384,8 @@ setWorkflowParameterDisplayPaths <- function(parameterDisplayPaths, workflow) {
 #' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
 #' @export
 getWorkflowParameterDisplayPaths <- function(workflow) {
-  validateIsOfType(workflow, "Workflow")
+  ospsuite.utils::validateIsOfType(workflow, "Workflow")
   return(workflow$getParameterDisplayPaths())
-}
-
-
-formatNumerics <- function(value,
-                           digits = NULL,
-                           scientific = NULL) {
-  validateIsInteger(digits, nullAllowed = TRUE)
-  validateIsLogical(scientific, nullAllowed = TRUE)
-
-  # Method for numerics
-  if(is.integer(value)){
-    return(value)
-  }
-  if(is.numeric(value)){
-    # Scientific writing
-    if(isTRUE(scientific %||% reEnv$formatNumericsScientific)){
-      return(sprintf(paste0('%.', digits %||% reEnv$formatNumericsDigits, 'e'), value))
-    }
-    # Decimal writing
-    return(sprintf(paste0('%.', digits %||% reEnv$formatNumericsDigits, 'f'), value))
-  }
-  # If data.frame or list, update each field
-  if(isOfType(value, c("list", "data.frame"))){
-    for(field in 1:length(value)){
-      value[[field]] <- formatNumerics(value[[field]], digits, scientific)
-    }
-  }
-  # Return the value as.is if not numeric
-  return(value)
 }
 
 #' @title parseVariableToObject
@@ -462,6 +394,7 @@ formatNumerics <- function(value,
 #' @param variableName Name of the variable and field of `objectName`
 #' @param keepIfNull logical `objectName$variableName <- variableName \%||\% objectName$variableName`
 #' @return An expression to `eval()`
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 parseVariableToObject <- function(objectName, variableName, keepIfNull = FALSE) {
   if (keepIfNull) {

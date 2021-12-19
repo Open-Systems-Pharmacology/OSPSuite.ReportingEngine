@@ -1,86 +1,5 @@
-isSameLength <- function(...) {
-  args <- list(...)
-  nrOfLengths <- length(unique(lengths(args)))
-
-  return(nrOfLengths == 1)
-}
-
-#' Check if the provided object has nbElements elements
-#'
-#' @param object An object or a list of objects
-#' @param nbElements number of elements that are supposed in object
-#'
-#' @return TRUE if the object or all objects inside the list have nbElements.
-#' Only the first level of the given list is considered.
-#' @keywords internal
-isOfLength <- function(object, nbElements) {
-  return(length(object) == nbElements)
-}
-
-validateIsOfLength <- function(object, nbElements) {
-  if (isOfLength(object, nbElements)) {
-    return(invisible())
-  }
-  logErrorThenStop(messages$errorWrongLength(object, nbElements))
-}
-
-#' Check if the provided object is of certain type
-#'
-#' @param object An object or a list of objects
-#' @param type String  representation or Class of the type that should be checked for
-#'
-#' @return TRUE if the object or all objects inside the list are of the given type.
-#' Only the first level of the given list is considered.
-#' @keywords internal
-isOfType <- function(object, type) {
-  if (is.null(object)) {
-    return(FALSE)
-  }
-
-  type <- typeNamesFrom(type)
-
-  inheritType <- function(x) inherits(x, type)
-
-  if (inheritType(object)) {
-    return(TRUE)
-  }
-  object <- c(object)
-
-  all(sapply(object, inheritType))
-}
-
-validateIsOfType <- function(object, type, nullAllowed = FALSE) {
-  if (nullAllowed && is.null(object)) {
-    return(invisible())
-  }
-
-  if (isOfType(object, type)) {
-    return(invisible())
-  }
-  # Name of the variable in the calling function
-  objectName <- getObjectNameAsString(object)
-  objectTypes <- typeNamesFrom(type)
-  # When called from validateIsString... objectName is "object"
-  # Need to get the name from parent frame
-  if (isIncluded(
-    as.character(sys.call(-1)[[1]]),
-    c("validateIsString", "validateIsLogical", "validateIsPositive", "validateIsNumeric", "validateIsInteger")
-  )) {
-    objectName <- deparse(substitute(object, sys.frame(-1)))
-  }
-  logErrorThenStop(messages$errorWrongType(objectName, class(object)[1], objectTypes))
-}
-
-validateIsInteger <- function(object, nullAllowed = FALSE) {
-  validateIsOfType(object, c("numeric", "integer"), nullAllowed)
-
-  if (isFALSE(object %% 1 == 0)) {
-    logErrorThenStop(messages$errorWrongType(getObjectNameAsString(object), class(object)[1], "integer"))
-  }
-}
-
 validateIsPositive <- function(object, nullAllowed = FALSE) {
-  validateIsOfType(object, c("numeric", "integer"), nullAllowed)
+  ospsuite.utils::validateIsOfType(object, c("numeric", "integer"), nullAllowed)
 
   if (isFALSE(object > 0)) {
     logErrorThenStop(messages$errorWrongType(getObjectNameAsString(object), class(object)[1], "positive"))
@@ -96,21 +15,13 @@ hasPositiveValues <- function(object) {
 
 
 validateIsInRange <- function(variableName, value, lowerBound, upperBound, nullAllowed = FALSE) {
-  validateIsOfLength(value, 1)
-  validateIsOfLength(lowerBound, 1)
-  validateIsOfLength(upperBound, 1)
-  validateIsNumeric(c(value, lowerBound, upperBound), nullAllowed)
+  ospsuite.utils::validateIsOfLength(value, 1)
+  ospsuite.utils::validateIsOfLength(lowerBound, 1)
+  ospsuite.utils::validateIsOfLength(upperBound, 1)
+  ospsuite.utils::validateIsNumeric(c(value, lowerBound, upperBound), nullAllowed)
   if ((value < lowerBound) | (value > upperBound)) {
     logErrorThenStop(messages$outsideRange(variableName, value, lowerBound, upperBound))
   }
-}
-
-validateEnumValue <- function(enum, value) {
-  if (value %in% names(enum)) {
-    return(invisible())
-  }
-
-  logErrorThenStop(messages$errorValueNotInEnum(enum, value))
 }
 
 typeNamesFrom <- function(type) {
@@ -121,32 +32,6 @@ typeNamesFrom <- function(type) {
   sapply(type, function(t) t$classname)
 }
 
-validateIsString <- function(object, nullAllowed = FALSE) {
-  validateIsOfType(object, "character", nullAllowed)
-}
-
-validateIsNumeric <- function(object, nullAllowed = FALSE) {
-  validateIsOfType(object, c("numeric", "integer"), nullAllowed)
-}
-
-validateIsLogical <- function(object, nullAllowed = FALSE) {
-  validateIsOfType(object, "logical", nullAllowed)
-}
-
-validateIsSameLength <- function(...) {
-  if (isSameLength(...)) {
-    return(invisible())
-  }
-  # Name of the variable in the calling function
-  objectName <- getObjectNameAsString(list(...))
-
-  # Name of the arguments
-  argnames <- sys.call()
-  arguments <- paste(lapply(argnames[-1], as.character), collapse = ", ")
-
-  logErrorThenStop(messages$errorDifferentLength(arguments))
-}
-
 validateNoDuplicatedEntries <- function(x) {
   if (any(duplicated(x))) {
     logErrorThenStop(messages$errorDuplicatedEntries(getObjectNameAsString(x)))
@@ -154,27 +39,12 @@ validateNoDuplicatedEntries <- function(x) {
   return(invisible())
 }
 
-#' Check if the provided object is included in a parent object
-#'
-#' @param values Vector of values
-#' @param parentValues Vector of values
-#'
-#' @return TRUE if the values are inside the parent values.
-#' @keywords internal
-isIncluded <- function(values, parentValues) {
-  if (is.null(values)) {
-    return(FALSE)
-  }
-
-  return(as.logical(min(values %in% parentValues)))
-}
-
-validateIsIncluded <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL, logFolder = NULL) {
+validateIsIncludedAndLog <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL, logFolder = NULL) {
   if (nullAllowed && is.null(values)) {
     return(invisible())
   }
 
-  if (isIncluded(values, parentValues)) {
+  if (ospsuite.utils::isIncluded(values, parentValues)) {
     return(invisible())
   }
   if (is.null(logFolder)) {
@@ -188,7 +58,7 @@ checkIsIncluded <- function(values, parentValues, nullAllowed = FALSE, groupName
     return(invisible())
   }
 
-  if (isIncluded(values, parentValues)) {
+  if (ospsuite.utils::isIncluded(values, parentValues)) {
     return(invisible())
   }
   if (is.null(logFolder)) {
@@ -207,10 +77,10 @@ validateMapping <- function(mapping, data, nullAllowed = FALSE) {
     return(invisible())
   }
 
-  validateIsString(mapping)
+  ospsuite.utils::validateIsString(mapping)
   variableNames <- names(data)
 
-  validateIsIncluded(mapping, variableNames)
+  ospsuite.utils::validateIsIncluded(mapping, variableNames)
 
   return(invisible())
 }
@@ -242,24 +112,11 @@ fileExtension <- function(file) {
   return(utils::tail(ex, 1))
 }
 
-#' Check if the provided path has required extension
-#'
-#' @param file file or path name to be checked
-#' @param extension extension of the file required after "."
-#'
-#' @return TRUE if the path includes the extension
-#' @keywords internal
-isFileExtension <- function(file, extension) {
-  extension <- c(extension)
-  file_ext <- fileExtension(file)
-  file_ext %in% extension
-}
-
 validateIsFileExtension <- function(path, extension, nullAllowed = FALSE) {
   if (nullAllowed && is.null(path)) {
     return(invisible())
   }
-  if (isFileExtension(path, extension)) {
+  if (ospsuite.utils::isFileExtension(path, extension)) {
     return(invisible())
   }
   logErrorThenStop(messages$errorExtension(path, extension))
@@ -304,16 +161,16 @@ logErrorMessage <- function(message, logFolderPath = getwd()) {
 #' @keywords internal
 validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile, outputs) {
   # Check that dictionary is provided
-  if (isOfLength(observedMetaDataFile, 0)) {
+  if (ospsuite.utils::isOfLength(observedMetaDataFile, 0)) {
     stop(messages$errorObservedMetaDataFileNotProvided(observedDataFile))
   }
   # Read dictionary and check that mandatory variables are included
   dictionary <- readObservedDataFile(observedMetaDataFile)
-  if (!isIncluded(dictionaryParameters$datasetUnit, names(dictionary))) {
+  if (!ospsuite.utils::isIncluded(dictionaryParameters$datasetUnit, names(dictionary))) {
     dictionary[, dictionaryParameters$datasetUnit] <- NA
   }
   validateIsIncludedInDataset(c(dictionaryParameters$ID, dictionaryParameters$datasetColumn), dictionary, datasetName = "dictionary")
-  validateIsIncluded(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID], groupName = paste0("Column '", dictionaryParameters$ID, "'"))
+  validateIsIncludedAndLog(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID], groupName = paste0("Column '", dictionaryParameters$ID, "'"))
 
   # Check that dictionary and observed data are consitent
   observedDataset <- readObservedDataFile(observedDataFile)
@@ -327,7 +184,7 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile,
   # Check of unit definitions:
   # 1) unit defined in outptuts
   dataUnit <- NULL
-  if (!isOfLength(outputs, 0)) {
+  if (!ospsuite.utils::isOfLength(outputs, 0)) {
     dataUnit <- unlist(lapply(outputs, function(output) {
       output$dataUnit
     }))
@@ -356,7 +213,7 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile,
 #' @keywords internal
 isDimension <- function(values) {
   allAvailableDimensions <- ospsuite::allAvailableDimensions()
-  return(isIncluded(c(values), allAvailableDimensions))
+  return(ospsuite.utils::isIncluded(c(values), allAvailableDimensions))
 }
 
 validateIsDimension <- function(values, nullAllowed = FALSE) {
@@ -378,7 +235,7 @@ isPathInSimulation <- function(paths, simulation) {
   allSimulationOutputPaths <- sapply(simulation$outputSelections$allOutputs, function(output) {
     output$path
   })
-  return(isIncluded(paths, allSimulationOutputPaths))
+  return(ospsuite.utils::isIncluded(paths, allSimulationOutputPaths))
 }
 
 validateIsPathInSimulation <- function(paths, simulation, nullAllowed = FALSE) {
@@ -395,7 +252,7 @@ validateOutputObject <- function(outputs, simulation, nullAllowed = FALSE) {
   if (nullAllowed && is.null(outputs)) {
     return(invisible())
   }
-  validateIsOfType(c(outputs), "Output")
+  ospsuite.utils::validateIsOfType(c(outputs), "Output")
   # Check paths existence
   allOutputPaths <- sapply(outputs, function(output) {
     output$path
@@ -414,16 +271,16 @@ isUnitFromDimension <- function(unit, dimension) {
   # Units can be switched between Mass/Amount and Concentration (molar)/Concentration (mass)
   # using molar weight as an input
   # Remove molar/mass for units that can cross dimensions using molar weight
-  if (isIncluded(dimension, c("Mass", "Amount"))) {
+  if (ospsuite.utils::isIncluded(dimension, c("Mass", "Amount"))) {
     dimension <- c("Mass", "Amount")
   }
-  if (isIncluded(dimension, c("Concentration (mass)", "Concentration (molar)"))) {
+  if (ospsuite.utils::isIncluded(dimension, c("Concentration (mass)", "Concentration (molar)"))) {
     dimension <- c("Concentration (mass)", "Concentration (molar)")
   }
-  if (isOfLength(dimensionForUnit, 0)) {
+  if (ospsuite.utils::isOfLength(dimensionForUnit, 0)) {
     return(FALSE)
   }
-  return(isIncluded(dimensionForUnit, dimension))
+  return(ospsuite.utils::isIncluded(dimensionForUnit, dimension))
 }
 
 validateIsUnitFromDimension <- function(unit, dimension, nullAllowed = FALSE) {
@@ -437,14 +294,14 @@ validateIsUnitFromDimension <- function(unit, dimension, nullAllowed = FALSE) {
 }
 
 validateHasReferencePopulation <- function(workflowType, simulationSets, logFolder = NULL) {
-  if (isIncluded(workflowType, PopulationWorkflowTypes$parallelComparison)) {
+  if (ospsuite.utils::isIncluded(workflowType, PopulationWorkflowTypes$parallelComparison)) {
     return(invisible())
   }
   allSimulationReferences <- sapply(simulationSets, function(set) {
     set$referencePopulation
   })
 
-  if (isOfLength(allSimulationReferences[allSimulationReferences], 1)) {
+  if (ospsuite.utils::isOfLength(allSimulationReferences[allSimulationReferences], 1)) {
     return(invisible())
   }
   if (is.null(logFolder)) {
@@ -468,7 +325,7 @@ validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
     if (all(pkParametersTable$path == pkParametersTableRef$path)) {
       pkParametersTableTest <- NULL
       for (pkParameterIndex in seq_along(pkParametersTable$group)) {
-        pkParametersTableTest[pkParameterIndex] <- isIncluded(pkParametersTable$group[pkParameterIndex], pkParametersTableRef$group[pkParameterIndex])
+        pkParametersTableTest[pkParameterIndex] <- ospsuite.utils::isIncluded(pkParametersTable$group[pkParameterIndex], pkParametersTableRef$group[pkParameterIndex])
       }
       if (all(pkParametersTableTest)) {
         pkParametersTableRef <- pkParametersTable
@@ -484,19 +341,12 @@ validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
   }
 }
 
-hasUniqueValues <- function(data, na.rm = TRUE) {
-  # na.rm is the usual tidyverse input to remove NA values
-  if (na.rm) {
-    data <- data[!is.na(data)]
-  }
-  return(!any(duplicated(data)))
-}
 
 validateHasUniqueValues <- function(data, dataName = "dataset", na.rm = TRUE, nullAllowed = FALSE) {
   if (nullAllowed && is.null(data)) {
     return(invisible())
   }
-  if (hasUniqueValues(data, na.rm)) {
+  if (ospsuite.utils::hasUniqueValues(data, na.rm)) {
     return(invisible())
   }
   stop(messages$errorHasNoUniqueValues(data, dataName, na.rm))
@@ -506,7 +356,7 @@ validateIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL
   if (nullAllowed && is.null(columnNames)) {
     return(invisible())
   }
-  if (isIncluded(columnNames, names(dataset))) {
+  if (ospsuite.utils::isIncluded(columnNames, names(dataset))) {
     return(invisible())
   }
   if (is.null(logFolder)) {
@@ -519,7 +369,7 @@ checkIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, n
   if (nullAllowed && is.null(columnNames)) {
     return(invisible())
   }
-  if (isIncluded(columnNames, names(dataset))) {
+  if (ospsuite.utils::isIncluded(columnNames, names(dataset))) {
     return(invisible())
   }
   #TODO this check should be ion logWorkflow and not in the caller!!
@@ -536,12 +386,12 @@ checkIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, n
 
 validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, outputs = NULL) {
   # In case, value from reading from Excel/csv file is not an actual NULL
-  if (any(isOfLength(unit, 0), is.na(unit), unit %in% "")) {
+  if (any(ospsuite.utils::isOfLength(unit, 0), is.na(unit), unit %in% "")) {
     unit <- NULL
   }
   # Case unit is defined using outputs
   dataUnit <- NULL
-  if (!isOfLength(outputs, 0)) {
+  if (!ospsuite.utils::isOfLength(outputs, 0)) {
     dataUnit <- unlist(lapply(outputs, function(output) {
       output$dataUnit
     }))
@@ -549,12 +399,12 @@ validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, output
 
   # Checks for errors
   # If no unit defined at all
-  if (isOfLength(c(unit, unitColumn, dataUnit), 0)) {
+  if (ospsuite.utils::isOfLength(c(unit, unitColumn, dataUnit), 0)) {
     stop(messages$errorNoDataUnit())
   }
   # If no unit defined by dictionray, all outputs need to define dataUnit
-  if (isOfLength(c(unit, unitColumn), 0)) {
-    if (!isSameLength(dataUnit, outputs)) {
+  if (ospsuite.utils::isOfLength(c(unit, unitColumn), 0)) {
+    if (!ospsuite.utils::isSameLength(dataUnit, outputs)) {
       stop(messages$errorNoDataUnitInOutputs())
     }
     return(invisible())
@@ -562,7 +412,7 @@ validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, output
   # Checks for warnings
   # Only one of unit, unitColumn and dataUnit should be defined
   # in the case dataUnit was defined, code has already returned
-  if (!isOfLength(c(unit, unitColumn, dataUnit), 1)) {
+  if (!ospsuite.utils::isOfLength(c(unit, unitColumn, dataUnit), 1)) {
     warning(messages$warningMultipleDataUnit())
   }
   # If defined, check that unitColumn refers an actual column from observed data

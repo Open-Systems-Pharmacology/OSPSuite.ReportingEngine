@@ -10,6 +10,7 @@
 #' @field includeTable logical indicating if the table should be included in final report
 #' @field textChunk text included into the report explaining the table
 #' @field includeTextChunk logical indicating if the text chunk should be included in final report
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 TaskResults <- R6::R6Class(
   "TaskResults",
@@ -31,7 +32,7 @@ TaskResults <- R6::R6Class(
     #' @param fileName path of file corresponding to the figure to save
     #' @param logFolder folder were logs are saved
     saveFigure = function(fileName, logFolder = getwd()) {
-      if (isOfLength(self$plot, 0)) {
+      if (ospsuite.utils::isOfLength(self$plot, 0)) {
         return()
       }
       # TODO once every plot will use tlf, deprecate the condition for null values
@@ -56,7 +57,7 @@ TaskResults <- R6::R6Class(
     #' @param fileName path of csv file corresponding to the table to save
     #' @param logFolder folder were logs are saved
     saveTable = function(fileName, logFolder = getwd()) {
-      if (isOfLength(self$table, 0)) {
+      if (ospsuite.utils::isOfLength(self$table, 0)) {
         return()
       }
       write.csv(self$table, file = fileName, row.names = FALSE, fileEncoding = "UTF-8")
@@ -75,7 +76,7 @@ TaskResults <- R6::R6Class(
     #' @param fileRootDirectory root directory of figure file path
     #' @param logFolder folder were logs are saved
     addFigureToReport = function(reportFile, fileRelativePath, fileRootDirectory, logFolder = getwd()) {
-      if (isOfLength(self$plot, 0)) {
+      if (ospsuite.utils::isOfLength(self$plot, 0)) {
         return()
       }
       # includePlot select if the plot and its caption should be included in final report
@@ -83,7 +84,7 @@ TaskResults <- R6::R6Class(
       if (isFALSE(self$includePlot)) {
         return()
       }
-      if (!isOfLength(self$plotCaption, 0)) {
+      if (!ospsuite.utils::isOfLength(self$plotCaption, 0)) {
         addTextChunk(reportFile, paste0("Figure: ", self$plotCaption), logFolder = logFolder)
       }
       addFigureChunk(
@@ -103,7 +104,7 @@ TaskResults <- R6::R6Class(
     #' @param scientific logical defining if displayed numbers use scientific writing
     #' @param logFolder folder were logs are saved
     addTableToReport = function(reportFile, fileRelativePath, fileRootDirectory, digits = NULL, scientific = NULL, logFolder = getwd()) {
-      if (isOfLength(self$table, 0)) {
+      if (ospsuite.utils::isOfLength(self$table, 0)) {
         return()
       }
       # includeTable select if the table and its caption should be included in final report
@@ -111,7 +112,7 @@ TaskResults <- R6::R6Class(
       if (isFALSE(self$includeTable)) {
         return()
       }
-      if (!isOfLength(self$tableCaption, 0)) {
+      if (!ospsuite.utils::isOfLength(self$tableCaption, 0)) {
         addTextChunk(reportFile, paste0("Table: ", self$tableCaption), logFolder = logFolder)
       }
       addTableChunk(
@@ -130,7 +131,7 @@ TaskResults <- R6::R6Class(
     #' @param reportFile file to which the text chunk should be added
     #' @param logFolder folder were logs are saved
     addTextChunkToReport = function(reportFile , logFolder = getwd()) {
-      if (isOfLength(self$textChunk, 0)) {
+      if (ospsuite.utils::isOfLength(self$textChunk, 0)) {
         return()
       }
       if (isFALSE(self$includeTextChunk)) {

@@ -6,6 +6,7 @@
 #' @return list with `plots` and `tables`
 #' @import tlf
 #' @import ospsuite
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotQualificationPKRatio <- function(configurationPlan,
                                      logFolder = getwd(),
@@ -27,7 +28,7 @@ plotQualificationPKRatio <- function(configurationPlan,
         sectionId = pkRatioPlan$SectionId,
         plot = pkRatioPlot,
         plotCaption = pkRatioPlan$Title,
-        includePlot = isIncluded("Plot", pkRatioPlan$Artifacts)
+        includePlot = ospsuite.utils::isIncluded("Plot", pkRatioPlan$Artifacts)
       )
       #----- Measure artifact -----#
       measureID <- paste(length(pkRatioResults) + 2, "pk-ratio-measure", pkParameterName, sep = "-")
@@ -37,7 +38,7 @@ plotQualificationPKRatio <- function(configurationPlan,
         sectionId = pkRatioPlan$SectionId,
         table = pkRatioMeasure,
         tableCaption = paste0("Measure of ", pkRatioPlan$Title),
-        includeTable = isIncluded("Measure", pkRatioPlan$Artifacts)
+        includeTable = ospsuite.utils::isIncluded("Measure", pkRatioPlan$Artifacts)
       )
     }
     #----- GMFE artifact -----#
@@ -48,7 +49,7 @@ plotQualificationPKRatio <- function(configurationPlan,
       sectionId = pkRatioPlan$SectionId,
       table = pkRatioGMFE,
       tableCaption = paste0("GMFE for ", pkRatioPlan$Title),
-      includeTable = isIncluded("GMFE", pkRatioPlan$Artifacts)
+      includeTable = ospsuite.utils::isIncluded("GMFE", pkRatioPlan$Artifacts)
     )
     #----- Table artifact -----#
     tableID <- paste(length(pkRatioResults) + 1, "pk-ratio-table", sep = "-")
@@ -58,7 +59,7 @@ plotQualificationPKRatio <- function(configurationPlan,
       sectionId = pkRatioPlan$SectionId,
       table = pkRatioTable,
       tableCaption = pkRatioPlan$Title,
-      includeTable = isIncluded("Table", pkRatioPlan$Artifacts)
+      includeTable = ospsuite.utils::isIncluded("Table", pkRatioPlan$Artifacts)
     )
   }
   return(pkRatioResults)
@@ -119,6 +120,7 @@ getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData) {
 #' @param metaData metaData with units and dimension for labeling the table header
 #' @param axesProperties list of axes properties obtained from `getAxesProperties`
 #' @return A ggplot object
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getQualificationPKRatioPlot <- function(pkParameterName, data, metaData, axesProperties) {
   # Prepare data, dataMapping and plotCOnfiguration to follow tlf nomenclature
@@ -178,6 +180,7 @@ getQualificationPKRatioTable <- function(data, metaData) {
 #' @return list with `data` and `metaData`
 #' @import tlf
 #' @import ospsuite
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getQualificationPKRatioData <- function(pkRatioPlan, configurationPlan, logFolder, settings) {
   # Get PK parameters from new or deprecated method
@@ -238,7 +241,7 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
   )
   observedData <- readObservedDataFile(configurationPlan$getObservedDataPath(pkRatioMapping$ObservedData))
   selectedRow <- which(observedData[, reEnv$pkRatio$dictionary$id] %in% pkRatioMapping$ObservedDataRecordId)
-  if (!isOfLength(selectedRow, 1)) {
+  if (!ospsuite.utils::isOfLength(selectedRow, 1)) {
     logWorkflow(
       message = paste0("In PK Ratio Plots, ", length(selectedRow), " data record(s) found for ObservedDataRecordId '", pkRatioMapping$ObservedDataRecordId, "'"),
       pathFolder = logFolder,
@@ -362,10 +365,10 @@ isBetween <- function(x, left, right, strict = FALSE) {
 #' measureValuesBetween(x, cos(x) + 1, cos(x) - 1)
 measureValuesBetween <- function(x, left, right, method = "count", strict = FALSE) {
   # Remove NA values from counting
-  if (isOfLength(left, 1)) {
+  if (ospsuite.utils::isOfLength(left, 1)) {
     left <- rep(left, length(x))
   }
-  if (isOfLength(right, 1)) {
+  if (ospsuite.utils::isOfLength(right, 1)) {
     right <- rep(right, length(x))
   }
   naRows <- (is.na(x) | is.na(left) | is.na(right))

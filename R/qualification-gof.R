@@ -4,6 +4,7 @@
 #' @param logFolder folder where the logs are saved
 #' @param settings settings for the task
 #' @return list of qualification GOF ggplot objects
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotQualificationGOFs <- function(configurationPlan,
                                   logFolder = getwd(),
@@ -23,7 +24,7 @@ plotQualificationGOFs <- function(configurationPlan,
       sectionId = gofPlan$SectionId,
       table = gofGMFE,
       tableCaption = paste0("GMFE for ", gofPlan$Title),
-      includeTable = isIncluded("GMFE", gofPlan$Artifacts)
+      includeTable = ospsuite.utils::isIncluded("GMFE", gofPlan$Artifacts)
     )
 
     # GOF plots
@@ -38,7 +39,7 @@ plotQualificationGOFs <- function(configurationPlan,
         sectionId = gofPlan$SectionId,
         plot = gofPlot,
         plotCaption = gofPlan$Title,
-        includePlot = isIncluded("Plot", gofPlan$Artifacts)
+        includePlot = ospsuite.utils::isIncluded("Plot", gofPlan$Artifacts)
       )
     }
     return(gofResults)
@@ -55,6 +56,7 @@ plotQualificationGOFs <- function(configurationPlan,
 #' @return list with `data` and `metaData`
 #' @import tlf
 #' @import ospsuite
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getQualificationGOFData <- function(gofPlan, configurationPlan, axesUnits, logFolder) {
   gofData <- data.frame()
@@ -165,6 +167,7 @@ getGOFDataForMapping <- function(outputMapping, configurationPlan, axesUnits, lo
 #' @param axesProperties list of axes properties obtained from `getAxesProperties`
 #' @return A ggplot object
 #' @import tlf
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties) {
   # Axes labels
@@ -210,23 +213,23 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties) {
   # Update shapes and colors from config plan
   plotConfiguration$points$color <- metaData$color
   plotConfiguration$points$shape <- metaData$shape
-  
+
   positiveRows <- (data[,"Observed"] > 0) & (data[,"Simulated"] > 0)
   dataForLimit <- c(data[positiveRows,"Observed"], data[positiveRows,"Simulated"])
-  
-  plotConfiguration$xAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||% 
+
+  plotConfiguration$xAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||%
     autoAxesLimits(switch(
       plotType,
       "predictedVsObserved" = dataForLimit,
       "residualsOverTime" = data[,"Time"]
     ))
-  plotConfiguration$yAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||% 
+  plotConfiguration$yAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||%
     autoAxesLimits(switch(
       plotType,
       "predictedVsObserved" = dataForLimit,
       "residualsOverTime" = c(0, data[,"Residuals"])
     ))
-  
+
   gofPlot <- switch(
     plotType,
     "predictedVsObserved" = tlf::plotObsVsPred(
@@ -267,7 +270,7 @@ getQualificationGOFGMFE <- function(data) {
       )
     )
   }
-  if (!isOfLength(groupNames, 1)) {
+  if (!ospsuite.utils::isOfLength(groupNames, 1)) {
     gmfe <- rbind.data.frame(
       gmfe,
       data.frame(
@@ -284,6 +287,7 @@ getQualificationGOFGMFE <- function(data) {
 #' @param gofPlan List providing the configuration of the goodness of fit results
 #' @param settings settings for the task
 #' @return A list of units for goodness of fit results
+#' @importFrom ospsuite.utils %||%
 getGOFAxesUnits <- function(gofPlan, settings) {
   predictedVsObservedAxesProperties <- getAxesProperties(gofPlan$Axes$PredictedVsObserved) %||% settings$predictedVsObserved$axes
   residualsOverTimeAxesProperties <- getAxesProperties(gofPlan$Axes$ResidualsOverTime) %||% settings$residualsOverTime$axes

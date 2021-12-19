@@ -205,6 +205,7 @@ plotMeanAbsorption <- function(structureSet,
 #' @import tlf
 #' @import ggplot2
 #' @import utils
+#' @importFrom ospsuite.utils %||%
 plotAbsorptionTimeProfile <- function(data,
                                       metaData = NULL,
                                       dataMapping = NULL,

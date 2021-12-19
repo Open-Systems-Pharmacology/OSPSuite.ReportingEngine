@@ -107,7 +107,7 @@ All results and plots as a structured output in the workflow folder
 \if{html}{\out{<a id="method-updateConfigurationPlan"></a>}}
 \if{latex}{\out{\hypertarget{method-updateConfigurationPlan}{}}}
 \subsection{Method \code{updateConfigurationPlan()}}{
-Update the content of the workflow `configurationPlan`. 
+Update the content of the workflow `configurationPlan`.
 Caution, updating the `configurationPlan` using this method won't update the workflow simulations and their results.
 Use the method only to bypass reloading a full workflow if only plot aesthetics or section content is changed.
 \subsection{Usage}{

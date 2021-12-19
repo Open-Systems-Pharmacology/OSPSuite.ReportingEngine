@@ -83,17 +83,18 @@ plotMeanPKParameters <- function(structureSet,
 #' @param molWeight Molecular weight for converting into PK Parameter `displayUnit`
 #' @return A data.frame with `Path`, `Parameter`, `Value` and `Unit` to display in final report
 #' @import ospsuite
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getMeanPKAnalysesFromOutput <- function(data, output, molWeight = NULL) {
   pkAnalysesFromOutput <- NULL
-  validateIsIncluded(output$path, unique(data$QuantityPath))
+  ospsuite.utils::validateIsIncluded(output$path, unique(data$QuantityPath))
   outputData <- data[data$QuantityPath %in% output$path, ]
 
   for (pkParameter in output$pkParameters) {
     displayName <- pkParameter$displayName
     displayUnit <- pkParameter$displayUnit
 
-    validateIsIncluded(pkParameter$pkParameter, unique(outputData$Parameter))
+    ospsuite.utils::validateIsIncluded(pkParameter$pkParameter, unique(outputData$Parameter))
     selectedParameter <- outputData$Parameter %in% pkParameter$pkParameter
     pkParameterObject <- ospsuite::pkParameterByName(pkParameter$pkParameter)
 
@@ -136,6 +137,7 @@ getMeanPKAnalysesFromOutput <- function(data, output, molWeight = NULL) {
 #' @import ospsuite
 #' @import tlf
 #' @import ggplot2
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotPopulationPKParameters <- function(structureSets,
                                        logFolder = getwd(),
@@ -143,11 +145,11 @@ plotPopulationPKParameters <- function(structureSets,
                                        workflowType = PopulationWorkflowTypes$parallelComparison,
                                        xParameters = getDefaultPkParametersXParameters(workflowType),
                                        yParameters = NULL) {
-  validateIsIncluded(workflowType, PopulationWorkflowTypes)
-  validateIsOfType(structureSets, "list")
-  validateIsOfType(c(structureSets), "SimulationStructure")
-  validateIsString(c(xParameters), nullAllowed = TRUE)
-  validateIsOfType(c(yParameters), "Output", nullAllowed = TRUE)
+  ospsuite.utils::validateIsIncluded(workflowType, PopulationWorkflowTypes)
+  ospsuite.utils::validateIsOfType(structureSets, "list")
+  ospsuite.utils::validateIsOfType(c(structureSets), "SimulationStructure")
+  ospsuite.utils::validateIsString(c(xParameters), nullAllowed = TRUE)
+  ospsuite.utils::validateIsOfType(c(yParameters), "Output", nullAllowed = TRUE)
   validateSameOutputsBetweenSets(
     c(lapply(structureSets, function(set) {
       set$simulationSet
@@ -461,6 +463,7 @@ plotPopulationPKParameters <- function(structureSets,
 #' @import ospsuite
 #' @import tlf
 #' @import ggplot2
+#' @importFrom ospsuite.utils %||%
 ratioBoxplot <- function(data,
                          plotConfiguration = NULL) {
   ratioPlot <- tlf::initializePlot(plotConfiguration)
@@ -496,6 +499,7 @@ ratioBoxplot <- function(data,
 #' @import ospsuite
 #' @import tlf
 #' @import ggplot2
+#' @importFrom ospsuite.utils %||%
 vpcParameterPlot <- function(data,
                              metaData = NULL,
                              plotConfiguration = NULL,
@@ -615,7 +619,7 @@ formatPKParametersTable <- function(structureSet, pkParametersTable, populationT
 #' @return A data.frame of PK and Population Parameters across simulation sets
 #' @keywords internal
 rbindPKParametersTables <- function(pkParametersTableAcrossPopulations, pkParametersTable) {
-  if (isOfLength(pkParametersTableAcrossPopulations, 0)) {
+  if (ospsuite.utils::isOfLength(pkParametersTableAcrossPopulations, 0)) {
     return(pkParametersTable)
   }
   # Prevent crash when merging populations with different columns
@@ -659,7 +663,7 @@ getPKRatiosTable <- function(pkParametersTable,
 #' @examples
 #' getDefaultPkParametersXParameters(PopulationWorkflowTypes$pediatric)
 getDefaultPkParametersXParameters <- function(workflowType) {
-  validateIsIncluded(workflowType, PopulationWorkflowTypes)
+  ospsuite.utils::validateIsIncluded(workflowType, PopulationWorkflowTypes)
   if (workflowType %in% PopulationWorkflowTypes$pediatric) {
     return(DemographyDefaultParameters)
   }
@@ -674,16 +678,17 @@ getDefaultPkParametersXParameters <- function(workflowType) {
 #' @param pkParameter `pkParameter` from `Output ` object
 #' @param molWeight Molecular weight of compound (if unit conversion needed)
 #' @return list of data.frame and its metaData including the values of PK parameters specified by `pkParameter` and `Output` objects
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getPopulationPKAnalysesFromOutput <- function(data, metaData, output, pkParameter, molWeight = NULL) {
-  validateIsIncluded(output$path, unique(data$QuantityPath))
+  ospsuite.utils::validateIsIncluded(output$path, unique(data$QuantityPath))
   outputData <- data[data$QuantityPath %in% output$path, ]
 
   displayName <- pkParameter$displayName
   displayUnit <- pkParameter$displayUnit
 
   # Caution: now using group instead of pkParameter and Parameter
-  validateIsIncluded(pkParameter$group, unique(outputData$group))
+  ospsuite.utils::validateIsIncluded(pkParameter$group, unique(outputData$group))
   selectedParameter <- outputData$group %in% pkParameter$group
   pkParameterObject <- ospsuite::pkParameterByName(pkParameter$pkParameter)
 
@@ -720,7 +725,7 @@ getPopulationPKAnalysesFromOutput <- function(data, metaData, output, pkParamete
 #' @return list of x-parameters used for PK parameters range plots
 #' @export
 getXParametersForPkParametersPlot <- function(workflow) {
-  validateIsOfType(workflow, "PopulationWorkflow")
+  ospsuite.utils::validateIsOfType(workflow, "PopulationWorkflow")
   return(workflow$plotPKParameters$xParameters)
 }
 
@@ -728,8 +733,9 @@ getXParametersForPkParametersPlot <- function(workflow) {
 #' @param workflow `PopulationWorkflow` R6 class object
 #' @return list of y-parameters used for PK parameters range plots and boxplots
 #' @export
+#' @importFrom ospsuite.utils %||%
 getYParametersForPkParametersPlot <- function(workflow) {
-  validateIsOfType(workflow, "PopulationWorkflow")
+  ospsuite.utils::validateIsOfType(workflow, "PopulationWorkflow")
   yParameters <- workflow$plotPKParameters$yParameters %||% workflow$simulationStructures[[1]]$simulationSet$outputs
 
   return(yParameters)
@@ -742,8 +748,8 @@ getYParametersForPkParametersPlot <- function(workflow) {
 #' @param parameters list of parameters to be used as x-parameters
 #' @export
 setXParametersForPkParametersPlot <- function(workflow, parameters) {
-  validateIsOfType(workflow, "PopulationWorkflow")
-  validateIsString(c(parameters))
+  ospsuite.utils::validateIsOfType(workflow, "PopulationWorkflow")
+  ospsuite.utils::validateIsString(c(parameters))
 
   workflow$plotPKParameters$xParameters <- parameters
 
@@ -777,8 +783,8 @@ addXParametersForPkParametersPlot <- function(workflow, parameters) {
 #' @param parameters list of R6 class `Output` objects to be used as y-parameters
 #' @export
 setYParametersForPkParametersPlot <- function(workflow, parameters) {
-  validateIsOfType(workflow, "PopulationWorkflow")
-  validateIsOfType(c(parameters), "Output")
+  ospsuite.utils::validateIsOfType(workflow, "PopulationWorkflow")
+  ospsuite.utils::validateIsOfType(c(parameters), "Output")
 
   workflow$plotPKParameters$yParameters <- parameters
 

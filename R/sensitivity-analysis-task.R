@@ -3,6 +3,7 @@
 #' @field getTaskResults function called by task that computes and format figure results
 #' @field settings instance of SensitivityAnalysisSettings class
 #' @field nameTaskResults name of function that returns task results
+#' @importFrom ospsuite.utils %||%
 SensitivityAnalysisTask <- R6::R6Class(
   "SensitivityAnalysisTask",
   inherit = Task,
@@ -22,7 +23,7 @@ SensitivityAnalysisTask <- R6::R6Class(
                           settings = NULL,
                           nameTaskResults = "none",
                           ...) {
-      validateIsOfType(settings, "SensitivityAnalysisSettings", nullAllowed = TRUE)
+      ospsuite.utils::validateIsOfType(settings, "SensitivityAnalysisSettings", nullAllowed = TRUE)
       super$initialize(...)
       self$settings <- settings %||% SensitivityAnalysisSettings$new()
       self$getTaskResults <- getTaskResults

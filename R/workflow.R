@@ -8,7 +8,7 @@
 #' @field userDefinedTasks List of user-defined tasks (to update with loadUserDefinedTask)
 #' @field numberSections logical defining if the report sections should be numbered
 #' @import tlf
-#' @import ospsuite
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 Workflow <- R6::R6Class(
   "Workflow",
@@ -31,28 +31,27 @@ Workflow <- R6::R6Class(
     #' @param numberSections logical defining if the report sections should be numbered
     #' @param theme A `Theme` object from `{tlf}` package
     #' @return A new `Workflow` object
-    #' @import ospsuite
     initialize = function(simulationSets,
                           workflowFolder,
                           createWordReport = TRUE,
                           watermark = NULL,
-                          simulationSetDescriptor = NULL, 
+                          simulationSetDescriptor = NULL,
                           numberSections = TRUE,
                           theme = NULL) {
       private$.reportingEngineInfo <- ReportingEngineInfo$new()
       # Empty list on which users can load tasks
       self$userDefinedTasks <- list()
 
-      validateIsString(workflowFolder)
-      validateIsString(watermark, nullAllowed = TRUE)
-      validateIsString(simulationSetDescriptor, nullAllowed = TRUE)
-      validateIsOfType(c(simulationSets), "SimulationSet")
-      validateIsLogical(createWordReport)
-      validateIsLogical(numberSections)
+      ospsuite.utils::validateIsString(workflowFolder)
+      ospsuite.utils::validateIsString(watermark, nullAllowed = TRUE)
+      ospsuite.utils::validateIsString(simulationSetDescriptor, nullAllowed = TRUE)
+      ospsuite.utils::validateIsOfType(c(simulationSets), "SimulationSet")
+      ospsuite.utils::validateIsLogical(createWordReport)
+      ospsuite.utils::validateIsLogical(numberSections)
 
       self$createWordReport <- createWordReport
       self$numberSections <- numberSections
-      if (!isOfType(simulationSets, "list")) {
+      if (!ospsuite.utils::isOfType(simulationSets, "list")) {
         simulationSets <- list(simulationSets)
       }
 
@@ -79,7 +78,7 @@ Workflow <- R6::R6Class(
       )
 
       self$reportFileName <- file.path(self$workflowFolder, paste0(defaultFileNames$reportName(), ".md"))
-      self$taskNames <- ospsuite::enum(self$getAllTasks())
+      self$taskNames <- ospsuite.utils::enum(self$getAllTasks())
 
       self$simulationStructures <- list()
       simulationSets <- c(simulationSets)
@@ -102,7 +101,7 @@ Workflow <- R6::R6Class(
     getAllTasks = function() {
       # get isTaskVector as a named vector
       isTaskVector <- unlist(eapply(self, function(x) {
-        isOfType(x, "Task")
+        ospsuite.utils::isOfType(x, "Task")
       }))
 
       taskNames <- setdiff(names(isTaskVector[as.logical(isTaskVector)]), "userDefinedTasks")
@@ -116,7 +115,7 @@ Workflow <- R6::R6Class(
     getAllPlotTasks = function() {
       # get isTaskVector as a named vector
       isPlotTaskVector <- unlist(eapply(self, function(x) {
-        isOfType(x, "PlotTask")
+        ospsuite.utils::isOfType(x, "PlotTask")
       }))
 
       taskNames <- setdiff(names(isPlotTaskVector[as.logical(isPlotTaskVector)]), "userDefinedTasks")
@@ -180,7 +179,7 @@ Workflow <- R6::R6Class(
     #' If the environment is NOT validated, \code{workflowWatermarkMessage} is reported on the background.
     #' Any user-defined text will overwrite this default feature and be reported on the figure background.
     setWatermark = function(watermark) {
-      validateIsString(watermark, nullAllowed = TRUE)
+      ospsuite.utils::validateIsString(watermark, nullAllowed = TRUE)
       # Define default feature based on validated system
       private$.watermark <- ""
       if (!private$.reportingEngineInfo$isValidated()) {
@@ -196,12 +195,12 @@ Workflow <- R6::R6Class(
     #' @param parameterDisplayPaths data.frame mapping Parameters with their display paths
     #' Variables of the data.frame should include `parameter` and `displayPath`.
     setParameterDisplayPaths = function(parameterDisplayPaths) {
-      validateIsOfType(parameterDisplayPaths, "data.frame", nullAllowed = TRUE)
-      if (!isOfLength(parameterDisplayPaths, 0)) {
-        validateIsIncluded(c("parameter", "displayPath"), names(parameterDisplayPaths))
+      ospsuite.utils::validateIsOfType(parameterDisplayPaths, "data.frame", nullAllowed = TRUE)
+      if (!ospsuite.utils::FisOfLength(parameterDisplayPaths, 0)) {
+        ospsuite.utils::validateIsIncluded(c("parameter", "displayPath"), names(parameterDisplayPaths))
       }
       # In case the same parameter is defined more than once, throw a warning
-      if (!hasUniqueValues(parameterDisplayPaths$parameter)) {
+      if (!ospsuite.utils::hasUniqueValues(parameterDisplayPaths$parameter)) {
         logWorkflow(
           message = messages$errorHasNoUniqueValues(parameterDisplayPaths$parameter, dataName = "parameter variable"),
           pathFolder = self$workflowFolder,
@@ -227,7 +226,7 @@ Workflow <- R6::R6Class(
     #' @description Set descriptor of simulation sets indicated in reports
     #' @param text character describing what simulation sets refer to
     setSimulationDescriptor = function(text) {
-      validateIsString(text, nullAllowed = TRUE)
+      ospsuite.utils::validateIsString(text, nullAllowed = TRUE)
 
       # simulationSetDescriptor needs to be send to the tasks using the field simulationStructures commmon among all tasks
       private$.simulationSetDescriptor <- text %||% ""

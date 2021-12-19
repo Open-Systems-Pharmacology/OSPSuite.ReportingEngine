@@ -13,7 +13,7 @@
 plotMeanGoodnessOfFit <- function(structureSet,
                                   logFolder = getwd(),
                                   settings = NULL) {
-  validateIsOfType(structureSet, "SimulationStructure")
+  ospsuite.utils::validateIsOfType(structureSet, "SimulationStructure")
 
   initializeExpression <- parse(text = paste0(
     c("observedData", "simulatedData", "lloqData", "residualsData", "residualsMetaData", "residuals"),
@@ -86,7 +86,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
     goodnessOfFitCaptions[[timeRange$name]] <- timeProfilePlotResults$captions
   }
 
-  if (!isOfLength(residualsData, 0)) {
+  if (!ospsuite.utils::isOfLength(residualsData, 0)) {
     for (timeRange in timeRanges) {
       if (!timeRange$keep) {
         next
@@ -99,7 +99,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
     }
   }
   allResiduals <- goodnessOfFitResiduals[[ApplicationRanges$total]]
-  if (!isOfLength(allResiduals, 0)) {
+  if (!ospsuite.utils::isOfLength(allResiduals, 0)) {
     residuals <- list(
       data = allResiduals,
       metaData = residualsMetaData[[ApplicationRanges$total]]
@@ -123,10 +123,11 @@ plotMeanGoodnessOfFit <- function(structureSet,
 #' @param molWeight Molar weight for unit conversion of dependent variable
 #' @param simulationSet `SimulationSet` object
 #' @return list of data and metaData
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getSimulatedResultsFromOutput <- function(simulationPathResults, output, simulationQuantity, molWeight, simulationSet) {
   outputConcentration <- simulationPathResults$data[, output$path]
-  if (!isOfLength(output$displayUnit, 0)) {
+  if (!ospsuite.utils::isOfLength(output$displayUnit, 0)) {
     outputConcentration <- ospsuite::toUnit(simulationQuantity,
       simulationPathResults$data[, output$path],
       output$displayUnit,
@@ -170,7 +171,7 @@ getSimulatedResultsFromOutput <- function(simulationPathResults, output, simulat
 getResiduals <- function(observedData,
                          simulatedData,
                          residualScale = ResidualScales$Logarithmic) {
-  if (isOfLength(observedData, 0)) {
+  if (ospsuite.utils::isOfLength(observedData, 0)) {
     return()
   }
   # Time matrix to match observed time with closest simulation time
@@ -187,10 +188,10 @@ getResiduals <- function(observedData,
   )
 
   residualValues <- rep(NA, nrow(observedData))
-  if (isIncluded(residualScale, ResidualScales$Logarithmic)) {
+  if (ospsuite.utils::isIncluded(residualScale, ResidualScales$Logarithmic)) {
     residualValues <- log(observedData[, "Concentration"]) - log(simulatedData[timeMatchedData, "Concentration"])
   }
-  if (isIncluded(residualScale, ResidualScales$Linear)) {
+  if (ospsuite.utils::isIncluded(residualScale, ResidualScales$Linear)) {
     residualValues <- (observedData[, "Concentration"] - simulatedData[timeMatchedData, "Concentration"])
   }
 
@@ -216,11 +217,12 @@ getResiduals <- function(observedData,
 #' @import ospsuite
 #' @import utils
 #' @import ggplot2
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotPopulationGoodnessOfFit <- function(structureSet,
                                         logFolder = getwd(),
                                         settings = NULL) {
-  validateIsOfType(structureSet, "SimulationStructure")
+  ospsuite.utils::validateIsOfType(structureSet, "SimulationStructure")
 
   initializeExpression <- parse(text = paste0(
     c("observedData", "simulatedData", "lloqData", "residualsData", "residualsMetaData", "residuals"),
@@ -287,7 +289,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     goodnessOfFitCaptions[[timeRange$name]] <- timeProfilePlotResults$captions
   }
 
-  if (!isOfLength(residualsData, 0)) {
+  if (!ospsuite.utils::isOfLength(residualsData, 0)) {
     for (timeRange in timeRanges) {
       if (!timeRange$keep) {
         next
@@ -300,14 +302,14 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     }
   }
   allResiduals <- goodnessOfFitResiduals[[ApplicationRanges$total]]
-  if (!isOfLength(allResiduals, 0)) {
+  if (!ospsuite.utils::isOfLength(allResiduals, 0)) {
     residuals <- list(
       data = allResiduals,
       metaData = residualsMetaData[[ApplicationRanges$total]]
     )
   }
   goodnessOfFitTables <- list(simulatedData = simulatedData)
-  if (!isOfLength(observedData, 0)) {
+  if (!ospsuite.utils::isOfLength(observedData, 0)) {
     goodnessOfFitTables <- list(
       observedData = observedData,
       simulatedData = simulatedData
@@ -338,6 +340,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
 #' @param simulationSet `SimulationSet` object
 #' @param settings TaskSetting object
 #' @return list of data and metaData
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getPopulationResultsFromOutput <- function(simulationPathResults, output, simulationQuantity, molWeight, simulationSet, settings = NULL) {
   aggregateNames <- c("mean", "median", "lowPerc", "highPerc")
@@ -359,7 +362,7 @@ getPopulationResultsFromOutput <- function(simulationPathResults, output, simula
   aggregateData$Time <- toUnit("Time", aggregateData$Time, simulationSet$timeUnit)
 
   convertExpressions <- parse(text = paste0(
-    "aggregateData$", aggregateNames, "<- ifnotnull(output$displayUnit,",
+    "aggregateData$", aggregateNames, "<- ospsuite.utils::ifNotNull(output$displayUnit,",
     "toUnit(simulationQuantity, aggregateData$", aggregateNames, ", output$displayUnit, molWeight = molWeight),",
     "aggregateData$", aggregateNames, ")"
   ))
@@ -420,7 +423,7 @@ plotMeanTimeProfile <- function(simulatedData,
     dataMapping = dataMapping,
     plotConfiguration = plotConfiguration
   )
-  if (!isOfLength(observedData, 0)) {
+  if (!ospsuite.utils::isOfLength(observedData, 0)) {
     timeProfilePlot <- tlf::addScatter(
       data = observedData,
       metaData = metaData,
@@ -428,7 +431,7 @@ plotMeanTimeProfile <- function(simulatedData,
       plotObject = timeProfilePlot
     )
   }
-  if (!isOfLength(lloqData, 0)) {
+  if (!ospsuite.utils::isOfLength(lloqData, 0)) {
     timeProfilePlot <- tlf::addLine(
       data = lloqData,
       metaData = metaData,
@@ -494,6 +497,7 @@ plotMeanObsVsPred <- function(data,
 #' @export
 #' @import tlf
 #' @import ggplot2
+#' @importFrom ospsuite.utils %||%
 plotMeanResVsTime <- function(data,
                               metaData = NULL,
                               plotConfiguration = NULL) {
@@ -542,6 +546,7 @@ plotMeanResVsTime <- function(data,
 #' @export
 #' @import tlf
 #' @import ggplot2
+#' @importFrom ospsuite.utils %||%
 plotMeanResVsPred <- function(data,
                               metaData = NULL,
                               plotConfiguration = NULL) {
@@ -627,7 +632,7 @@ plotPopulationTimeProfile <- function(simulatedData,
     caption = simulatedData$legendMean,
     plotObject = timeProfilePlot
   )
-  if (!isOfLength(observedData, 0)) {
+  if (!ospsuite.utils::isOfLength(observedData, 0)) {
     timeProfilePlot <- tlf::addScatter(
       data = observedData,
       metaData = metaData,
@@ -635,7 +640,7 @@ plotPopulationTimeProfile <- function(simulatedData,
       plotObject = timeProfilePlot
     )
   }
-  if (!isOfLength(lloqData, 0)) {
+  if (!ospsuite.utils::isOfLength(lloqData, 0)) {
     timeProfilePlot <- tlf::addLine(
       data = lloqData,
       metaData = metaData,
@@ -660,6 +665,7 @@ plotPopulationTimeProfile <- function(simulatedData,
 #' @import tlf
 #' @import ggplot2
 #' @import stats
+#' @importFrom ospsuite.utils %||%
 plotResidualsHistogram <- function(data,
                                    metaData = NULL,
                                    dataMapping = NULL,
@@ -731,6 +737,7 @@ plotResidualsHistogram <- function(data,
 #' @import tlf
 #' @import stats
 #' @import ggplot2
+#' @importFrom ospsuite.utils %||%
 plotResidualsQQPlot <- function(data,
                                 metaData = NULL,
                                 dataMapping = NULL,
@@ -795,7 +802,7 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet, logFolder) 
   # Get applications
   applications <- simulation$allApplicationsFor(path)
   applicationTimes <- 0
-  if (!isOfLength(applications, 0)) {
+  if (!ospsuite.utils::isOfLength(applications, 0)) {
     applicationTimes <- sapply(applications, function(application) {
       application$startTime$value
     })
@@ -828,7 +835,7 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet, logFolder) 
   timeRanges$total$values <- c(min(simulationRanges), max(simulationRanges))
 
   # Case of multiple applications, get first and last
-  if (!isOfLength(simulationRanges, 2)) {
+  if (!ospsuite.utils::isOfLength(simulationRanges, 2)) {
     timeRanges$firstApplication$values <- utils::head(simulationRanges, 2)
     timeRanges$lastApplication$values <- utils::tail(simulationRanges, 2)
     timeRanges$firstApplication$keep <- applicationRanges[[ApplicationRanges$firstApplication]]
@@ -839,7 +846,7 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet, logFolder) 
 }
 
 asTimeAfterDose <- function(data, doseTime, maxTime = NULL) {
-  if (isOfLength(data, 0)) {
+  if (ospsuite.utils::isOfLength(data, 0)) {
     # Return empty data.frame (consitent class with data[dataFilter, ])
     return(data.frame())
   }

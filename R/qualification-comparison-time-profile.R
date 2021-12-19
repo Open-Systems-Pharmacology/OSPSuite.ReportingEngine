@@ -6,6 +6,7 @@
 #' @return list with `plots` and `tables`
 #' @import tlf
 #' @import ospsuite
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotQualificationComparisonTimeProfile <- function(configurationPlan,
                                                    logFolder = getwd(),
@@ -17,7 +18,7 @@ plotQualificationComparisonTimeProfile <- function(configurationPlan,
 
     # Get axes properties (with scale, limits and display units)
     axesProperties <- getAxesProperties(timeProfilePlan$Axes) %||% settings$axes
-    if (isOfLength(axesProperties, 0)) {
+    if (ospsuite.utils::isOfLength(axesProperties, 0)) {
       # TODO Centralize messaging of configurtion plan errors and warnings
       logWorkflow(
         message = paste0(
@@ -71,6 +72,7 @@ plotQualificationComparisonTimeProfile <- function(configurationPlan,
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @param logFolder folder where the logs are saved
 #' @return A ggplot object
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, axesProperties, plotObject, configurationPlan, logFolder) {
   # Get simulation output
@@ -165,12 +167,12 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
   )
   observedValues <- observedValues[selectedObservedTimeValues]
   observedError <- NULL
-  if (!isOfLength(observedResults$metaData$error, 0)) {
+  if (!ospsuite.utils::isOfLength(observedResults$metaData$error, 0)) {
     # No unit means that error is geometric
     observedError$ymin <- observedValues / observedResults$data[, 3]
     observedError$ymax <- observedValues * observedResults$data[, 3]
 
-    if (!isIncluded(observedResults$metaData$error$unit, "")) {
+    if (!ospsuite.utils::isIncluded(observedResults$metaData$error$unit, "")) {
       observedError$ymin <- observedValues - ospsuite::toUnit(
         ospsuite::getDimensionForUnit(observedResults$metaData$error$unit),
         observedResults$data[, 3],
@@ -192,10 +194,10 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
     observedError$ymin[is.na(observedError$ymin)] <- observedValues[is.na(observedError$ymin)]
     observedError$ymax[is.na(observedError$ymax)] <- observedValues[is.na(observedError$ymax)]
     # In case of log scale, ymin<0 are replaced by y so upper branch is still plotted
-    if(isIncluded(axesProperties$y$scale, tlf::Scaling$log)){
+    if(ospsuite.utils::isIncluded(axesProperties$y$scale, tlf::Scaling$log)){
       observedError$ymin[observedError$ymin<=0] <- observedValues[observedError$ymin<=0]
     }
-    
+
     # Add error bars for observed data
     plotObject <- tlf::addErrorbar(
       x = observedTime,

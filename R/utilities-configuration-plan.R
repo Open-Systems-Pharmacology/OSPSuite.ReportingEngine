@@ -3,12 +3,12 @@
 #' @title ConfigurationPlots
 #' @description Enum defining possible plots defined in configuration plan
 #' @keywords internal
-ConfigurationPlots <- ospsuite::enum(c("TimeProfile", "GOFMergedPlots", "ComparisonTimeProfilePlots", "PKRatioPlots", "DDIRatioPlots"))
+ConfigurationPlots <- ospsuite.utils::enum(c("TimeProfile", "GOFMergedPlots", "ComparisonTimeProfilePlots", "PKRatioPlots", "DDIRatioPlots"))
 
 #' @title ConfigurationPlotSettings
 #' @description Enum defining possible plot settings fields defined in configuration plan
 #' @keywords internal
-ConfigurationPlotSettings <- ospsuite::enum(c("ChartWidth", "ChartHeight", "Fonts"))
+ConfigurationPlotSettings <- ospsuite.utils::enum(c("ChartWidth", "ChartHeight", "Fonts"))
 
 #' @title ConfigurationFontsFields
 #' @description Enum defining possible fonts fields defined in configuration plan
@@ -59,7 +59,7 @@ ConfigurationLinetypes <- list(
 #' @keywords internal
 getAxesProperties <- function(axesSettings) {
   # Hanlde when properties are left undefined globally or locally
-  if (isOfLength(axesSettings, 0)) {
+  if (ospsuite.utils::isOfLength(axesSettings, 0)) {
     return(NULL)
   }
   # Get axes types for identification of X, Y and Y2 axes
@@ -72,8 +72,8 @@ getAxesProperties <- function(axesSettings) {
   y2AxisIndex <- which(axisTypes %in% "Y2")
 
   # X and Y axes are mandatory, while Y2 is not
-  validateIsOfLength(xAxisIndex, 1)
-  validateIsOfLength(yAxisIndex, 1)
+  ospsuite.utils::validateIsOfLength(xAxisIndex, 1)
+  ospsuite.utils::validateIsOfLength(yAxisIndex, 1)
   xAxis <- axesSettings[[xAxisIndex]]
   yAxis <- axesSettings[[yAxisIndex]]
   # GridLines field defines if grid is present
@@ -97,7 +97,7 @@ getAxesProperties <- function(axesSettings) {
   )
 
   y2Axis <- NULL
-  if (isOfLength(y2AxisIndex, 1)) {
+  if (ospsuite.utils::isOfLength(y2AxisIndex, 1)) {
     y2Axis <- axesSettings[[y2AxisIndex]]
     y2Axis <- list(
       dimension = y2Axis$Dimension, unit = y2Axis$Unit,
@@ -151,7 +151,7 @@ updatePlotAxes <- function(plotObject, axesProperties) {
 tlfLinetype <- function(configurationLinetype) {
   # Unknown or NULL value will translate as NULL
   # which will lead to use default behaviour
-  if (isOfLength(configurationLinetype, 0)) {
+  if (ospsuite.utils::isOfLength(configurationLinetype, 0)) {
     return()
   }
   # tolower is used to ensure that there is no issue with caps from field values
@@ -167,7 +167,7 @@ tlfLinetype <- function(configurationLinetype) {
 tlfShape <- function(configurationShape) {
   # Unknown or NULL value will translate as NULL
   # which will lead to use default behaviour
-  if (isOfLength(configurationShape, 0)) {
+  if (ospsuite.utils::isOfLength(configurationShape, 0)) {
     return()
   }
   # tolower is used to ensure that there is no issue with caps from field values
@@ -183,7 +183,7 @@ tlfShape <- function(configurationShape) {
 tlfScale <- function(configurationScale) {
   # Unknown or NULL value will translate as NULL
   # which will lead to use default behaviour
-  if (isOfLength(configurationScale, 0)) {
+  if (ospsuite.utils::isOfLength(configurationScale, 0)) {
     return()
   }
   # tolower is used to ensure that there is no issue with caps from field values
@@ -226,7 +226,7 @@ getMolWeightForCompound <- function(compoundName, simulation) {
   allMoleculePaths <- ospsuite::getAllMoleculePathsIn(simulation)
   pathForCompoundName <- utils::head(allMoleculePaths[grepl(compoundName, allMoleculePaths)], 1)
   # When compound is not found in simulation, return NA
-  if (isOfLength(pathForCompoundName, 0)) {
+  if (ospsuite.utils::isOfLength(pathForCompoundName, 0)) {
     return(NA)
   }
   return(simulation$molWeightFor(pathForCompoundName))

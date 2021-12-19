@@ -2,6 +2,7 @@
 #' @description  R6 class for tracking and printing messages for the Excel template
 #' @field type "warnings" or "errors" (could potentially include other kind of information)
 #' @field messages list of messages included in each script section
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 ExcelMessaging <- R6::R6Class(
   "ExcelMessaging",
@@ -15,7 +16,7 @@ ExcelMessaging <- R6::R6Class(
     #' @param type "warnings" or "errors"
     #' @return A new `ExcelMessaging` object
     initialize = function(type) {
-      validateIsIncluded(type, c("errors", "warnings"))
+      ospsuite.utils::validateIsIncluded(type, c("errors", "warnings"))
       self$type <- type
       self$messages <- list()
     },
@@ -25,7 +26,7 @@ ExcelMessaging <- R6::R6Class(
     displayMessage = function() {
       message <- NULL
       for (sectionIndex in seq_along(self$messages)) {
-        if (isOfLength(self$messages[[sectionIndex]], 0)) {
+        if (ospsuite.utils::isOfLength(self$messages[[sectionIndex]], 0)) {
           next
         }
         message <- c(

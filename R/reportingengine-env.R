@@ -61,7 +61,7 @@ reEnv$pkRatio$dictionary <- list(
 #' @param watermark character or \code{Label} class object from `tlf` package
 #' @export
 #' @import tlf
-#' @examples 
+#' @examples
 #' setWatermarkConfiguration("Confidential")
 #' setWatermarkConfiguration(Label$new(text = "test", color = "blue"))
 setWatermarkConfiguration <- function(watermark = NULL) {
@@ -76,21 +76,22 @@ setWatermarkConfiguration <- function(watermark = NULL) {
 #' @param units units of `width` and `height` included in "in", "cm", "mm", or "px"
 #' @param dpi Plot resolution in dots per inch. Caution, font sizes depend on resolution.
 #' @export
-#' @examples 
+#' @importFrom ospsuite.utils %||%
+#' @examples
 #' setDefaultPlotFormat(format = "pdf")
 #' setDefaultPlotFormat(width = 16, height = 9, units = "cm", dpi = 300)
 setDefaultPlotFormat <- function(format = NULL, width = NULL, height = NULL, units = NULL, dpi = NULL) {
-  validateIsNumeric(width, nullAllowed = TRUE)
-  validateIsNumeric(height, nullAllowed = TRUE)
-  validateIsNumeric(dpi, nullAllowed = TRUE)
-  validateIsIncluded(units, c("in", "cm", "mm", "px"), nullAllowed = TRUE)
+  ospsuite.utils::validateIsNumeric(width, nullAllowed = TRUE)
+  ospsuite.utils::validateIsNumeric(height, nullAllowed = TRUE)
+  ospsuite.utils::validateIsNumeric(dpi, nullAllowed = TRUE)
+  ospsuite.utils::validateIsIncluded(units, c("in", "cm", "mm", "px"), nullAllowed = TRUE)
   reEnv$defaultPlotFormat$format <- format %||% reEnv$defaultPlotFormat$format
   reEnv$defaultPlotFormat$width <- width %||% reEnv$defaultPlotFormat$width
   reEnv$defaultPlotFormat$height <- height %||% reEnv$defaultPlotFormat$height
   reEnv$defaultPlotFormat$dpi <- dpi %||% reEnv$defaultPlotFormat$dpi
   # ggplot2 version 3.3.0 does not include pixels yet
   # Convert width and height back into inches in case of units as pixels
-  if (isIncluded(units, "px")) {
+  if (ospsuite.utils::isIncluded(units, "px")) {
     units <- "in"
     unitConversionFactor <- grDevices::dev.size("in") / grDevices::dev.size("px")
     reEnv$defaultPlotFormat$width <- reEnv$defaultPlotFormat$width * unitConversionFactor[1]
@@ -112,23 +113,23 @@ setPlotFormat <- function(format = NULL, width = NULL, height = NULL, units = NU
 #' @description
 #' Keys of reported ranges when simulation includes multiple applications
 #' @export
-#' @import ospsuite
 #' @examples
 #' ApplicationRanges$total
 #' ApplicationRanges$firstApplication
 #' ApplicationRanges$lastApplication
-ApplicationRanges <- ospsuite::enum(c("total", "firstApplication", "lastApplication"))
+ApplicationRanges <- ospsuite.utils::enum(c("total", "firstApplication", "lastApplication"))
 
 #' @title setDefaultNumericFormat
 #' @description Set default format for numeric values output in reports
 #' @param digits Number of significant digits
 #' @param scientific Logical defining if numeric format uses a scientific expression
 #' @export
-#' @examples 
+#' @importFrom ospsuite.utils %||%
+#' @examples
 #' setDefaultNumericFormat(digits = 2, scientific = TRUE)
 setDefaultNumericFormat <- function(digits = NULL, scientific = NULL) {
-  validateIsInteger(digits, nullAllowed = TRUE)
-  validateIsLogical(scientific, nullAllowed = TRUE)
+  ospsuite.utils::validateIsInteger(digits, nullAllowed = TRUE)
+  ospsuite.utils::validateIsLogical(scientific, nullAllowed = TRUE)
 
   reEnv$formatNumericsDigits <- digits %||% reEnv$formatNumericsDigits
   reEnv$formatNumericsScientific <- scientific %||% reEnv$formatNumericsScientific
@@ -142,7 +143,7 @@ setDefaultNumericFormat <- function(digits = NULL, scientific = NULL) {
 getDefaultRETheme <- function(){
   # Get reporting engine theme from its json file properties
   reThemeFile <- system.file("extdata", "re-theme.json", package = "ospsuite.reportingengine")
-  if(!isIncluded(reThemeFile, "")){
+  if(!ospsuite.utils::isIncluded(reThemeFile, "")){
     return(tlf::loadThemeFromJson(reThemeFile))
   }
   # If not found, e.g. before the package is built, use a tlf template theme
@@ -159,8 +160,9 @@ reEnv$theme <- getDefaultRETheme()
 #' @param theme `Theme` object from `tlf` package
 #' If `NULL`, the current theme is re-initialized to the reporting engine default
 #' @export
+#' @importFrom ospsuite.utils %||%
 setDefaultTheme <- function(theme = NULL) {
-  validateIsOfType(theme, "Theme", nullAllowed = TRUE)
+  ospsuite.utils::validateIsOfType(theme, "Theme", nullAllowed = TRUE)
   reEnv$theme <- theme %||% getDefaultRETheme()
   tlf::useTheme(reEnv$theme)
 }
@@ -177,20 +179,20 @@ setDefaultThemeFromJson <- function(jsonFile) {
 #' @title setDefaultBins
 #' @param bins number or edges of bins
 #' @export
-#' @examples 
+#' @examples
 #' setDefaultBins(10)
 setDefaultBins <- function(bins) {
-  validateIsNumeric(bins)
+  ospsuite.utils::validateIsNumeric(bins)
   reEnv$defaultBins <- bins
 }
 
 #' @title setDefaultStairstep
 #' @param stairstep logical defining if stairstep should be plotted by default when aggregation is performed
 #' @export
-#' @examples 
+#' @examples
 #' setDefaultStairstep(TRUE)
 setDefaultStairstep <- function(stairstep) {
-  validateIsLogical(stairstep)
+  ospsuite.utils::validateIsLogical(stairstep)
   reEnv$defaultStairstep <- stairstep
 }
 
@@ -198,9 +200,9 @@ setDefaultStairstep <- function(stairstep) {
 #' @param margin numeric value between 0 and 1
 #' defining the margin of automated axis limits
 #' @export
-#' @examples 
+#' @examples
 #' setDefaultAutoAxisLimitMargin(0.1)
 setDefaultAutoAxisLimitMargin <- function(margin) {
-  validateIsNumeric(margin)
+  ospsuite.utils::validateIsNumeric(margin)
   reEnv$autoAxisLimitMargin <- margin
 }

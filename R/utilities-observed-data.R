@@ -77,7 +77,7 @@ dictionaryParameters <- list(
 getDictionaryVariable <- function(dictionary, variableID) {
   variableMapping <- dictionary[, dictionaryParameters$ID] %in% variableID
   variableName <- as.character(dictionary[variableMapping, dictionaryParameters$datasetColumn])
-  if (isOfLength(variableName, 0)) {
+  if (ospsuite.utils::isOfLength(variableName, 0)) {
     return()
   }
   return(variableName)
@@ -91,10 +91,10 @@ getDictionaryVariable <- function(dictionary, variableID) {
 #' @return list of data and dataMapping
 #' @keywords internal
 loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
-  validateIsOfType(simulationSet, "SimulationSet")
+  ospsuite.utils::validateIsOfType(simulationSet, "SimulationSet")
   # Observed data and dictionary are already checked when creating the simulationSet
   # No observed data return NULL
-  if (isOfLength(simulationSet$observedDataFile, 0)) {
+  if (ospsuite.utils::isOfLength(simulationSet$observedDataFile, 0)) {
     return()
   }
 
@@ -104,7 +104,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   dictionary <- readObservedDataFile(simulationSet$observedMetaDataFile)
 
   # Enforce datasetUnit column to exist
-  if (!isIncluded(dictionaryParameters$datasetUnit, names(dictionary))) {
+  if (!ospsuite.utils::isIncluded(dictionaryParameters$datasetUnit, names(dictionary))) {
     dictionary[, dictionaryParameters$datasetUnit] <- NA
   }
   # Use dictionary to map the data and get the unit
@@ -119,24 +119,24 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   # Get values of unit column using datasetUnit
   timeMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$timeID
   timeUnit <- as.character(dictionary[timeMapping, dictionaryParameters$datasetUnit])
-  if (!any(is.na(timeUnit), isIncluded(timeUnit, ""))) {
+  if (!any(is.na(timeUnit), ospsuite.utils::isIncluded(timeUnit, ""))) {
     timeUnitColumn <- "timeUnit"
     observedDataset[, timeUnitColumn] <- timeUnit
   }
   dvMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$dvID
   dvUnit <- as.character(dictionary[dvMapping, dictionaryParameters$datasetUnit])
-  if (!any(is.na(dvUnit), isIncluded(dvUnit, ""))) {
+  if (!any(is.na(dvUnit), ospsuite.utils::isIncluded(dvUnit, ""))) {
     dvUnitColumn <- "dvUnit"
     observedDataset[, dvUnitColumn] <- dvUnit
   }
-  
+
   # Parse the data.frame with the appropriate columns and ensure units are "character" type
   observedDataset[, timeUnitColumn] <- as.character(observedDataset[, timeUnitColumn])
   observedDataset[, dvUnitColumn] <- as.character(observedDataset[, dvUnitColumn])
-  
+
   # If unit was actually defined using output objects, overwrite current dvUnit
   for(output in simulationSet$outputs){
-    if(isOfLength(output$dataUnit, 0)){
+    if(ospsuite.utils::isOfLength(output$dataUnit, 0)){
       next
     }
     selectedRows <- evalDataFilter(observedDataset, output$dataSelection)
@@ -157,7 +157,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   observedDataset$dimension <- NA
   for (dvUnit in unique(observedDataset[, dvUnitColumn])) {
     dvDimension <- ospsuite::getDimensionForUnit(dvUnit)
-    if (isOfLength(dvDimension, 0)) {
+    if (ospsuite.utils::isOfLength(dvDimension, 0)) {
       logWorkflow(
         message = paste0("In loadObservedDataFromSimulationSet: unit '", dvUnit, "' is unknown."),
         pathFolder = logFolder,
@@ -172,11 +172,11 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
       dvUnit
     )
     observedDataset$dimension[selectedRows] <- dvDimension
-    if (isOfLength(lloqColumn, 0)) {
+    if (ospsuite.utils::isOfLength(lloqColumn, 0)) {
       next
     }
     # Case where dictionary defined an lloq column missing from dataset
-    if (!isIncluded(lloqColumn, names(observedDataset))) {
+    if (!ospsuite.utils::isIncluded(lloqColumn, names(observedDataset))) {
       logWorkflow(
         message = paste0("lloq column '", lloqColumn, "' defined in dictionary is not present in the dataset columns"),
         pathFolder = logFolder,
@@ -219,7 +219,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
 #' @return list of data and lloq data.frames
 #' @keywords internal
 getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, timeUnit, logFolder) {
-  if (isOfLength(output$dataSelection, 0)) {
+  if (ospsuite.utils::isOfLength(output$dataSelection, 0)) {
     return()
   }
 
@@ -233,7 +233,7 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
   # Get dimensions of observed data
   dvDimensions <- unique(as.character(data[selectedRows, dataMapping$dimension]))
   outputConcentration <- data[selectedRows, dataMapping$dv]
-  if (!isOfLength(output$displayUnit, 0)) {
+  if (!ospsuite.utils::isOfLength(output$displayUnit, 0)) {
     for (dvDimension in dvDimensions) {
       if (is.na(dvDimension)) {
         next
@@ -253,12 +253,12 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
     "Legend" = paste0("Observed data ", output$dataDisplayName),
     "Path" = output$path
   )
-  if (isOfLength(dataMapping$lloq, 0)) {
+  if (ospsuite.utils::isOfLength(dataMapping$lloq, 0)) {
     return(list(data = outputData, lloq = NULL))
   }
 
   lloqConcentration <- data[selectedRows, dataMapping$lloq]
-  if (!isOfLength(output$displayUnit, 0)) {
+  if (!ospsuite.utils::isOfLength(output$displayUnit, 0)) {
     for (dvDimension in dvDimensions) {
       if (is.na(dvDimension)) {
         next
@@ -333,7 +333,7 @@ getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPl
 #' @keywords internal
 isObservedData <- function(path) {
   pathArray <- ospsuite::toPathArray(path)
-  isIncluded(pathArray[2], "ObservedData")
+  ospsuite.utils::isIncluded(pathArray[2], "ObservedData")
 }
 
 #' @title getObservedDataIdFromPath
