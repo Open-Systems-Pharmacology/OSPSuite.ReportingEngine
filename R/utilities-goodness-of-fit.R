@@ -14,7 +14,7 @@
 plotMeanGoodnessOfFit <- function(structureSet,
                                   logFolder = getwd(),
                                   settings = NULL) {
-  validateIsOfType(structureSet, "SimulationStructure")
+  ospsuite.utils::validateIsOfType(structureSet, "SimulationStructure")
 
   initializeExpression <- parse(text = paste0(
     c("observedData", "simulatedData", "lloqData", "residualsData", "residualsMetaData", "residuals"),
@@ -224,7 +224,7 @@ getResiduals <- function(observedData,
 plotPopulationGoodnessOfFit <- function(structureSet,
                                         logFolder = getwd(),
                                         settings = NULL) {
-  validateIsOfType(structureSet, "SimulationStructure")
+  ospsuite.utils::validateIsOfType(structureSet, "SimulationStructure")
 
   initializeExpression <- parse(text = paste0(
     c("observedData", "simulatedData", "lloqData", "residualsData", "residualsMetaData", "residuals"),

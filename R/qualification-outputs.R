@@ -24,7 +24,7 @@ getOutputsFromConfigurationPlan <- function(configurationPlan) {
 getTimeProfileOutputsDataframe <- function(configurationPlan) {
   timeProfileOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$TimeProfile) {
-    validateIsIncluded(values = "Plot", parentValues = names(plot), nullAllowed = TRUE)
+    ospsuite.utils::validateIsIncluded(values = "Plot", parentValues = names(plot), nullAllowed = TRUE)
 
     # Accounts for paths of both mean and pop time profiles
     paths <- plot$Plot$Analysis$Fields[[1]]$QuantityPath
@@ -79,13 +79,13 @@ getComparisonTimeProfileOutputsDataframe <- function(configurationPlan) {
 getGOFOutputsDataframe <- function(configurationPlan) {
   gofOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$GOFMergedPlots) {
-    validateIsIncluded(values = "Groups", parentValues = names(plot), nullAllowed = TRUE)
+    ospsuite.utils::validateIsIncluded(values = "Groups", parentValues = names(plot), nullAllowed = TRUE)
     paths <- NULL
     for (group in plot$Groups) {
-      validateIsIncluded(values = "OutputMappings", parentValues = names(group), nullAllowed = TRUE)
+      ospsuite.utils::validateIsIncluded(values = "OutputMappings", parentValues = names(group), nullAllowed = TRUE)
       for (outputMapping in group$OutputMappings) {
-        validateIsIncluded(values = "Output", parentValues = names(outputMapping), nullAllowed = TRUE)
-        validateIsString(object = outputMapping$Output)
+        ospsuite.utils::validateIsIncluded(values = "Output", parentValues = names(outputMapping), nullAllowed = TRUE)
+        ospsuite.utils::validateIsString(object = outputMapping$Output)
         paths <- c(paths, outputMapping$Output)
         df <- data.frame(
           project = outputMapping$Project,
@@ -244,7 +244,7 @@ addNewPkParameter <- function(pkParameter, startTime, endTime) {
 #' @import ospsuite.utils
 #' @keywords internal
 generateDDIPlotPKParameterName <- function(pkParameter, startTime, endTime) {
-  validateIsIncluded(values = pkParameter, parentValues = names(pkDictionaryQualificationOSP))
+  ospsuite.utils::validateIsIncluded(values = pkParameter, parentValues = names(pkDictionaryQualificationOSP))
   standardPKParameter <- pkDictionaryQualificationOSP[[pkParameter]]
   pkParameterName <- standardPKParameter
   pkParameterName <- ospsuite.utils::ifNotNull(startTime, paste0(pkParameterName, "_tStartTime_", startTime), pkParameterName)

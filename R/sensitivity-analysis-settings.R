@@ -32,8 +32,8 @@ SensitivityAnalysisSettings <- R6::R6Class(
       if (missing(value)) {
         private$.variationRange
       } else {
-        validateIsNumeric(value)
-        validateIsOfLength(value, nbElements = 1)
+        ospsuite.utils::validateIsNumeric(value)
+        ospsuite.utils::validateIsOfLength(value, nbElements = 1)
         private$.variationRange <- value
       }
     },
@@ -43,8 +43,8 @@ SensitivityAnalysisSettings <- R6::R6Class(
       if (missing(value)) {
         private$.numberOfCores
       } else {
-        validateIsInteger(value)
-        validateIsOfLength(object = value, nbElements = 1)
+        ospsuite.utils::validateIsInteger(value)
+        ospsuite.utils::validateIsOfLength(object = value, nbElements = 1)
         private$.numberOfCores <- value
       }
     },
@@ -54,7 +54,7 @@ SensitivityAnalysisSettings <- R6::R6Class(
       if (missing(value)) {
         private$.quantileVec
       } else {
-        validateIsNumeric(value)
+        ospsuite.utils::validateIsNumeric(value)
         validateNoDuplicatedEntries(value)
         private$.quantileVec <- value
       }
@@ -66,7 +66,7 @@ SensitivityAnalysisSettings <- R6::R6Class(
         private$.variableParameterPaths
       } else {
         if (!is.null(value)) {
-          validateIsString(value)
+          ospsuite.utils::validateIsString(value)
           validateNoDuplicatedEntries(value)
           private$.variableParameterPaths <- value
         }
@@ -79,7 +79,7 @@ SensitivityAnalysisSettings <- R6::R6Class(
         private$.showProgress
       } else {
         if (!is.null(value)) {
-          validateIsLogical(value)
+          ospsuite.utils::validateIsLogical(value)
           private$.showProgress <- value
         }
       }
@@ -91,8 +91,8 @@ SensitivityAnalysisSettings <- R6::R6Class(
         private$.allowedCores
       } else {
         if (!is.null(value)) {
-          validateIsInteger(value)
-          validateIsOfLength(object = value, nbElements = 1)
+          ospsuite.utils::validateIsInteger(value)
+          ospsuite.utils::validateIsOfLength(object = value, nbElements = 1)
           private$.allowedCores <- value
         }
       }

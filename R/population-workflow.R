@@ -54,12 +54,12 @@ PopulationWorkflow <- R6::R6Class(
         theme = theme
       )
 
-      validateIsOfType(c(simulationSets), "PopulationSimulationSet")
+      ospsuite.utils::validateIsOfType(c(simulationSets), "PopulationSimulationSet")
       if (!ospsuite.utils::isOfType(simulationSets, "list")) {
         simulationSets <- list(simulationSets)
       }
 
-      validateIsIncluded(workflowType, PopulationWorkflowTypes)
+      ospsuite.utils::validateIsIncluded(workflowType, PopulationWorkflowTypes)
       self$workflowType <- workflowType
 
       # Pediatric and ratio comparison workflows need ONE reference population

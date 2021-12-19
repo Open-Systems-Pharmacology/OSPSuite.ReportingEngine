@@ -1,5 +1,5 @@
 validateIsPositive <- function(object, nullAllowed = FALSE) {
-  validateIsOfType(object, c("numeric", "integer"), nullAllowed)
+  ospsuite.utils::validateIsOfType(object, c("numeric", "integer"), nullAllowed)
 
   if (isFALSE(object > 0)) {
     logErrorThenStop(messages$errorWrongType(getObjectNameAsString(object), class(object)[1], "positive"))
@@ -15,10 +15,10 @@ hasPositiveValues <- function(object) {
 
 
 validateIsInRange <- function(variableName, value, lowerBound, upperBound, nullAllowed = FALSE) {
-  validateIsOfLength(value, 1)
-  validateIsOfLength(lowerBound, 1)
-  validateIsOfLength(upperBound, 1)
-  validateIsNumeric(c(value, lowerBound, upperBound), nullAllowed)
+  ospsuite.utils::validateIsOfLength(value, 1)
+  ospsuite.utils::validateIsOfLength(lowerBound, 1)
+  ospsuite.utils::validateIsOfLength(upperBound, 1)
+  ospsuite.utils::validateIsNumeric(c(value, lowerBound, upperBound), nullAllowed)
   if ((value < lowerBound) | (value > upperBound)) {
     logErrorThenStop(messages$outsideRange(variableName, value, lowerBound, upperBound))
   }
@@ -63,10 +63,10 @@ validateMapping <- function(mapping, data, nullAllowed = FALSE) {
     return(invisible())
   }
 
-  validateIsString(mapping)
+  ospsuite.utils::validateIsString(mapping)
   variableNames <- names(data)
 
-  validateIsIncluded(mapping, variableNames)
+  ospsuite.utils::validateIsIncluded(mapping, variableNames)
 
   return(invisible())
 }
@@ -157,7 +157,7 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile,
     dictionary[, dictionaryParameters$datasetUnit] <- NA
   }
   validateIsIncludedInDataset(c(dictionaryParameters$ID, dictionaryParameters$datasetColumn), dictionary, datasetName = "dictionary")
-  validateIsIncluded(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID], groupName = paste0("Column '", dictionaryParameters$ID, "'"))
+  ospsuite.utils::validateIsIncluded(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID], groupName = paste0("Column '", dictionaryParameters$ID, "'"))
 
   # Check that dictionary and observed data are consitent
   observedDataset <- readObservedDataFile(observedDataFile)
@@ -240,7 +240,7 @@ validateOutputObject <- function(outputs, simulation, nullAllowed = FALSE) {
   if (nullAllowed && is.null(outputs)) {
     return(invisible())
   }
-  validateIsOfType(c(outputs), "Output")
+  ospsuite.utils::validateIsOfType(c(outputs), "Output")
   # Check paths existence
   allOutputPaths <- sapply(outputs, function(output) {
     output$path

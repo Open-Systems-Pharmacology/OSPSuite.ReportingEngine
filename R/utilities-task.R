@@ -41,8 +41,8 @@ AllAvailableTasks <- c(
 #' Default activates all tasks of the workflow using workflow method `workflow$getAllTasks()`
 #' @export
 activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
-  validateIsOfType(workflow, "Workflow")
-  validateIsIncluded(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
+  ospsuite.utils::validateIsOfType(workflow, "Workflow")
+  ospsuite.utils::validateIsIncluded(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
 
   for (task in tasks) {
     workflow[[task]]$activate()
@@ -56,8 +56,8 @@ activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
 #' Default inactivates all tasks of the workflow using workflow method `workflow$getAllTasks()`
 #' @export
 inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
-  validateIsOfType(workflow, "Workflow")
-  validateIsIncluded(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
+  ospsuite.utils::validateIsOfType(workflow, "Workflow")
+  ospsuite.utils::validateIsIncluded(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
 
   for (task in tasks) {
     workflow[[task]]$inactivate()
@@ -74,8 +74,8 @@ inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
 #' @return A `SimulationTask` object
 #' @export
 loadSimulateTask <- function(workflow, active = TRUE, settings = NULL) {
-  validateIsOfType(workflow, "Workflow")
-  validateIsLogical(active)
+  ospsuite.utils::validateIsOfType(workflow, "Workflow")
+  ospsuite.utils::validateIsLogical(active)
 
   return(SimulationTask$new(
     getTaskResults = simulateWorkflowModels,
@@ -99,8 +99,8 @@ loadSimulateTask <- function(workflow, active = TRUE, settings = NULL) {
 #' @return A `CalculatePKParametersTask` object
 #' @export
 loadCalculatePKParametersTask <- function(workflow, active = FALSE, settings = NULL) {
-  validateIsOfType(workflow, "Workflow")
-  validateIsLogical(active)
+  ospsuite.utils::validateIsOfType(workflow, "Workflow")
+  ospsuite.utils::validateIsLogical(active)
 
   return(CalculatePKParametersTask$new(
     getTaskResults = calculatePKParameters,
@@ -127,8 +127,8 @@ loadCalculatePKParametersTask <- function(workflow, active = FALSE, settings = N
 #' A `SensitivityAnalysisTask` object otherwise
 #' @export
 loadCalculateSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
-  validateIsOfType(workflow, "Workflow")
-  validateIsLogical(active)
+  ospsuite.utils::validateIsOfType(workflow, "Workflow")
+  ospsuite.utils::validateIsLogical(active)
 
   if (ospsuite.utils::isOfType(workflow, "PopulationWorkflow")) {
     return(PopulationSensitivityAnalysisTask$new(
@@ -167,9 +167,9 @@ loadCalculateSensitivityTask <- function(workflow, active = FALSE, settings = NU
 #' @return A `GofPlotTask` object
 #' @export
 loadPlotTimeProfilesAndResidualsTask <- function(workflow, active = FALSE, settings = NULL) {
-  validateIsOfType(workflow, "Workflow")
-  validateIsLogical(active)
-  validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
+  ospsuite.utils::validateIsOfType(workflow, "Workflow")
+  ospsuite.utils::validateIsLogical(active)
+  ospsuite.utils::validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
   settings <- settings %||% GofTaskSettings$new(AllAvailableTasks$plotTimeProfilesAndResiduals)
 
   taskFunction <- plotMeanGoodnessOfFit
@@ -206,9 +206,9 @@ loadPlotTimeProfilesAndResidualsTask <- function(workflow, active = FALSE, setti
 #' A `SensitivityAnalysisTask` object otherwise
 #' @export
 loadPlotPKParametersTask <- function(workflow, active = FALSE, settings = NULL) {
-  validateIsOfType(workflow, "Workflow")
-  validateIsLogical(active)
-  validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
+  ospsuite.utils::validateIsOfType(workflow, "Workflow")
+  ospsuite.utils::validateIsLogical(active)
+  ospsuite.utils::validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
   settings <- settings %||% TaskSettings$new(AllAvailableTasks$plotPKParameters)
 
   if (ospsuite.utils::isOfType(workflow, "PopulationWorkflow")) {
@@ -255,9 +255,9 @@ loadPlotPKParametersTask <- function(workflow, active = FALSE, settings = NULL) 
 #' A `SensitivityAnalysisTask` object otherwise
 #' @export
 loadPlotSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
-  validateIsOfType(workflow, "Workflow")
-  validateIsLogical(active)
-  validateIsOfType(settings, "SensitivityPlotSettings", nullAllowed = TRUE)
+  ospsuite.utils::validateIsOfType(workflow, "Workflow")
+  ospsuite.utils::validateIsLogical(active)
+  ospsuite.utils::validateIsOfType(settings, "SensitivityPlotSettings", nullAllowed = TRUE)
   settings <- settings %||% SensitivityPlotSettings$new()
 
   if (ospsuite.utils::isOfType(workflow, "PopulationWorkflow")) {
@@ -304,9 +304,9 @@ loadPlotSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
 #' @return A `PlotTask` object
 #' @export
 loadPlotMassBalanceTask <- function(workflow, active = FALSE, settings = NULL) {
-  validateIsOfType(workflow, "MeanModelWorkflow")
-  validateIsLogical(active)
-  validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
+  ospsuite.utils::validateIsOfType(workflow, "MeanModelWorkflow")
+  ospsuite.utils::validateIsLogical(active)
+  ospsuite.utils::validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
 
   return(PlotTask$new(
     reportTitle = defaultWorkflowTitles$plotMassBalance,
@@ -331,9 +331,9 @@ loadPlotMassBalanceTask <- function(workflow, active = FALSE, settings = NULL) {
 #' @return A `PlotTask` object
 #' @export
 loadPlotAbsorptionTask <- function(workflow, active = FALSE, settings = NULL) {
-  validateIsOfType(workflow, "MeanModelWorkflow")
-  validateIsLogical(active)
-  validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
+  ospsuite.utils::validateIsOfType(workflow, "MeanModelWorkflow")
+  ospsuite.utils::validateIsLogical(active)
+  ospsuite.utils::validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
 
   return(PlotTask$new(
     reportTitle = defaultWorkflowTitles$plotAbsorption,
@@ -358,9 +358,9 @@ loadPlotAbsorptionTask <- function(workflow, active = FALSE, settings = NULL) {
 #' @return A `PlotTask` object
 #' @export
 loadPlotDemographyTask <- function(workflow, active = FALSE, settings = NULL) {
-  validateIsOfType(workflow, "PopulationWorkflow")
-  validateIsLogical(active)
-  validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
+  ospsuite.utils::validateIsOfType(workflow, "PopulationWorkflow")
+  ospsuite.utils::validateIsLogical(active)
+  ospsuite.utils::validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
 
   return(PopulationPlotTask$new(
     workflowType = workflow$workflowType,
@@ -385,7 +385,7 @@ loadPlotDemographyTask <- function(workflow, active = FALSE, settings = NULL) {
 #' @return Names of the the expected simulation result files
 #' @export
 getSimulationResultFileNames <- function(workflow) {
-  validateIsOfType(workflow, "Workflow")
+  ospsuite.utils::validateIsOfType(workflow, "Workflow")
   simulationResultFileNames <- NULL
   for (structureSet in workflow$simulationStructures) {
     simulationResultFileNames <- c(simulationResultFileNames, structureSet$simulationResultFileNames)
@@ -400,7 +400,7 @@ getSimulationResultFileNames <- function(workflow) {
 #' @return Names of the the expected PK analysis result files
 #' @export
 getPkAnalysisResultsFileNames <- function(workflow) {
-  validateIsOfType(workflow, "Workflow")
+  ospsuite.utils::validateIsOfType(workflow, "Workflow")
   pkAnalysisResultsFileNames <- NULL
   for (structureSet in workflow$simulationStructures) {
     pkAnalysisResultsFileNames <- c(pkAnalysisResultsFileNames, structureSet$pkAnalysisResultsFileNames)
@@ -415,7 +415,7 @@ getPkAnalysisResultsFileNames <- function(workflow) {
 #' @return Names of the the expected sensitivity analysis result files
 #' @export
 getMeanSensitivityAnalysisResultsFileNames <- function(workflow) {
-  validateIsOfType(workflow, "MeanModelWorkflow")
+  ospsuite.utils::validateIsOfType(workflow, "MeanModelWorkflow")
   sensitivityAnalysisResultsFileNames <- NULL
   for (structureSet in workflow$simulationStructures) {
     sensitivityAnalysisResultsFileNames <- c(sensitivityAnalysisResultsFileNames, structureSet$sensitivityAnalysisResultsFileNames)
@@ -430,7 +430,7 @@ getMeanSensitivityAnalysisResultsFileNames <- function(workflow) {
 #' @return Names of the the expected sensitivity analysis result files
 #' @export
 getPopulationSensitivityAnalysisResultsFileNames <- function(workflow) {
-  validateIsOfType(workflow, "PopulationWorkflow")
+  ospsuite.utils::validateIsOfType(workflow, "PopulationWorkflow")
   sensitivityAnalysisResultsFileNames <- NULL
   for (structureSet in workflow$simulationStructures) {
     sensitivityAnalysisResultsFileNames <- c(sensitivityAnalysisResultsFileNames, structureSet$popSensitivityAnalysisResultsIndexFile)
@@ -445,7 +445,7 @@ getPopulationSensitivityAnalysisResultsFileNames <- function(workflow) {
 #' @return Names of the files required to perform the task
 #' @export
 getTaskInputs <- function(task) {
-  validateIsOfType(task, "Task")
+  ospsuite.utils::validateIsOfType(task, "Task")
   return(task$getInputs())
 }
 
@@ -456,7 +456,7 @@ getTaskInputs <- function(task) {
 #' @return Named list of logical values assessing if the files exist
 #' @export
 checkTaskInputsExist <- function(task) {
-  validateIsOfType(task, "Task")
+  ospsuite.utils::validateIsOfType(task, "Task")
   return(sapply(task$getInputs(), file.exists))
 }
 
@@ -478,16 +478,16 @@ addUserDefinedTask <- function(workflow,
                                taskName = "userDefinedTask",
                                active = TRUE,
                                settings = NULL) {
-  validateIsOfType(workflow, "Workflow")
-  validateIsOfType(taskFunction, "function")
-  validateIsString(taskName)
-  validateIsLogical(active)
+  ospsuite.utils::validateIsOfType(workflow, "Workflow")
+  ospsuite.utils::validateIsOfType(taskFunction, "function")
+  ospsuite.utils::validateIsString(taskName)
+  ospsuite.utils::validateIsLogical(active)
 
   # Get the names of input arguments of the function
   argumentNames <- names(formals(taskFunction))
   if (ospsuite.utils::isOfType(workflow, "MeanModelWorkflow")) {
     # PlotTask arguments
-    validateIsIncluded(c("structureSet", "logFolder", "settings"), argumentNames,
+    ospsuite.utils::validateIsIncluded(c("structureSet", "logFolder", "settings"), argumentNames,
       groupName = "Task function arguments", logFolder = workflow$workflowFolder
     )
 
@@ -509,7 +509,7 @@ addUserDefinedTask <- function(workflow,
 
   if (ospsuite.utils::isOfType(workflow, "PopulationWorkflow")) {
     # PopulationPlotTask arguments
-    validateIsIncluded(c("structureSets", "logFolder", "settings", "workflowType", "xParameters", "yParameters"), argumentNames,
+    ospsuite.utils::validateIsIncluded(c("structureSets", "logFolder", "settings", "workflowType", "xParameters", "yParameters"), argumentNames,
       groupName = "Task function arguments", logFolder = workflow$workflowFolder
     )
 
@@ -547,8 +547,8 @@ addUserDefinedTask <- function(workflow,
 #' @import ospsuite.utils
 #' @export
 loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
-  validateIsOfType(workflow, "QualificationWorkflow")
-  validateIsOfType(configurationPlan, "ConfigurationPlan")
+  ospsuite.utils::validateIsOfType(workflow, "QualificationWorkflow")
+  ospsuite.utils::validateIsOfType(configurationPlan, "ConfigurationPlan")
 
   # Time Profiles task is only active if the field is defined & not empty
   active <- !ospsuite.utils::isOfLength(configurationPlan$plots$TimeProfile, 0)
@@ -588,8 +588,8 @@ loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
 #' @import ospsuite.utils
 #' @export
 loadGOFMergedTask <- function(workflow, configurationPlan) {
-  validateIsOfType(workflow, "QualificationWorkflow")
-  validateIsOfType(configurationPlan, "ConfigurationPlan")
+  ospsuite.utils::validateIsOfType(workflow, "QualificationWorkflow")
+  ospsuite.utils::validateIsOfType(configurationPlan, "ConfigurationPlan")
 
   # Time Profiles task is only active if the field is defined & not empty
   active <- !ospsuite.utils::isOfLength(configurationPlan$plots$GOFMergedPlots, 0)
@@ -637,8 +637,8 @@ loadGOFMergedTask <- function(workflow, configurationPlan) {
 #' @export
 #' @import ospsuite.utils
 loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPlan) {
-  validateIsOfType(workflow, "QualificationWorkflow")
-  validateIsOfType(configurationPlan, "ConfigurationPlan")
+  ospsuite.utils::validateIsOfType(workflow, "QualificationWorkflow")
+  ospsuite.utils::validateIsOfType(configurationPlan, "ConfigurationPlan")
 
   # Time Profiles task is only active if the field is defined & not empty
   active <- !ospsuite.utils::isOfLength(configurationPlan$plots$ComparisonTimeProfilePlots, 0)
@@ -679,8 +679,8 @@ loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPl
 #' @export
 #' @import ospsuite.utils
 loadPlotPKRatioTask <- function(workflow, configurationPlan) {
-  validateIsOfType(workflow, "QualificationWorkflow")
-  validateIsOfType(configurationPlan, "ConfigurationPlan")
+  ospsuite.utils::validateIsOfType(workflow, "QualificationWorkflow")
+  ospsuite.utils::validateIsOfType(configurationPlan, "ConfigurationPlan")
 
   # Time Profiles task is only active if the field is defined & not empty
   active <- !ospsuite.utils::isOfLength(configurationPlan$plots$PKRatioPlots, 0)
@@ -735,8 +735,8 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
 #' @import ospsuite.utils
 #' @export
 loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
-  validateIsOfType(workflow, "QualificationWorkflow")
-  validateIsOfType(configurationPlan, "ConfigurationPlan")
+  ospsuite.utils::validateIsOfType(workflow, "QualificationWorkflow")
+  ospsuite.utils::validateIsOfType(configurationPlan, "ConfigurationPlan")
 
   # Time Profiles task is only active if the field is defined & not empty
   active <- !ospsuite.utils::isOfLength(configurationPlan$plots$DDIRatioPlots, 0)

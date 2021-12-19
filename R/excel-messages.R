@@ -16,7 +16,7 @@ ExcelMessaging <- R6::R6Class(
     #' @param type "warnings" or "errors"
     #' @return A new `ExcelMessaging` object
     initialize = function(type) {
-      validateIsIncluded(type, c("errors", "warnings"))
+      ospsuite.utils::validateIsIncluded(type, c("errors", "warnings"))
       self$type <- type
       self$messages <- list()
     },

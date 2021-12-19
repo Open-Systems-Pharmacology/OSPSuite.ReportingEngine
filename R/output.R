@@ -61,17 +61,17 @@ Output <- R6::R6Class(
                           pkParameters = NULL,
                           residualScale = ResidualScales$Logarithmic) {
 
-      validateIsString(path)
-      validateIsOfLength(path, 1)
-      validateIsString(c(displayName, dataUnit, displayUnit, dataDisplayName), nullAllowed = TRUE)
-      validateIsIncluded(residualScale, ResidualScales)
+      ospsuite.utils::validateIsString(path)
+      ospsuite.utils::validateIsOfLength(path, 1)
+      ospsuite.utils::validateIsString(c(displayName, dataUnit, displayUnit, dataDisplayName), nullAllowed = TRUE)
+      ospsuite.utils::validateIsIncluded(residualScale, ResidualScales)
       ospsuite.utils::ifNotNull(displayName, validateIsOfLength(displayName, 1))
       ospsuite.utils::ifNotNull(displayUnit, validateIsOfLength(displayUnit, 1))
       ospsuite.utils::ifNotNull(dataUnit, validateIsOfLength(dataUnit, 1))
       ospsuite.utils::ifNotNull(dataDisplayName, validateIsOfLength(dataDisplayName, 1))
-      validateIsOfType(dataSelection, c("character", "expression"), nullAllowed = TRUE)
+      ospsuite.utils::validateIsOfType(dataSelection, c("character", "expression"), nullAllowed = TRUE)
       ospsuite.utils::ifNotNull(dataSelection, validateIsOfLength(dataSelection, 1))
-      validateIsOfType(c(pkParameters), c("character", "PkParameterInfo"), nullAllowed = TRUE)
+      ospsuite.utils::validateIsOfType(c(pkParameters), c("character", "PkParameterInfo"), nullAllowed = TRUE)
 
       self$path <- path
       self$displayName <- displayName %||% path

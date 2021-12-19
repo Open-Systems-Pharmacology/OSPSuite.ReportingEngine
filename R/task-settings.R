@@ -10,7 +10,7 @@ TaskSettings <- R6::R6Class(
     #' @param taskName name of the task using the settings
     #' @return A new `TaskSettings` object
     initialize = function(taskName) {
-      validateIsIncluded(taskName, AllAvailableTasks)
+      ospsuite.utils::validateIsIncluded(taskName, AllAvailableTasks)
 
       private$.bins <- reEnv$defaultBins
       private$.stairstep <- reEnv$defaultStairstep
@@ -68,7 +68,7 @@ TaskSettings <- R6::R6Class(
       if (missing(value)) {
         return(private$.bins)
       }
-      validateIsNumeric(value, nullAllowed = TRUE)
+      ospsuite.utils::validateIsNumeric(value, nullAllowed = TRUE)
       private$.bins <- value %||% private$.bins
       return(invisible())
     },
@@ -77,7 +77,7 @@ TaskSettings <- R6::R6Class(
       if (missing(value)) {
         return(private$.stairstep)
       }
-      validateIsLogical(value, nullAllowed = TRUE)
+      ospsuite.utils::validateIsLogical(value, nullAllowed = TRUE)
       private$.stairstep <- value %||% private$.stairstep
       return(invisible())
     },
@@ -86,7 +86,7 @@ TaskSettings <- R6::R6Class(
       if (missing(value)) {
         return(private$.digits)
       }
-      validateIsInteger(value, nullAllowed = TRUE)
+      ospsuite.utils::validateIsInteger(value, nullAllowed = TRUE)
       private$.digits <- value %||% private$.digits
       return(invisible())
     },
@@ -95,7 +95,7 @@ TaskSettings <- R6::R6Class(
       if (missing(value)) {
         return(private$.nsmall)
       }
-      validateIsInteger(value, nullAllowed = TRUE)
+      ospsuite.utils::validateIsInteger(value, nullAllowed = TRUE)
       private$.nsmall <- value %||% private$.nsmall
       return(invisible())
     },
@@ -104,7 +104,7 @@ TaskSettings <- R6::R6Class(
       if (missing(value)) {
         return(private$.scientific)
       }
-      validateIsLogical(value, nullAllowed = TRUE)
+      ospsuite.utils::validateIsLogical(value, nullAllowed = TRUE)
       private$.scientific <- value %||% private$.scientific
       return(invisible())
     },
@@ -154,7 +154,7 @@ GofTaskSettings <- R6::R6Class(
     #' @param outputSelections subset of simulationSet outputs to be used in GoF plot
     #' @return A new `GofTaskSettings` object
     initialize = function(taskName = AllAvailableTasks$plotTimeProfilesAndResiduals, outputSelections = NULL) {
-      validateIsIncluded(taskName, AllAvailableTasks$plotTimeProfilesAndResiduals)
+      ospsuite.utils::validateIsIncluded(taskName, AllAvailableTasks$plotTimeProfilesAndResiduals)
       super$initialize(taskName)
       private$.includeReferenceData <- TRUE
       private$.outputSelections <- outputSelections
@@ -167,7 +167,7 @@ GofTaskSettings <- R6::R6Class(
       if (missing(value)) {
         return(private$.includeReferenceData)
       }
-      validateIsLogical(value, nullAllowed = TRUE)
+      ospsuite.utils::validateIsLogical(value, nullAllowed = TRUE)
       private$.includeReferenceData <- value %||% private$.includeReferenceData
       return(invisible())
     },
@@ -177,7 +177,7 @@ GofTaskSettings <- R6::R6Class(
       if (missing(value)) {
         return(private$.outputSelections)
       }
-      validateIsString(value, nullAllowed = TRUE)
+      ospsuite.utils::validateIsString(value, nullAllowed = TRUE)
       private$.outputSelections <- value %||% private$.outputSelections
       return(invisible())
     }

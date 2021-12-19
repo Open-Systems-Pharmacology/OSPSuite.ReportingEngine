@@ -43,11 +43,11 @@ SimulationSet <- R6::R6Class(
                           applicationRanges = ApplicationRanges,
                           minimumSimulationEndTime = NULL) {
       # Test and validate the simulation object
-      validateIsString(simulationSetName)
-      validateIsString(simulationFile)
+      ospsuite.utils::validateIsString(simulationSetName)
+      ospsuite.utils::validateIsString(simulationFile)
       # For optional input, usually null is allowed
       # but not here as it would mean that nothing would be reported
-      validateIsIncluded(c(applicationRanges), ApplicationRanges)
+      ospsuite.utils::validateIsIncluded(c(applicationRanges), ApplicationRanges)
 
       validateIsFileExtension(simulationFile, "pkml")
       simulation <- ospsuite::loadSimulation(simulationFile)
@@ -58,7 +58,7 @@ SimulationSet <- R6::R6Class(
       self$minimumSimulationEndTime <- minimumSimulationEndTime
 
       # Test and validate observed data
-      validateIsString(c(observedDataFile, observedMetaDataFile, timeUnit), nullAllowed = TRUE)
+      ospsuite.utils::validateIsString(c(observedDataFile, observedMetaDataFile, timeUnit), nullAllowed = TRUE)
       if (!is.null(observedDataFile)) {
         validateObservedMetaDataFile(observedMetaDataFile, observedDataFile, c(outputs))
       }

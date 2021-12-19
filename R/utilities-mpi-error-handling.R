@@ -3,7 +3,7 @@
 #' @param simulation the simulation object to be checked if loaded successfully
 #' @export
 checkSimulationLoaded <- function(simulation) {
-  return(is.null(validateIsOfType(simulation, "Simulation")))
+  return(is.null(ospsuite.utils::validateIsOfType(simulation, "Simulation")))
 }
 
 #' @title checkPopulationLoaded
@@ -11,7 +11,7 @@ checkSimulationLoaded <- function(simulation) {
 #' @param population the population object to be checked if loaded successfully
 #' @export
 checkPopulationLoaded <- function(population) {
-  return(is.null(validateIsOfType(population, "Population")))
+  return(is.null(ospsuite.utils::validateIsOfType(population, "Population")))
 }
 
 #' @title checkLibraryLoaded
@@ -44,7 +44,7 @@ loadSimulationOnCores <- function(structureSet, logFolder) {
   Rmpi::mpi.remote.exec(sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet))
   simulationLoaded <- Rmpi::mpi.remote.exec(checkSimulationLoaded(simulation = sim))
   success <- checkAllCoresSuccessful(simulationLoaded)
-  validateIsLogical(success)
+  ospsuite.utils::validateIsLogical(success)
   if (!success) {
     logErrorThenStop(message = paste("Simulation file", structureSet$simulationSet$simulationFile, "not loaded successfully on all cores"), logFolderPath = logFolder)
   }
@@ -62,10 +62,10 @@ loadPopulationOnCores <- function(populationFiles, logFolder) {
   Rmpi::mpi.remote.exec(population <- ospsuite::loadPopulation(populationFiles[Rmpi::mpi.comm.rank()]))
   populationLoaded <- Rmpi::mpi.remote.exec(checkPopulationLoaded(population = population))
   success <- checkAllCoresSuccessful(populationLoaded)
-  validateIsLogical(success)
+  ospsuite.utils::validateIsLogical(success)
   if (!success) {
     logErrorThenStop(message = paste("Population files not loaded successfully on all cores"), logFolderPath = logFolder)
-  } 
+  }
   logWorkflow(message = paste("Population files loaded successfully on all cores"), pathFolder = logFolder)
   return(invisible())
 }
@@ -80,10 +80,10 @@ loadLibraryOnCores <- function(libraryName, logFolder) {
   Rmpi::mpi.remote.exec(library(libraryName, character.only = TRUE))
   libraryLoaded <- Rmpi::mpi.remote.exec(checkLibraryLoaded(libraryName))
   success <- checkAllCoresSuccessful(libraryLoaded)
-  validateIsLogical(success)
+  ospsuite.utils::validateIsLogical(success)
   if (!success) {
     logErrorThenStop(message = paste(libraryName, "not loaded successfully on all cores"), logFolderPath = logFolder)
-  } 
+  }
   logWorkflow(message = paste(libraryName, "loaded successfully on all cores"), pathFolder = logFolder)
   return(invisible())
 }
@@ -97,7 +97,7 @@ updateIndividualParametersOnCores <- function(individualParameters, logFolder) {
   Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
   individualParametersUpdated <- Rmpi::mpi.remote.exec(updateSimulationIndividualParameters(simulation = sim, individualParameters))
   success <- checkAllCoresSuccessful(individualParametersUpdated)
-  validateIsLogical(success)
+  ospsuite.utils::validateIsLogical(success)
   if (!success) {
     logErrorThenStop(message = "Individual parameters updated successfully on all cores.", logFolderPath = logFolder)
   }
@@ -113,7 +113,7 @@ updateIndividualParametersOnCores <- function(individualParameters, logFolder) {
 #' @keywords internal
 verifySimulationRunSuccessful <- function(simulationRunSuccess, tempPopDataFiles, logFolder) {
   success <- checkAllCoresSuccessful(simulationRunSuccess)
-  validateIsLogical(success)
+  ospsuite.utils::validateIsLogical(success)
   if (success) {
     logWorkflow(message = "Simulations completed successfully on all cores.", pathFolder = logFolder)
   } else {
@@ -133,7 +133,7 @@ verifySimulationRunSuccessful <- function(simulationRunSuccess, tempPopDataFiles
 #' @keywords internal
 verifySensitivityAnalysisRunSuccessful <- function(sensitivityRunSuccess, logFolder) {
   success <- checkAllCoresSuccessful(sensitivityRunSuccess)
-  validateIsLogical(success)
+  ospsuite.utils::validateIsLogical(success)
   if (!success) {
     logErrorThenStop(message = "Sensitivity analyses not completed successfully on all cores.", logFolderPath = logFolder)
   }
@@ -148,7 +148,7 @@ verifySensitivityAnalysisRunSuccessful <- function(sensitivityRunSuccess, logFol
 #' @keywords internal
 verifyAnyPreviousFilesRemoved <- function(anyPreviousPartialResultsRemoved, logFolder) {
   success <- checkAllCoresSuccessful(anyPreviousPartialResultsRemoved)
-  validateIsLogical(success)
+  ospsuite.utils::validateIsLogical(success)
   if (!success) {
     logErrorThenStop(message = "Previous results not removed successfully.", logFolderPath = logFolder)
   }
@@ -164,7 +164,7 @@ verifyAnyPreviousFilesRemoved <- function(anyPreviousPartialResultsRemoved, logF
 #' @keywords internal
 verifyPartialResultsExported <- function(partialResultsExported, numberOfCores, logFolder) {
   success <- checkAllCoresSuccessful(partialResultsExported)
-  validateIsLogical(success)
+  ospsuite.utils::validateIsLogical(success)
   if (success) {
     logWorkflow(message = "All successful core results exported successfully.", pathFolder = logFolder)
   } else {

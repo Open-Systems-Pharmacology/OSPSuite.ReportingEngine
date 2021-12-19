@@ -73,8 +73,8 @@ getAxesProperties <- function(axesSettings) {
   y2AxisIndex <- which(axisTypes %in% "Y2")
 
   # X and Y axes are mandatory, while Y2 is not
-  validateIsOfLength(xAxisIndex, 1)
-  validateIsOfLength(yAxisIndex, 1)
+  ospsuite.utils::validateIsOfLength(xAxisIndex, 1)
+  ospsuite.utils::validateIsOfLength(yAxisIndex, 1)
   xAxis <- axesSettings[[xAxisIndex]]
   yAxis <- axesSettings[[yAxisIndex]]
   # GridLines field defines if grid is present

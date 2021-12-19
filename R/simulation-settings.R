@@ -24,8 +24,8 @@ SimulationSettings <- R6::R6Class(
         private$.numberOfCores
       } else {
         if (!is.null(value)) {
-          validateIsInteger(value)
-          validateIsOfLength(object = value, nbElements = 1)
+          ospsuite.utils::validateIsInteger(value)
+          ospsuite.utils::validateIsOfLength(object = value, nbElements = 1)
           private$.numberOfCores <- value
         }
       }
@@ -37,7 +37,7 @@ SimulationSettings <- R6::R6Class(
         private$.showProgress
       } else {
         if (!is.null(value)) {
-          validateIsLogical(value)
+          ospsuite.utils::validateIsLogical(value)
           private$.showProgress <- value
         }
       }
@@ -49,8 +49,8 @@ SimulationSettings <- R6::R6Class(
         private$.allowedCores
       } else {
         if (!is.null(value)) {
-          validateIsInteger(value)
-          validateIsOfLength(object = value, nbElements = 1)
+          ospsuite.utils::validateIsInteger(value)
+          ospsuite.utils::validateIsOfLength(object = value, nbElements = 1)
           private$.allowedCores <- value
         }
       }

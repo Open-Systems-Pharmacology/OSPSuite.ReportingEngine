@@ -19,7 +19,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
     # Pipes in configuration plan will be deprecated moving forward
     plotDDIMetadata$plotTypes <- plot$PlotTypes %||% ospsuite::toPathArray(plot$PlotType)
 
-    validateIsIncluded(plotDDIMetadata$plotTypes, names(ddiPlotTypeSpecifications))
+    ospsuite.utils::validateIsIncluded(plotDDIMetadata$plotTypes, names(ddiPlotTypeSpecifications))
 
     plotDDIMetadata$axesSettings <- lapply(plotDDIMetadata$plotTypes, function(plotType) {
       getAxesSettings(configurationPlan$plots$AxesSettings[[ ddiPlotTypeSpecifications[[plotType]]$ddiPlotAxesSettings ]])
@@ -47,13 +47,13 @@ getQualificationDDIPlotData <- function(configurationPlan) {
         observedDataSetFilePath <- configurationPlan$getObservedDataPath(id = observedDataSet)
         observedDataRecordId <- ddiRatio$ObservedDataRecordId
         observedDataFrame <- readObservedDataFile(file = observedDataSetFilePath)
-        validateIsIncluded(observedDataRecordId, observedDataFrame$ID)
+        ospsuite.utils::validateIsIncluded(observedDataRecordId, observedDataFrame$ID)
 
         ratioList <- list()
 
         for (pkParameter in pkParameters) {
           ratioList[[pkParameter]] <- list()
-          validateIsIncluded(ddiPKRatioColumnName[[pkParameter]], names(observedDataFrame))
+          ospsuite.utils::validateIsIncluded(ddiPKRatioColumnName[[pkParameter]], names(observedDataFrame))
 
           observedDataSelection <- observedDataFrame$ID %in% observedDataRecordId
 

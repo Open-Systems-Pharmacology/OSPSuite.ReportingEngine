@@ -535,7 +535,7 @@ plotMeanSensitivity <- function(structureSet,
   sensitivityPlotConfiguration$colorPalette <- settings$colorPalette %||% sensitivityPlotConfiguration$colorPalette
 
   for (output in structureSet$simulationSet$outputs) {
-    validateIsIncluded(output$path, saResults$allQuantityPaths)
+    ospsuite.utils::validateIsIncluded(output$path, saResults$allQuantityPaths)
     pathLabel <- lastPathElement(output$path)
     for (pkParameter in output$pkParameters) {
       if (!ospsuite.utils::isIncluded(pkParameter$pkParameter, saResults$allPKParameterNames)) {
@@ -626,9 +626,9 @@ plotPopulationSensitivity <- function(structureSets,
                                       workflowType = PopulationWorkflowTypes$parallelComparison,
                                       xParameters = NULL,
                                       yParameters = NULL) {
-  validateIsIncluded(workflowType, PopulationWorkflowTypes)
-  validateIsOfType(structureSets, "list")
-  validateIsOfType(c(structureSets), "SimulationStructure")
+  ospsuite.utils::validateIsIncluded(workflowType, PopulationWorkflowTypes)
+  ospsuite.utils::validateIsOfType(structureSets, "list")
+  ospsuite.utils::validateIsOfType(c(structureSets), "SimulationStructure")
 
   allPopsDf <- NULL
   saResultIndexFiles <- list()

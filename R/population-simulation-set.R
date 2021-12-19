@@ -36,12 +36,12 @@ PopulationSimulationSet <- R6::R6Class(
                           studyDesignFile = NULL,
                           plotReferenceObsData = FALSE,
                           ...) {
-      validateIsLogical(referencePopulation)
-      validateIsLogical(plotReferenceObsData)
-      validateIsString(simulationSetName)
-      validateIsString(simulationFile)
-      validateIsString(populationFile)
-      validateIsString(c(populationName, studyDesignFile), nullAllowed = TRUE)
+      ospsuite.utils::validateIsLogical(referencePopulation)
+      ospsuite.utils::validateIsLogical(plotReferenceObsData)
+      ospsuite.utils::validateIsString(simulationSetName)
+      ospsuite.utils::validateIsString(simulationFile)
+      ospsuite.utils::validateIsString(populationFile)
+      ospsuite.utils::validateIsString(c(populationName, studyDesignFile), nullAllowed = TRUE)
       validateIsFileExtension(populationFile, "csv")
 
       super$initialize(

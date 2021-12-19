@@ -92,7 +92,7 @@ getDictionaryVariable <- function(dictionary, variableID) {
 #' @import ospsuite.utils
 #' @keywords internal
 loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
-  validateIsOfType(simulationSet, "SimulationSet")
+  ospsuite.utils::validateIsOfType(simulationSet, "SimulationSet")
   # Observed data and dictionary are already checked when creating the simulationSet
   # No observed data return NULL
   if (ospsuite.utils::isOfLength(simulationSet$observedDataFile, 0)) {

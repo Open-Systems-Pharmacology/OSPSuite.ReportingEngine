@@ -81,10 +81,10 @@ setWatermarkConfiguration <- function(watermark = NULL) {
 #' setDefaultPlotFormat(format = "pdf")
 #' setDefaultPlotFormat(width = 16, height = 9, units = "cm", dpi = 300)
 setDefaultPlotFormat <- function(format = NULL, width = NULL, height = NULL, units = NULL, dpi = NULL) {
-  validateIsNumeric(width, nullAllowed = TRUE)
-  validateIsNumeric(height, nullAllowed = TRUE)
-  validateIsNumeric(dpi, nullAllowed = TRUE)
-  validateIsIncluded(units, c("in", "cm", "mm", "px"), nullAllowed = TRUE)
+  ospsuite.utils::validateIsNumeric(width, nullAllowed = TRUE)
+  ospsuite.utils::validateIsNumeric(height, nullAllowed = TRUE)
+  ospsuite.utils::validateIsNumeric(dpi, nullAllowed = TRUE)
+  ospsuite.utils::validateIsIncluded(units, c("in", "cm", "mm", "px"), nullAllowed = TRUE)
   reEnv$defaultPlotFormat$format <- format %||% reEnv$defaultPlotFormat$format
   reEnv$defaultPlotFormat$width <- width %||% reEnv$defaultPlotFormat$width
   reEnv$defaultPlotFormat$height <- height %||% reEnv$defaultPlotFormat$height
@@ -127,8 +127,8 @@ ApplicationRanges <- ospsuite.utils::enum(c("total", "firstApplication", "lastAp
 #' @examples
 #' setDefaultNumericFormat(digits = 2, scientific = TRUE)
 setDefaultNumericFormat <- function(digits = NULL, scientific = NULL) {
-  validateIsInteger(digits, nullAllowed = TRUE)
-  validateIsLogical(scientific, nullAllowed = TRUE)
+  ospsuite.utils::validateIsInteger(digits, nullAllowed = TRUE)
+  ospsuite.utils::validateIsLogical(scientific, nullAllowed = TRUE)
 
   reEnv$formatNumericsDigits <- digits %||% reEnv$formatNumericsDigits
   reEnv$formatNumericsScientific <- scientific %||% reEnv$formatNumericsScientific
@@ -161,7 +161,7 @@ reEnv$theme <- getDefaultRETheme()
 #' If `NULL`, the current theme is re-initialized to the reporting engine default
 #' @export
 setDefaultTheme <- function(theme = NULL) {
-  validateIsOfType(theme, "Theme", nullAllowed = TRUE)
+  ospsuite.utils::validateIsOfType(theme, "Theme", nullAllowed = TRUE)
   reEnv$theme <- theme %||% getDefaultRETheme()
   tlf::useTheme(reEnv$theme)
 }
@@ -181,7 +181,7 @@ setDefaultThemeFromJson <- function(jsonFile) {
 #' @examples
 #' setDefaultBins(10)
 setDefaultBins <- function(bins) {
-  validateIsNumeric(bins)
+  ospsuite.utils::validateIsNumeric(bins)
   reEnv$defaultBins <- bins
 }
 
@@ -191,7 +191,7 @@ setDefaultBins <- function(bins) {
 #' @examples
 #' setDefaultStairstep(TRUE)
 setDefaultStairstep <- function(stairstep) {
-  validateIsLogical(stairstep)
+  ospsuite.utils::validateIsLogical(stairstep)
   reEnv$defaultStairstep <- stairstep
 }
 
@@ -202,6 +202,6 @@ setDefaultStairstep <- function(stairstep) {
 #' @examples
 #' setDefaultAutoAxisLimitMargin(0.1)
 setDefaultAutoAxisLimitMargin <- function(margin) {
-  validateIsNumeric(margin)
+  ospsuite.utils::validateIsNumeric(margin)
   reEnv$autoAxisLimitMargin <- margin
 }

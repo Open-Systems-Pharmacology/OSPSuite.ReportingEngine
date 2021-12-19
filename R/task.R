@@ -36,8 +36,8 @@ Task <- R6::R6Class(
                           settings = NULL,
                           active = FALSE,
                           message = NULL) {
-      validateIsOfType(active, "logical")
-      validateIsString(c(outputFolder, inputFolder, inputs, outputs), nullAllowed = TRUE)
+      ospsuite.utils::validateIsOfType(active, "logical")
+      ospsuite.utils::validateIsString(c(outputFolder, inputFolder, inputs, outputs), nullAllowed = TRUE)
 
       self$active <- active
       self$outputFolder <- outputFolder
@@ -81,7 +81,7 @@ Task <- R6::R6Class(
     #' @param structureSet `SimulationStructure` object
     #' @return logical indicating if input is valid
     validateStructureSetInput = function(structureSet) {
-      validateIsOfType(structureSet, "SimulationStructure")
+      ospsuite.utils::validateIsOfType(structureSet, "SimulationStructure")
       isValid <- TRUE
       # Get only the input from the structure set
       structureSetInputs <- c(

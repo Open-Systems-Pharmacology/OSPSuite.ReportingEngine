@@ -19,7 +19,7 @@ PopulationSensitivityAnalysisTask <- R6::R6Class(
     initialize = function(getTaskResults = NULL,
                           settings = NULL,
                           ...) {
-      validateIsOfType(settings, "SensitivityAnalysisSettings", nullAllowed = TRUE)
+      ospsuite.utils::validateIsOfType(settings, "SensitivityAnalysisSettings", nullAllowed = TRUE)
       super$initialize(...)
       self$settings <- settings %||% SensitivityAnalysisSettings$new()
       self$getTaskResults <- getTaskResults

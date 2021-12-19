@@ -8,7 +8,7 @@
 #' @export
 #' @import ospsuite.utils
 calculateResiduals <- function(simulatedData, observedData, residualScale) {
-  validateIsOfLength(object = simulatedData, nbElements = length(observedData))
+  ospsuite.utils::validateIsOfLength(object = simulatedData, nbElements = length(observedData))
   residualValues <- rep(NA, length(observedData))
   if (ospsuite.utils::isIncluded(residualScale, ResidualScales$Logarithmic)) {
     residualValues <- log(observedData) - log(simulatedData)
@@ -174,7 +174,7 @@ loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE)
 #' @export
 #' @import ospsuite
 loadWorkflowPopulation <- function(simulationSet) {
-  validateIsOfType(simulationSet, "PopulationSimulationSet")
+  ospsuite.utils::validateIsOfType(simulationSet, "PopulationSimulationSet")
   population <- ospsuite::loadPopulation(simulationSet$populationFile)
   simulation <- loadSimulationWithUpdatedPaths(simulationSet)
 
@@ -244,7 +244,7 @@ removeMissingValues <- function(data, dataMapping = NULL, logFolder = getwd()) {
 #' @export
 #' @import ospsuite.utils
 getPKParametersInOutput <- function(output) {
-  validateIsOfType(output, "Output")
+  ospsuite.utils::validateIsOfType(output, "Output")
   pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
     pkParameterInfo$pkParameter
   })
@@ -260,7 +260,7 @@ getPKParametersInOutput <- function(output) {
 #' @import ospsuite.utils
 #' @keywords internal
 getPKParameterGroupsInOutput <- function(output) {
-  validateIsOfType(output, "Output")
+  ospsuite.utils::validateIsOfType(output, "Output")
   pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
     pkParameterInfo$group
   })
@@ -275,7 +275,7 @@ getPKParameterGroupsInOutput <- function(output) {
 #' @return Path names of outputs in `simulationSet`
 #' @export
 getOutputPathsInSimulationSet <- function(simulationSet) {
-  validateIsOfType(simulationSet, "SimulationSet")
+  ospsuite.utils::validateIsOfType(simulationSet, "SimulationSet")
   return(sapply(simulationSet$outputs, function(output) {
     output$path
   }))
@@ -286,7 +286,7 @@ getOutputPathsInSimulationSet <- function(simulationSet) {
 #' @return Data.frame with \code{path} and \code{pkParameter} in `simulationSet`
 #' @export
 getPKParametersInSimulationSet <- function(simulationSet) {
-  validateIsOfType(simulationSet, "SimulationSet")
+  ospsuite.utils::validateIsOfType(simulationSet, "SimulationSet")
   pkParametersTable <- data.frame()
   for (output in simulationSet$outputs) {
     pkParametersTable <- rbind.data.frame(
@@ -362,8 +362,8 @@ getSimulationParameterDisplayPaths <- function(parameterPaths, simulation, dicti
 #' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
 #' @export
 setWorkflowParameterDisplayPathsFromFile <- function(fileName, workflow) {
-  validateIsOfType(workflow, "Workflow")
-  validateIsString(fileName)
+  ospsuite.utils::validateIsOfType(workflow, "Workflow")
+  ospsuite.utils::validateIsString(fileName)
   validateIsFileExtension(fileName, "csv")
   parameterDisplayPaths <- readObservedDataFile(fileName)
   workflow$setParameterDisplayPaths(parameterDisplayPaths)
@@ -378,7 +378,7 @@ setWorkflowParameterDisplayPathsFromFile <- function(fileName, workflow) {
 #' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
 #' @export
 setWorkflowParameterDisplayPaths <- function(parameterDisplayPaths, workflow) {
-  validateIsOfType(workflow, "Workflow")
+  ospsuite.utils::validateIsOfType(workflow, "Workflow")
   workflow$setParameterDisplayPaths(parameterDisplayPaths)
   return(invisible())
 }
@@ -389,7 +389,7 @@ setWorkflowParameterDisplayPaths <- function(parameterDisplayPaths, workflow) {
 #' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
 #' @export
 getWorkflowParameterDisplayPaths <- function(workflow) {
-  validateIsOfType(workflow, "Workflow")
+  ospsuite.utils::validateIsOfType(workflow, "Workflow")
   return(workflow$getParameterDisplayPaths())
 }
 
