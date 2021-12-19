@@ -170,7 +170,7 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile,
     dictionary[, dictionaryParameters$datasetUnit] <- NA
   }
   validateIsIncludedInDataset(c(dictionaryParameters$ID, dictionaryParameters$datasetColumn), dictionary, datasetName = "dictionary")
-  ospsuite.utils::validateIsIncluded(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID], groupName = paste0("Column '", dictionaryParameters$ID, "'"))
+  validateIsIncludedAndLog(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID], groupName = paste0("Column '", dictionaryParameters$ID, "'"))
 
   # Check that dictionary and observed data are consitent
   observedDataset <- readObservedDataFile(observedDataFile)

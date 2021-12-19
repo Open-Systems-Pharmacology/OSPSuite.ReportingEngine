@@ -257,7 +257,7 @@ getOutputContent <- function(excelFile, outputInfo) {
     pkParametersOutputContent <- NULL
     pkParametersSheet <- getIdentifierInfo(outputTable, outputIndex, OutputCodeIdentifiers$pkParameters)
     if (!is.na(pkParametersSheet)) {
-      ospsuite.utils::validateIsIncluded(pkParametersSheet, readxl::excel_sheets(excelFile), groupName = paste0("Sheet names of '", excelFile, "'"))
+      validateIsIncludedAndLog(pkParametersSheet, readxl::excel_sheets(excelFile), groupName = paste0("Sheet names of '", excelFile, "'"))
       pkParametersInfo <- getPKParametersInfoContent(excelFile, pkParametersSheet)
       pkParametersContent <- pkParametersInfo$content
       outputWarnings <- c(outputWarnings, pkParametersInfo$warnings)
