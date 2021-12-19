@@ -179,7 +179,7 @@ mapStudyDesignSources <- function(data, population, simulation) {
     sourceExpressionsByColumn <- paste0("data[,'", path, "']", expressionType, values)
     sourceExpressionsByColumn[values %in% NA] <- "TRUE"
 
-    ifNotNull(
+    ospsuite.utils::ifNotNull(
       sourceExpressions,
       sourceExpressions <- paste(sourceExpressions, sourceExpressionsByColumn, sep = " & "),
       sourceExpressions <- sourceExpressionsByColumn

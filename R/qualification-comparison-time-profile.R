@@ -172,7 +172,7 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
     observedError$ymin <- observedValues / observedResults$data[, 3]
     observedError$ymax <- observedValues * observedResults$data[, 3]
 
-    if (!isIncluded(observedResults$metaData$error$unit, "")) {
+    if (!ospsuite.utils::isIncluded(observedResults$metaData$error$unit, "")) {
       observedError$ymin <- observedValues - ospsuite::toUnit(
         ospsuite::getDimensionForUnit(observedResults$metaData$error$unit),
         observedResults$data[, 3],
@@ -194,7 +194,7 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
     observedError$ymin[is.na(observedError$ymin)] <- observedValues[is.na(observedError$ymin)]
     observedError$ymax[is.na(observedError$ymax)] <- observedValues[is.na(observedError$ymax)]
     # In case of log scale, ymin<0 are replaced by y so upper branch is still plotted
-    if(isIncluded(axesProperties$y$scale, tlf::Scaling$log)){
+    if(ospsuite.utils::isIncluded(axesProperties$y$scale, tlf::Scaling$log)){
       observedError$ymin[observedError$ymin<=0] <- observedValues[observedError$ymin<=0]
     }
 

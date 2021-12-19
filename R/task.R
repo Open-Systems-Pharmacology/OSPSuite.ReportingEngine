@@ -117,13 +117,13 @@ Task <- R6::R6Class(
         sprintf("Task is%s active", taskActiveMessage),
         sprintf("Workflow folder: %s", self$workflowFolder %||% ""),
         sprintf("Expected input folder: %s", private$.inputFolder %||% "none"),
-        sprintf("Expected input files: %s", ifNotNull(
+        sprintf("Expected input files: %s", ospsuite.utils::ifNotNull(
           private$.inputs,
           paste0(private$.inputs, collapse = ", "),
           "none"
         )),
         sprintf("Expected output folder: %s", self$outputFolder %||% "none"),
-        sprintf("Expected output files: %s", ifNotNull(
+        sprintf("Expected output files: %s", ospsuite.utils::ifNotNull(
           private$.outputs,
           paste0(private$.outputs, collapse = ", "),
           "none"

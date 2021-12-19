@@ -117,7 +117,7 @@ simulateModelOnCore <- function(simulation,
                                 nodeName = NULL,
                                 showProgress = FALSE) {
   logDebug(
-    message = paste0(ifNotNull(nodeName, paste0(nodeName, ": "), ""), "Starting simulation."),
+    message = paste0(ospsuite.utils::ifNotNull(nodeName, paste0(nodeName, ": "), ""), "Starting simulation."),
     file = debugLogFileName,
     printConsole = TRUE
   )
@@ -127,7 +127,7 @@ simulateModelOnCore <- function(simulation,
   simulationResult <- ospsuite::runSimulation(simulation = simulation, population = population, simulationRunOptions = simRunOptions)
 
   logDebug(
-    message = paste0(ifNotNull(nodeName, paste0(nodeName, ": "), ""), "Simulation run complete."),
+    message = paste0(ospsuite.utils::ifNotNull(nodeName, paste0(nodeName, ": "), ""), "Simulation run complete."),
     file = debugLogFileName,
     printConsole = TRUE
   )
@@ -158,7 +158,7 @@ simulateModelParallel <- function(structureSets,
   })
 
   simRunOptions <- ospsuite::SimulationRunOptions$new(
-    showProgress = ifNotNull(settings, outputIfNotNull = settings$showProgress, outputIfNull = FALSE),
+    showProgress = ospsuite.utils::ifNotNull(settings, outputIfNotNull = settings$showProgress, outputIfNull = FALSE),
     numberOfCores = settings$allowedCores
   )
 
@@ -217,7 +217,7 @@ simulateModel <- function(structureSet,
   }
 
   simRunOptions <- ospsuite::SimulationRunOptions$new(
-    showProgress = ifNotNull(settings, outputIfNotNull = settings$showProgress, outputIfNull = FALSE),
+    showProgress = ospsuite.utils::ifNotNull(settings, outputIfNotNull = settings$showProgress, outputIfNull = FALSE),
     numberOfCores = settings$allowedCores
   )
 

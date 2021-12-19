@@ -153,7 +153,7 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile,
   }
   # Read dictionary and check that mandatory variables are included
   dictionary <- readObservedDataFile(observedMetaDataFile)
-  if (!isIncluded(dictionaryParameters$datasetUnit, names(dictionary))) {
+  if (!ospsuite.utils::isIncluded(dictionaryParameters$datasetUnit, names(dictionary))) {
     dictionary[, dictionaryParameters$datasetUnit] <- NA
   }
   validateIsIncludedInDataset(c(dictionaryParameters$ID, dictionaryParameters$datasetColumn), dictionary, datasetName = "dictionary")
@@ -201,7 +201,7 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile,
 #' @keywords internal
 isDimension <- function(values) {
   allAvailableDimensions <- ospsuite::allAvailableDimensions()
-  return(isIncluded(c(values), allAvailableDimensions))
+  return(ospsuite.utils::isIncluded(c(values), allAvailableDimensions))
 }
 
 validateIsDimension <- function(values, nullAllowed = FALSE) {

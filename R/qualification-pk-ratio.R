@@ -28,7 +28,7 @@ plotQualificationPKRatio <- function(configurationPlan,
         sectionId = pkRatioPlan$SectionId,
         plot = pkRatioPlot,
         plotCaption = pkRatioPlan$Title,
-        includePlot = isIncluded("Plot", pkRatioPlan$Artifacts)
+        includePlot = ospsuite.utils::isIncluded("Plot", pkRatioPlan$Artifacts)
       )
       #----- Measure artifact -----#
       measureID <- paste(length(pkRatioResults) + 2, "pk-ratio-measure", pkParameterName, sep = "-")
@@ -38,7 +38,7 @@ plotQualificationPKRatio <- function(configurationPlan,
         sectionId = pkRatioPlan$SectionId,
         table = pkRatioMeasure,
         tableCaption = paste0("Measure of ", pkRatioPlan$Title),
-        includeTable = isIncluded("Measure", pkRatioPlan$Artifacts)
+        includeTable = ospsuite.utils::isIncluded("Measure", pkRatioPlan$Artifacts)
       )
     }
     #----- GMFE artifact -----#
@@ -49,7 +49,7 @@ plotQualificationPKRatio <- function(configurationPlan,
       sectionId = pkRatioPlan$SectionId,
       table = pkRatioGMFE,
       tableCaption = paste0("GMFE for ", pkRatioPlan$Title),
-      includeTable = isIncluded("GMFE", pkRatioPlan$Artifacts)
+      includeTable = ospsuite.utils::isIncluded("GMFE", pkRatioPlan$Artifacts)
     )
     #----- Table artifact -----#
     tableID <- paste(length(pkRatioResults) + 1, "pk-ratio-table", sep = "-")
@@ -59,7 +59,7 @@ plotQualificationPKRatio <- function(configurationPlan,
       sectionId = pkRatioPlan$SectionId,
       table = pkRatioTable,
       tableCaption = pkRatioPlan$Title,
-      includeTable = isIncluded("Table", pkRatioPlan$Artifacts)
+      includeTable = ospsuite.utils::isIncluded("Table", pkRatioPlan$Artifacts)
     )
   }
   return(pkRatioResults)

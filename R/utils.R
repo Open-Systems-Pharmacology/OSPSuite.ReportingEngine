@@ -10,10 +10,10 @@
 calculateResiduals <- function(simulatedData, observedData, residualScale) {
   validateIsOfLength(object = simulatedData, nbElements = length(observedData))
   residualValues <- rep(NA, length(observedData))
-  if (isIncluded(residualScale, ResidualScales$Logarithmic)) {
+  if (ospsuite.utils::isIncluded(residualScale, ResidualScales$Logarithmic)) {
     residualValues <- log(observedData) - log(simulatedData)
   }
-  if (isIncluded(residualScale, ResidualScales$Linear)) {
+  if (ospsuite.utils::isIncluded(residualScale, ResidualScales$Linear)) {
     residualValues <- (observedData - simulatedData)
   }
 }
@@ -54,7 +54,7 @@ ifEqual <- function(x, y, outputIfEqual, outputIfNotEqual = NULL) {
 #' @import ospsuite.utils
 #' @keywords internal
 ifIncluded <- function(x, y, outputIfIncluded, outputIfNotIncluded = NULL) {
-  if (isIncluded(x, y)) {
+  if (ospsuite.utils::isIncluded(x, y)) {
     outputIfIncluded
   } else {
     outputIfNotIncluded

@@ -105,7 +105,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   dictionary <- readObservedDataFile(simulationSet$observedMetaDataFile)
 
   # Enforce datasetUnit column to exist
-  if (!isIncluded(dictionaryParameters$datasetUnit, names(dictionary))) {
+  if (!ospsuite.utils::isIncluded(dictionaryParameters$datasetUnit, names(dictionary))) {
     dictionary[, dictionaryParameters$datasetUnit] <- NA
   }
   # Use dictionary to map the data and get the unit
@@ -120,13 +120,13 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   # Get values of unit column using datasetUnit
   timeMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$timeID
   timeUnit <- as.character(dictionary[timeMapping, dictionaryParameters$datasetUnit])
-  if (!any(is.na(timeUnit), isIncluded(timeUnit, ""))) {
+  if (!any(is.na(timeUnit), ospsuite.utils::isIncluded(timeUnit, ""))) {
     timeUnitColumn <- "timeUnit"
     observedDataset[, timeUnitColumn] <- timeUnit
   }
   dvMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$dvID
   dvUnit <- as.character(dictionary[dvMapping, dictionaryParameters$datasetUnit])
-  if (!any(is.na(dvUnit), isIncluded(dvUnit, ""))) {
+  if (!any(is.na(dvUnit), ospsuite.utils::isIncluded(dvUnit, ""))) {
     dvUnitColumn <- "dvUnit"
     observedDataset[, dvUnitColumn] <- dvUnit
   }
@@ -177,7 +177,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
       next
     }
     # Case where dictionary defined an lloq column missing from dataset
-    if (!isIncluded(lloqColumn, names(observedDataset))) {
+    if (!ospsuite.utils::isIncluded(lloqColumn, names(observedDataset))) {
       logWorkflow(
         message = paste0("lloq column '", lloqColumn, "' defined in dictionary is not present in the dataset columns"),
         pathFolder = logFolder,
@@ -336,7 +336,7 @@ getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPl
 #' @keywords internal
 isObservedData <- function(path) {
   pathArray <- ospsuite::toPathArray(path)
-  isIncluded(pathArray[2], "ObservedData")
+  ospsuite.utils::isIncluded(pathArray[2], "ObservedData")
 }
 
 #' @title getObservedDataIdFromPath

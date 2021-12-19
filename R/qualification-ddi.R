@@ -349,7 +349,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
         id = plotID,
         sectionId = sectionID,
         plot = ddiPlot,
-        plotCaption = ifNotNull(
+        plotCaption = ospsuite.utils::ifNotNull(
           inputToCheck = captionSuffix,
           outputIfNotNull = paste(metadata$title, captionSuffix, sep = " - "),
           outputIfNull = metadata$title

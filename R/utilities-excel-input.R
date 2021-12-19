@@ -37,7 +37,7 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
     groupName = paste0("Sheet names of '", excelFile, "'")
   )
 
-  if (isIncluded(StandardExcelSheetNames$`Documentation`, inputSections)) {
+  if (ospsuite.utils::isIncluded(StandardExcelSheetNames$`Documentation`, inputSections)) {
     scriptDocumentation <- getScriptDocumentation(excelFile)
     scriptContent <- c(scriptContent, scriptDocumentation)
   }
@@ -49,7 +49,7 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
   )
 
   userDefPKParametersContent <- NULL
-  if (isIncluded(StandardExcelSheetNames$`Userdef PK Parameter`, inputSections)) {
+  if (ospsuite.utils::isIncluded(StandardExcelSheetNames$`Userdef PK Parameter`, inputSections)) {
     userDefPKParametersTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$`Userdef PK Parameter`)
     validateIsIncluded(c("Name", "Standard PK parameter", "Display Unit"), names(userDefPKParametersTable))
     userDefPKParametersInfo <- getUserDefPKParametersContent(userDefPKParametersTable)
@@ -59,7 +59,7 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
   }
 
   pkParametersContent <- NULL
-  if (isIncluded(StandardExcelSheetNames$`PK Parameter`, inputSections)) {
+  if (ospsuite.utils::isIncluded(StandardExcelSheetNames$`PK Parameter`, inputSections)) {
     pkParametersTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$`PK Parameter`)
     validateIsIncluded(c("Name", "Display name", "Unit"), names(pkParametersTable))
     pkParametersInfo <- getPKParametersContent(pkParametersTable)
@@ -68,7 +68,7 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
     scriptErrors$messages[["PK Parameters"]] <- pkParametersInfo$errors
   }
 
-  if (isIncluded(StandardExcelSheetNames$`Workflow and Tasks`, inputSections)) {
+  if (ospsuite.utils::isIncluded(StandardExcelSheetNames$`Workflow and Tasks`, inputSections)) {
     workflowTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$`Workflow and Tasks`)
     validateIsIncluded(WorkflowMandatoryVariables$`Code Identifier`, names(workflowTable)[1])
     validateIsIncluded(WorkflowMandatoryVariables$Description, names(workflowTable)[2])
@@ -82,7 +82,7 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
   }
 
   simulationSetContent <- NULL
-  if (isIncluded(StandardExcelSheetNames$SimulationSets, inputSections)) {
+  if (ospsuite.utils::isIncluded(StandardExcelSheetNames$SimulationSets, inputSections)) {
     simulationSetTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$SimulationSets)
     validateIsIncluded(WorkflowMandatoryVariables$`Code Identifier`, names(simulationSetTable)[1])
     validateIsIncluded(WorkflowMandatoryVariables$Description, names(simulationSetTable)[2])
@@ -392,7 +392,7 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
     referencePopulationContent <- NULL
     plotReferenceObsDataContent <- NULL
     studyDesignFileContent <- NULL
-    if (isIncluded(workflowMode, "PopulationWorkflow")) {
+    if (ospsuite.utils::isIncluded(workflowMode, "PopulationWorkflow")) {
       referencePopulation <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$referencePopulation)
       plotReferenceObsData <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$plotReferenceObsData)
       populationFile <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$populationFile)
@@ -501,14 +501,14 @@ getWorkflowContent <- function(workflowTable, excelFile) {
     if (isOfLength(activeTaskName, 0)) {
       next
     }
-    if (workflowMode == "PopulationWorkflow" & isIncluded(taskName, c("plotAbsorption", "plotMassBalance"))) {
+    if (workflowMode == "PopulationWorkflow" & ospsuite.utils::isIncluded(taskName, c("plotAbsorption", "plotMassBalance"))) {
       workflowWarnings <- c(
         workflowWarnings,
         paste0("Task '", taskName, "' defined as active, was not printed because '", taskName, "' is not available for '", workflowMode, "'.")
       )
       next
     }
-    if (workflowMode == "MeanModelWorkflow" & isIncluded(taskName, "plotDemography")) {
+    if (workflowMode == "MeanModelWorkflow" & ospsuite.utils::isIncluded(taskName, "plotDemography")) {
       workflowWarnings <- c(
         workflowWarnings,
         paste0("Task '", taskName, "' defined as active, was not printed because '", taskName, "' is not available for '", workflowMode, "'.")
@@ -538,7 +538,7 @@ getWorkflowContent <- function(workflowTable, excelFile) {
     if (is.na(settingValue)) {
       next
     }
-    if (isIncluded(optionalSettingName, "calculateSensitivity: variableParameterPaths")) {
+    if (ospsuite.utils::isIncluded(optionalSettingName, "calculateSensitivity: variableParameterPaths")) {
       settingValue <- getSensitivityVariableParameterPaths(excelFile, sensitivityParametersSheet = settingValue)
     }
     settingContent <- paste0(OptionalSettings[[optionalSettingName]], settingValue)
@@ -553,7 +553,7 @@ getWorkflowContent <- function(workflowTable, excelFile) {
   # Optional field: plot format
   plotFormatContent <- NULL
   plotFormat <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$plotFormat)
-  if (!isIncluded(plotFormat, "NULL")) {
+  if (!ospsuite.utils::isIncluded(plotFormat, "NULL")) {
     plotFormatContent <- c(
       paste0("# Figures exported by the workflow will be saved as ", plotFormat, " files"),
       paste0("setPlotFormat(", plotFormat, ")")
@@ -684,15 +684,15 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
   workflowInfo <- as.character(workflowTable[workflowID, simulationIndex + 2])
 
   # For tasks return the task name if it is activated
-  if (isIncluded(codeId, AllAvailableTasks)) {
+  if (ospsuite.utils::isIncluded(codeId, AllAvailableTasks)) {
     # If input is not included in 1, TRUE or true, assume task is not activated
-    if (isIncluded(workflowInfo, c("Yes", "YES", "1", "TRUE", "true"))) {
+    if (ospsuite.utils::isIncluded(workflowInfo, c("Yes", "YES", "1", "TRUE", "true"))) {
       return(paste0('"', codeId, '"'))
     }
     return()
   }
   # For info of type sheet, return directly sheet name
-  if (isIncluded(codeId, c(
+  if (ospsuite.utils::isIncluded(codeId, c(
     WorkflowCodeIdentifiers$`Workflow Mode`,
     WorkflowCodeIdentifiers$activitySpecificCode,
     SimulationCodeIdentifiers$outputs,
@@ -714,9 +714,9 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
     return("NULL")
   }
   # For info about reference population, return logical value as character
-  if (isIncluded(codeId, c(SimulationCodeIdentifiers$referencePopulation, SimulationCodeIdentifiers$plotReferenceObsData, WorkflowCodeIdentifiers$createWordReport))) {
+  if (ospsuite.utils::isIncluded(codeId, c(SimulationCodeIdentifiers$referencePopulation, SimulationCodeIdentifiers$plotReferenceObsData, WorkflowCodeIdentifiers$createWordReport))) {
     # Will return false if input is not included in 1, TRUE or true
-    return(as.character(isIncluded(workflowInfo, c("Yes", "YES", "1", "TRUE", "true"))))
+    return(as.character(ospsuite.utils::isIncluded(workflowInfo, c("Yes", "YES", "1", "TRUE", "true"))))
   }
   # For any other info, it needs to be returned in between quotes
   return(paste0("'", workflowInfo, "'"))
@@ -826,7 +826,7 @@ getPKParametersContent <- function(pkParametersTable) {
 getSimulationSetType <- function(workflowMode) {
   validateIsIncluded(workflowMode, c("MeanModelWorkflow", "PopulationWorkflow"))
   simulationType <- "SimulationSet"
-  if (isIncluded(workflowMode, "PopulationWorkflow")) {
+  if (ospsuite.utils::isIncluded(workflowMode, "PopulationWorkflow")) {
     simulationType <- paste0("Population", simulationType)
   }
   return(simulationType)
@@ -842,7 +842,7 @@ getSimulationSetType <- function(workflowMode) {
 #' @keywords internal
 getFileLocationFromType <- function(location, type, excelFile) {
   validateIsIncluded(type, c("SHEET", "FILE"))
-  if (isIncluded(type, "SHEET")) {
+  if (ospsuite.utils::isIncluded(type, "SHEET")) {
     location <- getObservedMetaDataFile(excelFile, location)
   }
   if (is.null(location)) {
@@ -878,12 +878,12 @@ concatenateDataSelection <- function(inputs, sep = ") & (") {
   }
 
   # If only some are NONE, remove any NONE
-  if (isIncluded("NONE", inputs)) {
+  if (ospsuite.utils::isIncluded("NONE", inputs)) {
     inputs <- inputs[!(inputs == "NONE")]
   }
 
   # Assume ALL in any is ALL in all
-  if (isIncluded("ALL", inputs)) {
+  if (ospsuite.utils::isIncluded("ALL", inputs)) {
     return('"ALL"')
   }
   return(paste0("'(", paste0(inputs, collapse = sep), ")'"))

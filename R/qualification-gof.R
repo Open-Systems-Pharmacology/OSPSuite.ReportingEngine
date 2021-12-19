@@ -24,7 +24,7 @@ plotQualificationGOFs <- function(configurationPlan,
       sectionId = gofPlan$SectionId,
       table = gofGMFE,
       tableCaption = paste0("GMFE for ", gofPlan$Title),
-      includeTable = isIncluded("GMFE", gofPlan$Artifacts)
+      includeTable = ospsuite.utils::isIncluded("GMFE", gofPlan$Artifacts)
     )
 
     # GOF plots
@@ -39,7 +39,7 @@ plotQualificationGOFs <- function(configurationPlan,
         sectionId = gofPlan$SectionId,
         plot = gofPlot,
         plotCaption = gofPlan$Title,
-        includePlot = isIncluded("Plot", gofPlan$Artifacts)
+        includePlot = ospsuite.utils::isIncluded("Plot", gofPlan$Artifacts)
       )
     }
     return(gofResults)

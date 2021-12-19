@@ -190,10 +190,10 @@ getResiduals <- function(observedData,
   )
 
   residualValues <- rep(NA, nrow(observedData))
-  if (isIncluded(residualScale, ResidualScales$Logarithmic)) {
+  if (ospsuite.utils::isIncluded(residualScale, ResidualScales$Logarithmic)) {
     residualValues <- log(observedData[, "Concentration"]) - log(simulatedData[timeMatchedData, "Concentration"])
   }
-  if (isIncluded(residualScale, ResidualScales$Linear)) {
+  if (ospsuite.utils::isIncluded(residualScale, ResidualScales$Linear)) {
     residualValues <- (observedData[, "Concentration"] - simulatedData[timeMatchedData, "Concentration"])
   }
 

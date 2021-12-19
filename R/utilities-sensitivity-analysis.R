@@ -312,12 +312,12 @@ analyzeCoreSensitivity <- function(simulation,
     numberOfCores = numberOfCores
   )
 
-  logDebug(message = paste0(ifNotNull(nodeName, paste0(nodeName, ": "), NULL), "Starting sensitivity analysis for path(s) ", paste(variableParameterPaths, collapse = ", ")), file = debugLogFileName, printConsole = FALSE)
+  logDebug(message = paste0(ospsuite.utils::ifNotNull(nodeName, paste0(nodeName, ": "), NULL), "Starting sensitivity analysis for path(s) ", paste(variableParameterPaths, collapse = ", ")), file = debugLogFileName, printConsole = FALSE)
   sensitivityAnalysisResults <- runSensitivityAnalysis(
     sensitivityAnalysis = sensitivityAnalysis,
     sensitivityAnalysisRunOptions = sensitivityAnalysisRunOptions
   )
-  logDebug(message = paste0(ifNotNull(nodeName, paste0(nodeName, ": "), NULL), "Sensitivity analysis for current path(s) completed"), file = debugLogFileName, printConsole = FALSE)
+  logDebug(message = paste0(ospsuite.utils::ifNotNull(nodeName, paste0(nodeName, ": "), NULL), "Sensitivity analysis for current path(s) completed"), file = debugLogFileName, printConsole = FALSE)
   return(sensitivityAnalysisResults)
 }
 
@@ -538,7 +538,7 @@ plotMeanSensitivity <- function(structureSet,
     validateIsIncluded(output$path, saResults$allQuantityPaths)
     pathLabel <- lastPathElement(output$path)
     for (pkParameter in output$pkParameters) {
-      if (!isIncluded(pkParameter$pkParameter, saResults$allPKParameterNames)) {
+      if (!ospsuite.utils::isIncluded(pkParameter$pkParameter, saResults$allPKParameterNames)) {
         logWorkflow(
           message = messages$errorNotIncluded(pkParameter$pkParameter, saResults$allPKParameterNames),
           logTypes = c(LogTypes$Debug, LogTypes$Error),
@@ -927,7 +927,7 @@ getPopSensDfForPkAndOutput <- function(simulation,
       )
 
       # verify that pkParameter is included in sensitivity results for current individual.  If not, skip to next individual
-      if (!isIncluded(pkParameter, individualSAResults$allPKParameterNames)) {
+      if (!ospsuite.utils::isIncluded(pkParameter, individualSAResults$allPKParameterNames)) {
         logWorkflow(
           message = paste("For individualID", individualId, ":", messages$errorNotIncluded(pkParameter, individualSAResults$allPKParameterNames)),
           logTypes = c(LogTypes$Debug, LogTypes$Error),
@@ -991,7 +991,7 @@ getPkOutputIndexDf <- function(indexDf, pkParameter, output) {
 #' @import ospsuite.utils
 #' @keywords internal
 getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold = NULL, variableParameterPaths = NULL) {
-  totalSensitivityThreshold <- totalSensitivityThreshold %||% ifNotNull(variableParameterPaths, 1, 0.9)
+  totalSensitivityThreshold <- totalSensitivityThreshold %||% ospsuite.utils::ifNotNull(variableParameterPaths, 1, 0.9)
   return(totalSensitivityThreshold)
 }
 

@@ -21,10 +21,10 @@ TaskSettings <- R6::R6Class(
       private$.plotConfigurations <- list()
 
       # Plot configurations fields depend on the task
-      if (isIncluded(taskName, AllAvailableTasks$plotAbsorption)) {
+      if (ospsuite.utils::isIncluded(taskName, AllAvailableTasks$plotAbsorption)) {
         private$.plotConfigurations <- list(absorptionPlot = NULL)
       }
-      if (isIncluded(taskName, AllAvailableTasks$plotMassBalance)) {
+      if (ospsuite.utils::isIncluded(taskName, AllAvailableTasks$plotMassBalance)) {
         private$.plotConfigurations <- list(
           timeProfile = NULL,
           cumulativeTimeProfile = NULL,
@@ -33,14 +33,14 @@ TaskSettings <- R6::R6Class(
           pieChart = NULL
         )
       }
-      if (isIncluded(taskName, AllAvailableTasks$plotDemography)) {
+      if (ospsuite.utils::isIncluded(taskName, AllAvailableTasks$plotDemography)) {
         private$.plotConfigurations <- list(
           histogram = NULL,
           vpcParameterPlot = NULL,
           comparisonVpcPlot = NULL
         )
       }
-      if (isIncluded(taskName, AllAvailableTasks$plotPKParameters)) {
+      if (ospsuite.utils::isIncluded(taskName, AllAvailableTasks$plotPKParameters)) {
         private$.plotConfigurations <- list(
           boxplotPkParameters = NULL,
           boxplotPkRatios = NULL,
@@ -48,7 +48,7 @@ TaskSettings <- R6::R6Class(
           comparisonVpcPlot = NULL
         )
       }
-      if (isIncluded(taskName, AllAvailableTasks$plotTimeProfilesAndResiduals)) {
+      if (ospsuite.utils::isIncluded(taskName, AllAvailableTasks$plotTimeProfilesAndResiduals)) {
         private$.plotConfigurations <- list(
           timeProfile = NULL,
           obsVsPred = NULL,

@@ -36,7 +36,7 @@ plotQualificationTimeProfiles <- function(configurationPlan,
     # Currently use ospsuite.utils::ifNotNull to select if mean or population time profile
     # So far only population defines "Type" but this might not be always true
     # Function switch could be used instead
-    timeProfilePlot <- ifNotNull(
+    timeProfilePlot <- ospsuite.utils::ifNotNull(
       timeProfilePlan$Plot$Type,
       plotQualificationPopulationTimeProfile(
         simulationAnalysis = timeProfilePlan$Plot$Analysis,
@@ -556,7 +556,7 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
     outputError$ymax <- outputValues * observedResults$data[, 3]
 
     # In case scale is log,
-    if (!isIncluded(observedResults$metaData$error$unit, "")) {
+    if (!ospsuite.utils::isIncluded(observedResults$metaData$error$unit, "")) {
       outputError$ymin <- outputValues - ospsuite::toUnit(
         ospsuite::getDimensionForUnit(observedResults$metaData$error$unit),
         observedResults$data[, 3],
@@ -578,7 +578,7 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
     outputError$ymin[is.na(outputError$ymin)] <- outputValues[is.na(outputError$ymin)]
     outputError$ymax[is.na(outputError$ymax)] <- outputValues[is.na(outputError$ymax)]
     # In case of log scale, ymin<0 are replaced by y so upper branch is still plotted
-    if(isIncluded(axesProperties$y$scale, tlf::Scaling$log)){
+    if(ospsuite.utils::isIncluded(axesProperties$y$scale, tlf::Scaling$log)){
       outputError$ymin[outputError$ymin<=0] <- outputValues[outputError$ymin<=0]
     }
   }

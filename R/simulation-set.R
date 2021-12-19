@@ -74,9 +74,9 @@ SimulationSet <- R6::R6Class(
       self$timeUnit <- timeUnit %||% "h"
 
       self$applicationRanges <- list(
-        total = isIncluded(ApplicationRanges$total, applicationRanges),
-        firstApplication = isIncluded(ApplicationRanges$firstApplication, applicationRanges),
-        lastApplication = isIncluded(ApplicationRanges$lastApplication, applicationRanges)
+        total = ospsuite.utils::isIncluded(ApplicationRanges$total, applicationRanges),
+        firstApplication = ospsuite.utils::isIncluded(ApplicationRanges$firstApplication, applicationRanges),
+        lastApplication = ospsuite.utils::isIncluded(ApplicationRanges$lastApplication, applicationRanges)
       )
     }
   )

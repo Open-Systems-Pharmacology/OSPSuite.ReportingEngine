@@ -50,7 +50,7 @@ autoAxesLimits <- function(x, scale = tlf::Scaling$lin) {
   minX[minX>0] <- (1-reEnv$autoAxisLimitMargin)*minX
   maxX[maxX<0] <- (1-reEnv$autoAxisLimitMargin)*maxX
   maxX[maxX<0] <- (1+reEnv$autoAxisLimitMargin)*maxX
-  if(!isIncluded(scale, "log")){
+  if(!ospsuite.utils::isIncluded(scale, "log")){
     return(c(minX, maxX))
   }
   # For log plots,
@@ -111,12 +111,12 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
   # If chart size is defined, it is in pixel and updated accordingly
   # Get conversion factor between pixels and inches, dev.size provides an array c(width, height)
   unitConversionFactor <- grDevices::dev.size("in") / grDevices::dev.size("px")
-  width <- ifNotNull(
+  width <- ospsuite.utils::ifNotNull(
     plotProperties$FontAndSize$ChartWidth,
     plotProperties$FontAndSize$ChartWidth * unitConversionFactor[1],
     reEnv$defaultPlotFormat$width
   )
-  height <- ifNotNull(
+  height <- ospsuite.utils::ifNotNull(
     plotProperties$FontAndSize$ChartHeight,
     plotProperties$FontAndSize$ChartHeight * unitConversionFactor[2],
     reEnv$defaultPlotFormat$height
@@ -142,11 +142,11 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
 #' @keywords internal
 getLegendScalingFactors <- function(legendPosition = tlf::LegendPositions$outsideTop){
   # Legend on the left/right sides: increase width
-  if(isIncluded(legendPosition, c(tlf::LegendPositions$outsideRight, tlf::LegendPositions$outsideLeft))){
+  if(ospsuite.utils::isIncluded(legendPosition, c(tlf::LegendPositions$outsideRight, tlf::LegendPositions$outsideLeft))){
     return(list(width = 4/3, height = 1))
   }
   # Legend on the top/bottom sides: increase height
-  if(isIncluded(legendPosition, c(tlf::LegendPositions$outsideTopLeft,
+  if(ospsuite.utils::isIncluded(legendPosition, c(tlf::LegendPositions$outsideTopLeft,
                                   tlf::LegendPositions$outsideTop,
                                   tlf::LegendPositions$outsideTopRight,
                                   tlf::LegendPositions$outsideBottomLeft,

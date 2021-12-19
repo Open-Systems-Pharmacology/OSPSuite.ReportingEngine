@@ -360,11 +360,11 @@ startQualificationRunner <- function(qualificationRunnerFolder,
   validateIsLogical(displayVersion)
 
   options <- c(
-    ifNotNull(pkSimPortableFolder, paste0("-p ", pkSimPortableFolder)),
-    ifNotNull(configurationPlanFile, paste0('-n "', configurationPlanName, '"')),
+    ospsuite.utils::ifNotNull(pkSimPortableFolder, paste0("-p ", pkSimPortableFolder)),
+    ospsuite.utils::ifNotNull(configurationPlanFile, paste0('-n "', configurationPlanName, '"')),
     switch(as.character(overwrite), "TRUE" = "-f", NULL),
-    ifNotNull(logFile, paste0('-l "', logFile, '"')),
-    ifNotNull(logLevel, paste0("--logLevel ", logLevel)),
+    ospsuite.utils::ifNotNull(logFile, paste0('-l "', logFile, '"')),
+    ospsuite.utils::ifNotNull(logLevel, paste0("--logLevel ", logLevel)),
     switch(as.character(displayVersion), "TRUE" = "--version", NULL)
   )
   optionalArguments <- paste0(options, collapse = " ")

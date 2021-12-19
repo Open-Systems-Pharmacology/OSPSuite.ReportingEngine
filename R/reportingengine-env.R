@@ -91,7 +91,7 @@ setDefaultPlotFormat <- function(format = NULL, width = NULL, height = NULL, uni
   reEnv$defaultPlotFormat$dpi <- dpi %||% reEnv$defaultPlotFormat$dpi
   # ggplot2 version 3.3.0 does not include pixels yet
   # Convert width and height back into inches in case of units as pixels
-  if (isIncluded(units, "px")) {
+  if (ospsuite.utils::isIncluded(units, "px")) {
     units <- "in"
     unitConversionFactor <- grDevices::dev.size("in") / grDevices::dev.size("px")
     reEnv$defaultPlotFormat$width <- reEnv$defaultPlotFormat$width * unitConversionFactor[1]
@@ -143,7 +143,7 @@ setDefaultNumericFormat <- function(digits = NULL, scientific = NULL) {
 getDefaultRETheme <- function(){
   # Get reporting engine theme from its json file properties
   reThemeFile <- system.file("extdata", "re-theme.json", package = "ospsuite.reportingengine")
-  if(!isIncluded(reThemeFile, "")){
+  if(!ospsuite.utils::isIncluded(reThemeFile, "")){
     return(tlf::loadThemeFromJson(reThemeFile))
   }
   # If not found, e.g. before the package is built, use a tlf template theme

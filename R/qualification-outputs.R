@@ -247,8 +247,8 @@ generateDDIPlotPKParameterName <- function(pkParameter, startTime, endTime) {
   validateIsIncluded(values = pkParameter, parentValues = names(pkDictionaryQualificationOSP))
   standardPKParameter <- pkDictionaryQualificationOSP[[pkParameter]]
   pkParameterName <- standardPKParameter
-  pkParameterName <- ifNotNull(startTime, paste0(pkParameterName, "_tStartTime_", startTime), pkParameterName)
-  pkParameterName <- ifNotNull(endTime, paste0(pkParameterName, "_tEndTime_", endTime), pkParameterName)
+  pkParameterName <- ospsuite.utils::ifNotNull(startTime, paste0(pkParameterName, "_tStartTime_", startTime), pkParameterName)
+  pkParameterName <- ospsuite.utils::ifNotNull(endTime, paste0(pkParameterName, "_tEndTime_", endTime), pkParameterName)
   return(pkParameterName)
 }
 
