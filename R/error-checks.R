@@ -32,20 +32,6 @@ typeNamesFrom <- function(type) {
   sapply(type, function(t) t$classname)
 }
 
-validateIsSameLength <- function(...) {
-  if (isSameLength(...)) {
-    return(invisible())
-  }
-  # Name of the variable in the calling function
-  objectName <- getObjectNameAsString(list(...))
-
-  # Name of the arguments
-  argnames <- sys.call()
-  arguments <- paste(lapply(argnames[-1], as.character), collapse = ", ")
-
-  logErrorThenStop(messages$errorDifferentLength(arguments))
-}
-
 validateNoDuplicatedEntries <- function(x) {
   if (any(duplicated(x))) {
     logErrorThenStop(messages$errorDuplicatedEntries(getObjectNameAsString(x)))
