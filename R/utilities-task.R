@@ -39,7 +39,9 @@ AllAvailableTasks <- c(
 #' @export
 activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   ospsuite.utils::validateIsOfType(workflow, "Workflow")
-  ospsuite.utils::validateIsIncluded(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
+
+  #Using ospsuite.reportingengine version of validateIsIncluded (and not the ospsuite.utils version) as the former has a logFolder argument
+  validateIsIncludedAndLog(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
 
   for (task in tasks) {
     workflow[[task]]$activate()
@@ -54,7 +56,9 @@ activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
 #' @export
 inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   ospsuite.utils::validateIsOfType(workflow, "Workflow")
-  ospsuite.utils::validateIsIncluded(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
+
+  #Using ospsuite.reportingengine version of validateIsIncluded (and not the ospsuite.utils version) as the former has a logFolder argument
+  validateIsIncludedAndLog(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
 
   for (task in tasks) {
     workflow[[task]]$inactivate()

@@ -39,6 +39,20 @@ validateNoDuplicatedEntries <- function(x) {
   return(invisible())
 }
 
+validateIsIncludedAndLog <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL, logFolder = NULL) {
+  if (nullAllowed && is.null(values)) {
+    return(invisible())
+  }
+
+  if (ospsuite.utils::isIncluded(values, parentValues)) {
+    return(invisible())
+  }
+  if (is.null(logFolder)) {
+    stop(messages$errorNotIncluded(values, parentValues, groupName))
+  }
+  logErrorThenStop(messages$errorNotIncluded(values, parentValues, groupName), logFolder)
+}
+
 checkIsIncluded <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL, logFolder = NULL) {
   if (nullAllowed && is.null(values)) {
     return(invisible())
