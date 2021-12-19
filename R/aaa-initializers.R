@@ -1,11 +1,21 @@
+getClassAncestry <- function(clsVec){
+  clsVec <- c(clsVec)
+  nv <- clsVec[[length(clsVec)]]$get_inherit()
+  if(is.null( nv )){
+    return(clsVec)
+  }
+  return(getClassAncestry( c(clsVec,nv) ))
+}
+
+getAncestralInitializerList <- function(childClass){
+  return(lapply(getClassAncestry(childClass),function(cls){ cls$public_methods$initialize }))
+}
 
 parseFunctionBody <- function(functionToParse) {
   ospsuite.utils::validateIsIncluded(values = typeof(functionToParse),parentValues= c("closure","function"))
   #read body of functionToParse, convert to character, removing first element (curly brackets), paste together all function commands into a string (separated by `;`)
   return(paste(tail(as.character(body(functionToParse)), -1), collapse = ";"))
 }
-
-
 
 #' @param parentInitializersList is an list of parent initializers. ordered from the most to the least superior.
 #' @param extendedInitializer is an initializer function to be called after calling all parent classes by order of superiority
