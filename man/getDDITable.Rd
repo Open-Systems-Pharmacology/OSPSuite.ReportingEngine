@@ -6,10 +6,13 @@
 \usage{
 getDDITable(dataframe)
 }
+\arguments{
+\item{dataframe}{for generating DDI summary table}
+}
 \value{
 Summary table for DDI plot
 }
 \description{
-Summary table for DDI plot
+Summary table for DDI
 }
 \keyword{internal}

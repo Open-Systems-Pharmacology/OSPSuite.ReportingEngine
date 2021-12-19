@@ -46,6 +46,7 @@ simulateWorkflowModels <- function(structureSets,
 #' @param logFolder folder where the logs are saved
 #' @return Simulation results for individual or population
 #' @import ospsuite
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 simulateModelForPopulation <- function(structureSets,
                                        settings = NULL,
