@@ -172,7 +172,7 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
   validateIsIncluded("Name", names(pkParametersTable)[1])
 
   # Check for duplicate PK parameters as input of Output object
-  if (!hasUniqueValues(pkParametersTable$Name)) {
+  if (!ospsuite.utils::hasUniqueValues(pkParametersTable$Name)) {
     pkParametersWarnings <- messages$errorHasNoUniqueValues(pkParametersTable$Name,
       dataName = paste0("selected PK parameters from Excel sheet '", pkParametersSheet, "'")
     )
@@ -191,7 +191,7 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
   }
 
   # Check for duplicate PK parameter display names as input of Output object
-  if (!hasUniqueValues(pkParametersTable$`Display name`)) {
+  if (!ospsuite.utils::hasUniqueValues(pkParametersTable$`Display name`)) {
     pkParametersErrors <- messages$errorHasNoUniqueValues(pkParametersTable$`Display name`,
       dataName = paste0("display names of selected PK parameters from Excel sheet '", pkParametersSheet, "'")
     )
@@ -305,7 +305,7 @@ getOutputContent <- function(excelFile, outputInfo) {
     allDataDisplayNames <- c(allDataDisplayNames, dataDisplayName)
   }
   # Check for duplicate output paths, display names and data display names
-  if (!hasUniqueValues(allOutputPaths)) {
+  if (!ospsuite.utils::hasUniqueValues(allOutputPaths)) {
     outputWarnings <- c(
       outputWarnings,
       messages$errorHasNoUniqueValues(gsub("'", "", allOutputPaths),
@@ -313,7 +313,7 @@ getOutputContent <- function(excelFile, outputInfo) {
       )
     )
   }
-  if (!hasUniqueValues(allDisplayNames)) {
+  if (!ospsuite.utils::hasUniqueValues(allDisplayNames)) {
     outputErrors <- c(
       outputErrors,
       messages$errorHasNoUniqueValues(gsub("'", "", allDisplayNames),
@@ -322,7 +322,7 @@ getOutputContent <- function(excelFile, outputInfo) {
     )
   }
   # TO DO: Check if no values are flagged because NAs are removed
-  if (!hasUniqueValues(allDataDisplayNames)) {
+  if (!ospsuite.utils::hasUniqueValues(allDataDisplayNames)) {
     outputErrors <- c(
       outputErrors,
       messages$errorHasNoUniqueValues(gsub("'", "", allDataDisplayNames),
@@ -448,7 +448,7 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
     )
     # Check that pkml file has correct extension
     simulationFile <- gsub("'", "", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationFile))
-    if (!isFileExtension(simulationFile, "pkml")) {
+    if (!ospsuite.utils::isFileExtension(simulationFile, "pkml")) {
       simulationSetErrors <- c(simulationSetErrors, paste0("In simulation set '", simulationSetNames[simulationIndex], "', ", messages$errorExtension(simulationFile, "pkml")))
     }
   }
@@ -784,14 +784,14 @@ getPKParametersContent <- function(pkParametersTable) {
     return(pkParametersContent)
   }
   # Check for duplicate PK parameters as input of Output object
-  if (!hasUniqueValues(pkParametersTable$Name)) {
+  if (!ospsuite.utils::hasUniqueValues(pkParametersTable$Name)) {
     pkParametersWarnings <- c(
       pkParametersWarnings,
       messages$errorHasNoUniqueValues(pkParametersTable$Name, dataName = "PK parameters update")
     )
   }
   # Check for duplicate PK parameter display names as input of Output object
-  if (!hasUniqueValues(pkParametersTable$`Display name`)) {
+  if (!ospsuite.utils::hasUniqueValues(pkParametersTable$`Display name`)) {
     pkParametersWarnings <- c(
       pkParametersWarnings,
       messages$errorHasNoUniqueValues(pkParametersTable$`Display name`, dataName = "PK parameters display names")
@@ -932,7 +932,7 @@ getUserDefPKParametersContent <- function(userDefPKParametersTable) {
     return(userDefPKParametersContent)
   }
   # Check for duplicate PK parameters as input of Output object
-  if (!hasUniqueValues(userDefPKParametersTable$Name)) {
+  if (!ospsuite.utils::hasUniqueValues(userDefPKParametersTable$Name)) {
     userDefPKParametersErrors <- c(
       userDefPKParametersErrors,
       messages$errorHasNoUniqueValues(userDefPKParametersTable$Name, dataName = "User Defined PK parameters")

@@ -336,7 +336,7 @@ ConfigurationPlan <- R6::R6Class(
         unexistingFiles <- paste0(dataPaths[unexistingFiles], collapse = "', '")
         warning(paste0("Observed datasets '", unexistingFiles, "' not found"))
       }
-      if (!hasUniqueValues(dataIds)) {
+      if (!ospsuite.utils::hasUniqueValues(dataIds)) {
         # Check if the id reference same paths
         duplicatedIds <- unique(dataIds[duplicated(dataIds)])
         for (observedDataSetsId in duplicatedIds) {
