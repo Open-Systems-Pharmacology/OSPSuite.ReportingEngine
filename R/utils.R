@@ -1,22 +1,3 @@
-#' Shortkey checking if argument 1 is not null,
-#' output argument 1 if not null, or output argument 2 otherwise
-#'
-#' @title \%||\%
-#' @param lhs argument 1
-#' @param rhs argument 2
-#' @return lhs if lhs is not null, rhs otherwise
-#' @description
-#' Check if lhs argument is not null, output lhs if not null,
-#' output rhs otherwise
-#' @keywords internal
-`%||%` <- function(lhs, rhs) {
-  if (!is.null(lhs)) {
-    lhs
-  } else {
-    rhs
-  }
-}
-
 #' @title calculateResiduals
 #' @param simulatedData, vector of simulated data
 #' @param observedData, vector of observed data
@@ -36,7 +17,6 @@ calculateResiduals <- function(simulatedData, observedData, residualScale) {
     residualValues <- (observedData - simulatedData)
   }
 }
-
 
 #' Shortkey checking if arguments 1 and 2 are equal,
 #' output argument 3 if equal, or output argument 4 otherwise
