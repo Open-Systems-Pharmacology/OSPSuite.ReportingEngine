@@ -1,5 +1,6 @@
 #' @title TaskSettings
 #' @description  R6 class defining properties of plot task settings
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 TaskSettings <- R6::R6Class(
   "TaskSettings",

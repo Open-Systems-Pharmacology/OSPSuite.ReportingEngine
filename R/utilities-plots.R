@@ -87,6 +87,7 @@ autoAxesTicksFromLimits <- function(limits) {
 #' @param legendPosition Legend position in order to add scale factor in the final plot dimensions
 #' that accounts for possible shrinking of the plot panel due to the addition of the legend
 #' @return A `PlotConfiguration` object
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legendPosition = reEnv$theme$background$legendPosition) {
   # Define the appropriate configuration from plotType

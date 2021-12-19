@@ -8,6 +8,7 @@
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
 #' @return SA results for individual or population
 #' @import ospsuite
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 runSensitivity <- function(structureSet,
                            settings,
@@ -498,6 +499,7 @@ defaultQuantileVec <- c(0.05, 0.5, 0.95)
 #' @return list of plots and tables
 #' @import ospsuite
 #' @import tlf
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotMeanSensitivity <- function(structureSet,
                                 logFolder = getwd(),

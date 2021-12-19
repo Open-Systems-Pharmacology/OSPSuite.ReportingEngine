@@ -162,6 +162,7 @@ loadCalculateSensitivityTask <- function(workflow, active = FALSE, settings = NU
 #' Default value is `TRUE`
 #' @param settings specific settings for `simulate` task
 #' @return A `GofPlotTask` object
+#' @importFrom ospsuite.utils %||%
 #' @export
 loadPlotTimeProfilesAndResidualsTask <- function(workflow, active = FALSE, settings = NULL) {
   ospsuite.utils::validateIsOfType(workflow, "Workflow")
@@ -202,6 +203,7 @@ loadPlotTimeProfilesAndResidualsTask <- function(workflow, active = FALSE, setti
 #' @return A `PopulationSensitivityAnalysisTask` for `PopulationWorkflow` objects.
 #' A `SensitivityAnalysisTask` object otherwise
 #' @export
+#' @importFrom ospsuite.utils %||%
 loadPlotPKParametersTask <- function(workflow, active = FALSE, settings = NULL) {
   ospsuite.utils::validateIsOfType(workflow, "Workflow")
   ospsuite.utils::validateIsLogical(active)
@@ -251,6 +253,7 @@ loadPlotPKParametersTask <- function(workflow, active = FALSE, settings = NULL) 
 #' @return A `PopulationSensitivityAnalysisTask` for `PopulationWorkflow` objects.
 #' A `SensitivityAnalysisTask` object otherwise
 #' @export
+#' @importFrom ospsuite.utils %||%
 loadPlotSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
   ospsuite.utils::validateIsOfType(workflow, "Workflow")
   ospsuite.utils::validateIsLogical(active)
@@ -300,6 +303,7 @@ loadPlotSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
 #' @param settings specific settings for `plotMassBalance` task
 #' @return A `PlotTask` object
 #' @export
+#' @importFrom ospsuite.utils %||%
 loadPlotMassBalanceTask <- function(workflow, active = FALSE, settings = NULL) {
   ospsuite.utils::validateIsOfType(workflow, "MeanModelWorkflow")
   ospsuite.utils::validateIsLogical(active)
@@ -327,6 +331,7 @@ loadPlotMassBalanceTask <- function(workflow, active = FALSE, settings = NULL) {
 #' @param settings specific settings for `plotAbsorption` task
 #' @return A `PlotTask` object
 #' @export
+#' @importFrom ospsuite.utils %||%
 loadPlotAbsorptionTask <- function(workflow, active = FALSE, settings = NULL) {
   ospsuite.utils::validateIsOfType(workflow, "MeanModelWorkflow")
   ospsuite.utils::validateIsLogical(active)
@@ -354,6 +359,7 @@ loadPlotAbsorptionTask <- function(workflow, active = FALSE, settings = NULL) {
 #' @param settings specific settings for `plotDemography` task
 #' @return A `PlotTask` object
 #' @export
+#' @importFrom ospsuite.utils %||%
 loadPlotDemographyTask <- function(workflow, active = FALSE, settings = NULL) {
   ospsuite.utils::validateIsOfType(workflow, "PopulationWorkflow")
   ospsuite.utils::validateIsLogical(active)
@@ -542,6 +548,7 @@ addUserDefinedTask <- function(workflow,
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @return A `QualificationTask` object
 #' @export
+#' @importFrom ospsuite.utils %||%
 loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
   ospsuite.utils::validateIsOfType(workflow, "QualificationWorkflow")
   ospsuite.utils::validateIsOfType(configurationPlan, "ConfigurationPlan")

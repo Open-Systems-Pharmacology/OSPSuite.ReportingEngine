@@ -9,6 +9,7 @@
 #' @import tlf
 #' @import ospsuite
 #' @import utils
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotMeanMassBalance <- function(structureSet,
                                 logFolder = getwd(),
@@ -220,6 +221,7 @@ plotMeanMassBalance <- function(structureSet,
 #' @export
 #' @import tlf
 #' @import ggplot2
+#' @importFrom ospsuite.utils %||%
 #' @import utils
 plotMassBalanceTimeProfile <- function(data,
                                        metaData = NULL,
@@ -260,6 +262,7 @@ plotMassBalanceTimeProfile <- function(data,
 #' @export
 #' @import tlf
 #' @import ggplot2
+#' @importFrom ospsuite.utils %||%
 #' @import utils
 plotMassBalanceCumulativeTimeProfile <- function(data,
                                                  metaData = NULL,
@@ -302,6 +305,7 @@ plotMassBalanceCumulativeTimeProfile <- function(data,
 #' @export
 #' @import tlf
 #' @import ggplot2
+#' @importFrom ospsuite.utils %||%
 #' @import utils
 plotMassBalancePieChart <- function(data,
                                     metaData = NULL,

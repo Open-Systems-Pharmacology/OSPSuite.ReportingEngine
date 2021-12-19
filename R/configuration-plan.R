@@ -7,6 +7,7 @@
 #' @field referenceFolder Reference path for accessing inputs
 #' @field workflowFolder path of the output folder created or used by the Workflow.
 #' @export
+#' @importFrom ospsuite.utils %||%
 ConfigurationPlan <- R6::R6Class(
   "ConfigurationPlan",
   cloneable = FALSE,

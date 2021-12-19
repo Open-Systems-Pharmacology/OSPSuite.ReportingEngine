@@ -83,6 +83,7 @@ plotMeanPKParameters <- function(structureSet,
 #' @param molWeight Molecular weight for converting into PK Parameter `displayUnit`
 #' @return A data.frame with `Path`, `Parameter`, `Value` and `Unit` to display in final report
 #' @import ospsuite
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getMeanPKAnalysesFromOutput <- function(data, output, molWeight = NULL) {
   pkAnalysesFromOutput <- NULL
@@ -136,6 +137,7 @@ getMeanPKAnalysesFromOutput <- function(data, output, molWeight = NULL) {
 #' @import ospsuite
 #' @import tlf
 #' @import ggplot2
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotPopulationPKParameters <- function(structureSets,
                                        logFolder = getwd(),
@@ -461,6 +463,7 @@ plotPopulationPKParameters <- function(structureSets,
 #' @import ospsuite
 #' @import tlf
 #' @import ggplot2
+#' @importFrom ospsuite.utils %||%
 ratioBoxplot <- function(data,
                          plotConfiguration = NULL) {
   ratioPlot <- tlf::initializePlot(plotConfiguration)
@@ -496,6 +499,7 @@ ratioBoxplot <- function(data,
 #' @import ospsuite
 #' @import tlf
 #' @import ggplot2
+#' @importFrom ospsuite.utils %||%
 vpcParameterPlot <- function(data,
                              metaData = NULL,
                              plotConfiguration = NULL,
@@ -674,6 +678,7 @@ getDefaultPkParametersXParameters <- function(workflowType) {
 #' @param pkParameter `pkParameter` from `Output ` object
 #' @param molWeight Molecular weight of compound (if unit conversion needed)
 #' @return list of data.frame and its metaData including the values of PK parameters specified by `pkParameter` and `Output` objects
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getPopulationPKAnalysesFromOutput <- function(data, metaData, output, pkParameter, molWeight = NULL) {
   ospsuite.utils::validateIsIncluded(output$path, unique(data$QuantityPath))
@@ -728,6 +733,7 @@ getXParametersForPkParametersPlot <- function(workflow) {
 #' @param workflow `PopulationWorkflow` R6 class object
 #' @return list of y-parameters used for PK parameters range plots and boxplots
 #' @export
+#' @importFrom ospsuite.utils %||%
 getYParametersForPkParametersPlot <- function(workflow) {
   ospsuite.utils::validateIsOfType(workflow, "PopulationWorkflow")
   yParameters <- workflow$plotPKParameters$yParameters %||% workflow$simulationStructures[[1]]$simulationSet$outputs

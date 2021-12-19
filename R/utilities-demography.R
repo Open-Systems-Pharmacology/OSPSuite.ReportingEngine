@@ -11,6 +11,7 @@
 #' @import ospsuite
 #' @import tlf
 #' @import ggplot2
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotDemographyParameters <- function(structureSets,
                                      logFolder = getwd(),
@@ -286,6 +287,8 @@ getDefaultDemographyXParameters <- function(workflowType) {
   return(NULL)
 }
 
+#' @title getDemographyAggregatedData
+#' @importFrom ospsuite.utils %||%
 getDemographyAggregatedData <- function(data,
                                         xParameterName,
                                         yParameterName,
@@ -374,6 +377,7 @@ getReferencePopulationName <- function(structureSets) {
 #' @import ospsuite
 #' @import tlf
 #' @import ggplot2
+#' @importFrom ospsuite.utils %||%
 plotDemographyHistogram <- function(data,
                                     metaData,
                                     dataMapping = NULL,
@@ -435,6 +439,7 @@ getXParametersForDemogrpahyPlot <- function(workflow) {
 #' @title getYParametersForDemogrpahyPlot
 #' @param workflow `PopulationWorkflow` R6 class object
 #' @return list of y parameters used for demography histogram and range plots
+#' @importFrom ospsuite.utils %||%
 #' @export
 getYParametersForDemogrpahyPlot <- function(workflow) {
   ospsuite.utils::validateIsOfType(workflow, "PopulationWorkflow")

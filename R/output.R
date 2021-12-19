@@ -29,6 +29,7 @@ DataSelectionKeys <- list(
 #' @field residualScale Scale for calculation of residuals as included in enum `ResidualScales`
 #' @export
 #' @import ospsuite
+#' @importFrom ospsuite.utils %||%
 Output <- R6::R6Class(
   "Output",
   public = list(

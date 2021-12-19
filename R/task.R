@@ -6,6 +6,7 @@
 #' @field settings list of settings for task such as plot configurations
 #' @field message message or title of the task
 #' @export
+#' @importFrom ospsuite.utils %||%
 Task <- R6::R6Class(
   "Task",
   public = list(

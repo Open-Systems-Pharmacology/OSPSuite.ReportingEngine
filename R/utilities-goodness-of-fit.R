@@ -123,6 +123,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
 #' @param molWeight Molar weight for unit conversion of dependent variable
 #' @param simulationSet `SimulationSet` object
 #' @return list of data and metaData
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getSimulatedResultsFromOutput <- function(simulationPathResults, output, simulationQuantity, molWeight, simulationSet) {
   outputConcentration <- simulationPathResults$data[, output$path]
@@ -216,6 +217,7 @@ getResiduals <- function(observedData,
 #' @import ospsuite
 #' @import utils
 #' @import ggplot2
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotPopulationGoodnessOfFit <- function(structureSet,
                                         logFolder = getwd(),
@@ -338,6 +340,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
 #' @param simulationSet `SimulationSet` object
 #' @param settings TaskSetting object
 #' @return list of data and metaData
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getPopulationResultsFromOutput <- function(simulationPathResults, output, simulationQuantity, molWeight, simulationSet, settings = NULL) {
   aggregateNames <- c("mean", "median", "lowPerc", "highPerc")
@@ -494,6 +497,7 @@ plotMeanObsVsPred <- function(data,
 #' @export
 #' @import tlf
 #' @import ggplot2
+#' @importFrom ospsuite.utils %||%
 plotMeanResVsTime <- function(data,
                               metaData = NULL,
                               plotConfiguration = NULL) {
@@ -542,6 +546,7 @@ plotMeanResVsTime <- function(data,
 #' @export
 #' @import tlf
 #' @import ggplot2
+#' @importFrom ospsuite.utils %||%
 plotMeanResVsPred <- function(data,
                               metaData = NULL,
                               plotConfiguration = NULL) {
@@ -660,6 +665,7 @@ plotPopulationTimeProfile <- function(simulatedData,
 #' @import tlf
 #' @import ggplot2
 #' @import stats
+#' @importFrom ospsuite.utils %||%
 plotResidualsHistogram <- function(data,
                                    metaData = NULL,
                                    dataMapping = NULL,
@@ -731,6 +737,7 @@ plotResidualsHistogram <- function(data,
 #' @import tlf
 #' @import stats
 #' @import ggplot2
+#' @importFrom ospsuite.utils %||%
 plotResidualsQQPlot <- function(data,
                                 metaData = NULL,
                                 dataMapping = NULL,

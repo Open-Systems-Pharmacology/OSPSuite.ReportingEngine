@@ -6,6 +6,7 @@
 #' @return list with `plots` and `tables`
 #' @import tlf
 #' @import ospsuite
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotQualificationTimeProfiles <- function(configurationPlan,
                                           logFolder = getwd(),
@@ -229,6 +230,7 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
 #' @param logFolder folder where the logs are saved
 #' @return Population time profile plot as a `ggplot` object
 #' @import tlf
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedDataCollection, simulation, simulationResults, axesProperties, configurationPlan, plotObject, logFolder) {
 

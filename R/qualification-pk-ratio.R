@@ -6,6 +6,7 @@
 #' @return list with `plots` and `tables`
 #' @import tlf
 #' @import ospsuite
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotQualificationPKRatio <- function(configurationPlan,
                                      logFolder = getwd(),
@@ -119,6 +120,7 @@ getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData) {
 #' @param metaData metaData with units and dimension for labeling the table header
 #' @param axesProperties list of axes properties obtained from `getAxesProperties`
 #' @return A ggplot object
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getQualificationPKRatioPlot <- function(pkParameterName, data, metaData, axesProperties) {
   # Prepare data, dataMapping and plotCOnfiguration to follow tlf nomenclature
@@ -178,6 +180,7 @@ getQualificationPKRatioTable <- function(data, metaData) {
 #' @return list with `data` and `metaData`
 #' @import tlf
 #' @import ospsuite
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getQualificationPKRatioData <- function(pkRatioPlan, configurationPlan, logFolder, settings) {
   # Get PK parameters from new or deprecated method

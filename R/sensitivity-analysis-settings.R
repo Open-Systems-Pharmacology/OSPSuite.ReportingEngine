@@ -1,5 +1,6 @@
 #' @title SensitivityAnalysisSettings
 #' @description  R6 class for Population Sensitivity Analysis Settings
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 SensitivityAnalysisSettings <- R6::R6Class(
   "SensitivityAnalysisSettings",

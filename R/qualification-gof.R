@@ -4,6 +4,7 @@
 #' @param logFolder folder where the logs are saved
 #' @param settings settings for the task
 #' @return list of qualification GOF ggplot objects
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotQualificationGOFs <- function(configurationPlan,
                                   logFolder = getwd(),
@@ -55,6 +56,7 @@ plotQualificationGOFs <- function(configurationPlan,
 #' @return list with `data` and `metaData`
 #' @import tlf
 #' @import ospsuite
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getQualificationGOFData <- function(gofPlan, configurationPlan, axesUnits, logFolder) {
   gofData <- data.frame()
@@ -165,6 +167,7 @@ getGOFDataForMapping <- function(outputMapping, configurationPlan, axesUnits, lo
 #' @param axesProperties list of axes properties obtained from `getAxesProperties`
 #' @return A ggplot object
 #' @import tlf
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties) {
   # Axes labels
@@ -284,6 +287,7 @@ getQualificationGOFGMFE <- function(data) {
 #' @param gofPlan List providing the configuration of the goodness of fit results
 #' @param settings settings for the task
 #' @return A list of units for goodness of fit results
+#' @importFrom ospsuite.utils %||%
 getGOFAxesUnits <- function(gofPlan, settings) {
   predictedVsObservedAxesProperties <- getAxesProperties(gofPlan$Axes$PredictedVsObserved) %||% settings$predictedVsObserved$axes
   residualsOverTimeAxesProperties <- getAxesProperties(gofPlan$Axes$ResidualsOverTime) %||% settings$residualsOverTime$axes

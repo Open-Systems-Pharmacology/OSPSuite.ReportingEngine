@@ -1,6 +1,7 @@
 #' @title SensitivityPlotSettings
 #' @description  R6 class for sensitivity analysis plot settings
 #' @export
+#' @importFrom ospsuite.utils %||%
 SensitivityPlotSettings <- R6::R6Class(
   "SensitivityPlotSettings",
   public = list(

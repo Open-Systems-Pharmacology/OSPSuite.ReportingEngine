@@ -76,6 +76,7 @@ setWatermarkConfiguration <- function(watermark = NULL) {
 #' @param units units of `width` and `height` included in "in", "cm", "mm", or "px"
 #' @param dpi Plot resolution in dots per inch. Caution, font sizes depend on resolution.
 #' @export
+#' @importFrom ospsuite.utils %||%
 #' @examples
 #' setDefaultPlotFormat(format = "pdf")
 #' setDefaultPlotFormat(width = 16, height = 9, units = "cm", dpi = 300)
@@ -123,6 +124,7 @@ ApplicationRanges <- ospsuite.utils::enum(c("total", "firstApplication", "lastAp
 #' @param digits Number of significant digits
 #' @param scientific Logical defining if numeric format uses a scientific expression
 #' @export
+#' @importFrom ospsuite.utils %||%
 #' @examples
 #' setDefaultNumericFormat(digits = 2, scientific = TRUE)
 setDefaultNumericFormat <- function(digits = NULL, scientific = NULL) {
@@ -158,6 +160,7 @@ reEnv$theme <- getDefaultRETheme()
 #' @param theme `Theme` object from `tlf` package
 #' If `NULL`, the current theme is re-initialized to the reporting engine default
 #' @export
+#' @importFrom ospsuite.utils %||%
 setDefaultTheme <- function(theme = NULL) {
   ospsuite.utils::validateIsOfType(theme, "Theme", nullAllowed = TRUE)
   reEnv$theme <- theme %||% getDefaultRETheme()

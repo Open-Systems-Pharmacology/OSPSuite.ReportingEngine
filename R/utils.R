@@ -394,6 +394,7 @@ getWorkflowParameterDisplayPaths <- function(workflow) {
 #' @param variableName Name of the variable and field of `objectName`
 #' @param keepIfNull logical `objectName$variableName <- variableName \%||\% objectName$variableName`
 #' @return An expression to `eval()`
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 parseVariableToObject <- function(objectName, variableName, keepIfNull = FALSE) {
   if (keepIfNull) {

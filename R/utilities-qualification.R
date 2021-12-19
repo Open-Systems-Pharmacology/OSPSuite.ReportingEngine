@@ -105,6 +105,7 @@ loadConfigurationPlan <- function(configurationPlanFile, workflowFolder) {
 #' @param parentFolder For subsections only, path of parent section
 #' @param sectionLevel Section level defining the level of markdown title
 #' @return A data.frame including information about every section and subsection
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFolder = NULL, sectionLevel = 1) {
   # If sections are already as a data.frame format,

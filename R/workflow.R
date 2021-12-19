@@ -8,6 +8,7 @@
 #' @field userDefinedTasks List of user-defined tasks (to update with loadUserDefinedTask)
 #' @field numberSections logical defining if the report sections should be numbered
 #' @import tlf
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 Workflow <- R6::R6Class(
   "Workflow",

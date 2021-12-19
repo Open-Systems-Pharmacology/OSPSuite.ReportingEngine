@@ -67,6 +67,7 @@ addFigureChunk <- function(fileName,
 #' @param logFolder folder where the logs are saved
 #' @param na character string replacing `NA` values in table
 #' @export
+#' @importFrom ospsuite.utils %||%
 addTableChunk <- function(fileName,
                           tableFileRelativePath,
                           tableFileRootDirectory,
@@ -409,6 +410,7 @@ addMarkdownToc <- function(tocContent, fileName, logFolder = getwd()) {
 #' @param workflow A `Workflow` object
 #' @param text Character describing simulation sets
 #' @export
+#' @importFrom ospsuite.utils %||%
 setSimulationDescriptor <- function(workflow, text) {
   ospsuite.utils::validateIsOfType(workflow, "Workflow")
   ospsuite.utils::validateIsString(text, nullAllowed = TRUE)

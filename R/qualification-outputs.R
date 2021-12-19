@@ -106,6 +106,7 @@ getGOFOutputsDataframe <- function(configurationPlan) {
 #' @description Get a dataframe relating project, simulation, output, pk parameter, start time, end time for each DDI plot component
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return A list containing data for generating DDI plots
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getDDIOutputsDataframe <- function(configurationPlan) {
   ddiOutputsDataframe <- NULL
@@ -168,6 +169,7 @@ getDDIOutputsDataframe <- function(configurationPlan) {
 #' @description Get a dataframe relating project, simulation, output path and pk parameter for each PK ratio plot
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return A list containing data for generating DDI plots
+#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getPKRatioOutputsDataframe <- function(configurationPlan) {
   pkRatioOutputsDataframe <- NULL
