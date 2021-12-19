@@ -17,12 +17,12 @@ BugReports:
 Depends: 
     R (>= 3.5),
     ospsuite (>= 10.0),
-    tlf (>= 1.2.0),
-    ospsuite.utils
+    tlf (>= 1.2.0)
 Imports: 
     R6,
     ggplot2,
-    jsonlite
+    jsonlite,
+    ospsuite.utils
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
