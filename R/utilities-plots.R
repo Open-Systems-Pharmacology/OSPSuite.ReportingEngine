@@ -230,7 +230,7 @@ getSplitPositions <- function(possibleSplits, splitWidth, numberOfSplits) {
   # Optimal splits are at equal width
   optimalSplits <- floor(cumsum(rep(splitWidth, numberOfSplits)))
   for (splitIndex in seq_along(optimalSplits)) {
-    if (isOfLength(possibleSplits, 0)) {
+    if (ospsuite.utils::isOfLength(possibleSplits, 0)) {
       return(optimalSplits)
     }
     positionDifference <- min(abs(possibleSplits - optimalSplits[splitIndex]))

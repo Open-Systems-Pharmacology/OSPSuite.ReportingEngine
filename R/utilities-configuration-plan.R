@@ -60,7 +60,7 @@ ConfigurationLinetypes <- list(
 #' @keywords internal
 getAxesProperties <- function(axesSettings) {
   # Hanlde when properties are left undefined globally or locally
-  if (isOfLength(axesSettings, 0)) {
+  if (ospsuite.utils::isOfLength(axesSettings, 0)) {
     return(NULL)
   }
   # Get axes types for identification of X, Y and Y2 axes
@@ -98,7 +98,7 @@ getAxesProperties <- function(axesSettings) {
   )
 
   y2Axis <- NULL
-  if (isOfLength(y2AxisIndex, 1)) {
+  if (ospsuite.utils::isOfLength(y2AxisIndex, 1)) {
     y2Axis <- axesSettings[[y2AxisIndex]]
     y2Axis <- list(
       dimension = y2Axis$Dimension, unit = y2Axis$Unit,
@@ -153,7 +153,7 @@ updatePlotAxes <- function(plotObject, axesProperties) {
 tlfLinetype <- function(configurationLinetype) {
   # Unknown or NULL value will translate as NULL
   # which will lead to use default behaviour
-  if (isOfLength(configurationLinetype, 0)) {
+  if (ospsuite.utils::isOfLength(configurationLinetype, 0)) {
     return()
   }
   # tolower is used to ensure that there is no issue with caps from field values
@@ -170,7 +170,7 @@ tlfLinetype <- function(configurationLinetype) {
 tlfShape <- function(configurationShape) {
   # Unknown or NULL value will translate as NULL
   # which will lead to use default behaviour
-  if (isOfLength(configurationShape, 0)) {
+  if (ospsuite.utils::isOfLength(configurationShape, 0)) {
     return()
   }
   # tolower is used to ensure that there is no issue with caps from field values
@@ -187,7 +187,7 @@ tlfShape <- function(configurationShape) {
 tlfScale <- function(configurationScale) {
   # Unknown or NULL value will translate as NULL
   # which will lead to use default behaviour
-  if (isOfLength(configurationScale, 0)) {
+  if (ospsuite.utils::isOfLength(configurationScale, 0)) {
     return()
   }
   # tolower is used to ensure that there is no issue with caps from field values
@@ -231,7 +231,7 @@ getMolWeightForCompound <- function(compoundName, simulation) {
   allMoleculePaths <- ospsuite::getAllMoleculePathsIn(simulation)
   pathForCompoundName <- utils::head(allMoleculePaths[grepl(compoundName, allMoleculePaths)], 1)
   # When compound is not found in simulation, return NA
-  if (isOfLength(pathForCompoundName, 0)) {
+  if (ospsuite.utils::isOfLength(pathForCompoundName, 0)) {
     return(NA)
   }
   return(simulation$molWeightFor(pathForCompoundName))

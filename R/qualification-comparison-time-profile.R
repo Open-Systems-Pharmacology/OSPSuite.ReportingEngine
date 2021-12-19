@@ -18,7 +18,7 @@ plotQualificationComparisonTimeProfile <- function(configurationPlan,
 
     # Get axes properties (with scale, limits and display units)
     axesProperties <- getAxesProperties(timeProfilePlan$Axes) %||% settings$axes
-    if (isOfLength(axesProperties, 0)) {
+    if (ospsuite.utils::isOfLength(axesProperties, 0)) {
       # TODO Centralize messaging of configurtion plan errors and warnings
       logWorkflow(
         message = paste0(
@@ -167,7 +167,7 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
   )
   observedValues <- observedValues[selectedObservedTimeValues]
   observedError <- NULL
-  if (!isOfLength(observedResults$metaData$error, 0)) {
+  if (!ospsuite.utils::isOfLength(observedResults$metaData$error, 0)) {
     # No unit means that error is geometric
     observedError$ymin <- observedValues / observedResults$data[, 3]
     observedError$ymax <- observedValues * observedResults$data[, 3]

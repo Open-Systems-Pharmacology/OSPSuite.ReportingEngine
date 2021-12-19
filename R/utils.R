@@ -248,7 +248,7 @@ getPKParametersInOutput <- function(output) {
   pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
     pkParameterInfo$pkParameter
   })
-  if (isOfLength(pkParameters, 0)) {
+  if (ospsuite.utils::isOfLength(pkParameters, 0)) {
     return(NA)
   }
   return(pkParameters)
@@ -264,7 +264,7 @@ getPKParameterGroupsInOutput <- function(output) {
   pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
     pkParameterInfo$group
   })
-  if (isOfLength(pkParameters, 0)) {
+  if (ospsuite.utils::isOfLength(pkParameters, 0)) {
     return(NA)
   }
   return(pkParameters)
@@ -343,7 +343,7 @@ getSimulationParameterDisplayPaths <- function(parameterPaths, simulation, dicti
   for (parameterIndex in seq_along(parameterPaths)) {
     # Get the index of parameter in dictionary if defined
     dictionaryIndex <- which(parameterPaths[parameterIndex] %in% dictionary$parameter)
-    if (!isOfLength(dictionaryIndex, 0)) {
+    if (!ospsuite.utils::isOfLength(dictionaryIndex, 0)) {
       # Since dictionaryIndex is not null, use first element
       # user should already have a warning if a parameter path is defined
       # more than once in workflow$parameterDisplayPaths

@@ -26,7 +26,7 @@ ExcelMessaging <- R6::R6Class(
     displayMessage = function() {
       message <- NULL
       for (sectionIndex in seq_along(self$messages)) {
-        if (isOfLength(self$messages[[sectionIndex]], 0)) {
+        if (ospsuite.utils::isOfLength(self$messages[[sectionIndex]], 0)) {
           next
         }
         message <- c(

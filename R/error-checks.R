@@ -148,7 +148,7 @@ logErrorMessage <- function(message, logFolderPath = getwd()) {
 #' @keywords internal
 validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile, outputs) {
   # Check that dictionary is provided
-  if (isOfLength(observedMetaDataFile, 0)) {
+  if (ospsuite.utils::isOfLength(observedMetaDataFile, 0)) {
     stop(messages$errorObservedMetaDataFileNotProvided(observedDataFile))
   }
   # Read dictionary and check that mandatory variables are included
@@ -171,7 +171,7 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile,
   # Check of unit definitions:
   # 1) unit defined in outptuts
   dataUnit <- NULL
-  if (!isOfLength(outputs, 0)) {
+  if (!ospsuite.utils::isOfLength(outputs, 0)) {
     dataUnit <- unlist(lapply(outputs, function(output) {
       output$dataUnit
     }))

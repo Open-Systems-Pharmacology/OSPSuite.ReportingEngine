@@ -95,7 +95,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   validateIsOfType(simulationSet, "SimulationSet")
   # Observed data and dictionary are already checked when creating the simulationSet
   # No observed data return NULL
-  if (isOfLength(simulationSet$observedDataFile, 0)) {
+  if (ospsuite.utils::isOfLength(simulationSet$observedDataFile, 0)) {
     return()
   }
 
@@ -137,7 +137,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
 
   # If unit was actually defined using output objects, overwrite current dvUnit
   for(output in simulationSet$outputs){
-    if(isOfLength(output$dataUnit, 0)){
+    if(ospsuite.utils::isOfLength(output$dataUnit, 0)){
       next
     }
     selectedRows <- evalDataFilter(observedDataset, output$dataSelection)
@@ -158,7 +158,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   observedDataset$dimension <- NA
   for (dvUnit in unique(observedDataset[, dvUnitColumn])) {
     dvDimension <- ospsuite::getDimensionForUnit(dvUnit)
-    if (isOfLength(dvDimension, 0)) {
+    if (ospsuite.utils::isOfLength(dvDimension, 0)) {
       logWorkflow(
         message = paste0("In loadObservedDataFromSimulationSet: unit '", dvUnit, "' is unknown."),
         pathFolder = logFolder,
@@ -173,7 +173,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
       dvUnit
     )
     observedDataset$dimension[selectedRows] <- dvDimension
-    if (isOfLength(lloqColumn, 0)) {
+    if (ospsuite.utils::isOfLength(lloqColumn, 0)) {
       next
     }
     # Case where dictionary defined an lloq column missing from dataset
@@ -221,7 +221,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
 #' @import ospsuite.utils
 #' @keywords internal
 getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, timeUnit, logFolder) {
-  if (isOfLength(output$dataSelection, 0)) {
+  if (ospsuite.utils::isOfLength(output$dataSelection, 0)) {
     return()
   }
 
@@ -235,7 +235,7 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
   # Get dimensions of observed data
   dvDimensions <- unique(as.character(data[selectedRows, dataMapping$dimension]))
   outputConcentration <- data[selectedRows, dataMapping$dv]
-  if (!isOfLength(output$displayUnit, 0)) {
+  if (!ospsuite.utils::isOfLength(output$displayUnit, 0)) {
     for (dvDimension in dvDimensions) {
       if (is.na(dvDimension)) {
         next
@@ -255,12 +255,12 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
     "Legend" = paste0("Observed data ", output$dataDisplayName),
     "Path" = output$path
   )
-  if (isOfLength(dataMapping$lloq, 0)) {
+  if (ospsuite.utils::isOfLength(dataMapping$lloq, 0)) {
     return(list(data = outputData, lloq = NULL))
   }
 
   lloqConcentration <- data[selectedRows, dataMapping$lloq]
-  if (!isOfLength(output$displayUnit, 0)) {
+  if (!ospsuite.utils::isOfLength(output$displayUnit, 0)) {
     for (dvDimension in dvDimensions) {
       if (is.na(dvDimension)) {
         next

@@ -498,7 +498,7 @@ getWorkflowContent <- function(workflowTable, excelFile) {
   })
   for (taskName in AllAvailableTasks) {
     activeTaskName <- getIdentifierInfo(workflowTable, 1, taskName)
-    if (isOfLength(activeTaskName, 0)) {
+    if (ospsuite.utils::isOfLength(activeTaskName, 0)) {
       next
     }
     if (workflowMode == "PopulationWorkflow" & ospsuite.utils::isIncluded(taskName, c("plotAbsorption", "plotMassBalance"))) {
@@ -864,7 +864,7 @@ getFileLocationFromType <- function(location, type, excelFile) {
 concatenateDataSelection <- function(inputs, sep = ") & (") {
   validateIsString(inputs)
   # No data selection to concatenate
-  if (isOfLength(inputs, 0)) {
+  if (ospsuite.utils::isOfLength(inputs, 0)) {
     return("NULL")
   }
   # Deal with NONE and ALL inputs
@@ -900,7 +900,7 @@ concatenateDataDisplayName <- function(inputs, sep = " - ") {
   validateIsString(inputs)
   # Remove NAs
   inputs <- inputs[!is.na(inputs)]
-  if (isOfLength(inputs, 0)) {
+  if (ospsuite.utils::isOfLength(inputs, 0)) {
     return("NULL")
   }
   return(paste0("'", paste0(inputs, collapse = sep), "'"))
@@ -958,7 +958,7 @@ getUserDefPKParametersContent <- function(userDefPKParametersTable) {
     for (userDefPKParameterIndex in seq_along(UserDefPKParametersOptionalSettings)) {
       userDefinedSetting <- userDefPKParametersTable[parameterIndex, columnNames[userDefPKParameterIndex]]
       # If setting is not defined (column does not exist) or not filled
-      if (isOfLength(userDefinedSetting, 0)) {
+      if (ospsuite.utils::isOfLength(userDefinedSetting, 0)) {
         next
       }
       if (is.na(userDefinedSetting)) {

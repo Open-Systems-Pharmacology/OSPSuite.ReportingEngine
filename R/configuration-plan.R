@@ -309,7 +309,7 @@ ConfigurationPlan <- R6::R6Class(
         return(private$.observedDataSets)
       }
       # ObservedDataSets can be null or empty list, in which case, nothing happens
-      if (isOfLength(value, 0)) {
+      if (ospsuite.utils::isOfLength(value, 0)) {
         return(invisible())
       }
       # Change field names to appropriate camelCase names within the mapping
@@ -342,7 +342,7 @@ ConfigurationPlan <- R6::R6Class(
         for (observedDataSetsId in duplicatedIds) {
           selectedRows <- dataIds %in% observedDataSetsId
           selectedPaths <- dataPaths[selectedRows]
-          if (isOfLength(unique(selectedPaths), 1)) {
+          if (ospsuite.utils::isOfLength(unique(selectedPaths), 1)) {
             warning(messages$errorHasNoUniqueValues(dataIds[selectedRows], dataName = "ObservedDataSets Id"))
             next
           }

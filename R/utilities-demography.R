@@ -45,7 +45,7 @@ plotDemographyParameters <- function(structureSets,
     referenceSimulationSetName <- getReferencePopulationName(structureSets)
   }
 
-  if (isOfLength(xParameters, 0)) {
+  if (ospsuite.utils::isOfLength(xParameters, 0)) {
     # Pediatric: comparison histogram
     if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
       for (parameterName in yParameters) {

@@ -240,7 +240,7 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
   )
   observedData <- readObservedDataFile(configurationPlan$getObservedDataPath(pkRatioMapping$ObservedData))
   selectedRow <- which(observedData[, reEnv$pkRatio$dictionary$id] %in% pkRatioMapping$ObservedDataRecordId)
-  if (!isOfLength(selectedRow, 1)) {
+  if (!ospsuite.utils::isOfLength(selectedRow, 1)) {
     logWorkflow(
       message = paste0("In PK Ratio Plots, ", length(selectedRow), " data record(s) found for ObservedDataRecordId '", pkRatioMapping$ObservedDataRecordId, "'"),
       pathFolder = logFolder,
@@ -365,10 +365,10 @@ isBetween <- function(x, left, right, strict = FALSE) {
 #' measureValuesBetween(x, cos(x) + 1, cos(x) - 1)
 measureValuesBetween <- function(x, left, right, method = "count", strict = FALSE) {
   # Remove NA values from counting
-  if (isOfLength(left, 1)) {
+  if (ospsuite.utils::isOfLength(left, 1)) {
     left <- rep(left, length(x))
   }
-  if (isOfLength(right, 1)) {
+  if (ospsuite.utils::isOfLength(right, 1)) {
     right <- rep(right, length(x))
   }
   naRows <- (is.na(x) | is.na(left) | is.na(right))

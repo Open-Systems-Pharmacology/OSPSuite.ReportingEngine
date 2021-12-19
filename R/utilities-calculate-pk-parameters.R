@@ -616,7 +616,7 @@ formatPKParametersTable <- function(structureSet, pkParametersTable, populationT
 #' @import ospsuite.utils
 #' @keywords internal
 rbindPKParametersTables <- function(pkParametersTableAcrossPopulations, pkParametersTable) {
-  if (isOfLength(pkParametersTableAcrossPopulations, 0)) {
+  if (ospsuite.utils::isOfLength(pkParametersTableAcrossPopulations, 0)) {
     return(pkParametersTable)
   }
   # Prevent crash when merging populations with different columns

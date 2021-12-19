@@ -96,7 +96,7 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves, simulation
     if (is.null(curveOutput)) {
       next
     }
-    if (!isOfLength(curveOutput$error, 0)) {
+    if (!ospsuite.utils::isOfLength(curveOutput$error, 0)) {
       plotObject <- tlf::addErrorbar(
         x = curveOutput$x,
         ymin = curveOutput$error$ymin,
@@ -282,7 +282,7 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
     # Currently, the molecular weight is directly taken from the simulation output
     observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties, logFolder)
 
-    if (!isOfLength(observedData$error, 0)) {
+    if (!ospsuite.utils::isOfLength(observedData$error, 0)) {
       plotObject <- tlf::addErrorbar(
         x = observedData$time,
         ymin = observedData$error$ymin,
@@ -540,7 +540,7 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
     NULL
   }
   )
-  if (isOfLength(outputValues, 0)) {
+  if (ospsuite.utils::isOfLength(outputValues, 0)) {
     logErrorThenStop(
       message = paste0(
         "Molecular weight not found but required for observed data Id '", pathArray[1], "' in Time Profile plot."
@@ -550,7 +550,7 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
   }
 
   outputError <- NULL
-  if (!isOfLength(observedResults$metaData$error, 0)) {
+  if (!ospsuite.utils::isOfLength(observedResults$metaData$error, 0)) {
     # No unit means that error is geometric
     outputError$ymin <- outputValues / observedResults$data[, 3]
     outputError$ymax <- outputValues * observedResults$data[, 3]

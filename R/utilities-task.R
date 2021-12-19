@@ -551,7 +551,7 @@ loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
   validateIsOfType(configurationPlan, "ConfigurationPlan")
 
   # Time Profiles task is only active if the field is defined & not empty
-  active <- !isOfLength(configurationPlan$plots$TimeProfile, 0)
+  active <- !ospsuite.utils::isOfLength(configurationPlan$plots$TimeProfile, 0)
 
   taskFunction <- plotQualificationTimeProfiles
   nameFunction <- getObjectNameAsString(plotQualificationTimeProfiles)
@@ -559,7 +559,7 @@ loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getTimeProfileOutputsDataframe(configurationPlan)
-  if (!isOfLength(outputs, 0)) {
+  if (!ospsuite.utils::isOfLength(outputs, 0)) {
     # data.frame to list
     outputs <- split(outputs, 1:nrow(outputs))
     inputFiles <- as.character(sapply(outputs, function(output) {
@@ -592,7 +592,7 @@ loadGOFMergedTask <- function(workflow, configurationPlan) {
   validateIsOfType(configurationPlan, "ConfigurationPlan")
 
   # Time Profiles task is only active if the field is defined & not empty
-  active <- !isOfLength(configurationPlan$plots$GOFMergedPlots, 0)
+  active <- !ospsuite.utils::isOfLength(configurationPlan$plots$GOFMergedPlots, 0)
 
   taskFunction <- plotQualificationGOFs
   nameFunction <- getObjectNameAsString(plotQualificationGOFs)
@@ -600,7 +600,7 @@ loadGOFMergedTask <- function(workflow, configurationPlan) {
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getGOFOutputsDataframe(configurationPlan)
-  if (!isOfLength(outputs, 0)) {
+  if (!ospsuite.utils::isOfLength(outputs, 0)) {
     # data.frame to list
     outputs <- split(outputs, 1:nrow(outputs))
     inputFiles <- as.character(sapply(outputs, function(output) {
@@ -641,7 +641,7 @@ loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPl
   validateIsOfType(configurationPlan, "ConfigurationPlan")
 
   # Time Profiles task is only active if the field is defined & not empty
-  active <- !isOfLength(configurationPlan$plots$ComparisonTimeProfilePlots, 0)
+  active <- !ospsuite.utils::isOfLength(configurationPlan$plots$ComparisonTimeProfilePlots, 0)
 
   taskFunction <- plotQualificationComparisonTimeProfile
   nameFunction <- getObjectNameAsString(plotQualificationComparisonTimeProfile)
@@ -649,7 +649,7 @@ loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPl
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getComparisonTimeProfileOutputsDataframe(configurationPlan)
-  if (!isOfLength(outputs, 0)) {
+  if (!ospsuite.utils::isOfLength(outputs, 0)) {
     # data.frame to list
     outputs <- split(outputs, 1:nrow(outputs))
     inputFiles <- as.character(sapply(outputs, function(output) {
@@ -683,7 +683,7 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
   validateIsOfType(configurationPlan, "ConfigurationPlan")
 
   # Time Profiles task is only active if the field is defined & not empty
-  active <- !isOfLength(configurationPlan$plots$PKRatioPlots, 0)
+  active <- !ospsuite.utils::isOfLength(configurationPlan$plots$PKRatioPlots, 0)
 
   taskFunction <- plotQualificationPKRatio
   nameFunction <- getObjectNameAsString(plotQualificationPKRatio)
@@ -691,7 +691,7 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getPKRatioOutputsDataframe(configurationPlan)
-  if (!isOfLength(outputs, 0)) {
+  if (!ospsuite.utils::isOfLength(outputs, 0)) {
     # data.frame to list
     outputs <- split(outputs, 1:nrow(outputs))
     inputFiles <- as.character(sapply(outputs, function(output) {
@@ -739,7 +739,7 @@ loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
   validateIsOfType(configurationPlan, "ConfigurationPlan")
 
   # Time Profiles task is only active if the field is defined & not empty
-  active <- !isOfLength(configurationPlan$plots$DDIRatioPlots, 0)
+  active <- !ospsuite.utils::isOfLength(configurationPlan$plots$DDIRatioPlots, 0)
 
   taskFunction <- plotQualificationDDIs
   nameFunction <- getObjectNameAsString(substitute(plotQualificationDDIs))
@@ -747,7 +747,7 @@ loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getDDIOutputsDataframe(configurationPlan)
-  if (!isOfLength(outputs, 0)) {
+  if (!ospsuite.utils::isOfLength(outputs, 0)) {
     # data.frame to list
     outputs <- split(outputs, 1:nrow(outputs))
     inputFiles <- as.character(sapply(outputs, function(output) {

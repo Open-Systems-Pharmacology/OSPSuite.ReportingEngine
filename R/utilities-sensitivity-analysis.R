@@ -439,7 +439,7 @@ getSAFileIndex <- function(structureSet,
       singleOuputSinglePKDataframe <- allPKResultsDataframe[(allPKResultsDataframe["QuantityPath"] == output) & (allPKResultsDataframe["Parameter"] == pkParameter), ]
       quantileResults <- getQuantileIndividualIds(singleOuputSinglePKDataframe, quantileVec)
 
-      if (!isOfLength(quantileResults$ids, length(quantileVec))) {
+      if (!ospsuite.utils::isOfLength(quantileResults$ids, length(quantileVec))) {
         logWorkflow(
           message = messages$warningNoFinitePKParametersForSomeIndividuals(pkParameter, output, structureSet$simulationSet$simulationSetName),
           logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error),
@@ -707,7 +707,7 @@ plotPopulationSensitivity <- function(structureSets,
     }
   }
 
-  if (isOfLength(allPopsDf, 0)) {
+  if (ospsuite.utils::isOfLength(allPopsDf, 0)) {
     logWorkflow(
       message = messages$warningPopulationSensitivityPlotsNotAvailable(),
       logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error),

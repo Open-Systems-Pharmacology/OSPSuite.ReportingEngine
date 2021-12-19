@@ -269,7 +269,7 @@ getQualificationGOFGMFE <- function(data) {
       )
     )
   }
-  if (!isOfLength(groupNames, 1)) {
+  if (!ospsuite.utils::isOfLength(groupNames, 1)) {
     gmfe <- rbind.data.frame(
       gmfe,
       data.frame(

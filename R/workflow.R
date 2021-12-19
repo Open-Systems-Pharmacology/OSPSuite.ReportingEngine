@@ -196,7 +196,7 @@ Workflow <- R6::R6Class(
     #' Variables of the data.frame should include `parameter` and `displayPath`.
     setParameterDisplayPaths = function(parameterDisplayPaths) {
       validateIsOfType(parameterDisplayPaths, "data.frame", nullAllowed = TRUE)
-      if (!isOfLength(parameterDisplayPaths, 0)) {
+      if (!ospsuite.utils::isOfLength(parameterDisplayPaths, 0)) {
         validateIsIncluded(c("parameter", "displayPath"), names(parameterDisplayPaths))
       }
       # In case the same parameter is defined more than once, throw a warning

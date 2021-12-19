@@ -143,7 +143,7 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
 
     # If subsections are included and not empty
     # Update sectionsOut data.frame
-    if (!isOfLength(section$Sections, 0)) {
+    if (!ospsuite.utils::isOfLength(section$Sections, 0)) {
       sectionsOut <- sectionsAsDataFrame(
         sectionsIn = section$Sections,
         sectionsOut = sectionsOut,
