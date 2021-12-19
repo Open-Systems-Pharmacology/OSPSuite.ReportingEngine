@@ -1,6 +1,6 @@
 
 parseFunctionBody <- function(functionToParse) {
-  validateIsIncluded(values = typeof(functionToParse),parentValues= c("closure","function"))
+  ospsuite.utils::validateIsIncluded(values = typeof(functionToParse),parentValues= c("closure","function"))
   #read body of functionToParse, convert to character, removing first element (curly brackets), paste together all function commands into a string (separated by `;`)
   return(paste(tail(as.character(body(functionToParse)), -1), collapse = ";"))
 }
@@ -11,9 +11,9 @@ parseFunctionBody <- function(functionToParse) {
 #' @param extendedInitializer is an initializer function to be called after calling all parent classes by order of superiority
 makeChildInitializer <- function(parentInitializersList, extendedInitializer) {
 
-  validateIsOfType(parentInitializersList,"list")
-  sapply(parentInitializersList,function(fn){ validateIsIncluded(values = typeof(fn),parentValues= c("closure","function")) })
-  validateIsIncluded(values = typeof(extendedInitializer),parentValues= c("closure","function"))
+  ospsuite.utils::validateIsOfType(parentInitializersList,"list")
+  sapply(parentInitializersList,function(fn){ ospsuite.utils::validateIsIncluded(values = typeof(fn),parentValues= c("closure","function")) })
+  ospsuite.utils::validateIsIncluded(values = typeof(extendedInitializer),parentValues= c("closure","function"))
 
   #Recursive application of this function for cases in which there is multilevel inheritance, where parentInitializersList
   #Each recursion will return an `extendedInitializer` that is an amalgamation of the all but the first elements of parentInitializersList with extendedInitializer
