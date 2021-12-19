@@ -24,7 +24,7 @@ ConfigurationPlan <- R6::R6Class(
     #' @param id section identifier
     #' @return The section path corresponding to the id in the configuration plan field `sections`
     getSectionPath = function(id) {
-      ospsuite.utils::validateIsIncluded(id, private$.sections$id, groupName = "'id' variable of sections")
+      validateIsIncludedAndLog(id, private$.sections$id, groupName = "'id' variable of sections")
       selectedId <- private$.sections$id %in% id
       return(file.path(self$workflowFolder, private$.sections$path[selectedId]))
     },
@@ -33,7 +33,7 @@ ConfigurationPlan <- R6::R6Class(
     #' @param id section identifier
     #' @return The title associated with "#" corresponding to the subection level
     getSectionTitle = function(id) {
-      ospsuite.utils::validateIsIncluded(id, private$.sections$id, groupName = "'id' variable of sections")
+      validateIsIncludedAndLog(id, private$.sections$id, groupName = "'id' variable of sections")
       selectedId <- private$.sections$id %in% id
       sectionTitle <- paste0(rep("#", private$.sections$level[selectedId]), collapse = "")
       sectionTitle <- paste(sectionTitle, private$.sections$title[selectedId], sep = " ")
@@ -44,7 +44,7 @@ ConfigurationPlan <- R6::R6Class(
     #' @param id section identifier
     #' @return The markdown file corresponding to the id in the configuration plan field `sections`
     getSectionMarkdown = function(id) {
-      ospsuite.utils::validateIsIncluded(id, private$.sections$id, groupName = "'id' variable of sections")
+      validateIsIncludedAndLog(id, private$.sections$id, groupName = "'id' variable of sections")
       selectedId <- private$.sections$id %in% id
       return(file.path(self$workflowFolder, private$.sections$md[selectedId]))
     },
@@ -53,7 +53,7 @@ ConfigurationPlan <- R6::R6Class(
     #' @param id section identifier
     #' @return Section level
     getSectionLevel = function(id) {
-      ospsuite.utils::validateIsIncluded(id, private$.sections$id, groupName = "'id' variable of sections")
+      validateIsIncludedAndLog(id, private$.sections$id, groupName = "'id' variable of sections")
       selectedId <- private$.sections$id %in% id
       return(private$.sections$level[selectedId])
     },
@@ -68,7 +68,7 @@ ConfigurationPlan <- R6::R6Class(
     #' @param id section identifier
     #' @param logFolder path where logs are saved
     copySectionContent = function(id, logFolder = getwd()) {
-      ospsuite.utils::validateIsIncluded(id, private$.sections$id, groupName = "'id' variable of sections")
+      validateIsIncludedAndLog(id, private$.sections$id, groupName = "'id' variable of sections")
       selectedId <- private$.sections$id %in% id
       sectionContent <- private$.sections$content[selectedId]
       sectionTitle <- private$.sections$title[selectedId]
@@ -172,7 +172,7 @@ ConfigurationPlan <- R6::R6Class(
     #' @param id observedDataSet identifier
     #' @return The observed data file path corresponding to the id in the configuration plan field `observedDataSet`
     getObservedDataPath = function(id) {
-      ospsuite.utils::validateIsIncluded(id, private$.observedDataSets$id, groupName = "'id' variable of observedDataSets")
+      validateIsIncludedAndLog(id, private$.observedDataSets$id, groupName = "'id' variable of observedDataSets")
       selectedId <- private$.observedDataSets$id %in% id
       # In case of duplicate observed data, use first
       return(utils::head(file.path(self$referenceFolder, private$.observedDataSets$path[selectedId]), 1))
@@ -182,7 +182,7 @@ ConfigurationPlan <- R6::R6Class(
     #' @param id observedDataSet identifier
     #' @return The observed data file path corresponding to the id in the configuration plan field `observedDataSet`
     getMolWeightForObservedData = function(id) {
-      ospsuite.utils::validateIsIncluded(id, private$.observedDataSets$id, groupName = "'id' variable of observedDataSets")
+      validateIsIncludedAndLog(id, private$.observedDataSets$id, groupName = "'id' variable of observedDataSets")
       selectedId <- private$.observedDataSets$id %in% id
       # In case of duplicate observed data, use first
       return(utils::head(private$.observedDataSets$molWeight[selectedId], 1))
@@ -194,8 +194,8 @@ ConfigurationPlan <- R6::R6Class(
     #' @return The simulation file path corresponding to the project and simulation in the configuration plan field `simulationMappings`
     getSimulationPath = function(project, simulation) {
       # Since data is imported from json, simulationMappings fields have a first upper case letter
-      ospsuite.utils::validateIsIncluded(project, private$.simulationMappings$project, groupName = "'project' variable of simulationMappings")
-      ospsuite.utils::validateIsIncluded(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
+      validateIsIncludedAndLog(project, private$.simulationMappings$project, groupName = "'project' variable of simulationMappings")
+      validateIsIncluded(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
       selectedId <- (private$.simulationMappings$project %in% project) & (private$.simulationMappings$simulation %in% simulation)
       simulationPath <- file.path(self$referenceFolder, private$.simulationMappings$path[selectedId], paste0(private$.simulationMappings$simulationFile[selectedId], ".pkml"))
       return(simulationPath)
@@ -207,8 +207,8 @@ ConfigurationPlan <- R6::R6Class(
     #' @return The population file path corresponding to the project and simulation in the configuration plan field `simulationMappings`
     getPopulationPath = function(project, simulation) {
       # Since data is imported from json, simulationMappings fields have a first upper case letter
-      ospsuite.utils::validateIsIncluded(project, private$.simulationMappings$project, groupName = "'project' variable of simulationMappings")
-      ospsuite.utils::validateIsIncluded(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
+      validateIsIncludedAndLog(project, private$.simulationMappings$project, groupName = "'project' variable of simulationMappings")
+      validateIsIncludedAndLog(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
       selectedId <- (private$.simulationMappings$project %in% project) & (private$.simulationMappings$simulation %in% simulation)
       populationPath <- file.path(self$referenceFolder, private$.simulationMappings$path[selectedId], paste0(private$.simulationMappings$simulationFile[selectedId], "-Population.csv"))
       if(file.exists(populationPath)){
@@ -223,8 +223,8 @@ ConfigurationPlan <- R6::R6Class(
     #' @return The simulation results file path corresponding to the project and simulation in the configuration plan field `simulationMappings`
     getSimulationResultsPath = function(project, simulation) {
       # Since data is imported from json, simulationMappings fields have a first upper case letter
-      ospsuite.utils::validateIsIncluded(project, private$.simulationMappings$project, groupName = "'project' variable of simulationMappings")
-      ospsuite.utils::validateIsIncluded(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
+      validateIsIncludedAndLog(project, private$.simulationMappings$project, groupName = "'project' variable of simulationMappings")
+      validateIsIncludedAndLog(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
 
       selectedId <- (private$.simulationMappings$project %in% project) & (private$.simulationMappings$simulation %in% simulation)
       simulationFile <- private$.simulationMappings$simulationFile[selectedId]
@@ -238,8 +238,8 @@ ConfigurationPlan <- R6::R6Class(
     #' @return The PKAnalysis results file path corresponding to the project and simulation in the configuration plan field `simulationMappings`
     getPKAnalysisResultsPath = function(project, simulation) {
       # Since data is imported from json, simulationMappings fields have a first upper case letter
-      ospsuite.utils::validateIsIncluded(project, private$.simulationMappings$project, groupName = "'project' variable of simulationMappings")
-      ospsuite.utils::validateIsIncluded(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
+      validateIsIncludedAndLog(project, private$.simulationMappings$project, groupName = "'project' variable of simulationMappings")
+      validateIsIncludedAndLog(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
 
       selectedId <- (private$.simulationMappings$project %in% project) & (private$.simulationMappings$simulation %in% simulation)
       simulationFile <- private$.simulationMappings$simulationFile[selectedId]
