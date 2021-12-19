@@ -401,8 +401,8 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
 }
 
 #' @title getDDITable
-#' @description Summary table for DDI plot
-#' @param dataframe
+#' @description Summary table for DDI
+#' @param dataframe for generating DDI summary table
 #' @return Summary table for DDI plot
 #' @keywords internal
 getDDITable <- function(dataframe){
