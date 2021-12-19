@@ -29,8 +29,8 @@ test_that("Target path is added to population object if not existing", {
   referencePopulation <- loadWorkflowPopulation(refSimulationSet)
   testPopulation <- loadWorkflowPopulation(studyDesignSimulationSet)
 
-  expect_false(isIncluded(drugMassPath, referencePopulation$allParameterPaths))
-  expect_true(isIncluded(drugMassPath, testPopulation$allParameterPaths))
+  expect_false(ospsuite.utils::isIncluded(drugMassPath, referencePopulation$allParameterPaths))
+  expect_true(ospsuite.utils::isIncluded(drugMassPath, testPopulation$allParameterPaths))
 })
 
 test_that("A study design needs at least one 'SOURCE' and one 'TARGET'", {
