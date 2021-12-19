@@ -73,7 +73,7 @@ workflowInitializeFunction <- function(simulationSets,
 
   self$createWordReport <- createWordReport
   self$numberSections <- numberSections
-  if (!isOfType(simulationSets, "list")) {
+  if (!ospsuite.utils::isOfType(simulationSets, "list")) {
     simulationSets <- list(simulationSets)
   }
 
