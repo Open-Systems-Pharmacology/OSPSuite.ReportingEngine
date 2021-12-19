@@ -130,7 +130,7 @@ loadCalculateSensitivityTask <- function(workflow, active = FALSE, settings = NU
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
 
-  if (isOfType(workflow, "PopulationWorkflow")) {
+  if (ospsuite.utils::isOfType(workflow, "PopulationWorkflow")) {
     return(PopulationSensitivityAnalysisTask$new(
       getTaskResults = runPopulationSensitivityAnalysis,
       nameTaskResults = getObjectNameAsString(runPopulationSensitivityAnalysis),
@@ -174,7 +174,7 @@ loadPlotTimeProfilesAndResidualsTask <- function(workflow, active = FALSE, setti
 
   taskFunction <- plotMeanGoodnessOfFit
   nameFunction <- getObjectNameAsString(plotMeanGoodnessOfFit)
-  if (isOfType(workflow, "PopulationWorkflow")) {
+  if (ospsuite.utils::isOfType(workflow, "PopulationWorkflow")) {
     taskFunction <- plotPopulationGoodnessOfFit
     nameFunction <- getObjectNameAsString(plotPopulationGoodnessOfFit)
   }
@@ -211,7 +211,7 @@ loadPlotPKParametersTask <- function(workflow, active = FALSE, settings = NULL) 
   validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
   settings <- settings %||% TaskSettings$new(AllAvailableTasks$plotPKParameters)
 
-  if (isOfType(workflow, "PopulationWorkflow")) {
+  if (ospsuite.utils::isOfType(workflow, "PopulationWorkflow")) {
     return(PopulationPlotTask$new(
       workflowType = workflow$workflowType,
       xParameters = getDefaultPkParametersXParameters(workflow$workflowType),
@@ -260,7 +260,7 @@ loadPlotSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(settings, "SensitivityPlotSettings", nullAllowed = TRUE)
   settings <- settings %||% SensitivityPlotSettings$new()
 
-  if (isOfType(workflow, "PopulationWorkflow")) {
+  if (ospsuite.utils::isOfType(workflow, "PopulationWorkflow")) {
     return(PopulationPlotTask$new(
       workflowType = workflow$workflowType,
       xParameters = NULL,
@@ -485,7 +485,7 @@ addUserDefinedTask <- function(workflow,
 
   # Get the names of input arguments of the function
   argumentNames <- names(formals(taskFunction))
-  if (isOfType(workflow, "MeanModelWorkflow")) {
+  if (ospsuite.utils::isOfType(workflow, "MeanModelWorkflow")) {
     # PlotTask arguments
     validateIsIncluded(c("structureSet", "logFolder", "settings"), argumentNames,
       groupName = "Task function arguments", logFolder = workflow$workflowFolder
@@ -507,7 +507,7 @@ addUserDefinedTask <- function(workflow,
     )
   }
 
-  if (isOfType(workflow, "PopulationWorkflow")) {
+  if (ospsuite.utils::isOfType(workflow, "PopulationWorkflow")) {
     # PopulationPlotTask arguments
     validateIsIncluded(c("structureSets", "logFolder", "settings", "workflowType", "xParameters", "yParameters"), argumentNames,
       groupName = "Task function arguments", logFolder = workflow$workflowFolder

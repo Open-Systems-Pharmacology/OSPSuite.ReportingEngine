@@ -11,7 +11,7 @@ simulateWorkflowModels <- function(structureSets,
                                    logFolder = getwd()) {
   allSimulationResults <- vector(mode = "list", length = length(structureSets))
   # Split between mean and population simulations
-  populationSets <- sapply(structureSets, function(set) isOfType(set$simulationSet, "PopulationSimulationSet"))
+  populationSets <- sapply(structureSets, function(set) ospsuite.utils::isOfType(set$simulationSet, "PopulationSimulationSet"))
   populationSimulationResults <- NULL
   simulationResults <- NULL
 

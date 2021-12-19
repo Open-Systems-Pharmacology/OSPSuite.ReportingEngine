@@ -110,7 +110,7 @@ loadConfigurationPlan <- function(configurationPlanFile, workflowFolder) {
 sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFolder = NULL, sectionLevel = 1) {
   # If sections are already as a data.frame format,
   # return them after checking that every field is present
-  if (isOfType(sectionsIn, "data.frame")) {
+  if (ospsuite.utils::isOfType(sectionsIn, "data.frame")) {
     validateIsIncluded(c("id", "title", "content", "index", "path", "md"), names(sectionsIn))
     return(sectionsIn)
   }

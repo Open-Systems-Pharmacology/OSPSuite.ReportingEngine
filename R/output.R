@@ -83,7 +83,7 @@ Output <- R6::R6Class(
       # If filter is null, assumes that user won't get any observed data
       self$dataSelection <- dataSelection
       # Ensure that dataFilter is of type expression
-      if (isOfType(self$dataSelection, "character")) {
+      if (ospsuite.utils::isOfType(self$dataSelection, "character")) {
         if (self$dataSelection %in% DataSelectionKeys$ALL) {
           self$dataSelection <- "TRUE"
         }
@@ -94,7 +94,7 @@ Output <- R6::R6Class(
       }
 
       self$pkParameters <- c(pkParameters)
-      if (isOfType(self$pkParameters, "character")) {
+      if (ospsuite.utils::isOfType(self$pkParameters, "character")) {
         self$pkParameters <- sapply(self$pkParameters, function(pkParameter) {
           PkParameterInfo$new(pkParameter)
         })

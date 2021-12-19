@@ -392,7 +392,7 @@ validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, output
   }
   # If no unit defined by dictionray, all outputs need to define dataUnit
   if (ospsuite.utils::isOfLength(c(unit, unitColumn), 0)) {
-    if (!isSameLength(dataUnit, outputs)) {
+    if (!ospsuite.utils::isSameLength(dataUnit, outputs)) {
       stop(messages$errorNoDataUnitInOutputs())
     }
     return(invisible())

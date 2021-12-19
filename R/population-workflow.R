@@ -55,7 +55,7 @@ PopulationWorkflow <- R6::R6Class(
       )
 
       validateIsOfType(c(simulationSets), "PopulationSimulationSet")
-      if (!isOfType(simulationSets, "list")) {
+      if (!ospsuite.utils::isOfType(simulationSets, "list")) {
         simulationSets <- list(simulationSets)
       }
 

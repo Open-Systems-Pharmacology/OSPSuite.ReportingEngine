@@ -51,7 +51,7 @@ Workflow <- R6::R6Class(
 
       self$createWordReport <- createWordReport
       self$numberSections <- numberSections
-      if (!isOfType(simulationSets, "list")) {
+      if (!ospsuite.utils::isOfType(simulationSets, "list")) {
         simulationSets <- list(simulationSets)
       }
 
@@ -101,7 +101,7 @@ Workflow <- R6::R6Class(
     getAllTasks = function() {
       # get isTaskVector as a named vector
       isTaskVector <- unlist(eapply(self, function(x) {
-        isOfType(x, "Task")
+        ospsuite.utils::isOfType(x, "Task")
       }))
 
       taskNames <- setdiff(names(isTaskVector[as.logical(isTaskVector)]), "userDefinedTasks")
@@ -115,7 +115,7 @@ Workflow <- R6::R6Class(
     getAllPlotTasks = function() {
       # get isTaskVector as a named vector
       isPlotTaskVector <- unlist(eapply(self, function(x) {
-        isOfType(x, "PlotTask")
+        ospsuite.utils::isOfType(x, "PlotTask")
       }))
 
       taskNames <- setdiff(names(isPlotTaskVector[as.logical(isPlotTaskVector)]), "userDefinedTasks")
@@ -196,7 +196,7 @@ Workflow <- R6::R6Class(
     #' Variables of the data.frame should include `parameter` and `displayPath`.
     setParameterDisplayPaths = function(parameterDisplayPaths) {
       validateIsOfType(parameterDisplayPaths, "data.frame", nullAllowed = TRUE)
-      if (!ospsuite.utils::isOfLength(parameterDisplayPaths, 0)) {
+      if (!ospsuite.utils::FisOfLength(parameterDisplayPaths, 0)) {
         validateIsIncluded(c("parameter", "displayPath"), names(parameterDisplayPaths))
       }
       # In case the same parameter is defined more than once, throw a warning
