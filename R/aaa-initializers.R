@@ -100,7 +100,7 @@ workflowInitializeFunction <- function(simulationSets,
   )
 
   self$reportFileName <- file.path(self$workflowFolder, paste0(defaultFileNames$reportName(), ".md"))
-  self$taskNames <- ospsuite::enum(self$getAllTasks())
+  self$taskNames <- ospsuite.utils::enum(self$getAllTasks())
 
   self$simulationStructures <- list()
   simulationSets <- c(simulationSets)
@@ -129,5 +129,5 @@ meanModelWorkflowExtensionInitializeFunction <- function() {
   self$plotPKParameters <- loadPlotPKParametersTask(self)
   self$plotSensitivity <- loadPlotSensitivityTask(self)
 
-  self$taskNames <- ospsuite::enum(self$getAllTasks())
+  self$taskNames <- ospsuite.utils::enum(self$getAllTasks())
 }
