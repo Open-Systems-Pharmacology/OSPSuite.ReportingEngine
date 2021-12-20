@@ -23,10 +23,77 @@ Workflow <- R6::R6Class(
 
     #' @description
     #' Create a new `Workflow` object.
-    #' @inheritParams workflowInitializeFunction
+    #' @param simulationSets list of `SimulationSet` R6 class objects
+    #' @param workflowFolder path of the output folder created or used by the Workflow.
+    #' @param createWordReport logical of option for creating Markdown-Report only but not a Word-Report.
+    #' @param watermark displayed watermark in figures background
+    #' @param simulationSetDescriptor character Descriptor of simulation sets indicated in reports
+    #' @param numberSections logical defining if the report sections should be numbered
+    #' @param theme A `Theme` object from `{tlf}` package
     #' @return A new `Workflow` object
-    #' @import ospsuite
-    initialize = workflowInitializeFunction,
+    initialize = function(simulationSets,
+                          workflowFolder,
+                          createWordReport = TRUE,
+                          watermark = NULL,
+                          simulationSetDescriptor = NULL,
+                          numberSections = TRUE,
+                          theme = NULL) {
+      private$.reportingEngineInfo <- ReportingEngineInfo$new()
+      # Empty list on which users can load tasks
+      self$userDefinedTasks <- list()
+
+      ospsuite.utils::validateIsString(workflowFolder)
+      ospsuite.utils::validateIsString(watermark, nullAllowed = TRUE)
+      ospsuite.utils::validateIsString(simulationSetDescriptor, nullAllowed = TRUE)
+      ospsuite.utils::validateIsOfType(c(simulationSets), "SimulationSet")
+      ospsuite.utils::validateIsLogical(createWordReport)
+      ospsuite.utils::validateIsLogical(numberSections)
+
+      self$createWordReport <- createWordReport
+      self$numberSections <- numberSections
+      if (!ospsuite.utils::isOfType(simulationSets, "list")) {
+        simulationSets <- list(simulationSets)
+      }
+
+      allSimulationSetNames <- sapply(simulationSets, function(set) {
+        set$simulationSetName
+      })
+      validateNoDuplicatedEntries(allSimulationSetNames)
+
+      self$workflowFolder <- workflowFolder
+      workflowFolderCheck <- file.exists(self$workflowFolder)
+
+      if (workflowFolderCheck) {
+        logWorkflow(
+          message = workflowFolderCheck,
+          pathFolder = self$workflowFolder,
+          logTypes = c(LogTypes$Debug)
+        )
+      }
+      dir.create(self$workflowFolder, showWarnings = FALSE, recursive = TRUE)
+
+      logWorkflow(
+        message = private$.reportingEngineInfo$print(),
+        pathFolder = self$workflowFolder
+      )
+
+      self$reportFileName <- file.path(self$workflowFolder, paste0(defaultFileNames$reportName(), ".md"))
+      self$taskNames <- ospsuite.utils::enum(self$getAllTasks())
+
+      self$simulationStructures <- list()
+      simulationSets <- c(simulationSets)
+      for (simulationSetIndex in seq_along(simulationSets)) {
+        self$simulationStructures[[simulationSetIndex]] <- SimulationStructure$new(
+          simulationSet = simulationSets[[simulationSetIndex]],
+          workflowFolder = self$workflowFolder
+        )
+      }
+      self$setSimulationDescriptor(simulationSetDescriptor %||% reEnv$defaultSimulationSetDescriptor)
+
+      # Load default workflow theme, and sync the watermark
+      setDefaultTheme(theme)
+      self$setWatermark(watermark)
+    },
 
     #' @description
     #' Get a vector with all the names of the tasks within the `Workflow`

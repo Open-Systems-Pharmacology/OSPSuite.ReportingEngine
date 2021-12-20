@@ -26,12 +26,23 @@ MeanModelWorkflow <- R6::R6Class(
 
     #' @description
     #' Create a new `MeanModelWorkflow` object.
-    #' @inheritParams workflowInitializeFunction
-    #' @inheritParams meanModelWorkflowExtensionInitializeFunction
+    #' @inheritParams Workflow$public_methods$initialize
     #' @return A new `MeanModelWorkflow` object
     #' @import ospsuite
     initialize = makeChildInitializer(parentClass = Workflow,
-                                      extendedInitializer = meanModelWorkflowExtensionInitializeFunction),
+                                      extendedInitializer = function() {
+                                        self$simulate <- loadSimulateTask(self)
+                                        self$calculatePKParameters <- loadCalculatePKParametersTask(self)
+                                        self$calculateSensitivity <- loadCalculateSensitivityTask(self)
+
+                                        self$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(self)
+                                        self$plotMassBalance <- loadPlotMassBalanceTask(self)
+                                        self$plotAbsorption <- loadPlotAbsorptionTask(self)
+                                        self$plotPKParameters <- loadPlotPKParametersTask(self)
+                                        self$plotSensitivity <- loadPlotSensitivityTask(self)
+
+                                        self$taskNames <- ospsuite.utils::enum(self$getAllTasks())
+                                      }),
 
     #' @description
     #' Run mean model workflow tasks for all simulation sets if tasks are activated

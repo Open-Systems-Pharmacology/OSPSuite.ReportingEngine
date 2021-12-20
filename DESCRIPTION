@@ -33,7 +33,7 @@ LazyData: true
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 Collate:
-    'aaa-initializers.R'
+    'utilities-initializers.R'
     'workflow.R'
     'mean-model-workflow.R'
     'population-workflow.R'
