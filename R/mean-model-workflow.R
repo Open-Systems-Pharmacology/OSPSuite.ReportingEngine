@@ -30,7 +30,8 @@ MeanModelWorkflow <- R6::R6Class(
     #' @return A new `MeanModelWorkflow` object
     #' @import ospsuite
     initialize = makeChildInitializer(parentClass = Workflow,
-                                      extendedInitializer = function() {
+                                      preSuperInitializer = NULL,
+                                      postSuperInitializer = function() {
                                         self$simulate <- loadSimulateTask(self)
                                         self$calculatePKParameters <- loadCalculatePKParametersTask(self)
                                         self$calculateSensitivity <- loadCalculateSensitivityTask(self)

@@ -1,5 +1,5 @@
 #' @title getClassAncestry
-#' @description function to get extend the head of the vector of classes `clsVec` with the ancestral classes of the first element fo `clsVec`
+#' @description function to extend the head of the vector of classes `clsVec` with the ancestral classes of the first element fo `clsVec`
 #' @param clsVec is a vector of R6 class objects
 getClassAncestry <- function(clsVec){
 
@@ -45,50 +45,57 @@ parseFunctionBody <- function(functionToParse) {
 
 
 #' @title makeChildInitializer
-#' @description a function to generate an initializer for a child class that executes the initializers of its ancestral classes followed by an extending initializer `extendedInitializer`
+#' @description a function to generate an initializer for a child class that executes the initializer function `preSuperInitializer`, followed by the initializers of `parentClass` and its ancestral classes, followed by the function `postSuperInitializer`
+#' @param preSuperInitializer is an initializer function to be called BEFORE calling all parent classes by order of superiority
 #' @param parentClass the parent class of the child class for which the initializer is to be generated.
-#' @param extendedInitializer is an initializer function to be called after calling all parent classes by order of superiority
-makeChildInitializer <- function(parentClass, extendedInitializer) {
-  parentInitializersList <- getAncestralInitializerList(parentClass)
-  return(generateInitializer(parentInitializersList,extendedInitializer))
+#' @param postSuperInitializer is an initializer function to be called AFTER calling all parent classes by order of superiority
+makeChildInitializer <- function(parentClass = NULL, preSuperInitializer = NULL, postSuperInitializer = NULL) {
+  parentInitializersList <- ospsuite.utils::ifNotNull(condition = parentClass, outputIfNotNull = getAncestralInitializerList(parentClass),outputIfNull = list(function(){}))
+  return(generateInitializer(parentInitializersList = parentInitializersList,
+                             preSuperInitializer = preSuperInitializer %||% function(){},
+                             postSuperInitializer = postSuperInitializer  %||% function(){}))
 }
 
 
 #' @title generateInitializer
-#' @description function that recursively builds a combined initializer based on a list of parent class initializers (`parentInitializersList`) and an extending initializer (`extendedInitializer`).
+#' @description function that recursively builds a combined initializer based on a list of parent class initializers (`parentInitializersList`) and an extending initializer (`postSuperInitializer`).
+#' @param preSuperInitializer is an initializer function to be called BEFORE calling all parent classes by order of superiority
 #' @param parentInitializersList is an list of parent initializers. ordered from the most to the least superior.
-#' @param extendedInitializer is an initializer function to be called after calling all parent classes by order of superiority
-generateInitializer <- function(parentInitializersList, extendedInitializer){
+#' @param postSuperInitializer is an initializer function to be called AFTER calling all parent classes by order of superiority
+generateInitializer <- function(parentInitializersList, preSuperInitializer, postSuperInitializer = function(){}){
 
   ospsuite.utils::validateIsOfType(parentInitializersList,"list")
   sapply(parentInitializersList,function(fn){ ospsuite.utils::validateIsIncluded(values = typeof(fn),parentValues= c("closure","function")) })
-  ospsuite.utils::validateIsIncluded(values = typeof(extendedInitializer),parentValues= c("closure","function"))
+  ospsuite.utils::validateIsIncluded(values = typeof(postSuperInitializer),parentValues= c("closure","function"))
 
   #Recursive application of this function for cases in which there is multilevel inheritance, where parentInitializersList
-  #Each recursion will return an `extendedInitializer` that is an amalgamation of the all but the first elements of parentInitializersList with extendedInitializer
+  #Each recursion will return an `postSuperInitializer` that is an amalgamation of the all but the first elements of parentInitializersList with postSuperInitializer
   if (length(parentInitializersList) > 1) {
-    extendedInitializer <- generateInitializer(tail(parentInitializersList, -1), extendedInitializer)
+    postSuperInitializer <- generateInitializer(parentInitializersList = tail(parentInitializersList, -1),
+                                               preSuperInitializer = NULL,
+                                               postSuperInitializer = postSuperInitializer)
   }
 
-  #If parentInitializersList includes only one element, amalgamate that function with extendedInitializer
+  #If parentInitializersList includes only one element, amalgamate that function with postSuperInitializer
   parentInitializer <- parentInitializersList[[1]]
 
   #Parse the body of the parent and child initializers into a series of commands (as strings) separated by semicolons (';')
+  preSuperInitializerBody <- parseFunctionBody(preSuperInitializer)
   parentInitializerBody <- parseFunctionBody(parentInitializer)
-  extendedInitializerBody <- parseFunctionBody(extendedInitializer)
+  postSuperInitializerBody <- parseFunctionBody(postSuperInitializer)
 
   #amalgamate (as a string) the bodies of the parent and child classes into a new function with no input arguments
   childInitializerBody <- paste0("function(){
-       eval(parse(text = '", parentInitializerBody, "' ))
-       eval(parse(text = '", extendedInitializerBody, "' ))
+      eval(parse(text = '", preSuperInitializerBody, "' ))
+      eval(parse(text = '", parentInitializerBody, "' ))
+      eval(parse(text = '", postSuperInitializerBody, "' ))
      }")
 
   #create a function object based on the string `childInitializerBody``
   childInitializer <- eval(parse(text = childInitializerBody))
-
-  # Set the arguments to the childInitializer function to be the union of the arguments of the `parentInitializer` function and the `extendedInitializer` function
-  # Remove any duplicated arguments.  Arguments of the extendedInitializer overwrite arguments of the parentInitializer with the same name.
-  childInitializerFormals <- c(formals(parentInitializer), formals(extendedInitializer))
+  # Set the arguments to the childInitializer function to be the union of the arguments of the `parentInitializer` function and the `postSuperInitializer` function
+  # Remove any duplicated arguments.  Arguments of the postSuperInitializer overwrite arguments of the parentInitializer with the same name.
+  childInitializerFormals <- c(formals(parentInitializer), formals(preSuperInitializer), formals(postSuperInitializer))
   formals(childInitializer) <- childInitializerFormals[!duplicated(names(childInitializerFormals), fromLast = TRUE)]
 
   return(childInitializer)
