@@ -63,6 +63,25 @@ makeChildInitializer <- function(parentClass = NULL, preSuperInitializer = NULL,
 }
 
 
+#' @title getFormalsAsString
+#' @description a function that transforms an `alist` of function formals to a string
+#' @param formalsList, an `alist` of function formals
+#' @return `formalsAsString`, a string of function arguments
+getFormalsAsString <- function(formalsList){
+  formalsAsString <- sapply(names(formalsList),function(x){
+    if (is.symbol(formalsList[[x]])){
+      return(x)
+    }
+    if (is.null(formalsList[[x]])){
+      return(paste(x,"= NULL"))
+    }
+    return(paste(x,"=",as.character(formalsList[[x]])))
+  })
+  formalsAsString <- paste(formalsAsString,collapse = ", ")
+  return(formalsAsString)
+}
+
+
 #' @title generateInitializer
 #' @description function that recursively builds a combined initializer that is a sequence of: a `preSuperInitializer` method, parent class initializers (`parentInitializersList`) and a `postSuperInitializer` method.
 #' @param preSuperInitializer is an initializer function to be called BEFORE calling all parent classes by order of superiority
@@ -92,8 +111,14 @@ generateInitializer <- function(parentInitializersList, preSuperInitializer, pos
   parentInitializerBody <- parseFunctionBody(parentInitializer)
   postSuperInitializerBody <- parseFunctionBody(postSuperInitializer)
 
+  # Set the arguments to the childInitializer function to be the union of the arguments of the `parentInitializer` function and the `postSuperInitializer` function
+  # Remove any duplicated arguments.  Arguments of the postSuperInitializer overwrite arguments of the parentInitializer with the same name.
+  childInitializerFormals <- c(formals(parentInitializer), formals(preSuperInitializer), formals(postSuperInitializer))
+  childInitializerFormals <- childInitializerFormals[!duplicated(names(childInitializerFormals), fromLast = TRUE)]
+  childInitializerFormalsString <- getFormalsAsString(childInitializerFormals)
+
   #amalgamate (as a string) the bodies of the parent and child classes into a new function with no input arguments
-  childInitializerBody <- paste0("function(){
+  childInitializerBody <- paste0("function(",childInitializerFormalsString,"){
       eval(parse(text = '", preSuperInitializerBody, "' ))
       eval(parse(text = '", parentInitializerBody, "' ))
       eval(parse(text = '", postSuperInitializerBody, "' ))
@@ -101,11 +126,6 @@ generateInitializer <- function(parentInitializersList, preSuperInitializer, pos
 
   #create a function object based on the string `childInitializerBody``
   childInitializer <- eval(parse(text = childInitializerBody))
-  # Set the arguments to the childInitializer function to be the union of the arguments of the `parentInitializer` function and the `postSuperInitializer` function
-  # Remove any duplicated arguments.  Arguments of the postSuperInitializer overwrite arguments of the parentInitializer with the same name.
-  childInitializerFormals <- c(formals(parentInitializer), formals(preSuperInitializer), formals(postSuperInitializer))
-  childInitializerFormals <- childInitializerFormals[!duplicated(names(childInitializerFormals), fromLast = TRUE)]
-  formals(childInitializer) <- childInitializerFormals
 
   return(childInitializer)
 }
