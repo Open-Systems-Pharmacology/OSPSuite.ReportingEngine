@@ -64,7 +64,7 @@ makeChildInitializer <- function(parentClass = NULL, preSuperInitializer = NULL,
 
 
 #' @title generateInitializer
-#' @description function that recursively builds a combined initializer based on a list of parent class initializers (`parentInitializersList`) and an extending initializer (`postSuperInitializer`).
+#' @description function that recursively builds a combined initializer that is a sequence of: a `preSuperInitializer` method, parent class initializers (`parentInitializersList`) and a `postSuperInitializer` method.
 #' @param preSuperInitializer is an initializer function to be called BEFORE calling all parent classes by order of superiority
 #' @param parentInitializersList is an list of parent initializers. ordered from the most to the least superior.
 #' @param postSuperInitializer is an initializer function to be called AFTER calling all parent classes by order of superiority
