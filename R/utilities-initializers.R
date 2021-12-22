@@ -1,6 +1,7 @@
 #' @title getClassAncestry
 #' @description function to extend the head of the vector of classes `clsVec` with the ancestral classes of the first element fo `clsVec`
 #' @param clsVec is a vector of R6 class objects
+#' @keywords internal
 getClassAncestry <- function(clsVec){
 
   #Ensure that `clsVec` is a vector of classes that can be indexed
@@ -22,6 +23,7 @@ getClassAncestry <- function(clsVec){
 #' @title getAncestralInitializerList
 #' @description function to get a list of the initializers of the R6 class `classObject` and all of its ancestor classes
 #' @param classObject is an R6 class object
+#' @keywords internal
 getAncestralInitializerList <- function(classObject){
 
   #Build a vector of the ancestor classes of `classObject`, starting with the most base class and ending with `classObject`.
@@ -37,6 +39,7 @@ getAncestralInitializerList <- function(classObject){
 #' @title parseFunctionBody
 #' @description function to cast the commands of the function `functionToParse` as a list of semicolon-separated strings
 #' @param `functionToParse` a function the body of which is to be converted to a list of semicolon-separated strings
+#' @keywords internal
 parseFunctionBody <- function(functionToParse) {
   ospsuite.utils::validateIsIncluded(values = typeof(functionToParse),parentValues= c("closure","function"))
   #read body of functionToParse, convert to character, removing first element (curly brackets), paste together all function commands into a string (separated by `;`)
@@ -49,11 +52,14 @@ parseFunctionBody <- function(functionToParse) {
 #' @param preSuperInitializer is an initializer function to be called BEFORE calling all parent classes by order of superiority
 #' @param parentClass the parent class of the child class for which the initializer is to be generated.
 #' @param postSuperInitializer is an initializer function to be called AFTER calling all parent classes by order of superiority
+#' @return `childInitializer`, an initializer function
+#' @keywords internal
 makeChildInitializer <- function(parentClass = NULL, preSuperInitializer = NULL, postSuperInitializer = NULL) {
   parentInitializersList <- ospsuite.utils::ifNotNull(condition = parentClass, outputIfNotNull = getAncestralInitializerList(parentClass),outputIfNull = list(function(){}))
-  return(generateInitializer(parentInitializersList = parentInitializersList,
-                             preSuperInitializer = preSuperInitializer %||% function(){},
-                             postSuperInitializer = postSuperInitializer  %||% function(){}))
+  childInitializer <- generateInitializer(parentInitializersList = parentInitializersList,
+                                          preSuperInitializer = preSuperInitializer %||% function(){},
+                                          postSuperInitializer = postSuperInitializer  %||% function(){})
+  return(childInitializer)
 }
 
 
@@ -62,6 +68,8 @@ makeChildInitializer <- function(parentClass = NULL, preSuperInitializer = NULL,
 #' @param preSuperInitializer is an initializer function to be called BEFORE calling all parent classes by order of superiority
 #' @param parentInitializersList is an list of parent initializers. ordered from the most to the least superior.
 #' @param postSuperInitializer is an initializer function to be called AFTER calling all parent classes by order of superiority
+#' @return `childInitializer`, an initializer function
+#' @keywords internal
 generateInitializer <- function(parentInitializersList, preSuperInitializer, postSuperInitializer = function(){}){
 
   ospsuite.utils::validateIsOfType(parentInitializersList,"list")
