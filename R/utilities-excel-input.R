@@ -1,7 +1,8 @@
 #' @title StandardExcelSheetNames
 #' @description Enum defining the standard names for the Excel sheets of template
+#' @import ospsuite.utils
 #' @keywords internal
-StandardExcelSheetNames <- ospsuite.utils::enum(c(
+StandardExcelSheetNames <- enum(c(
   "Documentation",
   "Workflow and Tasks",
   "SimulationSets",
@@ -21,7 +22,7 @@ StandardExcelSheetNames <- ospsuite.utils::enum(c(
 createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R", removeComments = FALSE) {
   validateIsFileExtension(excelFile, c("xls", "xlsx"))
   validateIsFileExtension(workflowFile, "R")
-  ospsuite.utils::validateIsLogical(removeComments)
+  validateIsLogical(removeComments)
 
   scriptContent <- NULL
   # Initialize warnings and errors
@@ -30,12 +31,12 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
 
   inputSections <- readxl::excel_sheets(excelFile)
   # Check for mandotory input sections
-  ospsuite.utils::validateIsIncluded(c(StandardExcelSheetNames$`Workflow and Tasks`, StandardExcelSheetNames$SimulationSets),
+  validateIsIncluded(c(StandardExcelSheetNames$`Workflow and Tasks`, StandardExcelSheetNames$SimulationSets),
     inputSections,
     groupName = paste0("Sheet names of '", excelFile, "'")
   )
 
-  if (ospsuite.utils::isIncluded(StandardExcelSheetNames$`Documentation`, inputSections)) {
+  if (isIncluded(StandardExcelSheetNames$`Documentation`, inputSections)) {
     scriptDocumentation <- getScriptDocumentation(excelFile)
     scriptContent <- c(scriptContent, scriptDocumentation)
   }
@@ -47,9 +48,9 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
   )
 
   userDefPKParametersContent <- NULL
-  if (ospsuite.utils::isIncluded(StandardExcelSheetNames$`Userdef PK Parameter`, inputSections)) {
+  if (isIncluded(StandardExcelSheetNames$`Userdef PK Parameter`, inputSections)) {
     userDefPKParametersTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$`Userdef PK Parameter`)
-    ospsuite.utils::validateIsIncluded(c("Name", "Standard PK parameter", "Display Unit"), names(userDefPKParametersTable))
+    validateIsIncluded(c("Name", "Standard PK parameter", "Display Unit"), names(userDefPKParametersTable))
     userDefPKParametersInfo <- getUserDefPKParametersContent(userDefPKParametersTable)
     userDefPKParametersContent <- userDefPKParametersInfo$content
     scriptWarnings$messages[["User Defined PK Parameters"]] <- userDefPKParametersInfo$warnings
@@ -57,19 +58,19 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
   }
 
   pkParametersContent <- NULL
-  if (ospsuite.utils::isIncluded(StandardExcelSheetNames$`PK Parameter`, inputSections)) {
+  if (isIncluded(StandardExcelSheetNames$`PK Parameter`, inputSections)) {
     pkParametersTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$`PK Parameter`)
-    ospsuite.utils::validateIsIncluded(c("Name", "Display name", "Unit"), names(pkParametersTable))
+    validateIsIncluded(c("Name", "Display name", "Unit"), names(pkParametersTable))
     pkParametersInfo <- getPKParametersContent(pkParametersTable)
     pkParametersContent <- pkParametersInfo$content
     scriptWarnings$messages[["PK Parameters"]] <- pkParametersInfo$warnings
     scriptErrors$messages[["PK Parameters"]] <- pkParametersInfo$errors
   }
 
-  if (ospsuite.utils::isIncluded(StandardExcelSheetNames$`Workflow and Tasks`, inputSections)) {
+  if (isIncluded(StandardExcelSheetNames$`Workflow and Tasks`, inputSections)) {
     workflowTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$`Workflow and Tasks`)
-    ospsuite.utils::validateIsIncluded(WorkflowMandatoryVariables$`Code Identifier`, names(workflowTable)[1])
-    ospsuite.utils::validateIsIncluded(WorkflowMandatoryVariables$Description, names(workflowTable)[2])
+    validateIsIncluded(WorkflowMandatoryVariables$`Code Identifier`, names(workflowTable)[1])
+    validateIsIncluded(WorkflowMandatoryVariables$Description, names(workflowTable)[2])
 
     workflowInfo <- getWorkflowContent(workflowTable = workflowTable, excelFile = excelFile)
     workflowContent <- workflowInfo$content
@@ -80,10 +81,10 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
   }
 
   simulationSetContent <- NULL
-  if (ospsuite.utils::isIncluded(StandardExcelSheetNames$SimulationSets, inputSections)) {
+  if (isIncluded(StandardExcelSheetNames$SimulationSets, inputSections)) {
     simulationSetTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$SimulationSets)
-    ospsuite.utils::validateIsIncluded(WorkflowMandatoryVariables$`Code Identifier`, names(simulationSetTable)[1])
-    ospsuite.utils::validateIsIncluded(WorkflowMandatoryVariables$Description, names(simulationSetTable)[2])
+    validateIsIncluded(WorkflowMandatoryVariables$`Code Identifier`, names(simulationSetTable)[1])
+    validateIsIncluded(WorkflowMandatoryVariables$Description, names(simulationSetTable)[2])
 
     simulationSetInfo <- getSimulationSetContent(excelFile, simulationSetTable, workflowMode = workflowInfo$workflowMode)
     simulationSetContent <- simulationSetInfo$content
@@ -142,7 +143,7 @@ getScriptDocumentation <- function(excelFile, colSep = "\t") {
   suppressMessages(
     docTable <- readxl::read_excel(excelFile, sheet = StandardExcelSheetNames$`Documentation`, col_names = FALSE)
   )
-  if (ospsuite.utils::isOfLength(docTable, 0)) {
+  if (isOfLength(docTable, 0)) {
     return(docContent)
   }
   for (lineIndex in 1:nrow(docTable)) {
@@ -166,10 +167,10 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
   pkParametersWarnings <- NULL
   pkParametersErrors <- NULL
   pkParametersTable <- readxl::read_excel(excelFile, sheet = pkParametersSheet)
-  ospsuite.utils::validateIsIncluded("Name", names(pkParametersTable)[1])
+  validateIsIncluded("Name", names(pkParametersTable)[1])
 
   # Check for duplicate PK parameters as input of Output object
-  if (!ospsuite.utils::hasUniqueValues(pkParametersTable$Name)) {
+  if (!hasUniqueValues(pkParametersTable$Name)) {
     pkParametersWarnings <- messages$errorHasNoUniqueValues(pkParametersTable$Name,
       dataName = paste0("selected PK parameters from Excel sheet '", pkParametersSheet, "'")
     )
@@ -188,7 +189,7 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
   }
 
   # Check for duplicate PK parameter display names as input of Output object
-  if (!ospsuite.utils::hasUniqueValues(pkParametersTable$`Display name`)) {
+  if (!hasUniqueValues(pkParametersTable$`Display name`)) {
     pkParametersErrors <- messages$errorHasNoUniqueValues(pkParametersTable$`Display name`,
       dataName = paste0("display names of selected PK parameters from Excel sheet '", pkParametersSheet, "'")
     )
@@ -248,8 +249,8 @@ getOutputContent <- function(excelFile, outputInfo) {
   outputErrors <- NULL
 
   outputTable <- readxl::read_excel(excelFile, sheet = outputInfo$sheetName)
-  ospsuite.utils::validateIsIncluded(WorkflowMandatoryVariables$`Code Identifier`, names(outputTable)[1])
-  ospsuite.utils::validateIsIncluded(WorkflowMandatoryVariables$Description, names(outputTable)[2])
+  validateIsIncluded(WorkflowMandatoryVariables$`Code Identifier`, names(outputTable)[1])
+  validateIsIncluded(WorkflowMandatoryVariables$Description, names(outputTable)[2])
 
   outputNames <- getOutputNames(excelFile, outputInfo$sheetName, outputInfo$simulationSetName)
 
@@ -301,7 +302,7 @@ getOutputContent <- function(excelFile, outputInfo) {
     allDataDisplayNames <- c(allDataDisplayNames, dataDisplayName)
   }
   # Check for duplicate output paths, display names and data display names
-  if (!ospsuite.utils::hasUniqueValues(allOutputPaths)) {
+  if (!hasUniqueValues(allOutputPaths)) {
     outputWarnings <- c(
       outputWarnings,
       messages$errorHasNoUniqueValues(gsub("'", "", allOutputPaths),
@@ -309,7 +310,7 @@ getOutputContent <- function(excelFile, outputInfo) {
       )
     )
   }
-  if (!ospsuite.utils::hasUniqueValues(allDisplayNames)) {
+  if (!hasUniqueValues(allDisplayNames)) {
     outputErrors <- c(
       outputErrors,
       messages$errorHasNoUniqueValues(gsub("'", "", allDisplayNames),
@@ -318,7 +319,7 @@ getOutputContent <- function(excelFile, outputInfo) {
     )
   }
   # TO DO: Check if no values are flagged because NAs are removed
-  if (!ospsuite.utils::hasUniqueValues(allDataDisplayNames)) {
+  if (!hasUniqueValues(allDataDisplayNames)) {
     outputErrors <- c(
       outputErrors,
       messages$errorHasNoUniqueValues(gsub("'", "", allDataDisplayNames),
@@ -387,7 +388,7 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
     referencePopulationContent <- NULL
     plotReferenceObsDataContent <- NULL
     studyDesignFileContent <- NULL
-    if (ospsuite.utils::isIncluded(workflowMode, "PopulationWorkflow")) {
+    if (isIncluded(workflowMode, "PopulationWorkflow")) {
       referencePopulation <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$referencePopulation)
       plotReferenceObsData <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$plotReferenceObsData)
       populationFile <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$populationFile)
@@ -437,13 +438,14 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
     outputs = c(", outputNames, "),
     observedDataFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$observedDataFile), ",
     observedMetaDataFile = ", dictionaryLocation, ",
-    timeUnit = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$timeUnit), ")"
+    timeUnit = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$timeUnit), ",
+    timeOffset = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$timeOffset), ")"
       ),
       ""
     )
     # Check that pkml file has correct extension
     simulationFile <- gsub("'", "", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationFile))
-    if (!ospsuite.utils::isFileExtension(simulationFile, "pkml")) {
+    if (!isFileExtension(simulationFile, "pkml")) {
       simulationSetErrors <- c(simulationSetErrors, paste0("In simulation set '", simulationSetNames[simulationIndex], "', ", messages$errorExtension(simulationFile, "pkml")))
     }
   }
@@ -492,17 +494,17 @@ getWorkflowContent <- function(workflowTable, excelFile) {
   })
   for (taskName in AllAvailableTasks) {
     activeTaskName <- getIdentifierInfo(workflowTable, 1, taskName)
-    if (ospsuite.utils::isOfLength(activeTaskName, 0)) {
+    if (isOfLength(activeTaskName, 0)) {
       next
     }
-    if (workflowMode == "PopulationWorkflow" & ospsuite.utils::isIncluded(taskName, c("plotAbsorption", "plotMassBalance"))) {
+    if (workflowMode == "PopulationWorkflow" & isIncluded(taskName, c("plotAbsorption", "plotMassBalance"))) {
       workflowWarnings <- c(
         workflowWarnings,
         paste0("Task '", taskName, "' defined as active, was not printed because '", taskName, "' is not available for '", workflowMode, "'.")
       )
       next
     }
-    if (workflowMode == "MeanModelWorkflow" & ospsuite.utils::isIncluded(taskName, "plotDemography")) {
+    if (workflowMode == "MeanModelWorkflow" & isIncluded(taskName, "plotDemography")) {
       workflowWarnings <- c(
         workflowWarnings,
         paste0("Task '", taskName, "' defined as active, was not printed because '", taskName, "' is not available for '", workflowMode, "'.")
@@ -532,7 +534,7 @@ getWorkflowContent <- function(workflowTable, excelFile) {
     if (is.na(settingValue)) {
       next
     }
-    if (ospsuite.utils::isIncluded(optionalSettingName, "calculateSensitivity: variableParameterPaths")) {
+    if (isIncluded(optionalSettingName, "calculateSensitivity: variableParameterPaths")) {
       settingValue <- getSensitivityVariableParameterPaths(excelFile, sensitivityParametersSheet = settingValue)
     }
     settingContent <- paste0(OptionalSettings[[optionalSettingName]], settingValue)
@@ -547,7 +549,7 @@ getWorkflowContent <- function(workflowTable, excelFile) {
   # Optional field: plot format
   plotFormatContent <- NULL
   plotFormat <- getIdentifierInfo(workflowTable, 1, WorkflowCodeIdentifiers$plotFormat)
-  if (!ospsuite.utils::isIncluded(plotFormat, "NULL")) {
+  if (!isIncluded(plotFormat, "NULL")) {
     plotFormatContent <- c(
       paste0("# Figures exported by the workflow will be saved as ", plotFormat, " files"),
       paste0("setPlotFormat(", plotFormat, ")")
@@ -580,7 +582,7 @@ getWorkflowContent <- function(workflowTable, excelFile) {
   ))
 }
 
-WorkflowMandatoryVariables <- ospsuite.utils::enum(c(
+WorkflowMandatoryVariables <- enum(c(
   "Code Identifier",
   "Description"
 ))
@@ -599,7 +601,7 @@ OptionalSettings <- list(
   "plotSensitivity: yAxisFontSize" = "workflow$plotSensitivity$settings$yAxisFontSize <- "
 )
 
-WorkflowCodeIdentifiers <- ospsuite.utils::enum(c(
+WorkflowCodeIdentifiers <- enum(c(
   "Workflow Mode",
   "Population Workflow type",
   "workflowFolder",
@@ -619,7 +621,7 @@ WorkflowCodeIdentifiers <- ospsuite.utils::enum(c(
   names(OptionalSettings)
 ))
 
-SimulationCodeIdentifiers <- ospsuite.utils::enum(c(
+SimulationCodeIdentifiers <- enum(c(
   "simulationSetName",
   "simulationFile",
   "outputs",
@@ -638,7 +640,7 @@ SimulationCodeIdentifiers <- ospsuite.utils::enum(c(
   "StudyDesignLocation"
 ))
 
-OutputCodeIdentifiers <- ospsuite.utils::enum(c(
+OutputCodeIdentifiers <- enum(c(
   "path",
   "displayName",
   "displayUnit",
@@ -667,9 +669,9 @@ UserDefPKParametersOptionalSettings <- list(
 #' @return Information from a data.frame matching a certain `simulationIndex` column and `codeId` line
 #' @keywords internal
 getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
-  ospsuite.utils::validateIsOfType(workflowTable, "data.frame")
-  ospsuite.utils::validateIsInteger(simulationIndex)
-  ospsuite.utils::validateIsIncluded(codeId, c(WorkflowCodeIdentifiers, SimulationCodeIdentifiers, OutputCodeIdentifiers))
+  validateIsOfType(workflowTable, "data.frame")
+  validateIsInteger(simulationIndex)
+  validateIsIncluded(codeId, c(WorkflowCodeIdentifiers, SimulationCodeIdentifiers, OutputCodeIdentifiers))
 
   # Which is necessary because of NAs
   workflowID <- which(workflowTable[, WorkflowMandatoryVariables$`Code Identifier`] == codeId)
@@ -677,15 +679,15 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
   workflowInfo <- as.character(workflowTable[workflowID, simulationIndex + 2])
 
   # For tasks return the task name if it is activated
-  if (ospsuite.utils::isIncluded(codeId, AllAvailableTasks)) {
+  if (isIncluded(codeId, AllAvailableTasks)) {
     # If input is not included in 1, TRUE or true, assume task is not activated
-    if (ospsuite.utils::isIncluded(workflowInfo, c("Yes", "YES", "1", "TRUE", "true"))) {
+    if (isIncluded(workflowInfo, c("Yes", "YES", "1", "TRUE", "true"))) {
       return(paste0('"', codeId, '"'))
     }
     return()
   }
-  # For info of type sheet, return directly sheet name
-  if (ospsuite.utils::isIncluded(codeId, c(
+  # For info of type sheet or numeric, return directly sheet name or value
+  if (isIncluded(codeId, c(
     WorkflowCodeIdentifiers$`Workflow Mode`,
     WorkflowCodeIdentifiers$activitySpecificCode,
     SimulationCodeIdentifiers$outputs,
@@ -698,6 +700,7 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
     OutputCodeIdentifiers$pkParameters,
     OutputCodeIdentifiers$dataSelection,
     OutputCodeIdentifiers$dataDisplayName,
+    SimulationCodeIdentifiers$timeOffset,
     names(OptionalSettings)
   ))) {
     return(workflowInfo)
@@ -707,9 +710,9 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
     return("NULL")
   }
   # For info about reference population, return logical value as character
-  if (ospsuite.utils::isIncluded(codeId, c(SimulationCodeIdentifiers$referencePopulation, SimulationCodeIdentifiers$plotReferenceObsData, WorkflowCodeIdentifiers$createWordReport))) {
+  if (isIncluded(codeId, c(SimulationCodeIdentifiers$referencePopulation, SimulationCodeIdentifiers$plotReferenceObsData, WorkflowCodeIdentifiers$createWordReport))) {
     # Will return false if input is not included in 1, TRUE or true
-    return(as.character(ospsuite.utils::isIncluded(workflowInfo, c("Yes", "YES", "1", "TRUE", "true"))))
+    return(as.character(isIncluded(workflowInfo, c("Yes", "YES", "1", "TRUE", "true"))))
   }
   # For any other info, it needs to be returned in between quotes
   return(paste0("'", workflowInfo, "'"))
@@ -776,14 +779,14 @@ getPKParametersContent <- function(pkParametersTable) {
     return(pkParametersContent)
   }
   # Check for duplicate PK parameters as input of Output object
-  if (!ospsuite.utils::hasUniqueValues(pkParametersTable$Name)) {
+  if (!hasUniqueValues(pkParametersTable$Name)) {
     pkParametersWarnings <- c(
       pkParametersWarnings,
       messages$errorHasNoUniqueValues(pkParametersTable$Name, dataName = "PK parameters update")
     )
   }
   # Check for duplicate PK parameter display names as input of Output object
-  if (!ospsuite.utils::hasUniqueValues(pkParametersTable$`Display name`)) {
+  if (!hasUniqueValues(pkParametersTable$`Display name`)) {
     pkParametersWarnings <- c(
       pkParametersWarnings,
       messages$errorHasNoUniqueValues(pkParametersTable$`Display name`, dataName = "PK parameters display names")
@@ -815,9 +818,9 @@ getPKParametersContent <- function(pkParametersTable) {
 #' @return `PopulationSimulationSet` or `SimulationSet` as character
 #' @keywords internal
 getSimulationSetType <- function(workflowMode) {
-  ospsuite.utils::validateIsIncluded(workflowMode, c("MeanModelWorkflow", "PopulationWorkflow"))
+  validateIsIncluded(workflowMode, c("MeanModelWorkflow", "PopulationWorkflow"))
   simulationType <- "SimulationSet"
-  if (ospsuite.utils::isIncluded(workflowMode, "PopulationWorkflow")) {
+  if (isIncluded(workflowMode, "PopulationWorkflow")) {
     simulationType <- paste0("Population", simulationType)
   }
   return(simulationType)
@@ -831,8 +834,8 @@ getSimulationSetType <- function(workflowMode) {
 #' @return Character of location to provide
 #' @keywords internal
 getFileLocationFromType <- function(location, type, excelFile) {
-  ospsuite.utils::validateIsIncluded(type, c("SHEET", "FILE"))
-  if (ospsuite.utils::isIncluded(type, "SHEET")) {
+  validateIsIncluded(type, c("SHEET", "FILE"))
+  if (isIncluded(type, "SHEET")) {
     location <- getObservedMetaDataFile(excelFile, location)
   }
   if (is.null(location)) {
@@ -851,9 +854,9 @@ getFileLocationFromType <- function(location, type, excelFile) {
 #' @return Character of concatenated inputs
 #' @keywords internal
 concatenateDataSelection <- function(inputs, sep = ") & (") {
-  ospsuite.utils::validateIsString(inputs)
+  validateIsString(inputs)
   # No data selection to concatenate
-  if (ospsuite.utils::isOfLength(inputs, 0)) {
+  if (isOfLength(inputs, 0)) {
     return("NULL")
   }
   # Deal with NONE and ALL inputs
@@ -867,12 +870,12 @@ concatenateDataSelection <- function(inputs, sep = ") & (") {
   }
 
   # If only some are NONE, remove any NONE
-  if (ospsuite.utils::isIncluded("NONE", inputs)) {
+  if (isIncluded("NONE", inputs)) {
     inputs <- inputs[!(inputs == "NONE")]
   }
 
   # Assume ALL in any is ALL in all
-  if (ospsuite.utils::isIncluded("ALL", inputs)) {
+  if (isIncluded("ALL", inputs)) {
     return('"ALL"')
   }
   return(paste0("'(", paste0(inputs, collapse = sep), ")'"))
@@ -885,10 +888,10 @@ concatenateDataSelection <- function(inputs, sep = ") & (") {
 #' @return Character of concatenated inputs
 #' @keywords internal
 concatenateDataDisplayName <- function(inputs, sep = " - ") {
-  ospsuite.utils::validateIsString(inputs)
+  validateIsString(inputs)
   # Remove NAs
   inputs <- inputs[!is.na(inputs)]
-  if (ospsuite.utils::isOfLength(inputs, 0)) {
+  if (isOfLength(inputs, 0)) {
     return("NULL")
   }
   return(paste0("'", paste0(inputs, collapse = sep), "'"))
@@ -919,7 +922,7 @@ getUserDefPKParametersContent <- function(userDefPKParametersTable) {
     return(userDefPKParametersContent)
   }
   # Check for duplicate PK parameters as input of Output object
-  if (!ospsuite.utils::hasUniqueValues(userDefPKParametersTable$Name)) {
+  if (!hasUniqueValues(userDefPKParametersTable$Name)) {
     userDefPKParametersErrors <- c(
       userDefPKParametersErrors,
       messages$errorHasNoUniqueValues(userDefPKParametersTable$Name, dataName = "User Defined PK parameters")
@@ -945,7 +948,7 @@ getUserDefPKParametersContent <- function(userDefPKParametersTable) {
     for (userDefPKParameterIndex in seq_along(UserDefPKParametersOptionalSettings)) {
       userDefinedSetting <- userDefPKParametersTable[parameterIndex, columnNames[userDefPKParameterIndex]]
       # If setting is not defined (column does not exist) or not filled
-      if (ospsuite.utils::isOfLength(userDefinedSetting, 0)) {
+      if (isOfLength(userDefinedSetting, 0)) {
         next
       }
       if (is.na(userDefinedSetting)) {
