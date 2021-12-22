@@ -70,7 +70,7 @@ makeChildInitializer <- function(parentClass = NULL, preSuperInitializer = NULL,
 #' @param postSuperInitializer is an initializer function to be called AFTER calling all parent classes by order of superiority
 #' @return `childInitializer`, an initializer function
 #' @keywords internal
-generateInitializer <- function(parentInitializersList, preSuperInitializer, postSuperInitializer = function(){}){
+generateInitializer <- function(parentInitializersList, preSuperInitializer, postSuperInitializer){
 
   ospsuite.utils::validateIsOfType(parentInitializersList,"list")
   sapply(parentInitializersList,function(fn){ ospsuite.utils::validateIsIncluded(values = typeof(fn),parentValues= c("closure","function")) })
@@ -104,7 +104,8 @@ generateInitializer <- function(parentInitializersList, preSuperInitializer, pos
   # Set the arguments to the childInitializer function to be the union of the arguments of the `parentInitializer` function and the `postSuperInitializer` function
   # Remove any duplicated arguments.  Arguments of the postSuperInitializer overwrite arguments of the parentInitializer with the same name.
   childInitializerFormals <- c(formals(parentInitializer), formals(preSuperInitializer), formals(postSuperInitializer))
-  formals(childInitializer) <- childInitializerFormals[!duplicated(names(childInitializerFormals), fromLast = TRUE)]
+  childInitializerFormals <- childInitializerFormals[!duplicated(names(childInitializerFormals), fromLast = TRUE)]
+  formals(childInitializer) <- childInitializerFormals
 
   return(childInitializer)
 }
