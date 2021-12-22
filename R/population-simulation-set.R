@@ -27,35 +27,32 @@ PopulationSimulationSet <- R6::R6Class(
     #' @param studyDesignFile name of study design csv file
     #' @param plotReferenceObsData logical for plotting reference observed data in Pediatric and Ratio Comparison workflows
     #' @param ... inputs inherited from `SimulationSet`
+    #' @inheritParams SimulationSet$public_methods$initialize
     #' @return A new `PopulationSimulationSet` object
-    initialize = function(referencePopulation = FALSE,
-                          simulationSetName,
-                          simulationFile,
-                          populationFile,
-                          populationName = NULL,
-                          studyDesignFile = NULL,
-                          plotReferenceObsData = FALSE,
-                          ...) {
-      ospsuite.utils::validateIsLogical(referencePopulation)
-      ospsuite.utils::validateIsLogical(plotReferenceObsData)
-      ospsuite.utils::validateIsString(simulationSetName)
-      ospsuite.utils::validateIsString(simulationFile)
-      ospsuite.utils::validateIsString(populationFile)
-      ospsuite.utils::validateIsString(c(populationName, studyDesignFile), nullAllowed = TRUE)
-      validateIsFileExtension(populationFile, "csv")
 
-      super$initialize(
-        simulationSetName = simulationSetName,
-        simulationFile = simulationFile,
-        ...
-      )
-
-      self$referencePopulation <- referencePopulation
-      self$plotReferenceObsData <- plotReferenceObsData
-      self$populationFile <- populationFile
-      self$populationName <- populationName %||% trimFileName(populationFile, extension = "csv")
-      self$studyDesignFile <- studyDesignFile
-    },
+    initialize = makeChildInitializer(parentClass = SimulationSet,
+                                      preSuperInitializer = function(referencePopulation = FALSE,
+                                                                     simulationSetName,
+                                                                     simulationFile,
+                                                                     populationFile,
+                                                                     populationName = NULL,
+                                                                     studyDesignFile = NULL,
+                                                                     plotReferenceObsData = FALSE){
+                                        ospsuite.utils::validateIsLogical(referencePopulation)
+                                        ospsuite.utils::validateIsLogical(plotReferenceObsData)
+                                        ospsuite.utils::validateIsString(simulationSetName)
+                                        ospsuite.utils::validateIsString(simulationFile)
+                                        ospsuite.utils::validateIsString(populationFile)
+                                        ospsuite.utils::validateIsString(c(populationName, studyDesignFile), nullAllowed = TRUE)
+                                        validateIsFileExtension(populationFile, "csv")
+                                      },
+                                      postSuperInitializer = function() {
+                                        self$referencePopulation <- referencePopulation
+                                        self$plotReferenceObsData <- plotReferenceObsData
+                                        self$populationFile <- populationFile
+                                        self$populationName <- populationName %||% trimFileName(populationFile, extension = "csv")
+                                        self$studyDesignFile <- studyDesignFile
+                                      }),
 
     #' @description
     #' Copy input files into a simulation set specific folder

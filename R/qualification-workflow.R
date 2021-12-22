@@ -28,28 +28,30 @@ QualificationWorkflow <- R6::R6Class(
     #' Create a new `QualificationWorkflow` object.
     #' @param ... input parameters inherited from R6 class object `Workflow`.
     #' @param configurationPlan A `ConfigurationPlan` object
+    #' @inheritParams Workflow$public_methods$initialize
     #' @return A new `QualificationWorkflow` object
-    initialize = function(configurationPlan,
-                          ...) {
-      super$initialize(...)
-      ospsuite.utils::validateIsOfType(configurationPlan, "ConfigurationPlan")
-      # Include global plot & axes settings at this stage
-      # Global settings are included using theme concept,
-      # they can be updated using setting$plotConfigurations within tasks
-      configurationPlan$updateTheme()
-      self$configurationPlan <- configurationPlan
+    initialize = makeChildInitializer(parentClass = Workflow,
+                                      preSuperInitializer = NULL,
+                                      postSuperInitializer = function(configurationPlan) {
+                                        ospsuite.utils::validateIsOfType(configurationPlan, "ConfigurationPlan")
+                                        # Include global plot & axes settings at this stage
+                                        # Global settings are included using theme concept,
+                                        # they can be updated using setting$plotConfigurations within tasks
+                                        configurationPlan$updateTheme()
+                                        self$configurationPlan <- configurationPlan
 
-      self$simulate <- loadSimulateTask(self, active = TRUE)
-      self$calculatePKParameters <- loadCalculatePKParametersTask(self, active = TRUE)
+                                        self$simulate <- loadSimulateTask(self, active = TRUE)
+                                        self$calculatePKParameters <- loadCalculatePKParametersTask(self, active = TRUE)
 
-      self$plotTimeProfiles <- loadQualificationTimeProfilesTask(self, configurationPlan)
-      self$plotGOFMerged <- loadGOFMergedTask(self, configurationPlan)
-      self$plotComparisonTimeProfile <- loadQualificationComparisonTimeProfileTask(self, configurationPlan)
-      self$plotPKRatio <- loadPlotPKRatioTask(self, configurationPlan)
-      self$plotDDIRatio <- loadPlotDDIRatioTask(self, configurationPlan)
+                                        self$plotTimeProfiles <- loadQualificationTimeProfilesTask(self, configurationPlan)
+                                        self$plotGOFMerged <- loadGOFMergedTask(self, configurationPlan)
+                                        self$plotComparisonTimeProfile <- loadQualificationComparisonTimeProfileTask(self, configurationPlan)
+                                        self$plotPKRatio <- loadPlotPKRatioTask(self, configurationPlan)
+                                        self$plotDDIRatio <- loadPlotDDIRatioTask(self, configurationPlan)
 
-      self$taskNames <- ospsuite.utils::enum(self$getAllTasks())
-    },
+                                        self$taskNames <- ospsuite.utils::enum(self$getAllTasks())
+
+                                      }),
 
     #' @description
     #' Run qualification workflow tasks for all simulation sets if tasks are activated
@@ -96,7 +98,7 @@ QualificationWorkflow <- R6::R6Class(
         createWordReport = self$createWordReport,
         numberSections = self$numberSections,
         intro = mdFiles$intro
-        )
+      )
     },
 
     #' @description

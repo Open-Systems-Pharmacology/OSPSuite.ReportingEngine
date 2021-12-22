@@ -35,47 +35,41 @@ PopulationWorkflow <- R6::R6Class(
     #' @param simulationSetDescriptor character Descriptor of simulation sets indicated in reports
     #' @param numberSections logical defining if the report sections should be numbered
     #' @param theme A `Theme` object from `{tlf}` package
+    #' @inheritParams Workflow$public_methods$initialize
     #' @return A new `PopulationWorkflow` object
-    initialize = function(workflowType,
-                          simulationSets,
-                          workflowFolder,
-                          createWordReport = TRUE,
-                          watermark = NULL,
-                          simulationSetDescriptor = NULL,
-                          numberSections = TRUE,
-                          theme = NULL) {
-      super$initialize(
-        simulationSets = simulationSets,
-        workflowFolder = workflowFolder,
-        createWordReport = createWordReport,
-        watermark = watermark,
-        simulationSetDescriptor = simulationSetDescriptor,
-        numberSections = numberSections,
-        theme = theme
-      )
 
-      ospsuite.utils::validateIsOfType(c(simulationSets), "PopulationSimulationSet")
-      if (!ospsuite.utils::isOfType(simulationSets, "list")) {
-        simulationSets <- list(simulationSets)
-      }
+    initialize = makeChildInitializer(parentClass = Workflow,
+                                      preSuperInitializer = NULL,
+                                      postSuperInitializer = function(workflowType,
+                                                                      simulationSets,
+                                                                      workflowFolder,
+                                                                      createWordReport = TRUE,
+                                                                      watermark = NULL,
+                                                                      simulationSetDescriptor = NULL,
+                                                                      numberSections = TRUE,
+                                                                      theme = NULL) {
+                                        ospsuite.utils::validateIsOfType(c(simulationSets), "PopulationSimulationSet")
+                                        if (!ospsuite.utils::isOfType(simulationSets, "list")) {
+                                          simulationSets <- list(simulationSets)
+                                        }
 
-      ospsuite.utils::validateIsIncluded(workflowType, PopulationWorkflowTypes)
-      self$workflowType <- workflowType
+                                        ospsuite.utils::validateIsIncluded(workflowType, PopulationWorkflowTypes)
+                                        self$workflowType <- workflowType
 
-      # Pediatric and ratio comparison workflows need ONE reference population
-      validateHasReferencePopulation(workflowType, simulationSets, logFolder = self$workflowFolder)
+                                        # Pediatric and ratio comparison workflows need ONE reference population
+                                        validateHasReferencePopulation(workflowType, simulationSets, logFolder = self$workflowFolder)
 
-      self$simulate <- loadSimulateTask(self)
-      self$calculatePKParameters <- loadCalculatePKParametersTask(self)
-      self$calculateSensitivity <- loadCalculateSensitivityTask(self)
+                                        self$simulate <- loadSimulateTask(self)
+                                        self$calculatePKParameters <- loadCalculatePKParametersTask(self)
+                                        self$calculateSensitivity <- loadCalculateSensitivityTask(self)
 
-      self$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(self)
-      self$plotDemography <- loadPlotDemographyTask(self)
-      self$plotPKParameters <- loadPlotPKParametersTask(self)
-      self$plotSensitivity <- loadPlotSensitivityTask(self)
+                                        self$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(self)
+                                        self$plotDemography <- loadPlotDemographyTask(self)
+                                        self$plotPKParameters <- loadPlotPKParametersTask(self)
+                                        self$plotSensitivity <- loadPlotSensitivityTask(self)
 
-      self$taskNames <- ospsuite.utils::enum(self$getAllTasks())
-    },
+                                        self$taskNames <- ospsuite.utils::enum(self$getAllTasks())
+                                      }),
 
     #' @description
     #' Run population workflow tasks for all simulation sets if tasks are activated
