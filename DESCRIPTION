@@ -33,6 +33,7 @@ LazyData: true
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 Collate:
+    'reportingengine-env.R'
     'utilities-initializers.R'
     'workflow.R'
     'mean-model-workflow.R'
@@ -68,7 +69,6 @@ Collate:
     'qualification-outputs.R'
     'qualification-pk-ratio.R'
     'qualification-time-profile.R'
-    'reportingengine-env.R'
     'sensitivity-analysis-settings.R'
     'sensitivity-plot-settings.R'
     'simulation-settings.R'

@@ -1,41 +1,3 @@
-#' @title getClassAncestry
-#' @description function to extend the head of the vector of classes `clsVec` with the ancestral classes of the first element fo `clsVec`
-#' @param clsVec is a vector of R6 class objects
-#' @keywords internal
-getClassAncestry <- function(clsVec){
-
-  #Ensure that `clsVec` is a vector of classes that can be indexed
-  clsVec <- c(clsVec)
-
-  #Get the parent class of the first element in the vector of classes `clsVec`
-  nextParent <- clsVec[[1]]$get_inherit()
-
-  #If nextParent is NULL, then the first element in the vector of classes `clsVec` has no parent class, so return `clsVec`.
-  if(is.null( nextParent )){
-    return(clsVec)
-  }
-
-  #If nextParent is not NULL, run this function recursively to obtain a vector of the ancestors of nextParent
-  return(getClassAncestry( c(nextParent,clsVec) ))
-}
-
-
-#' @title getAncestralInitializerList
-#' @description function to get a list of the initializers of the R6 class `classObject` and all of its ancestor classes
-#' @param classObject is an R6 class object
-#' @keywords internal
-getAncestralInitializerList <- function(classObject){
-
-  #Build a vector of the ancestor classes of `classObject`, starting with the most base class and ending with `classObject`.
-  classAncestry <- getClassAncestry(classObject)
-
-  #Loop through the vector of ancestor classes of `classObject` (`classAncestry`) and return a list of their initializer functions
-  ancestralInitializerList <- lapply(classAncestry,function(cls){ cls$public_methods$initialize })
-
-  return(ancestralInitializerList)
-}
-
-
 #' @title parseFunctionBody
 #' @description function to cast the commands of the function `functionToParse` as a list of semicolon-separated strings
 #' @param `functionToParse` a function the body of which is to be converted to a list of semicolon-separated strings
@@ -55,56 +17,29 @@ parseFunctionBody <- function(functionToParse) {
 #' @return `childInitializer`, an initializer function
 #' @keywords internal
 makeChildInitializer <- function(parentClass = NULL, preSuperInitializer = NULL, postSuperInitializer = NULL) {
-  parentInitializersList <- ospsuite.utils::ifNotNull(condition = parentClass, outputIfNotNull = getAncestralInitializerList(parentClass),outputIfNull = list(function(){}))
-  childInitializer <- generateInitializer(parentInitializersList = parentInitializersList,
-                                          preSuperInitializer = preSuperInitializer %||% function(){},
+  parentInitializer <- ospsuite.utils::ifNotNull(condition = parentClass,
+                                                 outputIfNotNull = parentClass$public_methods$initialize,
+                                                 outputIfNull = function(){})
+  childInitializer <- generateInitializer(preSuperInitializer = preSuperInitializer %||% function(){},
+                                          parentInitializer = parentInitializer,
                                           postSuperInitializer = postSuperInitializer  %||% function(){})
+
   return(childInitializer)
 }
 
 
-#' @title getFormalsAsString
-#' @description a function that transforms an `alist` of function formals to a string
-#' @param formalsList, an `alist` of function formals
-#' @return `formalsAsString`, a string of function arguments
-getFormalsAsString <- function(formalsList){
-  formalsAsString <- sapply(names(formalsList),function(x){
-    if (is.symbol(formalsList[[x]])){
-      return(x)
-    }
-    if (is.null(formalsList[[x]])){
-      return(paste(x,"= NULL"))
-    }
-    return(paste(x,"=",as.character(formalsList[[x]])))
-  })
-  formalsAsString <- paste(formalsAsString,collapse = ", ")
-  return(formalsAsString)
-}
-
-
 #' @title generateInitializer
-#' @description function that recursively builds a combined initializer that is a sequence of: a `preSuperInitializer` method, parent class initializers (`parentInitializersList`) and a `postSuperInitializer` method.
+#' @description function that a combined initializer that is a sequence of: a `preSuperInitializer` method, a parent class initializer (`parentInitializersList`) and a `postSuperInitializer` method.
 #' @param preSuperInitializer is an initializer function to be called BEFORE calling all parent classes by order of superiority
-#' @param parentInitializersList is an list of parent initializers. ordered from the most to the least superior.
+#' @param parentInitializer is the parent class initializer.
 #' @param postSuperInitializer is an initializer function to be called AFTER calling all parent classes by order of superiority
 #' @return `childInitializer`, an initializer function
 #' @keywords internal
-generateInitializer <- function(parentInitializersList, preSuperInitializer, postSuperInitializer){
+generateInitializer <- function(preSuperInitializer, parentInitializer, postSuperInitializer){
 
-  ospsuite.utils::validateIsOfType(parentInitializersList,"list")
-  sapply(parentInitializersList,function(fn){ ospsuite.utils::validateIsIncluded(values = typeof(fn),parentValues= c("closure","function")) })
-  ospsuite.utils::validateIsIncluded(values = typeof(postSuperInitializer),parentValues= c("closure","function"))
-
-  #Recursive application of this function for cases in which there is multilevel inheritance, where parentInitializersList
-  #Each recursion will return an `postSuperInitializer` that is an amalgamation of the all but the first elements of parentInitializersList with postSuperInitializer
-  if (length(parentInitializersList) > 1) {
-    postSuperInitializer <- generateInitializer(parentInitializersList = tail(parentInitializersList, -1),
-                                               preSuperInitializer = function(){},
-                                               postSuperInitializer = postSuperInitializer)
-  }
-
-  #If parentInitializersList includes only one element, amalgamate that function with postSuperInitializer
-  parentInitializer <- parentInitializersList[[1]]
+  ospsuite.utils::validateIsIncluded(values = typeof(preSuperInitializer), parentValues= c("closure","function"))
+  ospsuite.utils::validateIsIncluded(values = typeof(parentInitializer), parentValues= c("closure","function"))
+  ospsuite.utils::validateIsIncluded(values = typeof(postSuperInitializer), parentValues= c("closure","function"))
 
   #Parse the body of the parent and child initializers into a series of commands (as strings) separated by semicolons (';')
   preSuperInitializerBody <- parseFunctionBody(preSuperInitializer)
@@ -115,10 +50,9 @@ generateInitializer <- function(parentInitializersList, preSuperInitializer, pos
   # Remove any duplicated arguments.  Arguments of the postSuperInitializer overwrite arguments of the parentInitializer with the same name.
   childInitializerFormals <- c(formals(parentInitializer), formals(preSuperInitializer), formals(postSuperInitializer))
   childInitializerFormals <- childInitializerFormals[!duplicated(names(childInitializerFormals), fromLast = TRUE)]
-  childInitializerFormalsString <- getFormalsAsString(childInitializerFormals)
 
   #amalgamate (as a string) the bodies of the parent and child classes into a new function with no input arguments
-  childInitializerBody <- paste0("function(",childInitializerFormalsString,"){
+  childInitializerBody <- paste0("function(){
       eval(parse(text = '", preSuperInitializerBody, "' ))
       eval(parse(text = '", parentInitializerBody, "' ))
       eval(parse(text = '", postSuperInitializerBody, "' ))
@@ -126,6 +60,7 @@ generateInitializer <- function(parentInitializersList, preSuperInitializer, pos
 
   #create a function object based on the string `childInitializerBody``
   childInitializer <- eval(parse(text = childInitializerBody))
+  formals(childInitializer) <- childInitializerFormals
 
   return(childInitializer)
 }
