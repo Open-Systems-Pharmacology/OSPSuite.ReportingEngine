@@ -14,6 +14,5 @@ pwf$simulate$activate()
 pwf$calculatePKParameters$activate()
 pwf$calculateSensitivity$activate()
 pwf$calculateSensitivity$settings$showProgress <- TRUE
-pwf$calculateSensitivity$settings$pkParameterSelection <- c("C_max", "CL")
 pwf$calculateSensitivity$settings$quantileVec <- c(0.05, 0.25, 0.5, 0.75, 0.95)
 pwf$runWorkflow()
