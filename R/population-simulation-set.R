@@ -6,7 +6,7 @@
 #' @field studyDesignFile name of study design csv file
 #' @field plotReferenceObsData logical for plotting reference observed data in Pediatric and Ratio Comparison workflows
 #' @export
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
 PopulationSimulationSet <- R6::R6Class(
   "PopulationSimulationSet",
   inherit = SimulationSet,
@@ -36,12 +36,12 @@ PopulationSimulationSet <- R6::R6Class(
                           studyDesignFile = NULL,
                           plotReferenceObsData = FALSE,
                           ...) {
-      ospsuite.utils::validateIsLogical(referencePopulation)
-      ospsuite.utils::validateIsLogical(plotReferenceObsData)
-      ospsuite.utils::validateIsString(simulationSetName)
-      ospsuite.utils::validateIsString(simulationFile)
-      ospsuite.utils::validateIsString(populationFile)
-      ospsuite.utils::validateIsString(c(populationName, studyDesignFile), nullAllowed = TRUE)
+      validateIsLogical(referencePopulation)
+      validateIsLogical(plotReferenceObsData)
+      validateIsString(simulationSetName)
+      validateIsString(simulationFile)
+      validateIsString(populationFile)
+      validateIsString(c(populationName, studyDesignFile), nullAllowed = TRUE)
       validateIsFileExtension(populationFile, "csv")
 
       super$initialize(

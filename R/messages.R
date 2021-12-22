@@ -180,11 +180,10 @@ messages <- list(
     return(paste0(callingFunction(), "Values '", paste0(data[duplicated(data)], collapse = "', '"), "' in ", dataName, " are not unique"))
   },
 
-  dataIncludedInTimeRange = function(finalSize, initialSize, timeRange, timeUnit, dataType) {
+  dataIncludedInTimeRange = function(finalSize, timeRange, timeUnit, dataType) {
     paste0(
       finalSize, " ", dataType,
-      " data were included in the analysis between ", min(timeRange), " and ", max(timeRange), " ", timeUnit,
-      ". Initial size was ", initialSize, "."
+      " data were included in the analysis between ", min(timeRange), " and ", max(timeRange), " ", timeUnit, "."
     )
   }
 )
