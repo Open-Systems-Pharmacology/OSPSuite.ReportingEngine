@@ -72,7 +72,7 @@ generateInitializer <- function(parentInitializersList, preSuperInitializer, pos
   #Each recursion will return an `postSuperInitializer` that is an amalgamation of the all but the first elements of parentInitializersList with postSuperInitializer
   if (length(parentInitializersList) > 1) {
     postSuperInitializer <- generateInitializer(parentInitializersList = tail(parentInitializersList, -1),
-                                               preSuperInitializer = NULL,
+                                               preSuperInitializer = function(){},
                                                postSuperInitializer = postSuperInitializer)
   }
 
