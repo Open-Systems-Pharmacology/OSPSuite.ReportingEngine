@@ -89,7 +89,7 @@ autoAxesTicksFromLimits <- function(limits) {
 #' @return A `PlotConfiguration` object
 #' @importFrom ospsuite.utils %||%
 #' @keywords internal
-getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legendPosition = reEnv$theme$background$legendPosition) {
+getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legendPosition = NULL) {
   # Define the appropriate configuration from plotType
   # by creating expression: "tlf::<plotType>PlotCOnfiguration$new()"
   plotConfiguration <- eval(parse(text = paste0("tlf::", plotType, "PlotConfiguration$new()")))
@@ -106,6 +106,10 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
   plotConfiguration$yAxis$font$size <- reEnv$fontScaleFactor*(fonts$AxisSize %||% plotConfiguration$yAxis$font$size)
   plotConfiguration$legend$font$size <- reEnv$fontScaleFactor*(fonts$LegendSize %||% plotConfiguration$legend$font$size)
   plotConfiguration$background$watermark$font$size <- reEnv$fontScaleFactor*(fonts$WatermarkSize %||% plotConfiguration$background$watermark$font$size)
+
+  #Set legend position
+  ospsuite.utils::validateIsIncluded(values = legendPosition, parentValues = tlf::LegendPositions, nullAllowed = TRUE)
+  plotConfiguration$legend$position <- legendPosition %||% reEnv$theme$background$legendPosition
 
   # If chart size is defined, it is in pixel and updated accordingly
   # Get conversion factor between pixels and inches, dev.size provides an array c(width, height)
