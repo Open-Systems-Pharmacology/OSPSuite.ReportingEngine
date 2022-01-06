@@ -236,7 +236,11 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
 
   ddiPlotConfiguration <- getPlotConfigurationFromPlan(plotProperties = ddiPlotData$plotSettings,
                                                        plotType = "DDIRatio",
-                                                       legendPosition = reEnv$theme$background$legendPosition)
+                                                       legendPosition = tlf::LegendPositions$outsideRight)
+
+  #Set axes labels
+  ddiPlotConfiguration$labels$xlabel$text <- ddiPlotData$axesSettings$X$label
+  ddiPlotConfiguration$labels$ylabel$text <- ddiPlotData$axesSettings$Y$label
 
   # Set line color and type
   ddiPlotConfiguration$lines$color <- "black"
@@ -280,13 +284,6 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
 
   # Force legend to be only one column to maintain plot panel width, and left-justify legend entries
   qualificationDDIPlot <- qualificationDDIPlot + ggplot2::guides(col = guide_legend(ncol = 1, label.hjust = 0))
-
-  xlabel <- paste(ddiPlotData$axesSettings$X$label)
-  ylabel <- paste(ddiPlotData$axesSettings$Y$label)
-
-  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::xlab(xlabel) + ggplot2::ylab(ylabel)
-
-
 
   return(qualificationDDIPlot)
 }
@@ -349,7 +346,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
         sectionId = sectionID,
         plot = ddiPlot,
         plotCaption = ospsuite.utils::ifNotNull(
-          inputToCheck = captionSuffix,
+          condition = captionSuffix,
           outputIfNotNull = paste(metadata$title, captionSuffix, sep = " - "),
           outputIfNull = metadata$title
         )
