@@ -230,11 +230,11 @@ The vignette *qualification-workflow* details how to build and use such `Qualifi
 To create a `MeanModelWorkflow` or a `PopulationWorkflow` object, the method `$new()` needs to be used with at least the inputs defined below.
 
 - For mean model workflows: 
-```
+```r
 myWorkflow <- MeanModelWorkflow$new(simulationSets, workflowFolder)
 ```
 - For population workflows: 
-```
+```r
 myWorkflow <- 
 PopulationWorkflow$new(workflowType, simulationSets, workflowFolder)
 ```
@@ -293,7 +293,7 @@ Finally, the method `runWorkflow()` runs the simulations and analyses of the mod
 Below is the syntax for creating such simulation sets, the next sub-sections will provide more details on each input:
 
 __Simulation Set__
-```
+```r
 SimulationSet$new(
   simulationSetName, 
   simulationFile, 
@@ -302,12 +302,14 @@ SimulationSet$new(
   observedMetaDataFile,
   dataReportName,
   dataSelection,
-  applicationRanges
+  applicationRanges,
+  timeUnit,
+  timeOffset
 )
 ```
 
 __Population Simulation Set__
-```
+```r
 PopulationSimulationSet$new(
   referencePopulation,
   simulationSetName, 
@@ -320,7 +322,9 @@ PopulationSimulationSet$new(
   observedMetaDataFile,
   dataReportName,
   dataSelection,
-  applicationRanges
+  applicationRanges,
+  timeUnit,
+  timeOffset
 )
 ```
 
@@ -401,7 +405,7 @@ For any simulation set, `Output` objects define which simulation paths, associat
 Below is the syntax for creating such `Output` objects, the next sub-sections will provide more details on each input:
 
 __Output__
-```
+```r
 Output$new(
   path,
   displayName,
@@ -435,7 +439,7 @@ A list of pk parameter names can be directly provided to this input (e.g. *c('C_
 Display names and display units will be used as is from the PK parameter objects defined using the `ospsuite` package.
 
 In the case different display names or/and units are needed between the same PK parameters but from different paths, it is also possible to use `PkParameterInfo` instances instead of pk parameter names directly.
-```
+```r
 PkParameterInfo$new(
   pkParameter,
   displayName, 
@@ -462,6 +466,15 @@ ApplicationRanges
 ```
 
 This input is then translated in the `SimulationSet` objects as a list of logical values defining whether the corresponding application range is included in the report or not.
+
+## 3.6. Time Offset
+
+The input `timeOffset` shifts the time variable of time profile plots by its value in `timeUnit`. By default this value is 0.
+
+This input can be useful for pediatric workflows comparing simulation sets in the same time profile plot.
+
+In scenarios where multiple applications were defined, the time range of first application actually becomes the first application after `timeOffset`.
+
 
 # 4. Tasks
 ## 4.1. Task names and activation
