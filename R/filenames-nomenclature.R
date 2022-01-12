@@ -19,16 +19,16 @@ defaultFileNames <- list(
     file.path(folder, getDefaultFolderName(name, suffix = paste0("_", startDate(), "_", startTime()), sep = ""))
   },
   inputFolder = function(name = NULL) {
-    getDefaultFolderName(name, suffix = "Inputs", sep = ospsuite.utils::ifNotNull(name, "-", ""))
+    getDefaultFolderName(name, suffix = "Inputs", sep = ifNotNull(name, "-", ""))
   },
   simulationResultsFolder = function(name = NULL) {
-    getDefaultFolderName(name, suffix = "SimulationResults", sep = ospsuite.utils::ifNotNull(name, "-", ""))
+    getDefaultFolderName(name, suffix = "SimulationResults", sep = ifNotNull(name, "-", ""))
   },
   pkAnalysisResultsFolder = function(name = NULL) {
-    getDefaultFolderName(name, suffix = "PKAnalysisResults", sep = ospsuite.utils::ifNotNull(name, "-", ""))
+    getDefaultFolderName(name, suffix = "PKAnalysisResults", sep = ifNotNull(name, "-", ""))
   },
   sensitivityAnalysisResultsFolder = function(name = NULL) {
-    getDefaultFolderName(name, suffix = "SensitivityAnalysisResults", sep = ospsuite.utils::ifNotNull(name, "-", ""))
+    getDefaultFolderName(name, suffix = "SensitivityAnalysisResults", sep = ifNotNull(name, "-", ""))
   },
   popSensitivityResultsIndexFile = function(name = NULL) {
     getDefaultFileName(name, suffix = "popSensitivityResultsIndex")
@@ -37,10 +37,10 @@ defaultFileNames <- list(
     getDefaultFolderName(name, suffix = NULL, sep = "")
   },
   resultsFolder = function(name = NULL) {
-    getDefaultFolderName(name, suffix = "Results", sep = ospsuite.utils::ifNotNull(name, "-", ""))
+    getDefaultFolderName(name, suffix = "Results", sep = ifNotNull(name, "-", ""))
   },
   figuresFolder = function(name = NULL) {
-    getDefaultFolderName(name, suffix = "Figures", sep = ospsuite.utils::ifNotNull(name, "-", ""))
+    getDefaultFolderName(name, suffix = "Figures", sep = ifNotNull(name, "-", ""))
   },
   logInfoFile = function(name = "info") {
     getDefaultFileName("log", suffix = name, extension = "txt", sep = "-")

@@ -32,7 +32,7 @@ QualificationWorkflow <- R6::R6Class(
     initialize = function(configurationPlan,
                           ...) {
       super$initialize(...)
-      ospsuite.utils::validateIsOfType(configurationPlan, "ConfigurationPlan")
+      validateIsOfType(configurationPlan, "ConfigurationPlan")
       # Include global plot & axes settings at this stage
       # Global settings are included using theme concept,
       # they can be updated using setting$plotConfigurations within tasks
@@ -48,7 +48,7 @@ QualificationWorkflow <- R6::R6Class(
       self$plotPKRatio <- loadPlotPKRatioTask(self, configurationPlan)
       self$plotDDIRatio <- loadPlotDDIRatioTask(self, configurationPlan)
 
-      self$taskNames <- ospsuite.utils::enum(self$getAllTasks())
+      self$taskNames <- enum(self$getAllTasks())
     },
 
     #' @description

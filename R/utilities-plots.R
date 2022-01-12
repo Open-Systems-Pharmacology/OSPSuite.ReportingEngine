@@ -29,7 +29,7 @@ AggregationConfiguration <- list(
 )
 
 displayDimension <- function(dimension){
-  if (ospsuite.utils::isIncluded(dimension, c("Concentration (mass)", "Concentration (molar)"))) {
+  if (isIncluded(dimension, c("Concentration (mass)", "Concentration (molar)"))) {
     return("Concentration")
   }
   return(dimension)
@@ -49,7 +49,7 @@ autoAxesLimits <- function(x, scale = tlf::Scaling$lin) {
   minX[minX>0] <- (1-reEnv$autoAxisLimitMargin)*minX
   maxX[maxX<0] <- (1-reEnv$autoAxisLimitMargin)*maxX
   maxX[maxX<0] <- (1+reEnv$autoAxisLimitMargin)*maxX
-  if(!ospsuite.utils::isIncluded(scale, "log")){
+  if(!isIncluded(scale, "log")){
     return(c(minX, maxX))
   }
   # For log plots,
@@ -108,18 +108,18 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
   plotConfiguration$background$watermark$font$size <- reEnv$fontScaleFactor*(fonts$WatermarkSize %||% plotConfiguration$background$watermark$font$size)
 
   #Set legend position
-  ospsuite.utils::validateIsIncluded(values = legendPosition, parentValues = tlf::LegendPositions, nullAllowed = TRUE)
+  validateIsIncluded(values = legendPosition, parentValues = tlf::LegendPositions, nullAllowed = TRUE)
   plotConfiguration$legend$position <- legendPosition %||% reEnv$theme$background$legendPosition
 
   # If chart size is defined, it is in pixel and updated accordingly
   # Get conversion factor between pixels and inches, dev.size provides an array c(width, height)
   unitConversionFactor <- grDevices::dev.size("in") / grDevices::dev.size("px")
-  width <- ospsuite.utils::ifNotNull(
+  width <- ifNotNull(
     plotProperties$FontAndSize$ChartWidth,
     plotProperties$FontAndSize$ChartWidth * unitConversionFactor[1],
     reEnv$defaultPlotFormat$width
   )
-  height <- ospsuite.utils::ifNotNull(
+  height <- ifNotNull(
     plotProperties$FontAndSize$ChartHeight,
     plotProperties$FontAndSize$ChartHeight * unitConversionFactor[2],
     reEnv$defaultPlotFormat$height
@@ -143,11 +143,11 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
 #' @keywords internal
 getLegendScalingFactors <- function(legendPosition = tlf::LegendPositions$outsideTop){
   # Legend on the left/right sides: increase width
-  if(ospsuite.utils::isIncluded(legendPosition, c(tlf::LegendPositions$outsideRight, tlf::LegendPositions$outsideLeft))){
+  if(isIncluded(legendPosition, c(tlf::LegendPositions$outsideRight, tlf::LegendPositions$outsideLeft))){
     return(list(width = 4/3, height = 1))
   }
   # Legend on the top/bottom sides: increase height
-  if(ospsuite.utils::isIncluded(legendPosition, c(tlf::LegendPositions$outsideTopLeft,
+  if(isIncluded(legendPosition, c(tlf::LegendPositions$outsideTopLeft,
                                   tlf::LegendPositions$outsideTop,
                                   tlf::LegendPositions$outsideTopRight,
                                   tlf::LegendPositions$outsideBottomLeft,
@@ -230,7 +230,7 @@ getSplitPositions <- function(possibleSplits, splitWidth, numberOfSplits) {
   # Optimal splits are at equal width
   optimalSplits <- floor(cumsum(rep(splitWidth, numberOfSplits)))
   for (splitIndex in seq_along(optimalSplits)) {
-    if (ospsuite.utils::isOfLength(possibleSplits, 0)) {
+    if (isOfLength(possibleSplits, 0)) {
       return(optimalSplits)
     }
     positionDifference <- min(abs(possibleSplits - optimalSplits[splitIndex]))

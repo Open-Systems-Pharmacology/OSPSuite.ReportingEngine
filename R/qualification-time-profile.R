@@ -33,10 +33,10 @@ plotQualificationTimeProfiles <- function(configurationPlan,
     plotConfiguration <- getPlotConfigurationFromPlan(timeProfilePlan$Plot)
     timeProfilePlot <- tlf::initializePlot(plotConfiguration)
 
-    # Currently use ospsuite.utils::ifNotNull to select if mean or population time profile
+    # Currently use ifNotNull to select if mean or population time profile
     # So far only population defines "Type" but this might not be always true
     # Function switch could be used instead
-    timeProfilePlot <- ospsuite.utils::ifNotNull(
+    timeProfilePlot <- ifNotNull(
       timeProfilePlan$Plot$Type,
       plotQualificationPopulationTimeProfile(
         simulationAnalysis = timeProfilePlan$Plot$Analysis,
@@ -95,7 +95,7 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves, simulation
     if (is.null(curveOutput)) {
       next
     }
-    if (!ospsuite.utils::isOfLength(curveOutput$error, 0)) {
+    if (!isOfLength(curveOutput$error, 0)) {
       plotObject <- tlf::addErrorbar(
         x = curveOutput$x,
         ymin = curveOutput$error$ymin,
@@ -281,7 +281,7 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
     # Currently, the molecular weight is directly taken from the simulation output
     observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties, logFolder)
 
-    if (!ospsuite.utils::isOfLength(observedData$error, 0)) {
+    if (!isOfLength(observedData$error, 0)) {
       plotObject <- tlf::addErrorbar(
         x = observedData$time,
         ymin = observedData$error$ymin,
@@ -538,7 +538,7 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
     NULL
   }
   )
-  if (ospsuite.utils::isOfLength(outputValues, 0)) {
+  if (isOfLength(outputValues, 0)) {
     logErrorThenStop(
       message = paste0(
         "Molecular weight not found but required for observed data Id '", pathArray[1], "' in Time Profile plot."
@@ -548,13 +548,13 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
   }
 
   outputError <- NULL
-  if (!ospsuite.utils::isOfLength(observedResults$metaData$error, 0)) {
+  if (!isOfLength(observedResults$metaData$error, 0)) {
     # No unit means that error is geometric
     outputError$ymin <- outputValues / observedResults$data[, 3]
     outputError$ymax <- outputValues * observedResults$data[, 3]
 
     # In case scale is log,
-    if (!ospsuite.utils::isIncluded(observedResults$metaData$error$unit, "")) {
+    if (!isIncluded(observedResults$metaData$error$unit, "")) {
       outputError$ymin <- outputValues - ospsuite::toUnit(
         ospsuite::getDimensionForUnit(observedResults$metaData$error$unit),
         observedResults$data[, 3],
@@ -576,7 +576,7 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
     outputError$ymin[is.na(outputError$ymin)] <- outputValues[is.na(outputError$ymin)]
     outputError$ymax[is.na(outputError$ymax)] <- outputValues[is.na(outputError$ymax)]
     # In case of log scale, ymin<0 are replaced by y so upper branch is still plotted
-    if(ospsuite.utils::isIncluded(axesProperties$y$scale, tlf::Scaling$log)){
+    if(isIncluded(axesProperties$y$scale, tlf::Scaling$log)){
       outputError$ymin[outputError$ymin<=0] <- outputValues[outputError$ymin<=0]
     }
   }

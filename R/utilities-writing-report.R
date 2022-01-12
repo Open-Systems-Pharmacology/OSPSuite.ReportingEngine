@@ -84,7 +84,7 @@ addTableChunk <- function(fileName,
     fileEncoding = "UTF-8",
     stringsAsFactors = FALSE
   )
-  table <- ospsuite.utils::formatNumerics(
+  table <- formatNumerics(
     table,
     digits = digits %||% reEnv$formatNumericsDigits,
     scientific = scientific %||% reEnv$formatNumericsScientific
@@ -152,7 +152,7 @@ addTextChunk <- function(fileName,
 #' addTextChunk(fileName = "chapter-2.md", text = "Chapter 2")
 #' mergeMarkdowndFiles(inputFiles = c("chapter-1.md", "chapter-2.md"), outputFile = "chapters-1and2.md")
 mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd(), keepInputFiles = FALSE) {
-  ospsuite.utils::validateIsLogical(keepInputFiles)
+  validateIsLogical(keepInputFiles)
   # Read all files contents first in case outputFile is within inputFiles
   filesContent <- lapply(inputFiles, function(fileName){readLines(fileName, encoding = "UTF-8")})
   resetReport(outputFile, logFolder)
@@ -412,8 +412,8 @@ addMarkdownToc <- function(tocContent, fileName, logFolder = getwd()) {
 #' @export
 #' @importFrom ospsuite.utils %||%
 setSimulationDescriptor <- function(workflow, text) {
-  ospsuite.utils::validateIsOfType(workflow, "Workflow")
-  ospsuite.utils::validateIsString(text, nullAllowed = TRUE)
+  validateIsOfType(workflow, "Workflow")
+  validateIsString(text, nullAllowed = TRUE)
 
   # Allows NULL which is translated by ""
   workflow$setSimulationDescriptor(text %||% "")
@@ -426,6 +426,6 @@ setSimulationDescriptor <- function(workflow, text) {
 #' @return character describing simulation sets
 #' @export
 getSimulationDescriptor <- function(workflow) {
-  ospsuite.utils::validateIsOfType(workflow, "Workflow")
+  validateIsOfType(workflow, "Workflow")
   return(workflow$getSimulationDescriptor())
 }

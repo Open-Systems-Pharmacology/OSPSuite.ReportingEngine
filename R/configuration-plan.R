@@ -106,7 +106,7 @@ ConfigurationPlan <- R6::R6Class(
     #' @param input list including SectionId and Path
     #' @param logFolder path where logs are saved
     copyInput = function(input, logFolder = getwd()) {
-      ospsuite.utils::validateIsIncluded(names(input), c("SectionId", "Path"))
+      validateIsIncluded(names(input), c("SectionId", "Path"))
       # Get location of input
       inputLocation <- file.path(self$referenceFolder, input$Path)
       # In case file does not exist
@@ -128,7 +128,7 @@ ConfigurationPlan <- R6::R6Class(
     #' @param intro list including Path
     #' @param logFolder path where logs are saved
     copyIntro = function(intro, logFolder = getwd()) {
-      ospsuite.utils::validateIsIncluded(names(intro), "Path")
+      validateIsIncluded(names(intro), "Path")
       # Get location of intro
       introLocation <- file.path(self$referenceFolder, intro$Path)
       # In case file does not exist
@@ -309,7 +309,7 @@ ConfigurationPlan <- R6::R6Class(
         return(private$.observedDataSets)
       }
       # ObservedDataSets can be null or empty list, in which case, nothing happens
-      if (ospsuite.utils::isOfLength(value, 0)) {
+      if (isOfLength(value, 0)) {
         return(invisible())
       }
       # Change field names to appropriate camelCase names within the mapping
@@ -336,13 +336,13 @@ ConfigurationPlan <- R6::R6Class(
         unexistingFiles <- paste0(dataPaths[unexistingFiles], collapse = "', '")
         warning(paste0("Observed datasets '", unexistingFiles, "' not found"))
       }
-      if (!ospsuite.utils::hasUniqueValues(dataIds)) {
+      if (!hasUniqueValues(dataIds)) {
         # Check if the id reference same paths
         duplicatedIds <- unique(dataIds[duplicated(dataIds)])
         for (observedDataSetsId in duplicatedIds) {
           selectedRows <- dataIds %in% observedDataSetsId
           selectedPaths <- dataPaths[selectedRows]
-          if (ospsuite.utils::isOfLength(unique(selectedPaths), 1)) {
+          if (isOfLength(unique(selectedPaths), 1)) {
             warning(messages$errorHasNoUniqueValues(dataIds[selectedRows], dataName = "ObservedDataSets Id"))
             next
           }

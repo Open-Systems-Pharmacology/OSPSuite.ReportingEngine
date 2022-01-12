@@ -16,7 +16,7 @@ ExcelMessaging <- R6::R6Class(
     #' @param type "warnings" or "errors"
     #' @return A new `ExcelMessaging` object
     initialize = function(type) {
-      ospsuite.utils::validateIsIncluded(type, c("errors", "warnings"))
+      validateIsIncluded(type, c("errors", "warnings"))
       self$type <- type
       self$messages <- list()
     },
@@ -26,7 +26,7 @@ ExcelMessaging <- R6::R6Class(
     displayMessage = function() {
       message <- NULL
       for (sectionIndex in seq_along(self$messages)) {
-        if (ospsuite.utils::isOfLength(self$messages[[sectionIndex]], 0)) {
+        if (isOfLength(self$messages[[sectionIndex]], 0)) {
           next
         }
         message <- c(

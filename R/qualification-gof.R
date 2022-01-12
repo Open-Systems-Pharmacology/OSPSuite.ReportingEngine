@@ -24,7 +24,7 @@ plotQualificationGOFs <- function(configurationPlan,
       sectionId = gofPlan$SectionId,
       table = gofGMFE,
       tableCaption = paste0("GMFE for ", gofPlan$Title),
-      includeTable = ospsuite.utils::isIncluded("GMFE", gofPlan$Artifacts)
+      includeTable = isIncluded("GMFE", gofPlan$Artifacts)
     )
 
     # GOF plots
@@ -39,7 +39,7 @@ plotQualificationGOFs <- function(configurationPlan,
         sectionId = gofPlan$SectionId,
         plot = gofPlot,
         plotCaption = gofPlan$Title,
-        includePlot = ospsuite.utils::isIncluded("Plot", gofPlan$Artifacts)
+        includePlot = isIncluded("Plot", gofPlan$Artifacts)
       )
     }
     return(gofResults)
@@ -125,36 +125,41 @@ getGOFDataForMapping <- function(outputMapping, configurationPlan, axesUnits, lo
     molWeight = molWeight
   )
 
-  # Observed data
-  observedResults <- getObservedDataFromConfigurationPlan(outputMapping$ObservedData, configurationPlan, logFolder)
-  observedTime <- ospsuite::toUnit(
-    quantityOrDimension = "Time",
-    values = as.numeric(observedResults$data[, 1]),
-    targetUnit = axesUnits$time,
-    sourceUnit = observedResults$metaData$time$unit
-  )
-  observedValues <- ospsuite::toUnit(
-    quantityOrDimension = ospsuite::getDimensionForUnit(observedResults$metaData$output$unit),
-    values = observedResults$data[, 2],
-    targetUnit = axesUnits$observed,
-    sourceUnit = tolower(observedResults$metaData$output$unit),
-    molWeight = molWeight
-  )
+  # Loop on each observed dataset in OutputMappings
+  gofData <- data.frame()
+  for (observedDataSet in outputMapping$ObservedData) {
+    observedResults <- getObservedDataFromConfigurationPlan(observedDataSet, configurationPlan, logFolder)
+    observedTime <- ospsuite::toUnit(
+      quantityOrDimension = "Time",
+      values = as.numeric(observedResults$data[, 1]),
+      targetUnit = axesUnits$time,
+      sourceUnit = observedResults$metaData$time$unit
+    )
+    observedValues <- ospsuite::toUnit(
+      quantityOrDimension = ospsuite::getDimensionForUnit(observedResults$metaData$output$unit),
+      values = observedResults$data[, 2],
+      targetUnit = axesUnits$observed,
+      sourceUnit = tolower(observedResults$metaData$output$unit),
+      molWeight = molWeight
+    )
 
-  # Re-use nomenclature and functions from utilities-goodness-of-fit
-  observedData <- data.frame(
-    Time = observedTime,
-    Concentration = observedValues,
-    Path = outputMapping$ObservedData
-  )
-  simulatedData <- data.frame(
-    Time = simulatedTime,
-    Concentration = simulatedValues,
-    Legend = outputMapping$Simulation
-  )
-  # Currently residuals are only calculated assuming Logarithmic formula
-  gofData <- getResiduals(observedData, simulatedData)
-
+    # Re-use nomenclature and functions from utilities-goodness-of-fit
+    observedData <- data.frame(
+      Time = observedTime,
+      Concentration = observedValues,
+      Path = observedDataSet
+    )
+    simulatedData <- data.frame(
+      Time = simulatedTime,
+      Concentration = simulatedValues,
+      Legend = outputMapping$Simulation
+    )
+    # Currently residuals are only calculated assuming Logarithmic formula
+    gofData <- rbind.data.frame(
+      gofData,
+      getResiduals(observedData, simulatedData)
+    )
+  }
   return(gofData)
 }
 
@@ -172,10 +177,10 @@ getGOFDataForMapping <- function(outputMapping, configurationPlan, axesUnits, lo
 getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties) {
   # Axes labels
   axesProperties$y$dimension <- switch(
-      plotType,
-      "predictedVsObserved" = paste0("Simulated ", displayDimension(axesProperties$y$dimension)),
-      "residualsOverTime" = "Residuals\nlog10(Observed)-log10(Simulated)"
-    )
+    plotType,
+    "predictedVsObserved" = paste0("Simulated ", displayDimension(axesProperties$y$dimension)),
+    "residualsOverTime" = "Residuals\nlog10(Observed)-log10(Simulated)"
+  )
   axesProperties$x$dimension <- switch(
     plotType,
     "predictedVsObserved" = paste0("Observed ", displayDimension(axesProperties$x$dimension)),
@@ -214,20 +219,20 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties) {
   plotConfiguration$points$color <- metaData$color
   plotConfiguration$points$shape <- metaData$shape
 
-  positiveRows <- (data[,"Observed"] > 0) & (data[,"Simulated"] > 0)
-  dataForLimit <- c(data[positiveRows,"Observed"], data[positiveRows,"Simulated"])
+  positiveRows <- (data[, "Observed"] > 0) & (data[, "Simulated"] > 0)
+  dataForLimit <- c(data[positiveRows, "Observed"], data[positiveRows, "Simulated"])
 
   plotConfiguration$xAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||%
     autoAxesLimits(switch(
       plotType,
       "predictedVsObserved" = dataForLimit,
-      "residualsOverTime" = data[,"Time"]
+      "residualsOverTime" = data[, "Time"]
     ))
   plotConfiguration$yAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||%
     autoAxesLimits(switch(
       plotType,
       "predictedVsObserved" = dataForLimit,
-      "residualsOverTime" = c(0, data[,"Residuals"])
+      "residualsOverTime" = c(0, data[, "Residuals"])
     ))
 
   gofPlot <- switch(
@@ -270,7 +275,7 @@ getQualificationGOFGMFE <- function(data) {
       )
     )
   }
-  if (!ospsuite.utils::isOfLength(groupNames, 1)) {
+  if (!isOfLength(groupNames, 1)) {
     gmfe <- rbind.data.frame(
       gmfe,
       data.frame(
