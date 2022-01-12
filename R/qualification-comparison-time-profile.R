@@ -6,7 +6,7 @@
 #' @return list with `plots` and `tables`
 #' @import tlf
 #' @import ospsuite
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
 #' @keywords internal
 plotQualificationComparisonTimeProfile <- function(configurationPlan,
                                                    logFolder = getwd(),
@@ -72,7 +72,7 @@ plotQualificationComparisonTimeProfile <- function(configurationPlan,
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @param logFolder folder where the logs are saved
 #' @return A ggplot object
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
 #' @keywords internal
 addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, axesProperties, plotObject, configurationPlan, logFolder) {
   # Get simulation output
@@ -136,90 +136,90 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
     plotObject = plotObject
   )
 
-  # Get observed output
-  observedResults <- getObservedDataFromConfigurationPlan(outputMapping$ObservedData, configurationPlan, logFolder)
-  observedTime <- ospsuite::toUnit(
-    quantityOrDimension = "Time",
-    values = as.numeric(observedResults$data[, 1]),
-    targetUnit = axesProperties$x$unit,
-    sourceUnit = observedResults$metaData$time$unit
-  )
-  observedTime <- observedTime - timeOffset
-  selectedObservedTimeValues <- observedTime >= 0 & observedTime <= simulationDuration
-  observedTime <- observedTime[selectedObservedTimeValues]
+  # Loop on each observed dataset in OutputMappings
+  for (observedDataSet in outputMapping$ObservedData) {
+    # Get data and meta data of observed results
+    observedResults <- getObservedDataFromConfigurationPlan(observedDataSet, configurationPlan, logFolder)
+    observedTime <- ospsuite::toUnit(
+      quantityOrDimension = "Time",
+      values = as.numeric(observedResults$data[, 1]),
+      targetUnit = axesProperties$x$unit,
+      sourceUnit = observedResults$metaData$time$unit
+    )
+    observedTime <- observedTime - timeOffset
+    selectedObservedTimeValues <- observedTime >= 0 & observedTime <= simulationDuration
+    observedTime <- observedTime[selectedObservedTimeValues]
+    logWorkflow(
+      paste0(
+        "In comparison time profile, '", sum(selectedObservedTimeValues), "' values selected between ",
+        timeOffset, " and ", timeOffset + simulationDuration, " ", axesProperties$x$unit,
+        " in Observed Dataset '", observedDataSet, "'"
+      ),
+      logFolder,
+      LogTypes$Debug
+    )
+    observedValues <- ospsuite::toUnit(
+      quantityOrDimension = ospsuite::getDimensionForUnit(observedResults$metaData$output$unit),
+      values = observedResults$data[, 2],
+      targetUnit = axesProperties$y$unit,
+      sourceUnit = tolower(observedResults$metaData$output$unit),
+      molWeight = molWeight
+    )
+    observedValues <- observedValues[selectedObservedTimeValues]
 
-  logWorkflow(
-    paste0(
-      "In comparison time profile, '", sum(selectedObservedTimeValues), "' values selected between ",
-      timeOffset, " and ", timeOffset + simulationDuration, " ", axesProperties$x$unit,
-      " in Observed Dataset '", outputMapping$ObservedData, "'"
-    ),
-    logFolder,
-    LogTypes$Debug
-  )
+    # Check for errorbars to plot
+    if (!isOfLength(observedResults$metaData$error, 0)) {
+      observedError <- list()
+      # No unit means that error is geometric
+      observedError$ymin <- observedValues / observedResults$data[, 3]
+      observedError$ymax <- observedValues * observedResults$data[, 3]
+      # Based on unit, plot geometric or arithmetic errors
+      if (!isIncluded(observedResults$metaData$error$unit, "")) {
+        observedError$ymin <- observedValues - ospsuite::toUnit(
+          ospsuite::getDimensionForUnit(observedResults$metaData$error$unit),
+          observedResults$data[, 3],
+          targetUnit = axesProperties$y$unit,
+          sourceUnit = observedResults$metaData$error$unit,
+          molWeight = molWeight
+        )
 
-  observedValues <- ospsuite::toUnit(
-    quantityOrDimension = ospsuite::getDimensionForUnit(observedResults$metaData$output$unit),
-    values = observedResults$data[, 2],
-    targetUnit = axesProperties$y$unit,
-    sourceUnit = tolower(observedResults$metaData$output$unit),
-    molWeight = molWeight
-  )
-  observedValues <- observedValues[selectedObservedTimeValues]
-  observedError <- NULL
-  if (!isOfLength(observedResults$metaData$error, 0)) {
-    # No unit means that error is geometric
-    observedError$ymin <- observedValues / observedResults$data[, 3]
-    observedError$ymax <- observedValues * observedResults$data[, 3]
-
-    if (!isIncluded(observedResults$metaData$error$unit, "")) {
-      observedError$ymin <- observedValues - ospsuite::toUnit(
-        ospsuite::getDimensionForUnit(observedResults$metaData$error$unit),
-        observedResults$data[, 3],
-        targetUnit = axesProperties$y$unit,
-        sourceUnit = observedResults$metaData$error$unit,
-        molWeight = molWeight
-      )
-
-      observedError$ymax <- observedValues + ospsuite::toUnit(
-        ospsuite::getDimensionForUnit(observedResults$metaData$error$unit),
-        observedResults$data[, 3],
-        targetUnit = axesProperties$y$unit,
-        sourceUnit = observedResults$metaData$error$unit,
-        molWeight = molWeight
+        observedError$ymax <- observedValues + ospsuite::toUnit(
+          ospsuite::getDimensionForUnit(observedResults$metaData$error$unit),
+          observedResults$data[, 3],
+          targetUnit = axesProperties$y$unit,
+          sourceUnit = observedResults$metaData$error$unit,
+          molWeight = molWeight
+        )
+      }
+      # Caution: error NA values cause ymin and ymax NA values which breaks the plot,
+      # they need to be replaced by y (no error bar)
+      observedError$ymin[is.na(observedError$ymin)] <- observedValues[is.na(observedError$ymin)]
+      observedError$ymax[is.na(observedError$ymax)] <- observedValues[is.na(observedError$ymax)]
+      # In case of log scale, ymin<0 are replaced by y so upper branch is still plotted
+      if (isIncluded(axesProperties$y$scale, tlf::Scaling$log)) {
+        observedError$ymin[observedError$ymin <= 0] <- observedValues[observedError$ymin <= 0]
+      }
+      # Add observed errorbars
+      plotObject <- tlf::addErrorbar(
+        x = observedTime,
+        ymin = observedError$ymin[selectedObservedTimeValues],
+        ymax = observedError$ymax[selectedObservedTimeValues],
+        caption = prettyCaption(paste(outputMapping$Caption, "Observed Data")),
+        color = outputMapping$Color,
+        size = outputMapping$Size,
+        plotObject = plotObject
       )
     }
-    # Caution: error NA values cause ymin and ymax NA values which breaks the plot,
-    # they need to be replaced by y (no error bar)
-    observedError$ymin[is.na(observedError$ymin)] <- observedValues[is.na(observedError$ymin)]
-    observedError$ymax[is.na(observedError$ymax)] <- observedValues[is.na(observedError$ymax)]
-    # In case of log scale, ymin<0 are replaced by y so upper branch is still plotted
-    if(isIncluded(axesProperties$y$scale, tlf::Scaling$log)){
-      observedError$ymin[observedError$ymin<=0] <- observedValues[observedError$ymin<=0]
-    }
-
-    # Add error bars for observed data
-    plotObject <- tlf::addErrorbar(
+    # Add observed points
+    plotObject <- tlf::addScatter(
       x = observedTime,
-      ymin = observedError$ymin[selectedObservedTimeValues],
-      ymax = observedError$ymax[selectedObservedTimeValues],
+      y = observedValues,
       caption = prettyCaption(paste(outputMapping$Caption, "Observed Data")),
+      shape = tlfShape(outputMapping$Symbol),
       color = outputMapping$Color,
       size = outputMapping$Size,
       plotObject = plotObject
     )
   }
-
-  # Add observed values to plot
-  plotObject <- tlf::addScatter(
-    x = observedTime,
-    y = observedValues,
-    caption = prettyCaption(paste(outputMapping$Caption, "Observed Data")),
-    shape = tlfShape(outputMapping$Symbol),
-    color = outputMapping$Color,
-    size = outputMapping$Size,
-    plotObject = plotObject
-  )
-
   return(plotObject)
 }
