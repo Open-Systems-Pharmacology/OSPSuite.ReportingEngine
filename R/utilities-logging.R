@@ -95,7 +95,7 @@ logWorkflow <- function(message,
 #' LogTypes$Info
 #' LogTypes$Error
 #' LogTypes$Debug
-LogTypes <- ospsuite.utils::enum(c(
+LogTypes <- enum(c(
   "Info",
   "Error",
   "Debug"

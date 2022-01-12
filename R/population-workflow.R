@@ -54,12 +54,12 @@ PopulationWorkflow <- R6::R6Class(
         theme = theme
       )
 
-      ospsuite.utils::validateIsOfType(c(simulationSets), "PopulationSimulationSet")
-      if (!ospsuite.utils::isOfType(simulationSets, "list")) {
+      validateIsOfType(c(simulationSets), "PopulationSimulationSet")
+      if (!isOfType(simulationSets, "list")) {
         simulationSets <- list(simulationSets)
       }
 
-      ospsuite.utils::validateIsIncluded(workflowType, PopulationWorkflowTypes)
+      validateIsIncluded(workflowType, PopulationWorkflowTypes)
       self$workflowType <- workflowType
 
       # Pediatric and ratio comparison workflows need ONE reference population
@@ -74,7 +74,7 @@ PopulationWorkflow <- R6::R6Class(
       self$plotPKParameters <- loadPlotPKParametersTask(self)
       self$plotSensitivity <- loadPlotSensitivityTask(self)
 
-      self$taskNames <- ospsuite.utils::enum(self$getAllTasks())
+      self$taskNames <- enum(self$getAllTasks())
     },
 
     #' @description
@@ -155,7 +155,7 @@ PopulationWorkflow <- R6::R6Class(
 #' PopulationWorkflowTypes$pediatric
 #' PopulationWorkflowTypes$parallelComparison
 #' PopulationWorkflowTypes$ratioComparison
-PopulationWorkflowTypes <- ospsuite.utils::enum(c(
+PopulationWorkflowTypes <- enum(c(
   "pediatric",
   "parallelComparison",
   "ratioComparison"
