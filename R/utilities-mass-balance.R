@@ -35,7 +35,7 @@ plotMeanMassBalance <- function(structureSet,
 
   # User defined coumpound selection
   selectedCompoundNames <- settings$selectedCompoundNames %||% relevantCompoundNames
-  ospsuite.utils::validateIsIncluded(selectedCompoundNames, relevantCompoundNames)
+  validateIsIncluded(selectedCompoundNames, relevantCompoundNames)
 
   # Get all the molecule paths (with dimension=amount) of the selected/relevant coumpounds
   molecules <- ospsuite::getAllMoleculesMatching(paste0("**|", selectedCompoundNames), organism)
@@ -189,7 +189,7 @@ plotMeanMassBalance <- function(structureSet,
     plotConfiguration = settings$plotConfigurations[["pieChart"]]
   )
 
-  timeCaption <- ospsuite.utils::formatNumerics(
+  timeCaption <- formatNumerics(
     max(simulationResultsOutputByGroup$Time),
     digits = settings$digits,
     scientific = settings$scientific

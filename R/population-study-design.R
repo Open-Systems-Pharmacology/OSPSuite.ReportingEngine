@@ -5,9 +5,9 @@
 #' @export
 #' @import ospsuite
 addStudyParameters <- function(population, simulation, studyDesignFile) {
-  ospsuite.utils::validateIsOfType(population, "Population")
-  ospsuite.utils::validateIsOfType(simulation, "Simulation")
-  ospsuite.utils::validateIsString(studyDesignFile)
+  validateIsOfType(population, "Population")
+  validateIsOfType(simulation, "Simulation")
+  validateIsString(studyDesignFile)
 
   studyDesign <- loadStudyDesign(studyDesignFile, population, simulation)
 
@@ -34,9 +34,9 @@ addStudyParameters <- function(population, simulation, studyDesignFile) {
 #' @return A `StudyDesign` object`
 #' @export
 loadStudyDesign <- function(studyDesignFile, population, simulation) {
-  ospsuite.utils::validateIsOfType(population, "Population")
-  ospsuite.utils::validateIsOfType(simulation, "Simulation")
-  ospsuite.utils::validateIsString(studyDesignFile)
+  validateIsOfType(population, "Population")
+  validateIsOfType(simulation, "Simulation")
+  validateIsString(studyDesignFile)
 
   designData <- read.csv(studyDesignFile, header = FALSE, stringsAsFactors = FALSE)
 
@@ -58,9 +58,9 @@ studyDesignTypeLine <- 3
 #' @import ospsuite
 #' @keywords internal
 updateTargetValues <- function(values, targetValues, sourceExpressions, data) {
-  ospsuite.utils::validateIsSameLength(targetValues, sourceExpressions)
-  ospsuite.utils::validateIsOfType(data, "data.frame")
-  ospsuite.utils::validateIsOfLength(values, nrow(data))
+  validateIsSameLength(targetValues, sourceExpressions)
+  validateIsOfType(data, "data.frame")
+  validateIsOfLength(values, nrow(data))
 
   for (sourceIndex in seq_along(sourceExpressions)) {
     sourceFilter <- eval(sourceExpressions[sourceIndex])
@@ -88,13 +88,13 @@ StudyDesign <- R6::R6Class(
     #' @param simulation `Simulation` object
     #' @return `StudyDesign` class object
     initialize = function(data, population, simulation) {
-      ospsuite.utils::validateIsOfType(population, "Population")
-      ospsuite.utils::validateIsOfType(simulation, "Simulation")
+      validateIsOfType(population, "Population")
+      validateIsOfType(simulation, "Simulation")
       self$targets <- mapStudyDesignTargets(data, population, simulation)
       self$source <- mapStudyDesignSources(data, population, simulation)
 
       for (target in self$targets) {
-        ospsuite.utils::validateIsSameLength(target$values, self$source)
+        validateIsSameLength(target$values, self$source)
       }
     },
 
@@ -128,8 +128,8 @@ StudyDesignTarget <- R6::R6Class(
     #' `values` must be the same length as source condition expressions
     #' @return `StudyDesignTarget` class object
     initialize = function(name, values) {
-      ospsuite.utils::validateIsString(name)
-      ospsuite.utils::validateIsNumeric(values)
+      validateIsString(name)
+      validateIsNumeric(values)
 
       self$name <- name
       self$values <- values
@@ -178,7 +178,7 @@ mapStudyDesignSources <- function(data, population, simulation) {
     sourceExpressionsByColumn <- paste0("data[,'", path, "']", expressionType, values)
     sourceExpressionsByColumn[values %in% NA] <- "TRUE"
 
-    ospsuite.utils::ifNotNull(
+    ifNotNull(
       sourceExpressions,
       sourceExpressions <- paste(sourceExpressions, sourceExpressionsByColumn, sep = " & "),
       sourceExpressions <- sourceExpressionsByColumn
@@ -188,7 +188,7 @@ mapStudyDesignSources <- function(data, population, simulation) {
 }
 
 sourceTypeToExpressionType <- function(sourceType) {
-  ospsuite.utils::validateIsString(sourceType)
+  validateIsString(sourceType)
   expressionType <- NULL
   if (grepl("MIN", sourceType)) {
     expressionType <- " >= "
@@ -200,7 +200,7 @@ sourceTypeToExpressionType <- function(sourceType) {
     expressionType <- " == "
   }
   if (is.null(expressionType)) {
-    ospsuite.utils::validateIsIncluded(sourceType, c("MIN", "MAX", "EQUALS"))
+    validateIsIncluded(sourceType, c("MIN", "MAX", "EQUALS"))
   }
   return(expressionType)
 }

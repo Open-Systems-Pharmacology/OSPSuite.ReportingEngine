@@ -19,11 +19,11 @@ plotDemographyParameters <- function(structureSets,
                                      workflowType = PopulationWorkflowTypes$parallelComparison,
                                      xParameters = getDefaultDemographyXParameters(workflowType),
                                      yParameters = NULL) {
-  ospsuite.utils::validateIsIncluded(workflowType, PopulationWorkflowTypes)
-  ospsuite.utils::validateIsOfType(structureSets, "list")
-  ospsuite.utils::validateIsOfType(c(structureSets), "SimulationStructure")
-  ospsuite.utils::validateIsString(c(xParameters), nullAllowed = TRUE)
-  ospsuite.utils::validateIsString(c(yParameters), nullAllowed = TRUE)
+  validateIsIncluded(workflowType, PopulationWorkflowTypes)
+  validateIsOfType(structureSets, "list")
+  validateIsOfType(c(structureSets), "SimulationStructure")
+  validateIsString(c(xParameters), nullAllowed = TRUE)
+  validateIsString(c(yParameters), nullAllowed = TRUE)
 
   demographyPlots <- list()
   demographyCaptions <- list()
@@ -45,7 +45,7 @@ plotDemographyParameters <- function(structureSets,
     referenceSimulationSetName <- getReferencePopulationName(structureSets)
   }
 
-  if (ospsuite.utils::isOfLength(xParameters, 0)) {
+  if (isOfLength(xParameters, 0)) {
     # Pediatric: comparison histogram
     if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
       for (parameterName in yParameters) {
@@ -280,7 +280,7 @@ DemographyDefaultParameters <- c(ospsuite::StandardPath[c("Age", "Height", "Weig
 #' @examples
 #' getDefaultDemographyXParameters(PopulationWorkflowTypes$pediatric)
 getDefaultDemographyXParameters <- function(workflowType) {
-  ospsuite.utils::validateIsIncluded(workflowType, PopulationWorkflowTypes)
+  validateIsIncluded(workflowType, PopulationWorkflowTypes)
   if (workflowType %in% PopulationWorkflowTypes$pediatric) {
     return(ospsuite::StandardPath$Age)
   }
@@ -297,7 +297,7 @@ getDemographyAggregatedData <- function(data,
   stairstep <- stairstep %||% TRUE
   xParameterBreaks <- bins %||% AggregationConfiguration$bins
   # binningOnQuantiles use data distribution to improve the binning
-  if (ospsuite.utils::isOfLength(bins, 1) & AggregationConfiguration$binUsingQuantiles) {
+  if (isOfLength(bins, 1) & AggregationConfiguration$binUsingQuantiles) {
     xParameterBreaks <- unique(unname(quantile(x = data[, xParameterName], probs = seq(0, 1, length.out = xParameterBreaks))))
   }
   xParameterBins <- cut(data[, xParameterName], breaks = xParameterBreaks)
@@ -360,7 +360,7 @@ getReferencePopulationName <- function(structureSets) {
   allSimulationReferences <- sapply(structureSets, function(structureSet) {
     structureSet$simulationSet$referencePopulation
   })
-  ospsuite.utils::validateIsOfLength(allSimulationReferences[allSimulationReferences], 1)
+  validateIsOfLength(allSimulationReferences[allSimulationReferences], 1)
   referencePopulationName <- structureSets[[which(allSimulationReferences)]]$simulationSet$simulationSetName
   return(referencePopulationName)
 }
@@ -432,7 +432,7 @@ plotDemographyHistogram <- function(data,
 #' @return list of x parameters used for demography range plots
 #' @export
 getXParametersForDemogrpahyPlot <- function(workflow) {
-  ospsuite.utils::validateIsOfType(workflow, "PopulationWorkflow")
+  validateIsOfType(workflow, "PopulationWorkflow")
   return(workflow$plotDemography$xParameters)
 }
 
@@ -442,7 +442,7 @@ getXParametersForDemogrpahyPlot <- function(workflow) {
 #' @importFrom ospsuite.utils %||%
 #' @export
 getYParametersForDemogrpahyPlot <- function(workflow) {
-  ospsuite.utils::validateIsOfType(workflow, "PopulationWorkflow")
+  validateIsOfType(workflow, "PopulationWorkflow")
   return(workflow$plotDemography$yParameters %||% DemographyDefaultParameters)
 }
 
@@ -453,8 +453,8 @@ getYParametersForDemogrpahyPlot <- function(workflow) {
 #' @param parameters list of demography parameters to be used as x-parameters
 #' @export
 setXParametersForDemogrpahyPlot <- function(workflow, parameters) {
-  ospsuite.utils::validateIsOfType(workflow, "PopulationWorkflow")
-  ospsuite.utils::validateIsString(c(parameters), nullAllowed = TRUE)
+  validateIsOfType(workflow, "PopulationWorkflow")
+  validateIsString(c(parameters), nullAllowed = TRUE)
 
   workflow$plotDemography$xParameters <- parameters
 
@@ -488,8 +488,8 @@ addXParametersForDemogrpahyPlot <- function(workflow, parameters) {
 #' @param parameters list of demography parameters to be used as y-parameters
 #' @export
 setYParametersForDemogrpahyPlot <- function(workflow, parameters) {
-  ospsuite.utils::validateIsOfType(workflow, "PopulationWorkflow")
-  ospsuite.utils::validateIsString(c(parameters))
+  validateIsOfType(workflow, "PopulationWorkflow")
+  validateIsString(c(parameters))
 
   workflow$plotDemography$yParameters <- parameters
 

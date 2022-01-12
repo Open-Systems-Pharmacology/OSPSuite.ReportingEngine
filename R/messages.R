@@ -31,7 +31,7 @@ messages <- list(
   },
 
   errorNotIncluded = function(values, parentValues, groupName = NULL) {
-    if (ospsuite.utils::isOfLength(values, 1)) {
+    if (isOfLength(values, 1)) {
       if (!is.null(groupName)) {
         return(paste0(callingFunction(), "'", values, "' is not included in ", groupName, "."))
       }
@@ -44,7 +44,7 @@ messages <- list(
   },
 
   errorNotIncludedInDataset = function(columnNames, dataset, datasetName = NULL) {
-    if (ospsuite.utils::isOfLength(columnNames, 1)) {
+    if (isOfLength(columnNames, 1)) {
       return(paste0(callingFunction(), "'", columnNames, "' column is not present in ", datasetName, " columns: '", paste0(names(dataset), collapse = "', '"), "'."))
     }
     paste0(callingFunction(), "'", paste0(columnNames, collapse = "', '"), "' columns are not all present in ", datasetName, " columns: '", paste0(names(dataset), collapse = "', '"), "'.")

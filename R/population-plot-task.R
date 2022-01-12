@@ -25,7 +25,7 @@ PopulationPlotTask <- R6::R6Class(
                           yParameters = NULL,
                           ...) {
       super$initialize(...)
-      ospsuite.utils::validateIsIncluded(workflowType, PopulationWorkflowTypes)
+      validateIsIncluded(workflowType, PopulationWorkflowTypes)
       self$workflowType <- workflowType
       self$xParameters <- xParameters
       self$yParameters <- yParameters

@@ -4,7 +4,7 @@
 #' @examples
 #' ResidualScales$Linear
 #' ResidualScales$Logarithmic
-ResidualScales <- ospsuite.utils::enum(c("Linear", "Logarithmic"))
+ResidualScales <- enum(c("Linear", "Logarithmic"))
 
 #' @title DataSelectionKeys
 #' @description List of available short keys for observed data selection
@@ -62,17 +62,17 @@ Output <- R6::R6Class(
                           pkParameters = NULL,
                           residualScale = ResidualScales$Logarithmic) {
 
-      ospsuite.utils::validateIsString(path)
-      ospsuite.utils::validateIsOfLength(path, 1)
-      ospsuite.utils::validateIsString(c(displayName, dataUnit, displayUnit, dataDisplayName), nullAllowed = TRUE)
-      ospsuite.utils::validateIsIncluded(residualScale, ResidualScales)
-      ospsuite.utils::ifNotNull(displayName, ospsuite.utils::validateIsOfLength(displayName, 1))
-      ospsuite.utils::ifNotNull(displayUnit, ospsuite.utils::validateIsOfLength(displayUnit, 1))
-      ospsuite.utils::ifNotNull(dataUnit, ospsuite.utils::validateIsOfLength(dataUnit, 1))
-      ospsuite.utils::ifNotNull(dataDisplayName, ospsuite.utils::validateIsOfLength(dataDisplayName, 1))
-      ospsuite.utils::validateIsOfType(dataSelection, c("character", "expression"), nullAllowed = TRUE)
-      ospsuite.utils::ifNotNull(dataSelection, ospsuite.utils::validateIsOfLength(dataSelection, 1))
-      ospsuite.utils::validateIsOfType(c(pkParameters), c("character", "PkParameterInfo"), nullAllowed = TRUE)
+      validateIsString(path)
+      validateIsOfLength(path, 1)
+      validateIsString(c(displayName, dataUnit, displayUnit, dataDisplayName), nullAllowed = TRUE)
+      validateIsIncluded(residualScale, ResidualScales)
+      ifNotNull(displayName, validateIsOfLength(displayName, 1))
+      ifNotNull(displayUnit, validateIsOfLength(displayUnit, 1))
+      ifNotNull(dataUnit, validateIsOfLength(dataUnit, 1))
+      ifNotNull(dataDisplayName, validateIsOfLength(dataDisplayName, 1))
+      validateIsOfType(dataSelection, c("character", "expression"), nullAllowed = TRUE)
+      ifNotNull(dataSelection, validateIsOfLength(dataSelection, 1))
+      validateIsOfType(c(pkParameters), c("character", "PkParameterInfo"), nullAllowed = TRUE)
 
       self$path <- path
       self$displayName <- displayName %||% path
@@ -84,7 +84,7 @@ Output <- R6::R6Class(
       # If filter is null, assumes that user won't get any observed data
       self$dataSelection <- dataSelection
       # Ensure that dataFilter is of type expression
-      if (ospsuite.utils::isOfType(self$dataSelection, "character")) {
+      if (isOfType(self$dataSelection, "character")) {
         if (self$dataSelection %in% DataSelectionKeys$ALL) {
           self$dataSelection <- "TRUE"
         }
@@ -95,7 +95,7 @@ Output <- R6::R6Class(
       }
 
       self$pkParameters <- c(pkParameters)
-      if (ospsuite.utils::isOfType(self$pkParameters, "character")) {
+      if (isOfType(self$pkParameters, "character")) {
         self$pkParameters <- sapply(self$pkParameters, function(pkParameter) {
           PkParameterInfo$new(pkParameter)
         })
