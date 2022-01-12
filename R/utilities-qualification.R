@@ -360,7 +360,7 @@ startQualificationRunner <- function(qualificationRunnerFolder,
 
   options <- c(
     ospsuite.utils::ifNotNull(pkSimPortableFolder, paste0("-p ", pkSimPortableFolder)),
-    ospsuite.utils::ifNotNull(configurationPlanFile, paste0('-n "', configurationPlanName, '"')),
+    ospsuite.utils::ifNotNull(configurationPlanName, paste0('-n "', configurationPlanName, '"')),
     switch(as.character(overwrite), "TRUE" = "-f", NULL),
     ospsuite.utils::ifNotNull(logFile, paste0('-l "', logFile, '"')),
     ospsuite.utils::ifNotNull(logLevel, paste0("--logLevel ", logLevel)),
