@@ -41,7 +41,7 @@ MeanModelWorkflow <- R6::R6Class(
       self$plotPKParameters <- loadPlotPKParametersTask(self)
       self$plotSensitivity <- loadPlotSensitivityTask(self)
 
-      self$taskNames <- ospsuite.utils::enum(self$getAllTasks())
+      self$taskNames <- enum(self$getAllTasks())
     },
 
     #' @description

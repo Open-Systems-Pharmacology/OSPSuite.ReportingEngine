@@ -30,11 +30,11 @@ SensitivityPlotSettings <- R6::R6Class(
                           xLabel = "Sensitivity",
                           yLabel = NULL,
                           colorPalette = "Spectral") {
-      ospsuite.utils::validateIsInteger(maximalParametersPerSensitivityPlot, nullAllowed = TRUE)
-      ospsuite.utils::validateIsInteger(maxLinesPerParameter, nullAllowed = TRUE)
-      ospsuite.utils::validateIsInteger(maxWidthPerParameter, nullAllowed = TRUE)
-      ospsuite.utils::validateIsNumeric(xAxisFontSize, nullAllowed = TRUE)
-      ospsuite.utils::validateIsNumeric(yAxisFontSize, nullAllowed = TRUE)
+      validateIsInteger(maximalParametersPerSensitivityPlot, nullAllowed = TRUE)
+      validateIsInteger(maxLinesPerParameter, nullAllowed = TRUE)
+      validateIsInteger(maxWidthPerParameter, nullAllowed = TRUE)
+      validateIsNumeric(xAxisFontSize, nullAllowed = TRUE)
+      validateIsNumeric(yAxisFontSize, nullAllowed = TRUE)
 
       private$.totalSensitivityThreshold <- getDefaultTotalSensitivityThreshold(
         totalSensitivityThreshold = totalSensitivityThreshold,
@@ -72,7 +72,7 @@ SensitivityPlotSettings <- R6::R6Class(
         private$.maximalParametersPerSensitivityPlot
       } else {
         if (!is.null(value)) {
-          ospsuite.utils::validateIsInteger(value)
+          validateIsInteger(value)
           private$.maximalParametersPerSensitivityPlot <- value
         }
       }
@@ -84,7 +84,7 @@ SensitivityPlotSettings <- R6::R6Class(
       if (missing(value)) {
         private$.plotConfiguration
       } else {
-        ospsuite.utils::validateIsOfType(value, "PlotConfiguration", nullAllowed = TRUE)
+        validateIsOfType(value, "PlotConfiguration", nullAllowed = TRUE)
         private$.plotConfiguration <- value
       }
     },
@@ -95,8 +95,8 @@ SensitivityPlotSettings <- R6::R6Class(
       if (missing(value)) {
         private$.xAxisFontSize
       } else {
-        ospsuite.utils::validateIsNumeric(object = value, nullAllowed = FALSE)
-        ospsuite.utils::validateIsPositive(object = value, nullAllowed = FALSE)
+        validateIsNumeric(object = value, nullAllowed = FALSE)
+        validateIsPositive(object = value, nullAllowed = FALSE)
         private$.xAxisFontSize <- value
       }
     },
@@ -107,8 +107,8 @@ SensitivityPlotSettings <- R6::R6Class(
       if (missing(value)) {
         private$.yAxisFontSize
       } else {
-        ospsuite.utils::validateIsNumeric(object = value, nullAllowed = FALSE)
-        ospsuite.utils::validateIsPositive(object = value, nullAllowed = FALSE)
+        validateIsNumeric(object = value, nullAllowed = FALSE)
+        validateIsPositive(object = value, nullAllowed = FALSE)
         private$.yAxisFontSize <- value
       }
     },
@@ -119,7 +119,7 @@ SensitivityPlotSettings <- R6::R6Class(
       if (missing(value)) {
         private$.xLabel
       } else {
-        ospsuite.utils::validateIsString(value, nullAllowed = TRUE)
+        validateIsString(value, nullAllowed = TRUE)
         private$.xLabel <- value
       }
     },
@@ -130,7 +130,7 @@ SensitivityPlotSettings <- R6::R6Class(
       if (missing(value)) {
         private$.yLabel
       } else {
-        ospsuite.utils::validateIsString(value, nullAllowed = TRUE)
+        validateIsString(value, nullAllowed = TRUE)
         private$.yLabel <- value
       }
     },
@@ -141,7 +141,7 @@ SensitivityPlotSettings <- R6::R6Class(
       if (missing(value)) {
         private$.colorPalette
       } else {
-        ospsuite.utils::validateIsOfType(value, c("character", "numeric"), nullAllowed = TRUE)
+        validateIsOfType(value, c("character", "numeric"), nullAllowed = TRUE)
         private$.colorPalette <- value
       }
     },
@@ -151,7 +151,7 @@ SensitivityPlotSettings <- R6::R6Class(
       if (missing(value)) {
         private$.maxLinesPerParameter
       } else {
-        ospsuite.utils::validateIsInteger(value, nullAllowed = TRUE)
+        validateIsInteger(value, nullAllowed = TRUE)
         private$.maxLinesPerParameter <- value %||% private$.maxLinesPerParameter
       }
     },
@@ -161,7 +161,7 @@ SensitivityPlotSettings <- R6::R6Class(
       if (missing(value)) {
         private$.maxWidthPerParameter
       } else {
-        ospsuite.utils::validateIsInteger(value, nullAllowed = TRUE)
+        validateIsInteger(value, nullAllowed = TRUE)
         private$.maxWidthPerParameter <- value %||% private$.maxWidthPerParameter
       }
     }

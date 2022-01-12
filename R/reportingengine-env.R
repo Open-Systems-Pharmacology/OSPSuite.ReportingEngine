@@ -81,17 +81,17 @@ setWatermarkConfiguration <- function(watermark = NULL) {
 #' setDefaultPlotFormat(format = "pdf")
 #' setDefaultPlotFormat(width = 16, height = 9, units = "cm", dpi = 300)
 setDefaultPlotFormat <- function(format = NULL, width = NULL, height = NULL, units = NULL, dpi = NULL) {
-  ospsuite.utils::validateIsNumeric(width, nullAllowed = TRUE)
-  ospsuite.utils::validateIsNumeric(height, nullAllowed = TRUE)
-  ospsuite.utils::validateIsNumeric(dpi, nullAllowed = TRUE)
-  ospsuite.utils::validateIsIncluded(units, c("in", "cm", "mm", "px"), nullAllowed = TRUE)
+  validateIsNumeric(width, nullAllowed = TRUE)
+  validateIsNumeric(height, nullAllowed = TRUE)
+  validateIsNumeric(dpi, nullAllowed = TRUE)
+  validateIsIncluded(units, c("in", "cm", "mm", "px"), nullAllowed = TRUE)
   reEnv$defaultPlotFormat$format <- format %||% reEnv$defaultPlotFormat$format
   reEnv$defaultPlotFormat$width <- width %||% reEnv$defaultPlotFormat$width
   reEnv$defaultPlotFormat$height <- height %||% reEnv$defaultPlotFormat$height
   reEnv$defaultPlotFormat$dpi <- dpi %||% reEnv$defaultPlotFormat$dpi
   # ggplot2 version 3.3.0 does not include pixels yet
   # Convert width and height back into inches in case of units as pixels
-  if (ospsuite.utils::isIncluded(units, "px")) {
+  if (isIncluded(units, "px")) {
     units <- "in"
     unitConversionFactor <- grDevices::dev.size("in") / grDevices::dev.size("px")
     reEnv$defaultPlotFormat$width <- reEnv$defaultPlotFormat$width * unitConversionFactor[1]
@@ -117,7 +117,7 @@ setPlotFormat <- function(format = NULL, width = NULL, height = NULL, units = NU
 #' ApplicationRanges$total
 #' ApplicationRanges$firstApplication
 #' ApplicationRanges$lastApplication
-ApplicationRanges <- ospsuite.utils::enum(c("total", "firstApplication", "lastApplication"))
+ApplicationRanges <- enum(c("total", "firstApplication", "lastApplication"))
 
 #' @title setDefaultNumericFormat
 #' @description Set default format for numeric values output in reports
@@ -128,8 +128,8 @@ ApplicationRanges <- ospsuite.utils::enum(c("total", "firstApplication", "lastAp
 #' @examples
 #' setDefaultNumericFormat(digits = 2, scientific = TRUE)
 setDefaultNumericFormat <- function(digits = NULL, scientific = NULL) {
-  ospsuite.utils::validateIsInteger(digits, nullAllowed = TRUE)
-  ospsuite.utils::validateIsLogical(scientific, nullAllowed = TRUE)
+  validateIsInteger(digits, nullAllowed = TRUE)
+  validateIsLogical(scientific, nullAllowed = TRUE)
 
   reEnv$formatNumericsDigits <- digits %||% reEnv$formatNumericsDigits
   reEnv$formatNumericsScientific <- scientific %||% reEnv$formatNumericsScientific
@@ -143,7 +143,7 @@ setDefaultNumericFormat <- function(digits = NULL, scientific = NULL) {
 getDefaultRETheme <- function(){
   # Get reporting engine theme from its json file properties
   reThemeFile <- system.file("extdata", "re-theme.json", package = "ospsuite.reportingengine")
-  if(!ospsuite.utils::isIncluded(reThemeFile, "")){
+  if(!isIncluded(reThemeFile, "")){
     return(tlf::loadThemeFromJson(reThemeFile))
   }
   # If not found, e.g. before the package is built, use a tlf template theme
@@ -162,7 +162,7 @@ reEnv$theme <- getDefaultRETheme()
 #' @export
 #' @importFrom ospsuite.utils %||%
 setDefaultTheme <- function(theme = NULL) {
-  ospsuite.utils::validateIsOfType(theme, "Theme", nullAllowed = TRUE)
+  validateIsOfType(theme, "Theme", nullAllowed = TRUE)
   reEnv$theme <- theme %||% getDefaultRETheme()
   tlf::useTheme(reEnv$theme)
 }
@@ -182,7 +182,7 @@ setDefaultThemeFromJson <- function(jsonFile) {
 #' @examples
 #' setDefaultBins(10)
 setDefaultBins <- function(bins) {
-  ospsuite.utils::validateIsNumeric(bins)
+  validateIsNumeric(bins)
   reEnv$defaultBins <- bins
 }
 
@@ -192,7 +192,7 @@ setDefaultBins <- function(bins) {
 #' @examples
 #' setDefaultStairstep(TRUE)
 setDefaultStairstep <- function(stairstep) {
-  ospsuite.utils::validateIsLogical(stairstep)
+  validateIsLogical(stairstep)
   reEnv$defaultStairstep <- stairstep
 }
 
@@ -203,6 +203,6 @@ setDefaultStairstep <- function(stairstep) {
 #' @examples
 #' setDefaultAutoAxisLimitMargin(0.1)
 setDefaultAutoAxisLimitMargin <- function(margin) {
-  ospsuite.utils::validateIsNumeric(margin)
+  validateIsNumeric(margin)
   reEnv$autoAxisLimitMargin <- margin
 }

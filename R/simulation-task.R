@@ -27,7 +27,7 @@ SimulationTask <- R6::R6Class(
       if (is.null(settings)) {
         self$settings <- SimulationSettings$new()
       } else {
-        ospsuite.utils::validateIsOfType(object = settings, SimulationSettings)
+        validateIsOfType(object = settings, SimulationSettings)
         self$settings <- settings
       }
       self$getTaskResults <- getTaskResults

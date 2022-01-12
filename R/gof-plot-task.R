@@ -25,7 +25,7 @@ GofPlotTask <- R6::R6Class(
         listOfPlots <- taskResults$plots[[timeRange]]
         listOfPlotCaptions <- taskResults$captions[[timeRange]]
 
-        if (ospsuite.utils::isOfLength(listOfPlots, 0)) {
+        if (isOfLength(listOfPlots, 0)) {
           next
         }
         if (hasMultipleApplications) {
@@ -55,7 +55,7 @@ GofPlotTask <- R6::R6Class(
             logTypes = LogTypes$Debug
           )
 
-          if (!ospsuite.utils::isOfLength(listOfPlotCaptions[[plotName]], 0)) {
+          if (!isOfLength(listOfPlotCaptions[[plotName]], 0)) {
             addTextChunk(self$fileName, paste0("Figure: ", listOfPlotCaptions[[plotName]]), logFolder = self$workflowFolder)
           }
 
@@ -117,7 +117,7 @@ GofPlotTask <- R6::R6Class(
       referencePopulationIndex <- which(sapply(structureSets, function(structureSet) {
         isTRUE(structureSet$simulationSet$referencePopulation)
       }))
-      if (ospsuite.utils::isOfLength(referencePopulationIndex, 1)) {
+      if (isOfLength(referencePopulationIndex, 1)) {
         referenceSet <- structureSets[referencePopulationIndex]
         structureSets <- c(
           referenceSet,

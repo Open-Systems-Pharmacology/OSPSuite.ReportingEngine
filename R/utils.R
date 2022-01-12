@@ -7,12 +7,12 @@
 #' Calculate residuals between vectors `simulatedData` and `observedData` according the the residual scale specified in `residualScale`
 #' @export
 calculateResiduals <- function(simulatedData, observedData, residualScale) {
-  ospsuite.utils::validateIsOfLength(object = simulatedData, nbElements = length(observedData))
+  validateIsOfLength(object = simulatedData, nbElements = length(observedData))
   residualValues <- rep(NA, length(observedData))
-  if (ospsuite.utils::isIncluded(residualScale, ResidualScales$Logarithmic)) {
+  if (isIncluded(residualScale, ResidualScales$Logarithmic)) {
     residualValues <- log(observedData) - log(simulatedData)
   }
-  if (ospsuite.utils::isIncluded(residualScale, ResidualScales$Linear)) {
+  if (isIncluded(residualScale, ResidualScales$Linear)) {
     residualValues <- (observedData - simulatedData)
   }
 }
@@ -52,7 +52,7 @@ ifEqual <- function(x, y, outputIfEqual, outputIfNotEqual = NULL) {
 #' otherwise, output outputIfNotIncluded
 #' @keywords internal
 ifIncluded <- function(x, y, outputIfIncluded, outputIfNotIncluded = NULL) {
-  if (ospsuite.utils::isIncluded(x, y)) {
+  if (isIncluded(x, y)) {
     outputIfIncluded
   } else {
     outputIfNotIncluded
@@ -172,7 +172,7 @@ loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE)
 #' @export
 #' @import ospsuite
 loadWorkflowPopulation <- function(simulationSet) {
-  ospsuite.utils::validateIsOfType(simulationSet, "PopulationSimulationSet")
+  validateIsOfType(simulationSet, "PopulationSimulationSet")
   population <- ospsuite::loadPopulation(simulationSet$populationFile)
   simulation <- loadSimulationWithUpdatedPaths(simulationSet)
 
@@ -241,11 +241,11 @@ removeMissingValues <- function(data, dataMapping = NULL, logFolder = getwd()) {
 #' @return Names of pkParameters in `output`
 #' @export
 getPKParametersInOutput <- function(output) {
-  ospsuite.utils::validateIsOfType(output, "Output")
+  validateIsOfType(output, "Output")
   pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
     pkParameterInfo$pkParameter
   })
-  if (ospsuite.utils::isOfLength(pkParameters, 0)) {
+  if (isOfLength(pkParameters, 0)) {
     return(NA)
   }
   return(pkParameters)
@@ -256,11 +256,11 @@ getPKParametersInOutput <- function(output) {
 #' @return Names of pkParameters in `output`
 #' @keywords internal
 getPKParameterGroupsInOutput <- function(output) {
-  ospsuite.utils::validateIsOfType(output, "Output")
+  validateIsOfType(output, "Output")
   pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
     pkParameterInfo$group
   })
-  if (ospsuite.utils::isOfLength(pkParameters, 0)) {
+  if (isOfLength(pkParameters, 0)) {
     return(NA)
   }
   return(pkParameters)
@@ -271,7 +271,7 @@ getPKParameterGroupsInOutput <- function(output) {
 #' @return Path names of outputs in `simulationSet`
 #' @export
 getOutputPathsInSimulationSet <- function(simulationSet) {
-  ospsuite.utils::validateIsOfType(simulationSet, "SimulationSet")
+  validateIsOfType(simulationSet, "SimulationSet")
   return(sapply(simulationSet$outputs, function(output) {
     output$path
   }))
@@ -282,7 +282,7 @@ getOutputPathsInSimulationSet <- function(simulationSet) {
 #' @return Data.frame with \code{path} and \code{pkParameter} in `simulationSet`
 #' @export
 getPKParametersInSimulationSet <- function(simulationSet) {
-  ospsuite.utils::validateIsOfType(simulationSet, "SimulationSet")
+  validateIsOfType(simulationSet, "SimulationSet")
   pkParametersTable <- data.frame()
   for (output in simulationSet$outputs) {
     pkParametersTable <- rbind.data.frame(
@@ -338,7 +338,7 @@ getSimulationParameterDisplayPaths <- function(parameterPaths, simulation, dicti
   for (parameterIndex in seq_along(parameterPaths)) {
     # Get the index of parameter in dictionary if defined
     dictionaryIndex <- which(parameterPaths[parameterIndex] %in% dictionary$parameter)
-    if (!ospsuite.utils::isOfLength(dictionaryIndex, 0)) {
+    if (!isOfLength(dictionaryIndex, 0)) {
       # Since dictionaryIndex is not null, use first element
       # user should already have a warning if a parameter path is defined
       # more than once in workflow$parameterDisplayPaths
@@ -357,8 +357,8 @@ getSimulationParameterDisplayPaths <- function(parameterPaths, simulation, dicti
 #' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
 #' @export
 setWorkflowParameterDisplayPathsFromFile <- function(fileName, workflow) {
-  ospsuite.utils::validateIsOfType(workflow, "Workflow")
-  ospsuite.utils::validateIsString(fileName)
+  validateIsOfType(workflow, "Workflow")
+  validateIsString(fileName)
   validateIsFileExtension(fileName, "csv")
   parameterDisplayPaths <- readObservedDataFile(fileName)
   workflow$setParameterDisplayPaths(parameterDisplayPaths)
@@ -373,7 +373,7 @@ setWorkflowParameterDisplayPathsFromFile <- function(fileName, workflow) {
 #' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
 #' @export
 setWorkflowParameterDisplayPaths <- function(parameterDisplayPaths, workflow) {
-  ospsuite.utils::validateIsOfType(workflow, "Workflow")
+  validateIsOfType(workflow, "Workflow")
   workflow$setParameterDisplayPaths(parameterDisplayPaths)
   return(invisible())
 }
@@ -384,7 +384,7 @@ setWorkflowParameterDisplayPaths <- function(parameterDisplayPaths, workflow) {
 #' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
 #' @export
 getWorkflowParameterDisplayPaths <- function(workflow) {
-  ospsuite.utils::validateIsOfType(workflow, "Workflow")
+  validateIsOfType(workflow, "Workflow")
   return(workflow$getParameterDisplayPaths())
 }
 
