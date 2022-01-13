@@ -13,6 +13,8 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 
     plotDDIMetadata$title <- plot$Title
     plotDDIMetadata$sectionID <- plot$SectionId
+    validateIsIncluded(values = plot$Subunits, parentValues = names(ddiSubplotTypes))
+    plotDDIMetadata$subunits <- plot$Subunits
     plotDDIMetadata$artifacts <- plot$Artifacts
     plotDDIMetadata$plotSettings <- plot
 
@@ -458,12 +460,12 @@ plotQualificationDDIs <- function(configurationPlan,
     dataframe <- ddiData[[plotIndex]]$dataframe
     metadata <- ddiData[[plotIndex]]$metadata
     sectionID <- metadata$sectionID
+    subunits <- metadata$subunits
     sectionLevel <- configurationPlan$getSectionLevel(id = sectionID)
     idPrefix <- paste("DDIRatio", plotIndex, sep = "-")
     ddiResults <- c(ddiResults, getDDISection(dataframe, metadata, sectionID, idPrefix))
 
     if ("Table" %in% metadata$artifacts){
-
       ddiTable <- saveTaskResults(
         id = "DDI Table",
         sectionId = sectionID,
@@ -474,8 +476,9 @@ plotQualificationDDIs <- function(configurationPlan,
       ddiResults <- c(ddiResults, ddiTable)
     }
 
-    for (subplotType in names(ddiSubplotTypes)) {
-      subheading <- saveTaskResults(id = subplotType, sectionId = sectionID, textChunk = paste(paste0(rep("#", sectionLevel + 1), collapse = ""), ddiSubplotTypes[[subplotType]]), includeTextChunk = TRUE)
+    for (subplotTypeName in subunits) {
+      subplotType <- ddiSubplotTypes[[subplotTypeName]]
+      subheading <- saveTaskResults(id = subplotType, sectionId = sectionID, textChunk = paste(paste0(rep("#", sectionLevel + 1), collapse = ""), subplotTypeName), includeTextChunk = TRUE)
       ddiResults <- c(ddiResults, subheading)
       subplotTypeLevels <- unique(dataframe[[subplotType]])
       for (subplotTypeLevel in subplotTypeLevels) {
@@ -525,12 +528,12 @@ ddiPlotTypeSpecifications <- list(
 )
 
 
-#' Named list of of DDI subplot types
+#' Allowed DDI subplot types
 #' @keywords internal
 ddiSubplotTypes <- list(
-  "mechanism" = "Mechanism",
-  "perpetrator" = "Perpetrator",
-  "victim" = "Victim"
+  "Mechanism" = "mechanism",
+  "Perpetrator" = "perpetrator",
+  "Victim" = "victim"
 )
 
 
