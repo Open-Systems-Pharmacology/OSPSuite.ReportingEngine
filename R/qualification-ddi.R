@@ -50,7 +50,6 @@ getQualificationDDIPlotData <- function(configurationPlan) {
         validateIsIncluded(observedDataRecordId, observedDataFrame$ID)
 
         ratioList <- list()
-
         for (pkParameter in pkParameters) {
           ratioList[[pkParameter]] <- list()
           validateIsIncluded(ddiPKRatioColumnName[[pkParameter]], names(observedDataFrame))
@@ -532,4 +531,14 @@ ddiSubplotTypes <- list(
   "mechanism" = "Mechanism",
   "perpetrator" = "Perpetrator",
   "victim" = "Victim"
+)
+
+
+#' Column names to check in observed data based on Configuration Plan PK Parameter
+#' @keywords internal
+ddiPKRatioColumnName <- list(
+  "AUC" = "AUCR Avg",
+  "AUC_tEnd" = "AUCR Avg",
+  "CMAX" = "CmaxR Avg",
+  "C_max" = "CmaxR Avg"
 )
