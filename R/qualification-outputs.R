@@ -259,9 +259,4 @@ pkDictionaryQualificationOSP <- c(enum(ospsuite::allPKParameterNames()),
                                   list(AUC = "AUC_tEnd",
                                        CMAX = "C_max"))
 
-#' Column names to check in observed data based on Configuration Plan PK Parameter
-#' @keywords internal
-ddiPKRatioColumnName <- list(
-  AUC = "AUCR Avg",
-  CMAX = "CmaxR Avg"
-)
+
