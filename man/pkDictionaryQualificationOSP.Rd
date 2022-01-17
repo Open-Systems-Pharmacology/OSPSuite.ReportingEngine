@@ -5,7 +5,7 @@
 \alias{pkDictionaryQualificationOSP}
 \title{Dictionary for `ospsuite` PK parameters defined by Configuration Plan}
 \format{
-An object of class \code{list} of length 3.
+An object of class \code{list} of length 35.
 }
 \usage{
 pkDictionaryQualificationOSP

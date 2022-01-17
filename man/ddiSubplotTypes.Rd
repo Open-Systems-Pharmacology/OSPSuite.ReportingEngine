@@ -3,7 +3,7 @@
 \docType{data}
 \name{ddiSubplotTypes}
 \alias{ddiSubplotTypes}
-\title{Named list of of DDI subplot types}
+\title{Allowed DDI subplot types}
 \format{
 An object of class \code{list} of length 3.
 }
@@ -11,6 +11,6 @@ An object of class \code{list} of length 3.
 ddiSubplotTypes
 }
 \description{
-Named list of of DDI subplot types
+Allowed DDI subplot types
 }
 \keyword{internal}
