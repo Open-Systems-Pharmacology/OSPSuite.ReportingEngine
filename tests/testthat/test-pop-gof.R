@@ -12,17 +12,17 @@ refOutputTimeProfileSelectObs <- getTestDataFilePath("pop-gof/Select-Obs-simulat
 refOutputResidualsAllObs <- getTestDataFilePath("pop-gof/All-Obs-residuals.csv")
 refOutputResidualsSelectObs <- getTestDataFilePath("pop-gof/Select-Obs-residuals.csv")
 
-refWorkflowStructure <- sort(c(
+refWorkflowStructure <- c(
   "log-debug.txt", "log-info.txt",
   "Report-word.md", "Report.docx", "Report.md",
   "SimulationResults", "TimeProfiles"
-))
-timeProfileStructureNoObs <- sort(c(
+)
+timeProfileStructureNoObs <- c(
   "A-timeProfile-Concentration-total.png",
   "A-simulatedData.csv",
   "A-timeProfileLog-Concentration-total.png"
-))
-timeProfileStructureObs <- sort(c(
+)
+timeProfileStructureObs <- c(
   timeProfileStructureNoObs,
   "A-obsVsPred-Concentration-total.png",
   "A-obsVsPredLog-Concentration-total.png",
@@ -34,7 +34,7 @@ timeProfileStructureObs <- sort(c(
   "residuals-histogram.png",
   "residuals-qqplot.png",
   "residuals.csv"
-))
+)
 
 workflowFolderNoObs1 <- "Results-No-Obs-1"
 workflowFolderNoObs2 <- "Results-No-Obs-2"
@@ -119,20 +119,20 @@ workflowAllObs$runWorkflow()
 workflowSelectObs$runWorkflow()
 
 test_that("Workflow structure includes appropriate files and folders", {
-  expect_equal(list.files(workflowNoObs1$workflowFolder), refWorkflowStructure)
-  expect_equal(list.files(workflowNoObs2$workflowFolder), refWorkflowStructure)
-  expect_equal(list.files(workflowNoObs3$workflowFolder), refWorkflowStructure)
+  expect_setequal(list.files(workflowNoObs1$workflowFolder), refWorkflowStructure)
+  expect_setequal(list.files(workflowNoObs2$workflowFolder), refWorkflowStructure)
+  expect_setequal(list.files(workflowNoObs3$workflowFolder), refWorkflowStructure)
   # One value from obs is 0, log(0)=-Inf is removed with a warning written in log-error.txt
-  expect_equal(list.files(workflowAllObs$workflowFolder), sort(c("log-error.txt", refWorkflowStructure)))
-  expect_equal(list.files(workflowSelectObs$workflowFolder), refWorkflowStructure)
+  expect_setequal(list.files(workflowAllObs$workflowFolder), c("log-error.txt", refWorkflowStructure))
+  expect_setequal(list.files(workflowSelectObs$workflowFolder), refWorkflowStructure)
 })
 
 test_that("Time profile directory includes correct files and folders", {
-  expect_equal(list.files(file.path(workflowNoObs1$workflowFolder, "TimeProfiles")), timeProfileStructureNoObs)
-  expect_equal(list.files(file.path(workflowNoObs2$workflowFolder, "TimeProfiles")), timeProfileStructureNoObs)
-  expect_equal(list.files(file.path(workflowNoObs3$workflowFolder, "TimeProfiles")), timeProfileStructureNoObs)
-  expect_equal(list.files(file.path(workflowAllObs$workflowFolder, "TimeProfiles")), timeProfileStructureObs)
-  expect_equal(list.files(file.path(workflowSelectObs$workflowFolder, "TimeProfiles")), timeProfileStructureObs)
+  expect_setequal(list.files(file.path(workflowNoObs1$workflowFolder, "TimeProfiles")), timeProfileStructureNoObs)
+  expect_setequal(list.files(file.path(workflowNoObs2$workflowFolder, "TimeProfiles")), timeProfileStructureNoObs)
+  expect_setequal(list.files(file.path(workflowNoObs3$workflowFolder, "TimeProfiles")), timeProfileStructureNoObs)
+  expect_setequal(list.files(file.path(workflowAllObs$workflowFolder, "TimeProfiles")), timeProfileStructureObs)
+  expect_setequal(list.files(file.path(workflowSelectObs$workflowFolder, "TimeProfiles")), timeProfileStructureObs)
 })
 
 test_that("Saved time profile data and residuals includes the correct data", {
