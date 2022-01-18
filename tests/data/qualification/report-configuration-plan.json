@@ -123,7 +123,7 @@
           "Dimension": "Age",
           "Type": "X",
           "GridLines": false,
-          "Scaling": "Log"
+          "Scaling": "Linear"
         },
         {
           "Unit": "",
