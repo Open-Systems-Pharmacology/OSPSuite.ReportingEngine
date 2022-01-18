@@ -1,0 +1,21 @@
+﻿"QuantityPath","Parameter","PKParameter","Value"
+"Organism|A|Concentration in container","Volume","C_max",-1.00286847278814
+"Organism|A|Concentration in container","p1","C_max",0.418537912325968
+"Organism|A|Concentration in container","p2","C_max",0.581461987889784
+"Organism|A|Concentration in container","p3","C_max",0.121213512144042
+"Organism|A|Concentration in container","Volume","t_max",0
+"Organism|A|Concentration in container","p1","t_max",0
+"Organism|A|Concentration in container","p2","t_max",0
+"Organism|A|Concentration in container","p3","t_max",0
+"Organism|A|Concentration in container","Volume","C_tEnd",-1.00286847278814
+"Organism|A|Concentration in container","p1","C_tEnd",0.418537912325968
+"Organism|A|Concentration in container","p2","C_tEnd",0.581461987889784
+"Organism|A|Concentration in container","p3","C_tEnd",0.121213512144042
+"Organism|A|Concentration in container","Volume","AUC_tEnd",-1.00286792244997
+"Organism|A|Concentration in container","p1","AUC_tEnd",0.50842483598389
+"Organism|A|Concentration in container","p2","AUC_tEnd",0.491575207111332
+"Organism|A|Concentration in container","p3","AUC_tEnd",0.214905060361755
+"Organism|A|Concentration in container","Volume","Thalf",0
+"Organism|A|Concentration in container","p1","Thalf",0.419415334224709
+"Organism|A|Concentration in container","p2","Thalf",-0.420713119653046
+"Organism|A|Concentration in container","p3","Thalf",1.72829735583313
