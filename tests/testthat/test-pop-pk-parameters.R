@@ -14,16 +14,16 @@ refOutputRatioAUC <- getTestDataFilePath("pop-pk/Plasma-AUC_tEnd-ratio.csv")
 updatePKParameter("C_max", displayName = "C_max", displayUnit = "µmol/l")
 updatePKParameter("AUC_tEnd", displayName = "AUC_tEnd", displayUnit = "µmol*min/l")
 
-refWorkflowStructure <- sort(c(
+refWorkflowStructure <- c(
   "log-debug.txt", "log-info.txt",
   "Report-word.md", "Report.docx", "Report.md",
   "SimulationResults", "PKAnalysisResults", "PKAnalysis"
-))
+)
 
-pkParametersStructure <- sort(c(
+pkParametersStructure <- c(
   paste("Plasma (Peripheral Venous Blood)-AUC_tEnd", c(".csv", ".png", "-log.png"), sep = ""),
   paste("Plasma (Peripheral Venous Blood)-C_max", c(".csv", ".png", "-log.png"), sep = "")
-))
+)
 
 pkParametersStructurePeds <- pkParametersStructure
 for (popName in c("Adults", "Pediatric", "Pediatric-vs-ref")) {
@@ -35,13 +35,12 @@ for (popName in c("Adults", "Pediatric", "Pediatric-vs-ref")) {
     )
   }
 }
-pkParametersStructurePeds <- sort(pkParametersStructurePeds)
 
-pkParametersStructureRatio <- sort(c(
+pkParametersStructureRatio <- c(
   pkParametersStructure,
   paste("Plasma (Peripheral Venous Blood)-AUC_tEnd", "-ratio", c(".csv", ".png", "-log.png"), sep = ""),
   paste("Plasma (Peripheral Venous Blood)-C_max", "-ratio", c(".csv", ".png", "-log.png"), sep = "")
-))
+)
 
 setPeds <- PopulationSimulationSet$new(
   simulationSetName = "Pediatric",
@@ -94,15 +93,15 @@ workflowParallel$runWorkflow()
 workflowRatio$runWorkflow()
 
 test_that("Workflows generate appropriate files and folders", {
-  expect_equal(list.files(workflowPediatric$workflowFolder), refWorkflowStructure)
-  expect_equal(list.files(workflowParallel$workflowFolder), refWorkflowStructure)
-  expect_equal(list.files(workflowRatio$workflowFolder), refWorkflowStructure)
+  expect_setequal(list.files(workflowPediatric$workflowFolder), refWorkflowStructure)
+  expect_setequal(list.files(workflowParallel$workflowFolder), refWorkflowStructure)
+  expect_setequal(list.files(workflowRatio$workflowFolder), refWorkflowStructure)
 })
 
 test_that("PKAnalysis directory includes appropriate files and folders", {
-  expect_equal(sort(list.files(file.path(workflowPediatric$workflowFolder, "PKAnalysis"))), sort(pkParametersStructurePeds))
-  expect_equal(sort(list.files(file.path(workflowParallel$workflowFolder, "PKAnalysis"))), sort(pkParametersStructure))
-  expect_equal(sort(list.files(file.path(workflowRatio$workflowFolder, "PKAnalysis"))), sort(pkParametersStructureRatio))
+  expect_setequal(list.files(file.path(workflowPediatric$workflowFolder, "PKAnalysis")), pkParametersStructurePeds)
+  expect_setequal(list.files(file.path(workflowParallel$workflowFolder, "PKAnalysis")), pkParametersStructure)
+  expect_setequal(list.files(file.path(workflowRatio$workflowFolder, "PKAnalysis")), pkParametersStructureRatio)
 })
 
 test_that("Saved PK parameters data have correct values", {

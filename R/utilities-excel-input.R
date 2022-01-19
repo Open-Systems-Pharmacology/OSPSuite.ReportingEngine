@@ -31,7 +31,7 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
 
   inputSections <- readxl::excel_sheets(excelFile)
   # Check for mandotory input sections
-  validateIsIncluded(c(StandardExcelSheetNames$`Workflow and Tasks`, StandardExcelSheetNames$SimulationSets),
+  validateIsIncludedAndLog(c(StandardExcelSheetNames$`Workflow and Tasks`, StandardExcelSheetNames$SimulationSets),
     inputSections,
     groupName = paste0("Sheet names of '", excelFile, "'")
   )

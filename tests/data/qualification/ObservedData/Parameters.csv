@@ -1,0 +1,4 @@
+ID,Study,Reference,Grouping,Analyte,t0,tend,t Unit,AUC Avg,AUC AvgUnit,AUC AvgType,AUC Type,Comment
+1,Qualification Test 1,tests/data/qualification,mean,A,0,8,h,100,pg*h/mL,arith. Mean,AUC_inf,
+2,Qualification Test 2,tests/data/qualification,mean,A,0,1440,min,200,pg*h/mL,arith. Mean,AUC_inf,
+3,Qualification Test 3,tests/data/qualification,mean,A,0,120,min,300,pg*h/mL,arith. Mean,AUC_inf,

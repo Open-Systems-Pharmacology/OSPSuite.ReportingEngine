@@ -7,7 +7,7 @@
 getPlotConfigurationFromPlan(
   plotProperties,
   plotType = NULL,
-  legendPosition = reEnv$theme$background$legendPosition
+  legendPosition = NULL
 )
 }
 \arguments{

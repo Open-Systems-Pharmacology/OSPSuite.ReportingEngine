@@ -6,7 +6,6 @@ studyDesignFile <- getTestDataFilePath("input-data/StudyDesign.csv")
 studyDesignTempFile <- "TestStudyDesign.csv"
 drugMassPath <- "Applications|Larson 400mg|filmcoated tablet (original Merck formulation)|Application_1|ProtocolSchemaItem|DrugMass"
 
-
 refSimulationSet <- PopulationSimulationSet$new(
   simulationSetName = "ReferenceTest",
   simulationFile = simulationFile,

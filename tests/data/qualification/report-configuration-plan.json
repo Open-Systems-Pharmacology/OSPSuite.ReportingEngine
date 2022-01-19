@@ -1,0 +1,349 @@
+{
+  "SimulationMappings": [
+    {
+      "Project": "Mini",
+      "Simulation": "Model2",
+      "Path": "Models",
+      "SimulationFile": "MiniModel2"
+    },
+    {
+      "Project": "PKRatio",
+      "Simulation": "Larson",
+      "Path": "Models",
+      "SimulationFile": "Larson 2013 8-18y meal"
+    }
+  ],
+  "ObservedDataSets": [
+    {
+      "Id": "MiniObs",
+      "Path": "ObservedData/MiniObs2.csv"
+    },
+    {
+      "Id": "PK Parameters",
+      "Path": "ObservedData/Parameters.csv",
+      "Type": "PKRatio"
+    }
+  ],
+  "Plots": {
+    "PlotSettings": {
+      "ChartWidth": 500,
+      "ChartHeight": 400,
+      "Fonts": {
+        "AxisSize": 11,
+        "LegendSize": 9,
+        "OriginSize": 9,
+        "FontFamilyName": "Arial",
+        "WatermarkSize": 40
+      }
+    },
+    "AxesSettings": {
+      "ComparisonTimeProfile": [
+        {
+          "Unit": "h",
+          "Dimension": "Time",
+          "Type": "X",
+          "GridLines": false,
+          "Scaling": "Linear"
+        },
+        {
+          "Unit": "ng/ml",
+          "Dimension": "Concentration (mass)",
+          "Type": "Y",
+          "GridLines": false,
+          "Scaling": "Log"
+        }
+      ],
+      "DDIRatioPlotsPredictedVsObserved": [
+        {
+          "Unit": "",
+          "Dimension": "Dimensionless",
+          "Type": "X",
+          "GridLines": false,
+          "Scaling": "Log"
+        },
+        {
+          "Unit": "",
+          "Dimension": "Dimensionless",
+          "Type": "Y",
+          "GridLines": false,
+          "Scaling": "Log"
+        }
+      ],
+      "DDIRatioPlotsResidualsVsObserved": [
+        {
+          "Unit": "",
+          "Dimension": "Dimensionless",
+          "Type": "X",
+          "GridLines": false,
+          "Scaling": "Log"
+        },
+        {
+          "Unit": "",
+          "Dimension": "Dimensionless",
+          "Type": "Y",
+          "GridLines": false,
+          "Scaling": "Log"
+        }
+      ],
+      "GOFMergedPlotsPredictedVsObserved": [
+        {
+          "Unit": "µg/l",
+          "Dimension": "Concentration (mass)",
+          "Type": "X",
+          "GridLines": false,
+          "Scaling": "Log"
+        },
+        {
+          "Unit": "µg/l",
+          "Dimension": "Concentration (mass)",
+          "Type": "Y",
+          "GridLines": false,
+          "Scaling": "Log"
+        }
+      ],
+      "GOFMergedPlotsResidualsOverTime": [
+        {
+          "Unit": "h",
+          "Dimension": "Time",
+          "Type": "X",
+          "GridLines": false,
+          "Scaling": "Linear"
+        },
+        {
+          "Unit": "",
+          "Dimension": "Dimensionless",
+          "Type": "Y",
+          "GridLines": false,
+          "Scaling": "Linear"
+        }
+      ],
+      "PKRatioPlots": [
+        {
+          "Unit": "year(s)",
+          "Dimension": "Age",
+          "Type": "X",
+          "GridLines": false,
+          "Scaling": "Linear"
+        },
+        {
+          "Unit": "",
+          "Dimension": "Dimensionless",
+          "Type": "Y",
+          "GridLines": false,
+          "Scaling": "Log"
+        }
+      ]
+    },
+    "TimeProfile": [
+      {
+        "SectionId": 21,
+        "Project": "Mini",
+        "Simulation": "Model2",
+        "Plot": {
+          "Axes": [
+            {
+              "Unit": "min",
+              "Dimension": "Time",
+              "Type": "X",
+              "GridLines": false,
+              "Visible": true,
+              "DefaultColor": "#FFFFFF",
+              "DefaultLineStyle": "None",
+              "Scaling": "Linear",
+              "NumberMode": "Normal"
+            },
+            {
+              "Unit": "µg/l",
+              "Dimension": "Concentration (molar)",
+              "Type": "Y",
+              "GridLines": false,
+              "Visible": true,
+              "DefaultColor": "#FFFFFF",
+              "DefaultLineStyle": "Solid",
+              "Scaling": "Log",
+              "NumberMode": "Normal"
+            }
+          ],
+          "Curves": [
+            {
+              "Name": "Test of A",
+              "X": "Time",
+              "Y": "Model2|Organism|A|Concentration in container",
+              "CurveOptions": {
+                "Color": "#FF0000",
+                "LegendIndex": 1
+              }
+            },
+            {
+              "Name": "Test of B",
+              "X": "Time",
+              "Y": "Model2|Organism|B|Concentration in container",
+              "CurveOptions": {
+                "Color": "#00FF00",
+                "LegendIndex": 2
+              }
+            },
+            {
+              "Name": "Test of observed data",
+              "X": "MiniObs|Time",
+              "Y": "MiniObs|ObservedData|A|Concentration in container",
+              "CurveOptions": {
+                "Color": "#0000FF",
+                "LegendIndex": 3,
+                "LineStyle": "None",
+                "Symbol": "Circle"
+              }
+            }
+          ],
+          "Name": "Time Profile Analysis",
+          "FontAndSize": {
+            "ChartWidth": 400,
+            "ChartHeight": 400,
+            "Fonts": {
+              "AxisSize": 10,
+              "LegendSize": 8,
+              "TitleSize": 16,
+              "DescriptionSize": 12,
+              "OriginSize": 8,
+              "FontFamilyName": "Microsoft Sans Serif",
+              "WatermarkSize": 32
+            }
+          },
+          "OriginText": "Test"
+        }
+      }
+    ],
+    "GOFMergedPlots": [
+      {
+        "Title": "Test of Goodness-of-fit plots",
+        "SectionId": 23,
+        "PlotTypes": ["predictedVsObserved"],
+        "Groups": [
+          {
+            "Caption": "Test of A",
+            "Symbol": "Circle",
+            "OutputMappings": [
+              {
+                "Project": "Mini",
+                "Simulation": "Model2",
+                "Output": "Organism|A|Concentration in container",
+                "ObservedData": "MiniObs",
+                "Color": "#000000"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "ComparisonTimeProfilePlots": [
+      {
+        "SectionId": 22,
+        "Title": "Test Comparison Time Profile",
+        "SimulationDuration": 25,
+        "TimeUnit": "h",
+        "OutputMappings": [
+          {
+            "Project": "Mini",
+            "Simulation": "Model2",
+            "Output": "Organism|A|Concentration in container",
+            "ObservedData": "MiniObs",
+            "StartTime": 0,
+            "TimeUnit": "h",
+            "Color": "#2166ac",
+            "Caption": "Test of A",
+            "Symbol": "Circle"
+          },
+          {
+            "Project": "Mini",
+            "Simulation": "Model2",
+            "Output": "Organism|B|Concentration in container",
+            "ObservedData": "MiniObs",
+            "StartTime": 0,
+            "TimeUnit": "h",
+            "Color": "#b2182b",
+            "Caption": "Test of B",
+            "Symbol": "Square"
+          }
+        ]
+      }
+    ],
+    "PKRatioPlots": [
+      {
+        "Title": "Test of PK Ratio Plots",
+        "PKParameters": [
+          "AUC"
+        ],
+        "SectionId": 3,
+        "Groups": [
+          {
+            "Color": "#000000",
+            "Caption": "All compounds",
+            "Symbol": "Circle",
+            "PKRatios": [
+              {
+                "Project": "PKRatio",
+                "Simulation": "Larson",
+                "Output": "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",
+                "ObservedData": "PK Parameters",
+                "ObservedDataRecordId": 1
+              },
+              {
+                "Project": "PKRatio",
+                "Simulation": "Larson",
+                "Output": "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",
+                "ObservedData": "PK Parameters",
+                "ObservedDataRecordId": 2
+              },
+              {
+                "Project": "PKRatio",
+                "Simulation": "Larson",
+                "Output": "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",
+                "ObservedData": "PK Parameters",
+                "ObservedDataRecordId": 3
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "Inputs": [],
+  "Sections": [
+    {
+      "Id": 1,
+      "Title": "1 Test Content Input",
+      "Content": "Content/testcontent.md"
+    },
+    {
+      "Id": 2,
+      "Title": "2 Time Profile Tests",
+      "Sections": [
+        {
+          "Id": 21,
+          "Title": "2.1 Time Profile"
+        },
+        {
+          "Id": 22,
+          "Title": "2.2 Comparison Time Profile"
+        },
+        {
+          "Id": 23,
+          "Title": "2.3 Goodness of fit"
+        }
+      ]
+    },
+    {
+      "Id": 3,
+      "Title": "3 PK Ratio Tests"
+    },
+    {
+      "Id": 4,
+      "Title": "4 DDI Ratio Tests"
+    }
+  ],
+  "Intro": [
+    {
+      "Path": "Intro/titlepage.md"
+    }
+  ]
+}

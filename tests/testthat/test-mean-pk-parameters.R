@@ -9,14 +9,14 @@ refOutputUpdatedPK <- getTestDataFilePath("mean-pk/A-pkAnalysis-updatedPK.csv")
 updatePKParameter("C_max", displayName = "C_max", displayUnit = "µmol/l")
 updatePKParameter("AUC_tEnd", displayName = "AUC_tEnd", displayUnit = "µmol*min/l")
 
-refWorkflowStructure <- sort(c(
+refWorkflowStructure <- c(
   "log-debug.txt", "log-info.txt",
   "Report-word.md", "Report.docx", "Report.md",
   "SimulationResults", "PKAnalysisResults", "PKAnalysis"
-))
-pkStructure <- sort(c(
+)
+pkStructure <- c(
   "A-pkAnalysis.csv"
-))
+)
 
 setPK <- SimulationSet$new(
   simulationSetName = "A",
@@ -33,11 +33,11 @@ workflowPK$activateTasks(c("simulate", "calculatePKParameters", "plotPKParameter
 workflowPK$runWorkflow()
 
 test_that("Workflow generates appropriate files and folders", {
-  expect_equal(list.files(workflowPK$workflowFolder), refWorkflowStructure)
+  expect_setequal(list.files(workflowPK$workflowFolder), refWorkflowStructure)
 })
 
 test_that("PKAnalysis directory includes appropriate files and folders", {
-  expect_equal(list.files(file.path(workflowPK$workflowFolder, "PKAnalysis")), pkStructure)
+  expect_setequal(list.files(file.path(workflowPK$workflowFolder, "PKAnalysis")), pkStructure)
 })
 
 test_that("Saved PK parameters have correct values", {
@@ -68,7 +68,7 @@ workflowPK$activateTasks("plotPKParameters")
 workflowPK$runWorkflow()
 
 test_that("PKAnalysis directory includes appropriate files and folders, overwriting previous data", {
-  expect_equal(list.files(file.path(workflowPK$workflowFolder, "PKAnalysis")), pkStructure)
+  expect_setequal(list.files(file.path(workflowPK$workflowFolder, "PKAnalysis")), pkStructure)
 })
 
 test_that("Saved PK parameters have correct values with updated names and unit", {
