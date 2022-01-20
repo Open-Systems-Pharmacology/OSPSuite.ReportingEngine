@@ -189,6 +189,10 @@ messages <- list(
       finalSize, " ", dataType,
       " data were included in the analysis between ", min(timeRange), " and ", max(timeRange), " ", timeUnit, "."
     )
+  },
+  
+  errorCommand = function(command, status){
+    paste0("Command : '", command, "' returned Error Status ", status)
   }
 )
 
