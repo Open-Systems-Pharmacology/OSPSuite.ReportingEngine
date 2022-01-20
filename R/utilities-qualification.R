@@ -384,3 +384,92 @@ startQualificationRunner <- function(qualificationRunnerFolder,
   validateCommandStatus(command, status)
   return(invisible())
 }
+
+
+#' @title createQualificationReport
+#' @description Run a qualification workflow to create a qualification report.
+#' @param qualificationRunnerFolder Folder where QualificationRunner.exe is located
+#' @param pkSimPortableFolder Folder where PK-Sim is located.
+#' If not specified, installation path will be read from the registry (available only in case of full **non-portable** installation).
+#' This option is **MANDATORY** for the portable version of PK-Sim.
+#' @param workingDirectory Folder where the qualification inputs are located
+#' The `workingDirectory` is assumed with the following structure
+#' - `input`: input qualification plan directory
+#'   - `qualification_plan.json`: qualification plan file
+#' - `re_input`: directory generated from qualification runner used by workflow
+#'   - `report-configuration-plan.json` configuration plan file defining the report configuration 
+#' - `re_output`: directory generated from workflow
+#'   - `report.md`: final markdown report
+#'   - `report.docx`: final word report if `createWordReport` is `TRUE`
+#' @param createWordReport Logical defining if a `docx` version of the report should also be created.
+#' Note that `pandoc` installation is required for this feature
+#' [https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/wiki/Installing-pandoc]
+#' @param watermark Character string that will appear in all generated plots
+#' Default is no watermark. `Label` objects from `tlf` package can be used to specifiy watermark font.
+#' @export
+createQualificationReport <- function(qualificationRunnerFolder,
+                                      pkSimPortableFolder = NULL,
+                                      workingDirectory = getwd(),
+                                      createWordReport = TRUE,
+                                      watermark = "") {
+  #-------- STEP 1: Define workflow settings --------#
+  qualificationPlanName <- "qualification_plan.json"
+  qualificationPlanFile <- file.path(workingDirectory, "input", qualificationPlanName)
+  
+  # The default outputs of qualification runner should be generated under <workingDirectory>/re_input
+  reInputFolder <- file.path(workingDirectory, "re_input")
+  # The default outputs or RE should be generated under <workingDirectory>/re_output
+  reOutputFolder <- file.path(workingDirectory, "re_output")
+  # Configuration Plan created from the Qualification Plan by the Qualification Runner
+  configurationPlanName <- "report-configuration-plan"
+  configurationPlanFile <- file.path(reInputFolder, paste0(configurationPlanName, ".json"))
+  
+  # If not set, report created will be named `report.md` and located in  `reOutputFolder`
+  reportName <- file.path(reOutputFolder, "report.md")
+  
+  #----- Optional parameters for the Qualification Runner -----#
+  # If not null, logFile is passed internally via the '-l' option
+  logFile <- NULL
+  # If not null, 'logLevel' is passed internally via the '--logLevel' option
+  logLevel <- NULL
+  # If 'overwrite' is set to true, eventual results from the previous run of the QualiRunner/RE will be removed first
+  overwrite <- TRUE
+  
+  #-------- STEP 2: Qualification Runner  --------#
+  # Start timer to track time
+  tic <- as.numeric(Sys.time())
+  
+  # Start Qualification Runner to generate inputs for the reporting engine
+  startQualificationRunner(
+    qualificationRunnerFolder = qualificationRunnerFolder,
+    qualificationPlanFile = qualificationPlanFile,
+    outputFolder = reInputFolder,
+    pkSimPortableFolder = pkSimPortableFolder,
+    configurationPlanName = configurationPlanName,
+    overwrite = overwrite,
+    logFile = logFile,
+    logLevel = logLevel
+  )
+  # Print timer tracked time
+  toc <- as.numeric(Sys.time())
+  print(paste0("Qualification Runner Duration: ", round((toc - tic) / 60, 1), " minutes"))
+  
+  #-------- STEP 3: Run Qualification Workflow  --------#
+  # Load 'QualificationWorkflow' object from configuration plan
+  workflow <- loadQualificationWorkflow(
+    workflowFolder = reOutputFolder,
+    configurationPlanFile = configurationPlanFile
+  )
+  # Set the name of the final report
+  workflow$reportFileName <- reportName
+  workflow$createWordReport <- createWordReport
+  # Set watermark. If set, it will appear in all generated plots
+  workflow$setWatermark(watermark)
+  # Run the 'QualificatitonWorklfow' tasklist of ConfigurationPlan
+  workflow$runWorkflow()
+  
+  toc <- as.numeric(Sys.time())
+  print(paste0("Qualification Workflow Total Duration: ", round((toc - tic) / 60, 1), " minutes"))
+  
+  return()
+}
