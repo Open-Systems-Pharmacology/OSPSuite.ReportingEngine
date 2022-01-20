@@ -119,7 +119,17 @@ validateIsFileExtension <- function(path, extension, nullAllowed = FALSE) {
   if (isFileExtension(path, extension)) {
     return(invisible())
   }
-  logErrorThenStop(messages$errorExtension(path, extension))
+  stop(messages$errorExtension(path, extension))
+}
+
+validateFileExists <- function(path, nullAllowed = FALSE) {
+  if (nullAllowed && is.null(path)) {
+    return(invisible())
+  }
+  if (file.exists(path)){
+    return(invisible())
+  }
+  stop(messages$errorUnexistingFile(path))
 }
 
 #' Log the error with a message and then stop, displaying same message.

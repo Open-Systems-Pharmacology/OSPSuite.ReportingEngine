@@ -5,6 +5,8 @@
 #' @return A `QualificationWorkflow` object
 #' @export
 loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
+  validateIsFileExtension(configurationPlanFile, "json")
+  validateFileExists(configurationPlanFile)
   configurationPlan <- loadConfigurationPlan(
     workflowFolder = workflowFolder,
     configurationPlanFile = configurationPlanFile
