@@ -111,10 +111,7 @@ getGOFOutputsDataframe <- function(configurationPlan) {
 getDDIOutputsDataframe <- function(configurationPlan) {
   ddiOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$DDIRatioPlots) {
-    pkParameters <- NULL
-    if (!is.null(plot$PKParameter)) {
-      pkParameters <- toPathArray(plot$PKParameter)
-    }
+    pkParameters <- plot$PKParameters %||% ospsuite::toPathArray(plot$PKParameter)
 
     for (group in plot$Groups) {
       for (ddiRatio in group$DDIRatios) {
@@ -174,10 +171,7 @@ getDDIOutputsDataframe <- function(configurationPlan) {
 getPKRatioOutputsDataframe <- function(configurationPlan) {
   pkRatioOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$PKRatioPlots) {
-    pkParameters <- NULL
-    if (!is.null(plot$PKParameter)) {
-      pkParameters <- toPathArray(plot$PKParameter)
-    }
+    pkParameters <- plot$PKParameters %||% ospsuite::toPathArray(plot$PKParameter)
 
     for (group in plot$Groups) {
       for (plotComponent in group$PKRatios) {

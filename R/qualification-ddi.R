@@ -31,10 +31,8 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 
     plotDDIMetadata$groups <- list()
 
-    pkParameters <- NULL
-    if (!is.null(plot$PKParameter)) {
-      pkParameters <- toPathArray(plot$PKParameter)
-    }
+    pkParameters <- plot$PKParameters %||% ospsuite::toPathArray(plot$PKParameter)
+    validateIsIncluded(values = pkParameters,parentValues = names(ddiPKRatioColumnName),nullAllowed = FALSE)
 
     for (groupNumber in seq_along(plot$Groups)) {
       group <- plot$Groups[[groupNumber]]
