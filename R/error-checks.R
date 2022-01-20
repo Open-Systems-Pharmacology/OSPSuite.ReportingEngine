@@ -430,3 +430,11 @@ validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, output
 
   return(invisible())
 }
+
+
+validateCommandStatus <- function(command, status){
+  if(status!=0){
+    stop(messages$errorCommand(command, status))
+  }
+  return(invisible())
+}

@@ -363,6 +363,7 @@ startQualificationRunner <- function(qualificationRunnerFolder,
                                      logLevel = NULL,
                                      displayVersion = FALSE) {
   validateIsFileExtension(qualificationPlanFile, "json")
+  validateFileExists(qualificationPlanFile)
   validateIsLogical(overwrite)
   validateIsLogical(displayVersion)
 
@@ -378,6 +379,8 @@ startQualificationRunner <- function(qualificationRunnerFolder,
   qualificationRunner <- paste0('"', file.path(qualificationRunnerFolder, 'QualificationRunner.exe"'))
 
   arguments <- paste0(' -i "', qualificationPlanFile, '" -o "', outputFolder, '" ', "--norun ", optionalArguments)
-  system(paste0(qualificationRunner, arguments))
+  command <- paste0(qualificationRunner, arguments)
+  status <- system(command)
+  validateCommandStatus(command, status)
   return(invisible())
 }
