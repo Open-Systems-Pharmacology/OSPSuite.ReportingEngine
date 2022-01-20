@@ -53,6 +53,10 @@ messages <- list(
   warningExistingPath = function(existingPath) {
     paste0(callingFunction(), "Path: '", existingPath, "' already exists.")
   },
+  
+  errorUnexistingFile = function(path) {
+    paste0(callingFunction(), "File: '", path, "' does not exist.")
+  },
 
   warningPathIncludes = function(path) {
     paste0(
