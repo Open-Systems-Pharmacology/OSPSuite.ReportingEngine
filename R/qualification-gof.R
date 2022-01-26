@@ -226,15 +226,15 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties) {
     autoAxesLimits(switch(
       plotType,
       "predictedVsObserved" = dataForLimit,
-      "residualsOverTime" = data[, "Time"]
+      "residualsOverTime" = data[positiveRows, "Time"]
     ))
   plotConfiguration$yAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||%
     autoAxesLimits(switch(
       plotType,
       "predictedVsObserved" = dataForLimit,
-      "residualsOverTime" = c(0, data[, "Residuals"])
+      "residualsOverTime" = c(0, data[positiveRows, "Residuals"])
     ))
-
+  
   gofPlot <- switch(
     plotType,
     "predictedVsObserved" = tlf::plotObsVsPred(
