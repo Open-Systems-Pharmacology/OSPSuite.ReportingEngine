@@ -145,26 +145,54 @@ simulateModelOnCore <- function(simulation,
 simulateModelParallel <- function(structureSets,
                                   settings = NULL,
                                   logFolder = getwd()) {
-  simulations <- lapply(structureSets, function(set) {
-    re.tStoreFileMetadata(access = "read", filePath = set$simulationSet$simulationFile)
-    simulation <- loadSimulationWithUpdatedPaths(set$simulationSet)
+
+  simulationResults <- list()
+  maxSimulationsPerSubset <- 4  #To be set in settings argument
+
+  #Split the complete set of structureSets into a list of subsets of structureSets, each containing at most maxSimulationsPerSubset structureSets
+  structureSetList <- split(structureSets,ceiling(seq_along(structureSets)/maxSimulationsPerSubset))
+
+  #Loop through the list of structureSet subsets
+  for (subsetNumber in seq_along(structureSetList)){
+
+    structureSetsSubset <- structureSetList[[subsetNumber]]
+
     logWorkflow(
-      message = paste0("Simulation file '", set$simulationSet$simulationFile, "' successfully loaded"),
+      message = paste("Loading subset",subsetNumber,"of",length(structureSetList)),
       pathFolder = logFolder,
-      logTypes = LogTypes$Debug
+      logTypes = LogTypes$Info
     )
-    return(simulation)
-  })
 
-  simRunOptions <- ospsuite::SimulationRunOptions$new(
-    showProgress = ifNotNull(settings, outputIfNotNull = settings$showProgress, outputIfNull = FALSE),
-    numberOfCores = settings$allowedCores
-  )
+    simulations <- lapply(structureSetsSubset, function(set) {
+      re.tStoreFileMetadata(access = "read", filePath = set$simulationSet$simulationFile)
+      simulation <- loadSimulationWithUpdatedPaths(set$simulationSet,loadFromCache = TRUE)
+      logWorkflow(
+        message = paste0("Simulation file '", set$simulationSet$simulationFile, "' successfully loaded"),
+        pathFolder = logFolder,
+        logTypes = LogTypes$Debug
+      )
+      return(simulation)
+    })
 
-  simulationResults <- ospsuite::runSimulations(
-    simulations = simulations,
-    simulationRunOptions = simRunOptions
-  )
+    simRunOptions <- ospsuite::SimulationRunOptions$new(
+      showProgress = ifNotNull(settings, outputIfNotNull = settings$showProgress, outputIfNull = FALSE),
+      numberOfCores = settings$allowedCores
+    )
+
+    logWorkflow(
+      message = paste("Simulating subset",subsetNumber,"of",length(structureSetList)),
+      pathFolder = logFolder,
+      logTypes = LogTypes$Info
+    )
+
+    subsetSimulationResults <- ospsuite::runSimulations(
+      simulations = simulations,
+      simulationRunOptions = simRunOptions
+    )
+
+    simulationResults <- c(simulationResults,subsetSimulationResults)
+
+  }
 
   logWorkflow(
     message = "Parallel simulation run complete",
