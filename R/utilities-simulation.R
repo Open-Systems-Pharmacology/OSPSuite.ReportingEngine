@@ -149,7 +149,6 @@ defaultMaxSimulationsPerCore <- 2
 #' @param logFolder folder where the logs are saved
 #' @return List of simulation results for each simulation set
 #' @import ospsuite
-#' @import parallel
 #' @keywords internal
 simulateModelParallel <- function(structureSets,
                                   settings = NULL,
