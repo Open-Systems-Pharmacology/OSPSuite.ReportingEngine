@@ -156,7 +156,7 @@ simulateModelParallel <- function(structureSets,
                                   logFolder = getwd()) {
 
   simulationResults <- list()
-  maxSimulationsPerSubset <- settings$maxSimulationsPerCore*((getAllowedCores() %||% parallel::detectCores()) - 1)  #To be set in settings argument
+  maxSimulationsPerSubset <- settings$maxSimulationsPerCore*getOSPSuiteSetting(settingName = "numberOfCores")  #To be set in settings argument
 
   #Split the complete set of structureSets into a list of subsets of structureSets, each containing at most maxSimulationsPerSubset structureSets
   structureSetList <- split(structureSets,ceiling(seq_along(structureSets)/maxSimulationsPerSubset))
