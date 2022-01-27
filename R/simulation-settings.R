@@ -9,11 +9,14 @@ SimulationSettings <- R6::R6Class(
     #' Create a `SimulationSettings` object
     #' @param numberOfCores number of cores for parallel computation
     #' @param showProgress simulation progress printed to console if TRUE
+    #' @param maxSimulationsPerCore Scale factor used in a parallel simulation.  The product of this scale factor and the number of allowable cores (allowedCores) sets the maximum number of simulations that may be run on one core.
     #' @return A new `SimulationSettings` object
     initialize = function(numberOfCores = defaultSimulationNumberOfCores,
-                          showProgress = FALSE) {
+                          showProgress = FALSE,
+                          maxSimulationsPerCore = defaultMaxSimulationsPerCore) {
       self$numberOfCores <- numberOfCores
       self$showProgress <- showProgress
+      self$maxSimulationsPerCore <- maxSimulationsPerCore
     }
   ),
 
@@ -43,6 +46,19 @@ SimulationSettings <- R6::R6Class(
       }
     },
 
+    #' @field maxSimulationsPerCore  Scale factor used in a parallel simulation.  The product of this scale factor and the number of allowable cores (allowedCores) sets the maximum number of simulations that may be run on one core.
+    maxSimulationsPerCore = function(value) {
+      if (missing(value)) {
+        private$.maxSimulationsPerCore
+      } else {
+        if (!is.null(value)) {
+          validateIsInteger(value)
+          validateIsPositive(value)
+          private$.maxSimulationsPerCore <- value
+        }
+      }
+    },
+
     #' @field allowedCores is the number of cores assigned to the user session.
     allowedCores = function(value) {
       if (missing(value)) {
@@ -60,6 +76,7 @@ SimulationSettings <- R6::R6Class(
   private = list(
     .numberOfCores = NULL,
     .showProgress = NULL,
+    .maxSimulationsPerCore = NULL,
     .allowedCores = NULL
   )
 )

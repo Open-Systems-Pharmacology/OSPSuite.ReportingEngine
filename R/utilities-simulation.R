@@ -134,6 +134,14 @@ simulateModelOnCore <- function(simulation,
   return(simulationResult)
 }
 
+
+#' @title defaultMaxSimulationsPerCore
+#' @description Default value for a scale factor used in a parallel simulation.  The product of this scale factor and the number of allowable cores (allowedCores) sets the maximum number of simulations that may be run on one core.
+#' @export
+defaultMaxSimulationsPerCore <- 2
+
+
+
 #' @title simulateModelParallel
 #' @description Simulate models within a list of structure sets in parallel for an individual.
 #' @param structureSets, a list of `SimulationStructure` R6 class objects contain paths of files to be used
@@ -141,13 +149,14 @@ simulateModelOnCore <- function(simulation,
 #' @param logFolder folder where the logs are saved
 #' @return List of simulation results for each simulation set
 #' @import ospsuite
+#' @import parallel
 #' @keywords internal
 simulateModelParallel <- function(structureSets,
                                   settings = NULL,
                                   logFolder = getwd()) {
 
   simulationResults <- list()
-  maxSimulationsPerSubset <- 4  #To be set in settings argument
+  maxSimulationsPerSubset <- settings$maxSimulationsPerCore*((settings$allowedCores %||% parallel::detectCores()) - 1)  #To be set in settings argument
 
   #Split the complete set of structureSets into a list of subsets of structureSets, each containing at most maxSimulationsPerSubset structureSets
   structureSetList <- split(structureSets,ceiling(seq_along(structureSets)/maxSimulationsPerSubset))
@@ -174,11 +183,6 @@ simulateModelParallel <- function(structureSets,
       return(simulation)
     })
 
-    simRunOptions <- ospsuite::SimulationRunOptions$new(
-      showProgress = ifNotNull(settings, outputIfNotNull = settings$showProgress, outputIfNull = FALSE),
-      numberOfCores = settings$allowedCores
-    )
-
     logWorkflow(
       message = paste("Simulating subset",subsetNumber,"of",length(structureSetList)),
       pathFolder = logFolder,
@@ -186,8 +190,7 @@ simulateModelParallel <- function(structureSets,
     )
 
     subsetSimulationResults <- ospsuite::runSimulations(
-      simulations = simulations,
-      simulationRunOptions = simRunOptions
+      simulations = simulations
     )
 
     simulationResults <- c(simulationResults,subsetSimulationResults)
