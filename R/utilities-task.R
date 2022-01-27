@@ -41,7 +41,7 @@ activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
 
   #Using ospsuite.reportingengine version of validateIsIncluded (and not the ospsuite.utils version) as the former has a logFolder argument
-  validateIsIncludedAndLog(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
+  validateIsIncludedRE(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
 
   for (task in tasks) {
     workflow[[task]]$activate()
@@ -58,7 +58,7 @@ inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
 
   #Using ospsuite.reportingengine version of validateIsIncluded (and not the ospsuite.utils version) as the former has a logFolder argument
-  validateIsIncludedAndLog(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
+  validateIsIncludedRE(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
 
   for (task in tasks) {
     workflow[[task]]$inactivate()
