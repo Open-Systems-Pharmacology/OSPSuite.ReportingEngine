@@ -439,3 +439,13 @@ calculateGMFE <- function(x, y) {
 getObjectNameAsString <- function(object) {
   return(deparse(substitute(object)))
 }
+
+#' @title fileExtension
+#' @description Return the extension of a file
+#' @param file File name or path
+#' @return The file extension as a character string
+#' @keywords internal
+fileExtension <- function(file) {
+  ex <- strsplit(basename(file), split = "\\.")[[1]]
+  return(utils::tail(ex, 1))
+}

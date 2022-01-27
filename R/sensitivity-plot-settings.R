@@ -60,7 +60,7 @@ SensitivityPlotSettings <- R6::R6Class(
         private$.totalSensitivityThreshold
       } else {
         if (!is.null(value)) {
-          validateIsInRange("totalSensitivityThreshold", value, 0, 1)
+          validateIsBetween(value, 0, 1, objectName = "totalSensitivityThreshold")
           private$.totalSensitivityThreshold <- value
         }
       }

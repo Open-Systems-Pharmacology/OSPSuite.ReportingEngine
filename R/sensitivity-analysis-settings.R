@@ -56,7 +56,7 @@ SensitivityAnalysisSettings <- R6::R6Class(
         private$.quantileVec
       } else {
         validateIsNumeric(value)
-        validateNoDuplicatedEntries(value)
+        validateHasUniqueValues(value, objectName = "quantileVec")
         private$.quantileVec <- value
       }
     },
@@ -68,7 +68,7 @@ SensitivityAnalysisSettings <- R6::R6Class(
       } else {
         if (!is.null(value)) {
           validateIsString(value)
-          validateNoDuplicatedEntries(value)
+          validateHasUniqueValues(value, objectName = "variableParameterPaths")
           private$.variableParameterPaths <- value
         }
       }

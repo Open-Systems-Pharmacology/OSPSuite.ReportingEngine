@@ -1,11 +1,7 @@
-validateIsPositive <- function(object, nullAllowed = FALSE) {
-  validateIsOfType(object, c("numeric", "integer"), nullAllowed)
+# Assert helpers ---------
+# Assert helpers starting by "is" or "has" should return a logical value
 
-  if (isFALSE(object > 0)) {
-    logErrorThenStop(messages$errorWrongType(getObjectNameAsString(object), class(object)[1], "positive"))
-  }
-}
-
+# Seems it is only called once in pk parameters plot
 hasPositiveValues <- function(object) {
   object <- object[!is.na(object)]
   object <- object[!is.infinite(object)]
@@ -13,148 +9,273 @@ hasPositiveValues <- function(object) {
   return(!sum(positiveValues) == 0)
 }
 
-
-validateIsInRange <- function(variableName, value, lowerBound, upperBound, nullAllowed = FALSE) {
-  validateIsOfLength(value, 1)
-  validateIsOfLength(lowerBound, 1)
-  validateIsOfLength(upperBound, 1)
-  validateIsNumeric(c(value, lowerBound, upperBound), nullAllowed)
-  if ((value < lowerBound) | (value > upperBound)) {
-    logErrorThenStop(messages$outsideRange(variableName, value, lowerBound, upperBound))
+isPositive <- function(values, na.rm = TRUE) {
+  if(na.rm){
+    values <- values[!is.na(values)]
   }
+  if(isOfLength(values, 0)){
+    return(FALSE)
+  }
+  return(all(values > 0))
 }
 
-typeNamesFrom <- function(type) {
-  if (is.character(type)) {
-    return(type)
-  }
-  type <- c(type)
-  sapply(type, function(t) t$classname)
+isPathInSimulation <- function(paths, simulation) {
+  # Add every paths to the simulation object and
+  # check if all of these paths are included
+  ospsuite::addOutputs(quantitiesOrPaths = paths, simulation = simulation)
+  allSimulationOutputPaths <- sapply(simulation$outputSelections$allOutputs, function(output) {
+    output$path
+  })
+  return(isIncluded(paths, allSimulationOutputPaths))
 }
 
-validateNoDuplicatedEntries <- function(x) {
-  if (any(duplicated(x))) {
-    logErrorThenStop(messages$errorDuplicatedEntries(getObjectNameAsString(x)))
+isUnitFromDimension <- function(unit, dimension) {
+  dimensionForUnit <- ospsuite::getDimensionForUnit(unit)
+  # Units can be switched between Mass/Amount and Concentration (molar)/Concentration (mass)
+  # using molar weight as an input
+  # Remove molar/mass for units that can cross dimensions using molar weight
+  if (isIncluded(dimension, c("Mass", "Amount"))) {
+    dimension <- c("Mass", "Amount")
   }
+  if (isIncluded(dimension, c("Concentration (mass)", "Concentration (molar)"))) {
+    dimension <- c("Concentration (mass)", "Concentration (molar)")
+  }
+  if (isOfLength(dimensionForUnit, 0)) {
+    return(FALSE)
+  }
+  return(isIncluded(dimensionForUnit, dimension))
+}
+
+#' @title isBetween
+#' @description Assess if `x` is between `left` and `right` bounds.
+#' Shortcut for `x >= left & x <= right` if `strict=FALSE` (default).
+#' Shortcut for `x > left & x < right` if `strict=TRUE`.
+#' @param x Numeric values to assess
+#' @param left Numeric value(s) used as lower bound
+#' @param right Numeric value(s) used as upper bound
+#' @param strict Logical value defining if `x` is strictly between `left` and `right`.
+#' Default value is `FALSE`.
+#' @return Logical values
+#' @export
+#' @examples
+#' isBetween(1:12, 7, 9)
+#'
+#' x <- rnorm(1e2)
+#' x[isBetween(x, -1, 1)]
+#'
+#' isBetween(x, cos(x) + 1, cos(x) - 1)
+isBetween <- function(x, left, right, strict = FALSE) {
+  if (strict) {
+    return(x > left & x < right)
+  }
+  return(x >= left & x <= right)
+}
+
+# Validate helpers ---------
+validateIsOfTypeRE <- function(object, type, nullAllowed = FALSE, logFolder = NULL){
+  tryCatch({
+    # imported from ospsuite.utils
+    validateIsOfType(object, type, nullAllowed)
+  },
+  error = function(e){
+    logMessage(
+      message = messages$errorWrongType(getObjectNameAsString(object), typeof(object), type),
+      logLevel = LogLevels$Error,
+      logFolder = logFolder
+    )
+  })
   return(invisible())
 }
 
-validateIsIncludedAndLog <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL, logFolder = NULL) {
-  if (nullAllowed && is.null(values)) {
-    return(invisible())
-  }
-
-  if (isIncluded(values, parentValues)) {
-    return(invisible())
-  }
-  if (is.null(logFolder)) {
-    stop(messages$errorNotIncluded(values, parentValues, groupName))
-  }
-  logErrorThenStop(messages$errorNotIncluded(values, parentValues, groupName), logFolder)
+validateIsStringRE <- function(object, nullAllowed = FALSE, logFolder = NULL){
+  tryCatch({
+    # imported from ospsuite.utils
+    validateIsString(object, nullAllowed)
+  },
+  error = function(e){
+    logMessage(
+      message = messages$errorWrongType(getObjectNameAsString(object), typeof(object), "character"),
+      logLevel = LogLevels$Error,
+      logFolder = logFolder
+    )
+  })
+  return(invisible())
 }
 
-checkIsIncluded <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL, logFolder = NULL) {
-  if (nullAllowed && is.null(values)) {
-    return(invisible())
-  }
+validateIsNumericRE <- function(object, nullAllowed = FALSE, logFolder = NULL){
+  tryCatch({
+    # imported from ospsuite.utils
+    validateIsNumeric(object, nullAllowed)
+  },
+  error = function(e){
+    logMessage(
+      message = messages$errorWrongType(getObjectNameAsString(object), typeof(object), c("numeric", "integer")),
+      logLevel = LogLevels$Error,
+      logFolder = logFolder
+    )
+  })
+  return(invisible())
+}
 
-  if (isIncluded(values, parentValues)) {
+validateIsIntegerRE <- function(object, nullAllowed = FALSE, logFolder = NULL){
+  tryCatch({
+    # imported from ospsuite.utils
+    validateIsInteger(object, nullAllowed)
+  },
+  error = function(e){
+    logMessage(
+      message = messages$errorWrongType(getObjectNameAsString(object), typeof(object), "integer"),
+      logLevel = LogLevels$Error,
+      logFolder = logFolder
+    )
+  })
+  return(invisible())
+}
+
+validateIsLogicalRE <- function(object, nullAllowed = FALSE, logFolder = NULL){
+  tryCatch({
+    # imported from ospsuite.utils
+    validateIsLogical(object, nullAllowed)
+  },
+  error = function(e){
+    logMessage(
+      message = messages$errorWrongType(getObjectNameAsString(object), typeof(object), "logical"),
+      logLevel = LogLevels$Error,
+      logFolder = logFolder
+    )
+  })
+  return(invisible())
+}
+
+validateIsIncludedRE <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL, logFolder = NULL){
+  tryCatch({
+    # imported from ospsuite.utils
+    validateIsIncluded(values, parentValues, nullAllowed)
+  },
+  error = function(e){
+    logMessage(
+      message = messages$errorNotIncluded(values, parentValues, groupName),
+      logLevel = LogLevels$Error,
+      logFolder = logFolder
+    )
+  })
+  return(invisible())
+}
+
+validateIsIncludedInDataset <- function(columnNames, dataset, nullAllowed = FALSE, datasetName = NULL, logFolder = NULL) {
+  tryCatch({
+    # imported from ospsuite.utils
+    validateIsIncluded(columnNames, names(dataset), nullAllowed)
+  },
+  error = function(e){
+    logMessage(
+      message = messages$errorNotIncludedInDataset(columnNames, dataset, datasetName),
+      logLevel = LogLevels$Error,
+      logFolder = logFolder
+    )
+  })
+  return(invisible())
+}
+
+validateIsOfLengthRE <- function(object, nbElements, logFolder = NULL){
+  tryCatch({
+    # imported from ospsuite.utils
+    validateIsOfLength(object, nbElements)
+  },
+  error = function(e){
+    logMessage(
+      message = messages$errorWrongLength(getObjectNameAsString(object), nbElements),
+      logLevel = LogLevels$Error,
+      logFolder = logFolder
+    )
+  })
+  return(invisible())
+}
+
+validateIsSameLengthRE <- function(..., logFolder = NULL){
+  tryCatch({
+    # imported from ospsuite.utils
+    validateIsSameLength(...)
+  },
+  error = function(e){
+    logMessage(
+      message = messages$errorDifferentLength(...),
+      logLevel = LogLevels$Error,
+      logFolder = logFolder
+    )
+  })
+  return(invisible())
+}
+
+validateIsPositive <- function(object, nullAllowed = FALSE, logFolder = NULL) {
+  if (nullAllowed && is.null(object)) {
     return(invisible())
   }
-  if (is.null(logFolder)) {
-    warning(messages$errorNotIncluded(values, parentValues, groupName), call. = FALSE, immediate. = TRUE)
+  validateIsOfTypeRE(object, c("numeric", "integer"), nullAllowed, logFolder)
+  if (isPositive(object)){
+    logMessage(
+      messages$errorWrongType(getObjectNameAsString(object), class(object)[1], "positive"),
+      logLevel = LogLevels$Error,
+      logFolder = logFolder
+    )
+  }
+}
+
+# Note that -Inf/Inf can be use for validation of greater and lower only
+validateIsBetween <- function(object, left, right, strict = FALSE, nullAllowed = FALSE, objectName = NULL, logFolder = NULL){
+  if (nullAllowed && is.null(object)) {
     return(invisible())
   }
-  logWorkflow(
-    message = messages$errorNotIncluded(values, parentValues, groupName),
-    pathFolder = logFolder,
-    logTypes = c(LogTypes$Debug, LogTypes$Error)
+  validateIsNumericRE(object, nullAllowed, logFolder)
+  if(isTRUE(all(isBetween(values, left, right, strict)))){
+    return(invisible())
+  }
+  logMessage(
+    message = messages$outsideRange(objectName %||% getObjectNameAsString(object), object, left, right),
+    logLevel = LogLevels$Error,
+    logFolder = logFolder
   )
 }
 
-validateMapping <- function(mapping, data, nullAllowed = FALSE) {
-  if (nullAllowed && is.null(mapping)) {
+validateHasUniqueValues <- function(object, na.rm = TRUE, nullAllowed = FALSE, objectName = NULL, logFolder = NULL) {
+  if (nullAllowed && is.null(object)) {
     return(invisible())
   }
-
-  validateIsString(mapping)
-  variableNames <- names(data)
-
-  validateIsIncluded(mapping, variableNames)
-
-  return(invisible())
-}
-
-checkExisitingPath <- function(path, stopIfPathExists = FALSE) {
-  if (!dir.exists(path)) {
+  if (hasUniqueValues(object, na.rm)) {
     return(invisible())
   }
-  if (stopIfPathExists) {
-    logErrorThenStop(messages$warningExistingPath(path))
-  }
-
-  warning(messages$warningExistingPath(path))
+  logMessage(
+    messages$errorHasNoUniqueValues(object, objectName %||% getObjectNameAsString(object), na.rm),
+    logLevel = LogLevels$Error,
+    logFolder = logFolder
+  )
 }
 
-checkOverwriteExisitingPath <- function(path, overwrite) {
-  if (!dir.exists(path)) {
-    return(invisible())
-  }
-  warning(messages$warningExistingPath(path))
-  if (overwrite) {
-    warning(messages$warningOverwriting(path))
-    unlink(path, recursive = TRUE)
-  }
-}
-
-fileExtension <- function(file) {
-  ex <- strsplit(basename(file), split = "\\.")[[1]]
-  return(utils::tail(ex, 1))
-}
-
-validateIsFileExtension <- function(path, extension, nullAllowed = FALSE) {
+validateIsFileExtension <- function(path, extension, nullAllowed = FALSE, logFolder = NULL) {
   if (nullAllowed && is.null(path)) {
     return(invisible())
   }
   if (isFileExtension(path, extension)) {
     return(invisible())
   }
-  stop(messages$errorExtension(path, extension))
+  logMessage(
+    messages$errorExtension(path, extension),
+    logLevel = LogLevels$Error,
+    logFolder = logFolder
+  )
 }
 
-validateFileExists <- function(path, nullAllowed = FALSE) {
+validateFileExists <- function(path, nullAllowed = FALSE, logFolder = NULL) {
   if (nullAllowed && is.null(path)) {
     return(invisible())
   }
   if (file.exists(path)){
     return(invisible())
   }
-  stop(messages$errorUnexistingFile(path))
-}
-
-#' Log the error with a message and then stop, displaying same message.
-#'
-#' @param message message to display and then log
-#' @param logFolderPath path where logs are saved
-#' @keywords internal
-logErrorThenStop <- function(message, logFolderPath = getwd()) {
-  logWorkflow(
-    message = message,
-    pathFolder = logFolderPath,
-    logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error)
-  )
-  stop(message, call. = FALSE)
-}
-
-#' Log the error with a message
-#' @param message message to display and then log
-#' @param logFolderPath path where logs are saved
-#' @keywords internal
-logErrorMessage <- function(message, logFolderPath = getwd()) {
-  logWorkflow(
-    message = message,
-    pathFolder = logFolderPath,
-    logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error)
+  logMessage(
+    messages$errorUnexistingFile(path),
+    logLevel = LogLevels$Error,
+    logFolder = logFolder
   )
 }
 
@@ -172,7 +293,10 @@ logErrorMessage <- function(message, logFolderPath = getwd()) {
 validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile, outputs) {
   # Check that dictionary is provided
   if (isOfLength(observedMetaDataFile, 0)) {
-    stop(messages$errorObservedMetaDataFileNotProvided(observedDataFile))
+    logMessage(
+      messages$errorObservedMetaDataFileNotProvided(observedDataFile),
+      logLevel = LogLevels$Error
+    )
   }
   # Read dictionary and check that mandatory variables are included
   dictionary <- readObservedDataFile(observedMetaDataFile)
@@ -180,7 +304,7 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile,
     dictionary[, dictionaryParameters$datasetUnit] <- NA
   }
   validateIsIncludedInDataset(c(dictionaryParameters$ID, dictionaryParameters$datasetColumn), dictionary, datasetName = "dictionary")
-  validateIsIncludedAndLog(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID], groupName = paste0("Column '", dictionaryParameters$ID, "'"))
+  validateIsIncludedRE(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID], groupName = paste0("Column '", dictionaryParameters$ID, "'"))
 
   # Check that dictionary and observed data are consitent
   observedDataset <- readObservedDataFile(observedDataFile)
@@ -216,110 +340,65 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile,
   return(invisible())
 }
 
-#' Check if the provided values are included all available dimensions
-#' @param values Vector of dimensions
-#' @return TRUE if the values are included all available dimensions
-#' @import ospsuite
-#' @keywords internal
-isDimension <- function(values) {
-  allAvailableDimensions <- ospsuite::allAvailableDimensions()
-  return(isIncluded(c(values), allAvailableDimensions))
-}
-
-validateIsDimension <- function(values, nullAllowed = FALSE) {
-  if (nullAllowed && is.null(values)) {
-    return(invisible())
-  }
-
-  if (isDimension(values)) {
-    return(invisible())
-  }
-
-  logErrorThenStop(messages$errorNotADimension(values))
-}
-
-isPathInSimulation <- function(paths, simulation) {
-  # Add every paths to the simulation object and
-  # check if all of these paths are included
-  ospsuite::addOutputs(quantitiesOrPaths = paths, simulation = simulation)
-  allSimulationOutputPaths <- sapply(simulation$outputSelections$allOutputs, function(output) {
-    output$path
-  })
-  return(isIncluded(paths, allSimulationOutputPaths))
-}
-
-validateIsPathInSimulation <- function(paths, simulation, nullAllowed = FALSE) {
+validateIsPathInSimulation <- function(paths, simulation, nullAllowed = FALSE, logFolder = NULL) {
   if (nullAllowed && is.null(paths)) {
     return(invisible())
   }
   if (isPathInSimulation(paths, simulation)) {
     return(invisible())
   }
-  logErrorThenStop(message = messages$invalidOuputPath(paths, simulation$name))
+  logMessage(
+    messages$invalidOuputPath(paths, simulation$name),
+    logLevel = LogLevels$Error,
+    logFolder = logFolder
+  )
 }
 
-validateOutputObject <- function(outputs, simulation, nullAllowed = FALSE) {
-  if (nullAllowed && is.null(outputs)) {
-    return(invisible())
-  }
-  validateIsOfType(c(outputs), "Output")
-  # Check paths existence
-  allOutputPaths <- sapply(outputs, function(output) {
-    output$path
-  })
-  validateIsPathInSimulation(allOutputPaths, simulation)
-
-  # Check display unit
-  for (output in outputs) {
-    outputQuantity <- ospsuite::getQuantity(output$path, simulation)
-    validateIsUnitFromDimension(output$displayUnit, outputQuantity$dimension, nullAllowed = TRUE)
-  }
-}
-
-isUnitFromDimension <- function(unit, dimension) {
-  dimensionForUnit <- ospsuite::getDimensionForUnit(unit)
-  # Units can be switched between Mass/Amount and Concentration (molar)/Concentration (mass)
-  # using molar weight as an input
-  # Remove molar/mass for units that can cross dimensions using molar weight
-  if (isIncluded(dimension, c("Mass", "Amount"))) {
-    dimension <- c("Mass", "Amount")
-  }
-  if (isIncluded(dimension, c("Concentration (mass)", "Concentration (molar)"))) {
-    dimension <- c("Concentration (mass)", "Concentration (molar)")
-  }
-  if (isOfLength(dimensionForUnit, 0)) {
-    return(FALSE)
-  }
-  return(isIncluded(dimensionForUnit, dimension))
-}
-
-validateIsUnitFromDimension <- function(unit, dimension, nullAllowed = FALSE) {
+validateIsUnitFromDimension <- function(unit, dimension, nullAllowed = FALSE, logFolder = NULL) {
   if (nullAllowed && is.null(unit)) {
     return(invisible())
   }
   if (isUnitFromDimension(unit, dimension)) {
     return(invisible())
   }
-  stop(messages$errorUnitNotFromDimension(unit, dimension))
+  logMessage(
+    message = messages$errorUnitNotFromDimension(unit, dimension),
+    logLevel = LogLevels$Error,
+    logFolder = logFolder
+  )
+}
+
+validateOutputObject <- function(outputs, simulation, nullAllowed = FALSE, logFolder = NULL) {
+  if (nullAllowed && is.null(outputs)) {
+    return(invisible())
+  }
+  validateIsOfTypeRE(c(outputs), "Output", logFolder = logFolder)
+  # Check paths existence
+  allOutputPaths <- sapply(outputs, function(output) output$path)
+  validateIsPathInSimulation(allOutputPaths, simulation, logFolder = logFolder)
+
+  # Check display unit
+  for (output in outputs) {
+    outputQuantity <- ospsuite::getQuantity(output$path, simulation)
+    validateIsUnitFromDimension(output$displayUnit, outputQuantity$dimension, nullAllowed = TRUE, logFolder = logFolder)
+  }
 }
 
 validateHasReferencePopulation <- function(workflowType, simulationSets, logFolder = NULL) {
   if (isIncluded(workflowType, PopulationWorkflowTypes$parallelComparison)) {
     return(invisible())
   }
-  allSimulationReferences <- sapply(simulationSets, function(set) {
-    set$referencePopulation
-  })
+  allSimulationReferences <- sapply(simulationSets, function(set) set$referencePopulation)
 
   if (isOfLength(allSimulationReferences[allSimulationReferences], 1)) {
     return(invisible())
   }
-  if (is.null(logFolder)) {
-    stop(messages$warningNoReferencePopulation(workflowType))
-  }
-  logErrorThenStop(messages$warningNoReferencePopulation(workflowType), logFolder)
+  logMessage(
+    message = messages$warningNoReferencePopulation(workflowType),
+    logLevel = LogLevels$Error,
+    logFolder = logFolder
+  )
 }
-
 
 validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
   pkParametersTableRef <- NULL
@@ -342,59 +421,17 @@ validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
         next
       }
     }
-    if (is.null(logFolder)) {
-      stop(messages$errorNotSameOutputsBetweenSets(sapply(
-        simulationSets, function(set) {set$simulationSetName})))
-    }
-    logErrorThenStop(messages$errorNotSameOutputsBetweenSets(sapply(
-      simulationSets, function(set) {set$simulationSetName})), logFolder)
+    logMessage(
+      message = messages$errorNotSameOutputsBetweenSets(
+        sapply(simulationSets, function(set) set$simulationSetName)
+        ),
+      logLevel = LogLevels$Error,
+      logFolder = logFolder
+    )
   }
 }
 
-
-validateHasUniqueValues <- function(data, dataName = "dataset", na.rm = TRUE, nullAllowed = FALSE) {
-  if (nullAllowed && is.null(data)) {
-    return(invisible())
-  }
-  if (hasUniqueValues(data, na.rm)) {
-    return(invisible())
-  }
-  stop(messages$errorHasNoUniqueValues(data, dataName, na.rm))
-}
-
-validateIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, nullAllowed = FALSE, logFolder = NULL) {
-  if (nullAllowed && is.null(columnNames)) {
-    return(invisible())
-  }
-  if (isIncluded(columnNames, names(dataset))) {
-    return(invisible())
-  }
-  if (is.null(logFolder)) {
-    stop(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName), call. = FALSE, immediate. = TRUE)
-  }
-  logErrorThenStop(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName))
-}
-
-checkIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, nullAllowed = FALSE, logFolder = NULL) {
-  if (nullAllowed && is.null(columnNames)) {
-    return(invisible())
-  }
-  if (isIncluded(columnNames, names(dataset))) {
-    return(invisible())
-  }
-  #TODO this check should be ion logWorkflow and not in the caller!!
-  if (is.null(logFolder)) {
-    warning(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName), call. = FALSE, immediate. = TRUE)
-    return(invisible())
-  }
-  logWorkflow(
-    message = messages$errorNotIncludedInDataset(columnNames, dataset, datasetName),
-    pathFolder = logFolder,
-    logTypes = c(LogTypes$Debug, LogTypes$Error)
-  )
-}
-
-validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, outputs = NULL) {
+validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, outputs = NULL, logFolder = NULL) {
   # In case, value from reading from Excel/csv file is not an actual NULL
   if (any(isOfLength(unit, 0), is.na(unit), unit %in% "")) {
     unit <- NULL
@@ -402,20 +439,26 @@ validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, output
   # Case unit is defined using outputs
   dataUnit <- NULL
   if (!isOfLength(outputs, 0)) {
-    dataUnit <- unlist(lapply(outputs, function(output) {
-      output$dataUnit
-    }))
+    dataUnit <- unlist(lapply(outputs, function(output) output$dataUnit))
   }
 
   # Checks for errors
   # If no unit defined at all
   if (isOfLength(c(unit, unitColumn, dataUnit), 0)) {
-    stop(messages$errorNoDataUnit())
+    logMessage(
+      messages$errorNoDataUnit(),
+      logLevel = LogLevels$Error,
+      logFolder = logFolder
+    )
   }
   # If no unit defined by dictionray, all outputs need to define dataUnit
   if (isOfLength(c(unit, unitColumn), 0)) {
     if (!isSameLength(dataUnit, outputs)) {
-      stop(messages$errorNoDataUnitInOutputs())
+      logMessage(
+        messages$errorNoDataUnitInOutputs(),
+        logLevel = LogLevels$Error,
+        logFolder = logFolder
+      )
     }
     return(invisible())
   }
@@ -423,18 +466,54 @@ validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, output
   # Only one of unit, unitColumn and dataUnit should be defined
   # in the case dataUnit was defined, code has already returned
   if (!isOfLength(c(unit, unitColumn, dataUnit), 1)) {
-    warning(messages$warningMultipleDataUnit())
+    logMessage(
+      messages$warningMultipleDataUnit(),
+      logLevel = LogLevels$Warning,
+      logFolder = logFolder
+    )
   }
   # If defined, check that unitColumn refers an actual column from observed data
-  checkIsIncludedInDataset(unitColumn, observedDataset, datasetName = "observed dataset", nullAllowed = TRUE)
+  checkIsIncludedInDataset(unitColumn, observedDataset, datasetName = "observed dataset", nullAllowed = TRUE, logFolder = logFolder)
 
   return(invisible())
 }
 
-
 validateCommandStatus <- function(command, status){
   if(status!=0){
-    stop(messages$errorCommand(command, status))
+    logMessage(
+      messages$errorCommand(command, status),
+      logLevel = LogLevels$Error
+    )
   }
+  return(invisible())
+}
+
+#-------- Warning functions ---------
+checkIsIncluded <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL, logFolder = NULL){
+  tryCatch({
+    validateIsIncluded(values, parentValues, nullAllowed)
+  },
+  error = function(e){
+    logMessage(
+      message = messages$errorNotIncluded(values, parentValues, groupName),
+      logLevel = LogLevels$Warning,
+      logFolder = logFolder
+    )
+  })
+  return(invisible())
+}
+
+checkIsIncludedInDataset <- function(columnNames, dataset, nullAllowed = FALSE, datasetName = NULL, logFolder = NULL) {
+  tryCatch({
+    # imported from ospsuite.utils
+    validateIsIncluded(columnNames, names(dataset), nullAllowed)
+  },
+  error = function(e){
+    logMessage(
+      message = messages$errorNotIncludedInDataset(columnNames, dataset, datasetName),
+      logLevel = LogLevels$Warning,
+      logFolder = logFolder
+    )
+  })
   return(invisible())
 }

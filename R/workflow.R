@@ -58,7 +58,7 @@ Workflow <- R6::R6Class(
       allSimulationSetNames <- sapply(simulationSets, function(set) {
         set$simulationSetName
       })
-      validateNoDuplicatedEntries(allSimulationSetNames)
+      validateHasUniqueValues(allSimulationSetNames, objectName = "simulationSetName")
 
       self$workflowFolder <- workflowFolder
       workflowFolderCheck <- file.exists(self$workflowFolder)

@@ -14,10 +14,6 @@ messages <- list(
     )
   },
 
-  errorDuplicatedEntries = function(objectNames, optionalMessage = NULL) {
-    paste(objectNames, "contains duplicated elements.")
-  },
-
   errorWrongLength = function(object, nbElements, optionalMessage = NULL) {
     paste0(
       callingFunction(), "Object should be of length '", nbElements, "', but is of length '", length(object), "' instead. ", optionalMessage
@@ -177,11 +173,11 @@ messages <- list(
     paste0(callingFunction(), "Simulation sets '", paste0(setNames, collapse = "', '"), "' require same outputs and PK parameters.  Verify the outputs and PK parameters of simulation sets using the function: 'getPKParametersInSimulationSet'.")
   },
 
-  errorHasNoUniqueValues = function(data, dataName = "dataset", na.rm = TRUE) {
+  errorHasNoUniqueValues = function(object, objectName, na.rm = TRUE) {
     if (na.rm) {
-      data <- data[!is.na(data)]
+      object <- object[!is.na(object)]
     }
-    return(paste0(callingFunction(), "Values '", paste0(data[duplicated(data)], collapse = "', '"), "' in ", dataName, " are not unique"))
+    return(paste0(callingFunction(), "Values '", paste0(object[duplicated(object)], collapse = "', '"), "' in ", objectName, " are not unique"))
   },
 
   dataIncludedInTimeRange = function(finalSize, timeRange, timeUnit, dataType) {

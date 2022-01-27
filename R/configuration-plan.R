@@ -272,7 +272,7 @@ ConfigurationPlan <- R6::R6Class(
         return(private$.sections)
       }
       private$.sections <- sectionsAsDataFrame(value)
-      validateHasUniqueValues(private$.sections$id, dataName = "Sections Id")
+      validateHasUniqueValues(private$.sections$id, objectName = "Sections Id")
     },
 
     #' @field simulationMappings data.frame mapping simulations to their paths
@@ -300,7 +300,7 @@ ConfigurationPlan <- R6::R6Class(
         "project: '", private$.simulationMappings$project,
         "' - simulation: '", private$.simulationMappings$simulation, "'"
       )
-      validateHasUniqueValues(simulationMappingsId, dataName = "SimulationMappings combinations")
+      validateHasUniqueValues(simulationMappingsId, objectName = "SimulationMappings combinations")
     },
 
     #' @field observedDataSets data.frame mapping observed datasets to their paths

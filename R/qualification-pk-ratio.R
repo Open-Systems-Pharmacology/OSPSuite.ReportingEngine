@@ -318,32 +318,6 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
   ))
 }
 
-
-#' @title isBetween
-#' @description Assess if `x` is between `left` and `right` bounds.
-#' Shortcut for `x >= left & x <= right` if `strict=FALSE` (default).
-#' Shortcut for `x > left & x < right` if `strict=TRUE`.
-#' @param x Numeric values to assess
-#' @param left Numeric value(s) used as lower bound
-#' @param right Numeric value(s) used as upper bound
-#' @param strict Logical value defining if `x` is strictly between `left` and `right`.
-#' Default value is `FALSE`.
-#' @return Logical values
-#' @export
-#' @examples
-#' isBetween(1:12, 7, 9)
-#'
-#' x <- rnorm(1e2)
-#' x[isBetween(x, -1, 1)]
-#'
-#' isBetween(x, cos(x) + 1, cos(x) - 1)
-isBetween <- function(x, left, right, strict = FALSE) {
-  if (strict) {
-    return(x > left & x < right)
-  }
-  return(x >= left & x <= right)
-}
-
 #' @title measureValuesBetween
 #' @description Measure the values of `x` between `left` and `right` bounds according to `method`.
 #' @param x Numeric values to assess
