@@ -301,11 +301,25 @@ getPKParametersInSimulationSet <- function(simulationSet) {
 #' @title getAllowedCores
 #'
 #' @description
+#'
+#' @return Allowed number of CPU cores for computation
+#' @keywords internal
+getAllowedCores <- function(){
+  numberOfCores = getAllowedCoresLinuxKubernetes()
+  if (is.null(numberOfCores)){
+    numberOfCores = getOSPSuiteSetting(settingName = "numberOfCores")
+  }
+}
+
+
+#' @title getAllowedCoresLinuxKubernetes
+#'
+#' @description
 #' Relevant only when reporting engine is executed on a Linux Kubernetes cluster.
 #'
 #' @return Allowed number of CPU cores for computation
 #' @keywords internal
-getAllowedCores <- function() {
+getAllowedCoresLinuxKubernetes <- function() {
   cores <- tryCatch(
     {
       # get cpu allowance from files
