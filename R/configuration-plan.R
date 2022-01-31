@@ -288,7 +288,7 @@ ConfigurationPlan <- R6::R6Class(
         return(private$.observedDataSets)
       }
       # ObservedDataSets can be null or empty list, in which case, nothing happens
-      if (isOfLength(value, 0)) {
+      if (isEmpty(value)) {
         return(invisible())
       }
       # Change field names to appropriate camelCase names within the mapping
@@ -310,24 +310,35 @@ ConfigurationPlan <- R6::R6Class(
       # Checks if field observedDataSets is appropriate
       dataPaths <- private$.observedDataSets$path
       dataIds <- private$.observedDataSets$id
-      unexistingFiles <- !file.exists(file.path(self$referenceFolder, dataPaths))
-      if (any(unexistingFiles)) {
-        unexistingFiles <- paste0(dataPaths[unexistingFiles], collapse = "', '")
-        warning(paste0("Observed datasets '", unexistingFiles, "' not found"))
-      }
-      if (!hasUniqueValues(dataIds)) {
+      sapply(
+        file.path(self$referenceFolder, dataPaths),
+        function(observedDataFile) {
+          checkFileExists(observedDataFile, optionalMessage = paste0("Observed dataset '", observedDataFile, "' not found"))
+        }
+      )
+      tryCatch({
+        validateHasUniqueValues(dataIds, objectName = "ObservedDataSets Id")
+      },
+      error = function(e) {
         # Check if the id reference same paths
         duplicatedIds <- unique(dataIds[duplicated(dataIds)])
         for (observedDataSetsId in duplicatedIds) {
           selectedRows <- dataIds %in% observedDataSetsId
           selectedPaths <- dataPaths[selectedRows]
           if (isOfLength(unique(selectedPaths), 1)) {
-            warning(messages$errorHasNoUniqueValues(dataIds[selectedRows], dataName = "ObservedDataSets Id"))
+            logMessage(
+              message = messages$errorHasNoUniqueValues(dataIds[selectedRows], objectName = "ObservedDataSets Id"),
+              logLevel = LogLevels$Warning
+            )
             next
           }
-          stop(paste0("Inconsistent ObservedDataSets Paths '", paste0(selectedPaths, collapse = "', '"), "' for non unique Id '", observedDataSetsId, "'"))
+          logMessage(
+            message = paste0("Inconsistent ObservedDataSets Paths '", paste0(selectedPaths, collapse = "', '"), "' for non unique Id '", observedDataSetsId, "'"),
+            logLevel = LogLevels$Error
+          )
         }
-      }
+      })
+      return(invisible())
     }
   ),
 

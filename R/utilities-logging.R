@@ -45,6 +45,7 @@ timeStamp <- function() {
 #' @title logMessage
 #' @description Report a logging message
 #' @param message message to report
+#' @param logLevel Name of log level. Use helper enum `LogLevels` for finding appropriate log level.
 #' @param logFolder Directory in which logs are saved.
 #' If `NULL` the message is only reported on console
 #' @import ospsuite.utils

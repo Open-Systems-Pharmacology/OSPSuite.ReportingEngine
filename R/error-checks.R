@@ -255,10 +255,9 @@ validateIsPositive <- function(object, nullAllowed = FALSE, logFolder = NULL, op
     return(invisible())
   }
   validateIsOfTypeRE(object, c("numeric", "integer"), nullAllowed = nullAllowed, logFolder = logFolder, optionalMessage = optionalMessage)
-  if (isPositive(object)) {
+  if (!isPositive(object)) {
     logMessage(
-      message = optionalMessage %||%
-        messages$errorWrongType(getObjectNameAsString(object), class(object)[1], "positive"),
+      message = optionalMessage %||% paste0(getObjectNameAsString(object), "is not positive"),
       logLevel = LogLevels$Error,
       logFolder = logFolder
     )

@@ -107,7 +107,7 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
       " in Project '", outputMapping$Project, "' - Simulation '", outputMapping$Simulation, "'"
     ),
     logLevel = LogLevels$Debug,
-    logFolder = self$workflowFolder
+    logFolder = logFolder
   )
 
   simulatedValues <- ospsuite::toUnit(
@@ -149,7 +149,7 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
         " in Observed Dataset '", observedDataSet, "'"
       ),
       logLevel = LogLevels$Debug,
-      logFolder = self$workflowFolder
+      logFolder = logFolder
     )
 
     observedValues <- ospsuite::toUnit(

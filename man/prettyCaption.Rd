@@ -35,5 +35,4 @@ cat(prettyCaption("this_is_a_long_sentence_without_preferential_splits", maxLine
 cat(prettyCaption("this too short to split", maxLines = 3, width = 40))
 
 cat(prettyCaption("this forces the sentence to use one line", maxLines = 1, width = 5))
-
 }
