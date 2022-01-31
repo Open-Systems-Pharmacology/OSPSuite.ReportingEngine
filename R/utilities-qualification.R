@@ -115,7 +115,7 @@ loadConfigurationPlan <- function(configurationPlanFile, workflowFolder) {
 #' @return A data.frame including information about every section and subsection
 #' @importFrom ospsuite.utils %||%
 #' @keywords internal
-sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFolder = NULL, sectionLevel = 1) {
+sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFolder = "images", sectionLevel = 1) {
   # If sections are already as a data.frame format,
   # return them after checking that every field is present
   if (isOfType(sectionsIn, "data.frame")) {
@@ -129,10 +129,11 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
     validateIsIncluded(c("Id", "Title"), names(section))
     # Actual section path will be relative to the workflowFolder
     # and is wrapped in method configurationPlan$getSectionPath(id)
-    sectionPath <- paste0(parentFolder,
-                          sprintf("%0.3d_section_%d", sectionIndex, section$Id),
-                          sep = .Platform$file.sep
-    )
+    sectionPath <- paste(
+      parentFolder, 
+      sprintf("%0.3d_section_%d", sectionIndex, section$Id), 
+      sep = .Platform$file.sep
+      )
 
     sectionMarkdown <- sprintf("%0.3d_%s.md", sectionIndex, removeForbiddenLetters(section$Title))
 
