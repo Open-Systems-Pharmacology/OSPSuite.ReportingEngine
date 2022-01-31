@@ -19,37 +19,31 @@ runSensitivity <- function(structureSet,
   sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
 
   allVariableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
-
   # If no parameters to vary specified, vary all parameters valid for sensitivity analysis
-  if (is.null(settings$variableParameterPaths)) {
-    settings$variableParameterPaths <- allVariableParameterPaths
-  } else {
-    # if a variableParameterPaths input is provided, ensure that all
-    # its elements exist within allVariableParameterPaths.  If not, give an error.
+  settings$variableParameterPaths <- settings$variableParameterPaths %||% allVariableParameterPaths
+  # if a variableParameterPaths input is provided, ensure that all
+  # its elements exist within allVariableParameterPaths.  If not, give an error.
+  validParameterPaths <- intersect(settings$variableParameterPaths, allVariableParameterPaths)
+  validateIsNotEmpty(
+    validParameterPaths,
+    logFolder = logFolder,
+    optionalMessage = messages$errorNoValidParametersForSensitivityAnalysis(structureSet$simulationSet$simulationSetName)
+  )
 
-    validParameterPaths <- intersect(settings$variableParameterPaths, allVariableParameterPaths)
-
-    if (length(validParameterPaths) == 0) {
-      logErrorThenStop(messages$errorNoValidParametersForSensitivityAnalysis(structureSet$simulationSet$simulationSetName), logFolderPath = logFolder)
-    }
-
-    invalidParameterPaths <- setdiff(settings$variableParameterPaths, validParameterPaths)
-    settings$variableParameterPaths <- validParameterPaths
-
-    if (length(invalidParameterPaths) != 0) {
-      logWorkflow(
-        message = messages$warningIgnoringInvalidParametersForSensitivityAnalysis(invalidParameterPaths, structureSet$simulationSet$simulationSetName),
-        pathFolder = logFolder
-      )
-    }
+  invalidParameterPaths <- setdiff(settings$variableParameterPaths, validParameterPaths)
+  if (!isEmpty(invalidParameterPaths)) {
+    logMessage(
+      message = messages$warningIgnoringInvalidParametersForSensitivityAnalysis(invalidParameterPaths, structureSet$simulationSet$simulationSetName),
+      logLevel = LogLevels$Warning,
+      logFolder = logFolder,
+    )
   }
-  totalNumberParameters <- length(settings$variableParameterPaths)
+
+  settings$variableParameterPaths <- validParameterPaths
+
   # In case there are more cores specified in numberOfCores than
   # there are parameters, ensure at least one parameter per spawned core
-  settings$numberOfCores <- min(settings$numberOfCores, totalNumberParameters)
-  if (totalNumberParameters == 0) {
-    logErrorThenStop(messages$errorNoParametersForSensitivityAnalysis(), logFolderPath = logFolder)
-  }
+  settings$numberOfCores <- min(settings$numberOfCores, length(settings$variableParameterPaths))
 
   # If numberOfCores > 1 then spawn cores for later use.
   # Otherwise sensitivity analysis will be run on master core only.
@@ -64,16 +58,18 @@ runSensitivity <- function(structureSet,
   # If there is a population file and no individualId then do SA for entire population
   # If there is no population file and individualId then do SA for mean model
   # If there is no population file and no individualId then do SA for mean model.
-  if (!is.null(structureSet$simulationSet$populationFile)) { # Determine if SA is to be done for a single individual or more
+  if (!is.null(structureSet$simulationSet$populationFile)) {
+    # Determine if SA is to be done for a single individual or more
     re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$populationFile)
     popObject <- loadPopulation(structureSet$simulationSet$populationFile)
     resultsFileName <- resultsFileName %||% "sensitivityAnalysisResults"
     individualSeq <- individualId %||% seq(0, popObject$count - 1)
     individualSensitivityAnalysisResults <- list()
     for (ind in individualSeq) {
-      logWorkflow(
+      logMessage(
         message = paste("Starting sensitivity analysis for individual", ind),
-        pathFolder = logFolder
+        logLevel = LogLevels$Info,
+        logFolder = logFolder
       )
 
       individualSensitivityAnalysisResults[[getIndividualSAResultsFileName(ind, resultsFileName)]] <- individualSensitivityAnalysis(
@@ -193,8 +189,12 @@ runParallelSensitivityAnalysis <- function(structureSet,
 
   # Load simulation on each core
   loadSimulationOnCores(structureSet = structureSet, logFolder = logFolder)
+  logMessage(
+    message = "Sending simulation parameters to cores",
+    logLevel = LogLevels$Info,
+    logFolder = logFolder
+  )
 
-  logWorkflow(message = "Starting sending of parameters to cores", pathFolder = logFolder)
   Rmpi::mpi.bcast.Robj2slave(obj = partialIndividualSensitivityAnalysisResults)
   Rmpi::mpi.bcast.Robj2slave(obj = variationRange)
   Rmpi::mpi.bcast.Robj2slave(obj = showProgress)
@@ -202,13 +202,20 @@ runParallelSensitivityAnalysis <- function(structureSet,
   Rmpi::mpi.bcast.Robj2slave(obj = tempLogFileNames)
   Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
   Rmpi::mpi.bcast.Robj2slave(obj = allResultsFileNames)
-  logWorkflow(message = "Sending of parameters to cores completed", pathFolder = logFolder)
 
   # Update simulation with individual parameters
-  logWorkflow(message = "Updating individual parameters on cores.", pathFolder = logFolder)
+  logMessage(
+    message = "Updating individual parameters on cores",
+    logLevel = LogLevels$Info,
+    logFolder = logFolder
+  )
   updateIndividualParametersOnCores(individualParameters = individualParameters, logFolder = logFolder)
 
-  logWorkflow(message = "Starting sensitivity analysis on cores.", pathFolder = logFolder)
+  logMessage(
+    message = "Starting sensitivity analysis on cores",
+    logLevel = LogLevels$Info,
+    logFolder = logFolder
+  )
   Rmpi::mpi.remote.exec(partialIndividualSensitivityAnalysisResults <- analyzeCoreSensitivity(
     simulation = sim,
     variableParameterPaths = listSplitParameters[[Rmpi::mpi.comm.rank()]],
@@ -225,7 +232,11 @@ runParallelSensitivityAnalysis <- function(structureSet,
 
   # Write core logs to workflow logs
   for (core in seq(1, settings$numberOfCores)) {
-    logWorkflow(message = readLines(tempLogFileNames[core]), pathFolder = logFolder)
+    logMessage(
+      message = readLines(tempLogFileNames[core]),
+      logLevel = LogLevels$Debug,
+      logFolder = logFolder
+    )
     file.remove(tempLogFileNames[core])
   }
 
@@ -271,12 +282,15 @@ analyzeSensitivity <- function(simulation,
     numberOfCores = settings$allowedCores
   )
 
-  logWorkflow(message = paste0("Starting sensitivity analysis for path(s) ", paste(settings$variableParameterPaths, collapse = ", ")), pathFolder = logFolder)
+  logMessage(
+    message = paste0("Starting sensitivity analysis for path(s) ", paste(settings$variableParameterPaths, collapse = ", ")),
+    logLevel = LogLevels$Info,
+    logFolder = logFolder
+  )
   sensitivityAnalysisResults <- ospsuite::runSensitivityAnalysis(
     sensitivityAnalysis = sensitivityAnalysis,
     sensitivityAnalysisRunOptions = sensitivityAnalysisRunOptions
   )
-  logWorkflow(message = "Sensitivity analysis for current path(s) completed", pathFolder = logFolder)
   return(sensitivityAnalysisResults)
 }
 
@@ -439,10 +453,10 @@ getSAFileIndex <- function(structureSet,
       quantileResults <- getQuantileIndividualIds(singleOuputSinglePKDataframe, quantileVec)
 
       if (!isOfLength(quantileResults$ids, length(quantileVec))) {
-        logWorkflow(
+        logMessage(
           message = messages$warningNoFinitePKParametersForSomeIndividuals(pkParameter, output, structureSet$simulationSet$simulationSetName),
-          logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error),
-          pathFolder = logFolder
+          logLevel = LogLevels$Warning,
+          logFolder = logFolder
         )
         next
       }
@@ -538,10 +552,10 @@ plotMeanSensitivity <- function(structureSet,
     pathLabel <- lastPathElement(output$path)
     for (pkParameter in output$pkParameters) {
       if (!isIncluded(pkParameter$pkParameter, saResults$allPKParameterNames)) {
-        logWorkflow(
+        logMessage(
           message = messages$errorNotIncluded(pkParameter$pkParameter, saResults$allPKParameterNames),
-          logTypes = c(LogTypes$Debug, LogTypes$Error),
-          pathFolder = logFolder
+          logLevel = LogLevels$Warning,
+          logFolder = logFolder
         )
         next
       }
@@ -572,7 +586,7 @@ plotMeanSensitivity <- function(structureSet,
         captions = sensitivityData$parameter,
         maxLines = settings$maxLinesPerParameter,
         width = settings$maxWidthPerParameter
-        )
+      )
 
       sensitivityPlot <- tlf::plotTornado(
         data = sensitivityData,
@@ -674,14 +688,14 @@ plotPopulationSensitivity <- function(structureSets,
         )
 
         if (is.null(dfForPkAndOp)) {
-          logWorkflow(
+          logMessage(
             message = messages$warningPopulationSensitivityPlotsNotAvailableForPKParameterOutputSimulationSet(
               pkParameter = pkParameter$pkParameter,
               output = outputPath,
               simulationSetName = structureSet$simulationSet$simulationSetName
             ),
-            logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error),
-            pathFolder = logFolder
+            logLevel = LogLevels$Warning,
+            logFolder = logFolder
           )
           next
         }
@@ -705,11 +719,11 @@ plotPopulationSensitivity <- function(structureSets,
     }
   }
 
-  if (isOfLength(allPopsDf, 0)) {
-    logWorkflow(
+  if (isEmpty(allPopsDf)) {
+    logMessage(
       message = messages$warningPopulationSensitivityPlotsNotAvailable(),
-      logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error),
-      pathFolder = logFolder
+      logLevel = LogLevels$Warning,
+      logFolder = logFolder
     )
     return()
   }
@@ -925,10 +939,10 @@ getPopSensDfForPkAndOutput <- function(simulation,
 
       # verify that pkParameter is included in sensitivity results for current individual.  If not, skip to next individual
       if (!isIncluded(pkParameter, individualSAResults$allPKParameterNames)) {
-        logWorkflow(
+        logMessage(
           message = paste("For individualID", individualId, ":", messages$errorNotIncluded(pkParameter, individualSAResults$allPKParameterNames)),
-          logTypes = c(LogTypes$Debug, LogTypes$Error),
-          pathFolder = logFolder
+          logLevel = LogLevels$Warning,
+          logFolder = logFolder
         )
         next
       }
@@ -990,4 +1004,3 @@ getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold = NULL
   totalSensitivityThreshold <- totalSensitivityThreshold %||% ifNotNull(variableParameterPaths, 1, 0.9)
   return(totalSensitivityThreshold)
 }
-

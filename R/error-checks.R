@@ -10,10 +10,10 @@ hasPositiveValues <- function(object) {
 }
 
 isPositive <- function(values, na.rm = TRUE) {
-  if(na.rm){
+  if (na.rm) {
     values <- values[!is.na(values)]
   }
-  if(isOfLength(values, 0)){
+  if (isOfLength(values, 0)) {
     return(FALSE)
   }
   return(all(values > 0))
@@ -71,150 +71,194 @@ isBetween <- function(x, left, right, strict = FALSE) {
   return(x >= left & x <= right)
 }
 
+isEmpty <- function(object) {
+  if (isOfLength(object, 0)) {
+    return(TRUE)
+  }
+  # Length of empty data.frames counts the columns
+  if (!class(object)[1] %in% "data.frame") {
+    return(FALSE)
+  }
+  if (nrow(object) == 0) {
+    return(TRUE)
+  }
+  return(FALSE)
+}
+
 # Validate helpers ---------
-validateIsOfTypeRE <- function(object, type, nullAllowed = FALSE, logFolder = NULL){
+validateIsOfTypeRE <- function(object, type, nullAllowed = FALSE, logFolder = NULL, optionalMessage = NULL) {
   tryCatch({
     # imported from ospsuite.utils
     validateIsOfType(object, type, nullAllowed)
   },
-  error = function(e){
+  error = function(e) {
     logMessage(
-      message = messages$errorWrongType(getObjectNameAsString(object), typeof(object), type),
+      message = optionalMessage %||%
+        messages$errorWrongType(getObjectNameAsString(object), typeof(object), type),
       logLevel = LogLevels$Error,
       logFolder = logFolder
     )
-  })
+  }
+  )
   return(invisible())
 }
 
-validateIsStringRE <- function(object, nullAllowed = FALSE, logFolder = NULL){
+validateIsStringRE <- function(object, nullAllowed = FALSE, logFolder = NULL, optionalMessage = NULL) {
   tryCatch({
     # imported from ospsuite.utils
     validateIsString(object, nullAllowed)
   },
-  error = function(e){
+  error = function(e) {
     logMessage(
-      message = messages$errorWrongType(getObjectNameAsString(object), typeof(object), "character"),
+      message = optionalMessage %||%
+        messages$errorWrongType(getObjectNameAsString(object), typeof(object), "character"),
       logLevel = LogLevels$Error,
       logFolder = logFolder
     )
-  })
+  }
+  )
   return(invisible())
 }
 
-validateIsNumericRE <- function(object, nullAllowed = FALSE, logFolder = NULL){
+validateIsNumericRE <- function(object, nullAllowed = FALSE, logFolder = NULL, optionalMessage = NULL) {
   tryCatch({
     # imported from ospsuite.utils
     validateIsNumeric(object, nullAllowed)
   },
-  error = function(e){
+  error = function(e) {
     logMessage(
-      message = messages$errorWrongType(getObjectNameAsString(object), typeof(object), c("numeric", "integer")),
+      message = optionalMessage %||%
+        messages$errorWrongType(getObjectNameAsString(object), typeof(object), c("numeric", "integer")),
       logLevel = LogLevels$Error,
       logFolder = logFolder
     )
-  })
+  }
+  )
   return(invisible())
 }
 
-validateIsIntegerRE <- function(object, nullAllowed = FALSE, logFolder = NULL){
+validateIsIntegerRE <- function(object, nullAllowed = FALSE, logFolder = NULL, optionalMessage = NULL) {
   tryCatch({
     # imported from ospsuite.utils
     validateIsInteger(object, nullAllowed)
   },
-  error = function(e){
+  error = function(e) {
     logMessage(
-      message = messages$errorWrongType(getObjectNameAsString(object), typeof(object), "integer"),
+      message = optionalMessage %||%
+        messages$errorWrongType(getObjectNameAsString(object), typeof(object), "integer"),
       logLevel = LogLevels$Error,
       logFolder = logFolder
     )
-  })
+  }
+  )
   return(invisible())
 }
 
-validateIsLogicalRE <- function(object, nullAllowed = FALSE, logFolder = NULL){
+validateIsLogicalRE <- function(object, nullAllowed = FALSE, logFolder = NULL, optionalMessage = NULL) {
   tryCatch({
     # imported from ospsuite.utils
     validateIsLogical(object, nullAllowed)
   },
-  error = function(e){
+  error = function(e) {
     logMessage(
-      message = messages$errorWrongType(getObjectNameAsString(object), typeof(object), "logical"),
+      message = optionalMessage %||%
+        messages$errorWrongType(getObjectNameAsString(object), typeof(object), "logical"),
       logLevel = LogLevels$Error,
       logFolder = logFolder
     )
-  })
+  }
+  )
   return(invisible())
 }
 
-validateIsIncludedRE <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL, logFolder = NULL){
+validateIsIncludedRE <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL, logFolder = NULL, optionalMessage = NULL) {
   tryCatch({
     # imported from ospsuite.utils
     validateIsIncluded(values, parentValues, nullAllowed)
   },
-  error = function(e){
+  error = function(e) {
     logMessage(
-      message = messages$errorNotIncluded(values, parentValues, groupName),
+      message = optionalMessage %||%
+        messages$errorNotIncluded(values, parentValues, groupName),
       logLevel = LogLevels$Error,
       logFolder = logFolder
     )
-  })
+  }
+  )
   return(invisible())
 }
 
-validateIsIncludedInDataset <- function(columnNames, dataset, nullAllowed = FALSE, datasetName = NULL, logFolder = NULL) {
+validateIsIncludedInDataset <- function(columnNames, dataset, nullAllowed = FALSE, datasetName = NULL, logFolder = NULL, optionalMessage = NULL) {
   tryCatch({
     # imported from ospsuite.utils
     validateIsIncluded(columnNames, names(dataset), nullAllowed)
   },
-  error = function(e){
+  error = function(e) {
     logMessage(
-      message = messages$errorNotIncludedInDataset(columnNames, dataset, datasetName),
+      message = optionalMessage %||%
+        messages$errorNotIncludedInDataset(columnNames, dataset, datasetName),
       logLevel = LogLevels$Error,
       logFolder = logFolder
     )
-  })
+  }
+  )
   return(invisible())
 }
 
-validateIsOfLengthRE <- function(object, nbElements, logFolder = NULL){
+validateIsOfLengthRE <- function(object, nbElements, logFolder = NULL, optionalMessage = NULL) {
   tryCatch({
     # imported from ospsuite.utils
     validateIsOfLength(object, nbElements)
   },
-  error = function(e){
+  error = function(e) {
     logMessage(
-      message = messages$errorWrongLength(getObjectNameAsString(object), nbElements),
+      message = optionalMessage %||%
+        messages$errorWrongLength(getObjectNameAsString(object), nbElements),
       logLevel = LogLevels$Error,
       logFolder = logFolder
     )
-  })
+  }
+  )
   return(invisible())
 }
 
-validateIsSameLengthRE <- function(..., logFolder = NULL){
+# Note that empty includes null but also numeric(0), character(0), etc.
+validateIsNotEmpty <- function(object, logFolder = NULL, optionalMessage = NULL) {
+  if (!isEmpty(object)) {
+    return(invisible())
+  }
+  logMessage(
+    message = optionalMessage %||% paste0(getObjectNameAsString(object), " is empty"),
+    logLevel = LogLevels$Error,
+    logFolder = logFolder
+  )
+}
+
+validateIsSameLengthRE <- function(..., logFolder = NULL, optionalMessage = NULL) {
   tryCatch({
     # imported from ospsuite.utils
     validateIsSameLength(...)
   },
-  error = function(e){
+  error = function(e) {
     logMessage(
-      message = messages$errorDifferentLength(...),
+      message = optionalMessage %||% messages$errorDifferentLength(...),
       logLevel = LogLevels$Error,
       logFolder = logFolder
     )
-  })
+  }
+  )
   return(invisible())
 }
 
-validateIsPositive <- function(object, nullAllowed = FALSE, logFolder = NULL) {
+validateIsPositive <- function(object, nullAllowed = FALSE, logFolder = NULL, optionalMessage = NULL) {
   if (nullAllowed && is.null(object)) {
     return(invisible())
   }
-  validateIsOfTypeRE(object, c("numeric", "integer"), nullAllowed, logFolder)
-  if (isPositive(object)){
+  validateIsOfTypeRE(object, c("numeric", "integer"), nullAllowed = nullAllowed, logFolder = logFolder, optionalMessage = optionalMessage)
+  if (isPositive(object)) {
     logMessage(
-      messages$errorWrongType(getObjectNameAsString(object), class(object)[1], "positive"),
+      message = optionalMessage %||%
+        messages$errorWrongType(getObjectNameAsString(object), class(object)[1], "positive"),
       logLevel = LogLevels$Error,
       logFolder = logFolder
     )
@@ -222,22 +266,23 @@ validateIsPositive <- function(object, nullAllowed = FALSE, logFolder = NULL) {
 }
 
 # Note that -Inf/Inf can be use for validation of greater and lower only
-validateIsBetween <- function(object, left, right, strict = FALSE, nullAllowed = FALSE, objectName = NULL, logFolder = NULL){
+validateIsBetween <- function(object, left, right, strict = FALSE, nullAllowed = FALSE, objectName = NULL, logFolder = NULL, optionalMessage = NULL) {
   if (nullAllowed && is.null(object)) {
     return(invisible())
   }
-  validateIsNumericRE(object, nullAllowed, logFolder)
-  if(isTRUE(all(isBetween(values, left, right, strict)))){
+  validateIsNumericRE(object, nullAllowed = nullAllowed, logFolder = logFolder, optionalMessage = optionalMessage)
+  if (isTRUE(all(isBetween(values, left, right, strict)))) {
     return(invisible())
   }
   logMessage(
-    message = messages$outsideRange(objectName %||% getObjectNameAsString(object), object, left, right),
+    message = optionalMessage %||%
+      messages$outsideRange(objectName %||% getObjectNameAsString(object), object, left, right),
     logLevel = LogLevels$Error,
     logFolder = logFolder
   )
 }
 
-validateHasUniqueValues <- function(object, na.rm = TRUE, nullAllowed = FALSE, objectName = NULL, logFolder = NULL) {
+validateHasUniqueValues <- function(object, na.rm = TRUE, nullAllowed = FALSE, objectName = NULL, logFolder = NULL, optionalMessage = NULL) {
   if (nullAllowed && is.null(object)) {
     return(invisible())
   }
@@ -245,13 +290,14 @@ validateHasUniqueValues <- function(object, na.rm = TRUE, nullAllowed = FALSE, o
     return(invisible())
   }
   logMessage(
-    messages$errorHasNoUniqueValues(object, objectName %||% getObjectNameAsString(object), na.rm),
+    message = optionalMessage %||%
+      messages$errorHasNoUniqueValues(object, objectName %||% getObjectNameAsString(object), na.rm),
     logLevel = LogLevels$Error,
     logFolder = logFolder
   )
 }
 
-validateIsFileExtension <- function(path, extension, nullAllowed = FALSE, logFolder = NULL) {
+validateIsFileExtension <- function(path, extension, nullAllowed = FALSE, logFolder = NULL, optionalMessage = NULL) {
   if (nullAllowed && is.null(path)) {
     return(invisible())
   }
@@ -259,21 +305,21 @@ validateIsFileExtension <- function(path, extension, nullAllowed = FALSE, logFol
     return(invisible())
   }
   logMessage(
-    messages$errorExtension(path, extension),
+    message = optionalMessage %||% messages$errorExtension(path, extension),
     logLevel = LogLevels$Error,
     logFolder = logFolder
   )
 }
 
-validateFileExists <- function(path, nullAllowed = FALSE, logFolder = NULL) {
+validateFileExists <- function(path, nullAllowed = FALSE, logFolder = NULL, optionalMessage = NULL) {
   if (nullAllowed && is.null(path)) {
     return(invisible())
   }
-  if (file.exists(path)){
+  if (file.exists(path)) {
     return(invisible())
   }
   logMessage(
-    messages$errorUnexistingFile(path),
+    message = optionalMessage %||% messages$errorUnexistingFile(path),
     logLevel = LogLevels$Error,
     logFolder = logFolder
   )
@@ -424,7 +470,7 @@ validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
     logMessage(
       message = messages$errorNotSameOutputsBetweenSets(
         sapply(simulationSets, function(set) set$simulationSetName)
-        ),
+      ),
       logLevel = LogLevels$Error,
       logFolder = logFolder
     )
@@ -478,8 +524,8 @@ validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, output
   return(invisible())
 }
 
-validateCommandStatus <- function(command, status){
-  if(status!=0){
+validateCommandStatus <- function(command, status) {
+  if (status != 0) {
     logMessage(
       messages$errorCommand(command, status),
       logLevel = LogLevels$Error
@@ -489,31 +535,78 @@ validateCommandStatus <- function(command, status){
 }
 
 #-------- Warning functions ---------
-checkIsIncluded <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL, logFolder = NULL){
-  tryCatch({
-    validateIsIncluded(values, parentValues, nullAllowed)
-  },
-  error = function(e){
-    logMessage(
-      message = messages$errorNotIncluded(values, parentValues, groupName),
-      logLevel = LogLevels$Warning,
-      logFolder = logFolder
-    )
-  })
+# Different from null as it also includes character(0) or data.frame without any rows
+checkIsNotEmpty <- function(object, logFolder = NULL, optionalMessage = NULL) {
+  if (!isEmpty(object)) {
+    return(invisible())
+  }
+  logMessage(
+    message = optionalMessage %||% paste0(getObjectNameAsString(object), " is empty"),
+    logLevel = LogLevels$Warning,
+    logFolder = logFolder
+  )
   return(invisible())
 }
 
-checkIsIncludedInDataset <- function(columnNames, dataset, nullAllowed = FALSE, datasetName = NULL, logFolder = NULL) {
+checkFileExists <- function(path, nullAllowed = FALSE, logFolder = NULL, optionalMessage = NULL) {
+  tryCatch({
+    validateFileExists(path, nullAllowed)
+  },
+  error = function(e) {
+    logMessage(
+      message = optionalMessage %||% messages$errorUnexistingFile(path),
+      logLevel = LogLevels$Warning,
+      logFolder = logFolder
+    )
+  }
+  )
+  return(invisible())
+}
+
+checkIsIncluded <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL, logFolder = NULL, optionalMessage = NULL) {
+  tryCatch({
+    validateIsIncluded(values, parentValues, nullAllowed)
+  },
+  error = function(e) {
+    logMessage(
+      message = optionalMessage %||%
+        messages$errorNotIncluded(values, parentValues, groupName),
+      logLevel = LogLevels$Warning,
+      logFolder = logFolder
+    )
+  }
+  )
+  return(invisible())
+}
+
+checkIsIncludedInDataset <- function(columnNames, dataset, nullAllowed = FALSE, datasetName = NULL, logFolder = NULL, optionalMessage = NULL) {
   tryCatch({
     # imported from ospsuite.utils
     validateIsIncluded(columnNames, names(dataset), nullAllowed)
   },
-  error = function(e){
+  error = function(e) {
     logMessage(
-      message = messages$errorNotIncludedInDataset(columnNames, dataset, datasetName),
+      message = optionalMessage %||%
+        messages$errorNotIncludedInDataset(columnNames, dataset, datasetName),
       logLevel = LogLevels$Warning,
       logFolder = logFolder
     )
-  })
+  }
+  )
   return(invisible())
+}
+
+checkHasUniqueValues <- function(object, na.rm = TRUE, nullAllowed = FALSE, objectName = NULL, logFolder = NULL, optionalMessage = NULL) {
+  tryCatch({
+    validateHasUniqueValues(object, na.rm = na.rm, nullAllowed = nullAllowed)
+  },
+  error = function(e) {
+    logMessage(
+      message = optionalMessage %||%
+        messages$errorHasNoUniqueValues(object, objectName %||% getObjectNameAsString(object), na.rm),
+      logLevel = LogLevels$Error,
+      logFolder = logFolder
+    )
+  }
+  )
 }

@@ -63,11 +63,6 @@ PlotTask <- R6::R6Class(
           units = reEnv$defaultPlotFormat$units
         )
         re.tStoreFileMetadata(access = "write", filePath = figureFilePath)
-        logWorkflow(
-          message = paste0("Plot '", self$getRelativePath(plotFileName), "' was successfully saved."),
-          pathFolder = self$workflowFolder,
-          logTypes = LogTypes$Debug
-        )
 
         if (!is.null(taskResults$captions[[plotName]])) {
           addTextChunk(self$fileName, paste0("Figure: ", taskResults$captions[[plotName]]), logFolder = self$workflowFolder)
@@ -108,13 +103,12 @@ PlotTask <- R6::R6Class(
             logFolder = self$workflowFolder
           )
         }
-
-        logWorkflow(
-          message = paste0("Table '", self$getAbsolutePath(tableFileName), "' was successfully saved."),
-          pathFolder = self$workflowFolder,
-          logTypes = LogTypes$Debug
-        )
       }
+      logMessage(
+        message = paste0(length(taskResults$plots), " plots saved and ", length(taskResults$tables), " tables saved for ", self$title),
+        logLevel = LogLevels$Debug,
+        logFolder = self$workflowFolder
+      )
     },
 
     #' @description
@@ -122,9 +116,10 @@ PlotTask <- R6::R6Class(
     #' @param structureSets list of `SimulationStructure` objects
     runTask = function(structureSets) {
       actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
-      logWorkflow(
+      logMessage(
         message = paste0("Starting: ", self$message),
-        pathFolder = self$workflowFolder
+        logLevel = LogLevels$Info,
+        logFolder = self$workflowFolder
       )
       resetReport(self$fileName, self$workflowFolder)
       addTextChunk(
@@ -137,9 +132,10 @@ PlotTask <- R6::R6Class(
       }
 
       for (set in structureSets) {
-        logWorkflow(
+        logMessage(
           message = paste0(self$message, " for ", set$simulationSet$simulationSetName),
-          pathFolder = self$workflowFolder
+          logLevel = LogLevels$Info,
+          logFolder = self$workflowFolder
         )
         if (self$validateStructureSetInput(set)) {
           taskResults <- self$getTaskResults(

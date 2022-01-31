@@ -53,9 +53,10 @@ SimulationTask <- R6::R6Class(
     #' @param structureSets list of `SimulationStructure` R6 class
     runTask = function(structureSets) {
       actionToken <- re.tStartAction(actionType = "Simulation", actionNameExtension = self$nameTaskResults)
-      logWorkflow(
-        message = paste0("Starting ", self$message),
-        pathFolder = self$workflowFolder
+      logMessage(
+        message = paste0("Starting: ", self$message),
+        logLevel = LogLevels$Info,
+        logFolder = self$workflowFolder
       )
       if (!is.null(self$outputFolder)) {
         dir.create(file.path(self$workflowFolder, self$outputFolder))

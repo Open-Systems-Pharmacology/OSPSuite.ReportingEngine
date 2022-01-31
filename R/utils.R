@@ -203,11 +203,11 @@ lastPathElement <- function(path) {
 replaceInfWithNA <- function(data, logFolder = getwd()) {
   infData <- is.infinite(data)
   Ninf <- sum(infData)
-  if (Ninf > 0) {
-    logWorkflow(
+  if (isPositive(Ninf)) {
+    logMessage(
       message = paste0(Ninf, " values were infinite and transformed into missing values (NA)"),
-      pathFolder = logFolder,
-      logTypes = c(LogTypes$Debug, LogTypes$Error)
+      logLevel = LogLevels$Warning,
+      logFolder = logFolder
     )
   }
   data[infData] <- NA
@@ -224,16 +224,15 @@ removeMissingValues <- function(data, dataMapping = NULL, logFolder = getwd()) {
   data[, dataMapping] <- replaceInfWithNA(data[, dataMapping], logFolder)
   naData <- is.na(data[, dataMapping])
   Nna <- sum(naData)
-  data <- data[!naData, ]
 
-  if (Nna > 0) {
-    logWorkflow(
+  if (isPositive(Nna)) {
+    logMessage(
       message = paste0(Nna, " values were missing (NA) from variable '", dataMapping, "' and removed from the analysis"),
-      pathFolder = logFolder,
-      logTypes = c(LogTypes$Debug, LogTypes$Error)
+      logLevel = LogLevels$Warning,
+      logFolder = logFolder
     )
   }
-  return(data)
+  return(data[!naData, ])
 }
 
 #' @title getPKParametersInOutput
@@ -245,7 +244,7 @@ getPKParametersInOutput <- function(output) {
   pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
     pkParameterInfo$pkParameter
   })
-  if (isOfLength(pkParameters, 0)) {
+  if (isEmpty(pkParameters)) {
     return(NA)
   }
   return(pkParameters)
@@ -260,7 +259,7 @@ getPKParameterGroupsInOutput <- function(output) {
   pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
     pkParameterInfo$group
   })
-  if (isOfLength(pkParameters, 0)) {
+  if (isEmpty(pkParameters)) {
     return(NA)
   }
   return(pkParameters)
@@ -306,23 +305,22 @@ getPKParametersInSimulationSet <- function(simulationSet) {
 #' @return Allowed number of CPU cores for computation
 #' @keywords internal
 getAllowedCores <- function() {
-  cores <- tryCatch(
-    {
-      # get cpu allowance from files
-      cfs_quota_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us", intern = T))
-      cfs_period_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_period_us", intern = T))
-      cores <- floor(cfs_quota_us / cfs_period_us)
-      if (cores < 1) {
-        return(NULL)
-      }
-      return(cores)
-    },
-    error = function(cond) {
-      return(NULL)
-    },
-    warning = function(cond) {
+  cores <- tryCatch({
+    # get cpu allowance from files
+    cfs_quota_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us", intern = T))
+    cfs_period_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_period_us", intern = T))
+    cores <- floor(cfs_quota_us / cfs_period_us)
+    if (cores < 1) {
       return(NULL)
     }
+    return(cores)
+  },
+  error = function(cond) {
+    return(NULL)
+  },
+  warning = function(cond) {
+    return(NULL)
+  }
   )
 }
 
@@ -338,7 +336,7 @@ getSimulationParameterDisplayPaths <- function(parameterPaths, simulation, dicti
   for (parameterIndex in seq_along(parameterPaths)) {
     # Get the index of parameter in dictionary if defined
     dictionaryIndex <- which(parameterPaths[parameterIndex] %in% dictionary$parameter)
-    if (!isOfLength(dictionaryIndex, 0)) {
+    if (!isEmpty(dictionaryIndex)) {
       # Since dictionaryIndex is not null, use first element
       # user should already have a warning if a parameter path is defined
       # more than once in workflow$parameterDisplayPaths

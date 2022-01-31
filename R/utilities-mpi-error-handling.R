@@ -46,9 +46,17 @@ loadSimulationOnCores <- function(structureSet, logFolder) {
   success <- checkAllCoresSuccessful(simulationLoaded)
   validateIsLogical(success)
   if (!success) {
-    logErrorThenStop(message = paste("Simulation file", structureSet$simulationSet$simulationFile, "not loaded successfully on all cores"), logFolderPath = logFolder)
+    logMessage(
+      message = messages$loadedOnCores(structureSet$simulationSet$simulationFile, objectName = "Simulation file", success = "NOT "),
+      logLevel = LogLevels$Error,
+      logFolder = logFolder
+    )
   }
-  logWorkflow(message = paste("Simulation file", structureSet$simulationSet$simulationFile, "loaded successfully on all cores"), pathFolder = logFolder)
+  logMessage(
+    message = messages$loadedOnCores(structureSet$simulationSet$simulationFile, objectName = "Simulation file"),
+    logLevel = LogLevels$Info,
+    logFolder = logFolder
+  )
   return(invisible())
 }
 
@@ -64,9 +72,17 @@ loadPopulationOnCores <- function(populationFiles, logFolder) {
   success <- checkAllCoresSuccessful(populationLoaded)
   validateIsLogical(success)
   if (!success) {
-    logErrorThenStop(message = paste("Population files not loaded successfully on all cores"), logFolderPath = logFolder)
+    logMessage(
+      message = messages$loadedOnCores(populationFiles, objectName = "Population files", success = "NOT "),
+      logLevel = LogLevels$Error,
+      logFolder = logFolder
+    )
   }
-  logWorkflow(message = paste("Population files loaded successfully on all cores"), pathFolder = logFolder)
+  logMessage(
+    message = messages$loadedOnCores(populationFiles, objectName = "Population files"),
+    logLevel = LogLevels$Info,
+    logFolder = logFolder
+  )
   return(invisible())
 }
 
@@ -82,9 +98,17 @@ loadLibraryOnCores <- function(libraryName, logFolder) {
   success <- checkAllCoresSuccessful(libraryLoaded)
   validateIsLogical(success)
   if (!success) {
-    logErrorThenStop(message = paste(libraryName, "not loaded successfully on all cores"), logFolderPath = logFolder)
+    logMessage(
+      message = messages$loadedOnCores(libraryName, objectName = "Package", success = "NOT "),
+      logLevel = LogLevels$Error,
+      logFolder = logFolder
+    )
   }
-  logWorkflow(message = paste(libraryName, "loaded successfully on all cores"), pathFolder = logFolder)
+  logMessage(
+    message = messages$loadedOnCores(libraryName, objectName = "Package"),
+    logLevel = LogLevels$Info,
+    logFolder = logFolder
+  )
   return(invisible())
 }
 
@@ -99,9 +123,17 @@ updateIndividualParametersOnCores <- function(individualParameters, logFolder) {
   success <- checkAllCoresSuccessful(individualParametersUpdated)
   validateIsLogical(success)
   if (!success) {
-    logErrorThenStop(message = "Individual parameters updated successfully on all cores.", logFolderPath = logFolder)
+    logMessage(
+      message = messages$loadedOnCores("Individual parameters updated", success = "NOT "),
+      logLevel = LogLevels$Error,
+      logFolder = logFolder
+    )
   }
-  logWorkflow(message = "Individual parameters updated successfully on all cores.", pathFolder = logFolder)
+  logMessage(
+    message = messages$loadedOnCores("Individual parameters updated"),
+    logLevel = LogLevels$Error,
+    logFolder = logFolder
+  )
   return(invisible())
 }
 
@@ -115,14 +147,24 @@ verifySimulationRunSuccessful <- function(simulationRunSuccess, tempPopDataFiles
   success <- checkAllCoresSuccessful(simulationRunSuccess)
   validateIsLogical(success)
   if (success) {
-    logWorkflow(message = "Simulations completed successfully on all cores.", pathFolder = logFolder)
-  } else {
-    unsuccessfulCores <- setdiff(1:length(tempPopDataFiles), which(unlist(unname(simulationRunSuccess))))
-    for (core in unsuccessfulCores) {
-      pop <- ospsuite::loadPopulation(tempPopDataFiles[core])
-      logErrorMessage(message = paste("Simulations for individuals", paste(pop$allIndividualIds, collapse = ", "), "not completed successfully."), logFolderPath = logFolder)
-    }
+    logMessage(
+      message = "Simulations completed successfully on all cores.",
+      logLevel = LogLevels$Debug,
+      logFolder = logFolder
+    )
+    return(invisible())
   }
+
+  unsuccessfulCores <- setdiff(1:length(tempPopDataFiles), which(unlist(unname(simulationRunSuccess))))
+  for (core in unsuccessfulCores) {
+    pop <- ospsuite::loadPopulation(tempPopDataFiles[core])
+    logMessage(
+      message = paste("Simulations for individuals", paste(pop$allIndividualIds, collapse = ", "), "NOT completed successfully."),
+      logLevel = LogLevels$Warning,
+      logFolder = logFolder
+    )
+  }
+  return(invisible())
 }
 
 
@@ -135,9 +177,17 @@ verifySensitivityAnalysisRunSuccessful <- function(sensitivityRunSuccess, logFol
   success <- checkAllCoresSuccessful(sensitivityRunSuccess)
   validateIsLogical(success)
   if (!success) {
-    logErrorThenStop(message = "Sensitivity analyses not completed successfully on all cores.", logFolderPath = logFolder)
+    logMessage(
+      message = "Sensitivity analyses NOT completed successfully on all cores.",
+      logLevel = LogLevels$Error,
+      logFolder = logFolder
+    )
   }
-  logWorkflow(message = "Sensitivity analyses completed successfully on all cores.", pathFolder = logFolder)
+  logMessage(
+    message = "Sensitivity analyses completed successfully on all cores.",
+    logLevel = LogLevels$Debug,
+    logFolder = logFolder
+  )
   return(invisible())
 }
 
@@ -150,9 +200,17 @@ verifyAnyPreviousFilesRemoved <- function(anyPreviousPartialResultsRemoved, logF
   success <- checkAllCoresSuccessful(anyPreviousPartialResultsRemoved)
   validateIsLogical(success)
   if (!success) {
-    logErrorThenStop(message = "Previous results not removed successfully.", logFolderPath = logFolder)
+    logMessage(
+      message = "Previous results NOT removed successfully.",
+      logLevel = LogLevels$Error,
+      logFolder = logFolder
+    )
   }
-  logWorkflow(message = "Verified that no previous results exist.", pathFolder = logFolder)
+  logMessage(
+    message = "Verified that no previous results exist.",
+    logLevel = LogLevels$Debug,
+    logFolder = logFolder
+  )
   return(invisible())
 }
 
@@ -166,9 +224,18 @@ verifyPartialResultsExported <- function(partialResultsExported, numberOfCores, 
   success <- checkAllCoresSuccessful(partialResultsExported)
   validateIsLogical(success)
   if (success) {
-    logWorkflow(message = "All successful core results exported successfully.", pathFolder = logFolder)
-  } else {
-    unsuccessfulCores <- setdiff(1:numberOfCores, which(unlist(unname(partialResultsExported))))
-    logErrorMessage(message = paste("Results from cores", paste(unsuccessfulCores, collapse = ", "), "not exported successfully."), logFolderPath = logFolder)
+    logMessage(
+      message = "All successful core results exported successfully.",
+      logLevel = LogLevels$Debug,
+      logFolder = logFolder
+    )
+    return(invisible())
   }
+  unsuccessfulCores <- setdiff(1:numberOfCores, which(unlist(unname(partialResultsExported))))
+  logMessage(
+    message = paste("Results from cores", paste(unsuccessfulCores, collapse = ", "), "NOT exported successfully."),
+    logLevel = LogLevels$Warning,
+    logFolder = logFolder
+  )
+  return(invisible())
 }

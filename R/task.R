@@ -68,9 +68,9 @@ Task <- R6::R6Class(
       for (inputToCheck in private$.inputs) {
         if (!file.exists(inputToCheck)) {
           isValid <- FALSE
-          logWorkflow(
+          logMessage(
             message = messages$errorTaskInputDoesNotExist(inputToCheck),
-            logTypes = c(LogTypes$Error, LogTypes$Debug)
+            logLevel = LogLevels$Warning
           )
         }
       }
@@ -94,9 +94,9 @@ Task <- R6::R6Class(
       for (inputToCheck in inputsToCheck) {
         if (!file.exists(inputToCheck)) {
           isValid <- FALSE
-          logWorkflow(
+          logMessage(
             message = messages$errorTaskInputDoesNotExist(inputToCheck),
-            logTypes = c(LogTypes$Error, LogTypes$Debug)
+            logLevel = LogLevels$Warning
           )
         }
       }

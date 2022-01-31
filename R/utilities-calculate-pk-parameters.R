@@ -17,18 +17,14 @@ calculatePKParameters <- function(structureSet,
     simulation = simulation,
     filePaths = structureSet$simulationResultFileNames
   )
-
-  logWorkflow(
-    message = paste0("Simulation results '", structureSet$simulationResultFileNames, "' successfully loaded"),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
-
   pkAnalyses <- calculatePKAnalyses(results = simulationResults)
-  logWorkflow(
-    message = "Calculation of PK parameters complete",
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
+  logMessage(
+    message = paste0(
+      "PK parameters for simulation set '", structureSet$simulationSetName,
+      "' calculated from result files ", structureSet$simulationResultFileNames
+    ),
+    logLevel = LogLevels$Debug,
+    logFolder = logFolder
   )
   return(pkAnalyses)
 }
@@ -211,11 +207,11 @@ plotPopulationPKParameters <- function(structureSets,
 
       # NA and Inf values are removed to prevent crash in computation of percentiles
       pkParameterData <- removeMissingValues(pkParameterData, "Value", logFolder)
-      if (nrow(pkParameterData) == 0) {
-        logWorkflow(
+      if (isEmpty(pkParameterData)) {
+        logMessage(
           message = paste0(pkParameter$pkParameter, " of ", output$path, ": not enough available data to perform plot."),
-          pathFolder = logFolder,
-          logTypes = c(LogTypes$Info, LogTypes$Error, LogTypes$Debug)
+          logLevel = LogLevels$Warning,
+          logFolder = logFolder
         )
         next
       }
@@ -231,13 +227,6 @@ plotPopulationPKParameters <- function(structureSets,
       parameterCaption <- pkParameterMetaData$Value$dimension
       pkParametersCaptions[[plotID]] <- captions$plotPKParameters$boxplot(parameterCaption, output$displayName, simulationSetNames, simulationSetDescriptor)
 
-      if (!hasPositiveValues(pkParameterData$Value)) {
-        logWorkflow(
-          message = messages$warningLogScaleNoPositiveData(paste0(pkParameter$pkParameter, " of ", output$path)),
-          pathFolder = logFolder,
-          logTypes = c(LogTypes$Info, LogTypes$Error, LogTypes$Debug)
-        )
-      }
       if (hasPositiveValues(pkParameterData$Value)) {
         positiveValues <- pkParameterData$Value > 0
         boxRange <- autoAxesLimits(pkParameterData$Value[positiveValues], scale = "log")
@@ -255,6 +244,12 @@ plotPopulationPKParameters <- function(structureSets,
           simulationSetNames,
           simulationSetDescriptor,
           plotScale = "logarithmic"
+        )
+      } else {
+        logMessage(
+          message = messages$warningLogScaleNoPositiveData(paste0(pkParameter$pkParameter, " of ", output$path)),
+          logLevel = LogLevels$Warning,
+          logFolder = logFolder
         )
       }
 
@@ -750,17 +745,15 @@ getYParametersForPkParametersPlot <- function(workflow) {
 setXParametersForPkParametersPlot <- function(workflow, parameters) {
   validateIsOfType(workflow, "PopulationWorkflow")
   validateIsString(c(parameters))
-
   workflow$plotPKParameters$xParameters <- parameters
 
-  logWorkflow(
+  logMessage(
     message = paste0(
-      "X-parameters: '",
-      paste0(c(parameters), collapse = "', '"),
-      "' set for PK parameters plot."
+      "PK parameters range plots will include '", paste0(c(parameters), collapse = "', '"),
+      "' as parameters plotted in X-axis."
     ),
-    pathFolder = workflow$workflowFolder,
-    logTypes = LogTypes$Debug
+    logLevel = LogLevels$Info,
+    logFolder = workflow$workflowFolder
   )
   return(invisible())
 }
@@ -785,18 +778,16 @@ addXParametersForPkParametersPlot <- function(workflow, parameters) {
 setYParametersForPkParametersPlot <- function(workflow, parameters) {
   validateIsOfType(workflow, "PopulationWorkflow")
   validateIsOfType(c(parameters), "Output")
-
   workflow$plotPKParameters$yParameters <- parameters
 
   for (output in c(parameters)) {
-    logWorkflow(
+    logMessage(
       message = paste0(
-        "Y-parameters: '",
-        paste0(c(output$pkParameters), collapse = "', '"),
-        "' for '", output$path, "' set for PK parameters plot."
+        "PK parameters boxplots and range plots will include '", paste0(c(output$pkParameters), collapse = "', '"),
+        "' for '", output$path, "' as PK parameters plotted in Y-axis."
       ),
-      pathFolder = workflow$workflowFolder,
-      logTypes = LogTypes$Debug
+      logLevel = LogLevels$Info,
+      logFolder = workflow$workflowFolder
     )
   }
   return(invisible())

@@ -40,7 +40,7 @@ AllAvailableTasks <- c(
 activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
 
-  #Using ospsuite.reportingengine version of validateIsIncluded (and not the ospsuite.utils version) as the former has a logFolder argument
+  # Using ospsuite.reportingengine version of validateIsIncluded (and not the ospsuite.utils version) as the former has a logFolder argument
   validateIsIncludedRE(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
 
   for (task in tasks) {
@@ -57,7 +57,7 @@ activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
 inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
 
-  #Using ospsuite.reportingengine version of validateIsIncluded (and not the ospsuite.utils version) as the former has a logFolder argument
+  # Using ospsuite.reportingengine version of validateIsIncluded (and not the ospsuite.utils version) as the former has a logFolder argument
   validateIsIncludedRE(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
 
   for (task in tasks) {
@@ -538,9 +538,10 @@ addUserDefinedTask <- function(workflow,
       )
     )
   }
-  logWorkflow(
+  logMessage(
     message = paste0("User defined task '", taskName, "' successfully loaded on workflow"),
-    pathFolder = workflow$workflowFolder
+    logLevel = LogLevels$Info,
+    logFolder = workflow$workflowFolder
   )
   return(invisible())
 }

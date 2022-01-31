@@ -140,10 +140,10 @@ setDefaultNumericFormat <- function(digits = NULL, scientific = NULL) {
 #' @description Get default plot settings for RE package
 #' @return A `Theme` object from `tlf` package
 #' @keywords internal
-getDefaultRETheme <- function(){
+getDefaultRETheme <- function() {
   # Get reporting engine theme from its json file properties
   reThemeFile <- system.file("extdata", "re-theme.json", package = "ospsuite.reportingengine")
-  if(!isIncluded(reThemeFile, "")){
+  if (!isIncluded(reThemeFile, "")) {
     return(tlf::loadThemeFromJson(reThemeFile))
   }
   # If not found, e.g. before the package is built, use a tlf template theme

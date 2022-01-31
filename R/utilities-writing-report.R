@@ -7,9 +7,10 @@
 #' resetReport("report.md")
 resetReport <- function(fileName, logFolder = getwd()) {
   if (file.exists(fileName)) {
-    logWorkflow(
+    logMessage(
       message = paste0("'", fileName, "' already exists. Overwriting '", fileName, "'."),
-      pathFolder = logFolder
+      logLevel = LogLevels$Debug,
+      logFolder = logFolder
     )
   }
   fileObject <- file(fileName, encoding = "UTF-8")
@@ -31,6 +32,8 @@ addFigureChunk <- function(fileName,
                            figureFileRootDirectory,
                            figureCaption = "",
                            logFolder = getwd()) {
+  checkFileExists(fileName, logFolder = logFolder)
+  checkFileExists(file.path(figureFileRootDirectory, figureFileRelativePath), logFolder = logFolder)
   # For a figure path to be valid in markdown using ![](#figurePath)
   # %20 needs to replace spaces in that figure path
   mdFigureFile <- gsub(pattern = "[[:space:]*]", replacement = "%20", x = figureFileRelativePath)
@@ -49,11 +52,6 @@ addFigureChunk <- function(fileName,
   write(file.path(figureFileRootDirectory, figureFileRelativePath), file = fileObject, append = TRUE, sep = "\n")
   close(fileObject)
 
-  logWorkflow(
-    message = paste0("Figure path '", figureFileRelativePath, "' added to report '", fileName, "'."),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
   return(invisible())
 }
 
@@ -75,12 +73,14 @@ addTableChunk <- function(fileName,
                           scientific = NULL,
                           logFolder = getwd(),
                           na = "-") {
+  checkFileExists(fileName, logFolder = logFolder)
+  checkFileExists(file.path(tableFileRootDirectory, tableFileRelativePath), logFolder = logFolder)
   # The function `formatNumerics` is now used by addTableChunk
   # colClasses = "character" is not needed anymore to enforce all table elements to be 'character'
   table <- read.csv(
     file.path(tableFileRootDirectory, tableFileRelativePath),
     check.names = FALSE,
-    #colClasses = "character",
+    # colClasses = "character",
     fileEncoding = "UTF-8",
     stringsAsFactors = FALSE
   )
@@ -88,7 +88,7 @@ addTableChunk <- function(fileName,
     table,
     digits = digits %||% reEnv$formatNumericsDigits,
     scientific = scientific %||% reEnv$formatNumericsScientific
-    )
+  )
 
   # Currently using default options from kable
   mdText <- c(
@@ -107,11 +107,6 @@ addTableChunk <- function(fileName,
   write(file.path(tableFileRootDirectory, tableFileRelativePath), file = fileObject, append = TRUE, sep = "\n")
   close(fileObject)
 
-  logWorkflow(
-    message = paste0("Table path '", file.path(tableFileRootDirectory, tableFileRelativePath), "' added to report '", fileName, "'."),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
   return(invisible())
 }
 
@@ -127,14 +122,10 @@ addTableChunk <- function(fileName,
 addTextChunk <- function(fileName,
                          text,
                          logFolder = getwd()) {
+  checkFileExists(fileName, logFolder = logFolder)
   fileObject <- file(fileName, encoding = "UTF-8", open = "at")
   write(c("", text, ""), file = fileObject, append = TRUE, sep = "\n")
   close(fileObject)
-  logWorkflow(
-    message = paste0("Text '", text, "' added to report '", fileName, "'."),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
   return(invisible())
 }
 
@@ -154,7 +145,9 @@ addTextChunk <- function(fileName,
 mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd(), keepInputFiles = FALSE) {
   validateIsLogical(keepInputFiles)
   # Read all files contents first in case outputFile is within inputFiles
-  filesContent <- lapply(inputFiles, function(fileName){readLines(fileName, encoding = "UTF-8")})
+  filesContent <- lapply(inputFiles, function(fileName) {
+    readLines(fileName, encoding = "UTF-8")
+  })
   resetReport(outputFile, logFolder)
 
   # tracelib chunk of code
@@ -168,16 +161,17 @@ mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd(), kee
     }
   }
   # Merge input files content
-  invisible(lapply(filesContent, function(fileContent){addTextChunk(outputFile, fileContent, logFolder = logFolder)}))
+  invisible(lapply(filesContent, function(fileContent) {
+    addTextChunk(outputFile, fileContent, logFolder = logFolder)
+  }))
   if (!keepInputFiles) {
     # Use setdiff to prevent erasing output file its name is included in inputFiles
     file.remove(setdiff(inputFiles, outputFile))
   }
-
-  logWorkflow(
+  logMessage(
     message = paste0("Reports '", paste0(inputFiles, collapse = "', '"), "' were successfully merged into '", outputFile, "'"),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
+    logLevel = LogLevels$Debug,
+    logFolder = logFolder
   )
   return(invisible())
 }
@@ -268,10 +262,10 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
     unlink(reportConfig, recursive = TRUE)
     unlink(docxWordFileName, recursive = TRUE)
   }
-  logWorkflow(
+  logMessage(
     message = paste0("Word version of report '", fileName, "' created."),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
+    logLevel = LogLevels$Debug,
+    logFolder = logFolder
   )
   return(invisible())
 }
@@ -284,6 +278,7 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
 #' @param tablePattern character pattern referencing tables in first element of line
 #' @keywords internal
 numberTablesAndFigures <- function(fileName, logFolder = getwd(), figurePattern = "Figure:", tablePattern = "Table:") {
+  checkFileExists(fileName, logFolder = logFolder)
   fileContent <- readLines(fileName, encoding = "UTF-8")
 
   figureCount <- 0
@@ -305,10 +300,10 @@ numberTablesAndFigures <- function(fileName, logFolder = getwd(), figurePattern 
   write(fileContent, file = fileObject, sep = "\n")
   close(fileObject)
 
-  logWorkflow(
+  logMessage(
     message = paste0("In '", fileName, "', ", tableCount, " tables and ", figureCount, " figures were referenced."),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
+    logLevel = LogLevels$Debug,
+    logFolder = logFolder
   )
   return(invisible())
 }
@@ -325,6 +320,7 @@ numberTablesAndFigures <- function(fileName, logFolder = getwd(), figurePattern 
 #' @return Table of content referencing sections following a markdown format
 #' @keywords internal
 getSectionTOC <- function(fileName, logFolder = getwd(), numberSections = TRUE, tocPattern = "#", tocLevels = 6) {
+  checkFileExists(fileName, logFolder = logFolder)
   fileContent <- readLines(fileName, encoding = "UTF-8")
 
   # Initialize toc content
@@ -343,7 +339,7 @@ getSectionTOC <- function(fileName, logFolder = getwd(), numberSections = TRUE, 
     for (tocLevel in rev(seq(1, tocLevels))) {
       if (grepl(pattern = tocPatterns[tocLevel], x = firstElement)) {
         # Skip the section title if unnumbered and numberSection is FALSE
-        if(!grepl(pattern = "[[:digit:]]", x = secondElement) & !numberSections){
+        if (!grepl(pattern = "[[:digit:]]", x = secondElement) & !numberSections) {
           next
         }
         tocCounts[tocLevel] <- tocCounts[tocLevel] + 1
@@ -353,7 +349,7 @@ getSectionTOC <- function(fileName, logFolder = getwd(), numberSections = TRUE, 
 
         # Number section if option is true
         titlePattern <- paste0(tocPatterns[tocLevel], " ")
-        if(numberSections){
+        if (numberSections) {
           newTitlePattern <- paste0(tocCounts[seq(1, tocLevel)], collapse = ".")
           newTitlePattern <- paste0(titlePattern, newTitlePattern, " ")
           fileContent[lineIndex] <- gsub(pattern = titlePattern, replacement = newTitlePattern, x = fileContent[lineIndex])
@@ -375,10 +371,10 @@ getSectionTOC <- function(fileName, logFolder = getwd(), numberSections = TRUE, 
   write(fileContent, file = fileObject, sep = "\n")
   close(fileObject)
 
-  logWorkflow(
+  logMessage(
     message = paste0("In '", fileName, "', ", tocCounts[1], " main sections were referenced"),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
+    logLevel = LogLevels$Debug,
+    logFolder = logFolder
   )
   return(tocContent)
 }
@@ -390,6 +386,7 @@ getSectionTOC <- function(fileName, logFolder = getwd(), numberSections = TRUE, 
 #' @param logFolder folder where the logs are saved
 #' @keywords internal
 addMarkdownToc <- function(tocContent, fileName, logFolder = getwd()) {
+  checkFileExists(fileName, logFolder = logFolder)
   fileContent <- readLines(fileName, encoding = "UTF-8")
   fileContent <- c("# Table of Contents", "", tocContent, fileContent)
   fileObject <- file(fileName, encoding = "UTF-8")
@@ -397,10 +394,10 @@ addMarkdownToc <- function(tocContent, fileName, logFolder = getwd()) {
   close(fileObject)
   re.tStoreFileMetadata(access = "write", filePath = fileName)
 
-  logWorkflow(
+  logMessage(
     message = paste0("In '", fileName, "', table of content included."),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
+    logLevel = LogLevels$Debug,
+    logFolder = logFolder
   )
   return(invisible())
 }

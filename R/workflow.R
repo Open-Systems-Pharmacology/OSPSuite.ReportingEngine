@@ -45,7 +45,9 @@ Workflow <- R6::R6Class(
       validateIsString(workflowFolder)
       validateIsString(watermark, nullAllowed = TRUE)
       validateIsString(simulationSetDescriptor, nullAllowed = TRUE)
-      sapply(c(simulationSets),function(simulationSet){validateIsOfType(object = simulationSet,type = "SimulationSet")})
+      sapply(c(simulationSets), function(simulationSet) {
+        validateIsOfType(object = simulationSet, type = "SimulationSet")
+      })
       validateIsLogical(createWordReport)
       validateIsLogical(numberSections)
 
@@ -62,19 +64,12 @@ Workflow <- R6::R6Class(
 
       self$workflowFolder <- workflowFolder
       workflowFolderCheck <- file.exists(self$workflowFolder)
-
-      if (workflowFolderCheck) {
-        logWorkflow(
-          message = workflowFolderCheck,
-          pathFolder = self$workflowFolder,
-          logTypes = c(LogTypes$Debug)
-        )
-      }
       dir.create(self$workflowFolder, showWarnings = FALSE, recursive = TRUE)
 
-      logWorkflow(
+      logMessage(
         message = private$.reportingEngineInfo$print(),
-        pathFolder = self$workflowFolder
+        logLevel = LogLevels$Info,
+        logFolder = self$workflowFolder
       )
 
       self$reportFileName <- file.path(self$workflowFolder, paste0(defaultFileNames$reportName(), ".md"))
@@ -196,17 +191,15 @@ Workflow <- R6::R6Class(
     #' Variables of the data.frame should include `parameter` and `displayPath`.
     setParameterDisplayPaths = function(parameterDisplayPaths) {
       validateIsOfType(parameterDisplayPaths, "data.frame", nullAllowed = TRUE)
-      if (!FisOfLength(parameterDisplayPaths, 0)) {
+      if (!isEmpty(parameterDisplayPaths)) {
         validateIsIncluded(c("parameter", "displayPath"), names(parameterDisplayPaths))
       }
       # In case the same parameter is defined more than once, throw a warning
-      if (!hasUniqueValues(parameterDisplayPaths$parameter)) {
-        logWorkflow(
-          message = messages$errorHasNoUniqueValues(parameterDisplayPaths$parameter, dataName = "parameter variable"),
-          pathFolder = self$workflowFolder,
-          logTypes = LogTypes$Error
-        )
-      }
+      checkHasUniqueValues(
+        parameterDisplayPaths$parameter,
+        objectName = "parameter variable",
+        logFolder = self$workflowFolder
+      )
 
       # parameterDisplayPaths are centralized in the central private field .parameterDisplayPaths
       # However, they need to be send to the task using the field simulationStructures commmon among all tasks

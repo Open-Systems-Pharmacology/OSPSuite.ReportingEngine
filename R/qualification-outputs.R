@@ -249,8 +249,10 @@ generateDDIPlotPKParameterName <- function(pkParameter, startTime, endTime) {
 
 #' Dictionary for `ospsuite` PK parameters defined by Configuration Plan
 #' @keywords internal
-pkDictionaryQualificationOSP <- c(enum(ospsuite::allPKParameterNames()),
-                                  list(AUC = "AUC_tEnd",
-                                       CMAX = "C_max"))
-
-
+pkDictionaryQualificationOSP <- c(
+  enum(ospsuite::allPKParameterNames()),
+  list(
+    AUC = "AUC_tEnd",
+    CMAX = "C_max"
+  )
+)

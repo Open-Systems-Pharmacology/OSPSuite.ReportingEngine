@@ -49,12 +49,6 @@ GofPlotTask <- R6::R6Class(
 
           re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(plotFileName))
 
-          logWorkflow(
-            message = paste0("Plot '", self$getRelativePath(plotFileName), "' was successfully saved."),
-            pathFolder = self$workflowFolder,
-            logTypes = LogTypes$Debug
-          )
-
           if (!isOfLength(listOfPlotCaptions[[plotName]], 0)) {
             addTextChunk(self$fileName, paste0("Figure: ", listOfPlotCaptions[[plotName]]), logFolder = self$workflowFolder)
           }
@@ -81,13 +75,13 @@ GofPlotTask <- R6::R6Class(
         )
 
         re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(tableFileName))
-
-        logWorkflow(
-          message = paste0("Table '", self$getAbsolutePath(tableFileName), "' was successfully saved."),
-          pathFolder = self$workflowFolder,
-          logTypes = LogTypes$Debug
-        )
       }
+
+      logMessage(
+        message = paste0(length(taskResults$plots), " plots saved and ", length(taskResults$tables), " tables saved for ", self$title),
+        logLevel = LogLevels$Debug,
+        logFolder = self$workflowFolder
+      )
     },
 
     #' @description
@@ -95,9 +89,10 @@ GofPlotTask <- R6::R6Class(
     #' @param structureSets list of `SimulationStructure` objects
     runTask = function(structureSets) {
       actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
-      logWorkflow(
+      logMessage(
         message = paste0("Starting: ", self$message),
-        pathFolder = self$workflowFolder
+        logLevel = LogLevels$Info,
+        logFolder = self$workflowFolder
       )
       resetReport(self$fileName, self$workflowFolder)
       addTextChunk(
@@ -126,9 +121,10 @@ GofPlotTask <- R6::R6Class(
       }
 
       for (set in structureSets) {
-        logWorkflow(
+        logMessage(
           message = paste0(self$message, " for ", set$simulationSet$simulationSetName),
-          pathFolder = self$workflowFolder
+          logLevel = LogLevels$Info,
+          logFolder = self$workflowFolder
         )
         if (self$validateStructureSetInput(set)) {
           taskResults <- self$getTaskResults(
@@ -179,11 +175,6 @@ GofPlotTask <- R6::R6Class(
           row.names = FALSE
         )
         re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(tableFileName))
-        logWorkflow(
-          message = paste0("Table '", self$getAbsolutePath(tableFileName), "' was successfully saved."),
-          pathFolder = self$workflowFolder,
-          logTypes = LogTypes$Debug
-        )
 
         residualHistogramPlot <- plotResidualsHistogram(
           data = residualsAcrossAllSimulations,
@@ -219,12 +210,6 @@ GofPlotTask <- R6::R6Class(
         )
         re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(qqPlotFileName))
 
-        logWorkflow(
-          message = paste0("Plots '", self$getRelativePath(histogramFileName), "', '", self$getRelativePath(qqPlotFileName), "' were successfully saved."),
-          pathFolder = self$workflowFolder,
-          logTypes = LogTypes$Debug
-        )
-
         addTextChunk(
           self$fileName,
           "## Residuals across all simulations",
@@ -251,6 +236,11 @@ GofPlotTask <- R6::R6Class(
           fileName = self$fileName,
           figureFileRelativePath = self$getRelativePath(qqPlotFileName),
           figureFileRootDirectory = self$workflowFolder,
+          logFolder = self$workflowFolder
+        )
+        logMessage(
+          message = paste0("Saving 2 additional plots for ", self$title),
+          logLevel = LogLevels$Debug,
           logFolder = self$workflowFolder
         )
       }

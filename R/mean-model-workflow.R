@@ -59,12 +59,11 @@ MeanModelWorkflow <- R6::R6Class(
     runWorkflow = function() {
       actionToken1 <- re.tStartMetadataCapture(metaDataCapture = TRUE)
       actionToken2 <- re.tStartAction(actionType = "Run")
-      logWorkflow(
+      logMessage(
         message = "Starting run of mean model workflow",
-        pathFolder = self$workflowFolder
+        logLevel = LogLevels$Info,
+        logFolder = self$workflowFolder
       )
-
-
       if (self$simulate$active) {
         self$simulate$runTask(self$simulationStructures)
       }
@@ -101,8 +100,10 @@ MeanModelWorkflow <- R6::R6Class(
       appendices <- appendices[file.exists(appendices)]
       if (length(appendices) > 0) {
         mergeMarkdowndFiles(appendices, self$reportFileName, logFolder = self$workflowFolder)
-        renderReport(self$reportFileName, logFolder = self$workflowFolder,
-                     createWordReport = self$createWordReport, numberSections = self$numberSections)
+        renderReport(self$reportFileName,
+          logFolder = self$workflowFolder,
+          createWordReport = self$createWordReport, numberSections = self$numberSections
+        )
       }
 
       re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logInfoFile()))

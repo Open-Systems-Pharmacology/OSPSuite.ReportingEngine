@@ -74,7 +74,7 @@ ConfigurationPlan <- R6::R6Class(
       sectionTitle <- private$.sections$title[selectedId]
       sectionLevel <- private$.sections$level[selectedId]
       # If available, add title at appropriate level
-      if(!is.na(sectionTitle)){
+      if (!is.na(sectionTitle)) {
         markdownContent <- paste(
           paste0(rep("#", sectionLevel), collapse = ""),
           sectionTitle,
@@ -88,14 +88,7 @@ ConfigurationPlan <- R6::R6Class(
       # Get location of content
       markdownLocation <- file.path(self$referenceFolder, sectionContent)
       # In case file does not exist
-      if (!file.exists(markdownLocation)) {
-        logWorkflow(
-          message = paste0("Section content '", sectionContent, "' not found"),
-          pathFolder = logFolder,
-          logTypes = c(LogTypes$Error, LogTypes$Debug)
-        )
-        return(invisible())
-      }
+      validateFileExists(markdownLocation, logFolder = logFolder)
       # UTF-8 encoding is assumed for md files in Section Content
       markdownContent <- readLines(markdownLocation, encoding = "UTF-8")
       addTextChunk(fileName = self$getSectionMarkdown(id), text = markdownContent, logFolder = logFolder)
@@ -110,14 +103,7 @@ ConfigurationPlan <- R6::R6Class(
       # Get location of input
       inputLocation <- file.path(self$referenceFolder, input$Path)
       # In case file does not exist
-      if (!file.exists(inputLocation)) {
-        logWorkflow(
-          message = paste0("Input '", input$Path, "' not found"),
-          pathFolder = logFolder,
-          logTypes = c(LogTypes$Error, LogTypes$Debug)
-        )
-        return(invisible())
-      }
+      validateFileExists(inputLocation, logFolder = logFolder)
       # UTF-8 encoding is assumed for md files in Input
       markdownContent <- readLines(inputLocation, encoding = "UTF-8")
       addTextChunk(fileName = self$getSectionMarkdown(input$SectionId), text = markdownContent, logFolder = logFolder)
@@ -132,14 +118,7 @@ ConfigurationPlan <- R6::R6Class(
       # Get location of intro
       introLocation <- file.path(self$referenceFolder, intro$Path)
       # In case file does not exist
-      if (!file.exists(introLocation)) {
-        logWorkflow(
-          message = paste0("Input '", intro$Path, "' not found"),
-          pathFolder = logFolder,
-          logTypes = c(LogTypes$Error, LogTypes$Debug)
-        )
-        return(invisible())
-      }
+      validateFileExists(introLocation, logFolder = logFolder)
       # UTF-8 encoding is assumed for md files in Intro
       markdownContent <- readLines(introLocation, encoding = "UTF-8")
       addTextChunk(fileName = self$getIntroMarkdown(), text = markdownContent, logFolder = logFolder)
@@ -151,12 +130,12 @@ ConfigurationPlan <- R6::R6Class(
       inputContentFolder <- file.path(self$referenceFolder, "Content")
       # Get only sub folder names and remove "" from the values returned by list.dirs
       subFolders <- setdiff(list.dirs(inputContentFolder, full.names = FALSE), "")
-      for(subFolder in subFolders){
+      for (subFolder in subFolders) {
         inputContentSubFolder <- file.path(inputContentFolder, subFolder)
         outputContentSubFolder <- file.path(self$workflowFolder, subFolder)
         dir.create(outputContentSubFolder, showWarnings = FALSE, recursive = TRUE)
         # Copy all files from subfolder into report subfolder
-        for(fileName in list.files(inputContentSubFolder)){
+        for (fileName in list.files(inputContentSubFolder)) {
           # With recursive=TRUE, overwrite images
           file.copy(
             from = file.path(inputContentSubFolder, fileName),
@@ -211,7 +190,7 @@ ConfigurationPlan <- R6::R6Class(
       validateIsIncludedRE(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
       selectedId <- (private$.simulationMappings$project %in% project) & (private$.simulationMappings$simulation %in% simulation)
       populationPath <- file.path(self$referenceFolder, private$.simulationMappings$path[selectedId], paste0(private$.simulationMappings$simulationFile[selectedId], "-Population.csv"))
-      if(file.exists(populationPath)){
+      if (file.exists(populationPath)) {
         return(populationPath)
       }
       return()

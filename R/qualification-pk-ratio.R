@@ -241,14 +241,11 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
   )
   observedData <- readObservedDataFile(configurationPlan$getObservedDataPath(pkRatioMapping$ObservedData))
   selectedRow <- which(observedData[, reEnv$pkRatio$dictionary$id] %in% pkRatioMapping$ObservedDataRecordId)
-  if (!isOfLength(selectedRow, 1)) {
-    logWorkflow(
-      message = paste0("In PK Ratio Plots, ", length(selectedRow), " data record(s) found for ObservedDataRecordId '", pkRatioMapping$ObservedDataRecordId, "'"),
-      pathFolder = logFolder,
-      logTypes = c(LogTypes$Error, LogTypes$Debug)
-    )
-    return()
-  }
+  validateIsOfLengthRE(
+    selectedRow, 1,
+    logFolder = logFolder,
+    optionalMessage = paste0("In PK Ratio Plots, ", length(selectedRow), " data record(s) found for ObservedDataRecordId '", pkRatioMapping$ObservedDataRecordId, "'")
+  )
 
   metaData <- list()
   data <- data.frame()

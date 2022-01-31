@@ -18,18 +18,11 @@ plotQualificationComparisonTimeProfile <- function(configurationPlan,
 
     # Get axes properties (with scale, limits and display units)
     axesProperties <- getAxesProperties(timeProfilePlan$Axes) %||% settings$axes
-    if (isOfLength(axesProperties, 0)) {
-      # TODO Centralize messaging of configurtion plan errors and warnings
-      logWorkflow(
-        message = paste0(
-          "In Comparison Time Profile Plots,\n",
-          "No axes settings defined for plot: '", timeProfilePlan$Title, "'"
-        ),
-        pathFolder = logFolder,
-        logTypes = LogTypes$Error
-      )
-      next
-    }
+    validateIsNotEmpty(
+      axesProperties,
+      logFolder = logFolder,
+      optionalMessage = paste0("In Comparison Time Profile Plots,\nNo axes settings defined for plot: '", timeProfilePlan$Title, "'")
+    )
 
     simulationDuration <- ospsuite::toUnit(
       quantityOrDimension = "Time",
@@ -107,14 +100,14 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
   selectedTimeValues <- simulatedTime >= 0 & simulatedTime <= simulationDuration
   simulatedTime <- simulatedTime[selectedTimeValues]
 
-  logWorkflow(
-    paste0(
+  logMessage(
+    message = paste0(
       "In comparison time profile, '", sum(selectedTimeValues), "' values selected between ",
       timeOffset, " and ", timeOffset + simulationDuration, " ", axesProperties$x$unit,
       " in Project '", outputMapping$Project, "' - Simulation '", outputMapping$Simulation, "'"
     ),
-    logFolder,
-    LogTypes$Debug
+    logLevel = LogLevels$Debug,
+    logFolder = self$workflowFolder
   )
 
   simulatedValues <- ospsuite::toUnit(
@@ -149,15 +142,16 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
     observedTime <- observedTime - timeOffset
     selectedObservedTimeValues <- observedTime >= 0 & observedTime <= simulationDuration
     observedTime <- observedTime[selectedObservedTimeValues]
-    logWorkflow(
-      paste0(
+    logMessage(
+      message = paste0(
         "In comparison time profile, '", sum(selectedObservedTimeValues), "' values selected between ",
         timeOffset, " and ", timeOffset + simulationDuration, " ", axesProperties$x$unit,
         " in Observed Dataset '", observedDataSet, "'"
       ),
-      logFolder,
-      LogTypes$Debug
+      logLevel = LogLevels$Debug,
+      logFolder = self$workflowFolder
     )
+
     observedValues <- ospsuite::toUnit(
       quantityOrDimension = ospsuite::getDimensionForUnit(observedResults$metaData$output$unit),
       values = observedResults$data[, 2],

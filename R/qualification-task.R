@@ -61,7 +61,6 @@ QualificationTask <- R6::R6Class(
           reportFile = configurationPlan$getSectionMarkdown(result$sectionId),
           logFolder = self$workflowFolder
         )
-
       }
     },
 
@@ -70,9 +69,10 @@ QualificationTask <- R6::R6Class(
     #' @param configurationPlan A `ConfigurationPlan` object
     runTask = function(configurationPlan) {
       actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
-      logWorkflow(
+      logMessage(
         message = paste0("Starting: ", self$message),
-        pathFolder = self$workflowFolder
+        logLevel = LogLevels$Info,
+        logFolder = self$workflowFolder
       )
       if (self$validateInput()) {
         taskResults <- self$getTaskResults(

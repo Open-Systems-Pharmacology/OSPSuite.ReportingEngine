@@ -59,11 +59,6 @@ PopulationPlotTask <- R6::R6Class(
           units = reEnv$defaultPlotFormat$units
         )
         re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(plotFileName))
-        logWorkflow(
-          message = paste0("Plot '", self$getRelativePath(plotFileName), "' was successfully saved."),
-          pathFolder = self$workflowFolder,
-          logTypes = LogTypes$Debug
-        )
 
         if (!is.null(taskResults$captions[[plotName]])) {
           addTextChunk(self$fileName, paste0("Figure: ", taskResults$captions[[plotName]]), logFolder = self$workflowFolder)
@@ -102,13 +97,13 @@ PopulationPlotTask <- R6::R6Class(
           )
 
           re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(tableFileName))
-          logWorkflow(
-            message = paste0("Table '", self$getAbsolutePath(tableFileName), "' was successfully saved."),
-            pathFolder = self$workflowFolder,
-            logTypes = LogTypes$Debug
-          )
         }
       }
+      logMessage(
+        message = paste0(length(taskResults$plots), " plots saved and ", length(taskResults$tables), " tables saved for ", self$title),
+        logLevel = LogLevels$Debug,
+        logFolder = self$workflowFolder
+      )
     },
 
     #' @description
@@ -116,9 +111,10 @@ PopulationPlotTask <- R6::R6Class(
     #' @param structureSets list of `SimulationStructure` R6 class
     runTask = function(structureSets) {
       actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
-      logWorkflow(
+      logMessage(
         message = paste0("Starting: ", self$message),
-        pathFolder = self$workflowFolder
+        logLevel = LogLevels$Info,
+        logFolder = self$workflowFolder
       )
 
       if (self$validateInput()) {

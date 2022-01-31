@@ -20,7 +20,7 @@ LogLevels <- enum(c(
 #' @param logFolder Folder in which the log files are saved
 #' @return An array of file paths
 #' @keywords internal
-getLogPaths <- function(logLevel, logFolder){
+getLogPaths <- function(logLevel, logFolder) {
   filePaths <- file.path(
     logFolder,
     switch(
@@ -38,7 +38,7 @@ getLogPaths <- function(logLevel, logFolder){
 #' @description Print time stamp for logs
 #' @return A character string
 #' @keywords internal
-timeStamp <- function(){
+timeStamp <- function() {
   sprintf("%s : ", format(Sys.time(), "%d/%m/%Y - %H:%M:%S"))
 }
 
@@ -49,23 +49,23 @@ timeStamp <- function(){
 #' If `NULL` the message is only reported on console
 #' @import ospsuite.utils
 #' @export
-logMessage <- function(message, 
+logMessage <- function(message,
                        logLevel = LogLevels$Info,
-                       logFolder = NULL){
+                       logFolder = NULL) {
   validateIsString(message)
   validateIsIncluded(logLevel, LogLevels)
   timedMessage <- paste0(timeStamp(), message)
-  if(is.null(logFolder)){
+  if (is.null(logFolder)) {
     switch(
       logLevel,
       "Info" = cat(timedMessage),
       "Warning" = warning(timedMessage, call. = FALSE),
       "Error" = stop(timedMessage, call. = FALSE)
-      )
+    )
     return(invisible())
   }
   logFiles <- getLogPaths(logLevel, logFolder)
-  for(logFile in logFiles){
+  for (logFile in logFiles) {
     # Using the function file, the log is created if unexisting
     fileObject <- file(logFile, encoding = "UTF-8")
     write(timedMessage, file = fileObject, sep = "\n")

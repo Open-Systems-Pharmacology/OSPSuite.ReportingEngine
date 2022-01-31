@@ -22,9 +22,10 @@ CalculatePKParametersTask <- R6::R6Class(
     #' @param structureSets list of `SimulationStructure` objects
     runTask = function(structureSets) {
       actionToken <- re.tStartAction(actionType = "Analysis", actionNameExtension = self$nameTaskResults)
-      logWorkflow(
+      logMessage(
         message = paste0("Starting ", self$message),
-        pathFolder = self$workflowFolder
+        logLevel = LogLevels$Info,
+        logFolder = self$workflowFolder
       )
 
       if (!is.null(self$outputFolder)) {
@@ -32,9 +33,10 @@ CalculatePKParametersTask <- R6::R6Class(
       }
 
       for (set in structureSets) {
-        logWorkflow(
+        logMessage(
           message = paste0("Calculate PK parameters for simulation set ", set$simulationSet$simulationSetName),
-          pathFolder = self$workflowFolder
+          logLevel = LogLevels$Info,
+          logFolder = self$workflowFolder
         )
         if (self$validateStructureSetInput(set)) {
           taskResults <- self$getTaskResults(
@@ -48,9 +50,10 @@ CalculatePKParametersTask <- R6::R6Class(
             taskResults
           )
 
-          logWorkflow(
+          logMessage(
             message = "PK parameter calculation completed.",
-            pathFolder = self$workflowFolder
+            logLevel = LogLevels$Debug,
+            logFolder = self$workflowFolder
           )
         }
       }

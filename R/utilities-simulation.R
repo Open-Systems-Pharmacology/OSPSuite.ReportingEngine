@@ -73,9 +73,10 @@ simulateModelForPopulation <- function(structureSets,
     }
 
     # If multiple cores available, run in parallel
-    logWorkflow(
+    logMessage(
       message = paste0("Starting parallel population simulation on ", numberOfCores, " cores"),
-      pathFolder = logFolder
+      logLevel = LogLevels$Info,
+      logFolder = logFolder
     )
 
     simulationResultFileNames <- runParallelPopulationSimulation(
@@ -92,9 +93,10 @@ simulateModelForPopulation <- function(structureSets,
     )
     file.remove(simulationResultFileNames)
 
-    logWorkflow(
+    logMessage(
       message = "Parallel population simulation completed.",
-      pathFolder = logFolder
+      logLevel = LogLevels$Debug,
+      logFolder = logFolder
     )
     simulationResults <- c(simulationResults, simulationResult)
   }
@@ -148,10 +150,10 @@ simulateModelParallel <- function(structureSets,
   simulations <- lapply(structureSets, function(set) {
     re.tStoreFileMetadata(access = "read", filePath = set$simulationSet$simulationFile)
     simulation <- loadSimulationWithUpdatedPaths(set$simulationSet)
-    logWorkflow(
+    logMessage(
       message = paste0("Simulation file '", set$simulationSet$simulationFile, "' successfully loaded"),
-      pathFolder = logFolder,
-      logTypes = LogTypes$Debug
+      logLevel = LogLevels$Debug,
+      logFolder = logFolder
     )
     return(simulation)
   })
@@ -166,12 +168,11 @@ simulateModelParallel <- function(structureSets,
     simulationRunOptions = simRunOptions
   )
 
-  logWorkflow(
+  logMessage(
     message = "Parallel simulation run complete",
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
+    logLevel = LogLevels$Debug,
+    logFolder = logFolder
   )
-
   return(c(simulationResults))
 }
 
@@ -188,20 +189,19 @@ simulateModel <- function(structureSet,
                           logFolder = getwd()) {
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
-
-  logWorkflow(
+  logMessage(
     message = paste0("Simulation file '", structureSet$simulationSet$simulationFile, "' successfully loaded"),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
+    logLevel = LogLevels$Debug,
+    logFolder = logFolder
   )
 
   population <- NULL
   if (!is.null(structureSet$simulationSet$populationFile)) {
     population <- loadWorkflowPopulation(structureSet$simulationSet)
-    logWorkflow(
+    logMessage(
       message = paste0("Population file '", structureSet$simulationSet$populationFile, "' successfully loaded"),
-      pathFolder = logFolder,
-      logTypes = LogTypes$Debug
+      logLevel = LogLevels$Debug,
+      logFolder = logFolder
     )
   }
 
@@ -224,12 +224,11 @@ simulateModel <- function(structureSet,
     simulationRunOptions = simRunOptions
   )
 
-  logWorkflow(
+  logMessage(
     message = "Simulation run complete",
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
+    logLevel = LogLevels$Debug,
+    logFolder = logFolder
   )
-
   return(simulationResult)
 }
 
@@ -301,10 +300,10 @@ runParallelPopulationSimulation <- function(structureSet,
 
   # Write core logs to workflow logs
   for (core in seq(1, numberOfCores)) {
-    logWorkflow(
+    logMessage(
       message = readLines(tempLogFileNames[core]),
-      pathFolder = logFolder,
-      logTypes = LogTypes$Debug
+      logLevel = LogLevels$Debug,
+      logFolder = logFolder
     )
   }
 

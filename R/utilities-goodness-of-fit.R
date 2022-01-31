@@ -87,7 +87,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
     goodnessOfFitCaptions[[timeRange$name]] <- timeProfilePlotResults$captions
   }
 
-  if (!isOfLength(residualsData, 0)) {
+  if (!isEmpty(residualsData)) {
     for (timeRange in timeRanges) {
       if (!timeRange$keep) {
         next
@@ -100,7 +100,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
     }
   }
   allResiduals <- goodnessOfFitResiduals[[ApplicationRanges$total]]
-  if (!isOfLength(allResiduals, 0)) {
+  if (!isEmpty(allResiduals)) {
     residuals <- list(
       data = allResiduals,
       metaData = residualsMetaData[[ApplicationRanges$total]]
@@ -128,7 +128,7 @@ plotMeanGoodnessOfFit <- function(structureSet,
 #' @keywords internal
 getSimulatedResultsFromOutput <- function(simulationPathResults, output, simulationQuantity, molWeight, simulationSet) {
   outputConcentration <- simulationPathResults$data[, output$path]
-  if (!isOfLength(output$displayUnit, 0)) {
+  if (!isEmpty(output$displayUnit)) {
     outputConcentration <- ospsuite::toUnit(simulationQuantity,
       simulationPathResults$data[, output$path],
       output$displayUnit,
@@ -172,7 +172,7 @@ getSimulatedResultsFromOutput <- function(simulationPathResults, output, simulat
 getResiduals <- function(observedData,
                          simulatedData,
                          residualScale = ResidualScales$Logarithmic) {
-  if (isOfLength(observedData, 0)) {
+  if (isEmpty(observedData)) {
     return()
   }
   # Time matrix to match observed time with closest simulation time
@@ -290,7 +290,7 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     goodnessOfFitCaptions[[timeRange$name]] <- timeProfilePlotResults$captions
   }
 
-  if (!isOfLength(residualsData, 0)) {
+  if (!isEmpty(residualsData)) {
     for (timeRange in timeRanges) {
       if (!timeRange$keep) {
         next
@@ -303,14 +303,14 @@ plotPopulationGoodnessOfFit <- function(structureSet,
     }
   }
   allResiduals <- goodnessOfFitResiduals[[ApplicationRanges$total]]
-  if (!isOfLength(allResiduals, 0)) {
+  if (!isEmpty(allResiduals)) {
     residuals <- list(
       data = allResiduals,
       metaData = residualsMetaData[[ApplicationRanges$total]]
     )
   }
   goodnessOfFitTables <- list(simulatedData = simulatedData)
-  if (!isOfLength(observedData, 0)) {
+  if (!isEmpty(observedData)) {
     goodnessOfFitTables <- list(
       observedData = observedData,
       simulatedData = simulatedData
@@ -425,7 +425,7 @@ plotMeanTimeProfile <- function(simulatedData,
     dataMapping = dataMapping,
     plotConfiguration = plotConfiguration
   )
-  if (!isOfLength(observedData, 0)) {
+  if (!isEmpty(observedData)) {
     timeProfilePlot <- tlf::addScatter(
       data = observedData,
       metaData = metaData,
@@ -433,7 +433,7 @@ plotMeanTimeProfile <- function(simulatedData,
       plotObject = timeProfilePlot
     )
   }
-  if (!isOfLength(lloqData, 0)) {
+  if (!isEmpty(lloqData)) {
     timeProfilePlot <- tlf::addLine(
       data = lloqData,
       metaData = metaData,
@@ -634,7 +634,7 @@ plotPopulationTimeProfile <- function(simulatedData,
     caption = simulatedData$legendMean,
     plotObject = timeProfilePlot
   )
-  if (!isOfLength(observedData, 0)) {
+  if (!isEmpty(observedData)) {
     timeProfilePlot <- tlf::addScatter(
       data = observedData,
       metaData = metaData,
@@ -642,7 +642,7 @@ plotPopulationTimeProfile <- function(simulatedData,
       plotObject = timeProfilePlot
     )
   }
-  if (!isOfLength(lloqData, 0)) {
+  if (!isEmpty(lloqData)) {
     timeProfilePlot <- tlf::addLine(
       data = lloqData,
       metaData = metaData,
@@ -813,7 +813,7 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet, logFolder) 
   # Get applications
   applications <- simulation$allApplicationsFor(path)
   applicationTimes <- 0
-  if (!isOfLength(applications, 0)) {
+  if (!isEmpty(applications)) {
     applicationTimes <- sapply(applications, function(application) {
       application$startTime$value
     })
@@ -823,21 +823,13 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet, logFolder) 
   simulationRanges <- sort(ospsuite::toUnit("Time", simulationRanges, timeUnit))
 
   # Store number of applications and their ranges
-  logWorkflow(
+  logMessage(
     message = paste0(
-      "'", length(applications), "' applications identified for path '",
-      path, "' in simulation '", simulation$name, "'"
+      "'", length(applications), "' applications were identified for path '", path, "' in simulation '", simulation$name, "'\n",
+      "Corresponding time ranges wre : '", paste0(simulationRanges, collapse = "', '"), "'"
     ),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
-  logWorkflow(
-    message = paste0(
-      "Corresponding time ranges: '",
-      paste0(simulationRanges, collapse = "', '"), "'"
-    ),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
+    logLevel = LogLevels$Debug,
+    logFolder = logFolder
   )
 
   # Define ranges for output
@@ -848,14 +840,14 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet, logFolder) 
   # Flag simulationRanges prior to timeOffset
   timeOffsetFlag <- simulationRanges < simulationSet$timeOffset
   if (any(timeOffsetFlag)) {
-    logWorkflow(
+    logMessage(
       message = paste0(
         sum(timeOffsetFlag), " application(s) at ", paste0(simulationRanges[timeOffsetFlag], collapse = ", "), timeUnit,
         " were identified before 'timeOffset' defined at ", simulationSet$timeOffset, timeUnit,
         " for simulation set '", simulationSet$simulationSetName, "'."
       ),
-      pathFolder = logFolder,
-      logTypes = c(LogTypes$Error, LogTypes$Debug)
+      logLevel = LogLevels$Warning,
+      logFolder = logFolder
     )
   }
 
@@ -879,7 +871,7 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet, logFolder) 
 #' @return A data.frame
 #' @keywords internal
 asTimeAfterDose <- function(data, timeOffset, maxTime = NULL) {
-  if (isOfLength(data, 0)) {
+  if (isEmpty(data)) {
     # Return empty data.frame (consitent class with data[dataFilter, ])
     return(data.frame())
   }
@@ -951,12 +943,15 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
       max(timeRange) + structureSet$simulationSet$timeOffset
     )
   )
-  if (nrow(simulatedData) == 0) {
-    logErrorThenStop(
-      message = messages$dataIncludedInTimeRange(nrow(simulatedData), timeRange + structureSet$simulationSet$timeOffset, structureSet$simulationSet$timeUnit, "simulated"),
-      logFolder
+  validateIsNotEmpty(
+    simulatedData,
+    logFolder = logFolder,
+    optionalMessage = messages$dataIncludedInTimeRange(
+      nrow(simulatedData), timeRange + structureSet$simulationSet$timeOffset,
+      structureSet$simulationSet$timeUnit, "simulated"
     )
-  }
+  )
+
   observedData <- asTimeAfterDose(
     observedData,
     min(timeRange) + structureSet$simulationSet$timeOffset,
@@ -989,20 +984,14 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
     )
   }
 
-  logWorkflow(
-    message = messages$dataIncludedInTimeRange(nrow(simulatedData), timeRange + structureSet$simulationSet$timeOffset, structureSet$simulationSet$timeUnit, "simulated"),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
-  logWorkflow(
-    message = messages$dataIncludedInTimeRange(nrow(observedData), timeRange + structureSet$simulationSet$timeOffset, structureSet$simulationSet$timeUnit, "observed"),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
-  logWorkflow(
-    message = messages$dataIncludedInTimeRange(nrow(lloqData), timeRange + structureSet$simulationSet$timeOffset, structureSet$simulationSet$timeUnit, "lloq observed"),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
+  logMessage(
+    message = c(
+      messages$dataIncludedInTimeRange(nrow(simulatedData), timeRange + structureSet$simulationSet$timeOffset, structureSet$simulationSet$timeUnit, "simulated"),
+      messages$dataIncludedInTimeRange(nrow(observedData), timeRange + structureSet$simulationSet$timeOffset, structureSet$simulationSet$timeUnit, "observed"),
+      messages$dataIncludedInTimeRange(nrow(lloqData), timeRange + structureSet$simulationSet$timeOffset, structureSet$simulationSet$timeUnit, "lloq observed")
+    ),
+    logLevel = LogLevels$Debug,
+    logFolder = logFolder
   )
 
   for (unit in unique(metaDataFrame$unit)) {
@@ -1089,10 +1078,10 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
   refResidualsData <- removeMissingValues(refResidualsData, "Residuals", logFolder)
   residualsData <- asTimeAfterDose(refResidualsData, min(timeRange), max(timeRange))
 
-  logWorkflow(
+  logMessage(
     message = messages$dataIncludedInTimeRange(nrow(residualsData), timeRange, structureSet$simulationSet$timeUnit, "residuals"),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
+    logLevel = LogLevels$Debug,
+    logFolder = logFolder
   )
 
   if (nrow(residualsData) == 0) {

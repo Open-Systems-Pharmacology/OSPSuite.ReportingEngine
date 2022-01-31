@@ -77,7 +77,7 @@ dictionaryParameters <- list(
 getDictionaryVariable <- function(dictionary, variableID) {
   variableMapping <- dictionary[, dictionaryParameters$ID] %in% variableID
   variableName <- as.character(dictionary[variableMapping, dictionaryParameters$datasetColumn])
-  if (isOfLength(variableName, 0)) {
+  if (isEmpty(variableName)) {
     return()
   }
   return(variableName)
@@ -94,7 +94,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   validateIsOfType(simulationSet, "SimulationSet")
   # Observed data and dictionary are already checked when creating the simulationSet
   # No observed data return NULL
-  if (isOfLength(simulationSet$observedDataFile, 0)) {
+  if (isEmpty(simulationSet$observedDataFile)) {
     return()
   }
 
@@ -135,8 +135,8 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   observedDataset[, dvUnitColumn] <- as.character(observedDataset[, dvUnitColumn])
 
   # If unit was actually defined using output objects, overwrite current dvUnit
-  for(output in simulationSet$outputs){
-    if(isOfLength(output$dataUnit, 0)){
+  for (output in simulationSet$outputs) {
+    if (isEmpty(output$dataUnit)) {
       next
     }
     selectedRows <- evalDataFilter(observedDataset, output$dataSelection)
@@ -157,11 +157,11 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   observedDataset$dimension <- NA
   for (dvUnit in unique(observedDataset[, dvUnitColumn])) {
     dvDimension <- ospsuite::getDimensionForUnit(dvUnit)
-    if (isOfLength(dvDimension, 0)) {
-      logWorkflow(
+    if (isEmpty(dvDimension)) {
+      logMessage(
         message = paste0("In loadObservedDataFromSimulationSet: unit '", dvUnit, "' is unknown."),
-        pathFolder = logFolder,
-        logTypes = LogTypes$Debug
+        logLevel = LogLevels$Warning,
+        logFolder = logFolder
       )
       next
     }
@@ -172,15 +172,15 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
       dvUnit
     )
     observedDataset$dimension[selectedRows] <- dvDimension
-    if (isOfLength(lloqColumn, 0)) {
+    if (isEmpty(lloqColumn)) {
       next
     }
     # Case where dictionary defined an lloq column missing from dataset
     if (!isIncluded(lloqColumn, names(observedDataset))) {
-      logWorkflow(
+      logMessage(
         message = paste0("lloq column '", lloqColumn, "' defined in dictionary is not present in the dataset columns"),
-        pathFolder = logFolder,
-        logTypes = LogTypes$Debug
+        logLevel = LogLevels$Warning,
+        logFolder = logFolder
       )
       lloqColumn <- NULL
       next
@@ -219,21 +219,20 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
 #' @return list of data and lloq data.frames
 #' @keywords internal
 getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, timeUnit, logFolder) {
-  if (isOfLength(output$dataSelection, 0)) {
+  if (isEmpty(output$dataSelection)) {
     return()
   }
-
   selectedRows <- evalDataFilter(data, output$dataSelection)
-  logWorkflow(
+  logMessage(
     message = paste0("Output '", output$path, "'. Number of selected observations: ", sum(selectedRows)),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
+    logLevel = LogLevels$Debug,
+    logFolder = logFolder
   )
 
   # Get dimensions of observed data
   dvDimensions <- unique(as.character(data[selectedRows, dataMapping$dimension]))
   outputConcentration <- data[selectedRows, dataMapping$dv]
-  if (!isOfLength(output$displayUnit, 0)) {
+  if (!isEmpty(output$displayUnit)) {
     for (dvDimension in dvDimensions) {
       if (is.na(dvDimension)) {
         next
@@ -253,12 +252,12 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
     "Legend" = paste0("Observed data ", output$dataDisplayName),
     "Path" = output$path
   )
-  if (isOfLength(dataMapping$lloq, 0)) {
+  if (isEmpty(dataMapping$lloq)) {
     return(list(data = outputData, lloq = NULL))
   }
 
   lloqConcentration <- data[selectedRows, dataMapping$lloq]
-  if (!isOfLength(output$displayUnit, 0)) {
+  if (!isEmpty(output$displayUnit)) {
     for (dvDimension in dvDimensions) {
       if (is.na(dvDimension)) {
         next
@@ -303,10 +302,10 @@ getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPl
   numberOfRows <- nrow(observedData)
 
   # Log the description of the observed data for debugging
-  logWorkflow(
+  logMessage(
     message = paste0("Observed data Id '", observedDataId, "' included ", numberOfColumns, " columns and ", numberOfRows, " rows"),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
+    logLevel = LogLevels$Debug,
+    logFolder = logFolder
   )
 
   return(list(
