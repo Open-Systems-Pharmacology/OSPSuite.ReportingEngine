@@ -7,7 +7,7 @@
 sectionsAsDataFrame(
   sectionsIn,
   sectionsOut = data.frame(),
-  parentFolder = NULL,
+  parentFolder = "images",
   sectionLevel = 1
 )
 }

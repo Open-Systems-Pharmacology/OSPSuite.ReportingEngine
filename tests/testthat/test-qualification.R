@@ -3,9 +3,10 @@ context("Qualification Workflow")
 reOutputFolder <- "report-qualification"
 configurationPlanFile <- getTestDataFilePath("qualification/report-configuration-plan.json") 
 
-reOutputFolderReferenceFiles <- c("001_section_1", "002_section_2", "006_section_3", "007_section_4", 
-  "log-debug.txt", "log-info.txt", "PKAnalysisResults", "Report-word.md",
-  "Report.docx", "Report.md", "SimulationResults")
+reOutputFolderReferenceFiles <- c(
+  "images", "SimulationResults", "PKAnalysisResults", 
+  "log-debug.txt", "log-info.txt", "Report-word.md", "Report.docx", "Report.md"
+  )
 
 # Load and run test qualification workflow
 workflow <- loadQualificationWorkflow(
