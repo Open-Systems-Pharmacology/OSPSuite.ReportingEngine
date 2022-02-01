@@ -5,7 +5,7 @@
 \alias{ConfigurationShapes}
 \title{ConfigurationShapes}
 \format{
-An object of class \code{list} of length 8.
+An object of class \code{list} of length 16.
 }
 \usage{
 ConfigurationShapes
