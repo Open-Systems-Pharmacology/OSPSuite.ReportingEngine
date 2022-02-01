@@ -35,9 +35,17 @@ ConfigurationShapes <- list(
   dot = tlf::Shapes$dot,
   square = tlf::Shapes$square,
   diamond = tlf::Shapes$diamond,
-  asterisk = tlf::Shapes$star,
+  asterisk = tlf::Shapes$asterisk,
   cross = tlf::Shapes$cross,
-  point = tlf::Shapes$dot
+  plus = tlf::Shapes$plus,
+  point = tlf::Shapes$dot,
+  triangle = tlf::Shapes$triangle,
+  triangledown = tlf::Shapes$triangleDown,
+  hollowcircle = tlf::Shapes$hollowCircle,
+  hollowsquare = tlf::Shapes$hollowSquare,
+  hollowdiamond = tlf::Shapes$hollowDiamond,
+  hollowtriangle = tlf::Shapes$hollowTriangle,
+  hollowtriangledown = tlf::Shapes$hollowTriangleDown
 )
 
 #' @title ConfigurationLinetypes
