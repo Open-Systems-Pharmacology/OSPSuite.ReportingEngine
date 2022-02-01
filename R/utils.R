@@ -139,11 +139,11 @@ generateResultFileNames <- function(numberOfCores, folderName, fileName, separat
 #' @param loadFromCache logical allows load from Cache option
 #' @return simulation object with pathIDs updated from simulationSet
 #' @export
-loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE) {
+loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE, addToCache = FALSE) {
   simulation <- ospsuite::loadSimulation(
     filePath = simulationSet$simulationFile,
     loadFromCache = loadFromCache,
-    addToCache = FALSE
+    addToCache = addToCache
   )
   # Prevent loadSimulationWithUpdatedPaths from crashing if user did not submit any pathID
   if (!is.null(simulationSet$outputs)) {
@@ -304,10 +304,10 @@ getPKParametersInSimulationSet <- function(simulationSet) {
 #'
 #' @return Allowed number of CPU cores for computation
 #' @keywords internal
-getAllowedCores <- function(){
-  numberOfCores = getAllowedCoresLinuxKubernetes()
-  if (is.null(numberOfCores)){
-    numberOfCores = getOSPSuiteSetting(settingName = "numberOfCores")
+getAllowedCores <- function() {
+  numberOfCores <- getAllowedCoresLinuxKubernetes()
+  if (is.null(numberOfCores)) {
+    numberOfCores <- getOSPSuiteSetting(settingName = "numberOfCores")
   }
 }
 
