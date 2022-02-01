@@ -408,8 +408,13 @@ Simulation set B includes output path __Organism|B|Concentration in container__ 
 The `simulate` task needs to be re-run also in this case since the simulation results are saved in files that use the simulation set names.
 
 ```{r example 5}
+# Get the pkml simulation file: "MiniModel1.pkml"
+simulationFileA <- system.file("extdata", "MiniModel1.pkml",
+  package = "ospsuite.reportingengine"
+)
+
 # Get the pkml simulation file: "MiniModel2.pkml"
-simulationFile <- system.file("extdata", "MiniModel2.pkml",
+simulationFileB <- system.file("extdata", "MiniModel2.pkml",
   package = "ospsuite.reportingengine"
 )
 
@@ -437,14 +442,14 @@ outputB <- Output$new(
 
 setA <- SimulationSet$new(
   simulationSetName = "A",
-  simulationFile = simulationFile,
+  simulationFile = simulationFileA,
   outputs = outputA,
   observedDataFile = observationFile,
   observedMetaDataFile = dictionaryFile
 )
 setB <- SimulationSet$new(
   simulationSetName = "B",
-  simulationFile = simulationFile,
+  simulationFile = simulationFileB,
   outputs = outputB
 )
 
