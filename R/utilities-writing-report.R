@@ -9,7 +9,8 @@ resetReport <- function(fileName, logFolder = getwd()) {
   if (file.exists(fileName)) {
     logWorkflow(
       message = paste0("'", fileName, "' already exists. Overwriting '", fileName, "'."),
-      pathFolder = logFolder
+      pathFolder = logFolder,
+      logTypes = LogTypes$Debug
     )
   }
   fileObject <- file(fileName, encoding = "UTF-8")
