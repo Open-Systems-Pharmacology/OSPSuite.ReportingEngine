@@ -9,7 +9,8 @@ resetReport <- function(fileName, logFolder = getwd()) {
   if (file.exists(fileName)) {
     logWorkflow(
       message = paste0("'", fileName, "' already exists. Overwriting '", fileName, "'."),
-      pathFolder = logFolder
+      pathFolder = logFolder,
+      logTypes = LogTypes$Debug
     )
   }
   fileObject <- file(fileName, encoding = "UTF-8")
@@ -138,7 +139,7 @@ addTextChunk <- function(fileName,
   return(invisible())
 }
 
-#' @title mergeMarkdowndFiles
+#' @title mergeMarkdownFiles
 #' @description Merge markdown files into one unique file
 #' @param inputFiles names of .md files to merge
 #' @param outputFile name of merged .md file
@@ -150,8 +151,11 @@ addTextChunk <- function(fileName,
 #' addTextChunk(fileName = "chapter-1.md", text = "Chapter 1")
 #' resetReport("chapter-2.md")
 #' addTextChunk(fileName = "chapter-2.md", text = "Chapter 2")
-#' mergeMarkdowndFiles(inputFiles = c("chapter-1.md", "chapter-2.md"), outputFile = "chapters-1and2.md")
-mergeMarkdowndFiles <- function(inputFiles, outputFile, logFolder = getwd(), keepInputFiles = FALSE) {
+#' mergeMarkdownFiles(
+#'  inputFiles = c("chapter-1.md", "chapter-2.md"), 
+#'  outputFile = "chapters-1and2.md"
+#' )
+mergeMarkdownFiles <- function(inputFiles, outputFile, logFolder = getwd(), keepInputFiles = FALSE) {
   validateIsLogical(keepInputFiles)
   # Read all files contents first in case outputFile is within inputFiles
   filesContent <- lapply(inputFiles, function(fileName){readLines(fileName, encoding = "UTF-8")})
@@ -197,7 +201,7 @@ renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE
   renderWordReport(fileName, logFolder, createWordReport)
   tocContent <- getSectionTOC(fileName, logFolder, numberSections = numberSections)
   addMarkdownToc(tocContent, fileName, logFolder)
-  mergeMarkdowndFiles(inputFiles = c(intro, fileName), outputFile = fileName, logFolder = logFolder)
+  mergeMarkdownFiles(inputFiles = c(intro, fileName), outputFile = fileName, logFolder = logFolder)
   re.tEndAction(actionToken = actionToken2)
   return(invisible())
 }

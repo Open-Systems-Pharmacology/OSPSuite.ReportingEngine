@@ -89,7 +89,7 @@ QualificationWorkflow <- R6::R6Class(
       }
 
       # Merge appendices into final report
-      mergeMarkdowndFiles(mdFiles$appendices, self$reportFileName, logFolder = self$workflowFolder)
+      mergeMarkdownFiles(mdFiles$appendices, self$reportFileName, logFolder = self$workflowFolder)
       renderReport(
         fileName = self$reportFileName,
         logFolder = self$workflowFolder,
