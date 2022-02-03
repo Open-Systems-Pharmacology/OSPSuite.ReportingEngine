@@ -139,7 +139,7 @@ generateResultFileNames <- function(numberOfCores, folderName, fileName, separat
 #' @param loadFromCache logical allows load from Cache option
 #' @return simulation object with pathIDs updated from simulationSet
 #' @export
-loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE, addToCache = FALSE) {
+loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE, addToCache = TRUE) {
   simulation <- ospsuite::loadSimulation(
     filePath = simulationSet$simulationFile,
     loadFromCache = loadFromCache,

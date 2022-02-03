@@ -135,13 +135,6 @@ simulateModelOnCore <- function(simulation,
 }
 
 
-#' @title defaultMaxSimulationsPerCore
-#' @description Default value for a scale factor used in a parallel simulation.  The product of this scale factor and the number of allowable cores (allowedCores) sets the maximum number of simulations that may be run on one core.
-#' @export
-defaultMaxSimulationsPerCore <- 2
-
-
-
 #' @title simulateModelParallel
 #' @description Simulate models within a list of structure sets in parallel for an individual.
 #' @param structureSets, a list of `SimulationStructure` R6 class objects contain paths of files to be used
