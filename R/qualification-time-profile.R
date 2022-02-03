@@ -106,7 +106,10 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves, simulation
         plotObject = plotObject
       )
     }
-    plotObject <- tlf::addLine(
+    # If observed data, plotFunction uses tlf atom scatter plot
+    # If simulated data, plotFunction uses tlf atom line plot
+    # This allows different default sizes between points and lines
+    plotObject <- curveOutput$plotFunction(
       x = curveOutput$x,
       y = curveOutput$y,
       caption = prettyCaption(curveOutput$caption),
@@ -175,7 +178,9 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
       shape = tlfShape(configurationPlanCurve$CurveOptions$Symbol),
       size = configurationPlanCurve$CurveOptions$Size,
       id = configurationPlanCurve$CurveOptions$LegendIndex,
-      secondAxis = curveOnSecondAxis
+      secondAxis = curveOnSecondAxis,
+      # Use appropriate tlf atom for its default properties
+      plotFunction = tlf::addScatter
     )
     return(outputCurve)
   }
@@ -210,7 +215,9 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
     shape = tlfShape(configurationPlanCurve$CurveOptions$Symbol),
     size = configurationPlanCurve$CurveOptions$Size,
     id = configurationPlanCurve$CurveOptions$LegendIndex,
-    secondAxis = curveOnSecondAxis
+    secondAxis = curveOnSecondAxis,
+    # Use appropriate tlf atom for its default properties
+    plotFunction = tlf::addLine
   )
 
   return(outputCurve)
