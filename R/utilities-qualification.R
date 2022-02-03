@@ -32,7 +32,7 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
 
     outputsDataframeSubset <- outputsDataframe[outputsDataframe$project == project & outputsDataframe$simulation == simulationName, ]
 
-    if(nrow(outputsDataframeSubset) == 0){
+    if (nrow(outputsDataframeSubset) == 0) {
       next
     }
 
@@ -50,7 +50,7 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
 
     # simulationSetName defined as project-simulation uniquely identifies the simulation
     if (!is.null(populationFile)) {
-      simulationSets <- c(simulationSets,PopulationSimulationSet$new(
+      simulationSets <- c(simulationSets, PopulationSimulationSet$new(
         simulationSetName = simulationSetName,
         simulationFile = simulationFile,
         populationFile = populationFile,
@@ -60,7 +60,7 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
       next
     }
 
-    simulationSets <- c(simulationSets,SimulationSet$new(
+    simulationSets <- c(simulationSets, SimulationSet$new(
       simulationSetName = simulationSetName,
       simulationFile = simulationFile,
       outputs = c(outputs),
@@ -130,10 +130,10 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
     # Actual section path will be relative to the workflowFolder
     # and is wrapped in method configurationPlan$getSectionPath(id)
     sectionPath <- paste(
-      parentFolder, 
-      sprintf("%0.3d_section_%d", sectionIndex, section$Id), 
+      parentFolder,
+      sprintf("%0.3d_section_%d", sectionIndex, section$Id),
       sep = .Platform$file.sep
-      )
+    )
 
     sectionMarkdown <- sprintf("%0.3d_%s.md", sectionIndex, removeForbiddenLetters(section$Title))
 
@@ -197,7 +197,8 @@ createSectionOutput <- function(configurationPlan, logFolder = getwd()) {
   configurationPlan$copyContentSubFolders()
   return(list(
     intro = configurationPlan$getIntroMarkdown(),
-    appendices = appendices))
+    appendices = appendices
+  ))
 }
 
 
@@ -295,8 +296,8 @@ massMoleConversion <- function(dimension) {
   massMoleConversionList[[ospDimensions$Mass]] <- ospsuite::ospDimensions$Amount
   massMoleConversionList[[ospDimensions$`Concentration (mass)`]] <- ospsuite::ospDimensions$`Concentration (molar)`
   return(ifelse(test = dimension %in% c(ospsuite::ospDimensions$Mass, ospsuite::ospDimensions$`Concentration (mass)`),
-                yes = massMoleConversionList[[dimension]],
-                no = dimension
+    yes = massMoleConversionList[[dimension]],
+    no = dimension
   ))
 }
 

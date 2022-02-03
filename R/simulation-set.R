@@ -38,14 +38,14 @@ SimulationSet <- R6::R6Class(
     #' @param timeOffset shift of display time in time profile plots
     #' @return A new `SimulationSet` object
     initialize = function(simulationSetName,
-                              simulationFile,
-                              outputs = NULL,
-                              observedDataFile = NULL,
-                              observedMetaDataFile = NULL,
-                              timeUnit = "h",
-                              applicationRanges = ApplicationRanges,
-                              minimumSimulationEndTime = NULL,
-                              timeOffset = 0) {
+                          simulationFile,
+                          outputs = NULL,
+                          observedDataFile = NULL,
+                          observedMetaDataFile = NULL,
+                          timeUnit = "h",
+                          applicationRanges = ApplicationRanges,
+                          minimumSimulationEndTime = NULL,
+                          timeOffset = 0) {
       # Test and validate the simulation objects
       validateIsString(simulationSetName)
       validateIsString(simulationFile)

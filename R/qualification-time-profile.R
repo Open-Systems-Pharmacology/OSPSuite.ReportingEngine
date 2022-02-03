@@ -14,10 +14,7 @@ plotQualificationTimeProfiles <- function(configurationPlan,
   timeProfileResults <- list()
   for (timeProfilePlan in configurationPlan$plots$TimeProfile) {
     # Create a unique ID for the plot name as <Plot index>-<Project>-<Simulation>
-    plotID <- defaultFileNames$resultID(
-      length(timeProfileResults) + 1, "time_profile_plot",
-      timeProfilePlan$Project, timeProfilePlan$Simulation
-    )
+    plotID <- paste(length(timeProfileResults) + 1, timeProfilePlan$Project, timeProfilePlan$Simulation, sep = "-")
     # Get simulation and simulation results
     simulationFile <- configurationPlan$getSimulationPath(
       project = timeProfilePlan$Project,
@@ -535,18 +532,19 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
   # Convert output values, if molWeight is NA but not required, then toUnit works without any issue
   # if molWeight is NA and required, then toUnit crashes, error is caught
   # and the error message indictes which observed data Id need molWeight
-  outputValues <- tryCatch({
-    ospsuite::toUnit(
-      quantityOrDimension = ospsuite::getDimensionForUnit(observedResults$metaData$output$unit),
-      values = observedResults$data[, 2],
-      targetUnit = axesProperties$y$unit,
-      sourceUnit = observedResults$metaData$output$unit,
-      molWeight = molWeight
-    )
-  },
-  error = function(e) {
-    NULL
-  }
+  outputValues <- tryCatch(
+    {
+      ospsuite::toUnit(
+        quantityOrDimension = ospsuite::getDimensionForUnit(observedResults$metaData$output$unit),
+        values = observedResults$data[, 2],
+        targetUnit = axesProperties$y$unit,
+        sourceUnit = observedResults$metaData$output$unit,
+        molWeight = molWeight
+      )
+    },
+    error = function(e) {
+      NULL
+    }
   )
   if (isOfLength(outputValues, 0)) {
     logErrorThenStop(

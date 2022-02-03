@@ -28,7 +28,7 @@ setA <- SimulationSet$new(
 )
 
 workflowA <- MeanModelWorkflow$new(
-  simulationSets = setA, 
+  simulationSets = setA,
   workflowFolder = workflowFolder
 )
 workflowA$activateTasks(
@@ -52,7 +52,7 @@ test_that("Mean workflows generate appropriate files and folders", {
 })
 
 test_that("Mean sensitiviy results are equal to reference", {
-  for(fileName in list.files(refOutputFolder)){
+  for (fileName in list.files(refOutputFolder)) {
     refData <- readObservedDataFile(file.path(refOutputFolder, fileName))
     testData <- readObservedDataFile(file.path(workflowA$workflowFolder, "SensitivityResults", fileName))
     expect_equal(
@@ -82,14 +82,14 @@ setA <- PopulationSimulationSet$new(
     path = "Organism|A|Concentration in container",
     displayName = "Concentration of A",
     pkParameters = c("C_max", "AUC_tEnd")
-    )
+  )
 )
 
 workflowA <- PopulationWorkflow$new(
   workflowType = PopulationWorkflowTypes$parallelComparison,
-  simulationSets = setA, 
+  simulationSets = setA,
   workflowFolder = workflowFolder
-  )
+)
 
 workflowA$activateTasks(
   c("simulate", "calculatePKParameters", "calculateSensitivity", "plotSensitivity")
@@ -114,7 +114,7 @@ test_that("Population workflows generate appropriate files and folders", {
 test_that("Population sensitiviy results are equal to reference", {
   skip_on_os("linux") # the behaviour is correct, however due to "µ-conversion" done during reading of units
   # the re-exported file differs from the original one. Which is ok.
-  for(fileName in list.files(refOutputFolder)){
+  for (fileName in list.files(refOutputFolder)) {
     refData <- readObservedDataFile(file.path(refOutputFolder, fileName))
     testData <- readObservedDataFile(file.path(workflowA$workflowFolder, "SensitivityResults", fileName))
     expect_equal(
@@ -127,4 +127,3 @@ test_that("Population sensitiviy results are equal to reference", {
 
 # Clear test workflow folders
 unlink(workflowA$workflowFolder, recursive = TRUE)
-

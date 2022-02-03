@@ -24,7 +24,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
     validateIsIncluded(plotDDIMetadata$plotTypes, names(ddiPlotTypeSpecifications))
 
     plotDDIMetadata$axesSettings <- lapply(plotDDIMetadata$plotTypes, function(plotType) {
-      getAxesSettings(configurationPlan$plots$AxesSettings[[ ddiPlotTypeSpecifications[[plotType]]$ddiPlotAxesSettings ]])
+      getAxesSettings(configurationPlan$plots$AxesSettings[[ddiPlotTypeSpecifications[[plotType]]$ddiPlotAxesSettings]])
     })
     names(plotDDIMetadata$axesSettings) <- plotDDIMetadata$plotTypes
 
@@ -342,7 +342,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
       pkDataframe <- dataframe[dataframe$pkParameter == pkParameter, ]
       plotDDIData <- buildQualificationDDIDataframe(pkDataframe, metadata, pkParameter, plotType)
 
-      plotID <- defaultFileNames$resultID(idPrefix, "ddi_ratio_plot", pkParameter, plotType)
+      plotID <- paste("plot", idPrefix, pkParameter, plotType, sep = "-")
       ddiPlot <- generateDDIQualificationDDIPlot(plotDDIData)
       ddiArtifacts[["Plot"]][[plotID]] <- saveTaskResults(
         id = plotID,
@@ -373,7 +373,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
     ddiTableList[[pkParameter]] <- getQualificationDDIRatioMeasure(summaryDataFrame = ddiSummary, pkParameterName = pkParameter)
   }
 
-  gmfeID <- defaultFileNames$resultID(idPrefix, "ddi_ratio_gmfe")
+  gmfeID <- paste("gmfe", idPrefix, sep = "-")
   ddiArtifacts[["GMFE"]][[gmfeID]] <- saveTaskResults(
     id = gmfeID,
     sectionId = sectionID,
@@ -384,7 +384,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
 
 
   for (pkParameter in unique(dataframe$pkParameter)) {
-    tableID <- defaultFileNames$resultID(idPrefix, "ddi_ratio_measure", pkParameter)
+    tableID <- paste("table", pkParameter, idPrefix, sep = "-")
     ddiArtifacts[["Measure"]][[tableID]] <- saveTaskResults(
       id = tableID,
       sectionId = sectionID,
@@ -418,7 +418,7 @@ getDDITable <- function(dataframe) {
     ddiTable[[pk]] <- data.frame(
       "DataID" = pkDataframe$id,
       "Perpetrator" = paste(pkDataframe$perpetrator, paste(pkDataframe$dose, pkDataframe$doseUnit), pkDataframe$routePerpetrator, pkDataframe$description, sep = ", "),
-      "Victim" = paste(pkDataframe$victim, pkDataframe$routeVictim, sep = ", ")
+      "Victim" =  paste(pkDataframe$victim, pkDataframe$routeVictim, sep = ", ")
     )
 
     ddiTable[[pk]][[paste("Predicted", pk, "Ratio")]] <- pkDataframe$simulatedRatio

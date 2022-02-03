@@ -126,7 +126,7 @@ validateFileExists <- function(path, nullAllowed = FALSE) {
   if (nullAllowed && is.null(path)) {
     return(invisible())
   }
-  if (file.exists(path)){
+  if (file.exists(path)) {
     return(invisible())
   }
   stop(messages$errorUnexistingFile(path))
@@ -344,10 +344,16 @@ validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
     }
     if (is.null(logFolder)) {
       stop(messages$errorNotSameOutputsBetweenSets(sapply(
-        simulationSets, function(set) {set$simulationSetName})))
+        simulationSets, function(set) {
+          set$simulationSetName
+        }
+      )))
     }
     logErrorThenStop(messages$errorNotSameOutputsBetweenSets(sapply(
-      simulationSets, function(set) {set$simulationSetName})), logFolder)
+      simulationSets, function(set) {
+        set$simulationSetName
+      }
+    )), logFolder)
   }
 }
 
@@ -382,7 +388,7 @@ checkIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, n
   if (isIncluded(columnNames, names(dataset))) {
     return(invisible())
   }
-  #TODO this check should be ion logWorkflow and not in the caller!!
+  # TODO this check should be ion logWorkflow and not in the caller!!
   if (is.null(logFolder)) {
     warning(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName), call. = FALSE, immediate. = TRUE)
     return(invisible())
@@ -432,8 +438,8 @@ validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, output
 }
 
 
-validateCommandStatus <- function(command, status){
-  if(status!=0){
+validateCommandStatus <- function(command, status) {
+  if (status != 0) {
     stop(messages$errorCommand(command, status))
   }
   return(invisible())

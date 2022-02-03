@@ -146,27 +146,25 @@ simulateModelOnCore <- function(simulation,
 simulateModelParallel <- function(structureSets,
                                   settings = NULL,
                                   logFolder = getwd()) {
-
   simulationResults <- list()
-  maxSimulationsPerSubset <- settings$maxSimulationsPerCore*getAllowedCores()  #To be set in settings argument
+  maxSimulationsPerSubset <- settings$maxSimulationsPerCore * getAllowedCores() # To be set in settings argument
 
-  #Split the complete set of structureSets into a list of subsets of structureSets, each containing at most maxSimulationsPerSubset structureSets
-  structureSetList <- split(structureSets,ceiling(seq_along(structureSets)/maxSimulationsPerSubset))
+  # Split the complete set of structureSets into a list of subsets of structureSets, each containing at most maxSimulationsPerSubset structureSets
+  structureSetList <- split(structureSets, ceiling(seq_along(structureSets) / maxSimulationsPerSubset))
 
-  #Loop through the list of structureSet subsets
-  for (subsetNumber in seq_along(structureSetList)){
-
+  # Loop through the list of structureSet subsets
+  for (subsetNumber in seq_along(structureSetList)) {
     structureSetsSubset <- structureSetList[[subsetNumber]]
 
     logWorkflow(
-      message = paste("Loading subset",subsetNumber,"of",length(structureSetList)),
+      message = paste("Loading subset", subsetNumber, "of", length(structureSetList)),
       pathFolder = logFolder,
       logTypes = LogTypes$Info
     )
 
     simulations <- lapply(structureSetsSubset, function(set) {
       re.tStoreFileMetadata(access = "read", filePath = set$simulationSet$simulationFile)
-      simulation <- loadSimulationWithUpdatedPaths(set$simulationSet,loadFromCache = TRUE)
+      simulation <- loadSimulationWithUpdatedPaths(set$simulationSet, loadFromCache = TRUE)
       logWorkflow(
         message = paste0("Simulation file '", set$simulationSet$simulationFile, "' successfully loaded"),
         pathFolder = logFolder,
@@ -176,7 +174,7 @@ simulateModelParallel <- function(structureSets,
     })
 
     logWorkflow(
-      message = paste("Simulating subset",subsetNumber,"of",length(structureSetList)),
+      message = paste("Simulating subset", subsetNumber, "of", length(structureSetList)),
       pathFolder = logFolder,
       logTypes = LogTypes$Info
     )
@@ -185,8 +183,7 @@ simulateModelParallel <- function(structureSets,
       simulations = simulations
     )
 
-    simulationResults <- c(simulationResults,subsetSimulationResults)
-
+    simulationResults <- c(simulationResults, subsetSimulationResults)
   }
 
   logWorkflow(

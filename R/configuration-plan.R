@@ -74,7 +74,7 @@ ConfigurationPlan <- R6::R6Class(
       sectionTitle <- private$.sections$title[selectedId]
       sectionLevel <- private$.sections$level[selectedId]
       # If available, add title at appropriate level
-      if(!is.na(sectionTitle)){
+      if (!is.na(sectionTitle)) {
         markdownContent <- paste(
           paste0(rep("#", sectionLevel), collapse = ""),
           sectionTitle,
@@ -151,12 +151,12 @@ ConfigurationPlan <- R6::R6Class(
       inputContentFolder <- file.path(self$referenceFolder, "Content")
       # Get only sub folder names and remove "" from the values returned by list.dirs
       subFolders <- setdiff(list.dirs(inputContentFolder, full.names = FALSE), "")
-      for(subFolder in subFolders){
+      for (subFolder in subFolders) {
         inputContentSubFolder <- file.path(inputContentFolder, subFolder)
         outputContentSubFolder <- file.path(self$workflowFolder, subFolder)
         dir.create(outputContentSubFolder, showWarnings = FALSE, recursive = TRUE)
         # Copy all files from subfolder into report subfolder
-        for(fileName in list.files(inputContentSubFolder)){
+        for (fileName in list.files(inputContentSubFolder)) {
           # With recursive=TRUE, overwrite images
           file.copy(
             from = file.path(inputContentSubFolder, fileName),
@@ -211,7 +211,7 @@ ConfigurationPlan <- R6::R6Class(
       validateIsIncludedAndLog(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
       selectedId <- (private$.simulationMappings$project %in% project) & (private$.simulationMappings$simulation %in% simulation)
       populationPath <- file.path(self$referenceFolder, private$.simulationMappings$path[selectedId], paste0(private$.simulationMappings$simulationFile[selectedId], "-Population.csv"))
-      if(file.exists(populationPath)){
+      if (file.exists(populationPath)) {
         return(populationPath)
       }
       return()

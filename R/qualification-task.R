@@ -61,7 +61,6 @@ QualificationTask <- R6::R6Class(
           reportFile = configurationPlan$getSectionMarkdown(result$sectionId),
           logFolder = self$workflowFolder
         )
-
       }
     },
 

@@ -40,7 +40,7 @@ AllAvailableTasks <- c(
 activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
 
-  #Using ospsuite.reportingengine version of validateIsIncluded (and not the ospsuite.utils version) as the former has a logFolder argument
+  # Using ospsuite.reportingengine version of validateIsIncluded (and not the ospsuite.utils version) as the former has a logFolder argument
   validateIsIncludedAndLog(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
 
   for (task in tasks) {
@@ -57,7 +57,7 @@ activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
 inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
 
-  #Using ospsuite.reportingengine version of validateIsIncluded (and not the ospsuite.utils version) as the former has a logFolder argument
+  # Using ospsuite.reportingengine version of validateIsIncluded (and not the ospsuite.utils version) as the former has a logFolder argument
   validateIsIncludedAndLog(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
 
   for (task in tasks) {
@@ -494,10 +494,9 @@ addUserDefinedTask <- function(workflow,
   argumentNames <- names(formals(taskFunction))
   if (isOfType(workflow, "MeanModelWorkflow")) {
     # PlotTask arguments
-    validateIsIncludedAndLog(
-      c("structureSet", "logFolder", "settings"), argumentNames,
+    validateIsIncluded(c("structureSet", "logFolder", "settings"), argumentNames,
       groupName = "Task function arguments", logFolder = workflow$workflowFolder
-      )
+    )
 
     workflow$userDefinedTasks <- c(
       workflow$userDefinedTasks,
@@ -517,8 +516,7 @@ addUserDefinedTask <- function(workflow,
 
   if (isOfType(workflow, "PopulationWorkflow")) {
     # PopulationPlotTask arguments
-    validateIsIncludedAndLog(
-      c("structureSets", "logFolder", "settings", "workflowType", "xParameters", "yParameters"), argumentNames,
+    validateIsIncluded(c("structureSets", "logFolder", "settings", "workflowType", "xParameters", "yParameters"), argumentNames,
       groupName = "Task function arguments", logFolder = workflow$workflowFolder
     )
 

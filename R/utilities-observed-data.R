@@ -135,8 +135,8 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   observedDataset[, dvUnitColumn] <- as.character(observedDataset[, dvUnitColumn])
 
   # If unit was actually defined using output objects, overwrite current dvUnit
-  for(output in simulationSet$outputs){
-    if(isOfLength(output$dataUnit, 0)){
+  for (output in simulationSet$outputs) {
+    if (isOfLength(output$dataUnit, 0)) {
       next
     }
     selectedRows <- evalDataFilter(observedDataset, output$dataSelection)

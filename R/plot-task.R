@@ -34,7 +34,7 @@ PlotTask <- R6::R6Class(
       self$getTaskResults <- getTaskResults
       self$nameTaskResults <- nameTaskResults
     },
-    
+
     #' @description
     #' Save the task results related to a `structureSet`.
     #' @param structureSet A `SimulationStructure` object defining the properties of a simulation set
