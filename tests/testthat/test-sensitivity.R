@@ -74,6 +74,25 @@ refSensitivityStructure <- c(
   "C_max_Organism-A-Concentration in container.png"
 )
 
+
+getResultIndex <- function(pkAnalysis, pkParameterNames){
+  resultIndex <- data.frame()
+  for(pkParameterName in pkParameterNames){
+    selectedRows <- pkAnalysis$Parameter %in% pkParameterName
+    selectedData <- pkAnalysis[selectedRows, ]
+    indices <- c(
+      which.min(abs(selectedData$Value - quantile(selectedData$Value, 0.5, na.rm = TRUE))),
+      which.min(abs(selectedData$Value - quantile(selectedData$Value, 0.05, na.rm = TRUE))),
+      which.min(abs(selectedData$Value - quantile(selectedData$Value, 0.95, na.rm = TRUE)))
+    )
+    resultIndex <- rbind.data.frame(
+      resultIndex, selectedData[indices,]
+    )
+  }
+  return(resultIndex)
+}
+
+
 setA <- PopulationSimulationSet$new(
   simulationSetName = "A",
   simulationFile = simulationFile,
@@ -96,6 +115,24 @@ workflowA$activateTasks(
 )
 workflowA$runWorkflow()
 
+test_that("PK Analysis is same between Linux and Windows", {
+  pkParametersWindows <- readObservedDataFile(
+    file.path(refOutputFolder, "A-PKAnalysisResults.csv")
+  )
+  pkParametersLinux <- readObservedDataFile(
+    file.path(workflowA$workflowFolder, "PKAnalysisResults", "A-PKAnalysisResults.csv")
+  )
+  expect_equal(pkParametersLinux, pkParametersWindows)
+  resultIndexWindows <- getResultIndex(pkParametersWindows, c("C_max", "AUC_tEnd"))
+  resultIndexLinux <- getResultIndex(pkParametersLinux, c("C_max", "AUC_tEnd"))
+  
+  print("Windows")
+  print(resultIndexWindows)
+  print("Linux")
+  print(resultIndexLinux)
+  expect_equal(resultIndexLinux, resultIndexWindows)
+})
+
 test_that("Population workflows generate appropriate files and folders", {
   expect_setequal(
     list.files(workflowA$workflowFolder),
@@ -103,18 +140,20 @@ test_that("Population workflows generate appropriate files and folders", {
   )
   expect_setequal(
     list.files(file.path(workflowA$workflowFolder, "SensitivityResults")),
-    list.files(refOutputFolder)
+    setdiff(list.files(refOutputFolder), "A-PKAnalysisResults.csv")
   )
   expect_setequal(
     list.files(file.path(workflowA$workflowFolder, "Sensitivity")),
     refSensitivityStructure
   )
+  
 })
 
 test_that("Population sensitiviy results are equal to reference", {
   skip_on_os("linux") # the behaviour is correct, however due to "µ-conversion" done during reading of units
   # the re-exported file differs from the original one. Which is ok.
   for(fileName in list.files(refOutputFolder)){
+    if(fileName %in% "A-PKAnalysisResults.csv"){next}
     refData <- readObservedDataFile(file.path(refOutputFolder, fileName))
     testData <- readObservedDataFile(file.path(workflowA$workflowFolder, "SensitivityResults", fileName))
     expect_equal(
