@@ -173,7 +173,7 @@ simulateModelParallel <- function(structureSets,
 
     simulations <- lapply(structureSetsSubset, function(set) {
       re.tStoreFileMetadata(access = "read", filePath = set$simulationSet$simulationFile)
-      simulation <- loadSimulationWithUpdatedPaths(set$simulationSet,loadFromCache = FALSE)
+      simulation <- loadSimulationWithUpdatedPaths(set$simulationSet,loadFromCache = TRUE)
       logWorkflow(
         message = paste0("Simulation file '", set$simulationSet$simulationFile, "' successfully loaded"),
         pathFolder = logFolder,
