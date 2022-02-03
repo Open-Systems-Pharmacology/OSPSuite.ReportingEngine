@@ -50,6 +50,9 @@ defaultFileNames <- list(
   },
   logDebugFile = function(name = "debug") {
     getDefaultFileName("log", suffix = name, extension = "txt", sep = "-")
+  },
+  resultID = function(...) {
+    paste(removeForbiddenLetters(c(...)), collapse = "_")
   }
 )
 

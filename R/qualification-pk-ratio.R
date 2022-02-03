@@ -21,7 +21,7 @@ plotQualificationPKRatio <- function(configurationPlan,
 
     for (pkParameterName in pkParameterNames) {
       #----- Plot artifact -----#
-      plotID <- paste(length(pkRatioResults) + 1, "pk-ratio-plot", pkParameterName, sep = "-")
+      plotID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_plot", pkParameterName)
       pkRatioPlot <- getQualificationPKRatioPlot(pkParameterName, pkRatioData$data, pkRatioData$metaData, axesProperties)
       pkRatioResults[[plotID]] <- saveTaskResults(
         id = plotID,
@@ -31,7 +31,7 @@ plotQualificationPKRatio <- function(configurationPlan,
         includePlot = isIncluded("Plot", pkRatioPlan$Artifacts)
       )
       #----- Measure artifact -----#
-      measureID <- paste(length(pkRatioResults) + 2, "pk-ratio-measure", pkParameterName, sep = "-")
+      measureID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_measure", pkParameterName)
       pkRatioMeasure <- getQualificationPKRatioMeasure(pkParameterName, pkRatioData$data, pkRatioData$metaData)
       pkRatioResults[[measureID]] <- saveTaskResults(
         id = measureID,
@@ -42,7 +42,7 @@ plotQualificationPKRatio <- function(configurationPlan,
       )
     }
     #----- GMFE artifact -----#
-    gmfeID <- paste(length(pkRatioResults) + 2, "pk-ratio-gmfe", sep = "-")
+    gmfeID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_gmfe")
     pkRatioGMFE <- getQualificationPKRatioGMFE(pkParameterNames, pkRatioData$data)
     pkRatioResults[[gmfeID]] <- saveTaskResults(
       id = gmfeID,
@@ -52,7 +52,7 @@ plotQualificationPKRatio <- function(configurationPlan,
       includeTable = isIncluded("GMFE", pkRatioPlan$Artifacts)
     )
     #----- Table artifact -----#
-    tableID <- paste(length(pkRatioResults) + 1, "pk-ratio-table", sep = "-")
+    tableID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_table", pkParameterName)
     pkRatioTable <- getQualificationPKRatioTable(pkRatioData$data, pkRatioData$metaData)
     pkRatioResults[[tableID]] <- saveTaskResults(
       id = tableID,

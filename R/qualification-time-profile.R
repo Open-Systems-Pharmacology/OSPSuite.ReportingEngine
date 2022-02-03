@@ -14,7 +14,10 @@ plotQualificationTimeProfiles <- function(configurationPlan,
   timeProfileResults <- list()
   for (timeProfilePlan in configurationPlan$plots$TimeProfile) {
     # Create a unique ID for the plot name as <Plot index>-<Project>-<Simulation>
-    plotID <- paste(length(timeProfileResults) + 1, timeProfilePlan$Project, timeProfilePlan$Simulation, sep = "-")
+    plotID <- defaultFileNames$resultID(
+      length(timeProfileResults) + 1, "time_profile_plot",
+      timeProfilePlan$Project, timeProfilePlan$Simulation
+    )
     # Get simulation and simulation results
     simulationFile <- configurationPlan$getSimulationPath(
       project = timeProfilePlan$Project,
@@ -302,7 +305,7 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
     plotObject <- tlf::addScatter(
       x = observedData$time,
       y = observedData$y,
-      caption = prettyCaption(observedDataCollection$CurveOptions[[1]]$Caption  %||% "Observed data"),
+      caption = prettyCaption(observedDataCollection$CurveOptions[[1]]$Caption %||% "Observed data"),
       color = observedDataCollection$CurveOptions[[1]]$CurveOptions$Color,
       linetype = tlfLinetype(observedDataCollection$CurveOptions[[1]]$CurveOptions$LineStyle),
       size = observedDataCollection$CurveOptions[[1]]$CurveOptions$Size,
@@ -583,8 +586,8 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
     outputError$ymin[is.na(outputError$ymin)] <- outputValues[is.na(outputError$ymin)]
     outputError$ymax[is.na(outputError$ymax)] <- outputValues[is.na(outputError$ymax)]
     # In case of log scale, ymin<0 are replaced by y so upper branch is still plotted
-    if(isIncluded(axesProperties$y$scale, tlf::Scaling$log)){
-      outputError$ymin[outputError$ymin<=0] <- outputValues[outputError$ymin<=0]
+    if (isIncluded(axesProperties$y$scale, tlf::Scaling$log)) {
+      outputError$ymin[outputError$ymin <= 0] <- outputValues[outputError$ymin <= 0]
     }
   }
   return(list(
@@ -599,7 +602,7 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
 #' for keeping compatibility with configuration plan from Matlab version
 #' @return List of `x` and `y` axes settings
 #' @keywords internal
-getDefaultTimeProfileAxesSettings <- function(){
+getDefaultTimeProfileAxesSettings <- function() {
   xAxis <- list(
     dimension = ospsuite::ospDimensions$Time, unit = ospsuite::ospUnits$Time$h,
     min = NULL, max = NULL, scale = tlf::Scaling$lin,

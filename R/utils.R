@@ -104,8 +104,8 @@ trimFileName <- function(path, extension = NULL, sep = "/") {
 #' removeForbiddenLetters(text)
 #' }
 #' @export
-removeForbiddenLetters <- function(text, forbiddenLetters = "[[:punct:]]", replacement = "_") {
-  text <- gsub(
+removeForbiddenLetters <- function(text, forbiddenLetters = "[[:punct:][:blank:]]", replacement = "_") {
+  gsub(
     pattern = forbiddenLetters,
     replacement = replacement,
     x = text

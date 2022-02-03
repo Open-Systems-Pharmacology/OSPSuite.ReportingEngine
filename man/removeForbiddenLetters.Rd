@@ -6,7 +6,7 @@
 \usage{
 removeForbiddenLetters(
   text,
-  forbiddenLetters = "[[:punct:]]",
+  forbiddenLetters = "[[:punct:][:blank:]]",
   replacement = "_"
 )
 }

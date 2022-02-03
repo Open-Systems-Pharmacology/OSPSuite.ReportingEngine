@@ -32,7 +32,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
     plotDDIMetadata$groups <- list()
 
     pkParameters <- plot$PKParameters %||% ospsuite::toPathArray(plot$PKParameter)
-    validateIsIncluded(values = pkParameters,parentValues = names(ddiPKRatioColumnName),nullAllowed = FALSE)
+    validateIsIncluded(values = pkParameters, parentValues = names(ddiPKRatioColumnName), nullAllowed = FALSE)
 
     for (groupNumber in seq_along(plot$Groups)) {
       group <- plot$Groups[[groupNumber]]
@@ -219,7 +219,6 @@ buildQualificationDDIDataframe <- function(dataframe,
 #' @import ggplot2
 #' @keywords internal
 generateDDIQualificationDDIPlot <- function(ddiPlotData) {
-
   ddiData <- na.omit(ddiPlotData$ddiPlotDataframe)
 
   residualsVsObserved <- ddiPlotTypeSpecifications[[ddiPlotData$axesSettings$plotType]]$residualsVsObservedFlag
@@ -233,17 +232,19 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
     residualsVsObserved = residualsVsObserved
   )
 
-  ddiPlotConfiguration <- getPlotConfigurationFromPlan(plotProperties = ddiPlotData$plotSettings,
-                                                       plotType = "DDIRatio",
-                                                       legendPosition = tlf::LegendPositions$outsideRight)
+  ddiPlotConfiguration <- getPlotConfigurationFromPlan(
+    plotProperties = ddiPlotData$plotSettings,
+    plotType = "DDIRatio",
+    legendPosition = tlf::LegendPositions$outsideRight
+  )
 
-  #Set axes labels
+  # Set axes labels
   ddiPlotConfiguration$labels$xlabel$text <- ddiPlotData$axesSettings$X$label
   ddiPlotConfiguration$labels$ylabel$text <- ddiPlotData$axesSettings$Y$label
 
   # Set line color and type
   ddiPlotConfiguration$lines$color <- "black"
-  ddiPlotConfiguration$lines$linetype <- c("solid","dotted","solid")
+  ddiPlotConfiguration$lines$linetype <- c("solid", "dotted", "solid")
 
   # Set axes scaling
   if (ddiPlotData$axesSettings$X$scaling == "Log") {
@@ -254,21 +255,21 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
   }
 
   # Set y axis ticks and limits
-  if (residualsVsObserved & ddiPlotData$axesSettings$Y$scaling == "Log" ) {
+  if (residualsVsObserved & ddiPlotData$axesSettings$Y$scaling == "Log") {
 
-    #Minimum log10 predict/observed fold error among all data points, rounded DOWN to nearest whole number
+    # Minimum log10 predict/observed fold error among all data points, rounded DOWN to nearest whole number
     lowerBoundLog10 <- min(floor(log10(ddiData[[ddiPlotData$axesSettings$Y$label]])))
 
-    #Maximum log10 predict/observed fold error among all data points, rounded UP to nearest whole number
+    # Maximum log10 predict/observed fold error among all data points, rounded UP to nearest whole number
     upperBoundLog10 <- max(ceiling(log10(ddiData[[ddiPlotData$axesSettings$Y$label]])))
 
-    #Maximum log10 scale axis limit given by larger of the two fold error bounds, lowerBoundLog10 and upperBoundLog10
-    log10Limit <- max(abs(c(lowerBoundLog10,upperBoundLog10)))
+    # Maximum log10 scale axis limit given by larger of the two fold error bounds, lowerBoundLog10 and upperBoundLog10
+    log10Limit <- max(abs(c(lowerBoundLog10, upperBoundLog10)))
 
-    #Set lower and upper log scale y axis limits to be equal
+    # Set lower and upper log scale y axis limits to be equal
     ddiPlotConfiguration$yAxis$limits <- 10^(c(-log10Limit, log10Limit))
 
-    #Include ticks at each order of magnitude and at 1/2 and 2
+    # Include ticks at each order of magnitude and at 1/2 and 2
     ddiPlotConfiguration$yAxis$ticks <- 10^seq(-log10Limit, log10Limit, 1)
   }
 
@@ -278,8 +279,12 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
     dataMapping = ddiDataMapping
   )
 
-  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_color_manual(values = sapply(ddiPlotData$aestheticsList$color, function(x) {x}))
-  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_shape_manual(values = sapply(ddiPlotData$aestheticsList$shape, function(x) {x}))
+  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_color_manual(values = sapply(ddiPlotData$aestheticsList$color, function(x) {
+    x
+  }))
+  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_shape_manual(values = sapply(ddiPlotData$aestheticsList$shape, function(x) {
+    x
+  }))
 
   # Force legend to be only one column to maintain plot panel width, and left-justify legend entries
   qualificationDDIPlot <- qualificationDDIPlot + ggplot2::guides(col = guide_legend(ncol = 1, label.hjust = 0))
@@ -323,7 +328,6 @@ getQualificationDDIRatioMeasure <- function(summaryDataFrame, pkParameterName) {
 #' @return a `list` of DDI results for the current DDI section
 #' @keywords internal
 getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffix = NULL) {
-
   ddiArtifacts <- list(
     "Plot" = list(),
     "GMFE" = list(),
@@ -338,7 +342,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
       pkDataframe <- dataframe[dataframe$pkParameter == pkParameter, ]
       plotDDIData <- buildQualificationDDIDataframe(pkDataframe, metadata, pkParameter, plotType)
 
-      plotID <- paste("plot", idPrefix, pkParameter, plotType, sep = "-")
+      plotID <- defaultFileNames$resultID(idPrefix, "ddi_ratio_plot", pkParameter, plotType)
       ddiPlot <- generateDDIQualificationDDIPlot(plotDDIData)
       ddiArtifacts[["Plot"]][[plotID]] <- saveTaskResults(
         id = plotID,
@@ -369,7 +373,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
     ddiTableList[[pkParameter]] <- getQualificationDDIRatioMeasure(summaryDataFrame = ddiSummary, pkParameterName = pkParameter)
   }
 
-  gmfeID <- paste("gmfe", idPrefix, sep = "-")
+  gmfeID <- defaultFileNames$resultID(idPrefix, "ddi_ratio_gmfe")
   ddiArtifacts[["GMFE"]][[gmfeID]] <- saveTaskResults(
     id = gmfeID,
     sectionId = sectionID,
@@ -380,7 +384,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
 
 
   for (pkParameter in unique(dataframe$pkParameter)) {
-    tableID <- paste("table", pkParameter, idPrefix, sep = "-")
+    tableID <- defaultFileNames$resultID(idPrefix, "ddi_ratio_measure", pkParameter)
     ddiArtifacts[["Measure"]][[tableID]] <- saveTaskResults(
       id = tableID,
       sectionId = sectionID,
@@ -390,7 +394,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
     )
   }
 
-  #Ensure artifacts will appear in same order as in configuration plan
+  # Ensure artifacts will appear in same order as in configuration plan
   ddiPlotResults <- unlist(ddiArtifacts[metadata$artifacts])
 
   return(ddiPlotResults)
@@ -401,40 +405,39 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
 #' @param dataframe for generating DDI summary table
 #' @return Summary table for DDI plot
 #' @keywords internal
-getDDITable <- function(dataframe){
-
+getDDITable <- function(dataframe) {
   dataframe$simObsRatio <- dataframe$simulatedRatio / dataframe$observedRatio
 
   ddiTable <- list()
 
   pkParameters <- unique(dataframe$pkParameter)
 
-  for (pk in pkParameters){
-    pkDataframe <- dataframe[dataframe$pkParameter == pk,]
+  for (pk in pkParameters) {
+    pkDataframe <- dataframe[dataframe$pkParameter == pk, ]
 
     ddiTable[[pk]] <- data.frame(
       "DataID" = pkDataframe$id,
-      "Perpetrator" = paste(pkDataframe$perpetrator,paste(pkDataframe$dose,pkDataframe$doseUnit),pkDataframe$routePerpetrator,pkDataframe$description,sep = ", "),
-      "Victim" =  paste(pkDataframe$victim , pkDataframe$routeVictim, sep = ", ")
+      "Perpetrator" = paste(pkDataframe$perpetrator, paste(pkDataframe$dose, pkDataframe$doseUnit), pkDataframe$routePerpetrator, pkDataframe$description, sep = ", "),
+      "Victim" = paste(pkDataframe$victim, pkDataframe$routeVictim, sep = ", ")
     )
 
-    ddiTable[[pk]][[paste("Predicted",pk,"Ratio")]] <- pkDataframe$simulatedRatio
-    ddiTable[[pk]][[paste("Observed",pk,"Ratio")]] <- pkDataframe$observedRatio
-    ddiTable[[pk]][[paste("Pred/Obs",pk,"Ratio")]] <- pkDataframe$simObsRatio
+    ddiTable[[pk]][[paste("Predicted", pk, "Ratio")]] <- pkDataframe$simulatedRatio
+    ddiTable[[pk]][[paste("Observed", pk, "Ratio")]] <- pkDataframe$observedRatio
+    ddiTable[[pk]][[paste("Pred/Obs", pk, "Ratio")]] <- pkDataframe$simObsRatio
     ddiTable[[pk]][["Reference"]] <- pkDataframe$studyId
   }
 
-  #Merge together all dataframes (each of which corresponds to a different PK parameter) by combining together all rows that share common values in the columns named "DataID","Perpetrator","Victim","Reference"
+  # Merge together all dataframes (each of which corresponds to a different PK parameter) by combining together all rows that share common values in the columns named "DataID","Perpetrator","Victim","Reference"
   mergedDDITable <- Reduce(
-    function(x, y) merge(x, y, by=c("DataID","Perpetrator","Victim","Reference")),
+    function(x, y) merge(x, y, by = c("DataID", "Perpetrator", "Victim", "Reference")),
     ddiTable
   )
 
-  #Move reference column to the end
+  # Move reference column to the end
   mergedDDITable <- cbind(mergedDDITable[, names(mergedDDITable) != "Reference"], data.frame("Reference" = mergedDDITable$Reference))
 
-  #Order rows by Data ID
-  mergedDDITable <- mergedDDITable[order(mergedDDITable$DataID),]
+  # Order rows by Data ID
+  mergedDDITable <- mergedDDITable[order(mergedDDITable$DataID), ]
 
   return(mergedDDITable)
 }
@@ -450,7 +453,6 @@ getDDITable <- function(dataframe){
 plotQualificationDDIs <- function(configurationPlan,
                                   logFolder = getwd(),
                                   settings) {
-
   ddiData <- getQualificationDDIPlotData(configurationPlan)
 
   ddiResults <- list()
@@ -463,7 +465,7 @@ plotQualificationDDIs <- function(configurationPlan,
     idPrefix <- paste("DDIRatio", plotIndex, sep = "-")
     ddiResults <- c(ddiResults, getDDISection(dataframe, metadata, sectionID, idPrefix))
 
-    if ("Table" %in% metadata$artifacts){
+    if ("Table" %in% metadata$artifacts) {
       ddiTable <- saveTaskResults(
         id = "DDI Table",
         sectionId = sectionID,
@@ -498,30 +500,31 @@ plotQualificationDDIs <- function(configurationPlan,
 #' Specifications of each DDI plot type
 #' @keywords internal
 ddiPlotTypeSpecifications <- list(
-  predictedVsObserved = list(ddiPlotAxesSettings = "DDIRatioPlotsPredictedVsObserved",
-                             plotDDIXLabel = function(pk) {
-                               return(paste("Observed", pk, "Ratio"))
-                             },
-                             plotDDIYLabel = function(pk) {
-                               return(paste("Predicted", pk, "Ratio"))
-                             },
-                             residualsVsObservedFlag = FALSE,
-                             getYAxisDDIValues = function(observedRatio, simulatedRatio) {
-                               return(simulatedRatio)
-                             }
-
+  predictedVsObserved = list(
+    ddiPlotAxesSettings = "DDIRatioPlotsPredictedVsObserved",
+    plotDDIXLabel = function(pk) {
+      return(paste("Observed", pk, "Ratio"))
+    },
+    plotDDIYLabel = function(pk) {
+      return(paste("Predicted", pk, "Ratio"))
+    },
+    residualsVsObservedFlag = FALSE,
+    getYAxisDDIValues = function(observedRatio, simulatedRatio) {
+      return(simulatedRatio)
+    }
   ),
-  residualsVsObserved = list(ddiPlotAxesSettings = "DDIRatioPlotsResidualsVsObserved",
-                             plotDDIXLabel = function(pk) {
-                               return(paste("Observed", pk, "Ratio"))
-                             },
-                             plotDDIYLabel = function(pk) {
-                               return(paste("Predicted", pk, "Ratio / Observed", pk, "Ratio"))
-                             },
-                             residualsVsObservedFlag = TRUE,
-                             getYAxisDDIValues = function(observedRatio, simulatedRatio) {
-                               return(simulatedRatio / observedRatio)
-                             }
+  residualsVsObserved = list(
+    ddiPlotAxesSettings = "DDIRatioPlotsResidualsVsObserved",
+    plotDDIXLabel = function(pk) {
+      return(paste("Observed", pk, "Ratio"))
+    },
+    plotDDIYLabel = function(pk) {
+      return(paste("Predicted", pk, "Ratio / Observed", pk, "Ratio"))
+    },
+    residualsVsObservedFlag = TRUE,
+    getYAxisDDIValues = function(observedRatio, simulatedRatio) {
+      return(simulatedRatio / observedRatio)
+    }
   )
 )
 
