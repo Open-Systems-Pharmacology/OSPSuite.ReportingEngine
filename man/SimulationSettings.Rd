@@ -36,7 +36,7 @@ Create a `SimulationSettings` object
 \if{html}{\out{<div class="r">}}\preformatted{SimulationSettings$new(
   numberOfCores = defaultSimulationNumberOfCores,
   showProgress = FALSE,
-  maxSimulationsPerCore = defaultMaxSimulationsPerCore
+  maxSimulationsPerCore = reEnv$defaultMaxSimulationsPerCore
 )}\if{html}{\out{</div>}}
 }
 
