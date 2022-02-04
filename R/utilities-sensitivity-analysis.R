@@ -455,6 +455,11 @@ getSAFileIndex <- function(structureSet,
         "IndividualId" = quantileResults$ids,
         "Filename" = sapply(X = quantileResults$ids, FUN = getIndividualSAResultsFileName, resultsFileName)
       )
+      print(saResultsByOutput)
+      print(paste0("Number of individuals: ", nrow(singleOuputSinglePKDataframe)))
+      print(paste0("Number of NAs:", sum(is.na(singleOuputSinglePKDataframe$Value))))
+      print(paste0("Number of Inf:", sum(is.infinite(singleOuputSinglePKDataframe$Value))))
+      
       sensitivityAnalysesResultsIndexFileDF <- rbind.data.frame(sensitivityAnalysesResultsIndexFileDF, saResultsByOutput)
     }
   }

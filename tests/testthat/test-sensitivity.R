@@ -133,7 +133,6 @@ test_that("PK Analysis is same between Linux and Windows", {
   expect_equal(resultIndexLinux, resultIndexWindows)
 })
 
-
 test_that("Print exported index", {
   linuxIndexFile <- file.path(workflowA$workflowFolder, "SensitivityResults", "A-popSensitivityResultsIndex.csv")
   windowsIndexFile <- file.path(refOutputFolder, "A-popSensitivityResultsIndex.csv")
@@ -146,6 +145,23 @@ test_that("Print exported index", {
   
   expect_true(file.exists(linuxIndexFile))
   expect_true(file.exists(windowsIndexFile))
+})
+
+test_that("Check what happens for individuals 49 and 10", {
+  pkParametersWindows <- readObservedDataFile(
+    file.path(refOutputFolder, "A-PKAnalysisResults.csv")
+  )
+  pkParametersLinux <- readObservedDataFile(
+    file.path(workflowA$workflowFolder, "PKAnalysisResults", "A-PKAnalysisResults.csv")
+  )
+  print("Windows")
+  print(pkParametersWindows[pkParametersWindows$IndividualId %in% c(10, 49), ])
+  print("Linux")
+  print(pkParametersLinux[pkParametersLinux$IndividualId %in% c(10, 49), ])
+  expect_equal(
+    pkParametersWindows[pkParametersWindows$IndividualId %in% c(10, 49), ],
+    pkParametersLinux[pkParametersLinux$IndividualId %in% c(10, 49), ]
+    )
 })
 
 test_that("Print names of output files", {
