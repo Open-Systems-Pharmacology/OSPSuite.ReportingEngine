@@ -85,8 +85,20 @@ getResultIndex <- function(pkAnalysis, pkParameterNames){
       which.min(abs(selectedData$Value - quantile(selectedData$Value, 0.05, na.rm = TRUE))),
       which.min(abs(selectedData$Value - quantile(selectedData$Value, 0.95, na.rm = TRUE)))
     )
+    # get actual values
+    resultPK <- cbind.data.frame(
+      selectedData[indices,],
+      data.frame(
+        actual = c(
+          quantile(selectedData$Value, 0.50, na.rm = TRUE),
+          quantile(selectedData$Value, 0.05, na.rm = TRUE),
+          quantile(selectedData$Value, 0.95, na.rm = TRUE)
+        )
+      )
+    )
+      
     resultIndex <- rbind.data.frame(
-      resultIndex, selectedData[indices,]
+      resultIndex, resultPK
     )
   }
   return(resultIndex)
