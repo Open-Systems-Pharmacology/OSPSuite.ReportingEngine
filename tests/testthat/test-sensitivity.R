@@ -81,7 +81,7 @@ getResultIndex <- function(pkAnalysis, pkParameterNames){
     selectedRows <- pkAnalysis$Parameter %in% pkParameterName
     selectedData <- pkAnalysis[selectedRows, ]
     indices <- c(
-      which.min(abs(selectedData$Value - quantile(selectedData$Value, 0.5, na.rm = TRUE))),
+      which.min(abs(selectedData$Value - quantile(selectedData$Value, 0.50, na.rm = TRUE))),
       which.min(abs(selectedData$Value - quantile(selectedData$Value, 0.05, na.rm = TRUE))),
       which.min(abs(selectedData$Value - quantile(selectedData$Value, 0.95, na.rm = TRUE)))
     )
@@ -115,6 +115,18 @@ workflowA$activateTasks(
 )
 workflowA$runWorkflow()
 
+test_that("Actual values of quantileVec are expected percentiles", {
+  for(quantileValue in workflowA$calculateSensitivity$settings$quantileVec){
+    print(sprintf("%.9f", quantileValue))
+  }
+  expect_equal(
+    workflowA$calculateSensitivity$settings$quantileVec,
+    c(0.05,0.5,0.95)
+  )
+})
+
+
+
 test_that("PK Analysis is same between Linux and Windows", {
   pkParametersWindows <- readObservedDataFile(
     file.path(refOutputFolder, "A-PKAnalysisResults.csv")
@@ -145,23 +157,6 @@ test_that("Print exported index", {
   
   expect_true(file.exists(linuxIndexFile))
   expect_true(file.exists(windowsIndexFile))
-})
-
-test_that("Check what happens for individuals 49 and 10", {
-  pkParametersWindows <- readObservedDataFile(
-    file.path(refOutputFolder, "A-PKAnalysisResults.csv")
-  )
-  pkParametersLinux <- readObservedDataFile(
-    file.path(workflowA$workflowFolder, "PKAnalysisResults", "A-PKAnalysisResults.csv")
-  )
-  print("Windows")
-  print(pkParametersWindows[pkParametersWindows$IndividualId %in% c(10, 49), ])
-  print("Linux")
-  print(pkParametersLinux[pkParametersLinux$IndividualId %in% c(10, 49), ])
-  expect_equal(
-    pkParametersWindows[pkParametersWindows$IndividualId %in% c(10, 49), ],
-    pkParametersLinux[pkParametersLinux$IndividualId %in% c(10, 49), ]
-    )
 })
 
 test_that("Print names of output files", {
