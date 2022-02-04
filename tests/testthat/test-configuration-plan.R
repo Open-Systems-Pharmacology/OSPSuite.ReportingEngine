@@ -55,7 +55,7 @@ test_that("Sections field works appropriately", {
   )
   expect_error(minimalPlan$getSectionPath(id = 10), fsep = "/")
   expect_equal(
-    file.path("test-configuration-plan/003_Chapter 2_1.md", fsep = "/"),
+    file.path("test-configuration-plan/003_Chapter_2_1.md", fsep = "/"),
     file.path(minimalPlan$getSectionMarkdown(id = 3), fsep = "/")
   )
 })

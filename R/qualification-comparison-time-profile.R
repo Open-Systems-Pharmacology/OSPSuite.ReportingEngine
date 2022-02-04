@@ -14,7 +14,7 @@ plotQualificationComparisonTimeProfile <- function(configurationPlan,
   timeProfileResults <- list()
   for (timeProfilePlan in configurationPlan$plots$ComparisonTimeProfilePlots) {
     # Create a unique ID for the plot name as <Plot index>-<Project>-<Simulation>
-    plotID <- paste("comparison-time-profile", timeProfilePlan$Title, length(timeProfileResults) + 1, sep = "-")
+    plotID <- defaultFileNames$resultID("comparison_time_profile", timeProfilePlan$Title, length(timeProfileResults) + 1)
 
     # Get axes properties (with scale, limits and display units)
     axesProperties <- getAxesProperties(timeProfilePlan$Axes) %||% settings$axes
