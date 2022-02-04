@@ -133,6 +133,34 @@ test_that("PK Analysis is same between Linux and Windows", {
   expect_equal(resultIndexLinux, resultIndexWindows)
 })
 
+
+test_that("Print exported index", {
+  linuxIndexFile <- file.path(workflowA$workflowFolder, "SensitivityResults", "A-popSensitivityResultsIndex.csv")
+  windowsIndexFile <- file.path(refOutputFolder, "A-popSensitivityResultsIndex.csv")
+  
+  # Use trycatch 
+  print("Windows")
+  print(readLines(windowsIndexFile))
+  print("Linux")
+  print(readLines(linuxIndexFile))
+  
+  expect_true(file.exists(linuxIndexFile))
+  expect_true(file.exists(windowsIndexFile))
+})
+
+test_that("Print names of output files", {
+  print("Windows")
+  for(fileName in list.files(refOutputFolder)){
+    print(fileName)
+  }
+  print("Linux")
+  for(fileName in list.files(file.path(workflowA$workflowFolder, "SensitivityResults"))){
+    print(fileName)
+  }
+  # Prevent test to be skipped
+  expect_equal(2+2, 4)
+})
+
 test_that("Population workflows generate appropriate files and folders", {
   expect_setequal(
     list.files(workflowA$workflowFolder),
@@ -148,22 +176,6 @@ test_that("Population workflows generate appropriate files and folders", {
   )
   
 })
-
-test_that("Print names and content of output files", {
-  print("Windows")
-  for(fileName in list.files(refOutputFolder)){
-    print(fileName)
-    print(readObservedDataFile(file.path(refOutputFolder, fileName)))
-  }
-  print("Linux")
-  for(fileName in list.files(file.path(workflowA$workflowFolder, "SensitivityResults"))){
-    print(fileName)
-    print(readObservedDataFile(file.path(workflowA$workflowFolder, "SensitivityResults", fileName)))
-  }
-  # Prevent test to be skipped
-  expect_equal(2+2, 4)
-})
-
 
 test_that("Population sensitiviy results are equal to reference", {
   skip_on_os("linux") # the behaviour is correct, however due to "µ-conversion" done during reading of units
