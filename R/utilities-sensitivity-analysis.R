@@ -330,9 +330,11 @@ analyzeCoreSensitivity <- function(simulation,
 #' @return ids, IDs of individuals whose PK analysis results closest to quantiles given by vector of quantiles quantileVec
 #' @keywords internal
 getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
+  # Reorder rows by IndividualIds
+  sortedIds <- order(pkAnalysisResultsDataframe$IndividualId)
+  pkAnalysisResultsDataframe <- pkAnalysisResultsDataframe[sortedIds, ]
   rowNums <- NULL
   for (i in 1:length(quantileVec)) {
-    print(sprintf("%.9f", quantileVec[i]))
     rowNums[i] <- which.min(abs(pkAnalysisResultsDataframe$Value - quantile(pkAnalysisResultsDataframe$Value, quantileVec[i], na.rm = TRUE)))
   }
   ids <- as.numeric(pkAnalysisResultsDataframe$IndividualId[rowNums])
