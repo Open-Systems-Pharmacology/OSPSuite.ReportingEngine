@@ -14,7 +14,7 @@ install:
   - ps: $env:Path += ";C:\Program Files (x86)\Pandoc\"
 
 environment:
-  app_version: "1.2"
+  app_version: "2.0"
   USE_RTOOLS: true
   NOT_CRAN: true
   KEEP_VIGNETTES: true
