@@ -1,6 +1,6 @@
 #Project: Undefined
 #PK-Sim version: 9.0.0
-"IndividualId","Gender","Population","Population Name","Organism|p1 [µmol]","Organism|p2 [µmol]","Organism|p3 [1/min]"
+"IndividualId","Gender","Population","Population Name","Organism|p1 [ï¿½mol]","Organism|p2 [ï¿½mol]","Organism|p3 [1/min]"
 0,MALE,ICRP,Pop,1,2,171
 1,MALE,ICRP,Pop,2,3,172
 2,MALE,ICRP,Pop,3,4,173
@@ -500,4 +500,3 @@
 496,FEMALE,ICRP,Pop,2,3,187
 497,FEMALE,ICRP,Pop,3,4,188
 498,FEMALE,ICRP,Pop,1,2,189
-499,FEMALE,ICRP,Pop,2,3,190
