@@ -11,7 +11,7 @@ getOutputsFromConfigurationPlan <- function(configurationPlan) {
   outputsDDI <- getDDIOutputsDataframe(configurationPlan)
   outputsPKRatio <- getPKRatioOutputsDataframe(configurationPlan)
 
-  outputs <- rbind.data.frame(outputsTimeProfile, outputsComparisonTimeProfile, outputsGOF, outputsDDI, outputsPKRatio)
+  outputs <- rbind.data.frame(outputsTimeProfile, outputsComparisonTimeProfile, outputsGOF, outputsDDI, outputsPKRatio, stringsAsFactors = FALSE)
 
   return(outputs[!duplicated(outputs), ])
 }
@@ -40,9 +40,10 @@ getTimeProfileOutputsDataframe <- function(configurationPlan) {
       outputPath = paths,
       pkParameter = NA,
       startTime = NA,
-      endTime = NA
+      endTime = NA,
+      stringsAsFactors = FALSE
     )
-    timeProfileOutputsDataframe <- rbind.data.frame(timeProfileOutputsDataframe, df)
+    timeProfileOutputsDataframe <- rbind.data.frame(timeProfileOutputsDataframe, df, stringsAsFactors = FALSE)
   }
   return(timeProfileOutputsDataframe[!duplicated(timeProfileOutputsDataframe), ])
 }
@@ -63,9 +64,10 @@ getComparisonTimeProfileOutputsDataframe <- function(configurationPlan) {
         outputPath = outputMapping$Output,
         pkParameter = NA,
         startTime = NA,
-        endTime = NA
+        endTime = NA,
+        stringsAsFactors = FALSE
       )
-      comparisonTimeProfileOutputsDataframe <- rbind.data.frame(comparisonTimeProfileOutputsDataframe, df)
+      comparisonTimeProfileOutputsDataframe <- rbind.data.frame(comparisonTimeProfileOutputsDataframe, df, stringsAsFactors = FALSE)
     }
   }
   return(comparisonTimeProfileOutputsDataframe[!duplicated(comparisonTimeProfileOutputsDataframe), ])
@@ -93,9 +95,10 @@ getGOFOutputsDataframe <- function(configurationPlan) {
           outputPath = paths,
           pkParameter = NA,
           startTime = NA,
-          endTime = NA
+          endTime = NA,
+          stringsAsFactors = FALSE
         )
-        gofOutputsDataframe <- rbind.data.frame(gofOutputsDataframe, df)
+        gofOutputsDataframe <- rbind.data.frame(gofOutputsDataframe, df, stringsAsFactors = FALSE)
       }
     }
   }
@@ -152,9 +155,10 @@ getDDIOutputsDataframe <- function(configurationPlan) {
             outputPath = outputPath,
             pkParameter = newPKParameterNames %||% NA,
             startTime = startTime %||% NA,
-            endTime = endTime %||% NA
+            endTime = endTime %||% NA,
+            stringsAsFactors = FALSE
           )
-          ddiOutputsDataframe <- rbind.data.frame(ddiOutputsDataframe, df)
+          ddiOutputsDataframe <- rbind.data.frame(ddiOutputsDataframe, df, stringsAsFactors = FALSE)
         }
       }
     }
@@ -192,10 +196,11 @@ getPKRatioOutputsDataframe <- function(configurationPlan) {
           outputPath = outputPath,
           pkParameter = newPKParameterNames %||% NA,
           startTime = startTime %||% NA,
-          endTime = endTime %||% NA
+          endTime = endTime %||% NA,
+          stringsAsFactors = FALSE
         )
 
-        pkRatioOutputsDataframe <- rbind.data.frame(pkRatioOutputsDataframe, df)
+        pkRatioOutputsDataframe <- rbind.data.frame(pkRatioOutputsDataframe, df, stringsAsFactors = FALSE)
       }
     }
   }
