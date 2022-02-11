@@ -21,7 +21,7 @@ ddiPlotConfiguration <- tlf::DDIRatioPlotConfiguration$new(
   dataMapping = ddiDataMapping
 )
 
-ddiPlotConfiguration$export$width <- 2 * (1.6 / 1.2) * (data$plotSettings$width / 96)
+ddiPlotConfiguration$export$width <- 2 * (1.6/1.2) * (data$plotSettings$width / 96)
 ddiPlotConfiguration$export$height <- 2 * 1.0 * (data$plotSettings$height / 96)
 ddiPlotConfiguration$export$units <- "in"
 
@@ -41,7 +41,7 @@ ddiPlotConfiguration$legend$font$size <- 2 * data$plotSettings$legendFontSize
 
 # Set line color and type
 ddiPlotConfiguration$lines$color <- "black"
-ddiPlotConfiguration$lines$linetype <- c("solid", "dotted", "solid")
+ddiPlotConfiguration$lines$linetype <- c("solid","dotted","solid")
 
 # Set axes scaling
 ddiPlotConfiguration$xAxis$scale <- tlf::Scaling$log

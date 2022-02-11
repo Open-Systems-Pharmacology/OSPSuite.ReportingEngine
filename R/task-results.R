@@ -130,7 +130,7 @@ TaskResults <- R6::R6Class(
     #' Add a text chunk generated from a task to a
     #' @param reportFile file to which the text chunk should be added
     #' @param logFolder folder were logs are saved
-    addTextChunkToReport = function(reportFile, logFolder = getwd()) {
+    addTextChunkToReport = function(reportFile , logFolder = getwd()) {
       if (isOfLength(self$textChunk, 0)) {
         return()
       }
@@ -156,7 +156,7 @@ TaskResults <- R6::R6Class(
 #' @param includeTextChunk logical indicating if the text chunk should be included in final report
 #' @return A `TaskResults` object
 #' @keywords internal
-saveTaskResults <- function(id = NULL, sectionId = NULL, plot = NULL, plotCaption = NULL, includePlot = NULL, table = NULL, tableCaption = NULL, includeTable = NULL, textChunk = NULL, includeTextChunk = NULL, taskResults = NULL) {
+saveTaskResults <- function(id = NULL, sectionId = NULL, plot = NULL, plotCaption = NULL, includePlot = NULL, table = NULL, tableCaption = NULL, includeTable = NULL , textChunk = NULL, includeTextChunk = NULL , taskResults = NULL) {
   taskResults <- taskResults %||% TaskResults$new()
   eval(parseVariableToObject(
     objectName = "taskResults",
@@ -165,3 +165,5 @@ saveTaskResults <- function(id = NULL, sectionId = NULL, plot = NULL, plotCaptio
   ))
   return(taskResults)
 }
+
+

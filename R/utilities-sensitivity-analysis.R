@@ -572,7 +572,7 @@ plotMeanSensitivity <- function(structureSet,
         captions = sensitivityData$parameter,
         maxLines = settings$maxLinesPerParameter,
         width = settings$maxWidthPerParameter
-      )
+        )
 
       sensitivityPlot <- tlf::plotTornado(
         data = sensitivityData,
@@ -641,7 +641,7 @@ plotPopulationSensitivity <- function(structureSets,
 
     re.tStoreFileMetadata(access = "read", filePath = structureSet$popSensitivityAnalysisResultsIndexFile)
     if (!(file.exists(structureSet$popSensitivityAnalysisResultsIndexFile))) next
-    indexDf <- read.csv(file = structureSet$popSensitivityAnalysisResultsIndexFile)
+    indexDf <- readObservedDataFile(fileName = structureSet$popSensitivityAnalysisResultsIndexFile)
 
     outputPaths <- sapply(structureSet$simulationSet$outputs, function(x) {
       x$path
@@ -749,7 +749,7 @@ plotPopulationSensitivity <- function(structureSets,
       for (parNumber in seq_along(missingParameters)) {
 
         # load the index file of SA results for this individual's population to get the name of the individual's sensitivity result file
-        indx <- read.csv(saResultIndexFiles[[pop]])
+        indx <- readObservedDataFile(fileName = saResultIndexFiles[[pop]])
 
         # get the name of the individual's sensitivity result file
         saResFileName <- indx[(indx$Output %in% outputPath) & (indx$pkParameter %in% pk) & (indx$Quantile %in% qu), ]$Filename
@@ -990,3 +990,4 @@ getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold = NULL
   totalSensitivityThreshold <- totalSensitivityThreshold %||% ifNotNull(variableParameterPaths, 1, 0.9)
   return(totalSensitivityThreshold)
 }
+

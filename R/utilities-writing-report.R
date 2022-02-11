@@ -81,7 +81,7 @@ addTableChunk <- function(fileName,
   table <- read.csv(
     file.path(tableFileRootDirectory, tableFileRelativePath),
     check.names = FALSE,
-    # colClasses = "character",
+    #colClasses = "character",
     fileEncoding = "UTF-8",
     stringsAsFactors = FALSE
   )
@@ -89,7 +89,7 @@ addTableChunk <- function(fileName,
     table,
     digits = digits %||% reEnv$formatNumericsDigits,
     scientific = scientific %||% reEnv$formatNumericsScientific
-  )
+    )
 
   # Currently using default options from kable
   mdText <- c(
@@ -158,9 +158,7 @@ addTextChunk <- function(fileName,
 mergeMarkdownFiles <- function(inputFiles, outputFile, logFolder = getwd(), keepInputFiles = FALSE) {
   validateIsLogical(keepInputFiles)
   # Read all files contents first in case outputFile is within inputFiles
-  filesContent <- lapply(inputFiles, function(fileName) {
-    readLines(fileName, encoding = "UTF-8")
-  })
+  filesContent <- lapply(inputFiles, function(fileName){readLines(fileName, encoding = "UTF-8")})
   resetReport(outputFile, logFolder)
 
   # tracelib chunk of code
@@ -174,9 +172,7 @@ mergeMarkdownFiles <- function(inputFiles, outputFile, logFolder = getwd(), keep
     }
   }
   # Merge input files content
-  invisible(lapply(filesContent, function(fileContent) {
-    addTextChunk(outputFile, fileContent, logFolder = logFolder)
-  }))
+  invisible(lapply(filesContent, function(fileContent){addTextChunk(outputFile, fileContent, logFolder = logFolder)}))
   if (!keepInputFiles) {
     # Use setdiff to prevent erasing output file its name is included in inputFiles
     file.remove(setdiff(inputFiles, outputFile))
@@ -228,13 +224,13 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
   for (lineContent in fileContent) {
     firstElement <- as.character(unlist(strsplit(lineContent, " ")))
     firstElement <- firstElement[1]
-    if (grepl(pattern = "Figure", x = firstElement) || grepl(pattern = "Table", x = firstElement)) {
+    if (grepl(pattern = "Figure ", x = firstElement) || grepl(pattern = "Table ", x = firstElement)) {
       wordFileContent <- c(wordFileContent, "\\newpage")
     }
     # Markdown needs to cut/paste figure content within ![]
     # The reports are currently built to print "Figure xx:" and below add figure path as "![](path)"
     # Consequently, the strategy is to read the figure content with key "Figure" and paste within key "![]"
-    if (grepl(pattern = "Figure", x = firstElement)) {
+    if (grepl(pattern = "Figure ", x = firstElement)) {
       figureContent <- lineContent
       next
     }
@@ -351,7 +347,7 @@ getSectionTOC <- function(fileName, logFolder = getwd(), numberSections = TRUE, 
     for (tocLevel in rev(seq(1, tocLevels))) {
       if (grepl(pattern = tocPatterns[tocLevel], x = firstElement)) {
         # Skip the section title if unnumbered and numberSection is FALSE
-        if (!grepl(pattern = "[[:digit:]]", x = secondElement) & !numberSections) {
+        if(!grepl(pattern = "[[:digit:]]", x = secondElement) & !numberSections){
           next
         }
         tocCounts[tocLevel] <- tocCounts[tocLevel] + 1
@@ -361,7 +357,7 @@ getSectionTOC <- function(fileName, logFolder = getwd(), numberSections = TRUE, 
 
         # Number section if option is true
         titlePattern <- paste0(tocPatterns[tocLevel], " ")
-        if (numberSections) {
+        if(numberSections){
           newTitlePattern <- paste0(tocCounts[seq(1, tocLevel)], collapse = ".")
           newTitlePattern <- paste0(titlePattern, newTitlePattern, " ")
           fileContent[lineIndex] <- gsub(pattern = titlePattern, replacement = newTitlePattern, x = fileContent[lineIndex])

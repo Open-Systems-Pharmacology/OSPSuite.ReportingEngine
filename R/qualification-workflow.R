@@ -96,7 +96,7 @@ QualificationWorkflow <- R6::R6Class(
         createWordReport = self$createWordReport,
         numberSections = self$numberSections,
         intro = mdFiles$intro
-      )
+        )
     },
 
     #' @description
@@ -104,7 +104,7 @@ QualificationWorkflow <- R6::R6Class(
     #' Caution, updating the `configurationPlan` using this method won't update the workflow simulations and their results.
     #' Use the method only to bypass reloading a full workflow if only plot aesthetics or section content is changed.
     #' @param configurationPlanFile path to the json file corresponding to the Configuration Plan of a Qualification workflow
-    updateConfigurationPlan = function(configurationPlanFile) {
+    updateConfigurationPlan = function(configurationPlanFile){
       configurationPlan <- loadConfigurationPlan(configurationPlanFile, self$workflowFolder)
       # Update the default plot properties using `tlf` concept of theme
       configurationPlan$updateTheme()

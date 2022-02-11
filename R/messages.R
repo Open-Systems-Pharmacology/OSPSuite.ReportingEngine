@@ -53,7 +53,7 @@ messages <- list(
   warningExistingPath = function(existingPath) {
     paste0(callingFunction(), "Path: '", existingPath, "' already exists.")
   },
-
+  
   errorUnexistingFile = function(path) {
     paste0(callingFunction(), "File: '", path, "' does not exist.")
   },
@@ -95,7 +95,7 @@ messages <- list(
       "2) Define units in dictionary by filling the column '",
       dictionaryParameters$datasetColumn, "' for ID '", dictionaryParameters$timeUnitID, "' and '", dictionaryParameters$dvUnitID, "'\n",
       "3) Define units for '", dictionaryParameters$dvID, "' in every 'Output' object using the field 'dataUnit'"
-    )
+      )
   },
 
   errorNoDataUnitInOutputs = function() {
@@ -108,7 +108,7 @@ messages <- list(
       "2) Define units in dictionary by filling the column '",
       dictionaryParameters$datasetColumn, "' for ID '", dictionaryParameters$timeUnitID, "' and '", dictionaryParameters$dvUnitID, "'\n",
       "3) Define units for '", dictionaryParameters$dvID, "' in 'Output' objects using the field 'dataUnit'"
-    )
+      )
   },
 
   warningMultipleDataUnit = function() {
@@ -121,6 +121,7 @@ messages <- list(
       "2) Define units in dictionary by filling the column '",
       dictionaryParameters$datasetColumn, "' for ID '", dictionaryParameters$timeUnitID, "' and '", dictionaryParameters$dvUnitID, "'\n",
       "3) Define units for '", dictionaryParameters$dvID, "' in every 'Output' object using the field 'dataUnit'"
+
     )
   },
 
@@ -189,8 +190,8 @@ messages <- list(
       " data were included in the analysis between ", min(timeRange), " and ", max(timeRange), " ", timeUnit, "."
     )
   },
-
-  errorCommand = function(command, status) {
+  
+  errorCommand = function(command, status){
     paste0("Command : '", command, "' returned Error Status ", status)
   }
 )

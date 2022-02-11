@@ -28,7 +28,7 @@ AggregationConfiguration <- list(
   binUsingQuantiles = TRUE
 )
 
-displayDimension <- function(dimension) {
+displayDimension <- function(dimension){
   if (isIncluded(dimension, c("Concentration (mass)", "Concentration (molar)"))) {
     return("Concentration")
   }
@@ -45,19 +45,19 @@ displayDimension <- function(dimension) {
 autoAxesLimits <- function(x, scale = tlf::Scaling$lin) {
   minX <- min(x, na.rm = TRUE)
   maxX <- max(x, na.rm = TRUE)
-  minX[minX < 0] <- (1 + reEnv$autoAxisLimitMargin) * minX
-  minX[minX > 0] <- (1 - reEnv$autoAxisLimitMargin) * minX
-  maxX[maxX < 0] <- (1 - reEnv$autoAxisLimitMargin) * maxX
-  maxX[maxX < 0] <- (1 + reEnv$autoAxisLimitMargin) * maxX
-  if (!isIncluded(scale, "log")) {
+  minX[minX<0] <- (1+reEnv$autoAxisLimitMargin)*minX
+  minX[minX>0] <- (1-reEnv$autoAxisLimitMargin)*minX
+  maxX[maxX<0] <- (1-reEnv$autoAxisLimitMargin)*maxX
+  maxX[maxX<0] <- (1+reEnv$autoAxisLimitMargin)*maxX
+  if(!isIncluded(scale, "log")){
     return(c(minX, maxX))
   }
   # For log plots,
   # wider range for pretty axes limits
-  if ((log10(maxX) - log10(minX)) > 1) {
+  if ((log10(maxX)-log10(minX)) > 1) {
     return(c(minX, maxX))
   }
-  return(c(minX / 2, maxX * 2))
+  return(c(minX/2, maxX*2))
 }
 
 #' @title autoAxesTicksFromLimits
@@ -70,10 +70,10 @@ autoAxesLimits <- function(x, scale = tlf::Scaling$lin) {
 autoAxesTicksFromLimits <- function(limits) {
   minLogRange <- log10(min(limits))
   maxLogRange <- log10(max(limits))
-  logTicks <- seq(floor(minLogRange), ceiling(maxLogRange))
+  logTicks <- seq(floor(minLogRange),ceiling(maxLogRange))
   logRange <- maxLogRange - minLogRange
   # If range is wide enough, use one tick every factor 10
-  if (logRange > 1) {
+  if(logRange > 1){
     return(10^logTicks)
   }
   return(rep(c(1, 2, 5), length(logTicks)) * 10^rep(logTicks, each = 3))
@@ -98,16 +98,16 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
   fonts <- plotProperties$FontAndSize$Fonts
   # plotConfiguration initial font and size properties were defined from current theme
   # their scaling was not perform then to have it performed only at this level
-  plotConfiguration$labels$title$font$size <- reEnv$fontScaleFactor * (fonts$TitleSize %||% plotConfiguration$labels$title$font$size)
-  plotConfiguration$labels$subtitle$font$size <- reEnv$fontScaleFactor * (fonts$DescriptionSize %||% plotConfiguration$labels$subtitle$font$size)
-  plotConfiguration$labels$xlabel$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$labels$xlabel$font$size)
-  plotConfiguration$labels$ylabel$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$labels$ylabel$font$size)
-  plotConfiguration$xAxis$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$xAxis$font$size)
-  plotConfiguration$yAxis$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$yAxis$font$size)
-  plotConfiguration$legend$font$size <- reEnv$fontScaleFactor * (fonts$LegendSize %||% plotConfiguration$legend$font$size)
-  plotConfiguration$background$watermark$font$size <- reEnv$fontScaleFactor * (fonts$WatermarkSize %||% plotConfiguration$background$watermark$font$size)
+  plotConfiguration$labels$title$font$size <- reEnv$fontScaleFactor*(fonts$TitleSize %||% plotConfiguration$labels$title$font$size)
+  plotConfiguration$labels$subtitle$font$size <- reEnv$fontScaleFactor*(fonts$DescriptionSize %||% plotConfiguration$labels$subtitle$font$size)
+  plotConfiguration$labels$xlabel$font$size <- reEnv$fontScaleFactor*(fonts$AxisSize %||% plotConfiguration$labels$xlabel$font$size)
+  plotConfiguration$labels$ylabel$font$size <- reEnv$fontScaleFactor*(fonts$AxisSize %||% plotConfiguration$labels$ylabel$font$size)
+  plotConfiguration$xAxis$font$size <- reEnv$fontScaleFactor*(fonts$AxisSize %||% plotConfiguration$xAxis$font$size)
+  plotConfiguration$yAxis$font$size <- reEnv$fontScaleFactor*(fonts$AxisSize %||% plotConfiguration$yAxis$font$size)
+  plotConfiguration$legend$font$size <- reEnv$fontScaleFactor*(fonts$LegendSize %||% plotConfiguration$legend$font$size)
+  plotConfiguration$background$watermark$font$size <- reEnv$fontScaleFactor*(fonts$WatermarkSize %||% plotConfiguration$background$watermark$font$size)
 
-  # Set legend position
+  #Set legend position
   validateIsIncluded(values = legendPosition, parentValues = tlf::LegendPositions, nullAllowed = TRUE)
   plotConfiguration$legend$position <- legendPosition %||% reEnv$theme$background$legendPosition
 
@@ -123,14 +123,14 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
     plotProperties$FontAndSize$ChartHeight,
     plotProperties$FontAndSize$ChartHeight * unitConversionFactor[2],
     reEnv$defaultPlotFormat$height
-  )
+    )
 
   legendScaling <- getLegendScalingFactors(legendPosition)
 
   # Get dimensions of exported based on legend position and default/specific plot properties
   plotConfiguration$export$units <- reEnv$defaultPlotFormat$units
-  plotConfiguration$export$width <- reEnv$fontScaleFactor * legendScaling$width * width
-  plotConfiguration$export$height <- reEnv$fontScaleFactor * legendScaling$height * height
+  plotConfiguration$export$width <- reEnv$fontScaleFactor*legendScaling$width*width
+  plotConfiguration$export$height <- reEnv$fontScaleFactor*legendScaling$height*height
   return(plotConfiguration)
 }
 
@@ -141,21 +141,19 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
 #' @param legendPosition The name of the legend position as defined by `tlf` enum `LegendPositions`
 #' @return A list of scaling values for `width` and `height`
 #' @keywords internal
-getLegendScalingFactors <- function(legendPosition = tlf::LegendPositions$outsideTop) {
+getLegendScalingFactors <- function(legendPosition = tlf::LegendPositions$outsideTop){
   # Legend on the left/right sides: increase width
-  if (isIncluded(legendPosition, c(tlf::LegendPositions$outsideRight, tlf::LegendPositions$outsideLeft))) {
-    return(list(width = 4 / 3, height = 1))
+  if(isIncluded(legendPosition, c(tlf::LegendPositions$outsideRight, tlf::LegendPositions$outsideLeft))){
+    return(list(width = 4/3, height = 1))
   }
   # Legend on the top/bottom sides: increase height
-  if (isIncluded(legendPosition, c(
-    tlf::LegendPositions$outsideTopLeft,
-    tlf::LegendPositions$outsideTop,
-    tlf::LegendPositions$outsideTopRight,
-    tlf::LegendPositions$outsideBottomLeft,
-    tlf::LegendPositions$outsideBottom,
-    tlf::LegendPositions$outsideBottomRight
-  ))) {
-    return(list(width = 1, height = 7 / 6))
+  if(isIncluded(legendPosition, c(tlf::LegendPositions$outsideTopLeft,
+                                  tlf::LegendPositions$outsideTop,
+                                  tlf::LegendPositions$outsideTopRight,
+                                  tlf::LegendPositions$outsideBottomLeft,
+                                  tlf::LegendPositions$outsideBottom,
+                                  tlf::LegendPositions$outsideBottomRight))){
+    return(list(width = 1, height = 7/6))
   }
   # Otherwise use these default values
   return(list(width = 1, height = 1))
@@ -180,6 +178,7 @@ getLegendScalingFactors <- function(legendPosition = tlf::LegendPositions$outsid
 #' cat(prettyCaption("this too short to split", maxLines = 3, width = 40))
 #'
 #' cat(prettyCaption("this forces the sentence to use one line", maxLines = 1, width = 5))
+#'
 prettyCaption <- function(captions, maxLines = reEnv$maxLinesPerLegendCaption, width = reEnv$maxWidthPerLegendCaption) {
   # Get number of characters for each caption
   totalWidths <- nchar(captions)

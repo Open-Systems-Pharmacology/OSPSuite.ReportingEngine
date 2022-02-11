@@ -1,4 +1,4 @@
-# To access the global settings from unexported reEnv,
+# To access the global settings from unexported reEnv, 
 # ospsuite.reportingengine:::reEnv needs to be used
 
 test_that("Functions setting global properties work", {
@@ -12,24 +12,24 @@ test_that("Functions setting global properties work", {
   expect_equal(ospsuite.reportingengine:::reEnv$defaultPlotFormat$height, 9)
   expect_equal(ospsuite.reportingengine:::reEnv$defaultPlotFormat$units, "cm")
   expect_equal(ospsuite.reportingengine:::reEnv$defaultPlotFormat$dpi, 300)
-
+  
   # Numeric format of tables
   expect_error(setDefaultNumericFormat(digits = "a"))
   expect_error(setDefaultNumericFormat(scientific = "a"))
   setDefaultNumericFormat(digits = 2, scientific = TRUE)
   expect_equal(ospsuite.reportingengine:::reEnv$formatNumericsDigits, 2)
   expect_true(ospsuite.reportingengine:::reEnv$formatNumericsScientific)
-
+  
   # stairstep option for plots
   expect_error(setDefaultStairstep("a"))
   setDefaultStairstep(TRUE)
   expect_true(ospsuite.reportingengine:::reEnv$defaultStairstep)
-
+  
   # bins option for plots
   expect_error(setDefaultBins("a"))
   setDefaultBins(13)
   expect_equal(ospsuite.reportingengine:::reEnv$defaultBins, 13)
-
+  
   # auto axis limit margin option for plots
   expect_error(setDefaultAutoAxisLimitMargin("a"))
   setDefaultAutoAxisLimitMargin(0.1)

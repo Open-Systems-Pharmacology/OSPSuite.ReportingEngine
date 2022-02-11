@@ -17,7 +17,7 @@ plotQualificationGOFs <- function(configurationPlan,
     gofData <- getQualificationGOFData(gofPlan, configurationPlan, gofAxesUnits, logFolder)
 
     # GMFE
-    gmfeID <- paste(length(gofResults) + 1, "gof-gmfe", sep = "-")
+    gmfeID <- defaultFileNames$resultID(length(gofResults) + 1, "gof_gmfe")
     gofGMFE <- getQualificationGOFGMFE(gofData$data)
     gofResults[[gmfeID]] <- saveTaskResults(
       id = gmfeID,
@@ -30,7 +30,7 @@ plotQualificationGOFs <- function(configurationPlan,
     # GOF plots
     plotTypes <- gofPlan$PlotTypes %||% ospsuite::toPathArray(gofPlan$PlotType)
     for (plotType in plotTypes) {
-      plotID <- paste(length(gofResults) + 1, plotType, "gof-plot", sep = "-")
+      plotID <- defaultFileNames$resultID(length(gofResults) + 1, "gof_plot", plotType)
       axesProperties <- getAxesProperties(gofPlan$Axes[[plotType]]) %||% settings[[plotType]]$axes
 
       gofPlot <- getQualificationGOFPlot(plotType, gofData$data, gofData$metaData, axesProperties)

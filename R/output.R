@@ -61,6 +61,7 @@ Output <- R6::R6Class(
                           dataDisplayName = NULL,
                           pkParameters = NULL,
                           residualScale = ResidualScales$Logarithmic) {
+
       validateIsString(path)
       validateIsOfLength(path, 1)
       validateIsString(c(displayName, dataUnit, displayUnit, dataDisplayName), nullAllowed = TRUE)

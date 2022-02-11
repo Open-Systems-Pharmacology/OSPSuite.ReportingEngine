@@ -165,7 +165,7 @@ plotDemographyParameters <- function(structureSets,
             scale = tlf::Scaling$log,
             limits = vpcLogLimits,
             ticks = vpcLogTicks
-          )
+            )
 
           xParameterCaption <- vpcMetaData$x$dimension
           yParameterCaption <- vpcMetaData$median$dimension
@@ -213,8 +213,7 @@ plotDemographyParameters <- function(structureSets,
           plotObject = vpcPlot,
           scale = tlf::Scaling$log,
           limits = vpcLogLimits,
-          ticks = vpcLogTicks
-        )
+          ticks = vpcLogTicks)
 
         xParameterCaption <- vpcMetaData$x$dimension
         yParameterCaption <- vpcMetaData$median$dimension

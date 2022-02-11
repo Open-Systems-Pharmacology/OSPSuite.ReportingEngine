@@ -45,9 +45,7 @@ Workflow <- R6::R6Class(
       validateIsString(workflowFolder)
       validateIsString(watermark, nullAllowed = TRUE)
       validateIsString(simulationSetDescriptor, nullAllowed = TRUE)
-      sapply(c(simulationSets), function(simulationSet) {
-        validateIsOfType(object = simulationSet, type = "SimulationSet")
-      })
+      sapply(c(simulationSets),function(simulationSet){validateIsOfType(object = simulationSet,type = "SimulationSet")})
       validateIsLogical(createWordReport)
       validateIsLogical(numberSections)
 
