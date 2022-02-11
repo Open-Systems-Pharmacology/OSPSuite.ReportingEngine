@@ -494,9 +494,10 @@ addUserDefinedTask <- function(workflow,
   argumentNames <- names(formals(taskFunction))
   if (isOfType(workflow, "MeanModelWorkflow")) {
     # PlotTask arguments
-    validateIsIncluded(c("structureSet", "logFolder", "settings"), argumentNames,
+    validateIsIncludedAndLog(
+      c("structureSet", "logFolder", "settings"), argumentNames,
       groupName = "Task function arguments", logFolder = workflow$workflowFolder
-    )
+      )
 
     workflow$userDefinedTasks <- c(
       workflow$userDefinedTasks,
@@ -516,7 +517,8 @@ addUserDefinedTask <- function(workflow,
 
   if (isOfType(workflow, "PopulationWorkflow")) {
     # PopulationPlotTask arguments
-    validateIsIncluded(c("structureSets", "logFolder", "settings", "workflowType", "xParameters", "yParameters"), argumentNames,
+    validateIsIncludedAndLog(
+      c("structureSets", "logFolder", "settings", "workflowType", "xParameters", "yParameters"), argumentNames,
       groupName = "Task function arguments", logFolder = workflow$workflowFolder
     )
 
