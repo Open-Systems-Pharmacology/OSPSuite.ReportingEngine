@@ -200,7 +200,7 @@ Workflow <- R6::R6Class(
         validateIsIncluded(c("parameter", "displayPath"), names(parameterDisplayPaths))
       }
       # In case the same parameter is defined more than once, throw a warning
-      if (!hasUniqueValues(parameterDisplayPaths$parameter)) {
+      if (!hasOnlyDistinctValues(parameterDisplayPaths$parameter)) {
         logWorkflow(
           message = messages$errorHasNoUniqueValues(parameterDisplayPaths$parameter, dataName = "parameter variable"),
           pathFolder = self$workflowFolder,
