@@ -17,6 +17,8 @@ addTextChunk(fileName, text, logFolder = getwd())
 Add a text chunk to a .md document
 }
 \examples{
+\dontrun{
 resetReport("report.md")
 addTextChunk(fileName = "report.md", text = "new text")
+}
 }

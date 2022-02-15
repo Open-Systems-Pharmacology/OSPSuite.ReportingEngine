@@ -4,7 +4,9 @@
 #' @param logFolder folder where the logs are saved
 #' @export
 #' @examples
+#' \dontrun{
 #' resetReport("report.md")
+#' }
 resetReport <- function(fileName, logFolder = getwd()) {
   if (file.exists(fileName)) {
     logWorkflow(
@@ -123,8 +125,10 @@ addTableChunk <- function(fileName,
 #' @param logFolder folder where the logs are saved
 #' @export
 #' @examples
+#' \dontrun{
 #' resetReport("report.md")
 #' addTextChunk(fileName = "report.md", text = "new text")
+#' }
 addTextChunk <- function(fileName,
                          text,
                          logFolder = getwd()) {
