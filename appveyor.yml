@@ -18,6 +18,7 @@ environment:
   USE_RTOOLS: true
   NOT_CRAN: true
   KEEP_VIGNETTES: true
+  _R_CHECK_FORCE_SUGGESTS_: false
   R_ARCH: x64
   R_VERSION: "4.0.5"
   COVERALLS_TOKEN:
