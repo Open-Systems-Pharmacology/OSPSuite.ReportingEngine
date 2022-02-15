@@ -1,6 +1,6 @@
 Type: Package
 Package: ospsuite.reportingengine
-Title: R package to create reports for the Open Systems Pharmacology models.
+Title: R package to create reports for the Open Systems Pharmacology models
 Version: 2.0.0
 Authors@R: 
     c(person(given = "Open-Systems-Pharmacology Community",
