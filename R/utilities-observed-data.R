@@ -346,9 +346,9 @@ isObservedData <- function(path) {
 #' @import ospsuite
 #' @examples
 #' \dontrun{
-#' getObservedDataIdFromPath("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)")
+#' getObservedDataIdFromPath("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma")
 #' # > NULL
-#' getObservedDataIdFromPath("Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc")
+#' getObservedDataIdFromPath("Midazolam 600mg SD|ObservedData|Plasma|Rifampin|Conc")
 #' # > "Midazolam 600mg SD"
 #' }
 #' @keywords internal

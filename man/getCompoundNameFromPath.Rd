@@ -19,9 +19,9 @@ Get the compound name from a configuration plan quantity path
 }
 \examples{
 \dontrun{
-getCompoundNameFromPath("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)")
+getCompoundNameFromPath("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma")
 # > "Midazolam"
-getCompoundNameFromPath("Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc")
+getCompoundNameFromPath("Midazolam SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc")
 # > "Rifampin"
 }
 }
