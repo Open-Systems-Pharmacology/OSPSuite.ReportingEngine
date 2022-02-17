@@ -215,7 +215,11 @@ In this example, the names and units of the PK parameters are updated using the 
 
 ```{r example 3}
 # Get the pkml simulation file: "MiniModel2.pkml"
-simulationFile <- system.file("extdata", "MiniModel2.pkml",
+simulationFileA <- system.file("extdata", "MiniModel1.pkml",
+  package = "ospsuite.reportingengine"
+)
+
+simulationFileB <- system.file("extdata", "MiniModel2.pkml",
   package = "ospsuite.reportingengine"
 )
 
@@ -240,12 +244,12 @@ outputB <- Output$new(
 
 setA <- SimulationSet$new(
   simulationSetName = "A",
-  simulationFile = simulationFile,
+  simulationFile = simulationFileA,
   outputs = outputA
 )
 setB <- SimulationSet$new(
   simulationSetName = "B",
-  simulationFile = simulationFile,
+  simulationFile = simulationFileB,
   outputs = outputB
 )
 
