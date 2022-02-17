@@ -4,7 +4,11 @@
 \alias{loadSimulationWithUpdatedPaths}
 \title{loadSimulationWithUpdatedPaths}
 \usage{
-loadSimulationWithUpdatedPaths(simulationSet, loadFromCache = FALSE)
+loadSimulationWithUpdatedPaths(
+  simulationSet,
+  loadFromCache = FALSE,
+  addToCache = TRUE
+)
 }
 \arguments{
 \item{simulationSet}{simulation set containing path to simulation file and pathIDs for quantities to be loaded into simulation object}
