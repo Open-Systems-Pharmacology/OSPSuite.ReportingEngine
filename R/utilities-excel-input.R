@@ -115,7 +115,9 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
   )
 
   # Use styler to beautify and standardize the formatof the output file
-  scriptContent <- styler:::style_text(scriptContent)
+  if(requireNamespace("styler", quietly = TRUE)){
+    scriptContent <- styler::style_text(scriptContent)
+  }
 
   if (removeComments) {
     scriptContent <- removeCommentsFromWorkflowContent(scriptContent)
