@@ -56,6 +56,11 @@ reEnv$pkRatio$dictionary <- list(
   suffixRatio = "Ratio"
 )
 
+
+# Default value for a scale factor used in a parallel simulation.  The product of this scale factor and the number of allowable cores (allowedCores) sets the maximum number of simulations that may be run on one core.
+reEnv$defaultMaxSimulationsPerCore <- 2
+
+
 #' @title setWatermarkConfiguration
 #' @description Set default watermark configuration for current theme
 #' @param watermark character or \code{Label} class object from `tlf` package
