@@ -272,7 +272,7 @@ ConfigurationPlan <- R6::R6Class(
         return(private$.sections)
       }
       private$.sections <- sectionsAsDataFrame(value)
-      validateHasUniqueValues(private$.sections$id, dataName = "Sections Id")
+      validatehasOnlyDistinctValues(private$.sections$id, dataName = "Sections Id")
     },
 
     #' @field simulationMappings data.frame mapping simulations to their paths
@@ -300,7 +300,7 @@ ConfigurationPlan <- R6::R6Class(
         "project: '", private$.simulationMappings$project,
         "' - simulation: '", private$.simulationMappings$simulation, "'"
       )
-      validateHasUniqueValues(simulationMappingsId, dataName = "SimulationMappings combinations")
+      validatehasOnlyDistinctValues(simulationMappingsId, dataName = "SimulationMappings combinations")
     },
 
     #' @field observedDataSets data.frame mapping observed datasets to their paths
@@ -336,7 +336,7 @@ ConfigurationPlan <- R6::R6Class(
         unexistingFiles <- paste0(dataPaths[unexistingFiles], collapse = "', '")
         warning(paste0("Observed datasets '", unexistingFiles, "' not found"))
       }
-      if (!hasUniqueValues(dataIds)) {
+      if (!hasOnlyDistinctValues(dataIds)) {
         # Check if the id reference same paths
         duplicatedIds <- unique(dataIds[duplicated(dataIds)])
         for (observedDataSetsId in duplicatedIds) {

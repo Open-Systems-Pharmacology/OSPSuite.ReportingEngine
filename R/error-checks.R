@@ -352,11 +352,11 @@ validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
 }
 
 
-validateHasUniqueValues <- function(data, dataName = "dataset", na.rm = TRUE, nullAllowed = FALSE) {
+validatehasOnlyDistinctValues <- function(data, dataName = "dataset", na.rm = TRUE, nullAllowed = FALSE) {
   if (nullAllowed && is.null(data)) {
     return(invisible())
   }
-  if (hasUniqueValues(data, na.rm)) {
+  if (hasOnlyDistinctValues(data, na.rm)) {
     return(invisible())
   }
   stop(messages$errorHasNoUniqueValues(data, dataName, na.rm))
