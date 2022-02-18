@@ -288,7 +288,15 @@ getDefaultDemographyXParameters <- function(workflowType) {
 }
 
 #' @title getDemographyAggregatedData
-#' @importFrom ospsuite.utils %||%
+#' @param data A data.frame
+#' @param xParameterName Name of parameter in `data` used for aggregation in x axis of plot
+#' @param yParameterName Name of parameter in `data` aggreated in y axis of plot
+#' @param bins Either a numeric vector defining bin edges 
+#' or a numeric value defining the number of bins.
+#' @param stairstep A logical value defining if aggregation uses continuous or stairstep plot
+#' @return A data.frame of aggregated data
+#' @import ospsuite.utils
+#' @keywords internal
 getDemographyAggregatedData <- function(data,
                                         xParameterName,
                                         yParameterName,

@@ -12,6 +12,22 @@ getDemographyAggregatedData(
   stairstep = TRUE
 )
 }
+\arguments{
+\item{data}{A data.frame}
+
+\item{xParameterName}{Name of parameter in `data` used for aggregation in x axis of plot}
+
+\item{yParameterName}{Name of parameter in `data` aggreated in y axis of plot}
+
+\item{bins}{Either a numeric vector defining bin edges 
+or a numeric value defining the number of bins.}
+
+\item{stairstep}{A logical value defining if aggregation uses continuous or stairstep plot}
+}
+\value{
+A data.frame of aggregated data
+}
 \description{
 getDemographyAggregatedData
 }
+\keyword{internal}

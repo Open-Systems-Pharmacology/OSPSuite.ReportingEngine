@@ -24,6 +24,7 @@ mergeMarkdownFiles(
 Merge markdown files into one unique file
 }
 \examples{
+\dontrun{
 resetReport("chapter-1.md")
 addTextChunk(fileName = "chapter-1.md", text = "Chapter 1")
 resetReport("chapter-2.md")
@@ -32,4 +33,5 @@ mergeMarkdownFiles(
  inputFiles = c("chapter-1.md", "chapter-2.md"), 
  outputFile = "chapters-1and2.md"
 )
+}
 }

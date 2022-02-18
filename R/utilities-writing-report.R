@@ -4,7 +4,9 @@
 #' @param logFolder folder where the logs are saved
 #' @export
 #' @examples
+#' \dontrun{
 #' resetReport("report.md")
+#' }
 resetReport <- function(fileName, logFolder = getwd()) {
   if (file.exists(fileName)) {
     logWorkflow(
@@ -123,8 +125,10 @@ addTableChunk <- function(fileName,
 #' @param logFolder folder where the logs are saved
 #' @export
 #' @examples
+#' \dontrun{
 #' resetReport("report.md")
 #' addTextChunk(fileName = "report.md", text = "new text")
+#' }
 addTextChunk <- function(fileName,
                          text,
                          logFolder = getwd()) {
@@ -147,6 +151,7 @@ addTextChunk <- function(fileName,
 #' @param keepInputFiles logical option to prevent the input files to be deleted after merging them
 #' @export
 #' @examples
+#' \dontrun{
 #' resetReport("chapter-1.md")
 #' addTextChunk(fileName = "chapter-1.md", text = "Chapter 1")
 #' resetReport("chapter-2.md")
@@ -155,6 +160,7 @@ addTextChunk <- function(fileName,
 #'  inputFiles = c("chapter-1.md", "chapter-2.md"), 
 #'  outputFile = "chapters-1and2.md"
 #' )
+#' }
 mergeMarkdownFiles <- function(inputFiles, outputFile, logFolder = getwd(), keepInputFiles = FALSE) {
   validateIsLogical(keepInputFiles)
   # Read all files contents first in case outputFile is within inputFiles

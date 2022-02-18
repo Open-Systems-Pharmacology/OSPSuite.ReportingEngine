@@ -15,5 +15,7 @@ resetReport(fileName, logFolder = getwd())
 Initialize a report, warning if a previous version already exists
 }
 \examples{
+\dontrun{
 resetReport("report.md")
+}
 }
