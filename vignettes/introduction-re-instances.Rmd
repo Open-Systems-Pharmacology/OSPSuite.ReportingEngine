@@ -220,7 +220,7 @@ Three population workflow types are available in `ospsuite.reportingengine` and 
 
 
 ```{r figure 2, out.width="100%", include=TRUE, fig.align="center", fig.cap= "Figure 2: Population workflow inputs and tasks", echo=FALSE}
-knitr::include_graphics("figures/population-workflow-input-and-tasks.png", package = "ospsuite.reportingengine")
+knitr::include_graphics("figures/population-workflow-input-and-tasks.png")
 ```
 
 ## 2.3. Qualification Workflow
