@@ -392,7 +392,7 @@ getPKResultsDataFrame <- function(structureSet) {
     simulation = loadSimulationWithUpdatedPaths(simulationSet = structureSet$simulationSet, loadFromCache = TRUE)
   )
 
-  pkResultsDataFrame <- ospsuite::pkAnalysesAsDataFrame(pkAnalyses = pkResults)
+  pkResultsDataFrame <- ospsuite::pkAnalysesToDataFrame(pkAnalyses = pkResults)
 
   filteredPkResultsDf <- NULL
 

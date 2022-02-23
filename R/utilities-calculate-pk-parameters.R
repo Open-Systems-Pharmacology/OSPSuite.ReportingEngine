@@ -55,7 +55,7 @@ plotMeanPKParameters <- function(structureSet,
     simulation
   )
 
-  pkParametersTable <- ospsuite::pkAnalysesAsDataFrame(pkAnalyses)
+  pkParametersTable <- ospsuite::pkAnalysesToDataFrame(pkAnalyses)
   for (output in structureSet$simulationSet$outputs) {
     molWeight <- simulation$molWeightFor(output$path)
 
@@ -560,7 +560,7 @@ getPKParametersAcrossPopulations <- function(structureSets) {
       structureSet$pkAnalysisResultsFileNames,
       simulation
     )
-    pkParametersTable <- ospsuite::pkAnalysesAsDataFrame(pkAnalyses)
+    pkParametersTable <- ospsuite::pkAnalysesToDataFrame(pkAnalyses)
     populationTable <- getPopulationAsDataFrame(population, simulation)
 
     pkParametersTable <- formatPKParametersTable(
