@@ -16,7 +16,7 @@ BugReports:
     https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues
 Depends: 
     R (>= 3.5),
-    ospsuite (>= 10.0),
+    ospsuite (>= 11.0),
     tlf (>= 1.2.0)
 Imports: 
     R6,
