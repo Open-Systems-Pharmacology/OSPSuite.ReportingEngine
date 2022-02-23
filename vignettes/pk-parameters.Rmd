@@ -1,5 +1,8 @@
 ---
 title: "PK parameters"
+resource_files:
+  - figures
+  - reportOutputStyle.css
 output: 
   rmarkdown::html_vignette:
    number_sections: true
@@ -7,7 +10,7 @@ output:
 #   self_contained: false
 #   keep_md: true
 vignette: >
-  %\VignetteIndexEntry{pk-parameters}
+  %\VignetteIndexEntry{PK parameters}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

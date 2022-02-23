@@ -1,5 +1,8 @@
 ---
 title: "Qualification Workflow"
+resource_files:
+  - figures
+  - reportOutputStyle.css
 output: 
   rmarkdown::html_vignette:
     toc: true

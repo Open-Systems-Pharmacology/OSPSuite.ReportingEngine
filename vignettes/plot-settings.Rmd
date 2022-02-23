@@ -1,11 +1,14 @@
 ---
 title: "Plot settings"
+resource_files:
+  - figures
+  - reportOutputStyle.css
 output: 
   rmarkdown::html_vignette:
    number_sections: true
    toc: true
 vignette: >
-  %\VignetteIndexEntry{plot-settings}
+  %\VignetteIndexEntry{Plot settings}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

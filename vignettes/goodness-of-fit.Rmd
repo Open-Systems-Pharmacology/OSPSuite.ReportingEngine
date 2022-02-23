@@ -1,5 +1,8 @@
 ---
 title: "Time profiles and Residuals task"
+resource_files:
+  - figures
+  - reportOutputStyle.css
 output: 
   rmarkdown::html_vignette:
    number_sections: true
