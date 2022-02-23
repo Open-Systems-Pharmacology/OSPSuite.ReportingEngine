@@ -12,7 +12,7 @@ addStudyParameters <- function(population, simulation, studyDesignFile) {
   studyDesign <- loadStudyDesign(studyDesignFile, population, simulation)
 
   initialTargetValues <- rep(NA, population$count)
-  populationData <- ospsuite::populationAsDataFrame(population)
+  populationData <- ospsuite::populationToDataFrame(population)
 
   for (target in studyDesign$targets) {
     parameterPath <- target$name
@@ -21,6 +21,8 @@ addStudyParameters <- function(population, simulation, studyDesignFile) {
 
     population$setParameterValues(parameterPath, updatedTargetValues)
   }
+  # Since population is updated R6 object, no need to export it
+  return(invisible())
 }
 
 #' @title loadStudyDesign

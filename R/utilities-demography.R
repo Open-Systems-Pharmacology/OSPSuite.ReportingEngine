@@ -525,7 +525,7 @@ addYParametersForDemogrpahyPlot <- function(workflow, parameters) {
 }
 
 getPopulationAsDataFrame <- function(population, simulation) {
-  populationTable <- ospsuite::populationAsDataFrame(population)
+  populationTable <- ospsuite::populationToDataFrame(population)
   allParameters <- ospsuite::getAllParametersMatching(population$allParameterPaths, simulation)
 
   for (parameter in allParameters) {
