@@ -57,7 +57,7 @@ SimulationSet <- R6::R6Class(
       # but not here as it would mean that nothing would be reported
       validateIsIncluded(c(applicationRanges), ApplicationRanges)
 
-      simulation <- ospsuite::loadSimulation(simulationFile)
+      simulation <- ospsuite::loadSimulation(simulationFile,addToCache = FALSE)
 
       # Test and validate outputs and their paths
       validateOutputObject(c(outputs), simulation, nullAllowed = TRUE)
