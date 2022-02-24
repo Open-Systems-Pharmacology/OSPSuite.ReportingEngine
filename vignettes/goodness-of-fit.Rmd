@@ -160,8 +160,8 @@ The output report for Example 1 is shown below.
 There are only 2 figures in the report (linear and log scales) showing the time profile of the output path '__Organism|A|Concentration in container__' displayed as '__Concentration of A__'.
 
 <div class = "reportOutput">
-```{r example 1 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow1$reportFileName))
+```{r example 1 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow1$reportFileName)))
 ```
 </div>
 
@@ -244,8 +244,8 @@ The output report for Example 2 is shown below.
 There are now many more figures in the report showing not only time profiles in `µmol/ml` instead of `nmol/ml` but also residuals.
 
 <div class = "reportOutput">
-```{r example 2 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow2$reportFileName))
+```{r example 2 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow2$reportFileName)))
 ```
 </div>
 
@@ -310,15 +310,15 @@ knitr::kable(dictTableExample2, caption = "Table 4: Dictionary content")
 ```{r example 3 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow2$reportFileName)
+rmarkdown::render(workflow3$reportFileName)
 ```
 
 The output report for Example 3 is shown below. 
 The time profiles now indicate the LLOQ.
 
 <div class = "reportOutput">
-```{r example 3 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow2$reportFileName))
+```{r example 3 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow3$reportFileName)))
 ```
 </div>
 
@@ -393,8 +393,8 @@ rmarkdown::render(workflow4$reportFileName)
 The output report for Example 4 is shown below.
 
 <div class = "reportOutput">
-```{r example 4 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow4$reportFileName))
+```{r example 4 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow4$reportFileName)))
 ```
 </div>
 
@@ -479,8 +479,8 @@ rmarkdown::render(workflow5$reportFileName)
 The output report for Example 5 is shown below.
 
 <div class = "reportOutput">
-```{r example 5 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow5$reportFileName))
+```{r example 5 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow5$reportFileName)))
 ```
 </div>
 
@@ -543,8 +543,8 @@ The output report for Example 6 is shown below.
 The 2 figures of the report (linear and log scales) include median, mean 5th and 95th percentiles of the population.
 
 <div class = "reportOutput">
-```{r example 6 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow6$reportFileName))
+```{r example 6 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow6$reportFileName)))
 ```
 </div>
 
@@ -613,8 +613,8 @@ rmarkdown::render(workflow7$reportFileName)
 ```
 
 <div class = "reportOutput">
-```{r example 7 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow7$reportFileName))
+```{r example 7 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow7$reportFileName)))
 ```
 </div>
 

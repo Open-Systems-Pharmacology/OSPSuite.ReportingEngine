@@ -135,8 +135,8 @@ The output report for Example 1 is shown below.
 The table indicates the requested parameters in their base unit.
 
 <div class = "reportOutput">
-```{r example 1 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow1$reportFileName))
+```{r example 1 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow1$reportFileName)))
 ```
 </div>
 
@@ -201,8 +201,8 @@ The output report for Example 2 is shown below.
 The table indicates the requested parameters in their base unit.
 
 <div class = "reportOutput">
-```{r example 2 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow2$reportFileName))
+```{r example 2 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow2$reportFileName)))
 ```
 </div>
 
@@ -282,8 +282,8 @@ The output report for Example 3 is shown below.
 The table indicates the requested parameters in the updated units and display names.
 
 <div class = "reportOutput">
-```{r example 3 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow3$reportFileName))
+```{r example 3 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow3$reportFileName)))
 ```
 </div>
 
@@ -369,8 +369,8 @@ The output report for Example 4 is shown below.
 The table indicates the requested parameters in the updated units and display names.
 
 <div class = "reportOutput">
-```{r example 4 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow4$reportFileName))
+```{r example 4 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow4$reportFileName)))
 ```
 </div>
 
@@ -441,8 +441,8 @@ The output report for Example 6 is shown below.
 For the population, Box Whisker plots in linear and log scales are.
 
 <div class = "reportOutput">
-```{r example 5 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow5$reportFileName))
+```{r example 5 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow5$reportFileName)))
 ```
 </div>
 
@@ -521,8 +521,8 @@ The output report for Example 6 is shown below.
 For the population, BoxWhisker plots in linear and log scales are.
 
 <div class = "reportOutput">
-```{r example 6 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow6$reportFileName))
+```{r example 6 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow6$reportFileName)))
 ```
 </div>
 
@@ -597,8 +597,8 @@ rmarkdown::render(workflow7$reportFileName)
 The output report for Example 7 is shown below. 
 
 <div class = "reportOutput">
-```{r example 7 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow7$reportFileName))
+```{r example 7 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow7$reportFileName)))
 ```
 </div>
 
@@ -677,8 +677,8 @@ rmarkdown::render(workflow8$reportFileName)
 The output report for Example 8 is shown below. 
 
 <div class = "reportOutput">
-```{r example 8 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow8$reportFileName))
+```{r example 8 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow8$reportFileName)))
 ```
 </div>
 
@@ -777,8 +777,8 @@ rmarkdown::render(workflow9$reportFileName)
 The output report for Example 9 is shown below. 
 
 <div class = "reportOutput">
-```{r example 9 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow9$reportFileName))
+```{r example 9 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow9$reportFileName)))
 ```
 </div>
 
