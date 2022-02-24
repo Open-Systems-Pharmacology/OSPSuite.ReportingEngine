@@ -29,7 +29,6 @@ Suggests:
     rmarkdown,
     Rmpi,
     readxl,
-    htmltools,
     tracelib,
     styler
 Encoding: UTF-8

@@ -52,51 +52,36 @@ These objects need to be created before the creation of workflow objects as they
 
 ## 1.3. Nomenclature
 
-Table 1 defines some of the main instances of the `ospsuite.reportingengine` package usually defined by users during the design of a workflow. The classes of these instances and the parent classes they are derived from are also indicated.
+Table 1 enumerates some of the main instances of the `ospsuite.reportingengine` package usually defined by users during the design of a workflow.
 As mentioned above all these instances derive from the `R6` class, consequently creating them requires the call of the method `$new()` (e.g. `MeanModelWorkflow$new()`)
+The comprehensive documentation and usage of each of these objects is accessible in the tab **Reference**.
 
-```{r table 1, echo=FALSE, results='asis'}
-nomenclatureTable <- data.frame(
-  "Object creation" = c(
-    "workflow <- MeanModelWorkflow$new(simulationSets, workflowFolder)",
-    "workflow <- PopulationWorkflow$new(workflowType, simulationSets, workflowFolder)",
-    "simulationSet <- SimulationSet$new(simulationSetName, simulationFile)",
-    "simulationSet <- PopulationSimulationSet$new(simulationSetName, simulationFile, populationFile)",
-    "output <- Output$new(path)",
-    "task <- Task$new(settings)",
-    "task <- SimulationTask$new(settings)",
-    "task <- PlotTask$new(settings)",
-    "task <- GofPlotTask$new(settings)",
-    "task <- PopulationPlotTask$new(settings)"
-  ),
-  "Object class tree" = c(
-    paste0(c("R6", "Workflow", "MeanModelWorkflow"), collapse = " > "),
-    paste0(c("R6", "Workflow", "PopulationWorkflow"), collapse = " > "),
-    paste0(c("R6", "SimulationSet"), collapse = " > "),
-    paste0(c("R6", "SimulationSet", "PopulationSimulationSet"), collapse = " > "),
-    paste0(c("R6", "Output"), collapse = " > "),
-    paste0(c("R6", "Task"), collapse = " > "),
-    paste0(c("R6", "Task", "SimulationTask"), collapse = " > "),
-    paste0(c("R6", "Task", "PlotTask"), collapse = " > "),
-    paste0(c("R6", "Task", "PlotTask", "GofPlotTask"), collapse = " > "),
-    paste0(c("R6", "Task", "PlotTask", "PopulationPlotTask"), collapse = " > ")
-  ),
-  "Definition" = c(
-    "Object that runs tasks on simulation sets dedicated to mean models",
-    "Object that runs tasks on simulation sets dedicated to population models",
-    "Object with information on the simulation and observation to be evaluated",
-    "Object with information on the simulation, population and observation to be evaluated",
-    "Object with information on the simulation output path and observation to be evaluated",
-    "Object with evaluations to be performed and saved",
-    "Object with evaluations to be performed and saved specific to model simulations",
-    "Object with evaluations to be performed and saved specific to plots and tables to report",
-    "Object with evaluations to be performed and saved specific to plots and tables of goodness of fit to report",
-    "Object with evaluations across simulations to be performed and saved specific to plots and tables to report"
-  ),
-  check.names = FALSE
-)
-knitr::kable(nomenclatureTable, caption = "Table 1: Nomenclature of `ospsuite.reportingengine` main instances")
-```
+Table 1: Nomenclature of `ospsuite.reportingengine` main instances
+
+|**Workflow objects**|**Use case**|
+|--------------------|------------|
+|[MeanModelWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/MeanModelWorkflow.html)|Defined by user|
+|[PopulationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PopulationWorkflow.html)|Defined by user|
+|[QualificationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/loadQualificationWorkflow.html)|Build in [loadQualificationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/QualificationWorkflow.html)|
+|**Simulation Set objects**|**Use case**|
+|[SimulationSet](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/SimulationSet.html)|Defined by user|
+|[PopulationSimulationSet](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PopulationSimulationSet.html)|Defined by user|
+|[ConfigurationPlan](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/ConfigurationPlan.html)|Build in [loadQualificationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/QualificationWorkflow.html)|
+|**Output path and PK parameter objects**|**Use case**|
+|[Output](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/Output.html)|Defined by user|
+|[PkParameterInfo](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PkParameterInfo.html)|Defined by user|
+|**Workflow task objects**|**Use case**|
+|[Task](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/Task.html)|Build in workflow objects|
+|[SimulationTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/SimulationTask.html)|Build in workflow objects|
+|[SensitivityAnalysisTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/SensitivityAnalysisTask.html)|Build in workflow objects|
+|[PopulationSensitivityAnalysisTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PopulationSensitivityAnalysisTask.html)|Build in workflow objects|
+|[QualificationTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/QualificationTask.html)|Build in [QualificationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/loadQualificationWorkflow.html) objects|
+|[PlotTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PlotTask.html)|Build in workflow objects|
+|[PopulationPlotTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PopulationPlotTask.html)|Build in [PopulationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PopulationWorkflow.html) objects|
+|[GofPlotTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/GofPlotTask.html)|Build in workflow objects|
+|**Workflow task settings objects**|**Use case**|
+|PlotSettings|Build in workflow objects|
+|[SensitivityPlotSettings](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/SensitivityPlotSettings.html)|Build in workflow objects|
 
 
 ## 1.4. General scheme
@@ -153,8 +138,8 @@ rmarkdown::render(myExampleWorkflow$reportFileName)
 The associated report will be as follows:
 
 <div class = "reportOutput">
-```{r general scheme report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", myExampleWorkflow$reportFileName))
+```{r general scheme report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", myExampleWorkflow$reportFileName)))
 ```
 </div>
 

@@ -255,8 +255,8 @@ rmarkdown::render(workflowA$reportFileName)
 ```
 
 <div class = "reportOutput">
-```{r example time profile report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflowA$reportFileName))
+```{r example time profile report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflowA$reportFileName)))
 ```
 </div>
 
