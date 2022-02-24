@@ -461,7 +461,7 @@ pre code {
 }
 
 .tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+  content: "î‰™";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -469,12 +469,12 @@ pre code {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "";
+  content: "î‰˜";
   border: none;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "î‰™";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -652,9 +652,9 @@ $(document).ready(function () {
 <p>The population sensitivity workflow is run using the command:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pwf</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>The results of the population sensitivity analysis are found in multiple <code>.csv</code> files within the <code>SensitivityResults</code> sub-directory of the workflow folder, as shown in the following figure: <img src="../../../Users/ztsoj/AppData/Local/Temp/RtmpCuFoPE/temp_libpath66902e256b0a/ospsuite.reportingengine/extdata/sa-file-outputs.png" width="40%"></p>
+<p>The results of the population sensitivity analysis are found in multiple <code>.csv</code> files within the <code>SensitivityResults</code> sub-directory of the workflow folder, as shown in the following figure: <img src="figures/sa-file-outputs.png" width="40%"></p>
 <p>Two sets of files make up the population sensitivity analysis results for this example, each corresponding to one of the <code>PopulationSimulationSet</code> objects (named <code>popSimulationSet1</code> and <code>popSimulationSet2</code>). For each set, there is one index file. The name of the index file is prefixed with the name of the <code>PopulationSimulationSet</code> object and carries the suffix <code>-popSensitivityResultsIndex.csv</code>). The index file <code>popSimulationSet1-popSensitivityResultsIndex.csv</code> contains the names of the individual sensitivity analysis results files (found within the <code>SensitivityResults</code> sub-directory of the workflow folder) obtained for the <code>PopulationSimulationSet</code> object <code>popSimulationSet1</code>. Its contents are shown in the following figure:</p>
-<p><img src="../../../Users/ztsoj/AppData/Local/Temp/RtmpCuFoPE/temp_libpath66902e256b0a/ospsuite.reportingengine/extdata/sa-file-index.png" width="100%"></p>
+<p><img src="figures/sa-file-index.png" width="100%"></p>
 <p>Two output paths are shown corresponding to <code>output1</code> (pink), <code>output2</code> (blue). Note that, as per the definitions of <code>output1</code> and <code>output2</code>, the only PK parameters analyzed for those two outputs are <code>C_max</code> and <code>MRT</code> for <code>output1</code> and <code>t_max</code> and <code>AUC_tEnd</code> for <code>output2</code>. For each model output and PK parameter combination, there are sensitivity analysis result files for three individuals given under the <code>Filename</code> column, each corresponding to one of the quantiles specified using <code>pwf$calculateSensitivity$settings$quantileVec</code>.</p>
 <p>The output report, containing the population sensitivity plots from this example, is shown below.</p>
 <div class="reportOutput">
@@ -929,7 +929,7 @@ pre code {
 }
 
 .tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+  content: "î‰™";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -937,12 +937,12 @@ pre code {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "";
+  content: "î‰˜";
   border: none;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "î‰™";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;

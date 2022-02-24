@@ -126,44 +126,103 @@ div.reportOutput { background-color:#e6f0ff; border-radius: 5px; padding: 20px; 
 <div class="section level3">
 <h3 id="nomenclature">1.3. Nomenclature<a class="anchor" aria-label="anchor" href="#nomenclature"></a>
 </h3>
-<p>Table 1 defines some of the main instances of the <code>ospsuite.reportingengine</code> package usually defined by users during the design of a workflow. The classes of these instances and the parent classes they are derived from are also indicated. As mentioned above all these instances derive from the <code>R6</code> class, consequently creating them requires the call of the method <code>$new()</code> (e.g. <code>MeanModelWorkflow$new()</code>)</p>
+<p>Table 1 enumerates some of the main instances of the <code>ospsuite.reportingengine</code> package usually defined by users during the design of a workflow. As mentioned above all these instances derive from the <code>R6</code> class, consequently creating them requires the call of the method <code>$new()</code> (e.g. <code>MeanModelWorkflow$new()</code>) The comprehensive documentation and usage of each of these objects is accessible in the tab <strong>Reference</strong>.</p>
+<p>Table 1: Nomenclature of <code>ospsuite.reportingengine</code> main instances</p>
 <table class="table">
-<caption>Table 1: Nomenclature of <code>ospsuite.reportingengine</code> main instances</caption>
-<colgroup>
-<col width="38%">
-<col width="18%">
-<col width="43%">
-</colgroup>
 <thead><tr class="header">
-<th align="left">Object creation</th>
-<th align="left">Object class tree</th>
-<th align="left">Definition</th>
+<th><strong>Workflow objects</strong></th>
+<th><strong>Use case</strong></th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">workflow &lt;- MeanModelWorkflow<span class="math inline">\(new(simulationSets, workflowFolder) |R6 &gt; Workflow &gt; MeanModelWorkflow |Object that runs tasks on simulation sets dedicated to mean models | |workflow &lt;- PopulationWorkflow\)</span>new(workflowType, simulationSets, workflowFolder)</td>
-<td align="left">R6 &gt; Workflow &gt; PopulationWorkflow</td>
-<td align="left">Object that runs tasks on simulation sets dedicated to population models</td>
+<td><a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/MeanModelWorkflow.html">MeanModelWorkflow</a></td>
+<td>Defined by user</td>
 </tr>
 <tr class="even">
-<td align="left">simulationSet &lt;- SimulationSet<span class="math inline">\(new(simulationSetName, simulationFile) |R6 &gt; SimulationSet |Object with information on the simulation and observation to be evaluated | |simulationSet &lt;- PopulationSimulationSet\)</span>new(simulationSetName, simulationFile, populationFile)</td>
-<td align="left">R6 &gt; SimulationSet &gt; PopulationSimulationSet</td>
-<td align="left">Object with information on the simulation, population and observation to be evaluated</td>
+<td><a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PopulationWorkflow.html">PopulationWorkflow</a></td>
+<td>Defined by user</td>
 </tr>
 <tr class="odd">
-<td align="left">output &lt;- Output<span class="math inline">\(new(path) |R6 &gt; Output |Object with information on the simulation output path and observation to be evaluated | |task &lt;- Task\)</span>new(settings)</td>
-<td align="left">R6 &gt; Task</td>
-<td align="left">Object with evaluations to be performed and saved</td>
+<td><a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/loadQualificationWorkflow.html">QualificationWorkflow</a></td>
+<td>Build in <a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/QualificationWorkflow.html">loadQualificationWorkflow</a>
+</td>
 </tr>
 <tr class="even">
-<td align="left">task &lt;- SimulationTask<span class="math inline">\(new(settings) |R6 &gt; Task &gt; SimulationTask |Object with evaluations to be performed and saved specific to model simulations | |task &lt;- PlotTask\)</span>new(settings)</td>
-<td align="left">R6 &gt; Task &gt; PlotTask</td>
-<td align="left">Object with evaluations to be performed and saved specific to plots and tables to report</td>
+<td><strong>Simulation Set objects</strong></td>
+<td><strong>Use case</strong></td>
 </tr>
 <tr class="odd">
-<td align="left">task &lt;- GofPlotTask<span class="math inline">\(new(settings) |R6 &gt; Task &gt; PlotTask &gt; GofPlotTask |Object with evaluations to be performed and saved specific to plots and tables of goodness of fit to report | |task &lt;- PopulationPlotTask\)</span>new(settings)</td>
-<td align="left">R6 &gt; Task &gt; PlotTask &gt; PopulationPlotTask</td>
-<td align="left">Object with evaluations across simulations to be performed and saved specific to plots and tables to report</td>
+<td><a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/SimulationSet.html">SimulationSet</a></td>
+<td>Defined by user</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PopulationSimulationSet.html">PopulationSimulationSet</a></td>
+<td>Defined by user</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/ConfigurationPlan.html">ConfigurationPlan</a></td>
+<td>Build in <a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/QualificationWorkflow.html">loadQualificationWorkflow</a>
+</td>
+</tr>
+<tr class="even">
+<td><strong>Output path and PK parameter objects</strong></td>
+<td><strong>Use case</strong></td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/Output.html">Output</a></td>
+<td>Defined by user</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PkParameterInfo.html">PkParameterInfo</a></td>
+<td>Defined by user</td>
+</tr>
+<tr class="odd">
+<td><strong>Workflow task objects</strong></td>
+<td><strong>Use case</strong></td>
+</tr>
+<tr class="even">
+<td><a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/Task.html">Task</a></td>
+<td>Build in workflow objects</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/SimulationTask.html">SimulationTask</a></td>
+<td>Build in workflow objects</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/SensitivityAnalysisTask.html">SensitivityAnalysisTask</a></td>
+<td>Build in workflow objects</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PopulationSensitivityAnalysisTask.html">PopulationSensitivityAnalysisTask</a></td>
+<td>Build in workflow objects</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/QualificationTask.html">QualificationTask</a></td>
+<td>Build in <a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/loadQualificationWorkflow.html">QualificationWorkflow</a> objects</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PlotTask.html">PlotTask</a></td>
+<td>Build in workflow objects</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PopulationPlotTask.html">PopulationPlotTask</a></td>
+<td>Build in <a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PopulationWorkflow.html">PopulationWorkflow</a> objects</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/GofPlotTask.html">GofPlotTask</a></td>
+<td>Build in workflow objects</td>
+</tr>
+<tr class="even">
+<td><strong>Workflow task settings objects</strong></td>
+<td><strong>Use case</strong></td>
+</tr>
+<tr class="odd">
+<td>PlotSettings</td>
+<td>Build in workflow objects</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/SensitivityPlotSettings.html">SensitivityPlotSettings</a></td>
+<td>Build in workflow objects</td>
 </tr>
 </tbody>
 </table>
@@ -486,7 +545,7 @@ pre code {
 }
 
 .tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+  content: "î‰™";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -494,12 +553,12 @@ pre code {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "";
+  content: "î‰˜";
   border: none;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "î‰™";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -621,7 +680,7 @@ $(document).ready(function () {
 <p>The blue frame corresponds to the inputs of the workflow. These inputs need to be defined using <code>SimulationSet</code> objects. For workflows with multiple simulations and observed datasets, a list of <code>SimulationSet</code> objects can be input instead of one unique <code>SimulationSet</code> object. Within a <code>Workflow</code> object, the simulation sets are accessible from the <code>simulationStructures</code> lists which also provides relevant information about input/output files and folders</p>
 <p>The black frames correspond to the tasks or evaluations performed by the workflow. These tasks are defined using <code>Task</code> objects built in every <code>Workflow</code> object, meaning there is no need to input them when creating a <code>Workflow</code> object. Users access, update and switch the task on/off tasks after creation of their <code>Workflow</code>.</p>
 <div class="figure" style="text-align: center">
-<img src="../../../Users/ztsoj/AppData/Local/Temp/RtmpCuFoPE/temp_libpath66902e256b0a/ospsuite.reportingengine/extdata/mean-model-workflow-input-and-tasks.png" alt="Figure 1: Mean model workflow inputs and tasks" width="100%"><p class="caption">
+<img src="figures/mean-model-workflow-input-and-tasks.png" alt="Figure 1: Mean model workflow inputs and tasks" width="100%"><p class="caption">
 Figure 1: Mean model workflow inputs and tasks
 </p>
 </div>
@@ -657,7 +716,7 @@ Figure 1: Mean model workflow inputs and tasks
 </li>
 </ol>
 <div class="figure" style="text-align: center">
-<img src="../../../Users/ztsoj/AppData/Local/Temp/RtmpCuFoPE/temp_libpath66902e256b0a/ospsuite.reportingengine/extdata/population-workflow-input-and-tasks.png" alt="Figure 2: Population workflow inputs and tasks" width="100%"><p class="caption">
+<img src="figures/population-workflow-input-and-tasks.png" alt="Figure 2: Population workflow inputs and tasks" width="100%"><p class="caption">
 Figure 2: Population workflow inputs and tasks
 </p>
 </div>
