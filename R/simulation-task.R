@@ -52,7 +52,7 @@ SimulationTask <- R6::R6Class(
     #' Run task and save its output
     #' @param structureSets list of `SimulationStructure` R6 class
     runTask = function(structureSets) {
-      actionToken <- re.tStartAction(actionType = "Simulation", actionNameExtension = self$nameTaskResults)
+      re.tStartAction(actionType = "Simulation")
       logWorkflow(
         message = paste0("Starting ", self$message),
         pathFolder = self$workflowFolder
@@ -80,7 +80,7 @@ SimulationTask <- R6::R6Class(
           taskResults[[setNumber]]
         )
       }
-      re.tEndAction(actionToken = actionToken)
+      re.tEndAction()
     }
   )
 )

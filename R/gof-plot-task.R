@@ -94,7 +94,7 @@ GofPlotTask <- R6::R6Class(
     #' Run task and save its output results
     #' @param structureSets list of `SimulationStructure` objects
     runTask = function(structureSets) {
-      actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
+      re.tStartAction(actionType = "TLFGeneration")
       logWorkflow(
         message = paste0("Starting: ", self$message),
         pathFolder = self$workflowFolder
@@ -254,7 +254,7 @@ GofPlotTask <- R6::R6Class(
           logFolder = self$workflowFolder
         )
       }
-      re.tEndAction(actionToken = actionToken)
+      re.tEndAction()
     }
   )
 )

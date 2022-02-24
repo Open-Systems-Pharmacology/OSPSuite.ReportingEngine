@@ -157,7 +157,7 @@ addTextChunk <- function(fileName,
 #' resetReport("chapter-2.md")
 #' addTextChunk(fileName = "chapter-2.md", text = "Chapter 2")
 #' mergeMarkdownFiles(
-#'  inputFiles = c("chapter-1.md", "chapter-2.md"), 
+#'  inputFiles = c("chapter-1.md", "chapter-2.md"),
 #'  outputFile = "chapters-1and2.md"
 #' )
 #' }
@@ -201,14 +201,14 @@ mergeMarkdownFiles <- function(inputFiles, outputFile, logFolder = getwd(), keep
 #' @param intro name of .md file that include introduction (before toc)
 #' @export
 renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE, numberSections = TRUE, intro = NULL) {
-  actionToken2 <- re.tStartAction(actionType = "ReportGeneration")
+  re.tStartAction(actionType = "ReportGeneration")
   numberTablesAndFigures(fileName, logFolder)
   # TODO: number sections and intro in word report
   renderWordReport(fileName, logFolder, createWordReport)
   tocContent <- getSectionTOC(fileName, logFolder, numberSections = numberSections)
   addMarkdownToc(tocContent, fileName, logFolder)
   mergeMarkdownFiles(inputFiles = c(intro, fileName), outputFile = fileName, logFolder = logFolder)
-  re.tEndAction(actionToken = actionToken2)
+  re.tEndAction()
   return(invisible())
 }
 

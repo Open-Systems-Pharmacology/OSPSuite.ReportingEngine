@@ -69,7 +69,7 @@ QualificationTask <- R6::R6Class(
     #' Run task and save its output
     #' @param configurationPlan A `ConfigurationPlan` object
     runTask = function(configurationPlan) {
-      actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
+      re.tStartAction(actionType = "TLFGeneration")
       logWorkflow(
         message = paste0("Starting: ", self$message),
         pathFolder = self$workflowFolder
@@ -82,7 +82,7 @@ QualificationTask <- R6::R6Class(
         )
         self$saveResults(taskResults, configurationPlan)
       }
-      re.tEndAction(actionToken = actionToken)
+      re.tEndAction()
     }
   )
 )

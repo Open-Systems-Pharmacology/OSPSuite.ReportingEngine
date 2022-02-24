@@ -4,9 +4,9 @@ re.tStartMetadataCapture <- function(...) {
   }
 }
 
-re.tEndMetadataCapture <- function(..., actionToken) {
+re.tEndMetadataCapture <- function(...) {
   if (requireNamespace("tracelib", quietly = TRUE)) {
-    tracelib::tEndMetadataCapture(..., actionToken = actionToken)
+    tracelib::tEndMetadataCapture(...)
   }
 }
 
@@ -22,8 +22,8 @@ re.tStartAction <- function(...) {
   }
 }
 
-re.tEndAction <- function(..., actionToken) {
+re.tEndAction <- function() {
   if (requireNamespace("tracelib", quietly = TRUE)) {
-    tracelib::tEndAction(..., actionToken = actionToken)
+    tracelib::tEndAction()
   }
 }

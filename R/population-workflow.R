@@ -89,8 +89,8 @@ PopulationWorkflow <- R6::R6Class(
     #' # 4) Render report
     #' @return All results and plots as a structured output in the workflow folder
     runWorkflow = function() {
-      actionToken1 <- re.tStartMetadataCapture(metaDataCapture = TRUE)
-      actionToken2 <- re.tStartAction(actionType = "Run")
+      re.tStartMetadataCapture(metaDataCapture = TRUE)
+      re.tStartAction(actionType = "Run")
       logWorkflow(
         message = "Starting run of population workflow",
         pathFolder = self$workflowFolder
@@ -142,8 +142,8 @@ PopulationWorkflow <- R6::R6Class(
         re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logErrorFile()))
       }
 
-      re.tEndAction(actionToken = actionToken2)
-      re.tEndMetadataCapture(outputFolder = "./", actionToken = actionToken1)
+      re.tEndAction()
+      re.tEndMetadataCapture(outputFolder = "./")
     }
   )
 )

@@ -21,7 +21,7 @@ CalculatePKParametersTask <- R6::R6Class(
     #' Run task and save its output results
     #' @param structureSets list of `SimulationStructure` objects
     runTask = function(structureSets) {
-      actionToken <- re.tStartAction(actionType = "Analysis", actionNameExtension = self$nameTaskResults)
+      re.tStartAction(actionType = "Analysis")
       logWorkflow(
         message = paste0("Starting ", self$message),
         pathFolder = self$workflowFolder
@@ -55,7 +55,7 @@ CalculatePKParametersTask <- R6::R6Class(
         }
         clearMemory(clearSimulationsCache = TRUE)
       }
-      re.tEndAction(actionToken = actionToken)
+      re.tEndAction()
     }
   )
 )
