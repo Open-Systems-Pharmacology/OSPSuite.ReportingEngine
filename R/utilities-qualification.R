@@ -33,7 +33,7 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
       next
     }
 
-    progress <- (100*simulationIndex/nrow(configurationPlan$simulationMappings)  ) %>% round()
+    progress <- round(100*simulationIndex/nrow(configurationPlan$simulationMappings))
 
     cat(paste0(
       "Progress: ", progress , "%. Preparing project: '", project, "', simulation: '", simulationName,".'\n"
