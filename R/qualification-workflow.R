@@ -40,13 +40,14 @@ QualificationWorkflow <- R6::R6Class(
       self$configurationPlan <- configurationPlan
 
       self$simulate <- loadSimulateTask(self, active = TRUE)
-      self$calculatePKParameters <- loadCalculatePKParametersTask(self, active = TRUE)
-
+      
       self$plotTimeProfiles <- loadQualificationTimeProfilesTask(self, configurationPlan)
       self$plotGOFMerged <- loadGOFMergedTask(self, configurationPlan)
       self$plotComparisonTimeProfile <- loadQualificationComparisonTimeProfileTask(self, configurationPlan)
       self$plotPKRatio <- loadPlotPKRatioTask(self, configurationPlan)
       self$plotDDIRatio <- loadPlotDDIRatioTask(self, configurationPlan)
+      # PK Parameters need to be calculated only if PKRatio or DDIRatio are plotted
+      self$calculatePKParameters <- loadCalculatePKParametersTask(self, active = any(self$plotPKRatio$active, self$plotDDIRatio$active))
 
       self$taskNames <- enum(self$getAllTasks())
     },
