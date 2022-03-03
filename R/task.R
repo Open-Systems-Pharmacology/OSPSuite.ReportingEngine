@@ -70,6 +70,7 @@ Task <- R6::R6Class(
           isValid <- FALSE
           logWorkflow(
             message = messages$errorTaskInputDoesNotExist(inputToCheck),
+            pathFolder = self$workflowFolder,
             logTypes = c(LogTypes$Error, LogTypes$Debug)
           )
         }
@@ -96,6 +97,7 @@ Task <- R6::R6Class(
           isValid <- FALSE
           logWorkflow(
             message = messages$errorTaskInputDoesNotExist(inputToCheck),
+            pathFolder = self$workflowFolder,
             logTypes = c(LogTypes$Error, LogTypes$Debug)
           )
         }
