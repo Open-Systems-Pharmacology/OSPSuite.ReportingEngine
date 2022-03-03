@@ -546,7 +546,7 @@ plotMeanSensitivity <- function(structureSet,
         next
       }
       parameterLabel <- removeForbiddenLetters(pkParameter$pkParameter)
-      plotID <- paste0(parameterLabel, "-", pathLabel)
+      plotID <- paste0(pathLabel, "-", parameterLabel)
 
       pkSensitivities <- saResults$allPKParameterSensitivitiesFor(
         pkParameterName = pkParameter$pkParameter,
@@ -580,6 +580,7 @@ plotMeanSensitivity <- function(structureSet,
         plotConfiguration = sensitivityPlotConfiguration
       )
       # Remove legend which is redundant from y axis
+      print(plotID)
       sensitivityPlot <- tlf::setLegendPosition(sensitivityPlot, position = tlf::LegendPositions$none)
       sensitivityPlots[[plotID]] <- sensitivityPlot
 
@@ -831,8 +832,7 @@ plotPopulationSensitivity <- function(structureSets,
   for (outputIndex in 1:nrow(uniqueQuantitiesAndPKParameters)) {
     selectedPath <- uniqueQuantitiesAndPKParameters$QuantityPath[outputIndex]
     selectedPKParameter <- uniqueQuantitiesAndPKParameters$PKParameter[outputIndex]
-    plotID <- paste(as.character(selectedPKParameter), as.character(selectedPath), sep = "_")
-    plotID <- gsub(pattern = "|", replacement = "-", x = plotID, fixed = TRUE)
+    plotID <- paste(removeForbiddenLetters(selectedPath), removeForbiddenLetters(selectedPKParameter), sep = "-")
 
     outputRows <- allPopsDf$QuantityPath == selectedPath & allPopsDf$PKParameter == selectedPKParameter
     outputSensitivityData <- allPopsDf[outputRows, ]

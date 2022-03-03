@@ -1,26 +1,29 @@
 context("Run population workflows with Demography task")
 
+# Get test data
 simulationFile <- getTestDataFilePath("input-data/Larson 2013 8-18y meal.pkml")
 populationFilePeds <- getTestDataFilePath("input-data/Larson 2013 8-18y meal-Population.csv")
 populationFileAdults <- getTestDataFilePath("input-data/Raltegravir Adult Population.csv")
 
+# List of files necessary in output directory
 refWorkflowStructure <- c(
   "log-debug.txt", "log-info.txt",
   "Report-word.md", "Report.docx", "Report.md",
   "Demography"
 )
 
+# Define list of files necessary in Demography directory
 demographyStructure <- c(
-  paste(c("Gender", "Age", "BMI", "Height", "Weight"), "Adults.png", sep = "-"),
-  paste(c("Gender", "Age", "BMI", "Height", "Weight"), "Pediatric.png", sep = "-")
+  paste(c("Gender", "Organism_Age", "Organism_BMI", "Organism_Height", "Organism_Weight"), "Adults.png", sep = "-"),
+  paste(c("Gender", "Organism_Age", "Organism_BMI", "Organism_Height", "Organism_Weight"), "Pediatric.png", sep = "-")
 )
 
 demographyStructurePeds <- NULL
 for (popName in c("Adults", "Pediatric", "Pediatric-vs-ref")) {
-  for (parName in c("BMI", "Height", "Weight")) {
+  for (parName in c("Organism_BMI", "Organism_Height", "Organism_Weight")) {
     demographyStructurePeds <- c(
       demographyStructurePeds,
-      paste(popName, parName, c("vs-Age.png", "vs-Age-log.png"), sep = "-")
+      paste(popName, parName, c("vs-Organism_Age.png", "vs-Organism_Age-log.png"), sep = "-")
     )
   }
 }
@@ -75,9 +78,9 @@ test_that("Workflows generate appropriate files and folders", {
 })
 
 test_that("Demography directory includes appropriate files and folders", {
-  expect_setequal(sort(list.files(file.path(workflowPediatric$workflowFolder, "Demography"))), demographyStructurePeds)
-  expect_setequal(sort(list.files(file.path(workflowParallel$workflowFolder, "Demography"))), demographyStructure)
-  expect_setequal(sort(list.files(file.path(workflowRatio$workflowFolder, "Demography"))), demographyStructure)
+  expect_setequal(list.files(file.path(workflowPediatric$workflowFolder, "Demography")), demographyStructurePeds)
+  expect_setequal(list.files(file.path(workflowParallel$workflowFolder, "Demography")), demographyStructure)
+  expect_setequal(list.files(file.path(workflowRatio$workflowFolder, "Demography")), demographyStructure)
 })
 
 # Clear test workflow folders

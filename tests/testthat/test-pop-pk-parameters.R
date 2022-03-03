@@ -1,10 +1,10 @@
 context("Run population workflows with PK parameters task")
-
+# Get test data
 simulationFile <- getTestDataFilePath("input-data/Larson 2013 8-18y meal.pkml")
 populationFilePeds <- getTestDataFilePath("input-data/Larson 2013 8-18y meal-Population.csv")
 populationFileAdults <- getTestDataFilePath("input-data/Raltegravir Adult Population.csv")
 
-# Output reference
+# List of necessary in results to test
 refOutputParallelCmax <- getTestDataFilePath("pop-pk/Plasma-C_max.csv")
 refOutputParallelAUC <- getTestDataFilePath("pop-pk/Plasma-AUC_tEnd.csv")
 refOutputRatioCmax <- getTestDataFilePath("pop-pk/Plasma-C_max-ratio.csv")
@@ -14,20 +14,22 @@ refOutputRatioAUC <- getTestDataFilePath("pop-pk/Plasma-AUC_tEnd-ratio.csv")
 updatePKParameter("C_max", displayName = "C_max", displayUnit = "µmol/l")
 updatePKParameter("AUC_tEnd", displayName = "AUC_tEnd", displayUnit = "µmol*min/l")
 
+# List of files necessary in output directory
 refWorkflowStructure <- c(
   "log-debug.txt", "log-info.txt",
   "Report-word.md", "Report.docx", "Report.md",
   "SimulationResults", "PKAnalysisResults", "PKAnalysis"
 )
 
+# List of files necessary in PKAnalysis directory
 pkParametersStructure <- c(
-  paste("Plasma (Peripheral Venous Blood)-AUC_tEnd", c(".csv", ".png", "-log.png"), sep = ""),
-  paste("Plasma (Peripheral Venous Blood)-C_max", c(".csv", ".png", "-log.png"), sep = "")
+  paste("Organism_PeripheralVenousBlood_Raltegravir_Plasma__Peripheral_Venous_Blood_-AUC_tEnd", c(".csv", ".png", "-log.png"), sep = ""),
+  paste("Organism_PeripheralVenousBlood_Raltegravir_Plasma__Peripheral_Venous_Blood_-C_max", c(".csv", ".png", "-log.png"), sep = "")
 )
 
 pkParametersStructurePeds <- pkParametersStructure
 for (popName in c("Adults", "Pediatric", "Pediatric-vs-ref")) {
-  for (parName in c("Age", "BMI", "Height", "Weight")) {
+  for (parName in c("Organism_Age", "Organism_BMI", "Organism_Height", "Organism_Weight")) {
     pkParametersStructurePeds <- c(
       pkParametersStructurePeds,
       paste(popName, "-", c("AUC_tEnd", "C_max"), "-vs-", parName, ".png", sep = ""),
@@ -38,8 +40,8 @@ for (popName in c("Adults", "Pediatric", "Pediatric-vs-ref")) {
 
 pkParametersStructureRatio <- c(
   pkParametersStructure,
-  paste("Plasma (Peripheral Venous Blood)-AUC_tEnd", "-ratio", c(".csv", ".png", "-log.png"), sep = ""),
-  paste("Plasma (Peripheral Venous Blood)-C_max", "-ratio", c(".csv", ".png", "-log.png"), sep = "")
+  paste("Organism_PeripheralVenousBlood_Raltegravir_Plasma__Peripheral_Venous_Blood_-AUC_tEnd", "-ratio", c(".csv", ".png", "-log.png"), sep = ""),
+  paste("Organism_PeripheralVenousBlood_Raltegravir_Plasma__Peripheral_Venous_Blood_-C_max", "-ratio", c(".csv", ".png", "-log.png"), sep = "")
 )
 
 setPeds <- PopulationSimulationSet$new(
@@ -99,56 +101,105 @@ test_that("Workflows generate appropriate files and folders", {
 })
 
 test_that("PKAnalysis directory includes appropriate files and folders", {
-  expect_setequal(list.files(file.path(workflowPediatric$workflowFolder, "PKAnalysis")), pkParametersStructurePeds)
-  expect_setequal(list.files(file.path(workflowParallel$workflowFolder, "PKAnalysis")), pkParametersStructure)
-  expect_setequal(list.files(file.path(workflowRatio$workflowFolder, "PKAnalysis")), pkParametersStructureRatio)
+  expect_setequal(
+    list.files(file.path(workflowPediatric$workflowFolder, "PKAnalysis")), 
+    pkParametersStructurePeds
+    )
+  expect_setequal(
+    list.files(file.path(workflowParallel$workflowFolder, "PKAnalysis")),
+    pkParametersStructure
+    )
+  expect_setequal(
+    list.files(file.path(workflowRatio$workflowFolder, "PKAnalysis")), 
+    pkParametersStructureRatio
+    )
 })
 
 test_that("Saved PK parameters data have correct values", {
   expect_equal(
-    readObservedDataFile(file.path(workflowParallel$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-AUC_tEnd.csv")),
+    readObservedDataFile(
+      file.path(
+        workflowParallel$workflowFolder, "PKAnalysis", 
+        "Organism_PeripheralVenousBlood_Raltegravir_Plasma__Peripheral_Venous_Blood_-AUC_tEnd.csv"
+        )
+      ),
     readObservedDataFile(refOutputParallelAUC),
     tolerance = comparisonTolerance()
   )
 
   expect_equal(
-    readObservedDataFile(file.path(workflowParallel$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-C_max.csv")),
+    readObservedDataFile(
+      file.path(
+        workflowParallel$workflowFolder, "PKAnalysis", 
+        "Organism_PeripheralVenousBlood_Raltegravir_Plasma__Peripheral_Venous_Blood_-C_max.csv"
+        )
+      ),
     readObservedDataFile(refOutputParallelCmax),
     tolerance = comparisonTolerance()
   )
 
   expect_equal(
-    readObservedDataFile(file.path(workflowPediatric$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-AUC_tEnd.csv")),
+    readObservedDataFile(
+      file.path(
+        workflowPediatric$workflowFolder, "PKAnalysis", 
+        "Organism_PeripheralVenousBlood_Raltegravir_Plasma__Peripheral_Venous_Blood_-AUC_tEnd.csv"
+        )
+      ),
     readObservedDataFile(refOutputParallelAUC),
     tolerance = comparisonTolerance()
   )
 
   expect_equal(
-    readObservedDataFile(file.path(workflowPediatric$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-C_max.csv")),
+    readObservedDataFile(
+      file.path(
+        workflowPediatric$workflowFolder, "PKAnalysis", 
+        "Organism_PeripheralVenousBlood_Raltegravir_Plasma__Peripheral_Venous_Blood_-C_max.csv"
+        )
+      ),
     readObservedDataFile(refOutputParallelCmax),
     tolerance = comparisonTolerance()
   )
 
   expect_equal(
-    readObservedDataFile(file.path(workflowRatio$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-AUC_tEnd.csv")),
+    readObservedDataFile(
+      file.path(
+        workflowRatio$workflowFolder, "PKAnalysis", 
+        "Organism_PeripheralVenousBlood_Raltegravir_Plasma__Peripheral_Venous_Blood_-AUC_tEnd.csv"
+        )
+      ),
     readObservedDataFile(refOutputParallelAUC),
     tolerance = comparisonTolerance()
   )
 
   expect_equal(
-    readObservedDataFile(file.path(workflowRatio$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-C_max.csv")),
+    readObservedDataFile(
+      file.path(
+        workflowRatio$workflowFolder, "PKAnalysis", 
+        "Organism_PeripheralVenousBlood_Raltegravir_Plasma__Peripheral_Venous_Blood_-C_max.csv"
+        )
+      ),
     readObservedDataFile(refOutputParallelCmax),
     tolerance = comparisonTolerance()
   )
 
   expect_equal(
-    readObservedDataFile(file.path(workflowRatio$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-AUC_tEnd-ratio.csv")),
+    readObservedDataFile(
+      file.path(
+        workflowRatio$workflowFolder, "PKAnalysis", 
+        "Organism_PeripheralVenousBlood_Raltegravir_Plasma__Peripheral_Venous_Blood_-AUC_tEnd-ratio.csv"
+        )
+      ),
     readObservedDataFile(refOutputRatioAUC),
     tolerance = comparisonTolerance()
   )
 
   expect_equal(
-    readObservedDataFile(file.path(workflowRatio$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-C_max-ratio.csv")),
+    readObservedDataFile(
+      file.path(
+        workflowRatio$workflowFolder, "PKAnalysis", 
+        "Organism_PeripheralVenousBlood_Raltegravir_Plasma__Peripheral_Venous_Blood_-C_max-ratio.csv"
+        )
+      ),
     readObservedDataFile(refOutputRatioCmax),
     tolerance = comparisonTolerance()
   )

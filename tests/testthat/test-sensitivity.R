@@ -1,18 +1,20 @@
 context("Run workflows with Sensitivity tasks")
-
+# Get test data
 simulationFile <- getTestDataFilePath("input-data/MiniModel2.pkml")
 populationFile <- getTestDataFilePath("input-data/Pop500_p1p2p3.csv")
 refOutputFolder <- getTestDataFilePath("mean-sensitivity")
 
+# List of files necessary in output directory
 refWorkflowStructure <- c(
   "log-debug.txt", "log-info.txt",
   "Report-word.md", "Report.docx", "Report.md",
   "SimulationResults", "PKAnalysisResults", "SensitivityResults",
   "Sensitivity"
 )
+# List of files necessary in Sensitivity directory
 refSensitivityStructure <- c(
-  "A-AUC_tEnd-Concentration in container.png",
-  "A-C_max-Concentration in container.png"
+  "A-Organism_A_Concentration_in_container-AUC_tEnd.png",
+  "A-Organism_A_Concentration_in_container-C_max.png"
 )
 workflowFolder <- "Sensitivity-Tests"
 
@@ -66,12 +68,13 @@ test_that("Mean sensitiviy results are equal to reference", {
 # Clear test workflow folders
 unlink(workflowA$workflowFolder, recursive = TRUE)
 
-
 # Population model workflow
 refOutputFolder <- getTestDataFilePath("pop-sensitivity")
+
+# List of files necessary in Sensitivity directory
 refSensitivityStructure <- c(
-  "AUC_tEnd_Organism-A-Concentration in container.png",
-  "C_max_Organism-A-Concentration in container.png"
+  "Organism_A_Concentration_in_container-AUC_tEnd.png",
+  "Organism_A_Concentration_in_container-C_max.png"
 )
 
 setA <- PopulationSimulationSet$new(
@@ -127,4 +130,3 @@ test_that("Population sensitiviy results are equal to reference", {
 
 # Clear test workflow folders
 unlink(workflowA$workflowFolder, recursive = TRUE)
-
