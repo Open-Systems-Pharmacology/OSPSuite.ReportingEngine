@@ -49,7 +49,7 @@ plotDemographyParameters <- function(structureSets,
     # Pediatric: comparison histogram
     if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
       for (parameterName in yParameters) {
-        parameterLabel <- lastPathElement(parameterName)
+        parameterLabel <- removeForbiddenLetters(parameterName)
         parameterCaption <- demographyMetaData[[parameterName]]$dimension
 
         histogramMapping <- tlf::HistogramDataMapping$new(
@@ -71,7 +71,7 @@ plotDemographyParameters <- function(structureSets,
     # Parallel and Ratio: histograms per population
     if (workflowType %in% c(PopulationWorkflowTypes$parallelComparison, PopulationWorkflowTypes$ratioComparison)) {
       for (parameterName in yParameters) {
-        parameterLabel <- lastPathElement(parameterName)
+        parameterLabel <- removeForbiddenLetters(parameterName)
         parameterCaption <- demographyMetaData[[parameterName]]$dimension
 
         histogramMapping <- tlf::HistogramDataMapping$new(
@@ -106,14 +106,14 @@ plotDemographyParameters <- function(structureSets,
     if (demographyMetaData[[demographyParameter]]$class %in% "character") {
       next
     }
-    xParameterLabel <- lastPathElement(demographyParameter)
+    xParameterLabel <- removeForbiddenLetters(demographyParameter)
     # This aims at preventing plots such as age vs age
     for (parameterName in setdiff(yParameters, demographyParameter)) {
       # Categorical variables won't be plotted
       if (demographyMetaData[[parameterName]]$class %in% "character") {
         next
       }
-      yParameterLabel <- lastPathElement(parameterName)
+      yParameterLabel <- removeForbiddenLetters(parameterName)
       vpcMetaData <- list(
         "x" = demographyMetaData[[demographyParameter]],
         "median" = demographyMetaData[[parameterName]]

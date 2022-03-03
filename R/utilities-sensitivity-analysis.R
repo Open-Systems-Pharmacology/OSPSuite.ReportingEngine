@@ -535,7 +535,7 @@ plotMeanSensitivity <- function(structureSet,
 
   for (output in structureSet$simulationSet$outputs) {
     validateIsIncluded(output$path, saResults$allQuantityPaths)
-    pathLabel <- lastPathElement(output$path)
+    pathLabel <- removeForbiddenLetters(output$path)
     for (pkParameter in output$pkParameters) {
       if (!isIncluded(pkParameter$pkParameter, saResults$allPKParameterNames)) {
         logWorkflow(
@@ -545,7 +545,7 @@ plotMeanSensitivity <- function(structureSet,
         )
         next
       }
-      parameterLabel <- lastPathElement(pkParameter$pkParameter)
+      parameterLabel <- removeForbiddenLetters(pkParameter$pkParameter)
       plotID <- paste0(parameterLabel, "-", pathLabel)
 
       pkSensitivities <- saResults$allPKParameterSensitivitiesFor(

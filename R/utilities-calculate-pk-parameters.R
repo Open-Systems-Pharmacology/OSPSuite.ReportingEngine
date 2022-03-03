@@ -193,9 +193,9 @@ plotPopulationPKParameters <- function(structureSets,
   # Standard boxplots for each pkParameters of each output
   for (output in yParameters) {
     molWeight <- simulation$molWeightFor(output$path)
-    pathLabel <- lastPathElement(output$path)
+    pathLabel <- removeForbiddenLetters(output$path)
     for (pkParameter in output$pkParameters) {
-      yParameterLabel <- lastPathElement(pkParameter$pkParameter)
+      yParameterLabel <- removeForbiddenLetters(pkParameter$pkParameter)
       plotID <- paste0(pathLabel, "-", yParameterLabel)
 
       pkParameterFromOutput <- getPopulationPKAnalysesFromOutput(
@@ -290,7 +290,7 @@ plotPopulationPKParameters <- function(structureSets,
         if (pkParametersMetaDataAcrossPopulations[[demographyParameter]]$class %in% "character") {
           next
         }
-        xParameterLabel <- lastPathElement(demographyParameter)
+        xParameterLabel <- removeForbiddenLetters(demographyParameter)
         vpcMetaData <- list(
           "x" = pkParameterMetaData[[demographyParameter]],
           "median" = pkParameterMetaData$Value
