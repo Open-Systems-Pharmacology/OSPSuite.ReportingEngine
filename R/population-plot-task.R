@@ -48,16 +48,13 @@ PopulationPlotTask <- R6::R6Class(
           suffix = plotName,
           extension = reEnv$defaultPlotFormat$format
         )
+        
+        saveFigure(
+          plotObject = taskResults$plots[[plotName]],
+          fileName = self$getAbsolutePath(plotFileName),
+          logFolder = self$workflowFolder
+          )
 
-        # TO DO: define parameters from settings/plotConfiguration
-        ggplot2::ggsave(
-          filename = self$getAbsolutePath(plotFileName),
-          plot = taskResults$plots[[plotName]],
-          width = reEnv$defaultPlotFormat$width,
-          height = reEnv$defaultPlotFormat$height,
-          dpi = reEnv$defaultPlotFormat$dpi,
-          units = reEnv$defaultPlotFormat$units
-        )
         re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(plotFileName))
         logWorkflow(
           message = paste0("Plot '", self$getRelativePath(plotFileName), "' was successfully saved."),

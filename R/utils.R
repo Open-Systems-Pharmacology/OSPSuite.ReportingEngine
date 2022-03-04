@@ -453,3 +453,29 @@ calculateGMFE <- function(x, y) {
 getObjectNameAsString <- function(object) {
   return(deparse(substitute(object)))
 }
+
+#' @title saveFigure
+#' @description Save figure and catches
+#' @param plotObject A `ggplot` object
+#' @param fileName Name of the file in which `plotObject` is saved
+#' @param logFolder folder where the logs are saved
+#' @param simulationSetName Name of the simulation set for `PlotTask` results
+#' @return
+#' @keywords internal
+saveFigure <- function(plotObject, fileName, logFolder, simulationSetName = NULL) {
+  tryCatch({
+    ggplot2::ggsave(
+      filename = fileName,
+      plot = plotObject,
+      width = reEnv$defaultPlotFormat$width,
+      height = reEnv$defaultPlotFormat$height,
+      dpi = reEnv$defaultPlotFormat$dpi,
+      units = reEnv$defaultPlotFormat$units
+    )
+  },
+  error = function(e) {
+    logErrorThenStop(messages$ggsaveError(fileName, simulationSetName, e), logFolder)
+  })
+  return(invisible())
+}
+
