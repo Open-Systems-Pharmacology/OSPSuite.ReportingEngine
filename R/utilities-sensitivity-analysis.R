@@ -512,9 +512,6 @@ plotMeanSensitivity <- function(structureSet,
     simulation = simulation,
     structureSet$sensitivityAnalysisResultsFileNames
   )
-  sensitivityPlots <- list()
-  sensitivityCaptions <- list()
-
   # It is possible to add options to SensitivityPlotSettings
   # That the mapping could account for (e.g. how to sort the sensitivities)
   sensitivityMapping <- tlf::TornadoDataMapping$new(
@@ -533,9 +530,9 @@ plotMeanSensitivity <- function(structureSet,
   sensitivityPlotConfiguration$labels$ylabel$text <- settings$yLabel %||% sensitivityPlotConfiguration$labels$ylabel$text
   sensitivityPlotConfiguration$colorPalette <- settings$colorPalette %||% sensitivityPlotConfiguration$colorPalette
 
+  sensitivityResults <- list()
   for (output in structureSet$simulationSet$outputs) {
     validateIsIncluded(output$path, saResults$allQuantityPaths)
-    pathLabel <- removeForbiddenLetters(output$path)
     for (pkParameter in output$pkParameters) {
       if (!isIncluded(pkParameter$pkParameter, saResults$allPKParameterNames)) {
         logWorkflow(
@@ -545,9 +542,7 @@ plotMeanSensitivity <- function(structureSet,
         )
         next
       }
-      parameterLabel <- removeForbiddenLetters(pkParameter$pkParameter)
-      plotID <- paste0(pathLabel, "-", parameterLabel)
-
+      
       pkSensitivities <- saResults$allPKParameterSensitivitiesFor(
         pkParameterName = pkParameter$pkParameter,
         outputPath = output$path,
@@ -580,18 +575,19 @@ plotMeanSensitivity <- function(structureSet,
         plotConfiguration = sensitivityPlotConfiguration
       )
       # Remove legend which is redundant from y axis
-      print(plotID)
       sensitivityPlot <- tlf::setLegendPosition(sensitivityPlot, position = tlf::LegendPositions$none)
-      sensitivityPlots[[plotID]] <- sensitivityPlot
-
+      
       pkParameterCaption <- pkParameter$displayName %||% pkParameter$pkParameter
-      sensitivityCaptions[[plotID]] <- captions$plotSensitivity$mean(pkParameterCaption, output$displayName)
+      
+      resultID <- defaultFileNames$resultID(length(sensitivityResults) + 1, "sensitivity", pkParameter$pkParameter)
+      sensitivityResults[[resultID]] <- saveTaskResults(
+        id = resultID,
+        plot = sensitivityPlot,
+        plotCaption = captions$plotSensitivity$mean(pkParameterCaption, output$displayName)
+      )
     }
   }
-  return(list(
-    plots = sensitivityPlots,
-    captions = sensitivityCaptions
-  ))
+  return(sensitivityResults)
 }
 
 #' @title lookupPKParameterDisplayName
@@ -792,8 +788,7 @@ plotPopulationSensitivity <- function(structureSets,
   }
 
   #----- Population sensitivity plots
-  sensitivityPlots <- list()
-  sensitivityCaptions <- list()
+  sensitivityResults <- list()
 
   # Add line breaks for display based on allowed size if parameters are too long
   allPopsDf$Parameter <- prettyCaption(
@@ -832,8 +827,7 @@ plotPopulationSensitivity <- function(structureSets,
   for (outputIndex in 1:nrow(uniqueQuantitiesAndPKParameters)) {
     selectedPath <- uniqueQuantitiesAndPKParameters$QuantityPath[outputIndex]
     selectedPKParameter <- uniqueQuantitiesAndPKParameters$PKParameter[outputIndex]
-    plotID <- paste(removeForbiddenLetters(selectedPath), removeForbiddenLetters(selectedPKParameter), sep = "-")
-
+    
     outputRows <- allPopsDf$QuantityPath == selectedPath & allPopsDf$PKParameter == selectedPKParameter
     outputSensitivityData <- allPopsDf[outputRows, ]
 
@@ -860,20 +854,20 @@ plotPopulationSensitivity <- function(structureSets,
       ggplot2::theme(legend.title = ggplot2::element_text()) +
       ggplot2::labs(color = "Individual Percentile", shape = translateDescriptor(simulationSetDescriptor))
 
-    sensitivityPlots[[plotID]] <- tornadoPlot
-
-    sensitivityCaptions[[plotID]] <- captions$plotSensitivity$population(
-      parameterName = selectedSensitivityData$PKDisplayName[1],
-      pathName = selectedSensitivityData$OutputDisplayName[1],
-      quantiles = levels(selectedSensitivityData$Percentile),
-      simulationSetName = unique(selectedSensitivityData$Population),
-      descriptor = simulationSetDescriptor
+    resultID <- defaultFileNames$resultID(length(sensitivityResults) + 1, "sensitivity", selectedPKParameter)
+    sensitivityResults[[resultID]] <- saveTaskResults(
+      id = resultID,
+      plot = tornadoPlot,
+      plotCaption = captions$plotSensitivity$population(
+        parameterName = selectedSensitivityData$PKDisplayName[1],
+        pathName = selectedSensitivityData$OutputDisplayName[1],
+        quantiles = levels(selectedSensitivityData$Percentile),
+        simulationSetName = unique(selectedSensitivityData$Population),
+        descriptor = simulationSetDescriptor
+      )
     )
   }
-  return(list(
-    plots = sensitivityPlots,
-    captions = sensitivityCaptions
-  ))
+  return(sensitivityResults)
 }
 
 #' @title getPopSensDfForPkAndOutput

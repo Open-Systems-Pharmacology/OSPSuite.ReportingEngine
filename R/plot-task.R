@@ -42,78 +42,68 @@ PlotTask <- R6::R6Class(
     #' Currently, results contains at least 2 fields: `plots` and `tables`
     #' They are to be deprecated and replaced using `TaskResults` objects
     saveResults = function(structureSet, taskResults) {
+      simulationSetName <- structureSet$simulationSet$simulationSetName
       addTextChunk(
         self$fileName,
-        paste0("## ", self$title, " for ", structureSet$simulationSet$simulationSetName),
+        paste0("## ", self$title, " for ", simulationSetName),
         logFolder = self$workflowFolder
       )
-      for (plotName in names(taskResults$plots)) {
-        plotFileName <- getDefaultFileName(structureSet$simulationSet$simulationSetName,
-          suffix = plotName,
+      for (result in taskResults) {
+        plotFileName <- getDefaultFileName(
+          simulationSetName,
+          suffix = result$id,
           extension = reEnv$defaultPlotFormat$format
         )
-
         figureFilePath <- self$getAbsolutePath(plotFileName)
-        saveFigure(
-          plotObject = taskResults$plots[[plotName]],
-          fileName = figureFilePath,
-          logFolder = self$workflowFolder,
-          simulationSetName = structureSet$simulationSet$simulationSetName
+        
+        tableFileName <- getDefaultFileName(
+          simulationSetName,
+          suffix = result$id,
+          extension = "csv"
+        )
+        tableFilePath <- self$getAbsolutePath(tableFileName)
+        
+        # Figure and tables paths need to be relative to the final md report
+        figureFileRelativePath <- gsub(
+          pattern = paste0(self$workflowFolder, "/"),
+          replacement = "",
+          x = figureFilePath
+        )
+        tableFileRelativePath <- gsub(
+          pattern = paste0(self$workflowFolder, "/"),
+          replacement = "",
+          x = tableFilePath
         )
         
-        re.tStoreFileMetadata(access = "write", filePath = figureFilePath)
-        logWorkflow(
-          message = paste0("Plot '", self$getRelativePath(plotFileName), "' was successfully saved."),
-          pathFolder = self$workflowFolder,
-          logTypes = LogTypes$Debug
+        tryCatch({
+          result$saveFigure(fileName = figureFilePath, logFolder = self$workflowFolder)
+        },
+        error = function(e) {
+          logErrorThenStop(messages$ggsaveError(figureFilePath, simulationSetName, e), logFolder)
+        })
+        result$addFigureToReport(
+          reportFile = self$fileName,
+          fileRelativePath = figureFileRelativePath,
+          fileRootDirectory = self$workflowFolder,
+          logFolder = self$workflowFolder
         )
-
-        if (!is.null(taskResults$captions[[plotName]])) {
-          addTextChunk(self$fileName, paste0("Figure: ", taskResults$captions[[plotName]]), logFolder = self$workflowFolder)
-        }
-        addFigureChunk(
-          fileName = self$fileName,
-          figureFileRelativePath = self$getRelativePath(plotFileName),
-          figureFileRootDirectory = self$workflowFolder,
+        
+        result$saveTable(fileName = tableFilePath, logFolder = self$workflowFolder)
+        result$addTableToReport(
+          reportFile = self$fileName,
+          fileRelativePath = tableFileRelativePath,
+          fileRootDirectory = self$workflowFolder,
+          digits = self$settings$digits,
+          scientific = self$settings$scientific,
+          logFolder = self$workflowFolder
+        )
+        
+        result$addTextChunkToReport(
+          reportFile = self$fileName,
           logFolder = self$workflowFolder
         )
       }
-
-      for (tableName in names(taskResults$tables)) {
-        tableFileName <- getDefaultFileName(structureSet$simulationSet$simulationSetName,
-          suffix = tableName,
-          extension = "csv"
-        )
-
-        write.csv(taskResults$tables[[tableName]],
-          file = self$getAbsolutePath(tableFileName),
-          row.names = FALSE,
-          fileEncoding = "UTF-8"
-        )
-
-        re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(tableFileName))
-        # If the task output no plot, but tables, tables will be included in the report
-        if (is.null(taskResults$plots)) {
-          if (!is.null(taskResults$captions[[tableName]])) {
-            addTextChunk(self$fileName, paste0("Table: ", taskResults$captions[[tableName]]), logFolder = self$workflowFolder)
-          }
-
-          addTableChunk(
-            fileName = self$fileName,
-            tableFileRelativePath = self$getRelativePath(tableFileName),
-            tableFileRootDirectory = self$workflowFolder,
-            digits = self$settings$digits,
-            scientific = self$settings$scientific,
-            logFolder = self$workflowFolder
-          )
-        }
-
-        logWorkflow(
-          message = paste0("Table '", self$getAbsolutePath(tableFileName), "' was successfully saved."),
-          pathFolder = self$workflowFolder,
-          logTypes = LogTypes$Debug
-        )
-      }
+      return(invisible())
     },
 
     #' @description
