@@ -5,20 +5,6 @@ simulationFile <- getTestDataFilePath("input-data/Larson 2013 8-18y meal.pkml")
 # Output reference absorption time profiles
 refOutputMassBalance <- getTestDataFilePath("mass-balance/Larson-timeProfiles.csv")
 
-refWorkflowStructure <- c(
-  "log-debug.txt", "log-info.txt",
-  "Report-word.md", "Report.docx", "Report.md",
-  "MassBalance"
-)
-massBalanceStructure <- c(
-  "Larson-cumulativeTimeProfile.png",
-  "Larson-normalizedCumulativeTimeProfile.png",
-  "Larson-normalizedTimeProfile.png",
-  "Larson-pieChart.png",
-  "Larson-timeProfile.png",
-  "Larson-timeProfiles.csv"
-)
-
 setMB <- SimulationSet$new(
   simulationSetName = "Larson",
   simulationFile = simulationFile
@@ -30,17 +16,30 @@ workflowMB$inactivateTasks()
 workflowMB$activateTasks("plotMassBalance")
 workflowMB$runWorkflow()
 
-test_that("Workflow generates appropriate files and folders", {
-  expect_setequal(list.files(workflowMB$workflowFolder), refWorkflowStructure)
+test_that("Workflow generates appropriate number of files", {
+  # Log files
+  expect_length(list.files(workflowMB$workflowFolder, pattern = ".txt"), 2)
+  # Reports
+  expect_length(list.files(workflowMB$workflowFolder, pattern = ".md"), 2)
+  expect_length(list.files(workflowMB$workflowFolder, pattern = ".docx"), 1)
 })
 
-test_that("MassBalance directory includes appropriate files and folders", {
-  expect_setequal(list.files(file.path(workflowMB$workflowFolder, "MassBalance")), massBalanceStructure)
+massBalancePath <- file.path(workflowMB$workflowFolder, "MassBalance")
+
+test_that("MassBalance directory includes appropriate number of files", {
+  # Figures
+  expect_length(list.files(massBalancePath, pattern = ".png"), 5)
+  # Exported results
+  expect_length(list.files(massBalancePath, pattern = ".csv"), 1)
 })
 
 test_that("Saved mass balance time profiles have correct values", {
+  exportedFile <- file.path(
+    massBalancePath,
+    list.files(massBalancePath, pattern = ".csv")
+  ) 
   expect_equal(
-    readObservedDataFile(file.path(workflowMB$workflowFolder, "MassBalance", "Larson-timeProfiles.csv")),
+    readObservedDataFile(exportedFile),
     readObservedDataFile(refOutputMassBalance),
     tolerance = comparisonTolerance()
   )
