@@ -193,6 +193,13 @@ messages <- list(
   
   errorCommand = function(command, status){
     paste0("Command : '", command, "' returned Error Status ", status)
+  },
+  
+  ggsaveError = function(fileName, simulationSetName = NULL, errorMessage){
+    paste0(
+      "Figure '", fileName, "'", 
+      ifNotNull(simulationSetName, paste0(" from simulation set '", simulationSetName, "'"), ""),
+      " could not be saved.\nIn ggsave, ", errorMessage)
   }
 )
 

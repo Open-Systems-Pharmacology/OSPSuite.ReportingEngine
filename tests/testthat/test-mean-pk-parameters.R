@@ -1,22 +1,13 @@
 context("Run workflows with PK parameters task")
-
+# Get test data
 simulationFile <- getTestDataFilePath("input-data/MiniModel2.pkml")
 
-# Output reference
+# List of files necessary in output directory
 refOutputPK <- getTestDataFilePath("mean-pk/A-pkAnalysis.csv")
 refOutputUpdatedPK <- getTestDataFilePath("mean-pk/A-pkAnalysis-updatedPK.csv")
 # Ensure the PK parameters are reset before test
 updatePKParameter("C_max", displayName = "C_max", displayUnit = "µmol/l")
 updatePKParameter("AUC_tEnd", displayName = "AUC_tEnd", displayUnit = "µmol*min/l")
-
-refWorkflowStructure <- c(
-  "log-debug.txt", "log-info.txt",
-  "Report-word.md", "Report.docx", "Report.md",
-  "SimulationResults", "PKAnalysisResults", "PKAnalysis"
-)
-pkStructure <- c(
-  "A-pkAnalysis.csv"
-)
 
 setPK <- SimulationSet$new(
   simulationSetName = "A",
@@ -32,20 +23,34 @@ workflowPK$inactivateTasks()
 workflowPK$activateTasks(c("simulate", "calculatePKParameters", "plotPKParameters"))
 workflowPK$runWorkflow()
 
-test_that("Workflow generates appropriate files and folders", {
-  expect_setequal(list.files(workflowPK$workflowFolder), refWorkflowStructure)
+test_that("Workflow generates appropriate number of files", {
+  # Log files
+  expect_length(list.files(workflowPK$workflowFolder, pattern = ".txt"), 2)
+  # Reports
+  expect_length(list.files(workflowPK$workflowFolder, pattern = ".md"), 2)
+  expect_length(list.files(workflowPK$workflowFolder, pattern = ".docx"), 1)
 })
 
-test_that("PKAnalysis directory includes appropriate files and folders", {
-  expect_setequal(list.files(file.path(workflowPK$workflowFolder, "PKAnalysis")), pkStructure)
+pkAnalysisPath <- file.path(workflowPK$workflowFolder, "PKAnalysis")
+
+test_that("PKAnalysis directory includes appropriate number of files", {
+  # Figures
+  expect_length(list.files(pkAnalysisPath, pattern = ".png"), 0)
+  # Exported results
+  expect_length(list.files(pkAnalysisPath, pattern = ".csv"), 1)
 })
 
 test_that("Saved PK parameters have correct values", {
-  skip_on_os("linux") # the behaviour is correct, however due to "µ-conversion" done during reading of units
+  # the behaviour is correct, however due to "µ-conversion" done during reading of units
   # the re-exported file differs from the original one. Which is ok.
-
+  skip_on_os("linux") 
+  
+  exportedFile <- file.path(
+    pkAnalysisPath,
+    list.files(pkAnalysisPath, pattern = ".csv")
+  )
   expect_equal(
-    readObservedDataFile(file.path(workflowPK$workflowFolder, "PKAnalysis", "A-pkAnalysis.csv")),
+    readObservedDataFile(exportedFile),
     readObservedDataFile(refOutputPK),
     tolerance = comparisonTolerance()
   )
@@ -53,6 +58,7 @@ test_that("Saved PK parameters have correct values", {
 
 updatePKParameter("C_max", displayName = "Cmax", displayUnit = "nmol/l")
 updatePKParameter("AUC_tEnd", displayName = "AUC")
+
 newSetPK <- SimulationSet$new(
   simulationSetName = "A",
   simulationFile = simulationFile,
@@ -68,15 +74,23 @@ workflowPK$activateTasks("plotPKParameters")
 workflowPK$runWorkflow()
 
 test_that("PKAnalysis directory includes appropriate files and folders, overwriting previous data", {
-  expect_setequal(list.files(file.path(workflowPK$workflowFolder, "PKAnalysis")), pkStructure)
+  # Figures
+  expect_length(list.files(pkAnalysisPath, pattern = ".png"), 0)
+  # Exported results
+  expect_length(list.files(pkAnalysisPath, pattern = ".csv"), 1)
 })
 
 test_that("Saved PK parameters have correct values with updated names and unit", {
-  skip_on_os("linux") # the behaviour is correct, however due to "µ-conversion" done during reading of units
+  # the behaviour is correct, however due to "µ-conversion" done during reading of units
   # the re-exported file differs from the original one. Which is ok.
-
+  skip_on_os("linux") 
+  
+  exportedFile <- file.path(
+    pkAnalysisPath,
+    list.files(pkAnalysisPath, pattern = ".csv")
+  )
   expect_equal(
-    readObservedDataFile(file.path(workflowPK$workflowFolder, "PKAnalysis", "A-pkAnalysis.csv")),
+    readObservedDataFile(exportedFile),
     readObservedDataFile(refOutputUpdatedPK),
     tolerance = comparisonTolerance()
   )
