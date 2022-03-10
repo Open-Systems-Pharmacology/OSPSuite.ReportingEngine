@@ -55,7 +55,7 @@ messages <- list(
   },
   
   errorUnexistingFile = function(path) {
-    paste0(callingFunction(), "File: '", path, "' does not exist.")
+    paste0(callingFunction(), "File(s): '", paste0(path, collapse = "', '"), "' do not exist.")
   },
 
   warningPathIncludes = function(path) {
@@ -75,7 +75,7 @@ messages <- list(
   },
 
   errorTaskInputDoesNotExist = function(input) {
-    paste0(callingFunction(), "Task input file '", input, "' does not exist.")
+    paste0(callingFunction(), "Task input file(s) '", paste0(input, collapse = "', '."), "' do not exist.")
   },
 
   errorObservedMetaDataFileNotProvided = function(observedDataFile) {

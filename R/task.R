@@ -83,7 +83,6 @@ Task <- R6::R6Class(
     #' @return logical indicating if input is valid
     validateStructureSetInput = function(structureSet) {
       validateIsOfType(structureSet, "SimulationStructure")
-      isValid <- TRUE
       # Get only the input from the structure set
       structureSetInputs <- c(
         structureSet$simulationResultFileNames,
@@ -91,18 +90,21 @@ Task <- R6::R6Class(
         structureSet$sensitivityAnalysisResultsFileNames
       )
       inputsToCheck <- intersect(structureSetInputs, private$.inputs)
-
-      for (inputToCheck in inputsToCheck) {
-        if (!file.exists(inputToCheck)) {
-          isValid <- FALSE
-          logWorkflow(
-            message = messages$errorTaskInputDoesNotExist(inputToCheck),
-            pathFolder = self$workflowFolder,
-            logTypes = c(LogTypes$Error, LogTypes$Debug)
-          )
-        }
+      # If no required input
+      if(isEmpty(inputsToCheck)){
+        return(TRUE)
       }
-      return(isValid)
+      
+      # TODO: update after PR about logging
+      tryCatch({
+        validateFileExists(inputsToCheck, nullAllowed = TRUE)
+      },
+      error = function(e){
+        missingInputs <- inputsToCheck[!file.exists(inputsToCheck)]
+        logErrorThenStop(message = messages$errorTaskInputDoesNotExist(missingInputs), self$workflowFolder)
+      })
+      # If no error is caught, return isValid = TRUE
+      return(TRUE)
     },
 
     #' @description
