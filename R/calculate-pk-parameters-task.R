@@ -53,6 +53,7 @@ CalculatePKParametersTask <- R6::R6Class(
             pathFolder = self$workflowFolder
           )
         }
+        clearMemory(clearSimulationsCache = TRUE)
       }
       re.tEndAction(actionToken = actionToken)
     }

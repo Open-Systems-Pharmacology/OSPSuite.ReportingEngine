@@ -201,7 +201,7 @@ simulateModelParallel <- function(structureSets,
     })
     
     simulationResults <- c(simulationResults, subsetSimulationResults)
-
+    clearMemory(clearSimulationsCache = TRUE)
   }
 
   logWorkflow(
