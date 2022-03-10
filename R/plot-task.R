@@ -34,7 +34,7 @@ PlotTask <- R6::R6Class(
       self$getTaskResults <- getTaskResults
       self$nameTaskResults <- nameTaskResults
     },
-
+    
     #' @description
     #' Save the task results related to a `structureSet`.
     #' @param structureSet A `SimulationStructure` object defining the properties of a simulation set
@@ -110,7 +110,7 @@ PlotTask <- R6::R6Class(
     #' Run task and save its output results
     #' @param structureSets list of `SimulationStructure` objects
     runTask = function(structureSets) {
-      re.tStartAction(actionType = "TLFGeneration")
+      actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
       logWorkflow(
         message = paste0("Starting: ", self$message),
         pathFolder = self$workflowFolder
@@ -139,7 +139,7 @@ PlotTask <- R6::R6Class(
           self$saveResults(set, taskResults)
         }
       }
-      re.tEndAction()
+      re.tEndAction(actionToken = actionToken)
     }
   )
 )

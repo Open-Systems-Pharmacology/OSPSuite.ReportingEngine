@@ -103,7 +103,7 @@ PopulationPlotTask <- R6::R6Class(
     #' Run task and save its output
     #' @param structureSets list of `SimulationStructure` R6 class
     runTask = function(structureSets) {
-      re.tStartAction(actionType = "TLFGeneration")
+      actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
       logWorkflow(
         message = paste0("Starting: ", self$message),
         pathFolder = self$workflowFolder
@@ -124,7 +124,7 @@ PopulationPlotTask <- R6::R6Class(
         )
         self$saveResults(taskResults)
       }
-      re.tEndAction()
+      re.tEndAction(actionToken = actionToken)
     }
   )
 )
