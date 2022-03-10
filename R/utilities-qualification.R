@@ -23,18 +23,21 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
     simulationName <- configurationPlan$simulationMappings$simulation[simulationIndex]
     simulationSetName <- paste(project, configurationPlan$simulationMappings$simulationFile[simulationIndex], sep = "-")
     simulationFile <- configurationPlan$getSimulationPath(project = project, simulation = simulationName)
+    validateFileExists(path = simulationFile)
     populationFile <- configurationPlan$getPopulationPath(project = project, simulation = simulationName)
-
-    cat(paste0(
-      "Creating output objects for ", simulationIndex, "/", nrow(configurationPlan$simulationMappings),
-      ": Project '", project, "' - Simulation '", simulationName, "'\n"
-    ))
+    validateFileExists(path = populationFile,nullAllowed = TRUE)
 
     outputsDataframeSubset <- outputsDataframe[outputsDataframe$project == project & outputsDataframe$simulation == simulationName, ]
 
     if(nrow(outputsDataframeSubset) == 0){
       next
     }
+
+    progress <- round(100*simulationIndex/nrow(configurationPlan$simulationMappings))
+
+    cat(paste0(
+      "Progress: ", progress , "%. Preparing project: '", project, "', simulation: '", simulationName,".'\n"
+    ))
 
     outputs <- lapply(unique(outputsDataframeSubset$outputPath), function(outputPath) {
       Output$new(
@@ -82,9 +85,10 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
 #' @param configurationPlanFile path to the json file corresponding to the Configuration Plan of a Qualification workflow
 #' @param workflowFolder path of the output folder created or used by the Workflow.
 #' @return A `ConfigurationPlan` object including the content of json file
+#' @import jsonlite
 #' @export
 loadConfigurationPlan <- function(configurationPlanFile, workflowFolder) {
-  jsonConfigurationPlan <- jsonlite::fromJSON(configurationPlanFile, simplifyDataFrame = FALSE)
+  jsonConfigurationPlan <- fromJSON(configurationPlanFile, simplifyDataFrame = FALSE)
 
   # Check if mandatory variables were input
   # Matlab version had as well ObservedDataSets and Inputs, but they don't need to be mandatory in R
@@ -130,8 +134,8 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
     # Actual section path will be relative to the workflowFolder
     # and is wrapped in method configurationPlan$getSectionPath(id)
     sectionPath <- paste(
-      parentFolder, 
-      sprintf("%0.3d_section_%d", sectionIndex, section$Id), 
+      parentFolder,
+      sprintf("%0.3d_section_%d", sectionIndex, section$Id),
       sep = .Platform$file.sep
       )
 
