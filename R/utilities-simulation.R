@@ -180,11 +180,22 @@ simulateModelParallel <- function(structureSets,
       pathFolder = logFolder,
       logTypes = LogTypes$Info
     )
-
-    subsetSimulationResults <- ospsuite::runSimulations(
-      simulations = simulations
-    )
-
+    
+    subsetSimulationResults <- tryCatch({
+       ospsuite::runSimulations(simulations = simulations)
+    },
+    error = function(e) {
+      logErrorThenStop(message = e, logFolder)
+      },
+    warning = function(w) {
+      logWorkflow(
+        message = w,
+        pathFolder = logFolder,
+        logTypes = LogTypes$Error
+      )
+      return(ospsuite::runSimulations(simulations = simulations))
+    })
+    
     simulationResults <- c(simulationResults,subsetSimulationResults)
 
   }
