@@ -126,10 +126,10 @@ validateFileExists <- function(path, nullAllowed = FALSE) {
   if (nullAllowed && is.null(path)) {
     return(invisible())
   }
-  if (file.exists(path)){
+  if (all(file.exists(path))){
     return(invisible())
   }
-  stop(messages$errorUnexistingFile(path))
+  stop(messages$errorUnexistingFile(path[!file.exists(path)]))
 }
 
 #' Log the error with a message and then stop, displaying same message.
