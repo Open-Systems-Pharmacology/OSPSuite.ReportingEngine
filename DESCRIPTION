@@ -11,7 +11,7 @@ Authors@R:
              email = "michael@design2code.ca"),
       person(given = "Juri",
              family = "Solodenko",
-             role = c("aut", "cre"),
+             role = "aut",
              email = "juri.solodenko@bayer.com"),
       person(given = "Pierre",
              family = "Chelle",
