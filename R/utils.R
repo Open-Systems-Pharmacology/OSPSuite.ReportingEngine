@@ -136,8 +136,11 @@ generateResultFileNames <- function(numberOfCores, folderName, fileName, separat
 
 #' @title loadSimulationWithUpdatedPaths
 #' @param simulationSet simulation set containing path to simulation file and pathIDs for quantities to be loaded into simulation object
-#' @param loadFromCache logical allows load from Cache option
-#' @return simulation object with pathIDs updated from simulationSet
+#' @param loadFromCache If `TRUE`, an already loaded pkml file will not be loaded again, but the `Simulation` object will be retrieved from cache.
+#' If `FALSE`, a new `Simulation` object will be created. Default value is `FALSE`.
+#' @param addToCache If `TRUE`, the loaded simulation is added to cache.
+#' If `FALSE`, the returned simulation only exists locally. Default is `TRUE`.
+#' @return A `Simulation` object with pathIDs updated from simulationSet
 #' @export
 loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE, addToCache = TRUE) {
   simulation <- ospsuite::loadSimulation(
@@ -300,7 +303,7 @@ getPKParametersInSimulationSet <- function(simulationSet) {
 
 #' @title getAllowedCores
 #'
-#' @description
+#' @description Get allowed number of CPU cores for computation
 #'
 #' @return Allowed number of CPU cores for computation
 #' @keywords internal
@@ -460,7 +463,6 @@ getObjectNameAsString <- function(object) {
 #' @param fileName Name of the file in which `plotObject` is saved
 #' @param logFolder folder where the logs are saved
 #' @param simulationSetName Name of the simulation set for `PlotTask` results
-#' @return
 #' @keywords internal
 saveFigure <- function(plotObject, fileName, logFolder, simulationSetName = NULL) {
   tryCatch({

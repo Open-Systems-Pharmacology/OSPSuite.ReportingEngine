@@ -15,9 +15,6 @@ saveFigure(plotObject, fileName, logFolder, simulationSetName = NULL)
 
 \item{simulationSetName}{Name of the simulation set for `PlotTask` results}
 }
-\value{
-
-}
 \description{
 Save figure and catches
 }
