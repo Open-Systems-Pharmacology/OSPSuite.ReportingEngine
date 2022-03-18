@@ -262,9 +262,12 @@ QualificationPlotTypes <- c("GOFMergedPlots", "ComparisonTimeProfilePlots", "DDI
 #' @keywords internal
 separateVariableFromUnit <- function(variableUnitString) {
   splitVariableUnitString <- strsplit(x = sub("[ []", replacement = "", x = variableUnitString), split = "[][]")[[1]]
+  if(isOfLength(splitVariableUnitString, 1)){
+    return(list(name = splitVariableUnitString, unit = ""))
+  }
   return(list(
     name = trimws(splitVariableUnitString[1]),
-    unit = ifelse(test = is.na(x = tail(splitVariableUnitString, 1)), yes = "", no = tail(splitVariableUnitString, 1))
+    unit = tail(splitVariableUnitString, 1)
   ))
 }
 
