@@ -340,12 +340,12 @@ ConfigurationPlan <- R6::R6Class(
         duplicatedIds <- unique(dataIds[duplicated(dataIds)])
         for (observedDataSetsId in duplicatedIds) {
           selectedRows <- dataIds %in% observedDataSetsId
-          selectedPaths <- dataPaths[selectedRows]
-          if (isOfLength(unique(selectedPaths), 1)) {
-            warning(messages$errorHasNoUniqueValues(dataIds[selectedRows], dataName = "ObservedDataSets Id"))
-            next
-          }
-          stop(paste0("Inconsistent ObservedDataSets Paths '", paste0(selectedPaths, collapse = "', '"), "' for non unique Id '", observedDataSetsId, "'"))
+          selectedPaths <- unique(dataPaths[selectedRows])
+          tryCatch({
+            validateIsOfLength(selectedPaths, 1)},
+            error = function(e){
+              stop(paste0("Inconsistent ObservedDataSets Paths '", paste0(selectedPaths, collapse = "', '"), "' for non unique Id '", observedDataSetsId, "'"))
+            })
         }
       }
     }
