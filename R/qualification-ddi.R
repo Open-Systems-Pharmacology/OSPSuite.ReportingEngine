@@ -279,13 +279,14 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
     dataMapping = ddiDataMapping
   )
 
-  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_color_manual(values = sapply(ddiPlotData$aestheticsList$color, function(x) {
-    x
-  }))
-  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::scale_shape_manual(values = sapply(ddiPlotData$aestheticsList$shape, function(x) {
-    x
-  }))
-
+  # ggplot2 tends to throw messages when updating color and shape scales
+  # if not wrapped by suppressMessages
+  # Note that the wrapper does not suppress warnings nor errors
+  suppressMessages(
+    qualificationDDIPlot <- qualificationDDIPlot + 
+      ggplot2::scale_color_manual(values = sapply(ddiPlotData$aestheticsList$color, identity)) + 
+      ggplot2::scale_shape_manual(values = sapply(ddiPlotData$aestheticsList$shape, identity))
+  )
   # Force legend to be only one column to maintain plot panel width, and left-justify legend entries
   qualificationDDIPlot <- qualificationDDIPlot + ggplot2::guides(col = guide_legend(ncol = 1, label.hjust = 0))
 
