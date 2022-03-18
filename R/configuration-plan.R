@@ -160,8 +160,7 @@ ConfigurationPlan <- R6::R6Class(
           # With recursive=TRUE, overwrite images
           file.copy(
             from = file.path(inputContentSubFolder, fileName),
-            to = file.path(outputContentSubFolder, fileName),
-            recursive = TRUE
+            to = file.path(outputContentSubFolder, fileName)
           )
         }
       }
