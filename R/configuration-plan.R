@@ -97,7 +97,7 @@ ConfigurationPlan <- R6::R6Class(
         return(invisible())
       }
       # UTF-8 encoding is assumed for md files in Section Content
-      markdownContent <- readLines(markdownLocation, encoding = "UTF-8")
+      markdownContent <- readLines(markdownLocation, encoding = "UTF-8", warn = FALSE)
       addTextChunk(fileName = self$getSectionMarkdown(id), text = markdownContent, logFolder = logFolder)
       return(invisible())
     },
@@ -119,7 +119,7 @@ ConfigurationPlan <- R6::R6Class(
         return(invisible())
       }
       # UTF-8 encoding is assumed for md files in Input
-      markdownContent <- readLines(inputLocation, encoding = "UTF-8")
+      markdownContent <- readLines(inputLocation, encoding = "UTF-8", warn = FALSE)
       addTextChunk(fileName = self$getSectionMarkdown(input$SectionId), text = markdownContent, logFolder = logFolder)
       return(invisible())
     },
@@ -141,7 +141,7 @@ ConfigurationPlan <- R6::R6Class(
         return(invisible())
       }
       # UTF-8 encoding is assumed for md files in Intro
-      markdownContent <- readLines(introLocation, encoding = "UTF-8")
+      markdownContent <- readLines(introLocation, encoding = "UTF-8", warn = FALSE)
       addTextChunk(fileName = self$getIntroMarkdown(), text = markdownContent, logFolder = logFolder)
       return(invisible())
     },
