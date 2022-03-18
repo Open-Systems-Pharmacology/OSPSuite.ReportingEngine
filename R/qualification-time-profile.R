@@ -556,39 +556,10 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
       logFolderPath = logFolder
     )
   }
-
+  
   outputError <- NULL
-  if (!isOfLength(observedResults$metaData$error, 0)) {
-    # No unit means that error is geometric
-    outputError$ymin <- outputValues / observedResults$data[, 3]
-    outputError$ymax <- outputValues * observedResults$data[, 3]
-
-    # In case scale is log,
-    if (!isIncluded(observedResults$metaData$error$unit, "")) {
-      outputError$ymin <- outputValues - ospsuite::toUnit(
-        ospsuite::getDimensionForUnit(observedResults$metaData$error$unit),
-        observedResults$data[, 3],
-        targetUnit = axesProperties$y$unit,
-        sourceUnit = observedResults$metaData$error$unit,
-        molWeight = molWeight
-      )
-
-      outputError$ymax <- outputValues + ospsuite::toUnit(
-        ospsuite::getDimensionForUnit(observedResults$metaData$error$unit),
-        observedResults$data[, 3],
-        targetUnit = axesProperties$y$unit,
-        sourceUnit = observedResults$metaData$error$unit,
-        molWeight = molWeight
-      )
-    }
-    # Caution: error NA values cause ymin and ymax NA values which breaks the plot,
-    # they need to be replaced by y (no error bar)
-    outputError$ymin[is.na(outputError$ymin)] <- outputValues[is.na(outputError$ymin)]
-    outputError$ymax[is.na(outputError$ymax)] <- outputValues[is.na(outputError$ymax)]
-    # In case of log scale, ymin<0 are replaced by y so upper branch is still plotted
-    if (isIncluded(axesProperties$y$scale, tlf::Scaling$log)) {
-      outputError$ymin[outputError$ymin <= 0] <- outputValues[outputError$ymin <= 0]
-    }
+  if (!isEmpty(observedResults$metaData$error)) {
+    outputError <- getObservedErrorValues(outputValues, observedResults, axesProperties, molWeight = molWeight, logFolder = logFolder)
   }
   return(list(
     time = time,
@@ -614,4 +585,56 @@ getDefaultTimeProfileAxesSettings <- function() {
     grid = list(color = reEnv$theme$background$yGrid$color, linetype = reEnv$theme$background$yGrid$linetype)
   )
   return(list(x = xAxis, y = yAxis))
+}
+
+#' @title getObservedErrorValues
+#' @description
+#' Get the observed data error range to display on time profile plots
+#' @param observedValues Numeric values of observed data
+#' @param observedResults A named list, including `data` and `metaData`, of observed results.
+#' @param axesProperties list of axes properties obtained from `getAxesProperties`
+#' @param molWeight Molecular weight if unit conversion is required
+#' @param logFolder folder where the logs are saved
+#' @return A named list, with `ymin` and `ymax`, of the observed data error range
+#' @keywords internal
+getObservedErrorValues <- function(observedValues, observedResults, axesProperties, molWeight = NA, logFolder = getwd()){
+  # Compute geometric error by default
+  observedError <- calculateGeometricErrorRange(observedValues, observedResults$data[, 3])
+  
+  # If error has a unit, compute arithmetic error instead
+  if (!isIncluded(observedResults$metaData$error$unit, "")) {
+    # First convert error to the appropriate unit
+    errorValues <- ospsuite::toUnit(
+      ospsuite::getDimensionForUnit(observedResults$metaData$error$unit),
+      observedResults$data[, 3],
+      targetUnit = axesProperties$y$unit,
+      sourceUnit = observedResults$metaData$error$unit,
+      molWeight = molWeight
+    )
+    observedError <- calculateArithmeticErrorRange(observedValues, errorValues)
+  }
+  
+  # If error has no unit but values lower than 1, 
+  # Check output has also no unit and then compute arithmetic error
+  if (isIncluded(observedResults$metaData$error$unit, "") & any(observedResults$data[, 3] < 1, na.rm = TRUE)){
+    tryCatch({
+      validateIsIncluded(observedResults$metaData$output$unit, "")
+    },
+    error = function(e){
+      logErrorThenStop(,logFolder)
+    })
+    observedError <- calculateArithmeticErrorRange(observedValues, observedResults$data[, 3])
+  }
+  
+  # Caution: errors input as NA values leads to ymin and ymax being also NA values
+  # NA values are not well handled by ggplot2 which tends to crash
+  # Thus, NAs need to be replaced by observedValues (no error bar) which is virtually the same
+  observedError$ymin[is.na(observedError$ymin)] <- observedValues[is.na(observedError$ymin)]
+  observedError$ymax[is.na(observedError$ymax)] <- observedValues[is.na(observedError$ymax)]
+  
+  # For log scale plots, ymin<0 are replaced by observedValues so upper branch is still plotted
+  if (isIncluded(axesProperties$y$scale, tlf::Scaling$log)) {
+    observedError$ymin[observedError$ymin <= 0] <- observedValues[observedError$ymin <= 0]
+  }
+  return(observedError)
 }
