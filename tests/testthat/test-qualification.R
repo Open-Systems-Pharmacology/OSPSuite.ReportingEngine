@@ -5,7 +5,7 @@ configurationPlanFile <- getTestDataFilePath("qualification/report-configuration
 
 reOutputFolderReferenceFiles <- c(
   "images", "SimulationResults", "PKAnalysisResults", 
-  "log-debug.txt", "log-info.txt", "Report-word.md", "Report.docx", "Report.md"
+  "log-debug.txt", "log-info.txt", "Report-word.md", "Report.docx", "Report.md", "testcontent.md"
   )
 
 # Load and run test qualification workflow
@@ -18,6 +18,12 @@ workflow$runWorkflow()
 
 test_that("Output folder has the appropriate structure", {
   expect_setequal(list.files(reOutputFolder), reOutputFolderReferenceFiles)
+})
+
+test_that("Content files are all appropriately copied", {
+  for(fileName in list.files(getTestDataFilePath("qualification/Content"), recursive = TRUE)){
+    expect_true(file.exists(file.path(workflow$workflowFolder, fileName)))
+  }
 })
 
 test_that("Simulations and PK Analyses were saved", {

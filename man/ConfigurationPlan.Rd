@@ -45,7 +45,7 @@ R6 class for ConfigurationPlan guiding Qualification Workflow
 \item \href{#method-copySectionContent}{\code{ConfigurationPlan$copySectionContent()}}
 \item \href{#method-copyInput}{\code{ConfigurationPlan$copyInput()}}
 \item \href{#method-copyIntro}{\code{ConfigurationPlan$copyIntro()}}
-\item \href{#method-copyContentSubFolders}{\code{ConfigurationPlan$copyContentSubFolders()}}
+\item \href{#method-copyContentFiles}{\code{ConfigurationPlan$copyContentFiles()}}
 \item \href{#method-getObservedDataPath}{\code{ConfigurationPlan$getObservedDataPath()}}
 \item \href{#method-getMolWeightForObservedData}{\code{ConfigurationPlan$getMolWeightForObservedData()}}
 \item \href{#method-getSimulationPath}{\code{ConfigurationPlan$getSimulationPath()}}
@@ -206,12 +206,12 @@ Copy intro to intro markdown
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-copyContentSubFolders"></a>}}
-\if{latex}{\out{\hypertarget{method-copyContentSubFolders}{}}}
-\subsection{Method \code{copyContentSubFolders()}}{
-If available, copy files within subfolders of `Content` directory into `<workflowFolder>`
+\if{html}{\out{<a id="method-copyContentFiles"></a>}}
+\if{latex}{\out{\hypertarget{method-copyContentFiles}{}}}
+\subsection{Method \code{copyContentFiles()}}{
+If available, copy all files and folders of `Content` directory into `<workflowFolder>`
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$copyContentSubFolders()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$copyContentFiles()}\if{html}{\out{</div>}}
 }
 
 }
