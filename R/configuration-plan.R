@@ -146,23 +146,29 @@ ConfigurationPlan <- R6::R6Class(
       return(invisible())
     },
 
-    #' @description If available, copy files within subfolders of `Content` directory into `<workflowFolder>`
-    copyContentSubFolders = function() {
-      inputContentFolder <- file.path(self$referenceFolder, "Content")
-      # Get only sub folder names and remove "" from the values returned by list.dirs
-      subFolders <- setdiff(list.dirs(inputContentFolder, full.names = FALSE), "")
-      for(subFolder in subFolders){
-        inputContentSubFolder <- file.path(inputContentFolder, subFolder)
-        outputContentSubFolder <- file.path(self$workflowFolder, subFolder)
-        dir.create(outputContentSubFolder, showWarnings = FALSE, recursive = TRUE)
-        # Copy all files from subfolder into report subfolder
-        for(fileName in list.files(inputContentSubFolder)){
-          # With recursive=TRUE, overwrite images
-          file.copy(
-            from = file.path(inputContentSubFolder, fileName),
-            to = file.path(outputContentSubFolder, fileName)
+    #' @description If available, copy all files and folders of `Content` directory into `<workflowFolder>`
+    copyContentFiles = function() {
+      # If no Content available, does not need to copy anything
+      if(!dir.exists(file.path(self$referenceFolder, "Content"))){
+        return(invisible())
+      }
+      # Get list of folders within content as well as all the subfolders using recursive option
+      contentSubFolders <- list.dirs(path = file.path(self$referenceFolder, "Content"), full.names = FALSE, recursive = TRUE)
+      # Get list of files within content as well as all files within subfolders using recursive option
+      contentFiles <- list.files(path = file.path(self$referenceFolder, "Content"), full.names = FALSE, recursive = TRUE)
+      
+      # Create all necessary subfolders within workflow folder
+      # Note that recursive is not needed here since list of folders used it
+      for(contentSubFolder in contentSubFolders){
+        dir.create(file.path(self$workflowFolder, contentSubFolder), showWarnings = FALSE)
+      }
+      # Copy all available files of Content within workflow folder
+      # Note that recursive is not needed here since list of files used it
+      for(contentFile in contentFiles){
+        file.copy(
+          from = file.path(self$referenceFolder, "Content", contentFile),
+          to = file.path(self$workflowFolder, contentFile)
           )
-        }
       }
       return(invisible())
     },

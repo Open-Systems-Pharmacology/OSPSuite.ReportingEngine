@@ -198,7 +198,7 @@ createSectionOutput <- function(configurationPlan, logFolder = getwd()) {
     configurationPlan$copyInput(input, logFolder = logFolder)
   }
   # Images and other raw content to copy
-  configurationPlan$copyContentSubFolders()
+  configurationPlan$copyContentFiles()
   return(list(
     intro = configurationPlan$getIntroMarkdown(),
     appendices = appendices))
