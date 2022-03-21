@@ -76,3 +76,26 @@ test_that("Correct expressions work the way they should", {
 # Remove the files created during the tests
 unlink(testCsvFile, recursive = TRUE)
 unlink(testTxtFile, recursive = TRUE)
+
+test_that("Variable and unit separation works as expected", {
+  # Because the function is not exported, it needs to be called using ospsuite.reportingengine:::
+  # Get separateVariableFromUnit into current namespace
+  separateVariableFromUnit <- ospsuite.reportingengine:::separateVariableFromUnit
+  
+  expect_equal(separateVariableFromUnit("Value")$name, "Value")
+  expect_equal(separateVariableFromUnit("Value")$unit, "")
+  expect_equal(separateVariableFromUnit("Value [unit]")$name, "Value")
+  expect_equal(separateVariableFromUnit("Value [unit]")$unit, "unit")
+  expect_equal(separateVariableFromUnit("Value [unit] ")$name, "Value")
+  expect_equal(separateVariableFromUnit("Value [unit] ")$unit, "unit")
+  expect_equal(separateVariableFromUnit("Value [raw] 1 [unit]")$name, "Value [raw] 1")
+  expect_equal(separateVariableFromUnit("Value [raw] 1 [unit]")$unit, "unit")
+  expect_equal(separateVariableFromUnit("Value [raw] [unit]")$name, "Value [raw]")
+  expect_equal(separateVariableFromUnit("Value [raw] [unit]")$unit, "unit")
+  expect_equal(separateVariableFromUnit("Value [raw] 1")$name, "Value [raw] 1")
+  expect_equal(separateVariableFromUnit("Value [raw] 1")$unit, "")
+  expect_equal(separateVariableFromUnit("[Value] [unit]")$name, "[Value]")
+  expect_equal(separateVariableFromUnit("[Value] [unit]")$unit, "unit")
+  expect_equal(separateVariableFromUnit("Value []")$name, "Value")
+  expect_equal(separateVariableFromUnit("Value []")$unit, "")
+})
