@@ -148,14 +148,15 @@ ConfigurationPlan <- R6::R6Class(
 
     #' @description If available, copy all files and folders of `Content` directory into `<workflowFolder>`
     copyContentFiles = function() {
+      srcContentFolder <- file.path(self$referenceFolder, "Content")
       # If no Content available, does not need to copy anything
-      if(!dir.exists(file.path(self$referenceFolder, "Content"))){
+      if(!dir.exists(srcContentFolder)){
         return(invisible())
       }
       # Get list of folders within content as well as all the subfolders using recursive option
-      contentSubFolders <- list.dirs(path = file.path(self$referenceFolder, "Content"), full.names = FALSE, recursive = TRUE)
+      contentSubFolders <- list.dirs(path = srcContentFolder, full.names = FALSE, recursive = TRUE)
       # Get list of files within content as well as all files within subfolders using recursive option
-      contentFiles <- list.files(path = file.path(self$referenceFolder, "Content"), full.names = FALSE, recursive = TRUE)
+      contentFiles <- list.files(path = srcContentFolder, full.names = FALSE, recursive = TRUE)
       
       # Create all necessary subfolders within workflow folder
       # Note that recursive is not needed here since list of folders used it
@@ -166,7 +167,7 @@ ConfigurationPlan <- R6::R6Class(
       # Note that recursive is not needed here since list of files used it
       for(contentFile in contentFiles){
         file.copy(
-          from = file.path(self$referenceFolder, "Content", contentFile),
+          from = file.path(srcContentFolder, contentFile),
           to = file.path(self$workflowFolder, contentFile)
           )
       }
