@@ -259,14 +259,35 @@ QualificationPlotTypes <- c("GOFMergedPlots", "ComparisonTimeProfilePlots", "DDI
 #' @description Split a string containing a variable and unit description into a list of two strings that separates the variable and the unit.
 #' @param variableUnitString is a string that has the format 'Variable [unit]' or 'Variable'
 #' @return A named list, with fields 'name' and 'unit'.  If variableUnitString lacks a '[unit]' substring, then the unit field is returned as an empty string.
+#' @import ospsuite.utils
 #' @keywords internal
 separateVariableFromUnit <- function(variableUnitString) {
-  splitVariableUnitString <- strsplit(x = sub("[ []", replacement = "", x = variableUnitString), split = "[][]")[[1]]
-  if(isOfLength(splitVariableUnitString, 1)){
-    return(list(name = splitVariableUnitString, unit = ""))
+  # Get character positions of opening and closing brackets
+  openingBrackets <- gregexpr(pattern = "\\[", text = variableUnitString)[[1]]
+  closingBrackets <- gregexpr(pattern = "\\]", text = variableUnitString)[[1]]
+  openingBrackets <- openingBrackets[openingBrackets>0]
+  closingBrackets <- closingBrackets[closingBrackets>0]
+  # Warning of ill constructed variable name with different number of opening/closing brackets
+  if(!isSameLength(openingBrackets, closingBrackets)){
+    warning(paste0("No unit found for variable '", variableUnitString, "' due to inconsistent brackets"))
+    return(list(name = variableUnitString, unit = ""))
   }
+  # If no bracket found, directly return no unit
+  if(isOfLength(openingBrackets, 0)){
+    return(list(name = variableUnitString, unit = ""))
+  }
+  # Warning of ill constructed variable name with last closing bracket before first opening bracket
+  if(head(openingBrackets, 1)>tail(closingBrackets,1)){
+    warning(paste0("No unit found for variable '", variableUnitString, "' due to inconsistent brackets"))
+    return(list(name = variableUnitString, unit = ""))
+  }
+  # For all the remaining cases, 
+  # unit is included within the last brackets
+  # name corresponds to the remaining substring from start to character before last opening bracket
+  # trimws aims at removing the last spaces before the unit if any
+  splitVariableUnitString <- strsplit(x = sub("[ []", replacement = "", x = variableUnitString), split = "[][]")[[1]]
   return(list(
-    name = trimws(splitVariableUnitString[1]),
+    name = trimws(substr(x = variableUnitString, start = 1, stop = tail(openingBrackets, 1)-1)),
     unit = tail(splitVariableUnitString, 1)
   ))
 }
