@@ -253,36 +253,47 @@ getOutputsFromGOFMergedPlotsConfiguration <- function(plot) {
 QualificationPlotTypes <- c("GOFMergedPlots", "ComparisonTimeProfilePlots", "DDIRatioPlots", "TimeProfile")
 
 
-
-
-#' @title separateVariableFromUnit
-#' @description Split a string containing a variable and unit description into a list of two strings that separates the variable and the unit.
-#' @param variableUnitString is a string that has the format 'Variable [unit]' or 'Variable'
-#' @return A named list, with fields 'name' and 'unit'.  If variableUnitString lacks a '[unit]' substring, then the unit field is returned as an empty string.
+#' @title extractNameAndUnit
+#' @description Returns a named list with two entries (name, unit) corresponding to the name and unit
+#' extracted out of the `text` provided as parameter
+#' @param text Character from which name and unit are extracted
+#' @return A named list, with fields `name` and `unit`.
+#' @import ospsuite.utils
 #' @keywords internal
-separateVariableFromUnit <- function(variableUnitString) {
-  splitVariableUnitString <- strsplit(x = sub("[ []", replacement = "", x = variableUnitString), split = "[][]")[[1]]
-  return(list(
-    name = trimws(splitVariableUnitString[1]),
-    unit = ifelse(test = is.na(x = tail(splitVariableUnitString, 1)), yes = "", no = tail(splitVariableUnitString, 1))
-  ))
+#' @examples \dontrun{
+#' res <- extractNameAndUnit("Value [mg]")
+#' res$name
+#' # > "Value"
+#' res$unit
+#' # > "mg"
+#'
+#' res <- extractNameAndUnit("Value")
+#' res$name
+#' # > "Value"
+#' res$unit
+#' # > ""
+#' }
+extractNameAndUnit <- function(text) {
+  validateIsString(text)
+  dimensionTask <- rClr::clrCallStatic("OSPSuite.R.Api", "GetDimensionTask")
+  res <- rClr::clrCall(dimensionTask, "ExtractNameAndUnit", enc2utf8(text))
+  return(list(name = res[1], unit = res[2]))
 }
-
 
 #' @title parseObservationsDataFrame
 #' @description Function to read the variable names and units in the first two columns of an observations data frame used for qualification. First column stores timepoints.  Second column stores measurements of a quantity corresponding to timepoints in first column.
 #' @param observationsDataFrame from CSV
-#' @return A named list with `time` and `output` fields.  Each field contains a list that is output by `separateVariableFromUnit` with fields that store the variable name and the unit.
+#' @return A named list with `time` and `output` fields.  Each field contains a list that is output by `extractNameAndUnit` with fields that store the variable name and the unit.
 #' @keywords internal
 parseObservationsDataFrame <- function(observationsDataFrame) {
   namesObservationsDataFrame <- names(observationsDataFrame)
   validateIsIncluded(length(namesObservationsDataFrame), c(2, 3))
   dataFrameFields <- list(
-    time = separateVariableFromUnit(namesObservationsDataFrame[1]),
-    output = separateVariableFromUnit(namesObservationsDataFrame[2])
+    time = extractNameAndUnit(namesObservationsDataFrame[1]),
+    output = extractNameAndUnit(namesObservationsDataFrame[2])
   )
   if (length(namesObservationsDataFrame) == 3) {
-    dataFrameFields$error <- separateVariableFromUnit(namesObservationsDataFrame[3])
+    dataFrameFields$error <- extractNameAndUnit(namesObservationsDataFrame[3])
   }
   return(dataFrameFields)
 }

@@ -17,6 +17,34 @@ calculateResiduals <- function(simulatedData, observedData, residualScale) {
   }
 }
 
+#' @title calculateGeometricErrorRange
+#' @param values Numeric values of the geometric mean
+#' @param errorValues Numeric values of the geometric error
+#' @return A named list, with `ymin` and `ymax`, of the range calculated from the geometric mean and errors.
+#' @description
+#' Calculate the range from the geometric mean and error.
+#' @export
+calculateGeometricErrorRange <- function(values, errorValues) {
+  return(list(
+    ymin = values / errorValues,
+    ymax = values * errorValues
+  ))
+}
+
+#' @title calculateArithmeticErrorRange
+#' @param values Numeric values of the arithmetic mean
+#' @param errorValues Numeric values of the arithmetic error
+#' @return A named list, with `ymin` and `ymax`, of the range calculated from the arithmetic mean and errors.
+#' @description
+#' Calculate the range from the arithmetic mean and error.
+#' @export
+calculateArithmeticErrorRange <- function(values, errorValues) {
+  return(list(
+    ymin = values - errorValues,
+    ymax = values + errorValues
+  ))
+}
+
 #' Shortkey checking if arguments 1 and 2 are equal,
 #' output argument 3 if equal, or output argument 4 otherwise
 #'

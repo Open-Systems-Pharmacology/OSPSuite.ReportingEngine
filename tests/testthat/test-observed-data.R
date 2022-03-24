@@ -76,3 +76,44 @@ test_that("Correct expressions work the way they should", {
 # Remove the files created during the tests
 unlink(testCsvFile, recursive = TRUE)
 unlink(testTxtFile, recursive = TRUE)
+
+context("extractNameAndUnit")
+
+test_that("It can extract name and unit when no unit is present", {
+  # Because the function is not exported, it needs to be called using ospsuite.reportingengine:::
+  # Get separateVariableFromUnit into current namespace
+  res <- ospsuite.reportingengine:::extractNameAndUnit("Value")
+  expect_equal(res$name, "Value")
+  expect_equal(res$unit, "")
+})
+
+test_that("It can extract name and unit when a unit is present", {
+  res <- ospsuite.reportingengine:::extractNameAndUnit("Value [unit]")
+  expect_equal(res$name, "Value")
+  expect_equal(res$unit, "unit")
+})
+
+test_that("It can extract name and unit when there are multiple brackets in the name", {
+  res <- ospsuite.reportingengine:::extractNameAndUnit("Value [raw] [unit]")
+  expect_equal(res$name, "Value [raw]")
+  expect_equal(res$unit, "unit")
+})
+
+test_that("It can extract name and unit when there are empty spaces before and after the unit", {
+  res <- ospsuite.reportingengine:::extractNameAndUnit("Value [raw] [  unit]  ")
+  expect_equal(res$name, "Value [raw]")
+  expect_equal(res$unit, "unit")
+})
+
+test_that("It does not crash when provided with a string not formatted for the exctraction", {
+  res <- ospsuite.reportingengine:::extractNameAndUnit("Value [raw] rest")
+  expect_equal(res$name, "Value [raw] rest")
+  expect_equal(res$unit, "")
+})
+
+test_that("It does not crash when with an empty string", {
+  res <- ospsuite.reportingengine:::extractNameAndUnit("")
+  expect_equal(res$name, "")
+  expect_equal(res$unit, "")
+})
+  
