@@ -53,7 +53,7 @@ messages <- list(
   warningExistingPath = function(existingPath) {
     paste0(callingFunction(), "Path: '", existingPath, "' already exists.")
   },
-  
+
   errorUnexistingFile = function(path) {
     paste0(callingFunction(), "File(s): '", paste0(path, collapse = "', '"), "' do not exist.")
   },
@@ -95,7 +95,7 @@ messages <- list(
       "2) Define units in dictionary by filling the column '",
       dictionaryParameters$datasetColumn, "' for ID '", dictionaryParameters$timeUnitID, "' and '", dictionaryParameters$dvUnitID, "'\n",
       "3) Define units for '", dictionaryParameters$dvID, "' in every 'Output' object using the field 'dataUnit'"
-      )
+    )
   },
 
   errorNoDataUnitInOutputs = function() {
@@ -108,7 +108,11 @@ messages <- list(
       "2) Define units in dictionary by filling the column '",
       dictionaryParameters$datasetColumn, "' for ID '", dictionaryParameters$timeUnitID, "' and '", dictionaryParameters$dvUnitID, "'\n",
       "3) Define units for '", dictionaryParameters$dvID, "' in 'Output' objects using the field 'dataUnit'"
-      )
+    )
+  },
+
+  errorWrongColumnTypeInDataFile = function(fileName,columnName,expectedType){
+    paste0("Column '",columnName,"', imported from file '",fileName,"', is not of the expected type '",expectedType,"'.")
   },
 
   warningMultipleDataUnit = function() {
@@ -127,6 +131,10 @@ messages <- list(
 
   errorNoParametersForSensitivityAnalysis = function() {
     paste0(callingFunction(), "No variable parameters found for sensitivity analysis.")
+  },
+
+  warningCSVNotReadCommaSeparatedAttemptingSemicolon = function(fileName){
+    paste0("Unable to read CSV file '",fileName,"' as comma-separated.  Attempting to read this file as semicolon-separated.")
   },
 
   warningNoFinitePKParametersForSomeIndividuals = function(pkParameter, output, simulationSetName) {
@@ -190,14 +198,14 @@ messages <- list(
       " data were included in the analysis between ", min(timeRange), " and ", max(timeRange), " ", timeUnit, "."
     )
   },
-  
+
   errorCommand = function(command, status){
     paste0("Command : '", command, "' returned Error Status ", status)
   },
-  
+
   ggsaveError = function(fileName, simulationSetName = NULL, errorMessage){
     paste0(
-      "Figure '", fileName, "'", 
+      "Figure '", fileName, "'",
       ifNotNull(simulationSetName, paste0(" from simulation set '", simulationSetName, "'"), ""),
       " could not be saved.\nIn ggsave, ", errorMessage)
   }

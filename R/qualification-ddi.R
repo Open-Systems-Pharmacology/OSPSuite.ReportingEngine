@@ -66,7 +66,14 @@ getQualificationDDIPlotData <- function(configurationPlan) {
           ratioList[[pkParameter]]$dose <- observedDataFrame[["Dose"]][observedDataSelection]
           ratioList[[pkParameter]]$doseUnit <- observedDataFrame[["Dose Unit"]][observedDataSelection]
           ratioList[[pkParameter]]$description <- observedDataFrame[["Description"]][observedDataSelection]
-          ratioList[[pkParameter]]$observedRatio <- observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]][observedDataSelection]
+
+          tryCatch({
+            validateIsOfType(object = observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]],"numeric")
+            ratioList[[pkParameter]]$observedRatio <- observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]][observedDataSelection]
+          },
+          error = function(e){
+            logErrorThenStop(message = messages$errorWrongColumnTypeInDataFile(observedDataSetFilePath,ddiPKRatioColumnName[[pkParameter]],"numeric"))
+          })
 
           for (simulationType in c("SimulationControl", "SimulationDDI")) {
             plotComponent <- ddiRatio[[simulationType]]
@@ -283,8 +290,8 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
   # if not wrapped by suppressMessages
   # Note that the wrapper does not suppress warnings nor errors
   suppressMessages(
-    qualificationDDIPlot <- qualificationDDIPlot + 
-      ggplot2::scale_color_manual(values = sapply(ddiPlotData$aestheticsList$color, identity)) + 
+    qualificationDDIPlot <- qualificationDDIPlot +
+      ggplot2::scale_color_manual(values = sapply(ddiPlotData$aestheticsList$color, identity)) +
       ggplot2::scale_shape_manual(values = sapply(ddiPlotData$aestheticsList$shape, identity))
   )
   # Force legend to be only one column to maintain plot panel width, and left-justify legend entries
