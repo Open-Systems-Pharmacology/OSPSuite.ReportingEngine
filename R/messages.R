@@ -115,6 +115,10 @@ messages <- list(
     paste0("Column '",columnName,"', imported from file '",fileName,"', is not of the expected type '",expectedType,"'.")
   },
 
+  errorRunSimulationsNotSuccessful =  function(fileName,simulationSetName){
+    paste0("Simulation of model file '",fileName,"' from simulation set '",simulationSetName,"' was not completed successfully.")
+  },
+
   warningMultipleDataUnit = function() {
     paste0(
       callingFunction(),
