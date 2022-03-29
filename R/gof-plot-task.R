@@ -55,16 +55,15 @@ GofPlotTask <- R6::R6Class(
             logTypes = LogTypes$Debug
           )
 
-          if (!isOfLength(listOfPlotCaptions[[plotName]], 0)) {
-            addTextChunk(self$fileName, paste0("Figure: ", listOfPlotCaptions[[plotName]]), logFolder = self$workflowFolder)
-          }
-
           addFigureChunk(
             fileName = self$fileName,
             figureFileRelativePath = self$getRelativePath(plotFileName),
             figureFileRootDirectory = self$workflowFolder,
             logFolder = self$workflowFolder
           )
+          if (!isEmpty(listOfPlotCaptions[[plotName]])) {
+            addTextChunk(self$fileName, paste0("Figure: ", listOfPlotCaptions[[plotName]]), logFolder = self$workflowFolder)
+          }
         }
       }
 
