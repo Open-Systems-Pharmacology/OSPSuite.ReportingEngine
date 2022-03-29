@@ -84,15 +84,15 @@ TaskResults <- R6::R6Class(
       if (isFALSE(self$includePlot)) {
         return()
       }
-      if (!isOfLength(self$plotCaption, 0)) {
-        addTextChunk(reportFile, paste0("Figure: ", self$plotCaption), logFolder = logFolder)
-      }
       addFigureChunk(
         fileName = reportFile,
         figureFileRelativePath = fileRelativePath,
         figureFileRootDirectory = fileRootDirectory,
         logFolder = logFolder
       )
+      if (!isEmpty(self$plotCaption)) {
+        addTextChunk(reportFile, paste0("Figure: ", self$plotCaption), logFolder = logFolder)
+      }
     },
 
     #' @description
@@ -112,7 +112,7 @@ TaskResults <- R6::R6Class(
       if (isFALSE(self$includeTable)) {
         return()
       }
-      if (!isOfLength(self$tableCaption, 0)) {
+      if (!isEmpty(self$tableCaption)) {
         addTextChunk(reportFile, paste0("Table: ", self$tableCaption), logFolder = logFolder)
       }
       addTableChunk(

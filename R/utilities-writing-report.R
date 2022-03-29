@@ -230,19 +230,25 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
   for (lineContent in fileContent) {
     firstElement <- as.character(unlist(strsplit(lineContent, " ")))
     firstElement <- firstElement[1]
-    if (grepl(pattern = "Figure ", x = firstElement) || grepl(pattern = "Table ", x = firstElement)) {
+    # Table: caption is before table. Thus, break page is added before Table
+    if (grepl(pattern = "Table", x = firstElement)) {
       wordFileContent <- c(wordFileContent, "\\newpage")
     }
-    # Markdown needs to cut/paste figure content within ![]
-    # The reports are currently built to print "Figure xx:" and below add figure path as "![](path)"
-    # Consequently, the strategy is to read the figure content with key "Figure" and paste within key "![]"
-    if (grepl(pattern = "Figure ", x = firstElement)) {
+    # Figure: caption is after figure linked with "![](path)". Thus, break page is added before definition of figure path
+    # For word report, it needs to be merged as "![caption](path)"
+    if (grepl(pattern = "\\!\\[\\]", x = firstElement)) {
+      # Store link to figure path in figureContent
       figureContent <- lineContent
       next
     }
-    if (grepl(pattern = "\\!\\[\\]", x = lineContent)) {
-      lineContent <- paste0("![", figureContent, "]", gsub(pattern = "\\!\\[\\]", replacement = "", x = lineContent))
+    if (grepl(pattern = "Figure", x = firstElement) & !is.null(figureContent)) {
+      wordFileContent <- c(
+        wordFileContent,
+        "\\newpage",
+        paste0("![", lineContent, "]", gsub(pattern = "\\!\\[\\]", replacement = "", x = figureContent))
+        )
       figureContent <- NULL
+      next
     }
     wordFileContent <- c(wordFileContent, lineContent)
   }
