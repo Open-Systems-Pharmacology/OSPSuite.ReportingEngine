@@ -181,11 +181,30 @@ simulateModelParallel <- function(structureSets,
       logTypes = LogTypes$Info
     )
 
-    # Stop simulation run if any simulations not run succesfully in ospsuite::runSimulations
-    subsetSimulationResults <-  ospsuite::runSimulations(simulations = simulations)
+
+    # Catch, save and display any error or warning
+    # from ospsuite::runSimulations
+    subsetSimulationResults <- tryCatch({
+      ospsuite::runSimulations(simulations = simulations)
+    },
+    error = function(e) {
+      logErrorThenStop(message = e, logFolder)
+    },
+    warning = function(w) {
+      logWorkflow(
+        message = w,
+        pathFolder = logFolder,
+        logTypes = LogTypes$Error
+      )
+      # Since simulationResults is a list,
+      # return same output type
+      return(vector(mode = "list", length = length(simulations)))
+    })
+
+    # Stop simulation run if any individual simulations not run successfully in ospsuite::runSimulations
     failedSimulationIndices <- which( sapply(subsetSimulationResults,function(x){is.null(x)}) )
 
-    if(!isOfLength(failedSimulationIndices,0)){
+    if(!isEmpty(failedSimulationIndices)){
       errorMessages <- sapply(failedSimulationIndices, function(setNumber){
         set <- structureSetsSubset[[setNumber]]
         setSimFile <- set$simulationSet$simulationFile
