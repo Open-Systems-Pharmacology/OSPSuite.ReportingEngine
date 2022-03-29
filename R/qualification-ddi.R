@@ -57,8 +57,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
           #The following tryCatch verifies that the PK parameter columns are read as `numeric` by the call to `readObservedDataFile` above.
           #The function `readObservedDataFile` first attempts to read csv files using `read.csv`.
           #If this fails, because, for example the CSV file is semicolon separated, `readObservedDataFile` attempts to read the file using `read.csv2`.
-          #This check is needed in case the CSV file `observedDataSetFilePath` is semicolon-separated.
-          #If a semicolon-separated CSV contains a float column with decimal points demarked by a period `.` (and not a comma ',') then read.csv2 will read this column as factor.
+          #If a semicolon-separated CSV contains a float column with period `.` decimal separators (and not comma ',' decimal separators) then read.csv2 will read this column as factor.
           tryCatch({
             validateIsOfType(object = observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]],"numeric")
           },
