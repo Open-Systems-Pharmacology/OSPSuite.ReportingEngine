@@ -56,6 +56,16 @@ reEnv$pkRatio$dictionary <- list(
   suffixRatio = "Ratio"
 )
 
+reEnv$ddiRatioListColumnMappings <- list(id = "ID",
+                                         studyId = "Study ID",
+                                         mechanism = "Mechanism",
+                                         perpetrator = "Perpetrator",
+                                         routePerpetrator = "Route Perpetrator",
+                                         victim = "Victim",
+                                         routeVictim = "Route Victim",
+                                         dose = "Dose",
+                                         doseUnit = "Dose Unit",
+                                         description = "Description")
 
 # Default value for a scale factor used in a parallel simulation.  The product of this scale factor and the number of allowable cores (allowedCores) sets the maximum number of simulations that may be run on one core.
 reEnv$defaultMaxSimulationsPerCore <- 2
