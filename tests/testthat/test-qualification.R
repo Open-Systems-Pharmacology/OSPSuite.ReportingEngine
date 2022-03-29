@@ -27,7 +27,8 @@ test_that("Content files are all appropriately copied", {
 })
 
 test_that("Semicolon-separated data files with comma decimal points are read correctly", {
-  observedDataFrame <- readObservedDataFile("../data/qualification/ObservedData/test-data-semicolon-sep-dec-comma.csv")
+  dataFile <- getTestDataFilePath("qualification/ObservedData/test-data-semicolon-sep-dec-comma.csv")
+  observedDataFrame <- readObservedDataFile(dataFile)
   expect_true(is.data.frame(observedDataFrame))
   expect_true("AUCR Avg" %in% names(observedDataFrame))
   expect_true(is.numeric(observedDataFrame$`AUCR Avg`))
