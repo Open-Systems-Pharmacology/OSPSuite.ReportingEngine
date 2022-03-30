@@ -180,15 +180,16 @@ simulateModelParallel <- function(structureSets,
       pathFolder = logFolder,
       logTypes = LogTypes$Info
     )
-    
+
+
     # Catch, save and display any error or warning
     # from ospsuite::runSimulations
     subsetSimulationResults <- tryCatch({
-       ospsuite::runSimulations(simulations = simulations)
+      ospsuite::runSimulations(simulations = simulations)
     },
     error = function(e) {
       logErrorThenStop(message = e, logFolder)
-      },
+    },
     warning = function(w) {
       logWorkflow(
         message = w,
@@ -199,7 +200,21 @@ simulateModelParallel <- function(structureSets,
       # return same output type
       return(vector(mode = "list", length = length(simulations)))
     })
-    
+
+    # Stop simulation run if any individual simulations not run successfully in ospsuite::runSimulations
+    failedSimulationIndices <- which( sapply(subsetSimulationResults,function(x){is.null(x)}) )
+
+    if(!isEmpty(failedSimulationIndices)){
+      errorMessages <- sapply(failedSimulationIndices, function(setNumber){
+        set <- structureSetsSubset[[setNumber]]
+        setSimFile <- set$simulationSet$simulationFile
+        setName <- set$simulationSet$simulationSetName
+        messages$errorRunSimulationsNotSuccessful(setSimFile,setName)
+      })
+
+      logErrorThenStop(message = paste(errorMessages,collapse = "; "), logFolder)
+    }
+
     simulationResults <- c(simulationResults, subsetSimulationResults)
     clearMemory(clearSimulationsCache = TRUE)
   }
@@ -258,8 +273,8 @@ simulateModel <- function(structureSet,
   )
 
   simulationResult <- ospsuite::runSimulation(simulation,
-    population = population,
-    simulationRunOptions = simRunOptions
+                                              population = population,
+                                              simulationRunOptions = simRunOptions
   )
 
   logWorkflow(
@@ -360,8 +375,8 @@ runParallelPopulationSimulation <- function(structureSet,
   ))
   partialResultsExported <- Rmpi::mpi.remote.exec(file.exists(allResultsFileNames[mpi.comm.rank()]))
   verifyPartialResultsExported(partialResultsExported,
-    numberOfCores = numberOfCores,
-    logFolder = logFolder
+                               numberOfCores = numberOfCores,
+                               logFolder = logFolder
   )
 
   # Close slaves

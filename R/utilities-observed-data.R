@@ -16,11 +16,20 @@ readObservedDataFile <- function(fileName,
   forbiddenCharacters <- "\ufeff"
 
   if (extension %in% "csv") {
-    observedData <- read.csv(fileName,
-      header = header,
-      check.names = FALSE,
-      encoding = encoding
-    )
+    observedData <- tryCatch({
+      read.csv(fileName,
+               header = header,
+               check.names = FALSE,
+               encoding = encoding
+      )
+    },
+    error = function(e) {
+      warning(messages$warningCSVNotReadCommaSeparatedAttemptingSemicolon(fileName))
+      return(read.csv2(fileName,
+                       header = header,
+                       check.names = FALSE,
+                       encoding = encoding))
+    })
     variableNames <- names(observedData)
     variableNames[1] <- gsub(forbiddenCharacters, "", variableNames[1])
     names(observedData) <- variableNames
@@ -28,9 +37,9 @@ readObservedDataFile <- function(fileName,
   }
 
   observedData <- read.table(fileName,
-    header = header,
-    check.names = FALSE,
-    encoding = encoding
+                             header = header,
+                             check.names = FALSE,
+                             encoding = encoding
   )
   variableNames <- names(observedData)
   variableNames[1] <- gsub(forbiddenCharacters, "", variableNames[1])

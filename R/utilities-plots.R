@@ -29,7 +29,7 @@ AggregationConfiguration <- list(
 )
 
 displayDimension <- function(dimension){
-  if (isIncluded(dimension, c("Concentration (mass)", "Concentration (molar)"))) {
+  if (isIncluded(dimension, c(ospsuite::ospDimensions$`Concentration (mass)`,ospsuite::ospDimensions$`Concentration (molar)`))) {
     return("Concentration")
   }
   return(dimension)
