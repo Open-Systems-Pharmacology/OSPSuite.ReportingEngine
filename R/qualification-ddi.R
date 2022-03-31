@@ -54,20 +54,19 @@ getQualificationDDIPlotData <- function(configurationPlan) {
           ratioList[[pkParameter]] <- list()
           validateIsIncluded(ddiPKRatioColumnName[[pkParameter]], names(observedDataFrame))
 
+          #The following tryCatch verifies that the PK parameter columns are read as `numeric` by the call to `readObservedDataFile` above.
+          #The function `readObservedDataFile` first attempts to read csv files using `read.csv`.
+          #If this fails, because, for example the CSV file is semicolon separated, `readObservedDataFile` attempts to read the file using `read.csv2`.
+          #If a semicolon-separated CSV contains a float column with period `.` decimal separators (and not comma ',' decimal separators) then read.csv2 will read this column as factor.
+          tryCatch({
+            validateIsOfType(object = observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]],"numeric")
+          },
+          error = function(e){
+            logErrorThenStop(message = messages$errorWrongColumnTypeInDataFile(observedDataSetFilePath,ddiPKRatioColumnName[[pkParameter]],"numeric"))
+          })
+
           observedDataSelection <- observedDataFrame$ID %in% observedDataRecordId
-
-          ratioList[[pkParameter]]$id <- observedDataFrame[["ID"]][observedDataSelection]
-          ratioList[[pkParameter]]$studyId <- observedDataFrame[["Study ID"]][observedDataSelection]
-          ratioList[[pkParameter]]$mechanism <- observedDataFrame[["Mechanism"]][observedDataSelection]
-          ratioList[[pkParameter]]$perpetrator <- observedDataFrame[["Perpetrator"]][observedDataSelection]
-          ratioList[[pkParameter]]$routePerpetrator <- observedDataFrame[["Route Perpetrator"]][observedDataSelection]
-          ratioList[[pkParameter]]$victim <- observedDataFrame[["Victim"]][observedDataSelection]
-          ratioList[[pkParameter]]$routeVictim <- observedDataFrame[["Route Victim"]][observedDataSelection]
-          ratioList[[pkParameter]]$dose <- observedDataFrame[["Dose"]][observedDataSelection]
-          ratioList[[pkParameter]]$doseUnit <- observedDataFrame[["Dose Unit"]][observedDataSelection]
-          ratioList[[pkParameter]]$description <- observedDataFrame[["Description"]][observedDataSelection]
-          ratioList[[pkParameter]]$observedRatio <- observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]][observedDataSelection]
-
+          ratioList[[pkParameter]] <- getDDIRatioList(observedDataFrame[observedDataSelection,],ddiPKRatioColumnName[[pkParameter]])
           for (simulationType in c("SimulationControl", "SimulationDDI")) {
             plotComponent <- ddiRatio[[simulationType]]
             projectName <- plotComponent$Project
@@ -156,6 +155,21 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 
 
 
+#' @title getDDIRatioList
+#' @description Read the entries from a DDI observations data.frame that correspond to a particular PK parameter into a named list
+#' @param observedDataFrameRow data.frame of DDI observations
+#' @param ddiPKRatioColumnName Name of column in data.frame `observedDataFrameRow` containing the value of the PK parameter observation to be read
+#' @return A named list containing entries in `observedDataFrameRow`corresponding to the PK parameter in the data.frame column `ddiPKRatioColumnName`
+#' @keywords internal
+getDDIRatioList <- function(observedDataFrameRow,ddiPKRatioColumnName){
+  ratioList <- list()
+  for (col in names(reEnv$ddiRatioListColumnMappings)){
+    colName <- reEnv$ddiRatioListColumnMappings[[col]]
+    ratioList[[col]] <- observedDataFrameRow[[colName]]
+  }
+  ratioList$observedRatio <- observedDataFrameRow[[ ddiPKRatioColumnName ]]
+  return(ratioList)
+}
 
 
 #' @title buildQualificationDDIDataframe
@@ -283,8 +297,8 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
   # if not wrapped by suppressMessages
   # Note that the wrapper does not suppress warnings nor errors
   suppressMessages(
-    qualificationDDIPlot <- qualificationDDIPlot + 
-      ggplot2::scale_color_manual(values = sapply(ddiPlotData$aestheticsList$color, identity)) + 
+    qualificationDDIPlot <- qualificationDDIPlot +
+      ggplot2::scale_color_manual(values = sapply(ddiPlotData$aestheticsList$color, identity)) +
       ggplot2::scale_shape_manual(values = sapply(ddiPlotData$aestheticsList$shape, identity))
   )
   # Force legend to be only one column to maintain plot panel width, and left-justify legend entries

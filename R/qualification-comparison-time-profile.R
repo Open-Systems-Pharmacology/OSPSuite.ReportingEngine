@@ -166,11 +166,12 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
       molWeight = molWeight
     )
     observedValues <- observedValues[selectedObservedTimeValues]
+    observedResults$data <- observedResults$data[selectedObservedTimeValues,]
 
     # Add observed errorbars
     if (!isEmpty(observedResults$metaData$error)) {
       observedError <- getObservedErrorValues(observedValues, observedResults, axesProperties, molWeight = molWeight, logFolder = logFolder)
-      
+
       plotObject <- tlf::addErrorbar(
         x = observedTime,
         ymin = observedError$ymin[selectedObservedTimeValues],
