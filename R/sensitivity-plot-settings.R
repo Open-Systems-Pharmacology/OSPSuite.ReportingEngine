@@ -46,7 +46,10 @@ SensitivityPlotSettings <- R6::R6Class(
       private$.xAxisFontSize <- xAxisFontSize
       private$.yAxisFontSize <- yAxisFontSize
       private$.maxLinesPerParameter <- maxLinesPerParameter %||% reEnv$maxLinesPerParameter
-      private$.maxWidthPerParameter <- maxWidthPerParameter %||% reEnv$maxWidthPerParameter
+      # Default line breaks will now be limited to 1/3 of plot width
+      defaultPlotConfiguration <- tlf::PlotConfiguration$new()
+      defaultPlotConfiguration$yAxis$font$size <- yAxisFontSize
+      private$.maxWidthPerParameter <- maxWidthPerParameter %||% getLineBreakWidth(element = "yticklabels", plotConfiguration %||% defaultPlotConfiguration)
       private$.xLabel <- xLabel
       private$.yLabel <- yLabel
       private$.colorPalette <- colorPalette

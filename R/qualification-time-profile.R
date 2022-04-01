@@ -98,12 +98,12 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves, simulation
     if (is.null(curveOutput)) {
       next
     }
-    if (!isOfLength(curveOutput$error, 0)) {
+    if (!isEmpty(curveOutput$error)) {
       plotObject <- tlf::addErrorbar(
         x = curveOutput$x,
         ymin = curveOutput$error$ymin,
         ymax = curveOutput$error$ymax,
-        caption = prettyCaption(curveOutput$caption),
+        caption = prettyCaption(curveOutput$caption, plotObject),
         color = curveOutput$color,
         size = curveOutput$size,
         plotObject = plotObject
@@ -115,7 +115,7 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves, simulation
     plotObject <- curveOutput$plotFunction(
       x = curveOutput$x,
       y = curveOutput$y,
-      caption = prettyCaption(curveOutput$caption),
+      caption = prettyCaption(curveOutput$caption, plotObject),
       color = curveOutput$color,
       linetype = curveOutput$linetype,
       size = curveOutput$size,
@@ -291,12 +291,12 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
     # Currently, the molecular weight is directly taken from the simulation output
     observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties, logFolder)
 
-    if (!isOfLength(observedData$error, 0)) {
+    if (!isEmpty(observedData$error)) {
       plotObject <- tlf::addErrorbar(
         x = observedData$time,
         ymin = observedData$error$ymin,
         ymax = observedData$error$ymax,
-        caption = prettyCaption(observedDataCollection$CurveOptions[[1]]$Caption %||% "Observed data"),
+        caption = prettyCaption(observedDataCollection$CurveOptions[[1]]$Caption %||% "Observed data", plotObject),
         color = observedDataCollection$CurveOptions[[1]]$CurveOptions$Color,
         size = observedDataCollection$CurveOptions[[1]]$CurveOptions$Size,
         plotObject = plotObject
@@ -305,7 +305,7 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
     plotObject <- tlf::addScatter(
       x = observedData$time,
       y = observedData$y,
-      caption = prettyCaption(observedDataCollection$CurveOptions[[1]]$Caption %||% "Observed data"),
+      caption = prettyCaption(observedDataCollection$CurveOptions[[1]]$Caption %||% "Observed data", plotObject),
       color = observedDataCollection$CurveOptions[[1]]$CurveOptions$Color,
       linetype = tlfLinetype(observedDataCollection$CurveOptions[[1]]$CurveOptions$LineStyle),
       size = observedDataCollection$CurveOptions[[1]]$CurveOptions$Size,
@@ -331,7 +331,7 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
 plotStatisticsFromPlan <- function(time, outputValues, statisticId, outputName, color, linetype, plotObject) {
   # Format the data for plots
   aggregatedData <- getAggregateFromStat(statisticId, time, outputValues)
-  caption <- prettyCaption(getCaptionFromStat(statisticId, outputName))
+  caption <- prettyCaption(getCaptionFromStat(statisticId, outputName), plotObject)
   # Range plots use addRibbon
   if (grepl(pattern = "Range", statisticId)) {
     plotObject <- tlf::addRibbon(
