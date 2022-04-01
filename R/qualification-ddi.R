@@ -345,6 +345,16 @@ getQualificationDDIRatioMeasure <- function(summaryDataFrame, pkParameterName) {
   return(qualificationMeasure)
 }
 
+
+
+getDDIPlotCaption <- function(title,subPlotCaption,pkParameter,plotTypeCaption){
+  longTitle <- ifNotNull(condition = subPlotCaption,
+                         outputIfNotNull = paste0(title,". ", subPlotCaption,"."),
+                         outputIfNull = paste0(title,". "))
+  caption <- paste(longTitle,plotTypeCaption,pkParameter,"Ratio.")
+  return(caption)
+}
+
 #' @title getDDISection
 #' @description Plot observation vs prediction for DDI qualification workflow
 #' @param dataframe of DDI data for current DDI section
@@ -371,15 +381,15 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
 
       plotID <- defaultFileNames$resultID(idPrefix, "ddi_ratio_plot", pkParameter, plotType)
       ddiPlot <- generateDDIQualificationDDIPlot(plotDDIData)
+      ddiPlotCaption <- getDDIPlotCaption(title = metadata$title,
+                                          subPlotCaption = captionSuffix,
+                                          pkParameter = pkParameter,
+                                          plotTypeCaption = ddiPlotTypeSpecifications[[plotType]]$figureCaption)
       ddiArtifacts[["Plot"]][[plotID]] <- saveTaskResults(
         id = plotID,
         sectionId = sectionID,
         plot = ddiPlot,
-        plotCaption = ifNotNull(
-          condition = captionSuffix,
-          outputIfNotNull = paste(metadata$title, captionSuffix, sep = " - "),
-          outputIfNull = metadata$title
-        )
+        plotCaption = ddiPlotCaption
       )
     }
 
@@ -514,7 +524,7 @@ plotQualificationDDIs <- function(configurationPlan,
         subplotDataframe <- droplevels(dataframe[dataframe[[subplotType]] == subplotTypeLevel, ])
         sectionID <- metadata$sectionID
         idPrefix <- paste("DDIRatio", plotIndex, subplotType, subplotTypeLevel, sep = "-")
-        ddiResults <- c(ddiResults, getDDISection(subplotDataframe, metadata, sectionID, idPrefix, captionSuffix = subplotTypeLevel))
+        ddiResults <- c(ddiResults, getDDISection(subplotDataframe, metadata, sectionID, idPrefix, captionSuffix = paste0(subplotTypeName,": ",subplotTypeLevel)))
       }
     }
   }
@@ -538,7 +548,8 @@ ddiPlotTypeSpecifications <- list(
     residualsVsObservedFlag = FALSE,
     getYAxisDDIValues = function(observedRatio, simulatedRatio) {
       return(simulatedRatio)
-    }
+    },
+    figureCaption = "Predicted vs. Observed"
   ),
   residualsVsObserved = list(
     ddiPlotAxesSettings = "DDIRatioPlotsResidualsVsObserved",
@@ -551,7 +562,8 @@ ddiPlotTypeSpecifications <- list(
     residualsVsObservedFlag = TRUE,
     getYAxisDDIValues = function(observedRatio, simulatedRatio) {
       return(simulatedRatio / observedRatio)
-    }
+    },
+    figureCaption = "Residual vs. Observed"
   )
 )
 
