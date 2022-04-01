@@ -563,7 +563,7 @@ plotMeanSensitivity <- function(structureSet,
         stringsAsFactors = FALSE
       )
       # Add line breaks for display based on allowed size if parameters are too long
-      sensitivityData$parameter <- prettyCaption(
+      sensitivityData$parameter <- addLineBreakToCaption(
         captions = sensitivityData$parameter,
         maxLines = settings$maxLinesPerParameter,
         width = settings$maxWidthPerParameter
@@ -791,7 +791,7 @@ plotPopulationSensitivity <- function(structureSets,
   sensitivityResults <- list()
 
   # Add line breaks for display based on allowed size if parameters are too long
-  allPopsDf$Parameter <- prettyCaption(
+  allPopsDf$Parameter <- addLineBreakToCaption(
     captions = as.character(allPopsDf$Parameter),
     maxLines = settings$maxLinesPerParameter,
     width = settings$maxWidthPerParameter
@@ -849,10 +849,12 @@ plotPopulationSensitivity <- function(structureSets,
     )
     # Legends currently left aligned. This option may be changed on later version and use reEnv instead
     tornadoPlot <- tlf::setLegendPosition(tornadoPlot, position = tlf::LegendPositions$outsideTopLeft)
-    # Legend titles are not currently handled by tlf, ggplot2 is needed to print descriptor and quantiles
+    # Legend titles are usually set blanks by tlf, 
+    # ggplot2 theme with an element_text is needed to print descriptor and quantiles
     tornadoPlot <- tornadoPlot +
-      ggplot2::theme(legend.title = ggplot2::element_text()) +
+      ggplot2::theme(legend.title = sensitivityPlotConfiguration$legend$font$createPlotFont()) +
       ggplot2::labs(color = "Individual Percentile", shape = translateDescriptor(simulationSetDescriptor))
+    
 
     resultID <- defaultFileNames$resultID(length(sensitivityResults) + 1, "sensitivity", selectedPKParameter)
     sensitivityResults[[resultID]] <- saveTaskResults(

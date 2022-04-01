@@ -28,8 +28,8 @@ AggregationConfiguration <- list(
   binUsingQuantiles = TRUE
 )
 
-displayDimension <- function(dimension){
-  if (isIncluded(dimension, c(ospsuite::ospDimensions$`Concentration (mass)`,ospsuite::ospDimensions$`Concentration (molar)`))) {
+displayDimension <- function(dimension) {
+  if (isIncluded(dimension, c(ospsuite::ospDimensions$`Concentration (mass)`, ospsuite::ospDimensions$`Concentration (molar)`))) {
     return("Concentration")
   }
   return(dimension)
@@ -45,19 +45,19 @@ displayDimension <- function(dimension){
 autoAxesLimits <- function(x, scale = tlf::Scaling$lin) {
   minX <- min(x, na.rm = TRUE)
   maxX <- max(x, na.rm = TRUE)
-  minX[minX<0] <- (1+reEnv$autoAxisLimitMargin)*minX
-  minX[minX>0] <- (1-reEnv$autoAxisLimitMargin)*minX
-  maxX[maxX<0] <- (1-reEnv$autoAxisLimitMargin)*maxX
-  maxX[maxX<0] <- (1+reEnv$autoAxisLimitMargin)*maxX
-  if(!isIncluded(scale, "log")){
+  minX[minX < 0] <- (1 + reEnv$autoAxisLimitMargin) * minX
+  minX[minX > 0] <- (1 - reEnv$autoAxisLimitMargin) * minX
+  maxX[maxX < 0] <- (1 - reEnv$autoAxisLimitMargin) * maxX
+  maxX[maxX < 0] <- (1 + reEnv$autoAxisLimitMargin) * maxX
+  if (!isIncluded(scale, "log")) {
     return(c(minX, maxX))
   }
   # For log plots,
   # wider range for pretty axes limits
-  if ((log10(maxX)-log10(minX)) > 1) {
+  if ((log10(maxX) - log10(minX)) > 1) {
     return(c(minX, maxX))
   }
-  return(c(minX/2, maxX*2))
+  return(c(minX / 2, maxX * 2))
 }
 
 #' @title autoAxesTicksFromLimits
@@ -70,10 +70,10 @@ autoAxesLimits <- function(x, scale = tlf::Scaling$lin) {
 autoAxesTicksFromLimits <- function(limits) {
   minLogRange <- log10(min(limits))
   maxLogRange <- log10(max(limits))
-  logTicks <- seq(floor(minLogRange),ceiling(maxLogRange))
+  logTicks <- seq(floor(minLogRange), ceiling(maxLogRange))
   logRange <- maxLogRange - minLogRange
   # If range is wide enough, use one tick every factor 10
-  if(logRange > 1){
+  if (logRange > 1) {
     return(10^logTicks)
   }
   return(rep(c(1, 2, 5), length(logTicks)) * 10^rep(logTicks, each = 3))
@@ -98,16 +98,16 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
   fonts <- plotProperties$FontAndSize$Fonts
   # plotConfiguration initial font and size properties were defined from current theme
   # their scaling was not perform then to have it performed only at this level
-  plotConfiguration$labels$title$font$size <- reEnv$fontScaleFactor*(fonts$TitleSize %||% plotConfiguration$labels$title$font$size)
-  plotConfiguration$labels$subtitle$font$size <- reEnv$fontScaleFactor*(fonts$DescriptionSize %||% plotConfiguration$labels$subtitle$font$size)
-  plotConfiguration$labels$xlabel$font$size <- reEnv$fontScaleFactor*(fonts$AxisSize %||% plotConfiguration$labels$xlabel$font$size)
-  plotConfiguration$labels$ylabel$font$size <- reEnv$fontScaleFactor*(fonts$AxisSize %||% plotConfiguration$labels$ylabel$font$size)
-  plotConfiguration$xAxis$font$size <- reEnv$fontScaleFactor*(fonts$AxisSize %||% plotConfiguration$xAxis$font$size)
-  plotConfiguration$yAxis$font$size <- reEnv$fontScaleFactor*(fonts$AxisSize %||% plotConfiguration$yAxis$font$size)
-  plotConfiguration$legend$font$size <- reEnv$fontScaleFactor*(fonts$LegendSize %||% plotConfiguration$legend$font$size)
-  plotConfiguration$background$watermark$font$size <- reEnv$fontScaleFactor*(fonts$WatermarkSize %||% plotConfiguration$background$watermark$font$size)
+  plotConfiguration$labels$title$font$size <- reEnv$fontScaleFactor * (fonts$TitleSize %||% plotConfiguration$labels$title$font$size)
+  plotConfiguration$labels$subtitle$font$size <- reEnv$fontScaleFactor * (fonts$DescriptionSize %||% plotConfiguration$labels$subtitle$font$size)
+  plotConfiguration$labels$xlabel$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$labels$xlabel$font$size)
+  plotConfiguration$labels$ylabel$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$labels$ylabel$font$size)
+  plotConfiguration$xAxis$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$xAxis$font$size)
+  plotConfiguration$yAxis$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$yAxis$font$size)
+  plotConfiguration$legend$font$size <- reEnv$fontScaleFactor * (fonts$LegendSize %||% plotConfiguration$legend$font$size)
+  plotConfiguration$background$watermark$font$size <- reEnv$fontScaleFactor * (fonts$WatermarkSize %||% plotConfiguration$background$watermark$font$size)
 
-  #Set legend position
+  # Set legend position
   validateIsIncluded(values = legendPosition, parentValues = tlf::LegendPositions, nullAllowed = TRUE)
   plotConfiguration$legend$position <- legendPosition %||% reEnv$theme$background$legendPosition
 
@@ -123,14 +123,14 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
     plotProperties$FontAndSize$ChartHeight,
     plotProperties$FontAndSize$ChartHeight * unitConversionFactor[2],
     reEnv$defaultPlotFormat$height
-    )
+  )
 
   legendScaling <- getLegendScalingFactors(legendPosition)
 
   # Get dimensions of exported based on legend position and default/specific plot properties
   plotConfiguration$export$units <- reEnv$defaultPlotFormat$units
-  plotConfiguration$export$width <- reEnv$fontScaleFactor*legendScaling$width*width
-  plotConfiguration$export$height <- reEnv$fontScaleFactor*legendScaling$height*height
+  plotConfiguration$export$width <- reEnv$fontScaleFactor * legendScaling$width * width
+  plotConfiguration$export$height <- reEnv$fontScaleFactor * legendScaling$height * height
   return(plotConfiguration)
 }
 
@@ -141,26 +141,28 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
 #' @param legendPosition The name of the legend position as defined by `tlf` enum `LegendPositions`
 #' @return A list of scaling values for `width` and `height`
 #' @keywords internal
-getLegendScalingFactors <- function(legendPosition = tlf::LegendPositions$outsideTop){
+getLegendScalingFactors <- function(legendPosition = tlf::LegendPositions$outsideTop) {
   # Legend on the left/right sides: increase width
-  if(isIncluded(legendPosition, c(tlf::LegendPositions$outsideRight, tlf::LegendPositions$outsideLeft))){
-    return(list(width = 4/3, height = 1))
+  if (isIncluded(legendPosition, c(tlf::LegendPositions$outsideRight, tlf::LegendPositions$outsideLeft))) {
+    return(list(width = 4 / 3, height = 1))
   }
   # Legend on the top/bottom sides: increase height
-  if(isIncluded(legendPosition, c(tlf::LegendPositions$outsideTopLeft,
-                                  tlf::LegendPositions$outsideTop,
-                                  tlf::LegendPositions$outsideTopRight,
-                                  tlf::LegendPositions$outsideBottomLeft,
-                                  tlf::LegendPositions$outsideBottom,
-                                  tlf::LegendPositions$outsideBottomRight))){
-    return(list(width = 1, height = 7/6))
+  if (isIncluded(legendPosition, c(
+    tlf::LegendPositions$outsideTopLeft,
+    tlf::LegendPositions$outsideTop,
+    tlf::LegendPositions$outsideTopRight,
+    tlf::LegendPositions$outsideBottomLeft,
+    tlf::LegendPositions$outsideBottom,
+    tlf::LegendPositions$outsideBottomRight
+  ))) {
+    return(list(width = 1, height = 7 / 6))
   }
   # Otherwise use these default values
   return(list(width = 1, height = 1))
 }
 
-#' @title prettyCaption
-#' @description Get prettied captions with line breaks to prevent cropping of long captions
+#' @title addLineBreakToCaption
+#' @description Add line breaks to get prettier captions
 #' @param captions Array of character strings to render
 #' @param maxLines Maximum number of lines directly setting the maximum number of line breaks allowed.
 #' @param width Maximum number of characters per line desired.
@@ -168,18 +170,18 @@ getLegendScalingFactors <- function(legendPosition = tlf::LegendPositions$outsid
 #' @return A character vector of wrapped strings with line breaks at sensible places.
 #' @export
 #' @examples
+#' # Use cat to display result of line break character
+#' cat(addLineBreakToCaption("this-is-a-long-sentence-with-dashes", maxLines = 2, width = 25))
 #'
-#' cat(prettyCaption("this-is-a-long-sentence-with-dashes", maxLines = 2, width = 25))
+#' cat(addLineBreakToCaption("this is a sentence with spaces", maxLines = 2, width = 25))
 #'
-#' cat(prettyCaption("this is a sentence with spaces", maxLines = 2, width = 25))
+#' cat(addLineBreakToCaption("this_is_a_long_sentence_without_preferential_splits", maxLines = 2, width = 25))
 #'
-#' cat(prettyCaption("this_is_a_long_sentence_without_preferential_splits", maxLines = 2, width = 25))
+#' cat(addLineBreakToCaption("this too short to split", maxLines = 3, width = 40))
 #'
-#' cat(prettyCaption("this too short to split", maxLines = 3, width = 40))
-#'
-#' cat(prettyCaption("this forces the sentence to use one line", maxLines = 1, width = 5))
-#'
-prettyCaption <- function(captions, maxLines = reEnv$maxLinesPerLegendCaption, width = reEnv$maxWidthPerLegendCaption) {
+#' cat(addLineBreakToCaption("this forces the sentence to use one line", maxLines = 1, width = 5))
+#' 
+addLineBreakToCaption <- function(captions, maxLines = reEnv$maxLinesPerLegendCaption, width = reEnv$maxWidthPerLegendCaption) {
   # Get number of characters for each caption
   totalWidths <- nchar(captions)
   # Check which captions need line breaks to split
@@ -244,4 +246,57 @@ getSplitPositions <- function(possibleSplits, splitWidth, numberOfSplits) {
     possibleSplits <- possibleSplits[-closestAvailableSplitIndex]
   }
   return(optimalSplits)
+}
+
+#' @title getLineBreakWidth
+#' @description Calculate the maximum number of characters before breaking lines.
+#' This aims at preventing as much as possible legends shrinking the plot and legends not fully displayed
+#' @param element The name of element to which the line break should be added.
+#' If applied to the legend, use `"legend"`.
+#' If applied to a plot label use e.g. `"ylabel"` or `"title"`.
+#' If applied to tick labels use `"yticks"` or `"yticklabels"`.
+#' @param PlotConfiguration A `PlotConfiguration` object from the `tlf` package
+#' @return An integer as max character width before using line breaks
+#' @keywords internal
+getLineBreakWidth <- function(element = "legend", plotConfiguration) {
+  # Use inches as unit of formula for plotWidth
+  plotWidth <- plotConfiguration$export$width / switch(
+    plotConfiguration$export$units, "in" = 1, "cm" = 2.54, "mm" = 25.4, 1
+  )
+  # Initialize a default fontsize to have a more robust
+  fontSize <- 10
+  if (isIncluded(element, "legend")) {
+    fontSize <- plotConfiguration$legend$font$size
+    # Use only a third of the plot width when legend is on the side
+    if (isIncluded(plotConfiguration$legend$position, tlf::LegendPositions[c("outsideLeft", "outsideRight")])) {
+      fontSize <- plotConfiguration$legend$font$size * 3
+    }
+  }
+  # When applied to elements other than legend
+  if (isIncluded(element, names(plotConfiguration$labels))) {
+    fontSize <- plotConfiguration$labels[[element]]$font$size
+  }
+  # Use only a third of the plot width when using tick labels
+  if (isIncluded(element, c("yticks", "yticklabels", "yAxis"))) {
+    fontSize <- plotConfiguration$yAxis$font$size * 3
+  }
+
+  # Return max number of characters for using line break
+  return(round(120 * plotWidth / fontSize))
+}
+
+
+#' @title prettyCaption
+#' @description Get prettied captions with line breaks to prevent cropping of long captions
+#' @param captions Array of character strings to render
+#' @param element The name of element to which the line break should be added.
+#' If applied to the legend, use `"legend"`.
+#' If applied to a plot label use e.g. `"ylabel"` or `"title"`.
+#' If applied to tick labels use `"yticks"` or `"yticklabels"`.
+#' @param plotObject A `ggplot` object
+#' @return A character vector of wrapped strings with line breaks at sensible places.
+#' @export
+prettyCaption <- function(captions, plotObject, element = "legend") {
+  maxWidth <- getLineBreakWidth(element, plotObject$plotConfiguration)
+  return(addLineBreakToCaption(captions, width = maxWidth))
 }
