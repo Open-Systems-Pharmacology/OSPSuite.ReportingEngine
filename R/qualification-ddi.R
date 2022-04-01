@@ -130,7 +130,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
             simulatedRatio = ratioList[[pkParameter]][["SimulationDDI"]] / ratioList[[pkParameter]][["SimulationControl"]],
             id = ratioList[[pkParameter]]$id,
             studyId = ratioList[[pkParameter]]$studyId,
-            mechanism = ratioList[[pkParameter]]$mechanism,
+            mechanism = ratioList[[pkParameter]]$mechanism %>% getMechanismName(),
             perpetrator = ratioList[[pkParameter]]$perpetrator,
             routePerpetrator = ratioList[[pkParameter]]$routePerpetrator,
             victim = ratioList[[pkParameter]]$victim,
@@ -153,6 +153,18 @@ getQualificationDDIPlotData <- function(configurationPlan) {
   return(plotDDIdata)
 }
 
+#' @title getMechanismName
+#' @description Remove underscores from mechanism name read from DDI observed data file according to the dictionary defined in `reEnv$ddiRatioSubsetsDictionary`
+#' @param mechanism name of mechanism as read form DDI observev data file
+#' @return Display name of mechanism to be used in DDI report
+#' @keywords internal
+getMechanismName <- function(mechanism){
+  correctedMechanismName <- reEnv$ddiRatioSubsetsDictionary[[as.character(mechanism)]]
+  if(is.null(correctedMechanismName)){
+    return(mechanism)
+  }
+  return(correctedMechanismName)
+}
 
 
 #' @title getDDIRatioList
