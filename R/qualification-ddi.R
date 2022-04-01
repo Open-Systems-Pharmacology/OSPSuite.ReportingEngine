@@ -563,7 +563,7 @@ ddiPlotTypeSpecifications <- list(
     getYAxisDDIValues = function(observedRatio, simulatedRatio) {
       return(simulatedRatio / observedRatio)
     },
-    figureCaption = "Residual vs. Observed"
+    figureCaption = "Predicted/Observed vs. Observed"
   )
 )
 
