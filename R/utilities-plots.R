@@ -94,18 +94,21 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
   # by creating expression: "tlf::<plotType>PlotCOnfiguration$new()"
   plotConfiguration <- eval(parse(text = paste0("tlf::", plotType, "PlotConfiguration$new()")))
 
-  # Set properties from FontAndSize field
-  fonts <- plotProperties$FontAndSize$Fonts
-  # plotConfiguration initial font and size properties were defined from current theme
-  # their scaling was not perform then to have it performed only at this level
-  plotConfiguration$labels$title$font$size <- reEnv$fontScaleFactor * (fonts$TitleSize %||% plotConfiguration$labels$title$font$size)
-  plotConfiguration$labels$subtitle$font$size <- reEnv$fontScaleFactor * (fonts$DescriptionSize %||% plotConfiguration$labels$subtitle$font$size)
-  plotConfiguration$labels$xlabel$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$labels$xlabel$font$size)
-  plotConfiguration$labels$ylabel$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$labels$ylabel$font$size)
-  plotConfiguration$xAxis$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$xAxis$font$size)
-  plotConfiguration$yAxis$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$yAxis$font$size)
-  plotConfiguration$legend$font$size <- reEnv$fontScaleFactor * (fonts$LegendSize %||% plotConfiguration$legend$font$size)
-  plotConfiguration$background$watermark$font$size <- reEnv$fontScaleFactor * (fonts$WatermarkSize %||% plotConfiguration$background$watermark$font$size)
+
+  # If defined, set properties from FontAndSize field
+  if(!is.null(plotProperties$FontAndSize)){
+    fonts <- plotProperties$FontAndSize$Fonts
+    # plotConfiguration initial font and size properties were defined from current theme
+    # their scaling was not perform then to have it performed only at this level
+    plotConfiguration$labels$title$font$size <- reEnv$fontScaleFactor * (fonts$TitleSize %||% plotConfiguration$labels$title$font$size)
+    plotConfiguration$labels$subtitle$font$size <- reEnv$fontScaleFactor * (fonts$DescriptionSize %||% plotConfiguration$labels$subtitle$font$size)
+    plotConfiguration$labels$xlabel$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$labels$xlabel$font$size)
+    plotConfiguration$labels$ylabel$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$labels$ylabel$font$size)
+    plotConfiguration$xAxis$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$xAxis$font$size)
+    plotConfiguration$yAxis$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$yAxis$font$size)
+    plotConfiguration$legend$font$size <- reEnv$fontScaleFactor * (fonts$LegendSize %||% plotConfiguration$legend$font$size)
+    plotConfiguration$background$watermark$font$size <- reEnv$fontScaleFactor * (fonts$WatermarkSize %||% plotConfiguration$background$watermark$font$size)
+  }
 
   # Set legend position
   validateIsIncluded(values = legendPosition, parentValues = tlf::LegendPositions, nullAllowed = TRUE)
@@ -180,7 +183,7 @@ getLegendScalingFactors <- function(legendPosition = tlf::LegendPositions$outsid
 #' cat(addLineBreakToCaption("this too short to split", maxLines = 3, width = 40))
 #'
 #' cat(addLineBreakToCaption("this forces the sentence to use one line", maxLines = 1, width = 5))
-#' 
+#'
 addLineBreakToCaption <- function(captions, maxLines = reEnv$maxLinesPerLegendCaption, width = reEnv$maxWidthPerLegendCaption) {
   # Get number of characters for each caption
   totalWidths <- nchar(captions)
