@@ -255,11 +255,18 @@ ConfigurationPlan <- R6::R6Class(
 
     #' @description Update environment theme that will be used as default during workflow
     updateTheme = function() {
+      plotFormat <- self$plots$PlotSettings$ChartFormat
+      plotWidth <- self$plots$PlotSettings$ChartWidth
+      plotHeight <- self$plots$PlotSettings$ChartHeight
+      plotSizeUnits <- self$plots$PlotSettings$ChartUnits %||% "px"
+      if(is.null(c(plotWidth,plotHeight))){
+        plotSizeUnits <- NULL
+      }
       setDefaultPlotFormat(
-        format = self$plots$PlotSettings$ChartFormat,
-        width = self$plots$PlotSettings$ChartWidth,
-        height = self$plots$PlotSettings$ChartHeight,
-        units = self$plots$PlotSettings$ChartUnits %||% "px"
+        format = plotFormat,
+        width = plotWidth,
+        height = plotHeight,
+        units = plotSizeUnits
       )
 
       reEnv$theme$fonts$legend$size <- self$plots$PlotSettings$Fonts$LegendSize %||% reEnv$theme$fonts$legend$size
