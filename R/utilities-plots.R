@@ -180,7 +180,7 @@ getLegendScalingFactors <- function(legendPosition = tlf::LegendPositions$outsid
 #' cat(addLineBreakToCaption("this too short to split", maxLines = 3, width = 40))
 #'
 #' cat(addLineBreakToCaption("this forces the sentence to use one line", maxLines = 1, width = 5))
-#' 
+#'
 addLineBreakToCaption <- function(captions, maxLines = reEnv$maxLinesPerLegendCaption, width = reEnv$maxWidthPerLegendCaption) {
   # Get number of characters for each caption
   totalWidths <- nchar(captions)

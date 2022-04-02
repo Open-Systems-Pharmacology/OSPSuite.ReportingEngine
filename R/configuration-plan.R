@@ -157,7 +157,7 @@ ConfigurationPlan <- R6::R6Class(
       contentSubFolders <- list.dirs(path = srcContentFolder, full.names = FALSE, recursive = TRUE)
       # Get list of files within content as well as all files within subfolders using recursive option
       contentFiles <- list.files(path = srcContentFolder, full.names = FALSE, recursive = TRUE)
-      
+
       # Create all necessary subfolders within workflow folder
       # Note that recursive is not needed here since list of folders used it
       for(contentSubFolder in contentSubFolders){
@@ -255,16 +255,23 @@ ConfigurationPlan <- R6::R6Class(
 
     #' @description Update environment theme that will be used as default during workflow
     updateTheme = function() {
+      plotFormat <- self$plots$PlotSettings$ChartFormat
+      plotWidth <- self$plots$PlotSettings$ChartWidth
+      plotHeight <- self$plots$PlotSettings$ChartHeight
+      plotSizeUnits <- self$plots$PlotSettings$ChartUnits %||% "px"
+      if(is.null(c(plotWidth,plotHeight))){
+        plotSizeUnits <- NULL
+      }
       setDefaultPlotFormat(
-        format = self$plots$PlotSettings$ChartFormat,
-        width = self$plots$PlotSettings$ChartWidth,
-        height = self$plots$PlotSettings$ChartHeight,
-        units = self$plots$PlotSettings$ChartUnits %||% "px"
+        format = plotFormat,
+        width = plotWidth,
+        height = plotHeight,
+        units = plotSizeUnits
       )
 
       reEnv$theme$fonts$legend$size <- self$plots$PlotSettings$Fonts$LegendSize %||% reEnv$theme$fonts$legend$size
-      reEnv$theme$fonts$xAxis$size <- self$plots$PlotSettings$Fonts$AxisSize %||% reEnv$theme$xAxis$legend$size
-      reEnv$theme$fonts$yAxis$size <- self$plots$PlotSettings$Fonts$AxisSize %||% reEnv$theme$yAxis$legend$size
+      reEnv$theme$fonts$xAxis$size <- self$plots$PlotSettings$Fonts$AxisSize %||% reEnv$theme$fonts$xAxis$size
+      reEnv$theme$fonts$yAxis$size <- self$plots$PlotSettings$Fonts$AxisSize %||% reEnv$theme$fonts$yAxis$size
       # TODO resizing of the input: normal size always appears bigger in background due to annotation_custom()
       reEnv$theme$fonts$watermark$size <- self$plots$PlotSettings$Fonts$WatermarkSize %||% reEnv$theme$fonts$watermark$size
       return(invisible())
