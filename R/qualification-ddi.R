@@ -130,7 +130,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
             simulatedRatio = ratioList[[pkParameter]][["SimulationDDI"]] / ratioList[[pkParameter]][["SimulationControl"]],
             id = ratioList[[pkParameter]]$id,
             studyId = ratioList[[pkParameter]]$studyId,
-            mechanism = ratioList[[pkParameter]]$mechanism %>% getMechanismName(),
+            mechanism = getMechanismName(ratioList[[pkParameter]]$mechanism),
             perpetrator = ratioList[[pkParameter]]$perpetrator,
             routePerpetrator = ratioList[[pkParameter]]$routePerpetrator,
             victim = ratioList[[pkParameter]]$victim,
