@@ -232,7 +232,10 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
     firstElement <- firstElement[1]
     # Table: caption is before table. Thus, break page is added before Table
     if (grepl(pattern = "Table", x = firstElement)) {
-      wordFileContent <- c(wordFileContent, "\\newpage")
+      # Also add a space after the table caption,
+      # If no space, some tables are not translated by pandoc
+      wordFileContent <- c(wordFileContent, "\\newpage", lineContent, "")
+      next
     }
     # Figure: caption is after figure linked with "![](path)". Thus, break page is added before definition of figure path
     # For word report, it needs to be merged as "![caption](path)"
