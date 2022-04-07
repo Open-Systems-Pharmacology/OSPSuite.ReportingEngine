@@ -4,36 +4,21 @@
 \alias{prettyCaption}
 \title{prettyCaption}
 \usage{
-prettyCaption(
-  captions,
-  maxLines = reEnv$maxLinesPerLegendCaption,
-  width = reEnv$maxWidthPerLegendCaption
-)
+prettyCaption(captions, plotObject, element = "legend")
 }
 \arguments{
 \item{captions}{Array of character strings to render}
 
-\item{maxLines}{Maximum number of lines directly setting the maximum number of line breaks allowed.}
+\item{plotObject}{A `ggplot` object}
 
-\item{width}{Maximum number of characters per line desired.
-Due to `maxLines`, the returned width can be wider than `width`.}
+\item{element}{The name of element to which the line break should be added.
+If applied to the legend, use `"legend"`.
+If applied to a plot label use e.g. `"ylabel"` or `"title"`.
+If applied to tick labels use `"yticks"` or `"yticklabels"`.}
 }
 \value{
 A character vector of wrapped strings with line breaks at sensible places.
 }
 \description{
 Get prettied captions with line breaks to prevent cropping of long captions
-}
-\examples{
-
-cat(prettyCaption("this-is-a-long-sentence-with-dashes", maxLines = 2, width = 25))
-
-cat(prettyCaption("this is a sentence with spaces", maxLines = 2, width = 25))
-
-cat(prettyCaption("this_is_a_long_sentence_without_preferential_splits", maxLines = 2, width = 25))
-
-cat(prettyCaption("this too short to split", maxLines = 3, width = 40))
-
-cat(prettyCaption("this forces the sentence to use one line", maxLines = 1, width = 5))
-
 }

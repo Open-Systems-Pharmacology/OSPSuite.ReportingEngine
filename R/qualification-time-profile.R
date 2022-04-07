@@ -98,12 +98,12 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves, simulation
     if (is.null(curveOutput)) {
       next
     }
-    if (!isOfLength(curveOutput$error, 0)) {
+    if (!isEmpty(curveOutput$error)) {
       plotObject <- tlf::addErrorbar(
         x = curveOutput$x,
         ymin = curveOutput$error$ymin,
         ymax = curveOutput$error$ymax,
-        caption = prettyCaption(curveOutput$caption),
+        caption = prettyCaption(curveOutput$caption, plotObject),
         color = curveOutput$color,
         size = curveOutput$size,
         plotObject = plotObject
@@ -115,7 +115,7 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves, simulation
     plotObject <- curveOutput$plotFunction(
       x = curveOutput$x,
       y = curveOutput$y,
-      caption = prettyCaption(curveOutput$caption),
+      caption = prettyCaption(curveOutput$caption, plotObject),
       color = curveOutput$color,
       linetype = curveOutput$linetype,
       size = curveOutput$size,
@@ -291,12 +291,12 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
     # Currently, the molecular weight is directly taken from the simulation output
     observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties, logFolder)
 
-    if (!isOfLength(observedData$error, 0)) {
+    if (!isEmpty(observedData$error)) {
       plotObject <- tlf::addErrorbar(
         x = observedData$time,
         ymin = observedData$error$ymin,
         ymax = observedData$error$ymax,
-        caption = prettyCaption(observedDataCollection$CurveOptions[[1]]$Caption %||% "Observed data"),
+        caption = prettyCaption(observedDataCollection$CurveOptions[[1]]$Caption %||% "Observed data", plotObject),
         color = observedDataCollection$CurveOptions[[1]]$CurveOptions$Color,
         size = observedDataCollection$CurveOptions[[1]]$CurveOptions$Size,
         plotObject = plotObject
@@ -305,7 +305,7 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
     plotObject <- tlf::addScatter(
       x = observedData$time,
       y = observedData$y,
-      caption = prettyCaption(observedDataCollection$CurveOptions[[1]]$Caption %||% "Observed data"),
+      caption = prettyCaption(observedDataCollection$CurveOptions[[1]]$Caption %||% "Observed data", plotObject),
       color = observedDataCollection$CurveOptions[[1]]$CurveOptions$Color,
       linetype = tlfLinetype(observedDataCollection$CurveOptions[[1]]$CurveOptions$LineStyle),
       size = observedDataCollection$CurveOptions[[1]]$CurveOptions$Size,
@@ -331,7 +331,7 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
 plotStatisticsFromPlan <- function(time, outputValues, statisticId, outputName, color, linetype, plotObject) {
   # Format the data for plots
   aggregatedData <- getAggregateFromStat(statisticId, time, outputValues)
-  caption <- prettyCaption(getCaptionFromStat(statisticId, outputName))
+  caption <- prettyCaption(getCaptionFromStat(statisticId, outputName), plotObject)
   # Range plots use addRibbon
   if (grepl(pattern = "Range", statisticId)) {
     plotObject <- tlf::addRibbon(
@@ -386,7 +386,7 @@ plotStatisticsFromPlan <- function(time, outputValues, statisticId, outputName, 
 getAggregateFromStat <- function(statisticId, time, outputValues) {
   # Range plots use data.frame with x, ymin and ymax
   if (grepl(pattern = "Range", statisticId)) {
-    percentileValue <- as.numeric(gsub(pattern = "Range_", "", statisticId))
+    percentileValue <- as.numeric(gsub(pattern = "[Range_]", "", statisticId))
     percentileMinValue <- (100 - percentileValue) / 2
     percentileMaxValue <- (100 + percentileValue) / 2
 
@@ -493,7 +493,7 @@ getCaptionFromStat <- function(statisticId, outputName) {
     return(paste0(outputName, "-Percentile ", percentileValue, "%"))
   }
   if (grepl(pattern = "Range", statisticId)) {
-    percentileValue <- as.numeric(gsub(pattern = "Range_", "", statisticId))
+    percentileValue <- as.numeric(gsub(pattern = "[Range_]", "", statisticId))
     percentileMinValue <- (100 - percentileValue) / 2
     percentileMaxValue <- (100 + percentileValue) / 2
     return(return(paste0(outputName, "-Range ", percentileMinValue, " to ", percentileMaxValue, "%")))
@@ -556,7 +556,7 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
       logFolderPath = logFolder
     )
   }
-  
+
   outputError <- NULL
   if (!isEmpty(observedResults$metaData$error)) {
     outputError <- getObservedErrorValues(outputValues, observedResults, axesProperties, molWeight = molWeight, logFolder = logFolder)
@@ -600,7 +600,7 @@ getDefaultTimeProfileAxesSettings <- function() {
 getObservedErrorValues <- function(observedValues, observedResults, axesProperties, molWeight = NA, logFolder = getwd()){
   # Compute geometric error by default
   observedError <- calculateGeometricErrorRange(observedValues, observedResults$data[, 3])
-  
+
   # If error has a unit, compute arithmetic error instead
   if (!isIncluded(observedResults$metaData$error$unit, "")) {
     # First convert error to the appropriate unit
@@ -613,8 +613,8 @@ getObservedErrorValues <- function(observedValues, observedResults, axesProperti
     )
     observedError <- calculateArithmeticErrorRange(observedValues, errorValues)
   }
-  
-  # If error has no unit but values lower than 1, 
+
+  # If error has no unit but values lower than 1,
   # Check output has also no unit and then compute arithmetic error
   if (isIncluded(observedResults$metaData$error$unit, "") & any(observedResults$data[, 3] < 1, na.rm = TRUE)){
     tryCatch({
@@ -625,13 +625,13 @@ getObservedErrorValues <- function(observedValues, observedResults, axesProperti
     })
     observedError <- calculateArithmeticErrorRange(observedValues, observedResults$data[, 3])
   }
-  
+
   # Caution: errors input as NA values leads to ymin and ymax being also NA values
   # NA values are not well handled by ggplot2 which tends to crash
   # Thus, NAs need to be replaced by observedValues (no error bar) which is virtually the same
   observedError$ymin[is.na(observedError$ymin)] <- observedValues[is.na(observedError$ymin)]
   observedError$ymax[is.na(observedError$ymax)] <- observedValues[is.na(observedError$ymax)]
-  
+
   # For log scale plots, ymin<0 are replaced by observedValues so upper branch is still plotted
   if (isIncluded(axesProperties$y$scale, tlf::Scaling$log)) {
     observedError$ymin[observedError$ymin <= 0] <- observedValues[observedError$ymin <= 0]

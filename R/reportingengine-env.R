@@ -67,6 +67,11 @@ reEnv$ddiRatioListColumnMappings <- list(id = "ID",
                                          doseUnit = "Dose Unit",
                                          description = "Description")
 
+
+reEnv$ddiRatioSubsetsDictionary <- list("Reversible_Inhibition" = "Reversible Inhibition",
+                                        "Mechanism_based_Inactivation" = "Mechanism-based Inactivation")
+
+
 # Default value for a scale factor used in a parallel simulation.  The product of this scale factor and the number of allowable cores (allowedCores) sets the maximum number of simulations that may be run on one core.
 reEnv$defaultMaxSimulationsPerCore <- 2
 
