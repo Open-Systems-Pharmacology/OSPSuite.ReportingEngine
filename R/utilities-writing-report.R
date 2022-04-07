@@ -15,6 +15,9 @@ resetReport <- function(fileName, logFolder = getwd()) {
       logTypes = LogTypes$Debug
     )
   }
+  # When write() uses sep = "\n", 
+  # Every element of the array input in write() is added in a new line
+  # Thus, only "" is needed to create a new line
   fileObject <- file(fileName, encoding = "UTF-8")
   write("", file = fileObject, sep = "\n")
   close(fileObject)
@@ -230,10 +233,13 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
   for (lineContent in fileContent) {
     firstElement <- as.character(unlist(strsplit(lineContent, " ")))
     firstElement <- firstElement[1]
-    # Table: caption is before table. Thus, break page is added before Table
+    # When finding a line referencing a table caption,
     if (grepl(pattern = "Table", x = firstElement)) {
-      # Also add a space after the table caption,
-      # If no space, some tables are not translated by pandoc
+      # The new content to write in the report is
+      # - previous content = wordFileContent
+      # - page break = "\\newpage"
+      # - table caption = lineContent
+      # - line space = "" (due to sep="\n" in function write)
       wordFileContent <- c(wordFileContent, "\\newpage", lineContent, "")
       next
     }
@@ -244,7 +250,13 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
       figureContent <- lineContent
       next
     }
+    # When finding a line referencing a figure caption,
     if (grepl(pattern = "Figure", x = firstElement) & !is.null(figureContent)) {
+      # The new content to write in the report is
+      # - previous content = wordFileContent
+      # - page break = "\\newpage"
+      # - figure and its caption = "![lineContent](figureContent)"
+      # with lineContent = figure caption and figureContent = figure link
       wordFileContent <- c(
         wordFileContent,
         "\\newpage",
@@ -266,6 +278,8 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
   }
   file.remove(usedFilesFileName)
 
+  # Since write() uses sep = "\n", 
+  # every element of array wordFileContent is added in a new line
   fileObject <- file(wordFileName, encoding = "UTF-8")
   write(wordFileContent, file = fileObject, sep = "\n")
   close(fileObject)
