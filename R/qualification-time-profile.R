@@ -62,9 +62,6 @@ plotQualificationTimeProfiles <- function(configurationPlan,
       )
     )
 
-    # Set axes based on Axes properties
-    timeProfilePlot <- updatePlotAxes(timeProfilePlot, axesProperties)
-
     # Save results
     timeProfileResults[[plotID]] <- saveTaskResults(
       id = plotID,
@@ -123,6 +120,8 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves, simulation
       plotObject = plotObject
     )
   }
+  # Set axes based on Axes properties
+  plotObject <- updatePlotAxes(plotObject, axesProperties)
   return(plotObject)
 }
 
@@ -313,6 +312,8 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
       plotObject = plotObject
     )
   }
+  # Set axes based on Axes properties
+  plotObject <- updatePlotAxes(plotObject, axesProperties)
   return(plotObject)
 }
 
