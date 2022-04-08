@@ -101,8 +101,13 @@ MeanModelWorkflow <- R6::R6Class(
       appendices <- appendices[file.exists(appendices)]
       if (length(appendices) > 0) {
         mergeMarkdownFiles(appendices, self$reportFileName, logFolder = self$workflowFolder)
-        renderReport(self$reportFileName, logFolder = self$workflowFolder,
-                     createWordReport = self$createWordReport, numberSections = self$numberSections)
+        renderReport(
+          self$reportFileName,
+          logFolder = self$workflowFolder,
+          createWordReport = self$createWordReport, 
+          numberSections = self$numberSections,
+          wordConversionTemplate = self$wordConversionTemplate
+          )
       }
 
       re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logInfoFile()))

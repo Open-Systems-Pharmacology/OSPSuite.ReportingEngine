@@ -5,6 +5,7 @@
 #' @field taskNames Enum of task names
 #' @field reportFileName name of the Rmd report file
 #' @field createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
+#' @field wordConversionTemplate optional docx template for rendering a tuned Word-Report document
 #' @field userDefinedTasks List of user-defined tasks (to update with loadUserDefinedTask)
 #' @field numberSections logical defining if the report sections should be numbered
 #' @import tlf
@@ -18,6 +19,7 @@ Workflow <- R6::R6Class(
     taskNames = NULL,
     reportFileName = NULL,
     createWordReport = NULL,
+    wordConversionTemplate = NULL,
     userDefinedTasks = NULL,
     numberSections = NULL,
 
@@ -26,6 +28,7 @@ Workflow <- R6::R6Class(
     #' @param simulationSets list of `SimulationSet` R6 class objects
     #' @param workflowFolder path of the output folder created or used by the Workflow.
     #' @param createWordReport logical of option for creating Markdown-Report only but not a Word-Report.
+    #' @param wordConversionTemplate optional docx template for rendering a tuned Word-Report document
     #' @param watermark displayed watermark in figures background
     #' @param simulationSetDescriptor character Descriptor of simulation sets indicated in reports
     #' @param numberSections logical defining if the report sections should be numbered
@@ -34,6 +37,7 @@ Workflow <- R6::R6Class(
     initialize = function(simulationSets,
                           workflowFolder,
                           createWordReport = TRUE,
+                          wordConversionTemplate = NULL,
                           watermark = NULL,
                           simulationSetDescriptor = NULL,
                           numberSections = TRUE,
@@ -45,11 +49,13 @@ Workflow <- R6::R6Class(
       validateIsString(workflowFolder)
       validateIsString(watermark, nullAllowed = TRUE)
       validateIsString(simulationSetDescriptor, nullAllowed = TRUE)
+      validateIsString(wordConversionTemplate, nullAllowed = TRUE)
       sapply(c(simulationSets),function(simulationSet){validateIsOfType(object = simulationSet,type = "SimulationSet")})
       validateIsLogical(createWordReport)
       validateIsLogical(numberSections)
 
       self$createWordReport <- createWordReport
+      self$wordConversionTemplate <- wordConversionTemplate
       self$numberSections <- numberSections
       if (!isOfType(simulationSets, "list")) {
         simulationSets <- list(simulationSets)
