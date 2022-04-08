@@ -9,6 +9,8 @@
 #' [https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/wiki/Installing-pandoc]
 #' @param maxSimulationsPerCore An integer that set the maximimum number of simulations per core
 #' @param versionInfo A `QualificationVersionInfo` object to update title page with Qualification Version Information
+#' @param wordConversionTemplate File name of docx template document passed to Pandoc for the conversion of the md report into docx
+#' Default template is available using `system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")`
 #' @examples
 #' # Create a Qualification Report without any option and running v9.1.1 of Qualification Runner
 #' createQualificationReport("C:/Software/QualificationRunner9.1.1")
@@ -27,7 +29,8 @@ createQualificationReport <- function(qualificationRunnerFolder,
                                       pkSimPortableFolder = NULL,
                                       createWordReport = TRUE,
                                       maxSimulationsPerCore = NULL,
-                                      versionInfo = NULL) {
+                                      versionInfo = NULL,
+                                      wordConversionTemplate = NULL) {
   library(ospsuite.reportingengine)
 
   #-------- STEP 1: Define workflow settings --------#
@@ -76,10 +79,6 @@ createQualificationReport <- function(qualificationRunnerFolder,
 
   #' If not set, report created will be named `report.md` and located in  `reOutputFolder`
   reportName <- file.path(reOutputFolder, "report.md")
-  
-  #' Provide a template docx document passed to Pandoc for the conversion of the md report into docx
-  #' Default template is available in `system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")`
-  wordConversionTemplate <- NULL
   
   #----- Optional parameters for the Qualification Runner -----#
   #' If not null, `logFile` is passed internally via the `-l` option
