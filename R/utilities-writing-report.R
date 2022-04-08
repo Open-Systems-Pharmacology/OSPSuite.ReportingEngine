@@ -445,3 +445,23 @@ getSimulationDescriptor <- function(workflow) {
   validateIsOfType(workflow, "Workflow")
   return(workflow$getSimulationDescriptor())
 }
+
+#' @title adjustTitlePage
+#' @description Adust Qualification Version Information to be displayed on title page 
+#' @param fileName name of .md file to update
+#' @param qualificationVersionInfo A `QualificationVersionInfo`object defining Qualification Version Information to be displayed on title page
+#' @export
+adjustTitlePage <- function(fileName, qualificationVersionInfo = NULL) {
+  validateIsOfType(qualificationVersionInfo, "QualificationVersionInfo", nullAllowed = TRUE)
+  # Does not adust title page if no QualificationVersionInfo
+  if(isEmpty(qualificationVersionInfo)){
+    return(invisible())
+  }
+  fileContent <- readLines(fileName, encoding = "UTF-8")
+  fileContent <- qualificationVersionInfo$updateText(fileContent)
+  
+  fileObject <- file(fileName, encoding = "UTF-8")
+  write(fileContent, file = fileObject, sep = "\n")
+  close(fileObject)
+  return(invisible())
+}

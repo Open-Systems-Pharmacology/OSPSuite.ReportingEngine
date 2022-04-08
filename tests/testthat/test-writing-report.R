@@ -76,3 +76,15 @@ unlink("log-error.txt", recursive = TRUE)
 unlink("testReport.docx", recursive = TRUE)
 unlink("testReport-word.md", recursive = TRUE)
 unlink(testReport, recursive = TRUE)
+
+
+titleFile <- getTestDataFilePath("utilities-report/titlepage.md")
+refTitleFile <- getTestDataFilePath("utilities-report/updatedtitlepage.md")
+
+test_that("versionInfo is correctly adjusted in title pages", {
+  versionInfo <- QualificationVersionInfo$new("1.1", "2.2", "3.3")
+  adjustTitlePage(titleFile, versionInfo)
+  titleContent <- readLines(titleFile)
+  refTitleContent <- readLines(refTitleFile)
+  expect_equal(titleContent, refTitleContent)
+})
