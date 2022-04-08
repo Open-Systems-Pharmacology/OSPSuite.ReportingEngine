@@ -199,12 +199,13 @@ mergeMarkdownFiles <- function(inputFiles, outputFile, logFolder = getwd(), keep
 #' @param createWordReport option for creating Markdwon-Report only but not a Word-Report
 #' @param numberSections logical defining if sections are numbered
 #' @param intro name of .md file that include introduction (before toc)
+#' @param wordConversionTemplate optional docx template for rendering a tuned Word-Report document
 #' @export
-renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE, numberSections = TRUE, intro = NULL) {
+renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE, numberSections = TRUE, intro = NULL, wordConversionTemplate = NULL) {
   actionToken2 <- re.tStartAction(actionType = "ReportGeneration")
   numberTablesAndFigures(fileName, logFolder)
   # TODO: number sections and intro in word report
-  renderWordReport(fileName, logFolder, createWordReport)
+  renderWordReport(fileName, logFolder, createWordReport, wordConversionTemplate)
   tocContent <- getSectionTOC(fileName, logFolder, numberSections = numberSections)
   addMarkdownToc(tocContent, fileName, logFolder)
   mergeMarkdownFiles(inputFiles = c(intro, fileName), outputFile = fileName, logFolder = logFolder)
@@ -217,8 +218,9 @@ renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE
 #' @param fileName name of .md file to render
 #' @param logFolder folder where the logs are saved
 #' @param createWordReport option for creating Markdwon-Report only but not a Word-Report
+#' @param wordConversionTemplate optional docx template for rendering a tuned Word-Report document
 #' @export
-renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE) {
+renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE, wordConversionTemplate = NULL) {
   reportConfig <- file.path(logFolder, "word-report-configuration.txt")
   wordFileName <- sub(pattern = ".md", replacement = "-word.md", fileName)
   docxWordFileName <- sub(pattern = ".md", replacement = "-word.docx", fileName)
@@ -269,12 +271,12 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
   re.tStoreFileMetadata(access = "write", filePath = wordFileName)
 
   if (createWordReport) {
-    templateReport <- system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
+    wordConversionTemplate <- wordConversionTemplate %||% system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
     pageBreakCode <- system.file("extdata", "pagebreak.lua", package = "ospsuite.reportingengine")
 
     write(c(
       "self-contained:", "wrap: none", "toc:",
-      paste0('reference-doc: "', templateReport, '"'),
+      paste0('reference-doc: "', wordConversionTemplate, '"'),
       paste0('lua-filter: "', pageBreakCode, '"'),
       paste0('resource-path: "', logFolder, '"')
     ), file = reportConfig, sep = "\n")

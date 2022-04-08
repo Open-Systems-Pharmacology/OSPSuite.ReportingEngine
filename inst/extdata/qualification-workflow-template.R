@@ -7,12 +7,28 @@
 #' @param createWordReport Logical defining if a `docx` version of the report should also be created.
 #' Note that `pandoc` installation is required for this feature
 #' [https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/wiki/Installing-pandoc]
-#' @example
+#' @param maxSimulationsPerCore An integer that set the maximimum number of simulations per core
+#' @param versionInfo A `QualificationVersionInfo` object to update title page with Qualification Version Information
+#' @examples
+#' # Create a Qualification Report without any option and running v9.1.1 of Qualification Runner
 #' createQualificationReport("C:/Software/QualificationRunner9.1.1")
-#'
+#' 
+#' # Create a Qualification Report and turn of the creation of a doc version
+#' createQualificationReport("C:/Software/QualificationRunner9.1.1", createWordReport = FALSE)
+#' 
+#' # Create a Qualification Report and set the number of simulations to be run per core
+#' createQualificationReport("C:/Software/QualificationRunner9.1.1", maxSimulationsPerCore = 8)
+#' 
+#' # Create a Qualification Report and update Qualification Version Information on title page
+#' versionInfo <- QualificationVersionInfo$new("1.1", "2.2","3.3")
+#' createQualificationReport("C:/Software/QualificationRunner9.1.1", versionInfo = versionInfo)
+#' 
 createQualificationReport <- function(qualificationRunnerFolder,
                                       pkSimPortableFolder = NULL,
-                                      createWordReport = TRUE) {
+                                      createWordReport = TRUE,
+                                      maxSimulationsPerCore = NULL,
+                                      versionInfo = NULL) {
+  library(ospsuite.reportingengine)
 
   #-------- STEP 1: Define workflow settings --------#
   #' replace `workingDirectory` and `qualificationPlanName` with your paths
@@ -61,6 +77,10 @@ createQualificationReport <- function(qualificationRunnerFolder,
   #' If not set, report created will be named `report.md` and located in  `reOutputFolder`
   reportName <- file.path(reOutputFolder, "report.md")
   
+  #' Provide a template docx document passed to Pandoc for the conversion of the md report into docx
+  #' Default template is available in `system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")`
+  wordConversionTemplate <- NULL
+  
   #----- Optional parameters for the Qualification Runner -----#
   #' If not null, `logFile` is passed internally via the `-l` option
   logFile <- NULL
@@ -94,6 +114,12 @@ createQualificationReport <- function(qualificationRunnerFolder,
   }
 
   #-------- STEP 3: Run Qualification Workflow  --------#
+  # If version info is provided update title page
+  if(!is.null(versionInfo)){
+    titlePageFile <- file.path(reInputFolder, "Content/titlepage.md") 
+    adjustTitlePage(titlePageFile, qualificationVersionInfo = versionInfo)
+  }
+  
   #' Load `QualificationWorkflow` object from configuration plan
   workflow <- loadQualificationWorkflow(
     workflowFolder = reOutputFolder,
@@ -103,11 +129,26 @@ createQualificationReport <- function(qualificationRunnerFolder,
   #' Set the name of the final report
   workflow$reportFileName <- reportName
   workflow$createWordReport <- createWordReport
+  workflow$wordConversionTemplate <- wordConversionTemplate
 
   #' Set watermark. If set, it will appear in all generated plots
   workflow$setWatermark(watermark)
 
-  #' Run the `QualificatitonWorklfow` tasklist of ConfigurationPlan
+  #' Set the maximimum number of simulations per core if defined
+  if(!is.null(maxSimulationsPerCore)){
+    workflow$simulate$settings$maxSimulationsPerCore <- maxSimulationsPerCore
+  }
+  
+  #' Activate/Deactivate tasks of qualification workflow prior running
+  # workflow$inactivateTasks("simulate")
+  # workflow$inactivateTasks("calculatePKParameters")
+  # workflow$inactivateTasks("plotTimeProfiles")
+  # workflow$inactivateTasks("plotComparisonTimeProfile")
+  # workflow$inactivateTasks("plotGOFMerged")
+  # workflow$inactivateTasks("plotPKRatio")
+  # workflow$inactivateTasks("plotDDIRatio")
+  
+  #' Run the `QualificatitonWorklfow`
   workflow$runWorkflow()
 
   #' Print timer tracked time if option `recordWorkflowTime` is set to TRUE
