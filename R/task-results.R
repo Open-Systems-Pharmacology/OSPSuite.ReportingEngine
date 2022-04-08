@@ -32,10 +32,11 @@ TaskResults <- R6::R6Class(
     #' @param fileName path of file corresponding to the figure to save
     #' @param logFolder folder were logs are saved
     saveFigure = function(fileName, logFolder = getwd()) {
-      if (isOfLength(self$plot, 0)) {
+      if (isEmpty(self$plot)) {
         return()
       }
       # TODO once every plot will use tlf, deprecate the condition for null values
+      self$plot <- updatePlotDimensions(self$plot)
       ggplot2::ggsave(
         filename = fileName,
         plot = self$plot,
