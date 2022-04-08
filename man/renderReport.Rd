@@ -9,7 +9,8 @@ renderReport(
   logFolder = getwd(),
   createWordReport = FALSE,
   numberSections = TRUE,
-  intro = NULL
+  intro = NULL,
+  wordConversionTemplate = NULL
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ renderReport(
 \item{numberSections}{logical defining if sections are numbered}
 
 \item{intro}{name of .md file that include introduction (before toc)}
+
+\item{wordConversionTemplate}{optional docx template for rendering a tuned Word-Report document}
 }
 \description{
 Render report with number sections and table of content
