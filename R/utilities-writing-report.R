@@ -455,6 +455,7 @@ getSimulationDescriptor <- function(workflow) {
 #' @export
 adjustTitlePage <- function(fileName, qualificationVersionInfo = NULL) {
   validateIsOfType(qualificationVersionInfo, "QualificationVersionInfo", nullAllowed = TRUE)
+  validateFileExists(fileName)
   # Does not adust title page if no QualificationVersionInfo
   if(isEmpty(qualificationVersionInfo)){
     return(invisible())
