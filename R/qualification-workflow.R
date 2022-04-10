@@ -96,7 +96,8 @@ QualificationWorkflow <- R6::R6Class(
         logFolder = self$workflowFolder,
         createWordReport = self$createWordReport,
         numberSections = self$numberSections,
-        intro = mdFiles$intro
+        intro = mdFiles$intro,
+        wordConversionTemplate = self$wordConversionTemplate
         )
     },
 
