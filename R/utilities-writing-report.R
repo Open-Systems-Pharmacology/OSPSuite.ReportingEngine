@@ -15,6 +15,9 @@ resetReport <- function(fileName, logFolder = getwd()) {
       logTypes = LogTypes$Debug
     )
   }
+  # When write() uses sep = "\n", 
+  # Every element of the array input in write() is added in a new line
+  # Thus, only "" is needed to create a new line
   fileObject <- file(fileName, encoding = "UTF-8")
   write("", file = fileObject, sep = "\n")
   close(fileObject)
@@ -199,12 +202,13 @@ mergeMarkdownFiles <- function(inputFiles, outputFile, logFolder = getwd(), keep
 #' @param createWordReport option for creating Markdwon-Report only but not a Word-Report
 #' @param numberSections logical defining if sections are numbered
 #' @param intro name of .md file that include introduction (before toc)
+#' @param wordConversionTemplate optional docx template for rendering a tuned Word-Report document
 #' @export
-renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE, numberSections = TRUE, intro = NULL) {
+renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE, numberSections = TRUE, intro = NULL, wordConversionTemplate = NULL) {
   actionToken2 <- re.tStartAction(actionType = "ReportGeneration")
   numberTablesAndFigures(fileName, logFolder)
   # TODO: number sections and intro in word report
-  renderWordReport(fileName, logFolder, createWordReport)
+  renderWordReport(fileName, logFolder, createWordReport, wordConversionTemplate)
   tocContent <- getSectionTOC(fileName, logFolder, numberSections = numberSections)
   addMarkdownToc(tocContent, fileName, logFolder)
   mergeMarkdownFiles(inputFiles = c(intro, fileName), outputFile = fileName, logFolder = logFolder)
@@ -217,8 +221,9 @@ renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE
 #' @param fileName name of .md file to render
 #' @param logFolder folder where the logs are saved
 #' @param createWordReport option for creating Markdwon-Report only but not a Word-Report
+#' @param wordConversionTemplate optional docx template for rendering a tuned Word-Report document
 #' @export
-renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE) {
+renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE, wordConversionTemplate = NULL) {
   reportConfig <- file.path(logFolder, "word-report-configuration.txt")
   wordFileName <- sub(pattern = ".md", replacement = "-word.md", fileName)
   docxWordFileName <- sub(pattern = ".md", replacement = "-word.docx", fileName)
@@ -230,9 +235,15 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
   for (lineContent in fileContent) {
     firstElement <- as.character(unlist(strsplit(lineContent, " ")))
     firstElement <- firstElement[1]
-    # Table: caption is before table. Thus, break page is added before Table
+    # When finding a line referencing a table caption,
     if (grepl(pattern = "Table", x = firstElement)) {
-      wordFileContent <- c(wordFileContent, "\\newpage")
+      # The new content to write in the report is
+      # - previous content = wordFileContent
+      # - page break = "\\newpage"
+      # - table caption = lineContent
+      # - line space = "" (due to sep="\n" in function write)
+      wordFileContent <- c(wordFileContent, "\\newpage", lineContent, "")
+      next
     }
     # Figure: caption is after figure linked with "![](path)". Thus, break page is added before definition of figure path
     # For word report, it needs to be merged as "![caption](path)"
@@ -241,7 +252,13 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
       figureContent <- lineContent
       next
     }
+    # When finding a line referencing a figure caption,
     if (grepl(pattern = "Figure", x = firstElement) & !is.null(figureContent)) {
+      # The new content to write in the report is
+      # - previous content = wordFileContent
+      # - page break = "\\newpage"
+      # - figure and its caption = "![lineContent](figureContent)"
+      # with lineContent = figure caption and figureContent = figure link
       wordFileContent <- c(
         wordFileContent,
         "\\newpage",
@@ -263,18 +280,20 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
   }
   file.remove(usedFilesFileName)
 
+  # Since write() uses sep = "\n", 
+  # every element of array wordFileContent is added in a new line
   fileObject <- file(wordFileName, encoding = "UTF-8")
   write(wordFileContent, file = fileObject, sep = "\n")
   close(fileObject)
   re.tStoreFileMetadata(access = "write", filePath = wordFileName)
 
   if (createWordReport) {
-    templateReport <- system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
+    wordConversionTemplate <- wordConversionTemplate %||% system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
     pageBreakCode <- system.file("extdata", "pagebreak.lua", package = "ospsuite.reportingengine")
 
     write(c(
       "self-contained:", "wrap: none", "toc:",
-      paste0('reference-doc: "', templateReport, '"'),
+      paste0('reference-doc: "', wordConversionTemplate, '"'),
       paste0('lua-filter: "', pageBreakCode, '"'),
       paste0('resource-path: "', logFolder, '"')
     ), file = reportConfig, sep = "\n")
@@ -444,4 +463,25 @@ setSimulationDescriptor <- function(workflow, text) {
 getSimulationDescriptor <- function(workflow) {
   validateIsOfType(workflow, "Workflow")
   return(workflow$getSimulationDescriptor())
+}
+
+#' @title adjustTitlePage
+#' @description Adust Qualification Version Information to be displayed on title page 
+#' @param fileName name of .md file to update
+#' @param qualificationVersionInfo A `QualificationVersionInfo`object defining Qualification Version Information to be displayed on title page
+#' @export
+adjustTitlePage <- function(fileName, qualificationVersionInfo = NULL) {
+  validateIsOfType(qualificationVersionInfo, "QualificationVersionInfo", nullAllowed = TRUE)
+  validateFileExists(fileName)
+  # Does not adust title page if no QualificationVersionInfo
+  if(isEmpty(qualificationVersionInfo)){
+    return(invisible())
+  }
+  fileContent <- readLines(fileName, encoding = "UTF-8")
+  fileContent <- qualificationVersionInfo$updateText(fileContent)
+  
+  fileObject <- file(fileName, encoding = "UTF-8")
+  write(fileContent, file = fileObject, sep = "\n")
+  close(fileObject)
+  return(invisible())
 }
