@@ -333,34 +333,14 @@ plotStatisticsFromPlan <- function(time, outputValues, statisticId, outputName, 
   # Format the data for plots
   aggregatedData <- getAggregateFromStat(statisticId, time, outputValues)
   caption <- prettyCaption(getCaptionFromStat(statisticId, outputName), plotObject)
-  # Range plots use addRibbon
-  if (grepl(pattern = "Range", statisticId)) {
+  # Range and Deviation plots use addRibbon
+  if (grepl(pattern = "Range", statisticId) | grepl(pattern = "Deviation", statisticId)) {
     plotObject <- tlf::addRibbon(
       x = aggregatedData$x,
       ymin = aggregatedData$ymin,
       ymax = aggregatedData$ymax,
       caption = caption,
       fill = color,
-      plotObject = plotObject
-    )
-    return(plotObject)
-  }
-  # Deviation provides 2 lines
-  if (grepl(pattern = "Deviation", statisticId)) {
-    plotObject <- tlf::addLine(
-      x = aggregatedData$x,
-      y = aggregatedData$ymin,
-      caption = caption,
-      color = color,
-      linetype = linetype,
-      plotObject = plotObject
-    )
-    plotObject <- tlf::addLine(
-      x = aggregatedData$x,
-      y = aggregatedData$ymax,
-      caption = caption,
-      color = color,
-      linetype = linetype,
       plotObject = plotObject
     )
     return(plotObject)
@@ -413,12 +393,13 @@ getAggregateFromStat <- function(statisticId, time, outputValues) {
     return(aggregatedData)
   }
 
-  # Deviation use data.frame with x, ymin and ymax
-  # Possibility to plot them as range plot
+  # Deviation will lead to range plot using data.frame with x, ymin and ymax
   if (grepl(pattern = "Deviation", statisticId)) {
     aggregatedMinData <- aggregate(
       x = outputValues,
       by = list(time = time),
+      # Plot will show mean +/- 1*SD is plotted, 
+      # This can be changed to plot +/- 1.96*SD representing a 95% CI
       FUN = switch(
         statisticId,
         "ArithmeticStandardDeviation" = function(x) {
