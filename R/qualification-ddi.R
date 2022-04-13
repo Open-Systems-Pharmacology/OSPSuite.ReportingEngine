@@ -13,7 +13,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 
     plotDDIMetadata$title <- plot$Title
     plotDDIMetadata$sectionID <- plot$SectionId
-    validateIsIncluded(values = plot$Subunits, parentValues = names(ddiSubplotTypes))
+    validateIsIncluded(values = plot$Subunits, parentValues = names(ddiSubplotTypes), nullAllowed = TRUE)
     plotDDIMetadata$subunits <- plot$Subunits
     plotDDIMetadata$artifacts <- plot$Artifacts
     plotDDIMetadata$plotSettings <- plot
@@ -131,13 +131,13 @@ getQualificationDDIPlotData <- function(configurationPlan) {
             id = ratioList[[pkParameter]]$id,
             studyId = ratioList[[pkParameter]]$studyId,
             mechanism = getMechanismName(ratioList[[pkParameter]]$mechanism),
-            perpetrator = ratioList[[pkParameter]]$perpetrator,
-            routePerpetrator = ratioList[[pkParameter]]$routePerpetrator,
-            victim = ratioList[[pkParameter]]$victim,
-            routeVictim = ratioList[[pkParameter]]$routeVictim,
+            perpetrator = ratioList[[pkParameter]]$perpetrator %||% NA,
+            routePerpetrator = ratioList[[pkParameter]]$routePerpetrator %||% NA,
+            victim = ratioList[[pkParameter]]$victim %||% NA,
+            routeVictim = ratioList[[pkParameter]]$routeVictim %||% NA,
             dose = ratioList[[pkParameter]]$dose,
             doseUnit = ratioList[[pkParameter]]$doseUnit,
-            description = ratioList[[pkParameter]]$description
+            description = ratioList[[pkParameter]]$description %||% NA
           )
 
           plotDDIDataFrame <- rbind.data.frame(plotDDIDataFrame, df)
@@ -159,6 +159,9 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 #' @return Display name of mechanism to be used in DDI report
 #' @keywords internal
 getMechanismName <- function(mechanism){
+  if(is.null(mechanism)){
+    return(NA)
+  }
   correctedMechanismName <- reEnv$ddiRatioSubsetsDictionary[[as.character(mechanism)]]
   if(is.null(correctedMechanismName)){
     return(mechanism)
