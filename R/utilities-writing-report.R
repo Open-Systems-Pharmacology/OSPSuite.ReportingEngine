@@ -364,43 +364,44 @@ getSectionTOC <- function(fileName, logFolder = getwd(), numberSections = TRUE, 
 
   # Initialize toc content
   tocContent <- NULL
-  tocPatterns <- NULL
+  tocPatterns <- sapply(seq(1, tocLevels), function(tocLevel){paste0(rep(tocPattern, tocLevel), collapse = "")})
   tocCounts <- rep(0, tocLevels)
 
-  for (tocLevel in seq(1, tocLevels)) {
-    tocPatterns <- c(tocPatterns, paste0(rep(tocPattern, tocLevel), collapse = ""))
-  }
-
+  titleTocReference <- NULL
   for (lineIndex in seq_along(fileContent)) {
-    lineElements <- as.character(unlist(strsplit(fileContent[lineIndex], " ")))
-    firstElement <- lineElements[1]
-    secondElement <- lineElements[2]
+    lineContent <- fileContent[lineIndex]
+    firstElement <- as.character(unlist(strsplit(lineContent, " ")))[1]
+    # Use anchor only if defined as first element of line
+    if (grepl(pattern = "<a", x = firstElement)) {
+      titleTocReference <- getAnchorName(lineContent)
+    }
     for (tocLevel in rev(seq(1, tocLevels))) {
+      # Identify section titles as lines starting with "#" characters
       if (grepl(pattern = tocPatterns[tocLevel], x = firstElement)) {
-        # Skip the section title if unnumbered and numberSection is FALSE
-        if(!grepl(pattern = "[[:digit:]]", x = secondElement) & !numberSections){
+        # Prevents unreferenced title sections to appear in table of content
+        if(is.null(titleTocReference)){
           next
         }
+        # Count elements of section tree for numbering of sections
         tocCounts[tocLevel] <- tocCounts[tocLevel] + 1
         if (tocLevel < tocLevels) {
           tocCounts[seq(tocLevel + 1, tocLevels)] <- 0
         }
-
+        
         # Number section if option is true
         titlePattern <- paste0(tocPatterns[tocLevel], " ")
         if(numberSections){
-          newTitlePattern <- paste0(tocCounts[seq(1, tocLevel)], collapse = ".")
-          newTitlePattern <- paste0(titlePattern, newTitlePattern, " ")
+          titleNumber <- paste0(tocCounts[seq(1, tocLevel)], collapse = ".")
+          newTitlePattern <- paste0(titlePattern, titleNumber, " ")
           fileContent[lineIndex] <- gsub(pattern = titlePattern, replacement = newTitlePattern, x = fileContent[lineIndex])
         }
-
+        
         # Add section reference to toc content
         titleTocContent <- sub(pattern = titlePattern, replacement = "", x = fileContent[lineIndex])
-        titleTocReference <- gsub(pattern = "[^[:alnum:][:space:]\\_'-]", replacement = "", x = tolower(titleTocContent))
-        titleTocReference <- gsub(pattern = "[[:space:]*]", replacement = "-", x = titleTocReference)
         tocLevelShift <- paste0(rep(" ", tocLevel), collapse = " ")
         tocContent <- c(tocContent, paste0(tocLevelShift, "* [", titleTocContent, "](#", titleTocReference, ")"))
-
+        
+        titleTocReference <- NULL
         break
       }
     }
@@ -485,3 +486,52 @@ adjustTitlePage <- function(fileName, qualificationVersionInfo = NULL) {
   close(fileObject)
   return(invisible())
 }
+
+#' @title anchor
+#' @description Create an anchor tag for markdown document
+#' @param name Name/identifier of the anchor tag
+#' @return A character string
+#' @export
+#' @examples 
+#' anchor("section-1")
+#' 
+anchor <- function(name) {
+  return(paste0('<a id="', name, '"></a>'))
+}
+
+#' @title hasAnchor
+#' @description Check if a character string includes an anchor tag
+#' @param tag Character string
+#' @return A logical
+#' @export
+#' @examples 
+#' # Flags both anchors using id or name
+#' hasAnchor('<a id="section-1"></a>')
+#' hasAnchor('<a name="section-1"></a>')
+#' 
+#' hasAnchor("# section 1")
+hasAnchor <- function(tag) {
+  return(grepl(pattern = '<a (id|name)="', x = tag) & grepl(pattern = '"></a>', x = tag))
+}
+
+
+#' @title getAnchorName
+#' @description Get the name/identifier an anchor tag
+#' @param tag Character string
+#' @return A character Name/identifier of the anchor tag
+#' @export
+#' @examples 
+#' getAnchorName('<a id="section-1"></a>')
+#' 
+#' # Works also for tag name instead of id 
+#' getAnchorName('<a name="section-1"></a>')
+getAnchorName <- function(tag) {
+  if(!hasAnchor(tag)){
+    return()
+  }
+  # Keeps only what is within quotes
+  tagName <- gsub(pattern = '.*<a (id|name)="', replacement = "", x = tag)
+  tagName <- gsub(pattern = '"></a>.*', replacement = "", x = tagName)
+  return(tagName)
+}
+
