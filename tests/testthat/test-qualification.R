@@ -51,23 +51,32 @@ reportContent <- readLines(workflow$reportFileName)
 test_that("Final report managed appropriately intro, TOC and content", {
   intro <- grep(pattern = "# Title Page", reportContent)
   toc <- grep(pattern = "# Table of Contents", reportContent)
-  contentInput <- grep(pattern = "# 1 Test Content Input", reportContent)
+  contentInput <- grep(pattern = "## 1.1 With Content", reportContent)
+  noContentInput <- grep(pattern = "## 1.2 Without Content", reportContent)
 
   expect_length(intro, 1)
   expect_length(toc, 1)
   expect_length(contentInput, 1)
+  expect_length(noContentInput, 1)
   expect_gt(toc, intro)
   expect_gt(contentInput, toc)
+  expect_gt(noContentInput, contentInput)
 })
 
-test_that("Final report managed appropriately the order of sections", {
+test_that("Final report managed appropriately the order and numbering of sections", {
+  section1 <- grep(pattern = "# 1 Test Content Input", reportContent)
+  section11 <- grep(pattern = "## 1.1 With Content", reportContent)
+  section12 <- grep(pattern = "## 1.2 Without Content", reportContent)
   section2 <- grep(pattern = "# 2 Time Profile Tests", reportContent)
   section21 <- grep(pattern = "## 2.1 Time Profile", reportContent)
   section22 <- grep(pattern = "## 2.2 Comparison Time Profile", reportContent)
   section23 <- grep(pattern = "## 2.3 Goodness of fit", reportContent)
   section3 <- grep(pattern = "# 3 PK Ratio Tests", reportContent)
   section4 <- grep(pattern = "# 4 DDI Ratio Tests", reportContent)
-
+  
+  expect_length(section1, 1)
+  expect_length(section11, 1)
+  expect_length(section12, 1)
   expect_length(section2, 1)
   expect_length(section21, 1)
   expect_length(section22, 1)
@@ -75,13 +84,23 @@ test_that("Final report managed appropriately the order of sections", {
   expect_length(section3, 1)
   expect_length(section4, 1)
 
+  expect_gt(section11, section1)
+  expect_gt(section12, section11)
+  expect_gt(section2, section12)
   expect_gt(section21, section2)
   expect_gt(section22, section21)
   expect_gt(section23, section22)
   expect_gt(section3, section23)
   expect_gt(section4, section3)
+  
+  # Unreferenced section not in toc
+  unreferencedSection <- grep(pattern = "## Unreferenced section", reportContent)
+  expect_length(unreferencedSection, 1)
+  tocContent <- reportContent[grep(pattern = "\\[", x = reportContent)]
+  unreferencedSectionInTOC <- grep(pattern = "Unreferenced section", tocContent)
+  expect_length(unreferencedSectionInTOC, 0)
+  
 })
-
 
 test_that("Final report included the correct amount of figures and tables", {
   # Used digit to get only numered values (removing TOC from count)
