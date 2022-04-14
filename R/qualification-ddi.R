@@ -12,7 +12,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
     plot <- configurationPlan$plots$DDIRatioPlots[[plotNumber]]
 
     plotDDIMetadata$title <- plot$Title
-    plotDDIMetadata$sectionID <- plot$SectionId
+    plotDDIMetadata$sectionID <- plot$SectionReference %||% plot$SectionId
     validateIsIncluded(values = plot$Subunits, parentValues = names(ddiSubplotTypes), nullAllowed = TRUE)
     plotDDIMetadata$subunits <- plot$Subunits
     plotDDIMetadata$artifacts <- plot$Artifacts
