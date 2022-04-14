@@ -193,7 +193,6 @@ addDescriptorToTable <- function(data, descriptor) {
 }
 
 getTimeRangeCaption <- function(timeRangeName, reference, simulationSetName) {
-  anchor
   if (isIncluded(timeRangeName, ApplicationRanges$total)) {
     return(c(
       anchor(paste0(reference, "-", removeForbiddenLetters(simulationSetName), "-", "total")), "",
