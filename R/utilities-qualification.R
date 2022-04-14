@@ -74,8 +74,7 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
   workflow <- QualificationWorkflow$new(
     simulationSets = simulationSets,
     workflowFolder = workflowFolder,
-    configurationPlan = configurationPlan,
-    numberSections = FALSE
+    configurationPlan = configurationPlan
   )
   return(workflow)
 }
