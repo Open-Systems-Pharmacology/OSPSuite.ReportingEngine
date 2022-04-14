@@ -24,8 +24,7 @@ ConfigurationPlan <- R6::R6Class(
     #' @param id section identifier
     #' @return The section path corresponding to the id in the configuration plan field `sections`
     getSectionPath = function(id) {
-      validateIsIncludedAndLog(id, private$.sections$id, groupName = "'id' variable of sections")
-      selectedId <- private$.sections$id %in% id
+      selectedId <- private$.selectSectionsRow(id)
       return(file.path(self$workflowFolder, private$.sections$path[selectedId]))
     },
 
@@ -33,8 +32,7 @@ ConfigurationPlan <- R6::R6Class(
     #' @param id section identifier
     #' @return The title associated with "#" corresponding to the subection level
     getSectionTitle = function(id) {
-      validateIsIncludedAndLog(id, private$.sections$id, groupName = "'id' variable of sections")
-      selectedId <- private$.sections$id %in% id
+      selectedId <- private$.selectSectionsRow(id)
       sectionTitle <- paste0(rep("#", private$.sections$level[selectedId]), collapse = "")
       sectionTitle <- paste(sectionTitle, private$.sections$title[selectedId], sep = " ")
       return(sectionTitle)
@@ -44,8 +42,7 @@ ConfigurationPlan <- R6::R6Class(
     #' @param id section identifier
     #' @return The markdown file corresponding to the id in the configuration plan field `sections`
     getSectionMarkdown = function(id) {
-      validateIsIncludedAndLog(id, private$.sections$id, groupName = "'id' variable of sections")
-      selectedId <- private$.sections$id %in% id
+      selectedId <- private$.selectSectionsRow(id)
       return(file.path(self$workflowFolder, private$.sections$md[selectedId]))
     },
 
@@ -53,8 +50,7 @@ ConfigurationPlan <- R6::R6Class(
     #' @param id section identifier
     #' @return Section level
     getSectionLevel = function(id) {
-      validateIsIncludedAndLog(id, private$.sections$id, groupName = "'id' variable of sections")
-      selectedId <- private$.sections$id %in% id
+      selectedId <- private$.selectSectionsRow(id)
       return(private$.sections$level[selectedId])
     },
 
@@ -68,20 +64,17 @@ ConfigurationPlan <- R6::R6Class(
     #' @param id section identifier
     #' @param logFolder path where logs are saved
     copySectionContent = function(id, logFolder = getwd()) {
-      validateIsIncludedAndLog(id, private$.sections$id, groupName = "'id' variable of sections")
-      selectedId <- private$.sections$id %in% id
+      selectedId <- private$.selectSectionsRow(id)
+      
+      # Add refernce as anchor tag before title and content
+      sectionReference <- private$.sections$id[selectedId]
+      addTextChunk(fileName = self$getSectionMarkdown(id), text = anchor(sectionReference), logFolder = logFolder)
+      
+      # Add title at appropriate level
+      addTextChunk(fileName = self$getSectionMarkdown(id), text = self$getSectionTitle(id), logFolder = logFolder)
+      
+      # Add section content
       sectionContent <- private$.sections$content[selectedId]
-      sectionTitle <- private$.sections$title[selectedId]
-      sectionLevel <- private$.sections$level[selectedId]
-      # If available, add title at appropriate level
-      if(!is.na(sectionTitle)){
-        markdownContent <- paste(
-          paste0(rep("#", sectionLevel), collapse = ""),
-          sectionTitle,
-          sep = " "
-        )
-        addTextChunk(fileName = self$getSectionMarkdown(id), text = markdownContent, logFolder = logFolder)
-      }
       if (is.na(sectionContent)) {
         return(invisible())
       }
@@ -368,6 +361,11 @@ ConfigurationPlan <- R6::R6Class(
   private = list(
     .sections = NULL,
     .simulationMappings = NULL,
-    .observedDataSets = NULL
+    .observedDataSets = NULL,
+    
+    .selectSectionsRow = function(id){
+      validateIsIncludedAndLog(id, private$.sections$id, groupName = "'id' variable of sections")
+      return(which(private$.sections$id %in% id))
+    }
   )
 )

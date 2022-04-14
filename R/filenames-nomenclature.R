@@ -93,6 +93,15 @@ defaultWorkflowTitles <- list(
   "plotDemography" = "Demography"
 )
 
+defaultWorkflowReferences <- list(
+  "plotGoF" = "time-profiles",
+  "plotPKParameters" = "pk-parameters",
+  "plotMassBalance" = "mass-balance",
+  "plotAbsorption" = "absorption",
+  "plotSensitivity" = "sensitivity-analysis",
+  "plotDemography" = "demography"
+)
+
 defaultWorkflowAppendices <- list(
   "plotGoF" = "appendix-time-profile.md",
   "plotPKParameters" = "appendix-pk-parameters.md",
