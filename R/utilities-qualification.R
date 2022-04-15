@@ -129,12 +129,13 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
   for (section in sectionsIn) {
     # sectionIndex ensures that folder names are in correct order and have unique names
     sectionIndex <- nrow(sectionsOut) + 1
+    reference <- section$Reference %||% section$Id %||% paste0("undefined-section-", sectionIndex)
     validateIsIncluded("Title", names(section))
     # Actual section path will be relative to the workflowFolder
     # and is wrapped in method configurationPlan$getSectionPath(id)
     sectionPath <- paste(
       parentFolder,
-      sprintf("%0.3d_section_%d", sectionIndex, section$Id),
+      sprintf("%0.3d_section_%d", sectionIndex, reference),
       sep = .Platform$file.sep
       )
 
@@ -142,7 +143,9 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
 
     # section data.frame with every useful information
     sectionOut <- data.frame(
-      id = section$Reference %||% section$Id,
+      # Sections with no reference nor id are allowed
+      # Such sections won't appear in the table of content
+      id = reference,
       title = section$Title,
       # Empty content is allowed and translated by NA
       content = section$Content %||% NA,
