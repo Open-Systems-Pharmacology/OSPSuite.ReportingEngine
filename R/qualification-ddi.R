@@ -57,13 +57,9 @@ getQualificationDDIPlotData <- function(configurationPlan) {
           #The following tryCatch verifies that the PK parameter columns are read as `numeric` by the call to `readObservedDataFile` above.
           #The function `readObservedDataFile` first attempts to read csv files using `read.csv`.
           #If this fails, because, for example the CSV file is semicolon separated, `readObservedDataFile` attempts to read the file using `read.csv2`.
-          #If a semicolon-separated CSV contains a float column with period `.` decimal separators (and not comma ',' decimal separators) then read.csv2 will read this column as factor.
-          tryCatch({
-            validateIsOfType(object = observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]],"numeric")
-          },
-          error = function(e){
-            logErrorThenStop(message = messages$errorWrongColumnTypeInDataFile(observedDataSetFilePath,ddiPKRatioColumnName[[pkParameter]],"numeric"))
-          })
+          #If a semicolon-separated CSV contains a float column with period `.` decimal separators (and not comma ',' decimal separators) then read.csv2 will read this column as `factor`.
+          #Therefore, coerce this column into `numeric` format:
+          observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]] <- as.numeric(observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]])
 
           observedDataSelection <- observedDataFrame$ID %in% observedDataRecordId
           ratioList[[pkParameter]] <- getDDIRatioList(observedDataFrame[observedDataSelection,],ddiPKRatioColumnName[[pkParameter]])
