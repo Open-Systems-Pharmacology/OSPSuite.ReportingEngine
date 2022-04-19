@@ -21,7 +21,7 @@ plotQualificationGOFs <- function(configurationPlan,
     gofGMFE <- getQualificationGOFGMFE(gofData$data)
     gofResults[[gmfeID]] <- saveTaskResults(
       id = gmfeID,
-      sectionId = gofPlan$SectionId,
+      sectionId = gofPlan$SectionReference %||% gofPlan$SectionId,
       table = gofGMFE,
       tableCaption = paste0("GMFE for ", gofPlan$Title),
       includeTable = isIncluded("GMFE", gofPlan$Artifacts)
@@ -36,7 +36,7 @@ plotQualificationGOFs <- function(configurationPlan,
       gofPlot <- getQualificationGOFPlot(plotType, gofData$data, gofData$metaData, axesProperties)
       gofResults[[plotID]] <- saveTaskResults(
         id = plotID,
-        sectionId = gofPlan$SectionId,
+        sectionId = gofPlan$SectionReference %||% gofPlan$SectionId,
         plot = gofPlot,
         plotCaption = gofPlan$Title,
         includePlot = isIncluded("Plot", gofPlan$Artifacts)

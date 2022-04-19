@@ -25,7 +25,7 @@ plotQualificationPKRatio <- function(configurationPlan,
       pkRatioPlot <- getQualificationPKRatioPlot(pkParameterName, pkRatioData$data, pkRatioData$metaData, axesProperties)
       pkRatioResults[[plotID]] <- saveTaskResults(
         id = plotID,
-        sectionId = pkRatioPlan$SectionId,
+        sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
         plot = pkRatioPlot,
         plotCaption = pkRatioPlan$Title,
         includePlot = isIncluded("Plot", pkRatioPlan$Artifacts)
@@ -35,7 +35,7 @@ plotQualificationPKRatio <- function(configurationPlan,
       pkRatioMeasure <- getQualificationPKRatioMeasure(pkParameterName, pkRatioData$data, pkRatioData$metaData)
       pkRatioResults[[measureID]] <- saveTaskResults(
         id = measureID,
-        sectionId = pkRatioPlan$SectionId,
+        sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
         table = pkRatioMeasure,
         tableCaption = paste0("Measure of ", pkRatioPlan$Title),
         includeTable = isIncluded("Measure", pkRatioPlan$Artifacts)
@@ -46,7 +46,7 @@ plotQualificationPKRatio <- function(configurationPlan,
     pkRatioGMFE <- getQualificationPKRatioGMFE(pkParameterNames, pkRatioData$data)
     pkRatioResults[[gmfeID]] <- saveTaskResults(
       id = gmfeID,
-      sectionId = pkRatioPlan$SectionId,
+      sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
       table = pkRatioGMFE,
       tableCaption = paste0("GMFE for ", pkRatioPlan$Title),
       includeTable = isIncluded("GMFE", pkRatioPlan$Artifacts)
@@ -56,7 +56,7 @@ plotQualificationPKRatio <- function(configurationPlan,
     pkRatioTable <- getQualificationPKRatioTable(pkRatioData$data, pkRatioData$metaData)
     pkRatioResults[[tableID]] <- saveTaskResults(
       id = tableID,
-      sectionId = pkRatioPlan$SectionId,
+      sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
       table = pkRatioTable,
       tableCaption = pkRatioPlan$Title,
       includeTable = isIncluded("Table", pkRatioPlan$Artifacts)

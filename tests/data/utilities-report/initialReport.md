@@ -1,15 +1,13 @@
 
-
-
 # Title 1
 
 ## Sub title 1
 
-Figure 1: this is figure 1
+Figure: this is figure 1
 
 ## Sub title 2
 
-Figure 2: this is figure 2
+Figure: this is figure 2
 
 <a id="title-2"></a>
 
@@ -19,16 +17,15 @@ Figure 2: this is figure 2
 
 ## Sub title 1
 
-Table 1: this is table 1
+Table: this is table 1
 
 ## Sub title 2
 
-Figure 3: this is figure 3
+Figure: this is figure 3
 
 <a id="subtitle-23"></a>
 
 ## Sub title 3
 
 Figures: this is not a figure 
-
 

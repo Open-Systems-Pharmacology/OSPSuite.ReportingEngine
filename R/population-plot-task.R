@@ -39,8 +39,8 @@ PopulationPlotTask <- R6::R6Class(
     saveResults = function(taskResults) {
       resetReport(self$fileName, self$workflowFolder)
       addTextChunk(
-        self$fileName,
-        paste0("# ", self$title),
+        fileName = self$fileName,
+        text = c(anchor(self$reference), "", paste0("# ", self$title)),
         logFolder = self$workflowFolder
       )
       for (result in taskResults) {

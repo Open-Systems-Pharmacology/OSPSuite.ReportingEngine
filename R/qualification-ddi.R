@@ -12,7 +12,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
     plot <- configurationPlan$plots$DDIRatioPlots[[plotNumber]]
 
     plotDDIMetadata$title <- plot$Title
-    plotDDIMetadata$sectionID <- plot$SectionId
+    plotDDIMetadata$sectionID <- plot$SectionReference %||% plot$SectionId
     validateIsIncluded(values = plot$Subunits, parentValues = names(ddiSubplotTypes), nullAllowed = TRUE)
     plotDDIMetadata$subunits <- plot$Subunits
     plotDDIMetadata$artifacts <- plot$Artifacts
@@ -518,11 +518,29 @@ plotQualificationDDIs <- function(configurationPlan,
 
     for (subplotTypeName in subunits) {
       subplotType <- ddiSubplotTypes[[subplotTypeName]]
-      subheading <- saveTaskResults(id = subplotType, sectionId = sectionID, textChunk = paste(paste0(rep("#", sectionLevel + 1), collapse = ""), subplotTypeName), includeTextChunk = TRUE)
+      subheading <- saveTaskResults(
+        id = subplotType, 
+        sectionId = sectionID, 
+        # Subheading result includes anchor tag to be referenced in TOC
+        textChunk = c(
+          anchor(paste0(sectionID, "-ddi-subunit-", length(ddiResults)+1)), "",
+          paste(paste0(rep("#", sectionLevel + 1), collapse = ""), subplotTypeName)
+        ), 
+        includeTextChunk = TRUE
+        )
       ddiResults <- c(ddiResults, subheading)
       subplotTypeLevels <- unique(dataframe[[subplotType]])
       for (subplotTypeLevel in subplotTypeLevels) {
-        subsubheading <- saveTaskResults(id = paste(subplotType, subplotTypeLevel, sep = " - "), sectionId = sectionID, textChunk = paste(paste0(rep("#", sectionLevel + 2), collapse = ""), subplotTypeLevel), includeTextChunk = TRUE)
+        subsubheading <- saveTaskResults(
+          id = paste(subplotType, subplotTypeLevel, sep = " - "), 
+          sectionId = sectionID, 
+          # Subheading result includes anchor tag to be referenced in TOC
+          textChunk = c(
+            anchor(paste0(sectionID, "-ddi-subunit-", length(ddiResults)+1)), "",
+            paste(paste0(rep("#", sectionLevel + 2), collapse = ""), subplotTypeLevel)
+          ),
+          includeTextChunk = TRUE
+          )
         ddiResults <- c(ddiResults, subsubheading)
         subplotDataframe <- droplevels(dataframe[dataframe[[subplotType]] == subplotTypeLevel, ])
         sectionID <- metadata$sectionID

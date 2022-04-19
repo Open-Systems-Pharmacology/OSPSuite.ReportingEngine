@@ -14,6 +14,8 @@ R6 class for PlotTask settings
 \describe{
 \item{\code{title}}{section title in the report corresponding to the task}
 
+\item{\code{reference}}{id of anchor tag referencing title}
+
 \item{\code{fileName}}{name of report appendix file associated to task}
 
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
@@ -53,6 +55,7 @@ Create a `PlotTask` object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PlotTask$new(
   reportTitle = NULL,
+  reportReference = NULL,
   fileName = NULL,
   getTaskResults = NULL,
   nameTaskResults = "none",
@@ -64,6 +67,8 @@ Create a `PlotTask` object
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{reportTitle}}{title to be printed in the report}
+
+\item{\code{reportReference}}{id of anchor tag referencing title}
 
 \item{\code{fileName}}{name of report appendix file associated to task}
 

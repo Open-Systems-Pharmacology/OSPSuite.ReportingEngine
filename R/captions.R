@@ -192,14 +192,23 @@ addDescriptorToTable <- function(data, descriptor) {
   return(data)
 }
 
-getTimeRangeCaption <- function(timeRangeName) {
+getTimeRangeCaption <- function(timeRangeName, reference, simulationSetName) {
   if (isIncluded(timeRangeName, ApplicationRanges$total)) {
-    return("### For total simulation time range")
+    return(c(
+      anchor(paste0(reference, "-", removeForbiddenLetters(simulationSetName), "-", "total")), "",
+      "### For total simulation time range"
+      ))
   }
   if (isIncluded(timeRangeName, ApplicationRanges$firstApplication)) {
-    return("### For first application range")
+    return(c(
+      anchor(paste0(reference, "-", removeForbiddenLetters(simulationSetName), "-", "first")), "",
+      "### For first application range"
+    ))
   }
   if (isIncluded(timeRangeName, ApplicationRanges$lastApplication)) {
-    return("### For last application range")
+    return(c(
+      anchor(paste0(reference, "-", removeForbiddenLetters(simulationSetName), "-", "last")), "",
+      "### For last application range"
+    ))
   }
 }
