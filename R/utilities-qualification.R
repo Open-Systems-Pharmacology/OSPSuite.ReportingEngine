@@ -135,7 +135,7 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
     # and is wrapped in method configurationPlan$getSectionPath(id)
     sectionPath <- paste(
       parentFolder,
-      sprintf("%0.3d_section_%d", sectionIndex, reference),
+      sprintf("%0.3d_section_%s", sectionIndex, reference),
       sep = .Platform$file.sep
       )
 
