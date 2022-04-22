@@ -10,7 +10,7 @@
 #' @field includeTable logical indicating if the table should be included in final report
 #' @field textChunk text included into the report explaining the table
 #' @field includeTextChunk logical indicating if the text chunk should be included in final report
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
 #' @keywords internal
 TaskResults <- R6::R6Class(
   "TaskResults",
@@ -28,7 +28,7 @@ TaskResults <- R6::R6Class(
     includeTextChunk = FALSE,
 
     #' @description
-    #' If table is not null, save table as a csv file at `tableFileName`
+    #' Save ggplot figure, available as plot task result, into a file
     #' @param fileName path of file corresponding to the figure to save
     #' @param logFolder folder were logs are saved
     saveFigure = function(fileName, logFolder = getwd()) {
@@ -54,11 +54,11 @@ TaskResults <- R6::R6Class(
     },
 
     #' @description
-    #' If table is not null, save table as a csv file at `tableFileName`
+    #' Save data.frame, available as table task result, into a csv file
     #' @param fileName path of csv file corresponding to the table to save
     #' @param logFolder folder were logs are saved
     saveTable = function(fileName, logFolder = getwd()) {
-      if (isOfLength(self$table, 0)) {
+      if (isEmpty(self$table)) {
         return()
       }
       write.csv(self$table, file = fileName, row.names = FALSE, fileEncoding = "UTF-8")
@@ -71,13 +71,14 @@ TaskResults <- R6::R6Class(
     },
 
     #' @description
-    #' Add table results to a
-    #' @param reportFile file in which the figure and its caption should be added
-    #' @param fileRelativePath path of file relative to reportFile corresponding saved figure
-    #' @param fileRootDirectory root directory of figure file path
+    #' Write markdown content that adds a figure, available as plot task result, into a markdown report
+    #' To be displayed, figure path must be relative to report location
+    #' @param reportFile markdown file in which the figure and its caption should be added
+    #' @param fileRelativePath figure path relative to `reportFile` location
+    #' @param fileRootDirectory root/working directory needed by `tracelib` package
     #' @param logFolder folder were logs are saved
     addFigureToReport = function(reportFile, fileRelativePath, fileRootDirectory, logFolder = getwd()) {
-      if (isOfLength(self$plot, 0)) {
+      if (isEmpty(self$plot)) {
         return()
       }
       # includePlot select if the plot and its caption should be included in final report
@@ -94,22 +95,24 @@ TaskResults <- R6::R6Class(
       if (!isEmpty(self$plotCaption)) {
         addTextChunk(reportFile, paste0("Figure: ", self$plotCaption), logFolder = logFolder)
       }
+      # Enforce 2 blank lines using html notation to improve report clarity
+      addTextChunk(reportFile, rep("<br>", reEnv$blankLinesBetweenArtifacts), logFolder = logFolder)
     },
 
     #' @description
-    #' Add table results to a
-    #' @param reportFile file in which the table and its caption should be added
-    #' @param fileRelativePath path of file relative to reportFile corresponding saved figure
-    #' @param fileRootDirectory root directory of figure file path
+    #' Write markdown content that adds a data.frame, available as table task result, into a markdown report
+    #' @param reportFile markdown file in which the table and its caption should be added
+    #' @param fileRelativePath table path relative to `reportFile` location
+    #' @param fileRootDirectory root/working directory needed by `tracelib` package
     #' @param digits number of decimal digits in displayed numbers
     #' @param scientific logical defining if displayed numbers use scientific writing
     #' @param logFolder folder were logs are saved
     addTableToReport = function(reportFile, fileRelativePath, fileRootDirectory, digits = NULL, scientific = NULL, logFolder = getwd()) {
-      if (isOfLength(self$table, 0)) {
+      if (isEmpty(self$table)) {
         return()
       }
-      # includeTable select if the table and its caption should be included in final report
-      # However, tables in task results are saved no matter this field
+      # includeTable select if the table and its caption should be included in the markdown report
+      # tables in task results are still saved but won't appear in the markdown report
       if (isFALSE(self$includeTable)) {
         return()
       }
@@ -124,15 +127,17 @@ TaskResults <- R6::R6Class(
         scientific = scientific,
         logFolder = logFolder
       )
+      # Enforce blank lines using html notation to improve report clarity
+      addTextChunk(reportFile, rep("<br>", reEnv$blankLinesBetweenArtifacts), logFolder = logFolder)
     },
 
 
     #' @description
-    #' Add a text chunk generated from a task to a
-    #' @param reportFile file to which the text chunk should be added
+    #' Write markdown content that adds text, available as textChunk task result, into a markdown report
+    #' @param reportFile markdown file in which the text should be added
     #' @param logFolder folder were logs are saved
     addTextChunkToReport = function(reportFile , logFolder = getwd()) {
-      if (isOfLength(self$textChunk, 0)) {
+      if (isEmpty(self$textChunk)) {
         return()
       }
       if (isFALSE(self$includeTextChunk)) {
