@@ -26,6 +26,8 @@ reEnv$maxLinesPerLegendCaption <- 2
 # If plot limits are left undefined, an auto margin is added
 reEnv$autoAxisLimitMargin <- 0.05
 
+reEnv$blankLinesBetweenArtifacts <- 2
+
 # Default plot properties
 reEnv$theme$background$legendPosition <- tlf::LegendPositions$outsideTop
 # reEnv$defaultLegendPosition <- tlf::LegendPositions$outsideTop
