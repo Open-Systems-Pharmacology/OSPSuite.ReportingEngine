@@ -418,7 +418,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
     id = gmfeID,
     sectionId = sectionID,
     table = gmfeDDI,
-    tableCaption = paste("GMFE for", metadata$title, idPrefix),
+    tableCaption = paste("GMFE for", metadata$title, "Ratio"),
     includeTable = TRUE
   )
 
@@ -429,7 +429,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
       id = tableID,
       sectionId = sectionID,
       table = ddiTableList[[pkParameter]],
-      tableCaption = paste("Summary table for", metadata$title, idPrefix, pkParameter),
+      tableCaption = paste("Summary table for", metadata$title, "-", pkParameter, "Ratio"),
       includeTable = TRUE
     )
   }
@@ -510,7 +510,7 @@ plotQualificationDDIs <- function(configurationPlan,
         id = "DDI Table",
         sectionId = sectionID,
         table = getDDITable(dataframe),
-        tableCaption = NULL,
+        tableCaption = paste("Summary table for ", metadata$title),
         includeTable = TRUE
       )
       ddiResults <- c(ddiResults, ddiTable)
