@@ -6,6 +6,7 @@
 \usage{
 renderWordReport(
   fileName,
+  intro = NULL,
   logFolder = getwd(),
   createWordReport = FALSE,
   wordConversionTemplate = NULL
@@ -13,6 +14,8 @@ renderWordReport(
 }
 \arguments{
 \item{fileName}{name of .md file to render}
+
+\item{intro}{name of .md file that include introduction (before toc)}
 
 \item{logFolder}{folder where the logs are saved}
 

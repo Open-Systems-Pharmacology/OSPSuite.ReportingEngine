@@ -208,7 +208,7 @@ renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE
   actionToken2 <- re.tStartAction(actionType = "ReportGeneration")
   numberTablesAndFigures(fileName, logFolder)
   # TODO: number sections and intro in word report
-  renderWordReport(fileName, logFolder, createWordReport, wordConversionTemplate)
+  renderWordReport(fileName, intro = intro, logFolder, createWordReport, wordConversionTemplate)
   tocContent <- getSectionTOC(fileName, logFolder, numberSections = numberSections)
   addMarkdownToc(tocContent, fileName, logFolder)
   mergeMarkdownFiles(inputFiles = c(intro, fileName), outputFile = fileName, logFolder = logFolder)
@@ -219,11 +219,12 @@ renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE
 #' @title renderWordReport
 #' @description Render docx report with number sections and table of content
 #' @param fileName name of .md file to render
+#' @param intro name of .md file that include introduction (before toc)
 #' @param logFolder folder where the logs are saved
 #' @param createWordReport option for creating Markdwon-Report only but not a Word-Report
 #' @param wordConversionTemplate optional docx template for rendering a tuned Word-Report document
 #' @export
-renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE, wordConversionTemplate = NULL) {
+renderWordReport <- function(fileName, intro = NULL, logFolder = getwd(), createWordReport = FALSE, wordConversionTemplate = NULL) {
   reportConfig <- file.path(logFolder, "word-report-configuration.txt")
   wordFileName <- sub(pattern = ".md", replacement = "-word.md", fileName)
   docxWordFileName <- sub(pattern = ".md", replacement = "-word.docx", fileName)
@@ -280,6 +281,18 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
   }
   file.remove(usedFilesFileName)
 
+  # Include introduction as a yaml header passed as additional arguments to pandoc
+  if(!isEmpty(intro)){
+    introContent <- readLines(intro, encoding = "UTF-8")
+    yamlContent <- introToYamlHeader(introContent)
+    
+    wordFileContent <- c(
+      # Cover page features
+      yamlContent,
+      "",
+      wordFileContent
+    )
+  }
   # Since write() uses sep = "\n", 
   # every element of array wordFileContent is added in a new line
   fileObject <- file(wordFileName, encoding = "UTF-8")
@@ -533,5 +546,51 @@ getAnchorName <- function(tag) {
   tagName <- gsub(pattern = '.*<a (id|name)="', replacement = "", x = tag)
   tagName <- gsub(pattern = '"></a>.*', replacement = "", x = tagName)
   return(tagName)
+}
+
+#' @title introToYamlHeader
+#' @description Translate an markdown introduction file into yaml header
+#' In order to include introduction before the table of content,
+#' it needs to be included as cover page features through a yaml header.
+#' A yaml header provides additional arguments to pandoc when translating the md report.
+#' Cover page features can be created with each their own style in the reference doc
+#' @param introContent Character array of the intro content
+#' @return A character array of yaml content
+#' @keywords internal
+introToYamlHeader <- function(introContent) {
+  # Initialize empty contents for the yaml header
+  titleContent <- ""
+  subtitleContent <- ""
+  
+  # Look for title and subtitle of the intro content
+  titleLine <- head(which(grepl(pattern = "# ", introContent) & !grepl(pattern = "## ", introContent)), 1)
+  if(!isEmpty(titleLine)){
+    titleContent <- gsub(pattern = "# ", replacement = "", x = introContent[titleLine])
+    # Remove title from intro
+    introContent <- introContent[-titleLine]
+  }
+  subtitleLine <- head(which(grepl(pattern = "## ", introContent) & !grepl(pattern = "### ", introContent)), 1)
+  if(!isEmpty(subtitleLine)){
+    subtitleContent <- gsub(pattern = "## ", replacement = "", x = introContent[subtitleLine])
+    # Remove title from intro
+    introContent <- introContent[-subtitleLine]
+  }
+  
+  # Define cover page features
+  yamlContent <- c(
+    # yaml header is delimited by ---
+      "---",
+      paste0("title: '", titleContent, "'"),
+      paste0("subtitle: '", subtitleContent, "'"),
+      # Caution, yaml options on several lines require indentation
+      "abstract: | ",
+      paste("\t", introContent),
+      "",
+      # Add a page break before the table of content
+      paste("\t", "\\newpage"),
+      "---"
+    )
+  return(yamlContent)
+  
 }
 
