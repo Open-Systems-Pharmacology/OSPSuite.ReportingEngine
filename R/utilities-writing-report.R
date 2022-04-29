@@ -300,6 +300,20 @@ renderWordReport <- function(fileName, intro = NULL, logFolder = getwd(), create
   re.tStoreFileMetadata(access = "write", filePath = wordFileName)
 
   if (createWordReport) {
+    # Check if pandoc is available before trying to render word report
+    tryCatch({
+      command <- "pandoc --version"
+      status <- system(command, show.output.on.console = FALSE)
+      validateCommandStatus(command, status)
+    }, error = function(e) {
+      logWorkflow(
+        message = "Pandoc is not installed, word report was not created",
+        pathFolder = logFolder,
+        logTypes = c(LogTypes$Error, LogTypes$Debug)
+      )
+      return(invisible())
+    })
+
     wordConversionTemplate <- wordConversionTemplate %||% system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
     pageBreakCode <- system.file("extdata", "pagebreak.lua", package = "ospsuite.reportingengine")
 

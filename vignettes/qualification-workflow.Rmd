@@ -161,17 +161,32 @@ workflow$runWorkflow()
 
 ## Template
 
-A template R script for qualification workflows is available and can be found using the function `system.file("extdata", "qualification-workflow-template.R", package = "ospsuite.reportingengine")`.
-The content of the file is defined below.
+A template R script for qualification workflows is available below or using the function `system.file("extdata", "qualification-workflow-template.R", package = "ospsuite.reportingengine")`.
+The template aims at creating a function wrapping the usage of the qualification workflow including the call to the qualification runner and named `createQualificationReport`.
 
-```{r template, echo=FALSE, comment=NA}
+```{r template, echo=FALSE, results='asis'}
 cat(
-  readLines(
-    system.file(
-      "extdata", "qualification-workflow-template.R",
-      package = "ospsuite.reportingengine"
-    )
-  ),
+  c(
+    "```r",
+    readLines(
+      system.file(
+        "extdata", "qualification-workflow-template.R",
+        package = "ospsuite.reportingengine"
+        )
+      ),
+    "```"),
   sep = "\n"
 )
 ```
+
+# Creation of a word report
+
+By default, the qualification workflow field `createWordReport` is set to `r TRUE`.
+This option requests [**Pandoc**](https://pandoc.org/) to convert the report to a word version (with extension *docx*).
+
+Note that [**Pandoc** installation](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/wiki/Installing-pandoc) is required for using this feature.
+
+The conversion to word uses a reference word document that defines each style of report (e.g. *Title*, *Heading 1*, *Normal*, etc.).
+Users can input their own reference word document using the option `wordConversionTemplate` as previously illustrated in the template.
+The default reference word document can be found using `system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")`.
+
