@@ -207,7 +207,6 @@ mergeMarkdownFiles <- function(inputFiles, outputFile, logFolder = getwd(), keep
 renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE, numberSections = TRUE, intro = NULL, wordConversionTemplate = NULL) {
   actionToken2 <- re.tStartAction(actionType = "ReportGeneration")
   numberTablesAndFigures(fileName, logFolder)
-  # TODO: number sections and intro in word report
   renderWordReport(fileName, intro = intro, logFolder, createWordReport, wordConversionTemplate)
   tocContent <- getSectionTOC(fileName, logFolder, numberSections = numberSections)
   addMarkdownToc(tocContent, fileName, logFolder)
