@@ -174,7 +174,7 @@
       "shape": "blank",
       "linetype": "solid",
       "size": 1,
-      "alpha": 0.5
+      "alpha": 0.2
     },
     "addErrorbar": {
       "color": "black",
@@ -271,7 +271,7 @@
         "shape": "blank",
         "linetype": "blank",
         "size": 0.5,
-        "alpha": "first"
+        "alpha": 0.2
       },
       "errorbars": {
         "color": "reset",
