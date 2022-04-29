@@ -164,14 +164,17 @@ workflow$runWorkflow()
 A template R script for qualification workflows is available below or using the function `system.file("extdata", "qualification-workflow-template.R", package = "ospsuite.reportingengine")`.
 The template aims at creating a function wrapping the usage of the qualification workflow including the call to the qualification runner and named `createQualificationReport`.
 
-```{r template, echo=FALSE, comment=NA}
+```{r template, echo=FALSE, results='asis'}
 cat(
-  readLines(
-    system.file(
-      "extdata", "qualification-workflow-template.R",
-      package = "ospsuite.reportingengine"
-    )
-  ),
+  c(
+    "```r",
+    readLines(
+      system.file(
+        "extdata", "qualification-workflow-template.R",
+        package = "ospsuite.reportingengine"
+        )
+      ),
+    "```"),
   sep = "\n"
 )
 ```
