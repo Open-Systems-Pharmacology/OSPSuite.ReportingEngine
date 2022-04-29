@@ -6,6 +6,9 @@
 \usage{
 hasAnchor(tag)
 }
+\arguments{
+\item{tag}{Character string}
+}
 \value{
 A logical
 }

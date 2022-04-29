@@ -6,6 +6,9 @@
 \usage{
 getAnchorName(tag)
 }
+\arguments{
+\item{tag}{Character string}
+}
 \value{
 A character Name/identifier of the anchor tag
 }
