@@ -236,6 +236,52 @@ buildQualificationDDIDataframe <- function(dataframe,
 
 
 
+#' @title getSmartZoomLimits
+#' @description Get default axis limits for DDI Ratio plot
+#' @param isResidualsVsObserved a logical argument indicating if the data pertains to a residual vs observed (`TRUE`) or a predicted vs observed (`FALSE`) plot
+#' @param dataVector a numeric vector containing the x or y values of datapoints to be plotted
+#' @return a list containing the minimum and maximum axes limits
+#' @keywords internal
+getSmartZoomLimits <- function(isResidualsVsObserved,dataVector){
+
+  validateIsLogical(isResidualsVsObserved)
+  validateIsNumeric(dataVector)
+
+  if(!isResidualsVsObserved){
+
+    if(min(dataVector) >= 1){
+      minLimit <- min(0.8*min(dataVector), 0.8)
+    } else {
+      minLimit <- min(0.8*min(dataVector), 0.25)
+    }
+
+    if(min(dataVector) >= 1){
+      maxLimit <- max(1.25*max(dataVector), 4)
+    } else {
+      maxLimit <- max(1.25*max(dataVector), 1.25)
+    }
+
+    return(list(min = minLimit, max = maxLimit))
+
+  }
+
+  if(min(dataVector) >= 1){
+    minLimit <- 0.25
+  } else {
+    minLimit <- min(0.8*min(dataVector), 0.25)
+  }
+
+  if(max(dataVector) >= 1){
+    maxLimit <- max(1.25*max(dataVector), 4)
+  } else {
+    maxLimit <- 4
+  }
+
+  return(list(min = minLimit, max = maxLimit))
+
+}
+
+
 #' @title generateDDIQualificationDDIPlot
 #' @description Plot observation vs prediction for qualification workflow
 #' @param ddiPlotData a list containing the plot data.frame, aesthetics list, axes settings and plot settings
@@ -279,24 +325,14 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
     ddiPlotConfiguration$yAxis$scale <- tlf::Scaling$log
   }
 
-  # Set y axis ticks and limits
-  if (residualsVsObserved & ddiPlotData$axesSettings$Y$scaling == "Log") {
+  xSmartZoom <- getSmartZoomLimits(isResidualsVsObserved = residualsVsObserved,dataVector = ddiData[[ddiPlotData$axesSettings$X$label]])
+  ySmartZoom <- getSmartZoomLimits(isResidualsVsObserved = residualsVsObserved,dataVector = ddiData[[ddiPlotData$axesSettings$Y$label]])
 
-    # Minimum log10 predict/observed fold error among all data points, rounded DOWN to nearest whole number
-    lowerBoundLog10 <- min(floor(log10(ddiData[[ddiPlotData$axesSettings$Y$label]])))
 
-    # Maximum log10 predict/observed fold error among all data points, rounded UP to nearest whole number
-    upperBoundLog10 <- max(ceiling(log10(ddiData[[ddiPlotData$axesSettings$Y$label]])))
-
-    # Maximum log10 scale axis limit given by larger of the two fold error bounds, lowerBoundLog10 and upperBoundLog10
-    log10Limit <- max(abs(c(lowerBoundLog10, upperBoundLog10)))
-
-    # Set lower and upper log scale y axis limits to be equal
-    ddiPlotConfiguration$yAxis$limits <- 10^(c(-log10Limit, log10Limit))
-
-    # Include ticks at each order of magnitude and at 1/2 and 2
-    ddiPlotConfiguration$yAxis$ticks <- 10^seq(-log10Limit, log10Limit, 1)
-  }
+  ddiPlotConfiguration$xAxis$limits <- c(xSmartZoom$min,xSmartZoom$max)
+  ddiPlotConfiguration$yAxis$limits <- c(ySmartZoom$min,ySmartZoom$max)
+  ddiPlotConfiguration$xAxis$ticks <- 10^seq(ceiling(log10(xSmartZoom$min)), floor(log10(xSmartZoom$max)), 1)
+  ddiPlotConfiguration$yAxis$ticks <- 10^seq(ceiling(log10(ySmartZoom$min)), floor(log10(ySmartZoom$max)), 1)
 
   qualificationDDIPlot <- tlf::plotDDIRatio(
     data = ddiData,
@@ -515,21 +551,21 @@ plotQualificationDDIs <- function(configurationPlan,
     for (subplotTypeName in subunits) {
       subplotType <- ddiSubplotTypes[[subplotTypeName]]
       subheading <- saveTaskResults(
-        id = subplotType, 
-        sectionId = sectionID, 
+        id = subplotType,
+        sectionId = sectionID,
         # Subheading result includes anchor tag to be referenced in TOC
         textChunk = c(
           anchor(paste0(sectionID, "-ddi-subunit-", length(ddiResults)+1)), "",
           paste(paste0(rep("#", sectionLevel + 1), collapse = ""), subplotTypeName)
-        ), 
+        ),
         includeTextChunk = TRUE
         )
       ddiResults <- c(ddiResults, subheading)
       subplotTypeLevels <- unique(dataframe[[subplotType]])
       for (subplotTypeLevel in subplotTypeLevels) {
         subsubheading <- saveTaskResults(
-          id = paste(subplotType, subplotTypeLevel, sep = " - "), 
-          sectionId = sectionID, 
+          id = paste(subplotType, subplotTypeLevel, sep = " - "),
+          sectionId = sectionID,
           # Subheading result includes anchor tag to be referenced in TOC
           textChunk = c(
             anchor(paste0(sectionID, "-ddi-subunit-", length(ddiResults)+1)), "",
