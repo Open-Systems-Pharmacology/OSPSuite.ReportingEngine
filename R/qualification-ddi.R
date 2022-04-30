@@ -331,8 +331,15 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
 
   ddiPlotConfiguration$xAxis$limits <- c(xSmartZoom$min,xSmartZoom$max)
   ddiPlotConfiguration$yAxis$limits <- c(ySmartZoom$min,ySmartZoom$max)
-  ddiPlotConfiguration$xAxis$ticks <- 10^seq(ceiling(log10(xSmartZoom$min)), floor(log10(xSmartZoom$max)), 1)
-  ddiPlotConfiguration$yAxis$ticks <- 10^seq(ceiling(log10(ySmartZoom$min)), floor(log10(ySmartZoom$max)), 1)
+
+  if (ddiPlotData$axesSettings$X$scaling == "Log") {
+    ddiPlotConfiguration$xAxis$ticks <- 10^seq(ceiling(log10(xSmartZoom$min)), floor(log10(xSmartZoom$max)), 1)
+  }
+
+  if (ddiPlotData$axesSettings$Y$scaling == "Log") {
+    ddiPlotConfiguration$yAxis$ticks <- 10^seq(ceiling(log10(ySmartZoom$min)), floor(log10(ySmartZoom$max)), 1)
+  }
+
 
   qualificationDDIPlot <- tlf::plotDDIRatio(
     data = ddiData,
