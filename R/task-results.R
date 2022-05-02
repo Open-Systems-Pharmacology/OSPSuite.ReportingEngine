@@ -93,7 +93,7 @@ TaskResults <- R6::R6Class(
         logFolder = logFolder
       )
       if (!isEmpty(self$plotCaption)) {
-        addTextChunk(reportFile, paste0("Figure: ", self$plotCaption), logFolder = logFolder)
+        addTextChunk(reportFile, paste0("**Figure: ", self$plotCaption, "**"), logFolder = logFolder)
       }
       # Enforce 2 blank lines using html notation to improve report clarity
       addTextChunk(reportFile, rep("<br>", reEnv$blankLinesBetweenArtifacts), logFolder = logFolder)
@@ -117,7 +117,7 @@ TaskResults <- R6::R6Class(
         return()
       }
       if (!isEmpty(self$tableCaption)) {
-        addTextChunk(reportFile, paste0("Table: ", self$tableCaption), logFolder = logFolder)
+        addTextChunk(reportFile, paste0("**Table: ", self$tableCaption, "**"), logFolder = logFolder)
       }
       addTableChunk(
         fileName = reportFile,
