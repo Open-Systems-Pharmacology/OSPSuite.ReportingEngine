@@ -55,7 +55,7 @@ plotQualificationComparisonTimeProfile <- function(configurationPlan,
     # Save results
     timeProfileResults[[plotID]] <- saveTaskResults(
       id = plotID,
-      sectionId = timeProfilePlan$SectionId,
+      sectionId = timeProfilePlan$SectionReference %||% timeProfilePlan$SectionId,
       plot = timeProfilePlot,
       plotCaption = timeProfilePlan$Title
     )

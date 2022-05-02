@@ -46,7 +46,7 @@ R6 class for TaskResults settings
 \if{html}{\out{<a id="method-saveFigure"></a>}}
 \if{latex}{\out{\hypertarget{method-saveFigure}{}}}
 \subsection{Method \code{saveFigure()}}{
-If table is not null, save table as a csv file at `tableFileName`
+Save ggplot figure, available as plot task result, into a file
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TaskResults$saveFigure(fileName, logFolder = getwd())}\if{html}{\out{</div>}}
 }
@@ -65,7 +65,7 @@ If table is not null, save table as a csv file at `tableFileName`
 \if{html}{\out{<a id="method-saveTable"></a>}}
 \if{latex}{\out{\hypertarget{method-saveTable}{}}}
 \subsection{Method \code{saveTable()}}{
-If table is not null, save table as a csv file at `tableFileName`
+Save data.frame, available as table task result, into a csv file
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TaskResults$saveTable(fileName, logFolder = getwd())}\if{html}{\out{</div>}}
 }
@@ -84,7 +84,8 @@ If table is not null, save table as a csv file at `tableFileName`
 \if{html}{\out{<a id="method-addFigureToReport"></a>}}
 \if{latex}{\out{\hypertarget{method-addFigureToReport}{}}}
 \subsection{Method \code{addFigureToReport()}}{
-Add table results to a
+Write markdown content that adds a figure, available as plot task result, into a markdown report
+To be displayed, figure path must be relative to report location
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TaskResults$addFigureToReport(
   reportFile,
@@ -97,11 +98,11 @@ Add table results to a
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{reportFile}}{file in which the figure and its caption should be added}
+\item{\code{reportFile}}{markdown file in which the figure and its caption should be added}
 
-\item{\code{fileRelativePath}}{path of file relative to reportFile corresponding saved figure}
+\item{\code{fileRelativePath}}{figure path relative to `reportFile` location}
 
-\item{\code{fileRootDirectory}}{root directory of figure file path}
+\item{\code{fileRootDirectory}}{root/working directory needed by `tracelib` package}
 
 \item{\code{logFolder}}{folder were logs are saved}
 }
@@ -112,7 +113,7 @@ Add table results to a
 \if{html}{\out{<a id="method-addTableToReport"></a>}}
 \if{latex}{\out{\hypertarget{method-addTableToReport}{}}}
 \subsection{Method \code{addTableToReport()}}{
-Add table results to a
+Write markdown content that adds a data.frame, available as table task result, into a markdown report
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TaskResults$addTableToReport(
   reportFile,
@@ -127,11 +128,11 @@ Add table results to a
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{reportFile}}{file in which the table and its caption should be added}
+\item{\code{reportFile}}{markdown file in which the table and its caption should be added}
 
-\item{\code{fileRelativePath}}{path of file relative to reportFile corresponding saved figure}
+\item{\code{fileRelativePath}}{table path relative to `reportFile` location}
 
-\item{\code{fileRootDirectory}}{root directory of figure file path}
+\item{\code{fileRootDirectory}}{root/working directory needed by `tracelib` package}
 
 \item{\code{digits}}{number of decimal digits in displayed numbers}
 
@@ -146,7 +147,7 @@ Add table results to a
 \if{html}{\out{<a id="method-addTextChunkToReport"></a>}}
 \if{latex}{\out{\hypertarget{method-addTextChunkToReport}{}}}
 \subsection{Method \code{addTextChunkToReport()}}{
-Add a text chunk generated from a task to a
+Write markdown content that adds text, available as textChunk task result, into a markdown report
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TaskResults$addTextChunkToReport(reportFile, logFolder = getwd())}\if{html}{\out{</div>}}
 }
@@ -154,7 +155,7 @@ Add a text chunk generated from a task to a
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{reportFile}}{file to which the text chunk should be added}
+\item{\code{reportFile}}{markdown file in which the text should be added}
 
 \item{\code{logFolder}}{folder were logs are saved}
 }

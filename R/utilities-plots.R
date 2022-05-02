@@ -300,3 +300,37 @@ prettyCaption <- function(captions, plotObject, element = "legend") {
   maxWidth <- getLineBreakWidth(element, plotObject$plotConfiguration)
   return(addLineBreakToCaption(captions, width = maxWidth))
 }
+
+#' @title updatePlotDimensions
+#' @description Update plot dimensions based on size and position of legend
+#' @param plotObject A `ggplot` object
+#' @return A `ggplot` object
+#' @keywords internal
+updatePlotDimensions <- function(plotObject) {
+  # Get grob from plot = list of plot properties
+  grobObject <- ggplot2::ggplotGrob(plotObject)
+  # Look for legend grob that stores the dimensions of the legend
+  legendGrobIndex <- which(sapply(grobObject$grobs, function(grob) grob$name) == "guide-box")
+  # If no legend, index is empty
+  if (isEmpty(legendGrobIndex)) {
+    return(plotObject)
+  }
+  legendGrob <- grobObject$grobs[[legendGrobIndex]]
+  # If not empty,
+  # - add nothing if legend within
+  if (grepl(pattern = "inside", x = plotObject$plotConfiguration$legend$position)) {
+    return(plotObject)
+  }
+  # - add legend height to the final plot dimensions if legend above/below
+  if (grepl(pattern = "Top", x = plotObject$plotConfiguration$legend$position) |
+    grepl(pattern = "Bottom", x = plotObject$plotConfiguration$legend$position)) {
+    # grid package is already required and installed by ggplot2
+    plotObject$plotConfiguration$export$height <- plotObject$plotConfiguration$export$height +
+      as.numeric(grid::convertUnit(max(legendGrob$heights), plotObject$plotConfiguration$export$units))
+    return(plotObject)
+  }
+  # - add legend width to the final plot dimensions if legend left/right
+  plotObject$plotConfiguration$export$width <- plotObject$plotConfiguration$export$width +
+    as.numeric(grid::convertUnit(max(legendGrob$widths), plotObject$plotConfiguration$export$units))
+  return(plotObject)
+}

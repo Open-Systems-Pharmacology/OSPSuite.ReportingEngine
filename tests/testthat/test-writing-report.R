@@ -1,27 +1,14 @@
 context("Utilities for writing reports")
 
 testReport <- "testReport.md"
-testReportContent <- c(
-  "# Title 1",
-  "## Sub title 1",
-  "Figure: this is figure 1",
-  "## Sub title 2",
-  "Figure: this is figure 2",
-  "# Title 2",
-  "## Sub title 1",
-  "Table: this is table 1",
-  "## Sub title 2",
-  "Figure: this is figure 3",
-  "## Sub title 3",
-  "Figures: this is not a figure "
-)
-
+initialReport <- getTestDataFilePath("utilities-report/initialReport.md")
 testReportNumFigs <- getTestDataFilePath("utilities-report/testReportNumFigs.md")
 testReportNumSecs <- getTestDataFilePath("utilities-report/testReportNumSecs.md")
 testReportNumToc <- getTestDataFilePath("utilities-report/testReportNumToc.md")
 
 # Ensure testReport is not deleted before tests
 unlink(testReport, recursive = TRUE)
+initialReportContent <- readLines(initialReport)
 
 test_that("resetReport creates an empty file, overwriting pre-existing previous file", {
   resetReport(testReport)
@@ -46,7 +33,7 @@ test_that("addTextChunk does not overwrite previous file", {
 })
 
 resetReport(testReport)
-addTextChunk(testReport, testReportContent)
+addTextChunk(testReport, initialReportContent)
 numberTablesAndFigures(testReport)
 
 test_that("numberTablesAndFigures counts correctly and update input file", {
@@ -76,3 +63,15 @@ unlink("log-error.txt", recursive = TRUE)
 unlink("testReport.docx", recursive = TRUE)
 unlink("testReport-word.md", recursive = TRUE)
 unlink(testReport, recursive = TRUE)
+
+
+titleFile <- getTestDataFilePath("utilities-report/titlepage.md")
+refTitleFile <- getTestDataFilePath("utilities-report/updatedtitlepage.md")
+
+test_that("versionInfo is correctly adjusted in title pages", {
+  versionInfo <- QualificationVersionInfo$new("1.1", "2.2", "3.3")
+  adjustTitlePage(titleFile, versionInfo)
+  titleContent <- readLines(titleFile)
+  refTitleContent <- readLines(refTitleFile)
+  expect_equal(titleContent, refTitleContent)
+})

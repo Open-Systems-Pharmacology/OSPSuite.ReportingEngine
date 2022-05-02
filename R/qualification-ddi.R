@@ -12,8 +12,8 @@ getQualificationDDIPlotData <- function(configurationPlan) {
     plot <- configurationPlan$plots$DDIRatioPlots[[plotNumber]]
 
     plotDDIMetadata$title <- plot$Title
-    plotDDIMetadata$sectionID <- plot$SectionId
-    validateIsIncluded(values = plot$Subunits, parentValues = names(ddiSubplotTypes))
+    plotDDIMetadata$sectionID <- plot$SectionReference %||% plot$SectionId
+    validateIsIncluded(values = plot$Subunits, parentValues = names(ddiSubplotTypes), nullAllowed = TRUE)
     plotDDIMetadata$subunits <- plot$Subunits
     plotDDIMetadata$artifacts <- plot$Artifacts
     plotDDIMetadata$plotSettings <- plot
@@ -57,13 +57,9 @@ getQualificationDDIPlotData <- function(configurationPlan) {
           #The following tryCatch verifies that the PK parameter columns are read as `numeric` by the call to `readObservedDataFile` above.
           #The function `readObservedDataFile` first attempts to read csv files using `read.csv`.
           #If this fails, because, for example the CSV file is semicolon separated, `readObservedDataFile` attempts to read the file using `read.csv2`.
-          #If a semicolon-separated CSV contains a float column with period `.` decimal separators (and not comma ',' decimal separators) then read.csv2 will read this column as factor.
-          tryCatch({
-            validateIsOfType(object = observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]],"numeric")
-          },
-          error = function(e){
-            logErrorThenStop(message = messages$errorWrongColumnTypeInDataFile(observedDataSetFilePath,ddiPKRatioColumnName[[pkParameter]],"numeric"))
-          })
+          #If a semicolon-separated CSV contains a float column with period `.` decimal separators (and not comma ',' decimal separators) then read.csv2 will read this column as `factor`.
+          #Therefore, coerce this column into `numeric` format:
+          observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]] <- as.numeric(observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]])
 
           observedDataSelection <- observedDataFrame$ID %in% observedDataRecordId
           ratioList[[pkParameter]] <- getDDIRatioList(observedDataFrame[observedDataSelection,],ddiPKRatioColumnName[[pkParameter]])
@@ -131,13 +127,13 @@ getQualificationDDIPlotData <- function(configurationPlan) {
             id = ratioList[[pkParameter]]$id,
             studyId = ratioList[[pkParameter]]$studyId,
             mechanism = getMechanismName(ratioList[[pkParameter]]$mechanism),
-            perpetrator = ratioList[[pkParameter]]$perpetrator,
-            routePerpetrator = ratioList[[pkParameter]]$routePerpetrator,
-            victim = ratioList[[pkParameter]]$victim,
-            routeVictim = ratioList[[pkParameter]]$routeVictim,
+            perpetrator = ratioList[[pkParameter]]$perpetrator %||% NA,
+            routePerpetrator = ratioList[[pkParameter]]$routePerpetrator %||% NA,
+            victim = ratioList[[pkParameter]]$victim %||% NA,
+            routeVictim = ratioList[[pkParameter]]$routeVictim %||% NA,
             dose = ratioList[[pkParameter]]$dose,
             doseUnit = ratioList[[pkParameter]]$doseUnit,
-            description = ratioList[[pkParameter]]$description
+            description = ratioList[[pkParameter]]$description %||% NA
           )
 
           plotDDIDataFrame <- rbind.data.frame(plotDDIDataFrame, df)
@@ -159,6 +155,9 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 #' @return Display name of mechanism to be used in DDI report
 #' @keywords internal
 getMechanismName <- function(mechanism){
+  if(is.null(mechanism)){
+    return(NA)
+  }
   correctedMechanismName <- reEnv$ddiRatioSubsetsDictionary[[as.character(mechanism)]]
   if(is.null(correctedMechanismName)){
     return(mechanism)
@@ -415,7 +414,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
     id = gmfeID,
     sectionId = sectionID,
     table = gmfeDDI,
-    tableCaption = paste("GMFE for", metadata$title, idPrefix),
+    tableCaption = paste("GMFE for", metadata$title, "Ratio"),
     includeTable = TRUE
   )
 
@@ -426,7 +425,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
       id = tableID,
       sectionId = sectionID,
       table = ddiTableList[[pkParameter]],
-      tableCaption = paste("Summary table for", metadata$title, idPrefix, pkParameter),
+      tableCaption = paste("Summary table for", metadata$title, "-", pkParameter, "Ratio"),
       includeTable = TRUE
     )
   }
@@ -507,7 +506,7 @@ plotQualificationDDIs <- function(configurationPlan,
         id = "DDI Table",
         sectionId = sectionID,
         table = getDDITable(dataframe),
-        tableCaption = NULL,
+        tableCaption = paste("Summary table for ", metadata$title),
         includeTable = TRUE
       )
       ddiResults <- c(ddiResults, ddiTable)
@@ -515,11 +514,29 @@ plotQualificationDDIs <- function(configurationPlan,
 
     for (subplotTypeName in subunits) {
       subplotType <- ddiSubplotTypes[[subplotTypeName]]
-      subheading <- saveTaskResults(id = subplotType, sectionId = sectionID, textChunk = paste(paste0(rep("#", sectionLevel + 1), collapse = ""), subplotTypeName), includeTextChunk = TRUE)
+      subheading <- saveTaskResults(
+        id = subplotType, 
+        sectionId = sectionID, 
+        # Subheading result includes anchor tag to be referenced in TOC
+        textChunk = c(
+          anchor(paste0(sectionID, "-ddi-subunit-", length(ddiResults)+1)), "",
+          paste(paste0(rep("#", sectionLevel + 1), collapse = ""), subplotTypeName)
+        ), 
+        includeTextChunk = TRUE
+        )
       ddiResults <- c(ddiResults, subheading)
       subplotTypeLevels <- unique(dataframe[[subplotType]])
       for (subplotTypeLevel in subplotTypeLevels) {
-        subsubheading <- saveTaskResults(id = paste(subplotType, subplotTypeLevel, sep = " - "), sectionId = sectionID, textChunk = paste(paste0(rep("#", sectionLevel + 2), collapse = ""), subplotTypeLevel), includeTextChunk = TRUE)
+        subsubheading <- saveTaskResults(
+          id = paste(subplotType, subplotTypeLevel, sep = " - "), 
+          sectionId = sectionID, 
+          # Subheading result includes anchor tag to be referenced in TOC
+          textChunk = c(
+            anchor(paste0(sectionID, "-ddi-subunit-", length(ddiResults)+1)), "",
+            paste(paste0(rep("#", sectionLevel + 2), collapse = ""), subplotTypeLevel)
+          ),
+          includeTextChunk = TRUE
+          )
         ddiResults <- c(ddiResults, subsubheading)
         subplotDataframe <- droplevels(dataframe[dataframe[[subplotType]] == subplotTypeLevel, ])
         sectionID <- metadata$sectionID

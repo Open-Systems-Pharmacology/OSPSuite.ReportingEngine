@@ -20,6 +20,8 @@ R6 class representing Reporting Engine generic Workflow
 
 \item{\code{createWordReport}}{logical of option for creating Markdwon-Report only but not a Word-Report.}
 
+\item{\code{wordConversionTemplate}}{optional docx template for rendering a tuned Word-Report document}
+
 \item{\code{userDefinedTasks}}{List of user-defined tasks (to update with loadUserDefinedTask)}
 
 \item{\code{numberSections}}{logical defining if the report sections should be numbered}
@@ -57,6 +59,7 @@ Create a new `Workflow` object.
   simulationSets,
   workflowFolder,
   createWordReport = TRUE,
+  wordConversionTemplate = NULL,
   watermark = NULL,
   simulationSetDescriptor = NULL,
   numberSections = TRUE,
@@ -72,6 +75,8 @@ Create a new `Workflow` object.
 \item{\code{workflowFolder}}{path of the output folder created or used by the Workflow.}
 
 \item{\code{createWordReport}}{logical of option for creating Markdown-Report only but not a Word-Report.}
+
+\item{\code{wordConversionTemplate}}{optional docx template for rendering a tuned Word-Report document}
 
 \item{\code{watermark}}{displayed watermark in figures background}
 

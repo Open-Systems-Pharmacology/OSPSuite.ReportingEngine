@@ -15,6 +15,9 @@ resetReport <- function(fileName, logFolder = getwd()) {
       logTypes = LogTypes$Debug
     )
   }
+  # When write() uses sep = "\n", 
+  # Every element of the array input in write() is added in a new line
+  # Thus, only "" is needed to create a new line
   fileObject <- file(fileName, encoding = "UTF-8")
   write("", file = fileObject, sep = "\n")
   close(fileObject)
@@ -199,12 +202,12 @@ mergeMarkdownFiles <- function(inputFiles, outputFile, logFolder = getwd(), keep
 #' @param createWordReport option for creating Markdwon-Report only but not a Word-Report
 #' @param numberSections logical defining if sections are numbered
 #' @param intro name of .md file that include introduction (before toc)
+#' @param wordConversionTemplate optional docx template for rendering a tuned Word-Report document
 #' @export
-renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE, numberSections = TRUE, intro = NULL) {
+renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE, numberSections = TRUE, intro = NULL, wordConversionTemplate = NULL) {
   actionToken2 <- re.tStartAction(actionType = "ReportGeneration")
   numberTablesAndFigures(fileName, logFolder)
-  # TODO: number sections and intro in word report
-  renderWordReport(fileName, logFolder, createWordReport)
+  renderWordReport(fileName, intro = intro, logFolder, createWordReport, wordConversionTemplate)
   tocContent <- getSectionTOC(fileName, logFolder, numberSections = numberSections)
   addMarkdownToc(tocContent, fileName, logFolder)
   mergeMarkdownFiles(inputFiles = c(intro, fileName), outputFile = fileName, logFolder = logFolder)
@@ -215,10 +218,12 @@ renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE
 #' @title renderWordReport
 #' @description Render docx report with number sections and table of content
 #' @param fileName name of .md file to render
+#' @param intro name of .md file that include introduction (before toc)
 #' @param logFolder folder where the logs are saved
 #' @param createWordReport option for creating Markdwon-Report only but not a Word-Report
+#' @param wordConversionTemplate optional docx template for rendering a tuned Word-Report document
 #' @export
-renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE) {
+renderWordReport <- function(fileName, intro = NULL, logFolder = getwd(), createWordReport = FALSE, wordConversionTemplate = NULL) {
   reportConfig <- file.path(logFolder, "word-report-configuration.txt")
   wordFileName <- sub(pattern = ".md", replacement = "-word.md", fileName)
   docxWordFileName <- sub(pattern = ".md", replacement = "-word.docx", fileName)
@@ -230,9 +235,15 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
   for (lineContent in fileContent) {
     firstElement <- as.character(unlist(strsplit(lineContent, " ")))
     firstElement <- firstElement[1]
-    # Table: caption is before table. Thus, break page is added before Table
+    # When finding a line referencing a table caption,
     if (grepl(pattern = "Table", x = firstElement)) {
-      wordFileContent <- c(wordFileContent, "\\newpage")
+      # The new content to write in the report is
+      # - previous content = wordFileContent
+      # - page break = "\\newpage"
+      # - table caption = lineContent
+      # - line space = "" (due to sep="\n" in function write)
+      wordFileContent <- c(wordFileContent, "\\newpage", lineContent, "")
+      next
     }
     # Figure: caption is after figure linked with "![](path)". Thus, break page is added before definition of figure path
     # For word report, it needs to be merged as "![caption](path)"
@@ -241,7 +252,13 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
       figureContent <- lineContent
       next
     }
+    # When finding a line referencing a figure caption,
     if (grepl(pattern = "Figure", x = firstElement) & !is.null(figureContent)) {
+      # The new content to write in the report is
+      # - previous content = wordFileContent
+      # - page break = "\\newpage"
+      # - figure and its caption = "![lineContent](figureContent)"
+      # with lineContent = figure caption and figureContent = figure link
       wordFileContent <- c(
         wordFileContent,
         "\\newpage",
@@ -263,18 +280,46 @@ renderWordReport <- function(fileName, logFolder = getwd(), createWordReport = F
   }
   file.remove(usedFilesFileName)
 
+  # Include introduction as a yaml header passed as additional arguments to pandoc
+  if(!isEmpty(intro)){
+    introContent <- readLines(intro, encoding = "UTF-8")
+    yamlContent <- introToYamlHeader(introContent)
+    
+    wordFileContent <- c(
+      # Cover page features
+      yamlContent,
+      "",
+      wordFileContent
+    )
+  }
+  # Since write() uses sep = "\n", 
+  # every element of array wordFileContent is added in a new line
   fileObject <- file(wordFileName, encoding = "UTF-8")
   write(wordFileContent, file = fileObject, sep = "\n")
   close(fileObject)
   re.tStoreFileMetadata(access = "write", filePath = wordFileName)
 
   if (createWordReport) {
-    templateReport <- system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
+    # Check if pandoc is available before trying to render word report
+    tryCatch({
+      command <- "pandoc --version"
+      status <- system(command, show.output.on.console = FALSE)
+      validateCommandStatus(command, status)
+    }, error = function(e) {
+      logWorkflow(
+        message = "Pandoc is not installed, word report was not created",
+        pathFolder = logFolder,
+        logTypes = c(LogTypes$Error, LogTypes$Debug)
+      )
+      return(invisible())
+    })
+
+    wordConversionTemplate <- wordConversionTemplate %||% system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
     pageBreakCode <- system.file("extdata", "pagebreak.lua", package = "ospsuite.reportingengine")
 
     write(c(
       "self-contained:", "wrap: none", "toc:",
-      paste0('reference-doc: "', templateReport, '"'),
+      paste0('reference-doc: "', wordConversionTemplate, '"'),
       paste0('lua-filter: "', pageBreakCode, '"'),
       paste0('resource-path: "', logFolder, '"')
     ), file = reportConfig, sep = "\n")
@@ -345,43 +390,44 @@ getSectionTOC <- function(fileName, logFolder = getwd(), numberSections = TRUE, 
 
   # Initialize toc content
   tocContent <- NULL
-  tocPatterns <- NULL
+  tocPatterns <- sapply(seq(1, tocLevels), function(tocLevel){paste0(rep(tocPattern, tocLevel), collapse = "")})
   tocCounts <- rep(0, tocLevels)
 
-  for (tocLevel in seq(1, tocLevels)) {
-    tocPatterns <- c(tocPatterns, paste0(rep(tocPattern, tocLevel), collapse = ""))
-  }
-
+  titleTocReference <- NULL
   for (lineIndex in seq_along(fileContent)) {
-    lineElements <- as.character(unlist(strsplit(fileContent[lineIndex], " ")))
-    firstElement <- lineElements[1]
-    secondElement <- lineElements[2]
+    lineContent <- fileContent[lineIndex]
+    firstElement <- as.character(unlist(strsplit(lineContent, " ")))[1]
+    # Use anchor only if defined as first element of line
+    if (grepl(pattern = "<a", x = firstElement)) {
+      titleTocReference <- getAnchorName(lineContent)
+    }
     for (tocLevel in rev(seq(1, tocLevels))) {
+      # Identify section titles as lines starting with "#" characters
       if (grepl(pattern = tocPatterns[tocLevel], x = firstElement)) {
-        # Skip the section title if unnumbered and numberSection is FALSE
-        if(!grepl(pattern = "[[:digit:]]", x = secondElement) & !numberSections){
+        # Prevents unreferenced title sections to appear in table of content
+        if(is.null(titleTocReference)){
           next
         }
+        # Count elements of section tree for numbering of sections
         tocCounts[tocLevel] <- tocCounts[tocLevel] + 1
         if (tocLevel < tocLevels) {
           tocCounts[seq(tocLevel + 1, tocLevels)] <- 0
         }
-
+        
         # Number section if option is true
         titlePattern <- paste0(tocPatterns[tocLevel], " ")
         if(numberSections){
-          newTitlePattern <- paste0(tocCounts[seq(1, tocLevel)], collapse = ".")
-          newTitlePattern <- paste0(titlePattern, newTitlePattern, " ")
+          titleNumber <- paste0(tocCounts[seq(1, tocLevel)], collapse = ".")
+          newTitlePattern <- paste0(titlePattern, titleNumber, " ")
           fileContent[lineIndex] <- gsub(pattern = titlePattern, replacement = newTitlePattern, x = fileContent[lineIndex])
         }
-
+        
         # Add section reference to toc content
         titleTocContent <- sub(pattern = titlePattern, replacement = "", x = fileContent[lineIndex])
-        titleTocReference <- gsub(pattern = "[^[:alnum:][:space:]\\_'-]", replacement = "", x = tolower(titleTocContent))
-        titleTocReference <- gsub(pattern = "[[:space:]*]", replacement = "-", x = titleTocReference)
         tocLevelShift <- paste0(rep(" ", tocLevel), collapse = " ")
         tocContent <- c(tocContent, paste0(tocLevelShift, "* [", titleTocContent, "](#", titleTocReference, ")"))
-
+        
+        titleTocReference <- NULL
         break
       }
     }
@@ -445,3 +491,119 @@ getSimulationDescriptor <- function(workflow) {
   validateIsOfType(workflow, "Workflow")
   return(workflow$getSimulationDescriptor())
 }
+
+#' @title adjustTitlePage
+#' @description Adust Qualification Version Information to be displayed on title page 
+#' @param fileName name of .md file to update
+#' @param qualificationVersionInfo A `QualificationVersionInfo`object defining Qualification Version Information to be displayed on title page
+#' @export
+adjustTitlePage <- function(fileName, qualificationVersionInfo = NULL) {
+  validateIsOfType(qualificationVersionInfo, "QualificationVersionInfo", nullAllowed = TRUE)
+  validateFileExists(fileName)
+  # Does not adust title page if no QualificationVersionInfo
+  if(isEmpty(qualificationVersionInfo)){
+    return(invisible())
+  }
+  fileContent <- readLines(fileName, encoding = "UTF-8")
+  fileContent <- qualificationVersionInfo$updateText(fileContent)
+  
+  fileObject <- file(fileName, encoding = "UTF-8")
+  write(fileContent, file = fileObject, sep = "\n")
+  close(fileObject)
+  return(invisible())
+}
+
+#' @title anchor
+#' @description Create an anchor tag for markdown document
+#' @param name Name/identifier of the anchor tag
+#' @return A character string
+#' @export
+#' @examples 
+#' anchor("section-1")
+#' 
+anchor <- function(name) {
+  return(paste0('<a id="', name, '"></a>'))
+}
+
+#' @title hasAnchor
+#' @description Check if a character string includes an anchor tag
+#' @param tag Character string
+#' @return A logical
+#' @export
+#' @examples 
+#' # Flags both anchors using id or name
+#' hasAnchor('<a id="section-1"></a>')
+#' hasAnchor('<a name="section-1"></a>')
+#' 
+#' hasAnchor("# section 1")
+hasAnchor <- function(tag) {
+  return(grepl(pattern = '<a (id|name)="', x = tag) & grepl(pattern = '"></a>', x = tag))
+}
+
+
+#' @title getAnchorName
+#' @description Get the name/identifier an anchor tag
+#' @param tag Character string
+#' @return A character Name/identifier of the anchor tag
+#' @export
+#' @examples 
+#' getAnchorName('<a id="section-1"></a>')
+#' 
+#' # Works also for tag name instead of id 
+#' getAnchorName('<a name="section-1"></a>')
+getAnchorName <- function(tag) {
+  if(!hasAnchor(tag)){
+    return()
+  }
+  # Keeps only what is within quotes
+  tagName <- gsub(pattern = '.*<a (id|name)="', replacement = "", x = tag)
+  tagName <- gsub(pattern = '"></a>.*', replacement = "", x = tagName)
+  return(tagName)
+}
+
+#' @title introToYamlHeader
+#' @description Translate an markdown introduction file into yaml header
+#' In order to include introduction before the table of content,
+#' it needs to be included as cover page features through a yaml header.
+#' A yaml header provides additional arguments to pandoc when translating the md report.
+#' Cover page features can be created with each their own style in the reference doc
+#' @param introContent Character array of the intro content
+#' @return A character array of yaml content
+#' @keywords internal
+introToYamlHeader <- function(introContent) {
+  # Initialize empty contents for the yaml header
+  titleContent <- ""
+  subtitleContent <- ""
+  
+  # Look for title and subtitle of the intro content
+  titleLine <- head(which(grepl(pattern = "# ", introContent) & !grepl(pattern = "## ", introContent)), 1)
+  if(!isEmpty(titleLine)){
+    titleContent <- gsub(pattern = "# ", replacement = "", x = introContent[titleLine])
+    # Remove title from intro
+    introContent <- introContent[-titleLine]
+  }
+  subtitleLine <- head(which(grepl(pattern = "## ", introContent) & !grepl(pattern = "### ", introContent)), 1)
+  if(!isEmpty(subtitleLine)){
+    subtitleContent <- gsub(pattern = "## ", replacement = "", x = introContent[subtitleLine])
+    # Remove title from intro
+    introContent <- introContent[-subtitleLine]
+  }
+  
+  # Define cover page features
+  yamlContent <- c(
+    # yaml header is delimited by ---
+      "---",
+      paste0("title: '", titleContent, "'"),
+      paste0("subtitle: '", subtitleContent, "'"),
+      # Caution, yaml options on several lines require indentation
+      "abstract: | ",
+      paste("\t", introContent),
+      "",
+      # Add a page break before the table of content
+      paste("\t", "\\newpage"),
+      "---"
+    )
+  return(yamlContent)
+  
+}
+

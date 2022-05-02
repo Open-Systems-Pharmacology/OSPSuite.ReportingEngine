@@ -74,8 +74,7 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
   workflow <- QualificationWorkflow$new(
     simulationSets = simulationSets,
     workflowFolder = workflowFolder,
-    configurationPlan = configurationPlan,
-    numberSections = FALSE
+    configurationPlan = configurationPlan
   )
   return(workflow)
 }
@@ -123,19 +122,20 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
   # If sections are already as a data.frame format,
   # return them after checking that every field is present
   if (isOfType(sectionsIn, "data.frame")) {
-    validateIsIncluded(c("id", "title", "content", "index", "path", "md"), names(sectionsIn))
+    validateIsIncluded(c("id", "reference", "title", "content", "index", "path", "md"), names(sectionsIn))
     return(sectionsIn)
   }
   # Parse every section
   for (section in sectionsIn) {
     # sectionIndex ensures that folder names are in correct order and have unique names
     sectionIndex <- nrow(sectionsOut) + 1
-    validateIsIncluded(c("Id", "Title"), names(section))
+    reference <- section$Reference %||% section$Id %||% paste0("undefined-section-", sectionIndex)
+    validateIsIncluded("Title", names(section))
     # Actual section path will be relative to the workflowFolder
     # and is wrapped in method configurationPlan$getSectionPath(id)
     sectionPath <- paste(
       parentFolder,
-      sprintf("%0.3d_section_%d", sectionIndex, section$Id),
+      sprintf("%0.3d_section_%s", sectionIndex, reference),
       sep = .Platform$file.sep
       )
 
@@ -143,8 +143,11 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
 
     # section data.frame with every useful information
     sectionOut <- data.frame(
-      id = section$Id,
+      # Sections with no reference nor id are allowed
+      # Such sections won't appear in the table of content
+      id = reference,
       title = section$Title,
+      # Empty content is allowed and translated by NA
       content = section$Content %||% NA,
       index = sectionIndex,
       path = sectionPath,
@@ -153,10 +156,11 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
       stringsAsFactors = FALSE
     )
     sectionsOut <- rbind.data.frame(sectionsOut, sectionOut, stringsAsFactors = FALSE)
-
+    validatehasOnlyDistinctValues(sectionsOut$id, dataName = "'Id' and 'Reference' of 'Sections'")
+    
     # If subsections are included and not empty
     # Update sectionsOut data.frame
-    if (!isOfLength(section$Sections, 0)) {
+    if (!isEmpty(section$Sections)) {
       sectionsOut <- sectionsAsDataFrame(
         sectionsIn = section$Sections,
         sectionsOut = sectionsOut,

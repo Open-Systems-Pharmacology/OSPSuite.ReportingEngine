@@ -217,7 +217,9 @@
       {
         "Title": "Test of Goodness-of-fit plots",
         "SectionId": 23,
-        "PlotTypes": ["predictedVsObserved"],
+        "PlotTypes": [
+          "predictedVsObserved"
+        ],
         "Groups": [
           {
             "Caption": "Test of A",
@@ -311,34 +313,45 @@
   "Sections": [
     {
       "Id": 1,
-      "Title": "1 Test Content Input",
-      "Content": "Content/testcontent.md"
+      "Reference": 1,
+      "Title": "Test Content Input",
+      "Sections": [
+        {
+          "Id": 11,
+          "Title": "With Content",
+          "Content": "Content/testcontent.md"
+        },
+        {
+          "Id": 12,
+          "Title": "Without Content"
+        }
+      ]
     },
     {
       "Id": 2,
-      "Title": "2 Time Profile Tests",
+      "Title": "Time Profile Tests",
       "Sections": [
         {
           "Id": 21,
-          "Title": "2.1 Time Profile"
+          "Title": "Time Profile"
         },
         {
           "Id": 22,
-          "Title": "2.2 Comparison Time Profile"
+          "Title": "Comparison Time Profile"
         },
         {
           "Id": 23,
-          "Title": "2.3 Goodness of fit"
+          "Title": "Goodness of fit"
         }
       ]
     },
     {
       "Id": 3,
-      "Title": "3 PK Ratio Tests"
+      "Title": "PK Ratio Tests"
     },
     {
       "Id": 4,
-      "Title": "4 DDI Ratio Tests"
+      "Title": "DDI Ratio Tests"
     }
   ],
   "Intro": [

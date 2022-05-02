@@ -12,9 +12,13 @@ GofPlotTask <- R6::R6Class(
     #' Currently, results contains at least 2 fields: `plots` and `tables`
     #' They are to be deprecated and replaced using `TaskResults` objects
     saveResults = function(structureSet, taskResults) {
+      simulationSetName <- structureSet$simulationSet$simulationSetName
       addTextChunk(
-        self$fileName,
-        paste0("## ", self$title, " for ", structureSet$simulationSet$simulationSetName),
+        fileName = self$fileName,
+        text = c(
+          anchor(paste0(self$reference, "-", removeForbiddenLetters(simulationSetName))), "",
+          paste0("## ", self$title, " for ", simulationSetName)
+        ),
         logFolder = self$workflowFolder
       )
       # For mutliple applications, taskResults$plots has 3 fields named as ApplicationRanges
@@ -29,11 +33,11 @@ GofPlotTask <- R6::R6Class(
           next
         }
         if (hasMultipleApplications) {
-          addTextChunk(self$fileName, getTimeRangeCaption(timeRange), logFolder = self$workflowFolder)
+          addTextChunk(self$fileName, getTimeRangeCaption(timeRange, self$reference, simulationSetName), logFolder = self$workflowFolder)
         }
         # Save and include plot paths to report
         for (plotName in names(listOfPlots)) {
-          plotFileName <- getDefaultFileName(structureSet$simulationSet$simulationSetName,
+          plotFileName <- getDefaultFileName(simulationSetName,
             suffix = paste0(plotName, "-", timeRange),
             extension = reEnv$defaultPlotFormat$format
           )
@@ -68,7 +72,7 @@ GofPlotTask <- R6::R6Class(
       }
 
       for (tableName in names(taskResults$tables)) {
-        tableFileName <- getDefaultFileName(structureSet$simulationSet$simulationSetName,
+        tableFileName <- getDefaultFileName(simulationSetName,
           suffix = tableName,
           extension = "csv"
         )
@@ -100,8 +104,8 @@ GofPlotTask <- R6::R6Class(
       )
       resetReport(self$fileName, self$workflowFolder)
       addTextChunk(
-        self$fileName,
-        paste0("# ", self$title),
+        fileName = self$fileName,
+        text = c(anchor(self$reference), "", paste0("# ", self$title)),
         logFolder = self$workflowFolder
       )
       if (!is.null(self$outputFolder)) {

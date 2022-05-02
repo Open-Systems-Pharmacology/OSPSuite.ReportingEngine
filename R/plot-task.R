@@ -1,6 +1,7 @@
 #' @title PlotTask
 #' @description  R6 class for PlotTask settings
 #' @field title section title in the report corresponding to the task
+#' @field reference id of anchor tag referencing title
 #' @field fileName name of report appendix file associated to task
 #' @field getTaskResults function called by task that computes and format figure results
 #' @field nameTaskResults name of the function that returns task results,
@@ -11,6 +12,7 @@ PlotTask <- R6::R6Class(
 
   public = list(
     title = NULL,
+    reference = NULL,
     fileName = NULL,
     getTaskResults = NULL,
     nameTaskResults = "none",
@@ -18,18 +20,21 @@ PlotTask <- R6::R6Class(
     #' @description
     #' Create a `PlotTask` object
     #' @param reportTitle title to be printed in the report
+    #' @param reportReference id of anchor tag referencing title
     #' @param fileName name of report appendix file associated to task
     #' @param getTaskResults function called by task that computes and format figure results
     #' @param nameTaskResults name of the function that returns task results,
     #' @param ... input parameters inherited from `Task` R6 class
     #' @return A new `PlotTask` object
     initialize = function(reportTitle = NULL,
+                          reportReference = NULL,
                           fileName = NULL,
                           getTaskResults = NULL,
                           nameTaskResults = "none",
                           ...) {
       super$initialize(...)
       self$title <- reportTitle
+      self$reference <- reportReference
       self$fileName <- file.path(self$workflowFolder, fileName)
       self$getTaskResults <- getTaskResults
       self$nameTaskResults <- nameTaskResults
@@ -44,8 +49,11 @@ PlotTask <- R6::R6Class(
     saveResults = function(structureSet, taskResults) {
       simulationSetName <- structureSet$simulationSet$simulationSetName
       addTextChunk(
-        self$fileName,
-        paste0("## ", self$title, " for ", simulationSetName),
+        fileName = self$fileName,
+        text = c(
+          anchor(paste0(self$reference, "-", removeForbiddenLetters(simulationSetName))), "",
+          paste0("## ", self$title, " for ", simulationSetName)
+        ),
         logFolder = self$workflowFolder
       )
       for (result in taskResults) {
@@ -117,8 +125,8 @@ PlotTask <- R6::R6Class(
       )
       resetReport(self$fileName, self$workflowFolder)
       addTextChunk(
-        self$fileName,
-        paste0("# ", self$title),
+        fileName = self$fileName,
+        text = c(anchor(self$reference), "", paste0("# ", self$title)),
         logFolder = self$workflowFolder
       )
       if (!is.null(self$outputFolder)) {

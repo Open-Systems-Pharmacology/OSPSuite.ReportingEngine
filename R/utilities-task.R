@@ -183,6 +183,7 @@ loadPlotTimeProfilesAndResidualsTask <- function(workflow, active = FALSE, setti
 
   return(GofPlotTask$new(
     reportTitle = defaultWorkflowTitles$plotGoF,
+    reportReference = defaultWorkflowReferences$plotGoF,
     fileName = defaultWorkflowAppendices$plotGoF,
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
@@ -220,6 +221,7 @@ loadPlotPKParametersTask <- function(workflow, active = FALSE, settings = NULL) 
       xParameters = getDefaultPkParametersXParameters(workflow$workflowType),
       yParameters = NULL,
       reportTitle = defaultWorkflowTitles$plotPKParameters,
+      reportReference = defaultWorkflowReferences$plotPKParameters,
       fileName = defaultWorkflowAppendices$plotPKParameters,
       getTaskResults = plotPopulationPKParameters,
       nameTaskResults = getObjectNameAsString(plotPopulationPKParameters),
@@ -234,6 +236,7 @@ loadPlotPKParametersTask <- function(workflow, active = FALSE, settings = NULL) 
   }
   return(PlotTask$new(
     reportTitle = defaultWorkflowTitles$plotPKParameters,
+    reportReference = defaultWorkflowReferences$plotPKParameters,
     fileName = defaultWorkflowAppendices$plotPKParameters,
     getTaskResults = plotMeanPKParameters,
     nameTaskResults = getObjectNameAsString(plotMeanPKParameters),
@@ -270,6 +273,7 @@ loadPlotSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
       xParameters = NULL,
       yParameters = NULL,
       reportTitle = defaultWorkflowTitles$plotSensitivity,
+      reportReference = defaultWorkflowReferences$plotSensitivity,
       fileName = defaultWorkflowAppendices$plotSensitivity,
       getTaskResults = plotPopulationSensitivity,
       nameTaskResults = getObjectNameAsString(plotPopulationSensitivity),
@@ -284,6 +288,7 @@ loadPlotSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
   }
   return(PlotTask$new(
     reportTitle = defaultWorkflowTitles$plotSensitivity,
+    reportReference = defaultWorkflowReferences$plotSensitivity,
     fileName = defaultWorkflowAppendices$plotSensitivity,
     getTaskResults = plotMeanSensitivity,
     nameTaskResults = getObjectNameAsString(plotMeanSensitivity),
@@ -315,6 +320,7 @@ loadPlotMassBalanceTask <- function(workflow, active = FALSE, settings = NULL) {
 
   return(PlotTask$new(
     reportTitle = defaultWorkflowTitles$plotMassBalance,
+    reportReference = defaultWorkflowReferences$plotMassBalance,
     fileName = defaultWorkflowAppendices$plotMassBalance,
     getTaskResults = plotMeanMassBalance,
     nameTaskResults = getObjectNameAsString(plotMeanMassBalance),
@@ -343,6 +349,7 @@ loadPlotAbsorptionTask <- function(workflow, active = FALSE, settings = NULL) {
 
   return(PlotTask$new(
     reportTitle = defaultWorkflowTitles$plotAbsorption,
+    reportReference = defaultWorkflowReferences$plotAbsorption,
     fileName = defaultWorkflowAppendices$plotAbsorption,
     getTaskResults = plotMeanAbsorption,
     nameTaskResults = getObjectNameAsString(plotMeanAbsorption),
@@ -374,6 +381,7 @@ loadPlotDemographyTask <- function(workflow, active = FALSE, settings = NULL) {
     xParameters = getDefaultDemographyXParameters(workflow$workflowType),
     yParameters = NULL,
     reportTitle = defaultWorkflowTitles$plotDemography,
+    reportReference = defaultWorkflowReferences$plotDemography,
     fileName = defaultWorkflowAppendices$plotDemography,
     getTaskResults = plotDemographyParameters,
     nameTaskResults = getObjectNameAsString(plotDemographyParameters),

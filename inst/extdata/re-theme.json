@@ -5,7 +5,8 @@
       "size": 12,
       "fontFace": "bold",
       "fontFamily": "",
-      "angle": 0
+      "angle": 0,
+      "align": "center"
     },
     "subtitle": {
       "color": "black",
@@ -19,14 +20,16 @@
       "size": 11,
       "fontFace": "plain",
       "fontFamily": "",
-      "angle": 0
+      "angle": 0,
+      "align": "center"
     },
     "ylabel": {
       "color": "black",
       "size": 11,
       "fontFace": "plain",
       "fontFamily": "",
-      "angle": 90
+      "angle": 90,
+      "align": "center"
     },
     "watermark": {
       "color": "grey",
@@ -47,14 +50,16 @@
       "size": 11,
       "fontFace": "plain",
       "fontFamily": "",
-      "angle": 0
+      "angle": 0,
+      "align": "center"
     },
     "yAxis": {
       "color": "black",
       "size": 11,
       "fontFace": "plain",
       "fontFamily": "",
-      "angle": 0
+      "angle": 0,
+      "align": "right"
     }
   },
   "background": {
@@ -169,7 +174,7 @@
       "shape": "blank",
       "linetype": "solid",
       "size": 1,
-      "alpha": 0.5
+      "alpha": 0.2
     },
     "addErrorbar": {
       "color": "black",
@@ -189,10 +194,18 @@
         "alpha": 1
       },
       "lines": {
-        "color": ["black", "dodgerblue", "firebrick"],
+        "color": [
+          "black",
+          "dodgerblue",
+          "firebrick"
+        ],
         "fill": "NA",
         "shape": "blank",
-        "linetype": ["solid", "dashed", "dashed"],
+        "linetype": [
+          "solid",
+          "dashed",
+          "dashed"
+        ],
         "size": 0.5,
         "alpha": 1
       },
@@ -218,7 +231,11 @@
         "color": "black",
         "fill": "NA",
         "shape": "blank",
-        "linetype": ["solid", "dashed", "solid"],
+        "linetype": [
+          "solid",
+          "dashed",
+          "solid"
+        ],
         "size": 0.5,
         "alpha": 1
       },
@@ -254,7 +271,7 @@
         "shape": "blank",
         "linetype": "blank",
         "size": 0.5,
-        "alpha": "first"
+        "alpha": 0.2
       },
       "errorbars": {
         "color": "reset",
