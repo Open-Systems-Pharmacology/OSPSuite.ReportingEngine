@@ -179,13 +179,19 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
 #' @return Names of created appendices
 #' @keywords internal
 createSectionOutput <- function(configurationPlan, logFolder = getwd()) {
-  # Intro
-  resetReport(configurationPlan$getIntroMarkdown())
-  appendices <- NULL
-  for (intro in configurationPlan$intro) {
-    configurationPlan$copyIntro(intro, logFolder = logFolder)
+  # Introduction
+  reportIntro <- NULL
+  if(!isEmpty(configurationPlan$intro)){
+    # Centralize content of possibly multiple intro files in one md intro
+    reportIntro <- configurationPlan$getIntroMarkdown()
+    resetReport(reportIntro)
+    for (intro in configurationPlan$intro) {
+      configurationPlan$copyIntro(intro, logFolder = logFolder)
+    }
   }
+  
   # Sections
+  appendices <- NULL
   for (sectionIndex in configurationPlan$sections$index) {
     sectionId <- configurationPlan$sections$id[sectionIndex]
     # Create section output path
@@ -204,7 +210,7 @@ createSectionOutput <- function(configurationPlan, logFolder = getwd()) {
   # Images and other raw content to copy
   configurationPlan$copyContentFiles()
   return(list(
-    intro = configurationPlan$getIntroMarkdown(),
+    intro = reportIntro,
     appendices = appendices))
 }
 
