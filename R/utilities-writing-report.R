@@ -206,10 +206,14 @@ mergeMarkdownFiles <- function(inputFiles, outputFile, logFolder = getwd(), keep
 #' @export
 renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE, numberSections = TRUE, intro = NULL, wordConversionTemplate = NULL) {
   actionToken2 <- re.tStartAction(actionType = "ReportGeneration")
-  numberTablesAndFigures(fileName, logFolder)
+  addTableAndFigureNumbersToMarkdown(fileName, logFolder)
+  # When rendering word report, the pandoc command toc automatically number the sections
+  # Thus, report-word.md needs to be created before numbering the markdown sections
   renderWordReport(fileName, intro = intro, logFolder, createWordReport, wordConversionTemplate)
-  tocContent <- getSectionTOC(fileName, logFolder, numberSections = numberSections)
-  addMarkdownToc(tocContent, fileName, logFolder)
+  if(numberSections){
+    addSectionNumbersToMarkdown(fileName, logFolder)
+  }
+  addMarkdownToc(fileName, logFolder)
   mergeMarkdownFiles(inputFiles = c(intro, fileName), outputFile = fileName, logFolder = logFolder)
   re.tEndAction(actionToken = actionToken2)
   return(invisible())
@@ -233,8 +237,7 @@ renderWordReport <- function(fileName, intro = NULL, logFolder = getwd(), create
   wordFileContent <- NULL
   figureContent <- NULL
   for (lineContent in fileContent) {
-    firstElement <- as.character(unlist(strsplit(lineContent, " ")))
-    firstElement <- firstElement[1]
+    firstElement <- getFirstLineElement(lineContent)
     # When finding a line referencing a table caption,
     if (grepl(pattern = "Table", x = firstElement)) {
       # The new content to write in the report is
@@ -337,31 +340,25 @@ renderWordReport <- function(fileName, intro = NULL, logFolder = getwd(), create
   return(invisible())
 }
 
-#' @title numberTablesAndFigures
+#' @title addTableAndFigureNumbersToMarkdown
 #' @description Reference tables and figures in a report
 #' @param fileName name of .md file to update
 #' @param logFolder folder where the logs are saved
-#' @param figurePattern character pattern referencing figures in first element of line
-#' @param tablePattern character pattern referencing tables in first element of line
 #' @keywords internal
-numberTablesAndFigures <- function(fileName, logFolder = getwd(), figurePattern = "Figure:", tablePattern = "Table:") {
+addTableAndFigureNumbersToMarkdown <- function(fileName, logFolder = getwd()) {
   fileContent <- readLines(fileName, encoding = "UTF-8")
-
-  figureCount <- 0
-  tableCount <- 0
-  for (lineIndex in seq_along(fileContent)) {
-    firstElement <- as.character(unlist(strsplit(fileContent[lineIndex], " ")))
-    firstElement <- firstElement[1]
-    if (grepl(pattern = figurePattern, x = firstElement)) {
-      figureCount <- figureCount + 1
-      fileContent[lineIndex] <- gsub(pattern = figurePattern, replacement = paste0("Figure ", figureCount, ":"), x = fileContent[lineIndex])
-    }
-    if (grepl(pattern = tablePattern, x = firstElement)) {
-      tableCount <- tableCount + 1
-      fileContent[lineIndex] <- gsub(pattern = tablePattern, replacement = paste0("Table ", tableCount, ":"), x = fileContent[lineIndex])
-    }
-  }
-
+  numberOfLines <- length(fileContent)
+  
+  fileContent <- updateFigureNumbers(fileContent)
+  # Three new lines are added by referenced figure
+  figureCount <- (length(fileContent)-numberOfLines)/3
+  numberOfLines <- length(fileContent)
+  
+  fileContent <- updateTableNumbers(fileContent)
+  # Three new lines are added by referenced table
+  tableCount <- (length(fileContent)-numberOfLines)/3
+  numberOfLines <- length(fileContent)
+  
   fileObject <- file(fileName, encoding = "UTF-8")
   write(fileContent, file = fileObject, sep = "\n")
   close(fileObject)
@@ -374,76 +371,36 @@ numberTablesAndFigures <- function(fileName, logFolder = getwd(), figurePattern 
   return(invisible())
 }
 
-#' @title getSectionTOC
-#' @description Reference sections of a report
+#' @title addSectionNumbersToMarkdown
+#' @description Update section numbers of a report
 #' @param fileName name of .md file to update
 #' @param logFolder folder where the logs are saved
-#' @param numberSections logical defining if numbering of section titles is performed automatically when getting the table of content.
-#' When this option is `FALSE`, such as in qualification workflows,
-#' all unnumbered section titles are skipped from the the table of content
-#' @param tocPattern character pattern referencing sections in first element of line
-#' @param tocLevels levels of sections in the report
-#' @return Table of content referencing sections following a markdown format
 #' @keywords internal
-getSectionTOC <- function(fileName, logFolder = getwd(), numberSections = TRUE, tocPattern = "#", tocLevels = 6) {
+addSectionNumbersToMarkdown <- function(fileName, logFolder = getwd()){
   fileContent <- readLines(fileName, encoding = "UTF-8")
-
-  # Initialize toc content
-  tocContent <- NULL
-  tocPatterns <- sapply(seq(1, tocLevels), function(tocLevel){paste0(rep(tocPattern, tocLevel), collapse = "")})
-  tocCounts <- rep(0, tocLevels)
-
-  titleTocReference <- NULL
-  for (lineIndex in seq_along(fileContent)) {
-    lineContent <- fileContent[lineIndex]
-    firstElement <- as.character(unlist(strsplit(lineContent, " ")))[1]
-    # Use anchor only if defined as first element of line
-    if (grepl(pattern = "<a", x = firstElement)) {
-      titleTocReference <- getAnchorName(lineContent)
-    }
-    for (tocLevel in rev(seq(1, tocLevels))) {
-      # Identify section titles as lines starting with "#" characters
-      if (grepl(pattern = tocPatterns[tocLevel], x = firstElement)) {
-        # Prevents unreferenced title sections to appear in table of content
-        if(is.null(titleTocReference)){
-          next
-        }
-        # Count elements of section tree for numbering of sections
-        tocCounts[tocLevel] <- tocCounts[tocLevel] + 1
-        if (tocLevel < tocLevels) {
-          tocCounts[seq(tocLevel + 1, tocLevels)] <- 0
-        }
-        
-        # Number section if option is true
-        titlePattern <- paste0(tocPatterns[tocLevel], " ")
-        if(numberSections){
-          titleNumber <- paste0(tocCounts[seq(1, tocLevel)], collapse = ".")
-          newTitlePattern <- paste0(titlePattern, titleNumber, " ")
-          fileContent[lineIndex] <- gsub(pattern = titlePattern, replacement = newTitlePattern, x = fileContent[lineIndex])
-        }
-        
-        # Add section reference to toc content
-        titleTocContent <- sub(pattern = titlePattern, replacement = "", x = fileContent[lineIndex])
-        tocLevelShift <- paste0(rep(" ", tocLevel), collapse = " ")
-        tocContent <- c(tocContent, paste0(tocLevelShift, "* [", titleTocContent, "](#", titleTocReference, ")"))
-        
-        titleTocReference <- NULL
-        break
-      }
-    }
+  titleInfo <- getTitleInfo(fileContent)
+  for(title in titleInfo){
+    titleNumber <- paste0(title$count[seq(1, title$level)], collapse = ".")
+    titlePattern <- paste0(rep("#", title$level), collapse = "")
+    fileContent[title$line] <- gsub(
+      pattern = titlePattern,
+      x = fileContent[title$line],
+      replacement = paste(titlePattern, titleNumber)
+    )
   }
-
+  
   fileObject <- file(fileName, encoding = "UTF-8")
-  write(fileContent, file = fileObject, sep = "\n")
-  close(fileObject)
+write(fileContent, file = fileObject, sep = "\n")
+close(fileObject)
 
-  logWorkflow(
-    message = paste0("In '", fileName, "', ", tocCounts[1], " main sections were referenced"),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
-  return(tocContent)
+logWorkflow(
+  message = paste0("In '", fileName, "', ", length(title), " sections were numbered"),
+  pathFolder = logFolder,
+  logTypes = LogTypes$Debug
+)
+return(invisible())
 }
+
 
 #' @title addMarkdownToc
 #' @description Add table of content to a markdown file
@@ -451,9 +408,26 @@ getSectionTOC <- function(fileName, logFolder = getwd(), numberSections = TRUE, 
 #' @param fileName name of .md file to update
 #' @param logFolder folder where the logs are saved
 #' @keywords internal
-addMarkdownToc <- function(tocContent, fileName, logFolder = getwd()) {
+addMarkdownToc <- function(fileName, logFolder = getwd(), tocTitle = "# Table of Contents") {
   fileContent <- readLines(fileName, encoding = "UTF-8")
-  fileContent <- c("# Table of Contents", "", tocContent, fileContent)
+  titleInfo <- getTitleInfo(fileContent)
+  # For each title, create its entry in table of content
+  # By adding as many spaces as levels, then *[display title](#anchorId)
+  tocContent <- sapply(
+    titleInfo,
+    function(title){
+      titlePattern <- paste0(paste0(rep("#", title$level), collapse = ""), " ")
+      titleTocContent <- gsub(pattern = titlePattern, replacement = "", x = title$content)
+      tocLevelShift <- paste0(rep(" ", title$level), collapse = " ")
+      return(paste0(tocLevelShift, "* [", titleTocContent, "](#", title$reference, ")"))
+    }
+  )
+  # Update file content by adding before
+  # tocTitle: "# Table of Contents"
+  # line break
+  # content of the table of content
+  # then the report content
+  fileContent <- c(tocTitle, "", tocContent, "", fileContent)
   fileObject <- file(fileName, encoding = "UTF-8")
   write(fileContent, file = fileObject, sep = "\n")
   close(fileObject)
@@ -605,5 +579,133 @@ introToYamlHeader <- function(introContent) {
     )
   return(yamlContent)
   
+}
+
+#' @title getTitleInfo
+#' @description Get section titles information from report content
+#' @param fileContent Content of a markdown or text file read as an array of character strings
+#' @param titlePattern character pattern referencing titles in first element of line
+#' @param titleLevels levels of titles in the report
+#' @return List of title information including `line`, `content`, `reference`, `count`, `level`
+#' @keywords internal
+getTitleInfo <- function(fileContent, titlePattern = "#", titleLevels = 6) {
+  # Initialize title information
+  titleInfo <- list()
+  titlePatterns <- sapply(seq(1, titleLevels), function(titleLevel){paste0(rep(titlePattern, titleLevel), collapse = "")})
+  titleCounts <- rep(0, titleLevels)
+  titleReference <- NULL
+  for (lineIndex in seq_along(fileContent)) {
+    lineContent <- fileContent[lineIndex]
+    firstElement <- as.character(unlist(strsplit(lineContent, " ")))[1]
+    # Use anchor only if defined as first element of line
+    if (grepl(pattern = "<a", x = firstElement)) {
+      titleReference <- getAnchorName(lineContent)
+    }
+    for (titleLevel in rev(seq(1, titleLevels))) {
+      # Identify section titles as lines starting with "#" characters
+      if (grepl(pattern = titlePatterns[titleLevel], x = firstElement)) {
+        # Prevents unreferenced title sections to appear in table of content
+        if(is.null(titleReference)){
+          next
+        }
+        # Count elements of section tree for numbering of sections
+        titleCounts[titleLevel] <- titleCounts[titleLevel] + 1
+        if (titleLevel < titleLevels) {
+          titleCounts[seq(titleLevel + 1, titleLevels)] <- 0
+        }
+        
+        titleInfo[[length(titleInfo)+1]] <- list(
+            line = lineIndex,
+            # Remove the "#" characters from the title content
+            content = lineContent,
+            reference = titleReference,
+            count = titleCounts,
+            level = titleLevel
+          )
+        titleReference <- NULL
+        break
+    }
+    }
+  }
+  return(titleInfo)
+}
+
+#' @title getFirstLineElement
+#' @description Get first element/word of a line
+#' @param lineContent Character string
+#' @param split character pattern to split between elements/words
+#' @return Character string
+#' @keywords internal
+getFirstLineElement <- function(lineContent, split = " "){
+  as.character(unlist(strsplit(lineContent, split)))[1]
+}
+
+#' @title updateFigureNumbers
+#' @description Update figure captions and references in report
+#' @param fileContent Content of a markdown or text file read as an array of character strings
+#' @param pattern character pattern referencing figures in first element of line
+#' @param replacement character replacing pattern in updated caption name
+#' @param anchorId character pattern referencing figures in anchors
+#' @return Array of character strings
+#' @keywords internal
+updateFigureNumbers <- function(fileContent, pattern = "Figure:", replacement = "Figure", anchorId = "figure") {
+  # Only higher level titles are used for figure numbering
+  titleInfo <- getTitleInfo(fileContent)
+  titleInfo <- titleInfo[sapply(titleInfo, function(title)title$level==1)]
+  titleLines <- sapply(titleInfo, function(title)title$line)
+  # In case of unreferenced titles
+  titleNumbers <- sapply(titleInfo, function(title)title$count[1])
+
+  # Initialize
+  updatedFileContent <- NULL
+  count <- 1
+  titleIndex <- 1
+  for(lineIndex in seq_along(fileContent)){
+    # Counting is performed within sections
+    # Need to reset count at lines of titles
+    if(lineIndex %in% titleLines){
+      count <- 1
+    }
+    
+    # If line is not related to an artifact, nothing to update
+    firstElement <- getFirstLineElement(fileContent[lineIndex])
+    if (!grepl(pattern = pattern, x = firstElement)) {
+      updatedFileContent <- c(updatedFileContent, fileContent[lineIndex])
+      next
+    }
+    # Get section number of figure as last value lower than line index
+    # If no value found, section is empty and figure count is only global count
+    section <- tail(titleNumbers[titleLines<lineIndex], 1)
+    figureNumber <- paste(c(section, count), collapse = "-")
+    
+    # Create reference anchor with id matching figure number
+    anchorContent <- anchor(paste(anchorId, figureNumber, sep = "-"))
+    
+    # Update caption with appropriate figure count
+    updatedFigureContent <- gsub(
+      pattern = pattern, 
+      replacement = paste0(replacement, " ", figureNumber, ":"), 
+      x = fileContent[lineIndex]
+      )
+    
+    # Updated file content includes reference and intra section numbering
+    updatedFileContent <- c(updatedFileContent, "", anchorContent, "", updatedFigureContent)
+    
+    count <- count + 1
+  }
+  return(updatedFileContent)
+}
+
+#' @title updateTableNumbers
+#' @description Update table captions and references in report
+#' @param fileContent Content of a markdown or text file read as an array of character strings
+#' @param pattern character pattern referencing figures in first element of line
+#' @param replacement character replacing pattern in updated caption name
+#' @param anchorId character pattern referencing figures in anchors
+#' @return Array of character strings
+#' @keywords internal
+updateTableNumbers <- function(fileContent, pattern = "Table:", replacement = "Table", anchorId = "table") {
+  # For tables, relies on the same workflow replacing default figure patterns by table patterns
+  return(updateFigureNumbers(fileContent, pattern, replacement, anchorId))
 }
 

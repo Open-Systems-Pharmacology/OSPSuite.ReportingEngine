@@ -4,14 +4,14 @@
 \alias{addMarkdownToc}
 \title{addMarkdownToc}
 \usage{
-addMarkdownToc(tocContent, fileName, logFolder = getwd())
+addMarkdownToc(fileName, logFolder = getwd(), tocTitle = "# Table of Contents")
 }
 \arguments{
-\item{tocContent}{Table of content referencing sections following a markdown format}
-
 \item{fileName}{name of .md file to update}
 
 \item{logFolder}{folder where the logs are saved}
+
+\item{tocContent}{Table of content referencing sections following a markdown format}
 }
 \description{
 Add table of content to a markdown file
