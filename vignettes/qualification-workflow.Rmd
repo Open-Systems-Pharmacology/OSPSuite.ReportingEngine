@@ -190,3 +190,68 @@ The conversion to word uses a reference word document that defines each style of
 Users can input their own reference word document using the option `wordConversionTemplate` as previously illustrated in the template.
 The default reference word document can be found using `system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")`.
 
+# Referencing
+
+To create references in the final report, html tags are used by the qualification workflow as illustrated below.
+Note that spaces should not be used as reference ids.
+
+```html
+<a id="my-reference-id"></a>
+```
+
+The markdown link to the reference above can then be written as:
+
+```md
+[display text](#my-reference-id)
+```
+
+## Dynamic references 
+
+References for sections, figures and tables created by the qualification workflow are generated dynamically.
+
+For section references, the field **Reference** is used in priority by the configuration plan to generate the reference id.
+In case, such reference is not defined, the qualification worklfow uses the **Id** of the section.
+If no **Reference** nor **Id** is defined, the qualification worklfow generate a reference id named `"undefined-section-<section index>"`.
+
+Tables and figures are numbered internally within first level sections (section whose title start with one markdown character `"#"` and are also referenced).
+
+The algorithm for numbering the figures and tables will look for the keywords **`Figure:`** and **`Table:`** as first element of a line (italic/bold characters are ignored by the algorithm if there is no space between the keyword and the `"*"` or `"_"` characters).
+
+Their references follow the nomenclature below:
+
+- For Figures: `<a id="figure-<section number>-<internal figure count>"></a>`
+- For Table: `<a id="table-<section number>-<internal table count>"></a>`
+
+For instance, the second table encountered within section 3 (e.g. section in 3.1.4) would be referenced: `<a id="table-3-2"></a>`
+
+## User-defined references 
+
+Users can define their own static references to include in the report.
+For instance, user can cite articles in the report using exponent notations as illustrated in the example below:
+
+```md
+text related to article [<sup>1</sup>](#citations)
+
+some text in between
+
+<a id="citations"></a>
+
+### Citations
+
+<sup>1</sup> Cited article
+
+```
+
+which would render as below in the report:
+
+text related to article [<sup>1</sup>](#citations)
+
+<br>
+some text in between
+<br>
+
+<a id="citations"></a>
+
+### Citations
+
+<sup>1</sup> Cited article

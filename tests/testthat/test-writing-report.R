@@ -34,7 +34,7 @@ test_that("addTextChunk does not overwrite previous file", {
 
 resetReport(testReport)
 addTextChunk(testReport, initialReportContent)
-numberTablesAndFigures(testReport)
+addTableAndFigureNumbersToMarkdown(testReport)
 
 test_that("numberTablesAndFigures counts correctly and update input file", {
   reportContent <- readLines(testReport)
@@ -42,14 +42,14 @@ test_that("numberTablesAndFigures counts correctly and update input file", {
   expect_equal(reportContent, refReportContent)
 })
 
-tocContent <- getSectionTOC(testReport)
+tocContent <- addSectionNumbersToMarkdown(testReport)
 test_that("numberSections counts correctly and update input file", {
   reportContent <- readLines(testReport)
   refReportContent <- readLines(testReportNumSecs)
   expect_equal(reportContent, refReportContent)
 })
 
-addMarkdownToc(tocContent, testReport)
+addMarkdownToc(testReport)
 test_that("Table of content has a correct format", {
   reportContent <- readLines(testReport)
   refReportContent <- readLines(testReportNumToc)
