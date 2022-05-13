@@ -720,13 +720,22 @@ copyReport <- function(from, to, keep = FALSE) {
   validateIsFileExtension(to, "md")
   validateFileExists(from)
   validateIsLogical(keep)
-  # If from is 
-  if(from == to){
+  # If from and to files are identical, just return
+  if(tolower(normalizePath(from, mustWork = FALSE)) == tolower(normalizePath(to, mustWork = FALSE))){
     return(invisible())
   }
   # Get directories of reports
   fromFolder <- dirname(from)
   toFolder <- dirname(to)
+  
+  # If from and to locations are identical but not files, only copy report
+  if(tolower(normalizePath(fromFolder, mustWork = FALSE)) == tolower(normalizePath(toFolder, mustWork = FALSE))){
+    file.copy(from, to, overwrite = TRUE)
+    if(!keep){
+      unlink(from, recursive = TRUE)
+    }
+    return(invisible())
+  }
   
   # Copy the .md report to its destination
   dir.create(toFolder, showWarnings = FALSE, recursive = TRUE)
