@@ -169,12 +169,12 @@ The output report, containing the mean model sensitivity plots from this example
 ```{r mwf render, include=F, echo=F}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(mwf$reportFileName)
+rmarkdown::render(mwf$reportFilePath)
 ```
 
 <div class = "reportOutput">
 ```{r mwf report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", mwf$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", mwf$reportFilePath)))
 ```
 </div>
 
@@ -307,12 +307,12 @@ The output report, containing the population sensitivity plots from this example
 ```{r pwf render, include=F, echo=F}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(pwf$reportFileName)
+rmarkdown::render(pwf$reportFilePath)
 ```
 
 <div class = "reportOutput">
 ```{r pwf report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", pwf$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", pwf$reportFilePath)))
 ```
 </div>
 

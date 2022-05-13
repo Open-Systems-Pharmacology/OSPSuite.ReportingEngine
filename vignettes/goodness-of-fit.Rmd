@@ -153,7 +153,7 @@ workflow1$runWorkflow()
 ```{r example 1 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow1$reportFileName)
+rmarkdown::render(workflow1$reportFilePath)
 ```
 
 The output report for Example 1 is shown below. 
@@ -161,7 +161,7 @@ There are only 2 figures in the report (linear and log scales) showing the time 
 
 <div class = "reportOutput">
 ```{r example 1 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow1$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", workflow1$reportFilePath)))
 ```
 </div>
 
@@ -237,7 +237,7 @@ knitr::kable(dictTableExample2, caption = "Table 3: Dictionary content")
 ```{r example 2 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow2$reportFileName)
+rmarkdown::render(workflow2$reportFilePath)
 ```
 
 The output report for Example 2 is shown below. 
@@ -245,7 +245,7 @@ There are now many more figures in the report showing not only time profiles in 
 
 <div class = "reportOutput">
 ```{r example 2 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow2$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", workflow2$reportFilePath)))
 ```
 </div>
 
@@ -310,7 +310,7 @@ knitr::kable(dictTableExample2, caption = "Table 4: Dictionary content")
 ```{r example 3 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow3$reportFileName)
+rmarkdown::render(workflow3$reportFilePath)
 ```
 
 The output report for Example 3 is shown below. 
@@ -318,7 +318,7 @@ The time profiles now indicate the LLOQ.
 
 <div class = "reportOutput">
 ```{r example 3 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow3$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", workflow3$reportFilePath)))
 ```
 </div>
 
@@ -387,14 +387,14 @@ workflow4$runWorkflow()
 ```{r example 4 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow4$reportFileName)
+rmarkdown::render(workflow4$reportFilePath)
 ```
 
 The output report for Example 4 is shown below.
 
 <div class = "reportOutput">
 ```{r example 4 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow4$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", workflow4$reportFilePath)))
 ```
 </div>
 
@@ -473,14 +473,14 @@ workflow5$runWorkflow()
 ```{r example 5 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow5$reportFileName)
+rmarkdown::render(workflow5$reportFilePath)
 ```
 
 The output report for Example 5 is shown below.
 
 <div class = "reportOutput">
 ```{r example 5 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow5$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", workflow5$reportFilePath)))
 ```
 </div>
 
@@ -536,7 +536,7 @@ workflow6$runWorkflow()
 ```{r example 6 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow6$reportFileName)
+rmarkdown::render(workflow6$reportFilePath)
 ```
 
 The output report for Example 6 is shown below. 
@@ -544,7 +544,7 @@ The 2 figures of the report (linear and log scales) include median, mean 5th and
 
 <div class = "reportOutput">
 ```{r example 6 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow6$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", workflow6$reportFilePath)))
 ```
 </div>
 
@@ -609,12 +609,12 @@ The residuals are calculated on the median simulated values.
 ```{r example 7 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow7$reportFileName)
+rmarkdown::render(workflow7$reportFilePath)
 ```
 
 <div class = "reportOutput">
 ```{r example 7 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow7$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", workflow7$reportFilePath)))
 ```
 </div>
 

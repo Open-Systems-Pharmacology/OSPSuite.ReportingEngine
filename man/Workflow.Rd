@@ -28,6 +28,15 @@ R6 class representing Reporting Engine generic Workflow
 }
 \if{html}{\out{</div>}}
 }
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{reportFolder}}{Directory in which workflow report is saved}
+
+\item{\code{reportFilePath}}{Path of workflow report}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

@@ -132,14 +132,14 @@ list.files(myExampleWorkflow$workflowFolder)
 
 ```{r general scheme render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html with specific format
-rmarkdown::render(myExampleWorkflow$reportFileName)
+rmarkdown::render(myExampleWorkflow$reportFilePath)
 ```
 
 The associated report will be as follows:
 
 <div class = "reportOutput">
 ```{r general scheme report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", myExampleWorkflow$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", myExampleWorkflow$reportFilePath)))
 ```
 </div>
 
@@ -249,7 +249,7 @@ The default value for this option is `NULL`, meaning that there won't be any des
 After creation of a `Workflow` object, some built in methods and properties are available 
 (using the character `$` after the name of the object).
 
-Most of the workflow properties correspond to the inputs used to create the workflow and includes `createWordReport`, `workflowFolder`, `reportFileName`, the list `simulationStructures` and the workflow tasks (developed in section [4](#4-tasks)).
+Most of the workflow properties correspond to the inputs used to create the workflow and includes `createWordReport`, `workflowFolder`, `reportFilePath`, the list `simulationStructures` and the workflow tasks (developed in section [4](#4-tasks)).
 
 Additionally, the methods listed below can be used to access relevant information about the workflow:
 
