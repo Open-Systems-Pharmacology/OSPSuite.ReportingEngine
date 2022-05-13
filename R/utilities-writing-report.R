@@ -709,3 +709,53 @@ updateTableNumbers <- function(fileContent, pattern = "Table:", replacement = "T
   return(updateFigureNumbers(fileContent, pattern, replacement, anchorId))
 }
 
+#' @title copyReport
+#' @description Copy markdown report and its figures (using their paths)
+#' @param from path of initial .md file to copy
+#' @param to path of destination .md file to be copied
+#' @param keep logical defining if initial .md file and figures are kept
+#' @export
+copyReport <- function(from, to, keep = FALSE) {
+  validateIsFileExtension(from, "md")
+  validateIsFileExtension(to, "md")
+  validateFileExists(from)
+  validateIsLogical(keep)
+  # If from is 
+  if(from == to){
+    return(invisible())
+  }
+  # Get directories of reports
+  fromFolder <- dirname(from)
+  toFolder <- dirname(to)
+  
+  # Copy the .md report to its destination
+  dir.create(toFolder, showWarnings = FALSE, recursive = TRUE)
+  file.copy(from, to, overwrite = TRUE)
+  
+  # Get all file paths available in figures/file links
+  fileContent <- readLines(from, encoding = "UTF-8")
+  filePaths <- fileContent[grepl(pattern = '\\!\\[', x = fileContent)]
+  filePaths <- gsub(pattern = '.*\\]\\(', replacement = "", x = filePaths)
+  filePaths <- gsub(pattern = '\\).*', replacement = "", x = filePaths)
+  filePaths <- unique(filePaths)
+  
+  # Create all necessary subfolders within report folder
+  for(dirPath in unique(file.path(toFolder, dirname(filePaths)))){
+    dir.create(dirPath, showWarnings = FALSE, recursive = TRUE)
+  }
+  
+  # Copy the figures in destination folder to have them available for new report
+  file.copy(file.path(fromFolder, filePaths), file.path(toFolder, filePaths), overwrite = TRUE)
+  
+  # If keep is true, keep initial files and report
+  if(keep){
+    return(invisible())
+  }
+  
+  # If keep is false, delete initial files and report
+  for(filePath in filePaths){
+    unlink(file.path(fromFolder, filePath), recursive = TRUE)
+  }
+  unlink(from, recursive = TRUE)
+  return(invisible())
+}

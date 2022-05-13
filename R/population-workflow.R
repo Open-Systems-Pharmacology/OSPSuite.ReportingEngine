@@ -131,14 +131,15 @@ PopulationWorkflow <- R6::R6Class(
       )
       appendices <- appendices[file.exists(appendices)]
       if (length(appendices) > 0) {
-        mergeMarkdownFiles(appendices, self$reportFileName, logFolder = self$workflowFolder)
+        mergeMarkdownFiles(appendices, file.path(self$workflowFolder, self$reportFileName), logFolder = self$workflowFolder)
         renderReport(
-          self$reportFileName, 
+          file.path(self$workflowFolder, self$reportFileName), 
           logFolder = self$workflowFolder,
           createWordReport = self$createWordReport, 
           numberSections = self$numberSections,
           wordConversionTemplate = self$wordConversionTemplate
           )
+        copyReport(from = file.path(self$workflowFolder, self$reportFileName), to = self$reportFilePath, keep = TRUE)
       }
 
       re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logInfoFile()))
