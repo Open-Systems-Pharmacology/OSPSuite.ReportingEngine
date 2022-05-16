@@ -78,7 +78,7 @@ createQualificationReport <- function(qualificationRunnerFolder,
   watermark <- ""
 
   #' If not set, report created will be named `report.md` and located in the worflow folder namely `reOutputFolder`
-  reportName <- "report.md"
+  reportPath <- file.path(reOutputFolder, "report.md")
   
   #----- Optional parameters for the Qualification Runner -----#
   #' If not null, `logFile` is passed internally via the `-l` option
@@ -126,10 +126,7 @@ createQualificationReport <- function(qualificationRunnerFolder,
   )
 
   #' Set the name of the final report
-  workflow$reportFileName <- reportName
-  #' Set the folder of the final report
-  #' Folder is created if not already existing
-  # workflow$reportFolder <- reOutputFolder
+  workflow$reportFilePath <- reportPath
   workflow$createWordReport <- createWordReport
   workflow$wordConversionTemplate <- wordConversionTemplate
 
