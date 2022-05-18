@@ -713,12 +713,14 @@ updateTableNumbers <- function(fileContent, pattern = "Table:", replacement = "T
 #' @description Copy markdown report and its figures (using their paths)
 #' @param from path of initial .md file to copy
 #' @param to path of destination .md file to be copied
+#' @param copyWordReport logical defining if .docx report is also copied
 #' @param keep logical defining if initial .md file and figures are kept
 #' @export
-copyReport <- function(from, to, keep = FALSE) {
+copyReport <- function(from, to, copyWordReport = TRUE, keep = FALSE) {
   validateIsFileExtension(from, "md")
   validateIsFileExtension(to, "md")
   validateFileExists(from)
+  validateIsLogical(copyWordReport)
   validateIsLogical(keep)
   # If from and to files are identical, just return
   if(tolower(normalizePath(from, mustWork = FALSE)) == tolower(normalizePath(to, mustWork = FALSE))){
@@ -727,12 +729,20 @@ copyReport <- function(from, to, keep = FALSE) {
   # Get directories of reports
   fromFolder <- dirname(from)
   toFolder <- dirname(to)
+  fromWordReport <- gsub(pattern = ".md", replacement = ".docx", x = from)
+  toWordReport <-gsub(pattern = ".md", replacement = ".docx", x = to)
   
   # If from and to locations are identical but not files, only copy report
   if(tolower(normalizePath(fromFolder, mustWork = FALSE)) == tolower(normalizePath(toFolder, mustWork = FALSE))){
     file.copy(from, to, overwrite = TRUE)
+    if(copyWordReport){
+      file.copy(from = fromWordReport, to = toWordReport)
+    }
     if(!keep){
       unlink(from, recursive = TRUE)
+      if(copyWordReport){
+        unlink(fromWordReport, recursive = TRUE)
+      }
     }
     return(invisible())
   }
@@ -740,6 +750,9 @@ copyReport <- function(from, to, keep = FALSE) {
   # Copy the .md report to its destination
   dir.create(toFolder, showWarnings = FALSE, recursive = TRUE)
   file.copy(from, to, overwrite = TRUE)
+  if(copyWordReport){
+    file.copy(from = fromWordReport, to = toWordReport)
+  }
   
   # Get all file paths available in figures/file links
   fileContent <- readLines(from, encoding = "UTF-8")
@@ -766,5 +779,8 @@ copyReport <- function(from, to, keep = FALSE) {
     unlink(file.path(fromFolder, filePath), recursive = TRUE)
   }
   unlink(from, recursive = TRUE)
+  if(copyWordReport){
+    unlink(fromWordReport, recursive = TRUE)
+  }
   return(invisible())
 }

@@ -4,12 +4,14 @@
 \alias{copyReport}
 \title{copyReport}
 \usage{
-copyReport(from, to, keep = FALSE)
+copyReport(from, to, copyWordReport = TRUE, keep = FALSE)
 }
 \arguments{
 \item{from}{path of initial .md file to copy}
 
 \item{to}{path of destination .md file to be copied}
+
+\item{copyWordReport}{logical defining if .docx report is also copied}
 
 \item{keep}{logical defining if initial .md file and figures are kept}
 }

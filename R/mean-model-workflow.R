@@ -112,13 +112,7 @@ MeanModelWorkflow <- R6::R6Class(
           wordConversionTemplate = self$wordConversionTemplate
           )
         # Move report if a non-default path is provided
-        copyReport(from = initialReportPath, to = self$reportFilePath, keep = TRUE)
-        if(self$createWordReport){
-          file.copy(
-            from = gsub(pattern = ".md", replacement = ".docx", x = initialReportPath), 
-            to = gsub(pattern = ".md", replacement = ".docx", x = self$reportFilePath)
-            )
-        }
+        copyReport(from = initialReportPath, to = self$reportFilePath, copyWordReport = self$createWordReport, keep = TRUE)
       }
 
       re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logInfoFile()))
