@@ -35,13 +35,13 @@ Workflow <- R6::R6Class(
     #' @param theme A `Theme` object from `{tlf}` package
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
-                          workflowFolder,
-                          createWordReport = TRUE,
-                          wordConversionTemplate = NULL,
-                          watermark = NULL,
-                          simulationSetDescriptor = NULL,
-                          numberSections = TRUE,
-                          theme = NULL) {
+                              workflowFolder,
+                              createWordReport = TRUE,
+                              wordConversionTemplate = NULL,
+                              watermark = NULL,
+                              simulationSetDescriptor = NULL,
+                              numberSections = TRUE,
+                              theme = NULL) {
       private$.reportingEngineInfo <- ReportingEngineInfo$new()
       # Empty list on which users can load tasks
       self$userDefinedTasks <- list()
@@ -50,7 +50,9 @@ Workflow <- R6::R6Class(
       validateIsString(watermark, nullAllowed = TRUE)
       validateIsString(simulationSetDescriptor, nullAllowed = TRUE)
       validateIsString(wordConversionTemplate, nullAllowed = TRUE)
-      sapply(c(simulationSets),function(simulationSet){validateIsOfType(object = simulationSet,type = "SimulationSet")})
+      sapply(c(simulationSets), function(simulationSet) {
+        validateIsOfType(object = simulationSet, type = "SimulationSet")
+      })
       validateIsLogical(createWordReport)
       validateIsLogical(numberSections)
 
@@ -83,7 +85,8 @@ Workflow <- R6::R6Class(
         pathFolder = self$workflowFolder
       )
 
-      self$reportFileName <- file.path(self$workflowFolder, paste0(defaultFileNames$reportName(), ".md"))
+      private$.reportFolder <- workflowFolder
+      self$reportFileName <- paste0(defaultFileNames$reportName(), ".md")
       self$taskNames <- enum(self$getAllTasks())
 
       self$simulationStructures <- list()
@@ -261,11 +264,36 @@ Workflow <- R6::R6Class(
     }
   ),
 
+  active = list(
+    #' @field reportFolder Directory in which workflow report is saved
+    reportFolder = function(value) {
+      if (missing(value)) {
+        return(private$.reportFolder)
+      }
+      validateIsCharacter(value)
+      dir.create(value, showWarnings = FALSE, recursive = TRUE)
+      private$.reportFolder <- value
+      return(invisible())
+    },
+
+    #' @field reportFilePath Path of workflow report
+    reportFilePath = function(value) {
+      if (missing(value)) {
+        return(file.path(self$reportFolder, self$reportFileName))
+      }
+      validateIsFileExtension(value, "md")
+      self$reportFolder <- dirname(value)
+      self$reportFileName <- basename(value)
+      return(invisible())
+    }
+  ),
+
   private = list(
     .reportingEngineInfo = NULL,
     .watermark = NULL,
     .parameterDisplayPaths = NULL,
     .simulationSetDescriptor = NULL,
+    .reportFolder = NULL,
 
     .getTasksWithStatus = function(status) {
       taskNames <- self$getAllTasks()
