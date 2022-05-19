@@ -128,7 +128,7 @@ workflow1$runWorkflow()
 ```{r example 1 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow1$reportFileName)
+rmarkdown::render(workflow1$reportFilePath)
 ```
 
 The output report for Example 1 is shown below. 
@@ -136,7 +136,7 @@ The table indicates the requested parameters in their base unit.
 
 <div class = "reportOutput">
 ```{r example 1 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow1$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", workflow1$reportFilePath)))
 ```
 </div>
 
@@ -194,7 +194,7 @@ workflow2$runWorkflow()
 ```{r example 2 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow2$reportFileName)
+rmarkdown::render(workflow2$reportFilePath)
 ```
 
 The output report for Example 2 is shown below. 
@@ -202,7 +202,7 @@ The table indicates the requested parameters in their base unit.
 
 <div class = "reportOutput">
 ```{r example 2 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow2$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", workflow2$reportFilePath)))
 ```
 </div>
 
@@ -275,7 +275,7 @@ workflow3$runWorkflow()
 ```{r example 3 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow3$reportFileName)
+rmarkdown::render(workflow3$reportFilePath)
 ```
 
 The output report for Example 3 is shown below. 
@@ -283,7 +283,7 @@ The table indicates the requested parameters in the updated units and display na
 
 <div class = "reportOutput">
 ```{r example 3 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow3$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", workflow3$reportFilePath)))
 ```
 </div>
 
@@ -362,7 +362,7 @@ workflow4$runWorkflow()
 ```{r example 4 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow4$reportFileName)
+rmarkdown::render(workflow4$reportFilePath)
 ```
 
 The output report for Example 4 is shown below. 
@@ -370,7 +370,7 @@ The table indicates the requested parameters in the updated units and display na
 
 <div class = "reportOutput">
 ```{r example 4 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow4$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", workflow4$reportFilePath)))
 ```
 </div>
 
@@ -434,7 +434,7 @@ workflow5$runWorkflow()
 ```{r example 5 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow5$reportFileName)
+rmarkdown::render(workflow5$reportFilePath)
 ```
 
 The output report for Example 6 is shown below. 
@@ -442,7 +442,7 @@ For the population, Box Whisker plots in linear and log scales are.
 
 <div class = "reportOutput">
 ```{r example 5 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow5$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", workflow5$reportFilePath)))
 ```
 </div>
 
@@ -514,7 +514,7 @@ workflow6$runWorkflow()
 ```{r example 6 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow6$reportFileName)
+rmarkdown::render(workflow6$reportFilePath)
 ```
 
 The output report for Example 6 is shown below. 
@@ -522,7 +522,7 @@ For the population, BoxWhisker plots in linear and log scales are.
 
 <div class = "reportOutput">
 ```{r example 6 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow6$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", workflow6$reportFilePath)))
 ```
 </div>
 
@@ -591,14 +591,14 @@ workflow7$runWorkflow()
 ```{r example 7 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow7$reportFileName)
+rmarkdown::render(workflow7$reportFilePath)
 ```
 
 The output report for Example 7 is shown below. 
 
 <div class = "reportOutput">
 ```{r example 7 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow7$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", workflow7$reportFilePath)))
 ```
 </div>
 
@@ -671,14 +671,14 @@ workflow8$runWorkflow()
 ```{r example 8 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow8$reportFileName)
+rmarkdown::render(workflow8$reportFilePath)
 ```
 
 The output report for Example 8 is shown below. 
 
 <div class = "reportOutput">
 ```{r example 8 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow8$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", workflow8$reportFilePath)))
 ```
 </div>
 
@@ -771,14 +771,14 @@ workflow9$runWorkflow()
 ```{r example 9 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow9$reportFileName)
+rmarkdown::render(workflow9$reportFilePath)
 ```
 
 The output report for Example 9 is shown below. 
 
 <div class = "reportOutput">
 ```{r example 9 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow9$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", workflow9$reportFilePath)))
 ```
 </div>
 

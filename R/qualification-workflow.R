@@ -65,6 +65,8 @@ QualificationWorkflow <- R6::R6Class(
     #' # 4) Render report
     #' @return All results and plots as a structured output in the workflow folder
     runWorkflow = function() {
+      # Prevent crashes if folder was deleted before (re) running a worflow
+      dir.create(self$workflowFolder, showWarnings = FALSE, recursive = TRUE)
       logWorkflow(
         message = "Starting run of qualification workflow",
         pathFolder = self$workflowFolder
@@ -90,15 +92,18 @@ QualificationWorkflow <- R6::R6Class(
       }
 
       # Merge appendices into final report
-      mergeMarkdownFiles(mdFiles$appendices, self$reportFileName, logFolder = self$workflowFolder)
+      initialReportPath <- file.path(self$workflowFolder, self$reportFileName)
+      mergeMarkdownFiles(mdFiles$appendices, initialReportPath, logFolder = self$workflowFolder)
       renderReport(
-        fileName = self$reportFileName,
+        fileName = initialReportPath,
         logFolder = self$workflowFolder,
         createWordReport = self$createWordReport,
         numberSections = self$numberSections,
         intro = mdFiles$intro,
         wordConversionTemplate = self$wordConversionTemplate
         )
+      # Move report if a non-default path is provided
+      copyReport(from = initialReportPath, to = self$reportFilePath, copyWordReport = self$createWordReport, keep = TRUE)
     },
 
     #' @description

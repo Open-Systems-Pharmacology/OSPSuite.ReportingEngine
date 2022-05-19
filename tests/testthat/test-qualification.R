@@ -46,7 +46,7 @@ test_that("Simulations and PK Analyses were saved", {
   )
 })
 
-reportContent <- readLines(workflow$reportFileName)
+reportContent <- readLines(workflow$reportFilePath)
 
 test_that("Final report managed appropriately intro, TOC and content", {
   intro <- grep(pattern = "# Title Page", reportContent)

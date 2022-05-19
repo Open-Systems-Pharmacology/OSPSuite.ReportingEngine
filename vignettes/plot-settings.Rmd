@@ -251,12 +251,12 @@ workflowA$runWorkflow()
 ```{r example render time profile, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflowA$reportFileName)
+rmarkdown::render(workflowA$reportFilePath)
 ```
 
 <div class = "reportOutput">
 ```{r example time profile report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflowA$reportFileName)))
+knitr::raw_html(readLines(sub(".md", ".html", workflowA$reportFilePath)))
 ```
 </div>
 
