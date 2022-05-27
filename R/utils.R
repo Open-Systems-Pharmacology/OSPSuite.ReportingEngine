@@ -45,48 +45,6 @@ calculateArithmeticErrorRange <- function(values, errorValues) {
   ))
 }
 
-#' Shortkey checking if arguments 1 and 2 are equal,
-#' output argument 3 if equal, or output argument 4 otherwise
-#'
-#' @title ifEqual
-#' @param x argument 1
-#' @param y argument 2
-#' @param outputIfEqual argument 3
-#' @param outputIfNotEqual argument 4
-#' @return outputIfEqual if x=y, outputIfNotEqual otherwise
-#' @description
-#' Check if x=y, if so output outputIfEqual,
-#' otherwise, output outputIfNotEqual
-#' @keywords internal
-ifEqual <- function(x, y, outputIfEqual, outputIfNotEqual = NULL) {
-  if (x == y) {
-    outputIfEqual
-  } else {
-    outputIfNotEqual
-  }
-}
-
-#' Shortkey checking if arguments 1 is included in 2,
-#' output argument 3 if included, or output argument 4 otherwise
-#'
-#' @title ifIncluded
-#' @param x argument 1
-#' @param y argument 2
-#' @param outputIfIncluded argument 3
-#' @param outputIfNotIncluded argument 4
-#' @return outputIfIncluded if x=y, outputIfNotIncluded otherwise
-#' @description
-#' Check if x is in y, if so output outputIfIncluded,
-#' otherwise, output outputIfNotIncluded
-#' @keywords internal
-ifIncluded <- function(x, y, outputIfIncluded, outputIfNotIncluded = NULL) {
-  if (isIncluded(x, y)) {
-    outputIfIncluded
-  } else {
-    outputIfNotIncluded
-  }
-}
-
 #' @title trimFileName
 #' @param path character string containing the name of the path or file to trim
 #' @param extension character string containing the extension file
