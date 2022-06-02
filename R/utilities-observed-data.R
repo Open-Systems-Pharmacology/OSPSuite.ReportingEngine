@@ -1,3 +1,48 @@
+#' @title getReaderFunction
+#' @description
+#' Get most appropriate reader function by guessing file separator
+#' File separator is guessed by checking number of fields/columns along lines
+#' @param fileName Name of file to be read
+#' @param nlines Number of lines to look at for checking consistency within file.
+#' Note that, unlike `read.csv`, `count.fields` does not have options for handling encoding or escape characters.
+#' Thus, using `nlines` as low as possible reduces the chances of inconsistent column widths caused by such characters.
+#' @return Reader function such as `read.csv`
+#' @keywords internal
+getReaderFunction <- function(fileName, nlines = 2) {
+  # Define mapping between reader functions and their separator
+  # Default for read.csv2 is semicolon separator and comma decimal
+  readerMapping <- data.frame(
+    sep = c(",", ";", ""),
+    functionName = c("read.csv", "read.csv2", "read.table"),
+    stringsAsFactors = FALSE
+  )
+  # Select separators with consistent number of fields/columns along lines
+  sepConsistency <- sapply(
+    readerMapping$sep,
+    function(sep) {
+      isOfLength(unique(head(count.fields(fileName, sep = sep), nlines)), 1)
+    }
+  )
+  readerMapping <- readerMapping[sepConsistency, ]
+
+  # If none of the separators leads to consistent number of columns,
+  # Throw a more meaningful error message before error happens in read.table
+  if (isEmpty(readerMapping)) {
+    stop(messages$errorSeparatorNotFound(fileName))
+  }
+
+  # Select separator that provides more fields/columns
+  sepWidth <- sapply(
+    readerMapping$sep,
+    function(sep) {
+      max(head(count.fields(fileName, sep = sep), nlines))
+    }
+  )
+  # which.max returns the first max value. Thus, read.csv will be used in priority
+  selectedReader <- match.fun(readerMapping$functionName[which.max(sepWidth)])
+  return(selectedReader)
+}
+
 #' @title readObservedDataFile
 #' @description
 #' Read observed data file with Nonmem format.
@@ -10,37 +55,20 @@
 readObservedDataFile <- function(fileName,
                                  header = TRUE,
                                  encoding = "UTF-8") {
-  extension <- fileExtension(fileName)
+  validateFileExists(fileName)
+  # Get function with the most appropriate reading defaults
+  readObservedData <- getReaderFunction(fileName)
+  observedData <- readObservedData(
+    fileName,
+    header = header,
+    check.names = FALSE,
+    encoding = encoding,
+    stringsAsFactors = FALSE
+  )
+
   # For some cases where data was derived from Excel,
   # <U+FEFF> is included in first variable name and needs to be removed
   forbiddenCharacters <- "\ufeff"
-
-  if (extension %in% "csv") {
-    observedData <- tryCatch({
-      read.csv(fileName,
-               header = header,
-               check.names = FALSE,
-               encoding = encoding
-      )
-    },
-    error = function(e) {
-      warning(messages$warningCSVNotReadCommaSeparatedAttemptingSemicolon(fileName))
-      return(read.csv2(fileName,
-                       header = header,
-                       check.names = FALSE,
-                       encoding = encoding))
-    })
-    variableNames <- names(observedData)
-    variableNames[1] <- gsub(forbiddenCharacters, "", variableNames[1])
-    names(observedData) <- variableNames
-    return(observedData)
-  }
-
-  observedData <- read.table(fileName,
-                             header = header,
-                             check.names = FALSE,
-                             encoding = encoding
-  )
   variableNames <- names(observedData)
   variableNames[1] <- gsub(forbiddenCharacters, "", variableNames[1])
   names(observedData) <- variableNames
