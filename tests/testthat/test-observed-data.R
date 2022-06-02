@@ -3,15 +3,24 @@ testDataFrame <- data.frame(
   "ID" = c(1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3),
   "Time" = c(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4),
   "DV" = c(1, 1, 2, 2, 1, 1, 3, 3, 1, 1, 4, 4),
-  "Group" = c("A", "A", "A", "A", "A", "A", "A", "A", "B", "B", "B", "B")
+  "Group" = c("A", "A", "A", "A", "A", "A", "A", "A", "B", "B", "B", "B"),
+  stringsAsFactors = FALSE
 )
+
 testCsvFile <- "testFile.csv"
+testCsvSemiFile <- "testFileSemi.csv"
 testTxtFile <- "testFile.txt"
 
 # Regular csv file of data.frame
 write.csv(testDataFrame,
   file = testCsvFile,
   row.names = FALSE
+)
+# Semi-column csv file of data.frame
+write.table(testDataFrame,
+          file = testCsvSemiFile,
+          sep = ";",
+          row.names = FALSE
 )
 # Regular txt file of data.frame
 write.table(testDataFrame,
@@ -21,16 +30,19 @@ write.table(testDataFrame,
 
 context("Reading of Observed Data")
 
-test_that("readObservedDataFile can correctly read csv and txt format for observed data", {
+test_that("readObservedDataFile can correctly guess separator and read csv and txt format for observed data", {
   csvData <- readObservedDataFile(testCsvFile)
+  csvSemiData <- readObservedDataFile(testCsvSemiFile)
   txtData <- readObservedDataFile(testTxtFile)
   expect_equal(testDataFrame, csvData, tolerance = comparisonTolerance())
+  expect_equal(testDataFrame, csvSemiData, tolerance = comparisonTolerance())
   expect_equal(testDataFrame, txtData, tolerance = comparisonTolerance())
 })
 
 test_that("readObservedDataFile: unexistant file throw error", {
   expect_condition(readObservedDataFile("testFile10.csv"))
 })
+
 
 context("Data selection process")
 
@@ -75,6 +87,7 @@ test_that("Correct expressions work the way they should", {
 
 # Remove the files created during the tests
 unlink(testCsvFile, recursive = TRUE)
+unlink(testCsvSemiFile, recursive = TRUE)
 unlink(testTxtFile, recursive = TRUE)
 
 context("extractNameAndUnit")
