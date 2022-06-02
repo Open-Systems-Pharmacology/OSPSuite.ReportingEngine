@@ -137,8 +137,8 @@ messages <- list(
     paste0(callingFunction(), "No variable parameters found for sensitivity analysis.")
   },
 
-  warningCSVNotReadCommaSeparatedAttemptingSemicolon = function(fileName){
-    paste0("Unable to read CSV file '",fileName,"' as comma-separated.  Attempting to read this file as semicolon-separated.")
+  errorSeparatorNotFound = function(fileName){
+    paste0("Unable to find a suitable separator for file '", fileName, "' providing a consistent number of columns.")
   },
 
   warningNoFinitePKParametersForSomeIndividuals = function(pkParameter, output, simulationSetName) {
