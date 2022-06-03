@@ -4,11 +4,9 @@
 \alias{getSmartZoomLimits}
 \title{getSmartZoomLimits}
 \usage{
-getSmartZoomLimits(isResidualsVsObserved, dataVector)
+getSmartZoomLimits(dataVector)
 }
 \arguments{
-\item{isResidualsVsObserved}{a logical argument indicating if the data pertains to a residual vs observed (`TRUE`) or a predicted vs observed (`FALSE`) plot}
-
 \item{dataVector}{a numeric vector containing the x or y values of datapoints to be plotted}
 }
 \value{

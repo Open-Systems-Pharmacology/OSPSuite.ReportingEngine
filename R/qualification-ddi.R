@@ -238,31 +238,13 @@ buildQualificationDDIDataframe <- function(dataframe,
 
 #' @title getSmartZoomLimits
 #' @description Get default axis limits for DDI Ratio plot
-#' @param isResidualsVsObserved a logical argument indicating if the data pertains to a residual vs observed (`TRUE`) or a predicted vs observed (`FALSE`) plot
 #' @param dataVector a numeric vector containing the x or y values of datapoints to be plotted
 #' @return a list containing the minimum and maximum axes limits
 #' @keywords internal
-getSmartZoomLimits <- function(isResidualsVsObserved, dataVector){
-  validateIsLogical(isResidualsVsObserved)
+getSmartZoomLimits <- function(dataVector){
   validateIsNumeric(dataVector)
 
-  # Guest criterion range for obs vs pred DDI Ratio plot
-  if(!isResidualsVsObserved){
-    # Use ifelse to simplify notations and clarify what code does
-    minLimit <- ifelse(
-      min(dataVector)>=1,
-      min(0.8*min(dataVector), 0.8),
-      min(0.8*min(dataVector), 0.25)
-    )
-    maxLimit <- ifelse(
-      max(dataVector)>=1,
-      max(1.25*max(dataVector), 4),
-      max(1.25*max(dataVector), 1.25)
-    )
-    return(list(min = minLimit, max = maxLimit))
-  }
-  
-  # Guest criterion range for res vs pred DDI Ratio plot
+  # Guest criterion range for DDI Ratio plot
   minLimit <- ifelse(
     min(dataVector)>=1,
     0.8,
@@ -320,8 +302,8 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
     ddiPlotConfiguration$yAxis$scale <- tlf::Scaling$log
   }
 
-  xSmartZoom <- getSmartZoomLimits(isResidualsVsObserved = residualsVsObserved,dataVector = ddiData[[ddiPlotData$axesSettings$X$label]])
-  ySmartZoom <- getSmartZoomLimits(isResidualsVsObserved = residualsVsObserved,dataVector = ddiData[[ddiPlotData$axesSettings$Y$label]])
+  xSmartZoom <- getSmartZoomLimits(ddiData[[ddiPlotData$axesSettings$X$label]])
+  ySmartZoom <- getSmartZoomLimits(ddiData[[ddiPlotData$axesSettings$Y$label]])
 
   ddiPlotConfiguration$xAxis$limits <- c(xSmartZoom$min,xSmartZoom$max)
   ddiPlotConfiguration$yAxis$limits <- c(ySmartZoom$min,ySmartZoom$max)
