@@ -238,47 +238,24 @@ buildQualificationDDIDataframe <- function(dataframe,
 
 #' @title getSmartZoomLimits
 #' @description Get default axis limits for DDI Ratio plot
-#' @param isResidualsVsObserved a logical argument indicating if the data pertains to a residual vs observed (`TRUE`) or a predicted vs observed (`FALSE`) plot
 #' @param dataVector a numeric vector containing the x or y values of datapoints to be plotted
 #' @return a list containing the minimum and maximum axes limits
 #' @keywords internal
-getSmartZoomLimits <- function(isResidualsVsObserved,dataVector){
-
-  validateIsLogical(isResidualsVsObserved)
+getSmartZoomLimits <- function(dataVector){
   validateIsNumeric(dataVector)
 
-  if(!isResidualsVsObserved){
-
-    if(min(dataVector) >= 1){
-      minLimit <- min(0.8*min(dataVector), 0.8)
-    } else {
-      minLimit <- min(0.8*min(dataVector), 0.25)
-    }
-
-    if(min(dataVector) >= 1){
-      maxLimit <- max(1.25*max(dataVector), 4)
-    } else {
-      maxLimit <- max(1.25*max(dataVector), 1.25)
-    }
-
-    return(list(min = minLimit, max = maxLimit))
-
-  }
-
-  if(min(dataVector) >= 1){
-    minLimit <- 0.25
-  } else {
-    minLimit <- min(0.8*min(dataVector), 0.25)
-  }
-
-  if(max(dataVector) >= 1){
-    maxLimit <- max(1.25*max(dataVector), 4)
-  } else {
-    maxLimit <- 4
-  }
-
+  # Guest criterion range for DDI Ratio plot
+  minLimit <- ifelse(
+    min(dataVector)>=1,
+    0.8,
+    min(0.8*min(dataVector), 0.25)
+  )
+  maxLimit <- ifelse(
+    max(dataVector)>=1,
+    max(1.25*max(dataVector), 4),
+    1.25
+  )
   return(list(min = minLimit, max = maxLimit))
-
 }
 
 
@@ -325,9 +302,8 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
     ddiPlotConfiguration$yAxis$scale <- tlf::Scaling$log
   }
 
-  xSmartZoom <- getSmartZoomLimits(isResidualsVsObserved = residualsVsObserved,dataVector = ddiData[[ddiPlotData$axesSettings$X$label]])
-  ySmartZoom <- getSmartZoomLimits(isResidualsVsObserved = residualsVsObserved,dataVector = ddiData[[ddiPlotData$axesSettings$Y$label]])
-
+  xSmartZoom <- getSmartZoomLimits(ddiData[[ddiPlotData$axesSettings$X$label]])
+  ySmartZoom <- getSmartZoomLimits(ddiData[[ddiPlotData$axesSettings$Y$label]])
 
   ddiPlotConfiguration$xAxis$limits <- c(xSmartZoom$min,xSmartZoom$max)
   ddiPlotConfiguration$yAxis$limits <- c(ySmartZoom$min,ySmartZoom$max)
@@ -339,12 +315,14 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
   if (ddiPlotData$axesSettings$Y$scaling == "Log") {
     ddiPlotConfiguration$yAxis$ticks <- 10^seq(ceiling(log10(ySmartZoom$min)), floor(log10(ySmartZoom$max)), 1)
   }
-
-
+  # minRange defines the range for simulated x values of Guest et al. criterion
+  # Consequently, it also needs to be updated according to smart zoom
+  ddiDataMapping$minRange <- c(xSmartZoom$min, xSmartZoom$max)
+  
   qualificationDDIPlot <- tlf::plotDDIRatio(
     data = ddiData,
-    plotConfiguration = ddiPlotConfiguration,
-    dataMapping = ddiDataMapping
+    dataMapping = ddiDataMapping,
+    plotConfiguration = ddiPlotConfiguration
   )
 
   # ggplot2 tends to throw messages when updating color and shape scales
@@ -568,7 +546,7 @@ plotQualificationDDIs <- function(configurationPlan,
         includeTextChunk = TRUE
         )
       ddiResults <- c(ddiResults, subheading)
-      subplotTypeLevels <- unique(dataframe[[subplotType]])
+      subplotTypeLevels <- sort(unique(dataframe[[subplotType]]))
       for (subplotTypeLevel in subplotTypeLevels) {
         subsubheading <- saveTaskResults(
           id = paste(subplotType, subplotTypeLevel, sep = " - "),
