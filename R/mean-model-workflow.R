@@ -10,6 +10,7 @@
 #' @field plotSensitivity `PlotTask` object for sensitivity plot
 #' @export
 #' @import tlf
+#' @family workflows
 MeanModelWorkflow <- R6::R6Class(
   "MeanModelWorkflow",
   inherit = Workflow,

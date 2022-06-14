@@ -6,6 +6,7 @@
 \description{
 Object defining Qualification Version Information to be displayed on title page
 }
+\concept{qualification worfklow}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{

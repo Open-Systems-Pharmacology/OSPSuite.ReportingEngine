@@ -229,6 +229,7 @@ removeMissingValues <- function(data, dataMapping = NULL, logFolder = getwd()) {
 #' @param output Output object
 #' @return Names of pkParameters in `output`
 #' @export
+#' @family workflow helpers
 getPKParametersInOutput <- function(output) {
   validateIsOfType(output, "Output")
   pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
@@ -259,6 +260,7 @@ getPKParameterGroupsInOutput <- function(output) {
 #' @param simulationSet SimulationSet object or derived class
 #' @return Path names of outputs in `simulationSet`
 #' @export
+#' @family workflow helpers
 getOutputPathsInSimulationSet <- function(simulationSet) {
   validateIsOfType(simulationSet, "SimulationSet")
   return(sapply(simulationSet$outputs, function(output) {
@@ -270,6 +272,7 @@ getOutputPathsInSimulationSet <- function(simulationSet) {
 #' @param simulationSet SimulationSet object or derived class
 #' @return Data.frame with \code{path} and \code{pkParameter} in `simulationSet`
 #' @export
+#' @family workflow helpers
 getPKParametersInSimulationSet <- function(simulationSet) {
   validateIsOfType(simulationSet, "SimulationSet")
   pkParametersTable <- data.frame()
@@ -335,6 +338,7 @@ getAllowedCoresLinuxKubernetes <- function() {
 #' @param dictionary parameterDisplayPaths data.frame mapping user defined display names
 #' @return parameterDisplayPath
 #' @export
+#' @family workflow helpers
 getSimulationParameterDisplayPaths <- function(parameterPaths, simulation, dictionary) {
   parameterDisplayPaths <- ospsuite::getParameterDisplayPaths(parameterPaths, simulation)
 
@@ -359,6 +363,7 @@ getSimulationParameterDisplayPaths <- function(parameterPaths, simulation, dicti
 #' Names in header should include `parameter` and `displayPath`.
 #' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
 #' @export
+#' @family workflow helpers
 setWorkflowParameterDisplayPathsFromFile <- function(fileName, workflow) {
   validateIsOfType(workflow, "Workflow")
   validateIsString(fileName)
@@ -375,6 +380,7 @@ setWorkflowParameterDisplayPathsFromFile <- function(fileName, workflow) {
 #' Variables of the data.frame should include `parameter` and `displayPath`.
 #' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
 #' @export
+#' @family workflow helpers
 setWorkflowParameterDisplayPaths <- function(parameterDisplayPaths, workflow) {
   validateIsOfType(workflow, "Workflow")
   workflow$setParameterDisplayPaths(parameterDisplayPaths)
@@ -386,6 +392,7 @@ setWorkflowParameterDisplayPaths <- function(parameterDisplayPaths, workflow) {
 #' to replace standard display of parameter paths.
 #' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
 #' @export
+#' @family workflow helpers
 getWorkflowParameterDisplayPaths <- function(workflow) {
   validateIsOfType(workflow, "Workflow")
   return(workflow$getParameterDisplayPaths())

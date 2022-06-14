@@ -6,12 +6,6 @@
 \usage{
 getPkAnalysisResultsFileNames(workflow)
 }
-\arguments{
-\item{workflow}{`Workflow` object or derived class}
-}
-\value{
-Names of the the expected PK analysis result files
-}
 \description{
-Get the expected PK analysis result files obtained from a workflow
+getPkAnalysisResultsFileNames
 }

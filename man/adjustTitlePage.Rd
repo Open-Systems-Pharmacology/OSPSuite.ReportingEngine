@@ -14,3 +14,11 @@ adjustTitlePage(fileName, qualificationVersionInfo = NULL)
 \description{
 Adust Qualification Version Information to be displayed on title page
 }
+\seealso{
+Other qualification workflow: 
+\code{\link{ConfigurationPlan}},
+\code{\link{loadConfigurationPlan}()},
+\code{\link{loadQualificationWorkflow}()},
+\code{\link{startQualificationRunner}()}
+}
+\concept{qualification workflow}

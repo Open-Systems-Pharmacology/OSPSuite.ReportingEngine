@@ -11,6 +11,7 @@
 #' @export
 #' @import tlf
 #' @import ospsuite
+#' @family workflows
 PopulationWorkflow <- R6::R6Class(
   "PopulationWorkflow",
   inherit = Workflow,
@@ -161,10 +162,12 @@ PopulationWorkflow <- R6::R6Class(
 #' @title PopulationWorkflowTypes
 #' @description List of population workflow available types
 #' @export
+#' @family enum helpers
 #' @examples
-#' PopulationWorkflowTypes$pediatric
-#' PopulationWorkflowTypes$parallelComparison
-#' PopulationWorkflowTypes$ratioComparison
+#' 
+#' # Lists available Population Workflow types
+#' PopulationWorkflowTypes
+#' 
 PopulationWorkflowTypes <- enum(c(
   "pediatric",
   "parallelComparison",

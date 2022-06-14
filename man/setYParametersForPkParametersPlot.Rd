@@ -6,12 +6,6 @@
 \usage{
 setYParametersForPkParametersPlot(workflow, parameters)
 }
-\arguments{
-\item{workflow}{`PopulationWorkflow` R6 class object}
-
-\item{parameters}{list of R6 class `Output` objects to be used as y-parameters}
-}
 \description{
-Set y-parameters for boxplots and range plots of PK parameters plot task.
-The method update directly the input workflow
+setYParametersForPkParametersPlot
 }

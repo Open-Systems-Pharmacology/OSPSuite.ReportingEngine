@@ -6,6 +6,12 @@
 \description{
 R6 class for Reporting Engine Qualification Workflow
 }
+\seealso{
+Other workflows: 
+\code{\link{MeanModelWorkflow}},
+\code{\link{PopulationWorkflow}}
+}
+\concept{workflows}
 \section{Super class}{
 \code{\link[ospsuite.reportingengine:Workflow]{ospsuite.reportingengine::Workflow}} -> \code{QualificationWorkflow}
 }

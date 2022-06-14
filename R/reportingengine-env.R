@@ -135,10 +135,12 @@ setPlotFormat <- function(format = NULL, width = NULL, height = NULL, units = NU
 #' @description
 #' Keys of reported ranges when simulation includes multiple applications
 #' @export
+#' @family enum helpers
 #' @examples
-#' ApplicationRanges$total
-#' ApplicationRanges$firstApplication
-#' ApplicationRanges$lastApplication
+#' 
+#' # Lists available Application Ranges
+#' ApplicationRanges
+#' 
 ApplicationRanges <- enum(c("total", "firstApplication", "lastApplication"))
 
 #' @title setDefaultNumericFormat
@@ -146,7 +148,7 @@ ApplicationRanges <- enum(c("total", "firstApplication", "lastApplication"))
 #' @param digits Number of significant digits
 #' @param scientific Logical defining if numeric format uses a scientific expression
 #' @export
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
 #' @examples
 #' setDefaultNumericFormat(digits = 2, scientific = TRUE)
 setDefaultNumericFormat <- function(digits = NULL, scientific = NULL) {
@@ -182,7 +184,7 @@ reEnv$theme <- getDefaultRETheme()
 #' @param theme `Theme` object from `tlf` package
 #' If `NULL`, the current theme is re-initialized to the reporting engine default
 #' @export
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
 setDefaultTheme <- function(theme = NULL) {
   validateIsOfType(theme, "Theme", nullAllowed = TRUE)
   reEnv$theme <- theme %||% getDefaultRETheme()

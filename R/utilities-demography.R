@@ -309,7 +309,9 @@ DemographyDefaultParameters <- c(ospsuite::StandardPath[c("Age", "Height", "Weig
 #' @return names of default demography parameters
 #' @export
 #' @examples
+#' 
 #' getDefaultDemographyXParameters(PopulationWorkflowTypes$pediatric)
+#' 
 getDefaultDemographyXParameters <- function(workflowType) {
   validateIsIncluded(workflowType, PopulationWorkflowTypes)
   if (workflowType %in% PopulationWorkflowTypes$pediatric) {
@@ -470,6 +472,17 @@ plotDemographyHistogram <- function(data,
 #' @param workflow `PopulationWorkflow` R6 class object
 #' @return list of x parameters used for demography range plots
 #' @export
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
+#' 
+#' # Get the list of parameters in x-axis for range plots
+#' getXParametersForDemogrpahyPlot(workflow = myWorkflow)
+#' 
+#' }
+#' 
 getXParametersForDemogrpahyPlot <- function(workflow) {
   validateIsOfType(workflow, "PopulationWorkflow")
   return(workflow$plotDemography$xParameters)
@@ -478,8 +491,19 @@ getXParametersForDemogrpahyPlot <- function(workflow) {
 #' @title getYParametersForDemogrpahyPlot
 #' @param workflow `PopulationWorkflow` R6 class object
 #' @return list of y parameters used for demography histogram and range plots
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
 #' @export
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
+#' 
+#' # Get the list of parameters in x-axis for range plots
+#' getYParametersForDemogrpahyPlot(workflow = myWorkflow)
+#' 
+#' }
+#' 
 getYParametersForDemogrpahyPlot <- function(workflow) {
   validateIsOfType(workflow, "PopulationWorkflow")
   return(workflow$plotDemography$yParameters %||% DemographyDefaultParameters)
@@ -491,6 +515,20 @@ getYParametersForDemogrpahyPlot <- function(workflow) {
 #' @param workflow `PopulationWorkflow` R6 class object
 #' @param parameters list of demography parameters to be used as x-parameters
 #' @export
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
+#' 
+#' # Set parameters in x-axis for range plots
+#' setXParametersForDemogrpahyPlot(
+#' workflow = myWorkflow, 
+#' parameters = StandardPath
+#' )
+#' 
+#' }
+#' 
 setXParametersForDemogrpahyPlot <- function(workflow, parameters) {
   validateIsOfType(workflow, "PopulationWorkflow")
   validateIsString(c(parameters), nullAllowed = TRUE)
@@ -515,6 +553,20 @@ setXParametersForDemogrpahyPlot <- function(workflow, parameters) {
 #' @param workflow `PopulationWorkflow` R6 class object
 #' @param parameters list of demography parameters to be used as x-parameters
 #' @export
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
+#' 
+#' # Get the list of parameters in x-axis for range plots
+#' addXParametersForDemogrpahyPlot(
+#' workflow = myWorkflow, 
+#' parameters = StandardPath$GestationalAge
+#' )
+#' 
+#' }
+#' 
 addXParametersForDemogrpahyPlot <- function(workflow, parameters) {
   updatedParameters <- c(getXParametersForDemogrpahyPlot(workflow), parameters)
   setXParametersForDemogrpahyPlot(workflow, updatedParameters)
@@ -526,6 +578,20 @@ addXParametersForDemogrpahyPlot <- function(workflow, parameters) {
 #' @param workflow `PopulationWorkflow` R6 class object
 #' @param parameters list of demography parameters to be used as y-parameters
 #' @export
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
+#' 
+#' # Set parameters in y-axis for range plots and histograms
+#' setYParametersForDemogrpahyPlot(
+#' workflow = myWorkflow, 
+#' parameters = StandardPath
+#' )
+#' 
+#' }
+#' 
 setYParametersForDemogrpahyPlot <- function(workflow, parameters) {
   validateIsOfType(workflow, "PopulationWorkflow")
   validateIsString(c(parameters))
@@ -550,6 +616,20 @@ setYParametersForDemogrpahyPlot <- function(workflow, parameters) {
 #' @param workflow `PopulationWorkflow` R6 class object
 #' @param parameters list of demography parameters to be used as x-parameters
 #' @export
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
+#' 
+#' # Add parameters in y-axis for range plots and histograms
+#' addYParametersForDemogrpahyPlot(
+#' workflow = myWorkflow, 
+#' parameters = StandardPath$GestationalAge
+#' )
+#' 
+#' }
+#' 
 addYParametersForDemogrpahyPlot <- function(workflow, parameters) {
   updatedParameters <- c(getYParametersForDemogrpahyPlot(workflow), parameters)
   setYParametersForDemogrpahyPlot(workflow, updatedParameters)

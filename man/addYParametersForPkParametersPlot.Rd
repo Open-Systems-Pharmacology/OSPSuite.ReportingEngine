@@ -6,12 +6,6 @@
 \usage{
 addYParametersForPkParametersPlot(workflow, parameters)
 }
-\arguments{
-\item{workflow}{`PopulationWorkflow` R6 class object}
-
-\item{parameters}{list of parameters to be used as y-parameters}
-}
 \description{
-Apppend y-parameters for range plots of PK parameters plot task.
-The method update directly the input workflow
+addYParametersForPkParametersPlot
 }

@@ -6,16 +6,6 @@
 \usage{
 getDefaultPkParametersXParameters(workflowType)
 }
-\arguments{
-\item{workflowType}{Name of workflow type.
-Use enum `PopulationWorkflowTypes` to get a list of available workflow types.}
-}
-\value{
-names of default parameters
-}
 \description{
-Get names of default parameters in x axis of pk parameters plots.
-}
-\examples{
-getDefaultPkParametersXParameters(PopulationWorkflowTypes$pediatric)
+getDefaultPkParametersXParameters
 }

@@ -4,6 +4,7 @@
 #' @param configurationPlanFile path to the json file corresponding to the Configuration Plan of a Qualification workflow
 #' @return A `QualificationWorkflow` object
 #' @export
+#' @family qualification workflow
 loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
   validateIsFileExtension(configurationPlanFile, "json")
   validateFileExists(configurationPlanFile)
@@ -86,6 +87,7 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
 #' @return A `ConfigurationPlan` object including the content of json file
 #' @import jsonlite
 #' @export
+#' @family qualification workflow
 loadConfigurationPlan <- function(configurationPlanFile, workflowFolder) {
   jsonConfigurationPlan <- fromJSON(configurationPlanFile, simplifyDataFrame = FALSE)
 
@@ -330,7 +332,6 @@ massMoleConversion <- function(dimension) {
 #' @description Read axes settings for plots.
 #' @param axesSettingsFromConfigurationPlot is a field from the `configurationPlan$plots` list
 #' @return `axesSettings`, a list of settings for each of the X and Y axis.  Each list contains the unit, dimensions, and scaling type for each axes and option to plot grid lines.
-
 #' @keywords internal
 getAxesSettings <- function(axesSettingsFromConfigurationPlot) {
   axesSettings <- lapply(axesSettingsFromConfigurationPlot, function(x) {
@@ -350,6 +351,7 @@ getAxesSettings <- function(axesSettingsFromConfigurationPlot) {
 #' @description Read plot settings from configuration plan.
 #' @param plotSettingsFromConfigurationPlot is a field from the `configurationPlan$plots` list
 #' @return `plotSettings`, a list of settings for each of the X and Y axis.  Each list contains the unit, dimensions, and scaling type for each axes and option to plot grid lines.
+#' @keywords internal
 getPlotSettings <- function(plotSettingsFromConfigurationPlot) {
   plotSettings <- list(
     width = plotSettingsFromConfigurationPlot$ChartWidth,
@@ -379,6 +381,7 @@ getPlotSettings <- function(plotSettingsFromConfigurationPlot) {
 #' @param logLevel Log verbosity (Debug, Information, Warning, Error). Default is Information.
 #' @param displayVersion Logical defining if version information is displayed
 #' @export
+#' @family qualification workflow
 startQualificationRunner <- function(qualificationRunnerFolder,
                                      qualificationPlanFile,
                                      outputFolder,

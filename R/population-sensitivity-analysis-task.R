@@ -2,7 +2,8 @@
 #' @description  R6 class for PopulationSensitivityAnalysisTask settings
 #' @field getTaskResults function called by task that computes and format figure results
 #' @field settings A `SensitivityAnalysisSettings` object
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
+#' @family workflow tasks
 PopulationSensitivityAnalysisTask <- R6::R6Class(
   "PopulationSensitivityAnalysisTask",
   inherit = SensitivityAnalysisTask,

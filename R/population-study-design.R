@@ -4,6 +4,7 @@
 #' @param studyDesignFile file name of study design table
 #' @export
 #' @import ospsuite
+#' @family workflow helpers
 addStudyParameters <- function(population, simulation, studyDesignFile) {
   validateIsOfType(population, "Population")
   validateIsOfType(simulation, "Simulation")

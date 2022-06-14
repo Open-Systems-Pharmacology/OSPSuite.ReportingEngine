@@ -4,6 +4,7 @@
 #' @field xParameters list of parameter paths to be plotted along x-axis
 #' @field yParameters list of parameter paths to be plotted along y-axis
 #' @export
+#' @family workflow tasks
 PopulationPlotTask <- R6::R6Class(
   "PopulationPlotTask",
   inherit = PlotTask,

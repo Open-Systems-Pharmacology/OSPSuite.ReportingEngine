@@ -15,3 +15,4 @@ getPlotSettings(plotSettingsFromConfigurationPlot)
 \description{
 Read plot settings from configuration plan.
 }
+\keyword{internal}

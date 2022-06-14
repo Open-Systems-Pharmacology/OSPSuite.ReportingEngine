@@ -10,6 +10,7 @@
 #' @field plotDDIRatio `PlotTask` object for DDI ratio plot
 #' @export
 #' @import tlf
+#' @family workflows
 QualificationWorkflow <- R6::R6Class(
   "QualificationWorkflow",
   inherit = Workflow,

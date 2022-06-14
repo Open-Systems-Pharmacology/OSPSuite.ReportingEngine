@@ -40,3 +40,11 @@ This option is **MANDATORY** for the portable version of PK-Sim.}
 \description{
 Starts the qualification runner and creates inputs for the reporting engine
 }
+\seealso{
+Other qualification workflow: 
+\code{\link{ConfigurationPlan}},
+\code{\link{adjustTitlePage}()},
+\code{\link{loadConfigurationPlan}()},
+\code{\link{loadQualificationWorkflow}()}
+}
+\concept{qualification workflow}

@@ -1,5 +1,5 @@
 ---
-title: "Introduction to Reporting Engine and its instances"
+title: "Get Started"
 resource_files:
   - figures
   - reportOutputStyle.css
@@ -7,7 +7,7 @@ output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Introduction to Reporting Engine and its instances}
+  %\VignetteIndexEntry{Get Started}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -42,8 +42,9 @@ R6 objects, or objects from R6 class, presents some peculiarities.
 
 ## 1.2. Notion of workflow
 
-The `ospsuite.reportingengine` package is built around two central R6 classes __`MeanModelWorkflow`__ and __`PopulationWorkflow`__ derived from the parent R6 class `Workflow`.
+The `ospsuite.reportingengine` package is built around 3 central R6 classes __`MeanModelWorkflow`__,  __`PopulationWorkflow`__ and __`QualificationWorkflow`__ derived from the parent R6 class `Workflow`.
 The creation of `MeanModelWorkflow` or `PopulationWorkflow` objects provides a structured environment with methods and properties that facilitate the design, run and report of the evaluations of PBPK models developed on PK-Sim or/and Mobi.
+For `QualificationWorkflow` objects, more details are available in a dedicated [article](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/articles/qualification-workflow.html).
 The `Worklow` objects combine 2 features defined as R6 objects:
 
 - `SimulationSet` and `PopulationSimulationSet` objects defines which and how model(s) and/or data can be used by the workflow (developed in more details in section [3](#3-simulation-sets)).
@@ -53,10 +54,10 @@ These objects need to be created before the creation of workflow objects as they
 ## 1.3. Nomenclature
 
 Table 1 enumerates some of the main instances of the `ospsuite.reportingengine` package usually defined by users during the design of a workflow.
-As mentioned above all these instances derive from the `R6` class, consequently creating them requires the call of the method `$new()` (e.g. `MeanModelWorkflow$new()`)
+The tab [Reference](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference) documents available classes and functions exported by the `ospsuite.reportingengine` package.
 The comprehensive documentation and usage of each of these objects is accessible in the tab **Reference**.
 
-Table 1: Nomenclature of `ospsuite.reportingengine` main instances
+**Table 1: Nomenclature of `ospsuite.reportingengine` main instances**
 
 |**Workflow objects**|**Use case**|
 |--------------------|------------|
@@ -85,6 +86,33 @@ Table 1: Nomenclature of `ospsuite.reportingengine` main instances
 
 
 ## 1.4. General scheme
+
+In order to define and run appropriately a Worflow object, a few steps are required:
+
+- 1. Load the `ospsuite.reportingengine` package
+```r
+library(ospsuite.reportingengine)
+```
+- 2. Define the simulation outputs possibly with their PK parameters
+```r
+Output$new()
+```
+- 3. Define the simulation sets possibly mapping simulations to observed data
+```r
+SimulationSet$new()
+```
+- 4. Define the worflow and its result folder
+```r
+Workflow$new()
+```
+- 5. Define the worflow tasks
+```r
+workflow$activateTasks()
+```
+- 6. Run the worflow
+```r
+workflow$runWorkflow()
+```
 
 A working example of workflow script is provided below for reporting a time profile plot on *Minimodel2.pkml*.
 
@@ -211,7 +239,7 @@ knitr::include_graphics("figures/population-workflow-input-and-tasks.png")
 ## 2.3. Qualification Workflow
 
 Another type of workflow can be defined by `QualificationWorkflow` objects using a configuration plan for qualification purposes.
-The vignette *qualification-workflow* details how to build and use such `QualificationWorkflow` objects.
+The article [Qualification Workflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/articles/qualification-workflow.html) details how to build and use such `QualificationWorkflow` objects.
 
 ## 2.4. Creation of a Workflow
 
@@ -380,7 +408,8 @@ Regarding units, two options are possible:
    - the dictionary must include the follwoing new variables in '__ID__': '__time_unit__' and '__dv_unit__'.
    - the dictionary must also include the mapping to the variable names in the dataset using '__nonmenColumn__'.
 
-The example below shows a template of a dictionary content.
+The example below shows the template of a dictionary content available on [Github](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/tpDictionary.csv):
+
 
 ```{r table 3, echo=FALSE, results='asis'}
 knitr::kable(exampleDictionary, caption = "Table 3: Template for data dictionary")
@@ -598,3 +627,20 @@ At the end of the workflow run, all the available appendices are combined into f
 - __Report.docx__ which contains the word version of the report, including a table of content and numbering the figures and tables.
 
 The option `createWordReport` is set to __TRUE__ as default but can be set to __FALSE__ to prevent the conversion of __Report-word.md__ into __Report.docx__ using *pandoc* .
+
+
+
+# 6. Templates
+
+For creating or tuning reports, starting from scratch could be challenging.
+For this reason, some templates have been created to make it easier.
+The table below provides a list of templates available on Github and their usage.
+
+|Template |Link |Usage |
+|---------|-----|---------|
+|Excel workflow input |[WorkflowInput.xlsx](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/WorkflowInput.xlsx) |`createWorkflowFromExcelInput`|
+|Word reference report|[reference.docx](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/reference.docx) | `wordConversionTemplate` argument of `Worklfow` objects|
+|Qualification workflow script|[qualification-workflow-template.R](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/qualification-workflow-template.R) | Source file to create function `createQualificationReport`|
+|Observed data dictionary|[tpDictionary.csv](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/tpDictionary.csv)|`observedMetaDataFile` argument of `SimulationSet` objects|
+|json theme|[re-theme.json](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/re-theme.json)|`setDefaultThemeFromJson`|
+

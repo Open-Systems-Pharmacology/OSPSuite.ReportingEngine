@@ -6,12 +6,6 @@
 \usage{
 addXParametersForPkParametersPlot(workflow, parameters)
 }
-\arguments{
-\item{workflow}{`PopulationWorkflow` R6 class object}
-
-\item{parameters}{list of parameters to be used as x-parameters}
-}
 \description{
-Apppend x-parameters for range plots of PK parameters plot task.
-The method update directly the input workflow
+addXParametersForPkParametersPlot
 }

@@ -5,3 +5,55 @@ template:
 
 development:
   mode: auto
+
+reference:
+- title: "Working with Workflow objects"
+  desc: "Functions and classes for creating and working with Workflow objects"
+  contents: 
+  - has_concept("workflows")
+  - has_concept("workflow helpers")
+- title: "Simulation Sets and Outputs"
+  desc: "Classes required for creating workflows"
+  contents: 
+  - matches("SimulationSet")
+  - matches("PopulationSimulationSet")
+  - matches("Output")
+  - matches("PkParameterInfo")
+- title: "Workflow tasks"
+  desc: "Functions and classes for creating and working with workflow tasks"
+  contents: 
+  - has_concept("workflow tasks")
+- title: "Qualification Workflows"
+  desc: "Functions and classes dedicated to Qualification Workflows"
+  contents: 
+  - has_concept("qualification workflow")
+- title: "Writing and formatting reports"
+  desc: "Functions for facilitating the writing and formatting of markdown and word reports"
+  contents: 
+  - has_concept("reporting")
+- title: "Enum Helpers"
+  desc: "Enums listing available values for specific properties"
+  contents: 
+  - has_concept("enum helpers")
+- title: "Default Settings"
+  desc: "Functions for defining default package or workflow settings."
+  contents:
+  - starts_with("setDefault")
+  - matches("setWatermarkConfiguration")
+  - starts_with("getDefault")
+- title: "Simulated and observed data helpers"
+  desc: "Helper functions for working with simulated and observed data."
+  contents:
+  - matches("calculateArithmeticErrorRange")
+  - matches("calculateGeometricErrorRange")
+  - matches("calculateGMFE")
+  - matches("calculateResiduals")
+  - matches("getResiduals")
+  - matches("isBetween")
+  - matches("measureValuesBetween")
+  - matches("readObservedDataFile")
+  - matches("lastPathElement")
+  - matches("evalDataFilter")
+  - matches("loadSimulationWithUpdatedPaths")
+  - matches("loadWorkflowPopulation")
+  
