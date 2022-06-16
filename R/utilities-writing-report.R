@@ -3,10 +3,12 @@
 #' @param fileName name of .md file to reset
 #' @param logFolder folder where the logs are saved
 #' @export
+#' @family reporting
 #' @examples
 #' \dontrun{
 #' resetReport("report.md")
 #' }
+#' 
 resetReport <- function(fileName, logFolder = getwd()) {
   if (file.exists(fileName)) {
     logWorkflow(
@@ -32,6 +34,7 @@ resetReport <- function(fileName, logFolder = getwd()) {
 #' @param figureCaption caption of figure
 #' @param logFolder folder where the logs are saved
 #' @export
+#' @family reporting
 addFigureChunk <- function(fileName,
                            figureFileRelativePath,
                            figureFileRootDirectory,
@@ -73,7 +76,8 @@ addFigureChunk <- function(fileName,
 #' @param logFolder folder where the logs are saved
 #' @param na character string replacing `NA` values in table
 #' @export
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
+#' @family reporting
 addTableChunk <- function(fileName,
                           tableFileRelativePath,
                           tableFileRootDirectory,
@@ -127,11 +131,13 @@ addTableChunk <- function(fileName,
 #' @param text text to include in the document
 #' @param logFolder folder where the logs are saved
 #' @export
+#' @family reporting
 #' @examples
 #' \dontrun{
 #' resetReport("report.md")
 #' addTextChunk(fileName = "report.md", text = "new text")
 #' }
+#' 
 addTextChunk <- function(fileName,
                          text,
                          logFolder = getwd()) {
@@ -153,6 +159,7 @@ addTextChunk <- function(fileName,
 #' @param logFolder folder where the logs are saved
 #' @param keepInputFiles logical option to prevent the input files to be deleted after merging them
 #' @export
+#' @family reporting
 #' @examples
 #' \dontrun{
 #' resetReport("chapter-1.md")
@@ -164,6 +171,7 @@ addTextChunk <- function(fileName,
 #'  outputFile = "chapters-1and2.md"
 #' )
 #' }
+#' 
 mergeMarkdownFiles <- function(inputFiles, outputFile, logFolder = getwd(), keepInputFiles = FALSE) {
   validateIsLogical(keepInputFiles)
   # Read all files contents first in case outputFile is within inputFiles
@@ -204,6 +212,7 @@ mergeMarkdownFiles <- function(inputFiles, outputFile, logFolder = getwd(), keep
 #' @param intro name of .md file that include introduction (before toc)
 #' @param wordConversionTemplate optional docx template for rendering a tuned Word-Report document
 #' @export
+#' @family reporting
 renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE, numberSections = TRUE, intro = NULL, wordConversionTemplate = NULL) {
   actionToken2 <- re.tStartAction(actionType = "ReportGeneration")
   addTableAndFigureNumbersToMarkdown(fileName, logFolder)
@@ -227,6 +236,7 @@ renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE
 #' @param createWordReport option for creating Markdwon-Report only but not a Word-Report
 #' @param wordConversionTemplate optional docx template for rendering a tuned Word-Report document
 #' @export
+#' @family reporting
 renderWordReport <- function(fileName, intro = NULL, logFolder = getwd(), createWordReport = FALSE, wordConversionTemplate = NULL) {
   reportConfig <- file.path(logFolder, "word-report-configuration.txt")
   wordFileName <- sub(pattern = ".md", replacement = "-word.md", fileName)
@@ -446,7 +456,8 @@ addMarkdownToc <- function(fileName, logFolder = getwd(), tocTitle = "# Table of
 #' @param workflow A `Workflow` object
 #' @param text Character describing simulation sets
 #' @export
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
+#' @family workflow helpers
 setSimulationDescriptor <- function(workflow, text) {
   validateIsOfType(workflow, "Workflow")
   validateIsString(text, nullAllowed = TRUE)
@@ -461,6 +472,7 @@ setSimulationDescriptor <- function(workflow, text) {
 #' @param workflow A `Workflow` object
 #' @return character describing simulation sets
 #' @export
+#' @family workflow helpers
 getSimulationDescriptor <- function(workflow) {
   validateIsOfType(workflow, "Workflow")
   return(workflow$getSimulationDescriptor())
@@ -471,6 +483,7 @@ getSimulationDescriptor <- function(workflow) {
 #' @param fileName name of .md file to update
 #' @param qualificationVersionInfo A `QualificationVersionInfo`object defining Qualification Version Information to be displayed on title page
 #' @export
+#' @family qualification workflow
 adjustTitlePage <- function(fileName, qualificationVersionInfo = NULL) {
   validateIsOfType(qualificationVersionInfo, "QualificationVersionInfo", nullAllowed = TRUE)
   validateFileExists(fileName)
@@ -492,7 +505,9 @@ adjustTitlePage <- function(fileName, qualificationVersionInfo = NULL) {
 #' @param name Name/identifier of the anchor tag
 #' @return A character string
 #' @export
+#' @family reporting
 #' @examples 
+#' 
 #' anchor("section-1")
 #' 
 anchor <- function(name) {
@@ -504,12 +519,14 @@ anchor <- function(name) {
 #' @param tag Character string
 #' @return A logical
 #' @export
+#' @family reporting
 #' @examples 
 #' # Flags both anchors using id or name
 #' hasAnchor('<a id="section-1"></a>')
 #' hasAnchor('<a name="section-1"></a>')
 #' 
 #' hasAnchor("# section 1")
+#' 
 hasAnchor <- function(tag) {
   return(grepl(pattern = '<a (id|name)="', x = tag) & grepl(pattern = '"></a>', x = tag))
 }
@@ -520,11 +537,13 @@ hasAnchor <- function(tag) {
 #' @param tag Character string
 #' @return A character Name/identifier of the anchor tag
 #' @export
+#' @family reporting
 #' @examples 
 #' getAnchorName('<a id="section-1"></a>')
 #' 
 #' # Works also for tag name instead of id 
 #' getAnchorName('<a name="section-1"></a>')
+#' 
 getAnchorName <- function(tag) {
   if(!hasAnchor(tag)){
     return()
@@ -716,6 +735,7 @@ updateTableNumbers <- function(fileContent, pattern = "Table:", replacement = "T
 #' @param copyWordReport logical defining if .docx report is also copied
 #' @param keep logical defining if initial .md file and figures are kept
 #' @export
+#' @family reporting
 copyReport <- function(from, to, copyWordReport = TRUE, keep = FALSE) {
   validateIsFileExtension(from, "md")
   validateIsFileExtension(to, "md")

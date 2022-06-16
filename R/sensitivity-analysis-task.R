@@ -3,7 +3,8 @@
 #' @field getTaskResults function called by task that computes and format figure results
 #' @field settings instance of SensitivityAnalysisSettings class
 #' @field nameTaskResults name of function that returns task results
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
+#' @family workflow tasks
 SensitivityAnalysisTask <- R6::R6Class(
   "SensitivityAnalysisTask",
   inherit = Task,

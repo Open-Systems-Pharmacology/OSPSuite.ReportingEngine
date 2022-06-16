@@ -23,10 +23,12 @@ knitr::opts_chunk$set(
 require(ospsuite.reportingengine)
 ```
 
+
 # Objectives
 
-This vignette aims at introducing qualification workflows.
-Qualification workflows are usually build to derive Qualification Reports that are recreated with every new OSP Release.
+The [qualification framework](https://docs.open-systems-pharmacology.org/shared-tools-and-example-workflows/qualification) enables an automated validation of various scenarios (use-cases) supported by the OSP platform. This technical framework is used, for example, to release, in full confidence, a new version of the OSP Suite by verifying automatically that an ever-growing list of scenarios is performing as expected.
+Qualification workflows as performed by the package `ospsuite.reportingengine` aims at building Qualification Reports in Markdown and Word format. 
+This article aims at introducing how to work with `ospsuite.reportingengine` to perform such qualification workflows.
 
 # Qualification runner
 
@@ -161,7 +163,8 @@ workflow$runWorkflow()
 
 ## Template
 
-A template R script for qualification workflows is available below or using the function `system.file("extdata", "qualification-workflow-template.R", package = "ospsuite.reportingengine")`.
+A template R script for qualification workflows is available below.
+You can also download it from [Github](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/qualification-workflow-template.R).
 The template aims at creating a function wrapping the usage of the qualification workflow including the call to the qualification runner and named `createQualificationReport`.
 
 ```{r template, echo=FALSE, results='asis'}
@@ -188,7 +191,7 @@ Note that [**Pandoc** installation](https://github.com/Open-Systems-Pharmacology
 
 The conversion to word uses a reference word document that defines each style of report (e.g. *Title*, *Heading 1*, *Normal*, etc.).
 Users can input their own reference word document using the option `wordConversionTemplate` as previously illustrated in the template.
-The default reference word document can be found using `system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")`.
+The default reference word document can be found on [Github](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/reference.docx).
 
 # Referencing
 

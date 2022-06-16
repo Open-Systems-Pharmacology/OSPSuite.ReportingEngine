@@ -15,3 +15,54 @@ Default inactivates all tasks of the workflow using workflow method `workflow$ge
 \description{
 inactivates a series of `Tasks` from a `Workflow`
 }
+\examples{
+\dontrun{
+
+# A workflow object needs to be created first
+myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+
+# Use enum helper to get task names
+inactivateWorkflowTasks(
+workflow = myWorkflow, 
+tasks = StandardSimulationTasks$simulate
+)
+
+# Default will inactivate every task of workflow
+inactivateWorkflowTasks(workflow = myWorkflow)
+
+}
+
+}
+\seealso{
+Other workflow helpers: 
+\code{\link{activateWorkflowTasks}()},
+\code{\link{addStudyParameters}()},
+\code{\link{addXParametersForDemogrpahyPlot}()},
+\code{\link{addXParametersForPKParametersPlot}()},
+\code{\link{addYParametersForDemogrpahyPlot}()},
+\code{\link{addYParametersForPKParametersPlot}()},
+\code{\link{checkTaskInputsExist}()},
+\code{\link{getMeanSensitivityAnalysisResultsFileNames}()},
+\code{\link{getOutputPathsInSimulationSet}()},
+\code{\link{getPKAnalysisResultsFileNames}()},
+\code{\link{getPKParametersInOutput}()},
+\code{\link{getPKParametersInSimulationSet}()},
+\code{\link{getPopulationSensitivityAnalysisResultsFileNames}()},
+\code{\link{getSimulationDescriptor}()},
+\code{\link{getSimulationParameterDisplayPaths}()},
+\code{\link{getSimulationResultFileNames}()},
+\code{\link{getTaskInputs}()},
+\code{\link{getWorkflowParameterDisplayPaths}()},
+\code{\link{getXParametersForDemogrpahyPlot}()},
+\code{\link{getXParametersForPKParametersPlot}()},
+\code{\link{getYParametersForDemogrpahyPlot}()},
+\code{\link{getYParametersForPKParametersPlot}()},
+\code{\link{setSimulationDescriptor}()},
+\code{\link{setWorkflowParameterDisplayPathsFromFile}()},
+\code{\link{setWorkflowParameterDisplayPaths}()},
+\code{\link{setXParametersForDemogrpahyPlot}()},
+\code{\link{setXParametersForPKParametersPlot}()},
+\code{\link{setYParametersForDemogrpahyPlot}()},
+\code{\link{setYParametersForPKParametersPlot}()}
+}
+\concept{workflow helpers}

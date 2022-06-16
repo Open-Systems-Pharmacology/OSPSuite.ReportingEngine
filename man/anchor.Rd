@@ -16,6 +16,21 @@ A character string
 Create an anchor tag for markdown document
 }
 \examples{
+
 anchor("section-1")
 
 }
+\seealso{
+Other reporting: 
+\code{\link{addFigureChunk}()},
+\code{\link{addTableChunk}()},
+\code{\link{addTextChunk}()},
+\code{\link{copyReport}()},
+\code{\link{getAnchorName}()},
+\code{\link{hasAnchor}()},
+\code{\link{mergeMarkdownFiles}()},
+\code{\link{renderReport}()},
+\code{\link{renderWordReport}()},
+\code{\link{resetReport}()}
+}
+\concept{reporting}

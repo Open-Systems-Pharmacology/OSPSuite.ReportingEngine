@@ -1,6 +1,7 @@
 #' @title GofPlotTask
 #' @description  R6 class for GofPlotTask settings
 #' @export
+#' @family workflow tasks
 GofPlotTask <- R6::R6Class(
   "GofPlotTask",
   inherit = PlotTask,

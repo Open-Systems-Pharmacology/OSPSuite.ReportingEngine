@@ -161,7 +161,8 @@ TaskResults <- R6::R6Class(
 #' @param textChunk text included into the report explaining the table
 #' @param includeTextChunk logical indicating if the text chunk should be included in final report
 #' @return A `TaskResults` object
-#' @keywords internal
+#' @import ospsuite.utils
+#' @export
 saveTaskResults <- function(id = NULL, sectionId = NULL, plot = NULL, plotCaption = NULL, includePlot = NULL, table = NULL, tableCaption = NULL, includeTable = NULL , textChunk = NULL, includeTextChunk = NULL , taskResults = NULL) {
   taskResults <- taskResults %||% TaskResults$new()
   eval(parseVariableToObject(

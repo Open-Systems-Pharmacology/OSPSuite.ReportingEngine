@@ -29,3 +29,17 @@ renderReport(
 \description{
 Render report with number sections and table of content
 }
+\seealso{
+Other reporting: 
+\code{\link{addFigureChunk}()},
+\code{\link{addTableChunk}()},
+\code{\link{addTextChunk}()},
+\code{\link{anchor}()},
+\code{\link{copyReport}()},
+\code{\link{getAnchorName}()},
+\code{\link{hasAnchor}()},
+\code{\link{mergeMarkdownFiles}()},
+\code{\link{renderWordReport}()},
+\code{\link{resetReport}()}
+}
+\concept{reporting}

@@ -32,3 +32,17 @@ addTableChunk(
 \description{
 Add a table in a .md document
 }
+\seealso{
+Other reporting: 
+\code{\link{addFigureChunk}()},
+\code{\link{addTextChunk}()},
+\code{\link{anchor}()},
+\code{\link{copyReport}()},
+\code{\link{getAnchorName}()},
+\code{\link{hasAnchor}()},
+\code{\link{mergeMarkdownFiles}()},
+\code{\link{renderReport}()},
+\code{\link{renderWordReport}()},
+\code{\link{resetReport}()}
+}
+\concept{reporting}

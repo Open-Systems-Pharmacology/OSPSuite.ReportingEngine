@@ -17,3 +17,4 @@ A list of units for goodness of fit results
 \description{
 Get list of units from axes properties and settings
 }
+\keyword{internal}

@@ -6,6 +6,7 @@
 #' @field getTaskResults function called by task that computes and format figure results
 #' @field nameTaskResults name of the function that returns task results,
 #' @export
+#' @family workflow tasks
 PlotTask <- R6::R6Class(
   "PlotTask",
   inherit = Task,

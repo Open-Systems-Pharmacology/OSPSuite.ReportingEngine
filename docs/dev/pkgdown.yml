@@ -1,15 +1,15 @@
-pandoc: 2.9.2.1
-pkgdown: 2.0.2
+pandoc: 2.17.1.1
+pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   goodness-of-fit: goodness-of-fit.html
-  introduction-re-instances: introduction-re-instances.html
+  ospsuitereportingengine: ospsuitereportingengine.html
   pk-parameters: pk-parameters.html
   plot-settings: plot-settings.html
   qualification-workflow: qualification-workflow.html
   sensitivity-analysis: sensitivity-analysis.html
-last_built: 2022-02-24T17:13Z
+last_built: 2022-06-14T12:01Z
 urls:
-  reference: https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference
-  article: https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/articles
+  reference: https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine//reference
+  article: https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine//articles
 

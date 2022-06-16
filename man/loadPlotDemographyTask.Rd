@@ -20,3 +20,53 @@ A `PlotTask` object
 \description{
 Define `plotDemography` task and its settings
 }
+\examples{
+\dontrun{
+
+# A workflow object needs to be created first
+myWorkflow <- PopulationWorkflow$new(
+workflowType,
+workflowFolder,
+simulationSets
+)
+
+# (Re)load a default plotDemography task for workflow
+myWorkflow$plotDemography <- loadPlotDemographyTask(
+workflow = myWorkflow, 
+active = TRUE
+)
+
+# Load a user-defined simulation task for workflow
+myWorkflow$userDefinedTasks[["plotDemography"]] <- loadPlotDemographyTask(
+workflow = myWorkflow, 
+active = TRUE
+)
+
+}
+
+}
+\seealso{
+Other workflow tasks: 
+\code{\link{GofPlotTask}},
+\code{\link{PlotTask}},
+\code{\link{PopulationPlotTask}},
+\code{\link{PopulationSensitivityAnalysisTask}},
+\code{\link{QualificationTask}},
+\code{\link{SensitivityAnalysisTask}},
+\code{\link{Task}},
+\code{\link{addUserDefinedTask}()},
+\code{\link{loadCalculatePKParametersTask}()},
+\code{\link{loadCalculateSensitivityTask}()},
+\code{\link{loadGOFMergedTask}()},
+\code{\link{loadPlotAbsorptionTask}()},
+\code{\link{loadPlotDDIRatioTask}()},
+\code{\link{loadPlotMassBalanceTask}()},
+\code{\link{loadPlotPKParametersTask}()},
+\code{\link{loadPlotPKRatioTask}()},
+\code{\link{loadPlotSensitivityTask}()},
+\code{\link{loadPlotTimeProfilesAndResidualsTask}()},
+\code{\link{loadQualificationComparisonTimeProfileTask}()},
+\code{\link{loadQualificationTimeProfilesTask}()},
+\code{\link{loadSimulateTask}()}
+}
+\concept{workflow tasks}

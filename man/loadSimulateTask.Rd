@@ -20,3 +20,49 @@ A `SimulationTask` object
 \description{
 Define `simulate` task and its settings
 }
+\examples{
+\dontrun{
+
+# A workflow object needs to be created first
+myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+
+# (Re)load a default simulation task for workflow
+myWorkflow$simulate <- loadSimulateTask(
+workflow = myWorkflow, 
+active = TRUE
+)
+
+# Load a user-defined simulation task for workflow
+myWorkflow$userDefinedTasks[["otherSimulations"]] <- loadSimulateTask(
+workflow = myWorkflow, 
+active = TRUE
+)
+
+}
+
+}
+\seealso{
+Other workflow tasks: 
+\code{\link{GofPlotTask}},
+\code{\link{PlotTask}},
+\code{\link{PopulationPlotTask}},
+\code{\link{PopulationSensitivityAnalysisTask}},
+\code{\link{QualificationTask}},
+\code{\link{SensitivityAnalysisTask}},
+\code{\link{Task}},
+\code{\link{addUserDefinedTask}()},
+\code{\link{loadCalculatePKParametersTask}()},
+\code{\link{loadCalculateSensitivityTask}()},
+\code{\link{loadGOFMergedTask}()},
+\code{\link{loadPlotAbsorptionTask}()},
+\code{\link{loadPlotDDIRatioTask}()},
+\code{\link{loadPlotDemographyTask}()},
+\code{\link{loadPlotMassBalanceTask}()},
+\code{\link{loadPlotPKParametersTask}()},
+\code{\link{loadPlotPKRatioTask}()},
+\code{\link{loadPlotSensitivityTask}()},
+\code{\link{loadPlotTimeProfilesAndResidualsTask}()},
+\code{\link{loadQualificationComparisonTimeProfileTask}()},
+\code{\link{loadQualificationTimeProfilesTask}()}
+}
+\concept{workflow tasks}

@@ -14,7 +14,19 @@ ResidualScales
 List of available scales for calculation of residuals
 }
 \examples{
-ResidualScales$Linear
-ResidualScales$Logarithmic
+
+# Lists available Residual Scales
+ResidualScales
+
 }
+\seealso{
+Other enum helpers: 
+\code{\link{AllAvailableTasks}},
+\code{\link{ApplicationRanges}},
+\code{\link{DataSelectionKeys}},
+\code{\link{PopulationWorkflowTypes}},
+\code{\link{StandardPlotTasks}},
+\code{\link{StandardSimulationTasks}}
+}
+\concept{enum helpers}
 \keyword{datasets}

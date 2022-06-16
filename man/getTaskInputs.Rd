@@ -15,3 +15,48 @@ Names of the files required to perform the task
 \description{
 Get the names of the files required to perform the task
 }
+\examples{
+\dontrun{
+
+# A workflow object needs to be created first
+myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+
+# Get paths of required files for running a workflow task
+getTaskInputs(myWorkflow$plotSensitivity)
+
+}
+
+}
+\seealso{
+Other workflow helpers: 
+\code{\link{activateWorkflowTasks}()},
+\code{\link{addStudyParameters}()},
+\code{\link{addXParametersForDemogrpahyPlot}()},
+\code{\link{addXParametersForPKParametersPlot}()},
+\code{\link{addYParametersForDemogrpahyPlot}()},
+\code{\link{addYParametersForPKParametersPlot}()},
+\code{\link{checkTaskInputsExist}()},
+\code{\link{getMeanSensitivityAnalysisResultsFileNames}()},
+\code{\link{getOutputPathsInSimulationSet}()},
+\code{\link{getPKAnalysisResultsFileNames}()},
+\code{\link{getPKParametersInOutput}()},
+\code{\link{getPKParametersInSimulationSet}()},
+\code{\link{getPopulationSensitivityAnalysisResultsFileNames}()},
+\code{\link{getSimulationDescriptor}()},
+\code{\link{getSimulationParameterDisplayPaths}()},
+\code{\link{getSimulationResultFileNames}()},
+\code{\link{getWorkflowParameterDisplayPaths}()},
+\code{\link{getXParametersForDemogrpahyPlot}()},
+\code{\link{getXParametersForPKParametersPlot}()},
+\code{\link{getYParametersForDemogrpahyPlot}()},
+\code{\link{getYParametersForPKParametersPlot}()},
+\code{\link{inactivateWorkflowTasks}()},
+\code{\link{setSimulationDescriptor}()},
+\code{\link{setWorkflowParameterDisplayPathsFromFile}()},
+\code{\link{setWorkflowParameterDisplayPaths}()},
+\code{\link{setXParametersForDemogrpahyPlot}()},
+\code{\link{setXParametersForPKParametersPlot}()},
+\code{\link{setYParametersForDemogrpahyPlot}()},
+\code{\link{setYParametersForPKParametersPlot}()}
+}
+\concept{workflow helpers}

@@ -14,8 +14,19 @@ StandardSimulationTasks
 Names of simulation tasks performed by both `MeanModelWorkflow` and `PopulationWorkflow` objects
 }
 \examples{
-StandardSimulationTasks$simulate
-StandardSimulationTasks$calculatePKParameters
-StandardSimulationTasks$calculateSensitivity
+
+# Lists all available standard simulation task names available in both mean and population workflows
+StandardSimulationTasks
+
 }
+\seealso{
+Other enum helpers: 
+\code{\link{AllAvailableTasks}},
+\code{\link{ApplicationRanges}},
+\code{\link{DataSelectionKeys}},
+\code{\link{PopulationWorkflowTypes}},
+\code{\link{ResidualScales}},
+\code{\link{StandardPlotTasks}}
+}
+\concept{enum helpers}
 \keyword{datasets}

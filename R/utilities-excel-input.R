@@ -19,6 +19,7 @@ StandardExcelSheetNames <- enum(c(
 #' @param removeComments logical to remove comments and information in `workflowFile`
 #' @return An R script of name `workflowFile` to be run
 #' @export
+#' @family worfklow helpers
 createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R", removeComments = FALSE) {
   validateIsFileExtension(excelFile, c("xls", "xlsx"))
   validateIsFileExtension(workflowFile, "R")

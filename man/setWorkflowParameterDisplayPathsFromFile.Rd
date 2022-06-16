@@ -16,3 +16,36 @@ Names in header should include `parameter` and `displayPath`.}
 Set mapping between parameters and their display paths in a workflow
 to replace standard display of parameter paths.
 }
+\seealso{
+Other workflow helpers: 
+\code{\link{activateWorkflowTasks}()},
+\code{\link{addStudyParameters}()},
+\code{\link{addXParametersForDemogrpahyPlot}()},
+\code{\link{addXParametersForPKParametersPlot}()},
+\code{\link{addYParametersForDemogrpahyPlot}()},
+\code{\link{addYParametersForPKParametersPlot}()},
+\code{\link{checkTaskInputsExist}()},
+\code{\link{getMeanSensitivityAnalysisResultsFileNames}()},
+\code{\link{getOutputPathsInSimulationSet}()},
+\code{\link{getPKAnalysisResultsFileNames}()},
+\code{\link{getPKParametersInOutput}()},
+\code{\link{getPKParametersInSimulationSet}()},
+\code{\link{getPopulationSensitivityAnalysisResultsFileNames}()},
+\code{\link{getSimulationDescriptor}()},
+\code{\link{getSimulationParameterDisplayPaths}()},
+\code{\link{getSimulationResultFileNames}()},
+\code{\link{getTaskInputs}()},
+\code{\link{getWorkflowParameterDisplayPaths}()},
+\code{\link{getXParametersForDemogrpahyPlot}()},
+\code{\link{getXParametersForPKParametersPlot}()},
+\code{\link{getYParametersForDemogrpahyPlot}()},
+\code{\link{getYParametersForPKParametersPlot}()},
+\code{\link{inactivateWorkflowTasks}()},
+\code{\link{setSimulationDescriptor}()},
+\code{\link{setWorkflowParameterDisplayPaths}()},
+\code{\link{setXParametersForDemogrpahyPlot}()},
+\code{\link{setXParametersForPKParametersPlot}()},
+\code{\link{setYParametersForDemogrpahyPlot}()},
+\code{\link{setYParametersForPKParametersPlot}()}
+}
+\concept{workflow helpers}

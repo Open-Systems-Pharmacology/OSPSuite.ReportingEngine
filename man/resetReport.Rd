@@ -18,4 +18,19 @@ Initialize a report, warning if a previous version already exists
 \dontrun{
 resetReport("report.md")
 }
+
 }
+\seealso{
+Other reporting: 
+\code{\link{addFigureChunk}()},
+\code{\link{addTableChunk}()},
+\code{\link{addTextChunk}()},
+\code{\link{anchor}()},
+\code{\link{copyReport}()},
+\code{\link{getAnchorName}()},
+\code{\link{hasAnchor}()},
+\code{\link{mergeMarkdownFiles}()},
+\code{\link{renderReport}()},
+\code{\link{renderWordReport}()}
+}
+\concept{reporting}

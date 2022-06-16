@@ -293,6 +293,7 @@ getQualificationGOFGMFE <- function(data) {
 #' @param settings settings for the task
 #' @return A list of units for goodness of fit results
 #' @importFrom ospsuite.utils %||%
+#' @keywords internal
 getGOFAxesUnits <- function(gofPlan, settings) {
   predictedVsObservedAxesProperties <- getAxesProperties(gofPlan$Axes$PredictedVsObserved) %||% settings$predictedVsObserved$axes
   residualsOverTimeAxesProperties <- getAxesProperties(gofPlan$Axes$ResidualsOverTime) %||% settings$residualsOverTime$axes

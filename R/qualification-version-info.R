@@ -5,6 +5,7 @@
 #' @field qualificationFramework Qualification Framework version (string, e.g. `"3.0"`)
 #' @export
 #' @import ospsuite.utils
+#' @family qualification worfklow
 QualificationVersionInfo <- R6::R6Class(
   "QualificationVersionInfo",
   public = list(

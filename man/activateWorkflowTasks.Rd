@@ -7,7 +7,7 @@
 activateWorkflowTasks(workflow, tasks = workflow$getAllTasks())
 }
 \arguments{
-\item{workflow}{`MeanModelWorklfow` or `PopulationWorklfow` object}
+\item{workflow}{A `Worklfow` object}
 
 \item{tasks}{names of the tasks to activate
 Default activates all tasks of the workflow using workflow method `workflow$getAllTasks()`}
@@ -15,3 +15,54 @@ Default activates all tasks of the workflow using workflow method `workflow$getA
 \description{
 activates a series of `Tasks` from a `Workflow`
 }
+\examples{
+\dontrun{
+
+# A workflow object needs to be created first
+myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+
+# Use enum helper to get task names
+activateWorkflowTasks(
+workflow = myWorkflow, 
+tasks = StandardSimulationTasks$simulate
+)
+
+# Default will activate every task of workflow
+activateWorkflowTasks(workflow = myWorkflow)
+
+}
+
+}
+\seealso{
+Other workflow helpers: 
+\code{\link{addStudyParameters}()},
+\code{\link{addXParametersForDemogrpahyPlot}()},
+\code{\link{addXParametersForPKParametersPlot}()},
+\code{\link{addYParametersForDemogrpahyPlot}()},
+\code{\link{addYParametersForPKParametersPlot}()},
+\code{\link{checkTaskInputsExist}()},
+\code{\link{getMeanSensitivityAnalysisResultsFileNames}()},
+\code{\link{getOutputPathsInSimulationSet}()},
+\code{\link{getPKAnalysisResultsFileNames}()},
+\code{\link{getPKParametersInOutput}()},
+\code{\link{getPKParametersInSimulationSet}()},
+\code{\link{getPopulationSensitivityAnalysisResultsFileNames}()},
+\code{\link{getSimulationDescriptor}()},
+\code{\link{getSimulationParameterDisplayPaths}()},
+\code{\link{getSimulationResultFileNames}()},
+\code{\link{getTaskInputs}()},
+\code{\link{getWorkflowParameterDisplayPaths}()},
+\code{\link{getXParametersForDemogrpahyPlot}()},
+\code{\link{getXParametersForPKParametersPlot}()},
+\code{\link{getYParametersForDemogrpahyPlot}()},
+\code{\link{getYParametersForPKParametersPlot}()},
+\code{\link{inactivateWorkflowTasks}()},
+\code{\link{setSimulationDescriptor}()},
+\code{\link{setWorkflowParameterDisplayPathsFromFile}()},
+\code{\link{setWorkflowParameterDisplayPaths}()},
+\code{\link{setXParametersForDemogrpahyPlot}()},
+\code{\link{setXParametersForPKParametersPlot}()},
+\code{\link{setYParametersForDemogrpahyPlot}()},
+\code{\link{setYParametersForPKParametersPlot}()}
+}
+\concept{workflow helpers}

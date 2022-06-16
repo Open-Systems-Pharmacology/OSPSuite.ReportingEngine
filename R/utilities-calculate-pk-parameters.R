@@ -699,14 +699,20 @@ getPKRatiosTable <- function(pkParametersTable,
 #' @return names of default parameters
 #' @export
 #' @examples
+#' 
 #' getDefaultPkParametersXParameters(PopulationWorkflowTypes$pediatric)
-getDefaultPkParametersXParameters <- function(workflowType) {
+#' 
+getDefaultPKParametersXParameters <- function(workflowType) {
   validateIsIncluded(workflowType, PopulationWorkflowTypes)
   if (workflowType %in% PopulationWorkflowTypes$pediatric) {
     return(DemographyDefaultParameters)
   }
   return(NULL)
 }
+
+#' @title getDefaultPkParametersXParameters
+#' @export
+getDefaultPkParametersXParameters <- getDefaultPKParametersXParameters
 
 #' @title getPopulationPKAnalysesFromOutput
 #' @description Get the values of PK parameters specified by an `Output` object from a data.frame
@@ -758,34 +764,70 @@ getPopulationPKAnalysesFromOutput <- function(data, metaData, output, pkParamete
   ))
 }
 
-#' @title getXParametersForPkParametersPlot
+#' @title getXParametersForPKParametersPlot
 #' @param workflow `PopulationWorkflow` R6 class object
 #' @return list of x-parameters used for PK parameters range plots
 #' @export
-getXParametersForPkParametersPlot <- function(workflow) {
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
+#' 
+#' # Get the list of parameters in x-axis for range plots
+#' getXParametersForPKParametersPlot(workflow = myWorkflow)
+#' 
+#' }
+#' 
+getXParametersForPKParametersPlot <- function(workflow) {
   validateIsOfType(workflow, "PopulationWorkflow")
   return(workflow$plotPKParameters$xParameters)
 }
 
-#' @title getYParametersForPkParametersPlot
+#' @title getYParametersForPKParametersPlot
 #' @param workflow `PopulationWorkflow` R6 class object
 #' @return list of y-parameters used for PK parameters range plots and boxplots
 #' @export
-#' @importFrom ospsuite.utils %||%
-getYParametersForPkParametersPlot <- function(workflow) {
+#' @import ospsuite.utils
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
+#' 
+#' # Get the list of parameters in y-axis for range plots and boxplots
+#' getYParametersForPKParametersPlot(workflow = myWorkflow)
+#' 
+#' }
+#' 
+getYParametersForPKParametersPlot <- function(workflow) {
   validateIsOfType(workflow, "PopulationWorkflow")
   yParameters <- workflow$plotPKParameters$yParameters %||% workflow$simulationStructures[[1]]$simulationSet$outputs
 
   return(yParameters)
 }
 
-#' @title setXParametersForPkParametersPlot
+#' @title setXParametersForPKParametersPlot
 #' @description Set x-parameters for range plots of PK parameters plot task.
 #' The method update directly the input workflow
 #' @param workflow `PopulationWorkflow` R6 class object
 #' @param parameters list of parameters to be used as x-parameters
 #' @export
-setXParametersForPkParametersPlot <- function(workflow, parameters) {
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
+#' 
+#' # Set parameters in x-axis for range plots
+#' setXParametersForPKParametersPlot(
+#' workflow = myWorkflow, 
+#' parameters = StandardPath
+#' )
+#' 
+#' }
+#' 
+setXParametersForPKParametersPlot <- function(workflow, parameters) {
   validateIsOfType(workflow, "PopulationWorkflow")
   validateIsString(c(parameters))
 
@@ -803,24 +845,52 @@ setXParametersForPkParametersPlot <- function(workflow, parameters) {
   return(invisible())
 }
 
-#' @title addXParametersForPkParametersPlot
-#' @description Apppend x-parameters for range plots of PK parameters plot task.
+#' @title addXParametersForPKParametersPlot
+#' @description Append x-parameters for range plots of PK parameters plot task.
 #' The method update directly the input workflow
 #' @param workflow `PopulationWorkflow` R6 class object
 #' @param parameters list of parameters to be used as x-parameters
 #' @export
-addXParametersForPkParametersPlot <- function(workflow, parameters) {
-  updatedParameters <- c(getXParametersForPkParametersPlot(workflow), parameters)
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
+#' 
+#' # Add parameters in x-axis for range plots
+#' addXParametersForPKParametersPlot(
+#' workflow = myWorkflow, 
+#' parameters = StandardPath$GestationalAge
+#' )
+#' 
+#' }
+#' 
+addXParametersForPKParametersPlot <- function(workflow, parameters) {
+  updatedParameters <- c(getXParametersForPKParametersPlot(workflow), parameters)
   setXParametersForPkParametersPlot(workflow, updatedParameters)
 }
 
-#' @title setYParametersForPkParametersPlot
+#' @title setYParametersForPKParametersPlot
 #' @description Set y-parameters for boxplots and range plots of PK parameters plot task.
 #' The method update directly the input workflow
 #' @param workflow `PopulationWorkflow` R6 class object
 #' @param parameters list of R6 class `Output` objects to be used as y-parameters
 #' @export
-setYParametersForPkParametersPlot <- function(workflow, parameters) {
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
+#' 
+#' # Set parameters in y-axis for range plots and boxplots
+#' setYParametersForPKParametersPlot(
+#' workflow = myWorkflow, 
+#' parameters = Output$new(path, pkParameters)
+#' )
+#' 
+#' }
+#' 
+setYParametersForPKParametersPlot <- function(workflow, parameters) {
   validateIsOfType(workflow, "PopulationWorkflow")
   validateIsOfType(c(parameters), "Output")
 
@@ -840,13 +910,51 @@ setYParametersForPkParametersPlot <- function(workflow, parameters) {
   return(invisible())
 }
 
-#' @title addYParametersForPkParametersPlot
-#' @description Apppend y-parameters for range plots of PK parameters plot task.
+#' @title addYParametersForPKParametersPlot
+#' @description Append y-parameters for range plots of PK parameters plot task.
 #' The method update directly the input workflow
 #' @param workflow `PopulationWorkflow` R6 class object
 #' @param parameters list of parameters to be used as y-parameters
 #' @export
-addYParametersForPkParametersPlot <- function(workflow, parameters) {
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
+#' 
+#' # Add parameters in y-axis for range plots and boxplots
+#' addYParametersForPKParametersPlot(
+#' workflow = myWorkflow, 
+#' parameters = Output$new(path, pkParameters)
+#' )
+#' 
+#' }
+#' 
+addYParametersForPKParametersPlot <- function(workflow, parameters) {
   updatedParameters <- c(getYParametersForPkParametersPlot(workflow), parameters)
   setYParametersForPkParametersPlot(workflow, updatedParameters)
 }
+
+#' @title getXParametersForPkParametersPlot
+#' @export
+getXParametersForPkParametersPlot <- getXParametersForPKParametersPlot
+
+#' @title getYParametersForPkParametersPlot
+#' @export
+getYParametersForPkParametersPlot <- getYParametersForPKParametersPlot
+
+#' @title setXParametersForPkParametersPlot
+#' @export
+setXParametersForPkParametersPlot <- setXParametersForPKParametersPlot
+
+#' @title setYParametersForPkParametersPlot
+#' @export
+setYParametersForPkParametersPlot <- setYParametersForPKParametersPlot
+
+#' @title addXParametersForPkParametersPlot
+#' @export
+addXParametersForPkParametersPlot <- addXParametersForPKParametersPlot
+
+#' @title addYParametersForPkParametersPlot
+#' @export
+addYParametersForPkParametersPlot <- addYParametersForPKParametersPlot

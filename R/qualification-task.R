@@ -1,6 +1,7 @@
 #' @title QualificationTask
 #' @description  R6 class for QualificationTask settings
 #' @export
+#' @family workflow tasks
 QualificationTask <- R6::R6Class(
   "QualificationTask",
   inherit = PlotTask,

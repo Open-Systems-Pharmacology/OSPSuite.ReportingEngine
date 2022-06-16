@@ -17,3 +17,28 @@ A `QualificationTask` object
 \description{
 Define `plotPKRatio` task and its settings
 }
+\seealso{
+Other workflow tasks: 
+\code{\link{GofPlotTask}},
+\code{\link{PlotTask}},
+\code{\link{PopulationPlotTask}},
+\code{\link{PopulationSensitivityAnalysisTask}},
+\code{\link{QualificationTask}},
+\code{\link{SensitivityAnalysisTask}},
+\code{\link{Task}},
+\code{\link{addUserDefinedTask}()},
+\code{\link{loadCalculatePKParametersTask}()},
+\code{\link{loadCalculateSensitivityTask}()},
+\code{\link{loadGOFMergedTask}()},
+\code{\link{loadPlotAbsorptionTask}()},
+\code{\link{loadPlotDDIRatioTask}()},
+\code{\link{loadPlotDemographyTask}()},
+\code{\link{loadPlotMassBalanceTask}()},
+\code{\link{loadPlotPKParametersTask}()},
+\code{\link{loadPlotSensitivityTask}()},
+\code{\link{loadPlotTimeProfilesAndResidualsTask}()},
+\code{\link{loadQualificationComparisonTimeProfileTask}()},
+\code{\link{loadQualificationTimeProfilesTask}()},
+\code{\link{loadSimulateTask}()}
+}
+\concept{workflow tasks}

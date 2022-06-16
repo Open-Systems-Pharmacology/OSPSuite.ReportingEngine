@@ -17,3 +17,11 @@ A `ConfigurationPlan` object including the content of json file
 \description{
 Load a `ConfigurationPlan` object from json file
 }
+\seealso{
+Other qualification workflow: 
+\code{\link{ConfigurationPlan}},
+\code{\link{adjustTitlePage}()},
+\code{\link{loadQualificationWorkflow}()},
+\code{\link{startQualificationRunner}()}
+}
+\concept{qualification workflow}

@@ -6,6 +6,31 @@
 \description{
 R6 class for PopulationSensitivityAnalysisTask settings
 }
+\seealso{
+Other workflow tasks: 
+\code{\link{GofPlotTask}},
+\code{\link{PlotTask}},
+\code{\link{PopulationPlotTask}},
+\code{\link{QualificationTask}},
+\code{\link{SensitivityAnalysisTask}},
+\code{\link{Task}},
+\code{\link{addUserDefinedTask}()},
+\code{\link{loadCalculatePKParametersTask}()},
+\code{\link{loadCalculateSensitivityTask}()},
+\code{\link{loadGOFMergedTask}()},
+\code{\link{loadPlotAbsorptionTask}()},
+\code{\link{loadPlotDDIRatioTask}()},
+\code{\link{loadPlotDemographyTask}()},
+\code{\link{loadPlotMassBalanceTask}()},
+\code{\link{loadPlotPKParametersTask}()},
+\code{\link{loadPlotPKRatioTask}()},
+\code{\link{loadPlotSensitivityTask}()},
+\code{\link{loadPlotTimeProfilesAndResidualsTask}()},
+\code{\link{loadQualificationComparisonTimeProfileTask}()},
+\code{\link{loadQualificationTimeProfilesTask}()},
+\code{\link{loadSimulateTask}()}
+}
+\concept{workflow tasks}
 \section{Super classes}{
 \code{\link[ospsuite.reportingengine:Task]{ospsuite.reportingengine::Task}} -> \code{\link[ospsuite.reportingengine:SensitivityAnalysisTask]{ospsuite.reportingengine::SensitivityAnalysisTask}} -> \code{PopulationSensitivityAnalysisTask}
 }

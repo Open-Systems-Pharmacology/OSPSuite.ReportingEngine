@@ -21,4 +21,19 @@ hasAnchor('<a id="section-1"></a>')
 hasAnchor('<a name="section-1"></a>')
 
 hasAnchor("# section 1")
+
 }
+\seealso{
+Other reporting: 
+\code{\link{addFigureChunk}()},
+\code{\link{addTableChunk}()},
+\code{\link{addTextChunk}()},
+\code{\link{anchor}()},
+\code{\link{copyReport}()},
+\code{\link{getAnchorName}()},
+\code{\link{mergeMarkdownFiles}()},
+\code{\link{renderReport}()},
+\code{\link{renderWordReport}()},
+\code{\link{resetReport}()}
+}
+\concept{reporting}
