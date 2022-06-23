@@ -33,7 +33,8 @@ plotQualificationGOFs <- function(configurationPlan,
       plotID <- defaultFileNames$resultID(length(gofResults) + 1, "gof_plot", plotType)
       axesProperties <- getAxesProperties(gofPlan$Axes[[plotType]]) %||% settings[[plotType]]$axes
 
-      gofPlot <- getQualificationGOFPlot(plotType, gofData$data, gofData$metaData, axesProperties, gofPlan$Plot)
+      print(gofPlan$Plot)
+      gofPlot <- getQualificationGOFPlot(plotType, gofData$data, gofData$metaData, axesProperties, gofPlan[["PlotSettings"]])
       gofResults[[plotID]] <- saveTaskResults(
         id = plotID,
         sectionId = gofPlan$SectionReference %||% gofPlan$SectionId,
@@ -202,9 +203,9 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, pl
       shape = "Groups"
     )
   )
-
+print(plotProperties)
   plotConfiguration <- getPlotConfigurationFromPlan(
-    plotProperties = plotProperties,
+    plotProperties,
     plotType = switch(
       plotType,
       "predictedVsObserved" = "ObsVsPred",

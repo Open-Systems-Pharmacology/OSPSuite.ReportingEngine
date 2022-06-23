@@ -22,7 +22,7 @@ plotQualificationPKRatio <- function(configurationPlan,
     for (pkParameterName in pkParameterNames) {
       #----- Plot artifact -----#
       plotID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_plot", pkParameterName)
-      pkRatioPlot <- getQualificationPKRatioPlot(pkParameterName, pkRatioData$data, pkRatioData$metaData, axesProperties, pkRatioPlan$Plot)
+      pkRatioPlot <- getQualificationPKRatioPlot(pkParameterName, pkRatioData$data, pkRatioData$metaData, axesProperties, pkRatioPlan[["PlotSettings"]])
       pkRatioResults[[plotID]] <- saveTaskResults(
         id = plotID,
         sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,

@@ -38,7 +38,7 @@ plotQualificationComparisonTimeProfile <- function(configurationPlan,
       sourceUnit = timeProfilePlan$TimeUnit
     )
 
-    plotConfiguration <- getPlotConfigurationFromPlan(timeProfilePlan$Plot)
+    plotConfiguration <- getPlotConfigurationFromPlan(timeProfilePlan[["PlotSettings"]])
     timeProfilePlot <- tlf::initializePlot(plotConfiguration)
     for (outputMapping in timeProfilePlan$OutputMappings) {
       timeProfilePlot <- addOutputToComparisonTimeProfile(
