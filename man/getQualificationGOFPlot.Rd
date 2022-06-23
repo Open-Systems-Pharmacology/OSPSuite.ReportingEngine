@@ -4,7 +4,13 @@
 \alias{getQualificationGOFPlot}
 \title{getQualificationGOFPlot}
 \usage{
-getQualificationGOFPlot(plotType, data, metaData, axesProperties)
+getQualificationGOFPlot(
+  plotType,
+  data,
+  metaData,
+  axesProperties,
+  plotProperties
+)
 }
 \arguments{
 \item{plotType}{Name of PK Parameter as defined by users}
@@ -14,6 +20,8 @@ getQualificationGOFPlot(plotType, data, metaData, axesProperties)
 \item{metaData}{metaData with units and dimension for labeling the table header}
 
 \item{axesProperties}{list of axes properties obtained from `getAxesProperties`}
+
+\item{plotProperties}{list of plot properties defined in field `Plot` of GOFMerged configuration plan}
 }
 \value{
 A ggplot object

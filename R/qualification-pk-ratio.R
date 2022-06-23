@@ -22,7 +22,7 @@ plotQualificationPKRatio <- function(configurationPlan,
     for (pkParameterName in pkParameterNames) {
       #----- Plot artifact -----#
       plotID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_plot", pkParameterName)
-      pkRatioPlot <- getQualificationPKRatioPlot(pkParameterName, pkRatioData$data, pkRatioData$metaData, axesProperties)
+      pkRatioPlot <- getQualificationPKRatioPlot(pkParameterName, pkRatioData$data, pkRatioData$metaData, axesProperties, pkRatioPlan$Plot)
       pkRatioResults[[plotID]] <- saveTaskResults(
         id = plotID,
         sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
@@ -119,10 +119,11 @@ getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData) {
 #' @param data data.frame with PK Ratios
 #' @param metaData metaData with units and dimension for labeling the table header
 #' @param axesProperties list of axes properties obtained from `getAxesProperties`
+#' @param plotProperties list of plot properties defined in field `Plot` of PKRatio configuration plan
 #' @return A ggplot object
 #' @importFrom ospsuite.utils %||%
 #' @keywords internal
-getQualificationPKRatioPlot <- function(pkParameterName, data, metaData, axesProperties) {
+getQualificationPKRatioPlot <- function(pkParameterName, data, metaData, axesProperties, plotProperties) {
   # Prepare data, dataMapping and plotCOnfiguration to follow tlf nomenclature
   data$Groups <- metaData$caption
   dataMapping <- tlf::PKRatioDataMapping$new(
@@ -132,11 +133,8 @@ getQualificationPKRatioPlot <- function(pkParameterName, data, metaData, axesPro
     shape = "Groups"
   )
   axesProperties$y$dimension <- metaData[[paste0("ratio", pkParameterName)]]$dimension
-  plotConfiguration <- tlf::PKRatioPlotConfiguration$new(
-    data = data,
-    metaData = metaData,
-    dataMapping = dataMapping
-  )
+  
+  plotConfiguration <- getPlotConfigurationFromPlan(plotProperties, plotType = "PKRatio")
   plotConfiguration$points$color <- metaData$color
   plotConfiguration$points$shape <- metaData$shape
   plotConfiguration$xAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||% autoAxesLimits(data[, "age"])
@@ -204,10 +202,10 @@ getQualificationPKRatioData <- function(pkRatioPlan, configurationPlan, logFolde
     list(
       caption = caption,
       color = sapply(pkRatioPlan$Groups, FUN = function(group) {
-        group$Color %||% "black"
+        group$Color %||% reEnv$theme$plotConfigurations$plotPKRatio$points$color
       }),
       shape = sapply(pkRatioPlan$Groups, FUN = function(group) {
-        tlfShape(group$Symbol) %||% tlf::Shapes$circle
+        tlfShape(group$Symbol %||% reEnv$theme$plotConfigurations$plotPKRatio$points$shape)
       })
     )
   )

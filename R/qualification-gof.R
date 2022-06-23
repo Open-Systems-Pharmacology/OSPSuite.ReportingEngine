@@ -33,7 +33,7 @@ plotQualificationGOFs <- function(configurationPlan,
       plotID <- defaultFileNames$resultID(length(gofResults) + 1, "gof_plot", plotType)
       axesProperties <- getAxesProperties(gofPlan$Axes[[plotType]]) %||% settings[[plotType]]$axes
 
-      gofPlot <- getQualificationGOFPlot(plotType, gofData$data, gofData$metaData, axesProperties)
+      gofPlot <- getQualificationGOFPlot(plotType, gofData$data, gofData$metaData, axesProperties, gofPlan$Plot)
       gofResults[[plotID]] <- saveTaskResults(
         id = plotID,
         sectionId = gofPlan$SectionReference %||% gofPlan$SectionId,
@@ -170,11 +170,12 @@ getGOFDataForMapping <- function(outputMapping, configurationPlan, axesUnits, lo
 #' @param data data.frame with PK Ratios
 #' @param metaData metaData with units and dimension for labeling the table header
 #' @param axesProperties list of axes properties obtained from `getAxesProperties`
+#' @param plotProperties list of plot properties defined in field `Plot` of GOFMerged configuration plan
 #' @return A ggplot object
 #' @import tlf
 #' @importFrom ospsuite.utils %||%
 #' @keywords internal
-getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties) {
+getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, plotProperties) {
   # Axes labels
   axesProperties$y$dimension <- switch(
     plotType,
@@ -202,19 +203,15 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties) {
     )
   )
 
-  plotConfiguration <- switch(
-    plotType,
-    "predictedVsObserved" = tlf::ObsVsPredPlotConfiguration$new(
-      data = data,
-      metaData = metaData,
-      dataMapping = dataMapping
-    ),
-    "residualsOverTime" = tlf::ResVsPredPlotConfiguration$new(
-      data = data,
-      metaData = metaData,
-      dataMapping = dataMapping
-    )
+  plotConfiguration <- getPlotConfigurationFromPlan(
+    plotProperties = plotProperties,
+    plotType = switch(
+      plotType,
+      "predictedVsObserved" = "ObsVsPred",
+      "residualsOverTime" = "ResVsPred"
+      )
   )
+  
   # Update shapes and colors from config plan
   plotConfiguration$points$color <- metaData$color
   plotConfiguration$points$shape <- metaData$shape
