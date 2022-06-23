@@ -244,7 +244,7 @@
         "shape": "blank",
         "linetype": [
           "solid",
-          "dashed",
+          "dotted",
           "solid"
         ],
         "size": 0.5,

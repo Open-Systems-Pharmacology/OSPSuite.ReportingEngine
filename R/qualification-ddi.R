@@ -24,7 +24,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
     validateIsIncluded(plotDDIMetadata$plotTypes, names(ddiPlotTypeSpecifications))
 
     plotDDIMetadata$axesSettings <- lapply(plotDDIMetadata$plotTypes, function(plotType) {
-      getAxesSettings(configurationPlan$plots$AxesSettings[[ ddiPlotTypeSpecifications[[plotType]]$ddiPlotAxesSettings ]])
+      getAxesSettings(configurationPlan$plots$AxesSettings[[ddiPlotTypeSpecifications[[plotType]]$ddiPlotAxesSettings]])
     })
     names(plotDDIMetadata$axesSettings) <- plotDDIMetadata$plotTypes
 
@@ -38,8 +38,11 @@ getQualificationDDIPlotData <- function(configurationPlan) {
       group <- plot$Groups[[groupNumber]]
       plotDDIMetadata$groups[[groupNumber]] <- list()
       plotDDIMetadata$groups[[groupNumber]]$caption <- group$Caption
-      plotDDIMetadata$groups[[groupNumber]]$color <- group$Color
-      plotDDIMetadata$groups[[groupNumber]]$symbol <- tlfShape(group$Symbol)
+      plotDDIMetadata$groups[[groupNumber]]$color <- group$Color %||%
+        reEnv$theme$plotConfigurations$plotDDIRatio$points$color
+      plotDDIMetadata$groups[[groupNumber]]$symbol <- tlfShape(
+        group$Symbol %||% reEnv$theme$plotConfigurations$plotDDIRatio$points$shape
+      )
 
       for (ddiRatio in group$DDIRatios) {
         outputPath <- ddiRatio$Output
@@ -54,15 +57,15 @@ getQualificationDDIPlotData <- function(configurationPlan) {
           ratioList[[pkParameter]] <- list()
           validateIsIncluded(ddiPKRatioColumnName[[pkParameter]], names(observedDataFrame))
 
-          #The following tryCatch verifies that the PK parameter columns are read as `numeric` by the call to `readObservedDataFile` above.
-          #The function `readObservedDataFile` first attempts to read csv files using `read.csv`.
-          #If this fails, because, for example the CSV file is semicolon separated, `readObservedDataFile` attempts to read the file using `read.csv2`.
-          #If a semicolon-separated CSV contains a float column with period `.` decimal separators (and not comma ',' decimal separators) then read.csv2 will read this column as `factor`.
-          #Therefore, coerce this column into `numeric` format:
+          # The following tryCatch verifies that the PK parameter columns are read as `numeric` by the call to `readObservedDataFile` above.
+          # The function `readObservedDataFile` first attempts to read csv files using `read.csv`.
+          # If this fails, because, for example the CSV file is semicolon separated, `readObservedDataFile` attempts to read the file using `read.csv2`.
+          # If a semicolon-separated CSV contains a float column with period `.` decimal separators (and not comma ',' decimal separators) then read.csv2 will read this column as `factor`.
+          # Therefore, coerce this column into `numeric` format:
           observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]] <- as.numeric(observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]])
 
           observedDataSelection <- observedDataFrame$ID %in% observedDataRecordId
-          ratioList[[pkParameter]] <- getDDIRatioList(observedDataFrame[observedDataSelection,],ddiPKRatioColumnName[[pkParameter]])
+          ratioList[[pkParameter]] <- getDDIRatioList(observedDataFrame[observedDataSelection, ], ddiPKRatioColumnName[[pkParameter]])
           for (simulationType in c("SimulationControl", "SimulationDDI")) {
             plotComponent <- ddiRatio[[simulationType]]
             projectName <- plotComponent$Project
@@ -154,12 +157,12 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 #' @param mechanism name of mechanism as read form DDI observev data file
 #' @return Display name of mechanism to be used in DDI report
 #' @keywords internal
-getMechanismName <- function(mechanism){
-  if(is.null(mechanism)){
+getMechanismName <- function(mechanism) {
+  if (is.null(mechanism)) {
     return(NA)
   }
   correctedMechanismName <- reEnv$ddiRatioSubsetsDictionary[[as.character(mechanism)]]
-  if(is.null(correctedMechanismName)){
+  if (is.null(correctedMechanismName)) {
     return(mechanism)
   }
   return(correctedMechanismName)
@@ -172,13 +175,13 @@ getMechanismName <- function(mechanism){
 #' @param ddiPKRatioColumnName Name of column in data.frame `observedDataFrameRow` containing the value of the PK parameter observation to be read
 #' @return A named list containing entries in `observedDataFrameRow`corresponding to the PK parameter in the data.frame column `ddiPKRatioColumnName`
 #' @keywords internal
-getDDIRatioList <- function(observedDataFrameRow,ddiPKRatioColumnName){
+getDDIRatioList <- function(observedDataFrameRow, ddiPKRatioColumnName) {
   ratioList <- list()
-  for (col in names(reEnv$ddiRatioListColumnMappings)){
+  for (col in names(reEnv$ddiRatioListColumnMappings)) {
     colName <- reEnv$ddiRatioListColumnMappings[[col]]
     ratioList[[col]] <- observedDataFrameRow[[colName]]
   }
-  ratioList$observedRatio <- observedDataFrameRow[[ ddiPKRatioColumnName ]]
+  ratioList$observedRatio <- observedDataFrameRow[[ddiPKRatioColumnName]]
   return(ratioList)
 }
 
@@ -241,18 +244,18 @@ buildQualificationDDIDataframe <- function(dataframe,
 #' @param dataVector a numeric vector containing the x or y values of datapoints to be plotted
 #' @return a list containing the minimum and maximum axes limits
 #' @keywords internal
-getSmartZoomLimits <- function(dataVector){
+getSmartZoomLimits <- function(dataVector) {
   validateIsNumeric(dataVector)
 
   # Guest criterion range for DDI Ratio plot
   minLimit <- ifelse(
-    min(dataVector)>=1,
+    min(dataVector) >= 1,
     0.8,
-    min(0.8*min(dataVector), 0.25)
+    min(0.8 * min(dataVector), 0.25)
   )
   maxLimit <- ifelse(
-    max(dataVector)>=1,
-    max(1.25*max(dataVector), 4),
+    max(dataVector) >= 1,
+    max(1.25 * max(dataVector), 4),
     1.25
   )
   return(list(min = minLimit, max = maxLimit))
@@ -289,10 +292,9 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
   # Set axes labels
   ddiPlotConfiguration$labels$xlabel$text <- ddiPlotData$axesSettings$X$label
   ddiPlotConfiguration$labels$ylabel$text <- ddiPlotData$axesSettings$Y$label
-
-  # Set line color and type
-  ddiPlotConfiguration$lines$color <- "black"
-  ddiPlotConfiguration$lines$linetype <- c("solid", "dotted", "solid")
+  # Set points color and shapes
+  ddiPlotConfiguration$points$color <- sapply(ddiPlotData$aestheticsList$color, identity)
+  ddiPlotConfiguration$points$shape <- sapply(ddiPlotData$aestheticsList$shape, identity)
 
   # Set axes scaling
   if (ddiPlotData$axesSettings$X$scaling == "Log") {
@@ -305,8 +307,8 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
   xSmartZoom <- getSmartZoomLimits(ddiData[[ddiPlotData$axesSettings$X$label]])
   ySmartZoom <- getSmartZoomLimits(ddiData[[ddiPlotData$axesSettings$Y$label]])
 
-  ddiPlotConfiguration$xAxis$limits <- c(xSmartZoom$min,xSmartZoom$max)
-  ddiPlotConfiguration$yAxis$limits <- c(ySmartZoom$min,ySmartZoom$max)
+  ddiPlotConfiguration$xAxis$limits <- c(xSmartZoom$min, xSmartZoom$max)
+  ddiPlotConfiguration$yAxis$limits <- c(ySmartZoom$min, ySmartZoom$max)
 
   if (ddiPlotData$axesSettings$X$scaling == "Log") {
     ddiPlotConfiguration$xAxis$ticks <- 10^seq(ceiling(log10(xSmartZoom$min)), floor(log10(xSmartZoom$max)), 1)
@@ -318,23 +320,18 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
   # minRange defines the range for simulated x values of Guest et al. criterion
   # Consequently, it also needs to be updated according to smart zoom
   ddiDataMapping$minRange <- c(xSmartZoom$min, xSmartZoom$max)
-  
+
   qualificationDDIPlot <- tlf::plotDDIRatio(
     data = ddiData,
     dataMapping = ddiDataMapping,
     plotConfiguration = ddiPlotConfiguration
   )
-
-  # ggplot2 tends to throw messages when updating color and shape scales
-  # if not wrapped by suppressMessages
-  # Note that the wrapper does not suppress warnings nor errors
-  suppressMessages(
-    qualificationDDIPlot <- qualificationDDIPlot +
-      ggplot2::scale_color_manual(values = sapply(ddiPlotData$aestheticsList$color, identity)) +
-      ggplot2::scale_shape_manual(values = sapply(ddiPlotData$aestheticsList$shape, identity))
-  )
   # Force legend to be only one column to maintain plot panel width, and left-justify legend entries
-  qualificationDDIPlot <- qualificationDDIPlot + ggplot2::guides(col = guide_legend(ncol = 1, label.hjust = 0))
+  qualificationDDIPlot <- qualificationDDIPlot +
+    ggplot2::guides(
+      color = ggplot2::guide_legend(ncol = 1, label.hjust = 0),
+      shape = ggplot2::guide_legend(ncol = 1, label.hjust = 0)
+    )
 
   return(qualificationDDIPlot)
 }
@@ -367,11 +364,13 @@ getQualificationDDIRatioMeasure <- function(summaryDataFrame, pkParameterName) {
 
 
 
-getDDIPlotCaption <- function(title,subPlotCaption,pkParameter,plotTypeCaption){
-  longTitle <- ifNotNull(condition = subPlotCaption,
-                         outputIfNotNull = paste0(title,". ", subPlotCaption,"."),
-                         outputIfNull = paste0(title,". "))
-  caption <- paste(longTitle,plotTypeCaption,pkParameter,"Ratio.")
+getDDIPlotCaption <- function(title, subPlotCaption, pkParameter, plotTypeCaption) {
+  longTitle <- ifNotNull(
+    condition = subPlotCaption,
+    outputIfNotNull = paste0(title, ". ", subPlotCaption, "."),
+    outputIfNull = paste0(title, ". ")
+  )
+  caption <- paste(longTitle, plotTypeCaption, pkParameter, "Ratio.")
   return(caption)
 }
 
@@ -401,10 +400,12 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
 
       plotID <- defaultFileNames$resultID(idPrefix, "ddi_ratio_plot", pkParameter, plotType)
       ddiPlot <- generateDDIQualificationDDIPlot(plotDDIData)
-      ddiPlotCaption <- getDDIPlotCaption(title = metadata$title,
-                                          subPlotCaption = captionSuffix,
-                                          pkParameter = pkParameter,
-                                          plotTypeCaption = ddiPlotTypeSpecifications[[plotType]]$figureCaption)
+      ddiPlotCaption <- getDDIPlotCaption(
+        title = metadata$title,
+        subPlotCaption = captionSuffix,
+        pkParameter = pkParameter,
+        plotTypeCaption = ddiPlotTypeSpecifications[[plotType]]$figureCaption
+      )
       ddiArtifacts[["Plot"]][[plotID]] <- saveTaskResults(
         id = plotID,
         sectionId = sectionID,
@@ -540,11 +541,11 @@ plotQualificationDDIs <- function(configurationPlan,
         sectionId = sectionID,
         # Subheading result includes anchor tag to be referenced in TOC
         textChunk = c(
-          anchor(paste0(sectionID, "-ddi-subunit-", length(ddiResults)+1)), "",
+          anchor(paste0(sectionID, "-ddi-subunit-", length(ddiResults) + 1)), "",
           paste(paste0(rep("#", sectionLevel + 1), collapse = ""), subplotTypeName)
         ),
         includeTextChunk = TRUE
-        )
+      )
       ddiResults <- c(ddiResults, subheading)
       subplotTypeLevels <- sort(unique(dataframe[[subplotType]]))
       for (subplotTypeLevel in subplotTypeLevels) {
@@ -553,16 +554,16 @@ plotQualificationDDIs <- function(configurationPlan,
           sectionId = sectionID,
           # Subheading result includes anchor tag to be referenced in TOC
           textChunk = c(
-            anchor(paste0(sectionID, "-ddi-subunit-", length(ddiResults)+1)), "",
+            anchor(paste0(sectionID, "-ddi-subunit-", length(ddiResults) + 1)), "",
             paste(paste0(rep("#", sectionLevel + 2), collapse = ""), subplotTypeLevel)
           ),
           includeTextChunk = TRUE
-          )
+        )
         ddiResults <- c(ddiResults, subsubheading)
         subplotDataframe <- droplevels(dataframe[dataframe[[subplotType]] == subplotTypeLevel, ])
         sectionID <- metadata$sectionID
         idPrefix <- paste("DDIRatio", plotIndex, subplotType, subplotTypeLevel, sep = "-")
-        ddiResults <- c(ddiResults, getDDISection(subplotDataframe, metadata, sectionID, idPrefix, captionSuffix = paste0(subplotTypeName,": ",subplotTypeLevel)))
+        ddiResults <- c(ddiResults, getDDISection(subplotDataframe, metadata, sectionID, idPrefix, captionSuffix = paste0(subplotTypeName, ": ", subplotTypeLevel)))
       }
     }
   }
