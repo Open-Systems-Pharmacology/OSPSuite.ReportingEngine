@@ -26,26 +26,21 @@ ConfigurationScales <- list(
 )
 
 #' @title ConfigurationShapes
-#' @description List defining shape following tlf nomenclature from a Symbol field of configuration plan
+#' @description List mapping configuration plan symbols to tlf shapes
 #' @import tlf
 #' @keywords internal
 ConfigurationShapes <- list(
   none = tlf::Shapes$blank,
-  circle = tlf::Shapes$circle,
+  circle = tlf::Shapes$hollowCircle,
   dot = tlf::Shapes$dot,
-  square = tlf::Shapes$square,
-  diamond = tlf::Shapes$diamond,
+  square = tlf::Shapes$hollowSquare,
+  diamond = tlf::Shapes$hollowDiamond,
   asterisk = tlf::Shapes$asterisk,
   cross = tlf::Shapes$cross,
   plus = tlf::Shapes$plus,
-  point = tlf::Shapes$dot,
-  triangle = tlf::Shapes$triangle,
-  triangledown = tlf::Shapes$triangleDown,
-  hollowcircle = tlf::Shapes$hollowCircle,
-  hollowsquare = tlf::Shapes$hollowSquare,
-  hollowdiamond = tlf::Shapes$hollowDiamond,
-  hollowtriangle = tlf::Shapes$hollowTriangle,
-  hollowtriangledown = tlf::Shapes$hollowTriangleDown
+  point = tlf::Shapes$circle,
+  triangle = tlf::Shapes$hollowTriangle,
+  triangledown = tlf::Shapes$hollowTriangleDown
 )
 
 #' @title ConfigurationLinetypes
@@ -116,7 +111,7 @@ getAxesProperties <- function(axesSettings) {
 }
 
 #' @title updatePlotAxes
-#' @description Update the axes and grid properties of a plot object based on the identified axes properties
+#' @description Update the axes, grid and legend properties of a plot object based on the identified axes properties
 #' @param plotObject A ggplot object
 #' @param axesProperties list of axes properties obtained from `getAxesForTimeProfiles`
 #' @return A ggplot object
@@ -146,7 +141,7 @@ updatePlotAxes <- function(plotObject, axesProperties) {
   try({
     plotObject <- tlf::setYAxis(plotObject, scale = axesProperties$y$scale, limits = c(axesProperties$y$min, axesProperties$y$max))
   })
-  plotObject <- tlf::setLegendPosition(plotObject, position = tlf::LegendPositions$outsideTop)
+  plotObject <- tlf::setLegendPosition(plotObject)
   return(plotObject)
 }
 
@@ -175,7 +170,7 @@ tlfLinetype <- function(configurationLinetype) {
 tlfShape <- function(configurationShape) {
   # Unknown or NULL value will translate as NULL
   # which will lead to use default behaviour
-  if (isOfLength(configurationShape, 0)) {
+  if (isEmpty(configurationShape)) {
     return()
   }
   # tolower is used to ensure that there is no issue with caps from field values

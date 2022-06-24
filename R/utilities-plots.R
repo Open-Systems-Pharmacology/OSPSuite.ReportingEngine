@@ -125,40 +125,11 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
     reEnv$defaultPlotFormat$height
   )
 
-  legendScaling <- getLegendScalingFactors(legendPosition)
-
   # Get dimensions of exported based on legend position and default/specific plot properties
   plotConfiguration$export$units <- reEnv$defaultPlotFormat$units
-  plotConfiguration$export$width <- reEnv$fontScaleFactor * legendScaling$width * width
-  plotConfiguration$export$height <- reEnv$fontScaleFactor * legendScaling$height * height
+  plotConfiguration$export$width <- reEnv$fontScaleFactor * width
+  plotConfiguration$export$height <- reEnv$fontScaleFactor * height
   return(plotConfiguration)
-}
-
-#' @title getLegendScalingFactors
-#' @description Get factors to scale plot dimensions accounting for the location of the legend.
-#' Initial estimates based on Abdullah's tests
-#' TODO: improve this directly from tlf
-#' @param legendPosition The name of the legend position as defined by `tlf` enum `LegendPositions`
-#' @return A list of scaling values for `width` and `height`
-#' @keywords internal
-getLegendScalingFactors <- function(legendPosition = tlf::LegendPositions$outsideTop) {
-  # Legend on the left/right sides: increase width
-  if (isIncluded(legendPosition, c(tlf::LegendPositions$outsideRight, tlf::LegendPositions$outsideLeft))) {
-    return(list(width = 4 / 3, height = 1))
-  }
-  # Legend on the top/bottom sides: increase height
-  if (isIncluded(legendPosition, c(
-    tlf::LegendPositions$outsideTopLeft,
-    tlf::LegendPositions$outsideTop,
-    tlf::LegendPositions$outsideTopRight,
-    tlf::LegendPositions$outsideBottomLeft,
-    tlf::LegendPositions$outsideBottom,
-    tlf::LegendPositions$outsideBottomRight
-  ))) {
-    return(list(width = 1, height = 7 / 6))
-  }
-  # Otherwise use these default values
-  return(list(width = 1, height = 1))
 }
 
 #' @title addLineBreakToCaption

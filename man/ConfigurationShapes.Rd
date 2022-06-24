@@ -5,12 +5,12 @@
 \alias{ConfigurationShapes}
 \title{ConfigurationShapes}
 \format{
-An object of class \code{list} of length 16.
+An object of class \code{list} of length 11.
 }
 \usage{
 ConfigurationShapes
 }
 \description{
-List defining shape following tlf nomenclature from a Symbol field of configuration plan
+List mapping configuration plan symbols to tlf shapes
 }
 \keyword{internal}
