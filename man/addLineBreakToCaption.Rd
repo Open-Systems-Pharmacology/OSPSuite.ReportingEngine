@@ -30,7 +30,10 @@ cat(addLineBreakToCaption("this-is-a-long-sentence-with-dashes", maxLines = 2, w
 
 cat(addLineBreakToCaption("this is a sentence with spaces", maxLines = 2, width = 25))
 
-cat(addLineBreakToCaption("this_is_a_long_sentence_without_preferential_splits", maxLines = 2, width = 25))
+cat(addLineBreakToCaption(
+"this_is_a_long_sentence_without_preferential_splits", 
+maxLines = 2, width = 25
+))
 
 cat(addLineBreakToCaption("this too short to split", maxLines = 3, width = 40))
 

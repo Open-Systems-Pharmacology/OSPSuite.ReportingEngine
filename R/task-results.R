@@ -160,6 +160,7 @@ TaskResults <- R6::R6Class(
 #' @param includeTable logical indicating if the table should be included in final report
 #' @param textChunk text included into the report explaining the table
 #' @param includeTextChunk logical indicating if the text chunk should be included in final report
+#' @param taskResults A `TaskResults` object
 #' @return A `TaskResults` object
 #' @import ospsuite.utils
 #' @export

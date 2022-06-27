@@ -692,7 +692,7 @@ getPKRatiosTable <- function(pkParametersTable,
   return(pkRatiosTable)
 }
 
-#' @title getDefaultPkParametersXParameters
+#' @title getDefaultPKParametersXParameters
 #' @description Get names of default parameters in x axis of pk parameters plots.
 #' @param workflowType Name of workflow type.
 #' Use enum `PopulationWorkflowTypes` to get a list of available workflow types.
@@ -700,7 +700,7 @@ getPKRatiosTable <- function(pkParametersTable,
 #' @export
 #' @examples
 #' 
-#' getDefaultPkParametersXParameters(PopulationWorkflowTypes$pediatric)
+#' getDefaultPKParametersXParameters(PopulationWorkflowTypes$pediatric)
 #' 
 getDefaultPKParametersXParameters <- function(workflowType) {
   validateIsIncluded(workflowType, PopulationWorkflowTypes)
@@ -710,7 +710,7 @@ getDefaultPKParametersXParameters <- function(workflowType) {
   return(NULL)
 }
 
-#' @title getDefaultPkParametersXParameters
+#' @rdname getDefaultPKParametersXParameters
 #' @export
 getDefaultPkParametersXParameters <- getDefaultPKParametersXParameters
 
@@ -935,26 +935,26 @@ addYParametersForPKParametersPlot <- function(workflow, parameters) {
   setYParametersForPkParametersPlot(workflow, updatedParameters)
 }
 
-#' @title getXParametersForPkParametersPlot
+#' @rdname getXParametersForPKParametersPlot
 #' @export
 getXParametersForPkParametersPlot <- getXParametersForPKParametersPlot
 
-#' @title getYParametersForPkParametersPlot
+#' @rdname getYParametersForPKParametersPlot
 #' @export
 getYParametersForPkParametersPlot <- getYParametersForPKParametersPlot
 
-#' @title setXParametersForPkParametersPlot
+#' @rdname setXParametersForPKParametersPlot
 #' @export
 setXParametersForPkParametersPlot <- setXParametersForPKParametersPlot
 
-#' @title setYParametersForPkParametersPlot
+#' @rdname setYParametersForPKParametersPlot
 #' @export
 setYParametersForPkParametersPlot <- setYParametersForPKParametersPlot
 
-#' @title addXParametersForPkParametersPlot
+#' @rdname addXParametersForPKParametersPlot
 #' @export
 addXParametersForPkParametersPlot <- addXParametersForPKParametersPlot
 
-#' @title addYParametersForPkParametersPlot
+#' @rdname addYParametersForPKParametersPlot
 #' @export
 addYParametersForPkParametersPlot <- addYParametersForPKParametersPlot
