@@ -293,8 +293,9 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
   ddiPlotConfiguration$labels$xlabel$text <- ddiPlotData$axesSettings$X$label
   ddiPlotConfiguration$labels$ylabel$text <- ddiPlotData$axesSettings$Y$label
   # Set points color and shapes
-  ddiPlotConfiguration$points$color <- sapply(ddiPlotData$aestheticsList$color, identity)
-  ddiPlotConfiguration$points$shape <- sapply(ddiPlotData$aestheticsList$shape, identity)
+  isInLegend <- names(ddiPlotData$aestheticsList$color) %in% ddiData$Caption
+  ddiPlotConfiguration$points$color <- sapply(ddiPlotData$aestheticsList$color[isInLegend], identity)
+  ddiPlotConfiguration$points$shape <- sapply(ddiPlotData$aestheticsList$shape[isInLegend], identity)
 
   # Set axes scaling
   if (ddiPlotData$axesSettings$X$scaling == "Log") {
