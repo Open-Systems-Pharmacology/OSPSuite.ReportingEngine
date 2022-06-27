@@ -667,7 +667,7 @@ getPKAnalysisResultsFileNames <- function(workflow) {
   return(pkAnalysisResultsFileNames)
 }
 
-#' @title getPkAnalysisResultsFileNames
+#' @rdname getPKAnalysisResultsFileNames
 #' @export
 getPkAnalysisResultsFileNames <- getPKAnalysisResultsFileNames
 

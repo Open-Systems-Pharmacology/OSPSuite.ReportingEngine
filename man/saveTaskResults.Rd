@@ -38,6 +38,8 @@ saveTaskResults(
 \item{textChunk}{text included into the report explaining the table}
 
 \item{includeTextChunk}{logical indicating if the text chunk should be included in final report}
+
+\item{taskResults}{A `TaskResults` object}
 }
 \value{
 A `TaskResults` object
