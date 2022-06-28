@@ -330,8 +330,8 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
   # Force legend to be only one column to maintain plot panel width, and left-justify legend entries
   qualificationDDIPlot <- qualificationDDIPlot +
     ggplot2::guides(
-      color = ggplot2::guide_legend(ncol = 1, label.hjust = 0),
-      shape = ggplot2::guide_legend(ncol = 1, label.hjust = 0)
+      color = ggplot2::guide_legend(ncol = 1, label.hjust = 0, title = NULL),
+      shape = ggplot2::guide_legend(ncol = 1, label.hjust = 0, title = NULL)
     )
 
   return(qualificationDDIPlot)
