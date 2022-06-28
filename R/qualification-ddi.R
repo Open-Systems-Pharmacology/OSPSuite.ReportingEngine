@@ -548,7 +548,10 @@ plotQualificationDDIs <- function(configurationPlan,
         includeTextChunk = TRUE
       )
       ddiResults <- c(ddiResults, subheading)
-      subplotTypeLevels <- sort(unique(dataframe[[subplotType]]))
+      # Enforce character class instead of factor 
+      # to ensure that function 'sort' uses alphabetical order instead of factor levels
+      subplotTypeLevels <- as.character(dataframe[[subplotType]])
+      subplotTypeLevels <- sort(unique(subplotTypeLevels))
       for (subplotTypeLevel in subplotTypeLevels) {
         subsubheading <- saveTaskResults(
           id = paste(subplotType, subplotTypeLevel, sep = " - "),
