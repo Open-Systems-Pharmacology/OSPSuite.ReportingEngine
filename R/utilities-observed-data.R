@@ -256,7 +256,11 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
 #' @return list of data and lloq data.frames
 #' @keywords internal
 getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, timeUnit, logFolder) {
-  if (isOfLength(output$dataSelection, 0)) {
+  # If no observed data nor data selected, return empty dataset
+  if (isEmpty(data)) {
+    return()
+  }
+  if (isEmpty(output$dataSelection)) {
     return()
   }
 
@@ -270,7 +274,7 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
   # Get dimensions of observed data
   dvDimensions <- unique(as.character(data[selectedRows, dataMapping$dimension]))
   outputConcentration <- data[selectedRows, dataMapping$dv]
-  if (!isOfLength(output$displayUnit, 0)) {
+  if (!isEmpty(output$displayUnit)) {
     for (dvDimension in dvDimensions) {
       if (is.na(dvDimension)) {
         next
@@ -290,12 +294,12 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
     "Legend" = paste0("Observed data ", output$dataDisplayName),
     "Path" = output$path
   )
-  if (isOfLength(dataMapping$lloq, 0)) {
+  if (isEmpty(dataMapping$lloq)) {
     return(list(data = outputData, lloq = NULL))
   }
 
   lloqConcentration <- data[selectedRows, dataMapping$lloq]
-  if (!isOfLength(output$displayUnit, 0)) {
+  if (!isEmpty(output$displayUnit)) {
     for (dvDimension in dvDimensions) {
       if (is.na(dvDimension)) {
         next
