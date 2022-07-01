@@ -242,22 +242,26 @@ buildQualificationDDIDataframe <- function(dataframe,
 #' @title getSmartZoomLimits
 #' @description Get default axis limits for DDI Ratio plot
 #' @param dataVector a numeric vector containing the x or y values of datapoints to be plotted
+#' @param residualsVsObserved A logical values indicating if DDI Ratios are plotted as residuals vs observed
 #' @return a list containing the minimum and maximum axes limits
 #' @keywords internal
-getSmartZoomLimits <- function(dataVector) {
+getSmartZoomLimits <- function(dataVector, residualsVsObserved = FALSE) {
   validateIsNumeric(dataVector)
-
-  # Guest criterion range for DDI Ratio plot
+  # Use na.rm in case NAs were not removed
   minLimit <- ifelse(
-    min(dataVector) >= 1,
+    min(dataVector, na.rm = TRUE) >= 1,
     0.8,
-    min(0.8 * min(dataVector), 0.25)
+    min(0.8 * min(dataVector, na.rm = TRUE), 0.25)
   )
   maxLimit <- ifelse(
-    max(dataVector) >= 1,
-    max(1.25 * max(dataVector), 4),
+    max(dataVector, na.rm = TRUE) >= 1,
+    max(1.25 * max(dataVector, na.rm = TRUE), 4),
     1.25
   )
+  # For residuals vs observed, y axis should always include the 2-fold error range
+  if(residualsVsObserved){
+    return(list(min = min(minLimit, 0.25), max = max(maxLimit, 4)))
+  }
   return(list(min = minLimit, max = maxLimit))
 }
 
@@ -306,7 +310,7 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
   }
 
   xSmartZoom <- getSmartZoomLimits(ddiData[[ddiPlotData$axesSettings$X$label]])
-  ySmartZoom <- getSmartZoomLimits(ddiData[[ddiPlotData$axesSettings$Y$label]])
+  ySmartZoom <- getSmartZoomLimits(ddiData[[ddiPlotData$axesSettings$Y$label]], residualsVsObserved)
 
   ddiPlotConfiguration$xAxis$limits <- c(xSmartZoom$min, xSmartZoom$max)
   ddiPlotConfiguration$yAxis$limits <- c(ySmartZoom$min, ySmartZoom$max)
