@@ -85,7 +85,28 @@ test_that("Correct expressions work the way they should", {
   )
 })
 
+# get function 'getObservedDataFromOutput' which is not exported
+getObservedDataFromOutput <- ospsuite.reportingengine:::getObservedDataFromOutput
+test_that("'getObservedDataFromOutput' output empty data.frame when no data or data selection is provided", {
+  outputAll <- Output$new(path = "a", dataSelection = DataSelectionKeys$ALL)
+  outputNone <- Output$new(path = "a", dataSelection = DataSelectionKeys$NONE)
+  outputNoSelect <- Output$new(path = "a", dataSelection = 'Time > 5')
+  # No data provided
+  expect_null(getObservedDataFromOutput(outputAll, data = NULL, dataMapping = NULL, molWeight = NA, timeUnit = NULL, logFolder = getwd()))
+  expect_null(getObservedDataFromOutput(outputAll, data = data.frame(), dataMapping = NULL, molWeight = NA, timeUnit = NULL, logFolder = getwd()))
+  expect_null(getObservedDataFromOutput(outputNone, data = NULL, dataMapping = NULL, molWeight = NA, timeUnit = NULL, logFolder = getwd()))
+  expect_null(getObservedDataFromOutput(outputNone, data = data.frame(), dataMapping = NULL, molWeight = NA, timeUnit = NULL, logFolder = getwd()))
+  expect_null(getObservedDataFromOutput(outputNoSelect, data = NULL, dataMapping = NULL, molWeight = NA, timeUnit = NULL, logFolder = getwd()))
+  expect_null(getObservedDataFromOutput(outputNoSelect, data = data.frame(), dataMapping = NULL, molWeight = NA, timeUnit = NULL, logFolder = getwd()))
+  # No selected data or selection removing all the data
+  expect_null(getObservedDataFromOutput(outputNone, data = testDataFrame, dataMapping = NULL, molWeight = NA, timeUnit = NULL, logFolder = getwd()))
+  # Since in this step, user actually defined a data selection
+  # the number of selected rows is tracked in the log debug
+  expect_null(getObservedDataFromOutput(outputNoSelect, data = testDataFrame, dataMapping = NULL, molWeight = NA, timeUnit = NULL, logFolder = getwd()))
+})
+
 # Remove the files created during the tests
+unlink("log-debug.txt", recursive = TRUE)
 unlink(testCsvFile, recursive = TRUE)
 unlink(testCsvSemiFile, recursive = TRUE)
 unlink(testTxtFile, recursive = TRUE)

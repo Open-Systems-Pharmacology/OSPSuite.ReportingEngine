@@ -270,6 +270,10 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
     pathFolder = logFolder,
     logTypes = LogTypes$Debug
   )
+  # If filter did not select any data, return empty dataset
+  if(sum(selectedRows)==0){
+    return()
+  }
 
   # Get dimensions of observed data
   dvDimensions <- unique(as.character(data[selectedRows, dataMapping$dimension]))
