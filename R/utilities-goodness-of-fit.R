@@ -423,21 +423,38 @@ plotMeanTimeProfile <- function(simulatedData,
     data = simulatedData,
     metaData = metaData,
     dataMapping = dataMapping,
-    plotConfiguration = plotConfiguration
+    plotConfiguration = plotConfiguration %||%
+      TimeProfilePlotConfiguration$new(
+        data = simulatedData,
+        metaData = metaData,
+        dataMapping = dataMapping
+      )
   )
-  if (!isOfLength(observedData, 0)) {
+  if (!isEmpty(observedData)) {
     timeProfilePlot <- tlf::addScatter(
       data = observedData,
       metaData = metaData,
       dataMapping = dataMapping,
+      plotConfiguration = plotConfiguration %||%
+        TimeProfilePlotConfiguration$new(
+          data = simulatedData,
+          metaData = metaData,
+          dataMapping = dataMapping
+        ),
       plotObject = timeProfilePlot
     )
   }
-  if (!isOfLength(lloqData, 0)) {
+  if (!isEmpty(lloqData)) {
     timeProfilePlot <- tlf::addLine(
       data = lloqData,
       metaData = metaData,
       dataMapping = dataMapping,
+      plotConfiguration = plotConfiguration %||%
+        TimeProfilePlotConfiguration$new(
+          data = simulatedData,
+          metaData = metaData,
+          dataMapping = dataMapping
+        ),
       plotObject = timeProfilePlot
     )
   }
@@ -619,34 +636,62 @@ plotPopulationTimeProfile <- function(simulatedData,
     ymax = simulatedData$highPerc,
     metaData = metaData,
     caption = simulatedData$legendRange,
-    alpha = 0.6,
-    plotConfiguration = plotConfiguration
+    plotConfiguration = plotConfiguration %||%
+      TimeProfilePlotConfiguration$new(
+        data = simulatedData,
+        metaData = metaData,
+        dataMapping = TimeProfileDataMapping$new(x = "x", ymin = "ymin", ymax = "ymax")
+      )
   )
   timeProfilePlot <- tlf::addLine(
     x = simulatedData$Time,
     y = simulatedData$median,
     caption = simulatedData$legendMedian,
+    plotConfiguration = plotConfiguration %||%
+      TimeProfilePlotConfiguration$new(
+        data = simulatedData,
+        metaData = metaData,
+        dataMapping = TimeProfileDataMapping$new(x = "x", ymin = "ymin", ymax = "ymax")
+      ),
     plotObject = timeProfilePlot
   )
   timeProfilePlot <- tlf::addLine(
     x = simulatedData$Time,
     y = simulatedData$mean,
     caption = simulatedData$legendMean,
+    plotConfiguration = plotConfiguration %||%
+      TimeProfilePlotConfiguration$new(
+        data = simulatedData,
+        metaData = metaData,
+        dataMapping = TimeProfileDataMapping$new(x = "x", ymin = "ymin", ymax = "ymax")
+      ),
     plotObject = timeProfilePlot
   )
-  if (!isOfLength(observedData, 0)) {
+  if (!isEmpty(observedData)) {
     timeProfilePlot <- tlf::addScatter(
       data = observedData,
       metaData = metaData,
       dataMapping = dataMapping,
+      plotConfiguration = plotConfiguration %||%
+        TimeProfilePlotConfiguration$new(
+          data = simulatedData,
+          metaData = metaData,
+          dataMapping = TimeProfileDataMapping$new(x = "x", ymin = "ymin", ymax = "ymax")
+        ),
       plotObject = timeProfilePlot
     )
   }
-  if (!isOfLength(lloqData, 0)) {
+  if (!isEmpty(lloqData)) {
     timeProfilePlot <- tlf::addLine(
       data = lloqData,
       metaData = metaData,
       dataMapping = dataMapping,
+      plotConfiguration = plotConfiguration %||%
+        TimeProfilePlotConfiguration$new(
+          data = simulatedData,
+          metaData = metaData,
+          dataMapping = TimeProfileDataMapping$new(x = "x", ymin = "ymin", ymax = "ymax")
+        ),
       plotObject = timeProfilePlot
     )
   }
