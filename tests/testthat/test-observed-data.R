@@ -40,7 +40,13 @@ test_that("readObservedDataFile can correctly guess separator and read csv and t
 })
 
 test_that("readObservedDataFile: unexistant file throw error", {
-  expect_condition(readObservedDataFile("testFile10.csv"))
+  expect_error(readObservedDataFile("testFile10.csv"))
+})
+
+test_that("readObservedDataFile throw an error if columns are inconsistent", {
+  expect_error(
+    readObservedDataFile(getTestDataFilePath("input-data/error-data.csv"))
+    )
 })
 
 
