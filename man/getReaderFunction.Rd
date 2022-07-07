@@ -4,10 +4,12 @@
 \alias{getReaderFunction}
 \title{getReaderFunction}
 \usage{
-getReaderFunction(fileName, nlines = 2)
+getReaderFunction(fileName, header = TRUE, nlines = 2)
 }
 \arguments{
 \item{fileName}{Name of file to be read}
+
+\item{header}{logical indicating if data has a header}
 
 \item{nlines}{Number of lines to look at for checking consistency within file.
 Note that, unlike `read.csv`, `count.fields` does not have options for handling encoding or escape characters.

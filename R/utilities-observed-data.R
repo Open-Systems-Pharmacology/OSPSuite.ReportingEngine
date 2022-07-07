@@ -3,12 +3,13 @@
 #' Get most appropriate reader function by guessing file separator
 #' File separator is guessed by checking number of fields/columns along lines
 #' @param fileName Name of file to be read
+#' @param header logical indicating if data has a header
 #' @param nlines Number of lines to look at for checking consistency within file.
 #' Note that, unlike `read.csv`, `count.fields` does not have options for handling encoding or escape characters.
 #' Thus, using `nlines` as low as possible reduces the chances of inconsistent column widths caused by such characters.
 #' @return Reader function such as `read.csv`
 #' @keywords internal
-getReaderFunction <- function(fileName, nlines = 2) {
+getReaderFunction <- function(fileName, header = TRUE, nlines = 2) {
   # Define mapping between reader functions and their separator
   # Default for read.csv2 is semicolon separator and comma decimal
   readerMapping <- data.frame(
@@ -20,7 +21,19 @@ getReaderFunction <- function(fileName, nlines = 2) {
   sepConsistency <- sapply(
     readerMapping$sep,
     function(sep) {
-      isOfLength(unique(head(count.fields(fileName, sep = sep), nlines)), 1)
+      columnsPerRow <- count.fields(fileName, sep = sep)
+      if(!header){
+        return(isOfLength(unique(head(columnsPerRow, nlines)), 1))
+      }
+      # If header line has one less entry than the number of columns,
+      # the first column is taken to be the row names by reader functions
+      headerColumns <- head(columnsPerRow, 1)
+      columnsPerRow <- tail(columnsPerRow, -1)
+      consistency <- all(
+        isOfLength(unique(head(columnsPerRow, nlines)), 1),
+        isBetween(head(columnsPerRow - headerColumns, nlines), 0, 1)
+      )
+      return(consistency)
     }
   )
   readerMapping <- readerMapping[sepConsistency, ]
@@ -57,7 +70,7 @@ readObservedDataFile <- function(fileName,
                                  encoding = "UTF-8") {
   validateFileExists(fileName)
   # Get function with the most appropriate reading defaults
-  readObservedData <- getReaderFunction(fileName)
+  readObservedData <- getReaderFunction(fileName, header = header)
   observedData <- readObservedData(
     fileName,
     header = header,
