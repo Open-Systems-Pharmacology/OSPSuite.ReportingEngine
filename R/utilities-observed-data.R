@@ -30,7 +30,7 @@ getReaderFunction <- function(fileName, nlines = 2) {
       # if count.fields notices an odd number of ' or ", 
       # it will return NA for the line (example, "St John's" -> NA)
       # which needs to be removed from the count
-      max(count.fields(fileName, sep = sep, comment.char = ""), na.rm = TRUE)
+      max(count.fields(fileName, sep = sep, comment.char = "", quote = '\"'), na.rm = TRUE)
     }
   )
   # which.max returns the first max value.
@@ -39,7 +39,7 @@ getReaderFunction <- function(fileName, nlines = 2) {
   readerMapping <- readerMapping[which.max(sepWidth), ]
   
   # Assess if selected separator reads a consistent number of fields/columns along lines
-  fields <- count.fields(fileName, sep = readerMapping$sep, comment.char = "")
+  fields <- count.fields(fileName, sep = readerMapping$sep, comment.char = "", quote = '\"')
   fields <- fields[!is.na(fields)]
   consistentFields <- isOfLength(unique(fields), 1)
   
