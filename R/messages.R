@@ -137,8 +137,8 @@ messages <- list(
     paste0(callingFunction(), "No variable parameters found for sensitivity analysis.")
   },
 
-  errorSeparatorNotFound = function(fileName){
-    paste0("Unable to find a suitable separator for file '", fileName, "' providing a consistent number of columns.")
+  errorInconsistentFields = function(fileName){
+    paste0("Function 'readObservedDataFile' could not get a consistent number of columns for '", fileName, "'.")
   },
 
   warningNoFinitePKParametersForSomeIndividuals = function(pkParameter, output, simulationSetName) {

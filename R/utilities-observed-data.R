@@ -10,37 +10,47 @@
 #' @keywords internal
 getReaderFunction <- function(fileName, nlines = 2) {
   # Define mapping between reader functions and their separator
+  # Default for read.csv is comma separator and point decimal
   # Default for read.csv2 is semicolon separator and comma decimal
+  # Default for read.table is white space separator and point decimal
   readerMapping <- data.frame(
     sep = c(",", ";", ""),
     functionName = c("read.csv", "read.csv2", "read.table"),
     stringsAsFactors = FALSE
   )
-  # Select separators with consistent number of fields/columns along lines
-  sepConsistency <- sapply(
-    readerMapping$sep,
-    function(sep) {
-      isOfLength(unique(head(count.fields(fileName, sep = sep), nlines)), 1)
-    }
-  )
-  readerMapping <- readerMapping[sepConsistency, ]
-
-  # If none of the separators leads to consistent number of columns,
-  # Throw a more meaningful error message before error happens in read.table
-  if (isEmpty(readerMapping)) {
-    stop(messages$errorSeparatorNotFound(fileName))
+  # For csv files, do not include white space separator
+  if(isFileExtension(fileName, "csv")){
+    readerMapping <- readerMapping[1:2, ]
   }
-
-  # Select separator that provides more fields/columns
+  
+  # Keep separator that would provides the most fields/columns
   sepWidth <- sapply(
     readerMapping$sep,
     function(sep) {
-      max(head(count.fields(fileName, sep = sep), nlines))
+      # if count.fields notices an odd number of ' or ", 
+      # it will return NA for the line (example, "St John's" -> NA)
+      # which needs to be removed from the count
+      max(count.fields(fileName, sep = sep, comment.char = ""), na.rm = TRUE)
     }
   )
-  # which.max returns the first max value. Thus, read.csv will be used in priority
-  selectedReader <- match.fun(readerMapping$functionName[which.max(sepWidth)])
-  return(selectedReader)
+  # which.max returns the first max value.
+  # Thus, read.csv will be used in priority if same number of columns 
+  # are identified by each method
+  readerMapping <- readerMapping[which.max(sepWidth), ]
+  
+  # Assess if selected separator reads a consistent number of fields/columns along lines
+  fields <- count.fields(fileName, sep = readerMapping$sep, comment.char = "")
+  fields <- fields[!is.na(fields)]
+  consistentFields <- isOfLength(unique(fields), 1)
+  
+  # If selected separator leads to inconsistent number of columns,
+  # Throw a meaningful error message before error happens in read.table or later
+  if (!consistentFields) {
+    stop(messages$errorInconsistentFields(fileName))
+  }
+
+  # match.fun get actual function from function name
+  return(match.fun(readerMapping$functionName))
 }
 
 #' @title readObservedDataFile
