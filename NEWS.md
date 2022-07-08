@@ -1,4 +1,4 @@
-# ospsuite.reportingengine 2.0.0
+# ospsuite.reportingengine 2.0.189
 
 ## New features
 

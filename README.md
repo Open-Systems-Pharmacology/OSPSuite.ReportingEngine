@@ -14,13 +14,32 @@ OSPSuite.ReportingEngine implementation in R
 The **OSPSuite.ReportingEngine** package is compatible with version 3.6.x **AND** version 4.x.x of R. One of its indirect dependency, **rClr** needs to be installed specifically for the targeted R version. Please follow the installation instructions below:
 
 **OSPSuite.ReportingEngine** requires following packages to be installed:
-- [ospsuite v10.x](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases)
-- rClr
-  - [For R 4.x.x](https://github.com/Open-Systems-Pharmacology/rClr/releases/download/v0.9.1/rClr_0.9.1.zip)
-  - [For R 3.6.x](https://github.com/Open-Systems-Pharmacology/rClr/releases/download/v0.9.1-R3/rClr_0.9.1.zip)
-- [tlf v1.2.x](https://github.com/Open-Systems-Pharmacology/TLF-Library/releases)
-- [ggplot2](https://cran.r-project.org/web/packages/ggplot2)
-- [R6](https://github.com/r-lib/R6)
+
+- From CRAN:
+  - **ggplot2** (>= 3.3.0)
+  - **jsonlite**
+  - **knitr**
+  - **pander**
+  - **patchwork**
+  - **readxl**
+  - **reshape2**
+  - **rmarkdown**
+  - **styler**
+  - ... (s. [Installation instructions for the package **ospsuite**](https://github.com/Open-Systems-Pharmacology/OSPSuite-R#installation))
+- Must be downloaded manually:
+  - **ospsuite.utils** (>= 1.3.0)
+    - [Package download](https://github.com/Open-Systems-Pharmacology/OSPSuite.RUtils/releases)
+  - **tlf** (>= 1.4.0)
+    - [Package download](https://github.com/Open-Systems-Pharmacology/TLF-Library/releases)
+  - **rClr** (s. [Installation instructions for the package **ospsuite**](https://github.com/Open-Systems-Pharmacology/OSPSuite-R#installation))
+  - **ospsuite** (>= 11.0)
+    - [Package download](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases)
+    - [Installation instructions](https://github.com/Open-Systems-Pharmacology/OSPSuite-R#installation)
+
+[OPTIONAL] Install **Pandoc** (required for generation of reports in MS-Word format):
+
+* [Pandoc Installer (Windows)](https://github.com/jgm/pandoc/releases/download/2.9.2.1/pandoc-2.9.2.1-windows-x86_64.msi)
+* [Pandoc Installer (Linux)](https://github.com/jgm/pandoc/releases/download/2.9.2.1/pandoc-2.9.2.1-linux-amd64.tar.gz)
 
 # Development tasks
 
