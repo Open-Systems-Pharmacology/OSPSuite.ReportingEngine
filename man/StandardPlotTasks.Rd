@@ -13,4 +13,20 @@ StandardPlotTasks
 \description{
 Names of plot tasks performed by both `MeanModelWorkflow` and `PopulationWorkflow` objects
 }
+\examples{
+
+# Lists all available standard plot task names available in both mean and population workflows
+StandardPlotTasks
+
+}
+\seealso{
+Other enum helpers: 
+\code{\link{AllAvailableTasks}},
+\code{\link{ApplicationRanges}},
+\code{\link{DataSelectionKeys}},
+\code{\link{PopulationWorkflowTypes}},
+\code{\link{ResidualScales}},
+\code{\link{StandardSimulationTasks}}
+}
+\concept{enum helpers}
 \keyword{datasets}

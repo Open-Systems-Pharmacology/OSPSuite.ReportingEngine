@@ -20,3 +20,4 @@ list of `ggplot` objects
 \description{
 Plot absorption diagnostics time profile
 }
+\keyword{internal}

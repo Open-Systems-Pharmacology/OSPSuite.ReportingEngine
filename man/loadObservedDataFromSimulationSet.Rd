@@ -17,3 +17,4 @@ list of data and dataMapping
 \description{
 Load observed data and its dataMapping from a simulationSet
 }
+\keyword{internal}

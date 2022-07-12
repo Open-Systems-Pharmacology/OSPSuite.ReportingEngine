@@ -4,15 +4,23 @@
 \alias{loadSimulationWithUpdatedPaths}
 \title{loadSimulationWithUpdatedPaths}
 \usage{
-loadSimulationWithUpdatedPaths(simulationSet, loadFromCache = FALSE)
+loadSimulationWithUpdatedPaths(
+  simulationSet,
+  loadFromCache = FALSE,
+  addToCache = TRUE
+)
 }
 \arguments{
 \item{simulationSet}{simulation set containing path to simulation file and pathIDs for quantities to be loaded into simulation object}
 
-\item{loadFromCache}{logical allows load from Cache option}
+\item{loadFromCache}{If `TRUE`, an already loaded pkml file will not be loaded again, but the `Simulation` object will be retrieved from cache.
+If `FALSE`, a new `Simulation` object will be created. Default value is `FALSE`.}
+
+\item{addToCache}{If `TRUE`, the loaded simulation is added to cache.
+If `FALSE`, the returned simulation only exists locally. Default is `TRUE`.}
 }
 \value{
-simulation object with pathIDs updated from simulationSet
+A `Simulation` object with pathIDs updated from simulationSet
 }
 \description{
 loadSimulationWithUpdatedPaths

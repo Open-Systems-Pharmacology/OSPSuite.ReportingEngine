@@ -3,6 +3,8 @@
 #' @field getTaskResults function called by task that computes and format figure results
 #' @field settings instance of SensitivityAnalysisSettings class
 #' @field nameTaskResults name of function that returns task results
+#' @import ospsuite.utils
+#' @family workflow tasks
 SensitivityAnalysisTask <- R6::R6Class(
   "SensitivityAnalysisTask",
   inherit = Task,
@@ -19,9 +21,9 @@ SensitivityAnalysisTask <- R6::R6Class(
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SensitivityAnalysisTask` object
     initialize = function(getTaskResults = NULL,
-                              settings = NULL,
-                              nameTaskResults = "none",
-                              ...) {
+                          settings = NULL,
+                          nameTaskResults = "none",
+                          ...) {
       validateIsOfType(settings, "SensitivityAnalysisSettings", nullAllowed = TRUE)
       super$initialize(...)
       self$settings <- settings %||% SensitivityAnalysisSettings$new()
@@ -30,21 +32,20 @@ SensitivityAnalysisTask <- R6::R6Class(
     },
 
     #' @description
-    #' Save results from task run.
-    #' @param set R6 class `SimulationStructure`
+    #' Save the task results related to a `structureSet`.
+    #' @param structureSet A `SimulationStructure` object defining the properties of a simulation set
     #' @param taskResults list of results from task run.
-    saveResults = function(set,
-                               taskResults) {
+    saveResults = function(structureSet, taskResults) {
       ospsuite::exportSensitivityAnalysisResultsToCSV(
         results = taskResults,
-        filePath = set$sensitivityAnalysisResultsFileNames
+        filePath = structureSet$sensitivityAnalysisResultsFileNames
       )
-      re.tStoreFileMetadata(access = "write", filePath = set$sensitivityAnalysisResultsFileNames)
+      re.tStoreFileMetadata(access = "write", filePath = structureSet$sensitivityAnalysisResultsFileNames)
     },
 
     #' @description
-    #' Run task and save its output
-    #' @param structureSets list of `SimulationStructure` R6 class
+    #' Run task and save its output results
+    #' @param structureSets list of `SimulationStructure` objects
     runTask = function(structureSets) {
       actionToken <- re.tStartAction(actionType = "Analysis", actionNameExtension = self$nameTaskResults)
       logWorkflow(

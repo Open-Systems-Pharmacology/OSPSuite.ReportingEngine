@@ -3,6 +3,7 @@
 #' @field getTaskResults function called by task that computes and format figure results
 #' @field settings instance of SimulationSettings class
 #' @field nameTaskResults name of function that returns task results
+#' @keywords internal
 SimulationTask <- R6::R6Class(
   "SimulationTask",
   inherit = Task,
@@ -60,23 +61,24 @@ SimulationTask <- R6::R6Class(
         dir.create(file.path(self$workflowFolder, self$outputFolder))
       }
 
-      for (set in structureSets) {
-        logWorkflow(
-          message = paste0("Run simulation in simulation set: ", set$simulationSet$simulationSetName),
-          pathFolder = self$workflowFolder
-        )
-        if (self$validateStructureSetInput(set)) {
-          taskResults <- self$getTaskResults(
-            structureSet = set,
-            settings = self$settings,
-            logFolder = self$workflowFolder
-          )
+      sapply(structureSets, function(set) {
+        self$validateStructureSetInput(set)
+      })
 
-          self$saveResults(
-            set,
-            taskResults
-          )
+      taskResults <- self$getTaskResults(
+        structureSets = structureSets,
+        settings = self$settings,
+        logFolder = self$workflowFolder
+      )
+
+      for (setNumber in seq_along(structureSets)) {
+        if (is.null(taskResults[[setNumber]])) {
+          next
         }
+        self$saveResults(
+          structureSets[[setNumber]],
+          taskResults[[setNumber]]
+        )
       }
       re.tEndAction(actionToken = actionToken)
     }

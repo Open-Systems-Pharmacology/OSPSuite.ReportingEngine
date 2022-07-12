@@ -15,8 +15,9 @@ Dafault `suffix` is the curent date}
 \item{sep}{separation between names and suffix. Default is `-`}
 }
 \value{
-default filename adding default suffix and fileextension
+default filename adding default suffix and file extension
 }
 \description{
 Create a default folder name for reporting engine results and figures
 }
+\keyword{internal}

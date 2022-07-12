@@ -5,16 +5,6 @@ simulationFile <- getTestDataFilePath("input-data/Larson 2013 8-18y meal.pkml")
 # Output reference absorption time profiles
 refOutputAbsorption <- getTestDataFilePath("absorption/Larson-Raltegravir.csv")
 
-refWorkflowStructure <- sort(c(
-  "log-debug.txt", "log-info.txt",
-  "Report-word.md", "Report.docx", "Report.md",
-  "Absorption"
-))
-absorptionStructure <- sort(c(
-  "Larson-Raltegravir.png",
-  "Larson-Raltegravir.csv"
-))
-
 setAbs <- SimulationSet$new(
   simulationSetName = "Larson",
   simulationFile = simulationFile
@@ -26,18 +16,30 @@ workflowAbs$inactivateTasks()
 workflowAbs$activateTasks("plotAbsorption")
 workflowAbs$runWorkflow()
 
-
-test_that("Workflow generates appropriate files and folders", {
-  expect_equal(list.files(workflowAbs$workflowFolder), refWorkflowStructure)
+test_that("Workflow generates appropriate number of files", {
+  # Log files
+  expect_length(list.files(workflowAbs$workflowFolder, pattern = ".txt"), 2)
+  # Reports
+  expect_length(list.files(workflowAbs$workflowFolder, pattern = ".md"), 2)
+  expect_length(list.files(workflowAbs$workflowFolder, pattern = ".docx"), 1)
 })
 
-test_that("Absorption directory includes appropriate files and folders", {
-  expect_equal(list.files(file.path(workflowAbs$workflowFolder, "Absorption")), absorptionStructure)
+absorptionPath <- file.path(workflowAbs$workflowFolder, "Absorption")
+           
+test_that("Absorption directory includes appropriate number of files", {
+  # Figures
+  expect_length(list.files(absorptionPath, pattern = ".png"), 1)
+  # Exported results
+  expect_length(list.files(absorptionPath, pattern = ".csv"), 1)
 })
 
 test_that("Saved absorption time profiles have correct values", {
+  exportedFile <- file.path(
+    absorptionPath,
+    list.files(absorptionPath, pattern = ".csv")
+  )
   expect_equal(
-    readObservedDataFile(file.path(workflowAbs$workflowFolder, "Absorption", "Larson-Raltegravir.csv")),
+    readObservedDataFile(exportedFile),
     readObservedDataFile(refOutputAbsorption),
     tolerance = comparisonTolerance()
   )

@@ -7,7 +7,7 @@
 sectionsAsDataFrame(
   sectionsIn,
   sectionsOut = data.frame(),
-  parentFolder = NULL,
+  parentFolder = "images",
   sectionLevel = 1
 )
 }
@@ -27,3 +27,4 @@ A data.frame including information about every section and subsection
 Recursively parse Sections field of configuration plan
 to create a data.frame easier to handle by the wrkflow
 }
+\keyword{internal}

@@ -17,3 +17,4 @@ getDefaultTotalSensitivityThreshold(
 \description{
 return the default totalSensitivityThreshold to be used in a population sensitivity analysis plot
 }
+\keyword{internal}

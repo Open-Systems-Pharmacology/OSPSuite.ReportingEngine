@@ -13,4 +13,20 @@ DataSelectionKeys
 \description{
 List of available short keys for observed data selection
 }
+\examples{
+
+# Lists available Data Selection Keys
+DataSelectionKeys
+
+}
+\seealso{
+Other enum helpers: 
+\code{\link{AllAvailableTasks}},
+\code{\link{ApplicationRanges}},
+\code{\link{PopulationWorkflowTypes}},
+\code{\link{ResidualScales}},
+\code{\link{StandardPlotTasks}},
+\code{\link{StandardSimulationTasks}}
+}
+\concept{enum helpers}
 \keyword{datasets}

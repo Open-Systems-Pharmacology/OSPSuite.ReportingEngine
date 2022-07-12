@@ -17,3 +17,4 @@ Character vector defining the `Output` object
 \description{
 Creates a character vector to be written in a workflow .R script defining `Output` object.
 }
+\keyword{internal}

@@ -13,4 +13,20 @@ AllAvailableTasks
 \description{
 Names of all existing tasks that can be performed by `MeanModelWorkflow` or `PopulationWorkflow` objects
 }
+\examples{
+
+# Lists all available task names available in mean or population workflows
+AllAvailableTasks
+
+}
+\seealso{
+Other enum helpers: 
+\code{\link{ApplicationRanges}},
+\code{\link{DataSelectionKeys}},
+\code{\link{PopulationWorkflowTypes}},
+\code{\link{ResidualScales}},
+\code{\link{StandardPlotTasks}},
+\code{\link{StandardSimulationTasks}}
+}
+\concept{enum helpers}
 \keyword{datasets}

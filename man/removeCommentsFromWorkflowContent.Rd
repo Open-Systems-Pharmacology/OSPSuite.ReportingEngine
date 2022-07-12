@@ -17,3 +17,4 @@ Workflow content without its comments
 \description{
 Remove comments from workflow file content
 }
+\keyword{internal}

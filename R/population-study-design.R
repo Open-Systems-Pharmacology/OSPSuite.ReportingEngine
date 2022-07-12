@@ -4,6 +4,7 @@
 #' @param studyDesignFile file name of study design table
 #' @export
 #' @import ospsuite
+#' @family workflow helpers
 addStudyParameters <- function(population, simulation, studyDesignFile) {
   validateIsOfType(population, "Population")
   validateIsOfType(simulation, "Simulation")
@@ -12,7 +13,7 @@ addStudyParameters <- function(population, simulation, studyDesignFile) {
   studyDesign <- loadStudyDesign(studyDesignFile, population, simulation)
 
   initialTargetValues <- rep(NA, population$count)
-  populationData <- ospsuite::populationAsDataFrame(population)
+  populationData <- ospsuite::populationToDataFrame(population)
 
   for (target in studyDesign$targets) {
     parameterPath <- target$name
@@ -21,6 +22,8 @@ addStudyParameters <- function(population, simulation, studyDesignFile) {
 
     population$setParameterValues(parameterPath, updatedTargetValues)
   }
+  # Since population is updated R6 object, no need to export it
+  return(invisible())
 }
 
 #' @title loadStudyDesign
@@ -56,6 +59,7 @@ studyDesignTypeLine <- 3
 #' @param sourceExpressions study design expressions to be evaluated
 #' @param data population data as data.frame
 #' @import ospsuite
+#' @keywords internal
 updateTargetValues <- function(values, targetValues, sourceExpressions, data) {
   validateIsSameLength(targetValues, sourceExpressions)
   validateIsOfType(data, "data.frame")
@@ -73,6 +77,7 @@ updateTargetValues <- function(values, targetValues, sourceExpressions, data) {
 #' @description StudyDesign
 #' @field source expressions used on source data
 #' @field targets list of targets of expressions and associated values
+#' @keywords internal
 StudyDesign <- R6::R6Class(
   "StudyDesign",
   cloneable = FALSE,
@@ -112,6 +117,7 @@ StudyDesign <- R6::R6Class(
 #' @description StudyDesignTarget
 #' @field name path name of study design target
 #' @field values values assigned to study design target
+#' @keywords internal
 StudyDesignTarget <- R6::R6Class(
   "StudyDesign",
   cloneable = FALSE,
@@ -149,6 +155,7 @@ StudyDesignTarget <- R6::R6Class(
 #' @return vector of expressions assigning target values
 #' Must be the same length as target values
 #' @import utils
+#' @keywords internal
 mapStudyDesignSources <- function(data, population, simulation) {
   sourceFilter <- grepl("SOURCE", data[studyDesignTypeLine, ])
   validateIsPositive(sum(sourceFilter))
@@ -174,7 +181,7 @@ mapStudyDesignSources <- function(data, population, simulation) {
     sourceExpressionsByColumn <- paste0("data[,'", path, "']", expressionType, values)
     sourceExpressionsByColumn[values %in% NA] <- "TRUE"
 
-    ifnotnull(
+    ifNotNull(
       sourceExpressions,
       sourceExpressions <- paste(sourceExpressions, sourceExpressionsByColumn, sep = " & "),
       sourceExpressions <- sourceExpressionsByColumn
@@ -207,6 +214,7 @@ sourceTypeToExpressionType <- function(sourceType) {
 #' @param simulation `Simulation` object
 #' @return list of `StudyDesignTarget` objects
 #' @import utils
+#' @keywords internal
 mapStudyDesignTargets <- function(data, population, simulation) {
   targetFilter <- grepl("TARGET", data[studyDesignTypeLine, ])
   validateIsPositive(sum(targetFilter))

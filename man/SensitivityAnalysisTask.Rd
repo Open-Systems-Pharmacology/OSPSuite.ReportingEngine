@@ -6,6 +6,31 @@
 \description{
 R6 class for SensitivityAnalysisTask settings
 }
+\seealso{
+Other workflow tasks: 
+\code{\link{GofPlotTask}},
+\code{\link{PlotTask}},
+\code{\link{PopulationPlotTask}},
+\code{\link{PopulationSensitivityAnalysisTask}},
+\code{\link{QualificationTask}},
+\code{\link{Task}},
+\code{\link{addUserDefinedTask}()},
+\code{\link{loadCalculatePKParametersTask}()},
+\code{\link{loadCalculateSensitivityTask}()},
+\code{\link{loadGOFMergedTask}()},
+\code{\link{loadPlotAbsorptionTask}()},
+\code{\link{loadPlotDDIRatioTask}()},
+\code{\link{loadPlotDemographyTask}()},
+\code{\link{loadPlotMassBalanceTask}()},
+\code{\link{loadPlotPKParametersTask}()},
+\code{\link{loadPlotPKRatioTask}()},
+\code{\link{loadPlotSensitivityTask}()},
+\code{\link{loadPlotTimeProfilesAndResidualsTask}()},
+\code{\link{loadQualificationComparisonTimeProfileTask}()},
+\code{\link{loadQualificationTimeProfilesTask}()},
+\code{\link{loadSimulateTask}()}
+}
+\concept{workflow tasks}
 \section{Super class}{
 \code{\link[ospsuite.reportingengine:Task]{ospsuite.reportingengine::Task}} -> \code{SensitivityAnalysisTask}
 }
@@ -78,15 +103,15 @@ A new `SensitivityAnalysisTask` object
 \if{html}{\out{<a id="method-saveResults"></a>}}
 \if{latex}{\out{\hypertarget{method-saveResults}{}}}
 \subsection{Method \code{saveResults()}}{
-Save results from task run.
+Save the task results related to a `structureSet`.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$saveResults(set, taskResults)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$saveResults(structureSet, taskResults)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{set}}{R6 class `SimulationStructure`}
+\item{\code{structureSet}}{A `SimulationStructure` object defining the properties of a simulation set}
 
 \item{\code{taskResults}}{list of results from task run.}
 }
@@ -97,7 +122,7 @@ Save results from task run.
 \if{html}{\out{<a id="method-runTask"></a>}}
 \if{latex}{\out{\hypertarget{method-runTask}{}}}
 \subsection{Method \code{runTask()}}{
-Run task and save its output
+Run task and save its output results
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$runTask(structureSets)}\if{html}{\out{</div>}}
 }
@@ -105,7 +130,7 @@ Run task and save its output
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{structureSets}}{list of `SimulationStructure` R6 class}
+\item{\code{structureSets}}{list of `SimulationStructure` objects}
 }
 \if{html}{\out{</div>}}
 }

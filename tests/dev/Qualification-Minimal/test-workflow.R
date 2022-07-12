@@ -4,11 +4,13 @@ configurationFile <- "reporting engine input/report-configuration-plan.json"
 workflowFolder <- "reporting engine output"
 
 #-------- Workflow Definition --------#
-# Loading the workflow is done using the configuration plan 
+# Loading the workflow is done using the configuration plan
 # which includes the knowledge of the models, their location...
 # For ths reason, configurationPlan has become a field of workflow
-workflow <- loadQualificationWorkflow(workflowFolder = workflowFolder,
-                                      jsonFile = configurationFile)
+workflow <- loadQualificationWorkflow(
+  workflowFolder = workflowFolder,
+  configurationPlanFile = configurationFile
+)
 
 # Workflow works as mean model and population workflows
 workflow$runWorkflow()
@@ -21,8 +23,10 @@ list.dir(workflow$workflowFolder)
 
 
 #-------- Configuration Plan --------#
-configurationPlan <- loadConfigurationPlan(workflowFolder = workflowFolder,
-                                           jsonFile = configurationFile)
+configurationPlan <- loadConfigurationPlan(
+  workflowFolder = workflowFolder,
+  configurationPlanFile = configurationFile
+)
 
 # The json fields are also within the ConfigurationPlan object
 configurationPlan$sections

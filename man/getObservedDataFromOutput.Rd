@@ -32,3 +32,4 @@ list of data and lloq data.frames
 \description{
 Get selected observed data from an Output object
 }
+\keyword{internal}

@@ -12,3 +12,4 @@ checkAllCoresSuccessful(coreResults)
 \description{
 Check that all cores executed an mpi.remote.exec command successfully.
 }
+\keyword{internal}

@@ -13,4 +13,20 @@ ApplicationRanges
 \description{
 Keys of reported ranges when simulation includes multiple applications
 }
+\examples{
+
+# Lists available Application Ranges
+ApplicationRanges
+
+}
+\seealso{
+Other enum helpers: 
+\code{\link{AllAvailableTasks}},
+\code{\link{DataSelectionKeys}},
+\code{\link{PopulationWorkflowTypes}},
+\code{\link{ResidualScales}},
+\code{\link{StandardPlotTasks}},
+\code{\link{StandardSimulationTasks}}
+}
+\concept{enum helpers}
 \keyword{datasets}

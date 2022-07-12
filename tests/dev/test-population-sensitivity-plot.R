@@ -30,7 +30,7 @@ ps2 <- PopulationSimulationSet$new(
   )
 )
 
-pwf <- PopulationWorkflow$new(simulationSets = list(ps1, ps2), workflowFolder = "./tests/dev/ex_03_pop9",workflowType = PopulationWorkflowTypes$parallelComparison)
+pwf <- PopulationWorkflow$new(simulationSets = list(ps1, ps2), workflowFolder = "./tests/dev/ex_03_pop9", workflowType = PopulationWorkflowTypes$parallelComparison)
 pwf$simulate$settings$showProgress <- FALSE
 pwf$simulate$inactivate()
 pwf$calculatePKParameters$inactivate()

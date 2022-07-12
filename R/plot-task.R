@@ -1,16 +1,19 @@
 #' @title PlotTask
 #' @description  R6 class for PlotTask settings
 #' @field title section title in the report corresponding to the task
+#' @field reference id of anchor tag referencing title
 #' @field fileName name of report appendix file associated to task
 #' @field getTaskResults function called by task that computes and format figure results
 #' @field nameTaskResults name of the function that returns task results,
 #' @export
+#' @family workflow tasks
 PlotTask <- R6::R6Class(
   "PlotTask",
   inherit = Task,
 
   public = list(
     title = NULL,
+    reference = NULL,
     fileName = NULL,
     getTaskResults = NULL,
     nameTaskResults = "none",
@@ -18,105 +21,103 @@ PlotTask <- R6::R6Class(
     #' @description
     #' Create a `PlotTask` object
     #' @param reportTitle title to be printed in the report
+    #' @param reportReference id of anchor tag referencing title
     #' @param fileName name of report appendix file associated to task
     #' @param getTaskResults function called by task that computes and format figure results
     #' @param nameTaskResults name of the function that returns task results,
     #' @param ... input parameters inherited from `Task` R6 class
     #' @return A new `PlotTask` object
     initialize = function(reportTitle = NULL,
+                          reportReference = NULL,
                           fileName = NULL,
                           getTaskResults = NULL,
                           nameTaskResults = "none",
                           ...) {
       super$initialize(...)
       self$title <- reportTitle
+      self$reference <- reportReference
       self$fileName <- file.path(self$workflowFolder, fileName)
       self$getTaskResults <- getTaskResults
       self$nameTaskResults <- nameTaskResults
     },
-
+    
     #' @description
-    #' Save results from task run.
-    #' @param set R6 class `SimulationStructure`
+    #' Save the task results related to a `structureSet`.
+    #' @param structureSet A `SimulationStructure` object defining the properties of a simulation set
     #' @param taskResults list of results from task run.
-    #' Results contains at least 2 fields: `plots` and `tables`
-    saveResults = function(set,
-                           taskResults) {
+    #' Currently, results contains at least 2 fields: `plots` and `tables`
+    #' They are to be deprecated and replaced using `TaskResults` objects
+    saveResults = function(structureSet, taskResults) {
+      simulationSetName <- structureSet$simulationSet$simulationSetName
       addTextChunk(
-        self$fileName,
-        paste0("## ", self$title, " for ", set$simulationSet$simulationSetName),
+        fileName = self$fileName,
+        text = c(
+          anchor(paste0(self$reference, "-", removeForbiddenLetters(simulationSetName))), "",
+          paste0("## ", self$title, " for ", simulationSetName)
+        ),
         logFolder = self$workflowFolder
       )
-      for (plotName in names(taskResults$plots)) {
-        plotFileName <- getDefaultFileName(set$simulationSet$simulationSetName,
-          suffix = plotName,
-          extension = ExportPlotConfiguration$format
+      for (result in taskResults) {
+        plotFileName <- getDefaultFileName(
+          simulationSetName,
+          suffix = result$id,
+          extension = reEnv$defaultPlotFormat$format
         )
-
-        # TO DO: define parameters from settings/plotConfiguration
-
         figureFilePath <- self$getAbsolutePath(plotFileName)
-        ggplot2::ggsave(
-          filename = figureFilePath,
-          plot = taskResults$plots[[plotName]],
-          width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
+        
+        tableFileName <- getDefaultFileName(
+          simulationSetName,
+          suffix = result$id,
+          extension = "csv"
         )
-        re.tStoreFileMetadata(access = "write", filePath = figureFilePath)
-        logWorkflow(
-          message = paste0("Plot '", self$getRelativePath(plotFileName), "' was successfully saved."),
-          pathFolder = self$workflowFolder,
-          logTypes = LogTypes$Debug
+        tableFilePath <- self$getAbsolutePath(tableFileName)
+        
+        # Figure and tables paths need to be relative to the final md report
+        figureFileRelativePath <- gsub(
+          pattern = paste0(self$workflowFolder, "/"),
+          replacement = "",
+          x = figureFilePath
         )
-
-        if (!is.null(taskResults$captions[[plotName]])) {
-          addTextChunk(self$fileName, paste0("Figure: ", taskResults$captions[[plotName]]), logFolder = self$workflowFolder)
-        }
-        addFigureChunk(
-          fileName = self$fileName,
-          figureFileRelativePath = self$getRelativePath(plotFileName),
-          figureFileRootDirectory = self$workflowFolder,
+        tableFileRelativePath <- gsub(
+          pattern = paste0(self$workflowFolder, "/"),
+          replacement = "",
+          x = tableFilePath
+        )
+        
+        tryCatch({
+          result$saveFigure(fileName = figureFilePath, logFolder = self$workflowFolder)
+        },
+        error = function(e) {
+          logErrorThenStop(messages$ggsaveError(figureFilePath, simulationSetName, e), logFolder)
+        })
+        result$addFigureToReport(
+          reportFile = self$fileName,
+          fileRelativePath = figureFileRelativePath,
+          fileRootDirectory = self$workflowFolder,
+          logFolder = self$workflowFolder
+        )
+        
+        result$saveTable(fileName = tableFilePath, logFolder = self$workflowFolder)
+        result$addTableToReport(
+          reportFile = self$fileName,
+          fileRelativePath = tableFileRelativePath,
+          fileRootDirectory = self$workflowFolder,
+          digits = self$settings$digits,
+          scientific = self$settings$scientific,
+          logFolder = self$workflowFolder
+        )
+        
+        result$addTextChunkToReport(
+          reportFile = self$fileName,
           logFolder = self$workflowFolder
         )
       }
-
-      for (tableName in names(taskResults$tables)) {
-        tableFileName <- getDefaultFileName(set$simulationSet$simulationSetName,
-          suffix = tableName,
-          extension = "csv"
-        )
-
-        write.csv(taskResults$tables[[tableName]],
-          file = self$getAbsolutePath(tableFileName),
-          row.names = FALSE,
-          fileEncoding = "UTF-8"
-        )
-
-        re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(tableFileName))
-        # If the task output no plot, but tables, tables will be included in the report
-        if (is.null(taskResults$plots)) {
-          if (!is.null(taskResults$captions[[tableName]])) {
-            addTextChunk(self$fileName, paste0("Table: ", taskResults$captions[[tableName]]), logFolder = self$workflowFolder)
-          }
-          
-          addTableChunk(
-            fileName = self$fileName,
-            tableFileRelativePath = self$getRelativePath(tableFileName),
-            tableFileRootDirectory = self$workflowFolder,
-            logFolder = self$workflowFolder
-          )
-        }
-
-        logWorkflow(
-          message = paste0("Table '", self$getAbsolutePath(tableFileName), "' was successfully saved."),
-          pathFolder = self$workflowFolder,
-          logTypes = LogTypes$Debug
-        )
-      }
+      return(invisible())
     },
 
     #' @description
-    #' Run task and save its output
-    #' @param structureSets list of `SimulationStructure` R6 class
+    #' Run task and save its output results
+    #' @param structureSets list of `SimulationStructure` objects
     runTask = function(structureSets) {
       actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
       logWorkflow(
@@ -125,8 +126,8 @@ PlotTask <- R6::R6Class(
       )
       resetReport(self$fileName, self$workflowFolder)
       addTextChunk(
-        self$fileName,
-        paste0("# ", self$title),
+        fileName = self$fileName,
+        text = c(anchor(self$reference), "", paste0("# ", self$title)),
         logFolder = self$workflowFolder
       )
       if (!is.null(self$outputFolder)) {

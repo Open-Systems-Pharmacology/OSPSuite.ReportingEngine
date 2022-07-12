@@ -11,6 +11,7 @@
 #' @export
 #' @import tlf
 #' @import ospsuite
+#' @family workflows
 PopulationWorkflow <- R6::R6Class(
   "PopulationWorkflow",
   inherit = Workflow,
@@ -33,20 +34,25 @@ PopulationWorkflow <- R6::R6Class(
     #' @param createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
     #' @param watermark displayed watermark in every plot background
     #' @param simulationSetDescriptor character Descriptor of simulation sets indicated in reports
+    #' @param numberSections logical defining if the report sections should be numbered
+    #' @param theme A `Theme` object from `{tlf}` package
     #' @return A new `PopulationWorkflow` object
-    #' @import ospsuite
     initialize = function(workflowType,
-                              simulationSets,
-                              workflowFolder,
-                              createWordReport = TRUE,
-                              watermark = NULL,
-                          simulationSetDescriptor = NULL) {
+                          simulationSets,
+                          workflowFolder,
+                          createWordReport = TRUE,
+                          watermark = NULL,
+                          simulationSetDescriptor = NULL,
+                          numberSections = TRUE,
+                          theme = NULL) {
       super$initialize(
         simulationSets = simulationSets,
         workflowFolder = workflowFolder,
         createWordReport = createWordReport,
         watermark = watermark,
-        simulationSetDescriptor = simulationSetDescriptor
+        simulationSetDescriptor = simulationSetDescriptor,
+        numberSections = numberSections,
+        theme = theme
       )
 
       validateIsOfType(c(simulationSets), "PopulationSimulationSet")
@@ -69,7 +75,7 @@ PopulationWorkflow <- R6::R6Class(
       self$plotPKParameters <- loadPlotPKParametersTask(self)
       self$plotSensitivity <- loadPlotSensitivityTask(self)
 
-      self$taskNames <- ospsuite::enum(self$getAllTasks())
+      self$taskNames <- enum(self$getAllTasks())
     },
 
     #' @description
@@ -84,6 +90,8 @@ PopulationWorkflow <- R6::R6Class(
     #' # 4) Render report
     #' @return All results and plots as a structured output in the workflow folder
     runWorkflow = function() {
+      # Prevent crashes if folder was deleted before (re) running a worflow
+      dir.create(self$workflowFolder, showWarnings = FALSE, recursive = TRUE)
       actionToken1 <- re.tStartMetadataCapture(metaDataCapture = TRUE)
       actionToken2 <- re.tStartAction(actionType = "Run")
       logWorkflow(
@@ -126,8 +134,17 @@ PopulationWorkflow <- R6::R6Class(
       )
       appendices <- appendices[file.exists(appendices)]
       if (length(appendices) > 0) {
-        mergeMarkdowndFiles(appendices, self$reportFileName, logFolder = self$workflowFolder)
-        renderReport(self$reportFileName, logFolder = self$workflowFolder, createWordReport = self$createWordReport)
+        initialReportPath <- file.path(self$workflowFolder, self$reportFileName)
+        mergeMarkdownFiles(appendices, initialReportPath, logFolder = self$workflowFolder)
+        renderReport(
+          file.path(self$workflowFolder, self$reportFileName),
+          logFolder = self$workflowFolder,
+          createWordReport = self$createWordReport, 
+          numberSections = self$numberSections,
+          wordConversionTemplate = self$wordConversionTemplate
+        )
+        # Move report if a non-default path is provided
+        copyReport(from = initialReportPath, to = self$reportFilePath, copyWordReport = self$createWordReport, keep = TRUE)
       }
 
       re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logInfoFile()))
@@ -145,8 +162,13 @@ PopulationWorkflow <- R6::R6Class(
 #' @title PopulationWorkflowTypes
 #' @description List of population workflow available types
 #' @export
-#' @import ospsuite
-PopulationWorkflowTypes <- ospsuite::enum(c(
+#' @family enum helpers
+#' @examples
+#' 
+#' # Lists available Population Workflow types
+#' PopulationWorkflowTypes
+#' 
+PopulationWorkflowTypes <- enum(c(
   "pediatric",
   "parallelComparison",
   "ratioComparison"

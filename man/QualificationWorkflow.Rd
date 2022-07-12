@@ -6,6 +6,12 @@
 \description{
 R6 class for Reporting Engine Qualification Workflow
 }
+\seealso{
+Other workflows: 
+\code{\link{MeanModelWorkflow}},
+\code{\link{PopulationWorkflow}}
+}
+\concept{workflows}
 \section{Super class}{
 \code{\link[ospsuite.reportingengine:Workflow]{ospsuite.reportingengine::Workflow}} -> \code{QualificationWorkflow}
 }
@@ -20,9 +26,9 @@ R6 class for Reporting Engine Qualification Workflow
 
 \item{\code{plotTimeProfiles}}{`PlotTask` object for time profile plots}
 
-\item{\code{plotComparisonTimeProfiles}}{`PlotTask` object for comparison of time profiles plots}
+\item{\code{plotComparisonTimeProfile}}{`PlotTask` object for comparison of time profiles plots}
 
-\item{\code{plotObsVsPred}}{`PlotTask` object for goodness of fit plots}
+\item{\code{plotGOFMerged}}{`PlotTask` object for goodness of fit plots}
 
 \item{\code{plotPKRatio}}{`PlotTask` object for PK ratio plot}
 
@@ -35,6 +41,7 @@ R6 class for Reporting Engine Qualification Workflow
 \itemize{
 \item \href{#method-new}{\code{QualificationWorkflow$new()}}
 \item \href{#method-runWorkflow}{\code{QualificationWorkflow$runWorkflow()}}
+\item \href{#method-updateConfigurationPlan}{\code{QualificationWorkflow$updateConfigurationPlan()}}
 \item \href{#method-clone}{\code{QualificationWorkflow$clone()}}
 }
 }
@@ -64,18 +71,20 @@ R6 class for Reporting Engine Qualification Workflow
 \subsection{Method \code{new()}}{
 Create a new `QualificationWorkflow` object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{QualificationWorkflow$new(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{QualificationWorkflow$new(configurationPlan, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{configurationPlan}}{A `ConfigurationPlan` object}
+
 \item{\code{...}}{input parameters inherited from R6 class object `Workflow`.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `MeanModelWorkflow` object
+A new `QualificationWorkflow` object
 }
 }
 \if{html}{\out{<hr>}}
@@ -98,6 +107,25 @@ The order of tasks is as follows:
 
 \subsection{Returns}{
 All results and plots as a structured output in the workflow folder
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateConfigurationPlan"></a>}}
+\if{latex}{\out{\hypertarget{method-updateConfigurationPlan}{}}}
+\subsection{Method \code{updateConfigurationPlan()}}{
+Update the content of the workflow `configurationPlan`.
+Caution, updating the `configurationPlan` using this method won't update the workflow simulations and their results.
+Use the method only to bypass reloading a full workflow if only plot aesthetics or section content is changed.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{QualificationWorkflow$updateConfigurationPlan(configurationPlanFile)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{configurationPlanFile}}{path to the json file corresponding to the Configuration Plan of a Qualification workflow}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

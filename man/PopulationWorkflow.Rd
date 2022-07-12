@@ -6,6 +6,12 @@
 \description{
 R6 class for Reporting Engine Population Workflow
 }
+\seealso{
+Other workflows: 
+\code{\link{MeanModelWorkflow}},
+\code{\link{QualificationWorkflow}}
+}
+\concept{workflows}
 \section{Super class}{
 \code{\link[ospsuite.reportingengine:Workflow]{ospsuite.reportingengine::Workflow}} -> \code{PopulationWorkflow}
 }
@@ -70,7 +76,9 @@ Create a new `PopulationWorkflow` object.
   workflowFolder,
   createWordReport = TRUE,
   watermark = NULL,
-  simulationSetDescriptor = NULL
+  simulationSetDescriptor = NULL,
+  numberSections = TRUE,
+  theme = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -88,6 +96,10 @@ Create a new `PopulationWorkflow` object.
 \item{\code{watermark}}{displayed watermark in every plot background}
 
 \item{\code{simulationSetDescriptor}}{character Descriptor of simulation sets indicated in reports}
+
+\item{\code{numberSections}}{logical defining if the report sections should be numbered}
+
+\item{\code{theme}}{A `Theme` object from `{tlf}` package}
 }
 \if{html}{\out{</div>}}
 }

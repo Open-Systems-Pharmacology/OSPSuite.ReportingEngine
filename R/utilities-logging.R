@@ -91,8 +91,11 @@ logWorkflow <- function(message,
 #' @title LogTypes
 #' @description List of log types for recording workflow information
 #' @export
-#' @import ospsuite
-LogTypes <- ospsuite::enum(c(
+#' @examples
+#' LogTypes$Info
+#' LogTypes$Error
+#' LogTypes$Debug
+LogTypes <- enum(c(
   "Info",
   "Error",
   "Debug"

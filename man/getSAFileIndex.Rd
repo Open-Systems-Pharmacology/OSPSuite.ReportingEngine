@@ -19,3 +19,4 @@ getSAFileIndex(structureSet, settings, logFolder, resultsFileName)
 Function to build and write to CSV a dataframe that stores all
 sensitivity analysis result files that will be output by a population sensitivity analysis.
 }
+\keyword{internal}

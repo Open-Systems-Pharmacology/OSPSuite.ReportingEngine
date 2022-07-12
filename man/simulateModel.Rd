@@ -19,3 +19,4 @@ Simulation results for individual or population
 \description{
 Simulate model, either for an individual or for a given population.
 }
+\keyword{internal}

@@ -7,8 +7,11 @@
 #' @field observedMetaDataFile name of csv file to be used as dictionary of the observed data
 #' @field timeUnit display unit for time variable
 #' @field applicationRanges named list of logicals defining which Application ranges are included in
+#' @field minimumSimulationEndTime is the minimum length of time for which a simulation must be run
+#' @field timeOffset shift of display time in time profile plots
 #' reported time profiles and residual plots when applicable
 #' @export
+#' @import ospsuite.utils
 SimulationSet <- R6::R6Class(
   "SimulationSet",
   public = list(
@@ -19,6 +22,8 @@ SimulationSet <- R6::R6Class(
     observedMetaDataFile = NULL,
     timeUnit = NULL,
     applicationRanges = NULL,
+    minimumSimulationEndTime = NULL,
+    timeOffset = NULL,
 
     #' @description
     #' Create a new `SimulationSet` object.
@@ -29,6 +34,8 @@ SimulationSet <- R6::R6Class(
     #' @param observedMetaDataFile name of csv file to be used as dictionary of the observed data
     #' @param timeUnit display unit for time variable. Default is "h"
     #' @param applicationRanges names of application ranges to include in the report. Names are available in enum `ApplicationRanges`.
+    #' @param minimumSimulationEndTime is the minimum length of time for which a simulation must be run
+    #' @param timeOffset shift of display time in time profile plots
     #' @return A new `SimulationSet` object
     initialize = function(simulationSetName,
                               simulationFile,
@@ -36,26 +43,33 @@ SimulationSet <- R6::R6Class(
                               observedDataFile = NULL,
                               observedMetaDataFile = NULL,
                               timeUnit = "h",
-                              applicationRanges = ApplicationRanges) {
-      # Test and validate the simulation object
+                              applicationRanges = ApplicationRanges,
+                              minimumSimulationEndTime = NULL,
+                              timeOffset = 0) {
+      # Test and validate the simulation objects
       validateIsString(simulationSetName)
       validateIsString(simulationFile)
+      validateIsFileExtension(simulationFile, "pkml")
+      validateIsString(c(observedDataFile, observedMetaDataFile, timeUnit), nullAllowed = TRUE)
+      validateIsPositive(object = minimumSimulationEndTime, nullAllowed = TRUE)
+      validateIsNumeric(timeOffset)
       # For optional input, usually null is allowed
       # but not here as it would mean that nothing would be reported
       validateIsIncluded(c(applicationRanges), ApplicationRanges)
 
-      validateIsFileExtension(simulationFile, "pkml")
-      simulation <- ospsuite::loadSimulation(simulationFile)
+      simulation <- ospsuite::loadSimulation(simulationFile,addToCache = FALSE)
+
       # Test and validate outputs and their paths
       validateOutputObject(c(outputs), simulation, nullAllowed = TRUE)
-      # Test and validate observed data
-      validateIsString(c(observedDataFile, observedMetaDataFile, timeUnit), nullAllowed = TRUE)
+
       if (!is.null(observedDataFile)) {
-        validateObservedMetaDataFile(observedMetaDataFile, observedDataFile)
+        validateObservedMetaDataFile(observedMetaDataFile, observedDataFile, c(outputs))
       }
 
       self$simulationSetName <- simulationSetName
       self$simulationFile <- simulationFile
+      self$minimumSimulationEndTime <- minimumSimulationEndTime
+      self$timeOffset <- timeOffset
 
       self$outputs <- c(outputs)
 

@@ -6,6 +6,31 @@
 \description{
 R6 class for PopulationSensitivityAnalysisTask settings
 }
+\seealso{
+Other workflow tasks: 
+\code{\link{GofPlotTask}},
+\code{\link{PlotTask}},
+\code{\link{PopulationPlotTask}},
+\code{\link{QualificationTask}},
+\code{\link{SensitivityAnalysisTask}},
+\code{\link{Task}},
+\code{\link{addUserDefinedTask}()},
+\code{\link{loadCalculatePKParametersTask}()},
+\code{\link{loadCalculateSensitivityTask}()},
+\code{\link{loadGOFMergedTask}()},
+\code{\link{loadPlotAbsorptionTask}()},
+\code{\link{loadPlotDDIRatioTask}()},
+\code{\link{loadPlotDemographyTask}()},
+\code{\link{loadPlotMassBalanceTask}()},
+\code{\link{loadPlotPKParametersTask}()},
+\code{\link{loadPlotPKRatioTask}()},
+\code{\link{loadPlotSensitivityTask}()},
+\code{\link{loadPlotTimeProfilesAndResidualsTask}()},
+\code{\link{loadQualificationComparisonTimeProfileTask}()},
+\code{\link{loadQualificationTimeProfilesTask}()},
+\code{\link{loadSimulateTask}()}
+}
+\concept{workflow tasks}
 \section{Super classes}{
 \code{\link[ospsuite.reportingengine:Task]{ospsuite.reportingengine::Task}} -> \code{\link[ospsuite.reportingengine:SensitivityAnalysisTask]{ospsuite.reportingengine::SensitivityAnalysisTask}} -> \code{PopulationSensitivityAnalysisTask}
 }
@@ -14,7 +39,7 @@ R6 class for PopulationSensitivityAnalysisTask settings
 \describe{
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
 
-\item{\code{settings}}{instance of SensitivityAnalysisSettings class}
+\item{\code{settings}}{A `SensitivityAnalysisSettings` object}
 }
 \if{html}{\out{</div>}}
 }
@@ -73,17 +98,17 @@ A new `PopulationSensitivityAnalysisTask` object
 \if{html}{\out{<a id="method-saveResults"></a>}}
 \if{latex}{\out{\hypertarget{method-saveResults}{}}}
 \subsection{Method \code{saveResults()}}{
-Save results from task run.
+Save the task results related to a `structureSet`.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PopulationSensitivityAnalysisTask$saveResults(set, taskResults)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PopulationSensitivityAnalysisTask$saveResults(structureSet, taskResults)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{set}}{R6 class `SimulationStructure`}
+\item{\code{structureSet}}{A `SimulationStructure` object defining the properties of a simulation set}
 
-\item{\code{taskResults}}{list of results from task run.}
+\item{\code{taskResults}}{list of results from task run}
 }
 \if{html}{\out{</div>}}
 }

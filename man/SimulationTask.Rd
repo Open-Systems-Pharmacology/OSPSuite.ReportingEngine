@@ -6,6 +6,7 @@
 \description{
 R6 class for SimulationTask settings
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[ospsuite.reportingengine:Task]{ospsuite.reportingengine::Task}} -> \code{SimulationTask}
 }

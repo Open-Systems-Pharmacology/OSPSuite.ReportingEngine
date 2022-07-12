@@ -1,0 +1,5 @@
+id,path,molWeight,type
+Midazolam 600mg SD,ObservedData/Midazolam 600mg SD.csv,NA,NA
+Itraconazole 600mg MD,ObservedData/Itraconazole 600mg MD.csv,NA,NA
+Midazolam 600mg SD,ObservedData/Midazolam 600mg SD.csv,NA,NA
+DDI_Ratio_CYP3A4,ObservedData/DDI_Ratio_CYP3A4.csv,NA,DDIRatio

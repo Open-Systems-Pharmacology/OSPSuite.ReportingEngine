@@ -14,3 +14,4 @@ updateIndividualParametersOnCores(individualParameters, logFolder)
 \description{
 Update individual parameters on core
 }
+\keyword{internal}

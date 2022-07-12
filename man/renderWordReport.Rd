@@ -4,15 +4,39 @@
 \alias{renderWordReport}
 \title{renderWordReport}
 \usage{
-renderWordReport(fileName, logFolder = getwd(), createWordReport = FALSE)
+renderWordReport(
+  fileName,
+  intro = NULL,
+  logFolder = getwd(),
+  createWordReport = FALSE,
+  wordConversionTemplate = NULL
+)
 }
 \arguments{
 \item{fileName}{name of .md file to render}
 
+\item{intro}{name of .md file that include introduction (before toc)}
+
 \item{logFolder}{folder where the logs are saved}
 
 \item{createWordReport}{option for creating Markdwon-Report only but not a Word-Report}
+
+\item{wordConversionTemplate}{optional docx template for rendering a tuned Word-Report document}
 }
 \description{
 Render docx report with number sections and table of content
 }
+\seealso{
+Other reporting: 
+\code{\link{addFigureChunk}()},
+\code{\link{addTableChunk}()},
+\code{\link{addTextChunk}()},
+\code{\link{anchor}()},
+\code{\link{copyReport}()},
+\code{\link{getAnchorName}()},
+\code{\link{hasAnchor}()},
+\code{\link{mergeMarkdownFiles}()},
+\code{\link{renderReport}()},
+\code{\link{resetReport}()}
+}
+\concept{reporting}

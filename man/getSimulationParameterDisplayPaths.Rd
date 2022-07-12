@@ -9,7 +9,7 @@ getSimulationParameterDisplayPaths(parameterPaths, simulation, dictionary)
 \arguments{
 \item{parameterPaths}{Paths of a parameter in simulation}
 
-\item{simulation}{Simulation object}
+\item{simulation}{`Simulation` object from `ospsuite`}
 
 \item{dictionary}{parameterDisplayPaths data.frame mapping user defined display names}
 }
@@ -19,3 +19,36 @@ parameterDisplayPath
 \description{
 getSimulationParameterDisplayPaths
 }
+\seealso{
+Other workflow helpers: 
+\code{\link{activateWorkflowTasks}()},
+\code{\link{addStudyParameters}()},
+\code{\link{addXParametersForDemogrpahyPlot}()},
+\code{\link{addXParametersForPKParametersPlot}()},
+\code{\link{addYParametersForDemogrpahyPlot}()},
+\code{\link{addYParametersForPKParametersPlot}()},
+\code{\link{checkTaskInputsExist}()},
+\code{\link{getMeanSensitivityAnalysisResultsFileNames}()},
+\code{\link{getOutputPathsInSimulationSet}()},
+\code{\link{getPKAnalysisResultsFileNames}()},
+\code{\link{getPKParametersInOutput}()},
+\code{\link{getPKParametersInSimulationSet}()},
+\code{\link{getPopulationSensitivityAnalysisResultsFileNames}()},
+\code{\link{getSimulationDescriptor}()},
+\code{\link{getSimulationResultFileNames}()},
+\code{\link{getTaskInputs}()},
+\code{\link{getWorkflowParameterDisplayPaths}()},
+\code{\link{getXParametersForDemogrpahyPlot}()},
+\code{\link{getXParametersForPKParametersPlot}()},
+\code{\link{getYParametersForDemogrpahyPlot}()},
+\code{\link{getYParametersForPKParametersPlot}()},
+\code{\link{inactivateWorkflowTasks}()},
+\code{\link{setSimulationDescriptor}()},
+\code{\link{setWorkflowParameterDisplayPathsFromFile}()},
+\code{\link{setWorkflowParameterDisplayPaths}()},
+\code{\link{setXParametersForDemogrpahyPlot}()},
+\code{\link{setXParametersForPKParametersPlot}()},
+\code{\link{setYParametersForDemogrpahyPlot}()},
+\code{\link{setYParametersForPKParametersPlot}()}
+}
+\concept{workflow helpers}

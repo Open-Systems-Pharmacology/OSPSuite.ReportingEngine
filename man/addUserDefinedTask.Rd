@@ -31,3 +31,75 @@ Updated `Workflow` object
 \description{
 Add a user-defined function as a task accessible in the `Workflow` field `$userDefinedTasks`
 }
+\examples{
+\dontrun{
+
+# A workflow object needs to be created first
+myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+
+# Create a function to output results for workflow
+# Mean model workflows functions usually expect SimulationStructure objects as inputs
+userDefinedFunction <- function(structureSet, logFolder = getwd(), settings = NULL) {
+# Insert some code to calculate results and tune their output
+userResults <- list()
+userPlot <- ggplot()
+userTable <- data.frame()
+userText <- "Comments about the results of thMy user results"
+
+userResults[[1]] <- saveTaskResults(
+id = "user-result-1",
+plot = userPlot,
+plotCaption = "Title of Figure 1",
+includePlot = TRUE,
+table = userTable, 
+tableCaption = "Title of Table 1",
+includeTable = TRUE,
+textChunk = userText,
+includeTextChunk = TRUE
+)
+
+# Tasks will run through the list of userResults
+# And add their outputs to the report
+return(userResults)
+
+}
+
+# Add a user-defined task to workflow
+addUserDefinedTask(
+workflow = myWorkflow,
+taskFunction = userDefinedFunction,
+taskName = "userDefinedTask",
+active = TRUE
+)
+
+# Checks structure of task using
+# myWorkflow$userDefinedTasks[[index]]$
+
+}
+
+}
+\seealso{
+Other workflow tasks: 
+\code{\link{GofPlotTask}},
+\code{\link{PlotTask}},
+\code{\link{PopulationPlotTask}},
+\code{\link{PopulationSensitivityAnalysisTask}},
+\code{\link{QualificationTask}},
+\code{\link{SensitivityAnalysisTask}},
+\code{\link{Task}},
+\code{\link{loadCalculatePKParametersTask}()},
+\code{\link{loadCalculateSensitivityTask}()},
+\code{\link{loadGOFMergedTask}()},
+\code{\link{loadPlotAbsorptionTask}()},
+\code{\link{loadPlotDDIRatioTask}()},
+\code{\link{loadPlotDemographyTask}()},
+\code{\link{loadPlotMassBalanceTask}()},
+\code{\link{loadPlotPKParametersTask}()},
+\code{\link{loadPlotPKRatioTask}()},
+\code{\link{loadPlotSensitivityTask}()},
+\code{\link{loadPlotTimeProfilesAndResidualsTask}()},
+\code{\link{loadQualificationComparisonTimeProfileTask}()},
+\code{\link{loadQualificationTimeProfilesTask}()},
+\code{\link{loadSimulateTask}()}
+}
+\concept{workflow tasks}

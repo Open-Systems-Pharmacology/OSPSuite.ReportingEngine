@@ -5,10 +5,10 @@
 #' @param settings Options to be defined
 #' (e.g. plotConfigurations list of `PlotConfiguration` objects)
 #' @return list of `ggplot` objects
-#' @export
 #' @import tlf
 #' @import ospsuite
 #' @import utils
+#' @keywords internal
 plotMeanAbsorption <- function(structureSet,
                                logFolder = getwd(),
                                settings = NULL) {
@@ -20,11 +20,10 @@ plotMeanAbsorption <- function(structureSet,
   appliedMoleculePaths <- ospsuite::getAllMoleculePathsIn(applications)
 
   appliedMolecules <- ospsuite::getAllMoleculesMatching(appliedMoleculePaths, simulation)
-
+  
+  
+  # Get the absorption paths for each compound 
   resultsByCompound <- list()
-  absorptionPlots <- list()
-  absorptionCaptions <- list()
-  absorptionTables <- list()
   for (compound in appliedMolecules) {
     fractionAbsorbedInVenousBloodPath <- paste0("Organism|VenousBlood|*|", compound$name)
     fractionAbsorbedInPortalVeinPath <- paste0("Organism|PortalVein|*|", compound$name)
@@ -81,8 +80,6 @@ plotMeanAbsorption <- function(structureSet,
     simulation
   )
 
-  # quantitiesPaths <- sapply(quantities, function(quantity){quantity$path})
-
   # Clear concentration output in case any concentrations are still included
   ospsuite::clearOutputs(simulation)
   for (quantity in quantitiesToSimulate) {
@@ -112,7 +109,9 @@ plotMeanAbsorption <- function(structureSet,
   )
 
   # Get results by Compound
+  absorptionResults <- list()
   for (result in resultsByCompound) {
+    resultID <- defaultFileNames$resultID(length(absorptionResults) + 1, "absorption", result$compoundName)
     # Results by compound as fractions
     fractionAbsorbedInVenousBlood <- rowSums(cbind.data.frame(
       simulationResultsOutputNoLungBloodFlow$data[, result$fractionAbsorbedInVenousBloodPaths, drop = FALSE],
@@ -162,8 +161,8 @@ plotMeanAbsorption <- function(structureSet,
         unit = ""
       )
     )
-
-    absorptionPlots[[result$compoundName]] <- plotAbsorptionTimeProfile(
+    
+    absorptionPlot <- plotAbsorptionTimeProfile(
       data = result$timeProfileData,
       metaData = result$timeProfileMetaData,
       dataMapping = tlf::XYGDataMapping$new(
@@ -174,8 +173,9 @@ plotMeanAbsorption <- function(structureSet,
       plotConfiguration = settings$plotConfigurations[["absorptionPlot"]]
     )
 
-    absorptionCaptions[[result$compoundName]] <- captions$absorption(result$compoundName)
-    absorptionTables[[result$compoundName]] <- data.frame(
+    # Table of absoprtion time profiles
+    # saved but not included into report
+    absorptionTable <- data.frame(
       Time = simulationResultsOutput$data[, "Time"],
       `Fraction dissolved` = simulationResultsOutput$data[, result$fractionDissolvedPath],
       `Fraction absorbed to mucosa` = simulationResultsOutput$data[, result$fractionAbsorbedInMucosaPath],
@@ -184,13 +184,17 @@ plotMeanAbsorption <- function(structureSet,
       `Fraction excrected to feces` = simulationResultsOutput$data[, result$fractionExcretedPath],
       check.names = FALSE
     )
+    
+    absorptionResults[[resultID]] <- saveTaskResults(
+      id = resultID,
+      plot = absorptionPlot,
+      plotCaption = captions$absorption(result$compoundName),
+      table = absorptionTable,
+      includeTable = FALSE
+    )
   }
 
-  return(list(
-    plots = absorptionPlots,
-    tables = absorptionTables,
-    captions = absorptionCaptions
-  ))
+  return(absorptionResults)
 }
 
 
@@ -205,6 +209,7 @@ plotMeanAbsorption <- function(structureSet,
 #' @import tlf
 #' @import ggplot2
 #' @import utils
+#' @importFrom ospsuite.utils %||%
 plotAbsorptionTimeProfile <- function(data,
                                       metaData = NULL,
                                       dataMapping = NULL,

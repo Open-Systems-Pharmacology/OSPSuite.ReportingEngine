@@ -6,7 +6,6 @@ studyDesignFile <- getTestDataFilePath("input-data/StudyDesign.csv")
 studyDesignTempFile <- "TestStudyDesign.csv"
 drugMassPath <- "Applications|Larson 400mg|filmcoated tablet (original Merck formulation)|Application_1|ProtocolSchemaItem|DrugMass"
 
-
 refSimulationSet <- PopulationSimulationSet$new(
   simulationSetName = "ReferenceTest",
   simulationFile = simulationFile,
@@ -29,8 +28,8 @@ test_that("Target path is added to population object if not existing", {
   referencePopulation <- loadWorkflowPopulation(refSimulationSet)
   testPopulation <- loadWorkflowPopulation(studyDesignSimulationSet)
 
-  expect_false(isIncluded(drugMassPath, referencePopulation$allParameterPaths))
-  expect_true(isIncluded(drugMassPath, testPopulation$allParameterPaths))
+  expect_false(ospsuite.utils::isIncluded(drugMassPath, referencePopulation$allParameterPaths))
+  expect_true(ospsuite.utils::isIncluded(drugMassPath, testPopulation$allParameterPaths))
 })
 
 test_that("A study design needs at least one 'SOURCE' and one 'TARGET'", {
@@ -64,11 +63,11 @@ test_that("Units and paths are checked and converted to base unit when loading a
     check.names = FALSE
   )
   write.csv(studyDesignData, file = studyDesignTempFile, row.names = FALSE)
-  expect_silent(loadStudyDesign(studyDesignTempFile, testPopulation, testSimulation))
-  expect_silent(addStudyParameters(testPopulation, testSimulation, studyDesignTempFile))
   studyDesign <- loadStudyDesign(studyDesignTempFile, testPopulation, testSimulation)
+  expect_s3_class(studyDesign, "StudyDesign")
   expect_equal(studyDesign$targets[[1]]$name, "Organism|Height")
   expect_equal(studyDesign$targets[[1]]$values, 17)
+  expect_null(addStudyParameters(testPopulation, testSimulation, studyDesignTempFile))
   unlink(studyDesignTempFile, recursive = TRUE)
 
   # Example on source Weight in wrong unit
@@ -102,8 +101,8 @@ test_that("Units and paths are checked and converted to base unit when loading a
     check.names = FALSE
   )
   write.csv(studyDesignData, file = studyDesignTempFile, row.names = FALSE)
-  expect_silent(loadStudyDesign(studyDesignTempFile, testPopulation, testSimulation))
-  expect_silent(addStudyParameters(testPopulation, testSimulation, studyDesignTempFile))
+  expect_s3_class(loadStudyDesign(studyDesignTempFile, testPopulation, testSimulation), "StudyDesign")
+  expect_null(addStudyParameters(testPopulation, testSimulation, studyDesignTempFile))
   addStudyParameters(testPopulation, testSimulation, studyDesignTempFile)
   populationData <- ospsuite::populationAsDataFrame(testPopulation)
   # Base unit gives 17 dm for target
@@ -134,14 +133,14 @@ test_that("A study design 'SOURCE' requires a 'MIN', 'MAX', or 'EQUALS' attribut
   testPopulation <- ospsuite::loadPopulation(populationFile)
   testSimulation <- ospsuite::loadSimulation(simulationFile)
 
-  expect_silent(loadStudyDesign(studyDesignMinFile, testPopulation, testSimulation))
-  expect_silent(loadStudyDesign(studyDesignMaxFile, testPopulation, testSimulation))
-  expect_silent(loadStudyDesign(studyDesignEqualsFile, testPopulation, testSimulation))
+  expect_s3_class(loadStudyDesign(studyDesignMinFile, testPopulation, testSimulation), "StudyDesign")
+  expect_s3_class(loadStudyDesign(studyDesignMaxFile, testPopulation, testSimulation), "StudyDesign")
+  expect_s3_class(loadStudyDesign(studyDesignEqualsFile, testPopulation, testSimulation), "StudyDesign")
   expect_error(loadStudyDesign(studyDesignElseFile, testPopulation, testSimulation))
 
-  expect_silent(addStudyParameters(testPopulation, testSimulation, studyDesignMinFile))
-  expect_silent(addStudyParameters(testPopulation, testSimulation, studyDesignMaxFile))
-  expect_silent(addStudyParameters(testPopulation, testSimulation, studyDesignEqualsFile))
+  expect_null(addStudyParameters(testPopulation, testSimulation, studyDesignMinFile))
+  expect_null(addStudyParameters(testPopulation, testSimulation, studyDesignMaxFile))
+  expect_null(addStudyParameters(testPopulation, testSimulation, studyDesignEqualsFile))
   expect_error(addStudyParameters(testPopulation, testSimulation, studyDesignElseFile))
 })
 
@@ -243,7 +242,7 @@ test_that("Source expressions constraints add up as &", {
   expect_equal(sum(populationData[, drugMassPath] %in% 5), 22)
   expect_equal(sum(populationData[, drugMassPath] %in% NA), 78)
   expect_gte(min(populationData[populationData[, drugMassPath] %in% 5, "Organism|Weight"]), 45)
-  expect_lte(max(populationData[populationData[, drugMassPath] %in% 5, "Organism|Weight"]),  55)
+  expect_lte(max(populationData[populationData[, drugMassPath] %in% 5, "Organism|Weight"]), 55)
 
   testPopulation <- ospsuite::loadPopulation(populationFile)
   addStudyParameters(testPopulation, testSimulation, studyDesignNAFile)
@@ -255,3 +254,8 @@ test_that("Source expressions constraints add up as &", {
   unlink(studyDesignFile, recursive = TRUE)
   unlink(studyDesignNAFile, recursive = TRUE)
 })
+
+# Clear logs
+unlink("log-error.txt", recursive = TRUE)
+unlink("log-debug.txt", recursive = TRUE)
+unlink("log-info.txt", recursive = TRUE)

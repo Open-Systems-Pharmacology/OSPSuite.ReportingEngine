@@ -1,43 +1,15 @@
 context("Run population workflows with PK parameters task")
-
+# Get test data
 simulationFile <- getTestDataFilePath("input-data/Larson 2013 8-18y meal.pkml")
 populationFilePeds <- getTestDataFilePath("input-data/Larson 2013 8-18y meal-Population.csv")
 populationFileAdults <- getTestDataFilePath("input-data/Raltegravir Adult Population.csv")
 
-# Output reference
-refOutputParallelCmax <- getTestDataFilePath("pop-pk/Plasma-C_max.csv")
-refOutputParallelAUC <- getTestDataFilePath("pop-pk/Plasma-AUC_tEnd.csv")
-refOutputRatioCmax <- getTestDataFilePath("pop-pk/Plasma-C_max-ratio.csv")
-refOutputRatioAUC <- getTestDataFilePath("pop-pk/Plasma-AUC_tEnd-ratio.csv")
+# List of necessary in results to test
+refOutput <- getTestDataFilePath("pop-pk")
 
 # Ensure the PK parameters are reset before test
-updatePKParameter("C_max", displayName = "C_max", displayUnit = "μmol/l")
-updatePKParameter("AUC_tEnd", displayName = "AUC_tEnd", displayUnit = "μmol*min/l")
-
-refWorkflowStructure <- sort(c(
-  "log-debug.txt", "log-info.txt",
-  "Report-word.md", "Report.docx", "Report.md",
-  "SimulationResults", "PKAnalysisResults", "PKAnalysis"
-))
-
-pkParametersStructure <- sort(c(
-  paste("Plasma (Peripheral Venous Blood)-AUC_tEnd", c(".csv", ".png", "-log.png"), sep = ""),
-  paste("Plasma (Peripheral Venous Blood)-C_max", c(".csv", ".png", "-log.png"), sep = "")))
-
-pkParametersStructurePeds <- pkParametersStructure
-for (popName in c("Adults", "Pediatric", "Pediatric-vs-ref")){
-  for(parName in c("Age", "BMI", "Height", "Weight")){
-    pkParametersStructurePeds <- c(pkParametersStructurePeds, 
-                                 paste(popName, "-", c("AUC_tEnd", "C_max"), "-vs-", parName, ".png", sep=""),
-                                 paste(popName, "-", c("AUC_tEnd", "C_max"), "-vs-", parName, "-log.png", sep=""))
-  }
-}
-pkParametersStructurePeds <- sort(pkParametersStructurePeds)
-
-pkParametersStructureRatio <- sort(c(
-  pkParametersStructure,
-  paste("Plasma (Peripheral Venous Blood)-AUC_tEnd", "-ratio", c(".csv", ".png", "-log.png"), sep = ""),
-  paste("Plasma (Peripheral Venous Blood)-C_max", "-ratio", c(".csv", ".png", "-log.png"), sep = "")))
+updatePKParameter("C_max", displayName = "C_max", displayUnit = "µmol/l")
+updatePKParameter("AUC_tEnd", displayName = "AUC_tEnd", displayUnit = "µmol*min/l")
 
 setPeds <- PopulationSimulationSet$new(
   simulationSetName = "Pediatric",
@@ -65,15 +37,21 @@ workflowFolderPediatric <- "test-pk-parameters-pediatric"
 workflowFolderParallel <- "test-pk-parameters-parallel"
 workflowFolderRatio <- "test-pk-parameters-ratio"
 
-workflowPediatric <- PopulationWorkflow$new(workflowType = PopulationWorkflowTypes$pediatric, 
-                                            simulationSets = c(setAdults, setPeds), 
-                                            workflowFolder = workflowFolderPediatric)
-workflowParallel <- PopulationWorkflow$new(workflowType = PopulationWorkflowTypes$parallelComparison, 
-                                           simulationSets = c(setAdults, setPeds), 
-                                           workflowFolder = workflowFolderParallel)
-workflowRatio <- PopulationWorkflow$new(workflowType = PopulationWorkflowTypes$ratioComparison, 
-                                        simulationSets = c(setAdults, setPeds), 
-                                        workflowFolder = workflowFolderRatio)
+workflowPediatric <- PopulationWorkflow$new(
+  workflowType = PopulationWorkflowTypes$pediatric,
+  simulationSets = c(setAdults, setPeds),
+  workflowFolder = workflowFolderPediatric
+)
+workflowParallel <- PopulationWorkflow$new(
+  workflowType = PopulationWorkflowTypes$parallelComparison,
+  simulationSets = c(setAdults, setPeds),
+  workflowFolder = workflowFolderParallel
+)
+workflowRatio <- PopulationWorkflow$new(
+  workflowType = PopulationWorkflowTypes$ratioComparison,
+  simulationSets = c(setAdults, setPeds),
+  workflowFolder = workflowFolderRatio
+)
 
 workflowPediatric$activateTasks(c("simulate", "calculatePKParameters", "plotPKParameters"))
 workflowParallel$activateTasks(c("simulate", "calculatePKParameters", "plotPKParameters"))
@@ -83,71 +61,90 @@ workflowPediatric$runWorkflow()
 workflowParallel$runWorkflow()
 workflowRatio$runWorkflow()
 
-test_that("Workflows generate appropriate files and folders", {
-  expect_equal(list.files(workflowPediatric$workflowFolder), refWorkflowStructure)
-  expect_equal(list.files(workflowParallel$workflowFolder), refWorkflowStructure)
-  expect_equal(list.files(workflowRatio$workflowFolder), refWorkflowStructure)
+test_that("Workflow generates appropriate number of files", {
+  # Log files
+  expect_length(list.files(workflowPediatric$workflowFolder, pattern = ".txt"), 2)
+  expect_length(list.files(workflowParallel$workflowFolder, pattern = ".txt"), 2)
+  expect_length(list.files(workflowRatio$workflowFolder, pattern = ".txt"), 2)
+  # Reports
+  expect_length(list.files(workflowPediatric$workflowFolder, pattern = ".md"), 2)
+  expect_length(list.files(workflowPediatric$workflowFolder, pattern = ".docx"), 1)
+  expect_length(list.files(workflowParallel$workflowFolder, pattern = ".md"), 2)
+  expect_length(list.files(workflowParallel$workflowFolder, pattern = ".docx"), 1)
+  expect_length(list.files(workflowRatio$workflowFolder, pattern = ".md"), 2)
+  expect_length(list.files(workflowRatio$workflowFolder, pattern = ".docx"), 1)
 })
 
-test_that("PKAnalysis directory includes appropriate files and folders", {
-  expect_equal(sort(list.files(file.path(workflowPediatric$workflowFolder, "PKAnalysis"))), sort(pkParametersStructurePeds))
-  expect_equal(sort(list.files(file.path(workflowParallel$workflowFolder, "PKAnalysis"))), sort(pkParametersStructure))
-  expect_equal(sort(list.files(file.path(workflowRatio$workflowFolder, "PKAnalysis"))), sort(pkParametersStructureRatio))
+pkAnalysisPediatricPath <- file.path(workflowPediatric$workflowFolder, "PKAnalysis")
+test_that("PKAnalysis directory from Pediatric workflow includes appropriate number of files", {
+  # Figures
+  expect_length(list.files(pkAnalysisPediatricPath, pattern = ".png"), 52)
+  # Exported results
+  expect_length(list.files(pkAnalysisPediatricPath, pattern = ".csv"), 2)
 })
 
-test_that("Saved PK parameters data have correct values", {
-  expect_equal(
-    readObservedDataFile(file.path(workflowParallel$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-AUC_tEnd.csv")),
-    readObservedDataFile(refOutputParallelAUC),
-    tolerance = comparisonTolerance()
+pkAnalysisParallelPath <- file.path(workflowParallel$workflowFolder, "PKAnalysis")
+test_that("PKAnalysis directory from Parallel workflow includes appropriate number of files", {
+  # Figures
+  expect_length(list.files(pkAnalysisParallelPath, pattern = ".png"), 4)
+  # Exported results
+  expect_length(list.files(pkAnalysisParallelPath, pattern = ".csv"), 2)
+})
+
+pkAnalysisRatioPath <- file.path(workflowRatio$workflowFolder, "PKAnalysis")
+test_that("PKAnalysis directory from Ratio workflow includes appropriate number of files", {
+  # Figures
+  expect_length(list.files(pkAnalysisRatioPath, pattern = ".png"), 8)
+  # Exported results
+  expect_length(list.files(pkAnalysisRatioPath, pattern = ".csv"), 4)
+})
+
+test_that("Saved PK parameters data from workflows have correct values", {
+  pediatricFiles <- file.path(
+    pkAnalysisPediatricPath,
+    list.files(pkAnalysisPediatricPath, pattern = ".csv")
   )
-  
-  expect_equal(
-    readObservedDataFile(file.path(workflowParallel$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-C_max.csv")),
-    readObservedDataFile(refOutputParallelCmax),
-    tolerance = comparisonTolerance()
+  parallelFiles <- file.path(
+    pkAnalysisParallelPath,
+    list.files(pkAnalysisParallelPath, pattern = ".csv")
   )
-  
-  expect_equal(
-    readObservedDataFile(file.path(workflowPediatric$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-AUC_tEnd.csv")),
-    readObservedDataFile(refOutputParallelAUC),
-    tolerance = comparisonTolerance()
+  refFiles <- file.path(
+    refOutput,
+    list.files(refOutput, pattern = "pk_parameters")
   )
-  
-  expect_equal(
-    readObservedDataFile(file.path(workflowPediatric$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-C_max.csv")),
-    readObservedDataFile(refOutputParallelCmax),
-    tolerance = comparisonTolerance()
+  for(fileIndex in seq_along(refFiles)){
+    expect_equal(
+      readObservedDataFile(pediatricFiles[fileIndex]),
+      readObservedDataFile(refFiles[fileIndex]),
+      tolerance = comparisonTolerance()
+    )
+    expect_equal(
+      readObservedDataFile(parallelFiles[fileIndex]),
+      readObservedDataFile(refFiles[fileIndex]),
+      tolerance = comparisonTolerance()
+    )
+  }
+  # For ratio, 2 additional tables are exported
+  ratioFiles <- file.path(
+    pkAnalysisRatioPath,
+    list.files(pkAnalysisRatioPath, pattern = ".csv")
   )
-  
-  expect_equal(
-    readObservedDataFile(file.path(workflowRatio$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-AUC_tEnd.csv")),
-    readObservedDataFile(refOutputParallelAUC),
-    tolerance = comparisonTolerance()
+  refFiles <- file.path(
+    refOutput,
+    list.files(refOutput, pattern = ".csv")
   )
-  
-  expect_equal(
-    readObservedDataFile(file.path(workflowRatio$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-C_max.csv")),
-    readObservedDataFile(refOutputParallelCmax),
-    tolerance = comparisonTolerance()
-  )
-  
-  expect_equal(
-    readObservedDataFile(file.path(workflowRatio$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-AUC_tEnd-ratio.csv")),
-    readObservedDataFile(refOutputRatioAUC),
-    tolerance = comparisonTolerance()
-  )
-  
-  expect_equal(
-    readObservedDataFile(file.path(workflowRatio$workflowFolder, "PKAnalysis", "Plasma (Peripheral Venous Blood)-C_max-ratio.csv")),
-    readObservedDataFile(refOutputRatioCmax),
-    tolerance = comparisonTolerance()
-  )
+  for(fileIndex in seq_along(refFiles)){
+    expect_equal(
+      readObservedDataFile(ratioFiles[fileIndex]),
+      readObservedDataFile(refFiles[fileIndex]),
+      tolerance = comparisonTolerance()
+    )
+  }
 })
 
 # Ensure the PK parameters are reset after test
-updatePKParameter("C_max", displayName = "C_max", displayUnit = "μmol/l")
-updatePKParameter("AUC_tEnd", displayName = "AUC_tEnd", displayUnit = "μmol*min/l")
+updatePKParameter("C_max", displayName = "C_max", displayUnit = "µmol/l")
+updatePKParameter("AUC_tEnd", displayName = "AUC_tEnd", displayUnit = "µmol*min/l")
 
 # Clear test workflow folders
 unlink(workflowPediatric$workflowFolder, recursive = TRUE)

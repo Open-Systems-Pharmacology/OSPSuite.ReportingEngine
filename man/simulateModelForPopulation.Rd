@@ -4,10 +4,10 @@
 \alias{simulateModelForPopulation}
 \title{simulateModelForPopulation}
 \usage{
-simulateModelForPopulation(structureSet, settings = NULL, logFolder = getwd())
+simulateModelForPopulation(structureSets, settings = NULL, logFolder = getwd())
 }
 \arguments{
-\item{structureSet}{`SimulationStructure` object contain paths of files to be used}
+\item{structureSets}{List of `SimulationStructure` objects contain paths of files to be used}
 
 \item{settings}{list of simulation settings}
 
@@ -19,3 +19,4 @@ Simulation results for individual or population
 \description{
 Simulate model for a population.  Run parallel workflow if numberOfCores > 1 AND population size is >1.
 }
+\keyword{internal}

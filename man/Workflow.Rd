@@ -6,6 +6,7 @@
 \description{
 R6 class representing Reporting Engine generic Workflow
 }
+\keyword{internal}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
@@ -19,7 +20,20 @@ R6 class representing Reporting Engine generic Workflow
 
 \item{\code{createWordReport}}{logical of option for creating Markdwon-Report only but not a Word-Report.}
 
+\item{\code{wordConversionTemplate}}{optional docx template for rendering a tuned Word-Report document}
+
 \item{\code{userDefinedTasks}}{List of user-defined tasks (to update with loadUserDefinedTask)}
+
+\item{\code{numberSections}}{logical defining if the report sections should be numbered}
+}
+\if{html}{\out{</div>}}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{reportFolder}}{Directory in which workflow report is saved}
+
+\item{\code{reportFilePath}}{Path of workflow report}
 }
 \if{html}{\out{</div>}}
 }
@@ -54,8 +68,11 @@ Create a new `Workflow` object.
   simulationSets,
   workflowFolder,
   createWordReport = TRUE,
+  wordConversionTemplate = NULL,
   watermark = NULL,
-  simulationSetDescriptor = NULL
+  simulationSetDescriptor = NULL,
+  numberSections = TRUE,
+  theme = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -68,9 +85,15 @@ Create a new `Workflow` object.
 
 \item{\code{createWordReport}}{logical of option for creating Markdown-Report only but not a Word-Report.}
 
+\item{\code{wordConversionTemplate}}{optional docx template for rendering a tuned Word-Report document}
+
 \item{\code{watermark}}{displayed watermark in figures background}
 
 \item{\code{simulationSetDescriptor}}{character Descriptor of simulation sets indicated in reports}
+
+\item{\code{numberSections}}{logical defining if the report sections should be numbered}
+
+\item{\code{theme}}{A `Theme` object from `{tlf}` package}
 }
 \if{html}{\out{</div>}}
 }

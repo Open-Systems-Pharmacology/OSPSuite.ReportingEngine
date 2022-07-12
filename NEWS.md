@@ -1,3 +1,26 @@
+# ospsuite.reportingengine 2.0.189
+
+## New features
+
+- Qualification workflows are now available ! (#2)
+  - Qualification Workflows have their own [vignette](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/articles/qualification-workflow.html) to help you start (#566)
+  - A template qualification workflow R script is available on Github orat `system.file("extdata", "qualification-workflow-template.R", package = "ospsuite.reportingengine")` and can also be downloaded from [Github](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/qualification-workflow-template.R) (#572)
+  - Function `adjustTitlePage` can be used to personalize the report title page (#755)
+  - Configuration plans can be re-loaded on `QualificationWorkflow` objects to update the report display (#567)
+  - DDI subunits option is available (#642)
+- With `ospsuite` version 10, simulations can be run in parallel (#526)
+- Workflows account for time offset in simulation sets using option `timeOffset` for time profile plots (#313) or through user defined PK parameters for PK parameter plots (#578).
+- User can define their own word report template to tune the styles of their report by providing a reference word document to the `wordConversionTemplate` of their Workflow object. A word reference template is available on [Github](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/reference.docx) (#756)
+- The function `copyReport` can be used to copy markdown/word reports (#814)
+
+## Minor improvements and bug fixes
+
+- With `tlf` version 1.2.0, plots in log scale are better displayed (#603)
+- Too long legend captions are now displayed on multiple lines (#568, #602)
+- `Output` objects are now cloneable (#542)
+- In population workflows, option for adding reference observed data in time profile plots was created (#540).
+- Confusing observed data terminology starting _nonmem_ was replaced by _dataset_ (#534)
+
 # ospsuite.reportingengine 1.2.0
 
 ## New features

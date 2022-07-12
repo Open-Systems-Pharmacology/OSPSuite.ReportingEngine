@@ -1,50 +1,93 @@
-#' @title simulateModelForPopulation
+#' @title simulateWorkflowModels
 #' @description Simulate model for a population.  Run parallel workflow if numberOfCores > 1 AND population size is >1.
-#' @param structureSet `SimulationStructure` object contain paths of files to be used
+#' @param structureSets List of `SimulationStructure` objects contain paths of files to be used
 #' @param settings list of simulation settings
 #' @param logFolder folder where the logs are saved
 #' @return Simulation results for individual or population
-#' @export
 #' @import ospsuite
-simulateModelForPopulation <- function(structureSet,
-                                       settings = NULL,
-                                       logFolder = getwd()) {
-  re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$populationFile)
-  population <- loadWorkflowPopulation(structureSet$simulationSet)
+#' @keywords internal
+simulateWorkflowModels <- function(structureSets,
+                                   settings = NULL,
+                                   logFolder = getwd()) {
+  allSimulationResults <- vector(mode = "list", length = length(structureSets))
+  # Split between mean and population simulations
+  populationSets <- sapply(structureSets, function(set) isOfType(set$simulationSet, "PopulationSimulationSet"))
+  populationSimulationResults <- NULL
+  simulationResults <- NULL
 
-  numberOfIndividuals <- length(population$allIndividualIds)
-  numberOfCores <- min(ifnotnull(inputToCheck = settings, outputIfNotNull = settings$numberOfCores, outputIfNull = 1), numberOfIndividuals)
-
-  if (numberOfCores == 1) {
-
-    if (is.null(settings)){
-      settings <-SimulationSettings$new()
-    }
-
-    settings$allowedCores <-  getAllowedCores()
-
-    simulationResult <- simulateModel(
-      structureSet = structureSet,
+  # Run population simulations in series
+  if (sum(populationSets) > 0) {
+    populationSimulationResults <- simulateModelForPopulation(
+      structureSets = structureSets[populationSets],
       settings = settings,
       logFolder = logFolder
     )
   }
-  else if (numberOfCores > 1) {
+
+  # Run mean simulations in parallel
+  if (sum(!populationSets) > 0) {
+    simulationResults <- simulateModelParallel(
+      structureSet = structureSets[!populationSets],
+      settings = settings,
+      logFolder = logFolder
+    )
+  }
+  # Place the simulation results in same order as structureSet
+  allSimulationResults[populationSets] <- c(populationSimulationResults)
+  allSimulationResults[!populationSets] <- c(simulationResults)
+
+  return(allSimulationResults)
+}
+
+#' @title simulateModelForPopulation
+#' @description Simulate model for a population.  Run parallel workflow if numberOfCores > 1 AND population size is >1.
+#' @param structureSets List of `SimulationStructure` objects contain paths of files to be used
+#' @param settings list of simulation settings
+#' @param logFolder folder where the logs are saved
+#' @return Simulation results for individual or population
+#' @import ospsuite
+#' @importFrom ospsuite.utils %||%
+#' @keywords internal
+simulateModelForPopulation <- function(structureSets,
+                                       settings = NULL,
+                                       logFolder = getwd()) {
+  simulationResults <- NULL
+  for (set in structureSets) {
+    re.tStoreFileMetadata(access = "read", filePath = set$simulationSet$populationFile)
+    population <- loadWorkflowPopulation(set$simulationSet)
+    numberOfIndividuals <- length(population$allIndividualIds)
+    numberOfCores <- min(settings$numberOfCores %||% 1, numberOfIndividuals)
+
+    # If one core available, run in series
+    if (numberOfCores == 1) {
+      settings <- settings %||% SimulationSettings$new()
+      settings$allowedCores <- getAllowedCores()
+
+      simulationResult <- simulateModel(
+        structureSet = set,
+        settings = settings,
+        logFolder = logFolder
+      )
+      simulationResults <- c(simulationResults, simulationResult)
+      next
+    }
+
+    # If multiple cores available, run in parallel
     logWorkflow(
-      message = "Starting parallel population simulation",
+      message = paste0("Starting parallel population simulation on ", numberOfCores, " cores"),
       pathFolder = logFolder
     )
 
     simulationResultFileNames <- runParallelPopulationSimulation(
       numberOfCores = numberOfCores,
-      structureSet = structureSet,
+      structureSet = set,
       settings = settings,
       logFolder = logFolder
     )
 
-    re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
+    re.tStoreFileMetadata(access = "read", filePath = set$simulationSet$simulationFile)
     simulationResult <- ospsuite::importResultsFromCSV(
-      simulation = loadSimulationWithUpdatedPaths(structureSet$simulationSet),
+      simulation = loadSimulationWithUpdatedPaths(set$simulationSet),
       filePaths = simulationResultFileNames
     )
     file.remove(simulationResultFileNames)
@@ -53,9 +96,10 @@ simulateModelForPopulation <- function(structureSet,
       message = "Parallel population simulation completed.",
       pathFolder = logFolder
     )
+    simulationResults <- c(simulationResults, simulationResult)
   }
 
-  return(simulationResult)
+  return(simulationResults)
 }
 
 #' @title simulateModelOnCore
@@ -73,7 +117,7 @@ simulateModelOnCore <- function(simulation,
                                 nodeName = NULL,
                                 showProgress = FALSE) {
   logDebug(
-    message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), ""), "Starting simulation."),
+    message = paste0(ifNotNull(nodeName, paste0(nodeName, ": "), ""), "Starting simulation."),
     file = debugLogFileName,
     printConsole = TRUE
   )
@@ -83,11 +127,105 @@ simulateModelOnCore <- function(simulation,
   simulationResult <- ospsuite::runSimulation(simulation = simulation, population = population, simulationRunOptions = simRunOptions)
 
   logDebug(
-    message = paste0(ifnotnull(nodeName, paste0(nodeName, ": "), ""), "Simulation run complete."),
+    message = paste0(ifNotNull(nodeName, paste0(nodeName, ": "), ""), "Simulation run complete."),
     file = debugLogFileName,
     printConsole = TRUE
   )
   return(simulationResult)
+}
+
+
+#' @title simulateModelParallel
+#' @description Simulate models within a list of structure sets in parallel for an individual.
+#' @param structureSets, a list of `SimulationStructure` R6 class objects contain paths of files to be used
+#' @param settings list of options to be passed to the function
+#' @param logFolder folder where the logs are saved
+#' @return List of simulation results for each simulation set
+#' @import ospsuite
+#' @keywords internal
+simulateModelParallel <- function(structureSets,
+                                  settings = NULL,
+                                  logFolder = getwd()) {
+
+  simulationResults <- list()
+  maxSimulationsPerSubset <- settings$maxSimulationsPerCore*getAllowedCores()  #To be set in settings argument
+
+  #Split the complete set of structureSets into a list of subsets of structureSets, each containing at most maxSimulationsPerSubset structureSets
+  structureSetList <- split(structureSets,ceiling(seq_along(structureSets)/maxSimulationsPerSubset))
+
+  #Loop through the list of structureSet subsets
+  for (subsetNumber in seq_along(structureSetList)){
+
+    structureSetsSubset <- structureSetList[[subsetNumber]]
+
+    logWorkflow(
+      message = paste("Loading subset",subsetNumber,"of",length(structureSetList)),
+      pathFolder = logFolder,
+      logTypes = LogTypes$Info
+    )
+
+    simulations <- lapply(structureSetsSubset, function(set) {
+      re.tStoreFileMetadata(access = "read", filePath = set$simulationSet$simulationFile)
+      simulation <- loadSimulationWithUpdatedPaths(set$simulationSet,loadFromCache = TRUE)
+      logWorkflow(
+        message = paste0("Simulation file '", set$simulationSet$simulationFile, "' successfully loaded"),
+        pathFolder = logFolder,
+        logTypes = LogTypes$Debug
+      )
+      return(simulation)
+    })
+
+    logWorkflow(
+      message = paste("Simulating subset",subsetNumber,"of",length(structureSetList)),
+      pathFolder = logFolder,
+      logTypes = LogTypes$Info
+    )
+
+
+    # Catch, save and display any error or warning
+    # from ospsuite::runSimulations
+    subsetSimulationResults <- tryCatch({
+      ospsuite::runSimulations(simulations = simulations)
+    },
+    error = function(e) {
+      logErrorThenStop(message = e, logFolder)
+    },
+    warning = function(w) {
+      logWorkflow(
+        message = w,
+        pathFolder = logFolder,
+        logTypes = LogTypes$Error
+      )
+      # Since simulationResults is a list,
+      # return same output type
+      return(vector(mode = "list", length = length(simulations)))
+    })
+
+    # Stop simulation run if any individual simulations not run successfully in ospsuite::runSimulations
+    failedSimulationIndices <- which( sapply(subsetSimulationResults,function(x){is.null(x)}) )
+
+    if(!isEmpty(failedSimulationIndices)){
+      errorMessages <- sapply(failedSimulationIndices, function(setNumber){
+        set <- structureSetsSubset[[setNumber]]
+        setSimFile <- set$simulationSet$simulationFile
+        setName <- set$simulationSet$simulationSetName
+        messages$errorRunSimulationsNotSuccessful(setSimFile,setName)
+      })
+
+      logErrorThenStop(message = paste(errorMessages,collapse = "; "), logFolder)
+    }
+
+    simulationResults <- c(simulationResults, subsetSimulationResults)
+    clearMemory(clearSimulationsCache = TRUE)
+  }
+
+  logWorkflow(
+    message = "Parallel simulation run complete",
+    pathFolder = logFolder,
+    logTypes = LogTypes$Debug
+  )
+
+  return(c(simulationResults))
 }
 
 #' @title simulateModel
@@ -96,8 +234,8 @@ simulateModelOnCore <- function(simulation,
 #' @param settings list of options to be passed on the function
 #' @param logFolder folder where the logs are saved
 #' @return Simulation results for individual or population
-#' @export
 #' @import ospsuite
+#' @keywords internal
 simulateModel <- function(structureSet,
                           settings = NULL,
                           logFolder = getwd()) {
@@ -129,12 +267,14 @@ simulateModel <- function(structureSet,
     ospsuite::addOutputs(quantitiesOrPaths = quantity, simulation = simulation)
   }
 
-  simRunOptions <- ospsuite::SimulationRunOptions$new(showProgress = ifnotnull(settings, outputIfNotNull = settings$showProgress, outputIfNull = FALSE),
-                                                      numberOfCores = settings$allowedCores)
+  simRunOptions <- ospsuite::SimulationRunOptions$new(
+    showProgress = ifNotNull(settings, outputIfNotNull = settings$showProgress, outputIfNull = FALSE),
+    numberOfCores = settings$allowedCores
+  )
 
   simulationResult <- ospsuite::runSimulation(simulation,
-    population = population,
-    simulationRunOptions = simRunOptions
+                                              population = population,
+                                              simulationRunOptions = simRunOptions
   )
 
   logWorkflow(
@@ -153,8 +293,8 @@ simulateModel <- function(structureSet,
 #' @param settings list of options to be passed on the function
 #' @param logFolder folder where the logs are saved
 #' @return Simulation results for population
-#' @export
 #' @import ospsuite
+#' @keywords internal
 runParallelPopulationSimulation <- function(structureSet,
                                             numberOfCores,
                                             settings,
@@ -235,8 +375,8 @@ runParallelPopulationSimulation <- function(structureSet,
   ))
   partialResultsExported <- Rmpi::mpi.remote.exec(file.exists(allResultsFileNames[mpi.comm.rank()]))
   verifyPartialResultsExported(partialResultsExported,
-    numberOfCores = numberOfCores,
-    logFolder = logFolder
+                               numberOfCores = numberOfCores,
+                               logFolder = logFolder
   )
 
   # Close slaves

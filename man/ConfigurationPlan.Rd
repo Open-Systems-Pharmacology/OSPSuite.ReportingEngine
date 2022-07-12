@@ -6,6 +6,14 @@
 \description{
 R6 class for ConfigurationPlan guiding Qualification Workflow
 }
+\seealso{
+Other qualification workflow: 
+\code{\link{adjustTitlePage}()},
+\code{\link{loadConfigurationPlan}()},
+\code{\link{loadQualificationWorkflow}()},
+\code{\link{startQualificationRunner}()}
+}
+\concept{qualification workflow}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
@@ -40,14 +48,19 @@ R6 class for ConfigurationPlan guiding Qualification Workflow
 \item \href{#method-getSectionPath}{\code{ConfigurationPlan$getSectionPath()}}
 \item \href{#method-getSectionTitle}{\code{ConfigurationPlan$getSectionTitle()}}
 \item \href{#method-getSectionMarkdown}{\code{ConfigurationPlan$getSectionMarkdown()}}
+\item \href{#method-getSectionLevel}{\code{ConfigurationPlan$getSectionLevel()}}
 \item \href{#method-getIntroMarkdown}{\code{ConfigurationPlan$getIntroMarkdown()}}
 \item \href{#method-copySectionContent}{\code{ConfigurationPlan$copySectionContent()}}
 \item \href{#method-copyInput}{\code{ConfigurationPlan$copyInput()}}
 \item \href{#method-copyIntro}{\code{ConfigurationPlan$copyIntro()}}
+\item \href{#method-copyContentFiles}{\code{ConfigurationPlan$copyContentFiles()}}
 \item \href{#method-getObservedDataPath}{\code{ConfigurationPlan$getObservedDataPath()}}
+\item \href{#method-getMolWeightForObservedData}{\code{ConfigurationPlan$getMolWeightForObservedData()}}
 \item \href{#method-getSimulationPath}{\code{ConfigurationPlan$getSimulationPath()}}
+\item \href{#method-getPopulationPath}{\code{ConfigurationPlan$getPopulationPath()}}
 \item \href{#method-getSimulationResultsPath}{\code{ConfigurationPlan$getSimulationResultsPath()}}
 \item \href{#method-getPKAnalysisResultsPath}{\code{ConfigurationPlan$getPKAnalysisResultsPath()}}
+\item \href{#method-updateTheme}{\code{ConfigurationPlan$updateTheme()}}
 }
 }
 \if{html}{\out{<hr>}}
@@ -108,6 +121,26 @@ Get location of .md file corresponding to a specific section Id
 }
 \subsection{Returns}{
 The markdown file corresponding to the id in the configuration plan field `sections`
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getSectionLevel"></a>}}
+\if{latex}{\out{\hypertarget{method-getSectionLevel}{}}}
+\subsection{Method \code{getSectionLevel()}}{
+Get section level
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$getSectionLevel(id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id}}{section identifier}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Section level
 }
 }
 \if{html}{\out{<hr>}}
@@ -181,12 +214,42 @@ Copy intro to intro markdown
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-copyContentFiles"></a>}}
+\if{latex}{\out{\hypertarget{method-copyContentFiles}{}}}
+\subsection{Method \code{copyContentFiles()}}{
+If available, copy all files and folders of `Content` directory into `<workflowFolder>`
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$copyContentFiles()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-getObservedDataPath"></a>}}
 \if{latex}{\out{\hypertarget{method-getObservedDataPath}{}}}
 \subsection{Method \code{getObservedDataPath()}}{
 Get location of observed data corresponding to a specific observedDataSet Id
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$getObservedDataPath(id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id}}{observedDataSet identifier}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The observed data file path corresponding to the id in the configuration plan field `observedDataSet`
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getMolWeightForObservedData"></a>}}
+\if{latex}{\out{\hypertarget{method-getMolWeightForObservedData}{}}}
+\subsection{Method \code{getMolWeightForObservedData()}}{
+Get molecular weight of observed data corresponding to a specific observedDataSet Id
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$getMolWeightForObservedData(id)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -220,6 +283,28 @@ Get location of simulation file corresponding to a specific simulation and proje
 }
 \subsection{Returns}{
 The simulation file path corresponding to the project and simulation in the configuration plan field `simulationMappings`
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getPopulationPath"></a>}}
+\if{latex}{\out{\hypertarget{method-getPopulationPath}{}}}
+\subsection{Method \code{getPopulationPath()}}{
+Get location of population file corresponding to a specific simulation and project names
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$getPopulationPath(project, simulation)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{project}}{name of simulation project}
+
+\item{\code{simulation}}{name of the simulation}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The population file path corresponding to the project and simulation in the configuration plan field `simulationMappings`
 }
 }
 \if{html}{\out{<hr>}}
@@ -265,5 +350,15 @@ Get location of PK Analysis result file corresponding to a specific simulation a
 \subsection{Returns}{
 The PKAnalysis results file path corresponding to the project and simulation in the configuration plan field `simulationMappings`
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateTheme"></a>}}
+\if{latex}{\out{\hypertarget{method-updateTheme}{}}}
+\subsection{Method \code{updateTheme()}}{
+Update environment theme that will be used as default during workflow
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$updateTheme()}\if{html}{\out{</div>}}
+}
+
 }
 }

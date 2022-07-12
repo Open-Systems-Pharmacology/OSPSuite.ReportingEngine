@@ -28,3 +28,4 @@ SA results for population
 Spawn cores, divide parameters among cores, run sensitivity analysis on cores
 for a single individual, save results as CSV.
 }
+\keyword{internal}

@@ -16,3 +16,8 @@ names of default demography parameters
 \description{
 Get names of default demography parameters in x axis of demography plots.
 }
+\examples{
+
+getDefaultDemographyXParameters(PopulationWorkflowTypes$pediatric)
+
+}

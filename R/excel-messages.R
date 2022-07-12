@@ -2,7 +2,8 @@
 #' @description  R6 class for tracking and printing messages for the Excel template
 #' @field type "warnings" or "errors" (could potentially include other kind of information)
 #' @field messages list of messages included in each script section
-#' @export
+#' @importFrom ospsuite.utils %||%
+#' @keywords internal
 ExcelMessaging <- R6::R6Class(
   "ExcelMessaging",
   cloneable = FALSE,

@@ -6,6 +6,31 @@
 \description{
 R6 class for PopulationPlotTask settings
 }
+\seealso{
+Other workflow tasks: 
+\code{\link{GofPlotTask}},
+\code{\link{PlotTask}},
+\code{\link{PopulationSensitivityAnalysisTask}},
+\code{\link{QualificationTask}},
+\code{\link{SensitivityAnalysisTask}},
+\code{\link{Task}},
+\code{\link{addUserDefinedTask}()},
+\code{\link{loadCalculatePKParametersTask}()},
+\code{\link{loadCalculateSensitivityTask}()},
+\code{\link{loadGOFMergedTask}()},
+\code{\link{loadPlotAbsorptionTask}()},
+\code{\link{loadPlotDDIRatioTask}()},
+\code{\link{loadPlotDemographyTask}()},
+\code{\link{loadPlotMassBalanceTask}()},
+\code{\link{loadPlotPKParametersTask}()},
+\code{\link{loadPlotPKRatioTask}()},
+\code{\link{loadPlotSensitivityTask}()},
+\code{\link{loadPlotTimeProfilesAndResidualsTask}()},
+\code{\link{loadQualificationComparisonTimeProfileTask}()},
+\code{\link{loadQualificationTimeProfilesTask}()},
+\code{\link{loadSimulateTask}()}
+}
+\concept{workflow tasks}
 \section{Super classes}{
 \code{\link[ospsuite.reportingengine:Task]{ospsuite.reportingengine::Task}} -> \code{\link[ospsuite.reportingengine:PlotTask]{ospsuite.reportingengine::PlotTask}} -> \code{PopulationPlotTask}
 }
@@ -78,7 +103,7 @@ A new `PopulationPlotTask` object
 \if{html}{\out{<a id="method-saveResults"></a>}}
 \if{latex}{\out{\hypertarget{method-saveResults}{}}}
 \subsection{Method \code{saveResults()}}{
-Save results from task run.
+Save the task results
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationPlotTask$saveResults(taskResults)}\if{html}{\out{</div>}}
 }
@@ -87,9 +112,8 @@ Save results from task run.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{taskResults}}{list of results from task run.
-Results contains at least 2 fields: `plots` and `tables`}
-
-\item{\code{self$fileName}}{name of report}
+Currently, results contains at least 2 fields: `plots` and `tables`
+They are to be deprecated and replaced using `TaskResults` objects}
 }
 \if{html}{\out{</div>}}
 }

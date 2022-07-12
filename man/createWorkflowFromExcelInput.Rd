@@ -23,3 +23,4 @@ An R script of name `workflowFile` to be run
 \description{
 Creates an R script for running mean model or population workflows from an Excel file
 }
+\concept{worfklow helpers}

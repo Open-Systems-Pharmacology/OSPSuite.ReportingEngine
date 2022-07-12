@@ -1,30 +1,11 @@
 context("Run population workflows with Demography task")
 
+# Get test data
 simulationFile <- getTestDataFilePath("input-data/Larson 2013 8-18y meal.pkml")
 populationFilePeds <- getTestDataFilePath("input-data/Larson 2013 8-18y meal-Population.csv")
 populationFileAdults <- getTestDataFilePath("input-data/Raltegravir Adult Population.csv")
 
-refWorkflowStructure <- sort(c(
-  "log-debug.txt", "log-info.txt",
-  "Report-word.md", "Report.docx", "Report.md",
-  "Demography"
-))
-
-demographyStructure <- sort(c(
-  paste(c("Gender", "Age", "BMI", "Height", "Weight"), "Adults.png", sep = "-"),
-  paste(c("Gender", "Age", "BMI", "Height", "Weight"), "Pediatric.png", sep = "-")
-))
-
-demographyStructurePeds <- NULL
-for (popName in c("Adults", "Pediatric", "Pediatric-vs-ref")){
-  for(parName in c("BMI", "Height", "Weight")){
-    demographyStructurePeds <- c(demographyStructurePeds, 
-                                 paste(popName, parName, c("vs-Age.png", "vs-Age-log.png"), sep = "-"))
-  }
-}
-demographyStructurePeds <- sort(demographyStructurePeds)
-
-
+# Define list of files necessary in Demography directory
 setPeds <- PopulationSimulationSet$new(
   simulationSetName = "Pediatric",
   simulationFile = simulationFile,
@@ -41,15 +22,21 @@ workflowFolderPediatric <- "test-demography-pediatric"
 workflowFolderParallel <- "test-demography-parallel"
 workflowFolderRatio <- "test-demography-ratio"
 
-workflowPediatric <- PopulationWorkflow$new(workflowType = PopulationWorkflowTypes$pediatric, 
-                                            simulationSets = c(setAdults, setPeds), 
-                                            workflowFolder = workflowFolderPediatric)
-workflowParallel <- PopulationWorkflow$new(workflowType = PopulationWorkflowTypes$parallelComparison, 
-                                            simulationSets = c(setAdults, setPeds), 
-                                            workflowFolder = workflowFolderParallel)
-workflowRatio <- PopulationWorkflow$new(workflowType = PopulationWorkflowTypes$ratioComparison, 
-                                            simulationSets = c(setAdults, setPeds), 
-                                            workflowFolder = workflowFolderRatio)
+workflowPediatric <- PopulationWorkflow$new(
+  workflowType = PopulationWorkflowTypes$pediatric,
+  simulationSets = c(setAdults, setPeds),
+  workflowFolder = workflowFolderPediatric
+)
+workflowParallel <- PopulationWorkflow$new(
+  workflowType = PopulationWorkflowTypes$parallelComparison,
+  simulationSets = c(setAdults, setPeds),
+  workflowFolder = workflowFolderParallel
+)
+workflowRatio <- PopulationWorkflow$new(
+  workflowType = PopulationWorkflowTypes$ratioComparison,
+  simulationSets = c(setAdults, setPeds),
+  workflowFolder = workflowFolderRatio
+)
 
 workflowPediatric$inactivateTasks()
 workflowParallel$inactivateTasks()
@@ -62,16 +49,42 @@ workflowPediatric$runWorkflow()
 workflowParallel$runWorkflow()
 workflowRatio$runWorkflow()
 
-test_that("Workflows generate appropriate files and folders", {
-  expect_equal(list.files(workflowPediatric$workflowFolder), refWorkflowStructure)
-  expect_equal(list.files(workflowParallel$workflowFolder), refWorkflowStructure)
-  expect_equal(list.files(workflowRatio$workflowFolder), refWorkflowStructure)
+test_that("Workflow generates appropriate number of files", {
+  # Log files
+  expect_length(list.files(workflowPediatric$workflowFolder, pattern = ".txt"), 2)
+  expect_length(list.files(workflowParallel$workflowFolder, pattern = ".txt"), 2)
+  expect_length(list.files(workflowRatio$workflowFolder, pattern = ".txt"), 2)
+  # Reports
+  expect_length(list.files(workflowPediatric$workflowFolder, pattern = ".md"), 2)
+  expect_length(list.files(workflowPediatric$workflowFolder, pattern = ".docx"), 1)
+  expect_length(list.files(workflowParallel$workflowFolder, pattern = ".md"), 2)
+  expect_length(list.files(workflowParallel$workflowFolder, pattern = ".docx"), 1)
+  expect_length(list.files(workflowRatio$workflowFolder, pattern = ".md"), 2)
+  expect_length(list.files(workflowRatio$workflowFolder, pattern = ".docx"), 1)
 })
 
-test_that("Demography directory includes appropriate files and folders", {
-  expect_equal(sort(list.files(file.path(workflowPediatric$workflowFolder, "Demography"))), sort(demographyStructurePeds))
-  expect_equal(sort(list.files(file.path(workflowParallel$workflowFolder, "Demography"))), sort(demographyStructure))
-  expect_equal(sort(list.files(file.path(workflowRatio$workflowFolder, "Demography"))), sort(demographyStructure))
+demographyPediatricPath <- file.path(workflowPediatric$workflowFolder, "Demography")
+test_that("Demography directory from Pediatric workflow includes appropriate number of files", {
+  # Figures
+  expect_length(list.files(demographyPediatricPath, pattern = ".png"), 18)
+  # Exported results
+  expect_length(list.files(demographyPediatricPath, pattern = ".csv"), 0)
+})
+
+demographyParallelPath <- file.path(workflowParallel$workflowFolder, "Demography")
+test_that("Demography directory from Parallel workflow includes appropriate number of files", {
+  # Figures
+  expect_length(list.files(demographyParallelPath, pattern = ".png"), 10)
+  # Exported results
+  expect_length(list.files(demographyParallelPath, pattern = ".csv"), 0)
+})
+
+demographyRatioPath <- file.path(workflowRatio$workflowFolder, "Demography")
+test_that("Demography directory from Ratio workflow includes appropriate number of files", {
+  # Figures
+  expect_length(list.files(demographyRatioPath, pattern = ".png"), 10)
+  # Exported results
+  expect_length(list.files(demographyRatioPath, pattern = ".csv"), 0)
 })
 
 # Clear test workflow folders

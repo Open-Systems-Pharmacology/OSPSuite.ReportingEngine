@@ -19,3 +19,4 @@ ids, IDs of individuals whose PK analysis results closest to quantiles given by 
 Find IDs of individuals whose PK analysis results closest toquantiles given
 by vector of quantiles quantileVec
 }
+\keyword{internal}

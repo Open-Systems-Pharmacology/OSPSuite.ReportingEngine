@@ -13,4 +13,20 @@ PopulationWorkflowTypes
 \description{
 List of population workflow available types
 }
+\examples{
+
+# Lists available Population Workflow types
+PopulationWorkflowTypes
+
+}
+\seealso{
+Other enum helpers: 
+\code{\link{AllAvailableTasks}},
+\code{\link{ApplicationRanges}},
+\code{\link{DataSelectionKeys}},
+\code{\link{ResidualScales}},
+\code{\link{StandardPlotTasks}},
+\code{\link{StandardSimulationTasks}}
+}
+\concept{enum helpers}
 \keyword{datasets}

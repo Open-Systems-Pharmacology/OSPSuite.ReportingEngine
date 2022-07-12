@@ -9,7 +9,6 @@ testDataDisplayName <- "My test data"
 test_that("Output requires a 'path' as a single character value", {
   expect_error(Output$new())
   expect_error(Output$new(path = NULL))
-  expect_error(Output$new(path = data.frame(testPath)))
   expect_error(Output$new(path = c(testPath, testPath)))
   expect_silent(Output$new(path = testPath))
 
@@ -42,7 +41,6 @@ test_that("Output 'displayUnit' is checked and set properly", {
   outputPathUnit <- Output$new(path = testPath, displayUnit = testPathUnit)
   expect_equal(outputPathUnit$displayUnit, testPathUnit)
 
-  expect_error(Output$new(path = testPath, dislpayUnit = data.frame(testPathUnit)))
   expect_error(Output$new(path = testPath, dislpayUnit = c(testPathUnit, testPathUnit)))
 })
 
@@ -54,7 +52,6 @@ test_that("Output 'dataDisplayName' is checked and set properly", {
   outputDataDisplay <- Output$new(path = testPath, dataDisplayName = testDataDisplayName)
   expect_equal(outputDataDisplay$dataDisplayName, testDataDisplayName)
 
-  expect_error(Output$new(path = testPath, dataDisplayName = data.frame(testDataDisplayName)))
   expect_error(Output$new(path = testPath, dataDisplayName = c(testDataDisplayName, testDataDisplayName)))
 })
 
@@ -73,7 +70,6 @@ test_that("Output 'dataSelection' is checked and set properly", {
   expect_is(outputFilter$dataSelection, "expression")
   expect_equivalent(deparse(outputFilter$dataSelection), deparse(parse(text = testDataSelection)))
 
-  expect_error(Output$new(path = testPath, dataSelection = data.frame(testDataSelection)))
   expect_error(Output$new(path = testPath, dataSelection = c(testDataSelection, testDataSelection)))
 })
 
@@ -88,7 +84,6 @@ test_that("'PkParameterInfo' works properly", {
   expect_is(PkParameterInfo$new(pkParameter = myTestAUCName), "PkParameterInfo")
 
   expect_error(PkParameterInfo$new())
-  expect_error(PkParameterInfo$new(pkParameter = data.frame(myTestAUCName)))
   expect_error(PkParameterInfo$new(pkParameter = c(myTestAUCName, myTestAUCName)))
   # This test check if unexisting PK parameter names are flagged
   expect_error(PkParameterInfo$new(pkParameter = myTestWrongName))
@@ -115,8 +110,6 @@ test_that("'PkParameterInfo' works properly", {
   expect_equal(myCmax$displayName, myTestCmaxDisplayName)
   expect_equal(myCmax$displayUnit, myTestCmaxDisplayUnit)
 
-  expect_error(PkParameterInfo$new(pkParameter = myTestCmaxName, displayName = data.frame(myTestCmaxDisplayName)))
-  expect_error(PkParameterInfo$new(pkParameter = myTestCmaxName, displayUnit = data.frame(myTestCmaxDisplayUnit)))
   expect_error(PkParameterInfo$new(pkParameter = myTestCmaxName, displayName = c(myTestCmaxDisplayName, myTestCmaxDisplayName)))
   expect_error(PkParameterInfo$new(pkParameter = myTestCmaxName, displayUnit = c(myTestCmaxDisplayUnit, myTestCmaxDisplayUnit)))
 })
@@ -133,7 +126,6 @@ test_that("Output 'pkParameters' are checked and set properly", {
 
   expect_silent(Output$new(path = testPath, pkParameters = myTestAUCName))
   expect_silent(Output$new(path = testPath, pkParameters = myTestAUC))
-  expect_error(Output$new(path = testPath, pkParameters = data.frame(myTestAUCName)))
 
   outputAUCName <- Output$new(path = testPath, pkParameters = myTestAUCName)
   outputAUC <- Output$new(path = testPath, pkParameters = myTestAUC)

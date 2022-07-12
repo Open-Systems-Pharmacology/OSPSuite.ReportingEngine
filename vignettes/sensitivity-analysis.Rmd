@@ -1,5 +1,8 @@
 ---
 title: "Sensitivity Analysis"
+resource_files:
+  - figures
+  - reportOutputStyle.css
 output: 
   rmarkdown::html_vignette:
    number_sections: true
@@ -166,12 +169,12 @@ The output report, containing the mean model sensitivity plots from this example
 ```{r mwf render, include=F, echo=F}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(mwf$reportFileName)
+rmarkdown::render(mwf$reportFilePath)
 ```
 
 <div class = "reportOutput">
-```{r mwf report,echo=F}
-htmltools::includeHTML(sub(".md", ".html", mwf$reportFileName))
+```{r mwf report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", mwf$reportFilePath)))
 ```
 </div>
 
@@ -288,17 +291,13 @@ pwf$runWorkflow()
 
 The results of the population sensitivity analysis are found in multiple `.csv` files within the `SensitivityResults` sub-directory of the workflow folder, as shown in the following figure:
 ```{r echo=FALSE, out.width='40%'}
-knitr::include_graphics(system.file("extdata", "sa-file-outputs.png",
-  package = "ospsuite.reportingengine"
-))
+knitr::include_graphics("figures/sa-file-outputs.png")
 ```
 
 Two sets of files make up the population sensitivity analysis results for this example, each corresponding to one of the `PopulationSimulationSet` objects (named `popSimulationSet1` and `popSimulationSet2`). For each set, there is one index file.  The name of the index file is prefixed with the name of the `PopulationSimulationSet` object and carries the suffix `-popSensitivityResultsIndex.csv`).  The index file `popSimulationSet1-popSensitivityResultsIndex.csv` contains the names of the individual sensitivity analysis results files (found within the `SensitivityResults` sub-directory of the workflow folder) obtained for the `PopulationSimulationSet` object `popSimulationSet1`.  Its contents are shown in the following figure:
 
 ```{r echo=FALSE, out.width='100%'}
-knitr::include_graphics(system.file("extdata", "sa-file-index.png",
-  package = "ospsuite.reportingengine"
-))
+knitr::include_graphics("figures/sa-file-index.png")
 ```
 
 Two output paths are shown corresponding to `output1` (pink), `output2` (blue).  Note that, as per the definitions of `output1` and `output2`, the only PK parameters analyzed for those two outputs are `C_max` and `MRT` for `output1` and `t_max` and `AUC_tEnd`  for `output2`.  For each model output and PK parameter combination, there are sensitivity analysis result files for three individuals given under the `Filename` column, each corresponding to one of the quantiles specified using `pwf$calculateSensitivity$settings$quantileVec`.
@@ -308,12 +307,12 @@ The output report, containing the population sensitivity plots from this example
 ```{r pwf render, include=F, echo=F}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(pwf$reportFileName)
+rmarkdown::render(pwf$reportFilePath)
 ```
 
 <div class = "reportOutput">
-```{r pwf report,echo=F}
-htmltools::includeHTML(sub(".md", ".html", pwf$reportFileName))
+```{r pwf report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", pwf$reportFilePath)))
 ```
 </div>
 

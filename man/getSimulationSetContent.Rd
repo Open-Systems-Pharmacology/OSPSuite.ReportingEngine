@@ -19,3 +19,4 @@ Character vector defining the `SimulationSet` objects
 \description{
 Creates a character vector to be written in a workflow .R script defining `SimulationSet` objects.
 }
+\keyword{internal}

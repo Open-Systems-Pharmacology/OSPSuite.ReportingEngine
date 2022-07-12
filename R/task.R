@@ -5,6 +5,9 @@
 #' @field workflowFolder folder where workflow is run and saved
 #' @field settings list of settings for task such as plot configurations
 #' @field message message or title of the task
+#' @export
+#' @import ospsuite.utils
+#' @family workflow tasks
 Task <- R6::R6Class(
   "Task",
   public = list(
@@ -27,13 +30,13 @@ Task <- R6::R6Class(
     #' @param message message of the `Task`.
     #' @return A new `Task` object
     initialize = function(outputFolder = NULL,
-                              inputFolder = NULL,
-                              inputs = NULL,
-                              outputs = NULL,
-                              workflowFolder = getwd(),
-                              settings = NULL,
-                              active = FALSE,
-                              message = NULL) {
+                          inputFolder = NULL,
+                          inputs = NULL,
+                          outputs = NULL,
+                          workflowFolder = getwd(),
+                          settings = NULL,
+                          active = FALSE,
+                          message = NULL) {
       validateIsOfType(active, "logical")
       validateIsString(c(outputFolder, inputFolder, inputs, outputs), nullAllowed = TRUE)
 
@@ -68,6 +71,7 @@ Task <- R6::R6Class(
           isValid <- FALSE
           logWorkflow(
             message = messages$errorTaskInputDoesNotExist(inputToCheck),
+            pathFolder = self$workflowFolder,
             logTypes = c(LogTypes$Error, LogTypes$Debug)
           )
         }
@@ -80,7 +84,6 @@ Task <- R6::R6Class(
     #' @return logical indicating if input is valid
     validateStructureSetInput = function(structureSet) {
       validateIsOfType(structureSet, "SimulationStructure")
-      isValid <- TRUE
       # Get only the input from the structure set
       structureSetInputs <- c(
         structureSet$simulationResultFileNames,
@@ -88,17 +91,21 @@ Task <- R6::R6Class(
         structureSet$sensitivityAnalysisResultsFileNames
       )
       inputsToCheck <- intersect(structureSetInputs, private$.inputs)
-
-      for (inputToCheck in inputsToCheck) {
-        if (!file.exists(inputToCheck)) {
-          isValid <- FALSE
-          logWorkflow(
-            message = messages$errorTaskInputDoesNotExist(inputToCheck),
-            logTypes = c(LogTypes$Error, LogTypes$Debug)
-          )
-        }
+      # If no required input
+      if(isEmpty(inputsToCheck)){
+        return(TRUE)
       }
-      return(isValid)
+      
+      # TODO: update after PR about logging
+      tryCatch({
+        validateFileExists(inputsToCheck, nullAllowed = TRUE)
+      },
+      error = function(e){
+        missingInputs <- inputsToCheck[!file.exists(inputsToCheck)]
+        logErrorThenStop(message = messages$errorTaskInputDoesNotExist(missingInputs), self$workflowFolder)
+      })
+      # If no error is caught, return isValid = TRUE
+      return(TRUE)
     },
 
     #' @description
@@ -115,13 +122,13 @@ Task <- R6::R6Class(
         sprintf("Task is%s active", taskActiveMessage),
         sprintf("Workflow folder: %s", self$workflowFolder %||% ""),
         sprintf("Expected input folder: %s", private$.inputFolder %||% "none"),
-        sprintf("Expected input files: %s", ifnotnull(
+        sprintf("Expected input files: %s", ifNotNull(
           private$.inputs,
           paste0(private$.inputs, collapse = ", "),
           "none"
         )),
         sprintf("Expected output folder: %s", self$outputFolder %||% "none"),
-        sprintf("Expected output files: %s", ifnotnull(
+        sprintf("Expected output files: %s", ifNotNull(
           private$.outputs,
           paste0(private$.outputs, collapse = ", "),
           "none"
@@ -135,7 +142,7 @@ Task <- R6::R6Class(
     #' Get the relative path to a file to be output by this task
     #' @param fileName name (with extension) of the file to be output
     #' @return Output file's relative path
-    getRelativePath = function(fileName){
+    getRelativePath = function(fileName) {
       return(file.path(self$outputFolder, fileName))
     },
 
@@ -143,8 +150,8 @@ Task <- R6::R6Class(
     #' Get the absolute path to a file to be output by this task
     #' @param fileName name (with extension) of the file to be output
     #' @return Output file's absolute path
-    getAbsolutePath = function(fileName){
-      return(file.path(self$workflowFolder,self$outputFolder, fileName))
+    getAbsolutePath = function(fileName) {
+      return(file.path(self$workflowFolder, self$outputFolder, fileName))
     },
 
     #' @description

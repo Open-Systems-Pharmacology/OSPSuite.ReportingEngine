@@ -6,6 +6,7 @@
 \description{
 R6 class defining properties of time profiles and residuals plot task settings
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[ospsuite.reportingengine:TaskSettings]{ospsuite.reportingengine::TaskSettings}} -> \code{GofTaskSettings}
 }
@@ -21,6 +22,8 @@ R6 class defining properties of time profiles and residuals plot task settings
 \describe{
 \item{\code{includeReferenceData}}{logical defining if reference population should be included in
 time profiles and residual plots when applicable}
+
+\item{\code{outputSelections}}{is a subset of paths of all outputs belonging to a simulation set, to be used to generate a plot with only selected outputs}
 }
 \if{html}{\out{</div>}}
 }
@@ -43,13 +46,18 @@ time profiles and residual plots when applicable}
 \subsection{Method \code{new()}}{
 Create a `GofTaskSettings` object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{GofTaskSettings$new(taskName = AllAvailableTasks$plotTimeProfilesAndResiduals)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{GofTaskSettings$new(
+  taskName = AllAvailableTasks$plotTimeProfilesAndResiduals,
+  outputSelections = NULL
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{taskName}}{name of the task using the settings}
+
+\item{\code{outputSelections}}{subset of simulationSet outputs to be used in GoF plot}
 }
 \if{html}{\out{</div>}}
 }

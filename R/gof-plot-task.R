@@ -1,25 +1,27 @@
 #' @title GofPlotTask
 #' @description  R6 class for GofPlotTask settings
 #' @export
+#' @family workflow tasks
 GofPlotTask <- R6::R6Class(
   "GofPlotTask",
   inherit = PlotTask,
-
   public = list(
-
     #' @description
-    #' Save results from task run.
-    #' @param set R6 class `SimulationStructure`
+    #' Save the task results related to a `structureSet`.
+    #' @param structureSet A `SimulationStructure` object defining the properties of a simulation set
     #' @param taskResults list of results from task run.
-    #' Results contains at least 2 fields: `plots` and `tables`
-    saveResults = function(set,
-                               taskResults) {
+    #' Currently, results contains at least 2 fields: `plots` and `tables`
+    #' They are to be deprecated and replaced using `TaskResults` objects
+    saveResults = function(structureSet, taskResults) {
+      simulationSetName <- structureSet$simulationSet$simulationSetName
       addTextChunk(
-        self$fileName,
-        paste0("## ", self$title, " for ", set$simulationSet$simulationSetName),
+        fileName = self$fileName,
+        text = c(
+          anchor(paste0(self$reference, "-", removeForbiddenLetters(simulationSetName))), "",
+          paste0("## ", self$title, " for ", simulationSetName)
+        ),
         logFolder = self$workflowFolder
       )
-
       # For mutliple applications, taskResults$plots has 3 fields named as ApplicationRanges
       # Sub sections are created if more than one field are kept
       hasMultipleApplications <- (length(taskResults$plots) > 1)
@@ -27,24 +29,27 @@ GofPlotTask <- R6::R6Class(
       for (timeRange in ApplicationRanges) {
         listOfPlots <- taskResults$plots[[timeRange]]
         listOfPlotCaptions <- taskResults$captions[[timeRange]]
-        
+
         if (isOfLength(listOfPlots, 0)) {
           next
         }
         if (hasMultipleApplications) {
-          addTextChunk(self$fileName, getTimeRangeCaption(timeRange), logFolder = self$workflowFolder)
+          addTextChunk(self$fileName, getTimeRangeCaption(timeRange, self$reference, simulationSetName), logFolder = self$workflowFolder)
         }
         # Save and include plot paths to report
         for (plotName in names(listOfPlots)) {
-          plotFileName <- getDefaultFileName(set$simulationSet$simulationSetName,
+          plotFileName <- getDefaultFileName(simulationSetName,
             suffix = paste0(plotName, "-", timeRange),
-            extension = ExportPlotConfiguration$format
+            extension = reEnv$defaultPlotFormat$format
           )
 
           ggplot2::ggsave(
             filename = self$getAbsolutePath(plotFileName),
             plot = listOfPlots[[plotName]],
-            width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
+            width = reEnv$defaultPlotFormat$width,
+            height = reEnv$defaultPlotFormat$height,
+            units = reEnv$defaultPlotFormat$units,
+            dpi = reEnv$defaultPlotFormat$dpi
           )
 
           re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(plotFileName))
@@ -55,21 +60,20 @@ GofPlotTask <- R6::R6Class(
             logTypes = LogTypes$Debug
           )
 
-          if (!isOfLength(listOfPlotCaptions[[plotName]], 0)) {
-            addTextChunk(self$fileName, paste0("Figure: ", listOfPlotCaptions[[plotName]]), logFolder = self$workflowFolder)
-          }
-
           addFigureChunk(
             fileName = self$fileName,
             figureFileRelativePath = self$getRelativePath(plotFileName),
             figureFileRootDirectory = self$workflowFolder,
             logFolder = self$workflowFolder
           )
+          if (!isEmpty(listOfPlotCaptions[[plotName]])) {
+            addTextChunk(self$fileName, paste0("Figure: ", listOfPlotCaptions[[plotName]]), logFolder = self$workflowFolder)
+          }
         }
       }
 
       for (tableName in names(taskResults$tables)) {
-        tableFileName <- getDefaultFileName(set$simulationSet$simulationSetName,
+        tableFileName <- getDefaultFileName(simulationSetName,
           suffix = tableName,
           extension = "csv"
         )
@@ -91,9 +95,8 @@ GofPlotTask <- R6::R6Class(
     },
 
     #' @description
-    #' Run task and save its output
-    #' @param structureSets list of `SimulationStructure` R6 class
-    #' @param self$fileName name of report file
+    #' Run task and save its output results
+    #' @param structureSets list of `SimulationStructure` objects
     runTask = function(structureSets) {
       actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
       logWorkflow(
@@ -102,8 +105,8 @@ GofPlotTask <- R6::R6Class(
       )
       resetReport(self$fileName, self$workflowFolder)
       addTextChunk(
-        self$fileName,
-        paste0("# ", self$title),
+        fileName = self$fileName,
+        text = c(anchor(self$reference), "", paste0("# ", self$title)),
         logFolder = self$workflowFolder
       )
       if (!is.null(self$outputFolder)) {
@@ -138,7 +141,8 @@ GofPlotTask <- R6::R6Class(
             self$settings
           )
           # If first simulation set was a reference population,
-          # its data will be added to next plots through settings
+          # its simulated, observed and lloq data are added for the next plots through settings
+          # the option plotReferenceObsData from the simulation set will take care of the actual inclusion within the plots
           if (all(isTRUE(set$simulationSet$referencePopulation), isTRUE(self$settings$includeReferenceData))) {
             self$settings$referenceData <- taskResults$referenceData
           }
@@ -160,23 +164,19 @@ GofPlotTask <- R6::R6Class(
       if (!is.null(residualsAcrossAllSimulations)) {
         histogramFileName <- getDefaultFileName(
           suffix = "residuals-histogram",
-          extension = ExportPlotConfiguration$format,
+          extension = reEnv$defaultPlotFormat$format,
           sep = ""
         )
-
         qqPlotFileName <- getDefaultFileName(
           suffix = "residuals-qqplot",
-          extension = ExportPlotConfiguration$format,
+          extension = reEnv$defaultPlotFormat$format,
           sep = ""
         )
-
-
         tableFileName <- getDefaultFileName(
           suffix = "residuals",
           extension = "csv",
           sep = ""
         )
-
 
         write.csv(residualsAcrossAllSimulations,
           file = self$getAbsolutePath(tableFileName),
@@ -206,14 +206,20 @@ GofPlotTask <- R6::R6Class(
         ggplot2::ggsave(
           filename = residualHistogramPlotFileName,
           plot = residualHistogramPlot,
-          width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
+          width = reEnv$defaultPlotFormat$width,
+          height = reEnv$defaultPlotFormat$height,
+          units = reEnv$defaultPlotFormat$units,
+          dpi = reEnv$defaultPlotFormat$dpi
         )
         re.tStoreFileMetadata(access = "write", filePath = residualHistogramPlotFileName)
 
         ggplot2::ggsave(
           filename = self$getAbsolutePath(qqPlotFileName),
           plot = residualQQPlot,
-          width = ExportPlotConfiguration$width, height = ExportPlotConfiguration$height, units = ExportPlotConfiguration$units
+          width = reEnv$defaultPlotFormat$width,
+          height = reEnv$defaultPlotFormat$height,
+          units = reEnv$defaultPlotFormat$units,
+          dpi = reEnv$defaultPlotFormat$dpi
         )
         re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(qqPlotFileName))
 
@@ -229,10 +235,12 @@ GofPlotTask <- R6::R6Class(
           logFolder = self$workflowFolder
         )
 
-        simulationSetNames <- as.character(sapply(structureSets, function(set) {set$simulationSet$simulationSetName}))
+        simulationSetNames <- as.character(sapply(structureSets, function(set) {
+          set$simulationSet$simulationSetName
+        }))
         histogramCaption <- captions$plotGoF$histogram(simulationSetNames, structureSets[[1]]$simulationSetDescriptor)
         addTextChunk(self$fileName, paste0("Figure: ", histogramCaption), logFolder = self$workflowFolder)
-        
+
         addFigureChunk(
           fileName = self$fileName,
           figureFileRelativePath = self$getRelativePath(histogramFileName),

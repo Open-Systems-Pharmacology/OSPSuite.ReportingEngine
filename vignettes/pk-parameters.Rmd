@@ -1,5 +1,8 @@
 ---
 title: "PK parameters"
+resource_files:
+  - figures
+  - reportOutputStyle.css
 output: 
   rmarkdown::html_vignette:
    number_sections: true
@@ -7,7 +10,7 @@ output:
 #   self_contained: false
 #   keep_md: true
 vignette: >
-  %\VignetteIndexEntry{pk-parameters}
+  %\VignetteIndexEntry{PK parameters}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -70,10 +73,10 @@ Table 1 shows the features tested in each template script.
 
 ```{r table 1, echo = FALSE, results='asis'}
 examplesTable <- data.frame(
-  Example = seq(1, 4),
-  Workflow = c(rep("Mean model", 4), rep("Population model", 4)),
-  `Workflow Type` = c(rep("-", 4), c("Parallel", "Parallel", "Ratio", "Pediatric")),
-  `Simulation Sets` = c(1, 1, 2, 2, 1, 2, 2, 2),
+  Example = seq(1, 9),
+  Workflow = c(rep("Mean model", 4), rep("Population model", 5)),
+  `Workflow Type` = c(rep("-", 4), c("Parallel", "Parallel", "Ratio", "Pediatric", "Ratio")),
+  `Simulation Sets` = c(1, 1, 2, 2, 1, 2, 2, 2, 2),
   check.names = FALSE
 )
 knitr::kable(examplesTable, caption = "Table 1: Features tested by each template script")
@@ -125,15 +128,15 @@ workflow1$runWorkflow()
 ```{r example 1 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow1$reportFileName)
+rmarkdown::render(workflow1$reportFilePath)
 ```
 
 The output report for Example 1 is shown below. 
 The table indicates the requested parameters in their base unit.
 
 <div class = "reportOutput">
-```{r example 1 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow1$reportFileName))
+```{r example 1 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow1$reportFilePath)))
 ```
 </div>
 
@@ -191,15 +194,15 @@ workflow2$runWorkflow()
 ```{r example 2 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow2$reportFileName)
+rmarkdown::render(workflow2$reportFilePath)
 ```
 
 The output report for Example 2 is shown below. 
 The table indicates the requested parameters in their base unit.
 
 <div class = "reportOutput">
-```{r example 2 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow2$reportFileName))
+```{r example 2 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow2$reportFilePath)))
 ```
 </div>
 
@@ -215,7 +218,11 @@ In this example, the names and units of the PK parameters are updated using the 
 
 ```{r example 3}
 # Get the pkml simulation file: "MiniModel2.pkml"
-simulationFile <- system.file("extdata", "MiniModel2.pkml",
+simulationFileA <- system.file("extdata", "MiniModel1.pkml",
+  package = "ospsuite.reportingengine"
+)
+
+simulationFileB <- system.file("extdata", "MiniModel2.pkml",
   package = "ospsuite.reportingengine"
 )
 
@@ -240,12 +247,12 @@ outputB <- Output$new(
 
 setA <- SimulationSet$new(
   simulationSetName = "A",
-  simulationFile = simulationFile,
+  simulationFile = simulationFileA,
   outputs = outputA
 )
 setB <- SimulationSet$new(
   simulationSetName = "B",
-  simulationFile = simulationFile,
+  simulationFile = simulationFileB,
   outputs = outputB
 )
 
@@ -268,15 +275,15 @@ workflow3$runWorkflow()
 ```{r example 3 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow3$reportFileName)
+rmarkdown::render(workflow3$reportFilePath)
 ```
 
 The output report for Example 3 is shown below. 
 The table indicates the requested parameters in the updated units and display names.
 
 <div class = "reportOutput">
-```{r example 3 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow3$reportFileName))
+```{r example 3 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow3$reportFilePath)))
 ```
 </div>
 
@@ -355,15 +362,15 @@ workflow4$runWorkflow()
 ```{r example 4 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow4$reportFileName)
+rmarkdown::render(workflow4$reportFilePath)
 ```
 
 The output report for Example 4 is shown below. 
 The table indicates the requested parameters in the updated units and display names.
 
 <div class = "reportOutput">
-```{r example 4 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow4$reportFileName))
+```{r example 4 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow4$reportFilePath)))
 ```
 </div>
 
@@ -427,15 +434,15 @@ workflow5$runWorkflow()
 ```{r example 5 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow5$reportFileName)
+rmarkdown::render(workflow5$reportFilePath)
 ```
 
 The output report for Example 6 is shown below. 
 For the population, Box Whisker plots in linear and log scales are.
 
 <div class = "reportOutput">
-```{r example 5 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow5$reportFileName))
+```{r example 5 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow5$reportFilePath)))
 ```
 </div>
 
@@ -507,15 +514,15 @@ workflow6$runWorkflow()
 ```{r example 6 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow6$reportFileName)
+rmarkdown::render(workflow6$reportFilePath)
 ```
 
 The output report for Example 6 is shown below. 
 For the population, BoxWhisker plots in linear and log scales are.
 
 <div class = "reportOutput">
-```{r example 6 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow6$reportFileName))
+```{r example 6 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow6$reportFilePath)))
 ```
 </div>
 
@@ -584,14 +591,14 @@ workflow7$runWorkflow()
 ```{r example 7 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow7$reportFileName)
+rmarkdown::render(workflow7$reportFilePath)
 ```
 
 The output report for Example 7 is shown below. 
 
 <div class = "reportOutput">
-```{r example 7 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow7$reportFileName))
+```{r example 7 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow7$reportFilePath)))
 ```
 </div>
 
@@ -664,18 +671,118 @@ workflow8$runWorkflow()
 ```{r example 8 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow8$reportFileName)
+rmarkdown::render(workflow8$reportFilePath)
 ```
 
 The output report for Example 8 is shown below. 
 
 <div class = "reportOutput">
-```{r example 8 report, echo=FALSE}
-htmltools::includeHTML(sub(".md", ".html", workflow8$reportFileName))
+```{r example 8 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow8$reportFilePath)))
 ```
 </div>
 
 ```{r delete example 8, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
 unlink(workflow8$workflowFolder, recursive = TRUE)
+```
+
+## Example 9
+
+In some cases, it may be necessary to compare different PK parameters from different simulations.
+Example 9 shows how to define a group identifier in `PkParameterInfo` objects.
+In this example, a user defined PK parameter named `"MyAUC"` is created using the function `addUserDefinedPKParameter`.
+Then, 2 `PkParameterInfo` objects are created with the same value for their field `group` while their field `pkParameter` indicates a different PK parameter.
+If `group` is left undefined, it will take the value defined in `pkParameter` input argument by default.
+
+The workflow created using this method will compare *"AUC_tEnd"* from the first population with *"myAUC"* from the second population.
+
+```{r example 9}
+# Get the pkml simulation file: "MiniModel2.pkml"
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
+populationFile500 <- system.file("extdata", "Pop500_p1p2p3.csv",
+  package = "ospsuite.reportingengine"
+)
+populationFile200 <- system.file("extdata", "Pop200_p1p2p3.csv",
+  package = "ospsuite.reportingengine"
+)
+
+# Create a user defifened PK parameter
+myAUC <- addUserDefinedPKParameter(name = "MyAUC", standardPKParameter = StandardPKParameter$AUC_tEnd)
+myAUC$startTime <- 50
+myAUC$endTime <- 80
+
+# Define PkParameterInfo objects sharing the same groups
+AUC500 <- PkParameterInfo$new(
+  pkParameter = "AUC_tEnd", 
+  group = 1,
+  displayName = "AUC",
+  displayUnit = "µmol*min/l")
+AUC200 <- PkParameterInfo$new(
+  pkParameter = "MyAUC", 
+  group = 1,
+  displayName = "AUC",
+  displayUnit = "µmol*min/l")
+
+# Define the input parameters
+output500 <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "A",
+  pkParameters = AUC500
+)
+output200 <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "A",
+  pkParameters = AUC200
+)
+
+set500 <- PopulationSimulationSet$new(
+  referencePopulation = TRUE,
+  simulationSetName = "500 individuals",
+  simulationFile = simulationFile,
+  populationFile = populationFile500,
+  outputs = output500
+)
+set200 <- PopulationSimulationSet$new(
+  simulationSetName = "200 individuals",
+  simulationFile = simulationFile,
+  populationFile = populationFile200,
+  outputs = output200
+)
+
+# Create the workflow instance
+workflow9 <-
+  PopulationWorkflow$new(
+    workflowType = PopulationWorkflowTypes$ratioComparison,
+    simulationSets = c(set500, set200),
+    workflowFolder = "Example-9"
+  )
+
+# Set the workflow tasks to be run
+workflow9$activateTasks(c("simulate", "calculatePKParameters", "plotPKParameters"))
+workflow9$activateTasks("plotPKParameters")
+
+# Run the workflow
+workflow9$runWorkflow()
+```
+
+```{r example 9 render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflow9$reportFilePath)
+```
+
+The output report for Example 9 is shown below. 
+
+<div class = "reportOutput">
+```{r example 9 report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow9$reportFilePath)))
+```
+</div>
+
+```{r delete example 9, inlcude = FALSE, echo=FALSE}
+# Remove the workflow folders
+unlink(workflow9$workflowFolder, recursive = TRUE)
 ```

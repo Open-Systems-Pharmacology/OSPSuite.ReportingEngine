@@ -24,7 +24,7 @@ captions <- list(
       paste0("Distribution of ", parameterName, " for ", reportSimulationSet(simulationSetName, descriptor))
     },
     rangePlot = function(xParameterName, yParameterName, simulationSetName, descriptor, referenceSetName = NULL, plotScale = "linear") {
-      referenceSetText <- ifnotnull(referenceSetName, paste0(" in comparison to ", referenceSetName), "")
+      referenceSetText <- ifNotNull(referenceSetName, paste0(" in comparison to ", referenceSetName), "")
       return(paste0(
         xParameterName, "-dependence of ", yParameterName, " for ", reportSimulationSet(simulationSetName, descriptor),
         referenceSetText, ". Profiles are plotted in a ", plotScale, " scale."
@@ -32,36 +32,40 @@ captions <- list(
     }
   ),
   plotGoF = list(
-    timeProfile = function(simulationSetName, descriptor, dataSource, plotScale = "linear"){
-      dataSourceText <- ifnotnull(dataSource, paste0(". Data source: ", dataSource), "")
-      return(paste0("Time profiles for ", reportSimulationSet(simulationSetName, descriptor), 
-                    dataSourceText, ". Time profiles are plotted in a ", plotScale, " scale."))
+    timeProfile = function(simulationSetName, descriptor, dataSource, plotScale = "linear") {
+      dataSourceText <- ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
+      return(paste0(
+        "Time profiles for ", reportSimulationSet(simulationSetName, descriptor),
+        dataSourceText, ". Time profiles are plotted in a ", plotScale, " scale."
+      ))
     },
-    obsVsPred = function(simulationSetName, descriptor, dataSource, plotScale = "linear"){
-      dataSourceText <- ifnotnull(dataSource, paste0(". Data source: ", dataSource), "")
-      return(paste0("Predicted vs observed for ", reportSimulationSet(simulationSetName, descriptor), 
-                    dataSourceText, ". Predictions and observations are plotted in a ", plotScale, " scale."))
+    obsVsPred = function(simulationSetName, descriptor, dataSource, plotScale = "linear") {
+      dataSourceText <- ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
+      return(paste0(
+        "Predicted vs observed for ", reportSimulationSet(simulationSetName, descriptor),
+        dataSourceText, ". Predictions and observations are plotted in a ", plotScale, " scale."
+      ))
     },
-    resVsPred = function(simulationSetName, descriptor, dataSource, plotScale = ResidualScales$Linear){
-      dataSourceText <- ifnotnull(dataSource, paste0(". Data source: ", dataSource), "")
+    resVsPred = function(simulationSetName, descriptor, dataSource, plotScale = ResidualScales$Linear) {
+      dataSourceText <- ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
       return(paste0(plotScale, " residuals vs predicted values for ", reportSimulationSet(simulationSetName, descriptor), dataSourceText, "."))
     },
-    resVsTime = function(simulationSetName, descriptor, dataSource, plotScale = ResidualScales$Linear){
-      dataSourceText <- ifnotnull(dataSource, paste0(". Data source: ", dataSource), "")
+    resVsTime = function(simulationSetName, descriptor, dataSource, plotScale = ResidualScales$Linear) {
+      dataSourceText <- ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
       return(paste0(plotScale, " residuals vs time values for ", reportSimulationSet(simulationSetName, descriptor), dataSourceText, "."))
     },
-    resHisto = function(simulationSetName, descriptor, dataSource, plotScale = ResidualScales$Linear){
-      dataSourceText <- ifnotnull(dataSource, paste0(". Data source: ", dataSource), "")
+    resHisto = function(simulationSetName, descriptor, dataSource, plotScale = ResidualScales$Linear) {
+      dataSourceText <- ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
       return(paste0(plotScale, " residuals distribution for ", reportSimulationSet(simulationSetName, descriptor), dataSourceText, "."))
     },
-    resQQPlot = function(simulationSetName, descriptor, dataSource, plotScale = ResidualScales$Linear){
-      dataSourceText <- ifnotnull(dataSource, paste0(". Data source: ", dataSource), "")
+    resQQPlot = function(simulationSetName, descriptor, dataSource, plotScale = ResidualScales$Linear) {
+      dataSourceText <- ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
       return(paste0(plotScale, " residuals for ", reportSimulationSet(simulationSetName, descriptor), dataSourceText, "."))
     },
-    histogram = function(simulationSetName, descriptor){
+    histogram = function(simulationSetName, descriptor) {
       paste0("Distribution of residuals for ", reportSimulationSet(simulationSetName, descriptor), ".")
     },
-    qqPlot = function(simulationSetName, descriptor){
+    qqPlot = function(simulationSetName, descriptor) {
       paste0("Residuals for ", reportSimulationSet(simulationSetName, descriptor), " as quantile-quantile plot.")
     }
   ),
@@ -92,7 +96,7 @@ captions <- list(
       ))
     },
     rangePlot = function(xParameterName, yParameterName, simulationSetName, descriptor, referenceSetName = NULL, plotScale = "linear") {
-      referenceSetText <- ifnotnull(referenceSetName, paste0(" in comparison to ", referenceSetName), "")
+      referenceSetText <- ifNotNull(referenceSetName, paste0(" in comparison to ", referenceSetName), "")
       return(paste0(
         xParameterName, "-dependence of ", yParameterName, " for ", reportSimulationSet(simulationSetName, descriptor),
         referenceSetText, ". Profiles are plotted in a ", plotScale, " scale."
@@ -100,32 +104,38 @@ captions <- list(
     }
   ),
   plotSensitivity = list(
-    mean = function(parameterName, pathName){
+    mean = function(parameterName, pathName) {
       paste0("Most sensitive parameters for ", parameterName, " of ", pathName, ".")
     },
-    population = function(parameterName, pathName, quantiles, simulationSetName, descriptor){
+    population = function(parameterName, pathName, quantiles, simulationSetName, descriptor) {
       quantileText <- paste0(quantiles, collapse = ", ")
-      return(paste0("Most sensitive parameters for ", parameterName, " of ", pathName, 
-                    " for individuals at percentiles ", quantileText, " for ", 
-                    reportSimulationSet(simulationSetName, descriptor), "."))
+      return(paste0(
+        "Most sensitive parameters for ", parameterName, " of ", pathName,
+        " for individuals at percentiles ", quantileText, " for ",
+        reportSimulationSet(simulationSetName, descriptor), "."
+      ))
     }
-    )
+  )
 )
 
-getDataSource <- function(structureSet){
+getDataSource <- function(structureSet) {
   # If no observed data, return null
-  if(isOfLength(structureSet$simulationSet$observedDataFile, 0)){return()}
+  if (isOfLength(structureSet$simulationSet$observedDataFile, 0)) {
+    return()
+  }
   # Use strplit combined with normalizePath to get a vector of path elements
   # Then, cancel elements until observedDataFile diverge from workflowFolder
   observedDataPathElements <- unlist(strsplit(normalizePath(structureSet$simulationSet$observedDataFile, winslash = "/"), "/"))
   workflowPathElements <- unlist(strsplit(normalizePath(structureSet$workflowFolder, winslash = "/"), "/"))
-  
+
   observedDataPathSize <- length(observedDataPathElements)
   workflowPathSize <- length(workflowPathElements)
   isCommonElement <- rep(FALSE, observedDataPathSize)
-  
-  for(pathElementIndex in 1:observedDataPathSize){
-    if(pathElementIndex > workflowPathSize){next}
+
+  for (pathElementIndex in 1:observedDataPathSize) {
+    if (pathElementIndex > workflowPathSize) {
+      next
+    }
     isCommonElement[pathElementIndex] <- (observedDataPathElements[pathElementIndex] == workflowPathElements[pathElementIndex])
   }
   dataSource <- paste0(observedDataPathElements[!isCommonElement], collapse = "/")
@@ -136,8 +146,8 @@ getGoodnessOfFitCaptions <- function(structureSet, plotType, plotScale = "linear
   dataSource <- getDataSource(structureSet)
   simulationSetName <- structureSet$simulationSet$simulationSetName
   setDescriptor <- structureSet$simulationSetDescriptor
-  
-  captionExpression <- parse(text = paste0("plotCaption <- captions$plotGoF$", plotType, "(simulationSetName, setDescriptor, dataSource, plotScale)")) 
+
+  captionExpression <- parse(text = paste0("plotCaption <- captions$plotGoF$", plotType, "(simulationSetName, setDescriptor, dataSource, plotScale)"))
   eval(captionExpression)
   return(plotCaption)
 }
@@ -158,8 +168,12 @@ reportSimulationSet <- function(simulationSetNames, descriptor) {
 }
 
 reportUnit <- function(displayUnit) {
-  if(isOfLength(displayUnit, 0)){return("")}
-  if(displayUnit==""){return("")}
+  if (isOfLength(displayUnit, 0)) {
+    return("")
+  }
+  if (displayUnit == "") {
+    return("")
+  }
   return(paste0(" reported in [", displayUnit, "]"))
 }
 
@@ -178,14 +192,23 @@ addDescriptorToTable <- function(data, descriptor) {
   return(data)
 }
 
-getTimeRangeCaption <- function(timeRangeName) {
+getTimeRangeCaption <- function(timeRangeName, reference, simulationSetName) {
   if (isIncluded(timeRangeName, ApplicationRanges$total)) {
-    return("### For total simulation time range")
+    return(c(
+      anchor(paste0(reference, "-", removeForbiddenLetters(simulationSetName), "-", "total")), "",
+      "### For total simulation time range"
+      ))
   }
   if (isIncluded(timeRangeName, ApplicationRanges$firstApplication)) {
-    return("### For first application range")
+    return(c(
+      anchor(paste0(reference, "-", removeForbiddenLetters(simulationSetName), "-", "first")), "",
+      "### For first application range"
+    ))
   }
   if (isIncluded(timeRangeName, ApplicationRanges$lastApplication)) {
-    return("### For last application range")
+    return(c(
+      anchor(paste0(reference, "-", removeForbiddenLetters(simulationSetName), "-", "last")), "",
+      "### For last application range"
+    ))
   }
 }

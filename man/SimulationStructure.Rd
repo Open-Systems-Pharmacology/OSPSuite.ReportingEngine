@@ -6,6 +6,7 @@
 \description{
 R6 class representing that stores file structure (file names and paths) relating to a particular instance of a simulationSet object
 }
+\keyword{internal}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
@@ -53,7 +54,7 @@ Build and store names of potential subfolders to hold simulation results, pkAnal
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{simulationSet}}{`MeanModelSet` or `PopModelSet` R6 class object}
+\item{\code{simulationSet}}{A `SimulationSet` or `PopulationSimulationSet` object}
 
 \item{\code{workflowFolder}}{output folder of the worklow}
 }

@@ -21,7 +21,11 @@ R6 class representing Reporting Engine Mean Model Set
 
 \item{\code{timeUnit}}{display unit for time variable}
 
-\item{\code{applicationRanges}}{named list of logicals defining which Application ranges are included in
+\item{\code{applicationRanges}}{named list of logicals defining which Application ranges are included in}
+
+\item{\code{minimumSimulationEndTime}}{is the minimum length of time for which a simulation must be run}
+
+\item{\code{timeOffset}}{shift of display time in time profile plots
 reported time profiles and residual plots when applicable}
 }
 \if{html}{\out{</div>}}
@@ -46,7 +50,9 @@ Create a new `SimulationSet` object.
   observedDataFile = NULL,
   observedMetaDataFile = NULL,
   timeUnit = "h",
-  applicationRanges = ApplicationRanges
+  applicationRanges = ApplicationRanges,
+  minimumSimulationEndTime = NULL,
+  timeOffset = 0
 )}\if{html}{\out{</div>}}
 }
 
@@ -66,6 +72,10 @@ Create a new `SimulationSet` object.
 \item{\code{timeUnit}}{display unit for time variable. Default is "h"}
 
 \item{\code{applicationRanges}}{names of application ranges to include in the report. Names are available in enum `ApplicationRanges`.}
+
+\item{\code{minimumSimulationEndTime}}{is the minimum length of time for which a simulation must be run}
+
+\item{\code{timeOffset}}{shift of display time in time profile plots}
 }
 \if{html}{\out{</div>}}
 }

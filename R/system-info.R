@@ -3,6 +3,7 @@
 #' @title isValidatedSystem
 #' @description Check if environment variable is defined and as value \code{'prodrun'}
 #' @return logical assessing if system is validated
+#' @keywords internal
 isValidatedSystem <- function() {
   return(Sys.getenv("VALIDATEDR_ENVIRONMENT") %in% "prodrun")
 }
@@ -10,7 +11,7 @@ isValidatedSystem <- function() {
 #' @title ReportingEngineInfo
 #' @description R6 class representing system information for Reporting Engine
 #' @field Date Date at which the class is initialized
-#' @export
+#' @keywords internal
 ReportingEngineInfo <- R6::R6Class(
   "ReportingEngineInfo",
   public = list(

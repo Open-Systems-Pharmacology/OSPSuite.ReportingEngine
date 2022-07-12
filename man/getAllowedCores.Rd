@@ -10,5 +10,6 @@ getAllowedCores()
 Allowed number of CPU cores for computation
 }
 \description{
-getAllowedCores
+Get allowed number of CPU cores for computation
 }
+\keyword{internal}

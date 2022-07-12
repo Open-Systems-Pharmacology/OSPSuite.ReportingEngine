@@ -1,34 +1,68 @@
 #' @title StandardSimulationTasks
 #' @description Names of simulation tasks performed by both `MeanModelWorkflow` and `PopulationWorkflow` objects
 #' @export
-#' @import ospsuite
-StandardSimulationTasks <- ospsuite::enum(c("simulate", "calculatePKParameters", "calculateSensitivity"))
+#' @family enum helpers
+#' @examples
+#' 
+#' # Lists all available standard simulation task names available in both mean and population workflows
+#' StandardSimulationTasks
+#' 
+StandardSimulationTasks <- enum(c("simulate", "calculatePKParameters", "calculateSensitivity"))
 
 #' @title StandardPlotTasks
 #' @description Names of plot tasks performed by both `MeanModelWorkflow` and `PopulationWorkflow` objects
 #' @export
-#' @import ospsuite
-StandardPlotTasks <- ospsuite::enum(c("plotTimeProfilesAndResiduals", "plotPKParameters", "plotSensitivity"))
+#' @family enum helpers
+#' @examples
+#' 
+#' # Lists all available standard plot task names available in both mean and population workflows
+#' StandardPlotTasks
+#' 
+StandardPlotTasks <- enum(c("plotTimeProfilesAndResiduals", "plotPKParameters", "plotSensitivity"))
 
 #' @title AllAvailableTasks
 #' @description Names of all existing tasks that can be performed by `MeanModelWorkflow` or `PopulationWorkflow` objects
 #' @export
-#' @import ospsuite
+#' @family enum helpers
+#' @examples
+#' 
+#' # Lists all available task names available in mean or population workflows
+#' AllAvailableTasks
+#' 
 AllAvailableTasks <- c(
   StandardSimulationTasks,
   StandardPlotTasks,
-  ospsuite::enum(c("plotDemography", "plotAbsorption", "plotMassBalance"))
+  enum(c("plotDemography", "plotAbsorption", "plotMassBalance"))
 )
 
 #' @title activateWorkflowTasks
 #' @description activates a series of `Tasks` from a `Workflow`
-#' @param workflow `MeanModelWorklfow` or `PopulationWorklfow` object
+#' @param workflow A `Worklfow` object
 #' @param tasks names of the tasks to activate
 #' Default activates all tasks of the workflow using workflow method `workflow$getAllTasks()`
 #' @export
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+#' 
+#' # Use enum helper to get task names
+#' activateWorkflowTasks(
+#' workflow = myWorkflow, 
+#' tasks = StandardSimulationTasks$simulate
+#' )
+#' 
+#' # Default will activate every task of workflow
+#' activateWorkflowTasks(workflow = myWorkflow)
+#' 
+#' }
+#' 
 activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
-  validateIsIncluded(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
+
+  #Using ospsuite.reportingengine version of validateIsIncluded (and not the ospsuite.utils version) as the former has a logFolder argument
+  validateIsIncludedAndLog(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
 
   for (task in tasks) {
     workflow[[task]]$activate()
@@ -41,9 +75,28 @@ activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
 #' @param tasks names of the tasks to activate
 #' Default inactivates all tasks of the workflow using workflow method `workflow$getAllTasks()`
 #' @export
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+#' 
+#' # Use enum helper to get task names
+#' inactivateWorkflowTasks(
+#' workflow = myWorkflow, 
+#' tasks = StandardSimulationTasks$simulate
+#' )
+#' 
+#' # Default will inactivate every task of workflow
+#' inactivateWorkflowTasks(workflow = myWorkflow)
+#' 
+#' }
+#' 
 inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
-  validateIsIncluded(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
+
+  #Using ospsuite.reportingengine version of validateIsIncluded (and not the ospsuite.utils version) as the former has a logFolder argument
+  validateIsIncludedAndLog(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks", logFolder = workflow$workflowFolder)
 
   for (task in tasks) {
     workflow[[task]]$inactivate()
@@ -58,19 +111,34 @@ inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
 #' Default value is `TRUE`
 #' @param settings specific settings for `simulate` task
 #' @return A `SimulationTask` object
+#' @export
+#' @family workflow tasks
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+#' 
+#' # (Re)load a default simulation task for workflow
+#' myWorkflow$simulate <- loadSimulateTask(
+#' workflow = myWorkflow, 
+#' active = TRUE
+#' )
+#' 
+#' # Load a user-defined simulation task for workflow
+#' myWorkflow$userDefinedTasks[["otherSimulations"]] <- loadSimulateTask(
+#' workflow = myWorkflow, 
+#' active = TRUE
+#' )
+#' 
+#' }
+#' 
 loadSimulateTask <- function(workflow, active = TRUE, settings = NULL) {
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
-  taskFunction <- simulateModel
-  nameFunction <- deparse(substitute(simulateModel))
-  if (isOfType(workflow, "PopulationWorkflow")) {
-    taskFunction <- simulateModelForPopulation
-    nameFunction <- deparse(substitute(simulateModelForPopulation))
-  }
 
   return(SimulationTask$new(
-    getTaskResults = taskFunction,
-    nameTaskResults = nameFunction,
+    getTaskResults = simulateWorkflowModels,
+    nameTaskResults = getObjectNameAsString(simulateWorkflowModels),
     outputFolder = defaultTaskOutputFolders$simulate,
     outputs = getSimulationResultFileNames(workflow),
     workflowFolder = workflow$workflowFolder,
@@ -88,13 +156,34 @@ loadSimulateTask <- function(workflow, active = TRUE, settings = NULL) {
 #' Default value is `FALSE`
 #' @param settings specific settings for `calculatePKParameters` task
 #' @return A `CalculatePKParametersTask` object
+#' @export
+#' @family workflow tasks
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+#' 
+#' # (Re)load a default calculatePKParameters task for workflow
+#' myWorkflow$calculatePKParameters <- loadCalculatePKParametersTask(
+#' workflow = myWorkflow, 
+#' active = TRUE
+#' )
+#' 
+#' # Load a user-defined simulation task for workflow
+#' myWorkflow$userDefinedTasks[["pkParameters"]] <- loadCalculatePKParametersTask(
+#' workflow = myWorkflow, 
+#' active = TRUE
+#' )
+#' 
+#' }
+#' 
 loadCalculatePKParametersTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
 
   return(CalculatePKParametersTask$new(
     getTaskResults = calculatePKParameters,
-    nameTaskResults = deparse(substitute(calculatePKParameters)),
+    nameTaskResults = getObjectNameAsString(calculatePKParameters),
     outputFolder = defaultTaskOutputFolders$calculatePKParameters,
     inputFolder = defaultTaskOutputFolders$simulate,
     inputs = getSimulationResultFileNames(workflow),
@@ -115,6 +204,27 @@ loadCalculatePKParametersTask <- function(workflow, active = FALSE, settings = N
 #' @param settings specific settings for `calculateSensitivity` task
 #' @return A `PopulationSensitivityAnalysisTask` for `PopulationWorkflow` objects.
 #' A `SensitivityAnalysisTask` object otherwise
+#' @export
+#' @family workflow tasks
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+#' 
+#' # (Re)load a default calculateSensitivity task for workflow
+#' myWorkflow$calculateSensitivity <- loadCalculateSensitivityTask(
+#' workflow = myWorkflow, 
+#' active = TRUE
+#' )
+#' 
+#' # Load a user-defined simulation task for workflow
+#' myWorkflow$userDefinedTasks[["sensitivity"]] <- loadCalculateSensitivityTask(
+#' workflow = myWorkflow, 
+#' active = TRUE
+#' )
+#' 
+#' }
+#' 
 loadCalculateSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
@@ -122,7 +232,7 @@ loadCalculateSensitivityTask <- function(workflow, active = FALSE, settings = NU
   if (isOfType(workflow, "PopulationWorkflow")) {
     return(PopulationSensitivityAnalysisTask$new(
       getTaskResults = runPopulationSensitivityAnalysis,
-      nameTaskResults = deparse(substitute(runPopulationSensitivityAnalysis)),
+      nameTaskResults = getObjectNameAsString(runPopulationSensitivityAnalysis),
       outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
       outputs = getPopulationSensitivityAnalysisResultsFileNames(workflow),
       inputFolder = defaultTaskOutputFolders$calculatePKParameters,
@@ -136,7 +246,7 @@ loadCalculateSensitivityTask <- function(workflow, active = FALSE, settings = NU
 
   return(SensitivityAnalysisTask$new(
     getTaskResults = runSensitivity,
-    nameTaskResults = deparse(substitute(runSensitivity)),
+    nameTaskResults = getObjectNameAsString(runSensitivity),
     outputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
     outputs = getMeanSensitivityAnalysisResultsFileNames(workflow),
     workflowFolder = workflow$workflowFolder,
@@ -154,6 +264,28 @@ loadCalculateSensitivityTask <- function(workflow, active = FALSE, settings = NU
 #' Default value is `TRUE`
 #' @param settings specific settings for `simulate` task
 #' @return A `GofPlotTask` object
+#' @import ospsuite.utils
+#' @export
+#' @family workflow tasks
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+#' 
+#' # (Re)load a default plotTimeProfilesAndResiduals task for workflow
+#' myWorkflow$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(
+#' workflow = myWorkflow, 
+#' active = TRUE
+#' )
+#' 
+#' # Load a user-defined simulation task for workflow
+#' myWorkflow$userDefinedTasks[["plotGoodnessOfFit"]] <- loadPlotTimeProfilesAndResidualsTask(
+#' workflow = myWorkflow, 
+#' active = TRUE
+#' )
+#' 
+#' }
+#' 
 loadPlotTimeProfilesAndResidualsTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
@@ -161,14 +293,15 @@ loadPlotTimeProfilesAndResidualsTask <- function(workflow, active = FALSE, setti
   settings <- settings %||% GofTaskSettings$new(AllAvailableTasks$plotTimeProfilesAndResiduals)
 
   taskFunction <- plotMeanGoodnessOfFit
-  nameFunction <- deparse(substitute(plotMeanGoodnessOfFit))
+  nameFunction <- getObjectNameAsString(plotMeanGoodnessOfFit)
   if (isOfType(workflow, "PopulationWorkflow")) {
     taskFunction <- plotPopulationGoodnessOfFit
-    nameFunction <- deparse(substitute(plotPopulationGoodnessOfFit))
+    nameFunction <- getObjectNameAsString(plotPopulationGoodnessOfFit)
   }
 
   return(GofPlotTask$new(
     reportTitle = defaultWorkflowTitles$plotGoF,
+    reportReference = defaultWorkflowReferences$plotGoF,
     fileName = defaultWorkflowAppendices$plotGoF,
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
@@ -192,6 +325,28 @@ loadPlotTimeProfilesAndResidualsTask <- function(workflow, active = FALSE, setti
 #' @param settings specific settings for `plotPKParameters` task
 #' @return A `PopulationSensitivityAnalysisTask` for `PopulationWorkflow` objects.
 #' A `SensitivityAnalysisTask` object otherwise
+#' @export
+#' @import ospsuite.utils
+#' @family workflow tasks
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+#' 
+#' # (Re)load a default plotPKParameters task for workflow
+#' myWorkflow$plotPKParameters <- loadPlotPKParametersTask(
+#' workflow = myWorkflow, 
+#' active = TRUE
+#' )
+#' 
+#' # Load a user-defined simulation task for workflow
+#' myWorkflow$userDefinedTasks[["plotPK"]] <- loadPlotPKParametersTask(
+#' workflow = myWorkflow, 
+#' active = TRUE
+#' )
+#' 
+#' }
+#' 
 loadPlotPKParametersTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
@@ -204,9 +359,10 @@ loadPlotPKParametersTask <- function(workflow, active = FALSE, settings = NULL) 
       xParameters = getDefaultPkParametersXParameters(workflow$workflowType),
       yParameters = NULL,
       reportTitle = defaultWorkflowTitles$plotPKParameters,
+      reportReference = defaultWorkflowReferences$plotPKParameters,
       fileName = defaultWorkflowAppendices$plotPKParameters,
       getTaskResults = plotPopulationPKParameters,
-      nameTaskResults = deparse(substitute(plotPopulationPKParameters)),
+      nameTaskResults = getObjectNameAsString(plotPopulationPKParameters),
       outputFolder = defaultTaskOutputFolders$plotPKParameters,
       inputFolder = defaultTaskOutputFolders$calculatePKParameters,
       inputs = getPkAnalysisResultsFileNames(workflow),
@@ -218,9 +374,10 @@ loadPlotPKParametersTask <- function(workflow, active = FALSE, settings = NULL) 
   }
   return(PlotTask$new(
     reportTitle = defaultWorkflowTitles$plotPKParameters,
+    reportReference = defaultWorkflowReferences$plotPKParameters,
     fileName = defaultWorkflowAppendices$plotPKParameters,
     getTaskResults = plotMeanPKParameters,
-    nameTaskResults = deparse(substitute(plotMeanPKParameters)),
+    nameTaskResults = getObjectNameAsString(plotMeanPKParameters),
     outputFolder = defaultTaskOutputFolders$plotPKParameters,
     inputFolder = defaultTaskOutputFolders$calculatePKParameters,
     inputs = getPkAnalysisResultsFileNames(workflow),
@@ -240,6 +397,28 @@ loadPlotPKParametersTask <- function(workflow, active = FALSE, settings = NULL) 
 #' @param settings specific settings for `plotSensitivity` task
 #' @return A `PopulationSensitivityAnalysisTask` for `PopulationWorkflow` objects.
 #' A `SensitivityAnalysisTask` object otherwise
+#' @export
+#' @import ospsuite.utils
+#' @family workflow tasks
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+#' 
+#' # (Re)load a default plotSensitivity task for workflow
+#' myWorkflow$plotSensitivity <- loadPlotSensitivityTask(
+#' workflow = myWorkflow, 
+#' active = TRUE
+#' )
+#' 
+#' # Load a user-defined simulation task for workflow
+#' myWorkflow$userDefinedTasks[["plotSensitivity"]] <- loadPlotSensitivityTask(
+#' workflow = myWorkflow, 
+#' active = TRUE
+#' )
+#' 
+#' }
+#' 
 loadPlotSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
@@ -252,9 +431,10 @@ loadPlotSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
       xParameters = NULL,
       yParameters = NULL,
       reportTitle = defaultWorkflowTitles$plotSensitivity,
+      reportReference = defaultWorkflowReferences$plotSensitivity,
       fileName = defaultWorkflowAppendices$plotSensitivity,
       getTaskResults = plotPopulationSensitivity,
-      nameTaskResults = deparse(substitute(plotPopulationSensitivity)),
+      nameTaskResults = getObjectNameAsString(plotPopulationSensitivity),
       outputFolder = defaultTaskOutputFolders$plotSensitivity,
       inputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
       inputs = getPopulationSensitivityAnalysisResultsFileNames(workflow),
@@ -266,9 +446,10 @@ loadPlotSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
   }
   return(PlotTask$new(
     reportTitle = defaultWorkflowTitles$plotSensitivity,
+    reportReference = defaultWorkflowReferences$plotSensitivity,
     fileName = defaultWorkflowAppendices$plotSensitivity,
     getTaskResults = plotMeanSensitivity,
-    nameTaskResults = deparse(substitute(plotMeanSensitivity)),
+    nameTaskResults = getObjectNameAsString(plotMeanSensitivity),
     outputFolder = defaultTaskOutputFolders$plotSensitivity,
     inputFolder = defaultTaskOutputFolders$sensitivityAnalysis,
     inputs = getMeanSensitivityAnalysisResultsFileNames(workflow),
@@ -288,16 +469,39 @@ loadPlotSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
 #' Default value is `FALSE`
 #' @param settings specific settings for `plotMassBalance` task
 #' @return A `PlotTask` object
+#' @export
+#' @import ospsuite.utils
+#' @family workflow tasks
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+#' 
+#' # (Re)load a default plotMassBalance task for workflow
+#' myWorkflow$plotMassBalance <- loadPlotMassBalanceTask(
+#' workflow = myWorkflow, 
+#' active = TRUE
+#' )
+#' 
+#' # Load a user-defined simulation task for workflow
+#' myWorkflow$userDefinedTasks[["plotMassBalance"]] <- loadPlotMassBalanceTask(
+#' workflow = myWorkflow, 
+#' active = TRUE
+#' )
+#' 
+#' }
+#' 
 loadPlotMassBalanceTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "MeanModelWorkflow")
   validateIsLogical(active)
   validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
-  
+
   return(PlotTask$new(
     reportTitle = defaultWorkflowTitles$plotMassBalance,
+    reportReference = defaultWorkflowReferences$plotMassBalance,
     fileName = defaultWorkflowAppendices$plotMassBalance,
     getTaskResults = plotMeanMassBalance,
-    nameTaskResults = deparse(substitute(plotMeanMassBalance)),
+    nameTaskResults = getObjectNameAsString(plotMeanMassBalance),
     outputFolder = defaultTaskOutputFolders$plotMassBalance,
     workflowFolder = workflow$workflowFolder,
     active = active,
@@ -314,16 +518,39 @@ loadPlotMassBalanceTask <- function(workflow, active = FALSE, settings = NULL) {
 #' Default value is `FALSE`
 #' @param settings specific settings for `plotAbsorption` task
 #' @return A `PlotTask` object
+#' @export
+#' @import ospsuite.utils
+#' @family workflow tasks
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+#' 
+#' # (Re)load a default plotAbsorption task for workflow
+#' myWorkflow$plotAbsorption <- loadPlotAbsorptionTask(
+#' workflow = myWorkflow, 
+#' active = TRUE
+#' )
+#' 
+#' # Load a user-defined simulation task for workflow
+#' myWorkflow$userDefinedTasks[["plotAbsorption"]] <- loadPlotAbsorptionTask(
+#' workflow = myWorkflow, 
+#' active = TRUE
+#' )
+#' 
+#' }
+#' 
 loadPlotAbsorptionTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "MeanModelWorkflow")
   validateIsLogical(active)
   validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
-  
+
   return(PlotTask$new(
     reportTitle = defaultWorkflowTitles$plotAbsorption,
+    reportReference = defaultWorkflowReferences$plotAbsorption,
     fileName = defaultWorkflowAppendices$plotAbsorption,
     getTaskResults = plotMeanAbsorption,
-    nameTaskResults = deparse(substitute(plotMeanAbsorption)),
+    nameTaskResults = getObjectNameAsString(plotMeanAbsorption),
     outputFolder = defaultTaskOutputFolders$plotAbsorption,
     workflowFolder = workflow$workflowFolder,
     active = active,
@@ -340,19 +567,46 @@ loadPlotAbsorptionTask <- function(workflow, active = FALSE, settings = NULL) {
 #' Default value is `FALSE`
 #' @param settings specific settings for `plotDemography` task
 #' @return A `PlotTask` object
+#' @export
+#' @import ospsuite.utils
+#' @family workflow tasks
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- PopulationWorkflow$new(
+#' workflowType,
+#' workflowFolder,
+#' simulationSets
+#' )
+#' 
+#' # (Re)load a default plotDemography task for workflow
+#' myWorkflow$plotDemography <- loadPlotDemographyTask(
+#' workflow = myWorkflow, 
+#' active = TRUE
+#' )
+#' 
+#' # Load a user-defined simulation task for workflow
+#' myWorkflow$userDefinedTasks[["plotDemography"]] <- loadPlotDemographyTask(
+#' workflow = myWorkflow, 
+#' active = TRUE
+#' )
+#' 
+#' }
+#' 
 loadPlotDemographyTask <- function(workflow, active = FALSE, settings = NULL) {
   validateIsOfType(workflow, "PopulationWorkflow")
   validateIsLogical(active)
   validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
-  
+
   return(PopulationPlotTask$new(
     workflowType = workflow$workflowType,
     xParameters = getDefaultDemographyXParameters(workflow$workflowType),
     yParameters = NULL,
     reportTitle = defaultWorkflowTitles$plotDemography,
+    reportReference = defaultWorkflowReferences$plotDemography,
     fileName = defaultWorkflowAppendices$plotDemography,
     getTaskResults = plotDemographyParameters,
-    nameTaskResults = deparse(substitute(plotDemographyParameters)),
+    nameTaskResults = getObjectNameAsString(plotDemographyParameters),
     outputFolder = defaultTaskOutputFolders$plotDemography,
     workflowFolder = workflow$workflowFolder,
     active = active,
@@ -366,6 +620,18 @@ loadPlotDemographyTask <- function(workflow, active = FALSE, settings = NULL) {
 #' Get the expected simulation result files obtained from a workflow
 #' @param workflow `Workflow` object or derived class
 #' @return Names of the the expected simulation result files
+#' @export
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+#' 
+#' # Get expected paths and file names for workflow
+#' getSimulationResultFileNames(myWorkflow)
+#' 
+#' }
+#' 
 getSimulationResultFileNames <- function(workflow) {
   validateIsOfType(workflow, "Workflow")
   simulationResultFileNames <- NULL
@@ -375,12 +641,24 @@ getSimulationResultFileNames <- function(workflow) {
   return(simulationResultFileNames)
 }
 
-#' @title getPkAnalysisResultsFileNames
+#' @title getPKAnalysisResultsFileNames
 #' @description
 #' Get the expected PK analysis result files obtained from a workflow
 #' @param workflow `Workflow` object or derived class
 #' @return Names of the the expected PK analysis result files
-getPkAnalysisResultsFileNames <- function(workflow) {
+#' @export
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+#' 
+#' # Get expected paths and file names for workflow
+#' getPKAnalysisResultsFileNames(myWorkflow)
+#' 
+#' }
+#' 
+getPKAnalysisResultsFileNames <- function(workflow) {
   validateIsOfType(workflow, "Workflow")
   pkAnalysisResultsFileNames <- NULL
   for (structureSet in workflow$simulationStructures) {
@@ -389,11 +667,27 @@ getPkAnalysisResultsFileNames <- function(workflow) {
   return(pkAnalysisResultsFileNames)
 }
 
+#' @rdname getPKAnalysisResultsFileNames
+#' @export
+getPkAnalysisResultsFileNames <- getPKAnalysisResultsFileNames
+
 #' @title getMeanSensitivityAnalysisResultsFileNames
 #' @description
 #' Get the expected sensitivity analysis result files obtained from a mean model workflow
 #' @param workflow `MeanModelWorkflow` object or derived class
 #' @return Names of the the expected sensitivity analysis result files
+#' @export
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+#' 
+#' # Get expected paths and file names for workflow
+#' getMeanSensitivityAnalysisResultsFileNames(myWorkflow)
+#' 
+#' }
+#' 
 getMeanSensitivityAnalysisResultsFileNames <- function(workflow) {
   validateIsOfType(workflow, "MeanModelWorkflow")
   sensitivityAnalysisResultsFileNames <- NULL
@@ -408,6 +702,21 @@ getMeanSensitivityAnalysisResultsFileNames <- function(workflow) {
 #' Get the expected sensitivity analysis result files obtained from a population workflow
 #' @param workflow `PopulationWorkflow` object or derived class
 #' @return Names of the the expected sensitivity analysis result files
+#' @export
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- PopulationWorkflow$new(
+#' workflowType,
+#' workflowFolder, 
+#' simulationSets)
+#' 
+#' # Get expected paths and file names for workflow
+#' getPopulationSensitivityAnalysisResultsFileNames(myWorkflow)
+#' 
+#' }
+#' 
 getPopulationSensitivityAnalysisResultsFileNames <- function(workflow) {
   validateIsOfType(workflow, "PopulationWorkflow")
   sensitivityAnalysisResultsFileNames <- NULL
@@ -423,6 +732,17 @@ getPopulationSensitivityAnalysisResultsFileNames <- function(workflow) {
 #' @param task `Task` object or derived class
 #' @return Names of the files required to perform the task
 #' @export
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+#' 
+#' # Get paths of required files for running a workflow task
+#' getTaskInputs(myWorkflow$plotSensitivity)
+#' 
+#' }
+#' 
 getTaskInputs <- function(task) {
   validateIsOfType(task, "Task")
   return(task$getInputs())
@@ -434,6 +754,17 @@ getTaskInputs <- function(task) {
 #' @param task `Task` object or derived class
 #' @return Named list of logical values assessing if the files exist
 #' @export
+#' @family workflow helpers
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+#' 
+#' # Checks if paths of required files for running a workflow task exist
+#' checkTaskInputsExist(myWorkflow$plotSensitivity)
+#' 
+#' }
+#' 
 checkTaskInputsExist <- function(task) {
   validateIsOfType(task, "Task")
   return(sapply(task$getInputs(), file.exists))
@@ -452,11 +783,57 @@ checkTaskInputsExist <- function(task) {
 #' @param settings list of input arguments that can be used by `settings` input argument of `taskFunction`
 #' @return Updated `Workflow` object
 #' @export
+#' @family workflow tasks
+#' @examples \dontrun{
+#' 
+#' # A workflow object needs to be created first
+#' myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
+#' 
+#' # Create a function to output results for workflow
+#' # Mean model workflows functions usually expect SimulationStructure objects as inputs
+#' userDefinedFunction <- function(structureSet, logFolder = getwd(), settings = NULL) {
+#' # Insert some code to calculate results and tune their output
+#' userResults <- list()
+#' userPlot <- ggplot()
+#' userTable <- data.frame()
+#' userText <- "Comments about the results of thMy user results"
+#' 
+#' userResults[[1]] <- saveTaskResults(
+#' id = "user-result-1",
+#' plot = userPlot,
+#' plotCaption = "Title of Figure 1",
+#' includePlot = TRUE,
+#' table = userTable, 
+#' tableCaption = "Title of Table 1",
+#' includeTable = TRUE,
+#' textChunk = userText,
+#' includeTextChunk = TRUE
+#' )
+#' 
+#' # Tasks will run through the list of userResults
+#' # And add their outputs to the report
+#' return(userResults)
+#' 
+#' }
+#' 
+#' # Add a user-defined task to workflow
+#' addUserDefinedTask(
+#' workflow = myWorkflow,
+#' taskFunction = userDefinedFunction,
+#' taskName = "userDefinedTask",
+#' active = TRUE
+#' )
+#' 
+#' # Checks structure of task using
+#' # myWorkflow$userDefinedTasks[[index]]$
+#' 
+#' }
+#' 
 addUserDefinedTask <- function(workflow,
-                                taskFunction,
-                                taskName = "userDefinedTask",
-                                active = TRUE,
-                                settings = NULL) {
+                               taskFunction,
+                               taskName = "userDefinedTask",
+                               active = TRUE,
+                               settings = NULL) {
   validateIsOfType(workflow, "Workflow")
   validateIsOfType(taskFunction, "function")
   validateIsString(taskName)
@@ -466,9 +843,10 @@ addUserDefinedTask <- function(workflow,
   argumentNames <- names(formals(taskFunction))
   if (isOfType(workflow, "MeanModelWorkflow")) {
     # PlotTask arguments
-    validateIsIncluded(c("structureSet", "logFolder", "settings"), argumentNames,
+    validateIsIncludedAndLog(
+      c("structureSet", "logFolder", "settings"), argumentNames,
       groupName = "Task function arguments", logFolder = workflow$workflowFolder
-    )
+      )
 
     workflow$userDefinedTasks <- c(
       workflow$userDefinedTasks,
@@ -476,7 +854,7 @@ addUserDefinedTask <- function(workflow,
         reportTitle = taskName,
         fileName = paste0("appendix-", taskName, ".md"),
         getTaskResults = taskFunction,
-        nameTaskResults = deparse(substitute(taskFunction)),
+        nameTaskResults = getObjectNameAsString(taskFunction),
         outputFolder = taskName,
         workflowFolder = workflow$workflowFolder,
         active = active,
@@ -488,7 +866,8 @@ addUserDefinedTask <- function(workflow,
 
   if (isOfType(workflow, "PopulationWorkflow")) {
     # PopulationPlotTask arguments
-    validateIsIncluded(c("structureSets", "logFolder", "settings", "workflowType", "xParameters", "yParameters"), argumentNames,
+    validateIsIncludedAndLog(
+      c("structureSets", "logFolder", "settings", "workflowType", "xParameters", "yParameters"), argumentNames,
       groupName = "Task function arguments", logFolder = workflow$workflowFolder
     )
 
@@ -501,7 +880,7 @@ addUserDefinedTask <- function(workflow,
         reportTitle = taskName,
         fileName = paste0("appendix-", taskName, ".md"),
         getTaskResults = taskFunction,
-        nameTaskResults = deparse(substitute(taskFunction)),
+        nameTaskResults = getObjectNameAsString(taskFunction),
         outputFolder = taskName,
         workflowFolder = workflow$workflowFolder,
         active = active,
@@ -515,4 +894,241 @@ addUserDefinedTask <- function(workflow,
     pathFolder = workflow$workflowFolder
   )
   return(invisible())
+}
+
+#' @title loadPlotTimeProfilesTask
+#' @description
+#' Define `plotTimeProfiles` task and its settings
+#' @param workflow `QualificationWorkflow` object
+#' @param configurationPlan A `ConfigurationPlan` object
+#' @return A `QualificationTask` object
+#' @export
+#' @import ospsuite.utils
+#' @family workflow tasks
+loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
+  validateIsOfType(workflow, "QualificationWorkflow")
+  validateIsOfType(configurationPlan, "ConfigurationPlan")
+
+  # Time Profiles task is only active if the field is defined & not empty
+  active <- !isOfLength(configurationPlan$plots$TimeProfile, 0)
+
+  taskFunction <- plotQualificationTimeProfiles
+  nameFunction <- getObjectNameAsString(plotQualificationTimeProfiles)
+
+  # Get list of task required input files
+  inputFiles <- NULL
+  outputs <- getTimeProfileOutputsDataframe(configurationPlan)
+  if (!isOfLength(outputs, 0)) {
+    # data.frame to list
+    outputs <- split(outputs, 1:nrow(outputs))
+    inputFiles <- as.character(sapply(outputs, function(output) {
+      configurationPlan$getSimulationResultsPath(project = output$project, simulation = output$simulation)
+    }))
+  }
+
+  return(QualificationTask$new(
+    getTaskResults = taskFunction,
+    nameTaskResults = nameFunction,
+    inputFolder = defaultTaskOutputFolders$simulate,
+    # TODO: add observed data
+    inputs = inputFiles,
+    workflowFolder = workflow$workflowFolder,
+    active = active,
+    message = defaultWorkflowMessages$plotTimeProfiles,
+    settings = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$TimeProfile) %||% getDefaultTimeProfileAxesSettings())
+  ))
+}
+
+
+#' @title loadGOFMergedTask
+#' @param workflow `QualificationWorkflow` object
+#' @param configurationPlan A `ConfigurationPlan` object
+#' @return A `QualificationTask` object
+#' @export
+#' @family workflow tasks
+loadGOFMergedTask <- function(workflow, configurationPlan) {
+  validateIsOfType(workflow, "QualificationWorkflow")
+  validateIsOfType(configurationPlan, "ConfigurationPlan")
+
+  # Time Profiles task is only active if the field is defined & not empty
+  active <- !isOfLength(configurationPlan$plots$GOFMergedPlots, 0)
+
+  taskFunction <- plotQualificationGOFs
+  nameFunction <- getObjectNameAsString(plotQualificationGOFs)
+
+  # Get list of task required input files
+  inputFiles <- NULL
+  outputs <- getGOFOutputsDataframe(configurationPlan)
+  if (!isOfLength(outputs, 0)) {
+    # data.frame to list
+    outputs <- split(outputs, 1:nrow(outputs))
+    inputFiles <- as.character(sapply(outputs, function(output) {
+      configurationPlan$getSimulationResultsPath(project = output$project, simulation = output$simulation)
+    }))
+  }
+
+  return(QualificationTask$new(
+    getTaskResults = taskFunction,
+    nameTaskResults = nameFunction,
+    inputFolder = defaultTaskOutputFolders$simulate,
+    # TODO: add observed data
+    inputs = inputFiles,
+    workflowFolder = workflow$workflowFolder,
+    active = active,
+    message = defaultWorkflowMessages$plotGOFMerged,
+    settings = list(
+      predictedVsObserved = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$GOFMergedPlotsPredictedVsObserved)),
+      residualsOverTime = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$GOFMergedPlotsResidualsOverTime)),
+      digits = reEnv$formatNumericsDigits,
+      nsmall = reEnv$formatNumericsSmall,
+      scientific = reEnv$formatNumericsScientific
+    )
+  ))
+}
+
+
+#' @title loadQualificationComparisonTimeProfileTask
+#' @description
+#' Define `plotComparisonTimeProfileTask` task and its settings
+#' @param workflow `QualificationWorkflow` object
+#' @param configurationPlan A `ConfigurationPlan` object
+#' @return A `QualificationTask` object
+#' @export
+#' @family workflow tasks
+loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPlan) {
+  validateIsOfType(workflow, "QualificationWorkflow")
+  validateIsOfType(configurationPlan, "ConfigurationPlan")
+
+  # Time Profiles task is only active if the field is defined & not empty
+  active <- !isOfLength(configurationPlan$plots$ComparisonTimeProfilePlots, 0)
+
+  taskFunction <- plotQualificationComparisonTimeProfile
+  nameFunction <- getObjectNameAsString(plotQualificationComparisonTimeProfile)
+
+  # Get list of task required input files
+  inputFiles <- NULL
+  outputs <- getComparisonTimeProfileOutputsDataframe(configurationPlan)
+  if (!isOfLength(outputs, 0)) {
+    # data.frame to list
+    outputs <- split(outputs, 1:nrow(outputs))
+    inputFiles <- as.character(sapply(outputs, function(output) {
+      configurationPlan$getSimulationResultsPath(project = output$project, simulation = output$simulation)
+    }))
+  }
+
+  return(QualificationTask$new(
+    getTaskResults = taskFunction,
+    nameTaskResults = nameFunction,
+    inputFolder = defaultTaskOutputFolders$simulate,
+    # TODO: add observed data
+    inputs = inputFiles,
+    workflowFolder = workflow$workflowFolder,
+    active = active,
+    message = defaultWorkflowMessages$plotComparisonTimeProfiles,
+    settings = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$ComparisonTimeProfile))
+  ))
+}
+
+#' @title loadPlotPKRatioTask
+#' @description
+#' Define `plotPKRatio` task and its settings
+#' @param workflow `QualificationWorkflow` object
+#' @param configurationPlan A `ConfigurationPlan` object
+#' @return A `QualificationTask` object
+#' @export
+#' @family workflow tasks
+loadPlotPKRatioTask <- function(workflow, configurationPlan) {
+  validateIsOfType(workflow, "QualificationWorkflow")
+  validateIsOfType(configurationPlan, "ConfigurationPlan")
+
+  # Time Profiles task is only active if the field is defined & not empty
+  active <- !isOfLength(configurationPlan$plots$PKRatioPlots, 0)
+
+  taskFunction <- plotQualificationPKRatio
+  nameFunction <- getObjectNameAsString(plotQualificationPKRatio)
+
+  # Get list of task required input files
+  inputFiles <- NULL
+  outputs <- getPKRatioOutputsDataframe(configurationPlan)
+  if (!isOfLength(outputs, 0)) {
+    # data.frame to list
+    outputs <- split(outputs, 1:nrow(outputs))
+    inputFiles <- as.character(sapply(outputs, function(output) {
+      configurationPlan$getPKAnalysisResultsPath(project = output$project, simulation = output$simulation)
+    }))
+  }
+
+  return(QualificationTask$new(
+    getTaskResults = taskFunction,
+    nameTaskResults = nameFunction,
+    inputFolder = defaultTaskOutputFolders$simulate,
+    # TODO: add observed data
+    inputs = inputFiles,
+    workflowFolder = workflow$workflowFolder,
+    active = active,
+    message = defaultWorkflowMessages$plotPKRatio,
+    settings = list(
+      axes = getAxesProperties(configurationPlan$plots$AxesSettings$PKRatioPlots),
+      digits = reEnv$formatNumericsDigits,
+      nsmall = reEnv$formatNumericsSmall,
+      scientific = reEnv$formatNumericsScientific,
+      # Reference unit for table artifact
+      # Note that
+      # 1) it can be updated before running workflows
+      # 2) configuration plan inputs could override these
+      units = list(
+        AUC = ospsuite::ospUnits$`AUC [mass]`$`µg*h/l`,
+        CL = ospsuite::ospUnits$Flow$`l/h`
+      )
+    )
+  ))
+}
+
+
+#' @title loadPlotDDIRatioTask
+#' @description
+#' Define `plotDDIRatio` task and its settings
+#' @param workflow `QualificationWorkflow` object
+#' @param configurationPlan A `ConfigurationPlan` object
+#' @return A `QualificationTask` object
+#' @export
+#' @family workflow tasks
+loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
+  validateIsOfType(workflow, "QualificationWorkflow")
+  validateIsOfType(configurationPlan, "ConfigurationPlan")
+
+  # Time Profiles task is only active if the field is defined & not empty
+  active <- !isOfLength(configurationPlan$plots$DDIRatioPlots, 0)
+
+  taskFunction <- plotQualificationDDIs
+  nameFunction <- getObjectNameAsString(substitute(plotQualificationDDIs))
+
+  # Get list of task required input files
+  inputFiles <- NULL
+  outputs <- getDDIOutputsDataframe(configurationPlan)
+  if (!isOfLength(outputs, 0)) {
+    # data.frame to list
+    outputs <- split(outputs, 1:nrow(outputs))
+    inputFiles <- as.character(sapply(outputs, function(output) {
+      configurationPlan$getPKAnalysisResultsPath(project = output$project, simulation = output$simulation)
+    }))
+  }
+
+  return(QualificationTask$new(
+    getTaskResults = taskFunction,
+    nameTaskResults = nameFunction,
+    inputFolder = defaultTaskOutputFolders$simulate,
+    # TODO: add observed data
+    inputs = inputFiles,
+    workflowFolder = workflow$workflowFolder,
+    active = active,
+    message = defaultWorkflowMessages$plotDDIRatio,
+    settings = list(
+      predictedVsObserved = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$DDIRatioPlotsPredictedVsObserved)),
+      residualsOverTime = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$DDIRatioPlotsResidualsVsObserved)),
+      digits = reEnv$formatNumericsDigits,
+      nsmall = reEnv$formatNumericsSmall,
+      scientific = reEnv$formatNumericsScientific
+    )
+  ))
 }

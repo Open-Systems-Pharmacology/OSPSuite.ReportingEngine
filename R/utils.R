@@ -1,78 +1,48 @@
-#' Shortkey checking if argument 1 is not null,
-#' output argument 1 if not null, or output argument 2 otherwise
-#'
-#' @title \%||\%
-#' @param lhs argument 1
-#' @param rhs argument 2
-#' @return lhs if lhs is not null, rhs otherwise
+#' @title calculateResiduals
+#' @param simulatedData, vector of simulated data
+#' @param observedData, vector of observed data
+#' @param residualScale, must be selected from enum ResidualScales
+#' @return residuals between simulatedData and observedData
 #' @description
-#' Check if lhs argument is not null, output lhs if not null,
-#' output rhs otherwise
-`%||%` <- function(lhs, rhs) {
-  if (!is.null(lhs)) {
-    lhs
-  } else {
-    rhs
+#' Calculate residuals between vectors `simulatedData` and `observedData` according the the residual scale specified in `residualScale`
+#' @export
+calculateResiduals <- function(simulatedData, observedData, residualScale) {
+  validateIsOfLength(object = simulatedData, nbElements = length(observedData))
+  residualValues <- rep(NA, length(observedData))
+  if (isIncluded(residualScale, ResidualScales$Logarithmic)) {
+    residualValues <- log(observedData) - log(simulatedData)
+  }
+  if (isIncluded(residualScale, ResidualScales$Linear)) {
+    residualValues <- (observedData - simulatedData)
   }
 }
 
-#' Shortkey checking if argument 1 is not null,
-#' output the argument 2 if not null, or output argument 3 otherwise
-#'
-#' @title ifnotnull
-#' @param inputToCheck argument 1
-#' @param outputIfNotNull argument 2
-#' @param outputIfNull argument 3
-#' @return outputIfNotNull if inputToCheck is not null, outputIfNull otherwise
+#' @title calculateGeometricErrorRange
+#' @param values Numeric values of the geometric mean
+#' @param errorValues Numeric values of the geometric error
+#' @return A named list, with `ymin` and `ymax`, of the range calculated from the geometric mean and errors.
 #' @description
-#' Check if inputToCheck is not null, if so output outputIfNotNull,
-#' otherwise, output outputIfNull
-ifnotnull <- function(inputToCheck, outputIfNotNull, outputIfNull = NULL) {
-  if (!is.null(inputToCheck)) {
-    outputIfNotNull
-  } else {
-    outputIfNull
-  }
+#' Calculate the range from the geometric mean and error.
+#' @export
+calculateGeometricErrorRange <- function(values, errorValues) {
+  return(list(
+    ymin = values / errorValues,
+    ymax = values * errorValues
+  ))
 }
 
-#' Shortkey checking if arguments 1 and 2 are equal,
-#' output argument 3 if equal, or output argument 4 otherwise
-#'
-#' @title ifEqual
-#' @param x argument 1
-#' @param y argument 2
-#' @param outputIfEqual argument 3
-#' @param outputIfNotEqual argument 4
-#' @return outputIfEqual if x=y, outputIfNotEqual otherwise
+#' @title calculateArithmeticErrorRange
+#' @param values Numeric values of the arithmetic mean
+#' @param errorValues Numeric values of the arithmetic error
+#' @return A named list, with `ymin` and `ymax`, of the range calculated from the arithmetic mean and errors.
 #' @description
-#' Check if x=y, if so output outputIfEqual,
-#' otherwise, output outputIfNotEqual
-ifEqual <- function(x, y, outputIfEqual, outputIfNotEqual = NULL) {
-  if (x == y) {
-    outputIfEqual
-  } else {
-    outputIfNotEqual
-  }
-}
-
-#' Shortkey checking if arguments 1 is included in 2,
-#' output argument 3 if included, or output argument 4 otherwise
-#'
-#' @title ifIncluded
-#' @param x argument 1
-#' @param y argument 2
-#' @param outputIfIncluded argument 3
-#' @param outputIfNotIncluded argument 4
-#' @return outputIfIncluded if x=y, outputIfNotIncluded otherwise
-#' @description
-#' Check if x is in y, if so output outputIfIncluded,
-#' otherwise, output outputIfNotIncluded
-ifIncluded <- function(x, y, outputIfIncluded, outputIfNotIncluded = NULL) {
-  if (isIncluded(x, y)) {
-    outputIfIncluded
-  } else {
-    outputIfNotIncluded
-  }
+#' Calculate the range from the arithmetic mean and error.
+#' @export
+calculateArithmeticErrorRange <- function(values, errorValues) {
+  return(list(
+    ymin = values - errorValues,
+    ymax = values + errorValues
+  ))
 }
 
 #' @title trimFileName
@@ -87,6 +57,7 @@ ifIncluded <- function(x, y, outputIfIncluded, outputIfNotIncluded = NULL) {
 #' pathName <- "folder/subfolder/testFile.txt"
 #' trimFileName(pathName, extension = "txt")
 #' }
+#' @export
 trimFileName <- function(path, extension = NULL, sep = "/") {
   fileName <- sub(
     pattern = paste0("^.*[", sep, "]"),
@@ -118,8 +89,9 @@ trimFileName <- function(path, extension = NULL, sep = "/") {
 #' \dontrun{
 #' removeForbiddenLetters(text)
 #' }
-removeForbiddenLetters <- function(text, forbiddenLetters = "[[:punct:]]", replacement = "_") {
-  text <- gsub(
+#' @export
+removeForbiddenLetters <- function(text, forbiddenLetters = "[[:punct:][:blank:]]", replacement = "_") {
+  gsub(
     pattern = forbiddenLetters,
     replacement = replacement,
     x = text
@@ -150,24 +122,38 @@ generateResultFileNames <- function(numberOfCores, folderName, fileName, separat
 
 #' @title loadSimulationWithUpdatedPaths
 #' @param simulationSet simulation set containing path to simulation file and pathIDs for quantities to be loaded into simulation object
-#' @param loadFromCache logical allows load from Cache option
-#' @return simulation object with pathIDs updated from simulationSet
+#' @param loadFromCache If `TRUE`, an already loaded pkml file will not be loaded again, but the `Simulation` object will be retrieved from cache.
+#' If `FALSE`, a new `Simulation` object will be created. Default value is `FALSE`.
+#' @param addToCache If `TRUE`, the loaded simulation is added to cache.
+#' If `FALSE`, the returned simulation only exists locally. Default is `TRUE`.
+#' @return A `Simulation` object with pathIDs updated from simulationSet
 #' @export
-loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE) {
-  sim <- ospsuite::loadSimulation(
+loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE, addToCache = TRUE) {
+  simulation <- ospsuite::loadSimulation(
     filePath = simulationSet$simulationFile,
     loadFromCache = loadFromCache,
-    addToCache = FALSE
+    addToCache = addToCache
   )
   # Prevent loadSimulationWithUpdatedPaths from crashing if user did not submit any pathID
   if (!is.null(simulationSet$outputs)) {
-    sim$outputSelections$clear()
+    simulation$outputSelections$clear()
     paths <- sapply(simulationSet$outputs, function(output) {
       output$path
     })
-    ospsuite::addOutputs(quantitiesOrPaths = paths, simulation = sim)
+    ospsuite::addOutputs(quantitiesOrPaths = paths, simulation = simulation)
   }
-  return(sim)
+
+  if (is.null(simulationSet$minimumSimulationEndTime)) {
+    return(simulation)
+  }
+
+  if (simulationSet$minimumSimulationEndTime > simulation$outputSchema$endTime) {
+    maximalIntervalIndex <- which(sapply(simulation$outputSchema$intervals, function(x) {
+      x$endTime$value
+    }) == simulation$outputSchema$endTime)[1]
+    simulation$outputSchema$intervals[[maximalIntervalIndex]]$endTime$setValue(value = simulationSet$minimumSimulationEndTime, unit = ospUnits$Time$min)
+  }
+  return(simulation)
 }
 
 #' @title loadWorkflowPopulation
@@ -198,10 +184,11 @@ lastPathElement <- function(path) {
   return(lastElement)
 }
 
-#' @title removeInf
+#' @title replaceInfWithNA
 #' @param data numeric vector
 #' @param logFolder folder where the logs are saved
 #' @return numeric vector
+#' @keywords internal
 replaceInfWithNA <- function(data, logFolder = getwd()) {
   infData <- is.infinite(data)
   Ninf <- sum(infData)
@@ -221,6 +208,7 @@ replaceInfWithNA <- function(data, logFolder = getwd()) {
 #' @param dataMapping name of variable on which the missing values ar checked
 #' @param logFolder folder where the logs are saved
 #' @return filtered data.frame
+#' @keywords internal
 removeMissingValues <- function(data, dataMapping = NULL, logFolder = getwd()) {
   data[, dataMapping] <- replaceInfWithNA(data[, dataMapping], logFolder)
   naData <- is.na(data[, dataMapping])
@@ -241,6 +229,7 @@ removeMissingValues <- function(data, dataMapping = NULL, logFolder = getwd()) {
 #' @param output Output object
 #' @return Names of pkParameters in `output`
 #' @export
+#' @family workflow helpers
 getPKParametersInOutput <- function(output) {
   validateIsOfType(output, "Output")
   pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
@@ -252,10 +241,26 @@ getPKParametersInOutput <- function(output) {
   return(pkParameters)
 }
 
+#' @title getPKParametersInOutput
+#' @param output Output object
+#' @return Names of pkParameters in `output`
+#' @keywords internal
+getPKParameterGroupsInOutput <- function(output) {
+  validateIsOfType(output, "Output")
+  pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
+    pkParameterInfo$group
+  })
+  if (isOfLength(pkParameters, 0)) {
+    return(NA)
+  }
+  return(pkParameters)
+}
+
 #' @title getOutputPathsInSimulationSet
 #' @param simulationSet SimulationSet object or derived class
 #' @return Path names of outputs in `simulationSet`
 #' @export
+#' @family workflow helpers
 getOutputPathsInSimulationSet <- function(simulationSet) {
   validateIsOfType(simulationSet, "SimulationSet")
   return(sapply(simulationSet$outputs, function(output) {
@@ -267,6 +272,7 @@ getOutputPathsInSimulationSet <- function(simulationSet) {
 #' @param simulationSet SimulationSet object or derived class
 #' @return Data.frame with \code{path} and \code{pkParameter} in `simulationSet`
 #' @export
+#' @family workflow helpers
 getPKParametersInSimulationSet <- function(simulationSet) {
   validateIsOfType(simulationSet, "SimulationSet")
   pkParametersTable <- data.frame()
@@ -276,6 +282,7 @@ getPKParametersInSimulationSet <- function(simulationSet) {
       data.frame(
         path = output$path,
         pkParameter = getPKParametersInOutput(output),
+        group = getPKParameterGroupsInOutput(output),
         stringsAsFactors = FALSE
       )
     )
@@ -284,28 +291,54 @@ getPKParametersInSimulationSet <- function(simulationSet) {
 }
 
 #' @title getAllowedCores
+#'
+#' @description Get allowed number of CPU cores for computation
+#'
 #' @return Allowed number of CPU cores for computation
+#' @keywords internal
 getAllowedCores <- function() {
-  cores <- tryCatch({
-    # get cpu allowance from files
-    cfs_quota_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us", intern = T))
-    cfs_period_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_period_us", intern = T))
-    cfs_quota_us / cfs_period_us
-  },
-  error = function(cond) {
-    return(NULL)
-  },
-  warning = function(cond) {
-    return(NULL)
+  numberOfCores <- getAllowedCoresLinuxKubernetes()
+  if (is.null(numberOfCores)) {
+    numberOfCores <- getOSPSuiteSetting(settingName = "numberOfCores")
   }
+}
+
+
+#' @title getAllowedCoresLinuxKubernetes
+#'
+#' @description
+#' Relevant only when reporting engine is executed on a Linux Kubernetes cluster.
+#'
+#' @return Allowed number of CPU cores for computation
+#' @keywords internal
+getAllowedCoresLinuxKubernetes <- function() {
+  cores <- tryCatch(
+    {
+      # get cpu allowance from files
+      cfs_quota_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us", intern = T))
+      cfs_period_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_period_us", intern = T))
+      cores <- floor(cfs_quota_us / cfs_period_us)
+      if (cores < 1) {
+        return(NULL)
+      }
+      return(cores)
+    },
+    error = function(cond) {
+      return(NULL)
+    },
+    warning = function(cond) {
+      return(NULL)
+    }
   )
 }
 
 #' @title getSimulationParameterDisplayPaths
 #' @param parameterPaths Paths of a parameter in simulation
-#' @param simulation Simulation object
+#' @param simulation `Simulation` object from `ospsuite`
 #' @param dictionary parameterDisplayPaths data.frame mapping user defined display names
 #' @return parameterDisplayPath
+#' @export
+#' @family workflow helpers
 getSimulationParameterDisplayPaths <- function(parameterPaths, simulation, dictionary) {
   parameterDisplayPaths <- ospsuite::getParameterDisplayPaths(parameterPaths, simulation)
 
@@ -330,6 +363,7 @@ getSimulationParameterDisplayPaths <- function(parameterPaths, simulation, dicti
 #' Names in header should include `parameter` and `displayPath`.
 #' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
 #' @export
+#' @family workflow helpers
 setWorkflowParameterDisplayPathsFromFile <- function(fileName, workflow) {
   validateIsOfType(workflow, "Workflow")
   validateIsString(fileName)
@@ -346,6 +380,7 @@ setWorkflowParameterDisplayPathsFromFile <- function(fileName, workflow) {
 #' Variables of the data.frame should include `parameter` and `displayPath`.
 #' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
 #' @export
+#' @family workflow helpers
 setWorkflowParameterDisplayPaths <- function(parameterDisplayPaths, workflow) {
   validateIsOfType(workflow, "Workflow")
   workflow$setParameterDisplayPaths(parameterDisplayPaths)
@@ -357,23 +392,85 @@ setWorkflowParameterDisplayPaths <- function(parameterDisplayPaths, workflow) {
 #' to replace standard display of parameter paths.
 #' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
 #' @export
+#' @family workflow helpers
 getWorkflowParameterDisplayPaths <- function(workflow) {
   validateIsOfType(workflow, "Workflow")
   return(workflow$getParameterDisplayPaths())
 }
 
-
-formatNumerics <- function(numerics,  
-                           digits = NULL, 
-                           nsmall = NULL, 
-                           scientific = NULL) { 
-  validateIsInteger(digits, nullAllowed = TRUE)
-  validateIsInteger(nsmall, nullAllowed = TRUE)
-  validateIsLogical(scientific, nullAllowed = TRUE)
-  
-  digits <- digits %||% reEnv$formatNumericsDigits
-  nsmall <- nsmall %||% reEnv$formatNumericsSmall
-  scientific <- scientific %||% reEnv$formatNumericsScientific
-  
-  return(format(numerics, digits = digits, nsmall = nsmall, scientific = scientific)) 
+#' @title parseVariableToObject
+#' @description Create an expression of type `objectName$variableName <- variableName`
+#' @param objectName Name of the object whose field is updated
+#' @param variableName Name of the variable and field of `objectName`
+#' @param keepIfNull logical `objectName$variableName <- variableName \%||\% objectName$variableName`
+#' @return An expression to `eval()`
+#' @importFrom ospsuite.utils %||%
+#' @keywords internal
+parseVariableToObject <- function(objectName, variableName, keepIfNull = FALSE) {
+  if (keepIfNull) {
+    return(parse(text = paste0(objectName, "$", variableName, " <- ", variableName, " %||% ", objectName, "$", variableName)))
+  }
+  return(parse(text = paste0(objectName, "$", variableName, " <- ", variableName)))
 }
+
+#' @title parseVariableFromObject
+#' @description Create an expression of type `variableName <- objectName$variableName`
+#' @param objectName Name of the object whose field is updated
+#' @param variableName Name of the variable and field of `objectName`
+#' @param keepIfNull logical `variableName <- objectName$variableName \%||\% variableName`
+#' @return An expression to `eval()`
+#' @keywords internal
+parseVariableFromObject <- function(objectName, variableName, keepIfNull = FALSE) {
+  if (keepIfNull) {
+    return(parse(text = paste0(variableName, " <- ", objectName, "$", variableName)))
+  }
+  return(parse(text = paste0(variableName, " <- ", objectName, "$", variableName)))
+}
+
+#' @title calculateGMFE
+#' @description Calculate Geometric Mean Fold Error between `x` and `y`.
+#' Strictly positive pairs of values are kept in the calculation
+#' @param x x values to compare
+#' @param y y values to compare
+#' @return GMFE
+#' @export
+calculateGMFE <- function(x, y) {
+  positiveValues <- (y > 0 & x > 0)
+  log10Error <- log10(y[positiveValues]) - log10(x[positiveValues])
+  return(10^(sum(abs(log10Error)) / length(log10Error)))
+}
+
+
+#' @title getObjectNameAsString
+#' @description Return the name of an object as a string
+#' @param object the name of which is to be returned
+#' @return the name of the `object` as a string
+#' @keywords internal
+getObjectNameAsString <- function(object) {
+  return(deparse(substitute(object)))
+}
+
+#' @title saveFigure
+#' @description Save figure and catches
+#' @param plotObject A `ggplot` object
+#' @param fileName Name of the file in which `plotObject` is saved
+#' @param logFolder folder where the logs are saved
+#' @param simulationSetName Name of the simulation set for `PlotTask` results
+#' @keywords internal
+saveFigure <- function(plotObject, fileName, logFolder, simulationSetName = NULL) {
+  tryCatch({
+    ggplot2::ggsave(
+      filename = fileName,
+      plot = plotObject,
+      width = reEnv$defaultPlotFormat$width,
+      height = reEnv$defaultPlotFormat$height,
+      dpi = reEnv$defaultPlotFormat$dpi,
+      units = reEnv$defaultPlotFormat$units
+    )
+  },
+  error = function(e) {
+    logErrorThenStop(messages$ggsaveError(fileName, simulationSetName, e), logFolder)
+  })
+  return(invisible())
+}
+

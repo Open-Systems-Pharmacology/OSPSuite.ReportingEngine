@@ -8,8 +8,10 @@ addTableChunk(
   fileName,
   tableFileRelativePath,
   tableFileRootDirectory,
-  tableCaption = "",
-  logFolder = getwd()
+  digits = NULL,
+  scientific = NULL,
+  logFolder = getwd(),
+  na = "-"
 )
 }
 \arguments{
@@ -19,10 +21,28 @@ addTableChunk(
 
 \item{tableFileRootDirectory}{working directory}
 
-\item{tableCaption}{caption of the table}
+\item{digits}{number of decimal digits in displayed numbers}
+
+\item{scientific}{logical defining if displayed numbers use scientific writing}
 
 \item{logFolder}{folder where the logs are saved}
+
+\item{na}{character string replacing `NA` values in table}
 }
 \description{
 Add a table in a .md document
 }
+\seealso{
+Other reporting: 
+\code{\link{addFigureChunk}()},
+\code{\link{addTextChunk}()},
+\code{\link{anchor}()},
+\code{\link{copyReport}()},
+\code{\link{getAnchorName}()},
+\code{\link{hasAnchor}()},
+\code{\link{mergeMarkdownFiles}()},
+\code{\link{renderReport}()},
+\code{\link{renderWordReport}()},
+\code{\link{resetReport}()}
+}
+\concept{reporting}

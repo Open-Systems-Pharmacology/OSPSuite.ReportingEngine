@@ -1,3 +1,58 @@
+#' @title getReaderFunction
+#' @description
+#' Get most appropriate reader function by guessing file separator
+#' File separator is guessed by checking number of fields/columns along lines
+#' @param fileName Name of file to be read
+#' @param nlines Number of lines to look at for checking consistency within file.
+#' Note that, unlike `read.csv`, `count.fields` does not have options for handling encoding or escape characters.
+#' Thus, using `nlines` as low as possible reduces the chances of inconsistent column widths caused by such characters.
+#' @return Reader function such as `read.csv`
+#' @keywords internal
+getReaderFunction <- function(fileName, nlines = 2) {
+  # Define mapping between reader functions and their separator
+  # Default for read.csv is comma separator and point decimal
+  # Default for read.csv2 is semicolon separator and comma decimal
+  # Default for read.table is white space separator and point decimal
+  readerMapping <- data.frame(
+    sep = c(",", ";", ""),
+    functionName = c("read.csv", "read.csv2", "read.table"),
+    stringsAsFactors = FALSE
+  )
+  # For csv files, do not include white space separator
+  if(isFileExtension(fileName, "csv")){
+    readerMapping <- readerMapping[1:2, ]
+  }
+  
+  # Keep separator that would provides the most fields/columns
+  sepWidth <- sapply(
+    readerMapping$sep,
+    function(sep) {
+      # if count.fields notices an odd number of ' or ", 
+      # it will return NA for the line (example, "St John's" -> NA)
+      # which needs to be removed from the count
+      max(count.fields(fileName, sep = sep, comment.char = "", quote = '\"'), na.rm = TRUE)
+    }
+  )
+  # which.max returns the first max value.
+  # Thus, read.csv will be used in priority if same number of columns 
+  # are identified by each method
+  readerMapping <- readerMapping[which.max(sepWidth), ]
+  
+  # Assess if selected separator reads a consistent number of fields/columns along lines
+  fields <- count.fields(fileName, sep = readerMapping$sep, comment.char = "", quote = '\"')
+  fields <- fields[!is.na(fields)]
+  consistentFields <- isOfLength(unique(fields), 1)
+  
+  # If selected separator leads to inconsistent number of columns,
+  # Throw a meaningful error message before error happens in read.table or later
+  if (!consistentFields) {
+    stop(messages$errorInconsistentFields(fileName))
+  }
+
+  # match.fun get actual function from function name
+  return(match.fun(readerMapping$functionName))
+}
+
 #' @title readObservedDataFile
 #' @description
 #' Read observed data file with Nonmem format.
@@ -10,28 +65,20 @@
 readObservedDataFile <- function(fileName,
                                  header = TRUE,
                                  encoding = "UTF-8") {
-  extension <- fileExtension(fileName)
+  validateFileExists(fileName)
+  # Get function with the most appropriate reading defaults
+  readObservedData <- getReaderFunction(fileName)
+  observedData <- readObservedData(
+    fileName,
+    header = header,
+    check.names = FALSE,
+    encoding = encoding,
+    stringsAsFactors = FALSE
+  )
+
   # For some cases where data was derived from Excel,
   # <U+FEFF> is included in first variable name and needs to be removed
   forbiddenCharacters <- "\ufeff"
-
-  if (extension %in% "csv") {
-    observedData <- read.csv(fileName,
-      header = header,
-      check.names = FALSE,
-      encoding = encoding
-    )
-    variableNames <- names(observedData)
-    variableNames[1] <- gsub(forbiddenCharacters, "", variableNames[1])
-    names(observedData) <- variableNames
-    return(observedData)
-  }
-
-  observedData <- read.table(fileName,
-    header = header,
-    check.names = FALSE,
-    encoding = encoding
-  )
   variableNames <- names(observedData)
   variableNames[1] <- gsub(forbiddenCharacters, "", variableNames[1])
   names(observedData) <- variableNames
@@ -63,11 +110,10 @@ evalDataFilter <- function(data, filterExpression) {
   return(eval(filterExpression))
 }
 
-
 dictionaryParameters <- list(
   ID = "ID",
-  nonmenColumn = "nonmenColumn",
-  nonmemUnit = "nonmemUnit",
+  datasetColumn = "datasetColumn",
+  datasetUnit = "datasetUnit",
   timeID = "time",
   dvID = "dv",
   lloqID = "lloq",
@@ -77,7 +123,7 @@ dictionaryParameters <- list(
 
 getDictionaryVariable <- function(dictionary, variableID) {
   variableMapping <- dictionary[, dictionaryParameters$ID] %in% variableID
-  variableName <- as.character(dictionary[variableMapping, dictionaryParameters$nonmenColumn])
+  variableName <- as.character(dictionary[variableMapping, dictionaryParameters$datasetColumn])
   if (isOfLength(variableName, 0)) {
     return()
   }
@@ -90,6 +136,7 @@ getDictionaryVariable <- function(dictionary, variableID) {
 #' @param simulationSet A `SimulationSet` object
 #' @param logFolder folder where the logs are saved
 #' @return list of data and dataMapping
+#' @keywords internal
 loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   validateIsOfType(simulationSet, "SimulationSet")
   # Observed data and dictionary are already checked when creating the simulationSet
@@ -103,9 +150,9 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   re.tStoreFileMetadata(access = "read", filePath = simulationSet$observedMetaDataFile)
   dictionary <- readObservedDataFile(simulationSet$observedMetaDataFile)
 
-  # Enforce nonmemUnit column to exist
-  if (!isIncluded(dictionaryParameters$nonmemUnit, names(dictionary))) {
-    dictionary[, dictionaryParameters$nonmemUnit] <- NA
+  # Enforce datasetUnit column to exist
+  if (!isIncluded(dictionaryParameters$datasetUnit, names(dictionary))) {
+    dictionary[, dictionaryParameters$datasetUnit] <- NA
   }
   # Use dictionary to map the data and get the unit
   # Note that lloqColumn, timeUnitColumn and dvUnitColumn can be NULL
@@ -116,15 +163,15 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   dvUnitColumn <- getDictionaryVariable(dictionary, dictionaryParameters$dvUnitID)
 
   # Units: convert the observed data into base unit
-  # Get values of unit column using nonmemUnit
+  # Get values of unit column using datasetUnit
   timeMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$timeID
-  timeUnit <- as.character(dictionary[timeMapping, dictionaryParameters$nonmemUnit])
+  timeUnit <- as.character(dictionary[timeMapping, dictionaryParameters$datasetUnit])
   if (!any(is.na(timeUnit), isIncluded(timeUnit, ""))) {
     timeUnitColumn <- "timeUnit"
     observedDataset[, timeUnitColumn] <- timeUnit
   }
   dvMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$dvID
-  dvUnit <- as.character(dictionary[dvMapping, dictionaryParameters$nonmemUnit])
+  dvUnit <- as.character(dictionary[dvMapping, dictionaryParameters$datasetUnit])
   if (!any(is.na(dvUnit), isIncluded(dvUnit, ""))) {
     dvUnitColumn <- "dvUnit"
     observedDataset[, dvUnitColumn] <- dvUnit
@@ -133,6 +180,15 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   # Parse the data.frame with the appropriate columns and ensure units are "character" type
   observedDataset[, timeUnitColumn] <- as.character(observedDataset[, timeUnitColumn])
   observedDataset[, dvUnitColumn] <- as.character(observedDataset[, dvUnitColumn])
+
+  # If unit was actually defined using output objects, overwrite current dvUnit
+  for(output in simulationSet$outputs){
+    if(isOfLength(output$dataUnit, 0)){
+      next
+    }
+    selectedRows <- evalDataFilter(observedDataset, output$dataSelection)
+    observedDataset[selectedRows, dvUnitColumn] <- output$dataUnit
+  }
 
   # Convert observed data to base unit,
   # as.numeric needs to be enforced because toBaseUnit could think values are integer and crash
@@ -169,7 +225,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
     # Case where dictionary defined an lloq column missing from dataset
     if (!isIncluded(lloqColumn, names(observedDataset))) {
       logWorkflow(
-        message = paste0("lloq variable '", lloqColumn, "' defined in dictionary is missing from observed dataset"),
+        message = paste0("lloq column '", lloqColumn, "' defined in dictionary is not present in the dataset columns"),
         pathFolder = logFolder,
         logTypes = LogTypes$Debug
       )
@@ -208,8 +264,13 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
 #' @param timeUnit time unit for unit conversion of time
 #' @param logFolder folder where the logs are saved
 #' @return list of data and lloq data.frames
+#' @keywords internal
 getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, timeUnit, logFolder) {
-  if (isOfLength(output$dataSelection, 0)) {
+  # If no observed data nor data selected, return empty dataset
+  if (isEmpty(data)) {
+    return()
+  }
+  if (isEmpty(output$dataSelection)) {
     return()
   }
 
@@ -219,11 +280,15 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
     pathFolder = logFolder,
     logTypes = LogTypes$Debug
   )
+  # If filter did not select any data, return empty dataset
+  if(sum(selectedRows)==0){
+    return()
+  }
 
   # Get dimensions of observed data
   dvDimensions <- unique(as.character(data[selectedRows, dataMapping$dimension]))
   outputConcentration <- data[selectedRows, dataMapping$dv]
-  if (!isOfLength(output$displayUnit, 0)) {
+  if (!isEmpty(output$displayUnit)) {
     for (dvDimension in dvDimensions) {
       if (is.na(dvDimension)) {
         next
@@ -243,12 +308,12 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
     "Legend" = paste0("Observed data ", output$dataDisplayName),
     "Path" = output$path
   )
-  if (isOfLength(dataMapping$lloq, 0)) {
+  if (isEmpty(dataMapping$lloq)) {
     return(list(data = outputData, lloq = NULL))
   }
 
   lloqConcentration <- data[selectedRows, dataMapping$lloq]
-  if (!isOfLength(output$displayUnit, 0)) {
+  if (!isEmpty(output$displayUnit)) {
     for (dvDimension in dvDimensions) {
       if (is.na(dvDimension)) {
         next
@@ -269,4 +334,83 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
     "Path" = output$path
   )
   return(list(data = outputData, lloq = lloqOutput))
+}
+
+
+#' @title getObservedDataFromConfigurationPlan
+#' @description
+#' Get selected observed data from a `ConfigurationPlan` object
+#' @param observedDataId Identifier of observed data
+#' @param configurationPlan A `ConfigurationPlan` object that includes methods to find the data
+#' @param logFolder folder where the logs are saved
+#' @return list of including data and metaData to perform time profile plot
+#' @keywords internal
+getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPlan, logFolder) {
+  observedDataFile <- configurationPlan$getObservedDataPath(observedDataId)
+  observedData <- readObservedDataFile(observedDataFile)
+  observedMetaData <- parseObservationsDataFrame(observedData)
+
+  # In qualification workflow, observed data expected as:
+  # Column 1: Time
+  # Column 2: Observed variable
+  # Column 3: uncertainty around observed variable
+  numberOfColumns <- ncol(observedData)
+  numberOfRows <- nrow(observedData)
+
+  # Log the description of the observed data for debugging
+  logWorkflow(
+    message = paste0("Observed data Id '", observedDataId, "' included ", numberOfColumns, " columns and ", numberOfRows, " rows"),
+    pathFolder = logFolder,
+    logTypes = LogTypes$Debug
+  )
+
+  return(list(
+    data = observedData,
+    metaData = observedMetaData
+  ))
+}
+
+#' @title isObservedData
+#' @description
+#' Check if a configuration plan quantitiy path corresponds to observed data
+#' @param path A quantitiy path from the configuration plan
+#' For instance, "S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
+#' or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
+#' @return A logical checking if path corresponds to observed data
+#' @import ospsuite
+#' @examples
+#' \dontrun{
+#' isObservedData("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)")
+#' # > FALSE
+#' isObservedData("Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc")
+#' # > TRUE
+#' }
+#' @keywords internal
+isObservedData <- function(path) {
+  pathArray <- ospsuite::toPathArray(path)
+  isIncluded(pathArray[2], "ObservedData")
+}
+
+#' @title getObservedDataIdFromPath
+#' @description
+#' Get an observed dataset id from a configuration plan quantity path
+#' @param path A quantitiy path from the configuration plan
+#' For instance, "S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
+#' or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
+#' @return A string corresponding to the `id` of a configuration plan observed dataset
+#' @import ospsuite
+#' @examples
+#' \dontrun{
+#' getObservedDataIdFromPath("S2|Organism|PeripheralVenousBlood|Midazolam|Plasma")
+#' # > NULL
+#' getObservedDataIdFromPath("Midazolam 600mg SD|ObservedData|Plasma|Rifampin|Conc")
+#' # > "Midazolam 600mg SD"
+#' }
+#' @keywords internal
+getObservedDataIdFromPath <- function(path) {
+  if (!isObservedData(path)) {
+    return(NULL)
+  }
+  pathArray <- ospsuite::toPathArray(path)
+  return(pathArray[1])
 }

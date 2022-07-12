@@ -19,16 +19,16 @@ defaultFileNames <- list(
     file.path(folder, getDefaultFolderName(name, suffix = paste0("_", startDate(), "_", startTime()), sep = ""))
   },
   inputFolder = function(name = NULL) {
-    getDefaultFolderName(name, suffix = "Inputs", sep = ifnotnull(name, "-", ""))
+    getDefaultFolderName(name, suffix = "Inputs", sep = ifNotNull(name, "-", ""))
   },
   simulationResultsFolder = function(name = NULL) {
-    getDefaultFolderName(name, suffix = "SimulationResults", sep = ifnotnull(name, "-", ""))
+    getDefaultFolderName(name, suffix = "SimulationResults", sep = ifNotNull(name, "-", ""))
   },
   pkAnalysisResultsFolder = function(name = NULL) {
-    getDefaultFolderName(name, suffix = "PKAnalysisResults", sep = ifnotnull(name, "-", ""))
+    getDefaultFolderName(name, suffix = "PKAnalysisResults", sep = ifNotNull(name, "-", ""))
   },
   sensitivityAnalysisResultsFolder = function(name = NULL) {
-    getDefaultFolderName(name, suffix = "SensitivityAnalysisResults", sep = ifnotnull(name, "-", ""))
+    getDefaultFolderName(name, suffix = "SensitivityAnalysisResults", sep = ifNotNull(name, "-", ""))
   },
   popSensitivityResultsIndexFile = function(name = NULL) {
     getDefaultFileName(name, suffix = "popSensitivityResultsIndex")
@@ -37,10 +37,10 @@ defaultFileNames <- list(
     getDefaultFolderName(name, suffix = NULL, sep = "")
   },
   resultsFolder = function(name = NULL) {
-    getDefaultFolderName(name, suffix = "Results", sep = ifnotnull(name, "-", ""))
+    getDefaultFolderName(name, suffix = "Results", sep = ifNotNull(name, "-", ""))
   },
   figuresFolder = function(name = NULL) {
-    getDefaultFolderName(name, suffix = "Figures", sep = ifnotnull(name, "-", ""))
+    getDefaultFolderName(name, suffix = "Figures", sep = ifNotNull(name, "-", ""))
   },
   logInfoFile = function(name = "info") {
     getDefaultFileName("log", suffix = name, extension = "txt", sep = "-")
@@ -50,6 +50,9 @@ defaultFileNames <- list(
   },
   logDebugFile = function(name = "debug") {
     getDefaultFileName("log", suffix = name, extension = "txt", sep = "-")
+  },
+  resultID = function(...) {
+    paste(removeForbiddenLetters(c(...)), collapse = "_")
   }
 )
 
@@ -60,7 +63,8 @@ defaultFileNames <- list(
 #' @param suffix Suffix to be added at the end of the file name
 #' @param extension file format. Default is `csv`
 #' @param sep separation between names and suffix. Default is `-`
-#' @return default filename adding default suffix and fileextension
+#' @return default filename adding default suffix and file extension
+#' @keywords internal
 getDefaultFileName <- function(..., suffix, extension = "csv", sep = "-") {
   defaultName <- paste(..., suffix, sep = sep)
   defaultFileName <- paste0(defaultName, ".", extension)
@@ -73,7 +77,8 @@ getDefaultFileName <- function(..., suffix, extension = "csv", sep = "-") {
 #' @param suffix Suffix to be added at the end of the folder name.
 #' Dafault `suffix` is the curent date
 #' @param sep separation between names and suffix. Default is `-`
-#' @return default filename adding default suffix and fileextension
+#' @return default filename adding default suffix and file extension
+#' @keywords internal
 getDefaultFolderName <- function(..., suffix = "", sep = "-") {
   defaultFolderName <- paste(..., suffix, sep = sep)
   return(defaultFolderName)
@@ -86,6 +91,15 @@ defaultWorkflowTitles <- list(
   "plotAbsorption" = "Absorption",
   "plotSensitivity" = "Sensitivity Analysis",
   "plotDemography" = "Demography"
+)
+
+defaultWorkflowReferences <- list(
+  "plotGoF" = "time-profiles",
+  "plotPKParameters" = "pk-parameters",
+  "plotMassBalance" = "mass-balance",
+  "plotAbsorption" = "absorption",
+  "plotSensitivity" = "sensitivity-analysis",
+  "plotDemography" = "demography"
 )
 
 defaultWorkflowAppendices <- list(
@@ -106,7 +120,12 @@ defaultWorkflowMessages <- list(
   "plotMassBalance" = "Plot Mass Balance task",
   "plotAbsorption" = "Plot Absorption task",
   "plotSensitivity" = "Plot Sensitivity task",
-  "plotDemography" = "Plot Demography task"
+  "plotDemography" = "Plot Demography task",
+  "plotTimeProfiles" = "Plot Time Profiles task",
+  "plotGOFMerged" = "Plot merged Goodness of fit task",
+  "plotComparisonTimeProfiles" = "Plot Comparison Time Profiles task",
+  "plotPKRatio" = "Plot PK Ratio task",
+  "plotDDIRatio" = "Plot DDI Ratio task"
 )
 
 defaultTaskOutputFolders <- list(
@@ -120,4 +139,3 @@ defaultTaskOutputFolders <- list(
   "plotSensitivity" = "Sensitivity",
   "plotDemography" = "Demography"
 )
-

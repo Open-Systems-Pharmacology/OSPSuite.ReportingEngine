@@ -1,0 +1,260 @@
+---
+title: "Qualification Workflow"
+resource_files:
+  - figures
+  - reportOutputStyle.css
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Qualification Workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+require(ospsuite.reportingengine)
+```
+
+
+# Objectives
+
+The [qualification framework](https://docs.open-systems-pharmacology.org/shared-tools-and-example-workflows/qualification) enables an automated validation of various scenarios (use-cases) supported by the OSP platform. This technical framework is used, for example, to release, in full confidence, a new version of the OSP Suite by verifying automatically that an ever-growing list of scenarios is performing as expected.
+Qualification workflows as performed by the package `ospsuite.reportingengine` aims at building Qualification Reports in Markdown and Word format. 
+This article aims at introducing how to work with `ospsuite.reportingengine` to perform such qualification workflows.
+
+# Qualification runner
+
+The **QualificationRunner** is the software in charge of initializing and managing the qualification workflow by creating and organizing the inputs required for the reporting engine.
+
+The function `startQualificationRunner`, inspired from its Matlab version, launches the **QualificationRunner** on a project.
+The function requires the inputs below:
+
+- `qualificationRunnerFolder`: the directory where the file **QualificationRunner.exe** is located
+- `qualificationPlanFile`: the path of the input qualification plan (json file summarizing the project qualification)
+- `outputFolder`: the path of the output directory created by the qualification runner
+
+```{r qualification runner, eval = FALSE}
+startQualificationRunner(qualificationRunnerFolder, qualificationPlanFile, outputFolder)
+```
+
+Note that, in the R version of `startQualificationRunner`, the simulations and PK analyses are not run from the **QualificationRunner** but from the workflow itself.
+This update aims at preventing the runs of all the simulations available in the qualification.
+Only the simulations results and PK analyses required by the configuration plan are performed to optimize the building time of a qualification report.
+
+# Configuration Plan
+
+The configuration plan is included in a json file, created by the qualification runner, that defines the configuration of the final report.
+The function `loadConfigurationPlan` reads such a file and creates a `ConfigurationPlan` object that all the knowledge required to build the final report.
+It is internally called upon creation of a `QualificationWorkflow` and requires the inputs below:
+
+- `configurationPlanFile`: path of the Configuration Plan json file used by the Qualification workflow
+- `workflowFolder`: path of the output directory created and/or used by the Workflow.
+
+# Qualification workflow
+
+Qualification workflows are built from `Qualificationworkflow` objects which derive from `Workflow` objects.
+As such, they are also based on the concept of tasks but show a difference in the way they are created.
+
+## How to create a qualification workflow
+
+The function `loadQualificationWorkflow` is advised to create a `QualificationWorkflow` object from a configuration plan.
+It requires the same inputs as `loadConfigurationPlan` (`workflowFolder` and `configurationPlanFile`).
+
+```{r load qualification workflow, eval = FALSE}
+workflow <- loadQualificationWorkflow(workflowFolder, configurationPlanFile)
+```
+
+## Qualification workflow features
+
+### Configuration Plan
+
+All `QualificationWorkflow` objects inlcude a `configurationPlan` field.
+This field is a `ConfigurationPlan` object that provides a smart interface for buidling the report.
+
+In particular, all the fields below are reorganized in a data.frame format clarifying the design of the configuration plan.
+
+- `simulationMappings`
+- `observedDataSets`
+- `sections`
+
+Additionally, the `configurationPlan` field includes many `get` methods to search for specific paths of files managedd by the configuration plan (`$getSimulationPath(project, simulation)`, `$getObservedDataPath(id)`, etc)
+
+### Tasks available for Qualification workflow
+
+Two simulation tasks are available and active by default in the qualification workflows:
+
+- `simulate`: simulate time profile results requested in the report plots
+- `calculatePKParameters`: calculate the PK Parameters requested in the PK and DDI ratio plots
+
+Their results are stored within the `workflowFolder` output directory, in *SimulationResults* and *PKAnalysisResults* directories respectively.
+
+Five plot tasks are available in the qualification workflows, they are only active if defined by the configuration plan:
+
+- `plotTimeProfiles`: plot time profiles of the simulated outputs and/or observed data.
+- `plotGOFMerged`: plot goodness of fit results of grouped simulated outputs vs observed data.
+- `plotComparisonTimeProfile`: plot comparison of time profiles from the simulated outputs and/or observed data.
+- `plotPKRatio`: plot PK ratios of simulated vs observed PK parameters as a function of covariate (usually Age).
+- `plotDDIRatio`: plot Drug-Drug Interaction ratios of simulated vs observed PK parameters.
+
+### Settings and artifacts
+
+Most of the settings and artifacts are read from the configuration plan file and translated into task settings.
+Settings for simulations include `showProgress` to show the progress of the `simulate` task and `allowedCores` to perform the simulations in parallel.
+
+Plot tasks can include multiple results for the report, usually called artifacts.
+If the field **Artifacts** is not mentioned in a plot of the configuration plan, all its corresponding artifacts results will be added to the report.
+
+#### predictedVsObserved and residualsOverTime
+
+For `plotGOFMerged` and `plotDDIRatio` tasks, the plots represent observed vs predicted data.
+It is consequently possible to include them as predicted vs observed and/or residuals vs time/predicted by including the options **predictedVsObserved**, **residualsOverPredicted** and **residualsOverTime** in the field **PlotTypes** of the configuration plan.
+
+#### Gemotric Mean Fold Error (GMFE)
+
+For `plotGOFMerged`, `plotPKRatio` and `plotDDIRatio` tasks, it is possible to include a **GMFE** artifact in the configuration plan.
+This artifact corresponds to the addition of a table showing the Gemotric Mean Fold Error (*GMFE*) of the *residuals* calculated for specific plot using the formula $GMFE = 10^{\Sigma log_{10}(residuals)}$.
+
+#### Measure
+
+For `plotPKRatio` and `plotDDIRatio` tasks, it is possible to include a **Measure** artifact in the configuration plan.
+This artifact corresponds to the addition of a table showing:
+
+- For `plotPKRatio`, count and percent of ratios lying within 1.5- and 2-fold error ranges.
+- For `plotDDIRatio`, count and percent of ratios lying within 2-fold and Guest *et al.* error ranges.
+
+#### Table
+
+For `plotPKRatio` task, it is possible to include a **Table** artifact in the configuration plan.
+This artifact corresponds to the addition of a table showing comprehensive observed and simulatied PK data of the PK Ratio analysis.
+
+#### Settings
+
+Since plot tasks can include numerical results, `digits` and `scientific` are fields available in each task `settings` that will define the format of their numeric values.
+
+## How to update and re-run a qualification workflow
+
+If simulations need to be re-run, it is advised to relaod the workflow using `loadQualificationWorkflow`.
+
+In case the update does not require to re-run simulations (e.g. updating the section content, modifying plot aesthetics or removing a plot), the `QualificationWorkflow` method `$updateConfigurationPlan(configurationPlanFile)` can be used to avoid the process of reloading and checking all the simulations of the workflow.
+
+Then, you can also `inactivate` the tasks corresponding to the re-run of the simulations before re-running the workflow.
+
+```{r rerun workflow, eval = FALSE}
+# Reload Configuration Plan
+workflow$updateConfigurationPlan(
+  configurationPlanFile = newConfigurationPlanFile
+)
+
+# Inactivate simulations already performed
+workflow$simulate$inactivate()
+workflow$calculatePKParameters$inactivate()
+
+# Re-run and build updated report
+workflow$runWorkflow()
+```
+
+## Template
+
+A template R script for qualification workflows is available below.
+You can also download it from [Github](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/qualification-workflow-template.R).
+The template aims at creating a function wrapping the usage of the qualification workflow including the call to the qualification runner and named `createQualificationReport`.
+
+```{r template, echo=FALSE, results='asis'}
+cat(
+  c(
+    "```r",
+    readLines(
+      system.file(
+        "extdata", "qualification-workflow-template.R",
+        package = "ospsuite.reportingengine"
+        )
+      ),
+    "```"),
+  sep = "\n"
+)
+```
+
+# Creation of a word report
+
+By default, the qualification workflow field `createWordReport` is set to `r TRUE`.
+This option requests [**Pandoc**](https://pandoc.org/) to convert the report to a word version (with extension *docx*).
+
+Note that [**Pandoc** installation](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/wiki/Installing-pandoc) is required for using this feature.
+
+The conversion to word uses a reference word document that defines each style of report (e.g. *Title*, *Heading 1*, *Normal*, etc.).
+Users can input their own reference word document using the option `wordConversionTemplate` as previously illustrated in the template.
+The default reference word document can be found on [Github](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/reference.docx).
+
+# Referencing
+
+To create references in the final report, html tags are used by the qualification workflow as illustrated below.
+Note that spaces should not be used as reference ids.
+
+```html
+<a id="my-reference-id"></a>
+```
+
+The markdown link to the reference above can then be written as:
+
+```md
+[display text](#my-reference-id)
+```
+
+## Dynamic references 
+
+References for sections, figures and tables created by the qualification workflow are generated dynamically.
+
+For section references, the field **Reference** is used in priority by the configuration plan to generate the reference id.
+In case, such reference is not defined, the qualification worklfow uses the **Id** of the section.
+If no **Reference** nor **Id** is defined, the qualification worklfow generate a reference id named `"undefined-section-<section index>"`.
+
+Tables and figures are numbered internally within first level sections (section whose title start with one markdown character `"#"` and are also referenced).
+
+The algorithm for numbering the figures and tables will look for the keywords **`Figure:`** and **`Table:`** as first element of a line (italic/bold characters are ignored by the algorithm if there is no space between the keyword and the `"*"` or `"_"` characters).
+
+Their references follow the nomenclature below:
+
+- For Figures: `<a id="figure-<section number>-<internal figure count>"></a>`
+- For Table: `<a id="table-<section number>-<internal table count>"></a>`
+
+For instance, the second table encountered within section 3 (e.g. section in 3.1.4) would be referenced: `<a id="table-3-2"></a>`
+
+## User-defined references 
+
+Users can define their own static references to include in the report.
+For instance, user can cite articles in the report using exponent notations as illustrated in the example below:
+
+```md
+text related to article [<sup>1</sup>](#citations)
+
+some text in between
+
+<a id="citations"></a>
+
+### Citations
+
+<sup>1</sup> Cited article
+
+```
+
+which would render as below in the report:
+
+text related to article [<sup>1</sup>](#citations)
+
+<br>
+some text in between
+<br>
+
+<a id="citations"></a>
+
+### Citations
+
+<sup>1</sup> Cited article

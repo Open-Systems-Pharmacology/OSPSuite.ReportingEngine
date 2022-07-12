@@ -19,6 +19,8 @@ R6 class representing Reporting Engine Population Model Set
 \item{\code{populationName}}{display name of population}
 
 \item{\code{studyDesignFile}}{name of study design csv file}
+
+\item{\code{plotReferenceObsData}}{logical for plotting reference observed data in Pediatric and Ratio Comparison workflows}
 }
 \if{html}{\out{</div>}}
 }
@@ -49,6 +51,7 @@ Create a new `PopulationSimulationSet` object.
   populationFile,
   populationName = NULL,
   studyDesignFile = NULL,
+  plotReferenceObsData = FALSE,
   ...
 )}\if{html}{\out{</div>}}
 }
@@ -67,6 +70,8 @@ Create a new `PopulationSimulationSet` object.
 \item{\code{populationName}}{display name of population}
 
 \item{\code{studyDesignFile}}{name of study design csv file}
+
+\item{\code{plotReferenceObsData}}{logical for plotting reference observed data in Pediatric and Ratio Comparison workflows}
 
 \item{\code{...}}{inputs inherited from `SimulationSet`}
 }

@@ -6,12 +6,15 @@
 \description{
 R6 class for Population Simulation Settings
 }
+\keyword{internal}
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
 \item{\code{numberOfCores}}{is the number of cores to use for simulation}
 
 \item{\code{showProgress}}{is a logical field  TRUE shows progress of simulation.}
+
+\item{\code{maxSimulationsPerCore}}{Scale factor used in a parallel simulation.  The product of this scale factor and the number of allowable cores (allowedCores) sets the maximum number of simulations that may be run on one core.}
 
 \item{\code{allowedCores}}{is the number of cores assigned to the user session.}
 }
@@ -32,7 +35,8 @@ Create a `SimulationSettings` object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SimulationSettings$new(
   numberOfCores = defaultSimulationNumberOfCores,
-  showProgress = FALSE
+  showProgress = FALSE,
+  maxSimulationsPerCore = reEnv$defaultMaxSimulationsPerCore
 )}\if{html}{\out{</div>}}
 }
 
@@ -42,6 +46,8 @@ Create a `SimulationSettings` object
 \item{\code{numberOfCores}}{number of cores for parallel computation}
 
 \item{\code{showProgress}}{simulation progress printed to console if TRUE}
+
+\item{\code{maxSimulationsPerCore}}{Scale factor used in a parallel simulation.  The product of this scale factor and the number of allowable cores (allowedCores) sets the maximum number of simulations that may be run on one core.}
 }
 \if{html}{\out{</div>}}
 }

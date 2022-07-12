@@ -30,3 +30,4 @@ SA results for individual or population
 Determine whether to run SA for individual or population.  If for individual,  pass simulation to individualSensitivityAnalysis.
 If SA is for population, loop thru population file, extract parameters for each individual, and pass them to individualSensitivityAnalysis.
 }
+\keyword{internal}

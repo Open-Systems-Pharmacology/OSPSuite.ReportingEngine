@@ -21,3 +21,4 @@ list of `ggplot` objects
 Plot mass balance diagnostics time profiles, cumulative time profiles,
 normalized time profiles and cumulative normalized time profiles
 }
+\keyword{internal}

@@ -1,6 +1,7 @@
 #' @title SensitivityPlotSettings
 #' @description  R6 class for sensitivity analysis plot settings
 #' @export
+#' @importFrom ospsuite.utils %||%
 SensitivityPlotSettings <- R6::R6Class(
   "SensitivityPlotSettings",
   public = list(
@@ -19,16 +20,16 @@ SensitivityPlotSettings <- R6::R6Class(
     #' @param colorPalette Name of a color palette to be used by `ggplot2::scale_fill_brewer()` for sensitivity plot
     #' @return A new `SensitivityPlotSettings` object
     initialize = function(totalSensitivityThreshold = NULL,
-                              variableParameterPaths = NULL,
-                              maximalParametersPerSensitivityPlot = NULL,
-                              plotConfiguration = NULL,
-                              xAxisFontSize = 6,
-                              yAxisFontSize = 6,
-                              maxLinesPerParameter = NULL,
-                              maxWidthPerParameter = NULL,
-                              xLabel = "Sensitivity",
-                              yLabel = NULL,
-                              colorPalette = "Spectral") {
+                          variableParameterPaths = NULL,
+                          maximalParametersPerSensitivityPlot = NULL,
+                          plotConfiguration = NULL,
+                          xAxisFontSize = 6,
+                          yAxisFontSize = 6,
+                          maxLinesPerParameter = NULL,
+                          maxWidthPerParameter = NULL,
+                          xLabel = "Sensitivity",
+                          yLabel = NULL,
+                          colorPalette = "Spectral") {
       validateIsInteger(maximalParametersPerSensitivityPlot, nullAllowed = TRUE)
       validateIsInteger(maxLinesPerParameter, nullAllowed = TRUE)
       validateIsInteger(maxWidthPerParameter, nullAllowed = TRUE)
@@ -45,7 +46,10 @@ SensitivityPlotSettings <- R6::R6Class(
       private$.xAxisFontSize <- xAxisFontSize
       private$.yAxisFontSize <- yAxisFontSize
       private$.maxLinesPerParameter <- maxLinesPerParameter %||% reEnv$maxLinesPerParameter
-      private$.maxWidthPerParameter <- maxWidthPerParameter %||% reEnv$maxWidthPerParameter
+      # Default line breaks will now be limited to 1/3 of plot width
+      defaultPlotConfiguration <- tlf::PlotConfiguration$new()
+      defaultPlotConfiguration$yAxis$font$size <- yAxisFontSize
+      private$.maxWidthPerParameter <- maxWidthPerParameter %||% getLineBreakWidth(element = "yticklabels", plotConfiguration %||% defaultPlotConfiguration)
       private$.xLabel <- xLabel
       private$.yLabel <- yLabel
       private$.colorPalette <- colorPalette
