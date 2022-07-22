@@ -111,5 +111,15 @@ test_that("Final report included the correct amount of figures and tables", {
   expect_length(numberOfTables, 4)
 })
 
+test_that("Inputs are added in the appropriate location", {
+  section11 <- grep(pattern = "## 1.1 With Content", reportContent)
+  section12 <- grep(pattern = "## 1.2 Without Content", reportContent)
+  inputLocation <- grep("This is an input", reportContent)
+  
+  expect_length(inputLocation, 1)
+  expect_gt(inputLocation, section11)
+  expect_gt(section12, inputLocation)
+})
+
 # Clear the output
 unlink(reOutputFolder, recursive = TRUE)

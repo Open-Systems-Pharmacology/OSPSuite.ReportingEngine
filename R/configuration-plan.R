@@ -100,7 +100,7 @@ ConfigurationPlan <- R6::R6Class(
     #' @param input list including SectionId and Path
     #' @param logFolder path where logs are saved
     copyInput = function(input, logFolder = getwd()) {
-      validateIsIncluded(names(input), c("SectionId", "Path"))
+      validateIsIncluded("Path", names(input))
       # Get location of input
       inputLocation <- file.path(self$referenceFolder, input$Path)
       # In case file does not exist
@@ -114,7 +114,7 @@ ConfigurationPlan <- R6::R6Class(
       }
       # UTF-8 encoding is assumed for md files in Input
       markdownContent <- readLines(inputLocation, encoding = "UTF-8", warn = FALSE)
-      addTextChunk(fileName = self$getSectionMarkdown(input$SectionId), text = markdownContent, logFolder = logFolder)
+      addTextChunk(fileName = self$getSectionMarkdown(input$SectionReference %||% input$SectionId), text = markdownContent, logFolder = logFolder)
       return(invisible())
     },
 
