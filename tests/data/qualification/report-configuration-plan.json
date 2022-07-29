@@ -309,7 +309,12 @@
       }
     ]
   },
-  "Inputs": [],
+  "Inputs": [
+    {
+      "Path": "Inputs/input.md",
+      "SectionReference": "11"
+    }
+  ],
   "Sections": [
     {
       "Id": 1,
