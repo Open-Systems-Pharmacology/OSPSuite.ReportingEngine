@@ -5,23 +5,12 @@
       "Simulation": "Model2",
       "Path": "Models",
       "SimulationFile": "MiniModel2"
-    },
-    {
-      "Project": "PKRatio",
-      "Simulation": "Larson",
-      "Path": "Models",
-      "SimulationFile": "Larson 2013 8-18y meal"
     }
   ],
   "ObservedDataSets": [
     {
       "Id": "MiniObs",
       "Path": "ObservedData/MiniObs2.csv"
-    },
-    {
-      "Id": "PK Parameters",
-      "Path": "ObservedData/Parameters.csv",
-      "Type": "PKRatio"
     }
   ],
   "Plots": {
@@ -211,101 +200,6 @@
           },
           "OriginText": "Test"
         }
-      }
-    ],
-    "GOFMergedPlots": [
-      {
-        "Title": "Test of Goodness-of-fit plots",
-        "SectionId": 23,
-        "PlotTypes": [
-          "predictedVsObserved"
-        ],
-        "Groups": [
-          {
-            "Caption": "Test of A",
-            "Symbol": "Circle",
-            "OutputMappings": [
-              {
-                "Project": "Mini",
-                "Simulation": "Model2",
-                "Output": "Organism|A|Concentration in container",
-                "ObservedData": "MiniObs",
-                "Color": "#000000"
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    "ComparisonTimeProfilePlots": [
-      {
-        "SectionId": 22,
-        "Title": "Test Comparison Time Profile",
-        "SimulationDuration": 25,
-        "TimeUnit": "h",
-        "OutputMappings": [
-          {
-            "Project": "Mini",
-            "Simulation": "Model2",
-            "Output": "Organism|A|Concentration in container",
-            "ObservedData": "MiniObs",
-            "StartTime": 0,
-            "TimeUnit": "h",
-            "Color": "#2166ac",
-            "Caption": "Test of A",
-            "Symbol": "Circle"
-          },
-          {
-            "Project": "Mini",
-            "Simulation": "Model2",
-            "Output": "Organism|B|Concentration in container",
-            "ObservedData": "MiniObs",
-            "StartTime": 0,
-            "TimeUnit": "h",
-            "Color": "#b2182b",
-            "Caption": "Test of B",
-            "Symbol": "Square"
-          }
-        ]
-      }
-    ],
-    "PKRatioPlots": [
-      {
-        "Title": "Test of PK Ratio Plots",
-        "PKParameters": [
-          "AUC"
-        ],
-        "SectionId": 3,
-        "Groups": [
-          {
-            "Color": "#000000",
-            "Caption": "All compounds",
-            "Symbol": "Circle",
-            "PKRatios": [
-              {
-                "Project": "PKRatio",
-                "Simulation": "Larson",
-                "Output": "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",
-                "ObservedData": "PK Parameters",
-                "ObservedDataRecordId": 1
-              },
-              {
-                "Project": "PKRatio",
-                "Simulation": "Larson",
-                "Output": "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",
-                "ObservedData": "PK Parameters",
-                "ObservedDataRecordId": 2
-              },
-              {
-                "Project": "PKRatio",
-                "Simulation": "Larson",
-                "Output": "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",
-                "ObservedData": "PK Parameters",
-                "ObservedDataRecordId": 3
-              }
-            ]
-          }
-        ]
       }
     ]
   },

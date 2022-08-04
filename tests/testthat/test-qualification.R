@@ -1,7 +1,7 @@
 context("Qualification Workflow")
 
 reOutputFolder <- "report-qualification"
-configurationPlanFile <- getTestDataFilePath("qualification/report-configuration-plan.json")
+configurationPlanFile <- getTestDataFilePath("qualification/configuration-plan.json")
 
 reOutputFolderReferenceFiles <- c(
   "images", "SimulationResults", "PKAnalysisResults",
