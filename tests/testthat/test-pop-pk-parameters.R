@@ -54,10 +54,18 @@ workflowRatio <- PopulationWorkflow$new(
 )
 
 workflowPediatric$activateTasks(c("simulate", "calculatePKParameters", "plotPKParameters"))
-workflowParallel$activateTasks(c("simulate", "calculatePKParameters", "plotPKParameters"))
-workflowRatio$activateTasks(c("simulate", "calculatePKParameters", "plotPKParameters"))
+# Save time preventing run of same simulations and pk parameter analyses
+workflowParallel$inactivateTasks()
+workflowRatio$inactivateTasks()
+workflowParallel$activateTasks("plotPKParameters")
+workflowRatio$activateTasks("plotPKParameters")
 
 workflowPediatric$runWorkflow()
+# Before running parallel and ratio, save time by copying/pasting simulations and pk parameter analyses
+file.copy(from = "test-pk-parameters-pediatric/SimulationResults", to = "test-pk-parameters-parallel", recursive = TRUE)
+file.copy(from = "test-pk-parameters-pediatric/PKAnalysisResults", to = "test-pk-parameters-parallel", recursive = TRUE)
+file.copy(from = "test-pk-parameters-pediatric/SimulationResults", to = "test-pk-parameters-ratio", recursive = TRUE)
+file.copy(from = "test-pk-parameters-pediatric/PKAnalysisResults", to = "test-pk-parameters-ratio", recursive = TRUE)
 workflowParallel$runWorkflow()
 workflowRatio$runWorkflow()
 
