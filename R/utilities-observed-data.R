@@ -19,30 +19,30 @@ getReaderFunction <- function(fileName, nlines = 2) {
     stringsAsFactors = FALSE
   )
   # For csv files, do not include white space separator
-  if(isFileExtension(fileName, "csv")){
+  if (isFileExtension(fileName, "csv")) {
     readerMapping <- readerMapping[1:2, ]
   }
-  
+
   # Keep separator that would provides the most fields/columns
   sepWidth <- sapply(
     readerMapping$sep,
     function(sep) {
-      # if count.fields notices an odd number of ' or ", 
+      # if count.fields notices an odd number of ' or ",
       # it will return NA for the line (example, "St John's" -> NA)
       # which needs to be removed from the count
       max(count.fields(fileName, sep = sep, comment.char = "", quote = '\"'), na.rm = TRUE)
     }
   )
   # which.max returns the first max value.
-  # Thus, read.csv will be used in priority if same number of columns 
+  # Thus, read.csv will be used in priority if same number of columns
   # are identified by each method
   readerMapping <- readerMapping[which.max(sepWidth), ]
-  
+
   # Assess if selected separator reads a consistent number of fields/columns along lines
   fields <- count.fields(fileName, sep = readerMapping$sep, comment.char = "", quote = '\"')
   fields <- fields[!is.na(fields)]
   consistentFields <- isOfLength(unique(fields), 1)
-  
+
   # If selected separator leads to inconsistent number of columns,
   # Throw a meaningful error message before error happens in read.table or later
   if (!consistentFields) {
@@ -134,14 +134,13 @@ getDictionaryVariable <- function(dictionary, variableID) {
 #' @description
 #' Load observed data and its dataMapping from a simulationSet
 #' @param simulationSet A `SimulationSet` object
-#' @param logFolder folder where the logs are saved
 #' @return list of data and dataMapping
 #' @keywords internal
-loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
+loadObservedDataFromSimulationSet <- function(simulationSet) {
   validateIsOfType(simulationSet, "SimulationSet")
   # Observed data and dictionary are already checked when creating the simulationSet
   # No observed data return NULL
-  if (isOfLength(simulationSet$observedDataFile, 0)) {
+  if (isEmpty(simulationSet$observedDataFile)) {
     return()
   }
 
@@ -182,8 +181,8 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   observedDataset[, dvUnitColumn] <- as.character(observedDataset[, dvUnitColumn])
 
   # If unit was actually defined using output objects, overwrite current dvUnit
-  for(output in simulationSet$outputs){
-    if(isOfLength(output$dataUnit, 0)){
+  for (output in simulationSet$outputs) {
+    if (isOfLength(output$dataUnit, 0)) {
       next
     }
     selectedRows <- evalDataFilter(observedDataset, output$dataSelection)
@@ -204,12 +203,8 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   observedDataset$dimension <- NA
   for (dvUnit in unique(observedDataset[, dvUnitColumn])) {
     dvDimension <- ospsuite::getDimensionForUnit(dvUnit)
-    if (isOfLength(dvDimension, 0)) {
-      logWorkflow(
-        message = paste0("In loadObservedDataFromSimulationSet: unit '", dvUnit, "' is unknown."),
-        pathFolder = logFolder,
-        logTypes = LogTypes$Debug
-      )
+    if (isEmpty(dvDimension)) {
+      logDebug(messages$unknownUnitInObservedData(dvUnit))
       next
     }
     selectedRows <- observedDataset[, dvUnitColumn] %in% dvUnit
@@ -224,11 +219,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
     }
     # Case where dictionary defined an lloq column missing from dataset
     if (!isIncluded(lloqColumn, names(observedDataset))) {
-      logWorkflow(
-        message = paste0("lloq column '", lloqColumn, "' defined in dictionary is not present in the dataset columns"),
-        pathFolder = logFolder,
-        logTypes = LogTypes$Debug
-      )
+      logDebug(messages$lloqColumnNotFound(lloqColumn))
       lloqColumn <- NULL
       next
     }
@@ -262,10 +253,9 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
 #' @param dataMapping A list mapping the variable of data
 #' @param molWeight Molar weight for unit conversion of dependent variable
 #' @param timeUnit time unit for unit conversion of time
-#' @param logFolder folder where the logs are saved
 #' @return list of data and lloq data.frames
 #' @keywords internal
-getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, timeUnit, logFolder) {
+getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, timeUnit) {
   # If no observed data nor data selected, return empty dataset
   if (isEmpty(data)) {
     return()
@@ -275,13 +265,9 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
   }
 
   selectedRows <- evalDataFilter(data, output$dataSelection)
-  logWorkflow(
-    message = paste0("Output '", output$path, "'. Number of selected observations: ", sum(selectedRows)),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
+  logDebug(messages$selectedObservedDataForPath(output$path, sum(selectedRows)))
   # If filter did not select any data, return empty dataset
-  if(sum(selectedRows)==0){
+  if (sum(selectedRows) == 0) {
     return()
   }
 
@@ -342,10 +328,9 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
 #' Get selected observed data from a `ConfigurationPlan` object
 #' @param observedDataId Identifier of observed data
 #' @param configurationPlan A `ConfigurationPlan` object that includes methods to find the data
-#' @param logFolder folder where the logs are saved
 #' @return list of including data and metaData to perform time profile plot
 #' @keywords internal
-getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPlan, logFolder) {
+getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPlan) {
   observedDataFile <- configurationPlan$getObservedDataPath(observedDataId)
   observedData <- readObservedDataFile(observedDataFile)
   observedMetaData <- parseObservationsDataFrame(observedData)
@@ -354,15 +339,7 @@ getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPl
   # Column 1: Time
   # Column 2: Observed variable
   # Column 3: uncertainty around observed variable
-  numberOfColumns <- ncol(observedData)
-  numberOfRows <- nrow(observedData)
-
-  # Log the description of the observed data for debugging
-  logWorkflow(
-    message = paste0("Observed data Id '", observedDataId, "' included ", numberOfColumns, " columns and ", numberOfRows, " rows"),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
+  logDebug(messages$sizeForObservedDataId(observedDataId, ncol(observedData), nrow(observedData)))
 
   return(list(
     data = observedData,

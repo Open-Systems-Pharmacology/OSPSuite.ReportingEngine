@@ -4,14 +4,12 @@
 \alias{addTextChunk}
 \title{addTextChunk}
 \usage{
-addTextChunk(fileName, text, logFolder = getwd())
+addTextChunk(fileName, text)
 }
 \arguments{
 \item{fileName}{name of .md file}
 
 \item{text}{text to include in the document}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \description{
 Add a text chunk to a .md document

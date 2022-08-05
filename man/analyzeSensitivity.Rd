@@ -4,14 +4,12 @@
 \alias{analyzeSensitivity}
 \title{analyzeSensitivity}
 \usage{
-analyzeSensitivity(simulation, settings = settings, logFolder = getwd())
+analyzeSensitivity(simulation, settings = settings)
 }
 \arguments{
 \item{simulation}{simulation class object}
 
 \item{settings}{list of settings for the sensitivity analysis}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 sensitivity analysis results

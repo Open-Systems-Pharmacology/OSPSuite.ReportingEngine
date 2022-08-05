@@ -43,8 +43,8 @@ test_that("PKAnalysis directory includes appropriate number of files", {
 test_that("Saved PK parameters have correct values", {
   # the behaviour is correct, however due to "µ-conversion" done during reading of units
   # the re-exported file differs from the original one. Which is ok.
-  skip_on_os("linux") 
-  
+  skip_on_os("linux")
+
   exportedFile <- file.path(
     pkAnalysisPath,
     list.files(pkAnalysisPath, pattern = ".csv")
@@ -83,8 +83,8 @@ test_that("PKAnalysis directory includes appropriate files and folders, overwrit
 test_that("Saved PK parameters have correct values with updated names and unit", {
   # the behaviour is correct, however due to "µ-conversion" done during reading of units
   # the re-exported file differs from the original one. Which is ok.
-  skip_on_os("linux") 
-  
+  skip_on_os("linux")
+
   exportedFile <- file.path(
     pkAnalysisPath,
     list.files(pkAnalysisPath, pattern = ".csv")

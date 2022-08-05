@@ -15,7 +15,6 @@
 PopulationWorkflow <- R6::R6Class(
   "PopulationWorkflow",
   inherit = Workflow,
-
   public = list(
     workflowType = NULL,
     simulate = NULL,
@@ -55,27 +54,32 @@ PopulationWorkflow <- R6::R6Class(
         theme = theme
       )
 
-      validateIsOfType(c(simulationSets), "PopulationSimulationSet")
-      if (!isOfType(simulationSets, "list")) {
-        simulationSets <- list(simulationSets)
-      }
+      tryCatch(
+        {
+          validateIsOfType(c(simulationSets), "PopulationSimulationSet")
+          if (!isOfType(simulationSets, "list")) {
+            simulationSets <- list(simulationSets)
+          }
+          validateIsIncluded(workflowType, PopulationWorkflowTypes)
+          self$workflowType <- workflowType
+          # Pediatric and ratio comparison workflows need ONE reference population
+          validateHasReferencePopulation(workflowType, simulationSets)
 
-      validateIsIncluded(workflowType, PopulationWorkflowTypes)
-      self$workflowType <- workflowType
+          self$simulate <- loadSimulateTask(self)
+          self$calculatePKParameters <- loadCalculatePKParametersTask(self)
+          self$calculateSensitivity <- loadCalculateSensitivityTask(self)
 
-      # Pediatric and ratio comparison workflows need ONE reference population
-      validateHasReferencePopulation(workflowType, simulationSets, logFolder = self$workflowFolder)
+          self$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(self)
+          self$plotDemography <- loadPlotDemographyTask(self)
+          self$plotPKParameters <- loadPlotPKParametersTask(self)
+          self$plotSensitivity <- loadPlotSensitivityTask(self)
 
-      self$simulate <- loadSimulateTask(self)
-      self$calculatePKParameters <- loadCalculatePKParametersTask(self)
-      self$calculateSensitivity <- loadCalculateSensitivityTask(self)
-
-      self$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(self)
-      self$plotDemography <- loadPlotDemographyTask(self)
-      self$plotPKParameters <- loadPlotPKParametersTask(self)
-      self$plotSensitivity <- loadPlotSensitivityTask(self)
-
-      self$taskNames <- enum(self$getAllTasks())
+          self$taskNames <- enum(self$getAllTasks())
+        },
+        error = function(e) {
+          logErrorThenStop(e)
+        }
+      )
     },
 
     #' @description
@@ -92,69 +96,76 @@ PopulationWorkflow <- R6::R6Class(
     runWorkflow = function() {
       # Prevent crashes if folder was deleted before (re) running a worflow
       dir.create(self$workflowFolder, showWarnings = FALSE, recursive = TRUE)
+      # In case other logs were saved before running workflow
+      setLogFolder(self$workflowFolder)
       actionToken1 <- re.tStartMetadataCapture(metaDataCapture = TRUE)
       actionToken2 <- re.tStartAction(actionType = "Run")
-      logWorkflow(
-        message = "Starting run of population workflow",
-        pathFolder = self$workflowFolder
-      )
+      logInfo(messages$runStarting("Population Workflow", self$workflowType))
+      t0 <- tic()
 
-      if (self$simulate$active) {
-        self$simulate$runTask(self$simulationStructures)
-      }
+      tryCatch(
+        {
+          if (self$simulate$active) {
+            self$simulate$runTask(self$simulationStructures)
+          }
 
-      if (self$calculatePKParameters$active) {
-        self$calculatePKParameters$runTask(self$simulationStructures)
-      }
+          if (self$calculatePKParameters$active) {
+            self$calculatePKParameters$runTask(self$simulationStructures)
+          }
 
-      if (self$calculateSensitivity$active) {
-        self$calculateSensitivity$runTask(self$simulationStructures)
-      }
+          if (self$calculateSensitivity$active) {
+            self$calculateSensitivity$runTask(self$simulationStructures)
+          }
 
-      for (plotTask in self$getAllPlotTasks()) {
-        if (self[[plotTask]]$active) {
-          self[[plotTask]]$runTask(self$simulationStructures)
+          for (plotTask in self$getAllPlotTasks()) {
+            if (self[[plotTask]]$active) {
+              self[[plotTask]]$runTask(self$simulationStructures)
+            }
+          }
+
+          for (userDefinedTask in self$userDefinedTasks) {
+            if (userDefinedTask$active) {
+              userDefinedTask$runTask(self$simulationStructures)
+            }
+          }
+
+          # Merge appendices into final report
+          appendices <- c(
+            as.character(sapply(self$getAllPlotTasks(), function(taskName) {
+              self[[taskName]]$fileName
+            })),
+            as.character(sapply(self$userDefinedTasks, function(userDefinedTask) {
+              userDefinedTask$fileName
+            }))
+          )
+          appendices <- appendices[file.exists(appendices)]
+          if (length(appendices) > 0) {
+            initialReportPath <- file.path(self$workflowFolder, self$reportFileName)
+            mergeMarkdownFiles(appendices, initialReportPath)
+            renderReport(
+              file.path(self$workflowFolder, self$reportFileName),
+              createWordReport = self$createWordReport,
+              numberSections = self$numberSections,
+              wordConversionTemplate = self$wordConversionTemplate
+            )
+            # Move report if a non-default path is provided
+            copyReport(from = initialReportPath, to = self$reportFilePath, copyWordReport = self$createWordReport, keep = TRUE)
+          }
+
+          re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logInfoFile()))
+          re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logDebugFile()))
+          if (file.exists(file.path(self$workflowFolder, defaultFileNames$logErrorFile()))) {
+            re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logErrorFile()))
+          }
+
+          re.tEndAction(actionToken = actionToken2)
+          re.tEndMetadataCapture(outputFolder = "./", actionToken = actionToken1)
+        },
+        error = function(e) {
+          logErrorThenStop(e)
         }
-      }
-
-      for (userDefinedTask in self$userDefinedTasks) {
-        if (userDefinedTask$active) {
-          userDefinedTask$runTask(self$simulationStructures)
-        }
-      }
-
-      # Merge appendices into final report
-      appendices <- c(
-        as.character(sapply(self$getAllPlotTasks(), function(taskName) {
-          self[[taskName]]$fileName
-        })),
-        as.character(sapply(self$userDefinedTasks, function(userDefinedTask) {
-          userDefinedTask$fileName
-        }))
       )
-      appendices <- appendices[file.exists(appendices)]
-      if (length(appendices) > 0) {
-        initialReportPath <- file.path(self$workflowFolder, self$reportFileName)
-        mergeMarkdownFiles(appendices, initialReportPath, logFolder = self$workflowFolder)
-        renderReport(
-          file.path(self$workflowFolder, self$reportFileName),
-          logFolder = self$workflowFolder,
-          createWordReport = self$createWordReport, 
-          numberSections = self$numberSections,
-          wordConversionTemplate = self$wordConversionTemplate
-        )
-        # Move report if a non-default path is provided
-        copyReport(from = initialReportPath, to = self$reportFilePath, copyWordReport = self$createWordReport, keep = TRUE)
-      }
-
-      re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logInfoFile()))
-      re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logDebugFile()))
-      if (file.exists(file.path(self$workflowFolder, defaultFileNames$logErrorFile()))) {
-        re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logErrorFile()))
-      }
-
-      re.tEndAction(actionToken = actionToken2)
-      re.tEndMetadataCapture(outputFolder = "./", actionToken = actionToken1)
+      logInfo(messages$runCompleted(getElapsedTime(t0), "Population Workflow", self$workflowType))
     }
   )
 )
@@ -164,10 +175,10 @@ PopulationWorkflow <- R6::R6Class(
 #' @export
 #' @family enum helpers
 #' @examples
-#' 
+#'
 #' # Lists available Population Workflow types
 #' PopulationWorkflowTypes
-#' 
+#'
 PopulationWorkflowTypes <- enum(c(
   "pediatric",
   "parallelComparison",

@@ -10,8 +10,7 @@ plotQualificationMeanTimeProfile(
   simulationResults,
   axesProperties,
   configurationPlan,
-  plotObject,
-  logFolder
+  plotObject
 )
 }
 \arguments{
@@ -26,8 +25,6 @@ that includes the data requested from `configurationPlanCurve` properties}
 \item{configurationPlan}{A `ConfigurationPlan` object that includes methods to find observed data}
 
 \item{plotObject}{A `ggplot` object}
-
-\item{logFolder}{folder where the logs are saved}
 
 \item{configurationPlanCurve}{`Curves` fields of configuration plan}
 }

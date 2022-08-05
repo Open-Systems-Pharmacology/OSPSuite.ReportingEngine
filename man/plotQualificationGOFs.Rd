@@ -4,12 +4,10 @@
 \alias{plotQualificationGOFs}
 \title{plotQualificationGOFs}
 \usage{
-plotQualificationGOFs(configurationPlan, logFolder = getwd(), settings)
+plotQualificationGOFs(configurationPlan, settings)
 }
 \arguments{
 \item{configurationPlan}{A `ConfigurationPlan` object}
-
-\item{logFolder}{folder where the logs are saved}
 
 \item{settings}{settings for the task}
 }

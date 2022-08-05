@@ -4,12 +4,10 @@
 \alias{createSectionOutput}
 \title{createSectionOutput}
 \usage{
-createSectionOutput(configurationPlan, logFolder = getwd())
+createSectionOutput(configurationPlan)
 }
 \arguments{
 \item{configurationPlan}{A `ConfigurationPlan` object}
-
-\item{logFolder}{path where logs are saved}
 }
 \value{
 Names of created appendices

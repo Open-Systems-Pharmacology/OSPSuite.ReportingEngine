@@ -30,13 +30,13 @@ R6 class representing workflow output
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Output$new()}}
-\item \href{#method-clone}{\code{Output$clone()}}
+\item \href{#method-Output-new}{\code{Output$new()}}
+\item \href{#method-Output-clone}{\code{Output$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Output-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Output-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `Output` object.
 \subsection{Usage}{
@@ -78,8 +78,8 @@ A new `Output` object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Output-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Output-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -29,16 +29,15 @@ myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
 
 # (Re)load a default plotSensitivity task for workflow
 myWorkflow$plotSensitivity <- loadPlotSensitivityTask(
-workflow = myWorkflow, 
-active = TRUE
+  workflow = myWorkflow,
+  active = TRUE
 )
 
 # Load a user-defined simulation task for workflow
 myWorkflow$userDefinedTasks[["plotSensitivity"]] <- loadPlotSensitivityTask(
-workflow = myWorkflow, 
-active = TRUE
+  workflow = myWorkflow,
+  active = TRUE
 )
-
 }
 
 }

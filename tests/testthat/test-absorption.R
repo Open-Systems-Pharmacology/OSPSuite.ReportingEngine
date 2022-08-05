@@ -25,7 +25,7 @@ test_that("Workflow generates appropriate number of files", {
 })
 
 absorptionPath <- file.path(workflowAbs$workflowFolder, "Absorption")
-           
+
 test_that("Absorption directory includes appropriate number of files", {
   # Figures
   expect_length(list.files(absorptionPath, pattern = ".png"), 1)

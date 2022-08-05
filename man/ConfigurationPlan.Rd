@@ -45,27 +45,27 @@ Other qualification workflow:
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-getSectionPath}{\code{ConfigurationPlan$getSectionPath()}}
-\item \href{#method-getSectionTitle}{\code{ConfigurationPlan$getSectionTitle()}}
-\item \href{#method-getSectionMarkdown}{\code{ConfigurationPlan$getSectionMarkdown()}}
-\item \href{#method-getSectionLevel}{\code{ConfigurationPlan$getSectionLevel()}}
-\item \href{#method-getIntroMarkdown}{\code{ConfigurationPlan$getIntroMarkdown()}}
-\item \href{#method-copySectionContent}{\code{ConfigurationPlan$copySectionContent()}}
-\item \href{#method-copyInput}{\code{ConfigurationPlan$copyInput()}}
-\item \href{#method-copyIntro}{\code{ConfigurationPlan$copyIntro()}}
-\item \href{#method-copyContentFiles}{\code{ConfigurationPlan$copyContentFiles()}}
-\item \href{#method-getObservedDataPath}{\code{ConfigurationPlan$getObservedDataPath()}}
-\item \href{#method-getMolWeightForObservedData}{\code{ConfigurationPlan$getMolWeightForObservedData()}}
-\item \href{#method-getSimulationPath}{\code{ConfigurationPlan$getSimulationPath()}}
-\item \href{#method-getPopulationPath}{\code{ConfigurationPlan$getPopulationPath()}}
-\item \href{#method-getSimulationResultsPath}{\code{ConfigurationPlan$getSimulationResultsPath()}}
-\item \href{#method-getPKAnalysisResultsPath}{\code{ConfigurationPlan$getPKAnalysisResultsPath()}}
-\item \href{#method-updateTheme}{\code{ConfigurationPlan$updateTheme()}}
+\item \href{#method-ConfigurationPlan-getSectionPath}{\code{ConfigurationPlan$getSectionPath()}}
+\item \href{#method-ConfigurationPlan-getSectionTitle}{\code{ConfigurationPlan$getSectionTitle()}}
+\item \href{#method-ConfigurationPlan-getSectionMarkdown}{\code{ConfigurationPlan$getSectionMarkdown()}}
+\item \href{#method-ConfigurationPlan-getSectionLevel}{\code{ConfigurationPlan$getSectionLevel()}}
+\item \href{#method-ConfigurationPlan-getIntroMarkdown}{\code{ConfigurationPlan$getIntroMarkdown()}}
+\item \href{#method-ConfigurationPlan-copySectionContent}{\code{ConfigurationPlan$copySectionContent()}}
+\item \href{#method-ConfigurationPlan-copyInput}{\code{ConfigurationPlan$copyInput()}}
+\item \href{#method-ConfigurationPlan-copyIntro}{\code{ConfigurationPlan$copyIntro()}}
+\item \href{#method-ConfigurationPlan-copyContentFiles}{\code{ConfigurationPlan$copyContentFiles()}}
+\item \href{#method-ConfigurationPlan-getObservedDataPath}{\code{ConfigurationPlan$getObservedDataPath()}}
+\item \href{#method-ConfigurationPlan-getMolWeightForObservedData}{\code{ConfigurationPlan$getMolWeightForObservedData()}}
+\item \href{#method-ConfigurationPlan-getSimulationPath}{\code{ConfigurationPlan$getSimulationPath()}}
+\item \href{#method-ConfigurationPlan-getPopulationPath}{\code{ConfigurationPlan$getPopulationPath()}}
+\item \href{#method-ConfigurationPlan-getSimulationResultsPath}{\code{ConfigurationPlan$getSimulationResultsPath()}}
+\item \href{#method-ConfigurationPlan-getPKAnalysisResultsPath}{\code{ConfigurationPlan$getPKAnalysisResultsPath()}}
+\item \href{#method-ConfigurationPlan-updateTheme}{\code{ConfigurationPlan$updateTheme()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getSectionPath"></a>}}
-\if{latex}{\out{\hypertarget{method-getSectionPath}{}}}
+\if{html}{\out{<a id="method-ConfigurationPlan-getSectionPath"></a>}}
+\if{latex}{\out{\hypertarget{method-ConfigurationPlan-getSectionPath}{}}}
 \subsection{Method \code{getSectionPath()}}{
 Get location of directory corresponding to a specific section Id
 \subsection{Usage}{
@@ -84,8 +84,8 @@ The section path corresponding to the id in the configuration plan field `sectio
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getSectionTitle"></a>}}
-\if{latex}{\out{\hypertarget{method-getSectionTitle}{}}}
+\if{html}{\out{<a id="method-ConfigurationPlan-getSectionTitle"></a>}}
+\if{latex}{\out{\hypertarget{method-ConfigurationPlan-getSectionTitle}{}}}
 \subsection{Method \code{getSectionTitle()}}{
 Get markdown title to a specific section Id
 \subsection{Usage}{
@@ -104,8 +104,8 @@ The title associated with "#" corresponding to the subection level
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getSectionMarkdown"></a>}}
-\if{latex}{\out{\hypertarget{method-getSectionMarkdown}{}}}
+\if{html}{\out{<a id="method-ConfigurationPlan-getSectionMarkdown"></a>}}
+\if{latex}{\out{\hypertarget{method-ConfigurationPlan-getSectionMarkdown}{}}}
 \subsection{Method \code{getSectionMarkdown()}}{
 Get location of .md file corresponding to a specific section Id
 \subsection{Usage}{
@@ -124,8 +124,8 @@ The markdown file corresponding to the id in the configuration plan field `secti
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getSectionLevel"></a>}}
-\if{latex}{\out{\hypertarget{method-getSectionLevel}{}}}
+\if{html}{\out{<a id="method-ConfigurationPlan-getSectionLevel"></a>}}
+\if{latex}{\out{\hypertarget{method-ConfigurationPlan-getSectionLevel}{}}}
 \subsection{Method \code{getSectionLevel()}}{
 Get section level
 \subsection{Usage}{
@@ -144,8 +144,8 @@ Section level
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getIntroMarkdown"></a>}}
-\if{latex}{\out{\hypertarget{method-getIntroMarkdown}{}}}
+\if{html}{\out{<a id="method-ConfigurationPlan-getIntroMarkdown"></a>}}
+\if{latex}{\out{\hypertarget{method-ConfigurationPlan-getIntroMarkdown}{}}}
 \subsection{Method \code{getIntroMarkdown()}}{
 Get location of .md intro file
 \subsection{Usage}{
@@ -157,65 +157,59 @@ The markdown file corresponding to introduction
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-copySectionContent"></a>}}
-\if{latex}{\out{\hypertarget{method-copySectionContent}{}}}
+\if{html}{\out{<a id="method-ConfigurationPlan-copySectionContent"></a>}}
+\if{latex}{\out{\hypertarget{method-ConfigurationPlan-copySectionContent}{}}}
 \subsection{Method \code{copySectionContent()}}{
 Copy content to section markdown
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$copySectionContent(id, logFolder = getwd())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$copySectionContent(id)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{section identifier}
-
-\item{\code{logFolder}}{path where logs are saved}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-copyInput"></a>}}
-\if{latex}{\out{\hypertarget{method-copyInput}{}}}
+\if{html}{\out{<a id="method-ConfigurationPlan-copyInput"></a>}}
+\if{latex}{\out{\hypertarget{method-ConfigurationPlan-copyInput}{}}}
 \subsection{Method \code{copyInput()}}{
 Copy input to section markdown
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$copyInput(input, logFolder = getwd())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$copyInput(input)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{input}}{list including SectionId and Path}
-
-\item{\code{logFolder}}{path where logs are saved}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-copyIntro"></a>}}
-\if{latex}{\out{\hypertarget{method-copyIntro}{}}}
+\if{html}{\out{<a id="method-ConfigurationPlan-copyIntro"></a>}}
+\if{latex}{\out{\hypertarget{method-ConfigurationPlan-copyIntro}{}}}
 \subsection{Method \code{copyIntro()}}{
 Copy intro to intro markdown
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$copyIntro(intro, logFolder = getwd())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$copyIntro(intro)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{intro}}{list including Path}
-
-\item{\code{logFolder}}{path where logs are saved}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-copyContentFiles"></a>}}
-\if{latex}{\out{\hypertarget{method-copyContentFiles}{}}}
+\if{html}{\out{<a id="method-ConfigurationPlan-copyContentFiles"></a>}}
+\if{latex}{\out{\hypertarget{method-ConfigurationPlan-copyContentFiles}{}}}
 \subsection{Method \code{copyContentFiles()}}{
 If available, copy all files and folders of `Content` directory into `<workflowFolder>`
 \subsection{Usage}{
@@ -224,8 +218,8 @@ If available, copy all files and folders of `Content` directory into `<workflowF
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getObservedDataPath"></a>}}
-\if{latex}{\out{\hypertarget{method-getObservedDataPath}{}}}
+\if{html}{\out{<a id="method-ConfigurationPlan-getObservedDataPath"></a>}}
+\if{latex}{\out{\hypertarget{method-ConfigurationPlan-getObservedDataPath}{}}}
 \subsection{Method \code{getObservedDataPath()}}{
 Get location of observed data corresponding to a specific observedDataSet Id
 \subsection{Usage}{
@@ -244,8 +238,8 @@ The observed data file path corresponding to the id in the configuration plan fi
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getMolWeightForObservedData"></a>}}
-\if{latex}{\out{\hypertarget{method-getMolWeightForObservedData}{}}}
+\if{html}{\out{<a id="method-ConfigurationPlan-getMolWeightForObservedData"></a>}}
+\if{latex}{\out{\hypertarget{method-ConfigurationPlan-getMolWeightForObservedData}{}}}
 \subsection{Method \code{getMolWeightForObservedData()}}{
 Get molecular weight of observed data corresponding to a specific observedDataSet Id
 \subsection{Usage}{
@@ -264,8 +258,8 @@ The observed data file path corresponding to the id in the configuration plan fi
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getSimulationPath"></a>}}
-\if{latex}{\out{\hypertarget{method-getSimulationPath}{}}}
+\if{html}{\out{<a id="method-ConfigurationPlan-getSimulationPath"></a>}}
+\if{latex}{\out{\hypertarget{method-ConfigurationPlan-getSimulationPath}{}}}
 \subsection{Method \code{getSimulationPath()}}{
 Get location of simulation file corresponding to a specific simulation and project names
 \subsection{Usage}{
@@ -286,8 +280,8 @@ The simulation file path corresponding to the project and simulation in the conf
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getPopulationPath"></a>}}
-\if{latex}{\out{\hypertarget{method-getPopulationPath}{}}}
+\if{html}{\out{<a id="method-ConfigurationPlan-getPopulationPath"></a>}}
+\if{latex}{\out{\hypertarget{method-ConfigurationPlan-getPopulationPath}{}}}
 \subsection{Method \code{getPopulationPath()}}{
 Get location of population file corresponding to a specific simulation and project names
 \subsection{Usage}{
@@ -308,8 +302,8 @@ The population file path corresponding to the project and simulation in the conf
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getSimulationResultsPath"></a>}}
-\if{latex}{\out{\hypertarget{method-getSimulationResultsPath}{}}}
+\if{html}{\out{<a id="method-ConfigurationPlan-getSimulationResultsPath"></a>}}
+\if{latex}{\out{\hypertarget{method-ConfigurationPlan-getSimulationResultsPath}{}}}
 \subsection{Method \code{getSimulationResultsPath()}}{
 Get location of simulation result file corresponding to a specific simulation and project names
 \subsection{Usage}{
@@ -330,8 +324,8 @@ The simulation results file path corresponding to the project and simulation in 
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getPKAnalysisResultsPath"></a>}}
-\if{latex}{\out{\hypertarget{method-getPKAnalysisResultsPath}{}}}
+\if{html}{\out{<a id="method-ConfigurationPlan-getPKAnalysisResultsPath"></a>}}
+\if{latex}{\out{\hypertarget{method-ConfigurationPlan-getPKAnalysisResultsPath}{}}}
 \subsection{Method \code{getPKAnalysisResultsPath()}}{
 Get location of PK Analysis result file corresponding to a specific simulation and project names
 \subsection{Usage}{
@@ -352,8 +346,8 @@ The PKAnalysis results file path corresponding to the project and simulation in 
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateTheme"></a>}}
-\if{latex}{\out{\hypertarget{method-updateTheme}{}}}
+\if{html}{\out{<a id="method-ConfigurationPlan-updateTheme"></a>}}
+\if{latex}{\out{\hypertarget{method-ConfigurationPlan-updateTheme}{}}}
 \subsection{Method \code{updateTheme()}}{
 Update environment theme that will be used as default during workflow
 \subsection{Usage}{

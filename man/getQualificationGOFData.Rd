@@ -4,7 +4,7 @@
 \alias{getQualificationGOFData}
 \title{getQualificationGOFData}
 \usage{
-getQualificationGOFData(gofPlan, configurationPlan, axesUnits, logFolder)
+getQualificationGOFData(gofPlan, configurationPlan, axesUnits)
 }
 \arguments{
 \item{gofPlan}{List providing the mapping of observed and simulated data}
@@ -12,8 +12,6 @@ getQualificationGOFData(gofPlan, configurationPlan, axesUnits, logFolder)
 \item{configurationPlan}{A `ConfigurationPlan` object}
 
 \item{axesUnits}{list of axes properties obtained from `getGOFAxesUnits`}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 list with `data` and `metaData`

@@ -7,8 +7,7 @@
 simulateModelOnCore(
   simulation,
   population,
-  debugLogFileName = file.path(defaultFileNames$workflowFolderPath(),
-    defaultFileNames$logDebugFile()),
+  debugLogFileName = file.path(getwd(), defaultFileNames$logDebugFile()),
   nodeName = NULL,
   showProgress = FALSE
 )

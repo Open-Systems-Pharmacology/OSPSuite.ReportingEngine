@@ -2,7 +2,6 @@
 #' @description Plot mass balance diagnostics time profiles, cumulative time profiles,
 #' normalized time profiles and cumulative normalized time profiles
 #' @param structureSet `SimulationStructure` R6 class object
-#' @param logFolder folder where the logs are saved
 #' @param settings Options to be defined
 #' (e.g. how to group the plot results, or which molecule to exclude)
 #' @return list of `ggplot` objects
@@ -11,9 +10,7 @@
 #' @import utils
 #' @importFrom ospsuite.utils %||%
 #' @keywords internal
-plotMeanMassBalance <- function(structureSet,
-                                logFolder = getwd(),
-                                settings = NULL) {
+plotMeanMassBalance <- function(structureSet, settings = NULL) {
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
 
@@ -131,10 +128,10 @@ plotMeanMassBalance <- function(structureSet,
       unit = "fraction of drugmass"
     )
   )
-  
+
   # Get mass balance results
   massBalanceResults <- list()
-  
+
   # Time profile
   timeProfileID <- defaultFileNames$resultID(1, "mass_balance", structureSet$simulationSet$simulationSetName)
   massBalanceResults[[timeProfileID]] <- saveTaskResults(
@@ -151,7 +148,7 @@ plotMeanMassBalance <- function(structureSet,
     ),
     plotCaption = captions$massBalance$timeProfile()
   )
-  
+
   # Cumulative time profile
   cumulativeTimeProfileID <- defaultFileNames$resultID(2, "mass_balance", structureSet$simulationSet$simulationSetName)
   massBalanceResults[[cumulativeTimeProfileID]] <- saveTaskResults(
@@ -168,7 +165,7 @@ plotMeanMassBalance <- function(structureSet,
     ),
     plotCaption = captions$massBalance$cumulativeTimeProfile()
   )
-  
+
   # Normalized time profile
   normalizedTimeProfileID <- defaultFileNames$resultID(3, "mass_balance", structureSet$simulationSet$simulationSetName)
   massBalanceResults[[normalizedTimeProfileID]] <- saveTaskResults(
@@ -185,7 +182,7 @@ plotMeanMassBalance <- function(structureSet,
     ),
     plotCaption = captions$massBalance$normalizedTimeProfile()
   )
-  
+
   # Normalized cumulative time profile
   normalizedCumulativeTimeProfileID <- defaultFileNames$resultID(4, "mass_balance", structureSet$simulationSet$simulationSetName)
   massBalanceResults[[normalizedCumulativeTimeProfileID]] <- saveTaskResults(
@@ -224,7 +221,7 @@ plotMeanMassBalance <- function(structureSet,
     ),
     plotCaption = captions$massBalance$pieChart(timeCaption, metaDataOutputByGroup$Time$unit)
   )
-  
+
   # Table of mass balance time profiles
   # saved but not included into report
   tableID <- defaultFileNames$resultID(6, "mass_balance", structureSet$simulationSet$simulationSetName)
@@ -233,7 +230,7 @@ plotMeanMassBalance <- function(structureSet,
     table = simulationResultsOutputByGroup,
     includeTable = FALSE
   )
-  
+
   return(massBalanceResults)
 }
 

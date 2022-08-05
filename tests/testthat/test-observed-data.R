@@ -1,3 +1,4 @@
+library(ospsuite.reportingengine)
 # Test data frame used as reference
 testDataFrame <- data.frame(
   "ID" = c(1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3),
@@ -18,9 +19,9 @@ write.csv(testDataFrame,
 )
 # Semi-column csv file of data.frame
 write.table(testDataFrame,
-          file = testCsvSemiFile,
-          sep = ";",
-          row.names = FALSE
+  file = testCsvSemiFile,
+  sep = ";",
+  row.names = FALSE
 )
 # Regular txt file of data.frame
 write.table(testDataFrame,
@@ -46,7 +47,7 @@ test_that("readObservedDataFile: unexistant file throw error", {
 test_that("readObservedDataFile throw an error if columns are inconsistent", {
   expect_error(
     readObservedDataFile(getTestDataFilePath("input-data/error-data.csv"))
-    )
+  )
 })
 
 
@@ -96,19 +97,19 @@ getObservedDataFromOutput <- ospsuite.reportingengine:::getObservedDataFromOutpu
 test_that("'getObservedDataFromOutput' output empty data.frame when no data or data selection is provided", {
   outputAll <- Output$new(path = "a", dataSelection = DataSelectionKeys$ALL)
   outputNone <- Output$new(path = "a", dataSelection = DataSelectionKeys$NONE)
-  outputNoSelect <- Output$new(path = "a", dataSelection = 'Time > 5')
+  outputNoSelect <- Output$new(path = "a", dataSelection = "Time > 5")
   # No data provided
-  expect_null(getObservedDataFromOutput(outputAll, data = NULL, dataMapping = NULL, molWeight = NA, timeUnit = NULL, logFolder = getwd()))
-  expect_null(getObservedDataFromOutput(outputAll, data = data.frame(), dataMapping = NULL, molWeight = NA, timeUnit = NULL, logFolder = getwd()))
-  expect_null(getObservedDataFromOutput(outputNone, data = NULL, dataMapping = NULL, molWeight = NA, timeUnit = NULL, logFolder = getwd()))
-  expect_null(getObservedDataFromOutput(outputNone, data = data.frame(), dataMapping = NULL, molWeight = NA, timeUnit = NULL, logFolder = getwd()))
-  expect_null(getObservedDataFromOutput(outputNoSelect, data = NULL, dataMapping = NULL, molWeight = NA, timeUnit = NULL, logFolder = getwd()))
-  expect_null(getObservedDataFromOutput(outputNoSelect, data = data.frame(), dataMapping = NULL, molWeight = NA, timeUnit = NULL, logFolder = getwd()))
+  expect_null(getObservedDataFromOutput(outputAll, data = NULL, dataMapping = NULL, molWeight = NA, timeUnit = NULL))
+  expect_null(getObservedDataFromOutput(outputAll, data = data.frame(), dataMapping = NULL, molWeight = NA, timeUnit = NULL))
+  expect_null(getObservedDataFromOutput(outputNone, data = NULL, dataMapping = NULL, molWeight = NA, timeUnit = NULL))
+  expect_null(getObservedDataFromOutput(outputNone, data = data.frame(), dataMapping = NULL, molWeight = NA, timeUnit = NULL))
+  expect_null(getObservedDataFromOutput(outputNoSelect, data = NULL, dataMapping = NULL, molWeight = NA, timeUnit = NULL))
+  expect_null(getObservedDataFromOutput(outputNoSelect, data = data.frame(), dataMapping = NULL, molWeight = NA, timeUnit = NULL))
   # No selected data or selection removing all the data
-  expect_null(getObservedDataFromOutput(outputNone, data = testDataFrame, dataMapping = NULL, molWeight = NA, timeUnit = NULL, logFolder = getwd()))
+  expect_null(getObservedDataFromOutput(outputNone, data = testDataFrame, dataMapping = NULL, molWeight = NA, timeUnit = NULL))
   # Since in this step, user actually defined a data selection
   # the number of selected rows is tracked in the log debug
-  expect_null(getObservedDataFromOutput(outputNoSelect, data = testDataFrame, dataMapping = NULL, molWeight = NA, timeUnit = NULL, logFolder = getwd()))
+  expect_null(getObservedDataFromOutput(outputNoSelect, data = testDataFrame, dataMapping = NULL, molWeight = NA, timeUnit = NULL))
 })
 
 # Remove the files created during the tests
@@ -156,4 +157,3 @@ test_that("It does not crash when with an empty string", {
   expect_equal(res$name, "")
   expect_equal(res$unit, "")
 })
-  

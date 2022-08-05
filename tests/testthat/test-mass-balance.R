@@ -37,7 +37,7 @@ test_that("Saved mass balance time profiles have correct values", {
   exportedFile <- file.path(
     massBalancePath,
     list.files(massBalancePath, pattern = ".csv")
-  ) 
+  )
   expect_equal(
     readObservedDataFile(exportedFile),
     readObservedDataFile(refOutputMassBalance),

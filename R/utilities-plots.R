@@ -147,8 +147,8 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
 #' cat(addLineBreakToCaption("this is a sentence with spaces", maxLines = 2, width = 25))
 #'
 #' cat(addLineBreakToCaption(
-#' "this_is_a_long_sentence_without_preferential_splits", 
-#' maxLines = 2, width = 25
+#'   "this_is_a_long_sentence_without_preferential_splits",
+#'   maxLines = 2, width = 25
 #' ))
 #'
 #' cat(addLineBreakToCaption("this too short to split", maxLines = 3, width = 40))
@@ -234,8 +234,11 @@ getSplitPositions <- function(possibleSplits, splitWidth, numberOfSplits) {
 #' @keywords internal
 getLineBreakWidth <- function(element = "legend", plotConfiguration) {
   # Use inches as unit of formula for plotWidth
-  plotWidth <- plotConfiguration$export$width / switch(
-    plotConfiguration$export$units, "in" = 1, "cm" = 2.54, "mm" = 25.4, 1
+  plotWidth <- plotConfiguration$export$width / switch(plotConfiguration$export$units,
+    "in" = 1,
+    "cm" = 2.54,
+    "mm" = 25.4,
+    1
   )
   # Initialize a default fontsize to have a more robust
   fontSize <- 10
@@ -303,22 +306,22 @@ updatePlotDimensions <- function(plotObject) {
     grepl(pattern = "Bottom", x = plotObject$plotConfiguration$legend$position)) {
     # Prevent truncated legend, if legend is too long
     # Get size ratio to keep same aspect ratio
-    sizeRatio <- plotObject$plotConfiguration$export$height/plotObject$plotConfiguration$export$width
+    sizeRatio <- plotObject$plotConfiguration$export$height / plotObject$plotConfiguration$export$width
     # Update width if top/bottom legend is too wide (add 5% to legend width to ensure all the entry content are displayed)
-    plotObject$plotConfiguration$export$width <- max(plotObject$plotConfiguration$export$width, 1.05*legendWidth)
+    plotObject$plotConfiguration$export$width <- max(plotObject$plotConfiguration$export$width, 1.05 * legendWidth)
     # Keep width-height aspect ratio
-    plotObject$plotConfiguration$export$height <- sizeRatio*plotObject$plotConfiguration$export$height
+    plotObject$plotConfiguration$export$height <- sizeRatio * plotObject$plotConfiguration$export$height
     # Add legend height to final plot height to prevent shrinkage of plot area
     plotObject$plotConfiguration$export$height <- plotObject$plotConfiguration$export$height + legendHeight
     return(plotObject)
   }
   # Prevent truncated legend, if legend is too long
   # Get size ratio to keep same aspect ratio
-  sizeRatio <- plotObject$plotConfiguration$export$width/plotObject$plotConfiguration$export$height
+  sizeRatio <- plotObject$plotConfiguration$export$width / plotObject$plotConfiguration$export$height
   # Update height if side legend is too long (add 5% to legend height to ensure all the entries are displayed)
-  plotObject$plotConfiguration$export$height <- max(plotObject$plotConfiguration$export$height, 1.05*legendHeight)
+  plotObject$plotConfiguration$export$height <- max(plotObject$plotConfiguration$export$height, 1.05 * legendHeight)
   # Keep width-height aspect ratio
-  plotObject$plotConfiguration$export$width <- sizeRatio*plotObject$plotConfiguration$export$width
+  plotObject$plotConfiguration$export$width <- sizeRatio * plotObject$plotConfiguration$export$width
   # Add legend width to final plot width to prevent shrinkage of plot area
   plotObject$plotConfiguration$export$width <- plotObject$plotConfiguration$export$width + legendWidth
   return(plotObject)

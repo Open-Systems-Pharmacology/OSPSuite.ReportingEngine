@@ -25,23 +25,22 @@ Define `plotDemography` task and its settings
 
 # A workflow object needs to be created first
 myWorkflow <- PopulationWorkflow$new(
-workflowType,
-workflowFolder,
-simulationSets
+  workflowType,
+  workflowFolder,
+  simulationSets
 )
 
 # (Re)load a default plotDemography task for workflow
 myWorkflow$plotDemography <- loadPlotDemographyTask(
-workflow = myWorkflow, 
-active = TRUE
+  workflow = myWorkflow,
+  active = TRUE
 )
 
 # Load a user-defined simulation task for workflow
 myWorkflow$userDefinedTasks[["plotDemography"]] <- loadPlotDemographyTask(
-workflow = myWorkflow, 
-active = TRUE
+  workflow = myWorkflow,
+  active = TRUE
 )
-
 }
 
 }

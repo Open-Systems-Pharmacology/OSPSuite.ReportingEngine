@@ -4,14 +4,12 @@
 \alias{simulateModel}
 \title{simulateModel}
 \usage{
-simulateModel(structureSet, settings = NULL, logFolder = getwd())
+simulateModel(structureSet, settings = NULL)
 }
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object contain paths of files to be used}
 
 \item{settings}{list of options to be passed on the function}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 Simulation results for individual or population

@@ -10,8 +10,7 @@ getPopSensDfForPkAndOutput(
   indexDf,
   output,
   pkParameter,
-  totalSensitivityThreshold,
-  logFolder
+  totalSensitivityThreshold
 )
 }
 \arguments{
@@ -26,8 +25,6 @@ getPopSensDfForPkAndOutput(
 \item{pkParameter}{name of PK parameter for which to obtain the population sensitivity results}
 
 \item{totalSensitivityThreshold}{cut-off used for plots of the most sensitive parameters}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 sortedFilteredIndividualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output

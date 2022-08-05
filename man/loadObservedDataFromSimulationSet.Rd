@@ -4,12 +4,10 @@
 \alias{loadObservedDataFromSimulationSet}
 \title{loadObservedDataFromSimulationSet}
 \usage{
-loadObservedDataFromSimulationSet(simulationSet, logFolder)
+loadObservedDataFromSimulationSet(simulationSet)
 }
 \arguments{
 \item{simulationSet}{A `SimulationSet` object}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 list of data and dataMapping

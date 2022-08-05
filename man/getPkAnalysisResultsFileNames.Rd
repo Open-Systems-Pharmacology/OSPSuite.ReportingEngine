@@ -26,7 +26,6 @@ myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
 
 # Get expected paths and file names for workflow
 getPKAnalysisResultsFileNames(myWorkflow)
-
 }
 
 }

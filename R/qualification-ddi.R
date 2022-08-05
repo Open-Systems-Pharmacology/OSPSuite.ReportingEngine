@@ -259,7 +259,7 @@ getSmartZoomLimits <- function(dataVector, residualsVsObserved = FALSE) {
     1.25
   )
   # For residuals vs observed, y axis should always include the 2-fold error range
-  if(residualsVsObserved){
+  if (residualsVsObserved) {
     return(list(min = min(minLimit, 0.25), max = max(maxLimit, 4)))
   }
   return(list(min = minLimit, max = maxLimit))
@@ -509,13 +509,10 @@ getDDITable <- function(dataframe) {
 #' @title plotQualificationDDIs
 #' @description Plot observation vs prediction for DDI qualification workflow
 #' @param configurationPlan A `ConfigurationPlan` object
-#' @param logFolder Folder where logs are saved
 #' @param settings A `TaskSettings` object
 #' @return list of qualification DDI ggplot objects
 #' @keywords internal
-plotQualificationDDIs <- function(configurationPlan,
-                                  logFolder = getwd(),
-                                  settings) {
+plotQualificationDDIs <- function(configurationPlan, settings) {
   ddiData <- getQualificationDDIPlotData(configurationPlan)
 
   ddiResults <- list()
@@ -552,7 +549,7 @@ plotQualificationDDIs <- function(configurationPlan,
         includeTextChunk = TRUE
       )
       ddiResults <- c(ddiResults, subheading)
-      # Enforce character class instead of factor 
+      # Enforce character class instead of factor
       # to ensure that function 'sort' uses alphabetical order instead of factor levels
       subplotTypeLevels <- as.character(dataframe[[subplotType]])
       subplotTypeLevels <- sort(unique(subplotTypeLevels))

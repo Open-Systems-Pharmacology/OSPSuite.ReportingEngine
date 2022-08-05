@@ -6,7 +6,6 @@
 \usage{
 renderReport(
   fileName,
-  logFolder = getwd(),
   createWordReport = FALSE,
   numberSections = TRUE,
   intro = NULL,
@@ -16,9 +15,7 @@ renderReport(
 \arguments{
 \item{fileName}{name of .md file to render}
 
-\item{logFolder}{folder where the logs are saved}
-
-\item{createWordReport}{option for creating Markdwon-Report only but not a Word-Report}
+\item{createWordReport}{option for creating Markdown-Report only but not a Word-Report}
 
 \item{numberSections}{logical defining if sections are numbered}
 

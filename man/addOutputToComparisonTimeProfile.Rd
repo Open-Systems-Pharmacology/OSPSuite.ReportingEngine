@@ -9,8 +9,7 @@ addOutputToComparisonTimeProfile(
   simulationDuration,
   axesProperties,
   plotObject,
-  configurationPlan,
-  logFolder
+  configurationPlan
 )
 }
 \arguments{
@@ -23,8 +22,6 @@ addOutputToComparisonTimeProfile(
 \item{plotObject}{ggplot object}
 
 \item{configurationPlan}{A `ConfigurationPlan` object}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 A ggplot object

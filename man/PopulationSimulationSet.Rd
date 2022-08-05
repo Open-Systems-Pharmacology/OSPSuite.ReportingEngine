@@ -7,7 +7,7 @@
 R6 class representing Reporting Engine Population Model Set
 }
 \section{Super class}{
-\code{\link[ospsuite.reportingengine:SimulationSet]{ospsuite.reportingengine::SimulationSet}} -> \code{PopulationSimulationSet}
+\code{ospsuite.reportingengine::SimulationSet} -> \code{PopulationSimulationSet}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -27,20 +27,14 @@ R6 class representing Reporting Engine Population Model Set
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{PopulationSimulationSet$new()}}
-\item \href{#method-copyInputFiles}{\code{PopulationSimulationSet$copyInputFiles()}}
-\item \href{#method-clone}{\code{PopulationSimulationSet$clone()}}
+\item \href{#method-PopulationSimulationSet-new}{\code{PopulationSimulationSet$new()}}
+\item \href{#method-PopulationSimulationSet-copyInputFiles}{\code{PopulationSimulationSet$copyInputFiles()}}
+\item \href{#method-PopulationSimulationSet-clone}{\code{PopulationSimulationSet$clone()}}
 }
-}
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-}
-\out{</details>}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-PopulationSimulationSet-new"></a>}}
+\if{latex}{\out{\hypertarget{method-PopulationSimulationSet-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `PopulationSimulationSet` object.
 \subsection{Usage}{
@@ -82,8 +76,8 @@ A new `PopulationSimulationSet` object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-copyInputFiles"></a>}}
-\if{latex}{\out{\hypertarget{method-copyInputFiles}{}}}
+\if{html}{\out{<a id="method-PopulationSimulationSet-copyInputFiles"></a>}}
+\if{latex}{\out{\hypertarget{method-PopulationSimulationSet-copyInputFiles}{}}}
 \subsection{Method \code{copyInputFiles()}}{
 Copy input files into a simulation set specific folder
 \subsection{Usage}{
@@ -99,8 +93,8 @@ Copy input files into a simulation set specific folder
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-PopulationSimulationSet-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-PopulationSimulationSet-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

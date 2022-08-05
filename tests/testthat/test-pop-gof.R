@@ -122,8 +122,7 @@ test_that("Workflow structure includes appropriate files and folders", {
   expect_setequal(list.files(workflowNoObs1$workflowFolder), refWorkflowStructure)
   expect_setequal(list.files(workflowNoObs2$workflowFolder), refWorkflowStructure)
   expect_setequal(list.files(workflowNoObs3$workflowFolder), refWorkflowStructure)
-  # One value from obs is 0, log(0)=-Inf is removed with a warning written in log-error.txt
-  expect_setequal(list.files(workflowAllObs$workflowFolder), c("log-error.txt", refWorkflowStructure))
+  expect_setequal(list.files(workflowAllObs$workflowFolder), refWorkflowStructure)
   expect_setequal(list.files(workflowSelectObs$workflowFolder), refWorkflowStructure)
 })
 

@@ -16,8 +16,8 @@ addUserDefinedTask(
 \item{workflow}{`Workflow` object or derived class}
 
 \item{taskFunction}{Function to be called by `Task` object.
-For `MeanModelWorkflow`, input arguments of `taskFunction` should include: `simulationSet`, `logFolder` and `settings`.
-For `PopulationWorkflow`, input arguments of `taskFunction` should include: `simulationSets`, `logFolder`, `xParameters`, `yParameters` and `settings`}
+For `MeanModelWorkflow`, input arguments of `taskFunction` should include: `simulationSet`, and `settings`.
+For `PopulationWorkflow`, input arguments of `taskFunction` should include: `simulationSets`, `xParameters`, `yParameters` and `settings`}
 
 \item{taskName}{character name of task to initialize reporting of task}
 
@@ -39,42 +39,40 @@ myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
 
 # Create a function to output results for workflow
 # Mean model workflows functions usually expect SimulationStructure objects as inputs
-userDefinedFunction <- function(structureSet, logFolder = getwd(), settings = NULL) {
-# Insert some code to calculate results and tune their output
-userResults <- list()
-userPlot <- ggplot()
-userTable <- data.frame()
-userText <- "Comments about the results of thMy user results"
+userDefinedFunction <- function(structureSet, settings = NULL) {
+  # Insert some code to calculate results and tune their output
+  userResults <- list()
+  userPlot <- ggplot()
+  userTable <- data.frame()
+  userText <- "Comments about the results of thMy user results"
 
-userResults[[1]] <- saveTaskResults(
-id = "user-result-1",
-plot = userPlot,
-plotCaption = "Title of Figure 1",
-includePlot = TRUE,
-table = userTable, 
-tableCaption = "Title of Table 1",
-includeTable = TRUE,
-textChunk = userText,
-includeTextChunk = TRUE
-)
+  userResults[[1]] <- saveTaskResults(
+    id = "user-result-1",
+    plot = userPlot,
+    plotCaption = "Title of Figure 1",
+    includePlot = TRUE,
+    table = userTable,
+    tableCaption = "Title of Table 1",
+    includeTable = TRUE,
+    textChunk = userText,
+    includeTextChunk = TRUE
+  )
 
-# Tasks will run through the list of userResults
-# And add their outputs to the report
-return(userResults)
-
+  # Tasks will run through the list of userResults
+  # And add their outputs to the report
+  return(userResults)
 }
 
 # Add a user-defined task to workflow
 addUserDefinedTask(
-workflow = myWorkflow,
-taskFunction = userDefinedFunction,
-taskName = "userDefinedTask",
-active = TRUE
+  workflow = myWorkflow,
+  taskFunction = userDefinedFunction,
+  taskName = "userDefinedTask",
+  active = TRUE
 )
 
 # Checks structure of task using
 # myWorkflow$userDefinedTasks[[index]]$
-
 }
 
 }

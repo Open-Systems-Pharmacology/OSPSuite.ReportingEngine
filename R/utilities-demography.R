@@ -1,7 +1,6 @@
 #' @title plotDemographyParameters
 #' @description Plot demography parameters box plots and tables
 #' @param structureSets `SimulationStructure` R6 class object
-#' @param logFolder folder where the logs are saved
 #' @param settings list of settings for the output table/plot
 #' @param workflowType workflowType Type of population workflow.
 #' Use enum `PopulationWorkflowTypes` to get list of workflow types.
@@ -14,7 +13,6 @@
 #' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotDemographyParameters <- function(structureSets,
-                                     logFolder = getwd(),
                                      settings = NULL,
                                      workflowType = PopulationWorkflowTypes$parallelComparison,
                                      xParameters = getDefaultDemographyXParameters(workflowType),
@@ -35,8 +33,8 @@ plotDemographyParameters <- function(structureSets,
   demographyMetaData <- demographyAcrossPopulations$metaData
   simulationSetNames <- unique(as.character(demographyData$simulationSetName))
 
-  checkIsIncluded(xParameters, names(demographyData), nullAllowed = TRUE, groupName = "demography variable names across simulation sets", logFolder = logFolder)
-  checkIsIncluded(yParameters, names(demographyData), nullAllowed = TRUE, groupName = "demography variable names across simulation sets", logFolder = logFolder)
+  checkIsIncluded(xParameters, names(demographyData), nullAllowed = TRUE, groupName = "demography variable names across simulation sets")
+  checkIsIncluded(yParameters, names(demographyData), nullAllowed = TRUE, groupName = "demography variable names across simulation sets")
   xParameters <- intersect(xParameters, names(demographyData))
   yParameters <- intersect(yParameters, names(demographyData))
 
@@ -62,16 +60,16 @@ plotDemographyParameters <- function(structureSets,
           plotConfiguration = settings$plotConfigurations[["histogram"]],
           bins = settings$bins %||% AggregationConfiguration$bins
         )
-        
+
         # Save results
         demographyResults[[resultID]] <- saveTaskResults(
           id = resultID,
           plot = demographyHistogram,
           plotCaption = captions$demography$histogram(
-            parameterCaption, 
-            simulationSetNames, 
+            parameterCaption,
+            simulationSetNames,
             simulationSetDescriptor
-            )
+          )
         )
       }
     }
@@ -95,16 +93,16 @@ plotDemographyParameters <- function(structureSets,
             plotConfiguration = settings$plotConfigurations[["histogram"]],
             bins = settings$bins %||% AggregationConfiguration$bins
           )
-          
+
           # Save results
           demographyResults[[resultID]] <- saveTaskResults(
             id = resultID,
             plot = demographyHistogram,
             plotCaption = captions$demography$histogram(
-              parameterCaption, 
-              simulationSetName, 
+              parameterCaption,
+              simulationSetName,
               simulationSetDescriptor
-              )
+            )
           )
         }
       }
@@ -163,7 +161,7 @@ plotDemographyParameters <- function(structureSets,
             metaData = vpcMetaData,
             plotObject = referenceVpcPlot
           )
-          
+
           xParameterCaption <- vpcMetaData$x$dimension
           yParameterCaption <- vpcMetaData$median$dimension
 
@@ -180,10 +178,10 @@ plotDemographyParameters <- function(structureSets,
               referenceSetName = referenceSimulationSetName
             )
           )
-          
+
           vpcLogLimits <- autoAxesLimits(c(comparisonData$ymin, comparisonData$median, comparisonData$ymax), scale = "log")
           vpcLogTicks <- autoAxesTicksFromLimits(vpcLogLimits)
-          
+
           resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName, "log")
           demographyResults[[resultID]] <- saveTaskResults(
             id = resultID,
@@ -222,10 +220,10 @@ plotDemographyParameters <- function(structureSets,
           metaData = vpcMetaData,
           plotConfiguration = settings$plotConfigurations[["vpcParameterPlot"]]
         )
-        
+
         xParameterCaption <- vpcMetaData$x$dimension
         yParameterCaption <- vpcMetaData$median$dimension
-        
+
         # Save comparison vpc plots
         resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName)
         demographyResults[[resultID]] <- saveTaskResults(
@@ -236,12 +234,12 @@ plotDemographyParameters <- function(structureSets,
             yParameterCaption,
             simulationSetName,
             simulationSetDescriptor
-            )
+          )
         )
-        
+
         vpcLogLimits <- autoAxesLimits(c(vpcData$ymin, vpcData$median, vpcData$ymax), scale = "log")
         vpcLogTicks <- autoAxesTicksFromLimits(vpcLogLimits)
-        
+
         resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName, "log")
         demographyResults[[resultID]] <- saveTaskResults(
           id = resultID,
@@ -309,9 +307,9 @@ DemographyDefaultParameters <- c(ospsuite::StandardPath[c("Age", "Height", "Weig
 #' @return names of default demography parameters
 #' @export
 #' @examples
-#' 
+#'
 #' getDefaultDemographyXParameters(PopulationWorkflowTypes$pediatric)
-#' 
+#'
 getDefaultDemographyXParameters <- function(workflowType) {
   validateIsIncluded(workflowType, PopulationWorkflowTypes)
   if (workflowType %in% PopulationWorkflowTypes$pediatric) {
@@ -324,7 +322,7 @@ getDefaultDemographyXParameters <- function(workflowType) {
 #' @param data A data.frame
 #' @param xParameterName Name of parameter in `data` used for aggregation in x axis of plot
 #' @param yParameterName Name of parameter in `data` aggreated in y axis of plot
-#' @param bins Either a numeric vector defining bin edges 
+#' @param bins Either a numeric vector defining bin edges
 #' or a numeric value defining the number of bins.
 #' @param stairstep A logical value defining if aggregation uses continuous or stairstep plot
 #' @return A data.frame of aggregated data
@@ -474,15 +472,14 @@ plotDemographyHistogram <- function(data,
 #' @export
 #' @family workflow helpers
 #' @examples \dontrun{
-#' 
+#'
 #' # A workflow object needs to be created first
 #' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#' 
+#'
 #' # Get the list of parameters in x-axis for range plots
 #' getXParametersForDemogrpahyPlot(workflow = myWorkflow)
-#' 
 #' }
-#' 
+#'
 getXParametersForDemogrpahyPlot <- function(workflow) {
   validateIsOfType(workflow, "PopulationWorkflow")
   return(workflow$plotDemography$xParameters)
@@ -495,15 +492,14 @@ getXParametersForDemogrpahyPlot <- function(workflow) {
 #' @export
 #' @family workflow helpers
 #' @examples \dontrun{
-#' 
+#'
 #' # A workflow object needs to be created first
 #' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#' 
+#'
 #' # Get the list of parameters in x-axis for range plots
 #' getYParametersForDemogrpahyPlot(workflow = myWorkflow)
-#' 
 #' }
-#' 
+#'
 getYParametersForDemogrpahyPlot <- function(workflow) {
   validateIsOfType(workflow, "PopulationWorkflow")
   return(workflow$plotDemography$yParameters %||% DemographyDefaultParameters)
@@ -517,18 +513,17 @@ getYParametersForDemogrpahyPlot <- function(workflow) {
 #' @export
 #' @family workflow helpers
 #' @examples \dontrun{
-#' 
+#'
 #' # A workflow object needs to be created first
 #' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#' 
+#'
 #' # Set parameters in x-axis for range plots
 #' setXParametersForDemogrpahyPlot(
-#' workflow = myWorkflow, 
-#' parameters = StandardPath
+#'   workflow = myWorkflow,
+#'   parameters = StandardPath
 #' )
-#' 
 #' }
-#' 
+#'
 setXParametersForDemogrpahyPlot <- function(workflow, parameters) {
   validateIsOfType(workflow, "PopulationWorkflow")
   validateIsString(c(parameters), nullAllowed = TRUE)
@@ -555,18 +550,17 @@ setXParametersForDemogrpahyPlot <- function(workflow, parameters) {
 #' @export
 #' @family workflow helpers
 #' @examples \dontrun{
-#' 
+#'
 #' # A workflow object needs to be created first
 #' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#' 
+#'
 #' # Get the list of parameters in x-axis for range plots
 #' addXParametersForDemogrpahyPlot(
-#' workflow = myWorkflow, 
-#' parameters = StandardPath$GestationalAge
+#'   workflow = myWorkflow,
+#'   parameters = StandardPath$GestationalAge
 #' )
-#' 
 #' }
-#' 
+#'
 addXParametersForDemogrpahyPlot <- function(workflow, parameters) {
   updatedParameters <- c(getXParametersForDemogrpahyPlot(workflow), parameters)
   setXParametersForDemogrpahyPlot(workflow, updatedParameters)
@@ -580,18 +574,17 @@ addXParametersForDemogrpahyPlot <- function(workflow, parameters) {
 #' @export
 #' @family workflow helpers
 #' @examples \dontrun{
-#' 
+#'
 #' # A workflow object needs to be created first
 #' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#' 
+#'
 #' # Set parameters in y-axis for range plots and histograms
 #' setYParametersForDemogrpahyPlot(
-#' workflow = myWorkflow, 
-#' parameters = StandardPath
+#'   workflow = myWorkflow,
+#'   parameters = StandardPath
 #' )
-#' 
 #' }
-#' 
+#'
 setYParametersForDemogrpahyPlot <- function(workflow, parameters) {
   validateIsOfType(workflow, "PopulationWorkflow")
   validateIsString(c(parameters))
@@ -618,18 +611,17 @@ setYParametersForDemogrpahyPlot <- function(workflow, parameters) {
 #' @export
 #' @family workflow helpers
 #' @examples \dontrun{
-#' 
+#'
 #' # A workflow object needs to be created first
 #' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#' 
+#'
 #' # Add parameters in y-axis for range plots and histograms
 #' addYParametersForDemogrpahyPlot(
-#' workflow = myWorkflow, 
-#' parameters = StandardPath$GestationalAge
+#'   workflow = myWorkflow,
+#'   parameters = StandardPath$GestationalAge
 #' )
-#' 
 #' }
-#' 
+#'
 addYParametersForDemogrpahyPlot <- function(workflow, parameters) {
   updatedParameters <- c(getYParametersForDemogrpahyPlot(workflow), parameters)
   setYParametersForDemogrpahyPlot(workflow, updatedParameters)

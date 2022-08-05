@@ -19,13 +19,13 @@ R6 class for tracking and printing messages for the Excel template
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{ExcelMessaging$new()}}
-\item \href{#method-displayMessage}{\code{ExcelMessaging$displayMessage()}}
+\item \href{#method-ExcelMessaging-new}{\code{ExcelMessaging$new()}}
+\item \href{#method-ExcelMessaging-displayMessage}{\code{ExcelMessaging$displayMessage()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-ExcelMessaging-new"></a>}}
+\if{latex}{\out{\hypertarget{method-ExcelMessaging-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize an `ExcelMessaging` object
 \subsection{Usage}{
@@ -44,8 +44,8 @@ A new `ExcelMessaging` object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-displayMessage"></a>}}
-\if{latex}{\out{\hypertarget{method-displayMessage}{}}}
+\if{html}{\out{<a id="method-ExcelMessaging-displayMessage"></a>}}
+\if{latex}{\out{\hypertarget{method-ExcelMessaging-displayMessage}{}}}
 \subsection{Method \code{displayMessage()}}{
 display the messages stored in messages
 \subsection{Usage}{

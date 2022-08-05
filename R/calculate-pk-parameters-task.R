@@ -14,6 +14,10 @@ CalculatePKParametersTask <- R6::R6Class(
         taskResults,
         structureSet$pkAnalysisResultsFileNames
       )
+      logDebug(paste0(
+        "PK parameters for '", structureSet$simulationSet$simulationSetName,
+        "' saved in '", structureSet$pkAnalysisResultsFileNames
+      ))
       re.tStoreFileMetadata(access = "write", filePath = structureSet$pkAnalysisResultsFileNames)
     },
 
@@ -22,40 +26,27 @@ CalculatePKParametersTask <- R6::R6Class(
     #' @param structureSets list of `SimulationStructure` objects
     runTask = function(structureSets) {
       actionToken <- re.tStartAction(actionType = "Analysis", actionNameExtension = self$nameTaskResults)
-      logWorkflow(
-        message = paste0("Starting ", self$message),
-        pathFolder = self$workflowFolder
-      )
+      logInfo(messages$runStarting(self$message))
+      t0 <- tic()
 
       if (!is.null(self$outputFolder)) {
-        dir.create(file.path(self$workflowFolder, self$outputFolder))
+        dir.create(file.path(self$workflowFolder, self$outputFolder), showWarnings = FALSE, recursive = TRUE)
       }
 
       for (set in structureSets) {
-        logWorkflow(
-          message = paste0("Calculate PK parameters for simulation set ", set$simulationSet$simulationSetName),
-          pathFolder = self$workflowFolder
-        )
+        logInfo(messages$runStarting(self$message, set$simulationSet$simulationSetName))
         if (self$validateStructureSetInput(set)) {
           taskResults <- self$getTaskResults(
             structureSet = set,
-            settings = self$settings,
-            logFolder = self$workflowFolder
+            settings = self$settings
           )
 
-          self$saveResults(
-            set,
-            taskResults
-          )
-
-          logWorkflow(
-            message = "PK parameter calculation completed.",
-            pathFolder = self$workflowFolder
-          )
+          self$saveResults(set, taskResults)
         }
         clearMemory(clearSimulationsCache = TRUE)
       }
       re.tEndAction(actionToken = actionToken)
+      logInfo(messages$runCompleted(getElapsedTime(t0), self$message))
     }
   )
 )

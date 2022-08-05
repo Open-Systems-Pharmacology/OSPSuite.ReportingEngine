@@ -22,12 +22,12 @@ R6 class representing workflow selected PK parameter.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{PkParameterInfo$new()}}
+\item \href{#method-PkParameterInfo-new}{\code{PkParameterInfo$new()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-PkParameterInfo-new"></a>}}
+\if{latex}{\out{\hypertarget{method-PkParameterInfo-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `PkParameterInfo` object.
 \subsection{Usage}{

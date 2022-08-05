@@ -113,7 +113,7 @@ setSelectObs <- SimulationSet$new(
 # Use expression to define and run each workflow scenario
 scenarios <- c("NoObs1", "NoObs2", "NoObs3", "NoObs4", "AllObs", "SelectObs")
 defineAndRunWorkflows <- parse(text = paste0(
-  "workflow", scenarios, " <- MeanModelWorkflow$new(", 
+  "workflow", scenarios, " <- MeanModelWorkflow$new(",
   "simulationSets = set", scenarios, ", workflowFolder = workflowFolder", scenarios, ");",
   "workflow", scenarios, "$activateTasks(c('simulate', 'plotTimeProfilesAndResiduals'));",
   "workflow", scenarios, "$runWorkflow()"
@@ -125,8 +125,7 @@ test_that("Workflow structure includes appropriate files and folders", {
   expect_setequal(list.files(workflowNoObs2$workflowFolder), refWorkflowStructure)
   expect_setequal(list.files(workflowNoObs3$workflowFolder), refWorkflowStructure)
   expect_setequal(list.files(workflowNoObs4$workflowFolder), refWorkflowStructure)
-  # One value from obs is 0, log(0)=-Inf is removed with a warning written in log-error.txt
-  expect_setequal(list.files(workflowAllObs$workflowFolder), c("log-error.txt", refWorkflowStructure))
+  expect_setequal(list.files(workflowAllObs$workflowFolder), refWorkflowStructure)
   expect_setequal(list.files(workflowSelectObs$workflowFolder), refWorkflowStructure)
 })
 
@@ -154,10 +153,10 @@ test_that("Saved time profile data and residuals includes the correct data", {
     readObservedDataFile(refOutputTimeProfileNoObs),
     tolerance = comparisonTolerance()
   )
-  
+
   expect_equal(readObservedDataFile(file.path(workflowNoObs4$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")),
-               readObservedDataFile(refOutputTimeProfileNoObs),
-               tolerance = comparisonTolerance()
+    readObservedDataFile(refOutputTimeProfileNoObs),
+    tolerance = comparisonTolerance()
   )
 
   expect_equal(readObservedDataFile(file.path(workflowAllObs$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")),

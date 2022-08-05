@@ -120,7 +120,7 @@ test_that("Saved PK parameters data from workflows have correct values", {
     refOutput,
     list.files(refOutput, pattern = "pk_parameters")
   )
-  for(fileIndex in seq_along(refFiles)){
+  for (fileIndex in seq_along(refFiles)) {
     expect_equal(
       readObservedDataFile(pediatricFiles[fileIndex]),
       readObservedDataFile(refFiles[fileIndex]),
@@ -141,7 +141,7 @@ test_that("Saved PK parameters data from workflows have correct values", {
     refOutput,
     list.files(refOutput, pattern = ".csv")
   )
-  for(fileIndex in seq_along(refFiles)){
+  for (fileIndex in seq_along(refFiles)) {
     expect_equal(
       readObservedDataFile(ratioFiles[fileIndex]),
       readObservedDataFile(refFiles[fileIndex]),

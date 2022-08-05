@@ -92,18 +92,20 @@ Task <- R6::R6Class(
       )
       inputsToCheck <- intersect(structureSetInputs, private$.inputs)
       # If no required input
-      if(isEmpty(inputsToCheck)){
+      if (isEmpty(inputsToCheck)) {
         return(TRUE)
       }
-      
+
       # TODO: update after PR about logging
-      tryCatch({
-        validateFileExists(inputsToCheck, nullAllowed = TRUE)
-      },
-      error = function(e){
-        missingInputs <- inputsToCheck[!file.exists(inputsToCheck)]
-        logErrorThenStop(message = messages$errorTaskInputDoesNotExist(missingInputs), self$workflowFolder)
-      })
+      tryCatch(
+        {
+          validateFileExists(inputsToCheck, nullAllowed = TRUE)
+        },
+        error = function(e) {
+          missingInputs <- inputsToCheck[!file.exists(inputsToCheck)]
+          logErrorThenStop(message = messages$errorTaskInputDoesNotExist(missingInputs), self$workflowFolder)
+        }
+      )
       # If no error is caught, return isValid = TRUE
       return(TRUE)
     },
@@ -161,7 +163,6 @@ Task <- R6::R6Class(
       return(private$.inputs)
     }
   ),
-
   private = list(
     .inputFolder = NULL,
     .inputs = NULL,

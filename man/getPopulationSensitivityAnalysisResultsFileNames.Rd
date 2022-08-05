@@ -20,13 +20,13 @@ Get the expected sensitivity analysis result files obtained from a population wo
 
 # A workflow object needs to be created first
 myWorkflow <- PopulationWorkflow$new(
-workflowType,
-workflowFolder, 
-simulationSets)
+  workflowType,
+  workflowFolder,
+  simulationSets
+)
 
 # Get expected paths and file names for workflow
 getPopulationSensitivityAnalysisResultsFileNames(myWorkflow)
-
 }
 
 }

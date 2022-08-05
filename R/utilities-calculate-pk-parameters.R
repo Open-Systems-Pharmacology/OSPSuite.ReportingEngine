@@ -2,13 +2,10 @@
 #' @description Calculate PK parameters from simulated time profiles
 #' @param structureSet `SimulationStructure` R6 class object contain paths of files to be used
 #' @param settings list of options to be passed on the function
-#' @param logFolder folder where the logs are saved
 #' @return pkAnalysis object
 #' @import ospsuite
 #' @keywords internal
-calculatePKParameters <- function(structureSet,
-                                  settings = NULL,
-                                  logFolder = getwd()) {
+calculatePKParameters <- function(structureSet, settings = NULL) {
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
@@ -18,32 +15,21 @@ calculatePKParameters <- function(structureSet,
     filePaths = structureSet$simulationResultFileNames
   )
 
-  logWorkflow(
-    message = paste0("Simulation results '", structureSet$simulationResultFileNames, "' successfully loaded"),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
+  logDebug(paste0("Simulation results '", structureSet$simulationResultFileNames, "' successfully loaded"))
 
   pkAnalyses <- calculatePKAnalyses(results = simulationResults)
-  logWorkflow(
-    message = "Calculation of PK parameters complete",
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
+  logDebug("Calculation of PK parameters complete")
   return(pkAnalyses)
 }
 
 #' @title plotMeanPKParameters
 #' @description Plot PK parameters table
 #' @param structureSet `SimulationStructure` R6 class object
-#' @param logFolder folder where the logs are saved
 #' @param settings list of settings for the output table/plot
 #' @return data.frame with calculated PK parameters for the simulation set
 #' @import ospsuite
 #' @keywords internal
-plotMeanPKParameters <- function(structureSet,
-                                 logFolder = getwd(),
-                                 settings = NULL) {
+plotMeanPKParameters <- function(structureSet, settings = NULL) {
   pkParametersData <- NULL
   pkParametersResults <- list()
 
@@ -65,8 +51,8 @@ plotMeanPKParameters <- function(structureSet,
       getMeanPKAnalysesFromOutput(pkParametersTable, output, molWeight)
     )
   }
-  pkParametersData$Value <- replaceInfWithNA(pkParametersData$Value, logFolder)
-  
+  pkParametersData$Value <- replaceInfWithNA(pkParametersData$Value)
+
   tableID <- defaultFileNames$resultID("pk_parameters", structureSet$simulationSet$simulationSetName)
   pkParametersResults[[tableID]] <- saveTaskResults(
     id = tableID,
@@ -77,7 +63,7 @@ plotMeanPKParameters <- function(structureSet,
     ),
     includeTable = TRUE
   )
-  
+
   return(pkParametersResults)
 }
 
@@ -132,7 +118,6 @@ getMeanPKAnalysesFromOutput <- function(data, output, molWeight = NULL) {
 #' @title plotPopulationPKParameters
 #' @description Plot PK parameters box plots and tables
 #' @param structureSets `SimulationStructure` R6 class object
-#' @param logFolder folder where the logs are saved
 #' @param settings list of settings for the output table/plot
 #' @param workflowType workflowType Type of population workflow.
 #' Use enum `PopulationWorkflowTypes` to get list of workflow types.
@@ -145,7 +130,6 @@ getMeanPKAnalysesFromOutput <- function(data, output, molWeight = NULL) {
 #' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotPopulationPKParameters <- function(structureSets,
-                                       logFolder = getwd(),
                                        settings = NULL,
                                        workflowType = PopulationWorkflowTypes$parallelComparison,
                                        xParameters = getDefaultPkParametersXParameters(workflowType),
@@ -158,7 +142,7 @@ plotPopulationPKParameters <- function(structureSets,
   validateSameOutputsBetweenSets(
     c(lapply(structureSets, function(set) {
       set$simulationSet
-    })), logFolder
+    }))
   )
 
   # Use first structure set as reference
@@ -169,7 +153,7 @@ plotPopulationPKParameters <- function(structureSets,
 
   pkRatioTableAcrossPopulations <- NULL
   pkParametersResults <- list()
-  
+
   pkParametersMapping <- tlf::BoxWhiskerDataMapping$new(
     x = "simulationSetName",
     y = "Value"
@@ -182,7 +166,7 @@ plotPopulationPKParameters <- function(structureSets,
   simulationSetNames <- unique(as.character(pkParametersDataAcrossPopulations$simulationSetName))
 
   # Warn if some PK parameters were not exported by the simulation
-  checkIsIncluded(xParameters, names(pkParametersDataAcrossPopulations), nullAllowed = TRUE, groupName = "PK parameters variable names across simulation sets", logFolder = logFolder)
+  checkIsIncluded(xParameters, names(pkParametersDataAcrossPopulations), nullAllowed = TRUE, groupName = "PK parameters variable names across simulation sets")
   xParameters <- intersect(xParameters, names(pkParametersDataAcrossPopulations))
 
   # Enforce factors for population names with order as input by the user
@@ -212,25 +196,21 @@ plotPopulationPKParameters <- function(structureSets,
       pkParameterMetaData <- pkParameterFromOutput$metaData
 
       # NA and Inf values are removed to prevent crash in computation of percentiles
-      pkParameterData <- removeMissingValues(pkParameterData, "Value", logFolder)
+      pkParameterData <- removeMissingValues(pkParameterData, "Value")
       if (nrow(pkParameterData) == 0) {
-        logWorkflow(
-          message = paste0(pkParameter$pkParameter, " of ", output$path, ": not enough available data to perform plot."),
-          pathFolder = logFolder,
-          logTypes = c(LogTypes$Info, LogTypes$Error, LogTypes$Debug)
-        )
+        logError(messages$warningPKParameterNotEnoughData(pkParameter$pkParameter, output$path))
         next
       }
-      
+
       boxplotPkParameter <- tlf::plotBoxWhisker(
         data = pkParameterData,
         metaData = pkParameterMetaData,
         dataMapping = pkParametersMapping,
         plotConfiguration = settings$plotConfigurations[["boxplotPkParameters"]]
       ) + ggplot2::xlab(NULL)
-      
+
       parameterCaption <- pkParameterMetaData$Value$dimension
-      
+
       # Report tables summarizing the distributions
       pkParameterTable <- tlf::getBoxWhiskerMeasure(
         data = pkParameterData,
@@ -248,21 +228,21 @@ plotPopulationPKParameters <- function(structureSets,
 
       # A different table needs to be created here because of ratio comparison of the table values
       savedPKParameterTable <- addDescriptorToTable(pkParameterTable, simulationSetDescriptor)
-      
+
       pkParametersResults[[resultID]] <- saveTaskResults(
         id = resultID,
         plot = boxplotPkParameter,
         plotCaption = captions$plotPKParameters$boxplot(
-          parameterCaption, 
-          output$displayName, 
-          simulationSetNames, 
+          parameterCaption,
+          output$displayName,
+          simulationSetNames,
           simulationSetDescriptor
-          ),
+        ),
         table = savedPKParameterTable,
         tableCaption = captions$plotPKParameters$summaryTable(
-          parameterCaption, 
-          output$displayName, 
-          simulationSetNames, 
+          parameterCaption,
+          output$displayName,
+          simulationSetNames,
           simulationSetDescriptor,
           pkParameterMetaData$Value$unit
         ),
@@ -270,19 +250,15 @@ plotPopulationPKParameters <- function(structureSets,
       )
       # Plot in log scale
       if (!hasPositiveValues(pkParameterData$Value)) {
-        logWorkflow(
-          message = messages$warningLogScaleNoPositiveData(paste0(pkParameter$pkParameter, " of ", output$path)),
-          pathFolder = logFolder,
-          logTypes = c(LogTypes$Info, LogTypes$Error, LogTypes$Debug)
-        )
+        logError(messages$warningLogScaleNoPositiveData(paste0(pkParameter$pkParameter, " for ", output$path)))
       }
       if (hasPositiveValues(pkParameterData$Value)) {
         resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", pkParameter$pkParameter, "log")
-        
+
         positiveValues <- pkParameterData$Value > 0
         boxRange <- autoAxesLimits(pkParameterData$Value[positiveValues], scale = "log")
         boxBreaks <- autoAxesTicksFromLimits(boxRange)
-        
+
         pkParametersResults[[resultID]] <- saveTaskResults(
           id = resultID,
           plot = tlf::setYAxis(
@@ -343,10 +319,10 @@ plotPopulationPKParameters <- function(structureSets,
               metaData = vpcMetaData,
               plotObject = referenceVpcPlot
             )
-            
+
             xParameterCaption <- vpcMetaData$x$dimension
             yParameterCaption <- vpcMetaData$median$dimension
-            
+
             # Save comparison vpc results
             resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", demographyParameter, pkParameter$pkParameter)
             pkParametersResults[[resultID]] <- saveTaskResults(
@@ -360,7 +336,7 @@ plotPopulationPKParameters <- function(structureSets,
                 referenceSetName = referenceSimulationSetName
               )
             )
-            
+
             resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", demographyParameter, pkParameter$pkParameter, "log")
             pkParametersResults[[resultID]] <- saveTaskResults(
               id = resultID,
@@ -396,7 +372,7 @@ plotPopulationPKParameters <- function(structureSets,
           )
           xParameterCaption <- vpcMetaData$x$dimension
           yParameterCaption <- vpcMetaData$median$dimension
-          
+
           resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", demographyParameter, pkParameter$pkParameter)
           pkParametersResults[[resultID]] <- saveTaskResults(
             id = resultID,
@@ -408,7 +384,7 @@ plotPopulationPKParameters <- function(structureSets,
               simulationSetDescriptor
             )
           )
-          
+
           resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", demographyParameter, pkParameter$pkParameter, "log")
           pkParametersResults[[resultID]] <- saveTaskResults(
             id = resultID,
@@ -440,7 +416,7 @@ plotPopulationPKParameters <- function(structureSets,
         ) + ggplot2::ylab(paste0(pkParameterMetaData$Value$dimension, " [fraction of ", referenceSimulationSetName, "]"))
 
         parameterCaption <- pkParameterMetaData$Value$dimension
-        
+
         # Save PK Ratio results
         resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_ratios", pkParameter$pkParameter)
         pkParametersResults[[resultID]] <- saveTaskResults(
@@ -463,10 +439,10 @@ plotPopulationPKParameters <- function(structureSets,
           ),
           includeTable = TRUE
         )
-        
+
         ratioRange <- autoAxesLimits(c(pkRatiosData$ymin, pkRatiosData$ymax), scale = "log")
         ratioBreaks <- autoAxesTicksFromLimits(ratioRange)
-        
+
         resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_ratios", pkParameter$pkParameter, "log")
         pkParametersResults[[resultID]] <- saveTaskResults(
           id = resultID,
@@ -699,9 +675,9 @@ getPKRatiosTable <- function(pkParametersTable,
 #' @return names of default parameters
 #' @export
 #' @examples
-#' 
+#'
 #' getDefaultPKParametersXParameters(PopulationWorkflowTypes$pediatric)
-#' 
+#'
 getDefaultPKParametersXParameters <- function(workflowType) {
   validateIsIncluded(workflowType, PopulationWorkflowTypes)
   if (workflowType %in% PopulationWorkflowTypes$pediatric) {
@@ -770,15 +746,14 @@ getPopulationPKAnalysesFromOutput <- function(data, metaData, output, pkParamete
 #' @export
 #' @family workflow helpers
 #' @examples \dontrun{
-#' 
+#'
 #' # A workflow object needs to be created first
 #' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#' 
+#'
 #' # Get the list of parameters in x-axis for range plots
 #' getXParametersForPKParametersPlot(workflow = myWorkflow)
-#' 
 #' }
-#' 
+#'
 getXParametersForPKParametersPlot <- function(workflow) {
   validateIsOfType(workflow, "PopulationWorkflow")
   return(workflow$plotPKParameters$xParameters)
@@ -791,15 +766,14 @@ getXParametersForPKParametersPlot <- function(workflow) {
 #' @import ospsuite.utils
 #' @family workflow helpers
 #' @examples \dontrun{
-#' 
+#'
 #' # A workflow object needs to be created first
 #' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#' 
+#'
 #' # Get the list of parameters in y-axis for range plots and boxplots
 #' getYParametersForPKParametersPlot(workflow = myWorkflow)
-#' 
 #' }
-#' 
+#'
 getYParametersForPKParametersPlot <- function(workflow) {
   validateIsOfType(workflow, "PopulationWorkflow")
   yParameters <- workflow$plotPKParameters$yParameters %||% workflow$simulationStructures[[1]]$simulationSet$outputs
@@ -815,33 +789,27 @@ getYParametersForPKParametersPlot <- function(workflow) {
 #' @export
 #' @family workflow helpers
 #' @examples \dontrun{
-#' 
+#'
 #' # A workflow object needs to be created first
 #' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#' 
+#'
 #' # Set parameters in x-axis for range plots
 #' setXParametersForPKParametersPlot(
-#' workflow = myWorkflow, 
-#' parameters = StandardPath
+#'   workflow = myWorkflow,
+#'   parameters = StandardPath
 #' )
-#' 
 #' }
-#' 
+#'
 setXParametersForPKParametersPlot <- function(workflow, parameters) {
   validateIsOfType(workflow, "PopulationWorkflow")
   validateIsString(c(parameters))
 
   workflow$plotPKParameters$xParameters <- parameters
 
-  logWorkflow(
-    message = paste0(
-      "X-parameters: '",
-      paste0(c(parameters), collapse = "', '"),
-      "' set for PK parameters plot."
-    ),
-    pathFolder = workflow$workflowFolder,
-    logTypes = LogTypes$Debug
-  )
+  logDebug(paste0(
+    "X-parameters: '", paste0(c(parameters), collapse = "', '"), 
+    "' set for PK parameters plot."
+    ))
   return(invisible())
 }
 
@@ -853,18 +821,17 @@ setXParametersForPKParametersPlot <- function(workflow, parameters) {
 #' @export
 #' @family workflow helpers
 #' @examples \dontrun{
-#' 
+#'
 #' # A workflow object needs to be created first
 #' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#' 
+#'
 #' # Add parameters in x-axis for range plots
 #' addXParametersForPKParametersPlot(
-#' workflow = myWorkflow, 
-#' parameters = StandardPath$GestationalAge
+#'   workflow = myWorkflow,
+#'   parameters = StandardPath$GestationalAge
 #' )
-#' 
 #' }
-#' 
+#'
 addXParametersForPKParametersPlot <- function(workflow, parameters) {
   updatedParameters <- c(getXParametersForPKParametersPlot(workflow), parameters)
   setXParametersForPkParametersPlot(workflow, updatedParameters)
@@ -878,18 +845,17 @@ addXParametersForPKParametersPlot <- function(workflow, parameters) {
 #' @export
 #' @family workflow helpers
 #' @examples \dontrun{
-#' 
+#'
 #' # A workflow object needs to be created first
 #' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#' 
+#'
 #' # Set parameters in y-axis for range plots and boxplots
 #' setYParametersForPKParametersPlot(
-#' workflow = myWorkflow, 
-#' parameters = Output$new(path, pkParameters)
+#'   workflow = myWorkflow,
+#'   parameters = Output$new(path, pkParameters)
 #' )
-#' 
 #' }
-#' 
+#'
 setYParametersForPKParametersPlot <- function(workflow, parameters) {
   validateIsOfType(workflow, "PopulationWorkflow")
   validateIsOfType(c(parameters), "Output")
@@ -897,15 +863,10 @@ setYParametersForPKParametersPlot <- function(workflow, parameters) {
   workflow$plotPKParameters$yParameters <- parameters
 
   for (output in c(parameters)) {
-    logWorkflow(
-      message = paste0(
-        "Y-parameters: '",
-        paste0(c(output$pkParameters), collapse = "', '"),
+    logDebug(paste0(
+        "Y-parameters: '", paste0(c(output$pkParameters), collapse = "', '"),
         "' for '", output$path, "' set for PK parameters plot."
-      ),
-      pathFolder = workflow$workflowFolder,
-      logTypes = LogTypes$Debug
-    )
+      ))
   }
   return(invisible())
 }
@@ -918,18 +879,17 @@ setYParametersForPKParametersPlot <- function(workflow, parameters) {
 #' @export
 #' @family workflow helpers
 #' @examples \dontrun{
-#' 
+#'
 #' # A workflow object needs to be created first
 #' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#' 
+#'
 #' # Add parameters in y-axis for range plots and boxplots
 #' addYParametersForPKParametersPlot(
-#' workflow = myWorkflow, 
-#' parameters = Output$new(path, pkParameters)
+#'   workflow = myWorkflow,
+#'   parameters = Output$new(path, pkParameters)
 #' )
-#' 
 #' }
-#' 
+#'
 addYParametersForPKParametersPlot <- function(workflow, parameters) {
   updatedParameters <- c(getYParametersForPkParametersPlot(workflow), parameters)
   setYParametersForPkParametersPlot(workflow, updatedParameters)

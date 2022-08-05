@@ -1,16 +1,13 @@
 #' @title plotQualificationComparisonTimeProfile
 #' @description Plot comparison time profile for qualification workflow
 #' @param configurationPlan A `ConfigurationPlan` object
-#' @param logFolder folder where the logs are saved
 #' @param settings `ConfigurationPlan` object
 #' @return list with `plots` and `tables`
 #' @import tlf
 #' @import ospsuite
 #' @import ospsuite.utils
 #' @keywords internal
-plotQualificationComparisonTimeProfile <- function(configurationPlan,
-                                                   logFolder = getwd(),
-                                                   settings) {
+plotQualificationComparisonTimeProfile <- function(configurationPlan, settings) {
   timeProfileResults <- list()
   for (timeProfilePlan in configurationPlan$plots$ComparisonTimeProfilePlots) {
     # Create a unique ID for the plot name as <Plot index>-<Project>-<Simulation>
@@ -18,16 +15,11 @@ plotQualificationComparisonTimeProfile <- function(configurationPlan,
 
     # Get axes properties (with scale, limits and display units)
     axesProperties <- getAxesProperties(timeProfilePlan$Axes) %||% settings$axes
-    if (isOfLength(axesProperties, 0)) {
-      # TODO Centralize messaging of configurtion plan errors and warnings
-      logWorkflow(
-        message = paste0(
-          "In Comparison Time Profile Plots,\n",
-          "No axes settings defined for plot: '", timeProfilePlan$Title, "'"
-        ),
-        pathFolder = logFolder,
-        logTypes = LogTypes$Error
-      )
+    if (isEmpty(axesProperties)) {
+      logError(messages$warningNoAxesSettings(
+        timeProfilePlan$Title,
+        plotType = "Comparison Time Profile Plots"
+      ))
       next
     }
 
@@ -46,8 +38,7 @@ plotQualificationComparisonTimeProfile <- function(configurationPlan,
         simulationDuration,
         axesProperties,
         timeProfilePlot,
-        configurationPlan,
-        logFolder
+        configurationPlan
       )
     }
     # Set axes based on Axes properties
@@ -70,11 +61,10 @@ plotQualificationComparisonTimeProfile <- function(configurationPlan,
 #' @param axesProperties list of axes properties obtained from `getAxesProperties`
 #' @param plotObject ggplot object
 #' @param configurationPlan A `ConfigurationPlan` object
-#' @param logFolder folder where the logs are saved
 #' @return A ggplot object
 #' @import ospsuite.utils
 #' @keywords internal
-addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, axesProperties, plotObject, configurationPlan, logFolder) {
+addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, axesProperties, plotObject, configurationPlan) {
   # Get simulation output
   simulationFile <- configurationPlan$getSimulationPath(
     project = outputMapping$Project,
@@ -107,15 +97,16 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
   selectedTimeValues <- simulatedTime >= 0 & simulatedTime <= simulationDuration
   simulatedTime <- simulatedTime[selectedTimeValues]
 
-  logWorkflow(
-    paste0(
-      "In comparison time profile, '", sum(selectedTimeValues), "' values selected between ",
-      timeOffset, " and ", timeOffset + simulationDuration, " ", axesProperties$x$unit,
-      " in Project '", outputMapping$Project, "' - Simulation '", outputMapping$Simulation, "'"
-    ),
-    logFolder,
-    LogTypes$Debug
-  )
+  logDebug(paste0(
+    "In Comparison Time Profile Plots, Project '",
+    outputMapping$Project, "' - Simulation '", outputMapping$Simulation, "'\n",
+    messages$dataIncludedInTimeRange(
+      sum(selectedTimeValues),
+      timeOffset + c(0, simulationDuration),
+      axesProperties$x$unit,
+      "simulated"
+    )
+  ))
 
   simulatedValues <- ospsuite::toUnit(
     simulationQuantity,
@@ -139,7 +130,7 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
   # Loop on each observed dataset in OutputMappings
   for (observedDataSet in outputMapping$ObservedData) {
     # Get data and meta data of observed results
-    observedResults <- getObservedDataFromConfigurationPlan(observedDataSet, configurationPlan, logFolder)
+    observedResults <- getObservedDataFromConfigurationPlan(observedDataSet, configurationPlan)
     observedTime <- ospsuite::toUnit(
       quantityOrDimension = "Time",
       values = as.numeric(observedResults$data[, 1]),
@@ -149,15 +140,16 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
     observedTime <- observedTime - timeOffset
     selectedObservedTimeValues <- observedTime >= 0 & observedTime <= simulationDuration
     observedTime <- observedTime[selectedObservedTimeValues]
-    logWorkflow(
-      paste0(
-        "In comparison time profile, '", sum(selectedObservedTimeValues), "' values selected between ",
-        timeOffset, " and ", timeOffset + simulationDuration, " ", axesProperties$x$unit,
-        " in Observed Dataset '", observedDataSet, "'"
-      ),
-      logFolder,
-      LogTypes$Debug
-    )
+    logDebug(paste0(
+      "In Comparison Time Profile Plots, Observed Dataset '", observedDataSet, "'\n",
+      messages$dataIncludedInTimeRange(
+        sum(selectedObservedTimeValues),
+        timeOffset + c(0, simulationDuration),
+        axesProperties$x$unit,
+        "observed"
+      )
+    ))
+
     observedValues <- ospsuite::toUnit(
       quantityOrDimension = ospsuite::getDimensionForUnit(observedResults$metaData$output$unit),
       values = observedResults$data[, 2],
@@ -166,11 +158,11 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
       molWeight = molWeight
     )
     observedValues <- observedValues[selectedObservedTimeValues]
-    observedResults$data <- observedResults$data[selectedObservedTimeValues,]
+    observedResults$data <- observedResults$data[selectedObservedTimeValues, ]
 
     # Add observed errorbars
     if (!isEmpty(observedResults$metaData$error)) {
-      observedError <- getObservedErrorValues(observedValues, observedResults, axesProperties, molWeight = molWeight, logFolder = logFolder)
+      observedError <- getObservedErrorValues(observedValues, observedResults, axesProperties, molWeight = molWeight)
 
       plotObject <- tlf::addErrorbar(
         x = observedTime,

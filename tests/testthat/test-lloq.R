@@ -17,7 +17,7 @@ refOutputTimeProfileLLOQ <- getTestDataFilePath("mean-gof/lloq-timeProfileData.c
 refOutputResiduals <- getTestDataFilePath("mean-gof/All-Obs-residuals.csv")
 
 refWorkflowStructure <- c(
-  "log-debug.txt", "log-info.txt", "log-error.txt",
+  "log-debug.txt", "log-info.txt",
   "Report-word.md", "Report.docx", "Report.md",
   "SimulationResults", "TimeProfiles"
 )
@@ -58,18 +58,6 @@ test_that("Ill defined variables and units in dictionary are flagged by simulati
     simulationFile = simulationFile,
     observedDataFile = dataFile,
     observedMetaDataFile = dictFileErrorVariable,
-    outputs = Output$new(
-      path = "Organism|A|Concentration in container",
-      displayName = "Concentration of A",
-      dataSelection = DataSelectionKeys$ALL
-    )
-  ))
-
-  expect_warning(SimulationSet$new(
-    simulationSetName = "A",
-    simulationFile = simulationFile,
-    observedDataFile = dataFile,
-    observedMetaDataFile = dictFileLLOQ,
     outputs = Output$new(
       path = "Organism|A|Concentration in container",
       displayName = "Concentration of A",

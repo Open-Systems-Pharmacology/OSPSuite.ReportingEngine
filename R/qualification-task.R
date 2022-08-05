@@ -5,7 +5,6 @@
 QualificationTask <- R6::R6Class(
   "QualificationTask",
   inherit = PlotTask,
-
   public = list(
     #' @description
     #' Save results from task run.
@@ -40,29 +39,25 @@ QualificationTask <- R6::R6Class(
           x = tableFilePath
         )
 
-        result$saveFigure(fileName = figureFilePath, logFolder = self$workflowFolder)
+        result$saveFigure(fileName = figureFilePath)
         result$addFigureToReport(
           reportFile = configurationPlan$getSectionMarkdown(result$sectionId),
           fileRelativePath = figureFileRelativePath,
-          fileRootDirectory = self$workflowFolder,
-          logFolder = self$workflowFolder
+          fileRootDirectory = self$workflowFolder
         )
-        result$saveTable(fileName = tableFilePath, logFolder = self$workflowFolder)
+        result$saveTable(fileName = tableFilePath)
 
         result$addTableToReport(
           reportFile = configurationPlan$getSectionMarkdown(result$sectionId),
           fileRelativePath = tableFileRelativePath,
           fileRootDirectory = self$workflowFolder,
           digits = self$settings$digits,
-          scientific = self$settings$scientific,
-          logFolder = self$workflowFolder
+          scientific = self$settings$scientific
         )
 
         result$addTextChunkToReport(
-          reportFile = configurationPlan$getSectionMarkdown(result$sectionId),
-          logFolder = self$workflowFolder
+          reportFile = configurationPlan$getSectionMarkdown(result$sectionId)
         )
-
       }
     },
 
@@ -71,19 +66,18 @@ QualificationTask <- R6::R6Class(
     #' @param configurationPlan A `ConfigurationPlan` object
     runTask = function(configurationPlan) {
       actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
-      logWorkflow(
-        message = paste0("Starting: ", self$message),
-        pathFolder = self$workflowFolder
-      )
+      logInfo(messages$runStarting(self$message))
+      t0 <- tic()
+
       if (self$validateInput()) {
         taskResults <- self$getTaskResults(
           configurationPlan,
-          self$workflowFolder,
           self$settings
         )
         self$saveResults(taskResults, configurationPlan)
       }
       re.tEndAction(actionToken = actionToken)
+      logInfo(messages$runCompleted(getElapsedTime(t0), self$message))
     }
   )
 )

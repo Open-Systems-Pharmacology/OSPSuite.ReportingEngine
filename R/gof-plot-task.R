@@ -19,8 +19,7 @@ GofPlotTask <- R6::R6Class(
         text = c(
           anchor(paste0(self$reference, "-", removeForbiddenLetters(simulationSetName))), "",
           paste0("## ", self$title, " for ", simulationSetName)
-        ),
-        logFolder = self$workflowFolder
+        )
       )
       # For mutliple applications, taskResults$plots has 3 fields named as ApplicationRanges
       # Sub sections are created if more than one field are kept
@@ -30,11 +29,11 @@ GofPlotTask <- R6::R6Class(
         listOfPlots <- taskResults$plots[[timeRange]]
         listOfPlotCaptions <- taskResults$captions[[timeRange]]
 
-        if (isOfLength(listOfPlots, 0)) {
+        if (isEmpty(listOfPlots)) {
           next
         }
         if (hasMultipleApplications) {
-          addTextChunk(self$fileName, getTimeRangeCaption(timeRange, self$reference, simulationSetName), logFolder = self$workflowFolder)
+          addTextChunk(self$fileName, getTimeRangeCaption(timeRange, self$reference, simulationSetName))
         }
         # Save and include plot paths to report
         for (plotName in names(listOfPlots)) {
@@ -54,20 +53,15 @@ GofPlotTask <- R6::R6Class(
 
           re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(plotFileName))
 
-          logWorkflow(
-            message = paste0("Plot '", self$getRelativePath(plotFileName), "' was successfully saved."),
-            pathFolder = self$workflowFolder,
-            logTypes = LogTypes$Debug
-          )
+          logDebug(paste0("Plot '", self$getRelativePath(plotFileName), "' was successfully saved."))
 
           addFigureChunk(
             fileName = self$fileName,
             figureFileRelativePath = self$getRelativePath(plotFileName),
-            figureFileRootDirectory = self$workflowFolder,
-            logFolder = self$workflowFolder
+            figureFileRootDirectory = self$workflowFolder
           )
           if (!isEmpty(listOfPlotCaptions[[plotName]])) {
-            addTextChunk(self$fileName, paste0("Figure: ", listOfPlotCaptions[[plotName]]), logFolder = self$workflowFolder)
+            addTextChunk(self$fileName, paste0("Figure: ", listOfPlotCaptions[[plotName]]))
           }
         }
       }
@@ -86,11 +80,7 @@ GofPlotTask <- R6::R6Class(
 
         re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(tableFileName))
 
-        logWorkflow(
-          message = paste0("Table '", self$getAbsolutePath(tableFileName), "' was successfully saved."),
-          pathFolder = self$workflowFolder,
-          logTypes = LogTypes$Debug
-        )
+        logDebug(paste0("Table '", self$getAbsolutePath(tableFileName), "' was successfully saved."))
       }
     },
 
@@ -99,15 +89,12 @@ GofPlotTask <- R6::R6Class(
     #' @param structureSets list of `SimulationStructure` objects
     runTask = function(structureSets) {
       actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
-      logWorkflow(
-        message = paste0("Starting: ", self$message),
-        pathFolder = self$workflowFolder
-      )
-      resetReport(self$fileName, self$workflowFolder)
+      logInfo(messages$runStarting(self$message))
+      t0 <- tic()
+      resetReport(self$fileName)
       addTextChunk(
         fileName = self$fileName,
-        text = c(anchor(self$reference), "", paste0("# ", self$title)),
-        logFolder = self$workflowFolder
+        text = c(anchor(self$reference), "", paste0("# ", self$title))
       )
       if (!is.null(self$outputFolder)) {
         dir.create(file.path(self$workflowFolder, self$outputFolder), showWarnings = FALSE)
@@ -130,14 +117,10 @@ GofPlotTask <- R6::R6Class(
       }
 
       for (set in structureSets) {
-        logWorkflow(
-          message = paste0(self$message, " for ", set$simulationSet$simulationSetName),
-          pathFolder = self$workflowFolder
-        )
+        logInfo(messages$runStarting(self$message, set$simulationSet$simulationSetName))
         if (self$validateStructureSetInput(set)) {
           taskResults <- self$getTaskResults(
             set,
-            self$workflowFolder,
             self$settings
           )
           # If first simulation set was a reference population,
@@ -183,11 +166,7 @@ GofPlotTask <- R6::R6Class(
           row.names = FALSE
         )
         re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(tableFileName))
-        logWorkflow(
-          message = paste0("Table '", self$getAbsolutePath(tableFileName), "' was successfully saved."),
-          pathFolder = self$workflowFolder,
-          logTypes = LogTypes$Debug
-        )
+        logDebug(paste0("Table '", self$getAbsolutePath(tableFileName), "' was successfully saved."))
 
         residualHistogramPlot <- plotResidualsHistogram(
           data = residualsAcrossAllSimulations,
@@ -223,42 +202,36 @@ GofPlotTask <- R6::R6Class(
         )
         re.tStoreFileMetadata(access = "write", filePath = self$getAbsolutePath(qqPlotFileName))
 
-        logWorkflow(
-          message = paste0("Plots '", self$getRelativePath(histogramFileName), "', '", self$getRelativePath(qqPlotFileName), "' were successfully saved."),
-          pathFolder = self$workflowFolder,
-          logTypes = LogTypes$Debug
-        )
+        logDebug(paste0("Plots '", self$getRelativePath(histogramFileName), "', '", self$getRelativePath(qqPlotFileName), "' were successfully saved."))
 
         addTextChunk(
           self$fileName,
-          "## Residuals across all simulations",
-          logFolder = self$workflowFolder
+          "## Residuals across all simulations"
         )
 
         simulationSetNames <- as.character(sapply(structureSets, function(set) {
           set$simulationSet$simulationSetName
         }))
         histogramCaption <- captions$plotGoF$histogram(simulationSetNames, structureSets[[1]]$simulationSetDescriptor)
-        addTextChunk(self$fileName, paste0("Figure: ", histogramCaption), logFolder = self$workflowFolder)
+        addTextChunk(self$fileName, paste0("Figure: ", histogramCaption))
 
         addFigureChunk(
           fileName = self$fileName,
           figureFileRelativePath = self$getRelativePath(histogramFileName),
-          figureFileRootDirectory = self$workflowFolder,
-          logFolder = self$workflowFolder
+          figureFileRootDirectory = self$workflowFolder
         )
 
         qqPlotCaption <- captions$plotGoF$qqPlot(simulationSetNames, structureSets[[1]]$simulationSetDescriptor)
-        addTextChunk(self$fileName, paste0("Figure: ", qqPlotCaption), logFolder = self$workflowFolder)
+        addTextChunk(self$fileName, paste0("Figure: ", qqPlotCaption))
 
         addFigureChunk(
           fileName = self$fileName,
           figureFileRelativePath = self$getRelativePath(qqPlotFileName),
-          figureFileRootDirectory = self$workflowFolder,
-          logFolder = self$workflowFolder
+          figureFileRootDirectory = self$workflowFolder
         )
       }
       re.tEndAction(actionToken = actionToken)
+      logInfo(messages$runCompleted(getElapsedTime(t0), self$message))
     }
   )
 )

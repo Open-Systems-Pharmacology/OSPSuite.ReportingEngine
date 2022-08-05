@@ -4,19 +4,12 @@
 \alias{getQualificationPKRatioData}
 \title{getQualificationPKRatioData}
 \usage{
-getQualificationPKRatioData(
-  pkRatioPlan,
-  configurationPlan,
-  logFolder,
-  settings
-)
+getQualificationPKRatioData(pkRatioPlan, configurationPlan, settings)
 }
 \arguments{
 \item{pkRatioPlan}{List providing the PK ratio mapping from field `PKRatioPlots` of configuration plan}
 
 \item{configurationPlan}{A `ConfigurationPlan` object}
-
-\item{logFolder}{folder where the logs are saved}
 
 \item{settings}{settings for the task}
 }

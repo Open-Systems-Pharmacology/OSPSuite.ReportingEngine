@@ -4,12 +4,10 @@
 \alias{addSectionNumbersToMarkdown}
 \title{addSectionNumbersToMarkdown}
 \usage{
-addSectionNumbersToMarkdown(fileName, logFolder = getwd())
+addSectionNumbersToMarkdown(fileName)
 }
 \arguments{
 \item{fileName}{name of .md file to update}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \description{
 Update section numbers of a report

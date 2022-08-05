@@ -21,21 +21,21 @@ Object defining Qualification Version Information to be displayed on title page
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{QualificationVersionInfo$new()}}
-\item \href{#method-print}{\code{QualificationVersionInfo$print()}}
-\item \href{#method-updateText}{\code{QualificationVersionInfo$updateText()}}
-\item \href{#method-getQualificationPlanReleasePattern}{\code{QualificationVersionInfo$getQualificationPlanReleasePattern()}}
-\item \href{#method-getOSPPattern}{\code{QualificationVersionInfo$getOSPPattern()}}
-\item \href{#method-getQualificationFrameworkPattern}{\code{QualificationVersionInfo$getQualificationFrameworkPattern()}}
-\item \href{#method-setQualificationPlanReleasePattern}{\code{QualificationVersionInfo$setQualificationPlanReleasePattern()}}
-\item \href{#method-setOSPPattern}{\code{QualificationVersionInfo$setOSPPattern()}}
-\item \href{#method-setQualificationFrameworkPattern}{\code{QualificationVersionInfo$setQualificationFrameworkPattern()}}
-\item \href{#method-clone}{\code{QualificationVersionInfo$clone()}}
+\item \href{#method-QualificationVersionInfo-new}{\code{QualificationVersionInfo$new()}}
+\item \href{#method-QualificationVersionInfo-print}{\code{QualificationVersionInfo$print()}}
+\item \href{#method-QualificationVersionInfo-updateText}{\code{QualificationVersionInfo$updateText()}}
+\item \href{#method-QualificationVersionInfo-getQualificationPlanReleasePattern}{\code{QualificationVersionInfo$getQualificationPlanReleasePattern()}}
+\item \href{#method-QualificationVersionInfo-getOSPPattern}{\code{QualificationVersionInfo$getOSPPattern()}}
+\item \href{#method-QualificationVersionInfo-getQualificationFrameworkPattern}{\code{QualificationVersionInfo$getQualificationFrameworkPattern()}}
+\item \href{#method-QualificationVersionInfo-setQualificationPlanReleasePattern}{\code{QualificationVersionInfo$setQualificationPlanReleasePattern()}}
+\item \href{#method-QualificationVersionInfo-setOSPPattern}{\code{QualificationVersionInfo$setOSPPattern()}}
+\item \href{#method-QualificationVersionInfo-setQualificationFrameworkPattern}{\code{QualificationVersionInfo$setQualificationFrameworkPattern()}}
+\item \href{#method-QualificationVersionInfo-clone}{\code{QualificationVersionInfo$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-QualificationVersionInfo-new"></a>}}
+\if{latex}{\out{\hypertarget{method-QualificationVersionInfo-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `QualificationVersionInfo` object.
 \subsection{Usage}{
@@ -62,8 +62,8 @@ A new `QualificationVersionInfo` object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-QualificationVersionInfo-print"></a>}}
+\if{latex}{\out{\hypertarget{method-QualificationVersionInfo-print}{}}}
 \subsection{Method \code{print()}}{
 Print version information
 \subsection{Usage}{
@@ -75,8 +75,8 @@ A text with system information
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateText"></a>}}
-\if{latex}{\out{\hypertarget{method-updateText}{}}}
+\if{html}{\out{<a id="method-QualificationVersionInfo-updateText"></a>}}
+\if{latex}{\out{\hypertarget{method-QualificationVersionInfo-updateText}{}}}
 \subsection{Method \code{updateText()}}{
 Update `text` if patterns of version info are found
 \subsection{Usage}{
@@ -95,8 +95,8 @@ Updated character string
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getQualificationPlanReleasePattern"></a>}}
-\if{latex}{\out{\hypertarget{method-getQualificationPlanReleasePattern}{}}}
+\if{html}{\out{<a id="method-QualificationVersionInfo-getQualificationPlanReleasePattern"></a>}}
+\if{latex}{\out{\hypertarget{method-QualificationVersionInfo-getQualificationPlanReleasePattern}{}}}
 \subsection{Method \code{getQualificationPlanReleasePattern()}}{
 Get the Qualification Plan Release Version pattern to be replaced in title page
 **Caution, the function `gsub` is used to replace the pattern**
@@ -110,8 +110,8 @@ A character
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getOSPPattern"></a>}}
-\if{latex}{\out{\hypertarget{method-getOSPPattern}{}}}
+\if{html}{\out{<a id="method-QualificationVersionInfo-getOSPPattern"></a>}}
+\if{latex}{\out{\hypertarget{method-QualificationVersionInfo-getOSPPattern}{}}}
 \subsection{Method \code{getOSPPattern()}}{
 Get the OSP version pattern to be replaced in title page
 **Caution, the function `gsub` is used to replace the pattern**
@@ -125,8 +125,8 @@ A character
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getQualificationFrameworkPattern"></a>}}
-\if{latex}{\out{\hypertarget{method-getQualificationFrameworkPattern}{}}}
+\if{html}{\out{<a id="method-QualificationVersionInfo-getQualificationFrameworkPattern"></a>}}
+\if{latex}{\out{\hypertarget{method-QualificationVersionInfo-getQualificationFrameworkPattern}{}}}
 \subsection{Method \code{getQualificationFrameworkPattern()}}{
 Get the Qualification Framework version pattern to be replaced in title page
 **Caution, the function `gsub` is used to replace the pattern**
@@ -140,8 +140,8 @@ A character
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setQualificationPlanReleasePattern"></a>}}
-\if{latex}{\out{\hypertarget{method-setQualificationPlanReleasePattern}{}}}
+\if{html}{\out{<a id="method-QualificationVersionInfo-setQualificationPlanReleasePattern"></a>}}
+\if{latex}{\out{\hypertarget{method-QualificationVersionInfo-setQualificationPlanReleasePattern}{}}}
 \subsection{Method \code{setQualificationPlanReleasePattern()}}{
 Set the Qualification Plan Release Version pattern to be replaced in title page
 **Caution, the function `gsub` is used to replace the pattern.**
@@ -159,8 +159,8 @@ Set the Qualification Plan Release Version pattern to be replaced in title page
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setOSPPattern"></a>}}
-\if{latex}{\out{\hypertarget{method-setOSPPattern}{}}}
+\if{html}{\out{<a id="method-QualificationVersionInfo-setOSPPattern"></a>}}
+\if{latex}{\out{\hypertarget{method-QualificationVersionInfo-setOSPPattern}{}}}
 \subsection{Method \code{setOSPPattern()}}{
 Set the OSP version pattern to be replaced in title page
 **Caution, the function `gsub` is used to replace the pattern.**
@@ -178,8 +178,8 @@ Set the OSP version pattern to be replaced in title page
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setQualificationFrameworkPattern"></a>}}
-\if{latex}{\out{\hypertarget{method-setQualificationFrameworkPattern}{}}}
+\if{html}{\out{<a id="method-QualificationVersionInfo-setQualificationFrameworkPattern"></a>}}
+\if{latex}{\out{\hypertarget{method-QualificationVersionInfo-setQualificationFrameworkPattern}{}}}
 \subsection{Method \code{setQualificationFrameworkPattern()}}{
 Set the Qualification Framework version pattern to be replaced in title page
 **Caution, the function `gsub` is used to replace the pattern.**
@@ -197,8 +197,8 @@ Set the Qualification Framework version pattern to be replaced in title page
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-QualificationVersionInfo-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-QualificationVersionInfo-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

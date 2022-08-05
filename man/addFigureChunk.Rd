@@ -8,8 +8,7 @@ addFigureChunk(
   fileName,
   figureFileRelativePath,
   figureFileRootDirectory,
-  figureCaption = "",
-  logFolder = getwd()
+  figureCaption = ""
 )
 }
 \arguments{
@@ -20,8 +19,6 @@ addFigureChunk(
 \item{figureFileRootDirectory}{working directory}
 
 \item{figureCaption}{caption of figure}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \description{
 Add a figure in a .md document

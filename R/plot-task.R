@@ -10,7 +10,6 @@
 PlotTask <- R6::R6Class(
   "PlotTask",
   inherit = Task,
-
   public = list(
     title = NULL,
     reference = NULL,
@@ -40,7 +39,7 @@ PlotTask <- R6::R6Class(
       self$getTaskResults <- getTaskResults
       self$nameTaskResults <- nameTaskResults
     },
-    
+
     #' @description
     #' Save the task results related to a `structureSet`.
     #' @param structureSet A `SimulationStructure` object defining the properties of a simulation set
@@ -54,8 +53,7 @@ PlotTask <- R6::R6Class(
         text = c(
           anchor(paste0(self$reference, "-", removeForbiddenLetters(simulationSetName))), "",
           paste0("## ", self$title, " for ", simulationSetName)
-        ),
-        logFolder = self$workflowFolder
+        )
       )
       for (result in taskResults) {
         plotFileName <- getDefaultFileName(
@@ -64,14 +62,14 @@ PlotTask <- R6::R6Class(
           extension = reEnv$defaultPlotFormat$format
         )
         figureFilePath <- self$getAbsolutePath(plotFileName)
-        
+
         tableFileName <- getDefaultFileName(
           simulationSetName,
           suffix = result$id,
           extension = "csv"
         )
         tableFilePath <- self$getAbsolutePath(tableFileName)
-        
+
         # Figure and tables paths need to be relative to the final md report
         figureFileRelativePath <- gsub(
           pattern = paste0(self$workflowFolder, "/"),
@@ -83,34 +81,31 @@ PlotTask <- R6::R6Class(
           replacement = "",
           x = tableFilePath
         )
-        
-        tryCatch({
-          result$saveFigure(fileName = figureFilePath, logFolder = self$workflowFolder)
-        },
-        error = function(e) {
-          logErrorThenStop(messages$ggsaveError(figureFilePath, simulationSetName, e), logFolder)
-        })
+
+        tryCatch(
+          {
+            result$saveFigure(fileName = figureFilePath)
+          },
+          error = function(e) {
+            stop(messages$ggsaveError(figureFilePath, simulationSetName, e))
+          }
+        )
         result$addFigureToReport(
           reportFile = self$fileName,
           fileRelativePath = figureFileRelativePath,
-          fileRootDirectory = self$workflowFolder,
-          logFolder = self$workflowFolder
+          fileRootDirectory = self$workflowFolder
         )
-        
-        result$saveTable(fileName = tableFilePath, logFolder = self$workflowFolder)
+
+        result$saveTable(fileName = tableFilePath)
         result$addTableToReport(
           reportFile = self$fileName,
           fileRelativePath = tableFileRelativePath,
           fileRootDirectory = self$workflowFolder,
           digits = self$settings$digits,
-          scientific = self$settings$scientific,
-          logFolder = self$workflowFolder
+          scientific = self$settings$scientific
         )
-        
-        result$addTextChunkToReport(
-          reportFile = self$fileName,
-          logFolder = self$workflowFolder
-        )
+
+        result$addTextChunkToReport(reportFile = self$fileName)
       }
       return(invisible())
     },
@@ -120,35 +115,26 @@ PlotTask <- R6::R6Class(
     #' @param structureSets list of `SimulationStructure` objects
     runTask = function(structureSets) {
       actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
-      logWorkflow(
-        message = paste0("Starting: ", self$message),
-        pathFolder = self$workflowFolder
-      )
-      resetReport(self$fileName, self$workflowFolder)
+      logInfo(messages$runStarting(self$message))
+      t0 <- tic()
+      resetReport(self$fileName)
       addTextChunk(
         fileName = self$fileName,
-        text = c(anchor(self$reference), "", paste0("# ", self$title)),
-        logFolder = self$workflowFolder
+        text = c(anchor(self$reference), "", paste0("# ", self$title))
       )
       if (!is.null(self$outputFolder)) {
         dir.create(file.path(self$workflowFolder, self$outputFolder), showWarnings = FALSE)
       }
 
       for (set in structureSets) {
-        logWorkflow(
-          message = paste0(self$message, " for ", set$simulationSet$simulationSetName),
-          pathFolder = self$workflowFolder
-        )
+        logInfo(messages$runStarting(self$message, set$simulationSet$simulationSetName))
         if (self$validateStructureSetInput(set)) {
-          taskResults <- self$getTaskResults(
-            set,
-            self$workflowFolder,
-            self$settings
-          )
+          taskResults <- self$getTaskResults(set, self$settings)
           self$saveResults(set, taskResults)
         }
       }
       re.tEndAction(actionToken = actionToken)
+      logInfo(messages$runCompleted(getElapsedTime(t0), self$message))
     }
   )
 )

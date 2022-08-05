@@ -55,7 +55,6 @@ SensitivityPlotSettings <- R6::R6Class(
       private$.colorPalette <- colorPalette
     }
   ),
-
   active = list(
     #' @field totalSensitivityThreshold cut-off used for plots of the most sensitive parameters
     totalSensitivityThreshold = function(value) {
@@ -169,7 +168,6 @@ SensitivityPlotSettings <- R6::R6Class(
       }
     }
   ),
-
   private = list(
     .totalSensitivityThreshold = NULL,
     .maximalParametersPerSensitivityPlot = NULL,

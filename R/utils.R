@@ -186,18 +186,13 @@ lastPathElement <- function(path) {
 
 #' @title replaceInfWithNA
 #' @param data numeric vector
-#' @param logFolder folder where the logs are saved
 #' @return numeric vector
 #' @keywords internal
-replaceInfWithNA <- function(data, logFolder = getwd()) {
+replaceInfWithNA <- function(data) {
   infData <- is.infinite(data)
   Ninf <- sum(infData)
   if (Ninf > 0) {
-    logWorkflow(
-      message = paste0(Ninf, " values were infinite and transformed into missing values (NA)"),
-      pathFolder = logFolder,
-      logTypes = c(LogTypes$Debug, LogTypes$Error)
-    )
+    logDebug(paste0(Ninf, " values were infinite and transformed into missing values (NA)"))
   }
   data[infData] <- NA
   return(data)
@@ -206,21 +201,16 @@ replaceInfWithNA <- function(data, logFolder = getwd()) {
 #' @title removeMissingValues
 #' @param data data.frame
 #' @param dataMapping name of variable on which the missing values ar checked
-#' @param logFolder folder where the logs are saved
 #' @return filtered data.frame
 #' @keywords internal
-removeMissingValues <- function(data, dataMapping = NULL, logFolder = getwd()) {
-  data[, dataMapping] <- replaceInfWithNA(data[, dataMapping], logFolder)
+removeMissingValues <- function(data, dataMapping = NULL) {
+  data[, dataMapping] <- replaceInfWithNA(data[, dataMapping])
   naData <- is.na(data[, dataMapping])
   Nna <- sum(naData)
   data <- data[!naData, ]
 
   if (Nna > 0) {
-    logWorkflow(
-      message = paste0(Nna, " values were missing (NA) from variable '", dataMapping, "' and removed from the analysis"),
-      pathFolder = logFolder,
-      logTypes = c(LogTypes$Debug, LogTypes$Error)
-    )
+    logDebug(paste0(Nna, " values were missing (NA) from variable '", dataMapping, "' and removed from the analysis"))
   }
   return(data)
 }
@@ -235,7 +225,7 @@ getPKParametersInOutput <- function(output) {
   pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
     pkParameterInfo$pkParameter
   })
-  if (isOfLength(pkParameters, 0)) {
+  if (isEmpty(pkParameters)) {
     return(NA)
   }
   return(pkParameters)
@@ -250,7 +240,7 @@ getPKParameterGroupsInOutput <- function(output) {
   pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
     pkParameterInfo$group
   })
-  if (isOfLength(pkParameters, 0)) {
+  if (isEmpty(pkParameters)) {
     return(NA)
   }
   return(pkParameters)
@@ -454,23 +444,23 @@ getObjectNameAsString <- function(object) {
 #' @description Save figure and catches
 #' @param plotObject A `ggplot` object
 #' @param fileName Name of the file in which `plotObject` is saved
-#' @param logFolder folder where the logs are saved
 #' @param simulationSetName Name of the simulation set for `PlotTask` results
 #' @keywords internal
-saveFigure <- function(plotObject, fileName, logFolder, simulationSetName = NULL) {
-  tryCatch({
-    ggplot2::ggsave(
-      filename = fileName,
-      plot = plotObject,
-      width = reEnv$defaultPlotFormat$width,
-      height = reEnv$defaultPlotFormat$height,
-      dpi = reEnv$defaultPlotFormat$dpi,
-      units = reEnv$defaultPlotFormat$units
-    )
-  },
-  error = function(e) {
-    logErrorThenStop(messages$ggsaveError(fileName, simulationSetName, e), logFolder)
-  })
+saveFigure <- function(plotObject, fileName, simulationSetName = NULL) {
+  tryCatch(
+    {
+      ggplot2::ggsave(
+        filename = fileName,
+        plot = plotObject,
+        width = reEnv$defaultPlotFormat$width,
+        height = reEnv$defaultPlotFormat$height,
+        dpi = reEnv$defaultPlotFormat$dpi,
+        units = reEnv$defaultPlotFormat$units
+      )
+    },
+    error = function(e) {
+      stop(messages$ggsaveError(fileName, simulationSetName, e))
+    }
+  )
   return(invisible())
 }
-

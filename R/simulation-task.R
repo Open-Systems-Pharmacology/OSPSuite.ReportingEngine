@@ -20,9 +20,9 @@ SimulationTask <- R6::R6Class(
     #' @param ... parameters inherited from R6 class `Task` object
     #' @return A new `SimulationTask` object
     initialize = function(getTaskResults = NULL,
-                              settings = NULL,
-                              nameTaskResults = "none",
-                              ...) {
+                          settings = NULL,
+                          nameTaskResults = "none",
+                          ...) {
       super$initialize(...)
       if (is.null(settings)) {
         self$settings <- SimulationSettings$new()
@@ -40,7 +40,7 @@ SimulationTask <- R6::R6Class(
     #' @param set R6 class `SimulationStructure`
     #' @param taskResults list of results from task run.
     saveResults = function(set,
-                               taskResults) {
+                           taskResults) {
       ospsuite::exportResultsToCSV(
         taskResults,
         set$simulationResultFileNames
@@ -53,22 +53,18 @@ SimulationTask <- R6::R6Class(
     #' @param structureSets list of `SimulationStructure` R6 class
     runTask = function(structureSets) {
       actionToken <- re.tStartAction(actionType = "Simulation", actionNameExtension = self$nameTaskResults)
-      logWorkflow(
-        message = paste0("Starting ", self$message),
-        pathFolder = self$workflowFolder
-      )
+      logInfo(messages$runStarting(self$message))
+      t0 <- tic()
       if (!is.null(self$outputFolder)) {
-        dir.create(file.path(self$workflowFolder, self$outputFolder))
+        dir.create(file.path(self$workflowFolder, self$outputFolder), showWarnings = FALSE, recursive = TRUE)
       }
-
       sapply(structureSets, function(set) {
         self$validateStructureSetInput(set)
       })
 
       taskResults <- self$getTaskResults(
         structureSets = structureSets,
-        settings = self$settings,
-        logFolder = self$workflowFolder
+        settings = self$settings
       )
 
       for (setNumber in seq_along(structureSets)) {
@@ -81,6 +77,7 @@ SimulationTask <- R6::R6Class(
         )
       }
       re.tEndAction(actionToken = actionToken)
+      logInfo(messages$runCompleted(getElapsedTime(t0), self$message))
     }
   )
 )

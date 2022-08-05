@@ -4,7 +4,7 @@
 \alias{getSimulationTimeRanges}
 \title{getSimulationTimeRanges}
 \usage{
-getSimulationTimeRanges(simulation, path, simulationSet, logFolder)
+getSimulationTimeRanges(simulation, path, simulationSet)
 }
 \arguments{
 \item{simulation}{A `Simulation` object}
@@ -12,8 +12,6 @@ getSimulationTimeRanges(simulation, path, simulationSet, logFolder)
 \item{path}{Field `path` from `Output` object}
 
 \item{simulationSet}{A `SimulationSet` or `PopulationSimulationSet` object}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 Lists including `values` and `name` of time ranges.

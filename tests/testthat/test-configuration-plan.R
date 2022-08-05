@@ -87,12 +87,10 @@ test_that("Duplicated Ids for SimulationMappings is correctly handled", {
 })
 
 test_that("Duplicated Ids for ObservedDataSets is correctly handled", {
-  expect_warning(loadConfigurationPlan(
-    workflowFolder = workflowFolder,
-    configurationPlanFile = minimalFile
-  ))
   expect_error(loadConfigurationPlan(
     workflowFolder = workflowFolder,
     configurationPlanFile = getTestDataFilePath("configuration-plan/duplicated-obs-data.json")
   ))
 })
+
+unlink(workflowFolder, recursive = TRUE)

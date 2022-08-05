@@ -29,16 +29,15 @@ myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
 
 # (Re)load a default plotPKParameters task for workflow
 myWorkflow$plotPKParameters <- loadPlotPKParametersTask(
-workflow = myWorkflow, 
-active = TRUE
+  workflow = myWorkflow,
+  active = TRUE
 )
 
 # Load a user-defined simulation task for workflow
 myWorkflow$userDefinedTasks[["plotPK"]] <- loadPlotPKParametersTask(
-workflow = myWorkflow, 
-active = TRUE
+  workflow = myWorkflow,
+  active = TRUE
 )
-
 }
 
 }

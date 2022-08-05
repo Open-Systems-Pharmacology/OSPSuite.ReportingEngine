@@ -4,12 +4,10 @@
 \alias{loadLibraryOnCores}
 \title{loadLibraryOnCores}
 \usage{
-loadLibraryOnCores(libraryName, logFolder)
+loadLibraryOnCores(libraryName)
 }
 \arguments{
 \item{libraryName}{string containing name of library to be loaded}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \description{
 Send libraryName to core, load the library and check that it has been loaded successfully
