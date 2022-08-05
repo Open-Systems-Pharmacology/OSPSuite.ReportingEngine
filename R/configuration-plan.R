@@ -81,7 +81,7 @@ ConfigurationPlan <- R6::R6Class(
       markdownLocation <- file.path(self$referenceFolder, sectionContent)
       # In case file does not exist
       if (!file.exists(markdownLocation)) {
-        logError(paste0("Section content '", .highlight(sectionContent), "' not found"))
+        logError(paste0("Section content '", highlight(sectionContent), "' not found"))
         return(invisible())
       }
       # UTF-8 encoding is assumed for md files in Section Content
@@ -98,7 +98,7 @@ ConfigurationPlan <- R6::R6Class(
       inputLocation <- file.path(self$referenceFolder, input$Path)
       # In case file does not exist
       if (!file.exists(inputLocation)) {
-        logError(paste0("Input '", .highlight(input$Path), "' not found"))
+        logError(paste0("Input '", highlight(input$Path), "' not found"))
         return(invisible())
       }
       # UTF-8 encoding is assumed for md files in Input
@@ -115,7 +115,7 @@ ConfigurationPlan <- R6::R6Class(
       introLocation <- file.path(self$referenceFolder, intro$Path)
       # In case file does not exist
       if (!file.exists(introLocation)) {
-        logError(paste0("Input '", .highlight(intro$Path), "' not found"))
+        logError(paste0("Input '", highlight(intro$Path), "' not found"))
         return(invisible())
       }
       # UTF-8 encoding is assumed for md files in Intro
@@ -324,7 +324,7 @@ ConfigurationPlan <- R6::R6Class(
       unexistingFiles <- !file.exists(file.path(self$referenceFolder, dataPaths))
       if (any(unexistingFiles)) {
         unexistingFiles <- paste0(dataPaths[unexistingFiles], collapse = "', '")
-        logError(paste0("Observed datasets '", .highlight(unexistingFiles), "' not found"))
+        logError(paste0("Observed datasets '", highlight(unexistingFiles), "' not found"))
       }
       if (!hasOnlyDistinctValues(dataIds)) {
         # Check if the id reference same paths
