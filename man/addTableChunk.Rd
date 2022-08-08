@@ -10,7 +10,6 @@ addTableChunk(
   tableFileRootDirectory,
   digits = NULL,
   scientific = NULL,
-  logFolder = getwd(),
   na = "-"
 )
 }
@@ -24,8 +23,6 @@ addTableChunk(
 \item{digits}{number of decimal digits in displayed numbers}
 
 \item{scientific}{logical defining if displayed numbers use scientific writing}
-
-\item{logFolder}{folder where the logs are saved}
 
 \item{na}{character string replacing `NA` values in table}
 }

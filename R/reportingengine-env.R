@@ -5,6 +5,20 @@ reEnv <- new.env(parent = emptyenv())
 # name of the package. This will be used to retrieve information on the package at run time
 reEnv$packageName <- "ospsuite.reportingengine"
 
+# Create global logging system
+reEnv$log <- Logging$new()
+reEnv$defaultLogPrint <- list(
+  Error = TRUE,
+  Info = TRUE,
+  Debug = FALSE
+)
+
+#' @title displayDebugLogs
+#' @description `Debug` logs are displayed on R/RStudio console
+displayDebugLogs <- function() {
+  reEnv$defaultLogPrint$Debug <- TRUE
+}
+
 # Default format values for numerics
 reEnv$formatNumericsDigits <- 2
 reEnv$formatNumericsScientific <- NA
@@ -58,20 +72,24 @@ reEnv$pkRatio$dictionary <- list(
   suffixRatio = "Ratio"
 )
 
-reEnv$ddiRatioListColumnMappings <- list(id = "ID",
-                                         studyId = "Study ID",
-                                         mechanism = "Mechanism",
-                                         perpetrator = "Perpetrator",
-                                         routePerpetrator = "Route Perpetrator",
-                                         victim = "Victim",
-                                         routeVictim = "Route Victim",
-                                         dose = "Dose",
-                                         doseUnit = "Dose Unit",
-                                         description = "Description")
+reEnv$ddiRatioListColumnMappings <- list(
+  id = "ID",
+  studyId = "Study ID",
+  mechanism = "Mechanism",
+  perpetrator = "Perpetrator",
+  routePerpetrator = "Route Perpetrator",
+  victim = "Victim",
+  routeVictim = "Route Victim",
+  dose = "Dose",
+  doseUnit = "Dose Unit",
+  description = "Description"
+)
 
 
-reEnv$ddiRatioSubsetsDictionary <- list("Reversible_Inhibition" = "Reversible Inhibition",
-                                        "Mechanism_based_Inactivation" = "Mechanism-based Inactivation")
+reEnv$ddiRatioSubsetsDictionary <- list(
+  "Reversible_Inhibition" = "Reversible Inhibition",
+  "Mechanism_based_Inactivation" = "Mechanism-based Inactivation"
+)
 
 
 # Default value for a scale factor used in a parallel simulation.  The product of this scale factor and the number of allowable cores (allowedCores) sets the maximum number of simulations that may be run on one core.
@@ -137,10 +155,10 @@ setPlotFormat <- function(format = NULL, width = NULL, height = NULL, units = NU
 #' @export
 #' @family enum helpers
 #' @examples
-#' 
+#'
 #' # Lists available Application Ranges
 #' ApplicationRanges
-#' 
+#'
 ApplicationRanges <- enum(c("total", "firstApplication", "lastApplication"))
 
 #' @title setDefaultNumericFormat
@@ -164,10 +182,10 @@ setDefaultNumericFormat <- function(digits = NULL, scientific = NULL) {
 #' @description Get default plot settings for RE package
 #' @return A `Theme` object from `tlf` package
 #' @keywords internal
-getDefaultRETheme <- function(){
+getDefaultRETheme <- function() {
   # Get reporting engine theme from its json file properties
   reThemeFile <- system.file("extdata", "re-theme.json", package = "ospsuite.reportingengine")
-  if(!isIncluded(reThemeFile, "")){
+  if (!isIncluded(reThemeFile, "")) {
     return(tlf::loadThemeFromJson(reThemeFile))
   }
   # If not found, e.g. before the package is built, use a tlf template theme

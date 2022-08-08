@@ -4,12 +4,7 @@
 \alias{runParallelPopulationSimulation}
 \title{runParallelPopulationSimulation}
 \usage{
-runParallelPopulationSimulation(
-  structureSet,
-  numberOfCores,
-  settings,
-  logFolder
-)
+runParallelPopulationSimulation(structureSet, numberOfCores, settings)
 }
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object contain paths of files to be used}
@@ -17,8 +12,6 @@ runParallelPopulationSimulation(
 \item{numberOfCores}{number of cores do be used by the parallel simulation}
 
 \item{settings}{list of options to be passed on the function}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 Simulation results for population

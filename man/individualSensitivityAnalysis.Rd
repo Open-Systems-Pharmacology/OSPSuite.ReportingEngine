@@ -4,12 +4,7 @@
 \alias{individualSensitivityAnalysis}
 \title{individualSensitivityAnalysis}
 \usage{
-individualSensitivityAnalysis(
-  structureSet,
-  settings,
-  individualParameters,
-  logFolder = getwd()
-)
+individualSensitivityAnalysis(structureSet, settings, individualParameters)
 }
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object}
@@ -18,8 +13,6 @@ individualSensitivityAnalysis(
 
 \item{individualParameters}{is an object storing an individual's parameters, obtained from a
 population object's getParameterValuesForIndividual() function.}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 SA results for an individual

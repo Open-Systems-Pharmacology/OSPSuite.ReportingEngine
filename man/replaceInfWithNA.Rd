@@ -4,12 +4,10 @@
 \alias{replaceInfWithNA}
 \title{replaceInfWithNA}
 \usage{
-replaceInfWithNA(data, logFolder = getwd())
+replaceInfWithNA(data)
 }
 \arguments{
 \item{data}{numeric vector}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 numeric vector

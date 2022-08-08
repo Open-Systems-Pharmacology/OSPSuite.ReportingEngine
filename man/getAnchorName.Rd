@@ -18,7 +18,7 @@ Get the name/identifier an anchor tag
 \examples{
 getAnchorName('<a id="section-1"></a>')
 
-# Works also for tag name instead of id 
+# Works also for tag name instead of id
 getAnchorName('<a name="section-1"></a>')
 
 }

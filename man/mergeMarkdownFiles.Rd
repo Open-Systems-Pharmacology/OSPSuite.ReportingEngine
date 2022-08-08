@@ -4,19 +4,12 @@
 \alias{mergeMarkdownFiles}
 \title{mergeMarkdownFiles}
 \usage{
-mergeMarkdownFiles(
-  inputFiles,
-  outputFile,
-  logFolder = getwd(),
-  keepInputFiles = FALSE
-)
+mergeMarkdownFiles(inputFiles, outputFile, keepInputFiles = FALSE)
 }
 \arguments{
 \item{inputFiles}{names of .md files to merge}
 
 \item{outputFile}{name of merged .md file}
-
-\item{logFolder}{folder where the logs are saved}
 
 \item{keepInputFiles}{logical option to prevent the input files to be deleted after merging them}
 }
@@ -30,8 +23,8 @@ addTextChunk(fileName = "chapter-1.md", text = "Chapter 1")
 resetReport("chapter-2.md")
 addTextChunk(fileName = "chapter-2.md", text = "Chapter 2")
 mergeMarkdownFiles(
- inputFiles = c("chapter-1.md", "chapter-2.md"), 
- outputFile = "chapters-1and2.md"
+  inputFiles = c("chapter-1.md", "chapter-2.md"),
+  outputFile = "chapters-1and2.md"
 )
 }
 

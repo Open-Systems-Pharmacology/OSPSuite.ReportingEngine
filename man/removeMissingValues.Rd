@@ -4,14 +4,12 @@
 \alias{removeMissingValues}
 \title{removeMissingValues}
 \usage{
-removeMissingValues(data, dataMapping = NULL, logFolder = getwd())
+removeMissingValues(data, dataMapping = NULL)
 }
 \arguments{
 \item{data}{data.frame}
 
 \item{dataMapping}{name of variable on which the missing values ar checked}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 filtered data.frame

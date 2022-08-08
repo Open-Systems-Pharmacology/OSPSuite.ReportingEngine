@@ -3,10 +3,10 @@
 #' @export
 #' @family enum helpers
 #' @examples
-#' 
+#'
 #' # Lists available Residual Scales
 #' ResidualScales
-#' 
+#'
 ResidualScales <- enum(c("Linear", "Logarithmic"))
 
 #' @title DataSelectionKeys
@@ -14,10 +14,10 @@ ResidualScales <- enum(c("Linear", "Logarithmic"))
 #' @export
 #' @family enum helpers
 #' @examples
-#' 
+#'
 #' # Lists available Data Selection Keys
 #' DataSelectionKeys
-#' 
+#'
 DataSelectionKeys <- list(
   NONE = "NONE",
   ALL = "ALL"
@@ -67,7 +67,6 @@ Output <- R6::R6Class(
                           dataDisplayName = NULL,
                           pkParameters = NULL,
                           residualScale = ResidualScales$Logarithmic) {
-
       validateIsString(path)
       validateIsOfLength(path, 1)
       validateIsString(c(displayName, dataUnit, displayUnit, dataDisplayName), nullAllowed = TRUE)

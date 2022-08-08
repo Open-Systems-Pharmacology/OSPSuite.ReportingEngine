@@ -234,4 +234,3 @@ getMolWeightForCompound <- function(compoundName, simulation) {
   }
   return(simulation$molWeightFor(pathForCompoundName))
 }
-

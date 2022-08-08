@@ -4,12 +4,10 @@
 \alias{plotQualificationPKRatio}
 \title{plotQualificationPKRatio}
 \usage{
-plotQualificationPKRatio(configurationPlan, logFolder = getwd(), settings)
+plotQualificationPKRatio(configurationPlan, settings)
 }
 \arguments{
 \item{configurationPlan}{A `ConfigurationPlan` object}
-
-\item{logFolder}{folder where the logs are saved}
 
 \item{settings}{settings for the task}
 }

@@ -4,12 +4,10 @@
 \alias{updateIndividualParametersOnCores}
 \title{updateIndividualParametersOnCores}
 \usage{
-updateIndividualParametersOnCores(individualParameters, logFolder)
+updateIndividualParametersOnCores(individualParameters)
 }
 \arguments{
 \item{individualParameters}{parameters to update}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \description{
 Update individual parameters on core

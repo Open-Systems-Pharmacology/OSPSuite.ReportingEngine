@@ -13,8 +13,7 @@ getTimeProfilePlotResults(
   metaDataFrame,
   timeProfileMapping,
   structureSet,
-  settings = NULL,
-  logFolder
+  settings = NULL
 )
 }
 \arguments{
@@ -35,8 +34,6 @@ getTimeProfilePlotResults(
 \item{structureSet}{A `SimulationStructure` object}
 
 \item{settings}{Optional settings for the plots. In particular, includes reference data for population time profile.}
-
-\item{logFolder}{Folder where the logs are saved}
 }
 \value{
 List of `plots` and their `captions`

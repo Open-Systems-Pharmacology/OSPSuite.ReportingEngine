@@ -28,16 +28,15 @@ myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
 
 # (Re)load a default plotTimeProfilesAndResiduals task for workflow
 myWorkflow$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(
-workflow = myWorkflow, 
-active = TRUE
+  workflow = myWorkflow,
+  active = TRUE
 )
 
 # Load a user-defined simulation task for workflow
 myWorkflow$userDefinedTasks[["plotGoodnessOfFit"]] <- loadPlotTimeProfilesAndResidualsTask(
-workflow = myWorkflow, 
-active = TRUE
+  workflow = myWorkflow,
+  active = TRUE
 )
-
 }
 
 }

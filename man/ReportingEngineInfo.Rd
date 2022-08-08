@@ -17,15 +17,15 @@ R6 class representing system information for Reporting Engine
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{ReportingEngineInfo$new()}}
-\item \href{#method-print}{\code{ReportingEngineInfo$print()}}
-\item \href{#method-isValidated}{\code{ReportingEngineInfo$isValidated()}}
-\item \href{#method-clone}{\code{ReportingEngineInfo$clone()}}
+\item \href{#method-ReportingEngineInfo-new}{\code{ReportingEngineInfo$new()}}
+\item \href{#method-ReportingEngineInfo-print}{\code{ReportingEngineInfo$print()}}
+\item \href{#method-ReportingEngineInfo-isValidated}{\code{ReportingEngineInfo$isValidated()}}
+\item \href{#method-ReportingEngineInfo-clone}{\code{ReportingEngineInfo$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-ReportingEngineInfo-new"></a>}}
+\if{latex}{\out{\hypertarget{method-ReportingEngineInfo-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `ReportingEngineInfo` object.
 \subsection{Usage}{
@@ -37,8 +37,8 @@ A new `ReportingEngineInfo` object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-ReportingEngineInfo-print"></a>}}
+\if{latex}{\out{\hypertarget{method-ReportingEngineInfo-print}{}}}
 \subsection{Method \code{print()}}{
 Print system information
 \subsection{Usage}{
@@ -50,8 +50,8 @@ A text with system information
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-isValidated"></a>}}
-\if{latex}{\out{\hypertarget{method-isValidated}{}}}
+\if{html}{\out{<a id="method-ReportingEngineInfo-isValidated"></a>}}
+\if{latex}{\out{\hypertarget{method-ReportingEngineInfo-isValidated}{}}}
 \subsection{Method \code{isValidated()}}{
 Is the system validated
 \subsection{Usage}{
@@ -63,8 +63,8 @@ A logical reporting if the system is included in the validated systems
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-ReportingEngineInfo-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-ReportingEngineInfo-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

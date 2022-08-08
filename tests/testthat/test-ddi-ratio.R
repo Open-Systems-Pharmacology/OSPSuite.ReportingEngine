@@ -18,8 +18,8 @@ test_that("'getSmartZoomLimits' works as expected", {
 })
 
 test_that("'getSmartZoomLimits' handles NAs", {
-  expect_false(is.na(getSmartZoomLimits(c(1,2,3,NA))$min))
-  expect_false(is.na(getSmartZoomLimits(c(1,2,3,NA))$max))
+  expect_false(is.na(getSmartZoomLimits(c(1, 2, 3, NA))$min))
+  expect_false(is.na(getSmartZoomLimits(c(1, 2, 3, NA))$max))
 })
 
 test_that("'getSmartZoomLimits' always includes the 2-fold error range for residuals vs observed options", {
@@ -27,7 +27,7 @@ test_that("'getSmartZoomLimits' always includes the 2-fold error range for resid
   expect_lt(getSmartZoomLimits(1.1, residualsVsObserved = TRUE)$min, 0.5)
   expect_lt(getSmartZoomLimits(0.1, residualsVsObserved = TRUE)$min, 0.5)
   expect_lt(getSmartZoomLimits(0.9, residualsVsObserved = TRUE)$min, 0.5)
-  
+
   expect_gt(getSmartZoomLimits(0.1, residualsVsObserved = TRUE)$max, 2)
   expect_gt(getSmartZoomLimits(0.9, residualsVsObserved = TRUE)$max, 2)
   expect_gt(getSmartZoomLimits(10, residualsVsObserved = TRUE)$max, 2)

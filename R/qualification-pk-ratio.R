@@ -1,21 +1,18 @@
 #' @title plotQualificationPKRatio
 #' @description Plot PK Ratio plots for qualification workflow
 #' @param configurationPlan A `ConfigurationPlan` object
-#' @param logFolder folder where the logs are saved
 #' @param settings settings for the task
 #' @return list with `plots` and `tables`
 #' @import tlf
 #' @import ospsuite
 #' @importFrom ospsuite.utils %||%
 #' @keywords internal
-plotQualificationPKRatio <- function(configurationPlan,
-                                     logFolder = getwd(),
-                                     settings) {
+plotQualificationPKRatio <- function(configurationPlan, settings) {
   pkRatioResults <- list()
   for (pkRatioPlan in configurationPlan$plots$PKRatioPlots) {
     # If field artifacts is null, output them all
     pkRatioPlan$Artifacts <- pkRatioPlan$Artifacts %||% c("Table", "Plot", "Measure", "GMFE")
-    pkRatioData <- getQualificationPKRatioData(pkRatioPlan, configurationPlan, logFolder, settings)
+    pkRatioData <- getQualificationPKRatioData(pkRatioPlan, configurationPlan, settings)
     axesProperties <- getAxesProperties(pkRatioPlan$Axes) %||% settings$axes
     pkParameterNames <- pkRatioPlan$PKParameters %||% ospsuite::toPathArray(pkRatioPlan$PKParameter)
 
@@ -133,7 +130,7 @@ getQualificationPKRatioPlot <- function(pkParameterName, data, metaData, axesPro
     shape = "Groups"
   )
   axesProperties$y$dimension <- metaData[[paste0("ratio", pkParameterName)]]$dimension
-  
+
   plotConfiguration <- getPlotConfigurationFromPlan(plotProperties, plotType = "PKRatio")
   plotConfiguration$points$color <- metaData$color
   plotConfiguration$points$shape <- metaData$shape
@@ -173,14 +170,13 @@ getQualificationPKRatioTable <- function(data, metaData) {
 #' @description Get data of pk ratio from field `PKRatioPlots` of configuration plan
 #' @param pkRatioPlan List providing the PK ratio mapping from field `PKRatioPlots` of configuration plan
 #' @param configurationPlan A `ConfigurationPlan` object
-#' @param logFolder folder where the logs are saved
 #' @param settings settings for the task
 #' @return list with `data` and `metaData`
 #' @import tlf
 #' @import ospsuite
 #' @importFrom ospsuite.utils %||%
 #' @keywords internal
-getQualificationPKRatioData <- function(pkRatioPlan, configurationPlan, logFolder, settings) {
+getQualificationPKRatioData <- function(pkRatioPlan, configurationPlan, settings) {
   # Get PK parameters from new or deprecated method
   pkParameterNames <- pkRatioPlan$PKParameters %||% ospsuite::toPathArray(pkRatioPlan$PKParameter)
 
@@ -188,7 +184,7 @@ getQualificationPKRatioData <- function(pkRatioPlan, configurationPlan, logFolde
   caption <- NULL
   for (group in pkRatioPlan$Groups) {
     for (pkRatioMapping in group$PKRatios) {
-      pkRatioResults <- getPKRatioForMapping(pkRatioMapping, pkParameterNames, configurationPlan, logFolder, settings)
+      pkRatioResults <- getPKRatioForMapping(pkRatioMapping, pkParameterNames, configurationPlan, settings)
       pkRatioData <- rbind.data.frame(
         pkRatioData,
         pkRatioResults$data
@@ -221,13 +217,12 @@ getQualificationPKRatioData <- function(pkRatioPlan, configurationPlan, logFolde
 #' @param pkRatioMapping List providing the PK ratio mapping from field `PKRatios` of configuration plan
 #' @param pkParameterNames Names of PK Parameters as defined by users
 #' @param configurationPlan A `ConfigurationPlan` object
-#' @param logFolder folder where the logs are saved
 #' @param settings settings for the task
 #' @return list with `data` and `metaData`
 #' @import tlf
 #' @import ospsuite
 #' @keywords internal
-getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configurationPlan, logFolder, settings) {
+getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configurationPlan, settings) {
   # Load required inputs
   simulation <- ospsuite::loadSimulation(
     configurationPlan$getSimulationPath(project = pkRatioMapping$Project, simulation = pkRatioMapping$Simulation),
@@ -240,11 +235,10 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
   observedData <- readObservedDataFile(configurationPlan$getObservedDataPath(pkRatioMapping$ObservedData))
   selectedRow <- which(observedData[, reEnv$pkRatio$dictionary$id] %in% pkRatioMapping$ObservedDataRecordId)
   if (!isOfLength(selectedRow, 1)) {
-    logWorkflow(
-      message = paste0("In PK Ratio Plots, ", length(selectedRow), " data record(s) found for ObservedDataRecordId '", pkRatioMapping$ObservedDataRecordId, "'"),
-      pathFolder = logFolder,
-      logTypes = c(LogTypes$Error, LogTypes$Debug)
-    )
+    logError(messages$warningPKRatioMultipleObservedRows(
+      length(selectedRow),
+      pkRatioMapping$ObservedDataRecordId
+    ))
     return()
   }
 
@@ -370,8 +364,7 @@ measureValuesBetween <- function(x, left, right, method = "count", strict = FALS
     right <- rep(right, length(x))
   }
   naRows <- (is.na(x) | is.na(left) | is.na(right))
-  measure <- switch(
-    method,
+  measure <- switch(method,
     "count" = sum(isBetween(x[!naRows], left[!naRows], right[!naRows], strict)),
     "ratio" = sum(isBetween(x[!naRows], left[!naRows], right[!naRows], strict)) / length(x[!naRows]),
     "percent" = 100 * sum(isBetween(x[!naRows], left[!naRows], right[!naRows], strict)) / length(x[!naRows]),

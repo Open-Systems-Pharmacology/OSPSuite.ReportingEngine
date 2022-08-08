@@ -7,7 +7,6 @@
 ExcelMessaging <- R6::R6Class(
   "ExcelMessaging",
   cloneable = FALSE,
-
   public = list(
     type = NULL,
     messages = NULL,

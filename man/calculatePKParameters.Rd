@@ -4,14 +4,12 @@
 \alias{calculatePKParameters}
 \title{calculatePKParameters}
 \usage{
-calculatePKParameters(structureSet, settings = NULL, logFolder = getwd())
+calculatePKParameters(structureSet, settings = NULL)
 }
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object contain paths of files to be used}
 
 \item{settings}{list of options to be passed on the function}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 pkAnalysis object

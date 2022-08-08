@@ -7,8 +7,7 @@
 runParallelSensitivityAnalysis(
   structureSet,
   settings = settings,
-  individualParameters,
-  logFolder = getwd()
+  individualParameters
 )
 }
 \arguments{
@@ -18,8 +17,6 @@ runParallelSensitivityAnalysis(
 
 \item{individualParameters}{is an object storing an individual's parameters, obtained
 from a population object's `getParameterValuesForIndividual()`` function.}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 SA results for population

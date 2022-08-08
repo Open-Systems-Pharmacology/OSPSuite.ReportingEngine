@@ -23,7 +23,6 @@ myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
 
 # Checks if paths of required files for running a workflow task exist
 checkTaskInputsExist(myWorkflow$plotSensitivity)
-
 }
 
 }

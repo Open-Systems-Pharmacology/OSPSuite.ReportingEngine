@@ -28,16 +28,15 @@ myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
 
 # (Re)load a default plotMassBalance task for workflow
 myWorkflow$plotMassBalance <- loadPlotMassBalanceTask(
-workflow = myWorkflow, 
-active = TRUE
+  workflow = myWorkflow,
+  active = TRUE
 )
 
 # Load a user-defined simulation task for workflow
 myWorkflow$userDefinedTasks[["plotMassBalance"]] <- loadPlotMassBalanceTask(
-workflow = myWorkflow, 
-active = TRUE
+  workflow = myWorkflow,
+  active = TRUE
 )
-
 }
 
 }

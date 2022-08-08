@@ -14,7 +14,6 @@
 QualificationWorkflow <- R6::R6Class(
   "QualificationWorkflow",
   inherit = Workflow,
-
   public = list(
     configurationPlan = NULL,
     simulate = NULL,
@@ -33,24 +32,31 @@ QualificationWorkflow <- R6::R6Class(
     initialize = function(configurationPlan,
                           ...) {
       super$initialize(...)
-      validateIsOfType(configurationPlan, "ConfigurationPlan")
-      # Include global plot & axes settings at this stage
-      # Global settings are included using theme concept,
-      # they can be updated using setting$plotConfigurations within tasks
-      configurationPlan$updateTheme()
-      self$configurationPlan <- configurationPlan
+      tryCatch(
+        {
+          validateIsOfType(configurationPlan, "ConfigurationPlan")
+          # Include global plot & axes settings at this stage
+          # Global settings are included using theme concept,
+          # they can be updated using setting$plotConfigurations within tasks
+          configurationPlan$updateTheme()
+          self$configurationPlan <- configurationPlan
 
-      self$simulate <- loadSimulateTask(self, active = TRUE)
-      
-      self$plotTimeProfiles <- loadQualificationTimeProfilesTask(self, configurationPlan)
-      self$plotGOFMerged <- loadGOFMergedTask(self, configurationPlan)
-      self$plotComparisonTimeProfile <- loadQualificationComparisonTimeProfileTask(self, configurationPlan)
-      self$plotPKRatio <- loadPlotPKRatioTask(self, configurationPlan)
-      self$plotDDIRatio <- loadPlotDDIRatioTask(self, configurationPlan)
-      # PK Parameters need to be calculated only if PKRatio or DDIRatio are plotted
-      self$calculatePKParameters <- loadCalculatePKParametersTask(self, active = any(self$plotPKRatio$active, self$plotDDIRatio$active))
+          self$simulate <- loadSimulateTask(self, active = TRUE)
 
-      self$taskNames <- enum(self$getAllTasks())
+          self$plotTimeProfiles <- loadQualificationTimeProfilesTask(self, configurationPlan)
+          self$plotGOFMerged <- loadGOFMergedTask(self, configurationPlan)
+          self$plotComparisonTimeProfile <- loadQualificationComparisonTimeProfileTask(self, configurationPlan)
+          self$plotPKRatio <- loadPlotPKRatioTask(self, configurationPlan)
+          self$plotDDIRatio <- loadPlotDDIRatioTask(self, configurationPlan)
+          # PK Parameters need to be calculated only if PKRatio or DDIRatio are plotted
+          self$calculatePKParameters <- loadCalculatePKParametersTask(self, active = any(self$plotPKRatio$active, self$plotDDIRatio$active))
+
+          self$taskNames <- enum(self$getAllTasks())
+        },
+        error = function(e) {
+          logErrorThenStop(e)
+        }
+      )
     },
 
     #' @description
@@ -68,43 +74,50 @@ QualificationWorkflow <- R6::R6Class(
     runWorkflow = function() {
       # Prevent crashes if folder was deleted before (re) running a worflow
       dir.create(self$workflowFolder, showWarnings = FALSE, recursive = TRUE)
-      logWorkflow(
-        message = "Starting run of qualification workflow",
-        pathFolder = self$workflowFolder
-      )
+      # In case other logs were saved before running workflow
+      setLogFolder(self$workflowFolder)
+      logInfo(messages$runStarting("Qualification Workflow"))
+      t0 <- tic()
 
-      # Before running the actual workflow,
-      # Create Outputs for sections and copy intro and section content
-      mdFiles <- createSectionOutput(self$configurationPlan, logFolder = self$workflowFolder)
-      if (self$simulate$active) {
-        self$simulate$runTask(self$simulationStructures)
-      }
+      tryCatch(
+        {
+          # Before running the actual workflow,
+          # Create Outputs for sections and copy intro and section content
+          mdFiles <- createSectionOutput(self$configurationPlan)
+          if (self$simulate$active) {
+            self$simulate$runTask(self$simulationStructures)
+          }
 
-      if (self$calculatePKParameters$active) {
-        self$calculatePKParameters$runTask(self$simulationStructures)
-      }
+          if (self$calculatePKParameters$active) {
+            self$calculatePKParameters$runTask(self$simulationStructures)
+          }
 
-      # The Configuration Plan replaces SimulationStructures for Qualification Workflows
-      # since it directly indicates where to save and include results
-      for (plotTask in self$getAllPlotTasks()) {
-        if (self[[plotTask]]$active) {
-          self[[plotTask]]$runTask(self$configurationPlan)
+          # The Configuration Plan replaces SimulationStructures for Qualification Workflows
+          # since it directly indicates where to save and include results
+          for (plotTask in self$getAllPlotTasks()) {
+            if (self[[plotTask]]$active) {
+              self[[plotTask]]$runTask(self$configurationPlan)
+            }
+          }
+
+          # Merge appendices into final report
+          initialReportPath <- file.path(self$workflowFolder, self$reportFileName)
+          mergeMarkdownFiles(mdFiles$appendices, initialReportPath)
+          renderReport(
+            fileName = initialReportPath,
+            createWordReport = self$createWordReport,
+            numberSections = self$numberSections,
+            intro = mdFiles$intro,
+            wordConversionTemplate = self$wordConversionTemplate
+          )
+          # Move report if a non-default path is provided
+          copyReport(from = initialReportPath, to = self$reportFilePath, copyWordReport = self$createWordReport, keep = TRUE)
+        },
+        error = function(e) {
+          logErrorThenStop(e)
         }
-      }
-
-      # Merge appendices into final report
-      initialReportPath <- file.path(self$workflowFolder, self$reportFileName)
-      mergeMarkdownFiles(mdFiles$appendices, initialReportPath, logFolder = self$workflowFolder)
-      renderReport(
-        fileName = initialReportPath,
-        logFolder = self$workflowFolder,
-        createWordReport = self$createWordReport,
-        numberSections = self$numberSections,
-        intro = mdFiles$intro,
-        wordConversionTemplate = self$wordConversionTemplate
-        )
-      # Move report if a non-default path is provided
-      copyReport(from = initialReportPath, to = self$reportFilePath, copyWordReport = self$createWordReport, keep = TRUE)
+      )
+      logInfo(messages$runCompleted(getElapsedTime(t0), "Qualification Workflow"))
     },
 
     #' @description
@@ -112,12 +125,20 @@ QualificationWorkflow <- R6::R6Class(
     #' Caution, updating the `configurationPlan` using this method won't update the workflow simulations and their results.
     #' Use the method only to bypass reloading a full workflow if only plot aesthetics or section content is changed.
     #' @param configurationPlanFile path to the json file corresponding to the Configuration Plan of a Qualification workflow
-    updateConfigurationPlan = function(configurationPlanFile){
-      configurationPlan <- loadConfigurationPlan(configurationPlanFile, self$workflowFolder)
-      # Update the default plot properties using `tlf` concept of theme
-      configurationPlan$updateTheme()
-      # Overwrite the properties of the configurationPlan
-      self$configurationPlan <- configurationPlan
+    updateConfigurationPlan = function(configurationPlanFile) {
+      setLogFolder(self$workflowFolder)
+      tryCatch(
+        {
+          configurationPlan <- loadConfigurationPlan(configurationPlanFile, self$workflowFolder)
+          # Update the default plot properties using `tlf` concept of theme
+          configurationPlan$updateTheme()
+          # Overwrite the properties of the configurationPlan
+          self$configurationPlan <- configurationPlan
+        },
+        error = function(e) {
+          logErrorThenStop(e)
+        }
+      )
     }
   )
 )

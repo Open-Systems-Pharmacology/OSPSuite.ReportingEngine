@@ -4,12 +4,10 @@
 \alias{verifyAnyPreviousFilesRemoved}
 \title{verifyAnyPreviousFilesRemoved}
 \usage{
-verifyAnyPreviousFilesRemoved(anyPreviousPartialResultsRemoved, logFolder)
+verifyAnyPreviousFilesRemoved(anyPreviousPartialResultsRemoved)
 }
 \arguments{
 \item{anyPreviousPartialResultsRemoved}{result files to be removed}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \description{
 Check that any existing results from individual cores have been removed

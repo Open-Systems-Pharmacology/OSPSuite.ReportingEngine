@@ -26,7 +26,6 @@ SensitivityAnalysisSettings <- R6::R6Class(
       self$showProgress <- showProgress
     }
   ),
-
   active = list(
     #' @field variationRange variationRange of the sensitivity analysis
     variationRange = function(value) {
@@ -99,7 +98,6 @@ SensitivityAnalysisSettings <- R6::R6Class(
       }
     }
   ),
-
   private = list(
     .variationRange = NULL,
     .numberOfCores = NULL,

@@ -12,7 +12,6 @@
 ConfigurationPlan <- R6::R6Class(
   "ConfigurationPlan",
   cloneable = FALSE,
-
   public = list(
     plots = NULL,
     inputs = NULL,
@@ -63,17 +62,16 @@ ConfigurationPlan <- R6::R6Class(
 
     #' @description Copy content to section markdown
     #' @param id section identifier
-    #' @param logFolder path where logs are saved
-    copySectionContent = function(id, logFolder = getwd()) {
+    copySectionContent = function(id) {
       selectedId <- private$.selectSectionsRow(id)
-      
-      # Add refernce as anchor tag before title and content
+
+      # Add reference as anchor tag before title and content
       sectionReference <- private$.sections$id[selectedId]
-      addTextChunk(fileName = self$getSectionMarkdown(id), text = anchor(sectionReference), logFolder = logFolder)
-      
+      addTextChunk(fileName = self$getSectionMarkdown(id), text = anchor(sectionReference))
+
       # Add title at appropriate level
-      addTextChunk(fileName = self$getSectionMarkdown(id), text = self$getSectionTitle(id), logFolder = logFolder)
-      
+      addTextChunk(fileName = self$getSectionMarkdown(id), text = self$getSectionTitle(id))
+
       # Add section content
       sectionContent <- private$.sections$content[selectedId]
       if (is.na(sectionContent)) {
@@ -83,60 +81,46 @@ ConfigurationPlan <- R6::R6Class(
       markdownLocation <- file.path(self$referenceFolder, sectionContent)
       # In case file does not exist
       if (!file.exists(markdownLocation)) {
-        logWorkflow(
-          message = paste0("Section content '", sectionContent, "' not found"),
-          pathFolder = logFolder,
-          logTypes = c(LogTypes$Error, LogTypes$Debug)
-        )
+        logError(paste0("Section content '", highlight(sectionContent), "' not found"))
         return(invisible())
       }
       # UTF-8 encoding is assumed for md files in Section Content
       markdownContent <- readLines(markdownLocation, encoding = "UTF-8", warn = FALSE)
-      addTextChunk(fileName = self$getSectionMarkdown(id), text = markdownContent, logFolder = logFolder)
+      addTextChunk(fileName = self$getSectionMarkdown(id), text = markdownContent)
       return(invisible())
     },
 
     #' @description Copy input to section markdown
     #' @param input list including SectionId and Path
-    #' @param logFolder path where logs are saved
-    copyInput = function(input, logFolder = getwd()) {
+    copyInput = function(input) {
       validateIsIncluded("Path", names(input))
       # Get location of input
       inputLocation <- file.path(self$referenceFolder, input$Path)
       # In case file does not exist
       if (!file.exists(inputLocation)) {
-        logWorkflow(
-          message = paste0("Input '", input$Path, "' not found"),
-          pathFolder = logFolder,
-          logTypes = c(LogTypes$Error, LogTypes$Debug)
-        )
+        logError(paste0("Input '", highlight(input$Path), "' not found"))
         return(invisible())
       }
       # UTF-8 encoding is assumed for md files in Input
       markdownContent <- readLines(inputLocation, encoding = "UTF-8", warn = FALSE)
-      addTextChunk(fileName = self$getSectionMarkdown(input$SectionReference %||% input$SectionId), text = markdownContent, logFolder = logFolder)
+      addTextChunk(fileName = self$getSectionMarkdown(input$SectionReference %||% input$SectionId), text = markdownContent)
       return(invisible())
     },
 
     #' @description Copy intro to intro markdown
     #' @param intro list including Path
-    #' @param logFolder path where logs are saved
-    copyIntro = function(intro, logFolder = getwd()) {
+    copyIntro = function(intro) {
       validateIsIncluded(names(intro), "Path")
       # Get location of intro
       introLocation <- file.path(self$referenceFolder, intro$Path)
       # In case file does not exist
       if (!file.exists(introLocation)) {
-        logWorkflow(
-          message = paste0("Input '", intro$Path, "' not found"),
-          pathFolder = logFolder,
-          logTypes = c(LogTypes$Error, LogTypes$Debug)
-        )
+        logError(paste0("Input '", highlight(intro$Path), "' not found"))
         return(invisible())
       }
       # UTF-8 encoding is assumed for md files in Intro
       markdownContent <- readLines(introLocation, encoding = "UTF-8", warn = FALSE)
-      addTextChunk(fileName = self$getIntroMarkdown(), text = markdownContent, logFolder = logFolder)
+      addTextChunk(fileName = self$getIntroMarkdown(), text = markdownContent)
       return(invisible())
     },
 
@@ -144,7 +128,7 @@ ConfigurationPlan <- R6::R6Class(
     copyContentFiles = function() {
       srcContentFolder <- file.path(self$referenceFolder, "Content")
       # If no Content available, does not need to copy anything
-      if(!dir.exists(srcContentFolder)){
+      if (!dir.exists(srcContentFolder)) {
         return(invisible())
       }
       # Get list of folders within content as well as all the subfolders using recursive option
@@ -154,16 +138,16 @@ ConfigurationPlan <- R6::R6Class(
 
       # Create all necessary subfolders within workflow folder
       # Note that recursive is not needed here since list of folders used it
-      for(contentSubFolder in contentSubFolders){
+      for (contentSubFolder in contentSubFolders) {
         dir.create(file.path(self$workflowFolder, contentSubFolder), showWarnings = FALSE)
       }
       # Copy all available files of Content within workflow folder
       # Note that recursive is not needed here since list of files used it
-      for(contentFile in contentFiles){
+      for (contentFile in contentFiles) {
         file.copy(
           from = file.path(srcContentFolder, contentFile),
           to = file.path(self$workflowFolder, contentFile)
-          )
+        )
       }
       return(invisible())
     },
@@ -211,7 +195,7 @@ ConfigurationPlan <- R6::R6Class(
       validateIsIncludedAndLog(simulation, private$.simulationMappings$simulation, groupName = "'simulation' variable of simulationMappings")
       selectedId <- (private$.simulationMappings$project %in% project) & (private$.simulationMappings$simulation %in% simulation)
       populationPath <- file.path(self$referenceFolder, private$.simulationMappings$path[selectedId], paste0(private$.simulationMappings$simulationFile[selectedId], "-Population.csv"))
-      if(file.exists(populationPath)){
+      if (file.exists(populationPath)) {
         return(populationPath)
       }
       return()
@@ -253,7 +237,7 @@ ConfigurationPlan <- R6::R6Class(
       plotWidth <- self$plots$PlotSettings$ChartWidth
       plotHeight <- self$plots$PlotSettings$ChartHeight
       plotSizeUnits <- self$plots$PlotSettings$ChartUnits %||% "px"
-      if(is.null(c(plotWidth,plotHeight))){
+      if (is.null(c(plotWidth, plotHeight))) {
         plotSizeUnits <- NULL
       }
       setDefaultPlotFormat(
@@ -271,7 +255,6 @@ ConfigurationPlan <- R6::R6Class(
       return(invisible())
     }
   ),
-
   active = list(
     #' @field sections data.frame mapping section ids to their paths
     sections = function(value) {
@@ -316,7 +299,7 @@ ConfigurationPlan <- R6::R6Class(
         return(private$.observedDataSets)
       }
       # ObservedDataSets can be null or empty list, in which case, nothing happens
-      if (isOfLength(value, 0)) {
+      if (isEmpty(value)) {
         return(invisible())
       }
       # Change field names to appropriate camelCase names within the mapping
@@ -341,7 +324,7 @@ ConfigurationPlan <- R6::R6Class(
       unexistingFiles <- !file.exists(file.path(self$referenceFolder, dataPaths))
       if (any(unexistingFiles)) {
         unexistingFiles <- paste0(dataPaths[unexistingFiles], collapse = "', '")
-        warning(paste0("Observed datasets '", unexistingFiles, "' not found"))
+        logError(paste0("Observed datasets '", highlight(unexistingFiles), "' not found"))
       }
       if (!hasOnlyDistinctValues(dataIds)) {
         # Check if the id reference same paths
@@ -349,22 +332,27 @@ ConfigurationPlan <- R6::R6Class(
         for (observedDataSetsId in duplicatedIds) {
           selectedRows <- dataIds %in% observedDataSetsId
           selectedPaths <- unique(dataPaths[selectedRows])
-          tryCatch({
-            validateIsOfLength(selectedPaths, 1)},
-            error = function(e){
-              stop(paste0("Inconsistent ObservedDataSets Paths '", paste0(selectedPaths, collapse = "', '"), "' for non unique Id '", observedDataSetsId, "'"))
-            })
+          tryCatch(
+            {
+              validateIsOfLength(selectedPaths, 1)
+            },
+            error = function(e) {
+              .logErrorThenStop(paste0(
+                "Inconsistent ObservedDataSets Paths '",
+                paste0(selectedPaths, collapse = "', '"),
+                "' for non unique Id '", observedDataSetsId, "'"
+              ))
+            }
+          )
         }
       }
     }
   ),
-
   private = list(
     .sections = NULL,
     .simulationMappings = NULL,
     .observedDataSets = NULL,
-    
-    .selectSectionsRow = function(id){
+    .selectSectionsRow = function(id) {
       validateIsIncludedAndLog(id, private$.sections$id, groupName = "'id' variable of sections")
       return(which(private$.sections$id %in% id))
     }

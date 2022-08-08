@@ -1,7 +1,6 @@
 #' @title plotMeanAbsorption
 #' @description Plot absorption diagnostics time profile
 #' @param structureSet `SimulationStructure` R6 class object
-#' @param logFolder folder where the logs are saved
 #' @param settings Options to be defined
 #' (e.g. plotConfigurations list of `PlotConfiguration` objects)
 #' @return list of `ggplot` objects
@@ -9,9 +8,7 @@
 #' @import ospsuite
 #' @import utils
 #' @keywords internal
-plotMeanAbsorption <- function(structureSet,
-                               logFolder = getwd(),
-                               settings = NULL) {
+plotMeanAbsorption <- function(structureSet, settings = NULL) {
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
@@ -20,9 +17,9 @@ plotMeanAbsorption <- function(structureSet,
   appliedMoleculePaths <- ospsuite::getAllMoleculePathsIn(applications)
 
   appliedMolecules <- ospsuite::getAllMoleculesMatching(appliedMoleculePaths, simulation)
-  
-  
-  # Get the absorption paths for each compound 
+
+
+  # Get the absorption paths for each compound
   resultsByCompound <- list()
   for (compound in appliedMolecules) {
     fractionAbsorbedInVenousBloodPath <- paste0("Organism|VenousBlood|*|", compound$name)
@@ -161,7 +158,7 @@ plotMeanAbsorption <- function(structureSet,
         unit = ""
       )
     )
-    
+
     absorptionPlot <- plotAbsorptionTimeProfile(
       data = result$timeProfileData,
       metaData = result$timeProfileMetaData,
@@ -184,7 +181,7 @@ plotMeanAbsorption <- function(structureSet,
       `Fraction excrected to feces` = simulationResultsOutput$data[, result$fractionExcretedPath],
       check.names = FALSE
     )
-    
+
     absorptionResults[[resultID]] <- saveTaskResults(
       id = resultID,
       plot = absorptionPlot,

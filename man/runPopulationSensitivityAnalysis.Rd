@@ -4,14 +4,12 @@
 \alias{runPopulationSensitivityAnalysis}
 \title{runPopulationSensitivityAnalysis}
 \usage{
-runPopulationSensitivityAnalysis(structureSet, settings, logFolder = getwd())
+runPopulationSensitivityAnalysis(structureSet, settings)
 }
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object}
 
 \item{settings}{list of settings for the population sensitivity analysis}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \description{
 runPopulationSensitivityAnalysis

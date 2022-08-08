@@ -23,13 +23,12 @@ myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
 
 # Use enum helper to get task names
 inactivateWorkflowTasks(
-workflow = myWorkflow, 
-tasks = StandardSimulationTasks$simulate
+  workflow = myWorkflow,
+  tasks = StandardSimulationTasks$simulate
 )
 
 # Default will inactivate every task of workflow
 inactivateWorkflowTasks(workflow = myWorkflow)
-
 }
 
 }

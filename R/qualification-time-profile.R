@@ -1,16 +1,13 @@
 #' @title plotQualificationTimeProfiles
 #' @description Plot time profile for qualification workflow
 #' @param configurationPlan A `ConfigurationPlan` object
-#' @param logFolder folder where the logs are saved
 #' @param settings `ConfigurationPlan` object
 #' @return list with `plots` and `tables`
 #' @import tlf
 #' @import ospsuite
 #' @importFrom ospsuite.utils %||%
 #' @keywords internal
-plotQualificationTimeProfiles <- function(configurationPlan,
-                                          logFolder = getwd(),
-                                          settings) {
+plotQualificationTimeProfiles <- function(configurationPlan, settings) {
   timeProfileResults <- list()
   for (timeProfilePlan in configurationPlan$plots$TimeProfile) {
     # Create a unique ID for the plot name as <Plot index>-<Project>-<Simulation>
@@ -48,8 +45,7 @@ plotQualificationTimeProfiles <- function(configurationPlan,
         simulationResults = simulationResults,
         axesProperties = axesProperties,
         configurationPlan = configurationPlan,
-        plotObject = timeProfilePlot,
-        logFolder = logFolder
+        plotObject = timeProfilePlot
       ),
       plotQualificationMeanTimeProfile(
         configurationPlanCurves = timeProfilePlan$Plot$Curves,
@@ -57,8 +53,7 @@ plotQualificationTimeProfiles <- function(configurationPlan,
         simulationResults = simulationResults,
         axesProperties = axesProperties,
         configurationPlan = configurationPlan,
-        plotObject = timeProfilePlot,
-        logFolder = logFolder
+        plotObject = timeProfilePlot
       )
     )
 
@@ -84,14 +79,13 @@ plotQualificationTimeProfiles <- function(configurationPlan,
 #' @param axesProperties list of axes properties obtained from `getAxesProperties`
 #' @param configurationPlan A `ConfigurationPlan` object that includes methods to find observed data
 #' @param plotObject A `ggplot` object
-#' @param logFolder folder where the logs are saved
 #' @return Mean time profile plot as a `ggplot` object
 #' @import tlf
 #' @keywords internal
-plotQualificationMeanTimeProfile <- function(configurationPlanCurves, simulation, simulationResults, axesProperties, configurationPlan, plotObject, logFolder) {
+plotQualificationMeanTimeProfile <- function(configurationPlanCurves, simulation, simulationResults, axesProperties, configurationPlan, plotObject) {
   for (curve in configurationPlanCurves) {
     # TODO handle Observed data and Y2 axis
-    curveOutput <- getCurvePropertiesForTimeProfiles(curve, simulation, simulationResults, axesProperties, configurationPlan, logFolder)
+    curveOutput <- getCurvePropertiesForTimeProfiles(curve, simulation, simulationResults, axesProperties, configurationPlan)
     if (is.null(curveOutput)) {
       next
     }
@@ -134,7 +128,6 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves, simulation
 #' that includes the data requested from `configurationPlanCurve` properties
 #' @param axesProperties list of axes properties obtained from `getAxesProperties`
 #' @param configurationPlan A `ConfigurationPlan` object that includes methods to find observed data
-#' @param logFolder folder where the logs are saved
 #' @return A list of data and properties to be plotted and that follows `tlf` package nomenclature
 #' @import ospsuite
 #' @keywords internal
@@ -142,12 +135,12 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
                                               simulation,
                                               simulationResults,
                                               axesProperties,
-                                              configurationPlan,
-                                              logFolder) {
+                                              configurationPlan) {
   # Check if curve is on first or seconf Y axis
   curveOnSecondAxis <- isTRUE(configurationPlanCurve$CurveOptions$yAxisType == "Y2")
   # TODO handle curve on Y2
   if (curveOnSecondAxis) {
+    logError(messages$warningRightAxisNotAvailable(configurationPlanCurve$Name))
     return()
   }
 
@@ -167,8 +160,8 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
     # observedResults is a list that includes
     # data: a data.frame with column 1 = Time, column 2 = Concentration, column 3 = Error
     # metaData: a list for each column of data that includes their unit
-    observedResults <- getObservedDataFromConfigurationPlan(observedDataId, configurationPlan, logFolder)
-    observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties, logFolder)
+    observedResults <- getObservedDataFromConfigurationPlan(observedDataId, configurationPlan)
+    observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties)
 
     outputCurve <- list(
       x = observedData$time,
@@ -236,12 +229,11 @@ getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
 #' @param axesProperties list of axes properties obtained from `getAxesProperties`
 #' @param configurationPlan A `ConfigurationPlan` object that includes methods to find observed data
 #' @param plotObject A `ggplot` object
-#' @param logFolder folder where the logs are saved
 #' @return Population time profile plot as a `ggplot` object
 #' @import tlf
 #' @importFrom ospsuite.utils %||%
 #' @keywords internal
-plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedDataCollection, simulation, simulationResults, axesProperties, configurationPlan, plotObject, logFolder) {
+plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedDataCollection, simulation, simulationResults, axesProperties, configurationPlan, plotObject) {
 
   # Get simulation results from configuration plan field "Fields"
   outputPath <- simulationAnalysis$Fields[[1]]$QuantityPath
@@ -287,9 +279,9 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
     # observedResults is a list that includes
     # data: a data.frame with column 1 = Time, column 2 = Concentration, column 3 = Error
     # metaData: a list for each column of data that includes their unit
-    observedResults <- getObservedDataFromConfigurationPlan(observedDataId, configurationPlan, logFolder)
+    observedResults <- getObservedDataFromConfigurationPlan(observedDataId, configurationPlan)
     # Currently, the molecular weight is directly taken from the simulation output
-    observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties, logFolder)
+    observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties)
 
     if (!isEmpty(observedData$error)) {
       plotObject <- tlf::addErrorbar(
@@ -399,10 +391,9 @@ getAggregateFromStat <- function(statisticId, time, outputValues) {
     aggregatedMinData <- aggregate(
       x = outputValues,
       by = list(time = time),
-      # Plot will show mean +/- 1*SD is plotted, 
+      # Plot will show mean +/- 1*SD is plotted,
       # This can be changed to plot +/- 1.96*SD representing a 95% CI
-      FUN = switch(
-        statisticId,
+      FUN = switch(statisticId,
         "ArithmeticStandardDeviation" = function(x) {
           mean(x) + stats::sd(x)
         },
@@ -414,8 +405,7 @@ getAggregateFromStat <- function(statisticId, time, outputValues) {
     aggregatedMaxData <- aggregate(
       x = outputValues,
       by = list(time = time),
-      FUN = switch(
-        statisticId,
+      FUN = switch(statisticId,
         "ArithmeticStandardDeviation" = function(x) {
           mean(x) - stats::sd(x)
         },
@@ -447,8 +437,7 @@ getAggregateFromStat <- function(statisticId, time, outputValues) {
   aggregatedData <- aggregate(
     x = outputValues,
     by = list(time = time),
-    FUN = switch(
-      statisticId,
+    FUN = switch(statisticId,
       "ArithmeticMean" = mean,
       "GeometricMean" = function(x) {
         exp(mean(log(x)))
@@ -482,8 +471,7 @@ getCaptionFromStat <- function(statisticId, outputName) {
     return(return(paste0(outputName, "-Range ", percentileMinValue, " to ", percentileMaxValue, "%")))
   }
   return(paste(outputName,
-    switch(
-      statisticId,
+    switch(statisticId,
       "ArithmeticMean" = "Arithmetic Mean",
       "ArithmeticStandardDeviation" = "Arithmetic Standard Deviation",
       "GeometricMean" = "Geometric Mean",
@@ -505,10 +493,9 @@ getCaptionFromStat <- function(statisticId, outputName) {
 #' }
 #' @param molWeight Molecular weight of compound
 #' @param axesProperties list of axes properties obtained from `getAxesProperties`
-#' @param logFolder folder where the logs are saved
 #' @return List with `time`, `y` and `error` values
 #' @keywords internal
-getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, axesProperties, logFolder) {
+getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, axesProperties) {
   time <- ospsuite::toUnit(
     quantityOrDimension = "Time",
     values = as.numeric(observedResults$data[, 1]),
@@ -518,31 +505,27 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
   # Convert output values, if molWeight is NA but not required, then toUnit works without any issue
   # if molWeight is NA and required, then toUnit crashes, error is caught
   # and the error message indictes which observed data Id need molWeight
-  outputValues <- tryCatch({
-    ospsuite::toUnit(
-      quantityOrDimension = ospsuite::getDimensionForUnit(observedResults$metaData$output$unit),
-      values = observedResults$data[, 2],
-      targetUnit = axesProperties$y$unit,
-      sourceUnit = observedResults$metaData$output$unit,
-      molWeight = molWeight
-    )
-  },
-  error = function(e) {
-    NULL
-  }
+  outputValues <- tryCatch(
+    {
+      ospsuite::toUnit(
+        quantityOrDimension = ospsuite::getDimensionForUnit(observedResults$metaData$output$unit),
+        values = observedResults$data[, 2],
+        targetUnit = axesProperties$y$unit,
+        sourceUnit = observedResults$metaData$output$unit,
+        molWeight = molWeight
+      )
+    },
+    error = function(e) {
+      NULL
+    }
   )
-  if (isOfLength(outputValues, 0)) {
-    logErrorThenStop(
-      message = paste0(
-        "Molecular weight not found but required for observed data Id '", pathArray[1], "' in Time Profile plot."
-      ),
-      logFolderPath = logFolder
-    )
+  if (isEmpty(outputValues)) {
+    stop(messages$errorMolecularWeightRequired(pathArray[1]))
   }
 
   outputError <- NULL
   if (!isEmpty(observedResults$metaData$error)) {
-    outputError <- getObservedErrorValues(outputValues, observedResults, axesProperties, molWeight = molWeight, logFolder = logFolder)
+    outputError <- getObservedErrorValues(outputValues, observedResults, axesProperties, molWeight = molWeight)
   }
   return(list(
     time = time,
@@ -577,10 +560,9 @@ getDefaultTimeProfileAxesSettings <- function() {
 #' @param observedResults A named list, including `data` and `metaData`, of observed results.
 #' @param axesProperties list of axes properties obtained from `getAxesProperties`
 #' @param molWeight Molecular weight if unit conversion is required
-#' @param logFolder folder where the logs are saved
 #' @return A named list, with `ymin` and `ymax`, of the observed data error range
 #' @keywords internal
-getObservedErrorValues <- function(observedValues, observedResults, axesProperties, molWeight = NA, logFolder = getwd()){
+getObservedErrorValues <- function(observedValues, observedResults, axesProperties, molWeight = NA) {
   # Compute geometric error by default
   observedError <- calculateGeometricErrorRange(observedValues, observedResults$data[, 3])
 
@@ -599,13 +581,15 @@ getObservedErrorValues <- function(observedValues, observedResults, axesProperti
 
   # If error has no unit but values lower than 1,
   # Check output has also no unit and then compute arithmetic error
-  if (isIncluded(observedResults$metaData$error$unit, "") & any(observedResults$data[, 3] < 1, na.rm = TRUE)){
-    tryCatch({
-      validateIsIncluded(observedResults$metaData$output$unit, "")
-    },
-    error = function(e){
-      logErrorThenStop(,logFolder)
-    })
+  if (isIncluded(observedResults$metaData$error$unit, "") & any(observedResults$data[, 3] < 1, na.rm = TRUE)) {
+    tryCatch(
+      {
+        validateIsIncluded(observedResults$metaData$output$unit, "")
+      },
+      error = function(e) {
+        logError(messages$warningErrorAssumedArithmetic())
+      }
+    )
     observedError <- calculateArithmeticErrorRange(observedValues, observedResults$data[, 3])
   }
 

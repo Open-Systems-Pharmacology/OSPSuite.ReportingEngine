@@ -26,7 +26,6 @@ myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets
 
 # Get the list of parameters in y-axis for range plots and boxplots
 getYParametersForPKParametersPlot(workflow = myWorkflow)
-
 }
 
 }

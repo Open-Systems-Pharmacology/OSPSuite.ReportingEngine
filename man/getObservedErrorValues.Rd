@@ -8,8 +8,7 @@ getObservedErrorValues(
   observedValues,
   observedResults,
   axesProperties,
-  molWeight = NA,
-  logFolder = getwd()
+  molWeight = NA
 )
 }
 \arguments{
@@ -20,8 +19,6 @@ getObservedErrorValues(
 \item{axesProperties}{list of axes properties obtained from `getAxesProperties`}
 
 \item{molWeight}{Molecular weight if unit conversion is required}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 A named list, with `ymin` and `ymax`, of the observed data error range

@@ -13,7 +13,7 @@ Other workflows:
 }
 \concept{workflows}
 \section{Super class}{
-\code{\link[ospsuite.reportingengine:Workflow]{ospsuite.reportingengine::Workflow}} -> \code{PopulationWorkflow}
+\code{ospsuite.reportingengine::Workflow} -> \code{PopulationWorkflow}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -39,34 +39,34 @@ Other workflows:
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{PopulationWorkflow$new()}}
-\item \href{#method-runWorkflow}{\code{PopulationWorkflow$runWorkflow()}}
-\item \href{#method-clone}{\code{PopulationWorkflow$clone()}}
+\item \href{#method-PopulationWorkflow-new}{\code{PopulationWorkflow$new()}}
+\item \href{#method-PopulationWorkflow-runWorkflow}{\code{PopulationWorkflow$runWorkflow()}}
+\item \href{#method-PopulationWorkflow-clone}{\code{PopulationWorkflow$clone()}}
 }
 }
-\if{html}{
-\out{<details ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="activateTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-activateTasks}{\code{ospsuite.reportingengine::Workflow$activateTasks()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getActiveTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getActiveTasks}{\code{ospsuite.reportingengine::Workflow$getActiveTasks()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getAllPlotTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getAllPlotTasks}{\code{ospsuite.reportingengine::Workflow$getAllPlotTasks()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getAllTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getAllTasks}{\code{ospsuite.reportingengine::Workflow$getAllTasks()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getInactiveTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getInactiveTasks}{\code{ospsuite.reportingengine::Workflow$getInactiveTasks()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getParameterDisplayPaths">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getParameterDisplayPaths}{\code{ospsuite.reportingengine::Workflow$getParameterDisplayPaths()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getSimulationDescriptor">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getSimulationDescriptor}{\code{ospsuite.reportingengine::Workflow$getSimulationDescriptor()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getWatermark">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-getWatermark}{\code{ospsuite.reportingengine::Workflow$getWatermark()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="inactivateTasks">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-inactivateTasks}{\code{ospsuite.reportingengine::Workflow$inactivateTasks()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="print">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-print}{\code{ospsuite.reportingengine::Workflow$print()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="printReportingEngineInfo">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-printReportingEngineInfo}{\code{ospsuite.reportingengine::Workflow$printReportingEngineInfo()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="setParameterDisplayPaths">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-setParameterDisplayPaths}{\code{ospsuite.reportingengine::Workflow$setParameterDisplayPaths()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="setSimulationDescriptor">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-setSimulationDescriptor}{\code{ospsuite.reportingengine::Workflow$setSimulationDescriptor()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="setWatermark">}\href{../../ospsuite.reportingengine/html/Workflow.html#method-setWatermark}{\code{ospsuite.reportingengine::Workflow$setWatermark()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="activateTasks"><a href='../../ospsuite.reportingengine/html/Workflow.html#method-Workflow-activateTasks'><code>ospsuite.reportingengine::Workflow$activateTasks()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getActiveTasks"><a href='../../ospsuite.reportingengine/html/Workflow.html#method-Workflow-getActiveTasks'><code>ospsuite.reportingengine::Workflow$getActiveTasks()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getAllPlotTasks"><a href='../../ospsuite.reportingengine/html/Workflow.html#method-Workflow-getAllPlotTasks'><code>ospsuite.reportingengine::Workflow$getAllPlotTasks()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getAllTasks"><a href='../../ospsuite.reportingengine/html/Workflow.html#method-Workflow-getAllTasks'><code>ospsuite.reportingengine::Workflow$getAllTasks()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getInactiveTasks"><a href='../../ospsuite.reportingengine/html/Workflow.html#method-Workflow-getInactiveTasks'><code>ospsuite.reportingengine::Workflow$getInactiveTasks()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getParameterDisplayPaths"><a href='../../ospsuite.reportingengine/html/Workflow.html#method-Workflow-getParameterDisplayPaths'><code>ospsuite.reportingengine::Workflow$getParameterDisplayPaths()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getSimulationDescriptor"><a href='../../ospsuite.reportingengine/html/Workflow.html#method-Workflow-getSimulationDescriptor'><code>ospsuite.reportingengine::Workflow$getSimulationDescriptor()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="getWatermark"><a href='../../ospsuite.reportingengine/html/Workflow.html#method-Workflow-getWatermark'><code>ospsuite.reportingengine::Workflow$getWatermark()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="inactivateTasks"><a href='../../ospsuite.reportingengine/html/Workflow.html#method-Workflow-inactivateTasks'><code>ospsuite.reportingengine::Workflow$inactivateTasks()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="print"><a href='../../ospsuite.reportingengine/html/Workflow.html#method-Workflow-print'><code>ospsuite.reportingengine::Workflow$print()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="printReportingEngineInfo"><a href='../../ospsuite.reportingengine/html/Workflow.html#method-Workflow-printReportingEngineInfo'><code>ospsuite.reportingengine::Workflow$printReportingEngineInfo()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="setParameterDisplayPaths"><a href='../../ospsuite.reportingengine/html/Workflow.html#method-Workflow-setParameterDisplayPaths'><code>ospsuite.reportingengine::Workflow$setParameterDisplayPaths()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="setSimulationDescriptor"><a href='../../ospsuite.reportingengine/html/Workflow.html#method-Workflow-setSimulationDescriptor'><code>ospsuite.reportingengine::Workflow$setSimulationDescriptor()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Workflow" data-id="setWatermark"><a href='../../ospsuite.reportingengine/html/Workflow.html#method-Workflow-setWatermark'><code>ospsuite.reportingengine::Workflow$setWatermark()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-PopulationWorkflow-new"></a>}}
+\if{latex}{\out{\hypertarget{method-PopulationWorkflow-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `PopulationWorkflow` object.
 \subsection{Usage}{
@@ -108,8 +108,8 @@ A new `PopulationWorkflow` object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-runWorkflow"></a>}}
-\if{latex}{\out{\hypertarget{method-runWorkflow}{}}}
+\if{html}{\out{<a id="method-PopulationWorkflow-runWorkflow"></a>}}
+\if{latex}{\out{\hypertarget{method-PopulationWorkflow-runWorkflow}{}}}
 \subsection{Method \code{runWorkflow()}}{
 Run population workflow tasks for all simulation sets if tasks are activated
 The order of tasks is as follows:
@@ -129,8 +129,8 @@ All results and plots as a structured output in the workflow folder
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-PopulationWorkflow-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-PopulationWorkflow-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

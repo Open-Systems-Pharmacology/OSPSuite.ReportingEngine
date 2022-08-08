@@ -36,9 +36,8 @@ checkAllCoresSuccessful <- function(coreResults) {
 #' @title loadSimulationOnCores
 #' @description Send structureSet to core, check its simulation has been loaded successfully
 #' @param structureSet containing simulationSet which contains path to simulation file and pathIDs to be loaded in simulation object as outputs
-#' @param logFolder folder where the logs are saved
 #' @keywords internal
-loadSimulationOnCores <- function(structureSet, logFolder) {
+loadSimulationOnCores <- function(structureSet) {
   Rmpi::mpi.bcast.Robj2slave(obj = structureSet)
   Rmpi::mpi.remote.exec(sim <- NULL)
   Rmpi::mpi.remote.exec(sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet))
@@ -46,113 +45,111 @@ loadSimulationOnCores <- function(structureSet, logFolder) {
   success <- checkAllCoresSuccessful(simulationLoaded)
   validateIsLogical(success)
   if (!success) {
-    logErrorThenStop(message = paste("Simulation file", structureSet$simulationSet$simulationFile, "not loaded successfully on all cores"), logFolderPath = logFolder)
+    stop(messages$errorNotLoadedOnCores(paste("Simulation file", structureSet$simulationSet$simulationFile)), call. = FALSE)
   }
-  logWorkflow(message = paste("Simulation file", structureSet$simulationSet$simulationFile, "loaded successfully on all cores"), pathFolder = logFolder)
+  logDebug(messages$loadedOnCores(paste("Simulation file", structureSet$simulationSet$simulationFile)))
   return(invisible())
 }
 
 #' @title loadPopulationOnCores
 #' @description Send population file names to cores, check that population is loaded on each core successfully
 #' @param populationFiles population files to be loaded on cores
-#' @param logFolder folder where the logs are saved
 #' @keywords internal
-loadPopulationOnCores <- function(populationFiles, logFolder) {
+loadPopulationOnCores <- function(populationFiles) {
   Rmpi::mpi.bcast.Robj2slave(obj = populationFiles)
   Rmpi::mpi.remote.exec(population <- ospsuite::loadPopulation(populationFiles[Rmpi::mpi.comm.rank()]))
   populationLoaded <- Rmpi::mpi.remote.exec(checkPopulationLoaded(population = population))
   success <- checkAllCoresSuccessful(populationLoaded)
   validateIsLogical(success)
   if (!success) {
-    logErrorThenStop(message = paste("Population files not loaded successfully on all cores"), logFolderPath = logFolder)
+    stop(messages$errorNotLoadedOnCores("Population files"), call. = FALSE)
   }
-  logWorkflow(message = paste("Population files loaded successfully on all cores"), pathFolder = logFolder)
+  logDebug(messages$loadedOnCores("Population files"))
   return(invisible())
 }
 
 #' @title loadLibraryOnCores
 #' @description Send libraryName to core, load the library and check that it has been loaded successfully
 #' @param libraryName string containing name of library to be loaded
-#' @param logFolder folder where the logs are saved
 #' @keywords internal
-loadLibraryOnCores <- function(libraryName, logFolder) {
+loadLibraryOnCores <- function(libraryName) {
   Rmpi::mpi.bcast.Robj2slave(obj = libraryName)
   Rmpi::mpi.remote.exec(library(libraryName, character.only = TRUE))
   libraryLoaded <- Rmpi::mpi.remote.exec(checkLibraryLoaded(libraryName))
   success <- checkAllCoresSuccessful(libraryLoaded)
   validateIsLogical(success)
   if (!success) {
-    logErrorThenStop(message = paste(libraryName, "not loaded successfully on all cores"), logFolderPath = logFolder)
+    stop(messages$errorNotLoadedOnCores(libraryName), call. = FALSE)
   }
-  logWorkflow(message = paste(libraryName, "loaded successfully on all cores"), pathFolder = logFolder)
+  logDebug(messages$loadedOnCores(libraryName))
   return(invisible())
 }
 
 #' @title updateIndividualParametersOnCores
 #' @description Update individual parameters on core
 #' @param individualParameters parameters to update
-#' @param logFolder folder where the logs are saved
 #' @keywords internal
-updateIndividualParametersOnCores <- function(individualParameters, logFolder) {
+updateIndividualParametersOnCores <- function(individualParameters) {
   Rmpi::mpi.bcast.Robj2slave(obj = individualParameters)
   individualParametersUpdated <- Rmpi::mpi.remote.exec(updateSimulationIndividualParameters(simulation = sim, individualParameters))
   success <- checkAllCoresSuccessful(individualParametersUpdated)
   validateIsLogical(success)
   if (!success) {
-    logErrorThenStop(message = "Individual parameters updated successfully on all cores.", logFolderPath = logFolder)
+    stop(messages$errorNotLoadedOnCores("Individual parameters"), call. = FALSE)
   }
-  logWorkflow(message = "Individual parameters updated successfully on all cores.", pathFolder = logFolder)
+  logDebug(messages$loadedOnCores("Individual parameters"))
   return(invisible())
 }
+
+# TODO: Functions starting with verify should be renamed, refactored and placed within error-checks.R
 
 #' @title verifySimulationRunSuccessful
 #' @description Check that all cores ran simulation successfully
 #' @param simulationRunSuccess logical vector indicating success of simulation run on all cores
 #' @param tempPopDataFiles name of all temporary population files sent to cores
-#' @param logFolder folder where the logs are saved
 #' @keywords internal
-verifySimulationRunSuccessful <- function(simulationRunSuccess, tempPopDataFiles, logFolder) {
+verifySimulationRunSuccessful <- function(simulationRunSuccess, tempPopDataFiles) {
   success <- checkAllCoresSuccessful(simulationRunSuccess)
   validateIsLogical(success)
   if (success) {
-    logWorkflow(message = "Simulations completed successfully on all cores.", pathFolder = logFolder)
-  } else {
-    unsuccessfulCores <- setdiff(1:length(tempPopDataFiles), which(unlist(unname(simulationRunSuccess))))
-    for (core in unsuccessfulCores) {
-      pop <- ospsuite::loadPopulation(tempPopDataFiles[core])
-      logErrorMessage(message = paste("Simulations for individuals", paste(pop$allIndividualIds, collapse = ", "), "not completed successfully."), logFolderPath = logFolder)
-    }
+    logDebug(messages$completedOnCores("Simulations"))
+    return(invisible())
   }
+  unsuccessfulCores <- setdiff(1:length(tempPopDataFiles), which(unlist(unname(simulationRunSuccess))))
+  for (core in unsuccessfulCores) {
+    pop <- ospsuite::loadPopulation(tempPopDataFiles[core])
+    logError(messages$errorNotCompletedOnCores(
+      paste("Simulations for individuals", paste(pop$allIndividualIds, collapse = ", "))
+    ))
+  }
+  return(invisible())
 }
-
 
 #' @title verifySensitivityAnalysisRunSuccessful
 #' @description Check that all cores ran sensitivity analysis successfully
 #' @param sensitivityRunSuccess logical vector indicating success of sensitivity analysis run on all cores
-#' @param logFolder folder where the logs are saved
 #' @keywords internal
-verifySensitivityAnalysisRunSuccessful <- function(sensitivityRunSuccess, logFolder) {
+verifySensitivityAnalysisRunSuccessful <- function(sensitivityRunSuccess) {
   success <- checkAllCoresSuccessful(sensitivityRunSuccess)
   validateIsLogical(success)
   if (!success) {
-    logErrorThenStop(message = "Sensitivity analyses not completed successfully on all cores.", logFolderPath = logFolder)
+    stop(messages$errorNotCompletedOnCores("Sensitivity Analyses"), call. = FALSE)
   }
-  logWorkflow(message = "Sensitivity analyses completed successfully on all cores.", pathFolder = logFolder)
+  logDebug(messages$completedOnCores("Sensitivity Analyses"))
   return(invisible())
 }
 
 #' @title verifyAnyPreviousFilesRemoved
 #' @description Check that any existing results from individual cores have been removed
 #' @param anyPreviousPartialResultsRemoved result files to be removed
-#' @param logFolder folder where the logs are saved
 #' @keywords internal
-verifyAnyPreviousFilesRemoved <- function(anyPreviousPartialResultsRemoved, logFolder) {
+verifyAnyPreviousFilesRemoved <- function(anyPreviousPartialResultsRemoved) {
   success <- checkAllCoresSuccessful(anyPreviousPartialResultsRemoved)
   validateIsLogical(success)
   if (!success) {
-    logErrorThenStop(message = "Previous results not removed successfully.", logFolderPath = logFolder)
+    stop(messages$errorNotCompletedOnCores("Removal of temporary results"), call. = FALSE)
   }
-  logWorkflow(message = "Verified that no previous results exist.", pathFolder = logFolder)
+  logDebug(messages$completedOnCores("Removal of temporary results"))
   return(invisible())
 }
 
@@ -160,15 +157,17 @@ verifyAnyPreviousFilesRemoved <- function(anyPreviousPartialResultsRemoved, logF
 #' @description Check that results from individual cores have been exported
 #' @param partialResultsExported logical vector indicating success of result file export
 #' @param numberOfCores number of cores from which result files are to be exported
-#' @param logFolder folder where the logs are saved
 #' @keywords internal
-verifyPartialResultsExported <- function(partialResultsExported, numberOfCores, logFolder) {
+verifyPartialResultsExported <- function(partialResultsExported, numberOfCores) {
   success <- checkAllCoresSuccessful(partialResultsExported)
   validateIsLogical(success)
   if (success) {
-    logWorkflow(message = "All successful core results exported successfully.", pathFolder = logFolder)
-  } else {
-    unsuccessfulCores <- setdiff(1:numberOfCores, which(unlist(unname(partialResultsExported))))
-    logErrorMessage(message = paste("Results from cores", paste(unsuccessfulCores, collapse = ", "), "not exported successfully."), logFolderPath = logFolder)
+    logDebug(messages$completedOnCores("Export of results"))
+    return(invisible())
   }
+  unsuccessfulCores <- setdiff(1:numberOfCores, which(unlist(unname(partialResultsExported))))
+  logError(messages$errorNotCompletedOnCores(paste(
+    "In cores", paste(unsuccessfulCores, collapse = ", "), ", export of results."
+  )))
+  return(invisible())
 }

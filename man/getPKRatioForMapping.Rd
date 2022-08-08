@@ -8,7 +8,6 @@ getPKRatioForMapping(
   pkRatioMapping,
   pkParameterNames,
   configurationPlan,
-  logFolder,
   settings
 )
 }
@@ -18,8 +17,6 @@ getPKRatioForMapping(
 \item{pkParameterNames}{Names of PK Parameters as defined by users}
 
 \item{configurationPlan}{A `ConfigurationPlan` object}
-
-\item{logFolder}{folder where the logs are saved}
 
 \item{settings}{settings for the task}
 }

@@ -23,13 +23,13 @@ R6 class for Population Simulation Settings
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{SimulationSettings$new()}}
-\item \href{#method-clone}{\code{SimulationSettings$clone()}}
+\item \href{#method-SimulationSettings-new}{\code{SimulationSettings$new()}}
+\item \href{#method-SimulationSettings-clone}{\code{SimulationSettings$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-SimulationSettings-new"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationSettings-new}{}}}
 \subsection{Method \code{new()}}{
 Create a `SimulationSettings` object
 \subsection{Usage}{
@@ -56,8 +56,8 @@ A new `SimulationSettings` object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-SimulationSettings-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationSettings-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

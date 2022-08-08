@@ -23,7 +23,6 @@ myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
 
 # Get paths of required files for running a workflow task
 getTaskInputs(myWorkflow$plotSensitivity)
-
 }
 
 }

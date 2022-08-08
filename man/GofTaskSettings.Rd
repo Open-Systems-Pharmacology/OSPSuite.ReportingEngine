@@ -8,7 +8,7 @@ R6 class defining properties of time profiles and residuals plot task settings
 }
 \keyword{internal}
 \section{Super class}{
-\code{\link[ospsuite.reportingengine:TaskSettings]{ospsuite.reportingengine::TaskSettings}} -> \code{GofTaskSettings}
+\code{ospsuite.reportingengine::TaskSettings} -> \code{GofTaskSettings}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -30,19 +30,13 @@ time profiles and residual plots when applicable}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{GofTaskSettings$new()}}
-\item \href{#method-clone}{\code{GofTaskSettings$clone()}}
+\item \href{#method-GofTaskSettings-new}{\code{GofTaskSettings$new()}}
+\item \href{#method-GofTaskSettings-clone}{\code{GofTaskSettings$clone()}}
 }
-}
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-}
-\out{</details>}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-GofTaskSettings-new"></a>}}
+\if{latex}{\out{\hypertarget{method-GofTaskSettings-new}{}}}
 \subsection{Method \code{new()}}{
 Create a `GofTaskSettings` object
 \subsection{Usage}{
@@ -66,8 +60,8 @@ A new `GofTaskSettings` object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-GofTaskSettings-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-GofTaskSettings-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

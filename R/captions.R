@@ -197,7 +197,7 @@ getTimeRangeCaption <- function(timeRangeName, reference, simulationSetName) {
     return(c(
       anchor(paste0(reference, "-", removeForbiddenLetters(simulationSetName), "-", "total")), "",
       "### For total simulation time range"
-      ))
+    ))
   }
   if (isIncluded(timeRangeName, ApplicationRanges$firstApplication)) {
     return(c(

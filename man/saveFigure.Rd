@@ -4,14 +4,12 @@
 \alias{saveFigure}
 \title{saveFigure}
 \usage{
-saveFigure(plotObject, fileName, logFolder, simulationSetName = NULL)
+saveFigure(plotObject, fileName, simulationSetName = NULL)
 }
 \arguments{
 \item{plotObject}{A `ggplot` object}
 
 \item{fileName}{Name of the file in which `plotObject` is saved}
-
-\item{logFolder}{folder where the logs are saved}
 
 \item{simulationSetName}{Name of the simulation set for `PlotTask` results}
 }

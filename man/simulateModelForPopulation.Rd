@@ -4,14 +4,12 @@
 \alias{simulateModelForPopulation}
 \title{simulateModelForPopulation}
 \usage{
-simulateModelForPopulation(structureSets, settings = NULL, logFolder = getwd())
+simulateModelForPopulation(structureSets, settings = NULL)
 }
 \arguments{
 \item{structureSets}{List of `SimulationStructure` objects contain paths of files to be used}
 
 \item{settings}{list of simulation settings}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 Simulation results for individual or population

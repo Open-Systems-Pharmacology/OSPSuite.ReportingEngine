@@ -19,7 +19,6 @@ SimulationSettings <- R6::R6Class(
       self$maxSimulationsPerCore <- maxSimulationsPerCore
     }
   ),
-
   active = list(
     #' @field numberOfCores is the number of cores to use for simulation
     numberOfCores = function(value) {
@@ -60,7 +59,6 @@ SimulationSettings <- R6::R6Class(
       private$.allowedCores <- value
     }
   ),
-
   private = list(
     .numberOfCores = NULL,
     .showProgress = NULL,

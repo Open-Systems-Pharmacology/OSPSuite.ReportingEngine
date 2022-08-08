@@ -4,12 +4,10 @@
 \alias{plotPopulationGoodnessOfFit}
 \title{plotPopulationGoodnessOfFit}
 \usage{
-plotPopulationGoodnessOfFit(structureSet, logFolder = getwd(), settings = NULL)
+plotPopulationGoodnessOfFit(structureSet, settings = NULL)
 }
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object}
-
-\item{logFolder}{folder where the logs are saved}
 
 \item{settings}{List of settings such as `PlotConfiguration` R6 class objects for each goodness of fit plot}
 }

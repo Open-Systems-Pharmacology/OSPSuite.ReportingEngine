@@ -8,7 +8,6 @@ runSensitivity(
   structureSet,
   settings,
   individualId = NULL,
-  logFolder = getwd(),
   resultsFileName = NULL
 )
 }
@@ -18,8 +17,6 @@ runSensitivity(
 \item{settings}{list of settings for the sensitivity analysis}
 
 \item{individualId}{ID of individual in population data file for whom to perform sensitivity analysis}
-
-\item{logFolder}{folder where the logs are saved}
 
 \item{resultsFileName}{root name of population sensitivity analysis results CSV files}
 }

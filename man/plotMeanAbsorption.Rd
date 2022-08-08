@@ -4,12 +4,10 @@
 \alias{plotMeanAbsorption}
 \title{plotMeanAbsorption}
 \usage{
-plotMeanAbsorption(structureSet, logFolder = getwd(), settings = NULL)
+plotMeanAbsorption(structureSet, settings = NULL)
 }
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object}
-
-\item{logFolder}{folder where the logs are saved}
 
 \item{settings}{Options to be defined
 (e.g. plotConfigurations list of `PlotConfiguration` objects)}

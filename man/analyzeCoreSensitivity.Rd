@@ -9,9 +9,7 @@ analyzeCoreSensitivity(
   variableParameterPaths = NULL,
   variationRange = 0.1,
   numberOfCores = NULL,
-  debugLogFileName = file.path(getwd(), defaultFileNames$logDebugFile()),
-  infoLogFileName = file.path(getwd(), defaultFileNames$logInfoFile()),
-  errorLogFileName = file.path(getwd(), defaultFileNames$logErrorFile()),
+  debugLogFileName = defaultFileNames$logDebugFile(),
   nodeName = NULL,
   showProgress = FALSE
 )
@@ -27,10 +25,6 @@ analyzeCoreSensitivity(
 should be should be set to 1 when parallelizing over many nodes.}
 
 \item{debugLogFileName}{path to debug log file}
-
-\item{infoLogFileName}{path to info log file}
-
-\item{errorLogFileName}{path to error log file}
 
 \item{nodeName}{identifier for node used in parallel computation of sensitivity}
 

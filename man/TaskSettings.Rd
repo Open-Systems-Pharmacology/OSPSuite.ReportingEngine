@@ -30,13 +30,13 @@ defining aesthetic properties of reported plots}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{TaskSettings$new()}}
-\item \href{#method-clone}{\code{TaskSettings$clone()}}
+\item \href{#method-TaskSettings-new}{\code{TaskSettings$new()}}
+\item \href{#method-TaskSettings-clone}{\code{TaskSettings$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-TaskSettings-new"></a>}}
+\if{latex}{\out{\hypertarget{method-TaskSettings-new}{}}}
 \subsection{Method \code{new()}}{
 Create a `TaskSettings` object
 \subsection{Usage}{
@@ -55,8 +55,8 @@ A new `TaskSettings` object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-TaskSettings-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-TaskSettings-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

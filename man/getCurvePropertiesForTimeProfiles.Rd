@@ -9,8 +9,7 @@ getCurvePropertiesForTimeProfiles(
   simulation,
   simulationResults,
   axesProperties,
-  configurationPlan,
-  logFolder
+  configurationPlan
 )
 }
 \arguments{
@@ -25,8 +24,6 @@ that includes the data requested from `configurationPlanCurve` properties}
 \item{axesProperties}{list of axes properties obtained from `getAxesProperties`}
 
 \item{configurationPlan}{A `ConfigurationPlan` object that includes methods to find observed data}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 A list of data and properties to be plotted and that follows `tlf` package nomenclature

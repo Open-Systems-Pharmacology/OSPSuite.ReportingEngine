@@ -23,7 +23,6 @@ myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets
 
 # Get the list of parameters in x-axis for range plots
 getXParametersForDemogrpahyPlot(workflow = myWorkflow)
-
 }
 
 }

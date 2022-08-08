@@ -4,14 +4,12 @@
 \alias{verifyPartialResultsExported}
 \title{verifyPartialResultsExported}
 \usage{
-verifyPartialResultsExported(partialResultsExported, numberOfCores, logFolder)
+verifyPartialResultsExported(partialResultsExported, numberOfCores)
 }
 \arguments{
 \item{partialResultsExported}{logical vector indicating success of result file export}
 
 \item{numberOfCores}{number of cores from which result files are to be exported}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \description{
 Check that results from individual cores have been exported

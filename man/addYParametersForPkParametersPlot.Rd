@@ -26,10 +26,9 @@ myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets
 
 # Add parameters in y-axis for range plots and boxplots
 addYParametersForPKParametersPlot(
-workflow = myWorkflow, 
-parameters = Output$new(path, pkParameters)
+  workflow = myWorkflow,
+  parameters = Output$new(path, pkParameters)
 )
-
 }
 
 }

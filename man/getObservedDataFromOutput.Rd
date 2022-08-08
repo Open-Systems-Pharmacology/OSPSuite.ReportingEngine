@@ -4,14 +4,7 @@
 \alias{getObservedDataFromOutput}
 \title{getObservedDataFromOutput}
 \usage{
-getObservedDataFromOutput(
-  output,
-  data,
-  dataMapping,
-  molWeight,
-  timeUnit,
-  logFolder
-)
+getObservedDataFromOutput(output, data, dataMapping, molWeight, timeUnit)
 }
 \arguments{
 \item{output}{An `Output` object}
@@ -23,8 +16,6 @@ getObservedDataFromOutput(
 \item{molWeight}{Molar weight for unit conversion of dependent variable}
 
 \item{timeUnit}{time unit for unit conversion of time}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 list of data and lloq data.frames

@@ -4,12 +4,10 @@
 \alias{loadPopulationOnCores}
 \title{loadPopulationOnCores}
 \usage{
-loadPopulationOnCores(populationFiles, logFolder)
+loadPopulationOnCores(populationFiles)
 }
 \arguments{
 \item{populationFiles}{population files to be loaded on cores}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \description{
 Send population file names to cores, check that population is loaded on each core successfully

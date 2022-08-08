@@ -37,13 +37,13 @@ R6 class representing that stores file structure (file names and paths) relating
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{SimulationStructure$new()}}
-\item \href{#method-clone}{\code{SimulationStructure$clone()}}
+\item \href{#method-SimulationStructure-new}{\code{SimulationStructure$new()}}
+\item \href{#method-SimulationStructure-clone}{\code{SimulationStructure$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-SimulationStructure-new"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationStructure-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `SimulationStructure` object.
 Build and store names of potential subfolders to hold simulation results, pkAnalysis results and sensitivityAnalysis results.
@@ -62,8 +62,8 @@ Build and store names of potential subfolders to hold simulation results, pkAnal
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-SimulationStructure-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationStructure-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

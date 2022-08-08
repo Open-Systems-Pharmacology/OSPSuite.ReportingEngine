@@ -1,20 +1,17 @@
 #' @title plotQualificationGOFs
 #' @description Plot observation vs prediction for qualification workflow
 #' @param configurationPlan A `ConfigurationPlan` object
-#' @param logFolder folder where the logs are saved
 #' @param settings settings for the task
 #' @return list of qualification GOF ggplot objects
 #' @importFrom ospsuite.utils %||%
 #' @keywords internal
-plotQualificationGOFs <- function(configurationPlan,
-                                  logFolder = getwd(),
-                                  settings) {
+plotQualificationGOFs <- function(configurationPlan, settings) {
   gofResults <- list()
   for (gofPlan in configurationPlan$plots$GOFMergedPlots) {
     # If field artifacts is null, output them all
     gofPlan$Artifacts <- gofPlan$Artifacts %||% c("Plot", "GMFE")
     gofAxesUnits <- getGOFAxesUnits(gofPlan, settings)
-    gofData <- getQualificationGOFData(gofPlan, configurationPlan, gofAxesUnits, logFolder)
+    gofData <- getQualificationGOFData(gofPlan, configurationPlan, gofAxesUnits)
 
     # GMFE
     gmfeID <- defaultFileNames$resultID(length(gofResults) + 1, "gof_gmfe")
@@ -53,20 +50,19 @@ plotQualificationGOFs <- function(configurationPlan,
 #' @param gofPlan List providing the mapping of observed and simulated data
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @param axesUnits list of axes properties obtained from `getGOFAxesUnits`
-#' @param logFolder folder where the logs are saved
 #' @return list with `data` and `metaData`
 #' @import tlf
 #' @import ospsuite
 #' @importFrom ospsuite.utils %||%
 #' @keywords internal
-getQualificationGOFData <- function(gofPlan, configurationPlan, axesUnits, logFolder) {
+getQualificationGOFData <- function(gofPlan, configurationPlan, axesUnits) {
   gofData <- data.frame()
   groupCaptions <- NULL
   groupShapes <- NULL
   groupColors <- NULL
   for (group in gofPlan$Groups) {
     for (outputMapping in group$OutputMappings) {
-      gofResults <- getGOFDataForMapping(outputMapping, configurationPlan, axesUnits, logFolder)
+      gofResults <- getGOFDataForMapping(outputMapping, configurationPlan, axesUnits)
       gofResults$Groups <- group$Caption %||% NA
       gofData <- rbind.data.frame(gofData, gofResults)
 
@@ -94,11 +90,10 @@ getQualificationGOFData <- function(gofPlan, configurationPlan, axesUnits, logFo
 #' @param outputMapping list of mapping elements from `OutputMappings` field in configuration plan
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @param axesUnits list of axes properties obtained from `getGOFAxesUnits`
-#' @param logFolder folder where the logs are saved
 #' @return A data.frame as obtained by `getResiduals` whose values are in base unit
 #' @import ospsuite
 #' @keywords internal
-getGOFDataForMapping <- function(outputMapping, configurationPlan, axesUnits, logFolder) {
+getGOFDataForMapping <- function(outputMapping, configurationPlan, axesUnits) {
   # Get simulation output
   simulationFile <- configurationPlan$getSimulationPath(
     project = outputMapping$Project,
@@ -129,7 +124,7 @@ getGOFDataForMapping <- function(outputMapping, configurationPlan, axesUnits, lo
   # Loop on each observed dataset in OutputMappings
   gofData <- data.frame()
   for (observedDataSet in outputMapping$ObservedData) {
-    observedResults <- getObservedDataFromConfigurationPlan(observedDataSet, configurationPlan, logFolder)
+    observedResults <- getObservedDataFromConfigurationPlan(observedDataSet, configurationPlan)
     observedTime <- ospsuite::toUnit(
       quantityOrDimension = "Time",
       values = as.numeric(observedResults$data[, 1]),
@@ -178,18 +173,15 @@ getGOFDataForMapping <- function(outputMapping, configurationPlan, axesUnits, lo
 #' @keywords internal
 getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, plotProperties) {
   # Axes labels
-  axesProperties$y$dimension <- switch(
-    plotType,
+  axesProperties$y$dimension <- switch(plotType,
     "predictedVsObserved" = paste0("Simulated ", displayDimension(axesProperties$y$dimension)),
     "residualsOverTime" = "Residuals\nlog10(Observed)-log10(Simulated)"
   )
-  axesProperties$x$dimension <- switch(
-    plotType,
+  axesProperties$x$dimension <- switch(plotType,
     "predictedVsObserved" = paste0("Observed ", displayDimension(axesProperties$x$dimension)),
     "residualsOverTime" = displayDimension(axesProperties$x$dimension)
   )
-  dataMapping <- switch(
-    plotType,
+  dataMapping <- switch(plotType,
     "predictedVsObserved" = tlf::ObsVsPredDataMapping$new(
       x = "Observed",
       y = "Simulated",
@@ -203,16 +195,15 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, pl
       shape = "Groups"
     )
   )
-print(plotProperties)
+  print(plotProperties)
   plotConfiguration <- getPlotConfigurationFromPlan(
     plotProperties,
-    plotType = switch(
-      plotType,
+    plotType = switch(plotType,
       "predictedVsObserved" = "ObsVsPred",
       "residualsOverTime" = "ResVsPred"
-      )
+    )
   )
-  
+
   # Update shapes and colors from config plan
   plotConfiguration$points$color <- metaData$color
   plotConfiguration$points$shape <- metaData$shape
@@ -221,20 +212,17 @@ print(plotProperties)
   dataForLimit <- c(data[positiveRows, "Observed"], data[positiveRows, "Simulated"])
 
   plotConfiguration$xAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||%
-    autoAxesLimits(switch(
-      plotType,
+    autoAxesLimits(switch(plotType,
       "predictedVsObserved" = dataForLimit,
       "residualsOverTime" = data[positiveRows, "Time"]
     ))
   plotConfiguration$yAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||%
-    autoAxesLimits(switch(
-      plotType,
+    autoAxesLimits(switch(plotType,
       "predictedVsObserved" = dataForLimit,
       "residualsOverTime" = c(0, data[positiveRows, "Residuals"])
     ))
 
-  gofPlot <- switch(
-    plotType,
+  gofPlot <- switch(plotType,
     "predictedVsObserved" = tlf::plotObsVsPred(
       data = data,
       metaData = metaData,

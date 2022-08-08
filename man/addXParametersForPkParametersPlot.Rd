@@ -26,10 +26,9 @@ myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets
 
 # Add parameters in x-axis for range plots
 addXParametersForPKParametersPlot(
-workflow = myWorkflow, 
-parameters = StandardPath$GestationalAge
+  workflow = myWorkflow,
+  parameters = StandardPath$GestationalAge
 )
-
 }
 
 }

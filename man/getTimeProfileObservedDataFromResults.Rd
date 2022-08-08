@@ -7,8 +7,7 @@
 getTimeProfileObservedDataFromResults(
   observedResults,
   molWeight,
-  axesProperties,
-  logFolder
+  axesProperties
 )
 }
 \arguments{
@@ -21,8 +20,6 @@ getTimeProfileObservedDataFromResults(
 \item{molWeight}{Molecular weight of compound}
 
 \item{axesProperties}{list of axes properties obtained from `getAxesProperties`}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 List with `time`, `y` and `error` values
