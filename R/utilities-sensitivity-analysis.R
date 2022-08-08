@@ -270,8 +270,6 @@ analyzeSensitivity <- function(simulation,
 #' @param numberOfCores Number of cores to use on local node.  This parameter
 #' should be should be set to 1 when parallelizing over many nodes.
 #' @param debugLogFileName path to debug log file
-#' @param infoLogFileName path to info log file
-#' @param errorLogFileName path to error log file
 #' @param nodeName identifier for node used in parallel computation of sensitivity
 #' @param showProgress option to print progress of simulation to console
 #' @return sensitivity analysis results
@@ -280,9 +278,7 @@ analyzeCoreSensitivity <- function(simulation,
                                    variableParameterPaths = NULL,
                                    variationRange = 0.1,
                                    numberOfCores = NULL,
-                                   debugLogFileName = file.path(getwd(), defaultFileNames$logDebugFile()),
-                                   infoLogFileName = file.path(getwd(), defaultFileNames$logInfoFile()),
-                                   errorLogFileName = file.path(getwd(), defaultFileNames$logErrorFile()),
+                                   debugLogFileName = defaultFileNames$logDebugFile(),
                                    nodeName = NULL,
                                    showProgress = FALSE) {
   sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation, variationRange = variationRange)
@@ -291,13 +287,29 @@ analyzeCoreSensitivity <- function(simulation,
     showProgress = showProgress,
     numberOfCores = numberOfCores
   )
+  
+  write(
+    paste0(
+      ifNotNull(nodeName, paste0(nodeName, ": "), ""), 
+      "Starting sensitivity analysis for path(s) ", 
+      paste(variableParameterPaths, collapse = ", ")
+      ),
+    file = debugLogFileName,
+    append = TRUE
+  )
 
-  logDebug(message = paste0(ifNotNull(nodeName, paste0(nodeName, ": "), NULL), "Starting sensitivity analysis for path(s) ", paste(variableParameterPaths, collapse = ", ")), file = debugLogFileName, printConsole = FALSE)
   sensitivityAnalysisResults <- runSensitivityAnalysis(
     sensitivityAnalysis = sensitivityAnalysis,
     sensitivityAnalysisRunOptions = sensitivityAnalysisRunOptions
   )
-  logDebug(message = paste0(ifNotNull(nodeName, paste0(nodeName, ": "), NULL), "Sensitivity analysis for current path(s) completed"), file = debugLogFileName, printConsole = FALSE)
+  write(
+    paste0(
+      ifNotNull(nodeName, paste0(nodeName, ": "), ""), 
+      "Sensitivity analysis for current path(s) completed"
+    ),
+    file = debugLogFileName,
+    append = TRUE
+  )
   return(sensitivityAnalysisResults)
 }
 
