@@ -18,6 +18,8 @@ R6 class representing Reporting Engine generic Workflow
 
 \item{\code{reportFileName}}{name of the Rmd report file}
 
+\item{\code{reportTitle}}{report title page}
+
 \item{\code{createWordReport}}{logical of option for creating Markdwon-Report only but not a Word-Report.}
 
 \item{\code{wordConversionTemplate}}{optional docx template for rendering a tuned Word-Report document}
@@ -72,6 +74,7 @@ Create a new `Workflow` object.
   watermark = NULL,
   simulationSetDescriptor = NULL,
   numberSections = TRUE,
+  reportTitle = NULL,
   theme = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -92,6 +95,9 @@ Create a new `Workflow` object.
 \item{\code{simulationSetDescriptor}}{character Descriptor of simulation sets indicated in reports}
 
 \item{\code{numberSections}}{logical defining if the report sections should be numbered}
+
+\item{\code{reportTitle}}{report title internally added as a cover page
+If `reportTitle` is an existing file, it will be merged to the report as cover page.}
 
 \item{\code{theme}}{A `Theme` object from `{tlf}` package}
 }

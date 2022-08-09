@@ -78,6 +78,7 @@ Create a new `PopulationWorkflow` object.
   watermark = NULL,
   simulationSetDescriptor = NULL,
   numberSections = TRUE,
+  reportTitle = NULL,
   theme = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -98,6 +99,9 @@ Create a new `PopulationWorkflow` object.
 \item{\code{simulationSetDescriptor}}{character Descriptor of simulation sets indicated in reports}
 
 \item{\code{numberSections}}{logical defining if the report sections should be numbered}
+
+\item{\code{reportTitle}}{report title internally added as a cover page
+If `reportTitle` is an existing file, it will be merged to the report as cover page.}
 
 \item{\code{theme}}{A `Theme` object from `{tlf}` package}
 }

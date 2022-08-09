@@ -34,6 +34,8 @@ PopulationWorkflow <- R6::R6Class(
     #' @param watermark displayed watermark in every plot background
     #' @param simulationSetDescriptor character Descriptor of simulation sets indicated in reports
     #' @param numberSections logical defining if the report sections should be numbered
+    #' @param reportTitle report title internally added as a cover page
+    #' If `reportTitle` is an existing file, it will be merged to the report as cover page.
     #' @param theme A `Theme` object from `{tlf}` package
     #' @return A new `PopulationWorkflow` object
     initialize = function(workflowType,
@@ -43,6 +45,7 @@ PopulationWorkflow <- R6::R6Class(
                           watermark = NULL,
                           simulationSetDescriptor = NULL,
                           numberSections = TRUE,
+                          reportTitle = NULL,
                           theme = NULL) {
       super$initialize(
         simulationSets = simulationSets,
@@ -51,6 +54,7 @@ PopulationWorkflow <- R6::R6Class(
         watermark = watermark,
         simulationSetDescriptor = simulationSetDescriptor,
         numberSections = numberSections,
+        reportTitle = reportTitle,
         theme = theme
       )
 
@@ -146,6 +150,7 @@ PopulationWorkflow <- R6::R6Class(
               file.path(self$workflowFolder, self$reportFileName),
               createWordReport = self$createWordReport,
               numberSections = self$numberSections,
+              intro = getIntroFromReportTitle(self$reportTitle),
               wordConversionTemplate = self$wordConversionTemplate
             )
             # Move report if a non-default path is provided
