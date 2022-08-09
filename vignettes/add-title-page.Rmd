@@ -1,0 +1,224 @@
+---
+title: "Add a title page to your workflow report"
+resource_files:
+  - reportOutputStyle.css
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Add a title page to your workflow report}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r report output style, child="reportOutputStyle.css", eval=TRUE}
+```
+
+```{r vignette setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+require(ospsuite.reportingengine)
+```
+
+In Mean Model and Population workflows, title pages can be included using the __`reportTitle`__ input argument.
+
+The example below will be used to illustrate the available options when adding a title page to the final report.
+
+<details>
+<summary> __Code__ </summary>
+
+```{r mini model example}
+# Get the pkml simulation file: "MiniModel2.pkml"
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
+
+# Define the input parameters
+outputA <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "Concentration of A",
+  displayUnit = "nmol/ml"
+)
+
+setA <- SimulationSet$new(
+  simulationSetName = "A",
+  simulationFile = simulationFile,
+  outputs = outputA
+)
+
+```
+
+</details>
+
+## Add a title only
+
+When only a title is needed as a title page, the workflow will internally add the markdown title tag, __`"#"`__, to the __`reportTitle`__ as illustrated below.
+
+<details>
+<summary> __Code__ </summary>
+
+```{r workflow title only}
+# Create the workflow instance with the report title
+workflow <-
+  MeanModelWorkflow$new(
+    simulationSets = setA,
+    workflowFolder = "Example-1",
+    reportTitle = "A meaningful title"
+  )
+
+# Set the workflow tasks to be run
+workflow$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
+
+# Run the workflow
+workflow$runWorkflow()
+```
+
+```{r example title only render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflow$reportFilePath)
+```
+
+</details>
+
+<details>
+<summary> __Report__ </summary>
+
+<div class = "reportOutput">
+```{r example title only report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow$reportFilePath)))
+```
+</div>
+
+</details>
+
+## Add a title page
+
+When the length of `reportTitle` is longer than 1, the workflow will assume `reportTitle` is a more advanced title page already formatted for markdown.
+In such cases, `reportTitle` will used as is.
+
+<details>
+<summary> __Code__ </summary>
+
+In the example below, the content of a more advanced title page is defined.
+The corresponding page includes 
+
+- A reference anchor that could be linked using `[Title page](#title-page)`
+- A title with a markdown title tag
+- A table (using `kable` for markdown formatting)
+
+```{r title page content}
+
+titlePage <- c(
+  anchor("title-page"),
+  "",
+  "# A meaningful title",
+  "",
+  knitr::kable(
+    data.frame(
+      Date = Sys.Date(),
+      Author = "OSP Suite - Reporting Engine",
+      Subject = "Example Workflow"
+    )
+  )
+)
+
+```
+
+```{r workflow advanced title}
+# Here, it is more optimal to re-use the previous workflow 
+# since only the report title page is changed and the same results are used
+workflow$inactivateTasks("simulate")
+
+workflow$reportTitle <- titlePage
+
+# Re-run the workflow with the new title page
+workflow$runWorkflow()
+```
+
+```{r example advanced title render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflow$reportFilePath)
+```
+
+</details>
+
+<details>
+<summary> __Report__ </summary>
+
+<div class = "reportOutput">
+```{r example advanced title report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow$reportFilePath)))
+```
+</div>
+
+</details>
+
+## Use a file as title page
+
+Another option is to use a markdown file as cover page.
+In this case, the file path can directly be defined in `reportTitle` and the workflow will internally check that the file exists and include its content.
+
+<details>
+<summary> __Code__ </summary>
+
+The example below save the previously defined title page as a file named :
+
+```{r save title page}
+titlePageFile <- "title-page.md"
+write(
+  x = titlePage,
+  file = titlePageFile
+)
+```
+
+```{r workflow title file}
+# Here, it is more optimal to re-use the previous workflow 
+# since only the report title page is changed and the same results are used
+workflow$reportTitle <- titlePageFile
+
+# Re-run the workflow with the new title page
+workflow$runWorkflow()
+```
+
+```{r example title file render, include=FALSE, echo=FALSE}
+# Convert the markdown document into html
+# Otherwise the root path is messed up and cannot print the report correctly
+rmarkdown::render(workflow$reportFilePath)
+```
+
+</details>
+
+<details>
+<summary> __Report__ </summary>
+
+<div class = "reportOutput">
+```{r example title file report, echo=FALSE, results='asis'}
+knitr::raw_html(readLines(sub(".md", ".html", workflow$reportFilePath)))
+```
+</div>
+
+</details>
+
+<details>
+<summary> __Note__ </summary>
+Note that running the workflow won't delete the title page.
+The title file can be re-used if the workflow needs to be re-run.
+
+```{r title file not deleted}
+file.exists(titlePageFile)
+```
+
+```{r delete example folder, inlcude = FALSE, echo=FALSE}
+# Remove the workflow folders
+unlink(workflow$workflowFolder, recursive = TRUE)
+unlink(titlePageFile, recursive = TRUE)
+```
+
+</details>

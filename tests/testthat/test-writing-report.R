@@ -75,3 +75,66 @@ test_that("versionInfo is correctly adjusted in title pages", {
   refTitleContent <- readLines(refTitleFile)
   expect_equal(titleContent, refTitleContent)
 })
+
+# getIntroFromReportTitle is not an internal function
+getIntroFromReportTitle <- ospsuite.reportingengine:::getIntroFromReportTitle
+testIntroFile <- "test-temp-report-title.md"
+test_that("getIntroFromReportTitle does nothing if reportTitle is NULL", {
+  # Nothing is done if reportTitle is null
+  expect_null(getIntroFromReportTitle(reportTitle = NULL, intro = testIntroFile))
+  expect_false(file.exists(testIntroFile))
+})
+
+test_that("getIntroFromReportTitle add a title tag if reportTitle is one string", {
+  # Should return the file path
+  expect_equal(
+    getIntroFromReportTitle(reportTitle = "A title", intro = testIntroFile),
+    testIntroFile
+  )
+  # File path should exists
+  expect_true(file.exists(testIntroFile))
+  # Title tag is added
+  expect_true(any(grepl(pattern = "# A title", x = readLines(testIntroFile))))
+  # Removes file for next tests
+  unlink(testIntroFile, recursive = TRUE)
+})
+
+test_that("getIntroFromReportTitle use title as is if reportTitle is multiple strings", {
+  # Should return the file path
+  expect_equal(
+    getIntroFromReportTitle(reportTitle = c("My title", "other content"), intro = testIntroFile),
+    testIntroFile
+  )
+  # File path should exists
+  expect_true(file.exists(testIntroFile))
+  # Title tag is not added
+  expect_false(any(grepl(pattern = "# A title", x = readLines(testIntroFile))))
+  # Content is used as is
+  expect_true(any(grepl(pattern = "My title", x = readLines(testIntroFile))))
+  expect_true(any(grepl(pattern = "other content", x = readLines(testIntroFile))))
+  # Removes file for next tests
+  unlink(testIntroFile, recursive = TRUE)
+})
+
+userCoverPage <- "input-cover-page.md"
+userCoverPageContent <- "My cover page saved in a file"
+
+write(
+  x = userCoverPageContent,
+  file = userCoverPage
+)
+
+test_that("getIntroFromReportTitle add file content if reportTitle is a file path", {
+  # Should return the temporary file path 
+  # (prevents user cover page being deleted during report merging)
+  expect_equal(
+    getIntroFromReportTitle(reportTitle = userCoverPage, intro = testIntroFile),
+    testIntroFile
+  )
+  # File path should exists
+  expect_true(file.exists(testIntroFile))
+  expect_true(any(grepl(pattern = userCoverPageContent, x = readLines(testIntroFile))))
+  unlink(testIntroFile, recursive = TRUE)
+  unlink(userCoverPage, recursive = TRUE)
+})
+

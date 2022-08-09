@@ -4,6 +4,7 @@
 #' @field workflowFolder path of the folder create by the Workflow
 #' @field taskNames Enum of task names
 #' @field reportFileName name of the Rmd report file
+#' @field reportTitle report title page
 #' @field createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
 #' @field wordConversionTemplate optional docx template for rendering a tuned Word-Report document
 #' @field userDefinedTasks List of user-defined tasks (to update with loadUserDefinedTask)
@@ -18,6 +19,7 @@ Workflow <- R6::R6Class(
     workflowFolder = NULL,
     taskNames = NULL,
     reportFileName = NULL,
+    reportTitle = NULL,
     createWordReport = NULL,
     wordConversionTemplate = NULL,
     userDefinedTasks = NULL,
@@ -32,6 +34,8 @@ Workflow <- R6::R6Class(
     #' @param watermark displayed watermark in figures background
     #' @param simulationSetDescriptor character Descriptor of simulation sets indicated in reports
     #' @param numberSections logical defining if the report sections should be numbered
+    #' @param reportTitle report title internally added as a cover page
+    #' If `reportTitle` is an existing file, it will be merged to the report as cover page.
     #' @param theme A `Theme` object from `{tlf}` package
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
@@ -41,6 +45,7 @@ Workflow <- R6::R6Class(
                           watermark = NULL,
                           simulationSetDescriptor = NULL,
                           numberSections = TRUE,
+                          reportTitle = NULL,
                           theme = NULL) {
       #----- Check and initialize workflow folder  -----
       validateIsString(workflowFolder)
@@ -72,6 +77,7 @@ Workflow <- R6::R6Class(
           validateIsString(watermark, nullAllowed = TRUE)
           validateIsString(simulationSetDescriptor, nullAllowed = TRUE)
           validateIsString(wordConversionTemplate, nullAllowed = TRUE)
+          validateIsString(reportTitle, nullAllowed = TRUE)
 
           # Define workflow fields
           # Empty list on which users can load tasks
@@ -89,6 +95,7 @@ Workflow <- R6::R6Class(
           self$createWordReport <- createWordReport
           self$wordConversionTemplate <- wordConversionTemplate
           self$numberSections <- numberSections
+          self$reportTitle <- reportTitle
           self$setSimulationDescriptor(simulationSetDescriptor %||% reEnv$defaultSimulationSetDescriptor)
 
           private$.reportFolder <- workflowFolder

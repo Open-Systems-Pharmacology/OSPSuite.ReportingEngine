@@ -115,6 +115,7 @@ MeanModelWorkflow <- R6::R6Class(
               file.path(self$workflowFolder, self$reportFileName),
               createWordReport = self$createWordReport,
               numberSections = self$numberSections,
+              intro = getIntroFromReportTitle(self$reportTitle),
               wordConversionTemplate = self$wordConversionTemplate
             )
             # Move report if a non-default path is provided
