@@ -42,13 +42,20 @@ plotDemographyParameters <- function(structureSets,
     referenceSimulationSetName <- getReferencePopulationName(structureSets)
   }
 
-  if (isOfLength(xParameters, 0)) {
+  if (isEmpty(xParameters)) {
     # Pediatric: comparison histogram
     if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
       for (parameterName in yParameters) {
-        resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", parameterName)
+        sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", parameterName)
         parameterCaption <- demographyMetaData[[parameterName]]$dimension
-
+        
+        # Create sub level title for parameter name
+        demographyResults[[sectionId]] <- saveTaskResults(
+          id = sectionId,
+          textChunk = captions$demography$parameterSection(sectionId, parameterCaption),
+          includeTextChunk = TRUE
+        )
+        
         histogramMapping <- tlf::HistogramDataMapping$new(
           x = parameterName,
           fill = "simulationSetName"
@@ -62,6 +69,7 @@ plotDemographyParameters <- function(structureSets,
         )
 
         # Save results
+        resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", parameterName)
         demographyResults[[resultID]] <- saveTaskResults(
           id = resultID,
           plot = demographyHistogram,
@@ -76,14 +84,30 @@ plotDemographyParameters <- function(structureSets,
     # Parallel and Ratio: histograms per population
     if (workflowType %in% c(PopulationWorkflowTypes$parallelComparison, PopulationWorkflowTypes$ratioComparison)) {
       for (parameterName in yParameters) {
+        sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", parameterName)
         parameterCaption <- demographyMetaData[[parameterName]]$dimension
+        
+        # Create sub level title for parameter name
+        demographyResults[[sectionId]] <- saveTaskResults(
+          id = sectionId,
+          textChunk = captions$demography$parameterSection(sectionId, parameterCaption),
+          includeTextChunk = TRUE
+        )
 
         histogramMapping <- tlf::HistogramDataMapping$new(
           x = parameterName,
           fill = "simulationSetName"
         )
         for (simulationSetName in simulationSetNames) {
-          resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", parameterName)
+          sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", parameterName)
+          
+          # Create a sub level title for population
+          demographyResults[[sectionId]] <- saveTaskResults(
+            id = sectionId,
+            textChunk = captions$demography$populationSection(sectionId, simulationSetName, simulationSetDescriptor, level = 3),
+            includeTextChunk = TRUE
+          )
+          
           demographyDataByPopulation <- demographyData[demographyData$simulationSetName %in% simulationSetName, ]
 
           demographyHistogram <- plotDemographyHistogram(
@@ -95,6 +119,7 @@ plotDemographyParameters <- function(structureSets,
           )
 
           # Save results
+          resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", parameterName)
           demographyResults[[resultID]] <- saveTaskResults(
             id = resultID,
             plot = demographyHistogram,
@@ -115,6 +140,15 @@ plotDemographyParameters <- function(structureSets,
     if (demographyMetaData[[demographyParameter]]$class %in% "character") {
       next
     }
+    xParameterCaption <- demographyMetaData[[demographyParameter]]$dimension
+    sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter)
+    
+    # Create level title for x parameter name
+    demographyResults[[sectionId]] <- saveTaskResults(
+      id = sectionId,
+      textChunk = captions$demography$xParameterSection(sectionId, xParameterCaption),
+      includeTextChunk = TRUE
+    )
     # This aims at preventing plots such as age vs age
     for (parameterName in setdiff(yParameters, demographyParameter)) {
       # Categorical variables won't be plotted
@@ -124,6 +158,15 @@ plotDemographyParameters <- function(structureSets,
       vpcMetaData <- list(
         "x" = demographyMetaData[[demographyParameter]],
         "median" = demographyMetaData[[parameterName]]
+      )
+      yParameterCaption <- vpcMetaData$median$dimension
+      sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName)
+      
+      # Create sub level title for y parameter name
+      demographyResults[[sectionId]] <- saveTaskResults(
+        id = sectionId,
+        textChunk = captions$demography$yParameterSection(sectionId, yParameterCaption),
+        includeTextChunk = TRUE
       )
 
       # For pediatric workflow, range plots compare reference population to the other populations
@@ -146,6 +189,14 @@ plotDemographyParameters <- function(structureSets,
 
         # Range plot comparisons with reference
         for (simulationSetName in simulationSetNames[!simulationSetNames %in% referenceSimulationSetName]) {
+          sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName)
+          # Create sub level title for population
+          demographyResults[[sectionId]] <- saveTaskResults(
+            id = sectionId,
+            textChunk = captions$demography$populationSection(sectionId, simulationSetName, simulationSetDescriptor),
+            includeTextChunk = TRUE
+          )
+          
           comparisonData <- demographyData[demographyData$simulationSetName %in% simulationSetName, ]
           comparisonData <- getDemographyAggregatedData(
             data = comparisonData,
@@ -161,10 +212,7 @@ plotDemographyParameters <- function(structureSets,
             metaData = vpcMetaData,
             plotObject = referenceVpcPlot
           )
-
-          xParameterCaption <- vpcMetaData$x$dimension
-          yParameterCaption <- vpcMetaData$median$dimension
-
+          
           # Save comparison vpc plots
           resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName)
           demographyResults[[resultID]] <- saveTaskResults(
@@ -205,6 +253,14 @@ plotDemographyParameters <- function(structureSets,
 
       # Simple range plots
       for (simulationSetName in simulationSetNames) {
+        sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName)
+        # Create sub level title for population
+        demographyResults[[sectionId]] <- saveTaskResults(
+          id = sectionId,
+          textChunk = captions$demography$populationSection(sectionId, simulationSetName, simulationSetDescriptor),
+          includeTextChunk = TRUE
+        )
+        
         vpcData <- demographyData[demographyData$simulationSetName %in% simulationSetName, ]
         vpcData <- getDemographyAggregatedData(
           data = vpcData,
