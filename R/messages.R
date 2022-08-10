@@ -302,14 +302,39 @@ highlight <- function(text) {
 #' @description Remove highlight in text
 #' @keywords internal
 removeHighlight <- function(text) {
-  if (requireNamespace("crayon", quietly = TRUE)) {
-    highlightWrap <- strsplit(highlight(" "), split = " ")[[1]]
-    if(!isOfLength(highlightWrap,2)){
+  if (!requireNamespace("crayon", quietly = TRUE)) {
+    return(text)
+  }
+  # Hard coding results of
+  # strsplit(highlight(" "), split = " ")[[1]]
+  # to prevent any bug from highlight and strsplit
+  highlightLeft <- "\033[36m\033[1m\033[3m"
+  highlightRight <- "\033[23m\033[22m\033[39m"
+
+  # Use tryCatch, in case of error returning the initial text
+  newText <- tryCatch(
+    {
+      # gsub uses argument fixed and useBytes
+      # to make sure only highlight wrapping is removed
+      newText <- gsub(
+        pattern = highlightLeft,
+        x = as.character(text),
+        replacement = "",
+        fixed = TRUE,
+        useBytes = TRUE
+      )
+      newText <- gsub(
+        pattern = highlightRight,
+        x = newText,
+        replacement = "",
+        fixed = TRUE,
+        useBytes = TRUE
+      )
+      return(newText)
+    },
+    error = function(e) {
       return(text)
     }
-    newText <- gsub(pattern = highlightWrap[1], x = as.character(text), replacement = "", fixed = TRUE)
-    newText <- gsub(pattern = highlightWrap[2], x = newText, replacement = "", fixed = TRUE)
-    return(newText)
-  }
-  return(text)
+  )
+  return(newText)
 }
