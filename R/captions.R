@@ -20,6 +20,20 @@ captions <- list(
     }
   ),
   demography = list(
+    parameterSection = function(sectionId, parameterName) {
+      c(anchor(sectionId), "", paste("##", parameterName, "distributions"))
+    },
+    xParameterSection = function(sectionId, parameterName) {
+      c(anchor(sectionId), "", paste("## ", parameterName, "-dependence", sep = ""))
+    },
+    yParameterSection = function(sectionId, parameterName) {
+      c(anchor(sectionId), "", paste("### Dependence of", parameterName))
+    },
+    populationSection = function(sectionId, simulationSetName, descriptor, level = 4) {
+      tagLevel <- paste0(rep("#", level), collapse = "")
+      sectionTitle <- paste(tagLevel, "For", reportSimulationSet(simulationSetName, descriptor))
+      return(c(anchor(sectionId), "", sectionTitle))
+    },
     histogram = function(parameterName, simulationSetName, descriptor) {
       paste0("Distribution of ", parameterName, " for ", reportSimulationSet(simulationSetName, descriptor))
     },
