@@ -340,7 +340,12 @@ plotPopulationPKParameters <- function(structureSets,
             resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", demographyParameter, pkParameter$pkParameter, "log")
             pkParametersResults[[resultID]] <- saveTaskResults(
               id = resultID,
-              plot = tlf::setYAxis(plotObject = comparisonVpcPlot, scale = tlf::Scaling$log),
+              plot = tlf::setYAxis(
+                plotObject = comparisonVpcPlot, 
+                scale = tlf::Scaling$log,
+                limits = boxRange,
+                ticks = boxBreaks
+                ),
               plotCaption = captions$plotPKParameters$rangePlot(
                 xParameterCaption,
                 yParameterCaption,
@@ -388,7 +393,12 @@ plotPopulationPKParameters <- function(structureSets,
           resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", demographyParameter, pkParameter$pkParameter, "log")
           pkParametersResults[[resultID]] <- saveTaskResults(
             id = resultID,
-            plot = tlf::setYAxis(plotObject = vpcPlot, scale = tlf::Scaling$log),
+            plot = tlf::setYAxis(
+              plotObject = vpcPlot, 
+              scale = tlf::Scaling$log,
+              limits = boxRange,
+              ticks = boxBreaks
+              ),
             plotCaption = captions$plotPKParameters$rangePlot(
               xParameterCaption,
               yParameterCaption,
