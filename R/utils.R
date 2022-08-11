@@ -287,10 +287,10 @@ getPKParametersInSimulationSet <- function(simulationSet) {
 #' @return Allowed number of CPU cores for computation
 #' @keywords internal
 getAllowedCores <- function() {
-  numberOfCores <- getAllowedCoresLinuxKubernetes()
-  if (is.null(numberOfCores)) {
-    numberOfCores <- getOSPSuiteSetting(settingName = "numberOfCores")
-  }
+  return(
+    getAllowedCoresLinuxKubernetes() %||% 
+      getOSPSuiteSetting(settingName = "numberOfCores")
+  )
 }
 
 
@@ -320,6 +320,7 @@ getAllowedCoresLinuxKubernetes <- function() {
       return(NULL)
     }
   )
+  return(cores)
 }
 
 #' @title getSimulationParameterDisplayPaths
