@@ -2,7 +2,6 @@
 title: "Sensitivity Analysis"
 resource_files:
   - figures
-  - reportOutputStyle.css
 output: 
   rmarkdown::html_vignette:
    number_sections: true
@@ -13,14 +12,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r report output style, child="reportOutputStyle.css", eval=TRUE}
-```
-
 ```{r vignette setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+source(system.file("extdata", "vignette-helpers.R", package = "ospsuite.reportingengine"))
 ```
 
 ```{r setup, echo=FALSE, results='hide', message=F, warning=F}
@@ -166,17 +163,9 @@ mwf$runWorkflow()
 
 The output report, containing the mean model sensitivity plots from this example, is shown below.  
 
-```{r mwf render, include=F, echo=F}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(mwf$reportFilePath)
+```{r sensitivity report, echo=FALSE, results='asis'}
+cat(includeReportFromWorkflow(mwf))
 ```
-
-<div class = "reportOutput">
-```{r mwf report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", mwf$reportFilePath)))
-```
-</div>
 
 ```{r delete mwf, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
@@ -304,17 +293,9 @@ Two output paths are shown corresponding to `output1` (pink), `output2` (blue). 
 
 The output report, containing the population sensitivity plots from this example, is shown below.  
 
-```{r pwf render, include=F, echo=F}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(pwf$reportFilePath)
+```{r population sensitivity report, echo=FALSE, results='asis'}
+cat(includeReportFromWorkflow(pwf))
 ```
-
-<div class = "reportOutput">
-```{r pwf report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", pwf$reportFilePath)))
-```
-</div>
 
 ```{r delete pwf, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders

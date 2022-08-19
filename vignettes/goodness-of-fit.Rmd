@@ -2,7 +2,6 @@
 title: "Time profiles and Residuals task"
 resource_files:
   - figures
-  - reportOutputStyle.css
 output: 
   rmarkdown::html_vignette:
    number_sections: true
@@ -13,14 +12,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r report output style, child="reportOutputStyle.css", eval=TRUE}
-```
-
 ```{r vignette setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+source(system.file("extdata", "vignette-helpers.R", package = "ospsuite.reportingengine"))
 ```
 
 ```{r setup}
@@ -117,6 +114,9 @@ Example 1 shows one of the simplest workflows including a goodness of fit.
 In this example, only a simulation time profile is performed since there is no observed data.
 Furthermore, only one simulation set and one output are requested.
 
+<details>
+<summary> __Code__ </summary>
+
 ```{r example 1}
 # Get the pkml simulation file: "MiniModel2.pkml"
 simulationFile <- system.file("extdata", "MiniModel2.pkml",
@@ -150,20 +150,15 @@ workflow1$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 workflow1$runWorkflow()
 ```
 
-```{r example 1 render, include=FALSE, echo=FALSE}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow1$reportFilePath)
-```
+</details>
 
 The output report for Example 1 is shown below. 
 There are only 2 figures in the report (linear and log scales) showing the time profile of the output path '__Organism|A|Concentration in container__' displayed as '__Concentration of A__'.
 
-<div class = "reportOutput">
 ```{r example 1 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow1$reportFilePath)))
+cat(includeReportFromWorkflow(workflow1))
 ```
-</div>
+
 
 ## Example 2
 
@@ -173,6 +168,9 @@ This example shows 3 new features:
 - The presence of observed data compared to the simulation
 - The use of results obtained from a previous workflow
 - The change of display unit without re-running the `simulate` task
+
+<details>
+<summary> __Code__ </summary>
 
 ```{r example 2}
 # Get the pkml simulation file: "MiniModel2.pkml"
@@ -234,25 +232,22 @@ dictTableExample2 <- readObservedDataFile(dictionaryFile)
 knitr::kable(dictTableExample2, caption = "Table 3: Dictionary content")
 ```
 
-```{r example 2 render, include=FALSE, echo=FALSE}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow2$reportFilePath)
-```
+</details>
 
 The output report for Example 2 is shown below. 
 There are now many more figures in the report showing not only time profiles in `µmol/ml` instead of `nmol/ml` but also residuals.
 
-<div class = "reportOutput">
 ```{r example 2 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow2$reportFilePath)))
+cat(includeReportFromWorkflow(workflow2))
 ```
-</div>
 
 ## Example 3
 
 In example 3, the dictionary is changed and indicates that the lower limit of quantitation (LLOQ) is included in the observed data.
 Like the previous example, there is no need to re-run the `simulate` task.
+
+<details>
+<summary> __Code__ </summary>
 
 ```{r example 3}
 # Get the pkml simulation file: "MiniModel2.pkml"
@@ -307,20 +302,14 @@ dictTableExample2 <- readObservedDataFile(dictionaryFile)
 knitr::kable(dictTableExample2, caption = "Table 4: Dictionary content")
 ```
 
-```{r example 3 render, include=FALSE, echo=FALSE}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow3$reportFilePath)
-```
+</details>
 
 The output report for Example 3 is shown below. 
 The time profiles now indicate the LLOQ.
 
-<div class = "reportOutput">
 ```{r example 3 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow3$reportFilePath)))
+cat(includeReportFromWorkflow(workflow3))
 ```
-</div>
 
 ```{r delete example 3, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
@@ -333,6 +322,9 @@ In example 4, the simulation set now includes 2 output paths.
 Output path __Organism|A|Concentration in container__ has observed data to be compared to whereas output path __Organism|B|Concentration in container__ does not.
 Since output path __Organism|B|Concentration in container__ was not requested by the examples 1, 2 and 3, it is not included in the simulation results.
 As a consequence, the `simulate` task needs to be re-run.
+
+<details>
+<summary> __Code__ </summary>
 
 ```{r example 4}
 # Get the pkml simulation file: "MiniModel2.pkml"
@@ -384,19 +376,13 @@ workflow4$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 workflow4$runWorkflow()
 ```
 
-```{r example 4 render, include=FALSE, echo=FALSE}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow4$reportFilePath)
-```
+</details>
 
 The output report for Example 4 is shown below.
 
-<div class = "reportOutput">
 ```{r example 4 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow4$reportFilePath)))
+cat(includeReportFromWorkflow(workflow4))
 ```
-</div>
 
 ```{r delete example 4, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
@@ -409,6 +395,9 @@ In example 5, there are 2 simulation sets, each one includes one output path.
 Simulation set A includes output path __Organism|A|Concentration in container__ and has observed data.
 Simulation set B includes output path __Organism|B|Concentration in container__ and has no observed data.
 The `simulate` task needs to be re-run also in this case since the simulation results are saved in files that use the simulation set names.
+
+<details>
+<summary> __Code__ </summary>
 
 ```{r example 5}
 # Get the pkml simulation file: "MiniModel1.pkml"
@@ -470,19 +459,13 @@ workflow5$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 workflow5$runWorkflow()
 ```
 
-```{r example 5 render, include=FALSE, echo=FALSE}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow5$reportFilePath)
-```
+</details>
 
 The output report for Example 5 is shown below.
 
-<div class = "reportOutput">
 ```{r example 5 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow5$reportFilePath)))
+cat(includeReportFromWorkflow(workflow5))
 ```
-</div>
 
 ```{r delete example 5, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
@@ -493,6 +476,9 @@ unlink(workflow5$workflowFolder, recursive = TRUE)
 
 Example 6 shows a goodness of fit for a population workflow.
 In this example, there is no observed data, only one simulation set and one output are requested.
+
+<details>
+<summary> __Code__ </summary>
 
 ```{r example 6}
 # Get the pkml simulation file: "MiniModel2.pkml"
@@ -533,24 +519,22 @@ workflow6$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 workflow6$runWorkflow()
 ```
 
-```{r example 6 render, include=FALSE, echo=FALSE}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow6$reportFilePath)
-```
+</details>
 
 The output report for Example 6 is shown below. 
 The 2 figures of the report (linear and log scales) include median, mean 5th and 95th percentiles of the population.
 
-<div class = "reportOutput">
 ```{r example 6 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow6$reportFilePath)))
+cat(includeReportFromWorkflow(workflow6))
 ```
-</div>
+
 
 ## Example 7
 
 Example 7 add observed data to the previous workflow.
+
+<details>
+<summary> __Code__ </summary>
 
 ```{r example 7}
 # Get the pkml simulation file: "MiniModel2.pkml"
@@ -603,20 +587,15 @@ workflow7$inactivateTasks(StandardSimulationTasks$simulate)
 workflow7$runWorkflow()
 ```
 
+</details>
+
 The output report for Example 7 is shown below. 
 The residuals are calculated on the median simulated values.
 
-```{r example 7 render, include=FALSE, echo=FALSE}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow7$reportFilePath)
+```{r example 7 report, echo=FALSE, results='asis'}
+cat(includeReportFromWorkflow(workflow7))
 ```
 
-<div class = "reportOutput">
-```{r example 7 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow7$reportFilePath)))
-```
-</div>
 
 ```{r delete example 7, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders

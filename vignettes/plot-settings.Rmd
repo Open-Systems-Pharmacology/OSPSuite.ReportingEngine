@@ -2,7 +2,6 @@
 title: "Plot settings"
 resource_files:
   - figures
-  - reportOutputStyle.css
 output: 
   rmarkdown::html_vignette:
    number_sections: true
@@ -13,14 +12,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r report output style, child="reportOutputStyle.css", eval=TRUE}
-```
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+source(system.file("extdata", "vignette-helpers.R", package = "ospsuite.reportingengine"))
 ```
 
 ```{r setup}
@@ -248,17 +245,9 @@ Regarding observed vs simulated plots, the got the updated xlabel, ylabel and wa
 workflowA$runWorkflow()
 ```
 
-```{r example render time profile, include=FALSE, echo=FALSE}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflowA$reportFilePath)
-```
-
-<div class = "reportOutput">
 ```{r example time profile report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflowA$reportFilePath)))
+cat(includeReportFromWorkflow(workflowA))
 ```
-</div>
 
 ```{r delete example time profile, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders

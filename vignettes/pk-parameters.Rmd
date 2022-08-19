@@ -2,27 +2,22 @@
 title: "PK parameters"
 resource_files:
   - figures
-  - reportOutputStyle.css
 output: 
   rmarkdown::html_vignette:
    number_sections: true
    toc: true
-#   self_contained: false
-#   keep_md: true
 vignette: >
   %\VignetteIndexEntry{PK parameters}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r report output style, child="reportOutputStyle.css", eval=TRUE}
-```
-
 ```{r vignette setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+source(system.file("extdata", "vignette-helpers.R", package = "ospsuite.reportingengine"))
 ```
 
 ```{r setup}
@@ -90,6 +85,9 @@ Since the task PK parameters requires results from the folder __PKAnalysisResult
 the tasks `simulate` and `calculatePKParameters` need to be performed.
 The task `simulate` needs to be performed because the task `calculatePKParameters` is using the time profile simulation results.
 
+<details>
+<summary> __Code__ </summary>
+
 ```{r example 1}
 # Get the pkml simulation file: "MiniModel2.pkml"
 simulationFile <- system.file("extdata", "MiniModel2.pkml",
@@ -125,20 +123,14 @@ workflow1$activateTasks(c("simulate",
 workflow1$runWorkflow()
 ```
 
-```{r example 1 render, include=FALSE, echo=FALSE}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow1$reportFilePath)
-```
+</details>
 
 The output report for Example 1 is shown below. 
 The table indicates the requested parameters in their base unit.
 
-<div class = "reportOutput">
 ```{r example 1 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow1$reportFilePath)))
+cat(includeReportFromWorkflow(workflow1))
 ```
-</div>
 
 ```{r delete example 1, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
@@ -151,6 +143,9 @@ unlink(workflow1$workflowFolder, recursive = TRUE)
 Example 2 shows how to perform workflows with user defined PK parameters.
 In this example, '__MyAUC__' is added to the list of PK parameters.
 To create user defined PK parameter, the function __addUserDefinedPKParameter()__ from the `ospsuite` package needs to be used.
+
+<details>
+<summary> __Code__ </summary>
 
 ```{r example 2}
 # Get the pkml simulation file: "MiniModel2.pkml"
@@ -191,20 +186,14 @@ workflow2$activateTasks(c("simulate",
 workflow2$runWorkflow()
 ```
 
-```{r example 2 render, include=FALSE, echo=FALSE}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow2$reportFilePath)
-```
+</details>
 
 The output report for Example 2 is shown below. 
 The table indicates the requested parameters in their base unit.
 
-<div class = "reportOutput">
 ```{r example 2 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow2$reportFilePath)))
+cat(includeReportFromWorkflow(workflow2))
 ```
-</div>
 
 ```{r delete example 2, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
@@ -215,6 +204,9 @@ unlink(workflow2$workflowFolder, recursive = TRUE)
 
 Example 3 shows a similar example with 2 simulation sets.
 In this example, the names and units of the PK parameters are updated using the function __updatePKParameter__ from the `ospsuite` package.
+
+<details>
+<summary> __Code__ </summary>
 
 ```{r example 3}
 # Get the pkml simulation file: "MiniModel2.pkml"
@@ -272,20 +264,14 @@ workflow3$activateTasks(c("simulate",
 workflow3$runWorkflow()
 ```
 
-```{r example 3 render, include=FALSE, echo=FALSE}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow3$reportFilePath)
-```
+</details>
 
 The output report for Example 3 is shown below. 
 The table indicates the requested parameters in the updated units and display names.
 
-<div class = "reportOutput">
 ```{r example 3 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow3$reportFilePath)))
+cat(includeReportFromWorkflow(workflow3))
 ```
-</div>
 
 ```{r reset pk parameters from example 3, include=FALSE, echo=FALSE}
 # Go back to previous PK parameter settings
@@ -301,6 +287,9 @@ updatePKParameter("AUC_tEnd",
 
 Example 4 shows a different way of updating the PK parameters using the instance __PkParameterInfo__.
 Using that instance, it is possible to define different names and units for the same parameters from different paths or simulations.
+
+<details>
+<summary> __Code__ </summary>
 
 ```{r example 4}
 # Get the pkml simulation file: "MiniModel2.pkml"
@@ -359,20 +348,20 @@ workflow4$inactivateTasks(c("simulate", "calculatePKParameters"))
 workflow4$runWorkflow()
 ```
 
+</details>
+
+The output report for Example 4 is shown below. 
+The table indicates the requested parameters in the updated units and display names.
+
+```{r example 4 report, echo=FALSE, results='asis'}
+cat(includeReportFromWorkflow(workflow4))
+```
+
 ```{r example 4 render, include=FALSE, echo=FALSE}
 # Convert the markdown document into html
 # Otherwise the root path is messed up and cannot print the report correctly
 rmarkdown::render(workflow4$reportFilePath)
 ```
-
-The output report for Example 4 is shown below. 
-The table indicates the requested parameters in the updated units and display names.
-
-<div class = "reportOutput">
-```{r example 4 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow4$reportFilePath)))
-```
-</div>
 
 ```{r delete example 4, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
@@ -385,6 +374,8 @@ Example 5 shows pk parameters for a population workflow.
 In this example, only one population-simulation pair is used.
 Consequently, the workflow type needs to be a parallel comparison (no reference population).
 
+<details>
+<summary> __Code__ </summary>
 
 ```{r example 5}
 # Get the pkml simulation file: "MiniModel2.pkml"
@@ -431,20 +422,14 @@ workflow5$activateTasks(c("simulate",
 workflow5$runWorkflow()
 ```
 
-```{r example 5 render, include=FALSE, echo=FALSE}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow5$reportFilePath)
-```
+</details>
 
-The output report for Example 6 is shown below. 
+The output report for Example 5 is shown below. 
 For the population, Box Whisker plots in linear and log scales are.
 
-<div class = "reportOutput">
 ```{r example 5 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow5$reportFilePath)))
+cat(includeReportFromWorkflow(workflow5))
 ```
-</div>
 
 ```{r delete example 5, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
@@ -456,6 +441,9 @@ unlink(workflow5$workflowFolder, recursive = TRUE)
 Example 6 shows pk parameters for a population workflow.
 In this example, 2 population-simulation pairs are now used.
 Consequently, the workflow type needs to be a parallel comparison (no reference population).
+
+<details>
+<summary> __Code__ </summary>
 
 ```{r example 6}
 # Get the pkml simulation file: "MiniModel2.pkml"
@@ -511,20 +499,15 @@ workflow6$activateTasks(c("simulate",
 workflow6$runWorkflow()
 ```
 
-```{r example 6 render, include=FALSE, echo=FALSE}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow6$reportFilePath)
-```
+</details>
 
 The output report for Example 6 is shown below. 
 For the population, BoxWhisker plots in linear and log scales are.
 
-<div class = "reportOutput">
 ```{r example 6 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow6$reportFilePath)))
+cat(includeReportFromWorkflow(workflow6))
 ```
-</div>
+
 
 ## Example 7
 
@@ -532,6 +515,9 @@ Example 7 is the same as the previous example, only this time a ratio type popul
 As a consequence, the workflow type was specified when creating the workflow instance.
 In this workflow type, a __reference population__ is needed.
 Since the workflows can re-use the results from the previous PK analysis, only the plot task needs to be re-run.
+
+<details>
+<summary> __Code__ </summary>
 
 ```{r example 7}
 # Get the pkml simulation file: "MiniModel2.pkml"
@@ -588,19 +574,13 @@ workflow7$activateTasks("plotPKParameters")
 workflow7$runWorkflow()
 ```
 
-```{r example 7 render, include=FALSE, echo=FALSE}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow7$reportFilePath)
-```
+</details>
 
 The output report for Example 7 is shown below. 
 
-<div class = "reportOutput">
 ```{r example 7 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow7$reportFilePath)))
+cat(includeReportFromWorkflow(workflow7))
 ```
-</div>
 
 ## Example 8
 
@@ -610,6 +590,9 @@ In this workflow type, a __reference population__ is needed.
 In the test population, age and body weight are not population parameters only *p1*, *p2* and *p3*, as a consequence, *p3* was used in the x-axis in the range plots.
 These parameters will be used instead of age for the range plots.
 Since the workflows can re-use the results from the previous PK analysis, only the plot task needs to be re-run.
+
+<details>
+<summary> __Code__ </summary>
 
 ```{r example 8}
 # Get the pkml simulation file: "MiniModel2.pkml"
@@ -668,19 +651,13 @@ setXParametersForPkParametersPlot(workflow8, "Organism|p3")
 workflow8$runWorkflow()
 ```
 
-```{r example 8 render, include=FALSE, echo=FALSE}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflow8$reportFilePath)
-```
+</details>
 
 The output report for Example 8 is shown below. 
 
-<div class = "reportOutput">
 ```{r example 8 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow8$reportFilePath)))
+cat(includeReportFromWorkflow(workflow8))
 ```
-</div>
 
 ```{r delete example 8, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
@@ -696,6 +673,9 @@ Then, 2 `PkParameterInfo` objects are created with the same value for their fiel
 If `group` is left undefined, it will take the value defined in `pkParameter` input argument by default.
 
 The workflow created using this method will compare *"AUC_tEnd"* from the first population with *"myAUC"* from the second population.
+
+<details>
+<summary> __Code__ </summary>
 
 ```{r example 9}
 # Get the pkml simulation file: "MiniModel2.pkml"
@@ -774,13 +754,13 @@ workflow9$runWorkflow()
 rmarkdown::render(workflow9$reportFilePath)
 ```
 
+</details>
+
 The output report for Example 9 is shown below. 
 
-<div class = "reportOutput">
 ```{r example 9 report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflow9$reportFilePath)))
+cat(includeReportFromWorkflow(workflow9))
 ```
-</div>
 
 ```{r delete example 9, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
