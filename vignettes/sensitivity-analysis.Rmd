@@ -280,12 +280,24 @@ pwf$runWorkflow()
 
 The results of the population sensitivity analysis are found in multiple `.csv` files within the `SensitivityResults` sub-directory of the workflow folder, as shown in the following figure:
 ```{r echo=FALSE, out.width='40%'}
+# After running each vignette, their output is cleared when using devtools::check()
+# However, the content of "figures/" directory is required for docs/articles that display vignettes as a webpage
+# Thus, the file is temporarily copied to "figures/"
+dir.create("figures", showWarnings = FALSE)
+file.copy(
+  from = system.file("extdata", "sa-file-outputs.png", package = "ospsuite.reportingengine"),
+  to = "figures"
+) 
 knitr::include_graphics("figures/sa-file-outputs.png")
 ```
 
 Two sets of files make up the population sensitivity analysis results for this example, each corresponding to one of the `PopulationSimulationSet` objects (named `popSimulationSet1` and `popSimulationSet2`). For each set, there is one index file.  The name of the index file is prefixed with the name of the `PopulationSimulationSet` object and carries the suffix `-popSensitivityResultsIndex.csv`).  The index file `popSimulationSet1-popSensitivityResultsIndex.csv` contains the names of the individual sensitivity analysis results files (found within the `SensitivityResults` sub-directory of the workflow folder) obtained for the `PopulationSimulationSet` object `popSimulationSet1`.  Its contents are shown in the following figure:
 
 ```{r echo=FALSE, out.width='100%'}
+file.copy(
+  from = system.file("extdata", "sa-file-index.png", package = "ospsuite.reportingengine"),
+  to = "figures"
+) 
 knitr::include_graphics("figures/sa-file-index.png")
 ```
 

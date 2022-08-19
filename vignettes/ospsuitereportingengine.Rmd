@@ -195,6 +195,14 @@ These tasks are defined using `Task` objects built in every `Workflow` object, m
 Users access, update and switch the task on/off tasks after creation of their `Workflow`.
 
 ```{r figure 1, out.width="100%", include=TRUE, fig.align="center", fig.cap= "Figure 1: Mean model workflow inputs and tasks", echo=FALSE}
+# After running each vignette, their output is cleared when using devtools::check()
+# However, the content of "figures/" directory is required for docs/articles that display vignettes as a webpage
+# Thus, the file is temporarily copied to "figures/"
+dir.create("figures", showWarnings = FALSE)
+file.copy(
+  from = system.file("extdata", "mean-model-workflow-input-and-tasks.png", package = "ospsuite.reportingengine"),
+  to = "figures"
+) 
 knitr::include_graphics("figures/mean-model-workflow-input-and-tasks.png")
 ```
 
@@ -228,6 +236,10 @@ Three population workflow types are available in `ospsuite.reportingengine` and 
 
 
 ```{r figure 2, out.width="100%", include=TRUE, fig.align="center", fig.cap= "Figure 2: Population workflow inputs and tasks", echo=FALSE}
+file.copy(
+  from = system.file("extdata", "population-workflow-input-and-tasks.png", package = "ospsuite.reportingengine"),
+  to = "figures"
+) 
 knitr::include_graphics("figures/population-workflow-input-and-tasks.png")
 ```
 
