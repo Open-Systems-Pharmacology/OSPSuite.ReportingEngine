@@ -25,5 +25,5 @@ RUN /tmp_setup/install_packages_${os_version}.sh
 RUN rm -rf /tmp_setup
 
 # run package tests
-RUN R --no-save -e "spelling::spell_check_package(); setwd('/RE_Source/'); source('testRE.R')"
+RUN R --no-save -e "setwd('/RE_Source/'); source('testRE.R')"
 
