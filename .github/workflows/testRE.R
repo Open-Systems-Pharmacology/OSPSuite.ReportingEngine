@@ -1,3 +1,4 @@
+devtools::spell_check()
 library('ospsuite')
 setwd('tests')
 library(testthat)
