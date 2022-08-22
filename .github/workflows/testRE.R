@@ -1,3 +1,4 @@
+# spelling::spell_check_package()
 library('ospsuite')
 setwd('tests')
 library(testthat)
