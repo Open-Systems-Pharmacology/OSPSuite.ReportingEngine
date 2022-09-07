@@ -111,9 +111,7 @@ Save the task results
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{taskResults}}{list of results from task run.
-Currently, results contains at least 2 fields: `plots` and `tables`
-They are to be deprecated and replaced using `TaskResults` objects}
+\item{\code{taskResults}}{list of `TaskResults` objects}
 }
 \if{html}{\out{</div>}}
 }

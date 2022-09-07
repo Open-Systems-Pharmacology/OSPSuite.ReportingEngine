@@ -33,9 +33,7 @@ PopulationPlotTask <- R6::R6Class(
 
     #' @description
     #' Save the task results
-    #' @param taskResults list of results from task run.
-    #' Currently, results contains at least 2 fields: `plots` and `tables`
-    #' They are to be deprecated and replaced using `TaskResults` objects
+    #' @param taskResults list of `TaskResults` objects
     saveResults = function(taskResults) {
       resetReport(self$fileName)
       addTextChunk(
@@ -43,30 +41,24 @@ PopulationPlotTask <- R6::R6Class(
         text = c(anchor(self$reference), "", paste0("# ", self$title))
       )
       for (result in taskResults) {
+        # Get both absolute and relative paths for figures and tables
+        # Absolute path is required to always find the figure/table
+        # Relative path is required by the final md report
         plotFileName <- getDefaultFileName(
           suffix = result$id,
           extension = reEnv$defaultPlotFormat$format
         )
         figureFilePath <- self$getAbsolutePath(plotFileName)
+        figureFileRelativePath <- self$getRelativePath(plotFileName)
 
         tableFileName <- getDefaultFileName(
           suffix = result$id,
           extension = "csv"
         )
         tableFilePath <- self$getAbsolutePath(tableFileName)
+        tableFileRelativePath <- self$getRelativePath(tableFileName)
 
-        # Figure and tables paths need to be relative to the final md report
-        figureFileRelativePath <- gsub(
-          pattern = paste0(self$workflowFolder, "/"),
-          replacement = "",
-          x = figureFilePath
-        )
-        tableFileRelativePath <- gsub(
-          pattern = paste0(self$workflowFolder, "/"),
-          replacement = "",
-          x = tableFilePath
-        )
-
+        # Provide error message indicating which file could not be saved
         tryCatch(
           {
             result$saveFigure(fileName = figureFilePath)
@@ -75,6 +67,7 @@ PopulationPlotTask <- R6::R6Class(
             stop(messages$ggsaveError(figureFilePath, NULL, e))
           }
         )
+
         result$addFigureToReport(
           reportFile = self$fileName,
           fileRelativePath = figureFileRelativePath,

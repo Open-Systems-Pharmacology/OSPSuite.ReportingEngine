@@ -123,9 +123,7 @@ Save the task results related to a `structureSet`.
 \describe{
 \item{\code{structureSet}}{A `SimulationStructure` object defining the properties of a simulation set}
 
-\item{\code{taskResults}}{list of results from task run.
-Currently, results contains at least 2 fields: `plots` and `tables`
-They are to be deprecated and replaced using `TaskResults` objects}
+\item{\code{taskResults}}{list of `TaskResults` objects}
 }
 \if{html}{\out{</div>}}
 }

@@ -187,7 +187,7 @@ messages <- list(
   },
   warningApplicationsBeforeTimeOffset = function(applicationLength, timeRanges, timeUnit, timeOffset, simulationSetName) {
     paste0(
-      highlight(applicationLength), " application(s) at ", highlight(timeRanges), timeUnit,
+      highlight(applicationLength), " application(s) at ", highlight(timeRanges), " ", timeUnit,
       " were identified before '", highlight("timeOffset"), "' defined at ", timeOffset, timeUnit,
       " for simulation set '", highlight(simulationSetName), "'."
     )

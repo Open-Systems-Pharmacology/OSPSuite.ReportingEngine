@@ -43,9 +43,7 @@ PlotTask <- R6::R6Class(
     #' @description
     #' Save the task results related to a `structureSet`.
     #' @param structureSet A `SimulationStructure` object defining the properties of a simulation set
-    #' @param taskResults list of results from task run.
-    #' Currently, results contains at least 2 fields: `plots` and `tables`
-    #' They are to be deprecated and replaced using `TaskResults` objects
+    #' @param taskResults list of `TaskResults` objects
     saveResults = function(structureSet, taskResults) {
       simulationSetName <- structureSet$simulationSet$simulationSetName
       addTextChunk(
@@ -56,32 +54,26 @@ PlotTask <- R6::R6Class(
         )
       )
       for (result in taskResults) {
+        # Get both absolute and relative paths for figures and tables
+        # Absolute path is required to always find the figure/table
+        # Relative path is required by the final md report
         plotFileName <- getDefaultFileName(
-          simulationSetName,
+          removeForbiddenLetters(simulationSetName),
           suffix = result$id,
           extension = reEnv$defaultPlotFormat$format
         )
         figureFilePath <- self$getAbsolutePath(plotFileName)
+        figureFileRelativePath <- self$getRelativePath(plotFileName)
 
         tableFileName <- getDefaultFileName(
-          simulationSetName,
+          removeForbiddenLetters(simulationSetName),
           suffix = result$id,
           extension = "csv"
         )
         tableFilePath <- self$getAbsolutePath(tableFileName)
+        tableFileRelativePath <- self$getRelativePath(tableFileName)
 
-        # Figure and tables paths need to be relative to the final md report
-        figureFileRelativePath <- gsub(
-          pattern = paste0(self$workflowFolder, "/"),
-          replacement = "",
-          x = figureFilePath
-        )
-        tableFileRelativePath <- gsub(
-          pattern = paste0(self$workflowFolder, "/"),
-          replacement = "",
-          x = tableFilePath
-        )
-
+        # Provide error message indicating which file could not be saved
         tryCatch(
           {
             result$saveFigure(fileName = figureFilePath)
