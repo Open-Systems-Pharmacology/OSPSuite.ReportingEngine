@@ -12,6 +12,9 @@ QualificationTask <- R6::R6Class(
     #' @param configurationPlan A `ConfigurationPlan` object
     saveResults = function(taskResults, configurationPlan) {
       for (result in taskResults) {
+        # Get both absolute and relative paths for figures and tables
+        # Absolute path is required to always find the figure/table
+        # Relative path is required by the final md report
         figureFilePath <- file.path(
           configurationPlan$getSectionPath(result$sectionId),
           getDefaultFileName(

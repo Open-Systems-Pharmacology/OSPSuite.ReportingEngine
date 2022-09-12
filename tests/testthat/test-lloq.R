@@ -12,33 +12,152 @@ dictFileUnitInObs <- getTestDataFilePath("input-data/tpDictionary-unit-in-obs.cs
 dictFileErrorUnit <- getTestDataFilePath("input-data/tpDictionary-ill-defined-unit.csv")
 dictFileErrorVariable <- getTestDataFilePath("input-data/tpDictionary-ill-defined-variable.csv")
 
-refOutputTimeProfile <- getTestDataFilePath("mean-gof/All-Obs-timeProfileData.csv")
-refOutputTimeProfileLLOQ <- getTestDataFilePath("mean-gof/lloq-timeProfileData.csv")
-refOutputResiduals <- getTestDataFilePath("mean-gof/All-Obs-residuals.csv")
+# The tests use expressions centralizing the definitions,
+# in order to clarify what each scenario is testing
+# Scenarios are defined as
+# - ErrorUnit: Unit is not defined for DV
+# - ErrorVariable: DV column does not exist in data file
+# - UnitInObs: Unit is defined as a column in observed data file
+# - LLOQ: Lower limit of quantification is defined observed data file and provided
+# - MissingLLOQ: LLOQ column does not exist in data file
+scenarios <- c("UnitInObs", "LLOQ", "MissingLLOQ")
 
-refWorkflowStructure <- c(
+#----- Define expected outputs -----
+defineExpectedTimeProfileData <- parse(text = paste0(
+  "expectedTimeProfileData", scenarios, ' <- getTestDataFilePath("mean-gof/',
+  c("All-Obs", "lloq", "All-Obs"), '-timeProfileData.csv")'
+))
+defineExpectedResidualsData <- parse(text = paste0(
+  "expectedResidualsData", scenarios, ' <- getTestDataFilePath("mean-gof/All-Obs-residuals.csv")'
+))
+
+defineExpectedFigures <- parse(text = paste0(
+  "expectedFigures", scenarios, " <- 10"
+))
+
+defineExpectedTables <- parse(text = paste0(
+  "expectedTables", scenarios, " <- 2"
+))
+
+expectedWorkflowStructure <- c(
   "log-debug.txt", "log-info.txt",
   "Report-word.md", "Report.docx", "Report.md",
   "SimulationResults", "TimeProfiles"
 )
-timeProfileStructure <- c(
-  "A-timeProfile-Concentration-total.png",
-  "A-timeProfileData.csv",
-  "A-timeProfileLog-Concentration-total.png",
-  "A-obsVsPred-Concentration-total.png",
-  "A-obsVsPredLog-Concentration-total.png",
-  "A-resHisto-total.png",
-  "A-resQQPlot-total.png",
-  "A-resVsPred-Concentration-total.png",
-  "A-resVsTime-total.png",
-  "residuals-histogram.png",
-  "residuals-qqplot.png",
-  "residuals.csv"
-)
 
-workflowFolderUnit <- "Results-ObsUnit"
-workflowFolderLLOQ <- "Results-LLOQ"
-workflowFolderMissingLLOQ <- "Results-MissingLLOQ"
+eval(defineExpectedTimeProfileData)
+eval(defineExpectedResidualsData)
+eval(defineExpectedFigures)
+eval(defineExpectedTables)
+
+#----- Define and run workflows for each scenario -----
+defineWorkflowFolder <- parse(text = paste0(
+  "workflowFolder", scenarios, ' <- "Results-', scenarios, '"'
+))
+
+defineSimulationSets <- parse(text = paste0(
+  "set", scenarios, " <- SimulationSet$new(",
+  'simulationSetName = "A",',
+  "simulationFile = simulationFile,",
+  # Scenarios for observed data file
+  c(
+    "observedDataFile = dataFileUnit,",
+    "observedDataFile = dataFileLLOQ,",
+    "observedDataFile = dataFile,"
+  ),
+  # Scenarios for dictionary file
+  c(
+    "observedMetaDataFile = dictFileUnitInObs,",
+    "observedMetaDataFile = dictFileLLOQ,",
+    "observedMetaDataFile = dictFileLLOQ,"
+  ),
+  "outputs = Output$new(",
+  'path = "Organism|A|Concentration in container",',
+  "dataSelection = DataSelectionKeys$ALL,",
+  'displayName = "Concentration of A"))'
+))
+
+defineAndRunWorkflows <- parse(text = paste0(
+  "workflow", scenarios, " <- MeanModelWorkflow$new(",
+  "simulationSets = set", scenarios, ", workflowFolder = workflowFolder", scenarios, ");",
+  "workflow", scenarios, "$activateTasks(c('simulate', 'plotTimeProfilesAndResiduals'));",
+  "workflow", scenarios, "$runWorkflow()"
+))
+
+eval(defineWorkflowFolder)
+eval(defineSimulationSets)
+eval(defineAndRunWorkflows)
+
+#----- Tests -----
+
+test_that("Workflow structure includes appropriate files and folders", {
+  testFolderStructureExpression <- parse(text = paste0(
+    "expect_setequal(list.files(workflow", scenarios, "$workflowFolder), expectedWorkflowStructure)"
+  ))
+  eval(testFolderStructureExpression)
+})
+
+test_that("Time profile directory includes correct number of figure and table files", {
+  testFiguresExpression <- parse(text = paste0(
+    "expect_equal(length(list.files(",
+    "file.path(workflow", scenarios, '$workflowFolder, "TimeProfiles"),',
+    'pattern = ".png")), ',
+    "expectedFigures", scenarios, ")"
+  ))
+  
+  testTablesExpression <- parse(text = paste0(
+    "expect_equal(length(list.files(",
+    "file.path(workflow", scenarios, '$workflowFolder, "TimeProfiles"),',
+    'pattern = ".csv")), ',
+    "expectedTables", scenarios, ")"
+  ))
+  
+  eval(testFiguresExpression)
+  eval(testTablesExpression)
+})
+
+test_that("Saved time profile data and residuals includes the correct data", {
+  for (scenario in scenarios) {
+    getTimeProfileResultsFolder <- parse(text = paste0(
+      "timeProfileResultsFolder <- file.path(workflow", scenario, '$workflowFolder, "TimeProfiles")'
+    ))
+    eval(getTimeProfileResultsFolder)
+    # Get file corresponding to time profile data
+    actualTimeProfileData <- readObservedDataFile(
+      intersect(
+        list.files(timeProfileResultsFolder, pattern = "csv", full.names = TRUE),
+        # Note: Change in nomenclature could change the pattern below
+        list.files(timeProfileResultsFolder, pattern = "time_profile", full.names = TRUE)
+      )
+    )
+    testTimeProfileDataExpression <- parse(text = paste0(
+      "expect_equal(actualTimeProfileData, ",
+      "readObservedDataFile(expectedTimeProfileData", scenario, "),",
+      "tolerance = comparisonTolerance())"
+    ))
+    eval(testTimeProfileDataExpression)
+  }
+  
+  for (scenario in scenarios) {
+    getTimeProfileResultsFolder <- parse(text = paste0(
+      "timeProfileResultsFolder <- file.path(workflow", scenario, '$workflowFolder, "TimeProfiles")'
+    ))
+    eval(getTimeProfileResultsFolder)
+    # Get file corresponding to residuals data
+    actualResidualsData <- readObservedDataFile(
+      intersect(
+        list.files(timeProfileResultsFolder, pattern = "csv", full.names = TRUE),
+        list.files(timeProfileResultsFolder, pattern = "residuals", full.names = TRUE)
+      )
+    )
+    testResidualsDataExpression <- parse(text = paste0(
+      "expect_equal(actualResidualsData, ",
+      "readObservedDataFile(expectedResidualsData", scenario, "),",
+      "tolerance = comparisonTolerance())"
+    ))
+    eval(testTimeProfileDataExpression)
+  }
+})
 
 test_that("Ill defined variables and units in dictionary are flagged by simulation sets", {
   expect_error(SimulationSet$new(
@@ -52,7 +171,7 @@ test_that("Ill defined variables and units in dictionary are flagged by simulati
       dataSelection = DataSelectionKeys$ALL
     )
   ))
-
+  
   expect_error(SimulationSet$new(
     simulationSetName = "A",
     simulationFile = simulationFile,
@@ -66,96 +185,8 @@ test_that("Ill defined variables and units in dictionary are flagged by simulati
   ))
 })
 
-
-setUnitInObs <- SimulationSet$new(
-  simulationSetName = "A",
-  simulationFile = simulationFile,
-  observedDataFile = dataFileUnit,
-  observedMetaDataFile = dictFileUnitInObs,
-  outputs = Output$new(
-    path = "Organism|A|Concentration in container",
-    displayName = "Concentration of A",
-    dataSelection = DataSelectionKeys$ALL
-  )
-)
-
-setLLOQ <- SimulationSet$new(
-  simulationSetName = "A",
-  simulationFile = simulationFile,
-  observedDataFile = dataFileLLOQ,
-  observedMetaDataFile = dictFileLLOQ,
-  outputs = Output$new(
-    path = "Organism|A|Concentration in container",
-    displayName = "Concentration of A",
-    dataSelection = DataSelectionKeys$ALL
-  )
-)
-
-setMissingLLOQ <- SimulationSet$new(
-  simulationSetName = "A",
-  simulationFile = simulationFile,
-  observedDataFile = dataFile,
-  observedMetaDataFile = dictFileLLOQ,
-  outputs = Output$new(
-    path = "Organism|A|Concentration in container",
-    displayName = "Concentration of A",
-    dataSelection = DataSelectionKeys$ALL
-  )
-)
-
-workflowUnitInObs <- MeanModelWorkflow$new(simulationSets = setUnitInObs, workflowFolder = workflowFolderUnit)
-workflowLLOQ <- MeanModelWorkflow$new(simulationSets = setLLOQ, workflowFolder = workflowFolderLLOQ)
-workflowMissingLLOQ <- MeanModelWorkflow$new(simulationSets = setMissingLLOQ, workflowFolder = workflowFolderMissingLLOQ)
-
-workflowUnitInObs$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
-workflowLLOQ$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
-workflowMissingLLOQ$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
-
-workflowUnitInObs$runWorkflow()
-workflowLLOQ$runWorkflow()
-workflowMissingLLOQ$runWorkflow()
-
-
-test_that("Workflow structure includes appropriate files and folders", {
-  expect_setequal(list.files(workflowUnitInObs$workflowFolder), refWorkflowStructure)
-  expect_setequal(list.files(workflowLLOQ$workflowFolder), refWorkflowStructure)
-  expect_setequal(list.files(workflowMissingLLOQ$workflowFolder), refWorkflowStructure)
-})
-
-test_that("Time profile directory includes correct files and folders", {
-  expect_setequal(list.files(file.path(workflowUnitInObs$workflowFolder, "TimeProfiles")), timeProfileStructure)
-  expect_setequal(list.files(file.path(workflowLLOQ$workflowFolder, "TimeProfiles")), timeProfileStructure)
-  expect_setequal(list.files(file.path(workflowMissingLLOQ$workflowFolder, "TimeProfiles")), timeProfileStructure)
-})
-
-test_that("Saved time profile data and residuals includes the correct data", {
-  expect_equal(readObservedDataFile(file.path(workflowUnitInObs$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")),
-    readObservedDataFile(refOutputTimeProfile),
-    tolerance = comparisonTolerance()
-  )
-  expect_equal(readObservedDataFile(file.path(workflowLLOQ$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")),
-    readObservedDataFile(refOutputTimeProfileLLOQ),
-    tolerance = comparisonTolerance()
-  )
-  expect_equal(readObservedDataFile(file.path(workflowMissingLLOQ$workflowFolder, "TimeProfiles", "A-timeProfileData.csv")),
-    readObservedDataFile(refOutputTimeProfile),
-    tolerance = comparisonTolerance()
-  )
-  expect_equal(readObservedDataFile(file.path(workflowUnitInObs$workflowFolder, "TimeProfiles", "residuals.csv")),
-    readObservedDataFile(refOutputResiduals),
-    tolerance = comparisonTolerance()
-  )
-  expect_equal(readObservedDataFile(file.path(workflowLLOQ$workflowFolder, "TimeProfiles", "residuals.csv")),
-    readObservedDataFile(refOutputResiduals),
-    tolerance = comparisonTolerance()
-  )
-  expect_equal(readObservedDataFile(file.path(workflowMissingLLOQ$workflowFolder, "TimeProfiles", "residuals.csv")),
-    readObservedDataFile(refOutputResiduals),
-    tolerance = comparisonTolerance()
-  )
-})
-
-# Clear test workflow folders
-unlink(workflowUnitInObs$workflowFolder, recursive = TRUE)
-unlink(workflowLLOQ$workflowFolder, recursive = TRUE)
-unlink(workflowMissingLLOQ$workflowFolder, recursive = TRUE)
+#----- Cleaning of test folders -----
+clearFolders <- parse(text = paste0(
+  "unlink(workflow", scenarios, "$workflowFolder, recursive = TRUE)"
+))
+eval(clearFolders)

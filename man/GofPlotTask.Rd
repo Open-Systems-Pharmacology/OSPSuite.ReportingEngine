@@ -38,7 +38,9 @@ Other workflow tasks:
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-GofPlotTask-saveResults}{\code{GofPlotTask$saveResults()}}
+\item \href{#method-GofPlotTask-saveResidualsResults}{\code{GofPlotTask$saveResidualsResults()}}
 \item \href{#method-GofPlotTask-runTask}{\code{GofPlotTask$runTask()}}
+\item \href{#method-GofPlotTask-getResidualsResults}{\code{GofPlotTask$getResidualsResults()}}
 \item \href{#method-GofPlotTask-clone}{\code{GofPlotTask$clone()}}
 }
 }
@@ -71,9 +73,24 @@ Save the task results related to a `structureSet`.
 \describe{
 \item{\code{structureSet}}{A `SimulationStructure` object defining the properties of a simulation set}
 
-\item{\code{taskResults}}{list of results from task run.
-Currently, results contains at least 2 fields: `plots` and `tables`
-They are to be deprecated and replaced using `TaskResults` objects}
+\item{\code{taskResults}}{list of `TaskResults` objects}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-GofPlotTask-saveResidualsResults"></a>}}
+\if{latex}{\out{\hypertarget{method-GofPlotTask-saveResidualsResults}{}}}
+\subsection{Method \code{saveResidualsResults()}}{
+Save the task results related to residuals across all simulations
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{GofPlotTask$saveResidualsResults(taskResults)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{taskResults}}{list of `TaskResults` objects}
 }
 \if{html}{\out{</div>}}
 }
@@ -93,6 +110,32 @@ Run task and save its output results
 \item{\code{structureSets}}{list of `SimulationStructure` objects}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-GofPlotTask-getResidualsResults"></a>}}
+\if{latex}{\out{\hypertarget{method-GofPlotTask-getResidualsResults}{}}}
+\subsection{Method \code{getResidualsResults()}}{
+Get plot results for residuals across all simulations
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{GofPlotTask$getResidualsResults(structureSets, data, metaData, settings)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{structureSets}}{A list of `SimulationStructure` objects defining the properties of a simulation set}
+
+\item{\code{data}}{data.frame}
+
+\item{\code{metaData}}{meta data on `data`}
+
+\item{\code{settings}}{List of settings such as `PlotConfiguration` R6 class objects for each goodness of fit plot}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A list of `TaskResults` objects
 }
 }
 \if{html}{\out{<hr>}}

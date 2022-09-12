@@ -14,12 +14,12 @@ plotMeanGoodnessOfFit <- function(structureSet, settings = NULL) {
   validateIsOfType(structureSet, "SimulationStructure")
 
   initializeExpression <- parse(text = paste0(
-    c("observedData", "simulatedData", "lloqData", "residualsData", "residualsMetaData", "residuals"),
+    c("observedData", "simulatedData", "lloqData", "residualsData", "residualsMetaData"),
     " <- NULL"
   ))
   eval(initializeExpression)
-  goodnessOfFitPlots <- list()
-  goodnessOfFitCaptions <- list()
+
+  goodnessOfFitResults <- list()
   goodnessOfFitResiduals <- list()
 
   # Load observed and simulated data
@@ -31,7 +31,6 @@ plotMeanGoodnessOfFit <- function(structureSet, settings = NULL) {
 
   observedResult <- loadObservedDataFromSimulationSet(structureSet$simulationSet)
 
-
   outputSelections <- structureSet$simulationSet$outputs
   if (!is.null(settings$outputSelections)) {
     availableOutputs <- sapply(structureSet$simulationSet$outputs, function(output) {
@@ -40,7 +39,6 @@ plotMeanGoodnessOfFit <- function(structureSet, settings = NULL) {
     selectedOutputs <- availableOutputs %in% settings$outputSelections
     outputSelections <- structureSet$simulationSet$outputs[selectedOutputs]
   }
-
   outputSimulatedMetaData <- list()
   for (output in outputSelections) {
     outputSimulatedData <- NULL
@@ -66,6 +64,14 @@ plotMeanGoodnessOfFit <- function(structureSet, settings = NULL) {
   timeProfileData <- rbind.data.frame(observedData, lloqData, simulatedData)
   timeProfileMapping <- tlf::XYGDataMapping$new(x = "Time", y = "Concentration", color = "Legend")
 
+  resultID <- defaultFileNames$resultID(length(goodnessOfFitResults) + 1, "time_profile_data")
+
+  goodnessOfFitResults[[resultID]] <- saveTaskResults(
+    id = resultID,
+    table = timeProfileData,
+    includeTable = FALSE
+  )
+
   # metaDataFrame summarizes paths, dimensions and units
   metaDataFrame <- getMetaDataFrame(outputSimulatedMetaData)
 
@@ -74,41 +80,87 @@ plotMeanGoodnessOfFit <- function(structureSet, settings = NULL) {
   # timeOffset could also be included into the process
   timeRanges <- getSimulationTimeRanges(simulation, output$path, structureSet$simulationSet)
 
+  # For multiple applications, include text results corresponding to application sub section
+  hasMultipleApplications <- sum(sapply(timeRanges, function(timeRange) {
+    timeRange$keep
+  })) > 1
+
   # If one or no application, field 'keep' for time range other than total is FALSE
   for (timeRange in timeRanges) {
     if (!timeRange$keep) {
       next
     }
-    timeProfilePlotResults <- getTimeProfilePlotResults("mean", timeRange$values, simulatedData, observedData, lloqData, metaDataFrame, timeProfileMapping, structureSet, settings)
-    goodnessOfFitPlots[[timeRange$name]] <- timeProfilePlotResults$plots
-    goodnessOfFitCaptions[[timeRange$name]] <- timeProfilePlotResults$captions
-  }
+    if (hasMultipleApplications) {
+      resultID <- defaultFileNames$resultID(
+        length(goodnessOfFitResults) + 1,
+        "sub_section_title",
+        timeRange$name
+      )
 
-  if (!isOfLength(residualsData, 0)) {
-    for (timeRange in timeRanges) {
-      if (!timeRange$keep) {
-        next
-      }
-      residualsPlotResults <- getResidualsPlotResults(timeRange$values, residualsData, metaDataFrame, structureSet, settings)
-      goodnessOfFitPlots[[timeRange$name]] <- c(goodnessOfFitPlots[[timeRange$name]], residualsPlotResults$plots)
-      goodnessOfFitCaptions[[timeRange$name]] <- c(goodnessOfFitCaptions[[timeRange$name]], residualsPlotResults$captions)
-      goodnessOfFitResiduals[[timeRange$name]] <- residualsPlotResults$data
-      residualsMetaData[[timeRange$name]] <- residualsPlotResults$metaData
+      goodnessOfFitResults[[resultID]] <- saveTaskResults(
+        id = resultID,
+        textChunk = getTimeRangeCaption(timeRange$name, "goodness-of-fit", structureSet$simulationSet$simulationSetName),
+        includeTextChunk = TRUE
+      )
     }
-  }
-  allResiduals <- goodnessOfFitResiduals[[ApplicationRanges$total]]
-  if (!isOfLength(allResiduals, 0)) {
-    residuals <- list(
-      data = allResiduals,
-      metaData = residualsMetaData[[ApplicationRanges$total]]
+
+    timeProfilePlotResults <- getTimeProfilePlotResults(
+      "mean",
+      timeRange$values,
+      simulatedData,
+      observedData,
+      lloqData,
+      metaDataFrame,
+      timeProfileMapping,
+      structureSet,
+      settings
     )
+
+    for (plotID in names(timeProfilePlotResults$plots)) {
+      resultID <- defaultFileNames$resultID(length(goodnessOfFitResults) + 1, plotID, timeRange$name)
+      goodnessOfFitResults[[resultID]] <- saveTaskResults(
+        id = resultID,
+        plot = timeProfilePlotResults$plots[[plotID]],
+        plotCaption = timeProfilePlotResults$captions[[plotID]]
+      )
+    }
+
+    if (isEmpty(residualsData)) {
+      next
+    }
+
+    residualsPlotResults <- getResidualsPlotResults(
+      timeRange$values,
+      residualsData,
+      metaDataFrame,
+      structureSet,
+      settings
+    )
+
+    for (plotID in names(residualsPlotResults$plots)) {
+      resultID <- defaultFileNames$resultID(length(goodnessOfFitResults) + 1, plotID, timeRange$name)
+      goodnessOfFitResults[[resultID]] <- saveTaskResults(
+        id = resultID,
+        plot = residualsPlotResults$plots[[plotID]],
+        plotCaption = residualsPlotResults$captions[[plotID]]
+      )
+    }
+
+    goodnessOfFitResiduals[[timeRange$name]] <- residualsPlotResults$data
+    residualsMetaData[[timeRange$name]] <- residualsPlotResults$metaData
   }
 
+  allResiduals <- goodnessOfFitResiduals[[ApplicationRanges$total]]
   return(list(
-    plots = goodnessOfFitPlots,
-    tables = list(timeProfileData = timeProfileData),
-    captions = goodnessOfFitCaptions,
-    residuals = residuals
+    results = goodnessOfFitResults,
+    residuals = ifNotNull(
+      allResiduals,
+      list(
+        data = allResiduals,
+        metaData = residualsMetaData[[ApplicationRanges$total]]
+      ),
+      NULL
+    )
   ))
 }
 
@@ -220,12 +272,11 @@ plotPopulationGoodnessOfFit <- function(structureSet, settings = NULL) {
   validateIsOfType(structureSet, "SimulationStructure")
 
   initializeExpression <- parse(text = paste0(
-    c("observedData", "simulatedData", "lloqData", "residualsData", "residualsMetaData", "residuals"),
+    c("observedData", "simulatedData", "lloqData", "residualsData", "residualsMetaData"),
     " <- NULL"
   ))
   eval(initializeExpression)
-  goodnessOfFitPlots <- list()
-  goodnessOfFitCaptions <- list()
+  goodnessOfFitResults <- list()
   goodnessOfFitResiduals <- list()
 
   residualsAggregationType <- settings$residualsAggregationType %||% "mean"
@@ -269,47 +320,17 @@ plotPopulationGoodnessOfFit <- function(structureSet, settings = NULL) {
     residualsData <- rbind.data.frame(residualsData, outputResidualsData)
   }
 
-  timeProfileMapping <- tlf::XYGDataMapping$new(x = "Time", y = "Concentration", color = "Legend")
-  # metaDataFrame summarizes paths, dimensions and units
-  metaDataFrame <- getMetaDataFrame(outputSimulatedMetaData)
+  resultID <- defaultFileNames$resultID(
+    length(goodnessOfFitResults) + 1,
+    "time_profile_simulated_data"
+  )
+  goodnessOfFitResults[[resultID]] <- saveTaskResults(
+    id = resultID,
+    table = simulatedData,
+    includeTable = FALSE
+  )
 
-  timeRanges <- getSimulationTimeRanges(simulation, output$path, structureSet$simulationSet)
-
-  for (timeRange in timeRanges) {
-    if (!timeRange$keep) {
-      next
-    }
-    timeProfilePlotResults <- getTimeProfilePlotResults("population", timeRange$values, simulatedData, observedData, lloqData, metaDataFrame, timeProfileMapping, structureSet, settings)
-    goodnessOfFitPlots[[timeRange$name]] <- timeProfilePlotResults$plots
-    goodnessOfFitCaptions[[timeRange$name]] <- timeProfilePlotResults$captions
-  }
-
-  if (!isOfLength(residualsData, 0)) {
-    for (timeRange in timeRanges) {
-      if (!timeRange$keep) {
-        next
-      }
-      residualsPlotResults <- getResidualsPlotResults(timeRange$values, residualsData, metaDataFrame, structureSet, settings)
-      goodnessOfFitPlots[[timeRange$name]] <- c(goodnessOfFitPlots[[timeRange$name]], residualsPlotResults$plots)
-      goodnessOfFitCaptions[[timeRange$name]] <- c(goodnessOfFitCaptions[[timeRange$name]], residualsPlotResults$captions)
-      goodnessOfFitResiduals[[timeRange$name]] <- residualsPlotResults$data
-      residualsMetaData[[timeRange$name]] <- residualsPlotResults$metaData
-    }
-  }
-  allResiduals <- goodnessOfFitResiduals[[ApplicationRanges$total]]
-  if (!isOfLength(allResiduals, 0)) {
-    residuals <- list(
-      data = allResiduals,
-      metaData = residualsMetaData[[ApplicationRanges$total]]
-    )
-  }
-  goodnessOfFitTables <- list(simulatedData = simulatedData)
-  if (!isOfLength(observedData, 0)) {
-    goodnessOfFitTables <- list(
-      observedData = observedData,
-      simulatedData = simulatedData
-    )
-  }
+  # Save goodness of fit data for reference to be compared with other simulation sets
   referenceData <- list(
     simulatedData = simulatedData,
     observedData = observedData,
@@ -317,12 +338,95 @@ plotPopulationGoodnessOfFit <- function(structureSet, settings = NULL) {
     residualsData = residualsData,
     timeOffset = structureSet$simulationSet$timeOffset
   )
+
+  timeProfileMapping <- tlf::XYGDataMapping$new(x = "Time", y = "Concentration", color = "Legend")
+  # metaDataFrame summarizes paths, dimensions and units
+  metaDataFrame <- getMetaDataFrame(outputSimulatedMetaData)
+
+  timeRanges <- getSimulationTimeRanges(simulation, output$path, structureSet$simulationSet)
+
+  # For multiple applications, include text results corresponding to application sub section
+  hasMultipleApplications <- sum(sapply(timeRanges, function(timeRange) {
+    timeRange$keep
+  })) > 1
+
+  for (timeRange in timeRanges) {
+    if (!timeRange$keep) {
+      next
+    }
+    if (hasMultipleApplications) {
+      resultID <- defaultFileNames$resultID(
+        length(goodnessOfFitResults) + 1,
+        "sub_section_title",
+        removeForbiddenLetters(structureSet$simulationSet$simulationName),
+        timeRange$name
+      )
+
+      goodnessOfFitResults[[resultID]] <- saveTaskResults(
+        id = resultID,
+        textChunk = getTimeRangeCaption(timeRange$name, "goodness-of-fit", structureSet$simulationSet$simulationSetName),
+        includeTextChunk = TRUE
+      )
+    }
+
+    timeProfilePlotResults <- getTimeProfilePlotResults(
+      "population",
+      timeRange$values,
+      simulatedData,
+      observedData,
+      lloqData,
+      metaDataFrame,
+      timeProfileMapping,
+      structureSet,
+      settings
+    )
+
+    for (plotID in names(timeProfilePlotResults$plots)) {
+      resultID <- defaultFileNames$resultID(length(goodnessOfFitResults) + 1, plotID, timeRange$name)
+      goodnessOfFitResults[[resultID]] <- saveTaskResults(
+        id = resultID,
+        plot = timeProfilePlotResults$plots[[plotID]],
+        plotCaption = timeProfilePlotResults$captions[[plotID]]
+      )
+    }
+
+    if (isEmpty(residualsData)) {
+      next
+    }
+
+    residualsPlotResults <- getResidualsPlotResults(
+      timeRange$values,
+      residualsData,
+      metaDataFrame,
+      structureSet,
+      settings
+    )
+
+    for (plotID in names(residualsPlotResults$plots)) {
+      resultID <- defaultFileNames$resultID(length(goodnessOfFitResults) + 1, plotID, timeRange$name)
+      goodnessOfFitResults[[resultID]] <- saveTaskResults(
+        id = resultID,
+        plot = residualsPlotResults$plots[[plotID]],
+        plotCaption = residualsPlotResults$captions[[plotID]]
+      )
+    }
+
+    goodnessOfFitResiduals[[timeRange$name]] <- residualsPlotResults$data
+    residualsMetaData[[timeRange$name]] <- residualsPlotResults$metaData
+  }
+
+  allResiduals <- goodnessOfFitResiduals[[ApplicationRanges$total]]
   return(list(
-    plots = goodnessOfFitPlots,
-    captions = goodnessOfFitCaptions,
-    tables = goodnessOfFitTables,
-    residuals = residuals,
-    referenceData = referenceData
+    results = goodnessOfFitResults,
+    referenceData = referenceData,
+    residuals = ifNotNull(
+      allResiduals,
+      list(
+        data = allResiduals,
+        metaData = residualsMetaData[[ApplicationRanges$total]]
+      ),
+      NULL
+    )
   ))
 }
 
@@ -456,149 +560,6 @@ plotMeanTimeProfile <- function(simulatedData,
   return(timeProfilePlot)
 }
 
-#' @title plotMeanObsVsPred
-#' @description Plot observation vs prediction for mean model workflow
-#' @param data data.frame
-#' @param metaData meta data on `data`
-#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
-#' @return ggplot object of time profile for mean model workflow
-#' @export
-#' @import tlf
-#' @import ggplot2
-plotMeanObsVsPred <- function(data,
-                              metaData = NULL,
-                              plotConfiguration = NULL) {
-  identityMinMax <- c(
-    0.8 * min(cbind(data[, "Observed"], data[, "Simulated"]), na.rm = TRUE),
-    1.2 * max(cbind(data[, "Observed"], data[, "Simulated"]), na.rm = TRUE)
-  )
-  identityLine <- data.frame(
-    "Observed" = identityMinMax,
-    "Simulated" = identityMinMax,
-    "Legend" = "Line of identity"
-  )
-  obsVsPredDataMapping <- tlf::XYGDataMapping$new(
-    x = "Observed",
-    y = "Simulated",
-    color = "Legend"
-  )
-
-  meanObsVsPredPlot <- tlf::addLine(
-    data = identityLine,
-    metaData = metaData,
-    dataMapping = obsVsPredDataMapping,
-    plotConfiguration = plotConfiguration
-  )
-
-  meanObsVsPredPlot <- tlf::addScatter(
-    data = data,
-    metaData = metaData,
-    dataMapping = obsVsPredDataMapping,
-    plotObject = meanObsVsPredPlot
-  )
-  meanObsVsPredPlot <- tlf::setLegendPosition(plotObject = meanObsVsPredPlot, position = reDefaultLegendPosition)
-
-  return(meanObsVsPredPlot)
-}
-
-#' @title plotMeanResVsTime
-#' @description Plot Residual vs time for mean model workflow
-#' @param data data.frame
-#' @param metaData meta data on `data`
-#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
-#' @return ggplot object of time profile for mean model workflow
-#' @export
-#' @import tlf
-#' @import ggplot2
-#' @import ospsuite.utils
-plotMeanResVsTime <- function(data,
-                              metaData = NULL,
-                              plotConfiguration = NULL) {
-  resVsTimeDataMapping <- tlf::XYGDataMapping$new(
-    x = "Time",
-    y = "Residuals",
-    color = "Legend"
-  )
-
-  maxRes <- 1.2 * max(abs(data[, resVsTimeDataMapping$y]), na.rm = TRUE)
-
-  plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
-    data = data,
-    metaData = metaData,
-    dataMapping = resVsTimeDataMapping
-  )
-  meanResVsTimePlot <- tlf::initializePlot(plotConfiguration)
-
-  meanResVsTimePlot <- tlf::addScatter(
-    data = data,
-    metaData = metaData,
-    dataMapping = resVsTimeDataMapping,
-    plotObject = meanResVsTimePlot
-  )
-
-  meanResVsTimePlot <- meanResVsTimePlot + ggplot2::geom_hline(
-    yintercept = 0,
-    size = 1
-  )
-
-  meanResVsTimePlot <- tlf::setLegendPosition(plotObject = meanResVsTimePlot, position = reDefaultLegendPosition)
-  meanResVsTimePlot <- tlf::setYAxis(
-    plotObject = meanResVsTimePlot,
-    limits = c(-maxRes, maxRes)
-  )
-
-  return(meanResVsTimePlot)
-}
-
-#' @title plotMeanResVsPred
-#' @description Plot observation vs prediction for mean model workflow
-#' @param data data.frame
-#' @param metaData meta data on `data`
-#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
-#' @return ggplot object of time profile for mean model workflow
-#' @export
-#' @import tlf
-#' @import ggplot2
-#' @import ospsuite.utils
-plotMeanResVsPred <- function(data,
-                              metaData = NULL,
-                              plotConfiguration = NULL) {
-  resVsPredDataMapping <- tlf::XYGDataMapping$new(
-    x = "Simulated",
-    y = "Residuals",
-    color = "Legend"
-  )
-
-  maxRes <- 1.2 * max(abs(data[, resVsPredDataMapping$y]), na.rm = TRUE)
-
-  plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
-    data = data,
-    metaData = metaData,
-    dataMapping = resVsPredDataMapping
-  )
-  meanResVsPredPlot <- tlf::initializePlot(plotConfiguration)
-
-  meanResVsPredPlot <- tlf::addScatter(
-    data = data,
-    metaData = metaData,
-    dataMapping = resVsPredDataMapping,
-    plotObject = meanResVsPredPlot
-  )
-
-  meanResVsPredPlot <- meanResVsPredPlot + ggplot2::geom_hline(
-    yintercept = 0,
-    size = 1
-  )
-
-  meanResVsPredPlot <- tlf::setLegendPosition(plotObject = meanResVsPredPlot, position = reDefaultLegendPosition)
-  meanResVsTimePlot <- tlf::setYAxis(
-    plotObject = meanResVsPredPlot,
-    limits = c(-maxRes, maxRes)
-  )
-
-  return(meanResVsPredPlot)
-}
-
 #' @title plotPopulationTimeProfile
 #' @description Plot time profile for population model workflow
 #' @param simulatedData data.frame of simulated data
@@ -692,130 +653,6 @@ plotPopulationTimeProfile <- function(simulatedData,
   timeProfilePlot <- tlf::setLegendPosition(plotObject = timeProfilePlot, position = reDefaultLegendPosition)
 
   return(timeProfilePlot)
-}
-
-#' @title plotResidualsHistogram
-#' @description Plot histogram of residuals
-#' @param data data.frame
-#' @param metaData meta data on `data`
-#' @param dataMapping `HistogramDataMapping` R6 class object from `tlf` library
-#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
-#' @param bins number of bins defined in the histogram
-#' @return ggplot object of log residuals histogram
-#' @export
-#' @import tlf
-#' @import ggplot2
-#' @import stats
-#' @import ospsuite.utils
-plotResidualsHistogram <- function(data,
-                                   metaData = NULL,
-                                   dataMapping = NULL,
-                                   plotConfiguration = NULL,
-                                   bins = NULL) {
-  dataMapping <- dataMapping %||% tlf::HistogramDataMapping$new(x = "Residuals", fill = "Legend")
-
-  plotConfiguration <- plotConfiguration %||% tlf::HistogramPlotConfiguration$new(
-    data = data,
-    metaData = metaData,
-    dataMapping = dataMapping,
-    ylabel = "Number of residuals"
-  )
-
-  bins <- bins %||% 15
-
-  # To fit normal distribution density curve to histogram, the density curve needs to be scaled
-  # graphics::hist provides density and counts for histograms from which the scaling factor can be directly obtained
-  histResult <- graphics::hist(data[, dataMapping$x], breaks = bins, plot = FALSE)
-  scalingFactor <- mean(histResult$counts[histResult$counts > 0] / histResult$density[histResult$counts > 0])
-
-  xmax <- 1.1 * max(abs(data[, dataMapping$x]), na.rm = TRUE)
-  xDensityData <- seq(-xmax, xmax, 2 * xmax / 100)
-  yDensityData <- scalingFactor * stats::dnorm(xDensityData, sd = stats::sd(data[, dataMapping$x], na.rm = TRUE))
-  densityData <- data.frame(x = xDensityData, y = yDensityData)
-
-  resHistoPlot <- tlf::initializePlot(plotConfiguration)
-
-  # TO DO: transfer the histogram wrapper into TLF
-  resHistoPlot <- resHistoPlot +
-    ggplot2::geom_histogram(
-      data = data,
-      mapping = ggplot2::aes_string(
-        x = dataMapping$x,
-        fill = "Legend"
-      ),
-      position = ggplot2::position_stack(),
-      bins = bins,
-      size = 0.5,
-      color = "black",
-      alpha = 0.8
-    ) +
-    ggplot2::geom_vline(
-      xintercept = 0,
-      size = 1
-    ) +
-    ggplot2::geom_line(
-      data = densityData,
-      mapping = ggplot2::aes_string(x = "x", y = "y"),
-      size = 1
-    )
-  # Legends and axis
-  resHistoPlot <- tlf::setLegendPosition(plotObject = resHistoPlot, position = reDefaultLegendPosition)
-
-  # Ensure that the legend has no title
-  resHistoPlot <- resHistoPlot + ggplot2::theme(legend.title = element_blank())
-
-  return(resHistoPlot)
-}
-
-#' @title plotResidualsQQPlot
-#' @description Plot quantile-quantile plot for residuals
-#' @param data data.frame
-#' @param metaData meta data on `data`
-#' @param dataMapping `HistogramDataMapping` R6 class object from `tlf` library
-#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
-#' @return ggplot object of log residuals qq-plot
-#' @export
-#' @import tlf
-#' @import stats
-#' @import ggplot2
-#' @import ospsuite.utils
-plotResidualsQQPlot <- function(data,
-                                metaData = NULL,
-                                dataMapping = NULL,
-                                plotConfiguration = NULL) {
-  dataMapping <- dataMapping %||% tlf::HistogramDataMapping$new(x = "Residuals", fill = "Legend")
-
-  plotConfiguration <- plotConfiguration %||% tlf::HistogramPlotConfiguration$new(
-    data = data,
-    metaData = metaData,
-    dataMapping = dataMapping,
-    xlabel = "Standard Normal Quantiles",
-    ylabel = "Quantiles of residuals"
-  )
-
-  qqPlot <- tlf::initializePlot(plotConfiguration)
-
-  qqPlot <- qqPlot +
-    ggplot2::geom_qq_line(
-      data = data,
-      mapping = ggplot2::aes_string(
-        sample = dataMapping$x
-      ),
-      size = 1
-    ) +
-    ggplot2::geom_qq(
-      data = data,
-      mapping = ggplot2::aes_string(
-        sample = dataMapping$x,
-        color = "Legend"
-      )
-    )
-
-  # Legends and axis
-  qqPlot <- tlf::setLegendPosition(plotObject = qqPlot, position = reDefaultLegendPosition)
-  qqPlot <- qqPlot + ggplot2::theme(legend.title = element_blank())
-
-  return(qqPlot)
 }
 
 #' @title getSimulationTimeRanges
@@ -1158,26 +995,68 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
       "Residuals" = list(unit = "", dimension = residualsLegend)
     )
 
-    obsVsPredPlot <- plotMeanObsVsPred(
+    obsVsPredPlot <- tlf::plotObsVsPred(
       data = selectedResidualsData,
       metaData = residualsMetaData,
+      dataMapping = tlf::ObsVsPredDataMapping$new(
+        x = "Observed",
+        y = "Simulated",
+        group = "Legend"
+      ),
       plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
     )
-    obsVsPredPlotLog <- tlf::setYAxis(plotObject = obsVsPredPlot, scale = tlf::Scaling$log)
-    obsVsPredPlotLog <- tlf::setXAxis(plotObject = obsVsPredPlotLog, scale = tlf::Scaling$log)
 
     goodnessOfFitPlots[[paste0("obsVsPred-", selectedDimension)]] <- obsVsPredPlot
-    goodnessOfFitPlots[[paste0("obsVsPredLog-", selectedDimension)]] <- obsVsPredPlotLog
-
     goodnessOfFitCaptions[[paste0("obsVsPred-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred", "linear")
-    goodnessOfFitCaptions[[paste0("obsVsPredLog-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred", "logarithmic")
 
-    goodnessOfFitPlots[[paste0("resVsPred-", selectedDimension)]] <- plotMeanResVsPred(
+    # TODO: update after tlf is robust enough when 0 is in log plots (tlf issue #369)
+    selectedLogData <- selectedResidualsData$Simulated > 0 & selectedResidualsData$Observed > 0
+    if (sum(selectedLogData) > 0) {
+      obsVsPredRange <- autoAxesLimits(c(
+        selectedResidualsData$Simulated[selectedLogData],
+        selectedResidualsData$Observed[selectedLogData]
+      ),
+      scale = "log"
+      )
+      obsVsPredBreaks <- autoAxesTicksFromLimits(obsVsPredRange)
+
+      obsVsPredPlotLog <- tlf::plotObsVsPred(
+        data = selectedResidualsData[selectedLogData, ],
+        metaData = residualsMetaData,
+        dataMapping = tlf::ObsVsPredDataMapping$new(
+          x = "Observed",
+          y = "Simulated",
+          group = "Legend"
+        ),
+        plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
+      )
+      obsVsPredPlotLog <- tlf::setXAxis(
+        plotObject = obsVsPredPlotLog,
+        scale = tlf::Scaling$log,
+        limits = obsVsPredRange,
+        ticks = obsVsPredBreaks
+      )
+      obsVsPredPlotLog <- tlf::setYAxis(
+        plotObject = obsVsPredPlotLog,
+        scale = tlf::Scaling$log,
+        limits = obsVsPredRange,
+        ticks = obsVsPredBreaks
+      )
+
+      goodnessOfFitPlots[[paste0("obsVsPredLog-", selectedDimension)]] <- obsVsPredPlotLog
+      goodnessOfFitCaptions[[paste0("obsVsPredLog-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred", "logarithmic")
+    }
+
+    goodnessOfFitPlots[[paste0("resVsPred-", selectedDimension)]] <- tlf::plotResVsPred(
       data = selectedResidualsData,
       metaData = residualsMetaData,
+      dataMapping = tlf::ResVsPredDataMapping$new(
+        x = "Simulated",
+        y = "Residuals",
+        group = "Legend"
+      ),
       plotConfiguration = settings$plotConfigurations[["resVsPred"]]
     )
-
     goodnessOfFitCaptions[[paste0("resVsPred-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "resVsPred", residualScale)
   }
 
@@ -1186,25 +1065,48 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
     "Residuals" = list(dimension = residualsLegend, unit = "")
   )
 
-  goodnessOfFitPlots[["resVsTime"]] <- plotMeanResVsTime(
+  goodnessOfFitPlots[["resVsTime"]] <- tlf::plotResVsTime(
     data = residualsData,
     metaData = residualsMetaData,
+    dataMapping = tlf::ResVsTimeDataMapping$new(
+      x = "Time",
+      y = "Residuals",
+      group = "Legend"
+    ),
     plotConfiguration = settings$plotConfigurations[["resVsTime"]]
   )
   goodnessOfFitCaptions[["resVsTime"]] <- getGoodnessOfFitCaptions(structureSet, "resVsTime", residualScale)
 
-  goodnessOfFitPlots[["resHisto"]] <- plotResidualsHistogram(
+  goodnessOfFitPlots[["resHisto"]] <- tlf::plotHistogram(
     data = residualsData,
     metaData = residualsMetaData,
+    dataMapping = tlf::HistogramDataMapping$new(
+      x = "Residuals",
+      fill = "Legend",
+      stack = TRUE,
+      distribution = "normal"
+    ),
     plotConfiguration = settings$plotConfigurations[["resHisto"]],
-    bins = settings$bins
+    bins = settings$bins %||% reEnv$defaultBins
+  )
+  goodnessOfFitPlots[["resHisto"]] <- tlf::setPlotLabels(
+    goodnessOfFitPlots[["resHisto"]],
+    ylabel = reEnv$residualsHistogramLabel
   )
   goodnessOfFitCaptions[["resHisto"]] <- getGoodnessOfFitCaptions(structureSet, "resHisto", residualScale)
 
-  goodnessOfFitPlots[["resQQPlot"]] <- plotResidualsQQPlot(
+  goodnessOfFitPlots[["resQQPlot"]] <- tlf::plotQQ(
     data = residualsData,
     metaData = residualsMetaData,
+    dataMapping = tlf::QQDataMapping$new(
+      y = "Residuals",
+      group = "Legend"
+    ),
     plotConfiguration = settings$plotConfigurations[["resQQPlot"]]
+  )
+  goodnessOfFitPlots[["resQQPlot"]] <- tlf::setPlotLabels(
+    goodnessOfFitPlots[["resQQPlot"]],
+    ylabel = reEnv$residualsQQLabel
   )
   goodnessOfFitCaptions[["resQQPlot"]] <- getGoodnessOfFitCaptions(structureSet, "resQQPlot", residualScale)
 
