@@ -222,6 +222,7 @@ plotAbsorptionTimeProfile <- function(data,
     metaData = metaData,
     dataMapping = timeVsFractionDataMapping
   )
+  plotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, dataMapping, plotConfiguration)
 
   timeVsFractionPlot <- tlf::addLine(
     data = data,

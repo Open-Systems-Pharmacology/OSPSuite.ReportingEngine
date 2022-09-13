@@ -517,28 +517,26 @@ plotMeanTimeProfile <- function(simulatedData,
                                 metaData = NULL,
                                 dataMapping = NULL,
                                 plotConfiguration = NULL) {
+  plotConfiguration <- plotConfiguration %||%
+    TimeProfilePlotConfiguration$new(
+      data = simulatedData,
+      metaData = metaData,
+      dataMapping = dataMapping
+    )
+  plotConfiguration <- updatePlotConfigurationTimeTicks(simulatedData, metaData, dataMapping, plotConfiguration)
+
   timeProfilePlot <- tlf::addLine(
     data = simulatedData,
     metaData = metaData,
     dataMapping = dataMapping,
-    plotConfiguration = plotConfiguration %||%
-      TimeProfilePlotConfiguration$new(
-        data = simulatedData,
-        metaData = metaData,
-        dataMapping = dataMapping
-      )
+    plotConfiguration = plotConfiguration
   )
   if (!isEmpty(observedData)) {
     timeProfilePlot <- tlf::addScatter(
       data = observedData,
       metaData = metaData,
       dataMapping = dataMapping,
-      plotConfiguration = plotConfiguration %||%
-        TimeProfilePlotConfiguration$new(
-          data = simulatedData,
-          metaData = metaData,
-          dataMapping = dataMapping
-        ),
+      plotConfiguration = plotConfiguration,
       plotObject = timeProfilePlot
     )
   }
@@ -547,12 +545,7 @@ plotMeanTimeProfile <- function(simulatedData,
       data = lloqData,
       metaData = metaData,
       dataMapping = dataMapping,
-      plotConfiguration = plotConfiguration %||%
-        TimeProfilePlotConfiguration$new(
-          data = simulatedData,
-          metaData = metaData,
-          dataMapping = dataMapping
-        ),
+      plotConfiguration = plotConfiguration,
       plotObject = timeProfilePlot
     )
   }
@@ -585,41 +578,34 @@ plotPopulationTimeProfile <- function(simulatedData,
   metaData$ymin <- metaData$Concentration
   metaData$ymax <- metaData$Concentration
 
+  plotConfiguration <- plotConfiguration %||%
+    TimeProfilePlotConfiguration$new(
+      data = simulatedData,
+      metaData = metaData,
+      dataMapping = TimeProfileDataMapping$new(x = "x", ymin = "ymin", ymax = "ymax")
+    )
+  plotConfiguration <- updatePlotConfigurationTimeTicks(simulatedData, metaData, dataMapping, plotConfiguration)
+
   timeProfilePlot <- tlf::addRibbon(
     x = simulatedData$Time,
     ymin = simulatedData$lowPerc,
     ymax = simulatedData$highPerc,
     metaData = metaData,
     caption = simulatedData$legendRange,
-    plotConfiguration = plotConfiguration %||%
-      TimeProfilePlotConfiguration$new(
-        data = simulatedData,
-        metaData = metaData,
-        dataMapping = TimeProfileDataMapping$new(x = "x", ymin = "ymin", ymax = "ymax")
-      )
+    plotConfiguration = plotConfiguration
   )
   timeProfilePlot <- tlf::addLine(
     x = simulatedData$Time,
     y = simulatedData$median,
     caption = simulatedData$legendMedian,
-    plotConfiguration = plotConfiguration %||%
-      TimeProfilePlotConfiguration$new(
-        data = simulatedData,
-        metaData = metaData,
-        dataMapping = TimeProfileDataMapping$new(x = "x", ymin = "ymin", ymax = "ymax")
-      ),
+    plotConfiguration = plotConfiguration,
     plotObject = timeProfilePlot
   )
   timeProfilePlot <- tlf::addLine(
     x = simulatedData$Time,
     y = simulatedData$mean,
     caption = simulatedData$legendMean,
-    plotConfiguration = plotConfiguration %||%
-      TimeProfilePlotConfiguration$new(
-        data = simulatedData,
-        metaData = metaData,
-        dataMapping = TimeProfileDataMapping$new(x = "x", ymin = "ymin", ymax = "ymax")
-      ),
+    plotConfiguration = plotConfiguration,
     plotObject = timeProfilePlot
   )
   if (!isEmpty(observedData)) {
@@ -627,12 +613,7 @@ plotPopulationTimeProfile <- function(simulatedData,
       data = observedData,
       metaData = metaData,
       dataMapping = dataMapping,
-      plotConfiguration = plotConfiguration %||%
-        TimeProfilePlotConfiguration$new(
-          data = simulatedData,
-          metaData = metaData,
-          dataMapping = TimeProfileDataMapping$new(x = "x", ymin = "ymin", ymax = "ymax")
-        ),
+      plotConfiguration = plotConfiguration,
       plotObject = timeProfilePlot
     )
   }
@@ -641,12 +622,7 @@ plotPopulationTimeProfile <- function(simulatedData,
       data = lloqData,
       metaData = metaData,
       dataMapping = dataMapping,
-      plotConfiguration = plotConfiguration %||%
-        TimeProfilePlotConfiguration$new(
-          data = simulatedData,
-          metaData = metaData,
-          dataMapping = TimeProfileDataMapping$new(x = "x", ymin = "ymin", ymax = "ymax")
-        ),
+      plotConfiguration = plotConfiguration,
       plotObject = timeProfilePlot
     )
   }
@@ -1065,6 +1041,10 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
     "Residuals" = list(dimension = residualsLegend, unit = "")
   )
 
+  residualTimeTicks <- getTimeTicksFromUnit(
+    residualsMetaData$Time$unit,
+    timeValues = residualsData$Time
+  )
   goodnessOfFitPlots[["resVsTime"]] <- tlf::plotResVsTime(
     data = residualsData,
     metaData = residualsMetaData,
@@ -1074,6 +1054,11 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
       group = "Legend"
     ),
     plotConfiguration = settings$plotConfigurations[["resVsTime"]]
+  )
+  goodnessOfFitPlots[["resVsTime"]] <- tlf::setXAxis(
+    plotObject = goodnessOfFitPlots[["resVsTime"]],
+    ticks = residualTimeTicks$ticks,
+    ticklabels = residualTimeTicks$ticklabels
   )
   goodnessOfFitCaptions[["resVsTime"]] <- getGoodnessOfFitCaptions(structureSet, "resVsTime", residualScale)
 

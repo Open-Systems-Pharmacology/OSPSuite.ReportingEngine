@@ -79,6 +79,71 @@ autoAxesTicksFromLimits <- function(limits) {
   return(rep(c(1, 2, 5), length(logTicks)) * 10^rep(logTicks, each = 3))
 }
 
+#' @title getTimeTicksFromUnit
+#' @description Defines auto time ticks from time unit and time values
+#' @param unit A time unit as defined in `ospsuite::ospUnits$Time`
+#' @param timeValues Numeric values used by the data
+#' @return List of `ticks` and their `ticklabels`
+#' @keywords internal
+getTimeTicksFromUnit <- function(unit, timeValues = NULL) {
+  if (isEmpty(timeValues)) {
+    return()
+  }
+  minTime <- floor(min(0, as.numeric(timeValues), na.rm = TRUE))
+  maxTime <- ceiling(max(as.numeric(timeValues), na.rm = TRUE))
+  # For undefined ticking of units, assume major tick every 10 units (eg. 10 seconds)
+  majorTickStep <- 10
+  # For undefined ticking of units, assume minor tick every 1 unit (eg. 1 seconds)
+  minorTickStep <- 1
+
+  if (isIncluded(unit, ospsuite::ospUnits$Time$h)) {
+    # Major ticks every 6 hours
+    majorTickStep <- 6
+  }
+  if (isIncluded(unit, ospsuite::ospUnits$Time$`day(s)`)) {
+    # Major ticks every 7 days
+    majorTickStep <- 7
+  }
+  if (isIncluded(unit, ospsuite::ospUnits$Time$`week(s)`)) {
+    # Major ticks every 4 weeks
+    majorTickStep <- 4
+  }
+  if (isIncluded(unit, ospsuite::ospUnits$Time$`month(s)`)) {
+    # Major ticks every 6 months
+    majorTickStep <- 6
+  }
+
+  minorTicks <- seq(minTime, maxTime, minorTickStep)
+  majorTicks <- seq(minTime, maxTime, majorTickStep)
+  ticklabels <- as.character(minorTicks)
+  ticklabels[!(minorTicks %in% majorTicks)] <- ""
+
+  timeTicks <- list(
+    ticks = minorTicks,
+    ticklabels = ticklabels
+  )
+  return(timeTicks)
+}
+
+#' @title updatePlotConfigurationTimeTicks
+#' @description Update time ticks based on selected time unit in `PlotConfiguration` objects
+#' @param data data.frame
+#' @param metaData meta data on `data`
+#' @param dataMapping `XYGDataMapping` R6 class object from `tlf` library
+#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
+#' @return A `PlotConfiguration` object
+#' @keywords internal
+updatePlotConfigurationTimeTicks <- function(data, metaData, dataMapping, plotConfiguration) {
+  timeValues <- data[, dataMapping$x]
+  timeUnit <- metaData[[dataMapping$x]]$unit
+  timeTicks <- getTimeTicksFromUnit(timeUnit, timeValues)
+
+  plotConfiguration$xAxis$ticks <- timeTicks$ticks
+  plotConfiguration$xAxis$ticklabels <- timeTicks$ticklabels
+
+  return(plotConfiguration)
+}
+
 #' @title getPlotConfigurationFromPlan
 #' @description Get the appropriate `PlotConfiguration` object with scaled dimensions for exporting it
 #' @param plotProperties Plot properties from configuration plan

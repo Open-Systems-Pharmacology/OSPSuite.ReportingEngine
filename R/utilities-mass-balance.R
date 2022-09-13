@@ -262,6 +262,7 @@ plotMassBalanceTimeProfile <- function(data,
     metaData = metaData,
     dataMapping = timeVsAmountDataMapping
   )
+  plotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, dataMapping, plotConfiguration)
 
   timeVsAmountPlot <- tlf::initializePlot(plotConfiguration)
 
@@ -303,6 +304,7 @@ plotMassBalanceCumulativeTimeProfile <- function(data,
     metaData = metaData,
     dataMapping = timeVsAmountDataMapping
   )
+  plotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, dataMapping, plotConfiguration)
 
   timeVsAmountPlot <- tlf::initializePlot(plotConfiguration)
 

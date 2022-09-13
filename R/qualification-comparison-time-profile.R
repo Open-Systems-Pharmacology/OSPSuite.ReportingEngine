@@ -29,6 +29,10 @@ plotQualificationComparisonTimeProfile <- function(configurationPlan, settings) 
       targetUnit = axesProperties$x$unit,
       sourceUnit = timeProfilePlan$TimeUnit
     )
+    axesProperties$x <- c(
+      axesProperties$x,
+      getTimeTicksFromUnit(axesProperties$x$unit, simulationDuration)
+    )
 
     plotConfiguration <- getPlotConfigurationFromPlan(timeProfilePlan[["PlotSettings"]])
     timeProfilePlot <- tlf::initializePlot(plotConfiguration)

@@ -136,7 +136,13 @@ updatePlotAxes <- function(plotObject, axesProperties) {
   )
 
   try({
-    plotObject <- tlf::setXAxis(plotObject, scale = axesProperties$x$scale, limits = c(axesProperties$x$min, axesProperties$x$max))
+    plotObject <- tlf::setXAxis(
+      plotObject,
+      scale = axesProperties$x$scale,
+      limits = c(axesProperties$x$min, axesProperties$x$max),
+      ticks = axesProperties$x$ticks,
+      ticklabels = axesProperties$x$ticklabels
+    )
   })
   try({
     plotObject <- tlf::setYAxis(plotObject, scale = axesProperties$y$scale, limits = c(axesProperties$y$min, axesProperties$y$max))

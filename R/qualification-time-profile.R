@@ -252,6 +252,10 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
     simulationPathResults$data[, "Time"],
     axesProperties$x$unit
   )
+  axesProperties$x <- c(
+    axesProperties$x,
+    getTimeTicksFromUnit(axesProperties$x$unit, time)
+  )
   outputValues <- ospsuite::toUnit(
     simulationQuantity,
     simulationPathResults$data[, outputPath],
