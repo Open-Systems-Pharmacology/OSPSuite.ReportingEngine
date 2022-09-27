@@ -32,7 +32,7 @@ defineExpectedResidualsData <- parse(text = paste0(
 ))
 
 defineExpectedFigures <- parse(text = paste0(
-  "expectedFigures", scenarios, " <- 10"
+  "expectedFigures", scenarios, " <- 8"
 ))
 
 defineExpectedTables <- parse(text = paste0(

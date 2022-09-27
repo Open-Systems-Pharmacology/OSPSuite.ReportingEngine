@@ -254,8 +254,6 @@ GofPlotTask <- R6::R6Class(
       )
       allOutputs <- allOutputs[!duplicated(allOutputPaths)]
 
-      selectedLogData <- data$Simulated > 0 & data$Observed > 0
-
       # Plot the residuals across the simulations by output path
       for (output in allOutputs) {
         Legend <- "Residuals\nlog(Observed)-log(Simulated)"
@@ -268,10 +266,15 @@ GofPlotTask <- R6::R6Class(
           "Simulated" = list(dimension = "Simulated value", unit = output$displayUnit),
           "Residuals" = list(unit = "", dimension = Legend)
         )
+        
+        outputData <- data[data$Path %in% output$path, ]
+        if(isEmpty(outputData)){
+          next
+        }
 
         # Obs vs pred
         obsVsPredPlot <- tlf::plotObsVsPred(
-          data = data[data$Path %in% output$path, ],
+          data = outputData,
           metaData = residualsMetaData,
           dataMapping = tlf::ObsVsPredDataMapping$new(
             x = "Observed",
@@ -298,7 +301,8 @@ GofPlotTask <- R6::R6Class(
         )
 
         # Obs vs Pred log scale
-        if (sum(selectedLogData & data$Path %in% output$path) > 0) {
+        selectedLogData <- outputData$Simulated > 0 & outputData$Observed > 0
+        if (sum(selectedLogData) > 0) {
           obsVsPredRange <- autoAxesLimits(c(
             data$Simulated[selectedLogData & data$Path %in% output$path],
             data$Observed[selectedLogData & data$Path %in% output$path]
@@ -350,7 +354,7 @@ GofPlotTask <- R6::R6Class(
 
         # Res vs pred
         resVsPredPlot <- tlf::plotResVsPred(
-          data = data[data$Path %in% output$path, ],
+          data = outputData,
           metaData = residualsMetaData,
           dataMapping = tlf::ResVsPredDataMapping$new(
             x = "Simulated",
@@ -382,7 +386,7 @@ GofPlotTask <- R6::R6Class(
           timeValues = data$Time
         )
         resVsTimePlot <- tlf::plotResVsTime(
-          data = data,
+          data = outputData,
           metaData = residualsMetaData,
           dataMapping = tlf::ResVsTimeDataMapping$new(
             x = "Time",
@@ -415,7 +419,7 @@ GofPlotTask <- R6::R6Class(
 
         # Histogram
         residualsHistogramPlot <- tlf::plotHistogram(
-          data = data[data$Path %in% output$path, ],
+          data = outputData,
           metaData = residualsMetaData,
           dataMapping = tlf::HistogramDataMapping$new(
             x = "Residuals",
@@ -449,7 +453,7 @@ GofPlotTask <- R6::R6Class(
 
         # QQ Plot
         residualsQQPlot <- tlf::plotQQ(
-          data = data[data$Path %in% output$path, ],
+          data = outputData,
           metaData = residualsMetaData,
           dataMapping = tlf::QQDataMapping$new(
             y = "Residuals",

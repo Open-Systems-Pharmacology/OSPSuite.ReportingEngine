@@ -61,14 +61,20 @@ plotMeanGoodnessOfFit <- function(structureSet, settings = NULL) {
     residualsData <- rbind.data.frame(residualsData, outputResidualsData)
   }
 
-  timeProfileData <- rbind.data.frame(observedData, lloqData, simulatedData)
   timeProfileMapping <- list(x = "Time", y = "Concentration", group = "Legend")
 
   resultID <- defaultFileNames$resultID(length(goodnessOfFitResults) + 1, "time_profile_data")
 
   goodnessOfFitResults[[resultID]] <- saveTaskResults(
     id = resultID,
-    table = timeProfileData,
+    table = simulatedData,
+    includeTable = FALSE
+  )
+  # Save residuals data as a csv file
+  resultID <- defaultFileNames$resultID(length(goodnessOfFitResults) + 1, "residuals_data")
+  goodnessOfFitResults[[resultID]] <- saveTaskResults(
+    id = resultID,
+    table = residualsData,
     includeTable = FALSE
   )
 
@@ -191,7 +197,7 @@ getSimulatedResultsFromOutput <- function(simulationPathResults, output, simulat
       descriptor = structureSet$simulationSetDescriptor,
       pathName = output$displayName
     ),
-    "Legend" = captions$plotGoF$resLegend(
+    "ResidualsLegend" = captions$plotGoF$resLegend(
       simulationSetName = simulationSet$simulationSetName,
       descriptor = structureSet$simulationSetDescriptor,
       pathName = output$displayName
@@ -228,7 +234,7 @@ getSimulatedResultsFromOutput <- function(simulationPathResults, output, simulat
 getResiduals <- function(observedData,
                          simulatedData,
                          residualScale = ResidualScales$Logarithmic) {
-  if (isOfLength(observedData, 0)) {
+  if (isEmpty(observedData)) {
     return()
   }
   # Time matrix to match observed time with closest simulation time
@@ -325,6 +331,13 @@ plotPopulationGoodnessOfFit <- function(structureSet, settings = NULL) {
   goodnessOfFitResults[[resultID]] <- saveTaskResults(
     id = resultID,
     table = simulatedData,
+    includeTable = FALSE
+  )
+  # Save residuals data as a csv file
+  resultID <- defaultFileNames$resultID(length(goodnessOfFitResults) + 1, "residuals_data")
+  goodnessOfFitResults[[resultID]] <- saveTaskResults(
+    id = resultID,
+    table = residualsData,
     includeTable = FALSE
   )
 
@@ -582,8 +595,6 @@ plotMeanTimeProfileLog <- function(simulatedData,
   # Get the nice auto scaling of the log data
   yAxisLimits <- autoAxesLimits(c(
     simulatedData[, dataMapping$y],
-    simulatedData[, dataMapping$ymin],
-    simulatedData[, dataMapping$ymax],
     logObservedValues,
     logLLOQValues
   ),
