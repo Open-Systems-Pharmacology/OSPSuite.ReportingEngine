@@ -1,3 +1,3 @@
 "Time","Observed","Simulated","Residuals","Legend","Path"
-6,0.00269,3.43078410840464,-7.15100292345397,"A","Organism|A|Concentration in container"
-8,0.00163,3.73528102977959,-7.73699832216122,"A","Organism|A|Concentration in container"
+6,0.00269,3.43141293525696,-7.15118619620177,"Concentration of A (A)","Organism|A|Concentration in container"
+8,0.00163,3.73604607582092,-7.73720311738253,"Concentration of A (A)","Organism|A|Concentration in container"

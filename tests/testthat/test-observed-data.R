@@ -99,17 +99,17 @@ test_that("'getObservedDataFromOutput' output empty data.frame when no data or d
   outputNone <- Output$new(path = "a", dataSelection = DataSelectionKeys$NONE)
   outputNoSelect <- Output$new(path = "a", dataSelection = "Time > 5")
   # No data provided
-  expect_null(getObservedDataFromOutput(outputAll, data = NULL, dataMapping = NULL, molWeight = NA, timeUnit = NULL))
-  expect_null(getObservedDataFromOutput(outputAll, data = data.frame(), dataMapping = NULL, molWeight = NA, timeUnit = NULL))
-  expect_null(getObservedDataFromOutput(outputNone, data = NULL, dataMapping = NULL, molWeight = NA, timeUnit = NULL))
-  expect_null(getObservedDataFromOutput(outputNone, data = data.frame(), dataMapping = NULL, molWeight = NA, timeUnit = NULL))
-  expect_null(getObservedDataFromOutput(outputNoSelect, data = NULL, dataMapping = NULL, molWeight = NA, timeUnit = NULL))
-  expect_null(getObservedDataFromOutput(outputNoSelect, data = data.frame(), dataMapping = NULL, molWeight = NA, timeUnit = NULL))
+  expect_null(getObservedDataFromOutput(outputAll, data = NULL, dataMapping = NULL, molWeight = NA, structureSet = NULL))
+  expect_null(getObservedDataFromOutput(outputAll, data = data.frame(), dataMapping = NULL, molWeight = NA, structureSet = NULL))
+  expect_null(getObservedDataFromOutput(outputNone, data = NULL, dataMapping = NULL, molWeight = NA, structureSet = NULL))
+  expect_null(getObservedDataFromOutput(outputNone, data = data.frame(), dataMapping = NULL, molWeight = NA, structureSet = NULL))
+  expect_null(getObservedDataFromOutput(outputNoSelect, data = NULL, dataMapping = NULL, molWeight = NA, structureSet = NULL))
+  expect_null(getObservedDataFromOutput(outputNoSelect, data = data.frame(), dataMapping = NULL, molWeight = NA, structureSet = NULL))
   # No selected data or selection removing all the data
-  expect_null(getObservedDataFromOutput(outputNone, data = testDataFrame, dataMapping = NULL, molWeight = NA, timeUnit = NULL))
+  expect_null(getObservedDataFromOutput(outputNone, data = testDataFrame, dataMapping = NULL, molWeight = NA, structureSet = NULL))
   # Since in this step, user actually defined a data selection
   # the number of selected rows is tracked in the log debug
-  expect_null(getObservedDataFromOutput(outputNoSelect, data = testDataFrame, dataMapping = NULL, molWeight = NA, timeUnit = NULL))
+  expect_null(getObservedDataFromOutput(outputNoSelect, data = testDataFrame, dataMapping = NULL, molWeight = NA, structureSet = NULL))
 })
 
 # Remove the files created during the tests
