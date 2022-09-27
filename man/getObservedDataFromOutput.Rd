@@ -4,7 +4,7 @@
 \alias{getObservedDataFromOutput}
 \title{getObservedDataFromOutput}
 \usage{
-getObservedDataFromOutput(output, data, dataMapping, molWeight, timeUnit)
+getObservedDataFromOutput(output, data, dataMapping, molWeight, structureSet)
 }
 \arguments{
 \item{output}{An `Output` object}
@@ -15,7 +15,7 @@ getObservedDataFromOutput(output, data, dataMapping, molWeight, timeUnit)
 
 \item{molWeight}{Molar weight for unit conversion of dependent variable}
 
-\item{timeUnit}{time unit for unit conversion of time}
+\item{structureSet}{A `SimulationStructure` object}
 }
 \value{
 list of data and lloq data.frames

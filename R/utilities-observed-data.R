@@ -252,10 +252,10 @@ loadObservedDataFromSimulationSet <- function(simulationSet) {
 #' @param data A data.frame
 #' @param dataMapping A list mapping the variable of data
 #' @param molWeight Molar weight for unit conversion of dependent variable
-#' @param timeUnit time unit for unit conversion of time
+#' @param structureSet A `SimulationStructure` object
 #' @return list of data and lloq data.frames
 #' @keywords internal
-getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, timeUnit) {
+getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, structureSet) {
   # If no observed data nor data selected, return empty dataset
   if (isEmpty(data)) {
     return()
@@ -289,9 +289,17 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
     }
   }
   outputData <- data.frame(
-    "Time" = ospsuite::toUnit("Time", data[selectedRows, dataMapping$time], timeUnit),
+    "Time" = ospsuite::toUnit(
+      "Time", 
+      data[selectedRows, dataMapping$time], 
+      structureSet$simulationSet$timeUnit
+      ),
     "Concentration" = outputConcentration,
-    "Legend" = paste0("Observed data ", output$dataDisplayName),
+    "Legend" = captions$plotGoF$observedLegend(
+      simulationSetName = structureSet$simulationSet$simulationSetName, 
+      descriptor = structureSet$simulationSetDescriptor, 
+      pathName = output$dataDisplayName
+    ),
     "Path" = output$path
   )
   if (isEmpty(dataMapping$lloq)) {
@@ -314,9 +322,17 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
     }
   }
   lloqOutput <- data.frame(
-    "Time" = ospsuite::toUnit("Time", data[selectedRows, dataMapping$time], timeUnit),
+    "Time" = ospsuite::toUnit(
+      "Time", 
+      data[selectedRows, dataMapping$time], 
+      structureSet$simulationSet$timeUnit
+    ),
     "Concentration" = lloqConcentration,
-    "Legend" = "LLOQ",
+    "Legend" = captions$plotGoF$lloqLegend(
+      simulationSetName = structureSet$simulationSet$simulationSetName, 
+      descriptor = structureSet$simulationSetDescriptor, 
+      pathName = output$dataDisplayName
+    ),
     "Path" = output$path
   )
   return(list(data = outputData, lloq = lloqOutput))

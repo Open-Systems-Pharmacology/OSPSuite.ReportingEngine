@@ -9,7 +9,7 @@ getPopulationResultsFromOutput(
   output,
   simulationQuantity,
   molWeight,
-  simulationSet,
+  structureSet,
   settings = NULL
 )
 }
@@ -22,7 +22,7 @@ getPopulationResultsFromOutput(
 
 \item{molWeight}{Molar weight for unit conversion of dependent variable}
 
-\item{simulationSet}{`SimulationSet` object}
+\item{structureSet}{`SimulationStructure` object}
 
 \item{settings}{TaskSetting object}
 }

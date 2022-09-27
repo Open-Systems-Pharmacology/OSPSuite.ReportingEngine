@@ -6,6 +6,37 @@
 \description{
 R6 class defining properties of time profiles and residuals plot task settings
 }
+\examples{
+
+## ------------------------------------------------
+## Method `GofTaskSettings$setStatistics`
+## ------------------------------------------------
+
+\dontrun{
+# Set the statistics as geometric mean
+workflow$plotTimeProfilesAndResiduals$settings$setStatistics(
+statisticsType = StatisticsTypes$`Geometric mean`
+)
+
+# Set the legend caption displayed for range
+workflow$plotTimeProfilesAndResiduals$settings$setStatistics(
+statisticsType = StatisticsTypes$`Geometric mean`
+rangeCaption = "90\% population range"
+)
+
+}
+
+
+## ------------------------------------------------
+## Method `GofTaskSettings$getStatistics`
+## ------------------------------------------------
+
+\dontrun{
+# Get the statistics of time profiles task
+workflow$plotTimeProfilesAndResiduals$settings$getStatistics()
+}
+
+}
 \keyword{internal}
 \section{Super class}{
 \code{ospsuite.reportingengine::TaskSettings} -> \code{GofTaskSettings}
@@ -31,6 +62,8 @@ time profiles and residual plots when applicable}
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-GofTaskSettings-new}{\code{GofTaskSettings$new()}}
+\item \href{#method-GofTaskSettings-setStatistics}{\code{GofTaskSettings$setStatistics()}}
+\item \href{#method-GofTaskSettings-getStatistics}{\code{GofTaskSettings$getStatistics()}}
 \item \href{#method-GofTaskSettings-clone}{\code{GofTaskSettings$clone()}}
 }
 }
@@ -42,7 +75,8 @@ Create a `GofTaskSettings` object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{GofTaskSettings$new(
   taskName = AllAvailableTasks$plotTimeProfilesAndResiduals,
-  outputSelections = NULL
+  outputSelections = NULL,
+  statisticsType = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -52,12 +86,91 @@ Create a `GofTaskSettings` object
 \item{\code{taskName}}{name of the task using the settings}
 
 \item{\code{outputSelections}}{subset of simulationSet outputs to be used in GoF plot}
+
+\item{\code{statisticsType}}{Statistics summarizing time profile simulated data}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
 A new `GofTaskSettings` object
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-GofTaskSettings-setStatistics"></a>}}
+\if{latex}{\out{\hypertarget{method-GofTaskSettings-setStatistics}{}}}
+\subsection{Method \code{setStatistics()}}{
+Set statistics used in population time profiles and residuals plots
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{GofTaskSettings$setStatistics(
+  statisticsType = NULL,
+  y = NULL,
+  ymin = NULL,
+  ymax = NULL,
+  yCaption = NULL,
+  rangeCaption = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{statisticsType}}{Name of statistics type as defined in enum `StatisticsTypes`}
+
+\item{\code{y}}{Function or function name for middle values statistics}
+
+\item{\code{ymin}}{Function or function name for min values statistics}
+
+\item{\code{ymax}}{Function or function name for max values statistics}
+
+\item{\code{yCaption}}{Legend caption for middle values statistics}
+
+\item{\code{rangeCaption}}{Legend caption for range values statistics}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{
+# Set the statistics as geometric mean
+workflow$plotTimeProfilesAndResiduals$settings$setStatistics(
+statisticsType = StatisticsTypes$`Geometric mean`
+)
+
+# Set the legend caption displayed for range
+workflow$plotTimeProfilesAndResiduals$settings$setStatistics(
+statisticsType = StatisticsTypes$`Geometric mean`
+rangeCaption = "90\% population range"
+)
+
+}
+
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-GofTaskSettings-getStatistics"></a>}}
+\if{latex}{\out{\hypertarget{method-GofTaskSettings-getStatistics}{}}}
+\subsection{Method \code{getStatistics()}}{
+Get statistics used in population time profiles and residuals plots
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{GofTaskSettings$getStatistics()}\if{html}{\out{</div>}}
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{
+# Get the statistics of time profiles task
+workflow$plotTimeProfilesAndResiduals$settings$getStatistics()
+}
+
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-GofTaskSettings-clone"></a>}}
