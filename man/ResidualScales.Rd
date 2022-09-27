@@ -26,7 +26,8 @@ Other enum helpers:
 \code{\link{DataSelectionKeys}},
 \code{\link{PopulationWorkflowTypes}},
 \code{\link{StandardPlotTasks}},
-\code{\link{StandardSimulationTasks}}
+\code{\link{StandardSimulationTasks}},
+\code{\link{StatisticsTypes}}
 }
 \concept{enum helpers}
 \keyword{datasets}

@@ -97,7 +97,6 @@ reEnv$ddiRatioSubsetsDictionary <- list(
 # Default value for a scale factor used in a parallel simulation.  The product of this scale factor and the number of allowable cores (allowedCores) sets the maximum number of simulations that may be run on one core.
 reEnv$defaultMaxSimulationsPerCore <- 2
 
-
 #' @title setWatermarkConfiguration
 #' @description Set default watermark configuration for current theme
 #' @param watermark character or \code{Label} class object from `tlf` package
@@ -249,4 +248,133 @@ setDefaultStairstep <- function(stairstep) {
 setDefaultAutoAxisLimitMargin <- function(margin) {
   validateIsNumeric(margin)
   reEnv$autoAxisLimitMargin <- margin
+}
+
+#' @title StatisticsTypes
+#' @description List of available statistic types summarizing data for time profile plots
+#' \itemize{
+#' \item `"2.5th-97.5th Percentiles"` summarizes data using median, 2.5th and 97.5th percentiles
+#' \item `"5th-95th Percentiles"` summarizes data using median, 5th and 95th percentiles
+#' \item `"10th-90th Percentiles"` summarizes data using median, 10th and 90th percentiles
+#' \item `"Geometric mean"` summarizes data using geometric mean and mean */ geometric standard deviation
+#' \item `"Arithmetic mean"` summarizes data using arithmetic mean and mean +/- standard deviation
+#' }
+#' 
+#' @export
+#' @family enum helpers
+#' @examples dontrun{
+#' getStatisticsFromType(StatisticsTypes)
+#' }
+StatisticsTypes <- enum(c(
+  "2.5th-97.5th Percentiles",
+  "5th-95th Percentiles",
+  "10th-90th Percentiles",
+  "Geometric mean",
+  "Arithmetic mean"
+))
+
+
+#' @title getStatisticsFromType
+#' @description Get statistics 
+#' @param statisticsType Statistics summarizing time profile simulated data
+#' as defined by helper enum `StatisticsType`
+#' @return A list including `y`, `ymin` and `ymax` summary statistics as well as their `caption`
+#' @export
+#' @examples dontrun{
+#' workflow$plotTime
+#' }
+getStatisticsFromType <- function(statisticsType){
+  validateIsIncluded(statisticsType, StatisticsTypes)
+  if(isIncluded(statisticsType, StatisticsTypes$`2.5th-97.5th Percentiles`)){
+    return(list(
+      y = tlf::tlfStatFunctions$`Percentile50%`,
+      ymin = tlf::tlfStatFunctions$`Percentile2.5%`,
+      ymax = tlf::tlfStatFunctions$`Percentile97.5%`,
+      yCaption = "median",
+      # The unicode characters below are superscript th
+      rangeCaption = "[2.5\u1d57\u02b0-97.5\u1d57\u02b0] percentiles"
+    ))
+  }
+  if(isIncluded(statisticsType, StatisticsTypes$`5th-95th Percentiles`)){
+    return(list(
+      y = tlf::tlfStatFunctions$`Percentile50%`,
+      ymin = tlf::tlfStatFunctions$`Percentile5%`,
+      ymax = tlf::tlfStatFunctions$`Percentile95%`,
+      yCaption = "median",
+      rangeCaption = "[5\u1d57\u02b0-95\u1d57\u02b0] percentiles"
+    ))
+  }
+  if(isIncluded(statisticsType, StatisticsTypes$`10th-90th Percentiles`)){
+    return(list(
+      y = tlf::tlfStatFunctions$`Percentile50%`,
+      ymin = tlf::tlfStatFunctions$`Percentile10%`,
+      ymax = tlf::tlfStatFunctions$`Percentile90%`,
+      yCaption = "median",
+      rangeCaption = "[10\u1d57\u02b0-90\u1d57\u02b0] percentiles"
+    ))
+  }
+  if(isIncluded(statisticsType, StatisticsTypes$`Arithmetic mean`)){
+    return(list(
+      y = tlf::tlfStatFunctions$mean,
+      ymin = tlf::tlfStatFunctions$`mean-sd`,
+      ymax = tlf::tlfStatFunctions$`mean+sd`,
+      yCaption = "arithmetic mean",
+      # The unicode character below is +/- symbol
+      rangeCaption = "mean \u00b1 SD range"
+    ))
+  }
+  #TODO : define geometric mean in tlf !
+  return(list(
+    y = "geomean",
+    ymin = "geomean/sd",
+    ymax = "geomean*sd",
+    yCaption = "geometric mean",
+    # The unicode character below is supposed to be */ symbol
+    rangeCaption = "mean \u22c7 geometric SD range"
+  ))
+}
+
+reEnv$defaultTimeProfileStatistics <- getStatisticsFromType(StatisticsTypes$`5th-95th Percentiles`)
+
+#' @title setDefaultTimeProfileStatistics
+#' @description Set default statistics used in population time profiles and residuals plots
+#' @param statisticsType Name of statistics type as defined in enum `StatisticsTypes`
+#' @param y Function or function name for middle values statistics
+#' @param ymin Function or function name for min values statistics
+#' @param ymax Function or function name for max values statistics
+#' @param yCaption Legend caption for middle values statistics
+#' @param rangeCaption Legend caption for range values statistics
+#' @export
+#' @examples \dontrun{
+#' # Set the default statistics as geometric mean
+#' setDefaultTimeProfileStatistics(statisticsType = StatisticsTypes$`Geometric mean`)
+#' 
+#' # Set the default legend caption displayed for range
+#' setDefaultTimeProfileStatistics(rangeCaption = "90% population range")
+#' 
+#' }
+#' 
+setDefaultTimeProfileStatistics <- function(statisticsType = NULL,
+                                            y = NULL, 
+                                            ymin = NULL, 
+                                            ymax = NULL, 
+                                            yCaption = NULL,
+                                            rangeCaption = NULL){
+  
+  validateIsIncluded(statisticsType, StatisticsTypes, nullAllowed = TRUE)
+  # Allow user to enter the function directly
+  validateIsOfType(y, c("character", "closure"), nullAllowed = TRUE)
+  validateIsOfType(ymin, c("character", "closure"), nullAllowed = TRUE)
+  validateIsOfType(ymax, c("character", "closure"), nullAllowed = TRUE)
+  
+  if(!isEmpty(statisticsType)){
+    reEnv$defaultTimeProfileStatistics <- getStatisticsFromType(statisticsType)
+  }
+  # Assign variables to reEnv only if defined
+  eval(parseVariableToObject(
+    objectName = "reEnv$defaultTimeProfileStatistics",
+    variableName = c("y", "ymin", "ymax", "yCaption", "rangeCaption"),
+    keepIfNull = TRUE))
+  
+  return(invisible())
 }
