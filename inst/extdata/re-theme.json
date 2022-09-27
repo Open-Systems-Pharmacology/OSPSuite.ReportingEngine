@@ -197,11 +197,11 @@
     },
     "plotPKRatio": {
       "points": {
-        "color": "black",
+        "color": "reset",
         "fill": "NA",
         "shape": "circle",
         "linetype": "blank",
-        "size": 2,
+        "size": 1,
         "alpha": 1
       },
       "lines": {
@@ -231,11 +231,11 @@
     },
     "plotDDIRatio": {
       "points": {
-        "color": "black",
+        "color": "reset",
         "fill": "NA",
         "shape": "circle",
         "linetype": "blank",
-        "size": 2,
+        "size": 1,
         "alpha": 1
       },
       "lines": {
@@ -295,11 +295,11 @@
     },
     "plotObsVsPred": {
       "points": {
-        "color": "black",
+        "color": "reset",
         "fill": "NA",
         "shape": "circle",
         "linetype": "blank",
-        "size": 2,
+        "size": 1,
         "alpha": 1
       },
       "lines": {
@@ -311,6 +311,50 @@
         "alpha": 1
       },
       "errorbars": {
+        "color": "black",
+        "fill": "NA",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": 1
+      }
+    },
+    "plotResVsTime": {
+      "points": {
+        "color": "reset",
+        "fill": "NA",
+        "shape": "circle",
+        "linetype": "blank",
+        "size": 1,
+        "alpha": 1
+      },
+      "lines": {
+        "color": "black",
+        "fill": "NA",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": 1
+      },
+      "errorbars": {
+        "color": "black",
+        "fill": "NA",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": 1
+      }
+    },
+    "plotQQ": {
+      "points": {
+        "color": "reset",
+        "fill": "NA",
+        "shape": "next",
+        "linetype": "blank",
+        "size": 1,
+        "alpha": 1
+      },
+      "lines": {
         "color": "black",
         "fill": "NA",
         "shape": "blank",
