@@ -21,7 +21,7 @@ List of available statistic types summarizing data for time profile plots
 }
 }
 \examples{
-dontrun{
+\dontrun{
 getStatisticsFromType(StatisticsTypes)
 }
 }

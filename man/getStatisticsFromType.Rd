@@ -17,7 +17,7 @@ A list including `y`, `ymin` and `ymax` summary statistics as well as their `cap
 Get statistics
 }
 \examples{
-dontrun{
+\dontrun{
 workflow$plotTime
 }
 }

@@ -262,7 +262,8 @@ setDefaultAutoAxisLimitMargin <- function(margin) {
 #' 
 #' @export
 #' @family enum helpers
-#' @examples dontrun{
+#' @examples 
+#' \dontrun{
 #' getStatisticsFromType(StatisticsTypes)
 #' }
 StatisticsTypes <- enum(c(
@@ -280,7 +281,8 @@ StatisticsTypes <- enum(c(
 #' as defined by helper enum `StatisticsType`
 #' @return A list including `y`, `ymin` and `ymax` summary statistics as well as their `caption`
 #' @export
-#' @examples dontrun{
+#' @examples 
+#' \dontrun{
 #' workflow$plotTime
 #' }
 getStatisticsFromType <- function(statisticsType){
@@ -345,7 +347,8 @@ reEnv$defaultTimeProfileStatistics <- getStatisticsFromType(StatisticsTypes$`5th
 #' @param yCaption Legend caption for middle values statistics
 #' @param rangeCaption Legend caption for range values statistics
 #' @export
-#' @examples \dontrun{
+#' @examples 
+#' \dontrun{
 #' # Set the default statistics as geometric mean
 #' setDefaultTimeProfileStatistics(statisticsType = StatisticsTypes$`Geometric mean`)
 #' 
