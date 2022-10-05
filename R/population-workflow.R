@@ -58,8 +58,7 @@ PopulationWorkflow <- R6::R6Class(
         theme = theme
       )
 
-      tryCatch(
-        {
+      logCatch({
           validateIsOfType(c(simulationSets), "PopulationSimulationSet")
           if (!isOfType(simulationSets, "list")) {
             simulationSets <- list(simulationSets)
@@ -79,11 +78,7 @@ PopulationWorkflow <- R6::R6Class(
           self$plotSensitivity <- loadPlotSensitivityTask(self)
 
           self$taskNames <- enum(self$getAllTasks())
-        },
-        error = function(e) {
-          logErrorThenStop(e)
-        }
-      )
+        })
     },
 
     #' @description
@@ -107,8 +102,7 @@ PopulationWorkflow <- R6::R6Class(
       logInfo(messages$runStarting("Population Workflow", self$workflowType))
       t0 <- tic()
 
-      tryCatch(
-        {
+      logCatch({
           if (self$simulate$active) {
             self$simulate$runTask(self$simulationStructures)
           }
@@ -165,11 +159,7 @@ PopulationWorkflow <- R6::R6Class(
 
           re.tEndAction(actionToken = actionToken2)
           re.tEndMetadataCapture(outputFolder = "./", actionToken = actionToken1)
-        },
-        error = function(e) {
-          logErrorThenStop(e)
-        }
-      )
+        })
       logInfo(messages$runCompleted(getElapsedTime(t0), "Population Workflow", self$workflowType))
     }
   )

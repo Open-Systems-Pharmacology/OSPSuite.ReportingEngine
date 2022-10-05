@@ -30,8 +30,7 @@ MeanModelWorkflow <- R6::R6Class(
     #' @return A new `MeanModelWorkflow` object
     initialize = function(...) {
       super$initialize(...)
-      tryCatch(
-        {
+      logCatch({
           self$simulate <- loadSimulateTask(self)
           self$calculatePKParameters <- loadCalculatePKParametersTask(self)
           self$calculateSensitivity <- loadCalculateSensitivityTask(self)
@@ -43,11 +42,7 @@ MeanModelWorkflow <- R6::R6Class(
           self$plotSensitivity <- loadPlotSensitivityTask(self)
 
           self$taskNames <- enum(self$getAllTasks())
-        },
-        error = function(e) {
-          logErrorThenStop(e)
-        }
-      )
+        })
     },
 
     #' @description
@@ -73,8 +68,7 @@ MeanModelWorkflow <- R6::R6Class(
       logInfo(messages$runStarting("Mean Model Workflow"))
       t0 <- tic()
 
-      tryCatch(
-        {
+      logCatch({
           if (self$simulate$active) {
             self$simulate$runTask(self$simulationStructures)
           }
@@ -130,11 +124,7 @@ MeanModelWorkflow <- R6::R6Class(
 
           re.tEndAction(actionToken = actionToken2)
           re.tEndMetadataCapture(outputFolder = "./", actionToken = actionToken1)
-        },
-        error = function(e) {
-          logErrorThenStop(e)
-        }
-      )
+        })
       logInfo(messages$runCompleted(getElapsedTime(t0), "Mean Model Workflow"))
     }
   )

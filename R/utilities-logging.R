@@ -123,3 +123,55 @@ logInfo <- function(message, printConsole = NULL) {
   reEnv$log$info(message, display = printConsole)
   return(invisible())
 }
+
+#' @title logCatch
+#' @description Catch errors, log and display meaningfull information
+#' @param expr Evaluated code chunks
+#' @export
+logCatch <- function(expr) {
+  tryCatch(withCallingHandlers(
+    expr,
+    error = function(errorCondition) {
+      # Informative trace keeps only calls related to error from all current calls
+      # by removing tryCatch, logCatch, withCallingHandlers, simpleError from trace
+      calls <- sys.calls()
+      errorTrace <- "\n> Error Trace"
+      if (requireNamespace("crayon", quietly = TRUE)) {
+        errorTrace <- crayon::yellow$bold(errorTrace)
+      }
+      for (call in calls) {
+        textCall <- deparse(call, nlines = 1)
+
+        callNotDisplayed <- any(sapply(
+          c("logCatch", "tryCatch", "withCallingHandlers", "simpleError"),
+          FUN = function(pattern) {
+            grepl(textCall, pattern = pattern, ignore.case = TRUE)
+          }
+        ))
+
+        if (callNotDisplayed) {
+          next
+        }
+        tabs <- paste0(rep(" ", length(errorTrace)), collapse = "")
+        errorTrace <- c(
+          errorTrace,
+          paste0(tabs, "\u21aa ", textCall)
+        )
+      }
+      errorMessage <- c(
+        errorCondition$message,
+        errorTrace
+      )
+      logError(errorMessage)
+      stop(errorCondition$message)
+    },
+    warning = function(warningCondition) {
+      logError(warningCondition$message)
+      invokeRestart("muffleWarning")
+    }
+  ),
+  error = function(errorCondition) {
+    stop(errorCondition$message, call. = FALSE)
+  }
+  )
+}
