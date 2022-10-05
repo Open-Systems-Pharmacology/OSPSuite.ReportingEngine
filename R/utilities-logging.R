@@ -166,8 +166,24 @@ logCatch <- function(expr) {
       stop(errorCondition$message)
     },
     warning = function(warningCondition) {
+      # Remove unwanted warning from ggplot
+      # In case, include them in log debug
+      callNotDisplayed <- any(sapply(
+        c("Transformation introduced infinite values",
+          "Each group consists of only one observation",
+          "rows containing non-finite values",
+          "Ignoring unknown parameters"),
+        FUN = function(pattern) {
+          grepl(warningCondition$message, pattern = pattern)
+        }
+      ))
+      if(callNotDisplayed){
+        logDebug(warningCondition$message)
+        tryInvokeRestart("muffleWarning")
+        return(invisible())
+      }
       logError(warningCondition$message)
-      invokeRestart("muffleWarning")
+      tryInvokeRestart("muffleWarning")
     }
   ),
   error = function(errorCondition) {
