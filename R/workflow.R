@@ -58,8 +58,7 @@ Workflow <- R6::R6Class(
       logInfo(private$.reportingEngineInfo$print())
 
       #----- Check and initialize workflow fields  -----
-      tryCatch(
-        {
+      logCatch({
           # Checks of input arguments
           if (!isOfType(simulationSets, "list")) {
             simulationSets <- list(simulationSets)
@@ -105,12 +104,7 @@ Workflow <- R6::R6Class(
           # Load default workflow theme, and sync the watermark
           setDefaultTheme(theme)
           self$setWatermark(watermark)
-        },
-        # Stop when an error is found
-        error = function(e) {
-          logErrorThenStop(e)
-        }
-      )
+        })
     },
 
     #' @description
@@ -214,8 +208,7 @@ Workflow <- R6::R6Class(
     #' Variables of the data.frame should include `parameter` and `displayPath`.
     setParameterDisplayPaths = function(parameterDisplayPaths) {
       setLogFolder(self$workflowFolder)
-      tryCatch(
-        {
+      logCatch({
           validateIsOfType(parameterDisplayPaths, "data.frame", nullAllowed = TRUE)
           if (!isEmpty(parameterDisplayPaths)) {
             validateIsIncluded(c("parameter", "displayPath"), names(parameterDisplayPaths))
@@ -235,11 +228,7 @@ Workflow <- R6::R6Class(
           for (structureSet in self$simulationStructures) {
             structureSet$parameterDisplayPaths <- parameterDisplayPaths
           }
-        },
-        error = function(e) {
-          logErrorThenStop(e)
-        }
-      )
+        })
       return(invisible())
     },
 

@@ -32,8 +32,7 @@ QualificationWorkflow <- R6::R6Class(
     initialize = function(configurationPlan,
                           ...) {
       super$initialize(...)
-      tryCatch(
-        {
+      logCatch({
           validateIsOfType(configurationPlan, "ConfigurationPlan")
           # Include global plot & axes settings at this stage
           # Global settings are included using theme concept,
@@ -52,11 +51,7 @@ QualificationWorkflow <- R6::R6Class(
           self$calculatePKParameters <- loadCalculatePKParametersTask(self, active = any(self$plotPKRatio$active, self$plotDDIRatio$active))
 
           self$taskNames <- enum(self$getAllTasks())
-        },
-        error = function(e) {
-          logErrorThenStop(e)
-        }
-      )
+        })
     },
 
     #' @description
@@ -79,8 +74,7 @@ QualificationWorkflow <- R6::R6Class(
       logInfo(messages$runStarting("Qualification Workflow"))
       t0 <- tic()
 
-      tryCatch(
-        {
+      logCatch({
           # Before running the actual workflow,
           # Create Outputs for sections and copy intro and section content
           mdFiles <- createSectionOutput(self$configurationPlan)
@@ -112,11 +106,7 @@ QualificationWorkflow <- R6::R6Class(
           )
           # Move report if a non-default path is provided
           copyReport(from = initialReportPath, to = self$reportFilePath, copyWordReport = self$createWordReport, keep = TRUE)
-        },
-        error = function(e) {
-          logErrorThenStop(e)
-        }
-      )
+        })
       logInfo(messages$runCompleted(getElapsedTime(t0), "Qualification Workflow"))
     },
 
@@ -127,18 +117,13 @@ QualificationWorkflow <- R6::R6Class(
     #' @param configurationPlanFile path to the json file corresponding to the Configuration Plan of a Qualification workflow
     updateConfigurationPlan = function(configurationPlanFile) {
       setLogFolder(self$workflowFolder)
-      tryCatch(
-        {
+      logCatch({
           configurationPlan <- loadConfigurationPlan(configurationPlanFile, self$workflowFolder)
           # Update the default plot properties using `tlf` concept of theme
           configurationPlan$updateTheme()
           # Overwrite the properties of the configurationPlan
           self$configurationPlan <- configurationPlan
-        },
-        error = function(e) {
-          logErrorThenStop(e)
-        }
-      )
+        })
     }
   )
 )

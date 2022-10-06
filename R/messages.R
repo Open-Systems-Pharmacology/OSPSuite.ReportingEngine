@@ -305,36 +305,5 @@ removeHighlight <- function(text) {
   if (!requireNamespace("crayon", quietly = TRUE)) {
     return(text)
   }
-  # Hard coding results of
-  # strsplit(highlight(" "), split = " ")[[1]]
-  # to prevent any bug from highlight and strsplit
-  highlightLeft <- "\033[36m\033[1m\033[3m"
-  highlightRight <- "\033[23m\033[22m\033[39m"
-
-  # Use tryCatch, in case of error returning the initial text
-  newText <- tryCatch(
-    {
-      # gsub uses argument fixed and useBytes
-      # to make sure only highlight wrapping is removed
-      newText <- gsub(
-        pattern = highlightLeft,
-        x = as.character(text),
-        replacement = "",
-        fixed = TRUE,
-        useBytes = TRUE
-      )
-      newText <- gsub(
-        pattern = highlightRight,
-        x = newText,
-        replacement = "",
-        fixed = TRUE,
-        useBytes = TRUE
-      )
-      return(newText)
-    },
-    error = function(e) {
-      return(text)
-    }
-  )
-  return(newText)
+  return(crayon::strip_style(text))
 }
