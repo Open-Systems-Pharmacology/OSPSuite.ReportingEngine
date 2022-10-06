@@ -177,16 +177,26 @@ logCatch <- function(expr) {
           grepl(warningCondition$message, pattern = pattern)
         }
       ))
+      # invokeRestart("muffleWarning") prevents the unwanted  display of the message
+      # as an actual warning written in red on the console
+      # However, if the restart is not found, this ends up with an error
+      # tryInvokeRestart could have been used instead but appeared only on R.version 4.0.0
       if(callNotDisplayed){
         logDebug(warningCondition$message)
-        tryInvokeRestart("muffleWarning")
+        try({invokeRestart("muffleWarning")})
         return(invisible())
       }
       logError(warningCondition$message)
-      tryInvokeRestart("muffleWarning")
+      try({invokeRestart("muffleWarning")})
+      return(invisible())
     }
   ),
   error = function(errorCondition) {
+    # Equivalent to stop, but display of error is prettier in rlang
+    # and allows better tracing options
+    if (requireNamespace("rlang", quietly = TRUE)) {
+      rlang::abort(errorCondition$message, call. = FALSE)
+    }
     stop(errorCondition$message, call. = FALSE)
   }
   )
