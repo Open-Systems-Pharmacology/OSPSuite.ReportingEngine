@@ -70,14 +70,14 @@ captions <- list(
     },
     resHisto = function(simulationSetName, descriptor, dataSource, plotScale = ResidualScales$Linear) {
       dataSourceText <- ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
-      return(paste0(plotScale, " residuals distribution for ", reportSimulationSet(simulationSetName, descriptor), dataSourceText, "."))
+      return(paste0(plotScale, " residuals distribution (stacked) for ", reportSimulationSet(simulationSetName, descriptor), dataSourceText, "."))
     },
     resQQPlot = function(simulationSetName, descriptor, dataSource, plotScale = ResidualScales$Linear) {
       dataSourceText <- ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
       return(paste0(plotScale, " residuals for ", reportSimulationSet(simulationSetName, descriptor), dataSourceText, "."))
     },
     histogram = function(simulationSetName, descriptor) {
-      paste0("Distribution of residuals for ", reportSimulationSet(simulationSetName, descriptor), ".")
+      paste0("Distribution (stacked) of residuals for ", reportSimulationSet(simulationSetName, descriptor), ".")
     },
     qqPlot = function(simulationSetName, descriptor) {
       paste0("Residuals for ", reportSimulationSet(simulationSetName, descriptor), " as quantile-quantile plot.")
