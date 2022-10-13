@@ -1006,8 +1006,6 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
       )
     }
 
-    timeProfilePlotLog <- tlf::setYAxis(plotObject = timeProfilePlot, scale = tlf::Scaling$log)
-
     goodnessOfFitPlots[[paste0("timeProfile-", selectedDimension)]] <- timeProfilePlot
     goodnessOfFitPlots[[paste0("timeProfileLog-", selectedDimension)]] <- timeProfilePlotLog
 
