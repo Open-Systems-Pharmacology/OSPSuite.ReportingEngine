@@ -530,34 +530,45 @@ plotMeanTimeProfile <- function(simulatedData,
                                 metaData = NULL,
                                 dataMapping = NULL,
                                 plotConfiguration = NULL) {
-  simulatedDataMapping <- tlf::TimeProfileDataMapping$new(
-    x = dataMapping$x,
+  
+  dataMapping <- tlf::XYGDataMapping$new(
+    x = dataMapping$x, 
     y = dataMapping$y,
-    group = dataMapping$group
+    color = dataMapping$group
   )
-  observedDataMapping <- tlf::ObservedDataMapping$new(
-    x = dataMapping$x,
-    y = dataMapping$y,
-    group = dataMapping$group
-  )
-
   plotConfiguration <- plotConfiguration %||%
     TimeProfilePlotConfiguration$new(
       data = simulatedData,
       metaData = metaData,
-      dataMapping = simulatedDataMapping
+      dataMapping = dataMapping
     )
-  plotConfiguration <- updatePlotConfigurationTimeTicks(simulatedData, metaData, simulatedDataMapping, plotConfiguration)
-
-  timeProfilePlot <- tlf::plotTimeProfile(
+  plotConfiguration <- updatePlotConfigurationTimeTicks(simulatedData, metaData, dataMapping, plotConfiguration)
+  
+  timeProfilePlot <- tlf::addLine(
     data = simulatedData,
     metaData = metaData,
-    dataMapping = simulatedDataMapping,
-    observedData = rbind.data.frame(observedData, lloqData),
-    observedDataMapping = observedDataMapping,
+    dataMapping = dataMapping,
     plotConfiguration = plotConfiguration
   )
-
+  if (!isEmpty(observedData)) {
+    timeProfilePlot <- tlf::addScatter(
+      data = observedData,
+      metaData = metaData,
+      dataMapping = dataMapping,
+      plotConfiguration = plotConfiguration,
+      plotObject = timeProfilePlot
+    )
+  }
+  if (!isEmpty(lloqData)) {
+    timeProfilePlot <- tlf::addLine(
+      data = lloqData,
+      metaData = metaData,
+      dataMapping = dataMapping,
+      plotConfiguration = plotConfiguration,
+      plotObject = timeProfilePlot
+    )
+  }
+  timeProfilePlot <- tlf::setLegendPosition(plotObject = timeProfilePlot, position = reDefaultLegendPosition)
   return(timeProfilePlot)
 }
 
@@ -644,41 +655,63 @@ plotPopulationTimeProfile <- function(simulatedData,
   observedData <- removeMissingValues(observedData, dataMapping$y)
   lloqData <- removeMissingValues(lloqData, dataMapping$y)
   
-  # metaData needs to be transferred to ymin and ymax
+  # metaData needs to be transfered to ymin and ymax
   # so that y label shows dimension [unit] by default
   metaData$x <- metaData$Time
   metaData$ymin <- metaData$Concentration
   metaData$ymax <- metaData$Concentration
-
+  
   simulatedDataMapping <- tlf::TimeProfileDataMapping$new(
-    x = dataMapping$x,
+    x = dataMapping$x, 
     y = dataMapping$y,
     ymin = dataMapping$ymin,
     ymax = dataMapping$ymax,
     group = dataMapping$group
   )
-  observedDataMapping <- tlf::ObservedDataMapping$new(
-    x = dataMapping$x,
+  observedDataMapping <- tlf::XYGDataMapping$new(
+    x = dataMapping$x, 
     y = dataMapping$y,
-    group = dataMapping$group
+    color = dataMapping$group
   )
-
   plotConfiguration <- plotConfiguration %||%
     TimeProfilePlotConfiguration$new(
       data = simulatedData,
       metaData = metaData,
       dataMapping = simulatedDataMapping
     )
-  plotConfiguration <- updatePlotConfigurationTimeTicks(simulatedData, metaData, simulatedDataMapping, plotConfiguration)
-
-  timeProfilePlot <- tlf::plotTimeProfile(
+  plotConfiguration <- updatePlotConfigurationTimeTicks(simulatedData, metaData, dataMapping, plotConfiguration)
+  
+  timeProfilePlot <- tlf::addRibbon(
     data = simulatedData,
     metaData = metaData,
     dataMapping = simulatedDataMapping,
-    observedData = rbind.data.frame(observedData, lloqData),
-    observedDataMapping = observedDataMapping,
     plotConfiguration = plotConfiguration
   )
+  timeProfilePlot <- tlf::addLine(
+    data = simulatedData,
+    metaData = metaData,
+    dataMapping = simulatedDataMapping,
+    plotObject = timeProfilePlot
+  )
+  if (!isEmpty(observedData)) {
+    timeProfilePlot <- tlf::addScatter(
+      data = observedData,
+      metaData = metaData,
+      dataMapping = observedDataMapping,
+      plotConfiguration = plotConfiguration,
+      plotObject = timeProfilePlot
+    )
+  }
+  if (!isEmpty(lloqData)) {
+    timeProfilePlot <- tlf::addLine(
+      data = lloqData,
+      metaData = metaData,
+      dataMapping = observedDataMapping,
+      plotConfiguration = plotConfiguration,
+      plotObject = timeProfilePlot
+    )
+  }
+  timeProfilePlot <- tlf::setLegendPosition(plotObject = timeProfilePlot, position = reDefaultLegendPosition)
   
   return(timeProfilePlot)
 }
@@ -736,7 +769,6 @@ plotPopulationTimeProfileLog <- function(simulatedData,
     dataMapping = dataMapping,
     plotConfiguration = NULL
   )
-
   populationTimeProfile <- tlf::setYAxis(
     populationTimeProfile,
     scale = tlf::Scaling$log,
@@ -1005,8 +1037,6 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
         plotConfiguration = settings$plotConfigurations[["timeProfileLog"]]
       )
     }
-
-    timeProfilePlotLog <- tlf::setYAxis(plotObject = timeProfilePlot, scale = tlf::Scaling$log)
 
     goodnessOfFitPlots[[paste0("timeProfile-", selectedDimension)]] <- timeProfilePlot
     goodnessOfFitPlots[[paste0("timeProfileLog-", selectedDimension)]] <- timeProfilePlotLog
