@@ -328,8 +328,8 @@ getStatisticsFromType <- function(statisticsType){
   #TODO : define geometric mean in tlf !
   return(list(
     y = "geomean",
-    ymin = "geomean/sd",
-    ymax = "geomean*sd",
+    ymin = "geomeanDividedBySD",
+    ymax = "geomeanMultipliedBySD",
     yCaption = "geometric mean",
     # The unicode character below is supposed to be */ symbol
     rangeCaption = "mean \u22c7 geometric SD range"

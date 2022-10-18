@@ -31,26 +31,26 @@ geomean <- function(x, na.rm = TRUE) {
   exp(mean(logX, na.rm = na.rm))
 }
 
-#' @title geomean*sd
+#' @title geomeanMultipliedBySD
 #' @description
 #' Calculate the geometric mean * geometric SD
 #' @param x values
 #' @param na.rm logical defining removal of `NA` values
 #' @return Geometric mean * geometric SD
 #' @export
-`geomean*sd` <- function(x, na.rm = TRUE) {
+geomeanMultipliedBySD <- function(x, na.rm = TRUE) {
   logX <- log(x[x>0])
   exp(mean(logX, na.rm = na.rm)+stats::sd(logX, na.rm = na.rm))
 }
 
-#' @title geomean/sd
+#' @title geomeanDividedBySD
 #' @description
 #' Calculate the geometric mean / geometric SD
 #' @param x values
 #' @param na.rm logical defining removal of `NA` values
 #' @return Geometric mean / geometric SD
 #' @export
-`geomean/sd` <- function(x, na.rm = TRUE) {
+geomeanDividedBySD <- function(x, na.rm = TRUE) {
   logX <- log(x[x>0])
   exp(mean(logX, na.rm = na.rm)-stats::sd(logX, na.rm = na.rm))
 }
