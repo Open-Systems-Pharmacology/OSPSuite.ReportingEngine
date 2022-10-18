@@ -192,11 +192,6 @@ logCatch <- function(expr) {
     }
   ),
   error = function(errorCondition) {
-    # Equivalent to stop, but display of error is prettier in rlang
-    # and allows better tracing options
-    if (requireNamespace("rlang", quietly = TRUE)) {
-      rlang::abort(errorCondition$message, call. = FALSE)
-    }
     stop(errorCondition$message, call. = FALSE)
   }
   )
