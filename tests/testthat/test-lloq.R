@@ -1,3 +1,7 @@
+# since the previous test changed the default settings
+# reloading the package before this test aims at switching back to default settings
+library(ospsuite.reportingengine)
+
 context("Observed Data in plot time profile task")
 
 # Input files and structures for comparisons

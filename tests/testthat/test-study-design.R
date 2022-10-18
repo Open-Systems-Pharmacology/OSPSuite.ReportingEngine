@@ -104,7 +104,7 @@ test_that("Units and paths are checked and converted to base unit when loading a
   expect_s3_class(loadStudyDesign(studyDesignTempFile, testPopulation, testSimulation), "StudyDesign")
   expect_null(addStudyParameters(testPopulation, testSimulation, studyDesignTempFile))
   addStudyParameters(testPopulation, testSimulation, studyDesignTempFile)
-  populationData <- ospsuite::populationAsDataFrame(testPopulation)
+  populationData <- ospsuite::populationToDataFrame(testPopulation)
   # Base unit gives 17 dm for target
   expect_equal(sum(populationData[, "Gender"] %in% 2), sum(populationData[, "Organism|Height"] %in% 17))
   unlink(studyDesignTempFile, recursive = TRUE)
@@ -149,17 +149,17 @@ test_that("An empty 'SOURCE' value means no condition constraint", {
 
   testPopulation <- ospsuite::loadPopulation(populationFile)
   addStudyParameters(testPopulation, testSimulation, studyDesignMinFile)
-  populationData <- ospsuite::populationAsDataFrame(testPopulation)
+  populationData <- ospsuite::populationToDataFrame(testPopulation)
   expect_equal(sum(populationData[, drugMassPath] %in% 5), nrow(populationData))
 
   testPopulation <- ospsuite::loadPopulation(populationFile)
   addStudyParameters(testPopulation, testSimulation, studyDesignMaxFile)
-  populationData <- ospsuite::populationAsDataFrame(testPopulation)
+  populationData <- ospsuite::populationToDataFrame(testPopulation)
   expect_equal(sum(populationData[, drugMassPath] %in% 5), nrow(populationData))
 
   testPopulation <- ospsuite::loadPopulation(populationFile)
   addStudyParameters(testPopulation, testSimulation, studyDesignEqualsFile)
-  populationData <- ospsuite::populationAsDataFrame(testPopulation)
+  populationData <- ospsuite::populationToDataFrame(testPopulation)
   expect_equal(sum(populationData[, drugMassPath] %in% 5), nrow(populationData))
 })
 
@@ -178,7 +178,7 @@ test_that("Source expression 'MIN' include only values >=", {
   testPopulation <- ospsuite::loadPopulation(populationFile)
   testSimulation <- ospsuite::loadSimulation(simulationFile)
   addStudyParameters(testPopulation, testSimulation, studyDesignMinFile)
-  populationData <- ospsuite::populationAsDataFrame(testPopulation)
+  populationData <- ospsuite::populationToDataFrame(testPopulation)
   expect_equal(sum(populationData[, drugMassPath] %in% 5), 42)
   expect_equal(sum(populationData[, drugMassPath] %in% NA), 58)
   expect_gte(min(populationData[populationData[, drugMassPath] %in% 5, "Organism|Weight"]), 50)
@@ -195,7 +195,7 @@ test_that("Source expression 'MAX' include only values <", {
   testPopulation <- ospsuite::loadPopulation(populationFile)
   testSimulation <- ospsuite::loadSimulation(simulationFile)
   addStudyParameters(testPopulation, testSimulation, studyDesignMaxFile)
-  populationData <- ospsuite::populationAsDataFrame(testPopulation)
+  populationData <- ospsuite::populationToDataFrame(testPopulation)
   expect_equal(sum(populationData[, drugMassPath] %in% 5), 58)
   expect_equal(sum(populationData[, drugMassPath] %in% NA), 42)
   expect_lte(max(populationData[populationData[, drugMassPath] %in% 5, "Organism|Weight"]), 50)
@@ -213,7 +213,7 @@ test_that("Source expression 'EQUALS' include only values >= and attribute corre
   testSimulation <- ospsuite::loadSimulation(simulationFile)
   addStudyParameters(testPopulation, testSimulation, studyDesignEqualsFile)
 
-  populationData <- ospsuite::populationAsDataFrame(testPopulation)
+  populationData <- ospsuite::populationToDataFrame(testPopulation)
   expect_equal(sum(populationData[, drugMassPath] %in% 5), 49)
   expect_equal(sum(populationData[, drugMassPath] %in% NA), 51)
   expect_equal(populationData[populationData[, drugMassPath] %in% 5, "Organism|Hematocrit"], rep(0.4, 49))
@@ -237,7 +237,7 @@ test_that("Source expressions constraints add up as &", {
 
   testPopulation <- ospsuite::loadPopulation(populationFile)
   addStudyParameters(testPopulation, testSimulation, studyDesignFile)
-  populationData <- ospsuite::populationAsDataFrame(testPopulation)
+  populationData <- ospsuite::populationToDataFrame(testPopulation)
 
   expect_equal(sum(populationData[, drugMassPath] %in% 5), 22)
   expect_equal(sum(populationData[, drugMassPath] %in% NA), 78)
@@ -246,7 +246,7 @@ test_that("Source expressions constraints add up as &", {
 
   testPopulation <- ospsuite::loadPopulation(populationFile)
   addStudyParameters(testPopulation, testSimulation, studyDesignNAFile)
-  populationData <- ospsuite::populationAsDataFrame(testPopulation)
+  populationData <- ospsuite::populationToDataFrame(testPopulation)
 
   expect_equal(sum(populationData[, drugMassPath] %in% 5), 0)
   expect_equal(sum(populationData[, drugMassPath] %in% NA), 100)
