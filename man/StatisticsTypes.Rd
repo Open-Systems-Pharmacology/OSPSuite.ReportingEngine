@@ -20,11 +20,6 @@ List of available statistic types summarizing data for time profile plots
 \item `"Arithmetic mean"` summarizes data using arithmetic mean and mean +/- standard deviation
 }
 }
-\examples{
-\dontrun{
-getStatisticsFromType(StatisticsTypes)
-}
-}
 \seealso{
 Other enum helpers: 
 \code{\link{AllAvailableTasks}},

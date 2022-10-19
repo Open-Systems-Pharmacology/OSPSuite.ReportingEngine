@@ -18,6 +18,7 @@ Get statistics
 }
 \examples{
 \dontrun{
-workflow$plotTime
+getStatisticsFromType(StatisticsTypes$`Arithmetic mean`)
 }
+
 }

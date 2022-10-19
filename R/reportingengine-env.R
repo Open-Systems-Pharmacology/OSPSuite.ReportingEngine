@@ -262,10 +262,6 @@ setDefaultAutoAxisLimitMargin <- function(margin) {
 #' 
 #' @export
 #' @family enum helpers
-#' @examples 
-#' \dontrun{
-#' getStatisticsFromType(StatisticsTypes)
-#' }
 StatisticsTypes <- enum(c(
   "2.5th-97.5th Percentiles",
   "5th-95th Percentiles",
@@ -283,8 +279,9 @@ StatisticsTypes <- enum(c(
 #' @export
 #' @examples 
 #' \dontrun{
-#' workflow$plotTime
+#' getStatisticsFromType(StatisticsTypes$`Arithmetic mean`)
 #' }
+#' 
 getStatisticsFromType <- function(statisticsType){
   validateIsIncluded(statisticsType, StatisticsTypes)
   if(isIncluded(statisticsType, StatisticsTypes$`2.5th-97.5th Percentiles`)){
