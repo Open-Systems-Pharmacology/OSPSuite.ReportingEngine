@@ -101,7 +101,11 @@ messages <- list(
     paste0(callingFunction(), "Expected a dimension. Check that '", paste0(values, collapse = "', '."), "' is included in ospsuite::allAvailableDimensions().")
   },
   invalidOuputPath = function(path, simName) {
-    paste0(callingFunction(), "'", path, "' is an invalid output path for simulation '", simName, "'.")
+    if(isOfLength(path,1)){
+      return(paste0(callingFunction(), "'", path, "' is an invalid output path for simulation '", simName, "'."))
+    }
+    paths <- paste0(path, collapse = "', '")
+    return(paste0(callingFunction(), "'", paths, "' are invalid output paths for simulation '", simName, "'."))
   },
   outsideRange = function(variableName, value, lowerBound, upperBound) {
     paste0(callingFunction(), variableName, " has value ", value, ", which lies outside the allowable range [", lowerBound, ",", upperBound, "].")

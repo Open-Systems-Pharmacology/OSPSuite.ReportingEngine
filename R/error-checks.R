@@ -226,7 +226,8 @@ validateIsPathInSimulation <- function(paths, simulation, nullAllowed = FALSE) {
   if (isPathInSimulation(paths, simulation)) {
     return(invisible())
   }
-  stop(messages$invalidOuputPath(paths, simulation$name))
+  invalidPaths <- paths[sapply(paths, function(path){!isPathInSimulation(path, simulation)})]
+  stop(messages$invalidOuputPath(invalidPaths, simulation$name))
 }
 
 validateOutputObject <- function(outputs, simulation, nullAllowed = FALSE) {

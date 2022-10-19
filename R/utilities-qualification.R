@@ -26,56 +26,58 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
   logInfo(paste0("Loading Simulations onto ", highlight("Qualification Workflow")))
   loadingProgress <- txtProgressBar(max = nrow(configurationPlan$simulationMappings), style = 3)
 
-  for (simulationIndex in 1:nrow(configurationPlan$simulationMappings)) {
-    project <- configurationPlan$simulationMappings$project[simulationIndex]
-    simulationName <- configurationPlan$simulationMappings$simulation[simulationIndex]
-    simulationSetName <- paste(project, configurationPlan$simulationMappings$simulationFile[simulationIndex], sep = "-")
-    simulationFile <- configurationPlan$getSimulationPath(project = project, simulation = simulationName)
-    validateFileExists(path = simulationFile)
-    populationFile <- configurationPlan$getPopulationPath(project = project, simulation = simulationName)
-    validateFileExists(path = populationFile, nullAllowed = TRUE)
+  logCatch({
+    for (simulationIndex in 1:nrow(configurationPlan$simulationMappings)) {
+      project <- configurationPlan$simulationMappings$project[simulationIndex]
+      simulationName <- configurationPlan$simulationMappings$simulation[simulationIndex]
+      simulationSetName <- paste(project, configurationPlan$simulationMappings$simulationFile[simulationIndex], sep = "-")
+      simulationFile <- configurationPlan$getSimulationPath(project = project, simulation = simulationName)
+      validateFileExists(path = simulationFile)
+      populationFile <- configurationPlan$getPopulationPath(project = project, simulation = simulationName)
+      validateFileExists(path = populationFile, nullAllowed = TRUE)
 
-    outputsDataframeSubset <- outputsDataframe[outputsDataframe$project == project & outputsDataframe$simulation == simulationName, ]
-    if (nrow(outputsDataframeSubset) == 0) {
-      next
-    }
+      outputsDataframeSubset <- outputsDataframe[outputsDataframe$project == project & outputsDataframe$simulation == simulationName, ]
+      if (nrow(outputsDataframeSubset) == 0) {
+        next
+      }
 
-    # Display messages about simulations to load
-    cat(paste0("\nLoading project '", highlight(project), "', and simulation '", highlight(simulationName), ".'\n"))
+      # Display messages about simulations to load
+      cat(paste0("\nLoading project '", highlight(project), "', and simulation '", highlight(simulationName), ".'\n"))
 
-    outputs <- lapply(unique(outputsDataframeSubset$outputPath), function(outputPath) {
-      Output$new(
-        path = as.character(outputPath),
-        pkParameters = outputsDataframeSubset$pkParameter[outputsDataframeSubset$outputPath == outputPath & !(is.na(outputsDataframeSubset$pkParameter))]
-      )
-    })
+      outputs <- lapply(unique(outputsDataframeSubset$outputPath), function(outputPath) {
+        Output$new(
+          path = as.character(outputPath),
+          pkParameters = outputsDataframeSubset$pkParameter[outputsDataframeSubset$outputPath == outputPath & !(is.na(outputsDataframeSubset$pkParameter))]
+        )
+      })
 
-    minimumSimulationEndTime <- NULL
-    if (any(!is.na(outputsDataframeSubset$endTime))) {
-      minimumSimulationEndTime <- max(outputsDataframeSubset$endTime, na.rm = TRUE)
-    }
+      minimumSimulationEndTime <- NULL
+      if (any(!is.na(outputsDataframeSubset$endTime))) {
+        minimumSimulationEndTime <- max(outputsDataframeSubset$endTime, na.rm = TRUE)
+      }
 
-    # simulationSetName defined as project-simulation uniquely identifies the simulation
-    if (!is.null(populationFile)) {
-      simulationSets <- c(simulationSets, PopulationSimulationSet$new(
+      # simulationSetName defined as project-simulation uniquely identifies the simulation
+      if (!is.null(populationFile)) {
+        simulationSets <- c(simulationSets, PopulationSimulationSet$new(
+          simulationSetName = simulationSetName,
+          simulationFile = simulationFile,
+          populationFile = populationFile,
+          outputs = c(outputs),
+          minimumSimulationEndTime = minimumSimulationEndTime
+        ))
+        next
+      }
+
+      simulationSets <- c(simulationSets, SimulationSet$new(
         simulationSetName = simulationSetName,
         simulationFile = simulationFile,
-        populationFile = populationFile,
         outputs = c(outputs),
         minimumSimulationEndTime = minimumSimulationEndTime
       ))
-      next
+      # Update progress bar after each simulation is loaded
+      setTxtProgressBar(loadingProgress, value = simulationIndex)
     }
-
-    simulationSets <- c(simulationSets, SimulationSet$new(
-      simulationSetName = simulationSetName,
-      simulationFile = simulationFile,
-      outputs = c(outputs),
-      minimumSimulationEndTime = minimumSimulationEndTime
-    ))
-    # Update progress bar after each simulation is loaded
-    setTxtProgressBar(loadingProgress, value = simulationIndex)
-  }
+  })
   close(loadingProgress)
   logInfo(messages$runCompleted(getElapsedTime(t0), "Simulations loading"))
 
