@@ -332,7 +332,7 @@ getStatisticsFromType <- function(statisticsType){
     ymax = "geomeanMultipliedBySD",
     yCaption = "geometric mean",
     # The unicode character below is supposed to be */ symbol
-    rangeCaption = "mean \u22c7 geometric SD range"
+    rangeCaption = "mean */ geometric SD range"
   ))
 }
 
