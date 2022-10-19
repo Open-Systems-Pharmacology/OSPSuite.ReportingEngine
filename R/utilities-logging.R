@@ -143,7 +143,7 @@ logCatch <- function(expr) {
         textCall <- deparse(call, nlines = 1)
 
         callNotDisplayed <- any(sapply(
-          c("logCatch", "tryCatch", "withCallingHandlers", "simpleError"),
+          c("logCatch", "tryCatch", "withCallingHandlers", "simpleError", "eval\\(ei, envir\\)"),
           FUN = function(pattern) {
             grepl(textCall, pattern = pattern, ignore.case = TRUE)
           }

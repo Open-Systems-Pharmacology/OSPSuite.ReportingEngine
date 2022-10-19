@@ -11,7 +11,14 @@ getOutputsFromConfigurationPlan <- function(configurationPlan) {
   outputsDDI <- getDDIOutputsDataframe(configurationPlan)
   outputsPKRatio <- getPKRatioOutputsDataframe(configurationPlan)
 
-  outputs <- rbind.data.frame(outputsTimeProfile, outputsComparisonTimeProfile, outputsGOF, outputsDDI, outputsPKRatio, stringsAsFactors = FALSE)
+  outputs <- rbind.data.frame(
+    outputsTimeProfile,
+    outputsComparisonTimeProfile,
+    outputsGOF,
+    outputsDDI,
+    outputsPKRatio,
+    stringsAsFactors = FALSE
+  )
 
   return(outputs[!duplicated(outputs), ])
 }
@@ -25,8 +32,9 @@ getTimeProfileOutputsDataframe <- function(configurationPlan) {
   timeProfileOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$TimeProfile) {
     validateIsIncluded(values = "Plot", parentValues = names(plot), nullAllowed = TRUE)
-
     # Accounts for paths of both mean and pop time profiles
+    # If population, paths is directly QuantityPath and Curves is NULL
+    # If mean, paths from QuantityPath is NULL and increases using Curves coming from same simulation
     paths <- plot$Plot$Analysis$Fields[[1]]$QuantityPath
     for (curve in plot$Plot$Curves) {
       if (isObservedData(curve$Y)) {
@@ -34,16 +42,19 @@ getTimeProfileOutputsDataframe <- function(configurationPlan) {
       }
       paths <- c(paths, ospsuite::toPathString(tail(ospsuite::toPathArray(curve$Y), -1)))
     }
-    df <- data.frame(
-      project = plot$Project,
-      simulation = plot$Simulation,
-      outputPath = paths,
-      pkParameter = NA,
-      startTime = NA,
-      endTime = NA,
+    timeProfileOutputsDataframe <- rbind.data.frame(
+      timeProfileOutputsDataframe,
+      data.frame(
+        project = plot$Project,
+        simulation = plot$Simulation,
+        outputPath = paths,
+        pkParameter = NA,
+        startTime = NA,
+        endTime = NA,
+        stringsAsFactors = FALSE
+      ),
       stringsAsFactors = FALSE
     )
-    timeProfileOutputsDataframe <- rbind.data.frame(timeProfileOutputsDataframe, df, stringsAsFactors = FALSE)
   }
   return(timeProfileOutputsDataframe[!duplicated(timeProfileOutputsDataframe), ])
 }
@@ -58,16 +69,19 @@ getComparisonTimeProfileOutputsDataframe <- function(configurationPlan) {
   for (plot in configurationPlan$plots$ComparisonTimeProfilePlots) {
     paths <- NULL
     for (outputMapping in plot$OutputMappings) {
-      df <- data.frame(
-        project = outputMapping$Project,
-        simulation = outputMapping$Simulation,
-        outputPath = outputMapping$Output,
-        pkParameter = NA,
-        startTime = NA,
-        endTime = NA,
+      comparisonTimeProfileOutputsDataframe <- rbind.data.frame(
+        comparisonTimeProfileOutputsDataframe,
+        data.frame(
+          project = outputMapping$Project,
+          simulation = outputMapping$Simulation,
+          outputPath = outputMapping$Output,
+          pkParameter = NA,
+          startTime = NA,
+          endTime = NA,
+          stringsAsFactors = FALSE
+        ),
         stringsAsFactors = FALSE
       )
-      comparisonTimeProfileOutputsDataframe <- rbind.data.frame(comparisonTimeProfileOutputsDataframe, df, stringsAsFactors = FALSE)
     }
   }
   return(comparisonTimeProfileOutputsDataframe[!duplicated(comparisonTimeProfileOutputsDataframe), ])
@@ -88,17 +102,19 @@ getGOFOutputsDataframe <- function(configurationPlan) {
       for (outputMapping in group$OutputMappings) {
         validateIsIncluded(values = "Output", parentValues = names(outputMapping), nullAllowed = TRUE)
         validateIsString(object = outputMapping$Output)
-        paths <- c(paths, outputMapping$Output)
-        df <- data.frame(
-          project = outputMapping$Project,
-          simulation = outputMapping$Simulation,
-          outputPath = paths,
-          pkParameter = NA,
-          startTime = NA,
-          endTime = NA,
+        gofOutputsDataframe <- rbind.data.frame(
+          gofOutputsDataframe,
+          data.frame(
+            project = outputMapping$Project,
+            simulation = outputMapping$Simulation,
+            outputPath = outputMapping$Output,
+            pkParameter = NA,
+            startTime = NA,
+            endTime = NA,
+            stringsAsFactors = FALSE
+          ),
           stringsAsFactors = FALSE
         )
-        gofOutputsDataframe <- rbind.data.frame(gofOutputsDataframe, df, stringsAsFactors = FALSE)
       }
     }
   }
