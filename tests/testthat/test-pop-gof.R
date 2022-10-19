@@ -1,3 +1,6 @@
+# reload the package before this test to ensure default settings are used
+library(ospsuite.reportingengine)
+
 context("Run population workflows with Time Profiles and Residuals task")
 
 simulationFile <- getTestDataFilePath("input-data/MiniModel2.pkml")
@@ -27,7 +30,7 @@ defineExpectedResidualsData <- parse(text = paste0(
 ))
 
 defineExpectedFigures <- parse(text = paste0(
-  "expectedFigures", scenarios, " <- ", c(rep(2, 4), 10, 10)
+  "expectedFigures", scenarios, " <- ", c(rep(2, 4), 8, 8)
 ))
 
 defineExpectedTables <- parse(text = paste0(
@@ -140,9 +143,11 @@ test_that("Saved time profile data and residuals includes the correct data", {
         list.files(timeProfileResultsFolder, pattern = "simulated", full.names = TRUE)
       )
     )
+    # Check only values to prevent issues with system differences in 
+    # reading unicode characters
     testTimeProfileDataExpression <- parse(text = paste0(
-      "expect_equal(actualTimeProfileData, ",
-      "readObservedDataFile(expectedTimeProfileData", scenario, "),",
+      "expect_equal(actualTimeProfileData[,1:2], ",
+      "readObservedDataFile(expectedTimeProfileData", scenario, ")[,1:2],",
       "tolerance = comparisonTolerance())"
     ))
     eval(testTimeProfileDataExpression)
@@ -161,8 +166,8 @@ test_that("Saved time profile data and residuals includes the correct data", {
       )
     )
     testResidualsDataExpression <- parse(text = paste0(
-      "expect_equal(actualResidualsData, ",
-      "readObservedDataFile(expectedResidualsData", scenario, "),",
+      "expect_equal(actualResidualsData[,1:2], ",
+      "readObservedDataFile(expectedResidualsData", scenario, ")[,1:2],",
       "tolerance = comparisonTolerance())"
     ))
     eval(testTimeProfileDataExpression)

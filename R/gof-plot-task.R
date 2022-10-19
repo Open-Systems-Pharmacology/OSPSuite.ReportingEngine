@@ -178,9 +178,13 @@ GofPlotTask <- R6::R6Class(
           if (isEmpty(taskResults[["residuals"]])) {
             next
           }
-          residualsInSimulation <- taskResults$residuals$data
-          residualsMetaData <- taskResults$residuals$metaData
-          residualsInSimulation$Legend <- set$simulationSet$simulationSetName
+          residualsInSimulation <- taskResults$residuals
+          # Update residuals data for residuals accross all simulations
+          residualsInSimulation$Legend <- reportSimulationSet(
+            simulationSetName = set$simulationSet$simulationSetName,
+            descriptor = set$simulationSetDescriptor
+          )
+
           residualsAcrossAllSimulations <- rbind.data.frame(
             residualsAcrossAllSimulations,
             residualsInSimulation
@@ -188,7 +192,13 @@ GofPlotTask <- R6::R6Class(
         }
       }
 
-      if (isEmpty(residualsAcrossAllSimulations)) {
+      # Conditions where residuals across all simulations are not reported
+      noResidualsAcrossAllSimulations <- any(
+        isOfLength(structureSets, 1),
+        isEmpty(residualsAcrossAllSimulations)
+      )
+
+      if (noResidualsAcrossAllSimulations) {
         re.tEndAction(actionToken = actionToken)
         logInfo(messages$runCompleted(getElapsedTime(t0), self$message))
         return(invisible())
@@ -197,7 +207,6 @@ GofPlotTask <- R6::R6Class(
       residualsResults <- self$getResidualsResults(
         structureSets = structureSets,
         data = residualsAcrossAllSimulations,
-        metaData = residualsMetaData,
         settings = self$settings
       )
       self$saveResidualsResults(residualsResults)
@@ -210,10 +219,9 @@ GofPlotTask <- R6::R6Class(
     #' Get plot results for residuals across all simulations
     #' @param structureSets A list of `SimulationStructure` objects defining the properties of a simulation set
     #' @param data data.frame
-    #' @param metaData meta data on `data`
     #' @param settings List of settings such as `PlotConfiguration` R6 class objects for each goodness of fit plot
     #' @return A list of `TaskResults` objects
-    getResidualsResults = function(structureSets, data, metaData, settings) {
+    getResidualsResults = function(structureSets, data, settings) {
       residualsResults <- list()
       simulationSetNames <- sapply(structureSets, function(set) {
         set$simulationSet$simulationSetName
@@ -230,57 +238,250 @@ GofPlotTask <- R6::R6Class(
         includeTable = FALSE
       )
 
-      # Plot the residuals across the simulations
-      resultID <- defaultFileNames$resultID(
-        "residuals-across-all-simulations-histogram"
+      # Get all unique output paths
+      # TODO: group them by unique ID once introduced
+      allOutputs <- sapply(
+        structureSets,
+        FUN = function(set) {
+          set$simulationSet$outputs
+        }
       )
+      allOutputPaths <- sapply(
+        allOutputs,
+        FUN = function(output) {
+          output$path
+        }
+      )
+      allOutputs <- allOutputs[!duplicated(allOutputPaths)]
 
-      residualsHistogramPlot <- tlf::plotHistogram(
-        data = data,
-        metaData = metaData,
-        dataMapping = tlf::HistogramDataMapping$new(
-          x = "Residuals",
-          fill = "Legend",
-          stack = TRUE,
-          distribution = "normal"
-        ),
-        plotConfiguration = settings$plotConfigurations[["histogram"]],
-        bins = settings$bins %||% reEnv$defaultBins
-      )
-      residualsHistogramPlot <- tlf::setPlotLabels(
-        residualsHistogramPlot,
-        ylabel = reEnv$residualsHistogramLabel
-      )
+      # Plot the residuals across the simulations by output path
+      for (output in allOutputs) {
+        Legend <- "Residuals\nlog(Observed)-log(Simulated)"
+        if (isIncluded(output$residualScale, ResidualScales$Logarithmic)) {
+          Legend <- "Residuals\nObserved-Simulated"
+        }
+        residualsMetaData <- list(
+          "Time" = list(dimension = "Time", unit = structureSets[[1]]$simulationSet$timeUnit),
+          "Observed" = list(dimension = "Observed data", unit = output$displayUnit),
+          "Simulated" = list(dimension = "Simulated value", unit = output$displayUnit),
+          "Residuals" = list(unit = "", dimension = Legend)
+        )
+        
+        outputData <- data[data$Path %in% output$path, ]
+        if(isEmpty(outputData)){
+          next
+        }
 
-      residualsResults[[resultID]] <- saveTaskResults(
-        id = resultID,
-        plot = residualsHistogramPlot,
-        plotCaption = captions$plotGoF$histogram(simulationSetNames, simulationSetDescriptor)
-      )
+        # Obs vs pred
+        obsVsPredPlot <- tlf::plotObsVsPred(
+          data = outputData,
+          metaData = residualsMetaData,
+          dataMapping = tlf::ObsVsPredDataMapping$new(
+            x = "Observed",
+            y = "Simulated",
+            group = "Legend"
+          ),
+          plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
+        )
 
-      resultID <- defaultFileNames$resultID(
-        "residuals-across-all-simulations-qq-plot"
-      )
+        resultID <- defaultFileNames$resultID(
+          "residuals-across-all-simulations",
+          length(residualsResults),
+          "obsVsPred",
+          output$path
+        )
+        residualsResults[[resultID]] <- saveTaskResults(
+          id = resultID,
+          plot = obsVsPredPlot,
+          plotCaption = captions$plotGoF$obsVsPred(
+            simulationSetName = simulationSetNames,
+            descriptor = simulationSetDescriptor,
+            pathName = output$displayName
+          )
+        )
 
-      residualsQQPlot <- tlf::plotQQ(
-        data = data,
-        metaData = metaData,
-        dataMapping = tlf::QQDataMapping$new(
-          y = "Residuals",
-          group = "Legend"
-        ),
-        plotConfiguration = settings$plotConfigurations[["qqPlot"]]
-      )
-      residualsQQPlot <- tlf::setPlotLabels(
-        residualsQQPlot,
-        ylabel = reEnv$residualsQQLabel
-      )
+        # Obs vs Pred log scale
+        selectedLogData <- outputData$Simulated > 0 & outputData$Observed > 0
+        if (sum(selectedLogData) > 0) {
+          obsVsPredRange <- autoAxesLimits(c(
+            data$Simulated[selectedLogData & data$Path %in% output$path],
+            data$Observed[selectedLogData & data$Path %in% output$path]
+          ),
+          scale = "log"
+          )
+          obsVsPredBreaks <- autoAxesTicksFromLimits(obsVsPredRange)
 
-      residualsResults[[resultID]] <- saveTaskResults(
-        id = resultID,
-        plot = residualsQQPlot,
-        plotCaption = captions$plotGoF$qqPlot(simulationSetNames, simulationSetDescriptor)
-      )
+          obsVsPredPlotLog <- tlf::plotObsVsPred(
+            data = data[selectedLogData & data$Path %in% output$path, ],
+            metaData = residualsMetaData,
+            dataMapping = tlf::ObsVsPredDataMapping$new(
+              x = "Observed",
+              y = "Simulated",
+              group = "Legend"
+            ),
+            plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
+          )
+          obsVsPredPlotLog <- tlf::setXAxis(
+            plotObject = obsVsPredPlotLog,
+            scale = tlf::Scaling$log,
+            limits = obsVsPredRange,
+            ticks = obsVsPredBreaks
+          )
+          obsVsPredPlotLog <- tlf::setYAxis(
+            plotObject = obsVsPredPlotLog,
+            scale = tlf::Scaling$log,
+            limits = obsVsPredRange,
+            ticks = obsVsPredBreaks
+          )
+
+          resultID <- defaultFileNames$resultID(
+            "residuals-across-all-simulations",
+            length(residualsResults),
+            "obsVsPredLog",
+            output$path
+          )
+          residualsResults[[resultID]] <- saveTaskResults(
+            id = resultID,
+            plot = obsVsPredPlotLog,
+            plotCaption = captions$plotGoF$obsVsPred(
+              simulationSetName = simulationSetNames,
+              descriptor = simulationSetDescriptor,
+              plotScale = "logarithmic",
+              pathName = output$displayName
+            )
+          )
+        }
+
+        # Res vs pred
+        resVsPredPlot <- tlf::plotResVsPred(
+          data = outputData,
+          metaData = residualsMetaData,
+          dataMapping = tlf::ResVsPredDataMapping$new(
+            x = "Simulated",
+            y = "Residuals",
+            group = "Legend"
+          ),
+          plotConfiguration = settings$plotConfigurations[["resVsPred"]]
+        )
+
+        resultID <- defaultFileNames$resultID(
+          "residuals-across-all-simulations",
+          length(residualsResults),
+          "res-vs-pred"
+        )
+        residualsResults[[resultID]] <- saveTaskResults(
+          id = resultID,
+          plot = resVsPredPlot,
+          plotCaption = captions$plotGoF$resVsPred(
+            simulationSetName = simulationSetNames,
+            descriptor = simulationSetDescriptor,
+            plotScale = output$residualScale,
+            pathName = output$displayName
+          )
+        )
+
+        # Res vs time
+        residualTimeTicks <- getTimeTicksFromUnit(
+          residualsMetaData$Time$unit,
+          timeValues = data$Time
+        )
+        resVsTimePlot <- tlf::plotResVsTime(
+          data = outputData,
+          metaData = residualsMetaData,
+          dataMapping = tlf::ResVsTimeDataMapping$new(
+            x = "Time",
+            y = "Residuals",
+            group = "Legend"
+          ),
+          plotConfiguration = settings$plotConfigurations[["resVsTime"]]
+        )
+        resVsTimePlot <- tlf::setXAxis(
+          plotObject = resVsTimePlot,
+          ticks = residualTimeTicks$ticks,
+          ticklabels = residualTimeTicks$ticklabels
+        )
+
+        resultID <- defaultFileNames$resultID(
+          "residuals-across-all-simulations",
+          length(residualsResults),
+          "res-vs-time"
+        )
+        residualsResults[[resultID]] <- saveTaskResults(
+          id = resultID,
+          plot = resVsTimePlot,
+          plotCaption = captions$plotGoF$resVsTime(
+            simulationSetName = simulationSetNames,
+            descriptor = simulationSetDescriptor,
+            plotScale = output$residualScale,
+            pathName = output$displayName
+          )
+        )
+
+        # Histogram
+        residualsHistogramPlot <- tlf::plotHistogram(
+          data = outputData,
+          metaData = residualsMetaData,
+          dataMapping = tlf::HistogramDataMapping$new(
+            x = "Residuals",
+            fill = "Legend",
+            stack = TRUE,
+            distribution = "normal"
+          ),
+          plotConfiguration = settings$plotConfigurations[["histogram"]],
+          bins = settings$bins %||% reEnv$defaultBins
+        )
+        residualsHistogramPlot <- tlf::setPlotLabels(
+          residualsHistogramPlot,
+          ylabel = reEnv$residualsHistogramLabel
+        )
+
+        resultID <- defaultFileNames$resultID(
+          "residuals-across-all-simulations",
+          length(residualsResults),
+          "histogram"
+        )
+        residualsResults[[resultID]] <- saveTaskResults(
+          id = resultID,
+          plot = residualsHistogramPlot,
+          plotCaption = captions$plotGoF$resHisto(
+            simulationSetName = simulationSetNames,
+            descriptor = simulationSetDescriptor,
+            plotScale = output$residualScale,
+            pathName = output$displayName
+          )
+        )
+
+        # QQ Plot
+        residualsQQPlot <- tlf::plotQQ(
+          data = outputData,
+          metaData = residualsMetaData,
+          dataMapping = tlf::QQDataMapping$new(
+            y = "Residuals",
+            group = "Legend"
+          ),
+          plotConfiguration = settings$plotConfigurations[["qqPlot"]]
+        )
+        residualsQQPlot <- tlf::setPlotLabels(
+          residualsQQPlot,
+          ylabel = reEnv$residualsQQLabel
+        )
+
+        resultID <- defaultFileNames$resultID(
+          "residuals-across-all-simulations",
+          length(residualsResults),
+          "qq-plot"
+        )
+        residualsResults[[resultID]] <- saveTaskResults(
+          id = resultID,
+          plot = residualsQQPlot,
+          plotCaption = captions$plotGoF$resQQPlot(
+            simulationSetName = simulationSetNames,
+            descriptor = simulationSetDescriptor,
+            plotScale = output$residualScale,
+            pathName = output$displayName
+          )
+        )
+      }
 
       return(residualsResults)
     }

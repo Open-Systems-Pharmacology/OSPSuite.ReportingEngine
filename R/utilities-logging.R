@@ -172,7 +172,9 @@ logCatch <- function(expr) {
         c("Transformation introduced infinite values",
           "Each group consists of only one observation",
           "rows containing non-finite values",
-          "Ignoring unknown parameters"),
+          "Ignoring unknown parameters",
+          # warning thrown because of non-ASCII unicode characters
+          "mbcsToSbcs"),
         FUN = function(pattern) {
           grepl(warningCondition$message, pattern = pattern)
         }
@@ -192,11 +194,6 @@ logCatch <- function(expr) {
     }
   ),
   error = function(errorCondition) {
-    # Equivalent to stop, but display of error is prettier in rlang
-    # and allows better tracing options
-    if (requireNamespace("rlang", quietly = TRUE)) {
-      rlang::abort(errorCondition$message, call. = FALSE)
-    }
     stop(errorCondition$message, call. = FALSE)
   }
   )

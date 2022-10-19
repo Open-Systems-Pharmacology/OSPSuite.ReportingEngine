@@ -17,6 +17,44 @@ calculateResiduals <- function(simulatedData, observedData, residualScale) {
   }
 }
 
+# TODO: add these functions to tlf
+
+#' @title geomean
+#' @description
+#' Calculate the geometric mean
+#' @param x values
+#' @param na.rm logical defining removal of `NA` values
+#' @return Geometric mean
+#' @export
+geomean <- function(x, na.rm = TRUE) {
+  logX <- log(x[x>0])
+  exp(mean(logX, na.rm = na.rm))
+}
+
+#' @title geomeanMultipliedBySD
+#' @description
+#' Calculate the geometric mean * geometric SD
+#' @param x values
+#' @param na.rm logical defining removal of `NA` values
+#' @return Geometric mean * geometric SD
+#' @export
+geomeanMultipliedBySD <- function(x, na.rm = TRUE) {
+  logX <- log(x[x>0])
+  exp(mean(logX, na.rm = na.rm)+stats::sd(logX, na.rm = na.rm))
+}
+
+#' @title geomeanDividedBySD
+#' @description
+#' Calculate the geometric mean / geometric SD
+#' @param x values
+#' @param na.rm logical defining removal of `NA` values
+#' @return Geometric mean / geometric SD
+#' @export
+geomeanDividedBySD <- function(x, na.rm = TRUE) {
+  logX <- log(x[x>0])
+  exp(mean(logX, na.rm = na.rm)-stats::sd(logX, na.rm = na.rm))
+}
+
 #' @title calculateGeometricErrorRange
 #' @param values Numeric values of the geometric mean
 #' @param errorValues Numeric values of the geometric error
@@ -204,6 +242,9 @@ replaceInfWithNA <- function(data) {
 #' @return filtered data.frame
 #' @keywords internal
 removeMissingValues <- function(data, dataMapping = NULL) {
+  if(isEmpty(data)){
+    return(data)
+  }
   data[, dataMapping] <- replaceInfWithNA(data[, dataMapping])
   naData <- is.na(data[, dataMapping])
   Nna <- sum(naData)
@@ -211,6 +252,25 @@ removeMissingValues <- function(data, dataMapping = NULL) {
 
   if (Nna > 0) {
     logDebug(paste0(Nna, " values were missing (NA) from variable '", dataMapping, "' and removed from the analysis"))
+  }
+  return(data)
+}
+
+#' @title removeNegativeValues
+#' @param data data.frame
+#' @param dataMapping name of variable on which the missing values ar checked
+#' @return filtered data.frame
+#' @keywords internal
+removeNegativeValues <- function(data, dataMapping = NULL) {
+  if(isEmpty(data)){
+    return(data)
+  }
+  negativeData <- data[, dataMapping] <= 0
+  Nnegative <- sum(negativeData, na.rm = TRUE)
+  data <- data[!negativeData, ]
+  
+  if (Nnegative > 0) {
+    logDebug(paste0(Nnegative, " values from variable '", dataMapping, "' were negative and removed from the analysis"))
   }
   return(data)
 }

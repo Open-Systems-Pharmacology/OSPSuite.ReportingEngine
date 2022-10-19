@@ -277,6 +277,9 @@ messages <- list(
   },
   completedOnCores = function(objectNames) {
     paste0(objectNames, " successfully completed on all cores")
+  },
+  negativeDataRemoved = function(n) {
+    paste0(n, " negative or null values were removed from logarithmic plot")
   }
 )
 
