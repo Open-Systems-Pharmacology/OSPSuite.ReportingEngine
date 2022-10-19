@@ -30,7 +30,6 @@ plotQualificationGOFs <- function(configurationPlan, settings) {
       plotID <- defaultFileNames$resultID(length(gofResults) + 1, "gof_plot", plotType)
       axesProperties <- getAxesProperties(gofPlan$Axes[[plotType]]) %||% settings[[plotType]]$axes
 
-      print(gofPlan$Plot)
       gofPlot <- getQualificationGOFPlot(plotType, gofData$data, gofData$metaData, axesProperties, gofPlan[["PlotSettings"]])
       gofResults[[plotID]] <- saveTaskResults(
         id = plotID,
@@ -195,7 +194,6 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, pl
       shape = "Groups"
     )
   )
-  print(plotProperties)
   plotConfiguration <- getPlotConfigurationFromPlan(
     plotProperties,
     plotType = switch(plotType,
