@@ -58,7 +58,7 @@ reEnv$defaultPlotFormat <- list(
 reEnv$fontScaleFactor <- 2
 
 reEnv$workflowWatermarkMessage <- "preliminary analysis"
-reEnv$residualsHistogramLabel <- "Number of residuals"
+reEnv$residualsHistogramLabel <- "Relative frequency"
 reEnv$residualsQQLabel <- "Quantiles of residuals"
 
 # Default values for qualification pk ratio
