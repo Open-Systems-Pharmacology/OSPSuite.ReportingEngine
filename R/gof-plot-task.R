@@ -425,7 +425,8 @@ GofPlotTask <- R6::R6Class(
             x = "Residuals",
             fill = "Legend",
             stack = TRUE,
-            distribution = "normal"
+            distribution = "normal",
+            frequency = TRUE
           ),
           plotConfiguration = settings$plotConfigurations[["histogram"]],
           bins = settings$bins %||% reEnv$defaultBins

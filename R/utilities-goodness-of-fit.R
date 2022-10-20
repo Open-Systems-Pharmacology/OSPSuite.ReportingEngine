@@ -1223,7 +1223,8 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
       x = "Residuals",
       fill = "Legend",
       stack = TRUE,
-      distribution = "normal"
+      distribution = "normal",
+      frequency = TRUE
     ),
     plotConfiguration = settings$plotConfigurations[["resHisto"]],
     bins = settings$bins %||% reEnv$defaultBins
