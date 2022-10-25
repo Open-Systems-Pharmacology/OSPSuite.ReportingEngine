@@ -57,7 +57,6 @@ SimulationSet <- R6::R6Class(
       validateIsString(simulationFile)
       validateIsFileExtension(simulationFile, "pkml")
       validateIsString(c(observedDataFile, observedMetaDataFile, timeUnit), nullAllowed = TRUE)
-      validateIsOfType(dataSelection, c("character", "expression"), nullAllowed = TRUE)
       validateIsPositive(object = minimumSimulationEndTime, nullAllowed = TRUE)
       validateIsNumeric(timeOffset)
       # For optional input, usually null is allowed
@@ -82,20 +81,7 @@ SimulationSet <- R6::R6Class(
 
       self$observedDataFile <- observedDataFile
       self$observedMetaDataFile <- observedMetaDataFile
-      # If data selection is expression, use it as is
-      self$dataSelection <- dataSelection
-      # Ensure that dataFilter is of type expression
-      if (isOfType(self$dataSelection, "character")) {
-        # When concatenating, ALL won't be understood by dplyr
-        # Needs to be replaced by true to select all data
-        dataSelection[dataSelection %in% DataSelectionKeys$ALL] <- TRUE
-        # Concatenate selections using &
-        self$dataSelection <- paste(dataSelection, collapse = " & ")
-        # If any selection include None, do not select anything
-        if (isIncluded(DataSelectionKeys$NONE, dataSelection)) {
-          self$dataSelection <- FALSE
-        }
-      }
+      self$dataSelection <- translateDataSelection(dataSelection)
 
       self$timeUnit <- timeUnit %||% "h"
 

@@ -504,3 +504,25 @@ getObservedDataIdFromPath <- function(path) {
   pathArray <- ospsuite::toPathArray(path)
   return(pathArray[1])
 }
+
+#' @title translateDataSelection
+#' @description
+#' Translate `dataSelection` input by user into characters/expression understood by `getSelectedData`
+#' @param dataSelection characters or expression to select subset the observed data
+#' @return characters or expression to select subset the observed data
+translateDataSelection <- function(dataSelection){
+  validateIsOfType(dataSelection, c("character", "expression"), nullAllowed = TRUE)
+  if (!isOfType(dataSelection, "character")) {
+    return(dataSelection)
+  }
+  # If any selection include None, do not select anything
+  if (isIncluded(DataSelectionKeys$NONE, dataSelection)) {
+    return(FALSE)
+  }
+  # When concatenating, ALL won't be understood by dplyr
+  # Needs to be replaced by true to select all data
+  dataSelection[dataSelection %in% DataSelectionKeys$ALL] <- TRUE
+  # Concatenate selections using & and brackets
+  dataSelection <- paste(dataSelection, collapse = ") & (")
+  return(paste0("(", dataSelection, ")"))
+}

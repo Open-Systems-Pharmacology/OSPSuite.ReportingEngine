@@ -74,7 +74,6 @@ Output <- R6::R6Class(
       ifNotNull(displayUnit, validateIsOfLength(displayUnit, 1))
       ifNotNull(dataUnit, validateIsOfLength(dataUnit, 1))
       ifNotNull(dataDisplayName, validateIsOfLength(dataDisplayName, 1))
-      validateIsOfType(dataSelection, c("character", "expression"), nullAllowed = TRUE)
       validateIsOfType(c(pkParameters), c("character", "PkParameterInfo"), nullAllowed = TRUE)
 
       self$path <- path
@@ -84,20 +83,7 @@ Output <- R6::R6Class(
       self$dataDisplayName <- dataDisplayName %||% self$displayName
       self$residualScale <- residualScale
 
-      # If data selection is expression, use it as is
-      self$dataSelection <- dataSelection
-      # Ensure that dataFilter is of type expression
-      if (isOfType(self$dataSelection, "character")) {
-        # When concatenating, ALL won't be understood by dplyr
-        # Needs to be replaced by true to select all data
-        dataSelection[dataSelection %in% DataSelectionKeys$ALL] <- TRUE
-        # Concatenate selections using &
-        self$dataSelection <- paste(dataSelection, collapse = " & ")
-        # If any selection include None, do not select anything
-        if (isIncluded(DataSelectionKeys$NONE, dataSelection)) {
-          self$dataSelection <- FALSE
-        }
-      }
+      self$dataSelection <- translateDataSelection(dataSelection)
 
       self$pkParameters <- c(pkParameters)
       if (isOfType(self$pkParameters, "character")) {
