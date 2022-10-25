@@ -123,7 +123,7 @@ getSelectedData <- function(data, dataSelection) {
   if(isIncluded(dataSelection, DataSelectionKeys$ALL)){
     return(data)
   }
-  if(isIncluded(dataSelection, DataSelectionKeys$NONE)){
+  if(isIncluded(dataSelection, c(DataSelectionKeys$NONE, "", "()"))){
     return(data[FALSE,])
   }
   if(isOfType(dataSelection, "expression")){
@@ -170,7 +170,7 @@ getSelectedRows <- function(data, dataSelection) {
   if(isIncluded(dataSelection, DataSelectionKeys$ALL)){
     return(TRUE)
   }
-  if(isIncluded(dataSelection, DataSelectionKeys$NONE)){
+  if(isIncluded(dataSelection, c(DataSelectionKeys$NONE, "", "()"))){
     return(FALSE)
   }
   if(isOfType(dataSelection, "expression")){
@@ -519,6 +519,10 @@ translateDataSelection <- function(dataSelection){
   if (isIncluded(DataSelectionKeys$NONE, dataSelection)) {
     return(FALSE)
   }
+  # By removing "" string from dataSelection
+  # If "" is the only value provided, dataSelection isEmpty
+  # If multiple values provided, concatenate the remaining selections
+  dataSelection <- dataSelection[!(dataSelection %in% "")]
   # When concatenating, ALL won't be understood by dplyr
   # Needs to be replaced by true to select all data
   dataSelection[dataSelection %in% DataSelectionKeys$ALL] <- TRUE
