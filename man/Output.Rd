@@ -15,7 +15,7 @@ R6 class representing workflow output
 
 \item{\code{displayUnit}}{display unit for `path`}
 
-\item{\code{dataSelection}}{character or expression used to filter the observed data}
+\item{\code{dataSelection}}{character or expression used to select a subset of observed data}
 
 \item{\code{dataUnit}}{Unit of the observed data}
 
@@ -61,7 +61,9 @@ Create a new `Output` object.
 
 \item{\code{displayUnit}}{display unit for `path`}
 
-\item{\code{dataSelection}}{characters or expression to filter the observed data}
+\item{\code{dataSelection}}{characters or expression to select subset the observed data
+By default, no data is selected.
+When using a character array, selections are concatenated with the `&` sign}
 
 \item{\code{dataUnit}}{Unit of the observed data}
 
