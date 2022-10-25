@@ -36,7 +36,8 @@ Imports:
     R6,
     ggplot2,
     jsonlite,
-    ospsuite.utils (>= 1.3.0)
+    ospsuite.utils (>= 1.3.0),
+    dplyr
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
