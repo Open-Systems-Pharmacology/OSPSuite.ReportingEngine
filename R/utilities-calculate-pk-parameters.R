@@ -202,12 +202,23 @@ plotPopulationPKParameters <- function(structureSets,
         next
       }
 
+      # Define default plot configuration with rotate x-ticklabels
+      boxplotConfiguration <- tlf::BoxWhiskerPlotConfiguration$new(
+        data = pkParameterData,
+        metaData = pkParameterMetaData,
+        dataMapping = pkParametersMapping
+      )
+      boxplotConfiguration$labels$xlabel$text <- NULL
+      boxplotConfiguration$xAxis$font$angle <- 45
+      boxplotConfiguration <- settings$plotConfigurations[["boxplotPkParameters"]] %||%
+        boxplotConfiguration
+
       boxplotPkParameter <- tlf::plotBoxWhisker(
         data = pkParameterData,
         metaData = pkParameterMetaData,
         dataMapping = pkParametersMapping,
-        plotConfiguration = settings$plotConfigurations[["boxplotPkParameters"]]
-      ) + ggplot2::xlab(NULL)
+        plotConfiguration = boxplotConfiguration
+      )
 
       parameterCaption <- pkParameterMetaData$Value$dimension
 
@@ -341,11 +352,11 @@ plotPopulationPKParameters <- function(structureSets,
             pkParametersResults[[resultID]] <- saveTaskResults(
               id = resultID,
               plot = tlf::setYAxis(
-                plotObject = comparisonVpcPlot, 
+                plotObject = comparisonVpcPlot,
                 scale = tlf::Scaling$log,
                 limits = boxRange,
                 ticks = boxBreaks
-                ),
+              ),
               plotCaption = captions$plotPKParameters$rangePlot(
                 xParameterCaption,
                 yParameterCaption,
@@ -394,11 +405,11 @@ plotPopulationPKParameters <- function(structureSets,
           pkParametersResults[[resultID]] <- saveTaskResults(
             id = resultID,
             plot = tlf::setYAxis(
-              plotObject = vpcPlot, 
+              plotObject = vpcPlot,
               scale = tlf::Scaling$log,
               limits = boxRange,
               ticks = boxBreaks
-              ),
+            ),
             plotCaption = captions$plotPKParameters$rangePlot(
               xParameterCaption,
               yParameterCaption,
@@ -420,10 +431,20 @@ plotPopulationPKParameters <- function(structureSets,
         pkRatiosData[, c("ymin", "lower", "middle", "upper", "ymax")] <- pkRatiosTable[, c(3:7)]
         pkRatiosTable <- addDescriptorToTable(pkRatiosTable, simulationSetDescriptor)
 
+        ratioPlotConfiguration <- tlf::BoxWhiskerPlotConfiguration$new(
+          ylabel = paste0(
+            pkParameterMetaData$Value$dimension,
+            " [fraction of ", referenceSimulationSetName, "]"
+          )
+        )
+        ratioPlotConfiguration$xAxis$font$angle <- 45
+        ratioPlotConfiguration <- settings$plotConfigurations[["boxplotPkRatios"]] %||%
+          ratioPlotConfiguration
+
         boxplotPkRatios <- ratioBoxplot(
           data = pkRatiosData,
-          plotConfiguration = settings$plotConfigurations[["boxplotPkRatios"]]
-        ) + ggplot2::ylab(paste0(pkParameterMetaData$Value$dimension, " [fraction of ", referenceSimulationSetName, "]"))
+          plotConfiguration = ratioPlotConfiguration
+        )
 
         parameterCaption <- pkParameterMetaData$Value$dimension
 
@@ -484,13 +505,18 @@ plotPopulationPKParameters <- function(structureSets,
 #' @param plotConfiguration PlotConfiguration R6 class object
 #' @return ggplot object
 #' @export
-#' @import ospsuite
 #' @import tlf
 #' @import ggplot2
-#' @importFrom ospsuite.utils %||%
 ratioBoxplot <- function(data,
                          plotConfiguration = NULL) {
+  # TODO: create new molecule plot for this
   ratioPlot <- tlf::initializePlot(plotConfiguration)
+  aestheticValues <- tlf:::.getAestheticValuesFromConfiguration(
+    n = 1,
+    position = 0,
+    plotConfigurationProperty = ratioPlot$plotConfiguration$ribbons,
+    propertyNames = c("size", "alpha", "fill")
+  )
 
   ratioPlot <- ratioPlot +
     ggplot2::geom_boxplot(
@@ -504,11 +530,11 @@ ratioBoxplot <- function(data,
         ymax = "ymax"
       ),
       stat = "identity",
-      fill = "#999999",
-      alpha = 0.8,
-      size = 1
+      fill = aestheticValues$fill,
+      alpha = aestheticValues$alpha,
+      size = aestheticValues$size
     )
-  ratioPlot <- ratioPlot + ggplot2::xlab(NULL)
+  ratioPlot <- tlf:::.updateAxes(ratioPlot)
   return(ratioPlot)
 }
 
@@ -817,9 +843,9 @@ setXParametersForPKParametersPlot <- function(workflow, parameters) {
   workflow$plotPKParameters$xParameters <- parameters
 
   logDebug(paste0(
-    "X-parameters: '", paste0(c(parameters), collapse = "', '"), 
+    "X-parameters: '", paste0(c(parameters), collapse = "', '"),
     "' set for PK parameters plot."
-    ))
+  ))
   return(invisible())
 }
 
@@ -874,9 +900,9 @@ setYParametersForPKParametersPlot <- function(workflow, parameters) {
 
   for (output in c(parameters)) {
     logDebug(paste0(
-        "Y-parameters: '", paste0(c(output$pkParameters), collapse = "', '"),
-        "' for '", output$path, "' set for PK parameters plot."
-      ))
+      "Y-parameters: '", paste0(c(output$pkParameters), collapse = "', '"),
+      "' for '", output$path, "' set for PK parameters plot."
+    ))
   }
   return(invisible())
 }
