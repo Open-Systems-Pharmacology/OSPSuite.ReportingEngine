@@ -1135,7 +1135,11 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
       ),
       plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
     )
-
+    obsVsPredPlot <- setQuadraticDimension(
+      obsVsPredPlot, 
+      plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
+      )
+    
     goodnessOfFitPlots[[paste0("obsVsPred-", selectedDimension)]] <- obsVsPredPlot
     goodnessOfFitCaptions[[paste0("obsVsPred-", selectedDimension)]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred", "linear", settings)
 
@@ -1158,7 +1162,7 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
           y = "Simulated",
           group = "Legend"
         ),
-        plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
+        plotConfiguration = settings$plotConfigurations[["obsVsPredLog"]]
       )
       obsVsPredPlotLog <- tlf::setXAxis(
         plotObject = obsVsPredPlotLog,
@@ -1171,6 +1175,10 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
         scale = tlf::Scaling$log,
         limits = obsVsPredRange,
         ticks = obsVsPredBreaks
+      )
+      obsVsPredPlotLog <- setQuadraticDimension(
+        obsVsPredPlotLog, 
+        plotConfiguration = settings$plotConfigurations[["obsVsPredLog"]]
       )
 
       goodnessOfFitPlots[[paste0("obsVsPredLog-", selectedDimension)]] <- obsVsPredPlotLog

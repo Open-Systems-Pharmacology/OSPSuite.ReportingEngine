@@ -176,20 +176,27 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
   validateIsIncluded(values = legendPosition, parentValues = tlf::LegendPositions, nullAllowed = TRUE)
   plotConfiguration$legend$position <- legendPosition %||% reEnv$theme$background$legendPosition
 
+  # Quadratic dimensions for ObsVsPred plot type
+  # Note that other plots be could included in default quadratic plots
+  defaultWidth <- reEnv$defaultPlotFormat$width
+  defaultHeight <- reEnv$defaultPlotFormat$height
+  if(isIncluded(plotType, "ObsVsPred")){
+    defaultWidth <- mean(c(defaultWidth, defaultHeight))
+    defaultHeight <- defaultWidth
+  }
   # If chart size is defined, it is in pixel and updated accordingly
   # Get conversion factor between pixels and inches, dev.size provides an array c(width, height)
   unitConversionFactor <- grDevices::dev.size("in") / grDevices::dev.size("px")
   width <- ifNotNull(
     plotProperties$FontAndSize$ChartWidth,
     plotProperties$FontAndSize$ChartWidth * unitConversionFactor[1],
-    reEnv$defaultPlotFormat$width
+    defaultWidth
   )
   height <- ifNotNull(
     plotProperties$FontAndSize$ChartHeight,
     plotProperties$FontAndSize$ChartHeight * unitConversionFactor[2],
-    reEnv$defaultPlotFormat$height
+    defaultHeight
   )
-
   # Get dimensions of exported based on legend position and default/specific plot properties
   plotConfiguration$export$units <- reEnv$defaultPlotFormat$units
   plotConfiguration$export$width <- reEnv$fontScaleFactor * width
@@ -389,5 +396,26 @@ updatePlotDimensions <- function(plotObject) {
   plotObject$plotConfiguration$export$width <- sizeRatio * plotObject$plotConfiguration$export$width
   # Add legend width to final plot width to prevent shrinkage of plot area
   plotObject$plotConfiguration$export$width <- plotObject$plotConfiguration$export$width + legendWidth
+  return(plotObject)
+}
+
+#' @title setQuadraticDimension
+#' @description Set quadratic dimensions if plot configuration is not user-defined
+#' @param plotObject A `ggplot` object
+#' @param plotConfiguration `PlotConfiguration` object defined in task settings
+#' @return A `ggplot` object
+#' @keywords internal
+setQuadraticDimension <- function(plotObject, plotConfiguration = NULL) {
+  # If user defined the dimensions through a PlotConfiguration object, use it as is
+  if(!isEmpty(plotConfiguration)){
+    return(plotObject)
+  }
+  # Otherwise, set quadratic plot
+  newDimension <- mean(c(
+    plotObject$plotConfiguration$export$width,
+    plotObject$plotConfiguration$export$height
+  ))
+  plotObject$plotConfiguration$export$width <- newDimension
+  plotObject$plotConfiguration$export$height <- newDimension
   return(plotObject)
 }

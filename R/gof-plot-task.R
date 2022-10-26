@@ -283,6 +283,10 @@ GofPlotTask <- R6::R6Class(
           ),
           plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
         )
+        obsVsPredPlot <- setQuadraticDimension(
+          obsVsPredPlot, 
+          plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
+        )
 
         resultID <- defaultFileNames$resultID(
           "residuals-across-all-simulations",
@@ -319,7 +323,7 @@ GofPlotTask <- R6::R6Class(
               y = "Simulated",
               group = "Legend"
             ),
-            plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
+            plotConfiguration = settings$plotConfigurations[["obsVsPredLog"]]
           )
           obsVsPredPlotLog <- tlf::setXAxis(
             plotObject = obsVsPredPlotLog,
@@ -332,6 +336,10 @@ GofPlotTask <- R6::R6Class(
             scale = tlf::Scaling$log,
             limits = obsVsPredRange,
             ticks = obsVsPredBreaks
+          )
+          obsVsPredPlotLog <- setQuadraticDimension(
+            obsVsPredPlotLog, 
+            plotConfiguration = settings$plotConfigurations[["obsVsPredLog"]]
           )
 
           resultID <- defaultFileNames$resultID(
