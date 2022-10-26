@@ -510,6 +510,7 @@ getObservedDataIdFromPath <- function(path) {
 #' Translate `dataSelection` input by user into characters/expression understood by `getSelectedData`
 #' @param dataSelection characters or expression to select subset the observed data
 #' @return characters or expression to select subset the observed data
+#' @keywords internal
 translateDataSelection <- function(dataSelection){
   validateIsOfType(dataSelection, c("character", "expression"), nullAllowed = TRUE)
   if (!isOfType(dataSelection, "character")) {

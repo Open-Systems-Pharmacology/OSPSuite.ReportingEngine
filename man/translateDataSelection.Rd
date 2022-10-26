@@ -15,3 +15,4 @@ characters or expression to select subset the observed data
 \description{
 Translate `dataSelection` input by user into characters/expression understood by `getSelectedData`
 }
+\keyword{internal}
