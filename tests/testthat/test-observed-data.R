@@ -62,6 +62,37 @@ test_that("readObservedDataFile throw an error if columns are inconsistent", {
 
 context("Data selection process")
 
+# Get unexported function
+translateDataSelection <- ospsuite.reportingengine:::translateDataSelection
+test_that("Empty 'dataSelection' is translated as FALSE", {
+  expect_false(translateDataSelection(NULL))
+  expect_false(translateDataSelection(as.character(NULL)))
+  expect_false(translateDataSelection(""))
+  expect_false(translateDataSelection(" "))
+})
+test_that("'translateDataSelection' remove white space appropriately", {
+  expect_equal(
+    translateDataSelection(c("aa", " ", " bb", "cc ", "")),
+    "(aa) & (bb) & (cc)"
+    )
+  expect_false(translateDataSelection(c(" ", "")))
+  
+  expect_equal(
+    translateDataSelection(c("a < 5 | b>2", " group %in% 'b' ")),
+    "(a < 5 | b>2) & (group %in% 'b')"
+  )
+})
+test_that("'translateDataSelection' understands logicals and DataSelectionKeys", {
+  expect_false(translateDataSelection(FALSE))
+  expect_false(translateDataSelection(DataSelectionKeys$NONE))
+  
+  expect_true(translateDataSelection(TRUE))
+  expect_true(eval(parse(text = translateDataSelection(DataSelectionKeys$ALL))))
+})
+
+
+
+
 test_that("Selection Keys are well understood", {
   expect_equal(testDataFrame, getSelectedData(testDataFrame, DataSelectionKeys$ALL))
   expect_true(ospsuite.utils::isEmpty(getSelectedData(testDataFrame, DataSelectionKeys$NONE)))

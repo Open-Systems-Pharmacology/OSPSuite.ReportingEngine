@@ -123,7 +123,7 @@ getSelectedData <- function(data, dataSelection) {
   if(isIncluded(dataSelection, DataSelectionKeys$ALL)){
     return(data)
   }
-  if(isIncluded(dataSelection, c(DataSelectionKeys$NONE, "", "()"))){
+  if(isIncluded(dataSelection, c(DataSelectionKeys$NONE, ""))){
     return(data[FALSE,])
   }
   if(isOfType(dataSelection, "expression")){
@@ -170,7 +170,7 @@ getSelectedRows <- function(data, dataSelection) {
   if(isIncluded(dataSelection, DataSelectionKeys$ALL)){
     return(TRUE)
   }
-  if(isIncluded(dataSelection, c(DataSelectionKeys$NONE, "", "()"))){
+  if(isIncluded(dataSelection, c(DataSelectionKeys$NONE, ""))){
     return(FALSE)
   }
   if(isOfType(dataSelection, "expression")){
@@ -512,7 +512,10 @@ getObservedDataIdFromPath <- function(path) {
 #' @return characters or expression to select subset the observed data
 #' @keywords internal
 translateDataSelection <- function(dataSelection){
-  validateIsOfType(dataSelection, c("character", "expression"), nullAllowed = TRUE)
+  validateIsOfType(dataSelection, c("logical", "character", "expression"), nullAllowed = TRUE)
+  if (isEmpty(dataSelection)) {
+    return(FALSE)
+  }
   if (!isOfType(dataSelection, "character")) {
     return(dataSelection)
   }
@@ -523,7 +526,11 @@ translateDataSelection <- function(dataSelection){
   # By removing "" string from dataSelection
   # If "" is the only value provided, dataSelection isEmpty
   # If multiple values provided, concatenate the remaining selections
+  dataSelection <- trimws(dataSelection)
   dataSelection <- dataSelection[!(dataSelection %in% "")]
+  if (isEmpty(dataSelection)) {
+    return(FALSE)
+  }
   # When concatenating, ALL won't be understood by dplyr
   # Needs to be replaced by true to select all data
   dataSelection[dataSelection %in% DataSelectionKeys$ALL] <- TRUE
