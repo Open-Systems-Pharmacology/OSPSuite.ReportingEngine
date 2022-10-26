@@ -1,10 +1,10 @@
 library(ospsuite.reportingengine)
 # Test data frame used as reference
 testDataFrame <- data.frame(
-  "ID" = c(1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3),
-  "Time" = c(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4),
+  "ID" = rep(seq(1,3), each = 4),
+  "Time" = rep(seq(1,4), 3),
   "DV" = c(1, 1, 2, 2, 1, 1, 3, 3, 1, 1, 4, 4),
-  "Group" = c("A", "A", "A", "A", "A", "A", "A", "A", "B", "B", "B", "B"),
+  "Group" = rep(c("A", "B"), each = 6),
   stringsAsFactors = FALSE
 )
 
@@ -28,6 +28,15 @@ write.table(testDataFrame,
   file = testTxtFile,
   row.names = FALSE
 )
+
+# Needs to update expect_equal due to mismatch in attribute "row.names"
+# due to new dplyr package method
+expect_dataframe <- function(x, y){
+  row.names(x) <- 1:nrow(x)
+  row.names(y) <- 1:nrow(y)
+  expect_equal(x, y)
+}
+  
 
 context("Reading of Observed Data")
 
@@ -53,42 +62,76 @@ test_that("readObservedDataFile throw an error if columns are inconsistent", {
 
 context("Data selection process")
 
-test_that("'evalDataFilter' gets data.frame variable as 'data' and is consequently independent of input data.frame", {
-  testDataFrameA <- testDataFrame
-  testDataFrameB <- testDataFrame
-  filterExpression <- parse(text = "data")
-  expect_equal(testDataFrame, evalDataFilter(testDataFrameA, filterExpression))
-  expect_equal(testDataFrame, evalDataFilter(testDataFrameB, filterExpression))
+# Get unexported function
+translateDataSelection <- ospsuite.reportingengine:::translateDataSelection
+test_that("Empty 'dataSelection' is translated as FALSE", {
+  expect_false(translateDataSelection(NULL))
+  expect_false(translateDataSelection(as.character(NULL)))
+  expect_false(translateDataSelection(""))
+  expect_false(translateDataSelection(" "))
 })
-
-test_that("'filterExpression' uses data.frame variable names as actual variable", {
-  for (variableName in names(testDataFrame)) {
-    filterExpression <- parse(text = variableName)
-    filterVariable <- evalDataFilter(testDataFrame, filterExpression)
-    expect_equal(testDataFrame[, variableName], filterVariable)
-  }
-})
-
-test_that("'evalDataFilter' throw an error if variable name does not exist in data.frame", {
-  filterExpression <- parse(text = "wrongName")
-  expect_error(evalDataFilter(testDataFrame, filterExpression))
-})
-
-test_that("Correct expressions work the way they should", {
-  filterExpression <- parse(text = "ID == 1")
+test_that("'translateDataSelection' remove white space appropriately", {
   expect_equal(
-    c(TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE),
-    evalDataFilter(testDataFrame, filterExpression)
+    translateDataSelection(c("aa", " ", " bb", "cc ", "")),
+    "(aa) & (bb) & (cc)"
+    )
+  expect_false(translateDataSelection(c(" ", "")))
+  
+  expect_equal(
+    translateDataSelection(c("a < 5 | b>2", " group %in% 'b' ")),
+    "(a < 5 | b>2) & (group %in% 'b')"
   )
-  filterExpression <- parse(text = "Time %in% 1")
-  expect_equal(
-    c(TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE),
-    evalDataFilter(testDataFrame, filterExpression)
+})
+test_that("'translateDataSelection' understands logicals and DataSelectionKeys", {
+  expect_false(translateDataSelection(FALSE))
+  expect_false(translateDataSelection(DataSelectionKeys$NONE))
+  
+  expect_true(translateDataSelection(TRUE))
+  expect_true(eval(parse(text = translateDataSelection(DataSelectionKeys$ALL))))
+})
+
+
+
+
+test_that("Selection Keys are well understood", {
+  expect_equal(testDataFrame, getSelectedData(testDataFrame, DataSelectionKeys$ALL))
+  expect_true(ospsuite.utils::isEmpty(getSelectedData(testDataFrame, DataSelectionKeys$NONE)))
+  
+  expect_true(getSelectedRows(testDataFrame, DataSelectionKeys$ALL))
+  expect_false(getSelectedRows(testDataFrame, DataSelectionKeys$NONE))
+})
+
+test_that("'getSelectedData' and 'getSelectedRows' throw an error if variable name does not exist in data.frame", {
+  expect_error(getSelectedData(testDataFrame, "wrongName"))
+  expect_error(getSelectedData(testDataFrame, "wrongName"))
+})
+
+test_that("Correct expressions work as expected and both methods can be used to select data", {
+  testSelection <- "ID == 1"
+  selectedRows <- which(testDataFrame$ID == 1)
+  expect_equal(selectedRows, getSelectedRows(testDataFrame, testSelection))
+  expect_dataframe(testDataFrame[selectedRows,], getSelectedData(testDataFrame, testSelection))
+  expect_dataframe(
+    testDataFrame[getSelectedRows(testDataFrame, testSelection),], 
+    getSelectedData(testDataFrame, testSelection)
+    )
+  
+  testSelection <- "Time %in% 1"
+  selectedRows <- which(testDataFrame$Time %in% 1)
+  expect_equal(selectedRows, getSelectedRows(testDataFrame, testSelection))
+  expect_dataframe(testDataFrame[selectedRows,], getSelectedData(testDataFrame, testSelection))
+  expect_dataframe(
+    testDataFrame[getSelectedRows(testDataFrame, testSelection),], 
+    getSelectedData(testDataFrame, testSelection)
   )
-  filterExpression <- parse(text = '!DV %in% 1 & Group %in% "A"')
-  expect_equal(
-    c(FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE),
-    evalDataFilter(testDataFrame, filterExpression)
+  
+  testSelection <- '!DV %in% 1 & Group %in% "A"'
+  selectedRows <- which(!(testDataFrame$DV %in% 1) & testDataFrame$Group %in% "A")
+  expect_equal(selectedRows, getSelectedRows(testDataFrame, testSelection))
+  expect_dataframe(testDataFrame[selectedRows,], getSelectedData(testDataFrame, testSelection))
+  expect_dataframe(
+    testDataFrame[getSelectedRows(testDataFrame, testSelection),], 
+    getSelectedData(testDataFrame, testSelection)
   )
 })
 

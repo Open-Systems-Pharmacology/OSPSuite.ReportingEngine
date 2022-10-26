@@ -5,6 +5,7 @@
 #' @field outputs list of `Output` R6 class objects
 #' @field observedDataFile name of csv file to be used for observed data
 #' @field observedMetaDataFile name of csv file to be used as dictionary of the observed data
+#' @field dataSelection character or expression used to select a subset of observed data
 #' @field timeUnit display unit for time variable
 #' @field applicationRanges named list of logicals defining which Application ranges are included in
 #' @field minimumSimulationEndTime is the minimum length of time for which a simulation must be run
@@ -20,6 +21,7 @@ SimulationSet <- R6::R6Class(
     outputs = NULL,
     observedDataFile = NULL,
     observedMetaDataFile = NULL,
+    dataSelection = NULL,
     timeUnit = NULL,
     applicationRanges = NULL,
     minimumSimulationEndTime = NULL,
@@ -32,6 +34,9 @@ SimulationSet <- R6::R6Class(
     #' @param outputs list of `Output` R6 class objects
     #' @param observedDataFile name of csv file to be used for observed data
     #' @param observedMetaDataFile name of csv file to be used as dictionary of the observed data
+    #' @param dataSelection characters or expression to select subset the observed data
+    #' By default, all the data is selected.
+    #' When using a character array, selections are concatenated with the `&` sign
     #' @param timeUnit display unit for time variable. Default is "h"
     #' @param applicationRanges names of application ranges to include in the report. Names are available in enum `ApplicationRanges`.
     #' @param minimumSimulationEndTime is the minimum length of time for which a simulation must be run
@@ -42,6 +47,7 @@ SimulationSet <- R6::R6Class(
                           outputs = NULL,
                           observedDataFile = NULL,
                           observedMetaDataFile = NULL,
+                          dataSelection = DataSelectionKeys$ALL,
                           timeUnit = "h",
                           applicationRanges = ApplicationRanges,
                           minimumSimulationEndTime = NULL,
@@ -75,6 +81,7 @@ SimulationSet <- R6::R6Class(
 
       self$observedDataFile <- observedDataFile
       self$observedMetaDataFile <- observedMetaDataFile
+      self$dataSelection <- translateDataSelection(dataSelection)
 
       self$timeUnit <- timeUnit %||% "h"
 

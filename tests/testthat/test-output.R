@@ -59,18 +59,18 @@ test_that("Output 'dataSelection' is checked and set properly", {
   expect_silent(Output$new(path = testPath, dataSelection = testDataSelection))
 
   outputPath <- Output$new(path = testPath)
-  expect_null(outputPath$dataSelection)
+  expect_s3_class(outputPath, "Output")
+  # By default, no selection is used
+  expect_false(outputPath$dataSelection)
 
   outputFilter <- Output$new(path = testPath, dataSelection = testDataSelection)
-  expect_is(outputFilter$dataSelection, "expression")
-  expect_equivalent(deparse(outputFilter$dataSelection), deparse(parse(text = testDataSelection)))
-
-  # Expressions can be input
-  outputFilter <- Output$new(path = testPath, dataSelection = parse(text = testDataSelection))
-  expect_is(outputFilter$dataSelection, "expression")
-  expect_equivalent(deparse(outputFilter$dataSelection), deparse(parse(text = testDataSelection)))
-
-  expect_error(Output$new(path = testPath, dataSelection = c(testDataSelection, testDataSelection)))
+  expect_s3_class(outputFilter, "Output")
+  
+  # Vectors are concatenated using "&"
+  outputVector <- Output$new(path = testPath, dataSelection = c(testDataSelection, testDataSelection))
+  expect_length(outputVector$dataSelection, 1)
+  expect_true(grepl(pattern = "\\&", outputVector$dataSelection))
+  expect_true(grepl(pattern = testDataSelection, outputVector$dataSelection))
 })
 
 myTestAUCName <- "AUC_inf"

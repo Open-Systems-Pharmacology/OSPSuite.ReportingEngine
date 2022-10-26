@@ -85,6 +85,106 @@ readObservedDataFile <- function(fileName,
   return(observedData)
 }
 
+#' @title getSelectedData
+#' @description
+#' Get selected data 
+#' The function leverage `dplyr::filter` to select the data
+#' @param data A data.frame 
+#' @param dataSelection Character string or expression evaluated to select data
+#' The enum helper `DataSelectionKeys` provides keys for selected all or none of the data
+#' @return A data.frame of selected data
+#' @export
+#' @import dplyr
+#' @seealso DataSelectionKeys
+#' @examples
+#' data <- data.frame(
+#' x = seq(0,9),
+#' y = seq(10,19),
+#' mdv = c(1,1, rep(0, 8)),
+#' groups = rep(c("A", "B"), 5)
+#' )
+#' 
+#' # Select all the data
+#' getSelectedData(data, DataSelectionKeys$ALL)
+#' 
+#' # Select no data
+#' getSelectedData(data, DataSelectionKeys$NONE)
+#' 
+#' # Select data from group A
+#' getSelectedData(data, "groups %in% 'A'")
+#' 
+#' # Remove missing dependent variable (mdv)
+#' getSelectedData(data, "mdv == 0")
+#' 
+getSelectedData <- function(data, dataSelection) {
+  if(isEmpty(dataSelection)){
+    return(data[FALSE,])
+  }
+  if(isIncluded(dataSelection, DataSelectionKeys$ALL)){
+    return(data)
+  }
+  if(isIncluded(dataSelection, c(DataSelectionKeys$NONE, ""))){
+    return(data[FALSE,])
+  }
+  if(isOfType(dataSelection, "expression")){
+    return(data %>% dplyr::filter(eval(dataSelection)))
+  }
+  return(data %>% dplyr::filter(eval(parse(text = dataSelection))))
+}
+
+#' @title getSelectedRows
+#' @description
+#' Get selected rows from data and its selection
+#' The function leverage `dplyr::filter` to select the rows
+#' @param data A data.frame 
+#' @param dataSelection Character string or expression evaluated to select data
+#' The enum helper `DataSelectionKeys` provides keys for selected all or none of the data
+#' @return A data.frame of selected data
+#' @export
+#' @import dplyr
+#' @seealso DataSelectionKeys
+#' @examples
+#' data <- data.frame(
+#' x = seq(0,9),
+#' y = seq(10,19),
+#' mdv = c(1,1, rep(0, 8)),
+#' groups = rep(c("A", "B"), 5)
+#' )
+#' 
+#' # Select all the rows
+#' getSelectedRows(data, DataSelectionKeys$ALL)
+#' 
+#' # Select no row
+#' getSelectedRows(data, DataSelectionKeys$NONE)
+#' 
+#' # Select rows from group A
+#' getSelectedData(data, "groups %in% 'A'")
+#' 
+#' # Get rows of missing dependent variable (mdv)
+#' getSelectedRows(data, "mdv == 0")
+#' 
+getSelectedRows <- function(data, dataSelection) {
+  if(isEmpty(dataSelection)){
+    return(FALSE)
+  }
+  if(isIncluded(dataSelection, DataSelectionKeys$ALL)){
+    return(TRUE)
+  }
+  if(isIncluded(dataSelection, c(DataSelectionKeys$NONE, ""))){
+    return(FALSE)
+  }
+  if(isOfType(dataSelection, "expression")){
+    selectedData <- data %>% 
+      dplyr::mutate(rows = 1:n()) %>% 
+      dplyr::filter(eval(dataSelection))
+    return(selectedData$rows)
+  }
+  selectedData <- data %>% 
+    dplyr::mutate(rows = 1:n()) %>% 
+    dplyr::filter(eval(parse(text = dataSelection)))
+  return(selectedData$rows)
+}
+
 #' @title evalDataFilter
 #' @description
 #' Evaluate a data filter by converting the variable names of the data.frame
@@ -95,6 +195,7 @@ readObservedDataFile <- function(fileName,
 #' @return vector of logicals corresponding to the evaluation of the filter
 #' @export
 evalDataFilter <- function(data, filterExpression) {
+  .Deprecated("getSelectedRows")
   variableNames <- names(data)
   expressionList <- lapply(
     variableNames,
@@ -146,6 +247,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet) {
 
   re.tStoreFileMetadata(access = "read", filePath = simulationSet$observedDataFile)
   observedDataset <- readObservedDataFile(simulationSet$observedDataFile)
+  observedDataset <- getSelectedData(observedDataset, simulationSet$dataSelection)
   re.tStoreFileMetadata(access = "read", filePath = simulationSet$observedMetaDataFile)
   dictionary <- readObservedDataFile(simulationSet$observedMetaDataFile)
 
@@ -182,10 +284,10 @@ loadObservedDataFromSimulationSet <- function(simulationSet) {
 
   # If unit was actually defined using output objects, overwrite current dvUnit
   for (output in simulationSet$outputs) {
-    if (isOfLength(output$dataUnit, 0)) {
+    if (isEmpty(output$dataUnit)) {
       next
     }
-    selectedRows <- evalDataFilter(observedDataset, output$dataSelection)
+    selectedRows <- getSelectedRows(observedDataset, output$dataSelection)
     observedDataset[selectedRows, dvUnitColumn] <- output$dataUnit
   }
 
@@ -260,26 +362,21 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, stru
   if (isEmpty(data)) {
     return()
   }
-  if (isEmpty(output$dataSelection)) {
-    return()
-  }
-
-  selectedRows <- evalDataFilter(data, output$dataSelection)
-  logDebug(messages$selectedObservedDataForPath(output$path, sum(selectedRows)))
-  # If filter did not select any data, return empty dataset
-  if (sum(selectedRows) == 0) {
+  selectedData <- getSelectedData(data, output$dataSelection)
+  logDebug(messages$selectedObservedDataForPath(output$path, nrow(selectedData)))
+  if (isEmpty(selectedData)) {
     return()
   }
 
   # Get dimensions of observed data
-  dvDimensions <- unique(as.character(data[selectedRows, dataMapping$dimension]))
-  outputConcentration <- data[selectedRows, dataMapping$dv]
+  dvDimensions <- unique(as.character(selectedData[, dataMapping$dimension]))
+  outputConcentration <- selectedData[, dataMapping$dv]
   if (!isEmpty(output$displayUnit)) {
     for (dvDimension in dvDimensions) {
       if (is.na(dvDimension)) {
         next
       }
-      dvSelectedRows <- data[selectedRows, dataMapping$dimension] %in% dvDimension
+      dvSelectedRows <- selectedData[, dataMapping$dimension] %in% dvDimension
       outputConcentration[dvSelectedRows] <- ospsuite::toUnit(
         dvDimension,
         outputConcentration[dvSelectedRows],
@@ -291,7 +388,7 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, stru
   outputData <- data.frame(
     "Time" = ospsuite::toUnit(
       "Time", 
-      data[selectedRows, dataMapping$time], 
+      selectedData[, dataMapping$time], 
       structureSet$simulationSet$timeUnit
       ),
     "Concentration" = outputConcentration,
@@ -306,13 +403,13 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, stru
     return(list(data = outputData, lloq = NULL))
   }
 
-  lloqConcentration <- data[selectedRows, dataMapping$lloq]
+  lloqConcentration <- selectedData[, dataMapping$lloq]
   if (!isEmpty(output$displayUnit)) {
     for (dvDimension in dvDimensions) {
       if (is.na(dvDimension)) {
         next
       }
-      dvSelectedRows <- data[selectedRows, dataMapping$dimension] %in% dvDimension
+      dvSelectedRows <- selectedData[, dataMapping$dimension] %in% dvDimension
       lloqConcentration[dvSelectedRows] <- ospsuite::toUnit(
         dvDimension,
         lloqConcentration[dvSelectedRows],
@@ -324,7 +421,7 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, stru
   lloqOutput <- data.frame(
     "Time" = ospsuite::toUnit(
       "Time", 
-      data[selectedRows, dataMapping$time], 
+      selectedData[, dataMapping$time], 
       structureSet$simulationSet$timeUnit
     ),
     "Concentration" = lloqConcentration,
@@ -406,4 +503,38 @@ getObservedDataIdFromPath <- function(path) {
   }
   pathArray <- ospsuite::toPathArray(path)
   return(pathArray[1])
+}
+
+#' @title translateDataSelection
+#' @description
+#' Translate `dataSelection` input by user into characters/expression understood by `getSelectedData`
+#' @param dataSelection characters or expression to select subset the observed data
+#' @return characters or expression to select subset the observed data
+#' @keywords internal
+translateDataSelection <- function(dataSelection){
+  validateIsOfType(dataSelection, c("logical", "character", "expression"), nullAllowed = TRUE)
+  if (isEmpty(dataSelection)) {
+    return(FALSE)
+  }
+  if (!isOfType(dataSelection, "character")) {
+    return(dataSelection)
+  }
+  # If any selection include None, do not select anything
+  if (isIncluded(DataSelectionKeys$NONE, dataSelection)) {
+    return(FALSE)
+  }
+  # By removing "" string from dataSelection
+  # If "" is the only value provided, dataSelection isEmpty
+  # If multiple values provided, concatenate the remaining selections
+  dataSelection <- trimws(dataSelection)
+  dataSelection <- dataSelection[!(dataSelection %in% "")]
+  if (isEmpty(dataSelection)) {
+    return(FALSE)
+  }
+  # When concatenating, ALL won't be understood by dplyr
+  # Needs to be replaced by true to select all data
+  dataSelection[dataSelection %in% DataSelectionKeys$ALL] <- TRUE
+  # Concatenate selections using & and brackets
+  dataSelection <- paste(dataSelection, collapse = ") & (")
+  return(paste0("(", dataSelection, ")"))
 }

@@ -19,6 +19,8 @@ R6 class representing Reporting Engine Mean Model Set
 
 \item{\code{observedMetaDataFile}}{name of csv file to be used as dictionary of the observed data}
 
+\item{\code{dataSelection}}{character or expression used to select a subset of observed data}
+
 \item{\code{timeUnit}}{display unit for time variable}
 
 \item{\code{applicationRanges}}{named list of logicals defining which Application ranges are included in}
@@ -49,6 +51,7 @@ Create a new `SimulationSet` object.
   outputs = NULL,
   observedDataFile = NULL,
   observedMetaDataFile = NULL,
+  dataSelection = DataSelectionKeys$ALL,
   timeUnit = "h",
   applicationRanges = ApplicationRanges,
   minimumSimulationEndTime = NULL,
@@ -68,6 +71,10 @@ Create a new `SimulationSet` object.
 \item{\code{observedDataFile}}{name of csv file to be used for observed data}
 
 \item{\code{observedMetaDataFile}}{name of csv file to be used as dictionary of the observed data}
+
+\item{\code{dataSelection}}{characters or expression to select subset the observed data
+By default, all the data is selected.
+When using a character array, selections are concatenated with the `&` sign}
 
 \item{\code{timeUnit}}{display unit for time variable. Default is "h"}
 
