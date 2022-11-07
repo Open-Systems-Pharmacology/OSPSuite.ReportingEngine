@@ -25,6 +25,10 @@ DataSelectionKeys <- enum(c("NONE", "ALL"))
 #' @field path path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)
 #' @field displayName display name for `path`
 #' @field displayUnit display unit for `path`
+#' @field groupID Grouping Identifier.
+#' Outputs with same identifier and unit are plotted together
+#' @field color Displayed line/point color of the Output in plots
+#' @field fill Displayed range color of the Output in plots
 #' @field dataSelection character or expression used to select a subset of observed data
 #' @field dataUnit Unit of the observed data
 #' @field dataDisplayName display name of the observed data
@@ -39,6 +43,9 @@ Output <- R6::R6Class(
     path = NULL,
     displayName = NULL,
     displayUnit = NULL,
+    groupID = NULL,
+    color = NULL,
+    fill = NULL,
     dataSelection = NULL,
     dataDisplayName = NULL,
     dataUnit = NULL,
@@ -50,6 +57,10 @@ Output <- R6::R6Class(
     #' @param path path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)
     #' @param displayName display name for `path`
     #' @param displayUnit display unit for `path`
+    #' @param groupID Grouping Identifier.
+    #' Outputs with same identifier and unit are plotted together
+    #' @param color Displayed line/point color of the `Output` in plots
+    #' @param fill Displayed range color of the `Output` in plots
     #' @param dataSelection characters or expression to select subset the observed data
     #' By default, no data is selected.
     #' When using a character array, selections are concatenated with the `&` sign
@@ -61,6 +72,9 @@ Output <- R6::R6Class(
     initialize = function(path,
                           displayName = NULL,
                           displayUnit = NULL,
+                          groupID = NULL,
+                          color = NULL,
+                          fill = NULL,
                           dataSelection = DataSelectionKeys$NONE,
                           dataUnit = NULL,
                           dataDisplayName = NULL,
@@ -68,12 +82,12 @@ Output <- R6::R6Class(
                           residualScale = ResidualScales$Logarithmic) {
       validateIsString(path)
       validateIsOfLength(path, 1)
-      validateIsString(c(displayName, dataUnit, displayUnit, dataDisplayName), nullAllowed = TRUE)
+      # Check optional inputs
+      optionalStringInputs <- c("displayName", "displayUnit", "color", "fill", "dataUnit", "dataDisplayName")
+      eval(parse(text = paste0("validateIsString(", optionalStringInputs, ", nullAllowed = TRUE)")))
+      eval(parse(text = paste0("ifNotNull(", optionalStringInputs, ", validateIsOfLength(", optionalStringInputs, ", 1))")))
+
       validateIsIncluded(residualScale, ResidualScales)
-      ifNotNull(displayName, validateIsOfLength(displayName, 1))
-      ifNotNull(displayUnit, validateIsOfLength(displayUnit, 1))
-      ifNotNull(dataUnit, validateIsOfLength(dataUnit, 1))
-      ifNotNull(dataDisplayName, validateIsOfLength(dataDisplayName, 1))
       validateIsOfType(c(pkParameters), c("character", "PkParameterInfo"), nullAllowed = TRUE)
 
       self$path <- path
@@ -82,6 +96,11 @@ Output <- R6::R6Class(
       self$dataUnit <- dataUnit
       self$dataDisplayName <- dataDisplayName %||% self$displayName
       self$residualScale <- residualScale
+
+      self$groupID <- groupID
+
+      self$color <- color %||% newOutputColor()
+      self$fill <- fill %||% newOutputColor()
 
       self$dataSelection <- translateDataSelection(dataSelection)
 

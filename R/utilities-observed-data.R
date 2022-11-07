@@ -367,6 +367,23 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, stru
   if (isEmpty(selectedData)) {
     return()
   }
+  metaData <- list(
+    "Time" = list(
+      dimension = "Time",
+      unit = structureSet$simulationSet$timeUnit
+    ),
+    "Concentration" = list(dimension = NA, unit = output$displayUnit %||% NA),
+    "Path" = output$path,
+    legend = captions$plotGoF$observedLegend(
+      simulationSetName = structureSet$simulationSet$simulationSetName,
+      descriptor = structureSet$simulationSetDescriptor,
+      pathName = output$dataDisplayName
+    ),
+    residualsLegend = NA,
+    group = output$groupID,
+    color = output$color,
+    fill = output$fill
+  )
 
   # Get dimensions of observed data
   dvDimensions <- unique(as.character(selectedData[, dataMapping$dimension]))
@@ -387,20 +404,16 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, stru
   }
   outputData <- data.frame(
     "Time" = ospsuite::toUnit(
-      "Time", 
-      selectedData[, dataMapping$time], 
+      "Time",
+      selectedData[, dataMapping$time],
       structureSet$simulationSet$timeUnit
-      ),
-    "Concentration" = outputConcentration,
-    "Legend" = captions$plotGoF$observedLegend(
-      simulationSetName = structureSet$simulationSet$simulationSetName, 
-      descriptor = structureSet$simulationSetDescriptor, 
-      pathName = output$dataDisplayName
     ),
+    "Concentration" = outputConcentration,
+    "Legend" = metaData$legend,
     "Path" = output$path
   )
   if (isEmpty(dataMapping$lloq)) {
-    return(list(data = outputData, lloq = NULL))
+    return(list(data = outputData, lloq = NULL, metaData = metaData))
   }
 
   lloqConcentration <- selectedData[, dataMapping$lloq]
@@ -420,19 +433,19 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, stru
   }
   lloqOutput <- data.frame(
     "Time" = ospsuite::toUnit(
-      "Time", 
-      selectedData[, dataMapping$time], 
+      "Time",
+      selectedData[, dataMapping$time],
       structureSet$simulationSet$timeUnit
     ),
     "Concentration" = lloqConcentration,
     "Legend" = captions$plotGoF$lloqLegend(
-      simulationSetName = structureSet$simulationSet$simulationSetName, 
-      descriptor = structureSet$simulationSetDescriptor, 
+      simulationSetName = structureSet$simulationSet$simulationSetName,
+      descriptor = structureSet$simulationSetDescriptor,
       pathName = output$dataDisplayName
     ),
     "Path" = output$path
   )
-  return(list(data = outputData, lloq = lloqOutput))
+  return(list(data = outputData, lloq = lloqOutput, metaData = metaData))
 }
 
 

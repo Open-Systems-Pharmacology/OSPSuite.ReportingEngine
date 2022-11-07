@@ -60,6 +60,8 @@ reEnv$fontScaleFactor <- 2
 reEnv$workflowWatermarkMessage <- "preliminary analysis"
 reEnv$residualsHistogramLabel <- "Relative frequency"
 reEnv$residualsQQLabel <- "Quantiles of residuals"
+reEnv$referenceColor <- "grey50"
+reEnv$referenceFill <- "grey50"
 
 # Default values for qualification pk ratio
 reEnv$pkRatio <- list()
