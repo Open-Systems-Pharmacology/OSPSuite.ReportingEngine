@@ -108,14 +108,14 @@ test_that("Time profile directory includes correct number of figure and table fi
     'pattern = ".png")), ',
     "expectedFigures", scenarios, ")"
   ))
-  
+
   testTablesExpression <- parse(text = paste0(
     "expect_equal(length(list.files(",
     "file.path(workflow", scenarios, '$workflowFolder, "TimeProfiles"),',
     'pattern = ".csv")), ',
     "expectedTables", scenarios, ")"
   ))
-  
+
   eval(testFiguresExpression)
   eval(testTablesExpression)
 })
@@ -141,7 +141,7 @@ test_that("Saved time profile data and residuals includes the correct data", {
     ))
     eval(testTimeProfileDataExpression)
   }
-  
+
   for (scenario in scenarios) {
     getTimeProfileResultsFolder <- parse(text = paste0(
       "timeProfileResultsFolder <- file.path(workflow", scenario, '$workflowFolder, "TimeProfiles")'
@@ -175,7 +175,7 @@ test_that("Ill defined variables and units in dictionary are flagged by simulati
       dataSelection = DataSelectionKeys$ALL
     )
   ))
-  
+
   expect_error(SimulationSet$new(
     simulationSetName = "A",
     simulationFile = simulationFile,

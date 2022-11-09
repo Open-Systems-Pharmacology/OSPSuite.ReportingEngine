@@ -149,28 +149,27 @@ GofTaskSettings <- R6::R6Class(
   public = list(
     #' @field referenceData Data results obtained by TimeProfilesAndResiduals task corresponding to referencePopulation
     referenceData = NULL,
-    
+
     #' @description
     #' Create a `GofTaskSettings` object
     #' @param taskName name of the task using the settings
     #' @param outputSelections subset of simulationSet outputs to be used in GoF plot
     #' @param statisticsType Statistics summarizing time profile simulated data
     #' @return A new `GofTaskSettings` object
-    initialize = function(taskName = AllAvailableTasks$plotTimeProfilesAndResiduals, 
+    initialize = function(taskName = AllAvailableTasks$plotTimeProfilesAndResiduals,
                           outputSelections = NULL,
                           statisticsType = NULL) {
       validateIsIncluded(taskName, AllAvailableTasks$plotTimeProfilesAndResiduals)
       validateIsIncluded(statisticsType, StatisticsTypes, nullAllowed = TRUE)
-      
+
       super$initialize(taskName)
-      
+
       private$.includeReferenceData <- TRUE
       private$.outputSelections <- outputSelections
       private$.statistics <- reEnv$defaultTimeProfileStatistics
       self$setStatistics(statisticsType = statisticsType)
-      
     },
-    
+
     #' @description Set statistics used in population time profiles and residuals plots
     #' @param statisticsType Name of statistics type as defined in enum `StatisticsTypes`
     #' @param y Function or function name for middle values statistics
@@ -183,49 +182,48 @@ GofTaskSettings <- R6::R6Class(
     #' workflow$plotTimeProfilesAndResiduals$settings$setStatistics(
     #' statisticsType = StatisticsTypes$`Geometric mean`
     #' )
-    #' 
+    #'
     #' # Set the legend caption displayed for range
     #' workflow$plotTimeProfilesAndResiduals$settings$setStatistics(
     #' statisticsType = StatisticsTypes$`Geometric mean`
     #' rangeCaption = "90% population range"
     #' )
-    #' 
+    #'
     #' }
-    #' 
+    #'
     setStatistics = function(statisticsType = NULL,
-                              y = NULL, 
-                              ymin = NULL, 
-                              ymax = NULL, 
-                              yCaption = NULL,
-                              rangeCaption = NULL){
-      
+                             y = NULL,
+                             ymin = NULL,
+                             ymax = NULL,
+                             yCaption = NULL,
+                             rangeCaption = NULL) {
       validateIsIncluded(statisticsType, StatisticsTypes, nullAllowed = TRUE)
       # Allow user to enter the function directly
       validateIsOfType(y, c("character", "closure"), nullAllowed = TRUE)
       validateIsOfType(ymin, c("character", "closure"), nullAllowed = TRUE)
       validateIsOfType(ymax, c("character", "closure"), nullAllowed = TRUE)
-      
-      if(!isEmpty(statisticsType)){
+
+      if (!isEmpty(statisticsType)) {
         private$.statistics <- getStatisticsFromType(statisticsType)
       }
       # Assign variables to reEnv only if defined
       eval(parseVariableToObject(
         objectName = "private$.statistics",
         variableName = c("y", "ymin", "ymax", "yCaption", "rangeCaption"),
-        keepIfNull = TRUE))
+        keepIfNull = TRUE
+      ))
       return(invisible())
     },
-    
+
     #' @description Get statistics used in population time profiles and residuals plots
     #' @examples \dontrun{
     #' # Get the statistics of time profiles task
     #' workflow$plotTimeProfilesAndResiduals$settings$getStatistics()
     #' }
-    #' 
-    getStatistics = function(){
+    #'
+    getStatistics = function() {
       return(private$.statistics)
     }
-    
   ),
   active = list(
     #' @field includeReferenceData logical defining if reference population should be included in
@@ -248,7 +246,6 @@ GofTaskSettings <- R6::R6Class(
       private$.outputSelections <- value %||% private$.outputSelections
       return(invisible())
     }
-    
   ),
   private = list(
     .includeReferenceData = NULL,

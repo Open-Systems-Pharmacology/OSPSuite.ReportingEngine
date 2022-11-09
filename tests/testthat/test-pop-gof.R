@@ -143,7 +143,7 @@ test_that("Saved time profile data and residuals includes the correct data", {
         list.files(timeProfileResultsFolder, pattern = "simulated", full.names = TRUE)
       )
     )
-    # Check only values to prevent issues with system differences in 
+    # Check only values to prevent issues with system differences in
     # reading unicode characters
     testTimeProfileDataExpression <- parse(text = paste0(
       "expect_equal(actualTimeProfileData[,1:2], ",

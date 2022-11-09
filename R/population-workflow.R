@@ -59,26 +59,26 @@ PopulationWorkflow <- R6::R6Class(
       )
 
       logCatch({
-          validateIsOfType(c(simulationSets), "PopulationSimulationSet")
-          if (!isOfType(simulationSets, "list")) {
-            simulationSets <- list(simulationSets)
-          }
-          validateIsIncluded(workflowType, PopulationWorkflowTypes)
-          self$workflowType <- workflowType
-          # Pediatric and ratio comparison workflows need ONE reference population
-          validateHasReferencePopulation(workflowType, simulationSets)
+        validateIsOfType(c(simulationSets), "PopulationSimulationSet")
+        if (!isOfType(simulationSets, "list")) {
+          simulationSets <- list(simulationSets)
+        }
+        validateIsIncluded(workflowType, PopulationWorkflowTypes)
+        self$workflowType <- workflowType
+        # Pediatric and ratio comparison workflows need ONE reference population
+        validateHasReferencePopulation(workflowType, simulationSets)
 
-          self$simulate <- loadSimulateTask(self)
-          self$calculatePKParameters <- loadCalculatePKParametersTask(self)
-          self$calculateSensitivity <- loadCalculateSensitivityTask(self)
+        self$simulate <- loadSimulateTask(self)
+        self$calculatePKParameters <- loadCalculatePKParametersTask(self)
+        self$calculateSensitivity <- loadCalculateSensitivityTask(self)
 
-          self$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(self)
-          self$plotDemography <- loadPlotDemographyTask(self)
-          self$plotPKParameters <- loadPlotPKParametersTask(self)
-          self$plotSensitivity <- loadPlotSensitivityTask(self)
+        self$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(self)
+        self$plotDemography <- loadPlotDemographyTask(self)
+        self$plotPKParameters <- loadPlotPKParametersTask(self)
+        self$plotSensitivity <- loadPlotSensitivityTask(self)
 
-          self$taskNames <- enum(self$getAllTasks())
-        })
+        self$taskNames <- enum(self$getAllTasks())
+      })
     },
 
     #' @description
@@ -103,63 +103,63 @@ PopulationWorkflow <- R6::R6Class(
       t0 <- tic()
 
       logCatch({
-          if (self$simulate$active) {
-            self$simulate$runTask(self$simulationStructures)
-          }
+        if (self$simulate$active) {
+          self$simulate$runTask(self$simulationStructures)
+        }
 
-          if (self$calculatePKParameters$active) {
-            self$calculatePKParameters$runTask(self$simulationStructures)
-          }
+        if (self$calculatePKParameters$active) {
+          self$calculatePKParameters$runTask(self$simulationStructures)
+        }
 
-          if (self$calculateSensitivity$active) {
-            self$calculateSensitivity$runTask(self$simulationStructures)
-          }
+        if (self$calculateSensitivity$active) {
+          self$calculateSensitivity$runTask(self$simulationStructures)
+        }
 
-          for (plotTask in self$getAllPlotTasks()) {
-            if (self[[plotTask]]$active) {
-              self[[plotTask]]$runTask(self$simulationStructures)
-            }
+        for (plotTask in self$getAllPlotTasks()) {
+          if (self[[plotTask]]$active) {
+            self[[plotTask]]$runTask(self$simulationStructures)
           }
+        }
 
-          for (userDefinedTask in self$userDefinedTasks) {
-            if (userDefinedTask$active) {
-              userDefinedTask$runTask(self$simulationStructures)
-            }
+        for (userDefinedTask in self$userDefinedTasks) {
+          if (userDefinedTask$active) {
+            userDefinedTask$runTask(self$simulationStructures)
           }
+        }
 
-          # Merge appendices into final report
-          appendices <- c(
-            as.character(sapply(self$getAllPlotTasks(), function(taskName) {
-              self[[taskName]]$fileName
-            })),
-            as.character(sapply(self$userDefinedTasks, function(userDefinedTask) {
-              userDefinedTask$fileName
-            }))
+        # Merge appendices into final report
+        appendices <- c(
+          as.character(sapply(self$getAllPlotTasks(), function(taskName) {
+            self[[taskName]]$fileName
+          })),
+          as.character(sapply(self$userDefinedTasks, function(userDefinedTask) {
+            userDefinedTask$fileName
+          }))
+        )
+        appendices <- appendices[file.exists(appendices)]
+        if (length(appendices) > 0) {
+          initialReportPath <- file.path(self$workflowFolder, self$reportFileName)
+          mergeMarkdownFiles(appendices, initialReportPath)
+          renderReport(
+            file.path(self$workflowFolder, self$reportFileName),
+            createWordReport = self$createWordReport,
+            numberSections = self$numberSections,
+            intro = getIntroFromReportTitle(self$reportTitle),
+            wordConversionTemplate = self$wordConversionTemplate
           )
-          appendices <- appendices[file.exists(appendices)]
-          if (length(appendices) > 0) {
-            initialReportPath <- file.path(self$workflowFolder, self$reportFileName)
-            mergeMarkdownFiles(appendices, initialReportPath)
-            renderReport(
-              file.path(self$workflowFolder, self$reportFileName),
-              createWordReport = self$createWordReport,
-              numberSections = self$numberSections,
-              intro = getIntroFromReportTitle(self$reportTitle),
-              wordConversionTemplate = self$wordConversionTemplate
-            )
-            # Move report if a non-default path is provided
-            copyReport(from = initialReportPath, to = self$reportFilePath, copyWordReport = self$createWordReport, keep = TRUE)
-          }
+          # Move report if a non-default path is provided
+          copyReport(from = initialReportPath, to = self$reportFilePath, copyWordReport = self$createWordReport, keep = TRUE)
+        }
 
-          re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logInfoFile()))
-          re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logDebugFile()))
-          if (file.exists(file.path(self$workflowFolder, defaultFileNames$logErrorFile()))) {
-            re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logErrorFile()))
-          }
+        re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logInfoFile()))
+        re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logDebugFile()))
+        if (file.exists(file.path(self$workflowFolder, defaultFileNames$logErrorFile()))) {
+          re.tStoreFileMetadata(access = "write", filePath = file.path(self$workflowFolder, defaultFileNames$logErrorFile()))
+        }
 
-          re.tEndAction(actionToken = actionToken2)
-          re.tEndMetadataCapture(outputFolder = "./", actionToken = actionToken1)
-        })
+        re.tEndAction(actionToken = actionToken2)
+        re.tEndMetadataCapture(outputFolder = "./", actionToken = actionToken1)
+      })
       logInfo(messages$runCompleted(getElapsedTime(t0), "Population Workflow", self$workflowType))
     }
   )

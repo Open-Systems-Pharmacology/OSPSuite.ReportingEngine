@@ -21,10 +21,10 @@ The function leverage `dplyr::filter` to select the rows
 }
 \examples{
 data <- data.frame(
-x = seq(0,9),
-y = seq(10,19),
-mdv = c(1,1, rep(0, 8)),
-groups = rep(c("A", "B"), 5)
+  x = seq(0, 9),
+  y = seq(10, 19),
+  mdv = c(1, 1, rep(0, 8)),
+  groups = rep(c("A", "B"), 5)
 )
 
 # Select all the rows

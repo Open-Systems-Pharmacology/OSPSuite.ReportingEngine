@@ -287,13 +287,13 @@ analyzeCoreSensitivity <- function(simulation,
     showProgress = showProgress,
     numberOfCores = numberOfCores
   )
-  
+
   write(
     paste0(
-      ifNotNull(nodeName, paste0(nodeName, ": "), ""), 
-      "Starting sensitivity analysis for path(s) ", 
+      ifNotNull(nodeName, paste0(nodeName, ": "), ""),
+      "Starting sensitivity analysis for path(s) ",
       paste(variableParameterPaths, collapse = ", ")
-      ),
+    ),
     file = debugLogFileName,
     append = TRUE
   )
@@ -304,7 +304,7 @@ analyzeCoreSensitivity <- function(simulation,
   )
   write(
     paste0(
-      ifNotNull(nodeName, paste0(nodeName, ": "), ""), 
+      ifNotNull(nodeName, paste0(nodeName, ": "), ""),
       "Sensitivity analysis for current path(s) completed"
     ),
     file = debugLogFileName,

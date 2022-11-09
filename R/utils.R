@@ -27,7 +27,7 @@ calculateResiduals <- function(simulatedData, observedData, residualScale) {
 #' @return Geometric mean
 #' @export
 geomean <- function(x, na.rm = TRUE) {
-  logX <- log(x[x>0])
+  logX <- log(x[x > 0])
   exp(mean(logX, na.rm = na.rm))
 }
 
@@ -39,8 +39,8 @@ geomean <- function(x, na.rm = TRUE) {
 #' @return Geometric mean * geometric SD
 #' @export
 geomeanMultipliedBySD <- function(x, na.rm = TRUE) {
-  logX <- log(x[x>0])
-  exp(mean(logX, na.rm = na.rm)+stats::sd(logX, na.rm = na.rm))
+  logX <- log(x[x > 0])
+  exp(mean(logX, na.rm = na.rm) + stats::sd(logX, na.rm = na.rm))
 }
 
 #' @title geomeanDividedBySD
@@ -51,8 +51,8 @@ geomeanMultipliedBySD <- function(x, na.rm = TRUE) {
 #' @return Geometric mean / geometric SD
 #' @export
 geomeanDividedBySD <- function(x, na.rm = TRUE) {
-  logX <- log(x[x>0])
-  exp(mean(logX, na.rm = na.rm)-stats::sd(logX, na.rm = na.rm))
+  logX <- log(x[x > 0])
+  exp(mean(logX, na.rm = na.rm) - stats::sd(logX, na.rm = na.rm))
 }
 
 #' @title calculateGeometricErrorRange
@@ -191,7 +191,7 @@ replaceInfWithNA <- function(data) {
 #' @return filtered data.frame
 #' @keywords internal
 removeMissingValues <- function(data, dataMapping = NULL) {
-  if(isEmpty(data)){
+  if (isEmpty(data)) {
     return(data)
   }
   data[, dataMapping] <- replaceInfWithNA(data[, dataMapping])
@@ -211,13 +211,13 @@ removeMissingValues <- function(data, dataMapping = NULL) {
 #' @return filtered data.frame
 #' @keywords internal
 removeNegativeValues <- function(data, dataMapping = NULL) {
-  if(isEmpty(data)){
+  if (isEmpty(data)) {
     return(data)
   }
   negativeData <- data[, dataMapping] <= 0
   Nnegative <- sum(negativeData, na.rm = TRUE)
   data <- data[!negativeData, ]
-  
+
   if (Nnegative > 0) {
     logDebug(paste0(Nnegative, " values from variable '", dataMapping, "' were negative and removed from the analysis"))
   }
@@ -290,7 +290,7 @@ newOutputColor <- function() {
 #' @keywords internal
 getAllowedCores <- function() {
   return(
-    getAllowedCoresLinuxKubernetes() %||% 
+    getAllowedCoresLinuxKubernetes() %||%
       getOSPSuiteSetting(settingName = "numberOfCores")
   )
 }

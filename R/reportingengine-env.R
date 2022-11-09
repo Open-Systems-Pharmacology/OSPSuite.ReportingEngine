@@ -261,7 +261,7 @@ setDefaultAutoAxisLimitMargin <- function(margin) {
 #' \item `"Geometric mean"` summarizes data using geometric mean and mean */ geometric standard deviation
 #' \item `"Arithmetic mean"` summarizes data using arithmetic mean and mean +/- standard deviation
 #' }
-#' 
+#'
 #' @export
 #' @family enum helpers
 StatisticsTypes <- enum(c(
@@ -274,19 +274,19 @@ StatisticsTypes <- enum(c(
 
 
 #' @title getStatisticsFromType
-#' @description Get statistics 
+#' @description Get statistics
 #' @param statisticsType Statistics summarizing time profile simulated data
 #' as defined by helper enum `StatisticsType`
 #' @return A list including `y`, `ymin` and `ymax` summary statistics as well as their `caption`
 #' @export
-#' @examples 
+#' @examples
 #' \dontrun{
 #' getStatisticsFromType(StatisticsTypes$`Arithmetic mean`)
 #' }
-#' 
-getStatisticsFromType <- function(statisticsType){
+#'
+getStatisticsFromType <- function(statisticsType) {
   validateIsIncluded(statisticsType, StatisticsTypes)
-  if(isIncluded(statisticsType, StatisticsTypes$`2.5th-97.5th Percentiles`)){
+  if (isIncluded(statisticsType, StatisticsTypes$`2.5th-97.5th Percentiles`)) {
     return(list(
       y = tlf::tlfStatFunctions$`Percentile50%`,
       ymin = tlf::tlfStatFunctions$`Percentile2.5%`,
@@ -296,7 +296,7 @@ getStatisticsFromType <- function(statisticsType){
       rangeCaption = "[2.5\u1d57\u02b0-97.5\u1d57\u02b0] percentiles"
     ))
   }
-  if(isIncluded(statisticsType, StatisticsTypes$`5th-95th Percentiles`)){
+  if (isIncluded(statisticsType, StatisticsTypes$`5th-95th Percentiles`)) {
     return(list(
       y = tlf::tlfStatFunctions$`Percentile50%`,
       ymin = tlf::tlfStatFunctions$`Percentile5%`,
@@ -305,7 +305,7 @@ getStatisticsFromType <- function(statisticsType){
       rangeCaption = "[5\u1d57\u02b0-95\u1d57\u02b0] percentiles"
     ))
   }
-  if(isIncluded(statisticsType, StatisticsTypes$`10th-90th Percentiles`)){
+  if (isIncluded(statisticsType, StatisticsTypes$`10th-90th Percentiles`)) {
     return(list(
       y = tlf::tlfStatFunctions$`Percentile50%`,
       ymin = tlf::tlfStatFunctions$`Percentile10%`,
@@ -314,7 +314,7 @@ getStatisticsFromType <- function(statisticsType){
       rangeCaption = "[10\u1d57\u02b0-90\u1d57\u02b0] percentiles"
     ))
   }
-  if(isIncluded(statisticsType, StatisticsTypes$`Arithmetic mean`)){
+  if (isIncluded(statisticsType, StatisticsTypes$`Arithmetic mean`)) {
     return(list(
       y = tlf::tlfStatFunctions$mean,
       ymin = tlf::tlfStatFunctions$`mean-sd`,
@@ -324,7 +324,7 @@ getStatisticsFromType <- function(statisticsType){
       rangeCaption = "mean \u00b1 SD range"
     ))
   }
-  #TODO : define geometric mean in tlf !
+  # TODO : define geometric mean in tlf !
   return(list(
     y = "geomean",
     ymin = "geomeanDividedBySD",
@@ -346,37 +346,36 @@ reEnv$defaultTimeProfileStatistics <- getStatisticsFromType(StatisticsTypes$`5th
 #' @param yCaption Legend caption for middle values statistics
 #' @param rangeCaption Legend caption for range values statistics
 #' @export
-#' @examples 
+#' @examples
 #' \dontrun{
 #' # Set the default statistics as geometric mean
 #' setDefaultTimeProfileStatistics(statisticsType = StatisticsTypes$`Geometric mean`)
-#' 
+#'
 #' # Set the default legend caption displayed for range
 #' setDefaultTimeProfileStatistics(rangeCaption = "90% population range")
-#' 
 #' }
-#' 
+#'
 setDefaultTimeProfileStatistics <- function(statisticsType = NULL,
-                                            y = NULL, 
-                                            ymin = NULL, 
-                                            ymax = NULL, 
+                                            y = NULL,
+                                            ymin = NULL,
+                                            ymax = NULL,
                                             yCaption = NULL,
-                                            rangeCaption = NULL){
-  
+                                            rangeCaption = NULL) {
   validateIsIncluded(statisticsType, StatisticsTypes, nullAllowed = TRUE)
   # Allow user to enter the function directly
   validateIsOfType(y, c("character", "closure"), nullAllowed = TRUE)
   validateIsOfType(ymin, c("character", "closure"), nullAllowed = TRUE)
   validateIsOfType(ymax, c("character", "closure"), nullAllowed = TRUE)
-  
-  if(!isEmpty(statisticsType)){
+
+  if (!isEmpty(statisticsType)) {
     reEnv$defaultTimeProfileStatistics <- getStatisticsFromType(statisticsType)
   }
   # Assign variables to reEnv only if defined
   eval(parseVariableToObject(
     objectName = "reEnv$defaultTimeProfileStatistics",
     variableName = c("y", "ymin", "ymax", "yCaption", "rangeCaption"),
-    keepIfNull = TRUE))
-  
+    keepIfNull = TRUE
+  ))
+
   return(invisible())
 }

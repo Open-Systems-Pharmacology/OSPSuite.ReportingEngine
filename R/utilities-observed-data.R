@@ -87,9 +87,9 @@ readObservedDataFile <- function(fileName,
 
 #' @title getSelectedData
 #' @description
-#' Get selected data 
+#' Get selected data
 #' The function leverage `dplyr::filter` to select the data
-#' @param data A data.frame 
+#' @param data A data.frame
 #' @param dataSelection Character string or expression evaluated to select data
 #' The enum helper `DataSelectionKeys` provides keys for selected all or none of the data
 #' @return A data.frame of selected data
@@ -98,35 +98,35 @@ readObservedDataFile <- function(fileName,
 #' @seealso DataSelectionKeys
 #' @examples
 #' data <- data.frame(
-#' x = seq(0,9),
-#' y = seq(10,19),
-#' mdv = c(1,1, rep(0, 8)),
-#' groups = rep(c("A", "B"), 5)
+#'   x = seq(0, 9),
+#'   y = seq(10, 19),
+#'   mdv = c(1, 1, rep(0, 8)),
+#'   groups = rep(c("A", "B"), 5)
 #' )
-#' 
+#'
 #' # Select all the data
 #' getSelectedData(data, DataSelectionKeys$ALL)
-#' 
+#'
 #' # Select no data
 #' getSelectedData(data, DataSelectionKeys$NONE)
-#' 
+#'
 #' # Select data from group A
 #' getSelectedData(data, "groups %in% 'A'")
-#' 
+#'
 #' # Remove missing dependent variable (mdv)
 #' getSelectedData(data, "mdv == 0")
-#' 
+#'
 getSelectedData <- function(data, dataSelection) {
-  if(isEmpty(dataSelection)){
-    return(data[FALSE,])
+  if (isEmpty(dataSelection)) {
+    return(data[FALSE, ])
   }
-  if(isIncluded(dataSelection, DataSelectionKeys$ALL)){
+  if (isIncluded(dataSelection, DataSelectionKeys$ALL)) {
     return(data)
   }
-  if(isIncluded(dataSelection, c(DataSelectionKeys$NONE, ""))){
-    return(data[FALSE,])
+  if (isIncluded(dataSelection, c(DataSelectionKeys$NONE, ""))) {
+    return(data[FALSE, ])
   }
-  if(isOfType(dataSelection, "expression")){
+  if (isOfType(dataSelection, "expression")) {
     return(data %>% dplyr::filter(eval(dataSelection)))
   }
   return(data %>% dplyr::filter(eval(parse(text = dataSelection))))
@@ -136,7 +136,7 @@ getSelectedData <- function(data, dataSelection) {
 #' @description
 #' Get selected rows from data and its selection
 #' The function leverage `dplyr::filter` to select the rows
-#' @param data A data.frame 
+#' @param data A data.frame
 #' @param dataSelection Character string or expression evaluated to select data
 #' The enum helper `DataSelectionKeys` provides keys for selected all or none of the data
 #' @return A data.frame of selected data
@@ -145,42 +145,42 @@ getSelectedData <- function(data, dataSelection) {
 #' @seealso DataSelectionKeys
 #' @examples
 #' data <- data.frame(
-#' x = seq(0,9),
-#' y = seq(10,19),
-#' mdv = c(1,1, rep(0, 8)),
-#' groups = rep(c("A", "B"), 5)
+#'   x = seq(0, 9),
+#'   y = seq(10, 19),
+#'   mdv = c(1, 1, rep(0, 8)),
+#'   groups = rep(c("A", "B"), 5)
 #' )
-#' 
+#'
 #' # Select all the rows
 #' getSelectedRows(data, DataSelectionKeys$ALL)
-#' 
+#'
 #' # Select no row
 #' getSelectedRows(data, DataSelectionKeys$NONE)
-#' 
+#'
 #' # Select rows from group A
 #' getSelectedData(data, "groups %in% 'A'")
-#' 
+#'
 #' # Get rows of missing dependent variable (mdv)
 #' getSelectedRows(data, "mdv == 0")
-#' 
+#'
 getSelectedRows <- function(data, dataSelection) {
-  if(isEmpty(dataSelection)){
+  if (isEmpty(dataSelection)) {
     return(FALSE)
   }
-  if(isIncluded(dataSelection, DataSelectionKeys$ALL)){
+  if (isIncluded(dataSelection, DataSelectionKeys$ALL)) {
     return(TRUE)
   }
-  if(isIncluded(dataSelection, c(DataSelectionKeys$NONE, ""))){
+  if (isIncluded(dataSelection, c(DataSelectionKeys$NONE, ""))) {
     return(FALSE)
   }
-  if(isOfType(dataSelection, "expression")){
-    selectedData <- data %>% 
-      dplyr::mutate(rows = 1:n()) %>% 
+  if (isOfType(dataSelection, "expression")) {
+    selectedData <- data %>%
+      dplyr::mutate(rows = 1:n()) %>%
       dplyr::filter(eval(dataSelection))
     return(selectedData$rows)
   }
-  selectedData <- data %>% 
-    dplyr::mutate(rows = 1:n()) %>% 
+  selectedData <- data %>%
+    dplyr::mutate(rows = 1:n()) %>%
     dplyr::filter(eval(parse(text = dataSelection)))
   return(selectedData$rows)
 }
@@ -524,7 +524,7 @@ getObservedDataIdFromPath <- function(path) {
 #' @param dataSelection characters or expression to select subset the observed data
 #' @return characters or expression to select subset the observed data
 #' @keywords internal
-translateDataSelection <- function(dataSelection){
+translateDataSelection <- function(dataSelection) {
   validateIsOfType(dataSelection, c("logical", "character", "expression"), nullAllowed = TRUE)
   if (isEmpty(dataSelection)) {
     return(FALSE)

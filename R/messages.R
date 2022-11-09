@@ -101,7 +101,7 @@ messages <- list(
     paste0(callingFunction(), "Expected a dimension. Check that '", paste0(values, collapse = "', '."), "' is included in ospsuite::allAvailableDimensions().")
   },
   invalidOuputPath = function(path, simName) {
-    if(isOfLength(path,1)){
+    if (isOfLength(path, 1)) {
       return(paste0(callingFunction(), "'", path, "' is an invalid output path for simulation '", simName, "'."))
     }
     paths <- paste0(path, collapse = "', '")
