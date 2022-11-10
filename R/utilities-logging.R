@@ -174,6 +174,7 @@ logCatch <- function(expr) {
           "Each group consists of only one observation",
           "rows containing non-finite values",
           "Ignoring unknown parameters",
+          "was deprecated in ggplot2",
           # warning thrown because of non-ASCII unicode characters
           "mbcsToSbcs"
         ),
