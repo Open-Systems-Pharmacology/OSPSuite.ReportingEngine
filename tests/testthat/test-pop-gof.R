@@ -59,23 +59,16 @@ defineSimulationSets <- parse(text = paste0(
   "simulationFile = simulationFile,",
   "populationFile = populationFile,",
   # Scenarios for observed data file
+  "dataSource = ",
   c(
-    "",
-    "observedDataFile = dataFile,",
-    "observedDataFile = dataFile,",
-    "observedDataFile = NULL,",
-    "observedDataFile = dataFile,",
-    "observedDataFile = dataFile,"
+    "NULL",
+    "DataSource$new(dataFile = dataFile, metaDataFile = dictFile)",
+    "DataSource$new(dataFile = dataFile, metaDataFile = dictFile)",
+    "NULL",
+    "DataSource$new(dataFile = dataFile, metaDataFile = dictFile)",
+    "DataSource$new(dataFile = dataFile, metaDataFile = dictFile)"
   ),
-  # Scenarios for dictionary file
-  c(
-    "",
-    "observedMetaDataFile = dictFile,",
-    "observedMetaDataFile = dictFile,",
-    "observedMetaDataFile = NULL,",
-    "observedMetaDataFile = dictFile,",
-    "observedMetaDataFile = dictFile,"
-  ),
+  ",",
   "outputs = Output$new(",
   'path = "Organism|A|Concentration in container",',
   # Scenarios for data selection

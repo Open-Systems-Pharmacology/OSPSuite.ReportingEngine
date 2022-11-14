@@ -1,0 +1,10 @@
+14/11/2022 - 05:35:05
+'testReport.md' already exists. Overwriting 'testReport.md'.
+14/11/2022 - 05:35:05
+'testReport.md' already exists. Overwriting 'testReport.md'.
+14/11/2022 - 05:35:05
+In 'testReport.md', 1 tables and 3 figures were referenced.
+14/11/2022 - 05:35:05
+In 'testReport.md', 5 sections were numbered
+14/11/2022 - 05:35:05
+In 'testReport.md', table of content of 6 lines was included.
