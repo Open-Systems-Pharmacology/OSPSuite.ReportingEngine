@@ -138,52 +138,52 @@ validateFileExists <- function(path, nullAllowed = FALSE) {
 #' 1. Use units from outputs
 #' 2. Use units from observed dataset
 #' 3. Use units from dictionary
-#' @param observedMetaDataFile Path of meta data file on observed dataset (also called dictionary)
+#' @param dataSource A `DataSource` object
 #' @param observedDataFile Path of observed dataset
 #' @param outputs list or array of `Output` objects
 #' @keywords internal
-validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile, outputs) {
-  # Check that dictionary is provided
-  if (isEmpty(observedMetaDataFile)) {
-    stop(messages$errorObservedMetaDataFileNotProvided(observedDataFile))
+validateDataSource <- function(dataSource, outputs, nullAllowed = TRUE) {
+  if (nullAllowed && is.null(dataSource)) {
+    return(invisible())
   }
+  validateIsOfType(dataSource, "DataSource")
   # Read dictionary and check that mandatory variables are included
-  dictionary <- readObservedDataFile(observedMetaDataFile)
+  dictionary <- readObservedDataFile(dataSource$metaDataFile)
   if (!isIncluded(dictionaryParameters$datasetUnit, names(dictionary))) {
     dictionary[, dictionaryParameters$datasetUnit] <- NA
   }
   validateIsIncludedInDataset(c(dictionaryParameters$ID, dictionaryParameters$datasetColumn), dictionary, datasetName = "dictionary")
   validateIsIncludedAndLog(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID], groupName = paste0("Column '", dictionaryParameters$ID, "'"))
-
+  
   # Check that dictionary and observed data are consitent
-  observedDataset <- readObservedDataFile(observedDataFile)
+  observedDataset <- readObservedDataFile(dataSource$dataFile)
   timeVariable <- getDictionaryVariable(dictionary, dictionaryParameters$timeID)
   dvVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvID)
   lloqVariable <- getDictionaryVariable(dictionary, dictionaryParameters$lloqID)
-
+  
   checkIsIncludedInDataset(c(timeVariable, dvVariable), observedDataset, datasetName = "observed dataset")
   checkIsIncludedInDataset(lloqVariable, observedDataset, datasetName = "observed dataset", nullAllowed = TRUE)
-
+  
   # Check of unit definitions:
-  # 1) unit defined in outptuts
+  # 1) unit defined in outputs
   dataUnit <- NULL
-  if (!isOfLength(outputs, 0)) {
+  if (!isEmpty(outputs)) {
     dataUnit <- unlist(lapply(outputs, function(output) {
       output$dataUnit
     }))
   }
-
+  
   # 2) If unit is defined as a datasetColumn
   timeUnitVariable <- getDictionaryVariable(dictionary, dictionaryParameters$timeUnitID)
   dvUnitVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvUnitID)
-
+  
   # 3) If unit is defined as a value in datasetUnit
   timeMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$timeID
   dvMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$dvID
-
+  
   timeUnit <- as.character(dictionary[timeMapping, dictionaryParameters$datasetUnit])
   dvUnit <- as.character(dictionary[dvMapping, dictionaryParameters$datasetUnit])
-
+  
   validateUnitDataDefinition(timeUnit, timeUnitVariable, observedDataset)
   validateUnitDataDefinition(dvUnit, dvUnitVariable, observedDataset, dataUnit)
   return(invisible())
