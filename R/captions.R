@@ -87,24 +87,24 @@ captions <- list(
         " as quantile-quantile plot", dataSource
         ))
     },
-    meanLegend = function(simulationSetName, descriptor, pathName){
+    meanLegend = function(simulationSetName, descriptor, pathName) {
       return(paste0("Simulated ", pathName, " (", reportSimulationSet(simulationSetName, descriptor), ")"))
     },
-    populationLegend = function(simulationSetName, descriptor, statistics, pathName){
+    populationLegend = function(simulationSetName, descriptor, statistics, pathName) {
       paste0(
-        "Simulated ", statistics$yCaption, " and ", statistics$rangeCaption, 
+        "Simulated ", statistics$yCaption, " and ", statistics$rangeCaption,
         " for ", pathName, " (", reportSimulationSet(simulationSetName, descriptor), ")"
-        )
+      )
     },
-    resLegend = function(simulationSetName, descriptor, pathName){
+    resLegend = function(simulationSetName, descriptor, pathName) {
       return(paste0(pathName, " (", reportSimulationSet(simulationSetName, descriptor), ")"))
     },
-    observedLegend = function(simulationSetName, descriptor, pathName){
+    observedLegend = function(simulationSetName, descriptor, pathName) {
       paste0(
         "Observed data for ", pathName, " (", reportSimulationSet(simulationSetName, descriptor), ")"
       )
     },
-    lloqLegend = function(simulationSetName, descriptor, pathName){
+    lloqLegend = function(simulationSetName, descriptor, pathName) {
       paste0(
         "BLQ data for ", pathName, " (", reportSimulationSet(simulationSetName, descriptor), ")"
       )
@@ -173,8 +173,8 @@ getGoodnessOfFitCaptions <- function(structureSet, plotType, plotScale = "linear
   simulationSetName <- structureSet$simulationSet$simulationSetName
   setDescriptor <- structureSet$simulationSetDescriptor
   yCaption <- NULL
-  if(isOfType(structureSet$simulationSet, "PopulationSimulationSet") & 
-     isIncluded(plotType, c("obsVsPred", "resVsPred"))){
+  if (isOfType(structureSet$simulationSet, "PopulationSimulationSet") &
+    isIncluded(plotType, c("obsVsPred", "resVsPred"))) {
     gofStatistics <- settings$getStatistics()
     yCaption <- gofStatistics$yCaption
     plotCaption <- captions$plotGoF[[plotType]](simulationSetName, setDescriptor, dataSource, plotScale, yCaption)
@@ -249,15 +249,15 @@ getStatisticsCaption <- function(statistics){
   if(isEmpty(statistics)){
     return("")
   }
-  return(paste0("(", statistics,") "))
-} 
+  return(paste0("(", statistics, ") "))
+}
 
-getPlotScaleCaption <- function(plotName, plotScale){
+getPlotScaleCaption <- function(plotName, plotScale) {
   return(paste0(". ", plotName, " are plotted in a ", plotScale, " scale."))
 }
 
-getResidualsAcrossCaption <- function(pathName){
-  if(isEmpty(pathName)){
+getResidualsAcrossCaption <- function(pathName) {
+  if (isEmpty(pathName)) {
     return("")
   }
   return(paste0(pathName, " across "))

@@ -27,7 +27,7 @@ calculateResiduals <- function(simulatedData, observedData, residualScale) {
 #' @return Geometric mean
 #' @export
 geomean <- function(x, na.rm = TRUE) {
-  logX <- log(x[x>0])
+  logX <- log(x[x > 0])
   exp(mean(logX, na.rm = na.rm))
 }
 
@@ -39,8 +39,8 @@ geomean <- function(x, na.rm = TRUE) {
 #' @return Geometric mean * geometric SD
 #' @export
 geomeanMultipliedBySD <- function(x, na.rm = TRUE) {
-  logX <- log(x[x>0])
-  exp(mean(logX, na.rm = na.rm)+stats::sd(logX, na.rm = na.rm))
+  logX <- log(x[x > 0])
+  exp(mean(logX, na.rm = na.rm) + stats::sd(logX, na.rm = na.rm))
 }
 
 #' @title geomeanDividedBySD
@@ -51,8 +51,8 @@ geomeanMultipliedBySD <- function(x, na.rm = TRUE) {
 #' @return Geometric mean / geometric SD
 #' @export
 geomeanDividedBySD <- function(x, na.rm = TRUE) {
-  logX <- log(x[x>0])
-  exp(mean(logX, na.rm = na.rm)-stats::sd(logX, na.rm = na.rm))
+  logX <- log(x[x > 0])
+  exp(mean(logX, na.rm = na.rm) - stats::sd(logX, na.rm = na.rm))
 }
 
 #' @title calculateGeometricErrorRange
@@ -158,57 +158,6 @@ generateResultFileNames <- function(numberOfCores, folderName, fileName, separat
   return(allResultsFileNames)
 }
 
-#' @title loadSimulationWithUpdatedPaths
-#' @param simulationSet simulation set containing path to simulation file and pathIDs for quantities to be loaded into simulation object
-#' @param loadFromCache If `TRUE`, an already loaded pkml file will not be loaded again, but the `Simulation` object will be retrieved from cache.
-#' If `FALSE`, a new `Simulation` object will be created. Default value is `FALSE`.
-#' @param addToCache If `TRUE`, the loaded simulation is added to cache.
-#' If `FALSE`, the returned simulation only exists locally. Default is `TRUE`.
-#' @return A `Simulation` object with pathIDs updated from simulationSet
-#' @export
-loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE, addToCache = TRUE) {
-  simulation <- ospsuite::loadSimulation(
-    filePath = simulationSet$simulationFile,
-    loadFromCache = loadFromCache,
-    addToCache = addToCache
-  )
-  # Prevent loadSimulationWithUpdatedPaths from crashing if user did not submit any pathID
-  if (!is.null(simulationSet$outputs)) {
-    simulation$outputSelections$clear()
-    paths <- sapply(simulationSet$outputs, function(output) {
-      output$path
-    })
-    ospsuite::addOutputs(quantitiesOrPaths = paths, simulation = simulation)
-  }
-
-  if (is.null(simulationSet$minimumSimulationEndTime)) {
-    return(simulation)
-  }
-
-  if (simulationSet$minimumSimulationEndTime > simulation$outputSchema$endTime) {
-    maximalIntervalIndex <- which(sapply(simulation$outputSchema$intervals, function(x) {
-      x$endTime$value
-    }) == simulation$outputSchema$endTime)[1]
-    simulation$outputSchema$intervals[[maximalIntervalIndex]]$endTime$setValue(value = simulationSet$minimumSimulationEndTime, unit = ospUnits$Time$min)
-  }
-  return(simulation)
-}
-
-#' @title loadWorkflowPopulation
-#' @param simulationSet A `PopulationSimulationSet` object
-#' @export
-#' @import ospsuite
-loadWorkflowPopulation <- function(simulationSet) {
-  validateIsOfType(simulationSet, "PopulationSimulationSet")
-  population <- ospsuite::loadPopulation(simulationSet$populationFile)
-  simulation <- loadSimulationWithUpdatedPaths(simulationSet)
-
-  if (!is.null(simulationSet$studyDesignFile)) {
-    addStudyParameters(population, simulation, simulationSet$studyDesignFile)
-  }
-  return(population)
-}
-
 #' @title lastPathElement
 #' @param path simulation path
 #' @return last path element as character string
@@ -242,7 +191,7 @@ replaceInfWithNA <- function(data) {
 #' @return filtered data.frame
 #' @keywords internal
 removeMissingValues <- function(data, dataMapping = NULL) {
-  if(isEmpty(data)){
+  if (isEmpty(data)) {
     return(data)
   }
   data[, dataMapping] <- replaceInfWithNA(data[, dataMapping])
@@ -262,13 +211,13 @@ removeMissingValues <- function(data, dataMapping = NULL) {
 #' @return filtered data.frame
 #' @keywords internal
 removeNegativeValues <- function(data, dataMapping = NULL) {
-  if(isEmpty(data)){
+  if (isEmpty(data)) {
     return(data)
   }
   negativeData <- data[, dataMapping] <= 0
   Nnegative <- sum(negativeData, na.rm = TRUE)
   data <- data[!negativeData, ]
-  
+
   if (Nnegative > 0) {
     logDebug(paste0(Nnegative, " values from variable '", dataMapping, "' were negative and removed from the analysis"))
   }
@@ -306,39 +255,32 @@ getPKParameterGroupsInOutput <- function(output) {
   return(pkParameters)
 }
 
-#' @title getOutputPathsInSimulationSet
-#' @param simulationSet SimulationSet object or derived class
-#' @return Path names of outputs in `simulationSet`
-#' @export
-#' @family workflow helpers
-getOutputPathsInSimulationSet <- function(simulationSet) {
-  validateIsOfType(simulationSet, "SimulationSet")
-  return(sapply(simulationSet$outputs, function(output) {
-    output$path
-  }))
+#' @title newOutputColor
+#' @description
+#' Find a color for new `Output` objects
+#' @return A color from OSP Suite Color Map
+#' @keywords internal
+newOutputColor <- function() {
+  outputNames <- getObjectNamesInGlobalEnv("Output")
+  usedColors <- sapply(
+    outputNames,
+    function(outputName) {
+      output <- get(outputName)
+      return(output$color)
+    }
+  )
+  # OSP Suite color map includes 50 unique colors used here
+  remainingColors <- setdiff(tlf::ColorMaps$ospDefault, usedColors)
+  if (!isEmpty(remainingColors)) {
+    return(head(remainingColors, 1))
+  }
+  # If the colors were already used, in previous Outputs,
+  # Use new round of osp suite colors
+  colorIndex <- 1 + (length(outputNames) %% length(tlf::ColorMaps$ospDefault))
+  return(tlf::ColorMaps$ospDefault[colorIndex])
 }
 
-#' @title getPKParametersInSimulationSet
-#' @param simulationSet SimulationSet object or derived class
-#' @return Data.frame with \code{path} and \code{pkParameter} in `simulationSet`
-#' @export
-#' @family workflow helpers
-getPKParametersInSimulationSet <- function(simulationSet) {
-  validateIsOfType(simulationSet, "SimulationSet")
-  pkParametersTable <- data.frame()
-  for (output in simulationSet$outputs) {
-    pkParametersTable <- rbind.data.frame(
-      pkParametersTable,
-      data.frame(
-        path = output$path,
-        pkParameter = getPKParametersInOutput(output),
-        group = getPKParameterGroupsInOutput(output),
-        stringsAsFactors = FALSE
-      )
-    )
-  }
-  return(pkParametersTable)
-}
+
 
 #' @title getAllowedCores
 #'
@@ -348,7 +290,7 @@ getPKParametersInSimulationSet <- function(simulationSet) {
 #' @keywords internal
 getAllowedCores <- function() {
   return(
-    getAllowedCoresLinuxKubernetes() %||% 
+    getAllowedCoresLinuxKubernetes() %||%
       getOSPSuiteSetting(settingName = "numberOfCores")
   )
 }
@@ -524,4 +466,22 @@ saveFigure <- function(plotObject, fileName, simulationSetName = NULL) {
     }
   )
   return(invisible())
+}
+
+#' @title getObjectNamesInGlobalEnv
+#' @description Get object names of certain type/class in the Global Environment
+#' @param objectType Object type or class
+#' @return Array of Number of `Output` objects in the Global Environment
+#' @keywords internal
+getObjectNamesInGlobalEnv <- function(objectType) {
+  objectNames <- ls(envir = .GlobalEnv)
+  if (isEmpty(objectNames)) {
+    return(NULL)
+  }
+  objectNames[sapply(
+    objectNames,
+    function(objectName) {
+      isOfType(get(objectName, envir = .GlobalEnv), objectType)
+    }
+  )]
 }

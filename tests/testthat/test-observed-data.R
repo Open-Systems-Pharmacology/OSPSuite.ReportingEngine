@@ -1,8 +1,8 @@
 library(ospsuite.reportingengine)
 # Test data frame used as reference
 testDataFrame <- data.frame(
-  "ID" = rep(seq(1,3), each = 4),
-  "Time" = rep(seq(1,4), 3),
+  "ID" = rep(seq(1, 3), each = 4),
+  "Time" = rep(seq(1, 4), 3),
   "DV" = c(1, 1, 2, 2, 1, 1, 3, 3, 1, 1, 4, 4),
   "Group" = rep(c("A", "B"), each = 6),
   stringsAsFactors = FALSE
@@ -31,12 +31,12 @@ write.table(testDataFrame,
 
 # Needs to update expect_equal due to mismatch in attribute "row.names"
 # due to new dplyr package method
-expect_dataframe <- function(x, y){
+expect_dataframe <- function(x, y) {
   row.names(x) <- 1:nrow(x)
   row.names(y) <- 1:nrow(y)
   expect_equal(x, y)
 }
-  
+
 
 context("Reading of Observed Data")
 
@@ -74,9 +74,9 @@ test_that("'translateDataSelection' remove white space appropriately", {
   expect_equal(
     translateDataSelection(c("aa", " ", " bb", "cc ", "")),
     "(aa) & (bb) & (cc)"
-    )
+  )
   expect_false(translateDataSelection(c(" ", "")))
-  
+
   expect_equal(
     translateDataSelection(c("a < 5 | b>2", " group %in% 'b' ")),
     "(a < 5 | b>2) & (group %in% 'b')"
@@ -85,7 +85,7 @@ test_that("'translateDataSelection' remove white space appropriately", {
 test_that("'translateDataSelection' understands logicals and DataSelectionKeys", {
   expect_false(translateDataSelection(FALSE))
   expect_false(translateDataSelection(DataSelectionKeys$NONE))
-  
+
   expect_true(translateDataSelection(TRUE))
   expect_true(eval(parse(text = translateDataSelection(DataSelectionKeys$ALL))))
 })
@@ -96,7 +96,7 @@ test_that("'translateDataSelection' understands logicals and DataSelectionKeys",
 test_that("Selection Keys are well understood", {
   expect_equal(testDataFrame, getSelectedData(testDataFrame, DataSelectionKeys$ALL))
   expect_true(ospsuite.utils::isEmpty(getSelectedData(testDataFrame, DataSelectionKeys$NONE)))
-  
+
   expect_true(getSelectedRows(testDataFrame, DataSelectionKeys$ALL))
   expect_false(getSelectedRows(testDataFrame, DataSelectionKeys$NONE))
 })
@@ -110,27 +110,27 @@ test_that("Correct expressions work as expected and both methods can be used to 
   testSelection <- "ID == 1"
   selectedRows <- which(testDataFrame$ID == 1)
   expect_equal(selectedRows, getSelectedRows(testDataFrame, testSelection))
-  expect_dataframe(testDataFrame[selectedRows,], getSelectedData(testDataFrame, testSelection))
+  expect_dataframe(testDataFrame[selectedRows, ], getSelectedData(testDataFrame, testSelection))
   expect_dataframe(
-    testDataFrame[getSelectedRows(testDataFrame, testSelection),], 
+    testDataFrame[getSelectedRows(testDataFrame, testSelection), ],
     getSelectedData(testDataFrame, testSelection)
-    )
-  
+  )
+
   testSelection <- "Time %in% 1"
   selectedRows <- which(testDataFrame$Time %in% 1)
   expect_equal(selectedRows, getSelectedRows(testDataFrame, testSelection))
-  expect_dataframe(testDataFrame[selectedRows,], getSelectedData(testDataFrame, testSelection))
+  expect_dataframe(testDataFrame[selectedRows, ], getSelectedData(testDataFrame, testSelection))
   expect_dataframe(
-    testDataFrame[getSelectedRows(testDataFrame, testSelection),], 
+    testDataFrame[getSelectedRows(testDataFrame, testSelection), ],
     getSelectedData(testDataFrame, testSelection)
   )
-  
+
   testSelection <- '!DV %in% 1 & Group %in% "A"'
   selectedRows <- which(!(testDataFrame$DV %in% 1) & testDataFrame$Group %in% "A")
   expect_equal(selectedRows, getSelectedRows(testDataFrame, testSelection))
-  expect_dataframe(testDataFrame[selectedRows,], getSelectedData(testDataFrame, testSelection))
+  expect_dataframe(testDataFrame[selectedRows, ], getSelectedData(testDataFrame, testSelection))
   expect_dataframe(
-    testDataFrame[getSelectedRows(testDataFrame, testSelection),], 
+    testDataFrame[getSelectedRows(testDataFrame, testSelection), ],
     getSelectedData(testDataFrame, testSelection)
   )
 })

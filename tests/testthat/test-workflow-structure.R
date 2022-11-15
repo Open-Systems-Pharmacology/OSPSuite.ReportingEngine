@@ -61,4 +61,3 @@ test_that("Workflows initialization creates appropriate folder and logs, and war
 
   unlink(testFolder, recursive = TRUE)
 })
-

@@ -180,7 +180,7 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
   # Note that other plots be could included in default quadratic plots
   defaultWidth <- reEnv$defaultPlotFormat$width
   defaultHeight <- reEnv$defaultPlotFormat$height
-  if(isIncluded(plotType, "ObsVsPred")){
+  if (isIncluded(plotType, "ObsVsPred")) {
     defaultWidth <- mean(c(defaultWidth, defaultHeight))
     defaultHeight <- defaultWidth
   }
@@ -407,7 +407,7 @@ updatePlotDimensions <- function(plotObject) {
 #' @keywords internal
 setQuadraticDimension <- function(plotObject, plotConfiguration = NULL) {
   # If user defined the dimensions through a PlotConfiguration object, use it as is
-  if(!isEmpty(plotConfiguration)){
+  if (!isEmpty(plotConfiguration)) {
     return(plotObject)
   }
   # Otherwise, set quadratic plot
@@ -418,4 +418,199 @@ setQuadraticDimension <- function(plotObject, plotConfiguration = NULL) {
   plotObject$plotConfiguration$export$width <- newDimension
   plotObject$plotConfiguration$export$height <- newDimension
   return(plotObject)
+}
+
+#' @title getTimeProfilePlotConfiguration
+#' @description Define a `TimeProfilePlotConfiguration` object
+#' @param workflowType Workflow type, either `"mean"` or `"population"`
+#' @param group A data.frame mapping properties to output groups
+#' @param data A data.frame
+#' @param metaData List of metaData defining dimensions and units in the data.frame
+#' @param dataMapping List mapping x, y and color variables to `data`
+#' @param plotConfiguration A user-defined `TimeProfilePlotConfiguration` object
+#' @return A `TimeProfilePlotConfiguration` object
+#' @keywords internal
+getTimeProfilePlotConfiguration <- function(workflowType,
+                                            group,
+                                            data,
+                                            metaData,
+                                            observedData = NULL,
+                                            dataMapping = NULL,
+                                            plotConfiguration = NULL) {
+  # If user-defined plot configuration, use as is
+  if (!isEmpty(plotConfiguration)) {
+    return(plotConfiguration)
+  }
+  dataMapping <- switch(workflowType,
+    "mean" = tlf::XYGDataMapping$new(
+      x = dataMapping$x,
+      y = dataMapping$y,
+      color = dataMapping$group
+    ),
+    "population" = tlf::TimeProfileDataMapping$new(
+      x = dataMapping$x,
+      y = dataMapping$y,
+      ymin = dataMapping$ymin,
+      ymax = dataMapping$ymax,
+      group = dataMapping$group
+    )
+  )
+  plotConfiguration <- tlf::TimeProfilePlotConfiguration$new(
+    data = data,
+    metaData = metaData,
+    dataMapping = dataMapping
+  )
+  plotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, dataMapping, plotConfiguration)
+
+  plotConfiguration$lines$color <- getColorFromOutputGroup(
+    group = group,
+    data = data,
+    dataMapping = dataMapping,
+    legendVariable = "legend",
+    colorVariable = "color"
+  )
+  plotConfiguration$points$color <- getColorFromOutputGroup(
+    group = group,
+    data = observedData,
+    dataMapping = dataMapping,
+    legendVariable = "legend",
+    colorVariable = "color"
+  )
+  plotConfiguration$errorbars$color <- getColorFromOutputGroup(
+    group = group,
+    data = observedData,
+    dataMapping = dataMapping,
+    legendVariable = "legend",
+    colorVariable = "color"
+  )
+  plotConfiguration$ribbons$fill <- getColorFromOutputGroup(
+    group = group,
+    data = data,
+    dataMapping = dataMapping,
+    legendVariable = "legend",
+    colorVariable = "fill"
+  )
+
+  return(plotConfiguration)
+}
+
+#' @title getGOFPlotConfiguration
+#' @description Define a `PlotConfiguration` object
+#' @param plotType Plot type for residuals
+#' @param group A data.frame mapping properties to output groups
+#' @param data A data.frame
+#' @param metaData List of metaData defining dimensions and units in the data.frame
+#' @param dataMapping List `DataMapping` object
+#' @param plotConfiguration A user-defined `PlotConfiguration` object
+#' @return A `PlotConfiguration` object
+#' @keywords internal
+getGOFPlotConfiguration <- function(plotType,
+                                    group,
+                                    data,
+                                    metaData,
+                                    dataMapping = NULL,
+                                    plotConfiguration = NULL) {
+  # If user-defined plot configuration, use as is
+  if (!isEmpty(plotConfiguration)) {
+    return(plotConfiguration)
+  }
+
+  plotConfiguration <- switch(plotType,
+    "obsVsPred" = tlf::ObsVsPredPlotConfiguration$new(
+      data = data,
+      metaData = metaData,
+      dataMapping = dataMapping
+    ),
+    "resVsPred" = tlf::ResVsPredPlotConfiguration$new(
+      data = data,
+      metaData = metaData,
+      dataMapping = dataMapping
+    ),
+    "resVsTime" = tlf::ResVsTimePlotConfiguration$new(
+      data = data,
+      metaData = metaData,
+      dataMapping = dataMapping
+    ),
+    "resHisto" = tlf::HistogramPlotConfiguration$new(
+      data = data,
+      metaData = metaData,
+      dataMapping = dataMapping
+    ),
+    "resQQPlot" = tlf::QQPlotConfiguration$new(
+      data = data,
+      metaData = metaData,
+      dataMapping = dataMapping
+    )
+  )
+  # Set quadratic plot for obs vs pred
+  if (plotType %in% "obsVsPred") {
+    newDimension <- mean(c(
+      plotConfiguration$export$width,
+      plotConfiguration$export$height
+    ))
+    plotConfiguration$export$width <- newDimension
+    plotConfiguration$export$height <- newDimension
+  }
+  # Set time ticks for res vs time
+  if (plotType %in% "resVsTime") {
+    residualTimeTicks <- getTimeTicksFromUnit(
+      metaData$Time$unit,
+      timeValues = data$Time
+    )
+    # ticks = residualTimeTicks$ticks,
+    # ticklabels = residualTimeTicks$ticklabels
+    plotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, dataMapping, plotConfiguration)
+  }
+  # Set labels for qq plots and histograms
+  if (plotType %in% "resHisto") {
+    plotConfiguration$ribbons$fill <- group$fill
+    plotConfiguration$labels$ylabel$text <- reEnv$residualsHistogramLabel
+  }
+  if (plotType %in% "resQQPlot") {
+    plotConfiguration$labels$ylabel$text <- reEnv$residualsQQLabel
+  }
+
+  plotConfiguration$points$color <- getColorFromOutputGroup(
+    group = group,
+    data = data,
+    dataMapping = dataMapping,
+    legendVariable = "residualsLegend",
+    colorVariable = "color"
+  )
+  plotConfiguration$errorbars$color <- getColorFromOutputGroup(
+    group = group,
+    data = data,
+    dataMapping = dataMapping,
+    legendVariable = "residualsLegend",
+    colorVariable = "color"
+  )
+  return(plotConfiguration)
+}
+
+#' @title getColorFromOutputGroup
+#' @description Get the appropriate colors from an output group
+#' @param group A data.frame mapping properties to output groups
+#' @param data A data.frame
+#' @param dataMapping A `DataMapping` object
+#' @param legendVariable Name of legend variable in`group`
+#' @param colorVariable Name of color variable in`group`
+#' @return A sorted array of color values
+#' @keywords internal
+getColorFromOutputGroup <- function(group,
+                                    data,
+                                    dataMapping,
+                                    legendVariable = "legend",
+                                    colorVariable = "color") {
+  # If no output to plot, return a default color
+  if (isEmpty(data)) {
+    return("black")
+  }
+  displayedLegendValues <- unique(data[, dataMapping$groupMapping[[colorVariable]]$group])
+  # Get legend order and associated right color
+  toKeep <- (group[[legendVariable]] %in% displayedLegendValues) &
+    !duplicated(group[[legendVariable]])
+  legendValues <- group[[legendVariable]][toKeep]
+  legendOrder <- order(legendValues)
+  colorValues <- group[[colorVariable]][toKeep]
+  return(colorValues[legendOrder])
 }
