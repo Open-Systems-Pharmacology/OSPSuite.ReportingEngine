@@ -15,6 +15,13 @@ R6 class representing workflow output
 
 \item{\code{displayUnit}}{display unit for `path`}
 
+\item{\code{groupID}}{Grouping Identifier.
+Outputs with same identifier and unit are plotted together}
+
+\item{\code{color}}{Displayed line/point color of the Output in plots}
+
+\item{\code{fill}}{Displayed range color of the Output in plots}
+
 \item{\code{dataSelection}}{character or expression used to select a subset of observed data}
 
 \item{\code{dataUnit}}{Unit of the observed data}
@@ -44,6 +51,9 @@ Create a new `Output` object.
   path,
   displayName = NULL,
   displayUnit = NULL,
+  groupID = NULL,
+  color = NULL,
+  fill = NULL,
   dataSelection = DataSelectionKeys$NONE,
   dataUnit = NULL,
   dataDisplayName = NULL,
@@ -60,6 +70,13 @@ Create a new `Output` object.
 \item{\code{displayName}}{display name for `path`}
 
 \item{\code{displayUnit}}{display unit for `path`}
+
+\item{\code{groupID}}{Grouping Identifier.
+Outputs with same identifier and unit are plotted together}
+
+\item{\code{color}}{Displayed line/point color of the `Output` in plots}
+
+\item{\code{fill}}{Displayed range color of the `Output` in plots}
 
 \item{\code{dataSelection}}{characters or expression to select subset the observed data
 By default, no data is selected.

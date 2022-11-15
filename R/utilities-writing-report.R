@@ -768,21 +768,21 @@ copyReport <- function(from, to, copyWordReport = TRUE, keep = FALSE) {
 #' If `reportTitle` is one character string, it is assumed as a title.
 #' Thus the markdown title tag is internally added to `reportTitle`.
 #' If `reportTitle` is multiple character strings, it is assumed as the cover page content.
-#' and used *as is* in the cover page. 
+#' and used *as is* in the cover page.
 #' @param intro temporary introduction file deleted when merged to final report
 #' Parameter is named intro to stay consistent with Qualification Workflow nomenclature
 #' @return `intro`, path of temporary introduction file if created
 #' @keywords internal
-getIntroFromReportTitle = function(reportTitle = NULL, intro = "temp-report-title.md") {
+getIntroFromReportTitle <- function(reportTitle = NULL, intro = "temp-report-title.md") {
   # No cover page
-  if(isEmpty(reportTitle)){
+  if (isEmpty(reportTitle)) {
     return(NULL)
   }
   # Create temporary cover page file to be merged
   resetReport(intro)
   # If report title are actual files, use their content as cover page
-  if(all(file.exists(reportTitle))){
-    for(coverPage in reportTitle){
+  if (all(file.exists(reportTitle))) {
+    for (coverPage in reportTitle) {
       addTextChunk(
         fileName = intro,
         text = readLines(coverPage, encoding = "UTF-8", warn = FALSE)
@@ -790,16 +790,16 @@ getIntroFromReportTitle = function(reportTitle = NULL, intro = "temp-report-titl
     }
     return(intro)
   }
-  # If length of title is 1, it is assumed a title 
+  # If length of title is 1, it is assumed a title
   # and md title tag "#" is added
-  if(isOfLength(reportTitle, 1)){
+  if (isOfLength(reportTitle, 1)) {
     addTextChunk(
       fileName = intro,
       text = paste("#", reportTitle)
     )
     return(intro)
   }
-  # If length of title is longer than 1, 
+  # If length of title is longer than 1,
   # it is assumed report title is the content of the page
   # and added as is in the intro file
   addTextChunk(

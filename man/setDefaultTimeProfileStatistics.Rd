@@ -36,7 +36,6 @@ setDefaultTimeProfileStatistics(statisticsType = StatisticsTypes$`Geometric mean
 
 # Set the default legend caption displayed for range
 setDefaultTimeProfileStatistics(rangeCaption = "90\% population range")
-
 }
 
 }

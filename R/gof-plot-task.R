@@ -266,9 +266,9 @@ GofPlotTask <- R6::R6Class(
           "Simulated" = list(dimension = "Simulated value", unit = output$displayUnit),
           "Residuals" = list(unit = "", dimension = Legend)
         )
-        
+
         outputData <- data[data$Path %in% output$path, ]
-        if(isEmpty(outputData)){
+        if (isEmpty(outputData)) {
           next
         }
 
@@ -284,7 +284,7 @@ GofPlotTask <- R6::R6Class(
           plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
         )
         obsVsPredPlot <- setQuadraticDimension(
-          obsVsPredPlot, 
+          obsVsPredPlot,
           plotConfiguration = settings$plotConfigurations[["obsVsPred"]]
         )
 
@@ -338,7 +338,7 @@ GofPlotTask <- R6::R6Class(
             ticks = obsVsPredBreaks
           )
           obsVsPredPlotLog <- setQuadraticDimension(
-            obsVsPredPlotLog, 
+            obsVsPredPlotLog,
             plotConfiguration = settings$plotConfigurations[["obsVsPredLog"]]
           )
 

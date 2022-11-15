@@ -16,15 +16,15 @@ The enum helper `DataSelectionKeys` provides keys for selected all or none of th
 A data.frame of selected data
 }
 \description{
-Get selected data 
+Get selected data
 The function leverage `dplyr::filter` to select the data
 }
 \examples{
 data <- data.frame(
-x = seq(0,9),
-y = seq(10,19),
-mdv = c(1,1, rep(0, 8)),
-groups = rep(c("A", "B"), 5)
+  x = seq(0, 9),
+  y = seq(10, 19),
+  mdv = c(1, 1, rep(0, 8)),
+  groups = rep(c("A", "B"), 5)
 )
 
 # Select all the data

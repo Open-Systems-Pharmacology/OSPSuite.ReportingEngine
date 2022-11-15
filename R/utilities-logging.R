@@ -169,12 +169,15 @@ logCatch <- function(expr) {
       # Remove unwanted warning from ggplot
       # In case, include them in log debug
       callNotDisplayed <- any(sapply(
-        c("Transformation introduced infinite values",
+        c(
+          "Transformation introduced infinite values",
           "Each group consists of only one observation",
           "rows containing non-finite values",
           "Ignoring unknown parameters",
+          "was deprecated in ggplot2",
           # warning thrown because of non-ASCII unicode characters
-          "mbcsToSbcs"),
+          "mbcsToSbcs"
+        ),
         FUN = function(pattern) {
           grepl(warningCondition$message, pattern = pattern)
         }
@@ -183,13 +186,17 @@ logCatch <- function(expr) {
       # as an actual warning written in red on the console
       # However, if the restart is not found, this ends up with an error
       # tryInvokeRestart could have been used instead but appeared only on R.version 4.0.0
-      if(callNotDisplayed){
+      if (callNotDisplayed) {
         logDebug(warningCondition$message)
-        try({invokeRestart("muffleWarning")})
+        try({
+          invokeRestart("muffleWarning")
+        })
         return(invisible())
       }
       logError(warningCondition$message)
-      try({invokeRestart("muffleWarning")})
+      try({
+        invokeRestart("muffleWarning")
+      })
       return(invisible())
     }
   ),

@@ -106,4 +106,3 @@ test_that("PlotConfiguration default for observed vs predicted is quadratic", {
     defaultObsVsPredConfiguration$export$height
   )
 })
-

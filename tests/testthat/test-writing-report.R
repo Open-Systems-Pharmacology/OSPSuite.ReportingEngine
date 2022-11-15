@@ -125,7 +125,7 @@ write(
 )
 
 test_that("getIntroFromReportTitle add file content if reportTitle is a file path", {
-  # Should return the temporary file path 
+  # Should return the temporary file path
   # (prevents user cover page being deleted during report merging)
   expect_equal(
     getIntroFromReportTitle(reportTitle = userCoverPage, intro = testIntroFile),
@@ -137,4 +137,3 @@ test_that("getIntroFromReportTitle add file content if reportTitle is a file pat
   unlink(testIntroFile, recursive = TRUE)
   unlink(userCoverPage, recursive = TRUE)
 })
-

@@ -65,7 +65,7 @@ test_that("Output 'dataSelection' is checked and set properly", {
 
   outputFilter <- Output$new(path = testPath, dataSelection = testDataSelection)
   expect_s3_class(outputFilter, "Output")
-  
+
   # Vectors are concatenated using "&"
   outputVector <- Output$new(path = testPath, dataSelection = c(testDataSelection, testDataSelection))
   expect_length(outputVector$dataSelection, 1)

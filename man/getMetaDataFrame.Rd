@@ -10,9 +10,9 @@ getMetaDataFrame(listOfMetaData)
 \item{listOfMetaData}{list including `Path` and `Concentration`}
 }
 \value{
-A data.frame with variables `path`, `dimension` and `unit`
+A data.frame with variables `path`, `dimension`, `unit`, `group`, `color`, `fill`
 }
 \description{
-Get time profile metaData as a data.frame
+Get time profile list of metaData as a single data.frame
 }
 \keyword{internal}
