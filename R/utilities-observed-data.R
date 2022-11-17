@@ -241,15 +241,15 @@ loadObservedDataFromSimulationSet <- function(simulationSet) {
   validateIsOfType(simulationSet, "SimulationSet")
   # Observed data and dictionary are already checked when creating the simulationSet
   # No observed data return NULL
-  if (isEmpty(simulationSet$observedDataFile)) {
+  if (isEmpty(simulationSet$dataSource)) {
     return()
   }
 
-  re.tStoreFileMetadata(access = "read", filePath = simulationSet$observedDataFile)
-  observedDataset <- readObservedDataFile(simulationSet$observedDataFile)
+  re.tStoreFileMetadata(access = "read", filePath = simulationSet$dataSource$dataFile)
+  observedDataset <- readObservedDataFile(simulationSet$dataSource$dataFile)
   observedDataset <- getSelectedData(observedDataset, simulationSet$dataSelection)
-  re.tStoreFileMetadata(access = "read", filePath = simulationSet$observedMetaDataFile)
-  dictionary <- readObservedDataFile(simulationSet$observedMetaDataFile)
+  re.tStoreFileMetadata(access = "read", filePath = simulationSet$dataSource$metaDataFile)
+  dictionary <- readObservedDataFile(simulationSet$dataSource$metaDataFile)
 
   # Enforce datasetUnit column to exist
   if (!isIncluded(dictionaryParameters$datasetUnit, names(dictionary))) {

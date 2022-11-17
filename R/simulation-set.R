@@ -3,8 +3,7 @@
 #' @field simulationSetName display name of simulation set
 #' @field simulationFile names of pkml file to be used for the simulation
 #' @field outputs list of `Output` R6 class objects
-#' @field observedDataFile name of csv file to be used for observed data
-#' @field observedMetaDataFile name of csv file to be used as dictionary of the observed data
+#' @field dataSource A `DataSource` object
 #' @field dataSelection character or expression used to select a subset of observed data
 #' @field timeUnit display unit for time variable
 #' @field applicationRanges named list of logicals defining which Application ranges are included in
@@ -19,8 +18,7 @@ SimulationSet <- R6::R6Class(
     simulationSetName = NULL,
     simulationFile = NULL,
     outputs = NULL,
-    observedDataFile = NULL,
-    observedMetaDataFile = NULL,
+    dataSource = NULL,
     dataSelection = NULL,
     timeUnit = NULL,
     applicationRanges = NULL,
@@ -32,8 +30,7 @@ SimulationSet <- R6::R6Class(
     #' @param simulationSetName display name of simulation set
     #' @param simulationFile names of pkml file to be used for the simulation
     #' @param outputs list of `Output` R6 class objects
-    #' @param observedDataFile name of csv file to be used for observed data
-    #' @param observedMetaDataFile name of csv file to be used as dictionary of the observed data
+    #' @param dataSource A `DataSource` object
     #' @param dataSelection characters or expression to select subset the observed data
     #' By default, all the data is selected.
     #' When using a character array, selections are concatenated with the `&` sign
@@ -45,8 +42,7 @@ SimulationSet <- R6::R6Class(
     initialize = function(simulationSetName,
                           simulationFile,
                           outputs = NULL,
-                          observedDataFile = NULL,
-                          observedMetaDataFile = NULL,
+                          dataSource = NULL,
                           dataSelection = DataSelectionKeys$ALL,
                           timeUnit = "h",
                           applicationRanges = ApplicationRanges,
@@ -56,7 +52,7 @@ SimulationSet <- R6::R6Class(
       validateIsString(simulationSetName)
       validateIsString(simulationFile)
       validateIsFileExtension(simulationFile, "pkml")
-      validateIsString(c(observedDataFile, observedMetaDataFile, timeUnit), nullAllowed = TRUE)
+      validateIsString(timeUnit, nullAllowed = TRUE)
       validateIsPositive(object = minimumSimulationEndTime, nullAllowed = TRUE)
       validateIsNumeric(timeOffset)
       # For optional input, usually null is allowed
@@ -67,11 +63,8 @@ SimulationSet <- R6::R6Class(
 
       # Test and validate outputs and their paths
       validateOutputObject(c(outputs), simulation, nullAllowed = TRUE)
-
-      if (!is.null(observedDataFile)) {
-        validateObservedMetaDataFile(observedMetaDataFile, observedDataFile, c(outputs))
-      }
-
+      validateDataSource(dataSource, c(outputs), nullAllowed = TRUE)
+      
       self$simulationSetName <- simulationSetName
       self$simulationFile <- simulationFile
       self$minimumSimulationEndTime <- minimumSimulationEndTime
@@ -79,8 +72,7 @@ SimulationSet <- R6::R6Class(
 
       self$outputs <- c(outputs)
 
-      self$observedDataFile <- observedDataFile
-      self$observedMetaDataFile <- observedMetaDataFile
+      self$dataSource <- dataSource
       self$dataSelection <- translateDataSelection(dataSelection)
 
       self$timeUnit <- timeUnit %||% "h"

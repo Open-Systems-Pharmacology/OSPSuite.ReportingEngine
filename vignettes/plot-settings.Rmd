@@ -159,30 +159,18 @@ simulationFile <- system.file("extdata", "MiniModel2.pkml",
   package = "ospsuite.reportingengine"
 )
 
-# Get the observation file and its dictionary
-observationFile <- system.file("extdata", "SimpleData.nmdat",
-  package = "ospsuite.reportingengine"
-)
-dictionaryFile <- system.file("extdata", "tpDictionary.csv",
-  package = "ospsuite.reportingengine"
-)
-
 # Define the output object
 outputA <- Output$new(
   path = "Organism|A|Concentration in container",
   displayName = "Simulated concentration of A",
-  displayUnit = "µmol/ml"#,
-  #dataSelection = "MDV==0",
-  #dataDisplayName = "Observed concentration of A"
+  displayUnit = "µmol/ml"
 )
 
 # Define the simulation set object
 setA <- SimulationSet$new(
   simulationSetName = "A",
   simulationFile = simulationFile,
-  outputs = outputA#,
-  #observedDataFile = observationFile,
-  #observedMetaDataFile = dictionaryFile
+  outputs = outputA
 )
 
 # Create the workflow object

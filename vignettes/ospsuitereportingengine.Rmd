@@ -321,13 +321,12 @@ SimulationSet$new(
   simulationSetName, 
   simulationFile, 
   outputs,
-  observedDataFile,
-  observedMetaDataFile,
-  dataReportName,
+  dataSource,
   dataSelection,
   applicationRanges,
   timeUnit,
-  timeOffset
+  timeOffset,
+  minimumSimulationEndTime
 )
 ```
 
@@ -341,13 +340,12 @@ PopulationSimulationSet$new(
   studyDesignFile, 
   plotReferenceObsData,
   outputs, 
-  observedDataFile,
-  observedMetaDataFile,
-  dataReportName,
+  dataSource,
   dataSelection,
   applicationRanges,
   timeUnit,
-  timeOffset
+  timeOffset,
+  minimumSimulationEndTime
 )
 ```
 
@@ -381,19 +379,24 @@ knitr::kable(exampleStudyDesign, caption = "Table 2: Example of study design con
 
 ## 3.3. Format of data files
 
-__If the workflow uses data, two files must be provided__:
-one file containing the data in the Nonmem format, `observedDataFile`, and a dictionary file, `observedMetaDataFile`, which documents the content of the data file.
-Display names for the data can be provided using `dataReportName`.
+__If the workflow uses data, two files must be provided within a `DataSource` object__ as follows:
+
+```r
+DataSource$new(dataFile, metaDataFile, caption = NULL)
+```
+
+The optional `caption` argument defines the data source displayed caption in the report.
 
 ### 3.3.1. Data file
 
-The Nonmem file can be a blank separated text file or a csv file, column headers are used later as R variable names, and they must not contain special letters like blanks.
-All data columns used for figures and tables, must be numerical and listed in the dictionary file (details in section __3.3.2__).
+The Data file can be a blank separated text file or a csv file, column headers are used later as R variable names, and they must not contain special letters like blanks.
+The data is expected to follow a [tidy](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) format like Nonmem formatted datasets.
+All data columns used for figures and tables, must be numerical and listed in the dictionary/meta data file (details in section __3.3.2__).
 For data filtering, these columns and additional ones can be used, the additional columns may also contain strings. 
 But be careful that these strings do not contain the column separator blank. 
 A column must be either numerical or of type string, they must not contain both. 
 
-### 3.3.2. Dictionary file
+### 3.3.2. Dictionary/meta data file
 
 ```{r dictionary file, include=FALSE, echo=FALSE}
 dictionaryFile <- system.file("extdata", "tpDictionary.csv", package = "ospsuite.reportingengine")

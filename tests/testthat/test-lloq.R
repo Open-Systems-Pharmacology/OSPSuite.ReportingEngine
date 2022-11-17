@@ -64,17 +64,19 @@ defineSimulationSets <- parse(text = paste0(
   'simulationSetName = "A",',
   "simulationFile = simulationFile,",
   # Scenarios for observed data file
+  "dataSource = DataSource$new(",
   c(
-    "observedDataFile = dataFileUnit,",
-    "observedDataFile = dataFileLLOQ,",
-    "observedDataFile = dataFile,"
+    "dataFile = dataFileUnit,",
+    "dataFile = dataFileLLOQ,",
+    "dataFile = dataFile,"
   ),
   # Scenarios for dictionary file
   c(
-    "observedMetaDataFile = dictFileUnitInObs,",
-    "observedMetaDataFile = dictFileLLOQ,",
-    "observedMetaDataFile = dictFileLLOQ,"
+    "metaDataFile = dictFileUnitInObs",
+    "metaDataFile = dictFileLLOQ",
+    "metaDataFile = dictFileLLOQ"
   ),
+  "),",
   "outputs = Output$new(",
   'path = "Organism|A|Concentration in container",',
   "dataSelection = DataSelectionKeys$ALL,",
@@ -167,8 +169,10 @@ test_that("Ill defined variables and units in dictionary are flagged by simulati
   expect_error(SimulationSet$new(
     simulationSetName = "A",
     simulationFile = simulationFile,
-    observedDataFile = dataFile,
-    observedMetaDataFile = dictFileErrorUnit,
+    dataSource = DataSource$new(
+      dataFile = dataFile,
+      metaDataFile = dictFileErrorUnit
+    ),
     outputs = Output$new(
       path = "Organism|A|Concentration in container",
       displayName = "Concentration of A",
@@ -179,8 +183,10 @@ test_that("Ill defined variables and units in dictionary are flagged by simulati
   expect_error(SimulationSet$new(
     simulationSetName = "A",
     simulationFile = simulationFile,
-    observedDataFile = dataFile,
-    observedMetaDataFile = dictFileErrorVariable,
+    dataSource = DataSource$new(
+      dataFile = dataFile,
+      metaDataFile = dictFileErrorVariable
+    ),
     outputs = Output$new(
       path = "Organism|A|Concentration in container",
       displayName = "Concentration of A",

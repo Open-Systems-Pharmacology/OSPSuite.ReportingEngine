@@ -179,11 +179,17 @@ simulationFile <- system.file("extdata", "MiniModel2.pkml",
 )
 
 # Get the observation file and its dictionary
-observationFile <- system.file("extdata", "SimpleData.nmdat",
+observationFile = system.file(
+  "extdata", "SimpleData.nmdat",
   package = "ospsuite.reportingengine"
 )
-dictionaryFile <- system.file("extdata", "tpDictionary.csv",
+dictionaryFile = system.file(
+  "extdata", "tpDictionary.csv",
   package = "ospsuite.reportingengine"
+)
+dataSource <- DataSource$new(
+  dataFile = observationFile,
+  metaDataFile = dictionaryFile
 )
 
 # Define the input parameters
@@ -199,8 +205,7 @@ setA <- SimulationSet$new(
   simulationSetName = "A",
   simulationFile = simulationFile,
   outputs = outputA,
-  observedDataFile = observationFile,
-  observedMetaDataFile = dictionaryFile
+  dataSource = dataSource
 )
 
 # Create the workflow instance
@@ -256,11 +261,12 @@ simulationFile <- system.file("extdata", "MiniModel2.pkml",
 )
 
 # Get the observation file and its dictionary
-observationFile <- system.file("extdata", "SimpleData.nmdat",
-  package = "ospsuite.reportingengine"
-)
-dictionaryFile <- system.file("extdata", "tpDictionaryLoq.csv",
-  package = "ospsuite.reportingengine"
+dataSource <- DataSource$new(
+  dataFile = observationFile,
+  metaDataFile = system.file(
+    "extdata", "tpDictionaryLoq.csv",
+    package = "ospsuite.reportingengine"
+    )
 )
 
 # Define the input parameters
@@ -276,8 +282,7 @@ setA <- SimulationSet$new(
   simulationSetName = "A",
   simulationFile = simulationFile,
   outputs = outputA,
-  observedDataFile = observationFile,
-  observedMetaDataFile = dictionaryFile
+  dataSource = dataSource
 )
 
 # Create the workflow instance
@@ -333,11 +338,9 @@ simulationFile <- system.file("extdata", "MiniModel2.pkml",
 )
 
 # Get the observation file and its dictionary
-observationFile <- system.file("extdata", "SimpleData.nmdat",
-  package = "ospsuite.reportingengine"
-)
-dictionaryFile <- system.file("extdata", "tpDictionary.csv",
-  package = "ospsuite.reportingengine"
+dataSource <- DataSource$new(
+  dataFile = observationFile,
+  metaDataFile = dictionaryFile
 )
 
 # Define the input parameters
@@ -358,8 +361,7 @@ setAB <- SimulationSet$new(
   simulationSetName = "A and B",
   simulationFile = simulationFile,
   outputs = c(outputA, outputB),
-  observedDataFile = observationFile,
-  observedMetaDataFile = dictionaryFile
+  dataSource = dataSource
 )
 
 # Create the workflow instance
@@ -411,11 +413,9 @@ simulationFileB <- system.file("extdata", "MiniModel2.pkml",
 )
 
 # Get the observation file and its dictionary
-observationFile <- system.file("extdata", "SimpleData.nmdat",
-  package = "ospsuite.reportingengine"
-)
-dictionaryFile <- system.file("extdata", "tpDictionary.csv",
-  package = "ospsuite.reportingengine"
+dataSource <- DataSource$new(
+  dataFile = observationFile,
+  metaDataFile = dictionaryFile
 )
 
 # Define the input parameters
@@ -436,8 +436,7 @@ setA <- SimulationSet$new(
   simulationSetName = "A",
   simulationFile = simulationFileA,
   outputs = outputA,
-  observedDataFile = observationFile,
-  observedMetaDataFile = dictionaryFile
+  dataSource = dataSource
 )
 setB <- SimulationSet$new(
   simulationSetName = "B",
@@ -546,11 +545,9 @@ populationFile <- system.file("extdata", "Pop500_p1p2p3.csv",
 )
 
 # Get the observation file and its dictionary
-observationFile <- system.file("extdata", "SimpleData.nmdat",
-  package = "ospsuite.reportingengine"
-)
-dictionaryFile <- system.file("extdata", "tpDictionary.csv",
-  package = "ospsuite.reportingengine"
+dataSource <- DataSource$new(
+  dataFile = observationFile,
+  metaDataFile = dictionaryFile
 )
 
 # Define the input parameters
@@ -567,8 +564,7 @@ setA <- PopulationSimulationSet$new(
   simulationFile = simulationFile,
   populationFile = populationFile,
   outputs = outputA,
-  observedDataFile = observationFile,
-  observedMetaDataFile = dictionaryFile
+  dataSource = dataSource
 )
 
 # Create the workflow instance

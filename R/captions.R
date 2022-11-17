@@ -46,46 +46,46 @@ captions <- list(
     }
   ),
   plotGoF = list(
-    timeProfile = function(simulationSetName, descriptor, dataSource, plotScale = "linear") {
+    timeProfile = function(simulationSetName, descriptor, dataSource = "", plotScale = "linear") {
       return(paste0(
-        "Time profiles for ", reportSimulationSet(simulationSetName, descriptor),
-        getDataSourceCaption(dataSource), getPlotScaleCaption("Time profiles", plotScale)
+        "Time profiles for ", reportSimulationSet(simulationSetName, descriptor), 
+        dataSource, getPlotScaleCaption("Time profiles", plotScale)
       ))
     },
-    obsVsPred = function(simulationSetName, descriptor, dataSource = NULL, plotScale = "linear", yCaption = NULL, pathName = NULL) {
+    obsVsPred = function(simulationSetName, descriptor, dataSource = "", plotScale = "linear", yCaption = NULL, pathName = NULL) {
       return(paste0(
         "Predicted ", getStatisticsCaption(yCaption), "vs observed for ",
-        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor),
-        getDataSourceCaption(dataSource), getPlotScaleCaption("Predictions and observations", plotScale)
+        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor), 
+        dataSource, getPlotScaleCaption("Predictions and observations", plotScale)
       ))
     },
-    resVsPred = function(simulationSetName, descriptor, dataSource = NULL, plotScale = ResidualScales$Linear, yCaption = NULL, pathName = NULL) {
+    resVsPred = function(simulationSetName, descriptor, dataSource = "", plotScale = ResidualScales$Linear, yCaption = NULL, pathName = NULL) {
       return(paste0(
-        plotScale, " residuals vs predicted ", getStatisticsCaption(yCaption), "values for ",
-        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor),
-        getDataSourceCaption(dataSource)
-      ))
+        plotScale, " residuals vs predicted ", getStatisticsCaption(yCaption), "values for ", 
+        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor), 
+        dataSource
+        ))
     },
-    resVsTime = function(simulationSetName, descriptor, dataSource = NULL, plotScale = ResidualScales$Linear, pathName = NULL) {
+    resVsTime = function(simulationSetName, descriptor, dataSource = "", plotScale = ResidualScales$Linear, pathName = NULL) {
       return(paste0(
-        plotScale, " residuals vs time values for ",
-        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor),
-        getDataSourceCaption(dataSource)
-      ))
+        plotScale, " residuals vs time values for ", 
+        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor), 
+        dataSource
+        ))
     },
-    resHisto = function(simulationSetName, descriptor, dataSource = NULL, plotScale = ResidualScales$Linear, pathName = NULL) {
+    resHisto = function(simulationSetName, descriptor, dataSource = "", plotScale = ResidualScales$Linear, pathName = NULL) {
       return(paste0(
-        plotScale, " residuals distribution (stacked) for ",
-        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor),
-        getDataSourceCaption(dataSource)
-      ))
+        plotScale, " residuals distribution (stacked) for ", 
+        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor), 
+        dataSource
+        ))
     },
-    resQQPlot = function(simulationSetName, descriptor, dataSource = NULL, plotScale = ResidualScales$Linear, pathName = NULL) {
+    resQQPlot = function(simulationSetName, descriptor, dataSource = "", plotScale = ResidualScales$Linear, pathName = NULL) {
       return(paste0(
-        plotScale, " residuals for ",
-        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor),
-        " as quantile-quantile plot", getDataSourceCaption(dataSource)
-      ))
+        plotScale, " residuals for ", 
+        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor), 
+        " as quantile-quantile plot", dataSource
+        ))
     },
     meanLegend = function(simulationSetName, descriptor, pathName) {
       return(paste0("Simulated ", pathName, " (", reportSimulationSet(simulationSetName, descriptor), ")"))
@@ -159,32 +159,17 @@ captions <- list(
   )
 )
 
-getDataSource <- function(structureSet) {
-  # If no observed data, return null
-  if (isOfLength(structureSet$simulationSet$observedDataFile, 0)) {
-    return()
+getDataSourceCaption <- function(structureSet) {
+  # If no observed data, end the sentence of caption
+  if (isEmpty(structureSet$simulationSet$dataSource)) {
+    return(". ")
   }
-  # Use strplit combined with normalizePath to get a vector of path elements
-  # Then, cancel elements until observedDataFile diverge from workflowFolder
-  observedDataPathElements <- unlist(strsplit(normalizePath(structureSet$simulationSet$observedDataFile, winslash = "/"), "/"))
-  workflowPathElements <- unlist(strsplit(normalizePath(structureSet$workflowFolder, winslash = "/"), "/"))
-
-  observedDataPathSize <- length(observedDataPathElements)
-  workflowPathSize <- length(workflowPathElements)
-  isCommonElement <- rep(FALSE, observedDataPathSize)
-
-  for (pathElementIndex in 1:observedDataPathSize) {
-    if (pathElementIndex > workflowPathSize) {
-      next
-    }
-    isCommonElement[pathElementIndex] <- (observedDataPathElements[pathElementIndex] == workflowPathElements[pathElementIndex])
-  }
-  dataSource <- paste0(observedDataPathElements[!isCommonElement], collapse = "/")
-  return(dataSource)
+  dataSourceCaption <- structureSet$simulationSet$dataSource$getCaption(structureSet$workflowFolder)
+  return(paste(".", dataSourceCaption, "."))
 }
 
 getGoodnessOfFitCaptions <- function(structureSet, plotType, plotScale = "linear", settings = NULL) {
-  dataSource <- getDataSource(structureSet)
+  dataSource <- getDataSourceCaption(structureSet)
   simulationSetName <- structureSet$simulationSet$simulationSetName
   setDescriptor <- structureSet$simulationSetDescriptor
   yCaption <- NULL
@@ -260,15 +245,8 @@ getTimeRangeCaption <- function(timeRangeName, reference, simulationSetName) {
   }
 }
 
-getDataSourceCaption <- function(dataSource) {
-  if (isEmpty(dataSource)) {
-    return("")
-  }
-  return(paste0(". Data source: ", dataSource))
-}
-
-getStatisticsCaption <- function(statistics) {
-  if (isEmpty(statistics)) {
+getStatisticsCaption <- function(statistics){
+  if(isEmpty(statistics)){
     return("")
   }
   return(paste0("(", statistics, ") "))

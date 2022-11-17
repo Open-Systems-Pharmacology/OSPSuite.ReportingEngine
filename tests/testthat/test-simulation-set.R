@@ -99,81 +99,84 @@ write.csv(observedMetaDataWrongHeader, file = "observedMetaDataWrongHeader.csv",
 write.csv(observedMetaDataWrongMapping, file = "observedMetaDataWrongMapping.csv", row.names = FALSE)
 write.csv(observedMetaDataWrongLLOQMapping, file = "observedMetaDataWrongLLOQMapping.csv", row.names = FALSE)
 
-test_that("SimulationSet tests observed data and their metadata", {
+test_that("SimulationSet tests observed data and their metadata in dataSource", {
   expect_silent(SimulationSet$new(
     simulationSetName = "Test Simulation",
     simulationFile = testSimulationFile,
-    observedDataFile = testObservedDataFile,
-    observedMetaDataFile = testObservedMetaDataFile,
+    dataSource = DataSource$new(
+      dataFile = testObservedDataFile,
+      metaDataFile = testObservedMetaDataFile
+    ),
     outputs = testOutput
   ))
   expect_error(SimulationSet$new(
     simulationSetName = "Test Simulation",
     simulationFile = testSimulationFile,
-    observedDataFile = testObservedDataFile,
+    dataSource = DataSource$new(
+      dataFile = testObservedDataFile,
+      metaDataFile = "observedMetaDataWrongHeader.csv"
+    ),
     outputs = testOutput
   ))
   expect_error(SimulationSet$new(
     simulationSetName = "Test Simulation",
     simulationFile = testSimulationFile,
-    observedDataFile = testObservedDataFile,
-    observedMetaDataFile = "observedMetaDataWrongHeader.csv",
+    dataSource = DataSource$new(
+      dataFile = testObservedDataFile,
+      metaDataFile = "observedMetaDataWrongMapping.csv"
+    ),
     outputs = testOutput
   ))
   expect_error(SimulationSet$new(
     simulationSetName = "Test Simulation",
     simulationFile = testSimulationFile,
-    observedDataFile = testObservedDataFile,
-    observedMetaDataFile = "observedMetaDataWrongMapping.csv",
-    outputs = testOutput
-  ))
-  expect_error(SimulationSet$new(
-    simulationSetName = "Test Simulation",
-    simulationFile = testSimulationFile,
-    observedDataFile = testObservedDataFile,
-    observedMetaDataFile = "observedMetaDataWrongLLOQMapping.csv",
+    dataSource = DataSource$new(
+      dataFile = testObservedDataFile,
+      metaDataFile = "observedMetaDataWrongLLOQMapping.csv"
+    ),
     outputs = testOutput
   ))
 })
 
-test_that("SimulationSet tests observed data and their metadata", {
+test_that("PopulationSimulationSet tests observed data and their metadata in dataSource", {
   expect_silent(PopulationSimulationSet$new(
     simulationSetName = "Test Simulation",
     simulationFile = testSimulationFile,
     populationFile = testPopulationFile,
-    observedDataFile = testObservedDataFile,
-    observedMetaDataFile = testObservedMetaDataFile,
+    dataSource = DataSource$new(
+      dataFile = testObservedDataFile,
+      metaDataFile = testObservedMetaDataFile
+    ),
     outputs = testOutput
   ))
   expect_error(PopulationSimulationSet$new(
     simulationSetName = "Test Simulation",
     simulationFile = testSimulationFile,
     populationFile = testPopulationFile,
-    observedDataFile = testObservedDataFile,
+    dataSource = DataSource$new(
+      dataFile = testObservedDataFile,
+      metaDataFile = "observedMetaDataWrongHeader.csv"
+    ),
     outputs = testOutput
   ))
   expect_error(PopulationSimulationSet$new(
     simulationSetName = "Test Simulation",
     simulationFile = testSimulationFile,
     populationFile = testPopulationFile,
-    observedDataFile = testObservedDataFile,
-    observedMetaDataFile = "observedMetaDataWrongHeader.csv",
+    dataSource = DataSource$new(
+      dataFile = testObservedDataFile,
+      metaDataFile = "observedMetaDataWrongMapping.csv"
+    ),
     outputs = testOutput
   ))
   expect_error(PopulationSimulationSet$new(
     simulationSetName = "Test Simulation",
     simulationFile = testSimulationFile,
     populationFile = testPopulationFile,
-    observedDataFile = testObservedDataFile,
-    observedMetaDataFile = "observedMetaDataWrongMapping.csv",
-    outputs = testOutput
-  ))
-  expect_error(PopulationSimulationSet$new(
-    simulationSetName = "Test Simulation",
-    simulationFile = testSimulationFile,
-    populationFile = testPopulationFile,
-    observedDataFile = testObservedDataFile,
-    observedMetaDataFile = "observedMetaDataWrongLLOQMapping.csv",
+    dataSource = DataSource$new(
+      dataFile = testObservedDataFile,
+      metaDataFile = "observedMetaDataWrongLLOQMapping.csv"
+    ),
     outputs = testOutput
   ))
 })
