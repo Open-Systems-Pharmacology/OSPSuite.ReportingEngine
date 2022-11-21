@@ -43,6 +43,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add-title-page.html">Add a title page to your workflow report</a>
+    <a class="dropdown-item" href="../articles/excel-template.html">Excel Template</a>
     <a class="dropdown-item" href="../articles/goodness-of-fit.html">Time profiles and Residuals task</a>
     <a class="dropdown-item" href="../articles/ospsuitereportingengine.html">Get Started</a>
     <a class="dropdown-item" href="../articles/pk-parameters.html">PK parameters</a>
@@ -97,9 +98,12 @@
 <span><span class="co">#&gt; Loading required package: tlf</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'ospsuite.reportingengine'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:ospsuite':</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:tlf':</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     plotPopulationTimeProfile</span></span></code></pre></div>
+<span><span class="co">#&gt;     isBetween</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:ospsuite':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     calculateResiduals, plotPopulationTimeProfile</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
@@ -300,30 +304,18 @@ example in which <strong><code>plotConfigurations</code></strong> and
 <span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Get the observation file and its dictionary</span></span>
-<span><span class="va">observationFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"SimpleData.nmdat"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">dictionaryFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"tpDictionary.csv"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
 <span><span class="co"># Define the output object</span></span>
 <span><span class="va">outputA</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Output.html">Output</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  path <span class="op">=</span> <span class="st">"Organism|A|Concentration in container"</span>,</span>
 <span>  displayName <span class="op">=</span> <span class="st">"Simulated concentration of A"</span>,</span>
-<span>  displayUnit <span class="op">=</span> <span class="st">"µmol/ml"</span><span class="co">#,</span></span>
-<span>  <span class="co">#dataSelection = "MDV==0",</span></span>
-<span>  <span class="co">#dataDisplayName = "Observed concentration of A"</span></span>
+<span>  displayUnit <span class="op">=</span> <span class="st">"µmol/ml"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Define the simulation set object</span></span>
 <span><span class="va">setA</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/SimulationSet.html">SimulationSet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  simulationSetName <span class="op">=</span> <span class="st">"A"</span>,</span>
 <span>  simulationFile <span class="op">=</span> <span class="va">simulationFile</span>,</span>
-<span>  outputs <span class="op">=</span> <span class="va">outputA</span><span class="co">#,</span></span>
-<span>  <span class="co">#observedDataFile = observationFile,</span></span>
-<span>  <span class="co">#observedMetaDataFile = dictionaryFile</span></span>
+<span>  outputs <span class="op">=</span> <span class="va">outputA</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create the workflow object</span></span>
@@ -332,9 +324,9 @@ example in which <strong><code>plotConfigurations</code></strong> and
 <span>    simulationSets <span class="op">=</span> <span class="va">setA</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-A"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:46:06</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:33:52</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 19/08/2022 - 03:46:06</span></span>
+<span><span class="co">#&gt;  Date: 21/11/2022 - 12:33:52</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
 <span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span><span class="co">#&gt;  User: pchelle</span></span>
@@ -342,9 +334,9 @@ example in which <strong><code>plotConfigurations</code></strong> and
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 11.0.123</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 11.1.135</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
-<span><span class="co">#&gt;  tlf version: 1.4.0</span></span>
+<span><span class="co">#&gt;  tlf version: 1.4.116</span></span>
 <span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="va">workflowA</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simulate"</span>, <span class="st">"plotTimeProfilesAndResiduals"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -393,32 +385,32 @@ simulated plots, the got the updated xlabel, ylabel and watermark as
 defined in the plot configuration.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the workflow</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>workflowA<span class="sc">$</span><span class="fu">runWorkflow</span>()</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:46:07</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:33:52</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mMean Model Workflow [23m [22m [39m</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:46:07</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:33:52</span></span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mSimulation task [23m [22m [39m</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:46:07</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:33:53</span></span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mSplitting simulations for parallel run: [36m [1m [3m1 [23m [22m [39m simulations split into  [36m [1m [3m1 [23m [22m [39m subsets</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:46:07</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:33:53</span></span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3msubset simulations [23m [22m [39m</span></span>
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
 <span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:46:07</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:33:53</span></span>
 <span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mSimulation task [23m [22m [39m completed in 0 min</span></span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:46:07</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:33:53</span></span>
 <span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m</span></span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:46:07</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:33:53</span></span>
 <span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m for  [36m [1m [3mA [23m [22m [39m</span></span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:46:09</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:33:56</span></span>
 <span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m completed in 0 min</span></span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/R/win-library/4.2/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/R/win-library/4.2/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-A" -t docx -o "Example-A/Report-word.docx" "Example-A/Report-word.md"</span></span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:46:10</span></span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mMean Model Workflow [23m [22m [39m completed in 0 min</span></span></code></pre></div>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpwNKDmu/temp_libpath46b0420c217a/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpwNKDmu/temp_libpath46b0420c217a/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-A" -t docx -o "Example-A/Report-word.docx" "Example-A/Report-word.md"</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:33:56</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mMean Model Workflow [23m [22m [39m completed in 0.1 min</span></span></code></pre></div>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-25.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-23.png" style="width:100%; border-style: none;"></details>
 </div>
 <div class="section level3">
 <h3 id="pk-parameters-plots">PK parameters plots<a class="anchor" aria-label="anchor" href="#pk-parameters-plots"></a>

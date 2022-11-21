@@ -133,6 +133,7 @@ UserDefPKParametersOptionalSettings <- list(
 #' @title logicalCodeIds
 #' @description Some of the identifiers above need to be treated
 #' as logical by [getIdentifierInfo()] while usually input as `"Yes"`/`"No"`
+#' @keywords internal
 logicalCodeIds <- c(
   SimulationCodeIdentifiers$referencePopulation,
   SimulationCodeIdentifiers$plotReferenceObsData,
@@ -144,6 +145,7 @@ logicalCodeIds <- c(
 #' @title asisCodeIds
 #' @description Some of the identifiers above need to be treated
 #' as is by [getIdentifierInfo()]
+#' @keywords internal
 asisCodeIds <- c(
   WorkflowCodeIdentifiers$`Workflow Mode`,
   WorkflowCodeIdentifiers$activitySpecificCode,

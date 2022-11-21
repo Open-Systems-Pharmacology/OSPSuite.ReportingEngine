@@ -14,4 +14,4 @@ asisCodeIds
 Some of the identifiers above need to be treated
 as is by [getIdentifierInfo()]
 }
-\keyword{datasets}
+\keyword{internal}

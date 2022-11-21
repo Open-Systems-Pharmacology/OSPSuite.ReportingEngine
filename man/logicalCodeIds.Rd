@@ -14,4 +14,4 @@ logicalCodeIds
 Some of the identifiers above need to be treated
 as logical by [getIdentifierInfo()] while usually input as `"Yes"`/`"No"`
 }
-\keyword{datasets}
+\keyword{internal}

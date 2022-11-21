@@ -25,6 +25,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add-title-page.html">Add a title page to your workflow report</a>
+    <a class="dropdown-item" href="../articles/excel-template.html">Excel Template</a>
     <a class="dropdown-item" href="../articles/goodness-of-fit.html">Time profiles and Residuals task</a>
     <a class="dropdown-item" href="../articles/ospsuitereportingengine.html">Get Started</a>
     <a class="dropdown-item" href="../articles/pk-parameters.html">PK parameters</a>
@@ -94,6 +95,8 @@ time profiles and residual plots when applicable</p></dd>
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
 <ul><li><p><a href="#method-GofTaskSettings-new"><code>GofTaskSettings$new()</code></a></p></li>
+<li><p><a href="#method-GofTaskSettings-setStatistics"><code>GofTaskSettings$setStatistics()</code></a></p></li>
+<li><p><a href="#method-GofTaskSettings-getStatistics"><code>GofTaskSettings$getStatistics()</code></a></p></li>
 <li><p><a href="#method-GofTaskSettings-clone"><code>GofTaskSettings$clone()</code></a></p></li>
 </ul></div><p></p><hr><a id="method-GofTaskSettings-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
@@ -101,7 +104,8 @@ time profiles and residual plots when applicable</p></dd>
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/GofTaskSettings.html">GofTaskSettings</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  taskName <span class="op">=</span> <span class="va">AllAvailableTasks</span><span class="op">$</span><span class="va">plotTimeProfilesAndResiduals</span>,</span>
-<span>  outputSelections <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  outputSelections <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  statisticsType <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -115,6 +119,10 @@ time profiles and residual plots when applicable</p></dd>
 <dd><p>subset of simulationSet outputs to be used in GoF plot</p></dd>
 
 
+<dt><code>statisticsType</code></dt>
+<dd><p>Statistics summarizing time profile simulated data</p></dd>
+
+
 </dl><p></p></div>
 </div>
 <div class="section">
@@ -122,15 +130,95 @@ time profiles and residual plots when applicable</p></dd>
 <p>A new `GofTaskSettings` object</p>
 </div>
 
-</div><p></p><hr><a id="method-GofTaskSettings-clone"></a><div class="section">
-<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
-<p>The objects of this class are cloneable with this method.</p><div class="section">
+</div><p></p><hr><a id="method-GofTaskSettings-setStatistics"></a><div class="section">
+<h3 id="method-setstatistics-">Method <code>setStatistics()</code><a class="anchor" aria-label="anchor" href="#method-setstatistics-"></a></h3>
+<p>Set statistics used in population time profiles and residuals plots</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GofTaskSettings</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GofTaskSettings</span><span class="op">$</span><span class="fu">setStatistics</span><span class="op">(</span></span>
+<span>  statisticsType <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  y <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ymin <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ymax <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  yCaption <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  rangeCaption <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>statisticsType</code></dt>
+<dd><p>Name of statistics type as defined in enum `StatisticsTypes`</p></dd>
+
+
+<dt><code>y</code></dt>
+<dd><p>Function or function name for middle values statistics</p></dd>
+
+
+<dt><code>ymin</code></dt>
+<dd><p>Function or function name for min values statistics</p></dd>
+
+
+<dt><code>ymax</code></dt>
+<dd><p>Function or function name for max values statistics</p></dd>
+
+
+<dt><code>yCaption</code></dt>
+<dd><p>Legend caption for middle values statistics</p></dd>
+
+
+<dt><code>rangeCaption</code></dt>
+<dd><p>Legend caption for range values statistics</p></dd>
+
+
+</dl><p></p></div>
+</div>
+<div class="section">
+<h4 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h4>
+<p></p><div class="r example copy"><div class="sourceCode"><pre><code>\dontrun{
+# Set the statistics as geometric mean
+workflow$plotTimeProfilesAndResiduals$settings$setStatistics(
+statisticsType = StatisticsTypes$`Geometric mean`
+)
+
+# Set the legend caption displayed for range
+workflow$plotTimeProfilesAndResiduals$settings$setStatistics(
+statisticsType = StatisticsTypes$`Geometric mean`
+rangeCaption = "90% population range"
+)
+
+}
+
+</code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-GofTaskSettings-getStatistics"></a><div class="section">
+<h3 id="method-getstatistics-">Method <code>getStatistics()</code><a class="anchor" aria-label="anchor" href="#method-getstatistics-"></a></h3>
+<p>Get statistics used in population time profiles and residuals plots</p><div class="section">
+<h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GofTaskSettings</span><span class="op">$</span><span class="fu">getStatistics</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="examples-1">Examples<a class="anchor" aria-label="anchor" href="#examples-1"></a></h4>
+<p></p><div class="r example copy"><div class="sourceCode"><pre><code>\dontrun{
+# Get the statistics of time profiles task
+workflow$plotTimeProfilesAndResiduals$settings$getStatistics()
+}
+
+</code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-GofTaskSettings-clone"></a><div class="section">
+<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
+<p>The objects of this class are cloneable with this method.</p><div class="section">
+<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GofTaskSettings</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-2">Arguments<a class="anchor" aria-label="anchor" href="#arguments-2"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 
@@ -142,6 +230,10 @@ time profiles and residual plots when applicable</p></dd>
 
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
