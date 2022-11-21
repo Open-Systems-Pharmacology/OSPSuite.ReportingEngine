@@ -21,6 +21,8 @@ R6 class for tracking and printing messages for the Excel template
 \itemize{
 \item \href{#method-ExcelMessaging-new}{\code{ExcelMessaging$new()}}
 \item \href{#method-ExcelMessaging-displayMessage}{\code{ExcelMessaging$displayMessage()}}
+\item \href{#method-ExcelMessaging-getMessageHeader}{\code{ExcelMessaging$getMessageHeader()}}
+\item \href{#method-ExcelMessaging-getNoIssueMessage}{\code{ExcelMessaging$getNoIssueMessage()}}
 }
 }
 \if{html}{\out{<hr>}}
@@ -55,5 +57,32 @@ display the messages stored in messages
 \subsection{Returns}{
 Messages content
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ExcelMessaging-getMessageHeader"></a>}}
+\if{latex}{\out{\hypertarget{method-ExcelMessaging-getMessageHeader}{}}}
+\subsection{Method \code{getMessageHeader()}}{
+Get message header
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ExcelMessaging$getMessageHeader(section)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{section}}{name of R script section}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ExcelMessaging-getNoIssueMessage"></a>}}
+\if{latex}{\out{\hypertarget{method-ExcelMessaging-getNoIssueMessage}{}}}
+\subsection{Method \code{getNoIssueMessage()}}{
+Get message displaying no issue identified
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ExcelMessaging$getNoIssueMessage()}\if{html}{\out{</div>}}
+}
+
 }
 }
