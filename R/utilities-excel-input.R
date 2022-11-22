@@ -622,14 +622,12 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
     dataSourceId <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$dataSource)
     outputsNames <- c(
       outputsNames,
-      getOutpuNamesFromSimulationSetIdentifer(outputsId)
+      outputNamesFromIdentifier(outputsId)
     )
     dataSourceNames <- c(
       dataSourceNames,
-      getOutpuNamesFromSimulationSetIdentifer(dataSourceId)
+      dataSourceNamesFromIdentifier(dataSourceId)
     )
-    # Update Data Sources to NULL
-    dataSourceId[is.na(dataSourceId)] <- "NULL"
     # MeanModelWorkflow doesn't use population fields, which are set to NULL
     populationFileContent <- NULL
     populationNameContent <- NULL
@@ -717,8 +715,8 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
   return(list(
     content = simulationSetContent,
     simulationSetNames = simulationSetNames,
-    outputsNames = unique(outputsNames),
-    dataSourceNames = unique(dataSourceNames),
+    outputs = unique(outputsNames),
+    sources = unique(dataSourceNames),
     warnings = simulationSetWarnings,
     errors = simulationSetErrors
   ))
@@ -907,7 +905,7 @@ getIdentifierInfo <- function(workflowTable, simulationIndex, codeId) {
   if (isIncluded(codeId, SimulationCodeIdentifiers$outputs)) {
     return(paste0("c(", workflowInfo, ")"))
   }
-  # For simulation set dataSource, use as is if not NA
+  # For simulation set dataSource use as is
   if (isIncluded(codeId, SimulationCodeIdentifiers$dataSource)) {
     return(workflowInfo)
   }
@@ -935,13 +933,13 @@ getHeaderNames <- function(excelTable) {
   return(gsub(pattern = "[[:space:]*]", replacement = "", x = excelHeaderNames))
 }
 
-#' @title getOutpuNamesFromSimulationSetIdentifer
-#' @description Get the names of output name from simulation set identifier
+#' @title outputNamesFromIdentifier
+#' @description Get the names of output from simulation set identifier
 #' @param outputsId Content translated from cell corresponding to outputs in SimulationSets sheet.
 #' The `outputsId` are expected as `"c(outputName1, outputName2, etc.)"`
 #' @return names of Output objects in SimulationSets sheet
 #' @keywords internal
-getOutpuNamesFromSimulationSetIdentifer <- function(outputsId) {
+outputNamesFromIdentifier <- function(outputsId) {
   if (isIncluded(outputsId, "NULL")) {
     return(NULL)
   }
@@ -949,6 +947,18 @@ getOutpuNamesFromSimulationSetIdentifer <- function(outputsId) {
   outputsId <- substring(outputsId, first = 3, last = nchar(outputsId) - 1)
   outputsNames <- unlist(strsplit(outputsId, split = ","))
   return(trimws(outputsNames))
+}
+
+#' @title dataSourceNamesFromIdentifier
+#' @description Get the names of dataSource from simulation set identifier
+#' @param dataSourceId Content translated from cell corresponding to dataSource in SimulationSets sheet.
+#' @return names of Output objects in SimulationSets sheet
+#' @keywords internal
+dataSourceNamesFromIdentifier <- function(dataSourceId) {
+  if (isIncluded(dataSourceId, "NULL")) {
+    return(NULL)
+  }
+  return(trimws(dataSourceId))
 }
 
 #' @title getSensitivityVariableParameterPaths
