@@ -407,7 +407,7 @@ startQualificationRunner <- function(qualificationRunnerFolder,
   validateIsLogical(displayVersion)
 
   options <- c(
-    ifNotNull(pkSimPortableFolder, paste0("-p ", pkSimPortableFolder)),
+    ifNotNull(pkSimPortableFolder, paste0('-p "', pkSimPortableFolder, '"')),
     ifNotNull(configurationPlanName, paste0('-n "', configurationPlanName, '"')),
     switch(as.character(overwrite),
       "TRUE" = "-f",
