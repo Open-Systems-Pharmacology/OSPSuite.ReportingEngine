@@ -34,6 +34,7 @@ Other workflow helpers:
 \code{\link{addXParametersForPKParametersPlot}()},
 \code{\link{addYParametersForDemogrpahyPlot}()},
 \code{\link{addYParametersForPKParametersPlot}()},
+\code{\link{createWorkflowFromExcelInput}()},
 \code{\link{getMeanSensitivityAnalysisResultsFileNames}()},
 \code{\link{getOutputPathsInSimulationSet}()},
 \code{\link{getPKAnalysisResultsFileNames}()},

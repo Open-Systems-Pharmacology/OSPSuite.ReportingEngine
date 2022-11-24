@@ -25,6 +25,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add-title-page.html">Add a title page to your workflow report</a>
+    <a class="dropdown-item" href="../articles/excel-template.html">Excel Template</a>
     <a class="dropdown-item" href="../articles/goodness-of-fit.html">Time profiles and Residuals task</a>
     <a class="dropdown-item" href="../articles/ospsuitereportingengine.html">Get Started</a>
     <a class="dropdown-item" href="../articles/pk-parameters.html">PK parameters</a>
@@ -76,8 +77,21 @@
 <dd><p>display unit for `path`</p></dd>
 
 
+<dt><code>groupID</code></dt>
+<dd><p>Grouping Identifier.
+Outputs with same identifier and unit are plotted together</p></dd>
+
+
+<dt><code>color</code></dt>
+<dd><p>Displayed line/point color of the Output in plots</p></dd>
+
+
+<dt><code>fill</code></dt>
+<dd><p>Displayed range color of the Output in plots</p></dd>
+
+
 <dt><code>dataSelection</code></dt>
-<dd><p>character or expression used to filter the observed data</p></dd>
+<dd><p>character or expression used to select a subset of observed data</p></dd>
 
 
 <dt><code>dataUnit</code></dt>
@@ -114,6 +128,9 @@
 <span>  <span class="va">path</span>,</span>
 <span>  displayName <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  displayUnit <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  groupID <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  color <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fill <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dataSelection <span class="op">=</span> <span class="va">DataSelectionKeys</span><span class="op">$</span><span class="va">NONE</span>,</span>
 <span>  dataUnit <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dataDisplayName <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -136,8 +153,23 @@
 <dd><p>display unit for `path`</p></dd>
 
 
+<dt><code>groupID</code></dt>
+<dd><p>Grouping Identifier.
+Outputs with same identifier and unit are plotted together</p></dd>
+
+
+<dt><code>color</code></dt>
+<dd><p>Displayed line/point color of the `Output` in plots</p></dd>
+
+
+<dt><code>fill</code></dt>
+<dd><p>Displayed range color of the `Output` in plots</p></dd>
+
+
 <dt><code>dataSelection</code></dt>
-<dd><p>characters or expression to filter the observed data</p></dd>
+<dd><p>characters or expression to select subset the observed data
+By default, no data is selected.
+When using a character array, selections are concatenated with the `&amp;` sign</p></dd>
 
 
 <dt><code>dataUnit</code></dt>

@@ -29,6 +29,7 @@ Shortcut for `x &amp;gt; left &amp;amp; x &amp;lt; right` if `strict=TRUE`."><me
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add-title-page.html">Add a title page to your workflow report</a>
+    <a class="dropdown-item" href="../articles/excel-template.html">Excel Template</a>
     <a class="dropdown-item" href="../articles/goodness-of-fit.html">Time profiles and Residuals task</a>
     <a class="dropdown-item" href="../articles/ospsuitereportingengine.html">Get Started</a>
     <a class="dropdown-item" href="../articles/pk-parameters.html">PK parameters</a>
@@ -105,19 +106,19 @@ Default value is `FALSE`.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1e2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">x</span><span class="op">[</span><span class="fu">isBetween</span><span class="op">(</span><span class="va">x</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.59631257  0.45398112 -0.11735354 -0.33167188  0.63743639 -0.31830022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]  0.30536474  0.90683038 -0.91276064 -0.21463502 -0.70413936  0.35422951</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] -0.64201759 -0.30523442 -0.44683429 -0.69759020 -0.99649181  0.95301999</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19]  0.92813935  0.03810263 -0.39071830 -0.86436434  0.61725638  0.98275675</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] -0.95596825 -0.41353947  0.06291482  0.02280695  0.57411183 -0.04981364</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31] -0.37192537 -0.37335712  0.17037744 -0.12375183 -0.74991045 -0.19711246</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [37] -0.40533462  0.72412390 -0.34681847  0.17593117 -0.71582531 -0.04732990</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [43] -0.30370734  0.52598804  0.33546499 -0.45268511  0.39941187 -0.89237640</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [49]  0.77637650 -0.32793877  0.62355938 -0.36479709  0.33038691  0.68131680</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [55]  0.22274084  0.74271053 -0.17346646 -0.50198380  0.07575232  0.25006761</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [61]  0.70017571 -0.20894135 -0.10568065  0.42520030  0.09583263  0.28000446</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [67] -0.78924635  0.32445202  0.21949761 -0.75491839 -0.58428298 -0.19288913</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [73]  0.65169139</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  0.324655002 -0.444591840  0.902122645 -0.092681476 -0.344116694</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] -0.506231464  0.663610894  0.240733193 -0.669989000 -0.747833163</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11]  0.464681763  0.845067722  0.461796785  0.588015951 -0.952281242</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16]  0.792272005  0.712048273  0.825260074 -0.395741304  0.300631626</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21]  0.680333388 -0.520775846 -0.238474479  0.023445778 -0.711323980</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [26]  0.051302264 -0.257528176 -0.007141919  0.380327259 -0.227402590</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [31]  0.187609609  0.119809979 -0.039192932 -0.905567633 -0.198633368</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [36]  0.827491597  0.500114879 -0.444933614  0.460798762  0.453349113</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [41] -0.315989334  0.453957381 -0.718178958 -0.233061035  0.924304580</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [46]  0.288615702  0.562135922  0.533039476 -0.738962991  0.492229056</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [51] -0.175245952  0.035401562  0.161305057  0.801898394 -0.610576833</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [56] -0.387071049 -0.231219272  0.876763565  0.142970522  0.027726324</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [61] -0.277470514  0.754179131 -0.489140753  0.541728491</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">isBetween</span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</span>

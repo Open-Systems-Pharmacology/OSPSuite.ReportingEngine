@@ -43,6 +43,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add-title-page.html">Add a title page to your workflow report</a>
+    <a class="dropdown-item" href="../articles/excel-template.html">Excel Template</a>
     <a class="dropdown-item" href="../articles/goodness-of-fit.html">Time profiles and Residuals task</a>
     <a class="dropdown-item" href="../articles/ospsuitereportingengine.html">Get Started</a>
     <a class="dropdown-item" href="../articles/pk-parameters.html">PK parameters</a>
@@ -248,7 +249,7 @@ evaluation and plot are started with the command
 <p>The output report, containing the mean model sensitivity plots from
 this example, is shown below.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-26.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-24.png" style="width:100%; border-style: none;"></details>
 </div>
 <div class="section level4">
 <h4 id="population-model-workflow">Population model workflow<a class="anchor" aria-label="anchor" href="#population-model-workflow"></a>
@@ -362,8 +363,9 @@ plot is configured using an instance of a
 <p>The results of the population sensitivity analysis are found in
 multiple <code>.csv</code> files within the
 <code>SensitivityResults</code> sub-directory of the workflow folder, as
-shown in the following figure:
-<img src="figures/sa-file-outputs.png" width="40%"></p>
+shown in the following figure:</p>
+<pre><code><span><span class="co">#&gt; [1] TRUE</span></span></code></pre>
+<p><img src="figures/sa-file-outputs.png" width="40%"></p>
 <p>Two sets of files make up the population sensitivity analysis results
 for this example, each corresponding to one of the
 <code>PopulationSimulationSet</code> objects (named
@@ -378,6 +380,7 @@ within the <code>SensitivityResults</code> sub-directory of the workflow
 folder) obtained for the <code>PopulationSimulationSet</code> object
 <code>popSimulationSet1</code>. Its contents are shown in the following
 figure:</p>
+<pre><code><span><span class="co">#&gt; [1] TRUE</span></span></code></pre>
 <p><img src="figures/sa-file-index.png" width="100%"></p>
 <p>Two output paths are shown corresponding to <code>output1</code>
 (pink), <code>output2</code> (blue). Note that, as per the definitions

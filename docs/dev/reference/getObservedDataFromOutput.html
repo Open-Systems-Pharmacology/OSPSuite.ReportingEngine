@@ -25,6 +25,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add-title-page.html">Add a title page to your workflow report</a>
+    <a class="dropdown-item" href="../articles/excel-template.html">Excel Template</a>
     <a class="dropdown-item" href="../articles/goodness-of-fit.html">Time profiles and Residuals task</a>
     <a class="dropdown-item" href="../articles/ospsuitereportingengine.html">Get Started</a>
     <a class="dropdown-item" href="../articles/pk-parameters.html">PK parameters</a>
@@ -63,7 +64,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getObservedDataFromOutput</span><span class="op">(</span><span class="va">output</span>, <span class="va">data</span>, <span class="va">dataMapping</span>, <span class="va">molWeight</span>, <span class="va">timeUnit</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getObservedDataFromOutput</span><span class="op">(</span><span class="va">output</span>, <span class="va">data</span>, <span class="va">dataMapping</span>, <span class="va">molWeight</span>, <span class="va">structureSet</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -84,8 +85,8 @@
 <dd><p>Molar weight for unit conversion of dependent variable</p></dd>
 
 
-<dt>timeUnit</dt>
-<dd><p>time unit for unit conversion of time</p></dd>
+<dt>structureSet</dt>
+<dd><p>A `SimulationStructure` object</p></dd>
 
 </dl></div>
     <div class="section level2">

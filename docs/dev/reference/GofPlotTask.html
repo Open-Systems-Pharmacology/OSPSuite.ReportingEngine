@@ -25,6 +25,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add-title-page.html">Add a title page to your workflow report</a>
+    <a class="dropdown-item" href="../articles/excel-template.html">Excel Template</a>
     <a class="dropdown-item" href="../articles/goodness-of-fit.html">Time profiles and Residuals task</a>
     <a class="dropdown-item" href="../articles/ospsuitereportingengine.html">Get Started</a>
     <a class="dropdown-item" href="../articles/pk-parameters.html">PK parameters</a>
@@ -98,7 +99,9 @@
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
 <ul><li><p><a href="#method-GofPlotTask-saveResults"><code>GofPlotTask$saveResults()</code></a></p></li>
+<li><p><a href="#method-GofPlotTask-saveResidualsResults"><code>GofPlotTask$saveResidualsResults()</code></a></p></li>
 <li><p><a href="#method-GofPlotTask-runTask"><code>GofPlotTask$runTask()</code></a></p></li>
+<li><p><a href="#method-GofPlotTask-getResidualsResults"><code>GofPlotTask$getResidualsResults()</code></a></p></li>
 <li><p><a href="#method-GofPlotTask-clone"><code>GofPlotTask$clone()</code></a></p></li>
 </ul></div><p><details><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="activate"><a href="Task.html#method-activate"><code>ospsuite.reportingengine::Task$activate()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="getAbsolutePath"><a href="Task.html#method-getAbsolutePath"><code>ospsuite.reportingengine::Task$getAbsolutePath()</code></a></span></li>
@@ -123,9 +126,23 @@
 
 
 <dt><code>taskResults</code></dt>
-<dd><p>list of results from task run.
-Currently, results contains at least 2 fields: `plots` and `tables`
-They are to be deprecated and replaced using `TaskResults` objects</p></dd>
+<dd><p>list of `TaskResults` objects</p></dd>
+
+
+</dl><p></p></div>
+</div>
+
+</div><p></p><hr><a id="method-GofPlotTask-saveResidualsResults"></a><div class="section">
+<h3 id="method-saveresidualsresults-">Method <code>saveResidualsResults()</code><a class="anchor" aria-label="anchor" href="#method-saveresidualsresults-"></a></h3>
+<p>Save the task results related to residuals across all simulations</p><div class="section">
+<h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GofPlotTask</span><span class="op">$</span><span class="fu">saveResidualsResults</span><span class="op">(</span><span class="va">taskResults</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>taskResults</code></dt>
+<dd><p>list of `TaskResults` objects</p></dd>
 
 
 </dl><p></p></div>
@@ -134,12 +151,12 @@ They are to be deprecated and replaced using `TaskResults` objects</p></dd>
 </div><p></p><hr><a id="method-GofPlotTask-runTask"></a><div class="section">
 <h3 id="method-runtask-">Method <code>runTask()</code><a class="anchor" aria-label="anchor" href="#method-runtask-"></a></h3>
 <p>Run task and save its output results</p><div class="section">
-<h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
+<h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GofPlotTask</span><span class="op">$</span><span class="fu">runTask</span><span class="op">(</span><span class="va">structureSets</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
+<h4 id="arguments-2">Arguments<a class="anchor" aria-label="anchor" href="#arguments-2"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>structureSets</code></dt>
 <dd><p>list of `SimulationStructure` objects</p></dd>
 
@@ -147,15 +164,43 @@ They are to be deprecated and replaced using `TaskResults` objects</p></dd>
 </dl><p></p></div>
 </div>
 
+</div><p></p><hr><a id="method-GofPlotTask-getResidualsResults"></a><div class="section">
+<h3 id="method-getresidualsresults-">Method <code>getResidualsResults()</code><a class="anchor" aria-label="anchor" href="#method-getresidualsresults-"></a></h3>
+<p>Get plot results for residuals across all simulations</p><div class="section">
+<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GofPlotTask</span><span class="op">$</span><span class="fu">getResidualsResults</span><span class="op">(</span><span class="va">structureSets</span>, <span class="va">data</span>, <span class="va">settings</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-3">Arguments<a class="anchor" aria-label="anchor" href="#arguments-3"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>structureSets</code></dt>
+<dd><p>A list of `SimulationStructure` objects defining the properties of a simulation set</p></dd>
+
+
+<dt><code>data</code></dt>
+<dd><p>data.frame</p></dd>
+
+
+<dt><code>settings</code></dt>
+<dd><p>List of settings such as `PlotConfiguration` R6 class objects for each goodness of fit plot</p></dd>
+
+
+</dl><p></p></div>
+</div>
+<div class="section">
+<h4 id="returns">Returns<a class="anchor" aria-label="anchor" href="#returns"></a></h4>
+<p>A list of `TaskResults` objects</p>
+</div>
+
 </div><p></p><hr><a id="method-GofPlotTask-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
+<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GofPlotTask</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-2">Arguments<a class="anchor" aria-label="anchor" href="#arguments-2"></a></h4>
+<h4 id="arguments-4">Arguments<a class="anchor" aria-label="anchor" href="#arguments-4"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 

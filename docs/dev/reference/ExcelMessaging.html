@@ -25,6 +25,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add-title-page.html">Add a title page to your workflow report</a>
+    <a class="dropdown-item" href="../articles/excel-template.html">Excel Template</a>
     <a class="dropdown-item" href="../articles/goodness-of-fit.html">Time profiles and Residuals task</a>
     <a class="dropdown-item" href="../articles/ospsuitereportingengine.html">Get Started</a>
     <a class="dropdown-item" href="../articles/pk-parameters.html">PK parameters</a>
@@ -82,6 +83,8 @@
 
 <ul><li><p><a href="#method-ExcelMessaging-new"><code>ExcelMessaging$new()</code></a></p></li>
 <li><p><a href="#method-ExcelMessaging-displayMessage"><code>ExcelMessaging$displayMessage()</code></a></p></li>
+<li><p><a href="#method-ExcelMessaging-getMessageHeader"><code>ExcelMessaging$getMessageHeader()</code></a></p></li>
+<li><p><a href="#method-ExcelMessaging-getNoIssueMessage"><code>ExcelMessaging$getNoIssueMessage()</code></a></p></li>
 </ul></div><p></p><hr><a id="method-ExcelMessaging-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Initialize an `ExcelMessaging` object</p><div class="section">
@@ -113,6 +116,30 @@
 <h4 id="returns-1">Returns<a class="anchor" aria-label="anchor" href="#returns-1"></a></h4>
 <p>Messages content</p>
 </div>
+
+</div><p></p><hr><a id="method-ExcelMessaging-getMessageHeader"></a><div class="section">
+<h3 id="method-getmessageheader-">Method <code>getMessageHeader()</code><a class="anchor" aria-label="anchor" href="#method-getmessageheader-"></a></h3>
+<p>Get message header</p><div class="section">
+<h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">ExcelMessaging</span><span class="op">$</span><span class="fu">getMessageHeader</span><span class="op">(</span><span class="va">section</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>section</code></dt>
+<dd><p>name of R script section</p></dd>
+
+
+</dl><p></p></div>
+</div>
+
+</div><p></p><hr><a id="method-ExcelMessaging-getNoIssueMessage"></a><div class="section">
+<h3 id="method-getnoissuemessage-">Method <code>getNoIssueMessage()</code><a class="anchor" aria-label="anchor" href="#method-getnoissuemessage-"></a></h3>
+<p>Get message displaying no issue identified</p><div class="section">
+<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">ExcelMessaging</span><span class="op">$</span><span class="fu">getNoIssueMessage</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
 
 </div>
 

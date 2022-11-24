@@ -43,6 +43,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add-title-page.html">Add a title page to your workflow report</a>
+    <a class="dropdown-item" href="../articles/excel-template.html">Excel Template</a>
     <a class="dropdown-item" href="../articles/goodness-of-fit.html">Time profiles and Residuals task</a>
     <a class="dropdown-item" href="../articles/ospsuitereportingengine.html">Get Started</a>
     <a class="dropdown-item" href="../articles/pk-parameters.html">PK parameters</a>
@@ -97,9 +98,12 @@
 <span><span class="co">#&gt; Loading required package: tlf</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'ospsuite.reportingengine'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:ospsuite':</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:tlf':</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     plotPopulationTimeProfile</span></span></code></pre></div>
+<span><span class="co">#&gt;     isBetween</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:ospsuite':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     calculateResiduals, plotPopulationTimeProfile</span></span></code></pre></div>
 <p>This vignette focuses on time profiles and residuals plots (also
 called goodness of fit plots) generated using either mean model or
 population workflows.</p>
@@ -294,9 +298,9 @@ output are requested.</p>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">simulationSets =</span> setA,</span>
 <span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">workflowFolder =</span> <span class="st">"Example-1"</span></span>
 <span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:42:44</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:30:25</span></span>
 <span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mReporting Engine Information:</span></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Date: 19/08/2022 - 03:42:44</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Date: 21/11/2022 - 12:30:25</span></span>
 <span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  User Information:</span></span>
 <span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  User: pchelle</span></span>
@@ -304,46 +308,46 @@ output are requested.</p>
 <span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  System is NOT validated</span></span>
 <span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  System versions:</span></span>
 <span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  OSP Suite Package version: 11.0.123</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  OSP Suite Package version: 11.1.135</span></span>
 <span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  tlf version: 1.4.0</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  tlf version: 1.4.116</span></span>
 <span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the workflow tasks to be run</span></span>
 <span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>workflow1<span class="sc">$</span><span class="fu">activateTasks</span>(<span class="fu">c</span>(<span class="st">"simulate"</span>, <span class="st">"plotTimeProfilesAndResiduals"</span>))</span>
 <span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the workflow</span></span>
 <span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>workflow1<span class="sc">$</span><span class="fu">runWorkflow</span>()</span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:42:44</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:30:26</span></span>
 <span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mMean Model Workflow [23m [22m [39m</span></span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:42:44</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:30:26</span></span>
 <span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mSimulation task [23m [22m [39m</span></span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:42:44</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:30:26</span></span>
 <span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mSplitting simulations for parallel run: [36m [1m [3m1 [23m [22m [39m simulations split into  [36m [1m [3m1 [23m [22m [39m subsets</span></span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:42:44</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:30:26</span></span>
 <span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3msubset simulations [23m [22m [39m</span></span>
 <span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
 <span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
 <span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
 <span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:42:45</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:30:26</span></span>
 <span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mSimulation task [23m [22m [39m completed in 0 min</span></span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:42:45</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:30:26</span></span>
 <span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m</span></span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:42:45</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:30:26</span></span>
 <span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m for  [36m [1m [3mA [23m [22m [39m</span></span>
-<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:42:47</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:30:29</span></span>
 <span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m completed in 0 min</span></span>
-<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/R/win-library/4.2/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/R/win-library/4.2/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
-<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:42:47</span></span>
-<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mMean Model Workflow [23m [22m [39m completed in 0 min</span></span></code></pre></div>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpwNKDmu/temp_libpath46b0420c217a/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpwNKDmu/temp_libpath46b0420c217a/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:30:29</span></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mMean Model Workflow [23m [22m [39m completed in 0.1 min</span></span></code></pre></div>
 </details><p>The output report for Example 1 is shown below. There are only 2
 figures in the report (linear and log scales) showing the time profile
 of the output path ‘<strong>Organism|A|Concentration in
 container</strong>’ displayed as ‘<strong>Concentration of
 A</strong>’.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-8.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-4.png" style="width:100%; border-style: none;"></details>
 </div>
 <div class="section level3">
 <h3 id="example-2">Example 2<a class="anchor" aria-label="anchor" href="#example-2"></a>
@@ -364,11 +368,17 @@ in Example 1. This example shows 3 new features:</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Get the observation file and its dictionary</span></span>
-<span><span class="va">observationFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"SimpleData.nmdat"</span>,</span>
+<span><span class="va">observationFile</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
+<span>  <span class="st">"extdata"</span>, <span class="st">"SimpleData.nmdat"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">dictionaryFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"tpDictionary.csv"</span>,</span>
+<span><span class="va">dictionaryFile</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
+<span>  <span class="st">"extdata"</span>, <span class="st">"tpDictionary.csv"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">dataSource</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/DataSource.html">DataSource</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  dataFile <span class="op">=</span> <span class="va">observationFile</span>,</span>
+<span>  metaDataFile <span class="op">=</span> <span class="va">dictionaryFile</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Define the input parameters</span></span>
@@ -384,8 +394,7 @@ in Example 1. This example shows 3 new features:</p>
 <span>  simulationSetName <span class="op">=</span> <span class="st">"A"</span>,</span>
 <span>  simulationFile <span class="op">=</span> <span class="va">simulationFile</span>,</span>
 <span>  outputs <span class="op">=</span> <span class="va">outputA</span>,</span>
-<span>  observedDataFile <span class="op">=</span> <span class="va">observationFile</span>,</span>
-<span>  observedMetaDataFile <span class="op">=</span> <span class="va">dictionaryFile</span></span>
+<span>  dataSource <span class="op">=</span> <span class="va">dataSource</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create the workflow instance</span></span>
@@ -394,9 +403,9 @@ in Example 1. This example shows 3 new features:</p>
 <span>    simulationSets <span class="op">=</span> <span class="va">setA</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-1"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:42:51</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:30:33</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 19/08/2022 - 03:42:51</span></span>
+<span><span class="co">#&gt;  Date: 21/11/2022 - 12:30:33</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
 <span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span><span class="co">#&gt;  User: pchelle</span></span>
@@ -404,9 +413,9 @@ in Example 1. This example shows 3 new features:</p>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 11.0.123</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 11.1.135</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
-<span><span class="co">#&gt;  tlf version: 1.4.0</span></span>
+<span><span class="co">#&gt;  tlf version: 1.4.116</span></span>
 <span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="va">workflow2</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="st">"plotTimeProfilesAndResiduals"</span><span class="op">)</span></span>
@@ -414,17 +423,17 @@ in Example 1. This example shows 3 new features:</p>
 <span></span>
 <span><span class="co"># Run the workflow</span></span>
 <span><span class="va">workflow2</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:42:51</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:30:33</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span></span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:42:51</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:30:33</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span></span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:42:51</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:30:33</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">A</span></span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:42:59</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.1 min</span></span>
-<span><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/R/win-library/4.2/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/R/win-library/4.2/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:43:00</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0.1 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 21/11/2022 - 12:30:42</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.2 min</span></span>
+<span><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpwNKDmu/temp_libpath46b0420c217a/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpwNKDmu/temp_libpath46b0420c217a/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:30:43</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0.2 min</span></span></code></pre></div>
 <p>It can be seen from the run results that the task
 <code>simulate</code> was not run.</p>
 <p>In this example, the content of the observed data file and its
@@ -663,7 +672,7 @@ more figures in the report showing not only time profiles in
 <code>µmol/ml</code> instead of <code>nmol/ml</code> but also
 residuals.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-9.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-5.png" style="width:100%; border-style: none;"></details>
 </div>
 <div class="section level3">
 <h3 id="example-3">Example 3<a class="anchor" aria-label="anchor" href="#example-3"></a>
@@ -680,11 +689,12 @@ task.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Get the observation file and its dictionary</span></span>
-<span><span class="va">observationFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"SimpleData.nmdat"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">dictionaryFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"tpDictionaryLoq.csv"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
+<span><span class="va">dataSource</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/DataSource.html">DataSource</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  dataFile <span class="op">=</span> <span class="va">observationFile</span>,</span>
+<span>  metaDataFile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
+<span>    <span class="st">"extdata"</span>, <span class="st">"tpDictionaryLoq.csv"</span>,</span>
+<span>    package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
+<span>    <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Define the input parameters</span></span>
@@ -700,8 +710,7 @@ task.</p>
 <span>  simulationSetName <span class="op">=</span> <span class="st">"A"</span>,</span>
 <span>  simulationFile <span class="op">=</span> <span class="va">simulationFile</span>,</span>
 <span>  outputs <span class="op">=</span> <span class="va">outputA</span>,</span>
-<span>  observedDataFile <span class="op">=</span> <span class="va">observationFile</span>,</span>
-<span>  observedMetaDataFile <span class="op">=</span> <span class="va">dictionaryFile</span></span>
+<span>  dataSource <span class="op">=</span> <span class="va">dataSource</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create the workflow instance</span></span>
@@ -710,9 +719,9 @@ task.</p>
 <span>    simulationSets <span class="op">=</span> <span class="va">setA</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-1"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:43:05</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:30:48</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 19/08/2022 - 03:43:05</span></span>
+<span><span class="co">#&gt;  Date: 21/11/2022 - 12:30:48</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
 <span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span><span class="co">#&gt;  User: pchelle</span></span>
@@ -720,9 +729,9 @@ task.</p>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 11.0.123</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 11.1.135</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
-<span><span class="co">#&gt;  tlf version: 1.4.0</span></span>
+<span><span class="co">#&gt;  tlf version: 1.4.116</span></span>
 <span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="va">workflow3</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="st">"plotTimeProfilesAndResiduals"</span><span class="op">)</span></span>
@@ -730,28 +739,28 @@ task.</p>
 <span></span>
 <span><span class="co"># Run the workflow</span></span>
 <span><span class="va">workflow3</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:43:06</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:30:48</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span></span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:43:06</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:30:48</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span></span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:43:06</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:30:48</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">A</span></span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:43:14</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.1 min</span></span>
-<span><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/R/win-library/4.2/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/R/win-library/4.2/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:43:15</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:30:57</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.2 min</span></span>
+<span><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpwNKDmu/temp_libpath46b0420c217a/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpwNKDmu/temp_libpath46b0420c217a/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:30:57</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0.2 min</span></span></code></pre></div>
 <p>The new dictionary content is described in Table 4.</p>
 <table class="table">
 <caption>Table 4: Dictionary content</caption>
 <colgroup>
-<col width="5%">
-<col width="9%">
-<col width="10%">
-<col width="9%">
-<col width="9%">
-<col width="15%">
-<col width="40%">
+<col width="6%">
+<col width="11%">
+<col width="13%">
+<col width="11%">
+<col width="11%">
+<col width="19%">
+<col width="26%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">ID</th>
@@ -853,21 +862,11 @@ task.</p>
 <td align="left">Gender</td>
 <td align="left">Make sure 1=male 2= female</td>
 </tr>
-<tr class="odd">
-<td align="left">lloq</td>
-<td align="left">timeprofile</td>
-<td align="left">LOQ</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">units are defined in corresponding output
-definitions</td>
-</tr>
 </tbody>
 </table></details><p>The output report for Example 3 is shown below. The time profiles now
 indicate the LLOQ.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-10.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-6.png" style="width:100%; border-style: none;"></details>
 </div>
 <div class="section level3">
 <h3 id="example-4">Example 4<a class="anchor" aria-label="anchor" href="#example-4"></a>
@@ -887,87 +886,84 @@ needs to be re-run.</p>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the observation file and its dictionary</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>observationFile <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"SimpleData.nmdat"</span>,</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">package =</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>dictionaryFile <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"tpDictionary.csv"</span>,</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">package =</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the input parameters</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>outputA <span class="ot">&lt;-</span> Output<span class="sc">$</span><span class="fu">new</span>(</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"Organism|A|Concentration in container"</span>,</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">displayName =</span> <span class="st">"Simulated concentration of A"</span>,</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">displayUnit =</span> <span class="st">"µmol/ml"</span>,</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">dataSelection =</span> <span class="st">"MDV==0"</span>,</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">dataDisplayName =</span> <span class="st">"Observed concentration of A"</span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>outputB <span class="ot">&lt;-</span> Output<span class="sc">$</span><span class="fu">new</span>(</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"Organism|B|Concentration in container"</span>,</span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">displayName =</span> <span class="st">"Simulated concentration of B"</span>,</span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">displayUnit =</span> <span class="st">"µmol/ml"</span></span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>setAB <span class="ot">&lt;-</span> SimulationSet<span class="sc">$</span><span class="fu">new</span>(</span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">simulationSetName =</span> <span class="st">"A and B"</span>,</span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">simulationFile =</span> simulationFile,</span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">outputs =</span> <span class="fu">c</span>(outputA, outputB),</span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">observedDataFile =</span> observationFile,</span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">observedMetaDataFile =</span> dictionaryFile</span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the workflow instance</span></span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>workflow4 <span class="ot">&lt;-</span></span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>  MeanModelWorkflow<span class="sc">$</span><span class="fu">new</span>(</span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">simulationSets =</span> setAB,</span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">workflowFolder =</span> <span class="st">"Example-4"</span></span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:20</span></span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mReporting Engine Information:</span></span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Date: 19/08/2022 - 03:43:20</span></span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  User Information:</span></span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  User: pchelle</span></span>
-<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Login: pchelle</span></span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  System is NOT validated</span></span>
-<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  System versions:</span></span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
-<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  OSP Suite Package version: 11.0.123</span></span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  tlf version: 1.4.0</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>dataSource <span class="ot">&lt;-</span> DataSource<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">dataFile =</span> observationFile,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">metaDataFile =</span> dictionaryFile</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the input parameters</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>outputA <span class="ot">&lt;-</span> Output<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"Organism|A|Concentration in container"</span>,</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">displayName =</span> <span class="st">"Simulated concentration of A"</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">displayUnit =</span> <span class="st">"µmol/ml"</span>,</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">dataSelection =</span> <span class="st">"MDV==0"</span>,</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">dataDisplayName =</span> <span class="st">"Observed concentration of A"</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>outputB <span class="ot">&lt;-</span> Output<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"Organism|B|Concentration in container"</span>,</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">displayName =</span> <span class="st">"Simulated concentration of B"</span>,</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">displayUnit =</span> <span class="st">"µmol/ml"</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>setAB <span class="ot">&lt;-</span> SimulationSet<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">simulationSetName =</span> <span class="st">"A and B"</span>,</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">simulationFile =</span> simulationFile,</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">outputs =</span> <span class="fu">c</span>(outputA, outputB),</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">dataSource =</span> dataSource</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the workflow instance</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>workflow4 <span class="ot">&lt;-</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>  MeanModelWorkflow<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">simulationSets =</span> setAB,</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">workflowFolder =</span> <span class="st">"Example-4"</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:02</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mReporting Engine Information:</span></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Date: 21/11/2022 - 12:31:02</span></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  User Information:</span></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  User: pchelle</span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Login: pchelle</span></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  System is NOT validated</span></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  System versions:</span></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  OSP Suite Package version: 11.1.135</span></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  tlf version: 1.4.116</span></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the workflow tasks to be run</span></span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>workflow4<span class="sc">$</span><span class="fu">activateTasks</span>(<span class="fu">c</span>(<span class="st">"simulate"</span>, <span class="st">"plotTimeProfilesAndResiduals"</span>))</span>
 <span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the workflow tasks to be run</span></span>
-<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>workflow4<span class="sc">$</span><span class="fu">activateTasks</span>(<span class="fu">c</span>(<span class="st">"simulate"</span>, <span class="st">"plotTimeProfilesAndResiduals"</span>))</span>
-<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the workflow</span></span>
-<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>workflow4<span class="sc">$</span><span class="fu">runWorkflow</span>()</span>
-<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:21</span></span>
-<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mMean Model Workflow [23m [22m [39m</span></span>
-<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:21</span></span>
-<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mSimulation task [23m [22m [39m</span></span>
-<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:21</span></span>
-<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mSplitting simulations for parallel run: [36m [1m [3m1 [23m [22m [39m simulations split into  [36m [1m [3m1 [23m [22m [39m subsets</span></span>
-<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:21</span></span>
-<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3msubset simulations [23m [22m [39m</span></span>
-<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
-<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:21</span></span>
-<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mSimulation task [23m [22m [39m completed in 0 min</span></span>
-<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:21</span></span>
-<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m</span></span>
-<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:21</span></span>
-<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m for  [36m [1m [3mA and B [23m [22m [39m</span></span>
-<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:29</span></span>
-<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m completed in 0.1 min</span></span>
-<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/R/win-library/4.2/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/R/win-library/4.2/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-4" -t docx -o "Example-4/Report-word.docx" "Example-4/Report-word.md"</span></span>
-<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:29</span></span>
-<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mMean Model Workflow [23m [22m [39m completed in 0.1 min</span></span></code></pre></div>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the workflow</span></span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>workflow4<span class="sc">$</span><span class="fu">runWorkflow</span>()</span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:02</span></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mMean Model Workflow [23m [22m [39m</span></span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:02</span></span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mSimulation task [23m [22m [39m</span></span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:02</span></span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mSplitting simulations for parallel run: [36m [1m [3m1 [23m [22m [39m simulations split into  [36m [1m [3m1 [23m [22m [39m subsets</span></span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:02</span></span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3msubset simulations [23m [22m [39m</span></span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:03</span></span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mSimulation task [23m [22m [39m completed in 0 min</span></span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:03</span></span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m</span></span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:03</span></span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m for  [36m [1m [3mA and B [23m [22m [39m</span></span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:11</span></span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m completed in 0.1 min</span></span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpwNKDmu/temp_libpath46b0420c217a/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpwNKDmu/temp_libpath46b0420c217a/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-4" -t docx -o "Example-4/Report-word.docx" "Example-4/Report-word.md"</span></span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:11</span></span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mMean Model Workflow [23m [22m [39m completed in 0.1 min</span></span></code></pre></div>
 </details><p>The output report for Example 4 is shown below.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-11.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-7.png" style="width:100%; border-style: none;"></details>
 </div>
 <div class="section level3">
 <h3 id="example-5">Example 5<a class="anchor" aria-label="anchor" href="#example-5"></a>
@@ -992,94 +988,91 @@ simulation set names.</p>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the observation file and its dictionary</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>observationFile <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"SimpleData.nmdat"</span>,</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">package =</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>dictionaryFile <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"tpDictionary.csv"</span>,</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">package =</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the input parameters</span></span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>outputA <span class="ot">&lt;-</span> Output<span class="sc">$</span><span class="fu">new</span>(</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"Organism|A|Concentration in container"</span>,</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">displayName =</span> <span class="st">"Simulated concentration of A"</span>,</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">displayUnit =</span> <span class="st">"µmol/ml"</span>,</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">dataSelection =</span> <span class="st">"MDV==0"</span>,</span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">dataDisplayName =</span> <span class="st">"Observed concentration of A"</span></span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>outputB <span class="ot">&lt;-</span> Output<span class="sc">$</span><span class="fu">new</span>(</span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"Organism|B|Concentration in container"</span>,</span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">displayName =</span> <span class="st">"Simulated concentration of B"</span>,</span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">displayUnit =</span> <span class="st">"µmol/ml"</span></span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>setA <span class="ot">&lt;-</span> SimulationSet<span class="sc">$</span><span class="fu">new</span>(</span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">simulationSetName =</span> <span class="st">"A"</span>,</span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">simulationFile =</span> simulationFileA,</span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">outputs =</span> outputA,</span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">observedDataFile =</span> observationFile,</span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">observedMetaDataFile =</span> dictionaryFile</span>
-<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>setB <span class="ot">&lt;-</span> SimulationSet<span class="sc">$</span><span class="fu">new</span>(</span>
-<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">simulationSetName =</span> <span class="st">"B"</span>,</span>
-<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">simulationFile =</span> simulationFileB,</span>
-<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">outputs =</span> outputB</span>
-<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the workflow instance</span></span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>workflow5 <span class="ot">&lt;-</span></span>
-<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>  MeanModelWorkflow<span class="sc">$</span><span class="fu">new</span>(</span>
-<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">simulationSets =</span> <span class="fu">c</span>(setA, setB),</span>
-<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">workflowFolder =</span> <span class="st">"Example-5"</span></span>
-<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:36</span></span>
-<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mReporting Engine Information:</span></span>
-<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Date: 19/08/2022 - 03:43:35</span></span>
-<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  User Information:</span></span>
-<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
-<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  User: pchelle</span></span>
-<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Login: pchelle</span></span>
-<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  System is NOT validated</span></span>
-<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  System versions:</span></span>
-<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
-<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  OSP Suite Package version: 11.0.123</span></span>
-<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
-<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  tlf version: 1.4.0</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>dataSource <span class="ot">&lt;-</span> DataSource<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">dataFile =</span> observationFile,</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">metaDataFile =</span> dictionaryFile</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the input parameters</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>outputA <span class="ot">&lt;-</span> Output<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"Organism|A|Concentration in container"</span>,</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">displayName =</span> <span class="st">"Simulated concentration of A"</span>,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">displayUnit =</span> <span class="st">"µmol/ml"</span>,</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">dataSelection =</span> <span class="st">"MDV==0"</span>,</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">dataDisplayName =</span> <span class="st">"Observed concentration of A"</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>outputB <span class="ot">&lt;-</span> Output<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"Organism|B|Concentration in container"</span>,</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">displayName =</span> <span class="st">"Simulated concentration of B"</span>,</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">displayUnit =</span> <span class="st">"µmol/ml"</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>setA <span class="ot">&lt;-</span> SimulationSet<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">simulationSetName =</span> <span class="st">"A"</span>,</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">simulationFile =</span> simulationFileA,</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">outputs =</span> outputA,</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">dataSource =</span> dataSource</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>setB <span class="ot">&lt;-</span> SimulationSet<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">simulationSetName =</span> <span class="st">"B"</span>,</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">simulationFile =</span> simulationFileB,</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">outputs =</span> outputB</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the workflow instance</span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>workflow5 <span class="ot">&lt;-</span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>  MeanModelWorkflow<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">simulationSets =</span> <span class="fu">c</span>(setA, setB),</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">workflowFolder =</span> <span class="st">"Example-5"</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:16</span></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mReporting Engine Information:</span></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Date: 21/11/2022 - 12:31:16</span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  User Information:</span></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  User: pchelle</span></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Login: pchelle</span></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  System is NOT validated</span></span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  System versions:</span></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  OSP Suite Package version: 11.1.135</span></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  tlf version: 1.4.116</span></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the workflow tasks to be run</span></span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>workflow5<span class="sc">$</span><span class="fu">activateTasks</span>(<span class="fu">c</span>(<span class="st">"simulate"</span>, <span class="st">"plotTimeProfilesAndResiduals"</span>))</span>
 <span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the workflow tasks to be run</span></span>
-<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>workflow5<span class="sc">$</span><span class="fu">activateTasks</span>(<span class="fu">c</span>(<span class="st">"simulate"</span>, <span class="st">"plotTimeProfilesAndResiduals"</span>))</span>
-<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the workflow</span></span>
-<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>workflow5<span class="sc">$</span><span class="fu">runWorkflow</span>()</span>
-<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:36</span></span>
-<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mMean Model Workflow [23m [22m [39m</span></span>
-<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:36</span></span>
-<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mSimulation task [23m [22m [39m</span></span>
-<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:36</span></span>
-<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mSplitting simulations for parallel run: [36m [1m [3m2 [23m [22m [39m simulations split into  [36m [1m [3m1 [23m [22m [39m subsets</span></span>
-<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:36</span></span>
-<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3msubset simulations [23m [22m [39m</span></span>
-<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
-<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:36</span></span>
-<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mSimulation task [23m [22m [39m completed in 0 min</span></span>
-<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:36</span></span>
-<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m</span></span>
-<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:36</span></span>
-<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m for  [36m [1m [3mA [23m [22m [39m</span></span>
-<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:43</span></span>
-<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m for  [36m [1m [3mB [23m [22m [39m</span></span>
-<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:46</span></span>
-<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m completed in 0.2 min</span></span>
-<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/R/win-library/4.2/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/R/win-library/4.2/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-5" -t docx -o "Example-5/Report-word.docx" "Example-5/Report-word.md"</span></span>
-<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19/08/2022 - 03:43:46</span></span>
-<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mMean Model Workflow [23m [22m [39m completed in 0.2 min</span></span></code></pre></div>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the workflow</span></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>workflow5<span class="sc">$</span><span class="fu">runWorkflow</span>()</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:16</span></span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mMean Model Workflow [23m [22m [39m</span></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:16</span></span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mSimulation task [23m [22m [39m</span></span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:16</span></span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mSplitting simulations for parallel run: [36m [1m [3m2 [23m [22m [39m simulations split into  [36m [1m [3m1 [23m [22m [39m subsets</span></span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:16</span></span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3msubset simulations [23m [22m [39m</span></span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:17</span></span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mSimulation task [23m [22m [39m completed in 0 min</span></span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:17</span></span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m</span></span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:17</span></span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m for  [36m [1m [3mA [23m [22m [39m</span></span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:25</span></span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m for  [36m [1m [3mB [23m [22m [39m</span></span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:31</span></span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m completed in 0.2 min</span></span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpwNKDmu/temp_libpath46b0420c217a/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpwNKDmu/temp_libpath46b0420c217a/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-5" -t docx -o "Example-5/Report-word.docx" "Example-5/Report-word.md"</span></span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21/11/2022 - 12:31:32</span></span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mMean Model Workflow [23m [22m [39m completed in 0.3 min</span></span></code></pre></div>
 </details><p>The output report for Example 5 is shown below.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-12.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-8.png" style="width:100%; border-style: none;"></details>
 </div>
 <div class="section level3">
 <h3 id="example-6">Example 6<a class="anchor" aria-label="anchor" href="#example-6"></a>
@@ -1119,9 +1112,9 @@ output are requested.</p>
 <span>    simulationSets <span class="op">=</span> <span class="va">setA</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-6"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:43:52</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:31:38</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 19/08/2022 - 03:43:52</span></span>
+<span><span class="co">#&gt;  Date: 21/11/2022 - 12:31:38</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
 <span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span><span class="co">#&gt;  User: pchelle</span></span>
@@ -1129,35 +1122,35 @@ output are requested.</p>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 11.0.123</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 11.1.135</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
-<span><span class="co">#&gt;  tlf version: 1.4.0</span></span>
+<span><span class="co">#&gt;  tlf version: 1.4.116</span></span>
 <span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="va">workflow6</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simulate"</span>, <span class="st">"plotTimeProfilesAndResiduals"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run the workflow</span></span>
 <span><span class="va">workflow6</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:43:52</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:31:38</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:43:52</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:31:38</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span></span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:43:53</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:31:39</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:43:53</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:31:39</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span></span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:43:53</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:31:39</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">A</span></span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:43:56</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/R/win-library/4.2/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/R/win-library/4.2/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-6" -t docx -o "Example-6/Report-word.docx" "Example-6/Report-word.md"</span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:43:56</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:31:42</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.1 min</span></span>
+<span><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpwNKDmu/temp_libpath46b0420c217a/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpwNKDmu/temp_libpath46b0420c217a/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-6" -t docx -o "Example-6/Report-word.docx" "Example-6/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:31:43</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.1 min</span></span></code></pre></div>
 </details><p>The output report for Example 6 is shown below. The 2 figures of the
 report (linear and log scales) include median, mean 5th and 95th
 percentiles of the population.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-13.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-9.png" style="width:100%; border-style: none;"></details>
 </div>
 <div class="section level3">
 <h3 id="example-7">Example 7<a class="anchor" aria-label="anchor" href="#example-7"></a>
@@ -1174,11 +1167,9 @@ percentiles of the population.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Get the observation file and its dictionary</span></span>
-<span><span class="va">observationFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"SimpleData.nmdat"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">dictionaryFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"tpDictionary.csv"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
+<span><span class="va">dataSource</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/DataSource.html">DataSource</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  dataFile <span class="op">=</span> <span class="va">observationFile</span>,</span>
+<span>  metaDataFile <span class="op">=</span> <span class="va">dictionaryFile</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Define the input parameters</span></span>
@@ -1195,8 +1186,7 @@ percentiles of the population.</p>
 <span>  simulationFile <span class="op">=</span> <span class="va">simulationFile</span>,</span>
 <span>  populationFile <span class="op">=</span> <span class="va">populationFile</span>,</span>
 <span>  outputs <span class="op">=</span> <span class="va">outputA</span>,</span>
-<span>  observedDataFile <span class="op">=</span> <span class="va">observationFile</span>,</span>
-<span>  observedMetaDataFile <span class="op">=</span> <span class="va">dictionaryFile</span></span>
+<span>  dataSource <span class="op">=</span> <span class="va">dataSource</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create the workflow instance</span></span>
@@ -1206,9 +1196,9 @@ percentiles of the population.</p>
 <span>    simulationSets <span class="op">=</span> <span class="va">setA</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-6"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:44:00</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:31:46</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 19/08/2022 - 03:44:00</span></span>
+<span><span class="co">#&gt;  Date: 21/11/2022 - 12:31:46</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
 <span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span><span class="co">#&gt;  User: pchelle</span></span>
@@ -1216,9 +1206,9 @@ percentiles of the population.</p>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 11.0.123</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 11.1.135</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
-<span><span class="co">#&gt;  tlf version: 1.4.0</span></span>
+<span><span class="co">#&gt;  tlf version: 1.4.116</span></span>
 <span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="va">workflow7</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="va">StandardPlotTasks</span><span class="op">$</span><span class="va">plotTimeProfilesAndResiduals</span><span class="op">)</span></span>
@@ -1226,21 +1216,21 @@ percentiles of the population.</p>
 <span></span>
 <span><span class="co"># Run the workflow</span></span>
 <span><span class="va">workflow7</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:44:00</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:31:46</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:44:00</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:31:46</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span></span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:44:00</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:31:46</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">A</span></span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:44:09</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.1 min</span></span>
-<span><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/R/win-library/4.2/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/R/win-library/4.2/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-6" -t docx -o "Example-6/Report-word.docx" "Example-6/Report-word.md"</span></span>
-<span><span class="co">#&gt; 19/08/2022 - 03:44:09</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:31:56</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.2 min</span></span>
+<span><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpwNKDmu/temp_libpath46b0420c217a/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpwNKDmu/temp_libpath46b0420c217a/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-6" -t docx -o "Example-6/Report-word.docx" "Example-6/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/11/2022 - 12:31:57</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.2 min</span></span></code></pre></div>
 </details><p>The output report for Example 7 is shown below. The residuals are
 calculated on the median simulated values.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-14.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-10.png" style="width:100%; border-style: none;"></details>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

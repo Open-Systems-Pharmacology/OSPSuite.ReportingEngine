@@ -40,6 +40,7 @@ Other workflow helpers:
 \code{\link{addXParametersForPKParametersPlot}()},
 \code{\link{addYParametersForDemogrpahyPlot}()},
 \code{\link{checkTaskInputsExist}()},
+\code{\link{createWorkflowFromExcelInput}()},
 \code{\link{getMeanSensitivityAnalysisResultsFileNames}()},
 \code{\link{getOutputPathsInSimulationSet}()},
 \code{\link{getPKAnalysisResultsFileNames}()},

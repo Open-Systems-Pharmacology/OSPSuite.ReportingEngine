@@ -25,6 +25,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add-title-page.html">Add a title page to your workflow report</a>
+    <a class="dropdown-item" href="../articles/excel-template.html">Excel Template</a>
     <a class="dropdown-item" href="../articles/goodness-of-fit.html">Time profiles and Residuals task</a>
     <a class="dropdown-item" href="../articles/ospsuitereportingengine.html">Get Started</a>
     <a class="dropdown-item" href="../articles/pk-parameters.html">PK parameters</a>
@@ -76,12 +77,12 @@
 <dd><p>list of `Output` R6 class objects</p></dd>
 
 
-<dt><code>observedDataFile</code></dt>
-<dd><p>name of csv file to be used for observed data</p></dd>
+<dt><code>dataSource</code></dt>
+<dd><p>A `DataSource` object</p></dd>
 
 
-<dt><code>observedMetaDataFile</code></dt>
-<dd><p>name of csv file to be used as dictionary of the observed data</p></dd>
+<dt><code>dataSelection</code></dt>
+<dd><p>character or expression used to select a subset of observed data</p></dd>
 
 
 <dt><code>timeUnit</code></dt>
@@ -119,8 +120,8 @@ reported time profiles and residual plots when applicable</p></dd>
 <span>  <span class="va">simulationSetName</span>,</span>
 <span>  <span class="va">simulationFile</span>,</span>
 <span>  outputs <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  observedDataFile <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  observedMetaDataFile <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dataSource <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dataSelection <span class="op">=</span> <span class="va">DataSelectionKeys</span><span class="op">$</span><span class="va">ALL</span>,</span>
 <span>  timeUnit <span class="op">=</span> <span class="st">"h"</span>,</span>
 <span>  applicationRanges <span class="op">=</span> <span class="va">ApplicationRanges</span>,</span>
 <span>  minimumSimulationEndTime <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -142,12 +143,14 @@ reported time profiles and residual plots when applicable</p></dd>
 <dd><p>list of `Output` R6 class objects</p></dd>
 
 
-<dt><code>observedDataFile</code></dt>
-<dd><p>name of csv file to be used for observed data</p></dd>
+<dt><code>dataSource</code></dt>
+<dd><p>A `DataSource` object</p></dd>
 
 
-<dt><code>observedMetaDataFile</code></dt>
-<dd><p>name of csv file to be used as dictionary of the observed data</p></dd>
+<dt><code>dataSelection</code></dt>
+<dd><p>characters or expression to select subset the observed data
+By default, all the data is selected.
+When using a character array, selections are concatenated with the `&amp;` sign</p></dd>
 
 
 <dt><code>timeUnit</code></dt>
