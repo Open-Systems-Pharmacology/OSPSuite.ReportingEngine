@@ -22,7 +22,7 @@ AggregationConfiguration <- list(
   ),
   names = list(
     middle = "median",
-    range = "[5-95th] percentiles"
+    range = "[5-95\u1d57\u02b0] percentiles"
   ),
   bins = 11,
   binUsingQuantiles = TRUE
