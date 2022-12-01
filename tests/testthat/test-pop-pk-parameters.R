@@ -6,6 +6,13 @@ populationFileAdults <- getTestDataFilePath("input-data/Raltegravir Adult Popula
 
 # List of necessary in results to test
 refOutput <- getTestDataFilePath("pop-pk")
+# Sort files because list.files ordering is character by character
+getOrderedFiles <- function(dirPath, pattern){
+  fileNames <- list.files(dirPath, pattern = pattern)
+  # Keep only numbers included in filenames
+  fileNumbers <- as.numeric(gsub("[^[:digit:]]", "\\1", fileNames))
+  return(file.path(dirPath, fileNames[order(fileNumbers)]))
+}
 
 # Ensure the PK parameters are reset before test
 updatePKParameter("C_max", displayName = "C_max", displayUnit = "µmol/l")
@@ -108,41 +115,26 @@ test_that("PKAnalysis directory from Ratio workflow includes appropriate number 
 })
 
 test_that("Saved PK parameters data from workflows have correct values", {
-  pediatricFiles <- file.path(
-    pkAnalysisPediatricPath,
-    list.files(pkAnalysisPediatricPath, pattern = ".csv")
-  )
-  parallelFiles <- file.path(
-    pkAnalysisParallelPath,
-    list.files(pkAnalysisParallelPath, pattern = ".csv")
-  )
-  refFiles <- file.path(
-    refOutput,
-    list.files(refOutput, pattern = "pk_parameters")
-  )
+  pediatricFiles <- getOrderedFiles(pkAnalysisPediatricPath, pattern = ".csv")
+  parallelFiles <- getOrderedFiles(pkAnalysisParallelPath, pattern = ".csv")
+  refFiles <- getOrderedFiles(refOutput, pattern = "pk_parameters")
   for (fileIndex in seq_along(refFiles)) {
-    expect_equal(
+    expect_equivalent(
       readObservedDataFile(pediatricFiles[fileIndex]),
       readObservedDataFile(refFiles[fileIndex]),
       tolerance = comparisonTolerance()
     )
-    expect_equal(
+    expect_equivalent(
       readObservedDataFile(parallelFiles[fileIndex]),
       readObservedDataFile(refFiles[fileIndex]),
       tolerance = comparisonTolerance()
     )
   }
   # For ratio, 2 additional tables are exported
-  ratioFiles <- file.path(
-    pkAnalysisRatioPath,
-    list.files(pkAnalysisRatioPath, pattern = ".csv")
-  )
-  refFiles <- file.path(
-    refOutput,
-    list.files(refOutput, pattern = ".csv")
-  )
+  ratioFiles <- getOrderedFiles(pkAnalysisRatioPath, pattern = ".csv")
+  refFiles <- getOrderedFiles(refOutput, pattern = ".csv")
   for (fileIndex in seq_along(refFiles)) {
-    expect_equal(
+    expect_equivalent(
       readObservedDataFile(ratioFiles[fileIndex]),
       readObservedDataFile(refFiles[fileIndex]),
       tolerance = comparisonTolerance()

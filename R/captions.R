@@ -117,7 +117,9 @@ captions <- list(
     boxplot = function(parameterName, pathName, simulationSetName, descriptor, plotScale = "linear") {
       return(paste0(
         parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor),
-        " shown as box-whisker plot, which indicates the 5th, 25th, 50th, 75th, and 95th percentiles in ", plotScale, " scale."
+        " shown as box-whisker plot, which indicates the ",
+        paste(c(5, 25, 50, 75, 95), "\u1d57\u02b0", sep = "", collapse = ", "), 
+        " percentiles in ", plotScale, " scale."
       ))
     },
     summaryTable = function(parameterName, pathName, simulationSetName, descriptor, displayUnit) {
@@ -127,7 +129,9 @@ captions <- list(
       referenceSetText <- paste0(" in comparison to ", referenceSetName)
       return(paste0(
         parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor), referenceSetText,
-        " shown as box-whisker plot, which indicates ratios of the 5th, 25th, 50th, 75th, and 95th percentiles in ", plotScale, " scale."
+        " shown as box-whisker plot, which indicates ratios of the ",
+        paste(c(5, 25, 50, 75, 95), "\u1d57\u02b0", sep = "", collapse = ", "), 
+        " percentiles in ", plotScale, " scale."
       ))
     },
     ratioTable = function(parameterName, pathName, simulationSetName, descriptor, referenceSetName) {
@@ -219,8 +223,11 @@ translateDescriptor <- function(descriptor) {
   return(descriptor)
 }
 
-addDescriptorToTable <- function(data, descriptor) {
-  names(data)[1] <- translateDescriptor(descriptor)
+formatPKParameterHeader <- function(data, descriptor) {
+  names(data) <- c(
+    translateDescriptor(descriptor),
+    reEnv$defaultPKParametersHeader
+  )
   return(data)
 }
 

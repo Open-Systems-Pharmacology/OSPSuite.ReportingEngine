@@ -181,9 +181,18 @@ plotPopulationPKParameters <- function(structureSets,
   # Standard boxplots for each pkParameters of each output
   for (output in yParameters) {
     molWeight <- simulation$molWeightFor(output$path)
+    # Report heading for PK Parameter
+    resultID <- defaultFileNames$resultID("pk-parameters", removeForbiddenLetters(output$path))
+    pkParametersResults[[resultID]] <- saveTaskResults(
+      id = resultID,
+      textChunk = c(
+        anchor(resultID),
+        "",
+        paste0("## PK Parameters of ", output$displayName)
+      ),
+      includeTextChunk = TRUE
+    )
     for (pkParameter in output$pkParameters) {
-      resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", pkParameter$pkParameter)
-
       pkParameterFromOutput <- getPopulationPKAnalysesFromOutput(
         pkParametersDataAcrossPopulations,
         pkParametersMetaDataAcrossPopulations,
@@ -191,18 +200,33 @@ plotPopulationPKParameters <- function(structureSets,
         pkParameter,
         molWeight
       )
-
       pkParameterData <- pkParameterFromOutput$data
       pkParameterMetaData <- pkParameterFromOutput$metaData
 
       # NA and Inf values are removed to prevent crash in computation of percentiles
       pkParameterData <- removeMissingValues(pkParameterData, "Value")
-      if (nrow(pkParameterData) == 0) {
+      if (isEmpty(pkParameterData)) {
         logError(messages$warningPKParameterNotEnoughData(pkParameter$pkParameter, output$path))
         next
       }
 
-      # Define default plot configuration with rotate x-ticklabels
+      # Report heading for PK Parameter
+      resultID <- defaultFileNames$resultID(
+        "pk-parameters",
+        removeForbiddenLetters(output$path),
+        removeForbiddenLetters(pkParameter$pkParameter)
+      )
+      pkParametersResults[[resultID]] <- saveTaskResults(
+        id = resultID,
+        textChunk = c(
+          anchor(resultID),
+          "",
+          paste("###", pkParameter$displayName)
+        ),
+        includeTextChunk = TRUE
+      )
+
+      # Define default plot configuration with rotate x-tick labels
       boxplotConfiguration <- tlf::BoxWhiskerPlotConfiguration$new(
         data = pkParameterData,
         metaData = pkParameterMetaData,
@@ -210,39 +234,62 @@ plotPopulationPKParameters <- function(structureSets,
       )
       boxplotConfiguration$labels$xlabel$text <- NULL
       boxplotConfiguration$xAxis$font$angle <- 45
-      boxplotConfiguration <- settings$plotConfigurations[["boxplotPkParameters"]] %||%
-        boxplotConfiguration
+      boxRange <- autoAxesLimits(
+        pkParameterData$Value[pkParameterData$Value > 0], 
+        scale = "log")
+      boxBreaks <- autoAxesTicksFromLimits(boxRange)
 
-      boxplotPkParameter <- tlf::plotBoxWhisker(
+      pkParameterBoxplot <- tlf::plotBoxWhisker(
         data = pkParameterData,
         metaData = pkParameterMetaData,
         dataMapping = pkParametersMapping,
-        plotConfiguration = boxplotConfiguration
+        plotConfiguration = settings$plotConfigurations[["boxplotPkParameters"]] %||%
+          boxplotConfiguration
       )
-
       parameterCaption <- pkParameterMetaData$Value$dimension
 
+      pkParameterBoxplotLog <- plotBoxWhiskerLog(
+        data = pkParameterData[pkParameterData$Value > 0, ],
+        metaData = pkParameterMetaData,
+        dataMapping = pkParametersMapping,
+        plotConfiguration = settings$plotConfigurations[["boxplotPkParametersLog"]]
+      )
+      if (isEmpty(pkParameterBoxplotLog)) {
+        logError(messages$warningLogScaleNoPositiveData(paste0(pkParameter$pkParameter, " for ", output$path)))
+      }
+      # If log plot exists save it first
+      if (!isEmpty(pkParameterBoxplotLog)) {
+        resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", pkParameter$pkParameter, "log")
+        pkParametersResults[[resultID]] <- saveTaskResults(
+          id = resultID,
+          plot = pkParameterBoxplotLog,
+          plotCaption = captions$plotPKParameters$boxplot(
+            parameterCaption,
+            output$displayName,
+            simulationSetNames,
+            simulationSetDescriptor,
+            plotScale = "logarithmic"
+          )
+        )
+      }
+
       # Report tables summarizing the distributions
-      pkParameterTable <- tlf::getBoxWhiskerMeasure(
+      pkParameterTable <- getPKParameterMeasure(
         data = pkParameterData,
         dataMapping = pkParametersMapping
       )
-      # Row names are added as factor to data.frames by default
-      # This line ensures that the order of the rows is kept for the tables and plots
-      pkParameterTableRows <- factor(row.names(pkParameterTable),
-        levels = row.names(pkParameterTable)
-      )
-      pkParameterTable <- cbind(
-        Population = pkParameterTableRows,
-        pkParameterTable
+      # A different table needs to be created here
+      # because of ratio comparison of the table values
+      savedPKParameterTable <- formatPKParameterHeader(
+        pkParameterTable,
+        simulationSetDescriptor
       )
 
-      # A different table needs to be created here because of ratio comparison of the table values
-      savedPKParameterTable <- addDescriptorToTable(pkParameterTable, simulationSetDescriptor)
-
+      # Save results
+      resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", pkParameter$pkParameter)
       pkParametersResults[[resultID]] <- saveTaskResults(
         id = resultID,
-        plot = boxplotPkParameter,
+        plot = pkParameterBoxplot,
         plotCaption = captions$plotPKParameters$boxplot(
           parameterCaption,
           output$displayName,
@@ -259,34 +306,6 @@ plotPopulationPKParameters <- function(structureSets,
         ),
         includeTable = TRUE
       )
-      # Plot in log scale
-      if (!hasPositiveValues(pkParameterData$Value)) {
-        logError(messages$warningLogScaleNoPositiveData(paste0(pkParameter$pkParameter, " for ", output$path)))
-      }
-      if (hasPositiveValues(pkParameterData$Value)) {
-        resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", pkParameter$pkParameter, "log")
-
-        positiveValues <- pkParameterData$Value > 0
-        boxRange <- autoAxesLimits(pkParameterData$Value[positiveValues], scale = "log")
-        boxBreaks <- autoAxesTicksFromLimits(boxRange)
-
-        pkParametersResults[[resultID]] <- saveTaskResults(
-          id = resultID,
-          plot = tlf::setYAxis(
-            plotObject = boxplotPkParameter,
-            scale = tlf::Scaling$log,
-            limits = boxRange,
-            ticks = boxBreaks
-          ),
-          plotCaption = captions$plotPKParameters$boxplot(
-            parameterCaption,
-            output$displayName,
-            simulationSetNames,
-            simulationSetDescriptor,
-            plotScale = "logarithmic"
-          )
-        )
-      }
 
       # Range plots on PK parameters vs xParameters
       for (demographyParameter in setdiff(xParameters, pkParameter$pkParameter)) {
@@ -300,7 +319,7 @@ plotPopulationPKParameters <- function(structureSets,
         )
 
         # For pediatric workflow, range plots compare reference population to the other populations
-        if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
+        if (isIncluded(workflowType, PopulationWorkflowTypes$pediatric)) {
           # Get the table for reference population
           referenceData <- data.frame(
             x = c(-Inf, Inf),
@@ -334,6 +353,28 @@ plotPopulationPKParameters <- function(structureSets,
             xParameterCaption <- vpcMetaData$x$dimension
             yParameterCaption <- vpcMetaData$median$dimension
 
+            # Check if log scaled boxplot was created before plotting logs of range plots
+            if (!isEmpty(pkParameterBoxplotLog)) {
+              resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", demographyParameter, pkParameter$pkParameter, "log")
+              pkParametersResults[[resultID]] <- saveTaskResults(
+                id = resultID,
+                plot = tlf::setYAxis(
+                  plotObject = comparisonVpcPlot,
+                  scale = tlf::Scaling$log,
+                  limits = boxRange,
+                  ticks = boxBreaks
+                ),
+                plotCaption = captions$plotPKParameters$rangePlot(
+                  xParameterCaption,
+                  yParameterCaption,
+                  simulationSetName,
+                  simulationSetDescriptor,
+                  referenceSetName = referenceSimulationSetName,
+                  plotScale = "logarithmic"
+                )
+              )
+            }
+
             # Save comparison vpc results
             resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", demographyParameter, pkParameter$pkParameter)
             pkParametersResults[[resultID]] <- saveTaskResults(
@@ -345,25 +386,6 @@ plotPopulationPKParameters <- function(structureSets,
                 simulationSetName,
                 simulationSetDescriptor,
                 referenceSetName = referenceSimulationSetName
-              )
-            )
-
-            resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", demographyParameter, pkParameter$pkParameter, "log")
-            pkParametersResults[[resultID]] <- saveTaskResults(
-              id = resultID,
-              plot = tlf::setYAxis(
-                plotObject = comparisonVpcPlot,
-                scale = tlf::Scaling$log,
-                limits = boxRange,
-                ticks = boxBreaks
-              ),
-              plotCaption = captions$plotPKParameters$rangePlot(
-                xParameterCaption,
-                yParameterCaption,
-                simulationSetName,
-                simulationSetDescriptor,
-                referenceSetName = referenceSimulationSetName,
-                plotScale = "logarithmic"
               )
             )
           }
@@ -389,6 +411,27 @@ plotPopulationPKParameters <- function(structureSets,
           xParameterCaption <- vpcMetaData$x$dimension
           yParameterCaption <- vpcMetaData$median$dimension
 
+          # Check if log scaled boxplot was created before plotting logs of range plots
+          if (!isEmpty(pkParameterBoxplotLog)) {
+            resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", demographyParameter, pkParameter$pkParameter, "log")
+            pkParametersResults[[resultID]] <- saveTaskResults(
+              id = resultID,
+              plot = tlf::setYAxis(
+                plotObject = vpcPlot,
+                scale = tlf::Scaling$log,
+                limits = boxRange,
+                ticks = boxBreaks
+              ),
+              plotCaption = captions$plotPKParameters$rangePlot(
+                xParameterCaption,
+                yParameterCaption,
+                simulationSetName,
+                simulationSetDescriptor,
+                plotScale = "logarithmic"
+              )
+            )
+          }
+
           resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", demographyParameter, pkParameter$pkParameter)
           pkParametersResults[[resultID]] <- saveTaskResults(
             id = resultID,
@@ -400,77 +443,43 @@ plotPopulationPKParameters <- function(structureSets,
               simulationSetDescriptor
             )
           )
-
-          resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", demographyParameter, pkParameter$pkParameter, "log")
-          pkParametersResults[[resultID]] <- saveTaskResults(
-            id = resultID,
-            plot = tlf::setYAxis(
-              plotObject = vpcPlot,
-              scale = tlf::Scaling$log,
-              limits = boxRange,
-              ticks = boxBreaks
-            ),
-            plotCaption = captions$plotPKParameters$rangePlot(
-              xParameterCaption,
-              yParameterCaption,
-              simulationSetName,
-              simulationSetDescriptor,
-              plotScale = "logarithmic"
-            )
-          )
         }
       }
 
       # For Ratio Comparison create boxplots of boxplot hinges ratios
       # TODO: issue #536 change method for calculation of PK Ratio
-      if (workflowType %in% PopulationWorkflowTypes$ratioComparison) {
-        # Get the tables and compute the ratios using reference population name
-        pkRatiosTable <- getPKRatiosTable(pkParameterTable, referenceSimulationSetName)
+      if (!isIncluded(workflowType, PopulationWorkflowTypes$ratioComparison)) {
+        next
+      }
+      # Get the tables and compute the ratios using reference population name
+      pkRatiosTable <- getPKRatiosTable(pkParameterTable, referenceSimulationSetName)
 
-        pkRatiosData <- pkRatiosTable
-        pkRatiosData[, c("ymin", "lower", "middle", "upper", "ymax")] <- pkRatiosTable[, c(3:7)]
-        pkRatiosTable <- addDescriptorToTable(pkRatiosTable, simulationSetDescriptor)
+      pkRatiosData <- pkRatiosTable
+      pkRatiosData[, c("ymin", "lower", "middle", "upper", "ymax")] <- pkRatiosTable[, c(3:7)]
+      pkRatiosTable <- formatPKParameterHeader(
+        pkRatiosTable,
+        simulationSetDescriptor
+      )
 
-        ratioPlotConfiguration <- tlf::BoxWhiskerPlotConfiguration$new(
-          ylabel = paste0(
-            pkParameterMetaData$Value$dimension,
-            " [fraction of ", referenceSimulationSetName, "]"
-          )
+      ratioPlotConfiguration <- tlf::BoxWhiskerPlotConfiguration$new(
+        ylabel = paste0(
+          pkParameterMetaData$Value$dimension,
+          " [fraction of ", referenceSimulationSetName, "]"
         )
-        ratioPlotConfiguration$xAxis$font$angle <- 45
-        ratioPlotConfiguration <- settings$plotConfigurations[["boxplotPkRatios"]] %||%
-          ratioPlotConfiguration
+      )
+      ratioPlotConfiguration$xAxis$font$angle <- 45
+      ratioPlotConfiguration <- settings$plotConfigurations[["boxplotPkRatios"]] %||%
+        ratioPlotConfiguration
 
-        boxplotPkRatios <- ratioBoxplot(
-          data = pkRatiosData,
-          plotConfiguration = ratioPlotConfiguration
-        )
+      boxplotPkRatios <- ratioBoxplot(
+        data = pkRatiosData,
+        plotConfiguration = ratioPlotConfiguration
+      )
 
-        parameterCaption <- pkParameterMetaData$Value$dimension
+      parameterCaption <- pkParameterMetaData$Value$dimension
 
-        # Save PK Ratio results
-        resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_ratios", pkParameter$pkParameter)
-        pkParametersResults[[resultID]] <- saveTaskResults(
-          id = resultID,
-          plot = boxplotPkRatios,
-          plotCaption = captions$plotPKParameters$ratioPlot(
-            parameterCaption,
-            output$displayName,
-            setdiff(simulationSetNames, referenceSimulationSetName),
-            simulationSetDescriptor,
-            referenceSetName = referenceSimulationSetName
-          ),
-          table = pkRatiosTable,
-          tableCaption = captions$plotPKParameters$ratioTable(
-            parameterCaption,
-            output$displayName,
-            setdiff(simulationSetNames, referenceSimulationSetName),
-            simulationSetDescriptor,
-            referenceSetName = referenceSimulationSetName
-          ),
-          includeTable = TRUE
-        )
-
+      # Check if log scaled boxplot was created before plotting logs of PK Ratio
+      if (!isEmpty(pkParameterBoxplotLog)) {
         ratioRange <- autoAxesLimits(c(pkRatiosData$ymin, pkRatiosData$ymax), scale = "log")
         ratioBreaks <- autoAxesTicksFromLimits(ratioRange)
 
@@ -493,6 +502,29 @@ plotPopulationPKParameters <- function(structureSets,
           )
         )
       }
+
+      # Save PK Ratio results
+      resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_ratios", pkParameter$pkParameter)
+      pkParametersResults[[resultID]] <- saveTaskResults(
+        id = resultID,
+        plot = boxplotPkRatios,
+        plotCaption = captions$plotPKParameters$ratioPlot(
+          parameterCaption,
+          output$displayName,
+          setdiff(simulationSetNames, referenceSimulationSetName),
+          simulationSetDescriptor,
+          referenceSetName = referenceSimulationSetName
+        ),
+        table = pkRatiosTable,
+        tableCaption = captions$plotPKParameters$ratioTable(
+          parameterCaption,
+          output$displayName,
+          setdiff(simulationSetNames, referenceSimulationSetName),
+          simulationSetDescriptor,
+          referenceSetName = referenceSimulationSetName
+        ),
+        includeTable = TRUE
+      )
     }
   }
 
@@ -537,6 +569,46 @@ ratioBoxplot <- function(data,
   ratioPlot <- tlf:::.updateAxes(ratioPlot)
   return(ratioPlot)
 }
+
+#' @title plotBoxWhiskerLog
+#' @description Plot box-whiskers of PK parameter values in log scale
+#' @param data data.frame of the ratios
+#' @param plotConfiguration PlotConfiguration R6 class object
+#' @return ggplot object
+#' @import tlf
+#' @keywords internal
+plotBoxWhiskerLog <- function(data,
+                              metaData = NULL,
+                              dataMapping = NULL,
+                              plotConfiguration = NULL) {
+  if (isEmpty(data)) {
+    return()
+  }
+
+  boxRange <- autoAxesLimits(data$Value, scale = "log")
+  boxBreaks <- autoAxesTicksFromLimits(boxRange)
+  boxplotConfiguration <- tlf::BoxWhiskerPlotConfiguration$new(
+    data = data,
+    metaData = metaData,
+    dataMapping = dataMapping
+  )
+  boxplotConfiguration$labels$xlabel$text <- NULL
+  boxplotConfiguration$xAxis$font$angle <- 45
+  boxplotConfiguration$yAxis$scale <- tlf::Scaling$log
+  boxplotConfiguration$yAxis$limits <- boxRange
+  boxplotConfiguration$yAxis$ticks <- boxBreaks
+  # User-defined configuration can overwrite default
+  boxplotConfiguration <- plotConfiguration %||% boxplotConfiguration
+
+  logBoxPlot <- tlf::plotBoxWhisker(
+    data = data,
+    metaData = metaData,
+    dataMapping = dataMapping,
+    plotConfiguration = boxplotConfiguration
+  )
+  return(logBoxPlot)
+}
+
 
 #' @title vpcParameterPlot
 #' @description Plot vpc like plot of yParameter along xParameter
@@ -629,6 +701,32 @@ getPKParametersAcrossPopulations <- function(structureSets) {
     data = pkParametersTableAcrossPopulations,
     metaData = metaData
   ))
+}
+
+#' @title getPKParameterMeasure
+#' @description Get table summarizing the PK Parameter distribution by population
+#' @param data A data.frame of PK Parameter values across Population Simulation sets
+#' @param dataMapping A `BoxWhiskerDataMapping` object
+#' @return A data.frame summarizing the PK Parameter distribution by population
+#' @import tlf
+#' @keywords internal
+getPKParameterMeasure <- function(data, dataMapping) {
+  # Report tables summarizing the distributions
+  pkParameterTable <- tlf::getBoxWhiskerMeasure(
+    data = data,
+    dataMapping = dataMapping
+  )
+  # Row names are added as factor to data.frames by default
+  # This line ensures that the order of the rows is kept for the tables and plots
+  pkParameterTableRows <- factor(
+    row.names(pkParameterTable),
+    levels = row.names(pkParameterTable)
+  )
+  pkParameterTable <- cbind(
+    Population = pkParameterTableRows,
+    pkParameterTable
+  )
+  return(pkParameterTable)
 }
 
 #' @title formatPKParametersTable
