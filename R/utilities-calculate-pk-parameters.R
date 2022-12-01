@@ -181,9 +181,18 @@ plotPopulationPKParameters <- function(structureSets,
   # Standard boxplots for each pkParameters of each output
   for (output in yParameters) {
     molWeight <- simulation$molWeightFor(output$path)
+    # Report heading for PK Parameter
+    resultID <- defaultFileNames$resultID("pk-parameters", removeForbiddenLetters(output$path))
+    pkParametersResults[[resultID]] <- saveTaskResults(
+      id = resultID,
+      textChunk = c(
+        anchor(resultID),
+        "",
+        paste0("## PK Parameters of ", output$displayName)
+      ),
+      includeTextChunk = TRUE
+    )
     for (pkParameter in output$pkParameters) {
-      resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", pkParameter$pkParameter)
-
       pkParameterFromOutput <- getPopulationPKAnalysesFromOutput(
         pkParametersDataAcrossPopulations,
         pkParametersMetaDataAcrossPopulations,
@@ -191,18 +200,33 @@ plotPopulationPKParameters <- function(structureSets,
         pkParameter,
         molWeight
       )
-
       pkParameterData <- pkParameterFromOutput$data
       pkParameterMetaData <- pkParameterFromOutput$metaData
 
       # NA and Inf values are removed to prevent crash in computation of percentiles
       pkParameterData <- removeMissingValues(pkParameterData, "Value")
-      if (nrow(pkParameterData) == 0) {
+      if (isEmpty(pkParameterData)) {
         logError(messages$warningPKParameterNotEnoughData(pkParameter$pkParameter, output$path))
         next
       }
 
-      # Define default plot configuration with rotate x-ticklabels
+      # Report heading for PK Parameter
+      resultID <- defaultFileNames$resultID(
+        "pk-parameters",
+        removeForbiddenLetters(output$path),
+        removeForbiddenLetters(pkParameter$pkParameter)
+      )
+      pkParametersResults[[resultID]] <- saveTaskResults(
+        id = resultID,
+        textChunk = c(
+          anchor(resultID),
+          "",
+          paste("###", pkParameter$displayName)
+        ),
+        includeTextChunk = TRUE
+      )
+
+      # Define default plot configuration with rotate x-tick labels
       boxplotConfiguration <- tlf::BoxWhiskerPlotConfiguration$new(
         data = pkParameterData,
         metaData = pkParameterMetaData,
