@@ -119,12 +119,12 @@ test_that("Saved PK parameters data from workflows have correct values", {
   parallelFiles <- getOrderedFiles(pkAnalysisParallelPath, pattern = ".csv")
   refFiles <- getOrderedFiles(refOutput, pattern = "pk_parameters")
   for (fileIndex in seq_along(refFiles)) {
-    expect_equal(
+    expect_equivalent(
       readObservedDataFile(pediatricFiles[fileIndex]),
       readObservedDataFile(refFiles[fileIndex]),
       tolerance = comparisonTolerance()
     )
-    expect_equal(
+    expect_equivalent(
       readObservedDataFile(parallelFiles[fileIndex]),
       readObservedDataFile(refFiles[fileIndex]),
       tolerance = comparisonTolerance()
@@ -134,7 +134,7 @@ test_that("Saved PK parameters data from workflows have correct values", {
   ratioFiles <- getOrderedFiles(pkAnalysisRatioPath, pattern = ".csv")
   refFiles <- getOrderedFiles(refOutput, pattern = ".csv")
   for (fileIndex in seq_along(refFiles)) {
-    expect_equal(
+    expect_equivalent(
       readObservedDataFile(ratioFiles[fileIndex]),
       readObservedDataFile(refFiles[fileIndex]),
       tolerance = comparisonTolerance()
