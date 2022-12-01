@@ -223,26 +223,22 @@ plotPopulationPKParameters <- function(structureSets,
       parameterCaption <- pkParameterMetaData$Value$dimension
 
       # Report tables summarizing the distributions
-      pkParameterTable <- tlf::getBoxWhiskerMeasure(
+      pkParameterTable <- getPKParameterMeasure(
         data = pkParameterData,
         dataMapping = pkParametersMapping
       )
-      # Row names are added as factor to data.frames by default
-      # This line ensures that the order of the rows is kept for the tables and plots
-      pkParameterTableRows <- factor(row.names(pkParameterTable),
-        levels = row.names(pkParameterTable)
-      )
-      pkParameterTable <- cbind(
-        Population = pkParameterTableRows,
-        pkParameterTable
+      # A different table needs to be created here
+      # because of ratio comparison of the table values
+      savedPKParameterTable <- formatPKParameterHeader(
+        pkParameterTable,
+        simulationSetDescriptor
       )
 
-      # A different table needs to be created here because of ratio comparison of the table values
-      savedPKParameterTable <- addDescriptorToTable(pkParameterTable, simulationSetDescriptor)
-
+      # Save results
+      resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", pkParameter$pkParameter)
       pkParametersResults[[resultID]] <- saveTaskResults(
         id = resultID,
-        plot = boxplotPkParameter,
+        plot = pkParameterBoxplot,
         plotCaption = captions$plotPKParameters$boxplot(
           parameterCaption,
           output$displayName,
@@ -423,13 +419,18 @@ plotPopulationPKParameters <- function(structureSets,
 
       # For Ratio Comparison create boxplots of boxplot hinges ratios
       # TODO: issue #536 change method for calculation of PK Ratio
-      if (workflowType %in% PopulationWorkflowTypes$ratioComparison) {
-        # Get the tables and compute the ratios using reference population name
-        pkRatiosTable <- getPKRatiosTable(pkParameterTable, referenceSimulationSetName)
+      if (!isIncluded(workflowType, PopulationWorkflowTypes$ratioComparison)) {
+        next
+      }
+      # Get the tables and compute the ratios using reference population name
+      pkRatiosTable <- getPKRatiosTable(pkParameterTable, referenceSimulationSetName)
 
-        pkRatiosData <- pkRatiosTable
-        pkRatiosData[, c("ymin", "lower", "middle", "upper", "ymax")] <- pkRatiosTable[, c(3:7)]
-        pkRatiosTable <- addDescriptorToTable(pkRatiosTable, simulationSetDescriptor)
+      pkRatiosData <- pkRatiosTable
+      pkRatiosData[, c("ymin", "lower", "middle", "upper", "ymax")] <- pkRatiosTable[, c(3:7)]
+      pkRatiosTable <- formatPKParameterHeader(
+        pkRatiosTable,
+        simulationSetDescriptor
+      )
 
         ratioPlotConfiguration <- tlf::BoxWhiskerPlotConfiguration$new(
           ylabel = paste0(
@@ -492,7 +493,6 @@ plotPopulationPKParameters <- function(structureSets,
             plotScale = "logarithmic"
           )
         )
-      }
     }
   }
 

@@ -219,8 +219,11 @@ translateDescriptor <- function(descriptor) {
   return(descriptor)
 }
 
-addDescriptorToTable <- function(data, descriptor) {
-  names(data)[1] <- translateDescriptor(descriptor)
+formatPKParameterHeader <- function(data, descriptor) {
+  names(data) <- c(
+    translateDescriptor(descriptor),
+    reEnv$defaultPKParametersHeader
+  )
   return(data)
 }
 
