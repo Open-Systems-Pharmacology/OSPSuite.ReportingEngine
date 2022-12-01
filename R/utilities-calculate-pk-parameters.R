@@ -703,6 +703,32 @@ getPKParametersAcrossPopulations <- function(structureSets) {
   ))
 }
 
+#' @title getPKParameterMeasure
+#' @description Get table summarizing the PK Parameter distribution by population
+#' @param data A data.frame of PK Parameter values across Population Simulation sets
+#' @param dataMapping A `BoxWhiskerDataMapping` object
+#' @return A data.frame summarizing the PK Parameter distribution by population
+#' @import tlf
+#' @keywords internal
+getPKParameterMeasure <- function(data, dataMapping) {
+  # Report tables summarizing the distributions
+  pkParameterTable <- tlf::getBoxWhiskerMeasure(
+    data = data,
+    dataMapping = dataMapping
+  )
+  # Row names are added as factor to data.frames by default
+  # This line ensures that the order of the rows is kept for the tables and plots
+  pkParameterTableRows <- factor(
+    row.names(pkParameterTable),
+    levels = row.names(pkParameterTable)
+  )
+  pkParameterTable <- cbind(
+    Population = pkParameterTableRows,
+    pkParameterTable
+  )
+  return(pkParameterTable)
+}
+
 #' @title formatPKParametersTable
 #' @description Format data.frame of PK and Population Parameters from a simulation set
 #' @param structureSets A `SimulationStructure` objects
