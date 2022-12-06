@@ -225,7 +225,7 @@ dictionaryParameters <- list(
 getDictionaryVariable <- function(dictionary, variableID) {
   variableMapping <- dictionary[, dictionaryParameters$ID] %in% variableID
   variableName <- as.character(dictionary[variableMapping, dictionaryParameters$datasetColumn])
-  if (isOfLength(variableName, 0)) {
+  if (isEmpty(variableName)) {
     return()
   }
   return(variableName)

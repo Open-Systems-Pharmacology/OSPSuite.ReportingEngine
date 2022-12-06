@@ -62,24 +62,23 @@ messages <- list(
     paste0(
       callingFunction(),
       "No definition provided for units of observed dataset.\n",
-      "Please provide units for both '", dictionaryParameters$timeID, "' and '", dictionaryParameters$dvID, "' using methods available among the methods below:\n",
-      "1) Define units in dictionary by filling the column '",
-      dictionaryParameters$datasetUnit, "' for ID '", dictionaryParameters$timeID, "' and '", dictionaryParameters$dvID, "'\n",
-      "2) Define units in dictionary by filling the column '",
-      dictionaryParameters$datasetColumn, "' for ID '", dictionaryParameters$timeUnitID, "' and '", dictionaryParameters$dvUnitID, "'\n",
-      "3) Define units for '", dictionaryParameters$dvID, "' in every 'Output' object using the field 'dataUnit'"
+      messages$dataUnitMethods()
     )
   },
   errorNoDataUnitInOutputs = function() {
     paste0(
       callingFunction(),
-      "Units for '", dictionaryParameters$dvID, "' were not defined in every 'Output' object, and neither defined using the dictionary\n",
-      "Please provide units for both '", dictionaryParameters$timeID, "' and '", dictionaryParameters$dvID, "' using methods available among the methods below:\n",
-      "1) Define units in dictionary by filling the column '",
-      dictionaryParameters$datasetUnit, "' for ID '", dictionaryParameters$timeID, "' and '", dictionaryParameters$dvID, "'\n",
-      "2) Define units in dictionary by filling the column '",
-      dictionaryParameters$datasetColumn, "' for ID '", dictionaryParameters$timeUnitID, "' and '", dictionaryParameters$dvUnitID, "'\n",
-      "3) Define units for '", dictionaryParameters$dvID, "' in 'Output' objects using the field 'dataUnit'"
+      "Units for '", highlight(dictionaryParameters$dvID),
+      "' were neither defined in dictionary, nor in all 'Output' objects\n",
+      messages$dataUnitMethods()
+    )
+  },
+  errorInconsistentDataUnit = function() {
+    paste0(
+      callingFunction(),
+      "Units for '", highlight(dictionaryParameters$dvID),
+      "' were defined in both dictionary and 'Output' objects but were not consistent.\n",
+      messages$dataUnitMethods()
     )
   },
   errorWrongColumnTypeInDataFile = function(fileName, columnName, expectedType) {
@@ -166,12 +165,7 @@ messages <- list(
     paste0(
       callingFunction(),
       "Multiple definitions provided for units of observed dataset.\n",
-      "Among the methods available below, the definition for units will use in priority method 3), then 2) and then 1).\n",
-      "1) Define units in dictionary by filling the column '",
-      dictionaryParameters$datasetUnit, "' for ID '", dictionaryParameters$timeID, "' and '", dictionaryParameters$dvID, "'\n",
-      "2) Define units in dictionary by filling the column '",
-      dictionaryParameters$datasetColumn, "' for ID '", dictionaryParameters$timeUnitID, "' and '", dictionaryParameters$dvUnitID, "'\n",
-      "3) Define units for '", dictionaryParameters$dvID, "' in every 'Output' object using the field 'dataUnit'"
+      messages$dataUnitMethods()
     )
   },
   warningOverwriting = function(overwrittenPath) {
@@ -284,6 +278,26 @@ messages <- list(
   },
   negativeDataRemoved = function(n) {
     paste0(n, " negative or null values were removed from logarithmic plot")
+  },
+  dataUnitMethods = function(){
+    paste0(
+      "Units for both dependent variable (dv) and time are required when using observed data.\n",
+      "Please make sure that a unit definition does not use multiple methods or that the methods define consistent units.\n",
+      highlight("Available methods for units definition of observed data:\n"),
+      "\t1) Define units directly in dictionary (metaDataFile) by providing the units in column '",
+      highlight(dictionaryParameters$datasetUnit), "' of your dictionary for ID(s) '", 
+      highlight(dictionaryParameters$timeID), "' and/or '", 
+      highlight(dictionaryParameters$dvID), "'\n",
+      "\t2) Define units in your dataFile by including dedicated columns.\n\t",
+      "Then, provide the corresponding column name in the column '",
+      highlight(dictionaryParameters$datasetColumn),
+      "' of your dictionary for ID(s) '", 
+      highlight(dictionaryParameters$timeUnitID), "' and/or '", 
+      highlight(dictionaryParameters$dvUnitID), "'\n",
+      "\t3) Only for '", highlight(dictionaryParameters$dvID), 
+      "', define units in field '", highlight("dataUnit"), 
+      "' when creating an '", highlight("Output"), "' object."
+    )
   }
 )
 

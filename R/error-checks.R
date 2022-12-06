@@ -143,7 +143,7 @@ validateFileExists <- function(path, nullAllowed = FALSE) {
 #' @param outputs list or array of `Output` objects
 #' @keywords internal
 validateDataSource <- function(dataSource, outputs, nullAllowed = TRUE) {
-  if (nullAllowed && is.null(dataSource)) {
+  if (nullAllowed && any(is.null(dataSource), is.null(outputs))) {
     return(invisible())
   }
   validateIsOfType(dataSource, "DataSource")
@@ -155,7 +155,7 @@ validateDataSource <- function(dataSource, outputs, nullAllowed = TRUE) {
   validateIsIncludedInDataset(c(dictionaryParameters$ID, dictionaryParameters$datasetColumn), dictionary, datasetName = "dictionary")
   validateIsIncludedAndLog(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID], groupName = paste0("Column '", dictionaryParameters$ID, "'"))
   
-  # Check that dictionary and observed data are consitent
+  # Check that dictionary and observed data are consistent
   observedDataset <- readObservedDataFile(dataSource$dataFile)
   timeVariable <- getDictionaryVariable(dictionary, dictionaryParameters$timeID)
   dvVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvID)
@@ -165,19 +165,11 @@ validateDataSource <- function(dataSource, outputs, nullAllowed = TRUE) {
   checkIsIncludedInDataset(lloqVariable, observedDataset, datasetName = "observed dataset", nullAllowed = TRUE)
   
   # Check of unit definitions:
-  # 1) unit defined in outputs
-  dataUnit <- NULL
-  if (!isEmpty(outputs)) {
-    dataUnit <- unlist(lapply(outputs, function(output) {
-      output$dataUnit
-    }))
-  }
-  
-  # 2) If unit is defined as a datasetColumn
+  # - If unit is defined as a datasetColumn
   timeUnitVariable <- getDictionaryVariable(dictionary, dictionaryParameters$timeUnitID)
   dvUnitVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvUnitID)
   
-  # 3) If unit is defined as a value in datasetUnit
+  # - If unit is defined as a value in datasetUnit
   timeMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$timeID
   dvMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$dvID
   
@@ -185,7 +177,7 @@ validateDataSource <- function(dataSource, outputs, nullAllowed = TRUE) {
   dvUnit <- as.character(dictionary[dvMapping, dictionaryParameters$datasetUnit])
   
   validateUnitDataDefinition(timeUnit, timeUnitVariable, observedDataset)
-  validateUnitDataDefinition(dvUnit, dvUnitVariable, observedDataset, dataUnit)
+  validateUnitDataDefinition(dvUnit, dvUnitVariable, observedDataset, outputs)
   return(invisible())
 }
 
@@ -247,6 +239,7 @@ validateOutputObject <- function(outputs, simulation, nullAllowed = FALSE) {
   for (output in outputs) {
     outputQuantity <- ospsuite::getQuantity(output$path, simulation)
     validateIsUnitFromDimension(output$displayUnit, outputQuantity$dimension, nullAllowed = TRUE)
+    validateIsUnitFromDimension(output$dataUnit, outputQuantity$dimension, nullAllowed = TRUE)
   }
 }
 
@@ -358,35 +351,49 @@ validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, output
   if (any(isEmpty(unit), is.na(unit), unit %in% "")) {
     unit <- NULL
   }
-  # Case unit is defined using outputs
-  dataUnit <- NULL
-  if (!isEmpty(outputs)) {
-    dataUnit <- unlist(lapply(outputs, function(output) {
-      output$dataUnit
-    }))
+  # Get dataUnit from outputs
+  dataUnit <- ifNotNull(
+    outputs,
+    unlist(lapply(outputs, function(output) {output$dataUnit})),
+    NULL
+    )
+  
+  # Checks for errors/warnings
+  # - No unit at all
+  noUnit <- all(isEmpty(unit), isEmpty(unitColumn), isEmpty(dataUnit))
+  if (noUnit) {
+    logErrorThenStop(messages$errorNoDataUnit())
   }
-
-  # Checks for errors
-  # If no unit defined at all
-  if (isEmpty(c(unit, unitColumn, dataUnit))) {
-    stop(messages$errorNoDataUnit())
-  }
-  # If no unit defined by dictionray, all outputs need to define dataUnit
-  if (isEmpty(c(unit, unitColumn))) {
+  # - No unit defined by dictionary: all outputs need to define dataUnit
+  noDictionaryUnit <- all(isEmpty(unit), isEmpty(unitColumn))
+  if (noDictionaryUnit) {
     if (!isSameLength(dataUnit, outputs)) {
-      stop(messages$errorNoDataUnitInOutputs())
+      logErrorThenStop(messages$errorNoDataUnitInOutputs())
     }
     return(invisible())
   }
-  # Checks for warnings
-  # Only one of unit, unitColumn and dataUnit should be defined
-  # in the case dataUnit was defined, code has already returned
-  if (!isOfLength(c(unit, unitColumn, dataUnit), 1)) {
-    warning(messages$warningMultipleDataUnit())
-  }
-  # If defined, check that unitColumn refers an actual column from observed data
+  # If units defined in dataFile,
+  # check that unitColumn refers an actual column from observed data
   checkIsIncludedInDataset(unitColumn, observedDataset, datasetName = "observed dataset", nullAllowed = TRUE)
-
+  
+  # Check multiple unit definitions and their consistency
+  checkOutputConsistency <- all(!isEmpty(unit), !isEmpty(dataUnit))
+  if(checkOutputConsistency){
+    # Error when unit is different from dataUnit
+    if(!isIncluded(unit, dataUnit)){
+      logErrorThenStop(messages$errorInconsistentDataUnit())
+    }
+    logError(messages$warningMultipleDataUnit())
+    return(invisible())
+  }
+  # Warning consistency between unit definitions
+  warnMutlipleUnitDefinitions <- any(
+    all(!isEmpty(dataUnit), !isEmpty(unitColumn)),
+    all(!isEmpty(unit), !isEmpty(unitColumn))
+    )
+  if (warnMutlipleUnitDefinitions) {
+    logError(messages$warningMultipleDataUnit())
+  }
   return(invisible())
 }
 
