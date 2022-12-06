@@ -51,7 +51,7 @@ dataSourceNoUnit <- DataSource$new(dataFile = dataFile, metaDataFile = dictFileN
 outputUnit <- Output$new(
   path = "Organism|A|Concentration in container",
   dataSelection = DataSelectionKeys$ALL,
-  dataUnit = ospsuite::ospUnits$`Concentration [molar]`$`µmol/l`
+  dataUnit = "µmol/l"
 )
 outputNoUnit <- Output$new(
   path = "Organism|A|Concentration in container",
@@ -60,7 +60,7 @@ outputNoUnit <- Output$new(
 outputWrongUnit <- Output$new(
   path = "Organism|A|Concentration in container",
   dataSelection = DataSelectionKeys$ALL,
-  dataUnit = ospsuite::ospUnits$`Concentration [mass]`$`mg/l`
+  dataUnit = "mg/l"
 )
 
 validateDataSource <- ospsuite.reportingengine:::validateDataSource

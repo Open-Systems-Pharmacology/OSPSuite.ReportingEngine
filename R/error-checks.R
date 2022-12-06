@@ -352,12 +352,11 @@ validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, output
     unit <- NULL
   }
   # Get dataUnit from outputs
-  dataUnit <- NULL
-  if (!isEmpty(outputs)) {
-    dataUnit <- unlist(lapply(outputs, function(output) {
-      output$dataUnit
-    }))
-  }
+  dataUnit <- ifNotNull(
+    outputs,
+    unlist(lapply(outputs, function(output) {output$dataUnit})),
+    NULL
+    )
   
   # Checks for errors/warnings
   # - No unit at all
