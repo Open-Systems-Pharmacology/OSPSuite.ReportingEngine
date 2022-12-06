@@ -39,3 +39,46 @@ test_that("DataSource objects provide clean path using workflow path when captio
   expect_equal(dataSource$getCaption("a/b"), "Data source: c/data.csv")
   expect_equal(dataSource$getCaption("a/b/workflow"), "Data source: c/data.csv")
 })
+
+# Tests for definitions of units
+dataFile <- getTestDataFilePath("input-data/SimpleData.nmdat")
+dictFileUnit <- getTestDataFilePath("input-data/tpDictionary.csv")
+dictFileNoUnit <- getTestDataFilePath("input-data/tpDictionary-ill-defined-unit.csv")
+
+dataSourceUnit <- DataSource$new(dataFile = dataFile, metaDataFile = dictFileUnit)
+dataSourceNoUnit <- DataSource$new(dataFile = dataFile, metaDataFile = dictFileNoUnit)
+
+outputUnit <- Output$new(
+  path = "Organism|A|Concentration in container",
+  dataSelection = DataSelectionKeys$ALL,
+  dataUnit = ospsuite::ospUnits$`Concentration [molar]`$`µmol/l`
+)
+outputNoUnit <- Output$new(
+  path = "Organism|A|Concentration in container",
+  dataSelection = DataSelectionKeys$ALL
+)
+outputWrongUnit <- Output$new(
+  path = "Organism|A|Concentration in container",
+  dataSelection = DataSelectionKeys$ALL,
+  dataUnit = ospsuite::ospUnits$`Concentration [mass]`$`mg/l`
+)
+
+validateDataSource <- ospsuite.reportingengine:::validateDataSource
+test_that("Well defined units work", {
+  # No output -> no need to check
+  expect_null(validateDataSource(dataSourceUnit, NULL, nullAllowed = TRUE))
+  expect_null(validateDataSource(dataSourceNoUnit, NULL, nullAllowed = TRUE))
+  # Output without unit but data Source with unit
+  expect_null(validateDataSource(dataSourceUnit, c(outputNoUnit), nullAllowed = TRUE))
+  # Output with unit but data Source without unit
+  expect_null(validateDataSource(dataSourceNoUnit, c(outputUnit), nullAllowed = TRUE))
+})
+
+test_that("Errors are thrown for inconsistent/ill defined units", {
+  # No unit defined anywhere
+  expect_error(validateDataSource(dataSourceNoUnit, c(outputNoUnit), nullAllowed = TRUE))
+  # No unit defined in data source -> all outputs require a unit
+  expect_error(validateDataSource(dataSourceNoUnit, c(outputUnit, outputNoUnit), nullAllowed = TRUE))
+  # Inconsistent units between data source and output
+  expect_error(validateDataSource(dataSourceUnit, c(outputWrongUnit), nullAllowed = TRUE))
+})
