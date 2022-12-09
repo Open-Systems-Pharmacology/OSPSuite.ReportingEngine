@@ -1,4 +1,4 @@
-# Helper functions to translate configuration plan values/fields to tlf/ospuite.reportingengine
+# Helper functions to translate configuration plan values/fields to tlf/ospsuite.reportingengine
 
 #' @title ConfigurationPlots
 #' @description Enum defining possible plots defined in configuration plan
