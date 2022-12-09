@@ -16,7 +16,7 @@ individuals for a single PK parameter and single output path}
 ids, IDs of individuals whose PK analysis results closest to quantiles given by vector of quantiles quantileVec
 }
 \description{
-Find IDs of individuals whose PK analysis results closest toquantiles given
+Find IDs of individuals whose PK analysis results closest to quantiles given
 by vector of quantiles quantileVec
 }
 \keyword{internal}

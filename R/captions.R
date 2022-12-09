@@ -48,44 +48,44 @@ captions <- list(
   plotGoF = list(
     timeProfile = function(simulationSetName, descriptor, dataSource = "", plotScale = "linear") {
       return(paste0(
-        "Time profiles for ", reportSimulationSet(simulationSetName, descriptor), 
+        "Time profiles for ", reportSimulationSet(simulationSetName, descriptor),
         dataSource, getPlotScaleCaption("Time profiles", plotScale)
       ))
     },
     obsVsPred = function(simulationSetName, descriptor, dataSource = "", plotScale = "linear", yCaption = NULL, pathName = NULL) {
       return(paste0(
         "Predicted ", getStatisticsCaption(yCaption), "vs observed for ",
-        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor), 
+        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor),
         dataSource, getPlotScaleCaption("Predictions and observations", plotScale)
       ))
     },
     resVsPred = function(simulationSetName, descriptor, dataSource = "", plotScale = ResidualScales$Linear, yCaption = NULL, pathName = NULL) {
       return(paste0(
-        plotScale, " residuals vs predicted ", getStatisticsCaption(yCaption), "values for ", 
-        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor), 
+        plotScale, " residuals vs predicted ", getStatisticsCaption(yCaption), "values for ",
+        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor),
         dataSource
-        ))
+      ))
     },
     resVsTime = function(simulationSetName, descriptor, dataSource = "", plotScale = ResidualScales$Linear, pathName = NULL) {
       return(paste0(
-        plotScale, " residuals vs time values for ", 
-        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor), 
+        plotScale, " residuals vs time values for ",
+        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor),
         dataSource
-        ))
+      ))
     },
     resHisto = function(simulationSetName, descriptor, dataSource = "", plotScale = ResidualScales$Linear, pathName = NULL) {
       return(paste0(
-        plotScale, " residuals distribution (stacked) for ", 
-        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor), 
+        plotScale, " residuals distribution (stacked) for ",
+        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor),
         dataSource
-        ))
+      ))
     },
     resQQPlot = function(simulationSetName, descriptor, dataSource = "", plotScale = ResidualScales$Linear, pathName = NULL) {
       return(paste0(
-        plotScale, " residuals for ", 
-        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor), 
+        plotScale, " residuals for ",
+        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor),
         " as quantile-quantile plot", dataSource
-        ))
+      ))
     },
     meanLegend = function(simulationSetName, descriptor, pathName) {
       return(paste0("Simulated ", pathName, " (", reportSimulationSet(simulationSetName, descriptor), ")"))
@@ -118,7 +118,7 @@ captions <- list(
       return(paste0(
         parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor),
         " shown as box-whisker plot, which indicates the ",
-        paste(c(5, 25, 50, 75, 95), "\u1d57\u02b0", sep = "", collapse = ", "), 
+        paste(c(5, 25, 50, 75, 95), "\u1d57\u02b0", sep = "", collapse = ", "),
         " percentiles in ", plotScale, " scale."
       ))
     },
@@ -130,7 +130,7 @@ captions <- list(
       return(paste0(
         parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor), referenceSetText,
         " shown as box-whisker plot, which indicates ratios of the ",
-        paste(c(5, 25, 50, 75, 95), "\u1d57\u02b0", sep = "", collapse = ", "), 
+        paste(c(5, 25, 50, 75, 95), "\u1d57\u02b0", sep = "", collapse = ", "),
         " percentiles in ", plotScale, " scale."
       ))
     },
@@ -252,8 +252,8 @@ getTimeRangeCaption <- function(timeRangeName, reference, simulationSetName) {
   }
 }
 
-getStatisticsCaption <- function(statistics){
-  if(isEmpty(statistics)){
+getStatisticsCaption <- function(statistics) {
+  if (isEmpty(statistics)) {
     return("")
   }
   return(paste0("(", statistics, ") "))

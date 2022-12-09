@@ -61,7 +61,7 @@ The Excel template was created so that users can design their own workflows by d
 The Excel template is an *xlsx* document that defines all the relevant information of a working workflow.
 
 The function [`createWorkflowFromExcelInput()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/createWorkflowFromExcelInput.html) converts such Excel document into an R script that defines your workflow in plain R code. 
-Then, you can run your workflow by running the R script (eg. using the function `source()`).
+Then, you can run your workflow by running the R script (e.g. using the function `source()`).
 
 ### Where can I get the template ?
 
@@ -78,7 +78,7 @@ The Excel template includes a few standard Excel sheets that are required for th
 ### Documentation
 
 The Excel sheet *Documentation* aims at documenting your R script.
-All of its content will be added as commented text (preceeded by `#` character) in first lines of your R script.
+All of its content will be added as commented text (preceded by `#` character) in first lines of your R script.
 
 <details><summary>Table : Documentation sheet</summary>
 

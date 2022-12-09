@@ -8,7 +8,7 @@ tlf::setDefaultLegendPosition(reDefaultLegendPosition)
 #' @field functions list of `middle`, `ymin` and `ymax` functions for aggregation
 #' @field names list of legend captions for `middle` and `range` from aggregation
 #' @field bins default number of bins in plots
-#' @field binUsingQuantiles logical to choose a binning based on the quantiles rather thanon a constant interval width
+#' @field binUsingQuantiles logical to choose a binning based on the quantiles rather than on a constant interval width
 #' @export
 AggregationConfiguration <- list(
   functions = list(
@@ -269,7 +269,7 @@ addLineBreakToCaption <- function(captions, maxLines = reEnv$maxLinesPerLegendCa
 
 #' @title getSplitPositions
 #' @description Algorithm that gets positions where splitting a character string for sensible line breaks
-#' @param possibleSplits Positions where a space or a dash was flaged
+#' @param possibleSplits Positions where a space or a dash was found
 #' @param splitWidth Maximum number of characters desired per lines
 #' @param numberOfSplits Maximum number of line breaks to use
 #' @return Position where to insert a line break character

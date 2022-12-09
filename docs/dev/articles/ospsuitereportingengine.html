@@ -115,7 +115,7 @@ OSP-Suite Reporting Engine package
 </h3>
 <p>The <code>ospsuite.reportingengine</code> package aims at
 facilitating the design and build of reports evaluating PBPK models
-developed on PK-Sim or/and Mobi.</p>
+developed on PK-Sim or/and MoBi.</p>
 <p>To this end, the package benefits from the concept of R6 classes
 (similar to reference classes) which allows to define structured objects
 whose fields can be any object such as properties, methods or even other
@@ -144,7 +144,7 @@ parent R6 class <code>Workflow</code>. The creation of
 <code>MeanModelWorkflow</code> or <code>PopulationWorkflow</code>
 objects provides a structured environment with methods and properties
 that facilitate the design, run and report of the evaluations of PBPK
-models developed on PK-Sim or/and Mobi. For
+models developed on PK-Sim or/and MoBi. For
 <code>QualificationWorkflow</code> objects, more details are available
 in a dedicated <a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/articles/qualification-workflow.html">article</a>.
 The <code>Worklow</code> objects combine 2 features defined as R6
@@ -284,7 +284,7 @@ objects</td>
 <div class="section level3">
 <h3 id="general-scheme">1.4. General scheme<a class="anchor" aria-label="anchor" href="#general-scheme"></a>
 </h3>
-<p>In order to define and run appropriately a Worflow object, a few
+<p>In order to define and run appropriately a Workflow object, a few
 steps are required:</p>
 <ul>
 <li><ol style="list-style-type: decimal">
@@ -310,21 +310,21 @@ data</li>
 <code class="sourceCode R"><span><span class="va"><a href="../reference/SimulationSet.html">SimulationSet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li><ol start="4" style="list-style-type: decimal">
-<li>Define the worflow and its result folder</li>
+<li>Define the workflow and its result folder</li>
 </ol></li>
 </ul>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va"><a href="../reference/Workflow.html">Workflow</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li><ol start="5" style="list-style-type: decimal">
-<li>Define the worflow tasks</li>
+<li>Define the workflow tasks</li>
 </ol></li>
 </ul>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">workflow</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li><ol start="6" style="list-style-type: decimal">
-<li>Run the worflow</li>
+<li>Run the workflow</li>
 </ol></li>
 </ul>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -376,7 +376,7 @@ workflow are:</p>
 <span><span class="co">#&gt; [7] "TimeProfiles"</span></span></code></pre></div>
 </details><p>The associated report will be as follows:</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-11.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-38.png" style="width:100%; border-style: none;"></details>
 </div>
 </div>
 <div class="section level2">
@@ -413,7 +413,7 @@ built in every <code>Workflow</code> object, meaning there is no need to
 input them when creating a <code>Workflow</code> object. Users access,
 update and switch the task on/off tasks after creation of their
 <code>Workflow</code>.</p>
-<pre><code><span><span class="co">#&gt; [1] TRUE</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] FALSE</span></span></code></pre>
 <div class="figure" style="text-align: center">
 <img src="figures/mean-model-workflow-input-and-tasks.png" alt="Figure 1: Mean model workflow inputs and tasks" width="100%"><p class="caption">
 Figure 1: Mean model workflow inputs and tasks
@@ -477,7 +477,7 @@ plotted in box-whisker plots</li>
 </ul>
 </li>
 </ol>
-<pre><code><span><span class="co">#&gt; [1] TRUE</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] FALSE</span></span></code></pre>
 <div class="figure" style="text-align: center">
 <img src="figures/population-workflow-input-and-tasks.png" alt="Figure 2: Population workflow inputs and tasks" width="100%"><p class="caption">
 Figure 2: Population workflow inputs and tasks
@@ -534,7 +534,7 @@ that a report in word is also created.</li>
 <code>watermark</code>: character defining the text to display in
 figures background. The default value is <code>NULL</code>, in which
 case the text “preliminary results” will be displayed in the figures for
-all computers using an unvalidated environment.</li>
+all computers using an non-validated environment.</li>
 <li>
 <code>simulationSetDescriptor</code>: character defining a
 descriptor of how simulation sets should be indicated in reports
@@ -559,7 +559,7 @@ information about the workflow:</p>
 <ul>
 <li>
 <code>printReportingEngineInfo()</code>: prints information about
-the environment and pacakges currently used.</li>
+the environment and packages currently used.</li>
 <li>
 <code>getWatermark()</code>: prints the watermark to be displayed by
 the workflow.</li>
@@ -661,8 +661,8 @@ simulation set can be provided using <code>simulationSetName</code>.</p>
 <p>A population file, <code>populationFile</code>, is collection of
 parameter paths and parameter values normally an export of a population
 from PK-SIM in csv format. It is also possible to use an M&amp;S
-activity-specific population file, which has the “PKSIM” format, but was
-manipulated after the export from PK-SIM or was generated outside of
+activity-specific population file, which has the “PK-Sim” format, but
+was manipulated after the export from PK-SIM or was generated outside of
 PK-Sim. The generation of the population file than must be validated.
 Display names for the population can be provided using
 <code>simulationSetName</code>.</p>
@@ -782,7 +782,7 @@ unit (‘<strong>lloq</strong>’ is assumed with the same unit as
 ‘<strong>dv</strong>’).</li>
 <li>Providing units within the observed data:
 <ul>
-<li>the dictionary must include the follwoing new variables in
+<li>the dictionary must include the following new variables in
 ‘<strong>ID</strong>’: ‘<strong>time_unit</strong>’ and
 ‘<strong>dv_unit</strong>’.</li>
 <li>the dictionary must also include the mapping to the variable names

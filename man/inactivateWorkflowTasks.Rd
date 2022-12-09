@@ -7,7 +7,7 @@
 inactivateWorkflowTasks(workflow, tasks = workflow$getAllTasks())
 }
 \arguments{
-\item{workflow}{`MeanModelWorklfow` or `PopulationWorklfow` object}
+\item{workflow}{`MeanModelWorkflow` or `PopulationWorkflow` object}
 
 \item{tasks}{names of the tasks to activate
 Default inactivates all tasks of the workflow using workflow method `workflow$getAllTasks()`}

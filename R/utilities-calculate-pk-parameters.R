@@ -235,8 +235,9 @@ plotPopulationPKParameters <- function(structureSets,
       boxplotConfiguration$labels$xlabel$text <- NULL
       boxplotConfiguration$xAxis$font$angle <- 45
       boxRange <- autoAxesLimits(
-        pkParameterData$Value[pkParameterData$Value > 0], 
-        scale = "log")
+        pkParameterData$Value[pkParameterData$Value > 0],
+        scale = "log"
+      )
       boxBreaks <- autoAxesTicksFromLimits(boxRange)
 
       pkParameterBoxplot <- tlf::plotBoxWhisker(

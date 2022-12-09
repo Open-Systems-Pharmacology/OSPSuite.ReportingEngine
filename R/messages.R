@@ -279,23 +279,23 @@ messages <- list(
   negativeDataRemoved = function(n) {
     paste0(n, " negative or null values were removed from logarithmic plot")
   },
-  dataUnitMethods = function(){
+  dataUnitMethods = function() {
     paste0(
       "Units for both dependent variable (dv) and time are required when using observed data.\n",
       "Please make sure that a unit definition does not use multiple methods or that the methods define consistent units.\n",
       highlight("Available methods for units definition of observed data:\n"),
       "\t1) Define units directly in dictionary (metaDataFile) by providing the units in column '",
-      highlight(dictionaryParameters$datasetUnit), "' of your dictionary for ID(s) '", 
-      highlight(dictionaryParameters$timeID), "' and/or '", 
+      highlight(dictionaryParameters$datasetUnit), "' of your dictionary for ID(s) '",
+      highlight(dictionaryParameters$timeID), "' and/or '",
       highlight(dictionaryParameters$dvID), "'\n",
       "\t2) Define units in your dataFile by including dedicated columns.\n\t",
       "Then, provide the corresponding column name in the column '",
       highlight(dictionaryParameters$datasetColumn),
-      "' of your dictionary for ID(s) '", 
-      highlight(dictionaryParameters$timeUnitID), "' and/or '", 
+      "' of your dictionary for ID(s) '",
+      highlight(dictionaryParameters$timeUnitID), "' and/or '",
       highlight(dictionaryParameters$dvUnitID), "'\n",
-      "\t3) Only for '", highlight(dictionaryParameters$dvID), 
-      "', define units in field '", highlight("dataUnit"), 
+      "\t3) Only for '", highlight(dictionaryParameters$dvID),
+      "', define units in field '", highlight("dataUnit"),
       "' when creating an '", highlight("Output"), "' object."
     )
   }

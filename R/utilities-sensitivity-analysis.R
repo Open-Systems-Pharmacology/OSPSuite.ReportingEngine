@@ -159,7 +159,7 @@ runParallelSensitivityAnalysis <- function(structureSet,
   tempLogFileNamePrefix <- file.path(reEnv$log$folder, "logDebug-core-sensitivity-analysis")
   tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, settings$numberOfCores), ".txt")
 
-  # Generate a listcontaining names of SA CSV result files that will be output by each core
+  # Generate a list containing names of SA CSV result files that will be output by each core
   allResultsFileNames <- generateResultFileNames(
     numberOfCores = settings$numberOfCores,
     folderName = structureSet$workflowFolder,
@@ -314,7 +314,7 @@ analyzeCoreSensitivity <- function(simulation,
 }
 
 #' @title getQuantileIndividualIds
-#' @description Find IDs of individuals whose PK analysis results closest toquantiles given
+#' @description Find IDs of individuals whose PK analysis results closest to quantiles given
 #' by vector of quantiles quantileVec
 #' @param pkAnalysisResultsDataframe Dataframe storing the PK analysis results for multiple
 #' individuals for a single PK parameter and single output path
@@ -449,7 +449,7 @@ getSAFileIndex <- function(structureSet,
 
 
 #' @title getIndividualSAResultsFileName
-#' @description Function to build name of inidividual SA results file
+#' @description Function to build name of individual SA results file
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
 #' @param individualId id of individual
 #' @keywords internal

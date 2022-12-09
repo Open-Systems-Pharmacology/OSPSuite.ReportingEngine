@@ -10,7 +10,7 @@ getDefaultFolderName(..., suffix = "", sep = "-")
 \item{...}{names}
 
 \item{suffix}{Suffix to be added at the end of the folder name.
-Dafault `suffix` is the curent date}
+Default `suffix` is the current date}
 
 \item{sep}{separation between names and suffix. Default is `-`}
 }

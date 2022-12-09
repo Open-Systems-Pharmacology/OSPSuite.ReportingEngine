@@ -8,7 +8,7 @@ tic <- function() {
 
 #' @title getElapsedTime
 #' @description Get computer time as a character
-#' @param tic Numeric time from chrono trigger
+#' @param tic Numeric start time
 #' @param unit display unit of elapsed time
 #' @return Character displaying elapsed time in `unit`
 #' @keywords internal
@@ -125,7 +125,7 @@ logInfo <- function(message, printConsole = NULL) {
 }
 
 #' @title logCatch
-#' @description Catch errors, log and display meaningfull information
+#' @description Catch errors, log and display meaningful information
 #' @param expr Evaluated code chunks
 #' @export
 logCatch <- function(expr) {

@@ -10,5 +10,5 @@ logCatch(expr)
 \item{expr}{Evaluated code chunks}
 }
 \description{
-Catch errors, log and display meaningfull information
+Catch errors, log and display meaningful information
 }

@@ -37,7 +37,7 @@ AllAvailableTasks <- c(
 
 #' @title activateWorkflowTasks
 #' @description activates a series of `Tasks` from a `Workflow`
-#' @param workflow A `Worklfow` object
+#' @param workflow A `Workflow` object
 #' @param tasks names of the tasks to activate
 #' Default activates all tasks of the workflow using workflow method `workflow$getAllTasks()`
 #' @export
@@ -70,7 +70,7 @@ activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
 
 #' @title inactivateWorkflowTasks
 #' @description inactivates a series of `Tasks` from a `Workflow`
-#' @param workflow `MeanModelWorklfow` or `PopulationWorklfow` object
+#' @param workflow `MeanModelWorkflow` or `PopulationWorkflow` object
 #' @param tasks names of the tasks to activate
 #' Default inactivates all tasks of the workflow using workflow method `workflow$getAllTasks()`
 #' @export

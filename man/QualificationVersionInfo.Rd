@@ -6,7 +6,15 @@
 \description{
 Object defining Qualification Version Information to be displayed on title page
 }
-\concept{qualification worfklow}
+\seealso{
+Other qualification workflow: 
+\code{\link{ConfigurationPlan}},
+\code{\link{adjustTitlePage}()},
+\code{\link{loadConfigurationPlan}()},
+\code{\link{loadQualificationWorkflow}()},
+\code{\link{startQualificationRunner}()}
+}
+\concept{qualification workflow}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{

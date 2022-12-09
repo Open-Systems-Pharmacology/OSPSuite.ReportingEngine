@@ -122,7 +122,7 @@ loadConfigurationPlan <- function(configurationPlanFile, workflowFolder) {
 
 #' @title sectionsAsDataFrame
 #' @description Recursively parse Sections field of configuration plan
-#' to create a data.frame easier to handle by the wrkflow
+#' to create a data.frame easier to handle by the workflow
 #' @param sectionsIn list including Id and Title of section
 #' @param sectionsOut data.frame including id, path, title
 #' @param parentFolder For subsections only, path of parent section

@@ -154,7 +154,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 
 #' @title getMechanismName
 #' @description Remove underscores from mechanism name read from DDI observed data file according to the dictionary defined in `reEnv$ddiRatioSubsetsDictionary`
-#' @param mechanism name of mechanism as read form DDI observev data file
+#' @param mechanism name of mechanism as read form DDI observed data file
 #' @return Display name of mechanism to be used in DDI report
 #' @keywords internal
 getMechanismName <- function(mechanism) {

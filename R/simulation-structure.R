@@ -32,7 +32,7 @@ SimulationStructure <- R6::R6Class(
     #' Create a new `SimulationStructure` object.
     #' Build and store names of potential subfolders to hold simulation results, pkAnalysis results and sensitivityAnalysis results.
     #' @param simulationSet A `SimulationSet` or `PopulationSimulationSet` object
-    #' @param workflowFolder output folder of the worklow
+    #' @param workflowFolder output folder of the workflow
     initialize = function(simulationSet,
                           workflowFolder = getwd()) {
       self$workflowFolder <- workflowFolder

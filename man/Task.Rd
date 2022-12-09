@@ -34,7 +34,7 @@ Other workflow tasks:
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{active}}{logical indicating if `Task` is performed in a worklfow.}
+\item{\code{active}}{logical indicating if `Task` is performed in a workflow.}
 
 \item{\code{outputFolder}}{List of output files/folders to save the task output}
 
@@ -94,7 +94,7 @@ Create a `Task` object
 
 \item{\code{settings}}{specific settings for task (e.g. plot configurations)}
 
-\item{\code{active}}{logical indicating if `Task` is performed in a worklfow.
+\item{\code{active}}{logical indicating if `Task` is performed in a workflow.
 Default value is `FALSE`}
 
 \item{\code{message}}{message of the `Task`.}

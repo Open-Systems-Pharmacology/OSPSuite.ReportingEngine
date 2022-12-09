@@ -23,7 +23,7 @@ Aggregation default properties  (which functions and their captions).
 
 \item{\code{bins}}{default number of bins in plots}
 
-\item{\code{binUsingQuantiles}}{logical to choose a binning based on the quantiles rather thanon a constant interval width}
+\item{\code{binUsingQuantiles}}{logical to choose a binning based on the quantiles rather than on a constant interval width}
 }}
 
 \keyword{datasets}

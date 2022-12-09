@@ -7,7 +7,7 @@
 activateWorkflowTasks(workflow, tasks = workflow$getAllTasks())
 }
 \arguments{
-\item{workflow}{A `Worklfow` object}
+\item{workflow}{A `Workflow` object}
 
 \item{tasks}{names of the tasks to activate
 Default activates all tasks of the workflow using workflow method `workflow$getAllTasks()`}

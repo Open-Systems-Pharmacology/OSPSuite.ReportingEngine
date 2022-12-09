@@ -65,10 +65,10 @@ reEnv$referenceFill <- "grey50"
 
 # Default values for pk parameter measure header
 reEnv$defaultPKParametersHeader <- c(
-  "N", 
-  paste0(c(5, 25, 50, 75, 95),"\u1d57\u02b0 pctl"),
+  "N",
+  paste0(c(5, 25, 50, 75, 95), "\u1d57\u02b0 pctl"),
   "Mean", "SD", "Geo Mean", "Geo SD"
-  )
+)
 
 # Default values for qualification pk ratio
 reEnv$pkRatio <- list()

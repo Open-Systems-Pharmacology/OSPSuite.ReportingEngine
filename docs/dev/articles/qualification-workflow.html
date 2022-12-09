@@ -193,10 +193,10 @@ plan. It requires the same inputs as <code>loadConfigurationPlan</code>
 <div class="section level4">
 <h4 id="configuration-plan-1">Configuration Plan<a class="anchor" aria-label="anchor" href="#configuration-plan-1"></a>
 </h4>
-<p>All <code>QualificationWorkflow</code> objects inlcude a
+<p>All <code>QualificationWorkflow</code> objects include a
 <code>configurationPlan</code> field. This field is a
 <code>ConfigurationPlan</code> object that provides a smart interface
-for buidling the report.</p>
+for building the report.</p>
 <p>In particular, all the fields below are reorganized in a data.frame
 format clarifying the design of the configuration plan.</p>
 <ul>
@@ -205,7 +205,7 @@ format clarifying the design of the configuration plan.</p>
 <li><code>sections</code></li>
 </ul>
 <p>Additionally, the <code>configurationPlan</code> field includes many
-<code>get</code> methods to search for specific paths of files managedd
+<code>get</code> methods to search for specific paths of files managed
 by the configuration plan
 (<code>$getSimulationPath(project, simulation)</code>,
 <code>$getObservedDataPath(id)</code>, etc)</p>
@@ -271,12 +271,12 @@ time/predicted by including the options
 <strong>PlotTypes</strong> of the configuration plan.</p>
 </div>
 <div class="section level5">
-<h5 id="gemotric-mean-fold-error-gmfe">Gemotric Mean Fold Error (GMFE)<a class="anchor" aria-label="anchor" href="#gemotric-mean-fold-error-gmfe"></a>
+<h5 id="geometric-mean-fold-error-gmfe">Geometric Mean Fold Error (GMFE)<a class="anchor" aria-label="anchor" href="#geometric-mean-fold-error-gmfe"></a>
 </h5>
 <p>For <code>plotGOFMerged</code>, <code>plotPKRatio</code> and
 <code>plotDDIRatio</code> tasks, it is possible to include a
 <strong>GMFE</strong> artifact in the configuration plan. This artifact
-corresponds to the addition of a table showing the Gemotric Mean Fold
+corresponds to the addition of a table showing the Geometric Mean Fold
 Error (<em>GMFE</em>) of the <em>residuals</em> calculated for specific
 plot using the formula <span class="math inline">\(GMFE = 10^{\Sigma
 log_{10}(residuals)}\)</span>.</p>
@@ -301,7 +301,7 @@ within 2-fold and Guest <em>et al.</em> error ranges.</li>
 <p>For <code>plotPKRatio</code> task, it is possible to include a
 <strong>Table</strong> artifact in the configuration plan. This artifact
 corresponds to the addition of a table showing comprehensive observed
-and simulatied PK data of the PK Ratio analysis.</p>
+and simulated PK data of the PK Ratio analysis.</p>
 </div>
 <div class="section level5">
 <h5 id="settings">Settings<a class="anchor" aria-label="anchor" href="#settings"></a>
@@ -316,7 +316,7 @@ values.</p>
 <div class="section level3">
 <h3 id="how-to-update-and-re-run-a-qualification-workflow">How to update and re-run a qualification workflow<a class="anchor" aria-label="anchor" href="#how-to-update-and-re-run-a-qualification-workflow"></a>
 </h3>
-<p>If simulations need to be re-run, it is advised to relaod the
+<p>If simulations need to be re-run, it is advised to reload the
 workflow using <code>loadQualificationWorkflow</code>.</p>
 <p>In case the update does not require to re-run simulations
 (e.g. updating the section content, modifying plot aesthetics or
@@ -541,9 +541,9 @@ be used as reference ids.</p>
 qualification workflow are generated dynamically.</p>
 <p>For section references, the field <strong>Reference</strong> is used
 in priority by the configuration plan to generate the reference id. In
-case, such reference is not defined, the qualification worklfow uses the
+case, such reference is not defined, the qualification workflow uses the
 <strong>Id</strong> of the section. If no <strong>Reference</strong> nor
-<strong>Id</strong> is defined, the qualification worklfow generate a
+<strong>Id</strong> is defined, the qualification workflow generate a
 reference id named
 <code>"undefined-section-&lt;section index&gt;"</code>.</p>
 <p>Tables and figures are numbered internally within first level

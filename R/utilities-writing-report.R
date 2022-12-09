@@ -201,7 +201,7 @@ renderReport <- function(fileName, createWordReport = FALSE, numberSections = TR
 #' @description Render docx report with number sections and table of content
 #' @param fileName name of .md file to render
 #' @param intro name of .md file that include introduction (before toc)
-#' @param createWordReport option for creating Markdwon-Report only but not a Word-Report
+#' @param createWordReport option for creating Markdown-Report only but not a Word-Report
 #' @param wordConversionTemplate optional docx template for rendering a tuned Word-Report document
 #' @export
 #' @family reporting
@@ -433,7 +433,7 @@ getSimulationDescriptor <- function(workflow) {
 }
 
 #' @title adjustTitlePage
-#' @description Adust Qualification Version Information to be displayed on title page
+#' @description Adjust Qualification Version Information to be displayed on title page
 #' @param fileName name of .md file to update
 #' @param qualificationVersionInfo A `QualificationVersionInfo`object defining Qualification Version Information to be displayed on title page
 #' @export

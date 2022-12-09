@@ -20,7 +20,7 @@ R6 class representing Reporting Engine generic Workflow
 
 \item{\code{reportTitle}}{report title page}
 
-\item{\code{createWordReport}}{logical of option for creating Markdwon-Report only but not a Word-Report.}
+\item{\code{createWordReport}}{logical of option for creating Markdown-Report only but not a Word-Report.}
 
 \item{\code{wordConversionTemplate}}{optional docx template for rendering a tuned Word-Report document}
 
@@ -171,7 +171,7 @@ Activates a series of `Tasks` from current `Workflow`
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{tasks}}{names of the worklfow tasks to activate.
+\item{\code{tasks}}{names of the workflow tasks to activate.
 Default activates all tasks of the workflow using workflow method `workflow$getAllTasks()`}
 }
 \if{html}{\out{</div>}}
@@ -192,7 +192,7 @@ Inactivates a series of `Tasks` from current `Workflow`
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{tasks}}{names of the worklfow tasks to inactivate.
+\item{\code{tasks}}{names of the workflow tasks to inactivate.
 Default inactivates all tasks of the workflow using workflow method `workflow$getAllTasks()`}
 }
 \if{html}{\out{</div>}}
@@ -205,7 +205,7 @@ Vector of inactive `Task` names
 \if{html}{\out{<a id="method-Workflow-printReportingEngineInfo"></a>}}
 \if{latex}{\out{\hypertarget{method-Workflow-printReportingEngineInfo}{}}}
 \subsection{Method \code{printReportingEngineInfo()}}{
-Print reporting engine information obtained from initiliazing a `Workflow`
+Print reporting engine information obtained from initializing a `Workflow`
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Workflow$printReportingEngineInfo()}\if{html}{\out{</div>}}
 }
@@ -215,7 +215,7 @@ Print reporting engine information obtained from initiliazing a `Workflow`
 \if{html}{\out{<a id="method-Workflow-getWatermark"></a>}}
 \if{latex}{\out{\hypertarget{method-Workflow-getWatermark}{}}}
 \subsection{Method \code{getWatermark()}}{
-Get the current watermark to be reprted on figures background
+Get the current watermark to be reported on figures background
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Workflow$getWatermark()}\if{html}{\out{</div>}}
 }
