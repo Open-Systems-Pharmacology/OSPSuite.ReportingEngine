@@ -10,9 +10,9 @@ R6 class for TaskResults settings
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{id}}{unique identifer of results, helps in deriving final plot name}
+\item{\code{id}}{unique identifier of results, helps in deriving final plot name}
 
-\item{\code{sectionId}}{unique identifer of section results, used only by qualification workflows}
+\item{\code{sectionId}}{unique identifier of section results, used only by qualification workflows}
 
 \item{\code{plot}}{`ggplot` object corresponding to the figure to be saved}
 

@@ -43,6 +43,7 @@ Starts the qualification runner and creates inputs for the reporting engine
 \seealso{
 Other qualification workflow: 
 \code{\link{ConfigurationPlan}},
+\code{\link{QualificationVersionInfo}},
 \code{\link{adjustTitlePage}()},
 \code{\link{loadConfigurationPlan}()},
 \code{\link{loadQualificationWorkflow}()}

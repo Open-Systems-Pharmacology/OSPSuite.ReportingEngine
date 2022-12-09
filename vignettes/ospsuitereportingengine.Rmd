@@ -28,7 +28,7 @@ This vignette introduces the notions and objects implemented in the OSP-Suite Re
 # 1. Introduction
 ## 1.1. Notion of R6 objects
 
-The `ospsuite.reportingengine` package aims at facilitating the design and build of reports evaluating PBPK models developed on PK-Sim or/and Mobi.
+The `ospsuite.reportingengine` package aims at facilitating the design and build of reports evaluating PBPK models developed on PK-Sim or/and MoBi.
 
 To this end, the package benefits from the concept of R6 classes (similar to reference classes) which allows to define structured objects whose fields can be any object such as properties, methods or even other R6 objects.
 R6 objects, or objects from R6 class, presents some peculiarities.
@@ -40,7 +40,7 @@ R6 objects, or objects from R6 class, presents some peculiarities.
 ## 1.2. Notion of workflow
 
 The `ospsuite.reportingengine` package is built around 3 central R6 classes __`MeanModelWorkflow`__,  __`PopulationWorkflow`__ and __`QualificationWorkflow`__ derived from the parent R6 class `Workflow`.
-The creation of `MeanModelWorkflow` or `PopulationWorkflow` objects provides a structured environment with methods and properties that facilitate the design, run and report of the evaluations of PBPK models developed on PK-Sim or/and Mobi.
+The creation of `MeanModelWorkflow` or `PopulationWorkflow` objects provides a structured environment with methods and properties that facilitate the design, run and report of the evaluations of PBPK models developed on PK-Sim or/and MoBi.
 For `QualificationWorkflow` objects, more details are available in a dedicated [article](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/articles/qualification-workflow.html).
 The `Worklow` objects combine 2 features defined as R6 objects:
 
@@ -84,7 +84,7 @@ The comprehensive documentation and usage of each of these objects is accessible
 
 ## 1.4. General scheme
 
-In order to define and run appropriately a Worflow object, a few steps are required:
+In order to define and run appropriately a Workflow object, a few steps are required:
 
 - 1. Load the `ospsuite.reportingengine` package
 ```r
@@ -98,15 +98,15 @@ Output$new()
 ```r
 SimulationSet$new()
 ```
-- 4. Define the worflow and its result folder
+- 4. Define the workflow and its result folder
 ```r
 Workflow$new()
 ```
-- 5. Define the worflow tasks
+- 5. Define the workflow tasks
 ```r
 workflow$activateTasks()
 ```
-- 6. Run the worflow
+- 6. Run the workflow
 ```r
 workflow$runWorkflow()
 ```
@@ -275,7 +275,7 @@ Other optional inputs can be added when creating a workflow:
 
 - `createWordReport`: logical defining if a word version (.docx) of the report should be saved besides its markdown version (.md). The default value for this option is `TRUE`, meaning that a report in word is also created. 
 - `watermark`: character defining the text to display in figures background.
-The default value is `NULL`, in which case the text "preliminary results" will be displayed in the figures for all computers using an unvalidated environment.
+The default value is `NULL`, in which case the text "preliminary results" will be displayed in the figures for all computers using an non-validated environment.
 - `simulationSetDescriptor`: character defining a descriptor of how simulation sets should be indicated in reports (e.g. "scenario", "set", "simulation", or "population").
 The default value for this option is `NULL`, meaning that there won't be any descriptor of the simulation sets.
 
@@ -288,7 +288,7 @@ Most of the workflow properties correspond to the inputs used to create the work
 
 Additionally, the methods listed below can be used to access relevant information about the workflow:
 
-- `printReportingEngineInfo()`: prints information about the environment and pacakges currently used.
+- `printReportingEngineInfo()`: prints information about the environment and packages currently used.
 - `getWatermark()`: prints the watermark to be displayed by the workflow.
 - `getParameterDisplayPaths()`: prints the mapping between parameters and their display paths
 - `getSimulationDescriptor()`: prints the simulation descriptor to be used by the workflow
@@ -357,7 +357,7 @@ Display names for the simulation set can be provided using `simulationSetName`.
 ## 3.2. Population file
 
 A population file, `populationFile`, is collection of parameter paths and parameter values normally an export of a population from PK-SIM in csv format.
-It is also possible to use an M&S activity-specific population file, which has the “PKSIM” format, but was manipulated after the export from PK-SIM or was generated outside of PK-Sim. 
+It is also possible to use an M&S activity-specific population file, which has the “PK-Sim” format, but was manipulated after the export from PK-SIM or was generated outside of PK-Sim. 
 The generation of the population file than must be validated.
 Display names for the population can be provided using `simulationSetName`.
 
@@ -415,7 +415,7 @@ Regarding units, two options are possible:
 
 - Providing units using only the dictionary: for '__time__' and '__dv__' the column '__nonmemUnit__' should be filled with the corresponding unit ('__lloq__' is assumed with the same unit as '__dv__').
 - Providing units within the observed data: 
-   - the dictionary must include the follwoing new variables in '__ID__': '__time_unit__' and '__dv_unit__'.
+   - the dictionary must include the following new variables in '__ID__': '__time_unit__' and '__dv_unit__'.
    - the dictionary must also include the mapping to the variable names in the dataset using '__nonmenColumn__'.
 
 The example below shows the template of a dictionary content available on [Github](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/tpDictionary.csv):

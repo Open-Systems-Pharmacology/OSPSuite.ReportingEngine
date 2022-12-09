@@ -27,5 +27,5 @@ generateResultFileNames(
 A list of filenames to be output by each core
 }
 \description{
-#Generate a listcontaining names of CSV result files that will be output by each core in parallel computation
+#Generate a list containing names of CSV result files that will be output by each core in parallel computation
 }

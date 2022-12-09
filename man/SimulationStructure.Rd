@@ -56,7 +56,7 @@ Build and store names of potential subfolders to hold simulation results, pkAnal
 \describe{
 \item{\code{simulationSet}}{A `SimulationSet` or `PopulationSimulationSet` object}
 
-\item{\code{workflowFolder}}{output folder of the worklow}
+\item{\code{workflowFolder}}{output folder of the workflow}
 }
 \if{html}{\out{</div>}}
 }

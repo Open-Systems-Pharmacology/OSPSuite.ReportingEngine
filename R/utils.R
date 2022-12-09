@@ -117,7 +117,7 @@ trimFileName <- function(path, extension = NULL, sep = "/") {
 #' @param text character string to be evaluated
 #' @param forbiddenLetters characters to be removed if in the \code{text}.
 #' Default value of \code{forbiddenLetters} is \code{"[[:punct:]]"}
-#' meaning that all pointuation characters are forbidden.
+#' meaning that all punctuation characters are forbidden.
 #' @param replacement character replacing the \code{forbiddenLetters}.
 #' Default value of \code{forbiddenLetters} is "_".
 #' @return \code{text} character string with forbidden letters replaced
@@ -144,7 +144,7 @@ removeForbiddenLetters <- function(text, forbiddenLetters = "[[:punct:][:blank:]
 #' @param separator used between file name prefix and index
 #' @param extension for result file type.  default is CSV
 #' @description
-#' #Generate a listcontaining names of CSV result files that will be output by each core in parallel computation
+#' #Generate a list containing names of CSV result files that will be output by each core in parallel computation
 #' @export
 generateResultFileNames <- function(numberOfCores, folderName, fileName, separator = "-", extension = ".csv") {
   allResultsFileNames <- sapply(
@@ -187,7 +187,7 @@ replaceInfWithNA <- function(data) {
 
 #' @title removeMissingValues
 #' @param data data.frame
-#' @param dataMapping name of variable on which the missing values ar checked
+#' @param dataMapping name of variable on which the missing values are checked
 #' @return filtered data.frame
 #' @keywords internal
 removeMissingValues <- function(data, dataMapping = NULL) {
@@ -207,7 +207,7 @@ removeMissingValues <- function(data, dataMapping = NULL) {
 
 #' @title removeNegativeValues
 #' @param data data.frame
-#' @param dataMapping name of variable on which the missing values ar checked
+#' @param dataMapping name of variable on which the missing values are checked
 #' @return filtered data.frame
 #' @keywords internal
 removeNegativeValues <- function(data, dataMapping = NULL) {

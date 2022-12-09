@@ -1,7 +1,7 @@
 #' @title TaskResults
 #' @description  R6 class for TaskResults settings
-#' @field id unique identifer of results, helps in deriving final plot name
-#' @field sectionId unique identifer of section results, used only by qualification workflows
+#' @field id unique identifier of results, helps in deriving final plot name
+#' @field sectionId unique identifier of section results, used only by qualification workflows
 #' @field plot `ggplot` object corresponding to the figure to be saved
 #' @field plotCaption text included into the report explaining the figure
 #' @field includePlot logical indicating if the plot should be included in final report
@@ -135,8 +135,8 @@ TaskResults <- R6::R6Class(
 
 #' @title saveTaskResults
 #' @description  Save task results within a `TaskResults` object
-#' @param id unique identifer of results, helps in deriving final plot name
-#' @param sectionId unique identifer of section results, used only by qualification workflows
+#' @param id unique identifier of results, helps in deriving final plot name
+#' @param sectionId unique identifier of section results, used only by qualification workflows
 #' @param plot `ggplot` object corresponding to the figure to be saved
 #' @param plotCaption text included into the report explaining the figure
 #' @param includePlot logical indicating if the plot should be included in final report

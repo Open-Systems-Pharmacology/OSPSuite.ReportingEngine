@@ -9,7 +9,7 @@ removeNegativeValues(data, dataMapping = NULL)
 \arguments{
 \item{data}{data.frame}
 
-\item{dataMapping}{name of variable on which the missing values ar checked}
+\item{dataMapping}{name of variable on which the missing values are checked}
 }
 \value{
 filtered data.frame

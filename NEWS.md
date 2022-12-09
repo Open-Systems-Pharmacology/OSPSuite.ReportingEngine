@@ -4,7 +4,7 @@
 
 - Qualification workflows are now available ! (#2)
   - Qualification Workflows have their own [vignette](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/articles/qualification-workflow.html) to help you start (#566)
-  - A template qualification workflow R script is available on Github orat `system.file("extdata", "qualification-workflow-template.R", package = "ospsuite.reportingengine")` and can also be downloaded from [Github](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/qualification-workflow-template.R) (#572)
+  - A template qualification workflow R script is available on Github at `system.file("extdata", "qualification-workflow-template.R", package = "ospsuite.reportingengine")` and can also be downloaded from [Github](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/qualification-workflow-template.R) (#572)
   - Function `adjustTitlePage` can be used to personalize the report title page (#755)
   - Configuration plans can be re-loaded on `QualificationWorkflow` objects to update the report display (#567)
   - DDI subunits option is available (#642)
@@ -27,7 +27,7 @@
 
 * Descriptor of simulation sets is now available and can be defined in Excel template (#445) as well as using the function `setSimulationDescriptor` (#423).
 * Each task property `settings` is now an R6 object (#396). This allows users to have an easy and direct access to setting properties.
-* Posibility to read time and measurement units from nonmem columns (#414)
+* Possibility to read time and measurement units from nonmem columns (#414)
 
 ## Minor improvements and bug fixes
 

@@ -1,4 +1,4 @@
-# Helper functions to translate configuration plan values/fields to tlf/opsuite.reportingengine
+# Helper functions to translate configuration plan values/fields to tlf/ospuite.reportingengine
 
 #' @title ConfigurationPlots
 #' @description Enum defining possible plots defined in configuration plan
@@ -12,7 +12,7 @@ ConfigurationPlotSettings <- enum(c("ChartWidth", "ChartHeight", "Fonts"))
 
 #' @title ConfigurationFontsFields
 #' @description Enum defining possible fonts fields defined in configuration plan
-#' Note that some fields might not be used/converted by the current `opsuite.reportingengine` or `tlf` version (e.g. FontFamilyName)
+#' Note that some fields might not be used/converted by the current `ospsuite.reportingengine` or `tlf` version (e.g. FontFamilyName)
 #' @keywords internal
 ConfigurationFontsFields <- c("AxisSize", "LegendSize", "OriginSize", "FontFamilyName", "WatermarkSize")
 
@@ -202,7 +202,7 @@ tlfScale <- function(configurationScale) {
 #' @title getCompoundNameFromPath
 #' @description
 #' Get the compound name from a configuration plan quantity path
-#' @param path A quantitiy path from the configuration plan
+#' @param path A quantity path from the configuration plan
 #' For instance, "S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
 #' or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
 #' @return A string corresponding to the compound name of a configuration plan quantity path

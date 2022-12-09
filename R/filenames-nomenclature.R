@@ -75,7 +75,7 @@ getDefaultFileName <- function(..., suffix, extension = "csv", sep = "-") {
 #' @description Create a default folder name for reporting engine results and figures
 #' @param ... names
 #' @param suffix Suffix to be added at the end of the folder name.
-#' Dafault `suffix` is the curent date
+#' Default `suffix` is the current date
 #' @param sep separation between names and suffix. Default is `-`
 #' @return default filename adding default suffix and file extension
 #' @keywords internal

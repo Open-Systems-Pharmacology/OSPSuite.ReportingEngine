@@ -8,6 +8,7 @@ R6 class for ConfigurationPlan guiding Qualification Workflow
 }
 \seealso{
 Other qualification workflow: 
+\code{\link{QualificationVersionInfo}},
 \code{\link{adjustTitlePage}()},
 \code{\link{loadConfigurationPlan}()},
 \code{\link{loadQualificationWorkflow}()},
@@ -100,7 +101,7 @@ Get markdown title to a specific section Id
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-The title associated with "#" corresponding to the subection level
+The title associated with "#" corresponding to the subsection level
 }
 }
 \if{html}{\out{<hr>}}

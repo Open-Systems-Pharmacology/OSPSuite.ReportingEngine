@@ -92,7 +92,7 @@ Create a new `PopulationWorkflow` object.
 
 \item{\code{workflowFolder}}{path of the output folder created or used by the Workflow.}
 
-\item{\code{createWordReport}}{logical of option for creating Markdwon-Report only but not a Word-Report.}
+\item{\code{createWordReport}}{logical of option for creating Markdown-Report only but not a Word-Report.}
 
 \item{\code{watermark}}{displayed watermark in every plot background}
 

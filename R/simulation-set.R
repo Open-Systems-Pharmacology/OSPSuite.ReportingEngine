@@ -64,7 +64,7 @@ SimulationSet <- R6::R6Class(
       # Test and validate outputs and their paths
       validateOutputObject(c(outputs), simulation, nullAllowed = TRUE)
       validateDataSource(dataSource, c(outputs), nullAllowed = TRUE)
-      
+
       self$simulationSetName <- simulationSetName
       self$simulationFile <- simulationFile
       self$minimumSimulationEndTime <- minimumSimulationEndTime

@@ -145,7 +145,7 @@ mwf$calculateSensitivity$settings$variableParameterPaths <- c(
 ```
 
 
-The properties of the sensitivity plots to be generated are set next.  The field `totalSensitivityThreshold` is used to filter out from the sensitivity plots any model variables that contribute little to the total sensitivity of the model. The `maximalParametersPerSensitivityPlot` field limits the number of model variables to be displayeed in sensitivity plots. The axis font size is set using the parameters `xAxisFontSize` and `yAxisFontSize`.   
+The properties of the sensitivity plots to be generated are set next.  The field `totalSensitivityThreshold` is used to filter out from the sensitivity plots any model variables that contribute little to the total sensitivity of the model. The `maximalParametersPerSensitivityPlot` field limits the number of model variables to be displayed in sensitivity plots. The axis font size is set using the parameters `xAxisFontSize` and `yAxisFontSize`.   
 ```{r echo=T, results='hide'}
 mwf$plotSensitivity$settings <- SensitivityPlotSettings$new(
   totalSensitivityThreshold = 0.9,
@@ -222,7 +222,7 @@ pwf$calculateSensitivity$activate()
 pwf$plotSensitivity$activate()
 ```
 
-The population sensitivity analysis depends on the PK parameter calculations for the population, which in turn depend on population simulation results.  If these pre-requisite tasks (`simulate` and `calculatePKParameters`) have not previously been run, they must also be activated:  
+The population sensitivity analysis depends on the PK parameter calculations for the population, which in turn depend on population simulation results.  If these prerequisite tasks (`simulate` and `calculatePKParameters`) have not previously been run, they must also be activated:  
 
 ```{r echo=T, results='hide'}
 pwf$simulate$activate()

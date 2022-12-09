@@ -7,7 +7,7 @@
 getSplitPositions(possibleSplits, splitWidth, numberOfSplits)
 }
 \arguments{
-\item{possibleSplits}{Positions where a space or a dash was flaged}
+\item{possibleSplits}{Positions where a space or a dash was found}
 
 \item{splitWidth}{Maximum number of characters desired per lines}
 

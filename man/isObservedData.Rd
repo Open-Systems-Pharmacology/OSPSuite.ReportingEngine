@@ -7,7 +7,7 @@
 isObservedData(path)
 }
 \arguments{
-\item{path}{A quantitiy path from the configuration plan
+\item{path}{A quantity path from the configuration plan
 For instance, "S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
 or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"}
 }
@@ -15,7 +15,7 @@ or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc
 A logical checking if path corresponds to observed data
 }
 \description{
-Check if a configuration plan quantitiy path corresponds to observed data
+Check if a configuration plan quantity path corresponds to observed data
 }
 \examples{
 \dontrun{

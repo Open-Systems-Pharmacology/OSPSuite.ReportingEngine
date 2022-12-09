@@ -12,11 +12,12 @@ adjustTitlePage(fileName, qualificationVersionInfo = NULL)
 \item{qualificationVersionInfo}{A `QualificationVersionInfo`object defining Qualification Version Information to be displayed on title page}
 }
 \description{
-Adust Qualification Version Information to be displayed on title page
+Adjust Qualification Version Information to be displayed on title page
 }
 \seealso{
 Other qualification workflow: 
 \code{\link{ConfigurationPlan}},
+\code{\link{QualificationVersionInfo}},
 \code{\link{loadConfigurationPlan}()},
 \code{\link{loadQualificationWorkflow}()},
 \code{\link{startQualificationRunner}()}

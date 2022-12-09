@@ -224,7 +224,7 @@ getPKRatioOutputsDataframe <- function(configurationPlan) {
 }
 
 #' @title addNewPkParameter
-#' @description Create a PK parameter calculated between a start and end time as specified in a qualification `ConfigurationPlan` and return ther PK parameter name
+#' @description Create a PK parameter calculated between a start and end time as specified in a qualification `ConfigurationPlan` and return the PK parameter name
 #' @param pkParameter the name of the PK parameter from the qualification `ConfigurationPlan`
 #' @param startTime the starting time of the interval over which the PK parameter is calculated (from the qualification `ConfigurationPlan`)
 #' @param endTime the ending time of the interval over which the PK parameter is calculated (from the qualification `ConfigurationPlan`)

@@ -230,7 +230,7 @@ The field <code>totalSensitivityThreshold</code> is used to filter out
 from the sensitivity plots any model variables that contribute little to
 the total sensitivity of the model. The
 <code>maximalParametersPerSensitivityPlot</code> field limits the number
-of model variables to be displayeed in sensitivity plots. The axis font
+of model variables to be displayed in sensitivity plots. The axis font
 size is set using the parameters <code>xAxisFontSize</code> and
 <code>yAxisFontSize</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -249,7 +249,7 @@ evaluation and plot are started with the command
 <p>The output report, containing the mean model sensitivity plots from
 this example, is shown below.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-24.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-49.png" style="width:100%; border-style: none;"></details>
 </div>
 <div class="section level4">
 <h4 id="population-model-workflow">Population model workflow<a class="anchor" aria-label="anchor" href="#population-model-workflow"></a>
@@ -316,7 +316,7 @@ commands</p>
 <span><span class="va">pwf</span><span class="op">$</span><span class="va">plotSensitivity</span><span class="op">$</span><span class="fu">activate</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>The population sensitivity analysis depends on the PK parameter
 calculations for the population, which in turn depend on population
-simulation results. If these pre-requisite tasks (<code>simulate</code>
+simulation results. If these prerequisite tasks (<code>simulate</code>
 and <code>calculatePKParameters</code>) have not previously been run,
 they must also be activated:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -364,7 +364,7 @@ plot is configured using an instance of a
 multiple <code>.csv</code> files within the
 <code>SensitivityResults</code> sub-directory of the workflow folder, as
 shown in the following figure:</p>
-<pre><code><span><span class="co">#&gt; [1] TRUE</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] FALSE</span></span></code></pre>
 <p><img src="figures/sa-file-outputs.png" width="40%"></p>
 <p>Two sets of files make up the population sensitivity analysis results
 for this example, each corresponding to one of the
@@ -380,7 +380,7 @@ within the <code>SensitivityResults</code> sub-directory of the workflow
 folder) obtained for the <code>PopulationSimulationSet</code> object
 <code>popSimulationSet1</code>. Its contents are shown in the following
 figure:</p>
-<pre><code><span><span class="co">#&gt; [1] TRUE</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] FALSE</span></span></code></pre>
 <p><img src="figures/sa-file-index.png" width="100%"></p>
 <p>Two output paths are shown corresponding to <code>output1</code>
 (pink), <code>output2</code> (blue). Note that, as per the definitions
@@ -395,7 +395,7 @@ column, each corresponding to one of the quantiles specified using
 <p>The output report, containing the population sensitivity plots from
 this example, is shown below.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-27.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-50.png" style="width:100%; border-style: none;"></details>
 </div>
 </div>
 </div>

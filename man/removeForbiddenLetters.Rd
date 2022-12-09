@@ -15,7 +15,7 @@ removeForbiddenLetters(
 
 \item{forbiddenLetters}{characters to be removed if in the \code{text}.
 Default value of \code{forbiddenLetters} is \code{"[[:punct:]]"}
-meaning that all pointuation characters are forbidden.}
+meaning that all punctuation characters are forbidden.}
 
 \item{replacement}{character replacing the \code{forbiddenLetters}.
 Default value of \code{forbiddenLetters} is "_".}

@@ -5,7 +5,7 @@
 #' @field taskNames Enum of task names
 #' @field reportFileName name of the Rmd report file
 #' @field reportTitle report title page
-#' @field createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
+#' @field createWordReport logical of option for creating Markdown-Report only but not a Word-Report.
 #' @field wordConversionTemplate optional docx template for rendering a tuned Word-Report document
 #' @field userDefinedTasks List of user-defined tasks (to update with loadUserDefinedTask)
 #' @field numberSections logical defining if the report sections should be numbered
@@ -151,7 +151,7 @@ Workflow <- R6::R6Class(
 
     #' @description
     #' Activates a series of `Tasks` from current `Workflow`
-    #' @param tasks names of the worklfow tasks to activate.
+    #' @param tasks names of the workflow tasks to activate.
     #' Default activates all tasks of the workflow using workflow method `workflow$getAllTasks()`
     #' @return Vector of inactive `Task` names
     activateTasks = function(tasks = self$getAllTasks()) {
@@ -160,7 +160,7 @@ Workflow <- R6::R6Class(
 
     #' @description
     #' Inactivates a series of `Tasks` from current `Workflow`
-    #' @param tasks names of the worklfow tasks to inactivate.
+    #' @param tasks names of the workflow tasks to inactivate.
     #' Default inactivates all tasks of the workflow using workflow method `workflow$getAllTasks()`
     #' @return Vector of inactive `Task` names
     inactivateTasks = function(tasks = self$getAllTasks()) {
@@ -168,13 +168,13 @@ Workflow <- R6::R6Class(
     },
 
     #' @description
-    #' Print reporting engine information obtained from initiliazing a `Workflow`
+    #' Print reporting engine information obtained from initializing a `Workflow`
     printReportingEngineInfo = function() {
       private$.reportingEngineInfo$print()
     },
 
     #' @description
-    #' Get the current watermark to be reprted on figures background
+    #' Get the current watermark to be reported on figures background
     getWatermark = function() {
       private$.watermark
     },

@@ -30,7 +30,7 @@ PopulationWorkflow <- R6::R6Class(
     #' @param workflowType Type of population workflow. Use enum `PopulationWorkflowTypes` to get list of workflow types.
     #' @param simulationSets list of `SimulationSet` R6 class objects
     #' @param workflowFolder path of the output folder created or used by the Workflow.
-    #' @param createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
+    #' @param createWordReport logical of option for creating Markdown-Report only but not a Word-Report.
     #' @param watermark displayed watermark in every plot background
     #' @param simulationSetDescriptor character Descriptor of simulation sets indicated in reports
     #' @param numberSections logical defining if the report sections should be numbered

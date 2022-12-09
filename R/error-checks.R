@@ -154,28 +154,28 @@ validateDataSource <- function(dataSource, outputs, nullAllowed = TRUE) {
   }
   validateIsIncludedInDataset(c(dictionaryParameters$ID, dictionaryParameters$datasetColumn), dictionary, datasetName = "dictionary")
   validateIsIncludedAndLog(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID], groupName = paste0("Column '", dictionaryParameters$ID, "'"))
-  
+
   # Check that dictionary and observed data are consistent
   observedDataset <- readObservedDataFile(dataSource$dataFile)
   timeVariable <- getDictionaryVariable(dictionary, dictionaryParameters$timeID)
   dvVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvID)
   lloqVariable <- getDictionaryVariable(dictionary, dictionaryParameters$lloqID)
-  
+
   checkIsIncludedInDataset(c(timeVariable, dvVariable), observedDataset, datasetName = "observed dataset")
   checkIsIncludedInDataset(lloqVariable, observedDataset, datasetName = "observed dataset", nullAllowed = TRUE)
-  
+
   # Check of unit definitions:
   # - If unit is defined as a datasetColumn
   timeUnitVariable <- getDictionaryVariable(dictionary, dictionaryParameters$timeUnitID)
   dvUnitVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvUnitID)
-  
+
   # - If unit is defined as a value in datasetUnit
   timeMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$timeID
   dvMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$dvID
-  
+
   timeUnit <- as.character(dictionary[timeMapping, dictionaryParameters$datasetUnit])
   dvUnit <- as.character(dictionary[dvMapping, dictionaryParameters$datasetUnit])
-  
+
   validateUnitDataDefinition(timeUnit, timeUnitVariable, observedDataset)
   validateUnitDataDefinition(dvUnit, dvUnitVariable, observedDataset, outputs)
   return(invisible())
@@ -354,10 +354,12 @@ validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, output
   # Get dataUnit from outputs
   dataUnit <- ifNotNull(
     outputs,
-    unlist(lapply(outputs, function(output) {output$dataUnit})),
+    unlist(lapply(outputs, function(output) {
+      output$dataUnit
+    })),
     NULL
-    )
-  
+  )
+
   # Checks for errors/warnings
   # - No unit at all
   noUnit <- all(isEmpty(unit), isEmpty(unitColumn), isEmpty(dataUnit))
@@ -375,12 +377,12 @@ validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, output
   # If units defined in dataFile,
   # check that unitColumn refers an actual column from observed data
   checkIsIncludedInDataset(unitColumn, observedDataset, datasetName = "observed dataset", nullAllowed = TRUE)
-  
+
   # Check multiple unit definitions and their consistency
   checkOutputConsistency <- all(!isEmpty(unit), !isEmpty(dataUnit))
-  if(checkOutputConsistency){
+  if (checkOutputConsistency) {
     # Error when unit is different from dataUnit
-    if(!isIncluded(unit, dataUnit)){
+    if (!isIncluded(unit, dataUnit)) {
       logErrorThenStop(messages$errorInconsistentDataUnit())
     }
     logError(messages$warningMultipleDataUnit())
@@ -390,7 +392,7 @@ validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, output
   warnMutlipleUnitDefinitions <- any(
     all(!isEmpty(dataUnit), !isEmpty(unitColumn)),
     all(!isEmpty(unit), !isEmpty(unitColumn))
-    )
+  )
   if (warnMutlipleUnitDefinitions) {
     logError(messages$warningMultipleDataUnit())
   }

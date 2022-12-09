@@ -7,7 +7,7 @@
 getElapsedTime(tic, unit = "min")
 }
 \arguments{
-\item{tic}{Numeric time from chrono trigger}
+\item{tic}{Numeric start time}
 
 \item{unit}{display unit of elapsed time}
 }

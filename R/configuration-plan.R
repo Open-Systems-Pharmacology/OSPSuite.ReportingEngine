@@ -30,7 +30,7 @@ ConfigurationPlan <- R6::R6Class(
 
     #' @description Get markdown title to a specific section Id
     #' @param id section identifier
-    #' @return The title associated with "#" corresponding to the subection level
+    #' @return The title associated with "#" corresponding to the subsection level
     getSectionTitle = function(id) {
       selectedId <- private$.selectSectionsRow(id)
       sectionTitle <- paste0(rep("#", private$.sections$level[selectedId]), collapse = "")
