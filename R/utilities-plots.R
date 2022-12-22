@@ -350,6 +350,49 @@ prettyCaption <- function(captions, plotObject, element = "legend") {
   return(addLineBreakToCaption(captions, width = maxWidth))
 }
 
+#' @title updateWatermarkDimensions
+#' @description Update Watermark dimensions
+#' @param plotObject A `ggplot` object
+#' @return A `ggplot` object
+#' @keywords internal
+updateWatermarkDimensions <- function(plotObject) {
+  # No need to update if no displayed watermark
+  if (isEmpty(plotObject$plotConfiguration$background$watermark$text)) {
+    return(plotObject)
+  }
+  # Watermark size in inches to compare with plot dimensions
+  # Font size is in point = 1/72 inches
+  watermarkSize <- nchar(plotObject$plotConfiguration$background$watermark$text) *
+    plotObject$plotConfiguration$background$watermark$font$size / 72
+  watermarkWidth <- abs(watermarkSize * cos(plotObject$plotConfiguration$background$watermark$font$angle * pi / 180))
+  watermarkHeight <- abs(watermarkSize * sin(plotObject$plotConfiguration$background$watermark$font$angle * pi / 180))
+
+  # Plot dimensions in inches to compare with watermark dimensions
+  unitScaling <- switch(plotObject$plotConfiguration$export$units,
+    "in" = 1,
+    "cm" = 2.54,
+    "mm" = 25.4,
+    1
+  )
+  plotWidth <- plotObject$plotConfiguration$export$width / unitScaling
+  plotHeight <- plotObject$plotConfiguration$export$height / unitScaling
+
+  # Comparison and scaling of watermark
+  watermarkScaling <- max(
+    watermarkWidth / plotWidth,
+    watermarkHeight / plotHeight
+  )
+
+  if (watermarkScaling <= 1) {
+    return(plotObject)
+  }
+  plotObject <- tlf::setWatermark(
+    plotObject = plotObject,
+    size = plotObject$plotConfiguration$background$watermark$font$size / watermarkScaling
+  )
+  return(plotObject)
+}
+
 #' @title updatePlotDimensions
 #' @description Update plot dimensions based on size and position of legend
 #' @param plotObject A `ggplot` object
@@ -374,8 +417,11 @@ updatePlotDimensions <- function(plotObject) {
   legendWidth <- as.numeric(grid::convertUnit(max(legendGrob$widths), plotObject$plotConfiguration$export$units))
   legendHeight <- as.numeric(grid::convertUnit(max(legendGrob$heights), plotObject$plotConfiguration$export$units))
   # - add legend height to the final plot dimensions if legend above/below
-  if (grepl(pattern = "Top", x = plotObject$plotConfiguration$legend$position) |
-    grepl(pattern = "Bottom", x = plotObject$plotConfiguration$legend$position)) {
+  isLegendPositionVertical <- any(
+    grepl(pattern = "Top", x = plotObject$plotConfiguration$legend$position),
+    grepl(pattern = "Bottom", x = plotObject$plotConfiguration$legend$position)
+  )
+  if (isLegendPositionVertical) {
     # Prevent truncated legend, if legend is too long
     # Get size ratio to keep same aspect ratio
     sizeRatio <- plotObject$plotConfiguration$export$height / plotObject$plotConfiguration$export$width
@@ -385,6 +431,7 @@ updatePlotDimensions <- function(plotObject) {
     plotObject$plotConfiguration$export$height <- sizeRatio * plotObject$plotConfiguration$export$height
     # Add legend height to final plot height to prevent shrinkage of plot area
     plotObject$plotConfiguration$export$height <- plotObject$plotConfiguration$export$height + legendHeight
+    plotObject <- updateWatermarkDimensions(plotObject)
     return(plotObject)
   }
   # Prevent truncated legend, if legend is too long
@@ -396,6 +443,7 @@ updatePlotDimensions <- function(plotObject) {
   plotObject$plotConfiguration$export$width <- sizeRatio * plotObject$plotConfiguration$export$width
   # Add legend width to final plot width to prevent shrinkage of plot area
   plotObject$plotConfiguration$export$width <- plotObject$plotConfiguration$export$width + legendWidth
+  plotObject <- updateWatermarkDimensions(plotObject)
   return(plotObject)
 }
 
