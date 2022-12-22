@@ -282,27 +282,38 @@ renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, w
 
   if (createWordReport) {
     # Check if pandoc is available before trying to render word report
-    tryCatch(
-      {
-        command <- "pandoc --version"
-        status <- system(command, show.output.on.console = FALSE)
-        validateCommandStatus(command, status)
-      },
-      error = function(e) {
-        logError("Pandoc is not installed, word report was not created")
-        return(invisible())
-      }
-    )
+    if(!rmarkdown::pandoc_available()){
+      logError("Pandoc is not installed, word report was not created.")
+      return(invisible())
+    }
 
     wordConversionTemplate <- wordConversionTemplate %||% system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
     pageBreakCode <- system.file("extdata", "pagebreak.lua", package = "ospsuite.reportingengine")
-
+    
+    # Some arguments will depend on pandoc version to prevent warnings
+    # docx requires that figures are contained within document
+    selfContainedArgument <- "self-contained:"
+    if(rmarkdown::pandoc_version() >= '2.19'){
+      selfContainedArgument <- c("embed-resources:", "standalone:")
+    }
+    # Create txt file that includes arguments for Pandoc
     write(c(
-      "self-contained:", "wrap: none", "toc:",
+      selfContainedArgument, 
+      # Remove wrapping limitation of 80 characters/line
+      "wrap: none", 
+      # Add table of content
+      "toc:",
+      # Add extension to md to convert equations written in LateX
+      "from: markdown+tex_math_dollars",
+      # Document used for styling
       paste0('reference-doc: "', wordConversionTemplate, '"'),
+      # Filter for translating page breaks
       paste0('lua-filter: "', pageBreakCode, '"'),
+      # Location of resources such as figures
       paste0('resource-path: "', reEnv$log$folder, '"')
-    ), file = reportConfig, sep = "\n")
+    ), 
+    file = reportConfig, sep = "\n")
+    
     knitr::pandoc(input = wordFileName, format = "docx", config = reportConfig)
     file.copy(docxWordFileName, docxFileName, overwrite = TRUE)
     re.tStoreFileMetadata(access = "write", filePath = docxFileName)
