@@ -106,6 +106,10 @@ reEnv$ddiRatioSubsetsDictionary <- list(
 # Default value for a scale factor used in a parallel simulation.  The product of this scale factor and the number of allowable cores (allowedCores) sets the maximum number of simulations that may be run on one core.
 reEnv$defaultMaxSimulationsPerCore <- 2
 
+# Default values for Monte Carlo sampling when calculating PK Ratios
+reEnv$defaultMCRandomSeed <- 123456
+reEnv$defaultMCRepetitions <- 1e4
+
 #' @title setWatermarkConfiguration
 #' @description Set default watermark configuration for current theme
 #' @param watermark character or \code{Label} class object from `tlf` package
@@ -391,5 +395,54 @@ setDefaultTimeProfileStatistics <- function(statisticsType = NULL,
     keepIfNull = TRUE
   ))
 
+  return(invisible())
+}
+
+
+#' @title getDefaultMCRandomSeed
+#' @description Get the default random seed when performing Monte Carlo sampling
+#' @return Random seed number
+#' @export
+#' @examples
+#' getDefaultMCRandomSeed()
+#'
+getDefaultMCRandomSeed <- function() {
+  return(reEnv$defaultMCRandomSeed)
+}
+
+#' @title setDefaultMCRandomSeed
+#' @description Set the default random seed when performing Monte Carlo sampling
+#' @param seed Random seed number as an integer
+#' @export
+#' @examples
+#' setDefaultMCRandomSeed(123456)
+#'
+setDefaultMCRandomSeed <- function(seed) {
+  validateIsInteger(seed)
+  reEnv$defaultMCRandomSeed <- seed
+  return(invisible())
+}
+
+#' @title getDefaultMCRepetitions
+#' @description Get the default number of repetitions when performing Monte Carlo sampling
+#' @return Random seed number
+#' @export
+#' @examples
+#' getDefaultMCRepetitions()
+#'
+getDefaultMCRepetitions <- function() {
+  return(reEnv$defaultMCRepetitions)
+}
+
+#' @title setDefaultMCRepetitions
+#' @description Set the default number of repetitions when performing Monte Carlo sampling
+#' @param n Number of repetitions
+#' @export
+#' @examples
+#' setDefaultMCRepetitions(1e4)
+#'
+setDefaultMCRepetitions <- function(n) {
+  validateIsInteger(n)
+  reEnv$defaultMCRepetitions <- n
   return(invisible())
 }
