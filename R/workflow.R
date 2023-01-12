@@ -104,7 +104,9 @@ Workflow <- R6::R6Class(
         # Load default workflow theme, and sync the watermark
         setDefaultTheme(theme)
         self$setWatermark(watermark)
+        setDefaultPlotFormat()
       })
+      return(invisible())
     },
 
     #' @description

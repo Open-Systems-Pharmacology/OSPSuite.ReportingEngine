@@ -48,7 +48,7 @@ reEnv$theme$background$legendPosition <- tlf::LegendPositions$outsideTop
 
 reEnv$defaultPlotFormat <- list(
   format = "png",
-  width = 8,
+  width = 5,
   height = 5,
   units = "in",
   dpi = 300
@@ -148,6 +148,13 @@ setDefaultPlotFormat <- function(format = NULL, width = NULL, height = NULL, uni
     reEnv$defaultPlotFormat$height <- reEnv$defaultPlotFormat$height * unitConversionFactor[2]
   }
   reEnv$defaultPlotFormat$units <- units %||% reEnv$defaultPlotFormat$units
+  tlf::setDefaultExportParameters(
+    format = reEnv$defaultPlotFormat$format,
+    width = reEnv$defaultPlotFormat$width,
+    height = reEnv$defaultPlotFormat$height,
+    units = reEnv$defaultPlotFormat$units,
+    dpi = reEnv$defaultPlotFormat$dpi
+  )
   return(invisible())
 }
 
