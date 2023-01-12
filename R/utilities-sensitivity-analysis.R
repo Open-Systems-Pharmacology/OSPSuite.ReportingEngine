@@ -550,10 +550,12 @@ plotMeanSensitivity <- function(structureSet, settings) {
       sensitivityPlot <- tlf::plotTornado(
         data = sensitivityData,
         dataMapping = sensitivityMapping,
-        plotConfiguration = sensitivityPlotConfiguration
+        plotConfiguration = sensitivityPlotConfiguration,
+        bar = TRUE
       )
       # Remove legend which is redundant from y axis
       sensitivityPlot <- tlf::setLegendPosition(sensitivityPlot, position = tlf::LegendPositions$none)
+      sensitivityPlot <- setQuadraticDimension(sensitivityPlot, plotConfiguration = settings$plotConfiguration)
 
       pkParameterCaption <- pkParameter$displayName %||% pkParameter$pkParameter
 
@@ -812,16 +814,27 @@ plotPopulationSensitivity <- function(structureSets,
     tornadoPlot <- tlf::plotTornado(
       data = selectedSensitivityData,
       dataMapping = sensitivityMapping,
-      plotConfiguration = sensitivityPlotConfiguration
+      plotConfiguration = sensitivityPlotConfiguration,
+      # tlf default option is current TRUE
+      # overwriting the plotConfiguration object
+      bar = FALSE
     )
-    # Legends currently left aligned. This option may be changed on later version and use reEnv instead
-    tornadoPlot <- tlf::setLegendPosition(tornadoPlot, position = tlf::LegendPositions$outsideTopLeft)
-    # Legend titles are usually set blanks by tlf,
-    # ggplot2 theme with an element_text is needed to print descriptor and quantiles
+    # Right aligning to prevent cropping of legend title
+    tornadoPlot <- tlf::setLegendPosition(tornadoPlot, position = tlf::LegendPositions$outsideTopRight)
+    # In tlf, Legend titles are the same between mappings
+    # Needs to use ggplot2 directly
     tornadoPlot <- tornadoPlot +
-      ggplot2::theme(legend.title = sensitivityPlotConfiguration$legend$font$createPlotFont()) +
-      ggplot2::labs(color = "Individual Percentile", shape = translateDescriptor(simulationSetDescriptor))
-
+      ggplot2::guides(
+        color = ggplot2::guide_legend(
+          title = "Individual Percentile",
+          title.theme = sensitivityPlotConfiguration$legend$font$createPlotFont()
+        ),
+        shape = ggplot2::guide_legend(
+          title = translateDescriptor(simulationSetDescriptor),
+          title.theme = sensitivityPlotConfiguration$legend$font$createPlotFont()
+        )
+      )
+    tornadoPlot <- setQuadraticDimension(tornadoPlot, plotConfiguration = settings$plotConfiguration)
 
     resultID <- defaultFileNames$resultID(length(sensitivityResults) + 1, "sensitivity", selectedPKParameter)
     sensitivityResults[[resultID]] <- saveTaskResults(
