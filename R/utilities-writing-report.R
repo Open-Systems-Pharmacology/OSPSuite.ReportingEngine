@@ -35,7 +35,8 @@ addFigureChunk <- function(fileName,
                            figureCaption = "") {
   # For a figure path to be valid in markdown using ![](#figurePath)
   # %20 needs to replace spaces in that figure path
-  mdFigureFile <- gsub(pattern = "[[:space:]*]", replacement = "%20", x = figureFileRelativePath)
+  mdFigureFile <- URLencode(figureFileRelativePath)
+  
   mdText <- c(
     "",
     paste0("![", figureCaption, "](", mdFigureFile, ")"),
@@ -216,38 +217,23 @@ renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, w
   figureContent <- NULL
   for (lineContent in fileContent) {
     firstElement <- getFirstLineElement(lineContent)
-    # When finding a line referencing a table caption,
-    if (grepl(pattern = "Table", x = firstElement)) {
-      # The new content to write in the report is
-      # - previous content = wordFileContent
-      # - page break = "\\newpage"
-      # - table caption = lineContent
-      # - line space = "" (due to sep="\n" in function write)
+    # When finding a line referencing a table or figure caption
+    # The new content to write in the report is
+    # - previous content = wordFileContent
+    # - page break = "\\newpage"
+    # - caption = lineContent
+    # - line space = "" (due to sep="\n" in function write)
+    # - go on with artifact (figure/table)
+    isArtifactCaption <- any(
+      grepl(pattern = "Table", x = firstElement),
+      grepl(pattern = "Figure", x = firstElement)
+    )
+    if(isArtifactCaption){
       wordFileContent <- c(wordFileContent, "\\newpage", lineContent, "")
       next
     }
-    # Figure: caption is after figure linked with "![](path)". Thus, break page is added before definition of figure path
-    # For word report, it needs to be merged as "![caption](path)"
-    if (grepl(pattern = "\\!\\[\\]", x = firstElement)) {
-      # Store link to figure path in figureContent
-      figureContent <- lineContent
-      next
-    }
-    # When finding a line referencing a figure caption,
-    if (grepl(pattern = "Figure", x = firstElement) & !is.null(figureContent)) {
-      # The new content to write in the report is
-      # - previous content = wordFileContent
-      # - page break = "\\newpage"
-      # - figure and its caption = "![lineContent](figureContent)"
-      # with lineContent = figure caption and figureContent = figure link
-      wordFileContent <- c(
-        wordFileContent,
-        "\\newpage",
-        paste0("![", lineContent, "]", gsub(pattern = "\\!\\[\\]", replacement = "", x = figureContent))
-      )
-      figureContent <- NULL
-      next
-    }
+    # Keep anchoring information if flaged before
+    #anchoring <- any(anchoring, hasAnchor(lineContent))
     wordFileContent <- c(wordFileContent, lineContent)
   }
 
@@ -282,25 +268,25 @@ renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, w
 
   if (createWordReport) {
     # Check if pandoc is available before trying to render word report
-    if(!rmarkdown::pandoc_available()){
+    if (!rmarkdown::pandoc_available()) {
       logError("Pandoc is not installed, word report was not created.")
       return(invisible())
     }
 
     wordConversionTemplate <- wordConversionTemplate %||% system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
     pageBreakCode <- system.file("extdata", "pagebreak.lua", package = "ospsuite.reportingengine")
-    
+
     # Some arguments will depend on pandoc version to prevent warnings
     # docx requires that figures are contained within document
     selfContainedArgument <- "self-contained:"
-    if(rmarkdown::pandoc_version() >= '2.19'){
+    if (rmarkdown::pandoc_version() >= "2.19") {
       selfContainedArgument <- c("embed-resources:", "standalone:")
     }
     # Create txt file that includes arguments for Pandoc
     write(c(
-      selfContainedArgument, 
+      selfContainedArgument,
       # Remove wrapping limitation of 80 characters/line
-      "wrap: none", 
+      "wrap: none",
       # Add table of content
       "toc:",
       # Add extension to md to convert equations written in LateX
@@ -311,9 +297,10 @@ renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, w
       paste0('lua-filter: "', pageBreakCode, '"'),
       # Location of resources such as figures
       paste0('resource-path: "', reEnv$log$folder, '"')
-    ), 
-    file = reportConfig, sep = "\n")
-    
+    ),
+    file = reportConfig, sep = "\n"
+    )
+
     knitr::pandoc(input = wordFileName, format = "docx", config = reportConfig)
     file.copy(docxWordFileName, docxFileName, overwrite = TRUE)
     re.tStoreFileMetadata(access = "write", filePath = docxFileName)
