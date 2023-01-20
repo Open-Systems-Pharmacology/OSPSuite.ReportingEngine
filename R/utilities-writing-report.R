@@ -217,24 +217,26 @@ renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, w
   figureContent <- NULL
   for (lineContent in fileContent) {
     firstElement <- getFirstLineElement(lineContent)
-    # When finding a line referencing a table or figure caption
+    anchorName <- getAnchorName(lineContent)
+    # When finding a line referencing a table or figure tag as first element
     # The new content to write in the report is
     # - previous content = wordFileContent
     # - page break = "\\newpage"
-    # - caption = lineContent
-    # - line space = "" (due to sep="\n" in function write)
-    # - go on with artifact (figure/table)
-    isArtifactCaption <- any(
-      grepl(pattern = "Table", x = firstElement),
-      grepl(pattern = "Figure", x = firstElement)
+    # - tag
+    # - next content (caption, + table/figure)
+    isArtifactReference <- all(
+      isIncluded(firstElement, "<a"),
+      any(
+        grepl(pattern = "table", x = anchorName),
+        grepl(pattern = "figure", x = anchorName)
+      )
     )
-    if(isArtifactCaption){
-      wordFileContent <- c(wordFileContent, "\\newpage", lineContent, "")
-      next
-    }
-    # Keep anchoring information if flaged before
-    #anchoring <- any(anchoring, hasAnchor(lineContent))
-    wordFileContent <- c(wordFileContent, lineContent)
+    wordFileContent <- c(
+      wordFileContent, 
+      # Add \newpage only if artifact is found
+      "\\newpage"[isArtifactReference],
+      lineContent
+      )
   }
 
   usedFilesFileName <- sub(pattern = ".md", replacement = "-usedFiles.txt", fileName)
