@@ -44,7 +44,7 @@ addFigureChunk <- function(fileName,
   )
 
   fileObject <- file(fileName, encoding = "UTF-8", open = "at")
-  write(mdText, file = fileObject, append = TRUE, sep = "\n")
+  writeLines(mdText, con = fileObject, sep = "\n", useBytes = TRUE)
   close(fileObject)
 
   usedFilesFileName <- sub(pattern = ".md", replacement = "-usedFiles.txt", fileName)
@@ -95,7 +95,7 @@ addTableChunk <- function(fileName,
   mdText <- gsub("NA", na, mdText)
 
   fileObject <- file(fileName, encoding = "UTF-8", open = "at")
-  write(mdText, file = fileObject, append = TRUE, sep = "\n")
+  writeLines(mdText, con = fileObject, sep = "\n", useBytes = TRUE)
   close(fileObject)
 
   usedFilesFileName <- sub(pattern = ".md", replacement = "-usedFiles.txt", fileName)
@@ -119,7 +119,7 @@ addTableChunk <- function(fileName,
 #'
 addTextChunk <- function(fileName, text) {
   fileObject <- file(fileName, encoding = "UTF-8", open = "at")
-  write(c("", text, ""), file = fileObject, append = TRUE, sep = "\n")
+  writeLines(c("", text, ""), con = fileObject, sep = "\n", useBytes = TRUE)
   close(fileObject)
   return(invisible())
 }
@@ -264,7 +264,7 @@ renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, w
   # Since write() uses sep = "\n",
   # every element of array wordFileContent is added in a new line
   fileObject <- file(wordFileName, encoding = "UTF-8")
-  write(wordFileContent, file = fileObject, sep = "\n")
+  writeLines(wordFileContent, con = fileObject, sep = "\n", useBytes = TRUE)
   close(fileObject)
   re.tStoreFileMetadata(access = "write", filePath = wordFileName)
 
@@ -332,7 +332,7 @@ addTableAndFigureNumbersToMarkdown <- function(fileName) {
   numberOfLines <- length(fileContent)
 
   fileObject <- file(fileName, encoding = "UTF-8")
-  write(fileContent, file = fileObject, sep = "\n")
+  writeLines(fileContent, con = fileObject, sep = "\n", useBytes = TRUE)
   close(fileObject)
 
   logDebug(paste0(
@@ -360,7 +360,7 @@ addSectionNumbersToMarkdown <- function(fileName) {
   }
 
   fileObject <- file(fileName, encoding = "UTF-8")
-  write(fileContent, file = fileObject, sep = "\n")
+  writeLines(fileContent, con = fileObject, sep = "\n", useBytes = TRUE)
   close(fileObject)
 
   logDebug(paste0("In '", fileName, "', ", length(title), " sections were numbered"))
@@ -394,7 +394,7 @@ addMarkdownToc <- function(fileName, tocTitle = "# Table of Contents") {
   # then the report content
   fileContent <- c(tocTitle, "", tocContent, "", fileContent)
   fileObject <- file(fileName, encoding = "UTF-8")
-  write(fileContent, file = fileObject, sep = "\n")
+  writeLines(fileContent, con = fileObject, sep = "\n", useBytes = TRUE)
   close(fileObject)
   re.tStoreFileMetadata(access = "write", filePath = fileName)
 
@@ -449,7 +449,7 @@ adjustTitlePage <- function(fileName, qualificationVersionInfo = NULL) {
   fileContent <- qualificationVersionInfo$updateText(fileContent)
 
   fileObject <- file(fileName, encoding = "UTF-8")
-  write(fileContent, file = fileObject, sep = "\n")
+  writeLines(fileContent, con = fileObject, sep = "\n", useBytes = TRUE)
   close(fileObject)
   return(invisible())
 }
