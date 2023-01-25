@@ -220,9 +220,16 @@ plotAbsorptionTimeProfile <- function(data,
   timeVsFractionPlotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
     data = data,
     metaData = metaData,
-    dataMapping = timeVsFractionDataMapping
+    dataMapping = timeVsFractionDataMapping,
+    # Default line properties for Absorption plots use theme color and linetype maps
+    # Can be overwritten by user-defined plotConfiguration
+    lines = tlf::ThemeAestheticSelections$new(
+      color = "next", linetype = "next",
+      fill = NA, shape = tlf::Shapes$blank,
+      size = 0.5, alpha = 1
+    )
   )
-  plotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, dataMapping, plotConfiguration)
+  timeVsFractionPlotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, timeVsFractionDataMapping, timeVsFractionPlotConfiguration)
 
   timeVsFractionPlot <- tlf::addLine(
     data = data,
