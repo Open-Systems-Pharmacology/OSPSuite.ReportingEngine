@@ -1216,7 +1216,7 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
     group = metaDataFrame,
     data = residualsData,
     metaData = residualsMetaData,
-    dataMapping = resVsTimeDataMapping,
+    dataMapping = histogramDataMapping,
     plotConfiguration = settings$plotConfigurations[["resHisto"]]
   )
   goodnessOfFitPlots[["resHisto"]] <- tlf::plotHistogram(
@@ -1237,8 +1237,8 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
     group = metaDataFrame,
     data = residualsData,
     metaData = residualsMetaData,
-    dataMapping = resVsTimeDataMapping,
-    plotConfiguration = settings$plotConfigurations[["resHisto"]]
+    dataMapping = qqDataMapping,
+    plotConfiguration = settings$plotConfigurations[["resQQPlot"]]
   )
   goodnessOfFitPlots[["resQQPlot"]] <- tlf::plotQQ(
     data = residualsData,
