@@ -83,14 +83,16 @@ autoAxesTicksFromLimits <- function(limits) {
 #' @description Defines auto time ticks from time unit and time values
 #' @param unit A time unit as defined in `ospsuite::ospUnits$Time`
 #' @param timeValues Numeric values used by the data
+#' @param maxTicks Maximum number of ticks allowed
 #' @return List of `ticks` and their `ticklabels`
 #' @keywords internal
-getTimeTicksFromUnit <- function(unit, timeValues = NULL) {
+getTimeTicksFromUnit <- function(unit, timeValues = NULL, maxTicks = 10) {
   if (isEmpty(timeValues)) {
     return()
   }
   minTime <- floor(min(0, as.numeric(timeValues), na.rm = TRUE))
   maxTime <- ceiling(max(as.numeric(timeValues), na.rm = TRUE))
+  
   # For undefined ticking of units, assume major tick every 10 units (eg. 10 seconds)
   majorTickStep <- 10
   # For undefined ticking of units, assume minor tick every 1 unit (eg. 1 seconds)
@@ -112,9 +114,14 @@ getTimeTicksFromUnit <- function(unit, timeValues = NULL) {
     # Major ticks every 6 months
     majorTickStep <- 6
   }
+  
+  # Increase tick step to get ticks below max number of ticks
+  # To make it prettier, factor will be an integer
+  numberOfTicks <- floor((maxTime-minTime)/majorTickStep)+1
+  tickScaleFactor <- ceiling(numberOfTicks/maxTicks)
 
-  minorTicks <- seq(minTime, maxTime, minorTickStep)
-  majorTicks <- seq(minTime, maxTime, majorTickStep)
+  minorTicks <- seq(minTime, maxTime, tickScaleFactor*minorTickStep)
+  majorTicks <- seq(minTime, maxTime, tickScaleFactor*majorTickStep)
   ticklabels <- as.character(minorTicks)
   ticklabels[!(minorTicks %in% majorTicks)] <- ""
 
