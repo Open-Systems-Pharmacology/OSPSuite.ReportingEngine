@@ -642,6 +642,59 @@ getGOFPlotConfiguration <- function(plotType,
   return(plotConfiguration)
 }
 
+#' @title getBoxWhiskerPlotConfiguration
+#' @description Define a `PlotConfiguration` object
+#' @param plotScale Scale of Y Axis
+#' @param data A data.frame
+#' @param metaData dimensions and units in the data.frame
+#' @param dataMapping `DataMapping` object
+#' @param plotConfiguration A user-defined `PlotConfiguration` object
+#' @return A `PlotConfiguration` object
+#' @keywords internal
+getBoxWhiskerPlotConfiguration <- function(plotScale = "log",
+                                           colorGrouping = NULL,
+                                           data,
+                                           metaData,
+                                           dataMapping = NULL,
+                                           plotConfiguration = NULL) {
+  if (!isEmpty(plotConfiguration)) {
+    return(plotConfiguration)
+  }
+  plotConfiguration <- tlf::BoxWhiskerPlotConfiguration$new(
+    data = data,
+    metaData = metaData,
+    dataMapping = dataMapping
+  )
+  # Remove xlabel
+  plotConfiguration$labels$xlabel$text <- NULL
+  # Default angle for xticklabels is 45 degrees
+  plotConfiguration$xAxis$font$angle <- 45
+  # No need for legend for boxplots
+  plotConfiguration$legend$position <- tlf::LegendPositions$none
+  # Color groups
+  if (!isEmpty(colorGrouping)) {
+    fillValues <- getColorFromOutputGroup(
+      group = colorGrouping,
+      data = data,
+      dataMapping = dataMapping,
+      colorVariable = "fill"
+    )
+    plotConfiguration$ribbons$fill <- fillValues
+  }
+  # Default axes use auto scaling
+  if (!isIncluded(plotScale, "log")) {
+    return(plotConfiguration)
+  }
+  yValues <- data[, dataMapping$y]
+  boxRange <- autoAxesLimits(yValues[yValues > 0], scale = "log")
+  boxBreaks <- autoAxesTicksFromLimits(boxRange)
+
+  plotConfiguration$yAxis$scale <- tlf::Scaling$log
+  plotConfiguration$yAxis$limits <- boxRange
+  plotConfiguration$yAxis$ticks <- boxBreaks
+  return(plotConfiguration)
+}
+
 #' @title getColorFromOutputGroup
 #' @description Get the appropriate colors from an output group
 #' @param group A data.frame mapping properties to output groups
@@ -669,3 +722,55 @@ getColorFromOutputGroup <- function(group,
   colorValues <- group[[colorVariable]][toKeep]
   return(colorValues[legendOrder])
 }
+
+#' @title getColorGroupForPKParameterPlot
+#' @description Map colors to population names
+#' @param output An `Output` object
+#' @param referenceSetName Display name of reference simulation set
+#' @param simulationSetNames Display names of simulation sets
+#' @return A data.frame mapping colors to names
+#' @keywords internal
+getColorGroupForPKParameterPlot <- function(output,
+                                            referenceSetName,
+                                            simulationSetNames) {
+  remainingSetNames <- setdiff(simulationSetNames, referenceSetName)
+  colorGrouping <- data.frame(
+    # Legend is the default variable name used by getColorFromOutputGroup
+    legend = c(referenceSetName, remainingSetNames),
+    color = c(
+      reEnv$referenceColor,
+      rep(output$color %||% "dodgerblue", length(remainingSetNames))
+    ),
+    fill = c(
+      reEnv$referenceFill,
+      rep(output$fill %||% "dodgerblue", length(remainingSetNames))
+    )
+  )
+  return(colorGrouping)
+}
+
+#' @title updateVpcPlotColor
+#' @description Update colors of lines and ranges of VPC plots
+#' @param plotObject A ggplot object
+#' @param output An `Output` object
+#' @param referenceSimulationSetName Display name of reference simulation set
+#' @return A ggplot object
+#' @keywords internal
+updateVpcPlotColor <- function(plotObject, output, referenceSimulationSetName = NULL) {
+  legendSim <- paste("Simulated", AggregationConfiguration$names$middle, "and", AggregationConfiguration$names$range)
+  legendReference <- paste(legendSim, "of", referenceSimulationSetName)
+  
+  plotObject <- plotObject +
+    ggplot2::scale_color_manual(
+      breaks = c(ifNotNull(referenceSimulationSetName, legendReference), legendSim),
+      values = c(ifNotNull(referenceSimulationSetName, reEnv$referenceColor), output$color)
+    ) +
+    ggplot2::scale_fill_manual(
+      breaks = c(ifNotNull(referenceSimulationSetName, legendReference), legendSim),
+      values = c(ifNotNull(referenceSimulationSetName, reEnv$referenceFill), output$fill)
+    )
+  return(plotObject)
+}
+
+
+

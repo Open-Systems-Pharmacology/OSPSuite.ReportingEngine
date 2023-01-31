@@ -44,11 +44,14 @@ TaskSettings <- R6::R6Class(
       }
       if (isIncluded(taskName, AllAvailableTasks$plotPKParameters)) {
         private$.plotConfigurations <- list(
-          boxplotPkParameters = NULL,
-          boxplotPkRatios = NULL,
+          boxplotPKParameters = NULL,
+          boxplotPKParametersLog = NULL,
+          boxplotPKRatios = NULL,
           vpcParameterPlot = NULL,
           comparisonVpcPlot = NULL
         )
+        self$mcRepetitions <- getDefaultMCRepetitions()
+        self$mcRandomSeed <- getDefaultMCRandomSeed()
       }
       if (isIncluded(taskName, AllAvailableTasks$plotTimeProfilesAndResiduals)) {
         private$.plotConfigurations <- list(

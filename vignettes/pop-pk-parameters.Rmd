@@ -140,9 +140,10 @@ However, the potential PK ratios between the populations can be approximated by 
 
 In more details, random sampling of the population that includes more subjects is performed in order to obtain 2 populations with the same size. The populations are then assumed the same and PK ratios are evaluated for each subject of the population as the indivudal ratios of each PK Parameter value (same method as section [Same Population](#same-population)). Key statistics of the correspondig distribution are calculated. The final key statistics will be calculated as the median value obtained over all the repeated random samplings.
 
-Since analytical formulas exist for the calculation of arithmetic and geometric means, SDs and CVs, the quality of the approximation calculated on the percentiles of the ratios will be assessed, reported in the logs and displayed on the console.
+Since analytical formulas exist for the calculation of arithmetic and geometric means, SDs and CVs, the quality of the approximation calculated on the percentiles of the ratios will be assessed, reported in the logs.
 
-The random seed and number of repetitions for the random samplings can also be checked and set by the user as illustrated below.
+The random seed and number of repetitions for the random samplings can also be checked and set by the user globally as illustrated below.
+But also locally within the workflow task (`workflow$plotPKParameters$settings$mcRandomSeed`)
 
 ```{r}
 # Get the random seed for the MC sampling

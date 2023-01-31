@@ -298,7 +298,19 @@ messages <- list(
       "', define units in field '", highlight("dataUnit"),
       "' when creating an '", highlight("Output"), "' object."
     )
-  }
+  },
+  monteCarloChecking = function(analyticalSolutionMessage, medianPKRatioStatistics, n, seed){
+    c(
+      analyticalSolutionMessage,
+      paste0(
+        "Monte Carlo solution for ", paste0(tail(names(medianPKRatioStatistics), 4), collapse = ", "),
+        " resulted in ", paste0(tail(unlist(medianPKRatioStatistics), 4), collapse = ", "),
+        " respectively."
+        ),
+      paste0("Number of repetitions was set to: ", n), 
+      paste0("Random seed number was set to: ", seed) 
+    )
+    }
 )
 
 
