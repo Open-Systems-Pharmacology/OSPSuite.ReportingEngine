@@ -731,18 +731,18 @@ getColorFromOutputGroup <- function(group,
 #' @return A data.frame mapping colors to names
 #' @keywords internal
 getColorGroupForPKParameterPlot <- function(output,
-                                            referenceSetName,
+                                            referenceSetName = NULL,
                                             simulationSetNames) {
   remainingSetNames <- setdiff(simulationSetNames, referenceSetName)
   colorGrouping <- data.frame(
     # Legend is the default variable name used by getColorFromOutputGroup
     legend = c(referenceSetName, remainingSetNames),
     color = c(
-      reEnv$referenceColor,
+      ifNotNull(referenceSetName, reEnv$referenceColor),
       rep(output$color %||% "dodgerblue", length(remainingSetNames))
     ),
     fill = c(
-      reEnv$referenceFill,
+      ifNotNull(referenceSetName, reEnv$referenceFill),
       rep(output$fill %||% "dodgerblue", length(remainingSetNames))
     )
   )
@@ -763,11 +763,17 @@ updateVpcPlotColor <- function(plotObject, output, referenceSimulationSetName = 
   plotObject <- plotObject +
     ggplot2::scale_color_manual(
       breaks = c(ifNotNull(referenceSimulationSetName, legendReference), legendSim),
-      values = c(ifNotNull(referenceSimulationSetName, reEnv$referenceColor), output$color)
+      values = c(
+        ifNotNull(referenceSimulationSetName, reEnv$referenceColor), 
+        output$color %||% "dodgerblue"
+          )
     ) +
     ggplot2::scale_fill_manual(
       breaks = c(ifNotNull(referenceSimulationSetName, legendReference), legendSim),
-      values = c(ifNotNull(referenceSimulationSetName, reEnv$referenceFill), output$fill)
+      values = c(
+        ifNotNull(referenceSimulationSetName, reEnv$referenceFill), 
+        output$fill %||% "dodgerblue"
+          )
     )
   return(plotObject)
 }

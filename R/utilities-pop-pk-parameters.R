@@ -305,15 +305,15 @@ plotPopulationPKParameters <- function(structureSets,
             plotConfiguration = settings$plotConfigurations[["vpcParameterPlot"]]
           )
           vpcPlot <- updateVpcPlotColor(
-            plotObject = comparisonVpcPlot,
+            plotObject = vpcPlot,
             output = output
           )
           xParameterCaption <- vpcMetaData$x$dimension
           yParameterCaption <- vpcMetaData$median$dimension
 
           # Check if log scaled boxplot was created before plotting logs of range plots
-          if (hasPositiveValues(comparisonData$ymin)) {
-            vpcDataForLimits <- c(comparisonData$ymin, comparisonData$median, comparisonData$ymax)
+          if (hasPositiveValues(vpcData$ymin)) {
+            vpcDataForLimits <- c(vpcData$ymin, vpcData$median, vpcData$ymax)
             vpcLimits <- autoAxesLimits(vpcDataForLimits[vpcDataForLimits>0], scale = tlf::Scaling$log)
             
             vpcPlotLog <-  tlf::setYAxis(

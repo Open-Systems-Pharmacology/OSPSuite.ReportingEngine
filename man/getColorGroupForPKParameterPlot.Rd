@@ -4,7 +4,11 @@
 \alias{getColorGroupForPKParameterPlot}
 \title{getColorGroupForPKParameterPlot}
 \usage{
-getColorGroupForPKParameterPlot(output, referenceSetName, simulationSetNames)
+getColorGroupForPKParameterPlot(
+  output,
+  referenceSetName = NULL,
+  simulationSetNames
+)
 }
 \arguments{
 \item{output}{An `Output` object}
