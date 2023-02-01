@@ -717,7 +717,10 @@ getColorFromOutputGroup <- function(group,
   # Get legend order and associated right color
   toKeep <- (group[[legendVariable]] %in% displayedLegendValues) &
     !duplicated(group[[legendVariable]])
-  legendValues <- group[[legendVariable]][toKeep]
+  legendValues <- factor(
+    group[[legendVariable]][toKeep], 
+    levels = levels(displayedLegendValues) %||% displayedLegendValues
+    )
   legendOrder <- order(legendValues)
   colorValues <- group[[colorVariable]][toKeep]
   return(colorValues[legendOrder])

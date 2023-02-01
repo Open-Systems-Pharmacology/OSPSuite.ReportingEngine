@@ -213,6 +213,7 @@ getPKParameterRatioMeasureFromMCSampling <- function(comparisonData,
 #' @description Check wither simulation sets use same population as reference set
 #' @param structureSets A `SimulationStructure`
 #' @return list
+#' @keywords internal
 isSamePopulationInSets <- function(structureSets) {
   isReference <- sapply(structureSets, function(set) {
     set$simulationSet$referencePopulation
