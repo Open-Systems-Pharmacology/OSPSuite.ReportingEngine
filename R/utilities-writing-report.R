@@ -236,10 +236,13 @@ renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, w
       "```{=openxml}",
       paste0(
         "<w:p><w:r>",
-        # Page break
+        # Page break using source code
+        # https://pandoc.org/MANUAL.html#extension-raw_attribute
         '<w:br w:type="page"/>',
         "</w:r><w:r>",
-        # Bookmark that uses anchore name (e.g. figure-1-1)
+        # Bookmark that uses anchor name (e.g. figure-1-1)
+        # Used the following website as sample for the code
+        # https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.wordprocessing.bookmarkstart?view=openxml-2.8.1#remarks
         '<w:bookmarkStart w:id="', anchorName, '" w:name="', anchorName, '"/>',
         '<w:bookmarkEnd w:id="', anchorName, '"/>',
         "</w:r></w:p>"
@@ -308,7 +311,9 @@ renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, w
       "toc:",
       # Add extensions to md for conversion
       # +tex_math_dollars: convert equations written between $...$ in LateX
+      # https://pandoc.org/MANUAL.html#extension-tex_math_dollars
       # +raw_attribute: keep ```{=openxml} as raw openxml to include page breaks and bookmarks
+      # https://pandoc.org/MANUAL.html#extension-raw_attribute
       "from: markdown+tex_math_dollars+raw_attribute",
       # Document used for styling
       paste0('reference-doc: "', wordConversionTemplate, '"'),
