@@ -231,10 +231,26 @@ renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, w
         grepl(pattern = "figure", x = anchorName)
       )
     )
+    bookmarkLines <- c(
+      "",
+      "```{=openxml}",
+      paste0(
+        "<w:p><w:r>",
+        # Page break
+        '<w:br w:type="page"/>',
+        "</w:r><w:r>",
+        # Bookmark that uses anchore name (e.g. figure-1-1)
+        '<w:bookmarkStart w:id="', anchorName, '" w:name="', anchorName, '"/>',
+        '<w:bookmarkEnd w:id="', anchorName, '"/>',
+        "</w:r></w:p>"
+        ),
+      "```",
+      ""
+      )
     wordFileContent <- c(
       wordFileContent, 
-      # Add \newpage only if artifact is found
-      "\\newpage"[isArtifactReference],
+      # Add page break and bookmark if artifact is found
+      bookmarkLines[isArtifactReference],
       lineContent
       )
   }
@@ -276,8 +292,7 @@ renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, w
     }
 
     wordConversionTemplate <- wordConversionTemplate %||% system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
-    pageBreakCode <- system.file("extdata", "pagebreak.lua", package = "ospsuite.reportingengine")
-
+    
     # Some arguments will depend on pandoc version to prevent warnings
     # docx requires that figures are contained within document
     selfContainedArgument <- "self-contained:"
@@ -291,12 +306,12 @@ renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, w
       "wrap: none",
       # Add table of content
       "toc:",
-      # Add extension to md to convert equations written in LateX
-      "from: markdown+tex_math_dollars",
+      # Add extensions to md for conversion
+      # +tex_math_dollars: convert equations written between $...$ in LateX
+      # +raw_attribute: keep ```{=openxml} as raw openxml to include page breaks and bookmarks
+      "from: markdown+tex_math_dollars+raw_attribute",
       # Document used for styling
       paste0('reference-doc: "', wordConversionTemplate, '"'),
-      # Filter for translating page breaks
-      paste0('lua-filter: "', pageBreakCode, '"'),
       # Location of resources such as figures
       paste0('resource-path: "', reEnv$log$folder, '"')
     ),
