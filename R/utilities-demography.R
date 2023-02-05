@@ -326,7 +326,7 @@ getDemographyAcrossPopulations <- function(structureSets) {
   {
     population <- loadWorkflowPopulation(structureSet$simulationSet)
     simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile, loadFromCache = TRUE)
-    populationTable <- getPopulationAsDataFrame(population, simulation)
+    populationTable <- getPopulationPKData(population, simulation)
 
     fullDemographyTable <- cbind.data.frame(
       simulationSetName = structureSet$simulationSet$simulationSetName,
@@ -346,7 +346,7 @@ getDemographyAcrossPopulations <- function(structureSets) {
     )
   }
 
-  metaData <- getPopulationMetaData(population, simulation, structureSet$parameterDisplayPaths)
+  metaData <- getPopulationPKMetaData(population, simulation, structureSet$parameterDisplayPaths)
 
   return(list(
     data = demographyAcrossPopulations,
@@ -451,15 +451,6 @@ getDemographyAggregatedData <- function(data,
   return(aggregatedData)
 }
 
-getReferencePopulationName <- function(structureSets) {
-  allSimulationReferences <- sapply(structureSets, function(structureSet) {
-    structureSet$simulationSet$referencePopulation
-  })
-  validateIsOfLength(allSimulationReferences[allSimulationReferences], 1)
-  referencePopulationName <- structureSets[[which(allSimulationReferences)]]$simulationSet$simulationSetName
-  return(referencePopulationName)
-}
-
 #' @title plotDemographyHistogram
 #' @description Plot histograms for demography parameters
 #' @param data data.frame
@@ -520,196 +511,4 @@ plotDemographyHistogram <- function(data,
     ggplot2::guides(fill = guide_legend(title = NULL))
   demographyPlot <- tlf::setLegendPosition(plotObject = demographyPlot, position = reDefaultLegendPosition)
   return(demographyPlot)
-}
-
-#' @title getXParametersForDemogrpahyPlot
-#' @param workflow `PopulationWorkflow` R6 class object
-#' @return list of x parameters used for demography range plots
-#' @export
-#' @family workflow helpers
-#' @examples \dontrun{
-#'
-#' # A workflow object needs to be created first
-#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#'
-#' # Get the list of parameters in x-axis for range plots
-#' getXParametersForDemogrpahyPlot(workflow = myWorkflow)
-#' }
-#'
-getXParametersForDemogrpahyPlot <- function(workflow) {
-  validateIsOfType(workflow, "PopulationWorkflow")
-  return(workflow$plotDemography$xParameters)
-}
-
-#' @title getYParametersForDemogrpahyPlot
-#' @param workflow `PopulationWorkflow` R6 class object
-#' @return list of y parameters used for demography histogram and range plots
-#' @import ospsuite.utils
-#' @export
-#' @family workflow helpers
-#' @examples \dontrun{
-#'
-#' # A workflow object needs to be created first
-#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#'
-#' # Get the list of parameters in x-axis for range plots
-#' getYParametersForDemogrpahyPlot(workflow = myWorkflow)
-#' }
-#'
-getYParametersForDemogrpahyPlot <- function(workflow) {
-  validateIsOfType(workflow, "PopulationWorkflow")
-  return(workflow$plotDemography$yParameters %||% DemographyDefaultParameters)
-}
-
-#' @title setXParametersForDemogrpahyPlot
-#' @description Set x parameters for range plots of demography plot task.
-#' The method update directly the input workflow
-#' @param workflow `PopulationWorkflow` R6 class object
-#' @param parameters list of demography parameters to be used as x-parameters
-#' @export
-#' @family workflow helpers
-#' @examples \dontrun{
-#'
-#' # A workflow object needs to be created first
-#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#'
-#' # Set parameters in x-axis for range plots
-#' setXParametersForDemogrpahyPlot(
-#'   workflow = myWorkflow,
-#'   parameters = StandardPath
-#' )
-#' }
-#'
-setXParametersForDemogrpahyPlot <- function(workflow, parameters) {
-  validateIsOfType(workflow, "PopulationWorkflow")
-  validateIsString(c(parameters), nullAllowed = TRUE)
-
-  workflow$plotDemography$xParameters <- parameters
-
-  logWorkflow(
-    message = paste0(
-      "X-parameters: '",
-      paste0(c(parameters), collapse = "', '"),
-      "' set for demography plot."
-    ),
-    pathFolder = workflow$workflowFolder,
-    logTypes = LogTypes$Debug
-  )
-  return(invisible())
-}
-
-#' @title addXParametersForDemogrpahyPlot
-#' @description Append x parameters for range plots of demography plot task.
-#' The method update directly the input workflow
-#' @param workflow `PopulationWorkflow` R6 class object
-#' @param parameters list of demography parameters to be used as x-parameters
-#' @export
-#' @family workflow helpers
-#' @examples \dontrun{
-#'
-#' # A workflow object needs to be created first
-#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#'
-#' # Get the list of parameters in x-axis for range plots
-#' addXParametersForDemogrpahyPlot(
-#'   workflow = myWorkflow,
-#'   parameters = StandardPath$GestationalAge
-#' )
-#' }
-#'
-addXParametersForDemogrpahyPlot <- function(workflow, parameters) {
-  updatedParameters <- c(getXParametersForDemogrpahyPlot(workflow), parameters)
-  setXParametersForDemogrpahyPlot(workflow, updatedParameters)
-}
-
-#' @title setYParametersForDemogrpahyPlot
-#' @description Set y-parameters for histograms and range plots of demography plot task.
-#' The method update directly the input workflow
-#' @param workflow `PopulationWorkflow` R6 class object
-#' @param parameters list of demography parameters to be used as y-parameters
-#' @export
-#' @family workflow helpers
-#' @examples \dontrun{
-#'
-#' # A workflow object needs to be created first
-#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#'
-#' # Set parameters in y-axis for range plots and histograms
-#' setYParametersForDemogrpahyPlot(
-#'   workflow = myWorkflow,
-#'   parameters = StandardPath
-#' )
-#' }
-#'
-setYParametersForDemogrpahyPlot <- function(workflow, parameters) {
-  validateIsOfType(workflow, "PopulationWorkflow")
-  validateIsString(c(parameters))
-
-  workflow$plotDemography$yParameters <- parameters
-
-  logWorkflow(
-    message = paste0(
-      "Y-parameters: '",
-      paste0(c(parameters), collapse = "', '"),
-      "' set for demography plot."
-    ),
-    pathFolder = workflow$workflowFolder,
-    logTypes = LogTypes$Debug
-  )
-  return(invisible())
-}
-
-#' @title addYParametersForDemogrpahyPlot
-#' @description Append y parameters for range plots of demography plot task.
-#' The method update directly the input workflow
-#' @param workflow `PopulationWorkflow` R6 class object
-#' @param parameters list of demography parameters to be used as x-parameters
-#' @export
-#' @family workflow helpers
-#' @examples \dontrun{
-#'
-#' # A workflow object needs to be created first
-#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#'
-#' # Add parameters in y-axis for range plots and histograms
-#' addYParametersForDemogrpahyPlot(
-#'   workflow = myWorkflow,
-#'   parameters = StandardPath$GestationalAge
-#' )
-#' }
-#'
-addYParametersForDemogrpahyPlot <- function(workflow, parameters) {
-  updatedParameters <- c(getYParametersForDemogrpahyPlot(workflow), parameters)
-  setYParametersForDemogrpahyPlot(workflow, updatedParameters)
-}
-
-getPopulationAsDataFrame <- function(population, simulation) {
-  populationTable <- ospsuite::populationToDataFrame(population)
-  allParameters <- ospsuite::getAllParametersMatching(population$allParameterPaths, simulation)
-
-  for (parameter in allParameters) {
-    populationTable[, parameter$path] <- ospsuite::toDisplayUnit(parameter, populationTable[, parameter$path])
-  }
-  return(populationTable)
-}
-
-getPopulationMetaData <- function(population, simulation, parameterDisplayPaths) {
-  metaData <- list()
-  allParameters <- ospsuite::getAllParametersMatching(population$allParameterPaths, simulation)
-
-  for (covariate in population$allCovariateNames) {
-    metaData[[covariate]] <- list(
-      dimension = covariate,
-      unit = "",
-      class = class(population$getCovariateValues(covariate))
-    )
-  }
-  for (parameter in allParameters) {
-    metaData[[parameter$path]] <- list(
-      dimension = getSimulationParameterDisplayPaths(parameter$path, simulation, parameterDisplayPaths),
-      unit = parameter$displayUnit,
-      class = class(population$getParameterValues(parameter$path))
-    )
-  }
-  return(metaData)
 }

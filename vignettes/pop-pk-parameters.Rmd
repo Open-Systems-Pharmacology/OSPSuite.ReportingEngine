@@ -1,0 +1,418 @@
+---
+title: "PK Parameters in Population Workflows"
+resource_files:
+  - figures
+output: 
+  rmarkdown::html_vignette:
+   number_sections: true
+   toc: true
+vignette: >
+  %\VignetteIndexEntry{PK Parameters in Population Workflows}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r vignette setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+source(system.file("extdata", "vignette-helpers.R", package = "ospsuite.reportingengine"))
+```
+
+```{r setup}
+require(ospsuite.reportingengine)
+```
+
+# Overview
+
+In Population workflows, the PK parameters task (`plotPKParameters`) aims at reporting the distributions of requested PK parameters that will account for the population workflow type (as defined by variable `PopulationWorkflowTypes`).
+The distributions are quantified with tables describing key statistics such as percentiles and reported graphically using box and range plots.
+
+## Inputs
+
+Results obtained from the `calculatePKParameters` task and stored as csv files within the subdirectory __PKAnalysisResults__ from the `workflowFolder` directory are required in order to perform the PK parameters (`plotPKParameters`) task.
+As a consequence, if the workflow output folder does not include the appropriate simulations, the task `calculatePKParameters` needs to be __active__.
+
+## Outputs
+
+The `PopulationSimulationSet` and `Output` objects define which and how the simulated PK parameters will be reported.
+Especially, `Output` objects define from which paths the PK Parameters are calculated.
+
+The code below defines the files that will be used for the definition of the population simulation sets as well as the `Output` object describing the PK parameters to display in the report.
+
+<details>
+<summary> __Code__ </summary>
+
+```{r definition of global variables}
+# Define file paths for pkml simulation and populations
+simulationFile <- system.file("extdata", "MiniModel2.pkml",
+  package = "ospsuite.reportingengine"
+)
+populationFile500 <- system.file("extdata", "Pop500_p1p2p3.csv",
+  package = "ospsuite.reportingengine"
+)
+populationFile200 <- system.file("extdata", "Pop200_p1p2p3.csv",
+  package = "ospsuite.reportingengine"
+)
+
+# Update PK Parameters to display appropriate names in reports
+updatePKParameter("C_max", displayName = "Cmax")
+updatePKParameter("AUC_tEnd", displayName = "AUC")
+
+# Define paths and PK parameters to report
+outputA <- Output$new(
+  path = "Organism|A|Concentration in container",
+  displayName = "A",
+  pkParameters = c("C_max", "AUC_tEnd")
+)
+
+```
+
+</details>
+
+### Parallel Comparison
+
+In the `parallelComparison` workflow type, the distributions are graphically reported by box-whisker plots displaying 5<sup>th</sup>, 25<sup>th</sup>, 50<sup>th</sup>, 75<sup>th</sup> and 95<sup>th</sup> percentiles in both linear and logarithmic scales.
+
+Moreover, a table reporting for each population simulation set, its name, size, 5<sup>th</sup>, 25<sup>th</sup>, 50<sup>th</sup>, 75<sup>th</sup> and 95<sup>th</sup> percentiles, arithmetic mean, standard deviation (SD) and coefficient of variation (CV) as well as geometric mean, SD and CV.
+
+#### Example
+
+<details>
+<summary> __Code__ </summary>
+
+```{r example parallel workflow}
+# Define the populations to report
+set500 <- PopulationSimulationSet$new(
+  simulationSetName = "500 individuals",
+  simulationFile = simulationFile,
+  populationFile = populationFile500,
+  outputs = outputA
+)
+set200 <- PopulationSimulationSet$new(
+  simulationSetName = "200 individuals",
+  simulationFile = simulationFile,
+  populationFile = populationFile200,
+  outputs = outputA
+)
+
+# Create the workflow object
+workflowParallel <-
+  PopulationWorkflow$new(
+    workflowType = PopulationWorkflowTypes$parallelComparison,
+    simulationSets = c(set500, set200),
+    workflowFolder = "Example-Pop-PK"
+  )
+
+# Set the workflow tasks to be run
+workflowParallel$activateTasks(c("simulate", "calculatePKParameters", "plotPKParameters"))
+
+# Run the workflow
+workflowParallel$runWorkflow()
+```
+
+</details>
+
+```{r example parallel report, echo=FALSE, results='asis'}
+cat(includeReportFromWorkflow(workflowParallel))
+```
+
+### Ratio Comparison
+
+In the `ratioComparison` workflow type, tables and figures from the [Parallel Comparison](#parallel-comparison) workflow are reported.
+
+Moreover, the distributions of ratios of PK Parameters relative to the __reference population__ are also reported.
+The distributions of PK ratios are graphically reported by box-whisker plots displaying 5<sup>th</sup>, 25<sup>th</sup>, 50<sup>th</sup>, 75<sup>th</sup> and 95<sup>th</sup> percentiles of the PK Ratios in both linear and logarithmic scales.
+A table will also report for each population simulation set (except for the __reference population__), its ratio in population size and the 5<sup>th</sup>, 25<sup>th</sup>, 50<sup>th</sup>, 75<sup>th</sup> and 95<sup>th</sup> percentiles, arithmetic mean, standard deviation (SD) and coefficient of variation (CV) as well as geometric mean, SD and CV of the PK ratios.
+
+The computation of the PK ratios will account for matching between the __reference population__ and the populations to compare as described below.
+
+#### Same Population
+
+When the population to compare is the same as the __reference population__, PK ratios will be evaluated for each subject of the population (per `IndividualId`) as the indivudal ratios of each PK Parameter value. 
+The distributions of the corresponding PK Parameter Ratios will be reported.
+
+#### Different Populations
+
+When the population to compare is different from the __reference population__, PK ratios cannot be evaluated for each subject of the population (per `IndividualId`).
+However, the potential PK ratios between the populations can be approximated by Monte Carlo sampling.
+
+In more details, random sampling of the population that includes more subjects is performed in order to obtain 2 populations with the same size. The populations are then assumed the same and PK ratios are evaluated for each subject of the population as the indivudal ratios of each PK Parameter value (same method as section [Same Population](#same-population)). Key statistics of the correspondig distribution are calculated. The final key statistics will be calculated as the median value obtained over all the repeated random samplings.
+
+Since analytical formulas exist for the calculation of arithmetic and geometric means, SDs and CVs, the quality of the approximation calculated on the percentiles of the ratios will be assessed, reported in the logs.
+
+The random seed and number of repetitions for the random samplings can also be checked and set by the user globally as illustrated below.
+But also locally within the workflow task (`workflow$plotPKParameters$settings$mcRandomSeed`)
+
+```{r}
+# Get the random seed for the MC sampling
+getDefaultMCRandomSeed()
+
+# Get the number of repetitions of the MC sampling
+getDefaultMCRepetitions()
+```
+
+```r
+# Set a new random seed for the MC sampling
+setDefaultMCRandomSeed(54321)
+```
+
+```r
+# Set the number of repetitions of the MC sampling
+setDefaultMCRepetitions(1e2)
+```
+
+#### Example
+
+In this example, a Ratio Comparison population workflow is performed between different populations.
+Note that the quality and parameters of approximation from the Monte Carlo sampling is reported in the logs and displayed on the console.
+
+<details>
+<summary> __Code__ </summary>
+
+```{r example ratio}
+# Define reference population
+set500 <- PopulationSimulationSet$new(
+  referencePopulation = TRUE,
+  simulationSetName = "500 individuals",
+  simulationFile = simulationFile,
+  populationFile = populationFile500,
+  outputs = outputA
+)
+# Define population to be compared
+set200 <- PopulationSimulationSet$new(
+  simulationSetName = "200 individuals",
+  simulationFile = simulationFile,
+  populationFile = populationFile200,
+  outputs = outputA
+)
+
+# Create the workflow object
+ratioWorkflow <-
+  PopulationWorkflow$new(
+    workflowType = PopulationWorkflowTypes$ratioComparison,
+    simulationSets = c(set500, set200),
+    workflowFolder = "Example-Pop-PK"
+  )
+
+# Set the workflow tasks to be run
+# Re-use the results from the previous PK analysis to save time as results are the same
+ratioWorkflow$inactivateTasks()
+ratioWorkflow$activateTasks("plotPKParameters")
+
+# Run the workflow
+ratioWorkflow$runWorkflow()
+```
+
+</details>
+
+```{r example ratio report, echo=FALSE, results='asis'}
+cat(includeReportFromWorkflow(ratioWorkflow))
+```
+
+### Pediatric
+
+In the `pediatric` workflow type, tables and figures from the [Parallel Comparison](#parallel-comparison) workflow are reported.
+
+Additionally, range plots in both linear and logarithmic scales are also reported.
+They describe the distributions of the PK Parameters as a function the following population variables `r paste0('"', paste0(getDefaultPKParametersXParameters(PopulationWorkflowTypes$pediatric), collapse = '", "'), '"')`.
+
+Variables displayed as __xParameters__ in such range plots can be changed from the default as detailed within section [Optional features](#range-plots)
+
+Since Pediatric worflows require a __reference population__, they also report range plots that include the distribution of the reference population in parallel of the other populations.
+
+Moreover, the table of key statistics ratios comparing key statistics of each population to key statistics of the __reference population__ is included in the report. This table is optional for Parallel Comparison workflows (more details in section [Reference Population](#reference-population) but automatically included in Pediatric workflows.
+
+
+#### Example
+
+In this example, a Pediatric population workflow is performed.
+Here, the populations do not inlcude age and body weight in the model but parameters *p1*, *p2* and *p3*.
+The parameter path *p3* was used as the only __xParameters__ for the range plots and the __reference population__ was the population simulation set including 500 individuals.
+
+<details>
+<summary> __Code__ </summary>
+
+```{r example pediatric}
+# Define reference population
+set500 <- PopulationSimulationSet$new(
+  referencePopulation = TRUE,
+  simulationSetName = "500 individuals",
+  simulationFile = simulationFile,
+  populationFile = populationFile500,
+  outputs = outputA
+)
+# Define population to be compared
+set200 <- PopulationSimulationSet$new(
+  simulationSetName = "200 individuals",
+  simulationFile = simulationFile,
+  populationFile = populationFile200,
+  outputs = outputA
+)
+
+# Create the workflow object
+pediatricWorkflow <-
+  PopulationWorkflow$new(
+    workflowType = PopulationWorkflowTypes$pediatric,
+    simulationSets = c(set500, set200),
+    workflowFolder = "Example-Pop-PK"
+  )
+
+# Set the workflow tasks to be run
+# Re-use the results from the previous PK analysis to save time as results are the same
+pediatricWorkflow$inactivateTasks()
+pediatricWorkflow$activateTasks("plotPKParameters")
+
+# Define paths to be reported as xParameters in range plots
+setXParametersForPKParametersPlot(pediatricWorkflow, "Organism|p3")
+
+# Run the workflow
+pediatricWorkflow$runWorkflow()
+```
+
+</details>
+
+```{r example pediatric report, echo=FALSE, results='asis'}
+cat(includeReportFromWorkflow(pediatricWorkflow))
+```
+
+## Optional features
+
+### Range plots
+
+In population workflows, the PK Parameters task includes an optional setting named __xParameters__ meant to provide variables for performing range plots describing the 5<sup>th</sup>, 25<sup>th</sup>, 50<sup>th</sup>, 75<sup>th</sup> and 95<sup>th</sup> percentiles of the PK Parameters as a function of the __xParameters__.
+Usually, __xParameters__ are paths defined in the population that could influence the distributions of the PK Parameters such as the standard paths defined in `ospsuite::StandardPath`.
+
+With default settings, only Pediatric population workflows include the standard paths as __xParameters__ and perform the range plots.
+
+```{r default xParameters in workflows}
+# Check default xParameters for pediatric workflows
+getDefaultPKParametersXParameters(PopulationWorkflowTypes$pediatric)
+
+# Check default xParameters for parallel comparison workflows
+getDefaultPKParametersXParameters(PopulationWorkflowTypes$parallelComparison)
+
+# Check default xParameters for ratio comparison workflows
+getDefaultPKParametersXParameters(PopulationWorkflowTypes$ratioComparison)
+```
+
+However, you can report range plots for every population workflow type by including paths/variables defined in your population as __xParameters__ as illustrated below.
+
+```r
+# Create your population workflow
+workflow <- PopulationWorkflow$new(workflowType = PopulationWorkflowTypes$parallelComparison, ...)
+
+# Check if variables were included
+getXParametersForPKParametersPlot(workflow)
+
+# Set the xParameters for range plots of PK Parameters as a function of Age
+setXParametersForPKParametersPlot(workflow, ospsuite::StandardPath$Age)
+```
+
+#### Example
+
+In this example, a parallel comparison workflow is performed using __xParameters__ for range plots
+
+<details>
+<summary> __Code__ </summary>
+
+```{r example parallel range}
+# Define population simulations
+set500 <- PopulationSimulationSet$new(
+  simulationSetName = "500 individuals",
+  simulationFile = simulationFile,
+  populationFile = populationFile500,
+  outputs = outputA
+)
+set200 <- PopulationSimulationSet$new(
+  simulationSetName = "200 individuals",
+  simulationFile = simulationFile,
+  populationFile = populationFile200,
+  outputs = outputA
+)
+
+# Create the workflow object
+parallelRangeWorkflow <-
+  PopulationWorkflow$new(
+    workflowType = PopulationWorkflowTypes$parallelComparison,
+    simulationSets = c(set500, set200),
+    workflowFolder = "Example-Pop-PK"
+  )
+
+# Set the workflow tasks to be run
+# Re-use the results from the previous PK analysis to save time as results are the same
+parallelRangeWorkflow$inactivateTasks()
+parallelRangeWorkflow$activateTasks("plotPKParameters")
+
+# Define paths to be reported as xParameters in range plots
+setXParametersForPKParametersPlot(parallelRangeWorkflow, "Organism|p3")
+
+# Run the workflow
+parallelRangeWorkflow$runWorkflow()
+```
+
+</details>
+
+```{r example parallel range report, echo=FALSE, results='asis'}
+cat(includeReportFromWorkflow(parallelRangeWorkflow))
+```
+
+
+### Reference Population
+
+Unlike Pediatric and Ratio Comparison, Parallel Comparison workflows does not require a __reference population__.
+
+Inclusion of a __reference population__ in the Parallel Comparison workflow will report an additional table comparing the following statistics to the ones of the __reference population__: size, 5<sup>th</sup>, 25<sup>th</sup>, 50<sup>th</sup>, 75<sup>th</sup> and 95<sup>th</sup> percentiles, arithmetic mean, SD and CV as well as geometric mean, SD and CV.
+
+#### Example
+
+In this example, a parallel comparison workflow is performed using a __reference population__
+
+<details>
+<summary> __Code__ </summary>
+
+```{r example parallel reference}
+# Define reference population
+set500 <- PopulationSimulationSet$new(
+  referencePopulation = TRUE,
+  simulationSetName = "500 individuals",
+  simulationFile = simulationFile,
+  populationFile = populationFile500,
+  outputs = outputA
+)
+# Define population to be compared
+set200 <- PopulationSimulationSet$new(
+  simulationSetName = "200 individuals",
+  simulationFile = simulationFile,
+  populationFile = populationFile200,
+  outputs = outputA
+)
+
+# Create the workflow object
+parallelReferenceWorkflow <-
+  PopulationWorkflow$new(
+    workflowType = PopulationWorkflowTypes$parallelComparison,
+    simulationSets = c(set500, set200),
+    workflowFolder = "Example-Pop-PK"
+  )
+
+# Set the workflow tasks to be run
+# Re-use the results from the previous PK analysis to save time as results are the same
+parallelReferenceWorkflow$inactivateTasks()
+parallelReferenceWorkflow$activateTasks("plotPKParameters")
+
+# Run the workflow
+parallelReferenceWorkflow$runWorkflow()
+```
+
+</details>
+
+```{r example parallel reference report, echo=FALSE, results='asis'}
+cat(includeReportFromWorkflow(parallelReferenceWorkflow))
+```
+
+```{r delete workflow folder, inlcude = FALSE, echo=FALSE}
+# Remove the workflow folders
+unlink(parallelReferenceWorkflow$workflowFolder, recursive = TRUE)
+```

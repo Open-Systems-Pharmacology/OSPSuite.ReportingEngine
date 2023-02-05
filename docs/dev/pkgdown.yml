@@ -8,9 +8,10 @@ articles:
   ospsuitereportingengine: ospsuitereportingengine.html
   pk-parameters: pk-parameters.html
   plot-settings: plot-settings.html
+  pop-pk-parameters: pop-pk-parameters.html
   qualification-workflow: qualification-workflow.html
   sensitivity-analysis: sensitivity-analysis.html
-last_built: 2022-12-09T09:10Z
+last_built: 2023-02-01T10:20Z
 urls:
   reference: https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference
   article: https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/articles

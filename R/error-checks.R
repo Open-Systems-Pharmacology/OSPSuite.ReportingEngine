@@ -11,8 +11,7 @@ validateIsPositive <- function(object, nullAllowed = FALSE) {
 hasPositiveValues <- function(object) {
   object <- object[!is.na(object)]
   object <- object[!is.infinite(object)]
-  positiveValues <- object > 0
-  return(!sum(positiveValues) == 0)
+  return(any(object > 0))
 }
 
 

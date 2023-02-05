@@ -123,7 +123,7 @@ captions <- list(
       ))
     },
     summaryTable = function(parameterName, pathName, simulationSetName, descriptor, displayUnit) {
-      return(paste0(parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor), reportUnit(displayUnit)))
+      return(paste0("Population statistics summarizing ", parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor), reportUnit(displayUnit)))
     },
     ratioPlot = function(parameterName, pathName, simulationSetName, descriptor, referenceSetName, plotScale = "linear") {
       referenceSetText <- paste0(" in comparison to ", referenceSetName)
@@ -138,6 +138,12 @@ captions <- list(
       referenceSetText <- paste0(" in comparison to ", referenceSetName)
       return(paste0(
         "Ratios of ", parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor), referenceSetText
+      ))
+    },
+    relativeChangeTable = function(parameterName, pathName, simulationSetName, descriptor, referenceSetName) {
+      referenceSetText <- paste0(" in comparison to ", referenceSetName)
+      return(paste0(
+        "Population statistics ratios summarizing ", parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor), referenceSetText
       ))
     },
     rangePlot = function(xParameterName, yParameterName, simulationSetName, descriptor, referenceSetName = NULL, plotScale = "linear") {

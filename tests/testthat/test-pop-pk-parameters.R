@@ -95,7 +95,7 @@ test_that("PKAnalysis directory from Pediatric workflow includes appropriate num
   # Figures
   expect_length(list.files(pkAnalysisPediatricPath, pattern = ".png"), 52)
   # Exported results
-  expect_length(list.files(pkAnalysisPediatricPath, pattern = ".csv"), 2)
+  expect_length(list.files(pkAnalysisPediatricPath, pattern = ".csv"), 4)
 })
 
 pkAnalysisParallelPath <- file.path(workflowParallel$workflowFolder, "PKAnalysis")
@@ -103,7 +103,7 @@ test_that("PKAnalysis directory from Parallel workflow includes appropriate numb
   # Figures
   expect_length(list.files(pkAnalysisParallelPath, pattern = ".png"), 4)
   # Exported results
-  expect_length(list.files(pkAnalysisParallelPath, pattern = ".csv"), 2)
+  expect_length(list.files(pkAnalysisParallelPath, pattern = ".csv"), 4)
 })
 
 pkAnalysisRatioPath <- file.path(workflowRatio$workflowFolder, "PKAnalysis")
@@ -111,7 +111,7 @@ test_that("PKAnalysis directory from Ratio workflow includes appropriate number 
   # Figures
   expect_length(list.files(pkAnalysisRatioPath, pattern = ".png"), 8)
   # Exported results
-  expect_length(list.files(pkAnalysisRatioPath, pattern = ".csv"), 4)
+  expect_length(list.files(pkAnalysisRatioPath, pattern = ".csv"), 6)
 })
 
 test_that("Saved PK parameters data from workflows have correct values", {

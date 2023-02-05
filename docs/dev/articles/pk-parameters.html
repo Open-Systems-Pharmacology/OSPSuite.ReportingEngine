@@ -48,6 +48,7 @@
     <a class="dropdown-item" href="../articles/ospsuitereportingengine.html">Get Started</a>
     <a class="dropdown-item" href="../articles/pk-parameters.html">PK parameters</a>
     <a class="dropdown-item" href="../articles/plot-settings.html">Plot settings</a>
+    <a class="dropdown-item" href="../articles/pop-pk-parameters.html">PK Parameters in Population Workflows</a>
     <a class="dropdown-item" href="../articles/qualification-workflow.html">Qualification Workflow</a>
     <a class="dropdown-item" href="../articles/sensitivity-analysis.html">Sensitivity Analysis</a>
   </div>
@@ -144,33 +145,8 @@ the table of PK parameters requested in the requested
 <p>The distribution of the calculated PK parameters for each requested
 output are plotted as Box Whisker plots along with a table. By default,
 the 5th, 25th, 50th, 75th and 95th percentiles are plotted.</p>
-<p>Different types of a population workflow will lead to different
-output:</p>
-<ul>
-<li>
-<strong>Parallel Comparison</strong>: PK parameters are plotted
-parallel in the Box Whisker plots without any <strong>reference
-population</strong>.</li>
-<li>
-<strong>Ratio Comparison</strong>: Same as Parallel Comparison with
-additional Box Whisker plots and tables of the ratio of the PK
-parameters to the reference population is calculated and plotted in Box
-Whisker plots.</li>
-<li>
-<strong>Pediatric</strong>: PK Parameters are also plotted as range
-plots of the PK parameters vs. age and weight.</li>
-</ul>
-<p>Regarding range, the task option <strong>xParameters</strong> can be
-used to define which demography parameters to use in x-axis of range
-plots. Parallel and ratio use a <code>NULL</code> value by default,
-however it is also possible to add range plots to a Parallel or ratio
-comparison workflow by updating the value of
-<strong>xParameters</strong>.</p>
-<p>Regarding ratio comparison, the formula below is used to calculate
-the Box Whisker plot percentile values: <span class="math display">\[PK\
-Parameter\ Percentile\ Ratio = \frac{PK\ Parameter\ Percentile\ in\
-Population}{PK\ Parameter\ Percentile\ in\ Reference\
-Population}\]</span></p>
+<p>Check the article <a href="pop-pk-parameters.html">PK Parameters in
+Population Workflows</a> for more details</p>
 </div>
 </div>
 </div>
@@ -179,68 +155,34 @@ Population}\]</span></p>
 </h2>
 <p>The following sections will introduce template scripts including PK
 parameter tasks as well as their associated reports. Table 1 shows the
-features tested in each template script.</p>
+features tested in each template script. All the examples use Mean Model
+Worflows.</p>
 <table class="table">
 <caption>Table 1: Features tested by each template script</caption>
 <thead><tr class="header">
 <th align="right">Example</th>
 <th align="left">Workflow</th>
-<th align="left">Workflow Type</th>
 <th align="right">Simulation Sets</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="left">Mean model</td>
-<td align="left">-</td>
+<td align="left">MeanModelWorkflow</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
-<td align="left">Mean model</td>
-<td align="left">-</td>
+<td align="left">MeanModelWorkflow</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
-<td align="left">Mean model</td>
-<td align="left">-</td>
+<td align="left">MeanModelWorkflow</td>
 <td align="right">2</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
-<td align="left">Mean model</td>
-<td align="left">-</td>
-<td align="right">2</td>
-</tr>
-<tr class="odd">
-<td align="right">5</td>
-<td align="left">Population model</td>
-<td align="left">Parallel</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="right">6</td>
-<td align="left">Population model</td>
-<td align="left">Parallel</td>
-<td align="right">2</td>
-</tr>
-<tr class="odd">
-<td align="right">7</td>
-<td align="left">Population model</td>
-<td align="left">Ratio</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td align="right">8</td>
-<td align="left">Population model</td>
-<td align="left">Pediatric</td>
-<td align="right">2</td>
-</tr>
-<tr class="odd">
-<td align="right">9</td>
-<td align="left">Population model</td>
-<td align="left">Ratio</td>
+<td align="left">MeanModelWorkflow</td>
 <td align="right">2</td>
 </tr>
 </tbody>
@@ -281,9 +223,9 @@ profile simulation results.</p>
 <span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">simulationSets =</span> setA,</span>
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">workflowFolder =</span> <span class="st">"Example-1"</span></span>
 <span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:14:54</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:33</span></span>
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mReporting Engine Information:</span></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Date: 09/12/2022 - 04:14:54</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Date: 01/02/2023 - 05:25:33</span></span>
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  User Information:</span></span>
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  User: pchelle</span></span>
@@ -293,7 +235,7 @@ profile simulation results.</p>
 <span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
 <span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  OSP Suite Package version: 11.1.152</span></span>
 <span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  tlf version: 1.4.116</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  tlf version: 1.4.0</span></span>
 <span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the workflow tasks to be run</span></span>
 <span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>workflow1<span class="sc">$</span><span class="fu">activateTasks</span>(<span class="fu">c</span>(<span class="st">"simulate"</span>, </span>
@@ -302,40 +244,40 @@ profile simulation results.</p>
 <span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the workflow</span></span>
 <span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>workflow1<span class="sc">$</span><span class="fu">runWorkflow</span>()</span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:14:55</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:34</span></span>
 <span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mMean Model Workflow [23m [22m [39m</span></span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:14:55</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:34</span></span>
 <span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mSimulation task [23m [22m [39m</span></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:14:55</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:34</span></span>
 <span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mSplitting simulations for parallel run: [36m [1m [3m1 [23m [22m [39m simulations split into  [36m [1m [3m1 [23m [22m [39m subsets</span></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:14:55</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:34</span></span>
 <span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3msubset simulations [23m [22m [39m</span></span>
 <span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
 <span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
 <span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
 <span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:14:55</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:34</span></span>
 <span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mSimulation task [23m [22m [39m completed in 0 min</span></span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:14:55</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:34</span></span>
 <span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mCalculate PK Parameters task [23m [22m [39m</span></span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:14:55</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:34</span></span>
 <span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mCalculate PK Parameters task [23m [22m [39m for  [36m [1m [3mA [23m [22m [39m</span></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:14:56</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:34</span></span>
 <span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mCalculate PK Parameters task [23m [22m [39m completed in 0 min</span></span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:14:56</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:34</span></span>
 <span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot PK Parameters task [23m [22m [39m</span></span>
-<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:14:56</span></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:34</span></span>
 <span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot PK Parameters task [23m [22m [39m for  [36m [1m [3mA [23m [22m [39m</span></span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:14:56</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:35</span></span>
 <span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mPlot PK Parameters task [23m [22m [39m completed in 0 min</span></span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpmQSMW7/temp_libpath1c98356ba4d/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpmQSMW7/temp_libpath1c98356ba4d/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
-<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:14:57</span></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpSSHRFZ/temp_libpath3050756410f4/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpSSHRFZ/temp_libpath3050756410f4/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:35</span></span>
 <span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mMean Model Workflow [23m [22m [39m completed in 0 min</span></span></code></pre></div>
 </details><p>The output report for Example 1 is shown below. The table indicates
 the requested parameters in their base unit.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-39.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-14.png" style="width:100%; border-style: none;"></details>
 </div>
 <div class="section level3">
 <h3 id="example-2">Example 2<a class="anchor" aria-label="anchor" href="#example-2"></a>
@@ -374,9 +316,9 @@ list of PK parameters. To create user defined PK parameter, the function
 <span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">simulationSets =</span> setA,</span>
 <span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">workflowFolder =</span> <span class="st">"Example-2"</span></span>
 <span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:01</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:38</span></span>
 <span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mReporting Engine Information:</span></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Date: 09/12/2022 - 04:15:01</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Date: 01/02/2023 - 05:25:38</span></span>
 <span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  User Information:</span></span>
 <span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  User: pchelle</span></span>
@@ -386,7 +328,7 @@ list of PK parameters. To create user defined PK parameter, the function
 <span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
 <span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  OSP Suite Package version: 11.1.152</span></span>
 <span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  tlf version: 1.4.116</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  tlf version: 1.4.0</span></span>
 <span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the workflow tasks to be run</span></span>
 <span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>workflow2<span class="sc">$</span><span class="fu">activateTasks</span>(<span class="fu">c</span>(<span class="st">"simulate"</span>, </span>
@@ -395,40 +337,40 @@ list of PK parameters. To create user defined PK parameter, the function
 <span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the workflow</span></span>
 <span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>workflow2<span class="sc">$</span><span class="fu">runWorkflow</span>()</span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:01</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:39</span></span>
 <span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mMean Model Workflow [23m [22m [39m</span></span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:01</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:39</span></span>
 <span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mSimulation task [23m [22m [39m</span></span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:01</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:39</span></span>
 <span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mSplitting simulations for parallel run: [36m [1m [3m1 [23m [22m [39m simulations split into  [36m [1m [3m1 [23m [22m [39m subsets</span></span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:01</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:39</span></span>
 <span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3msubset simulations [23m [22m [39m</span></span>
 <span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
 <span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
 <span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
 <span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:01</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:39</span></span>
 <span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mSimulation task [23m [22m [39m completed in 0 min</span></span>
-<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:01</span></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:39</span></span>
 <span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mCalculate PK Parameters task [23m [22m [39m</span></span>
-<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:01</span></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:39</span></span>
 <span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mCalculate PK Parameters task [23m [22m [39m for  [36m [1m [3mA [23m [22m [39m</span></span>
-<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:02</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:39</span></span>
 <span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mCalculate PK Parameters task [23m [22m [39m completed in 0 min</span></span>
-<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:02</span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:39</span></span>
 <span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot PK Parameters task [23m [22m [39m</span></span>
-<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:02</span></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:39</span></span>
 <span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot PK Parameters task [23m [22m [39m for  [36m [1m [3mA [23m [22m [39m</span></span>
-<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:02</span></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:39</span></span>
 <span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mPlot PK Parameters task [23m [22m [39m completed in 0 min</span></span>
-<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpmQSMW7/temp_libpath1c98356ba4d/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpmQSMW7/temp_libpath1c98356ba4d/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-2" -t docx -o "Example-2/Report-word.docx" "Example-2/Report-word.md"</span></span>
-<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:02</span></span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpSSHRFZ/temp_libpath3050756410f4/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpSSHRFZ/temp_libpath3050756410f4/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-2" -t docx -o "Example-2/Report-word.docx" "Example-2/Report-word.md"</span></span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:40</span></span>
 <span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mMean Model Workflow [23m [22m [39m completed in 0 min</span></span></code></pre></div>
 </details><p>The output report for Example 2 is shown below. The table indicates
 the requested parameters in their base unit.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-40.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-15.png" style="width:100%; border-style: none;"></details>
 </div>
 <div class="section level3">
 <h3 id="example-3">Example 3<a class="anchor" aria-label="anchor" href="#example-3"></a>
@@ -493,9 +435,9 @@ function <strong>updatePKParameter</strong> from the
 <span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">simulationSets =</span> <span class="fu">c</span>(setA, setB),</span>
 <span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">workflowFolder =</span> <span class="st">"Example-3"</span></span>
 <span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:06</span></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:43</span></span>
 <span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mReporting Engine Information:</span></span>
-<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Date: 09/12/2022 - 04:15:06</span></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Date: 01/02/2023 - 05:25:43</span></span>
 <span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  User Information:</span></span>
 <span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  User: pchelle</span></span>
@@ -505,7 +447,7 @@ function <strong>updatePKParameter</strong> from the
 <span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
 <span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  OSP Suite Package version: 11.1.152</span></span>
 <span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
-<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  tlf version: 1.4.116</span></span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  tlf version: 1.4.0</span></span>
 <span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the workflow tasks to be run</span></span>
 <span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>workflow3<span class="sc">$</span><span class="fu">activateTasks</span>(<span class="fu">c</span>(<span class="st">"simulate"</span>, </span>
@@ -514,44 +456,44 @@ function <strong>updatePKParameter</strong> from the
 <span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the workflow</span></span>
 <span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>workflow3<span class="sc">$</span><span class="fu">runWorkflow</span>()</span>
-<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:06</span></span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:43</span></span>
 <span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mMean Model Workflow [23m [22m [39m</span></span>
-<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:06</span></span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:43</span></span>
 <span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mSimulation task [23m [22m [39m</span></span>
-<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:06</span></span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:43</span></span>
 <span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mSplitting simulations for parallel run: [36m [1m [3m2 [23m [22m [39m simulations split into  [36m [1m [3m1 [23m [22m [39m subsets</span></span>
-<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:06</span></span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:43</span></span>
 <span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3msubset simulations [23m [22m [39m</span></span>
 <span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
 <span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
 <span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
 <span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:06</span></span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:44</span></span>
 <span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mSimulation task [23m [22m [39m completed in 0 min</span></span>
-<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:06</span></span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:44</span></span>
 <span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mCalculate PK Parameters task [23m [22m [39m</span></span>
-<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:06</span></span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:44</span></span>
 <span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mCalculate PK Parameters task [23m [22m [39m for  [36m [1m [3mA [23m [22m [39m</span></span>
-<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:06</span></span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:44</span></span>
 <span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mCalculate PK Parameters task [23m [22m [39m for  [36m [1m [3mB [23m [22m [39m</span></span>
-<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:07</span></span>
+<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:44</span></span>
 <span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mCalculate PK Parameters task [23m [22m [39m completed in 0 min</span></span>
-<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:07</span></span>
+<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:44</span></span>
 <span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot PK Parameters task [23m [22m [39m</span></span>
-<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:07</span></span>
+<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:44</span></span>
 <span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot PK Parameters task [23m [22m [39m for  [36m [1m [3mA [23m [22m [39m</span></span>
-<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:07</span></span>
+<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:44</span></span>
 <span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot PK Parameters task [23m [22m [39m for  [36m [1m [3mB [23m [22m [39m</span></span>
-<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:07</span></span>
+<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:44</span></span>
 <span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mPlot PK Parameters task [23m [22m [39m completed in 0 min</span></span>
-<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpmQSMW7/temp_libpath1c98356ba4d/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpmQSMW7/temp_libpath1c98356ba4d/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-3" -t docx -o "Example-3/Report-word.docx" "Example-3/Report-word.md"</span></span>
-<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 09/12/2022 - 04:15:07</span></span>
+<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpSSHRFZ/temp_libpath3050756410f4/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpSSHRFZ/temp_libpath3050756410f4/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-3" -t docx -o "Example-3/Report-word.docx" "Example-3/Report-word.md"</span></span>
+<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:25:45</span></span>
 <span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mMean Model Workflow [23m [22m [39m completed in 0 min</span></span></code></pre></div>
 </details><p>The output report for Example 3 is shown below. The table indicates
 the requested parameters in the updated units and display names.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-41.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-16.png" style="width:100%; border-style: none;"></details>
 </div>
 <div class="section level3">
 <h3 id="example-4">Example 4<a class="anchor" aria-label="anchor" href="#example-4"></a>
@@ -609,9 +551,9 @@ from different paths or simulations.</p>
 <span>    simulationSets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">setA</span>, <span class="va">setB</span><span class="op">)</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-3"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:11</span></span>
+<span><span class="co">#&gt; 01/02/2023 - 05:25:48</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 09/12/2022 - 04:15:11</span></span>
+<span><span class="co">#&gt;  Date: 01/02/2023 - 05:25:48</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
 <span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span><span class="co">#&gt;  User: pchelle</span></span>
@@ -621,7 +563,7 @@ from different paths or simulations.</p>
 <span><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
 <span><span class="co">#&gt;  OSP Suite Package version: 11.1.152</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
-<span><span class="co">#&gt;  tlf version: 1.4.116</span></span>
+<span><span class="co">#&gt;  tlf version: 1.4.0</span></span>
 <span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="va">workflow4</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="st">"plotPKParameters"</span><span class="op">)</span></span>
@@ -629,562 +571,23 @@ from different paths or simulations.</p>
 <span></span>
 <span><span class="co"># Run the workflow</span></span>
 <span><span class="va">workflow4</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:11</span></span>
+<span><span class="co">#&gt; 01/02/2023 - 05:25:49</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:11</span></span>
+<span><span class="co">#&gt; 01/02/2023 - 05:25:49</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:11</span></span>
+<span><span class="co">#&gt; 01/02/2023 - 05:25:49</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">A</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:11</span></span>
+<span><span class="co">#&gt; 01/02/2023 - 05:25:49</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">B</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:11</span></span>
+<span><span class="co">#&gt; 01/02/2023 - 05:25:49</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpmQSMW7/temp_libpath1c98356ba4d/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpmQSMW7/temp_libpath1c98356ba4d/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-3" -t docx -o "Example-3/Report-word.docx" "Example-3/Report-word.md"</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:11</span></span>
+<span><span class="co">#&gt; Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpSSHRFZ/temp_libpath3050756410f4/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpSSHRFZ/temp_libpath3050756410f4/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-3" -t docx -o "Example-3/Report-word.docx" "Example-3/Report-word.md"</span></span>
+<span><span class="co">#&gt; 01/02/2023 - 05:25:49</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0 min</span></span></code></pre></div>
 </details><p>The output report for Example 4 is shown below. The table indicates
 the requested parameters in the updated units and display names.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-42.png" style="width:100%; border-style: none;"></details>
-</div>
-<div class="section level3">
-<h3 id="example-5">Example 5<a class="anchor" aria-label="anchor" href="#example-5"></a>
-</h3>
-<p>Example 5 shows pk parameters for a population workflow. In this
-example, only one population-simulation pair is used. Consequently, the
-workflow type needs to be a parallel comparison (no reference
-population).</p>
-<details><summary><strong>Code</strong>
-</summary><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Get the pkml simulation file: "MiniModel2.pkml"</span></span>
-<span><span class="va">simulationFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"MiniModel2.pkml"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">populationFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Pop500_p1p2p3.csv"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://www.open-systems-pharmacology.org/OSPSuite-R/reference/updatePKParameter.html" class="external-link">updatePKParameter</a></span><span class="op">(</span><span class="st">"C_max"</span>, </span>
-<span>                  displayName <span class="op">=</span> <span class="st">"Cmax"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; PKParameter: </span></span>
-<span><span class="co">#&gt;    Name: C_max </span></span>
-<span><span class="co">#&gt;    DisplayName: Cmax </span></span>
-<span><span class="co">#&gt;    Dimension: Concentration (molar) </span></span>
-<span><span class="co">#&gt;    DisplayUnit: µmol/l</span></span>
-<span><span class="fu"><a href="https://www.open-systems-pharmacology.org/OSPSuite-R/reference/updatePKParameter.html" class="external-link">updatePKParameter</a></span><span class="op">(</span><span class="st">"AUC_tEnd"</span>, </span>
-<span>                  displayName <span class="op">=</span> <span class="st">"AUC"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; PKParameter: </span></span>
-<span><span class="co">#&gt;    Name: AUC_tEnd </span></span>
-<span><span class="co">#&gt;    DisplayName: AUC </span></span>
-<span><span class="co">#&gt;    Dimension: AUC (molar) </span></span>
-<span><span class="co">#&gt;    DisplayUnit: µmol*min/l</span></span>
-<span></span>
-<span><span class="co"># Define the input parameters</span></span>
-<span><span class="va">outputA</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Output.html">Output</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  path <span class="op">=</span> <span class="st">"Organism|A|Concentration in container"</span>,</span>
-<span>  displayName <span class="op">=</span> <span class="st">"A"</span>,</span>
-<span>  pkParameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"C_max"</span>, <span class="st">"AUC_tEnd"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">set500</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PopulationSimulationSet.html">PopulationSimulationSet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  simulationSetName <span class="op">=</span> <span class="st">"Population A"</span>,</span>
-<span>  simulationFile <span class="op">=</span> <span class="va">simulationFile</span>,</span>
-<span>  populationFile <span class="op">=</span> <span class="va">populationFile</span>,</span>
-<span>  outputs <span class="op">=</span> <span class="va">outputA</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Create the workflow instance</span></span>
-<span><span class="va">workflow5</span> <span class="op">&lt;-</span></span>
-<span>  <span class="va"><a href="../reference/PopulationWorkflow.html">PopulationWorkflow</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>    workflowType <span class="op">=</span> <span class="va">PopulationWorkflowTypes</span><span class="op">$</span><span class="va">parallelComparison</span>,</span>
-<span>    simulationSets <span class="op">=</span> <span class="va">set500</span>,</span>
-<span>    workflowFolder <span class="op">=</span> <span class="st">"Example-5"</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:15</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 09/12/2022 - 04:15:15</span></span>
-<span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
-<span><span class="co">#&gt;  User: pchelle</span></span>
-<span><span class="co">#&gt;  Login: pchelle</span></span>
-<span><span class="co">#&gt;  System is NOT validated</span></span>
-<span><span class="co">#&gt;  System versions:</span></span>
-<span><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 11.1.152</span></span>
-<span><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
-<span><span class="co">#&gt;  tlf version: 1.4.116</span></span>
-<span></span>
-<span><span class="co"># Set the workflow tasks to be run</span></span>
-<span><span class="va">workflow5</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simulate"</span>, </span>
-<span>                          <span class="st">"calculatePKParameters"</span>, </span>
-<span>                          <span class="st">"plotPKParameters"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Run the workflow</span></span>
-<span><span class="va">workflow5</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:15</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:15</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:16</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:16</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Calculate PK Parameters task</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:16</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Calculate PK Parameters task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population A</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:16</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Calculate PK Parameters task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:16</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:20</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span> completed in 0.1 min</span></span>
-<span><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpmQSMW7/temp_libpath1c98356ba4d/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpmQSMW7/temp_libpath1c98356ba4d/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-5" -t docx -o "Example-5/Report-word.docx" "Example-5/Report-word.md"</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:20</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.1 min</span></span></code></pre></div>
-</details><p>The output report for Example 5 is shown below. For the population,
-Box Whisker plots in linear and log scales are.</p>
-<details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-43.png" style="width:100%; border-style: none;"></details>
-</div>
-<div class="section level3">
-<h3 id="example-6">Example 6<a class="anchor" aria-label="anchor" href="#example-6"></a>
-</h3>
-<p>Example 6 shows pk parameters for a population workflow. In this
-example, 2 population-simulation pairs are now used. Consequently, the
-workflow type needs to be a parallel comparison (no reference
-population).</p>
-<details><summary><strong>Code</strong>
-</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Get the pkml simulation file: "MiniModel2.pkml"</span></span>
-<span><span class="va">simulationFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"MiniModel2.pkml"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">populationFile500</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Pop500_p1p2p3.csv"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">populationFile200</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Pop200_p1p2p3.csv"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://www.open-systems-pharmacology.org/OSPSuite-R/reference/updatePKParameter.html" class="external-link">updatePKParameter</a></span><span class="op">(</span><span class="st">"C_max"</span>, </span>
-<span>                  displayName <span class="op">=</span> <span class="st">"Cmax"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; PKParameter: </span></span>
-<span><span class="co">#&gt;    Name: C_max </span></span>
-<span><span class="co">#&gt;    DisplayName: Cmax </span></span>
-<span><span class="co">#&gt;    Dimension: Concentration (molar) </span></span>
-<span><span class="co">#&gt;    DisplayUnit: µmol/l</span></span>
-<span><span class="fu"><a href="https://www.open-systems-pharmacology.org/OSPSuite-R/reference/updatePKParameter.html" class="external-link">updatePKParameter</a></span><span class="op">(</span><span class="st">"AUC_tEnd"</span>, </span>
-<span>                  displayName <span class="op">=</span> <span class="st">"AUC"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; PKParameter: </span></span>
-<span><span class="co">#&gt;    Name: AUC_tEnd </span></span>
-<span><span class="co">#&gt;    DisplayName: AUC </span></span>
-<span><span class="co">#&gt;    Dimension: AUC (molar) </span></span>
-<span><span class="co">#&gt;    DisplayUnit: µmol*min/l</span></span>
-<span></span>
-<span><span class="co"># Define the input parameters</span></span>
-<span><span class="va">outputA</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Output.html">Output</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  path <span class="op">=</span> <span class="st">"Organism|A|Concentration in container"</span>,</span>
-<span>  displayName <span class="op">=</span> <span class="st">"A"</span>,</span>
-<span>  pkParameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"C_max"</span>, <span class="st">"AUC_tEnd"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">set500</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PopulationSimulationSet.html">PopulationSimulationSet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  simulationSetName <span class="op">=</span> <span class="st">"500 individuals"</span>,</span>
-<span>  simulationFile <span class="op">=</span> <span class="va">simulationFile</span>,</span>
-<span>  populationFile <span class="op">=</span> <span class="va">populationFile500</span>,</span>
-<span>  outputs <span class="op">=</span> <span class="va">outputA</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">set200</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PopulationSimulationSet.html">PopulationSimulationSet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  simulationSetName <span class="op">=</span> <span class="st">"200 individuals"</span>,</span>
-<span>  simulationFile <span class="op">=</span> <span class="va">simulationFile</span>,</span>
-<span>  populationFile <span class="op">=</span> <span class="va">populationFile200</span>,</span>
-<span>  outputs <span class="op">=</span> <span class="va">outputA</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Create the workflow instance</span></span>
-<span><span class="va">workflow6</span> <span class="op">&lt;-</span></span>
-<span>  <span class="va"><a href="../reference/PopulationWorkflow.html">PopulationWorkflow</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>    workflowType <span class="op">=</span> <span class="va">PopulationWorkflowTypes</span><span class="op">$</span><span class="va">parallelComparison</span>,</span>
-<span>    simulationSets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">set500</span>, <span class="va">set200</span><span class="op">)</span>,</span>
-<span>    workflowFolder <span class="op">=</span> <span class="st">"Example-6"</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:24</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 09/12/2022 - 04:15:24</span></span>
-<span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
-<span><span class="co">#&gt;  User: pchelle</span></span>
-<span><span class="co">#&gt;  Login: pchelle</span></span>
-<span><span class="co">#&gt;  System is NOT validated</span></span>
-<span><span class="co">#&gt;  System versions:</span></span>
-<span><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 11.1.152</span></span>
-<span><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
-<span><span class="co">#&gt;  tlf version: 1.4.116</span></span>
-<span></span>
-<span><span class="co"># Set the workflow tasks to be run</span></span>
-<span><span class="va">workflow6</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simulate"</span>, </span>
-<span>                          <span class="st">"calculatePKParameters"</span>, </span>
-<span>                          <span class="st">"plotPKParameters"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Run the workflow</span></span>
-<span><span class="va">workflow6</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:25</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:25</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:26</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:26</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Calculate PK Parameters task</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:26</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Calculate PK Parameters task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">500 individuals</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:26</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Calculate PK Parameters task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">200 individuals</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:26</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Calculate PK Parameters task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:26</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:31</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span> completed in 0.1 min</span></span>
-<span><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpmQSMW7/temp_libpath1c98356ba4d/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpmQSMW7/temp_libpath1c98356ba4d/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-6" -t docx -o "Example-6/Report-word.docx" "Example-6/Report-word.md"</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:31</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.1 min</span></span></code></pre></div>
-</details><p>The output report for Example 6 is shown below. For the population,
-BoxWhisker plots in linear and log scales are.</p>
-<details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-44.png" style="width:100%; border-style: none;"></details>
-</div>
-<div class="section level3">
-<h3 id="example-7">Example 7<a class="anchor" aria-label="anchor" href="#example-7"></a>
-</h3>
-<p>Example 7 is the same as the previous example, only this time a ratio
-type population workflow is performed. As a consequence, the workflow
-type was specified when creating the workflow instance. In this workflow
-type, a <strong>reference population</strong> is needed. Since the
-workflows can re-use the results from the previous PK analysis, only the
-plot task needs to be re-run.</p>
-<details><summary><strong>Code</strong>
-</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Get the pkml simulation file: "MiniModel2.pkml"</span></span>
-<span><span class="va">simulationFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"MiniModel2.pkml"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">populationFile500</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Pop500_p1p2p3.csv"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">populationFile200</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Pop200_p1p2p3.csv"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://www.open-systems-pharmacology.org/OSPSuite-R/reference/updatePKParameter.html" class="external-link">updatePKParameter</a></span><span class="op">(</span><span class="st">"C_max"</span>, </span>
-<span>                  displayName <span class="op">=</span> <span class="st">"Cmax"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; PKParameter: </span></span>
-<span><span class="co">#&gt;    Name: C_max </span></span>
-<span><span class="co">#&gt;    DisplayName: Cmax </span></span>
-<span><span class="co">#&gt;    Dimension: Concentration (molar) </span></span>
-<span><span class="co">#&gt;    DisplayUnit: µmol/l</span></span>
-<span><span class="fu"><a href="https://www.open-systems-pharmacology.org/OSPSuite-R/reference/updatePKParameter.html" class="external-link">updatePKParameter</a></span><span class="op">(</span><span class="st">"AUC_tEnd"</span>, </span>
-<span>                  displayName <span class="op">=</span> <span class="st">"AUC"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; PKParameter: </span></span>
-<span><span class="co">#&gt;    Name: AUC_tEnd </span></span>
-<span><span class="co">#&gt;    DisplayName: AUC </span></span>
-<span><span class="co">#&gt;    Dimension: AUC (molar) </span></span>
-<span><span class="co">#&gt;    DisplayUnit: µmol*min/l</span></span>
-<span></span>
-<span><span class="co"># Define the input parameters</span></span>
-<span><span class="va">outputA</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Output.html">Output</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  path <span class="op">=</span> <span class="st">"Organism|A|Concentration in container"</span>,</span>
-<span>  displayName <span class="op">=</span> <span class="st">"A"</span>,</span>
-<span>  pkParameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"C_max"</span>, <span class="st">"AUC_tEnd"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">set500</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PopulationSimulationSet.html">PopulationSimulationSet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  referencePopulation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  simulationSetName <span class="op">=</span> <span class="st">"500 individuals"</span>,</span>
-<span>  simulationFile <span class="op">=</span> <span class="va">simulationFile</span>,</span>
-<span>  populationFile <span class="op">=</span> <span class="va">populationFile500</span>,</span>
-<span>  outputs <span class="op">=</span> <span class="va">outputA</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">set200</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PopulationSimulationSet.html">PopulationSimulationSet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  simulationSetName <span class="op">=</span> <span class="st">"200 individuals"</span>,</span>
-<span>  simulationFile <span class="op">=</span> <span class="va">simulationFile</span>,</span>
-<span>  populationFile <span class="op">=</span> <span class="va">populationFile200</span>,</span>
-<span>  outputs <span class="op">=</span> <span class="va">outputA</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span><span class="co"># Create the workflow instance</span></span>
-<span><span class="va">workflow7</span> <span class="op">&lt;-</span></span>
-<span>  <span class="va"><a href="../reference/PopulationWorkflow.html">PopulationWorkflow</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>    workflowType <span class="op">=</span> <span class="va">PopulationWorkflowTypes</span><span class="op">$</span><span class="va">ratioComparison</span>,</span>
-<span>    simulationSets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">set500</span>, <span class="va">set200</span><span class="op">)</span>,</span>
-<span>    workflowFolder <span class="op">=</span> <span class="st">"Example-6"</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:37</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 09/12/2022 - 04:15:37</span></span>
-<span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
-<span><span class="co">#&gt;  User: pchelle</span></span>
-<span><span class="co">#&gt;  Login: pchelle</span></span>
-<span><span class="co">#&gt;  System is NOT validated</span></span>
-<span><span class="co">#&gt;  System versions:</span></span>
-<span><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 11.1.152</span></span>
-<span><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
-<span><span class="co">#&gt;  tlf version: 1.4.116</span></span>
-<span></span>
-<span><span class="co"># Set the workflow tasks to be run</span></span>
-<span><span class="va">workflow7</span><span class="op">$</span><span class="fu">inactivateTasks</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">workflow7</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="st">"plotPKParameters"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Run the workflow</span></span>
-<span><span class="va">workflow7</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:37</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">ratioComparison</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:37</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:37</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>'Example-6\PKAnalysis' already exists</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:44</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span> completed in 0.1 min</span></span>
-<span><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpmQSMW7/temp_libpath1c98356ba4d/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpmQSMW7/temp_libpath1c98356ba4d/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-6" -t docx -o "Example-6/Report-word.docx" "Example-6/Report-word.md"</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:45</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">ratioComparison</span> completed in 0.1 min</span></span></code></pre></div>
-</details><p>The output report for Example 7 is shown below.</p>
-<details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-45.png" style="width:100%; border-style: none;"></details>
-</div>
-<div class="section level3">
-<h3 id="example-8">Example 8<a class="anchor" aria-label="anchor" href="#example-8"></a>
-</h3>
-<p>Example 8 is the same as the 2 previous examples, this time a
-pediatric type population workflow is performed. As a consequence, the
-workflow type was specified when creating the workflow instance. In this
-workflow type, a <strong>reference population</strong> is needed. In the
-test population, age and body weight are not population parameters only
-<em>p1</em>, <em>p2</em> and <em>p3</em>, as a consequence, <em>p3</em>
-was used in the x-axis in the range plots. These parameters will be used
-instead of age for the range plots. Since the workflows can re-use the
-results from the previous PK analysis, only the plot task needs to be
-re-run.</p>
-<details><summary><strong>Code</strong>
-</summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Get the pkml simulation file: "MiniModel2.pkml"</span></span>
-<span><span class="va">simulationFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"MiniModel2.pkml"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">populationFile500</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Pop500_p1p2p3.csv"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">populationFile200</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Pop200_p1p2p3.csv"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://www.open-systems-pharmacology.org/OSPSuite-R/reference/updatePKParameter.html" class="external-link">updatePKParameter</a></span><span class="op">(</span><span class="st">"C_max"</span>, </span>
-<span>                  displayName <span class="op">=</span> <span class="st">"Cmax"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; PKParameter: </span></span>
-<span><span class="co">#&gt;    Name: C_max </span></span>
-<span><span class="co">#&gt;    DisplayName: Cmax </span></span>
-<span><span class="co">#&gt;    Dimension: Concentration (molar) </span></span>
-<span><span class="co">#&gt;    DisplayUnit: µmol/l</span></span>
-<span><span class="fu"><a href="https://www.open-systems-pharmacology.org/OSPSuite-R/reference/updatePKParameter.html" class="external-link">updatePKParameter</a></span><span class="op">(</span><span class="st">"AUC_tEnd"</span>, </span>
-<span>                  displayName <span class="op">=</span> <span class="st">"AUC"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; PKParameter: </span></span>
-<span><span class="co">#&gt;    Name: AUC_tEnd </span></span>
-<span><span class="co">#&gt;    DisplayName: AUC </span></span>
-<span><span class="co">#&gt;    Dimension: AUC (molar) </span></span>
-<span><span class="co">#&gt;    DisplayUnit: µmol*min/l</span></span>
-<span></span>
-<span><span class="co"># Define the input parameters</span></span>
-<span><span class="va">outputA</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Output.html">Output</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  path <span class="op">=</span> <span class="st">"Organism|A|Concentration in container"</span>,</span>
-<span>  displayName <span class="op">=</span> <span class="st">"A"</span>,</span>
-<span>  pkParameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"C_max"</span>, <span class="st">"AUC_tEnd"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">set500</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PopulationSimulationSet.html">PopulationSimulationSet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  referencePopulation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  simulationSetName <span class="op">=</span> <span class="st">"500 individuals"</span>,</span>
-<span>  simulationFile <span class="op">=</span> <span class="va">simulationFile</span>,</span>
-<span>  populationFile <span class="op">=</span> <span class="va">populationFile500</span>,</span>
-<span>  outputs <span class="op">=</span> <span class="va">outputA</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">set200</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PopulationSimulationSet.html">PopulationSimulationSet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  simulationSetName <span class="op">=</span> <span class="st">"200 individuals"</span>,</span>
-<span>  simulationFile <span class="op">=</span> <span class="va">simulationFile</span>,</span>
-<span>  populationFile <span class="op">=</span> <span class="va">populationFile200</span>,</span>
-<span>  outputs <span class="op">=</span> <span class="va">outputA</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span><span class="co"># Create the workflow instance</span></span>
-<span><span class="va">workflow8</span> <span class="op">&lt;-</span></span>
-<span>  <span class="va"><a href="../reference/PopulationWorkflow.html">PopulationWorkflow</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>    workflowType <span class="op">=</span> <span class="va">PopulationWorkflowTypes</span><span class="op">$</span><span class="va">pediatric</span>,</span>
-<span>    simulationSets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">set500</span>, <span class="va">set200</span><span class="op">)</span>,</span>
-<span>    workflowFolder <span class="op">=</span> <span class="st">"Example-6"</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:50</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 09/12/2022 - 04:15:50</span></span>
-<span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
-<span><span class="co">#&gt;  User: pchelle</span></span>
-<span><span class="co">#&gt;  Login: pchelle</span></span>
-<span><span class="co">#&gt;  System is NOT validated</span></span>
-<span><span class="co">#&gt;  System versions:</span></span>
-<span><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 11.1.152</span></span>
-<span><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
-<span><span class="co">#&gt;  tlf version: 1.4.116</span></span>
-<span></span>
-<span><span class="co"># Set the workflow tasks to be run</span></span>
-<span><span class="va">workflow8</span><span class="op">$</span><span class="fu">inactivateTasks</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">workflow8</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="st">"plotPKParameters"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/setXParametersForPKParametersPlot.html">setXParametersForPkParametersPlot</a></span><span class="op">(</span><span class="va">workflow8</span>, <span class="st">"Organism|p3"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Run the workflow</span></span>
-<span><span class="va">workflow8</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:50</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:50</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:15:50</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>'Example-6\PKAnalysis' already exists</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:16:03</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span> completed in 0.2 min</span></span>
-<span><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpmQSMW7/temp_libpath1c98356ba4d/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpmQSMW7/temp_libpath1c98356ba4d/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-6" -t docx -o "Example-6/Report-word.docx" "Example-6/Report-word.md"</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:16:03</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.2 min</span></span></code></pre></div>
-</details><p>The output report for Example 8 is shown below.</p>
-<details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-46.png" style="width:100%; border-style: none;"></details>
-</div>
-<div class="section level3">
-<h3 id="example-9">Example 9<a class="anchor" aria-label="anchor" href="#example-9"></a>
-</h3>
-<p>In some cases, it may be necessary to compare different PK parameters
-from different simulations. Example 9 shows how to define a group
-identifier in <code>PkParameterInfo</code> objects. In this example, a
-user defined PK parameter named <code>"MyAUC"</code> is created using
-the function <code>addUserDefinedPKParameter</code>. Then, 2
-<code>PkParameterInfo</code> objects are created with the same value for
-their field <code>group</code> while their field
-<code>pkParameter</code> indicates a different PK parameter. If
-<code>group</code> is left undefined, it will take the value defined in
-<code>pkParameter</code> input argument by default.</p>
-<p>The workflow created using this method will compare
-<em>“AUC_tEnd”</em> from the first population with <em>“myAUC”</em> from
-the second population.</p>
-<details><summary><strong>Code</strong>
-</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Get the pkml simulation file: "MiniModel2.pkml"</span></span>
-<span><span class="va">simulationFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"MiniModel2.pkml"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">populationFile500</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Pop500_p1p2p3.csv"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">populationFile200</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Pop200_p1p2p3.csv"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Create a user defifened PK parameter</span></span>
-<span><span class="va">myAUC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://www.open-systems-pharmacology.org/OSPSuite-R/reference/addUserDefinedPKParameter.html" class="external-link">addUserDefinedPKParameter</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"MyAUC"</span>, standardPKParameter <span class="op">=</span> <span class="va">StandardPKParameter</span><span class="op">$</span><span class="va">AUC_tEnd</span><span class="op">)</span></span>
-<span><span class="va">myAUC</span><span class="op">$</span><span class="va">startTime</span> <span class="op">&lt;-</span> <span class="fl">50</span></span>
-<span><span class="va">myAUC</span><span class="op">$</span><span class="va">endTime</span> <span class="op">&lt;-</span> <span class="fl">80</span></span>
-<span></span>
-<span><span class="co"># Define PkParameterInfo objects sharing the same groups</span></span>
-<span><span class="va">AUC500</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PkParameterInfo.html">PkParameterInfo</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  pkParameter <span class="op">=</span> <span class="st">"AUC_tEnd"</span>, </span>
-<span>  group <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  displayName <span class="op">=</span> <span class="st">"AUC"</span>,</span>
-<span>  displayUnit <span class="op">=</span> <span class="st">"µmol*min/l"</span><span class="op">)</span></span>
-<span><span class="va">AUC200</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PkParameterInfo.html">PkParameterInfo</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  pkParameter <span class="op">=</span> <span class="st">"MyAUC"</span>, </span>
-<span>  group <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  displayName <span class="op">=</span> <span class="st">"AUC"</span>,</span>
-<span>  displayUnit <span class="op">=</span> <span class="st">"µmol*min/l"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Define the input parameters</span></span>
-<span><span class="va">output500</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Output.html">Output</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  path <span class="op">=</span> <span class="st">"Organism|A|Concentration in container"</span>,</span>
-<span>  displayName <span class="op">=</span> <span class="st">"A"</span>,</span>
-<span>  pkParameters <span class="op">=</span> <span class="va">AUC500</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">output200</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Output.html">Output</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  path <span class="op">=</span> <span class="st">"Organism|A|Concentration in container"</span>,</span>
-<span>  displayName <span class="op">=</span> <span class="st">"A"</span>,</span>
-<span>  pkParameters <span class="op">=</span> <span class="va">AUC200</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">set500</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PopulationSimulationSet.html">PopulationSimulationSet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  referencePopulation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  simulationSetName <span class="op">=</span> <span class="st">"500 individuals"</span>,</span>
-<span>  simulationFile <span class="op">=</span> <span class="va">simulationFile</span>,</span>
-<span>  populationFile <span class="op">=</span> <span class="va">populationFile500</span>,</span>
-<span>  outputs <span class="op">=</span> <span class="va">output500</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">set200</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PopulationSimulationSet.html">PopulationSimulationSet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  simulationSetName <span class="op">=</span> <span class="st">"200 individuals"</span>,</span>
-<span>  simulationFile <span class="op">=</span> <span class="va">simulationFile</span>,</span>
-<span>  populationFile <span class="op">=</span> <span class="va">populationFile200</span>,</span>
-<span>  outputs <span class="op">=</span> <span class="va">output200</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Create the workflow instance</span></span>
-<span><span class="va">workflow9</span> <span class="op">&lt;-</span></span>
-<span>  <span class="va"><a href="../reference/PopulationWorkflow.html">PopulationWorkflow</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>    workflowType <span class="op">=</span> <span class="va">PopulationWorkflowTypes</span><span class="op">$</span><span class="va">ratioComparison</span>,</span>
-<span>    simulationSets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">set500</span>, <span class="va">set200</span><span class="op">)</span>,</span>
-<span>    workflowFolder <span class="op">=</span> <span class="st">"Example-9"</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:16:10</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 09/12/2022 - 04:16:09</span></span>
-<span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
-<span><span class="co">#&gt;  User: pchelle</span></span>
-<span><span class="co">#&gt;  Login: pchelle</span></span>
-<span><span class="co">#&gt;  System is NOT validated</span></span>
-<span><span class="co">#&gt;  System versions:</span></span>
-<span><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 11.1.152</span></span>
-<span><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
-<span><span class="co">#&gt;  tlf version: 1.4.116</span></span>
-<span></span>
-<span><span class="co"># Set the workflow tasks to be run</span></span>
-<span><span class="va">workflow9</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simulate"</span>, <span class="st">"calculatePKParameters"</span>, <span class="st">"plotPKParameters"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">workflow9</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="st">"plotPKParameters"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Run the workflow</span></span>
-<span><span class="va">workflow9</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:16:10</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">ratioComparison</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:16:10</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:16:11</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:16:11</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Calculate PK Parameters task</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:16:11</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Calculate PK Parameters task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">500 individuals</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:16:11</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Calculate PK Parameters task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">200 individuals</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:16:12</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Calculate PK Parameters task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:16:12</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span></span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:16:15</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span> completed in 0.1 min</span></span>
-<span><span class="co">#&gt; Executing: pandoc --self-contained --wrap=none --toc --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpmQSMW7/temp_libpath1c98356ba4d/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpmQSMW7/temp_libpath1c98356ba4d/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-9" -t docx -o "Example-9/Report-word.docx" "Example-9/Report-word.md"</span></span>
-<span><span class="co">#&gt; 09/12/2022 - 04:16:16</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">ratioComparison</span> completed in 0.1 min</span></span></code></pre></div>
-</details><p>The output report for Example 9 is shown below.</p>
-<details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-47.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-17.png" style="width:100%; border-style: none;"></details>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

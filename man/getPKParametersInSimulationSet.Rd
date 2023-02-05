@@ -7,10 +7,10 @@
 getPKParametersInSimulationSet(simulationSet)
 }
 \arguments{
-\item{simulationSet}{SimulationSet object or derived class}
+\item{simulationSet}{A `SimulationSet` object}
 }
 \value{
-Data.frame with \code{path} and \code{pkParameter} in `simulationSet`
+A data.frame including \code{path} and \code{pkParameter} from the `outputs` field of `simulationSet`
 }
 \description{
 getPKParametersInSimulationSet
@@ -28,13 +28,17 @@ Other workflow helpers:
 \code{\link{getMeanSensitivityAnalysisResultsFileNames}()},
 \code{\link{getOutputPathsInSimulationSet}()},
 \code{\link{getPKAnalysisResultsFileNames}()},
+\code{\link{getPKParameterGroupsInOutput}()},
 \code{\link{getPKParametersInOutput}()},
+\code{\link{getPopulationPKData}()},
+\code{\link{getPopulationPKMetaData}()},
 \code{\link{getPopulationSensitivityAnalysisResultsFileNames}()},
 \code{\link{getSimulationDescriptor}()},
 \code{\link{getSimulationParameterDisplayPaths}()},
 \code{\link{getSimulationResultFileNames}()},
 \code{\link{getTaskInputs}()},
 \code{\link{getWorkflowParameterDisplayPaths}()},
+\code{\link{getWorkflowReferencePopulationName}()},
 \code{\link{getXParametersForDemogrpahyPlot}()},
 \code{\link{getXParametersForPKParametersPlot}()},
 \code{\link{getYParametersForDemogrpahyPlot}()},

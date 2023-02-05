@@ -11,8 +11,8 @@ getOutputPathsInSimulationSet <- function(simulationSet) {
 }
 
 #' @title getPKParametersInSimulationSet
-#' @param simulationSet SimulationSet object or derived class
-#' @return Data.frame with \code{path} and \code{pkParameter} in `simulationSet`
+#' @param simulationSet A `SimulationSet` object
+#' @return A data.frame including \code{path} and \code{pkParameter} from the `outputs` field of `simulationSet`
 #' @export
 #' @family workflow helpers
 getPKParametersInSimulationSet <- function(simulationSet) {
