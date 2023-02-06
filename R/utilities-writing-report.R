@@ -218,6 +218,9 @@ renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, w
   for (lineContent in fileContent) {
     firstElement <- getFirstLineElement(lineContent)
     anchorName <- getAnchorName(lineContent)
+    # Issue #968 Subscript and superscript rendering
+    lineContent <- gsub(pattern = "<sup>|</sup>", replacement = "^", lineContent)
+    lineContent <- gsub(pattern = "<sub>|</sub>", replacement = "~", lineContent)
     # When finding a line referencing a table or figure tag as first element
     # The new content to write in the report is
     # - previous content = wordFileContent
@@ -314,7 +317,9 @@ renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, w
       # https://pandoc.org/MANUAL.html#extension-tex_math_dollars
       # +raw_attribute: keep ```{=openxml} as raw openxml to include page breaks and bookmarks
       # https://pandoc.org/MANUAL.html#extension-raw_attribute
-      "from: markdown+tex_math_dollars+raw_attribute",
+      # +superscript+subscript: convert superscript text between ^...^, subscript text between ~...~
+      # https://pandoc.org/MANUAL.html#superscripts-and-subscripts
+      "from: markdown+tex_math_dollars+superscript+subscript+raw_attribute",
       # Document used for styling
       paste0('reference-doc: "', wordConversionTemplate, '"'),
       # Location of resources such as figures
