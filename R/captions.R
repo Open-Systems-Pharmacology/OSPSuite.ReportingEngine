@@ -118,7 +118,7 @@ captions <- list(
       return(paste0(
         parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor),
         " shown as box-whisker plot, which indicates the ",
-        paste(c(5, 25, 50, 75, 95), "\u1d57\u02b0", sep = "", collapse = ", "),
+        paste(c(5, 25, 50, 75, 95), "<sup>th</sup>", sep = "", collapse = ", "),
         " percentiles in ", plotScale, " scale."
       ))
     },
@@ -130,7 +130,7 @@ captions <- list(
       return(paste0(
         parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor), referenceSetText,
         " shown as box-whisker plot, which indicates ratios of the ",
-        paste(c(5, 25, 50, 75, 95), "\u1d57\u02b0", sep = "", collapse = ", "),
+        paste(c(5, 25, 50, 75, 95), "<sup>th</sup>", sep = "", collapse = ", "),
         " percentiles in ", plotScale, " scale."
       ))
     },
