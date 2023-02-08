@@ -175,7 +175,7 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, pl
   # Axes labels
   axesProperties$y$dimension <- switch(plotType,
     "predictedVsObserved" = paste0("Simulated ", displayDimension(axesProperties$y$dimension)),
-    "residualsOverTime" = "Residuals\nlog10(Observed)-log10(Simulated)"
+    "residualsOverTime" = "Residuals\nlog(Observed)-log(Simulated)"
   )
   axesProperties$x$dimension <- switch(plotType,
     "predictedVsObserved" = paste0("Observed ", displayDimension(axesProperties$x$dimension)),
