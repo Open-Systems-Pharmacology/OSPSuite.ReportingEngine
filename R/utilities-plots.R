@@ -418,6 +418,9 @@ updatePlotDimensions <- function(plotObject) {
   # If not empty,
   # - add nothing if legend within
   if (grepl(pattern = "inside", x = plotObject$plotConfiguration$legend$position)) {
+    # Add small margin of 20 pts on right side of plot to prevent axis ticklabel being cut-off
+    plotObject <- plotObject + 
+      ggplot2::theme(plot.margin = ggplot2::margin(r = 20))
     return(plotObject)
   }
   # grid package is already required and installed by ggplot2
@@ -439,6 +442,9 @@ updatePlotDimensions <- function(plotObject) {
     # Add legend height to final plot height to prevent shrinkage of plot area
     plotObject$plotConfiguration$export$height <- plotObject$plotConfiguration$export$height + legendHeight
     plotObject <- updateWatermarkDimensions(plotObject)
+    # Add small margin of 20 pts on right side of plot to prevent axis ticklabel being cut-off
+    plotObject <- plotObject + 
+      ggplot2::theme(plot.margin = ggplot2::margin(r = 20))
     return(plotObject)
   }
   # Prevent truncated legend, if legend is too long
