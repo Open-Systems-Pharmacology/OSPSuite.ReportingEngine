@@ -59,12 +59,18 @@ getQualificationGOFData <- function(gofPlan, configurationPlan, axesUnits) {
   groupCaptions <- NULL
   groupShapes <- NULL
   groupColors <- NULL
+  # groupColorsIndex aims at providing a unique number for the each new legend entry
+  # and ensuring the right color is associated to the right legend entry
+  groupColorsIndex <- 1
   for (group in gofPlan$Groups) {
     for (outputMapping in group$OutputMappings) {
       gofResults <- getGOFDataForMapping(outputMapping, configurationPlan, axesUnits)
+      # Variable associated to shapes
       gofResults$Groups <- group$Caption %||% NA
+      # Variable associated to colors
+      gofResults$Legend <- groupColorsIndex
+      groupColorsIndex <- groupColorsIndex + 1
       gofData <- rbind.data.frame(gofData, gofResults)
-
       # Use default "black" color to prevent crash if undefined
       groupColors <- c(groupColors, outputMapping$Color %||% group$Color %||% "black")
     }
@@ -175,7 +181,7 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, pl
   # Axes labels
   axesProperties$y$dimension <- switch(plotType,
     "predictedVsObserved" = paste0("Simulated ", displayDimension(axesProperties$y$dimension)),
-    "residualsOverTime" = "Residuals\nlog10(Observed)-log10(Simulated)"
+    "residualsOverTime" = "Residuals\nlog(Observed)-log(Simulated)"
   )
   axesProperties$x$dimension <- switch(plotType,
     "predictedVsObserved" = paste0("Observed ", displayDimension(axesProperties$x$dimension)),
@@ -205,7 +211,9 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, pl
 
   # Update shapes and colors from config plan
   plotConfiguration$points$color <- metaData$color
-  plotConfiguration$points$shape <- metaData$shape
+  # Ensure order of shapes matches order of caption
+  # so that the correct shape is associated to its caption
+  plotConfiguration$points$shape <- metaData$shape[order(metaData$caption)]
 
   positiveRows <- (data[, "Observed"] > 0) & (data[, "Simulated"] > 0)
   dataForLimit <- c(data[positiveRows, "Observed"], data[positiveRows, "Simulated"])
