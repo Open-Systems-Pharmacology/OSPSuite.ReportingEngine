@@ -32,6 +32,14 @@
       "angle": 90,
       "align": "center"
     },
+    "y2label": {
+      "color": "black",
+      "size": 11,
+      "fontFace": "plain",
+      "fontFamily": "",
+      "angle": -90,
+      "align": "center"
+    },
     "watermark": {
       "color": "grey",
       "size": 40,
@@ -98,12 +106,22 @@
       "size": "0.5",
       "linetype": "solid"
     },
+    "y2Axis": {
+      "color": "black",
+      "size": "0.5",
+      "linetype": "solid"
+    },
     "xGrid": {
       "color": "grey",
       "size": "0.25",
       "linetype": "dotted"
     },
     "yGrid": {
+      "color": "grey",
+      "size": "0.25",
+      "linetype": "dotted"
+    },
+    "y2Grid": {
       "color": "grey",
       "size": "0.25",
       "linetype": "dotted"

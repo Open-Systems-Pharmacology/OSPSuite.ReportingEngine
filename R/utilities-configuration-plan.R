@@ -70,15 +70,19 @@ getAxesProperties <- function(axesSettings) {
     axis$Type
   })
 
-  xAxisIndex <- which(axisTypes %in% "X")
-  yAxisIndex <- which(axisTypes %in% "Y")
-  y2AxisIndex <- which(axisTypes %in% "Y2")
-
+  axesIndices <- sapply(
+    c("X", "Y", "Y2", "Y3"),
+    FUN = function(axisField){
+      which(axisTypes %in% axisField)
+    },
+    simplify = FALSE
+  )
+  
   # X and Y axes are mandatory, while Y2 is not
-  validateIsOfLength(xAxisIndex, 1)
-  validateIsOfLength(yAxisIndex, 1)
-  xAxis <- axesSettings[[xAxisIndex]]
-  yAxis <- axesSettings[[yAxisIndex]]
+  validateIsOfLength(axesIndices$X, 1)
+  validateIsOfLength(axesIndices$Y, 1)
+  xAxis <- axesSettings[[axesIndices$X]]
+  yAxis <- axesSettings[[axesIndices$Y]]
   # GridLines field defines if grid is present
   # ifFALSE is used to ensure a value in *if* in case field is empty
   if (isFALSE(xAxis$GridLines)) {
@@ -88,26 +92,34 @@ getAxesProperties <- function(axesSettings) {
   if (isFALSE(yAxis$GridLines)) {
     yAxis$DefaultLineStyle <- "none"
   }
-  xAxis <- list(
-    dimension = xAxis$Dimension, unit = xAxis$Unit,
-    min = xAxis$Min, max = xAxis$Max, scale = tlfScale(xAxis$Scaling),
-    grid = list(color = xAxis$DefaultColor, linetype = tlfLinetype(xAxis$DefaultLineStyle))
-  )
-  yAxis <- list(
-    dimension = yAxis$Dimension, unit = yAxis$Unit,
-    min = yAxis$Min, max = yAxis$Max, scale = tlfScale(yAxis$Scaling),
-    grid = list(color = yAxis$DefaultColor, linetype = tlfLinetype(yAxis$DefaultLineStyle))
-  )
-
+  xAxis <- formatAxisProperties(xAxis)
+  yAxis <- formatAxisProperties(yAxis)
+  
   y2Axis <- NULL
-  if (isOfLength(y2AxisIndex, 1)) {
-    y2Axis <- axesSettings[[y2AxisIndex]]
-    y2Axis <- list(
-      dimension = y2Axis$Dimension, unit = y2Axis$Unit,
-      min = y2Axis$Min, max = y2Axis$Max, scale = tlfScale(y2Axis$Scaling)
-    )
+  if (isOfLength(axesIndices$Y2, 1)) {
+    y2Axis <- axesSettings[[axesIndices$Y2]]
+    y2Axis <- formatAxisProperties(y2Axis)
   }
-  return(list(x = xAxis, y = yAxis, y2 = y2Axis))
+  y3Axis <- NULL
+  if (isOfLength(axesIndices$Y3, 1)) {
+    y3Axis <- axesSettings[[axesIndices$Y3]]
+    y3Axis <- formatAxisProperties(y3Axis)
+  }
+  return(list(x = xAxis, y = yAxis, y2 = y2Axis, y3 = y3Axis))
+}
+
+formatAxisProperties <- function(axisField){
+  list(
+    dimension = axisField$Dimension, 
+    unit = axisField$Unit,
+    min = axisField$Min, 
+    max = axisField$Max, 
+    scale = tlfScale(axisField$Scaling),
+    grid = list(
+      color = axisField$DefaultColor, 
+      linetype = tlfLinetype(axisField$DefaultLineStyle)
+      )
+)
 }
 
 #' @title updatePlotAxes

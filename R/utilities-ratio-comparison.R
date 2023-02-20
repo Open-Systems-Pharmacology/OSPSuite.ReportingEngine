@@ -188,7 +188,7 @@ getPKParameterRatioMeasureFromMCSampling <- function(comparisonData,
   allSamplesRatioMeasure <- lapply(
     allSamplesRatioData,
     function(data) {
-      getPKParameterMeasure(dataMapping$checkMapData(data), dataMapping)
+      getPKParameterMeasure(data, dataMapping)
     }
   )
   # Transform list to table

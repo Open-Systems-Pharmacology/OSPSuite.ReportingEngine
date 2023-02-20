@@ -30,7 +30,10 @@ plotQualificationTimeProfiles <- function(configurationPlan, settings) {
 
     # Get axes properties (with scale, limits and display units)
     axesProperties <- getAxesProperties(timeProfilePlan$Plot$Axes) %||% settings$axes
-    plotConfiguration <- getPlotConfigurationFromPlan(timeProfilePlan$Plot)
+    plotConfiguration <- getPlotConfigurationFromPlan(
+      timeProfilePlan$Plot,
+      plotType = "TimeProfile"
+      )
     timeProfilePlot <- tlf::initializePlot(plotConfiguration)
 
     # Currently use ifNotNull to select if mean or population time profile
@@ -53,7 +56,7 @@ plotQualificationTimeProfiles <- function(configurationPlan, settings) {
         simulationResults = simulationResults,
         axesProperties = axesProperties,
         configurationPlan = configurationPlan,
-        plotObject = timeProfilePlot
+        plotConfiguration = plotConfiguration
       )
     )
 
@@ -78,144 +81,188 @@ plotQualificationTimeProfiles <- function(configurationPlan, settings) {
 #' that includes the data requested from `configurationPlanCurve` properties
 #' @param axesProperties list of axes properties obtained from `getAxesProperties`
 #' @param configurationPlan A `ConfigurationPlan` object that includes methods to find observed data
-#' @param plotObject A `ggplot` object
+#' @param plotConfiguration A `TimeProfilePlotConfiguration` object
 #' @return Mean time profile plot as a `ggplot` object
 #' @import tlf
 #' @keywords internal
-plotQualificationMeanTimeProfile <- function(configurationPlanCurves, simulation, simulationResults, axesProperties, configurationPlan, plotObject) {
+plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
+                                             simulation,
+                                             simulationResults,
+                                             axesProperties,
+                                             configurationPlan,
+                                             plotConfiguration) {
+  # Define tlf data mapping for observed and simulated time profile
+  simDataMapping <- tlf::TimeProfileDataMapping$new(
+    x = "x", y = "y", group = "legend", y2Axis = "yAxis"
+  )
+  obsDataMapping <- tlf::ObservedDataMapping$new(
+    x = "x", y = "y", ymin = "ymin", ymax = "ymax",
+    group = "legend", y2Axis = "yAxis"
+  )
+
+  # Initialize data and metaData
+  simData <- data.frame()
+  obsData <- data.frame()
+  simMetaData <- list(id = NULL, legend = NULL, color = NULL, linetype = NULL, size = NULL)
+  obsMetaData <- list(id = NULL, legend = NULL, color = NULL, shape = NULL, size = NULL)
   for (curve in configurationPlanCurves) {
-    # TODO handle Observed data and Y2 axis
-    curveOutput <- getCurvePropertiesForTimeProfiles(curve, simulation, simulationResults, axesProperties, configurationPlan)
-    if (is.null(curveOutput)) {
+    curveAxesProperties <- axesProperties
+    # Update features related to observed data
+    if (isObservedData(curve$Y)) {
+      curveProperties <- getObservedCurveProperties(
+        configurationPlanCurve = curve,
+        simulation = simulation,
+        axesProperties = curveAxesProperties,
+        configurationPlan = configurationPlan
+      )
+      obsData <- rbind.data.frame(obsData, curveProperties$data)
+      obsMetaData$id <- c(obsMetaData$id, curveProperties$id %||% NA)
+      for (propertyName in setdiff(names(obsMetaData), "id")) {
+        obsMetaData[[propertyName]] <- c(
+          obsMetaData[[propertyName]],
+          curveProperties[[propertyName]] %||% plotConfiguration$points[[propertyName]]
+        )
+      }
       next
     }
-    if (!isEmpty(curveOutput$error)) {
-      plotObject <- tlf::addErrorbar(
-        x = curveOutput$x,
-        ymin = curveOutput$error$ymin,
-        ymax = curveOutput$error$ymax,
-        caption = prettyCaption(curveOutput$caption, plotObject),
-        color = curveOutput$color,
-        size = curveOutput$size,
-        plotObject = plotObject
+    # Update features related to simulated data
+    curveProperties <- getSimulatedCurveProperties(
+      configurationPlanCurve = curve,
+      simulation = simulation,
+      simulationResults = simulationResults,
+      axesProperties = curveAxesProperties,
+      configurationPlan = configurationPlan
+    )
+    simData <- rbind.data.frame(simData, curveProperties$data)
+    simMetaData$id <- c(simMetaData$id, curveProperties$id %||% NA)
+    for (propertyName in setdiff(names(simMetaData), "id")) {
+      simMetaData[[propertyName]] <- c(
+        simMetaData[[propertyName]],
+        curveProperties[[propertyName]] %||% plotConfiguration$lines[[propertyName]]
       )
     }
-    # If observed data, plotFunction uses tlf atom scatter plot
-    # If simulated data, plotFunction uses tlf atom line plot
-    # This allows different default sizes between points and lines
-    plotObject <- curveOutput$plotFunction(
-      x = curveOutput$x,
-      y = curveOutput$y,
-      caption = prettyCaption(curveOutput$caption, plotObject),
-      color = curveOutput$color,
-      linetype = curveOutput$linetype,
-      size = curveOutput$size,
-      shape = curveOutput$shape,
-      plotObject = plotObject
-    )
   }
-  # Set axes based on Axes properties
-  plotObject <- updatePlotAxes(plotObject, axesProperties)
+  # Update legend captions based on expected plot width
+  # keep order as provided in legend index (collected as id in metaData)
+  if (!isEmpty(simData)) {
+    simData$legend <- factor(
+      prettyCaption(simData$legend, tlf::initializePlot(plotConfiguration)),
+      levels = prettyCaption(
+        simMetaData$legend[order(simMetaData$id)], 
+        tlf::initializePlot(plotConfiguration))
+    ) 
+  }
+  if (!isEmpty(obsData)) {
+    obsData$legend <- factor(
+      prettyCaption(obsData$legend, tlf::initializePlot(plotConfiguration)),
+      levels = prettyCaption(
+        obsMetaData$legend[order(obsMetaData$id)], 
+        tlf::initializePlot(plotConfiguration))
+    ) 
+  }
+
+  # Check necessity if dual axis by getting requested axes
+  requestedAxes <- sort(unique(c(simData$yAxis, obsData$yAxis)))
+  
+  # If only one axis requested, the only axis becomes the new y of axesProperties
+  if (isOfLength(requestedAxes, 1)) {
+    axesProperties$y <- axesProperties[[tolower(requestedAxes)]]
+    simData$yAxis <- ifNotNull(simData$yAxis, FALSE)
+    obsData$yAxis <- ifNotNull(obsData$yAxis, FALSE)
+    plotConfiguration <- updateQualificationTimeProfilePlotConfiguration(
+      simulatedMetaData = simMetaData,
+      observedMetaData = obsMetaData,
+      requestedAxes = requestedAxes,
+      axesProperties = axesProperties,
+      plotConfiguration = plotConfiguration
+    )
+    
+    plotObject <- tlf::plotTimeProfile(
+      data = simData,
+      observedData = obsData,
+      dataMapping = simDataMapping,
+      observedDataMapping = obsDataMapping,
+      plotConfiguration = plotConfiguration
+    )
+    return(plotObject)
+  }
+  # If all Y, Y2 and Y3 axes are defined and used
+  # Keep Y and Y2 with a warning message
+  if (isOfLength(requestedAxes, 3)) {
+    logError(messages$warningTooManyAxes())
+    requestedAxes <- c("Y", "Y2")
+  }
+  if (isOfLength(requestedAxes, 1)) {
+    axesProperties$y <- axesProperties[[tolower(requestedAxes)]]
+    simData$yAxis <- ifNotNull(simData$yAxis, FALSE)
+    obsData$yAxis <- ifNotNull(obsData$yAxis, FALSE)
+    plotConfiguration <- updateQualificationTimeProfilePlotConfiguration(
+      simulatedMetaData = simMetaData,
+      observedMetaData = obsMetaData,
+      requestedAxes = requestedAxes,
+      axesProperties = axesProperties,
+      plotConfiguration = plotConfiguration
+    )
+    
+    plotObject <- tlf::plotTimeProfile(
+      data = simData,
+      observedData = obsData,
+      dataMapping = simDataMapping,
+      observedDataMapping = obsDataMapping,
+      plotConfiguration = plotConfiguration
+    )
+    plotObject <- updatePlotAxes(plotObject, axesProperties)
+    return(plotObject)
+  }
+  # Y, Y2 and Y3 defined and used
+  if (isOfLength(requestedAxes, 3)) {
+    logError(messages$warningTooManyAxes(
+      project = timeProfilePlan$Project,
+      simulation = timeProfilePlan$Simulation
+    ))
+    requestedAxes <- c("Y", "Y2")
+  }
+  # Use dual axis but needs to map them first
+  # New Y axis will be either Y or Y2 (ie. axis found first because they were sorted)
+  # New Y2 axis will be either Y2 or Y3 (ie. axis found last because they were sorted)
+  axesProperties$y <- axesProperties[[head(tolower(requestedAxes), 1)]]
+  axesProperties$y2 <- axesProperties[[tail(tolower(requestedAxes), 1)]]
+
+  simData$yAxis <- ifNotNull(simData$yAxis, simData$yAxis %in% tail(requestedAxes, 1))
+  obsData$yAxis <- ifNotNull(obsData$yAxis, obsData$yAxis %in% tail(requestedAxes, 1))
+
+  plotConfiguration <- updateQualificationTimeProfilePlotConfiguration(
+    simulatedMetaData = simMetaData,
+    observedMetaData = obsMetaData,
+    requestedAxes = requestedAxes,
+    axesProperties = axesProperties,
+    plotConfiguration = plotConfiguration
+  )
+
+  plotObject <- tlf::plotTimeProfile(
+    data = simData,
+    observedData = obsData,
+    dataMapping = simDataMapping,
+    observedDataMapping = obsDataMapping,
+    plotConfiguration = plotConfiguration
+  )
+
+
+  # We might need in that case to create a dummy plot
+  # to update the exported size of the plot
+  simData$yAxis <- ifNotNull(simData$yAxis, FALSE)
+  obsData$yAxis <- ifNotNull(obsData$yAxis, FALSE)
+  dummyPlotObject <- tlf::plotTimeProfile(
+    data = simData,
+    observedData = obsData,
+    dataMapping = simDataMapping,
+    observedDataMapping = obsDataMapping,
+    plotConfiguration = plotConfiguration
+  )
+  dummyPlotObject <- updatePlotDimensions(dummyPlotObject)
+  plotObject$plotConfiguration$export <- dummyPlotObject$plotConfiguration$export
+
   return(plotObject)
-}
-
-#' @title getCurvePropertiesForTimeProfiles
-#' @description Identify and convert properties from `Curves` field of configuration plan
-#' @param configurationPlanCurve list of properties defined in `Curves` field of configuration plan
-#' @param simulation A `Simulation` object from `ospsuite` package
-#' that includes required information to identify and convert the data requested from `configurationPlanCurve` properties
-#' @param simulationResults A `SimulationResults` object from `ospsuite` package
-#' that includes the data requested from `configurationPlanCurve` properties
-#' @param axesProperties list of axes properties obtained from `getAxesProperties`
-#' @param configurationPlan A `ConfigurationPlan` object that includes methods to find observed data
-#' @return A list of data and properties to be plotted and that follows `tlf` package nomenclature
-#' @import ospsuite
-#' @keywords internal
-getCurvePropertiesForTimeProfiles <- function(configurationPlanCurve,
-                                              simulation,
-                                              simulationResults,
-                                              axesProperties,
-                                              configurationPlan) {
-  # Check if curve is on first or seconf Y axis
-  curveOnSecondAxis <- isTRUE(configurationPlanCurve$CurveOptions$yAxisType == "Y2")
-  # TODO handle curve on Y2
-  if (curveOnSecondAxis) {
-    logError(messages$warningRightAxisNotAvailable(configurationPlanCurve$Name))
-    return()
-  }
-
-  # configurationPlanCurve$Y is a quantity path from the cnofiguration plan
-  # e.g. "S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
-  # or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
-  pathArray <- ospsuite::toPathArray(configurationPlanCurve$Y)
-
-  # Case path is Observed Data
-  if (isObservedData(configurationPlanCurve$Y)) {
-    observedDataId <- getObservedDataIdFromPath(configurationPlanCurve$Y)
-    molWeight <- configurationPlan$getMolWeightForObservedData(observedDataId)
-    if (is.na(molWeight)) {
-      compoundName <- getCompoundNameFromPath(configurationPlanCurve$Y)
-      molWeight <- getMolWeightForCompound(compoundName, simulation)
-    }
-    # observedResults is a list that includes
-    # data: a data.frame with column 1 = Time, column 2 = Concentration, column 3 = Error
-    # metaData: a list for each column of data that includes their unit
-    observedResults <- getObservedDataFromConfigurationPlan(observedDataId, configurationPlan)
-    observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties)
-
-    outputCurve <- list(
-      x = observedData$time,
-      y = observedData$y,
-      error = observedData$error,
-      caption = configurationPlanCurve$Name,
-      color = configurationPlanCurve$CurveOptions$Color,
-      linetype = tlfLinetype(configurationPlanCurve$CurveOptions$LineStyle),
-      shape = tlfShape(configurationPlanCurve$CurveOptions$Symbol),
-      size = configurationPlanCurve$CurveOptions$Size,
-      id = configurationPlanCurve$CurveOptions$LegendIndex,
-      secondAxis = curveOnSecondAxis,
-      # Use appropriate tlf atom for its default properties
-      plotFunction = tlf::addScatter
-    )
-    return(outputCurve)
-  }
-  # Remove simulation name from path
-  outputPath <- ospsuite::toPathString(pathArray[-1])
-  # Get and convert output path values into display unit
-  simulationQuantity <- ospsuite::getQuantity(outputPath, simulation)
-  simulationPathResults <- ospsuite::getOutputValues(simulationResults, quantitiesOrPaths = outputPath)
-  molWeight <- simulation$molWeightFor(outputPath)
-
-  time <- ospsuite::toUnit(
-    "Time",
-    simulationPathResults$data[, "Time"],
-    axesProperties$x$unit
-  )
-
-  outputValues <- ospsuite::toUnit(simulationQuantity,
-    simulationPathResults$data[, outputPath],
-    axesProperties$y$unit,
-    molWeight = molWeight
-  )
-
-  # If CurveOptions or one of its field is not defined,
-  # the corresponding result will be NULL and default properties will be applied instead
-  # If defined, they'll overwrite the default
-  outputCurve <- list(
-    x = time,
-    y = outputValues,
-    caption = configurationPlanCurve$Name,
-    color = configurationPlanCurve$CurveOptions$Color,
-    linetype = tlfLinetype(configurationPlanCurve$CurveOptions$LineStyle),
-    shape = tlfShape(configurationPlanCurve$CurveOptions$Symbol),
-    size = configurationPlanCurve$CurveOptions$Size,
-    id = configurationPlanCurve$CurveOptions$LegendIndex,
-    secondAxis = curveOnSecondAxis,
-    # Use appropriate tlf atom for its default properties
-    plotFunction = tlf::addLine
-  )
-
-  return(outputCurve)
 }
 
 #' @title plotQualificationPopulationTimeProfile
@@ -524,7 +571,7 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
     }
   )
   if (isEmpty(outputValues)) {
-    stop(messages$errorMolecularWeightRequired(pathArray[1]))
+    stop(messages$errorMolecularWeightRequired("")) #pathArray[1]
   }
 
   outputError <- NULL
@@ -608,4 +655,203 @@ getObservedErrorValues <- function(observedValues, observedResults, axesProperti
     observedError$ymin[observedError$ymin <= 0] <- observedValues[observedError$ymin <= 0]
   }
   return(observedError)
+}
+
+
+#' @title getObservedCurveProperties
+#' @description Get Curve Properties and values of Observed data
+#' @param configurationPlanCurve `Curves` fields of configuration plan
+#' @param simulation A `Simulation` object from `ospsuite` package
+#' that includes required information to identify and convert the data requested from `configurationPlanCurve` properties
+#' @param axesProperties list of axes properties obtained from `getAxesProperties`
+#' @param configurationPlan A `ConfigurationPlan` object that includes methods to find observed data
+#' @return A named list data and meta data parameters
+#' @keywords internal
+getObservedCurveProperties <- function(configurationPlanCurve,
+                                       simulation,
+                                       axesProperties,
+                                       configurationPlan) {
+  # Update Axis Properties based on yAxisType
+  yAxisType <- configurationPlanCurve$CurveOptions$yAxisType %||% "Y"
+  axesProperties$y <- switch(yAxisType,
+    "Y2" = axesProperties$y2,
+    "Y3" = axesProperties$y3,
+    axesProperties$y
+  )
+
+  observedDataId <- getObservedDataIdFromPath(configurationPlanCurve$Y)
+  molWeight <- configurationPlan$getMolWeightForObservedData(observedDataId)
+  if (is.na(molWeight)) {
+    compoundName <- getCompoundNameFromPath(configurationPlanCurve$Y)
+    molWeight <- getMolWeightForCompound(compoundName, simulation)
+  }
+  # observedResults is a list that includes
+  # data: a data.frame with column 1 = Time, column 2 = Concentration, column 3 = Error
+  # metaData: a list for each column of data that includes their unit
+  observedResults <- getObservedDataFromConfigurationPlan(observedDataId, configurationPlan)
+  observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties)
+
+  outputData <- data.frame(
+    x = observedData$time,
+    y = observedData$y,
+    ymin = observedData$error$ymin %||% observedData$y,
+    ymax = observedData$error$ymax %||% observedData$y,
+    legend = configurationPlanCurve$Name,
+    yAxis = yAxisType
+  )
+
+  outputCurve <- list(
+    data = outputData,
+    color = configurationPlanCurve$CurveOptions$Color,
+    shape = tlfShape(configurationPlanCurve$CurveOptions$Symbol),
+    size = configurationPlanCurve$CurveOptions$Size,
+    id = configurationPlanCurve$CurveOptions$LegendIndex,
+    legend = configurationPlanCurve$Name
+  )
+
+  return(outputCurve)
+}
+
+#' @title getSimulatedCurveProperties
+#' @description Get Curve Properties and values of Simulated data
+#' @param configurationPlanCurve `Curves` fields of configuration plan
+#' @param simulation A `Simulation` object from `ospsuite` package
+#' that includes required information to identify and convert the data requested from `configurationPlanCurve` properties
+#' @param simulationResults A `SimulationResults` object from `ospsuite` package
+#' that includes the data requested from `configurationPlanCurve` properties
+#' @param axesProperties list of axes properties obtained from `getAxesProperties`
+#' @param configurationPlan A `ConfigurationPlan` object that includes methods to find observed data
+#' @return A named list data and meta data parameters
+#' @keywords internal
+getSimulatedCurveProperties <- function(configurationPlanCurve,
+                                        simulation,
+                                        simulationResults,
+                                        axesProperties,
+                                        configurationPlan) {
+  # Update Axis Properties based on yAxisType
+  yAxisType <- configurationPlanCurve$CurveOptions$yAxisType %||% "Y"
+  axesProperties$y <- switch(yAxisType,
+    "Y2" = axesProperties$y2,
+    "Y3" = axesProperties$y3,
+    axesProperties$y
+  )
+  # configurationPlanCurve$Y is a quantity path from the cnofiguration plan
+  # e.g. "S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
+  # or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
+  pathArray <- ospsuite::toPathArray(configurationPlanCurve$Y)
+  # Remove simulation name from path
+  outputPath <- ospsuite::toPathString(pathArray[-1])
+  # Get and convert output path values into display unit
+  simulationQuantity <- ospsuite::getQuantity(outputPath, simulation)
+  simulationPathResults <- ospsuite::getOutputValues(simulationResults, quantitiesOrPaths = outputPath)
+  molWeight <- simulation$molWeightFor(outputPath)
+
+  outputData <- data.frame(
+    x = ospsuite::toUnit(
+      "Time",
+      simulationPathResults$data[, "Time"],
+      axesProperties$x$unit
+    ),
+    y = ospsuite::toUnit(
+      simulationQuantity,
+      simulationPathResults$data[, outputPath],
+      axesProperties$y$unit,
+      molWeight = molWeight
+    ),
+    legend = configurationPlanCurve$Name,
+    yAxis = yAxisType
+  )
+
+  outputCurve <- list(
+    data = outputData,
+    color = configurationPlanCurve$CurveOptions$Color,
+    linetype = tlfLinetype(configurationPlanCurve$CurveOptions$LineStyle),
+    size = configurationPlanCurve$CurveOptions$Size,
+    id = configurationPlanCurve$CurveOptions$LegendIndex,
+    legend = configurationPlanCurve$Name
+  )
+
+  return(outputCurve)
+}
+
+#' @title updateQualificationTimeProfilePlotConfiguration
+#' @description Update TimeProfilePlotConfiguration properties based on meta data and requested axes
+#' @param simulatedMetaData List of meta data on simulated data obtained from `getSimulatedCurveProperties`
+#' @param observedMetaData List of meta data on observed data obtained from `getObservedCurveProperties`
+#' @param requestedAxes Array of requested axes included in `"Y"`, `"Y2"` and `"Y3"`
+#' @param axesProperties list of axes properties obtained from `getAxesProperties`
+#' @param plotConfiguration A `PlotConfiguration` object
+#' @return Updated `TimeProfilePlotConfiguration` object
+#' @keywords internal
+updateQualificationTimeProfilePlotConfiguration <- function(simulatedMetaData = NULL,
+                                                            observedMetaData  = NULL,
+                                                            requestedAxes = "Y",
+                                                            axesProperties = NULL,
+                                                            plotConfiguration) {
+  # Update plot configuration for simulated values
+  if (!isEmpty(simulatedMetaData)) {
+    sortedSimulatedMetaData <- order(simulatedMetaData$id)
+    plotConfiguration$lines$color <- simulatedMetaData$color[sortedSimulatedMetaData]
+    plotConfiguration$lines$linetype <- simulatedMetaData$linetype[sortedSimulatedMetaData]
+    plotConfiguration$lines$size <- simulatedMetaData$size[sortedSimulatedMetaData]
+  }
+  # Update plot configuration for observed values
+  if (!isEmpty(observedMetaData)) {
+    sortedObservedMetaData <- order(observedMetaData$id)
+    # offset of simulated data colors
+    plotConfiguration$points$color <- c(
+      simulatedMetaData$color, 
+      observedMetaData$color[sortedObservedMetaData]
+    )
+    plotConfiguration$errorbars$color <- c(
+      simulatedMetaData$color, 
+      observedMetaData$color[sortedObservedMetaData]
+    )
+    plotConfiguration$points$shape <- observedMetaData$shape[sortedObservedMetaData]
+    plotConfiguration$points$size <- observedMetaData$size[sortedObservedMetaData]
+  }
+  
+  # Update labels, axes and background properties
+  # These cannot be performed at the plotObject level any more because of dual axis
+  plotConfiguration$labels$xlabel <- tlf::getLabelWithUnit(
+    displayDimension(axesProperties$x$dimension), 
+    axesProperties$x$unit
+    )
+  plotConfiguration$labels$ylabel <- tlf::getLabelWithUnit(
+    displayDimension(axesProperties$y$dimension), 
+    axesProperties$y$unit
+    )
+  
+  plotConfiguration$background$xGrid$color <- axesProperties$x$grid$color
+  plotConfiguration$background$xGrid$linetype <- axesProperties$x$grid$linetype
+  plotConfiguration$background$yGrid$color <- axesProperties$y$grid$color
+  plotConfiguration$background$yGrid$linetype <- axesProperties$y$grid$linetype
+  
+  plotConfiguration$xAxis$scale <- axesProperties$x$scale
+  plotConfiguration$xAxis$limits <- c(axesProperties$x$min, axesProperties$x$max)
+  plotConfiguration$xAxis$ticks <- axesProperties$x$ticks
+  plotConfiguration$xAxis$ticklabels <- axesProperties$x$ticklabels
+  
+  plotConfiguration$yAxis$scale <- axesProperties$y$scale
+  plotConfiguration$yAxis$limits <- c(axesProperties$y$min, axesProperties$y$max)
+  plotConfiguration$yAxis$ticks <- axesProperties$y$ticks
+  plotConfiguration$yAxis$ticklabels <- axesProperties$y$ticklabels
+  
+  if (isOfLength(requestedAxes, 1)) {
+    return(plotConfiguration)
+  }
+  
+  plotConfiguration$labels$y2label <- tlf::getLabelWithUnit(
+    displayDimension(axesProperties$y2$dimension), 
+    axesProperties$y2$unit
+    )
+  plotConfiguration$background$y2Grid$color <- axesProperties$y2$grid$color
+  plotConfiguration$background$y2Grid$linetype <- axesProperties$y2$grid$linetype
+
+  plotConfiguration$y2Axis$scale <- axesProperties$y2$scale
+  plotConfiguration$y2Axis$limits <- c(axesProperties$y2$min, axesProperties$y2$max)
+  plotConfiguration$y2Axis$ticks <- axesProperties$y2$ticks
+  plotConfiguration$y2Axis$ticklabels <- axesProperties$y2$ticklabels
+
+  return(plotConfiguration)
 }

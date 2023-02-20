@@ -218,6 +218,9 @@ messages <- list(
       "errors/SD were assumed arithmetic with same unit as observed data values"
     )
   },
+  warningTooManyAxes = function(){
+    "Qualification TimeProfile is unable to display data for all 3 axes. Only Y and Y2 axes were kept."
+  },
 
   #----- Info messages ----
   runStarting = function(runName, subRun = NULL) {
