@@ -116,7 +116,15 @@ loadConfigurationPlan <- function(configurationPlanFile, workflowFolder) {
   # jsonFieldNames is almost camel case, only first letter needs to be switched to lower case
   fieldNames <- paste0(tolower(substring(jsonFieldNames, 1, 1)), substring(jsonFieldNames, 2))
   eval(parse(text = paste0("configurationPlan$", fieldNames, "<- jsonConfigurationPlan$", jsonFieldNames)))
-
+  
+  # Create unique plot number for each plot named "PlotNumber"
+  # within a specific plot type (eg. PKRatio) defined in the configuration plan
+  plotFields <- setdiff(names(configurationPlan$plots), c("PlotSettings", "AxesSettings"))
+  for(plotField in plotFields){
+    for(plotIndex in seq_along(configurationPlan$plots[[plotField]])){
+      configurationPlan$plots[[plotField]][[plotIndex]]$PlotNumber <- plotIndex
+    }
+  }
   return(configurationPlan)
 }
 

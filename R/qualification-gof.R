@@ -8,40 +8,44 @@
 plotQualificationGOFs <- function(configurationPlan, settings) {
   gofResults <- list()
   for (gofPlan in configurationPlan$plots$GOFMergedPlots) {
-    # If field artifacts is null, output them all
-    gofPlan$Artifacts <- gofPlan$Artifacts %||% c("Plot", "GMFE")
-    gofAxesUnits <- getGOFAxesUnits(gofPlan, settings)
-    gofData <- getQualificationGOFData(gofPlan, configurationPlan, gofAxesUnits)
+    qualificationCatch(
+      {
+        # If field artifacts is null, output them all
+        gofPlan$Artifacts <- gofPlan$Artifacts %||% c("Plot", "GMFE")
+        gofAxesUnits <- getGOFAxesUnits(gofPlan, settings)
+        gofData <- getQualificationGOFData(gofPlan, configurationPlan, gofAxesUnits)
 
-    # GMFE
-    gmfeID <- defaultFileNames$resultID(length(gofResults) + 1, "gof_gmfe")
-    gofGMFE <- getQualificationGOFGMFE(gofData$data)
-    gofResults[[gmfeID]] <- saveTaskResults(
-      id = gmfeID,
-      sectionId = gofPlan$SectionReference %||% gofPlan$SectionId,
-      table = gofGMFE,
-      tableCaption = paste0("GMFE for ", gofPlan$Title),
-      includeTable = isIncluded("GMFE", gofPlan$Artifacts)
+        # GMFE
+        gmfeID <- defaultFileNames$resultID(length(gofResults) + 1, "gof_gmfe")
+        gofGMFE <- getQualificationGOFGMFE(gofData$data)
+        gofResults[[gmfeID]] <- saveTaskResults(
+          id = gmfeID,
+          sectionId = gofPlan$SectionReference %||% gofPlan$SectionId,
+          table = gofGMFE,
+          tableCaption = paste0("GMFE for ", gofPlan$Title),
+          includeTable = isIncluded("GMFE", gofPlan$Artifacts)
+        )
+
+        # GOF plots
+        plotTypes <- gofPlan$PlotTypes %||% ospsuite::toPathArray(gofPlan$PlotType)
+        for (plotType in plotTypes) {
+          plotID <- defaultFileNames$resultID(length(gofResults) + 1, "gof_plot", plotType)
+          axesProperties <- getAxesProperties(gofPlan$Axes[[plotType]]) %||% settings[[plotType]]$axes
+
+          gofPlot <- getQualificationGOFPlot(plotType, gofData$data, gofData$metaData, axesProperties, gofPlan[["PlotSettings"]])
+          gofResults[[plotID]] <- saveTaskResults(
+            id = plotID,
+            sectionId = gofPlan$SectionReference %||% gofPlan$SectionId,
+            plot = gofPlot,
+            plotCaption = gofPlan$Title,
+            includePlot = isIncluded("Plot", gofPlan$Artifacts)
+          )
+        }
+      },
+      configurationPlanField = gofPlan
     )
-
-    # GOF plots
-    plotTypes <- gofPlan$PlotTypes %||% ospsuite::toPathArray(gofPlan$PlotType)
-    for (plotType in plotTypes) {
-      plotID <- defaultFileNames$resultID(length(gofResults) + 1, "gof_plot", plotType)
-      axesProperties <- getAxesProperties(gofPlan$Axes[[plotType]]) %||% settings[[plotType]]$axes
-
-      gofPlot <- getQualificationGOFPlot(plotType, gofData$data, gofData$metaData, axesProperties, gofPlan[["PlotSettings"]])
-      gofResults[[plotID]] <- saveTaskResults(
-        id = plotID,
-        sectionId = gofPlan$SectionReference %||% gofPlan$SectionId,
-        plot = gofPlot,
-        plotCaption = gofPlan$Title,
-        includePlot = isIncluded("Plot", gofPlan$Artifacts)
-      )
-    }
-    return(gofResults)
   }
-  return(gofPlotResults)
+  return(gofResults)
 }
 
 #' @title getQualificationGOFData

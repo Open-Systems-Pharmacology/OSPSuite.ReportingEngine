@@ -143,7 +143,7 @@ logCatch <- function(expr) {
         textCall <- deparse(call, nlines = 1)
 
         callNotDisplayed <- any(sapply(
-          c("logCatch", "tryCatch", "withCallingHandlers", "simpleError", "eval\\(ei, envir\\)"),
+          c("logCatch", "qualificationCatch", "stop", "tryCatch", "withCallingHandlers", "simpleError", "eval\\(ei, envir\\)"),
           FUN = function(pattern) {
             grepl(textCall, pattern = pattern, ignore.case = TRUE)
           }
@@ -203,5 +203,67 @@ logCatch <- function(expr) {
   error = function(errorCondition) {
     stop(errorCondition$message, call. = FALSE)
   }
+  )
+}
+
+#' @title displayConfigurationPlanPlotInfo
+#' @description 
+#' Display information of a configuration plan `Plot` field
+#' @param configurationPlanField A list extracted from a configuration plan field
+#' @return Array of name properties and their value
+#' @export
+#' @examples 
+#' 
+#' # Example of list with properties
+#' plotField <- list(
+#' PlotNumber = 5,
+#' Simulation = "Name of Simulation",
+#' Project = "Name of Project",
+#' Options = list(width = 10, height = 10, units = "cm")
+#' )
+#' 
+#' # Log messages are usually displayed through `cat()`, `error()` or `warning()`
+#' cat(displayConfigurationPlanPlotInfo(plotField))
+#' 
+displayConfigurationPlanPlotInfo <- function(configurationPlanField){
+  message <- unlist(lapply(
+    names(configurationPlanField), 
+    FUN = function(fieldElement){
+      # Lists can include a lot of options
+      # which would make a very long displayed message
+      # If necessary, this can be changed to get a max number of characters
+      if(isOfType(configurationPlanField[[fieldElement]], "list")){
+        return(paste0(highlight(fieldElement), ": list(...)"))
+      }
+      fieldValues <- paste(configurationPlanField[[fieldElement]], collapse = ", ")
+      return(paste0(highlight(fieldElement), ": ", fieldValues))
+    }
+  ))
+  infoTitle <- "Configuration Plan Information:"
+  if (requireNamespace("crayon", quietly = TRUE)) {
+    infoTitle <- crayon::yellow$bold(infoTitle)
+  }
+  message <- paste(c("", infoTitle, message, ""), collapse = "\n")
+  return(message)
+}
+
+
+#' @title qualificationCatch
+#' @description 
+#' Add configuration plan plot information when catching a warning/error
+#' @param expr Evaluated code chunks
+#' @param configurationPlanField A list extracted from a configuration plan field
+#' @keywords internal
+qualificationCatch <- function(expr, configurationPlanField = NULL){
+  withCallingHandlers(
+      expr,
+      error = function(errorCondition) {
+        plotInfo <- displayConfigurationPlanPlotInfo(configurationPlanField)
+        stop(c(errorCondition$message, plotInfo), call. = FALSE)
+        },
+      warning = function(warningCondition) {
+        plotInfo <- displayConfigurationPlanPlotInfo(configurationPlanField)
+        warning(c(warningCondition$message, plotInfo), call. = FALSE)
+      }
   )
 }
