@@ -161,9 +161,14 @@ getPKParameterRatioMeasureFromMCSampling <- function(comparisonData,
     allSamplesRatioData <- lapply(
       allSamplesReferenceData,
       function(sampleReferenceData) {
-        ratioData <- comparisonData[, c("simulationSetName", "Value")]
-        ratioData$Value <- comparisonData$Value / sampleReferenceData$Value
-        return(ratioData)
+        # TODO: tlf issue #408
+        # simulationSetName is factor class including multiple levels 
+        # After selecting the comparison data, only 1 level is remaining
+        # leading to empty factor levels for calculation of BoxWhisker measure
+        return(data.frame(
+          simulationSetName = factor(comparisonData$simulationSetName),
+          Value = comparisonData$Value / sampleReferenceData$Value
+        ))
       }
     )
   } else {
@@ -177,9 +182,10 @@ getPKParameterRatioMeasureFromMCSampling <- function(comparisonData,
     allSamplesRatioData <- lapply(
       allSamplesComparisonData,
       function(sampleComparisonData) {
-        ratioData <- sampleComparisonData
-        ratioData$Value <- sampleComparisonData$Value / referenceData$Value
-        return(ratioData)
+        return(data.frame(
+          simulationSetName = factor(sampleComparisonData$simulationSetName),
+          Value = sampleComparisonData$Value / referenceData$Value
+        ))
       }
     )
   }
