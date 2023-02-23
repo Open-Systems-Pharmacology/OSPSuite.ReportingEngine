@@ -116,13 +116,12 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
         configurationPlan = configurationPlan
       )
       obsData <- rbind.data.frame(obsData, curveProperties$data)
+      # Use default property if property is undefined
       obsMetaData$id <- c(obsMetaData$id, curveProperties$id %||% NA)
-      for (propertyName in setdiff(names(obsMetaData), "id")) {
-        obsMetaData[[propertyName]] <- c(
-          obsMetaData[[propertyName]],
-          curveProperties[[propertyName]] %||% plotConfiguration$points[[propertyName]]
-        )
-      }
+      obsMetaData$legend <- c(obsMetaData$legend, curveProperties$legend)
+      obsMetaData$color <- c(obsMetaData$color, curveProperties$color %||% "black")
+      obsMetaData$size <- c(obsMetaData$size, curveProperties$size %||% 2)
+      obsMetaData$shape <- c(obsMetaData$shape, curveProperties$shape %||% tlf::Shapes$circle)
       next
     }
     # Update features related to simulated data
@@ -134,13 +133,12 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
       configurationPlan = configurationPlan
     )
     simData <- rbind.data.frame(simData, curveProperties$data)
+    # Use default property if property is undefined
     simMetaData$id <- c(simMetaData$id, curveProperties$id %||% NA)
-    for (propertyName in setdiff(names(simMetaData), "id")) {
-      simMetaData[[propertyName]] <- c(
-        simMetaData[[propertyName]],
-        curveProperties[[propertyName]] %||% plotConfiguration$lines[[propertyName]]
-      )
-    }
+    simMetaData$legend <- c(simMetaData$legend, curveProperties$legend)
+    simMetaData$color <- c(simMetaData$color, curveProperties$color %||% "black")
+    simMetaData$size <- c(simMetaData$size, curveProperties$size %||% 1)
+    simMetaData$linetype <- c(simMetaData$linetype, curveProperties$linetype %||% tlf::Linetypes$solid)
   }
   # Update legend captions based on expected plot width
   # keep order as provided in legend index (collected as id in metaData)
