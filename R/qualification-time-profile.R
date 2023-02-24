@@ -93,11 +93,11 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
                                              plotConfiguration) {
   # Define tlf data mapping for observed and simulated time profile
   simDataMapping <- tlf::TimeProfileDataMapping$new(
-    x = "x", y = "y", group = "legend", y2Axis = "yAxis"
+    x = "x", y = "y", group = "legend", y2Axis = "y2Axis"
   )
   obsDataMapping <- tlf::ObservedDataMapping$new(
     x = "x", y = "y", ymin = "ymin", ymax = "ymax",
-    group = "legend", y2Axis = "yAxis"
+    group = "legend", y2Axis = "y2Axis"
   )
 
   # Initialize data and metaData
@@ -165,8 +165,8 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
   # If only one axis requested, the only axis becomes the new y of axesProperties
   if (isOfLength(requestedAxes, 1)) {
     axesProperties$y <- axesProperties[[tolower(requestedAxes)]]
-    simData$yAxis <- ifNotNull(simData$yAxis, FALSE)
-    obsData$yAxis <- ifNotNull(obsData$yAxis, FALSE)
+    simData$y2Axis <- ifNotNull(simData$yAxis, FALSE)
+    obsData$y2Axis <- ifNotNull(obsData$yAxis, FALSE)
     plotConfiguration <- updateQualificationTimeProfilePlotConfiguration(
       simulatedMetaData = simMetaData,
       observedMetaData = obsMetaData,
@@ -190,44 +190,19 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
     logError(messages$warningTooManyAxes())
     requestedAxes <- c("Y", "Y2")
   }
-  if (isOfLength(requestedAxes, 1)) {
-    axesProperties$y <- axesProperties[[tolower(requestedAxes)]]
-    simData$yAxis <- ifNotNull(simData$yAxis, FALSE)
-    obsData$yAxis <- ifNotNull(obsData$yAxis, FALSE)
-    plotConfiguration <- updateQualificationTimeProfilePlotConfiguration(
-      simulatedMetaData = simMetaData,
-      observedMetaData = obsMetaData,
-      requestedAxes = requestedAxes,
-      axesProperties = axesProperties,
-      plotConfiguration = plotConfiguration
-    )
-    
-    plotObject <- tlf::plotTimeProfile(
-      data = simData,
-      observedData = obsData,
-      dataMapping = simDataMapping,
-      observedDataMapping = obsDataMapping,
-      plotConfiguration = plotConfiguration
-    )
-    plotObject <- updatePlotAxes(plotObject, axesProperties)
-    return(plotObject)
-  }
-  # Y, Y2 and Y3 defined and used
-  if (isOfLength(requestedAxes, 3)) {
-    logError(messages$warningTooManyAxes(
-      project = timeProfilePlan$Project,
-      simulation = timeProfilePlan$Simulation
-    ))
-    requestedAxes <- c("Y", "Y2")
-  }
   # Use dual axis but needs to map them first
   # New Y axis will be either Y or Y2 (ie. axis found first because they were sorted)
   # New Y2 axis will be either Y2 or Y3 (ie. axis found last because they were sorted)
   axesProperties$y <- axesProperties[[head(tolower(requestedAxes), 1)]]
   axesProperties$y2 <- axesProperties[[tail(tolower(requestedAxes), 1)]]
 
-  simData$yAxis <- ifNotNull(simData$yAxis, simData$yAxis %in% tail(requestedAxes, 1))
-  obsData$yAxis <- ifNotNull(obsData$yAxis, obsData$yAxis %in% tail(requestedAxes, 1))
+  # y2Axis is the variable mapped to the dual axis and expected as logical by tlf package
+  # FALSE y2Axis values correspond to data on the left axis
+  # TRUE y2Axis values correspond to data on the right axis
+  # Since yAxis values are included in "Y", "Y2" or "Y3"
+  # TRUE values will correspond to the values included (%in%) last found axis
+  simData$y2Axis <- ifNotNull(simData$yAxis, simData$yAxis %in% tail(requestedAxes, 1))
+  obsData$y2Axis <- ifNotNull(obsData$yAxis, obsData$yAxis %in% tail(requestedAxes, 1))
 
   plotConfiguration <- updateQualificationTimeProfilePlotConfiguration(
     simulatedMetaData = simMetaData,
@@ -248,8 +223,8 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
 
   # We might need in that case to create a dummy plot
   # to update the exported size of the plot
-  simData$yAxis <- ifNotNull(simData$yAxis, FALSE)
-  obsData$yAxis <- ifNotNull(obsData$yAxis, FALSE)
+  simData$y2Axis <- ifNotNull(simData$yAxis, FALSE)
+  obsData$y2Axis <- ifNotNull(obsData$yAxis, FALSE)
   dummyPlotObject <- tlf::plotTimeProfile(
     data = simData,
     observedData = obsData,
