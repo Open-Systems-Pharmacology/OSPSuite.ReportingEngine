@@ -122,7 +122,12 @@ loadConfigurationPlan <- function(configurationPlanFile, workflowFolder) {
   plotFields <- setdiff(names(configurationPlan$plots), c("PlotSettings", "AxesSettings"))
   for(plotField in plotFields){
     for(plotIndex in seq_along(configurationPlan$plots[[plotField]])){
-      configurationPlan$plots[[plotField]][[plotIndex]]$PlotNumber <- plotIndex
+      # In json, numbering of fields in {} starts at 0
+      # Actual plot index should start at 1
+      configurationPlan$plots[[plotField]][[plotIndex]]$PlotNumber <- paste(
+        plotIndex - 1, "(json numbering starting at 0); ", 
+        plotIndex, "(actual plot index)"
+        )
     }
   }
   return(configurationPlan)
