@@ -32,7 +32,10 @@ plotQualificationTimeProfiles <- function(configurationPlan, settings) {
 
         # Get axes properties (with scale, limits and display units)
         axesProperties <- getAxesProperties(timeProfilePlan$Plot$Axes) %||% settings$axes
-        plotConfiguration <- getPlotConfigurationFromPlan(timeProfilePlan$Plot)
+        plotConfiguration <- getPlotConfigurationFromPlan(
+          timeProfilePlan$Plot, 
+          plotType = "TimeProfile"
+          )
         timeProfilePlot <- tlf::initializePlot(plotConfiguration)
 
         # Currently use ifNotNull to select if mean or population time profile
@@ -55,7 +58,7 @@ plotQualificationTimeProfiles <- function(configurationPlan, settings) {
             simulationResults = simulationResults,
             axesProperties = axesProperties,
             configurationPlan = configurationPlan,
-            plotObject = timeProfilePlot
+            plotConfiguration = plotConfiguration
           )
         )
 
