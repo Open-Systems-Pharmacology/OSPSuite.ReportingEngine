@@ -10,49 +10,54 @@
 plotQualificationComparisonTimeProfile <- function(configurationPlan, settings) {
   timeProfileResults <- list()
   for (timeProfilePlan in configurationPlan$plots$ComparisonTimeProfilePlots) {
-    # Create a unique ID for the plot name as <Plot index>-<Project>-<Simulation>
-    plotID <- defaultFileNames$resultID("comparison_time_profile", timeProfilePlan$Title, length(timeProfileResults) + 1)
+    qualificationCatch(
+      {
+        # Create a unique ID for the plot name as <Plot index>-<Project>-<Simulation>
+        plotID <- defaultFileNames$resultID("comparison_time_profile", timeProfilePlan$Title, length(timeProfileResults) + 1)
 
-    # Get axes properties (with scale, limits and display units)
-    axesProperties <- getAxesProperties(timeProfilePlan$Axes) %||% settings$axes
-    if (isEmpty(axesProperties)) {
-      logError(messages$warningNoAxesSettings(
-        timeProfilePlan$Title,
-        plotType = "Comparison Time Profile Plots"
-      ))
-      next
-    }
+        # Get axes properties (with scale, limits and display units)
+        axesProperties <- getAxesProperties(timeProfilePlan$Axes) %||% settings$axes
+        if (isEmpty(axesProperties)) {
+          logError(messages$warningNoAxesSettings(
+            timeProfilePlan$Title,
+            plotType = "Comparison Time Profile Plots"
+          ))
+          next
+        }
 
-    simulationDuration <- ospsuite::toUnit(
-      quantityOrDimension = "Time",
-      values = as.numeric(timeProfilePlan$SimulationDuration),
-      targetUnit = axesProperties$x$unit,
-      sourceUnit = timeProfilePlan$TimeUnit
-    )
-    axesProperties$x <- c(
-      axesProperties$x,
-      getTimeTicksFromUnit(axesProperties$x$unit, simulationDuration)
-    )
+        simulationDuration <- ospsuite::toUnit(
+          quantityOrDimension = "Time",
+          values = as.numeric(timeProfilePlan$SimulationDuration),
+          targetUnit = axesProperties$x$unit,
+          sourceUnit = timeProfilePlan$TimeUnit
+        )
+        axesProperties$x <- c(
+          axesProperties$x,
+          getTimeTicksFromUnit(axesProperties$x$unit, simulationDuration)
+        )
 
-    plotConfiguration <- getPlotConfigurationFromPlan(timeProfilePlan[["PlotSettings"]])
-    timeProfilePlot <- tlf::initializePlot(plotConfiguration)
-    for (outputMapping in timeProfilePlan$OutputMappings) {
-      timeProfilePlot <- addOutputToComparisonTimeProfile(
-        outputMapping,
-        simulationDuration,
-        axesProperties,
-        timeProfilePlot,
-        configurationPlan
-      )
-    }
-    # Set axes based on Axes properties
-    timeProfilePlot <- updatePlotAxes(timeProfilePlot, axesProperties)
-    # Save results
-    timeProfileResults[[plotID]] <- saveTaskResults(
-      id = plotID,
-      sectionId = timeProfilePlan$SectionReference %||% timeProfilePlan$SectionId,
-      plot = timeProfilePlot,
-      plotCaption = timeProfilePlan$Title
+        plotConfiguration <- getPlotConfigurationFromPlan(timeProfilePlan[["PlotSettings"]])
+        timeProfilePlot <- tlf::initializePlot(plotConfiguration)
+        for (outputMapping in timeProfilePlan$OutputMappings) {
+          timeProfilePlot <- addOutputToComparisonTimeProfile(
+            outputMapping,
+            simulationDuration,
+            axesProperties,
+            timeProfilePlot,
+            configurationPlan
+          )
+        }
+        # Set axes based on Axes properties
+        timeProfilePlot <- updatePlotAxes(timeProfilePlot, axesProperties)
+        # Save results
+        timeProfileResults[[plotID]] <- saveTaskResults(
+          id = plotID,
+          sectionId = timeProfilePlan$SectionReference %||% timeProfilePlan$SectionId,
+          plot = timeProfilePlot,
+          plotCaption = timeProfilePlan$Title
+        )
+      },
+      configurationPlanField = timeProfilePlan
     )
   }
   return(timeProfileResults)

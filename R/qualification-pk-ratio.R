@@ -10,53 +10,58 @@
 plotQualificationPKRatio <- function(configurationPlan, settings) {
   pkRatioResults <- list()
   for (pkRatioPlan in configurationPlan$plots$PKRatioPlots) {
-    # If field artifacts is null, output them all
-    pkRatioPlan$Artifacts <- pkRatioPlan$Artifacts %||% c("Table", "Plot", "Measure", "GMFE")
-    pkRatioData <- getQualificationPKRatioData(pkRatioPlan, configurationPlan, settings)
-    axesProperties <- getAxesProperties(pkRatioPlan$Axes) %||% settings$axes
-    pkParameterNames <- pkRatioPlan$PKParameters %||% ospsuite::toPathArray(pkRatioPlan$PKParameter)
+    qualificationCatch(
+      {
+        # If field artifacts is null, output them all
+        pkRatioPlan$Artifacts <- pkRatioPlan$Artifacts %||% c("Table", "Plot", "Measure", "GMFE")
+        pkRatioData <- getQualificationPKRatioData(pkRatioPlan, configurationPlan, settings)
+        axesProperties <- getAxesProperties(pkRatioPlan$Axes) %||% settings$axes
+        pkParameterNames <- pkRatioPlan$PKParameters %||% ospsuite::toPathArray(pkRatioPlan$PKParameter)
 
-    for (pkParameterName in pkParameterNames) {
-      #----- Plot artifact -----#
-      plotID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_plot", pkParameterName)
-      pkRatioPlot <- getQualificationPKRatioPlot(pkParameterName, pkRatioData$data, pkRatioData$metaData, axesProperties, pkRatioPlan[["PlotSettings"]])
-      pkRatioResults[[plotID]] <- saveTaskResults(
-        id = plotID,
-        sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
-        plot = pkRatioPlot,
-        plotCaption = pkRatioPlan$Title,
-        includePlot = isIncluded("Plot", pkRatioPlan$Artifacts)
-      )
-      #----- Measure artifact -----#
-      measureID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_measure", pkParameterName)
-      pkRatioMeasure <- getQualificationPKRatioMeasure(pkParameterName, pkRatioData$data, pkRatioData$metaData)
-      pkRatioResults[[measureID]] <- saveTaskResults(
-        id = measureID,
-        sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
-        table = pkRatioMeasure,
-        tableCaption = paste0("Measure of ", pkRatioPlan$Title),
-        includeTable = isIncluded("Measure", pkRatioPlan$Artifacts)
-      )
-    }
-    #----- GMFE artifact -----#
-    gmfeID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_gmfe")
-    pkRatioGMFE <- getQualificationPKRatioGMFE(pkParameterNames, pkRatioData$data)
-    pkRatioResults[[gmfeID]] <- saveTaskResults(
-      id = gmfeID,
-      sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
-      table = pkRatioGMFE,
-      tableCaption = paste0("GMFE for ", pkRatioPlan$Title),
-      includeTable = isIncluded("GMFE", pkRatioPlan$Artifacts)
-    )
-    #----- Table artifact -----#
-    tableID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_table", pkParameterName)
-    pkRatioTable <- getQualificationPKRatioTable(pkRatioData$data, pkRatioData$metaData)
-    pkRatioResults[[tableID]] <- saveTaskResults(
-      id = tableID,
-      sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
-      table = pkRatioTable,
-      tableCaption = pkRatioPlan$Title,
-      includeTable = isIncluded("Table", pkRatioPlan$Artifacts)
+        for (pkParameterName in pkParameterNames) {
+          #----- Plot artifact -----#
+          plotID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_plot", pkParameterName)
+          pkRatioPlot <- getQualificationPKRatioPlot(pkParameterName, pkRatioData$data, pkRatioData$metaData, axesProperties, pkRatioPlan[["PlotSettings"]])
+          pkRatioResults[[plotID]] <- saveTaskResults(
+            id = plotID,
+            sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
+            plot = pkRatioPlot,
+            plotCaption = pkRatioPlan$Title,
+            includePlot = isIncluded("Plot", pkRatioPlan$Artifacts)
+          )
+          #----- Measure artifact -----#
+          measureID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_measure", pkParameterName)
+          pkRatioMeasure <- getQualificationPKRatioMeasure(pkParameterName, pkRatioData$data, pkRatioData$metaData)
+          pkRatioResults[[measureID]] <- saveTaskResults(
+            id = measureID,
+            sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
+            table = pkRatioMeasure,
+            tableCaption = paste0("Measure of ", pkRatioPlan$Title),
+            includeTable = isIncluded("Measure", pkRatioPlan$Artifacts)
+          )
+        }
+        #----- GMFE artifact -----#
+        gmfeID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_gmfe")
+        pkRatioGMFE <- getQualificationPKRatioGMFE(pkParameterNames, pkRatioData$data)
+        pkRatioResults[[gmfeID]] <- saveTaskResults(
+          id = gmfeID,
+          sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
+          table = pkRatioGMFE,
+          tableCaption = paste0("GMFE for ", pkRatioPlan$Title),
+          includeTable = isIncluded("GMFE", pkRatioPlan$Artifacts)
+        )
+        #----- Table artifact -----#
+        tableID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_table", pkParameterName)
+        pkRatioTable <- getQualificationPKRatioTable(pkRatioData$data, pkRatioData$metaData)
+        pkRatioResults[[tableID]] <- saveTaskResults(
+          id = tableID,
+          sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
+          table = pkRatioTable,
+          tableCaption = pkRatioPlan$Title,
+          includeTable = isIncluded("Table", pkRatioPlan$Artifacts)
+        )
+      },
+      configurationPlanField = pkRatioPlan
     )
   }
   return(pkRatioResults)

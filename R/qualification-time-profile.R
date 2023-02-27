@@ -10,62 +10,67 @@
 plotQualificationTimeProfiles <- function(configurationPlan, settings) {
   timeProfileResults <- list()
   for (timeProfilePlan in configurationPlan$plots$TimeProfile) {
-    # Create a unique ID for the plot name as <Plot index>-<Project>-<Simulation>
-    plotID <- defaultFileNames$resultID(
-      length(timeProfileResults) + 1, "time_profile_plot",
-      timeProfilePlan$Project, timeProfilePlan$Simulation
-    )
-    # Get simulation and simulation results
-    simulationFile <- configurationPlan$getSimulationPath(
-      project = timeProfilePlan$Project,
-      simulation = timeProfilePlan$Simulation
-    )
-    simulationResultsFile <- configurationPlan$getSimulationResultsPath(
-      project = timeProfilePlan$Project,
-      simulation = timeProfilePlan$Simulation
-    )
+    qualificationCatch(
+      {
+        # Create a unique ID for the plot name as <Plot index>-<Project>-<Simulation>
+        plotID <- defaultFileNames$resultID(
+          length(timeProfileResults) + 1, "time_profile_plot",
+          timeProfilePlan$Project, timeProfilePlan$Simulation
+        )
+        # Get simulation and simulation results
+        simulationFile <- configurationPlan$getSimulationPath(
+          project = timeProfilePlan$Project,
+          simulation = timeProfilePlan$Simulation
+        )
+        simulationResultsFile <- configurationPlan$getSimulationResultsPath(
+          project = timeProfilePlan$Project,
+          simulation = timeProfilePlan$Simulation
+        )
 
-    simulation <- ospsuite::loadSimulation(simulationFile, loadFromCache = TRUE)
-    simulationResults <- ospsuite::importResultsFromCSV(simulation, simulationResultsFile)
+        simulation <- ospsuite::loadSimulation(simulationFile, loadFromCache = TRUE)
+        simulationResults <- ospsuite::importResultsFromCSV(simulation, simulationResultsFile)
 
-    # Get axes properties (with scale, limits and display units)
-    axesProperties <- getAxesProperties(timeProfilePlan$Plot$Axes) %||% settings$axes
-    plotConfiguration <- getPlotConfigurationFromPlan(
-      timeProfilePlan$Plot,
-      plotType = "TimeProfile"
-      )
-    timeProfilePlot <- tlf::initializePlot(plotConfiguration)
+        # Get axes properties (with scale, limits and display units)
+        axesProperties <- getAxesProperties(timeProfilePlan$Plot$Axes) %||% settings$axes
+        plotConfiguration <- getPlotConfigurationFromPlan(
+          timeProfilePlan$Plot, 
+          plotType = "TimeProfile"
+          )
+        timeProfilePlot <- tlf::initializePlot(plotConfiguration)
 
-    # Currently use ifNotNull to select if mean or population time profile
-    # So far only population defines "Type" but this might not be always true
-    # Function switch could be used instead
-    timeProfilePlot <- ifNotNull(
-      timeProfilePlan$Plot$Type,
-      plotQualificationPopulationTimeProfile(
-        simulationAnalysis = timeProfilePlan$Plot$Analysis,
-        observedDataCollection = timeProfilePlan$Plot$ObservedDataCollection,
-        simulation = simulation,
-        simulationResults = simulationResults,
-        axesProperties = axesProperties,
-        configurationPlan = configurationPlan,
-        plotObject = timeProfilePlot
-      ),
-      plotQualificationMeanTimeProfile(
-        configurationPlanCurves = timeProfilePlan$Plot$Curves,
-        simulation = simulation,
-        simulationResults = simulationResults,
-        axesProperties = axesProperties,
-        configurationPlan = configurationPlan,
-        plotConfiguration = plotConfiguration
-      )
-    )
+        # Currently use ifNotNull to select if mean or population time profile
+        # So far only population defines "Type" but this might not be always true
+        # Function switch could be used instead
+        timeProfilePlot <- ifNotNull(
+          timeProfilePlan$Plot$Type,
+          plotQualificationPopulationTimeProfile(
+            simulationAnalysis = timeProfilePlan$Plot$Analysis,
+            observedDataCollection = timeProfilePlan$Plot$ObservedDataCollection,
+            simulation = simulation,
+            simulationResults = simulationResults,
+            axesProperties = axesProperties,
+            configurationPlan = configurationPlan,
+            plotObject = timeProfilePlot
+          ),
+          plotQualificationMeanTimeProfile(
+            configurationPlanCurves = timeProfilePlan$Plot$Curves,
+            simulation = simulation,
+            simulationResults = simulationResults,
+            axesProperties = axesProperties,
+            configurationPlan = configurationPlan,
+            plotConfiguration = plotConfiguration
+          )
+        )
 
-    # Save results
-    timeProfileResults[[plotID]] <- saveTaskResults(
-      id = plotID,
-      sectionId = timeProfilePlan$SectionReference %||% timeProfilePlan$SectionId,
-      plot = timeProfilePlot,
-      plotCaption = timeProfilePlan$Plot$Title %||% timeProfilePlan$Plot$Name
+        # Save results
+        timeProfileResults[[plotID]] <- saveTaskResults(
+          id = plotID,
+          sectionId = timeProfilePlan$SectionReference %||% timeProfilePlan$SectionId,
+          plot = timeProfilePlot,
+          plotCaption = timeProfilePlan$Plot$Title %||% timeProfilePlan$Plot$Name
+        )
+      },
+      configurationPlanField = timeProfilePlan
     )
   }
   return(timeProfileResults)
