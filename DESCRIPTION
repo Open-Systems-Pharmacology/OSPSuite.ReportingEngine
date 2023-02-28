@@ -30,13 +30,13 @@ BugReports:
     https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues
 Depends: 
     R (>= 3.5),
-    ospsuite (>= 11.0),
-    tlf (>= 1.4.0)
+    ospsuite (>= 11.1),
+    tlf (>= 1.5.0)
 Imports: 
     R6,
     ggplot2,
     jsonlite,
-    ospsuite.utils (>= 1.3.0),
+    ospsuite.utils (>= 1.4.0),
     dplyr
 Suggests: 
     testthat (>= 2.1.0),
