@@ -252,12 +252,7 @@ getResiduals <- function(observedData,
 
   timeMatchedData <- as.numeric(sapply(as.data.frame(abs(obsTimeMatrix - simTimeMatrix)), which.min))
 
-  residualValues <- calculateResiduals(
-    simulatedData = simulatedData[timeMatchedData, "Concentration"],
-    observedData = observedData[, "Concentration"],
-    residualScale = residualScale
-  )
-
+  # TODO: issue #942, once implemented use ospsuite residuals calculation
   residualValues <- rep(NA, nrow(observedData))
   if (isIncluded(residualScale, ResidualScales$Logarithmic)) {
     residualValues <- log(observedData[, "Concentration"]) - log(simulatedData[timeMatchedData, "Concentration"])
@@ -635,7 +630,7 @@ plotMeanTimeProfileLog <- function(simulatedData,
   return(meanTimeProfileLog)
 }
 
-#' @title plotPopulationTimeProfile
+#' @title plotPopTimeProfile
 #' @description Plot time profile for population model workflow
 #' @param simulatedData data.frame of simulated data
 #' @param observedData data.frame of observed data
@@ -646,7 +641,7 @@ plotMeanTimeProfileLog <- function(simulatedData,
 #' @return ggplot object of time profile for mean model workflow
 #' @export
 #' @import tlf
-plotPopulationTimeProfile <- function(simulatedData,
+plotPopTimeProfile <- function(simulatedData,
                                       observedData = NULL,
                                       lloqData = NULL,
                                       dataMapping = NULL,
@@ -713,7 +708,7 @@ plotPopulationTimeProfile <- function(simulatedData,
   return(timeProfilePlot)
 }
 
-#' @title plotPopulationTimeProfileLog
+#' @title plotPopTimeProfileLog
 #' @description Plot time profile for mean model workflow
 #' @param simulatedData data.frame of simulated data
 #' @param observedData data.frame of observed data
@@ -724,7 +719,7 @@ plotPopulationTimeProfile <- function(simulatedData,
 #' @return ggplot object of time profile for mean model workflow
 #' @export
 #' @import tlf
-plotPopulationTimeProfileLog <- function(simulatedData,
+plotPopTimeProfileLog <- function(simulatedData,
                                          observedData = NULL,
                                          lloqData = NULL,
                                          metaData = NULL,
@@ -761,7 +756,7 @@ plotPopulationTimeProfileLog <- function(simulatedData,
   plotConfiguration$yAxis$limits <- plotConfiguration$yAxis$limits %||% yAxisLimits
   plotConfiguration$yAxis$ticks <- yAxisTicks
 
-  populationTimeProfileLog <- plotPopulationTimeProfile(
+  populationTimeProfileLog <- plotPopTimeProfile(
     simulatedData,
     observedData = observedData,
     lloqData = lloqData,
@@ -985,7 +980,7 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
     }
 
     if (workflowType %in% "population") {
-      timeProfilePlot <- plotPopulationTimeProfile(
+      timeProfilePlot <- plotPopTimeProfile(
         simulatedData = selectedSimulatedData,
         observedData = selectedObservedData,
         lloqData = selectedLloqData,
@@ -993,7 +988,7 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
         dataMapping = timeProfileMapping,
         plotConfiguration = timeProfilePlotConfiguration
       )
-      timeProfilePlotLog <- plotPopulationTimeProfileLog(
+      timeProfilePlotLog <- plotPopTimeProfileLog(
         simulatedData = selectedSimulatedData,
         observedData = selectedObservedData,
         lloqData = selectedLloqData,
