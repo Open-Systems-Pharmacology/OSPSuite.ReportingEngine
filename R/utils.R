@@ -1,22 +1,3 @@
-#' @title calculateResiduals
-#' @param simulatedData, vector of simulated data
-#' @param observedData, vector of observed data
-#' @param residualScale, must be selected from enum ResidualScales
-#' @return residuals between simulatedData and observedData
-#' @description
-#' Calculate residuals between vectors `simulatedData` and `observedData` according the the residual scale specified in `residualScale`
-#' @export
-calculateResiduals <- function(simulatedData, observedData, residualScale) {
-  validateIsOfLength(object = simulatedData, nbElements = length(observedData))
-  residualValues <- rep(NA, length(observedData))
-  if (isIncluded(residualScale, ResidualScales$Logarithmic)) {
-    residualValues <- log(observedData) - log(simulatedData)
-  }
-  if (isIncluded(residualScale, ResidualScales$Linear)) {
-    residualValues <- (observedData - simulatedData)
-  }
-}
-
 # TODO: add these functions to tlf
 
 #' @title geomean
