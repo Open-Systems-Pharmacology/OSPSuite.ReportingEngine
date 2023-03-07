@@ -2,7 +2,8 @@ context("Run workflows with Sensitivity tasks")
 # Get test data
 simulationFile <- getTestDataFilePath("input-data/MiniModel2.pkml")
 populationFile <- getTestDataFilePath("input-data/Pop500_p1p2p3.csv")
-refOutputFolder <- getTestDataFilePath("mean-sensitivity")
+refMeanOutputFolder <- getTestDataFilePath("mean-sensitivity")
+refPopOutputFolder <- getTestDataFilePath("pop-sensitivity")
 
 workflowFolder <- "Sensitivity-Tests"
 
@@ -54,10 +55,7 @@ test_that("Mean sensitiviy results are equal to reference", {
     sensitivityResultsPath,
     list.files(sensitivityResultsPath, pattern = ".csv")
   )
-  refFiles <- file.path(
-    refOutputFolder,
-    list.files(refOutputFolder, pattern = "sensitivity")
-  )
+  refFiles <- file.path(refMeanOutputFolder, list.files(refMeanOutputFolder))
   for (fileIndex in seq_along(refFiles)) {
     expect_equal(
       readObservedDataFile(sensitivityFiles[fileIndex]),
@@ -71,8 +69,6 @@ test_that("Mean sensitiviy results are equal to reference", {
 unlink(workflowA$workflowFolder, recursive = TRUE)
 
 # Population model workflow
-refOutputFolder <- getTestDataFilePath("pop-sensitivity")
-
 setA <- PopulationSimulationSet$new(
   simulationSetName = "A",
   simulationFile = simulationFile,
@@ -128,10 +124,7 @@ test_that("Population sensitiviy results are equal to reference", {
     sensitivityResultsPath,
     list.files(sensitivityResultsPath, pattern = ".csv")
   )
-  refFiles <- file.path(
-    refOutputFolder,
-    list.files(refOutputFolder, pattern = "sensitivity")
-  )
+  refFiles <- file.path(refPopOutputFolder, list.files(refPopOutputFolder))
   for (fileIndex in seq_along(refFiles)) {
     expect_equal(
       readObservedDataFile(sensitivityFiles[fileIndex]),
