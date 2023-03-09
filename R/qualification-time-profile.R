@@ -163,6 +163,13 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
         tlf::initializePlot(plotConfiguration))
     ) 
   }
+  # If ticks and ticklabels are undefined, time profile ticks are based on unit and range
+  timeTicks <- getTimeTicksFromUnit(
+    unit = axesProperties$x$unit, 
+    timeValues = c(simData$x, obsData$x)
+  )
+  axesProperties$x$ticks <- axesProperties$x$ticks %||% timeTicks$ticks
+  axesProperties$x$ticklabels <- axesProperties$x$ticklabels %||% timeTicks$ticklabels
 
   # Check necessity if dual axis by getting requested axes
   requestedAxes <- sort(unique(c(simData$yAxis, obsData$yAxis)))
