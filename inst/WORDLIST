@@ -73,6 +73,7 @@ createSectionOutput
 createWorkflowFromExcelInput
 csv
 cumulativeTimeProfile
+CVs
 dataDisplayName
 dataMapping
 DataMapping
@@ -85,6 +86,8 @@ dataSourceNamesFromIdentifier
 DataSources
 DictionaryLocation
 DictionaryType
+displayConfigurationPlanPlotInfo
+displayRatioMeasureAnalyticalSolution
 DDI
 ddiPKRatioColumnName
 DDIRatioPlots
@@ -116,9 +119,12 @@ frac
 generateDDIPlotPKParameterName
 generateDDIQualificationDDIPlot
 generateResultFileNames
+geoCV
 geomean
+geoMean
 geomeanDividedBySD
 geomeanMultipliedBySD
+geoSD
 getAggregateFromStat
 getAllowedCores
 getAllowedCoresLinuxKubernetes
@@ -127,8 +133,10 @@ getAnchorName
 getAxesForTimeProfiles
 getAxesProperties
 getAxesSettings
+getBoxWhiskerPlotConfiguration
 getCaptionFromStat
 getColorFromOutputGroup
+getColorGroupForPKParameterPlot
 getComparisonTimeProfileOutputsDataframe
 getCompoundNameFromPath
 getCurvePropertiesForTimeProfiles
@@ -140,6 +148,8 @@ getDDITable
 getDefaultDemographyXParameters
 getDefaultFileName
 getDefaultFolderName
+getDefaultMCRandomSeed
+getDefaultMCRepetitions
 getDefaultPKParametersXParameters
 getDefaultRETheme
 getDefaultTimeProfileAxesSettings
@@ -164,6 +174,7 @@ getMetaDataFrame
 getMolWeightForCompound
 getObjectNameAsString
 getObjectNamesInGlobalEnv
+getObservedCurveProperties
 getObservedDataFromConfigurationPlan
 getObservedDataFromOutput
 getObservedDataIdFromPath
@@ -179,7 +190,10 @@ getOutputsFromTimeProfileConfiguration
 getParameterValuesForIndividual
 getPKAnalysisResultsFileNames
 getPkOutputIndexDf
+getPKParameterGroupsInOutput
 getPKParameterMeasure
+getPKParameterRatioMeasureFromMCSampling
+getPKParameterRatioPKTable
 getPKParametersAcrossPopulations
 getPKParametersContent
 getPKParametersInfoContent
@@ -192,6 +206,8 @@ getPlotConfigurationFromPlan
 getPlotSettings
 getPopSensDfForPkAndOutput
 getPopulationPKAnalysesFromOutput
+getPopulationPKData
+getPopulationPKMetaData
 getPopulationResultsFromOutput
 getPopulationSensitivityAnalysisResultsFileNames
 getQualificationDDIPlotData
@@ -205,7 +221,9 @@ getQualificationPKRatioMeasure
 getQualificationPKRatioPlot
 getQualificationPKRatioTable
 getQuantileIndividualIds
+getRatioMeasureAnalyticalSolution
 getReaderFunction
+getReferencePopulationName
 getReportingEngineInfo
 getResiduals
 getResidualsPlotResults
@@ -214,6 +232,7 @@ getScriptDocumentation
 getSelectedData
 getSelectedRows
 getSensitivityVariableParameterPaths
+getSimulatedCurveProperties
 getSimulatedResultsFromOutput
 getSimulationDescriptor
 getSimulationParameterDisplayPaths
@@ -235,6 +254,7 @@ getTitleInfo
 getUserDefPKParametersContent
 getWorkflowContent
 getWorkflowParameterDisplayPaths
+getWorkflowReferencePopulationName
 getXParametersForDemogrpahyPlot
 getXParametersForPKParametersPlot
 getYParametersForDemogrpahyPlot
@@ -261,6 +281,7 @@ individualSensitivityAnalysis
 introToYamlHeader
 isBetween
 isObservedData
+isSamePopulationInSets
 isValidatedSystem
 jpg
 json
@@ -357,6 +378,7 @@ Pandoc
 parallelizing
 parameterDisplayPath
 parameterDisplayPaths
+parameterPaths
 parseObservationsDataFrame
 parseVariableFromObject
 parseVariableToObject
@@ -376,6 +398,7 @@ pkParameter
 PkParameterInfo
 pkParameterName
 pkParameterResultsFilePath
+pkParameterTableAsRelativeChange
 pkParameters
 PKParameters
 PKRatio
@@ -411,6 +434,8 @@ plotMeanTimeProfileLog
 plotObject
 plotPKParameters
 plotPKRatio
+plotPopTimeProfile
+plotPopTimeProfileLog
 plotPopulationGoodnessOfFit
 plotPopulationPKParameters
 plotPopulationSensitivity
@@ -445,6 +470,7 @@ prettyCaption
 px
 qq
 qqPlot
+qualificationCatch
 QualificationRunner
 QualificationTask
 QualificationVersionInfo
@@ -467,6 +493,7 @@ removeMissingValues
 removeNegativeValues
 renderReport
 renderWordReport
+repeatableSampling
 replaceInfWithNA
 reportFile
 reportingengine
@@ -498,6 +525,7 @@ saveFigure
 saveLogs
 saveLogsToJson
 saveTaskResults
+SDs
 SectionId
 sectionsAsDataFrame
 sensitivityAnalysis
@@ -508,6 +536,8 @@ SensitivityPlotSettings
 SensitivityResults
 setDefaultAutoAxisLimitMargin
 setDefaultBins
+setDefaultMCRandomSeed
+setDefaultMCRepetitions
 setDefaultNumericFormat
 setDefaultPlotFormat
 setDefaultStairstep
@@ -542,6 +572,7 @@ simulationMappings
 SimulationResults
 simulationSet
 SimulationSet
+simulationSetName
 simulationSets
 SimulationSets
 SimulationSettings
@@ -595,9 +626,12 @@ updatePKParameter
 updatePlotAxes
 updatePlotConfigurationTimeTicks
 updatePlotDimensions
+updateQualificationTimeProfilePlotConfiguration
 updateSimulationIndividualParameters
 updateTableNumbers
 updateTargetValues
+updateVpcPlotColor
+updateWatermarkDimensions
 Userdef
 userDefinedTasks
 UserDefPKParametersOptionalSettings

@@ -1,4 +1,4 @@
-#' @title repeatableSample
+#' @title repeatableSampling
 #' @description Perform repeatable random sampling
 #' @param x Array to be sampled
 #' @param size Number of samples

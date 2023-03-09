@@ -1,5 +1,5 @@
 #' @title getWorkflowReferencePopulationName
-#' @description Get `simulationSetName` from the reference `PopulationSimulationSet` of a `Worflow` object
+#' @description Get `simulationSetName` from the reference `PopulationSimulationSet` of a `Workflow` object
 #' @param workflow A `PopulationWorkflow` object
 #' @export
 #' @family workflow helpers

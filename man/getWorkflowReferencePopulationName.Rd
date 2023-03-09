@@ -10,7 +10,7 @@ getWorkflowReferencePopulationName(workflow)
 \item{workflow}{A `PopulationWorkflow` object}
 }
 \description{
-Get `simulationSetName` from the reference `PopulationSimulationSet` of a `Worflow` object
+Get `simulationSetName` from the reference `PopulationSimulationSet` of a `Workflow` object
 }
 \seealso{
 Other workflow helpers: 

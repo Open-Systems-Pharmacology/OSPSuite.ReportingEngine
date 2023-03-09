@@ -130,7 +130,7 @@ The computation of the PK ratios will account for matching between the __referen
 
 #### Same Population
 
-When the population to compare is the same as the __reference population__, PK ratios will be evaluated for each subject of the population (per `IndividualId`) as the indivudal ratios of each PK Parameter value. 
+When the population to compare is the same as the __reference population__, PK ratios will be evaluated for each subject of the population (per `IndividualId`) as the individual ratios of each PK Parameter value. 
 The distributions of the corresponding PK Parameter Ratios will be reported.
 
 #### Different Populations
@@ -138,7 +138,7 @@ The distributions of the corresponding PK Parameter Ratios will be reported.
 When the population to compare is different from the __reference population__, PK ratios cannot be evaluated for each subject of the population (per `IndividualId`).
 However, the potential PK ratios between the populations can be approximated by Monte Carlo sampling.
 
-In more details, random sampling of the population that includes more subjects is performed in order to obtain 2 populations with the same size. The populations are then assumed the same and PK ratios are evaluated for each subject of the population as the indivudal ratios of each PK Parameter value (same method as section [Same Population](#same-population)). Key statistics of the correspondig distribution are calculated. The final key statistics will be calculated as the median value obtained over all the repeated random samplings.
+In more details, random sampling of the population that includes more subjects is performed in order to obtain 2 populations with the same size. The populations are then assumed the same and PK ratios are evaluated for each subject of the population as the individual ratios of each PK Parameter value (same method as section [Same Population](#same-population)). Key statistics of the corresponding distribution are calculated. The final key statistics will be calculated as the median value obtained over all the repeated random samplings.
 
 Since analytical formulas exist for the calculation of arithmetic and geometric means, SDs and CVs, the quality of the approximation calculated on the percentiles of the ratios will be assessed, reported in the logs.
 
@@ -220,7 +220,7 @@ They describe the distributions of the PK Parameters as a function the following
 
 Variables displayed as __xParameters__ in such range plots can be changed from the default as detailed within section [Optional features](#range-plots)
 
-Since Pediatric worflows require a __reference population__, they also report range plots that include the distribution of the reference population in parallel of the other populations.
+Since Pediatric workflows require a __reference population__, they also report range plots that include the distribution of the reference population in parallel of the other populations.
 
 Moreover, the table of key statistics ratios comparing key statistics of each population to key statistics of the __reference population__ is included in the report. This table is optional for Parallel Comparison workflows (more details in section [Reference Population](#reference-population) but automatically included in Pediatric workflows.
 
@@ -228,7 +228,7 @@ Moreover, the table of key statistics ratios comparing key statistics of each po
 #### Example
 
 In this example, a Pediatric population workflow is performed.
-Here, the populations do not inlcude age and body weight in the model but parameters *p1*, *p2* and *p3*.
+Here, the populations do not include age and body weight in the model but parameters *p1*, *p2* and *p3*.
 The parameter path *p3* was used as the only __xParameters__ for the range plots and the __reference population__ was the population simulation set including 500 individuals.
 
 <details>
@@ -412,7 +412,7 @@ parallelReferenceWorkflow$runWorkflow()
 cat(includeReportFromWorkflow(parallelReferenceWorkflow))
 ```
 
-```{r delete workflow folder, inlcude = FALSE, echo=FALSE}
+```{r delete workflow folder, include = FALSE, echo=FALSE}
 # Remove the workflow folders
 unlink(parallelReferenceWorkflow$workflowFolder, recursive = TRUE)
 ```
