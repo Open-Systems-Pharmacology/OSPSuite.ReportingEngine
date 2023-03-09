@@ -2,7 +2,7 @@
 % Please edit documentation in R/utilities-ratio-comparison.R
 \name{repeatableSampling}
 \alias{repeatableSampling}
-\title{repeatableSample}
+\title{repeatableSampling}
 \usage{
 repeatableSampling(
   x,

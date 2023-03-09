@@ -55,7 +55,7 @@ Check the article [PK Parameters in Population Workflows](pop-pk-parameters.html
 
 The following sections will introduce template scripts including PK parameter tasks as well as their associated reports.
 Table 1 shows the features tested in each template script.
-All the examples use Mean Model Worflows.
+All the examples use Mean Model Workflows.
 
 ```{r table 1, echo = FALSE, results='asis'}
 examplesTable <- data.frame(
