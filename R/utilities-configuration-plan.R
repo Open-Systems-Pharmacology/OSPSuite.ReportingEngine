@@ -62,7 +62,7 @@ ConfigurationLinetypes <- list(
 #' @keywords internal
 getAxesProperties <- function(axesSettings) {
   # Hanlde when properties are left undefined globally or locally
-  if (isOfLength(axesSettings, 0)) {
+  if (isEmpty(axesSettings)) {
     return(NULL)
   }
   # Get axes types for identification of X, Y and Y2 axes
@@ -111,7 +111,8 @@ getAxesProperties <- function(axesSettings) {
 formatAxisProperties <- function(axisField){
   list(
     dimension = axisField$Dimension, 
-    unit = axisField$Unit,
+    # If no unit defined, use base unit of dimension
+    unit = axisField$Unit %||% ospsuite::getBaseUnit(axisField$Dimension),
     min = axisField$Min, 
     max = axisField$Max, 
     scale = tlfScale(axisField$Scaling),
