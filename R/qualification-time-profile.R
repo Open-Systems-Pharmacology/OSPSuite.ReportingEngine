@@ -265,10 +265,13 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
   simulationQuantity <- ospsuite::getQuantity(outputPath, simulation)
   simulationPathResults <- ospsuite::getOutputValues(simulationResults, quantitiesOrPaths = outputPath)
   molWeight <- simulation$molWeightFor(outputPath)
+  outputDimension <- simulationPathResults$metaData[[outputPath]]$dimension
+  
   # Overwrite dimension, unit and scale if found in Analysis field
   # Keep compatibility with Config Plan from Matlab version
   axesProperties$y$dimension <- simulationAnalysis$Fields[[1]]$Dimension %||% axesProperties$y$dimension
-  axesProperties$y$unit <- simulationAnalysis$Fields[[1]]$Unit %||% axesProperties$y$unit
+  # If unit is left undefined, use base unit
+  axesProperties$y$unit <- simulationAnalysis$Fields[[1]]$Unit %||% ospsuite::getBaseUnit(outputDimension)
   axesProperties$y$scale <- tlfScale(simulationAnalysis$Fields[[1]]$Scaling %||% axesProperties$y$scale)
 
   # Get and convert output path values into display unit
