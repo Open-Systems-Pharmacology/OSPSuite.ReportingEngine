@@ -418,7 +418,7 @@ Regarding units, two options are possible:
    - the dictionary must include the following new variables in '__ID__': '__time_unit__' and '__dv_unit__'.
    - the dictionary must also include the mapping to the variable names in the dataset using '__nonmenColumn__'.
 
-The example below shows the template of a dictionary content available on [Github](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/tpDictionary.csv):
+The example below shows the template of a dictionary content available on [GitHub](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/tpDictionary.csv):
 
 
 ```{r table 3, echo=FALSE, results='asis'}
@@ -644,7 +644,7 @@ The option `createWordReport` is set to __TRUE__ as default but can be set to __
 
 For creating or tuning reports, starting from scratch could be challenging.
 For this reason, some templates have been created to make it easier.
-The table below provides a list of templates available on Github and their usage.
+The table below provides a list of templates available on GitHub and their usage.
 
 |Template |Link |Usage |
 |---------|-----|---------|

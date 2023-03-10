@@ -65,7 +65,7 @@ Then, you can run your workflow by running the R script (e.g. using the function
 
 ### Where can I get the template ?
 
-The Excel template is available on Github: [WorkflowInput.xlsx](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/WorkflowInput.xlsx).
+The Excel template is available on GitHub: [WorkflowInput.xlsx](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/WorkflowInput.xlsx).
 
 ## Standard Excel Sheet Names
 
