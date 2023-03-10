@@ -27,12 +27,12 @@ The **OSPSuite.ReportingEngine** package is compatible with version 3.6.x **AND*
   - **styler**
   - ... (s. [Installation instructions for the package **ospsuite**](https://github.com/Open-Systems-Pharmacology/OSPSuite-R#installation))
 - Must be downloaded manually:
-  - **ospsuite.utils** (>= 1.3.0)
+  - **ospsuite.utils** (>= 1.4.0)
     - [Package download](https://github.com/Open-Systems-Pharmacology/OSPSuite.RUtils/releases)
-  - **tlf** (>= 1.4.0)
+  - **tlf** (>= 1.5.0)
     - [Package download](https://github.com/Open-Systems-Pharmacology/TLF-Library/releases)
   - **rClr** (s. [Installation instructions for the package **ospsuite**](https://github.com/Open-Systems-Pharmacology/OSPSuite-R#installation))
-  - **ospsuite** (>= 11.0)
+  - **ospsuite** (>= 11.1)
     - [Package download](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases)
     - [Installation instructions](https://github.com/Open-Systems-Pharmacology/OSPSuite-R#installation)
 
