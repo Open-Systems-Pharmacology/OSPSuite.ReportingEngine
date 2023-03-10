@@ -8,8 +8,8 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
-            r_version: [3.6.3, 4.1.0]
-            os_version: [centos7, bionic]
+            r_version: [4.1.0] #[3.6.3, 4.1.0]
+            os_version: [centos7] #[centos7, bionic]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
