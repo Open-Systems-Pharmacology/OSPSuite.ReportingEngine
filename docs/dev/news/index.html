@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ospsuite.reportingengine</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,11 +59,50 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.0.189" id="ospsuitereportingengine-20189">ospsuite.reportingengine 2.0.189<a class="anchor" aria-label="anchor" href="#ospsuitereportingengine-20189"></a></h2>
+<h2 class="pkg-version" data-toc-text="2.1.0" id="ospsuitereportingengine-210">ospsuite.reportingengine 2.1.0<a class="anchor" aria-label="anchor" href="#ospsuitereportingengine-210"></a></h2>
 <div class="section level3">
-<h3 id="new-features-2-0-189">New features<a class="anchor" aria-label="anchor" href="#new-features-2-0-189"></a></h3>
+<h3 id="new-features-2-1-0">New features<a class="anchor" aria-label="anchor" href="#new-features-2-1-0"></a></h3>
+<ul><li>Population workflows can use Monte Carlo sampling to handle ratio comparison (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/536" class="external-link">#536</a>) as documented in article <a href="../articles/pop-pk-parameters.html#ratio-comparison">PK Parameters in Population Workflows</a>.</li>
+<li>
+<a href="../reference/Output.html"><code>Output</code></a> objects can now include <code>color</code> and <code>fill</code> properties that will be displayed in the corresponding plots (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/418" class="external-link">#418</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/883" class="external-link">#883</a>)</li>
+<li>
+<code>dataSelection</code> is now available at both <code>SimulationSet</code> and <code>Output</code> levels (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/881" class="external-link">#881</a>)</li>
+<li>Excel template is up-to-date with the new features (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/882" class="external-link">#882</a>) and documented in the article <a href="../articles/excel-template.html">Excel Template</a>
+</li>
+<li>Mean and Population workflows can display a title/cover page at the beginning of the report (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/854" class="external-link">#854</a>) as documented in article <a href="../articles/add-title-page.html">Add a title page to your workflow report</a>
+</li>
+<li>Qualification Time Profiles handle dual axis plots (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/934" class="external-link">#934</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/985" class="external-link">#985</a>)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-improvements-and-bug-fixes-2-1-0">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-2-1-0"></a></h3>
+<ul><li>In qualification workflows, logging now includes information regarding the configuration plan location (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/930" class="external-link">#930</a>)</li>
+<li>By default, plot dimensions are now quadratic (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/877" class="external-link">#877</a>)</li>
+<li>Statistics in population workflow time profiles now use geometric mean and sd as default and can be easily updated with enum helper <a href="../reference/StatisticsTypes.html"><code>StatisticsTypes</code></a> and function <code><a href="../reference/setDefaultTimeProfileStatistics.html">setDefaultTimeProfileStatistics()</a></code> (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/862" class="external-link">#862</a>)</li>
+<li>Goodness of fit plots and captions were improved (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/418" class="external-link">#418</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/863" class="external-link">#863</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/865" class="external-link">#865</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/867" class="external-link">#867</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/871" class="external-link">#871</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/874" class="external-link">#874</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/875" class="external-link">#875</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/878" class="external-link">#878</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/884" class="external-link">#884</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/886" class="external-link">#886</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/887" class="external-link">#887</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/888" class="external-link">#888</a>)</li>
+<li>Displayed qualification plots now includes following updates:
+<ul><li>better scaled watermark (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/849" class="external-link">#849</a>)</li>
+<li>margin added to prevent truncated ticklabels (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/951" class="external-link">#951</a>)</li>
+<li>gof and time profile use correct colors (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/952" class="external-link">#952</a>)</li>
+<li>residual label match calculation method (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/953" class="external-link">#953</a>)</li>
+<li>legend does not shrink the plot size (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/861" class="external-link">#861</a>)</li>
+</ul></li>
+<li>Creation of word reports now includes following updates:
+<ul><li>page breaks at appropriate places (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/971" class="external-link">#971</a>)</li>
+<li>figure/table numbering (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/967" class="external-link">#967</a>) are now fixed</li>
+<li>default reference word document has been updated (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/748" class="external-link">#748</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/749" class="external-link">#749</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/750" class="external-link">#750</a> and <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/754" class="external-link">#754</a>)</li>
+<li>tags for subscript (wrapped by <code>&lt;sub&gt;...&lt;/sub&gt;</code>) and superscript (wrapped by <code>&lt;sup&gt;...&lt;/sup&gt;</code>) are converted to word (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/968" class="external-link">#968</a>)</li>
+<li>equations wrapped by <code>$$...$$</code> and written in LateX format are converted to word</li>
+<li>bookmarks are now created from markdown anchors (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/923" class="external-link">#923</a>)</li>
+</ul></li>
+<li>Qualification time profiles use base unit if unit is not defined by user (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/867" class="external-link">#867</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/991" class="external-link">#991</a>)</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.0.0" id="ospsuitereportingengine-200">ospsuite.reportingengine 2.0.0<a class="anchor" aria-label="anchor" href="#ospsuitereportingengine-200"></a></h2>
+<div class="section level3">
+<h3 id="new-features-2-0-0">New features<a class="anchor" aria-label="anchor" href="#new-features-2-0-0"></a></h3>
 <ul><li>Qualification workflows are now available ! (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/2" class="external-link">#2</a>)
-<ul><li>Qualification Workflows have their own <a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/articles/qualification-workflow.html">vignette</a> to help you start (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/566" class="external-link">#566</a>)</li>
+<ul><li>Qualification Workflows have their own <a href="../articles/qualification-workflow.html">vignette</a> to help you start (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/566" class="external-link">#566</a>)</li>
 <li>A template qualification workflow R script is available on Github at <code>system.file("extdata", "qualification-workflow-template.R", package = "ospsuite.reportingengine")</code> and can also be downloaded from <a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/qualification-workflow-template.R" class="external-link">Github</a> (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/572" class="external-link">#572</a>)</li>
 <li>Function <code>adjustTitlePage</code> can be used to personalize the report title page (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/755" class="external-link">#755</a>)</li>
 <li>Configuration plans can be re-loaded on <code>QualificationWorkflow</code> objects to update the report display (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/567" class="external-link">#567</a>)</li>
@@ -75,7 +114,7 @@
 <li>The function <code>copyReport</code> can be used to copy markdown/word reports (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/814" class="external-link">#814</a>)</li>
 </ul></div>
 <div class="section level3">
-<h3 id="minor-improvements-and-bug-fixes-2-0-189">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-2-0-189"></a></h3>
+<h3 id="minor-improvements-and-bug-fixes-2-0-0">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-2-0-0"></a></h3>
 <ul><li>With <code>tlf</code> version 1.2.0, plots in log scale are better displayed (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/603" class="external-link">#603</a>)</li>
 <li>Too long legend captions are now displayed on multiple lines (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/568" class="external-link">#568</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/602" class="external-link">#602</a>)</li>
 <li>

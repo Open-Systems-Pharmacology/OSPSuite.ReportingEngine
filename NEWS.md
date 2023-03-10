@@ -1,9 +1,41 @@
-# ospsuite.reportingengine 2.0.189
+# ospsuite.reportingengine 2.1.0
+
+## New features
+
+- Population workflows can use Monte Carlo sampling to handle ratio comparison (#536) as documented in article [PK Parameters in Population Workflows](../articles/pop-pk-parameters.html#ratio-comparison).
+- [`Output`](../reference/Output.html) objects can now include `color` and `fill` properties that will be displayed in the corresponding plots (#418, #883)
+- `dataSelection` is now available at both `SimulationSet` and `Output` levels (#881)
+- Excel template is up-to-date with the new features (#882) and documented in the article [Excel Template](../articles/excel-template.html)
+- Mean and Population workflows can display a title/cover page at the beginning of the report (#854) as documented in article [Add a title page to your workflow report](../articles/add-title-page.html)
+- Qualification Time Profiles handle dual axis plots (#934, #985)
+
+## Minor improvements and bug fixes
+
+- In qualification workflows, logging now includes information regarding the configuration plan location (#930)
+- By default, plot dimensions are now quadratic (#877)
+- Statistics in population workflow time profiles now use geometric mean and sd as default and can be easily updated with enum helper [`StatisticsTypes `](../reference/StatisticsTypes.html) and function `setDefaultTimeProfileStatistics()` (#862)
+- Goodness of fit plots and captions were improved (#418, #863, #865, #867, #871, #874, #875, #878, #884, #886, #887, #888)
+- Displayed qualification plots now includes following updates:
+   - better scaled watermark (#849)
+   - margin added to prevent truncated ticklabels (#951)
+   - gof and time profile use correct colors (#952)
+   - residual label match calculation method (#953)
+   - legend does not shrink the plot size (#861)
+- Creation of word reports now includes following updates:
+   - page breaks at appropriate places (#971)
+   - figure/table numbering (#967) are now fixed
+   - default reference word document has been updated (#748, #749, #750 and #754)
+   - tags for subscript (wrapped by `<sub>...</sub>`) and superscript (wrapped by `<sup>...</sup>`) are converted to word (#968)
+   - equations wrapped by `$$...$$` and written in LateX format are converted to word
+   - bookmarks are now created from markdown anchors (#923)
+- Qualification time profiles use base unit if unit is not defined by user (#867, #991)
+
+# ospsuite.reportingengine 2.0.0
 
 ## New features
 
 - Qualification workflows are now available ! (#2)
-  - Qualification Workflows have their own [vignette](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/articles/qualification-workflow.html) to help you start (#566)
+  - Qualification Workflows have their own [vignette](../articles/qualification-workflow.html) to help you start (#566)
   - A template qualification workflow R script is available on Github at `system.file("extdata", "qualification-workflow-template.R", package = "ospsuite.reportingengine")` and can also be downloaded from [Github](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/qualification-workflow-template.R) (#572)
   - Function `adjustTitlePage` can be used to personalize the report title page (#755)
   - Configuration plans can be re-loaded on `QualificationWorkflow` objects to update the report display (#567)
