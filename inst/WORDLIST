@@ -260,7 +260,7 @@ getXParametersForPKParametersPlot
 getYParametersForDemogrpahyPlot
 getYParametersForPKParametersPlot
 ggplot
-Github
+gof
 GMFE
 GoF
 GOF
@@ -525,6 +525,7 @@ saveFigure
 saveLogs
 saveLogsToJson
 saveTaskResults
+sd
 SDs
 SectionId
 sectionsAsDataFrame
