@@ -4,6 +4,8 @@
 #' @keywords internal
 TaskSettings <- R6::R6Class(
   "TaskSettings",
+  # This allows the R6 class to accept new fields
+  lock_objects = FALSE,
   public = list(
     #' @description
     #' Create a `TaskSettings` object
@@ -42,11 +44,14 @@ TaskSettings <- R6::R6Class(
       }
       if (isIncluded(taskName, AllAvailableTasks$plotPKParameters)) {
         private$.plotConfigurations <- list(
-          boxplotPkParameters = NULL,
-          boxplotPkRatios = NULL,
+          boxplotPKParameters = NULL,
+          boxplotPKParametersLog = NULL,
+          boxplotPKRatios = NULL,
           vpcParameterPlot = NULL,
           comparisonVpcPlot = NULL
         )
+        self$mcRepetitions <- getDefaultMCRepetitions()
+        self$mcRandomSeed <- getDefaultMCRandomSeed()
       }
       if (isIncluded(taskName, AllAvailableTasks$plotTimeProfilesAndResiduals)) {
         private$.plotConfigurations <- list(
@@ -152,12 +157,75 @@ GofTaskSettings <- R6::R6Class(
     #' Create a `GofTaskSettings` object
     #' @param taskName name of the task using the settings
     #' @param outputSelections subset of simulationSet outputs to be used in GoF plot
+    #' @param statisticsType Statistics summarizing time profile simulated data
     #' @return A new `GofTaskSettings` object
-    initialize = function(taskName = AllAvailableTasks$plotTimeProfilesAndResiduals, outputSelections = NULL) {
+    initialize = function(taskName = AllAvailableTasks$plotTimeProfilesAndResiduals,
+                          outputSelections = NULL,
+                          statisticsType = NULL) {
       validateIsIncluded(taskName, AllAvailableTasks$plotTimeProfilesAndResiduals)
+      validateIsIncluded(statisticsType, StatisticsTypes, nullAllowed = TRUE)
+
       super$initialize(taskName)
+
       private$.includeReferenceData <- TRUE
       private$.outputSelections <- outputSelections
+      private$.statistics <- reEnv$defaultTimeProfileStatistics
+      self$setStatistics(statisticsType = statisticsType)
+    },
+
+    #' @description Set statistics used in population time profiles and residuals plots
+    #' @param statisticsType Name of statistics type as defined in enum `StatisticsTypes`
+    #' @param y Function or function name for middle values statistics
+    #' @param ymin Function or function name for min values statistics
+    #' @param ymax Function or function name for max values statistics
+    #' @param yCaption Legend caption for middle values statistics
+    #' @param rangeCaption Legend caption for range values statistics
+    #' @examples \dontrun{
+    #' # Set the statistics as geometric mean
+    #' workflow$plotTimeProfilesAndResiduals$settings$setStatistics(
+    #' statisticsType = StatisticsTypes$`Geometric mean`
+    #' )
+    #'
+    #' # Set the legend caption displayed for range
+    #' workflow$plotTimeProfilesAndResiduals$settings$setStatistics(
+    #' statisticsType = StatisticsTypes$`Geometric mean`
+    #' rangeCaption = "90% population range"
+    #' )
+    #'
+    #' }
+    #'
+    setStatistics = function(statisticsType = NULL,
+                             y = NULL,
+                             ymin = NULL,
+                             ymax = NULL,
+                             yCaption = NULL,
+                             rangeCaption = NULL) {
+      validateIsIncluded(statisticsType, StatisticsTypes, nullAllowed = TRUE)
+      # Allow user to enter the function directly
+      validateIsOfType(y, c("character", "closure"), nullAllowed = TRUE)
+      validateIsOfType(ymin, c("character", "closure"), nullAllowed = TRUE)
+      validateIsOfType(ymax, c("character", "closure"), nullAllowed = TRUE)
+
+      if (!isEmpty(statisticsType)) {
+        private$.statistics <- getStatisticsFromType(statisticsType)
+      }
+      # Assign variables to reEnv only if defined
+      eval(parseVariableToObject(
+        objectName = "private$.statistics",
+        variableName = c("y", "ymin", "ymax", "yCaption", "rangeCaption"),
+        keepIfNull = TRUE
+      ))
+      return(invisible())
+    },
+
+    #' @description Get statistics used in population time profiles and residuals plots
+    #' @examples \dontrun{
+    #' # Get the statistics of time profiles task
+    #' workflow$plotTimeProfilesAndResiduals$settings$getStatistics()
+    #' }
+    #'
+    getStatistics = function() {
+      return(private$.statistics)
     }
   ),
   active = list(
@@ -184,6 +252,7 @@ GofTaskSettings <- R6::R6Class(
   ),
   private = list(
     .includeReferenceData = NULL,
-    .outputSelections = NULL
+    .outputSelections = NULL,
+    .statistics = NULL
   )
 )

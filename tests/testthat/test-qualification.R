@@ -1,12 +1,12 @@
 context("Qualification Workflow")
 
 reOutputFolder <- "report-qualification"
-configurationPlanFile <- getTestDataFilePath("qualification/report-configuration-plan.json")
+configurationPlanFile <- getTestDataFilePath("qualification/configuration-plan.json")
 
 reOutputFolderReferenceFiles <- c(
   "images", "SimulationResults", "PKAnalysisResults",
   "log-debug.txt", "log-info.txt", "Report-word.md", "Report.docx", "Report.md", "testcontent.md"
-  )
+)
 
 # Load and run test qualification workflow
 workflow <- loadQualificationWorkflow(
@@ -21,7 +21,7 @@ test_that("Output folder has the appropriate structure", {
 })
 
 test_that("Content files are all appropriately copied", {
-  for(fileName in list.files(getTestDataFilePath("qualification/Content"), recursive = TRUE)){
+  for (fileName in list.files(getTestDataFilePath("qualification/Content"), recursive = TRUE)) {
     expect_true(file.exists(file.path(workflow$workflowFolder, fileName)))
   }
 })
@@ -73,7 +73,7 @@ test_that("Final report managed appropriately the order and numbering of section
   section23 <- grep(pattern = "## 2.3 Goodness of fit", reportContent)
   section3 <- grep(pattern = "# 3 PK Ratio Tests", reportContent)
   section4 <- grep(pattern = "# 4 DDI Ratio Tests", reportContent)
-  
+
   expect_length(section1, 1)
   expect_length(section11, 1)
   expect_length(section12, 1)
@@ -92,14 +92,13 @@ test_that("Final report managed appropriately the order and numbering of section
   expect_gt(section23, section22)
   expect_gt(section3, section23)
   expect_gt(section4, section3)
-  
+
   # Unreferenced section not in toc
   unreferencedSection <- grep(pattern = "## Unreferenced section", reportContent)
   expect_length(unreferencedSection, 1)
   tocContent <- reportContent[grep(pattern = "\\[", x = reportContent)]
   unreferencedSectionInTOC <- grep(pattern = "Unreferenced section", tocContent)
   expect_length(unreferencedSectionInTOC, 0)
-  
 })
 
 test_that("Final report included the correct amount of figures and tables", {
@@ -115,7 +114,7 @@ test_that("Inputs are added in the appropriate location", {
   section11 <- grep(pattern = "## 1.1 With Content", reportContent)
   section12 <- grep(pattern = "## 1.2 Without Content", reportContent)
   inputLocation <- grep("This is an input", reportContent)
-  
+
   expect_length(inputLocation, 1)
   expect_gt(inputLocation, section11)
   expect_gt(section12, inputLocation)

@@ -47,7 +47,7 @@ SensitivityPlotSettings <- R6::R6Class(
       private$.yAxisFontSize <- yAxisFontSize
       private$.maxLinesPerParameter <- maxLinesPerParameter %||% reEnv$maxLinesPerParameter
       # Default line breaks will now be limited to 1/3 of plot width
-      defaultPlotConfiguration <- tlf::PlotConfiguration$new()
+      defaultPlotConfiguration <- tlf::TornadoPlotConfiguration$new(bar = FALSE)
       defaultPlotConfiguration$yAxis$font$size <- yAxisFontSize
       private$.maxWidthPerParameter <- maxWidthPerParameter %||% getLineBreakWidth(element = "yticklabels", plotConfiguration %||% defaultPlotConfiguration)
       private$.xLabel <- xLabel
@@ -55,7 +55,6 @@ SensitivityPlotSettings <- R6::R6Class(
       private$.colorPalette <- colorPalette
     }
   ),
-
   active = list(
     #' @field totalSensitivityThreshold cut-off used for plots of the most sensitive parameters
     totalSensitivityThreshold = function(value) {
@@ -169,7 +168,6 @@ SensitivityPlotSettings <- R6::R6Class(
       }
     }
   ),
-
   private = list(
     .totalSensitivityThreshold = NULL,
     .maximalParametersPerSensitivityPlot = NULL,

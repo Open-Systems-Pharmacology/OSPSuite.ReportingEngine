@@ -15,9 +15,9 @@ R6 class representing Reporting Engine Mean Model Set
 
 \item{\code{outputs}}{list of `Output` R6 class objects}
 
-\item{\code{observedDataFile}}{name of csv file to be used for observed data}
+\item{\code{dataSource}}{A `DataSource` object}
 
-\item{\code{observedMetaDataFile}}{name of csv file to be used as dictionary of the observed data}
+\item{\code{dataSelection}}{character or expression used to select a subset of observed data}
 
 \item{\code{timeUnit}}{display unit for time variable}
 
@@ -33,13 +33,13 @@ reported time profiles and residual plots when applicable}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{SimulationSet$new()}}
-\item \href{#method-clone}{\code{SimulationSet$clone()}}
+\item \href{#method-SimulationSet-new}{\code{SimulationSet$new()}}
+\item \href{#method-SimulationSet-clone}{\code{SimulationSet$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-SimulationSet-new"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationSet-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `SimulationSet` object.
 \subsection{Usage}{
@@ -47,8 +47,8 @@ Create a new `SimulationSet` object.
   simulationSetName,
   simulationFile,
   outputs = NULL,
-  observedDataFile = NULL,
-  observedMetaDataFile = NULL,
+  dataSource = NULL,
+  dataSelection = DataSelectionKeys$ALL,
   timeUnit = "h",
   applicationRanges = ApplicationRanges,
   minimumSimulationEndTime = NULL,
@@ -65,9 +65,11 @@ Create a new `SimulationSet` object.
 
 \item{\code{outputs}}{list of `Output` R6 class objects}
 
-\item{\code{observedDataFile}}{name of csv file to be used for observed data}
+\item{\code{dataSource}}{A `DataSource` object}
 
-\item{\code{observedMetaDataFile}}{name of csv file to be used as dictionary of the observed data}
+\item{\code{dataSelection}}{characters or expression to select subset the observed data
+By default, all the data is selected.
+When using a character array, selections are concatenated with the `&` sign}
 
 \item{\code{timeUnit}}{display unit for time variable. Default is "h"}
 
@@ -84,8 +86,8 @@ A new `SimulationSet` object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-SimulationSet-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-SimulationSet-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

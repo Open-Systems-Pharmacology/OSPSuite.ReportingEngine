@@ -19,13 +19,13 @@ StudyDesignTarget
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{StudyDesignTarget$new()}}
-\item \href{#method-print}{\code{StudyDesignTarget$print()}}
+\item \href{#method-StudyDesign-new}{\code{StudyDesignTarget$new()}}
+\item \href{#method-StudyDesign-print}{\code{StudyDesignTarget$print()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-StudyDesign-new"></a>}}
+\if{latex}{\out{\hypertarget{method-StudyDesign-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `StudyDesign` object.
 \subsection{Usage}{
@@ -47,8 +47,8 @@ Create a new `StudyDesign` object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-StudyDesign-print"></a>}}
+\if{latex}{\out{\hypertarget{method-StudyDesign-print}{}}}
 \subsection{Method \code{print()}}{
 Print study design target features
 \subsection{Usage}{

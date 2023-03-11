@@ -1,0 +1,304 @@
+---
+title: "Excel Template"
+resource_files:
+  - figures
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Excel Template}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r vignette setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(knitr.kable.NA = '')
+displayExcelSheet <- function(sheet){
+  sheetContent <- readxl::read_xlsx(
+    system.file(
+      "extdata",
+      "WorkflowInput.xlsx", 
+      package = "ospsuite.reportingengine"
+      ),
+    sheet = sheet
+    )
+  if(!("Description" %in% names(sheetContent))){
+    return(knitr::kable(sheetContent, na = ""))
+  }
+  # Replace line breaks by 
+  # in-cell breaks for nice display of the table within vignette
+  sheetContent$Description <- gsub(
+    pattern = "\\r\\n", 
+    replacement = "<br>", 
+    sheetContent$Description
+    )
+
+  return(knitr::kable(sheetContent, na = ""))
+}
+#source(system.file("extdata", "vignette-helpers.R", package = "ospsuite.reportingengine"))
+```
+
+```{r setup}
+require(ospsuite.reportingengine)
+```
+
+## Get started
+
+### What for ?
+
+Creating and customizing your workflow using R can be challenging.
+
+Leveraging *Excel*, you can define your workflow, all its elements, settings and options with a few clicks.
+
+The Excel template was created so that users can design their own workflows by directly tuning a working example.
+
+### What is it ?
+
+The Excel template is an *xlsx* document that defines all the relevant information of a working workflow.
+
+The function [`createWorkflowFromExcelInput()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/createWorkflowFromExcelInput.html) converts such Excel document into an R script that defines your workflow in plain R code. 
+Then, you can run your workflow by running the R script (e.g. using the function `source()`).
+
+### Where can I get the template ?
+
+The Excel template is available on GitHub: [WorkflowInput.xlsx](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/WorkflowInput.xlsx).
+
+## Standard Excel Sheet Names
+
+The Excel template includes a few standard Excel sheets that are required for the conversion into R code.
+
+`r paste(paste0("- [", ospsuite.reportingengine:::StandardExcelSheetNames, "](#", gsub(pattern = "[[:space:]]", replacement = "-", x = tolower(ospsuite.reportingengine:::StandardExcelSheetNames)), ")"), collapse = "\n")`
+
+<a id="documentation"></a>
+
+### Documentation
+
+The Excel sheet *Documentation* aims at documenting your R script.
+All of its content will be added as commented text (preceded by `#` character) in first lines of your R script.
+
+<details><summary>Table : Documentation sheet</summary>
+
+```{r table documentation sheet, echo=FALSE, results='asis'}
+displayExcelSheet("Documentation")
+```
+
+</details>
+
+<a id="workflow-and-tasks"></a>
+
+### Workflow and Tasks
+
+The Excel sheet *Workflow and Tasks* defines the main attributes of your workflow.
+
+<details><summary>Table : Workflow and Tasks sheet</summary>
+
+```{r table Workflow and Tasks sheet, echo=FALSE, results='asis'}
+displayExcelSheet("Workflow and Tasks")
+```
+
+</details>
+
+<a id="simulationsets"></a>
+
+### SimulationSets
+
+The Excel sheet *SimulationSets* defines the simulation sets and their properties of your workflow.
+
+<details><summary>Table : SimulationSets sheet</summary>
+
+```{r table SimulationSets sheet, echo=FALSE, results='asis'}
+displayExcelSheet("SimulationSets")
+```
+
+</details>
+
+<a id="outputs"></a>
+
+### Outputs
+
+The Excel sheet *Outputs* defines the properties of each output paths.
+
+<details><summary>Table : Outputs sheet</summary>
+
+```{r table outputs sheet, echo=FALSE, results='asis'}
+displayExcelSheet("Outputs")
+```
+
+</details>
+
+Check section [How to define Output objects ?](#excel-outputs) for more details on how to set up observed data sets.
+
+<a id="data-sources"></a>
+
+### Data Sources
+
+The Excel sheet *Data Sources* defines the observed data sets and their properties.
+
+<details><summary>Table : Data Sources sheet</summary>
+
+```{r table data sources sheet, echo=FALSE, results='asis'}
+displayExcelSheet("Data Sources")
+```
+
+</details>
+
+Check section [How to define observed data sets ?](#excel-observed-datasets) for more details on how to set up observed data sets.
+
+
+<a id="userdef-pk-parameter"></a>
+
+### Userdef PK Parameter
+
+This standard sheet is required when user-defined PK Parameters are calculated in your simulations.
+
+Check section [How to define PK Parameters ?](#excel-pk) for more details on how to set up user-defined PK Parameters.
+
+<a id="sensitivityparameter"></a>
+
+### SensitivityParameter
+
+This standard sheet is a template that can be tuned to inform which specific input parameters you wish to vary in your sensitivity analysis.
+
+Check section [How to set up sensitivity analyses ?](#excel-sensitivity) for more details on how to set up the input parameters.
+
+<a id="tpDictionary"></a>
+
+### tpDictionary
+
+This standard sheet is a template that can be tuned to inform the meta data of your observed datasets.
+
+Check section [How to define observed datasets ?](#excel-observed-datasets) for more details on how to set up the dictionary of your datasets.
+
+## How to ?
+
+<a id="excel-outputs"></a>
+
+### How to define Output objects ?
+
+To define and include Output objects in your Simulation Sets, users only need to 
+
+1- Define them in the standard Excel sheet *Outputs* 
+
+2- Declare the name of the created output(s) in the Excel sheet *SimulationSets* in the cell corresponding to *outputs*.
+A drop-down menu is available and allows you to select directly an output defined in the sheet *Outputs*. Users can also provide multiple outputs within the cell, however they need to be separated by a comma (character `,`).
+
+<a id="excel-pk"></a>
+
+### How to define PK Parameters ?
+
+To define and include PK Parameters users need to 
+
+1- Define them in an Excel sheet using the Excel sheet *PK Parameter* as reference (*PK Conc Single*, *PK Conc Multi* and *PK Fraction* can also be used as reference)
+
+<details><summary>Table : PK Parameter template sheet</summary>
+
+```{r table PK Parameter sheet, echo=FALSE, results='asis'}
+displayExcelSheet("PK Parameter")
+```
+
+</details>
+
+2- Declare the name of the created sheet in the Excel sheet of your Output object in the cell corresponding to *pkParameters*
+
+#### User-defined PK Parameters
+
+One additional sheet is required for user-defined PK Parameters.
+Use the standard Excel sheet *Userdef PK Parameter* to define your own user-defined PK Parameter and include the names of the parameters in your PK Parameters sheet.
+
+<a id="excel-observed-datasets"></a>
+
+### How to define observed data sets ?
+
+Observed data sets are managed using `DataSource` objects.
+
+To define and include observed data users need to 
+
+1- Define them in the standard Excel sheet *Data Sources*
+
+2- Declare the name of the sources in the standard Excel sheet *SimulationSet* within the cell corresponding to *dataSource*.
+A drop-down menu is available and allows you to select directly a data source defined in the sheet *Data Sources*. Users can only provide a unique dataSource within the corresponding cell.
+
+`DataSource` objects require a `metaDataFile` defining the content of the observed dataset. 
+This meta data can be provided either by using an Excel sheet of your Excel document or by using a separate csv file. 
+
+- If dictionary is defined as an Excel sheet:
+   - Go to the standard Excel sheet *Data Sources*
+   - Select the option **SHEET** in the cell corresponding to your **DictionaryType** 
+   - Include the name of the sheet in the cell corresponding to **DictionaryLocation** <br> You can use the Excel sheet *tpDictionary* as reference
+- If dictionary is defined as a separate csv file:
+   - Go to the standard Excel sheet *Data Sources*
+   - Select the option **FILE** in the cell corresponding to your **DictionaryType** 
+   - Include the path of the file in the cell corresponding to **DictionaryLocation**  <br> You can download and use the template [tpDictionary.csv](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/tpDictionary.csv) as reference
+
+<a id="excel-sensitivity"></a>
+
+### How to set up sensitivity analyses ?
+
+Because sensitivity analyses calculate and display the relative impact of selected - or all - input parameters on the PK parameters of those selected output curves, they can be performed and displayed in many ways
+
+For such reason, workflows provide a lot of options and settings that will help you design the specific analysis you wish to perform.
+
+To include a sensitivity analysis in your workflow report, you need to activate the following tasks: **`r paste(StandardSimulationTasks, collapse = "**, **")`**, and **plotSensitivity**.
+
+To activate these tasks, go to the standard Excel sheet *Workflow and Tasks* and set the Values of the corresponding cells to **Yes**.
+
+In the same Excel sheet, you will find many options for your sensitivity analysis under the section *Task-specific options*.
+
+The first set of options are related to the calculation of the sensitivity.
+
+In these options, you can set up the variation range of all or selected input parameters.
+This range defines the amplitude of the variations/perturbations applied around the value in the simulation. 
+For more details about the variation range, you can check the [OSP Suite documentation](https://docs.open-systems-pharmacology.org/shared-tools-and-example-workflows/sensitivity-analysis) on sensitivity analysis.
+
+Another option is the selection of specific input parameters on which applying the variations. To include only selected input parameters users need to 
+
+1- Define them in an Excel sheet using the Excel sheet *SensitivityParameter* as reference 
+
+<details><summary>Table : SensitivityParameter template sheet</summary>
+
+```{r table SensitivityParameter sheet, echo=FALSE, results='asis'}
+displayExcelSheet(ospsuite.reportingengine:::StandardExcelSheetNames$SensitivityParameter)
+```
+
+</details>
+
+2- Declare the name of the created sheet in the standard Excel sheet *Workflow and Tasks* in the cell corresponding to *calculateSensitivity: variableParameterPaths*
+
+The second set of options are related to the sensitivity plots and helps you defining how many input parameters are displayed and how they are displayed.
+
+### How add a Study Design table ?
+
+It is possible to add a special parameters variation which is not exported in your initial population by including a StudyDesign table to your workflow.
+
+To define Study Design tables users can either leverage an Excel sheet of the Excel document or they can use a separate csv file. 
+
+- If the Study Design is defined as an Excel sheet:
+   - Go to the standard Excel sheet *SimulationSets*
+   - Select the option **SHEET** in the cell corresponding to your **StudyDesignType** 
+   - Include the name of the sheet in the cell corresponding to **StudyDesignLocation** <br> You can use the Excel sheet *StudyDesign* as reference
+- If Study Design is defined as a separate csv file:
+   - Go to the standard Excel sheet *SimulationSets*
+   - Select the option **FILE** in the cell corresponding to your **StudyDesignType** 
+   - Include the path of the file in the cell corresponding to **StudyDesignLocation**  <br> You can download and use the template [StudyDesign.csv](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/StudyDesign.csv) as reference
+
+<details><summary>Table : StudyDesign sheet</summary>
+
+```{r table Study Design sheet, echo=FALSE, results='asis'}
+displayExcelSheet("StudyDesign")
+```
+
+</details>
+
+
+### How to include your own code ?
+
+Workflows can be updated by a user-defined function before execution (e.g. change options, add user-defined tasks, ...) by including the function call before the line `workflow$runWorkflow()` in your R script.
+
+To do so, in the standard Excel sheet *Workflow and Tasks*, you can include in the cell corresponding to **activitySpecificCode** the name of the R function.
+
+Note that this function must be placed in the same directory as the generated R code and **must have 1 argument of the type `"workflow"`**.
+

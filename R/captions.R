@@ -20,6 +20,20 @@ captions <- list(
     }
   ),
   demography = list(
+    parameterSection = function(sectionId, parameterName) {
+      c(anchor(sectionId), "", paste("##", parameterName, "distributions"))
+    },
+    xParameterSection = function(sectionId, parameterName) {
+      c(anchor(sectionId), "", paste("## ", parameterName, "-dependence", sep = ""))
+    },
+    yParameterSection = function(sectionId, parameterName) {
+      c(anchor(sectionId), "", paste("### Dependence of", parameterName))
+    },
+    populationSection = function(sectionId, simulationSetName, descriptor, level = 4) {
+      tagLevel <- paste0(rep("#", level), collapse = "")
+      sectionTitle <- paste(tagLevel, "For", reportSimulationSet(simulationSetName, descriptor))
+      return(c(anchor(sectionId), "", sectionTitle))
+    },
     histogram = function(parameterName, simulationSetName, descriptor) {
       paste0("Distribution of ", parameterName, " for ", reportSimulationSet(simulationSetName, descriptor))
     },
@@ -27,46 +41,73 @@ captions <- list(
       referenceSetText <- ifNotNull(referenceSetName, paste0(" in comparison to ", referenceSetName), "")
       return(paste0(
         xParameterName, "-dependence of ", yParameterName, " for ", reportSimulationSet(simulationSetName, descriptor),
-        referenceSetText, ". Profiles are plotted in a ", plotScale, " scale."
+        referenceSetText, getPlotScaleCaption("Profiles", plotScale)
       ))
     }
   ),
   plotGoF = list(
-    timeProfile = function(simulationSetName, descriptor, dataSource, plotScale = "linear") {
-      dataSourceText <- ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
+    timeProfile = function(simulationSetName, descriptor, dataSource = "", plotScale = "linear") {
       return(paste0(
         "Time profiles for ", reportSimulationSet(simulationSetName, descriptor),
-        dataSourceText, ". Time profiles are plotted in a ", plotScale, " scale."
+        dataSource, getPlotScaleCaption("Time profiles", plotScale)
       ))
     },
-    obsVsPred = function(simulationSetName, descriptor, dataSource, plotScale = "linear") {
-      dataSourceText <- ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
+    obsVsPred = function(simulationSetName, descriptor, dataSource = "", plotScale = "linear", yCaption = NULL, pathName = NULL) {
       return(paste0(
-        "Predicted vs observed for ", reportSimulationSet(simulationSetName, descriptor),
-        dataSourceText, ". Predictions and observations are plotted in a ", plotScale, " scale."
+        "Predicted ", getStatisticsCaption(yCaption), "vs observed for ",
+        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor),
+        dataSource, getPlotScaleCaption("Predictions and observations", plotScale)
       ))
     },
-    resVsPred = function(simulationSetName, descriptor, dataSource, plotScale = ResidualScales$Linear) {
-      dataSourceText <- ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
-      return(paste0(plotScale, " residuals vs predicted values for ", reportSimulationSet(simulationSetName, descriptor), dataSourceText, "."))
+    resVsPred = function(simulationSetName, descriptor, dataSource = "", plotScale = ResidualScales$Linear, yCaption = NULL, pathName = NULL) {
+      return(paste0(
+        plotScale, " residuals vs predicted ", getStatisticsCaption(yCaption), "values for ",
+        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor),
+        dataSource
+      ))
     },
-    resVsTime = function(simulationSetName, descriptor, dataSource, plotScale = ResidualScales$Linear) {
-      dataSourceText <- ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
-      return(paste0(plotScale, " residuals vs time values for ", reportSimulationSet(simulationSetName, descriptor), dataSourceText, "."))
+    resVsTime = function(simulationSetName, descriptor, dataSource = "", plotScale = ResidualScales$Linear, pathName = NULL) {
+      return(paste0(
+        plotScale, " residuals vs time values for ",
+        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor),
+        dataSource
+      ))
     },
-    resHisto = function(simulationSetName, descriptor, dataSource, plotScale = ResidualScales$Linear) {
-      dataSourceText <- ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
-      return(paste0(plotScale, " residuals distribution for ", reportSimulationSet(simulationSetName, descriptor), dataSourceText, "."))
+    resHisto = function(simulationSetName, descriptor, dataSource = "", plotScale = ResidualScales$Linear, pathName = NULL) {
+      return(paste0(
+        plotScale, " residuals distribution (stacked) for ",
+        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor),
+        dataSource
+      ))
     },
-    resQQPlot = function(simulationSetName, descriptor, dataSource, plotScale = ResidualScales$Linear) {
-      dataSourceText <- ifNotNull(dataSource, paste0(". Data source: ", dataSource), "")
-      return(paste0(plotScale, " residuals for ", reportSimulationSet(simulationSetName, descriptor), dataSourceText, "."))
+    resQQPlot = function(simulationSetName, descriptor, dataSource = "", plotScale = ResidualScales$Linear, pathName = NULL) {
+      return(paste0(
+        plotScale, " residuals for ",
+        getResidualsAcrossCaption(pathName), reportSimulationSet(simulationSetName, descriptor),
+        " as quantile-quantile plot", dataSource
+      ))
     },
-    histogram = function(simulationSetName, descriptor) {
-      paste0("Distribution of residuals for ", reportSimulationSet(simulationSetName, descriptor), ".")
+    meanLegend = function(simulationSetName, descriptor, pathName) {
+      return(paste0("Simulated ", pathName, " (", reportSimulationSet(simulationSetName, descriptor), ")"))
     },
-    qqPlot = function(simulationSetName, descriptor) {
-      paste0("Residuals for ", reportSimulationSet(simulationSetName, descriptor), " as quantile-quantile plot.")
+    populationLegend = function(simulationSetName, descriptor, statistics, pathName) {
+      paste0(
+        "Simulated ", statistics$yCaption, " and ", statistics$rangeCaption,
+        " for ", pathName, " (", reportSimulationSet(simulationSetName, descriptor), ")"
+      )
+    },
+    resLegend = function(simulationSetName, descriptor, pathName) {
+      return(paste0(pathName, " (", reportSimulationSet(simulationSetName, descriptor), ")"))
+    },
+    observedLegend = function(simulationSetName, descriptor, pathName) {
+      paste0(
+        "Observed data for ", pathName, " (", reportSimulationSet(simulationSetName, descriptor), ")"
+      )
+    },
+    lloqLegend = function(simulationSetName, descriptor, pathName) {
+      paste0(
+        "BLQ data for ", pathName, " (", reportSimulationSet(simulationSetName, descriptor), ")"
+      )
     }
   ),
   plotPKParameters = list(
@@ -76,23 +117,33 @@ captions <- list(
     boxplot = function(parameterName, pathName, simulationSetName, descriptor, plotScale = "linear") {
       return(paste0(
         parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor),
-        " shown as box-whisker plot, which indicates the 5th, 25th, 50th, 75th, and 95th percentiles in ", plotScale, " scale."
+        " shown as box-whisker plot, which indicates the ",
+        paste(c(5, 25, 50, 75, 95), "<sup>th</sup>", sep = "", collapse = ", "),
+        " percentiles in ", plotScale, " scale."
       ))
     },
     summaryTable = function(parameterName, pathName, simulationSetName, descriptor, displayUnit) {
-      return(paste0(parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor), reportUnit(displayUnit)))
+      return(paste0("Population statistics summarizing ", parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor), reportUnit(displayUnit)))
     },
     ratioPlot = function(parameterName, pathName, simulationSetName, descriptor, referenceSetName, plotScale = "linear") {
       referenceSetText <- paste0(" in comparison to ", referenceSetName)
       return(paste0(
         parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor), referenceSetText,
-        " shown as box-whisker plot, which indicates ratios of the 5th, 25th, 50th, 75th, and 95th percentiles in ", plotScale, " scale."
+        " shown as box-whisker plot, which indicates ratios of the ",
+        paste(c(5, 25, 50, 75, 95), "<sup>th</sup>", sep = "", collapse = ", "),
+        " percentiles in ", plotScale, " scale."
       ))
     },
     ratioTable = function(parameterName, pathName, simulationSetName, descriptor, referenceSetName) {
       referenceSetText <- paste0(" in comparison to ", referenceSetName)
       return(paste0(
         "Ratios of ", parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor), referenceSetText
+      ))
+    },
+    relativeChangeTable = function(parameterName, pathName, simulationSetName, descriptor, referenceSetName) {
+      referenceSetText <- paste0(" in comparison to ", referenceSetName)
+      return(paste0(
+        "Population statistics ratios summarizing ", parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor), referenceSetText
       ))
     },
     rangePlot = function(xParameterName, yParameterName, simulationSetName, descriptor, referenceSetName = NULL, plotScale = "linear") {
@@ -118,37 +169,28 @@ captions <- list(
   )
 )
 
-getDataSource <- function(structureSet) {
-  # If no observed data, return null
-  if (isOfLength(structureSet$simulationSet$observedDataFile, 0)) {
-    return()
+getDataSourceCaption <- function(structureSet) {
+  # If no observed data, end the sentence of caption
+  if (isEmpty(structureSet$simulationSet$dataSource)) {
+    return(". ")
   }
-  # Use strplit combined with normalizePath to get a vector of path elements
-  # Then, cancel elements until observedDataFile diverge from workflowFolder
-  observedDataPathElements <- unlist(strsplit(normalizePath(structureSet$simulationSet$observedDataFile, winslash = "/"), "/"))
-  workflowPathElements <- unlist(strsplit(normalizePath(structureSet$workflowFolder, winslash = "/"), "/"))
-
-  observedDataPathSize <- length(observedDataPathElements)
-  workflowPathSize <- length(workflowPathElements)
-  isCommonElement <- rep(FALSE, observedDataPathSize)
-
-  for (pathElementIndex in 1:observedDataPathSize) {
-    if (pathElementIndex > workflowPathSize) {
-      next
-    }
-    isCommonElement[pathElementIndex] <- (observedDataPathElements[pathElementIndex] == workflowPathElements[pathElementIndex])
-  }
-  dataSource <- paste0(observedDataPathElements[!isCommonElement], collapse = "/")
-  return(dataSource)
+  dataSourceCaption <- structureSet$simulationSet$dataSource$getCaption(structureSet$workflowFolder)
+  return(paste(".", dataSourceCaption, "."))
 }
 
-getGoodnessOfFitCaptions <- function(structureSet, plotType, plotScale = "linear") {
-  dataSource <- getDataSource(structureSet)
+getGoodnessOfFitCaptions <- function(structureSet, plotType, plotScale = "linear", settings = NULL) {
+  dataSource <- getDataSourceCaption(structureSet)
   simulationSetName <- structureSet$simulationSet$simulationSetName
   setDescriptor <- structureSet$simulationSetDescriptor
-
-  captionExpression <- parse(text = paste0("plotCaption <- captions$plotGoF$", plotType, "(simulationSetName, setDescriptor, dataSource, plotScale)"))
-  eval(captionExpression)
+  yCaption <- NULL
+  if (isOfType(structureSet$simulationSet, "PopulationSimulationSet") &
+    isIncluded(plotType, c("obsVsPred", "resVsPred"))) {
+    gofStatistics <- settings$getStatistics()
+    yCaption <- gofStatistics$yCaption
+    plotCaption <- captions$plotGoF[[plotType]](simulationSetName, setDescriptor, dataSource, plotScale, yCaption)
+    return(plotCaption)
+  }
+  plotCaption <- captions$plotGoF[[plotType]](simulationSetName, setDescriptor, dataSource, plotScale)
   return(plotCaption)
 }
 
@@ -187,8 +229,11 @@ translateDescriptor <- function(descriptor) {
   return(descriptor)
 }
 
-addDescriptorToTable <- function(data, descriptor) {
-  names(data)[1] <- translateDescriptor(descriptor)
+formatPKParameterHeader <- function(data, descriptor) {
+  names(data) <- c(
+    translateDescriptor(descriptor),
+    reEnv$defaultPKParametersHeader
+  )
   return(data)
 }
 
@@ -197,7 +242,7 @@ getTimeRangeCaption <- function(timeRangeName, reference, simulationSetName) {
     return(c(
       anchor(paste0(reference, "-", removeForbiddenLetters(simulationSetName), "-", "total")), "",
       "### For total simulation time range"
-      ))
+    ))
   }
   if (isIncluded(timeRangeName, ApplicationRanges$firstApplication)) {
     return(c(
@@ -211,4 +256,22 @@ getTimeRangeCaption <- function(timeRangeName, reference, simulationSetName) {
       "### For last application range"
     ))
   }
+}
+
+getStatisticsCaption <- function(statistics) {
+  if (isEmpty(statistics)) {
+    return("")
+  }
+  return(paste0("(", statistics, ") "))
+}
+
+getPlotScaleCaption <- function(plotName, plotScale) {
+  return(paste0(". ", plotName, " are plotted in a ", plotScale, " scale."))
+}
+
+getResidualsAcrossCaption <- function(pathName) {
+  if (isEmpty(pathName)) {
+    return("")
+  }
+  return(paste0(pathName, " across "))
 }

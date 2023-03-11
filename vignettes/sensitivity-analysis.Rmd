@@ -2,7 +2,6 @@
 title: "Sensitivity Analysis"
 resource_files:
   - figures
-  - reportOutputStyle.css
 output: 
   rmarkdown::html_vignette:
    number_sections: true
@@ -13,14 +12,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r report output style, child="reportOutputStyle.css", eval=TRUE}
-```
-
 ```{r vignette setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+source(system.file("extdata", "vignette-helpers.R", package = "ospsuite.reportingengine"))
 ```
 
 ```{r setup, echo=FALSE, results='hide', message=F, warning=F}
@@ -148,7 +145,7 @@ mwf$calculateSensitivity$settings$variableParameterPaths <- c(
 ```
 
 
-The properties of the sensitivity plots to be generated are set next.  The field `totalSensitivityThreshold` is used to filter out from the sensitivity plots any model variables that contribute little to the total sensitivity of the model. The `maximalParametersPerSensitivityPlot` field limits the number of model variables to be displayeed in sensitivity plots. The axis font size is set using the parameters `xAxisFontSize` and `yAxisFontSize`.   
+The properties of the sensitivity plots to be generated are set next.  The field `totalSensitivityThreshold` is used to filter out from the sensitivity plots any model variables that contribute little to the total sensitivity of the model. The `maximalParametersPerSensitivityPlot` field limits the number of model variables to be displayed in sensitivity plots. The axis font size is set using the parameters `xAxisFontSize` and `yAxisFontSize`.   
 ```{r echo=T, results='hide'}
 mwf$plotSensitivity$settings <- SensitivityPlotSettings$new(
   totalSensitivityThreshold = 0.9,
@@ -166,17 +163,9 @@ mwf$runWorkflow()
 
 The output report, containing the mean model sensitivity plots from this example, is shown below.  
 
-```{r mwf render, include=F, echo=F}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(mwf$reportFilePath)
+```{r sensitivity report, echo=FALSE, results='asis'}
+cat(includeReportFromWorkflow(mwf))
 ```
-
-<div class = "reportOutput">
-```{r mwf report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", mwf$reportFilePath)))
-```
-</div>
 
 ```{r delete mwf, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders
@@ -233,7 +222,7 @@ pwf$calculateSensitivity$activate()
 pwf$plotSensitivity$activate()
 ```
 
-The population sensitivity analysis depends on the PK parameter calculations for the population, which in turn depend on population simulation results.  If these pre-requisite tasks (`simulate` and `calculatePKParameters`) have not previously been run, they must also be activated:  
+The population sensitivity analysis depends on the PK parameter calculations for the population, which in turn depend on population simulation results.  If these prerequisite tasks (`simulate` and `calculatePKParameters`) have not previously been run, they must also be activated:  
 
 ```{r echo=T, results='hide'}
 pwf$simulate$activate()
@@ -291,12 +280,24 @@ pwf$runWorkflow()
 
 The results of the population sensitivity analysis are found in multiple `.csv` files within the `SensitivityResults` sub-directory of the workflow folder, as shown in the following figure:
 ```{r echo=FALSE, out.width='40%'}
+# After running each vignette, their output is cleared when using devtools::check()
+# However, the content of "figures/" directory is required for docs/articles that display vignettes as a webpage
+# Thus, the file is temporarily copied to "figures/"
+dir.create("figures", showWarnings = FALSE)
+file.copy(
+  from = system.file("extdata", "sa-file-outputs.png", package = "ospsuite.reportingengine"),
+  to = "figures"
+) 
 knitr::include_graphics("figures/sa-file-outputs.png")
 ```
 
 Two sets of files make up the population sensitivity analysis results for this example, each corresponding to one of the `PopulationSimulationSet` objects (named `popSimulationSet1` and `popSimulationSet2`). For each set, there is one index file.  The name of the index file is prefixed with the name of the `PopulationSimulationSet` object and carries the suffix `-popSensitivityResultsIndex.csv`).  The index file `popSimulationSet1-popSensitivityResultsIndex.csv` contains the names of the individual sensitivity analysis results files (found within the `SensitivityResults` sub-directory of the workflow folder) obtained for the `PopulationSimulationSet` object `popSimulationSet1`.  Its contents are shown in the following figure:
 
 ```{r echo=FALSE, out.width='100%'}
+file.copy(
+  from = system.file("extdata", "sa-file-index.png", package = "ospsuite.reportingengine"),
+  to = "figures"
+) 
 knitr::include_graphics("figures/sa-file-index.png")
 ```
 
@@ -304,17 +305,9 @@ Two output paths are shown corresponding to `output1` (pink), `output2` (blue). 
 
 The output report, containing the population sensitivity plots from this example, is shown below.  
 
-```{r pwf render, include=F, echo=F}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(pwf$reportFilePath)
+```{r population sensitivity report, echo=FALSE, results='asis'}
+cat(includeReportFromWorkflow(pwf))
 ```
-
-<div class = "reportOutput">
-```{r pwf report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", pwf$reportFilePath)))
-```
-</div>
 
 ```{r delete pwf, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders

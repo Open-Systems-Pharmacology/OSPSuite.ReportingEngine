@@ -1,16 +1,17 @@
 validateIsPositive <- function(object, nullAllowed = FALSE) {
   validateIsOfType(object, c("numeric", "integer"), nullAllowed)
-
   if (isFALSE(object > 0)) {
-    logErrorThenStop(messages$errorWrongType(getObjectNameAsString(object), class(object)[1], "positive"))
+    stop(
+      messages$errorWrongType(getObjectNameAsString(object), class(object)[1], "positive"),
+      call. = FALSE
+    )
   }
 }
 
 hasPositiveValues <- function(object) {
   object <- object[!is.na(object)]
   object <- object[!is.infinite(object)]
-  positiveValues <- object > 0
-  return(!sum(positiveValues) == 0)
+  return(any(object > 0))
 }
 
 
@@ -20,7 +21,10 @@ validateIsInRange <- function(variableName, value, lowerBound, upperBound, nullA
   validateIsOfLength(upperBound, 1)
   validateIsNumeric(c(value, lowerBound, upperBound), nullAllowed)
   if ((value < lowerBound) | (value > upperBound)) {
-    logErrorThenStop(messages$outsideRange(variableName, value, lowerBound, upperBound))
+    stop(
+      messages$outsideRange(variableName, value, lowerBound, upperBound),
+      call. = FALSE
+    )
   }
 }
 
@@ -34,12 +38,16 @@ typeNamesFrom <- function(type) {
 
 validateNoDuplicatedEntries <- function(x) {
   if (any(duplicated(x))) {
-    logErrorThenStop(messages$errorDuplicatedEntries(getObjectNameAsString(x)))
+    stop(
+      messages$errorDuplicatedEntries(getObjectNameAsString(x)),
+      call. = FALSE
+    )
   }
   return(invisible())
 }
 
-validateIsIncludedAndLog <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL, logFolder = NULL) {
+# TODO: replace the function name
+validateIsIncludedAndLog <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL) {
   if (nullAllowed && is.null(values)) {
     return(invisible())
   }
@@ -47,13 +55,10 @@ validateIsIncludedAndLog <- function(values, parentValues, nullAllowed = FALSE, 
   if (isIncluded(values, parentValues)) {
     return(invisible())
   }
-  if (is.null(logFolder)) {
-    stop(messages$errorNotIncluded(values, parentValues, groupName))
-  }
-  logErrorThenStop(messages$errorNotIncluded(values, parentValues, groupName), logFolder)
+  stop(messages$errorNotIncluded(values, parentValues, groupName))
 }
 
-checkIsIncluded <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL, logFolder = NULL) {
+checkIsIncluded <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL) {
   if (nullAllowed && is.null(values)) {
     return(invisible())
   }
@@ -61,15 +66,8 @@ checkIsIncluded <- function(values, parentValues, nullAllowed = FALSE, groupName
   if (isIncluded(values, parentValues)) {
     return(invisible())
   }
-  if (is.null(logFolder)) {
-    warning(messages$errorNotIncluded(values, parentValues, groupName), call. = FALSE, immediate. = TRUE)
-    return(invisible())
-  }
-  logWorkflow(
-    message = messages$errorNotIncluded(values, parentValues, groupName),
-    pathFolder = logFolder,
-    logTypes = c(LogTypes$Debug, LogTypes$Error)
-  )
+  logError(messages$errorNotIncluded(values, parentValues, groupName))
+  return(invisible())
 }
 
 validateMapping <- function(mapping, data, nullAllowed = FALSE) {
@@ -90,19 +88,19 @@ checkExisitingPath <- function(path, stopIfPathExists = FALSE) {
     return(invisible())
   }
   if (stopIfPathExists) {
-    logErrorThenStop(messages$warningExistingPath(path))
+    stop(messages$warningExistingPath(path), call. = FALSE)
   }
-
-  warning(messages$warningExistingPath(path))
+  logDebug(messages$warningExistingPath(path))
+  return(invisible())
 }
 
 checkOverwriteExisitingPath <- function(path, overwrite) {
   if (!dir.exists(path)) {
     return(invisible())
   }
-  warning(messages$warningExistingPath(path))
+  logDebug(messages$warningExistingPath(path))
   if (overwrite) {
-    warning(messages$warningOverwriting(path))
+    logDebug(messages$warningOverwriting(path))
     unlink(path, recursive = TRUE)
   }
 }
@@ -126,36 +124,10 @@ validateFileExists <- function(path, nullAllowed = FALSE) {
   if (nullAllowed && is.null(path)) {
     return(invisible())
   }
-  if (all(file.exists(path))){
+  if (all(file.exists(path))) {
     return(invisible())
   }
   stop(messages$errorUnexistingFile(path[!file.exists(path)]))
-}
-
-#' Log the error with a message and then stop, displaying same message.
-#'
-#' @param message message to display and then log
-#' @param logFolderPath path where logs are saved
-#' @keywords internal
-logErrorThenStop <- function(message, logFolderPath = getwd()) {
-  logWorkflow(
-    message = message,
-    pathFolder = logFolderPath,
-    logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error)
-  )
-  stop(message, call. = FALSE)
-}
-
-#' Log the error with a message
-#' @param message message to display and then log
-#' @param logFolderPath path where logs are saved
-#' @keywords internal
-logErrorMessage <- function(message, logFolderPath = getwd()) {
-  logWorkflow(
-    message = message,
-    pathFolder = logFolderPath,
-    logTypes = c(LogTypes$Info, LogTypes$Debug, LogTypes$Error)
-  )
 }
 
 #' Check the consistency between observed data and its dictionary.
@@ -165,25 +137,25 @@ logErrorMessage <- function(message, logFolderPath = getwd()) {
 #' 1. Use units from outputs
 #' 2. Use units from observed dataset
 #' 3. Use units from dictionary
-#' @param observedMetaDataFile Path of meta data file on observed dataset (also called dictionary)
+#' @param dataSource A `DataSource` object
 #' @param observedDataFile Path of observed dataset
 #' @param outputs list or array of `Output` objects
 #' @keywords internal
-validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile, outputs) {
-  # Check that dictionary is provided
-  if (isOfLength(observedMetaDataFile, 0)) {
-    stop(messages$errorObservedMetaDataFileNotProvided(observedDataFile))
+validateDataSource <- function(dataSource, outputs, nullAllowed = TRUE) {
+  if (nullAllowed && any(is.null(dataSource), is.null(outputs))) {
+    return(invisible())
   }
+  validateIsOfType(dataSource, "DataSource")
   # Read dictionary and check that mandatory variables are included
-  dictionary <- readObservedDataFile(observedMetaDataFile)
+  dictionary <- readObservedDataFile(dataSource$metaDataFile)
   if (!isIncluded(dictionaryParameters$datasetUnit, names(dictionary))) {
     dictionary[, dictionaryParameters$datasetUnit] <- NA
   }
   validateIsIncludedInDataset(c(dictionaryParameters$ID, dictionaryParameters$datasetColumn), dictionary, datasetName = "dictionary")
   validateIsIncludedAndLog(c(dictionaryParameters$timeID, dictionaryParameters$dvID), dictionary[, dictionaryParameters$ID], groupName = paste0("Column '", dictionaryParameters$ID, "'"))
 
-  # Check that dictionary and observed data are consitent
-  observedDataset <- readObservedDataFile(observedDataFile)
+  # Check that dictionary and observed data are consistent
+  observedDataset <- readObservedDataFile(dataSource$dataFile)
   timeVariable <- getDictionaryVariable(dictionary, dictionaryParameters$timeID)
   dvVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvID)
   lloqVariable <- getDictionaryVariable(dictionary, dictionaryParameters$lloqID)
@@ -192,19 +164,11 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile,
   checkIsIncludedInDataset(lloqVariable, observedDataset, datasetName = "observed dataset", nullAllowed = TRUE)
 
   # Check of unit definitions:
-  # 1) unit defined in outptuts
-  dataUnit <- NULL
-  if (!isOfLength(outputs, 0)) {
-    dataUnit <- unlist(lapply(outputs, function(output) {
-      output$dataUnit
-    }))
-  }
-
-  # 2) If unit is defined as a datasetColumn
+  # - If unit is defined as a datasetColumn
   timeUnitVariable <- getDictionaryVariable(dictionary, dictionaryParameters$timeUnitID)
   dvUnitVariable <- getDictionaryVariable(dictionary, dictionaryParameters$dvUnitID)
 
-  # 3) If unit is defined as a value in datasetUnit
+  # - If unit is defined as a value in datasetUnit
   timeMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$timeID
   dvMapping <- dictionary[, dictionaryParameters$ID] %in% dictionaryParameters$dvID
 
@@ -212,7 +176,7 @@ validateObservedMetaDataFile <- function(observedMetaDataFile, observedDataFile,
   dvUnit <- as.character(dictionary[dvMapping, dictionaryParameters$datasetUnit])
 
   validateUnitDataDefinition(timeUnit, timeUnitVariable, observedDataset)
-  validateUnitDataDefinition(dvUnit, dvUnitVariable, observedDataset, dataUnit)
+  validateUnitDataDefinition(dvUnit, dvUnitVariable, observedDataset, outputs)
   return(invisible())
 }
 
@@ -230,12 +194,10 @@ validateIsDimension <- function(values, nullAllowed = FALSE) {
   if (nullAllowed && is.null(values)) {
     return(invisible())
   }
-
   if (isDimension(values)) {
     return(invisible())
   }
-
-  logErrorThenStop(messages$errorNotADimension(values))
+  stop(messages$errorNotADimension(values))
 }
 
 isPathInSimulation <- function(paths, simulation) {
@@ -255,7 +217,10 @@ validateIsPathInSimulation <- function(paths, simulation, nullAllowed = FALSE) {
   if (isPathInSimulation(paths, simulation)) {
     return(invisible())
   }
-  logErrorThenStop(message = messages$invalidOuputPath(paths, simulation$name))
+  invalidPaths <- paths[sapply(paths, function(path) {
+    !isPathInSimulation(path, simulation)
+  })]
+  stop(messages$invalidOuputPath(invalidPaths, simulation$name))
 }
 
 validateOutputObject <- function(outputs, simulation, nullAllowed = FALSE) {
@@ -273,6 +238,7 @@ validateOutputObject <- function(outputs, simulation, nullAllowed = FALSE) {
   for (output in outputs) {
     outputQuantity <- ospsuite::getQuantity(output$path, simulation)
     validateIsUnitFromDimension(output$displayUnit, outputQuantity$dimension, nullAllowed = TRUE)
+    validateIsUnitFromDimension(output$dataUnit, outputQuantity$dimension, nullAllowed = TRUE)
   }
 }
 
@@ -287,7 +253,7 @@ isUnitFromDimension <- function(unit, dimension) {
   if (isIncluded(dimension, c("Concentration (mass)", "Concentration (molar)"))) {
     dimension <- c("Concentration (mass)", "Concentration (molar)")
   }
-  if (isOfLength(dimensionForUnit, 0)) {
+  if (isEmpty(dimensionForUnit)) {
     return(FALSE)
   }
   return(isIncluded(dimensionForUnit, dimension))
@@ -303,7 +269,7 @@ validateIsUnitFromDimension <- function(unit, dimension, nullAllowed = FALSE) {
   stop(messages$errorUnitNotFromDimension(unit, dimension))
 }
 
-validateHasReferencePopulation <- function(workflowType, simulationSets, logFolder = NULL) {
+validateHasReferencePopulation <- function(workflowType, simulationSets) {
   if (isIncluded(workflowType, PopulationWorkflowTypes$parallelComparison)) {
     return(invisible())
   }
@@ -314,14 +280,11 @@ validateHasReferencePopulation <- function(workflowType, simulationSets, logFold
   if (isOfLength(allSimulationReferences[allSimulationReferences], 1)) {
     return(invisible())
   }
-  if (is.null(logFolder)) {
-    stop(messages$warningNoReferencePopulation(workflowType))
-  }
-  logErrorThenStop(messages$warningNoReferencePopulation(workflowType), logFolder)
+  stop(messages$warningNoReferencePopulation(workflowType))
 }
 
 
-validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
+validateSameOutputsBetweenSets <- function(simulationSets) {
   pkParametersTableRef <- NULL
   for (set in simulationSets) {
     pkParametersTable <- getPKParametersInSimulationSet(set)
@@ -342,12 +305,11 @@ validateSameOutputsBetweenSets <- function(simulationSets, logFolder = NULL) {
         next
       }
     }
-    if (is.null(logFolder)) {
-      stop(messages$errorNotSameOutputsBetweenSets(sapply(
-        simulationSets, function(set) {set$simulationSetName})))
-    }
-    logErrorThenStop(messages$errorNotSameOutputsBetweenSets(sapply(
-      simulationSets, function(set) {set$simulationSetName})), logFolder)
+    stop(messages$errorNotSameOutputsBetweenSets(sapply(
+      simulationSets, function(set) {
+        set$simulationSetName
+      }
+    )))
   }
 }
 
@@ -362,79 +324,98 @@ validatehasOnlyDistinctValues <- function(data, dataName = "dataset", na.rm = TR
   stop(messages$errorHasNoUniqueValues(data, dataName, na.rm))
 }
 
-validateIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, nullAllowed = FALSE, logFolder = NULL) {
+validateIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, nullAllowed = FALSE) {
   if (nullAllowed && is.null(columnNames)) {
     return(invisible())
   }
   if (isIncluded(columnNames, names(dataset))) {
     return(invisible())
   }
-  if (is.null(logFolder)) {
-    stop(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName), call. = FALSE, immediate. = TRUE)
-  }
-  logErrorThenStop(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName))
+  stop(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName), call. = FALSE, immediate. = TRUE)
 }
 
-checkIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, nullAllowed = FALSE, logFolder = NULL) {
+checkIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, nullAllowed = FALSE) {
   if (nullAllowed && is.null(columnNames)) {
     return(invisible())
   }
   if (isIncluded(columnNames, names(dataset))) {
     return(invisible())
   }
-  #TODO this check should be ion logWorkflow and not in the caller!!
-  if (is.null(logFolder)) {
-    warning(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName), call. = FALSE, immediate. = TRUE)
-    return(invisible())
-  }
-  logWorkflow(
-    message = messages$errorNotIncludedInDataset(columnNames, dataset, datasetName),
-    pathFolder = logFolder,
-    logTypes = c(LogTypes$Debug, LogTypes$Error)
-  )
+  logError(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName))
+  return(invisible())
 }
 
 validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, outputs = NULL) {
   # In case, value from reading from Excel/csv file is not an actual NULL
-  if (any(isOfLength(unit, 0), is.na(unit), unit %in% "")) {
+  if (any(isEmpty(unit), is.na(unit), unit %in% "")) {
     unit <- NULL
   }
-  # Case unit is defined using outputs
-  dataUnit <- NULL
-  if (!isOfLength(outputs, 0)) {
-    dataUnit <- unlist(lapply(outputs, function(output) {
+  # Get dataUnit from outputs
+  dataUnit <- ifNotNull(
+    outputs,
+    unlist(lapply(outputs, function(output) {
       output$dataUnit
-    }))
-  }
+    })),
+    NULL
+  )
 
-  # Checks for errors
-  # If no unit defined at all
-  if (isOfLength(c(unit, unitColumn, dataUnit), 0)) {
-    stop(messages$errorNoDataUnit())
+  # Checks for errors/warnings
+  # - No unit at all
+  noUnit <- all(isEmpty(unit), isEmpty(unitColumn), isEmpty(dataUnit))
+  if (noUnit) {
+    logErrorThenStop(messages$errorNoDataUnit())
   }
-  # If no unit defined by dictionray, all outputs need to define dataUnit
-  if (isOfLength(c(unit, unitColumn), 0)) {
+  # - No unit defined by dictionary: all outputs need to define dataUnit
+  noDictionaryUnit <- all(isEmpty(unit), isEmpty(unitColumn))
+  if (noDictionaryUnit) {
     if (!isSameLength(dataUnit, outputs)) {
-      stop(messages$errorNoDataUnitInOutputs())
+      logErrorThenStop(messages$errorNoDataUnitInOutputs())
     }
     return(invisible())
   }
-  # Checks for warnings
-  # Only one of unit, unitColumn and dataUnit should be defined
-  # in the case dataUnit was defined, code has already returned
-  if (!isOfLength(c(unit, unitColumn, dataUnit), 1)) {
-    warning(messages$warningMultipleDataUnit())
-  }
-  # If defined, check that unitColumn refers an actual column from observed data
+  # If units defined in dataFile,
+  # check that unitColumn refers an actual column from observed data
   checkIsIncludedInDataset(unitColumn, observedDataset, datasetName = "observed dataset", nullAllowed = TRUE)
 
+  # Check multiple unit definitions and their consistency
+  checkOutputConsistency <- all(!isEmpty(unit), !isEmpty(dataUnit))
+  if (checkOutputConsistency) {
+    # Error when unit is different from dataUnit
+    if (!isIncluded(unit, dataUnit)) {
+      logErrorThenStop(messages$errorInconsistentDataUnit())
+    }
+    logError(messages$warningMultipleDataUnit())
+    return(invisible())
+  }
+  # Warning consistency between unit definitions
+  warnMutlipleUnitDefinitions <- any(
+    all(!isEmpty(dataUnit), !isEmpty(unitColumn)),
+    all(!isEmpty(unit), !isEmpty(unitColumn))
+  )
+  if (warnMutlipleUnitDefinitions) {
+    logError(messages$warningMultipleDataUnit())
+  }
   return(invisible())
 }
 
 
-validateCommandStatus <- function(command, status){
-  if(status!=0){
+validateCommandStatus <- function(command, status) {
+  if (status != 0) {
     stop(messages$errorCommand(command, status))
   }
   return(invisible())
+}
+
+validateHasValidParameterPathsForSensitivity <- function(paths, simulationSetName) {
+  if (isEmpty(paths)) {
+    stop(messages$errorNoValidParametersForSensitivityAnalysis(simulationSetName))
+  }
+  return(invisible())
+}
+
+validateHasParametersForSensitivity <- function(numberOfParameters) {
+  if (numberOfParameters > 0) {
+    return(invisible())
+  }
+  stop(messages$errorNoParametersForSensitivityAnalysis())
 }

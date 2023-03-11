@@ -4,12 +4,10 @@
 \alias{addTableAndFigureNumbersToMarkdown}
 \title{addTableAndFigureNumbersToMarkdown}
 \usage{
-addTableAndFigureNumbersToMarkdown(fileName, logFolder = getwd())
+addTableAndFigureNumbersToMarkdown(fileName)
 }
 \arguments{
 \item{fileName}{name of .md file to update}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \description{
 Reference tables and figures in a report

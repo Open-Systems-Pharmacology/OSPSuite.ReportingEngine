@@ -4,12 +4,10 @@
 \alias{plotMeanSensitivity}
 \title{plotMeanSensitivity}
 \usage{
-plotMeanSensitivity(structureSet, logFolder = getwd(), settings)
+plotMeanSensitivity(structureSet, settings)
 }
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object}
-
-\item{logFolder}{folder where the logs are saved}
 
 \item{settings}{list of settings for the output table/plot}
 }

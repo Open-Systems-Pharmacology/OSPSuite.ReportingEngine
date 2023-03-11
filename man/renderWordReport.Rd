@@ -7,7 +7,6 @@
 renderWordReport(
   fileName,
   intro = NULL,
-  logFolder = getwd(),
   createWordReport = FALSE,
   wordConversionTemplate = NULL
 )
@@ -17,9 +16,7 @@ renderWordReport(
 
 \item{intro}{name of .md file that include introduction (before toc)}
 
-\item{logFolder}{folder where the logs are saved}
-
-\item{createWordReport}{option for creating Markdwon-Report only but not a Word-Report}
+\item{createWordReport}{option for creating Markdown-Report only but not a Word-Report}
 
 \item{wordConversionTemplate}{optional docx template for rendering a tuned Word-Report document}
 }

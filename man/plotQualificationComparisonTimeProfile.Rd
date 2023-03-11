@@ -4,16 +4,10 @@
 \alias{plotQualificationComparisonTimeProfile}
 \title{plotQualificationComparisonTimeProfile}
 \usage{
-plotQualificationComparisonTimeProfile(
-  configurationPlan,
-  logFolder = getwd(),
-  settings
-)
+plotQualificationComparisonTimeProfile(configurationPlan, settings)
 }
 \arguments{
 \item{configurationPlan}{A `ConfigurationPlan` object}
-
-\item{logFolder}{folder where the logs are saved}
 
 \item{settings}{`ConfigurationPlan` object}
 }

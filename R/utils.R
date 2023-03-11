@@ -1,20 +1,39 @@
-#' @title calculateResiduals
-#' @param simulatedData, vector of simulated data
-#' @param observedData, vector of observed data
-#' @param residualScale, must be selected from enum ResidualScales
-#' @return residuals between simulatedData and observedData
+# TODO: add these functions to tlf
+
+#' @title geomean
 #' @description
-#' Calculate residuals between vectors `simulatedData` and `observedData` according the the residual scale specified in `residualScale`
+#' Calculate the geometric mean
+#' @param x values
+#' @param na.rm logical defining removal of `NA` values
+#' @return Geometric mean
 #' @export
-calculateResiduals <- function(simulatedData, observedData, residualScale) {
-  validateIsOfLength(object = simulatedData, nbElements = length(observedData))
-  residualValues <- rep(NA, length(observedData))
-  if (isIncluded(residualScale, ResidualScales$Logarithmic)) {
-    residualValues <- log(observedData) - log(simulatedData)
-  }
-  if (isIncluded(residualScale, ResidualScales$Linear)) {
-    residualValues <- (observedData - simulatedData)
-  }
+geomean <- function(x, na.rm = TRUE) {
+  logX <- log(x[x > 0])
+  exp(mean(logX, na.rm = na.rm))
+}
+
+#' @title geomeanMultipliedBySD
+#' @description
+#' Calculate the geometric mean * geometric SD
+#' @param x values
+#' @param na.rm logical defining removal of `NA` values
+#' @return Geometric mean * geometric SD
+#' @export
+geomeanMultipliedBySD <- function(x, na.rm = TRUE) {
+  logX <- log(x[x > 0])
+  exp(mean(logX, na.rm = na.rm) + stats::sd(logX, na.rm = na.rm))
+}
+
+#' @title geomeanDividedBySD
+#' @description
+#' Calculate the geometric mean / geometric SD
+#' @param x values
+#' @param na.rm logical defining removal of `NA` values
+#' @return Geometric mean / geometric SD
+#' @export
+geomeanDividedBySD <- function(x, na.rm = TRUE) {
+  logX <- log(x[x > 0])
+  exp(mean(logX, na.rm = na.rm) - stats::sd(logX, na.rm = na.rm))
 }
 
 #' @title calculateGeometricErrorRange
@@ -79,7 +98,7 @@ trimFileName <- function(path, extension = NULL, sep = "/") {
 #' @param text character string to be evaluated
 #' @param forbiddenLetters characters to be removed if in the \code{text}.
 #' Default value of \code{forbiddenLetters} is \code{"[[:punct:]]"}
-#' meaning that all pointuation characters are forbidden.
+#' meaning that all punctuation characters are forbidden.
 #' @param replacement character replacing the \code{forbiddenLetters}.
 #' Default value of \code{forbiddenLetters} is "_".
 #' @return \code{text} character string with forbidden letters replaced
@@ -106,7 +125,7 @@ removeForbiddenLetters <- function(text, forbiddenLetters = "[[:punct:][:blank:]
 #' @param separator used between file name prefix and index
 #' @param extension for result file type.  default is CSV
 #' @description
-#' #Generate a listcontaining names of CSV result files that will be output by each core in parallel computation
+#' #Generate a list containing names of CSV result files that will be output by each core in parallel computation
 #' @export
 generateResultFileNames <- function(numberOfCores, folderName, fileName, separator = "-", extension = ".csv") {
   allResultsFileNames <- sapply(
@@ -118,57 +137,6 @@ generateResultFileNames <- function(numberOfCores, folderName, fileName, separat
     USE.NAMES = FALSE
   )
   return(allResultsFileNames)
-}
-
-#' @title loadSimulationWithUpdatedPaths
-#' @param simulationSet simulation set containing path to simulation file and pathIDs for quantities to be loaded into simulation object
-#' @param loadFromCache If `TRUE`, an already loaded pkml file will not be loaded again, but the `Simulation` object will be retrieved from cache.
-#' If `FALSE`, a new `Simulation` object will be created. Default value is `FALSE`.
-#' @param addToCache If `TRUE`, the loaded simulation is added to cache.
-#' If `FALSE`, the returned simulation only exists locally. Default is `TRUE`.
-#' @return A `Simulation` object with pathIDs updated from simulationSet
-#' @export
-loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE, addToCache = TRUE) {
-  simulation <- ospsuite::loadSimulation(
-    filePath = simulationSet$simulationFile,
-    loadFromCache = loadFromCache,
-    addToCache = addToCache
-  )
-  # Prevent loadSimulationWithUpdatedPaths from crashing if user did not submit any pathID
-  if (!is.null(simulationSet$outputs)) {
-    simulation$outputSelections$clear()
-    paths <- sapply(simulationSet$outputs, function(output) {
-      output$path
-    })
-    ospsuite::addOutputs(quantitiesOrPaths = paths, simulation = simulation)
-  }
-
-  if (is.null(simulationSet$minimumSimulationEndTime)) {
-    return(simulation)
-  }
-
-  if (simulationSet$minimumSimulationEndTime > simulation$outputSchema$endTime) {
-    maximalIntervalIndex <- which(sapply(simulation$outputSchema$intervals, function(x) {
-      x$endTime$value
-    }) == simulation$outputSchema$endTime)[1]
-    simulation$outputSchema$intervals[[maximalIntervalIndex]]$endTime$setValue(value = simulationSet$minimumSimulationEndTime, unit = ospUnits$Time$min)
-  }
-  return(simulation)
-}
-
-#' @title loadWorkflowPopulation
-#' @param simulationSet A `PopulationSimulationSet` object
-#' @export
-#' @import ospsuite
-loadWorkflowPopulation <- function(simulationSet) {
-  validateIsOfType(simulationSet, "PopulationSimulationSet")
-  population <- ospsuite::loadPopulation(simulationSet$populationFile)
-  simulation <- loadSimulationWithUpdatedPaths(simulationSet)
-
-  if (!is.null(simulationSet$studyDesignFile)) {
-    addStudyParameters(population, simulation, simulationSet$studyDesignFile)
-  }
-  return(population)
 }
 
 #' @title lastPathElement
@@ -186,18 +154,13 @@ lastPathElement <- function(path) {
 
 #' @title replaceInfWithNA
 #' @param data numeric vector
-#' @param logFolder folder where the logs are saved
 #' @return numeric vector
 #' @keywords internal
-replaceInfWithNA <- function(data, logFolder = getwd()) {
+replaceInfWithNA <- function(data) {
   infData <- is.infinite(data)
   Ninf <- sum(infData)
   if (Ninf > 0) {
-    logWorkflow(
-      message = paste0(Ninf, " values were infinite and transformed into missing values (NA)"),
-      pathFolder = logFolder,
-      logTypes = c(LogTypes$Debug, LogTypes$Error)
-    )
+    logDebug(paste0(Ninf, " values were infinite and transformed into missing values (NA)"))
   }
   data[infData] <- NA
   return(data)
@@ -205,90 +168,69 @@ replaceInfWithNA <- function(data, logFolder = getwd()) {
 
 #' @title removeMissingValues
 #' @param data data.frame
-#' @param dataMapping name of variable on which the missing values ar checked
-#' @param logFolder folder where the logs are saved
+#' @param dataMapping name of variable on which the missing values are checked
 #' @return filtered data.frame
 #' @keywords internal
-removeMissingValues <- function(data, dataMapping = NULL, logFolder = getwd()) {
-  data[, dataMapping] <- replaceInfWithNA(data[, dataMapping], logFolder)
+removeMissingValues <- function(data, dataMapping = NULL) {
+  if (isEmpty(data)) {
+    return(data)
+  }
+  data[, dataMapping] <- replaceInfWithNA(data[, dataMapping])
   naData <- is.na(data[, dataMapping])
   Nna <- sum(naData)
   data <- data[!naData, ]
 
   if (Nna > 0) {
-    logWorkflow(
-      message = paste0(Nna, " values were missing (NA) from variable '", dataMapping, "' and removed from the analysis"),
-      pathFolder = logFolder,
-      logTypes = c(LogTypes$Debug, LogTypes$Error)
-    )
+    logDebug(paste0(Nna, " values were missing (NA) from variable '", dataMapping, "' and removed from the analysis"))
   }
   return(data)
 }
 
-#' @title getPKParametersInOutput
-#' @param output Output object
-#' @return Names of pkParameters in `output`
-#' @export
-#' @family workflow helpers
-getPKParametersInOutput <- function(output) {
-  validateIsOfType(output, "Output")
-  pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
-    pkParameterInfo$pkParameter
-  })
-  if (isOfLength(pkParameters, 0)) {
-    return(NA)
-  }
-  return(pkParameters)
-}
-
-#' @title getPKParametersInOutput
-#' @param output Output object
-#' @return Names of pkParameters in `output`
+#' @title removeNegativeValues
+#' @param data data.frame
+#' @param dataMapping name of variable on which the missing values are checked
+#' @return filtered data.frame
 #' @keywords internal
-getPKParameterGroupsInOutput <- function(output) {
-  validateIsOfType(output, "Output")
-  pkParameters <- sapply(output$pkParameters, function(pkParameterInfo) {
-    pkParameterInfo$group
-  })
-  if (isOfLength(pkParameters, 0)) {
-    return(NA)
+removeNegativeValues <- function(data, dataMapping = NULL) {
+  if (isEmpty(data)) {
+    return(data)
   }
-  return(pkParameters)
+  negativeData <- data[, dataMapping] <= 0
+  Nnegative <- sum(negativeData, na.rm = TRUE)
+  data <- data[!negativeData, ]
+
+  if (Nnegative > 0) {
+    logDebug(paste0(Nnegative, " values from variable '", dataMapping, "' were negative and removed from the analysis"))
+  }
+  return(data)
 }
 
-#' @title getOutputPathsInSimulationSet
-#' @param simulationSet SimulationSet object or derived class
-#' @return Path names of outputs in `simulationSet`
-#' @export
-#' @family workflow helpers
-getOutputPathsInSimulationSet <- function(simulationSet) {
-  validateIsOfType(simulationSet, "SimulationSet")
-  return(sapply(simulationSet$outputs, function(output) {
-    output$path
-  }))
+#' @title newOutputColor
+#' @description
+#' Find a color for new `Output` objects
+#' @return A color from OSP Suite Color Map
+#' @keywords internal
+newOutputColor <- function() {
+  outputNames <- getObjectNamesInGlobalEnv("Output")
+  usedColors <- sapply(
+    outputNames,
+    function(outputName) {
+      output <- get(outputName)
+      return(output$color)
+    }
+  )
+  # OSP Suite color map includes 50 unique colors used here
+  remainingColors <- setdiff(tlf::ColorMaps$ospDefault, usedColors)
+  if (!isEmpty(remainingColors)) {
+    return(head(remainingColors, 1))
+  }
+  # If the colors were already used, in previous Outputs,
+  # Use new round of osp suite colors
+  colorIndex <- 1 + (length(outputNames) %% length(tlf::ColorMaps$ospDefault))
+  return(tlf::ColorMaps$ospDefault[colorIndex])
 }
 
-#' @title getPKParametersInSimulationSet
-#' @param simulationSet SimulationSet object or derived class
-#' @return Data.frame with \code{path} and \code{pkParameter} in `simulationSet`
-#' @export
-#' @family workflow helpers
-getPKParametersInSimulationSet <- function(simulationSet) {
-  validateIsOfType(simulationSet, "SimulationSet")
-  pkParametersTable <- data.frame()
-  for (output in simulationSet$outputs) {
-    pkParametersTable <- rbind.data.frame(
-      pkParametersTable,
-      data.frame(
-        path = output$path,
-        pkParameter = getPKParametersInOutput(output),
-        group = getPKParameterGroupsInOutput(output),
-        stringsAsFactors = FALSE
-      )
-    )
-  }
-  return(pkParametersTable)
-}
+
 
 #' @title getAllowedCores
 #'
@@ -297,10 +239,10 @@ getPKParametersInSimulationSet <- function(simulationSet) {
 #' @return Allowed number of CPU cores for computation
 #' @keywords internal
 getAllowedCores <- function() {
-  numberOfCores <- getAllowedCoresLinuxKubernetes()
-  if (is.null(numberOfCores)) {
-    numberOfCores <- getOSPSuiteSetting(settingName = "numberOfCores")
-  }
+  return(
+    getAllowedCoresLinuxKubernetes() %||%
+      getOSPSuiteSetting(settingName = "numberOfCores")
+  )
 }
 
 
@@ -330,72 +272,7 @@ getAllowedCoresLinuxKubernetes <- function() {
       return(NULL)
     }
   )
-}
-
-#' @title getSimulationParameterDisplayPaths
-#' @param parameterPaths Paths of a parameter in simulation
-#' @param simulation `Simulation` object from `ospsuite`
-#' @param dictionary parameterDisplayPaths data.frame mapping user defined display names
-#' @return parameterDisplayPath
-#' @export
-#' @family workflow helpers
-getSimulationParameterDisplayPaths <- function(parameterPaths, simulation, dictionary) {
-  parameterDisplayPaths <- ospsuite::getParameterDisplayPaths(parameterPaths, simulation)
-
-  for (parameterIndex in seq_along(parameterPaths)) {
-    # Get the index of parameter in dictionary if defined
-    dictionaryIndex <- which(parameterPaths[parameterIndex] %in% dictionary$parameter)
-    if (!isOfLength(dictionaryIndex, 0)) {
-      # Since dictionaryIndex is not null, use first element
-      # user should already have a warning if a parameter path is defined
-      # more than once in workflow$parameterDisplayPaths
-      # as.character enforces character is used instead of levels
-      parameterDisplayPaths[parameterIndex] <- as.character(dictionary$displayPath[dictionaryIndex[1]])
-    }
-  }
-  return(parameterDisplayPaths)
-}
-
-#' @title setWorkflowParameterDisplayPathsFromFile
-#' @description Set mapping between parameters and their display paths in a workflow
-#' to replace standard display of parameter paths.
-#' @param fileName name of file that includes mapping of Parameters with their display paths
-#' Names in header should include `parameter` and `displayPath`.
-#' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
-#' @export
-#' @family workflow helpers
-setWorkflowParameterDisplayPathsFromFile <- function(fileName, workflow) {
-  validateIsOfType(workflow, "Workflow")
-  validateIsString(fileName)
-  validateIsFileExtension(fileName, "csv")
-  parameterDisplayPaths <- readObservedDataFile(fileName)
-  workflow$setParameterDisplayPaths(parameterDisplayPaths)
-  return(invisible())
-}
-
-#' @title setWorkflowParameterDisplayPaths
-#' @description Set mapping between parameters and their display paths in a workflow
-#' to replace standard display of parameter paths.
-#' @param parameterDisplayPaths data.frame mapping Parameters with their display paths
-#' Variables of the data.frame should include `parameter` and `displayPath`.
-#' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
-#' @export
-#' @family workflow helpers
-setWorkflowParameterDisplayPaths <- function(parameterDisplayPaths, workflow) {
-  validateIsOfType(workflow, "Workflow")
-  workflow$setParameterDisplayPaths(parameterDisplayPaths)
-  return(invisible())
-}
-
-#' @title getWorkflowParameterDisplayPaths
-#' @description Get mapping between parameters and their display paths in a workflow
-#' to replace standard display of parameter paths.
-#' @param workflow Object of class `MeanModelWorkflow` or `PopulationWorkflow`
-#' @export
-#' @family workflow helpers
-getWorkflowParameterDisplayPaths <- function(workflow) {
-  validateIsOfType(workflow, "Workflow")
-  return(workflow$getParameterDisplayPaths())
+  return(cores)
 }
 
 #' @title parseVariableToObject
@@ -454,23 +331,41 @@ getObjectNameAsString <- function(object) {
 #' @description Save figure and catches
 #' @param plotObject A `ggplot` object
 #' @param fileName Name of the file in which `plotObject` is saved
-#' @param logFolder folder where the logs are saved
 #' @param simulationSetName Name of the simulation set for `PlotTask` results
 #' @keywords internal
-saveFigure <- function(plotObject, fileName, logFolder, simulationSetName = NULL) {
-  tryCatch({
-    ggplot2::ggsave(
-      filename = fileName,
-      plot = plotObject,
-      width = reEnv$defaultPlotFormat$width,
-      height = reEnv$defaultPlotFormat$height,
-      dpi = reEnv$defaultPlotFormat$dpi,
-      units = reEnv$defaultPlotFormat$units
-    )
-  },
-  error = function(e) {
-    logErrorThenStop(messages$ggsaveError(fileName, simulationSetName, e), logFolder)
-  })
+saveFigure <- function(plotObject, fileName, simulationSetName = NULL) {
+  tryCatch(
+    {
+      ggplot2::ggsave(
+        filename = fileName,
+        plot = plotObject,
+        width = reEnv$defaultPlotFormat$width,
+        height = reEnv$defaultPlotFormat$height,
+        dpi = reEnv$defaultPlotFormat$dpi,
+        units = reEnv$defaultPlotFormat$units
+      )
+    },
+    error = function(e) {
+      stop(messages$ggsaveError(fileName, simulationSetName, e))
+    }
+  )
   return(invisible())
 }
 
+#' @title getObjectNamesInGlobalEnv
+#' @description Get object names of certain type/class in the Global Environment
+#' @param objectType Object type or class
+#' @return Array of Number of `Output` objects in the Global Environment
+#' @keywords internal
+getObjectNamesInGlobalEnv <- function(objectType) {
+  objectNames <- ls(envir = .GlobalEnv)
+  if (isEmpty(objectNames)) {
+    return(NULL)
+  }
+  objectNames[sapply(
+    objectNames,
+    function(objectName) {
+      isOfType(get(objectName, envir = .GlobalEnv), objectType)
+    }
+  )]
+}

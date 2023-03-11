@@ -2,7 +2,6 @@
 title: "Qualification Workflow"
 resource_files:
   - figures
-  - reportOutputStyle.css
 output: 
   rmarkdown::html_vignette:
     toc: true
@@ -76,8 +75,8 @@ workflow <- loadQualificationWorkflow(workflowFolder, configurationPlanFile)
 
 ### Configuration Plan
 
-All `QualificationWorkflow` objects inlcude a `configurationPlan` field.
-This field is a `ConfigurationPlan` object that provides a smart interface for buidling the report.
+All `QualificationWorkflow` objects include a `configurationPlan` field.
+This field is a `ConfigurationPlan` object that provides a smart interface for building the report.
 
 In particular, all the fields below are reorganized in a data.frame format clarifying the design of the configuration plan.
 
@@ -85,7 +84,7 @@ In particular, all the fields below are reorganized in a data.frame format clari
 - `observedDataSets`
 - `sections`
 
-Additionally, the `configurationPlan` field includes many `get` methods to search for specific paths of files managedd by the configuration plan (`$getSimulationPath(project, simulation)`, `$getObservedDataPath(id)`, etc)
+Additionally, the `configurationPlan` field includes many `get` methods to search for specific paths of files managed by the configuration plan (`$getSimulationPath(project, simulation)`, `$getObservedDataPath(id)`, etc)
 
 ### Tasks available for Qualification workflow
 
@@ -117,10 +116,10 @@ If the field **Artifacts** is not mentioned in a plot of the configuration plan,
 For `plotGOFMerged` and `plotDDIRatio` tasks, the plots represent observed vs predicted data.
 It is consequently possible to include them as predicted vs observed and/or residuals vs time/predicted by including the options **predictedVsObserved**, **residualsOverPredicted** and **residualsOverTime** in the field **PlotTypes** of the configuration plan.
 
-#### Gemotric Mean Fold Error (GMFE)
+#### Geometric Mean Fold Error (GMFE)
 
 For `plotGOFMerged`, `plotPKRatio` and `plotDDIRatio` tasks, it is possible to include a **GMFE** artifact in the configuration plan.
-This artifact corresponds to the addition of a table showing the Gemotric Mean Fold Error (*GMFE*) of the *residuals* calculated for specific plot using the formula $GMFE = 10^{\Sigma log_{10}(residuals)}$.
+This artifact corresponds to the addition of a table showing the Geometric Mean Fold Error (*GMFE*) of the *residuals* calculated for specific plot using the formula $GMFE = 10^{\Sigma log_{10}(residuals)}$.
 
 #### Measure
 
@@ -133,7 +132,7 @@ This artifact corresponds to the addition of a table showing:
 #### Table
 
 For `plotPKRatio` task, it is possible to include a **Table** artifact in the configuration plan.
-This artifact corresponds to the addition of a table showing comprehensive observed and simulatied PK data of the PK Ratio analysis.
+This artifact corresponds to the addition of a table showing comprehensive observed and simulated PK data of the PK Ratio analysis.
 
 #### Settings
 
@@ -141,7 +140,7 @@ Since plot tasks can include numerical results, `digits` and `scientific` are fi
 
 ## How to update and re-run a qualification workflow
 
-If simulations need to be re-run, it is advised to relaod the workflow using `loadQualificationWorkflow`.
+If simulations need to be re-run, it is advised to reload the workflow using `loadQualificationWorkflow`.
 
 In case the update does not require to re-run simulations (e.g. updating the section content, modifying plot aesthetics or removing a plot), the `QualificationWorkflow` method `$updateConfigurationPlan(configurationPlanFile)` can be used to avoid the process of reloading and checking all the simulations of the workflow.
 
@@ -164,7 +163,7 @@ workflow$runWorkflow()
 ## Template
 
 A template R script for qualification workflows is available below.
-You can also download it from [Github](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/qualification-workflow-template.R).
+You can also download it from [GitHub](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/qualification-workflow-template.R).
 The template aims at creating a function wrapping the usage of the qualification workflow including the call to the qualification runner and named `createQualificationReport`.
 
 ```{r template, echo=FALSE, results='asis'}
@@ -191,7 +190,7 @@ Note that [**Pandoc** installation](https://github.com/Open-Systems-Pharmacology
 
 The conversion to word uses a reference word document that defines each style of report (e.g. *Title*, *Heading 1*, *Normal*, etc.).
 Users can input their own reference word document using the option `wordConversionTemplate` as previously illustrated in the template.
-The default reference word document can be found on [Github](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/reference.docx).
+The default reference word document can be found on [GitHub](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/reference.docx).
 
 # Referencing
 
@@ -213,8 +212,8 @@ The markdown link to the reference above can then be written as:
 References for sections, figures and tables created by the qualification workflow are generated dynamically.
 
 For section references, the field **Reference** is used in priority by the configuration plan to generate the reference id.
-In case, such reference is not defined, the qualification worklfow uses the **Id** of the section.
-If no **Reference** nor **Id** is defined, the qualification worklfow generate a reference id named `"undefined-section-<section index>"`.
+In case, such reference is not defined, the qualification workflow uses the **Id** of the section.
+If no **Reference** nor **Id** is defined, the qualification workflow generate a reference id named `"undefined-section-<section index>"`.
 
 Tables and figures are numbered internally within first level sections (section whose title start with one markdown character `"#"` and are also referenced).
 

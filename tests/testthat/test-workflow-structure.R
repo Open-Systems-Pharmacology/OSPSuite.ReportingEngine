@@ -1,4 +1,5 @@
 context("Initialize workflows")
+library(ospsuite.reportingengine)
 
 test_that("Workflows can't be initialized without 'simulationSets' or/and 'workflowFolder'", {
   expect_error(Workflow$new())
@@ -40,7 +41,8 @@ test_that("Workflows initialization creates appropriate folder and logs, and war
 
   expect_true(testFolder %in% list.files())
   expect_true("log-info.txt" %in% list.files(testFolder))
-  expect_true("log-debug.txt" %in% list.files(testFolder))
+  expect_false("log-debug.txt" %in% list.files(testFolder))
+  expect_false("log-error.txt" %in% list.files(testFolder))
 
   # Make sure testFolder is not there
   unlink(testFolder, recursive = TRUE)
@@ -54,10 +56,8 @@ test_that("Workflows initialization creates appropriate folder and logs, and war
 
   expect_true(testFolder %in% list.files())
   expect_true("log-info.txt" %in% list.files(testFolder))
-  expect_true("log-debug.txt" %in% list.files(testFolder))
+  expect_false("log-debug.txt" %in% list.files(testFolder))
+  expect_false("log-error.txt" %in% list.files(testFolder))
 
   unlink(testFolder, recursive = TRUE)
 })
-
-unlink("log-debug.txt", recursive = TRUE)
-unlink("log-info.txt", recursive = TRUE)

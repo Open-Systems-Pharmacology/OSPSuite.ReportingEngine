@@ -22,7 +22,7 @@ plotMeanTimeProfile(
 
 \item{metaData}{meta data on `data`}
 
-\item{dataMapping}{`XYGDataMapping` R6 class object from `tlf` library}
+\item{dataMapping}{A list mapping `x`, `y` and `group` from datasets}
 
 \item{plotConfiguration}{`PlotConfiguration` class object from `tlf` library}
 }

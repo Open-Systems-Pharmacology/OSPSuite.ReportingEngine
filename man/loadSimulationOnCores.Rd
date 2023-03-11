@@ -4,12 +4,10 @@
 \alias{loadSimulationOnCores}
 \title{loadSimulationOnCores}
 \usage{
-loadSimulationOnCores(structureSet, logFolder)
+loadSimulationOnCores(structureSet)
 }
 \arguments{
 \item{structureSet}{containing simulationSet which contains path to simulation file and pathIDs to be loaded in simulation object as outputs}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \description{
 Send structureSet to core, check its simulation has been loaded successfully

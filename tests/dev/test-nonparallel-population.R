@@ -6,8 +6,10 @@ ps <- PopulationSimulationSet$new(
   simulationSetName = "nonparpopsim",
   simulationFile = "./tests/data/input-data/individualPksimSim.pkml",
   populationFile = "./tests/data/input-data/popData_short.csv",
-  outputs = Output$new(path = tree$Organism$VenousBlood$Plasma$smarties$Concentration$path,
-                       pkParameters = "C_max")
+  outputs = Output$new(
+    path = tree$Organism$VenousBlood$Plasma$smarties$Concentration$path,
+    pkParameters = "C_max"
+  )
 )
 pwf <- PopulationWorkflow$new(simulationSets = list(ps), workflowFolder = "./exnonpar", workflowType = PopulationWorkflowTypes$parallelComparison)
 pwf$simulate$settings$showProgress <- FALSE

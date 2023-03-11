@@ -5,7 +5,7 @@
 #' @field qualificationFramework Qualification Framework version (string, e.g. `"3.0"`)
 #' @export
 #' @import ospsuite.utils
-#' @family qualification worfklow
+#' @family qualification workflow
 QualificationVersionInfo <- R6::R6Class(
   "QualificationVersionInfo",
   public = list(
@@ -20,8 +20,8 @@ QualificationVersionInfo <- R6::R6Class(
     #' @param qualificationFramework Qualification Framework version (string, e.g. `"3.0"`)
     #' @return A new `QualificationVersionInfo` object
     initialize = function(qualificationPlanRelease = NULL,
-                              osp = NULL,
-                              qualificationFramework = NULL) {
+                          osp = NULL,
+                          qualificationFramework = NULL) {
       validateIsString(qualificationPlanRelease, nullAllowed = TRUE)
       validateIsString(osp, nullAllowed = TRUE)
       validateIsString(qualificationFramework, nullAllowed = TRUE)
@@ -119,17 +119,14 @@ QualificationVersionInfo <- R6::R6Class(
       return(invisible())
     }
   ),
-
   private = list(
     .qualificationPlanReleasePattern = NULL,
     .ospPattern = NULL,
     .qualificationFrameworkPattern = NULL,
-
     .getPattern = function(field) {
       # Return the value of a field to be passed on gsub pattern input
       return(eval(parse(text = paste0("private$.", field, "Pattern"))))
     },
-
     .updateExpression = function(field) {
       # Return expression to be evaluated that updates text based on version info
       return(parse(text = paste0(

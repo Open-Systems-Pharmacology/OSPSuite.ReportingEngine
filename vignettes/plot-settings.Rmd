@@ -2,7 +2,6 @@
 title: "Plot settings"
 resource_files:
   - figures
-  - reportOutputStyle.css
 output: 
   rmarkdown::html_vignette:
    number_sections: true
@@ -13,14 +12,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r report output style, child="reportOutputStyle.css", eval=TRUE}
-```
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+source(system.file("extdata", "vignette-helpers.R", package = "ospsuite.reportingengine"))
 ```
 
 ```{r setup}
@@ -162,30 +159,18 @@ simulationFile <- system.file("extdata", "MiniModel2.pkml",
   package = "ospsuite.reportingengine"
 )
 
-# Get the observation file and its dictionary
-observationFile <- system.file("extdata", "SimpleData.nmdat",
-  package = "ospsuite.reportingengine"
-)
-dictionaryFile <- system.file("extdata", "tpDictionary.csv",
-  package = "ospsuite.reportingengine"
-)
-
 # Define the output object
 outputA <- Output$new(
   path = "Organism|A|Concentration in container",
   displayName = "Simulated concentration of A",
-  displayUnit = "µmol/ml"#,
-  #dataSelection = "MDV==0",
-  #dataDisplayName = "Observed concentration of A"
+  displayUnit = "µmol/ml"
 )
 
 # Define the simulation set object
 setA <- SimulationSet$new(
   simulationSetName = "A",
   simulationFile = simulationFile,
-  outputs = outputA#,
-  #observedDataFile = observationFile,
-  #observedMetaDataFile = dictionaryFile
+  outputs = outputA
 )
 
 # Create the workflow object
@@ -248,17 +233,9 @@ Regarding observed vs simulated plots, the got the updated xlabel, ylabel and wa
 workflowA$runWorkflow()
 ```
 
-```{r example render time profile, include=FALSE, echo=FALSE}
-# Convert the markdown document into html
-# Otherwise the root path is messed up and cannot print the report correctly
-rmarkdown::render(workflowA$reportFilePath)
-```
-
-<div class = "reportOutput">
 ```{r example time profile report, echo=FALSE, results='asis'}
-knitr::raw_html(readLines(sub(".md", ".html", workflowA$reportFilePath)))
+cat(includeReportFromWorkflow(workflowA))
 ```
-</div>
 
 ```{r delete example time profile, inlcude = FALSE, echo=FALSE}
 # Remove the workflow folders

@@ -15,7 +15,14 @@ R6 class representing workflow output
 
 \item{\code{displayUnit}}{display unit for `path`}
 
-\item{\code{dataSelection}}{character or expression used to filter the observed data}
+\item{\code{groupID}}{Grouping Identifier.
+Outputs with same identifier and unit are plotted together}
+
+\item{\code{color}}{Displayed line/point color of the Output in plots}
+
+\item{\code{fill}}{Displayed range color of the Output in plots}
+
+\item{\code{dataSelection}}{character or expression used to select a subset of observed data}
 
 \item{\code{dataUnit}}{Unit of the observed data}
 
@@ -30,13 +37,13 @@ R6 class representing workflow output
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Output$new()}}
-\item \href{#method-clone}{\code{Output$clone()}}
+\item \href{#method-Output-new}{\code{Output$new()}}
+\item \href{#method-Output-clone}{\code{Output$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Output-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Output-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `Output` object.
 \subsection{Usage}{
@@ -44,6 +51,9 @@ Create a new `Output` object.
   path,
   displayName = NULL,
   displayUnit = NULL,
+  groupID = NULL,
+  color = NULL,
+  fill = NULL,
   dataSelection = DataSelectionKeys$NONE,
   dataUnit = NULL,
   dataDisplayName = NULL,
@@ -61,7 +71,16 @@ Create a new `Output` object.
 
 \item{\code{displayUnit}}{display unit for `path`}
 
-\item{\code{dataSelection}}{characters or expression to filter the observed data}
+\item{\code{groupID}}{Grouping Identifier.
+Outputs with same identifier and unit are plotted together}
+
+\item{\code{color}}{Displayed line/point color of the `Output` in plots}
+
+\item{\code{fill}}{Displayed range color of the `Output` in plots}
+
+\item{\code{dataSelection}}{characters or expression to select subset the observed data
+By default, no data is selected.
+When using a character array, selections are concatenated with the `&` sign}
 
 \item{\code{dataUnit}}{Unit of the observed data}
 
@@ -78,8 +97,8 @@ A new `Output` object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Output-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Output-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -7,146 +7,151 @@
 getQualificationDDIPlotData <- function(configurationPlan) {
   plotDDIdata <- list()
   for (plotNumber in seq_along(configurationPlan$plots$DDIRatioPlots)) {
-    plotDDIDataFrame <- NULL
-    plotDDIMetadata <- list()
-    plot <- configurationPlan$plots$DDIRatioPlots[[plotNumber]]
+    qualificationCatch(
+      {
+        plotDDIDataFrame <- NULL
+        plotDDIMetadata <- list()
+        plot <- configurationPlan$plots$DDIRatioPlots[[plotNumber]]
 
-    plotDDIMetadata$title <- plot$Title
-    plotDDIMetadata$sectionID <- plot$SectionReference %||% plot$SectionId
-    validateIsIncluded(values = plot$Subunits, parentValues = names(ddiSubplotTypes), nullAllowed = TRUE)
-    plotDDIMetadata$subunits <- plot$Subunits
-    plotDDIMetadata$artifacts <- plot$Artifacts
-    plotDDIMetadata$plotSettings <- plot
+        plotDDIMetadata$title <- plot$Title
+        plotDDIMetadata$sectionID <- plot$SectionReference %||% plot$SectionId
+        validateIsIncluded(values = plot$Subunits, parentValues = names(ddiSubplotTypes), nullAllowed = TRUE)
+        plotDDIMetadata$subunits <- plot$Subunits
+        plotDDIMetadata$artifacts <- plot$Artifacts
+        plotDDIMetadata$plotSettings <- plot
 
-    # Pipes in configuration plan will be deprecated moving forward
-    plotDDIMetadata$plotTypes <- plot$PlotTypes %||% ospsuite::toPathArray(plot$PlotType)
+        # Pipes in configuration plan will be deprecated moving forward
+        plotDDIMetadata$plotTypes <- plot$PlotTypes %||% ospsuite::toPathArray(plot$PlotType)
 
-    validateIsIncluded(plotDDIMetadata$plotTypes, names(ddiPlotTypeSpecifications))
+        validateIsIncluded(plotDDIMetadata$plotTypes, names(ddiPlotTypeSpecifications))
 
-    plotDDIMetadata$axesSettings <- lapply(plotDDIMetadata$plotTypes, function(plotType) {
-      getAxesSettings(configurationPlan$plots$AxesSettings[[ddiPlotTypeSpecifications[[plotType]]$ddiPlotAxesSettings]])
-    })
-    names(plotDDIMetadata$axesSettings) <- plotDDIMetadata$plotTypes
+        plotDDIMetadata$axesSettings <- lapply(plotDDIMetadata$plotTypes, function(plotType) {
+          getAxesSettings(configurationPlan$plots$AxesSettings[[ddiPlotTypeSpecifications[[plotType]]$ddiPlotAxesSettings]])
+        })
+        names(plotDDIMetadata$axesSettings) <- plotDDIMetadata$plotTypes
 
 
-    plotDDIMetadata$groups <- list()
+        plotDDIMetadata$groups <- list()
 
-    pkParameters <- plot$PKParameters %||% ospsuite::toPathArray(plot$PKParameter)
-    validateIsIncluded(values = pkParameters, parentValues = names(ddiPKRatioColumnName), nullAllowed = FALSE)
+        pkParameters <- plot$PKParameters %||% ospsuite::toPathArray(plot$PKParameter)
+        validateIsIncluded(values = pkParameters, parentValues = names(ddiPKRatioColumnName), nullAllowed = FALSE)
 
-    for (groupNumber in seq_along(plot$Groups)) {
-      group <- plot$Groups[[groupNumber]]
-      plotDDIMetadata$groups[[groupNumber]] <- list()
-      plotDDIMetadata$groups[[groupNumber]]$caption <- group$Caption
-      plotDDIMetadata$groups[[groupNumber]]$color <- group$Color %||%
-        reEnv$theme$plotConfigurations$plotDDIRatio$points$color
-      plotDDIMetadata$groups[[groupNumber]]$symbol <- tlfShape(
-        group$Symbol %||% reEnv$theme$plotConfigurations$plotDDIRatio$points$shape
-      )
-
-      for (ddiRatio in group$DDIRatios) {
-        outputPath <- ddiRatio$Output
-        observedDataSet <- ddiRatio$ObservedData
-        observedDataSetFilePath <- configurationPlan$getObservedDataPath(id = observedDataSet)
-        observedDataRecordId <- ddiRatio$ObservedDataRecordId
-        observedDataFrame <- readObservedDataFile(file = observedDataSetFilePath)
-        validateIsIncluded(observedDataRecordId, observedDataFrame$ID)
-
-        ratioList <- list()
-        for (pkParameter in pkParameters) {
-          ratioList[[pkParameter]] <- list()
-          validateIsIncluded(ddiPKRatioColumnName[[pkParameter]], names(observedDataFrame))
-
-          # The following tryCatch verifies that the PK parameter columns are read as `numeric` by the call to `readObservedDataFile` above.
-          # The function `readObservedDataFile` first attempts to read csv files using `read.csv`.
-          # If this fails, because, for example the CSV file is semicolon separated, `readObservedDataFile` attempts to read the file using `read.csv2`.
-          # If a semicolon-separated CSV contains a float column with period `.` decimal separators (and not comma ',' decimal separators) then read.csv2 will read this column as `factor`.
-          # Therefore, coerce this column into `numeric` format:
-          observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]] <- as.numeric(observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]])
-
-          observedDataSelection <- observedDataFrame$ID %in% observedDataRecordId
-          ratioList[[pkParameter]] <- getDDIRatioList(observedDataFrame[observedDataSelection, ], ddiPKRatioColumnName[[pkParameter]])
-          for (simulationType in c("SimulationControl", "SimulationDDI")) {
-            plotComponent <- ddiRatio[[simulationType]]
-            projectName <- plotComponent$Project
-            simulationName <- plotComponent$Simulation
-
-            startTime <- NULL
-            endTime <- NULL
-
-            if (is.numeric(plotComponent$StartTime)) {
-              startTime <- ospsuite::toBaseUnit(
-                quantityOrDimension = ospDimensions$Time,
-                values = plotComponent$StartTime,
-                unit = plotComponent$TimeUnit
-              )
-            }
-
-            if (is.numeric(plotComponent$EndTime)) {
-              endTime <- ospsuite::toBaseUnit(
-                quantityOrDimension = ospDimensions$Time,
-                values = plotComponent$EndTime,
-                unit = plotComponent$TimeUnit
-              )
-            }
-            pkParameterName <- generateDDIPlotPKParameterName(pkParameter, startTime, endTime)
-
-            simulationResultsFile <- configurationPlan$getSimulationResultsPath(
-              project = projectName,
-              simulation = simulationName
-            )
-
-            pkAnalysisResultsPath <- configurationPlan$getPKAnalysisResultsPath(
-              project = projectName,
-              simulation = simulationName
-            )
-
-            simulationFile <- configurationPlan$getSimulationPath(
-              project = projectName,
-              simulation = simulationName
-            )
-
-            simulation <- ospsuite::loadSimulation(simulationFile, loadFromCache = TRUE)
-            pkAnalysisResults <- ospsuite::importPKAnalysesFromCSV(
-              filePath = pkAnalysisResultsPath,
-              simulation = simulation
-            )
-
-            ratioList[[pkParameter]][[simulationType]] <- pkAnalysisResults$pKParameterFor(
-              quantityPath = outputPath,
-              pkParameter = pkParameterName
-            )$values
-          }
-
-          df <- data.frame(
-            project = projectName,
-            simulation = simulationName,
-            groupNumber = groupNumber,
-            outputPath = outputPath,
-            pkParameter = pkParameter,
-            pkParameterName = pkParameterName,
-            observedRatio = ratioList[[pkParameter]]$observedRatio,
-            simulatedRatio = ratioList[[pkParameter]][["SimulationDDI"]] / ratioList[[pkParameter]][["SimulationControl"]],
-            id = ratioList[[pkParameter]]$id,
-            studyId = ratioList[[pkParameter]]$studyId,
-            mechanism = getMechanismName(ratioList[[pkParameter]]$mechanism),
-            perpetrator = ratioList[[pkParameter]]$perpetrator %||% NA,
-            routePerpetrator = ratioList[[pkParameter]]$routePerpetrator %||% NA,
-            victim = ratioList[[pkParameter]]$victim %||% NA,
-            routeVictim = ratioList[[pkParameter]]$routeVictim %||% NA,
-            dose = ratioList[[pkParameter]]$dose,
-            doseUnit = ratioList[[pkParameter]]$doseUnit,
-            description = ratioList[[pkParameter]]$description %||% NA
+        for (groupNumber in seq_along(plot$Groups)) {
+          group <- plot$Groups[[groupNumber]]
+          plotDDIMetadata$groups[[groupNumber]] <- list()
+          plotDDIMetadata$groups[[groupNumber]]$caption <- group$Caption
+          plotDDIMetadata$groups[[groupNumber]]$color <- group$Color %||%
+            reEnv$theme$plotConfigurations$plotDDIRatio$points$color
+          plotDDIMetadata$groups[[groupNumber]]$symbol <- tlfShape(
+            group$Symbol %||% reEnv$theme$plotConfigurations$plotDDIRatio$points$shape
           )
 
-          plotDDIDataFrame <- rbind.data.frame(plotDDIDataFrame, df)
-        }
-      }
-    }
+          for (ddiRatio in group$DDIRatios) {
+            outputPath <- ddiRatio$Output
+            observedDataSet <- ddiRatio$ObservedData
+            observedDataSetFilePath <- configurationPlan$getObservedDataPath(id = observedDataSet)
+            observedDataRecordId <- ddiRatio$ObservedDataRecordId
+            observedDataFrame <- readObservedDataFile(file = observedDataSetFilePath)
+            validateIsIncluded(observedDataRecordId, observedDataFrame$ID)
 
-    plotDDIdata[[plotNumber]] <- list(
-      dataframe = plotDDIDataFrame,
-      metadata = plotDDIMetadata
+            ratioList <- list()
+            for (pkParameter in pkParameters) {
+              ratioList[[pkParameter]] <- list()
+              validateIsIncluded(ddiPKRatioColumnName[[pkParameter]], names(observedDataFrame))
+
+              # The following tryCatch verifies that the PK parameter columns are read as `numeric` by the call to `readObservedDataFile` above.
+              # The function `readObservedDataFile` first attempts to read csv files using `read.csv`.
+              # If this fails, because, for example the CSV file is semicolon separated, `readObservedDataFile` attempts to read the file using `read.csv2`.
+              # If a semicolon-separated CSV contains a float column with period `.` decimal separators (and not comma ',' decimal separators) then read.csv2 will read this column as `factor`.
+              # Therefore, coerce this column into `numeric` format:
+              observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]] <- as.numeric(observedDataFrame[[ddiPKRatioColumnName[[pkParameter]]]])
+
+              observedDataSelection <- observedDataFrame$ID %in% observedDataRecordId
+              ratioList[[pkParameter]] <- getDDIRatioList(observedDataFrame[observedDataSelection, ], ddiPKRatioColumnName[[pkParameter]])
+              for (simulationType in c("SimulationControl", "SimulationDDI")) {
+                plotComponent <- ddiRatio[[simulationType]]
+                projectName <- plotComponent$Project
+                simulationName <- plotComponent$Simulation
+
+                startTime <- NULL
+                endTime <- NULL
+
+                if (is.numeric(plotComponent$StartTime)) {
+                  startTime <- ospsuite::toBaseUnit(
+                    quantityOrDimension = ospDimensions$Time,
+                    values = plotComponent$StartTime,
+                    unit = plotComponent$TimeUnit
+                  )
+                }
+
+                if (is.numeric(plotComponent$EndTime)) {
+                  endTime <- ospsuite::toBaseUnit(
+                    quantityOrDimension = ospDimensions$Time,
+                    values = plotComponent$EndTime,
+                    unit = plotComponent$TimeUnit
+                  )
+                }
+                pkParameterName <- generateDDIPlotPKParameterName(pkParameter, startTime, endTime)
+
+                simulationResultsFile <- configurationPlan$getSimulationResultsPath(
+                  project = projectName,
+                  simulation = simulationName
+                )
+
+                pkAnalysisResultsPath <- configurationPlan$getPKAnalysisResultsPath(
+                  project = projectName,
+                  simulation = simulationName
+                )
+
+                simulationFile <- configurationPlan$getSimulationPath(
+                  project = projectName,
+                  simulation = simulationName
+                )
+
+                simulation <- ospsuite::loadSimulation(simulationFile, loadFromCache = TRUE)
+                pkAnalysisResults <- ospsuite::importPKAnalysesFromCSV(
+                  filePath = pkAnalysisResultsPath,
+                  simulation = simulation
+                )
+
+                ratioList[[pkParameter]][[simulationType]] <- pkAnalysisResults$pKParameterFor(
+                  quantityPath = outputPath,
+                  pkParameter = pkParameterName
+                )$values
+              }
+
+              df <- data.frame(
+                project = projectName,
+                simulation = simulationName,
+                groupNumber = groupNumber,
+                outputPath = outputPath,
+                pkParameter = pkParameter,
+                pkParameterName = pkParameterName,
+                observedRatio = ratioList[[pkParameter]]$observedRatio,
+                simulatedRatio = ratioList[[pkParameter]][["SimulationDDI"]] / ratioList[[pkParameter]][["SimulationControl"]],
+                id = ratioList[[pkParameter]]$id,
+                studyId = ratioList[[pkParameter]]$studyId,
+                mechanism = getMechanismName(ratioList[[pkParameter]]$mechanism),
+                perpetrator = ratioList[[pkParameter]]$perpetrator %||% NA,
+                routePerpetrator = ratioList[[pkParameter]]$routePerpetrator %||% NA,
+                victim = ratioList[[pkParameter]]$victim %||% NA,
+                routeVictim = ratioList[[pkParameter]]$routeVictim %||% NA,
+                dose = ratioList[[pkParameter]]$dose,
+                doseUnit = ratioList[[pkParameter]]$doseUnit,
+                description = ratioList[[pkParameter]]$description %||% NA
+              )
+
+              plotDDIDataFrame <- rbind.data.frame(plotDDIDataFrame, df)
+            }
+          }
+        }
+
+        plotDDIdata[[plotNumber]] <- list(
+          dataframe = plotDDIDataFrame,
+          metadata = plotDDIMetadata
+        )
+      },
+      configurationPlanField = plot
     )
   }
   return(plotDDIdata)
@@ -154,7 +159,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 
 #' @title getMechanismName
 #' @description Remove underscores from mechanism name read from DDI observed data file according to the dictionary defined in `reEnv$ddiRatioSubsetsDictionary`
-#' @param mechanism name of mechanism as read form DDI observev data file
+#' @param mechanism name of mechanism as read form DDI observed data file
 #' @return Display name of mechanism to be used in DDI report
 #' @keywords internal
 getMechanismName <- function(mechanism) {
@@ -259,7 +264,7 @@ getSmartZoomLimits <- function(dataVector, residualsVsObserved = FALSE) {
     1.25
   )
   # For residuals vs observed, y axis should always include the 2-fold error range
-  if(residualsVsObserved){
+  if (residualsVsObserved) {
     return(list(min = min(minLimit, 0.25), max = max(maxLimit, 4)))
   }
   return(list(min = minLimit, max = maxLimit))
@@ -509,13 +514,10 @@ getDDITable <- function(dataframe) {
 #' @title plotQualificationDDIs
 #' @description Plot observation vs prediction for DDI qualification workflow
 #' @param configurationPlan A `ConfigurationPlan` object
-#' @param logFolder Folder where logs are saved
 #' @param settings A `TaskSettings` object
 #' @return list of qualification DDI ggplot objects
 #' @keywords internal
-plotQualificationDDIs <- function(configurationPlan,
-                                  logFolder = getwd(),
-                                  settings) {
+plotQualificationDDIs <- function(configurationPlan, settings) {
   ddiData <- getQualificationDDIPlotData(configurationPlan)
 
   ddiResults <- list()
@@ -552,7 +554,7 @@ plotQualificationDDIs <- function(configurationPlan,
         includeTextChunk = TRUE
       )
       ddiResults <- c(ddiResults, subheading)
-      # Enforce character class instead of factor 
+      # Enforce character class instead of factor
       # to ensure that function 'sort' uses alphabetical order instead of factor levels
       subplotTypeLevels <- as.character(dataframe[[subplotType]])
       subplotTypeLevels <- sort(unique(subplotTypeLevels))

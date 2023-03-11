@@ -4,7 +4,7 @@
 \alias{getGOFDataForMapping}
 \title{getGOFDataForMapping}
 \usage{
-getGOFDataForMapping(outputMapping, configurationPlan, axesUnits, logFolder)
+getGOFDataForMapping(outputMapping, configurationPlan, axesUnits)
 }
 \arguments{
 \item{outputMapping}{list of mapping elements from `OutputMappings` field in configuration plan}
@@ -12,8 +12,6 @@ getGOFDataForMapping(outputMapping, configurationPlan, axesUnits, logFolder)
 \item{configurationPlan}{A `ConfigurationPlan` object}
 
 \item{axesUnits}{list of axes properties obtained from `getGOFAxesUnits`}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 A data.frame as obtained by `getResiduals` whose values are in base unit

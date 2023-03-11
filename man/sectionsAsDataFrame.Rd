@@ -25,6 +25,6 @@ A data.frame including information about every section and subsection
 }
 \description{
 Recursively parse Sections field of configuration plan
-to create a data.frame easier to handle by the wrkflow
+to create a data.frame easier to handle by the workflow
 }
 \keyword{internal}

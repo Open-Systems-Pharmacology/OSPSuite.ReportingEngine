@@ -6,6 +6,7 @@
 #' @export
 #' @family qualification workflow
 loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
+  setLogFolder(workflowFolder)
   validateIsFileExtension(configurationPlanFile, "json")
   validateFileExists(configurationPlanFile)
   configurationPlan <- loadConfigurationPlan(
@@ -19,58 +20,66 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
   # Either as part of simulationSets or as a settings for the task
   # Currently, no output is saved as simulationResults
   simulationSets <- list()
-  for (simulationIndex in 1:nrow(configurationPlan$simulationMappings)) {
-    project <- configurationPlan$simulationMappings$project[simulationIndex]
-    simulationName <- configurationPlan$simulationMappings$simulation[simulationIndex]
-    simulationSetName <- paste(project, configurationPlan$simulationMappings$simulationFile[simulationIndex], sep = "-")
-    simulationFile <- configurationPlan$getSimulationPath(project = project, simulation = simulationName)
-    validateFileExists(path = simulationFile)
-    populationFile <- configurationPlan$getPopulationPath(project = project, simulation = simulationName)
-    validateFileExists(path = populationFile,nullAllowed = TRUE)
 
-    outputsDataframeSubset <- outputsDataframe[outputsDataframe$project == project & outputsDataframe$simulation == simulationName, ]
+  # Display a nice progress bar
+  t0 <- tic()
+  logInfo(paste0("Loading Simulations onto ", highlight("Qualification Workflow")))
+  loadingProgress <- txtProgressBar(max = nrow(configurationPlan$simulationMappings), style = 3)
 
-    if(nrow(outputsDataframeSubset) == 0){
-      next
-    }
+  logCatch({
+    for (simulationIndex in 1:nrow(configurationPlan$simulationMappings)) {
+      project <- configurationPlan$simulationMappings$project[simulationIndex]
+      simulationName <- configurationPlan$simulationMappings$simulation[simulationIndex]
+      simulationSetName <- paste(project, configurationPlan$simulationMappings$simulationFile[simulationIndex], sep = "-")
+      simulationFile <- configurationPlan$getSimulationPath(project = project, simulation = simulationName)
+      validateFileExists(path = simulationFile)
+      populationFile <- configurationPlan$getPopulationPath(project = project, simulation = simulationName)
+      validateFileExists(path = populationFile, nullAllowed = TRUE)
 
-    progress <- round(100*simulationIndex/nrow(configurationPlan$simulationMappings))
+      outputsDataframeSubset <- outputsDataframe[outputsDataframe$project == project & outputsDataframe$simulation == simulationName, ]
+      if (nrow(outputsDataframeSubset) == 0) {
+        next
+      }
 
-    cat(paste0(
-      "Progress: ", progress , "%. Preparing project: '", project, "', simulation: '", simulationName,".'\n"
-    ))
+      # Display messages about simulations to load
+      cat(paste0("\nLoading project '", highlight(project), "', and simulation '", highlight(simulationName), ".'\n"))
 
-    outputs <- lapply(unique(outputsDataframeSubset$outputPath), function(outputPath) {
-      Output$new(
-        path = as.character(outputPath),
-        pkParameters = outputsDataframeSubset$pkParameter[outputsDataframeSubset$outputPath == outputPath & !(is.na(outputsDataframeSubset$pkParameter))]
-      )
-    })
+      outputs <- lapply(unique(outputsDataframeSubset$outputPath), function(outputPath) {
+        Output$new(
+          path = as.character(outputPath),
+          pkParameters = outputsDataframeSubset$pkParameter[outputsDataframeSubset$outputPath == outputPath & !(is.na(outputsDataframeSubset$pkParameter))]
+        )
+      })
 
-    minimumSimulationEndTime <- NULL
-    if (any(!is.na(outputsDataframeSubset$endTime))) {
-      minimumSimulationEndTime <- max(outputsDataframeSubset$endTime, na.rm = TRUE)
-    }
+      minimumSimulationEndTime <- NULL
+      if (any(!is.na(outputsDataframeSubset$endTime))) {
+        minimumSimulationEndTime <- max(outputsDataframeSubset$endTime, na.rm = TRUE)
+      }
 
-    # simulationSetName defined as project-simulation uniquely identifies the simulation
-    if (!is.null(populationFile)) {
-      simulationSets <- c(simulationSets,PopulationSimulationSet$new(
+      # simulationSetName defined as project-simulation uniquely identifies the simulation
+      if (!is.null(populationFile)) {
+        simulationSets <- c(simulationSets, PopulationSimulationSet$new(
+          simulationSetName = simulationSetName,
+          simulationFile = simulationFile,
+          populationFile = populationFile,
+          outputs = c(outputs),
+          minimumSimulationEndTime = minimumSimulationEndTime
+        ))
+        next
+      }
+
+      simulationSets <- c(simulationSets, SimulationSet$new(
         simulationSetName = simulationSetName,
         simulationFile = simulationFile,
-        populationFile = populationFile,
         outputs = c(outputs),
         minimumSimulationEndTime = minimumSimulationEndTime
       ))
-      next
+      # Update progress bar after each simulation is loaded
+      setTxtProgressBar(loadingProgress, value = simulationIndex)
     }
-
-    simulationSets <- c(simulationSets,SimulationSet$new(
-      simulationSetName = simulationSetName,
-      simulationFile = simulationFile,
-      outputs = c(outputs),
-      minimumSimulationEndTime = minimumSimulationEndTime
-    ))
-  }
+  })
+  close(loadingProgress)
+  logInfo(messages$runCompleted(getElapsedTime(t0), "Simulations loading"))
 
   workflow <- QualificationWorkflow$new(
     simulationSets = simulationSets,
@@ -89,6 +98,7 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
 #' @export
 #' @family qualification workflow
 loadConfigurationPlan <- function(configurationPlanFile, workflowFolder) {
+  setLogFolder(workflowFolder)
   jsonConfigurationPlan <- fromJSON(configurationPlanFile, simplifyDataFrame = FALSE)
 
   # Check if mandatory variables were input
@@ -106,13 +116,26 @@ loadConfigurationPlan <- function(configurationPlanFile, workflowFolder) {
   # jsonFieldNames is almost camel case, only first letter needs to be switched to lower case
   fieldNames <- paste0(tolower(substring(jsonFieldNames, 1, 1)), substring(jsonFieldNames, 2))
   eval(parse(text = paste0("configurationPlan$", fieldNames, "<- jsonConfigurationPlan$", jsonFieldNames)))
-
+  
+  # Create unique plot number for each plot named "PlotNumber"
+  # within a specific plot type (eg. PKRatio) defined in the configuration plan
+  plotFields <- setdiff(names(configurationPlan$plots), c("PlotSettings", "AxesSettings"))
+  for(plotField in plotFields){
+    for(plotIndex in seq_along(configurationPlan$plots[[plotField]])){
+      # In json, numbering of fields in {} starts at 0
+      # Actual plot index should start at 1
+      configurationPlan$plots[[plotField]][[plotIndex]]$PlotNumber <- paste(
+        plotIndex - 1, "(json numbering starting at 0); ", 
+        plotIndex, "(actual plot index)"
+        )
+    }
+  }
   return(configurationPlan)
 }
 
 #' @title sectionsAsDataFrame
 #' @description Recursively parse Sections field of configuration plan
-#' to create a data.frame easier to handle by the wrkflow
+#' to create a data.frame easier to handle by the workflow
 #' @param sectionsIn list including Id and Title of section
 #' @param sectionsOut data.frame including id, path, title
 #' @param parentFolder For subsections only, path of parent section
@@ -139,7 +162,7 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
       parentFolder,
       sprintf("%0.3d_section_%s", sectionIndex, reference),
       sep = .Platform$file.sep
-      )
+    )
 
     sectionMarkdown <- sprintf("%0.3d_%s.md", sectionIndex, removeForbiddenLetters(section$Title))
 
@@ -159,7 +182,7 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
     )
     sectionsOut <- rbind.data.frame(sectionsOut, sectionOut, stringsAsFactors = FALSE)
     validatehasOnlyDistinctValues(sectionsOut$id, dataName = "'Id' and 'Reference' of 'Sections'")
-    
+
     # If subsections are included and not empty
     # Update sectionsOut data.frame
     if (!isEmpty(section$Sections)) {
@@ -177,21 +200,20 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
 #' @title createSectionOutput
 #' @description Create the Sections output and their markdown content
 #' @param configurationPlan A `ConfigurationPlan` object
-#' @param logFolder path where logs are saved
 #' @return Names of created appendices
 #' @keywords internal
-createSectionOutput <- function(configurationPlan, logFolder = getwd()) {
+createSectionOutput <- function(configurationPlan) {
   # Introduction
   reportIntro <- NULL
-  if(!isEmpty(configurationPlan$intro)){
+  if (!isEmpty(configurationPlan$intro)) {
     # Centralize content of possibly multiple intro files in one md intro
     reportIntro <- configurationPlan$getIntroMarkdown()
     resetReport(reportIntro)
     for (intro in configurationPlan$intro) {
-      configurationPlan$copyIntro(intro, logFolder = logFolder)
+      configurationPlan$copyIntro(intro)
     }
   }
-  
+
   # Sections
   appendices <- NULL
   for (sectionIndex in configurationPlan$sections$index) {
@@ -199,21 +221,22 @@ createSectionOutput <- function(configurationPlan, logFolder = getwd()) {
     # Create section output path
     dir.create(configurationPlan$getSectionPath(sectionId), showWarnings = FALSE, recursive = TRUE)
     # Initialize markdown appendices
-    resetReport(configurationPlan$getSectionMarkdown(sectionId), logFolder = logFolder)
+    resetReport(configurationPlan$getSectionMarkdown(sectionId))
     appendices <- c(appendices, configurationPlan$getSectionMarkdown(sectionId))
 
     # Add info from content or title to section content
-    configurationPlan$copySectionContent(sectionId, logFolder = logFolder)
+    configurationPlan$copySectionContent(sectionId)
   }
   # Inputs
   for (input in configurationPlan$inputs) {
-    configurationPlan$copyInput(input, logFolder = logFolder)
+    configurationPlan$copyInput(input)
   }
   # Images and other raw content to copy
   configurationPlan$copyContentFiles()
   return(list(
     intro = reportIntro,
-    appendices = appendices))
+    appendices = appendices
+  ))
 }
 
 
@@ -322,8 +345,8 @@ massMoleConversion <- function(dimension) {
   massMoleConversionList[[ospDimensions$Mass]] <- ospsuite::ospDimensions$Amount
   massMoleConversionList[[ospDimensions$`Concentration (mass)`]] <- ospsuite::ospDimensions$`Concentration (molar)`
   return(ifelse(test = dimension %in% c(ospsuite::ospDimensions$Mass, ospsuite::ospDimensions$`Concentration (mass)`),
-                yes = massMoleConversionList[[dimension]],
-                no = dimension
+    yes = massMoleConversionList[[dimension]],
+    no = dimension
   ))
 }
 
@@ -397,12 +420,18 @@ startQualificationRunner <- function(qualificationRunnerFolder,
   validateIsLogical(displayVersion)
 
   options <- c(
-    ifNotNull(pkSimPortableFolder, paste0("-p ", pkSimPortableFolder)),
+    ifNotNull(pkSimPortableFolder, paste0('-p "', pkSimPortableFolder, '"')),
     ifNotNull(configurationPlanName, paste0('-n "', configurationPlanName, '"')),
-    switch(as.character(overwrite), "TRUE" = "-f", NULL),
+    switch(as.character(overwrite),
+      "TRUE" = "-f",
+      NULL
+    ),
     ifNotNull(logFile, paste0('-l "', logFile, '"')),
     ifNotNull(logLevel, paste0("--logLevel ", logLevel)),
-    switch(as.character(displayVersion), "TRUE" = "--version", NULL)
+    switch(as.character(displayVersion),
+      "TRUE" = "--version",
+      NULL
+    )
   )
   optionalArguments <- paste0(options, collapse = " ")
   qualificationRunner <- paste0('"', file.path(qualificationRunnerFolder, 'QualificationRunner.exe"'))

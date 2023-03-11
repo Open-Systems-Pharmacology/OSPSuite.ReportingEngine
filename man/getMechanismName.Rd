@@ -7,7 +7,7 @@
 getMechanismName(mechanism)
 }
 \arguments{
-\item{mechanism}{name of mechanism as read form DDI observev data file}
+\item{mechanism}{name of mechanism as read form DDI observed data file}
 }
 \value{
 Display name of mechanism to be used in DDI report

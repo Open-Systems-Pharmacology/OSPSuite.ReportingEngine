@@ -6,7 +6,6 @@
 \usage{
 plotPopulationSensitivity(
   structureSets,
-  logFolder = NULL,
   settings,
   workflowType = PopulationWorkflowTypes$parallelComparison,
   xParameters = NULL,
@@ -15,8 +14,6 @@ plotPopulationSensitivity(
 }
 \arguments{
 \item{structureSets}{list of `SimulationStructure` objects}
-
-\item{logFolder}{folder where the logs are saved}
 
 \item{settings}{list of settings for the population sensitivity plot}
 

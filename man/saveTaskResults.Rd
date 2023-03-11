@@ -19,9 +19,9 @@ saveTaskResults(
 )
 }
 \arguments{
-\item{id}{unique identifer of results, helps in deriving final plot name}
+\item{id}{unique identifier of results, helps in deriving final plot name}
 
-\item{sectionId}{unique identifer of section results, used only by qualification workflows}
+\item{sectionId}{unique identifier of section results, used only by qualification workflows}
 
 \item{plot}{`ggplot` object corresponding to the figure to be saved}
 

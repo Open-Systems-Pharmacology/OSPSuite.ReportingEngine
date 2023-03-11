@@ -32,7 +32,7 @@ Other workflow tasks:
 }
 \concept{workflow tasks}
 \section{Super classes}{
-\code{\link[ospsuite.reportingengine:Task]{ospsuite.reportingengine::Task}} -> \code{\link[ospsuite.reportingengine:SensitivityAnalysisTask]{ospsuite.reportingengine::SensitivityAnalysisTask}} -> \code{PopulationSensitivityAnalysisTask}
+\code{ospsuite.reportingengine::Task} -> \code{ospsuite.reportingengine::SensitivityAnalysisTask} -> \code{PopulationSensitivityAnalysisTask}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -46,29 +46,29 @@ Other workflow tasks:
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{PopulationSensitivityAnalysisTask$new()}}
-\item \href{#method-saveResults}{\code{PopulationSensitivityAnalysisTask$saveResults()}}
-\item \href{#method-clone}{\code{PopulationSensitivityAnalysisTask$clone()}}
+\item \href{#method-PopulationSensitivityAnalysisTask-new}{\code{PopulationSensitivityAnalysisTask$new()}}
+\item \href{#method-PopulationSensitivityAnalysisTask-saveResults}{\code{PopulationSensitivityAnalysisTask$saveResults()}}
+\item \href{#method-PopulationSensitivityAnalysisTask-clone}{\code{PopulationSensitivityAnalysisTask$clone()}}
 }
 }
-\if{html}{
-\out{<details ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="activate">}\href{../../ospsuite.reportingengine/html/Task.html#method-activate}{\code{ospsuite.reportingengine::Task$activate()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="getAbsolutePath">}\href{../../ospsuite.reportingengine/html/Task.html#method-getAbsolutePath}{\code{ospsuite.reportingengine::Task$getAbsolutePath()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="getInputs">}\href{../../ospsuite.reportingengine/html/Task.html#method-getInputs}{\code{ospsuite.reportingengine::Task$getInputs()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="getRelativePath">}\href{../../ospsuite.reportingengine/html/Task.html#method-getRelativePath}{\code{ospsuite.reportingengine::Task$getRelativePath()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="inactivate">}\href{../../ospsuite.reportingengine/html/Task.html#method-inactivate}{\code{ospsuite.reportingengine::Task$inactivate()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="print">}\href{../../ospsuite.reportingengine/html/Task.html#method-print}{\code{ospsuite.reportingengine::Task$print()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="validateInput">}\href{../../ospsuite.reportingengine/html/Task.html#method-validateInput}{\code{ospsuite.reportingengine::Task$validateInput()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="validateStructureSetInput">}\href{../../ospsuite.reportingengine/html/Task.html#method-validateStructureSetInput}{\code{ospsuite.reportingengine::Task$validateStructureSetInput()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="SensitivityAnalysisTask" data-id="runTask">}\href{../../ospsuite.reportingengine/html/SensitivityAnalysisTask.html#method-runTask}{\code{ospsuite.reportingengine::SensitivityAnalysisTask$runTask()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="activate"><a href='../../ospsuite.reportingengine/html/Task.html#method-Task-activate'><code>ospsuite.reportingengine::Task$activate()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="getAbsolutePath"><a href='../../ospsuite.reportingengine/html/Task.html#method-Task-getAbsolutePath'><code>ospsuite.reportingengine::Task$getAbsolutePath()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="getInputs"><a href='../../ospsuite.reportingengine/html/Task.html#method-Task-getInputs'><code>ospsuite.reportingengine::Task$getInputs()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="getRelativePath"><a href='../../ospsuite.reportingengine/html/Task.html#method-Task-getRelativePath'><code>ospsuite.reportingengine::Task$getRelativePath()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="inactivate"><a href='../../ospsuite.reportingengine/html/Task.html#method-Task-inactivate'><code>ospsuite.reportingengine::Task$inactivate()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="print"><a href='../../ospsuite.reportingengine/html/Task.html#method-Task-print'><code>ospsuite.reportingengine::Task$print()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="validateInput"><a href='../../ospsuite.reportingengine/html/Task.html#method-Task-validateInput'><code>ospsuite.reportingengine::Task$validateInput()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="validateStructureSetInput"><a href='../../ospsuite.reportingengine/html/Task.html#method-Task-validateStructureSetInput'><code>ospsuite.reportingengine::Task$validateStructureSetInput()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="SensitivityAnalysisTask" data-id="runTask"><a href='../../ospsuite.reportingengine/html/SensitivityAnalysisTask.html#method-SensitivityAnalysisTask-runTask'><code>ospsuite.reportingengine::SensitivityAnalysisTask$runTask()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-PopulationSensitivityAnalysisTask-new"></a>}}
+\if{latex}{\out{\hypertarget{method-PopulationSensitivityAnalysisTask-new}{}}}
 \subsection{Method \code{new()}}{
 Create a `PopulationSensitivityAnalysisTask` object
 \subsection{Usage}{
@@ -95,8 +95,8 @@ A new `PopulationSensitivityAnalysisTask` object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-saveResults"></a>}}
-\if{latex}{\out{\hypertarget{method-saveResults}{}}}
+\if{html}{\out{<a id="method-PopulationSensitivityAnalysisTask-saveResults"></a>}}
+\if{latex}{\out{\hypertarget{method-PopulationSensitivityAnalysisTask-saveResults}{}}}
 \subsection{Method \code{saveResults()}}{
 Save the task results related to a `structureSet`.
 \subsection{Usage}{
@@ -114,8 +114,8 @@ Save the task results related to a `structureSet`.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-PopulationSensitivityAnalysisTask-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-PopulationSensitivityAnalysisTask-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

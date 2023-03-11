@@ -20,6 +20,7 @@ Load a `ConfigurationPlan` object from json file
 \seealso{
 Other qualification workflow: 
 \code{\link{ConfigurationPlan}},
+\code{\link{QualificationVersionInfo}},
 \code{\link{adjustTitlePage}()},
 \code{\link{loadQualificationWorkflow}()},
 \code{\link{startQualificationRunner}()}

@@ -4,7 +4,8 @@
 #' @field workflowFolder path of the folder create by the Workflow
 #' @field taskNames Enum of task names
 #' @field reportFileName name of the Rmd report file
-#' @field createWordReport logical of option for creating Markdwon-Report only but not a Word-Report.
+#' @field reportTitle report title page
+#' @field createWordReport logical of option for creating Markdown-Report only but not a Word-Report.
 #' @field wordConversionTemplate optional docx template for rendering a tuned Word-Report document
 #' @field userDefinedTasks List of user-defined tasks (to update with loadUserDefinedTask)
 #' @field numberSections logical defining if the report sections should be numbered
@@ -18,6 +19,7 @@ Workflow <- R6::R6Class(
     workflowFolder = NULL,
     taskNames = NULL,
     reportFileName = NULL,
+    reportTitle = NULL,
     createWordReport = NULL,
     wordConversionTemplate = NULL,
     userDefinedTasks = NULL,
@@ -32,76 +34,79 @@ Workflow <- R6::R6Class(
     #' @param watermark displayed watermark in figures background
     #' @param simulationSetDescriptor character Descriptor of simulation sets indicated in reports
     #' @param numberSections logical defining if the report sections should be numbered
+    #' @param reportTitle report title internally added as a cover page
+    #' If `reportTitle` is an existing file, it will be merged to the report as cover page.
     #' @param theme A `Theme` object from `{tlf}` package
     #' @return A new `Workflow` object
     initialize = function(simulationSets,
-                              workflowFolder,
-                              createWordReport = TRUE,
-                              wordConversionTemplate = NULL,
-                              watermark = NULL,
-                              simulationSetDescriptor = NULL,
-                              numberSections = TRUE,
-                              theme = NULL) {
-      private$.reportingEngineInfo <- ReportingEngineInfo$new()
-      # Empty list on which users can load tasks
-      self$userDefinedTasks <- list()
-
+                          workflowFolder,
+                          createWordReport = TRUE,
+                          wordConversionTemplate = NULL,
+                          watermark = NULL,
+                          simulationSetDescriptor = NULL,
+                          numberSections = TRUE,
+                          reportTitle = NULL,
+                          theme = NULL) {
+      #----- Check and initialize workflow folder  -----
       validateIsString(workflowFolder)
-      validateIsString(watermark, nullAllowed = TRUE)
-      validateIsString(simulationSetDescriptor, nullAllowed = TRUE)
-      validateIsString(wordConversionTemplate, nullAllowed = TRUE)
-      sapply(c(simulationSets), function(simulationSet) {
-        validateIsOfType(object = simulationSet, type = "SimulationSet")
-      })
-      validateIsLogical(createWordReport)
-      validateIsLogical(numberSections)
-
-      self$createWordReport <- createWordReport
-      self$wordConversionTemplate <- wordConversionTemplate
-      self$numberSections <- numberSections
-      if (!isOfType(simulationSets, "list")) {
-        simulationSets <- list(simulationSets)
-      }
-
-      allSimulationSetNames <- sapply(simulationSets, function(set) {
-        set$simulationSetName
-      })
-      validateNoDuplicatedEntries(allSimulationSetNames)
-
       self$workflowFolder <- workflowFolder
-      workflowFolderCheck <- file.exists(self$workflowFolder)
-
-      if (workflowFolderCheck) {
-        logWorkflow(
-          message = workflowFolderCheck,
-          pathFolder = self$workflowFolder,
-          logTypes = c(LogTypes$Debug)
-        )
-      }
+      resetLogs(workflowFolder)
+      checkExisitingPath(self$workflowFolder)
       dir.create(self$workflowFolder, showWarnings = FALSE, recursive = TRUE)
 
-      logWorkflow(
-        message = private$.reportingEngineInfo$print(),
-        pathFolder = self$workflowFolder
-      )
+      private$.reportingEngineInfo <- ReportingEngineInfo$new()
+      logInfo(private$.reportingEngineInfo$print())
 
-      private$.reportFolder <- workflowFolder
-      self$reportFileName <- paste0(defaultFileNames$reportName(), ".md")
-      self$taskNames <- enum(self$getAllTasks())
+      #----- Check and initialize workflow fields  -----
+      logCatch({
+        # Checks of input arguments
+        if (!isOfType(simulationSets, "list")) {
+          simulationSets <- list(simulationSets)
+        }
+        sapply(c(simulationSets), function(simulationSet) {
+          validateIsOfType(object = simulationSet, type = "SimulationSet")
+        })
+        allSimulationSetNames <- sapply(simulationSets, function(set) {
+          set$simulationSetName
+        })
+        validateNoDuplicatedEntries(allSimulationSetNames)
 
-      self$simulationStructures <- list()
-      simulationSets <- c(simulationSets)
-      for (simulationSetIndex in seq_along(simulationSets)) {
-        self$simulationStructures[[simulationSetIndex]] <- SimulationStructure$new(
-          simulationSet = simulationSets[[simulationSetIndex]],
-          workflowFolder = self$workflowFolder
-        )
-      }
-      self$setSimulationDescriptor(simulationSetDescriptor %||% reEnv$defaultSimulationSetDescriptor)
+        validateIsLogical(createWordReport)
+        validateIsLogical(numberSections)
+        validateIsString(watermark, nullAllowed = TRUE)
+        validateIsString(simulationSetDescriptor, nullAllowed = TRUE)
+        validateIsString(wordConversionTemplate, nullAllowed = TRUE)
+        validateIsString(reportTitle, nullAllowed = TRUE)
 
-      # Load default workflow theme, and sync the watermark
-      setDefaultTheme(theme)
-      self$setWatermark(watermark)
+        # Define workflow fields
+        # Empty list on which users can load tasks
+        self$userDefinedTasks <- list()
+
+        self$simulationStructures <- list()
+        simulationSets <- c(simulationSets)
+        for (simulationSetIndex in seq_along(simulationSets)) {
+          self$simulationStructures[[simulationSetIndex]] <- SimulationStructure$new(
+            simulationSet = simulationSets[[simulationSetIndex]],
+            workflowFolder = self$workflowFolder
+          )
+        }
+
+        self$createWordReport <- createWordReport
+        self$wordConversionTemplate <- wordConversionTemplate
+        self$numberSections <- numberSections
+        self$reportTitle <- reportTitle
+        self$setSimulationDescriptor(simulationSetDescriptor %||% reEnv$defaultSimulationSetDescriptor)
+
+        private$.reportFolder <- workflowFolder
+        self$reportFileName <- paste0(defaultFileNames$reportName(), ".md")
+        self$taskNames <- enum(self$getAllTasks())
+
+        # Load default workflow theme, and sync the watermark
+        setDefaultTheme(theme)
+        self$setWatermark(watermark)
+        setDefaultPlotFormat()
+      })
+      return(invisible())
     },
 
     #' @description
@@ -148,7 +153,7 @@ Workflow <- R6::R6Class(
 
     #' @description
     #' Activates a series of `Tasks` from current `Workflow`
-    #' @param tasks names of the worklfow tasks to activate.
+    #' @param tasks names of the workflow tasks to activate.
     #' Default activates all tasks of the workflow using workflow method `workflow$getAllTasks()`
     #' @return Vector of inactive `Task` names
     activateTasks = function(tasks = self$getAllTasks()) {
@@ -157,7 +162,7 @@ Workflow <- R6::R6Class(
 
     #' @description
     #' Inactivates a series of `Tasks` from current `Workflow`
-    #' @param tasks names of the worklfow tasks to inactivate.
+    #' @param tasks names of the workflow tasks to inactivate.
     #' Default inactivates all tasks of the workflow using workflow method `workflow$getAllTasks()`
     #' @return Vector of inactive `Task` names
     inactivateTasks = function(tasks = self$getAllTasks()) {
@@ -165,13 +170,13 @@ Workflow <- R6::R6Class(
     },
 
     #' @description
-    #' Print reporting engine information obtained from initiliazing a `Workflow`
+    #' Print reporting engine information obtained from initializing a `Workflow`
     printReportingEngineInfo = function() {
       private$.reportingEngineInfo$print()
     },
 
     #' @description
-    #' Get the current watermark to be reprted on figures background
+    #' Get the current watermark to be reported on figures background
     getWatermark = function() {
       private$.watermark
     },
@@ -204,25 +209,29 @@ Workflow <- R6::R6Class(
     #' @param parameterDisplayPaths data.frame mapping Parameters with their display paths
     #' Variables of the data.frame should include `parameter` and `displayPath`.
     setParameterDisplayPaths = function(parameterDisplayPaths) {
-      validateIsOfType(parameterDisplayPaths, "data.frame", nullAllowed = TRUE)
-      if (!isEmpty(parameterDisplayPaths)) {
-        validateIsIncluded(c("parameter", "displayPath"), names(parameterDisplayPaths))
-      }
-      # In case the same parameter is defined more than once, throw a warning
-      if (!hasOnlyDistinctValues(parameterDisplayPaths$parameter)) {
-        logWorkflow(
-          message = messages$errorHasNoUniqueValues(parameterDisplayPaths$parameter, dataName = "parameter variable"),
-          pathFolder = self$workflowFolder,
-          logTypes = LogTypes$Error
-        )
-      }
-
-      # parameterDisplayPaths are centralized in the central private field .parameterDisplayPaths
-      # However, they need to be send to the task using the field simulationStructures commmon among all tasks
-      private$.parameterDisplayPaths <- parameterDisplayPaths
-      for (structureSet in self$simulationStructures) {
-        structureSet$parameterDisplayPaths <- parameterDisplayPaths
-      }
+      setLogFolder(self$workflowFolder)
+      logCatch({
+        validateIsOfType(parameterDisplayPaths, "data.frame", nullAllowed = TRUE)
+        if (!isEmpty(parameterDisplayPaths)) {
+          validateIsIncluded(c("parameter", "displayPath"), names(parameterDisplayPaths))
+        }
+        # In case the same parameter is defined more than once, throw a warning
+        if (!hasOnlyDistinctValues(parameterDisplayPaths$parameter)) {
+          stop(messages$errorHasNoUniqueValues(
+            parameterDisplayPaths$parameter,
+            dataName = "parameter variable"
+          ),
+          call. = FALSE
+          )
+        }
+        # parameterDisplayPaths are centralized in the central private field .parameterDisplayPaths
+        # However, they need to be send to the task using the field simulationStructures commmon among all tasks
+        private$.parameterDisplayPaths <- parameterDisplayPaths
+        for (structureSet in self$simulationStructures) {
+          structureSet$parameterDisplayPaths <- parameterDisplayPaths
+        }
+      })
+      return(invisible())
     },
 
     #' @description Get mapping between parameters and their display paths in workflow
@@ -263,7 +272,6 @@ Workflow <- R6::R6Class(
       return(tasksInfo)
     }
   ),
-
   active = list(
     #' @field reportFolder Directory in which workflow report is saved
     reportFolder = function(value) {
@@ -287,14 +295,12 @@ Workflow <- R6::R6Class(
       return(invisible())
     }
   ),
-
   private = list(
     .reportingEngineInfo = NULL,
     .watermark = NULL,
     .parameterDisplayPaths = NULL,
     .simulationSetDescriptor = NULL,
     .reportFolder = NULL,
-
     .getTasksWithStatus = function(status) {
       taskNames <- self$getAllTasks()
 

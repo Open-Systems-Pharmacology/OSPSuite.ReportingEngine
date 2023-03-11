@@ -4,14 +4,12 @@
 \alias{simulateModelParallel}
 \title{simulateModelParallel}
 \usage{
-simulateModelParallel(structureSets, settings = NULL, logFolder = getwd())
+simulateModelParallel(structureSets, settings = NULL)
 }
 \arguments{
 \item{structureSets, }{a list of `SimulationStructure` R6 class objects contain paths of files to be used}
 
 \item{settings}{list of options to be passed to the function}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 List of simulation results for each simulation set

@@ -32,34 +32,34 @@ Other workflow tasks:
 }
 \concept{workflow tasks}
 \section{Super classes}{
-\code{\link[ospsuite.reportingengine:Task]{ospsuite.reportingengine::Task}} -> \code{\link[ospsuite.reportingengine:PlotTask]{ospsuite.reportingengine::PlotTask}} -> \code{QualificationTask}
+\code{ospsuite.reportingengine::Task} -> \code{ospsuite.reportingengine::PlotTask} -> \code{QualificationTask}
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-saveResults}{\code{QualificationTask$saveResults()}}
-\item \href{#method-runTask}{\code{QualificationTask$runTask()}}
-\item \href{#method-clone}{\code{QualificationTask$clone()}}
+\item \href{#method-QualificationTask-saveResults}{\code{QualificationTask$saveResults()}}
+\item \href{#method-QualificationTask-runTask}{\code{QualificationTask$runTask()}}
+\item \href{#method-QualificationTask-clone}{\code{QualificationTask$clone()}}
 }
 }
-\if{html}{
-\out{<details ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="activate">}\href{../../ospsuite.reportingengine/html/Task.html#method-activate}{\code{ospsuite.reportingengine::Task$activate()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="getAbsolutePath">}\href{../../ospsuite.reportingengine/html/Task.html#method-getAbsolutePath}{\code{ospsuite.reportingengine::Task$getAbsolutePath()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="getInputs">}\href{../../ospsuite.reportingengine/html/Task.html#method-getInputs}{\code{ospsuite.reportingengine::Task$getInputs()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="getRelativePath">}\href{../../ospsuite.reportingengine/html/Task.html#method-getRelativePath}{\code{ospsuite.reportingengine::Task$getRelativePath()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="inactivate">}\href{../../ospsuite.reportingengine/html/Task.html#method-inactivate}{\code{ospsuite.reportingengine::Task$inactivate()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="print">}\href{../../ospsuite.reportingengine/html/Task.html#method-print}{\code{ospsuite.reportingengine::Task$print()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="validateInput">}\href{../../ospsuite.reportingengine/html/Task.html#method-validateInput}{\code{ospsuite.reportingengine::Task$validateInput()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="validateStructureSetInput">}\href{../../ospsuite.reportingengine/html/Task.html#method-validateStructureSetInput}{\code{ospsuite.reportingengine::Task$validateStructureSetInput()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="PlotTask" data-id="initialize">}\href{../../ospsuite.reportingengine/html/PlotTask.html#method-initialize}{\code{ospsuite.reportingengine::PlotTask$initialize()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="activate"><a href='../../ospsuite.reportingengine/html/Task.html#method-Task-activate'><code>ospsuite.reportingengine::Task$activate()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="getAbsolutePath"><a href='../../ospsuite.reportingengine/html/Task.html#method-Task-getAbsolutePath'><code>ospsuite.reportingengine::Task$getAbsolutePath()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="getInputs"><a href='../../ospsuite.reportingengine/html/Task.html#method-Task-getInputs'><code>ospsuite.reportingengine::Task$getInputs()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="getRelativePath"><a href='../../ospsuite.reportingengine/html/Task.html#method-Task-getRelativePath'><code>ospsuite.reportingengine::Task$getRelativePath()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="inactivate"><a href='../../ospsuite.reportingengine/html/Task.html#method-Task-inactivate'><code>ospsuite.reportingengine::Task$inactivate()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="print"><a href='../../ospsuite.reportingengine/html/Task.html#method-Task-print'><code>ospsuite.reportingengine::Task$print()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="validateInput"><a href='../../ospsuite.reportingengine/html/Task.html#method-Task-validateInput'><code>ospsuite.reportingengine::Task$validateInput()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="Task" data-id="validateStructureSetInput"><a href='../../ospsuite.reportingengine/html/Task.html#method-Task-validateStructureSetInput'><code>ospsuite.reportingengine::Task$validateStructureSetInput()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ospsuite.reportingengine" data-topic="PlotTask" data-id="initialize"><a href='../../ospsuite.reportingengine/html/PlotTask.html#method-PlotTask-initialize'><code>ospsuite.reportingengine::PlotTask$initialize()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-saveResults"></a>}}
-\if{latex}{\out{\hypertarget{method-saveResults}{}}}
+\if{html}{\out{<a id="method-QualificationTask-saveResults"></a>}}
+\if{latex}{\out{\hypertarget{method-QualificationTask-saveResults}{}}}
 \subsection{Method \code{saveResults()}}{
 Save results from task run.
 \subsection{Usage}{
@@ -77,8 +77,8 @@ Save results from task run.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-runTask"></a>}}
-\if{latex}{\out{\hypertarget{method-runTask}{}}}
+\if{html}{\out{<a id="method-QualificationTask-runTask"></a>}}
+\if{latex}{\out{\hypertarget{method-QualificationTask-runTask}{}}}
 \subsection{Method \code{runTask()}}{
 Run task and save its output
 \subsection{Usage}{
@@ -94,8 +94,8 @@ Run task and save its output
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-QualificationTask-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-QualificationTask-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

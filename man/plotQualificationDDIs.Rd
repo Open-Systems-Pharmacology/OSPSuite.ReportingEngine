@@ -4,12 +4,10 @@
 \alias{plotQualificationDDIs}
 \title{plotQualificationDDIs}
 \usage{
-plotQualificationDDIs(configurationPlan, logFolder = getwd(), settings)
+plotQualificationDDIs(configurationPlan, settings)
 }
 \arguments{
 \item{configurationPlan}{A `ConfigurationPlan` object}
-
-\item{logFolder}{Folder where logs are saved}
 
 \item{settings}{A `TaskSettings` object}
 }

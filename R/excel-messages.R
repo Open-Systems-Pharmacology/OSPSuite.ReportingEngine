@@ -7,7 +7,6 @@
 ExcelMessaging <- R6::R6Class(
   "ExcelMessaging",
   cloneable = FALSE,
-
   public = list(
     type = NULL,
     messages = NULL,
@@ -26,19 +25,36 @@ ExcelMessaging <- R6::R6Class(
     displayMessage = function() {
       message <- NULL
       for (sectionIndex in seq_along(self$messages)) {
-        if (isOfLength(self$messages[[sectionIndex]], 0)) {
+        if (isEmpty(self$messages[[sectionIndex]])) {
           next
         }
+
         message <- c(
           message,
-          paste0("The following ", self$type, " were identified during the writing of section '", names(self$messages)[sectionIndex], "':"),
+          self$getMessageHeader(names(self$messages)[sectionIndex]),
           paste("- ", self$messages[[sectionIndex]])
         )
       }
-      # Message when no warning founds
-      message <- message %||% paste0("No ", self$type, " found during the writing of the script")
-      cat(message, sep = "\n")
+      if (isEmpty(message)) {
+        logInfo(self$getNoIssueMessage())
+        return(invisible())
+      }
+      logError(message)
       return(invisible(message))
+    },
+
+    #' @description Get message header
+    #' @param section name of R script section
+    getMessageHeader = function(section) {
+      return(paste(
+        "Potential", highlight(self$type),
+        "identified when writing section ", highlight(section)
+      ))
+    },
+
+    #' @description Get message displaying no issue identified
+    getNoIssueMessage = function() {
+      return(paste("No potential", highlight(self$type), "identified when writing R script"))
     }
   )
 )

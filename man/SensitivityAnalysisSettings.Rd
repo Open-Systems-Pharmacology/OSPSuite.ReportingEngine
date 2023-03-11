@@ -27,13 +27,13 @@ R6 class for Population Sensitivity Analysis Settings
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{SensitivityAnalysisSettings$new()}}
-\item \href{#method-clone}{\code{SensitivityAnalysisSettings$clone()}}
+\item \href{#method-SensitivityAnalysisSettings-new}{\code{SensitivityAnalysisSettings$new()}}
+\item \href{#method-SensitivityAnalysisSettings-clone}{\code{SensitivityAnalysisSettings$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-SensitivityAnalysisSettings-new"></a>}}
+\if{latex}{\out{\hypertarget{method-SensitivityAnalysisSettings-new}{}}}
 \subsection{Method \code{new()}}{
 Create a `SensitivityAnalysisSettings` object
 \subsection{Usage}{
@@ -66,8 +66,8 @@ A new `SensitivityAnalysisSettings` object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-SensitivityAnalysisSettings-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-SensitivityAnalysisSettings-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

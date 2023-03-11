@@ -9,7 +9,7 @@ getSimulatedResultsFromOutput(
   output,
   simulationQuantity,
   molWeight,
-  simulationSet
+  structureSet
 )
 }
 \arguments{
@@ -21,7 +21,7 @@ getSimulatedResultsFromOutput(
 
 \item{molWeight}{Molar weight for unit conversion of dependent variable}
 
-\item{simulationSet}{`SimulationSet` object}
+\item{structureSet}{`SimulationStructure` object}
 }
 \value{
 list of data and metaData

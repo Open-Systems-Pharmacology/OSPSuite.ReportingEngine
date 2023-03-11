@@ -48,34 +48,26 @@ SensitivityAnalysisTask <- R6::R6Class(
     #' @param structureSets list of `SimulationStructure` objects
     runTask = function(structureSets) {
       actionToken <- re.tStartAction(actionType = "Analysis", actionNameExtension = self$nameTaskResults)
-      logWorkflow(
-        message = paste0("Starting ", self$message),
-        pathFolder = self$workflowFolder
-      )
+      logInfo(messages$runStarting(self$message))
+      t0 <- tic()
 
       if (!is.null(self$outputFolder)) {
-        dir.create(file.path(self$workflowFolder, self$outputFolder))
+        dir.create(file.path(self$workflowFolder, self$outputFolder), showWarnings = FALSE, recursive = TRUE)
       }
 
       for (set in structureSets) {
-        logWorkflow(
-          message = paste0("Run sensitivity for simulation set: ", set$simulationSet$simulationSetName),
-          pathFolder = self$workflowFolder
-        )
+        logInfo(messages$runStarting(self$message, set$simulationSet$simulationSetName))
         if (self$validateStructureSetInput(set)) {
           taskResults <- self$getTaskResults(
             structureSet = set,
-            settings = self$settings,
-            logFolder = self$workflowFolder
+            settings = self$settings
           )
 
-          self$saveResults(
-            set,
-            taskResults
-          )
+          self$saveResults(set, taskResults)
         }
       }
       re.tEndAction(actionToken = actionToken)
+      logInfo(messages$runCompleted(getElapsedTime(t0), self$message))
     }
   )
 )

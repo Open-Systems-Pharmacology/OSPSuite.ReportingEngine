@@ -19,30 +19,30 @@ getReaderFunction <- function(fileName, nlines = 2) {
     stringsAsFactors = FALSE
   )
   # For csv files, do not include white space separator
-  if(isFileExtension(fileName, "csv")){
+  if (isFileExtension(fileName, "csv")) {
     readerMapping <- readerMapping[1:2, ]
   }
-  
+
   # Keep separator that would provides the most fields/columns
   sepWidth <- sapply(
     readerMapping$sep,
     function(sep) {
-      # if count.fields notices an odd number of ' or ", 
+      # if count.fields notices an odd number of ' or ",
       # it will return NA for the line (example, "St John's" -> NA)
       # which needs to be removed from the count
       max(count.fields(fileName, sep = sep, comment.char = "", quote = '\"'), na.rm = TRUE)
     }
   )
   # which.max returns the first max value.
-  # Thus, read.csv will be used in priority if same number of columns 
+  # Thus, read.csv will be used in priority if same number of columns
   # are identified by each method
   readerMapping <- readerMapping[which.max(sepWidth), ]
-  
+
   # Assess if selected separator reads a consistent number of fields/columns along lines
   fields <- count.fields(fileName, sep = readerMapping$sep, comment.char = "", quote = '\"')
   fields <- fields[!is.na(fields)]
   consistentFields <- isOfLength(unique(fields), 1)
-  
+
   # If selected separator leads to inconsistent number of columns,
   # Throw a meaningful error message before error happens in read.table or later
   if (!consistentFields) {
@@ -85,6 +85,106 @@ readObservedDataFile <- function(fileName,
   return(observedData)
 }
 
+#' @title getSelectedData
+#' @description
+#' Get selected data
+#' The function leverage `dplyr::filter` to select the data
+#' @param data A data.frame
+#' @param dataSelection Character string or expression evaluated to select data
+#' The enum helper `DataSelectionKeys` provides keys for selected all or none of the data
+#' @return A data.frame of selected data
+#' @export
+#' @import dplyr
+#' @seealso DataSelectionKeys
+#' @examples
+#' data <- data.frame(
+#'   x = seq(0, 9),
+#'   y = seq(10, 19),
+#'   mdv = c(1, 1, rep(0, 8)),
+#'   groups = rep(c("A", "B"), 5)
+#' )
+#'
+#' # Select all the data
+#' getSelectedData(data, DataSelectionKeys$ALL)
+#'
+#' # Select no data
+#' getSelectedData(data, DataSelectionKeys$NONE)
+#'
+#' # Select data from group A
+#' getSelectedData(data, "groups %in% 'A'")
+#'
+#' # Remove missing dependent variable (mdv)
+#' getSelectedData(data, "mdv == 0")
+#'
+getSelectedData <- function(data, dataSelection) {
+  if (isEmpty(dataSelection)) {
+    return(data[FALSE, ])
+  }
+  if (isIncluded(dataSelection, DataSelectionKeys$ALL)) {
+    return(data)
+  }
+  if (isIncluded(dataSelection, c(DataSelectionKeys$NONE, ""))) {
+    return(data[FALSE, ])
+  }
+  if (isOfType(dataSelection, "expression")) {
+    return(data %>% dplyr::filter(eval(dataSelection)))
+  }
+  return(data %>% dplyr::filter(eval(parse(text = dataSelection))))
+}
+
+#' @title getSelectedRows
+#' @description
+#' Get selected rows from data and its selection
+#' The function leverage `dplyr::filter` to select the rows
+#' @param data A data.frame
+#' @param dataSelection Character string or expression evaluated to select data
+#' The enum helper `DataSelectionKeys` provides keys for selected all or none of the data
+#' @return A data.frame of selected data
+#' @export
+#' @import dplyr
+#' @seealso DataSelectionKeys
+#' @examples
+#' data <- data.frame(
+#'   x = seq(0, 9),
+#'   y = seq(10, 19),
+#'   mdv = c(1, 1, rep(0, 8)),
+#'   groups = rep(c("A", "B"), 5)
+#' )
+#'
+#' # Select all the rows
+#' getSelectedRows(data, DataSelectionKeys$ALL)
+#'
+#' # Select no row
+#' getSelectedRows(data, DataSelectionKeys$NONE)
+#'
+#' # Select rows from group A
+#' getSelectedData(data, "groups %in% 'A'")
+#'
+#' # Get rows of missing dependent variable (mdv)
+#' getSelectedRows(data, "mdv == 0")
+#'
+getSelectedRows <- function(data, dataSelection) {
+  if (isEmpty(dataSelection)) {
+    return(FALSE)
+  }
+  if (isIncluded(dataSelection, DataSelectionKeys$ALL)) {
+    return(TRUE)
+  }
+  if (isIncluded(dataSelection, c(DataSelectionKeys$NONE, ""))) {
+    return(FALSE)
+  }
+  if (isOfType(dataSelection, "expression")) {
+    selectedData <- data %>%
+      dplyr::mutate(rows = 1:n()) %>%
+      dplyr::filter(eval(dataSelection))
+    return(selectedData$rows)
+  }
+  selectedData <- data %>%
+    dplyr::mutate(rows = 1:n()) %>%
+    dplyr::filter(eval(parse(text = dataSelection)))
+  return(selectedData$rows)
+}
+
 #' @title evalDataFilter
 #' @description
 #' Evaluate a data filter by converting the variable names of the data.frame
@@ -95,6 +195,7 @@ readObservedDataFile <- function(fileName,
 #' @return vector of logicals corresponding to the evaluation of the filter
 #' @export
 evalDataFilter <- function(data, filterExpression) {
+  .Deprecated("getSelectedRows")
   variableNames <- names(data)
   expressionList <- lapply(
     variableNames,
@@ -124,7 +225,7 @@ dictionaryParameters <- list(
 getDictionaryVariable <- function(dictionary, variableID) {
   variableMapping <- dictionary[, dictionaryParameters$ID] %in% variableID
   variableName <- as.character(dictionary[variableMapping, dictionaryParameters$datasetColumn])
-  if (isOfLength(variableName, 0)) {
+  if (isEmpty(variableName)) {
     return()
   }
   return(variableName)
@@ -134,21 +235,21 @@ getDictionaryVariable <- function(dictionary, variableID) {
 #' @description
 #' Load observed data and its dataMapping from a simulationSet
 #' @param simulationSet A `SimulationSet` object
-#' @param logFolder folder where the logs are saved
 #' @return list of data and dataMapping
 #' @keywords internal
-loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
+loadObservedDataFromSimulationSet <- function(simulationSet) {
   validateIsOfType(simulationSet, "SimulationSet")
   # Observed data and dictionary are already checked when creating the simulationSet
   # No observed data return NULL
-  if (isOfLength(simulationSet$observedDataFile, 0)) {
+  if (isEmpty(simulationSet$dataSource)) {
     return()
   }
 
-  re.tStoreFileMetadata(access = "read", filePath = simulationSet$observedDataFile)
-  observedDataset <- readObservedDataFile(simulationSet$observedDataFile)
-  re.tStoreFileMetadata(access = "read", filePath = simulationSet$observedMetaDataFile)
-  dictionary <- readObservedDataFile(simulationSet$observedMetaDataFile)
+  re.tStoreFileMetadata(access = "read", filePath = simulationSet$dataSource$dataFile)
+  observedDataset <- readObservedDataFile(simulationSet$dataSource$dataFile)
+  observedDataset <- getSelectedData(observedDataset, simulationSet$dataSelection)
+  re.tStoreFileMetadata(access = "read", filePath = simulationSet$dataSource$metaDataFile)
+  dictionary <- readObservedDataFile(simulationSet$dataSource$metaDataFile)
 
   # Enforce datasetUnit column to exist
   if (!isIncluded(dictionaryParameters$datasetUnit, names(dictionary))) {
@@ -182,11 +283,11 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   observedDataset[, dvUnitColumn] <- as.character(observedDataset[, dvUnitColumn])
 
   # If unit was actually defined using output objects, overwrite current dvUnit
-  for(output in simulationSet$outputs){
-    if(isOfLength(output$dataUnit, 0)){
+  for (output in simulationSet$outputs) {
+    if (isEmpty(output$dataUnit)) {
       next
     }
-    selectedRows <- evalDataFilter(observedDataset, output$dataSelection)
+    selectedRows <- getSelectedRows(observedDataset, output$dataSelection)
     observedDataset[selectedRows, dvUnitColumn] <- output$dataUnit
   }
 
@@ -204,12 +305,8 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
   observedDataset$dimension <- NA
   for (dvUnit in unique(observedDataset[, dvUnitColumn])) {
     dvDimension <- ospsuite::getDimensionForUnit(dvUnit)
-    if (isOfLength(dvDimension, 0)) {
-      logWorkflow(
-        message = paste0("In loadObservedDataFromSimulationSet: unit '", dvUnit, "' is unknown."),
-        pathFolder = logFolder,
-        logTypes = LogTypes$Debug
-      )
+    if (isEmpty(dvDimension)) {
+      logDebug(messages$unknownUnitInObservedData(dvUnit))
       next
     }
     selectedRows <- observedDataset[, dvUnitColumn] %in% dvUnit
@@ -224,11 +321,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
     }
     # Case where dictionary defined an lloq column missing from dataset
     if (!isIncluded(lloqColumn, names(observedDataset))) {
-      logWorkflow(
-        message = paste0("lloq column '", lloqColumn, "' defined in dictionary is not present in the dataset columns"),
-        pathFolder = logFolder,
-        logTypes = LogTypes$Debug
-      )
+      logDebug(messages$lloqColumnNotFound(lloqColumn))
       lloqColumn <- NULL
       next
     }
@@ -261,39 +354,46 @@ loadObservedDataFromSimulationSet <- function(simulationSet, logFolder) {
 #' @param data A data.frame
 #' @param dataMapping A list mapping the variable of data
 #' @param molWeight Molar weight for unit conversion of dependent variable
-#' @param timeUnit time unit for unit conversion of time
-#' @param logFolder folder where the logs are saved
+#' @param structureSet A `SimulationStructure` object
 #' @return list of data and lloq data.frames
 #' @keywords internal
-getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, timeUnit, logFolder) {
+getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, structureSet) {
   # If no observed data nor data selected, return empty dataset
   if (isEmpty(data)) {
     return()
   }
-  if (isEmpty(output$dataSelection)) {
+  selectedData <- getSelectedData(data, output$dataSelection)
+  logDebug(messages$selectedObservedDataForPath(output$path, nrow(selectedData)))
+  if (isEmpty(selectedData)) {
     return()
   }
-
-  selectedRows <- evalDataFilter(data, output$dataSelection)
-  logWorkflow(
-    message = paste0("Output '", output$path, "'. Number of selected observations: ", sum(selectedRows)),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
+  metaData <- list(
+    "Time" = list(
+      dimension = "Time",
+      unit = structureSet$simulationSet$timeUnit
+    ),
+    "Concentration" = list(dimension = NA, unit = output$displayUnit %||% NA),
+    "Path" = output$path,
+    legend = captions$plotGoF$observedLegend(
+      simulationSetName = structureSet$simulationSet$simulationSetName,
+      descriptor = structureSet$simulationSetDescriptor,
+      pathName = output$dataDisplayName
+    ),
+    residualsLegend = NA,
+    group = output$groupID,
+    color = output$color,
+    fill = output$fill
   )
-  # If filter did not select any data, return empty dataset
-  if(sum(selectedRows)==0){
-    return()
-  }
 
   # Get dimensions of observed data
-  dvDimensions <- unique(as.character(data[selectedRows, dataMapping$dimension]))
-  outputConcentration <- data[selectedRows, dataMapping$dv]
+  dvDimensions <- unique(as.character(selectedData[, dataMapping$dimension]))
+  outputConcentration <- selectedData[, dataMapping$dv]
   if (!isEmpty(output$displayUnit)) {
     for (dvDimension in dvDimensions) {
       if (is.na(dvDimension)) {
         next
       }
-      dvSelectedRows <- data[selectedRows, dataMapping$dimension] %in% dvDimension
+      dvSelectedRows <- selectedData[, dataMapping$dimension] %in% dvDimension
       outputConcentration[dvSelectedRows] <- ospsuite::toUnit(
         dvDimension,
         outputConcentration[dvSelectedRows],
@@ -303,22 +403,26 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
     }
   }
   outputData <- data.frame(
-    "Time" = ospsuite::toUnit("Time", data[selectedRows, dataMapping$time], timeUnit),
+    "Time" = ospsuite::toUnit(
+      "Time",
+      selectedData[, dataMapping$time],
+      structureSet$simulationSet$timeUnit
+    ),
     "Concentration" = outputConcentration,
-    "Legend" = paste0("Observed data ", output$dataDisplayName),
+    "Legend" = metaData$legend,
     "Path" = output$path
   )
   if (isEmpty(dataMapping$lloq)) {
-    return(list(data = outputData, lloq = NULL))
+    return(list(data = outputData, lloq = NULL, metaData = metaData))
   }
 
-  lloqConcentration <- data[selectedRows, dataMapping$lloq]
+  lloqConcentration <- selectedData[, dataMapping$lloq]
   if (!isEmpty(output$displayUnit)) {
     for (dvDimension in dvDimensions) {
       if (is.na(dvDimension)) {
         next
       }
-      dvSelectedRows <- data[selectedRows, dataMapping$dimension] %in% dvDimension
+      dvSelectedRows <- selectedData[, dataMapping$dimension] %in% dvDimension
       lloqConcentration[dvSelectedRows] <- ospsuite::toUnit(
         dvDimension,
         lloqConcentration[dvSelectedRows],
@@ -328,12 +432,20 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
     }
   }
   lloqOutput <- data.frame(
-    "Time" = ospsuite::toUnit("Time", data[selectedRows, dataMapping$time], timeUnit),
+    "Time" = ospsuite::toUnit(
+      "Time",
+      selectedData[, dataMapping$time],
+      structureSet$simulationSet$timeUnit
+    ),
     "Concentration" = lloqConcentration,
-    "Legend" = "LLOQ",
+    "Legend" = captions$plotGoF$lloqLegend(
+      simulationSetName = structureSet$simulationSet$simulationSetName,
+      descriptor = structureSet$simulationSetDescriptor,
+      pathName = output$dataDisplayName
+    ),
     "Path" = output$path
   )
-  return(list(data = outputData, lloq = lloqOutput))
+  return(list(data = outputData, lloq = lloqOutput, metaData = metaData))
 }
 
 
@@ -342,10 +454,9 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, time
 #' Get selected observed data from a `ConfigurationPlan` object
 #' @param observedDataId Identifier of observed data
 #' @param configurationPlan A `ConfigurationPlan` object that includes methods to find the data
-#' @param logFolder folder where the logs are saved
 #' @return list of including data and metaData to perform time profile plot
 #' @keywords internal
-getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPlan, logFolder) {
+getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPlan) {
   observedDataFile <- configurationPlan$getObservedDataPath(observedDataId)
   observedData <- readObservedDataFile(observedDataFile)
   observedMetaData <- parseObservationsDataFrame(observedData)
@@ -354,15 +465,7 @@ getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPl
   # Column 1: Time
   # Column 2: Observed variable
   # Column 3: uncertainty around observed variable
-  numberOfColumns <- ncol(observedData)
-  numberOfRows <- nrow(observedData)
-
-  # Log the description of the observed data for debugging
-  logWorkflow(
-    message = paste0("Observed data Id '", observedDataId, "' included ", numberOfColumns, " columns and ", numberOfRows, " rows"),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
+  logDebug(messages$sizeForObservedDataId(observedDataId, ncol(observedData), nrow(observedData)))
 
   return(list(
     data = observedData,
@@ -372,8 +475,8 @@ getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPl
 
 #' @title isObservedData
 #' @description
-#' Check if a configuration plan quantitiy path corresponds to observed data
-#' @param path A quantitiy path from the configuration plan
+#' Check if a configuration plan quantity path corresponds to observed data
+#' @param path A quantity path from the configuration plan
 #' For instance, "S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
 #' or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
 #' @return A logical checking if path corresponds to observed data
@@ -394,7 +497,7 @@ isObservedData <- function(path) {
 #' @title getObservedDataIdFromPath
 #' @description
 #' Get an observed dataset id from a configuration plan quantity path
-#' @param path A quantitiy path from the configuration plan
+#' @param path A quantity path from the configuration plan
 #' For instance, "S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
 #' or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
 #' @return A string corresponding to the `id` of a configuration plan observed dataset
@@ -413,4 +516,38 @@ getObservedDataIdFromPath <- function(path) {
   }
   pathArray <- ospsuite::toPathArray(path)
   return(pathArray[1])
+}
+
+#' @title translateDataSelection
+#' @description
+#' Translate `dataSelection` input by user into characters/expression understood by `getSelectedData`
+#' @param dataSelection characters or expression to select subset the observed data
+#' @return characters or expression to select subset the observed data
+#' @keywords internal
+translateDataSelection <- function(dataSelection) {
+  validateIsOfType(dataSelection, c("logical", "character", "expression"), nullAllowed = TRUE)
+  if (isEmpty(dataSelection)) {
+    return(FALSE)
+  }
+  if (!isOfType(dataSelection, "character")) {
+    return(dataSelection)
+  }
+  # If any selection include None, do not select anything
+  if (isIncluded(DataSelectionKeys$NONE, dataSelection)) {
+    return(FALSE)
+  }
+  # By removing "" string from dataSelection
+  # If "" is the only value provided, dataSelection isEmpty
+  # If multiple values provided, concatenate the remaining selections
+  dataSelection <- trimws(dataSelection)
+  dataSelection <- dataSelection[!(dataSelection %in% "")]
+  if (isEmpty(dataSelection)) {
+    return(FALSE)
+  }
+  # When concatenating, ALL won't be understood by dplyr
+  # Needs to be replaced by true to select all data
+  dataSelection[dataSelection %in% DataSelectionKeys$ALL] <- TRUE
+  # Concatenate selections using & and brackets
+  dataSelection <- paste(dataSelection, collapse = ") & (")
+  return(paste0("(", dataSelection, ")"))
 }

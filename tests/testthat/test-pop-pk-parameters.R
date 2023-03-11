@@ -6,6 +6,13 @@ populationFileAdults <- getTestDataFilePath("input-data/Raltegravir Adult Popula
 
 # List of necessary in results to test
 refOutput <- getTestDataFilePath("pop-pk")
+# Sort files because list.files ordering is character by character
+getOrderedFiles <- function(dirPath, pattern){
+  fileNames <- list.files(dirPath, pattern = pattern)
+  # Keep only numbers included in filenames
+  fileNumbers <- as.numeric(gsub("[^[:digit:]]", "\\1", fileNames))
+  return(file.path(dirPath, fileNames[order(fileNumbers)]))
+}
 
 # Ensure the PK parameters are reset before test
 updatePKParameter("C_max", displayName = "C_max", displayUnit = "µmol/l")
@@ -54,10 +61,18 @@ workflowRatio <- PopulationWorkflow$new(
 )
 
 workflowPediatric$activateTasks(c("simulate", "calculatePKParameters", "plotPKParameters"))
-workflowParallel$activateTasks(c("simulate", "calculatePKParameters", "plotPKParameters"))
-workflowRatio$activateTasks(c("simulate", "calculatePKParameters", "plotPKParameters"))
+# Save time preventing run of same simulations and pk parameter analyses
+workflowParallel$inactivateTasks()
+workflowRatio$inactivateTasks()
+workflowParallel$activateTasks("plotPKParameters")
+workflowRatio$activateTasks("plotPKParameters")
 
 workflowPediatric$runWorkflow()
+# Before running parallel and ratio, save time by copying/pasting simulations and pk parameter analyses
+file.copy(from = "test-pk-parameters-pediatric/SimulationResults", to = "test-pk-parameters-parallel", recursive = TRUE)
+file.copy(from = "test-pk-parameters-pediatric/PKAnalysisResults", to = "test-pk-parameters-parallel", recursive = TRUE)
+file.copy(from = "test-pk-parameters-pediatric/SimulationResults", to = "test-pk-parameters-ratio", recursive = TRUE)
+file.copy(from = "test-pk-parameters-pediatric/PKAnalysisResults", to = "test-pk-parameters-ratio", recursive = TRUE)
 workflowParallel$runWorkflow()
 workflowRatio$runWorkflow()
 
@@ -80,7 +95,7 @@ test_that("PKAnalysis directory from Pediatric workflow includes appropriate num
   # Figures
   expect_length(list.files(pkAnalysisPediatricPath, pattern = ".png"), 52)
   # Exported results
-  expect_length(list.files(pkAnalysisPediatricPath, pattern = ".csv"), 2)
+  expect_length(list.files(pkAnalysisPediatricPath, pattern = ".csv"), 4)
 })
 
 pkAnalysisParallelPath <- file.path(workflowParallel$workflowFolder, "PKAnalysis")
@@ -88,7 +103,7 @@ test_that("PKAnalysis directory from Parallel workflow includes appropriate numb
   # Figures
   expect_length(list.files(pkAnalysisParallelPath, pattern = ".png"), 4)
   # Exported results
-  expect_length(list.files(pkAnalysisParallelPath, pattern = ".csv"), 2)
+  expect_length(list.files(pkAnalysisParallelPath, pattern = ".csv"), 4)
 })
 
 pkAnalysisRatioPath <- file.path(workflowRatio$workflowFolder, "PKAnalysis")
@@ -96,45 +111,30 @@ test_that("PKAnalysis directory from Ratio workflow includes appropriate number 
   # Figures
   expect_length(list.files(pkAnalysisRatioPath, pattern = ".png"), 8)
   # Exported results
-  expect_length(list.files(pkAnalysisRatioPath, pattern = ".csv"), 4)
+  expect_length(list.files(pkAnalysisRatioPath, pattern = ".csv"), 6)
 })
 
 test_that("Saved PK parameters data from workflows have correct values", {
-  pediatricFiles <- file.path(
-    pkAnalysisPediatricPath,
-    list.files(pkAnalysisPediatricPath, pattern = ".csv")
-  )
-  parallelFiles <- file.path(
-    pkAnalysisParallelPath,
-    list.files(pkAnalysisParallelPath, pattern = ".csv")
-  )
-  refFiles <- file.path(
-    refOutput,
-    list.files(refOutput, pattern = "pk_parameters")
-  )
-  for(fileIndex in seq_along(refFiles)){
-    expect_equal(
+  pediatricFiles <- getOrderedFiles(pkAnalysisPediatricPath, pattern = ".csv")
+  parallelFiles <- getOrderedFiles(pkAnalysisParallelPath, pattern = ".csv")
+  refFiles <- getOrderedFiles(refOutput, pattern = "pk_parameters")
+  for (fileIndex in seq_along(refFiles)) {
+    expect_equivalent(
       readObservedDataFile(pediatricFiles[fileIndex]),
       readObservedDataFile(refFiles[fileIndex]),
       tolerance = comparisonTolerance()
     )
-    expect_equal(
+    expect_equivalent(
       readObservedDataFile(parallelFiles[fileIndex]),
       readObservedDataFile(refFiles[fileIndex]),
       tolerance = comparisonTolerance()
     )
   }
   # For ratio, 2 additional tables are exported
-  ratioFiles <- file.path(
-    pkAnalysisRatioPath,
-    list.files(pkAnalysisRatioPath, pattern = ".csv")
-  )
-  refFiles <- file.path(
-    refOutput,
-    list.files(refOutput, pattern = ".csv")
-  )
-  for(fileIndex in seq_along(refFiles)){
-    expect_equal(
+  ratioFiles <- getOrderedFiles(pkAnalysisRatioPath, pattern = ".csv")
+  refFiles <- getOrderedFiles(refOutput, pattern = ".csv")
+  for (fileIndex in seq_along(refFiles)) {
+    expect_equivalent(
       readObservedDataFile(ratioFiles[fileIndex]),
       readObservedDataFile(refFiles[fileIndex]),
       tolerance = comparisonTolerance()

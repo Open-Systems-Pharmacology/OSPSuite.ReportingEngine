@@ -8,7 +8,7 @@ tlf::setDefaultLegendPosition(reDefaultLegendPosition)
 #' @field functions list of `middle`, `ymin` and `ymax` functions for aggregation
 #' @field names list of legend captions for `middle` and `range` from aggregation
 #' @field bins default number of bins in plots
-#' @field binUsingQuantiles logical to choose a binning based on the quantiles rather thanon a constant interval width
+#' @field binUsingQuantiles logical to choose a binning based on the quantiles rather than on a constant interval width
 #' @export
 AggregationConfiguration <- list(
   functions = list(
@@ -22,7 +22,7 @@ AggregationConfiguration <- list(
   ),
   names = list(
     middle = "median",
-    range = "[5-95th] percentiles"
+    range = "[5-95\u1d57\u02b0] percentiles"
   ),
   bins = 11,
   binUsingQuantiles = TRUE
@@ -79,6 +79,78 @@ autoAxesTicksFromLimits <- function(limits) {
   return(rep(c(1, 2, 5), length(logTicks)) * 10^rep(logTicks, each = 3))
 }
 
+#' @title getTimeTicksFromUnit
+#' @description Defines auto time ticks from time unit and time values
+#' @param unit A time unit as defined in `ospsuite::ospUnits$Time`
+#' @param timeValues Numeric values used by the data
+#' @param maxTicks Maximum number of ticks allowed
+#' @return List of `ticks` and their `ticklabels`
+#' @keywords internal
+getTimeTicksFromUnit <- function(unit, timeValues = NULL, maxTicks = 10) {
+  if (isEmpty(timeValues)) {
+    return()
+  }
+  minTime <- floor(min(0, as.numeric(timeValues), na.rm = TRUE))
+  maxTime <- ceiling(max(as.numeric(timeValues), na.rm = TRUE))
+  
+  # For undefined ticking of units, assume major tick every 10 units (eg. 10 seconds)
+  majorTickStep <- 10
+  # For undefined ticking of units, assume minor tick every 1 unit (eg. 1 seconds)
+  minorTickStep <- 1
+
+  if (isIncluded(unit, ospsuite::ospUnits$Time$h)) {
+    # Major ticks every 6 hours
+    majorTickStep <- 6
+  }
+  if (isIncluded(unit, ospsuite::ospUnits$Time$`day(s)`)) {
+    # Major ticks every 7 days
+    majorTickStep <- 7
+  }
+  if (isIncluded(unit, ospsuite::ospUnits$Time$`week(s)`)) {
+    # Major ticks every 4 weeks
+    majorTickStep <- 4
+  }
+  if (isIncluded(unit, ospsuite::ospUnits$Time$`month(s)`)) {
+    # Major ticks every 6 months
+    majorTickStep <- 6
+  }
+  
+  # Increase tick step to get ticks below max number of ticks
+  # To make it prettier, factor will be an integer
+  numberOfTicks <- floor((maxTime-minTime)/majorTickStep)+1
+  tickScaleFactor <- ceiling(numberOfTicks/maxTicks)
+
+  minorTicks <- seq(minTime, maxTime, tickScaleFactor*minorTickStep)
+  majorTicks <- seq(minTime, maxTime, tickScaleFactor*majorTickStep)
+  ticklabels <- as.character(minorTicks)
+  ticklabels[!(minorTicks %in% majorTicks)] <- ""
+
+  timeTicks <- list(
+    ticks = minorTicks,
+    ticklabels = ticklabels
+  )
+  return(timeTicks)
+}
+
+#' @title updatePlotConfigurationTimeTicks
+#' @description Update time ticks based on selected time unit in `PlotConfiguration` objects
+#' @param data data.frame
+#' @param metaData meta data on `data`
+#' @param dataMapping `XYGDataMapping` R6 class object from `tlf` library
+#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
+#' @return A `PlotConfiguration` object
+#' @keywords internal
+updatePlotConfigurationTimeTicks <- function(data, metaData, dataMapping, plotConfiguration) {
+  timeValues <- data[, dataMapping$x]
+  timeUnit <- metaData[[dataMapping$x]]$unit
+  timeTicks <- getTimeTicksFromUnit(timeUnit, timeValues)
+
+  plotConfiguration$xAxis$ticks <- timeTicks$ticks
+  plotConfiguration$xAxis$ticklabels <- timeTicks$ticklabels
+
+  return(plotConfiguration)
+}
+
 #' @title getPlotConfigurationFromPlan
 #' @description Get the appropriate `PlotConfiguration` object with scaled dimensions for exporting it
 #' @param plotProperties Plot properties from configuration plan
@@ -111,20 +183,27 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
   validateIsIncluded(values = legendPosition, parentValues = tlf::LegendPositions, nullAllowed = TRUE)
   plotConfiguration$legend$position <- legendPosition %||% reEnv$theme$background$legendPosition
 
+  # Quadratic dimensions for ObsVsPred plot type
+  # Note that other plots be could included in default quadratic plots
+  defaultWidth <- reEnv$defaultPlotFormat$width
+  defaultHeight <- reEnv$defaultPlotFormat$height
+  if (isIncluded(plotType, "ObsVsPred")) {
+    defaultWidth <- mean(c(defaultWidth, defaultHeight))
+    defaultHeight <- defaultWidth
+  }
   # If chart size is defined, it is in pixel and updated accordingly
   # Get conversion factor between pixels and inches, dev.size provides an array c(width, height)
   unitConversionFactor <- grDevices::dev.size("in") / grDevices::dev.size("px")
   width <- ifNotNull(
     plotProperties$FontAndSize$ChartWidth,
     plotProperties$FontAndSize$ChartWidth * unitConversionFactor[1],
-    reEnv$defaultPlotFormat$width
+    defaultWidth
   )
   height <- ifNotNull(
     plotProperties$FontAndSize$ChartHeight,
     plotProperties$FontAndSize$ChartHeight * unitConversionFactor[2],
-    reEnv$defaultPlotFormat$height
+    defaultHeight
   )
-
   # Get dimensions of exported based on legend position and default/specific plot properties
   plotConfiguration$export$units <- reEnv$defaultPlotFormat$units
   plotConfiguration$export$width <- reEnv$fontScaleFactor * width
@@ -147,8 +226,8 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
 #' cat(addLineBreakToCaption("this is a sentence with spaces", maxLines = 2, width = 25))
 #'
 #' cat(addLineBreakToCaption(
-#' "this_is_a_long_sentence_without_preferential_splits", 
-#' maxLines = 2, width = 25
+#'   "this_is_a_long_sentence_without_preferential_splits",
+#'   maxLines = 2, width = 25
 #' ))
 #'
 #' cat(addLineBreakToCaption("this too short to split", maxLines = 3, width = 40))
@@ -197,7 +276,7 @@ addLineBreakToCaption <- function(captions, maxLines = reEnv$maxLinesPerLegendCa
 
 #' @title getSplitPositions
 #' @description Algorithm that gets positions where splitting a character string for sensible line breaks
-#' @param possibleSplits Positions where a space or a dash was flaged
+#' @param possibleSplits Positions where a space or a dash was found
 #' @param splitWidth Maximum number of characters desired per lines
 #' @param numberOfSplits Maximum number of line breaks to use
 #' @return Position where to insert a line break character
@@ -234,8 +313,11 @@ getSplitPositions <- function(possibleSplits, splitWidth, numberOfSplits) {
 #' @keywords internal
 getLineBreakWidth <- function(element = "legend", plotConfiguration) {
   # Use inches as unit of formula for plotWidth
-  plotWidth <- plotConfiguration$export$width / switch(
-    plotConfiguration$export$units, "in" = 1, "cm" = 2.54, "mm" = 25.4, 1
+  plotWidth <- plotConfiguration$export$width / switch(plotConfiguration$export$units,
+    "in" = 1,
+    "cm" = 2.54,
+    "mm" = 25.4,
+    1
   )
   # Initialize a default fontsize to have a more robust
   fontSize <- 10
@@ -275,6 +357,49 @@ prettyCaption <- function(captions, plotObject, element = "legend") {
   return(addLineBreakToCaption(captions, width = maxWidth))
 }
 
+#' @title updateWatermarkDimensions
+#' @description Update Watermark dimensions
+#' @param plotObject A `ggplot` object
+#' @return A `ggplot` object
+#' @keywords internal
+updateWatermarkDimensions <- function(plotObject) {
+  # No need to update if no displayed watermark
+  if (isEmpty(plotObject$plotConfiguration$background$watermark$text)) {
+    return(plotObject)
+  }
+  # Watermark size in inches to compare with plot dimensions
+  # Font size is in point = 1/72 inches
+  watermarkSize <- nchar(plotObject$plotConfiguration$background$watermark$text) *
+    plotObject$plotConfiguration$background$watermark$font$size / 72
+  watermarkWidth <- abs(watermarkSize * cos(plotObject$plotConfiguration$background$watermark$font$angle * pi / 180))
+  watermarkHeight <- abs(watermarkSize * sin(plotObject$plotConfiguration$background$watermark$font$angle * pi / 180))
+
+  # Plot dimensions in inches to compare with watermark dimensions
+  unitScaling <- switch(plotObject$plotConfiguration$export$units,
+    "in" = 1,
+    "cm" = 2.54,
+    "mm" = 25.4,
+    1
+  )
+  plotWidth <- plotObject$plotConfiguration$export$width / unitScaling
+  plotHeight <- plotObject$plotConfiguration$export$height / unitScaling
+
+  # Comparison and scaling of watermark
+  watermarkScaling <- max(
+    watermarkWidth / plotWidth,
+    watermarkHeight / plotHeight
+  )
+
+  if (watermarkScaling <= 1) {
+    return(plotObject)
+  }
+  plotObject <- tlf::setWatermark(
+    plotObject = plotObject,
+    size = plotObject$plotConfiguration$background$watermark$font$size / watermarkScaling
+  )
+  return(plotObject)
+}
+
 #' @title updatePlotDimensions
 #' @description Update plot dimensions based on size and position of legend
 #' @param plotObject A `ggplot` object
@@ -293,33 +418,374 @@ updatePlotDimensions <- function(plotObject) {
   # If not empty,
   # - add nothing if legend within
   if (grepl(pattern = "inside", x = plotObject$plotConfiguration$legend$position)) {
+    # Add small margin of 20 pts on right side of plot to prevent axis ticklabel being cut-off
+    plotObject <- plotObject + 
+      ggplot2::theme(plot.margin = ggplot2::margin(r = 20))
     return(plotObject)
   }
   # grid package is already required and installed by ggplot2
   legendWidth <- as.numeric(grid::convertUnit(max(legendGrob$widths), plotObject$plotConfiguration$export$units))
   legendHeight <- as.numeric(grid::convertUnit(max(legendGrob$heights), plotObject$plotConfiguration$export$units))
   # - add legend height to the final plot dimensions if legend above/below
-  if (grepl(pattern = "Top", x = plotObject$plotConfiguration$legend$position) |
-    grepl(pattern = "Bottom", x = plotObject$plotConfiguration$legend$position)) {
+  isLegendPositionVertical <- any(
+    grepl(pattern = "Top", x = plotObject$plotConfiguration$legend$position),
+    grepl(pattern = "Bottom", x = plotObject$plotConfiguration$legend$position)
+  )
+  if (isLegendPositionVertical) {
     # Prevent truncated legend, if legend is too long
     # Get size ratio to keep same aspect ratio
-    sizeRatio <- plotObject$plotConfiguration$export$height/plotObject$plotConfiguration$export$width
+    sizeRatio <- plotObject$plotConfiguration$export$height / plotObject$plotConfiguration$export$width
     # Update width if top/bottom legend is too wide (add 5% to legend width to ensure all the entry content are displayed)
-    plotObject$plotConfiguration$export$width <- max(plotObject$plotConfiguration$export$width, 1.05*legendWidth)
+    plotObject$plotConfiguration$export$width <- max(plotObject$plotConfiguration$export$width, 1.05 * legendWidth)
     # Keep width-height aspect ratio
-    plotObject$plotConfiguration$export$height <- sizeRatio*plotObject$plotConfiguration$export$height
+    plotObject$plotConfiguration$export$height <- sizeRatio * plotObject$plotConfiguration$export$height
     # Add legend height to final plot height to prevent shrinkage of plot area
     plotObject$plotConfiguration$export$height <- plotObject$plotConfiguration$export$height + legendHeight
+    plotObject <- updateWatermarkDimensions(plotObject)
+    # Add small margin of 20 pts on right side of plot to prevent axis ticklabel being cut-off
+    plotObject <- plotObject + 
+      ggplot2::theme(plot.margin = ggplot2::margin(r = 20))
     return(plotObject)
   }
   # Prevent truncated legend, if legend is too long
   # Get size ratio to keep same aspect ratio
-  sizeRatio <- plotObject$plotConfiguration$export$width/plotObject$plotConfiguration$export$height
+  sizeRatio <- plotObject$plotConfiguration$export$width / plotObject$plotConfiguration$export$height
   # Update height if side legend is too long (add 5% to legend height to ensure all the entries are displayed)
-  plotObject$plotConfiguration$export$height <- max(plotObject$plotConfiguration$export$height, 1.05*legendHeight)
+  plotObject$plotConfiguration$export$height <- max(plotObject$plotConfiguration$export$height, 1.05 * legendHeight)
   # Keep width-height aspect ratio
-  plotObject$plotConfiguration$export$width <- sizeRatio*plotObject$plotConfiguration$export$width
+  plotObject$plotConfiguration$export$width <- sizeRatio * plotObject$plotConfiguration$export$width
   # Add legend width to final plot width to prevent shrinkage of plot area
   plotObject$plotConfiguration$export$width <- plotObject$plotConfiguration$export$width + legendWidth
+  plotObject <- updateWatermarkDimensions(plotObject)
   return(plotObject)
 }
+
+#' @title setQuadraticDimension
+#' @description Set quadratic dimensions if plot configuration is not user-defined
+#' @param plotObject A `ggplot` object
+#' @param plotConfiguration `PlotConfiguration` object defined in task settings
+#' @return A `ggplot` object
+#' @keywords internal
+setQuadraticDimension <- function(plotObject, plotConfiguration = NULL) {
+  # If user defined the dimensions through a PlotConfiguration object, use it as is
+  if (!isEmpty(plotConfiguration)) {
+    return(plotObject)
+  }
+  # Otherwise, set quadratic plot
+  newDimension <- mean(c(
+    plotObject$plotConfiguration$export$width,
+    plotObject$plotConfiguration$export$height
+  ))
+  plotObject$plotConfiguration$export$width <- newDimension
+  plotObject$plotConfiguration$export$height <- newDimension
+  return(plotObject)
+}
+
+#' @title getTimeProfilePlotConfiguration
+#' @description Define a `TimeProfilePlotConfiguration` object
+#' @param workflowType Workflow type, either `"mean"` or `"population"`
+#' @param group A data.frame mapping properties to output groups
+#' @param data A data.frame
+#' @param metaData List of metaData defining dimensions and units in the data.frame
+#' @param dataMapping List mapping x, y and color variables to `data`
+#' @param plotConfiguration A user-defined `TimeProfilePlotConfiguration` object
+#' @return A `TimeProfilePlotConfiguration` object
+#' @keywords internal
+getTimeProfilePlotConfiguration <- function(workflowType,
+                                            group,
+                                            data,
+                                            metaData,
+                                            observedData = NULL,
+                                            dataMapping = NULL,
+                                            plotConfiguration = NULL) {
+  # If user-defined plot configuration, use as is
+  if (!isEmpty(plotConfiguration)) {
+    return(plotConfiguration)
+  }
+  dataMapping <- switch(workflowType,
+    "mean" = tlf::XYGDataMapping$new(
+      x = dataMapping$x,
+      y = dataMapping$y,
+      color = dataMapping$group
+    ),
+    "population" = tlf::TimeProfileDataMapping$new(
+      x = dataMapping$x,
+      y = dataMapping$y,
+      ymin = dataMapping$ymin,
+      ymax = dataMapping$ymax,
+      group = dataMapping$group
+    )
+  )
+  plotConfiguration <- tlf::TimeProfilePlotConfiguration$new(
+    data = data,
+    metaData = metaData,
+    dataMapping = dataMapping
+  )
+  plotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, dataMapping, plotConfiguration)
+
+  plotConfiguration$lines$color <- getColorFromOutputGroup(
+    group = group,
+    data = data,
+    dataMapping = dataMapping,
+    legendVariable = "legend",
+    colorVariable = "color"
+  )
+  plotConfiguration$points$color <- getColorFromOutputGroup(
+    group = group,
+    data = observedData,
+    dataMapping = dataMapping,
+    legendVariable = "legend",
+    colorVariable = "color"
+  )
+  plotConfiguration$errorbars$color <- getColorFromOutputGroup(
+    group = group,
+    data = observedData,
+    dataMapping = dataMapping,
+    legendVariable = "legend",
+    colorVariable = "color"
+  )
+  plotConfiguration$ribbons$fill <- getColorFromOutputGroup(
+    group = group,
+    data = data,
+    dataMapping = dataMapping,
+    legendVariable = "legend",
+    colorVariable = "fill"
+  )
+
+  return(plotConfiguration)
+}
+
+#' @title getGOFPlotConfiguration
+#' @description Define a `PlotConfiguration` object
+#' @param plotType Plot type for residuals
+#' @param group A data.frame mapping properties to output groups
+#' @param data A data.frame
+#' @param metaData List of metaData defining dimensions and units in the data.frame
+#' @param dataMapping List `DataMapping` object
+#' @param plotConfiguration A user-defined `PlotConfiguration` object
+#' @return A `PlotConfiguration` object
+#' @keywords internal
+getGOFPlotConfiguration <- function(plotType,
+                                    group,
+                                    data,
+                                    metaData,
+                                    dataMapping = NULL,
+                                    plotConfiguration = NULL) {
+  # If user-defined plot configuration, use as is
+  if (!isEmpty(plotConfiguration)) {
+    return(plotConfiguration)
+  }
+
+  plotConfiguration <- switch(plotType,
+    "obsVsPred" = tlf::ObsVsPredPlotConfiguration$new(
+      data = data,
+      metaData = metaData,
+      dataMapping = dataMapping
+    ),
+    "resVsPred" = tlf::ResVsPredPlotConfiguration$new(
+      data = data,
+      metaData = metaData,
+      dataMapping = dataMapping
+    ),
+    "resVsTime" = tlf::ResVsTimePlotConfiguration$new(
+      data = data,
+      metaData = metaData,
+      dataMapping = dataMapping
+    ),
+    "resHisto" = tlf::HistogramPlotConfiguration$new(
+      data = data,
+      metaData = metaData,
+      dataMapping = dataMapping
+    ),
+    "resQQPlot" = tlf::QQPlotConfiguration$new(
+      data = data,
+      metaData = metaData,
+      dataMapping = dataMapping
+    )
+  )
+  # Set quadratic plot for obs vs pred
+  if (plotType %in% "obsVsPred") {
+    newDimension <- mean(c(
+      plotConfiguration$export$width,
+      plotConfiguration$export$height
+    ))
+    plotConfiguration$export$width <- newDimension
+    plotConfiguration$export$height <- newDimension
+  }
+  # Set time ticks for res vs time
+  if (plotType %in% "resVsTime") {
+    residualTimeTicks <- getTimeTicksFromUnit(
+      metaData$Time$unit,
+      timeValues = data$Time
+    )
+    # ticks = residualTimeTicks$ticks,
+    # ticklabels = residualTimeTicks$ticklabels
+    plotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, dataMapping, plotConfiguration)
+  }
+  # Set labels for qq plots and histograms
+  if (plotType %in% "resHisto") {
+    plotConfiguration$ribbons$fill <- group$fill
+    plotConfiguration$labels$ylabel$text <- reEnv$residualsHistogramLabel
+  }
+  if (plotType %in% "resQQPlot") {
+    plotConfiguration$labels$ylabel$text <- reEnv$residualsQQLabel
+  }
+
+  plotConfiguration$points$color <- getColorFromOutputGroup(
+    group = group,
+    data = data,
+    dataMapping = dataMapping,
+    legendVariable = "residualsLegend",
+    colorVariable = "color"
+  )
+  plotConfiguration$errorbars$color <- getColorFromOutputGroup(
+    group = group,
+    data = data,
+    dataMapping = dataMapping,
+    legendVariable = "residualsLegend",
+    colorVariable = "color"
+  )
+  return(plotConfiguration)
+}
+
+#' @title getBoxWhiskerPlotConfiguration
+#' @description Define a `PlotConfiguration` object
+#' @param plotScale Scale of Y Axis
+#' @param data A data.frame
+#' @param metaData dimensions and units in the data.frame
+#' @param dataMapping `DataMapping` object
+#' @param plotConfiguration A user-defined `PlotConfiguration` object
+#' @return A `PlotConfiguration` object
+#' @keywords internal
+getBoxWhiskerPlotConfiguration <- function(plotScale = "log",
+                                           colorGrouping = NULL,
+                                           data,
+                                           metaData,
+                                           dataMapping = NULL,
+                                           plotConfiguration = NULL) {
+  if (!isEmpty(plotConfiguration)) {
+    return(plotConfiguration)
+  }
+  plotConfiguration <- tlf::BoxWhiskerPlotConfiguration$new(
+    data = data,
+    metaData = metaData,
+    dataMapping = dataMapping
+  )
+  # Remove xlabel
+  plotConfiguration$labels$xlabel$text <- NULL
+  # Default angle for xticklabels is 45 degrees
+  plotConfiguration$xAxis$font$angle <- 45
+  # No need for legend for boxplots
+  plotConfiguration$legend$position <- tlf::LegendPositions$none
+  # Color groups
+  if (!isEmpty(colorGrouping)) {
+    fillValues <- getColorFromOutputGroup(
+      group = colorGrouping,
+      data = data,
+      dataMapping = dataMapping,
+      colorVariable = "fill"
+    )
+    plotConfiguration$ribbons$fill <- fillValues
+  }
+  # Default axes use auto scaling
+  if (!isIncluded(plotScale, "log")) {
+    return(plotConfiguration)
+  }
+  yValues <- data[, dataMapping$y]
+  boxRange <- autoAxesLimits(yValues[yValues > 0], scale = "log")
+  boxBreaks <- autoAxesTicksFromLimits(boxRange)
+
+  plotConfiguration$yAxis$scale <- tlf::Scaling$log
+  plotConfiguration$yAxis$limits <- boxRange
+  plotConfiguration$yAxis$ticks <- boxBreaks
+  return(plotConfiguration)
+}
+
+#' @title getColorFromOutputGroup
+#' @description Get the appropriate colors from an output group
+#' @param group A data.frame mapping properties to output groups
+#' @param data A data.frame
+#' @param dataMapping A `DataMapping` object
+#' @param legendVariable Name of legend variable in`group`
+#' @param colorVariable Name of color variable in`group`
+#' @return A sorted array of color values
+#' @keywords internal
+getColorFromOutputGroup <- function(group,
+                                    data,
+                                    dataMapping,
+                                    legendVariable = "legend",
+                                    colorVariable = "color") {
+  # If no output to plot, return a default color
+  if (isEmpty(data)) {
+    return("black")
+  }
+  displayedLegendValues <- unique(data[, dataMapping$groupMapping[[colorVariable]]$group])
+  # Get legend order and associated right color
+  toKeep <- (group[[legendVariable]] %in% displayedLegendValues) &
+    !duplicated(group[[legendVariable]])
+  legendValues <- factor(
+    group[[legendVariable]][toKeep], 
+    levels = levels(displayedLegendValues) %||% displayedLegendValues
+    )
+  legendOrder <- order(legendValues)
+  colorValues <- group[[colorVariable]][toKeep]
+  return(colorValues[legendOrder])
+}
+
+#' @title getColorGroupForPKParameterPlot
+#' @description Map colors to population names
+#' @param output An `Output` object
+#' @param referenceSetName Display name of reference simulation set
+#' @param simulationSetNames Display names of simulation sets
+#' @return A data.frame mapping colors to names
+#' @keywords internal
+getColorGroupForPKParameterPlot <- function(output,
+                                            referenceSetName = NULL,
+                                            simulationSetNames) {
+  remainingSetNames <- setdiff(simulationSetNames, referenceSetName)
+  colorGrouping <- data.frame(
+    # Legend is the default variable name used by getColorFromOutputGroup
+    legend = c(referenceSetName, remainingSetNames),
+    color = c(
+      ifNotNull(referenceSetName, reEnv$referenceColor),
+      rep(output$color %||% "dodgerblue", length(remainingSetNames))
+    ),
+    fill = c(
+      ifNotNull(referenceSetName, reEnv$referenceFill),
+      rep(output$fill %||% "dodgerblue", length(remainingSetNames))
+    )
+  )
+  return(colorGrouping)
+}
+
+#' @title updateVpcPlotColor
+#' @description Update colors of lines and ranges of VPC plots
+#' @param plotObject A ggplot object
+#' @param output An `Output` object
+#' @param referenceSimulationSetName Display name of reference simulation set
+#' @return A ggplot object
+#' @keywords internal
+updateVpcPlotColor <- function(plotObject, output, referenceSimulationSetName = NULL) {
+  legendSim <- paste("Simulated", AggregationConfiguration$names$middle, "and", AggregationConfiguration$names$range)
+  legendReference <- paste(legendSim, "of", referenceSimulationSetName)
+  
+  plotObject <- plotObject +
+    ggplot2::scale_color_manual(
+      breaks = c(ifNotNull(referenceSimulationSetName, legendReference), legendSim),
+      values = c(
+        ifNotNull(referenceSimulationSetName, reEnv$referenceColor), 
+        output$color %||% "dodgerblue"
+          )
+    ) +
+    ggplot2::scale_fill_manual(
+      breaks = c(ifNotNull(referenceSimulationSetName, legendReference), legendSim),
+      values = c(
+        ifNotNull(referenceSimulationSetName, reEnv$referenceFill), 
+        output$fill %||% "dodgerblue"
+          )
+    )
+  return(plotObject)
+}
+
+
+

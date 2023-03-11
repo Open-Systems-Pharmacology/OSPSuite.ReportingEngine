@@ -87,12 +87,22 @@ test_that("Duplicated Ids for SimulationMappings is correctly handled", {
 })
 
 test_that("Duplicated Ids for ObservedDataSets is correctly handled", {
-  expect_warning(loadConfigurationPlan(
-    workflowFolder = workflowFolder,
-    configurationPlanFile = minimalFile
-  ))
   expect_error(loadConfigurationPlan(
     workflowFolder = workflowFolder,
     configurationPlanFile = getTestDataFilePath("configuration-plan/duplicated-obs-data.json")
   ))
+})
+
+unlink(workflowFolder, recursive = TRUE)
+
+# Function is not exported
+getPlotConfigurationFromPlan <- ospsuite.reportingengine:::getPlotConfigurationFromPlan
+
+test_that("PlotConfiguration default for observed vs predicted is quadratic", {
+  defaultObsVsPredConfiguration <- getPlotConfigurationFromPlan(NULL, plotType = "ObsVsPred")
+  expect_s3_class(defaultObsVsPredConfiguration, "ObsVsPredPlotConfiguration")
+  expect_equal(
+    defaultObsVsPredConfiguration$export$width,
+    defaultObsVsPredConfiguration$export$height
+  )
 })

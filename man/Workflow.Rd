@@ -18,7 +18,9 @@ R6 class representing Reporting Engine generic Workflow
 
 \item{\code{reportFileName}}{name of the Rmd report file}
 
-\item{\code{createWordReport}}{logical of option for creating Markdwon-Report only but not a Word-Report.}
+\item{\code{reportTitle}}{report title page}
+
+\item{\code{createWordReport}}{logical of option for creating Markdown-Report only but not a Word-Report.}
 
 \item{\code{wordConversionTemplate}}{optional docx template for rendering a tuned Word-Report document}
 
@@ -40,27 +42,27 @@ R6 class representing Reporting Engine generic Workflow
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Workflow$new()}}
-\item \href{#method-getAllTasks}{\code{Workflow$getAllTasks()}}
-\item \href{#method-getAllPlotTasks}{\code{Workflow$getAllPlotTasks()}}
-\item \href{#method-getActiveTasks}{\code{Workflow$getActiveTasks()}}
-\item \href{#method-getInactiveTasks}{\code{Workflow$getInactiveTasks()}}
-\item \href{#method-activateTasks}{\code{Workflow$activateTasks()}}
-\item \href{#method-inactivateTasks}{\code{Workflow$inactivateTasks()}}
-\item \href{#method-printReportingEngineInfo}{\code{Workflow$printReportingEngineInfo()}}
-\item \href{#method-getWatermark}{\code{Workflow$getWatermark()}}
-\item \href{#method-setWatermark}{\code{Workflow$setWatermark()}}
-\item \href{#method-setParameterDisplayPaths}{\code{Workflow$setParameterDisplayPaths()}}
-\item \href{#method-getParameterDisplayPaths}{\code{Workflow$getParameterDisplayPaths()}}
-\item \href{#method-setSimulationDescriptor}{\code{Workflow$setSimulationDescriptor()}}
-\item \href{#method-getSimulationDescriptor}{\code{Workflow$getSimulationDescriptor()}}
-\item \href{#method-print}{\code{Workflow$print()}}
-\item \href{#method-clone}{\code{Workflow$clone()}}
+\item \href{#method-Workflow-new}{\code{Workflow$new()}}
+\item \href{#method-Workflow-getAllTasks}{\code{Workflow$getAllTasks()}}
+\item \href{#method-Workflow-getAllPlotTasks}{\code{Workflow$getAllPlotTasks()}}
+\item \href{#method-Workflow-getActiveTasks}{\code{Workflow$getActiveTasks()}}
+\item \href{#method-Workflow-getInactiveTasks}{\code{Workflow$getInactiveTasks()}}
+\item \href{#method-Workflow-activateTasks}{\code{Workflow$activateTasks()}}
+\item \href{#method-Workflow-inactivateTasks}{\code{Workflow$inactivateTasks()}}
+\item \href{#method-Workflow-printReportingEngineInfo}{\code{Workflow$printReportingEngineInfo()}}
+\item \href{#method-Workflow-getWatermark}{\code{Workflow$getWatermark()}}
+\item \href{#method-Workflow-setWatermark}{\code{Workflow$setWatermark()}}
+\item \href{#method-Workflow-setParameterDisplayPaths}{\code{Workflow$setParameterDisplayPaths()}}
+\item \href{#method-Workflow-getParameterDisplayPaths}{\code{Workflow$getParameterDisplayPaths()}}
+\item \href{#method-Workflow-setSimulationDescriptor}{\code{Workflow$setSimulationDescriptor()}}
+\item \href{#method-Workflow-getSimulationDescriptor}{\code{Workflow$getSimulationDescriptor()}}
+\item \href{#method-Workflow-print}{\code{Workflow$print()}}
+\item \href{#method-Workflow-clone}{\code{Workflow$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Workflow-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Workflow-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new `Workflow` object.
 \subsection{Usage}{
@@ -72,6 +74,7 @@ Create a new `Workflow` object.
   watermark = NULL,
   simulationSetDescriptor = NULL,
   numberSections = TRUE,
+  reportTitle = NULL,
   theme = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -93,6 +96,9 @@ Create a new `Workflow` object.
 
 \item{\code{numberSections}}{logical defining if the report sections should be numbered}
 
+\item{\code{reportTitle}}{report title internally added as a cover page
+If `reportTitle` is an existing file, it will be merged to the report as cover page.}
+
 \item{\code{theme}}{A `Theme` object from `{tlf}` package}
 }
 \if{html}{\out{</div>}}
@@ -102,8 +108,8 @@ A new `Workflow` object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getAllTasks"></a>}}
-\if{latex}{\out{\hypertarget{method-getAllTasks}{}}}
+\if{html}{\out{<a id="method-Workflow-getAllTasks"></a>}}
+\if{latex}{\out{\hypertarget{method-Workflow-getAllTasks}{}}}
 \subsection{Method \code{getAllTasks()}}{
 Get a vector with all the names of the tasks within the `Workflow`
 \subsection{Usage}{
@@ -115,8 +121,8 @@ Vector of `Task` names
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getAllPlotTasks"></a>}}
-\if{latex}{\out{\hypertarget{method-getAllPlotTasks}{}}}
+\if{html}{\out{<a id="method-Workflow-getAllPlotTasks"></a>}}
+\if{latex}{\out{\hypertarget{method-Workflow-getAllPlotTasks}{}}}
 \subsection{Method \code{getAllPlotTasks()}}{
 Get a vector with all the names of the plot tasks within the `Workflow`
 \subsection{Usage}{
@@ -128,8 +134,8 @@ Vector of `PlotTask` names
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getActiveTasks"></a>}}
-\if{latex}{\out{\hypertarget{method-getActiveTasks}{}}}
+\if{html}{\out{<a id="method-Workflow-getActiveTasks"></a>}}
+\if{latex}{\out{\hypertarget{method-Workflow-getActiveTasks}{}}}
 \subsection{Method \code{getActiveTasks()}}{
 Get a vector with all the names of active tasks within the `Workflow`
 \subsection{Usage}{
@@ -141,8 +147,8 @@ Vector of active `Task` names
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getInactiveTasks"></a>}}
-\if{latex}{\out{\hypertarget{method-getInactiveTasks}{}}}
+\if{html}{\out{<a id="method-Workflow-getInactiveTasks"></a>}}
+\if{latex}{\out{\hypertarget{method-Workflow-getInactiveTasks}{}}}
 \subsection{Method \code{getInactiveTasks()}}{
 Get a vector with all the names of inactive tasks within the `Workflow`
 \subsection{Usage}{
@@ -154,8 +160,8 @@ Vector of inactive `Task` names
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-activateTasks"></a>}}
-\if{latex}{\out{\hypertarget{method-activateTasks}{}}}
+\if{html}{\out{<a id="method-Workflow-activateTasks"></a>}}
+\if{latex}{\out{\hypertarget{method-Workflow-activateTasks}{}}}
 \subsection{Method \code{activateTasks()}}{
 Activates a series of `Tasks` from current `Workflow`
 \subsection{Usage}{
@@ -165,7 +171,7 @@ Activates a series of `Tasks` from current `Workflow`
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{tasks}}{names of the worklfow tasks to activate.
+\item{\code{tasks}}{names of the workflow tasks to activate.
 Default activates all tasks of the workflow using workflow method `workflow$getAllTasks()`}
 }
 \if{html}{\out{</div>}}
@@ -175,8 +181,8 @@ Vector of inactive `Task` names
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-inactivateTasks"></a>}}
-\if{latex}{\out{\hypertarget{method-inactivateTasks}{}}}
+\if{html}{\out{<a id="method-Workflow-inactivateTasks"></a>}}
+\if{latex}{\out{\hypertarget{method-Workflow-inactivateTasks}{}}}
 \subsection{Method \code{inactivateTasks()}}{
 Inactivates a series of `Tasks` from current `Workflow`
 \subsection{Usage}{
@@ -186,7 +192,7 @@ Inactivates a series of `Tasks` from current `Workflow`
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{tasks}}{names of the worklfow tasks to inactivate.
+\item{\code{tasks}}{names of the workflow tasks to inactivate.
 Default inactivates all tasks of the workflow using workflow method `workflow$getAllTasks()`}
 }
 \if{html}{\out{</div>}}
@@ -196,28 +202,28 @@ Vector of inactive `Task` names
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-printReportingEngineInfo"></a>}}
-\if{latex}{\out{\hypertarget{method-printReportingEngineInfo}{}}}
+\if{html}{\out{<a id="method-Workflow-printReportingEngineInfo"></a>}}
+\if{latex}{\out{\hypertarget{method-Workflow-printReportingEngineInfo}{}}}
 \subsection{Method \code{printReportingEngineInfo()}}{
-Print reporting engine information obtained from initiliazing a `Workflow`
+Print reporting engine information obtained from initializing a `Workflow`
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Workflow$printReportingEngineInfo()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getWatermark"></a>}}
-\if{latex}{\out{\hypertarget{method-getWatermark}{}}}
+\if{html}{\out{<a id="method-Workflow-getWatermark"></a>}}
+\if{latex}{\out{\hypertarget{method-Workflow-getWatermark}{}}}
 \subsection{Method \code{getWatermark()}}{
-Get the current watermark to be reprted on figures background
+Get the current watermark to be reported on figures background
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Workflow$getWatermark()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setWatermark"></a>}}
-\if{latex}{\out{\hypertarget{method-setWatermark}{}}}
+\if{html}{\out{<a id="method-Workflow-setWatermark"></a>}}
+\if{latex}{\out{\hypertarget{method-Workflow-setWatermark}{}}}
 \subsection{Method \code{setWatermark()}}{
 Set the watermark to be reported on figure background.
 The default value `NULL` leads to check if the computer has a validated environment.
@@ -241,8 +247,8 @@ Any user-defined text will overwrite this default feature and be reported on the
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setParameterDisplayPaths"></a>}}
-\if{latex}{\out{\hypertarget{method-setParameterDisplayPaths}{}}}
+\if{html}{\out{<a id="method-Workflow-setParameterDisplayPaths"></a>}}
+\if{latex}{\out{\hypertarget{method-Workflow-setParameterDisplayPaths}{}}}
 \subsection{Method \code{setParameterDisplayPaths()}}{
 Set mapping between parameters and their display paths in workflow
 to replace standard display of parameter paths.
@@ -260,8 +266,8 @@ Variables of the data.frame should include `parameter` and `displayPath`.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getParameterDisplayPaths"></a>}}
-\if{latex}{\out{\hypertarget{method-getParameterDisplayPaths}{}}}
+\if{html}{\out{<a id="method-Workflow-getParameterDisplayPaths"></a>}}
+\if{latex}{\out{\hypertarget{method-Workflow-getParameterDisplayPaths}{}}}
 \subsection{Method \code{getParameterDisplayPaths()}}{
 Get mapping between parameters and their display paths in workflow
 to replace standard display of parameter paths.
@@ -274,8 +280,8 @@ A data.frame with `parameter` and `displayPath` variables.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setSimulationDescriptor"></a>}}
-\if{latex}{\out{\hypertarget{method-setSimulationDescriptor}{}}}
+\if{html}{\out{<a id="method-Workflow-setSimulationDescriptor"></a>}}
+\if{latex}{\out{\hypertarget{method-Workflow-setSimulationDescriptor}{}}}
 \subsection{Method \code{setSimulationDescriptor()}}{
 Set descriptor of simulation sets indicated in reports
 \subsection{Usage}{
@@ -291,8 +297,8 @@ Set descriptor of simulation sets indicated in reports
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getSimulationDescriptor"></a>}}
-\if{latex}{\out{\hypertarget{method-getSimulationDescriptor}{}}}
+\if{html}{\out{<a id="method-Workflow-getSimulationDescriptor"></a>}}
+\if{latex}{\out{\hypertarget{method-Workflow-getSimulationDescriptor}{}}}
 \subsection{Method \code{getSimulationDescriptor()}}{
 Get descriptor of simulation sets indicated in reports
 \subsection{Usage}{
@@ -304,8 +310,8 @@ character Descriptor of simulation sets
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-Workflow-print"></a>}}
+\if{latex}{\out{\hypertarget{method-Workflow-print}{}}}
 \subsection{Method \code{print()}}{
 Print workflow list of tasks
 \subsection{Usage}{
@@ -317,8 +323,8 @@ Task list information
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Workflow-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Workflow-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

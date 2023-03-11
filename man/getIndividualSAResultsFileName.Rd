@@ -12,6 +12,6 @@ getIndividualSAResultsFileName(individualId, resultsFileName)
 \item{resultsFileName}{root name of population sensitivity analysis results CSV files}
 }
 \description{
-Function to build name of inidividual SA results file
+Function to build name of individual SA results file
 }
 \keyword{internal}

@@ -4,12 +4,10 @@
 \alias{plotMeanGoodnessOfFit}
 \title{plotMeanGoodnessOfFit}
 \usage{
-plotMeanGoodnessOfFit(structureSet, logFolder = getwd(), settings = NULL)
+plotMeanGoodnessOfFit(structureSet, settings = NULL)
 }
 \arguments{
 \item{structureSet}{`SimulationStructure` R6 class object}
-
-\item{logFolder}{folder where the logs are saved}
 
 \item{settings}{List of settings such as `PlotConfiguration` R6 class objects for each goodness of fit plot}
 }

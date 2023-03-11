@@ -75,7 +75,7 @@ getDefaultFileName <- function(..., suffix, extension = "csv", sep = "-") {
 #' @description Create a default folder name for reporting engine results and figures
 #' @param ... names
 #' @param suffix Suffix to be added at the end of the folder name.
-#' Dafault `suffix` is the curent date
+#' Default `suffix` is the current date
 #' @param sep separation between names and suffix. Default is `-`
 #' @return default filename adding default suffix and file extension
 #' @keywords internal
@@ -112,17 +112,17 @@ defaultWorkflowAppendices <- list(
 )
 
 defaultWorkflowMessages <- list(
-  "simulate" = "Perform simulation task",
-  "calculatePKParameters" = "Calculate PK parameters task",
-  "sensitivityAnalysis" = "Perform sensitivity analysis task",
+  "simulate" = "Simulation task",
+  "calculatePKParameters" = "Calculate PK Parameters task",
+  "sensitivityAnalysis" = "Sensitivity Analysis task",
   "plotGoF" = "Plot Time profiles and Residuals task",
-  "plotPKParameters" = "Plot PK parameters task",
+  "plotPKParameters" = "Plot PK Parameters task",
   "plotMassBalance" = "Plot Mass Balance task",
   "plotAbsorption" = "Plot Absorption task",
   "plotSensitivity" = "Plot Sensitivity task",
   "plotDemography" = "Plot Demography task",
   "plotTimeProfiles" = "Plot Time Profiles task",
-  "plotGOFMerged" = "Plot merged Goodness of fit task",
+  "plotGOFMerged" = "Plot Merged Goodness of Fit task",
   "plotComparisonTimeProfiles" = "Plot Comparison Time Profiles task",
   "plotPKRatio" = "Plot PK Ratio task",
   "plotDDIRatio" = "Plot DDI Ratio task"

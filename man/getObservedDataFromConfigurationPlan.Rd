@@ -4,18 +4,12 @@
 \alias{getObservedDataFromConfigurationPlan}
 \title{getObservedDataFromConfigurationPlan}
 \usage{
-getObservedDataFromConfigurationPlan(
-  observedDataId,
-  configurationPlan,
-  logFolder
-)
+getObservedDataFromConfigurationPlan(observedDataId, configurationPlan)
 }
 \arguments{
 \item{observedDataId}{Identifier of observed data}
 
 \item{configurationPlan}{A `ConfigurationPlan` object that includes methods to find the data}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \value{
 list of including data and metaData to perform time profile plot

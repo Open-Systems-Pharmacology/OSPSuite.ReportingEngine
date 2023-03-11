@@ -4,10 +4,12 @@
 \alias{getSmartZoomLimits}
 \title{getSmartZoomLimits}
 \usage{
-getSmartZoomLimits(dataVector)
+getSmartZoomLimits(dataVector, residualsVsObserved = FALSE)
 }
 \arguments{
 \item{dataVector}{a numeric vector containing the x or y values of datapoints to be plotted}
+
+\item{residualsVsObserved}{A logical values indicating if DDI Ratios are plotted as residuals vs observed}
 }
 \value{
 a list containing the minimum and maximum axes limits

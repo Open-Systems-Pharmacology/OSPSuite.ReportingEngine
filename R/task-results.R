@@ -1,7 +1,7 @@
 #' @title TaskResults
 #' @description  R6 class for TaskResults settings
-#' @field id unique identifer of results, helps in deriving final plot name
-#' @field sectionId unique identifer of section results, used only by qualification workflows
+#' @field id unique identifier of results, helps in deriving final plot name
+#' @field sectionId unique identifier of section results, used only by qualification workflows
 #' @field plot `ggplot` object corresponding to the figure to be saved
 #' @field plotCaption text included into the report explaining the figure
 #' @field includePlot logical indicating if the plot should be included in final report
@@ -30,8 +30,7 @@ TaskResults <- R6::R6Class(
     #' @description
     #' Save ggplot figure, available as plot task result, into a file
     #' @param fileName path of file corresponding to the figure to save
-    #' @param logFolder folder were logs are saved
-    saveFigure = function(fileName, logFolder = getwd()) {
+    saveFigure = function(fileName) {
       if (isEmpty(self$plot)) {
         return()
       }
@@ -45,28 +44,19 @@ TaskResults <- R6::R6Class(
         dpi = reEnv$defaultPlotFormat$dpi,
         units = self$plot$plotConfiguration$export$units %||% reEnv$defaultPlotFormat$units
       )
-      logWorkflow(
-        message = paste0("Figure '", fileName, "' was successfully saved."),
-        pathFolder = logFolder,
-        logTypes = LogTypes$Debug
-      )
+      logDebug(paste0("Figure '", fileName, "' was successfully saved."))
       re.tStoreFileMetadata(access = "write", filePath = fileName)
     },
 
     #' @description
     #' Save data.frame, available as table task result, into a csv file
     #' @param fileName path of csv file corresponding to the table to save
-    #' @param logFolder folder were logs are saved
-    saveTable = function(fileName, logFolder = getwd()) {
+    saveTable = function(fileName) {
       if (isEmpty(self$table)) {
         return()
       }
       write.csv(self$table, file = fileName, row.names = FALSE, fileEncoding = "UTF-8")
-      logWorkflow(
-        message = paste0("Table '", fileName, "' was successfully saved."),
-        pathFolder = logFolder,
-        logTypes = LogTypes$Debug
-      )
+      logDebug(paste0("Table '", fileName, "' was successfully saved."))
       re.tStoreFileMetadata(access = "write", filePath = fileName)
     },
 
@@ -76,8 +66,7 @@ TaskResults <- R6::R6Class(
     #' @param reportFile markdown file in which the figure and its caption should be added
     #' @param fileRelativePath figure path relative to `reportFile` location
     #' @param fileRootDirectory root/working directory needed by `tracelib` package
-    #' @param logFolder folder were logs are saved
-    addFigureToReport = function(reportFile, fileRelativePath, fileRootDirectory, logFolder = getwd()) {
+    addFigureToReport = function(reportFile, fileRelativePath, fileRootDirectory) {
       if (isEmpty(self$plot)) {
         return()
       }
@@ -86,17 +75,16 @@ TaskResults <- R6::R6Class(
       if (isFALSE(self$includePlot)) {
         return()
       }
+      if (!isEmpty(self$plotCaption)) {
+        addTextChunk(reportFile, paste0("**Figure: ", self$plotCaption, "**"))
+      }
       addFigureChunk(
         fileName = reportFile,
         figureFileRelativePath = fileRelativePath,
-        figureFileRootDirectory = fileRootDirectory,
-        logFolder = logFolder
+        figureFileRootDirectory = fileRootDirectory
       )
-      if (!isEmpty(self$plotCaption)) {
-        addTextChunk(reportFile, paste0("**Figure: ", self$plotCaption, "**"), logFolder = logFolder)
-      }
       # Enforce 2 blank lines using html notation to improve report clarity
-      addTextChunk(reportFile, rep("<br>", reEnv$blankLinesBetweenArtifacts), logFolder = logFolder)
+      addTextChunk(reportFile, rep("<br>", reEnv$blankLinesBetweenArtifacts))
     },
 
     #' @description
@@ -106,8 +94,7 @@ TaskResults <- R6::R6Class(
     #' @param fileRootDirectory root/working directory needed by `tracelib` package
     #' @param digits number of decimal digits in displayed numbers
     #' @param scientific logical defining if displayed numbers use scientific writing
-    #' @param logFolder folder were logs are saved
-    addTableToReport = function(reportFile, fileRelativePath, fileRootDirectory, digits = NULL, scientific = NULL, logFolder = getwd()) {
+    addTableToReport = function(reportFile, fileRelativePath, fileRootDirectory, digits = NULL, scientific = NULL) {
       if (isEmpty(self$table)) {
         return()
       }
@@ -117,41 +104,39 @@ TaskResults <- R6::R6Class(
         return()
       }
       if (!isEmpty(self$tableCaption)) {
-        addTextChunk(reportFile, paste0("**Table: ", self$tableCaption, "**"), logFolder = logFolder)
+        addTextChunk(reportFile, paste0("**Table: ", self$tableCaption, "**"))
       }
       addTableChunk(
         fileName = reportFile,
         tableFileRelativePath = fileRelativePath,
         tableFileRootDirectory = fileRootDirectory,
         digits = digits,
-        scientific = scientific,
-        logFolder = logFolder
+        scientific = scientific
       )
       # Enforce blank lines using html notation to improve report clarity
-      addTextChunk(reportFile, rep("<br>", reEnv$blankLinesBetweenArtifacts), logFolder = logFolder)
+      addTextChunk(reportFile, rep("<br>", reEnv$blankLinesBetweenArtifacts))
     },
 
 
     #' @description
     #' Write markdown content that adds text, available as textChunk task result, into a markdown report
     #' @param reportFile markdown file in which the text should be added
-    #' @param logFolder folder were logs are saved
-    addTextChunkToReport = function(reportFile , logFolder = getwd()) {
+    addTextChunkToReport = function(reportFile) {
       if (isEmpty(self$textChunk)) {
         return()
       }
       if (isFALSE(self$includeTextChunk)) {
         return()
       }
-      addTextChunk(reportFile, self$textChunk, logFolder = logFolder)
+      addTextChunk(reportFile, self$textChunk)
     }
   )
 )
 
 #' @title saveTaskResults
 #' @description  Save task results within a `TaskResults` object
-#' @param id unique identifer of results, helps in deriving final plot name
-#' @param sectionId unique identifer of section results, used only by qualification workflows
+#' @param id unique identifier of results, helps in deriving final plot name
+#' @param sectionId unique identifier of section results, used only by qualification workflows
 #' @param plot `ggplot` object corresponding to the figure to be saved
 #' @param plotCaption text included into the report explaining the figure
 #' @param includePlot logical indicating if the plot should be included in final report
@@ -164,7 +149,7 @@ TaskResults <- R6::R6Class(
 #' @return A `TaskResults` object
 #' @import ospsuite.utils
 #' @export
-saveTaskResults <- function(id = NULL, sectionId = NULL, plot = NULL, plotCaption = NULL, includePlot = NULL, table = NULL, tableCaption = NULL, includeTable = NULL , textChunk = NULL, includeTextChunk = NULL , taskResults = NULL) {
+saveTaskResults <- function(id = NULL, sectionId = NULL, plot = NULL, plotCaption = NULL, includePlot = NULL, table = NULL, tableCaption = NULL, includeTable = NULL, textChunk = NULL, includeTextChunk = NULL, taskResults = NULL) {
   taskResults <- taskResults %||% TaskResults$new()
   eval(parseVariableToObject(
     objectName = "taskResults",
@@ -173,5 +158,3 @@ saveTaskResults <- function(id = NULL, sectionId = NULL, plot = NULL, plotCaptio
   ))
   return(taskResults)
 }
-
-

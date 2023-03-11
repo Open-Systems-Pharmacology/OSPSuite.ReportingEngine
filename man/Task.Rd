@@ -34,7 +34,7 @@ Other workflow tasks:
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{active}}{logical indicating if `Task` is performed in a worklfow.}
+\item{\code{active}}{logical indicating if `Task` is performed in a workflow.}
 
 \item{\code{outputFolder}}{List of output files/folders to save the task output}
 
@@ -49,21 +49,21 @@ Other workflow tasks:
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Task$new()}}
-\item \href{#method-activate}{\code{Task$activate()}}
-\item \href{#method-inactivate}{\code{Task$inactivate()}}
-\item \href{#method-validateInput}{\code{Task$validateInput()}}
-\item \href{#method-validateStructureSetInput}{\code{Task$validateStructureSetInput()}}
-\item \href{#method-print}{\code{Task$print()}}
-\item \href{#method-getRelativePath}{\code{Task$getRelativePath()}}
-\item \href{#method-getAbsolutePath}{\code{Task$getAbsolutePath()}}
-\item \href{#method-getInputs}{\code{Task$getInputs()}}
-\item \href{#method-clone}{\code{Task$clone()}}
+\item \href{#method-Task-new}{\code{Task$new()}}
+\item \href{#method-Task-activate}{\code{Task$activate()}}
+\item \href{#method-Task-inactivate}{\code{Task$inactivate()}}
+\item \href{#method-Task-validateInput}{\code{Task$validateInput()}}
+\item \href{#method-Task-validateStructureSetInput}{\code{Task$validateStructureSetInput()}}
+\item \href{#method-Task-print}{\code{Task$print()}}
+\item \href{#method-Task-getRelativePath}{\code{Task$getRelativePath()}}
+\item \href{#method-Task-getAbsolutePath}{\code{Task$getAbsolutePath()}}
+\item \href{#method-Task-getInputs}{\code{Task$getInputs()}}
+\item \href{#method-Task-clone}{\code{Task$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Task-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Task-new}{}}}
 \subsection{Method \code{new()}}{
 Create a `Task` object
 \subsection{Usage}{
@@ -94,7 +94,7 @@ Create a `Task` object
 
 \item{\code{settings}}{specific settings for task (e.g. plot configurations)}
 
-\item{\code{active}}{logical indicating if `Task` is performed in a worklfow.
+\item{\code{active}}{logical indicating if `Task` is performed in a workflow.
 Default value is `FALSE`}
 
 \item{\code{message}}{message of the `Task`.}
@@ -106,8 +106,8 @@ A new `Task` object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-activate"></a>}}
-\if{latex}{\out{\hypertarget{method-activate}{}}}
+\if{html}{\out{<a id="method-Task-activate"></a>}}
+\if{latex}{\out{\hypertarget{method-Task-activate}{}}}
 \subsection{Method \code{activate()}}{
 Activate `Task`
 \subsection{Usage}{
@@ -116,8 +116,8 @@ Activate `Task`
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-inactivate"></a>}}
-\if{latex}{\out{\hypertarget{method-inactivate}{}}}
+\if{html}{\out{<a id="method-Task-inactivate"></a>}}
+\if{latex}{\out{\hypertarget{method-Task-inactivate}{}}}
 \subsection{Method \code{inactivate()}}{
 Inactivate `Task`
 \subsection{Usage}{
@@ -126,8 +126,8 @@ Inactivate `Task`
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-validateInput"></a>}}
-\if{latex}{\out{\hypertarget{method-validateInput}{}}}
+\if{html}{\out{<a id="method-Task-validateInput"></a>}}
+\if{latex}{\out{\hypertarget{method-Task-validateInput}{}}}
 \subsection{Method \code{validateInput()}}{
 Check if `Task` inputs exist
 \subsection{Usage}{
@@ -139,8 +139,8 @@ logical indicating if input is valid
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-validateStructureSetInput"></a>}}
-\if{latex}{\out{\hypertarget{method-validateStructureSetInput}{}}}
+\if{html}{\out{<a id="method-Task-validateStructureSetInput"></a>}}
+\if{latex}{\out{\hypertarget{method-Task-validateStructureSetInput}{}}}
 \subsection{Method \code{validateStructureSetInput()}}{
 Check if a task input from a specific `SimulationStructure` is valid
 \subsection{Usage}{
@@ -159,8 +159,8 @@ logical indicating if input is valid
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-Task-print"></a>}}
+\if{latex}{\out{\hypertarget{method-Task-print}{}}}
 \subsection{Method \code{print()}}{
 Print `Task` features
 \subsection{Usage}{
@@ -172,8 +172,8 @@ Text of task features
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getRelativePath"></a>}}
-\if{latex}{\out{\hypertarget{method-getRelativePath}{}}}
+\if{html}{\out{<a id="method-Task-getRelativePath"></a>}}
+\if{latex}{\out{\hypertarget{method-Task-getRelativePath}{}}}
 \subsection{Method \code{getRelativePath()}}{
 Get the relative path to a file to be output by this task
 \subsection{Usage}{
@@ -192,8 +192,8 @@ Output file's relative path
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getAbsolutePath"></a>}}
-\if{latex}{\out{\hypertarget{method-getAbsolutePath}{}}}
+\if{html}{\out{<a id="method-Task-getAbsolutePath"></a>}}
+\if{latex}{\out{\hypertarget{method-Task-getAbsolutePath}{}}}
 \subsection{Method \code{getAbsolutePath()}}{
 Get the absolute path to a file to be output by this task
 \subsection{Usage}{
@@ -212,8 +212,8 @@ Output file's absolute path
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getInputs"></a>}}
-\if{latex}{\out{\hypertarget{method-getInputs}{}}}
+\if{html}{\out{<a id="method-Task-getInputs"></a>}}
+\if{latex}{\out{\hypertarget{method-Task-getInputs}{}}}
 \subsection{Method \code{getInputs()}}{
 Get `Task` required input files
 \subsection{Usage}{
@@ -225,8 +225,8 @@ Required file names
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Task-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Task-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

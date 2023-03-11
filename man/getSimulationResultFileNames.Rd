@@ -23,7 +23,6 @@ myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
 
 # Get expected paths and file names for workflow
 getSimulationResultFileNames(myWorkflow)
-
 }
 
 }
@@ -36,16 +35,21 @@ Other workflow helpers:
 \code{\link{addYParametersForDemogrpahyPlot}()},
 \code{\link{addYParametersForPKParametersPlot}()},
 \code{\link{checkTaskInputsExist}()},
+\code{\link{createWorkflowFromExcelInput}()},
 \code{\link{getMeanSensitivityAnalysisResultsFileNames}()},
 \code{\link{getOutputPathsInSimulationSet}()},
 \code{\link{getPKAnalysisResultsFileNames}()},
+\code{\link{getPKParameterGroupsInOutput}()},
 \code{\link{getPKParametersInOutput}()},
 \code{\link{getPKParametersInSimulationSet}()},
+\code{\link{getPopulationPKData}()},
+\code{\link{getPopulationPKMetaData}()},
 \code{\link{getPopulationSensitivityAnalysisResultsFileNames}()},
 \code{\link{getSimulationDescriptor}()},
 \code{\link{getSimulationParameterDisplayPaths}()},
 \code{\link{getTaskInputs}()},
 \code{\link{getWorkflowParameterDisplayPaths}()},
+\code{\link{getWorkflowReferencePopulationName}()},
 \code{\link{getXParametersForDemogrpahyPlot}()},
 \code{\link{getXParametersForPKParametersPlot}()},
 \code{\link{getYParametersForDemogrpahyPlot}()},

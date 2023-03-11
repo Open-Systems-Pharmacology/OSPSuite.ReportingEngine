@@ -6,7 +6,6 @@
 \usage{
 plotDemographyParameters(
   structureSets,
-  logFolder = getwd(),
   settings = NULL,
   workflowType = PopulationWorkflowTypes$parallelComparison,
   xParameters = getDefaultDemographyXParameters(workflowType),
@@ -15,8 +14,6 @@ plotDemographyParameters(
 }
 \arguments{
 \item{structureSets}{`SimulationStructure` R6 class object}
-
-\item{logFolder}{folder where the logs are saved}
 
 \item{settings}{list of settings for the output table/plot}
 

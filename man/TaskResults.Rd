@@ -10,9 +10,9 @@ R6 class for TaskResults settings
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{id}}{unique identifer of results, helps in deriving final plot name}
+\item{\code{id}}{unique identifier of results, helps in deriving final plot name}
 
-\item{\code{sectionId}}{unique identifer of section results, used only by qualification workflows}
+\item{\code{sectionId}}{unique identifier of section results, used only by qualification workflows}
 
 \item{\code{plot}}{`ggplot` object corresponding to the figure to be saved}
 
@@ -35,64 +35,55 @@ R6 class for TaskResults settings
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-saveFigure}{\code{TaskResults$saveFigure()}}
-\item \href{#method-saveTable}{\code{TaskResults$saveTable()}}
-\item \href{#method-addFigureToReport}{\code{TaskResults$addFigureToReport()}}
-\item \href{#method-addTableToReport}{\code{TaskResults$addTableToReport()}}
-\item \href{#method-addTextChunkToReport}{\code{TaskResults$addTextChunkToReport()}}
+\item \href{#method-TaskResults-saveFigure}{\code{TaskResults$saveFigure()}}
+\item \href{#method-TaskResults-saveTable}{\code{TaskResults$saveTable()}}
+\item \href{#method-TaskResults-addFigureToReport}{\code{TaskResults$addFigureToReport()}}
+\item \href{#method-TaskResults-addTableToReport}{\code{TaskResults$addTableToReport()}}
+\item \href{#method-TaskResults-addTextChunkToReport}{\code{TaskResults$addTextChunkToReport()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-saveFigure"></a>}}
-\if{latex}{\out{\hypertarget{method-saveFigure}{}}}
+\if{html}{\out{<a id="method-TaskResults-saveFigure"></a>}}
+\if{latex}{\out{\hypertarget{method-TaskResults-saveFigure}{}}}
 \subsection{Method \code{saveFigure()}}{
 Save ggplot figure, available as plot task result, into a file
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TaskResults$saveFigure(fileName, logFolder = getwd())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TaskResults$saveFigure(fileName)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{fileName}}{path of file corresponding to the figure to save}
-
-\item{\code{logFolder}}{folder were logs are saved}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-saveTable"></a>}}
-\if{latex}{\out{\hypertarget{method-saveTable}{}}}
+\if{html}{\out{<a id="method-TaskResults-saveTable"></a>}}
+\if{latex}{\out{\hypertarget{method-TaskResults-saveTable}{}}}
 \subsection{Method \code{saveTable()}}{
 Save data.frame, available as table task result, into a csv file
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TaskResults$saveTable(fileName, logFolder = getwd())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TaskResults$saveTable(fileName)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{fileName}}{path of csv file corresponding to the table to save}
-
-\item{\code{logFolder}}{folder were logs are saved}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-addFigureToReport"></a>}}
-\if{latex}{\out{\hypertarget{method-addFigureToReport}{}}}
+\if{html}{\out{<a id="method-TaskResults-addFigureToReport"></a>}}
+\if{latex}{\out{\hypertarget{method-TaskResults-addFigureToReport}{}}}
 \subsection{Method \code{addFigureToReport()}}{
 Write markdown content that adds a figure, available as plot task result, into a markdown report
 To be displayed, figure path must be relative to report location
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TaskResults$addFigureToReport(
-  reportFile,
-  fileRelativePath,
-  fileRootDirectory,
-  logFolder = getwd()
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TaskResults$addFigureToReport(reportFile, fileRelativePath, fileRootDirectory)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -103,15 +94,13 @@ To be displayed, figure path must be relative to report location
 \item{\code{fileRelativePath}}{figure path relative to `reportFile` location}
 
 \item{\code{fileRootDirectory}}{root/working directory needed by `tracelib` package}
-
-\item{\code{logFolder}}{folder were logs are saved}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-addTableToReport"></a>}}
-\if{latex}{\out{\hypertarget{method-addTableToReport}{}}}
+\if{html}{\out{<a id="method-TaskResults-addTableToReport"></a>}}
+\if{latex}{\out{\hypertarget{method-TaskResults-addTableToReport}{}}}
 \subsection{Method \code{addTableToReport()}}{
 Write markdown content that adds a data.frame, available as table task result, into a markdown report
 \subsection{Usage}{
@@ -120,8 +109,7 @@ Write markdown content that adds a data.frame, available as table task result, i
   fileRelativePath,
   fileRootDirectory,
   digits = NULL,
-  scientific = NULL,
-  logFolder = getwd()
+  scientific = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -137,27 +125,23 @@ Write markdown content that adds a data.frame, available as table task result, i
 \item{\code{digits}}{number of decimal digits in displayed numbers}
 
 \item{\code{scientific}}{logical defining if displayed numbers use scientific writing}
-
-\item{\code{logFolder}}{folder were logs are saved}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-addTextChunkToReport"></a>}}
-\if{latex}{\out{\hypertarget{method-addTextChunkToReport}{}}}
+\if{html}{\out{<a id="method-TaskResults-addTextChunkToReport"></a>}}
+\if{latex}{\out{\hypertarget{method-TaskResults-addTextChunkToReport}{}}}
 \subsection{Method \code{addTextChunkToReport()}}{
 Write markdown content that adds text, available as textChunk task result, into a markdown report
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TaskResults$addTextChunkToReport(reportFile, logFolder = getwd())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TaskResults$addTextChunkToReport(reportFile)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{reportFile}}{markdown file in which the text should be added}
-
-\item{\code{logFolder}}{folder were logs are saved}
 }
 \if{html}{\out{</div>}}
 }

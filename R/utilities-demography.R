@@ -1,7 +1,6 @@
 #' @title plotDemographyParameters
 #' @description Plot demography parameters box plots and tables
 #' @param structureSets `SimulationStructure` R6 class object
-#' @param logFolder folder where the logs are saved
 #' @param settings list of settings for the output table/plot
 #' @param workflowType workflowType Type of population workflow.
 #' Use enum `PopulationWorkflowTypes` to get list of workflow types.
@@ -14,7 +13,6 @@
 #' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotDemographyParameters <- function(structureSets,
-                                     logFolder = getwd(),
                                      settings = NULL,
                                      workflowType = PopulationWorkflowTypes$parallelComparison,
                                      xParameters = getDefaultDemographyXParameters(workflowType),
@@ -35,8 +33,8 @@ plotDemographyParameters <- function(structureSets,
   demographyMetaData <- demographyAcrossPopulations$metaData
   simulationSetNames <- unique(as.character(demographyData$simulationSetName))
 
-  checkIsIncluded(xParameters, names(demographyData), nullAllowed = TRUE, groupName = "demography variable names across simulation sets", logFolder = logFolder)
-  checkIsIncluded(yParameters, names(demographyData), nullAllowed = TRUE, groupName = "demography variable names across simulation sets", logFolder = logFolder)
+  checkIsIncluded(xParameters, names(demographyData), nullAllowed = TRUE, groupName = "demography variable names across simulation sets")
+  checkIsIncluded(yParameters, names(demographyData), nullAllowed = TRUE, groupName = "demography variable names across simulation sets")
   xParameters <- intersect(xParameters, names(demographyData))
   yParameters <- intersect(yParameters, names(demographyData))
 
@@ -44,12 +42,19 @@ plotDemographyParameters <- function(structureSets,
     referenceSimulationSetName <- getReferencePopulationName(structureSets)
   }
 
-  if (isOfLength(xParameters, 0)) {
+  if (isEmpty(xParameters)) {
     # Pediatric: comparison histogram
     if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
       for (parameterName in yParameters) {
-        resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", parameterName)
+        sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", parameterName)
         parameterCaption <- demographyMetaData[[parameterName]]$dimension
+
+        # Create sub level title for parameter name
+        demographyResults[[sectionId]] <- saveTaskResults(
+          id = sectionId,
+          textChunk = captions$demography$parameterSection(sectionId, parameterCaption),
+          includeTextChunk = TRUE
+        )
 
         histogramMapping <- tlf::HistogramDataMapping$new(
           x = parameterName,
@@ -62,30 +67,47 @@ plotDemographyParameters <- function(structureSets,
           plotConfiguration = settings$plotConfigurations[["histogram"]],
           bins = settings$bins %||% AggregationConfiguration$bins
         )
-        
+
         # Save results
+        resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", parameterName)
         demographyResults[[resultID]] <- saveTaskResults(
           id = resultID,
           plot = demographyHistogram,
           plotCaption = captions$demography$histogram(
-            parameterCaption, 
-            simulationSetNames, 
+            parameterCaption,
+            simulationSetNames,
             simulationSetDescriptor
-            )
+          )
         )
       }
     }
     # Parallel and Ratio: histograms per population
     if (workflowType %in% c(PopulationWorkflowTypes$parallelComparison, PopulationWorkflowTypes$ratioComparison)) {
       for (parameterName in yParameters) {
+        sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", parameterName)
         parameterCaption <- demographyMetaData[[parameterName]]$dimension
+
+        # Create sub level title for parameter name
+        demographyResults[[sectionId]] <- saveTaskResults(
+          id = sectionId,
+          textChunk = captions$demography$parameterSection(sectionId, parameterCaption),
+          includeTextChunk = TRUE
+        )
 
         histogramMapping <- tlf::HistogramDataMapping$new(
           x = parameterName,
           fill = "simulationSetName"
         )
         for (simulationSetName in simulationSetNames) {
-          resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", parameterName)
+          sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", parameterName)
+
+          # Create a sub level title for population
+          demographyResults[[sectionId]] <- saveTaskResults(
+            id = sectionId,
+            textChunk = captions$demography$populationSection(sectionId, simulationSetName, simulationSetDescriptor, level = 3),
+            includeTextChunk = TRUE
+          )
+
           demographyDataByPopulation <- demographyData[demographyData$simulationSetName %in% simulationSetName, ]
 
           demographyHistogram <- plotDemographyHistogram(
@@ -95,16 +117,17 @@ plotDemographyParameters <- function(structureSets,
             plotConfiguration = settings$plotConfigurations[["histogram"]],
             bins = settings$bins %||% AggregationConfiguration$bins
           )
-          
+
           # Save results
+          resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", parameterName)
           demographyResults[[resultID]] <- saveTaskResults(
             id = resultID,
             plot = demographyHistogram,
             plotCaption = captions$demography$histogram(
-              parameterCaption, 
-              simulationSetName, 
+              parameterCaption,
+              simulationSetName,
               simulationSetDescriptor
-              )
+            )
           )
         }
       }
@@ -117,6 +140,15 @@ plotDemographyParameters <- function(structureSets,
     if (demographyMetaData[[demographyParameter]]$class %in% "character") {
       next
     }
+    xParameterCaption <- demographyMetaData[[demographyParameter]]$dimension
+    sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter)
+
+    # Create level title for x parameter name
+    demographyResults[[sectionId]] <- saveTaskResults(
+      id = sectionId,
+      textChunk = captions$demography$xParameterSection(sectionId, xParameterCaption),
+      includeTextChunk = TRUE
+    )
     # This aims at preventing plots such as age vs age
     for (parameterName in setdiff(yParameters, demographyParameter)) {
       # Categorical variables won't be plotted
@@ -126,6 +158,15 @@ plotDemographyParameters <- function(structureSets,
       vpcMetaData <- list(
         "x" = demographyMetaData[[demographyParameter]],
         "median" = demographyMetaData[[parameterName]]
+      )
+      yParameterCaption <- vpcMetaData$median$dimension
+      sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName)
+
+      # Create sub level title for y parameter name
+      demographyResults[[sectionId]] <- saveTaskResults(
+        id = sectionId,
+        textChunk = captions$demography$yParameterSection(sectionId, yParameterCaption),
+        includeTextChunk = TRUE
       )
 
       # For pediatric workflow, range plots compare reference population to the other populations
@@ -148,6 +189,14 @@ plotDemographyParameters <- function(structureSets,
 
         # Range plot comparisons with reference
         for (simulationSetName in simulationSetNames[!simulationSetNames %in% referenceSimulationSetName]) {
+          sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName)
+          # Create sub level title for population
+          demographyResults[[sectionId]] <- saveTaskResults(
+            id = sectionId,
+            textChunk = captions$demography$populationSection(sectionId, simulationSetName, simulationSetDescriptor),
+            includeTextChunk = TRUE
+          )
+
           comparisonData <- demographyData[demographyData$simulationSetName %in% simulationSetName, ]
           comparisonData <- getDemographyAggregatedData(
             data = comparisonData,
@@ -163,9 +212,6 @@ plotDemographyParameters <- function(structureSets,
             metaData = vpcMetaData,
             plotObject = referenceVpcPlot
           )
-          
-          xParameterCaption <- vpcMetaData$x$dimension
-          yParameterCaption <- vpcMetaData$median$dimension
 
           # Save comparison vpc plots
           resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName)
@@ -180,10 +226,10 @@ plotDemographyParameters <- function(structureSets,
               referenceSetName = referenceSimulationSetName
             )
           )
-          
+
           vpcLogLimits <- autoAxesLimits(c(comparisonData$ymin, comparisonData$median, comparisonData$ymax), scale = "log")
           vpcLogTicks <- autoAxesTicksFromLimits(vpcLogLimits)
-          
+
           resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName, "log")
           demographyResults[[resultID]] <- saveTaskResults(
             id = resultID,
@@ -207,6 +253,14 @@ plotDemographyParameters <- function(structureSets,
 
       # Simple range plots
       for (simulationSetName in simulationSetNames) {
+        sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName)
+        # Create sub level title for population
+        demographyResults[[sectionId]] <- saveTaskResults(
+          id = sectionId,
+          textChunk = captions$demography$populationSection(sectionId, simulationSetName, simulationSetDescriptor),
+          includeTextChunk = TRUE
+        )
+
         vpcData <- demographyData[demographyData$simulationSetName %in% simulationSetName, ]
         vpcData <- getDemographyAggregatedData(
           data = vpcData,
@@ -222,10 +276,10 @@ plotDemographyParameters <- function(structureSets,
           metaData = vpcMetaData,
           plotConfiguration = settings$plotConfigurations[["vpcParameterPlot"]]
         )
-        
+
         xParameterCaption <- vpcMetaData$x$dimension
         yParameterCaption <- vpcMetaData$median$dimension
-        
+
         # Save comparison vpc plots
         resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName)
         demographyResults[[resultID]] <- saveTaskResults(
@@ -236,12 +290,12 @@ plotDemographyParameters <- function(structureSets,
             yParameterCaption,
             simulationSetName,
             simulationSetDescriptor
-            )
+          )
         )
-        
+
         vpcLogLimits <- autoAxesLimits(c(vpcData$ymin, vpcData$median, vpcData$ymax), scale = "log")
         vpcLogTicks <- autoAxesTicksFromLimits(vpcLogLimits)
-        
+
         resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName, "log")
         demographyResults[[resultID]] <- saveTaskResults(
           id = resultID,
@@ -272,7 +326,7 @@ getDemographyAcrossPopulations <- function(structureSets) {
   {
     population <- loadWorkflowPopulation(structureSet$simulationSet)
     simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile, loadFromCache = TRUE)
-    populationTable <- getPopulationAsDataFrame(population, simulation)
+    populationTable <- getPopulationPKData(population, simulation)
 
     fullDemographyTable <- cbind.data.frame(
       simulationSetName = structureSet$simulationSet$simulationSetName,
@@ -292,7 +346,7 @@ getDemographyAcrossPopulations <- function(structureSets) {
     )
   }
 
-  metaData <- getPopulationMetaData(population, simulation, structureSet$parameterDisplayPaths)
+  metaData <- getPopulationPKMetaData(population, simulation, structureSet$parameterDisplayPaths)
 
   return(list(
     data = demographyAcrossPopulations,
@@ -309,9 +363,9 @@ DemographyDefaultParameters <- c(ospsuite::StandardPath[c("Age", "Height", "Weig
 #' @return names of default demography parameters
 #' @export
 #' @examples
-#' 
+#'
 #' getDefaultDemographyXParameters(PopulationWorkflowTypes$pediatric)
-#' 
+#'
 getDefaultDemographyXParameters <- function(workflowType) {
   validateIsIncluded(workflowType, PopulationWorkflowTypes)
   if (workflowType %in% PopulationWorkflowTypes$pediatric) {
@@ -323,8 +377,8 @@ getDefaultDemographyXParameters <- function(workflowType) {
 #' @title getDemographyAggregatedData
 #' @param data A data.frame
 #' @param xParameterName Name of parameter in `data` used for aggregation in x axis of plot
-#' @param yParameterName Name of parameter in `data` aggreated in y axis of plot
-#' @param bins Either a numeric vector defining bin edges 
+#' @param yParameterName Name of parameter in `data` aggregated in y axis of plot
+#' @param bins Either a numeric vector defining bin edges
 #' or a numeric value defining the number of bins.
 #' @param stairstep A logical value defining if aggregation uses continuous or stairstep plot
 #' @return A data.frame of aggregated data
@@ -397,15 +451,6 @@ getDemographyAggregatedData <- function(data,
   return(aggregatedData)
 }
 
-getReferencePopulationName <- function(structureSets) {
-  allSimulationReferences <- sapply(structureSets, function(structureSet) {
-    structureSet$simulationSet$referencePopulation
-  })
-  validateIsOfLength(allSimulationReferences[allSimulationReferences], 1)
-  referencePopulationName <- structureSets[[which(allSimulationReferences)]]$simulationSet$simulationSetName
-  return(referencePopulationName)
-}
-
 #' @title plotDemographyHistogram
 #' @description Plot histograms for demography parameters
 #' @param data data.frame
@@ -466,202 +511,4 @@ plotDemographyHistogram <- function(data,
     ggplot2::guides(fill = guide_legend(title = NULL))
   demographyPlot <- tlf::setLegendPosition(plotObject = demographyPlot, position = reDefaultLegendPosition)
   return(demographyPlot)
-}
-
-#' @title getXParametersForDemogrpahyPlot
-#' @param workflow `PopulationWorkflow` R6 class object
-#' @return list of x parameters used for demography range plots
-#' @export
-#' @family workflow helpers
-#' @examples \dontrun{
-#' 
-#' # A workflow object needs to be created first
-#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#' 
-#' # Get the list of parameters in x-axis for range plots
-#' getXParametersForDemogrpahyPlot(workflow = myWorkflow)
-#' 
-#' }
-#' 
-getXParametersForDemogrpahyPlot <- function(workflow) {
-  validateIsOfType(workflow, "PopulationWorkflow")
-  return(workflow$plotDemography$xParameters)
-}
-
-#' @title getYParametersForDemogrpahyPlot
-#' @param workflow `PopulationWorkflow` R6 class object
-#' @return list of y parameters used for demography histogram and range plots
-#' @import ospsuite.utils
-#' @export
-#' @family workflow helpers
-#' @examples \dontrun{
-#' 
-#' # A workflow object needs to be created first
-#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#' 
-#' # Get the list of parameters in x-axis for range plots
-#' getYParametersForDemogrpahyPlot(workflow = myWorkflow)
-#' 
-#' }
-#' 
-getYParametersForDemogrpahyPlot <- function(workflow) {
-  validateIsOfType(workflow, "PopulationWorkflow")
-  return(workflow$plotDemography$yParameters %||% DemographyDefaultParameters)
-}
-
-#' @title setXParametersForDemogrpahyPlot
-#' @description Set x parameters for range plots of demography plot task.
-#' The method update directly the input workflow
-#' @param workflow `PopulationWorkflow` R6 class object
-#' @param parameters list of demography parameters to be used as x-parameters
-#' @export
-#' @family workflow helpers
-#' @examples \dontrun{
-#' 
-#' # A workflow object needs to be created first
-#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#' 
-#' # Set parameters in x-axis for range plots
-#' setXParametersForDemogrpahyPlot(
-#' workflow = myWorkflow, 
-#' parameters = StandardPath
-#' )
-#' 
-#' }
-#' 
-setXParametersForDemogrpahyPlot <- function(workflow, parameters) {
-  validateIsOfType(workflow, "PopulationWorkflow")
-  validateIsString(c(parameters), nullAllowed = TRUE)
-
-  workflow$plotDemography$xParameters <- parameters
-
-  logWorkflow(
-    message = paste0(
-      "X-parameters: '",
-      paste0(c(parameters), collapse = "', '"),
-      "' set for demography plot."
-    ),
-    pathFolder = workflow$workflowFolder,
-    logTypes = LogTypes$Debug
-  )
-  return(invisible())
-}
-
-#' @title addXParametersForDemogrpahyPlot
-#' @description Append x parameters for range plots of demography plot task.
-#' The method update directly the input workflow
-#' @param workflow `PopulationWorkflow` R6 class object
-#' @param parameters list of demography parameters to be used as x-parameters
-#' @export
-#' @family workflow helpers
-#' @examples \dontrun{
-#' 
-#' # A workflow object needs to be created first
-#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#' 
-#' # Get the list of parameters in x-axis for range plots
-#' addXParametersForDemogrpahyPlot(
-#' workflow = myWorkflow, 
-#' parameters = StandardPath$GestationalAge
-#' )
-#' 
-#' }
-#' 
-addXParametersForDemogrpahyPlot <- function(workflow, parameters) {
-  updatedParameters <- c(getXParametersForDemogrpahyPlot(workflow), parameters)
-  setXParametersForDemogrpahyPlot(workflow, updatedParameters)
-}
-
-#' @title setYParametersForDemogrpahyPlot
-#' @description Set y-parameters for histograms and range plots of demography plot task.
-#' The method update directly the input workflow
-#' @param workflow `PopulationWorkflow` R6 class object
-#' @param parameters list of demography parameters to be used as y-parameters
-#' @export
-#' @family workflow helpers
-#' @examples \dontrun{
-#' 
-#' # A workflow object needs to be created first
-#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#' 
-#' # Set parameters in y-axis for range plots and histograms
-#' setYParametersForDemogrpahyPlot(
-#' workflow = myWorkflow, 
-#' parameters = StandardPath
-#' )
-#' 
-#' }
-#' 
-setYParametersForDemogrpahyPlot <- function(workflow, parameters) {
-  validateIsOfType(workflow, "PopulationWorkflow")
-  validateIsString(c(parameters))
-
-  workflow$plotDemography$yParameters <- parameters
-
-  logWorkflow(
-    message = paste0(
-      "Y-parameters: '",
-      paste0(c(parameters), collapse = "', '"),
-      "' set for demography plot."
-    ),
-    pathFolder = workflow$workflowFolder,
-    logTypes = LogTypes$Debug
-  )
-  return(invisible())
-}
-
-#' @title addYParametersForDemogrpahyPlot
-#' @description Append y parameters for range plots of demography plot task.
-#' The method update directly the input workflow
-#' @param workflow `PopulationWorkflow` R6 class object
-#' @param parameters list of demography parameters to be used as x-parameters
-#' @export
-#' @family workflow helpers
-#' @examples \dontrun{
-#' 
-#' # A workflow object needs to be created first
-#' myWorkflow <- PopulationWorkflow$new(worflowType, workflowFolder, simulationSets)
-#' 
-#' # Add parameters in y-axis for range plots and histograms
-#' addYParametersForDemogrpahyPlot(
-#' workflow = myWorkflow, 
-#' parameters = StandardPath$GestationalAge
-#' )
-#' 
-#' }
-#' 
-addYParametersForDemogrpahyPlot <- function(workflow, parameters) {
-  updatedParameters <- c(getYParametersForDemogrpahyPlot(workflow), parameters)
-  setYParametersForDemogrpahyPlot(workflow, updatedParameters)
-}
-
-getPopulationAsDataFrame <- function(population, simulation) {
-  populationTable <- ospsuite::populationToDataFrame(population)
-  allParameters <- ospsuite::getAllParametersMatching(population$allParameterPaths, simulation)
-
-  for (parameter in allParameters) {
-    populationTable[, parameter$path] <- ospsuite::toDisplayUnit(parameter, populationTable[, parameter$path])
-  }
-  return(populationTable)
-}
-
-getPopulationMetaData <- function(population, simulation, parameterDisplayPaths) {
-  metaData <- list()
-  allParameters <- ospsuite::getAllParametersMatching(population$allParameterPaths, simulation)
-
-  for (covariate in population$allCovariateNames) {
-    metaData[[covariate]] <- list(
-      dimension = covariate,
-      unit = "",
-      class = class(population$getCovariateValues(covariate))
-    )
-  }
-  for (parameter in allParameters) {
-    metaData[[parameter$path]] <- list(
-      dimension = getSimulationParameterDisplayPaths(parameter$path, simulation, parameterDisplayPaths),
-      unit = parameter$displayUnit,
-      class = class(population$getParameterValues(parameter$path))
-    )
-  }
-  return(metaData)
 }

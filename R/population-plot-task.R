@@ -8,7 +8,6 @@
 PopulationPlotTask <- R6::R6Class(
   "PopulationPlotTask",
   inherit = PlotTask,
-
   public = list(
     workflowType = NULL,
     xParameters = NULL,
@@ -34,68 +33,57 @@ PopulationPlotTask <- R6::R6Class(
 
     #' @description
     #' Save the task results
-    #' @param taskResults list of results from task run.
-    #' Currently, results contains at least 2 fields: `plots` and `tables`
-    #' They are to be deprecated and replaced using `TaskResults` objects
+    #' @param taskResults list of `TaskResults` objects
     saveResults = function(taskResults) {
-      resetReport(self$fileName, self$workflowFolder)
+      resetReport(self$fileName)
       addTextChunk(
         fileName = self$fileName,
-        text = c(anchor(self$reference), "", paste0("# ", self$title)),
-        logFolder = self$workflowFolder
+        text = c(anchor(self$reference), "", paste0("# ", self$title))
       )
       for (result in taskResults) {
+        # Get both absolute and relative paths for figures and tables
+        # Absolute path is required to always find the figure/table
+        # Relative path is required by the final md report
         plotFileName <- getDefaultFileName(
           suffix = result$id,
           extension = reEnv$defaultPlotFormat$format
         )
         figureFilePath <- self$getAbsolutePath(plotFileName)
-        
+        figureFileRelativePath <- self$getRelativePath(plotFileName)
+
         tableFileName <- getDefaultFileName(
           suffix = result$id,
           extension = "csv"
         )
         tableFilePath <- self$getAbsolutePath(tableFileName)
-        
-        # Figure and tables paths need to be relative to the final md report
-        figureFileRelativePath <- gsub(
-          pattern = paste0(self$workflowFolder, "/"),
-          replacement = "",
-          x = figureFilePath
+        tableFileRelativePath <- self$getRelativePath(tableFileName)
+
+        # Provide error message indicating which file could not be saved
+        tryCatch(
+          {
+            result$saveFigure(fileName = figureFilePath)
+          },
+          error = function(e) {
+            stop(messages$ggsaveError(figureFilePath, NULL, e))
+          }
         )
-        tableFileRelativePath <- gsub(
-          pattern = paste0(self$workflowFolder, "/"),
-          replacement = "",
-          x = tableFilePath
-        )
-        
-        tryCatch({
-          result$saveFigure(fileName = figureFilePath, logFolder = self$workflowFolder)
-        },
-        error = function(e) {
-          logErrorThenStop(messages$ggsaveError(figureFilePath, NULL, e), logFolder)
-        })
+
         result$addFigureToReport(
           reportFile = self$fileName,
           fileRelativePath = figureFileRelativePath,
-          fileRootDirectory = self$workflowFolder,
-          logFolder = self$workflowFolder
+          fileRootDirectory = self$workflowFolder
         )
-        
-        result$saveTable(fileName = tableFilePath, logFolder = self$workflowFolder)
+
+        result$saveTable(fileName = tableFilePath)
         result$addTableToReport(
           reportFile = self$fileName,
           fileRelativePath = tableFileRelativePath,
           fileRootDirectory = self$workflowFolder,
           digits = self$settings$digits,
-          scientific = self$settings$scientific,
-          logFolder = self$workflowFolder
+          scientific = self$settings$scientific
         )
-        
-        result$addTextChunkToReport(
-          reportFile = self$fileName,
-          logFolder = self$workflowFolder
-        )
+
+        result$addTextChunkToReport(reportFile = self$fileName)
       }
       return(invisible())
     },
@@ -105,10 +93,8 @@ PopulationPlotTask <- R6::R6Class(
     #' @param structureSets list of `SimulationStructure` R6 class
     runTask = function(structureSets) {
       actionToken <- re.tStartAction(actionType = "TLFGeneration", actionNameExtension = self$nameTaskResults)
-      logWorkflow(
-        message = paste0("Starting: ", self$message),
-        pathFolder = self$workflowFolder
-      )
+      logInfo(messages$runStarting(self$message))
+      t0 <- tic()
 
       if (self$validateInput()) {
         if (!is.null(self$outputFolder)) {
@@ -117,7 +103,6 @@ PopulationPlotTask <- R6::R6Class(
 
         taskResults <- self$getTaskResults(
           structureSets,
-          self$workflowFolder,
           self$settings,
           self$workflowType,
           self$xParameters,
@@ -126,6 +111,7 @@ PopulationPlotTask <- R6::R6Class(
         self$saveResults(taskResults)
       }
       re.tEndAction(actionToken = actionToken)
+      logInfo(messages$runCompleted(getElapsedTime(t0), self$message))
     }
   )
 )

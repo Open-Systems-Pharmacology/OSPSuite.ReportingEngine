@@ -1,65 +1,67 @@
 #' @title plotQualificationPKRatio
 #' @description Plot PK Ratio plots for qualification workflow
 #' @param configurationPlan A `ConfigurationPlan` object
-#' @param logFolder folder where the logs are saved
 #' @param settings settings for the task
 #' @return list with `plots` and `tables`
 #' @import tlf
 #' @import ospsuite
 #' @importFrom ospsuite.utils %||%
 #' @keywords internal
-plotQualificationPKRatio <- function(configurationPlan,
-                                     logFolder = getwd(),
-                                     settings) {
+plotQualificationPKRatio <- function(configurationPlan, settings) {
   pkRatioResults <- list()
   for (pkRatioPlan in configurationPlan$plots$PKRatioPlots) {
-    # If field artifacts is null, output them all
-    pkRatioPlan$Artifacts <- pkRatioPlan$Artifacts %||% c("Table", "Plot", "Measure", "GMFE")
-    pkRatioData <- getQualificationPKRatioData(pkRatioPlan, configurationPlan, logFolder, settings)
-    axesProperties <- getAxesProperties(pkRatioPlan$Axes) %||% settings$axes
-    pkParameterNames <- pkRatioPlan$PKParameters %||% ospsuite::toPathArray(pkRatioPlan$PKParameter)
+    qualificationCatch(
+      {
+        # If field artifacts is null, output them all
+        pkRatioPlan$Artifacts <- pkRatioPlan$Artifacts %||% c("Table", "Plot", "Measure", "GMFE")
+        pkRatioData <- getQualificationPKRatioData(pkRatioPlan, configurationPlan, settings)
+        axesProperties <- getAxesProperties(pkRatioPlan$Axes) %||% settings$axes
+        pkParameterNames <- pkRatioPlan$PKParameters %||% ospsuite::toPathArray(pkRatioPlan$PKParameter)
 
-    for (pkParameterName in pkParameterNames) {
-      #----- Plot artifact -----#
-      plotID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_plot", pkParameterName)
-      pkRatioPlot <- getQualificationPKRatioPlot(pkParameterName, pkRatioData$data, pkRatioData$metaData, axesProperties, pkRatioPlan[["PlotSettings"]])
-      pkRatioResults[[plotID]] <- saveTaskResults(
-        id = plotID,
-        sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
-        plot = pkRatioPlot,
-        plotCaption = pkRatioPlan$Title,
-        includePlot = isIncluded("Plot", pkRatioPlan$Artifacts)
-      )
-      #----- Measure artifact -----#
-      measureID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_measure", pkParameterName)
-      pkRatioMeasure <- getQualificationPKRatioMeasure(pkParameterName, pkRatioData$data, pkRatioData$metaData)
-      pkRatioResults[[measureID]] <- saveTaskResults(
-        id = measureID,
-        sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
-        table = pkRatioMeasure,
-        tableCaption = paste0("Measure of ", pkRatioPlan$Title),
-        includeTable = isIncluded("Measure", pkRatioPlan$Artifacts)
-      )
-    }
-    #----- GMFE artifact -----#
-    gmfeID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_gmfe")
-    pkRatioGMFE <- getQualificationPKRatioGMFE(pkParameterNames, pkRatioData$data)
-    pkRatioResults[[gmfeID]] <- saveTaskResults(
-      id = gmfeID,
-      sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
-      table = pkRatioGMFE,
-      tableCaption = paste0("GMFE for ", pkRatioPlan$Title),
-      includeTable = isIncluded("GMFE", pkRatioPlan$Artifacts)
-    )
-    #----- Table artifact -----#
-    tableID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_table", pkParameterName)
-    pkRatioTable <- getQualificationPKRatioTable(pkRatioData$data, pkRatioData$metaData)
-    pkRatioResults[[tableID]] <- saveTaskResults(
-      id = tableID,
-      sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
-      table = pkRatioTable,
-      tableCaption = pkRatioPlan$Title,
-      includeTable = isIncluded("Table", pkRatioPlan$Artifacts)
+        for (pkParameterName in pkParameterNames) {
+          #----- Plot artifact -----#
+          plotID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_plot", pkParameterName)
+          pkRatioPlot <- getQualificationPKRatioPlot(pkParameterName, pkRatioData$data, pkRatioData$metaData, axesProperties, pkRatioPlan[["PlotSettings"]])
+          pkRatioResults[[plotID]] <- saveTaskResults(
+            id = plotID,
+            sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
+            plot = pkRatioPlot,
+            plotCaption = pkRatioPlan$Title,
+            includePlot = isIncluded("Plot", pkRatioPlan$Artifacts)
+          )
+          #----- Measure artifact -----#
+          measureID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_measure", pkParameterName)
+          pkRatioMeasure <- getQualificationPKRatioMeasure(pkParameterName, pkRatioData$data, pkRatioData$metaData)
+          pkRatioResults[[measureID]] <- saveTaskResults(
+            id = measureID,
+            sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
+            table = pkRatioMeasure,
+            tableCaption = paste0("Measure of ", pkRatioPlan$Title),
+            includeTable = isIncluded("Measure", pkRatioPlan$Artifacts)
+          )
+        }
+        #----- GMFE artifact -----#
+        gmfeID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_gmfe")
+        pkRatioGMFE <- getQualificationPKRatioGMFE(pkParameterNames, pkRatioData$data)
+        pkRatioResults[[gmfeID]] <- saveTaskResults(
+          id = gmfeID,
+          sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
+          table = pkRatioGMFE,
+          tableCaption = paste0("GMFE for ", pkRatioPlan$Title),
+          includeTable = isIncluded("GMFE", pkRatioPlan$Artifacts)
+        )
+        #----- Table artifact -----#
+        tableID <- defaultFileNames$resultID(length(pkRatioResults) + 1, "pk_ratio_table", pkParameterName)
+        pkRatioTable <- getQualificationPKRatioTable(pkRatioData$data, pkRatioData$metaData)
+        pkRatioResults[[tableID]] <- saveTaskResults(
+          id = tableID,
+          sectionId = pkRatioPlan$SectionReference %||% pkRatioPlan$SectionId,
+          table = pkRatioTable,
+          tableCaption = pkRatioPlan$Title,
+          includeTable = isIncluded("Table", pkRatioPlan$Artifacts)
+        )
+      },
+      configurationPlanField = pkRatioPlan
     )
   }
   return(pkRatioResults)
@@ -133,12 +135,12 @@ getQualificationPKRatioPlot <- function(pkParameterName, data, metaData, axesPro
     shape = "Groups"
   )
   axesProperties$y$dimension <- metaData[[paste0("ratio", pkParameterName)]]$dimension
-  
+
   plotConfiguration <- getPlotConfigurationFromPlan(plotProperties, plotType = "PKRatio")
   plotConfiguration$points$color <- metaData$color
   plotConfiguration$points$shape <- metaData$shape
   plotConfiguration$xAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||% autoAxesLimits(data[, "age"])
-  plotConfiguration$yAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||% autoAxesLimits(c(0.5, 2, data[, paste0("ratio", pkParameterName)]))
+  plotConfiguration$yAxis$limits <- c(axesProperties$y$min, axesProperties$y$max) %||% autoAxesLimits(c(0.5, 2, data[, paste0("ratio", pkParameterName)]))
 
   pkRatioPlot <- tlf::plotPKRatio(
     data = data,
@@ -173,14 +175,13 @@ getQualificationPKRatioTable <- function(data, metaData) {
 #' @description Get data of pk ratio from field `PKRatioPlots` of configuration plan
 #' @param pkRatioPlan List providing the PK ratio mapping from field `PKRatioPlots` of configuration plan
 #' @param configurationPlan A `ConfigurationPlan` object
-#' @param logFolder folder where the logs are saved
 #' @param settings settings for the task
 #' @return list with `data` and `metaData`
 #' @import tlf
 #' @import ospsuite
 #' @importFrom ospsuite.utils %||%
 #' @keywords internal
-getQualificationPKRatioData <- function(pkRatioPlan, configurationPlan, logFolder, settings) {
+getQualificationPKRatioData <- function(pkRatioPlan, configurationPlan, settings) {
   # Get PK parameters from new or deprecated method
   pkParameterNames <- pkRatioPlan$PKParameters %||% ospsuite::toPathArray(pkRatioPlan$PKParameter)
 
@@ -188,7 +189,7 @@ getQualificationPKRatioData <- function(pkRatioPlan, configurationPlan, logFolde
   caption <- NULL
   for (group in pkRatioPlan$Groups) {
     for (pkRatioMapping in group$PKRatios) {
-      pkRatioResults <- getPKRatioForMapping(pkRatioMapping, pkParameterNames, configurationPlan, logFolder, settings)
+      pkRatioResults <- getPKRatioForMapping(pkRatioMapping, pkParameterNames, configurationPlan, settings)
       pkRatioData <- rbind.data.frame(
         pkRatioData,
         pkRatioResults$data
@@ -221,13 +222,12 @@ getQualificationPKRatioData <- function(pkRatioPlan, configurationPlan, logFolde
 #' @param pkRatioMapping List providing the PK ratio mapping from field `PKRatios` of configuration plan
 #' @param pkParameterNames Names of PK Parameters as defined by users
 #' @param configurationPlan A `ConfigurationPlan` object
-#' @param logFolder folder where the logs are saved
 #' @param settings settings for the task
 #' @return list with `data` and `metaData`
 #' @import tlf
 #' @import ospsuite
 #' @keywords internal
-getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configurationPlan, logFolder, settings) {
+getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configurationPlan, settings) {
   # Load required inputs
   simulation <- ospsuite::loadSimulation(
     configurationPlan$getSimulationPath(project = pkRatioMapping$Project, simulation = pkRatioMapping$Simulation),
@@ -240,11 +240,10 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
   observedData <- readObservedDataFile(configurationPlan$getObservedDataPath(pkRatioMapping$ObservedData))
   selectedRow <- which(observedData[, reEnv$pkRatio$dictionary$id] %in% pkRatioMapping$ObservedDataRecordId)
   if (!isOfLength(selectedRow, 1)) {
-    logWorkflow(
-      message = paste0("In PK Ratio Plots, ", length(selectedRow), " data record(s) found for ObservedDataRecordId '", pkRatioMapping$ObservedDataRecordId, "'"),
-      pathFolder = logFolder,
-      logTypes = c(LogTypes$Error, LogTypes$Debug)
-    )
+    logError(messages$warningPKRatioMultipleObservedRows(
+      length(selectedRow),
+      pkRatioMapping$ObservedDataRecordId
+    ))
     return()
   }
 
@@ -317,31 +316,6 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
 }
 
 
-#' @title isBetween
-#' @description Assess if `x` is between `left` and `right` bounds.
-#' Shortcut for `x >= left & x <= right` if `strict=FALSE` (default).
-#' Shortcut for `x > left & x < right` if `strict=TRUE`.
-#' @param x Numeric values to assess
-#' @param left Numeric value(s) used as lower bound
-#' @param right Numeric value(s) used as upper bound
-#' @param strict Logical value defining if `x` is strictly between `left` and `right`.
-#' Default value is `FALSE`.
-#' @return Logical values
-#' @export
-#' @examples
-#' isBetween(1:12, 7, 9)
-#'
-#' x <- rnorm(1e2)
-#' x[isBetween(x, -1, 1)]
-#'
-#' isBetween(x, cos(x) + 1, cos(x) - 1)
-isBetween <- function(x, left, right, strict = FALSE) {
-  if (strict) {
-    return(x > left & x < right)
-  }
-  return(x >= left & x <= right)
-}
-
 #' @title measureValuesBetween
 #' @description Measure the values of `x` between `left` and `right` bounds according to `method`.
 #' @param x Numeric values to assess
@@ -351,6 +325,7 @@ isBetween <- function(x, left, right, strict = FALSE) {
 #' @param strict Logical value defining if `x` is strictly between `left` and `right`.
 #' Default value is `FALSE`.
 #' @return Measure of `x` values between `left` and `right` bounds
+#' @import tlf
 #' @export
 #' @examples
 #' measureValuesBetween(1:12, 7, 9)
@@ -370,11 +345,10 @@ measureValuesBetween <- function(x, left, right, method = "count", strict = FALS
     right <- rep(right, length(x))
   }
   naRows <- (is.na(x) | is.na(left) | is.na(right))
-  measure <- switch(
-    method,
-    "count" = sum(isBetween(x[!naRows], left[!naRows], right[!naRows], strict)),
-    "ratio" = sum(isBetween(x[!naRows], left[!naRows], right[!naRows], strict)) / length(x[!naRows]),
-    "percent" = 100 * sum(isBetween(x[!naRows], left[!naRows], right[!naRows], strict)) / length(x[!naRows]),
+  measure <- switch(method,
+    "count" = sum(tlf::isBetween(x[!naRows], left[!naRows], right[!naRows], strict)),
+    "ratio" = sum(tlf::isBetween(x[!naRows], left[!naRows], right[!naRows], strict)) / length(x[!naRows]),
+    "percent" = 100 * sum(tlf::isBetween(x[!naRows], left[!naRows], right[!naRows], strict)) / length(x[!naRows]),
   )
   return(measure)
 }

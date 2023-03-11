@@ -7,7 +7,7 @@
 inactivateWorkflowTasks(workflow, tasks = workflow$getAllTasks())
 }
 \arguments{
-\item{workflow}{`MeanModelWorklfow` or `PopulationWorklfow` object}
+\item{workflow}{`MeanModelWorkflow` or `PopulationWorkflow` object}
 
 \item{tasks}{names of the tasks to activate
 Default inactivates all tasks of the workflow using workflow method `workflow$getAllTasks()`}
@@ -23,13 +23,12 @@ myWorkflow <- MeanModelWorkflow$new(workflowFolder, simulationSets)
 
 # Use enum helper to get task names
 inactivateWorkflowTasks(
-workflow = myWorkflow, 
-tasks = StandardSimulationTasks$simulate
+  workflow = myWorkflow,
+  tasks = StandardSimulationTasks$simulate
 )
 
 # Default will inactivate every task of workflow
 inactivateWorkflowTasks(workflow = myWorkflow)
-
 }
 
 }
@@ -42,17 +41,22 @@ Other workflow helpers:
 \code{\link{addYParametersForDemogrpahyPlot}()},
 \code{\link{addYParametersForPKParametersPlot}()},
 \code{\link{checkTaskInputsExist}()},
+\code{\link{createWorkflowFromExcelInput}()},
 \code{\link{getMeanSensitivityAnalysisResultsFileNames}()},
 \code{\link{getOutputPathsInSimulationSet}()},
 \code{\link{getPKAnalysisResultsFileNames}()},
+\code{\link{getPKParameterGroupsInOutput}()},
 \code{\link{getPKParametersInOutput}()},
 \code{\link{getPKParametersInSimulationSet}()},
+\code{\link{getPopulationPKData}()},
+\code{\link{getPopulationPKMetaData}()},
 \code{\link{getPopulationSensitivityAnalysisResultsFileNames}()},
 \code{\link{getSimulationDescriptor}()},
 \code{\link{getSimulationParameterDisplayPaths}()},
 \code{\link{getSimulationResultFileNames}()},
 \code{\link{getTaskInputs}()},
 \code{\link{getWorkflowParameterDisplayPaths}()},
+\code{\link{getWorkflowReferencePopulationName}()},
 \code{\link{getXParametersForDemogrpahyPlot}()},
 \code{\link{getXParametersForPKParametersPlot}()},
 \code{\link{getYParametersForDemogrpahyPlot}()},

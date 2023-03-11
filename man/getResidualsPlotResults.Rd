@@ -9,8 +9,7 @@ getResidualsPlotResults(
   residualsData,
   metaDataFrame,
   structureSet,
-  settings = NULL,
-  logFolder
+  settings = NULL
 )
 }
 \arguments{
@@ -23,8 +22,6 @@ getResidualsPlotResults(
 \item{structureSet}{A `SimulationStructure` object}
 
 \item{settings}{Optional settings for the plots. In particular, includes reference data for population time profile.}
-
-\item{logFolder}{Folder where the logs are saved}
 }
 \value{
 List of `plots`, their `captions` and `data` to export

@@ -19,13 +19,15 @@ R6 class for tracking and printing messages for the Excel template
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{ExcelMessaging$new()}}
-\item \href{#method-displayMessage}{\code{ExcelMessaging$displayMessage()}}
+\item \href{#method-ExcelMessaging-new}{\code{ExcelMessaging$new()}}
+\item \href{#method-ExcelMessaging-displayMessage}{\code{ExcelMessaging$displayMessage()}}
+\item \href{#method-ExcelMessaging-getMessageHeader}{\code{ExcelMessaging$getMessageHeader()}}
+\item \href{#method-ExcelMessaging-getNoIssueMessage}{\code{ExcelMessaging$getNoIssueMessage()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-ExcelMessaging-new"></a>}}
+\if{latex}{\out{\hypertarget{method-ExcelMessaging-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize an `ExcelMessaging` object
 \subsection{Usage}{
@@ -44,8 +46,8 @@ A new `ExcelMessaging` object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-displayMessage"></a>}}
-\if{latex}{\out{\hypertarget{method-displayMessage}{}}}
+\if{html}{\out{<a id="method-ExcelMessaging-displayMessage"></a>}}
+\if{latex}{\out{\hypertarget{method-ExcelMessaging-displayMessage}{}}}
 \subsection{Method \code{displayMessage()}}{
 display the messages stored in messages
 \subsection{Usage}{
@@ -55,5 +57,32 @@ display the messages stored in messages
 \subsection{Returns}{
 Messages content
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ExcelMessaging-getMessageHeader"></a>}}
+\if{latex}{\out{\hypertarget{method-ExcelMessaging-getMessageHeader}{}}}
+\subsection{Method \code{getMessageHeader()}}{
+Get message header
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ExcelMessaging$getMessageHeader(section)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{section}}{name of R script section}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ExcelMessaging-getNoIssueMessage"></a>}}
+\if{latex}{\out{\hypertarget{method-ExcelMessaging-getNoIssueMessage}{}}}
+\subsection{Method \code{getNoIssueMessage()}}{
+Get message displaying no issue identified
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ExcelMessaging$getNoIssueMessage()}\if{html}{\out{</div>}}
+}
+
 }
 }

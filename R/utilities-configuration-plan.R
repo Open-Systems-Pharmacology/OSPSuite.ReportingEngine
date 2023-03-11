@@ -1,4 +1,4 @@
-# Helper functions to translate configuration plan values/fields to tlf/opsuite.reportingengine
+# Helper functions to translate configuration plan values/fields to tlf/ospsuite.reportingengine
 
 #' @title ConfigurationPlots
 #' @description Enum defining possible plots defined in configuration plan
@@ -12,7 +12,7 @@ ConfigurationPlotSettings <- enum(c("ChartWidth", "ChartHeight", "Fonts"))
 
 #' @title ConfigurationFontsFields
 #' @description Enum defining possible fonts fields defined in configuration plan
-#' Note that some fields might not be used/converted by the current `opsuite.reportingengine` or `tlf` version (e.g. FontFamilyName)
+#' Note that some fields might not be used/converted by the current `ospsuite.reportingengine` or `tlf` version (e.g. FontFamilyName)
 #' @keywords internal
 ConfigurationFontsFields <- c("AxisSize", "LegendSize", "OriginSize", "FontFamilyName", "WatermarkSize")
 
@@ -62,7 +62,7 @@ ConfigurationLinetypes <- list(
 #' @keywords internal
 getAxesProperties <- function(axesSettings) {
   # Hanlde when properties are left undefined globally or locally
-  if (isOfLength(axesSettings, 0)) {
+  if (isEmpty(axesSettings)) {
     return(NULL)
   }
   # Get axes types for identification of X, Y and Y2 axes
@@ -70,15 +70,19 @@ getAxesProperties <- function(axesSettings) {
     axis$Type
   })
 
-  xAxisIndex <- which(axisTypes %in% "X")
-  yAxisIndex <- which(axisTypes %in% "Y")
-  y2AxisIndex <- which(axisTypes %in% "Y2")
-
+  axesIndices <- sapply(
+    c("X", "Y", "Y2", "Y3"),
+    FUN = function(axisField){
+      which(axisTypes %in% axisField)
+    },
+    simplify = FALSE
+  )
+  
   # X and Y axes are mandatory, while Y2 is not
-  validateIsOfLength(xAxisIndex, 1)
-  validateIsOfLength(yAxisIndex, 1)
-  xAxis <- axesSettings[[xAxisIndex]]
-  yAxis <- axesSettings[[yAxisIndex]]
+  validateIsOfLength(axesIndices$X, 1)
+  validateIsOfLength(axesIndices$Y, 1)
+  xAxis <- axesSettings[[axesIndices$X]]
+  yAxis <- axesSettings[[axesIndices$Y]]
   # GridLines field defines if grid is present
   # ifFALSE is used to ensure a value in *if* in case field is empty
   if (isFALSE(xAxis$GridLines)) {
@@ -88,26 +92,35 @@ getAxesProperties <- function(axesSettings) {
   if (isFALSE(yAxis$GridLines)) {
     yAxis$DefaultLineStyle <- "none"
   }
-  xAxis <- list(
-    dimension = xAxis$Dimension, unit = xAxis$Unit,
-    min = xAxis$Min, max = xAxis$Max, scale = tlfScale(xAxis$Scaling),
-    grid = list(color = xAxis$DefaultColor, linetype = tlfLinetype(xAxis$DefaultLineStyle))
-  )
-  yAxis <- list(
-    dimension = yAxis$Dimension, unit = yAxis$Unit,
-    min = yAxis$Min, max = yAxis$Max, scale = tlfScale(yAxis$Scaling),
-    grid = list(color = yAxis$DefaultColor, linetype = tlfLinetype(yAxis$DefaultLineStyle))
-  )
-
+  xAxis <- formatAxisProperties(xAxis)
+  yAxis <- formatAxisProperties(yAxis)
+  
   y2Axis <- NULL
-  if (isOfLength(y2AxisIndex, 1)) {
-    y2Axis <- axesSettings[[y2AxisIndex]]
-    y2Axis <- list(
-      dimension = y2Axis$Dimension, unit = y2Axis$Unit,
-      min = y2Axis$Min, max = y2Axis$Max, scale = tlfScale(y2Axis$Scaling)
-    )
+  if (isOfLength(axesIndices$Y2, 1)) {
+    y2Axis <- axesSettings[[axesIndices$Y2]]
+    y2Axis <- formatAxisProperties(y2Axis)
   }
-  return(list(x = xAxis, y = yAxis, y2 = y2Axis))
+  y3Axis <- NULL
+  if (isOfLength(axesIndices$Y3, 1)) {
+    y3Axis <- axesSettings[[axesIndices$Y3]]
+    y3Axis <- formatAxisProperties(y3Axis)
+  }
+  return(list(x = xAxis, y = yAxis, y2 = y2Axis, y3 = y3Axis))
+}
+
+formatAxisProperties <- function(axisField){
+  list(
+    dimension = axisField$Dimension, 
+    # If no unit defined, use base unit of dimension
+    unit = axisField$Unit %||% ospsuite::getBaseUnit(axisField$Dimension),
+    min = axisField$Min, 
+    max = axisField$Max, 
+    scale = tlfScale(axisField$Scaling),
+    grid = list(
+      color = axisField$DefaultColor, 
+      linetype = tlfLinetype(axisField$DefaultLineStyle)
+      )
+)
 }
 
 #' @title updatePlotAxes
@@ -136,7 +149,13 @@ updatePlotAxes <- function(plotObject, axesProperties) {
   )
 
   try({
-    plotObject <- tlf::setXAxis(plotObject, scale = axesProperties$x$scale, limits = c(axesProperties$x$min, axesProperties$x$max))
+    plotObject <- tlf::setXAxis(
+      plotObject,
+      scale = axesProperties$x$scale,
+      limits = c(axesProperties$x$min, axesProperties$x$max),
+      ticks = axesProperties$x$ticks,
+      ticklabels = axesProperties$x$ticklabels
+    )
   })
   try({
     plotObject <- tlf::setYAxis(plotObject, scale = axesProperties$y$scale, limits = c(axesProperties$y$min, axesProperties$y$max))
@@ -196,7 +215,7 @@ tlfScale <- function(configurationScale) {
 #' @title getCompoundNameFromPath
 #' @description
 #' Get the compound name from a configuration plan quantity path
-#' @param path A quantitiy path from the configuration plan
+#' @param path A quantity path from the configuration plan
 #' For instance, "S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
 #' or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"
 #' @return A string corresponding to the compound name of a configuration plan quantity path
@@ -234,4 +253,3 @@ getMolWeightForCompound <- function(compoundName, simulation) {
   }
   return(simulation$molWeightFor(pathForCompoundName))
 }
-

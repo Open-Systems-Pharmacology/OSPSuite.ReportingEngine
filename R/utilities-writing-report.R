@@ -1,23 +1,18 @@
 #' @title resetReport
 #' @description Initialize a report, warning if a previous version already exists
 #' @param fileName name of .md file to reset
-#' @param logFolder folder where the logs are saved
 #' @export
 #' @family reporting
 #' @examples
 #' \dontrun{
 #' resetReport("report.md")
 #' }
-#' 
-resetReport <- function(fileName, logFolder = getwd()) {
+#'
+resetReport <- function(fileName) {
   if (file.exists(fileName)) {
-    logWorkflow(
-      message = paste0("'", fileName, "' already exists. Overwriting '", fileName, "'."),
-      pathFolder = logFolder,
-      logTypes = LogTypes$Debug
-    )
+    logDebug(paste0("'", fileName, "' already exists. Overwriting '", fileName, "'."))
   }
-  # When write() uses sep = "\n", 
+  # When write() uses sep = "\n",
   # Every element of the array input in write() is added in a new line
   # Thus, only "" is needed to create a new line
   fileObject <- file(fileName, encoding = "UTF-8")
@@ -32,17 +27,16 @@ resetReport <- function(fileName, logFolder = getwd()) {
 #' @param figureFileRelativePath path to figure relative to working directory
 #' @param figureFileRootDirectory working directory
 #' @param figureCaption caption of figure
-#' @param logFolder folder where the logs are saved
 #' @export
 #' @family reporting
 addFigureChunk <- function(fileName,
                            figureFileRelativePath,
                            figureFileRootDirectory,
-                           figureCaption = "",
-                           logFolder = getwd()) {
+                           figureCaption = "") {
   # For a figure path to be valid in markdown using ![](#figurePath)
   # %20 needs to replace spaces in that figure path
-  mdFigureFile <- gsub(pattern = "[[:space:]*]", replacement = "%20", x = figureFileRelativePath)
+  mdFigureFile <- URLencode(figureFileRelativePath)
+  
   mdText <- c(
     "",
     paste0("![", figureCaption, "](", mdFigureFile, ")"),
@@ -57,12 +51,6 @@ addFigureChunk <- function(fileName,
   fileObject <- file(usedFilesFileName, open = "at", encoding = "UTF-8")
   write(file.path(figureFileRootDirectory, figureFileRelativePath), file = fileObject, append = TRUE, sep = "\n")
   close(fileObject)
-
-  logWorkflow(
-    message = paste0("Figure path '", figureFileRelativePath, "' added to report '", fileName, "'."),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
   return(invisible())
 }
 
@@ -73,7 +61,6 @@ addFigureChunk <- function(fileName,
 #' @param tableFileRootDirectory working directory
 #' @param digits number of decimal digits in displayed numbers
 #' @param scientific logical defining if displayed numbers use scientific writing
-#' @param logFolder folder where the logs are saved
 #' @param na character string replacing `NA` values in table
 #' @export
 #' @import ospsuite.utils
@@ -83,14 +70,13 @@ addTableChunk <- function(fileName,
                           tableFileRootDirectory,
                           digits = NULL,
                           scientific = NULL,
-                          logFolder = getwd(),
                           na = "-") {
   # The function `formatNumerics` is now used by addTableChunk
   # colClasses = "character" is not needed anymore to enforce all table elements to be 'character'
   table <- read.csv(
     file.path(tableFileRootDirectory, tableFileRelativePath),
     check.names = FALSE,
-    #colClasses = "character",
+    # colClasses = "character",
     fileEncoding = "UTF-8",
     stringsAsFactors = FALSE
   )
@@ -98,7 +84,7 @@ addTableChunk <- function(fileName,
     table,
     digits = digits %||% reEnv$formatNumericsDigits,
     scientific = scientific %||% reEnv$formatNumericsScientific
-    )
+  )
 
   # Currently using default options from kable
   mdText <- c(
@@ -116,12 +102,6 @@ addTableChunk <- function(fileName,
   fileObject <- file(usedFilesFileName, open = "at", encoding = "UTF-8")
   write(file.path(tableFileRootDirectory, tableFileRelativePath), file = fileObject, append = TRUE, sep = "\n")
   close(fileObject)
-
-  logWorkflow(
-    message = paste0("Table path '", file.path(tableFileRootDirectory, tableFileRelativePath), "' added to report '", fileName, "'."),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
   return(invisible())
 }
 
@@ -129,7 +109,6 @@ addTableChunk <- function(fileName,
 #' @description Add a text chunk to a .md document
 #' @param fileName name of .md file
 #' @param text text to include in the document
-#' @param logFolder folder where the logs are saved
 #' @export
 #' @family reporting
 #' @examples
@@ -137,18 +116,11 @@ addTableChunk <- function(fileName,
 #' resetReport("report.md")
 #' addTextChunk(fileName = "report.md", text = "new text")
 #' }
-#' 
-addTextChunk <- function(fileName,
-                         text,
-                         logFolder = getwd()) {
+#'
+addTextChunk <- function(fileName, text) {
   fileObject <- file(fileName, encoding = "UTF-8", open = "at")
   write(c("", text, ""), file = fileObject, append = TRUE, sep = "\n")
   close(fileObject)
-  logWorkflow(
-    message = paste0("Text '", text, "' added to report '", fileName, "'."),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
   return(invisible())
 }
 
@@ -156,7 +128,6 @@ addTextChunk <- function(fileName,
 #' @description Merge markdown files into one unique file
 #' @param inputFiles names of .md files to merge
 #' @param outputFile name of merged .md file
-#' @param logFolder folder where the logs are saved
 #' @param keepInputFiles logical option to prevent the input files to be deleted after merging them
 #' @export
 #' @family reporting
@@ -167,16 +138,18 @@ addTextChunk <- function(fileName,
 #' resetReport("chapter-2.md")
 #' addTextChunk(fileName = "chapter-2.md", text = "Chapter 2")
 #' mergeMarkdownFiles(
-#'  inputFiles = c("chapter-1.md", "chapter-2.md"), 
-#'  outputFile = "chapters-1and2.md"
+#'   inputFiles = c("chapter-1.md", "chapter-2.md"),
+#'   outputFile = "chapters-1and2.md"
 #' )
 #' }
-#' 
-mergeMarkdownFiles <- function(inputFiles, outputFile, logFolder = getwd(), keepInputFiles = FALSE) {
+#'
+mergeMarkdownFiles <- function(inputFiles, outputFile, keepInputFiles = FALSE) {
   validateIsLogical(keepInputFiles)
   # Read all files contents first in case outputFile is within inputFiles
-  filesContent <- lapply(inputFiles, function(fileName){readLines(fileName, encoding = "UTF-8")})
-  resetReport(outputFile, logFolder)
+  filesContent <- lapply(inputFiles, function(fileName) {
+    readLines(fileName, encoding = "UTF-8")
+  })
+  resetReport(outputFile)
 
   # tracelib chunk of code
   usedFilesOutputFile <- sub(pattern = ".md", replacement = "-usedFiles.txt", outputFile)
@@ -189,41 +162,38 @@ mergeMarkdownFiles <- function(inputFiles, outputFile, logFolder = getwd(), keep
     }
   }
   # Merge input files content
-  invisible(lapply(filesContent, function(fileContent){addTextChunk(outputFile, fileContent, logFolder = logFolder)}))
+  invisible(lapply(filesContent, function(fileContent) {
+    addTextChunk(outputFile, fileContent)
+  }))
   if (!keepInputFiles) {
     # Use setdiff to prevent erasing output file its name is included in inputFiles
     file.remove(setdiff(inputFiles, outputFile))
   }
 
-  logWorkflow(
-    message = paste0("Reports '", paste0(inputFiles, collapse = "', '"), "' were successfully merged into '", outputFile, "'"),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
+  logDebug(paste0("Reports '", paste0(inputFiles, collapse = "', '"), "' were successfully merged into '", outputFile, "'"))
   return(invisible())
 }
 
 #' @title renderReport
 #' @description Render report with number sections and table of content
 #' @param fileName name of .md file to render
-#' @param logFolder folder where the logs are saved
-#' @param createWordReport option for creating Markdwon-Report only but not a Word-Report
+#' @param createWordReport option for creating Markdown-Report only but not a Word-Report
 #' @param numberSections logical defining if sections are numbered
 #' @param intro name of .md file that include introduction (before toc)
 #' @param wordConversionTemplate optional docx template for rendering a tuned Word-Report document
 #' @export
 #' @family reporting
-renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE, numberSections = TRUE, intro = NULL, wordConversionTemplate = NULL) {
+renderReport <- function(fileName, createWordReport = FALSE, numberSections = TRUE, intro = NULL, wordConversionTemplate = NULL) {
   actionToken2 <- re.tStartAction(actionType = "ReportGeneration")
-  addTableAndFigureNumbersToMarkdown(fileName, logFolder)
+  addTableAndFigureNumbersToMarkdown(fileName)
   # When rendering word report, the pandoc command toc automatically number the sections
   # Thus, report-word.md needs to be created before numbering the markdown sections
-  renderWordReport(fileName, intro = intro, logFolder, createWordReport, wordConversionTemplate)
-  if(numberSections){
-    addSectionNumbersToMarkdown(fileName, logFolder)
+  renderWordReport(fileName, intro = intro, createWordReport, wordConversionTemplate)
+  if (numberSections) {
+    addSectionNumbersToMarkdown(fileName)
   }
-  addMarkdownToc(fileName, logFolder)
-  mergeMarkdownFiles(inputFiles = c(intro, fileName), outputFile = fileName, logFolder = logFolder)
+  addMarkdownToc(fileName)
+  mergeMarkdownFiles(inputFiles = c(intro, fileName), outputFile = fileName)
   re.tEndAction(actionToken = actionToken2)
   return(invisible())
 }
@@ -232,13 +202,12 @@ renderReport <- function(fileName, logFolder = getwd(), createWordReport = FALSE
 #' @description Render docx report with number sections and table of content
 #' @param fileName name of .md file to render
 #' @param intro name of .md file that include introduction (before toc)
-#' @param logFolder folder where the logs are saved
-#' @param createWordReport option for creating Markdwon-Report only but not a Word-Report
+#' @param createWordReport option for creating Markdown-Report only but not a Word-Report
 #' @param wordConversionTemplate optional docx template for rendering a tuned Word-Report document
 #' @export
 #' @family reporting
-renderWordReport <- function(fileName, intro = NULL, logFolder = getwd(), createWordReport = FALSE, wordConversionTemplate = NULL) {
-  reportConfig <- file.path(logFolder, "word-report-configuration.txt")
+renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, wordConversionTemplate = NULL) {
+  reportConfig <- file.path(reEnv$log$folder, "word-report-configuration.txt")
   wordFileName <- sub(pattern = ".md", replacement = "-word.md", fileName)
   docxWordFileName <- sub(pattern = ".md", replacement = "-word.docx", fileName)
   docxFileName <- sub(pattern = ".md", replacement = ".docx", fileName)
@@ -248,39 +217,48 @@ renderWordReport <- function(fileName, intro = NULL, logFolder = getwd(), create
   figureContent <- NULL
   for (lineContent in fileContent) {
     firstElement <- getFirstLineElement(lineContent)
-    # When finding a line referencing a table caption,
-    if (grepl(pattern = "Table", x = firstElement)) {
-      # The new content to write in the report is
-      # - previous content = wordFileContent
-      # - page break = "\\newpage"
-      # - table caption = lineContent
-      # - line space = "" (due to sep="\n" in function write)
-      wordFileContent <- c(wordFileContent, "\\newpage", lineContent, "")
-      next
-    }
-    # Figure: caption is after figure linked with "![](path)". Thus, break page is added before definition of figure path
-    # For word report, it needs to be merged as "![caption](path)"
-    if (grepl(pattern = "\\!\\[\\]", x = firstElement)) {
-      # Store link to figure path in figureContent
-      figureContent <- lineContent
-      next
-    }
-    # When finding a line referencing a figure caption,
-    if (grepl(pattern = "Figure", x = firstElement) & !is.null(figureContent)) {
-      # The new content to write in the report is
-      # - previous content = wordFileContent
-      # - page break = "\\newpage"
-      # - figure and its caption = "![lineContent](figureContent)"
-      # with lineContent = figure caption and figureContent = figure link
-      wordFileContent <- c(
-        wordFileContent,
-        "\\newpage",
-        paste0("![", lineContent, "]", gsub(pattern = "\\!\\[\\]", replacement = "", x = figureContent))
-        )
-      figureContent <- NULL
-      next
-    }
-    wordFileContent <- c(wordFileContent, lineContent)
+    anchorName <- getAnchorName(lineContent)
+    # Issue #968 Subscript and superscript rendering
+    lineContent <- gsub(pattern = "<sup>|</sup>", replacement = "^", lineContent)
+    lineContent <- gsub(pattern = "<sub>|</sub>", replacement = "~", lineContent)
+    # When finding a line referencing a table or figure tag as first element
+    # The new content to write in the report is
+    # - previous content = wordFileContent
+    # - page break = "\\newpage"
+    # - tag
+    # - next content (caption, + table/figure)
+    isArtifactReference <- all(
+      isIncluded(firstElement, "<a"),
+      any(
+        grepl(pattern = "table", x = anchorName),
+        grepl(pattern = "figure", x = anchorName)
+      )
+    )
+    bookmarkLines <- c(
+      "",
+      "```{=openxml}",
+      paste0(
+        "<w:p><w:r>",
+        # Page break using source code
+        # https://pandoc.org/MANUAL.html#extension-raw_attribute
+        '<w:br w:type="page"/>',
+        "</w:r><w:r>",
+        # Bookmark that uses anchor name (e.g. figure-1-1)
+        # Used the following website as sample for the code
+        # https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.wordprocessing.bookmarkstart?view=openxml-2.8.1#remarks
+        '<w:bookmarkStart w:id="', anchorName, '" w:name="', anchorName, '"/>',
+        '<w:bookmarkEnd w:id="', anchorName, '"/>',
+        "</w:r></w:p>"
+        ),
+      "```",
+      ""
+      )
+    wordFileContent <- c(
+      wordFileContent, 
+      # Add page break and bookmark if artifact is found
+      bookmarkLines[isArtifactReference],
+      lineContent
+      )
   }
 
   usedFilesFileName <- sub(pattern = ".md", replacement = "-usedFiles.txt", fileName)
@@ -294,10 +272,10 @@ renderWordReport <- function(fileName, intro = NULL, logFolder = getwd(), create
   file.remove(usedFilesFileName)
 
   # Include introduction as a yaml header passed as additional arguments to pandoc
-  if(!isEmpty(intro)){
+  if (!isEmpty(intro)) {
     introContent <- readLines(intro, encoding = "UTF-8")
     yamlContent <- introToYamlHeader(introContent)
-    
+
     wordFileContent <- c(
       # Cover page features
       yamlContent,
@@ -305,7 +283,7 @@ renderWordReport <- function(fileName, intro = NULL, logFolder = getwd(), create
       wordFileContent
     )
   }
-  # Since write() uses sep = "\n", 
+  # Since write() uses sep = "\n",
   # every element of array wordFileContent is added in a new line
   fileObject <- file(wordFileName, encoding = "UTF-8")
   write(wordFileContent, file = fileObject, sep = "\n")
@@ -314,82 +292,89 @@ renderWordReport <- function(fileName, intro = NULL, logFolder = getwd(), create
 
   if (createWordReport) {
     # Check if pandoc is available before trying to render word report
-    tryCatch({
-      command <- "pandoc --version"
-      status <- system(command, show.output.on.console = FALSE)
-      validateCommandStatus(command, status)
-    }, error = function(e) {
-      logWorkflow(
-        message = "Pandoc is not installed, word report was not created",
-        pathFolder = logFolder,
-        logTypes = c(LogTypes$Error, LogTypes$Debug)
-      )
+    if (!rmarkdown::pandoc_available()) {
+      logError("Pandoc is not installed, word report was not created.")
       return(invisible())
-    })
+    }
 
     wordConversionTemplate <- wordConversionTemplate %||% system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
-    pageBreakCode <- system.file("extdata", "pagebreak.lua", package = "ospsuite.reportingengine")
-
+    
+    # Some arguments will depend on pandoc version to prevent warnings
+    # docx requires that figures are contained within document
+    selfContainedArgument <- "self-contained:"
+    if (rmarkdown::pandoc_version() >= "2.19") {
+      selfContainedArgument <- c("embed-resources:", "standalone:")
+    }
+    # Create txt file that includes arguments for Pandoc
     write(c(
-      "self-contained:", "wrap: none", "toc:",
+      selfContainedArgument,
+      # Remove wrapping limitation of 80 characters/line
+      "wrap: none",
+      # Add table of content
+      "toc:",
+      # Add extensions to md for conversion
+      # +tex_math_dollars: convert equations written between $...$ in LateX
+      # https://pandoc.org/MANUAL.html#extension-tex_math_dollars
+      # +raw_attribute: keep ```{=openxml} as raw openxml to include page breaks and bookmarks
+      # https://pandoc.org/MANUAL.html#extension-raw_attribute
+      # +superscript+subscript: convert superscript text between ^...^, subscript text between ~...~
+      # https://pandoc.org/MANUAL.html#superscripts-and-subscripts
+      "from: markdown+tex_math_dollars+superscript+subscript+raw_attribute",
+      # Document used for styling
       paste0('reference-doc: "', wordConversionTemplate, '"'),
-      paste0('lua-filter: "', pageBreakCode, '"'),
-      paste0('resource-path: "', logFolder, '"')
-    ), file = reportConfig, sep = "\n")
+      # Location of resources such as figures
+      paste0('resource-path: "', reEnv$log$folder, '"')
+    ),
+    file = reportConfig, sep = "\n"
+    )
+
     knitr::pandoc(input = wordFileName, format = "docx", config = reportConfig)
     file.copy(docxWordFileName, docxFileName, overwrite = TRUE)
     re.tStoreFileMetadata(access = "write", filePath = docxFileName)
     unlink(reportConfig, recursive = TRUE)
     unlink(docxWordFileName, recursive = TRUE)
   }
-  logWorkflow(
-    message = paste0("Word version of report '", fileName, "' created."),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
+  logDebug(paste0("Word version of report '", fileName, "' created."))
   return(invisible())
 }
 
 #' @title addTableAndFigureNumbersToMarkdown
 #' @description Reference tables and figures in a report
 #' @param fileName name of .md file to update
-#' @param logFolder folder where the logs are saved
 #' @keywords internal
-addTableAndFigureNumbersToMarkdown <- function(fileName, logFolder = getwd()) {
+addTableAndFigureNumbersToMarkdown <- function(fileName) {
   fileContent <- readLines(fileName, encoding = "UTF-8")
   numberOfLines <- length(fileContent)
-  
+
   fileContent <- updateFigureNumbers(fileContent)
   # Three new lines are added by referenced figure
-  figureCount <- (length(fileContent)-numberOfLines)/3
+  figureCount <- (length(fileContent) - numberOfLines) / 3
   numberOfLines <- length(fileContent)
-  
+
   fileContent <- updateTableNumbers(fileContent)
   # Three new lines are added by referenced table
-  tableCount <- (length(fileContent)-numberOfLines)/3
+  tableCount <- (length(fileContent) - numberOfLines) / 3
   numberOfLines <- length(fileContent)
-  
+
   fileObject <- file(fileName, encoding = "UTF-8")
   write(fileContent, file = fileObject, sep = "\n")
   close(fileObject)
 
-  logWorkflow(
-    message = paste0("In '", fileName, "', ", tableCount, " tables and ", figureCount, " figures were referenced."),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
+  logDebug(paste0(
+    "In '", fileName, "', ", tableCount, " tables and ",
+    figureCount, " figures were referenced."
+  ))
   return(invisible())
 }
 
 #' @title addSectionNumbersToMarkdown
 #' @description Update section numbers of a report
 #' @param fileName name of .md file to update
-#' @param logFolder folder where the logs are saved
 #' @keywords internal
-addSectionNumbersToMarkdown <- function(fileName, logFolder = getwd()){
+addSectionNumbersToMarkdown <- function(fileName) {
   fileContent <- readLines(fileName, encoding = "UTF-8")
   titleInfo <- getTitleInfo(fileContent)
-  for(title in titleInfo){
+  for (title in titleInfo) {
     titleNumber <- paste0(title$count[seq(1, title$level)], collapse = ".")
     titlePattern <- paste0(rep("#", title$level), collapse = "")
     fileContent[title$line] <- gsub(
@@ -398,17 +383,13 @@ addSectionNumbersToMarkdown <- function(fileName, logFolder = getwd()){
       replacement = paste(titlePattern, titleNumber)
     )
   }
-  
-  fileObject <- file(fileName, encoding = "UTF-8")
-write(fileContent, file = fileObject, sep = "\n")
-close(fileObject)
 
-logWorkflow(
-  message = paste0("In '", fileName, "', ", length(title), " sections were numbered"),
-  pathFolder = logFolder,
-  logTypes = LogTypes$Debug
-)
-return(invisible())
+  fileObject <- file(fileName, encoding = "UTF-8")
+  write(fileContent, file = fileObject, sep = "\n")
+  close(fileObject)
+
+  logDebug(paste0("In '", fileName, "', ", length(title), " sections were numbered"))
+  return(invisible())
 }
 
 
@@ -416,16 +397,15 @@ return(invisible())
 #' @description Add table of content to a markdown file
 #' @param tocContent Table of content referencing sections following a markdown format
 #' @param fileName name of .md file to update
-#' @param logFolder folder where the logs are saved
 #' @keywords internal
-addMarkdownToc <- function(fileName, logFolder = getwd(), tocTitle = "# Table of Contents") {
+addMarkdownToc <- function(fileName, tocTitle = "# Table of Contents") {
   fileContent <- readLines(fileName, encoding = "UTF-8")
   titleInfo <- getTitleInfo(fileContent)
   # For each title, create its entry in table of content
   # By adding as many spaces as levels, then *[display title](#anchorId)
   tocContent <- sapply(
     titleInfo,
-    function(title){
+    function(title) {
       titlePattern <- paste0(paste0(rep("#", title$level), collapse = ""), " ")
       titleTocContent <- gsub(pattern = titlePattern, replacement = "", x = title$content)
       tocLevelShift <- paste0(rep(" ", title$level), collapse = " ")
@@ -443,11 +423,10 @@ addMarkdownToc <- function(fileName, logFolder = getwd(), tocTitle = "# Table of
   close(fileObject)
   re.tStoreFileMetadata(access = "write", filePath = fileName)
 
-  logWorkflow(
-    message = paste0("In '", fileName, "', table of content included."),
-    pathFolder = logFolder,
-    logTypes = LogTypes$Debug
-  )
+  logDebug(paste0(
+    "In '", fileName, "', table of content of ",
+    length(tocContent), " lines was included."
+  ))
   return(invisible())
 }
 
@@ -479,7 +458,7 @@ getSimulationDescriptor <- function(workflow) {
 }
 
 #' @title adjustTitlePage
-#' @description Adust Qualification Version Information to be displayed on title page 
+#' @description Adjust Qualification Version Information to be displayed on title page
 #' @param fileName name of .md file to update
 #' @param qualificationVersionInfo A `QualificationVersionInfo`object defining Qualification Version Information to be displayed on title page
 #' @export
@@ -488,12 +467,12 @@ adjustTitlePage <- function(fileName, qualificationVersionInfo = NULL) {
   validateIsOfType(qualificationVersionInfo, "QualificationVersionInfo", nullAllowed = TRUE)
   validateFileExists(fileName)
   # Does not adust title page if no QualificationVersionInfo
-  if(isEmpty(qualificationVersionInfo)){
+  if (isEmpty(qualificationVersionInfo)) {
     return(invisible())
   }
   fileContent <- readLines(fileName, encoding = "UTF-8")
   fileContent <- qualificationVersionInfo$updateText(fileContent)
-  
+
   fileObject <- file(fileName, encoding = "UTF-8")
   write(fileContent, file = fileObject, sep = "\n")
   close(fileObject)
@@ -506,10 +485,10 @@ adjustTitlePage <- function(fileName, qualificationVersionInfo = NULL) {
 #' @return A character string
 #' @export
 #' @family reporting
-#' @examples 
-#' 
+#' @examples
+#'
 #' anchor("section-1")
-#' 
+#'
 anchor <- function(name) {
   return(paste0('<a id="', name, '"></a>'))
 }
@@ -520,13 +499,13 @@ anchor <- function(name) {
 #' @return A logical
 #' @export
 #' @family reporting
-#' @examples 
+#' @examples
 #' # Flags both anchors using id or name
 #' hasAnchor('<a id="section-1"></a>')
 #' hasAnchor('<a name="section-1"></a>')
-#' 
+#'
 #' hasAnchor("# section 1")
-#' 
+#'
 hasAnchor <- function(tag) {
   return(grepl(pattern = '<a (id|name)="', x = tag) & grepl(pattern = '"></a>', x = tag))
 }
@@ -538,14 +517,14 @@ hasAnchor <- function(tag) {
 #' @return A character Name/identifier of the anchor tag
 #' @export
 #' @family reporting
-#' @examples 
+#' @examples
 #' getAnchorName('<a id="section-1"></a>')
-#' 
-#' # Works also for tag name instead of id 
+#'
+#' # Works also for tag name instead of id
 #' getAnchorName('<a name="section-1"></a>')
-#' 
+#'
 getAnchorName <- function(tag) {
-  if(!hasAnchor(tag)){
+  if (!hasAnchor(tag)) {
     return()
   }
   # Keeps only what is within quotes
@@ -567,37 +546,36 @@ introToYamlHeader <- function(introContent) {
   # Initialize empty contents for the yaml header
   titleContent <- ""
   subtitleContent <- ""
-  
+
   # Look for title and subtitle of the intro content
   titleLine <- head(which(grepl(pattern = "# ", introContent) & !grepl(pattern = "## ", introContent)), 1)
-  if(!isEmpty(titleLine)){
+  if (!isEmpty(titleLine)) {
     titleContent <- gsub(pattern = "# ", replacement = "", x = introContent[titleLine])
     # Remove title from intro
     introContent <- introContent[-titleLine]
   }
   subtitleLine <- head(which(grepl(pattern = "## ", introContent) & !grepl(pattern = "### ", introContent)), 1)
-  if(!isEmpty(subtitleLine)){
+  if (!isEmpty(subtitleLine)) {
     subtitleContent <- gsub(pattern = "## ", replacement = "", x = introContent[subtitleLine])
     # Remove title from intro
     introContent <- introContent[-subtitleLine]
   }
-  
+
   # Define cover page features
   yamlContent <- c(
     # yaml header is delimited by ---
-      "---",
-      paste0("title: '", titleContent, "'"),
-      paste0("subtitle: '", subtitleContent, "'"),
-      # Caution, yaml options on several lines require indentation
-      "abstract: | ",
-      paste("\t", introContent),
-      "",
-      # Add a page break before the table of content
-      paste("\t", "\\newpage"),
-      "---"
-    )
+    "---",
+    paste0("title: '", titleContent, "'"),
+    paste0("subtitle: '", subtitleContent, "'"),
+    # Caution, yaml options on several lines require indentation
+    "abstract: | ",
+    paste("\t", introContent),
+    "",
+    # Add a page break before the table of content
+    paste("\t", "\\newpage"),
+    "---"
+  )
   return(yamlContent)
-  
 }
 
 #' @title getTitleInfo
@@ -610,7 +588,9 @@ introToYamlHeader <- function(introContent) {
 getTitleInfo <- function(fileContent, titlePattern = "#", titleLevels = 6) {
   # Initialize title information
   titleInfo <- list()
-  titlePatterns <- sapply(seq(1, titleLevels), function(titleLevel){paste0(rep(titlePattern, titleLevel), collapse = "")})
+  titlePatterns <- sapply(seq(1, titleLevels), function(titleLevel) {
+    paste0(rep(titlePattern, titleLevel), collapse = "")
+  })
   titleCounts <- rep(0, titleLevels)
   titleReference <- NULL
   for (lineIndex in seq_along(fileContent)) {
@@ -624,7 +604,7 @@ getTitleInfo <- function(fileContent, titlePattern = "#", titleLevels = 6) {
       # Identify section titles as lines starting with "#" characters
       if (grepl(pattern = titlePatterns[titleLevel], x = firstElement)) {
         # Prevents unreferenced title sections to appear in table of content
-        if(is.null(titleReference)){
+        if (is.null(titleReference)) {
           next
         }
         # Count elements of section tree for numbering of sections
@@ -632,18 +612,18 @@ getTitleInfo <- function(fileContent, titlePattern = "#", titleLevels = 6) {
         if (titleLevel < titleLevels) {
           titleCounts[seq(titleLevel + 1, titleLevels)] <- 0
         }
-        
-        titleInfo[[length(titleInfo)+1]] <- list(
-            line = lineIndex,
-            # Remove the "#" characters from the title content
-            content = lineContent,
-            reference = titleReference,
-            count = titleCounts,
-            level = titleLevel
-          )
+
+        titleInfo[[length(titleInfo) + 1]] <- list(
+          line = lineIndex,
+          # Remove the "#" characters from the title content
+          content = lineContent,
+          reference = titleReference,
+          count = titleCounts,
+          level = titleLevel
+        )
         titleReference <- NULL
         break
-    }
+      }
     }
   }
   return(titleInfo)
@@ -655,7 +635,7 @@ getTitleInfo <- function(fileContent, titlePattern = "#", titleLevels = 6) {
 #' @param split character pattern to split between elements/words
 #' @return Character string
 #' @keywords internal
-getFirstLineElement <- function(lineContent, split = " "){
+getFirstLineElement <- function(lineContent, split = " ") {
   as.character(unlist(strsplit(lineContent, split)))[1]
 }
 
@@ -670,22 +650,22 @@ getFirstLineElement <- function(lineContent, split = " "){
 updateFigureNumbers <- function(fileContent, pattern = "Figure:", replacement = "Figure", anchorId = "figure") {
   # Only higher level titles are used for figure numbering
   titleInfo <- getTitleInfo(fileContent)
-  titleInfo <- titleInfo[sapply(titleInfo, function(title)title$level==1)]
-  titleLines <- sapply(titleInfo, function(title)title$line)
+  titleInfo <- titleInfo[sapply(titleInfo, function(title) title$level == 1)]
+  titleLines <- sapply(titleInfo, function(title) title$line)
   # In case of unreferenced titles
-  titleNumbers <- sapply(titleInfo, function(title)title$count[1])
+  titleNumbers <- sapply(titleInfo, function(title) title$count[1])
 
   # Initialize
   updatedFileContent <- NULL
   count <- 1
   titleIndex <- 1
-  for(lineIndex in seq_along(fileContent)){
+  for (lineIndex in seq_along(fileContent)) {
     # Counting is performed within sections
     # Need to reset count at lines of titles
-    if(lineIndex %in% titleLines){
+    if (lineIndex %in% titleLines) {
       count <- 1
     }
-    
+
     # If line is not related to an artifact, nothing to update
     firstElement <- getFirstLineElement(fileContent[lineIndex])
     if (!grepl(pattern = pattern, x = firstElement)) {
@@ -694,22 +674,22 @@ updateFigureNumbers <- function(fileContent, pattern = "Figure:", replacement = 
     }
     # Get section number of figure as last value lower than line index
     # If no value found, section is empty and figure count is only global count
-    section <- tail(titleNumbers[titleLines<lineIndex], 1)
+    section <- tail(titleNumbers[titleLines < lineIndex], 1)
     figureNumber <- paste(c(section, count), collapse = "-")
-    
+
     # Create reference anchor with id matching figure number
     anchorContent <- anchor(paste(anchorId, figureNumber, sep = "-"))
-    
+
     # Update caption with appropriate figure count
     updatedFigureContent <- gsub(
-      pattern = pattern, 
-      replacement = paste0(replacement, " ", figureNumber, ":"), 
+      pattern = pattern,
+      replacement = paste0(replacement, " ", figureNumber, ":"),
       x = fileContent[lineIndex]
-      )
-    
+    )
+
     # Updated file content includes reference and intra section numbering
     updatedFileContent <- c(updatedFileContent, "", anchorContent, "", updatedFigureContent)
-    
+
     count <- count + 1
   }
   return(updatedFileContent)
@@ -743,64 +723,113 @@ copyReport <- function(from, to, copyWordReport = TRUE, keep = FALSE) {
   validateIsLogical(copyWordReport)
   validateIsLogical(keep)
   # If from and to files are identical, just return
-  if(tolower(normalizePath(from, mustWork = FALSE)) == tolower(normalizePath(to, mustWork = FALSE))){
+  if (tolower(normalizePath(from, mustWork = FALSE)) == tolower(normalizePath(to, mustWork = FALSE))) {
     return(invisible())
   }
   # Get directories of reports
   fromFolder <- dirname(from)
   toFolder <- dirname(to)
   fromWordReport <- gsub(pattern = ".md", replacement = ".docx", x = from)
-  toWordReport <-gsub(pattern = ".md", replacement = ".docx", x = to)
-  
+  toWordReport <- gsub(pattern = ".md", replacement = ".docx", x = to)
+
   # If from and to locations are identical but not files, only copy report
-  if(tolower(normalizePath(fromFolder, mustWork = FALSE)) == tolower(normalizePath(toFolder, mustWork = FALSE))){
+  if (tolower(normalizePath(fromFolder, mustWork = FALSE)) == tolower(normalizePath(toFolder, mustWork = FALSE))) {
     file.copy(from, to, overwrite = TRUE)
-    if(copyWordReport){
+    if (copyWordReport) {
       file.copy(from = fromWordReport, to = toWordReport)
     }
-    if(!keep){
+    if (!keep) {
       unlink(from, recursive = TRUE)
-      if(copyWordReport){
+      if (copyWordReport) {
         unlink(fromWordReport, recursive = TRUE)
       }
     }
     return(invisible())
   }
-  
+
   # Copy the .md report to its destination
   dir.create(toFolder, showWarnings = FALSE, recursive = TRUE)
   file.copy(from, to, overwrite = TRUE)
-  if(copyWordReport){
+  if (copyWordReport) {
     file.copy(from = fromWordReport, to = toWordReport)
   }
-  
+
   # Get all file paths available in figures/file links
   fileContent <- readLines(from, encoding = "UTF-8")
-  filePaths <- fileContent[grepl(pattern = '\\!\\[', x = fileContent)]
-  filePaths <- gsub(pattern = '.*\\]\\(', replacement = "", x = filePaths)
-  filePaths <- gsub(pattern = '\\).*', replacement = "", x = filePaths)
+  filePaths <- fileContent[grepl(pattern = "\\!\\[", x = fileContent)]
+  filePaths <- gsub(pattern = ".*\\]\\(", replacement = "", x = filePaths)
+  filePaths <- gsub(pattern = "\\).*", replacement = "", x = filePaths)
   filePaths <- unique(filePaths)
-  
+
   # Create all necessary subfolders within report folder
-  for(dirPath in unique(file.path(toFolder, dirname(filePaths)))){
+  for (dirPath in unique(file.path(toFolder, dirname(filePaths)))) {
     dir.create(dirPath, showWarnings = FALSE, recursive = TRUE)
   }
-  
+
   # Copy the figures in destination folder to have them available for new report
   file.copy(file.path(fromFolder, filePaths), file.path(toFolder, filePaths), overwrite = TRUE)
-  
+
   # If keep is true, keep initial files and report
-  if(keep){
+  if (keep) {
     return(invisible())
   }
-  
+
   # If keep is false, delete initial files and report
-  for(filePath in filePaths){
+  for (filePath in filePaths) {
     unlink(file.path(fromFolder, filePath), recursive = TRUE)
   }
   unlink(from, recursive = TRUE)
-  if(copyWordReport){
+  if (copyWordReport) {
     unlink(fromWordReport, recursive = TRUE)
   }
   return(invisible())
+}
+
+
+#' @title getIntroFromReportTitle
+#' @description Get introduction file used as cover page of report
+#' @param reportTitle Report title page
+#' If `reportTitle` is an existing file, its content will be used as cover page.
+#' If `reportTitle` is one character string, it is assumed as a title.
+#' Thus the markdown title tag is internally added to `reportTitle`.
+#' If `reportTitle` is multiple character strings, it is assumed as the cover page content.
+#' and used *as is* in the cover page.
+#' @param intro temporary introduction file deleted when merged to final report
+#' Parameter is named intro to stay consistent with Qualification Workflow nomenclature
+#' @return `intro`, path of temporary introduction file if created
+#' @keywords internal
+getIntroFromReportTitle <- function(reportTitle = NULL, intro = "temp-report-title.md") {
+  # No cover page
+  if (isEmpty(reportTitle)) {
+    return(NULL)
+  }
+  # Create temporary cover page file to be merged
+  resetReport(intro)
+  # If report title are actual files, use their content as cover page
+  if (all(file.exists(reportTitle))) {
+    for (coverPage in reportTitle) {
+      addTextChunk(
+        fileName = intro,
+        text = readLines(coverPage, encoding = "UTF-8", warn = FALSE)
+      )
+    }
+    return(intro)
+  }
+  # If length of title is 1, it is assumed a title
+  # and md title tag "#" is added
+  if (isOfLength(reportTitle, 1)) {
+    addTextChunk(
+      fileName = intro,
+      text = paste("#", reportTitle)
+    )
+    return(intro)
+  }
+  # If length of title is longer than 1,
+  # it is assumed report title is the content of the page
+  # and added as is in the intro file
+  addTextChunk(
+    fileName = intro,
+    text = reportTitle
+  )
+  return(intro)
 }

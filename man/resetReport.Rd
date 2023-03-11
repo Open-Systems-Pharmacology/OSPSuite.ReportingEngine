@@ -4,12 +4,10 @@
 \alias{resetReport}
 \title{resetReport}
 \usage{
-resetReport(fileName, logFolder = getwd())
+resetReport(fileName)
 }
 \arguments{
 \item{fileName}{name of .md file to reset}
-
-\item{logFolder}{folder where the logs are saved}
 }
 \description{
 Initialize a report, warning if a previous version already exists
