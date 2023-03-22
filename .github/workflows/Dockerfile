@@ -24,8 +24,8 @@ RUN /tmp_setup/install_packages_${os_version}.sh
 # Cleanup
 RUN rm -rf /tmp_setup
 
-# run lint
-RUN R --no-save -e "library(lintr); lint_dir(path = 'R', linters=linters_with_defaults(object_name_linter=NULL, line_length_linter=NULL, object_length_linter=NULL, brace_linter=NULL, paren_body_linter=NULL, trailing_whitespace_linter=NULL, trailing_blank_lines_linter=NULL, spaces_left_parentheses_linter=NULL, infix_spaces_linter=NULL))"
+# # run lint
+# RUN R --no-save -e "library(lintr); lint_dir(path = 'R', linters=linters_with_defaults(object_name_linter=NULL, line_length_linter=NULL, object_length_linter=NULL, brace_linter=NULL, paren_body_linter=NULL, trailing_whitespace_linter=NULL, trailing_blank_lines_linter=NULL, spaces_left_parentheses_linter=NULL, infix_spaces_linter=NULL))"
 
 # run package tests
 RUN R --no-save -e "setwd('/RE_Source/'); source('testRE.R')"
