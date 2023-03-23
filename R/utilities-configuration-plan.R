@@ -27,24 +27,37 @@ ConfigurationScales <- list(
 
 #' @title ConfigurationShapes
 #' @description List mapping configuration plan symbols to tlf shapes.
-#' The current mapping leads to open shapes
+#' Note that the names only include lower case as the mapping 
+#' used in `tlfShape()` internally translate configuration plan field with `tolower()` function.
 #' @import tlf
 #' @keywords internal
 ConfigurationShapes <- list(
   none = tlf::Shapes$blank,
-  circle = tlf::Shapes$circleOpen,
+  circle = tlf::Shapes$circle,
   cross = tlf::Shapes$cross,
-  diamond = tlf::Shapes$diamondOpen,
+  diamond = tlf::Shapes$diamond,
   dot = tlf::Shapes$circle,
-  hexagon = tlf::Shapes$hexagonOpen,
-  invertedtriangle = tlf::Shapes$invertedTriangleOpen,
-  pentagon = tlf::Shapes$pentagonOpen,
+  hexagon = tlf::Shapes$hexagon,
+  invertedtriangle = tlf::Shapes$invertedTriangle,
+  pentagon = tlf::Shapes$pentagon,
   plus = tlf::Shapes$plus,
-  square = tlf::Shapes$squareOpen,
-  star = tlf::Shapes$starOpen,
+  square = tlf::Shapes$square,
+  star = tlf::Shapes$star,
   thincross = tlf::Shapes$thinCross,
   thinplus = tlf::Shapes$thinPlus,
-  triangle = tlf::Shapes$triangleOpen
+  triangle = tlf::Shapes$triangle,
+  # Add dictionary for open shapes
+  circleopen = tlf::Shapes$circleOpen,
+  cross = tlf::Shapes$cross,
+  diamondopen = tlf::Shapes$diamondOpen,
+  hexagonopen = tlf::Shapes$hexagonOpen,
+  invertedtriangleopen = tlf::Shapes$invertedTriangleOpen,
+  pentagonopen = tlf::Shapes$pentagonOpen,
+  squareopen = tlf::Shapes$squareOpen,
+  staropen = tlf::Shapes$starOpen,
+  thincross = tlf::Shapes$thinCross,
+  thinplus = tlf::Shapes$thinPlus,
+  triangleopen = tlf::Shapes$triangleOpen
 )
 
 #' @title ConfigurationLinetypes
