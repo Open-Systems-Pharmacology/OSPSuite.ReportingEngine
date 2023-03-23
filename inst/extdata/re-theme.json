@@ -198,10 +198,10 @@
       "alpha": 1
     },
     "addRibbon": {
-      "color": "#0078D7",
+      "color": "black",
       "fill": "#0078D7",
       "shape": "blank",
-      "linetype": "solid",
+      "linetype": "blank",
       "size": 1,
       "alpha": 0.2
     },
