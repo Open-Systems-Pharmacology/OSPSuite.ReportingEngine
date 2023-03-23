@@ -26,21 +26,25 @@ ConfigurationScales <- list(
 )
 
 #' @title ConfigurationShapes
-#' @description List mapping configuration plan symbols to tlf shapes
+#' @description List mapping configuration plan symbols to tlf shapes.
+#' The current mapping leads to open shapes
 #' @import tlf
 #' @keywords internal
 ConfigurationShapes <- list(
   none = tlf::Shapes$blank,
-  circle = tlf::Shapes$hollowCircle,
-  dot = tlf::Shapes$dot,
-  square = tlf::Shapes$hollowSquare,
-  diamond = tlf::Shapes$hollowDiamond,
-  asterisk = tlf::Shapes$asterisk,
+  circle = tlf::Shapes$circleOpen,
   cross = tlf::Shapes$cross,
+  diamond = tlf::Shapes$diamondOpen,
+  dot = tlf::Shapes$circle,
+  hexagon = tlf::Shapes$hexagonOpen,
+  invertedtriangle = tlf::Shapes$invertedTriangleOpen,
+  pentagon = tlf::Shapes$pentagonOpen,
   plus = tlf::Shapes$plus,
-  point = tlf::Shapes$circle,
-  triangle = tlf::Shapes$hollowTriangle,
-  triangledown = tlf::Shapes$hollowTriangleDown
+  square = tlf::Shapes$squareOpen,
+  star = tlf::Shapes$starOpen,
+  thincross = tlf::Shapes$thinCross,
+  thinplus = tlf::Shapes$thinPlus,
+  triangle = tlf::Shapes$triangleOpen
 )
 
 #' @title ConfigurationLinetypes

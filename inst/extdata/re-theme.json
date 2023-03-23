@@ -219,7 +219,7 @@
         "fill": "NA",
         "shape": "circle",
         "linetype": "blank",
-        "size": 1,
+        "size": 2,
         "alpha": 1
       },
       "lines": {
@@ -253,7 +253,7 @@
         "fill": "NA",
         "shape": "circle",
         "linetype": "blank",
-        "size": 1,
+        "size": 2,
         "alpha": 1
       },
       "lines": {
@@ -283,7 +283,7 @@
         "fill": "NA",
         "shape": "reset",
         "linetype": "blank",
-        "size": 1,
+        "size": 2,
         "alpha": 1
       },
       "lines": {
@@ -317,7 +317,7 @@
         "fill": "NA",
         "shape": "circle",
         "linetype": "blank",
-        "size": 1,
+        "size": 2,
         "alpha": 1
       },
       "lines": {
@@ -343,7 +343,7 @@
         "fill": "NA",
         "shape": "circle",
         "linetype": "blank",
-        "size": 1,
+        "size": 2,
         "alpha": 1
       },
       "lines": {
@@ -369,7 +369,7 @@
         "fill": "NA",
         "shape": "circle",
         "linetype": "blank",
-        "size": 1,
+        "size": 2,
         "alpha": 1
       },
       "lines": {
@@ -395,7 +395,7 @@
         "fill": "NA",
         "shape": "next",
         "linetype": "blank",
-        "size": 1,
+        "size": 2,
         "alpha": 1
       },
       "lines": {
@@ -439,7 +439,7 @@
         "fill": "NA",
         "shape": "reset",
         "linetype": "blank",
-        "size": 1,
+        "size": 2,
         "alpha": 1
       },
       "ribbons": {
