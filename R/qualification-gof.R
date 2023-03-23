@@ -212,6 +212,13 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, pl
       "residualsOverTime" = "ResVsPred"
     )
   )
+  # Use time tick algorithm for residualsOverTime plots
+  if (isIncluded(plotType, "residualsOverTime")) {
+    axesProperties$x <- c(
+      axesProperties$x,
+      getTimeTicksFromUnit(axesProperties$x$unit, data$Time)
+    )
+  }
 
   # Update shapes and colors from config plan
   plotConfiguration$points$color <- metaData$color
