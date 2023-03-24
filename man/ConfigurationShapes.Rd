@@ -5,12 +5,14 @@
 \alias{ConfigurationShapes}
 \title{ConfigurationShapes}
 \format{
-An object of class \code{list} of length 11.
+An object of class \code{list} of length 24.
 }
 \usage{
 ConfigurationShapes
 }
 \description{
-List mapping configuration plan symbols to tlf shapes
+List mapping configuration plan symbols to tlf shapes.
+Note that the names only include lower case as the mapping 
+used in `tlfShape()` internally translate configuration plan field with `tolower()` function.
 }
 \keyword{internal}
