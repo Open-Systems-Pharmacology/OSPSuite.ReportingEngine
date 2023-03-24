@@ -36,7 +36,6 @@ ConfigurationShapes <- list(
   circle = tlf::Shapes$circle,
   cross = tlf::Shapes$cross,
   diamond = tlf::Shapes$diamond,
-  dot = tlf::Shapes$circle,
   hexagon = tlf::Shapes$hexagon,
   invertedtriangle = tlf::Shapes$invertedTriangle,
   pentagon = tlf::Shapes$pentagon,
