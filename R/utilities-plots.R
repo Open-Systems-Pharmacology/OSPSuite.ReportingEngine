@@ -122,6 +122,10 @@ getTimeTicksFromUnit <- function(unit, timeValues = NULL, maxTicks = 10) {
 
   minorTicks <- seq(minTime, maxTime, tickScaleFactor*minorTickStep)
   majorTicks <- seq(minTime, maxTime, tickScaleFactor*majorTickStep)
+  # In case there are not enough major ticks due to short simulation time
+  if(length(majorTicks) <= 3){
+    majorTicks <- minorTicks
+  }
   ticklabels <- as.character(minorTicks)
   ticklabels[!(minorTicks %in% majorTicks)] <- ""
 
