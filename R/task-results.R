@@ -36,6 +36,9 @@ TaskResults <- R6::R6Class(
       }
       # TODO once every plot will use tlf, deprecate the condition for null values
       self$plot <- updatePlotDimensions(self$plot)
+      if(requireNamespace("showtext", quietly = TRUE)){
+        showtext::showtext_opts(dpi = reEnv$defaultPlotFormat$dpi)
+      }
       ggplot2::ggsave(
         filename = fileName,
         plot = self$plot,
