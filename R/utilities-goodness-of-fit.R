@@ -1112,7 +1112,9 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
       data = selectedResidualsData,
       metaData = residualsMetaData,
       dataMapping = obsVsPredDataMapping,
-      plotConfiguration = obsVsPredPlotConfiguration
+      plotConfiguration = obsVsPredPlotConfiguration,
+      # Add identity line to linear plot
+      foldDistance = 0
     )
 
     goodnessOfFitPlots[[resultId]] <- obsVsPredPlot
@@ -1141,7 +1143,9 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
         data = selectedResidualsData[selectedLogData, ],
         metaData = residualsMetaData,
         dataMapping = obsVsPredDataMapping,
-        plotConfiguration = obsVsPredPlotConfigurationLog
+        plotConfiguration = obsVsPredPlotConfigurationLog,
+        # Add identity line to log-log plot
+        foldDistance = 0
       )
       goodnessOfFitPlots[[resultIdLog]] <- obsVsPredPlotLog
       goodnessOfFitCaptions[[resultIdLog]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred", "logarithmic", settings)

@@ -245,7 +245,9 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, pl
       data = data,
       metaData = metaData,
       dataMapping = dataMapping,
-      plotConfiguration = plotConfiguration
+      plotConfiguration = plotConfiguration,
+      # Add identity line to log-log plot
+      foldDistance = 0
     ),
     "residualsOverTime" = tlf::plotResVsPred(
       data = data,
