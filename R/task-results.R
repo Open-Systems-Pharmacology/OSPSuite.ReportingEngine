@@ -36,7 +36,10 @@ TaskResults <- R6::R6Class(
       }
       # TODO once every plot will use tlf, deprecate the condition for null values
       self$plot <- updatePlotDimensions(self$plot)
+      # Use same dpi as RE environment settings to display correct point size
+      # TODO: To remove after implementation in tlf
       if(requireNamespace("showtext", quietly = TRUE)){
+        currentDPI <- showtext::showtext_opts()$dpi
         showtext::showtext_opts(dpi = reEnv$defaultPlotFormat$dpi)
       }
       ggplot2::ggsave(
@@ -47,6 +50,11 @@ TaskResults <- R6::R6Class(
         dpi = reEnv$defaultPlotFormat$dpi,
         units = self$plot$plotConfiguration$export$units %||% reEnv$defaultPlotFormat$units
       )
+      # Revert showtext settings
+      # TODO: To remove after implementation in tlf
+      if(requireNamespace("showtext", quietly = TRUE)){
+        showtext::showtext_opts(dpi = currentDPI)
+      }
       logDebug(paste0("Figure '", fileName, "' was successfully saved."))
       re.tStoreFileMetadata(access = "write", filePath = fileName)
     },
