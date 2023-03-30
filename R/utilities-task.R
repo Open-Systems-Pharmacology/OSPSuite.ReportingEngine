@@ -873,10 +873,7 @@ addUserDefinedTask <- function(workflow,
       )
     )
   }
-  logWorkflow(
-    message = paste0("User defined task '", taskName, "' successfully loaded on workflow"),
-    pathFolder = workflow$workflowFolder
-  )
+  logDebug(paste0("User defined task '", taskName, "' successfully loaded on workflow"))
   return(invisible())
 }
 
