@@ -245,7 +245,9 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, pl
       data = data,
       metaData = metaData,
       dataMapping = dataMapping,
-      plotConfiguration = plotConfiguration
+      plotConfiguration = plotConfiguration,
+      # Add identity line to log-log plot
+      foldDistance = 0
     ),
     "residualsOverTime" = tlf::plotResVsPred(
       data = data,
@@ -255,8 +257,8 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, pl
     )
   )
   gofPlot <- updatePlotAxes(gofPlot, axesProperties)
-  # Remove legend from colors
-  gofPlot <- gofPlot + ggplot2::guides(color = "none")
+  # Remove color and line from legend
+  gofPlot <- gofPlot + ggplot2::guides(color = "none", linetype = "none")
   return(gofPlot)
 }
 
