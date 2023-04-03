@@ -222,10 +222,10 @@ renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, w
     lineContent <- gsub(pattern = "<sup>|</sup>", replacement = "^", lineContent)
     lineContent <- gsub(pattern = "<sub>|</sub>", replacement = "~", lineContent)
     # When finding a line referencing a table or figure tag as first element
-    # The new content to write in the report is
+    # The new content to write in the word report is
     # - previous content = wordFileContent
-    # - page break = "\\newpage"
-    # - tag
+    # - page break as openxml '<w:br w:type="page"/>'
+    # - tag/bookmark as openxml '<w:bookmarkStart w:id ... <w:bookmarkEnd'
     # - next content (caption, + table/figure)
     isArtifactReference <- all(
       isIncluded(firstElement, "<a"),
@@ -560,7 +560,12 @@ introToYamlHeader <- function(introContent) {
     # Remove title from intro
     introContent <- introContent[-subtitleLine]
   }
-
+  # Because yaml header is indentation based,
+  # empty lines and spaces before text cause a yaml indentation issue as identified below
+  # YAML parse exception at line XX, column XX, while parsing a block mapping: did not find expected key
+  # Thus, remove left spaces
+  introContent <- trimws(introContent, which = "left", whitespace = "[ \t\r]")
+  
   # Define cover page features
   yamlContent <- c(
     # yaml header is delimited by ---
@@ -570,9 +575,9 @@ introToYamlHeader <- function(introContent) {
     # Caution, yaml options on several lines require indentation
     "abstract: | ",
     paste("\t", introContent),
-    "",
     # Add a page break before the table of content
-    paste("\t", "\\newpage"),
+    # Because page break is in yaml abstract, use inline code block with same indentation
+    '\t `<w:br w:type="page"/>`{=openxml}',
     "---"
   )
   return(yamlContent)
