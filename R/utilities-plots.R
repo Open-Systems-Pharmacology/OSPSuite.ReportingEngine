@@ -791,5 +791,35 @@ updateVpcPlotColor <- function(plotObject, output, referenceSimulationSetName = 
   return(plotObject)
 }
 
-
-
+#' @title updateAxesMargin
+#' @description Update axes properties based on configuration plan settings for side margins
+#' @param axesProperties List of axes properties
+#' @param sideMarginsEnabled Logical defining if side margins are enabled.
+#' @return List of axes properties
+#' @keywords internal
+updateAxesMargin <- function(axesProperties, sideMarginsEnabled = TRUE){
+  for(properyName in names(axesProperties)){
+    axesProperty <- axesProperties[[properyName]]
+    # Check if side margin is enabled or necessary
+    noSideMargins <- any(
+      sideMarginsEnabled = FALSE,
+      isEmpty(axesProperty$min),
+      isEmpty(axesProperty$max)
+    )
+    if(noSideMargins){
+      next
+    }
+    # Update range for log scale plots
+    if(isIncluded(axesProperty$scale, tlf::Scaling$log)){
+      axesProperty$min <- 0.7*axesProperty$min
+      axesProperty$max <- axesProperty$max/0.7
+      axesProperties[[properyName]] <- axesProperty
+      next
+    }
+    axesRange <- axesProperty$max-axesProperty$min
+    axesProperty$min <- axesProperty$min-axesRange/10
+    axesProperty$max <- axesProperty$max+axesRange/10
+    axesProperties[[properyName]] <- axesProperty
+  }
+  return(axesProperties)
+}
