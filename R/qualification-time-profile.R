@@ -32,6 +32,10 @@ plotQualificationTimeProfiles <- function(configurationPlan, settings) {
 
         # Get axes properties (with scale, limits and display units)
         axesProperties <- getAxesProperties(timeProfilePlan$Plot$Axes) %||% settings$axes
+        axesProperties <- updateAxesMargin(
+          axesProperties = axesProperties, 
+          sideMarginsEnabled = timeProfilePlan$Plot$Settings$SideMarginsEnabled %||% TRUE
+          )
         plotConfiguration <- getPlotConfigurationFromPlan(
           timeProfilePlan$Plot, 
           plotType = "TimeProfile"
