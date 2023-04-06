@@ -419,3 +419,39 @@ validateHasParametersForSensitivity <- function(numberOfParameters) {
   }
   stop(messages$errorNoParametersForSensitivityAnalysis())
 }
+
+checkPKParameterExists <- function(pkParameter, pkParameterName, pkRatioMapping){
+  if(!isEmpty(pkParameter)){
+    return(TRUE)
+  }
+  warning(messages$pkParameterNotFound(pkParameterName, pkRatioMapping), call. = FALSE)
+  return(FALSE)
+}
+
+checkPKRatioObservedVariable <- function(variableName, observedData){
+  if (isIncluded(variableName, names(observedData))) {
+    return(TRUE)
+  }
+  warning(messages$errorNotIncludedInDataset(
+      variableName, 
+      observedData, 
+      datasetName = "PK Ratio Dataset"
+      ), 
+    call. = FALSE
+  )
+  return(FALSE)
+}
+
+checkPKRatioObservedRecord <- function(selectedRow, observedDataRecordId){
+  if (isOfLength(selectedRow, 1)) {
+    return(TRUE)
+  }
+  warning(
+    messages$warningPKRatioMultipleObservedRows(
+      length(selectedRow),
+      observedDataRecordId
+    ), 
+    call. = FALSE
+  )
+  return(FALSE)
+}

@@ -239,42 +239,14 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
   )
   observedData <- readObservedDataFile(configurationPlan$getObservedDataPath(pkRatioMapping$ObservedData))
   selectedRow <- which(observedData[, reEnv$pkRatio$dictionary$id] %in% pkRatioMapping$ObservedDataRecordId)
-  if (!isOfLength(selectedRow, 1)) {
-    logError(messages$warningPKRatioMultipleObservedRows(
-      length(selectedRow),
-      pkRatioMapping$ObservedDataRecordId
-    ))
+  # Warn if record ID not found and go to next PK Ratio Mapping
+  if (!checkPKRatioObservedRecord(selectedRow, pkRatioMapping$ObservedDataRecordId)) {
     return()
   }
 
   metaData <- list()
   data <- data.frame()
   for (pkParameterName in pkParameterNames) {
-    pkParameter <- pkAnalyses$pKParameterFor(quantityPath = pkRatioMapping$Output, pkParameter = pkDictionaryQualificationOSP[[pkParameterName]])
-    pkParameterObservedValue <- as.numeric(
-      observedData[selectedRow, paste(pkParameterName, reEnv$pkRatio$dictionary$parameterColumn, sep = " ")]
-    )
-
-    pkParameterObservedUnit <- tolower(as.character(
-      observedData[selectedRow, paste(pkParameterName, reEnv$pkRatio$dictionary$unitColumn, sep = " ")]
-    ))
-    pkParameterSimulatedValue <- ospsuite::toUnit(
-      quantityOrDimension = pkParameter$dimension,
-      values = pkParameter$values,
-      targetUnit = settings$units[[pkParameterName]],
-      molWeight = simulation$molWeightFor(pkRatioMapping$Output)
-    )
-    pkParameterObservedValue <- ospsuite::toUnit(
-      quantityOrDimension = pkParameter$dimension,
-      values = pkParameterObservedValue,
-      targetUnit = settings$units[[pkParameterName]],
-      sourceUnit = pkParameterObservedUnit,
-      molWeight = simulation$molWeightFor(pkRatioMapping$Output)
-    )
-    # Values
-    data[1, paste0("pred", pkParameterName)] <- pkParameterSimulatedValue
-    data[1, paste0("obs", pkParameterName)] <- pkParameterObservedValue
-    data[1, paste0("ratio", pkParameterName)] <- pkParameterSimulatedValue / pkParameterObservedValue
     # MetaData for tables and plot labels
     metaData[[paste0("pred", pkParameterName)]] <- list(
       dimension = paste(reEnv$pkRatio$dictionary$prefixSimulated, pkParameterName, sep = " "),
@@ -288,6 +260,52 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
       dimension = paste(reEnv$pkRatio$dictionary$prefixRatio, pkParameterName, reEnv$pkRatio$dictionary$suffixRatio, sep = " "),
       unit = ""
     )
+
+    # Get PK Parameter observed and simulated values
+    # Warn if observed data is not found and display NA in case there is a simulated value
+    parameterColumn <- paste(pkParameterName, reEnv$pkRatio$dictionary$parameterColumn, sep = " ")
+    checkPKRatioObservedVariable(parameterColumn, observedData)
+    pkParameterObservedValue <- as.numeric(observedData[selectedRow, parameterColumn] %||% NA)
+
+    pkParameter <- pkAnalyses$pKParameterFor(
+      quantityPath = pkRatioMapping$Output,
+      pkParameter = pkDictionaryQualificationOSP[[pkParameterName]]
+    )
+
+    # Warn if PK parameter simulated value is not found,
+    # Still display observed data
+    if (!checkPKParameterExists(pkParameter, pkParameterName, pkRatioMapping)) {
+      data[1, paste0("pred", pkParameterName)] <- NA
+      data[1, paste0("obs", pkParameterName)] <- pkParameterObservedValue
+      data[1, paste0("ratio", pkParameterName)] <- NA
+      next
+    }
+
+    # Convert simulated to display unit
+    pkParameterSimulatedValue <- ospsuite::toUnit(
+      quantityOrDimension = pkParameter$dimension,
+      values = pkParameter$values,
+      targetUnit = settings$units[[pkParameterName]],
+      molWeight = simulation$molWeightFor(pkRatioMapping$Output)
+    )
+
+    # Warn if unit is not found and assumes unit is display unit
+    unitColumn <- paste(pkParameterName, reEnv$pkRatio$dictionary$unitColumn, sep = " ")
+    if (checkPKRatioObservedVariable(unitColumn, observedData)) {
+      pkParameterObservedUnit <- observedData[selectedRow, unitColumn]
+      pkParameterObservedValue <- ospsuite::toUnit(
+        quantityOrDimension = pkParameter$dimension,
+        values = pkParameterObservedValue,
+        targetUnit = settings$units[[pkParameterName]],
+        sourceUnit = pkParameterObservedUnit,
+        molWeight = simulation$molWeightFor(pkRatioMapping$Output)
+      )
+    }
+
+    # Values and ratio
+    data[1, paste0("pred", pkParameterName)] <- pkParameterSimulatedValue
+    data[1, paste0("obs", pkParameterName)] <- pkParameterObservedValue
+    data[1, paste0("ratio", pkParameterName)] <- pkParameterSimulatedValue / pkParameterObservedValue
   }
 
   # Complete table with study, age and weight

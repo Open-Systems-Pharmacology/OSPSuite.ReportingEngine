@@ -221,6 +221,14 @@ messages <- list(
   warningTooManyAxes = function(){
     "Qualification TimeProfile is unable to display data for all 3 axes. Only Y and Y2 axes were kept."
   },
+  
+  pkParameterNotFound = function(pkParameterName, pkRatioMapping){
+    paste0(
+      "PK Parameter '", highlight(pkParameterName), "' not found for ",
+      "Project '", highlight(pkRatioMapping$Project), 
+      "' and Simulation '", highlight(pkRatioMapping$Simulation), "'"
+    )
+  },
 
   #----- Info messages ----
   runStarting = function(runName, subRun = NULL) {
