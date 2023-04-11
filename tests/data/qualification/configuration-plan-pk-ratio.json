@@ -48,7 +48,7 @@
       {
         "Title": "Test of PK Ratio Plots Warning Wrong PK Parameters",
         "PKParameters": [
-          "CMAX"
+          "C_max"
         ],
         "SectionId": 3,
         "Groups": [

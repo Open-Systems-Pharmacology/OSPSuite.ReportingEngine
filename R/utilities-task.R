@@ -1053,13 +1053,24 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
       digits = reEnv$formatNumericsDigits,
       nsmall = reEnv$formatNumericsSmall,
       scientific = reEnv$formatNumericsScientific,
-      # Reference unit for table artifact
+      # Reference unit for table artifact as named list
       # Note that
       # 1) it can be updated before running workflows
       # 2) configuration plan inputs could override these
-      units = list(
-        AUC = ospsuite::ospUnits$`AUC [mass]`$`µg*h/l`,
-        CL = ospsuite::ospUnits$Flow$`l/h`
+      # 3) all PK Parameters use their default ospsuite unit
+      units = as.list(
+        c(
+          # Keep these 2 for backward compatibility
+          AUC = ospsuite::ospUnits$`AUC [mass]`$`µg*h/l`,
+          CL = ospsuite::ospUnits$Flow$`l/h`,
+          # All remaining PK Parameters
+          sapply(
+            ospsuite::allPKParameterNames(),
+            function(pkParameterName) {
+              ospsuite::pkParameterByName(pkParameterName)$displayUnit
+            }
+          )
+        )
       )
     )
   ))

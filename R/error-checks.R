@@ -253,6 +253,9 @@ isUnitFromDimension <- function(unit, dimension) {
   if (isIncluded(dimension, c("Concentration (mass)", "Concentration (molar)"))) {
     dimension <- c("Concentration (mass)", "Concentration (molar)")
   }
+  if (isIncluded(dimension, c("AUC (mass)", "AUC (molar)"))) {
+    dimension <- c("AUC (mass)", "AUC (molar)")
+  }
   if (isEmpty(dimensionForUnit)) {
     return(FALSE)
   }

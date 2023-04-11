@@ -282,6 +282,7 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
     }
 
     # Convert simulated to display unit
+    validateIsUnitFromDimension(settings$units[[pkParameterName]], pkParameter$dimension)
     pkParameterSimulatedValue <- ospsuite::toUnit(
       quantityOrDimension = pkParameter$dimension,
       values = pkParameter$values,
