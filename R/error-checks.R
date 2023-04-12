@@ -253,6 +253,9 @@ isUnitFromDimension <- function(unit, dimension) {
   if (isIncluded(dimension, c("Concentration (mass)", "Concentration (molar)"))) {
     dimension <- c("Concentration (mass)", "Concentration (molar)")
   }
+  if (isIncluded(dimension, c("AUC (mass)", "AUC (molar)"))) {
+    dimension <- c("AUC (mass)", "AUC (molar)")
+  }
   if (isEmpty(dimensionForUnit)) {
     return(FALSE)
   }
@@ -418,4 +421,40 @@ validateHasParametersForSensitivity <- function(numberOfParameters) {
     return(invisible())
   }
   stop(messages$errorNoParametersForSensitivityAnalysis())
+}
+
+checkPKParameterExists <- function(pkParameter, pkParameterName, pkRatioMapping){
+  if(!isEmpty(pkParameter)){
+    return(TRUE)
+  }
+  warning(messages$pkParameterNotFound(pkParameterName, pkRatioMapping), call. = FALSE)
+  return(FALSE)
+}
+
+checkPKRatioObservedVariable <- function(variableName, observedData){
+  if (isIncluded(variableName, names(observedData))) {
+    return(TRUE)
+  }
+  warning(messages$errorNotIncludedInDataset(
+      variableName, 
+      observedData, 
+      datasetName = "PK Ratio Dataset"
+      ), 
+    call. = FALSE
+  )
+  return(FALSE)
+}
+
+checkPKRatioObservedRecord <- function(selectedRow, observedDataRecordId){
+  if (isOfLength(selectedRow, 1)) {
+    return(TRUE)
+  }
+  warning(
+    messages$warningPKRatioMultipleObservedRows(
+      length(selectedRow),
+      observedDataRecordId
+    ), 
+    call. = FALSE
+  )
+  return(FALSE)
 }

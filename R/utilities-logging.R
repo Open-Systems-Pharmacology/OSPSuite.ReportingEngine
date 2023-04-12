@@ -264,6 +264,8 @@ qualificationCatch <- function(expr, configurationPlanField = NULL){
       warning = function(warningCondition) {
         plotInfo <- displayConfigurationPlanPlotInfo(configurationPlanField)
         warning(c(warningCondition$message, plotInfo), call. = FALSE)
+        try({invokeRestart("muffleWarning")})
       }
   )
+  return(invisible())
 }
