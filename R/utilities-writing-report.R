@@ -759,20 +759,20 @@ copyReport <- function(from, to, copyWordReport = TRUE, keep = FALSE) {
     file.copy(from = fromWordReport, to = toWordReport)
   }
 
+  # Copy the figures in destination folder to have them available for new report
   # Get all file paths available in figures/file links
-  fileContent <- readLines(from, encoding = "UTF-8")
-  filePaths <- fileContent[grepl(pattern = "\\!\\[", x = fileContent)]
-  filePaths <- gsub(pattern = ".*\\]\\(", replacement = "", x = filePaths)
-  filePaths <- gsub(pattern = "\\).*", replacement = "", x = filePaths)
-  filePaths <- unique(filePaths)
-
+  filePaths <- getFigurePathsFromReport(from)
   # Create all necessary subfolders within report folder
   for (dirPath in unique(file.path(toFolder, dirname(filePaths)))) {
     dir.create(dirPath, showWarnings = FALSE, recursive = TRUE)
   }
-
-  # Copy the figures in destination folder to have them available for new report
-  file.copy(file.path(fromFolder, filePaths), file.path(toFolder, filePaths), overwrite = TRUE)
+  # checkFileExists will warn the user if the path is corrupdted
+  checkFileExists(file.path(fromFolder, filePaths))
+  file.copy(
+    file.path(fromFolder, filePaths), 
+    file.path(toFolder, filePaths), 
+    overwrite = TRUE
+    )
 
   # If keep is true, keep initial files and report
   if (keep) {
@@ -837,4 +837,21 @@ getIntroFromReportTitle <- function(reportTitle = NULL, intro = "temp-report-tit
     text = reportTitle
   )
   return(intro)
+}
+
+#' @title getFigurePathsFromReport
+#' @description Get file paths from a report figure links
+#' @param fileName name of .md file to 
+#' @return array of file paths corresponding to figures linked in reports
+#' @export
+#' @examples \dontrun{
+#' # Check the figure paths of your report named "report.md"
+#' getFigurePathsFromReport("report.md")
+#' }
+getFigurePathsFromReport <- function(fileName){
+  fileContent <- readLines(fileName, encoding = "UTF-8")
+  filePaths <- fileContent[grepl(pattern = "\\!\\[", x = fileContent)]
+  filePaths <- gsub(pattern = ".*\\]\\(", replacement = "", x = filePaths)
+  filePaths <- gsub(pattern = "(\\))[^\\)]*$", replacement = "", x = filePaths)
+  return(unique(filePaths))
 }
