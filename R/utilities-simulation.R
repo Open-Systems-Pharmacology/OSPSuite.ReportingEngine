@@ -342,7 +342,13 @@ updateSimulationIndividualParameters <- function(simulation, individualParameter
   if (is.null(individualParameters)) {
     return(TRUE)
   }
-  ospsuite::setParameterValuesByPath(parameterPaths = individualParameters$paths, values = individualParameters$values, simulation = simulation)
+  ospsuite::setParameterValuesByPath(
+    parameterPaths = individualParameters$paths, 
+    values = individualParameters$values, 
+    simulation = simulation,
+    # Issue #497 prevent crash if parameter is not found
+    stopIfNotFound = FALSE
+    )
   return(TRUE)
 }
 
