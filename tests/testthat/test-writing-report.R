@@ -137,3 +137,17 @@ test_that("getIntroFromReportTitle add file content if reportTitle is a file pat
   unlink(testIntroFile, recursive = TRUE)
   unlink(userCoverPage, recursive = TRUE)
 })
+
+figureLinksReport <- getTestDataFilePath("utilities-report/figureLinks.md")
+referencePaths <- c(
+  "link/to/figure/1.png",
+  "link/to/figure(2).png",
+  "link/to table (1).pdf",
+  "link/to figure 3.png"
+)
+test_that("getFigurePathsFromReport gets the correct file paths", {
+  filePaths <- getFigurePathsFromReport(figureLinksReport)
+  expect_equal(referencePaths, referencePaths)
+  # and assess that warning will be thrown if files do not exist
+  expect_warning(ospsuite.reportingengine:::checkFileExists(filePaths))
+})

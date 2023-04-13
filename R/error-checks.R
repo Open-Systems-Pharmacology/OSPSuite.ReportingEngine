@@ -130,6 +130,16 @@ validateFileExists <- function(path, nullAllowed = FALSE) {
   stop(messages$errorUnexistingFile(path[!file.exists(path)]))
 }
 
+checkFileExists <- function(path, nullAllowed = FALSE) {
+  if (nullAllowed && is.null(path)) {
+    return(invisible())
+  }
+  if (all(file.exists(path))) {
+    return(invisible())
+  }
+  warning(messages$errorUnexistingFile(path[!file.exists(path)]))
+}
+
 #' Check the consistency between observed data and its dictionary.
 #' Units for `dv `and `time` need to be defined at least once in either
 #' the observed dataset, its dictionary or outputs
