@@ -113,9 +113,7 @@ test_that("'PkParameterInfo' works properly", {
   expect_error(PkParameterInfo$new(pkParameter = myTestCmaxName, displayName = c(myTestCmaxDisplayName, myTestCmaxDisplayName)))
   expect_error(PkParameterInfo$new(pkParameter = myTestCmaxName, displayUnit = c(myTestCmaxDisplayUnit, myTestCmaxDisplayUnit)))
   # Catch error when unit is wrong
-  expect_error(
-    PkParameterInfo$new("C_max", displayUnit = ospsuite::ospUnits$Amount$µmol)
-  )
+  expect_error(PkParameterInfo$new("C_max", displayUnit = "µmol"))
 })
 
 test_that("Output 'pkParameters' are checked and set properly", {
