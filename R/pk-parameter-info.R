@@ -34,11 +34,14 @@ PkParameterInfo <- R6::R6Class(
       validateIsIncluded(pkParameter, ospsuite::allPKParameterNames())
       ifNotNull(displayName, validateIsOfLength(displayName, 1))
       ifNotNull(displayUnit, validateIsOfLength(displayUnit, 1))
-      # TO DO: add validateIsUnit method
-      # validateIsUnit(displayUnit, nullAllowed = TRUE)
-
+      
       defaultPKParameterProperties <- ospsuite::pkParameterByName(name = pkParameter)
-
+      validateIsUnitFromDimension(
+        displayUnit, 
+        defaultPKParameterProperties$dimension, 
+        nullAllowed = TRUE
+        )
+      
       self$group <- group %||% pkParameter
       self$pkParameter <- pkParameter
       self$displayName <- displayName %||% defaultPKParameterProperties$displayName
