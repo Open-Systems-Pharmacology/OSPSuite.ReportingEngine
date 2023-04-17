@@ -190,26 +190,6 @@ validateDataSource <- function(dataSource, outputs, nullAllowed = TRUE) {
   return(invisible())
 }
 
-#' Check if the provided values are included all available dimensions
-#' @param values Vector of dimensions
-#' @return TRUE if the values are included all available dimensions
-#' @import ospsuite
-#' @keywords internal
-isDimension <- function(values) {
-  allAvailableDimensions <- ospsuite::allAvailableDimensions()
-  return(isIncluded(c(values), allAvailableDimensions))
-}
-
-validateIsDimension <- function(values, nullAllowed = FALSE) {
-  if (nullAllowed && is.null(values)) {
-    return(invisible())
-  }
-  if (isDimension(values)) {
-    return(invisible())
-  }
-  stop(messages$errorNotADimension(values))
-}
-
 isPathInSimulation <- function(paths, simulation) {
   # Add every paths to the simulation object and
   # check if all of these paths are included

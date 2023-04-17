@@ -77,7 +77,7 @@ myTestAUCName <- "AUC_inf"
 myTestWrongName <- "Wrong parameter"
 myTestCmaxName <- "C_max"
 myTestCmaxDisplayName <- "My test Cmax"
-myTestCmaxDisplayUnit <- "nmol"
+myTestCmaxDisplayUnit <- "mol/l"
 
 test_that("'PkParameterInfo' works properly", {
   expect_silent(PkParameterInfo$new(pkParameter = myTestAUCName))
@@ -112,6 +112,8 @@ test_that("'PkParameterInfo' works properly", {
 
   expect_error(PkParameterInfo$new(pkParameter = myTestCmaxName, displayName = c(myTestCmaxDisplayName, myTestCmaxDisplayName)))
   expect_error(PkParameterInfo$new(pkParameter = myTestCmaxName, displayUnit = c(myTestCmaxDisplayUnit, myTestCmaxDisplayUnit)))
+  # Catch error when unit is wrong
+  expect_error(PkParameterInfo$new("C_max", displayUnit = "µmol"))
 })
 
 test_that("Output 'pkParameters' are checked and set properly", {

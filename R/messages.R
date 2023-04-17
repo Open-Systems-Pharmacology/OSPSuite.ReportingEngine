@@ -96,9 +96,6 @@ messages <- list(
   errorNoValidParametersForSensitivityAnalysis = function(simulationSetName) {
     paste(callingFunction(), "No valid variable parameter paths for sensitivity analysis of simulation set", simulationSetName, ".")
   },
-  errorNotADimension = function(values) {
-    paste0(callingFunction(), "Expected a dimension. Check that '", paste0(values, collapse = "', '."), "' is included in ospsuite::allAvailableDimensions().")
-  },
   invalidOuputPath = function(path, simName) {
     if (isOfLength(path, 1)) {
       return(paste0(callingFunction(), "'", path, "' is an invalid output path for simulation '", simName, "'."))
