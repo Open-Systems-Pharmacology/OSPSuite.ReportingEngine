@@ -64,8 +64,12 @@ plotPopulationPKParameters <- function(structureSets,
   # PK Parameters are calculated per output
   # Results are calculated within this nested loop
   for (output in yParameters) {
-    # Report heading for Output path
-    resultID <- defaultFileNames$resultID("pk-parameters", removeForbiddenLetters(output$path))
+    # Report heading for Output path (in case output use same paths, render a unique id)
+    resultID <- defaultFileNames$resultID(
+      length(pkParametersResults)+1, 
+      "pk-parameters", 
+      removeForbiddenLetters(output$path)
+      )
     pkParametersResults[[resultID]] <- saveTaskResults(
       id = resultID,
       textChunk = c(anchor(resultID), "", paste0("## PK Parameters of ", output$displayName)),
@@ -100,6 +104,7 @@ plotPopulationPKParameters <- function(structureSets,
 
       # Report heading for PK Parameter
       resultID <- defaultFileNames$resultID(
+        length(pkParametersResults)+1, 
         "pk-parameters",
         removeForbiddenLetters(output$path),
         removeForbiddenLetters(pkParameter$pkParameter)
