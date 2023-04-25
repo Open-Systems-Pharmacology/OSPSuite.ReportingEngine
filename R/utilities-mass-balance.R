@@ -30,7 +30,7 @@ plotMeanMassBalance <- function(structureSet, settings = NULL) {
     compoundName %in% simulation$allEndogenousStationaryMoleculeNames()
   })]
 
-  # User defined coumpound selection
+  # User defined compound selection
   selectedCompoundNames <- settings$selectedCompoundNames %||% relevantCompoundNames
   validateIsIncluded(selectedCompoundNames, relevantCompoundNames)
 
@@ -131,77 +131,131 @@ plotMeanMassBalance <- function(structureSet, settings = NULL) {
 
   # Get mass balance results
   massBalanceResults <- list()
-
+  timeTicks <- getTimeTicksFromUnit(
+    structureSet$simulationSet$timeUnit,
+    timeValues = simulationResultsOutputByGroup$Time
+  )
   # Time profile
-  timeProfileID <- defaultFileNames$resultID(1, "mass_balance", structureSet$simulationSet$simulationSetName)
-  massBalanceResults[[timeProfileID]] <- saveTaskResults(
-    id = timeProfileID,
-    plot = plotMassBalanceTimeProfile(
+  timeProfileID <- defaultFileNames$resultID(
+    length(massBalanceResults) + 1,
+    "mass_balance",
+    structureSet$simulationSet$simulationSetName
+  )
+  timeProfilePlot <- tlf::plotSimulatedTimeProfile(
+    data = simulationResultsOutputByGroup,
+    metaData = metaDataOutputByGroup,
+    dataMapping = getMassBalanceDataMapping("timeProfile"),
+    plotConfiguration = getMassBalancePlotConfiguration(
+      plotType = "timeProfile",
       data = simulationResultsOutputByGroup,
       metaData = metaDataOutputByGroup,
-      dataMapping = tlf::XYGDataMapping$new(
-        x = "Time",
-        y = "Amount",
-        color = "Legend"
-      ),
-      plotConfiguration = settings$plotConfigurations[["timeProfile"]]
-    ),
+      settings = settings
+    )
+  )
+  massBalanceResults[[timeProfileID]] <- saveTaskResults(
+    id = timeProfileID,
+    plot = timeProfilePlot,
     plotCaption = captions$massBalance$timeProfile()
   )
 
   # Cumulative time profile
-  cumulativeTimeProfileID <- defaultFileNames$resultID(2, "mass_balance", structureSet$simulationSet$simulationSetName)
-  massBalanceResults[[cumulativeTimeProfileID]] <- saveTaskResults(
-    id = cumulativeTimeProfileID,
-    plot = plotMassBalanceCumulativeTimeProfile(
+  cumulativeTimeProfileID <- defaultFileNames$resultID(
+    length(massBalanceResults) + 1,
+    "mass_balance",
+    structureSet$simulationSet$simulationSetName
+  )
+  cumulativeTimeProfilePlot <- tlf::plotCumulativeTimeProfile(
+    data = simulationResultsOutputByGroup,
+    metaData = metaDataOutputByGroup,
+    dataMapping = getMassBalanceDataMapping("cumulativeTimeProfile"),
+    plotConfiguration = getMassBalancePlotConfiguration(
+      plotType = "cumulativeTimeProfile",
       data = simulationResultsOutputByGroup,
       metaData = metaDataOutputByGroup,
-      dataMapping = tlf::XYGDataMapping$new(
-        x = "Time",
-        y = "Amount",
-        fill = "Legend"
-      ),
-      plotConfiguration = settings$plotConfigurations[["cumulativeTimeProfile"]]
-    ),
+      settings = settings
+    )
+  )
+
+  massBalanceResults[[cumulativeTimeProfileID]] <- saveTaskResults(
+    id = cumulativeTimeProfileID,
+    plot = cumulativeTimeProfilePlot,
     plotCaption = captions$massBalance$cumulativeTimeProfile()
   )
 
   # Normalized time profile
-  normalizedTimeProfileID <- defaultFileNames$resultID(3, "mass_balance", structureSet$simulationSet$simulationSetName)
-  massBalanceResults[[normalizedTimeProfileID]] <- saveTaskResults(
-    id = normalizedTimeProfileID,
-    plot = plotMassBalanceTimeProfile(
+  normalizedTimeProfileID <- defaultFileNames$resultID(
+    length(massBalanceResults) + 1,
+    "mass_balance",
+    structureSet$simulationSet$simulationSetName
+  )
+  normalizedTimeProfilePlot <- tlf::plotSimulatedTimeProfile(
+    data = simulationResultsOutputByGroup,
+    metaData = metaDataOutputByGroup,
+    dataMapping = getMassBalanceDataMapping("normalizedTimeProfile"),
+    plotConfiguration = getMassBalancePlotConfiguration(
+      plotType = "normalizedTimeProfile",
       data = simulationResultsOutputByGroup,
       metaData = metaDataOutputByGroup,
-      dataMapping = tlf::XYGDataMapping$new(
-        x = "Time",
-        y = "NormalizedAmount",
-        color = "Legend"
-      ),
-      plotConfiguration = settings$plotConfigurations[["normalizedTimeProfile"]]
-    ),
+      settings = settings
+    )
+  )
+  massBalanceResults[[normalizedTimeProfileID]] <- saveTaskResults(
+    id = normalizedTimeProfileID,
+    plot = normalizedTimeProfilePlot,
     plotCaption = captions$massBalance$normalizedTimeProfile()
   )
 
   # Normalized cumulative time profile
-  normalizedCumulativeTimeProfileID <- defaultFileNames$resultID(4, "mass_balance", structureSet$simulationSet$simulationSetName)
-  massBalanceResults[[normalizedCumulativeTimeProfileID]] <- saveTaskResults(
-    id = normalizedCumulativeTimeProfileID,
-    plot = plotMassBalanceCumulativeTimeProfile(
+  normalizedCumulativeTimeProfileID <- defaultFileNames$resultID(
+    length(massBalanceResults) + 1,
+    "mass_balance",
+    structureSet$simulationSet$simulationSetName
+  )
+  normalizedCumulativeTimeProfilePlot <- tlf::plotCumulativeTimeProfile(
+    data = simulationResultsOutputByGroup,
+    metaData = metaDataOutputByGroup,
+    dataMapping = getMassBalanceDataMapping("normalizedCumulativeTimeProfile"),
+    plotConfiguration = getMassBalancePlotConfiguration(
+      plotType = "normalizedCumulativeTimeProfile",
       data = simulationResultsOutputByGroup,
       metaData = metaDataOutputByGroup,
-      dataMapping = tlf::XYGDataMapping$new(
-        x = "Time",
-        y = "NormalizedAmount",
-        fill = "Legend"
-      ),
-      plotConfiguration = settings$plotConfigurations[["normalizedCumulativeTimeProfile"]]
-    ),
+      settings = settings
+    )
+  )
+  massBalanceResults[[normalizedCumulativeTimeProfileID]] <- saveTaskResults(
+    id = normalizedCumulativeTimeProfileID,
+    plot = normalizedCumulativeTimeProfilePlot,
     plotCaption = captions$massBalance$normalizedCumulativeTimeProfile()
   )
 
   # Pie Chart
-  pieChartID <- defaultFileNames$resultID(5, "mass_balance", structureSet$simulationSet$simulationSetName)
+  pieChartID <- defaultFileNames$resultID(
+    length(massBalanceResults) + 1,
+    "mass_balance",
+    structureSet$simulationSet$simulationSetName
+  )
+  # Select latest time point
+  selectedRows <- which(simulationResultsOutputByGroup$Time == max(simulationResultsOutputByGroup$Time))
+  pieChartData <- simulationResultsOutputByGroup[selectedRows, ]
+  # Update legend to include normalized amount as percent
+  pieChartData$LegendWithPercent <- paste(
+    pieChartData$Legend,
+    " (", round(100 * pieChartData$NormalizedAmount, digits = 1), "%)",
+    sep = ""
+  )
+  # Ensure that the colors and legend match previous mass balance plots by re-ordering Legend
+  pieChartData$LegendWithPercent <- reorder(
+    pieChartData$LegendWithPercent,
+    as.numeric(factor(pieChartData$Legend))
+  )
+  pieChartPlot <- tlf::plotPieChart(
+    data = pieChartData,
+    metaData = metaDataOutputByGroup,
+    dataMapping = getMassBalanceDataMapping("pieChart"),
+    plotConfiguration = settings$plotConfigurations[["pieChart"]]
+  )
+
+  # Get time caption text for report
   timeCaption <- formatNumerics(
     max(simulationResultsOutputByGroup$Time),
     digits = settings$digits,
@@ -209,176 +263,97 @@ plotMeanMassBalance <- function(structureSet, settings = NULL) {
   )
   massBalanceResults[[pieChartID]] <- saveTaskResults(
     id = pieChartID,
-    plot = plotMassBalancePieChart(
-      data = simulationResultsOutputByGroup,
-      metaData = metaDataOutputByGroup,
-      dataMapping = tlf::XYGDataMapping$new(
-        x = "Time",
-        y = "NormalizedAmount",
-        fill = "Legend"
-      ),
-      plotConfiguration = settings$plotConfigurations[["pieChart"]]
-    ),
+    plot = pieChartPlot,
     plotCaption = captions$massBalance$pieChart(timeCaption, metaDataOutputByGroup$Time$unit)
   )
 
   # Table of mass balance time profiles
   # saved but not included into report
-  tableID <- defaultFileNames$resultID(6, "mass_balance", structureSet$simulationSet$simulationSetName)
+  tableID <- defaultFileNames$resultID(
+    length(massBalanceResults) + 1,
+    "mass_balance",
+    structureSet$simulationSet$simulationSetName
+  )
   massBalanceResults[[tableID]] <- saveTaskResults(
     id = tableID,
     table = simulationResultsOutputByGroup,
     includeTable = FALSE
   )
-
   return(massBalanceResults)
 }
 
 
-#' @title plotMassBalanceTimeProfile
-#' @description Plot mass balance time profile
+#' @title getMassBalancePlotConfiguration
+#' @description Get mass balance time profile plot configuration
+#' @param plotType One of the 5 plot types displayed by mass balance task
 #' @param data data.frame
 #' @param metaData meta data on `data`
-#' @param dataMapping `XYGDataMapping` R6 class object from `tlf` library
-#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
-#' @return ggplot object of time profile for mean model workflow
-#' @export
+#' @param settings User-defined options
+#' @return A `tlf` `PlotConfiguration` object
 #' @import tlf
-#' @import ggplot2
-#' @importFrom ospsuite.utils %||%
-#' @import utils
-plotMassBalanceTimeProfile <- function(data,
-                                       metaData = NULL,
-                                       dataMapping = NULL,
-                                       plotConfiguration = NULL) {
-  timeVsAmountDataMapping <- dataMapping %||% tlf::XYGDataMapping$new(
-    x = "Time",
-    y = "Amount",
-    color = "Legend"
-  )
-
-  plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
-    data = data,
-    metaData = metaData,
-    dataMapping = timeVsAmountDataMapping
-  )
-  plotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, dataMapping, plotConfiguration)
-
-  timeVsAmountPlot <- tlf::initializePlot(plotConfiguration)
-
-  timeVsAmountPlot <- timeVsAmountPlot + ggplot2::geom_line(
-    data = data,
-    mapping = ggplot2::aes_string(
-      x = timeVsAmountDataMapping$x,
-      y = timeVsAmountDataMapping$y,
-      color = timeVsAmountDataMapping$groupMapping$color$label
-    )
-  ) + ggplot2::theme(legend.title = ggplot2::element_blank())
-  return(timeVsAmountPlot)
-}
-
-#' @title plotMassBalanceCumulativeTimeProfile
-#' @description Plot mass balance time profile
-#' @param data data.frame
-#' @param metaData meta data on `data`
-#' @param dataMapping `XYGDataMapping` R6 class object from `tlf` library
-#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
-#' @return ggplot object of time profile for mean model workflow
-#' @export
-#' @import tlf
-#' @import ggplot2
-#' @importFrom ospsuite.utils %||%
-#' @import utils
-plotMassBalanceCumulativeTimeProfile <- function(data,
-                                                 metaData = NULL,
-                                                 dataMapping = NULL,
-                                                 plotConfiguration = NULL) {
-  timeVsAmountDataMapping <- dataMapping %||% tlf::XYGDataMapping$new(
-    x = "Time",
-    y = "Amount",
-    fill = "Legend"
-  )
-
-  plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
-    data = data,
-    metaData = metaData,
-    dataMapping = timeVsAmountDataMapping
-  )
-  plotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, dataMapping, plotConfiguration)
-
-  timeVsAmountPlot <- tlf::initializePlot(plotConfiguration)
-
-  timeVsAmountPlot <- timeVsAmountPlot + ggplot2::geom_area(
-    data = data,
-    mapping = ggplot2::aes_string(
-      x = timeVsAmountDataMapping$x,
-      y = timeVsAmountDataMapping$y,
-      fill = timeVsAmountDataMapping$groupMapping$fill$label
-    ),
-    position = ggplot2::position_stack(),
-    alpha = 0.8 # TO DO: Define this value as a setting from the plot configuration
-  ) + ggplot2::theme(legend.title = ggplot2::element_blank())
-  return(timeVsAmountPlot)
-}
-
-#' @title plotMassBalancePieChart
-#' @description Plot mass balance PieChart
-#' @param data data.frame
-#' @param metaData meta data on `data`
-#' @param dataMapping `XYGDataMapping` R6 class object from `tlf` library
-#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
-#' @return ggplot object of piechart for mean model workflow
-#' @export
-#' @import tlf
-#' @import ggplot2
-#' @importFrom ospsuite.utils %||%
-#' @import utils
-plotMassBalancePieChart <- function(data,
-                                    metaData = NULL,
-                                    dataMapping = NULL,
-                                    plotConfiguration = NULL) {
-  pieChartDataMapping <- dataMapping %||% tlf::XYGDataMapping$new(
-    x = "Time",
-    y = "NormalizedAmount",
-    fill = "Legend"
-  )
-
-  timeFilter <- data[, pieChartDataMapping$x] == max(data[, pieChartDataMapping$x])
-  pieChartData <- data[timeFilter, ]
-  # Legend captions need to includes normalized amount as percent
-  pieChartData$Legend <- paste(
-    pieChartData$Legend,
-    " (", round(100 * pieChartData[, pieChartDataMapping$y], digits = 1), "%)"
-  )
-  # Ensure that the colors and legend match previous mass balance plots by re-ordering Legend
-  pieChartData$Legend <- reorder(pieChartData$Legend, as.numeric(factor(data[timeFilter, "Legend"])))
-
-  # Caution:
-  # Watermark relies on ggplot2::annotation_custom which is not compatible with ggplot2::coord_polar
-  # As a consequence, the polar plot needs to be saved as a grob first, ie as a ggplot grid image
-  # Then, the grob is added as a layer of a tlf empty plot which can include a Watermark
-  pieChartCorePlot <- ggplot2::ggplot() +
-    ggplot2::geom_bar(
-      data = pieChartData,
-      mapping = ggplot2::aes_string(
-        x = pieChartDataMapping$x,
-        y = pieChartDataMapping$y,
-        fill = pieChartDataMapping$groupMapping$fill$label
+#' @keywords internal
+getMassBalancePlotConfiguration <- function(plotType, data, metaData, settings) {
+  dataMapping <- getMassBalanceDataMapping(plotType)
+  plotConfiguration <- settings$plotConfigurations[[plotType]] %||%
+    switch(plotType,
+      "timeProfile" = tlf::TimeProfilePlotConfiguration$new(
+        data = data,
+        metaData = metaData,
+        dataMapping = dataMapping
       ),
-      width = 1,
-      stat = "identity",
-      alpha = 0.8
-    ) +
-    coord_polar("y", start = 0) +
-    ggplot2::theme_void() +
-    xlab("") +
-    ylab("") +
-    ggplot2::theme(legend.title = ggplot2::element_blank())
+      "normalizedTimeProfile" = tlf::TimeProfilePlotConfiguration$new(
+        data = data,
+        metaData = metaData,
+        dataMapping = dataMapping
+      ),
+      "cumulativeTimeProfile" = tlf::CumulativeTimeProfilePlotConfiguration$new(
+        data = data,
+        metaData = metaData,
+        dataMapping = dataMapping
+      ),
+      "normalizedCumulativeTimeProfile" = tlf::CumulativeTimeProfilePlotConfiguration$new(
+        data = data,
+        metaData = metaData,
+        dataMapping = dataMapping
+      )
+    )
+  # Update time ticks
+  plotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, dataMapping, plotConfiguration)
+  return(plotConfiguration)
+}
 
-  pieChartGrob <- ggplot2::ggplotGrob(pieChartCorePlot)
-
-  pieChartPlot <- tlf::initializePlot(plotConfiguration)
-  pieChartPlot <- pieChartPlot + ggplot2::annotation_custom(pieChartGrob)
-
-  return(pieChartPlot)
+#' @title getMassBalanceDataMapping
+#' @description Get mass balance data mapping
+#' @param plotType One of the 5 plot types displayed by mass balance task
+#' @return A `tlf` `DataMapping` object
+#' @import tlf
+#' @keywords internal
+getMassBalanceDataMapping <- function(plotType) {
+  dataMapping <- switch(plotType,
+    "timeProfile" = tlf::TimeProfileDataMapping$new(
+      x = "Time",
+      y = "Amount",
+      color = "Legend"
+    ),
+    "normalizedTimeProfile" = tlf::TimeProfileDataMapping$new(
+      x = "Time",
+      y = "NormalizedAmount",
+      color = "Legend"
+    ),
+    "cumulativeTimeProfile" = tlf::CumulativeTimeProfileDataMapping$new(
+      x = "Time",
+      y = "Amount",
+      fill = "Legend"
+    ),
+    "normalizedCumulativeTimeProfile" = tlf::CumulativeTimeProfileDataMapping$new(
+      x = "Time",
+      y = "NormalizedAmount",
+      fill = "Legend"
+    ),
+    "pieChart" = tlf::PieChartDataMapping$new(
+      x = "NormalizedAmount",
+      fill = "LegendWithPercent"
+    )
+  )
+  return(dataMapping)
 }
