@@ -445,7 +445,10 @@ updatePlotDimensions <- function(plotObject) {
     plotObject$plotConfiguration$export$height <- sizeRatio * plotObject$plotConfiguration$export$height
     # Add legend height to final plot height to prevent shrinkage of plot area
     plotObject$plotConfiguration$export$height <- plotObject$plotConfiguration$export$height + legendHeight
-    plotObject <- updateWatermarkDimensions(plotObject)
+    # Caution: pieChart currently do not use watermark because of ggplot2::coord_polar
+    if(!isOfType(plotObject$plotConfiguration, "PieChartPlotConfiguration")){
+      plotObject <- updateWatermarkDimensions(plotObject)
+    }
     # Add small margin of 20 pts on right side of plot to prevent axis ticklabel being cut-off
     plotObject <- plotObject + 
       ggplot2::theme(plot.margin = ggplot2::margin(r = 20, b = 10, l = 10))
@@ -460,7 +463,10 @@ updatePlotDimensions <- function(plotObject) {
   plotObject$plotConfiguration$export$width <- sizeRatio * plotObject$plotConfiguration$export$width
   # Add legend width to final plot width to prevent shrinkage of plot area
   plotObject$plotConfiguration$export$width <- plotObject$plotConfiguration$export$width + legendWidth
-  plotObject <- updateWatermarkDimensions(plotObject)
+  # Caution: pieChart currently do not use watermark because of ggplot2::coord_polar
+  if(!isOfType(plotObject$plotConfiguration, "PieChartPlotConfiguration")){
+    plotObject <- updateWatermarkDimensions(plotObject)
+  }
   return(plotObject)
 }
 
