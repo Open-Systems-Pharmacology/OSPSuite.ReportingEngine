@@ -45,17 +45,15 @@ ConfigurationShapes <- list(
   thincross = tlf::Shapes$thinCross,
   thinplus = tlf::Shapes$thinPlus,
   triangle = tlf::Shapes$triangle,
+  asterisk = tlf::Shapes$asterisk,
   # Add dictionary for open shapes
   circleopen = tlf::Shapes$circleOpen,
-  cross = tlf::Shapes$cross,
   diamondopen = tlf::Shapes$diamondOpen,
   hexagonopen = tlf::Shapes$hexagonOpen,
   invertedtriangleopen = tlf::Shapes$invertedTriangleOpen,
   pentagonopen = tlf::Shapes$pentagonOpen,
   squareopen = tlf::Shapes$squareOpen,
   staropen = tlf::Shapes$starOpen,
-  thincross = tlf::Shapes$thinCross,
-  thinplus = tlf::Shapes$thinPlus,
   triangleopen = tlf::Shapes$triangleOpen
 )
 
