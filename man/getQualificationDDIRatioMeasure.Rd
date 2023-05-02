@@ -4,12 +4,14 @@
 \alias{getQualificationDDIRatioMeasure}
 \title{getQualificationDDIRatioMeasure}
 \usage{
-getQualificationDDIRatioMeasure(summaryDataFrame, pkParameterName)
+getQualificationDDIRatioMeasure(summaryDataFrame, pkParameterName, delta = 1)
 }
 \arguments{
 \item{summaryDataFrame}{data.frame with DDI Ratios}
 
 \item{pkParameterName}{Name of PK Parameter as defined by users}
+
+\item{delta}{Delta value from Guest et al. formula}
 }
 \value{
 A data.frame
