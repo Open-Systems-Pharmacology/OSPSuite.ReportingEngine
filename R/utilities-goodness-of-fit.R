@@ -616,7 +616,7 @@ plotMeanTimeProfileLog <- function(simulatedData,
   )
   yAxisTicks <- autoAxesTicksFromLimits(yAxisLimits)
   plotConfiguration$yAxis$scale <- tlf::Scaling$log
-  plotConfiguration$yAxis$limits <- plotConfiguration$yAxis$limits %||% yAxisLimits
+  plotConfiguration$yAxis$axisLimits <- plotConfiguration$yAxis$axisLimits %||% yAxisLimits
   plotConfiguration$yAxis$ticks <- yAxisTicks
 
   meanTimeProfileLog <- plotMeanTimeProfile(
@@ -753,7 +753,7 @@ plotPopTimeProfileLog <- function(simulatedData,
   )
   yAxisTicks <- autoAxesTicksFromLimits(yAxisLimits)
   plotConfiguration$yAxis$scale <- tlf::Scaling$log
-  plotConfiguration$yAxis$limits <- plotConfiguration$yAxis$limits %||% yAxisLimits
+  plotConfiguration$yAxis$axisLimits <- plotConfiguration$yAxis$axisLimits %||% yAxisLimits
   plotConfiguration$yAxis$ticks <- yAxisTicks
 
   populationTimeProfileLog <- plotPopTimeProfile(
@@ -1131,10 +1131,10 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
       )
       obsVsPredBreaks <- autoAxesTicksFromLimits(obsVsPredRange)
       obsVsPredPlotConfigurationLog$xAxis$scale <- tlf::Scaling$log
-      obsVsPredPlotConfigurationLog$xAxis$limits <- obsVsPredPlotConfigurationLog$xAxis$limits %||% obsVsPredRange
+      obsVsPredPlotConfigurationLog$xAxis$axisLimits <- obsVsPredPlotConfigurationLog$xAxis$axisLimits %||% obsVsPredRange
       obsVsPredPlotConfigurationLog$xAxis$ticks <- obsVsPredBreaks
       obsVsPredPlotConfigurationLog$yAxis$scale <- tlf::Scaling$log
-      obsVsPredPlotConfigurationLog$yAxis$limits <- obsVsPredPlotConfigurationLog$yAxis$limits %||% obsVsPredRange
+      obsVsPredPlotConfigurationLog$yAxis$axisLimits <- obsVsPredPlotConfigurationLog$yAxis$axisLimits %||% obsVsPredRange
       obsVsPredPlotConfigurationLog$yAxis$ticks <- obsVsPredBreaks
 
       # In log scale, identity line is 1 instead of 0

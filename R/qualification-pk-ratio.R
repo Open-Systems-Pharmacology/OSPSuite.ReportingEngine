@@ -139,8 +139,8 @@ getQualificationPKRatioPlot <- function(pkParameterName, data, metaData, axesPro
   plotConfiguration <- getPlotConfigurationFromPlan(plotProperties, plotType = "PKRatio")
   plotConfiguration$points$color <- metaData$color
   plotConfiguration$points$shape <- metaData$shape
-  plotConfiguration$xAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||% autoAxesLimits(data[, "age"])
-  plotConfiguration$yAxis$limits <- c(axesProperties$y$min, axesProperties$y$max) %||% autoAxesLimits(c(0.5, 2, data[, paste0("ratio", pkParameterName)]))
+  plotConfiguration$xAxis$axisLimits <- c(axesProperties$x$min, axesProperties$x$max) %||% autoAxesLimits(data[, "age"])
+  plotConfiguration$yAxis$axisLimits <- c(axesProperties$y$min, axesProperties$y$max) %||% autoAxesLimits(c(0.5, 2, data[, paste0("ratio", pkParameterName)]))
 
   pkRatioPlot <- tlf::plotPKRatio(
     data = data,
