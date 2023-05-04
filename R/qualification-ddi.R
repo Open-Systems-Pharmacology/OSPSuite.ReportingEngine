@@ -320,8 +320,8 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData, delta = 1) {
   xSmartZoom <- getSmartZoomLimits(ddiData[[ddiPlotData$axesSettings$X$label]])
   ySmartZoom <- getSmartZoomLimits(ddiData[[ddiPlotData$axesSettings$Y$label]], residualsVsObserved)
 
-  ddiPlotConfiguration$xAxis$limits <- c(xSmartZoom$min, xSmartZoom$max)
-  ddiPlotConfiguration$yAxis$limits <- c(ySmartZoom$min, ySmartZoom$max)
+  ddiPlotConfiguration$xAxis$axisLimits <- c(xSmartZoom$min, xSmartZoom$max)
+  ddiPlotConfiguration$yAxis$axisLimits <- c(ySmartZoom$min, ySmartZoom$max)
 
   if (ddiPlotData$axesSettings$X$scaling == "Log") {
     ddiPlotConfiguration$xAxis$ticks <- 10^seq(ceiling(log10(xSmartZoom$min)), floor(log10(xSmartZoom$max)), 1)

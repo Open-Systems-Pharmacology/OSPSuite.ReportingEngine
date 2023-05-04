@@ -328,13 +328,13 @@ GofPlotTask <- R6::R6Class(
           obsVsPredPlotLog <- tlf::setXAxis(
             plotObject = obsVsPredPlotLog,
             scale = tlf::Scaling$log,
-            limits = obsVsPredRange,
+            axisLimits = obsVsPredRange,
             ticks = obsVsPredBreaks
           )
           obsVsPredPlotLog <- tlf::setYAxis(
             plotObject = obsVsPredPlotLog,
             scale = tlf::Scaling$log,
-            limits = obsVsPredRange,
+            axisLimits = obsVsPredRange,
             ticks = obsVsPredBreaks
           )
           obsVsPredPlotLog <- setQuadraticDimension(

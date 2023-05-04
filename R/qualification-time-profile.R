@@ -820,12 +820,12 @@ updateQualificationTimeProfilePlotConfiguration <- function(simulatedMetaData = 
   plotConfiguration$background$yGrid$linetype <- axesProperties$y$grid$linetype
   
   plotConfiguration$xAxis$scale <- axesProperties$x$scale
-  plotConfiguration$xAxis$limits <- c(axesProperties$x$min, axesProperties$x$max)
+  plotConfiguration$xAxis$axisLimits <- c(axesProperties$x$min, axesProperties$x$max)
   plotConfiguration$xAxis$ticks <- axesProperties$x$ticks
   plotConfiguration$xAxis$ticklabels <- axesProperties$x$ticklabels
   
   plotConfiguration$yAxis$scale <- axesProperties$y$scale
-  plotConfiguration$yAxis$limits <- c(axesProperties$y$min, axesProperties$y$max)
+  plotConfiguration$yAxis$axisLimits <- c(axesProperties$y$min, axesProperties$y$max)
   plotConfiguration$yAxis$ticks <- axesProperties$y$ticks
   plotConfiguration$yAxis$ticklabels <- axesProperties$y$ticklabels
   
@@ -841,7 +841,7 @@ updateQualificationTimeProfilePlotConfiguration <- function(simulatedMetaData = 
   plotConfiguration$background$y2Grid$linetype <- axesProperties$y2$grid$linetype
 
   plotConfiguration$y2Axis$scale <- axesProperties$y2$scale
-  plotConfiguration$y2Axis$limits <- c(axesProperties$y2$min, axesProperties$y2$max)
+  plotConfiguration$y2Axis$axisLimits <- c(axesProperties$y2$min, axesProperties$y2$max)
   plotConfiguration$y2Axis$ticks <- axesProperties$y2$ticks
   plotConfiguration$y2Axis$ticklabels <- axesProperties$y2$ticklabels
 

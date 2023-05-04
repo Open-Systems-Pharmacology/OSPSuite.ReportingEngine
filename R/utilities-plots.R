@@ -706,7 +706,7 @@ getBoxWhiskerPlotConfiguration <- function(plotScale = "log",
   boxBreaks <- autoAxesTicksFromLimits(boxRange)
 
   plotConfiguration$yAxis$scale <- tlf::Scaling$log
-  plotConfiguration$yAxis$limits <- boxRange
+  plotConfiguration$yAxis$axisLimits <- boxRange
   plotConfiguration$yAxis$ticks <- boxBreaks
   return(plotConfiguration)
 }

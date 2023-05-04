@@ -258,7 +258,7 @@ plotPopulationPKParameters <- function(structureSets,
               comparisonVpcPlotLog <-  tlf::setYAxis(
                 plotObject = comparisonVpcPlot,
                 scale = tlf::Scaling$log,
-                limits = vpcLimits,
+                axisLimits = vpcLimits,
                 ticks = autoAxesTicksFromLimits(vpcLimits)
               )
               resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", demographyParameter, pkParameter$pkParameter, "log")
@@ -324,7 +324,7 @@ plotPopulationPKParameters <- function(structureSets,
             vpcPlotLog <-  tlf::setYAxis(
               plotObject = vpcPlot,
               scale = tlf::Scaling$log,
-              limits = vpcLimits,
+              axisLimits = vpcLimits,
               ticks = autoAxesTicksFromLimits(vpcLimits)
             )
             resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", demographyParameter, pkParameter$pkParameter, "log")
@@ -448,7 +448,7 @@ plotPopulationPKParameters <- function(structureSets,
         boxplotPKRatiosLog <- tlf::setYAxis(
           plotObject = boxplotPKRatios,
           scale = tlf::Scaling$log,
-          limits = ratioRange,
+          axisLimits = ratioRange,
           ticks = ratioBreaks
         )
         resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_ratios", pkParameter$pkParameter, "log")

@@ -229,12 +229,12 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, pl
   positiveRows <- (data[, "Observed"] > 0) & (data[, "Simulated"] > 0)
   dataForLimit <- c(data[positiveRows, "Observed"], data[positiveRows, "Simulated"])
 
-  plotConfiguration$xAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||%
+  plotConfiguration$xAxis$axisLimits <- c(axesProperties$x$min, axesProperties$x$max) %||%
     autoAxesLimits(switch(plotType,
       "predictedVsObserved" = dataForLimit,
       "residualsOverTime" = data[positiveRows, "Time"]
     ))
-  plotConfiguration$yAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||%
+  plotConfiguration$yAxis$axisLimits <- c(axesProperties$x$min, axesProperties$x$max) %||%
     autoAxesLimits(switch(plotType,
       "predictedVsObserved" = dataForLimit,
       "residualsOverTime" = c(0, data[positiveRows, "Residuals"])
