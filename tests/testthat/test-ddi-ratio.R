@@ -66,9 +66,8 @@ test_that("Guest et al. values are appropriately read", {
     getGuestDeltaFromConfigurationPlan(ddiRatioPlan1),
     list(AUC = 1.2, CL = 1.2, CMAX = 1.3)
   )
-  expect_equal(
-    getGuestDeltaFromConfigurationPlan(ddiRatioPlan2),
-    list(AUC = 1.2, CL = 1.2, CMAX = 1.3)
+  expect_error(
+    getGuestDeltaFromConfigurationPlan(ddiRatioPlan2)
   )
   expect_equal(
     getGuestDeltaFromConfigurationPlan(ddiRatioPlan3),

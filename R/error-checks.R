@@ -448,3 +448,15 @@ checkPKRatioObservedRecord <- function(selectedRow, observedDataRecordId){
   )
   return(FALSE)
 }
+
+validateGuestParameters <- function(guestParameters, pkParameters) {
+  # Repurpose validateIsIncluded
+  # and update error message
+  tryCatch({
+    validateIsIncluded(guestParameters, pkParameters)
+    }, error = function(e){
+      stop(messages$errorParametersNotIncludedInDDI(setdiff(guestParameters, pkParameters)), call. = FALSE)
+      }
+    )
+  return(invisible())
+}

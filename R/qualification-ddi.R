@@ -662,5 +662,7 @@ getGuestDeltaFromConfigurationPlan <- function(ddiRatioPlan) {
       guestDelta[[pkParameter]] <- guestPlan$Value
     }
   }
+  # Throw an error if parameters defined in Guest Delta were not included in the DDI parameters
+  validateGuestParameters(names(guestDelta), pkParameters)
   return(guestDelta)
 }
