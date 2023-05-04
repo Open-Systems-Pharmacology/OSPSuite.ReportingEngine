@@ -236,7 +236,7 @@ plotDemographyParameters <- function(structureSets,
             plot = tlf::setYAxis(
               plotObject = comparisonVpcPlot,
               scale = tlf::Scaling$log,
-              limits = vpcLogLimits,
+              axisLimits = vpcLogLimits,
               ticks = vpcLogTicks
             ),
             plotCaption = captions$demography$rangePlot(
@@ -302,7 +302,7 @@ plotDemographyParameters <- function(structureSets,
           plot = tlf::setYAxis(
             plotObject = vpcPlot,
             scale = tlf::Scaling$log,
-            limits = vpcLogLimits,
+            axisLimits = vpcLogLimits,
             ticks = vpcLogTicks
           ),
           plotCaption = captions$demography$rangePlot(
