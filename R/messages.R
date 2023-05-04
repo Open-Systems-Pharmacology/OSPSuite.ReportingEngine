@@ -137,7 +137,12 @@ messages <- list(
   errorMolecularWeightRequired = function(path) {
     paste0("Molecular weight not found but required for observed data Id '", path, "' in Time Profile plot.")
   },
-
+  errorParametersNotIncludedInDDI = function(parameterNames){
+    paste0(
+      "PK parameters '", highlight(paste(parameterNames, collapse = "', '")),
+      "' defined in ", highlight("GuestDelta"), " field but not in ", 
+      highlight("PKParameters"), " field")
+  },
   #----- Warning messages ----
   warningExistingPath = function(existingPath) {
     paste0(callingFunction(), "Path: '", existingPath, "' already exists.")

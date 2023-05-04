@@ -275,3 +275,13 @@ getResidualsAcrossCaption <- function(pathName) {
   }
   return(paste0(pathName, " across "))
 }
+
+getDDIPlotCaption <- function(title, subPlotCaption, pkParameter, plotTypeCaption) {
+  longTitle <- ifNotNull(
+    condition = subPlotCaption,
+    outputIfNotNull = paste0(title, ". ", subPlotCaption, "."),
+    outputIfNull = paste0(title, ". ")
+  )
+  caption <- paste(longTitle, plotTypeCaption, pkParameter, "Ratio.")
+  return(caption)
+}
