@@ -43,6 +43,13 @@ displayDimension <- function(dimension) {
 #' @return A list of units for goodness of fit results
 #' @keywords internal
 autoAxesLimits <- function(x, scale = tlf::Scaling$lin) {
+  # Filter negative data if scale is log using using which in case of NAs
+  if (isIncluded(scale, "log")) {
+    x <- x[which(x > 0)]
+    if (isEmpty(x)) {
+      return()
+    }
+  }
   minX <- min(x, na.rm = TRUE)
   maxX <- max(x, na.rm = TRUE)
   minX[minX < 0] <- (1 + reEnv$autoAxisLimitMargin) * minX
@@ -92,7 +99,7 @@ getTimeTicksFromUnit <- function(unit, timeValues = NULL, maxTicks = 10) {
   }
   minTime <- floor(min(0, as.numeric(timeValues), na.rm = TRUE))
   maxTime <- ceiling(max(as.numeric(timeValues), na.rm = TRUE))
-  
+
   # For undefined ticking of units, assume major tick every 10 units (eg. 10 seconds)
   majorTickStep <- 10
   # For undefined ticking of units, assume minor tick every 1 unit (eg. 1 seconds)
@@ -114,16 +121,16 @@ getTimeTicksFromUnit <- function(unit, timeValues = NULL, maxTicks = 10) {
     # Major ticks every 6 months
     majorTickStep <- 6
   }
-  
+
   # Increase tick step to get ticks below max number of ticks
   # To make it prettier, factor will be an integer
-  numberOfTicks <- floor((maxTime-minTime)/majorTickStep)+1
-  tickScaleFactor <- ceiling(numberOfTicks/maxTicks)
+  numberOfTicks <- floor((maxTime - minTime) / majorTickStep) + 1
+  tickScaleFactor <- ceiling(numberOfTicks / maxTicks)
 
-  minorTicks <- seq(minTime, maxTime, tickScaleFactor*minorTickStep)
-  majorTicks <- seq(minTime, maxTime, tickScaleFactor*majorTickStep)
+  minorTicks <- seq(minTime, maxTime, tickScaleFactor * minorTickStep)
+  majorTicks <- seq(minTime, maxTime, tickScaleFactor * majorTickStep)
   # In case there are not enough major ticks due to short simulation time
-  if(length(majorTicks) <= 3){
+  if (length(majorTicks) <= 3) {
     majorTicks <- minorTicks
   }
   ticklabels <- as.character(minorTicks)
@@ -423,7 +430,7 @@ updatePlotDimensions <- function(plotObject) {
   # - add nothing if legend within
   if (grepl(pattern = "inside", x = plotObject$plotConfiguration$legend$position)) {
     # Add small margin of 20 pts on right side of plot to prevent axis ticklabel being cut-off
-    plotObject <- plotObject + 
+    plotObject <- plotObject +
       ggplot2::theme(plot.margin = ggplot2::margin(r = 20, b = 10, l = 10))
     return(plotObject)
   }
@@ -446,11 +453,11 @@ updatePlotDimensions <- function(plotObject) {
     # Add legend height to final plot height to prevent shrinkage of plot area
     plotObject$plotConfiguration$export$height <- plotObject$plotConfiguration$export$height + legendHeight
     # Caution: pieChart currently do not use watermark because of ggplot2::coord_polar
-    if(!isOfType(plotObject$plotConfiguration, "PieChartPlotConfiguration")){
+    if (!isOfType(plotObject$plotConfiguration, "PieChartPlotConfiguration")) {
       plotObject <- updateWatermarkDimensions(plotObject)
     }
     # Add small margin of 20 pts on right side of plot to prevent axis ticklabel being cut-off
-    plotObject <- plotObject + 
+    plotObject <- plotObject +
       ggplot2::theme(plot.margin = ggplot2::margin(r = 20, b = 10, l = 10))
     return(plotObject)
   }
@@ -464,7 +471,7 @@ updatePlotDimensions <- function(plotObject) {
   # Add legend width to final plot width to prevent shrinkage of plot area
   plotObject$plotConfiguration$export$width <- plotObject$plotConfiguration$export$width + legendWidth
   # Caution: pieChart currently do not use watermark because of ggplot2::coord_polar
-  if(!isOfType(plotObject$plotConfiguration, "PieChartPlotConfiguration")){
+  if (!isOfType(plotObject$plotConfiguration, "PieChartPlotConfiguration")) {
     plotObject <- updateWatermarkDimensions(plotObject)
   }
   return(plotObject)
@@ -513,7 +520,7 @@ getTimeProfilePlotConfiguration <- function(workflowType,
     return(plotConfiguration)
   }
   dataMapping <- switch(workflowType,
-    "mean" = tlf::XYGDataMapping$new(
+    "mean" = tlf::TimeProfileDataMapping$new(
       x = dataMapping$x,
       y = dataMapping$y,
       color = dataMapping$group
@@ -592,6 +599,13 @@ getGOFPlotConfiguration <- function(plotType,
       metaData = metaData,
       dataMapping = dataMapping
     ),
+    "obsVsPredLog" = tlf::ObsVsPredPlotConfiguration$new(
+      data = data,
+      metaData = metaData,
+      dataMapping = dataMapping,
+      xScale = tlf::Scaling$log,
+      yScale = tlf::Scaling$log
+    ),
     "resVsPred" = tlf::ResVsPredPlotConfiguration$new(
       data = data,
       metaData = metaData,
@@ -613,23 +627,40 @@ getGOFPlotConfiguration <- function(plotType,
       dataMapping = dataMapping
     )
   )
+
   # Set quadratic plot for obs vs pred
-  if (plotType %in% "obsVsPred") {
+  if (isIncluded(plotType, c("obsVsPred", "obsVsPredLog"))) {
     newDimension <- mean(c(
       plotConfiguration$export$width,
       plotConfiguration$export$height
     ))
     plotConfiguration$export$width <- newDimension
     plotConfiguration$export$height <- newDimension
+
+    # Use auto axis limits to get prettier obs vs pred plot
+    axisLimits <- autoAxesLimits(
+      c(data$Simulated, data$Observed, data$lloq),
+      scale = switch(plotType,
+        "obsVsPredLog" = tlf::Scaling$log,
+        "obsVsPred" = tlf::Scaling$lin
+      )
+    )
+    plotConfiguration$xAxis$axisLimits <- axisLimits %||% plotConfiguration$xAxis$axisLimits
+    plotConfiguration$yAxis$axisLimits <- axisLimits %||% plotConfiguration$yAxis$axisLimits
+
+    updateAxisTicks <- all(isIncluded(plotType, "obsVsPredLog"), !isEmpty(axisLimits))
+    if (updateAxisTicks) {
+      plotConfiguration$xAxis$ticks <- autoAxesTicksFromLimits(axisLimits)
+      plotConfiguration$yAxis$ticks <- autoAxesTicksFromLimits(axisLimits)
+    }
   }
+
   # Set time ticks for res vs time
   if (plotType %in% "resVsTime") {
     residualTimeTicks <- getTimeTicksFromUnit(
       metaData$Time$unit,
       timeValues = data$Time
     )
-    # ticks = residualTimeTicks$ticks,
-    # ticklabels = residualTimeTicks$ticklabels
     plotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, dataMapping, plotConfiguration)
   }
   # Set labels for qq plots and histograms
@@ -734,9 +765,9 @@ getColorFromOutputGroup <- function(group,
   toKeep <- (group[[legendVariable]] %in% displayedLegendValues) &
     !duplicated(group[[legendVariable]])
   legendValues <- factor(
-    group[[legendVariable]][toKeep], 
+    group[[legendVariable]][toKeep],
     levels = levels(displayedLegendValues) %||% displayedLegendValues
-    )
+  )
   legendOrder <- order(legendValues)
   colorValues <- group[[colorVariable]][toKeep]
   return(colorValues[legendOrder])
@@ -778,21 +809,21 @@ getColorGroupForPKParameterPlot <- function(output,
 updateVpcPlotColor <- function(plotObject, output, referenceSimulationSetName = NULL) {
   legendSim <- paste("Simulated", AggregationConfiguration$names$middle, "and", AggregationConfiguration$names$range)
   legendReference <- paste(legendSim, "of", referenceSimulationSetName)
-  
+
   plotObject <- plotObject +
     ggplot2::scale_color_manual(
       breaks = c(ifNotNull(referenceSimulationSetName, legendReference), legendSim),
       values = c(
-        ifNotNull(referenceSimulationSetName, reEnv$referenceColor), 
+        ifNotNull(referenceSimulationSetName, reEnv$referenceColor),
         output$color %||% "dodgerblue"
-          )
+      )
     ) +
     ggplot2::scale_fill_manual(
       breaks = c(ifNotNull(referenceSimulationSetName, legendReference), legendSim),
       values = c(
-        ifNotNull(referenceSimulationSetName, reEnv$referenceFill), 
+        ifNotNull(referenceSimulationSetName, reEnv$referenceFill),
         output$fill %||% "dodgerblue"
-          )
+      )
     )
   return(plotObject)
 }
@@ -803,8 +834,8 @@ updateVpcPlotColor <- function(plotObject, output, referenceSimulationSetName = 
 #' @param sideMarginsEnabled Logical defining if side margins are enabled.
 #' @return List of axes properties
 #' @keywords internal
-updateAxesMargin <- function(axesProperties, sideMarginsEnabled = TRUE){
-  for(properyName in names(axesProperties)){
+updateAxesMargin <- function(axesProperties, sideMarginsEnabled = TRUE) {
+  for (properyName in names(axesProperties)) {
     axesProperty <- axesProperties[[properyName]]
     # Check if side margin is enabled or necessary
     noSideMargins <- any(
@@ -812,19 +843,19 @@ updateAxesMargin <- function(axesProperties, sideMarginsEnabled = TRUE){
       isEmpty(axesProperty$min),
       isEmpty(axesProperty$max)
     )
-    if(noSideMargins){
+    if (noSideMargins) {
       next
     }
     # Update range for log scale plots
-    if(isIncluded(axesProperty$scale, tlf::Scaling$log)){
-      axesProperty$min <- 0.7*axesProperty$min
-      axesProperty$max <- axesProperty$max/0.7
+    if (isIncluded(axesProperty$scale, tlf::Scaling$log)) {
+      axesProperty$min <- 0.7 * axesProperty$min
+      axesProperty$max <- axesProperty$max / 0.7
       axesProperties[[properyName]] <- axesProperty
       next
     }
-    axesRange <- axesProperty$max-axesProperty$min
-    axesProperty$min <- axesProperty$min-axesRange/10
-    axesProperty$max <- axesProperty$max+axesRange/10
+    axesRange <- axesProperty$max - axesProperty$min
+    axesProperty$min <- axesProperty$min - axesRange / 10
+    axesProperty$max <- axesProperty$max + axesRange / 10
     axesProperties[[properyName]] <- axesProperty
   }
   return(axesProperties)

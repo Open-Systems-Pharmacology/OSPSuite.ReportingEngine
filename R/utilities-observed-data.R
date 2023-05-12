@@ -355,7 +355,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet) {
 #' @param dataMapping A list mapping the variable of data
 #' @param molWeight Molar weight for unit conversion of dependent variable
 #' @param structureSet A `SimulationStructure` object
-#' @return list of data and lloq data.frames
+#' @return list of data and its metaData
 #' @keywords internal
 getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, structureSet) {
   # If no observed data nor data selected, return empty dataset
@@ -412,8 +412,11 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, stru
     "Legend" = metaData$legend,
     "Path" = output$path
   )
+  # lloq is NA if not used to prevent issues
+  # when building final data.frame that can have outputs with and without lloqs
   if (isEmpty(dataMapping$lloq)) {
-    return(list(data = outputData, lloq = NULL, metaData = metaData))
+    outputData$lloq <- NA
+    return(list(data = outputData, metaData = metaData))
   }
 
   lloqConcentration <- selectedData[, dataMapping$lloq]
@@ -431,21 +434,11 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, stru
       )
     }
   }
-  lloqOutput <- data.frame(
-    "Time" = ospsuite::toUnit(
-      "Time",
-      selectedData[, dataMapping$time],
-      structureSet$simulationSet$timeUnit
-    ),
-    "Concentration" = lloqConcentration,
-    "Legend" = captions$plotGoF$lloqLegend(
-      simulationSetName = structureSet$simulationSet$simulationSetName,
-      descriptor = structureSet$simulationSetDescriptor,
-      pathName = output$dataDisplayName
-    ),
-    "Path" = output$path
-  )
-  return(list(data = outputData, lloq = lloqOutput, metaData = metaData))
+  outputData$lloq <- checkLLOQValues(lloqConcentration, structureSet)
+  # Update legend indicating dotted lines are lloq
+  outputData$Legend <- paste(outputData$Legend, "LLOQ represented as dotted line", sep = "\n")
+  metaData$legend <- paste(metaData$legend, "LLOQ represented as dotted line", sep = "\n")
+  return(list(data = outputData, metaData = metaData))
 }
 
 
