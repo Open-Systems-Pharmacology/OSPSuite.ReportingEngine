@@ -37,15 +37,13 @@ getQualificationDDIPlotData <- function(configurationPlan) {
         pkParameters <- plot$PKParameters %||% ospsuite::toPathArray(plot$PKParameter)
         validateIsIncluded(values = pkParameters, parentValues = names(ddiPKRatioColumnName), nullAllowed = FALSE)
 
+        defaultProperties <- getDefaultPropertiesFromTheme("plotDDIRatio", propertyType = "points")
         for (groupNumber in seq_along(plot$Groups)) {
           group <- plot$Groups[[groupNumber]]
           plotDDIMetadata$groups[[groupNumber]] <- list()
           plotDDIMetadata$groups[[groupNumber]]$caption <- group$Caption
-          plotDDIMetadata$groups[[groupNumber]]$color <- group$Color %||%
-            reEnv$theme$plotConfigurations$plotDDIRatio$points$color
-          plotDDIMetadata$groups[[groupNumber]]$symbol <- tlfShape(
-            group$Symbol %||% reEnv$theme$plotConfigurations$plotDDIRatio$points$shape
-          )
+          plotDDIMetadata$groups[[groupNumber]]$color <- group$Color %||% defaultProperties$color
+          plotDDIMetadata$groups[[groupNumber]]$symbol <- tlfShape(group$Symbol %||% defaultProperties$shape)
 
           for (ddiRatio in group$DDIRatios) {
             outputPath <- ddiRatio$Output
