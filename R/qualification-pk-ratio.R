@@ -187,6 +187,7 @@ getQualificationPKRatioData <- function(pkRatioPlan, configurationPlan, settings
 
   pkRatioData <- data.frame()
   caption <- NULL
+  defaultProperties <- getDefaultPropertiesFromTheme("plotPKRatio", propertyType = "points")
   for (group in pkRatioPlan$Groups) {
     for (pkRatioMapping in group$PKRatios) {
       pkRatioResults <- getPKRatioForMapping(pkRatioMapping, pkParameterNames, configurationPlan, settings)
@@ -203,10 +204,10 @@ getQualificationPKRatioData <- function(pkRatioPlan, configurationPlan, settings
     list(
       caption = caption,
       color = sapply(pkRatioPlan$Groups, FUN = function(group) {
-        group$Color %||% reEnv$theme$plotConfigurations$plotPKRatio$points$color
+        group$Color %||% defaultProperties$color
       }),
       shape = sapply(pkRatioPlan$Groups, FUN = function(group) {
-        tlfShape(group$Symbol %||% reEnv$theme$plotConfigurations$plotPKRatio$points$shape)
+        tlfShape(group$Symbol %||% defaultProperties$shape)
       })
     )
   )

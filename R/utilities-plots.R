@@ -829,3 +829,22 @@ updateAxesMargin <- function(axesProperties, sideMarginsEnabled = TRUE){
   }
   return(axesProperties)
 }
+
+#' @title getDefaultPropertyFromTheme
+#' @description 
+#' Get default property value from current reEnv theme
+#' @param propertyName Name of the aesthetic property (eg `"color"`)
+#' @param propertyType One of `"points"`, `"lines`, `"ribbons"` or `"errorbars"`
+#' @param plotName Name of the plot in Theme (eg `"plotTimeProfile"`)
+#' @return Property value
+#' @keywords internal
+getDefaultPropertiesFromTheme <- function(plotName, 
+                                          propertyType = "points", 
+                                          propertyNames = as.character(tlf::AestheticProperties)){
+  # The function to get values from a Theme/PlotConfiguration exists in tlf but it is not exported
+  # For this reason, it needs to be called using :::
+  tlf:::.getAestheticValuesFromConfiguration(
+    plotConfigurationProperty = reEnv$theme$plotConfigurations[[plotName]][[propertyType]],
+    propertyNames = propertyNames
+  )
+}

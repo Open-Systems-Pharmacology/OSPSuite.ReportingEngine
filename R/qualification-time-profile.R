@@ -114,6 +114,8 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
   obsData <- data.frame()
   simMetaData <- list(id = NULL, legend = NULL, color = NULL, linetype = NULL, size = NULL)
   obsMetaData <- list(id = NULL, legend = NULL, color = NULL, shape = NULL, size = NULL)
+  defaultSimProperties <- getDefaultPropertiesFromTheme("plotTimeProfile", propertyType = "lines")
+  defaultObsProperties <- getDefaultPropertiesFromTheme("plotTimeProfile", propertyType = "points")
   for (curve in configurationPlanCurves) {
     curveAxesProperties <- axesProperties
     # Update features related to observed data
@@ -128,9 +130,9 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
       # Use default property if property is undefined
       obsMetaData$id <- c(obsMetaData$id, curveProperties$id %||% NA)
       obsMetaData$legend <- c(obsMetaData$legend, curveProperties$legend)
-      obsMetaData$color <- c(obsMetaData$color, curveProperties$color %||% "black")
-      obsMetaData$size <- c(obsMetaData$size, curveProperties$size %||% 2)
-      obsMetaData$shape <- c(obsMetaData$shape, curveProperties$shape %||% tlf::Shapes$circle)
+      obsMetaData$color <- c(obsMetaData$color, curveProperties$color %||% defaultObsProperties$color)
+      obsMetaData$size <- c(obsMetaData$size, curveProperties$size %||% defaultObsProperties$size)
+      obsMetaData$shape <- c(obsMetaData$shape, curveProperties$shape %||% defaultObsProperties$shape)
       next
     }
     # Update features related to simulated data
@@ -145,9 +147,9 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
     # Use default property if property is undefined
     simMetaData$id <- c(simMetaData$id, curveProperties$id %||% NA)
     simMetaData$legend <- c(simMetaData$legend, curveProperties$legend)
-    simMetaData$color <- c(simMetaData$color, curveProperties$color %||% "black")
-    simMetaData$size <- c(simMetaData$size, curveProperties$size %||% 1)
-    simMetaData$linetype <- c(simMetaData$linetype, curveProperties$linetype %||% tlf::Linetypes$solid)
+    simMetaData$color <- c(simMetaData$color, curveProperties$color %||% defaultSimProperties$color)
+    simMetaData$size <- c(simMetaData$size, curveProperties$size %||% defaultSimProperties$size)
+    simMetaData$linetype <- c(simMetaData$linetype, curveProperties$linetype %||% defaultSimProperties$linetype)
   }
   # Update legend captions based on expected plot width
   # keep order as provided in legend index (collected as id in metaData)
