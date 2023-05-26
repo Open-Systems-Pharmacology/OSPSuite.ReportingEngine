@@ -435,9 +435,6 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, stru
     }
   }
   outputData$lloq <- checkLLOQValues(lloqConcentration, structureSet)
-  # Update legend indicating dotted lines are lloq
-  outputData$Legend <- paste(outputData$Legend, "LLOQ represented as dotted line", sep = "\n")
-  metaData$legend <- paste(metaData$legend, "LLOQ represented as dotted line", sep = "\n")
   return(list(data = outputData, metaData = metaData))
 }
 

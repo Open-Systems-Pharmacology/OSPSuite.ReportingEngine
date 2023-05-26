@@ -862,20 +862,136 @@ updateAxesMargin <- function(axesProperties, sideMarginsEnabled = TRUE) {
 }
 
 #' @title getDefaultPropertyFromTheme
-#' @description 
+#' @description
 #' Get default property value from current reEnv theme
 #' @param propertyName Name of the aesthetic property (eg `"color"`)
 #' @param propertyType One of `"points"`, `"lines`, `"ribbons"` or `"errorbars"`
 #' @param plotName Name of the plot in Theme (eg `"plotTimeProfile"`)
 #' @return Property value
 #' @keywords internal
-getDefaultPropertiesFromTheme <- function(plotName, 
-                                          propertyType = "points", 
-                                          propertyNames = as.character(tlf::AestheticProperties)){
+getDefaultPropertiesFromTheme <- function(plotName,
+                                          propertyType = "points",
+                                          propertyNames = as.character(tlf::AestheticProperties)) {
   # The function to get values from a Theme/PlotConfiguration exists in tlf but it is not exported
   # For this reason, it needs to be called using :::
   tlf:::.getAestheticValuesFromConfiguration(
     plotConfigurationProperty = reEnv$theme$plotConfigurations[[plotName]][[propertyType]],
     propertyNames = propertyNames
   )
+}
+
+#' @title getLegendAesOverride
+#' @description
+#' In time profiles, legends are merged into one unique legend
+#' The displayed legend is stored in the `plotObject` within the color guide field `override.aes`.
+#' This function simply gets the list from that field for updating the current legend
+#' TODO: create and export that function in `{tlf}` package
+#' @param plotObject A ggplot object
+#' @return A list of aesthetic values
+#' @keywords internal
+getLegendAesOverride <- function(plotObject) {
+  return(plotObject$guides$colour$override.aes)
+}
+
+#' @title addLLOQLegend
+#' @description
+#' Add LLOQ displayed legend to the legend of a `plotObject`
+#' TODO: create and export that function in `{tlf}` package
+#' Fix coloring issues
+#' @param plotObject A ggplot object
+#' @param captions Current observed data captions for which lloq legend is needed
+#' @param prefix Prefix for legend
+#' @return A list of aesthetic values
+#' @keywords internal
+addLLOQLegend <- function(plotObject, captions, prefix = "LLOQ for") {
+
+  # Since lloq legend should be positioned after the current legend
+  # Current legend needs to be reused by the color and shape guides
+  # to prevent losing the correct captions and keys
+  currentLegend <- getLegendAesOverride(plotObject)
+  lloqLegend <- prettyCaption(
+    captions = paste(prefix, captions),
+    plotObject = plotObject
+  )
+
+  # If both observed and simulated data are displayed
+  # tlf merge the legends using option override.aes from color guide
+  # while removing the legends from linetype and shape
+  shapeGuide <- "none"
+  if (isEmpty(currentLegend)) {
+    # ggplot2 auto-merge shape and color legends
+    # if only observed data are displayed
+    # thus both color and shape guides need to be consistent by using same order and title
+    shapeGuide <- ggplot2::guide_legend(
+      title = plotObject$plotConfiguration$legend$title$text,
+      title.theme = plotObject$plotConfiguration$legend$title$createPlotFont(),
+      order = 1,
+      label.theme = plotObject$plotConfiguration$legend$font$createPlotFont()
+    )
+  }
+  colorGuide <- ggplot2::guide_legend(
+    title = plotObject$plotConfiguration$legend$title$text,
+    title.theme = plotObject$plotConfiguration$legend$title$createPlotFont(),
+    order = 1,
+    override.aes = currentLegend,
+    label.theme = plotObject$plotConfiguration$legend$font$createPlotFont()
+  )
+
+  # the linetype guide should display the caption for lloq legend
+  # corresponding to "LLOQ for <caption of the observed data set>"
+  # - order argument renders legend after current legend
+  # - title is null to allow pasting this additional legend right below the current
+  linetypeGuide <- ggplot2::guide_legend(
+    title = NULL,
+    order = 2,
+    override.aes = list(
+      shape = tlf::Shapes$blank,
+      linetype = tlf:::tlfEnv$defaultLLOQLinetype,
+      fill = NA
+    ),
+    label.theme = plotObject$plotConfiguration$legend$font$createPlotFont()
+  )
+
+  # Needs to add a dummy linetype aesthetic to get lloq legend displayed
+  plotObject <- plotObject +
+    ggplot2::geom_blank(
+      mapping = ggplot2::aes(linetype = lloqLegend),
+      inherit.aes = FALSE
+    )
+  linetypeScale <- plotObject$scales$get_scales("linetype")
+
+  # Suppress message stating scale was updated
+  suppressMessages({
+    plotObject <- plotObject +
+      # Ensure only lloq legend entries are displayed
+      # and prevent current linetypes to be changed or removed
+      ggplot2::scale_linetype_manual(
+        breaks = head(c(linetypeScale$breaks, lloqLegend), length(lloqLegend)),
+        values = as.character(c(
+          linetypeScale$palette(1),
+          rep(tlf::Linetypes$blank, length(lloqLegend))
+        )),
+        labels = lloqLegend
+      ) +
+      ggplot2::guides(
+        colour = colorGuide,
+        shape = shapeGuide,
+        linetype = linetypeGuide
+      ) +
+      # Ensures
+      # - gaps between legends are removed
+      # - legends are on top of each other (not side by side)
+      # - aligned on legend keys (prettier display)
+      ggplot2::theme(
+        legend.margin = ggplot2::margin(
+          t = -plotObject$plotConfiguration$legend$title$font$size / 2,
+          b = -plotObject$plotConfiguration$legend$title$font$size / 2,
+          unit = "pt"
+        ),
+        legend.box = "vertical",
+        legend.box.just = "left"
+      )
+  })
+
+  return(plotObject)
 }
