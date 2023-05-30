@@ -4,7 +4,7 @@
 \alias{getQualificationDDIRatioMeasure}
 \title{getQualificationDDIRatioMeasure}
 \usage{
-getQualificationDDIRatioMeasure(summaryDataFrame, pkParameterName, delta = 1)
+getQualificationDDIRatioMeasure(summaryDataFrame, pkParameterName, delta)
 }
 \arguments{
 \item{summaryDataFrame}{data.frame with DDI Ratios}

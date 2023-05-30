@@ -4,7 +4,7 @@
 \alias{generateDDIQualificationDDIPlot}
 \title{generateDDIQualificationDDIPlot}
 \usage{
-generateDDIQualificationDDIPlot(ddiPlotData, delta = 1)
+generateDDIQualificationDDIPlot(ddiPlotData, delta)
 }
 \arguments{
 \item{ddiPlotData}{a list containing the plot data.frame, aesthetics list, axes settings and plot settings}

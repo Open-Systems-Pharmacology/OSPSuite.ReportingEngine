@@ -356,8 +356,11 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData, delta) {
 #' @param delta Delta value from Guest et al. formula
 #' @return A data.frame
 #' @keywords internal
-getQualificationDDIRatioMeasure <- function(summaryDataFrame, pkParameterName, delta = 1) {
-  guestValues <- tlf::getGuestValues(x = summaryDataFrame[["observedRatio"]], delta = delta)
+getQualificationDDIRatioMeasure <- function(summaryDataFrame, pkParameterName, delta) {
+  guestValues <- tlf::getGuestValues(
+    x = summaryDataFrame[["observedRatio"]], 
+    delta = delta %||% 1
+    )
 
   qualificationMeasure <- data.frame(
     parameter = c("Points total", "Points within Guest *et al.*", "Points within 2 fold"),
@@ -456,7 +459,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
       table = ddiTableList[[pkParameter]],
       tableCaption = paste(
         "Summary table for", metadata$title, "-", pkParameter, "Ratio.",
-        "(\u03b4 =", metadata$guestDelta[[pkParameter]], "in Guest *et al.* formula)"
+        "(\u03b4 =", metadata$guestDelta[[pkParameter]] %||% 1, "in Guest *et al.* formula)"
       ),
       includeTable = TRUE
     )
