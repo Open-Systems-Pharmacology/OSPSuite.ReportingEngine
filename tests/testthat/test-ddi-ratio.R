@@ -91,7 +91,7 @@ ddiTestData <- data.frame(
 ddiTestData$simulatedObservedRatio <- ddiTestData$simulatedRatio/ddiTestData$observedRatio
 
 test_that("Guest et al. measure works as expected", {
-  ddiMeasure <- getQualificationDDIRatioMeasure(ddiTestData, pkParameterName = "AUC")
+  ddiMeasure <- getQualificationDDIRatioMeasure(ddiTestData, pkParameterName = "AUC", delta = 1)
   ddiMeasureGuest <- getQualificationDDIRatioMeasure(ddiTestData, pkParameterName = "AUC", delta = 1.3)
   
   expect_s3_class(ddiMeasure, "data.frame")
