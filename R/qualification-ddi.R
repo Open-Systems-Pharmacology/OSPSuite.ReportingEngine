@@ -278,7 +278,7 @@ getSmartZoomLimits <- function(dataVector, residualsVsObserved = FALSE) {
 #' @import tlf
 #' @import ggplot2
 #' @keywords internal
-generateDDIQualificationDDIPlot <- function(ddiPlotData, delta = 1) {
+generateDDIQualificationDDIPlot <- function(ddiPlotData, delta) {
   ddiData <- na.omit(ddiPlotData$ddiPlotDataframe)
 
   residualsVsObserved <- ddiPlotTypeSpecifications[[ddiPlotData$axesSettings$plotType]]$residualsVsObservedFlag
@@ -290,7 +290,9 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData, delta = 1) {
     color = "Caption",
     minRange = c(0.1, 10),
     residualsVsObserved = residualsVsObserved,
-    deltaGuest = delta
+    # Undefined delta in Configuration Plan corresponds to NULL
+    # In such case, default value should be 1 to prevent crash when defining data mapping
+    deltaGuest = delta %||% 1
   )
 
   ddiPlotConfiguration <- getPlotConfigurationFromPlan(
