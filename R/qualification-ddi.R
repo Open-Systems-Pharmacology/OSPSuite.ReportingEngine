@@ -278,7 +278,7 @@ getSmartZoomLimits <- function(dataVector, residualsVsObserved = FALSE) {
 #' @import tlf
 #' @import ggplot2
 #' @keywords internal
-generateDDIQualificationDDIPlot <- function(ddiPlotData, delta = 1) {
+generateDDIQualificationDDIPlot <- function(ddiPlotData, delta) {
   ddiData <- na.omit(ddiPlotData$ddiPlotDataframe)
 
   residualsVsObserved <- ddiPlotTypeSpecifications[[ddiPlotData$axesSettings$plotType]]$residualsVsObservedFlag
@@ -290,7 +290,9 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData, delta = 1) {
     color = "Caption",
     minRange = c(0.1, 10),
     residualsVsObserved = residualsVsObserved,
-    deltaGuest = delta
+    # Undefined delta in Configuration Plan corresponds to NULL
+    # In such case, default value should be 1 to prevent crash when defining data mapping
+    deltaGuest = delta %||% 1
   )
 
   ddiPlotConfiguration <- getPlotConfigurationFromPlan(
@@ -354,8 +356,11 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData, delta = 1) {
 #' @param delta Delta value from Guest et al. formula
 #' @return A data.frame
 #' @keywords internal
-getQualificationDDIRatioMeasure <- function(summaryDataFrame, pkParameterName, delta = 1) {
-  guestValues <- tlf::getGuestValues(x = summaryDataFrame[["observedRatio"]], delta = delta)
+getQualificationDDIRatioMeasure <- function(summaryDataFrame, pkParameterName, delta) {
+  guestValues <- tlf::getGuestValues(
+    x = summaryDataFrame[["observedRatio"]], 
+    delta = delta %||% 1
+    )
 
   qualificationMeasure <- data.frame(
     parameter = c("Points total", "Points within Guest *et al.*", "Points within 2 fold"),
@@ -454,7 +459,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
       table = ddiTableList[[pkParameter]],
       tableCaption = paste(
         "Summary table for", metadata$title, "-", pkParameter, "Ratio.",
-        "(\u03b4 =", metadata$guestDelta[[pkParameter]], "in Guest *et al.* formula)"
+        "(\u03b4 =", metadata$guestDelta[[pkParameter]] %||% 1, "in Guest *et al.* formula)"
       ),
       includeTable = TRUE
     )
