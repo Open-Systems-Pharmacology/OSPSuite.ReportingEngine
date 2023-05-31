@@ -92,9 +92,11 @@ ddiTestData$simulatedObservedRatio <- ddiTestData$simulatedRatio/ddiTestData$obs
 
 test_that("Guest et al. measure works as expected", {
   ddiMeasure <- getQualificationDDIRatioMeasure(ddiTestData, pkParameterName = "AUC", delta = 1)
+  ddiMeasureNULL <- getQualificationDDIRatioMeasure(ddiTestData, pkParameterName = "AUC", delta = NULL)
   ddiMeasureGuest <- getQualificationDDIRatioMeasure(ddiTestData, pkParameterName = "AUC", delta = 1.3)
   
   expect_s3_class(ddiMeasure, "data.frame")
+  expect_s3_class(ddiMeasureNULL, "data.frame")
   expect_s3_class(ddiMeasureGuest, "data.frame")
   
   expect_equal(names(ddiMeasure), c("AUC", "Number", "Ratio [%]"))
@@ -108,9 +110,12 @@ test_that("Guest et al. measure works as expected", {
     ddiMeasureGuest$AUC, 
     c("Points total", "Points within Guest *et al.*", "Points within 2 fold")
   )
+  
   expect_equal(ddiMeasure$Number, c(10, 1, 3))
   expect_equal(ddiMeasureGuest$Number, c(10, 3, 3))
   expect_equal(ddiMeasure$`Ratio [%]`, c(NA, 10, 30))
   expect_equal(ddiMeasureGuest$`Ratio [%]`, c(NA, 30, 30))
   
+  # Undefined is same as delta = 1
+  expect_equal(ddiMeasure, ddiMeasureNULL)
 })
