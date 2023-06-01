@@ -151,3 +151,15 @@ test_that("getFigurePathsFromReport gets the correct file paths", {
   # and assess that warning will be thrown if files do not exist
   expect_warning(ospsuite.reportingengine:::checkFileExists(filePaths))
 })
+
+test_that("removeForbiddenLetters handles unicode characters", {
+  expect_equal(
+    removeForbiddenLetters("Björkhem-Bergman 2013 (RIF @ 20 mg)"),
+    "Bjorkhem_Bergman_2013__RIF___20_mg_"
+  )
+  expect_equal(
+    removeForbiddenLetters("μ greek letter"),
+    "__greek_letter"
+  )
+})
+

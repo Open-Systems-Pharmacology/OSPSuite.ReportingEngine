@@ -110,6 +110,8 @@ trimFileName <- function(path, extension = NULL, sep = "/") {
 #' }
 #' @export
 removeForbiddenLetters <- function(text, forbiddenLetters = "[[:punct:][:blank:]]", replacement = "_") {
+  # Remove accents from characters
+  text <- iconv(x = text, to = "ASCII//TRANSLIT")
   gsub(
     pattern = forbiddenLetters,
     replacement = replacement,
