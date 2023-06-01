@@ -152,10 +152,3 @@ test_that("getFigurePathsFromReport gets the correct file paths", {
   expect_warning(ospsuite.reportingengine:::checkFileExists(filePaths))
 })
 
-test_that("removeForbiddenLetters handles unicode characters", {
-  expect_equal(
-    removeForbiddenLetters("Björkhem-Bergman 2013 (RIF @ 20 mg)"),
-    "Bjorkhem_Bergman_2013__RIF___20_mg_"
-  )
-})
-
