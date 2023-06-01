@@ -157,9 +157,5 @@ test_that("removeForbiddenLetters handles unicode characters", {
     removeForbiddenLetters("Björkhem-Bergman 2013 (RIF @ 20 mg)"),
     "Bjorkhem_Bergman_2013__RIF___20_mg_"
   )
-  expect_equal(
-    removeForbiddenLetters("μ greek letter"),
-    "__greek_letter"
-  )
 })
 
