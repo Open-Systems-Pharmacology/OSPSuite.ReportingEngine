@@ -202,7 +202,7 @@ setDefaultNumericFormat <- function(digits = NULL, scientific = NULL) {
 #' @title getDefaultRETheme
 #' @description Get default plot settings for RE package
 #' @return A `Theme` object from `tlf` package
-#' @keywords internal
+#' @export
 getDefaultRETheme <- function() {
   # Get reporting engine theme from its json file properties
   reThemeFile <- system.file("extdata", "re-theme.json", package = "ospsuite.reportingengine")
