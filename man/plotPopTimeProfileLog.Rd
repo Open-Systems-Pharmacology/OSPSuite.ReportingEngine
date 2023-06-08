@@ -7,7 +7,6 @@
 plotPopTimeProfileLog(
   simulatedData,
   observedData = NULL,
-  lloqData = NULL,
   metaData = NULL,
   dataMapping = NULL,
   plotConfiguration = NULL
@@ -17,8 +16,6 @@ plotPopTimeProfileLog(
 \item{simulatedData}{data.frame of simulated data}
 
 \item{observedData}{data.frame of observed data}
-
-\item{lloqData}{data.frame of lloq data}
 
 \item{metaData}{meta data on `data`}
 
