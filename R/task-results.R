@@ -86,14 +86,15 @@ TaskResults <- R6::R6Class(
       if (isFALSE(self$includePlot)) {
         return()
       }
-      if (!isEmpty(self$plotCaption)) {
-        addTextChunk(reportFile, paste0("**Figure: ", self$plotCaption, "**"))
-      }
       addFigureChunk(
         fileName = reportFile,
         figureFileRelativePath = fileRelativePath,
         figureFileRootDirectory = fileRootDirectory
       )
+      # Issue #1053, figure caption is below
+      if (!isEmpty(self$plotCaption)) {
+        addTextChunk(reportFile, paste0("**Figure: ", self$plotCaption, "**"))
+      }
       # Enforce 2 blank lines using html notation to improve report clarity
       addTextChunk(reportFile, rep("<br>", reEnv$blankLinesBetweenArtifacts))
     },
