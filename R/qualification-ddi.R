@@ -288,7 +288,6 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData, delta) {
     y = ddiPlotData$axesSettings$Y$label,
     shape = "Caption",
     color = "Caption",
-    minRange = c(0.1, 10),
     residualsVsObserved = residualsVsObserved,
     # Undefined delta in Configuration Plan corresponds to NULL
     # In such case, default value should be 1 to prevent crash when defining data mapping
@@ -309,30 +308,22 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData, delta) {
   ddiPlotConfiguration$points$color <- sapply(ddiPlotData$aestheticsList$color[isInLegend], identity)
   ddiPlotConfiguration$points$shape <- sapply(ddiPlotData$aestheticsList$shape[isInLegend], identity)
 
-  # Set axes scaling
-  if (ddiPlotData$axesSettings$X$scaling == "Log") {
-    ddiPlotConfiguration$xAxis$scale <- tlf::Scaling$log
-  }
-  if (ddiPlotData$axesSettings$Y$scaling == "Log") {
-    ddiPlotConfiguration$yAxis$scale <- tlf::Scaling$log
-  }
-
+  # DDI Default scales are already log, only need to update limits
   xSmartZoom <- getSmartZoomLimits(ddiData[[ddiPlotData$axesSettings$X$label]])
   ySmartZoom <- getSmartZoomLimits(ddiData[[ddiPlotData$axesSettings$Y$label]], residualsVsObserved)
-
-  ddiPlotConfiguration$xAxis$axisLimits <- c(xSmartZoom$min, xSmartZoom$max)
-  ddiPlotConfiguration$yAxis$axisLimits <- c(ySmartZoom$min, ySmartZoom$max)
-
-  if (ddiPlotData$axesSettings$X$scaling == "Log") {
-    ddiPlotConfiguration$xAxis$ticks <- 10^seq(ceiling(log10(xSmartZoom$min)), floor(log10(xSmartZoom$max)), 1)
+  # Ensure same limits are used for quadratic obs vs pred plots
+  if (!residualsVsObserved) {
+    xSmartZoom <- range(xSmartZoom, ySmartZoom)
+    ySmartZoom <- xSmartZoom
   }
+  ddiPlotConfiguration$xAxis$axisLimits <- range(xSmartZoom)
+  ddiPlotConfiguration$yAxis$axisLimits <- range(ySmartZoom)
+  ddiPlotConfiguration$xAxis$ticks <- autoAxesTicksFromLimits(range(xSmartZoom))
+  ddiPlotConfiguration$yAxis$ticks <- autoAxesTicksFromLimits(range(ySmartZoom))
 
-  if (ddiPlotData$axesSettings$Y$scaling == "Log") {
-    ddiPlotConfiguration$yAxis$ticks <- 10^seq(ceiling(log10(ySmartZoom$min)), floor(log10(ySmartZoom$max)), 1)
-  }
   # minRange defines the range for simulated x values of Guest et al. criterion
   # Consequently, it also needs to be updated according to smart zoom
-  ddiDataMapping$minRange <- c(xSmartZoom$min, xSmartZoom$max)
+  ddiDataMapping$minRange <- range(xSmartZoom)
 
   qualificationDDIPlot <- tlf::plotDDIRatio(
     data = ddiData,
@@ -341,11 +332,15 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData, delta) {
   )
   # Force legend to be only one column to maintain plot panel width, and left-justify legend entries
   qualificationDDIPlot <- qualificationDDIPlot +
+    # Issue #1060, ncol currently enforce the number of columns in legend
     ggplot2::guides(
       color = ggplot2::guide_legend(ncol = 1, label.hjust = 0, title = NULL),
       shape = ggplot2::guide_legend(ncol = 1, label.hjust = 0, title = NULL)
     )
-
+  # Only obs vs pred is required as quadratic
+  if (!residualsVsObserved) {
+    qualificationDDIPlot <- setQuadraticDimension(qualificationDDIPlot)
+  }
   return(qualificationDDIPlot)
 }
 
@@ -358,9 +353,9 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData, delta) {
 #' @keywords internal
 getQualificationDDIRatioMeasure <- function(summaryDataFrame, pkParameterName, delta) {
   guestValues <- tlf::getGuestValues(
-    x = summaryDataFrame[["observedRatio"]], 
+    x = summaryDataFrame[["observedRatio"]],
     delta = delta %||% 1
-    )
+  )
 
   qualificationMeasure <- data.frame(
     parameter = c("Points total", "Points within Guest *et al.*", "Points within 2 fold"),
