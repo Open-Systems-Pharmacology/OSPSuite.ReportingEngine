@@ -412,10 +412,11 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, stru
     "Legend" = metaData$legend,
     "Path" = output$path
   )
-  # lloq is NA if not used to prevent issues
+  # lloq is as.numeric(NA) if not used to prevent issues
   # when building final data.frame that can have outputs with and without lloqs
+  # numeric class is enforced to prevent ggplot errors when using continuous scale
   if (isEmpty(dataMapping$lloq)) {
-    outputData$lloq <- NA
+    outputData$lloq <- as.numeric(NA)
     return(list(data = outputData, metaData = metaData))
   }
 
@@ -450,13 +451,13 @@ getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPl
   observedDataFile <- configurationPlan$getObservedDataPath(observedDataId)
   observedData <- readObservedDataFile(observedDataFile)
   observedMetaData <- parseObservationsDataFrame(observedData)
-
+  
   # In qualification workflow, observed data expected as:
   # Column 1: Time
   # Column 2: Observed variable
   # Column 3: uncertainty around observed variable
   logDebug(messages$sizeForObservedDataId(observedDataId, ncol(observedData), nrow(observedData)))
-
+  
   return(list(
     data = observedData,
     metaData = observedMetaData
