@@ -756,7 +756,7 @@ copyReport <- function(from, to, copyWordReport = TRUE, keep = FALSE) {
   dir.create(toFolder, showWarnings = FALSE, recursive = TRUE)
   file.copy(from, to, overwrite = TRUE)
   if (copyWordReport) {
-    file.copy(from = fromWordReport, to = toWordReport)
+    file.copy(from = fromWordReport, to = toWordReport, overwrite = TRUE)
   }
 
   # Copy the figures in destination folder to have them available for new report
