@@ -18,7 +18,7 @@ getObservedDataFromOutput(output, data, dataMapping, molWeight, structureSet)
 \item{structureSet}{A `SimulationStructure` object}
 }
 \value{
-list of data and lloq data.frames
+list of data and its metaData
 }
 \description{
 Get selected observed data from an Output object

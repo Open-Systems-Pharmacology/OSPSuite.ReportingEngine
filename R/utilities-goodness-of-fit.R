@@ -14,7 +14,7 @@ plotMeanGoodnessOfFit <- function(structureSet, settings = NULL) {
   validateIsOfType(structureSet, "SimulationStructure")
 
   initializeExpression <- parse(text = paste0(
-    c("observedData", "simulatedData", "lloqData", "residualsData", "residualsMetaData"),
+    c("observedData", "simulatedData", "residualsData", "residualsMetaData"),
     " <- NULL"
   ))
   eval(initializeExpression)
@@ -59,7 +59,6 @@ plotMeanGoodnessOfFit <- function(structureSet, settings = NULL) {
     # Build data.frames to be plotted
     simulatedData <- rbind.data.frame(simulatedData, outputSimulatedData)
     observedData <- rbind.data.frame(observedData, outputObservedResults$data)
-    lloqData <- rbind.data.frame(lloqData, outputObservedResults$lloq)
     residualsData <- rbind.data.frame(residualsData, outputResidualsData)
   }
 
@@ -117,7 +116,6 @@ plotMeanGoodnessOfFit <- function(structureSet, settings = NULL) {
       timeRange$values,
       simulatedData,
       observedData,
-      lloqData,
       metaDataFrame,
       timeProfileMapping,
       structureSet,
@@ -264,6 +262,7 @@ getResiduals <- function(observedData,
   residualsData <- data.frame(
     "Time" = observedData[, "Time"],
     "Observed" = observedData[, "Concentration"],
+    "lloq" = observedData[, "lloq"],
     "Simulated" = simulatedData[timeMatchedData, "Concentration"],
     "Residuals" = residualValues,
     "Legend" = simulatedData[timeMatchedData, "ResidualsLegend"],
@@ -288,7 +287,7 @@ plotPopulationGoodnessOfFit <- function(structureSet, settings = NULL) {
   validateIsOfType(structureSet, "SimulationStructure")
 
   initializeExpression <- parse(text = paste0(
-    c("observedData", "simulatedData", "lloqData", "residualsData", "residualsMetaData"),
+    c("observedData", "simulatedData", "residualsData", "residualsMetaData"),
     " <- NULL"
   ))
   eval(initializeExpression)
@@ -325,7 +324,6 @@ plotPopulationGoodnessOfFit <- function(structureSet, settings = NULL) {
     # Build data.frames to be plotted
     simulatedData <- rbind.data.frame(simulatedData, outputSimulatedData)
     observedData <- rbind.data.frame(observedData, outputObservedResults$data)
-    lloqData <- rbind.data.frame(lloqData, outputObservedResults$lloq)
     residualsData <- rbind.data.frame(residualsData, outputResidualsData)
   }
 
@@ -354,7 +352,6 @@ plotPopulationGoodnessOfFit <- function(structureSet, settings = NULL) {
   referenceData <- list(
     simulatedData = simulatedData,
     observedData = observedData,
-    lloqData = lloqData,
     residualsData = residualsData,
     timeOffset = structureSet$simulationSet$timeOffset,
     metaData = metaDataFrame
@@ -391,7 +388,6 @@ plotPopulationGoodnessOfFit <- function(structureSet, settings = NULL) {
       timeRange$values,
       simulatedData,
       observedData,
-      lloqData,
       metaDataFrame,
       timeProfileMapping,
       structureSet,
@@ -529,49 +525,43 @@ getPopulationResultsFromOutput <- function(simulationPathResults, output, simula
 #' @description Plot time profile for mean model workflow
 #' @param simulatedData data.frame of simulated data
 #' @param observedData data.frame of observed data
-#' @param lloqData data.frame of lloq data
 #' @param metaData meta data on `data`
-#' @param dataMapping A list mapping `x`, `y` and `group` from datasets
+#' @param dataMapping A list to be integrated to `tlf` DataMapping objects
 #' @param plotConfiguration `PlotConfiguration` class object from `tlf` library
 #' @return ggplot object of time profile for mean model workflow
 #' @export
 #' @import tlf
 plotMeanTimeProfile <- function(simulatedData,
                                 observedData = NULL,
-                                lloqData = NULL,
                                 metaData = NULL,
                                 dataMapping = NULL,
                                 plotConfiguration = NULL) {
-  dataMapping <- tlf::XYGDataMapping$new(
+  simulatedDataMapping <- tlf::TimeProfileDataMapping$new(
     x = dataMapping$x,
     y = dataMapping$y,
-    color = dataMapping$group
+    group = dataMapping$group
   )
-  timeProfilePlot <- tlf::addLine(
+  observedDataMapping <- ObservedDataMapping$new(
+    x = dataMapping$x,
+    y = dataMapping$y,
+    group = dataMapping$group,
+    lloq = "lloq"
+  )
+  timeProfilePlot <- tlf::plotTimeProfile(
     data = simulatedData,
     metaData = metaData,
-    dataMapping = dataMapping,
+    dataMapping = simulatedDataMapping,
+    observedData = observedData,
+    observedDataMapping = observedDataMapping,
     plotConfiguration = plotConfiguration
   )
-  if (!isEmpty(observedData)) {
-    timeProfilePlot <- tlf::addScatter(
-      data = observedData,
-      metaData = metaData,
-      dataMapping = dataMapping,
-      plotConfiguration = plotConfiguration,
-      plotObject = timeProfilePlot
-    )
+  # Check if lloq needs to be added
+  lloqRows <- !is.na(observedData$lloq)
+  if(!any(lloqRows)){
+    return(timeProfilePlot)
   }
-  if (!isEmpty(lloqData)) {
-    timeProfilePlot <- tlf::addLine(
-      data = lloqData,
-      metaData = metaData,
-      dataMapping = dataMapping,
-      plotConfiguration = plotConfiguration,
-      plotObject = timeProfilePlot
-    )
-  }
-  timeProfilePlot <- tlf::setLegendPosition(plotObject = timeProfilePlot, position = reDefaultLegendPosition)
+  lloqCaptions <- unique(observedData[lloqRows, dataMapping$group])
+  timeProfilePlot <- addLLOQLegend(timeProfilePlot, lloqCaptions)
   return(timeProfilePlot)
 }
 
@@ -579,16 +569,14 @@ plotMeanTimeProfile <- function(simulatedData,
 #' @description Plot time profile for mean model workflow
 #' @param simulatedData data.frame of simulated data
 #' @param observedData data.frame of observed data
-#' @param lloqData data.frame of lloq data
 #' @param metaData meta data on `data`
-#' @param dataMapping A list mapping `x`, `y` and `group` from datasets
+#' @param dataMapping A list to be integrated to `tlf` DataMapping objects
 #' @param plotConfiguration `PlotConfiguration` class object from `tlf` library
 #' @return ggplot object of time profile for mean model workflow
 #' @export
 #' @import tlf
 plotMeanTimeProfileLog <- function(simulatedData,
                                    observedData = NULL,
-                                   lloqData = NULL,
                                    metaData = NULL,
                                    dataMapping = NULL,
                                    plotConfiguration = NULL) {
@@ -596,23 +584,15 @@ plotMeanTimeProfileLog <- function(simulatedData,
   # TODO: use dplyr to refactor the selection
   simulatedData <- removeNegativeValues(simulatedData, dataMapping$y)
   observedData <- removeNegativeValues(observedData, dataMapping$y)
-  lloqData <- removeNegativeValues(lloqData, dataMapping$y)
 
   logObservedValues <- NULL
-  logLLOQValues <- NULL
   if (!isEmpty(observedData)) {
-    logObservedValues <- observedData[, dataMapping$y]
-  }
-  if (!isEmpty(lloqData)) {
-    logLLOQValues <- lloqData[, dataMapping$y]
+    logObservedValues <- c(observedData[, dataMapping$y], observedData$lloq)
   }
   # Get the nice auto scaling of the log data unless user defined
-  yAxisLimits <- autoAxesLimits(c(
-    simulatedData[, dataMapping$y],
-    logObservedValues,
-    logLLOQValues
-  ),
-  scale = "log"
+  yAxisLimits <- autoAxesLimits(
+    c(simulatedData[, dataMapping$y], logObservedValues),
+    scale = "log"
   )
   yAxisTicks <- autoAxesTicksFromLimits(yAxisLimits)
   plotConfiguration$yAxis$scale <- tlf::Scaling$log
@@ -622,7 +602,6 @@ plotMeanTimeProfileLog <- function(simulatedData,
   meanTimeProfileLog <- plotMeanTimeProfile(
     simulatedData,
     observedData = observedData,
-    lloqData = lloqData,
     metaData = metaData,
     dataMapping = dataMapping,
     plotConfiguration = plotConfiguration
@@ -634,26 +613,23 @@ plotMeanTimeProfileLog <- function(simulatedData,
 #' @description Plot time profile for population model workflow
 #' @param simulatedData data.frame of simulated data
 #' @param observedData data.frame of observed data
-#' @param lloqData data.frame of lloq data
 #' @param metaData meta data on `data`
-#' @param dataMapping `XYGDataMapping` R6 class object from `tlf` library
+#' @param dataMapping A list to be integrated to `tlf` DataMapping objects
 #' @param plotConfiguration `TimeProfilePlotConfiguration` R6 class object from `tlf` library
 #' @return ggplot object of time profile for mean model workflow
 #' @export
 #' @import tlf
 plotPopTimeProfile <- function(simulatedData,
-                                      observedData = NULL,
-                                      lloqData = NULL,
-                                      dataMapping = NULL,
-                                      metaData = NULL,
-                                      plotConfiguration = NULL) {
+                               observedData = NULL,
+                               dataMapping = NULL,
+                               metaData = NULL,
+                               plotConfiguration = NULL) {
   simulatedData <- removeMissingValues(simulatedData, dataMapping$y)
   simulatedData <- removeMissingValues(simulatedData, dataMapping$ymin)
   simulatedData <- removeMissingValues(simulatedData, dataMapping$ymax)
   observedData <- removeMissingValues(observedData, dataMapping$y)
-  lloqData <- removeMissingValues(lloqData, dataMapping$y)
 
-  # metaData needs to be transfered to ymin and ymax
+  # metaData needs to be transferred to ymin and ymax
   # so that y label shows dimension [unit] by default
   metaData$x <- metaData$Time
   metaData$ymin <- metaData$Concentration
@@ -666,45 +642,28 @@ plotPopTimeProfile <- function(simulatedData,
     ymax = dataMapping$ymax,
     group = dataMapping$group
   )
-  observedDataMapping <- tlf::XYGDataMapping$new(
+  observedDataMapping <- tlf::ObservedDataMapping$new(
     x = dataMapping$x,
     y = dataMapping$y,
-    color = dataMapping$group
+    color = dataMapping$group,
+    lloq = "lloq"
   )
 
-  timeProfilePlot <- tlf::addRibbon(
+  timeProfilePlot <- tlf::plotTimeProfile(
     data = simulatedData,
     metaData = metaData,
     dataMapping = simulatedDataMapping,
+    observedData = observedData,
+    observedDataMapping = observedDataMapping,
     plotConfiguration = plotConfiguration
   )
-  timeProfilePlot <- tlf::addLine(
-    data = simulatedData,
-    metaData = metaData,
-    dataMapping = simulatedDataMapping,
-    plotConfiguration = plotConfiguration,
-    plotObject = timeProfilePlot
-  )
-  if (!isEmpty(observedData)) {
-    timeProfilePlot <- tlf::addScatter(
-      data = observedData,
-      metaData = metaData,
-      dataMapping = observedDataMapping,
-      plotConfiguration = plotConfiguration,
-      plotObject = timeProfilePlot
-    )
+  # Check if lloq needs to be added
+  lloqRows <- !is.na(observedData$lloq)
+  if(!any(lloqRows)){
+    return(timeProfilePlot)
   }
-  if (!isEmpty(lloqData)) {
-    timeProfilePlot <- tlf::addLine(
-      data = lloqData,
-      metaData = metaData,
-      dataMapping = observedDataMapping,
-      plotConfiguration = plotConfiguration,
-      plotObject = timeProfilePlot
-    )
-  }
-  timeProfilePlot <- tlf::setLegendPosition(plotObject = timeProfilePlot, position = reDefaultLegendPosition)
-
+  lloqCaptions <- unique(observedData[lloqRows, dataMapping$group])
+  timeProfilePlot <- addLLOQLegend(timeProfilePlot, lloqCaptions)
   return(timeProfilePlot)
 }
 
@@ -712,7 +671,6 @@ plotPopTimeProfile <- function(simulatedData,
 #' @description Plot time profile for mean model workflow
 #' @param simulatedData data.frame of simulated data
 #' @param observedData data.frame of observed data
-#' @param lloqData data.frame of lloq data
 #' @param metaData meta data on `data`
 #' @param dataMapping A list mapping `x`, `y` and `group` from datasets
 #' @param plotConfiguration `PlotConfiguration` class object from `tlf` library
@@ -720,34 +678,27 @@ plotPopTimeProfile <- function(simulatedData,
 #' @export
 #' @import tlf
 plotPopTimeProfileLog <- function(simulatedData,
-                                         observedData = NULL,
-                                         lloqData = NULL,
-                                         metaData = NULL,
-                                         dataMapping = NULL,
-                                         plotConfiguration = NULL) {
+                                  observedData = NULL,
+                                  metaData = NULL,
+                                  dataMapping = NULL,
+                                  plotConfiguration = NULL) {
   # Remove 0 values from simulated and observed data
   # TODO: use dplyr to refactor the selection
   simulatedData <- removeNegativeValues(simulatedData, dataMapping$y)
   simulatedData <- removeNegativeValues(simulatedData, dataMapping$ymin)
   simulatedData <- removeNegativeValues(simulatedData, dataMapping$ymax)
   observedData <- removeNegativeValues(observedData, dataMapping$y)
-  lloqData <- removeNegativeValues(lloqData, dataMapping$y)
 
   logObservedValues <- NULL
-  logLLOQValues <- NULL
   if (!isEmpty(observedData)) {
-    logObservedValues <- observedData[, dataMapping$y]
-  }
-  if (!isEmpty(lloqData)) {
-    logLLOQValues <- lloqData[, dataMapping$y]
+    logObservedValues <- c(observedData[, dataMapping$y], observedData$lloq)
   }
   # Get the nice auto scaling of the log data unless user defined
   yAxisLimits <- autoAxesLimits(c(
     simulatedData[, dataMapping$y],
     simulatedData[, dataMapping$ymin],
     simulatedData[, dataMapping$ymax],
-    logObservedValues,
-    logLLOQValues
+    logObservedValues
   ),
   scale = "log"
   )
@@ -759,7 +710,6 @@ plotPopTimeProfileLog <- function(simulatedData,
   populationTimeProfileLog <- plotPopTimeProfile(
     simulatedData,
     observedData = observedData,
-    lloqData = lloqData,
     metaData = metaData,
     dataMapping = dataMapping,
     plotConfiguration = plotConfiguration
@@ -827,14 +777,13 @@ getMetaDataFrame <- function(listOfMetaData) {
 #' @param timeRange array of time values defining range of simulated data
 #' @param simulatedData data.frame of simulated data
 #' @param observedData data.frame of observed data
-#' @param lloqData data.frame of observed lloq data
 #' @param metaDataFrame metaData represented as a data.frame
 #' @param timeProfileMapping list of variables to map in the time profile plots
 #' @param structureSet A `SimulationStructure` object
 #' @param settings Optional settings for the plots. In particular, includes reference data for population time profile.
 #' @return List of `plots` and their `captions`
 #' @keywords internal
-getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, observedData = NULL, lloqData = NULL, metaDataFrame, timeProfileMapping, structureSet, settings = NULL) {
+getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, observedData = NULL, metaDataFrame, timeProfileMapping, structureSet, settings = NULL) {
   goodnessOfFitPlots <- list()
   goodnessOfFitCaptions <- list()
 
@@ -865,12 +814,6 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
     min(timeRange) + structureSet$simulationSet$timeOffset,
     max(timeRange) + structureSet$simulationSet$timeOffset
   )
-  lloqData <- asTimeAfterDose(
-    lloqData,
-    min(timeRange) + structureSet$simulationSet$timeOffset,
-    max(timeRange) + structureSet$simulationSet$timeOffset
-  )
-
   # Add reference observed data only if option is set to true
   # isTRUE is used for mean model workflows that have a NULL field
   if (isTRUE(structureSet$simulationSet$plotReferenceObsData)) {
@@ -881,14 +824,6 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
         max(timeRange) + settings$referenceData$timeOffset
       ),
       observedData
-    )
-    lloqData <- rbind.data.frame(
-      asTimeAfterDose(
-        settings$referenceData$lloqData,
-        min(timeRange) + settings$referenceData$timeOffset,
-        max(timeRange) + settings$referenceData$timeOffset
-      ),
-      lloqData
     )
   }
 
@@ -903,12 +838,6 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
     timeRange + structureSet$simulationSet$timeOffset,
     structureSet$simulationSet$timeUnit,
     "observed"
-  ))
-  logDebug(messages$dataIncludedInTimeRange(
-    nrow(lloqData),
-    timeRange + structureSet$simulationSet$timeOffset,
-    structureSet$simulationSet$timeUnit,
-    "lloq observed"
   ))
 
   # update metaDataFrame if reference data included
@@ -929,7 +858,6 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
 
     selectedSimulatedData <- simulatedData[simulatedData$Path %in% outputGroup$path, ]
     selectedObservedData <- observedData[observedData$Path %in% outputGroup$path, ]
-    selectedLloqData <- lloqData[lloqData$Path %in% outputGroup$path, ]
 
     timeProfileMetaData <- list(
       "Time" = list(dimension = "Time", unit = structureSet$simulationSet$timeUnit),
@@ -964,7 +892,6 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
       timeProfilePlot <- plotMeanTimeProfile(
         simulatedData = selectedSimulatedData,
         observedData = selectedObservedData,
-        lloqData = selectedLloqData,
         metaData = timeProfileMetaData,
         dataMapping = timeProfileMapping,
         plotConfiguration = timeProfilePlotConfiguration
@@ -972,7 +899,6 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
       timeProfilePlotLog <- plotMeanTimeProfileLog(
         simulatedData = selectedSimulatedData,
         observedData = selectedObservedData,
-        lloqData = selectedLloqData,
         metaData = timeProfileMetaData,
         dataMapping = timeProfileMapping,
         plotConfiguration = timeProfilePlotConfigurationLog
@@ -983,7 +909,6 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
       timeProfilePlot <- plotPopTimeProfile(
         simulatedData = selectedSimulatedData,
         observedData = selectedObservedData,
-        lloqData = selectedLloqData,
         metaData = timeProfileMetaData,
         dataMapping = timeProfileMapping,
         plotConfiguration = timeProfilePlotConfiguration
@@ -991,7 +916,6 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
       timeProfilePlotLog <- plotPopTimeProfileLog(
         simulatedData = selectedSimulatedData,
         observedData = selectedObservedData,
-        lloqData = selectedLloqData,
         metaData = timeProfileMetaData,
         dataMapping = timeProfileMapping,
         plotConfiguration = timeProfilePlotConfigurationLog
@@ -1078,7 +1002,8 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
     obsVsPredDataMapping <- tlf::ObsVsPredDataMapping$new(
       x = "Observed",
       y = "Simulated",
-      group = "Legend"
+      group = "Legend",
+      lloq = "lloq"
     )
     selectedResidualsData <- residualsData[residualsData$Path %in% outputGroup$path, ]
     if (nrow(selectedResidualsData) == 0) {
@@ -1123,22 +1048,8 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
     # TODO: update after tlf is robust enough when 0 is in log plots (tlf issue #369)
     selectedLogData <- selectedResidualsData$Simulated > 0 & selectedResidualsData$Observed > 0
     if (sum(selectedLogData) > 0) {
-      obsVsPredRange <- autoAxesLimits(c(
-        selectedResidualsData$Simulated[selectedLogData],
-        selectedResidualsData$Observed[selectedLogData]
-      ),
-      scale = "log"
-      )
-      obsVsPredBreaks <- autoAxesTicksFromLimits(obsVsPredRange)
-      obsVsPredPlotConfigurationLog$xAxis$scale <- tlf::Scaling$log
-      obsVsPredPlotConfigurationLog$xAxis$axisLimits <- obsVsPredPlotConfigurationLog$xAxis$axisLimits %||% obsVsPredRange
-      obsVsPredPlotConfigurationLog$xAxis$ticks <- obsVsPredBreaks
-      obsVsPredPlotConfigurationLog$yAxis$scale <- tlf::Scaling$log
-      obsVsPredPlotConfigurationLog$yAxis$axisLimits <- obsVsPredPlotConfigurationLog$yAxis$axisLimits %||% obsVsPredRange
-      obsVsPredPlotConfigurationLog$yAxis$ticks <- obsVsPredBreaks
-
       # In log scale, identity line is 1 instead of 0
-      obsVsPredDataMapping$lines <- 1
+      # obsVsPredDataMapping$lines <- 1
       obsVsPredPlotLog <- tlf::plotObsVsPred(
         data = selectedResidualsData[selectedLogData, ],
         metaData = residualsMetaData,

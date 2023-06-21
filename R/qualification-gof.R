@@ -149,9 +149,12 @@ getGOFDataForMapping <- function(outputMapping, configurationPlan, axesUnits) {
     )
 
     # Re-use nomenclature and functions from utilities-goodness-of-fit
+    # TODO: Qualification currently do not handle LLOQ
+    # Add place holder for lloq, that will be replaced once data include lloq information
     observedData <- data.frame(
       Time = observedTime,
       Concentration = observedValues,
+      lloq = as.numeric(NA),
       Path = observedDataSet
     )
     simulatedData <- data.frame(

@@ -460,3 +460,26 @@ validateGuestParameters <- function(guestParameters, pkParameters) {
     )
   return(invisible())
 }
+
+checkLLOQValues <- function(lloq, structureSet){
+  if(any(is.infinite(lloq))){
+    warning(
+      messages$warningHasInfiniteValues(
+        n = sum(is.infinite(lloq)),
+        datasetName = structureSet$simulationSet$dataSource$dataFile
+        ),
+      call. = FALSE
+      )
+    lloq[is.infinite(lloq)] <- NA
+  }
+  # If no negative value, return lloq
+  if(isEmpty(which(lloq<=0))){
+    return(lloq)
+  }
+  warning(
+    messages$negativeDataRemoved(length(which(lloq<=0))),
+    call. = FALSE
+    )
+  lloq[lloq<=0 & !is.na(lloq)] <- NA
+  return(lloq)
+}
