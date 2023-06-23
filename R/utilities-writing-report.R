@@ -221,44 +221,56 @@ renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, w
     # Issue #968 Subscript and superscript rendering
     lineContent <- gsub(pattern = "<sup>|</sup>", replacement = "^", lineContent)
     lineContent <- gsub(pattern = "<sub>|</sub>", replacement = "~", lineContent)
+    # Expose openxml translations for users
+    # Manual page break
+    lineContent <- gsub(pattern = "<pagebreak>", replacement = '<w:p><w:r><w:br w:type="page"/></w:r>`{=openxml}', lineContent)
+    # Alignment
+    lineContent <- gsub(pattern = "</div>", replacement = '', lineContent)
+    lineContent <- gsub(pattern = '<div align=\"right\">', replacement = '`<w:pPr><w:jc w:val="right"/></w:pPr>`{=openxml}', lineContent)
+    lineContent <- gsub(pattern = '<div align=\"left\">', replacement = '`<w:pPr><w:jc w:val="left"/></w:pPr>`{=openxml}', lineContent)
+    lineContent <- gsub(pattern = '<div align=\"center\">', replacement = '`<w:pPr><w:jc w:val="center"/></w:pPr>`{=openxml}', lineContent)
+    lineContent <- gsub(pattern = '<div align=\"justify\">', replacement = '`<w:pPr><w:jc w:val="both"/></w:pPr>`{=openxml}', lineContent)
+    
     # When finding a line referencing a table or figure tag as first element
     # The new content to write in the word report is
     # - previous content = wordFileContent
     # - page break as openxml '<w:br w:type="page"/>'
     # - tag/bookmark as openxml '<w:bookmarkStart w:id ... <w:bookmarkEnd'
-    # - next content (caption, + table/figure)
-    isArtifactReference <- all(
-      isIncluded(firstElement, "<a"),
-      any(
+    # - next content (caption & table/figure)
+    # Since the identification is based on the html tag,
+    # caption on top or below the artifact should stay at the same position
+    bookmarkLines <- NULL
+    if(isIncluded(firstElement, "<a")){
+      # Bookmark that uses anchor name (e.g. figure-1-1)
+      # Used the following website as sample for the code
+      # https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.wordprocessing.bookmarkstart?view=openxml-2.8.1#remarks
+      bookmarkLines <- c(
+        "```{=openxml}",
+        paste0(
+          '<w:p><w:r><w:bookmarkStart w:id="', anchorName, '" w:name="', anchorName, '"/>',
+          '<w:bookmarkEnd w:id="', anchorName, '"/></w:r></w:p>'
+        ),
+        "```"
+      )
+        
+      isArtifact <- any(
         grepl(pattern = "table", x = anchorName),
         grepl(pattern = "figure", x = anchorName)
       )
-    )
-    bookmarkLines <- c(
-      "",
-      "```{=openxml}",
-      paste0(
-        "<w:p><w:r>",
+      if(isArtifact){
         # Page break using source code
         # https://pandoc.org/MANUAL.html#extension-raw_attribute
-        '<w:br w:type="page"/>',
-        "</w:r><w:r>",
-        # Bookmark that uses anchor name (e.g. figure-1-1)
-        # Used the following website as sample for the code
-        # https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.wordprocessing.bookmarkstart?view=openxml-2.8.1#remarks
-        '<w:bookmarkStart w:id="', anchorName, '" w:name="', anchorName, '"/>',
-        '<w:bookmarkEnd w:id="', anchorName, '"/>',
-        "</w:r></w:p>"
-        ),
-      "```",
-      ""
-      )
-    wordFileContent <- c(
-      wordFileContent, 
-      # Add page break and bookmark if artifact is found
-      bookmarkLines[isArtifactReference],
-      lineContent
-      )
+        bookmarkLines <- c(
+          "```{=openxml}",
+          '<w:p><w:r><w:br w:type="page"/></w:r></w:p>',
+          "```",
+          "",
+          bookmarkLines
+        )
+      }
+    }
+    
+    wordFileContent <- c(wordFileContent, lineContent, bookmarkLines)
   }
 
   usedFilesFileName <- sub(pattern = ".md", replacement = "-usedFiles.txt", fileName)
