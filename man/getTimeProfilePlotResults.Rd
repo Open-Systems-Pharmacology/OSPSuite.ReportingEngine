@@ -9,7 +9,6 @@ getTimeProfilePlotResults(
   timeRange,
   simulatedData,
   observedData = NULL,
-  lloqData = NULL,
   metaDataFrame,
   timeProfileMapping,
   structureSet,
@@ -24,8 +23,6 @@ getTimeProfilePlotResults(
 \item{simulatedData}{data.frame of simulated data}
 
 \item{observedData}{data.frame of observed data}
-
-\item{lloqData}{data.frame of observed lloq data}
 
 \item{metaDataFrame}{metaData represented as a data.frame}
 

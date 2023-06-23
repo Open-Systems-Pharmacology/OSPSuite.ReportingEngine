@@ -167,7 +167,7 @@ GofPlotTask <- R6::R6Class(
           self$saveResults(set, taskResults$results)
 
           # If first simulation set was a reference population,
-          # its simulated, observed and lloq data are added for the next plots through settings
+          # its simulated and observed data are added for the next plots through settings
           # the option plotReferenceObsData from the simulation set will take care of the actual inclusion within the plots
           if (all(isTRUE(set$simulationSet$referencePopulation), isTRUE(self$settings$includeReferenceData))) {
             self$settings$referenceData <- taskResults$referenceData

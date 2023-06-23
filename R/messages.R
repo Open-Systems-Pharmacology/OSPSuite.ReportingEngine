@@ -224,6 +224,14 @@ messages <- list(
     "Qualification TimeProfile is unable to display data for all 3 axes. Only Y and Y2 axes were kept."
   },
   
+  warningHasInfiniteValues = function(n, datasetName = NULL){
+    paste0(
+      "Data ", 
+      ifNotNull(datasetName, paste0("from '", highlight(datasetName), "' "), ""),
+      "included ", highlight(n), " infinite values"
+    )
+  },
+  
   pkParameterNotFound = function(pkParameterName, pkRatioMapping){
     paste0(
       "PK Parameter '", highlight(pkParameterName), "' not found for ",

@@ -64,7 +64,6 @@ unlink("testReport.docx", recursive = TRUE)
 unlink("testReport-word.md", recursive = TRUE)
 unlink(testReport, recursive = TRUE)
 
-
 titleFile <- getTestDataFilePath("utilities-report/titlepage.md")
 refTitleFile <- getTestDataFilePath("utilities-report/updatedtitlepage.md")
 

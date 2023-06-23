@@ -656,35 +656,41 @@ getFirstLineElement <- function(lineContent, split = " ") {
   as.character(unlist(strsplit(lineContent, split)))[1]
 }
 
-#' @title updateFigureNumbers
-#' @description Update figure captions and references in report
+#' @title updateArtifactNumbers
+#' @description Update artifact (figure or table) captions and references in report
 #' @param fileContent Content of a markdown or text file read as an array of character strings
 #' @param pattern character pattern referencing figures in first element of line
 #' @param replacement character replacing pattern in updated caption name
-#' @param anchorId character pattern referencing figures in anchors
+#' @param anchorId character pattern referencing anchor tags
+#' @param captionBelow logical defining if caption is below artifact
 #' @return Array of character strings
 #' @keywords internal
-updateFigureNumbers <- function(fileContent, pattern = "Figure:", replacement = "Figure", anchorId = "figure") {
+updateArtifactNumbers <- function(fileContent, pattern, replacement, anchorId, captionBelow = FALSE) {
   # Only higher level titles are used for figure numbering
   titleInfo <- getTitleInfo(fileContent)
   titleInfo <- titleInfo[sapply(titleInfo, function(title) title$level == 1)]
   titleLines <- sapply(titleInfo, function(title) title$line)
   # In case of unreferenced titles
   titleNumbers <- sapply(titleInfo, function(title) title$count[1])
-
+  
   # Initialize
   updatedFileContent <- NULL
   count <- 1
   titleIndex <- 1
+  artifactContent <- NULL
   for (lineIndex in seq_along(fileContent)) {
     # Counting is performed within sections
     # Need to reset count at lines of titles
     if (lineIndex %in% titleLines) {
       count <- 1
     }
-
-    # If line is not related to an artifact, nothing to update
     firstElement <- getFirstLineElement(fileContent[lineIndex])
+    # Place holder for artifact content, if caption is below
+    if(all(captionBelow, grepl(pattern = "\\!\\[", x = firstElement))){
+      artifactContent <- fileContent[lineIndex]
+      next
+    }
+    # If line is not related to an artifact, nothing to update
     if (!grepl(pattern = pattern, x = firstElement)) {
       updatedFileContent <- c(updatedFileContent, fileContent[lineIndex])
       next
@@ -692,37 +698,64 @@ updateFigureNumbers <- function(fileContent, pattern = "Figure:", replacement = 
     # Get section number of figure as last value lower than line index
     # If no value found, section is empty and figure count is only global count
     section <- tail(titleNumbers[titleLines < lineIndex], 1)
-    figureNumber <- paste(c(section, count), collapse = "-")
-
-    # Create reference anchor with id matching figure number
-    anchorContent <- anchor(paste(anchorId, figureNumber, sep = "-"))
-
-    # Update caption with appropriate figure count
-    updatedFigureContent <- gsub(
+    artifactNumber <- paste(c(section, count), collapse = "-")
+    
+    # Create reference anchor with id matching figure/table number
+    anchorContent <- anchor(paste(anchorId, artifactNumber, sep = "-"))
+    
+    # Update caption with appropriate figure/table count
+    updatedArtifactContent <- gsub(
       pattern = pattern,
-      replacement = paste0(replacement, " ", figureNumber, ":"),
+      replacement = paste0(replacement, " ", artifactNumber, ":"),
       x = fileContent[lineIndex]
     )
-
-    # Updated file content includes reference and intra section numbering
-    updatedFileContent <- c(updatedFileContent, "", anchorContent, "", updatedFigureContent)
-
+    
+    # Updated file content includes reference, figure/table and intra-section numbering
+    updatedFileContent <- c(
+      updatedFileContent, 
+      "", 
+      anchorContent, 
+      "",
+      # if caption is not below, artifactContent is NULL
+      artifactContent,
+      "",
+      updatedArtifactContent
+    )
+    
     count <- count + 1
+    artifactContent <- NULL
   }
   return(updatedFileContent)
+}
+
+#' @title updateFigureNumbers
+#' @description Update figure captions and references in report
+#' @param fileContent Content of a markdown or text file read as an array of character strings
+#' @return Array of character strings
+#' @keywords internal
+updateFigureNumbers <- function(fileContent) {
+  return(updateArtifactNumbers(
+    fileContent, 
+    pattern = "Figure:", 
+    replacement = "Figure", 
+    anchorId = "figure", 
+    captionBelow = TRUE
+    ))
 }
 
 #' @title updateTableNumbers
 #' @description Update table captions and references in report
 #' @param fileContent Content of a markdown or text file read as an array of character strings
-#' @param pattern character pattern referencing figures in first element of line
-#' @param replacement character replacing pattern in updated caption name
-#' @param anchorId character pattern referencing figures in anchors
 #' @return Array of character strings
 #' @keywords internal
-updateTableNumbers <- function(fileContent, pattern = "Table:", replacement = "Table", anchorId = "table") {
-  # For tables, relies on the same workflow replacing default figure patterns by table patterns
-  return(updateFigureNumbers(fileContent, pattern, replacement, anchorId))
+updateTableNumbers <- function(fileContent) {
+  return(updateArtifactNumbers(
+    fileContent, 
+    pattern = "Table:", 
+    replacement = "Table", 
+    anchorId = "table", 
+    captionBelow = FALSE
+    ))
 }
 
 #' @title copyReport
@@ -768,7 +801,7 @@ copyReport <- function(from, to, copyWordReport = TRUE, keep = FALSE) {
   dir.create(toFolder, showWarnings = FALSE, recursive = TRUE)
   file.copy(from, to, overwrite = TRUE)
   if (copyWordReport) {
-    file.copy(from = fromWordReport, to = toWordReport)
+    file.copy(from = fromWordReport, to = toWordReport, overwrite = TRUE)
   }
 
   # Copy the figures in destination folder to have them available for new report
