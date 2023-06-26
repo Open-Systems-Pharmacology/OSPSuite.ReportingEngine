@@ -636,7 +636,7 @@ ddiPKRatioColumnName <- list(
 
 #' @title getGuestDeltaFromConfigurationPlan
 #' @description Get Guest et al. delta values for a DDI Ratio plot from the configuration plan
-#' @param ddiRatioPlan Properties defined in `DDIRatioPlots` field of confiuration plan
+#' @param ddiRatioPlan Properties defined in `DDIRatioPlots` field of configuration plan
 #' @return A named list of Guest et al. values
 #' @keywords internal
 getGuestDeltaFromConfigurationPlan <- function(ddiRatioPlan) {

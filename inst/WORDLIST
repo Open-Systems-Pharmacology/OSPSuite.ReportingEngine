@@ -1,8 +1,10 @@
+aA
 absorptionPlot
 activateWorkflowTasks
 activitySpecificCode
 addFigureChunk
 addLineBreakToCaption
+addLLOQLegend
 addMarkdownToc
 addNewPkParameter
 addOutputToComparisonTimeProfile
@@ -18,6 +20,7 @@ addXParametersForPKParametersPlot
 addYParametersForDemogrpahyPlot
 addYParametersForPKParametersPlot
 adjustTitlePage
+aes
 AggregationConfiguration
 al
 AllAvailableTasks
@@ -33,6 +36,7 @@ autoAxesLimits
 autoAxesTicksFromLimits
 axesSettings
 AxesSettings
+bB
 behaviour
 boxplotPkParameters
 boxplotPkRatios
@@ -46,6 +50,7 @@ calculatePKParameters
 CalculatePKParametersTask
 calculateResiduals
 calculateSensitivity
+cC
 checkAllCoresSuccessful
 checkLibraryLoaded
 checkPopulationLoaded
@@ -74,6 +79,10 @@ createWorkflowFromExcelInput
 csv
 cumulativeTimeProfile
 CVs
+dA
+dB
+dC
+dt
 dataDisplayName
 dataMapping
 DataMapping
@@ -106,6 +115,7 @@ dv
 enum
 Enum
 enums
+errorbars
 et
 eval
 evalDataFilter
@@ -151,22 +161,28 @@ getDefaultFolderName
 getDefaultMCRandomSeed
 getDefaultMCRepetitions
 getDefaultPKParametersXParameters
+getDefaultPropertyFromTheme
 getDefaultRETheme
 getDefaultTimeProfileAxesSettings
 getDefaultTotalSensitivityThreshold
 getDemographyAggregatedData
 getElapsedTime
+getFigurePathsFromReport
 getFileLocationFromType
 getFirstLineElement
 getGOFAxesUnits
 getGOFDataForMapping
 getGOFOutputsDataframe
 getGOFPlotConfiguration
+getGuestDeltaFromConfigurationPlan
 getHeaderNames
 getIdentifierInfo
 getIndividualSAResultsFileName
 getIntroFromReportTitle
+getLegendAesOverride
 getLineBreakWidth
+getMassBalanceDataMapping
+getMassBalancePlotConfiguration
 getMeanPKAnalysesFromOutput
 getMeanSensitivityAnalysisResultsFileNames
 getMechanismName
@@ -259,6 +275,7 @@ getXParametersForDemogrpahyPlot
 getXParametersForPKParametersPlot
 getYParametersForDemogrpahyPlot
 getYParametersForPKParametersPlot
+Github
 ggplot
 gof
 GMFE
@@ -289,6 +306,7 @@ jsonlite
 knitr
 Kubernetes
 lastPathElement
+LateX
 libraryName
 LineStyle
 linetype
@@ -363,6 +381,7 @@ ObservedDataCollection
 observedDataFrameRow
 observedDataSet
 obsVsPred
+openxml
 OptionalSettings
 OSP
 ospsuite
@@ -455,6 +474,7 @@ plotSettings
 PlotSettings
 plotStatisticsFromPlan
 PlotTask
+plotTimeProfile
 plotTimeProfiles
 plotTimeProfilesAndResiduals
 plotType
@@ -513,6 +533,7 @@ resQQPlot
 resVsPred
 resVsTime
 Rifampin
+rightarrow
 rmarkdown
 Rmd
 RStudio
@@ -616,11 +637,14 @@ tlfLinetype
 tlfScale
 tlfShape
 toc
+tolower
 totalSensitivityThreshold
 tpDictionary
 tracelib
 translateDataSelection
 trimFileName
+updateArtifactNumbers
+updateAxesMargin
 updateFigureNumbers
 updateIndividualParametersOnCores
 updatePKParameter
