@@ -7,7 +7,7 @@
 getGuestDeltaFromConfigurationPlan(ddiRatioPlan)
 }
 \arguments{
-\item{ddiRatioPlan}{Properties defined in `DDIRatioPlots` field of confiuration plan}
+\item{ddiRatioPlan}{Properties defined in `DDIRatioPlots` field of configuration plan}
 }
 \value{
 A named list of Guest et al. values
