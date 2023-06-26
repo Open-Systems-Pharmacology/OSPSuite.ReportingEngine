@@ -33,7 +33,7 @@ This article aims at documenting available options and settings that work with t
 
 [**Pandoc**](https://pandoc.org/) is the software responsible for the conversion of the markdown report into its word version.
 As a consequence, the installation of **pandoc** is required for this feature.
-If you need to install **pandoc**, please follow the instructions provided on the [Github](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/wiki/Installing-pandoc).
+If you need to install **pandoc**, please follow the instructions provided on the [GitHub](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/wiki/Installing-pandoc).
 
 <!--- TODO: the wiki is currently empty and needs to have instructions for the user -->
 
@@ -62,7 +62,7 @@ file.copy(
 
 ### How to get the template
 
-Workflows use the following default template which can be downloaded via [Github](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/reference.docx)
+Workflows use the following default template which can be downloaded via [GitHub](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/reference.docx)
 
 Otherwise you can copy the file directly from its location within the package as illustrated below.
 
@@ -164,10 +164,10 @@ resource-path: <workflowFolder>
 The option `+raw_attribute` allows [pandoc](https://pandoc.org/MANUAL.html#extension-raw_attribute) to leave raw code block as is.
 This option is convenient when including page breaks and bookmarks in your word reports as described below.
 
-### Include LateX equations
+### Include LaTeX equations
 
 The option `+tex_math_dollars` allows [pandoc](https://pandoc.org/MANUAL.html#extension-tex_math_dollars) 
-to translate mathematical equations defined in [*LateX*](https://en.wikibooks.org/wiki/LaTeX/Mathematics).
+to translate mathematical equations defined in [*LaTeX*](https://en.wikibooks.org/wiki/LaTeX/Mathematics).
 
 <!--- Link to LateX wikibook that provides lists of symbols, letters and operators -->
 
