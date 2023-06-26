@@ -166,13 +166,17 @@ updatePlotAxes <- function(plotObject, axesProperties) {
     plotObject <- tlf::setXAxis(
       plotObject,
       scale = axesProperties$x$scale,
-      limits = c(axesProperties$x$min, axesProperties$x$max),
+      axisLimits = c(axesProperties$x$min, axesProperties$x$max),
       ticks = axesProperties$x$ticks,
       ticklabels = axesProperties$x$ticklabels
     )
   })
   try({
-    plotObject <- tlf::setYAxis(plotObject, scale = axesProperties$y$scale, limits = c(axesProperties$y$min, axesProperties$y$max))
+    plotObject <- tlf::setYAxis(
+      plotObject, 
+      scale = axesProperties$y$scale, 
+      axisLimits = c(axesProperties$y$min, axesProperties$y$max)
+      )
   })
   plotObject <- tlf::setLegendPosition(plotObject)
   return(plotObject)
