@@ -667,17 +667,33 @@ updateArtifactNumbers <- function(fileContent, pattern, replacement, anchorId, c
   updatedFileContent <- NULL
   count <- 1
   titleIndex <- 1
-  artifactContent <- NULL
   for (lineIndex in seq_along(fileContent)) {
     # Counting is performed within sections
     # Need to reset count at lines of titles
     if (lineIndex %in% titleLines) {
       count <- 1
     }
+    # Get section number of figure as last value lower than line index
+    # If no value found, section is empty and figure count is only global count
+    section <- tail(titleNumbers[titleLines < lineIndex], 1)
+    artifactNumber <- paste(c(section, count), collapse = "-")
+    # Create reference anchor with id matching figure number
+    anchorContent <- anchor(paste(anchorId, artifactNumber, sep = "-"))
+    # Assess if artifact from first line element
     firstElement <- getFirstLineElement(fileContent[lineIndex])
-    # Place holder for artifact content, if caption is below
-    if(all(captionBelow, grepl(pattern = "\\!\\[", x = firstElement))){
-      artifactContent <- fileContent[lineIndex]
+    # Artifact is Figure and update is called within Figure updates
+    # Otherwise, the function will also update figures for with Table reference
+    figureRequireUpdate <- all(
+      grepl(pattern = "\\!\\[", x = firstElement),
+      grepl(pattern = "Figure", x = pattern)
+    )
+    if(figureRequireUpdate){
+      updatedFileContent <- c(
+        updatedFileContent, 
+        anchorContent,
+        "",
+        fileContent[lineIndex]
+        )
       next
     }
     # If line is not related to an artifact, nothing to update
@@ -685,15 +701,9 @@ updateArtifactNumbers <- function(fileContent, pattern, replacement, anchorId, c
       updatedFileContent <- c(updatedFileContent, fileContent[lineIndex])
       next
     }
-    # Get section number of figure as last value lower than line index
-    # If no value found, section is empty and figure count is only global count
-    section <- tail(titleNumbers[titleLines < lineIndex], 1)
-    artifactNumber <- paste(c(section, count), collapse = "-")
-    
-    # Create reference anchor with id matching figure/table number
-    anchorContent <- anchor(paste(anchorId, artifactNumber, sep = "-"))
-    
+    # Else line starts by Figure or Table
     # Update caption with appropriate figure/table count
+    # TODO: should we prevent auto-numbering when users included their own numbering ?
     updatedArtifactContent <- gsub(
       pattern = pattern,
       replacement = paste0(replacement, " ", artifactNumber, ":"),
@@ -703,17 +713,12 @@ updateArtifactNumbers <- function(fileContent, pattern, replacement, anchorId, c
     # Updated file content includes reference, figure/table and intra-section numbering
     updatedFileContent <- c(
       updatedFileContent, 
-      "", 
-      anchorContent, 
-      "",
-      # if caption is not below, artifactContent is NULL
-      artifactContent,
+      # in case of caption below, the anchor was already included before artifact (figure)
+      anchorContent[!captionBelow], 
       "",
       updatedArtifactContent
     )
-    
     count <- count + 1
-    artifactContent <- NULL
   }
   return(updatedFileContent)
 }
