@@ -701,9 +701,8 @@ updateArtifactNumbers <- function(fileContent, pattern, replacement, anchorId, c
       updatedFileContent <- c(updatedFileContent, fileContent[lineIndex])
       next
     }
-    # Else line starts by Figure or Table
+    # Else line starts by "Figure:" or "Table:"
     # Update caption with appropriate figure/table count
-    # TODO: should we prevent auto-numbering when users included their own numbering ?
     updatedArtifactContent <- gsub(
       pattern = pattern,
       replacement = paste0(replacement, " ", artifactNumber, ":"),
