@@ -454,7 +454,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
       table = ddiTableList[[pkParameter]],
       tableCaption = paste(
         "Summary table for", metadata$title, "-", pkParameter, "Ratio.",
-        "(\u03b4 =", metadata$guestDelta[[pkParameter]] %||% 1, "in Guest *et al.* formula)"
+        "(&delta; =", metadata$guestDelta[[pkParameter]] %||% 1, "in Guest *et al.* formula)"
       ),
       includeTable = TRUE
     )
