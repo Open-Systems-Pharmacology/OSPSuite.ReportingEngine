@@ -7,15 +7,9 @@
 ## Sub title 1
 
 
-<a id="figure-1-1"></a>
-
-
 Figure 1-1: this is figure 1
 
-## 1.1 Sub title 2
-
-
-<a id="figure-1-2"></a>
+## Sub title 2
 
 
 Figure 1-2: this is figure 2
@@ -28,16 +22,11 @@ Figure 1-2: this is figure 2
 
 ## 2.1 Sub title 1
 
-
 <a id="table-2-1"></a>
-
 
 Table 2-1: this is table 1
 
 ## 2.2 Sub title 2
-
-
-<a id="figure-2-1"></a>
 
 
 Figure 2-1: this is figure 3
