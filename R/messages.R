@@ -325,7 +325,7 @@ messages <- list(
       analyticalSolutionMessage,
       paste0(
         "Monte Carlo solution for ", paste0(tail(names(medianPKRatioStatistics), 4), collapse = ", "),
-        " resulted in ", paste0(tail(unlist(medianPKRatioStatistics), 4), collapse = ", "),
+        " resulted in ", paste0(round(tail(unlist(medianPKRatioStatistics), 4), 3), collapse = ", "),
         " respectively."
         ),
       paste0("Number of repetitions was set to: ", n), 

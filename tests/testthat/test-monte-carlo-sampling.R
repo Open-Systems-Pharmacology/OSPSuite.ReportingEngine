@@ -43,12 +43,12 @@ test_that("Analytical Solution is close to known solution", {
   )
   
   expect_equal(
-    analyticalSolution$geoMean,
+    analyticalSolution$`geo mean`,
     ratioGeoMean,
     tolerance = approximationTolerance
     )
   expect_equal(
-    analyticalSolution$geoSD,
+    analyticalSolution$`geo standard deviation`,
     ratioGeoSD,
     tolerance = approximationTolerance
   )
@@ -91,3 +91,5 @@ test_that("Monte Carlo Solution is repeatable", {
   
   expect_equal(mcSolution1, mcSolution2)
 })
+
+
