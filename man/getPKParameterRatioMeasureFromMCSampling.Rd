@@ -8,6 +8,7 @@ getPKParameterRatioMeasureFromMCSampling(
   comparisonData,
   referenceData,
   dataMapping,
+  structureSet = NULL,
   settings = NULL
 )
 }
@@ -17,6 +18,8 @@ getPKParameterRatioMeasureFromMCSampling(
 \item{referenceData}{A data.frame of PK Parameter values for reference Population}
 
 \item{dataMapping}{A `BoxWhiskerDataMapping` object}
+
+\item{structureSet}{A `SimulationStructure` object}
 
 \item{settings}{A list of task settings}
 }

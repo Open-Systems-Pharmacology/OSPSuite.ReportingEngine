@@ -10,8 +10,8 @@ repeatableSampling <- function(x,
                                size,
                                n = getDefaultMCRepetitions(),
                                seed = getDefaultMCRandomSeed()) {
-  # .Random.seed is created when 
-  # calling a random number generator for the first time 
+  # .Random.seed is created when
+  # calling a random number generator for the first time
   # The next line aims at ensuring that a .Random.seed object exists
   createRandom <- runif(1)
   # Use pre-defined seed to get repeatable results
@@ -99,6 +99,12 @@ getPKParameterRatioPKTable <- function(data,
                                        referenceSimulationSetName,
                                        settings = NULL) {
   populationSets <- isSamePopulationInSets(structureSets)
+  simulationSetNames <- sapply(
+    structureSets,
+    function(set) {
+      set$simulationSet$simulationSetName
+    }
+  )
   # Pair each structure set with reference
   # If reference population = comp population, individual ratios
   # Else Monte Carlo Simulation
@@ -107,29 +113,36 @@ getPKParameterRatioPKTable <- function(data,
   for (set in populationSets) {
     comparisonData <- data[data$simulationSetName %in% set$simulationSetName, ]
     if (set$isSamePopulation) {
-      logDebug(paste0(
+      logInfo(paste0(
         "Simulation Set '", set$simulationSetName,
         "' was identified with same population as reference '",
         referenceSimulationSetName, "'. ",
         "Ratio comparison analyzed statistics of individual PK ratios."
       ))
       ratioData <- comparisonData
+      # TODO: tlf issue #408
+      # simulationSetName is factor class including multiple levels
+      # After selecting the comparison data, only 1 level is remaining
+      # leading to empty factor levels for calculation of BoxWhisker measure
+      ratioData$simulationSetName <- factor(ratioData$simulationSetName)
       ratioData$Value <- comparisonData$Value / referenceData$Value
       ratioPKMeasure <- getPKParameterMeasure(ratioData, dataMapping)
       ratioPKTable <- rbind.data.frame(ratioPKTable, ratioPKMeasure)
       next
     }
-    logDebug(paste0(
+    logInfo(paste0(
       "Simulation Set '", set$simulationSetName,
       "' was identified with population different from reference '",
       referenceSimulationSetName, "'. ",
       "Ratio comparison analyzed statistics from Monte Carlo Sampling"
     ))
+    # Get simulation structure set to save mc results
     ratioPKMeasure <- getPKParameterRatioMeasureFromMCSampling(
-      comparisonData,
-      referenceData,
-      dataMapping,
-      settings
+      comparisonData = comparisonData,
+      referenceData = referenceData,
+      dataMapping = dataMapping,
+      structureSet = structureSets[[which(simulationSetNames %in% set$simulationSetName)]],
+      settings = settings
     )
     ratioPKTable <- rbind.data.frame(ratioPKTable, ratioPKMeasure)
   }
@@ -141,12 +154,14 @@ getPKParameterRatioPKTable <- function(data,
 #' @param comparisonData A data.frame of PK Parameter values for Population to compare
 #' @param referenceData A data.frame of PK Parameter values for reference Population
 #' @param dataMapping A `BoxWhiskerDataMapping` object
+#' @param structureSet A `SimulationStructure` object
 #' @param settings A list of task settings
 #' @return A data.frame
 #' @keywords internal
 getPKParameterRatioMeasureFromMCSampling <- function(comparisonData,
                                                      referenceData,
                                                      dataMapping,
+                                                     structureSet = NULL,
                                                      settings = NULL) {
   # Sample from largest population if size is different
   # Create a list of Sampled PK Parameters for each MC repetition and calculate their Ratio
@@ -162,7 +177,7 @@ getPKParameterRatioMeasureFromMCSampling <- function(comparisonData,
       allSamplesReferenceData,
       function(sampleReferenceData) {
         # TODO: tlf issue #408
-        # simulationSetName is factor class including multiple levels 
+        # simulationSetName is factor class including multiple levels
         # After selecting the comparison data, only 1 level is remaining
         # leading to empty factor levels for calculation of BoxWhisker measure
         return(data.frame(
@@ -197,8 +212,26 @@ getPKParameterRatioMeasureFromMCSampling <- function(comparisonData,
       getPKParameterMeasure(data, dataMapping)
     }
   )
-  # Transform list to table
+  # Transform list to table and save results for debugging
   allSamplesRatioMeasure <- do.call("rbind", allSamplesRatioMeasure)
+  if (!is.null(structureSet)) {
+    mcResultsFile <- file.path(
+      structureSet$workflowFolder,
+      structureSet$pkAnalysisResultsFolder,
+      getDefaultFileName(
+        defaultFileNames$resultID(
+          structureSet$simulationSet$simulationSetName,
+          head(comparisonData$Parameter, 1),
+          head(comparisonData$QuantityPath, 1)
+        ),
+        suffix = "MonteCarlo"
+      )
+    )
+    write.csv(
+      allSamplesRatioMeasure,
+      file = mcResultsFile
+    )
+  }
   # Get median statistics over all MC repetitions as a data.frame
   medianPKRatioStatistics <- aggregate(
     allSamplesRatioMeasure[, 2:ncol(allSamplesRatioMeasure)],
@@ -206,7 +239,7 @@ getPKParameterRatioMeasureFromMCSampling <- function(comparisonData,
     FUN = median
   )
   # analyticalSolution <- getRatioMeasureAnalyticalSolution(referenceData, comparisonData)
-  logDebug(messages$monteCarloChecking(
+  logInfo(messages$monteCarloChecking(
     displayRatioMeasureAnalyticalSolution(referenceData, comparisonData),
     medianPKRatioStatistics,
     n = settings$mcRepetitions %||% getDefaultMCRepetitions(),
@@ -224,7 +257,7 @@ isSamePopulationInSets <- function(structureSets) {
   isReference <- sapply(structureSets, function(set) {
     set$simulationSet$referencePopulation
   })
-  referenceSet <- structureSets[isReference]
+  referenceSet <- structureSets[isReference][[1]]
   populationInSets <- lapply(
     structureSets[!isReference],
     function(set) {
@@ -261,9 +294,11 @@ isSamePopulationInSets <- function(structureSets) {
 #' @keywords internal
 getRatioMeasureAnalyticalSolution <- function(x, y) {
   list(
-    geoMean = exp(mean(log(y)) - mean(log(x))),
-    geoSD = exp(sqrt((sd(log(y)))^2 + (sd(log(x)))^2)),
-    geoCV = sqrt(exp((sd(log(y)))^2 + (sd(log(x)))^2) - 1)
+    "mean" = mean(y) / mean(x),
+    "standard deviation" = sqrt((sd(y) / mean(x))^2 + (mean(y) * sd(x) / (mean(x) * mean(x)))^2),
+    "geo mean" = exp(mean(log(y)) - mean(log(x))),
+    "geo standard deviation" = exp(sqrt((sd(log(y)))^2 + (sd(log(x)))^2))
+    # geoCV = sqrt(exp((sd(log(y)))^2 + (sd(log(x)))^2) - 1)
   )
 }
 
@@ -287,7 +322,7 @@ displayRatioMeasureAnalyticalSolution <- function(referenceData, comparisonData)
     ),
     paste0(
       "Analytical solution for ", paste0(names(analyticalSolution), collapse = ", "),
-      " resulted in ", paste0(unlist(analyticalSolution), collapse = ", "),
+      " resulted in ", paste0(round(unlist(analyticalSolution), 3), collapse = ", "),
       " respectively"
     )
   )
