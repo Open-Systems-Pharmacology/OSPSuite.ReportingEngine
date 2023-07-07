@@ -112,6 +112,7 @@ displayUnit
 docx
 dplyr
 dv
+eg
 enum
 Enum
 enums
@@ -642,6 +643,7 @@ totalSensitivityThreshold
 tpDictionary
 tracelib
 translateDataSelection
+translateForWord
 trimFileName
 updateArtifactNumbers
 updateAxesMargin
