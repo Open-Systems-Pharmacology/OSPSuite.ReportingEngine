@@ -215,22 +215,25 @@ getPKParameterRatioMeasureFromMCSampling <- function(comparisonData,
   # Transform list to table and save results for debugging
   allSamplesRatioMeasure <- do.call("rbind", allSamplesRatioMeasure)
   if (!is.null(structureSet)) {
-    mcResultsFile <- file.path(
-      structureSet$workflowFolder,
-      structureSet$pkAnalysisResultsFolder,
-      getDefaultFileName(
-        defaultFileNames$resultID(
-          structureSet$simulationSet$simulationSetName,
-          head(comparisonData$Parameter, 1),
-          head(comparisonData$QuantityPath, 1)
-        ),
-        suffix = "MonteCarlo"
+    pkAnalysisFolder <- file.path(structureSet$workflowFolder, structureSet$pkAnalysisResultsFolder)
+    # Prevent issue when directory is not found when called by testthat
+    if(dir.exists(pkAnalysisFolder)){
+      mcResultsFile <- file.path(
+        pkAnalysisFolder,
+        getDefaultFileName(
+          defaultFileNames$resultID(
+            structureSet$simulationSet$simulationSetName,
+            head(comparisonData$Parameter, 1),
+            head(comparisonData$QuantityPath, 1)
+          ),
+          suffix = "MonteCarlo"
+        )
       )
-    )
-    write.csv(
-      allSamplesRatioMeasure,
-      file = mcResultsFile
-    )
+      write.csv(
+        allSamplesRatioMeasure,
+        file = mcResultsFile
+      )
+    }
   }
   # Get median statistics over all MC repetitions as a data.frame
   medianPKRatioStatistics <- aggregate(
