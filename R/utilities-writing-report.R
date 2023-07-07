@@ -36,7 +36,7 @@ addFigureChunk <- function(fileName,
   # For a figure path to be valid in markdown using ![](#figurePath)
   # %20 needs to replace spaces in that figure path
   mdFigureFile <- URLencode(figureFileRelativePath)
-  
+
   mdText <- c(
     "",
     paste0("![", figureCaption, "](", mdFigureFile, ")"),
@@ -198,24 +198,23 @@ renderReport <- function(fileName, createWordReport = FALSE, numberSections = TR
   return(invisible())
 }
 
-#' @title renderWordReport
-#' @description Render docx report with number sections and table of content
-#' @param fileName name of .md file to render
-#' @param intro name of .md file that include introduction (before toc)
-#' @param createWordReport option for creating Markdown-Report only but not a Word-Report
-#' @param wordConversionTemplate optional docx template for rendering a tuned Word-Report document
-#' @export
-#' @family reporting
-renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, wordConversionTemplate = NULL) {
-  reportConfig <- file.path(reEnv$log$folder, "word-report-configuration.txt")
-  wordFileName <- sub(pattern = ".md", replacement = "-word.md", fileName)
-  docxWordFileName <- sub(pattern = ".md", replacement = "-word.docx", fileName)
-  docxFileName <- sub(pattern = ".md", replacement = ".docx", fileName)
-  fileContent <- readLines(fileName, encoding = "UTF-8")
-
-  wordFileContent <- NULL
-  figureContent <- NULL
-  for (lineContent in fileContent) {
+#' @title translateForWord
+#' @description
+#' Translate markdown text into a version that Pandoc can convert to Word with appropriate formatting
+#' @param mdText Character strings of markdown text
+#' @return Updated md text
+#' @keywords internal
+translateForWord <- function(mdText) {
+  wordText <- NULL
+  # Page break using source code
+  # https://pandoc.org/MANUAL.html#extension-raw_attribute
+  artifactPageBreak <- c(
+    "```{=openxml}",
+    '<w:p><w:r><w:br w:type="page"/></w:r></w:p>',
+    "```",
+    ""
+  )
+  for (lineContent in mdText) {
     firstElement <- getFirstLineElement(lineContent)
     anchorName <- getAnchorName(lineContent)
     # Issue #968 Subscript and superscript rendering
@@ -225,57 +224,59 @@ renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, w
     # Manual page break
     lineContent <- gsub(pattern = "<pagebreak>", replacement = '<w:p><w:r><w:br w:type="page"/></w:r>`{=openxml}', lineContent)
     # Alignment
-    lineContent <- gsub(pattern = "</div>", replacement = '', lineContent)
+    lineContent <- gsub(pattern = "</div>", replacement = "", lineContent)
     lineContent <- gsub(pattern = '<div align=\"right\">', replacement = '`<w:pPr><w:jc w:val="right"/></w:pPr>`{=openxml}', lineContent)
     lineContent <- gsub(pattern = '<div align=\"left\">', replacement = '`<w:pPr><w:jc w:val="left"/></w:pPr>`{=openxml}', lineContent)
     lineContent <- gsub(pattern = '<div align=\"center\">', replacement = '`<w:pPr><w:jc w:val="center"/></w:pPr>`{=openxml}', lineContent)
     lineContent <- gsub(pattern = '<div align=\"justify\">', replacement = '`<w:pPr><w:jc w:val="both"/></w:pPr>`{=openxml}', lineContent)
-    
-    # When finding a line referencing a table or figure tag as first element
-    # The new content to write in the word report is
-    # - previous content = wordFileContent
-    # - page break as openxml '<w:br w:type="page"/>'
-    # - tag/bookmark as openxml '<w:bookmarkStart w:id ... <w:bookmarkEnd'
-    # - next content (caption & table/figure)
-    # Since the identification is based on the html tag,
-    # caption on top or below the artifact should stay at the same position
-    bookmarkLines <- NULL
-    if(isIncluded(firstElement, "<a")){
-      # Bookmark that uses anchor name (e.g. figure-1-1)
-      # Used the following website as sample for the code
-      # https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.wordprocessing.bookmarkstart?view=openxml-2.8.1#remarks
-      bookmarkLines <- c(
-        "```{=openxml}",
-        paste0(
-          '<w:p><w:r><w:bookmarkStart w:id="', anchorName, '" w:name="', anchorName, '"/>',
-          '<w:bookmarkEnd w:id="', anchorName, '"/></w:r></w:p>'
-        ),
-        "```"
-      )
-        
-      isArtifact <- any(
-        grepl(pattern = "table", x = anchorName),
-        grepl(pattern = "figure", x = anchorName)
-      )
-      if(isArtifact){
-        # Page break using source code
-        # https://pandoc.org/MANUAL.html#extension-raw_attribute
-        bookmarkLines <- c(
-          "```{=openxml}",
-          '<w:p><w:r><w:br w:type="page"/></w:r></w:p>',
-          "```",
-          "",
-          bookmarkLines
-        )
-      }
-    }
-    
-    wordFileContent <- c(wordFileContent, lineContent, bookmarkLines)
-  }
 
+    # For anchors, remove and replace tag by inline bookmark at the end of the line
+    # By convention, no more than 1 anchor should be included in a line
+    if (hasAnchor(lineContent)) {
+      lineContent <- gsub(pattern = "<a.*/a>", replacement = "", lineContent)
+      lineContent <- paste0(
+        lineContent,
+        '`<w:bookmarkStart w:id="', anchorName, '" w:name="', anchorName, '"/>',
+        '<w:bookmarkEnd w:id="', anchorName, '"/>`{=openxml}'
+      )
+    }
+    # By convention, artifacts are referenced with a tag at the beginning of the line
+    # whose identifier includes "table" or "figure"
+    # For them, a page break is needed before the tag to get a prettier word document
+    # Since the identification is based on the html tag,
+    # caption on top or below the artifact does not require any update
+    isArtifactAnchor <- all(
+      isIncluded(firstElement, "<a"),
+      grepl(pattern = "table|figure", x = anchorName)
+    )
+    wordText <- c(wordText, artifactPageBreak[isArtifactAnchor], lineContent)
+  }
+  return(wordText)
+}
+
+#' @title renderWordReport
+#' @description Render docx report with number sections and table of content
+#' @param fileName name of .md file to render
+#' @param intro name of .md file that include introduction (before toc)
+#' @param createWordReport option for creating Markdown-Report only but not a Word-Report
+#' @param wordConversionTemplate optional docx template for rendering a tuned Word-Report document
+#' @export
+#' @family reporting
+renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, wordConversionTemplate = NULL) {
+  if (!createWordReport) {
+    return(invisible())
+  }
+  reportConfig <- file.path(reEnv$log$folder, "word-report-configuration.txt")
+  wordFileName <- sub(pattern = ".md", replacement = "-word.md", fileName)
+  docxWordFileName <- sub(pattern = ".md", replacement = "-word.docx", fileName)
+  docxFileName <- sub(pattern = ".md", replacement = ".docx", fileName)
+
+  fileContent <- readLines(fileName, encoding = "UTF-8")
+  wordFileContent <- translateForWord(fileContent)
+
+  # Code for tracelib package
   usedFilesFileName <- sub(pattern = ".md", replacement = "-usedFiles.txt", fileName)
   usedFiles <- readLines(usedFilesFileName, encoding = "UTF-8")
-
   for (usedFile in usedFiles) {
     if (usedFile != "") {
       re.tStoreFileMetadata(access = "read", filePath = usedFile)
@@ -287,13 +288,8 @@ renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, w
   if (!isEmpty(intro)) {
     introContent <- readLines(intro, encoding = "UTF-8")
     yamlContent <- introToYamlHeader(introContent)
-
-    wordFileContent <- c(
-      # Cover page features
-      yamlContent,
-      "",
-      wordFileContent
-    )
+    # Cover page features
+    wordFileContent <- c(yamlContent, "", wordFileContent)
   }
   # Since write() uses sep = "\n",
   # every element of array wordFileContent is added in a new line
@@ -302,50 +298,48 @@ renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, w
   close(fileObject)
   re.tStoreFileMetadata(access = "write", filePath = wordFileName)
 
-  if (createWordReport) {
-    # Check if pandoc is available before trying to render word report
-    if (!rmarkdown::pandoc_available()) {
-      logError("Pandoc is not installed, word report was not created.")
-      return(invisible())
-    }
-
-    wordConversionTemplate <- wordConversionTemplate %||% system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
-    
-    # Some arguments will depend on pandoc version to prevent warnings
-    # docx requires that figures are contained within document
-    selfContainedArgument <- "self-contained:"
-    if (rmarkdown::pandoc_version() >= "2.19") {
-      selfContainedArgument <- c("embed-resources:", "standalone:")
-    }
-    # Create txt file that includes arguments for Pandoc
-    write(c(
-      selfContainedArgument,
-      # Remove wrapping limitation of 80 characters/line
-      "wrap: none",
-      # Add table of content
-      "toc:",
-      # Add extensions to md for conversion
-      # +tex_math_dollars: convert equations written between $...$ in LateX
-      # https://pandoc.org/MANUAL.html#extension-tex_math_dollars
-      # +raw_attribute: keep ```{=openxml} as raw openxml to include page breaks and bookmarks
-      # https://pandoc.org/MANUAL.html#extension-raw_attribute
-      # +superscript+subscript: convert superscript text between ^...^, subscript text between ~...~
-      # https://pandoc.org/MANUAL.html#superscripts-and-subscripts
-      "from: markdown+tex_math_dollars+superscript+subscript+raw_attribute",
-      # Document used for styling
-      paste0('reference-doc: "', wordConversionTemplate, '"'),
-      # Location of resources such as figures
-      paste0('resource-path: "', reEnv$log$folder, '"')
-    ),
-    file = reportConfig, sep = "\n"
-    )
-
-    knitr::pandoc(input = wordFileName, format = "docx", config = reportConfig)
-    file.copy(docxWordFileName, docxFileName, overwrite = TRUE)
-    re.tStoreFileMetadata(access = "write", filePath = docxFileName)
-    unlink(reportConfig, recursive = TRUE)
-    unlink(docxWordFileName, recursive = TRUE)
+  # Check if pandoc is available before trying to render word report
+  if (!rmarkdown::pandoc_available()) {
+    logError("Pandoc is not installed, word report was not created.")
+    return(invisible())
   }
+  wordConversionTemplate <- wordConversionTemplate %||% system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
+
+  # Some arguments will depend on pandoc version to prevent warnings
+  # docx requires that figures are contained within document
+  selfContainedArgument <- "self-contained:"
+  if (rmarkdown::pandoc_version() >= "2.19") {
+    selfContainedArgument <- c("embed-resources:", "standalone:")
+  }
+  # Create txt file that includes arguments for Pandoc
+  write(c(
+    selfContainedArgument,
+    # Remove wrapping limitation of 80 characters/line
+    "wrap: none",
+    # Add table of content
+    "toc:",
+    # Add extensions to md for conversion
+    # +tex_math_dollars: convert equations written between $...$ in LateX
+    # https://pandoc.org/MANUAL.html#extension-tex_math_dollars
+    # +raw_attribute: keep ```{=openxml} as raw openxml to include page breaks and bookmarks
+    # https://pandoc.org/MANUAL.html#extension-raw_attribute
+    # +superscript+subscript: convert superscript text between ^...^, subscript text between ~...~
+    # https://pandoc.org/MANUAL.html#superscripts-and-subscripts
+    "from: markdown+tex_math_dollars+superscript+subscript+raw_attribute",
+    # Document used for styling
+    paste0('reference-doc: "', wordConversionTemplate, '"'),
+    # Location of resources such as figures
+    paste0('resource-path: "', reEnv$log$folder, '"')
+  ),
+  file = reportConfig, sep = "\n"
+  )
+
+  knitr::pandoc(input = wordFileName, format = "docx", config = reportConfig)
+  file.copy(docxWordFileName, docxFileName, overwrite = TRUE)
+  re.tStoreFileMetadata(access = "write", filePath = docxFileName)
+  unlink(reportConfig, recursive = TRUE)
+  unlink(docxWordFileName, recursive = TRUE)
+
   logDebug(paste0("Word version of report '", fileName, "' created."))
   return(invisible())
 }
@@ -577,7 +571,7 @@ introToYamlHeader <- function(introContent) {
   # YAML parse exception at line XX, column XX, while parsing a block mapping: did not find expected key
   # Thus, remove left spaces
   introContent <- trimws(introContent, which = "left", whitespace = "[ \t\r]")
-  
+
   # Define cover page features
   yamlContent <- c(
     # yaml header is delimited by ---
@@ -672,7 +666,7 @@ updateArtifactNumbers <- function(fileContent, pattern, replacement, anchorId, c
   titleLines <- sapply(titleInfo, function(title) title$line)
   # In case of unreferenced titles
   titleNumbers <- sapply(titleInfo, function(title) title$count[1])
-  
+
   # Initialize
   updatedFileContent <- NULL
   count <- 1
@@ -697,13 +691,13 @@ updateArtifactNumbers <- function(fileContent, pattern, replacement, anchorId, c
       grepl(pattern = "\\!\\[", x = firstElement),
       grepl(pattern = "Figure", x = pattern)
     )
-    if(figureRequireUpdate){
+    if (figureRequireUpdate) {
       updatedFileContent <- c(
-        updatedFileContent, 
+        updatedFileContent,
         anchorContent,
         "",
         fileContent[lineIndex]
-        )
+      )
       next
     }
     # If line is not related to an artifact, nothing to update
@@ -718,12 +712,12 @@ updateArtifactNumbers <- function(fileContent, pattern, replacement, anchorId, c
       replacement = paste0(replacement, " ", artifactNumber, ":"),
       x = fileContent[lineIndex]
     )
-    
+
     # Updated file content includes reference, figure/table and intra-section numbering
     updatedFileContent <- c(
-      updatedFileContent, 
+      updatedFileContent,
       # in case of caption below, the anchor was already included before artifact (figure)
-      anchorContent[!captionBelow], 
+      anchorContent[!captionBelow],
       "",
       updatedArtifactContent
     )
@@ -739,12 +733,12 @@ updateArtifactNumbers <- function(fileContent, pattern, replacement, anchorId, c
 #' @keywords internal
 updateFigureNumbers <- function(fileContent) {
   return(updateArtifactNumbers(
-    fileContent, 
-    pattern = "Figure:", 
-    replacement = "Figure", 
-    anchorId = "figure", 
+    fileContent,
+    pattern = "Figure:",
+    replacement = "Figure",
+    anchorId = "figure",
     captionBelow = TRUE
-    ))
+  ))
 }
 
 #' @title updateTableNumbers
@@ -754,12 +748,12 @@ updateFigureNumbers <- function(fileContent) {
 #' @keywords internal
 updateTableNumbers <- function(fileContent) {
   return(updateArtifactNumbers(
-    fileContent, 
-    pattern = "Table:", 
-    replacement = "Table", 
-    anchorId = "table", 
+    fileContent,
+    pattern = "Table:",
+    replacement = "Table",
+    anchorId = "table",
     captionBelow = FALSE
-    ))
+  ))
 }
 
 #' @title copyReport
@@ -818,10 +812,10 @@ copyReport <- function(from, to, copyWordReport = TRUE, keep = FALSE) {
   # checkFileExists will warn the user if the path is corrupdted
   checkFileExists(file.path(fromFolder, filePaths))
   file.copy(
-    file.path(fromFolder, filePaths), 
-    file.path(toFolder, filePaths), 
+    file.path(fromFolder, filePaths),
+    file.path(toFolder, filePaths),
     overwrite = TRUE
-    )
+  )
 
   # If keep is true, keep initial files and report
   if (keep) {
@@ -890,14 +884,14 @@ getIntroFromReportTitle <- function(reportTitle = NULL, intro = "temp-report-tit
 
 #' @title getFigurePathsFromReport
 #' @description Get file paths from a report figure links
-#' @param fileName name of .md file to 
+#' @param fileName name of .md file to
 #' @return array of file paths corresponding to figures linked in reports
 #' @export
 #' @examples \dontrun{
 #' # Check the figure paths of your report named "report.md"
 #' getFigurePathsFromReport("report.md")
 #' }
-getFigurePathsFromReport <- function(fileName){
+getFigurePathsFromReport <- function(fileName) {
   fileContent <- readLines(fileName, encoding = "UTF-8")
   filePaths <- fileContent[grepl(pattern = "\\!\\[", x = fileContent)]
   filePaths <- gsub(pattern = ".*\\]\\(", replacement = "", x = filePaths)
