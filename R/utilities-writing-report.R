@@ -210,7 +210,7 @@ translateForWord <- function(mdText) {
   # https://pandoc.org/MANUAL.html#extension-raw_attribute
   artifactPageBreak <- c(
     "```{=openxml}",
-    '<w:p><w:r><w:br w:type="page"/></w:r></w:p>',
+    '<w:br w:type="page"/>',
     "```",
     ""
   )
@@ -222,7 +222,7 @@ translateForWord <- function(mdText) {
     lineContent <- gsub(pattern = "<sub>|</sub>", replacement = "~", lineContent)
     # Expose openxml translations for users
     # Manual page break
-    lineContent <- gsub(pattern = "<pagebreak>", replacement = '<w:p><w:r><w:br w:type="page"/></w:r>`{=openxml}', lineContent)
+    lineContent <- gsub(pattern = "<pagebreak>", replacement = '<w:br w:type="page"/>`{=openxml}', lineContent)
     # Alignment
     lineContent <- gsub(pattern = "</div>", replacement = "", lineContent)
     lineContent <- gsub(pattern = '<div align=\"right\">', replacement = '`<w:pPr><w:jc w:val="right"/></w:pPr>`{=openxml}', lineContent)

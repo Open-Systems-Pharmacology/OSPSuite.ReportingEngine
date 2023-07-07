@@ -58,7 +58,7 @@ test_that("html anchor figure and table tags are translated with pagebreaks", {
     translateForWord('<a id="figure-1"></a>'),
     c(
       "```{=openxml}",
-      "<w:p><w:r><w:br w:type=\"page\"/></w:r></w:p>",
+      "<w:br w:type=\"page\"/>",
       "```",
       "",
       '`<w:bookmarkStart w:id="figure-1" w:name="figure-1"/><w:bookmarkEnd w:id="figure-1"/>`{=openxml}'
@@ -68,7 +68,7 @@ test_that("html anchor figure and table tags are translated with pagebreaks", {
     translateForWord('<a id="table-1"></a>'),
     c(
       "```{=openxml}",
-      "<w:p><w:r><w:br w:type=\"page\"/></w:r></w:p>",
+      "<w:br w:type=\"page\"/>",
       "```",
       "",
       '`<w:bookmarkStart w:id="table-1" w:name="table-1"/><w:bookmarkEnd w:id="table-1"/>`{=openxml}'
