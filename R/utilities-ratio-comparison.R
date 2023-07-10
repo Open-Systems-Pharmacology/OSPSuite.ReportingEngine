@@ -217,7 +217,7 @@ getPKParameterRatioMeasureFromMCSampling <- function(comparisonData,
   if (!is.null(structureSet)) {
     pkAnalysisFolder <- file.path(structureSet$workflowFolder, structureSet$pkAnalysisResultsFolder)
     # Prevent issue when directory is not found when called by testthat
-    if(dir.exists(pkAnalysisFolder)){
+    if(FALSE){
       mcResultsFile <- file.path(
         pkAnalysisFolder,
         getDefaultFileName(
