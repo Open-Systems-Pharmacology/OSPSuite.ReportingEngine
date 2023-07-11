@@ -228,10 +228,18 @@ getPKParameterRatioMeasureFromMCSampling <- function(comparisonData,
           suffix = "MonteCarlo"
         )
       )
-      write.csv(
+    tryCatch({write.csv(
         allSamplesRatioMeasure,
         file = mcResultsFile
-      )
+        )},
+      error = function(e){
+        warning(paste(
+          "Monte Carlo results could not be saved in file '",
+          mcResultsFile, 
+          "'"
+        ))
+      }
+    )
   }
   # Get median statistics over all MC repetitions as a data.frame
   medianPKRatioStatistics <- aggregate(
