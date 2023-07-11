@@ -642,6 +642,7 @@ totalSensitivityThreshold
 tpDictionary
 tracelib
 translateDataSelection
+translateForWord
 trimFileName
 updateArtifactNumbers
 updateAxesMargin
