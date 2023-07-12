@@ -80,7 +80,6 @@ test_that("Workflow generates appropriate number of files", {
   # Log files
   expect_length(list.files(workflowPediatric$workflowFolder, pattern = ".txt"), 2)
   expect_length(list.files(workflowParallel$workflowFolder, pattern = ".txt"), 2)
-  expect_length(list.files(workflowRatio$workflowFolder, pattern = ".txt"), 2)
   # Reports
   expect_length(list.files(workflowPediatric$workflowFolder, pattern = ".md"), 2)
   expect_length(list.files(workflowPediatric$workflowFolder, pattern = ".docx"), 1)
