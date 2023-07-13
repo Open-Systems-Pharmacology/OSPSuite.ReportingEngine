@@ -215,21 +215,30 @@ getPKParameterRatioMeasureFromMCSampling <- function(comparisonData,
   # Transform list to table and save results for debugging
   allSamplesRatioMeasure <- do.call("rbind", allSamplesRatioMeasure)
   if (!is.null(structureSet)) {
+    pkAnalysisFolder <- file.path(structureSet$workflowFolder, structureSet$pkAnalysisResultsFolder)
+    dir.create(pkAnalysisFolder, showWarnings = FALSE, recursive = TRUE)
     mcResultsFile <- file.path(
-      structureSet$workflowFolder,
-      structureSet$pkAnalysisResultsFolder,
-      getDefaultFileName(
-        defaultFileNames$resultID(
-          structureSet$simulationSet$simulationSetName,
-          head(comparisonData$Parameter, 1),
-          head(comparisonData$QuantityPath, 1)
-        ),
-        suffix = "MonteCarlo"
+        pkAnalysisFolder,
+        getDefaultFileName(
+          defaultFileNames$resultID(
+            structureSet$simulationSet$simulationSetName,
+            head(comparisonData$Parameter, 1),
+            head(comparisonData$QuantityPath, 1)
+          ),
+          suffix = "MonteCarlo"
+        )
       )
-    )
-    write.csv(
-      allSamplesRatioMeasure,
-      file = mcResultsFile
+    tryCatch({write.csv(
+        allSamplesRatioMeasure,
+        file = mcResultsFile
+        )},
+      error = function(e){
+        warning(paste(
+          "Monte Carlo results could not be saved in file '",
+          mcResultsFile, 
+          "'"
+        ))
+      }
     )
   }
   # Get median statistics over all MC repetitions as a data.frame
@@ -238,7 +247,6 @@ getPKParameterRatioMeasureFromMCSampling <- function(comparisonData,
     by = list(Population = allSamplesRatioMeasure$Population),
     FUN = median
   )
-  # analyticalSolution <- getRatioMeasureAnalyticalSolution(referenceData, comparisonData)
   logInfo(messages$monteCarloChecking(
     displayRatioMeasureAnalyticalSolution(referenceData, comparisonData),
     medianPKRatioStatistics,

@@ -11,7 +11,7 @@ getDefaultPropertiesFromTheme(
 )
 }
 \arguments{
-\item{plotName}{Name of the plot in Theme (eg `"plotTimeProfile"`)}
+\item{plotName}{Name of the plot in Theme (e.g. `"plotTimeProfile"`)}
 
 \item{propertyType}{One of `"points"`, `"lines`, `"ribbons"` or `"errorbars"`}
 
