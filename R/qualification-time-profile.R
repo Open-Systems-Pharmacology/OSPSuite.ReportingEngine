@@ -783,14 +783,14 @@ updateQualificationTimeProfilePlotConfiguration <- function(simulatedMetaData = 
                                                             axesProperties = NULL,
                                                             plotConfiguration) {
   # Update plot configuration for simulated values
-  if (!isEmpty(simulatedMetaData)) {
+  if (!isEmpty(simulatedMetaData$id)) {
     sortedSimulatedMetaData <- order(simulatedMetaData$id)
     plotConfiguration$lines$color <- simulatedMetaData$color[sortedSimulatedMetaData]
     plotConfiguration$lines$linetype <- simulatedMetaData$linetype[sortedSimulatedMetaData]
     plotConfiguration$lines$size <- simulatedMetaData$size[sortedSimulatedMetaData]
   }
   # Update plot configuration for observed values
-  if (!isEmpty(observedMetaData)) {
+  if (!isEmpty(observedMetaData$id)) {
     sortedObservedMetaData <- order(observedMetaData$id)
     # offset of simulated data colors
     plotConfiguration$points$color <- c(
