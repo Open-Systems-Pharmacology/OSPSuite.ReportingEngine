@@ -10,7 +10,7 @@
 #' @import ospsuite
 #' @import tlf
 #' @import ggplot2
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
 #' @keywords internal
 plotDemographyParameters <- function(structureSets,
                                      settings = NULL,
@@ -28,111 +28,47 @@ plotDemographyParameters <- function(structureSets,
 
   yParameters <- yParameters %||% DemographyDefaultParameters
 
-  demographyAcrossPopulations <- getDemographyAcrossPopulations(structureSets)
+  demographyAcrossPopulations <- getDemographyAcrossPopulations(
+    structureSets = structureSets,
+    demographyPaths = unique(c(xParameters, yParameters))
+  )
   demographyData <- demographyAcrossPopulations$data
-  demographyMetaData <- demographyAcrossPopulations$metaData
   simulationSetNames <- unique(as.character(demographyData$simulationSetName))
+  demographyMetaData <- demographyAcrossPopulations$metaData
 
-  checkIsIncluded(xParameters, names(demographyData), nullAllowed = TRUE, groupName = "demography variable names across simulation sets")
-  checkIsIncluded(yParameters, names(demographyData), nullAllowed = TRUE, groupName = "demography variable names across simulation sets")
-  xParameters <- intersect(xParameters, names(demographyData))
-  yParameters <- intersect(yParameters, names(demographyData))
+  observedDemographyData <- getObservedDemographyAcrossPopulations(
+    structureSets = structureSets,
+    demographyPaths = unique(c(xParameters, yParameters)),
+    metaData = demographyMetaData
+  )
 
-  if (workflowType %in% PopulationWorkflowTypes$pediatric) {
+  if (isIncluded(workflowType, PopulationWorkflowTypes$pediatric)) {
     referenceSimulationSetName <- getReferencePopulationName(structureSets)
   }
-
+  # If no demography variable defined in xParameters, plot histograms
   if (isEmpty(xParameters)) {
-    # Pediatric: comparison histogram
-    if (workflowType %in% c(PopulationWorkflowTypes$pediatric)) {
-      for (parameterName in yParameters) {
-        sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", parameterName)
-        parameterCaption <- demographyMetaData[[parameterName]]$dimension
-
-        # Create sub level title for parameter name
-        demographyResults[[sectionId]] <- saveTaskResults(
-          id = sectionId,
-          textChunk = captions$demography$parameterSection(sectionId, parameterCaption),
-          includeTextChunk = TRUE
-        )
-
-        histogramMapping <- tlf::HistogramDataMapping$new(
-          x = parameterName,
-          fill = "simulationSetName"
-        )
-        demographyHistogram <- plotDemographyHistogram(
-          data = demographyData,
-          metaData = demographyMetaData,
-          dataMapping = histogramMapping,
-          plotConfiguration = settings$plotConfigurations[["histogram"]],
-          bins = settings$bins %||% AggregationConfiguration$bins
-        )
-
-        # Save results
-        resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", parameterName)
-        demographyResults[[resultID]] <- saveTaskResults(
-          id = resultID,
-          plot = demographyHistogram,
-          plotCaption = captions$demography$histogram(
-            parameterCaption,
-            simulationSetNames,
-            simulationSetDescriptor
-          )
-        )
-      }
-    }
-    # Parallel and Ratio: histograms per population
-    if (workflowType %in% c(PopulationWorkflowTypes$parallelComparison, PopulationWorkflowTypes$ratioComparison)) {
-      for (parameterName in yParameters) {
-        sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", parameterName)
-        parameterCaption <- demographyMetaData[[parameterName]]$dimension
-
-        # Create sub level title for parameter name
-        demographyResults[[sectionId]] <- saveTaskResults(
-          id = sectionId,
-          textChunk = captions$demography$parameterSection(sectionId, parameterCaption),
-          includeTextChunk = TRUE
-        )
-
-        histogramMapping <- tlf::HistogramDataMapping$new(
-          x = parameterName,
-          fill = "simulationSetName"
-        )
-        for (simulationSetName in simulationSetNames) {
-          sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", parameterName)
-
-          # Create a sub level title for population
-          demographyResults[[sectionId]] <- saveTaskResults(
-            id = sectionId,
-            textChunk = captions$demography$populationSection(sectionId, simulationSetName, simulationSetDescriptor, level = 3),
-            includeTextChunk = TRUE
-          )
-
-          demographyDataByPopulation <- demographyData[demographyData$simulationSetName %in% simulationSetName, ]
-
-          demographyHistogram <- plotDemographyHistogram(
-            data = demographyDataByPopulation,
-            metaData = demographyMetaData,
-            dataMapping = histogramMapping,
-            plotConfiguration = settings$plotConfigurations[["histogram"]],
-            bins = settings$bins %||% AggregationConfiguration$bins
-          )
-
-          # Save results
-          resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", parameterName)
-          demographyResults[[resultID]] <- saveTaskResults(
-            id = resultID,
-            plot = demographyHistogram,
-            plotCaption = captions$demography$histogram(
-              parameterCaption,
-              simulationSetName,
-              simulationSetDescriptor
-            )
-          )
-        }
-      }
-    }
-    return(demographyResults)
+    demographyResults <- switch(workflowType,
+      # Pediatric: comparison histogram
+      "pediatric" = getComparisonHistogramResults(
+        simulationSetNames = simulationSetNames,
+        demographyPaths = yParameters,
+        data = demographyData,
+        metaData = demographyMetaData,
+        observedData = observedDemographyData,
+        settings = settings,
+        simulationSetDescriptor = simulationSetDescriptor
+      ),
+      # Parallel and Ratio: histograms per population
+      getHistogramResults(
+        simulationSetNames = simulationSetNames,
+        demographyPaths = yParameters,
+        data = demographyData,
+        metaData = demographyMetaData,
+        observedData = observedDemographyData,
+        settings = settings,
+        simulationSetDescriptor = simulationSetDescriptor
+      )
+    )
   }
 
   for (demographyParameter in xParameters) {
@@ -320,32 +256,53 @@ plotDemographyParameters <- function(structureSets,
   return(demographyResults)
 }
 
-getDemographyAcrossPopulations <- function(structureSets) {
+#' @title getDemographyAcrossPopulations
+#' @description Get Demography data across populations of simulation sets
+#' @param structureSets List of `SimulationStructure` objects
+#' @param demographyPaths Paths of demography variables to display
+#' @return A list of `data` and its `metaData`
+#' @import ospsuite
+#' @keywords internal
+getDemographyAcrossPopulations <- function(structureSets, demographyPaths) {
   demographyAcrossPopulations <- NULL
-  for (structureSet in structureSets)
-  {
+  dataColumnNames <- c("simulationSetName", as.character(demographyPaths))
+  for (structureSet in structureSets) {
     population <- loadWorkflowPopulation(structureSet$simulationSet)
     simulation <- ospsuite::loadSimulation(structureSet$simulationSet$simulationFile, loadFromCache = TRUE)
     populationTable <- getPopulationPKData(population, simulation)
-
-    fullDemographyTable <- cbind.data.frame(
-      simulationSetName = structureSet$simulationSet$simulationSetName,
-      populationTable
+    checkIsIncluded(
+      demographyPaths,
+      names(populationTable),
+      groupName = paste0(
+        "demography variables of simulation set '",
+        structureSet$simulationSet$simulationSetName,
+        "'"
+      )
     )
-    # Prevent crash when merging populations with different parameters by filling unexisting with NA
-    newNamesDemographyAcrossPopulations <- setdiff(names(fullDemographyTable), names(demographyAcrossPopulations))
-    newNamesDemographyTable <- setdiff(names(demographyAcrossPopulations), names(fullDemographyTable))
-    if (!is.null(demographyAcrossPopulations)) {
-      demographyAcrossPopulations[, newNamesDemographyAcrossPopulations] <- NA
+    # Initialize data.frame of only relevant demography data
+    demographyData <- as.data.frame(
+      sapply(
+      dataColumnNames,
+      function(x) {
+        rep(NA, population$count)
+      },
+      simplify = FALSE
+    ),
+    check.names = FALSE
+    )
+    demographyData$simulationSetName <- structureSet$simulationSet$simulationSetName
+    for (demographyPath in demographyPaths) {
+      if (!isIncluded(demographyPath, names(populationTable))) {
+        next
+      }
+      demographyData[[demographyPath]] <- populationTable[[demographyPath]]
     }
-    fullDemographyTable[, newNamesDemographyTable] <- NA
-
     demographyAcrossPopulations <- rbind.data.frame(
       demographyAcrossPopulations,
-      fullDemographyTable
+      demographyData
     )
   }
-
+  # Use last simulationSet to get display name and unit as metaData
   metaData <- getPopulationPKMetaData(population, simulation, structureSet$parameterDisplayPaths)
 
   return(list(
@@ -354,6 +311,34 @@ getDemographyAcrossPopulations <- function(structureSets) {
   ))
 }
 
+#' @title getObservedDemographyAcrossPopulations
+#' @description Get Observed Demography data across populations of simulation sets
+#' @param structureSets List of `SimulationStructure` objects
+#' @param demographyPaths Paths of demography variables to display
+#' @param metaData List of display names and units of demography variables
+#' @return A data.frame
+#' @import ospsuite
+#' @keywords internal
+getObservedDemographyAcrossPopulations <- function(structureSets, demographyPaths, metaData) {
+  demographyDataAcrossPopulations <- NULL
+  for (structureSet in structureSets) {
+    demographyData <- getObservedDemographyFromSimulationSet(
+      structureSet = structureSet,
+      demographyPaths = demographyPaths,
+      metaData = metaData
+    )
+    demographyDataAcrossPopulations <- rbind.data.frame(
+      demographyDataAcrossPopulations,
+      demographyData
+    )
+  }
+
+  return(demographyDataAcrossPopulations)
+}
+
+#' @title DemographyDefaultParameters
+#' @description Demography Default Parameters
+#' @keywords internal
 DemographyDefaultParameters <- c(ospsuite::StandardPath[c("Age", "Height", "Weight", "BMI")], list(Gender = "Gender"))
 
 #' @title getDefaultDemographyXParameters
@@ -451,64 +436,281 @@ getDemographyAggregatedData <- function(data,
   return(aggregatedData)
 }
 
+
+#' @title getHistogramResults
+#' @description Get Histogram results for Parallel and Ratio Comparison workflows
+#' @param demographyPaths Names of demography variables to be displayed
+#' @param simulationSetNames Names of simulation sets
+#' @param data A data.frame of simulated demography values across the simulationSets
+#' @param metaData A list of meta data indicating the display properties of the data
+#' @param observedData A data.frame of observed demography values across the simulationSets
+#' @param settings A list of plot settings
+#' @param simulationSetDescriptor Character describing the population sets within the report
+#' @param demographyResults A list of `TaskResult` objects
+#' @return A list of `TaskResult` objects
+#' @keywords internal
+getHistogramResults <- function(demographyPaths,
+                                simulationSetNames,
+                                data,
+                                metaData,
+                                observedData,
+                                settings = NULL,
+                                simulationSetDescriptor = "",
+                                demographyResults = list()) {
+  for (demographyPath in demographyPaths) {
+    sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyPath)
+    # Display name was stored in dimension of metaData
+    # to leverage smart plot configuration caption as dimension [unit]
+    parameterCaption <- metaData[[demographyPath]]$dimension
+    # Create sub level title for each demography path
+    demographyResults[[sectionId]] <- saveTaskResults(
+      id = sectionId,
+      textChunk = captions$demography$parameterSection(sectionId, parameterCaption),
+      includeTextChunk = TRUE
+    )
+    histogramMapping <- tlf::HistogramDataMapping$new(
+      x = demographyPath,
+      fill = "Legend"
+    )
+    for (simulationSetName in simulationSetNames) {
+      sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyPath)
+      # Within each path, create sub level title for each simulation set
+      demographyResults[[sectionId]] <- saveTaskResults(
+        id = sectionId,
+        textChunk = captions$demography$populationSection(sectionId, simulationSetName, simulationSetDescriptor, level = 3),
+        includeTextChunk = TRUE
+      )
+
+      demographyData <- data[data$simulationSetName %in% simulationSetName, c("simulationSetName", demographyPath)]
+      demographyData$Legend <- captions$demography$histogramLegend(demographyData)
+      # Check for observed data and include if possible
+      selectedRows <- observedData$simulationSetName %in% simulationSetName
+      dataSource <- ""
+      if (sum(selectedRows) > 0) {
+        observedDemographyData <- observedData[selectedRows, c("simulationSetName", demographyPath)]
+        observedDemographyData$Legend <- captions$demography$histogramLegend(observedDemographyData, observed = TRUE)
+        demographyData <- rbind.data.frame(demographyData, observedDemographyData)
+        demographyData$Legend <- factor(demographyData$Legend, levels = c(demographyData$Legend[1], observedDemographyData$Legend[1]))
+        dataSource <- head(observedData$dataSource, 1)
+      }
+
+      demographyHistogram <- plotDemographyHistogram(
+        data = demographyData,
+        metaData = metaData,
+        dataMapping = histogramMapping,
+        plotConfiguration = settings$plotConfigurations[["histogram"]] %||%
+          tlf::HistogramPlotConfiguration$new(
+            ylabel = "Number of individuals [%]",
+            data = demographyData,
+            metaData = metaData,
+            dataMapping = histogramMapping
+          ),
+        bins = settings$bins %||% AggregationConfiguration$bins,
+        dodge = settings$dodge %||% TRUE
+      )
+
+      # Save results
+      resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyPath)
+      demographyResults[[resultID]] <- saveTaskResults(
+        id = resultID,
+        plot = demographyHistogram,
+        plotCaption = captions$demography$histogram(
+          parameterCaption,
+          simulationSetName,
+          simulationSetDescriptor,
+          dataSource = dataSource
+        )
+      )
+    }
+  }
+  return(demographyResults)
+}
+
+#' @title getComparisonHistogramResults
+#' @description Get Comparison Histogram results for Pediatric workflows
+#' @param demographyPaths Names of demography variables to be displayed
+#' @param simulationSetNames Names of simulation sets
+#' @param data A data.frame of simulated demography values across the simulationSets
+#' @param metaData A list of meta data indicating the display properties of the data
+#' @param observedData A data.frame of observed demography values across the simulationSets
+#' @param settings A list of plot settings
+#' @param simulationSetDescriptor Character describing the population sets within the report
+#' @param demographyResults A list of `TaskResult` objects
+#' @return A list of `TaskResult` objects
+#' @keywords internal
+getComparisonHistogramResults <- function(demographyPaths,
+                                          simulationSetNames,
+                                          data,
+                                          metaData,
+                                          observedData,
+                                          settings = NULL,
+                                          simulationSetDescriptor = "",
+                                          demographyResults = list()) {
+  for (demographyPath in demographyPaths) {
+    sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyPath)
+    # Display name was stored in dimension of metaData
+    # to leverage smart plot configuration caption as dimension [unit]
+    parameterCaption <- metaData[[demographyPath]]$dimension
+    # Create sub level title for each demography path
+    demographyResults[[sectionId]] <- saveTaskResults(
+      id = sectionId,
+      textChunk = captions$demography$parameterSection(sectionId, parameterCaption),
+      includeTextChunk = TRUE
+    )
+    histogramMapping <- tlf::HistogramDataMapping$new(x = demographyPath, fill = "Legend")
+
+    data$Legend <- stats::ave(
+      data$simulationSetName,
+      # This second line is needed to compute size within each set
+      data$simulationSetName,
+      FUN = function(setName) {
+        paste0("Simulated ", setName, " (n=", length(setName), ")")
+      }
+    )
+    demographyHistogram <- plotDemographyHistogram(
+      data = data,
+      metaData = metaData,
+      dataMapping = histogramMapping,
+      plotConfiguration = settings$plotConfigurations[["histogram"]] %||%
+        tlf::HistogramPlotConfiguration$new(
+          ylabel = "Number of individuals [%]",
+          data = data,
+          metaData = metaData,
+          dataMapping = histogramMapping
+        ),
+      bins = settings$bins %||% AggregationConfiguration$bins,
+      dodge = settings$dodge %||% TRUE
+    )
+    # Save results
+    resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyPath)
+    demographyResults[[resultID]] <- saveTaskResults(
+      id = resultID,
+      plot = demographyHistogram,
+      plotCaption = captions$demography$histogram(
+        parameterCaption,
+        simulationSetNames,
+        simulationSetDescriptor
+      )
+    )
+    # Plot observed only if available
+    if (sum(!is.na(observedData[, demographyPath])) == 0) {
+      next
+    }
+    observedData$Legend <- stats::ave(
+      observedData$simulationSetName,
+      # This second line is needed to compute size within each set
+      observedData$simulationSetName,
+      FUN = function(setName) {
+        paste0("Observed ", setName, " (n=", length(setName), ")")
+      }
+    )
+    demographyHistogram <- plotDemographyHistogram(
+      data = observedData,
+      metaData = metaData,
+      dataMapping = histogramMapping,
+      plotConfiguration = settings$plotConfigurations[["histogram"]] %||%
+        tlf::HistogramPlotConfiguration$new(
+          ylabel = "Number of individuals [%]",
+          data = observedData,
+          metaData = metaData,
+          dataMapping = histogramMapping
+        ),
+      bins = settings$bins %||% AggregationConfiguration$bins,
+      dodge = settings$dodge %||% TRUE
+    )
+    # Save results
+    resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyPath)
+    demographyResults[[resultID]] <- saveTaskResults(
+      id = resultID,
+      plot = demographyHistogram,
+      plotCaption = captions$demography$histogram(
+        parameterCaption,
+        simulationSetNames,
+        simulationSetDescriptor,
+        dataSource = paste(unique(observedData$dataSource), collapse = "")
+      )
+    )
+  }
+  return(demographyResults)
+}
+
+
 #' @title plotDemographyHistogram
 #' @description Plot histograms for demography parameters
 #' @param data data.frame
 #' @param metaData list of metaData about `data`
 #' @param dataMapping `HistogramDataMapping` class object
 #' @param plotConfiguration `PlotConfiguration` class object
-#' @param bins number of bins for continuous parameters
+#' @param bins Number of bins for continuous demography parameters
+#' @param dodge For continuous demography parameters,
+#' Logical defining if histogram bars should dodge for continuous parameters
 #' @return ggplot object
 #' @export
-#' @import ospsuite
 #' @import tlf
 #' @import ggplot2
-#' @importFrom ospsuite.utils %||%
 plotDemographyHistogram <- function(data,
                                     metaData,
                                     dataMapping = NULL,
                                     plotConfiguration = NULL,
-                                    bins = NULL) {
-  dataMapping <- dataMapping %||% tlf::HistogramDataMapping$new(x = ospsuite::StandardPath$Age)
+                                    bins = AggregationConfiguration$bins,
+                                    dodge = TRUE) {
+  mapLabels <- tlf:::.getAesStringMapping(dataMapping)
+  # Calculate the inner class count to normalize the final histogram
+  data$classCount <- as.numeric(stats::ave(
+    data[[mapLabels$x]],
+    data[[mapLabels$fill]],
+    FUN = function(x) {
+      sum(!is.na(x))
+    }
+  ))
 
-  plotConfiguration <- PlotConfiguration$new(
-    data = data,
-    metaData = metaData,
-    dataMapping = dataMapping
+  aesProperties <- tlf:::.getAestheticValuesFromConfiguration(
+    n = length(unique(data[[mapLabels$fill]])),
+    plotConfigurationProperty = plotConfiguration$ribbons,
+    propertyNames = c("fill", "color", "alpha")
   )
   demographyPlot <- tlf::initializePlot(plotConfiguration)
+  # If character covariate such as Gender, use geom_bar
+  if (isIncluded(metaData[[dataMapping$x]]$class, "character")) {
+    demographyPlot <- demographyPlot +
+      ggplot2::geom_bar(
+        data = data,
+        mapping = ggplot2::aes(
+          x = .data[[mapLabels$x]],
+          # Scaling to population size
+          weight = 100 / .data[["classCount"]],
+          fill = .data[[mapLabels$fill]]
+        ),
+        color = aesProperties$color[1],
+        alpha = aesProperties$alpha[1],
+        position = ggplot2::position_dodge2(preserve = "single")
+      ) +
+      ggplot2::scale_fill_manual(values = aesProperties$fill) +
+      ggplot2::labs(fill = NULL)
 
-  if (metaData[[dataMapping$x]]$class %in% "character") {
-    data[, dataMapping$x] <- factor(data[, dataMapping$x])
-    demographyPlot <- demographyPlot +
-      ggplot2::geom_histogram(
-        data = data,
-        mapping = ggplot2::aes_string(
-          x = paste0("`", dataMapping$x, "`"),
-          fill = paste0("`", dataMapping$groupMapping$fill$label, "`"),
-        ),
-        color = "black",
-        alpha = 0.8,
-        position = ggplot2::position_dodge2(preserve = "single"),
-        stat = "count"
-      )
-  } else {
-    demographyPlot <- demographyPlot +
-      ggplot2::geom_histogram(
-        data = data,
-        mapping = ggplot2::aes_string(
-          x = paste0("`", dataMapping$x, "`"),
-          fill = paste0("`", dataMapping$groupMapping$fill$label, "`"),
-        ),
-        color = "black",
-        alpha = 0.8,
-        position = ggplot2::position_dodge2(preserve = "single"),
-        bins = bins
-      )
+    return(demographyPlot)
+  }
+
+  barPosition <- ggplot2::position_nudge()
+  if (dodge) {
+    barPosition <- ggplot2::position_dodge2(preserve = "single")
   }
   demographyPlot <- demographyPlot +
-    ggplot2::ylab("Number of individuals") +
-    ggplot2::guides(fill = guide_legend(title = NULL))
-  demographyPlot <- tlf::setLegendPosition(plotObject = demographyPlot, position = reDefaultLegendPosition)
+    ggplot2::geom_histogram(
+      data = data,
+      mapping = ggplot2::aes(
+        x = .data[[mapLabels$x]],
+        weight = 100 / .data[["classCount"]],
+        fill = .data[[mapLabels$fill]]
+      ),
+      bins = bins,
+      color = aesProperties$color[1],
+      # Set bars more transparent if dodge is false, because they could mask each other
+      alpha = aesProperties$alpha[1] * ifelse(dodge, 1, 0.8),
+      position = barPosition
+    ) +
+    ggplot2::scale_fill_manual(values = aesProperties$fill) +
+    ggplot2::labs(fill = NULL)
+
   return(demographyPlot)
 }

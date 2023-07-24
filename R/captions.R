@@ -34,8 +34,18 @@ captions <- list(
       sectionTitle <- paste(tagLevel, "For", reportSimulationSet(simulationSetName, descriptor))
       return(c(anchor(sectionId), "", sectionTitle))
     },
-    histogram = function(parameterName, simulationSetName, descriptor) {
-      paste0("Distribution of ", parameterName, " for ", reportSimulationSet(simulationSetName, descriptor))
+    histogramLegend = function(data, observed = FALSE) {
+      if (observed) {
+        return(paste0("Observed data (n=", nrow(data), ")"))
+      }
+      return(paste0("Simulated virtual population (n=", nrow(data), ")"))
+    },
+    histogram = function(parameterName, simulationSetName, descriptor, dataSource = "") {
+      paste0(
+        "Distribution of ", parameterName, " for ",
+        reportSimulationSet(simulationSetName, descriptor),
+        dataSource
+      )
     },
     rangePlot = function(xParameterName, yParameterName, simulationSetName, descriptor, referenceSetName = NULL, plotScale = "linear") {
       referenceSetText <- ifNotNull(referenceSetName, paste0(" in comparison to ", referenceSetName), "")
@@ -175,7 +185,7 @@ getDataSourceCaption <- function(structureSet) {
     return(". ")
   }
   dataSourceCaption <- structureSet$simulationSet$dataSource$getCaption(structureSet$workflowFolder)
-  return(paste(".", dataSourceCaption, "."))
+  return(paste0(". ", dataSourceCaption, "."))
 }
 
 getGoodnessOfFitCaptions <- function(structureSet, plotType, plotScale = "linear", settings = NULL) {

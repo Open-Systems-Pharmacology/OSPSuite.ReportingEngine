@@ -324,7 +324,7 @@ validateIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL
   if (isIncluded(columnNames, names(dataset))) {
     return(invisible())
   }
-  stop(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName), call. = FALSE, immediate. = TRUE)
+  stop(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName), call. = FALSE)
 }
 
 checkIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, nullAllowed = FALSE) {

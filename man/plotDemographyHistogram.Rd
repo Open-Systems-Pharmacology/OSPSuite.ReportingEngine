@@ -9,7 +9,8 @@ plotDemographyHistogram(
   metaData,
   dataMapping = NULL,
   plotConfiguration = NULL,
-  bins = NULL
+  bins = AggregationConfiguration$bins,
+  dodge = TRUE
 )
 }
 \arguments{
@@ -21,7 +22,10 @@ plotDemographyHistogram(
 
 \item{plotConfiguration}{`PlotConfiguration` class object}
 
-\item{bins}{number of bins for continuous parameters}
+\item{bins}{Number of bins for continuous demography parameters}
+
+\item{dodge}{For continuous demography parameters,
+Logical defining if histogram bars should dodge for continuous parameters}
 }
 \value{
 ggplot object

@@ -41,6 +41,7 @@ TaskSettings <- R6::R6Class(
           vpcParameterPlot = NULL,
           comparisonVpcPlot = NULL
         )
+        private$.dodge <- TRUE
       }
       if (isIncluded(taskName, AllAvailableTasks$plotPKParameters)) {
         private$.plotConfigurations <- list(
@@ -113,6 +114,15 @@ TaskSettings <- R6::R6Class(
       private$.scientific <- value %||% private$.scientific
       return(invisible())
     },
+    #' @field dodge logical defining if observed data bars dodge simulated data bars in demography histogram
+    dodge = function(value) {
+      if (missing(value)) {
+        return(private$.dodge)
+      }
+      validateIsLogical(value, nullAllowed = TRUE)
+      private$.dodge <- value %||% private$.dodge
+      return(invisible())
+    },
     #' @field scales named list of logicals defining if log/linear plots are included
     scales = function(value) {
       if (missing(value)) {
@@ -138,7 +148,8 @@ TaskSettings <- R6::R6Class(
     .digits = NULL,
     .nsmall = NULL,
     .scientific = NULL,
-    .scales = NULL
+    .scales = NULL,
+    .dodge = NULL
   )
 )
 
