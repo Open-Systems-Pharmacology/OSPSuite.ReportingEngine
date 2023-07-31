@@ -22,6 +22,8 @@ R6 class defining properties of plot task settings
 
 \item{\code{dodge}}{logical defining if observed data bars dodge simulated data bars in demography histogram}
 
+\item{\code{referenceGlobalRange}}{logical defining if reference population is plotted as range}
+
 \item{\code{scales}}{named list of logicals defining if log/linear plots are included}
 
 \item{\code{plotConfigurations}}{named list of `PlotConfiguration` objects

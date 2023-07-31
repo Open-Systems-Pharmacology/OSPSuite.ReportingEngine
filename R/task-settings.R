@@ -42,6 +42,7 @@ TaskSettings <- R6::R6Class(
           comparisonVpcPlot = NULL
         )
         private$.dodge <- TRUE
+        private$.referenceGlobalRange <- FALSE
       }
       if (isIncluded(taskName, AllAvailableTasks$plotPKParameters)) {
         private$.plotConfigurations <- list(
@@ -123,6 +124,15 @@ TaskSettings <- R6::R6Class(
       private$.dodge <- value %||% private$.dodge
       return(invisible())
     },
+    #' @field referenceGlobalRange logical defining if reference population is plotted as range
+    referenceGlobalRange = function(value) {
+      if (missing(value)) {
+        return(private$.referenceGlobalRange)
+      }
+      validateIsLogical(value, nullAllowed = TRUE)
+      private$.referenceGlobalRange <- value %||% private$.referenceGlobalRange
+      return(invisible())
+    },
     #' @field scales named list of logicals defining if log/linear plots are included
     scales = function(value) {
       if (missing(value)) {
@@ -149,7 +159,8 @@ TaskSettings <- R6::R6Class(
     .nsmall = NULL,
     .scientific = NULL,
     .scales = NULL,
-    .dodge = NULL
+    .dodge = NULL,
+    .referenceGlobalRange = FALSE
   )
 )
 
