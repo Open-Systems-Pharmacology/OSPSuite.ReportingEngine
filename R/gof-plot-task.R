@@ -14,10 +14,10 @@ GofPlotTask <- R6::R6Class(
       simulationSetName <- structureSet$simulationSet$simulationSetName
       addTextChunk(
         fileName = self$fileName,
-        text = c(
-          anchor(paste0(self$reference, "-", removeForbiddenLetters(simulationSetName))), "",
-          paste0("## ", self$title, " for ", simulationSetName)
-        )
+        text = paste(
+          "##", self$title, "for", simulationSetName,
+          anchor(paste0(self$reference, "-", removeForbiddenLetters(simulationSetName)))
+          )
       )
       for (result in taskResults) {
         # Get both absolute and relative paths for figures and tables
@@ -74,9 +74,9 @@ GofPlotTask <- R6::R6Class(
     saveResidualsResults = function(taskResults) {
       addTextChunk(
         fileName = self$fileName,
-        text = c(
-          anchor(paste0(self$reference, "-residuals-across-all-simulations")), "",
-          "## Residuals across all simulations"
+        text = paste(
+          "## Residuals across all simulations",
+          anchor(paste0(self$reference, "-residuals-across-all-simulations"))
         )
       )
       for (result in taskResults) {
@@ -136,7 +136,7 @@ GofPlotTask <- R6::R6Class(
       resetReport(self$fileName)
       addTextChunk(
         fileName = self$fileName,
-        text = c(anchor(self$reference), "", paste0("# ", self$title))
+        text = paste("#", self$title, anchor(self$reference))
       )
       if (!is.null(self$outputFolder)) {
         dir.create(file.path(self$workflowFolder, self$outputFolder), showWarnings = FALSE)

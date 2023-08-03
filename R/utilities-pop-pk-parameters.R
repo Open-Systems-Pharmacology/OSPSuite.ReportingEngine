@@ -72,7 +72,7 @@ plotPopulationPKParameters <- function(structureSets,
       )
     pkParametersResults[[resultID]] <- saveTaskResults(
       id = resultID,
-      textChunk = c(anchor(resultID), "", paste0("## PK Parameters of ", output$displayName)),
+      textChunk = captions$plotPKParameters$outputSection(output$displayName, resultID),
       includeTextChunk = TRUE
     )
     # Keep and format only relevant data per parameter
@@ -111,7 +111,7 @@ plotPopulationPKParameters <- function(structureSets,
       )
       pkParametersResults[[resultID]] <- saveTaskResults(
         id = resultID,
-        textChunk = c(anchor(resultID), "", paste("###", pkParameter$displayName)),
+        textChunk = captions$plotPKParameters$parameterSection(pkParameter$displayName, resultID),
         includeTextChunk = TRUE
       )
 
