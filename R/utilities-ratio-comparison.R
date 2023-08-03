@@ -111,14 +111,15 @@ getPKParameterRatioPKTable <- function(data,
   referenceData <- data[data$simulationSetName %in% referenceSimulationSetName, ]
   ratioPKTable <- data.frame()
   for (set in populationSets) {
+    logInfo(messages$ratioIdentifiedPopulations(
+      outputName = head(data$QuantityPath, 1),
+      pkParameterName = head(data$Parameter, 1), 
+      simulationSetName = set$simulationSetName, 
+      referenceSimulationSetName = referenceSimulationSetName,
+      isSamePopulation = set$isSamePopulation
+    ))
     comparisonData <- data[data$simulationSetName %in% set$simulationSetName, ]
     if (set$isSamePopulation) {
-      logInfo(paste0(
-        "Simulation Set '", set$simulationSetName,
-        "' was identified with same population as reference '",
-        referenceSimulationSetName, "'. ",
-        "Ratio comparison analyzed statistics of individual PK ratios."
-      ))
       ratioData <- comparisonData
       # TODO: tlf issue #408
       # simulationSetName is factor class including multiple levels
@@ -130,12 +131,6 @@ getPKParameterRatioPKTable <- function(data,
       ratioPKTable <- rbind.data.frame(ratioPKTable, ratioPKMeasure)
       next
     }
-    logInfo(paste0(
-      "Simulation Set '", set$simulationSetName,
-      "' was identified with population different from reference '",
-      referenceSimulationSetName, "'. ",
-      "Ratio comparison analyzed statistics from Monte Carlo Sampling"
-    ))
     # Get simulation structure set to save mc results
     ratioPKMeasure <- getPKParameterRatioMeasureFromMCSampling(
       comparisonData = comparisonData,
