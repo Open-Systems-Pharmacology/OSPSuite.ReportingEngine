@@ -34,14 +34,32 @@ captions <- list(
       sectionTitle <- paste(tagLevel, "For", reportSimulationSet(simulationSetName, descriptor))
       return(c(anchor(sectionId), "", sectionTitle))
     },
-    histogram = function(parameterName, simulationSetName, descriptor) {
-      paste0("Distribution of ", parameterName, " for ", reportSimulationSet(simulationSetName, descriptor))
+    histogramLegend = function(data, observed = FALSE) {
+      if (observed) {
+        return(paste0("Observed data (n=", nrow(data), ")"))
+      }
+      return(paste0("Simulated virtual population (n=", nrow(data), ")"))
     },
-    rangePlot = function(xParameterName, yParameterName, simulationSetName, descriptor, referenceSetName = NULL, plotScale = "linear") {
+    histogram = function(parameterName, simulationSetName, descriptor, dataSource = "") {
+      paste0(
+        "Distribution of ", parameterName, " for ",
+        reportSimulationSet(simulationSetName, descriptor),
+        dataSource
+      )
+    },
+    rangePlotLegend = function(simulationSetName, n, dataType = "Simulated"){
+      paste0(
+        dataType, " ", AggregationConfiguration$names$middle, " and ", 
+        AggregationConfiguration$names$range, " for ", 
+        simulationSetName,
+        " (n=", n, ")"
+      )
+    },
+    rangePlot = function(xParameterName, yParameterName, simulationSetName, descriptor, referenceSetName = NULL, plotScale = "linear", dataSource = "") {
       referenceSetText <- ifNotNull(referenceSetName, paste0(" in comparison to ", referenceSetName), "")
       return(paste0(
         xParameterName, "-dependence of ", yParameterName, " for ", reportSimulationSet(simulationSetName, descriptor),
-        referenceSetText, getPlotScaleCaption("Profiles", plotScale)
+        referenceSetText, getPlotScaleCaption("Profiles", plotScale), dataSource
       ))
     }
   ),
@@ -175,7 +193,7 @@ getDataSourceCaption <- function(structureSet) {
     return(". ")
   }
   dataSourceCaption <- structureSet$simulationSet$dataSource$getCaption(structureSet$workflowFolder)
-  return(paste(".", dataSourceCaption, "."))
+  return(paste0(". ", dataSourceCaption, "."))
 }
 
 getGoodnessOfFitCaptions <- function(structureSet, plotType, plotScale = "linear", settings = NULL) {

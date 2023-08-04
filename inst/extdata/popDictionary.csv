@@ -1,0 +1,4 @@
+ID,type,datasetColumn,datasetUnit,reportName,pathID,comment
+p1,covariate,P1,µmol,p1,Organism|p1,
+p3,covariate,P3,1/min,p3,Organism|p3,
+gender,covariate,GENDER,,Gender,Gender,Make sure to use same names as in Population

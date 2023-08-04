@@ -219,12 +219,25 @@ dictionaryParameters <- list(
   dvID = "dv",
   lloqID = "lloq",
   timeUnitID = "time_unit",
-  dvUnitID = "dv_unit"
+  dvUnitID = "dv_unit",
+  pathID = "pathID"
 )
 
-getDictionaryVariable <- function(dictionary, variableID) {
-  variableMapping <- dictionary[, dictionaryParameters$ID] %in% variableID
-  variableName <- as.character(dictionary[variableMapping, dictionaryParameters$datasetColumn])
+#' @title getDictionaryVariable
+#' @description
+#' Get the variable name from dictionary
+#' @param dictionary A data.frame from dictionary
+#' @param variableID An identifier
+#' @param idColumn The column name used for identification
+#' @param datasetColumn The column name used mapping the id to variable
+#' @return A variable name from dictionary
+#' @keywords internal
+getDictionaryVariable <- function(dictionary,
+                                  variableID,
+                                  idColumn = dictionaryParameters$ID,
+                                  datasetColumn = dictionaryParameters$datasetColumn) {
+  variableMapping <- head(which(dictionary[, idColumn] %in% variableID), 1)
+  variableName <- as.character(dictionary[variableMapping, datasetColumn])
   if (isEmpty(variableName)) {
     return()
   }
@@ -439,6 +452,77 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, stru
   return(list(data = outputData, metaData = metaData))
 }
 
+#' @title getObservedDemographyFromSimulationSet
+#' @param structureSet A `SimulationStructure` object
+#' @param demographyPaths Names of demography variables to display
+#' @param metaData Meta data of demography variables to display
+#' @return A data.frame
+#' @keywords internal
+getObservedDemographyFromSimulationSet <- function(structureSet, demographyPaths, metaData) {
+  simulationSet <- structureSet$simulationSet
+  populationSize <- 0
+  if (!is.null(simulationSet$dataSource)) {
+    data <- readObservedDataFile(simulationSet$dataSource$dataFile)
+    selectedData <- getSelectedData(data, simulationSet$dataSelection)
+    populationSize <- nrow(selectedData)
+  }
+  # Initialize data.frame of observed demography data
+  dataColumnNames <- c("simulationSetName", "dataSource", as.character(demographyPaths))
+  demographyObsData <- as.data.frame(
+    sapply(
+    dataColumnNames,
+    function(x) {
+      rep(NA, populationSize)
+    },
+    simplify = FALSE
+  ),
+  check.names = FALSE
+  )
+  if (populationSize == 0) {
+    return(demographyObsData)
+  }
+  demographyObsData$simulationSetName <- simulationSet$simulationSetName
+  demographyObsData$dataSource <- getDataSourceCaption(structureSet)
+  # If there is data to display, include data and update to their display unit if possible
+  dictionary <- readObservedDataFile(simulationSet$dataSource$metaDataFile)
+  for (demographyPath in demographyPaths) {
+    datasetColumn <- getDictionaryVariable(
+      dictionary = dictionary,
+      variableID = demographyPath,
+      idColumn = dictionaryParameters$pathID
+    )
+    # If not in dictionary paths, check next covariates
+    if (isEmpty(datasetColumn)) {
+      next
+    }
+    validateIsIncludedInDataset(
+      columnNames = datasetColumn, 
+      dataset = selectedData, 
+      datasetName = paste0("Observed dataset '", simulationSet$dataSource$dataFile, "'")
+      )
+    demographyObsData[[demographyPath]] <- selectedData[, datasetColumn]
+    # If character, does not require unit conversion
+    if (isIncluded(metaData[[demographyPath]]$class, "character")) {
+      next
+    }
+    sourceUnit <- getDictionaryVariable(
+      dictionary = dictionary,
+      variableID = demographyPath,
+      idColumn = dictionaryParameters$pathID,
+      datasetColumn = dictionaryParameters$datasetUnit
+    )
+    targetDimension <- ospsuite::getDimensionForUnit(metaData[[demographyPath]]$unit)
+    ospsuite::validateUnit(sourceUnit, targetDimension)
+    
+    demographyObsData[[demographyPath]] <- ospsuite::toUnit(
+      quantityOrDimension = demographyPath,
+      values = selectedData[, datasetColumn],
+      targetUnit = metaData[[demographyPath]]$unit,
+      sourceUnit = sourceUnit
+    )
+  }
+  return(demographyObsData)
+}
 
 #' @title getObservedDataFromConfigurationPlan
 #' @description
@@ -451,13 +535,13 @@ getObservedDataFromConfigurationPlan <- function(observedDataId, configurationPl
   observedDataFile <- configurationPlan$getObservedDataPath(observedDataId)
   observedData <- readObservedDataFile(observedDataFile)
   observedMetaData <- parseObservationsDataFrame(observedData)
-  
+
   # In qualification workflow, observed data expected as:
   # Column 1: Time
   # Column 2: Observed variable
   # Column 3: uncertainty around observed variable
   logDebug(messages$sizeForObservedDataId(observedDataId, ncol(observedData), nrow(observedData)))
-  
+
   return(list(
     data = observedData,
     metaData = observedMetaData

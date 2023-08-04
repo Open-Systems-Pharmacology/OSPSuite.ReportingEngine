@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ospsuite.reportingengine</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add-title-page.html">Add a title page to your workflow report</a>
+    <a class="dropdown-item" href="../articles/demography.html">Demography Parameters in Population Workflows</a>
     <a class="dropdown-item" href="../articles/excel-template.html">Excel Template</a>
     <a class="dropdown-item" href="../articles/goodness-of-fit.html">Time profiles and Residuals task</a>
     <a class="dropdown-item" href="../articles/ospsuitereportingengine.html">Get Started</a>
@@ -51,6 +52,7 @@
     <a class="dropdown-item" href="../articles/pop-pk-parameters.html">PK Parameters in Population Workflows</a>
     <a class="dropdown-item" href="../articles/qualification-workflow.html">Qualification Workflow</a>
     <a class="dropdown-item" href="../articles/sensitivity-analysis.html">Sensitivity Analysis</a>
+    <a class="dropdown-item" href="../articles/word-report.html">Word Report</a>
   </div>
 </li>
 <li class="nav-item">
@@ -96,15 +98,7 @@
 <span><span class="co">#&gt; Loading required package: rClr</span></span>
 <span><span class="co">#&gt; Loading the dynamic library for Microsoft .NET runtime...</span></span>
 <span><span class="co">#&gt; Loaded Common Language Runtime version 4.0.30319.42000</span></span>
-<span><span class="co">#&gt; Loading required package: tlf</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'ospsuite.reportingengine'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:tlf':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     isBetween</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:ospsuite':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     calculateResiduals, plotPopulationTimeProfile</span></span></code></pre></div>
+<span><span class="co">#&gt; Loading required package: tlf</span></span></code></pre></div>
 <p>This vignette introduces the notions and objects implemented in the
 OSP-Suite Reporting Engine package
 (<code>ospsuite.reportingengine</code>).</p>
@@ -377,7 +371,7 @@ workflow are:</p>
 <span><span class="co">#&gt; [7] "TimeProfiles"</span></span></code></pre></div>
 </details><p>The associated report will be as follows:</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-11.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-5.png" style="width:100%; border-style: none;"></details>
 </div>
 </div>
 <div class="section level2">
@@ -792,7 +786,7 @@ in the dataset using ‘<strong>nonmenColumn</strong>’.</li>
 </li>
 </ul>
 <p>The example below shows the template of a dictionary content
-available on <a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/tpDictionary.csv" class="external-link">Github</a>:</p>
+available on <a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/tpDictionary.csv" class="external-link">GitHub</a>:</p>
 <table class="table">
 <caption>Table 3: Template for data dictionary</caption>
 <colgroup>
@@ -1282,7 +1276,7 @@ tables.</li>
 <p>For creating or tuning reports, starting from scratch could be
 challenging. For this reason, some templates have been created to make
 it easier. The table below provides a list of templates available on
-Github and their usage.</p>
+GitHub and their usage.</p>
 <table class="table">
 <colgroup>
 <col width="39%">

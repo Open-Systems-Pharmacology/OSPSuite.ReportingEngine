@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ospsuite.reportingengine</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add-title-page.html">Add a title page to your workflow report</a>
+    <a class="dropdown-item" href="../articles/demography.html">Demography Parameters in Population Workflows</a>
     <a class="dropdown-item" href="../articles/excel-template.html">Excel Template</a>
     <a class="dropdown-item" href="../articles/goodness-of-fit.html">Time profiles and Residuals task</a>
     <a class="dropdown-item" href="../articles/ospsuitereportingengine.html">Get Started</a>
@@ -51,6 +52,7 @@
     <a class="dropdown-item" href="../articles/pop-pk-parameters.html">PK Parameters in Population Workflows</a>
     <a class="dropdown-item" href="../articles/qualification-workflow.html">Qualification Workflow</a>
     <a class="dropdown-item" href="../articles/sensitivity-analysis.html">Sensitivity Analysis</a>
+    <a class="dropdown-item" href="../articles/word-report.html">Word Report</a>
   </div>
 </li>
 <li class="nav-item">
@@ -96,15 +98,7 @@
 <span><span class="co">#&gt; Loading required package: rClr</span></span>
 <span><span class="co">#&gt; Loading the dynamic library for Microsoft .NET runtime...</span></span>
 <span><span class="co">#&gt; Loaded Common Language Runtime version 4.0.30319.42000</span></span>
-<span><span class="co">#&gt; Loading required package: tlf</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'ospsuite.reportingengine'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:tlf':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     isBetween</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:ospsuite':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     calculateResiduals, plotPopulationTimeProfile</span></span></code></pre></div>
+<span><span class="co">#&gt; Loading required package: tlf</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="objectives">Objectives<a class="anchor" aria-label="anchor" href="#objectives"></a>
 </h2>
@@ -344,7 +338,7 @@ the re-run of the simulations before re-running the workflow.</p>
 <h3 id="template">Template<a class="anchor" aria-label="anchor" href="#template"></a>
 </h3>
 <p>A template R script for qualification workflows is available below.
-You can also download it from <a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/qualification-workflow-template.R" class="external-link">Github</a>.
+You can also download it from <a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/qualification-workflow-template.R" class="external-link">GitHub</a>.
 The template aims at creating a function wrapping the usage of the
 qualification workflow including the call to the qualification runner
 and named <code>createQualificationReport</code>.</p>
@@ -524,7 +518,7 @@ each style of report (e.g. <em>Title</em>, <em>Heading 1</em>,
 <em>Normal</em>, etc.). Users can input their own reference word
 document using the option <code>wordConversionTemplate</code> as
 previously illustrated in the template. The default reference word
-document can be found on <a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/reference.docx" class="external-link">Github</a>.</p>
+document can be found on <a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/reference.docx" class="external-link">GitHub</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="referencing">Referencing<a class="anchor" aria-label="anchor" href="#referencing"></a>
@@ -532,9 +526,9 @@ document can be found on <a href="https://github.com/Open-Systems-Pharmacology/O
 <p>To create references in the final report, html tags are used by the
 qualification workflow as illustrated below. Note that spaces should not
 be used as reference ids.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">id</span><span class="ot">=</span><span class="st">"my-reference-id"</span><span class="kw">&gt;&lt;/a&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">id</span><span class="ot">=</span><span class="st">"my-reference-id"</span><span class="kw">&gt;&lt;/a&gt;</span></span></code></pre></div>
 <p>The markdown link to the reference above can then be written as:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode md"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">display text</span><span class="co">](#my-reference-id)</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode md"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co">[</span><span class="ot">display text</span><span class="co">](#my-reference-id)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="dynamic-references">Dynamic references<a class="anchor" aria-label="anchor" href="#dynamic-references"></a>
 </h3>
@@ -575,15 +569,15 @@ characters).</p>
 <p>Users can define their own static references to include in the
 report. For instance, user can cite articles in the report using
 exponent notations as illustrated in the example below:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode md"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>text related to article <span class="co">[</span><span class="ot">&lt;sup&gt;1&lt;/sup&gt;</span><span class="co">](#citations)</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>some text in between</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">id</span><span class="ot">=</span><span class="st">"citations"</span><span class="kw">&gt;&lt;/a&gt;</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">### Citations</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;sup&gt;</span>1<span class="kw">&lt;/sup&gt;</span> Cited article</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode md"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>text related to article <span class="co">[</span><span class="ot">&lt;sup&gt;1&lt;/sup&gt;</span><span class="co">](#citations)</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>some text in between</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">id</span><span class="ot">=</span><span class="st">"citations"</span><span class="kw">&gt;&lt;/a&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="fu">### Citations</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="kw">&lt;sup&gt;</span>1<span class="kw">&lt;/sup&gt;</span> Cited article</span></code></pre></div>
 <p>which would render as below in the report:</p>
 <p>text related to article <a href="#citations"><sup>1</sup></a></p>
 <p><br> some text in between <br></p>
