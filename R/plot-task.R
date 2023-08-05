@@ -46,13 +46,14 @@ PlotTask <- R6::R6Class(
     #' @param taskResults list of `TaskResults` objects
     saveResults = function(structureSet, taskResults) {
       simulationSetName <- structureSet$simulationSet$simulationSetName
+      # Issue #1084: new reference title get anchor at the end of title
       addTextChunk(
         fileName = self$fileName,
-        text = c(
-          anchor(paste0(self$reference, "-", removeForbiddenLetters(simulationSetName))), "",
-          paste0("## ", self$title, " for ", simulationSetName)
+        text = paste(
+          "##", self$title, "for", simulationSetName, 
+          anchor(paste0(self$reference, "-", removeForbiddenLetters(simulationSetName)))
+          )
         )
-      )
       for (result in taskResults) {
         # Get both absolute and relative paths for figures and tables
         # Absolute path is required to always find the figure/table
@@ -112,8 +113,8 @@ PlotTask <- R6::R6Class(
       resetReport(self$fileName)
       addTextChunk(
         fileName = self$fileName,
-        text = c(anchor(self$reference), "", paste0("# ", self$title))
-      )
+        text = paste("#", self$title, anchor(self$reference))
+        )
       if (!is.null(self$outputFolder)) {
         dir.create(file.path(self$workflowFolder, self$outputFolder), showWarnings = FALSE)
       }

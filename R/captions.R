@@ -21,18 +21,18 @@ captions <- list(
   ),
   demography = list(
     parameterSection = function(sectionId, parameterName) {
-      c(anchor(sectionId), "", paste("##", parameterName, "distributions"))
+      paste("##", parameterName, "distributions", anchor(sectionId))
     },
     xParameterSection = function(sectionId, parameterName) {
-      c(anchor(sectionId), "", paste("## ", parameterName, "-dependence", sep = ""))
+      paste("## ", parameterName, "-dependence ", anchor(sectionId), sep = "")
     },
     yParameterSection = function(sectionId, parameterName) {
-      c(anchor(sectionId), "", paste("### Dependence of", parameterName))
+      paste("### Dependence of", parameterName, anchor(sectionId))
     },
     populationSection = function(sectionId, simulationSetName, descriptor, level = 4) {
       tagLevel <- paste0(rep("#", level), collapse = "")
       sectionTitle <- paste(tagLevel, "For", reportSimulationSet(simulationSetName, descriptor))
-      return(c(anchor(sectionId), "", sectionTitle))
+      return(paste(sectionTitle, anchor(sectionId)))
     },
     histogramLegend = function(data, observed = FALSE) {
       if (observed) {
@@ -131,6 +131,12 @@ captions <- list(
   plotPKParameters = list(
     mean = function(simulationSetName, descriptor) {
       paste0("PK parameters for ", reportSimulationSet(simulationSetName, descriptor))
+    },
+    outputSection = function(pathName, pathID){
+       paste("## PK Parameters of", pathName, anchor(pathID))
+     },
+    parameterSection = function(parameterName, parameterID){
+      paste("###", parameterName, anchor(parameterID))
     },
     boxplot = function(parameterName, pathName, simulationSetName, descriptor, plotScale = "linear") {
       return(paste0(
@@ -257,21 +263,21 @@ formatPKParameterHeader <- function(data, descriptor) {
 
 getTimeRangeCaption <- function(timeRangeName, reference, simulationSetName) {
   if (isIncluded(timeRangeName, ApplicationRanges$total)) {
-    return(c(
-      anchor(paste0(reference, "-", removeForbiddenLetters(simulationSetName), "-", "total")), "",
-      "### For total simulation time range"
+    return(paste(
+      "### For total simulation time range",
+      anchor(paste0(reference, "-", removeForbiddenLetters(simulationSetName), "-", "total"))
     ))
   }
   if (isIncluded(timeRangeName, ApplicationRanges$firstApplication)) {
-    return(c(
-      anchor(paste0(reference, "-", removeForbiddenLetters(simulationSetName), "-", "first")), "",
-      "### For first application range"
+    return(paste(
+      "### For first application range",
+      anchor(paste0(reference, "-", removeForbiddenLetters(simulationSetName), "-", "first"))
     ))
   }
   if (isIncluded(timeRangeName, ApplicationRanges$lastApplication)) {
-    return(c(
-      anchor(paste0(reference, "-", removeForbiddenLetters(simulationSetName), "-", "last")), "",
-      "### For last application range"
+    return(paste(
+      "### For last application range",
+      anchor(paste0(reference, "-", removeForbiddenLetters(simulationSetName), "-", "last"))
     ))
   }
 }

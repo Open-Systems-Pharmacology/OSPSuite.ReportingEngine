@@ -607,13 +607,10 @@ getTitleInfo <- function(fileContent, titlePattern = "#", titleLevels = 6) {
   for (lineIndex in seq_along(fileContent)) {
     lineContent <- fileContent[lineIndex]
     firstElement <- as.character(unlist(strsplit(lineContent, " ")))[1]
-    # Use anchor only if defined as first element of line
-    if (grepl(pattern = "<a", x = firstElement)) {
-      titleReference <- getAnchorName(lineContent)
-    }
     for (titleLevel in rev(seq(1, titleLevels))) {
       # Identify section titles as lines starting with "#" characters
       if (grepl(pattern = titlePatterns[titleLevel], x = firstElement)) {
+        titleReference <- getAnchorName(lineContent)
         # Prevents unreferenced title sections to appear in table of content
         if (is.null(titleReference)) {
           next
@@ -627,7 +624,7 @@ getTitleInfo <- function(fileContent, titlePattern = "#", titleLevels = 6) {
         titleInfo[[length(titleInfo) + 1]] <- list(
           line = lineIndex,
           # Remove the "#" characters from the title content
-          content = lineContent,
+          content = gsub(lineContent, pattern = anchor(titleReference), replacement = ""),
           reference = titleReference,
           count = titleCounts,
           level = titleLevel
