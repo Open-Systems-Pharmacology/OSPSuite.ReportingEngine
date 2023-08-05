@@ -259,6 +259,21 @@ messages <- list(
   subsetsCreated = function(numberOfSubsets, numberOfSimulations) {
     paste0("Splitting simulations for parallel run:", highlight(numberOfSimulations), " simulations split into ", highlight(numberOfSubsets), " subsets")
   },
+  ratioIdentifiedPopulations = function(outputName, 
+                                        pkParameterName, 
+                                        simulationSetName, 
+                                        referenceSimulationSetName, 
+                                        isSamePopulation = TRUE){
+    paste0(
+      "Simulation Set '", highlight(simulationSetName),
+      "' was identified with population ", 
+      highlight(ifelse(isSamePopulation, "same", "different")),
+      " from reference '", highlight(referenceSimulationSetName), "'.\n",
+      "Ratio comparison of ", highlight(pkParameterName), " of ", highlight(outputName),
+      " uses ", highlight(ifelse(isSamePopulation, "Individual PK Ratios", "Monte Carlo Sampling")),
+      " for analyzing statistics."
+    )
+  },
 
   #----- Debug messages ----
   dataIncludedInTimeRange = function(finalSize, timeRange, timeUnit, dataType) {
