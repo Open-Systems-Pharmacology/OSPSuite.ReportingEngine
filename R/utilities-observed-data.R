@@ -470,13 +470,13 @@ getObservedDemographyFromSimulationSet <- function(structureSet, demographyPaths
   dataColumnNames <- c("simulationSetName", "dataSource", as.character(demographyPaths))
   demographyObsData <- as.data.frame(
     sapply(
-    dataColumnNames,
-    function(x) {
-      rep(NA, populationSize)
-    },
-    simplify = FALSE
-  ),
-  check.names = FALSE
+      dataColumnNames,
+      function(x) {
+        rep(NA, populationSize)
+      },
+      simplify = FALSE
+    ),
+    check.names = FALSE
   )
   if (populationSize == 0) {
     return(demographyObsData)
@@ -496,10 +496,10 @@ getObservedDemographyFromSimulationSet <- function(structureSet, demographyPaths
       next
     }
     validateIsIncludedInDataset(
-      columnNames = datasetColumn, 
-      dataset = selectedData, 
+      columnNames = datasetColumn,
+      dataset = selectedData,
       datasetName = paste0("Observed dataset '", simulationSet$dataSource$dataFile, "'")
-      )
+    )
     demographyObsData[[demographyPath]] <- selectedData[, datasetColumn]
     # If character, does not require unit conversion
     if (isIncluded(metaData[[demographyPath]]$class, "character")) {
@@ -513,7 +513,7 @@ getObservedDemographyFromSimulationSet <- function(structureSet, demographyPaths
     )
     targetDimension <- ospsuite::getDimensionForUnit(metaData[[demographyPath]]$unit)
     ospsuite::validateUnit(sourceUnit, targetDimension)
-    
+
     demographyObsData[[demographyPath]] <- ospsuite::toUnit(
       quantityOrDimension = demographyPath,
       values = selectedData[, datasetColumn],

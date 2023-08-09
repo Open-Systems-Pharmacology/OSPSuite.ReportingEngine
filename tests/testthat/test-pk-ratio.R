@@ -24,7 +24,7 @@ test_that("Errors and Warnings from ill formatted ObservedData/Configuration Pla
     object = errorsLog,
     regexp = "In PK Ratio Plots|0 data record|ObservedDataRecordId '12'",
     all = FALSE
-    )
+  )
 })
 
 unlink(reOutputFolder, recursive = TRUE)

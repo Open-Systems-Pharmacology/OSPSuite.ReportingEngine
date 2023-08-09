@@ -557,7 +557,7 @@ plotMeanTimeProfile <- function(simulatedData,
   )
   # Check if lloq needs to be added
   lloqRows <- !is.na(observedData$lloq)
-  if(!any(lloqRows)){
+  if (!any(lloqRows)) {
     return(timeProfilePlot)
   }
   lloqCaptions <- unique(observedData[lloqRows, dataMapping$group])
@@ -659,7 +659,7 @@ plotPopTimeProfile <- function(simulatedData,
   )
   # Check if lloq needs to be added
   lloqRows <- !is.na(observedData$lloq)
-  if(!any(lloqRows)){
+  if (!any(lloqRows)) {
     return(timeProfilePlot)
   }
   lloqCaptions <- unique(observedData[lloqRows, dataMapping$group])

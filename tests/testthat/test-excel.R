@@ -29,13 +29,13 @@ test_that("Excel template defines DataSource objects appropriately", {
     excelFile = templateDataSource,
     workflowFile = "template-source.R"
   )
-  
+
   # Check that DataSource objects are not defined in both simulation sets
   expect_true(file.exists("template-no-source.R"))
   noSourceContent <- readLines("template-no-source.R")
   expect_equal(sum(grepl(pattern = "dataSource = NULL", noSourceContent)), 2)
   expect_equal(sum(grepl(pattern = "DataSource\\$new", noSourceContent)), 0)
-  
+
   # Check that DataSource objects are defined in both simulation sets
   expect_true(file.exists("template-source.R"))
   # metaData included using DictionaryType = SHEET and DictionaryLocation = tpDictionary
@@ -43,7 +43,7 @@ test_that("Excel template defines DataSource objects appropriately", {
   sourceContent <- readLines("template-source.R")
   expect_equal(sum(grepl(pattern = "dataSource = Source1", sourceContent)), 2)
   expect_equal(sum(grepl(pattern = "DataSource\\$new", sourceContent)), 1)
-  
+
   unlink("template-no-source.R", recursive = TRUE)
   unlink("tpDictionary.csv", recursive = TRUE)
   unlink("template-source.R", recursive = TRUE)
@@ -59,32 +59,31 @@ test_that("Excel template defines Output objects appropriately", {
     excelFile = templateOutput,
     workflowFile = "template-output.R"
   )
-  
+
   # Check that Output objects are not defined in both simulation sets
   expect_true(file.exists("template-no-output.R"))
   noOutputContent <- readLines("template-no-output.R")
   expect_equal(sum(grepl(pattern = "outputs = NULL", noOutputContent)), 2)
   expect_equal(sum(grepl(pattern = "Output\\$new", noOutputContent)), 0)
-  
+
   # Check that Output objects are defined in both simulation sets
   expect_true(file.exists("template-output.R"))
   outputContent <- readLines("template-output.R")
   expect_equal(sum(grepl(pattern = "outputs = c\\(Output1, Output2\\)", outputContent)), 1)
   expect_equal(sum(grepl(pattern = "outputs = c\\(Output2\\)", outputContent)), 1)
   expect_equal(sum(grepl(pattern = "Output\\$new", outputContent)), 2)
-  
+
   unlink("template-no-output.R", recursive = TRUE)
   unlink("template-output.R", recursive = TRUE)
 })
 
 test_that("Undefined outputs in Simulation Sets are flagged", {
-expect_output(
-  createWorkflowFromExcelInput(
-    excelFile = templateBadOutput,
-    workflowFile = "template-bad-output.R"
-  ),
-  "The following objects were not defined in the 'Outputs' sheet: 'OutputA'"
-)
-unlink("template-bad-output.R", recursive = TRUE)
+  expect_output(
+    createWorkflowFromExcelInput(
+      excelFile = templateBadOutput,
+      workflowFile = "template-bad-output.R"
+    ),
+    "The following objects were not defined in the 'Outputs' sheet: 'OutputA'"
+  )
+  unlink("template-bad-output.R", recursive = TRUE)
 })
-

@@ -47,10 +47,10 @@ captions <- list(
         dataSource
       )
     },
-    rangePlotLegend = function(simulationSetName, n, dataType = "Simulated"){
+    rangePlotLegend = function(simulationSetName, n, dataType = "Simulated") {
       paste0(
-        dataType, " ", AggregationConfiguration$names$middle, " and ", 
-        AggregationConfiguration$names$range, " for ", 
+        dataType, " ", AggregationConfiguration$names$middle, " and ",
+        AggregationConfiguration$names$range, " for ",
         simulationSetName,
         " (n=", n, ")"
       )
@@ -132,10 +132,10 @@ captions <- list(
     mean = function(simulationSetName, descriptor) {
       paste0("PK parameters for ", reportSimulationSet(simulationSetName, descriptor))
     },
-    outputSection = function(pathName, pathID){
-       paste("## PK Parameters of", pathName, anchor(pathID))
-     },
-    parameterSection = function(parameterName, parameterID){
+    outputSection = function(pathName, pathID) {
+      paste("## PK Parameters of", pathName, anchor(pathID))
+    },
+    parameterSection = function(parameterName, parameterID) {
       paste("###", parameterName, anchor(parameterID))
     },
     boxplot = function(parameterName, pathName, simulationSetName, descriptor, plotScale = "linear") {

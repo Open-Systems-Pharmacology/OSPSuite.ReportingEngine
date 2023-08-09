@@ -137,11 +137,12 @@ messages <- list(
   errorMolecularWeightRequired = function(path) {
     paste0("Molecular weight not found but required for observed data Id '", path, "' in Time Profile plot.")
   },
-  errorParametersNotIncludedInDDI = function(parameterNames){
+  errorParametersNotIncludedInDDI = function(parameterNames) {
     paste0(
       "PK parameters '", highlight(paste(parameterNames, collapse = "', '")),
-      "' defined in ", highlight("GuestDelta"), " field but not in ", 
-      highlight("PKParameters"), " field")
+      "' defined in ", highlight("GuestDelta"), " field but not in ",
+      highlight("PKParameters"), " field"
+    )
   },
   #----- Warning messages ----
   warningExistingPath = function(existingPath) {
@@ -220,22 +221,20 @@ messages <- list(
       "errors/SD were assumed arithmetic with same unit as observed data values"
     )
   },
-  warningTooManyAxes = function(){
+  warningTooManyAxes = function() {
     "Qualification TimeProfile is unable to display data for all 3 axes. Only Y and Y2 axes were kept."
   },
-  
-  warningHasInfiniteValues = function(n, datasetName = NULL){
+  warningHasInfiniteValues = function(n, datasetName = NULL) {
     paste0(
-      "Data ", 
+      "Data ",
       ifNotNull(datasetName, paste0("from '", highlight(datasetName), "' "), ""),
       "included ", highlight(n), " infinite values"
     )
   },
-  
-  pkParameterNotFound = function(pkParameterName, pkRatioMapping){
+  pkParameterNotFound = function(pkParameterName, pkRatioMapping) {
     paste0(
       "PK Parameter '", highlight(pkParameterName), "' not found for ",
-      "Project '", highlight(pkRatioMapping$Project), 
+      "Project '", highlight(pkRatioMapping$Project),
       "' and Simulation '", highlight(pkRatioMapping$Simulation), "'"
     )
   },
@@ -259,14 +258,14 @@ messages <- list(
   subsetsCreated = function(numberOfSubsets, numberOfSimulations) {
     paste0("Splitting simulations for parallel run:", highlight(numberOfSimulations), " simulations split into ", highlight(numberOfSubsets), " subsets")
   },
-  ratioIdentifiedPopulations = function(outputName, 
-                                        pkParameterName, 
-                                        simulationSetName, 
-                                        referenceSimulationSetName, 
-                                        isSamePopulation = TRUE){
+  ratioIdentifiedPopulations = function(outputName,
+                                        pkParameterName,
+                                        simulationSetName,
+                                        referenceSimulationSetName,
+                                        isSamePopulation = TRUE) {
     paste0(
       "Simulation Set '", highlight(simulationSetName),
-      "' was identified with population ", 
+      "' was identified with population ",
       highlight(ifelse(isSamePopulation, "same", "different")),
       " from reference '", highlight(referenceSimulationSetName), "'.\n",
       "Ratio comparison of ", highlight(pkParameterName), " of ", highlight(outputName),
@@ -335,18 +334,18 @@ messages <- list(
       "' when creating an '", highlight("Output"), "' object."
     )
   },
-  monteCarloChecking = function(analyticalSolutionMessage, medianPKRatioStatistics, n, seed){
+  monteCarloChecking = function(analyticalSolutionMessage, medianPKRatioStatistics, n, seed) {
     c(
       analyticalSolutionMessage,
       paste0(
         "Monte Carlo solution for ", paste0(tail(names(medianPKRatioStatistics), 4), collapse = ", "),
         " resulted in ", paste0(round(tail(unlist(medianPKRatioStatistics), 4), 3), collapse = ", "),
         " respectively."
-        ),
-      paste0("Number of repetitions was set to: ", n), 
-      paste0("Random seed number was set to: ", seed) 
+      ),
+      paste0("Number of repetitions was set to: ", n),
+      paste0("Random seed number was set to: ", seed)
     )
-    }
+  }
 )
 
 

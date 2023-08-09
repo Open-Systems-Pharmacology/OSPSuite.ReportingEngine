@@ -1,6 +1,6 @@
 # Define input data
-# Note that population size needs to be big enough 
-# for approximation to be close to true known value 
+# Note that population size needs to be big enough
+# for approximation to be close to true known value
 # Tolerance of method is currently set to 5%
 popSize <- 1e3
 approximationTolerance <- 0.05
@@ -11,17 +11,17 @@ set.seed(1111)
 referenceData <- data.frame(
   simulationSetName = "reference",
   Value = rlnorm(
-    n = popSize, 
-    meanlog = referenceParams$meanlog, 
+    n = popSize,
+    meanlog = referenceParams$meanlog,
     sdlog = referenceParams$sdlog
-    )
+  )
 )
 
 comparisonData <- data.frame(
   simulationSetName = "comparison",
   Value = rlnorm(
-    n = popSize, 
-    meanlog = comparisonParams$meanlog, 
+    n = popSize,
+    meanlog = comparisonParams$meanlog,
     sdlog = comparisonParams$sdlog
   )
 )
@@ -32,8 +32,8 @@ dataMapping <- tlf::BoxWhiskerDataMapping$new(
 )
 
 # Expected values of ratio geomean and sd
-ratioGeoMean <- exp(comparisonParams$meanlog-referenceParams$meanlog)
-ratioGeoSD <- exp(sqrt((comparisonParams$sdlog)^2+(referenceParams$sdlog)^2))
+ratioGeoMean <- exp(comparisonParams$meanlog - referenceParams$meanlog)
+ratioGeoSD <- exp(sqrt((comparisonParams$sdlog)^2 + (referenceParams$sdlog)^2))
 
 test_that("Analytical Solution is close to known solution", {
   # Get analytical solution from simulated distribution
@@ -41,12 +41,12 @@ test_that("Analytical Solution is close to known solution", {
     x = referenceData$Value,
     y = comparisonData$Value
   )
-  
+
   expect_equal(
     analyticalSolution$`geo mean`,
     ratioGeoMean,
     tolerance = approximationTolerance
-    )
+  )
   expect_equal(
     analyticalSolution$`geo standard deviation`,
     ratioGeoSD,
@@ -60,8 +60,8 @@ test_that("Monte Carlo Solution is close to known solution", {
     comparisonData = comparisonData,
     referenceData = referenceData,
     dataMapping = dataMapping
-    )
-  
+  )
+
   expect_equal(
     mcSolution$`geo mean`,
     ratioGeoMean,
@@ -88,8 +88,6 @@ test_that("Monte Carlo Solution is repeatable", {
     dataMapping = dataMapping,
     settings = list(mcRepetitions = 100, mcRandomSeed = 3333)
   )
-  
+
   expect_equal(mcSolution1, mcSolution2)
 })
-
-

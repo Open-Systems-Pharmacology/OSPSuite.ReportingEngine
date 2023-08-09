@@ -113,8 +113,8 @@ getPKParameterRatioPKTable <- function(data,
   for (set in populationSets) {
     logInfo(messages$ratioIdentifiedPopulations(
       outputName = head(data$QuantityPath, 1),
-      pkParameterName = head(data$Parameter, 1), 
-      simulationSetName = set$simulationSetName, 
+      pkParameterName = head(data$Parameter, 1),
+      simulationSetName = set$simulationSetName,
       referenceSimulationSetName = referenceSimulationSetName,
       isSamePopulation = set$isSamePopulation
     ))
@@ -213,24 +213,27 @@ getPKParameterRatioMeasureFromMCSampling <- function(comparisonData,
     pkAnalysisFolder <- file.path(structureSet$workflowFolder, structureSet$pkAnalysisResultsFolder)
     dir.create(pkAnalysisFolder, showWarnings = FALSE, recursive = TRUE)
     mcResultsFile <- file.path(
-        pkAnalysisFolder,
-        getDefaultFileName(
-          defaultFileNames$resultID(
-            structureSet$simulationSet$simulationSetName,
-            head(comparisonData$Parameter, 1),
-            head(comparisonData$QuantityPath, 1)
-          ),
-          suffix = "MonteCarlo"
-        )
+      pkAnalysisFolder,
+      getDefaultFileName(
+        defaultFileNames$resultID(
+          structureSet$simulationSet$simulationSetName,
+          head(comparisonData$Parameter, 1),
+          head(comparisonData$QuantityPath, 1)
+        ),
+        suffix = "MonteCarlo"
       )
-    tryCatch({write.csv(
-        allSamplesRatioMeasure,
-        file = mcResultsFile
-        )},
-      error = function(e){
+    )
+    tryCatch(
+      {
+        write.csv(
+          allSamplesRatioMeasure,
+          file = mcResultsFile
+        )
+      },
+      error = function(e) {
         warning(paste(
           "Monte Carlo results could not be saved in file '",
-          mcResultsFile, 
+          mcResultsFile,
           "'"
         ))
       }

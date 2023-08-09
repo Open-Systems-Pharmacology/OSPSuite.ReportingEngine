@@ -66,10 +66,10 @@ plotPopulationPKParameters <- function(structureSets,
   for (output in yParameters) {
     # Report heading for Output path (in case output use same paths, render a unique id)
     resultID <- defaultFileNames$resultID(
-      length(pkParametersResults)+1, 
-      "pk-parameters", 
+      length(pkParametersResults) + 1,
+      "pk-parameters",
       removeForbiddenLetters(output$path)
-      )
+    )
     pkParametersResults[[resultID]] <- saveTaskResults(
       id = resultID,
       textChunk = captions$plotPKParameters$outputSection(output$displayName, resultID),
@@ -104,7 +104,7 @@ plotPopulationPKParameters <- function(structureSets,
 
       # Report heading for PK Parameter
       resultID <- defaultFileNames$resultID(
-        length(pkParametersResults)+1, 
+        length(pkParametersResults) + 1,
         "pk-parameters",
         removeForbiddenLetters(output$path),
         removeForbiddenLetters(pkParameter$pkParameter)
@@ -245,17 +245,19 @@ plotPopulationPKParameters <- function(structureSets,
               plotObject = comparisonVpcPlot,
               output = output,
               referenceSimulationSetName = referenceSimulationSetName
-              )
+            )
             xParameterCaption <- vpcMetaData$x$dimension
             yParameterCaption <- vpcMetaData$median$dimension
 
             # Check if log scaled vpc plot has positive data
             if (hasPositiveValues(comparisonData$ymin)) {
-              vpcDataForLimits <- c(comparisonData$ymin, comparisonData$median, comparisonData$ymax,
-                                    referenceData$ymin, referenceData$median, referenceData$ymax)
-              vpcLimits <- autoAxesLimits(vpcDataForLimits[vpcDataForLimits>0], scale = tlf::Scaling$log)
-                
-              comparisonVpcPlotLog <-  tlf::setYAxis(
+              vpcDataForLimits <- c(
+                comparisonData$ymin, comparisonData$median, comparisonData$ymax,
+                referenceData$ymin, referenceData$median, referenceData$ymax
+              )
+              vpcLimits <- autoAxesLimits(vpcDataForLimits[vpcDataForLimits > 0], scale = tlf::Scaling$log)
+
+              comparisonVpcPlotLog <- tlf::setYAxis(
                 plotObject = comparisonVpcPlot,
                 scale = tlf::Scaling$log,
                 axisLimits = vpcLimits,
@@ -319,9 +321,9 @@ plotPopulationPKParameters <- function(structureSets,
           # Check if log scaled boxplot was created before plotting logs of range plots
           if (hasPositiveValues(vpcData$ymin)) {
             vpcDataForLimits <- c(vpcData$ymin, vpcData$median, vpcData$ymax)
-            vpcLimits <- autoAxesLimits(vpcDataForLimits[vpcDataForLimits>0], scale = tlf::Scaling$log)
-            
-            vpcPlotLog <-  tlf::setYAxis(
+            vpcLimits <- autoAxesLimits(vpcDataForLimits[vpcDataForLimits > 0], scale = tlf::Scaling$log)
+
+            vpcPlotLog <- tlf::setYAxis(
               plotObject = vpcPlot,
               scale = tlf::Scaling$log,
               axisLimits = vpcLimits,
