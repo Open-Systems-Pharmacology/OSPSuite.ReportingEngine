@@ -864,7 +864,7 @@ updateAxesMargin <- function(axesProperties, sideMarginsEnabled = TRUE) {
 #' @title getDefaultPropertyFromTheme
 #' @description
 #' Get default property value from current reEnv theme
-#' @param propertyName Name of the aesthetic property (eg `"color"`)
+#' @param propertyName Name of the aesthetic property (e.g. `"color"`)
 #' @param propertyType One of `"points"`, `"lines`, `"ribbons"` or `"errorbars"`
 #' @param plotName Name of the plot in Theme (e.g. `"plotTimeProfile"`)
 #' @return Property value

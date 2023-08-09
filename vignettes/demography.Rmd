@@ -89,7 +89,7 @@ knitr::kable(head(readObservedDataFile(dataFile)))
 
 </details>
 
-**Tip**: to ensure that the unit defined in **datasetUnit** is appropriate, you can leverage the `{ospsuite}` package and copy/paste the value from R. Below provides a sample to get the appropriate unit for BMI (you need to use `format = 13` in order to keep correct unicode text as done for the square below).
+**Tip**: to ensure that the unit defined in **datasetUnit** is appropriate, you can leverage the `{ospsuite}` package and copy/paste the value from R. Below provides a sample to get the appropriate unit for BMI (you need to use `format = 13` in order to keep correct encoded text as done for the square below).
 
 ```r
 writeClipboard(ospsuite::ospUnits$BMI$`kg/m²`, format = 13)

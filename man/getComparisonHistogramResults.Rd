@@ -30,10 +30,10 @@ getComparisonHistogramResults(
 
 \item{simulationSetDescriptor}{Character describing the population sets within the report}
 
-\item{demographyResults}{A list of `TaskResult` objects}
+\item{demographyResults}{A list of `TaskResults` objects}
 }
 \value{
-A list of `TaskResult` objects
+A list of `TaskResults` objects
 }
 \description{
 Get Comparison Histogram results for Pediatric workflows

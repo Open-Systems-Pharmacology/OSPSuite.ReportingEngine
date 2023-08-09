@@ -38,6 +38,7 @@ axesSettings
 AxesSettings
 bB
 behaviour
+BMI
 boxplotPkParameters
 boxplotPkRatios
 BoxWhisker
@@ -88,11 +89,14 @@ dataMapping
 DataMapping
 dataSelection
 DataSelectionKeys
+datasetColumn
+datasetUnit
 dataSource
 DataSource
 DataSourceCodeIdentifiers
 dataSourceNamesFromIdentifier
 DataSources
+DemographyDefaultParameters
 DictionaryLocation
 DictionaryType
 displayConfigurationPlanPlotInfo
@@ -147,6 +151,7 @@ getBoxWhiskerPlotConfiguration
 getCaptionFromStat
 getColorFromOutputGroup
 getColorGroupForPKParameterPlot
+getComparisonHistogramResults
 getComparisonTimeProfileOutputsDataframe
 getCompoundNameFromPath
 getCurvePropertiesForTimeProfiles
@@ -165,7 +170,9 @@ getDefaultPropertyFromTheme
 getDefaultRETheme
 getDefaultTimeProfileAxesSettings
 getDefaultTotalSensitivityThreshold
+getDemographyAcrossPopulations
 getDemographyAggregatedData
+getDictionaryVariable
 getElapsedTime
 getFigurePathsFromReport
 getFileLocationFromType
@@ -176,6 +183,7 @@ getGOFOutputsDataframe
 getGOFPlotConfiguration
 getGuestDeltaFromConfigurationPlan
 getHeaderNames
+getHistogramResults
 getIdentifierInfo
 getIndividualSAResultsFileName
 getIntroFromReportTitle
@@ -194,6 +202,8 @@ getObservedCurveProperties
 getObservedDataFromConfigurationPlan
 getObservedDataFromOutput
 getObservedDataIdFromPath
+getObservedDemographyAcrossPopulation
+getObservedDemographyFromSimulationSet
 getObservedErrorValues
 getOutputContent
 getOutputGroups
@@ -436,6 +446,7 @@ plotDDIRatio
 plotDemography
 plotDemographyHistogram
 plotDemographyParameters
+plotDemographyRange
 plotMassBalance
 plotMassBalanceCumulativeTimeProfile
 plotMassBalancePieChart
@@ -629,6 +640,7 @@ textChunk
 th
 ticklabels
 timeProfile
+TimeProfileDataMapping
 TimeProfilePlotConfiguration
 TimeProfiles
 TimeProfilesAndResiduals

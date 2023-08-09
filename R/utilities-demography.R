@@ -510,8 +510,8 @@ getDemographyAggregatedData <- function(data,
 #' @param observedData A data.frame of observed demography values across the simulationSets
 #' @param settings A list of plot settings
 #' @param simulationSetDescriptor Character describing the population sets within the report
-#' @param demographyResults A list of `TaskResult` objects
-#' @return A list of `TaskResult` objects
+#' @param demographyResults A list of `TaskResults` objects
+#' @return A list of `TaskResults` objects
 #' @keywords internal
 getHistogramResults <- function(demographyPaths,
                                 simulationSetNames,
@@ -599,8 +599,8 @@ getHistogramResults <- function(demographyPaths,
 #' @param observedData A data.frame of observed demography values across the simulationSets
 #' @param settings A list of plot settings
 #' @param simulationSetDescriptor Character describing the population sets within the report
-#' @param demographyResults A list of `TaskResult` objects
-#' @return A list of `TaskResult` objects
+#' @param demographyResults A list of `TaskResults` objects
+#' @return A list of `TaskResults` objects
 #' @keywords internal
 getComparisonHistogramResults <- function(demographyPaths,
                                           simulationSetNames,
