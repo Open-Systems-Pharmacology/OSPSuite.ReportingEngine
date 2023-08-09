@@ -884,6 +884,7 @@ getIntroFromReportTitle <- function(reportTitle = NULL, intro = "temp-report-tit
 #' @param fileName name of .md file to
 #' @return array of file paths corresponding to figures linked in reports
 #' @export
+#' @family reporting
 #' @examples \dontrun{
 #' # Check the figure paths of your report named "report.md"
 #' getFigurePathsFromReport("report.md")

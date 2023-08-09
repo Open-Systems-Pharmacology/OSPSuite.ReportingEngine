@@ -19,10 +19,10 @@ Display information of a configuration plan `Plot` field
 
 # Example of list with properties
 plotField <- list(
-PlotNumber = 5,
-Simulation = "Name of Simulation",
-Project = "Name of Project",
-Options = list(width = 10, height = 10, units = "cm")
+  PlotNumber = 5,
+  Simulation = "Name of Simulation",
+  Project = "Name of Project",
+  Options = list(width = 10, height = 10, units = "cm")
 )
 
 # Log messages are usually displayed through `cat()`, `error()` or `warning()`

@@ -207,32 +207,32 @@ logCatch <- function(expr) {
 }
 
 #' @title displayConfigurationPlanPlotInfo
-#' @description 
+#' @description
 #' Display information of a configuration plan `Plot` field
 #' @param configurationPlanField A list extracted from a configuration plan field
 #' @return Array of name properties and their value
 #' @export
-#' @examples 
-#' 
+#' @examples
+#'
 #' # Example of list with properties
 #' plotField <- list(
-#' PlotNumber = 5,
-#' Simulation = "Name of Simulation",
-#' Project = "Name of Project",
-#' Options = list(width = 10, height = 10, units = "cm")
+#'   PlotNumber = 5,
+#'   Simulation = "Name of Simulation",
+#'   Project = "Name of Project",
+#'   Options = list(width = 10, height = 10, units = "cm")
 #' )
-#' 
+#'
 #' # Log messages are usually displayed through `cat()`, `error()` or `warning()`
 #' cat(displayConfigurationPlanPlotInfo(plotField))
-#' 
-displayConfigurationPlanPlotInfo <- function(configurationPlanField){
+#'
+displayConfigurationPlanPlotInfo <- function(configurationPlanField) {
   message <- unlist(lapply(
-    names(configurationPlanField), 
-    FUN = function(fieldElement){
+    names(configurationPlanField),
+    FUN = function(fieldElement) {
       # Lists can include a lot of options
       # which would make a very long displayed message
       # If necessary, this can be changed to get a max number of characters
-      if(isOfType(configurationPlanField[[fieldElement]], "list")){
+      if (isOfType(configurationPlanField[[fieldElement]], "list")) {
         return(paste0(highlight(fieldElement), ": list(...)"))
       }
       fieldValues <- paste(configurationPlanField[[fieldElement]], collapse = ", ")
@@ -249,23 +249,25 @@ displayConfigurationPlanPlotInfo <- function(configurationPlanField){
 
 
 #' @title qualificationCatch
-#' @description 
+#' @description
 #' Add configuration plan plot information when catching a warning/error
 #' @param expr Evaluated code chunks
 #' @param configurationPlanField A list extracted from a configuration plan field
 #' @keywords internal
-qualificationCatch <- function(expr, configurationPlanField = NULL){
+qualificationCatch <- function(expr, configurationPlanField = NULL) {
   withCallingHandlers(
-      expr,
-      error = function(errorCondition) {
-        plotInfo <- displayConfigurationPlanPlotInfo(configurationPlanField)
-        stop(c(errorCondition$message, plotInfo), call. = FALSE)
-        },
-      warning = function(warningCondition) {
-        plotInfo <- displayConfigurationPlanPlotInfo(configurationPlanField)
-        warning(c(warningCondition$message, plotInfo), call. = FALSE)
-        try({invokeRestart("muffleWarning")})
-      }
+    expr,
+    error = function(errorCondition) {
+      plotInfo <- displayConfigurationPlanPlotInfo(configurationPlanField)
+      stop(c(errorCondition$message, plotInfo), call. = FALSE)
+    },
+    warning = function(warningCondition) {
+      plotInfo <- displayConfigurationPlanPlotInfo(configurationPlanField)
+      warning(c(warningCondition$message, plotInfo), call. = FALSE)
+      try({
+        invokeRestart("muffleWarning")
+      })
+    }
   )
   return(invisible())
 }

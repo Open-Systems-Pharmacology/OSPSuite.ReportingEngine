@@ -27,7 +27,7 @@ ConfigurationScales <- list(
 
 #' @title ConfigurationShapes
 #' @description List mapping configuration plan symbols to tlf shapes.
-#' Note that the names only include lower case as the mapping 
+#' Note that the names only include lower case as the mapping
 #' used in `tlfShape()` internally translate configuration plan field with `tolower()` function.
 #' @import tlf
 #' @keywords internal
@@ -86,12 +86,12 @@ getAxesProperties <- function(axesSettings) {
 
   axesIndices <- sapply(
     c("X", "Y", "Y2", "Y3"),
-    FUN = function(axisField){
+    FUN = function(axisField) {
       which(axisTypes %in% axisField)
     },
     simplify = FALSE
   )
-  
+
   # X and Y axes are mandatory, while Y2 is not
   validateIsOfLength(axesIndices$X, 1)
   validateIsOfLength(axesIndices$Y, 1)
@@ -108,7 +108,7 @@ getAxesProperties <- function(axesSettings) {
   }
   xAxis <- formatAxisProperties(xAxis)
   yAxis <- formatAxisProperties(yAxis)
-  
+
   y2Axis <- NULL
   if (isOfLength(axesIndices$Y2, 1)) {
     y2Axis <- axesSettings[[axesIndices$Y2]]
@@ -122,19 +122,19 @@ getAxesProperties <- function(axesSettings) {
   return(list(x = xAxis, y = yAxis, y2 = y2Axis, y3 = y3Axis))
 }
 
-formatAxisProperties <- function(axisField){
+formatAxisProperties <- function(axisField) {
   list(
-    dimension = axisField$Dimension, 
+    dimension = axisField$Dimension,
     # If no unit defined, use base unit of dimension
     unit = axisField$Unit %||% ospsuite::getBaseUnit(axisField$Dimension),
-    min = axisField$Min, 
-    max = axisField$Max, 
+    min = axisField$Min,
+    max = axisField$Max,
     scale = tlfScale(axisField$Scaling),
     grid = list(
-      color = axisField$DefaultColor, 
+      color = axisField$DefaultColor,
       linetype = tlfLinetype(axisField$DefaultLineStyle)
-      )
-)
+    )
+  )
 }
 
 #' @title updatePlotAxes
@@ -173,10 +173,10 @@ updatePlotAxes <- function(plotObject, axesProperties) {
   })
   try({
     plotObject <- tlf::setYAxis(
-      plotObject, 
-      scale = axesProperties$y$scale, 
+      plotObject,
+      scale = axesProperties$y$scale,
       axisLimits = c(axesProperties$y$min, axesProperties$y$max)
-      )
+    )
   })
   plotObject <- tlf::setLegendPosition(plotObject)
   return(plotObject)

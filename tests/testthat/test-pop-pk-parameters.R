@@ -7,7 +7,7 @@ populationFileAdults <- getTestDataFilePath("input-data/Raltegravir Adult Popula
 # List of necessary in results to test
 refOutput <- getTestDataFilePath("pop-pk")
 # Sort files because list.files ordering is character by character
-getOrderedFiles <- function(dirPath, pattern){
+getOrderedFiles <- function(dirPath, pattern) {
   fileNames <- list.files(dirPath, pattern = pattern)
   # Keep only numbers included in filenames
   fileNumbers <- as.numeric(gsub("[^[:digit:]]", "\\1", fileNames))

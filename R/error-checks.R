@@ -413,29 +413,29 @@ validateHasParametersForSensitivity <- function(numberOfParameters) {
   stop(messages$errorNoParametersForSensitivityAnalysis())
 }
 
-checkPKParameterExists <- function(pkParameter, pkParameterName, pkRatioMapping){
-  if(!isEmpty(pkParameter)){
+checkPKParameterExists <- function(pkParameter, pkParameterName, pkRatioMapping) {
+  if (!isEmpty(pkParameter)) {
     return(TRUE)
   }
   warning(messages$pkParameterNotFound(pkParameterName, pkRatioMapping), call. = FALSE)
   return(FALSE)
 }
 
-checkPKRatioObservedVariable <- function(variableName, observedData){
+checkPKRatioObservedVariable <- function(variableName, observedData) {
   if (isIncluded(variableName, names(observedData))) {
     return(TRUE)
   }
   warning(messages$errorNotIncludedInDataset(
-      variableName, 
-      observedData, 
-      datasetName = "PK Ratio Dataset"
-      ), 
-    call. = FALSE
+    variableName,
+    observedData,
+    datasetName = "PK Ratio Dataset"
+  ),
+  call. = FALSE
   )
   return(FALSE)
 }
 
-checkPKRatioObservedRecord <- function(selectedRow, observedDataRecordId){
+checkPKRatioObservedRecord <- function(selectedRow, observedDataRecordId) {
   if (isOfLength(selectedRow, 1)) {
     return(TRUE)
   }
@@ -443,7 +443,7 @@ checkPKRatioObservedRecord <- function(selectedRow, observedDataRecordId){
     messages$warningPKRatioMultipleObservedRows(
       length(selectedRow),
       observedDataRecordId
-    ), 
+    ),
     call. = FALSE
   )
   return(FALSE)
@@ -452,34 +452,36 @@ checkPKRatioObservedRecord <- function(selectedRow, observedDataRecordId){
 validateGuestParameters <- function(guestParameters, pkParameters) {
   # Repurpose validateIsIncluded
   # and update error message
-  tryCatch({
-    validateIsIncluded(guestParameters, pkParameters)
-    }, error = function(e){
+  tryCatch(
+    {
+      validateIsIncluded(guestParameters, pkParameters)
+    },
+    error = function(e) {
       stop(messages$errorParametersNotIncludedInDDI(setdiff(guestParameters, pkParameters)), call. = FALSE)
-      }
-    )
+    }
+  )
   return(invisible())
 }
 
-checkLLOQValues <- function(lloq, structureSet){
-  if(any(is.infinite(lloq))){
+checkLLOQValues <- function(lloq, structureSet) {
+  if (any(is.infinite(lloq))) {
     warning(
       messages$warningHasInfiniteValues(
         n = sum(is.infinite(lloq)),
         datasetName = structureSet$simulationSet$dataSource$dataFile
-        ),
+      ),
       call. = FALSE
-      )
+    )
     lloq[is.infinite(lloq)] <- NA
   }
   # If no negative value, return lloq
-  if(isEmpty(which(lloq<=0))){
+  if (isEmpty(which(lloq <= 0))) {
     return(lloq)
   }
   warning(
-    messages$negativeDataRemoved(length(which(lloq<=0))),
+    messages$negativeDataRemoved(length(which(lloq <= 0))),
     call. = FALSE
-    )
-  lloq[lloq<=0 & !is.na(lloq)] <- NA
+  )
+  lloq[lloq <= 0 & !is.na(lloq)] <- NA
   return(lloq)
 }

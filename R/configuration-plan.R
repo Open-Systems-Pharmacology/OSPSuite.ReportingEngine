@@ -69,9 +69,9 @@ ConfigurationPlan <- R6::R6Class(
       sectionReference <- private$.sections$id[selectedId]
       # Issue #1084: new reference title get anchor at the end of title
       addTextChunk(
-        fileName = self$getSectionMarkdown(id), 
+        fileName = self$getSectionMarkdown(id),
         text = paste(self$getSectionTitle(id), anchor(sectionReference))
-        )
+      )
       # Add section content
       sectionContent <- private$.sections$content[selectedId]
       if (is.na(sectionContent)) {

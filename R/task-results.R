@@ -38,7 +38,7 @@ TaskResults <- R6::R6Class(
       self$plot <- updatePlotDimensions(self$plot)
       # Use same dpi as RE environment settings to display correct point size
       # TODO: To remove after implementation in tlf
-      if(requireNamespace("showtext", quietly = TRUE)){
+      if (requireNamespace("showtext", quietly = TRUE)) {
         currentDPI <- showtext::showtext_opts()$dpi
         showtext::showtext_opts(dpi = reEnv$defaultPlotFormat$dpi)
       }
@@ -52,7 +52,7 @@ TaskResults <- R6::R6Class(
       )
       # Revert showtext settings
       # TODO: To remove after implementation in tlf
-      if(requireNamespace("showtext", quietly = TRUE)){
+      if (requireNamespace("showtext", quietly = TRUE)) {
         showtext::showtext_opts(dpi = currentDPI)
       }
       logDebug(paste0("Figure '", fileName, "' was successfully saved."))

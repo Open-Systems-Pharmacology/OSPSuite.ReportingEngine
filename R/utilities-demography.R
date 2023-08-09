@@ -76,13 +76,13 @@ plotDemographyParameters <- function(structureSets,
   # If demography variable(s) defined in xParameters
   # Range plots
   demographyDataMapping <- tlf::TimeProfileDataMapping$new(
-    x = "x", 
+    x = "x",
     y = "median",
     ymin = "ymin",
     ymax = "ymax",
-    color = "Legend", 
+    color = "Legend",
     fill = "Legend"
-    )
+  )
   for (demographyParameter in xParameters) {
     # Currently, categorical variables are not be plotted in x-axis (for instance Gender)
     if (demographyMetaData[[demographyParameter]]$class %in% "character") {
@@ -130,7 +130,7 @@ plotDemographyParameters <- function(structureSets,
         # Build dataset with Visual Predictive check format
         selectedRows <- demographyData$simulationSetName %in% simulationSetName
         demographyData$Legend <- captions$demography$rangePlotLegend(simulationSetName, n = sum(selectedRows))
-        
+
         vpcData <- getDemographyAggregatedData(
           data = demographyData[selectedRows, ],
           xParameterName = demographyParameter,
@@ -160,7 +160,7 @@ plotDemographyParameters <- function(structureSets,
             data = rbind.data.frame(
               demographyData[selectedRows, selectedColumns],
               observedDemographyData[selectedObsRows, selectedColumns]
-              ),
+            ),
             xParameterName = demographyParameter,
             yParameterName = parameterName,
             groupName = "Legend",
@@ -238,7 +238,7 @@ plotDemographyParameters <- function(structureSets,
           stairstep = settings$stairstep
         )
         # If reference is preferred plotted as its global range
-        if(settings$referenceGlobalRange){
+        if (settings$referenceGlobalRange) {
           referenceData <- getDemographyAggregatedData(
             data = demographyData[selectedRefRows, ],
             xParameterName = demographyParameter,
@@ -465,16 +465,16 @@ getDemographyAggregatedData <- function(data,
 
   # Create "bins" variable corresponding to factor class grouping time points
   aggregatedData <- data %>% group_by(bins)
-  aggregatedXData <- aggregatedData %>% 
+  aggregatedXData <- aggregatedData %>%
     summarise(
       # If range plot is not stairstep,
       # Get the same use median for x which may not be centered within its bin,
       # however this summary may better represent where data actually is located
       x = AggregationConfiguration$functions$middle(.data[[xParameterName]])
-      )
+    )
   # If defined use groupName to split aggregation between groups
-  if(!is.null(groupName)){
-    eval(parse(text = paste0("aggregatedData <- data %>% group_by(bins,", groupName,")")))
+  if (!is.null(groupName)) {
+    eval(parse(text = paste0("aggregatedData <- data %>% group_by(bins,", groupName, ")")))
   }
   # Remove unwanted message: `summarise()` has grouped output by ...
   suppressMessages({
@@ -493,7 +493,7 @@ getDemographyAggregatedData <- function(data,
   if (stairstep) {
     # Use bin level number to associate the correct edge bins
     aggregatedDataMin <- aggregatedData %>% mutate(x = xParameterBreaks[as.numeric(bins)])
-    aggregatedDataMax <- aggregatedData %>% mutate(x = xParameterBreaks[as.numeric(bins)+1])
+    aggregatedDataMax <- aggregatedData %>% mutate(x = xParameterBreaks[as.numeric(bins) + 1])
     aggregatedData <- bind_rows(aggregatedDataMin, aggregatedDataMax)
     aggregatedData <- aggregatedData[order(aggregatedData$bins), ]
   }
@@ -510,8 +510,8 @@ getDemographyAggregatedData <- function(data,
 #' @param observedData A data.frame of observed demography values across the simulationSets
 #' @param settings A list of plot settings
 #' @param simulationSetDescriptor Character describing the population sets within the report
-#' @param demographyResults A list of `TaskResult` objects
-#' @return A list of `TaskResult` objects
+#' @param demographyResults A list of `TaskResults` objects
+#' @return A list of `TaskResults` objects
 #' @keywords internal
 getHistogramResults <- function(demographyPaths,
                                 simulationSetNames,
@@ -599,8 +599,8 @@ getHistogramResults <- function(demographyPaths,
 #' @param observedData A data.frame of observed demography values across the simulationSets
 #' @param settings A list of plot settings
 #' @param simulationSetDescriptor Character describing the population sets within the report
-#' @param demographyResults A list of `TaskResult` objects
-#' @return A list of `TaskResult` objects
+#' @param demographyResults A list of `TaskResults` objects
+#' @return A list of `TaskResults` objects
 #' @keywords internal
 getComparisonHistogramResults <- function(demographyPaths,
                                           simulationSetNames,

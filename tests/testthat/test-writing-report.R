@@ -150,4 +150,3 @@ test_that("getFigurePathsFromReport gets the correct file paths", {
   # and assess that warning will be thrown if files do not exist
   expect_warning(ospsuite.reportingengine:::checkFileExists(filePaths))
 })
-

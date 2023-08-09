@@ -17,7 +17,7 @@ GofPlotTask <- R6::R6Class(
         text = paste(
           "##", self$title, "for", simulationSetName,
           anchor(paste0(self$reference, "-", removeForbiddenLetters(simulationSetName)))
-          )
+        )
       )
       for (result in taskResults) {
         # Get both absolute and relative paths for figures and tables
