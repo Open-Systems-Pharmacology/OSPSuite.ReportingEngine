@@ -29,6 +29,7 @@ Other reporting:
 \code{\link{addTextChunk}()},
 \code{\link{anchor}()},
 \code{\link{copyReport}()},
+\code{\link{getFigurePathsFromReport}()},
 \code{\link{hasAnchor}()},
 \code{\link{mergeMarkdownFiles}()},
 \code{\link{renderReport}()},

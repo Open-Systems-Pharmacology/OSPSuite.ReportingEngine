@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ospsuite.reportingengine</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add-title-page.html">Add a title page to your workflow report</a>
+    <a class="dropdown-item" href="../articles/demography.html">Demography Parameters in Population Workflows</a>
     <a class="dropdown-item" href="../articles/excel-template.html">Excel Template</a>
     <a class="dropdown-item" href="../articles/goodness-of-fit.html">Time profiles and Residuals task</a>
     <a class="dropdown-item" href="../articles/ospsuitereportingengine.html">Get Started</a>
@@ -51,6 +52,7 @@
     <a class="dropdown-item" href="../articles/pop-pk-parameters.html">PK Parameters in Population Workflows</a>
     <a class="dropdown-item" href="../articles/qualification-workflow.html">Qualification Workflow</a>
     <a class="dropdown-item" href="../articles/sensitivity-analysis.html">Sensitivity Analysis</a>
+    <a class="dropdown-item" href="../articles/word-report.html">Word Report</a>
   </div>
 </li>
 <li class="nav-item">
@@ -96,15 +98,7 @@
 <span><span class="co">#&gt; Loading required package: rClr</span></span>
 <span><span class="co">#&gt; Loading the dynamic library for Microsoft .NET runtime...</span></span>
 <span><span class="co">#&gt; Loaded Common Language Runtime version 4.0.30319.42000</span></span>
-<span><span class="co">#&gt; Loading required package: tlf</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'ospsuite.reportingengine'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:tlf':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     isBetween</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:ospsuite':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     calculateResiduals, plotPopulationTimeProfile</span></span></code></pre></div>
+<span><span class="co">#&gt; Loading required package: tlf</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
@@ -325,9 +319,9 @@ example in which <strong><code>plotConfigurations</code></strong> and
 <span>    simulationSets <span class="op">=</span> <span class="va">setA</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-A"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 01/02/2023 - 05:26:01</span></span>
+<span><span class="co">#&gt; 09/08/2023 - 05:43:41</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 01/02/2023 - 05:26:00</span></span>
+<span><span class="co">#&gt;  Date: 09/08/2023 - 05:43:41</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
 <span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span><span class="co">#&gt;  User: pchelle</span></span>
@@ -335,9 +329,9 @@ example in which <strong><code>plotConfigurations</code></strong> and
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.2.1 (2022-06-23 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 11.1.152</span></span>
-<span><span class="co">#&gt;  OSP Reporting Engine version: 2.0.0</span></span>
-<span><span class="co">#&gt;  tlf version: 1.4.0</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 11.2.219</span></span>
+<span><span class="co">#&gt;  OSP Reporting Engine version: 2.2.0</span></span>
+<span><span class="co">#&gt;  tlf version: 1.5.150</span></span>
 <span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="va">workflowA</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simulate"</span>, <span class="st">"plotTimeProfilesAndResiduals"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -384,34 +378,34 @@ quite different. However, the option <strong><code>bins</code></strong>
 is currently set among all plots of the task. Regarding observed vs
 simulated plots, the got the updated xlabel, ylabel and watermark as
 defined in the plot configuration.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the workflow</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>workflowA<span class="sc">$</span><span class="fu">runWorkflow</span>()</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:26:01</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mMean Model Workflow [23m [22m [39m</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:26:01</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mSimulation task [23m [22m [39m</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:26:01</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mSplitting simulations for parallel run: [36m [1m [3m1 [23m [22m [39m simulations split into  [36m [1m [3m1 [23m [22m [39m subsets</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:26:01</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3msubset simulations [23m [22m [39m</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:26:02</span></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mSimulation task [23m [22m [39m completed in 0 min</span></span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:26:02</span></span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m</span></span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:26:02</span></span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m for  [36m [1m [3mA [23m [22m [39m</span></span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:26:05</span></span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m completed in 0.1 min</span></span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars --reference-doc="C:/Users/pchelle/AppData/Local/Temp/RtmpSSHRFZ/temp_libpath3050756410f4/ospsuite.reportingengine/extdata/reference.docx" --lua-filter="C:/Users/pchelle/AppData/Local/Temp/RtmpSSHRFZ/temp_libpath3050756410f4/ospsuite.reportingengine/extdata/pagebreak.lua" --resource-path="Example-A" -t docx -o "Example-A/Report-word.docx" "Example-A/Report-word.md"</span></span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 01/02/2023 - 05:26:05</span></span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mMean Model Workflow [23m [22m [39m completed in 0.1 min</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Run the workflow</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>workflowA<span class="sc">$</span><span class="fu">runWorkflow</span>()</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; 09/08/2023 - 05:43:41</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mMean Model Workflow [23m [22m [39m</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; 09/08/2023 - 05:43:41</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mSimulation task [23m [22m [39m</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; 09/08/2023 - 05:43:42</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mSplitting simulations for parallel run: [36m [1m [3m1 [23m [22m [39m simulations split into  [36m [1m [3m1 [23m [22m [39m subsets</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt; 09/08/2023 - 05:43:42</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3msubset simulations [23m [22m [39m</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt; 09/08/2023 - 05:43:42</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mSimulation task [23m [22m [39m completed in 0 min</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; 09/08/2023 - 05:43:42</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt; 09/08/2023 - 05:43:42</span></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m for  [36m [1m [3mA [23m [22m [39m</span></span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a><span class="co">#&gt; 09/08/2023 - 05:43:45</span></span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m completed in 0 min</span></span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a><span class="co">#&gt; Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/pchelle/AppData/Local/Temp/Rtmp8UDs5G/temp_libpath36d41c159c6/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-A" -t docx -o "Example-A/Report-word.docx" "Example-A/Report-word.md"</span></span>
+<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a><span class="co">#&gt; 09/08/2023 - 05:43:45</span></span>
+<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mMean Model Workflow [23m [22m [39m completed in 0.1 min</span></span></code></pre></div>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-18.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-22.png" style="width:100%; border-style: none;"></details>
 </div>
 <div class="section level3">
 <h3 id="pk-parameters-plots">PK parameters plots<a class="anchor" aria-label="anchor" href="#pk-parameters-plots"></a>

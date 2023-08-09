@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ospsuite.reportingengine</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,6 +25,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add-title-page.html">Add a title page to your workflow report</a>
+    <a class="dropdown-item" href="../articles/demography.html">Demography Parameters in Population Workflows</a>
     <a class="dropdown-item" href="../articles/excel-template.html">Excel Template</a>
     <a class="dropdown-item" href="../articles/goodness-of-fit.html">Time profiles and Residuals task</a>
     <a class="dropdown-item" href="../articles/ospsuitereportingengine.html">Get Started</a>
@@ -33,6 +34,7 @@
     <a class="dropdown-item" href="../articles/pop-pk-parameters.html">PK Parameters in Population Workflows</a>
     <a class="dropdown-item" href="../articles/qualification-workflow.html">Qualification Workflow</a>
     <a class="dropdown-item" href="../articles/sensitivity-analysis.html">Sensitivity Analysis</a>
+    <a class="dropdown-item" href="../articles/word-report.html">Word Report</a>
   </div>
 </li>
 <li class="nav-item">
@@ -68,7 +70,6 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotMeanTimeProfileLog</span><span class="op">(</span></span>
 <span>  <span class="va">simulatedData</span>,</span>
 <span>  observedData <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  lloqData <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  metaData <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dataMapping <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  plotConfiguration <span class="op">=</span> <span class="cn">NULL</span></span>
@@ -85,16 +86,12 @@
 <dd><p>data.frame of observed data</p></dd>
 
 
-<dt>lloqData</dt>
-<dd><p>data.frame of lloq data</p></dd>
-
-
 <dt>metaData</dt>
 <dd><p>meta data on `data`</p></dd>
 
 
 <dt>dataMapping</dt>
-<dd><p>A list mapping `x`, `y` and `group` from datasets</p></dd>
+<dd><p>A list to be integrated to `tlf` DataMapping objects</p></dd>
 
 
 <dt>plotConfiguration</dt>

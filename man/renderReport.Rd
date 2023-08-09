@@ -34,6 +34,7 @@ Other reporting:
 \code{\link{anchor}()},
 \code{\link{copyReport}()},
 \code{\link{getAnchorName}()},
+\code{\link{getFigurePathsFromReport}()},
 \code{\link{hasAnchor}()},
 \code{\link{mergeMarkdownFiles}()},
 \code{\link{renderWordReport}()},

@@ -73,6 +73,7 @@ reference:
   - matches("getMolWeightForCompound")
   - matches("plotAbsorptionTimeProfile")
   - matches("plotDemographyHistogram")
+  - matches("plotDemographyRange")
   - matches("plotMassBalanceCumulativeTimeProfile")
   - matches("plotMassBalancePieChart")
   - matches("plotMassBalanceTimeProfile")
