@@ -23,7 +23,7 @@ jobs:
           Rscript -e "download.file('https://ci.appveyor.com/api/projects/open-systems-pharmacology-ci/ospsuite-r/artifacts/ospsuite.zip?pr=false', destfile = 'ospsuite.zip', mode='wb'); install.packages('ospsuite.zip', repos = NULL, type = 'binary')"
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::covr, tracelib=?ignore
+          extra-packages: any::covr, tracelib=?ignore, rClr=?ignore, ospsuite.utils=?ignore, ospsuite=?ignore, tlf=?ignore
           needs: coverage
       - name: Test coverage
         run: |
