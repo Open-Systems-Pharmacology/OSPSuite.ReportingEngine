@@ -2,9 +2,7 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 name: Run Nightly Code Coverage
 # schedule from https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
-on:
-  schedule:
-    - cron: '0 0 * * *'
+on: push
 jobs:
   test-coverage:
     runs-on: windows-latest
