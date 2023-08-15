@@ -1,5 +1,5 @@
 ---
-title: "Word Report"
+title: "How to work with word reports"
 resource_files:
   - figures
 output: 
