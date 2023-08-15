@@ -20,7 +20,7 @@ environment:
   KEEP_VIGNETTES: true
   _R_CHECK_FORCE_SUGGESTS_: false
   R_ARCH: x64
-  R_VERSION: "4.0.5"
+  R_VERSION: "4.3.1"
   COVERALLS_TOKEN:
     secure: Qo8To6hV3C2ghrS0Z+pPyvaBaEpE24Pwr7LF8AbiMO9HL+pkwX1U3kYGUNzJF5EU
 
