@@ -924,17 +924,17 @@ addLLOQLegend <- function(plotObject, captions, prefix = "LLOQ for") {
     # thus both color and shape guides need to be consistent by using same order and title
     shapeGuide <- ggplot2::guide_legend(
       title = plotObject$plotConfiguration$legend$title$text,
-      title.theme = plotObject$plotConfiguration$legend$title$createPlotFont(),
+      title.theme = plotObject$plotConfiguration$legend$title$createPlotTextBoxFont(),
       order = 1,
-      label.theme = plotObject$plotConfiguration$legend$font$createPlotFont()
+      label.theme = plotObject$plotConfiguration$legend$font$createPlotTextBoxFont()
     )
   }
   colorGuide <- ggplot2::guide_legend(
     title = plotObject$plotConfiguration$legend$title$text,
-    title.theme = plotObject$plotConfiguration$legend$title$createPlotFont(),
+    title.theme = plotObject$plotConfiguration$legend$title$createPlotTextBoxFont(),
     order = 1,
     override.aes = currentLegend,
-    label.theme = plotObject$plotConfiguration$legend$font$createPlotFont()
+    label.theme = plotObject$plotConfiguration$legend$font$createPlotTextBoxFont()
   )
 
   # the linetype guide should display the caption for lloq legend
@@ -949,7 +949,7 @@ addLLOQLegend <- function(plotObject, captions, prefix = "LLOQ for") {
       linetype = tlf:::tlfEnv$defaultLLOQLinetype,
       fill = NA
     ),
-    label.theme = plotObject$plotConfiguration$legend$font$createPlotFont()
+    label.theme = plotObject$plotConfiguration$legend$font$createPlotTextBoxFont()
   )
 
   # Needs to add a dummy linetype aesthetic to get lloq legend displayed
