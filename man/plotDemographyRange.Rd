@@ -16,9 +16,9 @@ plotDemographyRange(
 
 \item{metaData}{list of metaData about `data`}
 
-\item{plotConfiguration}{`PlotConfiguration`  object}
+\item{dataMapping}{A `TimeProfileDataMapping` object}
 
-\item{daraMapping}{A `TimeProfileDataMapping` object}
+\item{plotConfiguration}{`PlotConfiguration`  object}
 }
 \value{
 ggplot object

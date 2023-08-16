@@ -827,11 +827,11 @@ plotPopulationSensitivity <- function(structureSets,
       ggplot2::guides(
         color = ggplot2::guide_legend(
           title = "Individual Percentile",
-          title.theme = sensitivityPlotConfiguration$legend$font$createPlotFont()
+          title.theme = sensitivityPlotConfiguration$legend$font$createPlotTextBoxFont()
         ),
         shape = ggplot2::guide_legend(
           title = translateDescriptor(simulationSetDescriptor),
-          title.theme = sensitivityPlotConfiguration$legend$font$createPlotFont()
+          title.theme = sensitivityPlotConfiguration$legend$font$createPlotTextBoxFont()
         )
       )
     tornadoPlot <- setQuadraticDimension(tornadoPlot, plotConfiguration = settings$plotConfiguration)
