@@ -784,7 +784,7 @@ plotDemographyHistogram <- function(data,
 #' Plot demography range plot using visual predictive check style
 #' @param data data.frame
 #' @param metaData list of metaData about `data`
-#' @param daraMapping A `TimeProfileDataMapping` object
+#' @param dataMapping A `TimeProfileDataMapping` object
 #' @param plotConfiguration `PlotConfiguration`  object
 #' @return ggplot object
 #' @export
