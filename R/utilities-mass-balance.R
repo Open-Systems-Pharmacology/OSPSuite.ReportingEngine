@@ -13,26 +13,33 @@
 plotMeanMassBalance <- function(structureSet, settings = NULL) {
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
-
+  outputPaths <- getOutputPathsInSimulationSet(structureSet$simulationSet)
+  outputArray <- unique(ospsuite::toPathArray(outputPaths))
+  
   # Get all the relevant compounds for mass balance
-  allCompoundNames <- c(simulation$allFloatingMoleculeNames(), simulation$allStationaryMoleculeNames())
-  relevantCompoundNames <- allCompoundNames[!sapply(allCompoundNames, function(compoundName) {
-    compoundName %in% simulation$allEndogenousStationaryMoleculeNames()
-  })]
-  # User defined compound selection
-  selectedCompoundNames <- settings$selectedCompoundNames %||% relevantCompoundNames
-  validateIsIncluded(selectedCompoundNames, relevantCompoundNames)
-
-  # Get drug mass to perform the drugmass normalized plot
+  # as intersect between all compounds and output paths
+  allAppliedCompoundNames <- simulation$allXenobioticFloatingMoleculeNames()
+  compoundsInOutputPaths <- sapply(
+    allAppliedCompoundNames, 
+    function(compoundName){isIncluded(compoundName, outputArray)}
+    )
+  relevantAppliedCompoundNames <- allAppliedCompoundNames[compoundsInOutputPaths]
+  # Get drug mass for each application to perform the drugmass normalized plot
+  applications <- NULL
+  for(compoundName in relevantAppliedCompoundNames){
+    applications <- c(applications, simulation$allApplicationsFor(compoundName))
+  }
   # Create data.frame of cumulative applied drug mass from applications
-  # (account for infusion time if not bolus nor oral)
-  # Use only one relevant compound to retrieve all the applications to prevent duplicate applications
-  applications <- simulation$allApplicationsFor(head(relevantCompoundNames, 1))
+  # which accounts for infusion time if not bolus nor oral
   applicationResults <- getApplicationResults(applications)
-
-  # Get all the molecule paths (with dimension=amount) of the selected/relevant coumpounds
+  
+  # Get all the molecule paths (with dimension=amount) for the compounds and their metabolites
+  allCompoundNames <- setdiff(
+    c(simulation$allFloatingMoleculeNames(), simulation$allStationaryMoleculeNames()),
+    simulation$allEndogenousStationaryMoleculeNames()
+  )
   organism <- ospsuite::getContainer("Organism", simulation)
-  molecules <- ospsuite::getAllMoleculesMatching(paste0("**|", selectedCompoundNames), organism)
+  molecules <- ospsuite::getAllMoleculesMatching(paste0("**|", allCompoundNames), organism)
   # Clear concentration output in case any concentrations are still included
   ospsuite::clearOutputs(simulation)
   for (molecule in molecules) {
