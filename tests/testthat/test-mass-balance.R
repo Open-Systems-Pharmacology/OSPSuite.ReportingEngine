@@ -7,7 +7,8 @@ refOutputMassBalance <- getTestDataFilePath("mass-balance/Larson-timeProfiles.cs
 
 setMB <- SimulationSet$new(
   simulationSetName = "Larson",
-  simulationFile = simulationFile
+  simulationFile = simulationFile,
+  outputs = Output$new(path = "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)")
 )
 workflowFolderMB <- "test-mass-balance"
 workflowMB <- MeanModelWorkflow$new(simulationSets = setMB, workflowFolder = workflowFolderMB)
