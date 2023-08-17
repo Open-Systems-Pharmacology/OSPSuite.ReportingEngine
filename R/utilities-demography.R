@@ -564,7 +564,7 @@ getHistogramResults <- function(demographyPaths,
         dataMapping = histogramMapping,
         plotConfiguration = settings$plotConfigurations[["histogram"]] %||%
           tlf::HistogramPlotConfiguration$new(
-            ylabel = "Number of individuals [%]",
+            ylabel = reEnv$demographyHistogramLabel,
             data = demographyData,
             metaData = metaData,
             dataMapping = histogramMapping
@@ -637,7 +637,7 @@ getComparisonHistogramResults <- function(demographyPaths,
       dataMapping = histogramMapping,
       plotConfiguration = settings$plotConfigurations[["histogram"]] %||%
         tlf::HistogramPlotConfiguration$new(
-          ylabel = "Number of individuals [%]",
+          ylabel = reEnv$demographyHistogramLabel,
           data = data,
           metaData = metaData,
           dataMapping = histogramMapping
@@ -674,7 +674,7 @@ getComparisonHistogramResults <- function(demographyPaths,
       dataMapping = histogramMapping,
       plotConfiguration = settings$plotConfigurations[["histogram"]] %||%
         tlf::HistogramPlotConfiguration$new(
-          ylabel = "Number of individuals [%]",
+          ylabel = reEnv$demographyHistogramLabel,
           data = observedData,
           metaData = metaData,
           dataMapping = histogramMapping
