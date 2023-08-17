@@ -23,6 +23,7 @@ adjustTitlePage
 aes
 AggregationConfiguration
 al
+allApplicationsFor
 AllAvailableTasks
 allowedCores
 allPKParameterNames
@@ -144,6 +145,7 @@ getAllowedCores
 getAllowedCoresLinuxKubernetes
 getAllTasks
 getAnchorName
+getApplicationResults
 getAxesForTimeProfiles
 getAxesProperties
 getAxesSettings

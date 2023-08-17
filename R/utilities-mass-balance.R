@@ -8,35 +8,31 @@
 #' @import tlf
 #' @import ospsuite
 #' @import utils
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
 #' @keywords internal
 plotMeanMassBalance <- function(structureSet, settings = NULL) {
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
 
-  # Get drug mass to perform the drugmass normalized plot
-  applications <- ospsuite::getContainer("Applications", simulation)
-  appliedMoleculePaths <- ospsuite::getAllMoleculePathsIn(applications)
-
-  appliedMolecules <- ospsuite::getAllMoleculesMatching(appliedMoleculePaths, simulation)
-  drugMass <- sum(sapply(appliedMolecules, function(molecule) {
-    molecule$value
-  }))
-
-  # Get all the relevant compounds
-  organism <- ospsuite::getContainer("Organism", simulation)
+  # Get all the relevant compounds for mass balance
   allCompoundNames <- c(simulation$allFloatingMoleculeNames(), simulation$allStationaryMoleculeNames())
   relevantCompoundNames <- allCompoundNames[!sapply(allCompoundNames, function(compoundName) {
     compoundName %in% simulation$allEndogenousStationaryMoleculeNames()
   })]
-
   # User defined compound selection
   selectedCompoundNames <- settings$selectedCompoundNames %||% relevantCompoundNames
   validateIsIncluded(selectedCompoundNames, relevantCompoundNames)
 
-  # Get all the molecule paths (with dimension=amount) of the selected/relevant coumpounds
-  molecules <- ospsuite::getAllMoleculesMatching(paste0("**|", selectedCompoundNames), organism)
+  # Get drug mass to perform the drugmass normalized plot
+  # Create data.frame of cumulative applied drug mass from applications
+  # (account for infusion time if not bolus nor oral)
+  # Use only one relevant compound to retrieve all the applications to prevent duplicate applications
+  applications <- simulation$allApplicationsFor(head(relevantCompoundNames, 1))
+  applicationResults <- getApplicationResults(applications)
 
+  # Get all the molecule paths (with dimension=amount) of the selected/relevant coumpounds
+  organism <- ospsuite::getContainer("Organism", simulation)
+  molecules <- ospsuite::getAllMoleculesMatching(paste0("**|", selectedCompoundNames), organism)
   # Clear concentration output in case any concentrations are still included
   ospsuite::clearOutputs(simulation)
   for (molecule in molecules) {
@@ -86,20 +82,29 @@ plotMeanMassBalance <- function(structureSet, settings = NULL) {
 
   # Aggregate Data by compound and compartment
   simulationResultsOutputByGroup <- NULL
-
   for (compoundLevel in levels(pathsArray[, "compoundName"])) {
     for (compartmentLevel in levels(pathsArray[, "subCompartmentName"])) {
-      pathFilter <- pathsArray[, "compoundName"] %in% compoundLevel & pathsArray[, "subCompartmentName"] %in% compartmentLevel
+      selectedPaths <- pathsArray[, "compoundName"] %in% compoundLevel & pathsArray[, "subCompartmentName"] %in% compartmentLevel
       # as.character() ensures that levels filtered out won't still be added to the aggregation
-      pathNamesFiltered <- as.character(pathsArray[pathFilter, "path"])
+      selectedPathNames <- as.character(pathsArray[selectedPaths, "path"])
 
       # cbind(..., 0) prevents rowSums to crash if only one column is filtered
       aggregatedData <- rowSums(cbind.data.frame(
-        simulationResultsOutput$data[, pathNamesFiltered, drop = FALSE],
+        simulationResultsOutput$data[, selectedPathNames, drop = FALSE],
         data.frame(dummyVariable = 0)
       ))
 
       if (max(aggregatedData) > 0) {
+        # Expand drugMass in the time grid of the simulated data using function approx
+        # Output of approx is a data.frame with x and y variables
+        drugMass <- approx(
+          x = applicationResults$time,
+          y = applicationResults$drugMass,
+          xout = simulationResultsOutput$data[, "Time"],
+          method = "constant",
+          rule = 2
+        )$y
+
         simulationResultsOutputByGroup <- rbind.data.frame(
           simulationResultsOutputByGroup,
           cbind.data.frame(
@@ -113,18 +118,17 @@ plotMeanMassBalance <- function(structureSet, settings = NULL) {
     }
   }
 
-  # TO DO: Get meta data from input or settings
   metaDataOutputByGroup <- list(
     "Time" = list(
       dimension = "Time",
       unit = structureSet$simulationSet$timeUnit
     ),
     "Amount" = list(
-      dimension = appliedMolecules[[1]]$dimension,
-      unit = appliedMolecules[[1]]$unit
+      dimension = molecule$dimension,
+      unit = molecule$unit
     ),
     "NormalizedAmount" = list(
-      dimension = appliedMolecules[[1]]$dimension,
+      dimension = molecule$dimension,
       unit = "fraction of drugmass"
     )
   )
@@ -356,4 +360,46 @@ getMassBalanceDataMapping <- function(plotType) {
     )
   )
   return(dataMapping)
+}
+
+
+#' @title getApplicationResults
+#' @description Get a data.frame of application results corresponding to
+#' cumulative drug mass as a function of time.
+#' Accounts for infusion cases in which infusion time is not `NULL` by including intermediate time steps
+#' @param applications list of `Application` objects queried by the method `simulation$allApplicationsFor()`
+#' @return A data.frame that includes time and drug mass as variables
+#' @import ospsuite
+#' @import ospsuite.utils
+#' @keywords internal
+getApplicationResults <- function(applications, infusionSteps = 20) {
+  applicationResults <- data.frame()
+  for (application in applications) {
+    # No Infusion
+    if (is.null(application$infusionTime$value)) {
+      applicationResults <- rbind.data.frame(
+        applicationResults,
+        data.frame(
+          time = application$startTime$value,
+          drugMass = application$drugMass$value
+        )
+      )
+      next
+    }
+    # Infusion, need to discretize in multiple time steps
+    applicationResults <- rbind.data.frame(
+      applicationResults,
+      data.frame(
+        time = seq(
+          application$startTime$value,
+          application$startTime$value + application$infusionTime$value,
+          length.out = infusionSteps
+        ),
+        drugMass = application$drugMass$value / infusionSteps
+      )
+    )
+  }
+  # Normalization uses total drug mass
+  applicationResults$drugMass <- cumsum(applicationResults$drugMass)
+  return(applicationResults)
 }
