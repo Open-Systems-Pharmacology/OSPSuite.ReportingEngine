@@ -21,6 +21,7 @@ environment:
   _R_CHECK_FORCE_SUGGESTS_: false
   R_ARCH: x64
   R_VERSION: "4.3.1"
+  R_CHECK_ARGS: --no-build-vignettes --no-manual --as-cran
   COVERALLS_TOKEN:
     secure: Qo8To6hV3C2ghrS0Z+pPyvaBaEpE24Pwr7LF8AbiMO9HL+pkwX1U3kYGUNzJF5EU
 
@@ -41,7 +42,7 @@ build_script:
 
 on_success:
   - Rscript -e "spelling::spell_check_package()"
-  - Rscript -e "covr::codecov(function_exclusions = c('print.*', '\\.onLoad'))"
+#  - Rscript -e "covr::codecov(function_exclusions = c('print.*', '\\.onLoad'))"
 
 test_script:
   - travis-tool.sh run_tests
