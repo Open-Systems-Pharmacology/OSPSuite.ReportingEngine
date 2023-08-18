@@ -1,0 +1,49 @@
+# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
+# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+name: Run Nightly Code Coverage
+# schedule from https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
+on:
+  schedule:
+    - cron: '0 0 * * *'
+jobs:
+  test-coverage:
+    runs-on: windows-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup
+        uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+      - name: Setup Pandoc for word conversion
+        uses: r-lib/actions/setup-pandoc@v2
+      - name: Install ospsuite ecosystem and cran packages
+        run: |
+          Rscript -e "install.packages(c('covr', 'testthat', 'ggtext', 'knitr', 'rmarkdown', 'readr', 'remotes', 'dplyr', 'tidyr', 'purrr', 'patchwork', 'readxl','data.table'), repos='http://cran.rstudio.com/')"
+          Rscript -e "install.packages('https://github.com/Open-Systems-Pharmacology/rClr/releases/download/v0.9.1/rClr_0.9.1.zip', repos = NULL, type = 'binary')"
+          Rscript -e "download.file('https://ci.appveyor.com/api/projects/open-systems-pharmacology-ci/ospsuite-rutils/artifacts/ospsuite.utils.zip?pr=false', destfile = 'ospsuite.utils.zip', mode='wb'); install.packages('ospsuite.utils.zip', repos = NULL, type = 'binary')"
+          Rscript -e "download.file('https://ci.appveyor.com/api/projects/open-systems-pharmacology-ci/tlf-library/artifacts/tlf.zip?pr=false', destfile = 'tlf.zip', mode='wb'); install.packages('tlf.zip', repos = NULL, type = 'binary')"
+          Rscript -e "download.file('https://ci.appveyor.com/api/projects/open-systems-pharmacology-ci/ospsuite-r/artifacts/ospsuite.zip?pr=false', destfile = 'ospsuite.zip', mode='wb'); install.packages('ospsuite.zip', repos = NULL, type = 'binary')"
+      - name: Test coverage
+        run: |
+          covr::codecov(
+            quiet = FALSE,
+            clean = FALSE,
+            token = "Qo8To6hV3C2ghrS0Z+pPyvaBaEpE24Pwr7LF8AbiMO9HL+pkwX1U3kYGUNzJF5EU",
+            install_path = file.path(normalizePath(Sys.getenv("RUNNER_TEMP"), winslash = "/"), "package")
+          )
+        shell: Rscript {0}
+      - name: Show testthat output
+        if: always()
+        run: |
+          ## --------------------------------------------------------------------
+          find ${{ runner.temp }}/package -name 'testthat.Rout*' -exec cat '{}' \; || true
+        shell: bash
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-test-failures
+          path: ${{ runner.temp }}/package
