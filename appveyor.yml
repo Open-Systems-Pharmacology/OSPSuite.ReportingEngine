@@ -68,6 +68,10 @@ skip_commits:
   files:
     - "*.md"
     - .github/workflows/codecov-nightly.yml
+    - .github/workflows/*.sh
+    - .github/workflows/Dockerfile
+    - .github/workflows/LinuxImages.yml
+    - .github/workflows/testRE.R
 
 skip_branch_with_pr: true
 

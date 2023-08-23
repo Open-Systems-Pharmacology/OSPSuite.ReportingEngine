@@ -1,3 +1,3 @@
 #!/bin/sh
 
-# nothing to do so far
+apt-get -y install libpng-dev
