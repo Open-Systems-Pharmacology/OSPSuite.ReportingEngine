@@ -67,7 +67,7 @@ platform: x64
 skip_commits:
   files:
     - "*.md"
-    - .github/workflows/*
+    - .github/workflows/codecov-nightly.yml
 
 skip_branch_with_pr: true
 
