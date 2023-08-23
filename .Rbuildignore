@@ -14,3 +14,4 @@
 ^inst/extdata/RaltegravirSim\.pkml$
 ^tests/data/input-data/RaltegravirSim\.pkml$
 ^tests/data/input-data/individualPksimSim\.pkml$
+^inst/WORDLIST

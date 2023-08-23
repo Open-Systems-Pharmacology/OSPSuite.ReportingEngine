@@ -22,8 +22,6 @@ environment:
   R_ARCH: x64
   R_VERSION: "4.3.1"
   R_CHECK_ARGS: --no-build-vignettes --no-manual --as-cran
-  COVERALLS_TOKEN:
-    secure: Qo8To6hV3C2ghrS0Z+pPyvaBaEpE24Pwr7LF8AbiMO9HL+pkwX1U3kYGUNzJF5EU
 
 version: "$(app_version).{build}"
 
@@ -33,16 +31,10 @@ before_build:
 build_script:
   - travis-tool.sh install_deps
   - travis-tool.sh r_binary_install curl
-  - Rscript -e "install.packages(c('dplyr','purrr','covr','readr','tidyr','webshot','spelling','readxl','data.table','gridtext','ggtext'), repos = 'http://cran.us.r-project.org', type='win.binary')"
-  - Rscript -e "install.packages('tidyselect', repos = 'http://cran.us.r-project.org', type='source')"
-  - Rscript -e "install.packages('https://github.com/Open-Systems-Pharmacology/rClr/releases/download/v0.9.1/rClr_0.9.1.zip', repos = NULL, type = 'binary')"
-  - Rscript -e "download.file('https://ci.appveyor.com/api/projects/open-systems-pharmacology-ci/ospsuite-rutils/artifacts/ospsuite.utils.zip?pr=false', destfile = 'ospsuite.utils.zip', mode='wb'); install.packages('ospsuite.utils.zip', repos = NULL, type = 'binary')"
-  - Rscript -e "download.file('https://ci.appveyor.com/api/projects/open-systems-pharmacology-ci/tlf-library/artifacts/tlf.zip?pr=false', destfile = 'tlf.zip', mode='wb'); install.packages('tlf.zip', repos = NULL, type = 'binary')"
-  - Rscript -e "download.file('https://ci.appveyor.com/api/projects/open-systems-pharmacology-ci/ospsuite-r/artifacts/ospsuite.zip?pr=false', destfile = 'ospsuite.zip', mode='wb'); install.packages('ospsuite.zip', repos = NULL, type = 'binary')"
+  - Rscript .github/workflows/install_dependencies.R
 
 on_success:
   - Rscript -e "spelling::spell_check_package()"
-#  - Rscript -e "covr::codecov(function_exclusions = c('print.*', '\\.onLoad'))"
 
 test_script:
   - travis-tool.sh run_tests
@@ -75,6 +67,11 @@ platform: x64
 skip_commits:
   files:
     - "*.md"
+    - .github/workflows/codecov-nightly.yml
+    - .github/workflows/*.sh
+    - .github/workflows/Dockerfile
+    - .github/workflows/LinuxImages.yml
+    - .github/workflows/testRE.R
 
 skip_branch_with_pr: true
 
@@ -83,7 +80,6 @@ skip_tags: true
 branches:
   only:
     - develop
-    - v1.2_Fixes
 
 pull_requests:
   do_not_increment_build_number: true
