@@ -21,11 +21,7 @@ jobs:
         uses: r-lib/actions/setup-pandoc@v2
       - name: Install ospsuite ecosystem and cran packages
         run: |
-          Rscript -e "install.packages(c('covr', 'testthat', 'ggtext', 'knitr', 'rmarkdown', 'readr', 'remotes', 'dplyr', 'tidyr', 'purrr', 'patchwork', 'readxl','data.table'), repos='http://cran.rstudio.com/')"
-          Rscript -e "install.packages('https://github.com/Open-Systems-Pharmacology/rClr/releases/download/v0.9.1/rClr_0.9.1.zip', repos = NULL, type = 'binary')"
-          Rscript -e "download.file('https://ci.appveyor.com/api/projects/open-systems-pharmacology-ci/ospsuite-rutils/artifacts/ospsuite.utils.zip?pr=false', destfile = 'ospsuite.utils.zip', mode='wb'); install.packages('ospsuite.utils.zip', repos = NULL, type = 'binary')"
-          Rscript -e "download.file('https://ci.appveyor.com/api/projects/open-systems-pharmacology-ci/tlf-library/artifacts/tlf.zip?pr=false', destfile = 'tlf.zip', mode='wb'); install.packages('tlf.zip', repos = NULL, type = 'binary')"
-          Rscript -e "download.file('https://ci.appveyor.com/api/projects/open-systems-pharmacology-ci/ospsuite-r/artifacts/ospsuite.zip?pr=false', destfile = 'ospsuite.zip', mode='wb'); install.packages('ospsuite.zip', repos = NULL, type = 'binary')"
+          Rscript install_dependencies.R
       - name: Test coverage
         run: |
           covr::codecov(
@@ -35,11 +31,9 @@ jobs:
           )
         shell: Rscript {0}
       - name: Show testthat output
-        if: always()
         run: |
-          ## --------------------------------------------------------------------
-          find ${{ runner.temp }}/package -name 'testthat.Rout*' -exec cat '{}' \; || true
-        shell: bash
+          cat ${{ runner.temp }}/package/testthat.Rout*
+        shell: cmd
       - name: Upload test results
         if: failure()
         uses: actions/upload-artifact@v3
