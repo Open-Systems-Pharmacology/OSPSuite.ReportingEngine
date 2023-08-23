@@ -139,36 +139,39 @@ captions <- list(
       paste("###", parameterName, anchor(parameterID))
     },
     boxplot = function(parameterName, pathName, simulationSetName, descriptor, plotScale = "linear") {
-      return(paste0(
-        parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor),
-        " shown as box-whisker plot, which indicates the ",
-        paste(c(5, 25, 50, 75, 95), "<sup>th</sup>", sep = "", collapse = ", "),
-        " percentiles in ", plotScale, " scale."
-      ))
+      paste(
+        parameterName, "of", pathName, "for", reportSimulationSet(simulationSetName, descriptor),
+        getBoxplotDescriptor(), "in", plotScale, "scale."
+      )
     },
     summaryTable = function(parameterName, pathName, simulationSetName, descriptor, displayUnit) {
       return(paste0("Population statistics summarizing ", parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor), reportUnit(displayUnit)))
     },
-    ratioPlot = function(parameterName, pathName, simulationSetName, descriptor, referenceSetName, plotScale = "linear") {
-      referenceSetText <- paste0(" in comparison to ", referenceSetName)
-      return(paste0(
-        parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor), referenceSetText,
-        " shown as box-whisker plot, which indicates ratios of the ",
-        paste(c(5, 25, 50, 75, 95), "<sup>th</sup>", sep = "", collapse = ", "),
-        " percentiles in ", plotScale, " scale."
-      ))
-    },
     ratioTable = function(parameterName, pathName, simulationSetName, descriptor, referenceSetName) {
-      referenceSetText <- paste0(" in comparison to ", referenceSetName)
-      return(paste0(
-        "Ratios of ", parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor), referenceSetText
-      ))
+      paste(
+        parameterName, "ratio population summary statistics of",
+        pathName, "for", reportSimulationSet(simulationSetName, descriptor),
+        "in comparison to", referenceSetName
+      )
     },
     relativeChangeTable = function(parameterName, pathName, simulationSetName, descriptor, referenceSetName) {
-      referenceSetText <- paste0(" in comparison to ", referenceSetName)
-      return(paste0(
-        "Population statistics ratios summarizing ", parameterName, " of ", pathName, " for ", reportSimulationSet(simulationSetName, descriptor), referenceSetText
-      ))
+      paste(
+        "Ratio of population summary statistics of",
+        parameterName, "of", pathName, " for ", reportSimulationSet(simulationSetName, descriptor),
+        "in comparison to", referenceSetName
+      )
+    },
+    ratioPlot = function(parameterName, pathName, simulationSetName, descriptor, referenceSetName, plotScale = "linear") {
+      paste(
+        captions$plotPKParameters$ratioTable(parameterName, pathName, simulationSetName, descriptor, referenceSetName),
+        getBoxplotDescriptor(), "in", plotScale, "scale."
+      )
+    },
+    relativeChangePlot = function(parameterName, pathName, simulationSetName, descriptor, referenceSetName, plotScale = "linear") {
+      paste(
+        captions$plotPKParameters$relativeChangeTable(parameterName, pathName, simulationSetName, descriptor, referenceSetName),
+        getBoxplotDescriptor(ratio = TRUE), "in", plotScale, "scale."
+      )
     },
     rangePlot = function(xParameterName, yParameterName, simulationSetName, descriptor, referenceSetName = NULL, plotScale = "linear") {
       referenceSetText <- ifNotNull(referenceSetName, paste0(" in comparison to ", referenceSetName), "")
@@ -280,6 +283,13 @@ getTimeRangeCaption <- function(timeRangeName, reference, simulationSetName) {
       anchor(paste0(reference, "-", removeForbiddenLetters(simulationSetName), "-", "last"))
     ))
   }
+}
+
+getBoxplotDescriptor <- function(percentiles = c(5, 25, 50, 75, 95), ratio = FALSE) {
+  paste(
+    "shown as box-whisker plot, which indicates", ifelse(ratio, "ratios of", ""), "the",
+    paste0(percentiles, "<sup>th</sup>", collapse = ", "), "percentiles"
+  )
 }
 
 getStatisticsCaption <- function(statistics) {

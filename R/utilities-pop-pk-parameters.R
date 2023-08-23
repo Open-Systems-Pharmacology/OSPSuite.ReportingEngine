@@ -365,14 +365,70 @@ plotPopulationPKParameters <- function(structureSets,
       }
       # Output table of relative change in the respective statistics
       # From issue #536, no plot is required as artifact here
-      pkParameterVsRefTable <- pkParameterTableAsRelativeChange(pkParameterTable, referenceSimulationSetName)
-      pkParameterVsRefTable <- formatPKParameterHeader(pkParameterVsRefTable, simulationSetDescriptor)
+      pkParameterVsRefData <- pkParameterTableAsRelativeChange(pkParameterTable, referenceSimulationSetName)
+      pkParameterVsRefTable <- formatPKParameterHeader(pkParameterVsRefData, simulationSetDescriptor)
+      names(pkParameterVsRefData)[1:7] <- c("simulationSetName", "N", "ymin", "lower", "middle", "upper", "ymax")
 
-      # Save results
+      ratioPlotConfiguration <- getBoxWhiskerPlotConfiguration(
+        plotScale = "lin",
+        colorGrouping = colorGrouping,
+        # Ensure auto-scaling of boxplot is appropriate
+        data = data.frame(
+          simulationSetName = rep(pkParameterVsRefData$simulationSetName, 2),
+          Value = c(pkParameterVsRefData$ymin, pkParameterVsRefData$ymax)
+        ),
+        # Create appropriate ylabel
+        metaData = list(Value = list(
+          dimension = pkParameterMetaData$Value$dimension,
+          unit = paste0("fraction of ", referenceSimulationSetName)
+        )),
+        dataMapping = pkParametersMapping,
+        plotConfiguration = settings$plotConfigurations[["boxplotPKRatios"]]
+      )
+      
+      boxplotPKRatios <- ratioBoxplot(
+        data = pkParameterVsRefData,
+        plotConfiguration = ratioPlotConfiguration
+      )
       parameterCaption <- pkParameterMetaData$Value$dimension
+
+      # Check if log scaled boxplot was created before plotting logs of PK Ratio
+      if (hasPositiveValues(pkParameterVsRefData$ymin)) {
+        ratioRange <- autoAxesLimits(c(pkParameterVsRefData$ymin, pkParameterVsRefData$median, pkParameterVsRefData$ymax), scale = "log")
+        ratioBreaks <- autoAxesTicksFromLimits(ratioRange)
+        boxplotPKRatiosLog <- tlf::setYAxis(
+          plotObject = boxplotPKRatios,
+          scale = tlf::Scaling$log,
+          axisLimits = ratioRange,
+          ticks = ratioBreaks
+        )
+        resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", pkParameter$pkParameter, "log")
+        pkParametersResults[[resultID]] <- saveTaskResults(
+          id = resultID,
+          plot = boxplotPKRatiosLog,
+          plotCaption = captions$plotPKParameters$relativeChangePlot(
+            parameterCaption,
+            output$displayName,
+            setdiff(simulationSetNames, referenceSimulationSetName),
+            simulationSetDescriptor,
+            referenceSetName = referenceSimulationSetName,
+            plotScale = "logarithmic"
+          )
+        )
+      }
+
+      # Save Ratio of summary stats results
       resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", pkParameter$pkParameter)
       pkParametersResults[[resultID]] <- saveTaskResults(
         id = resultID,
+        plot = boxplotPKRatios,
+        plotCaption = captions$plotPKParameters$relativeChangePlot(
+          parameterCaption,
+          output$displayName,
+          setdiff(simulationSetNames, referenceSimulationSetName),
+          simulationSetDescriptor,
+          referenceSetName = referenceSimulationSetName
+        ),
         table = pkParameterVsRefTable,
         tableCaption = captions$plotPKParameters$relativeChangeTable(
           parameterCaption,
@@ -405,23 +461,6 @@ plotPopulationPKParameters <- function(structureSets,
 
       ratioPlotConfiguration <- getBoxWhiskerPlotConfiguration(
         plotScale = "lin",
-        colorGrouping = colorGrouping,
-        # Ensure auto-scaling of boxplot is appropriate
-        data = data.frame(
-          simulationSetName = rep(pkRatiosData$simulationSetName, 2),
-          Value = c(pkRatiosData$ymin, pkRatiosData$ymax)
-        ),
-        # Create appropriate ylabel
-        metaData = list(Value = list(
-          dimension = pkParameterMetaData$Value$dimension,
-          unit = paste0("fraction of ", referenceSimulationSetName)
-        )),
-        dataMapping = pkParametersMapping,
-        plotConfiguration = settings$plotConfigurations[["boxplotPKRatios"]]
-      )
-
-      ratioPlotConfigurationLog <- getBoxWhiskerPlotConfiguration(
-        plotScale = "log",
         colorGrouping = colorGrouping,
         # Ensure auto-scaling of boxplot is appropriate
         data = data.frame(

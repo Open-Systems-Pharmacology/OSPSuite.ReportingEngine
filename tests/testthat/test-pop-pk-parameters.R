@@ -92,7 +92,7 @@ test_that("Workflow generates appropriate number of files", {
 pkAnalysisPediatricPath <- file.path(workflowPediatric$workflowFolder, "PKAnalysis")
 test_that("PKAnalysis directory from Pediatric workflow includes appropriate number of files", {
   # Figures
-  expect_length(list.files(pkAnalysisPediatricPath, pattern = ".png"), 52)
+  expect_length(list.files(pkAnalysisPediatricPath, pattern = ".png"), 56)
   # Exported results
   expect_length(list.files(pkAnalysisPediatricPath, pattern = ".csv"), 4)
 })
@@ -100,7 +100,7 @@ test_that("PKAnalysis directory from Pediatric workflow includes appropriate num
 pkAnalysisParallelPath <- file.path(workflowParallel$workflowFolder, "PKAnalysis")
 test_that("PKAnalysis directory from Parallel workflow includes appropriate number of files", {
   # Figures
-  expect_length(list.files(pkAnalysisParallelPath, pattern = ".png"), 4)
+  expect_length(list.files(pkAnalysisParallelPath, pattern = ".png"), 8)
   # Exported results
   expect_length(list.files(pkAnalysisParallelPath, pattern = ".csv"), 4)
 })
@@ -108,7 +108,7 @@ test_that("PKAnalysis directory from Parallel workflow includes appropriate numb
 pkAnalysisRatioPath <- file.path(workflowRatio$workflowFolder, "PKAnalysis")
 test_that("PKAnalysis directory from Ratio workflow includes appropriate number of files", {
   # Figures
-  expect_length(list.files(pkAnalysisRatioPath, pattern = ".png"), 8)
+  expect_length(list.files(pkAnalysisRatioPath, pattern = ".png"), 12)
   # Exported results
   expect_length(list.files(pkAnalysisRatioPath, pattern = ".csv"), 6)
 })
