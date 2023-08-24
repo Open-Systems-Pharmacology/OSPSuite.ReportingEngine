@@ -1,7 +1,9 @@
 name: Run Reporting Engine Tests under Linux
 on: 
   pull_request:
-#  push:
+    paths-ignore:
+      - '*.md'
+      - '.github/workflows/codecov-nightly.yml'
 
 jobs:
   build:
