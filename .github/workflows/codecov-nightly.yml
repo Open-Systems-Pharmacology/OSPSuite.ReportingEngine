@@ -33,7 +33,7 @@ jobs:
         continue-on-error: true
       - name: Show testthat output
         run: |
-          cat ${{ runner.temp }}/package/testthat.Rout*
+          cat ${{ runner.temp }}/package/ospsuite.reportingengine/ospsuite.reportingengine-tests/testthat.Rout*
         shell: cmd
       - name: Upload test results
         if: failure()
