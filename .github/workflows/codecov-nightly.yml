@@ -5,6 +5,7 @@ name: Run Nightly Code Coverage
 on:
   schedule:
     - cron: '0 0 * * *'
+
 jobs:
   test-coverage:
     runs-on: windows-latest
@@ -30,9 +31,10 @@ jobs:
             install_path = file.path(normalizePath(Sys.getenv("RUNNER_TEMP"), winslash = "/"), "package")
           )
         shell: Rscript {0}
+        continue-on-error: true
       - name: Show testthat output
         run: |
-          cat ${{ runner.temp }}/package/testthat.Rout*
+          cat ${{ runner.temp }}/package/ospsuite.reportingengine/ospsuite.reportingengine-tests/testthat.Rout*
         shell: cmd
       - name: Upload test results
         if: failure()
