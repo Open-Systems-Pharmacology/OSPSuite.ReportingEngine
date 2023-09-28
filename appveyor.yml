@@ -39,6 +39,11 @@ on_success:
 test_script:
   - travis-tool.sh run_tests
 
+after_test:
+  - ps: copy ospsuite.reportingengine_*.zip ospsuite.reportingengine.zip
+  - ps: copy ospsuite.reportingengine_*ubuntu18.tar.gz ospsuite.reportingengine_ubuntu18.tar.gz
+  - ps: copy ospsuite.reportingengine_*centOS7.tar.gz ospsuite.reportingengine_centOS7.tar.gz
+
 on_failure:
   - 7z a failure.zip *.Rcheck\*
   - appveyor PushArtifact failure.zip
