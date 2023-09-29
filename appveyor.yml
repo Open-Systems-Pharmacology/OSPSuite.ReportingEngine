@@ -39,6 +39,10 @@ on_success:
 test_script:
   - travis-tool.sh run_tests
 
+after_test:
+  - ps: copy ospsuite.reportingengine_*.zip ospsuite.reportingengine.zip
+  - ps: copy ospsuite.reportingengine_*.tar.gz ospsuite.reportingengine.tar.gz
+
 on_failure:
   - 7z a failure.zip *.Rcheck\*
   - appveyor PushArtifact failure.zip
@@ -56,10 +60,10 @@ artifacts:
   - path: '*.Rcheck\**\*.Rout'
     name: Logs
 
-  - path: '\*_*.tar.gz'
+  - path: '\*.tar.gz'
     name: Bits
 
-  - path: '\*_*.zip'
+  - path: '\*.zip'
     name: Bits
 
 platform: x64
