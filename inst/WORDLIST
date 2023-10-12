@@ -47,12 +47,14 @@ buildQualificationDDIDataframe
 calculateArithmeticErrorRange
 calculateGeometricErrorRange
 calculateGMFE
+calculatePKAnalysesRatio
 calculatePKParameters
 CalculatePKParametersTask
 calculateResiduals
 calculateSensitivity
 cC
 checkAllCoresSuccessful
+checkIsSamePopulation
 checkLibraryLoaded
 checkPopulationLoaded
 checkSimulationLoaded
@@ -91,6 +93,7 @@ dataSelection
 DataSelectionKeys
 datasetColumn
 datasetUnit
+dataSize
 dataSource
 DataSource
 DataSourceCodeIdentifiers
@@ -218,8 +221,7 @@ getPKAnalysisResultsFileNames
 getPkOutputIndexDf
 getPKParameterGroupsInOutput
 getPKParameterMeasure
-getPKParameterRatioMeasureFromMCSampling
-getPKParameterRatioPKTable
+getPKParameterRatioTable
 getPKParametersAcrossPopulations
 getPKParametersContent
 getPKParametersInfoContent
@@ -227,6 +229,11 @@ getPKParametersInOutput
 getPKParametersInSimulationSet
 getPKRatioForMapping
 getPKRatioOutputsDataframe
+getPKRatioSummaryForDifferentPopulations
+getPKRatioSummaryForSamePopulation
+getPKRatioSummaryFromAnalyticalSolution
+getPKRatioSummaryFromMCSampling
+getPKRatioSummaryStatistics
 getPKResultsDataFrame
 getPlotConfigurationFromPlan
 getPlotSettings
@@ -364,6 +371,7 @@ massMoleConversion
 maximalParametersPerSensitivityPlot
 maxLines
 maxLinesPerParameter
+mcSampling
 md
 MeanModelWorkflow
 measureValuesBetween
@@ -419,6 +427,7 @@ piechart
 pieChart
 PieChart
 pkAnalysis
+PKAnalyses
 PKAnalysis
 PKAnalysisResults
 pkml
@@ -553,6 +562,7 @@ runParallelSensitivityAnalysis
 runPopulationSensitivityAnalysis
 runSensitivity
 runWorkflow
+sampleSize
 saveFigure
 saveLogs
 saveLogsToJson

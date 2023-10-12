@@ -258,9 +258,7 @@ messages <- list(
   subsetsCreated = function(numberOfSubsets, numberOfSimulations) {
     paste0("Splitting simulations for parallel run:", highlight(numberOfSimulations), " simulations split into ", highlight(numberOfSubsets), " subsets")
   },
-  ratioIdentifiedPopulations = function(outputName,
-                                        pkParameterName,
-                                        simulationSetName,
+  ratioIdentifiedPopulations = function(simulationSetName,
                                         referenceSimulationSetName,
                                         isSamePopulation = TRUE) {
     paste0(
@@ -268,8 +266,7 @@ messages <- list(
       "' was identified with population ",
       highlight(ifelse(isSamePopulation, "same", "different")),
       " from reference '", highlight(referenceSimulationSetName), "'.\n",
-      "Ratio comparison of ", highlight(pkParameterName), " of ", highlight(outputName),
-      " uses ", highlight(ifelse(isSamePopulation, "Individual PK Ratios", "Monte Carlo Sampling")),
+      "Ratio comparison will use ", highlight(ifelse(isSamePopulation, "Individual PK Ratios", "Monte Carlo Sampling")),
       " for analyzing statistics."
     )
   },
@@ -333,6 +330,12 @@ messages <- list(
       "', define units in field '", highlight("dataUnit"),
       "' when creating an '", highlight("Output"), "' object."
     )
+  },
+  monteCarlo = function(simulationSetName, mcRepetitions, mcRandomSeed){
+    paste0(
+      "Monte Carlo Sampling for ", highlight(simulationSetName), " will use ",
+      highlight(mcRepetitions), " repetitions with Random Seed ", highlight(mcRandomSeed)
+      )
   },
   monteCarloChecking = function(analyticalSolutionMessage, medianPKRatioStatistics, n, seed) {
     c(

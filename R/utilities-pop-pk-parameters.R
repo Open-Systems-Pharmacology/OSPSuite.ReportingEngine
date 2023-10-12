@@ -385,7 +385,7 @@ plotPopulationPKParameters <- function(structureSets,
         dataMapping = pkParametersMapping,
         plotConfiguration = settings$plotConfigurations[["boxplotPKRatios"]]
       )
-      
+
       boxplotPKRatios <- ratioBoxplot(
         data = pkParameterVsRefData,
         plotConfiguration = ratioPlotConfiguration
@@ -445,15 +445,13 @@ plotPopulationPKParameters <- function(structureSets,
       if (!isIncluded(workflowType, PopulationWorkflowTypes$ratioComparison)) {
         next
       }
+      # To fix issue #1086, now ratio summary statistics are calculated from the calculatePKParameters task
+      # and directly available from the structureSet objects
 
-      # Compute the ratios against reference population and
-      # Get the tables of their summary statistics
-      pkRatiosTable <- getPKParameterRatioPKTable(
-        data = pkParameterData,
-        dataMapping = pkParametersMapping,
-        structureSets = structureSets,
-        referenceSimulationSetName = referenceSimulationSetName,
-        settings = settings
+      pkRatiosTable <- getPKParameterRatioTable(
+        pkParameter = pkParameter$pkParameter,
+        outputPath = output$path,
+        structureSets = structureSets
       )
       pkRatiosData <- pkRatiosTable
       names(pkRatiosData)[1:7] <- c("simulationSetName", "N", "ymin", "lower", "middle", "upper", "ymax")

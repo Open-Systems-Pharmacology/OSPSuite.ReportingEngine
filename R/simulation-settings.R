@@ -17,6 +17,8 @@ SimulationSettings <- R6::R6Class(
       self$numberOfCores <- numberOfCores
       self$showProgress <- showProgress
       self$maxSimulationsPerCore <- maxSimulationsPerCore
+      self$mcRepetitions <- getDefaultMCRepetitions()
+      self$mcRandomSeed <- getDefaultMCRandomSeed()
     }
   ),
   active = list(
@@ -57,12 +59,35 @@ SimulationSettings <- R6::R6Class(
       validateIsInteger(value)
       validateIsOfLength(object = value, nbElements = 1)
       private$.allowedCores <- value
+    },
+    
+    #' @field mcRepetitions is the number of repetitions when performing a Monte Carlo Simulation
+    mcRepetitions = function(value) {
+      if (missing(value)) {
+        return(private$.mcRepetitions)
+      }
+      validateIsInteger(value)
+      validateIsOfLength(object = value, nbElements = 1)
+      private$.mcRepetitions <- value
+    },
+    
+    #' @field mcRandomSeed is the Random Seed Number when performing a Monte Carlo Simulation
+    #' which allows repeatability of the simulations
+    mcRandomSeed = function(value) {
+      if (missing(value)) {
+        return(private$.mcRandomSeed)
+      }
+      validateIsInteger(value)
+      validateIsOfLength(object = value, nbElements = 1)
+      private$.mcRandomSeed <- value
     }
   ),
   private = list(
     .numberOfCores = NULL,
     .showProgress = NULL,
     .maxSimulationsPerCore = NULL,
-    .allowedCores = NULL
+    .allowedCores = NULL,
+    .mcRepetitions = NULL,
+    .mcRandomSeed = NULL
   )
 )

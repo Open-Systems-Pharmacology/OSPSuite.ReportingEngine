@@ -5,6 +5,8 @@ CalculatePKParametersTask <- R6::R6Class(
   "CalculatePKParametersTask",
   inherit = SimulationTask,
   public = list(
+    #' @field ratioComparison logical defining if a ratio comparison is required
+    ratioComparison = FALSE,
     #' @description
     #' Save the task results related to a `structureSet`.
     #' @param structureSet A `SimulationStructure` object defining the properties of a simulation set
@@ -40,11 +42,18 @@ CalculatePKParametersTask <- R6::R6Class(
             structureSet = set,
             settings = self$settings
           )
-
           self$saveResults(set, taskResults)
         }
         clearMemory(clearSimulationsCache = TRUE)
       }
+      if(!self$ratioComparison) {
+        re.tEndAction(actionToken = actionToken)
+        logInfo(messages$runCompleted(getElapsedTime(t0), self$message))
+        return(invisible())
+      }
+      # Case of ratio comparison
+      calculatePKAnalysesRatio(structureSets = structureSets, settings = self$settings)
+
       re.tEndAction(actionToken = actionToken)
       logInfo(messages$runCompleted(getElapsedTime(t0), self$message))
     }

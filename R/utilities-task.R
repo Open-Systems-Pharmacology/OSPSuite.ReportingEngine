@@ -177,7 +177,7 @@ loadCalculatePKParametersTask <- function(workflow, active = FALSE, settings = N
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
 
-  return(CalculatePKParametersTask$new(
+  calculatePKParametersTask <- CalculatePKParametersTask$new(
     getTaskResults = calculatePKParameters,
     nameTaskResults = getObjectNameAsString(calculatePKParameters),
     outputFolder = defaultTaskOutputFolders$calculatePKParameters,
@@ -188,7 +188,15 @@ loadCalculatePKParametersTask <- function(workflow, active = FALSE, settings = N
     active = active,
     settings = settings,
     message = defaultWorkflowMessages$calculatePKParameters
-  ))
+  )
+  if(!isOfType(workflow, "PopulationWorkflow")){
+    return(calculatePKParametersTask)
+  }
+  if(!isIncluded(workflow$workflowType, PopulationWorkflowTypes$ratioComparison)){
+    return(calculatePKParametersTask)
+  }
+  calculatePKParametersTask$ratioComparison <- TRUE
+  return(calculatePKParametersTask)
 }
 
 #' @title loadCalculateSensitivityTask

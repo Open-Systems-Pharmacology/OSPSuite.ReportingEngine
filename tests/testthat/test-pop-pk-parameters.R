@@ -60,26 +60,28 @@ workflowRatio <- PopulationWorkflow$new(
   workflowFolder = workflowFolderRatio
 )
 
-workflowPediatric$activateTasks(c("simulate", "calculatePKParameters", "plotPKParameters"))
 # Save time preventing run of same simulations and pk parameter analyses
+workflowRatio$activateTasks(c("simulate", "calculatePKParameters", "plotPKParameters"))
+workflowRatio$calculatePKParameters$settings$mcRepetitions <- 100
 workflowParallel$inactivateTasks()
-workflowRatio$inactivateTasks()
+workflowPediatric$inactivateTasks()
 workflowParallel$activateTasks("plotPKParameters")
-workflowRatio$activateTasks("plotPKParameters")
+workflowPediatric$activateTasks("plotPKParameters")
 
-workflowPediatric$runWorkflow()
-# Before running parallel and ratio, save time by copying/pasting simulations and pk parameter analyses
-file.copy(from = "test-pk-parameters-pediatric/SimulationResults", to = "test-pk-parameters-parallel", recursive = TRUE)
-file.copy(from = "test-pk-parameters-pediatric/PKAnalysisResults", to = "test-pk-parameters-parallel", recursive = TRUE)
-file.copy(from = "test-pk-parameters-pediatric/SimulationResults", to = "test-pk-parameters-ratio", recursive = TRUE)
-file.copy(from = "test-pk-parameters-pediatric/PKAnalysisResults", to = "test-pk-parameters-ratio", recursive = TRUE)
-workflowParallel$runWorkflow()
 workflowRatio$runWorkflow()
+# Before running parallel and ratio, save time by copying/pasting simulations and pk parameter analyses
+file.copy(from = "test-pk-parameters-ratio/SimulationResults", to = "test-pk-parameters-parallel", recursive = TRUE)
+file.copy(from = "test-pk-parameters-ratio/PKAnalysisResults", to = "test-pk-parameters-parallel", recursive = TRUE)
+file.copy(from = "test-pk-parameters-ratio/SimulationResults", to = "test-pk-parameters-pediatric", recursive = TRUE)
+file.copy(from = "test-pk-parameters-ratio/PKAnalysisResults", to = "test-pk-parameters-pediatric", recursive = TRUE)
+workflowParallel$runWorkflow()
+workflowPediatric$runWorkflow()
 
 test_that("Workflow generates appropriate number of files", {
   # Log files
   expect_length(list.files(workflowPediatric$workflowFolder, pattern = ".txt"), 2)
   expect_length(list.files(workflowParallel$workflowFolder, pattern = ".txt"), 2)
+  expect_length(list.files(workflowRatio$workflowFolder, pattern = ".txt"), 2)
   # Reports
   expect_length(list.files(workflowPediatric$workflowFolder, pattern = ".md"), 2)
   expect_length(list.files(workflowPediatric$workflowFolder, pattern = ".docx"), 1)
@@ -148,4 +150,4 @@ updatePKParameter("AUC_tEnd", displayName = "AUC_tEnd", displayUnit = "µmol*min
 # Clear test workflow folders
 unlink(workflowPediatric$workflowFolder, recursive = TRUE)
 unlink(workflowParallel$workflowFolder, recursive = TRUE)
-unlink(workflowRatio$workflowFolder, recursive = TRUE)
+#unlink(workflowRatio$workflowFolder, recursive = TRUE)

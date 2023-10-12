@@ -10,6 +10,9 @@ set.seed(1111)
 
 referenceData <- data.frame(
   simulationSetName = "reference",
+  IndividualId = 1:popSize,
+  QuantityPath = "a",
+  Parameter = "Cmax",
   Value = rlnorm(
     n = popSize,
     meanlog = referenceParams$meanlog,
@@ -18,17 +21,15 @@ referenceData <- data.frame(
 )
 
 comparisonData <- data.frame(
-  simulationSetName = "comparison",
+  simulationSetName = "test",
+  IndividualId = 1:popSize,
+  QuantityPath = "a",
+  Parameter = "Cmax",
   Value = rlnorm(
     n = popSize,
     meanlog = comparisonParams$meanlog,
     sdlog = comparisonParams$sdlog
   )
-)
-
-dataMapping <- tlf::BoxWhiskerDataMapping$new(
-  x = "simulationSetName",
-  y = "Value"
 )
 
 # Expected values of ratio geomean and sd
@@ -37,18 +38,19 @@ ratioGeoSD <- exp(sqrt((comparisonParams$sdlog)^2 + (referenceParams$sdlog)^2))
 
 test_that("Analytical Solution is close to known solution", {
   # Get analytical solution from simulated distribution
-  analyticalSolution <- ospsuite.reportingengine:::getRatioMeasureAnalyticalSolution(
-    x = referenceData$Value,
-    y = comparisonData$Value
-  )
-
+  analyticalSolution <- ospsuite.reportingengine:::getPKRatioSummaryFromAnalyticalSolution(
+    pkData = comparisonData, 
+    referencePKData = referenceData, 
+    simulationSetName = "test"
+    )
+  
   expect_equal(
-    analyticalSolution$`geo mean`,
+    analyticalSolution$GeoMean,
     ratioGeoMean,
     tolerance = approximationTolerance
   )
   expect_equal(
-    analyticalSolution$`geo standard deviation`,
+    analyticalSolution$GeoSD,
     ratioGeoSD,
     tolerance = approximationTolerance
   )
@@ -56,19 +58,21 @@ test_that("Analytical Solution is close to known solution", {
 
 test_that("Monte Carlo Solution is close to known solution", {
   # Get Monte Carlo solution from simulated distribution
-  mcSolution <- ospsuite.reportingengine:::getPKParameterRatioMeasureFromMCSampling(
-    comparisonData = comparisonData,
-    referenceData = referenceData,
-    dataMapping = dataMapping
+  mcSolution <- ospsuite.reportingengine:::getPKRatioSummaryFromMCSampling(
+    pkData = comparisonData, 
+    referencePKData = referenceData, 
+    simulationSetName = "test",
+    # With 10000 repetitions the method runs longer
+    settings = list(showProgress = FALSE, mcRepetitions = 200)
   )
 
   expect_equal(
-    mcSolution$`geo mean`,
+    mcSolution$GeoMean,
     ratioGeoMean,
     tolerance = approximationTolerance
   )
   expect_equal(
-    mcSolution$`geo standard deviation`,
+    mcSolution$GeoSD,
     ratioGeoSD,
     tolerance = approximationTolerance
   )
@@ -76,17 +80,17 @@ test_that("Monte Carlo Solution is close to known solution", {
 
 test_that("Monte Carlo Solution is repeatable", {
   # Get Monte Carlo solution from simulated distribution
-  mcSolution1 <- ospsuite.reportingengine:::getPKParameterRatioMeasureFromMCSampling(
-    comparisonData = comparisonData,
-    referenceData = referenceData,
-    dataMapping = dataMapping,
-    settings = list(mcRepetitions = 100, mcRandomSeed = 3333)
+  mcSolution1 <- ospsuite.reportingengine:::getPKRatioSummaryFromMCSampling(
+    pkData = comparisonData, 
+    referencePKData = referenceData, 
+    simulationSetName = "test",
+    settings = list(showProgress = FALSE, mcRepetitions = 100, mcRandomSeed = 3333)
   )
-  mcSolution2 <- ospsuite.reportingengine:::getPKParameterRatioMeasureFromMCSampling(
-    comparisonData = comparisonData,
-    referenceData = referenceData,
-    dataMapping = dataMapping,
-    settings = list(mcRepetitions = 100, mcRandomSeed = 3333)
+  mcSolution2 <- ospsuite.reportingengine:::getPKRatioSummaryFromMCSampling(
+    pkData = comparisonData, 
+    referencePKData = referenceData, 
+    simulationSetName = "test",
+    settings = list(showProgress = FALSE, mcRepetitions = 100, mcRandomSeed = 3333)
   )
 
   expect_equal(mcSolution1, mcSolution2)
