@@ -198,7 +198,7 @@ plotDemographyParameters <- function(structureSets,
               ),
               captions$demography$rangePlotLegend(
                 simulationSetName = simulationSetName,
-                n = sum(selectedRows),
+                n = sum(selectedObsRows),
                 parameterClass = parameterClass,
                 dataType = "Observed"
               )
@@ -502,6 +502,7 @@ getDefaultDemographyXParameters <- function(workflowType) {
 #' @return A data.frame of aggregated data
 #' @import ospsuite.utils
 #' @import dplyr
+#' @import tidyr
 #' @keywords internal
 getDemographyAggregatedData <- function(data,
                                         xParameterName,
@@ -548,17 +549,18 @@ getDemographyAggregatedData <- function(data,
     )
   # If defined use groupName to split aggregation between groups
   if (!is.null(groupName)) {
-    eval(parse(text = paste0("aggregatedData <- data %>% group_by(bins,", groupName, ")")))
+    aggregatedData <- data %>% 
+      tidyr::complete(bins, .data[[groupName]]) %>%
+      group_by(bins, .data[[groupName]])
   }
   # Remove unwanted message: `summarise()` has grouped output by ...
-  suppressMessages({
-    aggregatedData <- aggregatedData %>%
+  aggregatedData <- aggregatedData %>%
       summarise(
         median = AggregationConfiguration$functions$middle(.data[[yParameterName]]),
         ymin = AggregationConfiguration$functions$ymin(.data[[yParameterName]]),
-        ymax = AggregationConfiguration$functions$ymax(.data[[yParameterName]])
+        ymax = AggregationConfiguration$functions$ymax(.data[[yParameterName]]),
+        .groups = "drop_last"
       )
-  })
   aggregatedData <- full_join(aggregatedXData, aggregatedData, by = "bins", multiple = "all")
   # In case, enforce ordering of the x values,
   # aiming at preventing lines going back and forth to the x values

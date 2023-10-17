@@ -1,4 +1,4 @@
 ID,type,datasetColumn,datasetUnit,reportName,pathID,comment
-age,covariate,AGE,year(s),p1,Organism|Age,
-weight,covariate,WEIGHT,kg,p3,Organism|Weight,
+age,covariate,AGE,year(s),Age,Organism|Age,
+weight,covariate,WEIGHT,kg,Weight,Organism|Weight,
 gender,covariate,GENDER,,Gender,Gender,Make sure to use same names as in Population

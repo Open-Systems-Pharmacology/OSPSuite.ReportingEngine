@@ -12,12 +12,12 @@ tlf::setDefaultLegendPosition(reDefaultLegendPosition)
 #' @export
 AggregationConfiguration <- list(
   functions = list(
-    middle = median,
+    middle = function(x) {median(x, na.rm = TRUE)},
     ymin = function(x) {
-      as.numeric(quantile(x, probs = 0.05))
+      as.numeric(quantile(x, probs = 0.05, na.rm = TRUE))
     },
     ymax = function(x) {
-      as.numeric(quantile(x, probs = 0.95))
+      as.numeric(quantile(x, probs = 0.95, na.rm = TRUE))
     }
   ),
   names = list(
