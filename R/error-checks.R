@@ -485,3 +485,25 @@ checkLLOQValues <- function(lloq, structureSet) {
   lloq[lloq <= 0 & !is.na(lloq)] <- NA
   return(lloq)
 }
+
+#' @title checkIsSamePopulation
+#' @description Check if 2 simulation sets use the same population.
+#' Same population is identified as
+#' 1- same population file and 2- same study design file (if defined)
+#' @param simulationSet A `PopulationSimulationSet` object
+#' @param referenceSet A `PopulationSimulationSet` object
+#' @return A logical
+#' @keywords internal
+checkIsSamePopulation <- function(simulationSet, referenceSet){
+  isSamePopulation <- all(
+    simulationSet$populationFile %in% referenceSet$populationFile,
+    any(
+      simulationSet$studyDesignFile %in% referenceSet$studyDesignFile,
+      all(
+        isEmpty(simulationSet$studyDesignFile),
+        isEmpty(referenceSet$studyDesignFile)
+      )
+    )
+  )
+  return(isSamePopulation)
+}

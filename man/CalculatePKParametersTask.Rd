@@ -10,6 +10,13 @@ R6 class for defining how pk parameters are calculated and save
 \section{Super classes}{
 \code{ospsuite.reportingengine::Task} -> \code{ospsuite.reportingengine::SimulationTask} -> \code{CalculatePKParametersTask}
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{ratioComparison}}{logical defining if a ratio comparison is required}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

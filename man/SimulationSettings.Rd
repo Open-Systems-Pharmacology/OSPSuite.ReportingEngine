@@ -17,6 +17,11 @@ R6 class for Population Simulation Settings
 \item{\code{maxSimulationsPerCore}}{Scale factor used in a parallel simulation.  The product of this scale factor and the number of allowable cores (allowedCores) sets the maximum number of simulations that may be run on one core.}
 
 \item{\code{allowedCores}}{is the number of cores assigned to the user session.}
+
+\item{\code{mcRepetitions}}{is the number of repetitions when performing a Monte Carlo Simulation}
+
+\item{\code{mcRandomSeed}}{is the Random Seed Number when performing a Monte Carlo Simulation
+which allows repeatability of the simulations}
 }
 \if{html}{\out{</div>}}
 }
