@@ -74,20 +74,9 @@ plotDemographyParameters <- function(structureSets,
   }
 
   # If demography variable(s) defined in xParameters
-  # Range plots
-  demographyDataMapping <- tlf::TimeProfileDataMapping$new(
-    x = "x",
-    y = "median",
-    ymin = "ymin",
-    ymax = "ymax",
-    color = "Legend",
-    fill = "Legend"
-  )
+  # Range plots or boxplots depending on the parameter class (issue #1088)
   for (demographyParameter in xParameters) {
-    # Currently, categorical variables are not be plotted in x-axis (for instance Gender)
-    if (demographyMetaData[[demographyParameter]]$class %in% "character") {
-      next
-    }
+    parameterClass <- demographyMetaData[[demographyParameter]]$class
     xParameterCaption <- demographyMetaData[[demographyParameter]]$dimension
     sectionId <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter)
 
@@ -99,10 +88,25 @@ plotDemographyParameters <- function(structureSets,
     )
     # This aims at preventing plots such as age vs age
     for (parameterName in setdiff(yParameters, demographyParameter)) {
-      # Currently, categorical variables are not be plotted in y-axis neither
+      # Categorical covariates only plotted when on xParameter as boxplot (issue #1088)
       if (demographyMetaData[[parameterName]]$class %in% "character") {
         next
       }
+      demographyDataMapping <- switch(parameterClass,
+        "character" = tlf::BoxWhiskerDataMapping$new(
+          x = demographyParameter,
+          y = parameterName,
+          fill = "Legend"
+        ),
+        tlf::TimeProfileDataMapping$new(
+          x = "x",
+          y = "median",
+          ymin = "ymin",
+          ymax = "ymax",
+          color = "Legend",
+          fill = "Legend"
+        )
+      )
       vpcMetaData <- list(
         "x" = demographyMetaData[[demographyParameter]],
         "median" = demographyMetaData[[parameterName]]
@@ -126,23 +130,32 @@ plotDemographyParameters <- function(structureSets,
           textChunk = captions$demography$populationSection(sectionId, simulationSetName, simulationSetDescriptor),
           includeTextChunk = TRUE
         )
-
         # Build dataset with Visual Predictive check format
         selectedRows <- demographyData$simulationSetName %in% simulationSetName
-        demographyData$Legend <- captions$demography$rangePlotLegend(simulationSetName, n = sum(selectedRows))
-
-        vpcData <- getDemographyAggregatedData(
-          data = demographyData[selectedRows, ],
-          xParameterName = demographyParameter,
-          yParameterName = parameterName,
-          groupName = "Legend",
-          bins = settings$bins,
-          stairstep = settings$stairstep
+        demographyData$Legend <- captions$demography$rangePlotLegend(
+          simulationSetName = simulationSetName,
+          n = sum(selectedRows),
+          parameterClass = parameterClass
         )
+
+        # Depending on parameterClass, produce range plot or boxplot
+        if (!isIncluded(parameterClass, "character")) {
+          vpcData <- getDemographyAggregatedData(
+            data = demographyData[selectedRows, ],
+            xParameterName = demographyParameter,
+            yParameterName = parameterName,
+            groupName = "Legend",
+            bins = settings$bins,
+            stairstep = settings$stairstep
+          )
+        }
         # comparisonData is the name of the final data provided to the plot function
         # If parallel or ratio comparison workflow without data, it will be used as is
         # Otherwise, vpcData will be combined with obs/reference data to get new comparisonData
-        comparisonData <- vpcData
+        comparisonData <- switch(parameterClass,
+          "character" = demographyData[selectedRows, ],
+          vpcData
+        )
 
         # Include observed data into regular plot if available
         selectedObsRows <- observedDemographyData$simulationSetName %in% simulationSetName
@@ -151,74 +164,101 @@ plotDemographyParameters <- function(structureSets,
           dataSource <- head(observedDemographyData[selectedObsRows, "dataSource"], 1)
           # Build dataset with Visual Predictive check format
           selectedColumns <- c(demographyParameter, parameterName, "Legend", "simulationSetName")
-          observedDemographyData$Legend <- captions$demography$rangePlotLegend(
-            simulationSetName,
-            n = sum(selectedObsRows),
-            dataType = "Observed"
+          observedDemographyData$Legend <- switch(parameterClass,
+            "character" = captions$demography$boxPlotLegend(simulationSetName, n = sum(selectedObsRows), dataType = "Observed"),
+            captions$demography$rangePlotLegend(simulationSetName, n = sum(selectedObsRows), dataType = "Observed")
           )
-          comparisonData <- getDemographyAggregatedData(
-            data = rbind.data.frame(
+          comparisonData <- switch(parameterClass,
+            "character" = rbind.data.frame(
               demographyData[selectedRows, selectedColumns],
               observedDemographyData[selectedObsRows, selectedColumns]
             ),
-            xParameterName = demographyParameter,
-            yParameterName = parameterName,
-            groupName = "Legend",
-            bins = settings$bins,
-            stairstep = settings$stairstep
+            getDemographyAggregatedData(
+              data = rbind.data.frame(
+                demographyData[selectedRows, selectedColumns],
+                observedDemographyData[selectedObsRows, selectedColumns]
+              ),
+              xParameterName = demographyParameter,
+              yParameterName = parameterName,
+              groupName = "Legend",
+              bins = settings$bins,
+              stairstep = settings$stairstep
+            )
           )
           # Keep always reference as second entry for same coloring
           comparisonData$Legend <- factor(
             comparisonData$Legend,
             levels = c(
-              captions$demography$rangePlotLegend(simulationSetName, n = sum(selectedRows)),
-              captions$demography$rangePlotLegend(simulationSetName, n = sum(selectedObsRows), dataType = "Observed")
+              captions$demography$rangePlotLegend(
+                simulationSetName = simulationSetName,
+                n = sum(selectedRows),
+                parameterClass = parameterClass
+              ),
+              captions$demography$rangePlotLegend(
+                simulationSetName = simulationSetName,
+                n = sum(selectedRows),
+                parameterClass = parameterClass,
+                dataType = "Observed"
+              )
             )
           )
         }
 
-        demographyRangePlot <- plotDemographyRange(
+        demographyPlot <- plotDemographyRange(
           data = comparisonData,
-          metaData = vpcMetaData,
+          metaData = switch(parameterClass,
+            "character" = demographyMetaData,
+            vpcMetaData
+          ),
           dataMapping = demographyDataMapping,
-          plotConfiguration = settings$plotConfigurations[["vpcParameterPlot"]]
+          plotConfiguration = settings$plotConfigurations[[switch(parameterClass,
+            "character" = "boxplot",
+            "vpcParameterPlot"
+          )]],
+          parameterClass = parameterClass
         )
+
         # Save demography range plots
         resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName)
         demographyResults[[resultID]] <- saveTaskResults(
           id = resultID,
-          plot = demographyRangePlot,
+          plot = demographyPlot,
           plotCaption = captions$demography$rangePlot(
-            xParameterCaption,
-            yParameterCaption,
-            simulationSetName,
-            simulationSetDescriptor,
+            xParameterName = xParameterCaption,
+            yParameterName = yParameterCaption,
+            simulationSetName = simulationSetName,
+            descriptor = simulationSetDescriptor,
+            parameterClass = parameterClass,
             dataSource = dataSource
           )
         )
 
-        # Range plots in log scale
-        vpcLogLimits <- autoAxesLimits(
-          c(comparisonData$ymin, comparisonData$median, comparisonData$ymax),
+        # Range or boxplots in log scale
+        logLimits <- autoAxesLimits(
+          switch(parameterClass,
+            "character" = comparisonData[, parameterName],
+            c(comparisonData$ymin, comparisonData$median, comparisonData$ymax)
+          ),
           scale = "log"
         )
-        vpcLogTicks <- autoAxesTicksFromLimits(vpcLogLimits)
+        logTicks <- autoAxesTicksFromLimits(logLimits)
 
         resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName, "log")
         demographyResults[[resultID]] <- saveTaskResults(
           id = resultID,
           plot = tlf::setYAxis(
-            plotObject = demographyRangePlot,
+            plotObject = demographyPlot,
             scale = tlf::Scaling$log,
-            axisLimits = vpcLogLimits,
-            ticks = vpcLogTicks
+            axisLimits = logLimits,
+            ticks = logTicks
           ),
           plotCaption = captions$demography$rangePlot(
-            xParameterCaption,
-            yParameterCaption,
-            simulationSetName,
-            simulationSetDescriptor,
+            xParameterName = xParameterCaption,
+            yParameterName = yParameterCaption,
+            simulationSetName = simulationSetName,
+            descriptor = simulationSetDescriptor,
             plotScale = "logarithmic",
+            parameterClass = parameterClass,
             dataSource = dataSource
           )
         )
@@ -230,81 +270,113 @@ plotDemographyParameters <- function(structureSets,
           next
         }
         selectedRefRows <- demographyData$simulationSetName %in% referenceSimulationSetName
-        referenceData <- getDemographyAggregatedData(
-          data = demographyData[selectedRefRows, ],
-          xParameterName = demographyParameter,
-          yParameterName = parameterName,
-          bins = settings$bins,
-          stairstep = settings$stairstep
-        )
-        # If reference is preferred plotted as its global range
-        if (settings$referenceGlobalRange) {
-          referenceData <- getDemographyAggregatedData(
+        referenceData <- switch(parameterClass,
+          "character" = demographyData[selectedRefRows, ],
+          getDemographyAggregatedData(
             data = demographyData[selectedRefRows, ],
             xParameterName = demographyParameter,
             yParameterName = parameterName,
-            bins = c(-Inf, Inf),
-            stairstep = TRUE
+            bins = settings$bins,
+            stairstep = settings$stairstep
+          )
+        )
+
+        # If reference is preferred plotted as its global range
+        if (settings$referenceGlobalRange) {
+          referenceData <- switch(parameterClass,
+            "character" = demographyData[selectedRefRows, ],
+            getDemographyAggregatedData(
+              data = demographyData[selectedRefRows, ],
+              xParameterName = demographyParameter,
+              yParameterName = parameterName,
+              bins = c(-Inf, Inf),
+              stairstep = TRUE
+            )
           )
         }
         # Label for legend
         referenceData$Legend <- captions$demography$rangePlotLegend(
           referenceSimulationSetName,
-          n = sum(selectedRefRows)
+          n = sum(selectedRefRows),
+          parameterClass = parameterClass
         )
-        comparisonData <- rbind.data.frame(vpcData, referenceData)
+        comparisonData <- switch(parameterClass,
+          "character" = rbind.data.frame(demographyData[selectedRows, ], referenceData),
+          rbind.data.frame(vpcData, referenceData)
+        )
         # Keep always reference as second entry for same coloring
         comparisonData$Legend <- factor(
           comparisonData$Legend,
           levels = c(
-            captions$demography$rangePlotLegend(simulationSetName, n = sum(selectedRows)),
-            captions$demography$rangePlotLegend(referenceSimulationSetName, n = sum(selectedRefRows))
+            captions$demography$rangePlotLegend(
+              simulationSetName = simulationSetName,
+              n = sum(selectedRows),
+              parameterClass = parameterClass
+            ),
+            captions$demography$rangePlotLegend(
+              simulationSetName = referenceSimulationSetName,
+              n = sum(selectedRefRows),
+              parameterClass = parameterClass
+            )
           )
         )
 
-        demographyRangePlot <- plotDemographyRange(
+        demographyPlot <- plotDemographyRange(
           data = comparisonData,
-          metaData = vpcMetaData,
+          metaData = switch(parameterClass,
+            "character" = demographyMetaData,
+            vpcMetaData
+          ),
           dataMapping = demographyDataMapping,
-          plotConfiguration = settings$plotConfigurations[["comparisonVpcPlot"]]
+          plotConfiguration = settings$plotConfigurations[[switch(parameterClass,
+            "character" = "comparisonBoxplot",
+            "comparisonVpcPlot"
+          )]],
+          parameterClass = parameterClass
         )
+
         # Save comparison range plots
         resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName)
         demographyResults[[resultID]] <- saveTaskResults(
           id = resultID,
-          plot = demographyRangePlot,
+          plot = demographyPlot,
           plotCaption = captions$demography$rangePlot(
-            xParameterCaption,
-            yParameterCaption,
-            simulationSetName,
-            simulationSetDescriptor,
-            referenceSetName = referenceSimulationSetName
+            xParameterName = xParameterCaption,
+            yParameterName = yParameterCaption,
+            simulationSetName = simulationSetName,
+            descriptor = simulationSetDescriptor,
+            referenceSetName = referenceSimulationSetName,
+            parameterClass = parameterClass
           )
         )
 
         # Comparison range plots in log scale
-        vpcLogLimits <- autoAxesLimits(
-          c(comparisonData$ymin, comparisonData$median, comparisonData$ymax),
+        logLimits <- autoAxesLimits(
+          switch(parameterClass,
+            "character" = comparisonData[, parameterName],
+            c(comparisonData$ymin, comparisonData$median, comparisonData$ymax)
+          ),
           scale = "log"
         )
-        vpcLogTicks <- autoAxesTicksFromLimits(vpcLogLimits)
+        logTicks <- autoAxesTicksFromLimits(logLimits)
 
         resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName, "log")
         demographyResults[[resultID]] <- saveTaskResults(
           id = resultID,
           plot = tlf::setYAxis(
-            plotObject = demographyRangePlot,
+            plotObject = demographyPlot,
             scale = tlf::Scaling$log,
-            axisLimits = vpcLogLimits,
-            ticks = vpcLogTicks
+            axisLimits = logLimits,
+            ticks = logTicks
           ),
           plotCaption = captions$demography$rangePlot(
-            xParameterCaption,
-            yParameterCaption,
-            simulationSetName,
-            simulationSetDescriptor,
+            xParameterName = xParameterCaption,
+            yParameterName = yParameterCaption,
+            simulationSetName = simulationSetName,
+            descriptor = simulationSetDescriptor,
+            plotScale = "logarithmic",
             referenceSetName = referenceSimulationSetName,
-            plotScale = "logarithmic"
+            parameterClass = parameterClass
           )
         )
       }
@@ -781,11 +853,13 @@ plotDemographyHistogram <- function(data,
 
 #' @title plotDemographyRange
 #' @description
-#' Plot demography range plot using visual predictive check style
+#' Plot demography range plot using visual predictive check style if data is numeric,
+#' or using box whisker plot if data is categorical
 #' @param data data.frame
 #' @param metaData list of metaData about `data`
-#' @param dataMapping A `TimeProfileDataMapping` object
+#' @param dataMapping A `TimeProfileDataMapping` or `BoxWhiskerDataMapping` object
 #' @param plotConfiguration `PlotConfiguration`  object
+#' @param parameterClass Class of the parameter, either "numeric" or "character"
 #' @return ggplot object
 #' @export
 #' @import tlf
@@ -794,14 +868,23 @@ plotDemographyHistogram <- function(data,
 plotDemographyRange <- function(data,
                                 metaData = NULL,
                                 dataMapping = NULL,
-                                plotConfiguration = NULL) {
+                                plotConfiguration = NULL,
+                                parameterClass = "numeric") {
   mapLabels <- tlf:::.getAesStringMapping(dataMapping)
   # TODO: once range plots included in tlf, switch to range plots
-  vpcPlotConfiguration <- plotConfiguration %||% tlf::TimeProfilePlotConfiguration$new(
-    data = data,
-    metaData = metaData,
-    dataMapping = dataMapping
+  vpcPlotConfiguration <- plotConfiguration %||% switch(parameterClass,
+    "character" = tlf::BoxWhiskerPlotConfiguration$new(
+      data = data,
+      metaData = metaData,
+      dataMapping = dataMapping
+    ),
+    tlf::TimeProfilePlotConfiguration$new(
+      data = data,
+      metaData = metaData,
+      dataMapping = dataMapping
+    )
   )
+
   ribbonProperties <- tlf:::.getAestheticValuesFromConfiguration(
     n = length(unique(data[[mapLabels$fill]])),
     plotConfigurationProperty = vpcPlotConfiguration$ribbons,
@@ -816,6 +899,15 @@ plotDemographyRange <- function(data,
   ribbonProperties$fill[2] <- reEnv$referenceFill
   lineProperties$color[2] <- reEnv$referenceColor
 
+  if (isIncluded(parameterClass, "character")) {
+    vpcPlotConfiguration$ribbons$fill <- ribbonProperties$fill
+    return(tlf::plotBoxWhisker(
+      data = data,
+      metaData = metaData,
+      dataMapping = dataMapping,
+      plotConfiguration = vpcPlotConfiguration
+    ))
+  }
   vpcPlot <- tlf::initializePlot(vpcPlotConfiguration) +
     ggplot2::geom_ribbon(
       data = data,
