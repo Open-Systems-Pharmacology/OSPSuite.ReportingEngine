@@ -164,10 +164,12 @@ plotDemographyParameters <- function(structureSets,
           dataSource <- head(observedDemographyData[selectedObsRows, "dataSource"], 1)
           # Build dataset with Visual Predictive check format
           selectedColumns <- c(demographyParameter, parameterName, "Legend", "simulationSetName")
-          observedDemographyData$Legend <- switch(parameterClass,
-            "character" = captions$demography$boxPlotLegend(simulationSetName, n = sum(selectedObsRows), dataType = "Observed"),
-            captions$demography$rangePlotLegend(simulationSetName, n = sum(selectedObsRows), dataType = "Observed")
-          )
+          observedDemographyData$Legend <- captions$demography$rangePlotLegend(
+              simulationSetName = simulationSetName,
+              n = sum(selectedObsRows),
+              parameterClass = parameterClass,
+              dataType = "Observed"
+              )
           comparisonData <- switch(parameterClass,
             "character" = rbind.data.frame(
               demographyData[selectedRows, selectedColumns],
