@@ -47,19 +47,27 @@ captions <- list(
         dataSource
       )
     },
-    rangePlotLegend = function(simulationSetName, n, dataType = "Simulated") {
+    rangePlotLegend = function(simulationSetName, n, dataType = "Simulated", parameterClass = "numeric") {
       paste0(
-        dataType, " ", AggregationConfiguration$names$middle, " and ",
-        AggregationConfiguration$names$range, " for ",
-        simulationSetName,
-        " (n=", n, ")"
+        dataType, " ",
+        switch(parameterClass,
+          "character" = "data for",
+          paste(AggregationConfiguration$names$middle, "and", AggregationConfiguration$names$range, "for")
+        ),
+        " ", simulationSetName, " (n=", n, ")"
       )
     },
-    rangePlot = function(xParameterName, yParameterName, simulationSetName, descriptor, referenceSetName = NULL, plotScale = "linear", dataSource = "") {
+    rangePlot = function(xParameterName, yParameterName, simulationSetName, descriptor, referenceSetName = NULL, plotScale = "linear", parameterClass = "numeric", dataSource = "") {
       referenceSetText <- ifNotNull(referenceSetName, paste0(" in comparison to ", referenceSetName), "")
       return(paste0(
         xParameterName, "-dependence of ", yParameterName, " for ", reportSimulationSet(simulationSetName, descriptor),
-        referenceSetText, getPlotScaleCaption("Profiles", plotScale), dataSource
+        referenceSetText,
+        getPlotScaleCaption("Profiles", plotScale),
+        switch(parameterClass,
+          "character" = getBoxplotDescriptor(),
+          ""
+        ),
+        dataSource
       ))
     }
   ),

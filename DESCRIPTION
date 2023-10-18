@@ -37,7 +37,8 @@ Imports:
     ggplot2,
     jsonlite,
     ospsuite.utils (>= 1.4.0),
-    dplyr
+    dplyr,
+    tidyr
 Suggests: 
     testthat (>= 2.1.0),
     knitr,

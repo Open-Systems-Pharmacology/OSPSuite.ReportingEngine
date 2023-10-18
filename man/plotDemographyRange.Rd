@@ -8,7 +8,8 @@ plotDemographyRange(
   data,
   metaData = NULL,
   dataMapping = NULL,
-  plotConfiguration = NULL
+  plotConfiguration = NULL,
+  parameterClass = "numeric"
 )
 }
 \arguments{
@@ -16,13 +17,16 @@ plotDemographyRange(
 
 \item{metaData}{list of metaData about `data`}
 
-\item{dataMapping}{A `TimeProfileDataMapping` object}
+\item{dataMapping}{A `TimeProfileDataMapping` or `BoxWhiskerDataMapping` object}
 
 \item{plotConfiguration}{`PlotConfiguration`  object}
+
+\item{parameterClass}{Class of the parameter, either "numeric" or "character"}
 }
 \value{
 ggplot object
 }
 \description{
-Plot demography range plot using visual predictive check style
+Plot demography range plot using visual predictive check style if data is numeric,
+or using box whisker plot if data is categorical
 }
