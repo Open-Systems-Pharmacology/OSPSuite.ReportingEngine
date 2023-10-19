@@ -520,7 +520,8 @@ getDemographyAggregatedData <- function(data,
       xParameterBreaks <- unique(unname(
         quantile(
           x = data[, xParameterName],
-          probs = seq(0, 1, length.out = xParameterBreaks)
+          # needs to add 1 because n edges will create n-1 bins
+          probs = seq(0, 1, length.out = xParameterBreaks + 1)
         )
       ))
     } else {
@@ -528,7 +529,7 @@ getDemographyAggregatedData <- function(data,
       xParameterBreaks <- unique(seq(
         min(data[, xParameterName], na.rm = TRUE),
         max(data[, xParameterName], na.rm = TRUE),
-        length.out = xParameterBreaks
+        length.out = xParameterBreaks + 1
       ))
     }
   }
