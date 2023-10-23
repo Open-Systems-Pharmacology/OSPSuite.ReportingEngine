@@ -152,8 +152,7 @@ getPKRatioSummaryStatistics <- function(pkData, referencePKData, simulationSetNa
   ) %>% mutate(Ratio = Value / ValueRef)
 
   # Data summary is applied to subgroups of QuantityPath and Parameter
-  ratioSummary <- ratioData %>%
-    group_by(QuantityPath, Parameter) %>%
+  ratioSummary <- ratioData[, c("QuantityPath", "Parameter", "Ratio")] %>%
     summarise(
       N = n(),
       Perc5 = quantile(Ratio, probs = 0.05, na.rm = TRUE),
@@ -165,7 +164,7 @@ getPKRatioSummaryStatistics <- function(pkData, referencePKData, simulationSetNa
       SD = sd(Ratio, na.rm = TRUE),
       GeoMean = exp(mean(log(Ratio), na.rm = TRUE)),
       GeoSD = exp(sd(log(Ratio), na.rm = TRUE)),
-      .groups = "drop_last"
+      .by = c("QuantityPath", "Parameter")
     ) %>%
     mutate(SimulationSetName = simulationSetName, .before = everything())
 
@@ -211,22 +210,20 @@ mcSampling <- function(dataSize, sampleSize, n = getDefaultMCRepetitions(), seed
 #' @import dplyr
 getPKRatioSummaryFromAnalyticalSolution <- function(pkData, referencePKData, simulationSetName) {
   pkSummary <- pkData %>%
-    group_by(QuantityPath, Parameter) %>%
     summarise(
       Mean = mean(Value, na.rm = TRUE),
       SD = sd(Value, na.rm = TRUE),
       MeanLog = mean(log(Value), na.rm = TRUE),
       SDLog = sd(log(Value), na.rm = TRUE),
-      .groups = "drop_last"
+      .by = c("QuantityPath", "Parameter")
     )
   referencePKSummary <- referencePKData %>%
-    group_by(QuantityPath, Parameter) %>%
     summarise(
       Mean = mean(Value, na.rm = TRUE),
       SD = sd(Value, na.rm = TRUE),
       MeanLog = mean(log(Value), na.rm = TRUE),
       SDLog = sd(log(Value), na.rm = TRUE),
-      .groups = "drop_last"
+      .by = c("QuantityPath", "Parameter")
     )
   # Merge data summaries
   ratioSummary <- left_join(
@@ -248,6 +245,157 @@ getPKRatioSummaryFromAnalyticalSolution <- function(pkData, referencePKData, sim
 }
 
 
+#' @title getPKRatioSummaryFromSettings
+#' @description Get PK Parameter Ratio Measure From Monte Carlo Sampling
+#' @param pkData A data.frame of PK Parameter values for Population to compare
+#' @param referencePKData A data.frame of PK Parameter values for reference Population
+#' @param settings A list of task settings
+#' @return A data.frame of the PK Parameter ratios summary statistics
+#' @keywords internal
+getPKRatioSummaryFromSettings <- function(pkData, referencePKData, settings) {
+  # Sample from largest population if size is different
+  # Create a list of Sampled PK Parameters for each MC repetition and calculate their Ratio
+  pkSize <- length(unique(pkData$IndividualId))
+  referenceSize <- length(unique(referencePKData$IndividualId))
+  mcRepetitions <- settings$mcRepetitions %||% getDefaultMCRepetitions()
+  mcRandomSeed <- settings$mcRandomSeed %||% getDefaultMCRandomSeed()
+
+  widerPopulation <- ifelse(pkSize < referenceSize, "reference", "comparison")
+
+  selectedIds <- mcSampling(
+    dataSize = switch(widerPopulation,
+      "reference" = referenceSize,
+      "comparison" = pkSize
+    ),
+    sampleSize = switch(widerPopulation,
+      "reference" = pkSize,
+      "comparison" = referenceSize
+    ),
+    n = mcRepetitions,
+    seed = mcRandomSeed
+  )
+  useParallel <- all(
+    requireNamespace("parallel", quietly = TRUE),
+    settings$numberOfCores > 1
+  )
+  if (useParallel) {
+    cl <- parallel::makeCluster(settings$numberOfCores)
+    on.exit(parallel::stopCluster(cl))
+
+    # Parallel code requires that some objects are exported and to use dplyr package
+    # Re-import and rename function in this specific environment to be exported on clusters
+    getParallelSummaryStatistics <- getPKRatioSummaryStatistics
+    invisible(parallel::clusterEvalQ(cl, library(dplyr)))
+    invisible(parallel::clusterExport(cl, c(
+      "selectedIds",
+      "pkSize",
+      "referenceSize",
+      "pkData",
+      "referencePKData",
+      "getParallelSummaryStatistics"
+    ),
+    envir = environment()
+    ))
+    listOfMCRatioData <- switch(widerPopulation,
+      "reference" = parallel::parLapply(
+        cl = cl,
+        seq_along(selectedIds),
+        function(repetition) {
+          getParallelSummaryStatistics(
+            pkData = pkData %>%
+              mutate(IndividualId = ave(
+                1:pkSize,
+                pkData$QuantityPath,
+                pkData$Parameter,
+                FUN = identity
+              )),
+            referencePKData = referencePKData %>%
+              slice(selectedIds[[repetition]], .by = c("QuantityPath", "Parameter")) %>%
+              mutate(IndividualId = ave(1:pkSize, QuantityPath, Parameter, FUN = identity)),
+            simulationSetName = repetition
+          )
+        }
+      ),
+      "comparison" = parallel::parLapply(
+        cl = cl,
+        seq_along(selectedIds),
+        function(repetition) {
+          getParallelSummaryStatistics(
+            pkData %>%
+              slice(selectedIds[[repetition]], .by = c("QuantityPath", "Parameter")) %>%
+              mutate(IndividualId = ave(1:referenceSize, QuantityPath, Parameter, FUN = identity)),
+            referencePKData = referencePKData %>%
+              mutate(IndividualId = ave(
+                1:referenceSize,
+                referencePKData$QuantityPath,
+                referencePKData$Parameter,
+                FUN = identity
+              )),
+            simulationSetName = repetition
+          )
+        }
+      )
+    )
+    mcRatioData <- do.call("rbind", listOfMCRatioData)
+    return(mcRatioData)
+  }
+
+  if (settings$showProgress) {
+    loadingProgress <- txtProgressBar(max = mcRepetitions, style = 3)
+    on.exit(close(loadingProgress))
+  }
+
+  listOfMCRatioData <- switch(widerPopulation,
+    "reference" = lapply(
+      seq_along(selectedIds),
+      function(repetition) {
+        if (settings$showProgress) {
+          setTxtProgressBar(loadingProgress, value = repetition)
+        }
+        # data.frame is arranged by increasing values of IndividualId
+        # since group_by is slow, ave is used instead
+        getPKRatioSummaryStatistics(
+          pkData = pkData %>%
+            mutate(IndividualId = ave(
+              1:pkSize,
+              pkData$QuantityPath,
+              pkData$Parameter,
+              FUN = identity
+            )),
+          referencePKData = referencePKData %>%
+            slice(selectedIds[[repetition]], .by = c("QuantityPath", "Parameter")) %>%
+            mutate(IndividualId = ave(1:pkSize, QuantityPath, Parameter, FUN = identity)),
+          simulationSetName = repetition
+        )
+      }
+    ),
+    "comparison" = lapply(
+      seq_along(selectedIds),
+      function(repetition) {
+        if (settings$showProgress) {
+          setTxtProgressBar(loadingProgress, value = repetition)
+        }
+        # data.frame is arranged by increasing values of IndividualId
+        getPKRatioSummaryStatistics(
+          pkData %>%
+            slice(selectedIds[[repetition]], .by = c("QuantityPath", "Parameter")) %>%
+            mutate(IndividualId = ave(1:referenceSize, QuantityPath, Parameter, FUN = identity)),
+          referencePKData = referencePKData %>%
+            mutate(IndividualId = ave(
+              1:referenceSize,
+              referencePKData$QuantityPath,
+              referencePKData$Parameter,
+              FUN = identity
+            )),
+          simulationSetName = repetition
+        )
+      }
+    )
+  )
+  mcRatioData <- do.call("rbind", listOfMCRatioData)
+  return(mcRatioData)
+}
+
 #' @title getPKRatioSummaryFromMCSampling
 #' @description Get PK Parameter Ratio Measure From Monte Carlo Sampling
 #' @param pkData A data.frame of PK Parameter values for Population to compare
@@ -257,83 +405,21 @@ getPKRatioSummaryFromAnalyticalSolution <- function(pkData, referencePKData, sim
 #' @return A data.frame of the PK Parameter ratios summary statistics
 #' @keywords internal
 getPKRatioSummaryFromMCSampling <- function(pkData, referencePKData, simulationSetName, settings = NULL) {
-  # Sample from largest population if size is different
-  # Create a list of Sampled PK Parameters for each MC repetition and calculate their Ratio
-  pkSize <- length(unique(pkData$IndividualId))
-  referenceSize <- length(unique(referencePKData$IndividualId))
+  t0 <- tic()
   mcRepetitions <- settings$mcRepetitions %||% getDefaultMCRepetitions()
   mcRandomSeed <- settings$mcRandomSeed %||% getDefaultMCRandomSeed()
-
-  t0 <- tic()
   logInfo(messages$monteCarlo(simulationSetName, mcRepetitions, mcRandomSeed))
-  if (settings$showProgress) {
-    loadingProgress <- txtProgressBar(max = mcRepetitions, style = 3)
-  }
-
-  if (pkSize < referenceSize) {
-    selectedIds <- mcSampling(
-      dataSize = referenceSize,
-      sampleSize = pkSize,
-      n = mcRepetitions,
-      seed = mcRandomSeed
-    )
-
-    listOfMCRatioData <- lapply(
-      seq_along(selectedIds),
-      function(repetition) {
-        if (settings$showProgress) {
-          setTxtProgressBar(loadingProgress, value = repetition)
-        }
-        # data.frame is arranged by increasing values of IndividualId
-        getPKRatioSummaryStatistics(
-          pkData = pkData %>%
-            group_by(QuantityPath, Parameter) %>%
-            mutate(IndividualId = 1:pkSize),
-          referencePKData = referencePKData %>%
-            group_by(QuantityPath, Parameter) %>%
-            slice(selectedIds[[repetition]]) %>%
-            mutate(IndividualId = 1:pkSize),
-          simulationSetName = repetition
-        )
-      }
-    )
-  } else {
-    selectedIds <- mcSampling(
-      dataSize = pkSize,
-      sampleSize = referenceSize,
-      n = mcRepetitions,
-      seed = mcRandomSeed
-    )
-    listOfMCRatioData <- lapply(
-      seq_along(selectedIds),
-      function(repetition) {
-        if (settings$showProgress) {
-          setTxtProgressBar(loadingProgress, value = repetition)
-        }
-        # data.frame is arranged by increasing values of IndividualId
-        getPKRatioSummaryStatistics(
-          pkData = pkData %>%
-            group_by(QuantityPath, Parameter) %>%
-            slice(selectedIds[[repetition]]) %>%
-            mutate(IndividualId = 1:referenceSize),
-          referencePKData = referencePKData %>%
-            group_by(QuantityPath, Parameter) %>%
-            mutate(IndividualId = 1:referenceSize),
-          simulationSetName = repetition
-        )
-      }
-    )
-  }
-  if (settings$showProgress) {
-    close(loadingProgress)
-  }
+  mcRatioData <- getPKRatioSummaryFromSettings(
+    pkData = pkData,
+    referencePKData = referencePKData,
+    settings = settings
+  )
   logInfo(messages$runCompleted(getElapsedTime(t0), "Monte Carlo Sampling"))
-  # Transform list to table
-  mcRatioData <- do.call("rbind", listOfMCRatioData)
+
   # Get median statistics over all MC repetitions as a data.frame
   mcRatioSummary <- mcRatioData %>%
     group_by(QuantityPath, Parameter) %>%
-    summarise_all(median, .groups = "drop_last") %>%
+    summarise_all(median, .group = "drop_last") %>%
     mutate(SimulationSetName = simulationSetName, .before = everything())
 
   return(mcRatioSummary)
