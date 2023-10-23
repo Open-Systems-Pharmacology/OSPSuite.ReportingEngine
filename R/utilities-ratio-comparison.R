@@ -303,15 +303,10 @@ getPKRatioSummaryFromSettings <- function(pkData, referencePKData, settings) {
         function(repetition) {
           getParallelSummaryStatistics(
             pkData = pkData %>%
-              mutate(IndividualId = ave(
-                1:pkSize,
-                pkData$QuantityPath,
-                pkData$Parameter,
-                FUN = identity
-              )),
+              mutate(IndividualId = 1:pkSize, .by = c("QuantityPath", "Parameter")),
             referencePKData = referencePKData %>%
               slice(selectedIds[[repetition]], .by = c("QuantityPath", "Parameter")) %>%
-              mutate(IndividualId = ave(1:pkSize, QuantityPath, Parameter, FUN = identity)),
+              mutate(IndividualId = 1:pkSize, .by = c("QuantityPath", "Parameter")),
             simulationSetName = repetition
           )
         }
@@ -323,14 +318,9 @@ getPKRatioSummaryFromSettings <- function(pkData, referencePKData, settings) {
           getParallelSummaryStatistics(
             pkData %>%
               slice(selectedIds[[repetition]], .by = c("QuantityPath", "Parameter")) %>%
-              mutate(IndividualId = ave(1:referenceSize, QuantityPath, Parameter, FUN = identity)),
+              mutate(IndividualId = 1:referenceSize, .by = c("QuantityPath", "Parameter")),
             referencePKData = referencePKData %>%
-              mutate(IndividualId = ave(
-                1:referenceSize,
-                referencePKData$QuantityPath,
-                referencePKData$Parameter,
-                FUN = identity
-              )),
+              mutate(IndividualId = 1:referenceSize, .by = c("QuantityPath", "Parameter")),
             simulationSetName = repetition
           )
         }
@@ -353,18 +343,13 @@ getPKRatioSummaryFromSettings <- function(pkData, referencePKData, settings) {
           setTxtProgressBar(loadingProgress, value = repetition)
         }
         # data.frame is arranged by increasing values of IndividualId
-        # since group_by is slow, ave is used instead
+        # since group_by is slow, .by is used instead
         getPKRatioSummaryStatistics(
           pkData = pkData %>%
-            mutate(IndividualId = ave(
-              1:pkSize,
-              pkData$QuantityPath,
-              pkData$Parameter,
-              FUN = identity
-            )),
+            mutate(IndividualId = 1:pkSize, .by = c("QuantityPath", "Parameter")),
           referencePKData = referencePKData %>%
             slice(selectedIds[[repetition]], .by = c("QuantityPath", "Parameter")) %>%
-            mutate(IndividualId = ave(1:pkSize, QuantityPath, Parameter, FUN = identity)),
+            mutate(IndividualId = 1:pkSize, .by = c("QuantityPath", "Parameter")),
           simulationSetName = repetition
         )
       }
@@ -379,14 +364,9 @@ getPKRatioSummaryFromSettings <- function(pkData, referencePKData, settings) {
         getPKRatioSummaryStatistics(
           pkData %>%
             slice(selectedIds[[repetition]], .by = c("QuantityPath", "Parameter")) %>%
-            mutate(IndividualId = ave(1:referenceSize, QuantityPath, Parameter, FUN = identity)),
+            mutate(IndividualId = 1:referenceSize, .by = c("QuantityPath", "Parameter")),
           referencePKData = referencePKData %>%
-            mutate(IndividualId = ave(
-              1:referenceSize,
-              referencePKData$QuantityPath,
-              referencePKData$Parameter,
-              FUN = identity
-            )),
+            mutate(IndividualId = 1:referenceSize, .by = c("QuantityPath", "Parameter")),
           simulationSetName = repetition
         )
       }
