@@ -4,19 +4,19 @@
 \alias{getPKRatioSummaryStatistics}
 \title{getPKRatioSummaryStatistics}
 \usage{
-getPKRatioSummaryStatistics(pkData, referencePKData, simulationSetName)
+getPKRatioSummaryStatistics(pkData, referencePKData)
 }
 \arguments{
-\item{pkData}{A data.frame of PK Parameter values for Population to compare}
+\item{pkData}{A matrix of PK Parameter values for Population to compare}
 
-\item{referencePKData}{A data.frame of PK Parameter values for reference Population}
-
-\item{simulationSetName}{Name of simulation set}
+\item{referencePKData}{A matrix of PK Parameter values for reference Population}
 }
 \value{
-A data.frame of the PK Parameter ratios summary statistics
+A matrix of the PK Parameter ratios summary statistics
 }
 \description{
 Calculate and save summary statistics of ratios of PK parameters
+Note that this function computes on matrix objects to be faster 
+than on data.frame when Monte Carlo simulation is performed
 }
 \keyword{internal}

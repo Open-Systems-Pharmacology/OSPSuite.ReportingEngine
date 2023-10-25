@@ -7,9 +7,9 @@
 getPKRatioSummaryFromSettings(pkData, referencePKData, settings)
 }
 \arguments{
-\item{pkData}{A data.frame of PK Parameter values for Population to compare}
+\item{pkData}{A matrix of PK Parameter values for Population to compare}
 
-\item{referencePKData}{A data.frame of PK Parameter values for reference Population}
+\item{referencePKData}{A matrix of PK Parameter values for reference Population}
 
 \item{settings}{A list of task settings}
 }
