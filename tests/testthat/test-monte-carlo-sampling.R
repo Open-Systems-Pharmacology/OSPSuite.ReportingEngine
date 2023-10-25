@@ -9,7 +9,6 @@ comparisonParams <- list(meanlog = 1, sdlog = 2)
 set.seed(1111)
 
 referenceData <- data.frame(
-  simulationSetName = "reference",
   IndividualId = 1:popSize,
   QuantityPath = "a",
   Parameter = "Cmax",
@@ -21,7 +20,6 @@ referenceData <- data.frame(
 )
 
 comparisonData <- data.frame(
-  simulationSetName = "test",
   IndividualId = 1:popSize,
   QuantityPath = "a",
   Parameter = "Cmax",
