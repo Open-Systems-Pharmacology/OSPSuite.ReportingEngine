@@ -150,4 +150,4 @@ updatePKParameter("AUC_tEnd", displayName = "AUC_tEnd", displayUnit = "µmol*min
 # Clear test workflow folders
 unlink(workflowPediatric$workflowFolder, recursive = TRUE)
 unlink(workflowParallel$workflowFolder, recursive = TRUE)
-#unlink(workflowRatio$workflowFolder, recursive = TRUE)
+unlink(workflowRatio$workflowFolder, recursive = TRUE)

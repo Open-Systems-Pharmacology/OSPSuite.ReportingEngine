@@ -9,7 +9,6 @@ comparisonParams <- list(meanlog = 1, sdlog = 2)
 set.seed(1111)
 
 referenceData <- data.frame(
-  simulationSetName = "reference",
   IndividualId = 1:popSize,
   QuantityPath = "a",
   Parameter = "Cmax",
@@ -21,7 +20,6 @@ referenceData <- data.frame(
 )
 
 comparisonData <- data.frame(
-  simulationSetName = "test",
   IndividualId = 1:popSize,
   QuantityPath = "a",
   Parameter = "Cmax",
@@ -63,7 +61,7 @@ test_that("Monte Carlo Solution is close to known solution", {
     referencePKData = referenceData, 
     simulationSetName = "test",
     # With 10000 repetitions the method runs longer
-    settings = list(showProgress = FALSE, mcRepetitions = 200)
+    settings = list(showProgress = FALSE, numberOfCores = 1, mcRepetitions = 200)
   )
 
   expect_equal(
@@ -84,13 +82,13 @@ test_that("Monte Carlo Solution is repeatable", {
     pkData = comparisonData, 
     referencePKData = referenceData, 
     simulationSetName = "test",
-    settings = list(showProgress = FALSE, mcRepetitions = 100, mcRandomSeed = 3333)
+    settings = list(showProgress = FALSE, numberOfCores = 1, mcRepetitions = 100, mcRandomSeed = 3333)
   )
   mcSolution2 <- ospsuite.reportingengine:::getPKRatioSummaryFromMCSampling(
     pkData = comparisonData, 
     referencePKData = referenceData, 
     simulationSetName = "test",
-    settings = list(showProgress = FALSE, mcRepetitions = 100, mcRandomSeed = 3333)
+    settings = list(showProgress = FALSE, numberOfCores = 1, mcRepetitions = 100, mcRandomSeed = 3333)
   )
 
   expect_equal(mcSolution1, mcSolution2)
