@@ -3,20 +3,35 @@ captions <- list(
     paste0("Absorption of ", compound)
   },
   massBalance = list(
-    timeProfile = function() {
-      "Amount of drug vs time within the different compartments"
+    timeProfile = function(compoundNames) {
+      paste(
+        "Amount of drug vs time within the different compartments for",
+        paste(compoundNames, collapse = ", ")
+      )
     },
-    cumulativeTimeProfile = function() {
-      "Cumulated amount of drug vs time within the different compartments"
+    cumulativeTimeProfile = function(compoundNames) {
+      paste(
+        "Cumulated amount of drug vs time within the different compartments for",
+        paste(compoundNames, collapse = ", ")
+      )
     },
-    normalizedTimeProfile = function() {
-      "Amount of drug vs time within the different compartments normalized to applicated drugmass"
+    normalizedTimeProfile = function(compoundNames) {
+      paste(
+        "Amount of drug vs time within the different compartments normalized to applicated drugmass for",
+        paste(compoundNames, collapse = ", ")
+      )
     },
-    normalizedCumulativeTimeProfile = function() {
-      "Cumulated amount of drug vs time within the different compartments normalized to applicated drugmass"
+    normalizedCumulativeTimeProfile = function(compoundNames) {
+      paste(
+        "Cumulated amount of drug vs time within the different compartments normalized to applicated drugmass for",
+        paste(compoundNames, collapse = ", ")
+      )
     },
-    pieChart = function(time, timeUnit) {
-      paste0("Fraction of drug within the different compartments at ", time, timeUnit)
+    pieChart = function(time, timeUnit, compoundNames) {
+      paste0(
+        "Fraction of drug within the different compartments at ", time, timeUnit, " for ",
+        paste(compoundNames, collapse = ", ")
+        )
     }
   ),
   demography = list(

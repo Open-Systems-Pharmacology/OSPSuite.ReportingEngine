@@ -9,6 +9,7 @@
 #' @field applicationRanges named list of logicals defining which Application ranges are included in
 #' @field minimumSimulationEndTime is the minimum length of time for which a simulation must be run
 #' @field timeOffset shift of display time in time profile plots
+#' @field massBalanceSettings List of mass balance settings
 #' reported time profiles and residual plots when applicable
 #' @export
 #' @import ospsuite.utils
@@ -24,6 +25,7 @@ SimulationSet <- R6::R6Class(
     applicationRanges = NULL,
     minimumSimulationEndTime = NULL,
     timeOffset = NULL,
+    massBalanceSettings = NULL,
 
     #' @description
     #' Create a new `SimulationSet` object.
@@ -38,6 +40,7 @@ SimulationSet <- R6::R6Class(
     #' @param applicationRanges names of application ranges to include in the report. Names are available in enum `ApplicationRanges`.
     #' @param minimumSimulationEndTime is the minimum length of time for which a simulation must be run
     #' @param timeOffset shift of display time in time profile plots
+    #' @param massBalanceFile List of mass balance settings provided either as a json file
     #' @return A new `SimulationSet` object
     initialize = function(simulationSetName,
                           simulationFile,
@@ -47,11 +50,17 @@ SimulationSet <- R6::R6Class(
                           timeUnit = "h",
                           applicationRanges = ApplicationRanges,
                           minimumSimulationEndTime = NULL,
-                          timeOffset = 0) {
+                          timeOffset = 0,
+                          massBalanceFile = NULL) {
       # Test and validate the simulation objects
       validateIsString(simulationSetName)
       validateIsString(simulationFile)
+      validateIsString(massBalanceFile, nullAllowed = TRUE)
       validateIsFileExtension(simulationFile, "pkml")
+      if(!isEmpty(massBalanceFile)){
+        validateIsFileExtension(massBalanceFile, "json")
+        self$massBalanceSettings <- jsonlite::fromJSON(massBalanceFile, simplifyVector = FALSE)[["MassBalancePlots"]]
+      }
       validateIsString(timeUnit, nullAllowed = TRUE)
       validateIsPositive(object = minimumSimulationEndTime, nullAllowed = TRUE)
       validateIsNumeric(timeOffset)
