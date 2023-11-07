@@ -27,7 +27,7 @@ captions <- list(
       paste("## ", parameterName, "-dependence ", anchor(sectionId), sep = "")
     },
     yParameterSection = function(sectionId, parameterName) {
-      paste("### Dependence of", parameterName, anchor(sectionId))
+      paste("###", parameterName, anchor(sectionId))
     },
     populationSection = function(sectionId, simulationSetName, descriptor, level = 4) {
       tagLevel <- paste0(rep("#", level), collapse = "")
