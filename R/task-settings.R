@@ -42,7 +42,7 @@ TaskSettings <- R6::R6Class(
           comparisonVpcPlot = NULL
         )
         private$.dodge <- TRUE
-        private$.referenceGlobalRange <- FALSE
+        private$.referenceGlobalRange <- TRUE
       }
       if (isIncluded(taskName, AllAvailableTasks$plotPKParameters)) {
         private$.plotConfigurations <- list(
