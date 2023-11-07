@@ -234,36 +234,40 @@ plotDemographyParameters <- function(structureSets,
             dataSource = dataSource
           )
         )
-
-        # Range or boxplots in log scale
-        logLimits <- autoAxesLimits(
-          switch(parameterClass,
-            "character" = comparisonData[, parameterName],
-            c(comparisonData$ymin, comparisonData$median, comparisonData$ymax)
-          ),
-          scale = "log"
-        )
-        logTicks <- autoAxesTicksFromLimits(logLimits)
-
-        resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName, "log")
-        demographyResults[[resultID]] <- saveTaskResults(
-          id = resultID,
-          plot = tlf::setYAxis(
-            plotObject = demographyPlot,
-            scale = tlf::Scaling$log,
-            axisLimits = logLimits,
-            ticks = logTicks
-          ),
-          plotCaption = captions$demography$rangePlot(
-            xParameterName = xParameterCaption,
-            yParameterName = yParameterCaption,
-            simulationSetName = simulationSetName,
-            descriptor = simulationSetDescriptor,
-            plotScale = "logarithmic",
-            parameterClass = parameterClass,
-            dataSource = dataSource
+        # Issue #1133 by default, log plots are not performed
+        if(isTRUE(settings$scales$Logarithmic)){
+          # Range or boxplots in log scale
+          logLimits <- autoAxesLimits(
+            switch(parameterClass,
+                   "character" = comparisonData[, parameterName],
+                   c(comparisonData$ymin, comparisonData$median, comparisonData$ymax)
+            ),
+            scale = "log"
           )
-        )
+          logTicks <- autoAxesTicksFromLimits(logLimits)
+          
+          resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName, "log")
+          demographyResults[[resultID]] <- saveTaskResults(
+            id = resultID,
+            plot = tlf::setYAxis(
+              plotObject = demographyPlot,
+              scale = tlf::Scaling$log,
+              axisLimits = logLimits,
+              ticks = logTicks
+            ),
+            plotCaption = captions$demography$rangePlot(
+              xParameterName = xParameterCaption,
+              yParameterName = yParameterCaption,
+              simulationSetName = simulationSetName,
+              descriptor = simulationSetDescriptor,
+              plotScale = "logarithmic",
+              parameterClass = parameterClass,
+              dataSource = dataSource
+            )
+          )
+        }
+
+        
         # If workflow is pediatric, include plots comparing to reference population
         if (!isIncluded(workflowType, PopulationWorkflowTypes$pediatric)) {
           next
@@ -351,36 +355,38 @@ plotDemographyParameters <- function(structureSets,
             parameterClass = parameterClass
           )
         )
-
-        # Comparison range plots in log scale
-        logLimits <- autoAxesLimits(
-          switch(parameterClass,
-            "character" = comparisonData[, parameterName],
-            c(comparisonData$ymin, comparisonData$median, comparisonData$ymax)
-          ),
-          scale = "log"
-        )
-        logTicks <- autoAxesTicksFromLimits(logLimits)
-
-        resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName, "log")
-        demographyResults[[resultID]] <- saveTaskResults(
-          id = resultID,
-          plot = tlf::setYAxis(
-            plotObject = demographyPlot,
-            scale = tlf::Scaling$log,
-            axisLimits = logLimits,
-            ticks = logTicks
-          ),
-          plotCaption = captions$demography$rangePlot(
-            xParameterName = xParameterCaption,
-            yParameterName = yParameterCaption,
-            simulationSetName = simulationSetName,
-            descriptor = simulationSetDescriptor,
-            plotScale = "logarithmic",
-            referenceSetName = referenceSimulationSetName,
-            parameterClass = parameterClass
+        # Issue #1133 by default, log plots are not performed
+        if(isTRUE(settings$scales$Logarithmic)){
+          # Comparison range plots in log scale
+          logLimits <- autoAxesLimits(
+            switch(parameterClass,
+                   "character" = comparisonData[, parameterName],
+                   c(comparisonData$ymin, comparisonData$median, comparisonData$ymax)
+            ),
+            scale = "log"
           )
-        )
+          logTicks <- autoAxesTicksFromLimits(logLimits)
+          
+          resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName, "log")
+          demographyResults[[resultID]] <- saveTaskResults(
+            id = resultID,
+            plot = tlf::setYAxis(
+              plotObject = demographyPlot,
+              scale = tlf::Scaling$log,
+              axisLimits = logLimits,
+              ticks = logTicks
+            ),
+            plotCaption = captions$demography$rangePlot(
+              xParameterName = xParameterCaption,
+              yParameterName = yParameterCaption,
+              simulationSetName = simulationSetName,
+              descriptor = simulationSetDescriptor,
+              plotScale = "logarithmic",
+              referenceSetName = referenceSimulationSetName,
+              parameterClass = parameterClass
+            )
+          )
+        }
       }
     }
   }
