@@ -496,7 +496,7 @@ adjustTitlePage <- function(fileName, qualificationVersionInfo = NULL) {
 #' anchor("section-1")
 #'
 anchor <- function(name) {
-  return(paste0('<a id="', name, '"></a>'))
+  return(paste0('<a id="', tolower(name), '"></a>'))
 }
 
 #' @title hasAnchor
