@@ -429,9 +429,8 @@ Categorical parameters (*Gender* in this case) are also displayed along with the
 
 For the comparison between simulated and observed populations to be the most relevant possible, the same binning is used between simulated and observed populations.
 
-For the additional comparison with the **reference** simulation set, the same binning is applied by default.
-However, it is possible to display the global summary of the **reference** as horizontal ranges using the settings [**`referenceGlobalRange`**](#ref-global-range).
-
+For the additional comparison with the **reference** simulation set, the global summary statistics of the **reference** are displayed as horizontal ranges.
+However, it is possible to display binned ranges for the **reference ** simulation set by turning off the settings [**`referenceGlobalRange`**](#ref-global-range).
 
 ```{r example pediatric range report, echo=FALSE, results='asis'}
 cat(includeReportFromWorkflow(pediatricWorkflow))
@@ -605,16 +604,16 @@ workflow$plotDemography$settings$dodge <- FALSE
 
 Pediatric workflow range plots compare simulation sets to the **reference** simulation set ([#17](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/issues/17)).
 
-In cases where distributions in `xParameters` between populations are not comparable, it may be more appropriate to display only the global distributions of the `yParameters` of the reference population as horizontal lines/ranges.
+In cases where distributions in `xParameters` between populations are comparable, it may be more appropriate to display binned distributions of the `yParameters` of the reference population.
 
-As a consequence, it is possible to define such feature by setting the `referenceGlobalRange` field to `TRUE` as illustrated below.
+As a consequence, it is possible to define such feature by setting the `referenceGlobalRange` field to `FALSE` as illustrated below.
 
 
 ```r
-workflow$plotDemography$settings$referenceGlobalRange <- TRUE
+workflow$plotDemography$settings$referenceGlobalRange <- FALSE
 ```
 
-In the example below, reference simulation set is displayed as its global range within a pediatric workflow:
+In the example below, reference simulation set is displayed with same bins as the simulation set to compare:
 
 <details>
 <summary> __Code__ </summary>
@@ -633,9 +632,8 @@ activateWorkflowTasks(pediatricWorkflow, tasks = AllAvailableTasks$plotDemograph
 # Only display range plots for Age and Weight (Gender being a categorical variable, it won't be displayed)
 setYParametersForDemogrpahyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
 
-# Set up reference global range, 
-# only overall median 5th-95th percentiles of reference simulation set will be displayed
-pediatricWorkflow$plotDemography$settings$referenceGlobalRange <- TRUE
+# Turn off reference global range
+pediatricWorkflow$plotDemography$settings$referenceGlobalRange <- FALSE
 
 pediatricWorkflow$runWorkflow()
 
