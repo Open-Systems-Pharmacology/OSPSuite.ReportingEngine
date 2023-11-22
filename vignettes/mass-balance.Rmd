@@ -136,7 +136,8 @@ cat(
       system.file(
         "extdata", "mass-balance-settings.json",
         package = "ospsuite.reportingengine"
-        )
+        ),
+      warn = FALSE
       ),
     "```"),
   sep = "\n"

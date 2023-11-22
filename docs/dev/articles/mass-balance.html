@@ -149,9 +149,9 @@ associated with the compartment name.</p>
 <span>  simulationSets <span class="op">=</span> <span class="va">simulationSet</span>, </span>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Mass-Balance-Workflow"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 07/11/2023 - 05:31:01</span></span>
+<span><span class="co">#&gt; 22/11/2023 - 04:56:18</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 07/11/2023 - 05:31:01</span></span>
+<span><span class="co">#&gt;  Date: 22/11/2023 - 04:56:18</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
 <span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span><span class="co">#&gt;  User: pchelle</span></span>
@@ -166,19 +166,21 @@ associated with the compartment name.</p>
 <span><span class="va">massBalanceWorkflow</span><span class="op">$</span><span class="fu">inactivateTasks</span><span class="op">(</span><span class="va">massBalanceWorkflow</span><span class="op">$</span><span class="fu">getAllTasks</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">massBalanceWorkflow</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="st">"plotMassBalance"</span><span class="op">)</span></span>
 <span><span class="va">massBalanceWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 07/11/2023 - 05:31:02</span></span>
+<span><span class="co">#&gt; 22/11/2023 - 04:56:19</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span></span></span>
-<span><span class="co">#&gt; 07/11/2023 - 05:31:02</span></span>
+<span><span class="co">#&gt; 22/11/2023 - 04:56:19</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Mass Balance task</span></span></span>
-<span><span class="co">#&gt; 07/11/2023 - 05:31:02</span></span>
+<span><span class="co">#&gt; 22/11/2023 - 04:56:19</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Mass Balance task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Aciclovir</span></span></span>
-<span><span class="co">#&gt; 07/11/2023 - 05:31:21</span></span>
+<span><span class="co">#&gt; 22/11/2023 - 04:56:23</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>No molecule paths included in group '<span style="color: #00BBBB; font-weight: bold; font-style: italic;">Aciclovir - Endosome</span>'.</span></span>
+<span><span class="co">#&gt; 22/11/2023 - 04:56:35</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Mass Balance task</span> completed in 0.3 min</span></span>
 <span><span class="co">#&gt; Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/pchelle/AppData/Local/R/win-library/4.3/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Mass-Balance-Workflow" -t docx -o "Mass-Balance-Workflow/Report-word.docx" "Mass-Balance-Workflow/Report-word.md"</span></span>
-<span><span class="co">#&gt; 07/11/2023 - 05:31:21</span></span>
+<span><span class="co">#&gt; 22/11/2023 - 04:56:35</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0.3 min</span></span></code></pre></div>
 </details><details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-40.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-38.png" style="width:100%; border-style: none;"></details>
 </div>
 <div class="section level2">
 <h2 id="mass-balance-settings">Mass balance settings<a class="anchor" aria-label="anchor" href="#mass-balance-settings"></a>
@@ -243,114 +245,98 @@ grouping.</p>
 </h3>
 <p>In this workflow, the following mass balance settings file is used.
 The file is also available in <a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/mass-balance-settings.json" class="external-link">GitHub</a>.</p>
-<pre><code><span><span class="co">#&gt; Warning in readLines(system.file("extdata", "mass-balance-settings.json", :</span></span>
-<span><span class="co">#&gt; incomplete final line found on</span></span>
-<span><span class="co">#&gt; 'C:/Users/pchelle/AppData/Local/R/win-library/4.3/ospsuite.reportingengine/extdata/mass-balance-settings.json'</span></span></code></pre>
-<div class="sourceCode" id="cb6"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>    <span class="dt">"MassBalancePlots"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>        <span class="fu">{</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>            <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Name of mass balance sub-section (optional)"</span><span class="fu">,</span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>            <span class="dt">"Molecules"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>                <span class="st">"Aciclovir"</span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>            <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>            <span class="dt">"Groupings"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>                <span class="fu">{</span></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Intracellular"</span><span class="fu">,</span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>                        <span class="st">"Organism|**|Intracellular|Aciclovir*"</span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>                    <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>                    <span class="dt">"Exclude"</span><span class="fu">:</span><span class="ot">[</span></span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>                        <span class="st">"Organism|Lumen|*|Aciclovir*"</span></span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>                    <span class="ot">]</span></span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>                <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>                <span class="fu">{</span></span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Plasma &amp; Blood Cells"</span><span class="fu">,</span></span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>                        <span class="st">"Organism|**|Plasma|Aciclovir*"</span><span class="ot">,</span></span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>                        <span class="st">"Organism|**|BloodCells|Aciclovir*"</span></span>
-<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a>                    <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a>                    <span class="dt">"Exclude"</span><span class="fu">:</span><span class="ot">[</span></span>
-<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a>                        <span class="st">"Organism|Lumen|*|Aciclovir*"</span></span>
-<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a>                    <span class="ot">]</span></span>
-<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a>                <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a>                <span class="fu">{</span></span>
-<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Interstitial"</span><span class="fu">,</span></span>
-<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a>                        <span class="st">"Organism|**|Interstitial|Aciclovir*"</span></span>
-<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a>                    <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a>                    <span class="dt">"Exclude"</span><span class="fu">:</span><span class="ot">[</span></span>
-<span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a>                        <span class="st">"Organism|Lumen|*|Aciclovir*"</span></span>
-<span id="cb6-35"><a href="#cb6-35" tabindex="-1"></a>                    <span class="ot">]</span></span>
-<span id="cb6-36"><a href="#cb6-36" tabindex="-1"></a>                <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb6-37"><a href="#cb6-37" tabindex="-1"></a>                <span class="fu">{</span></span>
-<span id="cb6-38"><a href="#cb6-38" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Lumen"</span><span class="fu">,</span></span>
-<span id="cb6-39"><a href="#cb6-39" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb6-40"><a href="#cb6-40" tabindex="-1"></a>                        <span class="st">"Organism|Lumen|*|Aciclovir*"</span></span>
-<span id="cb6-41"><a href="#cb6-41" tabindex="-1"></a>                    <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb6-42"><a href="#cb6-42" tabindex="-1"></a>                    <span class="dt">"Exclude"</span><span class="fu">:</span><span class="ot">[</span></span>
-<span id="cb6-43"><a href="#cb6-43" tabindex="-1"></a>                        <span class="st">"Organism|Lumen|Feces|Aciclovir*"</span></span>
-<span id="cb6-44"><a href="#cb6-44" tabindex="-1"></a>                    <span class="ot">]</span></span>
-<span id="cb6-45"><a href="#cb6-45" tabindex="-1"></a>                <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb6-46"><a href="#cb6-46" tabindex="-1"></a>                <span class="fu">{</span></span>
-<span id="cb6-47"><a href="#cb6-47" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Excreted"</span><span class="fu">,</span></span>
-<span id="cb6-48"><a href="#cb6-48" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb6-49"><a href="#cb6-49" tabindex="-1"></a>                        <span class="st">"Organism|Kidney|Urine|Aciclovir*"</span><span class="ot">,</span></span>
-<span id="cb6-50"><a href="#cb6-50" tabindex="-1"></a>                        <span class="st">"Organism|Lumen|Feces|Aciclovir*"</span></span>
-<span id="cb6-51"><a href="#cb6-51" tabindex="-1"></a>                    <span class="ot">]</span></span>
-<span id="cb6-52"><a href="#cb6-52" tabindex="-1"></a>                <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb6-53"><a href="#cb6-53" tabindex="-1"></a>                <span class="fu">{</span></span>
-<span id="cb6-54"><a href="#cb6-54" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Rest of Aciclovir"</span><span class="fu">,</span></span>
-<span id="cb6-55"><a href="#cb6-55" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb6-56"><a href="#cb6-56" tabindex="-1"></a>                        <span class="st">"Organism|**|Aciclovir*"</span></span>
-<span id="cb6-57"><a href="#cb6-57" tabindex="-1"></a>                    <span class="ot">]</span></span>
-<span id="cb6-58"><a href="#cb6-58" tabindex="-1"></a>                <span class="fu">}</span></span>
-<span id="cb6-59"><a href="#cb6-59" tabindex="-1"></a>            <span class="ot">]</span></span>
-<span id="cb6-60"><a href="#cb6-60" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb6-61"><a href="#cb6-61" tabindex="-1"></a>        <span class="fu">{</span></span>
-<span id="cb6-62"><a href="#cb6-62" tabindex="-1"></a>            <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Aciclovir Mass Balance focus on Fat"</span><span class="fu">,</span></span>
-<span id="cb6-63"><a href="#cb6-63" tabindex="-1"></a>            <span class="dt">"Molecules"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb6-64"><a href="#cb6-64" tabindex="-1"></a>                <span class="st">"Aciclovir"</span></span>
-<span id="cb6-65"><a href="#cb6-65" tabindex="-1"></a>            <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb6-66"><a href="#cb6-66" tabindex="-1"></a>            <span class="dt">"Groupings"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb6-67"><a href="#cb6-67" tabindex="-1"></a>                <span class="fu">{</span></span>
-<span id="cb6-68"><a href="#cb6-68" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Fat"</span><span class="fu">,</span></span>
-<span id="cb6-69"><a href="#cb6-69" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb6-70"><a href="#cb6-70" tabindex="-1"></a>                        <span class="st">"Organism|Fat|*|Aciclovir"</span><span class="ot">,</span></span>
-<span id="cb6-71"><a href="#cb6-71" tabindex="-1"></a>                        <span class="st">"Organism|Fat|*|Aciclovir"</span></span>
-<span id="cb6-72"><a href="#cb6-72" tabindex="-1"></a>                    <span class="ot">]</span></span>
-<span id="cb6-73"><a href="#cb6-73" tabindex="-1"></a>                <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb6-74"><a href="#cb6-74" tabindex="-1"></a>                <span class="fu">{</span></span>
-<span id="cb6-75"><a href="#cb6-75" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Plasma &amp; Blood Cells"</span><span class="fu">,</span></span>
-<span id="cb6-76"><a href="#cb6-76" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb6-77"><a href="#cb6-77" tabindex="-1"></a>                        <span class="st">"Organism|**|Plasma|Aciclovir"</span><span class="ot">,</span></span>
-<span id="cb6-78"><a href="#cb6-78" tabindex="-1"></a>                        <span class="st">"Organism|**|BloodCells|Aciclovir"</span></span>
-<span id="cb6-79"><a href="#cb6-79" tabindex="-1"></a>                    <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb6-80"><a href="#cb6-80" tabindex="-1"></a>                    <span class="dt">"Exclude"</span><span class="fu">:</span><span class="ot">[</span></span>
-<span id="cb6-81"><a href="#cb6-81" tabindex="-1"></a>                        <span class="st">"Organism|Lumen|*|Aciclovir"</span></span>
-<span id="cb6-82"><a href="#cb6-82" tabindex="-1"></a>                    <span class="ot">]</span></span>
-<span id="cb6-83"><a href="#cb6-83" tabindex="-1"></a>                <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb6-84"><a href="#cb6-84" tabindex="-1"></a>                <span class="fu">{</span></span>
-<span id="cb6-85"><a href="#cb6-85" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Excreted"</span><span class="fu">,</span></span>
-<span id="cb6-86"><a href="#cb6-86" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb6-87"><a href="#cb6-87" tabindex="-1"></a>                        <span class="st">"Organism|Kidney|Urine|Aciclovir"</span><span class="ot">,</span></span>
-<span id="cb6-88"><a href="#cb6-88" tabindex="-1"></a>                        <span class="st">"Organism|Lumen|Feces|Aciclovir"</span></span>
-<span id="cb6-89"><a href="#cb6-89" tabindex="-1"></a>                    <span class="ot">]</span></span>
-<span id="cb6-90"><a href="#cb6-90" tabindex="-1"></a>                <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb6-91"><a href="#cb6-91" tabindex="-1"></a>                <span class="fu">{</span></span>
-<span id="cb6-92"><a href="#cb6-92" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Rest"</span><span class="fu">,</span></span>
-<span id="cb6-93"><a href="#cb6-93" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb6-94"><a href="#cb6-94" tabindex="-1"></a>                        <span class="st">"Organism|**|Aciclovir"</span></span>
-<span id="cb6-95"><a href="#cb6-95" tabindex="-1"></a>                    <span class="ot">]</span></span>
-<span id="cb6-96"><a href="#cb6-96" tabindex="-1"></a>                <span class="fu">}</span></span>
-<span id="cb6-97"><a href="#cb6-97" tabindex="-1"></a>            <span class="ot">]</span></span>
-<span id="cb6-98"><a href="#cb6-98" tabindex="-1"></a>        <span class="fu">}</span></span>
-<span id="cb6-99"><a href="#cb6-99" tabindex="-1"></a>    <span class="ot">]</span></span>
-<span id="cb6-100"><a href="#cb6-100" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>    <span class="dt">"MassBalancePlots"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>            <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Name of mass balance sub-section (optional)"</span><span class="fu">,</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>            <span class="dt">"Molecules"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>                <span class="st">"Aciclovir"</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>            <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>            <span class="dt">"Groupings"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>                <span class="fu">{</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Intracellular"</span><span class="fu">,</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>                        <span class="st">"Organism|**|Intracellular|Aciclovir*"</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>                    <span class="ot">]</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>                <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>                <span class="fu">{</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Plasma &amp; Blood Cells"</span><span class="fu">,</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>                        <span class="st">"Organism|**|Plasma|Aciclovir*"</span><span class="ot">,</span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>                        <span class="st">"Organism|**|BloodCells|Aciclovir*"</span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>                    <span class="ot">]</span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>                <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>                <span class="fu">{</span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Interstitial"</span><span class="fu">,</span></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a>                        <span class="st">"Organism|**|Interstitial|Aciclovir*"</span></span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a>                    <span class="ot">]</span></span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a>                <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a>                <span class="fu">{</span></span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Lumen"</span><span class="fu">,</span></span>
+<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a>                        <span class="st">"Organism|Lumen|*|Aciclovir*"</span></span>
+<span id="cb5-32"><a href="#cb5-32" tabindex="-1"></a>                    <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb5-33"><a href="#cb5-33" tabindex="-1"></a>                    <span class="dt">"Exclude"</span><span class="fu">:</span><span class="ot">[</span></span>
+<span id="cb5-34"><a href="#cb5-34" tabindex="-1"></a>                        <span class="st">"Organism|Lumen|Feces|Aciclovir*"</span></span>
+<span id="cb5-35"><a href="#cb5-35" tabindex="-1"></a>                    <span class="ot">]</span></span>
+<span id="cb5-36"><a href="#cb5-36" tabindex="-1"></a>                <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb5-37"><a href="#cb5-37" tabindex="-1"></a>                <span class="fu">{</span></span>
+<span id="cb5-38"><a href="#cb5-38" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Excreted"</span><span class="fu">,</span></span>
+<span id="cb5-39"><a href="#cb5-39" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb5-40"><a href="#cb5-40" tabindex="-1"></a>                        <span class="st">"Organism|Kidney|Urine|Aciclovir*"</span><span class="ot">,</span></span>
+<span id="cb5-41"><a href="#cb5-41" tabindex="-1"></a>                        <span class="st">"Organism|Lumen|Feces|Aciclovir*"</span></span>
+<span id="cb5-42"><a href="#cb5-42" tabindex="-1"></a>                    <span class="ot">]</span></span>
+<span id="cb5-43"><a href="#cb5-43" tabindex="-1"></a>                <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb5-44"><a href="#cb5-44" tabindex="-1"></a>                <span class="fu">{</span></span>
+<span id="cb5-45"><a href="#cb5-45" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Rest of Aciclovir"</span><span class="fu">,</span></span>
+<span id="cb5-46"><a href="#cb5-46" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb5-47"><a href="#cb5-47" tabindex="-1"></a>                        <span class="st">"Organism|**|Aciclovir*"</span></span>
+<span id="cb5-48"><a href="#cb5-48" tabindex="-1"></a>                    <span class="ot">]</span></span>
+<span id="cb5-49"><a href="#cb5-49" tabindex="-1"></a>                <span class="fu">}</span></span>
+<span id="cb5-50"><a href="#cb5-50" tabindex="-1"></a>            <span class="ot">]</span></span>
+<span id="cb5-51"><a href="#cb5-51" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb5-52"><a href="#cb5-52" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb5-53"><a href="#cb5-53" tabindex="-1"></a>            <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Aciclovir Mass Balance focus on Fat"</span><span class="fu">,</span></span>
+<span id="cb5-54"><a href="#cb5-54" tabindex="-1"></a>            <span class="dt">"Molecules"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb5-55"><a href="#cb5-55" tabindex="-1"></a>                <span class="st">"Aciclovir"</span></span>
+<span id="cb5-56"><a href="#cb5-56" tabindex="-1"></a>            <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb5-57"><a href="#cb5-57" tabindex="-1"></a>            <span class="dt">"Groupings"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb5-58"><a href="#cb5-58" tabindex="-1"></a>                <span class="fu">{</span></span>
+<span id="cb5-59"><a href="#cb5-59" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Fat"</span><span class="fu">,</span></span>
+<span id="cb5-60"><a href="#cb5-60" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb5-61"><a href="#cb5-61" tabindex="-1"></a>                        <span class="st">"Organism|Fat|*|Aciclovir"</span></span>
+<span id="cb5-62"><a href="#cb5-62" tabindex="-1"></a>                    <span class="ot">]</span></span>
+<span id="cb5-63"><a href="#cb5-63" tabindex="-1"></a>                <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb5-64"><a href="#cb5-64" tabindex="-1"></a>                <span class="fu">{</span></span>
+<span id="cb5-65"><a href="#cb5-65" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Plasma &amp; Blood Cells"</span><span class="fu">,</span></span>
+<span id="cb5-66"><a href="#cb5-66" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb5-67"><a href="#cb5-67" tabindex="-1"></a>                        <span class="st">"Organism|**|Plasma|Aciclovir"</span><span class="ot">,</span></span>
+<span id="cb5-68"><a href="#cb5-68" tabindex="-1"></a>                        <span class="st">"Organism|**|BloodCells|Aciclovir"</span></span>
+<span id="cb5-69"><a href="#cb5-69" tabindex="-1"></a>                    <span class="ot">]</span></span>
+<span id="cb5-70"><a href="#cb5-70" tabindex="-1"></a>                <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb5-71"><a href="#cb5-71" tabindex="-1"></a>                <span class="fu">{</span></span>
+<span id="cb5-72"><a href="#cb5-72" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Excreted"</span><span class="fu">,</span></span>
+<span id="cb5-73"><a href="#cb5-73" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb5-74"><a href="#cb5-74" tabindex="-1"></a>                        <span class="st">"Organism|Kidney|Urine|Aciclovir"</span><span class="ot">,</span></span>
+<span id="cb5-75"><a href="#cb5-75" tabindex="-1"></a>                        <span class="st">"Organism|Lumen|Feces|Aciclovir"</span></span>
+<span id="cb5-76"><a href="#cb5-76" tabindex="-1"></a>                    <span class="ot">]</span></span>
+<span id="cb5-77"><a href="#cb5-77" tabindex="-1"></a>                <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb5-78"><a href="#cb5-78" tabindex="-1"></a>                <span class="fu">{</span></span>
+<span id="cb5-79"><a href="#cb5-79" tabindex="-1"></a>                    <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"Rest"</span><span class="fu">,</span></span>
+<span id="cb5-80"><a href="#cb5-80" tabindex="-1"></a>                    <span class="dt">"Include"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb5-81"><a href="#cb5-81" tabindex="-1"></a>                        <span class="st">"Organism|**|Aciclovir"</span></span>
+<span id="cb5-82"><a href="#cb5-82" tabindex="-1"></a>                    <span class="ot">]</span></span>
+<span id="cb5-83"><a href="#cb5-83" tabindex="-1"></a>                <span class="fu">}</span></span>
+<span id="cb5-84"><a href="#cb5-84" tabindex="-1"></a>            <span class="ot">]</span></span>
+<span id="cb5-85"><a href="#cb5-85" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb5-86"><a href="#cb5-86" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb5-87"><a href="#cb5-87" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <p>The workflow is similar to the previous one except that the mass
 balance settings file is provided to the <code>SimulationSet</code>
 object.</p>
 <details><summary><strong>Code</strong>
-</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simulationFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Aciclovir.pkml"</span>, package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span><span class="op">)</span></span>
 <span><span class="va">massBalanceFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"mass-balance-settings.json"</span>, package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span><span class="op">)</span></span>
 <span></span>
@@ -363,9 +349,9 @@ object.</p>
 <span>  simulationSets <span class="op">=</span> <span class="va">simulationSet</span>, </span>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Mass-Balance-Workflow"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 07/11/2023 - 05:31:27</span></span>
+<span><span class="co">#&gt; 22/11/2023 - 04:56:41</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 07/11/2023 - 05:31:27</span></span>
+<span><span class="co">#&gt;  Date: 22/11/2023 - 04:56:41</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
 <span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span><span class="co">#&gt;  User: pchelle</span></span>
@@ -380,21 +366,21 @@ object.</p>
 <span><span class="va">massBalanceWorkflow</span><span class="op">$</span><span class="fu">inactivateTasks</span><span class="op">(</span><span class="va">massBalanceWorkflow</span><span class="op">$</span><span class="fu">getAllTasks</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">massBalanceWorkflow</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="st">"plotMassBalance"</span><span class="op">)</span></span>
 <span><span class="va">massBalanceWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 07/11/2023 - 05:31:27</span></span>
+<span><span class="co">#&gt; 22/11/2023 - 04:56:41</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span></span></span>
-<span><span class="co">#&gt; 07/11/2023 - 05:31:27</span></span>
+<span><span class="co">#&gt; 22/11/2023 - 04:56:41</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Mass Balance task</span></span></span>
-<span><span class="co">#&gt; 07/11/2023 - 05:31:27</span></span>
+<span><span class="co">#&gt; 22/11/2023 - 04:56:41</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Mass Balance task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Aciclovir</span></span></span>
-<span><span class="co">#&gt; 07/11/2023 - 05:31:49</span></span>
+<span><span class="co">#&gt; 22/11/2023 - 04:57:04</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Mass Balance task</span> completed in 0.4 min</span></span>
 <span><span class="co">#&gt; Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/pchelle/AppData/Local/R/win-library/4.3/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Mass-Balance-Workflow" -t docx -o "Mass-Balance-Workflow/Report-word.docx" "Mass-Balance-Workflow/Report-word.md"</span></span>
-<span><span class="co">#&gt; 07/11/2023 - 05:31:50</span></span>
+<span><span class="co">#&gt; 22/11/2023 - 04:57:04</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0.4 min</span></span></code></pre></div>
 </details><p>Since the settings included 2 plots, the report includes 2
 sub-sections.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-41.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-39.png" style="width:100%; border-style: none;"></details>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
