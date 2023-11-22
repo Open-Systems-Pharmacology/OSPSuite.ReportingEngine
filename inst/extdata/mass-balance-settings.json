@@ -10,9 +10,6 @@
                     "Name": "Intracellular",
                     "Include": [
                         "Organism|**|Intracellular|Aciclovir*"
-                    ],
-                    "Exclude":[
-                        "Organism|Lumen|*|Aciclovir*"
                     ]
                 },
                 {
@@ -20,18 +17,12 @@
                     "Include": [
                         "Organism|**|Plasma|Aciclovir*",
                         "Organism|**|BloodCells|Aciclovir*"
-                    ],
-                    "Exclude":[
-                        "Organism|Lumen|*|Aciclovir*"
                     ]
                 },
                 {
                     "Name": "Interstitial",
                     "Include": [
                         "Organism|**|Interstitial|Aciclovir*"
-                    ],
-                    "Exclude":[
-                        "Organism|Lumen|*|Aciclovir*"
                     ]
                 },
                 {
@@ -67,7 +58,6 @@
                 {
                     "Name": "Fat",
                     "Include": [
-                        "Organism|Fat|*|Aciclovir",
                         "Organism|Fat|*|Aciclovir"
                     ]
                 },
@@ -76,9 +66,6 @@
                     "Include": [
                         "Organism|**|Plasma|Aciclovir",
                         "Organism|**|BloodCells|Aciclovir"
-                    ],
-                    "Exclude":[
-                        "Organism|Lumen|*|Aciclovir"
                     ]
                 },
                 {
