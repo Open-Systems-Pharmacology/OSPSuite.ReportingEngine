@@ -454,6 +454,12 @@ defaultMassBalanceGroupings <- function(compoundNames) {
   )
 
   defaultGroupings <- c(
+    # Lumen Compartment excluding Feces
+    list(list(
+        Name = paste(paste(compoundNames, collapse = ", "), "Lumen", sep = " - "),
+        Include = paste0("Organism|Lumen|*|", compoundNames),
+        Exclude = paste0("Organism|Lumen|Feces|", compoundNames)
+      )),
     lapply(
       groupNames,
       function(groupName) {
@@ -463,23 +469,15 @@ defaultMassBalanceGroupings <- function(compoundNames) {
         )
       }
     ),
-    list(
-      # Lumen Compartment excluding Feces
-      list(
-        Name = paste(paste(compoundNames, collapse = ", "), "Lumen", sep = " - "),
-        Include = paste0("Organism|Lumen|*|", compoundNames),
-        Exclude = paste0("Organism|Lumen|Feces|", compoundNames)
-      ),
-      # Rest Compartment
-      list(
+    # Rest Compartment
+    list(list(
         Name = paste("Rest of", paste(compoundNames, collapse = ", ")),
         # Since default option excludes previously included paths,
         # we can include all the paths but saliva here
         Include = paste0("Organism|**|", compoundNames),
         # Exclude saliva from rest
         Exclude = paste0("Organism|Saliva|**|", compoundNames)
-      )
-    )
+      ))
   )
   return(defaultGroupings)
 }
