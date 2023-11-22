@@ -1,4 +1,4 @@
-# ospsuite.reportingengine 2.3.0
+# ospsuite.reportingengine 2.2.0
 
 ## New features
 
@@ -29,7 +29,7 @@
 - LLOQ line is better displayed in the legend of time profile plots (#478)
 
 
-# ospsuite.reportingengine 2.2
+# ospsuite.reportingengine 2.1.224
 
 ## New features
 
