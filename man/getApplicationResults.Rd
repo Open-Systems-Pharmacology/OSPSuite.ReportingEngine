@@ -13,7 +13,7 @@ getApplicationResults(applications)
 A data.frame that includes `time`, `drugMass` and `totalDrugMass` as variables
 }
 \description{
-Get a data.frame of application results corresponding to 
+Get a data.frame of application results corresponding to
 total drug mass as a function of time.
 }
 \keyword{internal}

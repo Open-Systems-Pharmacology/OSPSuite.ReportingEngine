@@ -32,7 +32,7 @@ plotMeanMassBalance <- function(structureSet, settings = NULL) {
   for (plotSettings in massBalanceSettings) {
     compoundNames <- as.character(plotSettings$Molecules)
     # Sub section using settings name
-    if(!isEmpty(plotSettings$Name)){
+    if (!isEmpty(plotSettings$Name)) {
       sectionId <- defaultFileNames$resultID(length(massBalanceResults) + 1, "mass_balance")
       massBalanceResults[[sectionId]] <- saveTaskResults(
         id = sectionId,
@@ -198,7 +198,7 @@ plotMeanMassBalance <- function(structureSet, settings = NULL) {
       "mass_balance",
       structureSet$simulationSet$simulationSetName
     )
-    
+
     pieChartData <- massBalanceData %>%
       filter(Time == max(Time)) %>%
       mutate(LegendWithPercent = paste(
@@ -227,10 +227,10 @@ plotMeanMassBalance <- function(structureSet, settings = NULL) {
       id = pieChartID,
       plot = pieChartPlot,
       plotCaption = captions$massBalance$pieChart(
-        timeCaption, 
+        timeCaption,
         metaData$Time$unit,
         compoundNames
-        )
+      )
     )
 
     # Table of mass balance time profiles
@@ -326,9 +326,9 @@ getMassBalanceDataMapping <- function(plotType) {
 }
 
 #' @title getApplicationResults
-#' @description Get a data.frame of application results corresponding to 
+#' @description Get a data.frame of application results corresponding to
 #' total drug mass as a function of time.
-#' @param applications 
+#' @param applications
 #' list of `Application` objects queried by the method `simulation$allApplicationsFor()`
 #' @return A data.frame that includes `time`, `drugMass` and `totalDrugMass` as variables
 #' @import ospsuite
@@ -339,13 +339,13 @@ getApplicationResults <- function(applications) {
   applicationResults <- data.frame()
   for (application in applications) {
     applicationResults <- rbind.data.frame(
-        applicationResults,
-        data.frame(
-          time = application$startTime$value,
-          drugMass = application$drugMass$value
-        )
+      applicationResults,
+      data.frame(
+        time = application$startTime$value,
+        drugMass = application$drugMass$value
       )
-    }
+    )
+  }
   # Total drug mass is cumulative sum of all the applied drug mass
   applicationResults <- applicationResults %>%
     mutate(totalDrugMass = cumsum(drugMass))
@@ -376,25 +376,27 @@ getMassBalanceData <- function(groupings, compoundNames, simulation, simulationR
     # Exclusion criteria
     excludedMoleculePaths <- NULL
     # If ExcludePreviousGroupings is TRUE, exclude molecules from previous groupings
-    if(group$ExcludePreviousGroupings %||% TRUE){
+    if (group$ExcludePreviousGroupings %||% TRUE) {
       excludedMoleculePaths <- previouslyIncludedMoleculePaths
     }
     if (!is.null(group$Exclude)) {
       excludedMolecules <- ospsuite::getAllMoleculesMatching(group$Exclude, simulation)
       excludedMoleculePaths <- c(
         excludedMoleculePaths,
-        sapply(excludedMolecules, function(molecule){molecule$path})
+        sapply(excludedMolecules, function(molecule) {
+          molecule$path
+        })
       )
     }
     includedMolecules <- includedMolecules[!includedMoleculePaths %in% excludedMoleculePaths]
     includedMoleculePaths <- setdiff(includedMoleculePaths, excludedMoleculePaths)
-    if(isEmpty(includedMoleculePaths)) {
+    if (isEmpty(includedMoleculePaths)) {
       warning(messages$noMoleculePathsIncluded(group$Name), call. = FALSE)
       next
     }
     validateMoleculesFromCompounds(includedMolecules, compoundNames)
     checkMoleculesAlreadyIncluded(includedMoleculePaths, previouslyIncludedMoleculePaths)
-    
+
     previouslyIncludedMoleculePaths <- c(
       previouslyIncludedMoleculePaths,
       includedMoleculePaths
@@ -408,7 +410,7 @@ getMassBalanceData <- function(groupings, compoundNames, simulation, simulationR
       }
     )
     moleculeAmounts <- rowSums(as.data.frame(moleculeAmounts))
-    
+
     massBalanceData <- rbind.data.frame(
       massBalanceData,
       data.frame(
@@ -424,7 +426,7 @@ getMassBalanceData <- function(groupings, compoundNames, simulation, simulationR
 
 #' @title defaultMassBalanceGrouping
 #' @description Get mass balance default inclusion/exclusion defined as groupings list
-#' Default groups are 
+#' Default groups are
 #' \itemize{
 #' \item Plasma
 #' \item BloodCells
@@ -440,9 +442,8 @@ getMassBalanceData <- function(groupings, compoundNames, simulation, simulationR
 #' @import ospsuite
 #' @keywords internal
 defaultMassBalanceGroupings <- function(compoundNames) {
-  
   groupNames <- c(
-    "Plasma", 
+    "Plasma",
     "BloodCells",
     "Interstitial",
     "Intracellular",
@@ -450,8 +451,8 @@ defaultMassBalanceGroupings <- function(compoundNames) {
     "Gallbladder",
     "Urine",
     "Feces"
-    )
-  
+  )
+
   defaultGroupings <- c(
     lapply(
       groupNames,

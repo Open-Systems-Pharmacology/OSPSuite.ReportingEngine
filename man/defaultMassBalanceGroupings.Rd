@@ -11,7 +11,7 @@ defaultMassBalanceGroupings(compoundNames)
 }
 \description{
 Get mass balance default inclusion/exclusion defined as groupings list
-Default groups are 
+Default groups are
 \itemize{
 \item Plasma
 \item BloodCells
