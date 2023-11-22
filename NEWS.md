@@ -1,3 +1,34 @@
+# ospsuite.reportingengine 2.2.0
+
+## New features
+
+- Demography task received significant updates:
+   - The [article for demography](../articles/demography.html) has been updated with more comprehensive examples using more representative virtual populations and illustrating the effects of population workflows and settings (#1095, #1102)
+   - Categorical parameters, such as Gender, are now accounted for demography range plots and displayed as boxplots (#1088)
+   - Demography plots can now display observed data (#535)
+- Mass Balance task received significant updates:
+   - A dedicated [article for mass balance](../articles/mass-balance.html) has been created in the documentation (#1118)
+   - Mass balance plots can leverage user-defined settings from json files as illustrated in the [mass balance article](../articles/mass-balance.html) (#1118)
+   - Normalized mass balance plots now use time-dependent cumulative drug mass for normalization (#1039, #1118)
+- Qualification DDI plots received the following improvements
+   - Delta symbol (&delta;) from Guest *et al.* formula is indicated in table caption (1069)
+   - Guest criterion (&delta;) can be tuned through the configuration plan (#789)
+   - DDI plot format is quadratic by default (#1051)
+- Formatting to word reports can translate additional `html` tags (#382)
+
+## Minor improvements and bug fixes
+
+- Monte Carlo sampling in ratio comparison workflows is now centralized, performed in the PK parameter calculation step and significantly faster (#536, #1086).
+- Wording for ratio comparison worflow figures and tables has been updated (#1087)
+- Number of bins in demography and PK parameter range plots is consistent with input (#1128)
+- Link/bookmark targets in word reports are better placed (#1084)
+- Qualification time profiles work when no observed data is contained (#1082)
+- Static images in qualification reports are better handled (#955, #1071)
+- Figure captions are displayed below the figure in the reports (#1053)
+- Word report is updated if it already existed (#1055)
+- LLOQ line is better displayed in the legend of time profile plots (#478)
+
+
 # ospsuite.reportingengine 2.1.244
 
 ## New features
@@ -30,7 +61,7 @@
    - bookmarks are now created from markdown anchors (#923)
 - Qualification time profiles use base unit if unit is not defined by user (#867, #991)
 
-# ospsuite.reportingengine 2.0.191
+# ospsuite.reportingengine 2.1
 
 ## New features
 
