@@ -4,18 +4,16 @@
 \alias{getApplicationResults}
 \title{getApplicationResults}
 \usage{
-getApplicationResults(applications, infusionSteps = 20)
+getApplicationResults(applications)
 }
 \arguments{
 \item{applications}{list of `Application` objects queried by the method `simulation$allApplicationsFor()`}
-
-\item{infusionSteps}{number of time steps to discretize the infusion time}
 }
 \value{
 A data.frame that includes `time`, `drugMass` and `totalDrugMass` as variables
 }
 \description{
-Get a data.frame of application results corresponding to total drug mass as a function of time.
-Accounts for infusion cases in which infusion time is not `NULL` by including intermediate time steps
+Get a data.frame of application results corresponding to 
+total drug mass as a function of time.
 }
 \keyword{internal}

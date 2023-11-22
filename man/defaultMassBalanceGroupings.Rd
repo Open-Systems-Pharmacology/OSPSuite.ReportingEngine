@@ -4,18 +4,24 @@
 \alias{defaultMassBalanceGroupings}
 \title{defaultMassBalanceGrouping}
 \usage{
-defaultMassBalanceGroupings(simulationResults, compoundNames)
+defaultMassBalanceGroupings(compoundNames)
 }
 \arguments{
-\item{simulationResults}{A `SimulationResults` object}
-
 \item{compoundNames}{Names of simulation molecules}
 }
 \description{
 Get mass balance default inclusion/exclusion defined as groupings list
-In the Matlab version, the grouping was as followed:
-1) Saliva is excluded from the mass balance calculation
-2) Lumen is a parent compartment that regroups many sub-compartments but Feces
-3) All the rest of the sub-compartments are used normally
+Default groups are 
+\itemize{
+\item Plasma
+\item BloodCells
+\item Interstitial
+\item Intracellular
+\item Endosome
+\item Gallbladder
+\item Urine
+\item Feces
+\item Rest (includes everything else but Saliva compartments)
+}
 }
 \keyword{internal}

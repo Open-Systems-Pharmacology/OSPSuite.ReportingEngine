@@ -30,6 +30,7 @@ plotMeanMassBalance <- function(structureSet, settings = NULL) {
 
   massBalanceResults <- list()
   for (plotSettings in massBalanceSettings) {
+    compoundNames <- as.character(plotSettings$Molecules)
     # Sub section using settings name
     if(!isEmpty(plotSettings$Name)){
       sectionId <- defaultFileNames$resultID(length(massBalanceResults) + 1, "mass_balance")
@@ -39,7 +40,6 @@ plotMeanMassBalance <- function(structureSet, settings = NULL) {
         includeTextChunk = TRUE
       )
     }
-    compoundNames <- as.character(plotSettings$Molecules)
     massBalanceData <- getMassBalanceData(
       groupings = plotSettings$Groupings,
       compoundNames = compoundNames,
@@ -47,9 +47,11 @@ plotMeanMassBalance <- function(structureSet, settings = NULL) {
       simulationResults = simulationResults
     )
 
-    # Get drugMass over time for compoundNames to normalize the mass balance plots
-    applications <- simulation$allApplicationsFor(head(compoundNames, 1))
-    # Get application results need for plot normalization corresponding to data.frame with time and cumulative drugMass
+    # Get applications for drug mass normalization, only the applied compound name should be used
+    appliedCompoundName <- intersect(compoundNames, allAppliedCompoundNames)
+    validateIsOfLength(appliedCompoundName, 1)
+    applications <- simulation$allApplicationsFor(appliedCompoundName)
+    # Application results formatted as a data.frame with time and cumulative drugMass
     applicationResults <- getApplicationResults(applications)
 
     # Format to appropriate units
@@ -78,8 +80,8 @@ plotMeanMassBalance <- function(structureSet, settings = NULL) {
       )
     )
 
-    # The function approx aims at extrapolating
-    # the total drug mass data on the time points of the mass balance data
+    # The function approx aims at intra- and extrapolating the total drug mass data
+    # at the same time points as the mass balance data
     massBalanceData$DrugMass <- approx(
       x = ospsuite::toUnit(
         "Time",
@@ -89,7 +91,11 @@ plotMeanMassBalance <- function(structureSet, settings = NULL) {
       y = applicationResults$totalDrugMass,
       xout = massBalanceData$Time,
       method = "constant",
+      # argument rule defines how interpolation is to take place outside the interval [min(x), max(x)]
+      # 1: predicts NA outside of range of x
+      # 2: predicts the y value at the closest x data extreme
       rule = 2
+      # since approx outputs a data.frame of x and y variables, only extract y values
     )$y
     massBalanceData <- massBalanceData %>% mutate(NormalizedAmount = Amount / DrugMass)
 
@@ -320,43 +326,27 @@ getMassBalanceDataMapping <- function(plotType) {
 }
 
 #' @title getApplicationResults
-#' @description Get a data.frame of application results corresponding to total drug mass as a function of time.
-#' Accounts for infusion cases in which infusion time is not `NULL` by including intermediate time steps
-#' @param applications list of `Application` objects queried by the method `simulation$allApplicationsFor()`
-#' @param infusionSteps number of time steps to discretize the infusion time
+#' @description Get a data.frame of application results corresponding to 
+#' total drug mass as a function of time.
+#' @param applications 
+#' list of `Application` objects queried by the method `simulation$allApplicationsFor()`
 #' @return A data.frame that includes `time`, `drugMass` and `totalDrugMass` as variables
 #' @import ospsuite
 #' @import ospsuite.utils
 #' @import dplyr
 #' @keywords internal
-getApplicationResults <- function(applications, infusionSteps = 20) {
+getApplicationResults <- function(applications) {
   applicationResults <- data.frame()
   for (application in applications) {
-    # No Infusion
-    if (is.null(application$infusionTime$value)) {
-      applicationResults <- rbind.data.frame(
+    applicationResults <- rbind.data.frame(
         applicationResults,
         data.frame(
           time = application$startTime$value,
           drugMass = application$drugMass$value
         )
       )
-      next
     }
-    # For infusion, infusion duration needs to be discretized in multiple time steps
-    applicationResults <- rbind.data.frame(
-      applicationResults,
-      data.frame(
-        time = seq(
-          application$startTime$value,
-          application$startTime$value + application$infusionTime$value,
-          length.out = infusionSteps
-        ),
-        drugMass = application$drugMass$value / infusionSteps
-      )
-    )
-  }
-  # Normalization uses total drug mass
+  # Total drug mass is cumulative sum of all the applied drug mass
   applicationResults <- applicationResults %>%
     mutate(totalDrugMass = cumsum(drugMass))
   return(applicationResults)
@@ -374,7 +364,7 @@ getApplicationResults <- function(applications, infusionSteps = 20) {
 #' @keywords internal
 getMassBalanceData <- function(groupings, compoundNames, simulation, simulationResults) {
   # If groupings is NULL, use default inclusion/exclusion and grouping
-  groupings <- groupings %||% defaultMassBalanceGroupings(simulationResults, compoundNames)
+  groupings <- groupings %||% defaultMassBalanceGroupings(compoundNames)
 
   massBalanceData <- data.frame()
   previouslyIncludedMoleculePaths <- NULL
@@ -398,8 +388,8 @@ getMassBalanceData <- function(groupings, compoundNames, simulation, simulationR
     }
     includedMolecules <- includedMolecules[!includedMoleculePaths %in% excludedMoleculePaths]
     includedMoleculePaths <- setdiff(includedMoleculePaths, excludedMoleculePaths)
-    
     if(isEmpty(includedMoleculePaths)) {
+      warning(messages$noMoleculePathsIncluded(group$Name), call. = FALSE)
       next
     }
     validateMoleculesFromCompounds(includedMolecules, compoundNames)
@@ -434,45 +424,52 @@ getMassBalanceData <- function(groupings, compoundNames, simulation, simulationR
 
 #' @title defaultMassBalanceGrouping
 #' @description Get mass balance default inclusion/exclusion defined as groupings list
-#' In the Matlab version, the grouping was as followed:
-#' 1) Saliva is excluded from the mass balance calculation
-#' 2) Lumen is a parent compartment that regroups many sub-compartments but Feces
-#' 3) All the rest of the sub-compartments are used normally
-#' @param simulationResults A `SimulationResults` object
+#' Default groups are 
+#' \itemize{
+#' \item Plasma
+#' \item BloodCells
+#' \item Interstitial
+#' \item Intracellular
+#' \item Endosome
+#' \item Gallbladder
+#' \item Urine
+#' \item Feces
+#' \item Rest (includes everything else but Saliva compartments)
+#' }
 #' @param compoundNames Names of simulation molecules
 #' @import ospsuite
 #' @keywords internal
-defaultMassBalanceGroupings <- function(simulationResults, compoundNames) {
-  groupNames <- unique(sapply(
-    simulationResults$allQuantityPaths,
-    function(path) {
-      head(tail(ospsuite::toPathArray(path), 2), 1)
-    }
-  ))
-
+defaultMassBalanceGroupings <- function(compoundNames) {
+  
+  groupNames <- c(
+    "Plasma", 
+    "BloodCells",
+    "Interstitial",
+    "Intracellular",
+    "Endosome",
+    "Gallbladder",
+    "Urine",
+    "Feces"
+    )
+  
   defaultGroupings <- c(
     lapply(
       groupNames,
       function(groupName) {
         list(
           Name = paste(paste(compoundNames, collapse = ", "), groupName, sep = " - "),
-          Include = paste0("Organism|**|", groupName, "|", compoundNames),
-          # 1) Exclude saliva and 2) Exclude Lumen
-          Exclude = c(
-            paste0("Organism|Saliva|**|", compoundNames),
-            switch(groupName,
-              "Feces" = NULL,
-              paste0("Organism|Lumen|*|", compoundNames)
-            )
-          )
+          Include = paste0("Organism|**|", groupName, "|", compoundNames)
         )
       }
     ),
-    # Lumen Compartment
+    # Rest Compartment
     list(list(
-      Name = paste(paste(compoundNames, collapse = ", "), "Lumen", sep = " - "),
-      Include = paste0("Organism|Lumen|*|", compoundNames),
-      Exclude = paste0("Organism|Lumen|Feces|", compoundNames)
+      Name = paste("Rest of", paste(compoundNames, collapse = ", ")),
+      # Since default option excludes previously included paths,
+      # we can include all the paths but saliva here
+      Include = paste0("Organism|**|", compoundNames),
+      # Exclude saliva from rest
+      Exclude = paste0("Organism|Saliva|**|", compoundNames)
     ))
   )
   return(defaultGroupings)
