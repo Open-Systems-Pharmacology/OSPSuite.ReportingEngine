@@ -8,7 +8,7 @@ R6 class for defining how pk parameters are calculated and save
 }
 \keyword{internal}
 \section{Super classes}{
-\code{ospsuite.reportingengine::Task} -> \code{ospsuite.reportingengine::SimulationTask} -> \code{CalculatePKParametersTask}
+\code{\link[ospsuite.reportingengine:Task]{ospsuite.reportingengine::Task}} -> \code{\link[ospsuite.reportingengine:SimulationTask]{ospsuite.reportingengine::SimulationTask}} -> \code{CalculatePKParametersTask}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

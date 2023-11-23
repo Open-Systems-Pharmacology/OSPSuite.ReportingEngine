@@ -25,7 +25,9 @@ R6 class representing Reporting Engine Mean Model Set
 
 \item{\code{minimumSimulationEndTime}}{is the minimum length of time for which a simulation must be run}
 
-\item{\code{timeOffset}}{shift of display time in time profile plots
+\item{\code{timeOffset}}{shift of display time in time profile plots}
+
+\item{\code{massBalanceSettings}}{List of mass balance settings
 reported time profiles and residual plots when applicable}
 }
 \if{html}{\out{</div>}}
@@ -52,7 +54,8 @@ Create a new `SimulationSet` object.
   timeUnit = "h",
   applicationRanges = ApplicationRanges,
   minimumSimulationEndTime = NULL,
-  timeOffset = 0
+  timeOffset = 0,
+  massBalanceFile = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -78,6 +81,8 @@ When using a character array, selections are concatenated with the `&` sign}
 \item{\code{minimumSimulationEndTime}}{is the minimum length of time for which a simulation must be run}
 
 \item{\code{timeOffset}}{shift of display time in time profile plots}
+
+\item{\code{massBalanceFile}}{List of mass balance settings provided either as a json file}
 }
 \if{html}{\out{</div>}}
 }

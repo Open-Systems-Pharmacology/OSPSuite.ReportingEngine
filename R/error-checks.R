@@ -507,3 +507,39 @@ checkIsSamePopulation <- function(simulationSet, referenceSet){
   )
   return(isSamePopulation)
 }
+
+validateMoleculesFromCompounds <- function(molecules, compoundNames) {
+  compoundsInMolecules <- sapply(molecules, function(molecule) {molecule$name})
+  isMoleculesFromCompounds <- all(compoundsInMolecules %in% compoundNames)
+  
+  if(isMoleculesFromCompounds){
+    return()
+  }
+  
+  pathsNotFromCompounds <- sapply(
+    molecules[!(compoundsInMolecules %in% compoundNames)], 
+    function(molecule) {molecule$path}
+  )
+  
+  stop(
+    paste0(
+        "The following molecule paths were not from the selected compounds (",
+        paste(compoundNames, collapse = ", "),
+        "): ",
+        paste(pathsNotFromCompounds, collapse = ", ")
+      )
+    )
+}
+
+checkMoleculesAlreadyIncluded <- function(moleculePaths, previousMoleculePaths){
+  if(!isIncluded(moleculePaths, previousMoleculePaths)){
+    return()
+  }
+  warning(
+      paste0(
+        "The following molecule paths were included multiple times in the mass balance: ",
+        paste(moleculePaths[moleculePaths %in% previousMoleculePaths], collapse = ", ")
+      )
+    )
+  return()
+}

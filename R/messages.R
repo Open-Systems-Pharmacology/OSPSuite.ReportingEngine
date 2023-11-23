@@ -238,6 +238,11 @@ messages <- list(
       "' and Simulation '", highlight(pkRatioMapping$Simulation), "'"
     )
   },
+  noMoleculePathsIncluded = function(groupName){
+    paste0(
+      "No molecule paths included in group '", highlight(groupName), "'."
+    )
+  },
 
   #----- Info messages ----
   runStarting = function(runName, subRun = NULL) {
