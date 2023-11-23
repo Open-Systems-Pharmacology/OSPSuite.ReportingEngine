@@ -86,7 +86,8 @@ SimulationCodeIdentifiers <- enum(c(
   "referencePopulation",
   "plotReferenceObsData",
   "StudyDesignType",
-  "StudyDesignLocation"
+  "StudyDesignLocation",
+  "massBalanceFile"
 ))
 #' @title DataSourceCodeIdentifiers
 #' @description Data Sources Code Identifiers
@@ -634,6 +635,14 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
     referencePopulationContent <- NULL
     plotReferenceObsDataContent <- NULL
     studyDesignFileContent <- NULL
+    masseBlanceContent <- NULL
+    if (isIncluded(workflowMode, "MeanModelWorkflow")) {
+      masseBlanceContent <- paste0(
+        "massBalanceFile = ", 
+        getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$massBalanceFile), 
+        ",\n"
+        )
+    }
     if (isIncluded(workflowMode, "PopulationWorkflow")) {
       referencePopulation <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$referencePopulation)
       plotReferenceObsData <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$plotReferenceObsData)
@@ -685,6 +694,7 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
         populationNameContent,
         plotReferenceObsDataContent,
         studyDesignFileContent,
+        masseBlanceContent,
         "simulationFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationFile), ",\n",
         "outputs = ", outputsId, ",\n",
         "dataSource = ", dataSourceId, ",\n",
