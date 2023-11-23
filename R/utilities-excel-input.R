@@ -635,9 +635,9 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
     referencePopulationContent <- NULL
     plotReferenceObsDataContent <- NULL
     studyDesignFileContent <- NULL
-    masseBlanceContent <- NULL
+    massBalanceContent <- NULL
     if (isIncluded(workflowMode, "MeanModelWorkflow")) {
-      masseBlanceContent <- paste0(
+      massBalanceContent <- paste0(
         "massBalanceFile = ", 
         getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$massBalanceFile), 
         ",\n"
@@ -694,7 +694,7 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
         populationNameContent,
         plotReferenceObsDataContent,
         studyDesignFileContent,
-        masseBlanceContent,
+        massBalanceContent,
         "simulationFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationFile), ",\n",
         "outputs = ", outputsId, ",\n",
         "dataSource = ", dataSourceId, ",\n",
