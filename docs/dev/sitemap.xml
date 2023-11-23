@@ -16,6 +16,9 @@
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/index.html</loc>
   </url>
   <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/mass-balance.html</loc>
+  </url>
+  <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/ospsuitereportingengine.html</loc>
   </url>
   <url>
@@ -145,6 +148,9 @@
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/calculateGMFE.html</loc>
   </url>
   <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/calculatePKAnalysesRatio.html</loc>
+  </url>
+  <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/calculatePKParameters.html</loc>
   </url>
   <url>
@@ -155,6 +161,9 @@
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkAllCoresSuccessful.html</loc>
+  </url>
+  <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkIsSamePopulation.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkLibraryLoaded.html</loc>
@@ -218,6 +227,9 @@
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/ddiSubplotTypes.html</loc>
+  </url>
+  <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/defaultMassBalanceGroupings.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/defaultQuantileVec.html</loc>
@@ -284,6 +296,9 @@
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getAnchorName.html</loc>
+  </url>
+  <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getApplicationResults.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getAxesProperties.html</loc>
@@ -418,6 +433,9 @@
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getLineBreakWidth.html</loc>
   </url>
   <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getMassBalanceData.html</loc>
+  </url>
+  <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getMassBalanceDataMapping.html</loc>
   </url>
   <url>
@@ -437,6 +455,9 @@
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getMolWeightForCompound.html</loc>
+  </url>
+  <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getMonteCarloMedians.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getObjectNameAsString.html</loc>
@@ -502,6 +523,9 @@
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKParameterRatioPKTable.html</loc>
   </url>
   <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKParameterRatioTable.html</loc>
+  </url>
+  <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKParametersAcrossPopulations.html</loc>
   </url>
   <url>
@@ -521,6 +545,24 @@
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKRatioOutputsDataframe.html</loc>
+  </url>
+  <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKRatioSummaryForDifferentPopulations.html</loc>
+  </url>
+  <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKRatioSummaryForSamePopulation.html</loc>
+  </url>
+  <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKRatioSummaryFromAnalyticalSolution.html</loc>
+  </url>
+  <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKRatioSummaryFromMCSampling.html</loc>
+  </url>
+  <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKRatioSummaryFromSettings.html</loc>
+  </url>
+  <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKRatioSummaryStatistics.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKResultsDataFrame.html</loc>
@@ -842,6 +884,9 @@
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/massMoleConversion.html</loc>
+  </url>
+  <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/mcSampling.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/MeanModelWorkflow.html</loc>
@@ -1208,6 +1253,9 @@
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/StudyDesignTarget.html</loc>
+  </url>
+  <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/summaryStatisticsToDataFrame.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/Task.html</loc>

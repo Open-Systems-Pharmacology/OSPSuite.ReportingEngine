@@ -8,8 +8,8 @@
 <meta name="description" content="ospsuite.reportingengine">
 <title>Demography Parameters in Population Workflows • ospsuite.reportingengine</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Demography Parameters in Population Workflows">
 <meta property="og:description" content="ospsuite.reportingengine">
@@ -46,6 +46,7 @@
     <a class="dropdown-item" href="../articles/demography.html">Demography Parameters in Population Workflows</a>
     <a class="dropdown-item" href="../articles/excel-template.html">Excel Template</a>
     <a class="dropdown-item" href="../articles/goodness-of-fit.html">Time profiles and Residuals task</a>
+    <a class="dropdown-item" href="../articles/mass-balance.html">Mass Balance</a>
     <a class="dropdown-item" href="../articles/ospsuitereportingengine.html">Get Started</a>
     <a class="dropdown-item" href="../articles/pk-parameters.html">PK parameters</a>
     <a class="dropdown-item" href="../articles/plot-settings.html">Plot settings</a>
@@ -377,9 +378,9 @@ activate only the demography task.</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Parallel-Histograms"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:57:10</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:23:44</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 17/10/2023 - 07:57:10</span></span>
+<span><span class="co">#&gt;  Date: 23/11/2023 - 09:23:44</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
 <span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span><span class="co">#&gt;  User: pchelle</span></span>
@@ -438,13 +439,13 @@ look for the parameters in the enum <code>StandardPath</code>.</p>
 <p>Run the corresponding workflow:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">parallelWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:57:11</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:23:45</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:57:11</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:23:45</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:57:30</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:24:05</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.3 min</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:57:30</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:24:05</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.3 min</span></span></code></pre></div>
 </details><p>For Parallel and Ratio Comparison workflows, the demography
 histograms display the distributions for each simulation set along with
@@ -455,7 +456,7 @@ leveraged to display the name of the categories as is. Thus, users need
 to ensure that the same names are used in both their population files
 and observed data.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-4.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-41.png" style="width:100%; border-style: none;"></details>
 </div>
 <div class="section level3">
 <h3 id="range-plots">Range plots <a id="range-parallel"></a><a class="anchor" aria-label="anchor" href="#range-plots"></a>
@@ -470,9 +471,9 @@ activate only the demography task.</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Parallel-Range-Plots"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:57:35</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:24:11</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 17/10/2023 - 07:57:35</span></span>
+<span><span class="co">#&gt;  Date: 23/11/2023 - 09:24:10</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
 <span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span><span class="co">#&gt;  User: pchelle</span></span>
@@ -504,30 +505,22 @@ using box-whisker plots.</p>
 <p>Run the corresponding workflow:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">parallelWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:57:35</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:24:11</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:57:35</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:24:11</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:57:51</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:24:25</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 12 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:57:52</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:24:26</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 12 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:57:52</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:24:26</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 12 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:57:52</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:24:26</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 12 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:57:53</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 10 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:57:53</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 10 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:57:53</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 10 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:57:54</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 10 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:58:01</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.4 min</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:58:01</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.4 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 23/11/2023 - 09:24:29</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.3 min</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:24:29</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.3 min</span></span></code></pre></div>
 </details><p>For Parallel and Ratio Comparison workflows, the demography range
 plots display the distributions for each simulation set along with its
 observed data if available (<a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/issues/17" class="external-link">#17</a>,
@@ -539,7 +532,7 @@ instead (<a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.Reportin
 the most relevant possible, the same binning is applied between
 simulated and observed populations.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-5.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-42.png" style="width:100%; border-style: none;"></details>
 </div>
 </div>
 <div class="section level2">
@@ -615,9 +608,9 @@ the demography task.</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Pediatric-Histograms"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:58:08</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:24:34</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 17/10/2023 - 07:58:08</span></span>
+<span><span class="co">#&gt;  Date: 23/11/2023 - 09:24:34</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
 <span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span><span class="co">#&gt;  User: pchelle</span></span>
@@ -641,14 +634,14 @@ below which defines the parameters to be plotted in the histograms.</p>
 <p>Run the corresponding workflow:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:58:08</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:24:34</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span></span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:58:08</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:24:34</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:58:26</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.3 min</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:58:26</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.3 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 23/11/2023 - 09:24:49</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.2 min</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:24:49</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.2 min</span></span></code></pre></div>
 </details><p>For Pediatric workflows, the demography histograms display the
 distributions for all simulation sets together (<a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/issues/17" class="external-link">#17</a>,
 <a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/issues/535" class="external-link">#535</a>).
@@ -659,7 +652,7 @@ leveraged to display the name of the categories as is. Thus, users need
 to ensure that the same names are used in both their population files
 and observed data.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-6.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-43.png" style="width:100%; border-style: none;"></details>
 </div>
 <div class="section level3">
 <h3 id="range-plots-1">Range plots<a class="anchor" aria-label="anchor" href="#range-plots-1"></a>
@@ -674,9 +667,9 @@ the demography task.</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Pediatric-Range-Plots"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:58:31</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:24:53</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 17/10/2023 - 07:58:31</span></span>
+<span><span class="co">#&gt;  Date: 23/11/2023 - 09:24:53</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
 <span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span><span class="co">#&gt;  User: pchelle</span></span>
@@ -708,30 +701,22 @@ using box-whisker plots.</p>
 <p>Run the corresponding workflow:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:58:31</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:24:53</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span></span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:58:31</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:24:53</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:58:49</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:07</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 12 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:58:50</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:07</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 12 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:58:50</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:07</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 12 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:58:50</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:08</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 12 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:58:51</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 10 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:58:51</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 10 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:58:51</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 10 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:58:52</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 10 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:03</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.5 min</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:04</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.5 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:12</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.3 min</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:12</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.3 min</span></span></code></pre></div>
 </details><p>For Pediatric workflows, the demography range plots display the
 distributions for each simulation set along with its observed data if
 available (<a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/issues/17" class="external-link">#17</a>,
@@ -745,11 +730,12 @@ displayed along with the <strong>reference</strong> simulation set.</p>
 the most relevant possible, the same binning is used between simulated
 and observed populations.</p>
 <p>For the additional comparison with the <strong>reference</strong>
-simulation set, the same binning is applied by default. However, it is
-possible to display the global summary of the <strong>reference</strong>
-as horizontal ranges using the settings <a href="#ref-global-range"><strong><code>referenceGlobalRange</code></strong></a>.</p>
+simulation set, the global summary statistics of the
+<strong>reference</strong> are displayed as horizontal ranges. However,
+it is possible to display binned ranges for the <strong>reference
+</strong> simulation set by turning off the settings <a href="#ref-global-range"><strong><code>referenceGlobalRange</code></strong></a>.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-7.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-44.png" style="width:100%; border-style: none;"></details>
 </div>
 </div>
 <div class="section level2">
@@ -778,9 +764,9 @@ workflow:</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Parallel-Histograms"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:16</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:18</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 17/10/2023 - 07:59:16</span></span>
+<span><span class="co">#&gt;  Date: 23/11/2023 - 09:25:18</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
 <span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span><span class="co">#&gt;  User: pchelle</span></span>
@@ -802,19 +788,19 @@ workflow:</p>
 <span><span class="va">parallelWorkflow</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">bins</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span></span>
 <span><span class="va">parallelWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:16</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:18</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:16</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:18</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:35</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:33</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.3 min</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:35</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:33</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.3 min</span></span></code></pre></div>
 </details><p>In the report displayed below, the histograms are displayed with 5
 bins except for categorical parameter whose categories are displayed as
 is.</p>
 <details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-8.png" style="width:100%; border-style: none;"></details><p>The same binning can also be applied to range plots as illustrated
+</summary><img src="figures/report-snapshot-45.png" style="width:100%; border-style: none;"></details><p>The same binning can also be applied to range plots as illustrated
 below:</p>
 <details><summary><strong>Code</strong>
 </summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
@@ -824,9 +810,9 @@ below:</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Pediatric-Range"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:40</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:39</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 17/10/2023 - 07:59:40</span></span>
+<span><span class="co">#&gt;  Date: 23/11/2023 - 09:25:38</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
 <span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span><span class="co">#&gt;  User: pchelle</span></span>
@@ -848,32 +834,24 @@ below:</p>
 <span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">bins</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span></span>
 <span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:40</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:39</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span></span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:40</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:39</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:54</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:52</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 4 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:54</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:52</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 4 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:54</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:52</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 4 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:55</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:53</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 4 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:55</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 2 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:55</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 2 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:56</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 2 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:56</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 2 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:58</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.3 min</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 07:59:58</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.3 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:53</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.2 min</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:54</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.2 min</span></span></code></pre></div>
 </details><details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-9.png" style="width:100%; border-style: none;"></details><p>Note that the algorithm that calculates the bin edges based on the
+</summary><img src="figures/report-snapshot-46.png" style="width:100%; border-style: none;"></details><p>Note that the algorithm that calculates the bin edges based on the
 number of bins aims at including the same number of points in each
 bin.</p>
 <p>It is also possible to update default aggregation settings in order
@@ -904,9 +882,9 @@ pediatric workflow:</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Pediatric-Range"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:03</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:57</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 17/10/2023 - 08:00:03</span></span>
+<span><span class="co">#&gt;  Date: 23/11/2023 - 09:25:57</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
 <span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span><span class="co">#&gt;  User: pchelle</span></span>
@@ -928,32 +906,24 @@ pediatric workflow:</p>
 <span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">stairstep</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span>
 <span></span>
 <span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:03</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:58</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span></span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:03</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:25:58</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:17</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:26:13</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 6 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:17</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:26:13</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 6 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:17</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:26:14</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 6 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:17</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:26:14</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 6 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:18</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 5 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:18</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 5 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:19</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 5 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:19</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 5 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:20</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:26:15</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.3 min</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:20</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:26:15</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.3 min</span></span></code></pre></div>
 </details><details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-10.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-47.png" style="width:100%; border-style: none;"></details>
 </div>
 <div class="section level3">
 <h3 id="dodging-histogram-bars">Dodging histogram bars<a class="anchor" aria-label="anchor" href="#dodging-histogram-bars"></a>
@@ -972,16 +942,16 @@ case the bars do not overlap by setting the <code>dodge</code> field to
 <p>Pediatric workflow range plots compare simulation sets to the
 <strong>reference</strong> simulation set (<a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/issues/17" class="external-link">#17</a>).</p>
 <p>In cases where distributions in <code>xParameters</code> between
-populations are not comparable, it may be more appropriate to display
-only the global distributions of the <code>yParameters</code> of the
-reference population as horizontal lines/ranges.</p>
+populations are comparable, it may be more appropriate to display binned
+distributions of the <code>yParameters</code> of the reference
+population.</p>
 <p>As a consequence, it is possible to define such feature by setting
-the <code>referenceGlobalRange</code> field to <code>TRUE</code> as
+the <code>referenceGlobalRange</code> field to <code>FALSE</code> as
 illustrated below.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">workflow</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">referenceGlobalRange</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span></code></pre></div>
-<p>In the example below, reference simulation set is displayed as its
-global range within a pediatric workflow:</p>
+<code class="sourceCode R"><span><span class="va">workflow</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">referenceGlobalRange</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span></code></pre></div>
+<p>In the example below, reference simulation set is displayed with same
+bins as the simulation set to compare:</p>
 <details><summary><strong>Code</strong>
 </summary><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pediatricWorkflow</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PopulationWorkflow.html">PopulationWorkflow</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
@@ -990,9 +960,9 @@ global range within a pediatric workflow:</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Pediatric-Range"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:26</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:26:20</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 17/10/2023 - 08:00:25</span></span>
+<span><span class="co">#&gt;  Date: 23/11/2023 - 09:26:19</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
 <span><span class="co">#&gt;  Computer Name: DESKTOP-KJ5K5R4</span></span>
 <span><span class="co">#&gt;  User: pchelle</span></span>
@@ -1010,37 +980,28 @@ global range within a pediatric workflow:</p>
 <span><span class="co"># Only display range plots for Age and Weight (Gender being a categorical variable, it won't be displayed)</span></span>
 <span><span class="fu"><a href="../reference/setYParametersForDemogrpahyPlot.html">setYParametersForDemogrpahyPlot</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="va">pediatricWorkflow</span>, parameters <span class="op">=</span> <span class="va">displayedParameters</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Set up reference global range, </span></span>
-<span><span class="co"># only overall median 5th-95th percentiles of reference simulation set will be displayed</span></span>
-<span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">referenceGlobalRange</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span>
+<span><span class="co"># Turn off reference global range</span></span>
+<span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">referenceGlobalRange</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span>
 <span></span>
 <span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:26</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:26:20</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span></span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:26</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:26:20</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:39</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:26:35</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 12 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:39</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:26:35</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 12 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:39</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:26:36</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 12 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:40</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:26:36</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 12 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:40</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 10 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:40</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 10 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:41</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 10 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:41</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>Removed 10 rows containing missing values (`geom_line()`).</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:43</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:26:37</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.3 min</span></span>
-<span><span class="co">#&gt; 17/10/2023 - 08:00:43</span></span>
+<span><span class="co">#&gt; 23/11/2023 - 09:26:37</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.3 min</span></span></code></pre></div>
 </details><details><summary><strong>Report</strong>
-</summary><img src="figures/report-snapshot-11.png" style="width:100%; border-style: none;"></details>
+</summary><img src="figures/report-snapshot-48.png" style="width:100%; border-style: none;"></details>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
