@@ -411,14 +411,14 @@ getAggregateFromStat <- function(statisticId, time, outputValues) {
     percentileMinValue <- (100 - percentileValue) / 2
     percentileMaxValue <- (100 + percentileValue) / 2
 
-    aggregatedMinData <- aggregate(
+    aggregatedMinData <- stats::aggregate(
       x = outputValues,
       by = list(time = time),
       FUN = function(x) {
         as.numeric(stats::quantile(x, probs = percentileMinValue / 100))
       }
     )
-    aggregatedMaxData <- aggregate(
+    aggregatedMaxData <- stats::aggregate(
       x = outputValues,
       by = list(time = time),
       FUN = function(x) {
@@ -435,7 +435,7 @@ getAggregateFromStat <- function(statisticId, time, outputValues) {
 
   # Deviation will lead to range plot using data.frame with x, ymin and ymax
   if (grepl(pattern = "Deviation", statisticId)) {
-    aggregatedMinData <- aggregate(
+    aggregatedMinData <- stats::aggregate(
       x = outputValues,
       by = list(time = time),
       # Plot will show mean +/- 1*SD is plotted,
@@ -449,7 +449,7 @@ getAggregateFromStat <- function(statisticId, time, outputValues) {
         }
       )
     )
-    aggregatedMaxData <- aggregate(
+    aggregatedMaxData <- stats::aggregate(
       x = outputValues,
       by = list(time = time),
       FUN = switch(statisticId,
@@ -471,7 +471,7 @@ getAggregateFromStat <- function(statisticId, time, outputValues) {
   # Line plots use data.frame with x and y
   if (grepl(pattern = "Percentile", statisticId)) {
     percentileValue <- as.numeric(gsub(pattern = "Percentile_", "", statisticId))
-    aggregatedData <- aggregate(
+    aggregatedData <- stats::aggregate(
       x = outputValues,
       by = list(time = time),
       FUN = function(x) {
@@ -481,7 +481,7 @@ getAggregateFromStat <- function(statisticId, time, outputValues) {
     names(aggregatedData) <- c("x", "y")
     return(aggregatedData)
   }
-  aggregatedData <- aggregate(
+  aggregatedData <- stats::aggregate(
     x = outputValues,
     by = list(time = time),
     FUN = switch(statisticId,
@@ -489,7 +489,7 @@ getAggregateFromStat <- function(statisticId, time, outputValues) {
       "GeometricMean" = function(x) {
         exp(mean(log(x)))
       },
-      "Median" = median,
+      "Median" = stats::median,
       "Min" = min,
       "Max" = max
     )

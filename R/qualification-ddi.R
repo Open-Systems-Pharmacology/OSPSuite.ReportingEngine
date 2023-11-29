@@ -50,7 +50,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
             observedDataSet <- ddiRatio$ObservedData
             observedDataSetFilePath <- configurationPlan$getObservedDataPath(id = observedDataSet)
             observedDataRecordId <- ddiRatio$ObservedDataRecordId
-            observedDataFrame <- readObservedDataFile(file = observedDataSetFilePath)
+            observedDataFrame <- readObservedDataFile(fileName = observedDataSetFilePath)
             validateIsIncluded(observedDataRecordId, observedDataFrame$ID)
 
             ratioList <- list()
@@ -279,7 +279,7 @@ getSmartZoomLimits <- function(dataVector, residualsVsObserved = FALSE) {
 #' @import ggplot2
 #' @keywords internal
 generateDDIQualificationDDIPlot <- function(ddiPlotData, delta) {
-  ddiData <- na.omit(ddiPlotData$ddiPlotDataframe)
+  ddiData <- stats::na.omit(ddiPlotData$ddiPlotDataframe)
 
   residualsVsObserved <- ddiPlotTypeSpecifications[[ddiPlotData$axesSettings$plotType]]$residualsVsObservedFlag
 
@@ -415,7 +415,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
       )
     }
 
-    ddiSummary <- na.omit(pkDataframe[, c("observedRatio", "simulatedRatio")])
+    ddiSummary <- stats::na.omit(pkDataframe[, c("observedRatio", "simulatedRatio")])
     ddiSummary[["simulatedObservedRatio"]] <- ddiSummary[["simulatedRatio"]] / ddiSummary[["observedRatio"]]
     gmfeDDI <- rbind.data.frame(
       gmfeDDI,

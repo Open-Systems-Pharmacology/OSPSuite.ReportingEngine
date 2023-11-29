@@ -524,7 +524,7 @@ getDemographyAggregatedData <- function(data,
     # leverages distribution to get equal number of data points within bins
     if (AggregationConfiguration$binUsingQuantiles) {
       xParameterBreaks <- unique(unname(
-        quantile(
+        stats::quantile(
           x = data[, xParameterName],
           # needs to add 1 because n edges will create n-1 bins
           probs = seq(0, 1, length.out = xParameterBreaks + 1)

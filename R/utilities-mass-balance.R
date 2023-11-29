@@ -9,6 +9,7 @@
 #' @import ospsuite
 #' @import utils
 #' @import ospsuite.utils
+#' @importFrom rlang .data
 #' @keywords internal
 plotMeanMassBalance <- function(structureSet, settings = NULL) {
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
@@ -82,7 +83,7 @@ plotMeanMassBalance <- function(structureSet, settings = NULL) {
 
     # The function approx aims at intra- and extrapolating the total drug mass data
     # at the same time points as the mass balance data
-    massBalanceData$DrugMass <- approx(
+    massBalanceData$DrugMass <- stats::approx(
       x = ospsuite::toUnit(
         "Time",
         applicationResults$time,
@@ -97,7 +98,7 @@ plotMeanMassBalance <- function(structureSet, settings = NULL) {
       rule = 2
       # since approx outputs a data.frame of x and y variables, only extract y values
     )$y
-    massBalanceData <- massBalanceData %>% mutate(NormalizedAmount = Amount / DrugMass)
+    massBalanceData <- massBalanceData %>% mutate(NormalizedAmount = .data$Amount / .data$DrugMass)
 
     #------ Get mass balance plots ------
     # Time profile
@@ -200,13 +201,13 @@ plotMeanMassBalance <- function(structureSet, settings = NULL) {
     )
 
     pieChartData <- massBalanceData %>%
-      filter(Time == max(Time)) %>%
+      filter(.data$Time == max(.data$Time)) %>%
       mutate(LegendWithPercent = paste(
-        Legend, " (", round(100 * NormalizedAmount, digits = 1), "%)",
+        .data$Legend, " (", round(100 * .data$NormalizedAmount, digits = 1), "%)",
         sep = ""
       ))
     # Ensure that the colors and legend match previous mass balance plots by re-ordering Legend
-    pieChartData$LegendWithPercent <- reorder(
+    pieChartData$LegendWithPercent <- stats::reorder(
       pieChartData$LegendWithPercent,
       as.numeric(factor(pieChartData$Legend))
     )
@@ -334,6 +335,7 @@ getMassBalanceDataMapping <- function(plotType) {
 #' @import ospsuite
 #' @import ospsuite.utils
 #' @import dplyr
+#' @importFrom rlang .data
 #' @keywords internal
 getApplicationResults <- function(applications) {
   applicationResults <- data.frame()
@@ -348,7 +350,7 @@ getApplicationResults <- function(applications) {
   }
   # Total drug mass is cumulative sum of all the applied drug mass
   applicationResults <- applicationResults %>%
-    mutate(totalDrugMass = cumsum(drugMass))
+    mutate(totalDrugMass = cumsum(.data$drugMass))
   return(applicationResults)
 }
 

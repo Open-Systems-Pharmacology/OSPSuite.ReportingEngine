@@ -324,7 +324,7 @@ analyzeCoreSensitivity <- function(simulation,
 getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
   rowNums <- NULL
   for (i in 1:length(quantileVec)) {
-    rowNums[i] <- which.min(abs(pkAnalysisResultsDataframe$Value - quantile(pkAnalysisResultsDataframe$Value, quantileVec[i], na.rm = TRUE)))
+    rowNums[i] <- which.min(abs(pkAnalysisResultsDataframe$Value - stats::quantile(pkAnalysisResultsDataframe$Value, quantileVec[i], na.rm = TRUE)))
   }
   ids <- as.numeric(pkAnalysisResultsDataframe$IndividualId[rowNums])
   values <- pkAnalysisResultsDataframe$Value[rowNums]

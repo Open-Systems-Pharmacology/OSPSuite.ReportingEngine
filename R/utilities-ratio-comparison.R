@@ -65,6 +65,7 @@ calculatePKAnalysesRatio <- function(structureSets, settings) {
 #' @param referenceSet A `SimulationStructure` object of the reference population
 #' @return A data.frame of the PK Parameter ratios summary statistics
 #' @keywords internal
+#' @importFrom rlang .data
 getPKRatioSummaryForDifferentPopulations <- function(structureSet, referenceSet, settings) {
   pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
     filePath = structureSet$pkAnalysisResultsFileNames,
@@ -76,11 +77,11 @@ getPKRatioSummaryForDifferentPopulations <- function(structureSet, referenceSet,
   )
   # Use arrange to ensure Ids, QuantityPath and Parameter are consistent between PK parameters and output paths
   pkData <- ospsuite::pkAnalysesToTibble(pkAnalyses) %>% 
-    select(IndividualId, QuantityPath, Parameter, Value) %>% 
-    arrange(IndividualId, QuantityPath, Parameter)
+    select(.data$IndividualId, .data$QuantityPath, .data$Parameter, .data$Value) %>% 
+    arrange(.data$IndividualId,.data$QuantityPath, .data$Parameter)
   referencePKData <- ospsuite::pkAnalysesToTibble(referencePKAnalyses) %>% 
-    select(IndividualId, QuantityPath, Parameter, Value) %>% 
-    arrange(IndividualId, QuantityPath, Parameter)
+    select(.data$IndividualId, .data$QuantityPath, .data$Parameter, .data$Value) %>% 
+    arrange(.data$IndividualId, .data$QuantityPath, .data$Parameter)
 
   # Check that both PK data to be compared are included in reference PK data
   validateIsIncluded(unique(pkData$QuantityPath), unique(referencePKData$QuantityPath))
@@ -184,9 +185,9 @@ getPKRatioSummaryStatistics <- function(pkData, referencePKData) {
   ratioSummary <- rbind(
     # Apply with MARGIN = 2 means that calculation is performed by columns
     N = apply(ratioData, 2, FUN = function(x){sum(!is.na(x))}),
-    apply(ratioData, 2, FUN = function(x){quantile(x, probs = c(0.05,0.25,0.5,0.75,0.95), na.rm = TRUE)}),
+    apply(ratioData, 2, FUN = function(x){stats::quantile(x, probs = c(0.05,0.25,0.5,0.75,0.95), na.rm = TRUE)}),
     Mean = apply(ratioData, 2, FUN = function(x){mean(x, na.rm = TRUE)}),
-    SD = apply(ratioData, 2, FUN = function(x){sd(x, na.rm = TRUE)}),
+    SD = apply(ratioData, 2, FUN = function(x){stats::sd(x, na.rm = TRUE)}),
     GeoMean = apply(ratioData, 2, FUN = function(x){exp(mean(log(x), na.rm = TRUE))}),
     GeoSD = apply(ratioData, 2, FUN = function(x){exp(sd(log(x), na.rm = TRUE))})
   )
@@ -226,7 +227,7 @@ getMonteCarloMedians <- function(listOfData){
     function(statsIndex){
       selectedRows <- statsIndex + seq(0, nrow(data)-10, 10)
       # Get median of each column per selected stats
-      apply(data[selectedRows,], 2, median)
+      apply(data[selectedRows,], 2, stats::median)
     }
   )
   medianData <- summaryStatisticsToDataFrame(
@@ -251,7 +252,7 @@ mcSampling <- function(dataSize, sampleSize, n = getDefaultMCRepetitions(), seed
   # .Random.seed is created when
   # calling a random number generator for the first time
   # The next line aims at ensuring that a .Random.seed object exists
-  createRandom <- runif(1)
+  createRandom <- stats::runif(1)
   # Use pre-defined seed to get repeatable results
   oldSeed <- .Random.seed
   on.exit({
@@ -274,21 +275,22 @@ mcSampling <- function(dataSize, sampleSize, n = getDefaultMCRepetitions(), seed
 #' @return A data.frame of the PK Parameter ratios summary statistics
 #' @keywords internal
 #' @import dplyr
+#' @importFrom rlang .data
 getPKRatioSummaryFromAnalyticalSolution <- function(pkData, referencePKData, simulationSetName) {
   pkSummary <- pkData %>%
     summarise(
-      Mean = mean(Value, na.rm = TRUE),
-      SD = sd(Value, na.rm = TRUE),
-      MeanLog = mean(log(Value), na.rm = TRUE),
-      SDLog = sd(log(Value), na.rm = TRUE),
+      Mean = mean(.data$Value, na.rm = TRUE),
+      SD = stats::sd(.data$Value, na.rm = TRUE),
+      MeanLog = mean(log(.data$Value), na.rm = TRUE),
+      SDLog = stats::sd(log(.data$Value), na.rm = TRUE),
       .by = c("QuantityPath", "Parameter")
     )
   referencePKSummary <- referencePKData %>%
     summarise(
-      Mean = mean(Value, na.rm = TRUE),
-      SD = sd(Value, na.rm = TRUE),
-      MeanLog = mean(log(Value), na.rm = TRUE),
-      SDLog = sd(log(Value), na.rm = TRUE),
+      Mean = mean(.data$Value, na.rm = TRUE),
+      SD = stats::sd(.data$Value, na.rm = TRUE),
+      MeanLog = mean(log(.data$Value), na.rm = TRUE),
+      SDLog = stats::sd(log(.data$Value), na.rm = TRUE),
       .by = c("QuantityPath", "Parameter")
     )
   # Merge data summaries
@@ -299,13 +301,13 @@ getPKRatioSummaryFromAnalyticalSolution <- function(pkData, referencePKData, sim
     suffix = c("X", "Y")
   ) %>%
     mutate(
-      SimulationSetName = simulationSetName,
-      Mean = MeanX / MeanY,
-      SD = sqrt((SDX / MeanY)^2 + (MeanX * SDY / (MeanY * MeanY))^2),
-      GeoMean = exp(MeanLogX - MeanLogY),
-      GeoSD = exp(sqrt(SDLogX^2 + SDLogY^2))
+      SimulationSetName = .data$simulationSetName,
+      Mean = .data$MeanX / .data$MeanY,
+      SD = sqrt((.data$SDX / .data$MeanY)^2 + (.data$MeanX * .data$SDY / (.data$MeanY * .data$MeanY))^2),
+      GeoMean = exp(.data$MeanLogX - .data$MeanLogY),
+      GeoSD = exp(sqrt(.data$SDLogX^2 + .data$SDLogY^2))
     ) %>%
-    select(SimulationSetName, QuantityPath, Parameter, Mean, SD, GeoMean, GeoSD)
+    select(.data$SimulationSetName, .data$QuantityPath, .data$Parameter, .data$Mean, .data$SD, .data$GeoMean, .data$GeoSD)
 
   return(as.data.frame(ratioSummary))
 }
@@ -429,6 +431,7 @@ getPKRatioSummaryFromSettings <- function(pkData, referencePKData, settings) {
 #' @param settings A list of task settings
 #' @return A data.frame of the PK Parameter ratios summary statistics
 #' @keywords internal
+#' @importFrom rlang .data
 getPKRatioSummaryFromMCSampling <- function(pkData, referencePKData, simulationSetName, settings = NULL) {
   t0 <- tic()
   mcRepetitions <- settings$mcRepetitions %||% getDefaultMCRepetitions()
@@ -447,13 +450,13 @@ getPKRatioSummaryFromMCSampling <- function(pkData, referencePKData, simulationS
   
   pkData <- pkData %>% 
     tidyr::pivot_wider(
-      names_from = c(QuantityPath, Parameter), 
-      values_from = Value
+      names_from = c(.data$QuantityPath, .data$Parameter), 
+      values_from = .data$Value
     )
   referencePKData <- referencePKData %>% 
     tidyr::pivot_wider(
-      names_from = c(QuantityPath, Parameter), 
-      values_from = Value
+      names_from = c(.data$QuantityPath, .data$Parameter), 
+      values_from = .data$Value
     )
   
   pkRatioSummary <- getPKRatioSummaryFromSettings(
@@ -527,6 +530,7 @@ pkParameterTableAsRelativeChange <- function(pkParametersTable, referenceSimulat
 #' @param structureSets `SimulationStructure` R6 class object
 #' @keywords internal
 #' @import dplyr
+#' @importFrom rlang .data
 getPKParameterRatioTable <- function(pkParameter,
                                      outputPath,
                                      structureSets) {
@@ -538,8 +542,8 @@ getPKParameterRatioTable <- function(pkParameter,
     ratioData <- rbind.data.frame(
       ratioData,
       readObservedDataFile(set$pkRatioResultsFileNames) %>%
-        filter(QuantityPath %in% outputPath, Parameter %in% pkParameter) %>%
-        select(!c(QuantityPath, Parameter))
+        filter(.data$QuantityPath %in% outputPath, .data$Parameter %in% pkParameter) %>%
+        select(!c(.data$QuantityPath, .data$Parameter))
     )
   }
   return(ratioData)
