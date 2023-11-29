@@ -253,7 +253,7 @@ mcSampling <- function(dataSize, sampleSize, n = getDefaultMCRepetitions(), seed
   # .Random.seed is created when
   # calling a random number generator for the first time
   # The next line aims at ensuring that a .Random.seed object exists
-  createRandom <- runif(1)
+  createRandom <- stats::runif(1)
   # Use pre-defined seed to get repeatable results
   oldSeed <- .Random.seed
   on.exit({

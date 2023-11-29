@@ -50,7 +50,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
             observedDataSet <- ddiRatio$ObservedData
             observedDataSetFilePath <- configurationPlan$getObservedDataPath(id = observedDataSet)
             observedDataRecordId <- ddiRatio$ObservedDataRecordId
-            observedDataFrame <- readObservedDataFile(file = observedDataSetFilePath)
+            observedDataFrame <- readObservedDataFile(fileName = observedDataSetFilePath)
             validateIsIncluded(observedDataRecordId, observedDataFrame$ID)
 
             ratioList <- list()

@@ -207,7 +207,7 @@ plotMeanMassBalance <- function(structureSet, settings = NULL) {
         sep = ""
       ))
     # Ensure that the colors and legend match previous mass balance plots by re-ordering Legend
-    pieChartData$LegendWithPercent <- reorder(
+    pieChartData$LegendWithPercent <- stats::reorder(
       pieChartData$LegendWithPercent,
       as.numeric(factor(pieChartData$Legend))
     )
