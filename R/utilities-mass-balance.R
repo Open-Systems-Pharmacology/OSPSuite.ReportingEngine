@@ -9,6 +9,7 @@
 #' @import ospsuite
 #' @import utils
 #' @import ospsuite.utils
+#' @importFrom stats approx
 #' @keywords internal
 plotMeanMassBalance <- function(structureSet, settings = NULL) {
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)

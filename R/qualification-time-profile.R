@@ -5,7 +5,7 @@
 #' @return list with `plots` and `tables`
 #' @import tlf
 #' @import ospsuite
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
 #' @keywords internal
 plotQualificationTimeProfiles <- function(configurationPlan, settings) {
   timeProfileResults <- list()
@@ -404,6 +404,7 @@ plotStatisticsFromPlan <- function(time, outputValues, statisticId, outputName, 
 #' @param outputValues Output values to be aggregated
 #' @return A data.frame of aggregated data to display
 #' @keywords internal
+#' @importFrom stats aggregate quantile
 getAggregateFromStat <- function(statisticId, time, outputValues) {
   # Range plots use data.frame with x, ymin and ymax
   if (grepl(pattern = "Range", statisticId)) {
