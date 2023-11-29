@@ -38,7 +38,8 @@ Imports:
     jsonlite,
     ospsuite.utils (>= 1.4.0),
     dplyr,
-    tidyr
+    tidyr,
+    rlang
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
