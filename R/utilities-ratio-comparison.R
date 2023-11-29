@@ -175,6 +175,7 @@ getPKRatioSummaryForSamePopulation <- function(structureSet, referenceSet) {
 #' @param referencePKData A matrix of PK Parameter values for reference Population
 #' @return A matrix of the PK Parameter ratios summary statistics
 #' @keywords internal
+#' @import stats
 getPKRatioSummaryStatistics <- function(pkData, referencePKData) {
   # Since data.frame objects were pivoted to get matrix objects
   # Rows contained unique individuals while
@@ -216,6 +217,7 @@ summaryStatisticsToDataFrame <- function(data, monteCarlo = FALSE){
 #' @param listOfData A list of summary statistics matrices
 #' @return A data.frame displaying summary statistics by column
 #' @keywords internal
+#' @import stats
 getMonteCarloMedians <- function(listOfData){
   # Translate list of matrix objects into a single matrix object
   # The matrix object has 10 rows of summary statistics, 
@@ -274,6 +276,7 @@ mcSampling <- function(dataSize, sampleSize, n = getDefaultMCRepetitions(), seed
 #' @return A data.frame of the PK Parameter ratios summary statistics
 #' @keywords internal
 #' @import dplyr
+#' @import stats
 getPKRatioSummaryFromAnalyticalSolution <- function(pkData, referencePKData, simulationSetName) {
   pkSummary <- pkData %>%
     summarise(
