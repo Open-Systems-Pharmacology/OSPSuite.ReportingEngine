@@ -113,6 +113,7 @@ getPKRatioSummaryForDifferentPopulations <- function(structureSet, referenceSet,
 #' @param referenceSet A `SimulationStructure` object of the reference population
 #' @return A data.frame of the PK Parameter ratios summary statistics
 #' @keywords internal
+#' @importFrom rlang .data
 getPKRatioSummaryForSamePopulation <- function(structureSet, referenceSet) {
   pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
     filePath = structureSet$pkAnalysisResultsFileNames,
@@ -123,11 +124,11 @@ getPKRatioSummaryForSamePopulation <- function(structureSet, referenceSet) {
     simulation = ospsuite::loadSimulation(referenceSet$simulationSet$simulationFile)
   )
   pkData <- ospsuite::pkAnalysesToTibble(pkAnalyses) %>% 
-    select(IndividualId, QuantityPath, Parameter, Value) %>% 
-    arrange(IndividualId, QuantityPath, Parameter)
+    select(.data$IndividualId, .data$QuantityPath, .data$Parameter, .data$Value) %>% 
+    arrange(.data$IndividualId, .data$QuantityPath, .data$Parameter)
   referencePKData <- ospsuite::pkAnalysesToTibble(referencePKAnalyses) %>% 
-    select(IndividualId, QuantityPath, Parameter, Value) %>% 
-    arrange(IndividualId, QuantityPath, Parameter)
+    select(.data$IndividualId, .data$QuantityPath, .data$Parameter, .data$Value) %>% 
+    arrange(.data$IndividualId, .data$QuantityPath, .data$Parameter)
   # Check that both PK data to be compared are included in reference PK data
   validateIsIncluded(unique(pkData$QuantityPath), unique(referencePKData$QuantityPath))
   validateIsIncluded(unique(pkData$Parameter), unique(referencePKData$Parameter))
@@ -144,13 +145,13 @@ getPKRatioSummaryForSamePopulation <- function(structureSet, referenceSet) {
   
   pkData <- pkData %>% 
     tidyr::pivot_wider(
-      names_from = c(QuantityPath, Parameter), 
-      values_from = Value
+      names_from = c(.data$QuantityPath, .data$Parameter), 
+      values_from = .data$Value
     )
   referencePKData <- referencePKData %>% 
     tidyr::pivot_wider(
-      names_from = c(QuantityPath, Parameter), 
-      values_from = Value
+      names_from = c(.data$QuantityPath, .data$Parameter), 
+      values_from = .data$Value
     )
   
   pkRatioSummary <- getPKRatioSummaryStatistics(
@@ -189,7 +190,7 @@ getPKRatioSummaryStatistics <- function(pkData, referencePKData) {
     Mean = apply(ratioData, 2, FUN = function(x){mean(x, na.rm = TRUE)}),
     SD = apply(ratioData, 2, FUN = function(x){stats::sd(x, na.rm = TRUE)}),
     GeoMean = apply(ratioData, 2, FUN = function(x){exp(mean(log(x), na.rm = TRUE))}),
-    GeoSD = apply(ratioData, 2, FUN = function(x){exp(sd(log(x), na.rm = TRUE))})
+    GeoSD = apply(ratioData, 2, FUN = function(x){exp(stats::sd(log(x), na.rm = TRUE))})
   )
   return(ratioSummary)
 }
