@@ -37,12 +37,12 @@ DataSource <- R6::R6Class(
     #' @return A character string
     getCaption = function(workflowFolder = NULL) {
       if (!isEmpty(self$caption)) {
-        return(paste(self$descriptor, self$caption))
+        return(paste0(self$descriptor, " ", self$caption, ". "))
       }
       if (isEmpty(workflowFolder)) {
-        return(paste(self$descriptor, self$dataFile))
+        return(paste0(self$descriptor, " ", self$dataFile, ". "))
       }
-      return(paste(self$descriptor, self$getRelativeDataPath(workflowFolder)))
+      return(paste0(self$descriptor, " ", self$getRelativeDataPath(workflowFolder), ". "))
     },
 
     #' @description
