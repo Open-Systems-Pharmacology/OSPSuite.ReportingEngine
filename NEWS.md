@@ -19,7 +19,7 @@
 ## Minor improvements and bug fixes
 
 - Monte Carlo sampling in ratio comparison workflows is now centralized, performed in the PK parameter calculation step and significantly faster (#536, #1086).
-- Wording for ratio comparison worflow figures and tables has been updated (#1087)
+- Wording for ratio comparison workflow figures and tables has been updated (#1087)
 - Number of bins in demography and PK parameter range plots is consistent with input (#1128)
 - Link/bookmark targets in word reports are better placed (#1084)
 - Qualification time profiles work when no observed data is contained (#1082)
