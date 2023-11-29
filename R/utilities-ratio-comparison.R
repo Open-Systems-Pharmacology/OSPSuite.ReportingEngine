@@ -301,7 +301,7 @@ getPKRatioSummaryFromAnalyticalSolution <- function(pkData, referencePKData, sim
     suffix = c("X", "Y")
   ) %>%
     mutate(
-      SimulationSetName = .data$simulationSetName,
+      SimulationSetName = simulationSetName,
       Mean = .data$MeanX / .data$MeanY,
       SD = sqrt((.data$SDX / .data$MeanY)^2 + (.data$MeanX * .data$SDY / (.data$MeanY * .data$MeanY))^2),
       GeoMean = exp(.data$MeanLogX - .data$MeanLogY),
