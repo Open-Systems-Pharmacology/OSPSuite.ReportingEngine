@@ -80,12 +80,10 @@ captions <- list(
         referenceSetText,
         ". ",
         dataSource,
-        getPlotScaleCaption("Profiles", plotScale),
         switch(parameterClass,
-          "character" = paste0(" and ", getBoxplotDescriptor()),
-          ""
-        ),
-        "."
+          "character" = paste0("Data is ", getBoxplotDescriptor(), "."),
+          getPlotScaleCaption("Profiles", plotScale)
+        )
       ))
     }
   ),
@@ -228,7 +226,7 @@ getDataSourceCaption <- function(structureSet) {
     return("")
   }
   dataSourceCaption <- structureSet$simulationSet$dataSource$getCaption(structureSet$workflowFolder)
-  return(paste0(dataSourceCaption, ". "))
+  return(dataSourceCaption)
 }
 
 getGoodnessOfFitCaptions <- function(structureSet, plotType, plotScale = "linear", settings = NULL) {
