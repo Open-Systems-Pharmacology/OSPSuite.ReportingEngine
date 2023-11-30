@@ -2,7 +2,7 @@
 #' @description Build dataframes and metadata for each DDI plot
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return  plotDDIdata, a list of lists of the form list(dataframe,metadata) specific to each DID plot
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
 #' @keywords internal
 getQualificationDDIPlotData <- function(configurationPlan) {
   plotDDIdata <- list()
@@ -50,7 +50,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
             observedDataSet <- ddiRatio$ObservedData
             observedDataSetFilePath <- configurationPlan$getObservedDataPath(id = observedDataSet)
             observedDataRecordId <- ddiRatio$ObservedDataRecordId
-            observedDataFrame <- readObservedDataFile(file = observedDataSetFilePath)
+            observedDataFrame <- readObservedDataFile(fileName = observedDataSetFilePath)
             validateIsIncluded(observedDataRecordId, observedDataFrame$ID)
 
             ratioList <- list()
@@ -277,6 +277,7 @@ getSmartZoomLimits <- function(dataVector, residualsVsObserved = FALSE) {
 #' @return ggplot DDI plot object for DDI qualification workflow
 #' @import tlf
 #' @import ggplot2
+#' @importFrom stats na.omit
 #' @keywords internal
 generateDDIQualificationDDIPlot <- function(ddiPlotData, delta) {
   ddiData <- na.omit(ddiPlotData$ddiPlotDataframe)

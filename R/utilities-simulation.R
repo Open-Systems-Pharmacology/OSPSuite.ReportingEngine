@@ -23,7 +23,7 @@ simulateWorkflowModels <- function(structureSets, settings = NULL) {
   # Run mean simulations in parallel
   if (sum(!populationSets) > 0) {
     simulationResults <- simulateModelParallel(
-      structureSet = structureSets[!populationSets],
+      structureSets = structureSets[!populationSets],
       settings = settings
     )
   }
@@ -65,7 +65,7 @@ simulateModelForPopulation <- function(structureSets, settings = NULL) {
 
     # If multiple cores available, run in parallel
     logInfo(paste0(
-      "Starting parallel population simulation on ", .highlight(numberOfCores), " cores"
+      "Starting parallel population simulation on ", highlight(numberOfCores), " cores"
     ))
 
     simulationResultFileNames <- runParallelPopulationSimulation(

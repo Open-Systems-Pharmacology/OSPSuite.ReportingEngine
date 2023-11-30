@@ -11,14 +11,14 @@ test_that("DataSource objects use caption when defined", {
     caption = "my data source caption"
   )
 
-  expect_equal(dataSource$getCaption(), "Data source: my data source caption")
+  expect_equal(dataSource$getCaption(), "Data source: my data source caption. ")
 
   dataSource <- DataSource$new(
     dataFile = "data.csv",
     metaDataFile = "meta-data.csv"
   )
   dataSource$caption <- "my second data source caption"
-  expect_equal(dataSource$getCaption(), "Data source: my second data source caption")
+  expect_equal(dataSource$getCaption(), "Data source: my second data source caption. ")
 })
 
 test_that("DataSource objects provide clean path using workflow path when caption is not defined", {
@@ -27,17 +27,17 @@ test_that("DataSource objects provide clean path using workflow path when captio
     metaDataFile = "meta-data.csv"
   )
 
-  expect_equal(dataSource$getCaption(), "Data source: data.csv")
+  expect_equal(dataSource$getCaption(), "Data source: data.csv. ")
 
   dataSource <- DataSource$new(
     dataFile = "a/b/c/data.csv",
     metaDataFile = "meta-data.csv"
   )
 
-  expect_equal(dataSource$getCaption(), "Data source: a/b/c/data.csv")
-  expect_equal(dataSource$getCaption("a"), "Data source: b/c/data.csv")
-  expect_equal(dataSource$getCaption("a/b"), "Data source: c/data.csv")
-  expect_equal(dataSource$getCaption("a/b/workflow"), "Data source: c/data.csv")
+  expect_equal(dataSource$getCaption(), "Data source: a/b/c/data.csv. ")
+  expect_equal(dataSource$getCaption("a"), "Data source: b/c/data.csv. ")
+  expect_equal(dataSource$getCaption("a/b"), "Data source: c/data.csv. ")
+  expect_equal(dataSource$getCaption("a/b/workflow"), "Data source: c/data.csv. ")
 })
 
 # Tests for definitions of units

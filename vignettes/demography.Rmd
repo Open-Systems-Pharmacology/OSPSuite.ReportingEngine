@@ -183,7 +183,7 @@ activateWorkflowTasks(parallelWorkflow, tasks = AllAvailableTasks$plotDemography
 
 To plot histograms of demography parameters, no demography parameters are defined in `xParameters` as illustrated in the example below which defines the parameters to be plotted in the histograms.
 
-To define parameters not displayed by displayed, either a character array or a named list can be provided.
+To define parameters to be included in the report, either a character array or a named list can be provided.
 In the case of a named list, the name will be displayed while using its argument to query the appropriate demography parameter.
 In this example, the parameter `Organism|Age` is defined with `Age` as displayed name.
 User can also leverage the `{ospsuite}` package and look for the parameters in the enum `StandardPath`.
@@ -255,7 +255,7 @@ activateWorkflowTasks(parallelWorkflow, tasks = AllAvailableTasks$plotDemography
 </details>
 
 To display range plots of demography parameters, the demography parameters to display are defined in `xParameters` as illustrated in the example.
-Note that **categorical** parameters defined as `xParameters` (_Gender_ in this case) are displayed ([#1088](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/issues/1088) using box-whisker plots.
+Note that **categorical** parameters defined as `xParameters` (_Gender_ in this case) are displayed ([#1088](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/issues/1088)) using box-whisker plots.
 
 <details>
 <summary> __Code__ </summary>
@@ -348,6 +348,12 @@ To plot histograms of demography parameters, no demography parameters are define
 <summary> __Code__ </summary>
 
 ```{r}
+displayedParameters  <- list(
+  Age = "Organism|Age", 
+  Weight = "Organism|Weight", 
+  Gender = "Gender"
+  )
+
 setXParametersForDemogrpahyPlot(workflow = pediatricWorkflow, parameters = NULL)
 setYParametersForDemogrpahyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
 ```
@@ -398,7 +404,7 @@ activateWorkflowTasks(pediatricWorkflow, tasks = AllAvailableTasks$plotDemograph
 </details>
 
 To display range plots of demography parameters, the demography parameters to display are defined in `xParameters` as illustrated in the example.
-Note that **categorical** parameters defined as `xParameters` (_Gender_ in this case) are displayed ([#1088](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/issues/1088) using box-whisker plots.
+Note that **categorical** parameters defined as `xParameters` (_Gender_ in this case) are displayed ([#1088](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/issues/1088)) using box-whisker plots.
 
 <details>
 <summary> __Code__ </summary>
@@ -447,7 +453,7 @@ unlink(pediatricWorkflow$workflowFolder, recursive = TRUE)
 The demography plot task includes a few settings that may allow users to fine tune their demography plots.
 Such settings are available in the field `workflow$plotDemography$settings`.
 
-Since categorical parameters are displayed using boxplots, they are not affected the settings described below.
+Since categorical parameters are displayed using boxplots, they are not affected by the settings described below.
 
 ## Binning histograms and range plots
 
@@ -475,6 +481,11 @@ inactivateWorkflowTasks(parallelWorkflow)
 activateWorkflowTasks(parallelWorkflow, tasks = AllAvailableTasks$plotDemography)
 
 # Only display histograms for Age, Weight and Gender
+displayedParameters  <- list(
+  Age = "Organism|Age", 
+  Weight = "Organism|Weight", 
+  Gender = "Gender"
+  )
 setYParametersForDemogrpahyPlot(workflow = parallelWorkflow, parameters = displayedParameters)
 
 # Set up 5 bins for all histograms
@@ -514,7 +525,12 @@ pediatricWorkflow <- PopulationWorkflow$new(
 inactivateWorkflowTasks(pediatricWorkflow)
 activateWorkflowTasks(pediatricWorkflow, tasks = AllAvailableTasks$plotDemography)
 
-# Only display range plots for Age and Weight (Gender being a categorical variable, it won't be displayed)
+
+displayedParameters  <- list(
+  Age = "Organism|Age", 
+  Weight = "Organism|Weight", 
+  Gender = "Gender"
+  )
 setYParametersForDemogrpahyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
 
 # Set up 5 bins for all the range plots
@@ -570,7 +586,12 @@ pediatricWorkflow <- PopulationWorkflow$new(
 inactivateWorkflowTasks(pediatricWorkflow)
 activateWorkflowTasks(pediatricWorkflow, tasks = AllAvailableTasks$plotDemography)
 
-# Only display range plots for Age and Weight (Gender being a categorical variable, it won't be displayed)
+
+displayedParameters  <- list(
+  Age = "Organism|Age", 
+  Weight = "Organism|Weight", 
+  Gender = "Gender"
+  )
 setYParametersForDemogrpahyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
 
 # Set up continuous line between bins with stairstep settings being FALSE
@@ -629,7 +650,11 @@ pediatricWorkflow <- PopulationWorkflow$new(
 inactivateWorkflowTasks(pediatricWorkflow)
 activateWorkflowTasks(pediatricWorkflow, tasks = AllAvailableTasks$plotDemography)
 
-# Only display range plots for Age and Weight (Gender being a categorical variable, it won't be displayed)
+displayedParameters  <- list(
+  Age = "Organism|Age", 
+  Weight = "Organism|Weight", 
+  Gender = "Gender"
+  )
 setYParametersForDemogrpahyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
 
 # Turn off reference global range

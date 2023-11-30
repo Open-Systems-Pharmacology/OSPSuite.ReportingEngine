@@ -175,6 +175,7 @@ getPKRatioSummaryForSamePopulation <- function(structureSet, referenceSet) {
 #' @param referencePKData A matrix of PK Parameter values for reference Population
 #' @return A matrix of the PK Parameter ratios summary statistics
 #' @keywords internal
+#' @importFrom stats quantile sd
 getPKRatioSummaryStatistics <- function(pkData, referencePKData) {
   # Since data.frame objects were pivoted to get matrix objects
   # Rows contained unique individuals while
@@ -216,6 +217,7 @@ summaryStatisticsToDataFrame <- function(data, monteCarlo = FALSE){
 #' @param listOfData A list of summary statistics matrices
 #' @return A data.frame displaying summary statistics by column
 #' @keywords internal
+#' @importFrom stats median
 getMonteCarloMedians <- function(listOfData){
   # Translate list of matrix objects into a single matrix object
   # The matrix object has 10 rows of summary statistics, 
@@ -251,7 +253,7 @@ mcSampling <- function(dataSize, sampleSize, n = getDefaultMCRepetitions(), seed
   # .Random.seed is created when
   # calling a random number generator for the first time
   # The next line aims at ensuring that a .Random.seed object exists
-  createRandom <- runif(1)
+  createRandom <- stats::runif(1)
   # Use pre-defined seed to get repeatable results
   oldSeed <- .Random.seed
   on.exit({
@@ -273,6 +275,7 @@ mcSampling <- function(dataSize, sampleSize, n = getDefaultMCRepetitions(), seed
 #' @param simulationSetName Name of simulation set
 #' @return A data.frame of the PK Parameter ratios summary statistics
 #' @keywords internal
+#' @importFrom stats sd
 #' @import dplyr
 getPKRatioSummaryFromAnalyticalSolution <- function(pkData, referencePKData, simulationSetName) {
   pkSummary <- pkData %>%

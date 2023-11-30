@@ -23,6 +23,7 @@ adjustTitlePage
 aes
 AggregationConfiguration
 al
+allApplicationsFor
 AllAvailableTasks
 allowedCores
 allPKParameterNames
@@ -38,6 +39,7 @@ axesSettings
 AxesSettings
 bB
 behaviour
+BloodCells
 BMI
 boxplotPkParameters
 boxplotPkRatios
@@ -82,6 +84,7 @@ createWorkflowFromExcelInput
 csv
 cumulativeTimeProfile
 CVs
+δ
 dA
 dB
 dC
@@ -108,6 +111,7 @@ DDI
 ddiPKRatioColumnName
 DDIRatioPlots
 ddiRatioSubsetsDictionary
+defaultMassBalanceGrouping
 defaultQuantileVec
 defaultSensitivityAnalysisNumberOfCores
 defaultSimulationNumberOfCores
@@ -118,7 +122,9 @@ displayPath
 displayUnit
 docx
 dplyr
+drugMass
 dv
+Endosome
 enum
 Enum
 enums
@@ -147,6 +153,7 @@ getAllowedCores
 getAllowedCoresLinuxKubernetes
 getAllTasks
 getAnchorName
+getApplicationResults
 getAxesForTimeProfiles
 getAxesProperties
 getAxesSettings
@@ -192,6 +199,7 @@ getIndividualSAResultsFileName
 getIntroFromReportTitle
 getLegendAesOverride
 getLineBreakWidth
+getMassBalanceData
 getMassBalanceDataMapping
 getMassBalancePlotConfiguration
 getMeanPKAnalysesFromOutput
@@ -199,6 +207,7 @@ getMeanSensitivityAnalysisResultsFileNames
 getMechanismName
 getMetaDataFrame
 getMolWeightForCompound
+getMonteCarloMedians
 getObjectNameAsString
 getObjectNamesInGlobalEnv
 getObservedCurveProperties
@@ -233,6 +242,7 @@ getPKRatioSummaryForDifferentPopulations
 getPKRatioSummaryForSamePopulation
 getPKRatioSummaryFromAnalyticalSolution
 getPKRatioSummaryFromMCSampling
+getPKRatioSummaryFromSettings
 getPKRatioSummaryStatistics
 getPKResultsDataFrame
 getPlotConfigurationFromPlan
@@ -312,6 +322,7 @@ importSensitivityAnalysisResultsFromCSV
 inactivateWorkflowTasks
 individualParameters
 individualSensitivityAnalysis
+Intracellular
 introToYamlHeader
 isBetween
 isObservedData
@@ -641,6 +652,7 @@ subfields
 subfolders
 subtype
 subunits
+summaryStatisticsToDataFrame
 taskFunction
 TaskResults
 TaskSetting
@@ -660,6 +672,7 @@ tlfScale
 tlfShape
 toc
 tolower
+totalDrugMass
 totalSensitivityThreshold
 tpDictionary
 tracelib
@@ -699,6 +712,7 @@ workflowFolder
 WorkflowInput
 WorkflowMandatoryVariables
 workflowType
+xenobiotic
 xlabel
 xLabel
 xlsx
