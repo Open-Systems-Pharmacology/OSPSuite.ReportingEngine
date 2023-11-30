@@ -621,6 +621,49 @@ It is however possible to remove this settings in case the bars do not overlap b
 workflow$plotDemography$settings$dodge <- FALSE
 ```
 
+In the example below, dodging is removed within a parallel comparison workflow:
+
+<details>
+<summary> __Code__ </summary>
+
+```{r}
+parallelWorkflow <- PopulationWorkflow$new(
+  workflowType = PopulationWorkflowTypes$parallelComparison,
+  simulationSets = c(adultSet, childrenSet),
+  workflowFolder = "Parallel-Histograms",
+  createWordReport = FALSE
+)
+
+inactivateWorkflowTasks(parallelWorkflow)
+activateWorkflowTasks(parallelWorkflow, tasks = AllAvailableTasks$plotDemography)
+
+displayedParameters  <- list(
+  Age = "Organism|Age", 
+  Weight = "Organism|Weight", 
+  Gender = "Gender"
+  )
+setYParametersForDemogrpahyPlot(workflow = parallelWorkflow, parameters = displayedParameters)
+
+# Turn off dodging of histogram bars
+parallelWorkflow$plotDemography$settings$dodge <- FALSE
+
+parallelWorkflow$runWorkflow()
+
+```
+
+</details>
+
+
+```{r example parallel report dodge, echo=FALSE, results='asis'}
+cat(includeReportFromWorkflow(parallelWorkflow))
+```
+
+```{r delete parallel report dodge, include = FALSE, echo=FALSE}
+# Remove the workflow folders
+unlink(parallelWorkflow$workflowFolder, recursive = TRUE)
+```
+
+
 ## Display reference population global range <a id="ref-global-range"></a>
 
 Pediatric workflow range plots compare simulation sets to the **reference** simulation set ([#17](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/issues/17)).
