@@ -41,7 +41,7 @@ R6 objects, or objects from R6 class, presents some peculiarities.
 
 The `ospsuite.reportingengine` package is built around 3 central R6 classes __`MeanModelWorkflow`__,  __`PopulationWorkflow`__ and __`QualificationWorkflow`__ derived from the parent R6 class `Workflow`.
 The creation of `MeanModelWorkflow` or `PopulationWorkflow` objects provides a structured environment with methods and properties that facilitate the design, run and report of the evaluations of PBPK models developed on PK-Sim or/and MoBi.
-For `QualificationWorkflow` objects, more details are available in a dedicated [article](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/articles/qualification-workflow.html).
+For `QualificationWorkflow` objects, more details are available in a dedicated [article](./qualification-workflow.html).
 The `Worklow` objects combine 2 features defined as R6 objects:
 
 - `SimulationSet` and `PopulationSimulationSet` objects defines which and how model(s) and/or data can be used by the workflow (developed in more details in section [3](#3-simulation-sets)).
@@ -51,35 +51,35 @@ These objects need to be created before the creation of workflow objects as they
 ## 1.3. Nomenclature
 
 Table 1 enumerates some of the main instances of the `ospsuite.reportingengine` package usually defined by users during the design of a workflow.
-The tab [Reference](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference) documents available classes and functions exported by the `ospsuite.reportingengine` package.
+The tab [Reference](../reference/index.html) documents available classes and functions exported by the `ospsuite.reportingengine` package.
 The comprehensive documentation and usage of each of these objects is accessible in the tab **Reference**.
 
 **Table 1: Nomenclature of `ospsuite.reportingengine` main instances**
 
 |**Workflow objects**|**Use case**|
 |--------------------|------------|
-|[MeanModelWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/MeanModelWorkflow.html)|Defined by user|
-|[PopulationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PopulationWorkflow.html)|Defined by user|
-|[QualificationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/loadQualificationWorkflow.html)|Build in [loadQualificationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/QualificationWorkflow.html)|
+|[MeanModelWorkflow](../reference/MeanModelWorkflow.html)|Defined by user|
+|[PopulationWorkflow](../reference/PopulationWorkflow.html)|Defined by user|
+|[QualificationWorkflow](../reference/loadQualificationWorkflow.html)|Build in [loadQualificationWorkflow](../reference/QualificationWorkflow.html)|
 |**Simulation Set objects**|**Use case**|
-|[SimulationSet](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/SimulationSet.html)|Defined by user|
-|[PopulationSimulationSet](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PopulationSimulationSet.html)|Defined by user|
-|[ConfigurationPlan](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/ConfigurationPlan.html)|Build in [loadQualificationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/QualificationWorkflow.html)|
+|[SimulationSet](../reference/SimulationSet.html)|Defined by user|
+|[PopulationSimulationSet](../reference/PopulationSimulationSet.html)|Defined by user|
+|[ConfigurationPlan](../reference/ConfigurationPlan.html)|Build in [loadQualificationWorkflow](../reference/QualificationWorkflow.html)|
 |**Output path and PK parameter objects**|**Use case**|
-|[Output](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/Output.html)|Defined by user|
-|[PkParameterInfo](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PkParameterInfo.html)|Defined by user|
+|[Output](../reference/Output.html)|Defined by user|
+|[PkParameterInfo](../reference/PkParameterInfo.html)|Defined by user|
 |**Workflow task objects**|**Use case**|
-|[Task](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/Task.html)|Build in workflow objects|
-|[SimulationTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/SimulationTask.html)|Build in workflow objects|
-|[SensitivityAnalysisTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/SensitivityAnalysisTask.html)|Build in workflow objects|
-|[PopulationSensitivityAnalysisTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PopulationSensitivityAnalysisTask.html)|Build in workflow objects|
-|[QualificationTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/QualificationTask.html)|Build in [QualificationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/loadQualificationWorkflow.html) objects|
-|[PlotTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PlotTask.html)|Build in workflow objects|
-|[PopulationPlotTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PopulationPlotTask.html)|Build in [PopulationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/PopulationWorkflow.html) objects|
-|[GofPlotTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/GofPlotTask.html)|Build in workflow objects|
+|[Task](../reference/Task.html)|Build in workflow objects|
+|[SimulationTask](../reference/SimulationTask.html)|Build in workflow objects|
+|[SensitivityAnalysisTask](../reference/SensitivityAnalysisTask.html)|Build in workflow objects|
+|[PopulationSensitivityAnalysisTask](../reference/PopulationSensitivityAnalysisTask.html)|Build in workflow objects|
+|[QualificationTask](../reference/QualificationTask.html)|Build in [QualificationWorkflow](../reference/loadQualificationWorkflow.html) objects|
+|[PlotTask](../reference/PlotTask.html)|Build in workflow objects|
+|[PopulationPlotTask](../reference/PopulationPlotTask.html)|Build in [PopulationWorkflow](../reference/PopulationWorkflow.html) objects|
+|[GofPlotTask](../reference/GofPlotTask.html)|Build in workflow objects|
 |**Workflow task settings objects**|**Use case**|
 |PlotSettings|Build in workflow objects|
-|[SensitivityPlotSettings](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/SensitivityPlotSettings.html)|Build in workflow objects|
+|[SensitivityPlotSettings](../reference/SensitivityPlotSettings.html)|Build in workflow objects|
 
 
 ## 1.4. General scheme
@@ -246,7 +246,7 @@ knitr::include_graphics("figures/population-workflow-input-and-tasks.png")
 ## 2.3. Qualification Workflow
 
 Another type of workflow can be defined by `QualificationWorkflow` objects using a configuration plan for qualification purposes.
-The article [Qualification Workflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/articles/qualification-workflow.html) details how to build and use such `QualificationWorkflow` objects.
+The article [Qualification Workflow](./qualification-workflow.html) details how to build and use such `QualificationWorkflow` objects.
 
 ## 2.4. Creation of a Workflow
 
