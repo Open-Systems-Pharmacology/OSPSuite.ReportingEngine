@@ -18,7 +18,10 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="nav-item">
+  <a class="nav-link" href="../articles/ospsuite-reportingengine.html">Get started</a>
+</li>
+<li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
@@ -29,7 +32,6 @@
     <a class="dropdown-item" href="../articles/excel-template.html">Excel Template</a>
     <a class="dropdown-item" href="../articles/goodness-of-fit.html">Time profiles and Residuals task</a>
     <a class="dropdown-item" href="../articles/mass-balance.html">Mass Balance</a>
-    <a class="dropdown-item" href="../articles/ospsuitereportingengine.html">Get Started</a>
     <a class="dropdown-item" href="../articles/pk-parameters.html">PK parameters</a>
     <a class="dropdown-item" href="../articles/plot-settings.html">Plot settings</a>
     <a class="dropdown-item" href="../articles/pop-pk-parameters.html">PK Parameters in Population Workflows</a>
@@ -186,7 +188,7 @@ statisticsType = StatisticsTypes$`Geometric mean`
 
 # Set the legend caption displayed for range
 workflow$plotTimeProfilesAndResiduals$settings$setStatistics(
-statisticsType = StatisticsTypes$`Geometric mean`
+statisticsType = StatisticsTypes$`Geometric mean`,
 rangeCaption = "90% population range"
 )
 
@@ -236,7 +238,36 @@ workflow$plotTimeProfilesAndResiduals$settings$getStatistics()
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co">## Method `GofTaskSettings$setStatistics`</span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># Set the statistics as geometric mean</span></span></span>
+<span class="r-in"><span><span class="va">workflow</span><span class="op">$</span><span class="va">plotTimeProfilesAndResiduals</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="fu">setStatistics</span><span class="op">(</span></span></span>
+<span class="r-in"><span>statisticsType <span class="op">=</span> <span class="va">StatisticsTypes</span><span class="op">$</span><span class="va">`Geometric mean`</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Set the legend caption displayed for range</span></span></span>
+<span class="r-in"><span><span class="va">workflow</span><span class="op">$</span><span class="va">plotTimeProfilesAndResiduals</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="fu">setStatistics</span><span class="op">(</span></span></span>
+<span class="r-in"><span>statisticsType <span class="op">=</span> <span class="va">StatisticsTypes</span><span class="op">$</span><span class="va">`Geometric mean`</span>,</span></span>
+<span class="r-in"><span>rangeCaption <span class="op">=</span> <span class="st">"90% population range"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co">## Method `GofTaskSettings$getStatistics`</span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># Get the statistics of time profiles task</span></span></span>
+<span class="r-in"><span><span class="va">workflow</span><span class="op">$</span><span class="va">plotTimeProfilesAndResiduals</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="fu">getStatistics</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
