@@ -24,7 +24,8 @@ jobs:
           Rscript .github/workflows/install_dependencies.R
 
       - name: Install lintr
-        run: install.packages('lintr'), repos='http://cran.rstudio.com/')
+        run: |
+          install.packages('lintr'), repos='http://cran.rstudio.com/')
         shell: Rscript {0}
 
       - name: Lint
