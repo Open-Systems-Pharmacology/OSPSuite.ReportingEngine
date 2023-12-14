@@ -259,8 +259,8 @@ getAllowedCoresLinuxKubernetes <- function() {
   cores <- tryCatch(
     {
       # get cpu allowance from files
-      cfs_quota_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us", intern = T))
-      cfs_period_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_period_us", intern = T))
+      cfs_quota_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us", intern = TRUE))
+      cfs_period_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_period_us", intern = TRUE))
       cores <- floor(cfs_quota_us / cfs_period_us)
       if (cores < 1) {
         return(NULL)

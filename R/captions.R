@@ -31,7 +31,7 @@ captions <- list(
       paste0(
         "Fraction of drug within the different compartments at ", time, timeUnit, " for ",
         paste(compoundNames, collapse = ", ")
-        )
+      )
     }
   ),
   demography = list(
@@ -234,8 +234,11 @@ getGoodnessOfFitCaptions <- function(structureSet, plotType, plotScale = "linear
   simulationSetName <- structureSet$simulationSet$simulationSetName
   setDescriptor <- structureSet$simulationSetDescriptor
   yCaption <- NULL
-  if (isOfType(structureSet$simulationSet, "PopulationSimulationSet") &
-    isIncluded(plotType, c("obsVsPred", "resVsPred"))) {
+  usePopulationCaption <- all(
+    isOfType(structureSet$simulationSet, "PopulationSimulationSet"),
+    isIncluded(plotType, c("obsVsPred", "resVsPred"))
+  )
+  if (usePopulationCaption) {
     gofStatistics <- settings$getStatistics()
     yCaption <- gofStatistics$yCaption
     plotCaption <- captions$plotGoF[[plotType]](simulationSetName, setDescriptor, dataSource, plotScale, yCaption)

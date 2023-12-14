@@ -92,11 +92,6 @@ getQualificationDDIPlotData <- function(configurationPlan) {
                 }
                 pkParameterName <- generateDDIPlotPKParameterName(pkParameter, startTime, endTime)
 
-                simulationResultsFile <- configurationPlan$getSimulationResultsPath(
-                  project = projectName,
-                  simulation = simulationName
-                )
-
                 pkAnalysisResultsPath <- configurationPlan$getPKAnalysisResultsPath(
                   project = projectName,
                   simulation = simulationName

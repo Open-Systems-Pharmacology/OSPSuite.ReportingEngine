@@ -76,7 +76,6 @@ addTableChunk <- function(fileName,
   table <- read.csv(
     file.path(tableFileRootDirectory, tableFileRelativePath),
     check.names = FALSE,
-    # colClasses = "character",
     fileEncoding = "UTF-8",
     stringsAsFactors = FALSE
   )
@@ -667,7 +666,6 @@ updateArtifactNumbers <- function(fileContent, pattern, replacement, anchorId, c
   # Initialize
   updatedFileContent <- NULL
   count <- 1
-  titleIndex <- 1
   for (lineIndex in seq_along(fileContent)) {
     # Counting is performed within sections
     # Need to reset count at lines of titles

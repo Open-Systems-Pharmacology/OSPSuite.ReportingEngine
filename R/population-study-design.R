@@ -179,7 +179,7 @@ mapStudyDesignSources <- function(data, population, simulation) {
     }
 
     sourceExpressionsByColumn <- paste0("data[,'", path, "']", expressionType, values)
-    sourceExpressionsByColumn[values %in% NA] <- "TRUE"
+    sourceExpressionsByColumn[is.na(values)] <- "TRUE"
 
     ifNotNull(
       sourceExpressions,

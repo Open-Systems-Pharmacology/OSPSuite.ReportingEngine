@@ -116,7 +116,11 @@ createQualificationReport <- function(qualificationRunnerFolder,
   #-------- STEP 3: Run Qualification Workflow  --------#
   # If version info is provided update title page
   titlePageFile <- file.path(reInputFolder, "Intro/titlepage.md") 
-  if(!is.null(versionInfo) & file.exists(titlePageFile)){
+  addTitlePage <- all(
+    !is.null(versionInfo),
+    file.exists(titlePageFile)
+  )
+  if(addTitlePage){
     adjustTitlePage(titlePageFile, qualificationVersionInfo = versionInfo)
   }
   

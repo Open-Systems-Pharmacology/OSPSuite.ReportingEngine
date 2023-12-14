@@ -907,9 +907,9 @@ loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getTimeProfileOutputsDataframe(configurationPlan)
-  if (!isOfLength(outputs, 0)) {
+  if (!isEmpty(outputs)) {
     # data.frame to list
-    outputs <- split(outputs, 1:nrow(outputs))
+    outputs <- split(outputs, seq_len(nrow(outputs)))
     inputFiles <- as.character(sapply(outputs, function(output) {
       configurationPlan$getSimulationResultsPath(project = output$project, simulation = output$simulation)
     }))
@@ -948,9 +948,9 @@ loadGOFMergedTask <- function(workflow, configurationPlan) {
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getGOFOutputsDataframe(configurationPlan)
-  if (!isOfLength(outputs, 0)) {
+  if (!isEmpty(outputs)) {
     # data.frame to list
-    outputs <- split(outputs, 1:nrow(outputs))
+    outputs <- split(outputs, seq_len(nrow(outputs)))
     inputFiles <- as.character(sapply(outputs, function(output) {
       configurationPlan$getSimulationResultsPath(project = output$project, simulation = output$simulation)
     }))
@@ -997,9 +997,9 @@ loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPl
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getComparisonTimeProfileOutputsDataframe(configurationPlan)
-  if (!isOfLength(outputs, 0)) {
+  if (!isEmpty(outputs)) {
     # data.frame to list
-    outputs <- split(outputs, 1:nrow(outputs))
+    outputs <- split(outputs, seq_len(nrow(outputs)))
     inputFiles <- as.character(sapply(outputs, function(output) {
       configurationPlan$getSimulationResultsPath(project = output$project, simulation = output$simulation)
     }))
@@ -1039,9 +1039,9 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getPKRatioOutputsDataframe(configurationPlan)
-  if (!isOfLength(outputs, 0)) {
+  if (!isEmpty(outputs)) {
     # data.frame to list
-    outputs <- split(outputs, 1:nrow(outputs))
+    outputs <- split(outputs, seq_len(nrow(outputs)))
     inputFiles <- as.character(sapply(outputs, function(output) {
       configurationPlan$getPKAnalysisResultsPath(project = output$project, simulation = output$simulation)
     }))
@@ -1106,9 +1106,9 @@ loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getDDIOutputsDataframe(configurationPlan)
-  if (!isOfLength(outputs, 0)) {
+  if (!isEmpty(outputs)) {
     # data.frame to list
-    outputs <- split(outputs, 1:nrow(outputs))
+    outputs <- split(outputs, seq_len(nrow(outputs)))
     inputFiles <- as.character(sapply(outputs, function(output) {
       configurationPlan$getPKAnalysisResultsPath(project = output$project, simulation = output$simulation)
     }))

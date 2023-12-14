@@ -175,12 +175,12 @@ getSelectedRows <- function(data, dataSelection) {
   }
   if (isOfType(dataSelection, "expression")) {
     selectedData <- data %>%
-      dplyr::mutate(rows = 1:n()) %>%
+      dplyr::mutate(rows = seq_len(n())) %>%
       dplyr::filter(eval(dataSelection))
     return(selectedData$rows)
   }
   selectedData <- data %>%
-    dplyr::mutate(rows = 1:n()) %>%
+    dplyr::mutate(rows = seq_len(n())) %>%
     dplyr::filter(eval(parse(text = dataSelection)))
   return(selectedData$rows)
 }

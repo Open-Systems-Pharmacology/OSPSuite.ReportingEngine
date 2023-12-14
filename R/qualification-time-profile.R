@@ -374,7 +374,11 @@ plotStatisticsFromPlan <- function(time, outputValues, statisticId, outputName, 
   aggregatedData <- getAggregateFromStat(statisticId, time, outputValues)
   caption <- prettyCaption(getCaptionFromStat(statisticId, outputName), plotObject)
   # Range and Deviation plots use addRibbon
-  if (grepl(pattern = "Range", statisticId) | grepl(pattern = "Deviation", statisticId)) {
+  useRibbon <- any(
+    grepl(pattern = "Range", statisticId),
+    grepl(pattern = "Deviation", statisticId)
+  )
+  if (useRibbon) {
     plotObject <- tlf::addRibbon(
       x = aggregatedData$x,
       ymin = aggregatedData$ymin,
@@ -568,7 +572,8 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
     }
   )
   if (isEmpty(outputValues)) {
-    stop(messages$errorMolecularWeightRequired("")) # pathArray[1]
+    # TODO: change error message
+    stop(messages$errorMolecularWeightRequired(""))
   }
 
   outputError <- NULL
@@ -629,7 +634,11 @@ getObservedErrorValues <- function(observedValues, observedResults, axesProperti
 
   # If error has no unit but values lower than 1,
   # Check output has also no unit and then compute arithmetic error
-  if (isIncluded(observedResults$metaData$error$unit, "") & any(observedResults$data[, 3] < 1, na.rm = TRUE)) {
+  checkOutputIsFraction <- all(
+    isIncluded(observedResults$metaData$error$unit, ""),
+    any(observedResults$data[, 3] < 1, na.rm = TRUE)
+  )
+  if (checkOutputIsFraction) {
     tryCatch(
       {
         validateIsIncluded(observedResults$metaData$output$unit, "")

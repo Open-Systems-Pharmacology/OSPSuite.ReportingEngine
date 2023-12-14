@@ -657,10 +657,6 @@ getGOFPlotConfiguration <- function(plotType,
 
   # Set time ticks for res vs time
   if (plotType %in% "resVsTime") {
-    residualTimeTicks <- getTimeTicksFromUnit(
-      metaData$Time$unit,
-      timeValues = data$Time
-    )
     plotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, dataMapping, plotConfiguration)
   }
   # Set labels for qq plots and histograms

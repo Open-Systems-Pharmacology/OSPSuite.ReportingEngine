@@ -195,12 +195,13 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
 
     inputSections <- readxl::excel_sheets(excelFile)
     # Check for mandatory input sections
-    validateIsIncludedAndLog(c(
-      StandardExcelSheetNames$`Workflow and Tasks`,
-      StandardExcelSheetNames$SimulationSets
-    ),
-    inputSections,
-    groupName = paste0("Sheet names of '", excelFile, "'")
+    validateIsIncludedAndLog(
+      c(
+        StandardExcelSheetNames$`Workflow and Tasks`,
+        StandardExcelSheetNames$SimulationSets
+      ),
+      inputSections,
+      groupName = paste0("Sheet names of '", excelFile, "'")
     )
 
     # ----- Documentation -----
@@ -352,7 +353,7 @@ getScriptDocumentation <- function(excelFile, colSep = "\t") {
   if (isEmpty(docTable)) {
     return(docContent)
   }
-  for (lineIndex in 1:nrow(docTable)) {
+  for (lineIndex in seq_len(nrow(docTable))) {
     docContent <- c(
       docContent,
       # Each line is commented
@@ -638,10 +639,10 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
     massBalanceContent <- NULL
     if (isIncluded(workflowMode, "MeanModelWorkflow")) {
       massBalanceContent <- paste0(
-        "massBalanceFile = ", 
-        getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$massBalanceFile), 
+        "massBalanceFile = ",
+        getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$massBalanceFile),
         ",\n"
-        )
+      )
     }
     if (isIncluded(workflowMode, "PopulationWorkflow")) {
       referencePopulation <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$referencePopulation)
@@ -774,14 +775,22 @@ getWorkflowContent <- function(workflowTable, excelFile) {
     if (isEmpty(activeTaskName)) {
       next
     }
-    if (workflowMode == "PopulationWorkflow" & isIncluded(taskName, c("plotAbsorption", "plotMassBalance"))) {
+    taskNotInWorkflow <- all(
+      workflowMode == "PopulationWorkflow",
+      isIncluded(taskName, c("plotAbsorption", "plotMassBalance"))
+    )
+    if (taskNotInWorkflow) {
       workflowWarnings <- c(
         workflowWarnings,
         paste0("Task '", taskName, "' defined as active, was not printed because '", taskName, "' is not available for '", workflowMode, "'.")
       )
       next
     }
-    if (workflowMode == "MeanModelWorkflow" & isIncluded(taskName, "plotDemography")) {
+    taskNotInWorkflow <- all(
+      workflowMode == "MeanModelWorkflow",
+      isIncluded(taskName, "plotDemography")
+    )
+    if (taskNotInWorkflow) {
       workflowWarnings <- c(
         workflowWarnings,
         paste0("Task '", taskName, "' defined as active, was not printed because '", taskName, "' is not available for '", workflowMode, "'.")
@@ -809,7 +818,11 @@ getWorkflowContent <- function(workflowTable, excelFile) {
   optionalSettingContent <- NULL
   for (optionalSettingName in names(OptionalSettings)) {
     settingValue <- getIdentifierInfo(workflowTable, 1, optionalSettingName)
-    if (is.na(settingValue) | isIncluded(settingValue, "NULL")) {
+    noSettings <- any(
+      is.na(settingValue),
+      isIncluded(settingValue, "NULL")
+    )
+    if (noSettings) {
       next
     }
     if (isIncluded(

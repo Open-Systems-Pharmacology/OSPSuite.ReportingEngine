@@ -44,7 +44,6 @@ reEnv$blankLinesBetweenArtifacts <- 2
 
 # Default plot properties
 reEnv$theme$background$legendPosition <- tlf::LegendPositions$outsideTop
-# reEnv$defaultLegendPosition <- tlf::LegendPositions$outsideTop
 
 reEnv$defaultPlotFormat <- list(
   format = "png",
