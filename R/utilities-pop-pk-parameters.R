@@ -34,7 +34,6 @@ plotPopulationPKParameters <- function(structureSets,
   simulation <- loadSimulationWithUpdatedPaths(structureSets[[1]]$simulationSet, loadFromCache = TRUE)
   simulationSetDescriptor <- structureSets[[1]]$simulationSetDescriptor
 
-  pkRatioTableAcrossPopulations <- NULL
   pkParametersResults <- list()
 
   pkParametersMapping <- tlf::BoxWhiskerDataMapping$new(

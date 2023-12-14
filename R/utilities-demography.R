@@ -165,11 +165,11 @@ plotDemographyParameters <- function(structureSets,
           # Build dataset with Visual Predictive check format
           selectedColumns <- c(demographyParameter, parameterName, "Legend", "simulationSetName")
           observedDemographyData$Legend <- captions$demography$rangePlotLegend(
-              simulationSetName = simulationSetName,
-              n = sum(selectedObsRows),
-              parameterClass = parameterClass,
-              dataType = "Observed"
-              )
+            simulationSetName = simulationSetName,
+            n = sum(selectedObsRows),
+            parameterClass = parameterClass,
+            dataType = "Observed"
+          )
           comparisonData <- switch(parameterClass,
             "character" = rbind.data.frame(
               demographyData[selectedRows, selectedColumns],
@@ -235,17 +235,17 @@ plotDemographyParameters <- function(structureSets,
           )
         )
         # Issue #1133 by default, log plots are not performed
-        if(isTRUE(settings$scales$Logarithmic)){
+        if (isTRUE(settings$scales$Logarithmic)) {
           # Range or boxplots in log scale
           logLimits <- autoAxesLimits(
             switch(parameterClass,
-                   "character" = comparisonData[, parameterName],
-                   c(comparisonData$ymin, comparisonData$median, comparisonData$ymax)
+              "character" = comparisonData[, parameterName],
+              c(comparisonData$ymin, comparisonData$median, comparisonData$ymax)
             ),
             scale = "log"
           )
           logTicks <- autoAxesTicksFromLimits(logLimits)
-          
+
           resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName, "log")
           demographyResults[[resultID]] <- saveTaskResults(
             id = resultID,
@@ -267,7 +267,7 @@ plotDemographyParameters <- function(structureSets,
           )
         }
 
-        
+
         # If workflow is pediatric, include plots comparing to reference population
         if (!isIncluded(workflowType, PopulationWorkflowTypes$pediatric)) {
           next
@@ -356,17 +356,17 @@ plotDemographyParameters <- function(structureSets,
           )
         )
         # Issue #1133 by default, log plots are not performed
-        if(isTRUE(settings$scales$Logarithmic)){
+        if (isTRUE(settings$scales$Logarithmic)) {
           # Comparison range plots in log scale
           logLimits <- autoAxesLimits(
             switch(parameterClass,
-                   "character" = comparisonData[, parameterName],
-                   c(comparisonData$ymin, comparisonData$median, comparisonData$ymax)
+              "character" = comparisonData[, parameterName],
+              c(comparisonData$ymin, comparisonData$median, comparisonData$ymax)
             ),
             scale = "log"
           )
           logTicks <- autoAxesTicksFromLimits(logLimits)
-          
+
           resultID <- defaultFileNames$resultID(length(demographyResults) + 1, "demography", demographyParameter, parameterName, "log")
           demographyResults[[resultID]] <- saveTaskResults(
             id = resultID,
@@ -556,18 +556,18 @@ getDemographyAggregatedData <- function(data,
     )
   # If defined use groupName to split aggregation between groups
   if (!is.null(groupName)) {
-    aggregatedData <- data %>% 
+    aggregatedData <- data %>%
       tidyr::complete(bins, .data[[groupName]]) %>%
       group_by(bins, .data[[groupName]])
   }
   # Remove unwanted message: `summarise()` has grouped output by ...
   aggregatedData <- aggregatedData %>%
-      summarise(
-        median = AggregationConfiguration$functions$middle(.data[[yParameterName]]),
-        ymin = AggregationConfiguration$functions$ymin(.data[[yParameterName]]),
-        ymax = AggregationConfiguration$functions$ymax(.data[[yParameterName]]),
-        .groups = "drop_last"
-      )
+    summarise(
+      median = AggregationConfiguration$functions$middle(.data[[yParameterName]]),
+      ymin = AggregationConfiguration$functions$ymin(.data[[yParameterName]]),
+      ymax = AggregationConfiguration$functions$ymax(.data[[yParameterName]]),
+      .groups = "drop_last"
+    )
   aggregatedData <- full_join(aggregatedXData, aggregatedData, by = "bins", multiple = "all")
   # In case, enforce ordering of the x values,
   # aiming at preventing lines going back and forth to the x values

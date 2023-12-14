@@ -176,7 +176,6 @@ plotMeanGoodnessOfFit <- function(structureSet, settings = NULL) {
 #' @keywords internal
 getSimulatedResultsFromOutput <- function(simulationPathResults, output, simulationQuantity, molWeight, structureSet) {
   simulationSet <- structureSet$simulationSet
-  outputConcentration <- simulationPathResults$data[, output$path]
   # Output object is updated: displayUnit cannot be empty anymore
   output$displayUnit <- output$displayUnit %||% simulationQuantity$displayUnit
 
@@ -1049,7 +1048,6 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
     selectedLogData <- selectedResidualsData$Simulated > 0 & selectedResidualsData$Observed > 0
     if (sum(selectedLogData) > 0) {
       # In log scale, identity line is 1 instead of 0
-      # obsVsPredDataMapping$lines <- 1
       obsVsPredPlotLog <- tlf::plotObsVsPred(
         data = selectedResidualsData[selectedLogData, ],
         metaData = residualsMetaData,

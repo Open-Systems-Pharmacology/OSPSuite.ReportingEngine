@@ -238,7 +238,7 @@ messages <- list(
       "' and Simulation '", highlight(pkRatioMapping$Simulation), "'"
     )
   },
-  noMoleculePathsIncluded = function(groupName){
+  noMoleculePathsIncluded = function(groupName) {
     paste0(
       "No molecule paths included in group '", highlight(groupName), "'."
     )
@@ -336,11 +336,11 @@ messages <- list(
       "' when creating an '", highlight("Output"), "' object."
     )
   },
-  monteCarlo = function(simulationSetName, mcRepetitions, mcRandomSeed){
+  monteCarlo = function(simulationSetName, mcRepetitions, mcRandomSeed) {
     paste0(
       "Monte Carlo Sampling for ", highlight(simulationSetName), " will use ",
       highlight(mcRepetitions), " repetitions with Random Seed ", highlight(mcRandomSeed)
-      )
+    )
   },
   monteCarloChecking = function(analyticalSolutionMessage, medianPKRatioStatistics, n, seed) {
     c(

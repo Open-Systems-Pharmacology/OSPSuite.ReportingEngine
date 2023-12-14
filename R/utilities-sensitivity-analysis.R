@@ -323,7 +323,7 @@ analyzeCoreSensitivity <- function(simulation,
 #' @keywords internal
 getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
   rowNums <- NULL
-  for (i in 1:length(quantileVec)) {
+  for (i in seq_along(quantileVec)) {
     rowNums[i] <- which.min(abs(pkAnalysisResultsDataframe$Value - quantile(pkAnalysisResultsDataframe$Value, quantileVec[i], na.rm = TRUE)))
   }
   ids <- as.numeric(pkAnalysisResultsDataframe$IndividualId[rowNums])
@@ -685,7 +685,7 @@ plotPopulationSensitivity <- function(structureSets,
   # get set of unique combinations of outputs and pkParameters.  A plot is built for each combination.
   uniqueQuantitiesAndPKParameters <- unique(allPopsDf[, c("QuantityPath", "PKParameter")])
 
-  for (n in 1:nrow(uniqueQuantitiesAndPKParameters)) {
+  for (n in seq_len(nrow(uniqueQuantitiesAndPKParameters))) {
     outputPath <- uniqueQuantitiesAndPKParameters$QuantityPath[n]
     pk <- uniqueQuantitiesAndPKParameters$PKParameter[n]
 
@@ -698,7 +698,7 @@ plotPopulationSensitivity <- function(structureSets,
     individualCombinationsThisOpPk <- unique(sensitivityThisOpPk[, c("Quantile", "IndividualId", "Population", "OutputDisplayName", "PKDisplayName")])
 
     # loop thru each individual in current combination of output and pkParameter
-    for (m in 1:nrow(individualCombinationsThisOpPk)) {
+    for (m in seq_len(nrow(individualCombinationsThisOpPk))) {
       qu <- individualCombinationsThisOpPk$Quantile[m]
       id <- individualCombinationsThisOpPk$IndividualId[m]
       pop <- individualCombinationsThisOpPk$Population[m]
@@ -793,7 +793,7 @@ plotPopulationSensitivity <- function(structureSets,
   sensitivityPlotConfiguration$colorPalette <- settings$colorPalette %||% sensitivityPlotConfiguration$colorPalette
 
   # Create plots and captions per unique output path and PK parameter
-  for (outputIndex in 1:nrow(uniqueQuantitiesAndPKParameters)) {
+  for (outputIndex in seq_len(nrow(uniqueQuantitiesAndPKParameters))) {
     selectedPath <- uniqueQuantitiesAndPKParameters$QuantityPath[outputIndex]
     selectedPKParameter <- uniqueQuantitiesAndPKParameters$PKParameter[outputIndex]
 
@@ -808,7 +808,7 @@ plotPopulationSensitivity <- function(structureSets,
 
     # Select most sensitive parameters
     allAvailableParameters <- levels(outputSensitivityData$Parameter)
-    selectedParameters <- rev(allAvailableParameters)[1:min(settings$maximalParametersPerSensitivityPlot, length(allAvailableParameters))]
+    selectedParameters <- rev(allAvailableParameters)[seq_len(min(settings$maximalParametersPerSensitivityPlot, length(allAvailableParameters)))]
     selectedSensitivityData <- outputSensitivityData[outputSensitivityData$Parameter %in% selectedParameters, ]
 
     tornadoPlot <- tlf::plotTornado(
@@ -877,7 +877,7 @@ getPopSensDfForPkAndOutput <- function(simulation,
     dfList <- list()
 
     # Loop through the quantiles for this output and pkParameter combination
-    for (n in 1:nrow(pkOutputIndexDf)) {
+    for (n in seq_len(nrow(pkOutputIndexDf))) {
 
       # Current quantile
       quantile <- pkOutputIndexDf$Quantile[n]

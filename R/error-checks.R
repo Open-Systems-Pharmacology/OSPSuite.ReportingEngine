@@ -20,7 +20,7 @@ validateIsInRange <- function(variableName, value, lowerBound, upperBound, nullA
   validateIsOfLength(lowerBound, 1)
   validateIsOfLength(upperBound, 1)
   validateIsNumeric(c(value, lowerBound, upperBound), nullAllowed)
-  if ((value < lowerBound) | (value > upperBound)) {
+  if (any(value < lowerBound, value > upperBound)) {
     stop(
       messages$outsideRange(variableName, value, lowerBound, upperBound),
       call. = FALSE
@@ -425,12 +425,13 @@ checkPKRatioObservedVariable <- function(variableName, observedData) {
   if (isIncluded(variableName, names(observedData))) {
     return(TRUE)
   }
-  warning(messages$errorNotIncludedInDataset(
-    variableName,
-    observedData,
-    datasetName = "PK Ratio Dataset"
-  ),
-  call. = FALSE
+  warning(
+    messages$errorNotIncludedInDataset(
+      variableName,
+      observedData,
+      datasetName = "PK Ratio Dataset"
+    ),
+    call. = FALSE
   )
   return(FALSE)
 }
@@ -494,7 +495,7 @@ checkLLOQValues <- function(lloq, structureSet) {
 #' @param referenceSet A `PopulationSimulationSet` object
 #' @return A logical
 #' @keywords internal
-checkIsSamePopulation <- function(simulationSet, referenceSet){
+checkIsSamePopulation <- function(simulationSet, referenceSet) {
   isSamePopulation <- all(
     simulationSet$populationFile %in% referenceSet$populationFile,
     any(
@@ -509,37 +510,41 @@ checkIsSamePopulation <- function(simulationSet, referenceSet){
 }
 
 validateMoleculesFromCompounds <- function(molecules, compoundNames) {
-  compoundsInMolecules <- sapply(molecules, function(molecule) {molecule$name})
+  compoundsInMolecules <- sapply(molecules, function(molecule) {
+    molecule$name
+  })
   isMoleculesFromCompounds <- all(compoundsInMolecules %in% compoundNames)
-  
-  if(isMoleculesFromCompounds){
+
+  if (isMoleculesFromCompounds) {
     return()
   }
-  
+
   pathsNotFromCompounds <- sapply(
-    molecules[!(compoundsInMolecules %in% compoundNames)], 
-    function(molecule) {molecule$path}
+    molecules[!(compoundsInMolecules %in% compoundNames)],
+    function(molecule) {
+      molecule$path
+    }
   )
-  
+
   stop(
     paste0(
-        "The following molecule paths were not from the selected compounds (",
-        paste(compoundNames, collapse = ", "),
-        "): ",
-        paste(pathsNotFromCompounds, collapse = ", ")
-      )
+      "The following molecule paths were not from the selected compounds (",
+      paste(compoundNames, collapse = ", "),
+      "): ",
+      paste(pathsNotFromCompounds, collapse = ", ")
     )
+  )
 }
 
-checkMoleculesAlreadyIncluded <- function(moleculePaths, previousMoleculePaths){
-  if(!isIncluded(moleculePaths, previousMoleculePaths)){
+checkMoleculesAlreadyIncluded <- function(moleculePaths, previousMoleculePaths) {
+  if (!isIncluded(moleculePaths, previousMoleculePaths)) {
     return()
   }
   warning(
-      paste0(
-        "The following molecule paths were included multiple times in the mass balance: ",
-        paste(moleculePaths[moleculePaths %in% previousMoleculePaths], collapse = ", ")
-      )
+    paste0(
+      "The following molecule paths were included multiple times in the mass balance: ",
+      paste(moleculePaths[moleculePaths %in% previousMoleculePaths], collapse = ", ")
     )
+  )
   return()
 }
