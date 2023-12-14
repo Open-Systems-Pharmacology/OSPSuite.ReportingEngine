@@ -1,3 +1,5 @@
+pkgload::load_all()
+
 lintr::lint_package(
   linters=lintr::linters_with_defaults(
     object_name_linter=lintr::object_name_linter(styles=c("camelCase","CamelCase","symbols")),
