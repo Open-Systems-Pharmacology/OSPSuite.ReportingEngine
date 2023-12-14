@@ -24,24 +24,9 @@ jobs:
           Rscript .github/workflows/install_dependencies.R
 
       - name: Install lintr
-        run: |
-          install.packages('lintr'), repos='http://cran.rstudio.com/')
-        shell: Rscript {0}
+        run: R --no-save -e "install.packages('lintr'),repos='http://cran.rstudio.com/')"
 
       - name: Lint
         run: |
-          lintr::lint_package(
-            linters= lintr::linters_with_defaults(
-              object_name_linter=lintr::object_name_linter(styles=c("camelCase","CamelCase","symbols")),
-              line_length_linter=NULL, 
-              object_length_linter=NULL, 
-              brace_linter=NULL, 
-              paren_body_linter=NULL, 
-              trailing_whitespace_linter=NULL, 
-              trailing_blank_lines_linter=NULL, 
-              spaces_left_parentheses_linter=NULL, 
-              infix_spaces_linter=NULL
-              )
-              )
-        shell: Rscript {0}
+          Rscript .github/workflows/run_lintr.R
         
