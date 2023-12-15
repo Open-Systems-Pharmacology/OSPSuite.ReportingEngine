@@ -4,9 +4,13 @@ OSPSuite.ReportingEngine implementation in R
 
 <!-- badges: start -->
 
+  ![](https://img.shields.io/github/downloads/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/latest/total?label=%E2%AD%B3%20Downloads%20latest%20release)
+  ![](https://img.shields.io/github/downloads/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/total?label=%E2%AD%B3%20Downloads%20total)
+
   [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/Open-Systems-Pharmacology/OSPSuite.ReportingEngine?branch=develop&svg=true)](https://ci.appveyor.com/project/open-systems-pharmacology-ci/OSPSuite-ReportingEngine/branch/develop)
   [![codecov](https://codecov.io/gh/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/branch/develop/graph/badge.svg)](https://codecov.io/gh/Open-Systems-Pharmacology/OSPSuite.ReportingEngine)
-  ![lintr](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/actions/workflows/lint/badge.svg)
+  ![Lint Test](https://img.shields.io/github/actions/workflow/status/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/lint.yaml?logo=githubactions&logoColor=white&label=lint)
+  ![Linux Test](https://img.shields.io/github/actions/workflow/status/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/LinuxImages.yml?logo=githubactions&logoColor=white&label=linux%20tests)
 
 <!-- badges: end -->
 
