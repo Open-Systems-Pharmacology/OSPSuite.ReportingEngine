@@ -160,7 +160,9 @@ getPKRatioSummaryForSamePopulation <- function(structureSet, referenceSet) {
   # Combine stats to their parameters, paths and simulation set name
   pkRatioSummary <- bind_cols(
     pkRatioSummaryGroups,
-    summaryStatisticsToDataFrame(pkRatioSummary)
+    # First row of summary statistics is individual ID 
+    # which needs to be removed to match both data.frame rows
+    tail(summaryStatisticsToDataFrame(pkRatioSummary), -1)
   )
 
   return(pkRatioSummary)
