@@ -46,6 +46,12 @@ The **OSPSuite.ReportingEngine** package is compatible with version 3.6.x **AND*
 * [Pandoc Installer (Windows)](https://github.com/jgm/pandoc/releases/download/2.9.2.1/pandoc-2.9.2.1-windows-x86_64.msi)
 * [Pandoc Installer (Linux)](https://github.com/jgm/pandoc/releases/download/2.9.2.1/pandoc-2.9.2.1-linux-amd64.tar.gz)
 
+[OPTIONAL] Install **rsvg-convert** (required by pandoc for conversion of images in SVG format)
+
+* [Installer (Windows)]([Releases · miyako/console-rsvg-convert (github.com)](https://github.com/miyako/console-rsvg-convert/releases))
+  * The installation folder must be added to the system path.
+* For Linux, **librsvg** package must be installed (package name depends on distribution, e.g. **librsvg2-bin** for Ubuntu).
+
 # Development tasks
 
 ## dev_mode
