@@ -150,3 +150,48 @@ test_that("getFigurePathsFromReport gets the correct file paths", {
   # and assess that warning will be thrown if files do not exist
   expect_warning(ospsuite.reportingengine:::checkFileExists(filePaths))
 })
+
+
+test_that("updateFigureNumbers provide unique anchors even for static figures", {
+  testContent <- c(
+    "# Test figure update <a id=\"title-1\"></a>",
+    "",
+    "![](link/to/figure/1.png)",
+    "",
+    "Figure: this is figure 1-1",
+    "",
+    "![](link/to/figure/2.png)",
+    "",
+    "Figure 1-2: this is user defined figure 1-2 that does not include key word Figure:",
+    "",
+    "![](link/to/figure/3.png)",
+    "",
+    "Figure 1-3: this is user defined figure 1-3 whose anchor is updated"
+  )
+  
+  referenceUpdateTestContent <- c(
+    "# Test figure update <a id=\"title-1\"></a>",
+    "",
+    "<a id=\"figure-1-1\"></a>",
+    "",
+    "![](link/to/figure/1.png)",
+    "",
+    "",
+    "Figure 1-1: this is figure 1-1",
+    "",
+    "<a id=\"figure-1-2\"></a>",
+    "",
+    "![](link/to/figure/2.png)",
+    "",
+    "Figure 1-2: this is user defined figure 1-2 that does not include key word Figure:",
+    "",
+    "<a id=\"figure-1-3\"></a>",
+    "",
+    "![](link/to/figure/3.png)",
+    "",
+    "Figure 1-3: this is user defined figure 1-3 whose anchor is updated"
+  )
+  
+  updateTestContent <- ospsuite.reportingengine:::updateFigureNumbers(testContent)
+  expect_equal(referenceUpdateTestContent, updateTestContent)
+})
