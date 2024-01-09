@@ -672,6 +672,7 @@ updateArtifactNumbers <- function(fileContent, pattern, replacement, anchorId, c
     # Need to reset count at lines of titles
     if (lineIndex %in% titleLines) {
       count <- 1
+      patternFound <- TRUE
     }
     # Get section number of figure as last value lower than line index
     # If no value found, section is empty and figure count is only global count

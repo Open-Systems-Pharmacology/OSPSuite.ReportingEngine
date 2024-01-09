@@ -195,3 +195,52 @@ test_that("updateFigureNumbers provide unique anchors even for static figures", 
   updateTestContent <- ospsuite.reportingengine:::updateFigureNumbers(testContent)
   expect_equal(referenceUpdateTestContent, updateTestContent)
 })
+
+test_that("updateFigureNumbers reset count when figure not found but new section begin", {
+  testContent <- c(
+    "# Section without keyword figure found <a id=\"title-1\"></a>",
+    "",
+    "![](link/to/figure/1.png)",
+    "",
+    "Figure 1 not updated but still get anchor 1-1",
+    "",
+    "# Section with keyword figure found <a id=\"title-2\"></a>",
+    "",
+    "![](link/to/figure/2.png)",
+    "",
+    "Figure: this figure will get anchor 2-1",
+    "",
+    "![](link/to/figure/3.png)",
+    "",
+    "Figure: this figure should get anchor and label 2-2"
+  )
+  
+  referenceUpdateTestContent <- c(
+    "# Section without keyword figure found <a id=\"title-1\"></a>",
+    "",
+    "<a id=\"figure-1-1\"></a>",
+    "",
+    "![](link/to/figure/1.png)",
+    "",
+    "Figure 1 not updated but still get anchor 1-1",
+    "",
+    "# Section with keyword figure found <a id=\"title-2\"></a>",
+    "",
+    "<a id=\"figure-2-1\"></a>",
+    "",
+    "![](link/to/figure/2.png)",
+    "",
+    "",
+    "Figure 2-1: this figure will get anchor 2-1",
+    "",
+    "<a id=\"figure-2-2\"></a>",
+    "",
+    "![](link/to/figure/3.png)",
+    "",
+    "",
+    "Figure 2-2: this figure should get anchor and label 2-2"
+  )
+  
+  updateTestContent <- ospsuite.reportingengine:::updateFigureNumbers(testContent)
+  expect_equal(referenceUpdateTestContent, updateTestContent)
+})
