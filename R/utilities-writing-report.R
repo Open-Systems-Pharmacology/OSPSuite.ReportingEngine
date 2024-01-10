@@ -666,11 +666,13 @@ updateArtifactNumbers <- function(fileContent, pattern, replacement, anchorId, c
   # Initialize
   updatedFileContent <- NULL
   count <- 1
+  patternFound <- TRUE
   for (lineIndex in seq_along(fileContent)) {
     # Counting is performed within sections
     # Need to reset count at lines of titles
     if (lineIndex %in% titleLines) {
       count <- 1
+      patternFound <- TRUE
     }
     # Get section number of figure as last value lower than line index
     # If no value found, section is empty and figure count is only global count
@@ -687,12 +689,21 @@ updateArtifactNumbers <- function(fileContent, pattern, replacement, anchorId, c
       grepl(pattern = "Figure", x = pattern)
     )
     if (figureRequireUpdate) {
+      # If no Figure pattern was found before the next figure
+      # Updates the count and name of the figure
+      if(!patternFound){
+        count <- count + 1
+        artifactNumber <- paste(c(section, count), collapse = "-")
+        # Create reference anchor with id matching figure number
+        anchorContent <- anchor(paste(anchorId, artifactNumber, sep = "-"))
+      }
       updatedFileContent <- c(
         updatedFileContent,
         anchorContent,
         "",
         fileContent[lineIndex]
       )
+      patternFound <- FALSE
       next
     }
     # If line is not related to an artifact, nothing to update
@@ -717,6 +728,7 @@ updateArtifactNumbers <- function(fileContent, pattern, replacement, anchorId, c
       updatedArtifactContent
     )
     count <- count + 1
+    patternFound <- TRUE
   }
   return(updatedFileContent)
 }
