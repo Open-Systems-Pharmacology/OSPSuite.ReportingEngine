@@ -65,6 +65,8 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
           outputs = c(outputs),
           minimumSimulationEndTime = minimumSimulationEndTime
         ))
+        # Update progress bar after each simulation is loaded
+        setTxtProgressBar(loadingProgress, value = simulationIndex)
         next
       }
 
