@@ -44,10 +44,11 @@ simulateWorkflowModels <- function(structureSets, settings = NULL) {
 #' @keywords internal
 simulateModelForPopulation <- function(structureSets, settings = NULL) {
   simulationResults <- NULL
-  setIndex <- 1
+  setIndex <- 0
   logInfo(messages$runStarting("Population Simulations"))
   # Display a nice progress bar for users
   simulationProgress <- txtProgressBar(max = length(structureSets), style = 3)
+  cat("\n")
   # Loop through the list of structureSets
   for (set in structureSets) {
     re.tStoreFileMetadata(access = "read", filePath = set$simulationSet$populationFile)
@@ -58,7 +59,7 @@ simulateModelForPopulation <- function(structureSets, settings = NULL) {
     # Display name of simulation and population on console
     setName <- paste0(
       set$simulationSet$simulationSetName,
-      " (", set$simulationSet$populationFile, ")",
+      " (", set$simulationSet$populationName, ")",
       ifelse(numberOfCores == 1, "", paste(" using", numberOfCores, "cores"))
     )
     logInfo(messages$runStarting(setName))
@@ -76,6 +77,7 @@ simulateModelForPopulation <- function(structureSets, settings = NULL) {
       # Update progress bar after each simulation
       setIndex <- setIndex + 1
       setTxtProgressBar(simulationProgress, value = setIndex)
+      cat("\n")
       next
     }
 
@@ -97,6 +99,7 @@ simulateModelForPopulation <- function(structureSets, settings = NULL) {
     # Update progress bar after each simulation
     setIndex <- setIndex + 1
     setTxtProgressBar(simulationProgress, value = setIndex)
+    cat("\n")
   }
   close(simulationProgress)
   return(simulationResults)
