@@ -44,12 +44,25 @@ simulateWorkflowModels <- function(structureSets, settings = NULL) {
 #' @keywords internal
 simulateModelForPopulation <- function(structureSets, settings = NULL) {
   simulationResults <- NULL
+  setIndex <- 1
+  logInfo(messages$runStarting("Population Simulations"))
+  # Display a nice progress bar for users
+  simulationProgress <- txtProgressBar(max = length(structureSets), style = 3)
+  # Loop through the list of structureSets
   for (set in structureSets) {
     re.tStoreFileMetadata(access = "read", filePath = set$simulationSet$populationFile)
     population <- loadWorkflowPopulation(set$simulationSet)
     numberOfIndividuals <- length(population$allIndividualIds)
     numberOfCores <- min(settings$numberOfCores %||% 1, numberOfIndividuals)
-
+    
+    # Display name of simulation and population on console
+    setName <- paste0(
+      set$simulationSet$simulationSetName,
+      " (", set$simulationSet$populationFile, ")",
+      ifelse(numberOfCores == 1, "", paste(" using", numberOfCores, "cores"))
+    )
+    logInfo(messages$runStarting(setName))
+    
     # If one core available, run in series
     if (numberOfCores == 1) {
       settings <- settings %||% SimulationSettings$new()
@@ -60,13 +73,11 @@ simulateModelForPopulation <- function(structureSets, settings = NULL) {
         settings = settings
       )
       simulationResults <- c(simulationResults, simulationResult)
+      # Update progress bar after each simulation
+      setIndex <- setIndex + 1
+      setTxtProgressBar(simulationProgress, value = setIndex)
       next
     }
-
-    # If multiple cores available, run in parallel
-    logInfo(paste0(
-      "Starting parallel population simulation on ", highlight(numberOfCores), " cores"
-    ))
 
     simulationResultFileNames <- runParallelPopulationSimulation(
       numberOfCores = numberOfCores,
@@ -83,8 +94,11 @@ simulateModelForPopulation <- function(structureSets, settings = NULL) {
 
     logDebug("Parallel population simulation completed.")
     simulationResults <- c(simulationResults, simulationResult)
+    # Update progress bar after each simulation
+    setIndex <- setIndex + 1
+    setTxtProgressBar(simulationProgress, value = setIndex)
   }
-
+  close(simulationProgress)
   return(simulationResults)
 }
 
