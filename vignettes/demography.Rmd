@@ -158,7 +158,7 @@ knitr::kable(data.frame(
 ))
 ```
 
-To define different demography parameters in `xParameters` and `yParameters`, the functions [`setXParametersForDemogrpahyPlot()`](../reference/setXParametersForDemogrpahyPlot.html) and [`setYParametersForDemogrpahyPlot()`](../reference/setYParametersForDemogrpahyPlot.html) can be respectively used.
+To define different demography parameters in `xParameters` and `yParameters`, the functions [`setXParametersForDemographyPlot()`](../reference/setXParametersForDemographyPlot.html) and [`setYParametersForDemographyPlot()`](../reference/setYParametersForDemographyPlot.html) can be respectively used.
 
 ## Histograms <a id="histo-parallel"></a>
 
@@ -193,9 +193,9 @@ User can also leverage the `{ospsuite}` package and look for the parameters in t
 
 ```{r}
 # Query parameters defined in xParameters
-getXParametersForDemogrpahyPlot(workflow = parallelWorkflow)
+getXParametersForDemographyPlot(workflow = parallelWorkflow)
 # Query parameters defined in yParameters
-getYParametersForDemogrpahyPlot(workflow = parallelWorkflow)
+getYParametersForDemographyPlot(workflow = parallelWorkflow)
 ```
 
 ```{r}
@@ -206,9 +206,9 @@ displayedParameters  <- list(
   )
 
 # Define no parameters in xParameters to get histograms
-setXParametersForDemogrpahyPlot(workflow = parallelWorkflow, parameters = NULL)
+setXParametersForDemographyPlot(workflow = parallelWorkflow, parameters = NULL)
 # Define parameters to be displayed in histograms as yParameters
-setYParametersForDemogrpahyPlot(workflow = parallelWorkflow, parameters = displayedParameters)
+setYParametersForDemographyPlot(workflow = parallelWorkflow, parameters = displayedParameters)
 ```
 
 Run the corresponding workflow:
@@ -266,8 +266,8 @@ xParameters  <- list(
   Gender = "Gender"
   )
 
-setXParametersForDemogrpahyPlot(workflow = parallelWorkflow, parameters = xParameters)
-setYParametersForDemogrpahyPlot(workflow = parallelWorkflow, parameters = displayedParameters)
+setXParametersForDemographyPlot(workflow = parallelWorkflow, parameters = xParameters)
+setYParametersForDemographyPlot(workflow = parallelWorkflow, parameters = displayedParameters)
 ```
 
 Run the corresponding workflow:
@@ -319,7 +319,7 @@ knitr::kable(data.frame(
 ))
 ```
 
-To define different demography parameters in `xParameters` and `yParameters`, the functions [`setXParametersForDemogrpahyPlot()`](../reference/setXParametersForDemogrpahyPlot.html) and [`setYParametersForDemogrpahyPlot()`](../reference/setYParametersForDemogrpahyPlot.html) can be respectively used.
+To define different demography parameters in `xParameters` and `yParameters`, the functions [`setXParametersForDemographyPlot()`](../reference/setXParametersForDemographyPlot.html) and [`setYParametersForDemographyPlot()`](../reference/setYParametersForDemographyPlot.html) can be respectively used.
 
 ## Histograms <a id="histo-pediatric"></a>
 
@@ -354,8 +354,8 @@ displayedParameters  <- list(
   Gender = "Gender"
   )
 
-setXParametersForDemogrpahyPlot(workflow = pediatricWorkflow, parameters = NULL)
-setYParametersForDemogrpahyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
+setXParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = NULL)
+setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
 ```
 
 Run the corresponding workflow:
@@ -415,8 +415,8 @@ xParameters  <- list(
   Gender = "Gender"
   )
 
-setXParametersForDemogrpahyPlot(workflow = pediatricWorkflow, parameters = xParameters)
-setYParametersForDemogrpahyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
+setXParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = xParameters)
+setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
 ```
 
 Run the corresponding workflow:
@@ -486,7 +486,7 @@ displayedParameters  <- list(
   Weight = "Organism|Weight", 
   Gender = "Gender"
   )
-setYParametersForDemogrpahyPlot(workflow = parallelWorkflow, parameters = displayedParameters)
+setYParametersForDemographyPlot(workflow = parallelWorkflow, parameters = displayedParameters)
 
 # Set up 5 bins for all histograms
 parallelWorkflow$plotDemography$settings$bins <- 5
@@ -531,7 +531,7 @@ displayedParameters  <- list(
   Weight = "Organism|Weight", 
   Gender = "Gender"
   )
-setYParametersForDemogrpahyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
+setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
 
 # Set up 5 bins for all the range plots
 pediatricWorkflow$plotDemography$settings$bins <- 5
@@ -592,7 +592,7 @@ displayedParameters  <- list(
   Weight = "Organism|Weight", 
   Gender = "Gender"
   )
-setYParametersForDemogrpahyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
+setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
 
 # Set up continuous line between bins with stairstep settings being FALSE
 pediatricWorkflow$plotDemography$settings$stairstep <- FALSE
@@ -642,7 +642,7 @@ displayedParameters  <- list(
   Weight = "Organism|Weight", 
   Gender = "Gender"
   )
-setYParametersForDemogrpahyPlot(workflow = parallelWorkflow, parameters = displayedParameters)
+setYParametersForDemographyPlot(workflow = parallelWorkflow, parameters = displayedParameters)
 
 # Turn off dodging of histogram bars
 parallelWorkflow$plotDemography$settings$dodge <- FALSE
@@ -698,7 +698,7 @@ displayedParameters  <- list(
   Weight = "Organism|Weight", 
   Gender = "Gender"
   )
-setYParametersForDemogrpahyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
+setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
 
 # Turn off reference global range
 pediatricWorkflow$plotDemography$settings$referenceGlobalRange <- FALSE
