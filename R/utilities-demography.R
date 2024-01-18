@@ -53,9 +53,11 @@ plotDemographyParameters <- function(structureSets,
       "pediatric" = getComparisonHistogramResults(
         simulationSetNames = simulationSetNames,
         demographyPaths = yParameters,
-        data = demographyData,
+        data = demographyData %>% 
+          filter(!(.data[["simulationSetName"]] %in% referenceSimulationSetName)),
         metaData = demographyMetaData,
-        observedData = observedDemographyData,
+        observedData = observedDemographyData %>% 
+          filter(!(.data[["simulationSetName"]] %in% referenceSimulationSetName)),
         settings = settings,
         simulationSetDescriptor = simulationSetDescriptor
       ),
