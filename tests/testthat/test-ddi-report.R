@@ -57,14 +57,14 @@ test_that("Subunits are alphabetically ordered", {
 
 test_that("Subunits are included in TOC", {
   tocSubunits <- c(
-    "* [1.1 Mechanism]",
-    "* [1.1.1 M1 ]",
-    "* [1.2 Perpetrator ]",
-    "* [1.2.1 P1 ]",
-    "* [1.2.2 P2 ]",
-    "* [1.3 Victim ]",
-    "* [1.3.1 V1 ]",
-    "* [1.3.2 V2 ]"
+    "\\* \\[1.1 Mechanism \\]",
+    "\\* \\[1.1.1 M1 \\]",
+    "\\* \\[1.2 Perpetrator \\]",
+    "\\* \\[1.2.1 P1 \\]",
+    "\\* \\[1.2.2 P2 \\]",
+    "\\* \\[1.3 Victim \\]",
+    "\\* \\[1.3.1 V1 \\]",
+    "\\* \\[1.3.2 V2 \\]"
   )
   for(subunit in tocSubunits){
     subunitLine <- grep(pattern = subunit, x = reportContent)
