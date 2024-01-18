@@ -38,6 +38,27 @@ workflowRatio <- PopulationWorkflow$new(
   workflowFolder = workflowFolderRatio
 )
 
+test_that("Reference population is well defined", {
+  expect_equal("Adults", getWorkflowReferencePopulationName(workflowParallel))
+  expect_equal("Adults", getWorkflowReferencePopulationName(workflowRatio))
+  expect_equal("Adults", getWorkflowReferencePopulationName(workflowPediatric))
+})
+
+test_that("Default Demography parameters are well defined", {
+  expect_equal(
+    getDefaultDemographyXParameters(PopulationWorkflowTypes$parallelComparison),
+    getXParametersForDemographyPlot(workflowParallel)
+  )
+  expect_equal(
+    getDefaultDemographyXParameters(PopulationWorkflowTypes$ratioComparison),
+    getXParametersForDemographyPlot(workflowRatio)
+  )
+  expect_equal(
+    getDefaultDemographyXParameters(PopulationWorkflowTypes$pediatric),
+    getXParametersForDemographyPlot(workflowPediatric)
+  )
+})
+
 workflowPediatric$inactivateTasks()
 workflowParallel$inactivateTasks()
 workflowRatio$inactivateTasks()

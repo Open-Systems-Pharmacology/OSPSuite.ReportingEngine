@@ -15,9 +15,9 @@ addTableChunk
 addTextChunk
 addUserDefinedPKParameter
 addUserDefinedTask
-addXParametersForDemogrpahyPlot
+addXParametersForDemographyPlot
 addXParametersForPKParametersPlot
-addYParametersForDemogrpahyPlot
+addYParametersForDemographyPlot
 addYParametersForPKParametersPlot
 adjustTitlePage
 aes
@@ -298,9 +298,9 @@ getUserDefPKParametersContent
 getWorkflowContent
 getWorkflowParameterDisplayPaths
 getWorkflowReferencePopulationName
-getXParametersForDemogrpahyPlot
+getXParametersForDemographyPlot
 getXParametersForPKParametersPlot
-getYParametersForDemogrpahyPlot
+getYParametersForDemographyPlot
 getYParametersForPKParametersPlot
 GitHub
 ggplot
@@ -605,9 +605,9 @@ setSimulationDescriptor
 setWatermarkConfiguration
 setWorkflowParameterDisplayPaths
 setWorkflowParameterDisplayPathsFromFile
-setXParametersForDemogrpahyPlot
+setXParametersForDemographyPlot
 setXParametersForPKParametersPlot
-setYParametersForDemogrpahyPlot
+setYParametersForDemographyPlot
 setYParametersForPKParametersPlot
 sheetname
 sheetName
