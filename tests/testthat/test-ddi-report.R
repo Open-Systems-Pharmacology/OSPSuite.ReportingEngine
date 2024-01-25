@@ -1,4 +1,4 @@
-context("Qualification Workflow")
+context("Qualification DDI Workflow")
 
 reOutputFolder <- "ddi-report-qualification"
 configurationPlanFile <- getTestDataFilePath("qualification/configuration-plan-ddi-ratio.json")
@@ -78,4 +78,4 @@ test_that("Subunits are included in TOC", {
 })
 
 # Clear the output
-unlink(reOutputFolder, recursive = TRUE)
+removeAllUserDefinedPKParameters()

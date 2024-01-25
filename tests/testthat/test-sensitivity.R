@@ -1,5 +1,6 @@
 context("Run workflows with Sensitivity tasks")
 # Get test data
+removeAllUserDefinedPKParameters()
 simulationFile <- getTestDataFilePath("input-data/MiniModel2.pkml")
 populationFile <- getTestDataFilePath("input-data/Pop500_p1p2p3.csv")
 refMeanOutputFolder <- getTestDataFilePath("mean-sensitivity")
