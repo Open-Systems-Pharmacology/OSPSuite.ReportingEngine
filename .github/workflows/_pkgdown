@@ -1,0 +1,122 @@
+url: https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/
+
+template:
+  bootstrap: 5
+
+development:
+  mode: release
+
+reference:
+- title: "Working with Workflow objects"
+  desc: "Functions and classes for creating and working with Workflow objects"
+  contents: 
+  - has_concept("workflows")
+  - has_concept("workflow helpers")
+  - matches("createWorkflowFromExcelInput")
+- title: "Simulation Sets and Outputs"
+  desc: "Classes required for creating workflows"
+  contents: 
+  - matches("SimulationSet")
+  - matches("PopulationSimulationSet")
+  - matches("Output")
+  - matches("DataSource")
+  - matches("PkParameterInfo")
+  - matches("loadStudyDesign")
+- title: "Workflow tasks"
+  desc: "Functions and classes for creating and working with workflow tasks"
+  contents: 
+  - has_concept("workflow tasks")
+  - matches("SensitivityPlotSettings")
+  - matches("saveTaskResults")
+- title: "Qualification Workflows"
+  desc: "Functions and classes dedicated to Qualification Workflows"
+  contents: 
+  - has_concept("qualification workflow")
+  - matches("QualificationVersionInfo")  
+- title: "Writing and formatting reports"
+  desc: "Functions for facilitating the writing and formatting of markdown and word reports"
+  contents: 
+  - has_concept("reporting")
+- title: "Enum Helpers"
+  desc: "Enums listing available values for specific properties"
+  contents: 
+  - has_concept("enum helpers")
+- title: "Default Settings"
+  desc: "Functions for defining default package or workflow settings."
+  contents:
+  - starts_with("setDefault")
+  - matches("setWatermarkConfiguration")
+  - starts_with("getDefault")
+  - matches("setPlotFormat")
+- title: "Simulated and observed data helpers"
+  desc: "Helper functions for working with simulated and observed data."
+  contents:
+  - matches("calculateArithmeticErrorRange")
+  - matches("calculateGeometricErrorRange")
+  - matches("calculateGMFE")
+  - matches("calculateResiduals")
+  - matches("displayConfigurationPlanPlotInfo")
+  - matches("getResiduals")
+  - matches("isBetween")
+  - matches("measureValuesBetween")
+  - matches("geomean")
+  - matches("geomeanDividedBySD")
+  - matches("geomeanMultipliedBySD")
+  - matches("getStatisticsFromType")
+  - matches("readObservedDataFile")
+  - matches("lastPathElement")
+  - matches("evalDataFilter")
+  - matches("getSelectedRows")
+  - matches("getSelectedData")
+  - matches("loadSimulationWithUpdatedPaths")
+  - matches("loadWorkflowPopulation")
+  - matches("getMolWeightForCompound")
+  - matches("plotAbsorptionTimeProfile")
+  - matches("plotDemographyHistogram")
+  - matches("plotDemographyRange")
+  - matches("plotMassBalanceCumulativeTimeProfile")
+  - matches("plotMassBalancePieChart")
+  - matches("plotMassBalanceTimeProfile")
+  - matches("plotMeanObsVsPred")
+  - matches("plotMeanResVsPred")
+  - matches("plotMeanResVsTime")
+  - matches("plotMeanTimeProfile")
+  - matches("plotPopTimeProfile")
+  - matches("plotPopTimeProfileLog")
+  - matches("plotResidualsHistogram")
+  - matches("plotResidualsQQPlot")
+  - matches("ratioBoxplot")
+  - matches("vpcParameterPlot")
+  - matches("addLineBreakToCaption")
+  - matches("AggregationConfiguration")
+  - matches("prettyCaption")
+  - matches("removeForbiddenLetters")
+  - matches("trimFileName")
+- title: "Parallel computation helpers"
+  desc: "Helper functions for working with parallel simulations and sensitivity analyses."
+  contents:
+  - matches("analyzeCoreSensitivity")
+  - matches("analyzeSensitivity")
+  - matches("checkLibraryLoaded")
+  - matches("checkPopulationLoaded")
+  - matches("checkSimulationLoaded")
+  - matches("defaultQuantileVec")
+  - matches("defaultSensitivityAnalysisNumberOfCores")
+  - matches("defaultSimulationNumberOfCores")
+  - matches("defaultVariationRange")
+  - matches("generateResultFileNames")
+  - matches("simulateModelOnCore")
+  - matches("updateSimulationIndividualParameters")
+- title: "Logging system"
+  desc: "Helper functions for working with workflow logs."
+  contents:
+  - matches("LogTypes")
+  - matches("logInfo")
+  - matches("logError")
+  - matches("logDebug")
+  - matches("logCatch")
+  - matches("saveLogs")
+  - matches("saveLogsToJson")
+  - matches("showLogMessages")
+  - matches("displayDebugLogs")
+  - matches("getReportingEngineInfo")

@@ -1,0 +1,73 @@
+name: Update release website
+# The action is triggered only when a PR is merged
+# Caution, a closed PR does not necessarily mean that it was merged
+# A second assessment is required in the jobs
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+# The action needs permissions to update the branch
+permissions:
+  contents: write
+env:
+  GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+          
+jobs:
+  build:
+  # Second assessment checking if PR was actually merged
+    if: github.event.pull_request.merged == true
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+      - name: Setup Pandoc for word conversion
+        uses: r-lib/actions/setup-pandoc@v2
+      - name: Install ospsuite ecosystem and cran packages
+        run: |
+          Rscript .github/workflows/install_dependencies.R
+      - name: Copy pkgdown release config
+        run: |
+          file.copy(from = '.github/workflows/_pkgdown', to = '_pkgdown.yml', overwrite = TRUE)
+        shell: Rscript {0}
+      # install=TRUE is necessary to install the package prior building the vignettes
+      # devel=TRUE is used for convenience in case the action fails and we need to troubleshoot
+      - name: Build release site
+        run: |
+          pkgdown::build_site(devel=TRUE, install=TRUE)
+        shell: Rscript {0}
+        # The project is then uploaded as an artifact named 'docs'.
+      - name: Upload Artifacts 
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs
+          path: docs
+
+  deploy:
+    concurrency: ci-${{ github.ref }}
+    # The second job must depend on the first one to complete before running and uses ubuntu-latest instead of windows.
+    needs: [build] 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        # The built project is downloaded into the 'docs' folder.
+      - name: Download Artifacts 
+        uses: actions/download-artifact@v4
+        with:
+          name: docs
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        # The deployment folder should match the name of the artifact.
+        # Clean is false to prevent removing release site
+        # only target folder of repo from gh-pages branch is updated
+        with:
+          folder: docs
+          clean: false
+          branch: gh-pages
+          target-folder: docs
