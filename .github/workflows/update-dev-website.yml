@@ -1,5 +1,6 @@
 name: Update dev website
-on: [push]
+on:
+  [push, pull_request]
 # The action needs permissions to update the branch
 permissions:
   contents: write
