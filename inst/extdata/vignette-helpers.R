@@ -1,5 +1,6 @@
 # This line install the java script app that takes snapshots of reports
-webshot::install_phantomjs()
+# Add option force=TRUE to prevent webshot to crash if the install path is not found
+webshot::install_phantomjs(force = TRUE)
 
 #' @title includeReportFromWorkflow
 #' @description Render a `workflow` report and display its content as raw html

@@ -4,6 +4,10 @@ on:
     paths-ignore:
       - '*.md'
       - '.github/workflows/codecov-nightly.yml'
+      - '.github/workflows/update-dev-website.yml'
+      - '.github/workflows/update-release-website.yml'
+      - '.github/workflows/pkgdown_setup.R'
+      - '_pkgdown.yml'
 
 jobs:
   build:
