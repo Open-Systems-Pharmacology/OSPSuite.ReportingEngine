@@ -8,8 +8,8 @@
 <meta name="description" content="Creates tables and figures and combines them into (Markdown and MS-Word) reports.">
 <title>R package to create reports for the Open Systems Pharmacology models • ospsuite.reportingengine</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="R package to create reports for the Open Systems Pharmacology models">
 <meta property="og:description" content="Creates tables and figures and combines them into (Markdown and MS-Word) reports.">
@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="index.html">ospsuite.reportingengine</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,6 +86,7 @@
 <p>OSPSuite.ReportingEngine implementation in R</p>
 <!-- badges: start -->
 
+
 <!-- badges: end -->
 </div>
 <div class="section level1">
@@ -140,6 +141,16 @@
 <li><a href="https://github.com/jgm/pandoc/releases/download/2.9.2.1/pandoc-2.9.2.1-windows-x86_64.msi" class="external-link">Pandoc Installer (Windows)</a></li>
 <li><a href="https://github.com/jgm/pandoc/releases/download/2.9.2.1/pandoc-2.9.2.1-linux-amd64.tar.gz" class="external-link">Pandoc Installer (Linux)</a></li>
 </ul>
+<p>[OPTIONAL] Install <strong>rsvg-convert</strong> (required by Pandoc for conversion of images in SVG format)</p>
+<ul>
+<li>
+<a href="https://github.com/miyako/console-rsvg-convert/releases" class="external-link">Installer (Windows)</a>
+<ul>
+<li>The installation folder must be added to the system path.</li>
+</ul>
+</li>
+<li>For Linux, <strong>librsvg</strong> package must be installed (package name depends on distribution, e.g. <strong>librsvg2-bin</strong> for Ubuntu).</li>
+</ul>
 </div>
 <div class="section level1">
 <h1 id="development-tasks">Development tasks<a class="anchor" aria-label="anchor" href="#development-tasks"></a>
@@ -147,16 +158,16 @@
 <div class="section level2">
 <h2 id="dev_mode">dev_mode<a class="anchor" aria-label="anchor" href="#dev_mode"></a>
 </h2>
-<p><code><a href="https://devtools.r-lib.org/reference/dev_mode.html" class="external-link">devtools::dev_mode</a></code> function switches your version of R into “development mode”. This is useful to avoid clobbering the existing versions of CRAN packages that you need for other tasks. Calling dev_mode() again will turn development mode off, and return you to your default library setup.</p>
+<p><code>devtools::dev_mode</code> function switches your version of R into “development mode”. This is useful to avoid clobbering the existing versions of CRAN packages that you need for other tasks. Calling dev_mode() again will turn development mode off, and return you to your default library setup.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># This will install the package in the folder C:/Rpackages</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/dev_mode.html" class="external-link">dev_mode</a></span><span class="op">(</span>path<span class="op">=</span><span class="st">"C:/Rpackages"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">dev_mode</span><span class="op">(</span>path<span class="op">=</span><span class="st">"C:/Rpackages"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="reload-the-package">Reload the package<a class="anchor" aria-label="anchor" href="#reload-the-package"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>or <code>Ctrl + Shift + L</code></p>
 </div>
 <div class="section level2">
@@ -221,8 +232,12 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
+<li><a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/releases/latest" class="external-link"><img src="https://img.shields.io/github/downloads/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/latest/total?label=%E2%AD%B3%20Downloads%20latest%20release"></a></li>
+<li><a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/releases" class="external-link"><img src="https://img.shields.io/github/downloads/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/total?label=%E2%AD%B3%20Downloads%20total"></a></li>
 <li><a href="https://ci.appveyor.com/project/open-systems-pharmacology-ci/OSPSuite-ReportingEngine/branch/develop" class="external-link"><img src="https://ci.appveyor.com/api/projects/status/github/Open-Systems-Pharmacology/OSPSuite.ReportingEngine?branch=develop&amp;svg=true" alt="AppVeyor build status"></a></li>
 <li><a href="https://codecov.io/gh/Open-Systems-Pharmacology/OSPSuite.ReportingEngine" class="external-link"><img src="https://codecov.io/gh/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/branch/develop/graph/badge.svg" alt="codecov"></a></li>
+<li><a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/actions/workflows/lint.yaml" class="external-link"><img src="https://img.shields.io/github/actions/workflow/status/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/lint.yaml?logo=githubactions&amp;logoColor=white&amp;label=lint" alt="Lint Test"></a></li>
+<li><a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/actions/workflows/LinuxImages.yml" class="external-link"><img src="https://img.shields.io/github/actions/workflow/status/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/LinuxImages.yml?logo=githubactions&amp;logoColor=white&amp;label=linux%20tests" alt="Linux Test"></a></li>
 </ul>
 </div>
 
