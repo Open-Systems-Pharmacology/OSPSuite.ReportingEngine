@@ -1,11 +1,17 @@
 name: Update dev website
 on:
-  [push, pull_request]
+  pull_request:
+    branches:
+      - develop
+  push: 
+    branches:
+      - develop
 # The action needs permissions to update the branch
 permissions:
   contents: write
 env:
   GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+  PKGDOWN_MODE: devel
           
 jobs:
   build:
@@ -22,10 +28,12 @@ jobs:
       - name: Install ospsuite ecosystem and cran packages
         run: |
           Rscript .github/workflows/install_dependencies.R
+          Rscript .github/workflows/pkgdown_setup.R
       # install=TRUE is necessary to install the package prior building the vignettes
       # devel=TRUE is used for convenience in case the action fails and we need to troubleshoot
       - name: Build dev site
         run: |
+          options(yaml.eval.expr=TRUE)
           pkgdown::build_site(devel=TRUE, install=TRUE)
         shell: Rscript {0}
         # The project is then uploaded as an artifact named 'docs'.
@@ -42,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         # The built project is downloaded into the 'docs' folder.
       - name: Download Artifacts 
         uses: actions/download-artifact@v1
@@ -58,3 +66,4 @@ jobs:
           clean: false
           branch: gh-pages
           target-folder: docs
+          token: ${{ secrets.GITHUB_TOKEN }}
