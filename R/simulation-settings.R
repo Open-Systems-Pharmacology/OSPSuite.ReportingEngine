@@ -12,7 +12,7 @@ SimulationSettings <- R6::R6Class(
     #' @param maxSimulationsPerCore Scale factor used in a parallel simulation.  The product of this scale factor and the number of allowable cores (allowedCores) sets the maximum number of simulations that may be run on one core.
     #' @return A new `SimulationSettings` object
     initialize = function(numberOfCores = defaultSimulationNumberOfCores,
-                          showProgress = FALSE,
+                          showProgress = TRUE,
                           maxSimulationsPerCore = reEnv$defaultMaxSimulationsPerCore) {
       self$numberOfCores <- numberOfCores
       self$showProgress <- showProgress

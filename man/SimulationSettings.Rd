@@ -40,7 +40,7 @@ Create a `SimulationSettings` object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SimulationSettings$new(
   numberOfCores = defaultSimulationNumberOfCores,
-  showProgress = FALSE,
+  showProgress = TRUE,
   maxSimulationsPerCore = reEnv$defaultMaxSimulationsPerCore
 )}\if{html}{\out{</div>}}
 }

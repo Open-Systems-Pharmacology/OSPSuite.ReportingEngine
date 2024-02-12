@@ -261,7 +261,7 @@ messages <- list(
     paste0("Loading simulations on ", highlight(workflowName))
   },
   subsetsCreated = function(numberOfSubsets, numberOfSimulations) {
-    paste0("Splitting simulations for parallel run:", highlight(numberOfSimulations), " simulations split into ", highlight(numberOfSubsets), " subsets")
+    paste0("Splitting simulations for parallel run: ", highlight(numberOfSimulations), " simulations split into ", highlight(numberOfSubsets), " subsets")
   },
   ratioIdentifiedPopulations = function(simulationSetName,
                                         referenceSimulationSetName,

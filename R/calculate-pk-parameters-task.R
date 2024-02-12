@@ -30,11 +30,14 @@ CalculatePKParametersTask <- R6::R6Class(
       actionToken <- re.tStartAction(actionType = "Analysis", actionNameExtension = self$nameTaskResults)
       logInfo(messages$runStarting(self$message))
       t0 <- tic()
-
       if (!is.null(self$outputFolder)) {
         dir.create(file.path(self$workflowFolder, self$outputFolder), showWarnings = FALSE, recursive = TRUE)
       }
-
+      if (self$settings$showProgress) {
+        loadingProgress <- txtProgressBar(max = length(structureSets), style = 3)
+        cat("\n")
+        setIndex <- 0
+      }
       for (set in structureSets) {
         logInfo(messages$runStarting(self$message, set$simulationSet$simulationSetName))
         if (self$validateStructureSetInput(set)) {
@@ -45,8 +48,16 @@ CalculatePKParametersTask <- R6::R6Class(
           self$saveResults(set, taskResults)
         }
         clearMemory(clearSimulationsCache = TRUE)
+        if (self$settings$showProgress) {
+          setIndex <- setIndex + 1
+          setTxtProgressBar(loadingProgress, value = setIndex)
+          cat("\n")
+        }
       }
-      if(!self$ratioComparison) {
+      if (self$settings$showProgress) {
+        close(loadingProgress)
+      }
+      if (!self$ratioComparison) {
         re.tEndAction(actionToken = actionToken)
         logInfo(messages$runCompleted(getElapsedTime(t0), self$message))
         return(invisible())
