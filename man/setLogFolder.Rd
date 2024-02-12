@@ -4,7 +4,7 @@
 \alias{setLogFolder}
 \title{setLogFolder}
 \usage{
-setLogFolder(folder)
+setLogFolder(folder = NULL)
 }
 \arguments{
 \item{folder}{Folder where logs are saved}
