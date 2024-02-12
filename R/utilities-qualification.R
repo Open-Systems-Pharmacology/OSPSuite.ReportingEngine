@@ -7,12 +7,14 @@
 #' @family qualification workflow
 loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
   setLogFolder(workflowFolder)
-  validateIsFileExtension(configurationPlanFile, "json")
-  validateFileExists(configurationPlanFile)
-  configurationPlan <- loadConfigurationPlan(
-    workflowFolder = workflowFolder,
-    configurationPlanFile = configurationPlanFile
-  )
+  logCatch({
+    validateIsFileExtension(configurationPlanFile, "json")
+    validateFileExists(configurationPlanFile)
+    configurationPlan <- loadConfigurationPlan(
+      workflowFolder = workflowFolder,
+      configurationPlanFile = configurationPlanFile
+    )
+  })
 
   outputsDataframe <- getOutputsFromConfigurationPlan(configurationPlan = configurationPlan)
 
@@ -101,37 +103,39 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
 #' @family qualification workflow
 loadConfigurationPlan <- function(configurationPlanFile, workflowFolder) {
   setLogFolder(workflowFolder)
-  jsonConfigurationPlan <- fromJSON(configurationPlanFile, simplifyDataFrame = FALSE)
+  logCatch({
+    jsonConfigurationPlan <- fromJSON(configurationPlanFile, simplifyDataFrame = FALSE)
 
-  # Check if mandatory variables were input
-  # Matlab version had as well ObservedDataSets and Inputs, but they don't need to be mandatory in R
-  validateIsIncluded(c("SimulationMappings", "Plots", "Sections"), names(jsonConfigurationPlan))
+    # Check if mandatory variables were input
+    # Matlab version had as well ObservedDataSets and Inputs, but they don't need to be mandatory in R
+    validateIsIncluded(c("SimulationMappings", "Plots", "Sections"), names(jsonConfigurationPlan))
 
-  # Create `ConfigurationPlan` object
-  configurationPlan <- ConfigurationPlan$new()
-  # The workflow and reference folders are required to know from where accessing the files
-  configurationPlan$workflowFolder <- workflowFolder
-  configurationPlan$referenceFolder <- normalizePath(path = dirname(configurationPlanFile), winslash = .Platform$file.sep)
+    # Create `ConfigurationPlan` object
+    configurationPlan <- ConfigurationPlan$new()
+    # The workflow and reference folders are required to know from where accessing the files
+    configurationPlan$workflowFolder <- workflowFolder
+    configurationPlan$referenceFolder <- normalizePath(path = dirname(configurationPlanFile), winslash = .Platform$file.sep)
 
-  # Assiociate fields defined in json to ConfigurationPlan object using expression
-  jsonFieldNames <- names(jsonConfigurationPlan)
-  # jsonFieldNames is almost camel case, only first letter needs to be switched to lower case
-  fieldNames <- paste0(tolower(substring(jsonFieldNames, 1, 1)), substring(jsonFieldNames, 2))
-  eval(parse(text = paste0("configurationPlan$", fieldNames, "<- jsonConfigurationPlan$", jsonFieldNames)))
+    # Assiociate fields defined in json to ConfigurationPlan object using expression
+    jsonFieldNames <- names(jsonConfigurationPlan)
+    # jsonFieldNames is almost camel case, only first letter needs to be switched to lower case
+    fieldNames <- paste0(tolower(substring(jsonFieldNames, 1, 1)), substring(jsonFieldNames, 2))
+    eval(parse(text = paste0("configurationPlan$", fieldNames, "<- jsonConfigurationPlan$", jsonFieldNames)))
 
-  # Create unique plot number for each plot named "PlotNumber"
-  # within a specific plot type (eg. PKRatio) defined in the configuration plan
-  plotFields <- setdiff(names(configurationPlan$plots), c("PlotSettings", "AxesSettings"))
-  for (plotField in plotFields) {
-    for (plotIndex in seq_along(configurationPlan$plots[[plotField]])) {
-      # In json, numbering of fields in {} starts at 0
-      # Actual plot index should start at 1
-      configurationPlan$plots[[plotField]][[plotIndex]]$PlotNumber <- paste(
-        plotIndex - 1, "(json numbering starting at 0); ",
-        plotIndex, "(actual plot index)"
-      )
+    # Create unique plot number for each plot named "PlotNumber"
+    # within a specific plot type (eg. PKRatio) defined in the configuration plan
+    plotFields <- setdiff(names(configurationPlan$plots), c("PlotSettings", "AxesSettings"))
+    for (plotField in plotFields) {
+      for (plotIndex in seq_along(configurationPlan$plots[[plotField]])) {
+        # In json, numbering of fields in {} starts at 0
+        # Actual plot index should start at 1
+        configurationPlan$plots[[plotField]][[plotIndex]]$PlotNumber <- paste(
+          plotIndex - 1, "(json numbering starting at 0); ",
+          plotIndex, "(actual plot index)"
+        )
+      }
     }
-  }
+  })
   return(configurationPlan)
 }
 

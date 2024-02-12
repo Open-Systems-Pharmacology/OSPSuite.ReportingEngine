@@ -79,3 +79,4 @@ test_that("Subunits are included in TOC", {
 
 # Clear the output
 removeAllUserDefinedPKParameters()
+unlink(reOutputFolder, recursive = TRUE)

@@ -39,7 +39,7 @@ getTimeStamp <- function() {
 #' @description Reset/empty messages of global logging system
 #' @param folder Folder where logs are saved
 #' @keywords internal
-resetLogs <- function(folder) {
+resetLogs <- function(folder = NULL) {
   reEnv$log$reset(folder)
   return(invisible())
 }
@@ -48,7 +48,7 @@ resetLogs <- function(folder) {
 #' @description Set folder where logs are saved
 #' @param folder Folder where logs are saved
 #' @keywords internal
-setLogFolder <- function(folder) {
+setLogFolder <- function(folder = NULL) {
   reEnv$log$folder <- folder
   return(invisible())
 }
@@ -101,6 +101,7 @@ logError <- function(message, printConsole = NULL) {
 #' @keywords internal
 logErrorThenStop <- function(message, logFolder = NULL) {
   logError(message, printConsole = FALSE)
+  setLogFolder()
   stop(as.character(message), call. = FALSE)
 }
 
@@ -175,6 +176,7 @@ logCatch <- function(expr) {
           "rows containing non-finite values",
           "Ignoring unknown parameters",
           "was deprecated in ggplot2",
+          "font family not found in Windows font database",
           # warning thrown because of non-ASCII unicode characters
           "mbcsToSbcs"
         ),
@@ -201,6 +203,8 @@ logCatch <- function(expr) {
     }
   ),
   error = function(errorCondition) {
+    # Prevent logging new messages in old log files after crash
+    setLogFolder()
     stop(errorCondition$message, call. = FALSE)
   }
   )
