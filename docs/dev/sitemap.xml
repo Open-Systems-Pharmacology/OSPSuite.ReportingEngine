@@ -22,9 +22,6 @@
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/ospsuite-reportingengine.html</loc>
   </url>
   <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/ospsuitereportingengine.html</loc>
-  </url>
-  <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/pk-parameters.html</loc>
   </url>
   <url>
@@ -97,19 +94,13 @@
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addXParametersForDemographyPlot.html</loc>
   </url>
   <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addXParametersForDemogrpahyPlot.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addXParametersForPkParametersPlot.html</loc>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addXParametersForPKParametersPlot.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addYParametersForDemographyPlot.html</loc>
   </url>
   <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addYParametersForDemogrpahyPlot.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addYParametersForPkParametersPlot.html</loc>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addYParametersForPKParametersPlot.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/adjustTitlePage.html</loc>
@@ -164,9 +155,6 @@
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/CalculatePKParametersTask.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/calculateResiduals.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkAllCoresSuccessful.html</loc>
@@ -262,9 +250,6 @@
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/displayDebugLogs.html</loc>
   </url>
   <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/displayRatioMeasureAnalyticalSolution.html</loc>
-  </url>
-  <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/evalDataFilter.html</loc>
   </url>
   <url>
@@ -335,9 +320,6 @@
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getCompoundNameFromPath.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getCurvePropertiesForTimeProfiles.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getDataSourcesContent.html</loc>
@@ -514,7 +496,7 @@
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getOutputsFromTimeProfileConfiguration.html</loc>
   </url>
   <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPkAnalysisResultsFileNames.html</loc>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKAnalysisResultsFileNames.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPkOutputIndexDf.html</loc>
@@ -524,12 +506,6 @@
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKParameterMeasure.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKParameterRatioMeasureFromMCSampling.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKParameterRatioPKTable.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKParameterRatioTable.html</loc>
@@ -634,9 +610,6 @@
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getQuantileIndividualIds.html</loc>
   </url>
   <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getRatioMeasureAnalyticalSolution.html</loc>
-  </url>
-  <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getReaderFunction.html</loc>
   </url>
   <url>
@@ -739,19 +712,13 @@
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getXParametersForDemographyPlot.html</loc>
   </url>
   <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getXParametersForDemogrpahyPlot.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getXParametersForPkParametersPlot.html</loc>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getXParametersForPKParametersPlot.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getYParametersForDemographyPlot.html</loc>
   </url>
   <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getYParametersForDemogrpahyPlot.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getYParametersForPkParametersPlot.html</loc>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getYParametersForPKParametersPlot.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/GofPlotTask.html</loc>
@@ -778,16 +745,7 @@
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/introToYamlHeader.html</loc>
   </url>
   <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/isBetween.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/isDimension.html</loc>
-  </url>
-  <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/isObservedData.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/isSamePopulationInSets.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/isValidatedSystem.html</loc>
@@ -949,9 +907,6 @@
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/plotAbsorptionTimeProfile.html</loc>
   </url>
   <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/plotBoxWhiskerLog.html</loc>
-  </url>
-  <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/plotDemographyHistogram.html</loc>
   </url>
   <url>
@@ -959,15 +914,6 @@
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/plotDemographyRange.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/plotMassBalanceCumulativeTimeProfile.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/plotMassBalancePieChart.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/plotMassBalanceTimeProfile.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/plotMeanAbsorption.html</loc>
@@ -1004,12 +950,6 @@
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/plotPopulationSensitivity.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/plotPopulationTimeProfile.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/plotPopulationTimeProfileLog.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/plotQualificationComparisonTimeProfile.html</loc>
@@ -1097,9 +1037,6 @@
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/renderWordReport.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/repeatableSampling.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/replaceInfWithNA.html</loc>
@@ -1207,19 +1144,13 @@
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setXParametersForDemographyPlot.html</loc>
   </url>
   <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setXParametersForDemogrpahyPlot.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setXParametersForPkParametersPlot.html</loc>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setXParametersForPKParametersPlot.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setYParametersForDemographyPlot.html</loc>
   </url>
   <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setYParametersForDemogrpahyPlot.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setYParametersForPkParametersPlot.html</loc>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setYParametersForPKParametersPlot.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/showLogMessages.html</loc>
