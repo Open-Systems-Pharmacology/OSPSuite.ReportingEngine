@@ -247,6 +247,6 @@ reSettingsNames <- enum(names(reEnv))
 newEnv <- reEnv
 save(
   "newEnv",
-  file = file.path(system.file(package = "ospsuite.reportingengine", "extdata"), "re-env.RData")
+  file = file.path(system.file(package = "ospsuite.reportingengine"), "extdata", "re-env.RData")
 )
 rm(list = "newEnv")
