@@ -5,7 +5,7 @@
 \alias{reEnv}
 \title{reEnv}
 \format{
-An object of class \code{environment} of length 33.
+An object of class \code{environment} of length 34.
 }
 \usage{
 reEnv
@@ -84,6 +84,8 @@ sets the maximum number of simulations that may be run on one core.}
 \item{\code{ddiRatioListColumnMappings}}{Dictionary of column names for DDI Ratio tables}
 
 \item{\code{ddiRatioSubsetsDictionary}}{Dictionary of sub-sections names for DDI Ratios}
+
+\item{\code{capSize}}{Default size of the caps in the plots}
 
 \item{\code{theme}}{A `Theme` object from the `{tlf}` package defining default properties of the figures}
 

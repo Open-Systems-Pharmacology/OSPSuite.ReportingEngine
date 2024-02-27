@@ -54,6 +54,7 @@
 #' @field pkRatioDictionary Dictionary of column names for PK Ratio tables
 #' @field ddiRatioListColumnMappings Dictionary of column names for DDI Ratio tables
 #' @field ddiRatioSubsetsDictionary  Dictionary of sub-sections names for DDI Ratios
+#' @field capSize Default size of the caps in the plots
 #' @field theme A `Theme` object from the `{tlf}` package defining default properties of the figures
 #' @field defaultPlotFormat List of default format when exporting plots
 #' @field defaultTimeProfileStatistics
@@ -125,6 +126,7 @@ reEnv$ddiRatioSubsetsDictionary <- list(
   "Reversible_Inhibition" = "Reversible Inhibition",
   "Mechanism_based_Inactivation" = "Mechanism-based Inactivation"
 )
+reEnv$capSize <- 3
 reEnv$defaultPlotFormat <- list(
   format = "png",
   width = 5,
@@ -245,6 +247,6 @@ reSettingsNames <- enum(names(reEnv))
 newEnv <- reEnv
 save(
   "newEnv",
-  file = file.path(system.file(package = "ospsuite.reportingengine"), "extdata", "re-env.RData")
+  file = file.path(system.file(package = "ospsuite.reportingengine", "extdata"), "re-env.RData")
 )
 rm(list = "newEnv")

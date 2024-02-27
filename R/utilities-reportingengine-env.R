@@ -267,7 +267,7 @@ loadRESettings <- function(file) {
 #' Reset the global settings stored in `reEnv` to default values defined by the package.
 #' @export
 resetRESettingsToDefault <- function() {
-  loadRESettings(system.file("extdata", "re-env.RData", package = "tlf"))
+  loadRESettings(system.file("extdata", "re-env.RData", package = "ospsuite.reportingengine"))
   # Set the default tlf theme to RE Default values
   setDefaultTheme()
   return(invisible())
