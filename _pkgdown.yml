@@ -48,6 +48,8 @@ reference:
   - matches("setWatermarkConfiguration")
   - starts_with("getDefault")
   - matches("setPlotFormat")
+  - ends_with("RESettings")
+  - matches("resetRESettingsToDefault")
 - title: "Simulated and observed data helpers"
   desc: "Helper functions for working with simulated and observed data."
   contents:
