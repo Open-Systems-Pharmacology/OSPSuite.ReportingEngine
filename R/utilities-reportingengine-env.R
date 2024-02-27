@@ -29,7 +29,7 @@ setDefaultPlotFormat <- function(format = NULL, width = NULL, height = NULL, uni
   # ggplot2 version 3.3.0 does not include pixels yet
   # In such case, Convert width and height back into inches in case of units as pixels
   requireConversion <- all(
-    packageVersion("ggplot2")<="3.3",
+    packageVersion("ggplot2")<"3.4",
     isIncluded(units, "px")
   )
   if (requireConversion) {
@@ -227,7 +227,7 @@ setDefaultTimeProfileStatistics <- function(statisticsType = NULL,
 #' Get properties from name of the default/global settings stored in `reEnv`.
 #' @param settingName setting name as defined in enum `reSettingsNames`
 #' @export
-getTLFSettings <- function(settingName) {
+getRESettings <- function(settingName) {
   validateEnumValue(settingName, enum = reSettingsNames, nullAllowed = FALSE)
   obj <- reEnv[[settingName]]
   
@@ -244,7 +244,7 @@ getTLFSettings <- function(settingName) {
 #' @export
 saveRESettings <- function(file) {
   validateIsFileExtension(file, "RData")
-  newEnv <- tlfEnv
+  newEnv <- reEnv
   save("newEnv", file = file)
 }
 
@@ -253,7 +253,7 @@ saveRESettings <- function(file) {
 #' Load reporting engine global settings from a file
 #' @param file `.RData` file containing the settings
 #' @export
-loadTLFSettings <- function(file) {
+loadRESettings <- function(file) {
   validateIsFileExtension(file, "RData")
   load(file = file)
   for(fieldNames in names(newEnv)){

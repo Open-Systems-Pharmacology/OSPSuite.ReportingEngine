@@ -28,7 +28,7 @@ Other enum helpers:
 \code{\link{StandardPlotTasks}},
 \code{\link{StandardSimulationTasks}},
 \code{\link{StatisticsTypes}},
-\code{\link{tlfSettingsNames}}
+\code{\link{reSettingsNames}}
 }
 \concept{enum helpers}
 \keyword{datasets}

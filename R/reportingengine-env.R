@@ -239,7 +239,7 @@ reEnv$defaultTimeProfileStatistics <- getStatisticsFromType(StatisticsTypes$`5th
 #' @import ospsuite.utils
 #' @export
 #' @family enum helpers
-tlfSettingsNames <- enum(names(reEnv))
+reSettingsNames <- enum(names(reEnv))
 
 # Save a sync version of re-env as an .RData file
 newEnv <- reEnv
