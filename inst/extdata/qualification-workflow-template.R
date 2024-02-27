@@ -32,6 +32,9 @@ createQualificationReport <- function(qualificationRunnerFolder,
                                       versionInfo = NULL,
                                       wordConversionTemplate = NULL) {
   library(ospsuite.reportingengine)
+  # Reset settings such as plot theme or format of numeric in tables
+  # to Reporting Engine default values
+  resetRESettingsToDefault()
 
   #-------- STEP 1: Define workflow settings --------#
   #' replace `workingDirectory` and `qualificationPlanName` with your paths
