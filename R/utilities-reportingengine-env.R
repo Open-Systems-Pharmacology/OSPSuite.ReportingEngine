@@ -257,7 +257,7 @@ loadRESettings <- function(file) {
   validateIsFileExtension(file, "RData")
   load(file = file)
   for(fieldNames in names(newEnv)){
-    reEnv[[fieldNames]] <- reEnv[[fieldNames]]
+    reEnv[[fieldNames]] <- newEnv[[fieldNames]]
   }
   return(invisible())
 }
