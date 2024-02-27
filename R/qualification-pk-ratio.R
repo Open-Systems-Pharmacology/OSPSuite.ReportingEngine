@@ -239,7 +239,7 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
     simulation = simulation
   )
   observedData <- readObservedDataFile(configurationPlan$getObservedDataPath(pkRatioMapping$ObservedData))
-  selectedRow <- which(observedData[, reEnv$pkRatio$dictionary$id] %in% pkRatioMapping$ObservedDataRecordId)
+  selectedRow <- which(observedData[, reEnv$pkRatioDictionary$id] %in% pkRatioMapping$ObservedDataRecordId)
   # Warn if record ID not found and go to next PK Ratio Mapping
   if (!checkPKRatioObservedRecord(selectedRow, pkRatioMapping$ObservedDataRecordId)) {
     return()
@@ -250,21 +250,21 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
   for (pkParameterName in pkParameterNames) {
     # MetaData for tables and plot labels
     metaData[[paste0("pred", pkParameterName)]] <- list(
-      dimension = paste(reEnv$pkRatio$dictionary$prefixSimulated, pkParameterName, sep = " "),
+      dimension = paste(reEnv$pkRatioDictionary$prefixSimulated, pkParameterName, sep = " "),
       unit = settings$units[[pkParameterName]]
     )
     metaData[[paste0("obs", pkParameterName)]] <- list(
-      dimension = paste(reEnv$pkRatio$dictionary$prefixObserved, pkParameterName, sep = " "),
+      dimension = paste(reEnv$pkRatioDictionary$prefixObserved, pkParameterName, sep = " "),
       unit = settings$units[[pkParameterName]]
     )
     metaData[[paste0("ratio", pkParameterName)]] <- list(
-      dimension = paste(reEnv$pkRatio$dictionary$prefixRatio, pkParameterName, reEnv$pkRatio$dictionary$suffixRatio, sep = " "),
+      dimension = paste(reEnv$pkRatioDictionary$prefixRatio, pkParameterName, reEnv$pkRatioDictionary$suffixRatio, sep = " "),
       unit = ""
     )
 
     # Get PK Parameter observed and simulated values
     # Warn if observed data is not found and display NA in case there is a simulated value
-    parameterColumn <- paste(pkParameterName, reEnv$pkRatio$dictionary$parameterColumn, sep = " ")
+    parameterColumn <- paste(pkParameterName, reEnv$pkRatioDictionary$parameterColumn, sep = " ")
     checkPKRatioObservedVariable(parameterColumn, observedData)
     pkParameterObservedValue <- as.numeric(observedData[selectedRow, parameterColumn] %||% NA)
 
@@ -292,7 +292,7 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
     )
 
     # Warn if unit is not found and assumes unit is display unit
-    unitColumn <- paste(pkParameterName, reEnv$pkRatio$dictionary$unitColumn, sep = " ")
+    unitColumn <- paste(pkParameterName, reEnv$pkRatioDictionary$unitColumn, sep = " ")
     if (checkPKRatioObservedVariable(unitColumn, observedData)) {
       pkParameterObservedUnit <- observedData[selectedRow, unitColumn]
       pkParameterObservedValue <- ospsuite::toUnit(
@@ -315,7 +315,7 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
   weight <- ospsuite::getParameter(ospsuite::StandardPath$Weight, simulation)
   # Concatenate all the results
   data <- cbind.data.frame(
-    study = observedData[selectedRow, reEnv$pkRatio$dictionary$study],
+    study = observedData[selectedRow, reEnv$pkRatioDictionary$study],
     age = age$value,
     weight = weight$value,
     data

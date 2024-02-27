@@ -1176,3 +1176,15 @@ getOutputGroups <- function(metaDataFrame) {
   )
   return(outputGroups)
 }
+
+#' @title ApplicationRanges
+#' @description
+#' Keys of reported ranges when simulation includes multiple applications
+#' @export
+#' @family enum helpers
+#' @examples
+#'
+#' # Lists available Application Ranges
+#' ApplicationRanges
+#'
+ApplicationRanges <- enum(c("total", "firstApplication", "lastApplication"))

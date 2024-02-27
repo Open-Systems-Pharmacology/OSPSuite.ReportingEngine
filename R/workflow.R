@@ -201,7 +201,8 @@ Workflow <- R6::R6Class(
       }
       # Non-NULL user-defined watermark overwrite default feature
       private$.watermark <- watermark %||% private$.watermark
-      setWatermarkConfiguration(private$.watermark)
+      tlf::setDefaultWatermark(private$.watermark)
+      return(invisible())
     },
 
     #' @description Set mapping between parameters and their display paths in workflow
