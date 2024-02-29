@@ -26,13 +26,9 @@ setDefaultPlotFormat <- function(format = NULL, width = NULL, height = NULL, uni
   reEnv$defaultPlotFormat$width <- width %||% reEnv$defaultPlotFormat$width
   reEnv$defaultPlotFormat$height <- height %||% reEnv$defaultPlotFormat$height
   reEnv$defaultPlotFormat$dpi <- dpi %||% reEnv$defaultPlotFormat$dpi
-  # ggplot2 version 3.3.0 does not include pixels yet
-  # In such case, Convert width and height back into inches in case of units as pixels
-  requireConversion <- all(
-    packageVersion("ggplot2")<"3.4",
-    isIncluded(units, "px")
-  )
-  if (requireConversion) {
+  # The function updatePlotDimensions(plotObject) which uses grid::convertUnit to 
+  # add legend space to plot dimensions does not support pixels as units
+  if (isIncluded(units, "px")) {
     units <- "in"
     unitConversionFactor <- grDevices::dev.size("in") / grDevices::dev.size("px")
     reEnv$defaultPlotFormat$width <- reEnv$defaultPlotFormat$width * unitConversionFactor[1]
