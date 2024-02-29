@@ -42,6 +42,7 @@
 #' @field residualsQQLabel Default ylabel in goodness of fit QQ-plots
 #' @field referenceColor Color of reference simulationSet in plots for Population Workflows
 #' @field referenceFill Fill color of reference simulationSet in plots for Population Workflows
+#' @field defaultErrorbarCapSize Default size of the error bar caps in the plots
 #' @field defaultMaxSimulationsPerCore
 #' Default value for a scale factor used in a parallel simulation.
 #' The product of this scale factor and the number of allowable cores (`allowedCores`)
@@ -54,7 +55,6 @@
 #' @field pkRatioDictionary Dictionary of column names for PK Ratio tables
 #' @field ddiRatioListColumnMappings Dictionary of column names for DDI Ratio tables
 #' @field ddiRatioSubsetsDictionary  Dictionary of sub-sections names for DDI Ratios
-#' @field capSize Default size of the caps in the plots
 #' @field theme A `Theme` object from the `{tlf}` package defining default properties of the figures
 #' @field defaultPlotFormat List of default format when exporting plots
 #' @field defaultTimeProfileStatistics
@@ -81,7 +81,6 @@ reEnv$maxWidthPerLegendCaption <- 50
 reEnv$maxLinesPerLegendCaption <- 2
 reEnv$autoAxisLimitMargin <- 0.05
 reEnv$blankLinesBetweenArtifacts <- 2
-# Scale factor for font size when exporting plot as png
 reEnv$fontScaleFactor <- 2
 reEnv$workflowWatermarkMessage <- "preliminary analysis"
 reEnv$residualsHistogramLabel <- "Relative frequency"
@@ -89,9 +88,8 @@ reEnv$demographyHistogramLabel <- "Percentage of population [%]"
 reEnv$residualsQQLabel <- "Quantiles of residuals"
 reEnv$referenceColor <- "grey50"
 reEnv$referenceFill <- "grey50"
-# Default value for a scale factor used in a parallel simulation.  The product of this scale factor and the number of allowable cores (allowedCores) sets the maximum number of simulations that may be run on one core.
+reEnv$defaultErrorbarCapSize <- 3
 reEnv$defaultMaxSimulationsPerCore <- 2
-# Default values for Monte Carlo sampling when calculating PK Ratios
 reEnv$defaultMCRandomSeed <- 123456
 reEnv$defaultMCRepetitions <- 1e4
 reEnv$defaultPKParametersHeader <- c(
@@ -99,7 +97,6 @@ reEnv$defaultPKParametersHeader <- c(
   paste0(c(5, 25, 50, 75, 95), "<sup>th</sup> pctl"),
   "Mean", "SD", "Geo Mean", "Geo SD"
 )
-# Default values for qualification pk ratio
 reEnv$pkRatioDictionary <- list(
   id = "ID",
   study = "Study",
@@ -126,7 +123,6 @@ reEnv$ddiRatioSubsetsDictionary <- list(
   "Reversible_Inhibition" = "Reversible Inhibition",
   "Mechanism_based_Inactivation" = "Mechanism-based Inactivation"
 )
-reEnv$capSize <- 3
 reEnv$defaultPlotFormat <- list(
   format = "png",
   width = 5,

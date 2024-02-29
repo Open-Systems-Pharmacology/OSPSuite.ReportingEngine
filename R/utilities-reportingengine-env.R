@@ -179,6 +179,20 @@ setDefaultMCRepetitions <- function(n) {
   return(invisible())
 }
 
+#' @title setDefaultErrorbarCapSize
+#' @description Set the default size of error bar caps
+#' @param size Size of error bar caps
+#' @export
+#' @examples
+#' setDefaultErrorbarCapSize(5)
+#'
+setDefaultErrorbarCapSize <- function(size) {
+  validateIsNumeric(size)
+  reEnv$defaultErrorbarCapSize <- size
+  tlf::setDefaultErrorbarCapSize(size)
+  return(invisible())
+}
+
 #' @title setDefaultTimeProfileStatistics
 #' @description Set default statistics used in population time profiles and residuals plots
 #' @param statisticsType Name of statistics type as defined in enum `StatisticsTypes`
@@ -259,6 +273,9 @@ loadRESettings <- function(file) {
   for(fieldNames in names(newEnv)){
     reEnv[[fieldNames]] <- newEnv[[fieldNames]]
   }
+  # Set TLF settings affecting RE to RE specific default values
+  setDefaultTheme(reEnv$theme)
+  tlf::setDefaultErrorbarCapSize(reEnv$defaultErrorbarCapSize)
   return(invisible())
 }
 
@@ -267,8 +284,12 @@ loadRESettings <- function(file) {
 #' Reset the global settings stored in `reEnv` to default values defined by the package.
 #' @export
 resetRESettingsToDefault <- function() {
+  # Reset TLF settings environment to its default values
+  tlf::resetTLFSettingsToDefault()
+  # Reset RE settings environment to default values
   loadRESettings(system.file("extdata", "re-env.RData", package = "ospsuite.reportingengine"))
-  # Set the default tlf theme to RE Default values
+  # Set TLF settings affecting RE to RE specific default values
   setDefaultTheme()
+  tlf::setDefaultErrorbarCapSize(reEnv$defaultErrorbarCapSize)
   return(invisible())
 }

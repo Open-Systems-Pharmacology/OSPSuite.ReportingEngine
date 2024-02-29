@@ -69,6 +69,8 @@ value of the margin to add to the limits of the axis when left undefined}
 
 \item{\code{referenceFill}}{Fill color of reference simulationSet in plots for Population Workflows}
 
+\item{\code{defaultErrorbarCapSize}}{Default size of the error bar caps in the plots}
+
 \item{\code{defaultMaxSimulationsPerCore}}{Default value for a scale factor used in a parallel simulation.
 The product of this scale factor and the number of allowable cores (`allowedCores`)
 sets the maximum number of simulations that may be run on one core.}
@@ -84,8 +86,6 @@ sets the maximum number of simulations that may be run on one core.}
 \item{\code{ddiRatioListColumnMappings}}{Dictionary of column names for DDI Ratio tables}
 
 \item{\code{ddiRatioSubsetsDictionary}}{Dictionary of sub-sections names for DDI Ratios}
-
-\item{\code{capSize}}{Default size of the caps in the plots}
 
 \item{\code{theme}}{A `Theme` object from the `{tlf}` package defining default properties of the figures}
 
