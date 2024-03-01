@@ -28,7 +28,8 @@ Other enum helpers:
 \code{\link{PopulationWorkflowTypes}},
 \code{\link{ResidualScales}},
 \code{\link{StandardPlotTasks}},
-\code{\link{StandardSimulationTasks}}
+\code{\link{StandardSimulationTasks}},
+\code{\link{reSettingsNames}}
 }
 \concept{enum helpers}
 \keyword{datasets}

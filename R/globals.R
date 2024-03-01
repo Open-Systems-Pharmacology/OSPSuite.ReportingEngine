@@ -13,6 +13,7 @@ dplyrVariables <- c(
   "MeanLogY",
   "MeanX",
   "MeanY",
+  "newEnv",
   "NormalizedAmount",
   "Parameter",
   "QuantityPath",

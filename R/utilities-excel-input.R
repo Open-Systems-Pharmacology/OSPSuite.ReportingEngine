@@ -213,7 +213,9 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
     scriptContent <- c(
       scriptContent,
       '# Load package "ospsuite.reportingengine" (require() function install the package if not installed yet)',
-      "require(ospsuite.reportingengine)", ""
+      "require(ospsuite.reportingengine)", "",
+      "# Reset settings such as plot theme or format of numeric in tables to Reporting Engine default values",
+      "resetRESettingsToDefault()", ""
     )
 
     # ----- User Defined PK Parameters -----

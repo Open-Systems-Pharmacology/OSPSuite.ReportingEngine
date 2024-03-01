@@ -37,10 +37,12 @@ These properties can at 2 levels:
 
 # How to set global workflow properties
 
-Most of the global settings can be managed using the notion of __theme__ from the `tlf` package,
-the `reporting.engine` functions generate their plots using the `tlf` package.
+Reporting Engine global setting names are listed in the enum [`reSettingsNames`](../reference/reSettingsNames.html).
+Each global setting can be reviewed using the function `getRESettings()`.
 
-Some shortkey methods were added to the `reporting.engine` package to simplify their use.
+It is possible to update, save and reuse most of the reporting engine default settings using the functions available in the section [__Default Settings__](../reference/index.html#default-settings).
+
+Note that the function `resetRESettingsToDefault()` allows you to reset to initial default values defined by the reporting engine.
 
 ## Notion of theme
 
