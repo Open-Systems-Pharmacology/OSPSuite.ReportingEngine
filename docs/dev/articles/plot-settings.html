@@ -101,7 +101,12 @@
 <span><span class="co">#&gt; Loading required package: rClr</span></span>
 <span><span class="co">#&gt; Loading the dynamic library for Microsoft .NET runtime...</span></span>
 <span><span class="co">#&gt; Loaded Common Language Runtime version 4.0.30319.42000</span></span>
-<span><span class="co">#&gt; Loading required package: tlf</span></span></code></pre></div>
+<span><span class="co">#&gt; Loading required package: tlf</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'ospsuite.reportingengine'</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:tlf':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     setDefaultErrorbarCapSize</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
@@ -118,12 +123,15 @@ task</li>
 <div class="section level2">
 <h2 id="how-to-set-global-workflow-properties">How to set global workflow properties<a class="anchor" aria-label="anchor" href="#how-to-set-global-workflow-properties"></a>
 </h2>
-<p>Most of the global settings can be managed using the notion of
-<strong>theme</strong> from the <code>tlf</code> package, the
-<code>reporting.engine</code> functions generate their plots using the
-<code>tlf</code> package.</p>
-<p>Some shortkey methods were added to the <code>reporting.engine</code>
-package to simplify their use.</p>
+<p>Reporting Engine global setting names are listed in the enum <a href="../reference/reSettingsNames.html"><code>reSettingsNames</code></a>.
+Each global setting can be reviewed using the function
+<code><a href="../reference/getRESettings.html">getRESettings()</a></code>.</p>
+<p>It is possible to update, save and reuse most of the reporting engine
+default settings using the functions available in the section <a href="../reference/index.html#default-settings"><strong>Default
+Settings</strong></a>.</p>
+<p>Note that the function <code><a href="../reference/resetRESettingsToDefault.html">resetRESettingsToDefault()</a></code> allows
+you to reset to initial default values defined by the reporting
+engine.</p>
 <div class="section level3">
 <h3 id="notion-of-theme">Notion of theme<a class="anchor" aria-label="anchor" href="#notion-of-theme"></a>
 </h3>
@@ -322,19 +330,19 @@ example in which <strong><code>plotConfigurations</code></strong> and
 <span>    simulationSets <span class="op">=</span> <span class="va">setA</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-A"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 20/02/2024 - 16:04:45</span></span>
+<span><span class="co">#&gt; 01/03/2024 - 14:05:43</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 20/02/2024 - 16:04:45</span></span>
+<span><span class="co">#&gt;  Date: 01/03/2024 - 14:05:43</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az586-579</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1390-687</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
-<span><span class="co">#&gt;  R version: R version 4.3.2 (2023-10-31 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.0.476</span></span>
+<span><span class="co">#&gt;  R version: R version 4.3.3 (2024-02-29 ucrt)</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.0.482</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.2</span></span>
-<span><span class="co">#&gt;  tlf version: 1.5.160</span></span>
+<span><span class="co">#&gt;  tlf version: 1.5.164</span></span>
 <span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="va">workflowA</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simulate"</span>, <span class="st">"plotTimeProfilesAndResiduals"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -381,32 +389,32 @@ quite different. However, the option <strong><code>bins</code></strong>
 is currently set among all plots of the task. Regarding observed vs
 simulated plots, the got the updated xlabel, ylabel and watermark as
 defined in the plot configuration.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the workflow</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>workflowA<span class="sc">$</span><span class="fu">runWorkflow</span>()</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 20/02/2024 - 16:04:46</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mMean Model Workflow [23m [22m [39m</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 20/02/2024 - 16:04:46</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mSimulation task [23m [22m [39m</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 20/02/2024 - 16:04:46</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mSplitting simulations for parallel run:  [36m [1m [3m1 [23m [22m [39m simulations split into  [36m [1m [3m1 [23m [22m [39m subsets</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 20/02/2024 - 16:04:46</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3msubset simulations [23m [22m [39m</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 20/02/2024 - 16:04:46</span></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mSimulation task [23m [22m [39m completed in 0 min</span></span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 20/02/2024 - 16:04:46</span></span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m</span></span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 20/02/2024 - 16:04:46</span></span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m for  [36m [1m [3mA [23m [22m [39m</span></span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 20/02/2024 - 16:04:48</span></span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m completed in 0 min</span></span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmp4WeVzN/temp_libpath146017c37fc9/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-A" -t docx -o "Example-A/Report-word.docx" "Example-A/Report-word.md"</span></span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 20/02/2024 - 16:04:48</span></span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mMean Model Workflow [23m [22m [39m completed in 0 min</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Run the workflow</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>workflowA<span class="sc">$</span><span class="fu">runWorkflow</span>()</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; 01/03/2024 - 14:05:43</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mMean Model Workflow [23m [22m [39m</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; 01/03/2024 - 14:05:43</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mSimulation task [23m [22m [39m</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; 01/03/2024 - 14:05:43</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mSplitting simulations for parallel run:  [36m [1m [3m1 [23m [22m [39m simulations split into  [36m [1m [3m1 [23m [22m [39m subsets</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt; 01/03/2024 - 14:05:43</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3msubset simulations [23m [22m [39m</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt; 01/03/2024 - 14:05:44</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mSimulation task [23m [22m [39m completed in 0 min</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; 01/03/2024 - 14:05:44</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt; 01/03/2024 - 14:05:44</span></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39mStarting run of  [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m for  [36m [1m [3mA [23m [22m [39m</span></span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a><span class="co">#&gt; 01/03/2024 - 14:05:47</span></span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mPlot Time profiles and Residuals task [23m [22m [39m completed in 0 min</span></span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a><span class="co">#&gt; Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/RtmpGgqLZe/temp_libpath1a5c3246a98/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-A" -t docx -o "Example-A/Report-word.docx" "Example-A/Report-word.md"</span></span>
+<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a><span class="co">#&gt; 01/03/2024 - 14:05:47</span></span>
+<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a><span class="co">#&gt;  [32m [1mi Info   [22m [39m [36m [1m [3mMean Model Workflow [23m [22m [39m completed in 0.1 min</span></span></code></pre></div>
 <details><summary><strong>Report</strong>
 </summary><img src="figures/report-snapshot-64.png" style="width:100%; border-style: none;"></details>
 </div>
