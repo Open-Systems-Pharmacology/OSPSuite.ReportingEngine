@@ -46,7 +46,6 @@ validateNoDuplicatedEntries <- function(x) {
   return(invisible())
 }
 
-# TODO: replace the function name
 validateIsIncludedAndLog <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL) {
   if (nullAllowed && is.null(values)) {
     return(invisible())

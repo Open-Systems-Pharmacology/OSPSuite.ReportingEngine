@@ -572,7 +572,6 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
     }
   )
   if (isEmpty(outputValues)) {
-    # TODO: change error message
     stop(messages$errorMolecularWeightRequired(""))
   }
 

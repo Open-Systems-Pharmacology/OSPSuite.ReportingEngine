@@ -494,7 +494,6 @@ getPKRatioSummaryFromMCSampling <- function(pkData, referencePKData, simulationS
 #' @import ggplot2
 ratioBoxplot <- function(data,
                          plotConfiguration = NULL) {
-  # TODO: create new molecule plot for this
   ratioPlot <- tlf::initializePlot(plotConfiguration)
   aestheticValues <- tlf:::.getAestheticValuesFromConfiguration(
     n = 1,

@@ -101,8 +101,6 @@ updateIndividualParametersOnCores <- function(individualParameters) {
   return(invisible())
 }
 
-# TODO: Functions starting with verify should be renamed, refactored and placed within error-checks.R
-
 #' @title verifySimulationRunSuccessful
 #' @description Check that all cores ran simulation successfully
 #' @param simulationRunSuccess logical vector indicating success of simulation run on all cores

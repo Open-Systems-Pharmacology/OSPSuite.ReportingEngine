@@ -1,5 +1,3 @@
-# TODO: add these functions to tlf
-
 #' @title geomean
 #' @description
 #' Calculate the geometric mean

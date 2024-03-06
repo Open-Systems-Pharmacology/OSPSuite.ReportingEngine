@@ -91,8 +91,6 @@ Task <- R6::R6Class(
       if (isEmpty(inputsToCheck)) {
         return(TRUE)
       }
-
-      # TODO: update after PR about logging
       tryCatch(
         {
           validateFileExists(inputsToCheck, nullAllowed = TRUE)

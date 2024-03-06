@@ -250,7 +250,6 @@ ConfigurationPlan <- R6::R6Class(
       reEnv$theme$fonts$legend$size <- self$plots$PlotSettings$Fonts$LegendSize %||% reEnv$theme$fonts$legend$size
       reEnv$theme$fonts$xAxis$size <- self$plots$PlotSettings$Fonts$AxisSize %||% reEnv$theme$fonts$xAxis$size
       reEnv$theme$fonts$yAxis$size <- self$plots$PlotSettings$Fonts$AxisSize %||% reEnv$theme$fonts$yAxis$size
-      # TODO resizing of the input: normal size always appears bigger in background due to annotation_custom()
       reEnv$theme$fonts$watermark$size <- self$plots$PlotSettings$Fonts$WatermarkSize %||% reEnv$theme$fonts$watermark$size
       return(invisible())
     }

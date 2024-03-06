@@ -249,7 +249,7 @@ getResiduals <- function(observedData,
 
   timeMatchedData <- as.numeric(sapply(as.data.frame(abs(obsTimeMatrix - simTimeMatrix)), which.min))
 
-  # TODO: issue #942, once implemented use ospsuite residuals calculation
+  # Issue #942, once implemented use ospsuite residuals calculation
   residualValues <- rep(NA, nrow(observedData))
   if (isIncluded(residualScale, ResidualScales$Logarithmic)) {
     residualValues <- log(observedData[, "Concentration"]) - log(simulatedData[timeMatchedData, "Concentration"])
@@ -579,8 +579,7 @@ plotMeanTimeProfileLog <- function(simulatedData,
                                    metaData = NULL,
                                    dataMapping = NULL,
                                    plotConfiguration = NULL) {
-  # Remove 0 values from simulated and observed data
-  # TODO: use dplyr to refactor the selection
+  # Remove 0 values from simulated and observed data because of log scale
   simulatedData <- removeNegativeValues(simulatedData, dataMapping$y)
   observedData <- removeNegativeValues(observedData, dataMapping$y)
 
@@ -681,8 +680,7 @@ plotPopTimeProfileLog <- function(simulatedData,
                                   metaData = NULL,
                                   dataMapping = NULL,
                                   plotConfiguration = NULL) {
-  # Remove 0 values from simulated and observed data
-  # TODO: use dplyr to refactor the selection
+  # Remove 0 values from simulated and observed data because of log plots
   simulatedData <- removeNegativeValues(simulatedData, dataMapping$y)
   simulatedData <- removeNegativeValues(simulatedData, dataMapping$ymin)
   simulatedData <- removeNegativeValues(simulatedData, dataMapping$ymax)
@@ -1044,7 +1042,7 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
     goodnessOfFitPlots[[resultId]] <- obsVsPredPlot
     goodnessOfFitCaptions[[resultId]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred", "linear", settings)
 
-    # TODO: update after tlf is robust enough when 0 is in log plots (tlf issue #369)
+    # tlf issue #369
     selectedLogData <- selectedResidualsData$Simulated > 0 & selectedResidualsData$Observed > 0
     if (sum(selectedLogData) > 0) {
       # In log scale, identity line is 1 instead of 0
