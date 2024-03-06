@@ -175,6 +175,7 @@ logCatch <- function(expr) {
             "introduced infinite values",
             "Each group consists of only one observation",
             "rows containing non-finite values",
+            "rows containing missing values",
             "Ignoring unknown parameters",
             "was deprecated in ggplot2",
             "font family not found in Windows font database",
