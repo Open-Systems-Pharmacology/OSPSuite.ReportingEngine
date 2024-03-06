@@ -884,7 +884,7 @@ plotDemographyRange <- function(data,
                                 plotConfiguration = NULL,
                                 parameterClass = "numeric") {
   mapLabels <- tlf:::.getAesStringMapping(dataMapping)
-  # TODO: once range plots included in tlf, switch to range plots
+  
   vpcPlotConfiguration <- plotConfiguration %||% switch(parameterClass,
     "character" = tlf::BoxWhiskerPlotConfiguration$new(
       data = data,

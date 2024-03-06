@@ -142,7 +142,11 @@ getDefaultRETheme <- function() {
     return(tlf::loadThemeFromJson(reThemeFile))
   }
   # If not found, e.g. before the package is built, use a tlf template theme
-  # TODO use themes instead of extdata in later versions of tlf
+  reThemeFile <- system.file("themes", "template-theme.json", package = "tlf")
+  if (!isIncluded(reThemeFile, "")) {
+    return(tlf::loadThemeFromJson(reThemeFile))
+  }
+  # Use extdata, in case the old tlf version is installed and used
   return(tlf::loadThemeFromJson(system.file("extdata", "template-theme.json", package = "tlf")))
 }
 reEnv$theme <- getDefaultRETheme()
@@ -218,7 +222,6 @@ getStatisticsFromType <- function(statisticsType) {
       rangeCaption = "mean \u00b1 SD range"
     ))
   }
-  # TODO : define geometric mean in tlf !
   return(list(
     y = "geomean",
     ymin = "geomeanDividedBySD",

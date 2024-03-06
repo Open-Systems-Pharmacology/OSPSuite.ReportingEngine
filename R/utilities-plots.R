@@ -266,7 +266,6 @@ addLineBreakToCaption <- function(captions, maxLines = reEnv$maxLinesPerLegendCa
       next
     }
     # dashes and spaces provides preferential sites for line breaks
-    # TODO: improve the preferental site using input arguments
     dashSplits <- as.numeric(gregexpr(pattern = "-", captions[captionIndex])[[1]])
     spaceSplits <- as.numeric(gregexpr(pattern = " ", captions[captionIndex])[[1]])
     possibleSplits <- sort(c(dashSplits[dashSplits > 0], spaceSplits[spaceSplits > 0]))
@@ -881,7 +880,6 @@ getDefaultPropertiesFromTheme <- function(plotName,
 #' In time profiles, legends are merged into one unique legend
 #' The displayed legend is stored in the `plotObject` within the color guide field `override.aes`.
 #' This function simply gets the list from that field for updating the current legend
-#' TODO: create and export that function in `{tlf}` package
 #' @param plotObject A ggplot object
 #' @return A list of aesthetic values
 #' @keywords internal
@@ -897,8 +895,6 @@ getLegendAesOverride <- function(plotObject) {
 #' @title addLLOQLegend
 #' @description
 #' Add LLOQ displayed legend to the legend of a `plotObject`
-#' TODO: create and export that function in `{tlf}` package
-#' Fix coloring issues
 #' @param plotObject A ggplot object
 #' @param captions Current observed data captions for which lloq legend is needed
 #' @param prefix Prefix for legend

@@ -238,8 +238,8 @@ GofPlotTask <- R6::R6Class(
         includeTable = FALSE
       )
 
-      # Get all unique output paths
-      # TODO: group them by unique ID once introduced
+      # Get all unique output paths and 
+      # issue #1188: need to group them by unique groupID
       allOutputs <- sapply(
         structureSets,
         FUN = function(set) {

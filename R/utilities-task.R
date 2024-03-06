@@ -59,8 +59,6 @@ AllAvailableTasks <- c(
 #'
 activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
-
-  # TODO: update once renamed
   validateIsIncludedAndLog(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks")
 
   for (task in tasks) {
@@ -92,8 +90,6 @@ activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
 #'
 inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
-
-  # TODO: Update once the function name is updated
   validateIsIncludedAndLog(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks")
 
   for (task in tasks) {
@@ -833,11 +829,11 @@ addUserDefinedTask <- function(workflow,
   argumentNames <- names(formals(taskFunction))
   if (isOfType(workflow, "MeanModelWorkflow")) {
     # PlotTask arguments
-    # TODO: updated once renamed
     validateIsIncludedAndLog(
-      c("structureSet", "settings"), argumentNames,
+      c("structureSet", "settings"), 
+      argumentNames, 
       groupName = "Task function arguments"
-    )
+      )
 
     workflow$userDefinedTasks <- c(
       workflow$userDefinedTasks,
@@ -857,9 +853,9 @@ addUserDefinedTask <- function(workflow,
 
   if (isOfType(workflow, "PopulationWorkflow")) {
     # PopulationPlotTask arguments
-    # TODO: update once renamed
     validateIsIncludedAndLog(
-      c("structureSets", "settings", "workflowType", "xParameters", "yParameters"), argumentNames,
+      c("structureSets", "settings", "workflowType", "xParameters", "yParameters"), 
+      argumentNames,
       groupName = "Task function arguments"
     )
 
@@ -919,7 +915,6 @@ loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
     inputFolder = defaultTaskOutputFolders$simulate,
-    # TODO: add observed data
     inputs = inputFiles,
     workflowFolder = workflow$workflowFolder,
     active = active,
@@ -960,7 +955,6 @@ loadGOFMergedTask <- function(workflow, configurationPlan) {
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
     inputFolder = defaultTaskOutputFolders$simulate,
-    # TODO: add observed data
     inputs = inputFiles,
     workflowFolder = workflow$workflowFolder,
     active = active,
@@ -1009,7 +1003,6 @@ loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPl
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
     inputFolder = defaultTaskOutputFolders$simulate,
-    # TODO: add observed data
     inputs = inputFiles,
     workflowFolder = workflow$workflowFolder,
     active = active,
@@ -1051,7 +1044,6 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
     inputFolder = defaultTaskOutputFolders$simulate,
-    # TODO: add observed data
     inputs = inputFiles,
     workflowFolder = workflow$workflowFolder,
     active = active,
@@ -1118,7 +1110,6 @@ loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
     inputFolder = defaultTaskOutputFolders$simulate,
-    # TODO: add observed data
     inputs = inputFiles,
     workflowFolder = workflow$workflowFolder,
     active = active,

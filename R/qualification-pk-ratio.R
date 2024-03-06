@@ -94,7 +94,6 @@ getQualificationPKRatioGMFE <- function(pkParameterNames, data) {
 #' @return A data.frame
 #' @keywords internal
 getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData) {
-  # TODO: use tlf::getPKRatioMeasure once updated on tlf
   ratios <- data[, paste0("ratio", pkParameterName)]
   ratios <- ratios[!is.na(ratios)]
 

@@ -18,7 +18,5 @@ A list of aesthetic values
 }
 \description{
 Add LLOQ displayed legend to the legend of a `plotObject`
-TODO: create and export that function in `{tlf}` package
-Fix coloring issues
 }
 \keyword{internal}

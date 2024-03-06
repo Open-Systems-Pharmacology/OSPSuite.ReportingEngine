@@ -18,11 +18,7 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
 
   outputsDataframe <- getOutputsFromConfigurationPlan(configurationPlan = configurationPlan)
 
-  # TODO outputs and pk parameters may need to be defined
-  # Either as part of simulationSets or as a settings for the task
-  # Currently, no output is saved as simulationResults
   simulationSets <- list()
-
   # Display a nice progress bar
   t0 <- tic()
   logInfo(paste0("Loading Simulations onto ", highlight("Qualification Workflow")))
@@ -287,12 +283,6 @@ getOutputsFromGOFMergedPlotsConfiguration <- function(plot) {
   }
   return(unique(paths))
 }
-
-
-# Vector of allowable plot types in configuration plan.
-# TODO deprecate vector using enum ConfigurationPlots
-QualificationPlotTypes <- c("GOFMergedPlots", "ComparisonTimeProfilePlots", "DDIRatioPlots", "TimeProfile")
-
 
 #' @title extractNameAndUnit
 #' @description Returns a named list with two entries (name, unit) corresponding to the name and unit
