@@ -130,83 +130,101 @@ logInfo <- function(message, printConsole = NULL) {
 #' @param expr Evaluated code chunks
 #' @export
 logCatch <- function(expr) {
-  tryCatch(withCallingHandlers(
-    expr,
-    error = function(errorCondition) {
-      # Informative trace keeps only calls related to error from all current calls
-      # by removing tryCatch, logCatch, withCallingHandlers, simpleError from trace
-      calls <- sys.calls()
-      errorTrace <- "\n> Error Trace"
-      if (requireNamespace("crayon", quietly = TRUE)) {
-        errorTrace <- crayon::yellow$bold(errorTrace)
-      }
-      for (call in calls) {
-        textCall <- deparse(call, nlines = 1)
+  tryCatch(
+    withCallingHandlers(
+      expr,
+      error = function(errorCondition) {
+        # Informative trace keeps only calls related to error from all current calls
+        # by removing tryCatch, logCatch, withCallingHandlers, simpleError from trace
+        calls <- sys.calls()
+        errorTrace <- "\n> Error Trace"
+        if (requireNamespace("crayon", quietly = TRUE)) {
+          errorTrace <- crayon::yellow$bold(errorTrace)
+        }
+        for (call in calls) {
+          textCall <- deparse(call, nlines = 1)
 
+          callNotDisplayed <- any(sapply(
+            c("logCatch", "qualificationCatch", "stop", "tryCatch", "withCallingHandlers", "simpleError", "eval\\(ei, envir\\)"),
+            FUN = function(pattern) {
+              grepl(textCall, pattern = pattern, ignore.case = TRUE)
+            }
+          ))
+
+          if (callNotDisplayed) {
+            next
+          }
+          tabs <- paste0(rep(" ", length(errorTrace)), collapse = "")
+          errorTrace <- c(
+            errorTrace,
+            paste0(tabs, "\u21aa ", textCall)
+          )
+        }
+        errorMessage <- c(
+          errorCondition$message,
+          errorTrace
+        )
+        logError(errorMessage)
+        stop(errorCondition$message)
+      },
+      warning = function(warningCondition) {
+        # Remove unwanted warning from ggplot
+        # In case, include them in log debug
         callNotDisplayed <- any(sapply(
-          c("logCatch", "qualificationCatch", "stop", "tryCatch", "withCallingHandlers", "simpleError", "eval\\(ei, envir\\)"),
+          c(
+            "introduced infinite values",
+            "Each group consists of only one observation",
+            "rows containing non-finite values",
+            "rows containing missing values",
+            "Ignoring unknown parameters",
+            "was deprecated in ggplot2",
+            "font family not found in Windows font database",
+            # warning thrown because of non-ASCII unicode characters
+            "mbcsToSbcs"
+          ),
           FUN = function(pattern) {
-            grepl(textCall, pattern = pattern, ignore.case = TRUE)
+            grepl(warningCondition$message, pattern = pattern)
           }
         ))
-
+        # invokeRestart("muffleWarning") prevents the unwanted  display of the message
+        # as an actual warning written in red on the console
+        # However, if the restart is not found, this ends up with an error
+        # tryInvokeRestart could have been used instead but appeared only on R.version 4.0.0
         if (callNotDisplayed) {
-          next
+          logDebug(warningCondition$message)
+        } else {
+          logError(warningCondition$message)
         }
-        tabs <- paste0(rep(" ", length(errorTrace)), collapse = "")
-        errorTrace <- c(
-          errorTrace,
-          paste0(tabs, "\u21aa ", textCall)
-        )
-      }
-      errorMessage <- c(
-        errorCondition$message,
-        errorTrace
-      )
-      logError(errorMessage)
-      stop(errorCondition$message)
-    },
-    warning = function(warningCondition) {
-      # Remove unwanted warning from ggplot
-      # In case, include them in log debug
-      callNotDisplayed <- any(sapply(
-        c(
-          "Transformation introduced infinite values",
-          "Each group consists of only one observation",
-          "rows containing non-finite values",
-          "Ignoring unknown parameters",
-          "was deprecated in ggplot2",
-          "font family not found in Windows font database",
-          # warning thrown because of non-ASCII unicode characters
-          "mbcsToSbcs"
-        ),
-        FUN = function(pattern) {
-          grepl(warningCondition$message, pattern = pattern)
-        }
-      ))
-      # invokeRestart("muffleWarning") prevents the unwanted  display of the message
-      # as an actual warning written in red on the console
-      # However, if the restart is not found, this ends up with an error
-      # tryInvokeRestart could have been used instead but appeared only on R.version 4.0.0
-      if (callNotDisplayed) {
-        logDebug(warningCondition$message)
         try({
           invokeRestart("muffleWarning")
         })
         return(invisible())
+      },
+      message = function(messageCondition) {
+        # Remove unwanted messages especially from ggplot
+        # In case, include them in log debug
+        callNotDisplayed <- any(sapply(
+          c("Each group consists of only one observation"),
+          FUN = function(pattern) {
+            grepl(messageCondition$message, pattern = pattern)
+          }
+        ))
+        if (callNotDisplayed) {
+          logDebug(messageCondition$message)
+        } else {
+          logInfo(messageCondition$message)
+        }
+        # Allows logCatch to go on after catching a message
+        try({
+          invokeRestart("muffleMessage")
+        })
       }
-      logError(warningCondition$message)
-      try({
-        invokeRestart("muffleWarning")
-      })
-      return(invisible())
+    ),
+    error = function(errorCondition) {
+      # Prevent logging new messages in old log files after crash
+      setLogFolder()
+      stop(errorCondition$message, call. = FALSE)
     }
-  ),
-  error = function(errorCondition) {
-    # Prevent logging new messages in old log files after crash
-    setLogFolder()
-    stop(errorCondition$message, call. = FALSE)
-  }
   )
 }
 
