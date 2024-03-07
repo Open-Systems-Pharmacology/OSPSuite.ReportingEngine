@@ -157,19 +157,10 @@
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/CalculatePKParametersTask.html</loc>
   </url>
   <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkAllCoresSuccessful.html</loc>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkHasRunOnAllCores.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkIsSamePopulation.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkLibraryLoaded.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkPopulationLoaded.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkSimulationLoaded.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkTaskInputsExist.html</loc>
@@ -227,18 +218,6 @@
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/defaultMassBalanceGroupings.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/defaultQuantileVec.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/defaultSensitivityAnalysisNumberOfCores.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/defaultSimulationNumberOfCores.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/defaultVariationRange.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/DemographyDefaultParameters.html</loc>
@@ -748,6 +727,15 @@
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/introToYamlHeader.html</loc>
   </url>
   <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/isLoadedPackage.html</loc>
+  </url>
+  <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/isLoadedPopulation.html</loc>
+  </url>
+  <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/isLoadedSimulation.html</loc>
+  </url>
+  <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/isObservedData.html</loc>
   </url>
   <url>
@@ -769,10 +757,10 @@
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadGOFMergedTask.html</loc>
   </url>
   <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadLibraryOnCores.html</loc>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadObservedDataFromSimulationSet.html</loc>
   </url>
   <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadObservedDataFromSimulationSet.html</loc>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadPackageOnCores.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadPlotAbsorptionTask.html</loc>
@@ -1303,16 +1291,7 @@
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/validateDataSource.html</loc>
   </url>
   <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/verifyAnyPreviousFilesRemoved.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/verifyPartialResultsExported.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/verifySensitivityAnalysisRunSuccessful.html</loc>
-  </url>
-  <url>
-    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/verifySimulationRunSuccessful.html</loc>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/validateHasRunOnAllCores.html</loc>
   </url>
   <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/vpcParameterPlot.html</loc>

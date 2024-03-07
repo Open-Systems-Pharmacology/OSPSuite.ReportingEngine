@@ -111,9 +111,9 @@ which allows repeatability of the simulations</p></dd>
 <p>Create a `SimulationSettings` object</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/SimulationSettings.html">SimulationSettings</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  numberOfCores <span class="op">=</span> <span class="va">defaultSimulationNumberOfCores</span>,</span>
+<span>  numberOfCores <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  showProgress <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  maxSimulationsPerCore <span class="op">=</span> <span class="va">reEnv</span><span class="op">$</span><span class="va">defaultMaxSimulationsPerCore</span></span>
+<span>  maxSimulationsPerCore <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -124,7 +124,7 @@ which allows repeatability of the simulations</p></dd>
 
 
 <dt><code>showProgress</code></dt>
-<dd><p>simulation progress printed to console if TRUE</p></dd>
+<dd><p>logical indicating if simulation progress is printed on console</p></dd>
 
 
 <dt><code>maxSimulationsPerCore</code></dt>

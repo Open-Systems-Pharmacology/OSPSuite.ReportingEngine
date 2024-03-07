@@ -78,7 +78,7 @@ It is not exported and should not be directly manipulated by other packages.</p>
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>An object of class <code>environment</code> of length 34.</p>
+    <p>An object of class <code>environment</code> of length 38.</p>
     </div>
     <div class="section level2">
     <h2 id="fields">Fields<a class="anchor" aria-label="anchor" href="#fields"></a></h2>
@@ -110,7 +110,7 @@ This will be used to retrieve information on the package at run time.</p></dd>
 
 
 <dt><code>binUsingQuantiles</code></dt>
-<dd><p>Logical value indicating whether splitting method for bins 
+<dd><p>Logical value indicating whether splitting method for bins
 `TRUE` uses same number of points in bins through quantiles
 `FALSE` uses same interval ranges</p></dd>
 
@@ -128,12 +128,12 @@ This will be used to retrieve information on the package at run time.</p></dd>
 
 
 <dt><code>maxWidthPerParameter</code></dt>
-<dd><p>Maximum number of characters allowed before adding line breaks 
+<dd><p>Maximum number of characters allowed before adding line breaks
 in sensitivity plot parameter captions.</p></dd>
 
 
 <dt><code>maxLinesPerParameter</code></dt>
-<dd><p>Maximum number of lines allowed when line breaks need to be included 
+<dd><p>Maximum number of lines allowed when line breaks need to be included
 in sensitivity plot parameter captions.</p></dd>
 
 
@@ -146,7 +146,7 @@ in sensitivity plot parameter captions.</p></dd>
 
 
 <dt><code>autoAxisLimitMargin</code></dt>
-<dd><p>For DDI Ratio plots, 
+<dd><p>For DDI Ratio plots,
 value of the margin to add to the limits of the axis when left undefined</p></dd>
 
 
@@ -184,6 +184,22 @@ value of the margin to add to the limits of the axis when left undefined</p></dd
 
 <dt><code>defaultErrorbarCapSize</code></dt>
 <dd><p>Default size of the error bar caps in the plots</p></dd>
+
+
+<dt><code>defaultSimulationNumberOfCores</code></dt>
+<dd><p>default numberOfCores for simulation</p></dd>
+
+
+<dt><code>defaultSensitivityAnalysisNumberOfCores</code></dt>
+<dd><p>default numberOfCores for sensitivity analysis</p></dd>
+
+
+<dt><code>defaultVariationRange</code></dt>
+<dd><p>default parameter variation range for sensitivity analysis</p></dd>
+
+
+<dt><code>defaultQuantileVec</code></dt>
+<dd><p>default quantiles for population sensitivity analysis</p></dd>
 
 
 <dt><code>defaultMaxSimulationsPerCore</code></dt>
