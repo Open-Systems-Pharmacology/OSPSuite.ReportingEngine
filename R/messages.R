@@ -96,6 +96,12 @@ messages <- list(
   errorNoValidParametersForSensitivityAnalysis = function(simulationSetName) {
     paste(callingFunction(), "No valid variable parameter paths for sensitivity analysis of simulation set", simulationSetName, ".")
   },
+  errorPackageNotInstalled = function(packageName) {
+    paste0(
+      callingFunction(), "Package '", highlight(packageName), "' is not installed.",
+      "Use '", highlight("install.packages(\"", packageName, "\")"), "' to install package"
+    )
+  },
   invalidOuputPath = function(path, simName) {
     if (isOfLength(path, 1)) {
       return(paste0(callingFunction(), "'", path, "' is an invalid output path for simulation '", simName, "'."))

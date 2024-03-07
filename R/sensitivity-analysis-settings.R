@@ -1,6 +1,6 @@
 #' @title SensitivityAnalysisSettings
 #' @description  R6 class for Population Sensitivity Analysis Settings
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
 #' @keywords internal
 SensitivityAnalysisSettings <- R6::R6Class(
   "SensitivityAnalysisSettings",
@@ -19,9 +19,9 @@ SensitivityAnalysisSettings <- R6::R6Class(
                           quantileVec = NULL,
                           variableParameterPaths = NULL,
                           showProgress = FALSE) {
-      self$variationRange <- variationRange %||% defaultVariationRange
-      self$numberOfCores <- numberOfCores %||% defaultSensitivityAnalysisNumberOfCores
-      self$quantileVec <- quantileVec %||% defaultQuantileVec
+      self$variationRange <- variationRange %||% reEnv$defaultVariationRange
+      self$numberOfCores <- numberOfCores %||% reEnv$defaultSensitivityAnalysisNumberOfCores
+      self$quantileVec <- quantileVec %||% reEnv$defaultQuantileVec
       self$variableParameterPaths <- variableParameterPaths
       self$showProgress <- showProgress
     }

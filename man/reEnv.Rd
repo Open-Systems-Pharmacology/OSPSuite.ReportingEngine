@@ -5,7 +5,7 @@
 \alias{reEnv}
 \title{reEnv}
 \format{
-An object of class \code{environment} of length 34.
+An object of class \code{environment} of length 38.
 }
 \usage{
 reEnv
@@ -30,7 +30,7 @@ This will be used to retrieve information on the package at run time.}
 
 \item{\code{defaultBins}}{Default number of bins to use in histograms}
 
-\item{\code{binUsingQuantiles}}{Logical value indicating whether splitting method for bins 
+\item{\code{binUsingQuantiles}}{Logical value indicating whether splitting method for bins
 `TRUE` uses same number of points in bins through quantiles
 `FALSE` uses same interval ranges}
 
@@ -40,17 +40,17 @@ This will be used to retrieve information on the package at run time.}
 
 \item{\code{maximalParametersPerSensitivityPlot}}{Maximum number of parameters to include in a sensitivity plot}
 
-\item{\code{maxWidthPerParameter}}{Maximum number of characters allowed before adding line breaks 
+\item{\code{maxWidthPerParameter}}{Maximum number of characters allowed before adding line breaks
 in sensitivity plot parameter captions.}
 
-\item{\code{maxLinesPerParameter}}{Maximum number of lines allowed when line breaks need to be included 
+\item{\code{maxLinesPerParameter}}{Maximum number of lines allowed when line breaks need to be included
 in sensitivity plot parameter captions.}
 
 \item{\code{maxWidthPerLegendCaption}}{Maximum number of characters allowed before adding line breaks in legend captions.}
 
 \item{\code{maxLinesPerLegendCaption}}{Maximum number of lines allowed when line breaks need to be included in legend captions.}
 
-\item{\code{autoAxisLimitMargin}}{For DDI Ratio plots, 
+\item{\code{autoAxisLimitMargin}}{For DDI Ratio plots,
 value of the margin to add to the limits of the axis when left undefined}
 
 \item{\code{blankLinesBetweenArtifacts}}{Default number of line breaks to include in reports after inclusion of artifact}
@@ -70,6 +70,14 @@ value of the margin to add to the limits of the axis when left undefined}
 \item{\code{referenceFill}}{Fill color of reference simulationSet in plots for Population Workflows}
 
 \item{\code{defaultErrorbarCapSize}}{Default size of the error bar caps in the plots}
+
+\item{\code{defaultSimulationNumberOfCores}}{default numberOfCores for simulation}
+
+\item{\code{defaultSensitivityAnalysisNumberOfCores}}{default numberOfCores for sensitivity analysis}
+
+\item{\code{defaultVariationRange}}{default parameter variation range for sensitivity analysis}
+
+\item{\code{defaultQuantileVec}}{default quantiles for population sensitivity analysis}
 
 \item{\code{defaultMaxSimulationsPerCore}}{Default value for a scale factor used in a parallel simulation.
 The product of this scale factor and the number of allowable cores (`allowedCores`)

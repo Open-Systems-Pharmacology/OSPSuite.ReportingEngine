@@ -99,9 +99,7 @@ reference:
   contents:
   - matches("analyzeCoreSensitivity")
   - matches("analyzeSensitivity")
-  - matches("checkLibraryLoaded")
-  - matches("checkPopulationLoaded")
-  - matches("checkSimulationLoaded")
+  - starts_with("isLoaded")
   - matches("defaultQuantileVec")
   - matches("defaultSensitivityAnalysisNumberOfCores")
   - matches("defaultSimulationNumberOfCores")

@@ -173,10 +173,7 @@ asisCodeIds <- c(
 createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R", removeComments = FALSE) {
   # ----- Checks inputs -----
   if (!requireNamespace("readxl", quietly = TRUE)) {
-    logError(c(
-      paste0("Package '", highlight("readxl"), "' is required but not installed."),
-      paste0("\t> use '", 'install.packages("readxl")', "' to install package")
-    ))
+    logError(messages$errorPackageNotInstalled("readxl"))
     return(invisible())
   }
 

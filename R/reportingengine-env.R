@@ -9,8 +9,8 @@
 #' @field formatNumericsDigits Number of digits to display for numeric values in reports
 #' @field formatNumericsScientific Logical value indicating whether to use scientific notation for numeric values in reports
 #' @field defaultBins Default number of bins to use in histograms
-#' @field binUsingQuantiles 
-#' Logical value indicating whether splitting method for bins 
+#' @field binUsingQuantiles
+#' Logical value indicating whether splitting method for bins
 #' `TRUE` uses same number of points in bins through quantiles
 #' `FALSE` uses same interval ranges
 #' @field defaultStairstep
@@ -19,22 +19,22 @@
 #' Default descriptor for simulation sets to include in reports
 #' @field maximalParametersPerSensitivityPlot
 #' Maximum number of parameters to include in a sensitivity plot
-#' @field maxWidthPerParameter 
-#' Maximum number of characters allowed before adding line breaks 
+#' @field maxWidthPerParameter
+#' Maximum number of characters allowed before adding line breaks
 #' in sensitivity plot parameter captions.
 #' @field maxLinesPerParameter
-#' Maximum number of lines allowed when line breaks need to be included 
+#' Maximum number of lines allowed when line breaks need to be included
 #' in sensitivity plot parameter captions.
-#' @field maxWidthPerLegendCaption 
+#' @field maxWidthPerLegendCaption
 #' Maximum number of characters allowed before adding line breaks in legend captions.
-#' @field maxLinesPerLegendCaption 
+#' @field maxLinesPerLegendCaption
 #' Maximum number of lines allowed when line breaks need to be included in legend captions.
-#' @field autoAxisLimitMargin 
-#' For DDI Ratio plots, 
+#' @field autoAxisLimitMargin
+#' For DDI Ratio plots,
 #' value of the margin to add to the limits of the axis when left undefined
-#' @field blankLinesBetweenArtifacts 
+#' @field blankLinesBetweenArtifacts
 #' Default number of line breaks to include in reports after inclusion of artifact
-#' @field fontScaleFactor 
+#' @field fontScaleFactor
 #' Arbitrary scale factor for font size when exporting plot as png to render prettier captions
 #' @field workflowWatermarkMessage Default watermark message to print when system is not validated
 #' @field residualsHistogramLabel Default ylabel in goodness of fit residuals histogram plots
@@ -43,6 +43,10 @@
 #' @field referenceColor Color of reference simulationSet in plots for Population Workflows
 #' @field referenceFill Fill color of reference simulationSet in plots for Population Workflows
 #' @field defaultErrorbarCapSize Default size of the error bar caps in the plots
+#' @field defaultSimulationNumberOfCores default numberOfCores for simulation
+#' @field defaultSensitivityAnalysisNumberOfCores default numberOfCores for sensitivity analysis
+#' @field defaultVariationRange default parameter variation range for sensitivity analysis
+#' @field defaultQuantileVec default quantiles for population sensitivity analysis
 #' @field defaultMaxSimulationsPerCore
 #' Default value for a scale factor used in a parallel simulation.
 #' The product of this scale factor and the number of allowable cores (`allowedCores`)
@@ -90,6 +94,10 @@ reEnv$referenceColor <- "grey50"
 reEnv$referenceFill <- "grey50"
 reEnv$defaultErrorbarCapSize <- 3
 reEnv$defaultMaxSimulationsPerCore <- 2
+reEnv$defaultVariationRange <- 0.1
+reEnv$defaultSensitivityAnalysisNumberOfCores <- 1
+reEnv$defaultQuantileVec <- c(0.05, 0.5, 0.95)
+reEnv$defaultSimulationNumberOfCores <- 1
 reEnv$defaultMCRandomSeed <- 123456
 reEnv$defaultMCRepetitions <- 1e4
 reEnv$defaultPKParametersHeader <- c(
