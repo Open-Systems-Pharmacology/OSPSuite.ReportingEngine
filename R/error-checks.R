@@ -581,19 +581,18 @@ isLoadedPackage <- function(packageName) {
 #' @param inputType Type of input to be loaded
 #' @param runType Type of run executed on `{Rmpi}` cores
 #' @keywords internal
-validateHasRunOnAllCores <- function(coreResults, inputName, inputType, runType = "load"){
+validateHasRunOnAllCores <- function(coreResults, inputName, inputType, runType = "load") {
   hasRunOnAllCores <- all(sapply(coreResults, identity))
-  if(hasRunOnAllCores){
+  if (hasRunOnAllCores) {
     return(invisible())
   }
   # If specific cores have not run, returns only their results in error message
   coresNotRun <- which(!sapply(coreResults, identity))
   inputName <- highlight(inputName)
-  if(isSameLength(inputName, coreResults)){
+  if (isSameLength(inputName, coreResults)) {
     inputName <- paste(inputName[coresNotRun], collapse = ", ")
   }
-  stop(switch(
-    runType,
+  stop(switch(runType,
     "load" = messages$errorNotLoadedOnCores(paste(inputType, inputName), call. = FALSE),
     "task" = messages$errorNotCompletedOnCores(paste(inputType, inputName), call. = FALSE)
   ))
@@ -604,16 +603,19 @@ validateHasRunOnAllCores <- function(coreResults, inputName, inputType, runType 
 #' Check if all cores executed an mpi.remote.exec command successfully.
 #' @inheritParams validateHasRunOnAllCores
 #' @keywords internal
-checkHasRunOnAllCores <- function(coreResults, inputName, inputType, runType = "load"){
-  tryCatch({
-    validateHasRunOnAllCores(
-      coreResults = coreResults,
-      inputName = inputName,
-      inputType = inputType,
-      runType = runType
+checkHasRunOnAllCores <- function(coreResults, inputName, inputType, runType = "load") {
+  tryCatch(
+    {
+      validateHasRunOnAllCores(
+        coreResults = coreResults,
+        inputName = inputName,
+        inputType = inputType,
+        runType = runType
       )
-  }, error = function(e) {
-    warning(e$message, call. = FALSE)
-  })
+    },
+    error = function(e) {
+      warning(e$message, call. = FALSE)
+    }
+  )
   return(invisible())
 }

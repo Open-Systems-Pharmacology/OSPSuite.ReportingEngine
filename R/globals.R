@@ -2,7 +2,7 @@
 # Variables called withing dplyr and tidyr functions
 dplyrVariables <- c(
   "Amount",
-  "drugMass", 
+  "drugMass",
   "DrugMass",
   "GeoMean",
   "GeoSD",
@@ -20,14 +20,14 @@ dplyrVariables <- c(
   "SD",
   "SDLogX",
   "SDLogY",
-  "SDX", 
-  "SDY", 
-  "SimulationSetName", 
-  "Time", 
+  "SDX",
+  "SDY",
+  "SimulationSetName",
+  "Time",
   "Value"
 )
 rmpiVariables <- c(
-  "mpi.comm.rank", 
+  "mpi.comm.rank",
   "population",
   "sim"
 )

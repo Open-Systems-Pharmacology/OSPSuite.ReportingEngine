@@ -78,8 +78,8 @@ updateIndividualParametersOnCores <- function(individualParameters) {
     updateSimulationIndividualParameters(
       simulation = sim,
       individualParameters
-      )
     )
+  )
   validateHasRunOnAllCores(
     coreResults = isUpdatedOnEachCore,
     inputName = paste(individualParameters$paths, collapse = ", "),
@@ -88,7 +88,8 @@ updateIndividualParametersOnCores <- function(individualParameters) {
   logDebug(messages$loadedOnCores(
     paste(
       "Individual parameters",
-      paste(individualParameters$paths, collapse = ", "))
-    ))
+      paste(individualParameters$paths, collapse = ", ")
+    )
+  ))
   return(invisible())
 }

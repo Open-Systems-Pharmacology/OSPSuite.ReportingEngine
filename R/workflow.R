@@ -218,11 +218,12 @@ Workflow <- R6::R6Class(
         }
         # In case the same parameter is defined more than once, throw a warning
         if (!hasOnlyDistinctValues(parameterDisplayPaths$parameter)) {
-          stop(messages$errorHasNoUniqueValues(
-            parameterDisplayPaths$parameter,
-            dataName = "parameter variable"
-          ),
-          call. = FALSE
+          stop(
+            messages$errorHasNoUniqueValues(
+              parameterDisplayPaths$parameter,
+              dataName = "parameter variable"
+            ),
+            call. = FALSE
           )
         }
         # parameterDisplayPaths are centralized in the central private field .parameterDisplayPaths

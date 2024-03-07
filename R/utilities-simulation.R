@@ -55,7 +55,7 @@ simulateModelForPopulation <- function(structureSets, settings = NULL) {
     population <- loadWorkflowPopulation(set$simulationSet)
     numberOfIndividuals <- length(population$allIndividualIds)
     numberOfCores <- min(settings$numberOfCores %||% 1, numberOfIndividuals)
-    
+
     # Display name of simulation and population on console
     setName <- paste0(
       set$simulationSet$simulationSetName,
@@ -63,7 +63,7 @@ simulateModelForPopulation <- function(structureSets, settings = NULL) {
       ifelse(numberOfCores == 1, "", paste(" using", numberOfCores, "cores"))
     )
     logInfo(messages$runStarting(setName))
-    
+
     # If one core available, run in series
     if (numberOfCores == 1) {
       settings <- settings %||% SimulationSettings$new()
@@ -311,15 +311,15 @@ runParallelPopulationSimulation <- function(structureSet,
   simulationRunSuccess <- Rmpi::mpi.remote.exec(!(simulationResult$count == 0))
   successfulCores <- which(unlist(unname(simulationRunSuccess)))
   checkHasRunOnAllCores(
-    coreResults = simulationRunSuccess, 
-    inputName = tempPopDataFiles, 
+    coreResults = simulationRunSuccess,
+    inputName = tempPopDataFiles,
     inputType = paste(
-      "Run(s) using simulation file '", 
-      structureSet$simulationSet$simulationFile, 
+      "Run(s) using simulation file '",
+      structureSet$simulationSet$simulationFile,
       "' and population file(s)"
-      ), 
+    ),
     runType = "task"
-    )
+  )
 
   # Write core logs to workflow logs
   for (core in seq_len(numberOfCores)) {
@@ -329,28 +329,29 @@ runParallelPopulationSimulation <- function(structureSet,
   # Remove any previous temporary results files
   Rmpi::mpi.remote.exec(
     if (file.exists(allResultsFileNames[Rmpi::mpi.comm.rank()])) {
-    file.remove(allResultsFileNames[Rmpi::mpi.comm.rank()])
-  })
+      file.remove(allResultsFileNames[Rmpi::mpi.comm.rank()])
+    }
+  )
   validateHasRunOnAllCores(
     coreResults = Rmpi::mpi.remote.exec(!file.exists(allResultsFileNames[Rmpi::mpi.comm.rank()])),
-    inputName = allResultsFileNames, 
-    inputType = "Clean up of temporary files", 
+    inputName = allResultsFileNames,
+    inputType = "Clean up of temporary files",
     runType = "task"
   )
-  
+
   # Export temporary results files to CSV
   Rmpi::mpi.remote.exec(ospsuite::exportResultsToCSV(
     results = simulationResult,
     filePath = allResultsFileNames[Rmpi::mpi.comm.rank()]
   ))
-  # Check and warn if some runs could not be exported 
+  # Check and warn if some runs could not be exported
   checkHasRunOnAllCores(
     coreResults = Rmpi::mpi.remote.exec(file.exists(allResultsFileNames[Rmpi::mpi.comm.rank()])),
-    inputName = allResultsFileNames, 
-    inputType = "Export of simulation results for", 
+    inputName = allResultsFileNames,
+    inputType = "Export of simulation results for",
     runType = "task"
-    )
-  
+  )
+
   # Close slaves
   Rmpi::mpi.close.Rslaves()
 

@@ -16,7 +16,7 @@ displayDebugLogs <- function() {
 #' @examples
 #' setDefaultPlotFormat(format = "pdf")
 #' setDefaultPlotFormat(width = 16, height = 9, units = "cm", dpi = 300)
-#' 
+#'
 setDefaultPlotFormat <- function(format = NULL, width = NULL, height = NULL, units = NULL, dpi = NULL) {
   validateIsNumeric(width, nullAllowed = TRUE)
   validateIsNumeric(height, nullAllowed = TRUE)
@@ -26,7 +26,7 @@ setDefaultPlotFormat <- function(format = NULL, width = NULL, height = NULL, uni
   reEnv$defaultPlotFormat$width <- width %||% reEnv$defaultPlotFormat$width
   reEnv$defaultPlotFormat$height <- height %||% reEnv$defaultPlotFormat$height
   reEnv$defaultPlotFormat$dpi <- dpi %||% reEnv$defaultPlotFormat$dpi
-  # The function updatePlotDimensions(plotObject) which uses grid::convertUnit to 
+  # The function updatePlotDimensions(plotObject) which uses grid::convertUnit to
   # add legend space to plot dimensions does not support pixels as units
   if (isIncluded(units, "px")) {
     units <- "in"
@@ -64,7 +64,7 @@ setPlotFormat <- function(format = NULL, width = NULL, height = NULL, units = NU
 setDefaultNumericFormat <- function(digits = NULL, scientific = NULL) {
   validateIsInteger(digits, nullAllowed = TRUE)
   validateIsLogical(scientific, nullAllowed = TRUE)
-  
+
   reEnv$formatNumericsDigits <- digits %||% reEnv$formatNumericsDigits
   reEnv$formatNumericsScientific <- scientific %||% reEnv$formatNumericsScientific
   return(invisible())
@@ -218,7 +218,7 @@ setDefaultTimeProfileStatistics <- function(statisticsType = NULL,
   validateIsOfType(y, c("character", "closure"), nullAllowed = TRUE)
   validateIsOfType(ymin, c("character", "closure"), nullAllowed = TRUE)
   validateIsOfType(ymax, c("character", "closure"), nullAllowed = TRUE)
-  
+
   if (!isEmpty(statisticsType)) {
     reEnv$defaultTimeProfileStatistics <- getStatisticsFromType(statisticsType)
   }
@@ -228,7 +228,7 @@ setDefaultTimeProfileStatistics <- function(statisticsType = NULL,
     variableName = c("y", "ymin", "ymax", "yCaption", "rangeCaption"),
     keepIfNull = TRUE
   ))
-  
+
   return(invisible())
 }
 
@@ -240,7 +240,7 @@ setDefaultTimeProfileStatistics <- function(statisticsType = NULL,
 getRESettings <- function(settingName) {
   validateEnumValue(settingName, enum = reSettingsNames, nullAllowed = FALSE)
   obj <- reEnv[[settingName]]
-  
+
   return(list(
     Name = settingName,
     Class = class(obj),
@@ -266,7 +266,7 @@ saveRESettings <- function(file) {
 loadRESettings <- function(file) {
   validateIsFileExtension(file, "RData")
   load(file = file)
-  for(fieldNames in names(newEnv)){
+  for (fieldNames in names(newEnv)) {
     reEnv[[fieldNames]] <- newEnv[[fieldNames]]
   }
   # Set TLF settings affecting RE to RE specific default values

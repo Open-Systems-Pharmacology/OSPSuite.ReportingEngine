@@ -50,7 +50,7 @@ SimulationStructure <- R6::R6Class(
         self$pkAnalysisResultsFolder,
         defaultFileNames$pkAnalysisResultsFile(self$simulationSet$simulationSetName)
       )
-      
+
       self$pkRatioResultsFileNames <- file.path(
         workflowFolder,
         self$pkAnalysisResultsFolder,
