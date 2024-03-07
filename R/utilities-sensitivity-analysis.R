@@ -47,8 +47,8 @@ runSensitivity <- function(structureSet,
   # Otherwise sensitivity analysis will be run on master core only.
   if (settings$numberOfCores > 1) {
     Rmpi::mpi.spawn.Rslaves(nslaves = settings$numberOfCores)
-    loadLibraryOnCores(libraryName = "ospsuite.reportingengine")
-    loadLibraryOnCores(libraryName = "ospsuite")
+    loadPackageOnCores("ospsuite.reportingengine")
+    loadPackageOnCores("ospsuite")
     Rmpi::mpi.bcast.Robj2slave(obj = structureSet)
   }
 

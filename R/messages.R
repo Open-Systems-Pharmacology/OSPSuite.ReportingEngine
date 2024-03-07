@@ -99,7 +99,7 @@ messages <- list(
   errorPackageNotInstalled = function(packageName) {
     paste0(
       callingFunction(), "Package '", highlight(packageName), "' is not installed.",
-      "Use '", highlight("install.packages(\"", packageName, "\")"), "' to install package"
+      "Use '", highlight(paste0("install.packages(\"", packageName, "\")")), "' to install package"
     )
   },
   invalidOuputPath = function(path, simName) {

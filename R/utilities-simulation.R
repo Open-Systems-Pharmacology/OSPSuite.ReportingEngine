@@ -276,8 +276,8 @@ runParallelPopulationSimulation <- function(structureSet,
     stop(paste0(numberOfCores, " cores were not successfully spawned."))
   }
 
-  loadLibraryOnCores(libraryName = "ospsuite.reportingengine")
-  loadLibraryOnCores(libraryName = "ospsuite")
+  loadPackageOnCores("ospsuite.reportingengine")
+  loadPackageOnCores("ospsuite")
 
   tempPopDataFiles <- ospsuite::splitPopulationFile(
     csvPopulationFile = structureSet$simulationSet$populationFile,

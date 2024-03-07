@@ -60,7 +60,7 @@ loadPackageOnCores <- function(packageName) {
     inputName = packageName,
     inputType = "Package"
   )
-  logDebug(messages$loadedOnCores(paste("Package", Package)))
+  logDebug(messages$loadedOnCores(paste("Package", packageName)))
   return(invisible())
 }
 
