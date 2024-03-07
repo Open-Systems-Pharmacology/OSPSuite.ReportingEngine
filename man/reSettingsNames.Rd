@@ -5,7 +5,7 @@
 \alias{reSettingsNames}
 \title{reSettingsNames}
 \format{
-An object of class \code{list} of length 34.
+An object of class \code{list} of length 38.
 }
 \usage{
 reSettingsNames

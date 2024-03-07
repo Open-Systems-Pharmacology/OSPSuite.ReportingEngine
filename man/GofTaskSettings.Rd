@@ -39,7 +39,7 @@ workflow$plotTimeProfilesAndResiduals$settings$getStatistics()
 }
 \keyword{internal}
 \section{Super class}{
-\code{\link[ospsuite.reportingengine:TaskSettings]{ospsuite.reportingengine::TaskSettings}} -> \code{GofTaskSettings}
+\code{ospsuite.reportingengine::TaskSettings} -> \code{GofTaskSettings}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

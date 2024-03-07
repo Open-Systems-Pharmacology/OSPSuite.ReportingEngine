@@ -185,10 +185,10 @@ loadCalculatePKParametersTask <- function(workflow, active = FALSE, settings = N
     settings = settings,
     message = defaultWorkflowMessages$calculatePKParameters
   )
-  if(!isOfType(workflow, "PopulationWorkflow")){
+  if (!isOfType(workflow, "PopulationWorkflow")) {
     return(calculatePKParametersTask)
   }
-  if(!isIncluded(workflow$workflowType, PopulationWorkflowTypes$ratioComparison)){
+  if (!isIncluded(workflow$workflowType, PopulationWorkflowTypes$ratioComparison)) {
     return(calculatePKParametersTask)
   }
   calculatePKParametersTask$ratioComparison <- TRUE
@@ -830,10 +830,10 @@ addUserDefinedTask <- function(workflow,
   if (isOfType(workflow, "MeanModelWorkflow")) {
     # PlotTask arguments
     validateIsIncludedAndLog(
-      c("structureSet", "settings"), 
-      argumentNames, 
+      c("structureSet", "settings"),
+      argumentNames,
       groupName = "Task function arguments"
-      )
+    )
 
     workflow$userDefinedTasks <- c(
       workflow$userDefinedTasks,
@@ -854,7 +854,7 @@ addUserDefinedTask <- function(workflow,
   if (isOfType(workflow, "PopulationWorkflow")) {
     # PopulationPlotTask arguments
     validateIsIncludedAndLog(
-      c("structureSets", "settings", "workflowType", "xParameters", "yParameters"), 
+      c("structureSets", "settings", "workflowType", "xParameters", "yParameters"),
       argumentNames,
       groupName = "Task function arguments"
     )

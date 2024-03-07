@@ -126,7 +126,7 @@ MeanModelWorkflow <- R6::R6Class(
         re.tEndMetadataCapture(outputFolder = "./", actionToken = actionToken1)
       })
       logInfo(messages$runCompleted(getElapsedTime(t0), "Mean Model Workflow"))
-      # Stop logging messages in workflowFolder after run is completed 
+      # Stop logging messages in workflowFolder after run is completed
       # Prevents potential logging of new messages in previous workflowFolder
       setLogFolder()
     }

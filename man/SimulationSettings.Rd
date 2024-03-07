@@ -39,9 +39,9 @@ which allows repeatability of the simulations}
 Create a `SimulationSettings` object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SimulationSettings$new(
-  numberOfCores = defaultSimulationNumberOfCores,
+  numberOfCores = NULL,
   showProgress = TRUE,
-  maxSimulationsPerCore = reEnv$defaultMaxSimulationsPerCore
+  maxSimulationsPerCore = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -50,7 +50,7 @@ Create a `SimulationSettings` object
 \describe{
 \item{\code{numberOfCores}}{number of cores for parallel computation}
 
-\item{\code{showProgress}}{simulation progress printed to console if TRUE}
+\item{\code{showProgress}}{logical indicating if simulation progress is printed on console}
 
 \item{\code{maxSimulationsPerCore}}{Scale factor used in a parallel simulation.  The product of this scale factor and the number of allowable cores (allowedCores) sets the maximum number of simulations that may be run on one core.}
 }

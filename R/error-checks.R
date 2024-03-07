@@ -14,7 +14,6 @@ hasPositiveValues <- function(object) {
   return(any(object > 0))
 }
 
-
 validateIsInRange <- function(variableName, value, lowerBound, upperBound, nullAllowed = FALSE) {
   validateIsOfLength(value, 1)
   validateIsOfLength(lowerBound, 1)
@@ -275,7 +274,6 @@ validateHasReferencePopulation <- function(workflowType, simulationSets) {
   stop(messages$warningNoReferencePopulation(workflowType))
 }
 
-
 validateSameOutputsBetweenSets <- function(simulationSets) {
   pkParametersTableRef <- NULL
   for (set in simulationSets) {
@@ -304,7 +302,6 @@ validateSameOutputsBetweenSets <- function(simulationSets) {
     )))
   }
 }
-
 
 validatehasOnlyDistinctValues <- function(data, dataName = "dataset", na.rm = TRUE, nullAllowed = FALSE) {
   if (nullAllowed && is.null(data)) {
@@ -389,7 +386,6 @@ validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, output
   }
   return(invisible())
 }
-
 
 validateCommandStatus <- function(command, status) {
   if (status != 0) {
@@ -546,4 +542,80 @@ checkMoleculesAlreadyIncluded <- function(moleculePaths, previousMoleculePaths) 
     )
   )
   return()
+}
+
+#' @title isLoadedSimulation
+#' @description
+#' Check that the simulation has been loaded
+#' @param simulation A `Simulation` object
+#' @return Logical indicating if the `simulation` exists
+#' @export
+isLoadedSimulation <- function(simulation) {
+  return(isOfType(simulation, "Simulation"))
+}
+
+#' @title isLoadedPopulation
+#' @description
+#' Check that the population has been loaded
+#' @param population A `Population` object
+#' @return Logical indicating if the `population` exists
+#' @export
+isLoadedPopulation <- function(population) {
+  return(isOfType(population, "Population"))
+}
+
+#' @title isLoadedPackage
+#' @description
+#' Check that a R package has been successfully loaded
+#' @param packageName Name of the package
+#' @export
+isLoadedPackage <- function(packageName) {
+  return(isIncluded(packageName, .packages()))
+}
+
+#' @title validateHasRunOnAllCores
+#' @description
+#' Validate if all cores executed an mpi.remote.exec command successfully.
+#' @param coreResults list of logical results returned by each core after an mpi.remote.exec command is complete
+#' @param inputName Name of the input to be loaded
+#' @param inputType Type of input to be loaded
+#' @param runType Type of run executed on `{Rmpi}` cores
+#' @keywords internal
+validateHasRunOnAllCores <- function(coreResults, inputName, inputType, runType = "load") {
+  hasRunOnAllCores <- all(sapply(coreResults, identity))
+  if (hasRunOnAllCores) {
+    return(invisible())
+  }
+  # If specific cores have not run, returns only their results in error message
+  coresNotRun <- which(!sapply(coreResults, identity))
+  inputName <- highlight(inputName)
+  if (isSameLength(inputName, coreResults)) {
+    inputName <- paste(inputName[coresNotRun], collapse = ", ")
+  }
+  stop(switch(runType,
+    "load" = messages$errorNotLoadedOnCores(paste(inputType, inputName)),
+    "task" = messages$errorNotCompletedOnCores(paste(inputType, inputName))
+  ), call. = FALSE)
+}
+
+#' @title checkHasRunOnAllCores
+#' @description
+#' Check if all cores executed an mpi.remote.exec command successfully.
+#' @inheritParams validateHasRunOnAllCores
+#' @keywords internal
+checkHasRunOnAllCores <- function(coreResults, inputName, inputType, runType = "load") {
+  tryCatch(
+    {
+      validateHasRunOnAllCores(
+        coreResults = coreResults,
+        inputName = inputName,
+        inputType = inputType,
+        runType = runType
+      )
+    },
+    error = function(e) {
+      warning(e$message, call. = FALSE)
+    }
+  )
+  return(invisible())
 }

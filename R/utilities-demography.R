@@ -53,10 +53,10 @@ plotDemographyParameters <- function(structureSets,
       "pediatric" = getComparisonHistogramResults(
         simulationSetNames = simulationSetNames,
         demographyPaths = yParameters,
-        data = demographyData %>% 
+        data = demographyData %>%
           filter(!(.data[["simulationSetName"]] %in% referenceSimulationSetName)),
         metaData = demographyMetaData,
-        observedData = observedDemographyData %>% 
+        observedData = observedDemographyData %>%
           filter(!(.data[["simulationSetName"]] %in% referenceSimulationSetName)),
         settings = settings,
         simulationSetDescriptor = simulationSetDescriptor
@@ -884,7 +884,7 @@ plotDemographyRange <- function(data,
                                 plotConfiguration = NULL,
                                 parameterClass = "numeric") {
   mapLabels <- tlf:::.getAesStringMapping(dataMapping)
-  
+
   vpcPlotConfiguration <- plotConfiguration %||% switch(parameterClass,
     "character" = tlf::BoxWhiskerPlotConfiguration$new(
       data = data,

@@ -12,7 +12,9 @@ tlf::setDefaultLegendPosition(reDefaultLegendPosition)
 #' @export
 AggregationConfiguration <- list(
   functions = list(
-    middle = function(x) {median(x, na.rm = TRUE)},
+    middle = function(x) {
+      median(x, na.rm = TRUE)
+    },
     ymin = function(x) {
       as.numeric(quantile(x, probs = 0.05, na.rm = TRUE))
     },
@@ -886,7 +888,7 @@ getDefaultPropertiesFromTheme <- function(plotName,
 #' @import ggplot2
 getLegendAesOverride <- function(plotObject) {
   # ggplot2 version 3.5.0 has made some break changes regarding guides
-  if(packageVersion("ggplot2") >= "3.5.0") {
+  if (packageVersion("ggplot2") >= "3.5.0") {
     return(plotObject$guides$guides$colour$params$override.aes)
   }
   return(plotObject$guides$colour$override.aes)
@@ -901,7 +903,6 @@ getLegendAesOverride <- function(plotObject) {
 #' @return A list of aesthetic values
 #' @keywords internal
 addLLOQLegend <- function(plotObject, captions, prefix = "LLOQ for") {
-
   # Since lloq legend should be positioned after the current legend
   # Current legend needs to be reused by the color and shape guides
   # to prevent losing the correct captions and keys
@@ -910,7 +911,7 @@ addLLOQLegend <- function(plotObject, captions, prefix = "LLOQ for") {
     captions = paste(prefix, captions),
     plotObject = plotObject
   )
-  
+
   # If both observed and simulated data are displayed
   # tlf merge the legends using option override.aes from color guide
   # while removing the legends from linetype and shape
@@ -925,7 +926,7 @@ addLLOQLegend <- function(plotObject, captions, prefix = "LLOQ for") {
       label.theme = plotObject$plotConfiguration$legend$font$createPlotTextBoxFont()
     )
     # For ggplot2 version >= 3.5, themes are not in guides anymore
-    if(packageVersion("ggplot2")>="3.5.0"){
+    if (packageVersion("ggplot2") >= "3.5.0") {
       shapeGuide <- ggplot2::guide_legend(
         title = plotObject$plotConfiguration$legend$title$text,
         order = 1
@@ -940,7 +941,7 @@ addLLOQLegend <- function(plotObject, captions, prefix = "LLOQ for") {
     label.theme = plotObject$plotConfiguration$legend$font$createPlotTextBoxFont()
   )
   # For ggplot2 version >= 3.5, themes are not in guides anymore
-  if(packageVersion("ggplot2")>="3.5.0"){
+  if (packageVersion("ggplot2") >= "3.5.0") {
     colorGuide <- ggplot2::guide_legend(
       title = plotObject$plotConfiguration$legend$title$text,
       order = 1,
@@ -963,7 +964,7 @@ addLLOQLegend <- function(plotObject, captions, prefix = "LLOQ for") {
     label.theme = plotObject$plotConfiguration$legend$font$createPlotTextBoxFont()
   )
   # For ggplot2 version >= 3.5, themes are not in guides anymore
-  if(packageVersion("ggplot2")>="3.5.0"){
+  if (packageVersion("ggplot2") >= "3.5.0") {
     linetypeGuide <- ggplot2::guide_legend(
       title = NULL,
       order = 2,

@@ -311,26 +311,27 @@ renderWordReport <- function(fileName, intro = NULL, createWordReport = FALSE, w
     selfContainedArgument <- c("embed-resources:", "standalone:")
   }
   # Create txt file that includes arguments for Pandoc
-  write(c(
-    selfContainedArgument,
-    # Remove wrapping limitation of 80 characters/line
-    "wrap: none",
-    # Add table of content
-    "toc:",
-    # Add extensions to md for conversion
-    # +tex_math_dollars: convert equations written between $...$ in LateX
-    # https://pandoc.org/MANUAL.html#extension-tex_math_dollars
-    # +raw_attribute: keep ```{=openxml} as raw openxml to include page breaks and bookmarks
-    # https://pandoc.org/MANUAL.html#extension-raw_attribute
-    # +superscript+subscript: convert superscript text between ^...^, subscript text between ~...~
-    # https://pandoc.org/MANUAL.html#superscripts-and-subscripts
-    "from: markdown+tex_math_dollars+superscript+subscript+raw_attribute",
-    # Document used for styling
-    paste0('reference-doc: "', wordConversionTemplate, '"'),
-    # Location of resources such as figures
-    paste0('resource-path: "', reEnv$log$folder, '"')
-  ),
-  file = reportConfig, sep = "\n"
+  write(
+    c(
+      selfContainedArgument,
+      # Remove wrapping limitation of 80 characters/line
+      "wrap: none",
+      # Add table of content
+      "toc:",
+      # Add extensions to md for conversion
+      # +tex_math_dollars: convert equations written between $...$ in LateX
+      # https://pandoc.org/MANUAL.html#extension-tex_math_dollars
+      # +raw_attribute: keep ```{=openxml} as raw openxml to include page breaks and bookmarks
+      # https://pandoc.org/MANUAL.html#extension-raw_attribute
+      # +superscript+subscript: convert superscript text between ^...^, subscript text between ~...~
+      # https://pandoc.org/MANUAL.html#superscripts-and-subscripts
+      "from: markdown+tex_math_dollars+superscript+subscript+raw_attribute",
+      # Document used for styling
+      paste0('reference-doc: "', wordConversionTemplate, '"'),
+      # Location of resources such as figures
+      paste0('resource-path: "', reEnv$log$folder, '"')
+    ),
+    file = reportConfig, sep = "\n"
   )
 
   knitr::pandoc(input = wordFileName, format = "docx", config = reportConfig)
@@ -691,7 +692,7 @@ updateArtifactNumbers <- function(fileContent, pattern, replacement, anchorId, c
     if (figureRequireUpdate) {
       # If no Figure pattern was found before the next figure
       # Updates the count and name of the figure
-      if(!patternFound){
+      if (!patternFound) {
         count <- count + 1
         artifactNumber <- paste(c(section, count), collapse = "-")
         # Create reference anchor with id matching figure number

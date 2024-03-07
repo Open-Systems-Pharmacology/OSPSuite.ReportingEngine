@@ -143,14 +143,12 @@ logCatch <- function(expr) {
         }
         for (call in calls) {
           textCall <- deparse(call, nlines = 1)
-
           callNotDisplayed <- any(sapply(
             c("logCatch", "qualificationCatch", "stop", "tryCatch", "withCallingHandlers", "simpleError", "eval\\(ei, envir\\)"),
             FUN = function(pattern) {
               grepl(textCall, pattern = pattern, ignore.case = TRUE)
             }
           ))
-
           if (callNotDisplayed) {
             next
           }

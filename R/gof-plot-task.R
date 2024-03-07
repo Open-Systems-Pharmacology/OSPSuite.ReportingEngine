@@ -238,7 +238,7 @@ GofPlotTask <- R6::R6Class(
         includeTable = FALSE
       )
 
-      # Get all unique output paths and 
+      # Get all unique output paths and
       # issue #1188: need to group them by unique groupID
       allOutputs <- sapply(
         structureSets,
@@ -307,11 +307,12 @@ GofPlotTask <- R6::R6Class(
         # Obs vs Pred log scale
         selectedLogData <- outputData$Simulated > 0 & outputData$Observed > 0
         if (sum(selectedLogData) > 0) {
-          obsVsPredRange <- autoAxesLimits(c(
-            data$Simulated[selectedLogData & data$Path %in% output$path],
-            data$Observed[selectedLogData & data$Path %in% output$path]
-          ),
-          scale = "log"
+          obsVsPredRange <- autoAxesLimits(
+            c(
+              data$Simulated[selectedLogData & data$Path %in% output$path],
+              data$Observed[selectedLogData & data$Path %in% output$path]
+            ),
+            scale = "log"
           )
           obsVsPredBreaks <- autoAxesTicksFromLimits(obsVsPredRange)
 

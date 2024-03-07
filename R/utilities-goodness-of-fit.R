@@ -691,13 +691,14 @@ plotPopTimeProfileLog <- function(simulatedData,
     logObservedValues <- c(observedData[, dataMapping$y], observedData$lloq)
   }
   # Get the nice auto scaling of the log data unless user defined
-  yAxisLimits <- autoAxesLimits(c(
-    simulatedData[, dataMapping$y],
-    simulatedData[, dataMapping$ymin],
-    simulatedData[, dataMapping$ymax],
-    logObservedValues
-  ),
-  scale = "log"
+  yAxisLimits <- autoAxesLimits(
+    c(
+      simulatedData[, dataMapping$y],
+      simulatedData[, dataMapping$ymin],
+      simulatedData[, dataMapping$ymax],
+      logObservedValues
+    ),
+    scale = "log"
   )
   yAxisTicks <- autoAxesTicksFromLimits(yAxisLimits)
   plotConfiguration$yAxis$scale <- tlf::Scaling$log

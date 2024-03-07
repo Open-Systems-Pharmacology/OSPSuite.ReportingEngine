@@ -57,7 +57,7 @@ SimulationSet <- R6::R6Class(
       validateIsString(simulationFile)
       validateIsString(massBalanceFile, nullAllowed = TRUE)
       validateIsFileExtension(simulationFile, "pkml")
-      if(!isEmpty(massBalanceFile)){
+      if (!isEmpty(massBalanceFile)) {
         validateIsFileExtension(massBalanceFile, "json")
         self$massBalanceSettings <- jsonlite::fromJSON(massBalanceFile, simplifyVector = FALSE)[["MassBalancePlots"]]
       }

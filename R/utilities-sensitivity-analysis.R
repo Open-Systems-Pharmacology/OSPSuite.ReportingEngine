@@ -47,8 +47,8 @@ runSensitivity <- function(structureSet,
   # Otherwise sensitivity analysis will be run on master core only.
   if (settings$numberOfCores > 1) {
     Rmpi::mpi.spawn.Rslaves(nslaves = settings$numberOfCores)
-    loadLibraryOnCores(libraryName = "ospsuite.reportingengine")
-    loadLibraryOnCores(libraryName = "ospsuite")
+    loadPackageOnCores("ospsuite.reportingengine")
+    loadPackageOnCores("ospsuite")
     Rmpi::mpi.bcast.Robj2slave(obj = structureSet)
   }
 
@@ -102,8 +102,6 @@ runSensitivity <- function(structureSet,
 individualSensitivityAnalysis <- function(structureSet,
                                           settings,
                                           individualParameters) {
-
-
   # Determine if SA is to be done on a single core or more
   if (settings$numberOfCores > 1) {
     individualSensitivityAnalysisResults <- runParallelSensitivityAnalysis(
@@ -157,7 +155,7 @@ runParallelSensitivityAnalysis <- function(structureSet,
   # Split the parameters of the model according to sortVec
   listSplitParameters <- split(x = settings$variableParameterPaths, sortVec)
   tempLogFileNamePrefix <- file.path(reEnv$log$folder, "logDebug-core-sensitivity-analysis")
-  tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, settings$numberOfCores), ".txt")
+  tempLogFileNames <- paste0(tempLogFileNamePrefix, seq_len(settings$numberOfCores), ".txt")
 
   # Generate a list containing names of SA CSV result files that will be output by each core
   allResultsFileNames <- generateResultFileNames(
@@ -195,35 +193,52 @@ runParallelSensitivityAnalysis <- function(structureSet,
     nodeName = paste("Core", Rmpi::mpi.comm.rank()),
     showProgress = showProgress
   ))
-
-  # Verify sensitivity analyses ran successfully
-  sensitivityRunSuccess <- Rmpi::mpi.remote.exec(!is.null(partialIndividualSensitivityAnalysisResults))
-  verifySensitivityAnalysisRunSuccessful(sensitivityRunSuccess)
+  # Validate that all sensitivity analyses ran successfully
+  validateHasRunOnAllCores(
+    coreResults = Rmpi::mpi.remote.exec(!is.null(partialIndividualSensitivityAnalysisResults)),
+    inputName = structureSet$simulationSet$simulationSetName,
+    inputType = "Sensitivity Analyses for",
+    runType = "task"
+  )
 
   # Write core logs to workflow logs
-  for (core in seq(1, settings$numberOfCores)) {
+  for (core in seq_len(settings$numberOfCores)) {
     logDebug(readLines(tempLogFileNames[core]))
-    file.remove(tempLogFileNames[core])
   }
 
   # Remove any previous temporary results files
-  Rmpi::mpi.remote.exec(if (file.exists(allResultsFileNames[Rmpi::mpi.comm.rank()])) {
-    file.remove(allResultsFileNames[Rmpi::mpi.comm.rank()])
-  })
-  anyPreviousPartialResultsRemoved <- Rmpi::mpi.remote.exec(!file.exists(allResultsFileNames[Rmpi::mpi.comm.rank()]))
-  verifyAnyPreviousFilesRemoved(anyPreviousPartialResultsRemoved)
+  Rmpi::mpi.remote.exec(
+    if (file.exists(allResultsFileNames[Rmpi::mpi.comm.rank()])) {
+      file.remove(allResultsFileNames[Rmpi::mpi.comm.rank()])
+    }
+  )
+  validateHasRunOnAllCores(
+    coreResults = Rmpi::mpi.remote.exec(!file.exists(allResultsFileNames[Rmpi::mpi.comm.rank()])),
+    inputName = allResultsFileNames,
+    inputType = "Clean up of temporary files",
+    runType = "task"
+  )
 
   # Export temporary results files to CSV
   Rmpi::mpi.remote.exec(ospsuite::exportSensitivityAnalysisResultsToCSV(
     results = partialIndividualSensitivityAnalysisResults,
     filePath = allResultsFileNames[Rmpi::mpi.comm.rank()]
   ))
-  partialResultsExported <- Rmpi::mpi.remote.exec(file.exists(allResultsFileNames[Rmpi::mpi.comm.rank()]))
-  verifyPartialResultsExported(partialResultsExported, settings$numberOfCores)
+  # Check and warn if some runs could not be exported
+  checkHasRunOnAllCores(
+    coreResults = Rmpi::mpi.remote.exec(file.exists(allResultsFileNames[Rmpi::mpi.comm.rank()])),
+    inputName = allResultsFileNames,
+    inputType = "Export of sensitivity results for",
+    runType = "task"
+  )
 
   # Merge temporary results files
-  allSAResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(simulation = loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE), filePaths = allResultsFileNames)
+  allSAResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(
+    simulation = loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE),
+    filePaths = allResultsFileNames
+  )
   file.remove(allResultsFileNames)
+  file.remove(tempLogFileNames)
   return(allSAResults)
 }
 
@@ -456,25 +471,6 @@ getSAFileIndex <- function(structureSet,
 getIndividualSAResultsFileName <- function(individualId, resultsFileName) {
   return(paste0(resultsFileName, "IndividualId-", individualId, ".csv"))
 }
-
-#' @title defaultVariationRange
-#' @description default parameter variation range for sensitivity analysis
-#' @export
-defaultVariationRange <- 0.1
-
-
-#' @title defaultSensitivityAnalysisNumberOfCores
-#' @description default numberOfCores for sensitivity analysis
-#' @export
-defaultSensitivityAnalysisNumberOfCores <- 1
-
-
-#' @title defaultQuantileVec
-#' @description default quantiles for population sensitivity analysis
-#' @export
-defaultQuantileVec <- c(0.05, 0.5, 0.95)
-
-
 
 #' @title plotMeanSensitivity
 #' @description Plot sensitivity analysis results for mean models
@@ -713,7 +709,6 @@ plotPopulationSensitivity <- function(structureSets,
 
       # loop thru the missing parameters for the current individual
       for (parNumber in seq_along(missingParameters)) {
-
         # load the index file of SA results for this individual's population to get the name of the individual's sensitivity result file
         indx <- readObservedDataFile(fileName = saResultIndexFiles[[pop]])
 
@@ -878,7 +873,6 @@ getPopSensDfForPkAndOutput <- function(simulation,
 
     # Loop through the quantiles for this output and pkParameter combination
     for (n in seq_len(nrow(pkOutputIndexDf))) {
-
       # Current quantile
       quantile <- pkOutputIndexDf$Quantile[n]
 
@@ -916,7 +910,6 @@ getPopSensDfForPkAndOutput <- function(simulation,
 
       # Verify that there exist SA results within the threshold given by totalSensitivityThreshold for this individual, this output and this pkParameter
       if (length(filteredIndividualSAResults) > 0) {
-
         # Build a list of sensitivities to parameters containing each sensitivity result falling within the threshold given by totalSensitivityThreshold
         listOfFilteredIndividualSAResults <- lapply(filteredIndividualSAResults, function(x) {
           list(

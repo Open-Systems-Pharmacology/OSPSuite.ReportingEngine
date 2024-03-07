@@ -274,7 +274,6 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
 #' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedDataCollection, simulation, simulationResults, axesProperties, configurationPlan, plotObject) {
-
   # Get simulation results from configuration plan field "Fields"
   outputPath <- simulationAnalysis$Fields[[1]]$QuantityPath
   simulationQuantity <- ospsuite::getQuantity(outputPath, simulation)
