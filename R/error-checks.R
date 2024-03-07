@@ -593,9 +593,9 @@ validateHasRunOnAllCores <- function(coreResults, inputName, inputType, runType 
     inputName <- paste(inputName[coresNotRun], collapse = ", ")
   }
   stop(switch(runType,
-    "load" = messages$errorNotLoadedOnCores(paste(inputType, inputName), call. = FALSE),
-    "task" = messages$errorNotCompletedOnCores(paste(inputType, inputName), call. = FALSE)
-  ))
+    "load" = messages$errorNotLoadedOnCores(paste(inputType, inputName)),
+    "task" = messages$errorNotCompletedOnCores(paste(inputType, inputName))
+  ), call. = FALSE)
 }
 
 #' @title checkHasRunOnAllCores
