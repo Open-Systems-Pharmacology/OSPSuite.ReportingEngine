@@ -143,14 +143,12 @@ logCatch <- function(expr) {
         }
         for (call in calls) {
           textCall <- deparse(call, nlines = 1)
-
           callNotDisplayed <- any(sapply(
             c("logCatch", "qualificationCatch", "stop", "tryCatch", "withCallingHandlers", "simpleError", "eval\\(ei, envir\\)"),
             FUN = function(pattern) {
               grepl(textCall, pattern = pattern, ignore.case = TRUE)
             }
           ))
-
           if (callNotDisplayed) {
             next
           }
@@ -172,9 +170,10 @@ logCatch <- function(expr) {
         # In case, include them in log debug
         callNotDisplayed <- any(sapply(
           c(
-            "Transformation introduced infinite values",
+            "introduced infinite values",
             "Each group consists of only one observation",
             "rows containing non-finite values",
+            "rows containing missing values",
             "Ignoring unknown parameters",
             "was deprecated in ggplot2",
             "font family not found in Windows font database",
@@ -191,16 +190,32 @@ logCatch <- function(expr) {
         # tryInvokeRestart could have been used instead but appeared only on R.version 4.0.0
         if (callNotDisplayed) {
           logDebug(warningCondition$message)
-          try({
-            invokeRestart("muffleWarning")
-          })
-          return(invisible())
+        } else {
+          logError(warningCondition$message)
         }
-        logError(warningCondition$message)
         try({
           invokeRestart("muffleWarning")
         })
         return(invisible())
+      },
+      message = function(messageCondition) {
+        # Remove unwanted messages especially from ggplot
+        # In case, include them in log debug
+        callNotDisplayed <- any(sapply(
+          c("Each group consists of only one observation"),
+          FUN = function(pattern) {
+            grepl(messageCondition$message, pattern = pattern)
+          }
+        ))
+        if (callNotDisplayed) {
+          logDebug(messageCondition$message)
+        } else {
+          logInfo(messageCondition$message)
+        }
+        # Allows logCatch to go on after catching a message
+        try({
+          invokeRestart("muffleMessage")
+        })
       }
     ),
     error = function(errorCondition) {
