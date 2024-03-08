@@ -68,6 +68,8 @@ SimulationSet <- R6::R6Class(
       # but not here as it would mean that nothing would be reported
       validateIsIncluded(c(applicationRanges), ApplicationRanges)
 
+      # Before loading the simulation, check if the file exists
+      validateFileExists(simulationFile)
       simulation <- ospsuite::loadSimulation(simulationFile, addToCache = FALSE)
 
       # Test and validate outputs and their paths
