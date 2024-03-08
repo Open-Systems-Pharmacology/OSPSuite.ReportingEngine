@@ -90,7 +90,8 @@ TaskResults <- R6::R6Class(
       )
       # Issue #1053, figure caption is below
       if (!isEmpty(self$plotCaption)) {
-        addTextChunk(reportFile, paste0("**Figure: ", self$plotCaption, "**"))
+        # Remove leading and/or trailing whitespace from character strings
+        addTextChunk(reportFile, paste0("**Figure: ", trimws(self$plotCaption), "**"))
       }
       # Enforce 2 blank lines using html notation to improve report clarity
       addTextChunk(reportFile, rep("<br>", reEnv$blankLinesBetweenArtifacts))
@@ -113,7 +114,7 @@ TaskResults <- R6::R6Class(
         return()
       }
       if (!isEmpty(self$tableCaption)) {
-        addTextChunk(reportFile, paste0("**Table: ", self$tableCaption, "**"))
+        addTextChunk(reportFile, paste0("**Table: ", trimws(self$tableCaption), "**"))
       }
       addTableChunk(
         fileName = reportFile,
