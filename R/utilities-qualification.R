@@ -183,7 +183,7 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
       stringsAsFactors = FALSE
     )
     sectionsOut <- rbind.data.frame(sectionsOut, sectionOut, stringsAsFactors = FALSE)
-    validatehasOnlyDistinctValues(sectionsOut$id, dataName = "'Id' and 'Reference' of 'Sections'")
+    validateNoDuplicate(values = sectionsOut$id, variableName = "'Id' and 'Reference' of 'Sections'")
 
     # If subsections are included and not empty
     # Update sectionsOut data.frame

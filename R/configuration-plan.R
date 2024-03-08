@@ -261,7 +261,7 @@ ConfigurationPlan <- R6::R6Class(
         return(private$.sections)
       }
       private$.sections <- sectionsAsDataFrame(value)
-      validatehasOnlyDistinctValues(private$.sections$id, dataName = "Sections Id")
+      validateNoDuplicate(values = private$.sections$id, variableName = "Sections Id")
     },
 
     #' @field simulationMappings data.frame mapping simulations to their paths
@@ -289,7 +289,7 @@ ConfigurationPlan <- R6::R6Class(
         "project: '", private$.simulationMappings$project,
         "' - simulation: '", private$.simulationMappings$simulation, "'"
       )
-      validatehasOnlyDistinctValues(simulationMappingsId, dataName = "SimulationMappings combinations")
+      validateNoDuplicate(values = simulationMappingsId, variableName = "SimulationMappings combinations")
     },
 
     #' @field observedDataSets data.frame mapping observed datasets to their paths

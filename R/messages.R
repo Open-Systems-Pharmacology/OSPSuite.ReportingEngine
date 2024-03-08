@@ -13,9 +13,6 @@ messages <- list(
       "' must have the same length, but they don't!", optionalMessage
     )
   },
-  errorDuplicatedEntries = function(objectNames, optionalMessage = NULL) {
-    paste(objectNames, "contains duplicated elements.")
-  },
   errorWrongLength = function(object, nbElements, optionalMessage = NULL) {
     paste0(
       callingFunction(), "Object should be of length '", nbElements, "', but is of length '", length(object), "' instead. ", optionalMessage
@@ -118,11 +115,20 @@ messages <- list(
   errorNotSameOutputsBetweenSets = function(setNames) {
     paste0(callingFunction(), "Simulation sets '", paste0(setNames, collapse = "', '"), "' require same outputs and PK parameters.  Verify the outputs and PK parameters of simulation sets using the function: 'getPKParametersInSimulationSet'.")
   },
-  errorHasNoUniqueValues = function(data, dataName = "dataset", na.rm = TRUE) {
+  errorHasNoUniqueValues = function(values, variableName = NULL, na.rm = TRUE) {
     if (na.rm) {
-      data <- data[!is.na(data)]
+      values <- values[!is.na(values)]
     }
-    return(paste0(callingFunction(), "Values '", paste0(data[duplicated(data)], collapse = "', '"), "' in ", dataName, " are not unique"))
+    duplicateValues <- highlight(values[duplicated(values)])
+    nameText <- ""
+    if (!is.null(variableName)) {
+      nameText <- paste0(" in ", highlight(variableName))
+    }
+    return(paste0(
+      callingFunction(),
+      "Values '", paste0(duplicateValues, collapse = "', '"),
+      "'", nameText, " are not unique"
+    ))
   },
   errorCommand = function(command, status) {
     paste0("Command : '", command, "' returned Error Status ", status)
