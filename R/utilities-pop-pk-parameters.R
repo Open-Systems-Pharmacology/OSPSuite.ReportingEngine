@@ -599,11 +599,7 @@ getPKParametersAcrossPopulations <- function(structureSets) {
   for (structureSet in structureSets) {
     simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
     population <- loadWorkflowPopulation(structureSet$simulationSet)
-    pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
-      structureSet$pkAnalysisResultsFileNames,
-      simulation
-    )
-    pkParametersTable <- ospsuite::pkAnalysesToDataFrame(pkAnalyses)
+    pkParametersTable <- loadPKAnalysesFromSet(structureSet = structureSet, to = "data.frame", useCache = TRUE)
     populationTable <- getPopulationPKData(population, simulation)
 
     pkParametersTable <- formatPKParametersTable(

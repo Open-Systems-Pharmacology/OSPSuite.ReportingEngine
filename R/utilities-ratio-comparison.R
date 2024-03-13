@@ -66,19 +66,11 @@ calculatePKAnalysesRatio <- function(structureSets, settings) {
 #' @return A data.frame of the PK Parameter ratios summary statistics
 #' @keywords internal
 getPKRatioSummaryForDifferentPopulations <- function(structureSet, referenceSet, settings) {
-  pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
-    filePath = structureSet$pkAnalysisResultsFileNames,
-    simulation = ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
-  )
-  referencePKAnalyses <- ospsuite::importPKAnalysesFromCSV(
-    filePath = referenceSet$pkAnalysisResultsFileNames,
-    simulation = ospsuite::loadSimulation(referenceSet$simulationSet$simulationFile)
-  )
   # Use arrange to ensure Ids, QuantityPath and Parameter are consistent between PK parameters and output paths
-  pkData <- ospsuite::pkAnalysesToTibble(pkAnalyses) %>%
+  pkData <- loadPKAnalysesFromSet(structureSet = structureSet, to = "tibble") %>%
     select(IndividualId, QuantityPath, Parameter, Value) %>%
     arrange(IndividualId, QuantityPath, Parameter)
-  referencePKData <- ospsuite::pkAnalysesToTibble(referencePKAnalyses) %>%
+  referencePKData <- loadPKAnalysesFromSet(structureSet = referenceSet, to = "tibble") %>%
     select(IndividualId, QuantityPath, Parameter, Value) %>%
     arrange(IndividualId, QuantityPath, Parameter)
 
@@ -113,18 +105,10 @@ getPKRatioSummaryForDifferentPopulations <- function(structureSet, referenceSet,
 #' @return A data.frame of the PK Parameter ratios summary statistics
 #' @keywords internal
 getPKRatioSummaryForSamePopulation <- function(structureSet, referenceSet) {
-  pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
-    filePath = structureSet$pkAnalysisResultsFileNames,
-    simulation = ospsuite::loadSimulation(structureSet$simulationSet$simulationFile)
-  )
-  referencePKAnalyses <- ospsuite::importPKAnalysesFromCSV(
-    filePath = referenceSet$pkAnalysisResultsFileNames,
-    simulation = ospsuite::loadSimulation(referenceSet$simulationSet$simulationFile)
-  )
-  pkData <- ospsuite::pkAnalysesToTibble(pkAnalyses) %>%
+  pkData <- loadPKAnalysesFromSet(structureSet = structureSet, to = "tibble") %>%
     select(IndividualId, QuantityPath, Parameter, Value) %>%
     arrange(IndividualId, QuantityPath, Parameter)
-  referencePKData <- ospsuite::pkAnalysesToTibble(referencePKAnalyses) %>%
+  referencePKData <- loadPKAnalysesFromSet(structureSet = referenceSet, to = "tibble") %>%
     select(IndividualId, QuantityPath, Parameter, Value) %>%
     arrange(IndividualId, QuantityPath, Parameter)
   # Check that both PK data to be compared are included in reference PK data

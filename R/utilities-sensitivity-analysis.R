@@ -391,30 +391,24 @@ runPopulationSensitivityAnalysis <- function(structureSet, settings) {
 getPKResultsDataFrame <- function(structureSet) {
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   re.tStoreFileMetadata(access = "read", filePath = structureSet$pkAnalysisResultsFileNames)
-  pkResults <- ospsuite::importPKAnalysesFromCSV(
-    filePath = structureSet$pkAnalysisResultsFileNames,
-    simulation = loadSimulationWithUpdatedPaths(simulationSet = structureSet$simulationSet, loadFromCache = TRUE)
-  )
-
-  pkResultsDataFrame <- ospsuite::pkAnalysesToDataFrame(pkAnalyses = pkResults)
-
-  filteredPkResultsDf <- NULL
-
-  for (op in structureSet$simulationSet$outputs) {
+  pkResultsDataFrame <- loadPKAnalysesFromSet(structureSet = structureSet, to = "data.frame", useCache = TRUE)
+  
+  selectedPKData <- NULL
+  for (output in structureSet$simulationSet$outputs) {
     # skip cases where pkParameters are not specified for the output
-    if (is.null(op$pkParameters)) next
-
-    pkParametersThisOutput <- unname(sapply(
-      op$pkParameters,
-      function(y) {
-        y$pkParameter
+    if (is.null(output$pkParameters)) {
+      next
       }
+
+    pkParametersInOutput <- unname(sapply(
+      output$pkParameters,
+      function(pkParameter) {pkParameter$pkParameter}
     ))
 
-    filteredPkResultsDf <- rbind.data.frame(pkResultsDataFrame[(pkResultsDataFrame$QuantityPath %in% op$path) & (pkResultsDataFrame$Parameter %in% pkParametersThisOutput), ], filteredPkResultsDf)
+    selectedRows <- (pkResultsDataFrame$QuantityPath %in% output$path) & (pkResultsDataFrame$Parameter %in% pkParametersInOutput)
+    selectedPKData <- rbind.data.frame(pkResultsDataFrame[selectedRows, ], selectedPKData)
   }
-
-  return(filteredPkResultsDf)
+  return(selectedPKData)
 }
 
 

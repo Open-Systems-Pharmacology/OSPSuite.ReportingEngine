@@ -249,6 +249,9 @@ messages <- list(
       "No molecule paths included in group '", highlight(groupName), "'."
     )
   },
+  warningNAFoundInPKAnalysisFile = function(filePath){
+    paste0(highlight("NaN"),  " found in PK analysis file '",  highlight(filePath), "'.")
+  },
 
   #----- Info messages ----
   runStarting = function(runName, subRun = NULL) {
