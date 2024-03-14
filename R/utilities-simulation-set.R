@@ -35,6 +35,7 @@ loadPKAnalysesFromStructureSet <- function(structureSet, to = "PKAnalyses", useC
 #' @import ospsuite
 #' @keywords internal
 loadPKAnalysesFromCSV <- function(filePath, simulation, to = "PKAnalyses") {
+  validateIsIncluded(to, c("PKAnalyses", "data.frame", "tibble"))
   withCallingHandlers(
     {
       pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
