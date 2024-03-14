@@ -391,7 +391,7 @@ runPopulationSensitivityAnalysis <- function(structureSet, settings) {
 getPKResultsDataFrame <- function(structureSet) {
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   re.tStoreFileMetadata(access = "read", filePath = structureSet$pkAnalysisResultsFileNames)
-  pkResultsDataFrame <- loadPKAnalysesFromSet(structureSet = structureSet, to = "data.frame", useCache = TRUE)
+  pkResultsDataFrame <- loadPKAnalysesFromStructureSet(structureSet = structureSet, to = "data.frame", useCache = TRUE)
   
   selectedPKData <- NULL
   for (output in structureSet$simulationSet$outputs) {

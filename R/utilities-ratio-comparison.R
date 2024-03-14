@@ -67,10 +67,10 @@ calculatePKAnalysesRatio <- function(structureSets, settings) {
 #' @keywords internal
 getPKRatioSummaryForDifferentPopulations <- function(structureSet, referenceSet, settings) {
   # Use arrange to ensure Ids, QuantityPath and Parameter are consistent between PK parameters and output paths
-  pkData <- loadPKAnalysesFromSet(structureSet = structureSet, to = "tibble") %>%
+  pkData <- loadPKAnalysesFromStructureSet(structureSet = structureSet, to = "tibble") %>%
     select(IndividualId, QuantityPath, Parameter, Value) %>%
     arrange(IndividualId, QuantityPath, Parameter)
-  referencePKData <- loadPKAnalysesFromSet(structureSet = referenceSet, to = "tibble") %>%
+  referencePKData <- loadPKAnalysesFromStructureSet(structureSet = referenceSet, to = "tibble") %>%
     select(IndividualId, QuantityPath, Parameter, Value) %>%
     arrange(IndividualId, QuantityPath, Parameter)
 
@@ -105,10 +105,10 @@ getPKRatioSummaryForDifferentPopulations <- function(structureSet, referenceSet,
 #' @return A data.frame of the PK Parameter ratios summary statistics
 #' @keywords internal
 getPKRatioSummaryForSamePopulation <- function(structureSet, referenceSet) {
-  pkData <- loadPKAnalysesFromSet(structureSet = structureSet, to = "tibble") %>%
+  pkData <- loadPKAnalysesFromStructureSet(structureSet = structureSet, to = "tibble") %>%
     select(IndividualId, QuantityPath, Parameter, Value) %>%
     arrange(IndividualId, QuantityPath, Parameter)
-  referencePKData <- loadPKAnalysesFromSet(structureSet = referenceSet, to = "tibble") %>%
+  referencePKData <- loadPKAnalysesFromStructureSet(structureSet = referenceSet, to = "tibble") %>%
     select(IndividualId, QuantityPath, Parameter, Value) %>%
     arrange(IndividualId, QuantityPath, Parameter)
   # Check that both PK data to be compared are included in reference PK data

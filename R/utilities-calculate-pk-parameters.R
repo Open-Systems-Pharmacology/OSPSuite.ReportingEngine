@@ -37,7 +37,7 @@ plotMeanPKParameters <- function(structureSet, settings = NULL) {
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
 
   re.tStoreFileMetadata(access = "read", filePath = structureSet$pkAnalysisResultsFileNames)
-  pkParametersTable <- loadPKAnalysesFromSet(structureSet = structureSet, to = "data.frame", useCache = TRUE)
+  pkParametersTable <- loadPKAnalysesFromStructureSet(structureSet = structureSet, to = "data.frame", useCache = TRUE)
   for (output in structureSet$simulationSet$outputs) {
     molWeight <- simulation$molWeightFor(output$path)
 

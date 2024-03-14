@@ -1,4 +1,4 @@
-#' @title loadPKAnalysesFromSet
+#' @title loadPKAnalysesFromStructureSet
 #' @param structureSet A `SimulationStructure` object
 #' @param to Format of the loaded output`
 #' @return
@@ -7,22 +7,22 @@
 #' A `tibble` if `to="tibble"`
 #' @import ospsuite
 #' @keywords internal
-loadPKAnalysesFromSet <- function(structureSet, to = "PKAnalyses", useCache = FALSE) {
+loadPKAnalysesFromStructureSet <- function(structureSet, to = "PKAnalyses", useCache = FALSE) {
   if (useCache) {
-    return(loadPKAnalysesFromFromCSV(
+    return(loadPKAnalysesFromCSV(
       filePath = structureSet$pkAnalysisResultsFileNames,
       simulation = loadSimulationWithUpdatedPaths(simulationSet = structureSet$simulationSet, loadFromCache = TRUE),
       to = to
     ))
   }
-  return(loadPKAnalysesFromFromCSV(
+  return(loadPKAnalysesFromCSV(
     filePath = structureSet$pkAnalysisResultsFileNames,
     simulation = ospsuite::loadSimulation(structureSet$simulationSet$simulationFile),
     to = to
   ))
 }
 
-#' @title loadPKAnalysesFromFromCSV
+#' @title loadPKAnalysesFromCSV
 #' @description Load PK analyses from a CSV file
 #' Wrap the `ospsuite::importPKAnalysesFromCSV()` to provide more useful warning messages.
 #' @param filePath Full path of the file containing the PK-Analyses to load
@@ -34,7 +34,7 @@ loadPKAnalysesFromSet <- function(structureSet, to = "PKAnalyses", useCache = FA
 #' A `tibble` if `to="tibble"`
 #' @import ospsuite
 #' @keywords internal
-loadPKAnalysesFromFromCSV <- function(filePath, simulation, to = "PKAnalyses") {
+loadPKAnalysesFromCSV <- function(filePath, simulation, to = "PKAnalyses") {
   withCallingHandlers(
     {
       pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
