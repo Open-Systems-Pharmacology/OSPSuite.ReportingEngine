@@ -1,3 +1,73 @@
+#' @title loadPKAnalysesFromStructureSet
+#' @param structureSet A `SimulationStructure` object
+#' @param to Format of the loaded output`
+#' @return
+#' A `PKAnalyses` object if `to="PKAnalyses"`
+#' A `data.frame` if `to="data.frame"`
+#' A `tibble` if `to="tibble"`
+#' @import ospsuite
+#' @keywords internal
+loadPKAnalysesFromStructureSet <- function(structureSet, to = "PKAnalyses", useCache = FALSE) {
+  if (useCache) {
+    return(loadPKAnalysesFromCSV(
+      filePath = structureSet$pkAnalysisResultsFileNames,
+      simulation = loadSimulationWithUpdatedPaths(simulationSet = structureSet$simulationSet, loadFromCache = TRUE),
+      to = to
+    ))
+  }
+  return(loadPKAnalysesFromCSV(
+    filePath = structureSet$pkAnalysisResultsFileNames,
+    simulation = ospsuite::loadSimulation(structureSet$simulationSet$simulationFile),
+    to = to
+  ))
+}
+
+#' @title loadPKAnalysesFromCSV
+#' @description Load PK analyses from a CSV file
+#' Wrap the `ospsuite::importPKAnalysesFromCSV()` to provide more useful warning messages.
+#' @param filePath Full path of the file containing the PK-Analyses to load
+#' @param simulation A `Simulation` object
+#' @param to Format of the loaded output`
+#' @return
+#' A `PKAnalyses` object if `to="PKAnalyses"`
+#' A `data.frame` if `to="data.frame"`
+#' A `tibble` if `to="tibble"`
+#' @import ospsuite
+#' @keywords internal
+loadPKAnalysesFromCSV <- function(filePath, simulation, to = "PKAnalyses") {
+  validateIsIncluded(to, c("PKAnalyses", "data.frame", "tibble"))
+  withCallingHandlers(
+    {
+      pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
+        filePath = filePath,
+        simulation = simulation
+      )
+      pkAnalyses <- switch(to,
+        "PKAnalyses" = pkAnalyses,
+        "data.frame" = ospsuite::pkAnalysesToDataFrame(pkAnalyses),
+        "tibble" = ospsuite::pkAnalysesToTibble(pkAnalyses)
+      )
+    },
+    warning = function(warningCondition) {
+      naParsingMessage <- grepl(
+        pattern = "One or more parsing issues",
+        warningCondition$message
+      )
+      # Usual warning are returned as is
+      if (!naParsingMessage) {
+        return()
+      }
+      # New message when NA is found in the CSV file
+      warning(messages$warningNAFoundInPKAnalysisFile(filePath), call. = FALSE)
+      # Remove initial warning message
+      try({
+        invokeRestart("muffleWarning")
+      })
+    }
+  )
+  return(pkAnalyses)
+}
+
 #' @title getOutputPathsInSimulationSet
 #' @param simulationSet SimulationSet object or derived class
 #' @return Path names of outputs in `simulationSet`
