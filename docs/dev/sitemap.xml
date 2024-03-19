@@ -1300,6 +1300,9 @@
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/validateHasRunOnAllCores.html</loc>
   </url>
   <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/validateNoDuplicate.html</loc>
+  </url>
+  <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/vpcParameterPlot.html</loc>
   </url>
   <url>
