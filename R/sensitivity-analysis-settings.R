@@ -55,7 +55,10 @@ SensitivityAnalysisSettings <- R6::R6Class(
         private$.quantileVec
       } else {
         validateIsNumeric(value)
-        validateNoDuplicatedEntries(value)
+        validateNoDuplicate(
+          values = value,
+          variableName = "sensitivity vector of quantiles"
+        )
         private$.quantileVec <- value
       }
     },
@@ -67,7 +70,10 @@ SensitivityAnalysisSettings <- R6::R6Class(
       } else {
         if (!is.null(value)) {
           validateIsString(value)
-          validateNoDuplicatedEntries(value)
+          validateNoDuplicate(
+            values = value,
+            variableName = "variable parameter paths"
+          )
           private$.variableParameterPaths <- value
         }
       }

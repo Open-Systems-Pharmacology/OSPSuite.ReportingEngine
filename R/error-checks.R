@@ -35,16 +35,6 @@ typeNamesFrom <- function(type) {
   sapply(type, function(t) t$classname)
 }
 
-validateNoDuplicatedEntries <- function(x) {
-  if (any(duplicated(x))) {
-    stop(
-      messages$errorDuplicatedEntries(getObjectNameAsString(x)),
-      call. = FALSE
-    )
-  }
-  return(invisible())
-}
-
 validateIsIncludedAndLog <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL) {
   if (nullAllowed && is.null(values)) {
     return(invisible())
@@ -303,14 +293,59 @@ validateSameOutputsBetweenSets <- function(simulationSets) {
   }
 }
 
-validatehasOnlyDistinctValues <- function(data, dataName = "dataset", na.rm = TRUE, nullAllowed = FALSE) {
-  if (nullAllowed && is.null(data)) {
+#' @title validateNoDuplicate
+#' @description
+#' Leverage `ospsuite.utils::validateHasOnlyDistinctValues()` to
+#' validate that a vector has only distinct values and display a useful message.
+#' @param values An array to validate
+#' @param variableName Name of variable that can be used to display a useful message
+#' @param na.rm logical indicating if `NA` values should be removed before the check
+#' @param nullAllowed logical indicating if `NULL` values should be allowed
+#' @import  ospsuite.utils
+#' @keywords internal
+validateNoDuplicate <- function(values, variableName = NULL, na.rm = TRUE, nullAllowed = FALSE) {
+  if (nullAllowed && is.null(values)) {
     return(invisible())
   }
-  if (hasOnlyDistinctValues(data, na.rm)) {
+  if (hasOnlyDistinctValues(values, na.rm = na.rm)) {
     return(invisible())
   }
-  stop(messages$errorHasNoUniqueValues(data, dataName, na.rm))
+  stop(
+    messages$errorHasNoUniqueValues(values, variableName, na.rm = na.rm),
+    call. = FALSE
+  )
+}
+
+checkNoDuplicate <- function(values, variableName = NULL, na.rm = TRUE, nullAllowed = FALSE) {
+  tryCatch(
+    {
+      validateNoDuplicate(
+        values = values,
+        variableName = variableName,
+        na.rm = na.rm,
+        nullAllowed = nullAllowed
+      )
+    },
+    error = function(e) {
+      warning(e$message, call. = FALSE)
+    }
+  )
+  return(invisible())
+}
+
+excelCheckNoDuplicate <- function(values, variableName = NULL) {
+  excelMessage <- tryCatch(
+    {
+      validateNoDuplicate(
+        values = values,
+        variableName = variableName
+      )
+    },
+    error = function(e) {
+      e$message
+    }
+  )
+  return(excelMessage)
 }
 
 validateIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, nullAllowed = FALSE) {

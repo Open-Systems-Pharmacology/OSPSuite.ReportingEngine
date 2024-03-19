@@ -377,11 +377,11 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
   validateIsIncluded("Name", names(pkParametersTable)[1])
 
   # Check for duplicate PK parameters as input of Output object
-  if (!hasOnlyDistinctValues(pkParametersTable$Name)) {
-    pkParametersWarnings <- messages$errorHasNoUniqueValues(pkParametersTable$Name,
-      dataName = paste0("selected PK parameters from Excel sheet '", pkParametersSheet, "'")
-    )
-  }
+  pkParametersWarnings <- excelCheckNoDuplicate(
+    values = pkParametersTable$Name,
+    variableName = paste0("selected PK parameters from Excel sheet '", pkParametersSheet, "'")
+  )
+
   # If none of the PK Parameters are updated, their names can directly be used as is
   if (all(is.na(pkParametersTable$`Display name`)) && all(is.na(pkParametersTable$Unit))) {
     pkParametersContent <- c(
@@ -396,11 +396,10 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
   }
 
   # Check for duplicate PK parameter display names as input of Output object
-  if (!hasOnlyDistinctValues(pkParametersTable$`Display name`)) {
-    pkParametersErrors <- messages$errorHasNoUniqueValues(pkParametersTable$`Display name`,
-      dataName = paste0("display names of selected PK parameters from Excel sheet '", pkParametersSheet, "'")
-    )
-  }
+  pkParametersErrors <- excelCheckNoDuplicate(
+    values = pkParametersTable$`Display name`,
+    variableName = paste0("display names of selected PK parameters from Excel sheet '", pkParametersSheet, "'")
+  )
 
   for (pkParameterIndex in seq_along(pkParametersTable$Name)) {
     pkParameter <- pkParametersTable$Name[pkParameterIndex]
@@ -469,15 +468,11 @@ getOutputsContent <- function(excelFile, outputsTable, simulationOutputs) {
       )
     )
   }
-  if (!hasOnlyDistinctValues(outputsNames)) {
-    outputsErrors <- c(
-      outputsErrors,
-      messages$errorHasNoUniqueValues(
-        highlight(outputsNames),
-        dataName = highlight("Output names")
-      )
-    )
-  }
+  outputsErrors <- c(
+    outputsErrors,
+    excelCheckNoDuplicate(values = outputsNames, variableName = "Output names")
+  )
+
   for (outputsIndex in seq_along(outputsNames)) {
     pkParametersOutputContent <- NULL
     pkParametersSheet <- getIdentifierInfo(outputsTable, outputsIndex, OutputsCodeIdentifiers$pkParameters)
@@ -547,15 +542,11 @@ getDataSourcesContent <- function(excelFile, dataSourcesTable, simulationSources
       )
     )
   }
-  if (!hasOnlyDistinctValues(dataSourcesNames)) {
-    dataSourcesErrors <- c(
-      dataSourcesErrors,
-      messages$errorHasNoUniqueValues(
-        highlight(dataSourcesNames),
-        dataName = highlight("Data Source names")
-      )
-    )
-  }
+  dataSourcesErrors <- c(
+    dataSourcesErrors,
+    excelCheckNoDuplicate(values = dataSourcesNames, variableName = "Data Source names")
+  )
+
   for (dataSourceIndex in seq_along(dataSourcesNames)) {
     # Function for dictionary
     dictionaryType <- getIdentifierInfo(dataSourcesTable, dataSourceIndex, DataSourcesCodeIdentifiers$DictionaryType)
@@ -1030,19 +1021,15 @@ getPKParametersContent <- function(pkParametersTable) {
     return(pkParametersContent)
   }
   # Check for duplicate PK parameters as input of Output object
-  if (!hasOnlyDistinctValues(pkParametersTable$Name)) {
-    pkParametersWarnings <- c(
-      pkParametersWarnings,
-      messages$errorHasNoUniqueValues(pkParametersTable$Name, dataName = "PK parameters update")
-    )
-  }
+  pkParametersWarnings <- c(
+    pkParametersWarnings,
+    excelCheckNoDuplicate(values = pkParametersTable$Name, variableName = "PK parameters update")
+  )
   # Check for duplicate PK parameter display names as input of Output object
-  if (!hasOnlyDistinctValues(pkParametersTable$`Display name`)) {
-    pkParametersWarnings <- c(
-      pkParametersWarnings,
-      messages$errorHasNoUniqueValues(pkParametersTable$`Display name`, dataName = "PK parameters display names")
-    )
-  }
+  pkParametersWarnings <- c(
+    pkParametersWarnings,
+    excelCheckNoDuplicate(values = pkParametersTable$`Display name`, variableName = "PK parameters display names")
+  )
 
   for (parameterIndex in seq(1, nrow(pkParametersTable))) {
     pkParametersContent <- c(
@@ -1122,15 +1109,10 @@ getUserDefPKParametersContent <- function(userDefPKParametersTable) {
     return(userDefPKParametersContent)
   }
   # Check for duplicate PK parameters as input of Output object
-  if (!hasOnlyDistinctValues(userDefPKParametersTable$Name)) {
-    userDefPKParametersErrors <- c(
-      userDefPKParametersErrors,
-      messages$errorHasNoUniqueValues(
-        userDefPKParametersTable$Name,
-        dataName = "User Defined PK parameters"
-      )
-    )
-  }
+  userDefPKParametersErrors <- c(
+    userDefPKParametersErrors,
+    excelCheckNoDuplicate(values = userDefPKParametersTable$Name, variableName = "User Defined PK parameters")
+  )
 
   # User defined parameters currently need to be set in 2 steps:
   # 1- create the parameter

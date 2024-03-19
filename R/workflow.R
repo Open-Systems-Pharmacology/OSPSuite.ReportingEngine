@@ -69,7 +69,11 @@ Workflow <- R6::R6Class(
         allSimulationSetNames <- sapply(simulationSets, function(set) {
           set$simulationSetName
         })
-        validateNoDuplicatedEntries(allSimulationSetNames)
+        validateNoDuplicate(
+          values = allSimulationSetNames,
+          variableName = "simulation set names",
+          na.rm = FALSE
+        )
 
         validateIsLogical(createWordReport)
         validateIsLogical(numberSections)
@@ -216,16 +220,8 @@ Workflow <- R6::R6Class(
         if (!isEmpty(parameterDisplayPaths)) {
           validateIsIncluded(c("parameter", "displayPath"), names(parameterDisplayPaths))
         }
-        # In case the same parameter is defined more than once, throw a warning
-        if (!hasOnlyDistinctValues(parameterDisplayPaths$parameter)) {
-          stop(
-            messages$errorHasNoUniqueValues(
-              parameterDisplayPaths$parameter,
-              dataName = "parameter variable"
-            ),
-            call. = FALSE
-          )
-        }
+        # In case the same parameter is defined more than once, throw an error
+        validateNoDuplicate(values = parameterDisplayPaths$parameter, variableName = "variable 'parameter'")
         # parameterDisplayPaths are centralized in the central private field .parameterDisplayPaths
         # However, they need to be send to the task using the field simulationStructures commmon among all tasks
         private$.parameterDisplayPaths <- parameterDisplayPaths
