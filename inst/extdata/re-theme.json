@@ -18,27 +18,30 @@
     },
     "xlabel": {
       "color": "black",
-      "size": 11,
+      "size": 10,
       "fontFace": "plain",
       "fontFamily": "",
       "angle": 0,
-      "align": "center"
+      "align": "center",
+      "margin": [10, 10, 10, 10]
     },
     "ylabel": {
       "color": "black",
-      "size": 11,
+      "size": 10,
       "fontFace": "plain",
       "fontFamily": "",
       "angle": 90,
-      "align": "center"
+      "align": "center",
+      "margin": [10, 10, 10, 10]
     },
     "y2label": {
       "color": "black",
-      "size": 11,
+      "size": 10,
       "fontFace": "plain",
       "fontFamily": "",
       "angle": -90,
-      "align": "center"
+      "align": "center",
+      "margin": [10, 10, 10, 10]
     },
     "watermark": {
       "color": "grey",
@@ -54,7 +57,8 @@
       "fontFace": "plain",
       "fontFamily": "",
       "angle": 0,
-      "align": "left"
+      "align": "left",
+      "margin": [8, 5, 2, 5]
     },
     "legendTitle": {
       "color": "black",
