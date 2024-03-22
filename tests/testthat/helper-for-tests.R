@@ -12,7 +12,8 @@ getSimulationFilePath <- function(simulationName) {
 # new instances should be created unless specifically specified otherwise
 loadTestSimulation <- function(simulationName, loadFromCache = FALSE, addToCache = TRUE) {
   simFile <- getSimulationFilePath(simulationName)
-  sim <- loadSimulation(simFile, loadFromCache = loadFromCache, addToCache = addToCache)
+  simulation <- loadSimulation(simFile, loadFromCache = loadFromCache, addToCache = addToCache)
+  return(simulation)
 }
 
 executeWithTestFile <- function(actionWithFile) {

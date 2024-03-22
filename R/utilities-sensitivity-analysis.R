@@ -392,17 +392,19 @@ getPKResultsDataFrame <- function(structureSet) {
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   re.tStoreFileMetadata(access = "read", filePath = structureSet$pkAnalysisResultsFileNames)
   pkResultsDataFrame <- loadPKAnalysesFromStructureSet(structureSet = structureSet, to = "data.frame", useCache = TRUE)
-  
+
   selectedPKData <- NULL
   for (output in structureSet$simulationSet$outputs) {
     # skip cases where pkParameters are not specified for the output
     if (is.null(output$pkParameters)) {
       next
-      }
+    }
 
     pkParametersInOutput <- unname(sapply(
       output$pkParameters,
-      function(pkParameter) {pkParameter$pkParameter}
+      function(pkParameter) {
+        pkParameter$pkParameter
+      }
     ))
 
     selectedRows <- (pkResultsDataFrame$QuantityPath %in% output$path) & (pkResultsDataFrame$Parameter %in% pkParametersInOutput)
@@ -605,12 +607,11 @@ plotPopulationSensitivity <- function(structureSets,
     simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
 
     re.tStoreFileMetadata(access = "read", filePath = structureSet$popSensitivityAnalysisResultsIndexFile)
-    if (!(file.exists(structureSet$popSensitivityAnalysisResultsIndexFile))) next
+    if (!(file.exists(structureSet$popSensitivityAnalysisResultsIndexFile))) {
+      next
+    }
     indexDf <- readObservedDataFile(fileName = structureSet$popSensitivityAnalysisResultsIndexFile)
 
-    outputPaths <- sapply(structureSet$simulationSet$outputs, function(x) {
-      x$path
-    })
     populationName <- structureSet$simulationSet$simulationSetName
 
     saResultIndexFiles[[populationName]] <- structureSet$popSensitivityAnalysisResultsIndexFile
@@ -619,13 +620,6 @@ plotPopulationSensitivity <- function(structureSets,
     for (output in structureSet$simulationSet$outputs) {
       outputPath <- output$path
       outputDisplayName <- output$displayName
-
-      # opIndexDf is sub-dataframe of indexDf that has only the output paths outputPath in the Outputs column
-      opIndexDf <- indexDf[indexDf$Output == outputPath, ]
-
-      # pkParameters are all the entries in the pkParameters column of  opIndexDf
-      pkParameters <- unique(opIndexDf$pkParameter)
-
       for (pkParameter in output$pkParameters) {
         pk <- pkParameter$pkParameter
         dfForPkAndOp <- getPopSensDfForPkAndOutput(

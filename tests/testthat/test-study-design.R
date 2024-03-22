@@ -180,7 +180,7 @@ test_that("Source expression 'MIN' include only values >=", {
   addStudyParameters(testPopulation, testSimulation, studyDesignMinFile)
   populationData <- ospsuite::populationToDataFrame(testPopulation)
   expect_equal(sum(populationData[, drugMassPath] %in% 5), 42)
-  expect_equal(sum(populationData[, drugMassPath] %in% NA), 58)
+  expect_equal(sum(is.na(populationData[, drugMassPath])), 58)
   expect_gte(min(populationData[populationData[, drugMassPath] %in% 5, "Organism|Weight"]), 50)
 
   unlink(studyDesignMinFile, recursive = TRUE)
@@ -197,7 +197,7 @@ test_that("Source expression 'MAX' include only values <", {
   addStudyParameters(testPopulation, testSimulation, studyDesignMaxFile)
   populationData <- ospsuite::populationToDataFrame(testPopulation)
   expect_equal(sum(populationData[, drugMassPath] %in% 5), 58)
-  expect_equal(sum(populationData[, drugMassPath] %in% NA), 42)
+  expect_equal(sum(is.na(populationData[, drugMassPath])), 42)
   expect_lte(max(populationData[populationData[, drugMassPath] %in% 5, "Organism|Weight"]), 50)
 
   unlink(studyDesignMaxFile, recursive = TRUE)
@@ -215,7 +215,7 @@ test_that("Source expression 'EQUALS' include only values >= and attribute corre
 
   populationData <- ospsuite::populationToDataFrame(testPopulation)
   expect_equal(sum(populationData[, drugMassPath] %in% 5), 49)
-  expect_equal(sum(populationData[, drugMassPath] %in% NA), 51)
+  expect_equal(sum(is.na(populationData[, drugMassPath])), 51)
   expect_equal(populationData[populationData[, drugMassPath] %in% 5, "Organism|Hematocrit"], rep(0.4, 49))
 
   unlink(studyDesignEqualsFile, recursive = TRUE)
@@ -240,7 +240,7 @@ test_that("Source expressions constraints add up as &", {
   populationData <- ospsuite::populationToDataFrame(testPopulation)
 
   expect_equal(sum(populationData[, drugMassPath] %in% 5), 22)
-  expect_equal(sum(populationData[, drugMassPath] %in% NA), 78)
+  expect_equal(sum(is.na(populationData[, drugMassPath])), 78)
   expect_gte(min(populationData[populationData[, drugMassPath] %in% 5, "Organism|Weight"]), 45)
   expect_lte(max(populationData[populationData[, drugMassPath] %in% 5, "Organism|Weight"]), 55)
 
@@ -249,7 +249,7 @@ test_that("Source expressions constraints add up as &", {
   populationData <- ospsuite::populationToDataFrame(testPopulation)
 
   expect_equal(sum(populationData[, drugMassPath] %in% 5), 0)
-  expect_equal(sum(populationData[, drugMassPath] %in% NA), 100)
+  expect_equal(sum(is.na(populationData[, drugMassPath])), 100)
 
   unlink(studyDesignFile, recursive = TRUE)
   unlink(studyDesignNAFile, recursive = TRUE)

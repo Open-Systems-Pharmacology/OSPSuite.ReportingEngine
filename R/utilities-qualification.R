@@ -25,7 +25,7 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
   loadingProgress <- txtProgressBar(max = nrow(configurationPlan$simulationMappings), style = 3)
 
   logCatch({
-    for (simulationIndex in 1:nrow(configurationPlan$simulationMappings)) {
+    for (simulationIndex in seq_len(nrow(configurationPlan$simulationMappings))) {
       project <- configurationPlan$simulationMappings$project[simulationIndex]
       simulationName <- configurationPlan$simulationMappings$simulation[simulationIndex]
       simulationSetName <- paste(project, configurationPlan$simulationMappings$simulationFile[simulationIndex], sep = "-")

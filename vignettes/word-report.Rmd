@@ -52,7 +52,7 @@ dir.create("figures", showWarnings = FALSE)
 file.copy(
   from = system.file("extdata", "reference-docx.png", package = "ospsuite.reportingengine"),
   to = "figures"
-) 
+)
 ```
 
 ![](figures/reference-docx.png){width="90%"}
@@ -84,7 +84,7 @@ In the following bullet points, tutorial videos shows how to update such style i
 file.copy(
   from = system.file("extdata", "paragraph-styles-reference-doc.mp4", package = "ospsuite.reportingengine"),
   to = "figures"
-) 
+)
 ```
 
 ![](figures/paragraph-styles-reference-doc.mp4){width="90%"}
@@ -104,7 +104,7 @@ styling does not account for text alignment/justification within the table.
 file.copy(
   from = system.file("extdata", "table-style-reference-doc.mp4", package = "ospsuite.reportingengine"),
   to = "figures"
-) 
+)
 ```
 
 ![](figures/table-style-reference-doc.mp4){width="90%"}
@@ -131,7 +131,7 @@ myExampleWorkflow <- MeanModelWorkflow$new(
 file.copy(
   from = system.file("extdata", "report-reference-docx.png", package = "ospsuite.reportingengine"),
   to = "figures"
-) 
+)
 ```
 
 ![](figures/report-reference-docx.png){width="100%"}

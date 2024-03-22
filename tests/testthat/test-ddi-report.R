@@ -26,7 +26,7 @@ test_that("All results were saved", {
   expect_length(
     list.files(file.path(reOutputFolder, "images", "001_section_test-ddi"), pattern = "csv"),
     19
-    )
+  )
   expect_length(
     list.files(file.path(reOutputFolder, "images", "001_section_test-ddi"), pattern = "png"),
     24
@@ -48,7 +48,7 @@ test_that("Subunits are alphabetically ordered", {
     "### 1.3.2 V2"
   )
   previousSubunitLine <- 0
-  for(subunit in subunitTitles){
+  for (subunit in subunitTitles) {
     subunitLine <- grep(pattern = subunit, x = reportContent)
     testthat::expect_gt(subunitLine, previousSubunitLine)
     previousSubunitLine <- subunitLine
@@ -66,13 +66,13 @@ test_that("Subunits are included in TOC", {
     "\\* \\[1.3.1 V1 \\]",
     "\\* \\[1.3.2 V2 \\]"
   )
-  for(subunit in tocSubunits){
+  for (subunit in tocSubunits) {
     subunitLine <- grep(pattern = subunit, x = reportContent)
     testthat::expect_true(
       any(grepl(
-        pattern = subunit, 
+        pattern = subunit,
         x = reportContent
-        ))
+      ))
     )
   }
 })

@@ -174,9 +174,10 @@ cat(
       system.file(
         "extdata", "qualification-workflow-template.R",
         package = "ospsuite.reportingengine"
-        )
-      ),
-    "```"),
+      )
+    ),
+    "```"
+  ),
   sep = "\n"
 )
 ```
