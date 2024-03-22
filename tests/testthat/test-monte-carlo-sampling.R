@@ -37,11 +37,11 @@ ratioGeoSD <- exp(sqrt((comparisonParams$sdlog)^2 + (referenceParams$sdlog)^2))
 test_that("Analytical Solution is close to known solution", {
   # Get analytical solution from simulated distribution
   analyticalSolution <- ospsuite.reportingengine:::getPKRatioSummaryFromAnalyticalSolution(
-    pkData = comparisonData, 
-    referencePKData = referenceData, 
+    pkData = comparisonData,
+    referencePKData = referenceData,
     simulationSetName = "test"
-    )
-  
+  )
+
   expect_equal(
     analyticalSolution$GeoMean,
     ratioGeoMean,
@@ -57,8 +57,8 @@ test_that("Analytical Solution is close to known solution", {
 test_that("Monte Carlo Solution is close to known solution", {
   # Get Monte Carlo solution from simulated distribution
   mcSolution <- ospsuite.reportingengine:::getPKRatioSummaryFromMCSampling(
-    pkData = comparisonData, 
-    referencePKData = referenceData, 
+    pkData = comparisonData,
+    referencePKData = referenceData,
     simulationSetName = "test",
     # With 10000 repetitions the method runs longer
     settings = list(showProgress = FALSE, numberOfCores = 1, mcRepetitions = 200)
@@ -79,14 +79,14 @@ test_that("Monte Carlo Solution is close to known solution", {
 test_that("Monte Carlo Solution is repeatable", {
   # Get Monte Carlo solution from simulated distribution
   mcSolution1 <- ospsuite.reportingengine:::getPKRatioSummaryFromMCSampling(
-    pkData = comparisonData, 
-    referencePKData = referenceData, 
+    pkData = comparisonData,
+    referencePKData = referenceData,
     simulationSetName = "test",
     settings = list(showProgress = FALSE, numberOfCores = 1, mcRepetitions = 100, mcRandomSeed = 3333)
   )
   mcSolution2 <- ospsuite.reportingengine:::getPKRatioSummaryFromMCSampling(
-    pkData = comparisonData, 
-    referencePKData = referenceData, 
+    pkData = comparisonData,
+    referencePKData = referenceData,
     simulationSetName = "test",
     settings = list(showProgress = FALSE, numberOfCores = 1, mcRepetitions = 100, mcRandomSeed = 3333)
   )

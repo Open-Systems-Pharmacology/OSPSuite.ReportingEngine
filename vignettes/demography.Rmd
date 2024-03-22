@@ -53,11 +53,10 @@ dataFile <- system.file("extdata", "obsPop.csv",
 )
 
 dataSource <- DataSource$new(
-  dataFile = dataFile, 
+  dataFile = dataFile,
   metaDataFile = dictionary,
   caption = "Demography vignette example"
-  )
-
+)
 ```
 
 </details>
@@ -127,7 +126,6 @@ childrenSet <- PopulationSimulationSet$new(
   dataSource = dataSource,
   dataSelection = 'POP %in% "Children"'
 )
-
 ```
 
 </details>
@@ -199,11 +197,11 @@ getYParametersForDemographyPlot(workflow = parallelWorkflow)
 ```
 
 ```{r}
-displayedParameters  <- list(
-  Age = "Organism|Age", 
-  Weight = "Organism|Weight", 
+displayedParameters <- list(
+  Age = "Organism|Age",
+  Weight = "Organism|Weight",
   Gender = "Gender"
-  )
+)
 
 # Define no parameters in xParameters to get histograms
 setXParametersForDemographyPlot(workflow = parallelWorkflow, parameters = NULL)
@@ -261,10 +259,10 @@ Note that **categorical** parameters defined as `xParameters` (_Gender_ in this 
 <summary> __Code__ </summary>
 
 ```{r}
-xParameters  <- list(
-  Age = "Organism|Age", 
+xParameters <- list(
+  Age = "Organism|Age",
   Gender = "Gender"
-  )
+)
 
 setXParametersForDemographyPlot(workflow = parallelWorkflow, parameters = xParameters)
 setYParametersForDemographyPlot(workflow = parallelWorkflow, parameters = displayedParameters)
@@ -348,11 +346,11 @@ To plot histograms of demography parameters, no demography parameters are define
 <summary> __Code__ </summary>
 
 ```{r}
-displayedParameters  <- list(
-  Age = "Organism|Age", 
-  Weight = "Organism|Weight", 
+displayedParameters <- list(
+  Age = "Organism|Age",
+  Weight = "Organism|Weight",
   Gender = "Gender"
-  )
+)
 
 setXParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = NULL)
 setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
@@ -410,10 +408,10 @@ Note that **categorical** parameters defined as `xParameters` (_Gender_ in this 
 <summary> __Code__ </summary>
 
 ```{r}
-xParameters  <- list(
-  Age = "Organism|Age", 
+xParameters <- list(
+  Age = "Organism|Age",
   Gender = "Gender"
-  )
+)
 
 setXParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = xParameters)
 setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
@@ -481,18 +479,17 @@ inactivateWorkflowTasks(parallelWorkflow)
 activateWorkflowTasks(parallelWorkflow, tasks = AllAvailableTasks$plotDemography)
 
 # Only display histograms for Age, Weight and Gender
-displayedParameters  <- list(
-  Age = "Organism|Age", 
-  Weight = "Organism|Weight", 
+displayedParameters <- list(
+  Age = "Organism|Age",
+  Weight = "Organism|Weight",
   Gender = "Gender"
-  )
+)
 setYParametersForDemographyPlot(workflow = parallelWorkflow, parameters = displayedParameters)
 
 # Set up 5 bins for all histograms
 parallelWorkflow$plotDemography$settings$bins <- 5
 
 parallelWorkflow$runWorkflow()
-
 ```
 
 </details>
@@ -526,18 +523,17 @@ inactivateWorkflowTasks(pediatricWorkflow)
 activateWorkflowTasks(pediatricWorkflow, tasks = AllAvailableTasks$plotDemography)
 
 
-displayedParameters  <- list(
-  Age = "Organism|Age", 
-  Weight = "Organism|Weight", 
+displayedParameters <- list(
+  Age = "Organism|Age",
+  Weight = "Organism|Weight",
   Gender = "Gender"
-  )
+)
 setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
 
 # Set up 5 bins for all the range plots
 pediatricWorkflow$plotDemography$settings$bins <- 5
 
 pediatricWorkflow$runWorkflow()
-
 ```
 
 </details>
@@ -587,18 +583,17 @@ inactivateWorkflowTasks(pediatricWorkflow)
 activateWorkflowTasks(pediatricWorkflow, tasks = AllAvailableTasks$plotDemography)
 
 
-displayedParameters  <- list(
-  Age = "Organism|Age", 
-  Weight = "Organism|Weight", 
+displayedParameters <- list(
+  Age = "Organism|Age",
+  Weight = "Organism|Weight",
   Gender = "Gender"
-  )
+)
 setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
 
 # Set up continuous line between bins with stairstep settings being FALSE
 pediatricWorkflow$plotDemography$settings$stairstep <- FALSE
 
 pediatricWorkflow$runWorkflow()
-
 ```
 
 </details>
@@ -637,18 +632,17 @@ parallelWorkflow <- PopulationWorkflow$new(
 inactivateWorkflowTasks(parallelWorkflow)
 activateWorkflowTasks(parallelWorkflow, tasks = AllAvailableTasks$plotDemography)
 
-displayedParameters  <- list(
-  Age = "Organism|Age", 
-  Weight = "Organism|Weight", 
+displayedParameters <- list(
+  Age = "Organism|Age",
+  Weight = "Organism|Weight",
   Gender = "Gender"
-  )
+)
 setYParametersForDemographyPlot(workflow = parallelWorkflow, parameters = displayedParameters)
 
 # Turn off dodging of histogram bars
 parallelWorkflow$plotDemography$settings$dodge <- FALSE
 
 parallelWorkflow$runWorkflow()
-
 ```
 
 </details>
@@ -693,18 +687,17 @@ pediatricWorkflow <- PopulationWorkflow$new(
 inactivateWorkflowTasks(pediatricWorkflow)
 activateWorkflowTasks(pediatricWorkflow, tasks = AllAvailableTasks$plotDemography)
 
-displayedParameters  <- list(
-  Age = "Organism|Age", 
-  Weight = "Organism|Weight", 
+displayedParameters <- list(
+  Age = "Organism|Age",
+  Weight = "Organism|Weight",
   Gender = "Gender"
-  )
+)
 setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displayedParameters)
 
 # Turn off reference global range
 pediatricWorkflow$plotDemography$settings$referenceGlobalRange <- FALSE
 
 pediatricWorkflow$runWorkflow()
-
 ```
 
 </details>

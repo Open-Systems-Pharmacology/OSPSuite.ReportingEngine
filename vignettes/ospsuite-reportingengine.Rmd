@@ -202,7 +202,7 @@ dir.create("figures", showWarnings = FALSE)
 file.copy(
   from = system.file("extdata", "mean-model-workflow-input-and-tasks.png", package = "ospsuite.reportingengine"),
   to = "figures"
-) 
+)
 knitr::include_graphics("figures/mean-model-workflow-input-and-tasks.png")
 ```
 
@@ -239,7 +239,7 @@ Three population workflow types are available in `ospsuite.reportingengine` and 
 file.copy(
   from = system.file("extdata", "population-workflow-input-and-tasks.png", package = "ospsuite.reportingengine"),
   to = "figures"
-) 
+)
 knitr::include_graphics("figures/population-workflow-input-and-tasks.png")
 ```
 

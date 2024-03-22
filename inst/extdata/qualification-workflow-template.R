@@ -146,14 +146,14 @@ createQualificationReport <- function(qualificationRunnerFolder,
     workflow$simulate$settings$maxSimulationsPerCore <- maxSimulationsPerCore
   }
   
-  #' Activate/Deactivate tasks of qualification workflow prior running
-  # workflow$inactivateTasks("simulate")
-  # workflow$inactivateTasks("calculatePKParameters")
-  # workflow$inactivateTasks("plotTimeProfiles")
-  # workflow$inactivateTasks("plotComparisonTimeProfile")
-  # workflow$inactivateTasks("plotGOFMerged")
-  # workflow$inactivateTasks("plotPKRatio")
-  # workflow$inactivateTasks("plotDDIRatio")
+  #' @note Activate/Inactivate tasks of qualification workflow prior running
+  #' workflow$inactivateTasks("simulate")
+  #' workflow$inactivateTasks("calculatePKParameters")
+  #' workflow$inactivateTasks("plotTimeProfiles")
+  #' workflow$inactivateTasks("plotComparisonTimeProfile")
+  #' workflow$inactivateTasks("plotGOFMerged")
+  #' workflow$inactivateTasks("plotPKRatio")
+  #' workflow$inactivateTasks("plotDDIRatio")
   
   #' Run the `QualificatitonWorklfow`
   workflow$runWorkflow()

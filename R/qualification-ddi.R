@@ -104,7 +104,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 
                 simulation <- ospsuite::loadSimulation(simulationFile, loadFromCache = TRUE)
                 pkAnalysisResults <- loadPKAnalysesFromCSV(
-                  filePath = pkAnalysisResultsPath, 
+                  filePath = pkAnalysisResultsPath,
                   simulation = simulation
                 )
 

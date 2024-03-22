@@ -54,8 +54,9 @@ Templates of json files are available in the `tlf` package at the location defin
 
 ```{r theme definition}
 # Get the path of the Json template
-jsonFile <- system.file("extdata", "re-theme.json", 
-                        package = "ospsuite.reportingengine")
+jsonFile <- system.file("extdata", "re-theme.json",
+  package = "ospsuite.reportingengine"
+)
 
 # Load the theme from the json file
 reTheme <- tlf::loadThemeFromJson(jsonFile)
@@ -193,13 +194,15 @@ The next chunk of code will define `PlotConfiguration` objects to be included in
 obsVsPredConfiguration <- PlotConfiguration$new(
   xlabel = "Observed values [µmol/ml]",
   ylabel = "Simulated values [µmol/ml]",
-  watermark = "vignette")
+  watermark = "vignette"
+)
 
 # Define plot configuration for resHisto
 resHistoConfiguration <- PlotConfiguration$new(
   xlabel = "Residuals",
   ylabel = "Count",
-  watermark = "vignette")
+  watermark = "vignette"
+)
 
 # Update some fields of the configuration if necessary
 resHistoConfiguration$background$plot$fill <- "lemonchiffon"
@@ -209,12 +212,16 @@ resHistoConfiguration$background$xGrid$color <- "goldenrod3"
 resHistoConfiguration$background$yGrid$color <- "goldenrod3"
 
 # Define plotConfigurations list
-plotConfigurations <- list(resHisto = resHistoConfiguration,
-                           obsVsPred = obsVsPredConfiguration)
+plotConfigurations <- list(
+  resHisto = resHistoConfiguration,
+  obsVsPred = obsVsPredConfiguration
+)
 
-# Define list to update task settings with plotConfigurations field and and bins field  
-mySettings <- list(plotConfigurations = plotConfigurations, 
-                   bins = 3)
+# Define list to update task settings with plotConfigurations field and and bins field
+mySettings <- list(
+  plotConfigurations = plotConfigurations,
+  bins = 3
+)
 ```
 
 Then, the __`settings`__ field of the __"plotTimeProfilesAndResiduals"__ task can be updated as shown below:
@@ -277,7 +284,7 @@ workflowA$plotPKParameters$settings$bins <- c(0, 1, 2, 3, 5, 10)
 # Associate the number of bins
 workflowA$plotPKParameters$settings$bins <- 15
 
-# Set VPC as stair step 
+# Set VPC as stair step
 workflowA$plotPKParameters$settings$stairstep <- TRUE
 ```
 

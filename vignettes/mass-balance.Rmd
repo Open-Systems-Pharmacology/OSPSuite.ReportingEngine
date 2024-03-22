@@ -58,9 +58,9 @@ simulationSet <- SimulationSet$new(
   simulationFile = simulationFile
 )
 massBalanceWorkflow <- MeanModelWorkflow$new(
-  simulationSets = simulationSet, 
+  simulationSets = simulationSet,
   workflowFolder = "Mass-Balance-Workflow"
-  )
+)
 
 massBalanceWorkflow$inactivateTasks(massBalanceWorkflow$getAllTasks())
 massBalanceWorkflow$activateTasks("plotMassBalance")
@@ -136,10 +136,11 @@ cat(
       system.file(
         "extdata", "mass-balance-settings.json",
         package = "ospsuite.reportingengine"
-        ),
-      warn = FALSE
       ),
-    "```"),
+      warn = FALSE
+    ),
+    "```"
+  ),
   sep = "\n"
 )
 ```
@@ -159,9 +160,9 @@ simulationSet <- SimulationSet$new(
   massBalanceFile = massBalanceFile
 )
 massBalanceWorkflow <- MeanModelWorkflow$new(
-  simulationSets = simulationSet, 
+  simulationSets = simulationSet,
   workflowFolder = "Mass-Balance-Workflow"
-  )
+)
 
 massBalanceWorkflow$inactivateTasks(massBalanceWorkflow$getAllTasks())
 massBalanceWorkflow$activateTasks("plotMassBalance")

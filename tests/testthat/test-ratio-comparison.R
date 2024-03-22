@@ -106,7 +106,7 @@ test_that("Saved PK parameters summaries have correct values", {
     )
     expect_equivalent(
       readObservedDataFile(diffFiles[fileIndex]),
-      readObservedDataFile(refFiles[fileIndex+length(sameFiles)]),
+      readObservedDataFile(refFiles[fileIndex + length(sameFiles)]),
       tolerance = comparisonTolerance()
     )
   }
@@ -119,4 +119,3 @@ updatePKParameter("AUC_tEnd", displayName = "AUC_tEnd", displayUnit = "µmol*min
 # Clear test workflow folders
 unlink(workflowSame$workflowFolder, recursive = TRUE)
 unlink(workflowDiff$workflowFolder, recursive = TRUE)
-

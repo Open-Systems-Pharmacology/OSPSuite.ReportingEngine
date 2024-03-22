@@ -234,7 +234,7 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
     loadFromCache = TRUE
   )
   pkAnalyses <- loadPKAnalysesFromCSV(
-    filePath = configurationPlan$getPKAnalysisResultsPath(project = pkRatioMapping$Project, simulation = pkRatioMapping$Simulation), 
+    filePath = configurationPlan$getPKAnalysisResultsPath(project = pkRatioMapping$Project, simulation = pkRatioMapping$Simulation),
     simulation = simulation
   )
   observedData <- readObservedDataFile(configurationPlan$getObservedDataPath(pkRatioMapping$ObservedData))
