@@ -118,7 +118,7 @@ populations to be studied:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">populationFile1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"pop1.csv"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
-<span><span class="op">)</span> </span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">populationFile2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"pop2.csv"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
@@ -287,7 +287,7 @@ Step 2.</p></li>
 populations in parallel. In the first step, the model outputs to be
 analyzed are defined:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">populationOutputs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">output1</span>,<span class="va">output2</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">populationOutputs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">output1</span>, <span class="va">output2</span><span class="op">)</span></span></code></pre></div>
 <p>Next, <code>PopulationSimulationSet</code> objects are defined for
 each of the two populations:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -311,9 +311,11 @@ are then used to create a <code>PopulationWorkflow</code>, the results
 of which are to be placed in the root directory
 <code>./popSensitivityExample</code>:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pwf</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PopulationWorkflow.html">PopulationWorkflow</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>simulationSets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ps1</span>,<span class="va">ps2</span><span class="op">)</span>,</span>
-<span>                              workflowFolder <span class="op">=</span> <span class="st">"popSensitivityExample"</span>,</span>
-<span>                              workflowType <span class="op">=</span> <span class="va">PopulationWorkflowTypes</span><span class="op">$</span><span class="va">parallelComparison</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pwf</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PopulationWorkflow.html">PopulationWorkflow</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  simulationSets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ps1</span>, <span class="va">ps2</span><span class="op">)</span>,</span>
+<span>  workflowFolder <span class="op">=</span> <span class="st">"popSensitivityExample"</span>,</span>
+<span>  workflowType <span class="op">=</span> <span class="va">PopulationWorkflowTypes</span><span class="op">$</span><span class="va">parallelComparison</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>Next, the required tasks of the workflow are activated. The
 sensitivity analysis and sensitivity plot tasks are activated using the
 commands</p>
@@ -359,10 +361,12 @@ These quantiles are specified as follows:</p>
 plot is configured using an instance of a
 <code>SensitivityPlotSettings</code> object:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pwf</span><span class="op">$</span><span class="va">plotSensitivity</span><span class="op">$</span><span class="va">settings</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/SensitivityPlotSettings.html">SensitivityPlotSettings</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>totalSensitivityThreshold <span class="op">=</span> <span class="fl">0.9</span>,</span>
-<span>                                                            maximalParametersPerSensitivityPlot <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>                                                            xAxisFontSize <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>                                                            yAxisFontSize <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pwf</span><span class="op">$</span><span class="va">plotSensitivity</span><span class="op">$</span><span class="va">settings</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/SensitivityPlotSettings.html">SensitivityPlotSettings</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  totalSensitivityThreshold <span class="op">=</span> <span class="fl">0.9</span>,</span>
+<span>  maximalParametersPerSensitivityPlot <span class="op">=</span> <span class="fl">12</span>,</span>
+<span>  xAxisFontSize <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  yAxisFontSize <span class="op">=</span> <span class="fl">10</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>The population sensitivity workflow is run using the command:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pwf</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>

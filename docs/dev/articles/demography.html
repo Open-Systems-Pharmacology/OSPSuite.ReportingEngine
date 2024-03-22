@@ -147,10 +147,10 @@ to include observed data in demography plots.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">dataSource</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/DataSource.html">DataSource</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  dataFile <span class="op">=</span> <span class="va">dataFile</span>, </span>
+<span>  dataFile <span class="op">=</span> <span class="va">dataFile</span>,</span>
 <span>  metaDataFile <span class="op">=</span> <span class="va">dictionary</span>,</span>
 <span>  caption <span class="op">=</span> <span class="st">"Demography vignette example"</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 </details><p>In this process, the dictionary input as <code>metaDataFile</code> is
 essential. Three columns of the dictionary are used by the workflow in
 order to map and convert the demography parameters.</p>
@@ -385,11 +385,11 @@ activate only the demography task.</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Parallel-Histograms"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:02:36</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:30:09</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 21/03/2024 - 12:02:36</span></span>
+<span><span class="co">#&gt;  Date: 22/03/2024 - 20:30:09</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az653-851</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1105-941</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
@@ -433,11 +433,11 @@ look for the parameters in the enum <code>StandardPath</code>.</p>
 <span><span class="co">#&gt; $Gender</span></span>
 <span><span class="co">#&gt; [1] "Gender"</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">displayedParameters</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  Age <span class="op">=</span> <span class="st">"Organism|Age"</span>, </span>
-<span>  Weight <span class="op">=</span> <span class="st">"Organism|Weight"</span>, </span>
+<code class="sourceCode R"><span><span class="va">displayedParameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  Age <span class="op">=</span> <span class="st">"Organism|Age"</span>,</span>
+<span>  Weight <span class="op">=</span> <span class="st">"Organism|Weight"</span>,</span>
 <span>  Gender <span class="op">=</span> <span class="st">"Gender"</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Define no parameters in xParameters to get histograms</span></span>
 <span><span class="fu"><a href="../reference/setXParametersForDemographyPlot.html">setXParametersForDemographyPlot</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="va">parallelWorkflow</span>, parameters <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
@@ -446,13 +446,13 @@ look for the parameters in the enum <code>StandardPath</code>.</p>
 <p>Run the corresponding workflow:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">parallelWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:02:37</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:30:10</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:02:37</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:30:10</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:02:48</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:30:21</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.2 min</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:02:48</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:30:21</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.2 min</span></span></code></pre></div>
 </details><p>For Parallel and Ratio Comparison workflows, the demography
 histograms display the distributions for each simulation set along with
@@ -478,11 +478,11 @@ activate only the demography task.</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Parallel-Range-Plots"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:02:52</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:30:25</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 21/03/2024 - 12:02:52</span></span>
+<span><span class="co">#&gt;  Date: 22/03/2024 - 20:30:25</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az653-851</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1105-941</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
@@ -502,23 +502,23 @@ case) are displayed (<a href="https://github.com/Open-Systems-Pharmacology/OSPSu
 using box-whisker plots.</p>
 <details><summary><strong>Code</strong>
 </summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">xParameters</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  Age <span class="op">=</span> <span class="st">"Organism|Age"</span>, </span>
+<code class="sourceCode R"><span><span class="va">xParameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  Age <span class="op">=</span> <span class="st">"Organism|Age"</span>,</span>
 <span>  Gender <span class="op">=</span> <span class="st">"Gender"</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/setXParametersForDemographyPlot.html">setXParametersForDemographyPlot</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="va">parallelWorkflow</span>, parameters <span class="op">=</span> <span class="va">xParameters</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/setYParametersForDemographyPlot.html">setYParametersForDemographyPlot</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="va">parallelWorkflow</span>, parameters <span class="op">=</span> <span class="va">displayedParameters</span><span class="op">)</span></span></code></pre></div>
 <p>Run the corresponding workflow:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">parallelWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:02:52</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:30:25</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:02:52</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:30:25</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:03:07</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:30:40</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.3 min</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:03:07</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:30:40</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.3 min</span></span></code></pre></div>
 </details><p>For Parallel and Ratio Comparison workflows, the demography range
 plots display the distributions for each simulation set along with its
@@ -607,11 +607,11 @@ the demography task.</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Pediatric-Histograms"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:03:11</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:30:44</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 21/03/2024 - 12:03:11</span></span>
+<span><span class="co">#&gt;  Date: 22/03/2024 - 20:30:44</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az653-851</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1105-941</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
@@ -628,24 +628,24 @@ are defined in <code>xParameters</code> as illustrated in the example
 below which defines the parameters to be plotted in the histograms.</p>
 <details><summary><strong>Code</strong>
 </summary><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">displayedParameters</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  Age <span class="op">=</span> <span class="st">"Organism|Age"</span>, </span>
-<span>  Weight <span class="op">=</span> <span class="st">"Organism|Weight"</span>, </span>
+<code class="sourceCode R"><span><span class="va">displayedParameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  Age <span class="op">=</span> <span class="st">"Organism|Age"</span>,</span>
+<span>  Weight <span class="op">=</span> <span class="st">"Organism|Weight"</span>,</span>
 <span>  Gender <span class="op">=</span> <span class="st">"Gender"</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/setXParametersForDemographyPlot.html">setXParametersForDemographyPlot</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="va">pediatricWorkflow</span>, parameters <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/setYParametersForDemographyPlot.html">setYParametersForDemographyPlot</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="va">pediatricWorkflow</span>, parameters <span class="op">=</span> <span class="va">displayedParameters</span><span class="op">)</span></span></code></pre></div>
 <p>Run the corresponding workflow:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:03:11</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:30:44</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span></span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:03:11</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:30:44</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:03:22</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:30:55</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.2 min</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:03:22</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:30:55</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.2 min</span></span></code></pre></div>
 </details><p>For Pediatric workflows, the demography histograms display the
 distributions for all simulation sets together (<a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/issues/17" class="external-link">#17</a>,
@@ -672,11 +672,11 @@ the demography task.</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Pediatric-Range-Plots"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:03:25</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:30:58</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 21/03/2024 - 12:03:25</span></span>
+<span><span class="co">#&gt;  Date: 22/03/2024 - 20:30:58</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az653-851</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1105-941</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
@@ -696,23 +696,23 @@ case) are displayed (<a href="https://github.com/Open-Systems-Pharmacology/OSPSu
 using box-whisker plots.</p>
 <details><summary><strong>Code</strong>
 </summary><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">xParameters</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  Age <span class="op">=</span> <span class="st">"Organism|Age"</span>, </span>
+<code class="sourceCode R"><span><span class="va">xParameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  Age <span class="op">=</span> <span class="st">"Organism|Age"</span>,</span>
 <span>  Gender <span class="op">=</span> <span class="st">"Gender"</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/setXParametersForDemographyPlot.html">setXParametersForDemographyPlot</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="va">pediatricWorkflow</span>, parameters <span class="op">=</span> <span class="va">xParameters</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/setYParametersForDemographyPlot.html">setYParametersForDemographyPlot</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="va">pediatricWorkflow</span>, parameters <span class="op">=</span> <span class="va">displayedParameters</span><span class="op">)</span></span></code></pre></div>
 <p>Run the corresponding workflow:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:03:25</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:30:58</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span></span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:03:25</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:30:58</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:03:46</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:31:19</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.3 min</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:03:46</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:31:19</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.3 min</span></span></code></pre></div>
 </details><p>For Pediatric workflows, the demography range plots display the
 distributions for each simulation set along with its observed data if
@@ -761,11 +761,11 @@ workflow:</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Parallel-Histograms"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:03:50</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:31:23</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 21/03/2024 - 12:03:50</span></span>
+<span><span class="co">#&gt;  Date: 22/03/2024 - 20:31:23</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az653-851</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1105-941</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
@@ -779,24 +779,24 @@ workflow:</p>
 <span><span class="fu"><a href="../reference/activateWorkflowTasks.html">activateWorkflowTasks</a></span><span class="op">(</span><span class="va">parallelWorkflow</span>, tasks <span class="op">=</span> <span class="va">AllAvailableTasks</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Only display histograms for Age, Weight and Gender</span></span>
-<span><span class="va">displayedParameters</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  Age <span class="op">=</span> <span class="st">"Organism|Age"</span>, </span>
-<span>  Weight <span class="op">=</span> <span class="st">"Organism|Weight"</span>, </span>
+<span><span class="va">displayedParameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  Age <span class="op">=</span> <span class="st">"Organism|Age"</span>,</span>
+<span>  Weight <span class="op">=</span> <span class="st">"Organism|Weight"</span>,</span>
 <span>  Gender <span class="op">=</span> <span class="st">"Gender"</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/setYParametersForDemographyPlot.html">setYParametersForDemographyPlot</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="va">parallelWorkflow</span>, parameters <span class="op">=</span> <span class="va">displayedParameters</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Set up 5 bins for all histograms</span></span>
 <span><span class="va">parallelWorkflow</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">bins</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span></span>
 <span><span class="va">parallelWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:03:50</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:31:23</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:03:50</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:31:23</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:01</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:31:35</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.2 min</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:01</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:31:35</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.2 min</span></span></code></pre></div>
 </details><p>In the report displayed below, the histograms are displayed with 5
 bins except for categorical parameter whose categories are displayed as
@@ -812,11 +812,11 @@ below:</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Pediatric-Range"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:04</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:31:38</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 21/03/2024 - 12:04:04</span></span>
+<span><span class="co">#&gt;  Date: 22/03/2024 - 20:31:38</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az653-851</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1105-941</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
@@ -830,24 +830,24 @@ below:</p>
 <span><span class="fu"><a href="../reference/activateWorkflowTasks.html">activateWorkflowTasks</a></span><span class="op">(</span><span class="va">pediatricWorkflow</span>, tasks <span class="op">=</span> <span class="va">AllAvailableTasks</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">)</span></span>
 <span></span>
 <span></span>
-<span><span class="va">displayedParameters</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  Age <span class="op">=</span> <span class="st">"Organism|Age"</span>, </span>
-<span>  Weight <span class="op">=</span> <span class="st">"Organism|Weight"</span>, </span>
+<span><span class="va">displayedParameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  Age <span class="op">=</span> <span class="st">"Organism|Age"</span>,</span>
+<span>  Weight <span class="op">=</span> <span class="st">"Organism|Weight"</span>,</span>
 <span>  Gender <span class="op">=</span> <span class="st">"Gender"</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/setYParametersForDemographyPlot.html">setYParametersForDemographyPlot</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="va">pediatricWorkflow</span>, parameters <span class="op">=</span> <span class="va">displayedParameters</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Set up 5 bins for all the range plots</span></span>
 <span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">bins</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span></span>
 <span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:05</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:31:38</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span></span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:05</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:31:38</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:14</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:31:48</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.2 min</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:15</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:31:48</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.2 min</span></span></code></pre></div>
 </details><details><summary><strong>Report</strong>
 </summary><img src="figures/report-snapshot-46.png" style="width:100%; border-style: none;"></details><p>Note that the algorithm that calculates the bin edges based on the
@@ -881,11 +881,11 @@ pediatric workflow:</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Pediatric-Range"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:17</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:31:51</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 21/03/2024 - 12:04:17</span></span>
+<span><span class="co">#&gt;  Date: 22/03/2024 - 20:31:51</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az653-851</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1105-941</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
@@ -899,25 +899,25 @@ pediatric workflow:</p>
 <span><span class="fu"><a href="../reference/activateWorkflowTasks.html">activateWorkflowTasks</a></span><span class="op">(</span><span class="va">pediatricWorkflow</span>, tasks <span class="op">=</span> <span class="va">AllAvailableTasks</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">)</span></span>
 <span></span>
 <span></span>
-<span><span class="va">displayedParameters</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  Age <span class="op">=</span> <span class="st">"Organism|Age"</span>, </span>
-<span>  Weight <span class="op">=</span> <span class="st">"Organism|Weight"</span>, </span>
+<span><span class="va">displayedParameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  Age <span class="op">=</span> <span class="st">"Organism|Age"</span>,</span>
+<span>  Weight <span class="op">=</span> <span class="st">"Organism|Weight"</span>,</span>
 <span>  Gender <span class="op">=</span> <span class="st">"Gender"</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/setYParametersForDemographyPlot.html">setYParametersForDemographyPlot</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="va">pediatricWorkflow</span>, parameters <span class="op">=</span> <span class="va">displayedParameters</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Set up continuous line between bins with stairstep settings being FALSE</span></span>
 <span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">stairstep</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span>
 <span></span>
 <span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:17</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:31:51</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span></span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:17</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:31:51</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:26</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.1 min</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:26</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.1 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 22/03/2024 - 20:32:01</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.2 min</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:32:01</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.2 min</span></span></code></pre></div>
 </details><details><summary><strong>Report</strong>
 </summary><img src="figures/report-snapshot-47.png" style="width:100%; border-style: none;"></details>
 </div>
@@ -940,11 +940,11 @@ workflow:</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Parallel-Histograms"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:29</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:32:04</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 21/03/2024 - 12:04:29</span></span>
+<span><span class="co">#&gt;  Date: 22/03/2024 - 20:32:04</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az653-851</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1105-941</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
@@ -957,24 +957,24 @@ workflow:</p>
 <span><span class="fu"><a href="../reference/inactivateWorkflowTasks.html">inactivateWorkflowTasks</a></span><span class="op">(</span><span class="va">parallelWorkflow</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/activateWorkflowTasks.html">activateWorkflowTasks</a></span><span class="op">(</span><span class="va">parallelWorkflow</span>, tasks <span class="op">=</span> <span class="va">AllAvailableTasks</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">displayedParameters</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  Age <span class="op">=</span> <span class="st">"Organism|Age"</span>, </span>
-<span>  Weight <span class="op">=</span> <span class="st">"Organism|Weight"</span>, </span>
+<span><span class="va">displayedParameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  Age <span class="op">=</span> <span class="st">"Organism|Age"</span>,</span>
+<span>  Weight <span class="op">=</span> <span class="st">"Organism|Weight"</span>,</span>
 <span>  Gender <span class="op">=</span> <span class="st">"Gender"</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/setYParametersForDemographyPlot.html">setYParametersForDemographyPlot</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="va">parallelWorkflow</span>, parameters <span class="op">=</span> <span class="va">displayedParameters</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Turn off dodging of histogram bars</span></span>
 <span><span class="va">parallelWorkflow</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">dodge</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span>
 <span></span>
 <span><span class="va">parallelWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:29</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:32:04</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:29</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:32:04</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:40</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:32:15</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.2 min</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:40</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:32:15</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.2 min</span></span></code></pre></div>
 </details><details><summary><strong>Report</strong>
 </summary><img src="figures/report-snapshot-48.png" style="width:100%; border-style: none;"></details>
@@ -1004,11 +1004,11 @@ bins as the simulation set to compare:</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Pediatric-Range"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:43</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:32:19</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 21/03/2024 - 12:04:43</span></span>
+<span><span class="co">#&gt;  Date: 22/03/2024 - 20:32:19</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az653-851</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1105-941</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
@@ -1021,24 +1021,24 @@ bins as the simulation set to compare:</p>
 <span><span class="fu"><a href="../reference/inactivateWorkflowTasks.html">inactivateWorkflowTasks</a></span><span class="op">(</span><span class="va">pediatricWorkflow</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/activateWorkflowTasks.html">activateWorkflowTasks</a></span><span class="op">(</span><span class="va">pediatricWorkflow</span>, tasks <span class="op">=</span> <span class="va">AllAvailableTasks</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">displayedParameters</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  Age <span class="op">=</span> <span class="st">"Organism|Age"</span>, </span>
-<span>  Weight <span class="op">=</span> <span class="st">"Organism|Weight"</span>, </span>
+<span><span class="va">displayedParameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  Age <span class="op">=</span> <span class="st">"Organism|Age"</span>,</span>
+<span>  Weight <span class="op">=</span> <span class="st">"Organism|Weight"</span>,</span>
 <span>  Gender <span class="op">=</span> <span class="st">"Gender"</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/setYParametersForDemographyPlot.html">setYParametersForDemographyPlot</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="va">pediatricWorkflow</span>, parameters <span class="op">=</span> <span class="va">displayedParameters</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Turn off reference global range</span></span>
 <span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">referenceGlobalRange</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span>
 <span></span>
 <span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:43</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:32:19</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span></span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:43</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:32:19</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:53</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:32:29</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.2 min</span></span>
-<span><span class="co">#&gt; 21/03/2024 - 12:04:53</span></span>
+<span><span class="co">#&gt; 22/03/2024 - 20:32:29</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.2 min</span></span></code></pre></div>
 </details><details><summary><strong>Report</strong>
 </summary><img src="figures/report-snapshot-49.png" style="width:100%; border-style: none;"></details>
