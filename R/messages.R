@@ -147,7 +147,7 @@ messages <- list(
     paste0(objectNames, " NOT completed successfully on all cores")
   },
   errorMolecularWeightRequired = function(path) {
-    paste0("Molecular weight not found but required for observed data Id '", path, "' in Time Profile plot.")
+    paste0("Molecular weight required but not found for observed data Id '", highlight(path), "' in Time Profile plot.")
   },
   errorParametersNotIncludedInDDI = function(parameterNames) {
     paste0(
