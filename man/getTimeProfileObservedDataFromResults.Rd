@@ -7,7 +7,8 @@
 getTimeProfileObservedDataFromResults(
   observedResults,
   molWeight,
-  axesProperties
+  axesProperties,
+  observedDataId
 )
 }
 \arguments{
@@ -20,6 +21,8 @@ getTimeProfileObservedDataFromResults(
 \item{molWeight}{Molecular weight of compound}
 
 \item{axesProperties}{list of axes properties obtained from `getAxesProperties`}
+
+\item{observedDataId}{Id of the observed data for better handling error messages}
 }
 \value{
 List with `time`, `y` and `error` values

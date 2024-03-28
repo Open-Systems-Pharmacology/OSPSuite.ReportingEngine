@@ -327,7 +327,7 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
     # metaData: a list for each column of data that includes their unit
     observedResults <- getObservedDataFromConfigurationPlan(observedDataId, configurationPlan)
     # Currently, the molecular weight is directly taken from the simulation output
-    observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties)
+    observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties, observedDataId)
 
     if (!isEmpty(observedData$error)) {
       plotObject <- tlf::addErrorbar(
@@ -544,9 +544,10 @@ getCaptionFromStat <- function(statisticId, outputName) {
 #' }
 #' @param molWeight Molecular weight of compound
 #' @param axesProperties list of axes properties obtained from `getAxesProperties`
+#' @param observedDataId Id of the observed data for better handling error messages
 #' @return List with `time`, `y` and `error` values
 #' @keywords internal
-getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, axesProperties) {
+getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, axesProperties, observedDataId) {
   time <- ospsuite::toUnit(
     quantityOrDimension = "Time",
     values = as.numeric(observedResults$data[, 1]),
@@ -555,7 +556,7 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
   )
   # Convert output values, if molWeight is NA but not required, then toUnit works without any issue
   # if molWeight is NA and required, then toUnit crashes, error is caught
-  # and the error message indictes which observed data Id need molWeight
+  # and the error message indicates which observed data Id need molWeight
   outputValues <- tryCatch(
     {
       ospsuite::toUnit(
@@ -571,7 +572,7 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
     }
   )
   if (isEmpty(outputValues)) {
-    stop(messages$errorMolecularWeightRequired(""))
+    stop(messages$errorMolecularWeightRequired(observedDataId))
   }
 
   outputError <- NULL
@@ -693,7 +694,7 @@ getObservedCurveProperties <- function(configurationPlanCurve,
   # data: a data.frame with column 1 = Time, column 2 = Concentration, column 3 = Error
   # metaData: a list for each column of data that includes their unit
   observedResults <- getObservedDataFromConfigurationPlan(observedDataId, configurationPlan)
-  observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties)
+  observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties, observedDataId)
 
   outputData <- data.frame(
     x = observedData$time,
