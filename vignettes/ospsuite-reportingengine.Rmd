@@ -672,7 +672,6 @@ The table below provides a list of available templates and their usage.
 |Excel workflow input |[WorkflowInput.xlsx](templates/WorkflowInput.xlsx) |`createWorkflowFromExcelInput()`|
 |Word reference report|[reference.docx](templates/reference.docx) | `wordConversionTemplate` argument of [`Worklfow`](../reference/Worklfow.html) objects|
 |Qualification workflow script|[qualification-workflow-template.R](templates/qualification-workflow-template.R) | Source file to create function `createQualificationReport()`|
-|Qualification workflow script|<a href="templates/qualification-workflow-template.R" target="_blank" download>qualification-workflow-template.R</a>|Source file to create function `createQualificationReport()`|
 |Observed data dictionary|[tpDictionary.csv](templates/tpDictionary.csv)|`observedMetaDataFile` argument of [`SimulationSet`](../reference/SimulationSet.html) objects|
 |Study Design|[StudyDesign.csv](templates/StudyDesign.csv)| `studyDesignFile` argument of [`PopulationSimulationSet`](../reference/PopulationSimulationSet.html) objects|
 |json theme|[re-theme.json](templates/re-theme.json)|`setDefaultThemeFromJson()`|
