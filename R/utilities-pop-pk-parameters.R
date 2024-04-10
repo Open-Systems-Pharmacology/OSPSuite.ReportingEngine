@@ -152,7 +152,7 @@ plotPopulationPKParameters <- function(structureSets,
         resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", pkParameter$pkParameter, "log")
         pkParametersResults[[resultID]] <- saveTaskResults(
           id = resultID,
-          plot = pkParameterBoxplotLog,
+          plot = alignXTicks(pkParameterBoxplotLog),
           plotCaption = captions$plotPKParameters$boxplot(
             parameterCaption,
             output$displayName,
@@ -179,7 +179,7 @@ plotPopulationPKParameters <- function(structureSets,
       resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", pkParameter$pkParameter)
       pkParametersResults[[resultID]] <- saveTaskResults(
         id = resultID,
-        plot = pkParameterBoxplot,
+        plot = alignXTicks(pkParameterBoxplot),
         plotCaption = captions$plotPKParameters$boxplot(
           parameterCaption,
           output$displayName,
@@ -404,7 +404,7 @@ plotPopulationPKParameters <- function(structureSets,
         resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", pkParameter$pkParameter, "log")
         pkParametersResults[[resultID]] <- saveTaskResults(
           id = resultID,
-          plot = boxplotPKRatiosLog,
+          plot = alignXTicks(boxplotPKRatiosLog),
           plotCaption = captions$plotPKParameters$relativeChangePlot(
             parameterCaption,
             output$displayName,
@@ -420,7 +420,7 @@ plotPopulationPKParameters <- function(structureSets,
       resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", pkParameter$pkParameter)
       pkParametersResults[[resultID]] <- saveTaskResults(
         id = resultID,
-        plot = boxplotPKRatios,
+        plot = alignXTicks(boxplotPKRatios),
         plotCaption = captions$plotPKParameters$relativeChangePlot(
           parameterCaption,
           output$displayName,
@@ -492,7 +492,7 @@ plotPopulationPKParameters <- function(structureSets,
         resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_ratios", pkParameter$pkParameter, "log")
         pkParametersResults[[resultID]] <- saveTaskResults(
           id = resultID,
-          plot = boxplotPKRatiosLog,
+          plot = alignXTicks(boxplotPKRatiosLog),
           plotCaption = captions$plotPKParameters$ratioPlot(
             parameterCaption,
             output$displayName,
@@ -508,7 +508,7 @@ plotPopulationPKParameters <- function(structureSets,
       resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_ratios", pkParameter$pkParameter)
       pkParametersResults[[resultID]] <- saveTaskResults(
         id = resultID,
-        plot = boxplotPKRatios,
+        plot = alignXTicks(boxplotPKRatios),
         plotCaption = captions$plotPKParameters$ratioPlot(
           parameterCaption,
           output$displayName,
