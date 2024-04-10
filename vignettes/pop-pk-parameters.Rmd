@@ -2,6 +2,7 @@
 title: "PK Parameters in Population Workflows"
 resource_files:
   - figures
+  - templates
 output: 
   rmarkdown::html_vignette:
    number_sections: true

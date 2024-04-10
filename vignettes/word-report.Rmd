@@ -2,6 +2,7 @@
 title: "How to work with word reports"
 resource_files:
   - figures
+  - templates
 output: 
   rmarkdown::html_vignette:
     toc: true
@@ -62,7 +63,7 @@ file.copy(
 
 ### How to get the template
 
-Workflows use the following default template which can be downloaded via [GitHub](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/reference.docx)
+Workflows use the following default template which can be downloaded through the link [reference.docx](templates/reference.docx)
 
 Otherwise you can copy the file directly from its location within the package as illustrated below.
 
