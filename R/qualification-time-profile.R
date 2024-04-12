@@ -586,25 +586,6 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
   ))
 }
 
-#' @title getDefaultTimeProfileAxesSettings
-#' @description Get the default axes settings for mean and population time profiles
-#' for keeping compatibility with configuration plan from Matlab version
-#' @return List of `x` and `y` axes settings
-#' @keywords internal
-getDefaultTimeProfileAxesSettings <- function() {
-  xAxis <- list(
-    dimension = ospsuite::ospDimensions$Time, unit = ospsuite::ospUnits$Time$h,
-    min = NULL, max = NULL, scale = tlf::Scaling$lin,
-    grid = list(color = reEnv$theme$background$xGrid$color, linetype = reEnv$theme$background$xGrid$linetype)
-  )
-  yAxis <- list(
-    dimension = ospsuite::ospDimensions$`Concentration (mass)`, unit = ospsuite::ospUnits$`Concentration [mass]`$`µg/l`,
-    min = NULL, max = NULL, scale = tlf::Scaling$log,
-    grid = list(color = reEnv$theme$background$yGrid$color, linetype = reEnv$theme$background$yGrid$linetype)
-  )
-  return(list(x = xAxis, y = yAxis))
-}
-
 #' @title getObservedErrorValues
 #' @description
 #' Get the observed data error range to display on time profile plots
