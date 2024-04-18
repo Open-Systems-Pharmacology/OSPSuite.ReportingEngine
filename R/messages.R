@@ -258,7 +258,14 @@ messages <- list(
   warningNAFoundInPKAnalysisFile = function(filePath) {
     paste0(highlight("NaN"), " found in PK analysis file '", highlight(filePath), "'.")
   },
-
+  warningPKAnalysesMissingIds = function(ids, setName){
+    paste0(
+      "Missing ", highlight("IndividualIds"), " in PKAnalysis file for simulation set '", 
+      highlight(setName), "': ",
+      paste0("'", highlight(ids), "'", collapse = ", ")
+    )
+  },
+  
   #----- Info messages ----
   runStarting = function(runName, subRun = NULL) {
     if (is.null(subRun)) {
