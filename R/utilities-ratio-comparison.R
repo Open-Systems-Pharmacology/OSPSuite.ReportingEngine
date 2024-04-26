@@ -114,6 +114,16 @@ getPKRatioSummaryForSamePopulation <- function(structureSet, referenceSet) {
   # Check that both PK data to be compared are included in reference PK data
   validateIsIncluded(unique(pkData$QuantityPath), unique(referencePKData$QuantityPath))
   validateIsIncluded(unique(pkData$Parameter), unique(referencePKData$Parameter))
+  # Check that same individuals are present in both data sets and use intersection
+  checkSamePopulationIds(
+    setIds = pkData$IndividualId,
+    referenceSetIds = referencePKData$IndividualId,
+    setName = structureSet$simulationSet$simulationSetName,
+    referenceSetName = referenceSet$simulationSet$simulationSetName
+  )
+  ids <- intersect(pkData$IndividualId, referencePKData$IndividualId)
+  pkData <- pkData %>% filter(IndividualId %in% ids)
+  referencePKData <- referencePKData %>% filter(IndividualId %in% ids)
 
   # Pivot table to get fast computation of ratios and their statistics
   quantityPaths <- unique(pkData$QuantityPath)

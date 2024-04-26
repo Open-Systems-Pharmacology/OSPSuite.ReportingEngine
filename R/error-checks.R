@@ -657,3 +657,36 @@ checkHasRunOnAllCores <- function(coreResults, inputName, inputType, runType = "
   )
   return(invisible())
 }
+
+#' @title checkSamePopulationIds
+#' @description
+#' Check if PKAnalses with same population actually use the same IndividualIds
+#' @param setIds A vector of IndividualIds for a simulation set
+#' @param referenceSetIds A vector of IndividualIds for the reference simulation set
+#' @param setName Name of simulation set for warning message
+#' @param referenceSetName Name of the reference simulation set for warning message
+#' @keywords internal
+checkSamePopulationIds <- function(setIds,
+                                   referenceSetIds,
+                                   setName,
+                                   referenceSetName) {
+  tryCatch(
+    {
+      validateIsIncluded(referenceSetIds, setIds)
+    },
+    error = function(e) {
+      missingIds <- setdiff(referenceSetIds, setIds)
+      warning(messages$warningPKAnalysesMissingIds(missingIds, setName), call. = FALSE)
+    }
+  )
+  tryCatch(
+    {
+      validateIsIncluded(setIds, referenceSetIds)
+    },
+    error = function(e) {
+      missingIds <- setdiff(setIds, referenceSetIds)
+      warning(messages$warningPKAnalysesMissingIds(missingIds, referenceSetName), call. = FALSE)
+    }
+  )
+  return(invisible())
+}
