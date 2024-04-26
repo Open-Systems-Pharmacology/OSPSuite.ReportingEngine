@@ -83,7 +83,7 @@ plotMeanAbsorption <- function(structureSet, settings = NULL) {
     addOutputs(quantitiesOrPaths = quantity, simulation = simulation)
   }
 
-  simulationResults <- ospsuite::runSimulation(simulation)
+  simulationResults <- ospsuite::runSimulations(simulation)[[1]]
   simulationResultsOutput <- ospsuite::getOutputValues(
     simulationResults = simulationResults,
     quantitiesOrPaths = simulationResults$allQuantityPaths
@@ -91,7 +91,7 @@ plotMeanAbsorption <- function(structureSet, settings = NULL) {
 
   # 4) Fraction absorbed in venous blood
   ospsuite::setParameterValues(lungBloodFlowParameter, 0)
-  simulationResultsNoLungBloodFlow <- ospsuite::runSimulation(simulation)
+  simulationResultsNoLungBloodFlow <- ospsuite::runSimulations(simulation)[[1]]
   simulationResultsOutputNoLungBloodFlow <- ospsuite::getOutputValues(
     simulationResults = simulationResultsNoLungBloodFlow,
     quantitiesOrPaths = simulationResultsNoLungBloodFlow$allQuantityPaths
@@ -99,7 +99,7 @@ plotMeanAbsorption <- function(structureSet, settings = NULL) {
 
   # 5) Fraction absorbed in venous blood
   ospsuite::setParameterValues(portalVeinBloodFlowParameter, 0)
-  simulationResultsNoPortalVeinBloodFlow <- ospsuite::runSimulation(simulation)
+  simulationResultsNoPortalVeinBloodFlow <- ospsuite::runSimulations(simulation)[[1]]
   simulationResultsOutputNoPortalVeinBloodFlow <- ospsuite::getOutputValues(
     simulationResults = simulationResultsNoPortalVeinBloodFlow,
     quantitiesOrPaths = simulationResultsNoPortalVeinBloodFlow$allQuantityPaths
