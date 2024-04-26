@@ -17,7 +17,7 @@ plotMeanMassBalance <- function(structureSet, settings = NULL) {
   allMoleculePaths <- ospsuite::getAllMoleculePathsIn(simulation)
   ospsuite::clearOutputs(simulation)
   addOutputs(quantitiesOrPaths = allMoleculePaths, simulation = simulation)
-  simulationResults <- ospsuite::runSimulation(simulation)
+  simulationResults <- ospsuite::runSimulations(simulation)[[1]]
 
   allAppliedCompoundNames <- simulation$allXenobioticFloatingMoleculeNames()
   # Default configuration behavior integrates all xenobiotic molecules in mass balance
