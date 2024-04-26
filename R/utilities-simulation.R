@@ -127,7 +127,7 @@ simulateModelOnCore <- function(simulation,
 
   simRunOptions <- ospsuite::SimulationRunOptions$new(showProgress = showProgress, numberOfCores = 1)
   simulationResult <- NULL
-  simulationResult <- ospsuite::runSimulation(simulation = simulation, population = population, simulationRunOptions = simRunOptions)
+  simulationResult <- ospsuite::runSimulations(simulation = simulation, population = population, simulationRunOptions = simRunOptions)[[1]]
 
   write(
     paste0(ifNotNull(nodeName, paste0(nodeName, ": "), ""), "Simulation run complete."),
@@ -244,10 +244,10 @@ simulateModel <- function(structureSet, settings = NULL) {
     numberOfCores = settings$allowedCores
   )
 
-  simulationResult <- ospsuite::runSimulation(simulation,
+  simulationResult <- ospsuite::runSimulations(simulation,
     population = population,
     simulationRunOptions = simRunOptions
-  )
+  )[[1]]
 
   logDebug("Simulation run complete")
 
