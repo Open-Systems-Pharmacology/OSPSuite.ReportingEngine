@@ -2,6 +2,7 @@
 title: "Time profiles and Residuals task"
 resource_files:
   - figures
+  - templates
 output: 
   rmarkdown::html_vignette:
    number_sections: true

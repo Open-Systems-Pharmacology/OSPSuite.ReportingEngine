@@ -2,6 +2,7 @@
 title: "Add a title page to your workflow report"
 resource_files:
   - figures
+  - templates
 output: 
   rmarkdown::html_vignette:
     toc: true

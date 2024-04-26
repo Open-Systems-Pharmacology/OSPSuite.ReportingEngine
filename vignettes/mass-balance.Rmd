@@ -2,6 +2,7 @@
 title: "Mass Balance"
 resource_files:
   - figures
+  - templates
 output: 
   rmarkdown::html_vignette:
    number_sections: true
@@ -126,7 +127,7 @@ Then, the metabolite can be included in the grouping.
 ## A workflow leveraging mass balance settings
 
 In this workflow, the following mass balance settings file is used.
-The file is also available in [GitHub](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/mass-balance-settings.json).
+The file is also available through the following link [mass-balance-settings.json](templates/mass-balance-settings.json).
 
 ```{r template, echo=FALSE, results='asis'}
 cat(

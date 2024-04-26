@@ -2,6 +2,7 @@
 title: "Get Started"
 resource_files:
   - figures
+  - templates
 output: 
   rmarkdown::html_vignette:
     toc: true
@@ -30,7 +31,7 @@ This vignette introduces the notions and objects implemented in the OSP-Suite Re
 
 The `ospsuite.reportingengine` package aims at facilitating the design and build of reports evaluating PBPK models developed on PK-Sim or/and MoBi.
 
-To this end, the package benefits from the concept of R6 classes (similar to reference classes) which allows to define structured objects whose fields can be any object such as properties, methods or even other R6 objects.
+To this end, the package benefits from the concept of [R6 classes](https://r6.r-lib.org/articles/Introduction.html) (similar to reference classes) which allows to define structured objects whose fields can be any object such as properties, methods or even other R6 objects.
 R6 objects, or objects from R6 class, presents some peculiarities.
 
 - They are usually initialized using the method `$new(...)` (e.g. `r6Object <- R6Class$new()`).
@@ -60,26 +61,26 @@ The comprehensive documentation and usage of each of these objects is accessible
 |--------------------|------------|
 |[MeanModelWorkflow](../reference/MeanModelWorkflow.html)|Defined by user|
 |[PopulationWorkflow](../reference/PopulationWorkflow.html)|Defined by user|
-|[QualificationWorkflow](../reference/loadQualificationWorkflow.html)|Build in [loadQualificationWorkflow](../reference/QualificationWorkflow.html)|
+|[QualificationWorkflow](../reference/loadQualificationWorkflow.html)|Built in [loadQualificationWorkflow](../reference/QualificationWorkflow.html)|
 |**Simulation Set objects**|**Use case**|
 |[SimulationSet](../reference/SimulationSet.html)|Defined by user|
 |[PopulationSimulationSet](../reference/PopulationSimulationSet.html)|Defined by user|
-|[ConfigurationPlan](../reference/ConfigurationPlan.html)|Build in [loadQualificationWorkflow](../reference/QualificationWorkflow.html)|
+|[ConfigurationPlan](../reference/ConfigurationPlan.html)|Built in [loadQualificationWorkflow](../reference/QualificationWorkflow.html)|
 |**Output path and PK parameter objects**|**Use case**|
 |[Output](../reference/Output.html)|Defined by user|
 |[PkParameterInfo](../reference/PkParameterInfo.html)|Defined by user|
 |**Workflow task objects**|**Use case**|
-|[Task](../reference/Task.html)|Build in workflow objects|
-|[SimulationTask](../reference/SimulationTask.html)|Build in workflow objects|
-|[SensitivityAnalysisTask](../reference/SensitivityAnalysisTask.html)|Build in workflow objects|
-|[PopulationSensitivityAnalysisTask](../reference/PopulationSensitivityAnalysisTask.html)|Build in workflow objects|
-|[QualificationTask](../reference/QualificationTask.html)|Build in [QualificationWorkflow](../reference/loadQualificationWorkflow.html) objects|
-|[PlotTask](../reference/PlotTask.html)|Build in workflow objects|
-|[PopulationPlotTask](../reference/PopulationPlotTask.html)|Build in [PopulationWorkflow](../reference/PopulationWorkflow.html) objects|
-|[GofPlotTask](../reference/GofPlotTask.html)|Build in workflow objects|
+|[Task](../reference/Task.html)|Built in workflow objects|
+|[SimulationTask](../reference/SimulationTask.html)|Built in workflow objects|
+|[SensitivityAnalysisTask](../reference/SensitivityAnalysisTask.html)|Built in workflow objects|
+|[PopulationSensitivityAnalysisTask](../reference/PopulationSensitivityAnalysisTask.html)|Built in workflow objects|
+|[QualificationTask](../reference/QualificationTask.html)|Built in [QualificationWorkflow](../reference/loadQualificationWorkflow.html) objects|
+|[PlotTask](../reference/PlotTask.html)|Built in workflow objects|
+|[PopulationPlotTask](../reference/PopulationPlotTask.html)|Built in [PopulationWorkflow](../reference/PopulationWorkflow.html) objects|
+|[GofPlotTask](../reference/GofPlotTask.html)|Built in workflow objects|
 |**Workflow task settings objects**|**Use case**|
-|PlotSettings|Build in workflow objects|
-|[SensitivityPlotSettings](../reference/SensitivityPlotSettings.html)|Build in workflow objects|
+|PlotSettings|Built in workflow objects|
+|[SensitivityPlotSettings](../reference/SensitivityPlotSettings.html)|Built in workflow objects|
 
 
 ## 1.4. General scheme
@@ -173,12 +174,12 @@ unlink(myExampleWorkflow$workflowFolder, recursive = TRUE)
 
 # 2. Workflow
 
-`Workflow` objects define which models are evaluated, how they are evaluated and how the evaluations are reported.
+[`Workflow`](../reference/Workflow.html) objects define which models are evaluated, how they are evaluated and how the evaluations are reported.
 
 In the `ospsuite.reportingengine` package, two types of `Workflow` are available and can be created:
 
-1) `MeanModelWorkflow` dedicated on evaluations specific to mean models
-2) `PopulationWorkflow` dedicated on evaluations specific to population models
+1) [`MeanModelWorkflow`](../reference/MeanModelWorkflow.html) dedicated on evaluations specific to mean models
+2) [`PopulationWorkflow`](../reference/PopulationWorkflow.html) dedicated on evaluations specific to population models
 
 ## 2.1. MeanModelWorkflow
 
@@ -194,15 +195,30 @@ The black frames correspond to the tasks or evaluations performed by the workflo
 These tasks are defined using `Task` objects built in every `Workflow` object, meaning there is no need to input them when creating a `Workflow` object.
 Users access, update and switch the task on/off tasks after creation of their `Workflow`.
 
-```{r figure 1, out.width="100%", include=TRUE, fig.align="center", fig.cap= "Figure 1: Mean model workflow inputs and tasks", echo=FALSE}
+```{r, include=FALSE}
 # After running each vignette, their output is cleared when using devtools::check()
 # However, the content of "figures/" directory is required for docs/articles that display vignettes as a webpage
 # Thus, the file is temporarily copied to "figures/"
 dir.create("figures", showWarnings = FALSE)
 file.copy(
-  from = system.file("extdata", "mean-model-workflow-input-and-tasks.png", package = "ospsuite.reportingengine"),
-  to = "figures"
+  from = system.file(
+    "extdata", "mean-model-workflow-input-and-tasks.png",
+    package = "ospsuite.reportingengine"
+  ),
+  to = "figures",
+  overwrite = TRUE
 )
+file.copy(
+  from = system.file(
+    "extdata", "population-workflow-input-and-tasks.png",
+    package = "ospsuite.reportingengine"
+  ),
+  to = "figures",
+  overwrite = TRUE
+)
+```
+
+```{r figure 1, out.width="100%", include=TRUE, fig.align="center", fig.cap= "Figure 1: Mean model workflow inputs and tasks", echo=FALSE}
 knitr::include_graphics("figures/mean-model-workflow-input-and-tasks.png")
 ```
 
@@ -236,10 +252,6 @@ Three population workflow types are available in `ospsuite.reportingengine` and 
 
 
 ```{r figure 2, out.width="100%", include=TRUE, fig.align="center", fig.cap= "Figure 2: Population workflow inputs and tasks", echo=FALSE}
-file.copy(
-  from = system.file("extdata", "population-workflow-input-and-tasks.png", package = "ospsuite.reportingengine"),
-  to = "figures"
-)
 knitr::include_graphics("figures/population-workflow-input-and-tasks.png")
 ```
 
@@ -288,23 +300,23 @@ Most of the workflow properties correspond to the inputs used to create the work
 
 Additionally, the methods listed below can be used to access relevant information about the workflow:
 
-- `printReportingEngineInfo()`: prints information about the environment and packages currently used.
-- `getWatermark()`: prints the watermark to be displayed by the workflow.
-- `getParameterDisplayPaths()`: prints the mapping between parameters and their display paths
-- `getSimulationDescriptor()`: prints the simulation descriptor to be used by the workflow
-- `getAllTasks()`: prints the names of all the workflow available tasks
-- `getAllPlotTasks()`: prints the names of all the workflow plot tasks
-- `getActiveTasks()`: prints the names of all the workflow active tasks
-- `getInactiveTasks()`: prints the names of all the workflow inactive tasks
+- [`printReportingEngineInfo()`](../reference/Workflow.html#public-methods): prints information about the environment and packages currently used.
+- [`getWatermark()`](../reference/Workflow.html#public-methods): prints the watermark to be displayed by the workflow.
+- [`getParameterDisplayPaths()`](../reference/Workflow.html#public-methods): prints the mapping between parameters and their display paths
+- [`getSimulationDescriptor()`](../reference/Workflow.html#public-methods): prints the simulation descriptor to be used by the workflow
+- [`getAllTasks()`](../reference/Workflow.html#public-methods): prints the names of all the workflow available tasks
+- [`getAllPlotTasks()`](../reference/Workflow.html#public-methods): prints the names of all the workflow plot tasks
+- [`getActiveTasks()`](../reference/Workflow.html#public-methods): prints the names of all the workflow active tasks
+- [`getInactiveTasks()`](../reference/Workflow.html#public-methods): prints the names of all the workflow inactive tasks
 
 To update some of the workflow properties, the methods listed below can be used:
 
-- `setWatermark(watermark)`: set the watermark to be displayed by the workflow. 
+- [`setWatermark(watermark)`](../reference/Workflow.html#public-methods): set the watermark to be displayed by the workflow. 
 The input `watermark` is of type character.
-- `setParameterDisplayPaths(parameterDisplayPaths)`: set the the mapping between parameters and their display paths. The input `parameterDisplayPaths` is of type data.frame and includes "parameter" and "displayPath" in its variables. External functions can also be used instead:
-   - `setWorkflowParameterDisplayPaths(parameterDisplayPaths, workflow)`
-   - `setWorkflowParameterDisplayPathsFromFile(fileName, workflow)`
-- `setSimulationDescriptor(text)`: set the simulation descriptor of the workflow. 
+- [`setParameterDisplayPaths(parameterDisplayPaths)`](../reference/Workflow.html#public-methods): set the the mapping between parameters and their display paths. The input `parameterDisplayPaths` is of type data.frame and includes "parameter" and "displayPath" in its variables. External functions can also be used instead:
+   - [`setWorkflowParameterDisplayPaths(parameterDisplayPaths, workflow)`](../reference/setWorkflowParameterDisplayPaths.html)
+   - [`setWorkflowParameterDisplayPathsFromFile(fileName, workflow)`](../reference/setWorkflowParameterDisplayPathsFromFile.html)
+- [`setSimulationDescriptor(text)`](../reference/setSimulationDescriptor.html): set the simulation descriptor of the workflow. 
 The input `text` is of type character. 
 
 Finally, the method `runWorkflow()` runs the simulations and analyses of the models, and also saves the evaluations and their report.
@@ -418,8 +430,7 @@ Regarding units, two options are possible:
    - the dictionary must include the following new variables in '__ID__': '__time_unit__' and '__dv_unit__'.
    - the dictionary must also include the mapping to the variable names in the dataset using '__nonmenColumn__'.
 
-The example below shows the template of a dictionary content available on [GitHub](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/tpDictionary.csv):
-
+The example below shows content of the dictionary template [tpDictionary.csv](templates/tpDictionary.csv):
 
 ```{r table 3, echo=FALSE, results='asis'}
 knitr::kable(exampleDictionary, caption = "Table 3: Template for data dictionary")
@@ -616,7 +627,7 @@ This directory is specific of mean model workflows.
 - __Demography__ which contains the figures and tables obtained from `plotDemography` task and their source values as png and csv files.
 This directory is specific of population model workflows.
 
-Default figure format is png, but it is possible to change this default using __setPlotFormat()__.
+Default figure format is png, but it is possible to change this default using `setPlotFormat()`.
 
 ## 5.3. Reports and appendices
 
@@ -636,21 +647,32 @@ At the end of the workflow run, all the available appendices are combined into f
 - __Report-word.md__ which contains a markdown version of the report to be translated by *pandoc* for generating the word report.
 - __Report.docx__ which contains the word version of the report, including a table of content and numbering the figures and tables.
 
-The option `createWordReport` is set to __TRUE__ as default but can be set to __FALSE__ to prevent the conversion of __Report-word.md__ into __Report.docx__ using *pandoc* .
-
-
+The option [`createWordReport`](../reference/Workflow.html#public-fields) is set to __TRUE__ as default but can be set to __FALSE__ to prevent the conversion of __Report-word.md__ into __Report.docx__ using *pandoc* .
 
 # 6. Templates
 
+```{r, include=FALSE}
+# Save templates in the templates folder
+templateDir <- system.file("extdata", package = "ospsuite.reportingengine")
+templateFiles <- c(
+  "WorkflowInput.xlsx",
+  "reference.docx",
+  "qualification-workflow-template.R", "tpDictionary.csv", "StudyDesign.csv", "re-theme.json", "mass-balance-settings.json"
+)
+dir.create("templates", showWarnings = FALSE)
+file.copy(from = file.path(templateDir, templateFiles), to = file.path("templates", templateFiles), overwrite = TRUE)
+```
+
 For creating or tuning reports, starting from scratch could be challenging.
 For this reason, some templates have been created to make it easier.
-The table below provides a list of templates available on GitHub and their usage.
+The table below provides a list of available templates and their usage.
 
 |Template |Link |Usage |
 |---------|-----|---------|
-|Excel workflow input |[WorkflowInput.xlsx](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/WorkflowInput.xlsx) |`createWorkflowFromExcelInput`|
-|Word reference report|[reference.docx](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/reference.docx) | `wordConversionTemplate` argument of `Worklfow` objects|
-|Qualification workflow script|[qualification-workflow-template.R](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/qualification-workflow-template.R) | Source file to create function `createQualificationReport`|
-|Observed data dictionary|[tpDictionary.csv](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/tpDictionary.csv)|`observedMetaDataFile` argument of `SimulationSet` objects|
-|json theme|[re-theme.json](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/re-theme.json)|`setDefaultThemeFromJson`|
-
+|Excel workflow input |[WorkflowInput.xlsx](templates/WorkflowInput.xlsx) |`createWorkflowFromExcelInput()`|
+|Word reference report|[reference.docx](templates/reference.docx) | `wordConversionTemplate` argument of [`Worklfow`](../reference/Worklfow.html) objects|
+|Qualification workflow script|[qualification-workflow-template.R](templates/qualification-workflow-template.R) | Source file to create function `createQualificationReport()`|
+|Observed data dictionary|[tpDictionary.csv](templates/tpDictionary.csv)|`observedMetaDataFile` argument of [`SimulationSet`](../reference/SimulationSet.html) objects|
+|Study Design|[StudyDesign.csv](templates/StudyDesign.csv)| `studyDesignFile` argument of [`PopulationSimulationSet`](../reference/PopulationSimulationSet.html) objects|
+|json theme|[re-theme.json](templates/re-theme.json)|`setDefaultThemeFromJson()`|
+|Mass Balance settings|[mass-balance-settings.json](templates/mass-balance-settings.json)|`massBalanceFile` argument of [`SimulationSet`](../reference/SimulationSet.html) objects|
