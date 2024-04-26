@@ -711,8 +711,9 @@ getBoxWhiskerPlotConfiguration <- function(plotScale = "log",
   )
   # Remove xlabel
   plotConfiguration$labels$xlabel$text <- NULL
-  # Default angle for xticklabels is 45 degrees
+  # Default angle for x-ticklabels is 45 degrees right aligned
   plotConfiguration$xAxis$font$angle <- 45
+  plotConfiguration$xAxis$font$align <- tlf::Alignments$right
   # No need for legend for boxplots
   plotConfiguration$legend$position <- tlf::LegendPositions$none
   # Color groups
@@ -738,6 +739,45 @@ getBoxWhiskerPlotConfiguration <- function(plotScale = "log",
   plotConfiguration$yAxis$ticks <- boxBreaks
   return(plotConfiguration)
 }
+
+#' @title alignXTicks
+#' @description
+#' Use the `plotConfiguration` of a `plotObject`
+#' to check and perform vertical alignment of x-axis tick labels
+#' @param plotObject A `ggplot` object
+#' @return A `ggplot` object
+#' @keywords internal
+#' @import ggplot2
+alignXTicks <- function(plotObject) {
+  # vertical alignment required only for 45 degrees right aligned x-axis labels
+  requireAlignment <- all(
+    isIncluded(
+      plotObject$plotConfiguration$xAxis$font$align,
+      tlf::Alignments$right
+    ),
+    plotObject$plotConfiguration$xAxis$font$angle %in% 45
+  )
+  if (!requireAlignment) {
+    return(plotObject)
+  }
+  xAxisFont <- plotObject$plotConfiguration$xAxis$font
+  plotObject <- plotObject + ggplot2::theme(
+    axis.text.x = ggplot2::element_text(
+      colour = xAxisFont$color,
+      size = xAxisFont$size,
+      face = xAxisFont$fontFace,
+      family = tlf:::.checkPlotFontFamily(xAxisFont$fontFamily),
+      hjust = switch(xAxisFont$align,
+        left = 0,
+        center = 0.5,
+        right = 1
+      ),
+      vjust = 1
+    )
+  )
+  return(plotObject)
+}
+
 
 #' @title getColorFromOutputGroup
 #' @description Get the appropriate colors from an output group
