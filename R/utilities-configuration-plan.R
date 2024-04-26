@@ -122,6 +122,12 @@ getAxesProperties <- function(axesSettings) {
   return(list(x = xAxis, y = yAxis, y2 = y2Axis, y3 = y3Axis))
 }
 
+#' @title formatAxisProperties
+#' @description
+#' Format configuration plan field values to a list compatible with `tlf` package nomenclature
+#' @param axisField List of configuration plan field properties
+#' @return A list of properties compatible with `tlf` package nomenclature
+#' @keywords internal
 formatAxisProperties <- function(axisField) {
   list(
     dimension = axisField$Dimension,
@@ -135,6 +141,29 @@ formatAxisProperties <- function(axisField) {
       linetype = tlfLinetype(axisField$DefaultLineStyle)
     )
   )
+}
+
+#' @title getAxesPropertiesFromName
+#' @description
+#' Get axes properties from global field `AxesSettings` of configuration plan if defined,
+#' otherwise use default values.
+#' @param configurationPlan A `ConfigurationPlan` object
+#' @param plotName Field name of the plot in the configuration plan `AxesSettings`
+#' @return A list of properties for axes identified for `x`, `y` and `y2` axes.
+#' The identified properties are directly compatible with `tlf` package nomenclature
+#' @keywords internal
+#' @import jsonlite
+getAxesPropertiesFromName <- function(configurationPlan, plotName) {
+  axesProperties <- getAxesProperties(configurationPlan$plots$AxesSettings[[plotName]])
+  if (!isEmpty(axesProperties)) {
+    return(axesProperties)
+  }
+  # If no axes settings are defined, use default values stored in the package json file
+  defaultAxisSettings <- jsonlite::fromJSON(
+    txt = system.file("extdata", "qualification-axis-settings.json", package = "ospsuite.reportingengine"),
+    simplifyVector = FALSE
+  )
+  return(getAxesProperties(defaultAxisSettings[[plotName]]))
 }
 
 #' @title updatePlotAxes
@@ -191,7 +220,7 @@ updatePlotAxes <- function(plotObject, axesProperties) {
 tlfLinetype <- function(configurationLinetype) {
   # Unknown or NULL value will translate as NULL
   # which will lead to use default behaviour
-  if (isOfLength(configurationLinetype, 0)) {
+  if (isEmpty(configurationLinetype)) {
     return()
   }
   # tolower is used to ensure that there is no issue with caps from field values

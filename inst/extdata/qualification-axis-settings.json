@@ -1,0 +1,114 @@
+{
+  "GOFMergedPlotsPredictedVsObserved": [
+    {
+      "Type": "X",
+      "Dimension": "Concentration (mass)",
+      "Unit": "µg/l",
+      "GridLines": false,
+      "Scaling": "Log"
+    },
+    {
+      "Type": "Y",
+      "Dimension": "Concentration (mass)",
+      "Unit": "µg/l",
+      "GridLines": false,
+      "Scaling": "Log"
+    }
+  ],
+  "GOFMergedPlotsResidualsOverTime": [
+    {
+      "Type": "X",
+      "Dimension": "Time",
+      "Unit": "h",
+      "GridLines": false,
+      "Scaling": "Linear"
+    },
+    {
+      "Type": "Y",
+      "Dimension": "Dimensionless",
+      "Unit": "",
+      "GridLines": false,
+      "Scaling": "Linear"
+    }
+  ],
+  "ComparisonTimeProfile": [
+    {
+      "Type": "X",
+      "Dimension": "Time",
+      "Unit": "h",
+      "GridLines": false,
+      "Scaling": "Linear"
+    },
+    {
+      "Type": "Y",
+      "Dimension": "Concentration (mass)",
+      "Unit": "µg/l",
+      "GridLines": false,
+      "Scaling": "Log"
+    }
+  ],
+  "DDIRatioPlotsPredictedVsObserved": [
+    {
+      "Type": "X",
+      "Dimension": "Dimensionless",
+      "Unit": "",
+      "GridLines": false,
+      "Scaling": "Log"
+    },
+    {
+      "Type": "Y",
+      "Dimension": "Dimensionless",
+      "Unit": "",
+      "GridLines": false,
+      "Scaling": "Log"
+    }
+  ],
+  "DDIRatioPlotsResidualsVsObserved": [
+    {
+      "Type": "X",
+      "Dimension": "Dimensionless",
+      "Unit": "",
+      "GridLines": false,
+      "Scaling": "Log"
+    },
+    {
+      "Type": "Y",
+      "Dimension": "Dimensionless",
+      "Unit": "",
+      "GridLines": false,
+      "Scaling": "Log"
+    }
+  ],
+  "PKRatioPlots": [
+    {
+      "Type": "X",
+      "Dimension": "Age",
+      "Unit": "year(s)",
+      "GridLines": false,
+      "Scaling": "Linear"
+    },
+    {
+      "Type": "Y",
+      "Dimension": "Dimensionless",
+      "Unit": "",
+      "GridLines": false,
+      "Scaling": "Log"
+    }
+  ],
+  "TimeProfile": [
+    {
+      "Type": "X",
+      "Dimension": "Time",
+      "Unit": "h",
+      "GridLines": false,
+      "Scaling": "Linear"
+    },
+    {
+      "Type": "Y",
+      "Dimension": "Concentration (mass)",
+      "Unit": "µg/l",
+      "GridLines": false,
+      "Scaling": "Log"
+    }
+  ]
+}

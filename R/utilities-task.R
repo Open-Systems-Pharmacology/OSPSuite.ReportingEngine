@@ -919,7 +919,10 @@ loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotTimeProfiles,
-    settings = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$TimeProfile) %||% getDefaultTimeProfileAxesSettings())
+    settings = list(axes = getAxesPropertiesFromName(
+      configurationPlan = configurationPlan,
+      plotName = "TimeProfile"
+    ))
   ))
 }
 
@@ -960,8 +963,14 @@ loadGOFMergedTask <- function(workflow, configurationPlan) {
     active = active,
     message = defaultWorkflowMessages$plotGOFMerged,
     settings = list(
-      predictedVsObserved = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$GOFMergedPlotsPredictedVsObserved)),
-      residualsOverTime = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$GOFMergedPlotsResidualsOverTime)),
+      predictedVsObserved = list(axes = getAxesPropertiesFromName(
+        configurationPlan = configurationPlan,
+        plotName = "GOFMergedPlotsPredictedVsObserved"
+      )),
+      residualsOverTime = list(axes = getAxesPropertiesFromName(
+        configurationPlan = configurationPlan,
+        plotName = "GOFMergedPlotsResidualsOverTime"
+      )),
       digits = reEnv$formatNumericsDigits,
       nsmall = reEnv$formatNumericsSmall,
       scientific = reEnv$formatNumericsScientific
@@ -1007,7 +1016,12 @@ loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPl
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotComparisonTimeProfiles,
-    settings = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$ComparisonTimeProfile))
+    settings = list(
+      axes = getAxesPropertiesFromName(
+        configurationPlan = configurationPlan,
+        plotName = "ComparisonTimeProfile"
+      )
+    )
   ))
 }
 
@@ -1049,7 +1063,10 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
     active = active,
     message = defaultWorkflowMessages$plotPKRatio,
     settings = list(
-      axes = getAxesProperties(configurationPlan$plots$AxesSettings$PKRatioPlots),
+      axes = getAxesPropertiesFromName(
+        configurationPlan = configurationPlan,
+        plotName = "PKRatioPlots"
+      ),
       digits = reEnv$formatNumericsDigits,
       nsmall = reEnv$formatNumericsSmall,
       scientific = reEnv$formatNumericsScientific,
@@ -1115,8 +1132,14 @@ loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
     active = active,
     message = defaultWorkflowMessages$plotDDIRatio,
     settings = list(
-      predictedVsObserved = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$DDIRatioPlotsPredictedVsObserved)),
-      residualsOverTime = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$DDIRatioPlotsResidualsVsObserved)),
+      predictedVsObserved = list(axes = getAxesPropertiesFromName(
+        configurationPlan = configurationPlan,
+        plotName = "DDIRatioPlotsPredictedVsObserved"
+      )),
+      residualsOverTime = list(axes = getAxesPropertiesFromName(
+        configurationPlan = configurationPlan,
+        plotName = "DDIRatioPlotsResidualsVsObserved"
+      )),
       digits = reEnv$formatNumericsDigits,
       nsmall = reEnv$formatNumericsSmall,
       scientific = reEnv$formatNumericsScientific
