@@ -159,9 +159,16 @@ plotPopulationPKParameters <- function(structureSets,
       }
 
       # Report tables summarizing the distributions
+      # Caution: since simulationSetName is a factor, 
+      # Unused levels need to be removed first to prevent errors in tlf::getPKParameterMeasure
+      allSetNames <-levels(pkParameterData$simulationSetName)
+      usedSetNames <- unique(as.character(pkParameterData$simulationSetName))
       pkParameterTable <- getPKParameterMeasure(
         data = pkParameterData %>% 
-          mutate(simulationSetName = as.character(simulationSetName)),
+          mutate(simulationSetName = factor(
+            simulationSetName, 
+            levels = intersect(allSetNames, usedSetNames)
+            )),
         dataMapping = pkParametersMapping
       )
       # A different table needs to be created here
