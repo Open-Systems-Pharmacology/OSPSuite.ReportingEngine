@@ -208,7 +208,7 @@ plotPopulationPKParameters <- function(structureSets,
         # Include reference population if defined
         includeReferenceInRangePlot <- all(
           !isEmpty(referenceSimulationSetName),
-          isIncluded(unique(pkParameterData$simulationSetName), referenceSimulationSetName)
+          isIncluded(referenceSimulationSetName, unique(pkParameterData$simulationSetName))
         )
         if (includeReferenceInRangePlot) {
           # Get the table for reference population
@@ -361,7 +361,7 @@ plotPopulationPKParameters <- function(structureSets,
       # Table is output for every workflow except parallel no reference
       noRatio <- any(
         isEmpty(referenceSimulationSetName),
-        !isIncluded(unique(pkParameterData$simulationSetName), referenceSimulationSetName),
+        !isIncluded(referenceSimulationSetName, unique(pkParameterData$simulationSetName)),
         isOfLength(unique(pkParameterData$simulationSetName), 1)
       )
       if (noRatio) {
