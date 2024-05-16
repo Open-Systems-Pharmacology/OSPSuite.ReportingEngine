@@ -112,9 +112,6 @@ messages <- list(
   errorUnitNotFromDimension = function(unit, dimension) {
     paste0(callingFunction(), "Unit '", paste0(unit, collapse = "', '"), "' is not included in available units for dimension: '", paste0(dimension, collapse = "', '"), "'.")
   },
-  errorNotSameOutputsBetweenSets = function(setNames) {
-    paste0(callingFunction(), "Simulation sets '", paste0(setNames, collapse = "', '"), "' require same outputs and PK parameters.  Verify the outputs and PK parameters of simulation sets using the function: 'getPKParametersInSimulationSet'.")
-  },
   errorHasNoUniqueValues = function(values, variableName = NULL, na.rm = TRUE) {
     if (na.rm) {
       values <- values[!is.na(values)]
@@ -263,6 +260,33 @@ messages <- list(
       "Missing ", highlight("IndividualIds"), " in PKAnalysis file for simulation set '", 
       highlight(setName), "': ",
       paste0("'", highlight(ids), "'", collapse = ", ")
+    )
+  },
+  warningPKAnalysesMissingIds = function(ids, setName){
+    paste0(
+      "Missing ", highlight("IndividualIds"), " in PKAnalysis file for simulation set '", 
+      highlight(setName), "': ",
+      paste0("'", highlight(ids), "'", collapse = ", ")
+    )
+  },
+  warningMissingFromReferenceSet = function(path, simulationSetName, pkParameters = NULL){
+    if(is.null(pkParameters)){
+      return(
+        paste0(
+          "Output path '", highlight(path), 
+          "' was NOT defined for reference simulation set '", highlight(simulationSetName), 
+          "'. Ouptut path and its PK Parameters were added to the list of figures to export."
+        )
+      )
+    }
+    return(
+      paste0(
+        "The following PK Parameters '", 
+        paste(highlight(pkParameters), collapse = "', '"), 
+        "' were NOT defined for the Ouptut path '", highlight(path), 
+        "' in the reference simulation set '", highlight(simulationSetName), 
+        "'. The PK Parameters were added to the list of figures to export."
+      )
     )
   },
   
