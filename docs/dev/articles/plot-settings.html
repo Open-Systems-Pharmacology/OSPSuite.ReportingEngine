@@ -336,25 +336,26 @@ example in which <strong><code>plotConfigurations</code></strong> and
 <span>    simulationSets <span class="op">=</span> <span class="va">setA</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-A"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:02</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:36</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 26/04/2024 - 20:08:02</span></span>
+<span><span class="co">#&gt;  Date: 21/05/2024 - 10:47:36</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az586-617</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1258-893</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.4.0 (2024-04-24 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.0.532</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.0.537</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.2</span></span>
-<span><span class="co">#&gt;  tlf version: 1.5.165</span></span>
-<span></span>
+<span><span class="co">#&gt;  tlf version: 1.5.167</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="va">workflowA</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simulate"</span>, <span class="st">"plotTimeProfilesAndResiduals"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The next chunk of code will define <code>PlotConfiguration</code>
 objects to be included in <strong><code>settings</code></strong>:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define plot configuration for obsVsPred</span></span>
 <span><span class="va">obsVsPredConfiguration</span> <span class="op">&lt;-</span> <span class="va">PlotConfiguration</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  xlabel <span class="op">=</span> <span class="st">"Observed values [µmol/ml]"</span>,</span>
@@ -390,7 +391,7 @@ objects to be included in <strong><code>settings</code></strong>:</p>
 <p>Then, the <strong><code>settings</code></strong> field of the
 <strong>“plotTimeProfilesAndResiduals”</strong> task can be updated as
 shown below:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Run the workflow</span></span>
 <span><span class="va">workflowA</span><span class="op">$</span><span class="va">plotTimeProfilesAndResiduals</span><span class="op">$</span><span class="va">settings</span> <span class="op">&lt;-</span> <span class="va">mySettings</span></span></code></pre></div>
 <p>The run of the workflow with updated settings and get the resulting
@@ -401,31 +402,31 @@ quite different. However, the option <strong><code>bins</code></strong>
 is currently set among all plots of the task. Regarding observed vs
 simulated plots, the got the updated xlabel, ylabel and watermark as
 defined in the plot configuration.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Run the workflow</span></span>
 <span><span class="va">workflowA</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:02</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:36</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:02</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:36</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:02</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:36</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Splitting simulations for parallel run: <span style="color: #00BBBB; font-weight: bold; font-style: italic;">1</span> simulations split into <span style="color: #00BBBB; font-weight: bold; font-style: italic;">1</span> subsets</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:02</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:36</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">subset simulations</span></span></span>
 <span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:03</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:37</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:03</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:37</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:03</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:37</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">A</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:06</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:39</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:06</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmp2HdEq9/temp_libpath15f0b2f46a0/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-A" -t docx -o "Example-A/Report-word.docx" "Example-A/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:39</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmpeqe55w/temp_libpath1fbc2b4b43a3/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-A" -t docx -o "Example-A/Report-word.docx" "Example-A/Report-word.md"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:06</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0.1 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:39</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0 min</span></span></code></pre></div>
 <details><summary><strong>Report</strong>
 </summary><img src="figures/report-snapshot-64.png" style="width:100%; border-style: none;"></details>
 </div>
@@ -475,7 +476,7 @@ but this can be tuned with the optional field
 (<code>TRUE</code>/<code>FALSE</code>) from the task field
 <strong><code>settings</code></strong>.</p>
 <p>Below shows examples of how to set such options:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Associate the bin edges</span></span>
 <span><span class="va">workflowA</span><span class="op">$</span><span class="va">plotPKParameters</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span></span>

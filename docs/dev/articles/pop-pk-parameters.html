@@ -162,14 +162,16 @@ object describing the PK parameters to display in the report.</p>
 <span><span class="co">#&gt;    Name: C_max </span></span>
 <span><span class="co">#&gt;    DisplayName: Cmax </span></span>
 <span><span class="co">#&gt;    Dimension: Concentration (molar) </span></span>
-<span><span class="co">#&gt;    DisplayUnit: µmol/l</span></span>
-<span><span class="fu">updatePKParameter</span><span class="op">(</span><span class="st">"AUC_tEnd"</span>, displayName <span class="op">=</span> <span class="st">"AUC"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    DisplayUnit: µmol/l</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">updatePKParameter</span><span class="op">(</span><span class="st">"AUC_tEnd"</span>, displayName <span class="op">=</span> <span class="st">"AUC"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; PKParameter: </span></span>
 <span><span class="co">#&gt;    Name: AUC_tEnd </span></span>
 <span><span class="co">#&gt;    DisplayName: AUC </span></span>
 <span><span class="co">#&gt;    Dimension: AUC (molar) </span></span>
-<span><span class="co">#&gt;    DisplayUnit: µmol*min/l</span></span>
-<span></span>
+<span><span class="co">#&gt;    DisplayUnit: µmol*min/l</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Define paths and PK parameters to report</span></span>
 <span><span class="va">outputA</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Output.html">Output</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  path <span class="op">=</span> <span class="st">"Organism|A|Concentration in container"</span>,</span>
@@ -192,7 +194,7 @@ geometric mean, SD and CV.</p>
 <h5 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h5>
 <details><summary><strong>Code</strong>
-</summary><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define the populations to report</span></span>
 <span><span class="va">set500</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PopulationSimulationSet.html">PopulationSimulationSet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  simulationSetName <span class="op">=</span> <span class="st">"500 individuals"</span>,</span>
@@ -214,62 +216,63 @@ geometric mean, SD and CV.</p>
 <span>    simulationSets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">set500</span>, <span class="va">set200</span><span class="op">)</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-Pop-PK"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:16</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:48</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 26/04/2024 - 20:08:16</span></span>
+<span><span class="co">#&gt;  Date: 21/05/2024 - 10:47:48</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az586-617</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1258-893</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.4.0 (2024-04-24 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.0.532</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.0.537</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.2</span></span>
-<span><span class="co">#&gt;  tlf version: 1.5.165</span></span>
-<span></span>
+<span><span class="co">#&gt;  tlf version: 1.5.167</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="va">workflowParallel</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simulate"</span>, <span class="st">"calculatePKParameters"</span>, <span class="st">"plotPKParameters"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run the workflow</span></span>
 <span><span class="va">workflowParallel</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:16</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:48</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:16</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:49</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:16</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:49</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Simulations</span></span></span>
 <span><span class="co">#&gt;   |                                                                              |                                                                      |   0%</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:16</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:49</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">500 individuals (Pop500_p1p2p3)</span></span></span>
 <span><span class="co">#&gt;   |                                                                              |===================================                                   |  50%</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:17</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:49</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">200 individuals (Pop200_p1p2p3)</span></span></span>
 <span><span class="co">#&gt;   |                                                                              |======================================================================| 100%</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:17</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:50</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:17</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:50</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Calculate PK Parameters task</span></span></span>
 <span><span class="co">#&gt;   |                                                                              |                                                                      |   0%</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:17</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:50</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Calculate PK Parameters task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">500 individuals</span></span></span>
 <span><span class="co">#&gt;   |                                                                              |===================================                                   |  50%</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:18</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:50</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Calculate PK Parameters task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">200 individuals</span></span></span>
 <span><span class="co">#&gt;   |                                                                              |======================================================================| 100%</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:18</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:50</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Calculate PK Parameters task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:18</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:50</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:27</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:55</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span> completed in 0.1 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:27</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmp2HdEq9/temp_libpath15f0b2f46a0/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-Pop-PK" -t docx -o "Example-Pop-PK/Report-word.docx" "Example-Pop-PK/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:55</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmpeqe55w/temp_libpath1fbc2b4b43a3/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-Pop-PK" -t docx -o "Example-Pop-PK/Report-word.docx" "Example-Pop-PK/Report-word.md"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:27</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.2 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:55</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.1 min</span></span></code></pre></div>
 </details><details><summary><strong>Report</strong>
 </summary><img src="figures/report-snapshot-65.png" style="width:100%; border-style: none;"></details>
 </div>
@@ -328,18 +331,19 @@ in the logs.</p>
 can also be checked and set by the user globally as illustrated below.
 But also locally within the workflow task
 (<code>workflow$calculatePKParameters$settings$mcRandomSeed</code>)</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get the random seed for the MC sampling</span></span>
 <span><span class="fu"><a href="../reference/getDefaultMCRandomSeed.html">getDefaultMCRandomSeed</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 123456</span></span>
-<span></span>
+<span><span class="co">#&gt; [1] 123456</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Get the number of repetitions of the MC sampling</span></span>
 <span><span class="fu"><a href="../reference/getDefaultMCRepetitions.html">getDefaultMCRepetitions</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 10000</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Set a new random seed for the MC sampling</span></span>
 <span><span class="fu"><a href="../reference/setDefaultMCRandomSeed.html">setDefaultMCRandomSeed</a></span><span class="op">(</span><span class="fl">54321</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Set the number of repetitions of the MC sampling</span></span>
 <span><span class="fu"><a href="../reference/setDefaultMCRepetitions.html">setDefaultMCRepetitions</a></span><span class="op">(</span><span class="fl">1e2</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -351,7 +355,7 @@ between different populations. Note that the quality and parameters of
 approximation from the Monte Carlo sampling is reported in the logs and
 displayed on the console.</p>
 <details><summary><strong>Code</strong>
-</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define reference population</span></span>
 <span><span class="va">set500</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PopulationSimulationSet.html">PopulationSimulationSet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  referencePopulation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -375,20 +379,21 @@ displayed on the console.</p>
 <span>    simulationSets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">set500</span>, <span class="va">set200</span><span class="op">)</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-Pop-PK"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:31</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:58</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 26/04/2024 - 20:08:31</span></span>
+<span><span class="co">#&gt;  Date: 21/05/2024 - 10:47:58</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az586-617</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1258-893</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.4.0 (2024-04-24 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.0.532</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.0.537</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.2</span></span>
-<span><span class="co">#&gt;  tlf version: 1.5.165</span></span>
-<span></span>
+<span><span class="co">#&gt;  tlf version: 1.5.167</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Update settings to display the progress bar of the MC Simulations</span></span>
 <span><span class="co"># and use less simulation to speed up the workflow</span></span>
 <span><span class="va">ratioWorkflow</span><span class="op">$</span><span class="va">calculatePKParameters</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">showProgress</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span>
@@ -401,27 +406,27 @@ displayed on the console.</p>
 <span></span>
 <span><span class="co"># Run the workflow</span></span>
 <span><span class="va">ratioWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:31</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:59</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">ratioComparison</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:31</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:59</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Calculate PK Parameters task</span></span></span>
 <span><span class="co">#&gt;   |                                                                              |                                                                      |   0%</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:31</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:59</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Calculate PK Parameters task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">500 individuals</span></span></span>
 <span><span class="co">#&gt;   |                                                                              |===================================                                   |  50%</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:31</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:59</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Calculate PK Parameters task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">200 individuals</span></span></span>
 <span><span class="co">#&gt;   |                                                                              |======================================================================| 100%</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:32</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:47:59</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Simulation Set '<span style="color: #00BBBB; font-weight: bold; font-style: italic;">200 individuals</span>' was identified with population <span style="color: #00BBBB; font-weight: bold; font-style: italic;">different</span> from reference '<span style="color: #00BBBB; font-weight: bold; font-style: italic;">500 individuals</span>'.</span></span>
 <span><span class="co">#&gt; Ratio comparison will use <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Monte Carlo Sampling</span> for analyzing statistics.</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:32</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:00</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Monte Carlo Sampling for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">200 individuals</span> will use <span style="color: #00BBBB; font-weight: bold; font-style: italic;">100</span> repetitions with Random Seed <span style="color: #00BBBB; font-weight: bold; font-style: italic;">123456</span></span></span>
 <span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=                                                                     |   1%  |                                                                              |=                                                                     |   2%  |                                                                              |==                                                                    |   3%  |                                                                              |===                                                                   |   4%  |                                                                              |====                                                                  |   5%  |                                                                              |====                                                                  |   6%  |                                                                              |=====                                                                 |   7%  |                                                                              |======                                                                |   8%  |                                                                              |======                                                                |   9%  |                                                                              |=======                                                               |  10%  |                                                                              |========                                                              |  11%  |                                                                              |========                                                              |  12%  |                                                                              |=========                                                             |  13%  |                                                                              |==========                                                            |  14%  |                                                                              |==========                                                            |  15%  |                                                                              |===========                                                           |  16%  |                                                                              |============                                                          |  17%  |                                                                              |=============                                                         |  18%  |                                                                              |=============                                                         |  19%  |                                                                              |==============                                                        |  20%  |                                                                              |===============                                                       |  21%  |                                                                              |===============                                                       |  22%  |                                                                              |================                                                      |  23%  |                                                                              |=================                                                     |  24%  |                                                                              |==================                                                    |  25%  |                                                                              |==================                                                    |  26%  |                                                                              |===================                                                   |  27%  |                                                                              |====================                                                  |  28%  |                                                                              |====================                                                  |  29%  |                                                                              |=====================                                                 |  30%  |                                                                              |======================                                                |  31%  |                                                                              |======================                                                |  32%  |                                                                              |=======================                                               |  33%  |                                                                              |========================                                              |  34%  |                                                                              |========================                                              |  35%  |                                                                              |=========================                                             |  36%  |                                                                              |==========================                                            |  37%  |                                                                              |===========================                                           |  38%  |                                                                              |===========================                                           |  39%  |                                                                              |============================                                          |  40%  |                                                                              |=============================                                         |  41%  |                                                                              |=============================                                         |  42%  |                                                                              |==============================                                        |  43%  |                                                                              |===============================                                       |  44%  |                                                                              |================================                                      |  45%  |                                                                              |================================                                      |  46%  |                                                                              |=================================                                     |  47%  |                                                                              |==================================                                    |  48%  |                                                                              |==================================                                    |  49%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================                                  |  51%  |                                                                              |====================================                                  |  52%  |                                                                              |=====================================                                 |  53%  |                                                                              |======================================                                |  54%  |                                                                              |======================================                                |  55%  |                                                                              |=======================================                               |  56%  |                                                                              |========================================                              |  57%  |                                                                              |=========================================                             |  58%  |                                                                              |=========================================                             |  59%  |                                                                              |==========================================                            |  60%  |                                                                              |===========================================                           |  61%  |                                                                              |===========================================                           |  62%  |                                                                              |============================================                          |  63%  |                                                                              |=============================================                         |  64%  |                                                                              |==============================================                        |  65%  |                                                                              |==============================================                        |  66%  |                                                                              |===============================================                       |  67%  |                                                                              |================================================                      |  68%  |                                                                              |================================================                      |  69%  |                                                                              |=================================================                     |  70%  |                                                                              |==================================================                    |  71%  |                                                                              |==================================================                    |  72%  |                                                                              |===================================================                   |  73%  |                                                                              |====================================================                  |  74%  |                                                                              |====================================================                  |  75%  |                                                                              |=====================================================                 |  76%  |                                                                              |======================================================                |  77%  |                                                                              |=======================================================               |  78%  |                                                                              |=======================================================               |  79%  |                                                                              |========================================================              |  80%  |                                                                              |=========================================================             |  81%  |                                                                              |=========================================================             |  82%  |                                                                              |==========================================================            |  83%  |                                                                              |===========================================================           |  84%  |                                                                              |============================================================          |  85%  |                                                                              |============================================================          |  86%  |                                                                              |=============================================================         |  87%  |                                                                              |==============================================================        |  88%  |                                                                              |==============================================================        |  89%  |                                                                              |===============================================================       |  90%  |                                                                              |================================================================      |  91%  |                                                                              |================================================================      |  92%  |                                                                              |=================================================================     |  93%  |                                                                              |==================================================================    |  94%  |                                                                              |==================================================================    |  95%  |                                                                              |===================================================================   |  96%  |                                                                              |====================================================================  |  97%  |                                                                              |===================================================================== |  98%  |                                                                              |===================================================================== |  99%  |                                                                              |======================================================================| 100%</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:32</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:00</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Monte Carlo Sampling</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:32</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:00</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>There were 2 warnings in `summarise()`.</span></span>
 <span><span class="co">#&gt; The first warning was:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> In argument: `MeanLog = mean(log(Value), na.rm = TRUE)`.</span></span>
@@ -430,7 +435,7 @@ displayed on the console.</p>
 <span><span class="co">#&gt; Caused by warning in `log()`:</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> NaNs produced</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Run `dplyr::last_dplyr_warnings()` to see the 1 remaining warning.</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:33</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:00</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>There were 2 warnings in `summarise()`.</span></span>
 <span><span class="co">#&gt; The first warning was:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> In argument: `MeanLog = mean(log(Value), na.rm = TRUE)`.</span></span>
@@ -439,18 +444,18 @@ displayed on the console.</p>
 <span><span class="co">#&gt; Caused by warning in `log()`:</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> NaNs produced</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Run `dplyr::last_dplyr_warnings()` to see the 1 remaining warning.</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:33</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:00</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Calculate PK Parameters task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:33</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:00</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:33</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:00</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>'Example-Pop-PK\PKAnalysis' already exists</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:45</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span> completed in 0.2 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:45</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmp2HdEq9/temp_libpath15f0b2f46a0/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-Pop-PK" -t docx -o "Example-Pop-PK/Report-word.docx" "Example-Pop-PK/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:08</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span> completed in 0.1 min</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:08</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmpeqe55w/temp_libpath1fbc2b4b43a3/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-Pop-PK" -t docx -o "Example-Pop-PK/Report-word.docx" "Example-Pop-PK/Report-word.md"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:45</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:08</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">ratioComparison</span> completed in 0.2 min</span></span></code></pre></div>
 </details><details><summary><strong>Report</strong>
 </summary><img src="figures/report-snapshot-66.png" style="width:100%; border-style: none;"></details>
@@ -487,7 +492,7 @@ parameters <em>p1</em>, <em>p2</em> and <em>p3</em>. The parameter path
 range plots and the <strong>reference population</strong> was the
 population simulation set including 500 individuals.</p>
 <details><summary><strong>Code</strong>
-</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define reference population</span></span>
 <span><span class="va">set500</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PopulationSimulationSet.html">PopulationSimulationSet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  referencePopulation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -511,20 +516,21 @@ population simulation set including 500 individuals.</p>
 <span>    simulationSets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">set500</span>, <span class="va">set200</span><span class="op">)</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-Pop-PK"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:50</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:13</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 26/04/2024 - 20:08:50</span></span>
+<span><span class="co">#&gt;  Date: 21/05/2024 - 10:48:13</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az586-617</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1258-893</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.4.0 (2024-04-24 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.0.532</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.0.537</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.2</span></span>
-<span><span class="co">#&gt;  tlf version: 1.5.165</span></span>
-<span></span>
+<span><span class="co">#&gt;  tlf version: 1.5.167</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="co"># Re-use the results from the previous PK analysis to save time as results are the same</span></span>
 <span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="fu">inactivateTasks</span><span class="op">(</span><span class="op">)</span></span>
@@ -535,19 +541,19 @@ population simulation set including 500 individuals.</p>
 <span></span>
 <span><span class="co"># Run the workflow</span></span>
 <span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:50</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:13</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:50</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:13</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:08:50</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:13</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>'Example-Pop-PK\PKAnalysis' already exists</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:09:08</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span> completed in 0.3 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:09:09</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmp2HdEq9/temp_libpath15f0b2f46a0/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-Pop-PK" -t docx -o "Example-Pop-PK/Report-word.docx" "Example-Pop-PK/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:26</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span> completed in 0.2 min</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:26</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmpeqe55w/temp_libpath1fbc2b4b43a3/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-Pop-PK" -t docx -o "Example-Pop-PK/Report-word.docx" "Example-Pop-PK/Report-word.md"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:09:09</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.3 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:26</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.2 min</span></span></code></pre></div>
 </details><details><summary><strong>Report</strong>
 </summary><img src="figures/report-snapshot-67.png" style="width:100%; border-style: none;"></details>
 </div>
@@ -571,7 +577,7 @@ of the PK Parameters such as the standard paths defined in
 <p>With default settings, only Pediatric population workflows include
 the standard paths as <strong>xParameters</strong> and perform the range
 plots.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Check default xParameters for pediatric workflows</span></span>
 <span><span class="fu"><a href="../reference/getDefaultPkParametersXParameters.html">getDefaultPKParametersXParameters</a></span><span class="op">(</span><span class="va">PopulationWorkflowTypes</span><span class="op">$</span><span class="va">pediatric</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $Age</span></span>
@@ -587,19 +593,21 @@ plots.</p>
 <span><span class="co">#&gt; [1] "Organism|BMI"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $Gender</span></span>
-<span><span class="co">#&gt; [1] "Gender"</span></span>
-<span></span>
+<span><span class="co">#&gt; [1] "Gender"</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Check default xParameters for parallel comparison workflows</span></span>
 <span><span class="fu"><a href="../reference/getDefaultPkParametersXParameters.html">getDefaultPKParametersXParameters</a></span><span class="op">(</span><span class="va">PopulationWorkflowTypes</span><span class="op">$</span><span class="va">parallelComparison</span><span class="op">)</span></span>
-<span><span class="co">#&gt; NULL</span></span>
-<span></span>
+<span><span class="co">#&gt; NULL</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Check default xParameters for ratio comparison workflows</span></span>
 <span><span class="fu"><a href="../reference/getDefaultPkParametersXParameters.html">getDefaultPKParametersXParameters</a></span><span class="op">(</span><span class="va">PopulationWorkflowTypes</span><span class="op">$</span><span class="va">ratioComparison</span><span class="op">)</span></span>
 <span><span class="co">#&gt; NULL</span></span></code></pre></div>
 <p>However, you can report range plots for every population workflow
 type by including paths/variables defined in your population as
 <strong>xParameters</strong> as illustrated below.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create your population workflow</span></span>
 <span><span class="va">workflow</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PopulationWorkflow.html">PopulationWorkflow</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>workflowType <span class="op">=</span> <span class="va">PopulationWorkflowTypes</span><span class="op">$</span><span class="va">parallelComparison</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
@@ -614,7 +622,7 @@ type by including paths/variables defined in your population as
 <p>In this example, a parallel comparison workflow is performed using
 <strong>xParameters</strong> for range plots</p>
 <details><summary><strong>Code</strong>
-</summary><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define population simulations</span></span>
 <span><span class="va">set500</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PopulationSimulationSet.html">PopulationSimulationSet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  simulationSetName <span class="op">=</span> <span class="st">"500 individuals"</span>,</span>
@@ -636,20 +644,21 @@ type by including paths/variables defined in your population as
 <span>    simulationSets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">set500</span>, <span class="va">set200</span><span class="op">)</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-Pop-PK"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:09:15</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:32</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 26/04/2024 - 20:09:15</span></span>
+<span><span class="co">#&gt;  Date: 21/05/2024 - 10:48:32</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az586-617</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1258-893</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.4.0 (2024-04-24 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.0.532</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.0.537</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.2</span></span>
-<span><span class="co">#&gt;  tlf version: 1.5.165</span></span>
-<span></span>
+<span><span class="co">#&gt;  tlf version: 1.5.167</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="co"># Re-use the results from the previous PK analysis to save time as results are the same</span></span>
 <span><span class="va">parallelRangeWorkflow</span><span class="op">$</span><span class="fu">inactivateTasks</span><span class="op">(</span><span class="op">)</span></span>
@@ -660,19 +669,19 @@ type by including paths/variables defined in your population as
 <span></span>
 <span><span class="co"># Run the workflow</span></span>
 <span><span class="va">parallelRangeWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:09:15</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:32</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:09:15</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:32</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:09:15</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:32</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>'Example-Pop-PK\PKAnalysis' already exists</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:09:28</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span> completed in 0.2 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:09:28</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmp2HdEq9/temp_libpath15f0b2f46a0/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-Pop-PK" -t docx -o "Example-Pop-PK/Report-word.docx" "Example-Pop-PK/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:41</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span> completed in 0.1 min</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:41</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmpeqe55w/temp_libpath1fbc2b4b43a3/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-Pop-PK" -t docx -o "Example-Pop-PK/Report-word.docx" "Example-Pop-PK/Report-word.md"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:09:29</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.2 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:41</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.1 min</span></span></code></pre></div>
 </details><details><summary><strong>Report</strong>
 </summary><img src="figures/report-snapshot-68.png" style="width:100%; border-style: none;"></details>
 </div>
@@ -694,7 +703,7 @@ arithmetic mean, SD and CV as well as geometric mean, SD and CV.</p>
 <p>In this example, a parallel comparison workflow is performed using a
 <strong>reference population</strong></p>
 <details><summary><strong>Code</strong>
-</summary><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define reference population</span></span>
 <span><span class="va">set500</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PopulationSimulationSet.html">PopulationSimulationSet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  referencePopulation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -718,20 +727,21 @@ arithmetic mean, SD and CV as well as geometric mean, SD and CV.</p>
 <span>    simulationSets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">set500</span>, <span class="va">set200</span><span class="op">)</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-Pop-PK"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:09:33</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:45</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 26/04/2024 - 20:09:33</span></span>
+<span><span class="co">#&gt;  Date: 21/05/2024 - 10:48:45</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az586-617</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1258-893</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.4.0 (2024-04-24 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.0.532</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.0.537</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.2</span></span>
-<span><span class="co">#&gt;  tlf version: 1.5.165</span></span>
-<span></span>
+<span><span class="co">#&gt;  tlf version: 1.5.167</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="co"># Re-use the results from the previous PK analysis to save time as results are the same</span></span>
 <span><span class="va">parallelReferenceWorkflow</span><span class="op">$</span><span class="fu">inactivateTasks</span><span class="op">(</span><span class="op">)</span></span>
@@ -739,19 +749,19 @@ arithmetic mean, SD and CV as well as geometric mean, SD and CV.</p>
 <span></span>
 <span><span class="co"># Run the workflow</span></span>
 <span><span class="va">parallelReferenceWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:09:33</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:45</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:09:33</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:45</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:09:33</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:45</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>'Example-Pop-PK\PKAnalysis' already exists</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:09:43</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span> completed in 0.2 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:09:43</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmp2HdEq9/temp_libpath15f0b2f46a0/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-Pop-PK" -t docx -o "Example-Pop-PK/Report-word.docx" "Example-Pop-PK/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:51</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot PK Parameters task</span> completed in 0.1 min</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:52</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmpeqe55w/temp_libpath1fbc2b4b43a3/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-Pop-PK" -t docx -o "Example-Pop-PK/Report-word.docx" "Example-Pop-PK/Report-word.md"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:09:43</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.2 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 21/05/2024 - 10:48:52</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.1 min</span></span></code></pre></div>
 </details><details><summary><strong>Report</strong>
 </summary><img src="figures/report-snapshot-69.png" style="width:100%; border-style: none;"></details>
 </div>

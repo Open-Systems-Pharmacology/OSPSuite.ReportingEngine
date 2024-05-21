@@ -151,47 +151,48 @@ internally add the markdown title tag,
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-1"</span>,</span>
 <span>    reportTitle <span class="op">=</span> <span class="st">"A meaningful title"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:00:44</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:14</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 26/04/2024 - 20:00:44</span></span>
+<span><span class="co">#&gt;  Date: 21/05/2024 - 10:42:14</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az586-617</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1258-893</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.4.0 (2024-04-24 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.0.532</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.0.537</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.2</span></span>
-<span><span class="co">#&gt;  tlf version: 1.5.165</span></span>
-<span></span>
+<span><span class="co">#&gt;  tlf version: 1.5.167</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="va">workflow</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simulate"</span>, <span class="st">"plotTimeProfilesAndResiduals"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run the workflow</span></span>
 <span><span class="va">workflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:00:44</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:14</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:00:44</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:15</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:00:45</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:15</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Splitting simulations for parallel run: <span style="color: #00BBBB; font-weight: bold; font-style: italic;">1</span> simulations split into <span style="color: #00BBBB; font-weight: bold; font-style: italic;">1</span> subsets</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:00:45</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:15</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">subset simulations</span></span></span>
 <span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:00:46</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:15</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:00:46</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:15</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:00:46</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:15</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">A</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:00:59</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.2 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:00:59</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmp2HdEq9/temp_libpath15f0b2f46a0/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:20</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.1 min</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:20</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmpeqe55w/temp_libpath1fbc2b4b43a3/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:00:59</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0.3 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:20</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0.1 min</span></span></code></pre></div>
 </details><details><summary><strong>Report</strong>
 </summary><img src="figures/report-snapshot-38.png" style="width:100%; border-style: none;"></details>
 </div>
@@ -212,7 +213,7 @@ defined. The corresponding page includes</p>
 <li>A table (using <code>kable</code> for markdown formatting)</li>
 </ul>
 <details><summary><strong>Code</strong>
-</summary><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">titlePage</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/anchor.html">anchor</a></span><span class="op">(</span><span class="st">"title-page"</span><span class="op">)</span>,</span>
 <span>  <span class="st">""</span>,</span>
@@ -226,7 +227,7 @@ defined. The corresponding page includes</p>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Here, it is more optimal to re-use the previous workflow</span></span>
 <span><span class="co"># since only the report title page is changed and the same results are used</span></span>
 <span><span class="va">workflow</span><span class="op">$</span><span class="fu">inactivateTasks</span><span class="op">(</span><span class="st">"simulate"</span><span class="op">)</span></span>
@@ -235,18 +236,18 @@ defined. The corresponding page includes</p>
 <span></span>
 <span><span class="co"># Re-run the workflow with the new title page</span></span>
 <span><span class="va">workflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:01:04</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:23</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:01:04</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:24</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:01:04</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:24</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">A</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:01:06</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:25</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:01:06</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmp2HdEq9/temp_libpath15f0b2f46a0/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:25</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmpeqe55w/temp_libpath1fbc2b4b43a3/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:01:06</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:25</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0 min</span></span></code></pre></div>
 </details><details><summary><strong>Report</strong>
 </summary><img src="figures/report-snapshot-39.png" style="width:100%; border-style: none;"></details>
@@ -261,37 +262,37 @@ content.</p>
 <p>The example below save the previously defined title page as a file
 named :</p>
 <details><summary><strong>Code</strong>
-</summary><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">titlePageFile</span> <span class="op">&lt;-</span> <span class="st">"title-page.md"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/write.html" class="external-link">write</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">titlePage</span>,</span>
 <span>  file <span class="op">=</span> <span class="va">titlePageFile</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Here, it is more optimal to re-use the previous workflow</span></span>
 <span><span class="co"># since only the report title page is changed and the same results are used</span></span>
 <span><span class="va">workflow</span><span class="op">$</span><span class="va">reportTitle</span> <span class="op">&lt;-</span> <span class="va">titlePageFile</span></span>
 <span></span>
 <span><span class="co"># Re-run the workflow with the new title page</span></span>
 <span><span class="va">workflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:01:09</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:28</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:01:09</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:28</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:01:09</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:28</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">A</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:01:12</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:30</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:01:12</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmp2HdEq9/temp_libpath15f0b2f46a0/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:30</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmpeqe55w/temp_libpath1fbc2b4b43a3/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:01:12</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:42:30</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0 min</span></span></code></pre></div>
 </details><details><summary><strong>Report</strong>
 </summary><img src="figures/report-snapshot-40.png" style="width:100%; border-style: none;"></details><details><summary><strong>Note</strong>
 </summary><p>Note that running the workflow won’t delete the title page. The title
 file can be re-used if the workflow needs to be re-run.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">titlePageFile</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 </details>

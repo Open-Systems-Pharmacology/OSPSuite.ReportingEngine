@@ -307,47 +307,48 @@ output are requested.</p>
 <span>    simulationSets <span class="op">=</span> <span class="va">setA</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-1"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:03:59</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:44:50</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 26/04/2024 - 20:03:59</span></span>
+<span><span class="co">#&gt;  Date: 21/05/2024 - 10:44:50</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az586-617</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1258-893</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.4.0 (2024-04-24 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.0.532</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.0.537</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.2</span></span>
-<span><span class="co">#&gt;  tlf version: 1.5.165</span></span>
-<span></span>
+<span><span class="co">#&gt;  tlf version: 1.5.167</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="va">workflow1</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simulate"</span>, <span class="st">"plotTimeProfilesAndResiduals"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run the workflow</span></span>
 <span><span class="va">workflow1</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:00</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:44:50</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:00</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:44:50</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:00</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:44:50</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Splitting simulations for parallel run: <span style="color: #00BBBB; font-weight: bold; font-style: italic;">1</span> simulations split into <span style="color: #00BBBB; font-weight: bold; font-style: italic;">1</span> subsets</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:00</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:44:50</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">subset simulations</span></span></span>
 <span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:00</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:44:50</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:00</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:44:50</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:00</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:44:50</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">A</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:03</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:44:53</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:03</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmp2HdEq9/temp_libpath15f0b2f46a0/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:44:53</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmpeqe55w/temp_libpath1fbc2b4b43a3/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:03</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0.1 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 21/05/2024 - 10:44:53</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0 min</span></span></code></pre></div>
 </details><p>The output report for Example 1 is shown below. There are only 2
 figures in the report (linear and log scales) showing the time profile
 of the output path ‘<strong>Organism|A|Concentration in
@@ -368,7 +369,7 @@ in Example 1. This example shows 3 new features:</p>
 <code>simulate</code> task</li>
 </ul>
 <details><summary><strong>Code</strong>
-</summary><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get the pkml simulation file: "MiniModel2.pkml"</span></span>
 <span><span class="va">simulationFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"MiniModel2.pkml"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
@@ -410,39 +411,40 @@ in Example 1. This example shows 3 new features:</p>
 <span>    simulationSets <span class="op">=</span> <span class="va">setA</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-1"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:06</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:44:56</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 26/04/2024 - 20:04:06</span></span>
+<span><span class="co">#&gt;  Date: 21/05/2024 - 10:44:56</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az586-617</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1258-893</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.4.0 (2024-04-24 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.0.532</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.0.537</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.2</span></span>
-<span><span class="co">#&gt;  tlf version: 1.5.165</span></span>
-<span></span>
+<span><span class="co">#&gt;  tlf version: 1.5.167</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="va">workflow2</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="st">"plotTimeProfilesAndResiduals"</span><span class="op">)</span></span>
 <span><span class="va">workflow2</span><span class="op">$</span><span class="fu">inactivateTasks</span><span class="op">(</span><span class="st">"simulate"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run the workflow</span></span>
 <span><span class="va">workflow2</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:06</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:44:56</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:06</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:44:56</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:06</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:44:56</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">A</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:24</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.3 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:24</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmp2HdEq9/temp_libpath15f0b2f46a0/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:04</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.1 min</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:04</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmpeqe55w/temp_libpath1fbc2b4b43a3/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:24</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0.3 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:04</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0.1 min</span></span></code></pre></div>
 <p>It can be seen from the run results that the task
 <code>simulate</code> was not run.</p>
 <p>In this example, the content of the observed data file and its
@@ -691,7 +693,7 @@ limit of quantitation (LLOQ) is included in the observed data. Like the
 previous example, there is no need to re-run the <code>simulate</code>
 task.</p>
 <details><summary><strong>Code</strong>
-</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get the pkml simulation file: "MiniModel2.pkml"</span></span>
 <span><span class="va">simulationFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"MiniModel2.pkml"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
@@ -728,39 +730,40 @@ task.</p>
 <span>    simulationSets <span class="op">=</span> <span class="va">setA</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-1"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:28</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:08</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 26/04/2024 - 20:04:28</span></span>
+<span><span class="co">#&gt;  Date: 21/05/2024 - 10:45:08</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az586-617</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1258-893</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.4.0 (2024-04-24 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.0.532</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.0.537</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.2</span></span>
-<span><span class="co">#&gt;  tlf version: 1.5.165</span></span>
-<span></span>
+<span><span class="co">#&gt;  tlf version: 1.5.167</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="va">workflow3</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="st">"plotTimeProfilesAndResiduals"</span><span class="op">)</span></span>
 <span><span class="va">workflow3</span><span class="op">$</span><span class="fu">inactivateTasks</span><span class="op">(</span><span class="st">"simulate"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run the workflow</span></span>
 <span><span class="va">workflow3</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:29</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:08</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:29</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:08</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:29</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:08</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">A</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:46</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.3 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:46</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmp2HdEq9/temp_libpath15f0b2f46a0/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:16</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.1 min</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:16</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmpeqe55w/temp_libpath1fbc2b4b43a3/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o "Example-1/Report-word.docx" "Example-1/Report-word.md"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:47</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0.3 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:16</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0.1 min</span></span></code></pre></div>
 <p>The new dictionary content is described in Table 4.</p>
 <table class="table">
 <caption>Table 4: Dictionary content</caption>
@@ -891,7 +894,7 @@ not requested by the examples 1, 2 and 3, it is not included in the
 simulation results. As a consequence, the <code>simulate</code> task
 needs to be re-run.</p>
 <details><summary><strong>Code</strong>
-</summary><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get the pkml simulation file: "MiniModel2.pkml"</span></span>
 <span><span class="va">simulationFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"MiniModel2.pkml"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
@@ -930,47 +933,48 @@ needs to be re-run.</p>
 <span>    simulationSets <span class="op">=</span> <span class="va">setAB</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-4"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:51</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:20</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 26/04/2024 - 20:04:51</span></span>
+<span><span class="co">#&gt;  Date: 21/05/2024 - 10:45:20</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az586-617</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1258-893</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.4.0 (2024-04-24 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.0.532</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.0.537</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.2</span></span>
-<span><span class="co">#&gt;  tlf version: 1.5.165</span></span>
-<span></span>
+<span><span class="co">#&gt;  tlf version: 1.5.167</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="va">workflow4</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simulate"</span>, <span class="st">"plotTimeProfilesAndResiduals"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run the workflow</span></span>
 <span><span class="va">workflow4</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:51</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:20</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:51</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:20</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:51</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:20</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Splitting simulations for parallel run: <span style="color: #00BBBB; font-weight: bold; font-style: italic;">1</span> simulations split into <span style="color: #00BBBB; font-weight: bold; font-style: italic;">1</span> subsets</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:51</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:20</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">subset simulations</span></span></span>
 <span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:51</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:20</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:51</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:20</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:04:51</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:20</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">A and B</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:08</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.3 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:08</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmp2HdEq9/temp_libpath15f0b2f46a0/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-4" -t docx -o "Example-4/Report-word.docx" "Example-4/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:28</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.1 min</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:28</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmpeqe55w/temp_libpath1fbc2b4b43a3/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-4" -t docx -o "Example-4/Report-word.docx" "Example-4/Report-word.md"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:09</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0.3 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:28</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0.1 min</span></span></code></pre></div>
 </details><p>The output report for Example 4 is shown below.</p>
 <details><summary><strong>Report</strong>
 </summary><img src="figures/report-snapshot-53.png" style="width:100%; border-style: none;"></details>
@@ -987,7 +991,7 @@ observed data. The <code>simulate</code> task needs to be re-run also in
 this case since the simulation results are saved in files that use the
 simulation set names.</p>
 <details><summary><strong>Code</strong>
-</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get the pkml simulation file: "MiniModel1.pkml"</span></span>
 <span><span class="va">simulationFileA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"MiniModel1.pkml"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
@@ -1036,49 +1040,50 @@ simulation set names.</p>
 <span>    simulationSets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">setA</span>, <span class="va">setB</span><span class="op">)</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-5"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:13</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:32</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 26/04/2024 - 20:05:13</span></span>
+<span><span class="co">#&gt;  Date: 21/05/2024 - 10:45:32</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az586-617</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1258-893</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.4.0 (2024-04-24 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.0.532</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.0.537</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.2</span></span>
-<span><span class="co">#&gt;  tlf version: 1.5.165</span></span>
-<span></span>
+<span><span class="co">#&gt;  tlf version: 1.5.167</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="va">workflow5</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simulate"</span>, <span class="st">"plotTimeProfilesAndResiduals"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run the workflow</span></span>
 <span><span class="va">workflow5</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:13</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:32</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:13</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:32</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:13</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:32</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Splitting simulations for parallel run: <span style="color: #00BBBB; font-weight: bold; font-style: italic;">2</span> simulations split into <span style="color: #00BBBB; font-weight: bold; font-style: italic;">1</span> subsets</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:13</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:32</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">subset simulations</span></span></span>
 <span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:13</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:33</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:13</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:33</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:13</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:33</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">A</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:30</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:40</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">B</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:47</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.6 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:47</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmp2HdEq9/temp_libpath15f0b2f46a0/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-5" -t docx -o "Example-5/Report-word.docx" "Example-5/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:48</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.3 min</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:48</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmpeqe55w/temp_libpath1fbc2b4b43a3/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-5" -t docx -o "Example-5/Report-word.docx" "Example-5/Report-word.md"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:48</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0.6 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:48</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0.3 min</span></span></code></pre></div>
 </details><p>The output report for Example 5 is shown below.</p>
 <details><summary><strong>Report</strong>
 </summary><img src="figures/report-snapshot-54.png" style="width:100%; border-style: none;"></details>
@@ -1090,7 +1095,7 @@ simulation set names.</p>
 example, there is no observed data, only one simulation set and one
 output are requested.</p>
 <details><summary><strong>Code</strong>
-</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get the pkml simulation file: "MiniModel2.pkml"</span></span>
 <span><span class="va">simulationFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"MiniModel2.pkml"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
@@ -1121,49 +1126,50 @@ output are requested.</p>
 <span>    simulationSets <span class="op">=</span> <span class="va">setA</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-6"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:53</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:53</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 26/04/2024 - 20:05:53</span></span>
+<span><span class="co">#&gt;  Date: 21/05/2024 - 10:45:53</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az586-617</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1258-893</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.4.0 (2024-04-24 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.0.532</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.0.537</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.2</span></span>
-<span><span class="co">#&gt;  tlf version: 1.5.165</span></span>
-<span></span>
+<span><span class="co">#&gt;  tlf version: 1.5.167</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="va">workflow6</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simulate"</span>, <span class="st">"plotTimeProfilesAndResiduals"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run the workflow</span></span>
 <span><span class="va">workflow6</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:53</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:53</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:53</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:53</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:53</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:53</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Simulations</span></span></span>
 <span><span class="co">#&gt;   |                                                                              |                                                                      |   0%</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:53</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:54</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">A (Pop500_p1p2p3)</span></span></span>
 <span><span class="co">#&gt;   |                                                                              |======================================================================| 100%</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:54</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:54</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:54</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:54</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:54</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:54</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">A</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:58</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.1 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:58</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmp2HdEq9/temp_libpath15f0b2f46a0/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-6" -t docx -o "Example-6/Report-word.docx" "Example-6/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:56</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0 min</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:56</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmpeqe55w/temp_libpath1fbc2b4b43a3/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-6" -t docx -o "Example-6/Report-word.docx" "Example-6/Report-word.md"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:05:58</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.1 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:56</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0 min</span></span></code></pre></div>
 </details><p>The output report for Example 6 is shown below. The 2 figures of the
 report (linear and log scales) include median, mean 5th and 95th
 percentiles of the population.</p>
@@ -1175,7 +1181,7 @@ percentiles of the population.</p>
 </h3>
 <p>Example 7 add observed data to the previous workflow.</p>
 <details><summary><strong>Code</strong>
-</summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get the pkml simulation file: "MiniModel2.pkml"</span></span>
 <span><span class="va">simulationFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"MiniModel2.pkml"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"ospsuite.reportingengine"</span></span>
@@ -1214,39 +1220,40 @@ percentiles of the population.</p>
 <span>    simulationSets <span class="op">=</span> <span class="va">setA</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-6"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:06:01</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:59</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 26/04/2024 - 20:06:01</span></span>
+<span><span class="co">#&gt;  Date: 21/05/2024 - 10:45:59</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az586-617</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1258-893</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.4.0 (2024-04-24 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.0.532</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.0.537</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.2</span></span>
-<span><span class="co">#&gt;  tlf version: 1.5.165</span></span>
-<span></span>
+<span><span class="co">#&gt;  tlf version: 1.5.167</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Set the workflow tasks to be run</span></span>
 <span><span class="va">workflow7</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="va">StandardPlotTasks</span><span class="op">$</span><span class="va">plotTimeProfilesAndResiduals</span><span class="op">)</span></span>
 <span><span class="va">workflow7</span><span class="op">$</span><span class="fu">inactivateTasks</span><span class="op">(</span><span class="va">StandardSimulationTasks</span><span class="op">$</span><span class="va">simulate</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run the workflow</span></span>
 <span><span class="va">workflow7</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:06:01</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:59</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:06:01</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:59</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:06:01</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:45:59</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">A</span></span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:06:19</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.3 min</span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:06:19</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmp2HdEq9/temp_libpath15f0b2f46a0/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-6" -t docx -o "Example-6/Report-word.docx" "Example-6/Report-word.md"</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:46:07</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0.1 min</span></span>
+<span><span class="co">#&gt; 21/05/2024 - 10:46:07</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmpeqe55w/temp_libpath1fbc2b4b43a3/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-6" -t docx -o "Example-6/Report-word.docx" "Example-6/Report-word.md"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 26/04/2024 - 20:06:19</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.3 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 21/05/2024 - 10:46:08</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.1 min</span></span></code></pre></div>
 </details><p>The output report for Example 7 is shown below. The residuals are
 calculated on the median simulated values.</p>
 <details><summary><strong>Report</strong>

@@ -1067,8 +1067,9 @@ workflows.</p>
 <span><span class="co">#&gt; [1] "calculatePKParameters"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $calculateSensitivity</span></span>
-<span><span class="co">#&gt; [1] "calculateSensitivity"</span></span>
-<span></span>
+<span><span class="co">#&gt; [1] "calculateSensitivity"</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Names of standard plot tasks</span></span>
 <span><span class="va">StandardPlotTasks</span></span>
 <span><span class="co">#&gt; $plotTimeProfilesAndResiduals</span></span>
@@ -1081,29 +1082,32 @@ workflows.</p>
 <span><span class="co">#&gt; [1] "plotSensitivity"</span></span></code></pre></div>
 <p>Using the example shown in section <a href="#id_14-general-scheme">1.4.</a>. The task names in the mean model
 workflow were:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># All workflow's tasks</span></span>
 <span><span class="va">myExampleWorkflow</span><span class="op">$</span><span class="fu">getAllTasks</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "plotSensitivity"              "plotPKParameters"            </span></span>
 <span><span class="co">#&gt; [3] "plotAbsorption"               "plotMassBalance"             </span></span>
 <span><span class="co">#&gt; [5] "plotTimeProfilesAndResiduals" "calculateSensitivity"        </span></span>
-<span><span class="co">#&gt; [7] "calculatePKParameters"        "simulate"</span></span>
-<span></span>
+<span><span class="co">#&gt; [7] "calculatePKParameters"        "simulate"</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Only active tasks that are run</span></span>
 <span><span class="va">myExampleWorkflow</span><span class="op">$</span><span class="fu">getActiveTasks</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "plotTimeProfilesAndResiduals" "simulate"</span></span>
-<span></span>
+<span><span class="co">#&gt; [1] "plotTimeProfilesAndResiduals" "simulate"</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Only inactive tasks that are not run</span></span>
 <span><span class="va">myExampleWorkflow</span><span class="op">$</span><span class="fu">getInactiveTasks</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "plotSensitivity"       "plotPKParameters"      "plotAbsorption"       </span></span>
 <span><span class="co">#&gt; [4] "plotMassBalance"       "calculateSensitivity"  "calculatePKParameters"</span></span></code></pre></div>
 <p>The activation/inactivation of tasks can be done as follows:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Inactivate all tasks</span></span>
 <span><span class="va">myExampleWorkflow</span><span class="op">$</span><span class="fu">inactivateTasks</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">myExampleWorkflow</span><span class="op">$</span><span class="fu">getActiveTasks</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; NULL</span></span>
-<span></span>
+<span><span class="co">#&gt; NULL</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Activate only tasks "simulate" and "plotTimeProfilesAndResiduals" tasks</span></span>
 <span><span class="va">myExampleWorkflow</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simulate"</span>, <span class="st">"plotTimeProfilesAndResiduals"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">myExampleWorkflow</span><span class="op">$</span><span class="fu">getActiveTasks</span><span class="op">(</span><span class="op">)</span></span>
@@ -1120,7 +1124,7 @@ essential.</p>
 input files are available. This feature can also be accessed by users
 from the task method <code>getInputs()</code> which can be combined with
 the function <code>file.exists</code></p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get list of files or folders required to run task "plotTimeProfilesAndResiduals"</span></span>
 <span><span class="va">myExampleWorkflow</span><span class="op">$</span><span class="va">plotTimeProfilesAndResiduals</span><span class="op">$</span><span class="fu">getInputs</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "myExample-Results/SimulationResults/My example-SimulationResults.csv"</span></span></code></pre></div>
@@ -1137,15 +1141,17 @@ for the evaluation, log or report of the workflow. The task
 <code>settings</code> are R6 objects whose properties can be directly
 accessed as shown below (using the character <code>$</code> after
 <code>settings</code>).</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get value of settings property "showProgress" for the task "simulate"</span></span>
 <span><span class="va">myExampleWorkflow</span><span class="op">$</span><span class="va">simulate</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">showProgress</span></span>
-<span><span class="co">#&gt; [1] TRUE</span></span>
-<span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Get value of settings property "digits" for the task "plotPKParameters"</span></span>
 <span><span class="va">myExampleWorkflow</span><span class="op">$</span><span class="va">plotPKParameters</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">digits</span></span>
-<span><span class="co">#&gt; [1] 2</span></span>
-<span></span>
+<span><span class="co">#&gt; [1] 2</span></span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Get the names of the "plotConfigurations" list used during the task "plotTimeProfilesAndResiduals"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">myExampleWorkflow</span><span class="op">$</span><span class="va">plotTimeProfilesAndResiduals</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">plotConfigurations</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "timeProfile" "obsVsPred"   "resVsPred"   "resVsTime"   "resHisto"   </span></span>
