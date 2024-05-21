@@ -215,7 +215,8 @@ plotPopulationPKParameters <- function(structureSets,
         # Include reference population if defined
         includeReferenceInRangePlot <- all(
           !isEmpty(referenceSimulationSetName),
-          isIncluded(referenceSimulationSetName, unique(pkParameterData$simulationSetName))
+          isIncluded(referenceSimulationSetName, unique(pkParameterData$simulationSetName)),
+          length(unique(pkParameterData$simulationSetName)) > 1
         )
         if (includeReferenceInRangePlot) {
           # Get the table for reference population
@@ -303,6 +304,16 @@ plotPopulationPKParameters <- function(structureSets,
         # Regular range plots not associated to workflow type
         for (simulationSetName in simulationSetNames) {
           vpcData <- pkParameterData[pkParameterData$simulationSetName %in% simulationSetName, ]
+          if(nrow(vpcData) == 0){
+            logDebug(paste(
+              "No data found for simulation set",
+              simulationSetName,
+              "for parameter",
+              pkParameter$pkParameter,
+              "of output", output$displayName
+            ))
+            next
+          }
           vpcData <- getDemographyAggregatedData(
             data = vpcData,
             xParameterName = demographyParameter,
