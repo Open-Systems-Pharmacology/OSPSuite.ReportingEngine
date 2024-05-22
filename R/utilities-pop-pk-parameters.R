@@ -22,14 +22,9 @@ plotPopulationPKParameters <- function(structureSets,
   validateIsOfType(c(structureSets), "SimulationStructure")
   validateIsString(c(xParameters), nullAllowed = TRUE)
   validateIsOfType(c(yParameters), "Output", nullAllowed = TRUE)
-  validateSameOutputsBetweenSets(
-    c(lapply(structureSets, function(set) {
-      set$simulationSet
-    }))
-  )
-
-  # Use first structure set as reference
-  yParameters <- yParameters %||% structureSets[[1]]$simulationSet$outputs
+  
+  # Use union of outputs from all the structure sets
+  yParameters <- yParameters %||% getOutputsForPKPlot(structureSets)
   # Get first simulation, in case mol weight is needed
   simulation <- loadSimulationWithUpdatedPaths(structureSets[[1]]$simulationSet, loadFromCache = TRUE)
   simulationSetDescriptor <- structureSets[[1]]$simulationSetDescriptor
@@ -164,8 +159,16 @@ plotPopulationPKParameters <- function(structureSets,
       }
 
       # Report tables summarizing the distributions
+      # Caution: since simulationSetName is a factor, 
+      # Unused levels need to be removed first to prevent errors in tlf::getPKParameterMeasure
+      allSetNames <-levels(pkParameterData$simulationSetName)
+      usedSetNames <- unique(as.character(pkParameterData$simulationSetName))
       pkParameterTable <- getPKParameterMeasure(
-        data = pkParameterData,
+        data = pkParameterData %>% 
+          mutate(simulationSetName = factor(
+            simulationSetName, 
+            levels = intersect(allSetNames, usedSetNames)
+            )),
         dataMapping = pkParametersMapping
       )
       # A different table needs to be created here
@@ -210,7 +213,12 @@ plotPopulationPKParameters <- function(structureSets,
           "median" = pkParameterMetaData$Value
         )
         # Include reference population if defined
-        if (!isEmpty(referenceSimulationSetName)) {
+        includeReferenceInRangePlot <- all(
+          !isEmpty(referenceSimulationSetName),
+          isIncluded(referenceSimulationSetName, unique(pkParameterData$simulationSetName)),
+          length(unique(pkParameterData$simulationSetName)) > 1
+        )
+        if (includeReferenceInRangePlot) {
           # Get the table for reference population
           referenceData <- data.frame(
             x = c(-Inf, Inf),
@@ -296,6 +304,16 @@ plotPopulationPKParameters <- function(structureSets,
         # Regular range plots not associated to workflow type
         for (simulationSetName in simulationSetNames) {
           vpcData <- pkParameterData[pkParameterData$simulationSetName %in% simulationSetName, ]
+          if(nrow(vpcData) == 0){
+            logDebug(paste(
+              "No data found for simulation set",
+              simulationSetName,
+              "for parameter",
+              pkParameter$pkParameter,
+              "of output", output$displayName
+            ))
+            next
+          }
           vpcData <- getDemographyAggregatedData(
             data = vpcData,
             xParameterName = demographyParameter,
@@ -359,7 +377,12 @@ plotPopulationPKParameters <- function(structureSets,
       #---- Ratio comparisons -----
       # Checks ratios of statistics and parameters
       # Table is output for every workflow except parallel no reference
-      if (isEmpty(referenceSimulationSetName)) {
+      noRatio <- any(
+        isEmpty(referenceSimulationSetName),
+        !isIncluded(referenceSimulationSetName, unique(pkParameterData$simulationSetName)),
+        isOfLength(unique(pkParameterData$simulationSetName), 1)
+      )
+      if (noRatio) {
         next
       }
       # Output table of relative change in the respective statistics
@@ -777,4 +800,74 @@ getPopulationPKAnalysesFromOutput <- function(data, metaData, output, pkParamete
     data = pkAnalysesFromOutput,
     metaData = pkAnalysesFromOutputMetaData
   ))
+}
+
+#' @title getOutputsForPKPlot
+#' @description 
+#' Get the list of outputs and their PK parameters for population PK parameter plot
+#' @param structureSets List of `SimulationStructure` objects
+#' @return list of `Output` objects
+#' @keywords internal
+#' @import dplyr
+getOutputsForPKPlot <- function(structureSets){
+  # Use the first simulation set as reference for PK parameters to plot
+  # Clone R6 objects to prevent potential issues in other workflow steps
+  outputsToPlot <- lapply(
+    structureSets[[1]]$simulationSet$outputs, 
+    function(output){
+      output$clone()
+    })
+  for (structureSet in structureSets) {
+    outputsToAdd <- structureSet$simulationSet$outputs
+    for(output in outputsToAdd){
+      # Check if output path is included in the initial outputs to plot
+      outputIndex <- head(which(sapply(
+        outputsToPlot, 
+        function(outputToPlot) {
+          isIncluded(outputToPlot$path, output$path)
+        }
+        )), 1)
+      if(isEmpty(outputIndex)){
+        warning(
+          messages$warningMissingFromReferenceSet(
+            path = output$path, 
+            simulationSetName = structureSets[[1]]$simulationSet$simulationSetName
+            ),
+          call. = FALSE
+          )
+        outputsToPlot <- c(outputsToPlot, output$clone())
+        next
+      }
+      # If output path is included, check if PK parameters are the same
+      pkParametersToPlot <- sapply(
+        outputsToPlot[[outputIndex]]$pkParameters,
+        function(pkParameter){
+          pkParameter$pkParameter
+          }
+        )
+      pkParametersToAdd <- sapply(
+        output$pkParameters,
+        function(pkParameter){
+          pkParameter$pkParameter
+        }
+      )
+      if(isIncluded(pkParametersToAdd, pkParametersToPlot)){
+        next
+      }
+      indicesToAdd <- which(!(pkParametersToAdd %in% pkParametersToPlot))
+      warning(
+        messages$warningMissingFromReferenceSet(
+          path = output$path, 
+          simulationSetName = structureSets[[1]]$simulationSet$simulationSetName,
+          pkParameters = pkParametersToAdd[indicesToAdd]
+        ),
+        call. = FALSE
+      )
+      outputsToPlot[[outputIndex]]$pkParameters <- c(
+        outputsToPlot[[outputIndex]]$pkParameters,
+        output$pkParameters[indicesToAdd]
+      )
+    }
+  }
+  return(outputsToPlot)
 }

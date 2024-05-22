@@ -264,35 +264,6 @@ validateHasReferencePopulation <- function(workflowType, simulationSets) {
   stop(messages$warningNoReferencePopulation(workflowType))
 }
 
-validateSameOutputsBetweenSets <- function(simulationSets) {
-  pkParametersTableRef <- NULL
-  for (set in simulationSets) {
-    pkParametersTable <- getPKParametersInSimulationSet(set)
-    # In case output or pkParameters are in different orders
-    pkParametersTable <- pkParametersTable[order(pkParametersTable$path, pkParametersTable$group), c("path", "group")]
-
-    if (is.null(pkParametersTableRef)) {
-      pkParametersTableRef <- pkParametersTable
-      next
-    }
-    if (all(pkParametersTable$path == pkParametersTableRef$path)) {
-      pkParametersTableTest <- NULL
-      for (pkParameterIndex in seq_along(pkParametersTable$group)) {
-        pkParametersTableTest[pkParameterIndex] <- isIncluded(pkParametersTable$group[pkParameterIndex], pkParametersTableRef$group[pkParameterIndex])
-      }
-      if (all(pkParametersTableTest)) {
-        pkParametersTableRef <- pkParametersTable
-        next
-      }
-    }
-    stop(messages$errorNotSameOutputsBetweenSets(sapply(
-      simulationSets, function(set) {
-        set$simulationSetName
-      }
-    )))
-  }
-}
-
 #' @title validateNoDuplicate
 #' @description
 #' Leverage `ospsuite.utils::validateHasOnlyDistinctValues()` to
