@@ -98,9 +98,7 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine" class="external-link">ospsuite.reportingengine</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: ospsuite.reportingengine</span></span>
 <span><span class="co">#&gt; Loading required package: ospsuite</span></span>
-<span><span class="co">#&gt; Loading required package: rClr</span></span>
-<span><span class="co">#&gt; Loading the dynamic library for Microsoft .NET runtime...</span></span>
-<span><span class="co">#&gt; Loaded Common Language Runtime version 4.0.30319.42000</span></span>
+<span><span class="co">#&gt; Loading required package: rSharp</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'ospsuite'</span></span>
 <span><span class="co">#&gt; The following object is masked from 'package:base':</span></span>
@@ -336,17 +334,17 @@ example in which <strong><code>plotConfigurations</code></strong> and
 <span>    simulationSets <span class="op">=</span> <span class="va">setA</span>,</span>
 <span>    workflowFolder <span class="op">=</span> <span class="st">"Example-A"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; 22/05/2024 - 09:27:10</span></span>
+<span><span class="co">#&gt; 04/06/2024 - 14:42:09</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 22/05/2024 - 09:27:10</span></span>
+<span><span class="co">#&gt;  Date: 04/06/2024 - 14:42:09</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: fv-az534-287</span></span>
+<span><span class="co">#&gt;  Computer Name: fv-az1785-142</span></span>
 <span><span class="co">#&gt;  User: runneradmin</span></span>
 <span><span class="co">#&gt;  Login: runneradmin</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
 <span><span class="co">#&gt;  R version: R version 4.4.0 (2024-04-24 ucrt)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.0.537</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.0.1015</span></span>
 <span><span class="co">#&gt;  OSP Reporting Engine version: 2.2</span></span>
 <span><span class="co">#&gt;  tlf version: 1.5.167</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -405,27 +403,27 @@ defined in the plot configuration.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Run the workflow</span></span>
 <span><span class="va">workflowA</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 22/05/2024 - 09:27:10</span></span>
+<span><span class="co">#&gt; 04/06/2024 - 14:42:09</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span></span></span>
-<span><span class="co">#&gt; 22/05/2024 - 09:27:10</span></span>
+<span><span class="co">#&gt; 04/06/2024 - 14:42:09</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span></span></span>
-<span><span class="co">#&gt; 22/05/2024 - 09:27:10</span></span>
+<span><span class="co">#&gt; 04/06/2024 - 14:42:10</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Splitting simulations for parallel run: <span style="color: #00BBBB; font-weight: bold; font-style: italic;">1</span> simulations split into <span style="color: #00BBBB; font-weight: bold; font-style: italic;">1</span> subsets</span></span>
-<span><span class="co">#&gt; 22/05/2024 - 09:27:10</span></span>
+<span><span class="co">#&gt; 04/06/2024 - 14:42:10</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">subset simulations</span></span></span>
 <span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span></span>
-<span><span class="co">#&gt; 22/05/2024 - 09:27:11</span></span>
+<span><span class="co">#&gt; 04/06/2024 - 14:42:10</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Simulation task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 22/05/2024 - 09:27:11</span></span>
+<span><span class="co">#&gt; 04/06/2024 - 14:42:10</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span></span></span>
-<span><span class="co">#&gt; 22/05/2024 - 09:27:11</span></span>
+<span><span class="co">#&gt; 04/06/2024 - 14:42:10</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">A</span></span></span>
-<span><span class="co">#&gt; 22/05/2024 - 09:27:13</span></span>
+<span><span class="co">#&gt; 04/06/2024 - 14:42:12</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Time profiles and Residuals task</span> completed in 0 min</span></span>
-<span><span class="co">#&gt; 22/05/2024 - 09:27:13</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/RtmpE78aUW/temp_libpath11b877417aae/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-A" -t docx -o "Example-A/Report-word.docx" "Example-A/Report-word.md"</span></span>
+<span><span class="co">#&gt; 04/06/2024 - 14:42:12</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="C:/Users/runneradmin/AppData/Local/Temp/Rtmpuye3df/temp_libpathecc181e33e5/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-A" -t docx -o "Example-A/Report-word.docx" "Example-A/Report-word.md"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 22/05/2024 - 09:27:13</span></span>
+<span><span class="co">#&gt; 04/06/2024 - 14:42:12</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0 min</span></span></code></pre></div>
 <details><summary><strong>Report</strong>
 </summary><img src="figures/report-snapshot-64.png" style="width:100%; border-style: none;"></details>
