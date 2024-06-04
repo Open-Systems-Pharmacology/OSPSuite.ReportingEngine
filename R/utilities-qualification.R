@@ -306,8 +306,8 @@ getOutputsFromGOFMergedPlotsConfiguration <- function(plot) {
 #' }
 extractNameAndUnit <- function(text) {
   validateIsString(text)
-  dimensionTask <- rClr::clrCallStatic("OSPSuite.R.Api", "GetDimensionTask")
-  res <- rClr::clrCall(dimensionTask, "ExtractNameAndUnit", enc2utf8(text))
+  dimensionTask <- rSharp::callStatic("OSPSuite.R.Api", "GetDimensionTask")
+  res <- dimensionTask$call("ExtractNameAndUnit", enc2utf8(text))
   return(list(name = res[1], unit = res[2]))
 }
 
