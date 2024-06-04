@@ -631,7 +631,7 @@ checkHasRunOnAllCores <- function(coreResults, inputName, inputType, runType = "
 
 #' @title checkSamePopulationIds
 #' @description
-#' Check if PKAnalses with same population actually use the same IndividualIds
+#' Check if PK Analyses with same population actually use the same IndividualIds
 #' @param setIds A vector of IndividualIds for a simulation set
 #' @param referenceSetIds A vector of IndividualIds for the reference simulation set
 #' @param setName Name of simulation set for warning message
