@@ -18,7 +18,8 @@ getTimeProfilePlotResults(
 \arguments{
 \item{workflowType}{`"mean"` or `"population"` workflow}
 
-\item{timeRange}{array of time values defining range of simulated data}
+\item{timeRange}{array of time values defining range of simulated data.
+Note that `timeRange` accounts for user defined `timeOffset`}
 
 \item{simulatedData}{data.frame of simulated data}
 

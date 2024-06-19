@@ -186,7 +186,7 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet) {
   # Get applications
   applications <- simulation$allApplicationsFor(path)
   applicationTimes <- 0
-  if (!isOfLength(applications, 0)) {
+  if (!isEmpty(applications)) {
     applicationTimes <- sapply(applications, function(application) {
       application$startTime$value
     })
@@ -199,10 +199,8 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet) {
   logDebug(messages$numberOfApplications(length(applications), path, simulation$name))
   logDebug(messages$timeRangesForSimulation(paste0(simulationRanges, collapse = "', '"), simulation$name))
 
-  # Define ranges for output
-  # Depending on expected behaviour of settings$applicationRange
-  # It would be possible to set these values
-  timeRanges$total$values <- c(min(simulationRanges), max(simulationRanges))
+  # Define ranges for output based on time offset and simulation
+  timeRanges$total$values <- c(simulationSet$timeOffset, max(simulationRanges))
 
   # Flag simulationRanges prior to timeOffset
   timeOffsetFlag <- simulationRanges < simulationSet$timeOffset
@@ -217,9 +215,10 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet) {
 
   # Case of multiple applications, get first and last
   if (!isOfLength(simulationRanges, 2)) {
-    # First application becomes first application after timeOffset
+    # First application becomes first application since timeOffset
     timeRanges$firstApplication$values <- utils::head(simulationRanges[!timeOffsetFlag], 2)
-    timeRanges$lastApplication$values <- utils::tail(simulationRanges, 2)
+    # Last application becomes last application since timeOffset
+    timeRanges$lastApplication$values <- utils::tail(simulationRanges[!timeOffsetFlag], 2)
     timeRanges$firstApplication$keep <- applicationRanges[[ApplicationRanges$firstApplication]]
     timeRanges$lastApplication$keep <- applicationRanges[[ApplicationRanges$lastApplication]]
   }
