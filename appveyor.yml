@@ -10,7 +10,7 @@ init:
 install:
   - ps: Bootstrap
   - git submodule update --init --recursive
-  - ps: cinst pandoc --no-progress
+  - ps: choco install pandoc --no-progress
   - ps: $env:Path += ";C:\Program Files (x86)\Pandoc\"
 
 environment:
