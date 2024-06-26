@@ -77,7 +77,7 @@ SimulationSet <- R6::R6Class(
         targetUnit = timeUnit
       )
       validateVectorRange(timeOffset, type = "numeric", valueRange = c(0, endTime))
-      validateVectorRange(minimumSimulationEndTime, type = "numeric", valueRange = c(0, endTime), nullAllowed = TRUE)
+      validateVector(minimumSimulationEndTime, type = "numeric", valueRange = c(0, endTime), nullAllowed = TRUE)
       
       # Test and validate outputs and their paths
       validateOutputObject(c(outputs), simulation, nullAllowed = TRUE)
