@@ -55,39 +55,45 @@ SimulationSet <- R6::R6Class(
       # Test and validate the simulation objects
       validateIsString(simulationSetName)
       validateIsString(simulationFile)
-      validateIsString(massBalanceFile, nullAllowed = TRUE)
       validateIsFileExtension(simulationFile, "pkml")
+      validateIsUnitFromDimension(timeUnit, "Time")
+      
+      # For optional input, usually null is allowed
+      # but not here as it would mean that nothing would be reported
+      validateIsIncluded(c(applicationRanges), ApplicationRanges)
+      validateIsString(massBalanceFile, nullAllowed = TRUE)
       if (!isEmpty(massBalanceFile)) {
         validateIsFileExtension(massBalanceFile, "json")
         self$massBalanceSettings <- jsonlite::fromJSON(massBalanceFile, simplifyVector = FALSE)[["MassBalancePlots"]]
       }
-      validateIsString(timeUnit, nullAllowed = TRUE)
-      validateIsPositive(object = minimumSimulationEndTime, nullAllowed = TRUE)
-      validateIsNumeric(timeOffset)
-      # For optional input, usually null is allowed
-      # but not here as it would mean that nothing would be reported
-      validateIsIncluded(c(applicationRanges), ApplicationRanges)
-
+      
       # Before loading the simulation, check if the file exists
       validateFileExists(simulationFile)
       simulation <- ospsuite::loadSimulation(simulationFile, addToCache = FALSE)
-
+      # Checks requiring simulation info
+      endTime <- ospsuite::toUnit(
+        quantityOrDimension = "Time",
+        values = simulation$outputSchema$endTime,
+        targetUnit = timeUnit
+      )
+      validateVectorRange(timeOffset, type = "numeric", valueRange = c(0, endTime))
+      validateVectorRange(minimumSimulationEndTime, type = "numeric", valueRange = c(0, endTime), nullAllowed = TRUE)
+      
       # Test and validate outputs and their paths
       validateOutputObject(c(outputs), simulation, nullAllowed = TRUE)
       validateDataSource(dataSource, c(outputs), nullAllowed = TRUE)
+      # Warn if time offset is not in application times (or 0 if there is no application at all)
+      allApplicationTimes <- getApplicationTimesForSimulation(simulation, outputs)
+      checkIsIncluded(timeOffset, allApplicationTimes %||% 0, groupName = "Application Times")
 
       self$simulationSetName <- simulationSetName
       self$simulationFile <- simulationFile
       self$minimumSimulationEndTime <- minimumSimulationEndTime
       self$timeOffset <- timeOffset
-
       self$outputs <- c(outputs)
-
       self$dataSource <- dataSource
       self$dataSelection <- translateDataSelection(dataSelection)
-
-      self$timeUnit <- timeUnit %||% "h"
-
+      self$timeUnit <- timeUnit
       self$applicationRanges <- list(
         total = isIncluded(ApplicationRanges$total, applicationRanges),
         firstApplication = isIncluded(ApplicationRanges$firstApplication, applicationRanges),
