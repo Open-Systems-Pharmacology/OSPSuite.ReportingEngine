@@ -83,7 +83,7 @@ SimulationSet <- R6::R6Class(
       validateOutputObject(c(outputs), simulation, nullAllowed = TRUE)
       validateDataSource(dataSource, c(outputs), nullAllowed = TRUE)
       # Warn if time offset is not in application times (or 0 if there is no application at all)
-      allApplicationTimes <- getApplicationTimesForSimulation(simulation, outputs)
+      allApplicationTimes <- getApplicationTimesForSimulation(simulation, c(outputs))
       checkIsIncluded(timeOffset, allApplicationTimes %||% 0, groupName = "Application Times")
 
       self$simulationSetName <- simulationSetName
