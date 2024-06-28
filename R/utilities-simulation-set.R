@@ -123,6 +123,15 @@ loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE,
     ospsuite::addOutputs(quantitiesOrPaths = paths, simulation = simulation)
   }
   
+  # Add timeOffset time point to output schema
+  simulation$outputSchema$addTimePoints(
+    timePoints = ospsuite::toBaseUnit(
+      quantityOrDimension = "Time",
+      values = simulationSet$timeOffset,
+      unit = simulationSet$timeUnit
+    )
+  )
+  
   # Update simulation end time if minimum is longer than current simulation end time
   endTime <- max(
     simulation$outputSchema$endTime,
