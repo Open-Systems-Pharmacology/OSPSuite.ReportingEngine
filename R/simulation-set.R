@@ -70,14 +70,17 @@ SimulationSet <- R6::R6Class(
       # Before loading the simulation, check if the file exists
       validateFileExists(simulationFile)
       simulation <- ospsuite::loadSimulation(simulationFile, addToCache = FALSE)
-      # Checks requiring simulation info
-      endTime <- ospsuite::toUnit(
-        quantityOrDimension = "Time",
-        values = simulation$outputSchema$endTime,
-        targetUnit = timeUnit
+      validateVector(minimumSimulationEndTime, type = "numeric", valueRange = c(0, Inf), nullAllowed = TRUE)
+      # Following checks require simulation info
+      endTime <- max(
+        minimumSimulationEndTime, 
+        ospsuite::toUnit(
+          quantityOrDimension = "Time",
+          values = simulation$outputSchema$endTime,
+          targetUnit = timeUnit
+        )
       )
       validateVectorRange(timeOffset, type = "numeric", valueRange = c(0, endTime))
-      validateVector(minimumSimulationEndTime, type = "numeric", valueRange = c(0, endTime), nullAllowed = TRUE)
       
       # Test and validate outputs and their paths
       validateOutputObject(c(outputs), simulation, nullAllowed = TRUE)
