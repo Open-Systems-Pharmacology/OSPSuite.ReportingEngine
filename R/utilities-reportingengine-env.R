@@ -175,14 +175,14 @@ setDefaultMCRepetitions <- function(n) {
   return(invisible())
 }
 
-#' @title setDefaultErrorbarCapSize
+#' @title setDefaultREErrorbarCapSize
 #' @description Set the default size of error bar caps
 #' @param size Size of error bar caps
 #' @export
 #' @examples
-#' setDefaultErrorbarCapSize(5)
+#' setDefaultREErrorbarCapSize(5)
 #'
-setDefaultErrorbarCapSize <- function(size) {
+setDefaultREErrorbarCapSize <- function(size) {
   validateIsNumeric(size)
   reEnv$defaultErrorbarCapSize <- size
   tlf::setDefaultErrorbarCapSize(size)
