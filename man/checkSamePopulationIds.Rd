@@ -16,6 +16,6 @@ checkSamePopulationIds(setIds, referenceSetIds, setName, referenceSetName)
 \item{referenceSetName}{Name of the reference simulation set for warning message}
 }
 \description{
-Check if PKAnalses with same population actually use the same IndividualIds
+Check if PK Analyses with same population actually use the same IndividualIds
 }
 \keyword{internal}

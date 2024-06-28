@@ -507,11 +507,11 @@ This input is then translated in the `SimulationSet` objects as a list of logica
 
 ## 3.6. Time Offset
 
-The input `timeOffset` shifts the time variable of time profile plots by its value in `timeUnit`. By default this value is 0.
+The input `timeOffset` shifts the time variable of time profile plots by its value in `timeUnit`. By default this value is `0`.
 
 This input can be useful for pediatric workflows comparing simulation sets in the same time profile plot.
 
-In scenarios where multiple applications were defined, the time range of first application actually becomes the first application after `timeOffset`.
+In scenarios where multiple applications are defined, the time range of first application actually becomes the time range of first application since `timeOffset`. Likewise, the time range of last application becomes the time range of last application since `timeOffset`.
 
 
 # 4. Tasks

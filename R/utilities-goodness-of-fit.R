@@ -723,7 +723,7 @@ plotPopTimeProfileLog <- function(simulatedData,
 #' @return A data.frame
 #' @keywords internal
 asTimeAfterDose <- function(data, timeOffset, maxTime = NULL) {
-  if (isOfLength(data, 0)) {
+  if (isEmpty(data)) {
     # Return empty data.frame (consitent class with data[dataFilter, ])
     return(data.frame())
   }
@@ -772,7 +772,8 @@ getMetaDataFrame <- function(listOfMetaData) {
 #' @title getTimeProfilePlotResults
 #' @description Get plots and their captions for mean or population time profiles
 #' @param workflowType `"mean"` or `"population"` workflow
-#' @param timeRange array of time values defining range of simulated data
+#' @param timeRange array of time values defining range of simulated data.
+#' Note that `timeRange` accounts for user defined `timeOffset`
 #' @param simulatedData data.frame of simulated data
 #' @param observedData data.frame of observed data
 #' @param metaDataFrame metaData represented as a data.frame
@@ -789,51 +790,35 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
   # rbind.data.frame enforces data.frame type and nrow can be used as is
   # Reset time based on timeOffset or application range
   simulatedData <- rbind.data.frame(
-    asTimeAfterDose(
-      settings$referenceData$simulatedData,
-      min(timeRange) + settings$referenceData$timeOffset,
-      max(timeRange) + settings$referenceData$timeOffset
-    ),
-    asTimeAfterDose(
-      simulatedData,
-      min(timeRange) + structureSet$simulationSet$timeOffset,
-      max(timeRange) + structureSet$simulationSet$timeOffset
-    )
+    asTimeAfterDose(settings$referenceData$simulatedData, min(timeRange), max(timeRange)),
+    asTimeAfterDose(simulatedData, min(timeRange), max(timeRange))
   )
   if (nrow(simulatedData) == 0) {
     stop(messages$dataIncludedInTimeRange(
       nrow(simulatedData),
-      timeRange + structureSet$simulationSet$timeOffset,
+      timeRange,
       structureSet$simulationSet$timeUnit, "simulated"
     ))
   }
-  observedData <- asTimeAfterDose(
-    observedData,
-    min(timeRange) + structureSet$simulationSet$timeOffset,
-    max(timeRange) + structureSet$simulationSet$timeOffset
-  )
+  observedData <- asTimeAfterDose(observedData, min(timeRange), max(timeRange))
   # Add reference observed data only if option is set to true
   # isTRUE is used for mean model workflows that have a NULL field
   if (isTRUE(structureSet$simulationSet$plotReferenceObsData)) {
     observedData <- rbind.data.frame(
-      asTimeAfterDose(
-        settings$referenceData$observedData,
-        min(timeRange) + settings$referenceData$timeOffset,
-        max(timeRange) + settings$referenceData$timeOffset
-      ),
+      asTimeAfterDose(settings$referenceData$observedData, min(timeRange), max(timeRange)),
       observedData
     )
   }
 
   logDebug(messages$dataIncludedInTimeRange(
     nrow(simulatedData),
-    timeRange + structureSet$simulationSet$timeOffset,
+    timeRange,
     structureSet$simulationSet$timeUnit,
     "simulated"
   ))
   logDebug(messages$dataIncludedInTimeRange(
     nrow(observedData),
-    timeRange + structureSet$simulationSet$timeOffset,
+    timeRange,
     structureSet$simulationSet$timeUnit,
     "observed"
   ))

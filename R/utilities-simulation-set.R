@@ -183,26 +183,18 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet) {
     )
   )
 
-  # Get applications
-  applications <- simulation$allApplicationsFor(path)
-  applicationTimes <- 0
-  if (!isOfLength(applications, 0)) {
-    applicationTimes <- sapply(applications, function(application) {
-      application$startTime$value
-    })
-  }
+  # Get applications times
+  applicationTimes <- getApplicationTimesForPath(simulation, path) %||% 0
   # Get all ranges of simulation ranked defined by application intervals
   simulationRanges <- c(applicationTimes, simulation$outputSchema$endTime)
   simulationRanges <- sort(ospsuite::toUnit("Time", simulationRanges, timeUnit))
 
   # Store number of applications and their ranges
-  logDebug(messages$numberOfApplications(length(applications), path, simulation$name))
+  logDebug(messages$numberOfApplications(length(applicationTimes), path, simulation$name))
   logDebug(messages$timeRangesForSimulation(paste0(simulationRanges, collapse = "', '"), simulation$name))
 
-  # Define ranges for output
-  # Depending on expected behaviour of settings$applicationRange
-  # It would be possible to set these values
-  timeRanges$total$values <- c(min(simulationRanges), max(simulationRanges))
+  # Define ranges for output based on time offset and simulation
+  timeRanges$total$values <- c(simulationSet$timeOffset, max(simulationRanges))
 
   # Flag simulationRanges prior to timeOffset
   timeOffsetFlag <- simulationRanges < simulationSet$timeOffset
@@ -217,12 +209,42 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet) {
 
   # Case of multiple applications, get first and last
   if (!isOfLength(simulationRanges, 2)) {
-    # First application becomes first application after timeOffset
+    # First application becomes first application since timeOffset
     timeRanges$firstApplication$values <- utils::head(simulationRanges[!timeOffsetFlag], 2)
-    timeRanges$lastApplication$values <- utils::tail(simulationRanges, 2)
+    # Last application becomes last application since timeOffset
+    timeRanges$lastApplication$values <- utils::tail(simulationRanges[!timeOffsetFlag], 2)
     timeRanges$firstApplication$keep <- applicationRanges[[ApplicationRanges$firstApplication]]
     timeRanges$lastApplication$keep <- applicationRanges[[ApplicationRanges$lastApplication]]
   }
 
   return(timeRanges)
+}
+
+#' @title getApplicationTimesForSimulation
+#' @param simulation A `Simulation` object
+#' @param output A list of `Output` objects
+#' @return Time values of applications
+#' @keywords internal
+getApplicationTimesForSimulation <- function(simulation, outputs){
+  allApplicationsTimes <- lapply(
+    outputs,
+    function(output) {
+      getApplicationTimesForPath(simulation, output$path)
+      }
+    )
+  # Concatenate all the application times in one single numeric vector
+  return(do.call("c", allApplicationsTimes))
+}
+
+#' @title getApplicationTimesForPath
+#' @param simulation A `Simulation` object
+#' @param path A simulation path
+#' @return Time values of applications
+#' @import ospsuite
+#' @keywords internal
+getApplicationTimesForPath <- function(simulation, path){
+  applications <- simulation$allApplicationsFor(path)
+  if (isEmpty(applications)) {return()}
+  applicationTimes <- sapply(applications, function(application) {application$startTime$value})
+  return(as.numeric(applicationTimes))
 }
