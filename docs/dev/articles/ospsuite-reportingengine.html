@@ -1018,11 +1018,13 @@ application range is included in the report or not.</p>
 </h3>
 <p>The input <code>timeOffset</code> shifts the time variable of time
 profile plots by its value in <code>timeUnit</code>. By default this
-value is 0.</p>
+value is <code>0</code>.</p>
 <p>This input can be useful for pediatric workflows comparing simulation
 sets in the same time profile plot.</p>
-<p>In scenarios where multiple applications were defined, the time range
-of first application actually becomes the first application after
+<p>In scenarios where multiple applications are defined, the time range
+of first application actually becomes the time range of first
+application since <code>timeOffset</code>. Likewise, the time range of
+last application becomes the time range of last application since
 <code>timeOffset</code>.</p>
 </div>
 </div>

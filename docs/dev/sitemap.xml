@@ -283,6 +283,12 @@
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getApplicationResults.html</loc>
   </url>
   <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getApplicationTimesForPath.html</loc>
+  </url>
+  <url>
+    <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getApplicationTimesForSimulation.html</loc>
+  </url>
+  <url>
     <loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getAxesProperties.html</loc>
   </url>
   <url>
