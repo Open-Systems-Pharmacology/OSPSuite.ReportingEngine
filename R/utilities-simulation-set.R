@@ -119,22 +119,45 @@ loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE,
   # Prevent loadSimulationWithUpdatedPaths from crashing if user did not submit any pathID
   if (!is.null(simulationSet$outputs)) {
     simulation$outputSelections$clear()
-    paths <- sapply(simulationSet$outputs, function(output) {
-      output$path
-    })
+    paths <- getOutputPathsInSimulationSet(simulationSet)
     ospsuite::addOutputs(quantitiesOrPaths = paths, simulation = simulation)
   }
-
-  if (is.null(simulationSet$minimumSimulationEndTime)) {
+  
+  # Add timeOffset time point to output schema
+  simulation$outputSchema$addTimePoints(
+    timePoints = ospsuite::toBaseUnit(
+      quantityOrDimension = "Time",
+      values = simulationSet$timeOffset,
+      unit = simulationSet$timeUnit
+    )
+  )
+  
+  # Update simulation end time if minimum is longer than current simulation end time
+  endTime <- max(
+    simulation$outputSchema$endTime,
+    ospsuite::toBaseUnit(
+      quantityOrDimension = "Time",
+      values = simulationSet$minimumSimulationEndTime,
+      unit = simulationSet$timeUnit
+    )
+  )
+  if (endTime <= simulation$outputSchema$endTime) {
     return(simulation)
   }
+  # Get interval that includes current endTime, 
+  # if mutliple intervals include endTime, update the last one
+  endTimes <- sapply(
+    simulation$outputSchema$intervals,
+    function(interval) {
+      interval$endTime$value
+    }
+  )
+  indexToUpdate <- tail(which(endTimes == simulation$outputSchema$endTime), 1)
+  simulation$outputSchema$intervals[[indexToUpdate]]$endTime$setValue(
+    value = endTime,
+    unit = ospsuite::getBaseUnit("Time")
+  )
 
-  if (simulationSet$minimumSimulationEndTime > simulation$outputSchema$endTime) {
-    maximalIntervalIndex <- which(sapply(simulation$outputSchema$intervals, function(x) {
-      x$endTime$value
-    }) == simulation$outputSchema$endTime)[1]
-    simulation$outputSchema$intervals[[maximalIntervalIndex]]$endTime$setValue(value = simulationSet$minimumSimulationEndTime, unit = ospUnits$Time$min)
-  }
   return(simulation)
 }
 
@@ -225,13 +248,13 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet) {
 #' @param output A list of `Output` objects
 #' @return Time values of applications
 #' @keywords internal
-getApplicationTimesForSimulation <- function(simulation, outputs){
+getApplicationTimesForSimulation <- function(simulation, outputs) {
   allApplicationsTimes <- lapply(
     outputs,
     function(output) {
       getApplicationTimesForPath(simulation, output$path)
-      }
-    )
+    }
+  )
   # Concatenate all the application times in one single numeric vector
   return(do.call("c", allApplicationsTimes))
 }
@@ -242,9 +265,13 @@ getApplicationTimesForSimulation <- function(simulation, outputs){
 #' @return Time values of applications
 #' @import ospsuite
 #' @keywords internal
-getApplicationTimesForPath <- function(simulation, path){
+getApplicationTimesForPath <- function(simulation, path) {
   applications <- simulation$allApplicationsFor(path)
-  if (isEmpty(applications)) {return()}
-  applicationTimes <- sapply(applications, function(application) {application$startTime$value})
+  if (isEmpty(applications)) {
+    return()
+  }
+  applicationTimes <- sapply(applications, function(application) {
+    application$startTime$value
+  })
   return(as.numeric(applicationTimes))
 }
