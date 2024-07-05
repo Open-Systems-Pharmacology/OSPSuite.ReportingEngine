@@ -1077,10 +1077,9 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
       # 3) all PK Parameters use their default ospsuite unit
       units = as.list(
         c(
-          # Keep these 2 for backward compatibility
+          # Keep these AUC for backward compatibility
           AUC = ospsuite::ospUnits$`AUC [mass]`$`µg*h/l`,
-          CL = ospsuite::ospUnits$Flow$`l/h`,
-          # All remaining PK Parameters
+          # All remaining PK Parameter units are defined here including CL
           sapply(
             ospsuite::allPKParameterNames(),
             function(pkParameterName) {
