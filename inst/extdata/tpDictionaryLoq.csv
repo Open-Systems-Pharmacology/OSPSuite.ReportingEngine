@@ -8,5 +8,5 @@ age,covariate,AGE,year(s),Age,Organism|Age,
 wght,covariate,WGHT,kg,Body weight,Organism|Weight,
 hght,covariate,HGHT,cm,Height,Organism|Height,
 bmi,covariate,BMI,kg/m2,BMI,Organism|BMI,
-gender,covariate,SEX,,SEX,Gender,Make sure 1=male  2= female
+gender,covariate,SEX,,SEX,Gender,Make sure male="MALE" and female="FEMALE"
 lloq,timeprofile,LOQ,,,,units are defined in corresponding output definitions
