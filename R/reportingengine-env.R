@@ -89,7 +89,8 @@ reEnv$fontScaleFactor <- 2
 reEnv$workflowWatermarkMessage <- "preliminary analysis"
 reEnv$residualsHistogramLabel <- "Relative frequency"
 reEnv$demographyHistogramLabel <- "Percentage of population [%]"
-reEnv$residualsQQLabel <- "Quantiles of residuals"
+reEnv$residualsQQLabelX <- "Standard normal quantiles"
+reEnv$residualsQQLabelY <- "Quantiles of residuals"
 reEnv$referenceColor <- "grey50"
 reEnv$referenceFill <- "grey50"
 reEnv$defaultErrorbarCapSize <- 3
