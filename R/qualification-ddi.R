@@ -401,7 +401,8 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
         title = metadata$title,
         subPlotCaption = captionSuffix,
         pkParameter = pkParameter,
-        plotTypeCaption = ddiPlotTypeSpecifications[[plotType]]$figureCaption
+        plotTypeCaption = ddiPlotTypeSpecifications[[plotType]]$figureCaption,
+        guestDelta = metadata$guestDelta[[pkParameter]]
       )
       ddiArtifacts[["Plot"]][[plotID]] <- saveTaskResults(
         id = plotID,
@@ -437,7 +438,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
     id = gmfeID,
     sectionId = sectionID,
     table = gmfeDDI,
-    tableCaption = paste("GMFE for", metadata$title, "Ratio"),
+    tableCaption = captions$ddi$gmfe(metadata$title),
     includeTable = TRUE
   )
 
@@ -448,9 +449,10 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
       id = tableID,
       sectionId = sectionID,
       table = ddiTableList[[pkParameter]],
-      tableCaption = paste(
-        "Summary table for", metadata$title, "-", pkParameter, "Ratio.",
-        "(&delta; =", metadata$guestDelta[[pkParameter]] %||% 1, "in Guest *et al.* formula)"
+      tableCaption = captions$ddi$measureTable(
+        title = metadata$title,
+        pkParameter = pkParameter,
+        guestDelta = metadata$guestDelta[[pkParameter]]
       ),
       includeTable = TRUE
     )
@@ -529,7 +531,7 @@ plotQualificationDDIs <- function(configurationPlan, settings) {
         id = "DDI Table",
         sectionId = sectionID,
         table = getDDITable(dataframe),
-        tableCaption = paste("Summary table for ", metadata$title),
+        tableCaption = captions$ddi$summaryTable(metadata$title),
         includeTable = TRUE
       )
       ddiResults <- c(ddiResults, ddiTable)

@@ -32,7 +32,7 @@ Other workflow tasks:
 }
 \concept{workflow tasks}
 \section{Super classes}{
-\code{ospsuite.reportingengine::Task} -> \code{ospsuite.reportingengine::PlotTask} -> \code{GofPlotTask}
+\code{\link[ospsuite.reportingengine:Task]{ospsuite.reportingengine::Task}} -> \code{\link[ospsuite.reportingengine:PlotTask]{ospsuite.reportingengine::PlotTask}} -> \code{GofPlotTask}
 }
 \section{Methods}{
 \subsection{Public methods}{

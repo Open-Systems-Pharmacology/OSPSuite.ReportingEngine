@@ -63,8 +63,8 @@ Other workflow helpers:
 \code{\link{getYParametersForPKParametersPlot}()},
 \code{\link{inactivateWorkflowTasks}()},
 \code{\link{setSimulationDescriptor}()},
-\code{\link{setWorkflowParameterDisplayPathsFromFile}()},
 \code{\link{setWorkflowParameterDisplayPaths}()},
+\code{\link{setWorkflowParameterDisplayPathsFromFile}()},
 \code{\link{setXParametersForDemographyPlot}()},
 \code{\link{setYParametersForDemographyPlot}()},
 \code{\link{setYParametersForPKParametersPlot}()}
