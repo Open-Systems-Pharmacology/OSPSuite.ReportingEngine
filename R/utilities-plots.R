@@ -666,7 +666,15 @@ getGOFPlotConfiguration <- function(plotType,
     plotConfiguration$labels$ylabel$text <- reEnv$residualsHistogramLabel
   }
   if (plotType %in% "resQQPlot") {
-    plotConfiguration$labels$ylabel$text <- reEnv$residualsQQLabel
+    # Set quadratic qqplot
+    newDimension <- mean(c(
+      plotConfiguration$export$width,
+      plotConfiguration$export$height
+    ))
+    plotConfiguration$export$width <- newDimension
+    plotConfiguration$export$height <- newDimension
+    plotConfiguration$labels$xlabel$text <- reEnv$residualsQQLabelX
+    plotConfiguration$labels$ylabel$text <- reEnv$residualsQQLabelY
   }
 
   plotConfiguration$points$color <- getColorFromOutputGroup(
