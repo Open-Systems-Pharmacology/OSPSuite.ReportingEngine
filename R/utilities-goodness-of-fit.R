@@ -969,11 +969,11 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
     output$residualScale
   })
   if (all(residualScales %in% ResidualScales$Logarithmic)) {
-    residualsLegend <- "Residuals\nlog(observed)-log(simulated)"
+    residualsLegend <- "Residuals<br>log(observed)-log(simulated)"
     residualScale <- ResidualScales$Logarithmic
   }
   if (all(residualScales %in% ResidualScales$Linear)) {
-    residualsLegend <- "Residuals\nobserved-simulated"
+    residualsLegend <- "Residuals<br>observed-simulated"
     residualScale <- ResidualScales$Linear
   }
 
