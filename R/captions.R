@@ -150,6 +150,12 @@ captions <- list(
       paste0(
         "BLQ data for ", pathName, " (", reportSimulationSet(simulationSetName, descriptor), ")"
       )
+    },
+    residualsLabel = function(residualScale) {
+      if (isIncluded(residualScale, ResidualScales$Linear)) {
+        return("Residuals<br>observed-simulated")
+      }
+      return("Residuals<br>log(observed)-log(simulated)")
     }
   ),
   plotPKParameters = list(

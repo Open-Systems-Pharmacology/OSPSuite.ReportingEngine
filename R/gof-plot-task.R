@@ -256,15 +256,11 @@ GofPlotTask <- R6::R6Class(
 
       # Plot the residuals across the simulations by output path
       for (output in allOutputs) {
-        Legend <- "Residuals<br>log(observed)-log(simulated)"
-        if (isIncluded(output$residualScale, ResidualScales$Linear)) {
-          Legend <- "Residuals<br>observed-simulated"
-        }
         residualsMetaData <- list(
           "Time" = list(dimension = "Time", unit = structureSets[[1]]$simulationSet$timeUnit),
           "Observed" = list(dimension = "Observed data", unit = output$displayUnit),
           "Simulated" = list(dimension = "Simulated value", unit = output$displayUnit),
-          "Residuals" = list(unit = "", dimension = Legend)
+          "Residuals" = list(dimension = captions$plotGoF$residualsLabel(output$residualScale), unit = "")
         )
 
         outputData <- data[data$Path %in% output$path, ]
