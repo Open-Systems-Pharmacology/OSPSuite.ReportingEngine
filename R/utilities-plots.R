@@ -196,11 +196,11 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
   validateIsIncluded(values = legendPosition, parentValues = tlf::LegendPositions, nullAllowed = TRUE)
   plotConfiguration$legend$position <- legendPosition %||% reEnv$theme$background$legendPosition
 
-  # Quadratic dimensions for ObsVsPred plot type
+  # Quadratic dimensions for ObsVsPred, DDIRatio plot type
   # Note that other plots be could included in default quadratic plots
   defaultWidth <- reEnv$defaultPlotFormat$width
   defaultHeight <- reEnv$defaultPlotFormat$height
-  if (isIncluded(plotType, "ObsVsPred")) {
+  if (isIncluded(plotType, c("ObsVsPred", "DDIRatio"))) {
     defaultWidth <- mean(c(defaultWidth, defaultHeight))
     defaultHeight <- defaultWidth
   }
