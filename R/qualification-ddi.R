@@ -32,7 +32,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 
 
         plotDDIMetadata$groups <- list()
-        plotDDIMetadata$deltaGuest <- getGuestDeltaFromConfigurationPlan(plot)
+        plotDDIMetadata$guestDelta <- getGuestDeltaFromConfigurationPlan(plot)
 
         pkParameters <- plot$PKParameters %||% ospsuite::toPathArray(plot$PKParameter)
         validateIsIncluded(values = pkParameters, parentValues = names(ddiPKRatioColumnName), nullAllowed = FALSE)
