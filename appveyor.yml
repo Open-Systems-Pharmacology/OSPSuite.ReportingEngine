@@ -74,7 +74,7 @@ skip_commits:
     - .github/workflows/*.yml
     - .github/workflows/*.sh
     - .github/workflows/Dockerfile
-    - .github/workflows/*.R
+#    - .github/workflows/*.R
     - '_pkgdown.yml'
 
 skip_branch_with_pr: true
