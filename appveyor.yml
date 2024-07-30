@@ -22,6 +22,7 @@ environment:
   R_ARCH: x64
   R_VERSION: "4.3.1"
   R_CHECK_ARGS: --no-build-vignettes --no-manual --as-cran
+  GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
 version: "$(app_version).{build}"
 
