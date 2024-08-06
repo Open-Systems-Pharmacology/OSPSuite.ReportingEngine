@@ -97,7 +97,8 @@ Output <- R6::R6Class(
       self$dataDisplayName <- dataDisplayName %||% self$displayName
       self$residualScale <- residualScale
 
-      self$groupID <- groupID
+      # Same output path get same group ID
+      self$groupID <- groupID %||% path
 
       self$color <- color %||% newOutputColor()
       self$fill <- fill %||% newOutputColor()

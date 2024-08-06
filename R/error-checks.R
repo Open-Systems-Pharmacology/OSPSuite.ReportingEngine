@@ -661,3 +661,33 @@ checkSamePopulationIds <- function(setIds,
   )
   return(invisible())
 }
+
+#' @title checkMetaDataIsConsistent
+#' @description
+#' Check consistency of metadata units, dimensions and residuals scale
+#' @param metaData A data.frame summarizing meta data of multiple `SimulationSet` and `Output` objects
+#' @keywords internal
+checkMetaDataIsConsistent <- function(metaData) {
+  groupId <- unique(metaData$group)
+  if(!isOfLength(unique(metaData$unit), 1)){
+    warning(
+      messages$inconsistentMetaData(
+        values = metaData$unit, 
+        id = groupId, 
+        dataType = "units"
+        ),
+      call. = FALSE
+      )
+  }
+  if(!isOfLength(unique(metaData$residualScale), 1)){
+    warning(
+      messages$inconsistentMetaData(
+        values = metaData$residualScale, 
+        id = groupId, 
+        dataType = "residualScale"
+      ),
+      call. = FALSE
+    )
+  }
+  return()
+}

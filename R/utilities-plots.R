@@ -662,7 +662,13 @@ getGOFPlotConfiguration <- function(plotType,
   }
   # Set labels for qq plots and histograms
   if (plotType %in% "resHisto") {
-    plotConfiguration$ribbons$fill <- group$fill
+    plotConfiguration$ribbons$fill <- getColorFromOutputGroup(
+      group = group,
+      data = data,
+      dataMapping = dataMapping,
+      legendVariable = "residualsLegend",
+      colorVariable = "fill"
+    ) # group$fill
     plotConfiguration$labels$ylabel$text <- reEnv$residualsHistogramLabel
   }
   if (plotType %in% "resQQPlot") {
