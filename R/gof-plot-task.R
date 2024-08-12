@@ -256,15 +256,11 @@ GofPlotTask <- R6::R6Class(
 
       # Plot the residuals across the simulations by output path
       for (output in allOutputs) {
-        Legend <- "Residuals\nlog(Observed)-log(Simulated)"
-        if (isIncluded(output$residualScale, ResidualScales$Logarithmic)) {
-          Legend <- "Residuals\nObserved-Simulated"
-        }
         residualsMetaData <- list(
           "Time" = list(dimension = "Time", unit = structureSets[[1]]$simulationSet$timeUnit),
           "Observed" = list(dimension = "Observed data", unit = output$displayUnit),
           "Simulated" = list(dimension = "Simulated value", unit = output$displayUnit),
-          "Residuals" = list(unit = "", dimension = Legend)
+          "Residuals" = list(dimension = captions$plotGoF$residualsLabel(output$residualScale), unit = "")
         )
 
         outputData <- data[data$Path %in% output$path, ]
@@ -473,7 +469,8 @@ GofPlotTask <- R6::R6Class(
         )
         residualsQQPlot <- tlf::setPlotLabels(
           residualsQQPlot,
-          ylabel = reEnv$residualsQQLabel
+          xlabel = reEnv$residualsQQLabelX,
+          ylabel = reEnv$residualsQQLabelY
         )
 
         resultID <- defaultFileNames$resultID(

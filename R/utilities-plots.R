@@ -196,11 +196,11 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
   validateIsIncluded(values = legendPosition, parentValues = tlf::LegendPositions, nullAllowed = TRUE)
   plotConfiguration$legend$position <- legendPosition %||% reEnv$theme$background$legendPosition
 
-  # Quadratic dimensions for ObsVsPred plot type
+  # Quadratic dimensions for ObsVsPred, DDIRatio plot type
   # Note that other plots be could included in default quadratic plots
   defaultWidth <- reEnv$defaultPlotFormat$width
   defaultHeight <- reEnv$defaultPlotFormat$height
-  if (isIncluded(plotType, "ObsVsPred")) {
+  if (isIncluded(plotType, c("ObsVsPred", "DDIRatio"))) {
     defaultWidth <- mean(c(defaultWidth, defaultHeight))
     defaultHeight <- defaultWidth
   }
@@ -280,7 +280,7 @@ addLineBreakToCaption <- function(captions, maxLines = reEnv$maxLinesPerLegendCa
     # Update captions with sensible line breaks
     captions[captionIndex] <- paste0(
       substring(captions[captionIndex], first = splitFirst, last = splitLast),
-      collapse = "\n"
+      collapse = "<br>"
     )
   }
   return(captions)
@@ -666,7 +666,15 @@ getGOFPlotConfiguration <- function(plotType,
     plotConfiguration$labels$ylabel$text <- reEnv$residualsHistogramLabel
   }
   if (plotType %in% "resQQPlot") {
-    plotConfiguration$labels$ylabel$text <- reEnv$residualsQQLabel
+    # Set quadratic qqplot
+    newDimension <- mean(c(
+      plotConfiguration$export$width,
+      plotConfiguration$export$height
+    ))
+    plotConfiguration$export$width <- newDimension
+    plotConfiguration$export$height <- newDimension
+    plotConfiguration$labels$xlabel$text <- reEnv$residualsQQLabelX
+    plotConfiguration$labels$ylabel$text <- reEnv$residualsQQLabelY
   }
 
   plotConfiguration$points$color <- getColorFromOutputGroup(

@@ -150,6 +150,12 @@ captions <- list(
       paste0(
         "BLQ data for ", pathName, " (", reportSimulationSet(simulationSetName, descriptor), ")"
       )
+    },
+    residualsLabel = function(residualScale) {
+      if (isIncluded(residualScale, ResidualScales$Linear)) {
+        return("Residuals<br>observed-simulated")
+      }
+      return("Residuals<br>log(observed)-log(simulated)")
     }
   ),
   plotPKParameters = list(
@@ -216,6 +222,20 @@ captions <- list(
         " for individuals at percentiles ", quantileText, " for ",
         reportSimulationSet(simulationSetName, descriptor), "."
       ))
+    }
+  ),
+  ddi = list(
+    gmfe = function(title) {
+      paste("GMFE for", title, "Ratio")
+    },
+    summaryTable = function(title) {
+      paste("Summary table for", title)
+    },
+    measureTable = function(title, pkParameter, guestDelta = NULL) {
+      paste(
+        "Summary table for", title, "-", pkParameter, "Ratio.",
+        "(&delta; =", guestDelta %||% 1, "in Guest *et al.* formula)"
+      )
     }
   )
 )
@@ -337,12 +357,15 @@ getResidualsAcrossCaption <- function(pathName) {
   return(paste0(pathName, " across "))
 }
 
-getDDIPlotCaption <- function(title, subPlotCaption, pkParameter, plotTypeCaption) {
+getDDIPlotCaption <- function(title, subPlotCaption, pkParameter, plotTypeCaption, guestDelta = NULL) {
   longTitle <- ifNotNull(
     condition = subPlotCaption,
     outputIfNotNull = paste0(title, ". ", subPlotCaption, "."),
     outputIfNull = paste0(title, ". ")
   )
-  caption <- paste(longTitle, plotTypeCaption, pkParameter, "Ratio.")
+  caption <- paste(
+    longTitle, plotTypeCaption, pkParameter, "Ratio.",
+    "(&delta; =", guestDelta %||% 1, "in Guest *et al.* formula)"
+  )
   return(caption)
 }

@@ -963,19 +963,16 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
   }
 
   # Get residual scale for legends and captions
-  residualsLegend <- "Residuals"
-  residualScale <- ""
-  residualScales <- sapply(structureSet$simulationSet$outputs, function(output) {
-    output$residualScale
-  })
-  if (all(residualScales %in% ResidualScales$Logarithmic)) {
-    residualsLegend <- "Residuals\nlog(Observed)-log(Simulated)"
-    residualScale <- ResidualScales$Logarithmic
-  }
+  # TODO: issue #1251 use same group ID and warn if they have different scales
+  residualScales <- sapply(
+    structureSet$simulationSet$outputs, 
+    function(output) {output$residualScale}
+    )
+  residualScale <- ResidualScales$Logarithmic
   if (all(residualScales %in% ResidualScales$Linear)) {
-    residualsLegend <- "Residuals\nObserved-Simulated"
     residualScale <- ResidualScales$Linear
   }
+  residualsLegend <- captions$plotGoF$residualsLabel(residualScale)
 
   # Observed vs Predicted Plots
   outputGroups <- getOutputGroups(metaDataFrame)
@@ -995,7 +992,7 @@ getResidualsPlotResults <- function(timeRange, residualsData, metaDataFrame, str
     residualsMetaData <- list(
       "Observed" = list(dimension = "Observed data", unit = utils::head(outputGroup$unit, 1)),
       "Simulated" = list(dimension = "Simulated value", unit = utils::head(outputGroup$unit, 1)),
-      "Residuals" = list(unit = "", dimension = residualsLegend)
+      "Residuals" = list(dimension = residualsLegend, unit = "")
     )
 
     obsVsPredPlotConfiguration <- getGOFPlotConfiguration(
