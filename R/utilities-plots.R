@@ -280,7 +280,7 @@ addLineBreakToCaption <- function(captions, maxLines = reEnv$maxLinesPerLegendCa
     # Update captions with sensible line breaks
     captions[captionIndex] <- paste0(
       substring(captions[captionIndex], first = splitFirst, last = splitLast),
-      collapse = "<br>"
+      collapse = "\n"
     )
   }
   return(captions)
