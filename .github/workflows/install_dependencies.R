@@ -1,7 +1,7 @@
 install.packages(c('dplyr','purrr','covr','readr','tidyr','webshot','spelling','readxl','data.table','gridtext','ggtext','tidyselect','testthat','rmarkdown','pkgdown','openxlsx'), repos = 'http://cran.us.r-project.org', type='win.binary')
 download.file('https://github.com/Open-Systems-Pharmacology/rSharp/releases/download/v1.0.0/rSharp-v1.0.0-Windows-r_4.4.0.zip', destfile = "rsharp.zip", mode = "wb")
 download.file('https://ci.appveyor.com/api/projects/open-systems-pharmacology-ci/ospsuite-rutils/artifacts/ospsuite.utils.zip?pr=false', destfile = 'ospsuite.utils.zip', mode='wb')
-download.file('https://github.com/Open-Systems-Pharmacology/TLF-Library/releases/download/v1.5.158/tlf_1.5.158.zip', destfile = "tlf.zip", mode = "wb")
+download.file('https://ci.appveyor.com/api/projects/open-systems-pharmacology-ci/tlf-library/artifacts/tlf.zip?pr=false', destfile = 'tlf.zip', mode='wb')
 download.file('https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/download/v12.1.0/ospsuite_12.1.0.zip', destfile = "ospsuite.zip", mode = "wb")
 unzip("rsharp.zip")
 rSharp_archive <- list.files( pattern = "rSharp.*\\.zip")
