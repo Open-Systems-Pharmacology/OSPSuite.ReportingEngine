@@ -54,6 +54,7 @@
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/CalculatePKParametersTask.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkHasRunOnAllCores.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkIsSamePopulation.html</loc></url>
+<url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkMetaDataIsConsistent.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkSamePopulationIds.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkTaskInputsExist.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/ConfigurationFontsFields.html</loc></url>
@@ -207,6 +208,7 @@
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getRESettings.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getResiduals.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getResidualsPlotResults.html</loc></url>
+<url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getResidualsPlotResultsInGroup.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getSAFileIndex.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getScriptDocumentation.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getSelectedData.html</loc></url>
