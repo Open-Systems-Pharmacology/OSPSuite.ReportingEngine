@@ -250,6 +250,15 @@ getDataSourceCaption <- function(structureSet) {
 }
 
 getGoodnessOfFitCaptions <- function(structureSet, plotType, plotScale = "linear", settings = NULL) {
+  if (is.null(structureSet)) {
+    plotCaption <- captions$plotGoF[[plotType]](
+      simulationSetName = settings$simulationSetNames,
+      descriptor = settings$simulationSetDescriptor,
+      plotScale = plotScale,
+      pathName = settings$groupID
+    )
+    return(plotCaption)
+  }
   dataSource <- getDataSourceCaption(structureSet)
   simulationSetName <- structureSet$simulationSet$simulationSetName
   setDescriptor <- structureSet$simulationSetDescriptor

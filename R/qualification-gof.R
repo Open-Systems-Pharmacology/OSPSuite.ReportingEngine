@@ -160,7 +160,8 @@ getGOFDataForMapping <- function(outputMapping, configurationPlan, axesUnits) {
       Time = simulatedTime,
       Concentration = simulatedValues,
       Legend = outputMapping$Simulation,
-      ResidualsLegend = outputMapping$Simulation
+      ResidualsLegend = outputMapping$Simulation,
+      Group = outputMapping$Output
     )
     # Currently residuals are only calculated assuming Logarithmic formula
     gofData <- rbind.data.frame(

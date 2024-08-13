@@ -289,7 +289,13 @@ messages <- list(
       )
     )
   },
-  
+  inconsistentMetaData = function(values, id, dataType = "units"){
+    paste0(
+      "Inconsistent ", highlight(dataType), 
+      " found within Group ID '", highlight(id), "': '",
+      paste0(highlight(unique(values)), collapse = "', '"), "'."
+      )
+  },
   #----- Info messages ----
   runStarting = function(runName, subRun = NULL) {
     if (is.null(subRun)) {

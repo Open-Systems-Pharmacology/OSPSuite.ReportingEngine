@@ -381,18 +381,20 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, stru
     return()
   }
   metaData <- list(
-    "Time" = list(
+    Time = list(
       dimension = "Time",
       unit = structureSet$simulationSet$timeUnit
     ),
-    "Concentration" = list(dimension = NA, unit = output$displayUnit %||% NA),
-    "Path" = output$path,
+    Concentration = list(dimension = NA, unit = output$displayUnit %||% NA),
+    Path = output$path,
+    displayName = output$displayName,
     legend = captions$plotGoF$observedLegend(
       simulationSetName = structureSet$simulationSet$simulationSetName,
       descriptor = structureSet$simulationSetDescriptor,
       pathName = output$dataDisplayName
     ),
     residualsLegend = NA,
+    residualScale = output$residualScale,
     group = output$groupID,
     color = output$color,
     fill = output$fill
@@ -423,7 +425,8 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, stru
     ),
     "Concentration" = outputConcentration,
     "Legend" = metaData$legend,
-    "Path" = output$path
+    "Path" = output$path,
+    "Group" = output$groupID
   )
   # lloq is as.numeric(NA) if not used to prevent issues
   # when building final data.frame that can have outputs with and without lloqs
