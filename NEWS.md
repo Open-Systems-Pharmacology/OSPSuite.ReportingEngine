@@ -2,6 +2,9 @@
 
 ## New features
 
+> [!NOTE]
+> Users can now check out [Reporting Engine Test Reports](https://github.com/Open-Systems-Pharmacology/RE-Test-Reports) and access a bunch of template workflows including their R code, models, data and corresponding reports.
+
 - Demography task received significant updates:
    - The [article for demography](../articles/demography.html) has been updated with more comprehensive examples using more representative virtual populations and illustrating the effects of population workflows and settings (#1095, #1102)
    - Categorical parameters, such as Gender, are now accounted for demography range plots and displayed as boxplots (#1088)
@@ -11,10 +14,11 @@
    - Mass balance plots can leverage user-defined settings from json files as illustrated in the [mass balance article](../articles/mass-balance.html) (#1118)
    - Normalized mass balance plots now use time-dependent cumulative drug mass for normalization (#1039, #1118)
 - Qualification DDI plots received the following improvements
-   - Delta symbol (&delta;) from Guest *et al.* formula is indicated in table caption (1069)
+   - Delta symbol (&delta;) from Guest *et al.* formula is indicated in table caption (#1069)
    - Guest criterion (&delta;) can be tuned through the configuration plan (#789)
    - DDI plot format is quadratic by default (#1051)
 - Formatting to word reports can translate additional `html` tags (#382)
+- Goodness of Fit task leverages `groupID` from `Output` objects to group multiple outputs in same time profile and residual plots (#1188).<br>`groupID` is also leveraged in the plots of residuals across the simulations (#1251).
 
 ## Minor improvements and bug fixes
 
@@ -23,6 +27,7 @@
 - Number of bins in demography and PK parameter range plots is consistent with input (#1128)
 - Link/bookmark targets in word reports are better placed (#1084)
 - Qualification time profiles work when no observed data is contained (#1082)
+- Qualification PKRatio uses *ml/min/kg* as default clearance - *CL* - unit (#1242)
 - Static images in qualification reports are better handled (#955, #1071)
 - Figure captions are displayed below the figure in the reports (#1053)
 - Word report is updated if it already existed (#1055)
