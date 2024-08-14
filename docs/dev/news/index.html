@@ -51,6 +51,9 @@
 <h2 class="pkg-version" data-toc-text="2.2.0" id="ospsuitereportingengine-220">ospsuite.reportingengine 2.2.0<a class="anchor" aria-label="anchor" href="#ospsuitereportingengine-220"></a></h2>
 <div class="section level3">
 <h3 id="new-features-2-2-0">New features<a class="anchor" aria-label="anchor" href="#new-features-2-2-0"></a></h3>
+<blockquote>
+<p>[!NOTE] Users can now check out <a href="https://github.com/Open-Systems-Pharmacology/RE-Test-Reports" class="external-link">Reporting Engine Test Reports</a> and access a bunch of template workflows including their R code, models, data and corresponding reports.</p>
+</blockquote>
 <ul><li>Demography task received significant updates:
 <ul><li>The <a href="../articles/demography.html">article for demography</a> has been updated with more comprehensive examples using more representative virtual populations and illustrating the effects of population workflows and settings (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1095" class="external-link">#1095</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1102" class="external-link">#1102</a>)</li>
 <li>Categorical parameters, such as Gender, are now accounted for demography range plots and displayed as boxplots (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1088" class="external-link">#1088</a>)</li>
@@ -62,11 +65,12 @@
 <li>Normalized mass balance plots now use time-dependent cumulative drug mass for normalization (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1039" class="external-link">#1039</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1118" class="external-link">#1118</a>)</li>
 </ul></li>
 <li>Qualification DDI plots received the following improvements
-<ul><li>Delta symbol (δ) from Guest <em>et al.</em> formula is indicated in table caption (1069)</li>
+<ul><li>Delta symbol (δ) from Guest <em>et al.</em> formula is indicated in table caption (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1069" class="external-link">#1069</a>)</li>
 <li>Guest criterion (δ) can be tuned through the configuration plan (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/789" class="external-link">#789</a>)</li>
 <li>DDI plot format is quadratic by default (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1051" class="external-link">#1051</a>)</li>
 </ul></li>
 <li>Formatting to word reports can translate additional <code>html</code> tags (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/382" class="external-link">#382</a>)</li>
+<li>Goodness of Fit task leverages <code>groupID</code> from <code>Output</code> objects to group multiple outputs in same time profile and residual plots (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1188" class="external-link">#1188</a>).<br><code>groupID</code> is also leveraged in the plots of residuals across the simulations (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1251" class="external-link">#1251</a>).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="minor-improvements-and-bug-fixes-2-2-0">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-2-2-0"></a></h3>
@@ -75,6 +79,7 @@
 <li>Number of bins in demography and PK parameter range plots is consistent with input (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1128" class="external-link">#1128</a>)</li>
 <li>Link/bookmark targets in word reports are better placed (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1084" class="external-link">#1084</a>)</li>
 <li>Qualification time profiles work when no observed data is contained (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1082" class="external-link">#1082</a>)</li>
+<li>Qualification PKRatio uses <em>ml/min/kg</em> as default clearance - <em>CL</em> - unit (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1242" class="external-link">#1242</a>)</li>
 <li>Static images in qualification reports are better handled (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/955" class="external-link">#955</a>, <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1071" class="external-link">#1071</a>)</li>
 <li>Figure captions are displayed below the figure in the reports (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1053" class="external-link">#1053</a>)</li>
 <li>Word report is updated if it already existed (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1055" class="external-link">#1055</a>)</li>
