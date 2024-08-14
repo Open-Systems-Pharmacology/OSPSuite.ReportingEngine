@@ -49,8 +49,14 @@ test_that("readObservedDataFile can correctly guess separator and read csv and t
   expect_equal(testDataFrame, txtData, tolerance = comparisonTolerance())
 })
 
-test_that("readObservedDataFile: unexistant file throw error", {
+test_that("readObservedDataFile: throws an error for unexistant files", {
   expect_error(readObservedDataFile("testFile10.csv"))
+})
+
+test_that("readObservedDataFile throws an error for non UTF-8 files", {
+  expect_error(
+    readObservedDataFile(getTestDataFilePath("input-data/non-utf8.txt"))
+    )
 })
 
 test_that("readObservedDataFile throw an error if columns are inconsistent", {

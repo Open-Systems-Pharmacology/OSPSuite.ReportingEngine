@@ -66,6 +66,7 @@ readObservedDataFile <- function(fileName,
                                  header = TRUE,
                                  encoding = "UTF-8") {
   validateFileExists(fileName)
+  validateIsFileUTF8(fileName)
   # Get function with the most appropriate reading defaults
   readObservedData <- getReaderFunction(fileName)
   observedData <- readObservedData(

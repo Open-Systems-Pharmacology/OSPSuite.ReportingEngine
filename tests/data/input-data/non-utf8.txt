@@ -1,0 +1,330 @@
+ID Study_Num Study Grouping Analyte Compartment Time TimeUnit Avg AvgUnit AvgType UnitConv Unit OUTPUT
+570 1 Iwamoto_2008 "Study_I _Period_1_(control)" Raltegravir Plasma 0.5 h 240.1831 nmol/L arith._mean 106.7412846 µg/L Raltegravir_PLASMA
+570 1 Iwamoto_2008 "Study_I _Period_1_(control)" Raltegravir Plasma 1 h 647.777 nmol/L arith._mean 287.8826576 µg/L Raltegravir_PLASMA
+570 1 Iwamoto_2008 "Study_I _Period_1_(control)" Raltegravir Plasma 1.5 h 1122.335 nmol/L arith._mean 498.7839681 µg/L Raltegravir_PLASMA
+570 1 Iwamoto_2008 "Study_I _Period_1_(control)" Raltegravir Plasma 2 h 1557.839 nmol/L arith._mean 692.3290444 µg/L Raltegravir_PLASMA
+570 1 Iwamoto_2008 "Study_I _Period_1_(control)" Raltegravir Plasma 3 h 1390.902 nmol/L arith._mean 618.1395205 µg/L Raltegravir_PLASMA
+570 1 Iwamoto_2008 "Study_I _Period_1_(control)" Raltegravir Plasma 4 h 989.5717 nmol/L arith._mean 439.7817935 µg/L Raltegravir_PLASMA
+570 1 Iwamoto_2008 "Study_I _Period_1_(control)" Raltegravir Plasma 5 h 493.3842 nmol/L arith._mean 219.2679806 µg/L Raltegravir_PLASMA
+570 1 Iwamoto_2008 "Study_I _Period_1_(control)" Raltegravir Plasma 6 h 237.152 nmol/L arith._mean 105.3942144 µg/L Raltegravir_PLASMA
+570 1 Iwamoto_2008 "Study_I _Period_1_(control)" Raltegravir Plasma 8 h 115.3128 nmol/L arith._mean 51.24688792 µg/L Raltegravir_PLASMA
+570 1 Iwamoto_2008 "Study_I _Period_1_(control)" Raltegravir Plasma 10 h 71.60728 nmol/L arith._mean 31.82344243 µg/L Raltegravir_PLASMA
+570 1 Iwamoto_2008 "Study_I _Period_1_(control)" Raltegravir Plasma 12 h 35.77291 nmol/L arith._mean 15.8980643 µg/L Raltegravir_PLASMA
+570 1 Iwamoto_2008 "Study_I _Period_1_(control)" Raltegravir Plasma 16 h 10.03018 nmol/L arith._mean 4.457575484 µg/L Raltegravir_PLASMA
+570 1 Iwamoto_2008 "Study_I _Period_1_(control)" Raltegravir Plasma 24 h 2.115189 nmol/L arith._mean 0.940024469 µg/L Raltegravir_PLASMA
+571 2 Iwamoto_2008 "Study_I _Period_2_(ATV_treatment)" Raltegravir Plasma 144.5 h 362.951 nmol/L arith._mean 161.3013405 µg/L Raltegravir_PLASMA
+571 2 Iwamoto_2008 "Study_I _Period_2_(ATV_treatment)" Raltegravir Plasma 145 h 731.4823 nmol/L arith._mean 325.0826573 µg/L Raltegravir_PLASMA
+571 2 Iwamoto_2008 "Study_I _Period_2_(ATV_treatment)" Raltegravir Plasma 145.5 h 1083.281 nmol/L arith._mean 481.4277339 µg/L Raltegravir_PLASMA
+571 2 Iwamoto_2008 "Study_I _Period_2_(ATV_treatment)" Raltegravir Plasma 146 h 2087.982 nmol/L arith._mean 927.9332349 µg/L Raltegravir_PLASMA
+571 2 Iwamoto_2008 "Study_I _Period_2_(ATV_treatment)" Raltegravir Plasma 147 h 2077.286 nmol/L arith._mean 923.1797582 µg/L Raltegravir_PLASMA
+571 2 Iwamoto_2008 "Study_I _Period_2_(ATV_treatment)" Raltegravir Plasma 148 h 1966.134 nmol/L arith._mean 873.7819976 µg/L Raltegravir_PLASMA
+571 2 Iwamoto_2008 "Study_I _Period_2_(ATV_treatment)" Raltegravir Plasma 149 h 1319.286 nmol/L arith._mean 586.3122028 µg/L Raltegravir_PLASMA
+571 2 Iwamoto_2008 "Study_I _Period_2_(ATV_treatment)" Raltegravir Plasma 150 h 689.1609 nmol/L arith._mean 306.2743373 µg/L Raltegravir_PLASMA
+571 2 Iwamoto_2008 "Study_I _Period_2_(ATV_treatment)" Raltegravir Plasma 152 h 265.9912 nmol/L arith._mean 118.2108249 µg/L Raltegravir_PLASMA
+571 2 Iwamoto_2008 "Study_I _Period_2_(ATV_treatment)" Raltegravir Plasma 154 h 138.5716 nmol/L arith._mean 61.58347776 µg/L Raltegravir_PLASMA
+571 2 Iwamoto_2008 "Study_I _Period_2_(ATV_treatment)" Raltegravir Plasma 156 h 65.8429 nmol/L arith._mean 29.261658 µg/L Raltegravir_PLASMA
+571 2 Iwamoto_2008 "Study_I _Period_2_(ATV_treatment)" Raltegravir Plasma 160 h 16.8765 nmol/L arith._mean 7.500191687 µg/L Raltegravir_PLASMA
+571 2 Iwamoto_2008 "Study_I _Period_2_(ATV_treatment)" Raltegravir Plasma 168 h 4.828043 nmol/L arith._mean 2.145661006 µg/L Raltegravir_PLASMA
+571 2 Iwamoto_2008 "Study_I _Period_2_(ATV_treatment)" Raltegravir Plasma 176 h 1.431739 nmol/L arith._mean 0.636288149 µg/L Raltegravir_PLASMA
+572 3 Neely_2010 Study_arm_A_(Raltegravir_400mg_BID) Raltegravir Plasma 168 h 263.8029 ng/mL geom._mean 263.8029 µg/L Raltegravir_PLASMA
+572 3 Neely_2010 Study_arm_A_(Raltegravir_400mg_BID) Raltegravir Plasma 169 h 676.2476 ng/mL geom._mean 676.2476 µg/L Raltegravir_PLASMA
+572 3 Neely_2010 Study_arm_A_(Raltegravir_400mg_BID) Raltegravir Plasma 170 h 637.2081 ng/mL geom._mean 637.2081 µg/L Raltegravir_PLASMA
+572 3 Neely_2010 Study_arm_A_(Raltegravir_400mg_BID) Raltegravir Plasma 172 h 282.4502 ng/mL geom._mean 282.4502 µg/L Raltegravir_PLASMA
+572 3 Neely_2010 Study_arm_A_(Raltegravir_400mg_BID) Raltegravir Plasma 176 h 106.0531 ng/mL geom._mean 106.0531 µg/L Raltegravir_PLASMA
+572 3 Neely_2010 Study_arm_A_(Raltegravir_400mg_BID) Raltegravir Plasma 180 h 46.40403 ng/mL geom._mean 46.40403 µg/L Raltegravir_PLASMA
+573 4 Neely_2010 Study_arm_B_(Raltegravir_400mg_OD_+_Atazanavir_400_mg_OD) Raltegravir Plasma 168 h 23.05777 ng/mL geom._mean 23.05777 µg/L Raltegravir_PLASMA
+573 4 Neely_2010 Study_arm_B_(Raltegravir_400mg_OD_+_Atazanavir_400_mg_OD) Raltegravir Plasma 169 h 962.815 ng/mL geom._mean 962.815 µg/L Raltegravir_PLASMA
+573 4 Neely_2010 Study_arm_B_(Raltegravir_400mg_OD_+_Atazanavir_400_mg_OD) Raltegravir Plasma 170 h 797.0018 ng/mL geom._mean 797.0018 µg/L Raltegravir_PLASMA
+573 4 Neely_2010 Study_arm_B_(Raltegravir_400mg_OD_+_Atazanavir_400_mg_OD) Raltegravir Plasma 172 h 388.1118 ng/mL geom._mean 388.1118 µg/L Raltegravir_PLASMA
+573 4 Neely_2010 Study_arm_B_(Raltegravir_400mg_OD_+_Atazanavir_400_mg_OD) Raltegravir Plasma 176 h 125.0545 ng/mL geom._mean 125.0545 µg/L Raltegravir_PLASMA
+573 4 Neely_2010 Study_arm_B_(Raltegravir_400mg_OD_+_Atazanavir_400_mg_OD) Raltegravir Plasma 180 h 68.43072 ng/mL geom._mean 68.43072 µg/L Raltegravir_PLASMA
+573 4 Neely_2010 Study_arm_B_(Raltegravir_400mg_OD_+_Atazanavir_400_mg_OD) Raltegravir Plasma 192 h 17.34161 ng/mL geom._mean 17.34161 µg/L Raltegravir_PLASMA
+574 5 Krishna_2016 "Period_1 _Day_1_(1200_mg_raltegravir_SD)" Raltegravir Plasma 0.5 h 4438.511 nmol/L arith._mean 1972.546636 µg/L Raltegravir_PLASMA
+574 5 Krishna_2016 "Period_1 _Day_1_(1200_mg_raltegravir_SD)" Raltegravir Plasma 1 h 6503.355 nmol/L arith._mean 2890.196967 µg/L Raltegravir_PLASMA
+574 5 Krishna_2016 "Period_1 _Day_1_(1200_mg_raltegravir_SD)" Raltegravir Plasma 1.5 h 9900.689 nmol/L arith._mean 4400.027573 µg/L Raltegravir_PLASMA
+574 5 Krishna_2016 "Period_1 _Day_1_(1200_mg_raltegravir_SD)" Raltegravir Plasma 2 h 12214.1 nmol/L arith._mean 5428.14513 µg/L Raltegravir_PLASMA
+574 5 Krishna_2016 "Period_1 _Day_1_(1200_mg_raltegravir_SD)" Raltegravir Plasma 3 h 12445.84 nmol/L arith._mean 5531.134163 µg/L Raltegravir_PLASMA
+574 5 Krishna_2016 "Period_1 _Day_1_(1200_mg_raltegravir_SD)" Raltegravir Plasma 4 h 7286.552 nmol/L arith._mean 3238.26248 µg/L Raltegravir_PLASMA
+574 5 Krishna_2016 "Period_1 _Day_1_(1200_mg_raltegravir_SD)" Raltegravir Plasma 6 h 2695.958 nmol/L arith._mean 1198.127679 µg/L Raltegravir_PLASMA
+574 5 Krishna_2016 "Period_1 _Day_1_(1200_mg_raltegravir_SD)" Raltegravir Plasma 8 h 763.3453 nmol/L arith._mean 339.2430938 µg/L Raltegravir_PLASMA
+574 5 Krishna_2016 "Period_1 _Day_1_(1200_mg_raltegravir_SD)" Raltegravir Plasma 12 h 211.9133 nmol/L arith._mean 94.17772471 µg/L Raltegravir_PLASMA
+574 5 Krishna_2016 "Period_1 _Day_1_(1200_mg_raltegravir_SD)" Raltegravir Plasma 16 h 136.3725 nmol/L arith._mean 60.60616187 µg/L Raltegravir_PLASMA
+574 5 Krishna_2016 "Period_1 _Day_1_(1200_mg_raltegravir_SD)" Raltegravir Plasma 24 h 100.1907 nmol/L arith._mean 44.52638019 µg/L Raltegravir_PLASMA
+574 5 Krishna_2016 "Period_1 _Day_1_(1200_mg_raltegravir_SD)" Raltegravir Plasma 48 h 45.42207 nmol/L arith._mean 20.18630829 µg/L Raltegravir_PLASMA
+574 5 Krishna_2016 "Period_1 _Day_1_(1200_mg_raltegravir_SD)" Raltegravir Plasma 72 h 29.6052 nmol/L arith._mean 13.15703344 µg/L Raltegravir_PLASMA
+575 6 Krishna_2016 "Period_2 _Day_7_(1200_mg_raltegravir_SD_with_OD_doses_of_400_mg_ATV)" Raltegravir Plasma 144.5 h 4272.381 nmol/L arith._mean 1898.715756 µg/L Raltegravir_PLASMA
+575 6 Krishna_2016 "Period_2 _Day_7_(1200_mg_raltegravir_SD_with_OD_doses_of_400_mg_ATV)" Raltegravir Plasma 145 h 7434.369 nmol/L arith._mean 3303.954764 µg/L Raltegravir_PLASMA
+575 6 Krishna_2016 "Period_2 _Day_7_(1200_mg_raltegravir_SD_with_OD_doses_of_400_mg_ATV)" Raltegravir Plasma 145.5 h 11317.27 nmol/L arith._mean 5029.57926 µg/L Raltegravir_PLASMA
+575 6 Krishna_2016 "Period_2 _Day_7_(1200_mg_raltegravir_SD_with_OD_doses_of_400_mg_ATV)" Raltegravir Plasma 146 h 12935.19 nmol/L arith._mean 5748.60928 µg/L Raltegravir_PLASMA
+575 6 Krishna_2016 "Period_2 _Day_7_(1200_mg_raltegravir_SD_with_OD_doses_of_400_mg_ATV)" Raltegravir Plasma 147 h 14780.8 nmol/L arith._mean 6568.828447 µg/L Raltegravir_PLASMA
+575 6 Krishna_2016 "Period_2 _Day_7_(1200_mg_raltegravir_SD_with_OD_doses_of_400_mg_ATV)" Raltegravir Plasma 148 h 14776.69 nmol/L arith._mean 6567.001896 µg/L Raltegravir_PLASMA
+575 6 Krishna_2016 "Period_2 _Day_7_(1200_mg_raltegravir_SD_with_OD_doses_of_400_mg_ATV)" Raltegravir Plasma 150 h 8648.465 nmol/L arith._mean 3843.518816 µg/L Raltegravir_PLASMA
+575 6 Krishna_2016 "Period_2 _Day_7_(1200_mg_raltegravir_SD_with_OD_doses_of_400_mg_ATV)" Raltegravir Plasma 152 h 2799.23 nmol/L arith._mean 1244.023439 µg/L Raltegravir_PLASMA
+575 6 Krishna_2016 "Period_2 _Day_7_(1200_mg_raltegravir_SD_with_OD_doses_of_400_mg_ATV)" Raltegravir Plasma 156 h 491.2354 nmol/L arith._mean 218.3130189 µg/L Raltegravir_PLASMA
+575 6 Krishna_2016 "Period_2 _Day_7_(1200_mg_raltegravir_SD_with_OD_doses_of_400_mg_ATV)" Raltegravir Plasma 160 h 237.343 nmol/L arith._mean 105.4790979 µg/L Raltegravir_PLASMA
+575 6 Krishna_2016 "Period_2 _Day_7_(1200_mg_raltegravir_SD_with_OD_doses_of_400_mg_ATV)" Raltegravir Plasma 168 h 136.0264 nmol/L arith._mean 60.45234939 µg/L Raltegravir_PLASMA
+575 6 Krishna_2016 "Period_2 _Day_7_(1200_mg_raltegravir_SD_with_OD_doses_of_400_mg_ATV)" Raltegravir Plasma 192 h 54.98442 nmol/L arith._mean 24.43597249 µg/L Raltegravir_PLASMA
+575 6 Krishna_2016 "Period_2 _Day_7_(1200_mg_raltegravir_SD_with_OD_doses_of_400_mg_ATV)" Raltegravir Plasma 216 h 20.98891 nmol/L arith._mean 9.327813723 µg/L Raltegravir_PLASMA
+578 7 Zhu_2010 Raltegravir_400_mg_twice_daily Raltegravir Plasma 96 h 165.8905 ng/mL arith._mean 165.8905 µg/L Raltegravir_PLASMA
+578 7 Zhu_2010 Raltegravir_400_mg_twice_daily Raltegravir Plasma 97 h 365.6406 ng/mL arith._mean 365.6406 µg/L Raltegravir_PLASMA
+578 7 Zhu_2010 Raltegravir_400_mg_twice_daily Raltegravir Plasma 98 h 424.3954 ng/mL arith._mean 424.3954 µg/L Raltegravir_PLASMA
+578 7 Zhu_2010 Raltegravir_400_mg_twice_daily Raltegravir Plasma 99 h 342.1414 ng/mL arith._mean 342.1414 µg/L Raltegravir_PLASMA
+578 7 Zhu_2010 Raltegravir_400_mg_twice_daily Raltegravir Plasma 100 h 293.0627 ng/mL arith._mean 293.0627 µg/L Raltegravir_PLASMA
+578 7 Zhu_2010 Raltegravir_400_mg_twice_daily Raltegravir Plasma 102 h 1057.492 ng/mL arith._mean 1057.492 µg/L Raltegravir_PLASMA
+578 7 Zhu_2010 Raltegravir_400_mg_twice_daily Raltegravir Plasma 104 h 353.8842 ng/mL arith._mean 353.8842 µg/L Raltegravir_PLASMA
+578 7 Zhu_2010 Raltegravir_400_mg_twice_daily Raltegravir Plasma 108 h 116.1274 ng/mL arith._mean 116.1274 µg/L Raltegravir_PLASMA
+579 8 Zhu_2010 Raltegravir_400_mg_twice_daily_plus_atazanavir_300_mg_twice_daily Raltegravir Plasma 600 h 273.7104 ng/mL arith._mean 273.7104 µg/L Raltegravir_PLASMA
+579 8 Zhu_2010 Raltegravir_400_mg_twice_daily_plus_atazanavir_300_mg_twice_daily Raltegravir Plasma 601 h 340.7591 ng/mL arith._mean 340.7591 µg/L Raltegravir_PLASMA
+579 8 Zhu_2010 Raltegravir_400_mg_twice_daily_plus_atazanavir_300_mg_twice_daily Raltegravir Plasma 602 h 673.2106 ng/mL arith._mean 673.2106 µg/L Raltegravir_PLASMA
+579 8 Zhu_2010 Raltegravir_400_mg_twice_daily_plus_atazanavir_300_mg_twice_daily Raltegravir Plasma 603 h 491.4442 ng/mL arith._mean 491.4442 µg/L Raltegravir_PLASMA
+579 8 Zhu_2010 Raltegravir_400_mg_twice_daily_plus_atazanavir_300_mg_twice_daily Raltegravir Plasma 604 h 475.5408 ng/mL arith._mean 475.5408 µg/L Raltegravir_PLASMA
+579 8 Zhu_2010 Raltegravir_400_mg_twice_daily_plus_atazanavir_300_mg_twice_daily Raltegravir Plasma 606 h 1248.25 ng/mL arith._mean 1248.25 µg/L Raltegravir_PLASMA
+579 8 Zhu_2010 Raltegravir_400_mg_twice_daily_plus_atazanavir_300_mg_twice_daily Raltegravir Plasma 608 h 760.2822 ng/mL arith._mean 760.2822 µg/L Raltegravir_PLASMA
+579 8 Zhu_2010 Raltegravir_400_mg_twice_daily_plus_atazanavir_300_mg_twice_daily Raltegravir Plasma 612 h 199.0795 ng/mL arith._mean 199.0795 µg/L Raltegravir_PLASMA
+5295 9 Iwamoto_2008 400mg_FCT Raltegravir Plasma 0.5 h 2.34375 µmol/L arith._mean 1041.600703 µg/L Raltegravir_PLASMA
+5295 9 Iwamoto_2008 400mg_FCT Raltegravir Plasma 1 h 3.03125 µmol/L arith._mean 1347.136909 µg/L Raltegravir_PLASMA
+5295 9 Iwamoto_2008 400mg_FCT Raltegravir Plasma 1.5 h 3.65625 µmol/L arith._mean 1624.897097 µg/L Raltegravir_PLASMA
+5295 9 Iwamoto_2008 400mg_FCT Raltegravir Plasma 2 h 3.5 µmol/L arith._mean 1555.45705 µg/L Raltegravir_PLASMA
+5295 9 Iwamoto_2008 400mg_FCT Raltegravir Plasma 3 h 2.46875 µmol/L arith._mean 1097.152741 µg/L Raltegravir_PLASMA
+5295 9 Iwamoto_2008 400mg_FCT Raltegravir Plasma 4 h 1.84375 µmol/L arith._mean 819.3925531 µg/L Raltegravir_PLASMA
+5295 9 Iwamoto_2008 400mg_FCT Raltegravir Plasma 5 h 1.1875 µmol/L arith._mean 527.7443563 µg/L Raltegravir_PLASMA
+5295 9 Iwamoto_2008 400mg_FCT Raltegravir Plasma 6 h 0.65625 µmol/L arith._mean 291.6481969 µg/L Raltegravir_PLASMA
+5295 9 Iwamoto_2008 400mg_FCT Raltegravir Plasma 8 h 0.1875 µmol/L arith._mean 83.32805625 µg/L Raltegravir_PLASMA
+5295 9 Iwamoto_2008 400mg_FCT Raltegravir Plasma 12 h 0.09375 µmol/L arith._mean 41.66402813 µg/L Raltegravir_PLASMA
+5295 9 Iwamoto_2008 400mg_FCT Raltegravir Plasma 16 h 0.03125 µmol/L arith._mean 13.88800938 µg/L Raltegravir_PLASMA
+5295 9 Iwamoto_2008 400mg_FCT Raltegravir Plasma 24 h 0.03125 µmol/L arith._mean 13.88800938 µg/L Raltegravir_PLASMA
+5296 10 Markowitz_2006 100mg_FCT_MD Raltegravir Plasma 216 h 144.1441498 nmol/L arith._mean 64.06000971 µg/L Raltegravir_PLASMA
+5296 10 Markowitz_2006 100mg_FCT_MD Raltegravir Plasma 216.5 h 882.8829346 nmol/L arith._mean 392.3675671 µg/L Raltegravir_PLASMA
+5296 10 Markowitz_2006 100mg_FCT_MD Raltegravir Plasma 217 h 1333.333374 nmol/L arith._mean 592.5550848 µg/L Raltegravir_PLASMA
+5296 10 Markowitz_2006 100mg_FCT_MD Raltegravir Plasma 217.5 h 1747.747803 nmol/L arith._mean 776.7276118 µg/L Raltegravir_PLASMA
+5296 10 Markowitz_2006 100mg_FCT_MD Raltegravir Plasma 218 h 1909.910034 nmol/L arith._mean 848.7951507 µg/L Raltegravir_PLASMA
+5296 10 Markowitz_2006 100mg_FCT_MD Raltegravir Plasma 219 h 972.9730225 nmol/L arith._mean 432.4050706 µg/L Raltegravir_PLASMA
+5296 10 Markowitz_2006 100mg_FCT_MD Raltegravir Plasma 220 h 594.5946045 nmol/L arith._mean 264.2475341 µg/L Raltegravir_PLASMA
+5296 10 Markowitz_2006 100mg_FCT_MD Raltegravir Plasma 222 h 216.216217 nmol/L arith._mean 96.09001118 µg/L Raltegravir_PLASMA
+5296 10 Markowitz_2006 100mg_FCT_MD Raltegravir Plasma 224 h 126.1261292 nmol/L arith._mean 56.05250765 µg/L Raltegravir_PLASMA
+5296 10 Markowitz_2006 100mg_FCT_MD Raltegravir Plasma 228 h 54.05405426 nmol/L arith._mean 24.02250279 µg/L Raltegravir_PLASMA
+5297 11 Markowitz_2006 200mg_FCT_MD Raltegravir Plasma 216 h 432.4324341 nmol/L arith._mean 192.1800224 µg/L Raltegravir_PLASMA
+5297 11 Markowitz_2006 200mg_FCT_MD Raltegravir Plasma 216.5 h 1225.22522 nmol/L arith._mean 544.5100588 µg/L Raltegravir_PLASMA
+5297 11 Markowitz_2006 200mg_FCT_MD Raltegravir Plasma 217 h 2594.594727 nmol/L arith._mean 1153.080188 µg/L Raltegravir_PLASMA
+5297 11 Markowitz_2006 200mg_FCT_MD Raltegravir Plasma 217.5 h 2126.126221 nmol/L arith._mean 944.8851483 µg/L Raltegravir_PLASMA
+5297 11 Markowitz_2006 200mg_FCT_MD Raltegravir Plasma 218 h 2540.540527 nmol/L arith._mean 1129.057621 µg/L Raltegravir_PLASMA
+5297 11 Markowitz_2006 200mg_FCT_MD Raltegravir Plasma 219 h 1873.873901 nmol/L arith._mean 832.7801059 µg/L Raltegravir_PLASMA
+5297 11 Markowitz_2006 200mg_FCT_MD Raltegravir Plasma 220 h 1027.0271 nmol/L arith._mean 456.4275836 µg/L Raltegravir_PLASMA
+5297 11 Markowitz_2006 200mg_FCT_MD Raltegravir Plasma 222 h 450.45047 nmol/L arith._mean 200.1875312 µg/L Raltegravir_PLASMA
+5297 11 Markowitz_2006 200mg_FCT_MD Raltegravir Plasma 224 h 270.2702942 nmol/L arith._mean 120.1125241 µg/L Raltegravir_PLASMA
+5297 11 Markowitz_2006 200mg_FCT_MD Raltegravir Plasma 228 h 144.1441498 nmol/L arith._mean 64.06000971 µg/L Raltegravir_PLASMA
+5298 12 Markowitz_2006 400mg_FCT_MD Raltegravir Plasma 216 h 360.3603821 nmol/L arith._mean 160.1500277 µg/L Raltegravir_PLASMA
+5298 12 Markowitz_2006 400mg_FCT_MD Raltegravir Plasma 216.5 h 3621.621826 nmol/L arith._mean 1609.507772 µg/L Raltegravir_PLASMA
+5298 12 Markowitz_2006 400mg_FCT_MD Raltegravir Plasma 217 h 5045.04541 nmol/L arith._mean 2242.100415 µg/L Raltegravir_PLASMA
+5298 12 Markowitz_2006 400mg_FCT_MD Raltegravir Plasma 217.5 h 4486.486816 nmol/L arith._mean 1993.867871 µg/L Raltegravir_PLASMA
+5298 12 Markowitz_2006 400mg_FCT_MD Raltegravir Plasma 218 h 4144.144531 nmol/L arith._mean 1841.725379 µg/L Raltegravir_PLASMA
+5298 12 Markowitz_2006 400mg_FCT_MD Raltegravir Plasma 219 h 2576.57666 nmol/L arith._mean 1145.072666 µg/L Raltegravir_PLASMA
+5298 12 Markowitz_2006 400mg_FCT_MD Raltegravir Plasma 220 h 2036.036133 nmol/L arith._mean 904.8476448 µg/L Raltegravir_PLASMA
+5298 12 Markowitz_2006 400mg_FCT_MD Raltegravir Plasma 222 h 630.6306763 nmol/L arith._mean 280.2625518 µg/L Raltegravir_PLASMA
+5298 12 Markowitz_2006 400mg_FCT_MD Raltegravir Plasma 224 h 306.3063049 nmol/L arith._mean 136.1275147 µg/L Raltegravir_PLASMA
+5298 12 Markowitz_2006 400mg_FCT_MD Raltegravir Plasma 228 h 162.1621704 nmol/L arith._mean 72.06751177 µg/L Raltegravir_PLASMA
+5299 13 Markowitz_2006 600mg_FCT_MD Raltegravir Plasma 216 h 720.7207642 nmol/L arith._mean 320.3000553 µg/L Raltegravir_PLASMA
+5299 13 Markowitz_2006 600mg_FCT_MD Raltegravir Plasma 216.5 h 3135.135254 nmol/L arith._mean 1393.30521 µg/L Raltegravir_PLASMA
+5299 13 Markowitz_2006 600mg_FCT_MD Raltegravir Plasma 217 h 3441.44165 nmol/L arith._mean 1529.432765 µg/L Raltegravir_PLASMA
+5299 13 Markowitz_2006 600mg_FCT_MD Raltegravir Plasma 217.5 h 3423.423584 nmol/L arith._mean 1521.425243 µg/L Raltegravir_PLASMA
+5299 13 Markowitz_2006 600mg_FCT_MD Raltegravir Plasma 218 h 3477.477539 nmol/L arith._mean 1545.447701 µg/L Raltegravir_PLASMA
+5299 13 Markowitz_2006 600mg_FCT_MD Raltegravir Plasma 219 h 2666.666748 nmol/L arith._mean 1185.11017 µg/L Raltegravir_PLASMA
+5299 13 Markowitz_2006 600mg_FCT_MD Raltegravir Plasma 220 h 2486.486572 nmol/L arith._mean 1105.035162 µg/L Raltegravir_PLASMA
+5299 13 Markowitz_2006 600mg_FCT_MD Raltegravir Plasma 222 h 1477.477539 nmol/L arith._mean 656.6151012 µg/L Raltegravir_PLASMA
+5299 13 Markowitz_2006 600mg_FCT_MD Raltegravir Plasma 224 h 756.7567749 nmol/L arith._mean 336.3150459 µg/L Raltegravir_PLASMA
+5299 13 Markowitz_2006 600mg_FCT_MD Raltegravir Plasma 228 h 288.2882996 nmol/L arith._mean 128.1200194 µg/L Raltegravir_PLASMA
+5300 14 Kassahun_2007 200mg_FCT_SD Raltegravir Plasma 0 h 0 nmol/L arith._mean 0 µg/L Raltegravir_PLASMA
+5300 14 Kassahun_2007 200mg_FCT_SD Raltegravir Plasma 0.5 h 3061.224365 nmol/L arith._mean 1360.458006 µg/L Raltegravir_PLASMA
+5300 14 Kassahun_2007 200mg_FCT_SD Raltegravir Plasma 1 h 4359.183594 nmol/L arith._mean 1937.292244 µg/L Raltegravir_PLASMA
+5300 14 Kassahun_2007 200mg_FCT_SD Raltegravir Plasma 2 h 2865.306152 nmol/L arith._mean 1273.388759 µg/L Raltegravir_PLASMA
+5300 14 Kassahun_2007 200mg_FCT_SD Raltegravir Plasma 3 h 1518.36731 nmol/L arith._mean 674.7871818 µg/L Raltegravir_PLASMA
+5300 14 Kassahun_2007 200mg_FCT_SD Raltegravir Plasma 4 h 808.163269 nmol/L arith._mean 359.1609298 µg/L Raltegravir_PLASMA
+5300 14 Kassahun_2007 200mg_FCT_SD Raltegravir Plasma 5 h 391.836731 nmol/L arith._mean 174.1386302 µg/L Raltegravir_PLASMA
+5300 14 Kassahun_2007 200mg_FCT_SD Raltegravir Plasma 6 h 171.4285736 nmol/L arith._mean 76.1856524 µg/L Raltegravir_PLASMA
+5300 14 Kassahun_2007 200mg_FCT_SD Raltegravir Plasma 8 h 97.95918274 nmol/L arith._mean 43.53465754 µg/L Raltegravir_PLASMA
+5300 14 Kassahun_2007 200mg_FCT_SD Raltegravir Plasma 10 h 73.46939087 nmol/L arith._mean 32.65099485 µg/L Raltegravir_PLASMA
+5300 14 Kassahun_2007 200mg_FCT_SD Raltegravir Plasma 12 h 97.95918274 nmol/L arith._mean 43.53465754 µg/L Raltegravir_PLASMA
+5435 15 Rhee_2014 Chewable_tablet_fasted Raltegravir Plasma 0.5 h 16.03322601 µmol/L arith._mean 7125.426982 µg/L Raltegravir_PLASMA
+5435 15 Rhee_2014 Chewable_tablet_fasted Raltegravir Plasma 1 h 12.30150414 µmol/L arith._mean 5466.988952 µg/L Raltegravir_PLASMA
+5435 15 Rhee_2014 Chewable_tablet_fasted Raltegravir Plasma 1.5 h 8.780406952 µmol/L arith._mean 3902.15597 µg/L Raltegravir_PLASMA
+5435 15 Rhee_2014 Chewable_tablet_fasted Raltegravir Plasma 2 h 6.419946671 µmol/L arith._mean 2853.128946 µg/L Raltegravir_PLASMA
+5435 15 Rhee_2014 Chewable_tablet_fasted Raltegravir Plasma 3 h 3.689314127 µmol/L arith._mean 1639.591334 µg/L Raltegravir_PLASMA
+5435 15 Rhee_2014 Chewable_tablet_fasted Raltegravir Plasma 4 h 2.120117188 µmol/L arith._mean 942.214636 µg/L Raltegravir_PLASMA
+5435 15 Rhee_2014 Chewable_tablet_fasted Raltegravir Plasma 5 h 1.218355656 µmol/L arith._mean 541.4571126 µg/L Raltegravir_PLASMA
+5435 15 Rhee_2014 Chewable_tablet_fasted Raltegravir Plasma 6 h 0.734697878 µmol/L arith._mean 326.5117127 µg/L Raltegravir_PLASMA
+5435 15 Rhee_2014 Chewable_tablet_fasted Raltegravir Plasma 8 h 0.308702201 µmol/L arith._mean 137.1922898 µg/L Raltegravir_PLASMA
+5435 15 Rhee_2014 Chewable_tablet_fasted Raltegravir Plasma 10 h 0.190692991 µmol/L arith._mean 84.7470735 µg/L Raltegravir_PLASMA
+5435 15 Rhee_2014 Chewable_tablet_fasted Raltegravir Plasma 12 h 0.149876043 µmol/L arith._mean 66.60735658 µg/L Raltegravir_PLASMA
+5435 15 Rhee_2014 Chewable_tablet_fasted Raltegravir Plasma 16 h 0.090378881 µmol/L arith._mean 40.16584767 µg/L Raltegravir_PLASMA
+5435 15 Rhee_2014 Chewable_tablet_fasted Raltegravir Plasma 24 h 0.069343254 µmol/L arith._mean 30.81727236 µg/L Raltegravir_PLASMA
+5436 16 Rhee_2014 Chewable_tablet_fed Raltegravir Plasma 0.5 h 5.556097984 µmol/L arith._mean 2469.220509 µg/L Raltegravir_PLASMA
+5436 16 Rhee_2014 Chewable_tablet_fed Raltegravir Plasma 1 h 5.97242403 µmol/L arith._mean 2654.24259 µg/L Raltegravir_PLASMA
+5436 16 Rhee_2014 Chewable_tablet_fed Raltegravir Plasma 1.5 h 5.423874855 µmol/L arith._mean 2410.458395 µg/L Raltegravir_PLASMA
+5436 16 Rhee_2014 Chewable_tablet_fed Raltegravir Plasma 2 h 5.168792725 µmol/L arith._mean 2297.095738 µg/L Raltegravir_PLASMA
+5436 16 Rhee_2014 Chewable_tablet_fed Raltegravir Plasma 3 h 4.16147089 µmol/L arith._mean 1849.425496 µg/L Raltegravir_PLASMA
+5436 16 Rhee_2014 Chewable_tablet_fed Raltegravir Plasma 4 h 3.87138319 µmol/L arith._mean 1720.505793 µg/L Raltegravir_PLASMA
+5436 16 Rhee_2014 Chewable_tablet_fed Raltegravir Plasma 5 h 2.763265371 µmol/L arith._mean 1228.040172 µg/L Raltegravir_PLASMA
+5436 16 Rhee_2014 Chewable_tablet_fed Raltegravir Plasma 6 h 1.748549104 µmol/L arith._mean 777.0837231 µg/L Raltegravir_PLASMA
+5436 16 Rhee_2014 Chewable_tablet_fed Raltegravir Plasma 8 h 0.91253823 µmol/L arith._mean 405.546864 µg/L Raltegravir_PLASMA
+5436 16 Rhee_2014 Chewable_tablet_fed Raltegravir Plasma 10 h 0.770955503 µmol/L arith._mean 342.6251921 µg/L Raltegravir_PLASMA
+5436 16 Rhee_2014 Chewable_tablet_fed Raltegravir Plasma 12 h 0.550282598 µmol/L arith._mean 244.554556 µg/L Raltegravir_PLASMA
+5436 16 Rhee_2014 Chewable_tablet_fed Raltegravir Plasma 16 h 0.273677111 µmol/L arith._mean 121.6265689 µg/L Raltegravir_PLASMA
+5436 16 Rhee_2014 Chewable_tablet_fed Raltegravir Plasma 24 h 0.071033701 µmol/L arith._mean 31.56853471 µg/L Raltegravir_PLASMA
+5437 17 Rhee_2014 granules_suspension Raltegravir Plasma 0.5 h 18.97766113 µmol/L arith._mean 8433.981943 µg/L Raltegravir_PLASMA
+5437 17 Rhee_2014 granules_suspension Raltegravir Plasma 1 h 19.4403019 µmol/L arith._mean 8639.587039 µg/L Raltegravir_PLASMA
+5437 17 Rhee_2014 granules_suspension Raltegravir Plasma 1.5 h 16.82447243 µmol/L arith._mean 7477.069786 µg/L Raltegravir_PLASMA
+5437 17 Rhee_2014 granules_suspension Raltegravir Plasma 2 h 11.17164612 µmol/L arith._mean 4964.861633 µg/L Raltegravir_PLASMA
+5437 17 Rhee_2014 granules_suspension Raltegravir Plasma 3 h 5.97242403 µmol/L arith._mean 2654.24259 µg/L Raltegravir_PLASMA
+5437 17 Rhee_2014 granules_suspension Raltegravir Plasma 4 h 3.192891121 µmol/L arith._mean 1418.972858 µg/L Raltegravir_PLASMA
+5437 17 Rhee_2014 granules_suspension Raltegravir Plasma 5 h 1.626661181 µmol/L arith._mean 722.9147436 µg/L Raltegravir_PLASMA
+5437 17 Rhee_2014 granules_suspension Raltegravir Plasma 6 h 1.029324532 µmol/L arith._mean 457.4485998 µg/L Raltegravir_PLASMA
+5437 17 Rhee_2014 granules_suspension Raltegravir Plasma 8 h 0.432497174 µmol/L arith._mean 192.2087936 µg/L Raltegravir_PLASMA
+5437 17 Rhee_2014 granules_suspension Raltegravir Plasma 10 h 0.260806262 µmol/L arith._mean 115.9065542 µg/L Raltegravir_PLASMA
+5437 17 Rhee_2014 granules_suspension Raltegravir Plasma 12 h 0.177400157 µmol/L arith._mean 78.83952133 µg/L Raltegravir_PLASMA
+5437 17 Rhee_2014 granules_suspension Raltegravir Plasma 16 h 0.10443075 µmol/L arith._mean 46.41072753 µg/L Raltegravir_PLASMA
+5437 17 Rhee_2014 granules_suspension Raltegravir Plasma 24 h 0.069343254 µmol/L arith._mean 30.81727236 µg/L Raltegravir_PLASMA
+5438 18 Rhee_2014 filmcoated_tablet Raltegravir Plasma 0.5 h 1.189361334 µmol/L arith._mean 528.5715634 µg/L Raltegravir_PLASMA
+5438 18 Rhee_2014 filmcoated_tablet Raltegravir Plasma 1 h 2.899633646 µmol/L arith._mean 1288.644456 µg/L Raltegravir_PLASMA
+5438 18 Rhee_2014 filmcoated_tablet Raltegravir Plasma 1.5 h 3.515807629 µmol/L arith._mean 1562.482218 µg/L Raltegravir_PLASMA
+5438 18 Rhee_2014 filmcoated_tablet Raltegravir Plasma 2 h 4.062436581 µmol/L arith._mean 1805.413034 µg/L Raltegravir_PLASMA
+5438 18 Rhee_2014 filmcoated_tablet Raltegravir Plasma 3 h 2.97032094 µmol/L arith._mean 1320.059042 µg/L Raltegravir_PLASMA
+5438 18 Rhee_2014 filmcoated_tablet Raltegravir Plasma 4 h 2.899633646 µmol/L arith._mean 1288.644456 µg/L Raltegravir_PLASMA
+5438 18 Rhee_2014 filmcoated_tablet Raltegravir Plasma 5 h 2.391448975 µmol/L arith._mean 1062.798905 µg/L Raltegravir_PLASMA
+5438 18 Rhee_2014 filmcoated_tablet Raltegravir Plasma 6 h 1.442101479 µmol/L arith._mean 640.8934033 µg/L Raltegravir_PLASMA
+5438 18 Rhee_2014 filmcoated_tablet Raltegravir Plasma 8 h 0.511923432 µmol/L arith._mean 227.5071177 µg/L Raltegravir_PLASMA
+5438 18 Rhee_2014 filmcoated_tablet Raltegravir Plasma 10 h 0.248540685 µmol/L arith._mean 110.4555314 µg/L Raltegravir_PLASMA
+5438 18 Rhee_2014 filmcoated_tablet Raltegravir Plasma 12 h 0.161106452 µmol/L arith._mean 71.59833346 µg/L Raltegravir_PLASMA
+5438 18 Rhee_2014 filmcoated_tablet Raltegravir Plasma 16 h 0.099519454 µmol/L arith._mean 44.2280675 µg/L Raltegravir_PLASMA
+5438 18 Rhee_2014 filmcoated_tablet Raltegravir Plasma 24 h 0.071033701 µmol/L arith._mean 31.56853471 µg/L Raltegravir_PLASMA
+5439 19 Iwamoto_2008 10mg_ Raltegravir Plasma 0.25 h 86.04350281 nmol/L arith._mean 38.23913516 µg/L Raltegravir_PLASMA
+5439 19 Iwamoto_2008 10mg_ Raltegravir Plasma 0.5 h 508.430481 nmol/L arith._mean 225.9547932 µg/L Raltegravir_PLASMA
+5439 19 Iwamoto_2008 10mg_ Raltegravir Plasma 1 h 356.3927307 nmol/L arith._mean 158.3867387 µg/L Raltegravir_PLASMA
+5439 19 Iwamoto_2008 10mg_ Raltegravir Plasma 1.5 h 206.3193817 nmol/L arith._mean 91.69169623 µg/L Raltegravir_PLASMA
+5439 19 Iwamoto_2008 10mg_ Raltegravir Plasma 2 h 140.7239532 nmol/L arith._mean 62.5400186 µg/L Raltegravir_PLASMA
+5439 19 Iwamoto_2008 10mg_ Raltegravir Plasma 3 h 73.0300293 nmol/L arith._mean 32.45573541 µg/L Raltegravir_PLASMA
+5439 19 Iwamoto_2008 10mg_ Raltegravir Plasma 4 h 60.31361389 nmol/L arith._mean 26.80435312 µg/L Raltegravir_PLASMA
+5439 19 Iwamoto_2008 10mg_ Raltegravir Plasma 6 h 20.77339363 nmol/L arith._mean 9.232034735 µg/L Raltegravir_PLASMA
+5439 19 Iwamoto_2008 10mg_ Raltegravir Plasma 8 h 9.664139748 nmol/L arith._mean 4.294901229 µg/L Raltegravir_PLASMA
+5439 19 Iwamoto_2008 10mg_ Raltegravir Plasma 12 h 4.374712944 nmol/L arith._mean 1.94419374 µg/L Raltegravir_PLASMA
+5440 20 Iwamoto_2008 25mg Raltegravir Plasma 0.5 h 397.5635986 nmol/L arith._mean 176.6837435 µg/L Raltegravir_PLASMA
+5440 20 Iwamoto_2008 25mg Raltegravir Plasma 1 h 725.3274536 nmol/L arith._mean 322.3473432 µg/L Raltegravir_PLASMA
+5440 20 Iwamoto_2008 25mg Raltegravir Plasma 1.5 h 455.7784729 nmol/L arith._mean 202.5553825 µg/L Raltegravir_PLASMA
+5440 20 Iwamoto_2008 25mg Raltegravir Plasma 2 h 328.3375244 nmol/L arith._mean 145.9185478 µg/L Raltegravir_PLASMA
+5440 20 Iwamoto_2008 25mg Raltegravir Plasma 3 h 152.748291 nmol/L arith._mean 67.88383032 µg/L Raltegravir_PLASMA
+5440 20 Iwamoto_2008 25mg Raltegravir Plasma 4 h 79.27016449 nmol/L arith._mean 35.2289532 µg/L Raltegravir_PLASMA
+5440 20 Iwamoto_2008 25mg Raltegravir Plasma 6 h 25.15321159 nmol/L arith._mean 11.17849723 µg/L Raltegravir_PLASMA
+5440 20 Iwamoto_2008 25mg Raltegravir Plasma 8 h 14.96491241 nmol/L arith._mean 6.650651005 µg/L Raltegravir_PLASMA
+5440 20 Iwamoto_2008 25mg Raltegravir Plasma 12 h 6.591604233 nmol/L arith._mean 2.929416364 µg/L Raltegravir_PLASMA
+5441 21 Iwamoto_2008 50mg Raltegravir Plasma 0.5 h 1422.924927 nmol/L arith._mean 632.3710311 µg/L Raltegravir_PLASMA
+5441 21 Iwamoto_2008 50mg Raltegravir Plasma 1 h 1739.130493 nmol/L arith._mean 772.897939 µg/L Raltegravir_PLASMA
+5441 21 Iwamoto_2008 50mg Raltegravir Plasma 1.5 h 1185.770752 nmol/L arith._mean 526.9758502 µg/L Raltegravir_PLASMA
+5441 21 Iwamoto_2008 50mg Raltegravir Plasma 2 h 869.5652466 nmol/L arith._mean 386.4489695 µg/L Raltegravir_PLASMA
+5441 21 Iwamoto_2008 50mg Raltegravir Plasma 4 h 286.4002075 nmol/L arith._mean 127.2809205 µg/L Raltegravir_PLASMA
+5441 21 Iwamoto_2008 50mg Raltegravir Plasma 6 h 95.98334503 nmol/L arith._mean 42.65656306 µg/L Raltegravir_PLASMA
+5441 21 Iwamoto_2008 50mg Raltegravir Plasma 8 h 51.19161224 nmol/L arith._mean 22.7503869 µg/L Raltegravir_PLASMA
+5441 21 Iwamoto_2008 50mg Raltegravir Plasma 12 h 25.15321159 nmol/L arith._mean 11.17849723 µg/L Raltegravir_PLASMA
+5441 21 Iwamoto_2008 50mg Raltegravir Plasma 15 h 14.96491241 nmol/L arith._mean 6.650651005 µg/L Raltegravir_PLASMA
+5441 21 Iwamoto_2008 50mg Raltegravir Plasma 24 h 12.70157623 nmol/L arith._mean 5.644787514 µg/L Raltegravir_PLASMA
+5441 21 Iwamoto_2008 50mg Raltegravir Plasma 32 h 6.961935043 nmol/L arith._mean 3.093997413 µg/L Raltegravir_PLASMA
+5442 22 Iwamoto_2008 100mg Raltegravir Plasma 0.5 h 2450.593018 nmol/L arith._mean 1089.083482 µg/L Raltegravir_PLASMA
+5442 22 Iwamoto_2008 100mg Raltegravir Plasma 1 h 2134.387451 nmol/L arith._mean 948.5565738 µg/L Raltegravir_PLASMA
+5442 22 Iwamoto_2008 100mg Raltegravir Plasma 1.5 h 1581.02771 nmol/L arith._mean 702.6344851 µg/L Raltegravir_PLASMA
+5442 22 Iwamoto_2008 100mg Raltegravir Plasma 2 h 1185.770752 nmol/L arith._mean 526.9758502 µg/L Raltegravir_PLASMA
+5442 22 Iwamoto_2008 100mg Raltegravir Plasma 3 h 766.0780029 nmol/L arith._mean 340.4575516 µg/L Raltegravir_PLASMA
+5442 22 Iwamoto_2008 100mg Raltegravir Plasma 4 h 431.533905 nmol/L arith._mean 191.7807014 µg/L Raltegravir_PLASMA
+5442 22 Iwamoto_2008 100mg Raltegravir Plasma 6 h 129.6461792 nmol/L arith._mean 57.61687527 µg/L Raltegravir_PLASMA
+5442 22 Iwamoto_2008 100mg Raltegravir Plasma 8 h 73.0300293 nmol/L arith._mean 32.45573541 µg/L Raltegravir_PLASMA
+5442 22 Iwamoto_2008 100mg Raltegravir Plasma 12 h 26.56637764 nmol/L arith._mean 11.80653126 µg/L Raltegravir_PLASMA
+5442 22 Iwamoto_2008 100mg Raltegravir Plasma 15 h 17.63156319 nmol/L arith._mean 7.835754075 µg/L Raltegravir_PLASMA
+5442 22 Iwamoto_2008 100mg Raltegravir Plasma 24 h 11.38622761 nmol/L arith._mean 5.060225144 µg/L Raltegravir_PLASMA
+5442 22 Iwamoto_2008 100mg Raltegravir Plasma 32 h 6.961935043 nmol/L arith._mean 3.093997413 µg/L Raltegravir_PLASMA
+5443 23 Iwamoto_2008 200mg Raltegravir Plasma 0.5 h 5217.391113 nmol/L arith._mean 2318.693654 µg/L Raltegravir_PLASMA
+5443 23 Iwamoto_2008 200mg Raltegravir Plasma 1 h 5691.699707 nmol/L arith._mean 2529.484125 µg/L Raltegravir_PLASMA
+5443 23 Iwamoto_2008 200mg Raltegravir Plasma 1.5 h 4743.083008 nmol/L arith._mean 2107.903401 µg/L Raltegravir_PLASMA
+5443 23 Iwamoto_2008 200mg Raltegravir Plasma 2 h 3557.312256 nmol/L arith._mean 1580.927551 µg/L Raltegravir_PLASMA
+5443 23 Iwamoto_2008 200mg Raltegravir Plasma 3 h 2292.490234 nmol/L arith._mean 1018.820028 µg/L Raltegravir_PLASMA
+5443 23 Iwamoto_2008 200mg Raltegravir Plasma 4 h 1185.770752 nmol/L arith._mean 526.9758502 µg/L Raltegravir_PLASMA
+5443 23 Iwamoto_2008 200mg Raltegravir Plasma 6 h 419.8996277 nmol/L arith._mean 186.6102389 µg/L Raltegravir_PLASMA
+5443 23 Iwamoto_2008 200mg Raltegravir Plasma 8 h 217.9108734 nmol/L arith._mean 96.84314409 µg/L Raltegravir_PLASMA
+5443 23 Iwamoto_2008 200mg Raltegravir Plasma 12 h 98.64278412 nmol/L arith._mean 43.83846114 µg/L Raltegravir_PLASMA
+5443 23 Iwamoto_2008 200mg Raltegravir Plasma 15 h 63.70217133 nmol/L arith._mean 28.31028328 µg/L Raltegravir_PLASMA
+5443 23 Iwamoto_2008 200mg Raltegravir Plasma 24 h 47.16181183 nmol/L arith._mean 20.95947791 µg/L Raltegravir_PLASMA
+5443 23 Iwamoto_2008 200mg Raltegravir Plasma 32 h 41.13801956 nmol/L arith._mean 18.28240644 µg/L Raltegravir_PLASMA
+5443 23 Iwamoto_2008 200mg Raltegravir Plasma 48 h 10.4899044 nmol/L arith._mean 4.661884502 µg/L Raltegravir_PLASMA
+5444 24 Iwamoto_2008 400mg Raltegravir Plasma 0.25 h 1660.079102 nmol/L arith._mean 737.766212 µg/L Raltegravir_PLASMA
+5444 24 Iwamoto_2008 400mg Raltegravir Plasma 0.5 h 5612.648438 nmol/L arith._mean 2494.352452 µg/L Raltegravir_PLASMA
+5444 24 Iwamoto_2008 400mg Raltegravir Plasma 1 h 8458.498047 nmol/L arith._mean 3759.094406 µg/L Raltegravir_PLASMA
+5444 24 Iwamoto_2008 400mg Raltegravir Plasma 1.5 h 8142.29248 nmol/L arith._mean 3618.567498 µg/L Raltegravir_PLASMA
+5444 24 Iwamoto_2008 400mg Raltegravir Plasma 2 h 6798.418945 nmol/L arith._mean 3021.328194 µg/L Raltegravir_PLASMA
+5444 24 Iwamoto_2008 400mg Raltegravir Plasma 3 h 3794.466309 nmol/L arith._mean 1686.322677 µg/L Raltegravir_PLASMA
+5444 24 Iwamoto_2008 400mg Raltegravir Plasma 4 h 2055.335938 nmol/L arith._mean 913.4247926 µg/L Raltegravir_PLASMA
+5444 24 Iwamoto_2008 400mg Raltegravir Plasma 6 h 536.9952393 nmol/L arith._mean 238.6494373 µg/L Raltegravir_PLASMA
+5444 24 Iwamoto_2008 400mg Raltegravir Plasma 8 h 302.4908142 nmol/L arith._mean 134.4318484 µg/L Raltegravir_PLASMA
+5444 24 Iwamoto_2008 400mg Raltegravir Plasma 12 h 88.42753601 nmol/L arith._mean 39.29863837 µg/L Raltegravir_PLASMA
+5444 24 Iwamoto_2008 400mg Raltegravir Plasma 15 h 43.44924927 nmol/L arith._mean 19.3095546 µg/L Raltegravir_PLASMA
+5444 24 Iwamoto_2008 400mg Raltegravir Plasma 24 h 33.97483063 nmol/L arith._mean 15.09896852 µg/L Raltegravir_PLASMA
+5444 24 Iwamoto_2008 400mg Raltegravir Plasma 32 h 17.15620995 nmol/L arith._mean 7.624499346 µg/L Raltegravir_PLASMA
+5444 24 Iwamoto_2008 400mg Raltegravir Plasma 48 h 9.664139748 nmol/L arith._mean 4.294901229 µg/L Raltegravir_PLASMA
+5445 25 Iwamoto_2008 800mg Raltegravir Plasma 0.25 h 2134.387451 nmol/L arith._mean 948.5565738 µg/L Raltegravir_PLASMA
+5445 25 Iwamoto_2008 800mg Raltegravir Plasma 0.5 h 12094.86133 nmol/L arith._mean 5375.15352 µg/L Raltegravir_PLASMA
+5445 25 Iwamoto_2008 800mg Raltegravir Plasma 1 h 20237.1543 nmol/L arith._mean 8993.721235 µg/L Raltegravir_PLASMA
+5445 25 Iwamoto_2008 800mg Raltegravir Plasma 1.5 h 23003.95313 nmol/L arith._mean 10223.33173 µg/L Raltegravir_PLASMA
+5445 25 Iwamoto_2008 800mg Raltegravir Plasma 2 h 16679.8418 nmol/L arith._mean 7412.793576 µg/L Raltegravir_PLASMA
+5445 25 Iwamoto_2008 800mg Raltegravir Plasma 3 h 9090.90918 nmol/L arith._mean 4040.148221 µg/L Raltegravir_PLASMA
+5445 25 Iwamoto_2008 800mg Raltegravir Plasma 4 h 5296.442871 nmol/L arith._mean 2353.825544 µg/L Raltegravir_PLASMA
+5445 25 Iwamoto_2008 800mg Raltegravir Plasma 6 h 1476.180908 nmol/L arith._mean 656.0388574 µg/L Raltegravir_PLASMA
+5445 25 Iwamoto_2008 800mg Raltegravir Plasma 8 h 522.5177002 nmol/L arith._mean 232.215383 µg/L Raltegravir_PLASMA
+5445 25 Iwamoto_2008 800mg Raltegravir Plasma 12 h 206.3193817 nmol/L arith._mean 91.69169624 µg/L Raltegravir_PLASMA
+5445 25 Iwamoto_2008 800mg Raltegravir Plasma 15 h 129.6461792 nmol/L arith._mean 57.61687527 µg/L Raltegravir_PLASMA
+5445 25 Iwamoto_2008 800mg Raltegravir Plasma 24 h 113.0869522 nmol/L arith._mean 50.25768488 µg/L Raltegravir_PLASMA
+5445 25 Iwamoto_2008 800mg Raltegravir Plasma 32 h 83.72374725 nmol/L arith._mean 37.20819798 µg/L Raltegravir_PLASMA
+5445 25 Iwamoto_2008 800mg Raltegravir Plasma 48 h 41.13801956 nmol/L arith._mean 18.28240644 µg/L Raltegravir_PLASMA
+5446 26 Iwamoto_2008 1200mg Raltegravir Plasma 0.25 h 2845.849854 nmol/L arith._mean 1264.742062 µg/L Raltegravir_PLASMA
+5446 26 Iwamoto_2008 1200mg Raltegravir Plasma 0.5 h 12490.11914 nmol/L arith._mean 5550.812535 µg/L Raltegravir_PLASMA
+5446 26 Iwamoto_2008 1200mg Raltegravir Plasma 1 h 27351.7793 nmol/L arith._mean 12155.57655 µg/L Raltegravir_PLASMA
+5446 26 Iwamoto_2008 1200mg Raltegravir Plasma 1.5 h 27984.18945 nmol/L arith._mean 12436.62994 µg/L Raltegravir_PLASMA
+5446 26 Iwamoto_2008 1200mg Raltegravir Plasma 2 h 24110.67188 nmol/L arith._mean 10715.17559 µg/L Raltegravir_PLASMA
+5446 26 Iwamoto_2008 1200mg Raltegravir Plasma 3 h 14071.14648 nmol/L arith._mean 6253.446857 µg/L Raltegravir_PLASMA
+5446 26 Iwamoto_2008 1200mg Raltegravir Plasma 4 h 8063.241211 nmol/L arith._mean 3583.435825 µg/L Raltegravir_PLASMA
+5446 26 Iwamoto_2008 1200mg Raltegravir Plasma 6 h 2105.921143 nmol/L arith._mean 935.9056823 µg/L Raltegravir_PLASMA
+5446 26 Iwamoto_2008 1200mg Raltegravir Plasma 8 h 725.3274536 nmol/L arith._mean 322.3473432 µg/L Raltegravir_PLASMA
+5446 26 Iwamoto_2008 1200mg Raltegravir Plasma 15 h 148.6301575 nmol/L arith._mean 66.05366465 µg/L Raltegravir_PLASMA
+5446 26 Iwamoto_2008 1200mg Raltegravir Plasma 24 h 110.0380936 nmol/L arith._mean 48.9027224 µg/L Raltegravir_PLASMA
+5446 26 Iwamoto_2008 1200mg Raltegravir Plasma 32 h 75.05348969 nmol/L arith._mean 33.35499419 µg/L Raltegravir_PLASMA
+5446 26 Iwamoto_2008 1200mg Raltegravir Plasma 48 h 23.81522369 nmol/L arith._mean 10.5838736 µg/L Raltegravir_PLASMA
+5446 26 Iwamoto_2008 1200mg Raltegravir Plasma 72 h 5.154258251 nmol/L arith._mean 2.290636381 µg/L Raltegravir_PLASMA
+5447 27 Iwamoto_2008 1600mg Raltegravir Plasma 0.25 h 10592.88574 nmol/L arith._mean 4707.651088 µg/L Raltegravir_PLASMA
+5447 27 Iwamoto_2008 1600mg Raltegravir Plasma 0.5 h 27509.88086 nmol/L arith._mean 12225.83946 µg/L Raltegravir_PLASMA
+5447 27 Iwamoto_2008 1600mg Raltegravir Plasma 1 h 35256.91797 nmol/L arith._mean 15668.74903 µg/L Raltegravir_PLASMA
+5447 27 Iwamoto_2008 1600mg Raltegravir Plasma 1.5 h 31462.45117 nmol/L arith._mean 13982.42614 µg/L Raltegravir_PLASMA
+5447 27 Iwamoto_2008 1600mg Raltegravir Plasma 2 h 24031.62109 nmol/L arith._mean 10680.04413 µg/L Raltegravir_PLASMA
+5447 27 Iwamoto_2008 1600mg Raltegravir Plasma 3 h 13517.78711 nmol/L arith._mean 6007.524931 µg/L Raltegravir_PLASMA
+5447 27 Iwamoto_2008 1600mg Raltegravir Plasma 4 h 7351.778809 nmol/L arith._mean 3267.250337 µg/L Raltegravir_PLASMA
+5447 27 Iwamoto_2008 1600mg Raltegravir Plasma 6 h 1836.940552 nmol/L arith._mean 816.3663233 µg/L Raltegravir_PLASMA
+5447 27 Iwamoto_2008 1600mg Raltegravir Plasma 8 h 599.029541 nmol/L arith._mean 266.2184922 µg/L Raltegravir_PLASMA
+5447 27 Iwamoto_2008 1600mg Raltegravir Plasma 12 h 263.8547974 nmol/L arith._mean 117.2613728 µg/L Raltegravir_PLASMA
+5447 27 Iwamoto_2008 1600mg Raltegravir Plasma 15 h 190.0780182 nmol/L arith._mean 84.47376955 µg/L Raltegravir_PLASMA
+5447 27 Iwamoto_2008 1600mg Raltegravir Plasma 24 h 122.7498093 nmol/L arith._mean 54.55201606 µg/L Raltegravir_PLASMA
+5447 27 Iwamoto_2008 1600mg Raltegravir Plasma 32 h 95.98334503 nmol/L arith._mean 42.65656306 µg/L Raltegravir_PLASMA
+5447 27 Iwamoto_2008 1600mg Raltegravir Plasma 48 h 57.10533524 nmol/L arith._mean 25.3785418 µg/L Raltegravir_PLASMA
+5447 27 Iwamoto_2008 1600mg Raltegravir Plasma 72 h 9.150068283 nmol/L arith._mean 4.066439491 µg/L Raltegravir_PLASMA
+5448 28 Wenning_2009 400mg_ Raltegravir Plasma 0.5 h 5312.377441 nmol/L arith._mean 2360.907127 µg/L Raltegravir_PLASMA
+5448 28 Wenning_2009 400mg_ Raltegravir Plasma 1 h 7465.619141 nmol/L arith._mean 3317.842836 µg/L Raltegravir_PLASMA
+5448 28 Wenning_2009 400mg_ Raltegravir Plasma 1.5 h 8094.302734 nmol/L arith._mean 3597.240072 µg/L Raltegravir_PLASMA
+5448 28 Wenning_2009 400mg_ Raltegravir Plasma 2 h 7544.20459 nmol/L arith._mean 3352.76749 µg/L Raltegravir_PLASMA
+5448 28 Wenning_2009 400mg_ Raltegravir Plasma 3 h 4809.430176 nmol/L arith._mean 2137.389164 µg/L Raltegravir_PLASMA
+5448 28 Wenning_2009 400mg_ Raltegravir Plasma 4 h 2891.945068 nmol/L arith._mean 1285.227527 µg/L Raltegravir_PLASMA
+5448 28 Wenning_2009 400mg_ Raltegravir Plasma 5 h 1445.972534 nmol/L arith._mean 642.6137635 µg/L Raltegravir_PLASMA
+5448 28 Wenning_2009 400mg_ Raltegravir Plasma 6 h 848.7230225 nmol/L arith._mean 377.1863454 µg/L Raltegravir_PLASMA
+5448 28 Wenning_2009 400mg_ Raltegravir Plasma 8 h 282.9076538 nmol/L arith._mean 125.7287727 µg/L Raltegravir_PLASMA
+5448 28 Wenning_2009 400mg_ Raltegravir Plasma 10 h 172.8880157 nmol/L arith._mean 76.83425227 µg/L Raltegravir_PLASMA
+5448 28 Wenning_2009 400mg_ Raltegravir Plasma 12 h 141.4538269 nmol/L arith._mean 62.86438637 µg/L Raltegravir_PLASMA
+5449 29 Larson_2013 8-18y Raltegravir Plasma 0 h 223.6047 ng/mL arith._mean 223.6047 µg/L Raltegravir_PLASMA
+5449 29 Larson_2013 8-18y Raltegravir Plasma 0.5 h 655.5547 ng/mL arith._mean 655.5547 µg/L Raltegravir_PLASMA
+5449 29 Larson_2013 8-18y Raltegravir Plasma 1 h 883.826 ng/mL arith._mean 883.826 µg/L Raltegravir_PLASMA
+5449 29 Larson_2013 8-18y Raltegravir Plasma 2 h 793.6957 ng/mL arith._mean 793.6957 µg/L Raltegravir_PLASMA
+5449 29 Larson_2013 8-18y Raltegravir Plasma 3 h 738.775 ng/mL arith._mean 738.775 µg/L Raltegravir_PLASMA
+5449 29 Larson_2013 8-18y Raltegravir Plasma 4 h 602.9438 ng/mL arith._mean 602.9438 µg/L Raltegravir_PLASMA
+5449 29 Larson_2013 8-18y Raltegravir Plasma 6 h 258.0861 ng/mL arith._mean 258.0861 µg/L Raltegravir_PLASMA
+5449 29 Larson_2013 8-18y Raltegravir Plasma 8 h 171.9072 ng/mL arith._mean 171.9072 µg/L Raltegravir_PLASMA
+5449 29 Larson_2013 8-18y Raltegravir Plasma 12 h 123.0171 ng/mL arith._mean 123.0171 µg/L Raltegravir_PLASMA
