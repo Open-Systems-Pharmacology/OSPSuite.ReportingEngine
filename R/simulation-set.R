@@ -57,7 +57,7 @@ SimulationSet <- R6::R6Class(
       validateIsString(simulationFile)
       validateIsFileExtension(simulationFile, "pkml")
       validateIsUnitFromDimension(timeUnit, "Time")
-      
+
       # For optional input, usually null is allowed
       # but not here as it would mean that nothing would be reported
       validateIsIncluded(c(applicationRanges), ApplicationRanges)
@@ -66,14 +66,14 @@ SimulationSet <- R6::R6Class(
         validateIsFileExtension(massBalanceFile, "json")
         self$massBalanceSettings <- jsonlite::fromJSON(massBalanceFile, simplifyVector = FALSE)[["MassBalancePlots"]]
       }
-      
+
       # Before loading the simulation, check if the file exists
       validateFileExists(simulationFile)
       simulation <- ospsuite::loadSimulation(simulationFile, addToCache = FALSE)
       validateVector(minimumSimulationEndTime, type = "numeric", valueRange = c(0, Inf), nullAllowed = TRUE)
       # Following checks require simulation info
       endTime <- max(
-        minimumSimulationEndTime, 
+        minimumSimulationEndTime,
         ospsuite::toUnit(
           quantityOrDimension = "Time",
           values = simulation$outputSchema$endTime,
@@ -81,7 +81,7 @@ SimulationSet <- R6::R6Class(
         )
       )
       validateVectorRange(timeOffset, type = "numeric", valueRange = c(0, endTime))
-      
+
       # Test and validate outputs and their paths
       validateOutputObject(c(outputs), simulation, nullAllowed = TRUE)
       validateDataSource(dataSource, c(outputs), nullAllowed = TRUE)

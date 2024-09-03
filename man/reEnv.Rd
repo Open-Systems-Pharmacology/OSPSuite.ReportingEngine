@@ -5,7 +5,7 @@
 \alias{reEnv}
 \title{reEnv}
 \format{
-An object of class \code{environment} of length 38.
+An object of class \code{environment} of length 39.
 }
 \usage{
 reEnv

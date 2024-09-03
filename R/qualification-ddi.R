@@ -545,8 +545,10 @@ plotQualificationDDIs <- function(configurationPlan, settings) {
         # Subheading result includes anchor tag to be referenced in TOC
         textChunk = paste(
           paste0(rep("#", sectionLevel + 1), collapse = ""),
+          " ",
           subplotTypeName,
-          anchor(paste0(sectionID, "-ddi-subunit-", length(ddiResults) + 1))
+          anchor(paste0(sectionID, "-ddi-subunit-", length(ddiResults) + 1)),
+          sep = ""
         ),
         includeTextChunk = TRUE
       )
@@ -562,8 +564,10 @@ plotQualificationDDIs <- function(configurationPlan, settings) {
           # Subheading result includes anchor tag to be referenced in TOC
           textChunk = paste(
             paste0(rep("#", sectionLevel + 2), collapse = ""),
+            " ",
             subplotTypeLevel,
-            anchor(paste0(sectionID, "-ddi-subunit-", length(ddiResults) + 1))
+            anchor(paste0(sectionID, "-ddi-subunit-", length(ddiResults) + 1)),
+            sep = ""
           ),
           includeTextChunk = TRUE
         )

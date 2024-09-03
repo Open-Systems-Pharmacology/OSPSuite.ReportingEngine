@@ -38,7 +38,7 @@ PopulationPlotTask <- R6::R6Class(
       resetReport(self$fileName)
       addTextChunk(
         fileName = self$fileName,
-        text = paste("#", self$title, anchor(self$reference))
+        text = paste("# ", self$title, anchor(self$reference), sep = "")
       )
       for (result in taskResults) {
         # Get both absolute and relative paths for figures and tables

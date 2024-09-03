@@ -37,7 +37,7 @@ plotMeanMassBalance <- function(structureSet, settings = NULL) {
       sectionId <- defaultFileNames$resultID(length(massBalanceResults) + 1, "mass_balance")
       massBalanceResults[[sectionId]] <- saveTaskResults(
         id = sectionId,
-        textChunk = paste("###", plotSettings$Name, anchor(sectionId)),
+        textChunk = paste("### ", plotSettings$Name, anchor(sectionId), sep = ""),
         includeTextChunk = TRUE
       )
     }
