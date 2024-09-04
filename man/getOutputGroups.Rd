@@ -13,6 +13,6 @@ getOutputGroups(metaDataFrame)
 List of data.frames data.frame with variables `path`, `dimension`, `unit`, `group`, `color`, `fill`
 }
 \description{
-Group paths with same group IDs and Units
+Group paths with same group IDs and check their units and residuals are consistent
 }
 \keyword{internal}

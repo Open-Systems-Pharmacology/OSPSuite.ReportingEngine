@@ -669,21 +669,21 @@ checkSamePopulationIds <- function(setIds,
 #' @keywords internal
 checkMetaDataIsConsistent <- function(metaData) {
   groupId <- unique(metaData$group)
-  if(!isOfLength(unique(metaData$unit), 1)){
+  if (!isOfLength(unique(metaData$unit), 1)) {
     warning(
       messages$inconsistentMetaData(
-        values = metaData$unit, 
-        id = groupId, 
+        values = metaData$unit,
+        id = groupId,
         dataType = "units"
-        ),
+      ),
       call. = FALSE
-      )
+    )
   }
-  if(!isOfLength(unique(metaData$residualScale), 1)){
+  if (!isOfLength(unique(metaData$residualScale), 1)) {
     warning(
       messages$inconsistentMetaData(
-        values = metaData$residualScale, 
-        id = groupId, 
+        values = metaData$residualScale,
+        id = groupId,
         dataType = "residualScale"
       ),
       call. = FALSE

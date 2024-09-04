@@ -32,7 +32,7 @@ Other workflow tasks:
 }
 \concept{workflow tasks}
 \section{Super classes}{
-\code{\link[ospsuite.reportingengine:Task]{ospsuite.reportingengine::Task}} -> \code{\link[ospsuite.reportingengine:PlotTask]{ospsuite.reportingengine::PlotTask}} -> \code{GofPlotTask}
+\code{ospsuite.reportingengine::Task} -> \code{ospsuite.reportingengine::PlotTask} -> \code{GofPlotTask}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -118,7 +118,7 @@ Run task and save its output results
 \subsection{Method \code{getResidualsResults()}}{
 Get plot results for residuals across all simulations
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{GofPlotTask$getResidualsResults(structureSets, data, settings)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{GofPlotTask$getResidualsResults(structureSets, data, metaData, settings)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -127,6 +127,8 @@ Get plot results for residuals across all simulations
 \item{\code{structureSets}}{A list of `SimulationStructure` objects defining the properties of a simulation set}
 
 \item{\code{data}}{data.frame}
+
+\item{\code{metaData}}{A data.frame containing relevant information about the residuals}
 
 \item{\code{settings}}{List of settings such as `PlotConfiguration` R6 class objects for each goodness of fit plot}
 }

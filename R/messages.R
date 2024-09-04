@@ -255,46 +255,46 @@ messages <- list(
   warningNAFoundInPKAnalysisFile = function(filePath) {
     paste0(highlight("NaN"), " found in PK analysis file '", highlight(filePath), "'.")
   },
-  warningPKAnalysesMissingIds = function(ids, setName){
+  warningPKAnalysesMissingIds = function(ids, setName) {
     paste0(
-      "Missing ", highlight("IndividualIds"), " in PKAnalysis file for simulation set '", 
+      "Missing ", highlight("IndividualIds"), " in PKAnalysis file for simulation set '",
       highlight(setName), "': ",
       paste0("'", highlight(ids), "'", collapse = ", ")
     )
   },
-  warningPKAnalysesMissingIds = function(ids, setName){
+  warningPKAnalysesMissingIds = function(ids, setName) {
     paste0(
-      "Missing ", highlight("IndividualIds"), " in PKAnalysis file for simulation set '", 
+      "Missing ", highlight("IndividualIds"), " in PKAnalysis file for simulation set '",
       highlight(setName), "': ",
       paste0("'", highlight(ids), "'", collapse = ", ")
     )
   },
-  warningMissingFromReferenceSet = function(path, simulationSetName, pkParameters = NULL){
-    if(is.null(pkParameters)){
+  warningMissingFromReferenceSet = function(path, simulationSetName, pkParameters = NULL) {
+    if (is.null(pkParameters)) {
       return(
         paste0(
-          "Output path '", highlight(path), 
-          "' was NOT defined for reference simulation set '", highlight(simulationSetName), 
+          "Output path '", highlight(path),
+          "' was NOT defined for reference simulation set '", highlight(simulationSetName),
           "'. Ouptut path and its PK Parameters were added to the list of figures to export."
         )
       )
     }
     return(
       paste0(
-        "The following PK Parameters '", 
-        paste(highlight(pkParameters), collapse = "', '"), 
-        "' were NOT defined for the Ouptut path '", highlight(path), 
-        "' in the reference simulation set '", highlight(simulationSetName), 
+        "The following PK Parameters '",
+        paste(highlight(pkParameters), collapse = "', '"),
+        "' were NOT defined for the Ouptut path '", highlight(path),
+        "' in the reference simulation set '", highlight(simulationSetName),
         "'. The PK Parameters were added to the list of figures to export."
       )
     )
   },
-  inconsistentMetaData = function(values, id, dataType = "units"){
+  inconsistentMetaData = function(values, id, dataType = "units") {
     paste0(
-      "Inconsistent ", highlight(dataType), 
+      "Inconsistent ", highlight(dataType),
       " found within Group ID '", highlight(id), "': '",
       paste0(highlight(unique(values)), collapse = "', '"), "'."
-      )
+    )
   },
   #----- Info messages ----
   runStarting = function(runName, subRun = NULL) {
