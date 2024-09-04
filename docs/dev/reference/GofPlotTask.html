@@ -158,7 +158,7 @@
 <h3 id="method-getresidualsresults-">Method <code>getResidualsResults()</code><a class="anchor" aria-label="anchor" href="#method-getresidualsresults-"></a></h3>
 <p>Get plot results for residuals across all simulations</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GofPlotTask</span><span class="op">$</span><span class="fu">getResidualsResults</span><span class="op">(</span><span class="va">structureSets</span>, <span class="va">data</span>, <span class="va">settings</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GofPlotTask</span><span class="op">$</span><span class="fu">getResidualsResults</span><span class="op">(</span><span class="va">structureSets</span>, <span class="va">data</span>, <span class="va">metaData</span>, <span class="va">settings</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -169,6 +169,10 @@
 
 <dt><code>data</code></dt>
 <dd><p>data.frame</p></dd>
+
+
+<dt><code>metaData</code></dt>
+<dd><p>A data.frame containing relevant information about the residuals</p></dd>
 
 
 <dt><code>settings</code></dt>
