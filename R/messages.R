@@ -299,7 +299,7 @@ messages <- list(
   warningLogScaleIssue = function(output) {
     paste0(
       "Plot scale is logarithmic, however all values from simulated output '", 
-      highlight(output), "' were 0."
+      highlight(output), "' were lower or equal to 0."
     )
   },
   
