@@ -67,97 +67,164 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="ospsuitereportingengine">OSPSuite.ReportingEngine<a class="anchor" aria-label="anchor" href="#ospsuitereportingengine"></a>
 </h1></div>
-<p>OSPSuite.ReportingEngine implementation in R</p>
+<p>The <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine" class="external-link">ospsuite.reportingengine</a> package provides a framework in R to design and create reports evaluating PBPK models developed in the <a href="https://github.com/Open-Systems-Pharmacology" class="external-link">Open Systems Pharmacology</a> ecosystem.</p>
 <!-- badges: start -->
 
 
 <!-- badges: end -->
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>The <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine" class="external-link">ospsuite.reportingengine</a> package is compatible with version 4.x.x of R. Please follow the installation instructions below:</p>
+<div class="section level3">
+<h3 id="from-github-">From Github <img src="https://avatars.githubusercontent.com/github" width="15px"><a class="anchor" aria-label="anchor" href="#from-github-"></a>
+</h3>
+<p>You can install the development version of <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine" class="external-link">ospsuite.reportingengine</a> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"Open-Systems-Pharmacology/OSPSuite.ReportingEngine"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level1">
-<h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h1>
-<p>The <strong>OSPSuite.ReportingEngine</strong> package is compatible with version 4.x.x of R. Please follow the installation instructions below:</p>
-<p><strong>OSPSuite.ReportingEngine</strong> requires following packages to be installed:</p>
+<div class="section level3">
+<h3 id="using-the-package-bundle-">Using the package bundle 📦<a class="anchor" aria-label="anchor" href="#using-the-package-bundle-"></a>
+</h3>
+<p>You can install the <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine" class="external-link">ospsuite.reportingengine</a> package by downloading and installing its zip or tar.gz bundle.</p>
 <ul>
-<li>From CRAN:
+<li>The package bundle for the <strong>release</strong> version is available <a href="https://ci.appveyor.com/project/open-systems-pharmacology-ci/OSPSuite-ReportingEngine/branch/master/artifacts" class="external-link">here 📦</a>.</li>
+<li>The package bundle for the <strong>development</strong> version is available <a href="https://ci.appveyor.com/project/open-systems-pharmacology-ci/OSPSuite-ReportingEngine/branch/develop/artifacts" class="external-link">here 📦</a>.</li>
+<li>The package bundles for specific versions of <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine" class="external-link">ospsuite.reportingengine</a> are available <a href="https://ci.appveyor.com/project/open-systems-pharmacology-ci/OSPSuite-ReportingEngine/history" class="external-link">here 📦</a>.</li>
+</ul>
+<p>Then, to install manually, replace the <code>path/to/ospsuite.reportingengine.zip</code> by your actual local path to the <code>.zip</code> or <code>tar.gz</code> file in the code below:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="va">path</span><span class="op">/</span><span class="va">to</span><span class="op">/</span><span class="va">ospsuite.reportingengine.zip</span>, repos <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+<p>To install the package along with its tests, the <code>.tar.gz</code> bundle is required. Then, use the <code>install-tests</code> option as illustrated below.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="va">path</span><span class="op">/</span><span class="va">to</span><span class="op">/</span><span class="va">ospsuite.reportingengine.tar.gz</span>, repos <span class="op">=</span> <span class="cn">NULL</span>, INSTALL_opts <span class="op">=</span> <span class="st">"--install-tests"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="required-packages">Required packages<a class="anchor" aria-label="anchor" href="#required-packages"></a>
+</h3>
+<p><a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine" class="external-link">ospsuite.reportingengine</a> requires following packages to be installed:</p>
 <ul>
-<li>
-<strong>ggplot2</strong> (&gt;= 3.3.0)</li>
-<li><strong>jsonlite</strong></li>
-<li><strong>knitr</strong></li>
-<li><strong>pander</strong></li>
-<li><strong>patchwork</strong></li>
-<li><strong>readxl</strong></li>
-<li><strong>reshape2</strong></li>
-<li><strong>rmarkdown</strong></li>
-<li><strong>styler</strong></li>
-<li>… (s. <a href="https://github.com/Open-Systems-Pharmacology/OSPSuite-R#installation" class="external-link">Installation instructions for the package <strong>ospsuite</strong></a>)</li>
+<li>From the <a href="https://github.com/Open-Systems-Pharmacology" class="external-link">Open Systems Pharmacology</a> ecosystem:</li>
+</ul>
+<table class="table">
+<colgroup>
+<col width="26%">
+<col width="26%">
+<col width="46%">
+</colgroup>
+<thead><tr class="header">
+<th>Package</th>
+<th>Version</th>
+<th>Installation Instructions</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.RUtils" class="external-link"><code>{ospsuite.utils}</code></a></td>
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>≥</mo><annotation encoding="application/x-tex">\geq</annotation></semantics></math> 1.5</td>
+<td>Download and install package bundle <a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.RUtils/releases" class="external-link">here 📦</a>
+</td>
+</tr>
+<tr class="even">
+<td><a href="https://github.com/Open-Systems-Pharmacology/TLF-Library" class="external-link"><code>{tlf}</code></a></td>
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>≥</mo><annotation encoding="application/x-tex">\geq</annotation></semantics></math> 1.5</td>
+<td>Download and install package bundle <a href="https://github.com/Open-Systems-Pharmacology/TLF-Library/releases" class="external-link">here 📦</a><br>⚠ Visit <a href="https://github.com/Open-Systems-Pharmacology/TLF-Library" class="external-link"><code>{tlf}</code> Documentation</a> to install its dependencies ⚠</td>
+</tr>
+<tr class="odd">
+<td><a href="https://github.com/Open-Systems-Pharmacology/rSharp" class="external-link"><code>{rSharp}</code></a></td>
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>≥</mo><annotation encoding="application/x-tex">\geq</annotation></semantics></math> 1.0</td>
+<td>Instructions are available <a href="https://github.com/Open-Systems-Pharmacology/rSharp#installation" class="external-link">here 📖</a>
+</td>
+</tr>
+<tr class="even">
+<td><a href="https://github.com/Open-Systems-Pharmacology/OSPSuite-R" class="external-link"><code>{ospsuite}</code></a></td>
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>≥</mo><annotation encoding="application/x-tex">\geq</annotation></semantics></math> 12.1</td>
+<td>Download and install package bundle <a href="https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases" class="external-link">here 📦</a><br>Instructions are available <a href="https://github.com/Open-Systems-Pharmacology/OSPSuite-R#installation" class="external-link">here 📖</a><br>⚠ Visit <a href="https://github.com/Open-Systems-Pharmacology/OSPSuite-R" class="external-link"><code>{ospsuite}</code> Documentation</a> to install its dependencies ⚠</td>
+</tr>
+</tbody>
+</table>
+<p>Once the bundles downloaded, you can install the packages by using the code below:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># bundlePath &lt;- path/to/osp/bundles</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">bundlePath</span>,<span class="st">"ospsuite.utils.zip"</span><span class="op">)</span>, repos <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">bundlePath</span>,<span class="st">"tlf.zip"</span><span class="op">)</span>, repos <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">bundlePath</span>,<span class="st">"rSharp.zip"</span><span class="op">)</span>, repos <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">bundlePath</span>,<span class="st">"ospsuite.zip"</span><span class="op">)</span>, repos <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+<ul>
+<li>Required packages from <a href="https://cran.r-project.org/" class="external-link">CRAN</a>: &gt; Some of these packages may already be installed as dependencies of the Open Systems Pharmacology ecosystem
+<ul>
+<li><a href="https://cran.r-project.org/web/packages/dplyr" class="external-link"><code>{dplyr}</code></a></li>
+<li><a href="https://cran.r-project.org/web/packages/ggplot2" class="external-link"><code>{ggplot2}</code> &gt;= 3.3.0</a></li>
+<li><a href="https://cran.r-project.org/web/packages/jsonlite" class="external-link"><code>{jsonlite}</code></a></li>
+<li><a href="https://cran.r-project.org/web/packages/R6" class="external-link"><code>{R6}</code></a></li>
+<li><a href="https://cran.r-project.org/web/packages/tidyr" class="external-link"><code>{tidyr}</code></a></li>
 </ul>
 </li>
-<li>Must be downloaded manually:
+<li>Optional packages from <a href="https://cran.r-project.org/" class="external-link">CRAN</a>
 <ul>
-<li>
-<strong>ospsuite.utils</strong> (&gt;= 1.4.0)
-<ul>
-<li><a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.RUtils/releases" class="external-link">Package download</a></li>
-</ul>
-</li>
-<li>
-<strong>tlf</strong> (&gt;= 1.5.0)
-<ul>
-<li><a href="https://github.com/Open-Systems-Pharmacology/TLF-Library/releases" class="external-link">Package download</a></li>
-</ul>
-</li>
-<li>
-<strong>rSharp</strong> (s. <a href="https://github.com/Open-Systems-Pharmacology/OSPSuite-R#installation" class="external-link">Installation instructions for the package <strong>ospsuite</strong></a>)</li>
-<li>
-<strong>ospsuite</strong> (&gt;= 11.1)
-<ul>
-<li><a href="https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases" class="external-link">Package download</a></li>
-<li><a href="https://github.com/Open-Systems-Pharmacology/OSPSuite-R#installation" class="external-link">Installation instructions</a></li>
+<li><a href="https://cran.r-project.org/web/packages/crayon" class="external-link"><code>{crayon}</code></a></li>
+<li><a href="https://cran.r-project.org/web/packages/knitr" class="external-link"><code>{knitr}</code></a></li>
+<li><a href="https://cran.r-project.org/web/packages/parallel" class="external-link"><code>{parallel}</code></a></li>
+<li><a href="https://cran.r-project.org/web/packages/readxl" class="external-link"><code>{readxl}</code></a></li>
+<li><a href="https://cran.r-project.org/web/packages/Rmpi" class="external-link"><code>{Rmpi}</code></a></li>
+<li><a href="https://cran.r-project.org/web/packages/styler" class="external-link"><code>{styler}</code></a></li>
 </ul>
 </li>
 </ul>
-</li>
-</ul>
-<p>[OPTIONAL] Install <strong>Pandoc</strong> (required for generation of reports in MS-Word format):</p>
+<p>To install these packages, use the code below:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Required packages</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"dplyr"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ggplot2"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"jsonlite"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"R6"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"tidyr"</span><span class="op">)</span></span>
+<span><span class="co"># Optional packages</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"crayon"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"knitr"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"parallel"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"readxl"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"Rmpi"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"styler"</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="ms-word-reports">MS-Word reports<a class="anchor" aria-label="anchor" href="#ms-word-reports"></a>
+</h2>
+<p>It is possible to convert markdown reports to MS-Word (<code>.docx</code> format) from the <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine" class="external-link">ospsuite.reportingengine</a> package. This conversion requires the installation of an additional software: <a href="https://pandoc.org/" class="external-link">Pandoc</a>.</p>
+<p>A dedicated article details how to create MS-Word reports using the <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine" class="external-link">ospsuite.reportingengine</a> package: <a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/word-report.html">here</a></p>
+<div class="section level3">
+<h3 id="optional-pandoc-installation">[OPTIONAL] Pandoc Installation<a class="anchor" aria-label="anchor" href="#optional-pandoc-installation"></a>
+</h3>
+<p>Install <strong>Pandoc</strong> (required for generation of reports in MS-Word format) by downloading one of the following files:</p>
 <ul>
-<li><a href="https://github.com/jgm/pandoc/releases/download/2.9.2.1/pandoc-2.9.2.1-windows-x86_64.msi" class="external-link">Pandoc Installer (Windows)</a></li>
-<li><a href="https://github.com/jgm/pandoc/releases/download/2.9.2.1/pandoc-2.9.2.1-linux-amd64.tar.gz" class="external-link">Pandoc Installer (Linux)</a></li>
+<li><p><a href="https://github.com/jgm/pandoc/releases/download/3.1.2/pandoc-3.1.2-windows-x86_64.msi" class="external-link">Pandoc Installer (Windows)</a></p></li>
+<li><p><a href="https://github.com/jgm/pandoc/releases/download/3.1.2/pandoc-3.1.2-linux-amd64.tar.gz" class="external-link">Pandoc Installer (Linux)</a></p></li>
 </ul>
-<p>[OPTIONAL] Install <strong>rsvg-convert</strong> (required by Pandoc for conversion of images in SVG format)</p>
+</div>
+<div class="section level3">
+<h3 id="optional-use-svg-figures">[OPTIONAL] Use SVG figures<a class="anchor" aria-label="anchor" href="#optional-use-svg-figures"></a>
+</h3>
+<p>In order to use SVG figures in MS-Word report, you need to install <strong>rsvg-convert</strong> (required by Pandoc for conversion of images in SVG format)</p>
 <ul>
 <li>
 <a href="https://github.com/miyako/console-rsvg-convert/releases" class="external-link">Installer (Windows)</a>
 <ul>
-<li>The installation folder must be added to the system path.</li>
+<li>⚠ The installation folder must be added to the <strong>system path</strong>. ⚠</li>
 </ul>
 </li>
 <li>For Linux, <strong>librsvg</strong> package must be installed (package name depends on distribution, e.g. <strong>librsvg2-bin</strong> for Ubuntu).</li>
 </ul>
 </div>
-<div class="section level1">
-<h1 id="development-tasks">Development tasks<a class="anchor" aria-label="anchor" href="#development-tasks"></a>
-</h1>
-<div class="section level2">
-<h2 id="dev_mode">dev_mode<a class="anchor" aria-label="anchor" href="#dev_mode"></a>
-</h2>
-<p><code>devtools::dev_mode</code> function switches your version of R into “development mode”. This is useful to avoid clobbering the existing versions of CRAN packages that you need for other tasks. Calling dev_mode() again will turn development mode off, and return you to your default library setup.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># This will install the package in the folder C:/Rpackages</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">dev_mode</span><span class="op">(</span>path<span class="op">=</span><span class="st">"C:/Rpackages"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="reload-the-package">Reload the package<a class="anchor" aria-label="anchor" href="#reload-the-package"></a>
+<h2 id="documentation-">Documentation 📖<a class="anchor" aria-label="anchor" href="#documentation-"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>or <code>Ctrl + Shift + L</code></p>
-</div>
-<div class="section level2">
-<h2 id="add-or-update-script-files">Add or update script files<a class="anchor" aria-label="anchor" href="#add-or-update-script-files"></a>
-</h2>
-<p><code>.R</code> files defined in <code>tests\dev\</code> will be removed from the package and can be used to simulate interaction with the package. See <a href="tests/dev/scripts.R">scripts.R</a></p>
+<p>A detailed account of existing functions and articles on how to use them can be found on the <a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/">dedicated website</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="code-of-conduct">Code of conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
@@ -165,7 +232,7 @@
 <p>Everyone interacting in the Open Systems Pharmacology community (codebases, issue trackers, chat rooms, mailing lists etc…) is expected to follow the Open Systems Pharmacology <a href="https://github.com/Open-Systems-Pharmacology/Suite/blob/master/CODE_OF_CONDUCT.md" class="external-link">code of conduct</a>.</p>
 </div>
 <div class="section level2">
-<h2 id="contribution">Contribution<a class="anchor" aria-label="anchor" href="#contribution"></a>
+<h2 id="contribution-">Contribution 💡<a class="anchor" aria-label="anchor" href="#contribution-"></a>
 </h2>
 <p>We encourage contribution to the Open Systems Pharmacology community. Before getting started please read the <a href="https://github.com/Open-Systems-Pharmacology/Suite/blob/master/CONTRIBUTING.md" class="external-link">contribution guidelines</a>. If you are contributing code, please be familiar with the <a href="https://github.com/Open-Systems-Pharmacology/Suite/blob/master/CODING_STANDARDS_R.md" class="external-link">coding standards</a>.</p>
 </div>
@@ -176,7 +243,6 @@
 <p>All trademarks within this document belong to their legitimate owners.</p>
 </div>
 </div>
-
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
@@ -207,7 +273,7 @@
 <ul class="list-unstyled">
 <li>Michael Sevestre <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-3054-8160" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Juri Solodenko <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-6922-588X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Pierre Chelle <br><small class="roles"> Author </small>  </li>
+<li>Pierre Chelle <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-0167-4774" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Abdullah Hamadeh <br><small class="roles"> Author </small>  </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
