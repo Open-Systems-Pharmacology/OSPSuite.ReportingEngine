@@ -124,25 +124,26 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
     molWeight = molWeight
   )
   simulatedValues <- simulatedValues[selectedTimeValues]
-  logScaleIssue <- all(simulatedValues == 0, isIncluded(axesProperties$y$scale, "log")) 
+  # If issues with log scale due to all zeros or negative values
+  # Warn and do not plot the data
+  logScaleIssue <- all(simulatedValues <= 0, isIncluded(axesProperties$y$scale, "log")) 
   if(logScaleIssue){
     warning(messages$warningLogScaleIssue(outputMapping$Output), call. = FALSE)
-    # Set the first value to 1 to avoid log scale issue
-    # Since this only affect one value, no line will plotted
-    simulatedValues[1] <- 1
   }
   
-  # Add simulated values to plot
-  plotObject <- tlf::addLine(
-    x = simulatedTime,
-    y = simulatedValues,
-    caption = prettyCaption(paste(outputMapping$Caption, "Simulated Data"), plotObject),
-    linetype = tlfLinetype(outputMapping$LineStyle),
-    color = outputMapping$Color,
-    size = outputMapping$Size,
-    plotObject = plotObject
-  )
-
+  if(!logScaleIssue){
+    # Add simulated values to plot
+    plotObject <- tlf::addLine(
+      x = simulatedTime,
+      y = simulatedValues,
+      caption = prettyCaption(paste(outputMapping$Caption, "Simulated Data"), plotObject),
+      linetype = tlfLinetype(outputMapping$LineStyle),
+      color = outputMapping$Color,
+      size = outputMapping$Size,
+      plotObject = plotObject
+    )
+  }
+  
   # Loop on each observed dataset in OutputMappings
   for (observedDataSet in outputMapping$ObservedData) {
     # Get data and meta data of observed results
