@@ -8,5 +8,5 @@ lloq,timeprofile,LOQ,µmol/l,,,
 age,covariate,AGE,year(s),Age,Organism|Age,
 wght,covariate,WGHT,kg,Body weight,Organism|Weight,
 hght,covariate,HGHT,cm,Height,Organism|Height,
-bmi,covariate,BMI,kg/m�,BMI,Organism|BMI,
+bmi,covariate,BMI,kg/m²,BMI,Organism|BMI,
 gender,covariate,SEX,,SEX,Gender,Make sure 1=male  2= female
