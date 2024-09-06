@@ -29,15 +29,22 @@ remotes::install_github("Open-Systems-Pharmacology/OSPSuite.ReportingEngine")
 ```
 ### Using the package bundle &#128230;
 
-You can install a specific version of the `{ospsuite.reportingengine}` package by downloading and installing its zip or tar.gz bundle [here &#128230;](https://ci.appveyor.com/project/open-systems-pharmacology-ci/OSPSuite-ReportingEngine/history).
+You can install the `{ospsuite.reportingengine}` package by downloading and installing its zip or tar.gz bundle.
 
-- The package bundle for the __development__ version is available [here &#128230;](https://ci.appveyor.com/project/open-systems-pharmacology-ci/OSPSuite-ReportingEngine/branch/develop/artifacts).
 - The package bundle for the __release__ version is available [here &#128230;](https://ci.appveyor.com/project/open-systems-pharmacology-ci/OSPSuite-ReportingEngine/branch/master/artifacts).
+- The package bundle for the __development__ version is available [here &#128230;](https://ci.appveyor.com/project/open-systems-pharmacology-ci/OSPSuite-ReportingEngine/branch/develop/artifacts).
+- The package bundles for specific versions of `{ospsuite.reportingengine}` are available [here &#128230;](https://ci.appveyor.com/project/open-systems-pharmacology-ci/OSPSuite-ReportingEngine/history).
 
 Then, to install manually, replace the `path/to/ospsuite.reportingengine.zip` by your actual local path to the `.zip` or `tar.gz` file in the code below:
 
 ```r
 install.packages(path/to/ospsuite.reportingengine.zip, repos = NULL)
+```
+
+To install the package along with its tests, the `.tar.gz` bundle is required. Then, use the `install-tests` option as illustrated below.
+
+```r
+install.packages(path/to/ospsuite.reportingengine.tar.gz, repos = NULL, INSTALL_opts = "--install-tests")
 ```
 
 ### Required packages
@@ -48,10 +55,10 @@ install.packages(path/to/ospsuite.reportingengine.zip, repos = NULL)
 
 |Package|Version|Installation Instructions|
 |-------|-------|------------|
-|[`{ospsuite.utils}`](https://github.com/Open-Systems-Pharmacology/OSPSuite.RUtils)|$\geq$ 1.4|Download and install package bundle [here &#128230;](https://github.com/Open-Systems-Pharmacology/OSPSuite.RUtils/releases)|
+|[`{ospsuite.utils}`](https://github.com/Open-Systems-Pharmacology/OSPSuite.RUtils)|$\geq$ 1.5|Download and install package bundle [here &#128230;](https://github.com/Open-Systems-Pharmacology/OSPSuite.RUtils/releases)|
 |[`{tlf}`](https://github.com/Open-Systems-Pharmacology/TLF-Library)|$\geq$ 1.5|Download and install package bundle [here &#128230;](https://github.com/Open-Systems-Pharmacology/TLF-Library/releases)<br>&#9888; Visit [`{tlf}` Documentation](https://github.com/Open-Systems-Pharmacology/TLF-Library) to install its dependencies &#9888;|
 |[`{rSharp}`](https://github.com/Open-Systems-Pharmacology/rSharp)|$\geq$ 1.0|Instructions are available [here &#128214;](https://github.com/Open-Systems-Pharmacology/rSharp#installation)|
-|[`{ospsuite}`](https://github.com/Open-Systems-Pharmacology/OSPSuite-R)|$\geq$ 12.0|Download and install package bundle [here &#128230;](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases)<br>Instructions are available [here &#128214;](https://github.com/Open-Systems-Pharmacology/OSPSuite-R#installation)<br>&#9888; Visit [`{ospsuite}` Documentation](https://github.com/Open-Systems-Pharmacology/OSPSuite-R) to install its dependencies &#9888;|
+|[`{ospsuite}`](https://github.com/Open-Systems-Pharmacology/OSPSuite-R)|$\geq$ 12.1|Download and install package bundle [here &#128230;](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases)<br>Instructions are available [here &#128214;](https://github.com/Open-Systems-Pharmacology/OSPSuite-R#installation)<br>&#9888; Visit [`{ospsuite}` Documentation](https://github.com/Open-Systems-Pharmacology/OSPSuite-R) to install its dependencies &#9888;|
 
 Once the bundles downloaded, you can install the packages by using the code below:
 
@@ -107,8 +114,9 @@ A dedicated article details how to create MS-Word reports using the `{ospsuite.r
 
 Install **Pandoc** (required for generation of reports in MS-Word format) by downloading one of the following files:
 
-- [Pandoc Installer (Windows)](https://github.com/jgm/pandoc/releases/download/2.9.2.1/pandoc-2.9.2.1-windows-x86_64.msi)
-- [Pandoc Installer (Linux)](https://github.com/jgm/pandoc/releases/download/2.9.2.1/pandoc-2.9.2.1-linux-amd64.tar.gz)
+- [Pandoc Installer (Windows)](https://github.com/jgm/pandoc/releases/download/3.1.2/pandoc-3.1.2-windows-x86_64.msi)
+
+- [Pandoc Installer (Linux)](https://github.com/jgm/pandoc/releases/download/3.1.2/pandoc-3.1.2-linux-amd64.tar.gz)
 
 ### [OPTIONAL] Use SVG figures
 
