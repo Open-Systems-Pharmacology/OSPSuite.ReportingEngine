@@ -1154,7 +1154,7 @@ getResidualsPlotResultsInGroup <- function(data, metaData, outputId, structureSe
     plotConfiguration = qqPlotConfiguration
   )
   goodnessOfFitCaptions[[resultId$resQQPlot]] <- getGoodnessOfFitCaptions(structureSet, "resQQPlot", residualScale, settings)
-  
+
   return(list(
     plots = goodnessOfFitPlots,
     captions = goodnessOfFitCaptions

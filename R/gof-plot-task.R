@@ -15,8 +15,9 @@ GofPlotTask <- R6::R6Class(
       addTextChunk(
         fileName = self$fileName,
         text = paste(
-          "##", self$title, "for", simulationSetName,
-          anchor(paste0(self$reference, "-", removeForbiddenLetters(simulationSetName)))
+          "## ", self$title, " for ", simulationSetName,
+          anchor(paste0(self$reference, "-", removeForbiddenLetters(simulationSetName))),
+          sep = ""
         )
       )
       for (result in taskResults) {
@@ -76,7 +77,8 @@ GofPlotTask <- R6::R6Class(
         fileName = self$fileName,
         text = paste(
           "## Residuals across all simulations",
-          anchor(paste0(self$reference, "-residuals-across-all-simulations"))
+          anchor(paste0(self$reference, "-residuals-across-all-simulations")),
+          sep = ""
         )
       )
       for (result in taskResults) {
@@ -136,7 +138,7 @@ GofPlotTask <- R6::R6Class(
       resetReport(self$fileName)
       addTextChunk(
         fileName = self$fileName,
-        text = paste("#", self$title, anchor(self$reference))
+        text = paste("# ", self$title, anchor(self$reference), sep = "")
       )
       if (!is.null(self$outputFolder)) {
         dir.create(file.path(self$workflowFolder, self$outputFolder), showWarnings = FALSE)

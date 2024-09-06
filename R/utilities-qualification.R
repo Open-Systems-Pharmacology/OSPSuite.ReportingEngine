@@ -52,6 +52,8 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
       minimumSimulationEndTime <- NULL
       if (any(!is.na(outputsDataframeSubset$endTime))) {
         minimumSimulationEndTime <- max(outputsDataframeSubset$endTime, na.rm = TRUE)
+        # Convert minimumSimulationEndTime from base unit to simulation set default unit
+        minimumSimulationEndTime <- ospsuite::toUnit("Time", minimumSimulationEndTime, "h")
       }
 
       # simulationSetName defined as project-simulation uniquely identifies the simulation
