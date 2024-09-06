@@ -124,7 +124,14 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
     molWeight = molWeight
   )
   simulatedValues <- simulatedValues[selectedTimeValues]
-
+  logScaleIssue <- all(simulatedValues == 0, isIncluded(axesProperties$y$scale, "log")) 
+  if(logScaleIssue){
+    warning(messages$warningLogScaleIssue(outputMapping$Output), call. = FALSE)
+    # Set the first value to 1 to avoid log scale issue
+    # Since this only affect one value, no line will plotted
+    simulatedValues[1] <- 1
+  }
+  
   # Add simulated values to plot
   plotObject <- tlf::addLine(
     x = simulatedTime,

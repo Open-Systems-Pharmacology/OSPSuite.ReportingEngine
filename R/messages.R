@@ -296,6 +296,13 @@ messages <- list(
       paste0(highlight(unique(values)), collapse = "', '"), "'."
     )
   },
+  warningLogScaleIssue = function(output) {
+    paste0(
+      "Plot scale is logarithmic, however all values from simulated output '", 
+      highlight(output), "' were 0."
+    )
+  },
+  
   #----- Info messages ----
   runStarting = function(runName, subRun = NULL) {
     if (is.null(subRun)) {
