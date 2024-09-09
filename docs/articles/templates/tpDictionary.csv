@@ -1,0 +1,11 @@
+ID,type,datasetColumn,datasetUnit,reportName,pathID,comment
+sid,identifier,SID,,,,
+stud,identifier,STUD,,,,
+time,timeprofile,TIME,h,,,
+dv,timeprofile,DV,mg/ml,,,
+tad,timeprofile,TAD,h,,,
+age,covariate,AGE,year(s),Age,Organism|Age,
+wght,covariate,WGHT,kg,Body weight,Organism|Weight,
+hght,covariate,HGHT,cm,Height,Organism|Height,
+bmi,covariate,BMI,kg/m²,BMI,Organism|BMI,
+gender,covariate,SEX,,SEX,Gender,Make sure male="MALE" and female="FEMALE"

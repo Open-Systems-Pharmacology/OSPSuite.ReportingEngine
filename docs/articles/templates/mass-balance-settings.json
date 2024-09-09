@@ -1,0 +1,87 @@
+{
+    "MassBalancePlots": [
+        {
+            "Name": "Name of mass balance sub-section (optional)",
+            "Molecules": [
+                "Aciclovir"
+            ],
+            "Groupings": [
+                {
+                    "Name": "Intracellular",
+                    "Include": [
+                        "Organism|**|Intracellular|Aciclovir*"
+                    ]
+                },
+                {
+                    "Name": "Plasma & Blood Cells",
+                    "Include": [
+                        "Organism|**|Plasma|Aciclovir*",
+                        "Organism|**|BloodCells|Aciclovir*"
+                    ]
+                },
+                {
+                    "Name": "Interstitial",
+                    "Include": [
+                        "Organism|**|Interstitial|Aciclovir*"
+                    ]
+                },
+                {
+                    "Name": "Lumen",
+                    "Include": [
+                        "Organism|Lumen|*|Aciclovir*"
+                    ],
+                    "Exclude":[
+                        "Organism|Lumen|Feces|Aciclovir*"
+                    ]
+                },
+                {
+                    "Name": "Excreted",
+                    "Include": [
+                        "Organism|Kidney|Urine|Aciclovir*",
+                        "Organism|Lumen|Feces|Aciclovir*"
+                    ]
+                },
+                {
+                    "Name": "Rest of Aciclovir",
+                    "Include": [
+                        "Organism|**|Aciclovir*"
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "Aciclovir Mass Balance focus on Fat",
+            "Molecules": [
+                "Aciclovir"
+            ],
+            "Groupings": [
+                {
+                    "Name": "Fat",
+                    "Include": [
+                        "Organism|Fat|*|Aciclovir"
+                    ]
+                },
+                {
+                    "Name": "Plasma & Blood Cells",
+                    "Include": [
+                        "Organism|**|Plasma|Aciclovir",
+                        "Organism|**|BloodCells|Aciclovir"
+                    ]
+                },
+                {
+                    "Name": "Excreted",
+                    "Include": [
+                        "Organism|Kidney|Urine|Aciclovir",
+                        "Organism|Lumen|Feces|Aciclovir"
+                    ]
+                },
+                {
+                    "Name": "Rest",
+                    "Include": [
+                        "Organism|**|Aciclovir"
+                    ]
+                }
+            ]
+        }
+    ]
+}
