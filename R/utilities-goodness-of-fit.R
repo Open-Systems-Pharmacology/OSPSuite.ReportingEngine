@@ -843,8 +843,8 @@ getTimeProfilePlotResults <- function(workflowType, timeRange, simulatedData, ob
 
   outputGroups <- getOutputGroups(metaDataFrame)
   for (outputGroup in outputGroups) {
-    resultId <- paste0("timeProfile-", utils::head(outputGroup$dimension, 1))
-    resultIdLog <- paste0("timeProfileLog-", utils::head(outputGroup$dimension, 1))
+    resultId <- paste0("timeProfile-", length(goodnessOfFitPlots)+1)
+    resultIdLog <- paste0("timeProfileLog-", length(goodnessOfFitPlots)+2)
 
     selectedSimulatedData <- simulatedData[simulatedData$Group %in% outputGroup$group, ]
     selectedObservedData <- observedData[observedData$Group %in% outputGroup$group, ]
