@@ -64,7 +64,6 @@ unlink("testReport.docx", recursive = TRUE)
 unlink("testReport-word.md", recursive = TRUE)
 unlink(testReport, recursive = TRUE)
 
-
 titleFile <- getTestDataFilePath("utilities-report/titlepage.md")
 refTitleFile <- getTestDataFilePath("utilities-report/updatedtitlepage.md")
 
@@ -136,4 +135,112 @@ test_that("getIntroFromReportTitle add file content if reportTitle is a file pat
   expect_true(any(grepl(pattern = userCoverPageContent, x = readLines(testIntroFile))))
   unlink(testIntroFile, recursive = TRUE)
   unlink(userCoverPage, recursive = TRUE)
+})
+
+figureLinksReport <- getTestDataFilePath("utilities-report/figureLinks.md")
+referencePaths <- c(
+  "link/to/figure/1.png",
+  "link/to/figure(2).png",
+  "link/to table (1).pdf",
+  "link/to figure 3.png"
+)
+test_that("getFigurePathsFromReport gets the correct file paths", {
+  filePaths <- getFigurePathsFromReport(figureLinksReport)
+  expect_equal(referencePaths, referencePaths)
+  # and assess that warning will be thrown if files do not exist
+  expect_warning(ospsuite.reportingengine:::checkFileExists(filePaths))
+})
+
+
+test_that("updateFigureNumbers provide unique anchors even for static figures", {
+  testContent <- c(
+    "# Test figure update <a id=\"title-1\"></a>",
+    "",
+    "![](link/to/figure/1.png)",
+    "",
+    "Figure: this is figure 1-1",
+    "",
+    "![](link/to/figure/2.png)",
+    "",
+    "Figure 1-2: this is user defined figure 1-2 that does not include key word Figure:",
+    "",
+    "![](link/to/figure/3.png)",
+    "",
+    "Figure 1-3: this is user defined figure 1-3 whose anchor is updated"
+  )
+
+  referenceUpdateTestContent <- c(
+    "# Test figure update <a id=\"title-1\"></a>",
+    "",
+    "<a id=\"figure-1-1\"></a>",
+    "",
+    "![](link/to/figure/1.png)",
+    "",
+    "",
+    "Figure 1-1: this is figure 1-1",
+    "",
+    "<a id=\"figure-1-2\"></a>",
+    "",
+    "![](link/to/figure/2.png)",
+    "",
+    "Figure 1-2: this is user defined figure 1-2 that does not include key word Figure:",
+    "",
+    "<a id=\"figure-1-3\"></a>",
+    "",
+    "![](link/to/figure/3.png)",
+    "",
+    "Figure 1-3: this is user defined figure 1-3 whose anchor is updated"
+  )
+
+  updateTestContent <- ospsuite.reportingengine:::updateFigureNumbers(testContent)
+  expect_equal(referenceUpdateTestContent, updateTestContent)
+})
+
+test_that("updateFigureNumbers reset count when figure not found but new section begin", {
+  testContent <- c(
+    "# Section without keyword figure found <a id=\"title-1\"></a>",
+    "",
+    "![](link/to/figure/1.png)",
+    "",
+    "Figure 1 not updated but still get anchor 1-1",
+    "",
+    "# Section with keyword figure found <a id=\"title-2\"></a>",
+    "",
+    "![](link/to/figure/2.png)",
+    "",
+    "Figure: this figure will get anchor 2-1",
+    "",
+    "![](link/to/figure/3.png)",
+    "",
+    "Figure: this figure should get anchor and label 2-2"
+  )
+
+  referenceUpdateTestContent <- c(
+    "# Section without keyword figure found <a id=\"title-1\"></a>",
+    "",
+    "<a id=\"figure-1-1\"></a>",
+    "",
+    "![](link/to/figure/1.png)",
+    "",
+    "Figure 1 not updated but still get anchor 1-1",
+    "",
+    "# Section with keyword figure found <a id=\"title-2\"></a>",
+    "",
+    "<a id=\"figure-2-1\"></a>",
+    "",
+    "![](link/to/figure/2.png)",
+    "",
+    "",
+    "Figure 2-1: this figure will get anchor 2-1",
+    "",
+    "<a id=\"figure-2-2\"></a>",
+    "",
+    "![](link/to/figure/3.png)",
+    "",
+    "",
+    "Figure 2-2: this figure should get anchor and label 2-2"
+  )
+
+  updateTestContent <- ospsuite.reportingengine:::updateFigureNumbers(testContent)
+  expect_equal(referenceUpdateTestContent, updateTestContent)
 })

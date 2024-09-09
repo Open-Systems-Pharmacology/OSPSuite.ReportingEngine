@@ -108,6 +108,9 @@ QualificationWorkflow <- R6::R6Class(
         copyReport(from = initialReportPath, to = self$reportFilePath, copyWordReport = self$createWordReport, keep = TRUE)
       })
       logInfo(messages$runCompleted(getElapsedTime(t0), "Qualification Workflow"))
+      # Stop logging messages in workflowFolder after run is completed
+      # Prevents potential logging of new messages in previous workflowFolder
+      setLogFolder()
     },
 
     #' @description

@@ -4,21 +4,10 @@
 \alias{updateTableNumbers}
 \title{updateTableNumbers}
 \usage{
-updateTableNumbers(
-  fileContent,
-  pattern = "Table:",
-  replacement = "Table",
-  anchorId = "table"
-)
+updateTableNumbers(fileContent)
 }
 \arguments{
 \item{fileContent}{Content of a markdown or text file read as an array of character strings}
-
-\item{pattern}{character pattern referencing figures in first element of line}
-
-\item{replacement}{character replacing pattern in updated caption name}
-
-\item{anchorId}{character pattern referencing figures in anchors}
 }
 \value{
 Array of character strings

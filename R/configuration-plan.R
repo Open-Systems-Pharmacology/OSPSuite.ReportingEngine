@@ -67,11 +67,11 @@ ConfigurationPlan <- R6::R6Class(
 
       # Add reference as anchor tag before title and content
       sectionReference <- private$.sections$id[selectedId]
-      addTextChunk(fileName = self$getSectionMarkdown(id), text = anchor(sectionReference))
-
-      # Add title at appropriate level
-      addTextChunk(fileName = self$getSectionMarkdown(id), text = self$getSectionTitle(id))
-
+      # Issue #1084: new reference title get anchor at the end of title
+      addTextChunk(
+        fileName = self$getSectionMarkdown(id),
+        text = paste(self$getSectionTitle(id), anchor(sectionReference), sep = "")
+      )
       # Add section content
       sectionContent <- private$.sections$content[selectedId]
       if (is.na(sectionContent)) {
@@ -250,7 +250,6 @@ ConfigurationPlan <- R6::R6Class(
       reEnv$theme$fonts$legend$size <- self$plots$PlotSettings$Fonts$LegendSize %||% reEnv$theme$fonts$legend$size
       reEnv$theme$fonts$xAxis$size <- self$plots$PlotSettings$Fonts$AxisSize %||% reEnv$theme$fonts$xAxis$size
       reEnv$theme$fonts$yAxis$size <- self$plots$PlotSettings$Fonts$AxisSize %||% reEnv$theme$fonts$yAxis$size
-      # TODO resizing of the input: normal size always appears bigger in background due to annotation_custom()
       reEnv$theme$fonts$watermark$size <- self$plots$PlotSettings$Fonts$WatermarkSize %||% reEnv$theme$fonts$watermark$size
       return(invisible())
     }
@@ -262,7 +261,7 @@ ConfigurationPlan <- R6::R6Class(
         return(private$.sections)
       }
       private$.sections <- sectionsAsDataFrame(value)
-      validatehasOnlyDistinctValues(private$.sections$id, dataName = "Sections Id")
+      validateNoDuplicate(values = private$.sections$id, variableName = "Sections Id")
     },
 
     #' @field simulationMappings data.frame mapping simulations to their paths
@@ -290,7 +289,7 @@ ConfigurationPlan <- R6::R6Class(
         "project: '", private$.simulationMappings$project,
         "' - simulation: '", private$.simulationMappings$simulation, "'"
       )
-      validatehasOnlyDistinctValues(simulationMappingsId, dataName = "SimulationMappings combinations")
+      validateNoDuplicate(values = simulationMappingsId, variableName = "SimulationMappings combinations")
     },
 
     #' @field observedDataSets data.frame mapping observed datasets to their paths

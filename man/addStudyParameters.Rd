@@ -19,9 +19,9 @@ addStudyParameters
 \seealso{
 Other workflow helpers: 
 \code{\link{activateWorkflowTasks}()},
-\code{\link{addXParametersForDemogrpahyPlot}()},
+\code{\link{addXParametersForDemographyPlot}()},
 \code{\link{addXParametersForPKParametersPlot}()},
-\code{\link{addYParametersForDemogrpahyPlot}()},
+\code{\link{addYParametersForDemographyPlot}()},
 \code{\link{addYParametersForPKParametersPlot}()},
 \code{\link{checkTaskInputsExist}()},
 \code{\link{createWorkflowFromExcelInput}()},
@@ -40,17 +40,17 @@ Other workflow helpers:
 \code{\link{getTaskInputs}()},
 \code{\link{getWorkflowParameterDisplayPaths}()},
 \code{\link{getWorkflowReferencePopulationName}()},
-\code{\link{getXParametersForDemogrpahyPlot}()},
+\code{\link{getXParametersForDemographyPlot}()},
 \code{\link{getXParametersForPKParametersPlot}()},
-\code{\link{getYParametersForDemogrpahyPlot}()},
+\code{\link{getYParametersForDemographyPlot}()},
 \code{\link{getYParametersForPKParametersPlot}()},
 \code{\link{inactivateWorkflowTasks}()},
 \code{\link{setSimulationDescriptor}()},
-\code{\link{setWorkflowParameterDisplayPathsFromFile}()},
 \code{\link{setWorkflowParameterDisplayPaths}()},
-\code{\link{setXParametersForDemogrpahyPlot}()},
+\code{\link{setWorkflowParameterDisplayPathsFromFile}()},
+\code{\link{setXParametersForDemographyPlot}()},
 \code{\link{setXParametersForPKParametersPlot}()},
-\code{\link{setYParametersForDemogrpahyPlot}()},
+\code{\link{setYParametersForDemographyPlot}()},
 \code{\link{setYParametersForPKParametersPlot}()}
 }
 \concept{workflow helpers}

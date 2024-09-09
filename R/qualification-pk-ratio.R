@@ -94,7 +94,6 @@ getQualificationPKRatioGMFE <- function(pkParameterNames, data) {
 #' @return A data.frame
 #' @keywords internal
 getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData) {
-  # TODO: use tlf::getPKRatioMeasure once updated on tlf
   ratios <- data[, paste0("ratio", pkParameterName)]
   ratios <- ratios[!is.na(ratios)]
 
@@ -139,8 +138,8 @@ getQualificationPKRatioPlot <- function(pkParameterName, data, metaData, axesPro
   plotConfiguration <- getPlotConfigurationFromPlan(plotProperties, plotType = "PKRatio")
   plotConfiguration$points$color <- metaData$color
   plotConfiguration$points$shape <- metaData$shape
-  plotConfiguration$xAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||% autoAxesLimits(data[, "age"])
-  plotConfiguration$yAxis$limits <- c(axesProperties$y$min, axesProperties$y$max) %||% autoAxesLimits(c(0.5, 2, data[, paste0("ratio", pkParameterName)]))
+  plotConfiguration$xAxis$axisLimits <- c(axesProperties$x$min, axesProperties$x$max) %||% autoAxesLimits(data[, "age"])
+  plotConfiguration$yAxis$axisLimits <- c(axesProperties$y$min, axesProperties$y$max) %||% autoAxesLimits(c(0.5, 2, data[, paste0("ratio", pkParameterName)]))
 
   pkRatioPlot <- tlf::plotPKRatio(
     data = data,
@@ -187,6 +186,7 @@ getQualificationPKRatioData <- function(pkRatioPlan, configurationPlan, settings
 
   pkRatioData <- data.frame()
   caption <- NULL
+  defaultProperties <- getDefaultPropertiesFromTheme("plotPKRatio", propertyType = "points")
   for (group in pkRatioPlan$Groups) {
     for (pkRatioMapping in group$PKRatios) {
       pkRatioResults <- getPKRatioForMapping(pkRatioMapping, pkParameterNames, configurationPlan, settings)
@@ -203,10 +203,10 @@ getQualificationPKRatioData <- function(pkRatioPlan, configurationPlan, settings
     list(
       caption = caption,
       color = sapply(pkRatioPlan$Groups, FUN = function(group) {
-        group$Color %||% reEnv$theme$plotConfigurations$plotPKRatio$points$color
+        group$Color %||% defaultProperties$color
       }),
       shape = sapply(pkRatioPlan$Groups, FUN = function(group) {
-        tlfShape(group$Symbol %||% reEnv$theme$plotConfigurations$plotPKRatio$points$shape)
+        tlfShape(group$Symbol %||% defaultProperties$shape)
       })
     )
   )
@@ -233,61 +233,80 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
     configurationPlan$getSimulationPath(project = pkRatioMapping$Project, simulation = pkRatioMapping$Simulation),
     loadFromCache = TRUE
   )
-  pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
+  pkAnalyses <- loadPKAnalysesFromCSV(
     filePath = configurationPlan$getPKAnalysisResultsPath(project = pkRatioMapping$Project, simulation = pkRatioMapping$Simulation),
     simulation = simulation
   )
   observedData <- readObservedDataFile(configurationPlan$getObservedDataPath(pkRatioMapping$ObservedData))
-  selectedRow <- which(observedData[, reEnv$pkRatio$dictionary$id] %in% pkRatioMapping$ObservedDataRecordId)
-  if (!isOfLength(selectedRow, 1)) {
-    logError(messages$warningPKRatioMultipleObservedRows(
-      length(selectedRow),
-      pkRatioMapping$ObservedDataRecordId
-    ))
+  selectedRow <- which(observedData[, reEnv$pkRatioDictionary$id] %in% pkRatioMapping$ObservedDataRecordId)
+  # Warn if record ID not found and go to next PK Ratio Mapping
+  if (!checkPKRatioObservedRecord(selectedRow, pkRatioMapping$ObservedDataRecordId)) {
     return()
   }
 
   metaData <- list()
   data <- data.frame()
   for (pkParameterName in pkParameterNames) {
-    pkParameter <- pkAnalyses$pKParameterFor(quantityPath = pkRatioMapping$Output, pkParameter = pkDictionaryQualificationOSP[[pkParameterName]])
-    pkParameterObservedValue <- as.numeric(
-      observedData[selectedRow, paste(pkParameterName, reEnv$pkRatio$dictionary$parameterColumn, sep = " ")]
+    # MetaData for tables and plot labels
+    metaData[[paste0("pred", pkParameterName)]] <- list(
+      dimension = paste(reEnv$pkRatioDictionary$prefixSimulated, pkParameterName, sep = " "),
+      unit = settings$units[[pkParameterName]]
+    )
+    metaData[[paste0("obs", pkParameterName)]] <- list(
+      dimension = paste(reEnv$pkRatioDictionary$prefixObserved, pkParameterName, sep = " "),
+      unit = settings$units[[pkParameterName]]
+    )
+    metaData[[paste0("ratio", pkParameterName)]] <- list(
+      dimension = paste(reEnv$pkRatioDictionary$prefixRatio, pkParameterName, reEnv$pkRatioDictionary$suffixRatio, sep = " "),
+      unit = ""
     )
 
-    pkParameterObservedUnit <- tolower(as.character(
-      observedData[selectedRow, paste(pkParameterName, reEnv$pkRatio$dictionary$unitColumn, sep = " ")]
-    ))
+    # Get PK Parameter observed and simulated values
+    # Warn if observed data is not found and display NA in case there is a simulated value
+    parameterColumn <- paste(pkParameterName, reEnv$pkRatioDictionary$parameterColumn, sep = " ")
+    checkPKRatioObservedVariable(parameterColumn, observedData)
+    pkParameterObservedValue <- as.numeric(observedData[selectedRow, parameterColumn] %||% NA)
+
+    pkParameter <- pkAnalyses$pKParameterFor(
+      quantityPath = pkRatioMapping$Output,
+      pkParameter = pkDictionaryQualificationOSP[[pkParameterName]]
+    )
+
+    # Warn if PK parameter simulated value is not found,
+    # Still display observed data
+    if (!checkPKParameterExists(pkParameter, pkParameterName, pkRatioMapping)) {
+      data[1, paste0("pred", pkParameterName)] <- NA
+      data[1, paste0("obs", pkParameterName)] <- pkParameterObservedValue
+      data[1, paste0("ratio", pkParameterName)] <- NA
+      next
+    }
+
+    # Convert simulated to display unit
+    validateIsUnitFromDimension(settings$units[[pkParameterName]], pkParameter$dimension)
     pkParameterSimulatedValue <- ospsuite::toUnit(
       quantityOrDimension = pkParameter$dimension,
       values = pkParameter$values,
       targetUnit = settings$units[[pkParameterName]],
       molWeight = simulation$molWeightFor(pkRatioMapping$Output)
     )
-    pkParameterObservedValue <- ospsuite::toUnit(
-      quantityOrDimension = pkParameter$dimension,
-      values = pkParameterObservedValue,
-      targetUnit = settings$units[[pkParameterName]],
-      sourceUnit = pkParameterObservedUnit,
-      molWeight = simulation$molWeightFor(pkRatioMapping$Output)
-    )
-    # Values
+
+    # Warn if unit is not found and assumes unit is display unit
+    unitColumn <- paste(pkParameterName, reEnv$pkRatioDictionary$unitColumn, sep = " ")
+    if (checkPKRatioObservedVariable(unitColumn, observedData)) {
+      pkParameterObservedUnit <- observedData[selectedRow, unitColumn]
+      pkParameterObservedValue <- ospsuite::toUnit(
+        quantityOrDimension = pkParameter$dimension,
+        values = pkParameterObservedValue,
+        targetUnit = settings$units[[pkParameterName]],
+        sourceUnit = pkParameterObservedUnit,
+        molWeight = simulation$molWeightFor(pkRatioMapping$Output)
+      )
+    }
+
+    # Values and ratio
     data[1, paste0("pred", pkParameterName)] <- pkParameterSimulatedValue
     data[1, paste0("obs", pkParameterName)] <- pkParameterObservedValue
     data[1, paste0("ratio", pkParameterName)] <- pkParameterSimulatedValue / pkParameterObservedValue
-    # MetaData for tables and plot labels
-    metaData[[paste0("pred", pkParameterName)]] <- list(
-      dimension = paste(reEnv$pkRatio$dictionary$prefixSimulated, pkParameterName, sep = " "),
-      unit = settings$units[[pkParameterName]]
-    )
-    metaData[[paste0("obs", pkParameterName)]] <- list(
-      dimension = paste(reEnv$pkRatio$dictionary$prefixObserved, pkParameterName, sep = " "),
-      unit = settings$units[[pkParameterName]]
-    )
-    metaData[[paste0("ratio", pkParameterName)]] <- list(
-      dimension = paste(reEnv$pkRatio$dictionary$prefixRatio, pkParameterName, reEnv$pkRatio$dictionary$suffixRatio, sep = " "),
-      unit = ""
-    )
   }
 
   # Complete table with study, age and weight
@@ -295,7 +314,7 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
   weight <- ospsuite::getParameter(ospsuite::StandardPath$Weight, simulation)
   # Concatenate all the results
   data <- cbind.data.frame(
-    study = observedData[selectedRow, reEnv$pkRatio$dictionary$study],
+    study = observedData[selectedRow, reEnv$pkRatioDictionary$study],
     age = age$value,
     weight = weight$value,
     data

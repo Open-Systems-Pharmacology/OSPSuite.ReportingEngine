@@ -93,8 +93,6 @@ test_that("Duplicated Ids for ObservedDataSets is correctly handled", {
   ))
 })
 
-unlink(workflowFolder, recursive = TRUE)
-
 # Function is not exported
 getPlotConfigurationFromPlan <- ospsuite.reportingengine:::getPlotConfigurationFromPlan
 
@@ -106,3 +104,5 @@ test_that("PlotConfiguration default for observed vs predicted is quadratic", {
     defaultObsVsPredConfiguration$export$height
   )
 })
+
+unlink(workflowFolder, recursive = TRUE)

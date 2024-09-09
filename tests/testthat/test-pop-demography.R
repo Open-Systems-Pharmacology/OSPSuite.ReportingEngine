@@ -38,6 +38,27 @@ workflowRatio <- PopulationWorkflow$new(
   workflowFolder = workflowFolderRatio
 )
 
+test_that("Reference population is well defined", {
+  expect_equal("Adults", getWorkflowReferencePopulationName(workflowParallel))
+  expect_equal("Adults", getWorkflowReferencePopulationName(workflowRatio))
+  expect_equal("Adults", getWorkflowReferencePopulationName(workflowPediatric))
+})
+
+test_that("Default Demography parameters are well defined", {
+  expect_equal(
+    getDefaultDemographyXParameters(PopulationWorkflowTypes$parallelComparison),
+    getXParametersForDemographyPlot(workflowParallel)
+  )
+  expect_equal(
+    getDefaultDemographyXParameters(PopulationWorkflowTypes$ratioComparison),
+    getXParametersForDemographyPlot(workflowRatio)
+  )
+  expect_equal(
+    getDefaultDemographyXParameters(PopulationWorkflowTypes$pediatric),
+    getXParametersForDemographyPlot(workflowPediatric)
+  )
+})
+
 workflowPediatric$inactivateTasks()
 workflowParallel$inactivateTasks()
 workflowRatio$inactivateTasks()
@@ -66,7 +87,7 @@ test_that("Workflow generates appropriate number of files", {
 demographyPediatricPath <- file.path(workflowPediatric$workflowFolder, "Demography")
 test_that("Demography directory from Pediatric workflow includes appropriate number of files", {
   # Figures
-  expect_length(list.files(demographyPediatricPath, pattern = ".png"), 18)
+  expect_length(list.files(demographyPediatricPath, pattern = ".png"), 9)
   # Exported results
   expect_length(list.files(demographyPediatricPath, pattern = ".csv"), 0)
 })

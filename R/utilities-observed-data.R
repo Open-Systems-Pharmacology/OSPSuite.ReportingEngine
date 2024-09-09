@@ -66,6 +66,7 @@ readObservedDataFile <- function(fileName,
                                  header = TRUE,
                                  encoding = "UTF-8") {
   validateFileExists(fileName)
+  validateIsFileUTF8(fileName)
   # Get function with the most appropriate reading defaults
   readObservedData <- getReaderFunction(fileName)
   observedData <- readObservedData(
@@ -175,12 +176,12 @@ getSelectedRows <- function(data, dataSelection) {
   }
   if (isOfType(dataSelection, "expression")) {
     selectedData <- data %>%
-      dplyr::mutate(rows = 1:n()) %>%
+      dplyr::mutate(rows = seq_len(n())) %>%
       dplyr::filter(eval(dataSelection))
     return(selectedData$rows)
   }
   selectedData <- data %>%
-    dplyr::mutate(rows = 1:n()) %>%
+    dplyr::mutate(rows = seq_len(n())) %>%
     dplyr::filter(eval(parse(text = dataSelection)))
   return(selectedData$rows)
 }
@@ -219,12 +220,25 @@ dictionaryParameters <- list(
   dvID = "dv",
   lloqID = "lloq",
   timeUnitID = "time_unit",
-  dvUnitID = "dv_unit"
+  dvUnitID = "dv_unit",
+  pathID = "pathID"
 )
 
-getDictionaryVariable <- function(dictionary, variableID) {
-  variableMapping <- dictionary[, dictionaryParameters$ID] %in% variableID
-  variableName <- as.character(dictionary[variableMapping, dictionaryParameters$datasetColumn])
+#' @title getDictionaryVariable
+#' @description
+#' Get the variable name from dictionary
+#' @param dictionary A data.frame from dictionary
+#' @param variableID An identifier
+#' @param idColumn The column name used for identification
+#' @param datasetColumn The column name used mapping the id to variable
+#' @return A variable name from dictionary
+#' @keywords internal
+getDictionaryVariable <- function(dictionary,
+                                  variableID,
+                                  idColumn = dictionaryParameters$ID,
+                                  datasetColumn = dictionaryParameters$datasetColumn) {
+  variableMapping <- head(which(dictionary[, idColumn] %in% variableID), 1)
+  variableName <- as.character(dictionary[variableMapping, datasetColumn])
   if (isEmpty(variableName)) {
     return()
   }
@@ -355,7 +369,7 @@ loadObservedDataFromSimulationSet <- function(simulationSet) {
 #' @param dataMapping A list mapping the variable of data
 #' @param molWeight Molar weight for unit conversion of dependent variable
 #' @param structureSet A `SimulationStructure` object
-#' @return list of data and lloq data.frames
+#' @return list of data and its metaData
 #' @keywords internal
 getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, structureSet) {
   # If no observed data nor data selected, return empty dataset
@@ -368,18 +382,20 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, stru
     return()
   }
   metaData <- list(
-    "Time" = list(
+    Time = list(
       dimension = "Time",
       unit = structureSet$simulationSet$timeUnit
     ),
-    "Concentration" = list(dimension = NA, unit = output$displayUnit %||% NA),
-    "Path" = output$path,
+    Concentration = list(dimension = NA, unit = output$displayUnit %||% NA),
+    Path = output$path,
+    displayName = output$displayName,
     legend = captions$plotGoF$observedLegend(
       simulationSetName = structureSet$simulationSet$simulationSetName,
       descriptor = structureSet$simulationSetDescriptor,
       pathName = output$dataDisplayName
     ),
     residualsLegend = NA,
+    residualScale = output$residualScale,
     group = output$groupID,
     color = output$color,
     fill = output$fill
@@ -410,10 +426,15 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, stru
     ),
     "Concentration" = outputConcentration,
     "Legend" = metaData$legend,
-    "Path" = output$path
+    "Path" = output$path,
+    "Group" = output$groupID
   )
+  # lloq is as.numeric(NA) if not used to prevent issues
+  # when building final data.frame that can have outputs with and without lloqs
+  # numeric class is enforced to prevent ggplot errors when using continuous scale
   if (isEmpty(dataMapping$lloq)) {
-    return(list(data = outputData, lloq = NULL, metaData = metaData))
+    outputData$lloq <- as.numeric(NA)
+    return(list(data = outputData, metaData = metaData))
   }
 
   lloqConcentration <- selectedData[, dataMapping$lloq]
@@ -431,23 +452,81 @@ getObservedDataFromOutput <- function(output, data, dataMapping, molWeight, stru
       )
     }
   }
-  lloqOutput <- data.frame(
-    "Time" = ospsuite::toUnit(
-      "Time",
-      selectedData[, dataMapping$time],
-      structureSet$simulationSet$timeUnit
-    ),
-    "Concentration" = lloqConcentration,
-    "Legend" = captions$plotGoF$lloqLegend(
-      simulationSetName = structureSet$simulationSet$simulationSetName,
-      descriptor = structureSet$simulationSetDescriptor,
-      pathName = output$dataDisplayName
-    ),
-    "Path" = output$path
-  )
-  return(list(data = outputData, lloq = lloqOutput, metaData = metaData))
+  outputData$lloq <- checkLLOQValues(lloqConcentration, structureSet)
+  return(list(data = outputData, metaData = metaData))
 }
 
+#' @title getObservedDemographyFromSimulationSet
+#' @param structureSet A `SimulationStructure` object
+#' @param demographyPaths Names of demography variables to display
+#' @param metaData Meta data of demography variables to display
+#' @return A data.frame
+#' @keywords internal
+getObservedDemographyFromSimulationSet <- function(structureSet, demographyPaths, metaData) {
+  simulationSet <- structureSet$simulationSet
+  populationSize <- 0
+  if (!is.null(simulationSet$dataSource)) {
+    data <- readObservedDataFile(simulationSet$dataSource$dataFile)
+    selectedData <- getSelectedData(data, simulationSet$dataSelection)
+    populationSize <- nrow(selectedData)
+  }
+  # Initialize data.frame of observed demography data
+  dataColumnNames <- c("simulationSetName", "dataSource", as.character(demographyPaths))
+  demographyObsData <- as.data.frame(
+    sapply(
+      dataColumnNames,
+      function(x) {
+        rep(NA, populationSize)
+      },
+      simplify = FALSE
+    ),
+    check.names = FALSE
+  )
+  if (populationSize == 0) {
+    return(demographyObsData)
+  }
+  demographyObsData$simulationSetName <- simulationSet$simulationSetName
+  demographyObsData$dataSource <- getDataSourceCaption(structureSet)
+  # If there is data to display, include data and update to their display unit if possible
+  dictionary <- readObservedDataFile(simulationSet$dataSource$metaDataFile)
+  for (demographyPath in demographyPaths) {
+    datasetColumn <- getDictionaryVariable(
+      dictionary = dictionary,
+      variableID = demographyPath,
+      idColumn = dictionaryParameters$pathID
+    )
+    # If not in dictionary paths, check next covariates
+    if (isEmpty(datasetColumn)) {
+      next
+    }
+    validateIsIncludedInDataset(
+      columnNames = datasetColumn,
+      dataset = selectedData,
+      datasetName = paste0("Observed dataset '", simulationSet$dataSource$dataFile, "'")
+    )
+    demographyObsData[[demographyPath]] <- selectedData[, datasetColumn]
+    # If character, does not require unit conversion
+    if (isIncluded(metaData[[demographyPath]]$class, "character")) {
+      next
+    }
+    sourceUnit <- getDictionaryVariable(
+      dictionary = dictionary,
+      variableID = demographyPath,
+      idColumn = dictionaryParameters$pathID,
+      datasetColumn = dictionaryParameters$datasetUnit
+    )
+    targetDimension <- ospsuite::getDimensionForUnit(metaData[[demographyPath]]$unit)
+    ospsuite::validateUnit(sourceUnit, targetDimension)
+
+    demographyObsData[[demographyPath]] <- ospsuite::toUnit(
+      quantityOrDimension = demographyPath,
+      values = selectedData[, datasetColumn],
+      targetUnit = metaData[[demographyPath]]$unit,
+      sourceUnit = sourceUnit
+    )
+  }
+  return(demographyObsData)
+}
 
 #' @title getObservedDataFromConfigurationPlan
 #' @description

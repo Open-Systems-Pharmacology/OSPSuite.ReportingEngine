@@ -12,4 +12,3 @@ A `Theme` object from `tlf` package
 \description{
 Get default plot settings for RE package
 }
-\keyword{internal}

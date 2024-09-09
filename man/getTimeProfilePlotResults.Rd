@@ -9,7 +9,6 @@ getTimeProfilePlotResults(
   timeRange,
   simulatedData,
   observedData = NULL,
-  lloqData = NULL,
   metaDataFrame,
   timeProfileMapping,
   structureSet,
@@ -19,13 +18,12 @@ getTimeProfilePlotResults(
 \arguments{
 \item{workflowType}{`"mean"` or `"population"` workflow}
 
-\item{timeRange}{array of time values defining range of simulated data}
+\item{timeRange}{array of time values defining range of simulated data.
+Note that `timeRange` accounts for user defined `timeOffset`}
 
 \item{simulatedData}{data.frame of simulated data}
 
 \item{observedData}{data.frame of observed data}
-
-\item{lloqData}{data.frame of observed lloq data}
 
 \item{metaDataFrame}{metaData represented as a data.frame}
 

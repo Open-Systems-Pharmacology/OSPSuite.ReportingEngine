@@ -2,6 +2,7 @@
 title: "Sensitivity Analysis"
 resource_files:
   - figures
+  - templates
 output: 
   rmarkdown::html_vignette:
    number_sections: true
@@ -43,7 +44,7 @@ For population sensitivity analyses, the user needs to similarly specify paths t
 ```{r echo=T, results='hide'}
 populationFile1 <- system.file("extdata", "pop1.csv",
   package = "ospsuite.reportingengine"
-) 
+)
 
 populationFile2 <- system.file("extdata", "pop2.csv",
   package = "ospsuite.reportingengine"
@@ -186,7 +187,7 @@ Unlike the mean model sensitivity analysis, a population sensitivity analysis de
 In this example, the sensitivity analysis will be conducted for two populations in parallel.  In the first step, the model outputs to be analyzed are defined:
 
 ```{r echo=T, results='hide'} 
-populationOutputs <- c(output1,output2)
+populationOutputs <- c(output1, output2)
 ```
 
 Next, `PopulationSimulationSet` objects are defined for each of the two populations:
@@ -210,9 +211,11 @@ ps2 <- PopulationSimulationSet$new(
 With this setup, the sensitivity of PK parameters of `output1` and `output2` will be analyzed for the two populations.  The two `PopulationSimulationSet` objects are then used to create a `PopulationWorkflow`, the results of which are to be placed in the root directory `./popSensitivityExample`:
 
 ```{r echo=T, results='hide'}
-pwf <- PopulationWorkflow$new(simulationSets = list(ps1,ps2),
-                              workflowFolder = "popSensitivityExample",
-                              workflowType = PopulationWorkflowTypes$parallelComparison)
+pwf <- PopulationWorkflow$new(
+  simulationSets = list(ps1, ps2),
+  workflowFolder = "popSensitivityExample",
+  workflowType = PopulationWorkflowTypes$parallelComparison
+)
 ```
 
 Next, the required tasks of the workflow are activated. The sensitivity analysis and sensitivity plot tasks are activated using the commands
@@ -266,10 +269,12 @@ pwf$calculateSensitivity$settings$quantileVec <- c(0.25, 0.5, 0.75)
 
 As with the mean model sensitivity plot, the population sensitivity plot is configured using an instance of a `SensitivityPlotSettings` object:
 ```{r echo=T, results='hide'}
-pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(totalSensitivityThreshold = 0.9,
-                                                            maximalParametersPerSensitivityPlot = 12,
-                                                            xAxisFontSize = 10,
-                                                            yAxisFontSize = 10)
+pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(
+  totalSensitivityThreshold = 0.9,
+  maximalParametersPerSensitivityPlot = 12,
+  xAxisFontSize = 10,
+  yAxisFontSize = 10
+)
 ```
 
 The population sensitivity workflow is run using the command:
@@ -287,7 +292,7 @@ dir.create("figures", showWarnings = FALSE)
 file.copy(
   from = system.file("extdata", "sa-file-outputs.png", package = "ospsuite.reportingengine"),
   to = "figures"
-) 
+)
 knitr::include_graphics("figures/sa-file-outputs.png")
 ```
 
@@ -297,7 +302,7 @@ Two sets of files make up the population sensitivity analysis results for this e
 file.copy(
   from = system.file("extdata", "sa-file-index.png", package = "ospsuite.reportingengine"),
   to = "figures"
-) 
+)
 knitr::include_graphics("figures/sa-file-index.png")
 ```
 

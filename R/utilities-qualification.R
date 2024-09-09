@@ -7,27 +7,25 @@
 #' @family qualification workflow
 loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
   setLogFolder(workflowFolder)
-  validateIsFileExtension(configurationPlanFile, "json")
-  validateFileExists(configurationPlanFile)
-  configurationPlan <- loadConfigurationPlan(
-    workflowFolder = workflowFolder,
-    configurationPlanFile = configurationPlanFile
-  )
+  logCatch({
+    validateIsFileExtension(configurationPlanFile, "json")
+    validateFileExists(configurationPlanFile)
+    configurationPlan <- loadConfigurationPlan(
+      workflowFolder = workflowFolder,
+      configurationPlanFile = configurationPlanFile
+    )
+  })
 
   outputsDataframe <- getOutputsFromConfigurationPlan(configurationPlan = configurationPlan)
 
-  # TODO outputs and pk parameters may need to be defined
-  # Either as part of simulationSets or as a settings for the task
-  # Currently, no output is saved as simulationResults
   simulationSets <- list()
-
   # Display a nice progress bar
   t0 <- tic()
   logInfo(paste0("Loading Simulations onto ", highlight("Qualification Workflow")))
   loadingProgress <- txtProgressBar(max = nrow(configurationPlan$simulationMappings), style = 3)
 
   logCatch({
-    for (simulationIndex in 1:nrow(configurationPlan$simulationMappings)) {
+    for (simulationIndex in seq_len(nrow(configurationPlan$simulationMappings))) {
       project <- configurationPlan$simulationMappings$project[simulationIndex]
       simulationName <- configurationPlan$simulationMappings$simulation[simulationIndex]
       simulationSetName <- paste(project, configurationPlan$simulationMappings$simulationFile[simulationIndex], sep = "-")
@@ -54,6 +52,8 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
       minimumSimulationEndTime <- NULL
       if (any(!is.na(outputsDataframeSubset$endTime))) {
         minimumSimulationEndTime <- max(outputsDataframeSubset$endTime, na.rm = TRUE)
+        # Convert minimumSimulationEndTime from base unit to simulation set default unit
+        minimumSimulationEndTime <- ospsuite::toUnit("Time", minimumSimulationEndTime, "h")
       }
 
       # simulationSetName defined as project-simulation uniquely identifies the simulation
@@ -65,6 +65,8 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
           outputs = c(outputs),
           minimumSimulationEndTime = minimumSimulationEndTime
         ))
+        # Update progress bar after each simulation is loaded
+        setTxtProgressBar(loadingProgress, value = simulationIndex)
         next
       }
 
@@ -99,37 +101,39 @@ loadQualificationWorkflow <- function(workflowFolder, configurationPlanFile) {
 #' @family qualification workflow
 loadConfigurationPlan <- function(configurationPlanFile, workflowFolder) {
   setLogFolder(workflowFolder)
-  jsonConfigurationPlan <- fromJSON(configurationPlanFile, simplifyDataFrame = FALSE)
+  logCatch({
+    jsonConfigurationPlan <- fromJSON(configurationPlanFile, simplifyDataFrame = FALSE)
 
-  # Check if mandatory variables were input
-  # Matlab version had as well ObservedDataSets and Inputs, but they don't need to be mandatory in R
-  validateIsIncluded(c("SimulationMappings", "Plots", "Sections"), names(jsonConfigurationPlan))
+    # Check if mandatory variables were input
+    # Matlab version had as well ObservedDataSets and Inputs, but they don't need to be mandatory in R
+    validateIsIncluded(c("SimulationMappings", "Plots", "Sections"), names(jsonConfigurationPlan))
 
-  # Create `ConfigurationPlan` object
-  configurationPlan <- ConfigurationPlan$new()
-  # The workflow and reference folders are required to know from where accessing the files
-  configurationPlan$workflowFolder <- workflowFolder
-  configurationPlan$referenceFolder <- normalizePath(path = dirname(configurationPlanFile), winslash = .Platform$file.sep)
+    # Create `ConfigurationPlan` object
+    configurationPlan <- ConfigurationPlan$new()
+    # The workflow and reference folders are required to know from where accessing the files
+    configurationPlan$workflowFolder <- workflowFolder
+    configurationPlan$referenceFolder <- normalizePath(path = dirname(configurationPlanFile), winslash = .Platform$file.sep)
 
-  # Assiociate fields defined in json to ConfigurationPlan object using expression
-  jsonFieldNames <- names(jsonConfigurationPlan)
-  # jsonFieldNames is almost camel case, only first letter needs to be switched to lower case
-  fieldNames <- paste0(tolower(substring(jsonFieldNames, 1, 1)), substring(jsonFieldNames, 2))
-  eval(parse(text = paste0("configurationPlan$", fieldNames, "<- jsonConfigurationPlan$", jsonFieldNames)))
-  
-  # Create unique plot number for each plot named "PlotNumber"
-  # within a specific plot type (eg. PKRatio) defined in the configuration plan
-  plotFields <- setdiff(names(configurationPlan$plots), c("PlotSettings", "AxesSettings"))
-  for(plotField in plotFields){
-    for(plotIndex in seq_along(configurationPlan$plots[[plotField]])){
-      # In json, numbering of fields in {} starts at 0
-      # Actual plot index should start at 1
-      configurationPlan$plots[[plotField]][[plotIndex]]$PlotNumber <- paste(
-        plotIndex - 1, "(json numbering starting at 0); ", 
-        plotIndex, "(actual plot index)"
+    # Assiociate fields defined in json to ConfigurationPlan object using expression
+    jsonFieldNames <- names(jsonConfigurationPlan)
+    # jsonFieldNames is almost camel case, only first letter needs to be switched to lower case
+    fieldNames <- paste0(tolower(substring(jsonFieldNames, 1, 1)), substring(jsonFieldNames, 2))
+    eval(parse(text = paste0("configurationPlan$", fieldNames, "<- jsonConfigurationPlan$", jsonFieldNames)))
+
+    # Create unique plot number for each plot named "PlotNumber"
+    # within a specific plot type (eg. PKRatio) defined in the configuration plan
+    plotFields <- setdiff(names(configurationPlan$plots), c("PlotSettings", "AxesSettings"))
+    for (plotField in plotFields) {
+      for (plotIndex in seq_along(configurationPlan$plots[[plotField]])) {
+        # In json, numbering of fields in {} starts at 0
+        # Actual plot index should start at 1
+        configurationPlan$plots[[plotField]][[plotIndex]]$PlotNumber <- paste(
+          plotIndex - 1, "(json numbering starting at 0); ",
+          plotIndex, "(actual plot index)"
         )
+      }
     }
-  }
+  })
   return(configurationPlan)
 }
 
@@ -181,7 +185,7 @@ sectionsAsDataFrame <- function(sectionsIn, sectionsOut = data.frame(), parentFo
       stringsAsFactors = FALSE
     )
     sectionsOut <- rbind.data.frame(sectionsOut, sectionOut, stringsAsFactors = FALSE)
-    validatehasOnlyDistinctValues(sectionsOut$id, dataName = "'Id' and 'Reference' of 'Sections'")
+    validateNoDuplicate(values = sectionsOut$id, variableName = "'Id' and 'Reference' of 'Sections'")
 
     # If subsections are included and not empty
     # Update sectionsOut data.frame
@@ -282,12 +286,6 @@ getOutputsFromGOFMergedPlotsConfiguration <- function(plot) {
   return(unique(paths))
 }
 
-
-# Vector of allowable plot types in configuration plan.
-# TODO deprecate vector using enum ConfigurationPlots
-QualificationPlotTypes <- c("GOFMergedPlots", "ComparisonTimeProfilePlots", "DDIRatioPlots", "TimeProfile")
-
-
 #' @title extractNameAndUnit
 #' @description Returns a named list with two entries (name, unit) corresponding to the name and unit
 #' extracted out of the `text` provided as parameter
@@ -310,8 +308,8 @@ QualificationPlotTypes <- c("GOFMergedPlots", "ComparisonTimeProfilePlots", "DDI
 #' }
 extractNameAndUnit <- function(text) {
   validateIsString(text)
-  dimensionTask <- rClr::clrCallStatic("OSPSuite.R.Api", "GetDimensionTask")
-  res <- rClr::clrCall(dimensionTask, "ExtractNameAndUnit", enc2utf8(text))
+  dimensionTask <- rSharp::callStatic("OSPSuite.R.Api", "GetDimensionTask")
+  res <- dimensionTask$call("ExtractNameAndUnit", enc2utf8(text))
   return(list(name = res[1], unit = res[2]))
 }
 

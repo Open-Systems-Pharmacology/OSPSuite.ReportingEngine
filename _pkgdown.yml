@@ -4,7 +4,7 @@ template:
   bootstrap: 5
 
 development:
-  mode: devel
+  mode: !expr Sys.getenv('PKGDOWN_MODE')
 
 reference:
 - title: "Working with Workflow objects"
@@ -48,6 +48,8 @@ reference:
   - matches("setWatermarkConfiguration")
   - starts_with("getDefault")
   - matches("setPlotFormat")
+  - ends_with("RESettings")
+  - matches("resetRESettingsToDefault")
 - title: "Simulated and observed data helpers"
   desc: "Helper functions for working with simulated and observed data."
   contents:
@@ -73,6 +75,7 @@ reference:
   - matches("getMolWeightForCompound")
   - matches("plotAbsorptionTimeProfile")
   - matches("plotDemographyHistogram")
+  - matches("plotDemographyRange")
   - matches("plotMassBalanceCumulativeTimeProfile")
   - matches("plotMassBalancePieChart")
   - matches("plotMassBalanceTimeProfile")
@@ -96,13 +99,7 @@ reference:
   contents:
   - matches("analyzeCoreSensitivity")
   - matches("analyzeSensitivity")
-  - matches("checkLibraryLoaded")
-  - matches("checkPopulationLoaded")
-  - matches("checkSimulationLoaded")
-  - matches("defaultQuantileVec")
-  - matches("defaultSensitivityAnalysisNumberOfCores")
-  - matches("defaultSimulationNumberOfCores")
-  - matches("defaultVariationRange")
+  - starts_with("isLoaded")
   - matches("generateResultFileNames")
   - matches("simulateModelOnCore")
   - matches("updateSimulationIndividualParameters")

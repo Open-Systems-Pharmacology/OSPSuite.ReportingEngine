@@ -12,12 +12,14 @@ tlf::setDefaultLegendPosition(reDefaultLegendPosition)
 #' @export
 AggregationConfiguration <- list(
   functions = list(
-    middle = median,
+    middle = function(x) {
+      median(x, na.rm = TRUE)
+    },
     ymin = function(x) {
-      as.numeric(quantile(x, probs = 0.05))
+      as.numeric(quantile(x, probs = 0.05, na.rm = TRUE))
     },
     ymax = function(x) {
-      as.numeric(quantile(x, probs = 0.95))
+      as.numeric(quantile(x, probs = 0.95, na.rm = TRUE))
     }
   ),
   names = list(
@@ -43,6 +45,13 @@ displayDimension <- function(dimension) {
 #' @return A list of units for goodness of fit results
 #' @keywords internal
 autoAxesLimits <- function(x, scale = tlf::Scaling$lin) {
+  # Filter negative data if scale is log using using which in case of NAs
+  if (isIncluded(scale, "log")) {
+    x <- x[which(x > 0)]
+    if (isEmpty(x)) {
+      return()
+    }
+  }
   minX <- min(x, na.rm = TRUE)
   maxX <- max(x, na.rm = TRUE)
   minX[minX < 0] <- (1 + reEnv$autoAxisLimitMargin) * minX
@@ -92,7 +101,7 @@ getTimeTicksFromUnit <- function(unit, timeValues = NULL, maxTicks = 10) {
   }
   minTime <- floor(min(0, as.numeric(timeValues), na.rm = TRUE))
   maxTime <- ceiling(max(as.numeric(timeValues), na.rm = TRUE))
-  
+
   # For undefined ticking of units, assume major tick every 10 units (eg. 10 seconds)
   majorTickStep <- 10
   # For undefined ticking of units, assume minor tick every 1 unit (eg. 1 seconds)
@@ -114,14 +123,18 @@ getTimeTicksFromUnit <- function(unit, timeValues = NULL, maxTicks = 10) {
     # Major ticks every 6 months
     majorTickStep <- 6
   }
-  
+
   # Increase tick step to get ticks below max number of ticks
   # To make it prettier, factor will be an integer
-  numberOfTicks <- floor((maxTime-minTime)/majorTickStep)+1
-  tickScaleFactor <- ceiling(numberOfTicks/maxTicks)
+  numberOfTicks <- floor((maxTime - minTime) / majorTickStep) + 1
+  tickScaleFactor <- ceiling(numberOfTicks / maxTicks)
 
-  minorTicks <- seq(minTime, maxTime, tickScaleFactor*minorTickStep)
-  majorTicks <- seq(minTime, maxTime, tickScaleFactor*majorTickStep)
+  minorTicks <- seq(minTime, maxTime, tickScaleFactor * minorTickStep)
+  majorTicks <- seq(minTime, maxTime, tickScaleFactor * majorTickStep)
+  # In case there are not enough major ticks due to short simulation time
+  if (length(majorTicks) <= 3) {
+    majorTicks <- minorTicks
+  }
   ticklabels <- as.character(minorTicks)
   ticklabels[!(minorTicks %in% majorTicks)] <- ""
 
@@ -183,11 +196,11 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
   validateIsIncluded(values = legendPosition, parentValues = tlf::LegendPositions, nullAllowed = TRUE)
   plotConfiguration$legend$position <- legendPosition %||% reEnv$theme$background$legendPosition
 
-  # Quadratic dimensions for ObsVsPred plot type
+  # Quadratic dimensions for ObsVsPred, DDIRatio plot type
   # Note that other plots be could included in default quadratic plots
   defaultWidth <- reEnv$defaultPlotFormat$width
   defaultHeight <- reEnv$defaultPlotFormat$height
-  if (isIncluded(plotType, "ObsVsPred")) {
+  if (isIncluded(plotType, c("ObsVsPred", "DDIRatio"))) {
     defaultWidth <- mean(c(defaultWidth, defaultHeight))
     defaultHeight <- defaultWidth
   }
@@ -255,7 +268,6 @@ addLineBreakToCaption <- function(captions, maxLines = reEnv$maxLinesPerLegendCa
       next
     }
     # dashes and spaces provides preferential sites for line breaks
-    # TODO: improve the preferental site using input arguments
     dashSplits <- as.numeric(gregexpr(pattern = "-", captions[captionIndex])[[1]])
     spaceSplits <- as.numeric(gregexpr(pattern = " ", captions[captionIndex])[[1]])
     possibleSplits <- sort(c(dashSplits[dashSplits > 0], spaceSplits[spaceSplits > 0]))
@@ -419,8 +431,8 @@ updatePlotDimensions <- function(plotObject) {
   # - add nothing if legend within
   if (grepl(pattern = "inside", x = plotObject$plotConfiguration$legend$position)) {
     # Add small margin of 20 pts on right side of plot to prevent axis ticklabel being cut-off
-    plotObject <- plotObject + 
-      ggplot2::theme(plot.margin = ggplot2::margin(r = 20))
+    plotObject <- plotObject +
+      ggplot2::theme(plot.margin = ggplot2::margin(r = 20, b = 10, l = 10))
     return(plotObject)
   }
   # grid package is already required and installed by ggplot2
@@ -441,10 +453,13 @@ updatePlotDimensions <- function(plotObject) {
     plotObject$plotConfiguration$export$height <- sizeRatio * plotObject$plotConfiguration$export$height
     # Add legend height to final plot height to prevent shrinkage of plot area
     plotObject$plotConfiguration$export$height <- plotObject$plotConfiguration$export$height + legendHeight
-    plotObject <- updateWatermarkDimensions(plotObject)
+    # Caution: pieChart currently do not use watermark because of ggplot2::coord_polar
+    if (!isOfType(plotObject$plotConfiguration, "PieChartPlotConfiguration")) {
+      plotObject <- updateWatermarkDimensions(plotObject)
+    }
     # Add small margin of 20 pts on right side of plot to prevent axis ticklabel being cut-off
-    plotObject <- plotObject + 
-      ggplot2::theme(plot.margin = ggplot2::margin(r = 20))
+    plotObject <- plotObject +
+      ggplot2::theme(plot.margin = ggplot2::margin(r = 20, b = 10, l = 10))
     return(plotObject)
   }
   # Prevent truncated legend, if legend is too long
@@ -456,7 +471,10 @@ updatePlotDimensions <- function(plotObject) {
   plotObject$plotConfiguration$export$width <- sizeRatio * plotObject$plotConfiguration$export$width
   # Add legend width to final plot width to prevent shrinkage of plot area
   plotObject$plotConfiguration$export$width <- plotObject$plotConfiguration$export$width + legendWidth
-  plotObject <- updateWatermarkDimensions(plotObject)
+  # Caution: pieChart currently do not use watermark because of ggplot2::coord_polar
+  if (!isOfType(plotObject$plotConfiguration, "PieChartPlotConfiguration")) {
+    plotObject <- updateWatermarkDimensions(plotObject)
+  }
   return(plotObject)
 }
 
@@ -503,7 +521,7 @@ getTimeProfilePlotConfiguration <- function(workflowType,
     return(plotConfiguration)
   }
   dataMapping <- switch(workflowType,
-    "mean" = tlf::XYGDataMapping$new(
+    "mean" = tlf::TimeProfileDataMapping$new(
       x = dataMapping$x,
       y = dataMapping$y,
       color = dataMapping$group
@@ -582,6 +600,13 @@ getGOFPlotConfiguration <- function(plotType,
       metaData = metaData,
       dataMapping = dataMapping
     ),
+    "obsVsPredLog" = tlf::ObsVsPredPlotConfiguration$new(
+      data = data,
+      metaData = metaData,
+      dataMapping = dataMapping,
+      xScale = tlf::Scaling$log,
+      yScale = tlf::Scaling$log
+    ),
     "resVsPred" = tlf::ResVsPredPlotConfiguration$new(
       data = data,
       metaData = metaData,
@@ -603,32 +628,59 @@ getGOFPlotConfiguration <- function(plotType,
       dataMapping = dataMapping
     )
   )
+
   # Set quadratic plot for obs vs pred
-  if (plotType %in% "obsVsPred") {
+  if (isIncluded(plotType, c("obsVsPred", "obsVsPredLog"))) {
     newDimension <- mean(c(
       plotConfiguration$export$width,
       plotConfiguration$export$height
     ))
     plotConfiguration$export$width <- newDimension
     plotConfiguration$export$height <- newDimension
+
+    # Use auto axis limits to get prettier obs vs pred plot
+    axisLimits <- autoAxesLimits(
+      c(data$Simulated, data$Observed, data$lloq),
+      scale = switch(plotType,
+        "obsVsPredLog" = tlf::Scaling$log,
+        "obsVsPred" = tlf::Scaling$lin
+      )
+    )
+    plotConfiguration$xAxis$axisLimits <- axisLimits %||% plotConfiguration$xAxis$axisLimits
+    plotConfiguration$yAxis$axisLimits <- axisLimits %||% plotConfiguration$yAxis$axisLimits
+
+    updateAxisTicks <- all(isIncluded(plotType, "obsVsPredLog"), !isEmpty(axisLimits))
+    if (updateAxisTicks) {
+      plotConfiguration$xAxis$ticks <- autoAxesTicksFromLimits(axisLimits)
+      plotConfiguration$yAxis$ticks <- autoAxesTicksFromLimits(axisLimits)
+    }
   }
+
   # Set time ticks for res vs time
   if (plotType %in% "resVsTime") {
-    residualTimeTicks <- getTimeTicksFromUnit(
-      metaData$Time$unit,
-      timeValues = data$Time
-    )
-    # ticks = residualTimeTicks$ticks,
-    # ticklabels = residualTimeTicks$ticklabels
     plotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, dataMapping, plotConfiguration)
   }
   # Set labels for qq plots and histograms
   if (plotType %in% "resHisto") {
-    plotConfiguration$ribbons$fill <- group$fill
+    plotConfiguration$ribbons$fill <- getColorFromOutputGroup(
+      group = group,
+      data = data,
+      dataMapping = dataMapping,
+      legendVariable = "residualsLegend",
+      colorVariable = "fill"
+    ) # group$fill
     plotConfiguration$labels$ylabel$text <- reEnv$residualsHistogramLabel
   }
   if (plotType %in% "resQQPlot") {
-    plotConfiguration$labels$ylabel$text <- reEnv$residualsQQLabel
+    # Set quadratic qqplot
+    newDimension <- mean(c(
+      plotConfiguration$export$width,
+      plotConfiguration$export$height
+    ))
+    plotConfiguration$export$width <- newDimension
+    plotConfiguration$export$height <- newDimension
+    plotConfiguration$labels$xlabel$text <- reEnv$residualsQQLabelX
+    plotConfiguration$labels$ylabel$text <- reEnv$residualsQQLabelY
   }
 
   plotConfiguration$points$color <- getColorFromOutputGroup(
@@ -673,8 +725,9 @@ getBoxWhiskerPlotConfiguration <- function(plotScale = "log",
   )
   # Remove xlabel
   plotConfiguration$labels$xlabel$text <- NULL
-  # Default angle for xticklabels is 45 degrees
+  # Default angle for x-ticklabels is 45 degrees right aligned
   plotConfiguration$xAxis$font$angle <- 45
+  plotConfiguration$xAxis$font$align <- tlf::Alignments$right
   # No need for legend for boxplots
   plotConfiguration$legend$position <- tlf::LegendPositions$none
   # Color groups
@@ -696,10 +749,49 @@ getBoxWhiskerPlotConfiguration <- function(plotScale = "log",
   boxBreaks <- autoAxesTicksFromLimits(boxRange)
 
   plotConfiguration$yAxis$scale <- tlf::Scaling$log
-  plotConfiguration$yAxis$limits <- boxRange
+  plotConfiguration$yAxis$axisLimits <- boxRange
   plotConfiguration$yAxis$ticks <- boxBreaks
   return(plotConfiguration)
 }
+
+#' @title alignXTicks
+#' @description
+#' Use the `plotConfiguration` of a `plotObject`
+#' to check and perform vertical alignment of x-axis tick labels
+#' @param plotObject A `ggplot` object
+#' @return A `ggplot` object
+#' @keywords internal
+#' @import ggplot2
+alignXTicks <- function(plotObject) {
+  # vertical alignment required only for 45 degrees right aligned x-axis labels
+  requireAlignment <- all(
+    isIncluded(
+      plotObject$plotConfiguration$xAxis$font$align,
+      tlf::Alignments$right
+    ),
+    plotObject$plotConfiguration$xAxis$font$angle %in% 45
+  )
+  if (!requireAlignment) {
+    return(plotObject)
+  }
+  xAxisFont <- plotObject$plotConfiguration$xAxis$font
+  plotObject <- plotObject + ggplot2::theme(
+    axis.text.x = ggplot2::element_text(
+      colour = xAxisFont$color,
+      size = xAxisFont$size,
+      face = xAxisFont$fontFace,
+      family = tlf:::.checkPlotFontFamily(xAxisFont$fontFamily),
+      hjust = switch(xAxisFont$align,
+        left = 0,
+        center = 0.5,
+        right = 1
+      ),
+      vjust = 1
+    )
+  )
+  return(plotObject)
+}
+
 
 #' @title getColorFromOutputGroup
 #' @description Get the appropriate colors from an output group
@@ -724,9 +816,9 @@ getColorFromOutputGroup <- function(group,
   toKeep <- (group[[legendVariable]] %in% displayedLegendValues) &
     !duplicated(group[[legendVariable]])
   legendValues <- factor(
-    group[[legendVariable]][toKeep], 
+    group[[legendVariable]][toKeep],
     levels = levels(displayedLegendValues) %||% displayedLegendValues
-    )
+  )
   legendOrder <- order(legendValues)
   colorValues <- group[[colorVariable]][toKeep]
   return(colorValues[legendOrder])
@@ -768,24 +860,216 @@ getColorGroupForPKParameterPlot <- function(output,
 updateVpcPlotColor <- function(plotObject, output, referenceSimulationSetName = NULL) {
   legendSim <- paste("Simulated", AggregationConfiguration$names$middle, "and", AggregationConfiguration$names$range)
   legendReference <- paste(legendSim, "of", referenceSimulationSetName)
-  
+
   plotObject <- plotObject +
     ggplot2::scale_color_manual(
       breaks = c(ifNotNull(referenceSimulationSetName, legendReference), legendSim),
       values = c(
-        ifNotNull(referenceSimulationSetName, reEnv$referenceColor), 
+        ifNotNull(referenceSimulationSetName, reEnv$referenceColor),
         output$color %||% "dodgerblue"
-          )
+      )
     ) +
     ggplot2::scale_fill_manual(
       breaks = c(ifNotNull(referenceSimulationSetName, legendReference), legendSim),
       values = c(
-        ifNotNull(referenceSimulationSetName, reEnv$referenceFill), 
+        ifNotNull(referenceSimulationSetName, reEnv$referenceFill),
         output$fill %||% "dodgerblue"
-          )
+      )
     )
   return(plotObject)
 }
 
+#' @title updateAxesMargin
+#' @description Update axes properties based on configuration plan settings for side margins
+#' @param axesProperties List of axes properties
+#' @param sideMarginsEnabled Logical defining if side margins are enabled.
+#' @return List of axes properties
+#' @keywords internal
+updateAxesMargin <- function(axesProperties, sideMarginsEnabled = TRUE) {
+  for (properyName in names(axesProperties)) {
+    axesProperty <- axesProperties[[properyName]]
+    # Check if side margin is enabled or necessary
+    noSideMargins <- any(
+      sideMarginsEnabled = FALSE,
+      isEmpty(axesProperty$min),
+      isEmpty(axesProperty$max)
+    )
+    if (noSideMargins) {
+      next
+    }
+    # Update range for log scale plots
+    if (isIncluded(axesProperty$scale, tlf::Scaling$log)) {
+      axesProperty$min <- 0.7 * axesProperty$min
+      axesProperty$max <- axesProperty$max / 0.7
+      axesProperties[[properyName]] <- axesProperty
+      next
+    }
+    axesRange <- axesProperty$max - axesProperty$min
+    axesProperty$min <- axesProperty$min - axesRange / 10
+    axesProperty$max <- axesProperty$max + axesRange / 10
+    axesProperties[[properyName]] <- axesProperty
+  }
+  return(axesProperties)
+}
 
+#' @title getDefaultPropertyFromTheme
+#' @description
+#' Get default property value from current reEnv theme
+#' @param propertyName Name of the aesthetic property (e.g. `"color"`)
+#' @param propertyType One of `"points"`, `"lines`, `"ribbons"` or `"errorbars"`
+#' @param plotName Name of the plot in Theme (e.g. `"plotTimeProfile"`)
+#' @return Property value
+#' @keywords internal
+getDefaultPropertiesFromTheme <- function(plotName,
+                                          propertyType = "points",
+                                          propertyNames = as.character(tlf::AestheticProperties)) {
+  # The function to get values from a Theme/PlotConfiguration exists in tlf but it is not exported
+  # For this reason, it needs to be called using :::
+  tlf:::.getAestheticValuesFromConfiguration(
+    plotConfigurationProperty = reEnv$theme$plotConfigurations[[plotName]][[propertyType]],
+    propertyNames = propertyNames
+  )
+}
 
+#' @title getLegendAesOverride
+#' @description
+#' In time profiles, legends are merged into one unique legend
+#' The displayed legend is stored in the `plotObject` within the color guide field `override.aes`.
+#' This function simply gets the list from that field for updating the current legend
+#' @param plotObject A ggplot object
+#' @return A list of aesthetic values
+#' @keywords internal
+#' @import ggplot2
+getLegendAesOverride <- function(plotObject) {
+  # ggplot2 version 3.5.0 has made some break changes regarding guides
+  if (packageVersion("ggplot2") >= "3.5.0") {
+    return(plotObject$guides$guides$colour$params$override.aes)
+  }
+  return(plotObject$guides$colour$override.aes)
+}
+
+#' @title addLLOQLegend
+#' @description
+#' Add LLOQ displayed legend to the legend of a `plotObject`
+#' @param plotObject A ggplot object
+#' @param captions Current observed data captions for which lloq legend is needed
+#' @param prefix Prefix for legend
+#' @return A list of aesthetic values
+#' @keywords internal
+addLLOQLegend <- function(plotObject, captions, prefix = "LLOQ for") {
+  # Since lloq legend should be positioned after the current legend
+  # Current legend needs to be reused by the color and shape guides
+  # to prevent losing the correct captions and keys
+  currentLegend <- getLegendAesOverride(plotObject)
+  lloqLegend <- prettyCaption(
+    captions = paste(prefix, captions),
+    plotObject = plotObject
+  )
+
+  # If both observed and simulated data are displayed
+  # tlf merge the legends using option override.aes from color guide
+  # while removing the legends from linetype and shape
+  shapeGuide <- "none"
+  if (isEmpty(currentLegend)) {
+    # ggplot2 auto-merge shape and color legends, if only observed data are displayed
+    # thus both color and shape guides need to be consistent by using same order and title
+    shapeGuide <- ggplot2::guide_legend(
+      title = plotObject$plotConfiguration$legend$title$text,
+      title.theme = plotObject$plotConfiguration$legend$title$createPlotTextBoxFont(),
+      order = 1,
+      label.theme = plotObject$plotConfiguration$legend$font$createPlotTextBoxFont()
+    )
+    # For ggplot2 version >= 3.5, themes are not in guides anymore
+    if (packageVersion("ggplot2") >= "3.5.0") {
+      shapeGuide <- ggplot2::guide_legend(
+        title = plotObject$plotConfiguration$legend$title$text,
+        order = 1
+      )
+    }
+  }
+  colorGuide <- ggplot2::guide_legend(
+    title = plotObject$plotConfiguration$legend$title$text,
+    title.theme = plotObject$plotConfiguration$legend$title$createPlotTextBoxFont(),
+    order = 1,
+    override.aes = currentLegend,
+    label.theme = plotObject$plotConfiguration$legend$font$createPlotTextBoxFont()
+  )
+  # For ggplot2 version >= 3.5, themes are not in guides anymore
+  if (packageVersion("ggplot2") >= "3.5.0") {
+    colorGuide <- ggplot2::guide_legend(
+      title = plotObject$plotConfiguration$legend$title$text,
+      order = 1,
+      override.aes = currentLegend
+    )
+  }
+
+  # the linetype guide should display the caption for lloq legend
+  # corresponding to "LLOQ for <caption of the observed data set>"
+  # - order argument renders legend after current legend
+  # - title is null to allow pasting this additional legend right below the current
+  linetypeGuide <- ggplot2::guide_legend(
+    title = NULL,
+    order = 2,
+    override.aes = list(
+      shape = tlf::Shapes$blank,
+      linetype = tlf:::tlfEnv$defaultLLOQLinetype,
+      fill = NA
+    ),
+    label.theme = plotObject$plotConfiguration$legend$font$createPlotTextBoxFont()
+  )
+  # For ggplot2 version >= 3.5, themes are not in guides anymore
+  if (packageVersion("ggplot2") >= "3.5.0") {
+    linetypeGuide <- ggplot2::guide_legend(
+      title = NULL,
+      order = 2,
+      override.aes = list(
+        shape = tlf::Shapes$blank,
+        linetype = tlf:::tlfEnv$defaultLLOQLinetype,
+        fill = NA
+      )
+    )
+  }
+
+  # Needs to add a dummy linetype aesthetic to get lloq legend displayed
+  plotObject <- plotObject +
+    ggplot2::geom_blank(
+      mapping = ggplot2::aes(linetype = lloqLegend),
+      inherit.aes = FALSE
+    )
+  linetypeScale <- plotObject$scales$get_scales("linetype")
+
+  # Suppress message stating scale was updated
+  suppressMessages({
+    plotObject <- plotObject +
+      # Ensure only lloq legend entries are displayed
+      # and prevent current linetypes to be changed or removed
+      ggplot2::scale_linetype_manual(
+        breaks = head(c(linetypeScale$breaks, lloqLegend), length(lloqLegend)),
+        values = as.character(c(
+          linetypeScale$palette(1),
+          rep(tlf::Linetypes$blank, length(lloqLegend))
+        )),
+        labels = lloqLegend
+      ) +
+      ggplot2::guides(
+        colour = colorGuide,
+        shape = shapeGuide,
+        linetype = linetypeGuide
+      ) +
+      # Ensures
+      # - gaps between legends are removed
+      # - legends are on top of each other (not side by side)
+      # - aligned on legend keys (prettier display)
+      ggplot2::theme(
+        legend.margin = ggplot2::margin(
+          t = -plotObject$plotConfiguration$legend$title$font$size / 2,
+          b = -plotObject$plotConfiguration$legend$title$font$size / 2,
+          unit = "pt"
+        ),
+        legend.box = "vertical",
+        legend.box.just = "left"
+      )
+  })
+
+  return(plotObject)
+}

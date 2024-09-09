@@ -1,3 +1,73 @@
+#' @title loadPKAnalysesFromStructureSet
+#' @param structureSet A `SimulationStructure` object
+#' @param to Format of the loaded output`
+#' @return
+#' A `PKAnalyses` object if `to="PKAnalyses"`
+#' A `data.frame` if `to="data.frame"`
+#' A `tibble` if `to="tibble"`
+#' @import ospsuite
+#' @keywords internal
+loadPKAnalysesFromStructureSet <- function(structureSet, to = "PKAnalyses", useCache = FALSE) {
+  if (useCache) {
+    return(loadPKAnalysesFromCSV(
+      filePath = structureSet$pkAnalysisResultsFileNames,
+      simulation = loadSimulationWithUpdatedPaths(simulationSet = structureSet$simulationSet, loadFromCache = TRUE),
+      to = to
+    ))
+  }
+  return(loadPKAnalysesFromCSV(
+    filePath = structureSet$pkAnalysisResultsFileNames,
+    simulation = ospsuite::loadSimulation(structureSet$simulationSet$simulationFile),
+    to = to
+  ))
+}
+
+#' @title loadPKAnalysesFromCSV
+#' @description Load PK analyses from a CSV file
+#' Wrap the `ospsuite::importPKAnalysesFromCSV()` to provide more useful warning messages.
+#' @param filePath Full path of the file containing the PK-Analyses to load
+#' @param simulation A `Simulation` object
+#' @param to Format of the loaded output`
+#' @return
+#' A `PKAnalyses` object if `to="PKAnalyses"`
+#' A `data.frame` if `to="data.frame"`
+#' A `tibble` if `to="tibble"`
+#' @import ospsuite
+#' @keywords internal
+loadPKAnalysesFromCSV <- function(filePath, simulation, to = "PKAnalyses") {
+  validateIsIncluded(to, c("PKAnalyses", "data.frame", "tibble"))
+  withCallingHandlers(
+    {
+      pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
+        filePath = filePath,
+        simulation = simulation
+      )
+      pkAnalyses <- switch(to,
+        "PKAnalyses" = pkAnalyses,
+        "data.frame" = ospsuite::pkAnalysesToDataFrame(pkAnalyses),
+        "tibble" = ospsuite::pkAnalysesToTibble(pkAnalyses)
+      )
+    },
+    warning = function(warningCondition) {
+      naParsingMessage <- grepl(
+        pattern = "One or more parsing issues",
+        warningCondition$message
+      )
+      # Usual warning are returned as is
+      if (!naParsingMessage) {
+        return()
+      }
+      # New message when NA is found in the CSV file
+      warning(messages$warningNAFoundInPKAnalysisFile(filePath), call. = FALSE)
+      # Remove initial warning message
+      try({
+        invokeRestart("muffleWarning")
+      })
+    }
+  )
+  return(pkAnalyses)
+}
+
 #' @title getOutputPathsInSimulationSet
 #' @param simulationSet SimulationSet object or derived class
 #' @return Path names of outputs in `simulationSet`
@@ -49,22 +119,45 @@ loadSimulationWithUpdatedPaths <- function(simulationSet, loadFromCache = FALSE,
   # Prevent loadSimulationWithUpdatedPaths from crashing if user did not submit any pathID
   if (!is.null(simulationSet$outputs)) {
     simulation$outputSelections$clear()
-    paths <- sapply(simulationSet$outputs, function(output) {
-      output$path
-    })
+    paths <- getOutputPathsInSimulationSet(simulationSet)
     ospsuite::addOutputs(quantitiesOrPaths = paths, simulation = simulation)
   }
 
-  if (is.null(simulationSet$minimumSimulationEndTime)) {
+  # Add timeOffset time point to output schema
+  simulation$outputSchema$addTimePoints(
+    timePoints = ospsuite::toBaseUnit(
+      quantityOrDimension = "Time",
+      values = simulationSet$timeOffset,
+      unit = simulationSet$timeUnit
+    )
+  )
+
+  # Update simulation end time if minimum is longer than current simulation end time
+  endTime <- max(
+    simulation$outputSchema$endTime,
+    ospsuite::toBaseUnit(
+      quantityOrDimension = "Time",
+      values = simulationSet$minimumSimulationEndTime,
+      unit = simulationSet$timeUnit
+    )
+  )
+  if (endTime <= simulation$outputSchema$endTime) {
     return(simulation)
   }
+  # Get interval that includes current endTime,
+  # if mutliple intervals include endTime, update the last one
+  endTimes <- sapply(
+    simulation$outputSchema$intervals,
+    function(interval) {
+      interval$endTime$value
+    }
+  )
+  indexToUpdate <- tail(which(endTimes == simulation$outputSchema$endTime), 1)
+  simulation$outputSchema$intervals[[indexToUpdate]]$endTime$setValue(
+    value = endTime,
+    unit = ospsuite::getBaseUnit("Time")
+  )
 
-  if (simulationSet$minimumSimulationEndTime > simulation$outputSchema$endTime) {
-    maximalIntervalIndex <- which(sapply(simulation$outputSchema$intervals, function(x) {
-      x$endTime$value
-    }) == simulation$outputSchema$endTime)[1]
-    simulation$outputSchema$intervals[[maximalIntervalIndex]]$endTime$setValue(value = simulationSet$minimumSimulationEndTime, unit = ospUnits$Time$min)
-  }
   return(simulation)
 }
 
@@ -113,26 +206,18 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet) {
     )
   )
 
-  # Get applications
-  applications <- simulation$allApplicationsFor(path)
-  applicationTimes <- 0
-  if (!isOfLength(applications, 0)) {
-    applicationTimes <- sapply(applications, function(application) {
-      application$startTime$value
-    })
-  }
+  # Get applications times
+  applicationTimes <- getApplicationTimesForPath(simulation, path) %||% 0
   # Get all ranges of simulation ranked defined by application intervals
   simulationRanges <- c(applicationTimes, simulation$outputSchema$endTime)
   simulationRanges <- sort(ospsuite::toUnit("Time", simulationRanges, timeUnit))
 
   # Store number of applications and their ranges
-  logDebug(messages$numberOfApplications(length(applications), path, simulation$name))
+  logDebug(messages$numberOfApplications(length(applicationTimes), path, simulation$name))
   logDebug(messages$timeRangesForSimulation(paste0(simulationRanges, collapse = "', '"), simulation$name))
 
-  # Define ranges for output
-  # Depending on expected behaviour of settings$applicationRange
-  # It would be possible to set these values
-  timeRanges$total$values <- c(min(simulationRanges), max(simulationRanges))
+  # Define ranges for output based on time offset and simulation
+  timeRanges$total$values <- c(simulationSet$timeOffset, max(simulationRanges))
 
   # Flag simulationRanges prior to timeOffset
   timeOffsetFlag <- simulationRanges < simulationSet$timeOffset
@@ -147,12 +232,46 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet) {
 
   # Case of multiple applications, get first and last
   if (!isOfLength(simulationRanges, 2)) {
-    # First application becomes first application after timeOffset
+    # First application becomes first application since timeOffset
     timeRanges$firstApplication$values <- utils::head(simulationRanges[!timeOffsetFlag], 2)
-    timeRanges$lastApplication$values <- utils::tail(simulationRanges, 2)
+    # Last application becomes last application since timeOffset
+    timeRanges$lastApplication$values <- utils::tail(simulationRanges[!timeOffsetFlag], 2)
     timeRanges$firstApplication$keep <- applicationRanges[[ApplicationRanges$firstApplication]]
     timeRanges$lastApplication$keep <- applicationRanges[[ApplicationRanges$lastApplication]]
   }
 
   return(timeRanges)
+}
+
+#' @title getApplicationTimesForSimulation
+#' @param simulation A `Simulation` object
+#' @param output A list of `Output` objects
+#' @return Time values of applications
+#' @keywords internal
+getApplicationTimesForSimulation <- function(simulation, outputs) {
+  allApplicationsTimes <- lapply(
+    outputs,
+    function(output) {
+      getApplicationTimesForPath(simulation, output$path)
+    }
+  )
+  # Concatenate all the application times in one single numeric vector
+  return(do.call("c", allApplicationsTimes))
+}
+
+#' @title getApplicationTimesForPath
+#' @param simulation A `Simulation` object
+#' @param path A simulation path
+#' @return Time values of applications
+#' @import ospsuite
+#' @keywords internal
+getApplicationTimesForPath <- function(simulation, path) {
+  applications <- simulation$allApplicationsFor(path)
+  if (isEmpty(applications)) {
+    return()
+  }
+  applicationTimes <- sapply(applications, function(application) {
+    application$startTime$value
+  })
+  return(as.numeric(applicationTimes))
 }

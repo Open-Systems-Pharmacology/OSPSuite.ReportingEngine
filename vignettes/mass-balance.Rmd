@@ -1,0 +1,186 @@
+---
+title: "Mass Balance"
+resource_files:
+  - figures
+  - templates
+output: 
+  rmarkdown::html_vignette:
+   number_sections: true
+   toc: true
+vignette: >
+  %\VignetteIndexEntry{Mass Balance}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r vignette setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+source(system.file("extdata", "vignette-helpers.R", package = "ospsuite.reportingengine"))
+```
+
+```{r setup}
+library(ospsuite.reportingengine)
+```
+
+# Overview
+
+In Mean Model workflows, the Mass Balance task (`plotMassBalance`) aims at reporting diagnostics of the simulation mass balance.
+
+The diagnostic plots correspond to 5 plots for each molecule (or group of molecules if defined by user) :
+
+- Plot 1: **Amount vs time**
+- Plot 2: **Cumulative amount vs time** in which the amounts of all the molecule paths included are stacked up.
+- Plot 3: **Normalized amount vs time** in which the amounts are normalized by the drug mass applied at the current time.
+- Plot 4: **Normalized cumulative amount vs time** in which the cumulative amounts are normalized by the drug mass applied at the current time.
+- Plot 5: **Pie Chart** displaying the fraction of drug mass at the last simulated time point for all the molecule paths included.
+
+Since version [2.3](../news/index.html#ospsuitereportingengine-23), normalization uses the current drug mass and not the final drug mass.
+As a result, normalized plots 3 and 4 provide more realistic results in case of multiple applications.
+
+# Regular mass balance workflow 
+
+In the example below, the mass balance task is performed using the default settings.
+By default, the mass balance is performed for each unique xenobiotic molecule (check [`Simulation$allXenobioticFloatingMoleculeNames()`](https://www.open-systems-pharmacology.org/OSPSuite-R/reference/Simulation.html#method-Simulation-allXenobioticFloatingMoleculeNames) for more details).
+
+The legend of the mass balance corresponds to the molecule name associated with the compartment name.
+
+<details>
+<summary> __Code__ </summary>
+
+```{r regular mass balance}
+# Define file paths for pkml simulation
+simulationFile <- system.file("extdata", "Aciclovir.pkml", package = "ospsuite.reportingengine")
+
+simulationSet <- SimulationSet$new(
+  simulationSetName = "Aciclovir",
+  simulationFile = simulationFile
+)
+massBalanceWorkflow <- MeanModelWorkflow$new(
+  simulationSets = simulationSet,
+  workflowFolder = "Mass-Balance-Workflow"
+)
+
+massBalanceWorkflow$inactivateTasks(massBalanceWorkflow$getAllTasks())
+massBalanceWorkflow$activateTasks("plotMassBalance")
+massBalanceWorkflow$runWorkflow()
+```
+
+</details>
+
+
+```{r mass balance report, echo=FALSE, results='asis'}
+cat(includeReportFromWorkflow(massBalanceWorkflow))
+```
+
+```{r delete mass balance folder, include = FALSE, echo=FALSE}
+# Remove the workflow folders
+unlink(massBalanceWorkflow$workflowFolder, recursive = TRUE)
+```
+
+
+# Mass balance settings
+
+The mass balance task can now be customized using settings defined through the `SimulationSet` field `massBalanceFile` as a *json* file.
+
+The settings aims at defining criteria for grouping molecule paths for a molecule or group of molecules. 
+These settings can be useful especially when the simulation includes metabolites that need to be appropriately displayed in the diagnostics.
+For each plot the file needs to include the following fields:
+
+- `"Name"`: name of the sub-section in report
+- `"Molecules"`: array of the molecule names (or/and metabolites) to be included in the mass balance
+- `"Groupings"`: array of the grouping names and criteria
+
+## Groupings
+
+The field `"Groupings"` is an array that defines how to group and label molecule paths in the mass balance diagnostic plots.
+Thus, each element of `"Groupings"` includes the following fields:
+
+- `"Name"`: reported name of the group
+- `"Include"`: array of included molecule paths
+- `"Exclude"`: array of excluded molecule paths (optional)
+- `"ExcludePreviousGroupings"`: logical to exclude molecule paths that have been already included in previous groupings (optional - default is `true`)
+
+Note that inclusion and exclusion criteria for molecule paths leverage [wild card symbols (`*`)](https://www.open-systems-pharmacology.org/OSPSuite-R/articles/load-get.html#accessing-entities-of-the-model-and-their-properties---the-path-concept).
+
+The most common use case is to include all the paths for specific compartments such as  *Plasma*. Here this would translate as:
+
+```json
+{
+  "Name": "Plasma",
+  "Include": ["Organism|**|Plasma|Aciclovir"]
+}
+```
+
+Another use case is when a metabolite is defined using the molecule name as prefix.
+Then, the metabolite can be included in the grouping.
+
+```json
+{
+  "Name": "Plasma for Aciclovir and metabolites", 
+  "Include": ["Organism|**|Plasma|Aciclovir*"]
+}
+```
+
+## A workflow leveraging mass balance settings
+
+In this workflow, the following mass balance settings file is used.
+The file is also available through the following link [mass-balance-settings.json](templates/mass-balance-settings.json).
+
+```{r template, echo=FALSE, results='asis'}
+cat(
+  c(
+    "```json",
+    readLines(
+      system.file(
+        "extdata", "mass-balance-settings.json",
+        package = "ospsuite.reportingengine"
+      ),
+      warn = FALSE
+    ),
+    "```"
+  ),
+  sep = "\n"
+)
+```
+
+The workflow is similar to the previous one except that the mass balance settings file is provided to the `SimulationSet` object.
+
+<details>
+<summary> __Code__ </summary>
+
+```{r mass balance settings}
+simulationFile <- system.file("extdata", "Aciclovir.pkml", package = "ospsuite.reportingengine")
+massBalanceFile <- system.file("extdata", "mass-balance-settings.json", package = "ospsuite.reportingengine")
+
+simulationSet <- SimulationSet$new(
+  simulationSetName = "Aciclovir",
+  simulationFile = simulationFile,
+  massBalanceFile = massBalanceFile
+)
+massBalanceWorkflow <- MeanModelWorkflow$new(
+  simulationSets = simulationSet,
+  workflowFolder = "Mass-Balance-Workflow"
+)
+
+massBalanceWorkflow$inactivateTasks(massBalanceWorkflow$getAllTasks())
+massBalanceWorkflow$activateTasks("plotMassBalance")
+massBalanceWorkflow$runWorkflow()
+```
+
+</details>
+
+
+Since the settings included 2 plots, the report includes 2 sub-sections.
+
+```{r mass balance settings report, echo=FALSE, results='asis'}
+cat(includeReportFromWorkflow(massBalanceWorkflow))
+```
+
+```{r delete mass balance settings folder, include = FALSE, echo=FALSE}
+# Remove the workflow folders
+unlink(massBalanceWorkflow$workflowFolder, recursive = TRUE)
+```
+

@@ -22,19 +22,13 @@ plotPopulationPKParameters <- function(structureSets,
   validateIsOfType(c(structureSets), "SimulationStructure")
   validateIsString(c(xParameters), nullAllowed = TRUE)
   validateIsOfType(c(yParameters), "Output", nullAllowed = TRUE)
-  validateSameOutputsBetweenSets(
-    c(lapply(structureSets, function(set) {
-      set$simulationSet
-    }))
-  )
 
-  # Use first structure set as reference
-  yParameters <- yParameters %||% structureSets[[1]]$simulationSet$outputs
+  # Use union of outputs from all the structure sets
+  yParameters <- yParameters %||% getOutputsForPKPlot(structureSets)
   # Get first simulation, in case mol weight is needed
   simulation <- loadSimulationWithUpdatedPaths(structureSets[[1]]$simulationSet, loadFromCache = TRUE)
   simulationSetDescriptor <- structureSets[[1]]$simulationSetDescriptor
 
-  pkRatioTableAcrossPopulations <- NULL
   pkParametersResults <- list()
 
   pkParametersMapping <- tlf::BoxWhiskerDataMapping$new(
@@ -64,11 +58,15 @@ plotPopulationPKParameters <- function(structureSets,
   # PK Parameters are calculated per output
   # Results are calculated within this nested loop
   for (output in yParameters) {
-    # Report heading for Output path
-    resultID <- defaultFileNames$resultID("pk-parameters", removeForbiddenLetters(output$path))
+    # Report heading for Output path (in case output use same paths, render a unique id)
+    resultID <- defaultFileNames$resultID(
+      length(pkParametersResults) + 1,
+      "pk-parameters",
+      removeForbiddenLetters(output$path)
+    )
     pkParametersResults[[resultID]] <- saveTaskResults(
       id = resultID,
-      textChunk = c(anchor(resultID), "", paste0("## PK Parameters of ", output$displayName)),
+      textChunk = captions$plotPKParameters$outputSection(output$displayName, resultID),
       includeTextChunk = TRUE
     )
     # Keep and format only relevant data per parameter
@@ -100,13 +98,14 @@ plotPopulationPKParameters <- function(structureSets,
 
       # Report heading for PK Parameter
       resultID <- defaultFileNames$resultID(
+        length(pkParametersResults) + 1,
         "pk-parameters",
         removeForbiddenLetters(output$path),
         removeForbiddenLetters(pkParameter$pkParameter)
       )
       pkParametersResults[[resultID]] <- saveTaskResults(
         id = resultID,
-        textChunk = c(anchor(resultID), "", paste("###", pkParameter$displayName)),
+        textChunk = captions$plotPKParameters$parameterSection(pkParameter$displayName, resultID),
         includeTextChunk = TRUE
       )
 
@@ -148,7 +147,7 @@ plotPopulationPKParameters <- function(structureSets,
         resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", pkParameter$pkParameter, "log")
         pkParametersResults[[resultID]] <- saveTaskResults(
           id = resultID,
-          plot = pkParameterBoxplotLog,
+          plot = alignXTicks(pkParameterBoxplotLog),
           plotCaption = captions$plotPKParameters$boxplot(
             parameterCaption,
             output$displayName,
@@ -160,8 +159,16 @@ plotPopulationPKParameters <- function(structureSets,
       }
 
       # Report tables summarizing the distributions
+      # Caution: since simulationSetName is a factor,
+      # Unused levels need to be removed first to prevent errors in tlf::getPKParameterMeasure
+      allSetNames <- levels(pkParameterData$simulationSetName)
+      usedSetNames <- unique(as.character(pkParameterData$simulationSetName))
       pkParameterTable <- getPKParameterMeasure(
-        data = pkParameterData,
+        data = pkParameterData %>%
+          mutate(simulationSetName = factor(
+            simulationSetName,
+            levels = intersect(allSetNames, usedSetNames)
+          )),
         dataMapping = pkParametersMapping
       )
       # A different table needs to be created here
@@ -175,7 +182,7 @@ plotPopulationPKParameters <- function(structureSets,
       resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", pkParameter$pkParameter)
       pkParametersResults[[resultID]] <- saveTaskResults(
         id = resultID,
-        plot = pkParameterBoxplot,
+        plot = alignXTicks(pkParameterBoxplot),
         plotCaption = captions$plotPKParameters$boxplot(
           parameterCaption,
           output$displayName,
@@ -206,7 +213,12 @@ plotPopulationPKParameters <- function(structureSets,
           "median" = pkParameterMetaData$Value
         )
         # Include reference population if defined
-        if (!isEmpty(referenceSimulationSetName)) {
+        includeReferenceInRangePlot <- all(
+          !isEmpty(referenceSimulationSetName),
+          isIncluded(referenceSimulationSetName, unique(pkParameterData$simulationSetName)),
+          length(unique(pkParameterData$simulationSetName)) > 1
+        )
+        if (includeReferenceInRangePlot) {
           # Get the table for reference population
           referenceData <- data.frame(
             x = c(-Inf, Inf),
@@ -240,20 +252,22 @@ plotPopulationPKParameters <- function(structureSets,
               plotObject = comparisonVpcPlot,
               output = output,
               referenceSimulationSetName = referenceSimulationSetName
-              )
+            )
             xParameterCaption <- vpcMetaData$x$dimension
             yParameterCaption <- vpcMetaData$median$dimension
 
             # Check if log scaled vpc plot has positive data
             if (hasPositiveValues(comparisonData$ymin)) {
-              vpcDataForLimits <- c(comparisonData$ymin, comparisonData$median, comparisonData$ymax,
-                                    referenceData$ymin, referenceData$median, referenceData$ymax)
-              vpcLimits <- autoAxesLimits(vpcDataForLimits[vpcDataForLimits>0], scale = tlf::Scaling$log)
-                
-              comparisonVpcPlotLog <-  tlf::setYAxis(
+              vpcDataForLimits <- c(
+                comparisonData$ymin, comparisonData$median, comparisonData$ymax,
+                referenceData$ymin, referenceData$median, referenceData$ymax
+              )
+              vpcLimits <- autoAxesLimits(vpcDataForLimits[vpcDataForLimits > 0], scale = tlf::Scaling$log)
+
+              comparisonVpcPlotLog <- tlf::setYAxis(
                 plotObject = comparisonVpcPlot,
                 scale = tlf::Scaling$log,
-                limits = vpcLimits,
+                axisLimits = vpcLimits,
                 ticks = autoAxesTicksFromLimits(vpcLimits)
               )
               resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", demographyParameter, pkParameter$pkParameter, "log")
@@ -290,6 +304,16 @@ plotPopulationPKParameters <- function(structureSets,
         # Regular range plots not associated to workflow type
         for (simulationSetName in simulationSetNames) {
           vpcData <- pkParameterData[pkParameterData$simulationSetName %in% simulationSetName, ]
+          if (nrow(vpcData) == 0) {
+            logDebug(paste(
+              "No data found for simulation set",
+              simulationSetName,
+              "for parameter",
+              pkParameter$pkParameter,
+              "of output", output$displayName
+            ))
+            next
+          }
           vpcData <- getDemographyAggregatedData(
             data = vpcData,
             xParameterName = demographyParameter,
@@ -314,12 +338,12 @@ plotPopulationPKParameters <- function(structureSets,
           # Check if log scaled boxplot was created before plotting logs of range plots
           if (hasPositiveValues(vpcData$ymin)) {
             vpcDataForLimits <- c(vpcData$ymin, vpcData$median, vpcData$ymax)
-            vpcLimits <- autoAxesLimits(vpcDataForLimits[vpcDataForLimits>0], scale = tlf::Scaling$log)
-            
-            vpcPlotLog <-  tlf::setYAxis(
+            vpcLimits <- autoAxesLimits(vpcDataForLimits[vpcDataForLimits > 0], scale = tlf::Scaling$log)
+
+            vpcPlotLog <- tlf::setYAxis(
               plotObject = vpcPlot,
               scale = tlf::Scaling$log,
-              limits = vpcLimits,
+              axisLimits = vpcLimits,
               ticks = autoAxesTicksFromLimits(vpcLimits)
             )
             resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", demographyParameter, pkParameter$pkParameter, "log")
@@ -353,19 +377,80 @@ plotPopulationPKParameters <- function(structureSets,
       #---- Ratio comparisons -----
       # Checks ratios of statistics and parameters
       # Table is output for every workflow except parallel no reference
-      if (isEmpty(referenceSimulationSetName)) {
+      noRatio <- any(
+        isEmpty(referenceSimulationSetName),
+        !isIncluded(referenceSimulationSetName, unique(pkParameterData$simulationSetName)),
+        isOfLength(unique(pkParameterData$simulationSetName), 1)
+      )
+      if (noRatio) {
         next
       }
       # Output table of relative change in the respective statistics
       # From issue #536, no plot is required as artifact here
-      pkParameterVsRefTable <- pkParameterTableAsRelativeChange(pkParameterTable, referenceSimulationSetName)
-      pkParameterVsRefTable <- formatPKParameterHeader(pkParameterVsRefTable, simulationSetDescriptor)
+      pkParameterVsRefData <- pkParameterTableAsRelativeChange(pkParameterTable, referenceSimulationSetName)
+      pkParameterVsRefTable <- formatPKParameterHeader(pkParameterVsRefData, simulationSetDescriptor)
+      names(pkParameterVsRefData)[1:7] <- c("simulationSetName", "N", "ymin", "lower", "middle", "upper", "ymax")
 
-      # Save results
+      ratioPlotConfiguration <- getBoxWhiskerPlotConfiguration(
+        plotScale = "lin",
+        colorGrouping = colorGrouping,
+        # Ensure auto-scaling of boxplot is appropriate
+        data = data.frame(
+          simulationSetName = rep(pkParameterVsRefData$simulationSetName, 2),
+          Value = c(pkParameterVsRefData$ymin, pkParameterVsRefData$ymax)
+        ),
+        # Create appropriate ylabel
+        metaData = list(Value = list(
+          dimension = pkParameterMetaData$Value$dimension,
+          unit = paste0("fraction of ", referenceSimulationSetName)
+        )),
+        dataMapping = pkParametersMapping,
+        plotConfiguration = settings$plotConfigurations[["boxplotPKRatios"]]
+      )
+
+      boxplotPKRatios <- ratioBoxplot(
+        data = pkParameterVsRefData,
+        plotConfiguration = ratioPlotConfiguration
+      )
       parameterCaption <- pkParameterMetaData$Value$dimension
+
+      # Check if log scaled boxplot was created before plotting logs of PK Ratio
+      if (hasPositiveValues(pkParameterVsRefData$ymin)) {
+        ratioRange <- autoAxesLimits(c(pkParameterVsRefData$ymin, pkParameterVsRefData$median, pkParameterVsRefData$ymax), scale = "log")
+        ratioBreaks <- autoAxesTicksFromLimits(ratioRange)
+        boxplotPKRatiosLog <- tlf::setYAxis(
+          plotObject = boxplotPKRatios,
+          scale = tlf::Scaling$log,
+          axisLimits = ratioRange,
+          ticks = ratioBreaks
+        )
+        resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", pkParameter$pkParameter, "log")
+        pkParametersResults[[resultID]] <- saveTaskResults(
+          id = resultID,
+          plot = alignXTicks(boxplotPKRatiosLog),
+          plotCaption = captions$plotPKParameters$relativeChangePlot(
+            parameterCaption,
+            output$displayName,
+            setdiff(simulationSetNames, referenceSimulationSetName),
+            simulationSetDescriptor,
+            referenceSetName = referenceSimulationSetName,
+            plotScale = "logarithmic"
+          )
+        )
+      }
+
+      # Save Ratio of summary stats results
       resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_parameters", pkParameter$pkParameter)
       pkParametersResults[[resultID]] <- saveTaskResults(
         id = resultID,
+        plot = alignXTicks(boxplotPKRatios),
+        plotCaption = captions$plotPKParameters$relativeChangePlot(
+          parameterCaption,
+          output$displayName,
+          setdiff(simulationSetNames, referenceSimulationSetName),
+          simulationSetDescriptor,
+          referenceSetName = referenceSimulationSetName
+        ),
         table = pkParameterVsRefTable,
         tableCaption = captions$plotPKParameters$relativeChangeTable(
           parameterCaption,
@@ -382,15 +467,13 @@ plotPopulationPKParameters <- function(structureSets,
       if (!isIncluded(workflowType, PopulationWorkflowTypes$ratioComparison)) {
         next
       }
+      # To fix issue #1086, now ratio summary statistics are calculated from the calculatePKParameters task
+      # and directly available from the structureSet objects
 
-      # Compute the ratios against reference population and
-      # Get the tables of their summary statistics
-      pkRatiosTable <- getPKParameterRatioPKTable(
-        data = pkParameterData,
-        dataMapping = pkParametersMapping,
-        structureSets = structureSets,
-        referenceSimulationSetName = referenceSimulationSetName,
-        settings = settings
+      pkRatiosTable <- getPKParameterRatioTable(
+        pkParameter = pkParameter$pkParameter,
+        outputPath = output$path,
+        structureSets = structureSets
       )
       pkRatiosData <- pkRatiosTable
       names(pkRatiosData)[1:7] <- c("simulationSetName", "N", "ymin", "lower", "middle", "upper", "ymax")
@@ -398,23 +481,6 @@ plotPopulationPKParameters <- function(structureSets,
 
       ratioPlotConfiguration <- getBoxWhiskerPlotConfiguration(
         plotScale = "lin",
-        colorGrouping = colorGrouping,
-        # Ensure auto-scaling of boxplot is appropriate
-        data = data.frame(
-          simulationSetName = rep(pkRatiosData$simulationSetName, 2),
-          Value = c(pkRatiosData$ymin, pkRatiosData$ymax)
-        ),
-        # Create appropriate ylabel
-        metaData = list(Value = list(
-          dimension = pkParameterMetaData$Value$dimension,
-          unit = paste0("fraction of ", referenceSimulationSetName)
-        )),
-        dataMapping = pkParametersMapping,
-        plotConfiguration = settings$plotConfigurations[["boxplotPKRatios"]]
-      )
-
-      ratioPlotConfigurationLog <- getBoxWhiskerPlotConfiguration(
-        plotScale = "log",
         colorGrouping = colorGrouping,
         # Ensure auto-scaling of boxplot is appropriate
         data = data.frame(
@@ -443,13 +509,13 @@ plotPopulationPKParameters <- function(structureSets,
         boxplotPKRatiosLog <- tlf::setYAxis(
           plotObject = boxplotPKRatios,
           scale = tlf::Scaling$log,
-          limits = ratioRange,
+          axisLimits = ratioRange,
           ticks = ratioBreaks
         )
         resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_ratios", pkParameter$pkParameter, "log")
         pkParametersResults[[resultID]] <- saveTaskResults(
           id = resultID,
-          plot = boxplotPKRatiosLog,
+          plot = alignXTicks(boxplotPKRatiosLog),
           plotCaption = captions$plotPKParameters$ratioPlot(
             parameterCaption,
             output$displayName,
@@ -465,7 +531,7 @@ plotPopulationPKParameters <- function(structureSets,
       resultID <- defaultFileNames$resultID(length(pkParametersResults) + 1, "pk_ratios", pkParameter$pkParameter)
       pkParametersResults[[resultID]] <- saveTaskResults(
         id = resultID,
-        plot = boxplotPKRatios,
+        plot = alignXTicks(boxplotPKRatios),
         plotCaption = captions$plotPKParameters$ratioPlot(
           parameterCaption,
           output$displayName,
@@ -556,11 +622,7 @@ getPKParametersAcrossPopulations <- function(structureSets) {
   for (structureSet in structureSets) {
     simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
     population <- loadWorkflowPopulation(structureSet$simulationSet)
-    pkAnalyses <- ospsuite::importPKAnalysesFromCSV(
-      structureSet$pkAnalysisResultsFileNames,
-      simulation
-    )
-    pkParametersTable <- ospsuite::pkAnalysesToDataFrame(pkAnalyses)
+    pkParametersTable <- loadPKAnalysesFromStructureSet(structureSet = structureSet, to = "data.frame", useCache = TRUE)
     populationTable <- getPopulationPKData(population, simulation)
 
     pkParametersTable <- formatPKParametersTable(
@@ -738,4 +800,75 @@ getPopulationPKAnalysesFromOutput <- function(data, metaData, output, pkParamete
     data = pkAnalysesFromOutput,
     metaData = pkAnalysesFromOutputMetaData
   ))
+}
+
+#' @title getOutputsForPKPlot
+#' @description
+#' Get the list of outputs and their PK parameters for population PK parameter plot
+#' @param structureSets List of `SimulationStructure` objects
+#' @return list of `Output` objects
+#' @keywords internal
+#' @import dplyr
+getOutputsForPKPlot <- function(structureSets) {
+  # Use the first simulation set as reference for PK parameters to plot
+  # Clone R6 objects to prevent potential issues in other workflow steps
+  outputsToPlot <- lapply(
+    structureSets[[1]]$simulationSet$outputs,
+    function(output) {
+      output$clone()
+    }
+  )
+  for (structureSet in structureSets) {
+    outputsToAdd <- structureSet$simulationSet$outputs
+    for (output in outputsToAdd) {
+      # Check if output path is included in the initial outputs to plot
+      outputIndex <- head(which(sapply(
+        outputsToPlot,
+        function(outputToPlot) {
+          isIncluded(outputToPlot$path, output$path)
+        }
+      )), 1)
+      if (isEmpty(outputIndex)) {
+        warning(
+          messages$warningMissingFromReferenceSet(
+            path = output$path,
+            simulationSetName = structureSets[[1]]$simulationSet$simulationSetName
+          ),
+          call. = FALSE
+        )
+        outputsToPlot <- c(outputsToPlot, output$clone())
+        next
+      }
+      # If output path is included, check if PK parameters are the same
+      pkParametersToPlot <- sapply(
+        outputsToPlot[[outputIndex]]$pkParameters,
+        function(pkParameter) {
+          pkParameter$pkParameter
+        }
+      )
+      pkParametersToAdd <- sapply(
+        output$pkParameters,
+        function(pkParameter) {
+          pkParameter$pkParameter
+        }
+      )
+      if (isIncluded(pkParametersToAdd, pkParametersToPlot)) {
+        next
+      }
+      indicesToAdd <- which(!(pkParametersToAdd %in% pkParametersToPlot))
+      warning(
+        messages$warningMissingFromReferenceSet(
+          path = output$path,
+          simulationSetName = structureSets[[1]]$simulationSet$simulationSetName,
+          pkParameters = pkParametersToAdd[indicesToAdd]
+        ),
+        call. = FALSE
+      )
+      outputsToPlot[[outputIndex]]$pkParameters <- c(
+        outputsToPlot[[outputIndex]]$pkParameters,
+        output$pkParameters[indicesToAdd]
+      )
+    }
+  }
+  return(outputsToPlot)
 }

@@ -2,6 +2,7 @@
 title: "Add a title page to your workflow report"
 resource_files:
   - figures
+  - templates
 output: 
   rmarkdown::html_vignette:
     toc: true
@@ -48,7 +49,6 @@ setA <- SimulationSet$new(
   simulationFile = simulationFile,
   outputs = outputA
 )
-
 ```
 
 </details>
@@ -98,7 +98,6 @@ The corresponding page includes
 <summary> __Code__ </summary>
 
 ```{r title page content}
-
 titlePage <- c(
   anchor("title-page"),
   "",
@@ -112,11 +111,10 @@ titlePage <- c(
     )
   )
 )
-
 ```
 
 ```{r workflow advanced title}
-# Here, it is more optimal to re-use the previous workflow 
+# Here, it is more optimal to re-use the previous workflow
 # since only the report title page is changed and the same results are used
 workflow$inactivateTasks("simulate")
 
@@ -151,7 +149,7 @@ write(
 ```
 
 ```{r workflow title file}
-# Here, it is more optimal to re-use the previous workflow 
+# Here, it is more optimal to re-use the previous workflow
 # since only the report title page is changed and the same results are used
 workflow$reportTitle <- titlePageFile
 

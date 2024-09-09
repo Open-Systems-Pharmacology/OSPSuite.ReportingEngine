@@ -2,6 +2,7 @@
 title: "Time profiles and Residuals task"
 resource_files:
   - figures
+  - templates
 output: 
   rmarkdown::html_vignette:
    number_sections: true
@@ -179,11 +180,11 @@ simulationFile <- system.file("extdata", "MiniModel2.pkml",
 )
 
 # Get the observation file and its dictionary
-observationFile = system.file(
+observationFile <- system.file(
   "extdata", "SimpleData.nmdat",
   package = "ospsuite.reportingengine"
 )
-dictionaryFile = system.file(
+dictionaryFile <- system.file(
   "extdata", "tpDictionary.csv",
   package = "ospsuite.reportingengine"
 )
@@ -266,7 +267,7 @@ dataSource <- DataSource$new(
   metaDataFile = system.file(
     "extdata", "tpDictionaryLoq.csv",
     package = "ospsuite.reportingengine"
-    )
+  )
 )
 
 # Define the input parameters

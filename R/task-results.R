@@ -34,8 +34,12 @@ TaskResults <- R6::R6Class(
       if (isEmpty(self$plot)) {
         return()
       }
-      # TODO once every plot will use tlf, deprecate the condition for null values
       self$plot <- updatePlotDimensions(self$plot)
+      # Use same dpi as RE environment settings to display correct point size
+      if (requireNamespace("showtext", quietly = TRUE)) {
+        currentDPI <- showtext::showtext_opts()$dpi
+        showtext::showtext_opts(dpi = reEnv$defaultPlotFormat$dpi)
+      }
       ggplot2::ggsave(
         filename = fileName,
         plot = self$plot,
@@ -44,6 +48,10 @@ TaskResults <- R6::R6Class(
         dpi = reEnv$defaultPlotFormat$dpi,
         units = self$plot$plotConfiguration$export$units %||% reEnv$defaultPlotFormat$units
       )
+      # Revert showtext settings
+      if (requireNamespace("showtext", quietly = TRUE)) {
+        showtext::showtext_opts(dpi = currentDPI)
+      }
       logDebug(paste0("Figure '", fileName, "' was successfully saved."))
       re.tStoreFileMetadata(access = "write", filePath = fileName)
     },
@@ -75,14 +83,16 @@ TaskResults <- R6::R6Class(
       if (isFALSE(self$includePlot)) {
         return()
       }
-      if (!isEmpty(self$plotCaption)) {
-        addTextChunk(reportFile, paste0("**Figure: ", self$plotCaption, "**"))
-      }
       addFigureChunk(
         fileName = reportFile,
         figureFileRelativePath = fileRelativePath,
         figureFileRootDirectory = fileRootDirectory
       )
+      # Issue #1053, figure caption is below
+      if (!isEmpty(self$plotCaption)) {
+        # Remove leading and/or trailing whitespace from character strings
+        addTextChunk(reportFile, paste0("**Figure: ", trimws(self$plotCaption), "**"))
+      }
       # Enforce 2 blank lines using html notation to improve report clarity
       addTextChunk(reportFile, rep("<br>", reEnv$blankLinesBetweenArtifacts))
     },
@@ -104,7 +114,7 @@ TaskResults <- R6::R6Class(
         return()
       }
       if (!isEmpty(self$tableCaption)) {
-        addTextChunk(reportFile, paste0("**Table: ", self$tableCaption, "**"))
+        addTextChunk(reportFile, paste0("**Table: ", trimws(self$tableCaption), "**"))
       }
       addTableChunk(
         fileName = reportFile,

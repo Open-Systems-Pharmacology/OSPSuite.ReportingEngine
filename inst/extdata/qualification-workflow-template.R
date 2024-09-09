@@ -32,6 +32,9 @@ createQualificationReport <- function(qualificationRunnerFolder,
                                       versionInfo = NULL,
                                       wordConversionTemplate = NULL) {
   library(ospsuite.reportingengine)
+  # Reset settings such as plot theme or format of numeric in tables
+  # to Reporting Engine default values
+  resetRESettingsToDefault()
 
   #-------- STEP 1: Define workflow settings --------#
   #' replace `workingDirectory` and `qualificationPlanName` with your paths
@@ -116,7 +119,11 @@ createQualificationReport <- function(qualificationRunnerFolder,
   #-------- STEP 3: Run Qualification Workflow  --------#
   # If version info is provided update title page
   titlePageFile <- file.path(reInputFolder, "Intro/titlepage.md") 
-  if(!is.null(versionInfo) & file.exists(titlePageFile)){
+  addTitlePage <- all(
+    !is.null(versionInfo),
+    file.exists(titlePageFile)
+  )
+  if(addTitlePage){
     adjustTitlePage(titlePageFile, qualificationVersionInfo = versionInfo)
   }
   
@@ -139,14 +146,14 @@ createQualificationReport <- function(qualificationRunnerFolder,
     workflow$simulate$settings$maxSimulationsPerCore <- maxSimulationsPerCore
   }
   
-  #' Activate/Deactivate tasks of qualification workflow prior running
-  # workflow$inactivateTasks("simulate")
-  # workflow$inactivateTasks("calculatePKParameters")
-  # workflow$inactivateTasks("plotTimeProfiles")
-  # workflow$inactivateTasks("plotComparisonTimeProfile")
-  # workflow$inactivateTasks("plotGOFMerged")
-  # workflow$inactivateTasks("plotPKRatio")
-  # workflow$inactivateTasks("plotDDIRatio")
+  #' @note Activate/Inactivate tasks of qualification workflow prior running
+  #' workflow$inactivateTasks("simulate")
+  #' workflow$inactivateTasks("calculatePKParameters")
+  #' workflow$inactivateTasks("plotTimeProfiles")
+  #' workflow$inactivateTasks("plotComparisonTimeProfile")
+  #' workflow$inactivateTasks("plotGOFMerged")
+  #' workflow$inactivateTasks("plotPKRatio")
+  #' workflow$inactivateTasks("plotDDIRatio")
   
   #' Run the `QualificatitonWorklfow`
   workflow$runWorkflow()

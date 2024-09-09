@@ -2,6 +2,7 @@
 title: "Excel Template"
 resource_files:
   - figures
+  - templates
 output: 
   rmarkdown::html_vignette:
     toc: true
@@ -16,30 +17,29 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-options(knitr.kable.NA = '')
-displayExcelSheet <- function(sheet){
+options(knitr.kable.NA = "")
+displayExcelSheet <- function(sheet) {
   sheetContent <- readxl::read_xlsx(
     system.file(
       "extdata",
-      "WorkflowInput.xlsx", 
+      "WorkflowInput.xlsx",
       package = "ospsuite.reportingengine"
-      ),
+    ),
     sheet = sheet
-    )
-  if(!("Description" %in% names(sheetContent))){
+  )
+  if (!("Description" %in% names(sheetContent))) {
     return(knitr::kable(sheetContent, na = ""))
   }
-  # Replace line breaks by 
+  # Replace line breaks by
   # in-cell breaks for nice display of the table within vignette
   sheetContent$Description <- gsub(
-    pattern = "\\r\\n", 
-    replacement = "<br>", 
+    pattern = "\\r\\n",
+    replacement = "<br>",
     sheetContent$Description
-    )
+  )
 
   return(knitr::kable(sheetContent, na = ""))
 }
-#source(system.file("extdata", "vignette-helpers.R", package = "ospsuite.reportingengine"))
 ```
 
 ```{r setup}
@@ -60,12 +60,12 @@ The Excel template was created so that users can design their own workflows by d
 
 The Excel template is an *xlsx* document that defines all the relevant information of a working workflow.
 
-The function [`createWorkflowFromExcelInput()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/reference/createWorkflowFromExcelInput.html) converts such Excel document into an R script that defines your workflow in plain R code. 
+The function [`createWorkflowFromExcelInput()`](../reference/createWorkflowFromExcelInput.html) converts such Excel document into an R script that defines your workflow in plain R code. 
 Then, you can run your workflow by running the R script (e.g. using the function `source()`).
 
 ### Where can I get the template ?
 
-The Excel template is available on GitHub: [WorkflowInput.xlsx](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/WorkflowInput.xlsx).
+The Excel template is available through the following link [WorkflowInput.xlsx](templates/WorkflowInput.xlsx).
 
 ## Standard Excel Sheet Names
 
@@ -232,7 +232,7 @@ This meta data can be provided either by using an Excel sheet of your Excel docu
 - If dictionary is defined as a separate csv file:
    - Go to the standard Excel sheet *Data Sources*
    - Select the option **FILE** in the cell corresponding to your **DictionaryType** 
-   - Include the path of the file in the cell corresponding to **DictionaryLocation**  <br> You can download and use the template [tpDictionary.csv](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/tpDictionary.csv) as reference
+   - Include the path of the file in the cell corresponding to **DictionaryLocation**  <br> You can download and use the template [tpDictionary.csv](templates/tpDictionary.csv) as reference
 
 <a id="excel-sensitivity"></a>
 
@@ -283,7 +283,7 @@ To define Study Design tables users can either leverage an Excel sheet of the Ex
 - If Study Design is defined as a separate csv file:
    - Go to the standard Excel sheet *SimulationSets*
    - Select the option **FILE** in the cell corresponding to your **StudyDesignType** 
-   - Include the path of the file in the cell corresponding to **StudyDesignLocation**  <br> You can download and use the template [StudyDesign.csv](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/blob/develop/inst/extdata/StudyDesign.csv) as reference
+   - Include the path of the file in the cell corresponding to **StudyDesignLocation**  <br> You can download and use the template [StudyDesign.csv](templates/StudyDesign.csv) as reference
 
 <details><summary>Table : StudyDesign sheet</summary>
 

@@ -7,6 +7,7 @@
 #' @field sensitivityAnalysisResultsFolder path to folder storing results of sensitivity analyses
 #' @field simulationResultFileNames vector of names of CSV files storing simulation results
 #' @field pkAnalysisResultsFileNames vector of names of CSV files storing results of pk analyses
+#' @field pkRatioResultsFileNames vector of names of CSV files storing results of pk ratios
 #' @field sensitivityAnalysisResultsFileNames vector of names of CSV files storing results of sensitivity analyses
 #' @field popSensitivityAnalysisResultsIndexFile path to file containing index of population sensitivity analysis results
 #' @field parameterDisplayPaths data.frame mapping parameters to user-defined display paths
@@ -23,6 +24,7 @@ SimulationStructure <- R6::R6Class(
     sensitivityAnalysisResultsFolder = defaultTaskOutputFolders$sensitivityAnalysis,
     simulationResultFileNames = NULL,
     pkAnalysisResultsFileNames = NULL,
+    pkRatioResultsFileNames = NULL,
     sensitivityAnalysisResultsFileNames = NULL,
     popSensitivityAnalysisResultsIndexFile = NULL,
     parameterDisplayPaths = NULL,
@@ -47,6 +49,12 @@ SimulationStructure <- R6::R6Class(
         workflowFolder,
         self$pkAnalysisResultsFolder,
         defaultFileNames$pkAnalysisResultsFile(self$simulationSet$simulationSetName)
+      )
+
+      self$pkRatioResultsFileNames <- file.path(
+        workflowFolder,
+        self$pkAnalysisResultsFolder,
+        defaultFileNames$pkRatioResultsFile(self$simulationSet$simulationSetName)
       )
 
       self$sensitivityAnalysisResultsFileNames <- file.path(

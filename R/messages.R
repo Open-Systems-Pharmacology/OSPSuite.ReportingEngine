@@ -13,9 +13,6 @@ messages <- list(
       "' must have the same length, but they don't!", optionalMessage
     )
   },
-  errorDuplicatedEntries = function(objectNames, optionalMessage = NULL) {
-    paste(objectNames, "contains duplicated elements.")
-  },
   errorWrongLength = function(object, nbElements, optionalMessage = NULL) {
     paste0(
       callingFunction(), "Object should be of length '", nbElements, "', but is of length '", length(object), "' instead. ", optionalMessage
@@ -96,8 +93,11 @@ messages <- list(
   errorNoValidParametersForSensitivityAnalysis = function(simulationSetName) {
     paste(callingFunction(), "No valid variable parameter paths for sensitivity analysis of simulation set", simulationSetName, ".")
   },
-  errorNotADimension = function(values) {
-    paste0(callingFunction(), "Expected a dimension. Check that '", paste0(values, collapse = "', '."), "' is included in ospsuite::allAvailableDimensions().")
+  errorPackageNotInstalled = function(packageName) {
+    paste0(
+      callingFunction(), "Package '", highlight(packageName), "' is not installed.",
+      "Use '", highlight(paste0("install.packages(\"", packageName, "\")")), "' to install package"
+    )
   },
   invalidOuputPath = function(path, simName) {
     if (isOfLength(path, 1)) {
@@ -112,14 +112,20 @@ messages <- list(
   errorUnitNotFromDimension = function(unit, dimension) {
     paste0(callingFunction(), "Unit '", paste0(unit, collapse = "', '"), "' is not included in available units for dimension: '", paste0(dimension, collapse = "', '"), "'.")
   },
-  errorNotSameOutputsBetweenSets = function(setNames) {
-    paste0(callingFunction(), "Simulation sets '", paste0(setNames, collapse = "', '"), "' require same outputs and PK parameters.  Verify the outputs and PK parameters of simulation sets using the function: 'getPKParametersInSimulationSet'.")
-  },
-  errorHasNoUniqueValues = function(data, dataName = "dataset", na.rm = TRUE) {
+  errorHasNoUniqueValues = function(values, variableName = NULL, na.rm = TRUE) {
     if (na.rm) {
-      data <- data[!is.na(data)]
+      values <- values[!is.na(values)]
     }
-    return(paste0(callingFunction(), "Values '", paste0(data[duplicated(data)], collapse = "', '"), "' in ", dataName, " are not unique"))
+    duplicateValues <- highlight(values[duplicated(values)])
+    nameText <- ""
+    if (!is.null(variableName)) {
+      nameText <- paste0(" in ", highlight(variableName))
+    }
+    return(paste0(
+      callingFunction(),
+      "Values '", paste0(duplicateValues, collapse = "', '"),
+      "'", nameText, " are not unique"
+    ))
   },
   errorCommand = function(command, status) {
     paste0("Command : '", command, "' returned Error Status ", status)
@@ -138,9 +144,15 @@ messages <- list(
     paste0(objectNames, " NOT completed successfully on all cores")
   },
   errorMolecularWeightRequired = function(path) {
-    paste0("Molecular weight not found but required for observed data Id '", path, "' in Time Profile plot.")
+    paste0("Molecular weight required but not found for observed data Id '", highlight(path), "' in Time Profile plot.")
   },
-
+  errorParametersNotIncludedInDDI = function(parameterNames) {
+    paste0(
+      "PK parameters '", highlight(paste(parameterNames, collapse = "', '")),
+      "' defined in ", highlight("GuestDelta"), " field but not in ",
+      highlight("PKParameters"), " field"
+    )
+  },
   #----- Warning messages ----
   warningExistingPath = function(existingPath) {
     paste0(callingFunction(), "Path: '", existingPath, "' already exists.")
@@ -218,10 +230,79 @@ messages <- list(
       "errors/SD were assumed arithmetic with same unit as observed data values"
     )
   },
-  warningTooManyAxes = function(){
+  warningTooManyAxes = function() {
     "Qualification TimeProfile is unable to display data for all 3 axes. Only Y and Y2 axes were kept."
   },
-
+  warningHasInfiniteValues = function(n, datasetName = NULL) {
+    paste0(
+      "Data ",
+      ifNotNull(datasetName, paste0("from '", highlight(datasetName), "' "), ""),
+      "included ", highlight(n), " infinite values"
+    )
+  },
+  pkParameterNotFound = function(pkParameterName, pkRatioMapping) {
+    paste0(
+      "PK Parameter '", highlight(pkParameterName), "' not found for ",
+      "Project '", highlight(pkRatioMapping$Project),
+      "' and Simulation '", highlight(pkRatioMapping$Simulation), "'"
+    )
+  },
+  noMoleculePathsIncluded = function(groupName) {
+    paste0(
+      "No molecule paths included in group '", highlight(groupName), "'."
+    )
+  },
+  warningNAFoundInPKAnalysisFile = function(filePath) {
+    paste0(highlight("NaN"), " found in PK analysis file '", highlight(filePath), "'.")
+  },
+  warningPKAnalysesMissingIds = function(ids, setName) {
+    paste0(
+      "Missing ", highlight("IndividualIds"), " in PKAnalysis file for simulation set '",
+      highlight(setName), "': ",
+      paste0("'", highlight(ids), "'", collapse = ", ")
+    )
+  },
+  warningPKAnalysesMissingIds = function(ids, setName) {
+    paste0(
+      "Missing ", highlight("IndividualIds"), " in PKAnalysis file for simulation set '",
+      highlight(setName), "': ",
+      paste0("'", highlight(ids), "'", collapse = ", ")
+    )
+  },
+  warningMissingFromReferenceSet = function(path, simulationSetName, pkParameters = NULL) {
+    if (is.null(pkParameters)) {
+      return(
+        paste0(
+          "Output path '", highlight(path),
+          "' was NOT defined for reference simulation set '", highlight(simulationSetName),
+          "'. Ouptut path and its PK Parameters were added to the list of figures to export."
+        )
+      )
+    }
+    return(
+      paste0(
+        "The following PK Parameters '",
+        paste(highlight(pkParameters), collapse = "', '"),
+        "' were NOT defined for the Ouptut path '", highlight(path),
+        "' in the reference simulation set '", highlight(simulationSetName),
+        "'. The PK Parameters were added to the list of figures to export."
+      )
+    )
+  },
+  inconsistentMetaData = function(values, id, dataType = "units") {
+    paste0(
+      "Inconsistent ", highlight(dataType),
+      " found within Group ID '", highlight(id), "': '",
+      paste0(highlight(unique(values)), collapse = "', '"), "'."
+    )
+  },
+  warningLogScaleIssue = function(output) {
+    paste0(
+      "Plot scale is logarithmic, however all values from simulated output '", 
+      highlight(output), "' were lower or equal to 0."
+    )
+  },
+  
   #----- Info messages ----
   runStarting = function(runName, subRun = NULL) {
     if (is.null(subRun)) {
@@ -239,7 +320,19 @@ messages <- list(
     paste0("Loading simulations on ", highlight(workflowName))
   },
   subsetsCreated = function(numberOfSubsets, numberOfSimulations) {
-    paste0("Splitting simulations for parallel run:", highlight(numberOfSimulations), " simulations split into ", highlight(numberOfSubsets), " subsets")
+    paste0("Splitting simulations for parallel run: ", highlight(numberOfSimulations), " simulations split into ", highlight(numberOfSubsets), " subsets")
+  },
+  ratioIdentifiedPopulations = function(simulationSetName,
+                                        referenceSimulationSetName,
+                                        isSamePopulation = TRUE) {
+    paste0(
+      "Simulation Set '", highlight(simulationSetName),
+      "' was identified with population ",
+      highlight(ifelse(isSamePopulation, "same", "different")),
+      " from reference '", highlight(referenceSimulationSetName), "'.\n",
+      "Ratio comparison will use ", highlight(ifelse(isSamePopulation, "Individual PK Ratios", "Monte Carlo Sampling")),
+      " for analyzing statistics."
+    )
   },
 
   #----- Debug messages ----
@@ -302,18 +395,24 @@ messages <- list(
       "' when creating an '", highlight("Output"), "' object."
     )
   },
-  monteCarloChecking = function(analyticalSolutionMessage, medianPKRatioStatistics, n, seed){
+  monteCarlo = function(simulationSetName, mcRepetitions, mcRandomSeed) {
+    paste0(
+      "Monte Carlo Sampling for ", highlight(simulationSetName), " will use ",
+      highlight(mcRepetitions), " repetitions with Random Seed ", highlight(mcRandomSeed)
+    )
+  },
+  monteCarloChecking = function(analyticalSolutionMessage, medianPKRatioStatistics, n, seed) {
     c(
       analyticalSolutionMessage,
       paste0(
         "Monte Carlo solution for ", paste0(tail(names(medianPKRatioStatistics), 4), collapse = ", "),
-        " resulted in ", paste0(tail(unlist(medianPKRatioStatistics), 4), collapse = ", "),
+        " resulted in ", paste0(round(tail(unlist(medianPKRatioStatistics), 4), 3), collapse = ", "),
         " respectively."
-        ),
-      paste0("Number of repetitions was set to: ", n), 
-      paste0("Random seed number was set to: ", seed) 
+      ),
+      paste0("Number of repetitions was set to: ", n),
+      paste0("Random seed number was set to: ", seed)
     )
-    }
+  }
 )
 
 

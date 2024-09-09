@@ -97,7 +97,8 @@ Output <- R6::R6Class(
       self$dataDisplayName <- dataDisplayName %||% self$displayName
       self$residualScale <- residualScale
 
-      self$groupID <- groupID
+      # Same output path get same group ID
+      self$groupID <- groupID %||% path
 
       self$color <- color %||% newOutputColor()
       self$fill <- fill %||% newOutputColor()
@@ -106,10 +107,25 @@ Output <- R6::R6Class(
 
       self$pkParameters <- c(pkParameters)
       if (isOfType(self$pkParameters, "character")) {
-        self$pkParameters <- sapply(self$pkParameters, function(pkParameter) {
-          PkParameterInfo$new(pkParameter)
-        })
+        # Keep only unique PK parameter names
+        self$pkParameters <- sapply(
+          unique(self$pkParameters),
+          function(pkParameter) {
+            PkParameterInfo$new(pkParameter)
+          }
+        )
       }
+      # Throw warning if PK Parameter display names are not the same
+      checkNoDuplicate(
+        values = sapply(
+          self$pkParameters,
+          function(pkParameter) {
+            pkParameter$displayName
+          }
+        ),
+        variableName = paste0("PK Parameters display names for Output '", self$displayName, "'"),
+        nullAllowed = TRUE
+      )
     }
   )
 )

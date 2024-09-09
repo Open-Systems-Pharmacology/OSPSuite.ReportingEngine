@@ -7,7 +7,6 @@
 plotMeanTimeProfileLog(
   simulatedData,
   observedData = NULL,
-  lloqData = NULL,
   metaData = NULL,
   dataMapping = NULL,
   plotConfiguration = NULL
@@ -18,11 +17,9 @@ plotMeanTimeProfileLog(
 
 \item{observedData}{data.frame of observed data}
 
-\item{lloqData}{data.frame of lloq data}
-
 \item{metaData}{meta data on `data`}
 
-\item{dataMapping}{A list mapping `x`, `y` and `group` from datasets}
+\item{dataMapping}{A list to be integrated to `tlf` DataMapping objects}
 
 \item{plotConfiguration}{`PlotConfiguration` class object from `tlf` library}
 }

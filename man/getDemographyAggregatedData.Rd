@@ -8,6 +8,7 @@ getDemographyAggregatedData(
   data,
   xParameterName,
   yParameterName,
+  groupName = NULL,
   bins = NULL,
   stairstep = TRUE
 )
@@ -18,6 +19,8 @@ getDemographyAggregatedData(
 \item{xParameterName}{Name of parameter in `data` used for aggregation in x axis of plot}
 
 \item{yParameterName}{Name of parameter in `data` aggregated in y axis of plot}
+
+\item{groupName}{Name of parameter in `data` aggregated for grouping}
 
 \item{bins}{Either a numeric vector defining bin edges
 or a numeric value defining the number of bins.}

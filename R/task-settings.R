@@ -41,6 +41,9 @@ TaskSettings <- R6::R6Class(
           vpcParameterPlot = NULL,
           comparisonVpcPlot = NULL
         )
+        private$.dodge <- TRUE
+        private$.referenceGlobalRange <- TRUE
+        private$.scales <- list(Linear = TRUE, Logarithmic = FALSE)
       }
       if (isIncluded(taskName, AllAvailableTasks$plotPKParameters)) {
         private$.plotConfigurations <- list(
@@ -113,6 +116,24 @@ TaskSettings <- R6::R6Class(
       private$.scientific <- value %||% private$.scientific
       return(invisible())
     },
+    #' @field dodge logical defining if observed data bars dodge simulated data bars in demography histogram
+    dodge = function(value) {
+      if (missing(value)) {
+        return(private$.dodge)
+      }
+      validateIsLogical(value, nullAllowed = TRUE)
+      private$.dodge <- value %||% private$.dodge
+      return(invisible())
+    },
+    #' @field referenceGlobalRange logical defining if reference population is plotted as range
+    referenceGlobalRange = function(value) {
+      if (missing(value)) {
+        return(private$.referenceGlobalRange)
+      }
+      validateIsLogical(value, nullAllowed = TRUE)
+      private$.referenceGlobalRange <- value %||% private$.referenceGlobalRange
+      return(invisible())
+    },
     #' @field scales named list of logicals defining if log/linear plots are included
     scales = function(value) {
       if (missing(value)) {
@@ -138,7 +159,9 @@ TaskSettings <- R6::R6Class(
     .digits = NULL,
     .nsmall = NULL,
     .scientific = NULL,
-    .scales = NULL
+    .scales = NULL,
+    .dodge = NULL,
+    .referenceGlobalRange = FALSE
   )
 )
 
@@ -188,7 +211,7 @@ GofTaskSettings <- R6::R6Class(
     #'
     #' # Set the legend caption displayed for range
     #' workflow$plotTimeProfilesAndResiduals$settings$setStatistics(
-    #' statisticsType = StatisticsTypes$`Geometric mean`
+    #' statisticsType = StatisticsTypes$`Geometric mean`,
     #' rangeCaption = "90% population range"
     #' )
     #'

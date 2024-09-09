@@ -1,0 +1,193 @@
+{
+  "SimulationMappings": [
+    {
+      "Project": "P1",
+      "Simulation": "S1",
+      "Path": "Models",
+      "SimulationFile": "Larson 2013 8-18y meal"
+    },
+    {
+      "Project": "P2",
+      "Simulation": "S2",
+      "Path": "Models",
+      "SimulationFile": "MiniModel2"
+    }
+  ],
+  "ObservedDataSets": [
+    {
+      "Id": "DDI Ratios",
+      "Path": "ObservedData/DDI.csv",
+      "Type": "DDIRatio"
+    }
+  ],
+  "Plots": {
+    "AxesSettings": {
+      "DDIRatioPlotsPredictedVsObserved": [
+        {
+          "Type": "X",
+          "Dimension": "Dimensionless",
+          "Unit": "",
+          "GridLines": false,
+          "Scaling": "Log"
+        },
+        {
+          "Type": "Y",
+          "Dimension": "Dimensionless",
+          "Unit": "",
+          "GridLines": false,
+          "Scaling": "Log"
+        }
+      ],
+      "DDIRatioPlotsResidualsVsObserved": [
+        {
+          "Type": "X",
+          "Dimension": "Dimensionless",
+          "Unit": "",
+          "GridLines": false,
+          "Scaling": "Log"
+        },
+        {
+          "Type": "Y",
+          "Dimension": "Dimensionless",
+          "Unit": "",
+          "GridLines": false,
+          "Scaling": "Log"
+        }
+      ]
+    },
+    "PlotSettings": {
+      "ChartWidth": 500,
+      "ChartHeight": 400,
+      "Fonts": {
+        "AxisSize": 11,
+        "LegendSize": 9,
+        "OriginSize": 9,
+        "FontFamilyName": "Arial",
+        "WatermarkSize": 40
+      }
+    },
+    "GOFMergedPlots": [],
+    "ComparisonTimeProfilePlots": [],
+    "DDIRatioPlots": [
+      {
+        "SectionReference": "test-ddi",
+        "Title": "Test DDI Results",
+        "PKParameters": [
+          "AUC_tEnd",
+          "C_max"
+        ],
+        "PlotTypes": [
+          "predictedVsObserved",
+          "residualsVsObserved"
+        ],
+        "Artifacts": [
+          "Plot",
+          "GMFE",
+          "Measure",
+          "Table"
+        ],
+        "Subunits": [
+          "Mechanism",
+          "Perpetrator",
+          "Victim"
+        ],
+        "Groups": [
+          {
+            "Caption": "Test 1",
+            "Color": "#FF0000",
+            "Symbol": "Square",
+            "DDIRatios": [
+              {
+                "Output": "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",
+                "ObservedData": "DDI Ratios",
+                "ObservedDataRecordId": 111,
+                "SimulationControl": {
+                  "Project": "P1",
+                  "Simulation": "S1",
+                  "StartTime": 1,
+                  "TimeUnit": "h"
+                },
+                "SimulationDDI": {
+                  "Project": "P1",
+                  "Simulation": "S1",
+                  "StartTime": 1,
+                  "TimeUnit": "h"
+                }
+              },
+              {
+                "Output": "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",
+                "ObservedData": "DDI Ratios",
+                "ObservedDataRecordId": 333,
+                "SimulationControl": {
+                  "Project": "P1",
+                  "Simulation": "S1",
+                  "StartTime": 1,
+                  "TimeUnit": "h"
+                },
+                "SimulationDDI": {
+                  "Project": "P1",
+                  "Simulation": "S1",
+                  "StartTime": 1,
+                  "TimeUnit": "h"
+                }
+              }
+            ]
+          },
+          {
+            "Caption": "Test 2",
+            "Color": "#00FF00",
+            "Symbol": "Square",
+            "DDIRatios": [
+              {
+                "Output": "Organism|A|Concentration in container",
+                "ObservedData": "DDI Ratios",
+                "ObservedDataRecordId": 222,
+                "SimulationControl": {
+                  "Project": "P2",
+                  "Simulation": "S2",
+                  "StartTime": 1,
+                  "TimeUnit": "h"
+                },
+                "SimulationDDI": {
+                  "Project": "P2",
+                  "Simulation": "S2",
+                  "StartTime": 1,
+                  "TimeUnit": "h"
+                }
+              },
+              {
+                "Output": "Organism|A|Concentration in container",
+                "ObservedData": "DDI Ratios",
+                "ObservedDataRecordId": 444,
+                "SimulationControl": {
+                  "Project": "P2",
+                  "Simulation": "S2",
+                  "StartTime": 1,
+                  "TimeUnit": "h"
+                },
+                "SimulationDDI": {
+                  "Project": "P2",
+                  "Simulation": "S2",
+                  "StartTime": 1,
+                  "TimeUnit": "h"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "TimeProfile": []
+  },
+  "Inputs": [],
+  "Sections": [
+    {
+      "Reference": "test-ddi",
+      "Title": "Test of DDI Ratio",
+      "Content": null,
+      "Sections": []
+    }
+  ],
+  "Intro": [
+  ]
+}

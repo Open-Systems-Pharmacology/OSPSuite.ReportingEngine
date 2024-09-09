@@ -1,6 +1,6 @@
 #' @title SensitivityAnalysisSettings
 #' @description  R6 class for Population Sensitivity Analysis Settings
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
 #' @keywords internal
 SensitivityAnalysisSettings <- R6::R6Class(
   "SensitivityAnalysisSettings",
@@ -19,9 +19,9 @@ SensitivityAnalysisSettings <- R6::R6Class(
                           quantileVec = NULL,
                           variableParameterPaths = NULL,
                           showProgress = FALSE) {
-      self$variationRange <- variationRange %||% defaultVariationRange
-      self$numberOfCores <- numberOfCores %||% defaultSensitivityAnalysisNumberOfCores
-      self$quantileVec <- quantileVec %||% defaultQuantileVec
+      self$variationRange <- variationRange %||% reEnv$defaultVariationRange
+      self$numberOfCores <- numberOfCores %||% reEnv$defaultSensitivityAnalysisNumberOfCores
+      self$quantileVec <- quantileVec %||% reEnv$defaultQuantileVec
       self$variableParameterPaths <- variableParameterPaths
       self$showProgress <- showProgress
     }
@@ -55,7 +55,10 @@ SensitivityAnalysisSettings <- R6::R6Class(
         private$.quantileVec
       } else {
         validateIsNumeric(value)
-        validateNoDuplicatedEntries(value)
+        validateNoDuplicate(
+          values = value,
+          variableName = "sensitivity vector of quantiles"
+        )
         private$.quantileVec <- value
       }
     },
@@ -67,7 +70,10 @@ SensitivityAnalysisSettings <- R6::R6Class(
       } else {
         if (!is.null(value)) {
           validateIsString(value)
-          validateNoDuplicatedEntries(value)
+          validateNoDuplicate(
+            values = value,
+            variableName = "variable parameter paths"
+          )
           private$.variableParameterPaths <- value
         }
       }

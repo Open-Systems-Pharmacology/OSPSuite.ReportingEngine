@@ -59,8 +59,6 @@ AllAvailableTasks <- c(
 #'
 activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
-
-  # TODO: update once renamed
   validateIsIncludedAndLog(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks")
 
   for (task in tasks) {
@@ -92,8 +90,6 @@ activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
 #'
 inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
-
-  # TODO: Update once the function name is updated
   validateIsIncludedAndLog(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks")
 
   for (task in tasks) {
@@ -177,7 +173,7 @@ loadCalculatePKParametersTask <- function(workflow, active = FALSE, settings = N
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
 
-  return(CalculatePKParametersTask$new(
+  calculatePKParametersTask <- CalculatePKParametersTask$new(
     getTaskResults = calculatePKParameters,
     nameTaskResults = getObjectNameAsString(calculatePKParameters),
     outputFolder = defaultTaskOutputFolders$calculatePKParameters,
@@ -188,7 +184,15 @@ loadCalculatePKParametersTask <- function(workflow, active = FALSE, settings = N
     active = active,
     settings = settings,
     message = defaultWorkflowMessages$calculatePKParameters
-  ))
+  )
+  if (!isOfType(workflow, "PopulationWorkflow")) {
+    return(calculatePKParametersTask)
+  }
+  if (!isIncluded(workflow$workflowType, PopulationWorkflowTypes$ratioComparison)) {
+    return(calculatePKParametersTask)
+  }
+  calculatePKParametersTask$ratioComparison <- TRUE
+  return(calculatePKParametersTask)
 }
 
 #' @title loadCalculateSensitivityTask
@@ -825,9 +829,9 @@ addUserDefinedTask <- function(workflow,
   argumentNames <- names(formals(taskFunction))
   if (isOfType(workflow, "MeanModelWorkflow")) {
     # PlotTask arguments
-    # TODO: updated once renamed
     validateIsIncludedAndLog(
-      c("structureSet", "settings"), argumentNames,
+      c("structureSet", "settings"),
+      argumentNames,
       groupName = "Task function arguments"
     )
 
@@ -849,9 +853,9 @@ addUserDefinedTask <- function(workflow,
 
   if (isOfType(workflow, "PopulationWorkflow")) {
     # PopulationPlotTask arguments
-    # TODO: update once renamed
     validateIsIncludedAndLog(
-      c("structureSets", "settings", "workflowType", "xParameters", "yParameters"), argumentNames,
+      c("structureSets", "settings", "workflowType", "xParameters", "yParameters"),
+      argumentNames,
       groupName = "Task function arguments"
     )
 
@@ -873,10 +877,7 @@ addUserDefinedTask <- function(workflow,
       )
     )
   }
-  logWorkflow(
-    message = paste0("User defined task '", taskName, "' successfully loaded on workflow"),
-    pathFolder = workflow$workflowFolder
-  )
+  logDebug(paste0("User defined task '", taskName, "' successfully loaded on workflow"))
   return(invisible())
 }
 
@@ -902,9 +903,9 @@ loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getTimeProfileOutputsDataframe(configurationPlan)
-  if (!isOfLength(outputs, 0)) {
+  if (!isEmpty(outputs)) {
     # data.frame to list
-    outputs <- split(outputs, 1:nrow(outputs))
+    outputs <- split(outputs, seq_len(nrow(outputs)))
     inputFiles <- as.character(sapply(outputs, function(output) {
       configurationPlan$getSimulationResultsPath(project = output$project, simulation = output$simulation)
     }))
@@ -914,12 +915,14 @@ loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
     inputFolder = defaultTaskOutputFolders$simulate,
-    # TODO: add observed data
     inputs = inputFiles,
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotTimeProfiles,
-    settings = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$TimeProfile) %||% getDefaultTimeProfileAxesSettings())
+    settings = list(axes = getAxesPropertiesFromName(
+      configurationPlan = configurationPlan,
+      plotName = "TimeProfile"
+    ))
   ))
 }
 
@@ -943,9 +946,9 @@ loadGOFMergedTask <- function(workflow, configurationPlan) {
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getGOFOutputsDataframe(configurationPlan)
-  if (!isOfLength(outputs, 0)) {
+  if (!isEmpty(outputs)) {
     # data.frame to list
-    outputs <- split(outputs, 1:nrow(outputs))
+    outputs <- split(outputs, seq_len(nrow(outputs)))
     inputFiles <- as.character(sapply(outputs, function(output) {
       configurationPlan$getSimulationResultsPath(project = output$project, simulation = output$simulation)
     }))
@@ -955,14 +958,19 @@ loadGOFMergedTask <- function(workflow, configurationPlan) {
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
     inputFolder = defaultTaskOutputFolders$simulate,
-    # TODO: add observed data
     inputs = inputFiles,
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotGOFMerged,
     settings = list(
-      predictedVsObserved = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$GOFMergedPlotsPredictedVsObserved)),
-      residualsOverTime = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$GOFMergedPlotsResidualsOverTime)),
+      predictedVsObserved = list(axes = getAxesPropertiesFromName(
+        configurationPlan = configurationPlan,
+        plotName = "GOFMergedPlotsPredictedVsObserved"
+      )),
+      residualsOverTime = list(axes = getAxesPropertiesFromName(
+        configurationPlan = configurationPlan,
+        plotName = "GOFMergedPlotsResidualsOverTime"
+      )),
       digits = reEnv$formatNumericsDigits,
       nsmall = reEnv$formatNumericsSmall,
       scientific = reEnv$formatNumericsScientific
@@ -992,9 +1000,9 @@ loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPl
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getComparisonTimeProfileOutputsDataframe(configurationPlan)
-  if (!isOfLength(outputs, 0)) {
+  if (!isEmpty(outputs)) {
     # data.frame to list
-    outputs <- split(outputs, 1:nrow(outputs))
+    outputs <- split(outputs, seq_len(nrow(outputs)))
     inputFiles <- as.character(sapply(outputs, function(output) {
       configurationPlan$getSimulationResultsPath(project = output$project, simulation = output$simulation)
     }))
@@ -1004,12 +1012,16 @@ loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPl
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
     inputFolder = defaultTaskOutputFolders$simulate,
-    # TODO: add observed data
     inputs = inputFiles,
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotComparisonTimeProfiles,
-    settings = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$ComparisonTimeProfile))
+    settings = list(
+      axes = getAxesPropertiesFromName(
+        configurationPlan = configurationPlan,
+        plotName = "ComparisonTimeProfile"
+      )
+    )
   ))
 }
 
@@ -1034,9 +1046,9 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getPKRatioOutputsDataframe(configurationPlan)
-  if (!isOfLength(outputs, 0)) {
+  if (!isEmpty(outputs)) {
     # data.frame to list
-    outputs <- split(outputs, 1:nrow(outputs))
+    outputs <- split(outputs, seq_len(nrow(outputs)))
     inputFiles <- as.character(sapply(outputs, function(output) {
       configurationPlan$getPKAnalysisResultsPath(project = output$project, simulation = output$simulation)
     }))
@@ -1046,23 +1058,35 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
     inputFolder = defaultTaskOutputFolders$simulate,
-    # TODO: add observed data
     inputs = inputFiles,
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotPKRatio,
     settings = list(
-      axes = getAxesProperties(configurationPlan$plots$AxesSettings$PKRatioPlots),
+      axes = getAxesPropertiesFromName(
+        configurationPlan = configurationPlan,
+        plotName = "PKRatioPlots"
+      ),
       digits = reEnv$formatNumericsDigits,
       nsmall = reEnv$formatNumericsSmall,
       scientific = reEnv$formatNumericsScientific,
-      # Reference unit for table artifact
+      # Reference unit for table artifact as named list
       # Note that
       # 1) it can be updated before running workflows
       # 2) configuration plan inputs could override these
-      units = list(
-        AUC = ospsuite::ospUnits$`AUC [mass]`$`µg*h/l`,
-        CL = ospsuite::ospUnits$Flow$`l/h`
+      # 3) all PK Parameters use their default ospsuite unit
+      units = as.list(
+        c(
+          # Keep these AUC for backward compatibility
+          AUC = ospsuite::ospUnits$`AUC [mass]`$`µg*h/l`,
+          # All remaining PK Parameter units are defined here including CL
+          sapply(
+            ospsuite::allPKParameterNames(),
+            function(pkParameterName) {
+              ospsuite::pkParameterByName(pkParameterName)$displayUnit
+            }
+          )
+        )
       )
     )
   ))
@@ -1090,9 +1114,9 @@ loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
   # Get list of task required input files
   inputFiles <- NULL
   outputs <- getDDIOutputsDataframe(configurationPlan)
-  if (!isOfLength(outputs, 0)) {
+  if (!isEmpty(outputs)) {
     # data.frame to list
-    outputs <- split(outputs, 1:nrow(outputs))
+    outputs <- split(outputs, seq_len(nrow(outputs)))
     inputFiles <- as.character(sapply(outputs, function(output) {
       configurationPlan$getPKAnalysisResultsPath(project = output$project, simulation = output$simulation)
     }))
@@ -1102,14 +1126,19 @@ loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
     getTaskResults = taskFunction,
     nameTaskResults = nameFunction,
     inputFolder = defaultTaskOutputFolders$simulate,
-    # TODO: add observed data
     inputs = inputFiles,
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotDDIRatio,
     settings = list(
-      predictedVsObserved = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$DDIRatioPlotsPredictedVsObserved)),
-      residualsOverTime = list(axes = getAxesProperties(configurationPlan$plots$AxesSettings$DDIRatioPlotsResidualsVsObserved)),
+      predictedVsObserved = list(axes = getAxesPropertiesFromName(
+        configurationPlan = configurationPlan,
+        plotName = "DDIRatioPlotsPredictedVsObserved"
+      )),
+      residualsOverTime = list(axes = getAxesPropertiesFromName(
+        configurationPlan = configurationPlan,
+        plotName = "DDIRatioPlotsResidualsVsObserved"
+      )),
       digits = reEnv$formatNumericsDigits,
       nsmall = reEnv$formatNumericsSmall,
       scientific = reEnv$formatNumericsScientific

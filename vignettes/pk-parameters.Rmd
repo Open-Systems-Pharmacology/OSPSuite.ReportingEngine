@@ -2,6 +2,7 @@
 title: "PK parameters"
 resource_files:
   - figures
+  - templates
 output: 
   rmarkdown::html_vignette:
    number_sections: true
@@ -105,9 +106,11 @@ workflow1 <-
   )
 
 # Set the workflow tasks to be run
-workflow1$activateTasks(c("simulate", 
-                          "calculatePKParameters", 
-                          "plotPKParameters"))
+workflow1$activateTasks(c(
+  "simulate",
+  "calculatePKParameters",
+  "plotPKParameters"
+))
 
 # Run the workflow
 workflow1$runWorkflow()
@@ -168,9 +171,11 @@ workflow2 <-
   )
 
 # Set the workflow tasks to be run
-workflow2$activateTasks(c("simulate", 
-                          "calculatePKParameters", 
-                          "plotPKParameters"))
+workflow2$activateTasks(c(
+  "simulate",
+  "calculatePKParameters",
+  "plotPKParameters"
+))
 
 # Run the workflow
 workflow2$runWorkflow()
@@ -208,12 +213,14 @@ simulationFileB <- system.file("extdata", "MiniModel2.pkml",
   package = "ospsuite.reportingengine"
 )
 
-updatePKParameter("C_max", 
-                  displayName = "Cmax",
-                  displayUnit = "nmol/l")
-updatePKParameter("AUC_tEnd", 
-                  displayName = "AUC",
-                  displayUnit = "nmol*min/l")
+updatePKParameter("C_max",
+  displayName = "Cmax",
+  displayUnit = "nmol/l"
+)
+updatePKParameter("AUC_tEnd",
+  displayName = "AUC",
+  displayUnit = "nmol*min/l"
+)
 
 # Define the input parameters
 outputA <- Output$new(
@@ -246,9 +253,11 @@ workflow3 <-
   )
 
 # Set the workflow tasks to be run
-workflow3$activateTasks(c("simulate", 
-                          "calculatePKParameters", 
-                          "plotPKParameters"))
+workflow3$activateTasks(c(
+  "simulate",
+  "calculatePKParameters",
+  "plotPKParameters"
+))
 
 # Run the workflow
 workflow3$runWorkflow()
@@ -265,12 +274,14 @@ cat(includeReportFromWorkflow(workflow3))
 
 ```{r reset pk parameters from example 3, include=FALSE, echo=FALSE}
 # Go back to previous PK parameter settings
-updatePKParameter("C_max", 
-                  displayName = "C_max",
-                  displayUnit = "µmol/l")
-updatePKParameter("AUC_tEnd", 
-                  displayName = "AUC_tEnd",
-                  displayUnit = "µmol*min/l")
+updatePKParameter("C_max",
+  displayName = "C_max",
+  displayUnit = "µmol/l"
+)
+updatePKParameter("AUC_tEnd",
+  displayName = "AUC_tEnd",
+  displayUnit = "µmol*min/l"
+)
 ```
 
 ## Example 4
@@ -287,18 +298,22 @@ simulationFile <- system.file("extdata", "MiniModel2.pkml",
   package = "ospsuite.reportingengine"
 )
 
-CmaxA <- PkParameterInfo$new("C_max", 
-                  displayName = "Cmax from A",
-                  displayUnit = "µmol/l")
-CmaxB <- PkParameterInfo$new("C_max", 
-                  displayName = "Cmax from B",
-                  displayUnit = "nmol/l")
-AUCA <- PkParameterInfo$new("AUC_tEnd", 
-                  displayName = "AUC from A",
-                  displayUnit = "µmol*min/l")
-AUCB <- PkParameterInfo$new("AUC_tEnd", 
-                  displayName = "AUC from B",
-                  displayUnit = "nmol*min/l")
+CmaxA <- PkParameterInfo$new("C_max",
+  displayName = "Cmax from A",
+  displayUnit = "µmol/l"
+)
+CmaxB <- PkParameterInfo$new("C_max",
+  displayName = "Cmax from B",
+  displayUnit = "nmol/l"
+)
+AUCA <- PkParameterInfo$new("AUC_tEnd",
+  displayName = "AUC from A",
+  displayUnit = "µmol*min/l"
+)
+AUCB <- PkParameterInfo$new("AUC_tEnd",
+  displayName = "AUC from B",
+  displayUnit = "nmol*min/l"
+)
 
 # Define the input parameters
 outputA <- Output$new(

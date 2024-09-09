@@ -1,34 +1,481 @@
-#' @title repeatableSampling
-#' @description Perform repeatable random sampling
-#' @param x Array to be sampled
-#' @param size Number of samples
-#' @param n Number of repetitions
-#' @param seed Random Seed
-#' @return A list of `n` arrays of length `size` sampled from `x`
+#' @title calculatePKAnalysesRatio
+#' @description
+#' Calculate and save statistics of ratios of PK parameters for each simulation set but reference
+#' If simulation sets use the same population, calculate individual ratios and
+#' get summary statistics from these individual ratios.
+#' If simulation sets use different populations, perform Monte Carlo Sampling,
+#' calculate individual ratios for each repetition of the Monte Carlo Sampling,
+#' get summary statistics from these individual ratios for each repetition, and
+#' get the median of the summary statistics as best approximation of the ratio summary statistics.
 #' @keywords internal
-repeatableSampling <- function(x,
-                               size,
-                               n = getDefaultMCRepetitions(),
-                               seed = getDefaultMCRandomSeed()) {
-  # .Random.seed is created when 
-  # calling a random number generator for the first time 
+calculatePKAnalysesRatio <- function(structureSets, settings) {
+  isReference <- sapply(structureSets, function(set) {
+    set$simulationSet$referencePopulation
+  })
+  referenceSet <- structureSets[isReference][[1]]
+
+  for (set in structureSets[!isReference]) {
+    isSamePopulation <- checkIsSamePopulation(set$simulationSet, referenceSet$simulationSet)
+    logInfo(messages$ratioIdentifiedPopulations(
+      simulationSetName = set$simulationSet$simulationSetName,
+      referenceSimulationSetName = referenceSet$simulationSet$simulationSetName,
+      isSamePopulation = isSamePopulation
+    ))
+
+    if (isSamePopulation) {
+      pkRatioSummary <- getPKRatioSummaryForSamePopulation(
+        structureSet = set,
+        referenceSet = referenceSet
+      )
+      write.csv(
+        pkRatioSummary,
+        file = set$pkRatioResultsFileNames,
+        row.names = FALSE,
+        fileEncoding = "UTF-8"
+      )
+      next
+    }
+    pkRatioSummaries <- getPKRatioSummaryForDifferentPopulations(
+      structureSet = set,
+      referenceSet = referenceSet,
+      settings = settings
+    )
+    # Save Monte Carlo solution
+    write.csv(
+      pkRatioSummaries$monteCarlo,
+      file = set$pkRatioResultsFileNames,
+      row.names = FALSE,
+      fileEncoding = "UTF-8"
+    )
+    # Save analytical solution in case debugging is required
+    write.csv(
+      pkRatioSummaries$analyticalSolution,
+      file = gsub(set$pkRatioResultsFileNames, pattern = ".csv", replacement = "AnalyticalSolutions.csv"),
+      row.names = FALSE, fileEncoding = "UTF-8"
+    )
+  }
+
+  return(invisible())
+}
+
+#' @title getPKRatioSummaryForDifferentPopulations
+#' @description
+#' Calculate and save summary statistics of ratios of PK parameters if populations are identical
+#' @param structureSet A `SimulationStructure` object of the population to compare
+#' @param referenceSet A `SimulationStructure` object of the reference population
+#' @return A data.frame of the PK Parameter ratios summary statistics
+#' @keywords internal
+getPKRatioSummaryForDifferentPopulations <- function(structureSet, referenceSet, settings) {
+  # Use arrange to ensure Ids, QuantityPath and Parameter are consistent between PK parameters and output paths
+  pkData <- loadPKAnalysesFromStructureSet(structureSet = structureSet, to = "tibble") %>%
+    select(IndividualId, QuantityPath, Parameter, Value) %>%
+    arrange(IndividualId, QuantityPath, Parameter)
+  referencePKData <- loadPKAnalysesFromStructureSet(structureSet = referenceSet, to = "tibble") %>%
+    select(IndividualId, QuantityPath, Parameter, Value) %>%
+    arrange(IndividualId, QuantityPath, Parameter)
+
+  # Check that both PK data to be compared are included in reference PK data
+  validateIsIncluded(unique(pkData$QuantityPath), unique(referencePKData$QuantityPath))
+  validateIsIncluded(unique(pkData$Parameter), unique(referencePKData$Parameter))
+
+  pkRatioSummary <- getPKRatioSummaryFromMCSampling(
+    pkData = pkData,
+    referencePKData = referencePKData,
+    simulationSetName = structureSet$simulationSet$simulationSetName,
+    settings = settings
+  )
+
+  pkRatioSummaryAnalyticalSolution <- getPKRatioSummaryFromAnalyticalSolution(
+    pkData = pkData,
+    referencePKData = referencePKData,
+    simulationSetName = structureSet$simulationSet$simulationSetName
+  )
+
+  return(list(
+    monteCarlo = pkRatioSummary,
+    analyticalSolution = pkRatioSummaryAnalyticalSolution
+  ))
+}
+
+#' @title getPKRatioSummaryForSamePopulation
+#' @description
+#' Calculate and save summary statistics of ratios of PK parameters if populations are identical
+#' @param structureSet A `SimulationStructure` object of the population to compare
+#' @param referenceSet A `SimulationStructure` object of the reference population
+#' @return A data.frame of the PK Parameter ratios summary statistics
+#' @keywords internal
+getPKRatioSummaryForSamePopulation <- function(structureSet, referenceSet) {
+  pkData <- loadPKAnalysesFromStructureSet(structureSet = structureSet, to = "tibble") %>%
+    select(IndividualId, QuantityPath, Parameter, Value) %>%
+    arrange(IndividualId, QuantityPath, Parameter)
+  referencePKData <- loadPKAnalysesFromStructureSet(structureSet = referenceSet, to = "tibble") %>%
+    select(IndividualId, QuantityPath, Parameter, Value) %>%
+    arrange(IndividualId, QuantityPath, Parameter)
+  # Check that both PK data to be compared are included in reference PK data
+  validateIsIncluded(unique(pkData$QuantityPath), unique(referencePKData$QuantityPath))
+  validateIsIncluded(unique(pkData$Parameter), unique(referencePKData$Parameter))
+  # Check that same individuals are present in both data sets and use intersection
+  checkSamePopulationIds(
+    setIds = pkData$IndividualId,
+    referenceSetIds = referencePKData$IndividualId,
+    setName = structureSet$simulationSet$simulationSetName,
+    referenceSetName = referenceSet$simulationSet$simulationSetName
+  )
+  ids <- intersect(pkData$IndividualId, referencePKData$IndividualId)
+  pkData <- pkData %>% filter(IndividualId %in% ids)
+  referencePKData <- referencePKData %>% filter(IndividualId %in% ids)
+
+  # Pivot table to get fast computation of ratios and their statistics
+  quantityPaths <- unique(pkData$QuantityPath)
+  parameters <- unique(pkData$Parameter)
+
+  pkRatioSummaryGroups <- data.frame(
+    SimulationSetName = structureSet$simulationSet$simulationSetName,
+    QuantityPath = rep(quantityPaths, each = length(parameters)),
+    Parameter = rep(parameters, length(quantityPaths))
+  )
+
+  pkData <- pkData %>%
+    tidyr::pivot_wider(
+      names_from = c(QuantityPath, Parameter),
+      values_from = Value
+    )
+  referencePKData <- referencePKData %>%
+    tidyr::pivot_wider(
+      names_from = c(QuantityPath, Parameter),
+      values_from = Value
+    )
+
+  pkRatioSummary <- getPKRatioSummaryStatistics(
+    pkData = as.matrix(pkData),
+    # In case reference data had more paths and parameters, restrict to those in pkData
+    referencePKData = as.matrix(referencePKData[, names(referencePKData) %in% names(pkData)])
+  )
+  # Combine stats to their parameters, paths and simulation set name
+  pkRatioSummary <- bind_cols(
+    pkRatioSummaryGroups,
+    # First row of summary statistics is individual ID
+    # which needs to be removed to match both data.frame rows
+    tail(summaryStatisticsToDataFrame(pkRatioSummary), -1)
+  )
+
+  return(pkRatioSummary)
+}
+
+#' @title getPKRatioSummaryStatistics
+#' @description
+#' Calculate and save summary statistics of ratios of PK parameters
+#' Note that this function computes on matrix objects to be faster
+#' than on data.frame when Monte Carlo simulation is performed
+#' @param pkData A matrix of PK Parameter values for Population to compare
+#' @param referencePKData A matrix of PK Parameter values for reference Population
+#' @return A matrix of the PK Parameter ratios summary statistics
+#' @keywords internal
+#' @importFrom stats quantile sd
+getPKRatioSummaryStatistics <- function(pkData, referencePKData) {
+  # Since data.frame objects were pivoted to get matrix objects
+  # Rows contained unique individuals while
+  # columns contained all combinations of QuantityPath and Parameter
+  # Since the object is a matrix of numeric values, calculation is vectorized
+  ratioData <- pkData / referencePKData
+  ratioSummary <- rbind(
+    # Apply with MARGIN = 2 means that calculation is performed by columns
+    N = apply(ratioData, 2, FUN = function(x) {
+      sum(!is.na(x))
+    }),
+    apply(ratioData, 2, FUN = function(x) {
+      quantile(x, probs = c(0.05, 0.25, 0.5, 0.75, 0.95), na.rm = TRUE)
+    }),
+    Mean = apply(ratioData, 2, FUN = function(x) {
+      mean(x, na.rm = TRUE)
+    }),
+    SD = apply(ratioData, 2, FUN = function(x) {
+      sd(x, na.rm = TRUE)
+    }),
+    GeoMean = apply(ratioData, 2, FUN = function(x) {
+      exp(mean(log(x), na.rm = TRUE))
+    }),
+    GeoSD = apply(ratioData, 2, FUN = function(x) {
+      exp(sd(log(x), na.rm = TRUE))
+    })
+  )
+  return(ratioSummary)
+}
+
+#' @title summaryStatisticsToDataFrame
+#' @description
+#' Translate matrix of summary statistics to data.frame with appropriate names
+#' @param data A matrix of summary statistics
+#' @return A data.frame displaying summary statistics by column
+#' @keywords internal
+summaryStatisticsToDataFrame <- function(data, monteCarlo = FALSE) {
+  # For same population, summary statistics is by row and needs to be transposed
+  # For different populations, summary statistics is directly by column (because of sapply usage)
+  if (!monteCarlo) {
+    data <- t(data)
+  }
+  data <- as.data.frame(data)
+  names(data) <- c("N", paste0("Perc", c(5, 25, 50, 75, 95)), "Mean", "SD", "GeoMean", "GeoSD")
+  return(data)
+}
+
+#' @title getMonteCarloMedians
+#' @description
+#' Get all median values from a list of Monte Carlo simulations
+#' @param listOfData A list of summary statistics matrices
+#' @return A data.frame displaying summary statistics by column
+#' @keywords internal
+#' @importFrom stats median
+getMonteCarloMedians <- function(listOfData) {
+  # Translate list of matrix objects into a single matrix object
+  # The matrix object has 10 rows of summary statistics,
+  # repeated as many times as the number of Monte Carlo simulations
+  data <- do.call("rbind", listOfData)
+  medianData <- sapply(
+    1:10,
+    function(statsIndex) {
+      selectedRows <- statsIndex + seq(0, nrow(data) - 10, 10)
+      # Get median of each column per selected stats
+      apply(data[selectedRows, ], 2, median)
+    }
+  )
+  medianData <- summaryStatisticsToDataFrame(
+    # First row is summary stat for individual ids and needs to be removed
+    tail(medianData, -1),
+    monteCarlo = TRUE
+  )
+  return(medianData)
+}
+
+#' @title mcSampling
+#' @description Perform repeatable Monte Carlo random sampling
+#' for a data.frame obtained from a `PKAnalyses` object
+#' @param dataSize Number of rows/unique individuals in `data`
+#' @param sampleSize Number of sampled individuals in each Monte Carlo repetition
+#' @param n Number of repetitions
+#' @param seed Random Seed Number in order to get repeatable results
+#' @return A list of `n` elements that include `sampleSize` integers sampled from `1:dataSize`
+#' @keywords internal
+#' @import dplyr
+mcSampling <- function(dataSize, sampleSize, n = getDefaultMCRepetitions(), seed = getDefaultMCRandomSeed()) {
+  # .Random.seed is created when
+  # calling a random number generator for the first time
   # The next line aims at ensuring that a .Random.seed object exists
-  createRandom <- runif(1)
+  createRandom <- stats::runif(1)
   # Use pre-defined seed to get repeatable results
   oldSeed <- .Random.seed
   on.exit({
     .Random.seed <<- oldSeed
   })
   set.seed(seed)
+
   # Return a matrix of sampled PK parameters
-  if (isOfType(x, "data.frame")) {
-    return(lapply(1:n, function(repetition) {
-      x[sample(x = 1:nrow(x), size = size, replace = FALSE), ]
-    }))
+  selectedIds <- lapply(1:n, function(repetition) {
+    sample(x = 1:dataSize, size = sampleSize, replace = FALSE)
+  })
+  return(selectedIds)
+}
+
+#' @title getPKRatioSummaryFromAnalyticalSolution
+#' @description Get PK Ratio Summary from Analytical Solution
+#' @param pkData A data.frame of PK Parameter values for the Population to compare
+#' @param referencePKData A data.frame of PK Parameter values for reference Population
+#' @param simulationSetName Name of simulation set
+#' @return A data.frame of the PK Parameter ratios summary statistics
+#' @keywords internal
+#' @importFrom stats sd
+#' @import dplyr
+getPKRatioSummaryFromAnalyticalSolution <- function(pkData, referencePKData, simulationSetName) {
+  pkSummary <- pkData %>%
+    summarise(
+      Mean = mean(Value, na.rm = TRUE),
+      SD = sd(Value, na.rm = TRUE),
+      MeanLog = mean(log(Value), na.rm = TRUE),
+      SDLog = sd(log(Value), na.rm = TRUE),
+      .by = c("QuantityPath", "Parameter")
+    )
+  referencePKSummary <- referencePKData %>%
+    summarise(
+      Mean = mean(Value, na.rm = TRUE),
+      SD = sd(Value, na.rm = TRUE),
+      MeanLog = mean(log(Value), na.rm = TRUE),
+      SDLog = sd(log(Value), na.rm = TRUE),
+      .by = c("QuantityPath", "Parameter")
+    )
+  # Merge data summaries
+  ratioSummary <- left_join(
+    as.data.frame(pkSummary),
+    as.data.frame(referencePKSummary),
+    by = c("QuantityPath", "Parameter"),
+    suffix = c("X", "Y")
+  ) %>%
+    mutate(
+      SimulationSetName = simulationSetName,
+      Mean = MeanX / MeanY,
+      SD = sqrt((SDX / MeanY)^2 + (MeanX * SDY / (MeanY * MeanY))^2),
+      GeoMean = exp(MeanLogX - MeanLogY),
+      GeoSD = exp(sqrt(SDLogX^2 + SDLogY^2))
+    ) %>%
+    select(SimulationSetName, QuantityPath, Parameter, Mean, SD, GeoMean, GeoSD)
+
+  return(as.data.frame(ratioSummary))
+}
+
+
+#' @title getPKRatioSummaryFromSettings
+#' @description Get PK Parameter Ratio Measure From Monte Carlo Sampling
+#' @param pkData A matrix of PK Parameter values for Population to compare
+#' @param referencePKData A matrix of PK Parameter values for reference Population
+#' @param settings A list of task settings
+#' @return A data.frame of the PK Parameter ratios summary statistics
+#' @keywords internal
+getPKRatioSummaryFromSettings <- function(pkData, referencePKData, settings) {
+  # Sample from largest population if size is different
+  # Create a list of Sampled PK Parameters for each MC repetition and calculate their Ratio
+  pkSize <- nrow(pkData)
+  referenceSize <- nrow(referencePKData)
+  mcRepetitions <- settings$mcRepetitions %||% getDefaultMCRepetitions()
+  mcRandomSeed <- settings$mcRandomSeed %||% getDefaultMCRandomSeed()
+
+  widerPopulation <- ifelse(pkSize < referenceSize, "reference", "comparison")
+
+  selectedIds <- mcSampling(
+    dataSize = switch(widerPopulation,
+      "reference" = referenceSize,
+      "comparison" = pkSize
+    ),
+    sampleSize = switch(widerPopulation,
+      "reference" = pkSize,
+      "comparison" = referenceSize
+    ),
+    n = mcRepetitions,
+    seed = mcRandomSeed
+  )
+  useParallel <- all(
+    requireNamespace("parallel", quietly = TRUE),
+    settings$numberOfCores > 1
+  )
+  if (useParallel) {
+    cl <- parallel::makeCluster(settings$numberOfCores)
+    on.exit(parallel::stopCluster(cl))
+
+    # Parallel code requires that some objects are exported and to use dplyr package
+    # Re-import and rename function in this specific environment to be exported on clusters
+    getParallelSummaryStatistics <- getPKRatioSummaryStatistics
+    invisible(parallel::clusterExport(cl, c(
+      "selectedIds",
+      "pkData",
+      "referencePKData",
+      "getParallelSummaryStatistics"
+    ),
+    envir = environment()
+    ))
+    listOfMCRatioData <- switch(widerPopulation,
+      "reference" = parallel::parLapply(
+        cl = cl,
+        seq_along(selectedIds),
+        function(repetition) {
+          getParallelSummaryStatistics(
+            pkData = pkData,
+            referencePKData = referencePKData[selectedIds[[repetition]], ]
+          )
+        }
+      ),
+      "comparison" = parallel::parLapply(
+        cl = cl,
+        seq_along(selectedIds),
+        function(repetition) {
+          getParallelSummaryStatistics(
+            pkData = pkData[selectedIds[[repetition]], ],
+            referencePKData = referencePKData
+          )
+        }
+      )
+    )
+    return(getMonteCarloMedians(listOfMCRatioData))
   }
-  return(lapply(1:n, function(repetition) {
-    sample(x = x, size = size, replace = FALSE)
-  }))
+
+  if (settings$showProgress) {
+    loadingProgress <- txtProgressBar(max = mcRepetitions, style = 3)
+    on.exit(close(loadingProgress))
+  }
+
+  listOfMCRatioData <- switch(widerPopulation,
+    "reference" = lapply(
+      seq_along(selectedIds),
+      function(repetition) {
+        if (settings$showProgress) {
+          setTxtProgressBar(loadingProgress, value = repetition)
+        }
+        # With pivoted matrix objects, there is no need to group_by rows correspond to unique individual ids
+        # thus, smaller population can be used as is and wider only needs to be subset by simulated Monte Carlo rows
+        getPKRatioSummaryStatistics(
+          pkData = pkData,
+          referencePKData = referencePKData[selectedIds[[repetition]], ]
+        )
+      }
+    ),
+    "comparison" = lapply(
+      seq_along(selectedIds),
+      function(repetition) {
+        if (settings$showProgress) {
+          setTxtProgressBar(loadingProgress, value = repetition)
+        }
+        # data.frame is arranged by increasing values of IndividualId
+        getPKRatioSummaryStatistics(
+          pkData = pkData[selectedIds[[repetition]], ],
+          referencePKData = referencePKData
+        )
+      }
+    )
+  )
+  return(getMonteCarloMedians(listOfMCRatioData))
+}
+
+#' @title getPKRatioSummaryFromMCSampling
+#' @description Get PK Parameter Ratio Measure From Monte Carlo Sampling
+#' @param pkData A data.frame of PK Parameter values for Population to compare
+#' @param referencePKData A data.frame of PK Parameter values for reference Population
+#' @param simulationSetName Name of simulation set
+#' @param settings A list of task settings
+#' @return A data.frame of the PK Parameter ratios summary statistics
+#' @keywords internal
+getPKRatioSummaryFromMCSampling <- function(pkData, referencePKData, simulationSetName, settings = NULL) {
+  t0 <- tic()
+  mcRepetitions <- settings$mcRepetitions %||% getDefaultMCRepetitions()
+  mcRandomSeed <- settings$mcRandomSeed %||% getDefaultMCRandomSeed()
+  logInfo(messages$monteCarlo(simulationSetName, mcRepetitions, mcRandomSeed))
+
+  # Pivot table to get fast computation of ratios and their statistics
+  quantityPaths <- unique(pkData$QuantityPath)
+  parameters <- unique(pkData$Parameter)
+
+  pkRatioSummaryGroups <- data.frame(
+    SimulationSetName = simulationSetName,
+    QuantityPath = rep(quantityPaths, each = length(parameters)),
+    Parameter = rep(parameters, length(quantityPaths))
+  )
+
+  pkData <- pkData %>%
+    tidyr::pivot_wider(
+      names_from = c(QuantityPath, Parameter),
+      values_from = Value
+    )
+  referencePKData <- referencePKData %>%
+    tidyr::pivot_wider(
+      names_from = c(QuantityPath, Parameter),
+      values_from = Value
+    )
+
+  pkRatioSummary <- getPKRatioSummaryFromSettings(
+    pkData = as.matrix(pkData),
+    referencePKData = as.matrix(referencePKData[, names(referencePKData) %in% names(pkData)]),
+    settings = settings
+  )
+  pkRatioSummary <- bind_cols(pkRatioSummaryGroups, pkRatioSummary)
+  logInfo(messages$runCompleted(getElapsedTime(t0), "Monte Carlo Sampling"))
+
+  return(pkRatioSummary)
 }
 
 #' @title ratioBoxplot
@@ -41,7 +488,6 @@ repeatableSampling <- function(x,
 #' @import ggplot2
 ratioBoxplot <- function(data,
                          plotConfiguration = NULL) {
-  # TODO: create new molecule plot for this
   ratioPlot <- tlf::initializePlot(plotConfiguration)
   aestheticValues <- tlf:::.getAestheticValuesFromConfiguration(
     n = 1,
@@ -75,8 +521,7 @@ ratioBoxplot <- function(data,
 #' @param pkParametersTable PK Parameter Measure summarizing key statistics for each population
 #' @param referenceSimulationSetName Reference
 #' @keywords internal
-pkParameterTableAsRelativeChange <- function(pkParametersTable,
-                                             referenceSimulationSetName) {
+pkParameterTableAsRelativeChange <- function(pkParametersTable, referenceSimulationSetName) {
   simulationSetNames <- pkParametersTable$Population
   pkRatiosTable <- pkParametersTable[simulationSetNames != referenceSimulationSetName, ]
   referencePkParametersTable <- pkParametersTable[rep(referenceSimulationSetName, length(pkRatiosTable$Population)), ]
@@ -85,211 +530,27 @@ pkParameterTableAsRelativeChange <- function(pkParametersTable,
   return(pkRatiosTable)
 }
 
-#' @title getPKParameterRatioPKTable
-#' @description Get Data for Measure Table and Plots of PK Ratios
-#' @param data A data.frame of PK Parameter values for across Populations
-#' @param dataMapping A `BoxWhiskerDataMapping` object
+#' @title getPKParameterRatioTable
+#' @description Get Table of summary statistics of PK parameter ratios across simulation sets
+#' @param pkParameter PK Parameter name
+#' @param outputPath Quantity Path name
 #' @param structureSets `SimulationStructure` R6 class object
-#' @param referenceSimulationSetName Name of reference simulation set
-#' @param settings A list of task settings
 #' @keywords internal
-getPKParameterRatioPKTable <- function(data,
-                                       dataMapping,
-                                       structureSets,
-                                       referenceSimulationSetName,
-                                       settings = NULL) {
-  populationSets <- isSamePopulationInSets(structureSets)
-  # Pair each structure set with reference
-  # If reference population = comp population, individual ratios
-  # Else Monte Carlo Simulation
-  referenceData <- data[data$simulationSetName %in% referenceSimulationSetName, ]
-  ratioPKTable <- data.frame()
-  for (set in populationSets) {
-    comparisonData <- data[data$simulationSetName %in% set$simulationSetName, ]
-    if (set$isSamePopulation) {
-      logDebug(paste0(
-        "Simulation Set '", set$simulationSetName,
-        "' was identified with same population as reference '",
-        referenceSimulationSetName, "'. ",
-        "Ratio comparison analyzed statistics of individual PK ratios."
-      ))
-      ratioData <- comparisonData
-      ratioData$Value <- comparisonData$Value / referenceData$Value
-      ratioPKMeasure <- getPKParameterMeasure(ratioData, dataMapping)
-      ratioPKTable <- rbind.data.frame(ratioPKTable, ratioPKMeasure)
-      next
-    }
-    logDebug(paste0(
-      "Simulation Set '", set$simulationSetName,
-      "' was identified with population different from reference '",
-      referenceSimulationSetName, "'. ",
-      "Ratio comparison analyzed statistics from Monte Carlo Sampling"
-    ))
-    ratioPKMeasure <- getPKParameterRatioMeasureFromMCSampling(
-      comparisonData,
-      referenceData,
-      dataMapping,
-      settings
-    )
-    ratioPKTable <- rbind.data.frame(ratioPKTable, ratioPKMeasure)
-  }
-  return(ratioPKTable)
-}
-
-#' @title getPKParameterRatioMeasureFromMCSampling
-#' @description Get PK Parameter Ratio Measure From Monte Carlo Sampling
-#' @param comparisonData A data.frame of PK Parameter values for Population to compare
-#' @param referenceData A data.frame of PK Parameter values for reference Population
-#' @param dataMapping A `BoxWhiskerDataMapping` object
-#' @param settings A list of task settings
-#' @return A data.frame
-#' @keywords internal
-getPKParameterRatioMeasureFromMCSampling <- function(comparisonData,
-                                                     referenceData,
-                                                     dataMapping,
-                                                     settings = NULL) {
-  # Sample from largest population if size is different
-  # Create a list of Sampled PK Parameters for each MC repetition and calculate their Ratio
-  if (nrow(comparisonData) < nrow(referenceData)) {
-    allSamplesReferenceData <- repeatableSampling(
-      # Keep columns at minimum to prevent slowing down computation
-      x = referenceData[, c("simulationSetName", "Value")],
-      size = nrow(comparisonData),
-      n = settings$mcRepetitions %||% getDefaultMCRepetitions(),
-      seed = settings$mcRandomSeed %||% getDefaultMCRandomSeed()
-    )
-    allSamplesRatioData <- lapply(
-      allSamplesReferenceData,
-      function(sampleReferenceData) {
-        # TODO: tlf issue #408
-        # simulationSetName is factor class including multiple levels 
-        # After selecting the comparison data, only 1 level is remaining
-        # leading to empty factor levels for calculation of BoxWhisker measure
-        return(data.frame(
-          simulationSetName = factor(comparisonData$simulationSetName),
-          Value = comparisonData$Value / sampleReferenceData$Value
-        ))
-      }
-    )
-  } else {
-    # Keep columns at minimum to prevent slowing down computation
-    allSamplesComparisonData <- repeatableSampling(
-      x = comparisonData[, c("simulationSetName", "Value")],
-      size = nrow(referenceData),
-      n = settings$mcRepetitions %||% getDefaultMCRepetitions(),
-      seed = settings$mcRandomSeed %||% getDefaultMCRandomSeed()
-    )
-    allSamplesRatioData <- lapply(
-      allSamplesComparisonData,
-      function(sampleComparisonData) {
-        return(data.frame(
-          simulationSetName = factor(sampleComparisonData$simulationSetName),
-          Value = sampleComparisonData$Value / referenceData$Value
-        ))
-      }
-    )
-  }
-
-  # Get tables of ratio summary statistics as list
-  allSamplesRatioMeasure <- lapply(
-    allSamplesRatioData,
-    function(data) {
-      getPKParameterMeasure(data, dataMapping)
-    }
-  )
-  # Transform list to table
-  allSamplesRatioMeasure <- do.call("rbind", allSamplesRatioMeasure)
-  # Get median statistics over all MC repetitions as a data.frame
-  medianPKRatioStatistics <- aggregate(
-    allSamplesRatioMeasure[, 2:ncol(allSamplesRatioMeasure)],
-    by = list(Population = allSamplesRatioMeasure$Population),
-    FUN = median
-  )
-  # analyticalSolution <- getRatioMeasureAnalyticalSolution(referenceData, comparisonData)
-  logDebug(messages$monteCarloChecking(
-    displayRatioMeasureAnalyticalSolution(referenceData, comparisonData),
-    medianPKRatioStatistics,
-    n = settings$mcRepetitions %||% getDefaultMCRepetitions(),
-    seed = settings$mcRandomSeed %||% getDefaultMCRandomSeed()
-  ))
-  return(medianPKRatioStatistics)
-}
-
-#' @title isSamePopulationInSets
-#' @description Check wither simulation sets use same population as reference set
-#' @param structureSets A `SimulationStructure`
-#' @return list
-#' @keywords internal
-isSamePopulationInSets <- function(structureSets) {
+#' @import dplyr
+getPKParameterRatioTable <- function(pkParameter,
+                                     outputPath,
+                                     structureSets) {
   isReference <- sapply(structureSets, function(set) {
     set$simulationSet$referencePopulation
   })
-  referenceSet <- structureSets[isReference]
-  populationInSets <- lapply(
-    structureSets[!isReference],
-    function(set) {
-      if (set$simulationSet$referencePopulation) {
-        return()
-      }
-      # Same population is identified as
-      # 1- same population file
-      # 2- same study design file (if defined)
-      isSamePopulation <- all(
-        set$simulationSet$populationFile %in% referenceSet$simulationSet$populationFile,
-        any(
-          set$simulationSet$populationFile %in% referenceSet$simulationSet$populationFile,
-          all(
-            isEmpty(set$simulationSet$studyDesignFile),
-            isEmpty(referenceSet$simulationSet$studyDesignFile)
-          )
-        )
-      )
-      return(list(
-        simulationSetName = set$simulationSet$simulationSetName,
-        isSamePopulation = isSamePopulation
-      ))
-    }
-  )
-  return(populationInSets)
-}
-
-#' @title getRatioMeasureAnalyticalSolution
-#' @description Get Ratio Measure Analytical Solution
-#' @param y Array of PK parameter numeric values
-#' @param x Array of PK parameter numeric values
-#' @return A list including geoMean, geoSD and geoCV
-#' @keywords internal
-getRatioMeasureAnalyticalSolution <- function(x, y) {
-  list(
-    geoMean = exp(mean(log(y)) - mean(log(x))),
-    geoSD = exp(sqrt((sd(log(y)))^2 + (sd(log(x)))^2)),
-    geoCV = sqrt(exp((sd(log(y)))^2 + (sd(log(x)))^2) - 1)
-  )
-}
-
-#' @title displayRatioMeasureAnalyticalSolution
-#' @description Display Ratio Measure Analytical Solution message
-#' @param comparisonData A data.frame of PK Parameter values for Population to compare
-#' @param referenceData A data.frame of PK Parameter values for reference Population
-#' @return A character
-#' @keywords internal
-displayRatioMeasureAnalyticalSolution <- function(referenceData, comparisonData) {
-  analyticalSolution <- getRatioMeasureAnalyticalSolution(
-    referenceData$Value,
-    comparisonData$Value
-  )
-  checkingMessage <- c(
-    paste0(
-      "Analysis of PK Ratios between '",
-      unique(comparisonData$simulationSetName), "' (n=", nrow(comparisonData), ")",
-      " against reference '",
-      unique(referenceData$simulationSetName), "' (n=", nrow(referenceData), ")"
-    ),
-    paste0(
-      "Analytical solution for ", paste0(names(analyticalSolution), collapse = ", "),
-      " resulted in ", paste0(unlist(analyticalSolution), collapse = ", "),
-      " respectively"
+  ratioData <- data.frame()
+  for (set in structureSets[!isReference]) {
+    ratioData <- rbind.data.frame(
+      ratioData,
+      readObservedDataFile(set$pkRatioResultsFileNames) %>%
+        filter(QuantityPath %in% outputPath, Parameter %in% pkParameter) %>%
+        select(!c(QuantityPath, Parameter))
     )
-  )
-  return(checkingMessage)
+  }
+  return(ratioData)
 }

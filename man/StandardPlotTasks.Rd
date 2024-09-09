@@ -27,7 +27,8 @@ Other enum helpers:
 \code{\link{PopulationWorkflowTypes}},
 \code{\link{ResidualScales}},
 \code{\link{StandardSimulationTasks}},
-\code{\link{StatisticsTypes}}
+\code{\link{StatisticsTypes}},
+\code{\link{reSettingsNames}}
 }
 \concept{enum helpers}
 \keyword{datasets}

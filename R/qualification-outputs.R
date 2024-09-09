@@ -67,7 +67,6 @@ getTimeProfileOutputsDataframe <- function(configurationPlan) {
 getComparisonTimeProfileOutputsDataframe <- function(configurationPlan) {
   comparisonTimeProfileOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$ComparisonTimeProfilePlots) {
-    paths <- NULL
     for (outputMapping in plot$OutputMappings) {
       comparisonTimeProfileOutputsDataframe <- rbind.data.frame(
         comparisonTimeProfileOutputsDataframe,
@@ -96,7 +95,6 @@ getGOFOutputsDataframe <- function(configurationPlan) {
   gofOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$GOFMergedPlots) {
     validateIsIncluded(values = "Groups", parentValues = names(plot), nullAllowed = TRUE)
-    paths <- NULL
     for (group in plot$Groups) {
       validateIsIncluded(values = "OutputMappings", parentValues = names(group), nullAllowed = TRUE)
       for (outputMapping in group$OutputMappings) {

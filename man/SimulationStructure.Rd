@@ -24,6 +24,8 @@ R6 class representing that stores file structure (file names and paths) relating
 
 \item{\code{pkAnalysisResultsFileNames}}{vector of names of CSV files storing results of pk analyses}
 
+\item{\code{pkRatioResultsFileNames}}{vector of names of CSV files storing results of pk ratios}
+
 \item{\code{sensitivityAnalysisResultsFileNames}}{vector of names of CSV files storing results of sensitivity analyses}
 
 \item{\code{popSensitivityAnalysisResultsIndexFile}}{path to file containing index of population sensitivity analysis results}

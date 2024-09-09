@@ -1,0 +1,6 @@
+"Time","Observed","lloq","Simulated","Residuals","Legend","Path","Group","ResidualScale"
+0,0,0.001,1,-Inf,"Concentration of A (A)","Organism|A|Concentration in container","Organism|A|Concentration in container","Logarithmic"
+2,0.00559,0.001,1.38888609409332,-5.51527804653233,"Concentration of A (A)","Organism|A|Concentration in container","Organism|A|Concentration in container","Logarithmic"
+4,0.0047,0.001,1.70202422142029,-5.8920110314678,"Concentration of A (A)","Organism|A|Concentration in container","Organism|A|Concentration in container","Logarithmic"
+6,0.00269,0.001,1.95408761501312,-6.58813747678269,"Concentration of A (A)","Organism|A|Concentration in container","Organism|A|Concentration in container","Logarithmic"
+8,0.00163,0.001,2.15719437599182,-7.18798374155396,"Concentration of A (A)","Organism|A|Concentration in container","Organism|A|Concentration in container","Logarithmic"

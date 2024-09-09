@@ -5,7 +5,7 @@
 #' @return list with `plots` and `tables`
 #' @import tlf
 #' @import ospsuite
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
 #' @keywords internal
 plotQualificationTimeProfiles <- function(configurationPlan, settings) {
   timeProfileResults <- list()
@@ -32,10 +32,14 @@ plotQualificationTimeProfiles <- function(configurationPlan, settings) {
 
         # Get axes properties (with scale, limits and display units)
         axesProperties <- getAxesProperties(timeProfilePlan$Plot$Axes) %||% settings$axes
+        axesProperties <- updateAxesMargin(
+          axesProperties = axesProperties,
+          sideMarginsEnabled = timeProfilePlan$Plot$Settings$SideMarginsEnabled %||% TRUE
+        )
         plotConfiguration <- getPlotConfigurationFromPlan(
-          timeProfilePlan$Plot, 
+          timeProfilePlan$Plot,
           plotType = "TimeProfile"
-          )
+        )
         timeProfilePlot <- tlf::initializePlot(plotConfiguration)
 
         # Currently use ifNotNull to select if mean or population time profile
@@ -110,6 +114,8 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
   obsData <- data.frame()
   simMetaData <- list(id = NULL, legend = NULL, color = NULL, linetype = NULL, size = NULL)
   obsMetaData <- list(id = NULL, legend = NULL, color = NULL, shape = NULL, size = NULL)
+  defaultSimProperties <- getDefaultPropertiesFromTheme("plotTimeProfile", propertyType = "lines")
+  defaultObsProperties <- getDefaultPropertiesFromTheme("plotTimeProfile", propertyType = "points")
   for (curve in configurationPlanCurves) {
     curveAxesProperties <- axesProperties
     # Update features related to observed data
@@ -124,9 +130,9 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
       # Use default property if property is undefined
       obsMetaData$id <- c(obsMetaData$id, curveProperties$id %||% NA)
       obsMetaData$legend <- c(obsMetaData$legend, curveProperties$legend)
-      obsMetaData$color <- c(obsMetaData$color, curveProperties$color %||% "black")
-      obsMetaData$size <- c(obsMetaData$size, curveProperties$size %||% 2)
-      obsMetaData$shape <- c(obsMetaData$shape, curveProperties$shape %||% tlf::Shapes$circle)
+      obsMetaData$color <- c(obsMetaData$color, curveProperties$color %||% defaultObsProperties$color)
+      obsMetaData$size <- c(obsMetaData$size, curveProperties$size %||% defaultObsProperties$size)
+      obsMetaData$shape <- c(obsMetaData$shape, curveProperties$shape %||% defaultObsProperties$shape)
       next
     }
     # Update features related to simulated data
@@ -141,9 +147,9 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
     # Use default property if property is undefined
     simMetaData$id <- c(simMetaData$id, curveProperties$id %||% NA)
     simMetaData$legend <- c(simMetaData$legend, curveProperties$legend)
-    simMetaData$color <- c(simMetaData$color, curveProperties$color %||% "black")
-    simMetaData$size <- c(simMetaData$size, curveProperties$size %||% 1)
-    simMetaData$linetype <- c(simMetaData$linetype, curveProperties$linetype %||% tlf::Linetypes$solid)
+    simMetaData$color <- c(simMetaData$color, curveProperties$color %||% defaultSimProperties$color)
+    simMetaData$size <- c(simMetaData$size, curveProperties$size %||% defaultSimProperties$size)
+    simMetaData$linetype <- c(simMetaData$linetype, curveProperties$linetype %||% defaultSimProperties$linetype)
   }
   # Update legend captions based on expected plot width
   # keep order as provided in legend index (collected as id in metaData)
@@ -151,21 +157,23 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
     simData$legend <- factor(
       prettyCaption(simData$legend, tlf::initializePlot(plotConfiguration)),
       levels = prettyCaption(
-        simMetaData$legend[order(simMetaData$id)], 
-        tlf::initializePlot(plotConfiguration))
-    ) 
+        simMetaData$legend[order(simMetaData$id)],
+        tlf::initializePlot(plotConfiguration)
+      )
+    )
   }
   if (!isEmpty(obsData)) {
     obsData$legend <- factor(
       prettyCaption(obsData$legend, tlf::initializePlot(plotConfiguration)),
       levels = prettyCaption(
-        obsMetaData$legend[order(obsMetaData$id)], 
-        tlf::initializePlot(plotConfiguration))
-    ) 
+        obsMetaData$legend[order(obsMetaData$id)],
+        tlf::initializePlot(plotConfiguration)
+      )
+    )
   }
   # If ticks and ticklabels are undefined, time profile ticks are based on unit and range
   timeTicks <- getTimeTicksFromUnit(
-    unit = axesProperties$x$unit, 
+    unit = axesProperties$x$unit,
     timeValues = c(simData$x, obsData$x)
   )
   axesProperties$x$ticks <- axesProperties$x$ticks %||% timeTicks$ticks
@@ -173,7 +181,7 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
 
   # Check necessity if dual axis by getting requested axes
   requestedAxes <- sort(unique(c(simData$yAxis, obsData$yAxis)))
-  
+
   # If only one axis requested, the only axis becomes the new y of axesProperties
   if (isOfLength(requestedAxes, 1)) {
     axesProperties$y <- axesProperties[[tolower(requestedAxes)]]
@@ -186,7 +194,7 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
       axesProperties = axesProperties,
       plotConfiguration = plotConfiguration
     )
-    
+
     plotObject <- tlf::plotTimeProfile(
       data = simData,
       observedData = obsData,
@@ -266,14 +274,13 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
 #' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedDataCollection, simulation, simulationResults, axesProperties, configurationPlan, plotObject) {
-
   # Get simulation results from configuration plan field "Fields"
   outputPath <- simulationAnalysis$Fields[[1]]$QuantityPath
   simulationQuantity <- ospsuite::getQuantity(outputPath, simulation)
   simulationPathResults <- ospsuite::getOutputValues(simulationResults, quantitiesOrPaths = outputPath)
   molWeight <- simulation$molWeightFor(outputPath)
   outputDimension <- simulationPathResults$metaData[[outputPath]]$dimension
-  
+
   # Overwrite dimension, unit and scale if found in Analysis field
   # Keep compatibility with Config Plan from Matlab version
   axesProperties$y$dimension <- simulationAnalysis$Fields[[1]]$Dimension %||% axesProperties$y$dimension
@@ -320,7 +327,7 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
     # metaData: a list for each column of data that includes their unit
     observedResults <- getObservedDataFromConfigurationPlan(observedDataId, configurationPlan)
     # Currently, the molecular weight is directly taken from the simulation output
-    observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties)
+    observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties, observedDataId)
 
     if (!isEmpty(observedData$error)) {
       plotObject <- tlf::addErrorbar(
@@ -366,7 +373,11 @@ plotStatisticsFromPlan <- function(time, outputValues, statisticId, outputName, 
   aggregatedData <- getAggregateFromStat(statisticId, time, outputValues)
   caption <- prettyCaption(getCaptionFromStat(statisticId, outputName), plotObject)
   # Range and Deviation plots use addRibbon
-  if (grepl(pattern = "Range", statisticId) | grepl(pattern = "Deviation", statisticId)) {
+  useRibbon <- any(
+    grepl(pattern = "Range", statisticId),
+    grepl(pattern = "Deviation", statisticId)
+  )
+  if (useRibbon) {
     plotObject <- tlf::addRibbon(
       x = aggregatedData$x,
       ymin = aggregatedData$ymin,
@@ -396,6 +407,7 @@ plotStatisticsFromPlan <- function(time, outputValues, statisticId, outputName, 
 #' @param outputValues Output values to be aggregated
 #' @return A data.frame of aggregated data to display
 #' @keywords internal
+#' @importFrom stats aggregate quantile
 getAggregateFromStat <- function(statisticId, time, outputValues) {
   # Range plots use data.frame with x, ymin and ymax
   if (grepl(pattern = "Range", statisticId)) {
@@ -532,9 +544,10 @@ getCaptionFromStat <- function(statisticId, outputName) {
 #' }
 #' @param molWeight Molecular weight of compound
 #' @param axesProperties list of axes properties obtained from `getAxesProperties`
+#' @param observedDataId Id of the observed data for better handling error messages
 #' @return List with `time`, `y` and `error` values
 #' @keywords internal
-getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, axesProperties) {
+getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, axesProperties, observedDataId) {
   time <- ospsuite::toUnit(
     quantityOrDimension = "Time",
     values = as.numeric(observedResults$data[, 1]),
@@ -543,7 +556,7 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
   )
   # Convert output values, if molWeight is NA but not required, then toUnit works without any issue
   # if molWeight is NA and required, then toUnit crashes, error is caught
-  # and the error message indictes which observed data Id need molWeight
+  # and the error message indicates which observed data Id need molWeight
   outputValues <- tryCatch(
     {
       ospsuite::toUnit(
@@ -559,7 +572,7 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
     }
   )
   if (isEmpty(outputValues)) {
-    stop(messages$errorMolecularWeightRequired("")) #pathArray[1]
+    stop(messages$errorMolecularWeightRequired(observedDataId))
   }
 
   outputError <- NULL
@@ -571,25 +584,6 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
     y = outputValues,
     error = outputError
   ))
-}
-
-#' @title getDefaultTimeProfileAxesSettings
-#' @description Get the default axes settings for mean and population time profiles
-#' for keeping compatibility with configuration plan from Matlab version
-#' @return List of `x` and `y` axes settings
-#' @keywords internal
-getDefaultTimeProfileAxesSettings <- function() {
-  xAxis <- list(
-    dimension = ospsuite::ospDimensions$Time, unit = ospsuite::ospUnits$Time$h,
-    min = NULL, max = NULL, scale = tlf::Scaling$lin,
-    grid = list(color = reEnv$theme$background$xGrid$color, linetype = reEnv$theme$background$xGrid$linetype)
-  )
-  yAxis <- list(
-    dimension = ospsuite::ospDimensions$`Concentration (mass)`, unit = ospsuite::ospUnits$`Concentration [mass]`$`µg/l`,
-    min = NULL, max = NULL, scale = tlf::Scaling$log,
-    grid = list(color = reEnv$theme$background$yGrid$color, linetype = reEnv$theme$background$yGrid$linetype)
-  )
-  return(list(x = xAxis, y = yAxis))
 }
 
 #' @title getObservedErrorValues
@@ -620,7 +614,11 @@ getObservedErrorValues <- function(observedValues, observedResults, axesProperti
 
   # If error has no unit but values lower than 1,
   # Check output has also no unit and then compute arithmetic error
-  if (isIncluded(observedResults$metaData$error$unit, "") & any(observedResults$data[, 3] < 1, na.rm = TRUE)) {
+  checkOutputIsFraction <- all(
+    isIncluded(observedResults$metaData$error$unit, ""),
+    any(observedResults$data[, 3] < 1, na.rm = TRUE)
+  )
+  if (checkOutputIsFraction) {
     tryCatch(
       {
         validateIsIncluded(observedResults$metaData$output$unit, "")
@@ -677,7 +675,7 @@ getObservedCurveProperties <- function(configurationPlanCurve,
   # data: a data.frame with column 1 = Time, column 2 = Concentration, column 3 = Error
   # metaData: a list for each column of data that includes their unit
   observedResults <- getObservedDataFromConfigurationPlan(observedDataId, configurationPlan)
-  observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties)
+  observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties, observedDataId)
 
   outputData <- data.frame(
     x = observedData$time,
@@ -772,72 +770,72 @@ getSimulatedCurveProperties <- function(configurationPlanCurve,
 #' @return Updated `TimeProfilePlotConfiguration` object
 #' @keywords internal
 updateQualificationTimeProfilePlotConfiguration <- function(simulatedMetaData = NULL,
-                                                            observedMetaData  = NULL,
+                                                            observedMetaData = NULL,
                                                             requestedAxes = "Y",
                                                             axesProperties = NULL,
                                                             plotConfiguration) {
   # Update plot configuration for simulated values
-  if (!isEmpty(simulatedMetaData)) {
+  if (!isEmpty(simulatedMetaData$id)) {
     sortedSimulatedMetaData <- order(simulatedMetaData$id)
     plotConfiguration$lines$color <- simulatedMetaData$color[sortedSimulatedMetaData]
     plotConfiguration$lines$linetype <- simulatedMetaData$linetype[sortedSimulatedMetaData]
     plotConfiguration$lines$size <- simulatedMetaData$size[sortedSimulatedMetaData]
   }
   # Update plot configuration for observed values
-  if (!isEmpty(observedMetaData)) {
+  if (!isEmpty(observedMetaData$id)) {
     sortedObservedMetaData <- order(observedMetaData$id)
     # offset of simulated data colors
     plotConfiguration$points$color <- c(
-      simulatedMetaData$color, 
+      simulatedMetaData$color,
       observedMetaData$color[sortedObservedMetaData]
     )
     plotConfiguration$errorbars$color <- c(
-      simulatedMetaData$color, 
+      simulatedMetaData$color,
       observedMetaData$color[sortedObservedMetaData]
     )
     plotConfiguration$points$shape <- observedMetaData$shape[sortedObservedMetaData]
     plotConfiguration$points$size <- observedMetaData$size[sortedObservedMetaData]
   }
-  
+
   # Update labels, axes and background properties
   # These cannot be performed at the plotObject level any more because of dual axis
   plotConfiguration$labels$xlabel <- tlf::getLabelWithUnit(
-    displayDimension(axesProperties$x$dimension), 
+    displayDimension(axesProperties$x$dimension),
     axesProperties$x$unit
-    )
+  )
   plotConfiguration$labels$ylabel <- tlf::getLabelWithUnit(
-    displayDimension(axesProperties$y$dimension), 
+    displayDimension(axesProperties$y$dimension),
     axesProperties$y$unit
-    )
-  
+  )
+
   plotConfiguration$background$xGrid$color <- axesProperties$x$grid$color
   plotConfiguration$background$xGrid$linetype <- axesProperties$x$grid$linetype
   plotConfiguration$background$yGrid$color <- axesProperties$y$grid$color
   plotConfiguration$background$yGrid$linetype <- axesProperties$y$grid$linetype
-  
+
   plotConfiguration$xAxis$scale <- axesProperties$x$scale
-  plotConfiguration$xAxis$limits <- c(axesProperties$x$min, axesProperties$x$max)
+  plotConfiguration$xAxis$axisLimits <- c(axesProperties$x$min, axesProperties$x$max)
   plotConfiguration$xAxis$ticks <- axesProperties$x$ticks
   plotConfiguration$xAxis$ticklabels <- axesProperties$x$ticklabels
-  
+
   plotConfiguration$yAxis$scale <- axesProperties$y$scale
-  plotConfiguration$yAxis$limits <- c(axesProperties$y$min, axesProperties$y$max)
+  plotConfiguration$yAxis$axisLimits <- c(axesProperties$y$min, axesProperties$y$max)
   plotConfiguration$yAxis$ticks <- axesProperties$y$ticks
   plotConfiguration$yAxis$ticklabels <- axesProperties$y$ticklabels
-  
+
   if (isOfLength(requestedAxes, 1)) {
     return(plotConfiguration)
   }
-  
+
   plotConfiguration$labels$y2label <- tlf::getLabelWithUnit(
-    displayDimension(axesProperties$y2$dimension), 
+    displayDimension(axesProperties$y2$dimension),
     axesProperties$y2$unit
-    )
+  )
   plotConfiguration$background$y2Grid$color <- axesProperties$y2$grid$color
   plotConfiguration$background$y2Grid$linetype <- axesProperties$y2$grid$linetype
 
   plotConfiguration$y2Axis$scale <- axesProperties$y2$scale
-  plotConfiguration$y2Axis$limits <- c(axesProperties$y2$min, axesProperties$y2$max)
+  plotConfiguration$y2Axis$axisLimits <- c(axesProperties$y2$min, axesProperties$y2$max)
   plotConfiguration$y2Axis$ticks <- axesProperties$y2$ticks
   plotConfiguration$y2Axis$ticklabels <- axesProperties$y2$ticklabels
 

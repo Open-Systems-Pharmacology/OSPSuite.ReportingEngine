@@ -12,6 +12,9 @@ defaultFileNames <- list(
   pkAnalysisResultsFile = function(simulationSetName) {
     getDefaultFileName(simulationSetName, suffix = "PKAnalysisResults")
   },
+  pkRatioResultsFile = function(simulationSetName) {
+    getDefaultFileName(simulationSetName, suffix = "PKRatioResults")
+  },
   sensitivityAnalysisResultsFile = function(simulationSetName) {
     getDefaultFileName(simulationSetName, suffix = "SensitivityAnalysisResults")
   },

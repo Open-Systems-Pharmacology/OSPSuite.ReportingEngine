@@ -31,10 +31,10 @@ write.table(testDataFrame,
 
 # Needs to update expect_equal due to mismatch in attribute "row.names"
 # due to new dplyr package method
-expect_dataframe <- function(x, y) {
-  row.names(x) <- 1:nrow(x)
-  row.names(y) <- 1:nrow(y)
-  expect_equal(x, y)
+expectDataframe <- function(x, y) {
+  row.names(x) <- seq_len(nrow(x))
+  row.names(y) <- seq_len(nrow(y))
+  return(testthat::expect_equal(x, y))
 }
 
 
@@ -49,8 +49,14 @@ test_that("readObservedDataFile can correctly guess separator and read csv and t
   expect_equal(testDataFrame, txtData, tolerance = comparisonTolerance())
 })
 
-test_that("readObservedDataFile: unexistant file throw error", {
+test_that("readObservedDataFile: throws an error for unexistant files", {
   expect_error(readObservedDataFile("testFile10.csv"))
+})
+
+test_that("readObservedDataFile throws an error for non UTF-8 files", {
+  expect_error(
+    readObservedDataFile(getTestDataFilePath("input-data/non-utf8.txt"))
+    )
 })
 
 test_that("readObservedDataFile throw an error if columns are inconsistent", {
@@ -110,8 +116,8 @@ test_that("Correct expressions work as expected and both methods can be used to 
   testSelection <- "ID == 1"
   selectedRows <- which(testDataFrame$ID == 1)
   expect_equal(selectedRows, getSelectedRows(testDataFrame, testSelection))
-  expect_dataframe(testDataFrame[selectedRows, ], getSelectedData(testDataFrame, testSelection))
-  expect_dataframe(
+  expectDataframe(testDataFrame[selectedRows, ], getSelectedData(testDataFrame, testSelection))
+  expectDataframe(
     testDataFrame[getSelectedRows(testDataFrame, testSelection), ],
     getSelectedData(testDataFrame, testSelection)
   )
@@ -119,8 +125,8 @@ test_that("Correct expressions work as expected and both methods can be used to 
   testSelection <- "Time %in% 1"
   selectedRows <- which(testDataFrame$Time %in% 1)
   expect_equal(selectedRows, getSelectedRows(testDataFrame, testSelection))
-  expect_dataframe(testDataFrame[selectedRows, ], getSelectedData(testDataFrame, testSelection))
-  expect_dataframe(
+  expectDataframe(testDataFrame[selectedRows, ], getSelectedData(testDataFrame, testSelection))
+  expectDataframe(
     testDataFrame[getSelectedRows(testDataFrame, testSelection), ],
     getSelectedData(testDataFrame, testSelection)
   )
@@ -128,8 +134,8 @@ test_that("Correct expressions work as expected and both methods can be used to 
   testSelection <- '!DV %in% 1 & Group %in% "A"'
   selectedRows <- which(!(testDataFrame$DV %in% 1) & testDataFrame$Group %in% "A")
   expect_equal(selectedRows, getSelectedRows(testDataFrame, testSelection))
-  expect_dataframe(testDataFrame[selectedRows, ], getSelectedData(testDataFrame, testSelection))
-  expect_dataframe(
+  expectDataframe(testDataFrame[selectedRows, ], getSelectedData(testDataFrame, testSelection))
+  expectDataframe(
     testDataFrame[getSelectedRows(testDataFrame, testSelection), ],
     getSelectedData(testDataFrame, testSelection)
   )

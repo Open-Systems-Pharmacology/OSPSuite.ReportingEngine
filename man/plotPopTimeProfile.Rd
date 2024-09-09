@@ -7,7 +7,6 @@
 plotPopTimeProfile(
   simulatedData,
   observedData = NULL,
-  lloqData = NULL,
   dataMapping = NULL,
   metaData = NULL,
   plotConfiguration = NULL
@@ -18,9 +17,7 @@ plotPopTimeProfile(
 
 \item{observedData}{data.frame of observed data}
 
-\item{lloqData}{data.frame of lloq data}
-
-\item{dataMapping}{`XYGDataMapping` R6 class object from `tlf` library}
+\item{dataMapping}{A list to be integrated to `tlf` DataMapping objects}
 
 \item{metaData}{meta data on `data`}
 

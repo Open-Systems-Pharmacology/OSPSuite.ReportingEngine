@@ -17,6 +17,11 @@ R6 class for Population Simulation Settings
 \item{\code{maxSimulationsPerCore}}{Scale factor used in a parallel simulation.  The product of this scale factor and the number of allowable cores (allowedCores) sets the maximum number of simulations that may be run on one core.}
 
 \item{\code{allowedCores}}{is the number of cores assigned to the user session.}
+
+\item{\code{mcRepetitions}}{is the number of repetitions when performing a Monte Carlo Simulation}
+
+\item{\code{mcRandomSeed}}{is the Random Seed Number when performing a Monte Carlo Simulation
+which allows repeatability of the simulations}
 }
 \if{html}{\out{</div>}}
 }
@@ -34,9 +39,9 @@ R6 class for Population Simulation Settings
 Create a `SimulationSettings` object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SimulationSettings$new(
-  numberOfCores = defaultSimulationNumberOfCores,
-  showProgress = FALSE,
-  maxSimulationsPerCore = reEnv$defaultMaxSimulationsPerCore
+  numberOfCores = NULL,
+  showProgress = TRUE,
+  maxSimulationsPerCore = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -45,7 +50,7 @@ Create a `SimulationSettings` object
 \describe{
 \item{\code{numberOfCores}}{number of cores for parallel computation}
 
-\item{\code{showProgress}}{simulation progress printed to console if TRUE}
+\item{\code{showProgress}}{logical indicating if simulation progress is printed on console}
 
 \item{\code{maxSimulationsPerCore}}{Scale factor used in a parallel simulation.  The product of this scale factor and the number of allowable cores (allowedCores) sets the maximum number of simulations that may be run on one core.}
 }

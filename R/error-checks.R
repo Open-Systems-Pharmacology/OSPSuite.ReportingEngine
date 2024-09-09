@@ -14,13 +14,12 @@ hasPositiveValues <- function(object) {
   return(any(object > 0))
 }
 
-
 validateIsInRange <- function(variableName, value, lowerBound, upperBound, nullAllowed = FALSE) {
   validateIsOfLength(value, 1)
   validateIsOfLength(lowerBound, 1)
   validateIsOfLength(upperBound, 1)
   validateIsNumeric(c(value, lowerBound, upperBound), nullAllowed)
-  if ((value < lowerBound) | (value > upperBound)) {
+  if (any(value < lowerBound, value > upperBound)) {
     stop(
       messages$outsideRange(variableName, value, lowerBound, upperBound),
       call. = FALSE
@@ -36,17 +35,6 @@ typeNamesFrom <- function(type) {
   sapply(type, function(t) t$classname)
 }
 
-validateNoDuplicatedEntries <- function(x) {
-  if (any(duplicated(x))) {
-    stop(
-      messages$errorDuplicatedEntries(getObjectNameAsString(x)),
-      call. = FALSE
-    )
-  }
-  return(invisible())
-}
-
-# TODO: replace the function name
 validateIsIncludedAndLog <- function(values, parentValues, nullAllowed = FALSE, groupName = NULL) {
   if (nullAllowed && is.null(values)) {
     return(invisible())
@@ -130,6 +118,16 @@ validateFileExists <- function(path, nullAllowed = FALSE) {
   stop(messages$errorUnexistingFile(path[!file.exists(path)]))
 }
 
+checkFileExists <- function(path, nullAllowed = FALSE) {
+  if (nullAllowed && is.null(path)) {
+    return(invisible())
+  }
+  if (all(file.exists(path))) {
+    return(invisible())
+  }
+  warning(messages$errorUnexistingFile(path[!file.exists(path)]))
+}
+
 #' Check the consistency between observed data and its dictionary.
 #' Units for `dv `and `time` need to be defined at least once in either
 #' the observed dataset, its dictionary or outputs
@@ -178,26 +176,6 @@ validateDataSource <- function(dataSource, outputs, nullAllowed = TRUE) {
   validateUnitDataDefinition(timeUnit, timeUnitVariable, observedDataset)
   validateUnitDataDefinition(dvUnit, dvUnitVariable, observedDataset, outputs)
   return(invisible())
-}
-
-#' Check if the provided values are included all available dimensions
-#' @param values Vector of dimensions
-#' @return TRUE if the values are included all available dimensions
-#' @import ospsuite
-#' @keywords internal
-isDimension <- function(values) {
-  allAvailableDimensions <- ospsuite::allAvailableDimensions()
-  return(isIncluded(c(values), allAvailableDimensions))
-}
-
-validateIsDimension <- function(values, nullAllowed = FALSE) {
-  if (nullAllowed && is.null(values)) {
-    return(invisible())
-  }
-  if (isDimension(values)) {
-    return(invisible())
-  }
-  stop(messages$errorNotADimension(values))
 }
 
 isPathInSimulation <- function(paths, simulation) {
@@ -253,6 +231,9 @@ isUnitFromDimension <- function(unit, dimension) {
   if (isIncluded(dimension, c("Concentration (mass)", "Concentration (molar)"))) {
     dimension <- c("Concentration (mass)", "Concentration (molar)")
   }
+  if (isIncluded(dimension, c("AUC (mass)", "AUC (molar)"))) {
+    dimension <- c("AUC (mass)", "AUC (molar)")
+  }
   if (isEmpty(dimensionForUnit)) {
     return(FALSE)
   }
@@ -283,45 +264,59 @@ validateHasReferencePopulation <- function(workflowType, simulationSets) {
   stop(messages$warningNoReferencePopulation(workflowType))
 }
 
-
-validateSameOutputsBetweenSets <- function(simulationSets) {
-  pkParametersTableRef <- NULL
-  for (set in simulationSets) {
-    pkParametersTable <- getPKParametersInSimulationSet(set)
-    # In case output or pkParameters are in different orders
-    pkParametersTable <- pkParametersTable[order(pkParametersTable$path, pkParametersTable$group), c("path", "group")]
-
-    if (is.null(pkParametersTableRef)) {
-      pkParametersTableRef <- pkParametersTable
-      next
-    }
-    if (all(pkParametersTable$path == pkParametersTableRef$path)) {
-      pkParametersTableTest <- NULL
-      for (pkParameterIndex in seq_along(pkParametersTable$group)) {
-        pkParametersTableTest[pkParameterIndex] <- isIncluded(pkParametersTable$group[pkParameterIndex], pkParametersTableRef$group[pkParameterIndex])
-      }
-      if (all(pkParametersTableTest)) {
-        pkParametersTableRef <- pkParametersTable
-        next
-      }
-    }
-    stop(messages$errorNotSameOutputsBetweenSets(sapply(
-      simulationSets, function(set) {
-        set$simulationSetName
-      }
-    )))
+#' @title validateNoDuplicate
+#' @description
+#' Leverage `ospsuite.utils::validateHasOnlyDistinctValues()` to
+#' validate that a vector has only distinct values and display a useful message.
+#' @param values An array to validate
+#' @param variableName Name of variable that can be used to display a useful message
+#' @param na.rm logical indicating if `NA` values should be removed before the check
+#' @param nullAllowed logical indicating if `NULL` values should be allowed
+#' @import  ospsuite.utils
+#' @keywords internal
+validateNoDuplicate <- function(values, variableName = NULL, na.rm = TRUE, nullAllowed = FALSE) {
+  if (nullAllowed && is.null(values)) {
+    return(invisible())
   }
+  if (hasOnlyDistinctValues(values, na.rm = na.rm)) {
+    return(invisible())
+  }
+  stop(
+    messages$errorHasNoUniqueValues(values, variableName, na.rm = na.rm),
+    call. = FALSE
+  )
 }
 
+checkNoDuplicate <- function(values, variableName = NULL, na.rm = TRUE, nullAllowed = FALSE) {
+  tryCatch(
+    {
+      validateNoDuplicate(
+        values = values,
+        variableName = variableName,
+        na.rm = na.rm,
+        nullAllowed = nullAllowed
+      )
+    },
+    error = function(e) {
+      warning(e$message, call. = FALSE)
+    }
+  )
+  return(invisible())
+}
 
-validatehasOnlyDistinctValues <- function(data, dataName = "dataset", na.rm = TRUE, nullAllowed = FALSE) {
-  if (nullAllowed && is.null(data)) {
-    return(invisible())
-  }
-  if (hasOnlyDistinctValues(data, na.rm)) {
-    return(invisible())
-  }
-  stop(messages$errorHasNoUniqueValues(data, dataName, na.rm))
+excelCheckNoDuplicate <- function(values, variableName = NULL) {
+  excelMessage <- tryCatch(
+    {
+      validateNoDuplicate(
+        values = values,
+        variableName = variableName
+      )
+    },
+    error = function(e) {
+      e$message
+    }
+  )
+  return(excelMessage)
 }
 
 validateIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, nullAllowed = FALSE) {
@@ -331,7 +326,7 @@ validateIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL
   if (isIncluded(columnNames, names(dataset))) {
     return(invisible())
   }
-  stop(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName), call. = FALSE, immediate. = TRUE)
+  stop(messages$errorNotIncludedInDataset(columnNames, dataset, datasetName), call. = FALSE)
 }
 
 checkIsIncludedInDataset <- function(columnNames, dataset, datasetName = NULL, nullAllowed = FALSE) {
@@ -398,7 +393,6 @@ validateUnitDataDefinition <- function(unit, unitColumn, observedDataset, output
   return(invisible())
 }
 
-
 validateCommandStatus <- function(command, status) {
   if (status != 0) {
     stop(messages$errorCommand(command, status))
@@ -418,4 +412,282 @@ validateHasParametersForSensitivity <- function(numberOfParameters) {
     return(invisible())
   }
   stop(messages$errorNoParametersForSensitivityAnalysis())
+}
+
+checkPKParameterExists <- function(pkParameter, pkParameterName, pkRatioMapping) {
+  if (!isEmpty(pkParameter)) {
+    return(TRUE)
+  }
+  warning(messages$pkParameterNotFound(pkParameterName, pkRatioMapping), call. = FALSE)
+  return(FALSE)
+}
+
+checkPKRatioObservedVariable <- function(variableName, observedData) {
+  if (isIncluded(variableName, names(observedData))) {
+    return(TRUE)
+  }
+  warning(
+    messages$errorNotIncludedInDataset(
+      variableName,
+      observedData,
+      datasetName = "PK Ratio Dataset"
+    ),
+    call. = FALSE
+  )
+  return(FALSE)
+}
+
+checkPKRatioObservedRecord <- function(selectedRow, observedDataRecordId) {
+  if (isOfLength(selectedRow, 1)) {
+    return(TRUE)
+  }
+  warning(
+    messages$warningPKRatioMultipleObservedRows(
+      length(selectedRow),
+      observedDataRecordId
+    ),
+    call. = FALSE
+  )
+  return(FALSE)
+}
+
+validateGuestParameters <- function(guestParameters, pkParameters) {
+  # Repurpose validateIsIncluded
+  # and update error message
+  tryCatch(
+    {
+      validateIsIncluded(guestParameters, pkParameters)
+    },
+    error = function(e) {
+      stop(messages$errorParametersNotIncludedInDDI(setdiff(guestParameters, pkParameters)), call. = FALSE)
+    }
+  )
+  return(invisible())
+}
+
+checkLLOQValues <- function(lloq, structureSet) {
+  if (any(is.infinite(lloq))) {
+    warning(
+      messages$warningHasInfiniteValues(
+        n = sum(is.infinite(lloq)),
+        datasetName = structureSet$simulationSet$dataSource$dataFile
+      ),
+      call. = FALSE
+    )
+    lloq[is.infinite(lloq)] <- NA
+  }
+  # If no negative value, return lloq
+  if (isEmpty(which(lloq <= 0))) {
+    return(lloq)
+  }
+  warning(
+    messages$negativeDataRemoved(length(which(lloq <= 0))),
+    call. = FALSE
+  )
+  lloq[lloq <= 0 & !is.na(lloq)] <- NA
+  return(lloq)
+}
+
+#' @title checkIsSamePopulation
+#' @description Check if 2 simulation sets use the same population.
+#' Same population is identified as
+#' 1- same population file and 2- same study design file (if defined)
+#' @param simulationSet A `PopulationSimulationSet` object
+#' @param referenceSet A `PopulationSimulationSet` object
+#' @return A logical
+#' @keywords internal
+checkIsSamePopulation <- function(simulationSet, referenceSet) {
+  isSamePopulation <- all(
+    simulationSet$populationFile %in% referenceSet$populationFile,
+    any(
+      simulationSet$studyDesignFile %in% referenceSet$studyDesignFile,
+      all(
+        isEmpty(simulationSet$studyDesignFile),
+        isEmpty(referenceSet$studyDesignFile)
+      )
+    )
+  )
+  return(isSamePopulation)
+}
+
+validateMoleculesFromCompounds <- function(molecules, compoundNames) {
+  compoundsInMolecules <- sapply(molecules, function(molecule) {
+    molecule$name
+  })
+  isMoleculesFromCompounds <- all(compoundsInMolecules %in% compoundNames)
+
+  if (isMoleculesFromCompounds) {
+    return()
+  }
+
+  pathsNotFromCompounds <- sapply(
+    molecules[!(compoundsInMolecules %in% compoundNames)],
+    function(molecule) {
+      molecule$path
+    }
+  )
+
+  stop(
+    paste0(
+      "The following molecule paths were not from the selected compounds (",
+      paste(compoundNames, collapse = ", "),
+      "): ",
+      paste(pathsNotFromCompounds, collapse = ", ")
+    )
+  )
+}
+
+checkMoleculesAlreadyIncluded <- function(moleculePaths, previousMoleculePaths) {
+  if (!isIncluded(moleculePaths, previousMoleculePaths)) {
+    return()
+  }
+  warning(
+    paste0(
+      "The following molecule paths were included multiple times in the mass balance: ",
+      paste(moleculePaths[moleculePaths %in% previousMoleculePaths], collapse = ", ")
+    )
+  )
+  return()
+}
+
+#' @title isLoadedSimulation
+#' @description
+#' Check that the simulation has been loaded
+#' @param simulation A `Simulation` object
+#' @return Logical indicating if the `simulation` exists
+#' @export
+isLoadedSimulation <- function(simulation) {
+  return(isOfType(simulation, "Simulation"))
+}
+
+#' @title isLoadedPopulation
+#' @description
+#' Check that the population has been loaded
+#' @param population A `Population` object
+#' @return Logical indicating if the `population` exists
+#' @export
+isLoadedPopulation <- function(population) {
+  return(isOfType(population, "Population"))
+}
+
+#' @title isLoadedPackage
+#' @description
+#' Check that a R package has been successfully loaded
+#' @param packageName Name of the package
+#' @export
+isLoadedPackage <- function(packageName) {
+  return(isIncluded(packageName, .packages()))
+}
+
+#' @title validateHasRunOnAllCores
+#' @description
+#' Validate if all cores executed an mpi.remote.exec command successfully.
+#' @param coreResults list of logical results returned by each core after an mpi.remote.exec command is complete
+#' @param inputName Name of the input to be loaded
+#' @param inputType Type of input to be loaded
+#' @param runType Type of run executed on `{Rmpi}` cores
+#' @keywords internal
+validateHasRunOnAllCores <- function(coreResults, inputName, inputType, runType = "load") {
+  hasRunOnAllCores <- all(sapply(coreResults, identity))
+  if (hasRunOnAllCores) {
+    return(invisible())
+  }
+  # If specific cores have not run, returns only their results in error message
+  coresNotRun <- which(!sapply(coreResults, identity))
+  inputName <- highlight(inputName)
+  if (isSameLength(inputName, coreResults)) {
+    inputName <- paste(inputName[coresNotRun], collapse = ", ")
+  }
+  stop(
+    switch(runType,
+      "load" = messages$errorNotLoadedOnCores(paste(inputType, inputName)),
+      "task" = messages$errorNotCompletedOnCores(paste(inputType, inputName))
+    ),
+    call. = FALSE
+  )
+}
+
+#' @title checkHasRunOnAllCores
+#' @description
+#' Check if all cores executed an mpi.remote.exec command successfully.
+#' @inheritParams validateHasRunOnAllCores
+#' @keywords internal
+checkHasRunOnAllCores <- function(coreResults, inputName, inputType, runType = "load") {
+  tryCatch(
+    {
+      validateHasRunOnAllCores(
+        coreResults = coreResults,
+        inputName = inputName,
+        inputType = inputType,
+        runType = runType
+      )
+    },
+    error = function(e) {
+      warning(e$message, call. = FALSE)
+    }
+  )
+  return(invisible())
+}
+
+#' @title checkSamePopulationIds
+#' @description
+#' Check if PK Analyses with same population actually use the same IndividualIds
+#' @param setIds A vector of IndividualIds for a simulation set
+#' @param referenceSetIds A vector of IndividualIds for the reference simulation set
+#' @param setName Name of simulation set for warning message
+#' @param referenceSetName Name of the reference simulation set for warning message
+#' @keywords internal
+checkSamePopulationIds <- function(setIds,
+                                   referenceSetIds,
+                                   setName,
+                                   referenceSetName) {
+  tryCatch(
+    {
+      validateIsIncluded(referenceSetIds, setIds)
+    },
+    error = function(e) {
+      missingIds <- setdiff(referenceSetIds, setIds)
+      warning(messages$warningPKAnalysesMissingIds(missingIds, setName), call. = FALSE)
+    }
+  )
+  tryCatch(
+    {
+      validateIsIncluded(setIds, referenceSetIds)
+    },
+    error = function(e) {
+      missingIds <- setdiff(setIds, referenceSetIds)
+      warning(messages$warningPKAnalysesMissingIds(missingIds, referenceSetName), call. = FALSE)
+    }
+  )
+  return(invisible())
+}
+
+#' @title checkMetaDataIsConsistent
+#' @description
+#' Check consistency of metadata units, dimensions and residuals scale
+#' @param metaData A data.frame summarizing meta data of multiple `SimulationSet` and `Output` objects
+#' @keywords internal
+checkMetaDataIsConsistent <- function(metaData) {
+  groupId <- unique(metaData$group)
+  if (!isOfLength(unique(metaData$unit), 1)) {
+    warning(
+      messages$inconsistentMetaData(
+        values = metaData$unit,
+        id = groupId,
+        dataType = "units"
+      ),
+      call. = FALSE
+    )
+  }
+  if (!isOfLength(unique(metaData$residualScale), 1)) {
+    warning(
+      messages$inconsistentMetaData(
+        values = metaData$residualScale,
+        id = groupId,
+        dataType = "residualScale"
+      ),
+      call. = FALSE
+    )
+  }
+  return()
 }

@@ -2,6 +2,7 @@
 title: "Plot settings"
 resource_files:
   - figures
+  - templates
 output: 
   rmarkdown::html_vignette:
    number_sections: true
@@ -37,10 +38,12 @@ These properties can at 2 levels:
 
 # How to set global workflow properties
 
-Most of the global settings can be managed using the notion of __theme__ from the `tlf` package,
-the `reporting.engine` functions generate their plots using the `tlf` package.
+Reporting Engine global setting names are listed in the enum [`reSettingsNames`](../reference/reSettingsNames.html).
+Each global setting can be reviewed using the function `getRESettings()`.
 
-Some shortkey methods were added to the `reporting.engine` package to simplify their use.
+It is possible to update, save and reuse most of the reporting engine default settings using the functions available in the section [__Default Settings__](../reference/index.html#default-settings).
+
+Note that the function `resetRESettingsToDefault()` allows you to reset to initial default values defined by the reporting engine.
 
 ## Notion of theme
 
@@ -52,8 +55,9 @@ Templates of json files are available in the `tlf` package at the location defin
 
 ```{r theme definition}
 # Get the path of the Json template
-jsonFile <- system.file("extdata", "re-theme.json", 
-                        package = "ospsuite.reportingengine")
+jsonFile <- system.file("extdata", "re-theme.json",
+  package = "ospsuite.reportingengine"
+)
 
 # Load the theme from the json file
 reTheme <- tlf::loadThemeFromJson(jsonFile)
@@ -191,13 +195,15 @@ The next chunk of code will define `PlotConfiguration` objects to be included in
 obsVsPredConfiguration <- PlotConfiguration$new(
   xlabel = "Observed values [µmol/ml]",
   ylabel = "Simulated values [µmol/ml]",
-  watermark = "vignette")
+  watermark = "vignette"
+)
 
 # Define plot configuration for resHisto
 resHistoConfiguration <- PlotConfiguration$new(
   xlabel = "Residuals",
   ylabel = "Count",
-  watermark = "vignette")
+  watermark = "vignette"
+)
 
 # Update some fields of the configuration if necessary
 resHistoConfiguration$background$plot$fill <- "lemonchiffon"
@@ -207,12 +213,16 @@ resHistoConfiguration$background$xGrid$color <- "goldenrod3"
 resHistoConfiguration$background$yGrid$color <- "goldenrod3"
 
 # Define plotConfigurations list
-plotConfigurations <- list(resHisto = resHistoConfiguration,
-                           obsVsPred = obsVsPredConfiguration)
+plotConfigurations <- list(
+  resHisto = resHistoConfiguration,
+  obsVsPred = obsVsPredConfiguration
+)
 
-# Define list to update task settings with plotConfigurations field and and bins field  
-mySettings <- list(plotConfigurations = plotConfigurations, 
-                   bins = 3)
+# Define list to update task settings with plotConfigurations field and and bins field
+mySettings <- list(
+  plotConfigurations = plotConfigurations,
+  bins = 3
+)
 ```
 
 Then, the __`settings`__ field of the __"plotTimeProfilesAndResiduals"__ task can be updated as shown below:
@@ -275,7 +285,7 @@ workflowA$plotPKParameters$settings$bins <- c(0, 1, 2, 3, 5, 10)
 # Associate the number of bins
 workflowA$plotPKParameters$settings$bins <- 15
 
-# Set VPC as stair step 
+# Set VPC as stair step
 workflowA$plotPKParameters$settings$stairstep <- TRUE
 ```
 

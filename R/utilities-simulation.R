@@ -23,7 +23,7 @@ simulateWorkflowModels <- function(structureSets, settings = NULL) {
   # Run mean simulations in parallel
   if (sum(!populationSets) > 0) {
     simulationResults <- simulateModelParallel(
-      structureSet = structureSets[!populationSets],
+      structureSets = structureSets[!populationSets],
       settings = settings
     )
   }
@@ -44,11 +44,25 @@ simulateWorkflowModels <- function(structureSets, settings = NULL) {
 #' @keywords internal
 simulateModelForPopulation <- function(structureSets, settings = NULL) {
   simulationResults <- NULL
+  setIndex <- 0
+  logInfo(messages$runStarting("Population Simulations"))
+  # Display a nice progress bar for users
+  simulationProgress <- txtProgressBar(max = length(structureSets), style = 3)
+  cat("\n")
+  # Loop through the list of structureSets
   for (set in structureSets) {
     re.tStoreFileMetadata(access = "read", filePath = set$simulationSet$populationFile)
     population <- loadWorkflowPopulation(set$simulationSet)
     numberOfIndividuals <- length(population$allIndividualIds)
     numberOfCores <- min(settings$numberOfCores %||% 1, numberOfIndividuals)
+
+    # Display name of simulation and population on console
+    setName <- paste0(
+      set$simulationSet$simulationSetName,
+      " (", set$simulationSet$populationName, ")",
+      ifelse(numberOfCores == 1, "", paste(" using", numberOfCores, "cores"))
+    )
+    logInfo(messages$runStarting(setName))
 
     # If one core available, run in series
     if (numberOfCores == 1) {
@@ -60,13 +74,12 @@ simulateModelForPopulation <- function(structureSets, settings = NULL) {
         settings = settings
       )
       simulationResults <- c(simulationResults, simulationResult)
+      # Update progress bar after each simulation
+      setIndex <- setIndex + 1
+      setTxtProgressBar(simulationProgress, value = setIndex)
+      cat("\n")
       next
     }
-
-    # If multiple cores available, run in parallel
-    logInfo(paste0(
-      "Starting parallel population simulation on ", .highlight(numberOfCores), " cores"
-    ))
 
     simulationResultFileNames <- runParallelPopulationSimulation(
       numberOfCores = numberOfCores,
@@ -83,8 +96,12 @@ simulateModelForPopulation <- function(structureSets, settings = NULL) {
 
     logDebug("Parallel population simulation completed.")
     simulationResults <- c(simulationResults, simulationResult)
+    # Update progress bar after each simulation
+    setIndex <- setIndex + 1
+    setTxtProgressBar(simulationProgress, value = setIndex)
+    cat("\n")
   }
-
+  close(simulationProgress)
   return(simulationResults)
 }
 
@@ -110,7 +127,7 @@ simulateModelOnCore <- function(simulation,
 
   simRunOptions <- ospsuite::SimulationRunOptions$new(showProgress = showProgress, numberOfCores = 1)
   simulationResult <- NULL
-  simulationResult <- ospsuite::runSimulation(simulation = simulation, population = population, simulationRunOptions = simRunOptions)
+  simulationResult <- ospsuite::runSimulations(simulation = simulation, population = population, simulationRunOptions = simRunOptions)[[1]]
 
   write(
     paste0(ifNotNull(nodeName, paste0(nodeName, ": "), ""), "Simulation run complete."),
@@ -227,10 +244,10 @@ simulateModel <- function(structureSet, settings = NULL) {
     numberOfCores = settings$allowedCores
   )
 
-  simulationResult <- ospsuite::runSimulation(simulation,
+  simulationResult <- ospsuite::runSimulations(simulation,
     population = population,
     simulationRunOptions = simRunOptions
-  )
+  )[[1]]
 
   logDebug("Simulation run complete")
 
@@ -259,8 +276,8 @@ runParallelPopulationSimulation <- function(structureSet,
     stop(paste0(numberOfCores, " cores were not successfully spawned."))
   }
 
-  loadLibraryOnCores(libraryName = "ospsuite.reportingengine")
-  loadLibraryOnCores(libraryName = "ospsuite")
+  loadPackageOnCores("ospsuite.reportingengine")
+  loadPackageOnCores("ospsuite")
 
   tempPopDataFiles <- ospsuite::splitPopulationFile(
     csvPopulationFile = structureSet$simulationSet$populationFile,
@@ -270,8 +287,8 @@ runParallelPopulationSimulation <- function(structureSet,
   )
 
   tempLogFileNamePrefix <- file.path(reEnv$log$folder, "logDebug-core-simulation")
-  tempLogFileNames <- paste0(tempLogFileNamePrefix, seq(1, numberOfCores), ".txt")
-  allResultsFileNames <- paste0(structureSet$simulationSet$simulationSetName, seq(1, numberOfCores), ".csv")
+  tempLogFileNames <- paste0(tempLogFileNamePrefix, seq_len(numberOfCores), ".txt")
+  allResultsFileNames <- paste0(structureSet$simulationSet$simulationSetName, seq_len(numberOfCores), ".csv")
 
   Rmpi::mpi.bcast.Robj2slave(obj = structureSet)
   Rmpi::mpi.bcast.Robj2slave(obj = settings)
@@ -286,39 +303,54 @@ runParallelPopulationSimulation <- function(structureSet,
   Rmpi::mpi.remote.exec(simulationResult <- simulateModelOnCore(
     simulation = sim,
     population = population,
-    debugLogFileName = tempLogFileNames[mpi.comm.rank()],
-    nodeName = paste("Core", mpi.comm.rank()),
+    debugLogFileName = tempLogFileNames[Rmpi::mpi.comm.rank()],
+    nodeName = paste("Core", Rmpi::mpi.comm.rank()),
     showProgress = settings$showProgress
   ))
-
-  # Verify simulations ran successfully
+  # Check and warn if some runs were not successful for specific split population files
   simulationRunSuccess <- Rmpi::mpi.remote.exec(!(simulationResult$count == 0))
   successfulCores <- which(unlist(unname(simulationRunSuccess)))
-  verifySimulationRunSuccessful(
-    simulationRunSuccess = simulationRunSuccess,
-    tempPopDataFiles = tempPopDataFiles
+  checkHasRunOnAllCores(
+    coreResults = simulationRunSuccess,
+    inputName = tempPopDataFiles,
+    inputType = paste(
+      "Run(s) using simulation file '",
+      structureSet$simulationSet$simulationFile,
+      "' and population file(s)"
+    ),
+    runType = "task"
   )
 
-
   # Write core logs to workflow logs
-  for (core in seq(1, numberOfCores)) {
+  for (core in seq_len(numberOfCores)) {
     logDebug(readLines(tempLogFileNames[core]))
   }
 
   # Remove any previous temporary results files
-  Rmpi::mpi.remote.exec(if (file.exists(allResultsFileNames[mpi.comm.rank()])) {
-    file.remove(allResultsFileNames[mpi.comm.rank()])
-  })
-  anyPreviousPartialResultsRemoved <- Rmpi::mpi.remote.exec(!file.exists(allResultsFileNames[mpi.comm.rank()]))
-  verifyAnyPreviousFilesRemoved(anyPreviousPartialResultsRemoved)
+  Rmpi::mpi.remote.exec(
+    if (file.exists(allResultsFileNames[Rmpi::mpi.comm.rank()])) {
+      file.remove(allResultsFileNames[Rmpi::mpi.comm.rank()])
+    }
+  )
+  validateHasRunOnAllCores(
+    coreResults = Rmpi::mpi.remote.exec(!file.exists(allResultsFileNames[Rmpi::mpi.comm.rank()])),
+    inputName = allResultsFileNames,
+    inputType = "Clean up of temporary files",
+    runType = "task"
+  )
 
   # Export temporary results files to CSV
   Rmpi::mpi.remote.exec(ospsuite::exportResultsToCSV(
     results = simulationResult,
-    filePath = allResultsFileNames[mpi.comm.rank()]
+    filePath = allResultsFileNames[Rmpi::mpi.comm.rank()]
   ))
-  partialResultsExported <- Rmpi::mpi.remote.exec(file.exists(allResultsFileNames[mpi.comm.rank()]))
-  verifyPartialResultsExported(partialResultsExported, numberOfCores)
+  # Check and warn if some runs could not be exported
+  checkHasRunOnAllCores(
+    coreResults = Rmpi::mpi.remote.exec(file.exists(allResultsFileNames[Rmpi::mpi.comm.rank()])),
+    inputName = allResultsFileNames,
+    inputType = "Export of simulation results for",
+    runType = "task"
+  )
 
   # Close slaves
   Rmpi::mpi.close.Rslaves()
@@ -342,11 +374,12 @@ updateSimulationIndividualParameters <- function(simulation, individualParameter
   if (is.null(individualParameters)) {
     return(TRUE)
   }
-  ospsuite::setParameterValuesByPath(parameterPaths = individualParameters$paths, values = individualParameters$values, simulation = simulation)
+  ospsuite::setParameterValuesByPath(
+    parameterPaths = individualParameters$paths,
+    values = individualParameters$values,
+    simulation = simulation,
+    # Issue #497 prevent crash if parameter is not found
+    stopIfNotFound = FALSE
+  )
   return(TRUE)
 }
-
-#' @title defaultSimulationNumberOfCores
-#' @description default numberOfCores for simulation
-#' @export
-defaultSimulationNumberOfCores <- 1

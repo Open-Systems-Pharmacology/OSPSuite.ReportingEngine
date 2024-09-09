@@ -59,5 +59,6 @@ test_that("Workflows initialization creates appropriate folder and logs, and war
   expect_false("log-debug.txt" %in% list.files(testFolder))
   expect_false("log-error.txt" %in% list.files(testFolder))
 
+  resetLogs()
   unlink(testFolder, recursive = TRUE)
 })

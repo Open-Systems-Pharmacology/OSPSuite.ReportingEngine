@@ -20,7 +20,7 @@ statisticsType = StatisticsTypes$`Geometric mean`
 
 # Set the legend caption displayed for range
 workflow$plotTimeProfilesAndResiduals$settings$setStatistics(
-statisticsType = StatisticsTypes$`Geometric mean`
+statisticsType = StatisticsTypes$`Geometric mean`,
 rangeCaption = "90\% population range"
 )
 
@@ -138,7 +138,7 @@ statisticsType = StatisticsTypes$`Geometric mean`
 
 # Set the legend caption displayed for range
 workflow$plotTimeProfilesAndResiduals$settings$setStatistics(
-statisticsType = StatisticsTypes$`Geometric mean`
+statisticsType = StatisticsTypes$`Geometric mean`,
 rangeCaption = "90\% population range"
 )
 

@@ -69,11 +69,7 @@ Task <- R6::R6Class(
       for (inputToCheck in private$.inputs) {
         if (!file.exists(inputToCheck)) {
           isValid <- FALSE
-          logWorkflow(
-            message = messages$errorTaskInputDoesNotExist(inputToCheck),
-            pathFolder = self$workflowFolder,
-            logTypes = c(LogTypes$Error, LogTypes$Debug)
-          )
+          logErrorThenStop(messages$errorTaskInputDoesNotExist(inputToCheck))
         }
       }
       return(isValid)
@@ -95,8 +91,6 @@ Task <- R6::R6Class(
       if (isEmpty(inputsToCheck)) {
         return(TRUE)
       }
-
-      # TODO: update after PR about logging
       tryCatch(
         {
           validateFileExists(inputsToCheck, nullAllowed = TRUE)

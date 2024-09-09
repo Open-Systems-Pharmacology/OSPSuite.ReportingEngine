@@ -18,27 +18,30 @@
     },
     "xlabel": {
       "color": "black",
-      "size": 11,
+      "size": 10,
       "fontFace": "plain",
       "fontFamily": "",
       "angle": 0,
-      "align": "center"
+      "align": "center",
+      "margin": [10, 10, 10, 10]
     },
     "ylabel": {
       "color": "black",
-      "size": 11,
+      "size": 10,
       "fontFace": "plain",
       "fontFamily": "",
       "angle": 90,
-      "align": "center"
+      "align": "center",
+      "margin": [10, 10, 10, 10]
     },
     "y2label": {
       "color": "black",
-      "size": 11,
+      "size": 10,
       "fontFace": "plain",
       "fontFamily": "",
       "angle": -90,
-      "align": "center"
+      "align": "center",
+      "margin": [10, 10, 10, 10]
     },
     "watermark": {
       "color": "grey",
@@ -54,7 +57,8 @@
       "fontFace": "plain",
       "fontFamily": "",
       "angle": 0,
-      "align": "left"
+      "align": "left",
+      "margin": [8, 5, 2, 5]
     },
     "legendTitle": {
       "color": "black",
@@ -135,20 +139,48 @@
   },
   "aestheticMaps": {
     "color": [
-      "#0078D7",
-      "#D83B01",
-      "#107C10",
-      "#A80000",
-      "#002050",
-      "#B4009E"
+      "#5050FF",
+      "#CE3D32",
+      "#749B58",
+      "#F0E685",
+      "#466983",
+      "#BA6338",
+      "#5DB1DD",
+      "#802268",
+      "#6BD76B",
+      "#D595A7",
+      "#924822",
+      "#837B8D",
+      "#C75127",
+      "#D58F5C",
+      "#7A65A5",
+      "#E4AF69",
+      "#3B1B53",
+      "#CDDEB7",
+      "#612A79",
+      "#AE1F63"
     ],
     "fill": [
-      "#0078D7",
-      "#D83B01",
-      "#107C10",
-      "#A80000",
-      "#002050",
-      "#B4009E"
+      "#5050FF",
+      "#CE3D32",
+      "#749B58",
+      "#F0E685",
+      "#466983",
+      "#BA6338",
+      "#5DB1DD",
+      "#802268",
+      "#6BD76B",
+      "#D595A7",
+      "#924822",
+      "#837B8D",
+      "#C75127",
+      "#D58F5C",
+      "#7A65A5",
+      "#E4AF69",
+      "#3B1B53",
+      "#CDDEB7",
+      "#612A79",
+      "#AE1F63"
     ],
     "shape": [
       "circle",
@@ -186,7 +218,7 @@
       "fill": "NA",
       "shape": "circle",
       "linetype": "blank",
-      "size": 2,
+      "size": 3,
       "alpha": 1
     },
     "addLine": {
@@ -198,12 +230,12 @@
       "alpha": 1
     },
     "addRibbon": {
-      "color": "#0078D7",
+      "color": "black",
       "fill": "#0078D7",
       "shape": "blank",
-      "linetype": "solid",
+      "linetype": "blank",
       "size": 1,
-      "alpha": 0.2
+      "alpha": 0.6
     },
     "addErrorbar": {
       "color": "black",
@@ -219,7 +251,7 @@
         "fill": "NA",
         "shape": "circle",
         "linetype": "blank",
-        "size": 1,
+        "size": 3,
         "alpha": 1
       },
       "lines": {
@@ -253,7 +285,7 @@
         "fill": "NA",
         "shape": "circle",
         "linetype": "blank",
-        "size": 1,
+        "size": 3,
         "alpha": 1
       },
       "lines": {
@@ -283,7 +315,7 @@
         "fill": "NA",
         "shape": "reset",
         "linetype": "blank",
-        "size": 1,
+        "size": 3,
         "alpha": 1
       },
       "lines": {
@@ -299,8 +331,8 @@
         "fill": "reset",
         "shape": "blank",
         "linetype": "blank",
-        "size": 0.6,
-        "alpha": 0.2
+        "size": 0.5,
+        "alpha": 0.6
       },
       "errorbars": {
         "color": "reset",
@@ -317,7 +349,7 @@
         "fill": "NA",
         "shape": "circle",
         "linetype": "blank",
-        "size": 1,
+        "size": 3,
         "alpha": 1
       },
       "lines": {
@@ -343,7 +375,7 @@
         "fill": "NA",
         "shape": "circle",
         "linetype": "blank",
-        "size": 1,
+        "size": 3,
         "alpha": 1
       },
       "lines": {
@@ -369,7 +401,7 @@
         "fill": "NA",
         "shape": "circle",
         "linetype": "blank",
-        "size": 1,
+        "size": 3,
         "alpha": 1
       },
       "lines": {
@@ -395,7 +427,7 @@
         "fill": "NA",
         "shape": "next",
         "linetype": "blank",
-        "size": 1,
+        "size": 3,
         "alpha": 1
       },
       "lines": {
@@ -439,7 +471,7 @@
         "fill": "NA",
         "shape": "reset",
         "linetype": "blank",
-        "size": 1,
+        "size": 3,
         "alpha": 1
       },
       "ribbons": {
@@ -462,6 +494,16 @@
       },
       "ribbons": {
         "color": "black",
+        "fill": "reset",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": "first"
+      }
+    },
+    "plotPieChart": {
+      "ribbons": {
+        "color": "white",
         "fill": "reset",
         "shape": "blank",
         "linetype": "solid",

@@ -4,7 +4,7 @@
 \alias{resetLogs}
 \title{resetLogs}
 \usage{
-resetLogs(folder)
+resetLogs(folder = NULL)
 }
 \arguments{
 \item{folder}{Folder where logs are saved}

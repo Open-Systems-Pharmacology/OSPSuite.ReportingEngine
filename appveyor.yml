@@ -10,19 +10,18 @@ init:
 install:
   - ps: Bootstrap
   - git submodule update --init --recursive
-  - ps: cinst pandoc --no-progress
+  - ps: choco install pandoc --no-progress
   - ps: $env:Path += ";C:\Program Files (x86)\Pandoc\"
 
 environment:
-  app_version: "2.1"
+  app_version: "2.2"
   USE_RTOOLS: true
   NOT_CRAN: true
   KEEP_VIGNETTES: true
   _R_CHECK_FORCE_SUGGESTS_: false
   R_ARCH: x64
-  R_VERSION: "4.0.5"
-  COVERALLS_TOKEN:
-    secure: Qo8To6hV3C2ghrS0Z+pPyvaBaEpE24Pwr7LF8AbiMO9HL+pkwX1U3kYGUNzJF5EU
+  R_VERSION: "4.3.1"
+  R_CHECK_ARGS: --no-build-vignettes --no-manual --as-cran
 
 version: "$(app_version).{build}"
 
@@ -32,19 +31,17 @@ before_build:
 build_script:
   - travis-tool.sh install_deps
   - travis-tool.sh r_binary_install curl
-  - Rscript -e "install.packages(c('dplyr','purrr','covr','readr','tidyr','webshot','spelling','readxl'), repos = 'http://cran.us.r-project.org', type='win.binary')"
-  - Rscript -e "install.packages('tidyselect', repos = 'http://cran.us.r-project.org', type='source')"
-  - Rscript -e "install.packages('https://github.com/Open-Systems-Pharmacology/rClr/releases/download/v0.9.1/rClr_0.9.1.zip', repos = NULL, type = 'binary')"
-  - Rscript -e "install.packages('https://ci.appveyor.com/api/projects/open-systems-pharmacology-ci/tlf-library/artifacts/tlf.zip', repos = NULL, type = 'binary')"
-  - Rscript -e "install.packages('https://ci.appveyor.com/api/projects/open-systems-pharmacology-ci/ospsuite-r/artifacts/ospsuite.zip', repos = NULL, type = 'binary')"
-  - Rscript -e "install.packages('https://ci.appveyor.com/api/projects/open-systems-pharmacology-ci/ospsuite-rutils/artifacts/ospsuite.utils.zip', repos = NULL, type = 'binary')"
+  - Rscript .github/workflows/install_dependencies.R
 
 on_success:
   - Rscript -e "spelling::spell_check_package()"
-  - Rscript -e "covr::codecov(function_exclusions = c('print.*', '\\.onLoad'))"
 
 test_script:
   - travis-tool.sh run_tests
+
+after_test:
+  - ps: copy ospsuite.reportingengine_*.zip ospsuite.reportingengine.zip
+  - ps: copy ospsuite.reportingengine_*.tar.gz ospsuite.reportingengine.tar.gz
 
 on_failure:
   - 7z a failure.zip *.Rcheck\*
@@ -63,10 +60,10 @@ artifacts:
   - path: '*.Rcheck\**\*.Rout'
     name: Logs
 
-  - path: '\*_*.tar.gz'
+  - path: '\*.tar.gz'
     name: Bits
 
-  - path: '\*_*.zip'
+  - path: '\*.zip'
     name: Bits
 
 platform: x64
@@ -74,6 +71,11 @@ platform: x64
 skip_commits:
   files:
     - "*.md"
+    - .github/workflows/*.yml
+    - .github/workflows/*.sh
+    - .github/workflows/Dockerfile
+#    - .github/workflows/*.R
+    - '_pkgdown.yml'
 
 skip_branch_with_pr: true
 
@@ -82,7 +84,6 @@ skip_tags: true
 branches:
   only:
     - develop
-    - v1.2_Fixes
 
 pull_requests:
   do_not_increment_build_number: true

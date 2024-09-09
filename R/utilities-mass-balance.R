@@ -8,377 +8,472 @@
 #' @import tlf
 #' @import ospsuite
 #' @import utils
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
+#' @importFrom stats approx
 #' @keywords internal
 plotMeanMassBalance <- function(structureSet, settings = NULL) {
   re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
-
-  # Get drug mass to perform the drugmass normalized plot
-  applications <- ospsuite::getContainer("Applications", simulation)
-  appliedMoleculePaths <- ospsuite::getAllMoleculePathsIn(applications)
-
-  appliedMolecules <- ospsuite::getAllMoleculesMatching(appliedMoleculePaths, simulation)
-  drugMass <- sum(sapply(appliedMolecules, function(molecule) {
-    molecule$value
-  }))
-
-  # Get all the relevant compounds
-  organism <- ospsuite::getContainer("Organism", simulation)
-  allCompoundNames <- c(simulation$allFloatingMoleculeNames(), simulation$allStationaryMoleculeNames())
-  relevantCompoundNames <- allCompoundNames[!sapply(allCompoundNames, function(compoundName) {
-    compoundName %in% simulation$allEndogenousStationaryMoleculeNames()
-  })]
-
-  # User defined coumpound selection
-  selectedCompoundNames <- settings$selectedCompoundNames %||% relevantCompoundNames
-  validateIsIncluded(selectedCompoundNames, relevantCompoundNames)
-
-  # Get all the molecule paths (with dimension=amount) of the selected/relevant coumpounds
-  molecules <- ospsuite::getAllMoleculesMatching(paste0("**|", selectedCompoundNames), organism)
-
-  # Clear concentration output in case any concentrations are still included
+  allMoleculePaths <- ospsuite::getAllMoleculePathsIn(simulation)
   ospsuite::clearOutputs(simulation)
-  for (molecule in molecules) {
-    addOutputs(quantitiesOrPaths = molecule, simulation = simulation)
-  }
+  addOutputs(quantitiesOrPaths = allMoleculePaths, simulation = simulation)
+  simulationResults <- ospsuite::runSimulations(simulation)[[1]]
 
-  simulationResults <- ospsuite::runSimulation(simulation)
-  simulationResultsOutput <- ospsuite::getOutputValues(
-    simulationResults = simulationResults,
-    quantitiesOrPaths = simulationResults$allQuantityPaths
-  )
+  allAppliedCompoundNames <- simulation$allXenobioticFloatingMoleculeNames()
+  # Default configuration behavior integrates all xenobiotic molecules in mass balance
+  # Note that a list of lists is expected from the json file,
+  # thus the same format is used for default configuration
+  massBalanceSettings <- list(list(
+    Name = paste("Mass Balance for", paste(allAppliedCompoundNames, collapse = ", ")),
+    Molecules = allAppliedCompoundNames
+  ))
+  massBalanceSettings <- structureSet$simulationSet$massBalanceSettings %||% massBalanceSettings
 
-  # Create a data.frame with full string path and separates the last 3 elements of paths
-  # to perform filtering and grouping of for the final plot
-  pathsArray <- NULL
-  for (path in simulationResults$allQuantityPaths) {
-    endOfPath <- utils::tail(ospsuite::toPathArray(path), 3)
-    pathsArray <- rbind.data.frame(
-      pathsArray,
-      data.frame(
-        "parentCompartmentName" = endOfPath[1],
-        "subCompartmentName" = endOfPath[2],
-        "compoundName" = endOfPath[3],
-        "path" = path,
-        stringsAsFactors = FALSE
+  massBalanceResults <- list()
+  for (plotSettings in massBalanceSettings) {
+    compoundNames <- as.character(plotSettings$Molecules)
+    # Sub section using settings name
+    if (!isEmpty(plotSettings$Name)) {
+      sectionId <- defaultFileNames$resultID(length(massBalanceResults) + 1, "mass_balance")
+      massBalanceResults[[sectionId]] <- saveTaskResults(
+        id = sectionId,
+        textChunk = paste("### ", plotSettings$Name, anchor(sectionId), sep = ""),
+        includeTextChunk = TRUE
+      )
+    }
+    massBalanceData <- getMassBalanceData(
+      groupings = plotSettings$Groupings,
+      compoundNames = compoundNames,
+      simulation = simulation,
+      simulationResults = simulationResults
+    )
+
+    # Get applications for drug mass normalization, only the applied compound name should be used
+    appliedCompoundName <- intersect(compoundNames, allAppliedCompoundNames)
+    validateIsOfLength(appliedCompoundName, 1)
+    applications <- simulation$allApplicationsFor(appliedCompoundName)
+    # Application results formatted as a data.frame with time and cumulative drugMass
+    applicationResults <- getApplicationResults(applications)
+
+    # Format to appropriate units
+    massBalanceData$Time <- ospsuite::toUnit(
+      "Time",
+      massBalanceData$Time,
+      structureSet$simulationSet$timeUnit
+    )
+    metaData <- list(
+      "Time" = list(
+        dimension = "Time",
+        unit = structureSet$simulationSet$timeUnit
+      ),
+      "Amount" = list(
+        dimension = applications[[1]]$drugMass$dimension,
+        unit = applications[[1]]$drugMass$unit
+      ),
+      "NormalizedAmount" = list(
+        dimension = applications[[1]]$drugMass$dimension,
+        unit = "fraction of drugmass"
       )
     )
-  }
 
-  # In the Matlab version, there are multiple groupings performed at that point:
-  # 1) Saliva is excluded from the mass balance calculation
-  # 2) Lumen is a parent compartment that regroups many sub-compartments but Feces
-  # 3) All the rest of the sub-compartments are used normally
+    # The function approx aims at intra- and extrapolating the total drug mass data
+    # at the same time points as the mass balance data
+    massBalanceData$DrugMass <- approx(
+      x = ospsuite::toUnit(
+        "Time",
+        applicationResults$time,
+        structureSet$simulationSet$timeUnit
+      ),
+      y = applicationResults$totalDrugMass,
+      xout = massBalanceData$Time,
+      method = "constant",
+      # argument rule defines how interpolation is to take place outside the interval [min(x), max(x)]
+      # 1: predicts NA outside of range of x
+      # 2: predicts the y value at the closest x data extreme
+      rule = 2
+      # since approx outputs a data.frame of x and y variables, only extract y values
+    )$y
+    massBalanceData <- massBalanceData %>% mutate(NormalizedAmount = Amount / DrugMass)
 
-  # 1) Exclude Saliva
-  salivaExclusionCondition <- !pathsArray[, "parentCompartmentName"] %in% "Saliva"
-  pathsArray <- pathsArray[salivaExclusionCondition, ]
-
-  # 2) Regroup the lumen sub-compartment but Feces
-  lumenGroupingCondition <- pathsArray[, "parentCompartmentName"] %in% "Lumen" & !pathsArray[, "subCompartmentName"] %in% "Feces"
-  pathsArray[lumenGroupingCondition, "subCompartmentName"] <- "Lumen"
-
-  # Factors could not be used for steps 1 and 2 but are needed in the next step
-  pathsArray <- as.data.frame(lapply(pathsArray, function(pathsArrayColumn) {
-    as.factor(pathsArrayColumn)
-  }))
-
-  # Aggregate Data by compound and compartment
-  simulationResultsOutputByGroup <- NULL
-
-  for (compoundLevel in levels(pathsArray[, "compoundName"])) {
-    for (compartmentLevel in levels(pathsArray[, "subCompartmentName"])) {
-      pathFilter <- pathsArray[, "compoundName"] %in% compoundLevel & pathsArray[, "subCompartmentName"] %in% compartmentLevel
-      # as.character() ensures that levels filtered out won't still be added to the aggregation
-      pathNamesFiltered <- as.character(pathsArray[pathFilter, "path"])
-
-      # cbind(..., 0) prevents rowSums to crash if only one column is filtered
-      aggregatedData <- rowSums(cbind.data.frame(
-        simulationResultsOutput$data[, pathNamesFiltered, drop = FALSE],
-        data.frame(dummyVariable = 0)
-      ))
-
-      if (max(aggregatedData) > 0) {
-        simulationResultsOutputByGroup <- rbind.data.frame(
-          simulationResultsOutputByGroup,
-          cbind.data.frame(
-            "Time" = toUnit("Time", simulationResultsOutput$data[, "Time"], structureSet$simulationSet$timeUnit),
-            "Amount" = aggregatedData,
-            "NormalizedAmount" = aggregatedData / drugMass,
-            "Legend" = paste0(compoundLevel, " - ", compartmentLevel)
-          )
-        )
-      }
-    }
-  }
-
-  # TO DO: Get meta data from input or settings
-  metaDataOutputByGroup <- list(
-    "Time" = list(
-      dimension = "Time",
-      unit = structureSet$simulationSet$timeUnit
-    ),
-    "Amount" = list(
-      dimension = appliedMolecules[[1]]$dimension,
-      unit = appliedMolecules[[1]]$unit
-    ),
-    "NormalizedAmount" = list(
-      dimension = appliedMolecules[[1]]$dimension,
-      unit = "fraction of drugmass"
+    #------ Get mass balance plots ------
+    # Time profile
+    timeProfileID <- defaultFileNames$resultID(
+      length(massBalanceResults) + 1,
+      "mass_balance",
+      structureSet$simulationSet$simulationSetName
     )
-  )
+    timeProfilePlot <- tlf::plotSimulatedTimeProfile(
+      data = massBalanceData,
+      metaData = metaData,
+      dataMapping = getMassBalanceDataMapping("timeProfile"),
+      plotConfiguration = getMassBalancePlotConfiguration(
+        plotType = "timeProfile",
+        data = massBalanceData,
+        metaData = metaData,
+        settings = settings
+      )
+    )
+    massBalanceResults[[timeProfileID]] <- saveTaskResults(
+      id = timeProfileID,
+      plot = timeProfilePlot,
+      plotCaption = captions$massBalance$timeProfile(compoundNames)
+    )
 
-  # Get mass balance results
-  massBalanceResults <- list()
+    # Cumulative time profile
+    cumulativeTimeProfileID <- defaultFileNames$resultID(
+      length(massBalanceResults) + 1,
+      "mass_balance",
+      structureSet$simulationSet$simulationSetName
+    )
+    cumulativeTimeProfilePlot <- tlf::plotCumulativeTimeProfile(
+      data = massBalanceData,
+      metaData = metaData,
+      dataMapping = getMassBalanceDataMapping("cumulativeTimeProfile"),
+      plotConfiguration = getMassBalancePlotConfiguration(
+        plotType = "cumulativeTimeProfile",
+        data = massBalanceData,
+        metaData = metaData,
+        settings = settings
+      )
+    )
+    massBalanceResults[[cumulativeTimeProfileID]] <- saveTaskResults(
+      id = cumulativeTimeProfileID,
+      plot = cumulativeTimeProfilePlot,
+      plotCaption = captions$massBalance$cumulativeTimeProfile(compoundNames)
+    )
 
-  # Time profile
-  timeProfileID <- defaultFileNames$resultID(1, "mass_balance", structureSet$simulationSet$simulationSetName)
-  massBalanceResults[[timeProfileID]] <- saveTaskResults(
-    id = timeProfileID,
-    plot = plotMassBalanceTimeProfile(
-      data = simulationResultsOutputByGroup,
-      metaData = metaDataOutputByGroup,
-      dataMapping = tlf::XYGDataMapping$new(
-        x = "Time",
-        y = "Amount",
-        color = "Legend"
-      ),
-      plotConfiguration = settings$plotConfigurations[["timeProfile"]]
-    ),
-    plotCaption = captions$massBalance$timeProfile()
-  )
+    # Normalized time profile
+    normalizedTimeProfileID <- defaultFileNames$resultID(
+      length(massBalanceResults) + 1,
+      "mass_balance",
+      structureSet$simulationSet$simulationSetName
+    )
+    normalizedTimeProfilePlot <- tlf::plotSimulatedTimeProfile(
+      data = massBalanceData,
+      metaData = metaData,
+      dataMapping = getMassBalanceDataMapping("normalizedTimeProfile"),
+      plotConfiguration = getMassBalancePlotConfiguration(
+        plotType = "normalizedTimeProfile",
+        data = massBalanceData,
+        metaData = metaData,
+        settings = settings
+      )
+    )
+    massBalanceResults[[normalizedTimeProfileID]] <- saveTaskResults(
+      id = normalizedTimeProfileID,
+      plot = normalizedTimeProfilePlot,
+      plotCaption = captions$massBalance$normalizedTimeProfile(compoundNames)
+    )
 
-  # Cumulative time profile
-  cumulativeTimeProfileID <- defaultFileNames$resultID(2, "mass_balance", structureSet$simulationSet$simulationSetName)
-  massBalanceResults[[cumulativeTimeProfileID]] <- saveTaskResults(
-    id = cumulativeTimeProfileID,
-    plot = plotMassBalanceCumulativeTimeProfile(
-      data = simulationResultsOutputByGroup,
-      metaData = metaDataOutputByGroup,
-      dataMapping = tlf::XYGDataMapping$new(
-        x = "Time",
-        y = "Amount",
-        fill = "Legend"
-      ),
-      plotConfiguration = settings$plotConfigurations[["cumulativeTimeProfile"]]
-    ),
-    plotCaption = captions$massBalance$cumulativeTimeProfile()
-  )
+    # Normalized cumulative time profile
+    normalizedCumulativeTimeProfileID <- defaultFileNames$resultID(
+      length(massBalanceResults) + 1,
+      "mass_balance",
+      structureSet$simulationSet$simulationSetName
+    )
+    normalizedCumulativeTimeProfilePlot <- tlf::plotCumulativeTimeProfile(
+      data = massBalanceData,
+      metaData = metaData,
+      dataMapping = getMassBalanceDataMapping("normalizedCumulativeTimeProfile"),
+      plotConfiguration = getMassBalancePlotConfiguration(
+        plotType = "normalizedCumulativeTimeProfile",
+        data = massBalanceData,
+        metaData = metaData,
+        settings = settings
+      )
+    )
+    massBalanceResults[[normalizedCumulativeTimeProfileID]] <- saveTaskResults(
+      id = normalizedCumulativeTimeProfileID,
+      plot = normalizedCumulativeTimeProfilePlot,
+      plotCaption = captions$massBalance$normalizedCumulativeTimeProfile(compoundNames)
+    )
 
-  # Normalized time profile
-  normalizedTimeProfileID <- defaultFileNames$resultID(3, "mass_balance", structureSet$simulationSet$simulationSetName)
-  massBalanceResults[[normalizedTimeProfileID]] <- saveTaskResults(
-    id = normalizedTimeProfileID,
-    plot = plotMassBalanceTimeProfile(
-      data = simulationResultsOutputByGroup,
-      metaData = metaDataOutputByGroup,
-      dataMapping = tlf::XYGDataMapping$new(
-        x = "Time",
-        y = "NormalizedAmount",
-        color = "Legend"
-      ),
-      plotConfiguration = settings$plotConfigurations[["normalizedTimeProfile"]]
-    ),
-    plotCaption = captions$massBalance$normalizedTimeProfile()
-  )
+    # Pie Chart
+    pieChartID <- defaultFileNames$resultID(
+      length(massBalanceResults) + 1,
+      "mass_balance",
+      structureSet$simulationSet$simulationSetName
+    )
 
-  # Normalized cumulative time profile
-  normalizedCumulativeTimeProfileID <- defaultFileNames$resultID(4, "mass_balance", structureSet$simulationSet$simulationSetName)
-  massBalanceResults[[normalizedCumulativeTimeProfileID]] <- saveTaskResults(
-    id = normalizedCumulativeTimeProfileID,
-    plot = plotMassBalanceCumulativeTimeProfile(
-      data = simulationResultsOutputByGroup,
-      metaData = metaDataOutputByGroup,
-      dataMapping = tlf::XYGDataMapping$new(
-        x = "Time",
-        y = "NormalizedAmount",
-        fill = "Legend"
-      ),
-      plotConfiguration = settings$plotConfigurations[["normalizedCumulativeTimeProfile"]]
-    ),
-    plotCaption = captions$massBalance$normalizedCumulativeTimeProfile()
-  )
-
-  # Pie Chart
-  pieChartID <- defaultFileNames$resultID(5, "mass_balance", structureSet$simulationSet$simulationSetName)
-  timeCaption <- formatNumerics(
-    max(simulationResultsOutputByGroup$Time),
-    digits = settings$digits,
-    scientific = settings$scientific
-  )
-  massBalanceResults[[pieChartID]] <- saveTaskResults(
-    id = pieChartID,
-    plot = plotMassBalancePieChart(
-      data = simulationResultsOutputByGroup,
-      metaData = metaDataOutputByGroup,
-      dataMapping = tlf::XYGDataMapping$new(
-        x = "Time",
-        y = "NormalizedAmount",
-        fill = "Legend"
-      ),
+    pieChartData <- massBalanceData %>%
+      filter(Time == max(Time)) %>%
+      mutate(LegendWithPercent = paste(
+        Legend, " (", round(100 * NormalizedAmount, digits = 1), "%)",
+        sep = ""
+      ))
+    # Ensure that the colors and legend match previous mass balance plots by re-ordering Legend
+    pieChartData$LegendWithPercent <- stats::reorder(
+      pieChartData$LegendWithPercent,
+      as.numeric(factor(pieChartData$Legend))
+    )
+    pieChartPlot <- tlf::plotPieChart(
+      data = pieChartData,
+      metaData = metaData,
+      dataMapping = getMassBalanceDataMapping("pieChart"),
       plotConfiguration = settings$plotConfigurations[["pieChart"]]
-    ),
-    plotCaption = captions$massBalance$pieChart(timeCaption, metaDataOutputByGroup$Time$unit)
-  )
+    )
 
-  # Table of mass balance time profiles
-  # saved but not included into report
-  tableID <- defaultFileNames$resultID(6, "mass_balance", structureSet$simulationSet$simulationSetName)
-  massBalanceResults[[tableID]] <- saveTaskResults(
-    id = tableID,
-    table = simulationResultsOutputByGroup,
-    includeTable = FALSE
-  )
+    # Get time caption text for report
+    timeCaption <- formatNumerics(
+      max(massBalanceData$Time),
+      digits = settings$digits,
+      scientific = settings$scientific
+    )
+    massBalanceResults[[pieChartID]] <- saveTaskResults(
+      id = pieChartID,
+      plot = pieChartPlot,
+      plotCaption = captions$massBalance$pieChart(
+        timeCaption,
+        metaData$Time$unit,
+        compoundNames
+      )
+    )
 
+    # Table of mass balance time profiles
+    # saved but not included into report
+    tableID <- defaultFileNames$resultID(
+      length(massBalanceResults) + 1,
+      "mass_balance",
+      structureSet$simulationSet$simulationSetName
+    )
+    massBalanceResults[[tableID]] <- saveTaskResults(
+      id = tableID,
+      table = massBalanceData,
+      includeTable = FALSE
+    )
+  }
   return(massBalanceResults)
 }
 
 
-#' @title plotMassBalanceTimeProfile
-#' @description Plot mass balance time profile
+#' @title getMassBalancePlotConfiguration
+#' @description Get mass balance time profile plot configuration
+#' @param plotType One of the 5 plot types displayed by mass balance task
 #' @param data data.frame
 #' @param metaData meta data on `data`
-#' @param dataMapping `XYGDataMapping` R6 class object from `tlf` library
-#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
-#' @return ggplot object of time profile for mean model workflow
-#' @export
+#' @param settings User-defined options
+#' @return A `tlf` `PlotConfiguration` object
 #' @import tlf
-#' @import ggplot2
-#' @importFrom ospsuite.utils %||%
-#' @import utils
-plotMassBalanceTimeProfile <- function(data,
-                                       metaData = NULL,
-                                       dataMapping = NULL,
-                                       plotConfiguration = NULL) {
-  timeVsAmountDataMapping <- dataMapping %||% tlf::XYGDataMapping$new(
-    x = "Time",
-    y = "Amount",
-    color = "Legend"
-  )
-
-  plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
-    data = data,
-    metaData = metaData,
-    dataMapping = timeVsAmountDataMapping
-  )
-  plotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, dataMapping, plotConfiguration)
-
-  timeVsAmountPlot <- tlf::initializePlot(plotConfiguration)
-
-  timeVsAmountPlot <- timeVsAmountPlot + ggplot2::geom_line(
-    data = data,
-    mapping = ggplot2::aes_string(
-      x = timeVsAmountDataMapping$x,
-      y = timeVsAmountDataMapping$y,
-      color = timeVsAmountDataMapping$groupMapping$color$label
-    )
-  ) + ggplot2::theme(legend.title = ggplot2::element_blank())
-  return(timeVsAmountPlot)
-}
-
-#' @title plotMassBalanceCumulativeTimeProfile
-#' @description Plot mass balance time profile
-#' @param data data.frame
-#' @param metaData meta data on `data`
-#' @param dataMapping `XYGDataMapping` R6 class object from `tlf` library
-#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
-#' @return ggplot object of time profile for mean model workflow
-#' @export
-#' @import tlf
-#' @import ggplot2
-#' @importFrom ospsuite.utils %||%
-#' @import utils
-plotMassBalanceCumulativeTimeProfile <- function(data,
-                                                 metaData = NULL,
-                                                 dataMapping = NULL,
-                                                 plotConfiguration = NULL) {
-  timeVsAmountDataMapping <- dataMapping %||% tlf::XYGDataMapping$new(
-    x = "Time",
-    y = "Amount",
-    fill = "Legend"
-  )
-
-  plotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
-    data = data,
-    metaData = metaData,
-    dataMapping = timeVsAmountDataMapping
-  )
-  plotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, dataMapping, plotConfiguration)
-
-  timeVsAmountPlot <- tlf::initializePlot(plotConfiguration)
-
-  timeVsAmountPlot <- timeVsAmountPlot + ggplot2::geom_area(
-    data = data,
-    mapping = ggplot2::aes_string(
-      x = timeVsAmountDataMapping$x,
-      y = timeVsAmountDataMapping$y,
-      fill = timeVsAmountDataMapping$groupMapping$fill$label
-    ),
-    position = ggplot2::position_stack(),
-    alpha = 0.8 # TO DO: Define this value as a setting from the plot configuration
-  ) + ggplot2::theme(legend.title = ggplot2::element_blank())
-  return(timeVsAmountPlot)
-}
-
-#' @title plotMassBalancePieChart
-#' @description Plot mass balance PieChart
-#' @param data data.frame
-#' @param metaData meta data on `data`
-#' @param dataMapping `XYGDataMapping` R6 class object from `tlf` library
-#' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
-#' @return ggplot object of piechart for mean model workflow
-#' @export
-#' @import tlf
-#' @import ggplot2
-#' @importFrom ospsuite.utils %||%
-#' @import utils
-plotMassBalancePieChart <- function(data,
-                                    metaData = NULL,
-                                    dataMapping = NULL,
-                                    plotConfiguration = NULL) {
-  pieChartDataMapping <- dataMapping %||% tlf::XYGDataMapping$new(
-    x = "Time",
-    y = "NormalizedAmount",
-    fill = "Legend"
-  )
-
-  timeFilter <- data[, pieChartDataMapping$x] == max(data[, pieChartDataMapping$x])
-  pieChartData <- data[timeFilter, ]
-  # Legend captions need to includes normalized amount as percent
-  pieChartData$Legend <- paste(
-    pieChartData$Legend,
-    " (", round(100 * pieChartData[, pieChartDataMapping$y], digits = 1), "%)"
-  )
-  # Ensure that the colors and legend match previous mass balance plots by re-ordering Legend
-  pieChartData$Legend <- reorder(pieChartData$Legend, as.numeric(factor(data[timeFilter, "Legend"])))
-
-  # Caution:
-  # Watermark relies on ggplot2::annotation_custom which is not compatible with ggplot2::coord_polar
-  # As a consequence, the polar plot needs to be saved as a grob first, ie as a ggplot grid image
-  # Then, the grob is added as a layer of a tlf empty plot which can include a Watermark
-  pieChartCorePlot <- ggplot2::ggplot() +
-    ggplot2::geom_bar(
-      data = pieChartData,
-      mapping = ggplot2::aes_string(
-        x = pieChartDataMapping$x,
-        y = pieChartDataMapping$y,
-        fill = pieChartDataMapping$groupMapping$fill$label
+#' @keywords internal
+getMassBalancePlotConfiguration <- function(plotType, data, metaData, settings) {
+  dataMapping <- getMassBalanceDataMapping(plotType)
+  plotConfiguration <- settings$plotConfigurations[[plotType]] %||%
+    switch(plotType,
+      "timeProfile" = tlf::TimeProfilePlotConfiguration$new(
+        data = data,
+        metaData = metaData,
+        dataMapping = dataMapping
       ),
-      width = 1,
-      stat = "identity",
-      alpha = 0.8
-    ) +
-    coord_polar("y", start = 0) +
-    ggplot2::theme_void() +
-    xlab("") +
-    ylab("") +
-    ggplot2::theme(legend.title = ggplot2::element_blank())
+      "normalizedTimeProfile" = tlf::TimeProfilePlotConfiguration$new(
+        data = data,
+        metaData = metaData,
+        dataMapping = dataMapping
+      ),
+      "cumulativeTimeProfile" = tlf::CumulativeTimeProfilePlotConfiguration$new(
+        data = data,
+        metaData = metaData,
+        dataMapping = dataMapping
+      ),
+      "normalizedCumulativeTimeProfile" = tlf::CumulativeTimeProfilePlotConfiguration$new(
+        data = data,
+        metaData = metaData,
+        dataMapping = dataMapping
+      )
+    )
+  # Update time ticks
+  plotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, dataMapping, plotConfiguration)
+  return(plotConfiguration)
+}
 
-  pieChartGrob <- ggplot2::ggplotGrob(pieChartCorePlot)
+#' @title getMassBalanceDataMapping
+#' @description Get mass balance data mapping
+#' @param plotType One of the 5 plot types displayed by mass balance task
+#' @return A `tlf` `DataMapping` object
+#' @import tlf
+#' @keywords internal
+getMassBalanceDataMapping <- function(plotType) {
+  dataMapping <- switch(plotType,
+    "timeProfile" = tlf::TimeProfileDataMapping$new(
+      x = "Time",
+      y = "Amount",
+      color = "Legend"
+    ),
+    "normalizedTimeProfile" = tlf::TimeProfileDataMapping$new(
+      x = "Time",
+      y = "NormalizedAmount",
+      color = "Legend"
+    ),
+    "cumulativeTimeProfile" = tlf::CumulativeTimeProfileDataMapping$new(
+      x = "Time",
+      y = "Amount",
+      fill = "Legend"
+    ),
+    "normalizedCumulativeTimeProfile" = tlf::CumulativeTimeProfileDataMapping$new(
+      x = "Time",
+      y = "NormalizedAmount",
+      fill = "Legend"
+    ),
+    "pieChart" = tlf::PieChartDataMapping$new(
+      x = "NormalizedAmount",
+      fill = "LegendWithPercent"
+    )
+  )
+  return(dataMapping)
+}
 
-  pieChartPlot <- tlf::initializePlot(plotConfiguration)
-  pieChartPlot <- pieChartPlot + ggplot2::annotation_custom(pieChartGrob)
+#' @title getApplicationResults
+#' @description Get a data.frame of application results corresponding to
+#' total drug mass as a function of time.
+#' @param applications
+#' list of `Application` objects queried by the method `simulation$allApplicationsFor()`
+#' @return A data.frame that includes `time`, `drugMass` and `totalDrugMass` as variables
+#' @import ospsuite
+#' @import ospsuite.utils
+#' @import dplyr
+#' @keywords internal
+getApplicationResults <- function(applications) {
+  applicationResults <- data.frame()
+  for (application in applications) {
+    applicationResults <- rbind.data.frame(
+      applicationResults,
+      data.frame(
+        time = application$startTime$value,
+        drugMass = application$drugMass$value
+      )
+    )
+  }
+  # Total drug mass is cumulative sum of all the applied drug mass
+  applicationResults <- applicationResults %>%
+    mutate(totalDrugMass = cumsum(drugMass))
+  return(applicationResults)
+}
 
-  return(pieChartPlot)
+#' @title getMassBalanceData
+#' @description Get mass balance data for a set of compounds
+#' @param groupings A list of grouping lists that define naming and inclusion/exclusion criteria
+#' @param compoundNames A vector of compound names
+#' @param simulation A `Simulation` object
+#' @param simulationResults A `SimulationResults` object
+#' @return A data.frame that includes `Time`, `Amount` and `Legend` as variables
+#' @import ospsuite
+#' @import ospsuite.utils
+#' @keywords internal
+getMassBalanceData <- function(groupings, compoundNames, simulation, simulationResults) {
+  # If groupings is NULL, use default inclusion/exclusion and grouping
+  groupings <- groupings %||% defaultMassBalanceGroupings(compoundNames)
+
+  massBalanceData <- data.frame()
+  previouslyIncludedMoleculePaths <- NULL
+  for (group in groupings) {
+    includedMolecules <- ospsuite::getAllMoleculesMatching(group$Include, simulation)
+    includedMoleculePaths <- sapply(includedMolecules, function(molecule) {
+      molecule$path
+    })
+    # Exclusion criteria
+    excludedMoleculePaths <- NULL
+    # If ExcludePreviousGroupings is TRUE, exclude molecules from previous groupings
+    if (group$ExcludePreviousGroupings %||% TRUE) {
+      excludedMoleculePaths <- previouslyIncludedMoleculePaths
+    }
+    if (!is.null(group$Exclude)) {
+      excludedMolecules <- ospsuite::getAllMoleculesMatching(group$Exclude, simulation)
+      excludedMoleculePaths <- c(
+        excludedMoleculePaths,
+        sapply(excludedMolecules, function(molecule) {
+          molecule$path
+        })
+      )
+    }
+    includedMolecules <- includedMolecules[!includedMoleculePaths %in% excludedMoleculePaths]
+    includedMoleculePaths <- setdiff(includedMoleculePaths, excludedMoleculePaths)
+    if (isEmpty(includedMoleculePaths)) {
+      warning(messages$noMoleculePathsIncluded(group$Name), call. = FALSE)
+      next
+    }
+    validateMoleculesFromCompounds(includedMolecules, compoundNames)
+    checkMoleculesAlreadyIncluded(includedMoleculePaths, previouslyIncludedMoleculePaths)
+
+    previouslyIncludedMoleculePaths <- c(
+      previouslyIncludedMoleculePaths,
+      includedMoleculePaths
+    )
+
+    # For included molecule paths, get their amount vs time and sum them
+    moleculeAmounts <- sapply(
+      includedMoleculePaths,
+      function(moleculePath) {
+        simulationResults$getValuesByPath(moleculePath, individualIds = simulationResults$allIndividualIds)
+      }
+    )
+    moleculeAmounts <- rowSums(as.data.frame(moleculeAmounts))
+
+    massBalanceData <- rbind.data.frame(
+      massBalanceData,
+      data.frame(
+        Time = simulationResults$timeValues,
+        Amount = moleculeAmounts,
+        Legend = group$Name,
+        stringsAsFactors = FALSE
+      )
+    )
+  }
+  return(massBalanceData)
+}
+
+#' @title defaultMassBalanceGrouping
+#' @description Get mass balance default inclusion/exclusion defined as groupings list
+#' Default groups are
+#' \itemize{
+#' \item Plasma
+#' \item BloodCells
+#' \item Interstitial
+#' \item Intracellular
+#' \item Endosome
+#' \item Gallbladder
+#' \item Urine
+#' \item Feces
+#' \item Rest (includes everything else but Saliva compartments)
+#' }
+#' @param compoundNames Names of simulation molecules
+#' @import ospsuite
+#' @keywords internal
+defaultMassBalanceGroupings <- function(compoundNames) {
+  groupNames <- c(
+    "Plasma",
+    "BloodCells",
+    "Interstitial",
+    "Intracellular",
+    "Endosome",
+    "Gallbladder",
+    "Urine",
+    "Feces"
+  )
+
+  defaultGroupings <- c(
+    # Lumen Compartment excluding Feces
+    list(list(
+      Name = paste(paste(compoundNames, collapse = ", "), "Lumen", sep = " - "),
+      Include = paste0("Organism|Lumen|*|", compoundNames),
+      Exclude = paste0("Organism|Lumen|Feces|", compoundNames)
+    )),
+    lapply(
+      groupNames,
+      function(groupName) {
+        list(
+          Name = paste(paste(compoundNames, collapse = ", "), groupName, sep = " - "),
+          Include = paste0("Organism|**|", groupName, "|", compoundNames)
+        )
+      }
+    ),
+    # Rest Compartment
+    list(list(
+      Name = paste("Rest of", paste(compoundNames, collapse = ", ")),
+      # Since default option excludes previously included paths,
+      # we can include all the paths but saliva here
+      Include = paste0("Organism|**|", compoundNames),
+      # Exclude saliva from rest
+      Exclude = paste0("Organism|Saliva|**|", compoundNames)
+    ))
+  )
+  return(defaultGroupings)
 }

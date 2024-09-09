@@ -2,7 +2,7 @@
 #' @description Build dataframes and metadata for each DDI plot
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return  plotDDIdata, a list of lists of the form list(dataframe,metadata) specific to each DID plot
-#' @importFrom ospsuite.utils %||%
+#' @import ospsuite.utils
 #' @keywords internal
 getQualificationDDIPlotData <- function(configurationPlan) {
   plotDDIdata <- list()
@@ -32,26 +32,25 @@ getQualificationDDIPlotData <- function(configurationPlan) {
 
 
         plotDDIMetadata$groups <- list()
+        plotDDIMetadata$guestDelta <- getGuestDeltaFromConfigurationPlan(plot)
 
         pkParameters <- plot$PKParameters %||% ospsuite::toPathArray(plot$PKParameter)
         validateIsIncluded(values = pkParameters, parentValues = names(ddiPKRatioColumnName), nullAllowed = FALSE)
 
+        defaultProperties <- getDefaultPropertiesFromTheme("plotDDIRatio", propertyType = "points")
         for (groupNumber in seq_along(plot$Groups)) {
           group <- plot$Groups[[groupNumber]]
           plotDDIMetadata$groups[[groupNumber]] <- list()
           plotDDIMetadata$groups[[groupNumber]]$caption <- group$Caption
-          plotDDIMetadata$groups[[groupNumber]]$color <- group$Color %||%
-            reEnv$theme$plotConfigurations$plotDDIRatio$points$color
-          plotDDIMetadata$groups[[groupNumber]]$symbol <- tlfShape(
-            group$Symbol %||% reEnv$theme$plotConfigurations$plotDDIRatio$points$shape
-          )
+          plotDDIMetadata$groups[[groupNumber]]$color <- group$Color %||% defaultProperties$color
+          plotDDIMetadata$groups[[groupNumber]]$symbol <- tlfShape(group$Symbol %||% defaultProperties$shape)
 
           for (ddiRatio in group$DDIRatios) {
             outputPath <- ddiRatio$Output
             observedDataSet <- ddiRatio$ObservedData
             observedDataSetFilePath <- configurationPlan$getObservedDataPath(id = observedDataSet)
             observedDataRecordId <- ddiRatio$ObservedDataRecordId
-            observedDataFrame <- readObservedDataFile(file = observedDataSetFilePath)
+            observedDataFrame <- readObservedDataFile(fileName = observedDataSetFilePath)
             validateIsIncluded(observedDataRecordId, observedDataFrame$ID)
 
             ratioList <- list()
@@ -93,11 +92,6 @@ getQualificationDDIPlotData <- function(configurationPlan) {
                 }
                 pkParameterName <- generateDDIPlotPKParameterName(pkParameter, startTime, endTime)
 
-                simulationResultsFile <- configurationPlan$getSimulationResultsPath(
-                  project = projectName,
-                  simulation = simulationName
-                )
-
                 pkAnalysisResultsPath <- configurationPlan$getPKAnalysisResultsPath(
                   project = projectName,
                   simulation = simulationName
@@ -109,7 +103,7 @@ getQualificationDDIPlotData <- function(configurationPlan) {
                 )
 
                 simulation <- ospsuite::loadSimulation(simulationFile, loadFromCache = TRUE)
-                pkAnalysisResults <- ospsuite::importPKAnalysesFromCSV(
+                pkAnalysisResults <- loadPKAnalysesFromCSV(
                   filePath = pkAnalysisResultsPath,
                   simulation = simulation
                 )
@@ -274,11 +268,13 @@ getSmartZoomLimits <- function(dataVector, residualsVsObserved = FALSE) {
 #' @title generateDDIQualificationDDIPlot
 #' @description Plot observation vs prediction for qualification workflow
 #' @param ddiPlotData a list containing the plot data.frame, aesthetics list, axes settings and plot settings
+#' @param delta Delta value from Guest et al. formula
 #' @return ggplot DDI plot object for DDI qualification workflow
 #' @import tlf
 #' @import ggplot2
+#' @importFrom stats na.omit
 #' @keywords internal
-generateDDIQualificationDDIPlot <- function(ddiPlotData) {
+generateDDIQualificationDDIPlot <- function(ddiPlotData, delta) {
   ddiData <- na.omit(ddiPlotData$ddiPlotDataframe)
 
   residualsVsObserved <- ddiPlotTypeSpecifications[[ddiPlotData$axesSettings$plotType]]$residualsVsObservedFlag
@@ -288,8 +284,10 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
     y = ddiPlotData$axesSettings$Y$label,
     shape = "Caption",
     color = "Caption",
-    minRange = c(0.1, 10),
-    residualsVsObserved = residualsVsObserved
+    residualsVsObserved = residualsVsObserved,
+    # Undefined delta in Configuration Plan corresponds to NULL
+    # In such case, default value should be 1 to prevent crash when defining data mapping
+    deltaGuest = delta %||% 1
   )
 
   ddiPlotConfiguration <- getPlotConfigurationFromPlan(
@@ -306,30 +304,22 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
   ddiPlotConfiguration$points$color <- sapply(ddiPlotData$aestheticsList$color[isInLegend], identity)
   ddiPlotConfiguration$points$shape <- sapply(ddiPlotData$aestheticsList$shape[isInLegend], identity)
 
-  # Set axes scaling
-  if (ddiPlotData$axesSettings$X$scaling == "Log") {
-    ddiPlotConfiguration$xAxis$scale <- tlf::Scaling$log
-  }
-  if (ddiPlotData$axesSettings$Y$scaling == "Log") {
-    ddiPlotConfiguration$yAxis$scale <- tlf::Scaling$log
-  }
-
+  # DDI Default scales are already log, only need to update limits
   xSmartZoom <- getSmartZoomLimits(ddiData[[ddiPlotData$axesSettings$X$label]])
   ySmartZoom <- getSmartZoomLimits(ddiData[[ddiPlotData$axesSettings$Y$label]], residualsVsObserved)
-
-  ddiPlotConfiguration$xAxis$limits <- c(xSmartZoom$min, xSmartZoom$max)
-  ddiPlotConfiguration$yAxis$limits <- c(ySmartZoom$min, ySmartZoom$max)
-
-  if (ddiPlotData$axesSettings$X$scaling == "Log") {
-    ddiPlotConfiguration$xAxis$ticks <- 10^seq(ceiling(log10(xSmartZoom$min)), floor(log10(xSmartZoom$max)), 1)
+  # Ensure same limits are used for quadratic obs vs pred plots
+  if (!residualsVsObserved) {
+    xSmartZoom <- range(xSmartZoom, ySmartZoom)
+    ySmartZoom <- xSmartZoom
   }
+  ddiPlotConfiguration$xAxis$axisLimits <- range(xSmartZoom)
+  ddiPlotConfiguration$yAxis$axisLimits <- range(ySmartZoom)
+  ddiPlotConfiguration$xAxis$ticks <- autoAxesTicksFromLimits(range(xSmartZoom))
+  ddiPlotConfiguration$yAxis$ticks <- autoAxesTicksFromLimits(range(ySmartZoom))
 
-  if (ddiPlotData$axesSettings$Y$scaling == "Log") {
-    ddiPlotConfiguration$yAxis$ticks <- 10^seq(ceiling(log10(ySmartZoom$min)), floor(log10(ySmartZoom$max)), 1)
-  }
   # minRange defines the range for simulated x values of Guest et al. criterion
   # Consequently, it also needs to be updated according to smart zoom
-  ddiDataMapping$minRange <- c(xSmartZoom$min, xSmartZoom$max)
+  ddiDataMapping$minRange <- range(xSmartZoom)
 
   qualificationDDIPlot <- tlf::plotDDIRatio(
     data = ddiData,
@@ -338,11 +328,15 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
   )
   # Force legend to be only one column to maintain plot panel width, and left-justify legend entries
   qualificationDDIPlot <- qualificationDDIPlot +
+    # Issue #1060, ncol currently enforce the number of columns in legend
     ggplot2::guides(
       color = ggplot2::guide_legend(ncol = 1, label.hjust = 0, title = NULL),
       shape = ggplot2::guide_legend(ncol = 1, label.hjust = 0, title = NULL)
     )
-
+  # Only obs vs pred is required as quadratic
+  if (!residualsVsObserved) {
+    qualificationDDIPlot <- setQuadraticDimension(qualificationDDIPlot)
+  }
   return(qualificationDDIPlot)
 }
 
@@ -350,10 +344,14 @@ generateDDIQualificationDDIPlot <- function(ddiPlotData) {
 #' @description Get qualification measure of DDI ratio from field `DDIRatioPlots` of configuration plan
 #' @param summaryDataFrame data.frame with DDI Ratios
 #' @param pkParameterName Name of PK Parameter as defined by users
+#' @param delta Delta value from Guest et al. formula
 #' @return A data.frame
 #' @keywords internal
-getQualificationDDIRatioMeasure <- function(summaryDataFrame, pkParameterName) {
-  guestValues <- tlf::getGuestValues(x = summaryDataFrame[["observedRatio"]])
+getQualificationDDIRatioMeasure <- function(summaryDataFrame, pkParameterName, delta) {
+  guestValues <- tlf::getGuestValues(
+    x = summaryDataFrame[["observedRatio"]],
+    delta = delta %||% 1
+  )
 
   qualificationMeasure <- data.frame(
     parameter = c("Points total", "Points within Guest *et al.*", "Points within 2 fold"),
@@ -372,17 +370,6 @@ getQualificationDDIRatioMeasure <- function(summaryDataFrame, pkParameterName) {
   return(qualificationMeasure)
 }
 
-
-
-getDDIPlotCaption <- function(title, subPlotCaption, pkParameter, plotTypeCaption) {
-  longTitle <- ifNotNull(
-    condition = subPlotCaption,
-    outputIfNotNull = paste0(title, ". ", subPlotCaption, "."),
-    outputIfNull = paste0(title, ". ")
-  )
-  caption <- paste(longTitle, plotTypeCaption, pkParameter, "Ratio.")
-  return(caption)
-}
 
 #' @title getDDISection
 #' @description Plot observation vs prediction for DDI qualification workflow
@@ -409,12 +396,13 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
       plotDDIData <- buildQualificationDDIDataframe(pkDataframe, metadata, pkParameter, plotType)
 
       plotID <- defaultFileNames$resultID(idPrefix, "ddi_ratio_plot", pkParameter, plotType)
-      ddiPlot <- generateDDIQualificationDDIPlot(plotDDIData)
+      ddiPlot <- generateDDIQualificationDDIPlot(plotDDIData, delta = metadata$guestDelta[[pkParameter]])
       ddiPlotCaption <- getDDIPlotCaption(
         title = metadata$title,
         subPlotCaption = captionSuffix,
         pkParameter = pkParameter,
-        plotTypeCaption = ddiPlotTypeSpecifications[[plotType]]$figureCaption
+        plotTypeCaption = ddiPlotTypeSpecifications[[plotType]]$figureCaption,
+        guestDelta = metadata$guestDelta[[pkParameter]]
       )
       ddiArtifacts[["Plot"]][[plotID]] <- saveTaskResults(
         id = plotID,
@@ -438,7 +426,11 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
       )
     )
 
-    ddiTableList[[pkParameter]] <- getQualificationDDIRatioMeasure(summaryDataFrame = ddiSummary, pkParameterName = pkParameter)
+    ddiTableList[[pkParameter]] <- getQualificationDDIRatioMeasure(
+      summaryDataFrame = ddiSummary,
+      pkParameterName = pkParameter,
+      delta = metadata$guestDelta[[pkParameter]]
+    )
   }
 
   gmfeID <- defaultFileNames$resultID(idPrefix, "ddi_ratio_gmfe")
@@ -446,7 +438,7 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
     id = gmfeID,
     sectionId = sectionID,
     table = gmfeDDI,
-    tableCaption = paste("GMFE for", metadata$title, "Ratio"),
+    tableCaption = captions$ddi$gmfe(metadata$title),
     includeTable = TRUE
   )
 
@@ -457,7 +449,11 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
       id = tableID,
       sectionId = sectionID,
       table = ddiTableList[[pkParameter]],
-      tableCaption = paste("Summary table for", metadata$title, "-", pkParameter, "Ratio"),
+      tableCaption = captions$ddi$measureTable(
+        title = metadata$title,
+        pkParameter = pkParameter,
+        guestDelta = metadata$guestDelta[[pkParameter]]
+      ),
       includeTable = TRUE
     )
   }
@@ -535,7 +531,7 @@ plotQualificationDDIs <- function(configurationPlan, settings) {
         id = "DDI Table",
         sectionId = sectionID,
         table = getDDITable(dataframe),
-        tableCaption = paste("Summary table for ", metadata$title),
+        tableCaption = captions$ddi$summaryTable(metadata$title),
         includeTable = TRUE
       )
       ddiResults <- c(ddiResults, ddiTable)
@@ -547,9 +543,12 @@ plotQualificationDDIs <- function(configurationPlan, settings) {
         id = subplotType,
         sectionId = sectionID,
         # Subheading result includes anchor tag to be referenced in TOC
-        textChunk = c(
-          anchor(paste0(sectionID, "-ddi-subunit-", length(ddiResults) + 1)), "",
-          paste(paste0(rep("#", sectionLevel + 1), collapse = ""), subplotTypeName)
+        textChunk = paste(
+          paste0(rep("#", sectionLevel + 1), collapse = ""),
+          " ",
+          subplotTypeName,
+          anchor(paste0(sectionID, "-ddi-subunit-", length(ddiResults) + 1)),
+          sep = ""
         ),
         includeTextChunk = TRUE
       )
@@ -563,9 +562,12 @@ plotQualificationDDIs <- function(configurationPlan, settings) {
           id = paste(subplotType, subplotTypeLevel, sep = " - "),
           sectionId = sectionID,
           # Subheading result includes anchor tag to be referenced in TOC
-          textChunk = c(
-            anchor(paste0(sectionID, "-ddi-subunit-", length(ddiResults) + 1)), "",
-            paste(paste0(rep("#", sectionLevel + 2), collapse = ""), subplotTypeLevel)
+          textChunk = paste(
+            paste0(rep("#", sectionLevel + 2), collapse = ""),
+            " ",
+            subplotTypeLevel,
+            anchor(paste0(sectionID, "-ddi-subunit-", length(ddiResults) + 1)),
+            sep = ""
           ),
           includeTextChunk = TRUE
         )
@@ -634,3 +636,35 @@ ddiPKRatioColumnName <- list(
   "CMAX" = "CmaxR Avg",
   "C_max" = "CmaxR Avg"
 )
+
+
+#' @title getGuestDeltaFromConfigurationPlan
+#' @description Get Guest et al. delta values for a DDI Ratio plot from the configuration plan
+#' @param ddiRatioPlan Properties defined in `DDIRatioPlots` field of configuration plan
+#' @return A named list of Guest et al. values
+#' @keywords internal
+getGuestDeltaFromConfigurationPlan <- function(ddiRatioPlan) {
+  pkParameters <- ddiRatioPlan$PKParameters %||% ospsuite::toPathArray(ddiRatioPlan$PKParameter)
+  # By default all Guest et al.  delta values are 1
+  guestDelta <- as.list(sapply(pkParameters, function(x) {
+    1
+  }))
+  if (isEmpty(ddiRatioPlan$GuestDelta)) {
+    return(guestDelta)
+  }
+  # If defined as a numeric, all parameters get same delta
+  if (is.numeric(ddiRatioPlan$GuestDelta)) {
+    return(as.list(sapply(pkParameters, function(x) {
+      ddiRatioPlan$GuestDelta
+    })))
+  }
+  # Otherwise, update defined values
+  for (guestPlan in ddiRatioPlan$GuestDelta) {
+    for (pkParameter in guestPlan$PKParameters) {
+      guestDelta[[pkParameter]] <- guestPlan$Value
+    }
+  }
+  # Throw an error if parameters defined in Guest Delta were not included in the DDI parameters
+  validateGuestParameters(names(guestDelta), pkParameters)
+  return(guestDelta)
+}

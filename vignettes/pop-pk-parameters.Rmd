@@ -2,6 +2,7 @@
 title: "PK Parameters in Population Workflows"
 resource_files:
   - figures
+  - templates
 output: 
   rmarkdown::html_vignette:
    number_sections: true
@@ -66,7 +67,6 @@ outputA <- Output$new(
   displayName = "A",
   pkParameters = c("C_max", "AUC_tEnd")
 )
-
 ```
 
 </details>
@@ -143,7 +143,7 @@ In more details, random sampling of the population that includes more subjects i
 Since analytical formulas exist for the calculation of arithmetic and geometric means, SDs and CVs, the quality of the approximation calculated on the percentiles of the ratios will be assessed, reported in the logs.
 
 The random seed and number of repetitions for the random samplings can also be checked and set by the user globally as illustrated below.
-But also locally within the workflow task (`workflow$plotPKParameters$settings$mcRandomSeed`)
+But also locally within the workflow task (`workflow$calculatePKParameters$settings$mcRandomSeed`)
 
 ```{r}
 # Get the random seed for the MC sampling
@@ -196,10 +196,15 @@ ratioWorkflow <-
     workflowFolder = "Example-Pop-PK"
   )
 
+# Update settings to display the progress bar of the MC Simulations
+# and use less simulation to speed up the workflow
+ratioWorkflow$calculatePKParameters$settings$showProgress <- TRUE
+ratioWorkflow$calculatePKParameters$settings$mcRepetitions <- 100
+
 # Set the workflow tasks to be run
 # Re-use the results from the previous PK analysis to save time as results are the same
 ratioWorkflow$inactivateTasks()
-ratioWorkflow$activateTasks("plotPKParameters")
+ratioWorkflow$activateTasks(c("calculatePKParameters", "plotPKParameters"))
 
 # Run the workflow
 ratioWorkflow$runWorkflow()

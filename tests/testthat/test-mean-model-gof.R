@@ -22,7 +22,7 @@ defineExpectedTimeProfileData <- parse(text = paste0(
 ))
 defineExpectedResidualsData <- parse(text = paste0(
   "expectedResidualsData", scenarios[5:6], ' <- getTestDataFilePath("mean-gof/',
-  c("All-Obs", "Select-Obs"), '-residuals.csv.csv")'
+  c("All-Obs", "Select-Obs"), '-residuals.csv")'
 ))
 
 defineExpectedFigures <- parse(text = paste0(
@@ -157,7 +157,7 @@ test_that("Saved time profile data and residuals includes the correct data", {
       "readObservedDataFile(expectedResidualsData", scenario, "),",
       "tolerance = comparisonTolerance())"
     ))
-    eval(testTimeProfileDataExpression)
+    eval(testResidualsDataExpression)
   }
 })
 

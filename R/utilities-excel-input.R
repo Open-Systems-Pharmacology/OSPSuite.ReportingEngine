@@ -86,7 +86,8 @@ SimulationCodeIdentifiers <- enum(c(
   "referencePopulation",
   "plotReferenceObsData",
   "StudyDesignType",
-  "StudyDesignLocation"
+  "StudyDesignLocation",
+  "massBalanceFile"
 ))
 #' @title DataSourceCodeIdentifiers
 #' @description Data Sources Code Identifiers
@@ -172,10 +173,7 @@ asisCodeIds <- c(
 createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R", removeComments = FALSE) {
   # ----- Checks inputs -----
   if (!requireNamespace("readxl", quietly = TRUE)) {
-    logError(c(
-      paste0("Package '", highlight("readxl"), "' is required but not installed."),
-      paste0("\t> use '", 'install.packages("readxl")', "' to install package")
-    ))
+    logError(messages$errorPackageNotInstalled("readxl"))
     return(invisible())
   }
 
@@ -194,12 +192,13 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
 
     inputSections <- readxl::excel_sheets(excelFile)
     # Check for mandatory input sections
-    validateIsIncludedAndLog(c(
-      StandardExcelSheetNames$`Workflow and Tasks`,
-      StandardExcelSheetNames$SimulationSets
-    ),
-    inputSections,
-    groupName = paste0("Sheet names of '", excelFile, "'")
+    validateIsIncludedAndLog(
+      c(
+        StandardExcelSheetNames$`Workflow and Tasks`,
+        StandardExcelSheetNames$SimulationSets
+      ),
+      inputSections,
+      groupName = paste0("Sheet names of '", excelFile, "'")
     )
 
     # ----- Documentation -----
@@ -211,7 +210,9 @@ createWorkflowFromExcelInput <- function(excelFile, workflowFile = "workflow.R",
     scriptContent <- c(
       scriptContent,
       '# Load package "ospsuite.reportingengine" (require() function install the package if not installed yet)',
-      "require(ospsuite.reportingengine)", ""
+      "require(ospsuite.reportingengine)", "",
+      "# Reset settings such as plot theme or format of numeric in tables to Reporting Engine default values",
+      "resetRESettingsToDefault()", ""
     )
 
     # ----- User Defined PK Parameters -----
@@ -351,7 +352,7 @@ getScriptDocumentation <- function(excelFile, colSep = "\t") {
   if (isEmpty(docTable)) {
     return(docContent)
   }
-  for (lineIndex in 1:nrow(docTable)) {
+  for (lineIndex in seq_len(nrow(docTable))) {
     docContent <- c(
       docContent,
       # Each line is commented
@@ -376,11 +377,11 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
   validateIsIncluded("Name", names(pkParametersTable)[1])
 
   # Check for duplicate PK parameters as input of Output object
-  if (!hasOnlyDistinctValues(pkParametersTable$Name)) {
-    pkParametersWarnings <- messages$errorHasNoUniqueValues(pkParametersTable$Name,
-      dataName = paste0("selected PK parameters from Excel sheet '", pkParametersSheet, "'")
-    )
-  }
+  pkParametersWarnings <- excelCheckNoDuplicate(
+    values = pkParametersTable$Name,
+    variableName = paste0("selected PK parameters from Excel sheet '", pkParametersSheet, "'")
+  )
+
   # If none of the PK Parameters are updated, their names can directly be used as is
   if (all(is.na(pkParametersTable$`Display name`)) && all(is.na(pkParametersTable$Unit))) {
     pkParametersContent <- c(
@@ -395,11 +396,10 @@ getPKParametersInfoContent <- function(excelFile, pkParametersSheet) {
   }
 
   # Check for duplicate PK parameter display names as input of Output object
-  if (!hasOnlyDistinctValues(pkParametersTable$`Display name`)) {
-    pkParametersErrors <- messages$errorHasNoUniqueValues(pkParametersTable$`Display name`,
-      dataName = paste0("display names of selected PK parameters from Excel sheet '", pkParametersSheet, "'")
-    )
-  }
+  pkParametersErrors <- excelCheckNoDuplicate(
+    values = pkParametersTable$`Display name`,
+    variableName = paste0("display names of selected PK parameters from Excel sheet '", pkParametersSheet, "'")
+  )
 
   for (pkParameterIndex in seq_along(pkParametersTable$Name)) {
     pkParameter <- pkParametersTable$Name[pkParameterIndex]
@@ -468,15 +468,11 @@ getOutputsContent <- function(excelFile, outputsTable, simulationOutputs) {
       )
     )
   }
-  if (!hasOnlyDistinctValues(outputsNames)) {
-    outputsErrors <- c(
-      outputsErrors,
-      messages$errorHasNoUniqueValues(
-        highlight(outputsNames),
-        dataName = highlight("Output names")
-      )
-    )
-  }
+  outputsErrors <- c(
+    outputsErrors,
+    excelCheckNoDuplicate(values = outputsNames, variableName = "Output names")
+  )
+
   for (outputsIndex in seq_along(outputsNames)) {
     pkParametersOutputContent <- NULL
     pkParametersSheet <- getIdentifierInfo(outputsTable, outputsIndex, OutputsCodeIdentifiers$pkParameters)
@@ -546,15 +542,11 @@ getDataSourcesContent <- function(excelFile, dataSourcesTable, simulationSources
       )
     )
   }
-  if (!hasOnlyDistinctValues(dataSourcesNames)) {
-    dataSourcesErrors <- c(
-      dataSourcesErrors,
-      messages$errorHasNoUniqueValues(
-        highlight(dataSourcesNames),
-        dataName = highlight("Data Source names")
-      )
-    )
-  }
+  dataSourcesErrors <- c(
+    dataSourcesErrors,
+    excelCheckNoDuplicate(values = dataSourcesNames, variableName = "Data Source names")
+  )
+
   for (dataSourceIndex in seq_along(dataSourcesNames)) {
     # Function for dictionary
     dictionaryType <- getIdentifierInfo(dataSourcesTable, dataSourceIndex, DataSourcesCodeIdentifiers$DictionaryType)
@@ -634,6 +626,14 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
     referencePopulationContent <- NULL
     plotReferenceObsDataContent <- NULL
     studyDesignFileContent <- NULL
+    massBalanceContent <- NULL
+    if (isIncluded(workflowMode, "MeanModelWorkflow")) {
+      massBalanceContent <- paste0(
+        "massBalanceFile = ",
+        getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$massBalanceFile),
+        ",\n"
+      )
+    }
     if (isIncluded(workflowMode, "PopulationWorkflow")) {
       referencePopulation <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$referencePopulation)
       plotReferenceObsData <- getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$plotReferenceObsData)
@@ -685,9 +685,11 @@ getSimulationSetContent <- function(excelFile, simulationTable, workflowMode) {
         populationNameContent,
         plotReferenceObsDataContent,
         studyDesignFileContent,
+        massBalanceContent,
         "simulationFile = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$simulationFile), ",\n",
         "outputs = ", outputsId, ",\n",
         "dataSource = ", dataSourceId, ",\n",
+        "dataSelection = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$dataSelection), ",\n",
         "timeUnit = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$timeUnit), ",\n",
         "timeOffset = ", getIdentifierInfo(simulationTable, simulationIndex, SimulationCodeIdentifiers$timeOffset), "\n)"
       ),
@@ -763,14 +765,22 @@ getWorkflowContent <- function(workflowTable, excelFile) {
     if (isEmpty(activeTaskName)) {
       next
     }
-    if (workflowMode == "PopulationWorkflow" & isIncluded(taskName, c("plotAbsorption", "plotMassBalance"))) {
+    taskNotInWorkflow <- all(
+      workflowMode == "PopulationWorkflow",
+      isIncluded(taskName, c("plotAbsorption", "plotMassBalance"))
+    )
+    if (taskNotInWorkflow) {
       workflowWarnings <- c(
         workflowWarnings,
         paste0("Task '", taskName, "' defined as active, was not printed because '", taskName, "' is not available for '", workflowMode, "'.")
       )
       next
     }
-    if (workflowMode == "MeanModelWorkflow" & isIncluded(taskName, "plotDemography")) {
+    taskNotInWorkflow <- all(
+      workflowMode == "MeanModelWorkflow",
+      isIncluded(taskName, "plotDemography")
+    )
+    if (taskNotInWorkflow) {
       workflowWarnings <- c(
         workflowWarnings,
         paste0("Task '", taskName, "' defined as active, was not printed because '", taskName, "' is not available for '", workflowMode, "'.")
@@ -798,7 +808,11 @@ getWorkflowContent <- function(workflowTable, excelFile) {
   optionalSettingContent <- NULL
   for (optionalSettingName in names(OptionalSettings)) {
     settingValue <- getIdentifierInfo(workflowTable, 1, optionalSettingName)
-    if (is.na(settingValue) | isIncluded(settingValue, "NULL")) {
+    noSettings <- any(
+      is.na(settingValue),
+      isIncluded(settingValue, "NULL")
+    )
+    if (noSettings) {
       next
     }
     if (isIncluded(
@@ -1007,19 +1021,15 @@ getPKParametersContent <- function(pkParametersTable) {
     return(pkParametersContent)
   }
   # Check for duplicate PK parameters as input of Output object
-  if (!hasOnlyDistinctValues(pkParametersTable$Name)) {
-    pkParametersWarnings <- c(
-      pkParametersWarnings,
-      messages$errorHasNoUniqueValues(pkParametersTable$Name, dataName = "PK parameters update")
-    )
-  }
+  pkParametersWarnings <- c(
+    pkParametersWarnings,
+    excelCheckNoDuplicate(values = pkParametersTable$Name, variableName = "PK parameters update")
+  )
   # Check for duplicate PK parameter display names as input of Output object
-  if (!hasOnlyDistinctValues(pkParametersTable$`Display name`)) {
-    pkParametersWarnings <- c(
-      pkParametersWarnings,
-      messages$errorHasNoUniqueValues(pkParametersTable$`Display name`, dataName = "PK parameters display names")
-    )
-  }
+  pkParametersWarnings <- c(
+    pkParametersWarnings,
+    excelCheckNoDuplicate(values = pkParametersTable$`Display name`, variableName = "PK parameters display names")
+  )
 
   for (parameterIndex in seq(1, nrow(pkParametersTable))) {
     pkParametersContent <- c(
@@ -1099,15 +1109,10 @@ getUserDefPKParametersContent <- function(userDefPKParametersTable) {
     return(userDefPKParametersContent)
   }
   # Check for duplicate PK parameters as input of Output object
-  if (!hasOnlyDistinctValues(userDefPKParametersTable$Name)) {
-    userDefPKParametersErrors <- c(
-      userDefPKParametersErrors,
-      messages$errorHasNoUniqueValues(
-        userDefPKParametersTable$Name,
-        dataName = "User Defined PK parameters"
-      )
-    )
-  }
+  userDefPKParametersErrors <- c(
+    userDefPKParametersErrors,
+    excelCheckNoDuplicate(values = userDefPKParametersTable$Name, variableName = "User Defined PK parameters")
+  )
 
   # User defined parameters currently need to be set in 2 steps:
   # 1- create the parameter

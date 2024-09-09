@@ -17,8 +17,8 @@ workflowMB$activateTasks("plotMassBalance")
 workflowMB$runWorkflow()
 
 test_that("Workflow generates appropriate number of files", {
-  # Log files
-  expect_length(list.files(workflowMB$workflowFolder, pattern = ".txt"), 2)
+  # Log files include warning as exosome does not contain any path in simulation
+  expect_length(list.files(workflowMB$workflowFolder, pattern = ".txt"), 3)
   # Reports
   expect_length(list.files(workflowMB$workflowFolder, pattern = ".md"), 2)
   expect_length(list.files(workflowMB$workflowFolder, pattern = ".docx"), 1)

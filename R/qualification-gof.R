@@ -149,16 +149,19 @@ getGOFDataForMapping <- function(outputMapping, configurationPlan, axesUnits) {
     )
 
     # Re-use nomenclature and functions from utilities-goodness-of-fit
+    # Add place holder for lloq, that will be replaced once data include lloq information
     observedData <- data.frame(
       Time = observedTime,
       Concentration = observedValues,
+      lloq = as.numeric(NA),
       Path = observedDataSet
     )
     simulatedData <- data.frame(
       Time = simulatedTime,
       Concentration = simulatedValues,
       Legend = outputMapping$Simulation,
-      ResidualsLegend = outputMapping$Simulation
+      ResidualsLegend = outputMapping$Simulation,
+      Group = outputMapping$Output
     )
     # Currently residuals are only calculated assuming Logarithmic formula
     gofData <- rbind.data.frame(
@@ -185,7 +188,7 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, pl
   # Axes labels
   axesProperties$y$dimension <- switch(plotType,
     "predictedVsObserved" = paste0("Simulated ", displayDimension(axesProperties$y$dimension)),
-    "residualsOverTime" = "Residuals\nlog(Observed)-log(Simulated)"
+    "residualsOverTime" = captions$plotGoF$residualsLabel(ResidualScales$Logarithmic)
   )
   axesProperties$x$dimension <- switch(plotType,
     "predictedVsObserved" = paste0("Observed ", displayDimension(axesProperties$x$dimension)),
@@ -212,6 +215,13 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, pl
       "residualsOverTime" = "ResVsPred"
     )
   )
+  # Use time tick algorithm for residualsOverTime plots
+  if (isIncluded(plotType, "residualsOverTime")) {
+    axesProperties$x <- c(
+      axesProperties$x,
+      getTimeTicksFromUnit(axesProperties$x$unit, data$Time)
+    )
+  }
 
   # Update shapes and colors from config plan
   plotConfiguration$points$color <- metaData$color
@@ -222,12 +232,12 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, pl
   positiveRows <- (data[, "Observed"] > 0) & (data[, "Simulated"] > 0)
   dataForLimit <- c(data[positiveRows, "Observed"], data[positiveRows, "Simulated"])
 
-  plotConfiguration$xAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||%
+  plotConfiguration$xAxis$axisLimits <- c(axesProperties$x$min, axesProperties$x$max) %||%
     autoAxesLimits(switch(plotType,
       "predictedVsObserved" = dataForLimit,
       "residualsOverTime" = data[positiveRows, "Time"]
     ))
-  plotConfiguration$yAxis$limits <- c(axesProperties$x$min, axesProperties$x$max) %||%
+  plotConfiguration$yAxis$axisLimits <- c(axesProperties$x$min, axesProperties$x$max) %||%
     autoAxesLimits(switch(plotType,
       "predictedVsObserved" = dataForLimit,
       "residualsOverTime" = c(0, data[positiveRows, "Residuals"])
@@ -238,7 +248,9 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, pl
       data = data,
       metaData = metaData,
       dataMapping = dataMapping,
-      plotConfiguration = plotConfiguration
+      plotConfiguration = plotConfiguration,
+      # Add identity line to log-log plot
+      foldDistance = 0
     ),
     "residualsOverTime" = tlf::plotResVsPred(
       data = data,
@@ -248,8 +260,8 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, pl
     )
   )
   gofPlot <- updatePlotAxes(gofPlot, axesProperties)
-  # Remove legend from colors
-  gofPlot <- gofPlot + ggplot2::guides(color = "none")
+  # Remove color and line from legend
+  gofPlot <- gofPlot + ggplot2::guides(color = "none", linetype = "none")
   return(gofPlot)
 }
 
