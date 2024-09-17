@@ -1117,7 +1117,7 @@ getResidualsPlotResultsInGroup <- function(data, metaData, outputId, structureSe
       dataMapping = obsVsPredDataMapping,
       plotConfiguration = obsVsPredPlotConfigurationLog,
       # Add identity line to log-log plot
-      foldDistance = 0
+      foldDistance = 1
     )
     goodnessOfFitCaptions[[resultId$obsVsPredLog]] <- getGoodnessOfFitCaptions(structureSet, "obsVsPred", "logarithmic", settings)
   }
