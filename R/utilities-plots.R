@@ -419,7 +419,13 @@ updateWatermarkDimensions <- function(plotObject) {
 #' @keywords internal
 updatePlotDimensions <- function(plotObject) {
   # Get grob from plot = list of plot properties
+  if (requireNamespace("showtext", quietly = TRUE)) {
+    showtext::showtext_auto(FALSE)
+  }
   grobObject <- ggplot2::ggplotGrob(plotObject)
+  if (requireNamespace("showtext", quietly = TRUE)) {
+    showtext::showtext_auto(TRUE)
+  }
   # Look for legend grob that stores the dimensions of the legend
   legendGrobIndex <- which(sapply(grobObject$grobs, function(grob) grob$name) == "guide-box")
   # If no legend, index is empty
