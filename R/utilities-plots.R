@@ -419,9 +419,6 @@ updateWatermarkDimensions <- function(plotObject) {
 #' @keywords internal
 updatePlotDimensions <- function(plotObject) {
   # Get grob from plot = list of plot properties
-  if (requireNamespace("showtext", quietly = TRUE)) {
-    showtext::showtext_auto(FALSE)
-  }
   grobObject <- tryCatch(
     {
       ggplot2::ggplotGrob(plotObject)
@@ -430,7 +427,7 @@ updatePlotDimensions <- function(plotObject) {
       warning(errorCondition$message, call. = FALSE)
       return(NULL)
     },
-    warning = function(errorCondition) {
+    warning = function(warningCondition) {
       logInfo(warningCondition$message)
       return(NULL)
     }
