@@ -422,9 +422,21 @@ updatePlotDimensions <- function(plotObject) {
   if (requireNamespace("showtext", quietly = TRUE)) {
     showtext::showtext_auto(FALSE)
   }
-  grobObject <- ggplot2::ggplotGrob(plotObject)
-  if (requireNamespace("showtext", quietly = TRUE)) {
-    showtext::showtext_auto(TRUE)
+  grobObject <- tryCatch(
+    {
+      ggplot2::ggplotGrob(plotObject)
+    },
+    error = function(errorCondition) {
+      warning(errorCondition$message, call. = FALSE)
+      return(NULL)
+    },
+    warning = function(errorCondition) {
+      logInfo(warningCondition$message)
+      return(NULL)
+    }
+  )
+  if (isEmpty(grobObject)) {
+    return(plotObject)
   }
   # Look for legend grob that stores the dimensions of the legend
   legendGrobIndex <- which(sapply(grobObject$grobs, function(grob) grob$name) == "guide-box")
