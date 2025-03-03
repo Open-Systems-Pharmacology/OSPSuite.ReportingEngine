@@ -426,10 +426,6 @@ updatePlotDimensions <- function(plotObject) {
     error = function(errorCondition) {
       warning(errorCondition$message, call. = FALSE)
       return(NULL)
-    },
-    warning = function(warningCondition) {
-      logInfo(warningCondition$message)
-      return(NULL)
     }
   )
   if (isEmpty(grobObject)) {
