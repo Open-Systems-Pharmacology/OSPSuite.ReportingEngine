@@ -195,6 +195,18 @@ messages <- list(
   warningPKParameterNotEnoughData = function(pkParameter, path) {
     paste0(highlight(pkParameter), " for ", highlight(path), ": not enough available data to perform plot.")
   },
+  warningDDINotPlotted = function(title, pkParameter, plotType, captionSuffix = NULL) {
+    subunitMessage <- ifelse(
+      is.null(captionSuffix),
+      "",
+      paste0("' for subunit '", highlight(captionSuffix))
+    )
+    return(paste0(
+      "DDI plot '", highlight(title), subunitMessage,
+      "' of ", plotType, " '", highlight(pkParameter),
+      "' ratios was skipped because no data was available."
+    ))
+  },
   warningApplicationsBeforeTimeOffset = function(applicationLength, timeRanges, timeUnit, timeOffset, simulationSetName) {
     paste0(
       highlight(applicationLength), " application(s) at ", highlight(timeRanges), " ", timeUnit,
@@ -298,11 +310,11 @@ messages <- list(
   },
   warningLogScaleIssue = function(output) {
     paste0(
-      "Plot scale is logarithmic, however all values from simulated output '", 
+      "Plot scale is logarithmic, however all values from simulated output '",
       highlight(output), "' were lower or equal to 0."
     )
   },
-  
+
   #----- Info messages ----
   runStarting = function(runName, subRun = NULL) {
     if (is.null(subRun)) {

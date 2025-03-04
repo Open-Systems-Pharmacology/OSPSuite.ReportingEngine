@@ -276,6 +276,9 @@ getSmartZoomLimits <- function(dataVector, residualsVsObserved = FALSE) {
 #' @keywords internal
 generateDDIQualificationDDIPlot <- function(ddiPlotData, delta) {
   ddiData <- na.omit(ddiPlotData$ddiPlotDataframe)
+  if (isEmpty(ddiData)) {
+    return(NULL)
+  }
 
   residualsVsObserved <- ddiPlotTypeSpecifications[[ddiPlotData$axesSettings$plotType]]$residualsVsObservedFlag
 
@@ -397,6 +400,19 @@ getDDISection <- function(dataframe, metadata, sectionID, idPrefix, captionSuffi
 
       plotID <- defaultFileNames$resultID(idPrefix, "ddi_ratio_plot", pkParameter, plotType)
       ddiPlot <- generateDDIQualificationDDIPlot(plotDDIData, delta = metadata$guestDelta[[pkParameter]])
+      if (isEmpty(ddiPlot)) {
+        warning(
+          messages$warningDDINotPlotted(
+            title = plotDDIData$plotSettings$Title,
+            pkParameter = pkParameter,
+            plotType = plotType,
+            # Caption suffix indicates for which subunit, DDI plot is skipped
+            captionSuffix = captionSuffix
+          ),
+          call. = FALSE
+        )
+        next
+      }
       ddiPlotCaption <- getDDIPlotCaption(
         title = metadata$title,
         subPlotCaption = captionSuffix,
