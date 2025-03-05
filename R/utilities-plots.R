@@ -418,15 +418,18 @@ updateWatermarkDimensions <- function(plotObject) {
 #' @return A `ggplot` object
 #' @keywords internal
 updatePlotDimensions <- function(plotObject) {
-  # Get grob from plot = list of plot properties
-  grobObject <- ggplot2::layer_grob(plotObject)[[1]]
+  allLegendGrobs <- cowplot::get_plot_component(
+    plotObject, 
+    pattern = "guide-box", 
+    return_all = TRUE
+    )
   # Look for legend grob that stores the dimensions of the legend
-  legendGrobIndex <- which(sapply(grobObject$grobs, function(grob) grob$name) == "guide-box")
+  legendGrobIndex <- which(sapply(allLegendGrobs, function(grob) grob$name %in% "guide-box"))
   # If no legend, index is empty
   if (isEmpty(legendGrobIndex)) {
     return(plotObject)
   }
-  legendGrob <- grobObject$grobs[[legendGrobIndex]]
+  legendGrob <- allLegendGrobs[[legendGrobIndex]]
   # If not empty,
   # - add nothing if legend within
   if (grepl(pattern = "inside", x = plotObject$plotConfiguration$legend$position)) {
