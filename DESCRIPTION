@@ -31,14 +31,14 @@ BugReports:
     https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues
 Depends: 
     R (>= 4.1),
-    ospsuite (>= 12.0),
-    tlf (>= 1.5),
-    rSharp (>= 1.0)
+    tlf (>= 1.6.0),
+    rSharp (>= 1.0),
+    ospsuite (>= 12.1.0)
 Imports: 
     R6,
     ggplot2,
     jsonlite,
-    ospsuite.utils (>= 1.4.0),
+    ospsuite.utils (>= 1.6.0.9000),
     dplyr,
     tidyr
 Suggests: 
@@ -56,3 +56,7 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
 VignetteBuilder: knitr
+Remotes: 
+    Open-Systems-Pharmacology/rSharp,
+    ospsuite.utils=Open-Systems-Pharmacology/OSPSuite.RUtils,
+    tlf=Open-Systems-Pharmacology/TLF-Library
