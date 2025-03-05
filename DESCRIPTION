@@ -47,7 +47,6 @@ Suggests:
     rmarkdown,
     Rmpi,
     readxl,
-    tracelib,
     styler,
     crayon,
     webshot,
@@ -59,4 +58,5 @@ VignetteBuilder: knitr
 Remotes: 
     Open-Systems-Pharmacology/rSharp,
     ospsuite.utils=Open-Systems-Pharmacology/OSPSuite.RUtils,
-    tlf=Open-Systems-Pharmacology/TLF-Library
+    tlf=Open-Systems-Pharmacology/TLF-Library,
+    ospsuite=Open-Systems-Pharmacology/OSPSuite-R
