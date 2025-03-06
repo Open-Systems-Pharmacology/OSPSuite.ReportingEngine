@@ -204,17 +204,14 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
     defaultWidth <- mean(c(defaultWidth, defaultHeight))
     defaultHeight <- defaultWidth
   }
-  # If chart size is defined, it is in pixel and updated accordingly
-  # Get conversion factor between pixels and inches, dev.size provides an array c(width, height)
-  unitConversionFactor <- grDevices::dev.size("in") / grDevices::dev.size("px")
   width <- ifNotNull(
     plotProperties$FontAndSize$ChartWidth,
-    plotProperties$FontAndSize$ChartWidth * unitConversionFactor[1],
+    plotProperties$FontAndSize$ChartWidth/reEnv$defaultPlotFormat$dpi,
     defaultWidth
   )
   height <- ifNotNull(
     plotProperties$FontAndSize$ChartHeight,
-    plotProperties$FontAndSize$ChartHeight * unitConversionFactor[2],
+    plotProperties$FontAndSize$ChartHeight/reEnv$defaultPlotFormat$dpi,
     defaultHeight
   )
   # Get dimensions of exported based on legend position and default/specific plot properties
