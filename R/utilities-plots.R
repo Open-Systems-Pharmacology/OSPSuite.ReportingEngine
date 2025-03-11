@@ -412,21 +412,60 @@ updateWatermarkDimensions <- function(plotObject) {
   return(plotObject)
 }
 
+#' @title getLegendDimensions
+#' @description 
+#' Get legend dimensions
+#' @param plotObject A `ggplot` object
+#' @return 
+#' A list of `width` and `height` if legend is found, 
+#' otherwise `NULL`
+#' @keywords internal
+#' @importFrom grid convertUnit
+#' @importFrom cowplot get_plot_component
+getLegendDimensions <- function(plotObject){
+  # Duplicate plot object to apply modifications preventing crash
+  legendPlotObject <- plotObject
+  for(elementName in names(legendPlotObject$theme)){
+    if(isOfType(legendPlotObject$theme[[elementName]], "element_text")){
+      legendPlotObject$theme[[elementName]]$family <- ""
+    }
+  }
+  # Get grob from plot = list of plot properties
+  allLegendGrobs <- cowplot::get_plot_component(
+    legendPlotObject, 
+    pattern = "guide-box", 
+    return_all = TRUE
+  )
+  # Look for legend grob that stores the dimensions of the legend
+  legendGrobIndex <- which(sapply(grobObject$grobs, function(grob) grob$name) == "guide-box")
+  # If no legend, index is empty
+  if (isEmpty(legendGrobIndex)) {
+    return(NULL)
+  }
+  legendGrob <- allLegendGrobs[[legendGrobIndex]]
+  # grid package is already required and installed by ggplot2
+  legendWidth <- as.numeric(grid::convertUnit(
+    max(legendGrob$widths), 
+    plotObject$plotConfiguration$export$units
+    ))
+  legendHeight <- as.numeric(grid::convertUnit(
+    max(legendGrob$heights), 
+    plotObject$plotConfiguration$export$units
+    ))
+  return(list(width = legendWidth, height = legendHeight))
+}
+
 #' @title updatePlotDimensions
 #' @description Update plot dimensions based on size and position of legend
 #' @param plotObject A `ggplot` object
 #' @return A `ggplot` object
 #' @keywords internal
 updatePlotDimensions <- function(plotObject) {
-  # Get grob from plot = list of plot properties
-  grobObject <- ggplot2::ggplotGrob(plotObject)
-  # Look for legend grob that stores the dimensions of the legend
-  legendGrobIndex <- which(sapply(grobObject$grobs, function(grob) grob$name) == "guide-box")
+  legendDimensions <- getLegendDimensions(plotObject)
   # If no legend, index is empty
-  if (isEmpty(legendGrobIndex)) {
+  if (isEmpty(legendDimensions)) {
     return(plotObject)
   }
-  legendGrob <- grobObject$grobs[[legendGrobIndex]]
   # If not empty,
   # - add nothing if legend within
   if (grepl(pattern = "inside", x = plotObject$plotConfiguration$legend$position)) {
@@ -435,9 +474,8 @@ updatePlotDimensions <- function(plotObject) {
       ggplot2::theme(plot.margin = ggplot2::margin(r = 20, b = 10, l = 10))
     return(plotObject)
   }
-  # grid package is already required and installed by ggplot2
-  legendWidth <- as.numeric(grid::convertUnit(max(legendGrob$widths), plotObject$plotConfiguration$export$units))
-  legendHeight <- as.numeric(grid::convertUnit(max(legendGrob$heights), plotObject$plotConfiguration$export$units))
+  legendWidth <- legendDimensions$width
+  legendHeight <- legendDimensions$height
   # - add legend height to the final plot dimensions if legend above/below
   isLegendPositionVertical <- any(
     grepl(pattern = "Top", x = plotObject$plotConfiguration$legend$position),
