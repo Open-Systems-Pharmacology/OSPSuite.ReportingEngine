@@ -437,7 +437,7 @@ getLegendDimensions <- function(plotObject){
     return_all = TRUE
   )
   # Look for legend grob that stores the dimensions of the legend
-  legendGrobIndex <- which(sapply(grobObject$grobs, function(grob) grob$name) == "guide-box")
+  legendGrobIndex <- head(which(sapply(allLegendGrobs, function(grob) grob$name) %in% "guide-box"), 1)
   # If no legend, index is empty
   if (isEmpty(legendGrobIndex)) {
     return(NULL)
