@@ -422,11 +422,11 @@ updateWatermarkDimensions <- function(plotObject) {
 getLegendDimensions <- function(plotObject){
   # Duplicate plot object to apply modifications preventing crash
   legendPlotObject <- plotObject
-  #for(elementName in names(legendPlotObject$theme)){
-  #  if(isOfType(legendPlotObject$theme[[elementName]], "element_text")){
-  #    legendPlotObject$theme[[elementName]]$family <- ""
-  #  }
-  #}
+  for(elementName in names(legendPlotObject$theme)){
+    if(isOfType(legendPlotObject$theme[[elementName]], "element_text")){
+      legendPlotObject$theme[[elementName]]$family <- ""
+    }
+  }
   # Get grob from plot = list of plot properties
   allLegendGrobs <- cowplot::get_plot_component(
     legendPlotObject, 
