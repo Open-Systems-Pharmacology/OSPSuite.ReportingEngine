@@ -85,7 +85,7 @@ reEnv$maxWidthPerLegendCaption <- 50
 reEnv$maxLinesPerLegendCaption <- 2
 reEnv$autoAxisLimitMargin <- 0.05
 reEnv$blankLinesBetweenArtifacts <- 2
-reEnv$fontScaleFactor <- 2
+reEnv$fontScaleFactor <- 5
 reEnv$workflowWatermarkMessage <- "preliminary analysis"
 reEnv$residualsHistogramLabel <- "Relative frequency"
 reEnv$demographyHistogramLabel <- "Percentage of population [%]"
