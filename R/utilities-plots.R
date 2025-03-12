@@ -430,6 +430,8 @@ getLegendDimensions <- function(plotObject){
       legendPlotObject$theme[[elementName]]$family <- ""
     }
   }
+  # See https://wilkelab.org/cowplot/reference/set_null_device.html for more details
+  cowplot::set_null_device("png")
   # Get grob from plot = list of plot properties
   allLegendGrobs <- cowplot::get_plot_component(
     legendPlotObject, 
