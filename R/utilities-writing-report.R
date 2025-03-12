@@ -401,8 +401,8 @@ addSectionNumbersToMarkdown <- function(fileName) {
 
 #' @title addMarkdownToc
 #' @description Add table of content to a markdown file
-#' @param tocContent Table of content referencing sections following a markdown format
 #' @param fileName name of .md file to update
+#' @param tocTitle Markdown text for table of content title
 #' @keywords internal
 addMarkdownToc <- function(fileName, tocTitle = "# Table of Contents") {
   fileContent <- readLines(fileName, encoding = "UTF-8")

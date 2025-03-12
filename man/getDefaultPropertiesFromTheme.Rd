@@ -15,7 +15,7 @@ getDefaultPropertiesFromTheme(
 
 \item{propertyType}{One of `"points"`, `"lines`, `"ribbons"` or `"errorbars"`}
 
-\item{propertyName}{Name of the aesthetic property (e.g. `"color"`)}
+\item{propertyNames}{Names of the aesthetic property (e.g. `"color"`)}
 }
 \value{
 Property value

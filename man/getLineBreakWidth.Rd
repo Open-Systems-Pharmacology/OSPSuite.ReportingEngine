@@ -12,7 +12,7 @@ If applied to the legend, use `"legend"`.
 If applied to a plot label use e.g. `"ylabel"` or `"title"`.
 If applied to tick labels use `"yticks"` or `"yticklabels"`.}
 
-\item{PlotConfiguration}{A `PlotConfiguration` object from the `tlf` package}
+\item{plotConfiguration}{A `PlotConfiguration` object from the `tlf` package}
 }
 \value{
 An integer as max character width before using line breaks

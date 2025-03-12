@@ -9,7 +9,7 @@ getApplicationTimesForSimulation(simulation, outputs)
 \arguments{
 \item{simulation}{A `Simulation` object}
 
-\item{output}{A list of `Output` objects}
+\item{outputs}{A list of `Output` objects}
 }
 \value{
 Time values of applications

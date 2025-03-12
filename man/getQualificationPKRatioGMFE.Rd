@@ -7,9 +7,9 @@
 getQualificationPKRatioGMFE(pkParameterNames, data)
 }
 \arguments{
-\item{data}{data.frame with PK Ratios}
+\item{pkParameterNames}{Name of PK Parameter as defined by users}
 
-\item{pkParameterName}{Name of PK Parameter as defined by users}
+\item{data}{data.frame with PK Ratios}
 }
 \value{
 A data.frame

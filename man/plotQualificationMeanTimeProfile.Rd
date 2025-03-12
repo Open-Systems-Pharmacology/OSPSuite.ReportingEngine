@@ -14,6 +14,8 @@ plotQualificationMeanTimeProfile(
 )
 }
 \arguments{
+\item{configurationPlanCurves}{`Curves` fields of configuration plan}
+
 \item{simulation}{A `Simulation` object from `ospsuite` package
 that includes required information to identify and convert the data requested from `configurationPlanCurve` properties}
 
@@ -25,8 +27,6 @@ that includes the data requested from `configurationPlanCurve` properties}
 \item{configurationPlan}{A `ConfigurationPlan` object that includes methods to find observed data}
 
 \item{plotConfiguration}{A `TimeProfilePlotConfiguration` object}
-
-\item{configurationPlanCurve}{`Curves` fields of configuration plan}
 }
 \value{
 Mean time profile plot as a `ggplot` object

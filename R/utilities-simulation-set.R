@@ -245,7 +245,7 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet) {
 
 #' @title getApplicationTimesForSimulation
 #' @param simulation A `Simulation` object
-#' @param output A list of `Output` objects
+#' @param outputs A list of `Output` objects
 #' @return Time values of applications
 #' @keywords internal
 getApplicationTimesForSimulation <- function(simulation, outputs) {

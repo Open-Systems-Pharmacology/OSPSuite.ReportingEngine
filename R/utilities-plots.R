@@ -320,7 +320,7 @@ getSplitPositions <- function(possibleSplits, splitWidth, numberOfSplits) {
 #' If applied to the legend, use `"legend"`.
 #' If applied to a plot label use e.g. `"ylabel"` or `"title"`.
 #' If applied to tick labels use `"yticks"` or `"yticklabels"`.
-#' @param PlotConfiguration A `PlotConfiguration` object from the `tlf` package
+#' @param plotConfiguration A `PlotConfiguration` object from the `tlf` package
 #' @return An integer as max character width before using line breaks
 #' @keywords internal
 getLineBreakWidth <- function(element = "legend", plotConfiguration) {
@@ -955,9 +955,9 @@ updateAxesMargin <- function(axesProperties, sideMarginsEnabled = TRUE) {
 #' @title getDefaultPropertyFromTheme
 #' @description
 #' Get default property value from current reEnv theme
-#' @param propertyName Name of the aesthetic property (e.g. `"color"`)
-#' @param propertyType One of `"points"`, `"lines`, `"ribbons"` or `"errorbars"`
 #' @param plotName Name of the plot in Theme (e.g. `"plotTimeProfile"`)
+#' @param propertyType One of `"points"`, `"lines`, `"ribbons"` or `"errorbars"`
+#' @param propertyNames Names of the aesthetic property (e.g. `"color"`)
 #' @return Property value
 #' @keywords internal
 getDefaultPropertiesFromTheme <- function(plotName,

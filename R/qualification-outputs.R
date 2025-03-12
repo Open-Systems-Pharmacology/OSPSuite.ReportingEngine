@@ -1,6 +1,5 @@
 #' @title getOutputsFromConfigurationPlan
 #' @description Get a list of outputs from simulation and from `ConfigurationPlan`
-#' @param simulation path of the output folder created or used by the Workflow.
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return A dataframe of project, simulation, output paths and (if applicable) pk parameters and start and end times of interval over which the pk parameter is evaluated
 #' @keywords internal

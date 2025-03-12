@@ -17,7 +17,7 @@ validateDataSource(dataSource, outputs, nullAllowed = TRUE)
 
 \item{outputs}{list or array of `Output` objects}
 
-\item{observedDataFile}{Path of observed dataset}
+\item{nullAllowed}{Logical defining if `NULL` input is allowed}
 }
 \description{
 Check the consistency between observed data and its dictionary.

@@ -9,7 +9,7 @@ addMarkdownToc(fileName, tocTitle = "# Table of Contents")
 \arguments{
 \item{fileName}{name of .md file to update}
 
-\item{tocContent}{Table of content referencing sections following a markdown format}
+\item{tocTitle}{Markdown text for table of content title}
 }
 \description{
 Add table of content to a markdown file
