@@ -49,7 +49,7 @@ Suggests:
     readxl,
     styler,
     crayon,
-    webshot,
+    webshot2,
     parallel,
     devtools
 Encoding: UTF-8
