@@ -1,3 +1,7 @@
+# This line install the java script app that takes snapshots of reports
+# Add option force=TRUE to prevent webshot to crash if the install path is not found
+webshot::install_phantomjs(force = TRUE)
+
 #' @title includeReportFromWorkflow
 #' @description Render a `workflow` report and display its content as raw html
 #' @param workflow A `Workflow` object
@@ -27,7 +31,7 @@ includeReportFromWorkflow <- function(workflow) {
     "figures",
     paste0("report-snapshot-", length(list.files("figures", pattern = "png")) + 1, ".png")
   )
-  webshot2::webshot(
+  webshot::webshot(
     url = sub(".md", ".html", workflow$reportFilePath),
     file = reportSnapshotFile,
     delay = 0.1
