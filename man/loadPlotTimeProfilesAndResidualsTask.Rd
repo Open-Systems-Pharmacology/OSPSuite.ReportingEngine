@@ -7,18 +7,18 @@
 loadPlotTimeProfilesAndResidualsTask(workflow, active = FALSE, settings = NULL)
 }
 \arguments{
-\item{workflow}{`Workflow` object or derived class}
+\item{workflow}{\code{Workflow} object or derived class}
 
-\item{active}{logical defining if `Task` will be run by workflow.
-Default value is `TRUE`}
+\item{active}{logical defining if \code{Task} will be run by workflow.
+Default value is \code{TRUE}}
 
-\item{settings}{specific settings for `simulate` task}
+\item{settings}{specific settings for \code{simulate} task}
 }
 \value{
-A `GofPlotTask` object
+A \code{GofPlotTask} object
 }
 \description{
-Define `plotTimeProfilesAndResiduals` task and its settings
+Define \code{plotTimeProfilesAndResiduals} task and its settings
 }
 \examples{
 \dontrun{

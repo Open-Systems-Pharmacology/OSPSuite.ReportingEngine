@@ -7,10 +7,10 @@
 getOutputsForPKPlot(structureSets)
 }
 \arguments{
-\item{structureSets}{List of `SimulationStructure` objects}
+\item{structureSets}{List of \code{SimulationStructure} objects}
 }
 \value{
-list of `Output` objects
+list of \code{Output} objects
 }
 \description{
 Get the list of outputs and their PK parameters for population PK parameter plot

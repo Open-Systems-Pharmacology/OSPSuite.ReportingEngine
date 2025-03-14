@@ -7,7 +7,7 @@
 getWorkflowParameterDisplayPaths(workflow)
 }
 \arguments{
-\item{workflow}{Object of class `MeanModelWorkflow` or `PopulationWorkflow`}
+\item{workflow}{Object of class \code{MeanModelWorkflow} or \code{PopulationWorkflow}}
 }
 \description{
 Get mapping between parameters and their display paths in a workflow

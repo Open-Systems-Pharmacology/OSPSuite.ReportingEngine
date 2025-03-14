@@ -1,6 +1,7 @@
 #' @title CalculatePKParametersTask
 #' @description  R6 class for defining how pk parameters are calculated and save
 #' @keywords internal
+#' @importFrom R6 R6Class
 CalculatePKParametersTask <- R6::R6Class(
   "CalculatePKParametersTask",
   inherit = SimulationTask,

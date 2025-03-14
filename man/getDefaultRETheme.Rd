@@ -7,7 +7,7 @@
 getDefaultRETheme()
 }
 \value{
-A `Theme` object from `tlf` package
+A \code{Theme} object from \code{tlf} package
 }
 \description{
 Get default plot settings for RE package

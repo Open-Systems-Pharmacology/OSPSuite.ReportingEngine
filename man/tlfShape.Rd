@@ -10,9 +10,9 @@ tlfShape(configurationShape)
 \item{configurationShape}{Value of the configuration plan plot property}
 }
 \value{
-`shape` values that follows `tlf` package nomenclature
+\code{shape} values that follows \code{tlf} package nomenclature
 }
 \description{
-Translate value of `Symbol` property from configuration plan into tlf `shape`
+Translate value of \code{Symbol} property from configuration plan into tlf \code{shape}
 }
 \keyword{internal}

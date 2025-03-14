@@ -19,14 +19,14 @@ getQualificationPKRatioPlot(
 
 \item{metaData}{metaData with units and dimension for labeling the table header}
 
-\item{axesProperties}{list of axes properties obtained from `getAxesProperties`}
+\item{axesProperties}{list of axes properties obtained from \code{getAxesProperties}}
 
-\item{plotProperties}{list of plot properties defined in field `Plot` of PKRatio configuration plan}
+\item{plotProperties}{list of plot properties defined in field \code{Plot} of PKRatio configuration plan}
 }
 \value{
 A ggplot object
 }
 \description{
-Get plot of pk ratio from field `PKRatioPlots` of configuration plan
+Get plot of pk ratio from field \code{PKRatioPlots} of configuration plan
 }
 \keyword{internal}

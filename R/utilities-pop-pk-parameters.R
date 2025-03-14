@@ -671,7 +671,7 @@ getPKParameterMeasure <- function(data, dataMapping) {
 
 #' @title formatPKParametersTable
 #' @description Format data.frame of PK and Population Parameters from a simulation set
-#' @param structureSets A `SimulationStructure` objects
+#' @param structureSet A `SimulationStructure` object
 #' @param pkParametersTable A data.frame of PK parameters
 #' @param populationTable A data.frame of population parameters
 #' @return A data.frame and its metaData including the values of PK parameters across Population Simulation sets

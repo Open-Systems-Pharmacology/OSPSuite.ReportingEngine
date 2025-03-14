@@ -9,7 +9,7 @@ updateVpcPlotColor(plotObject, output, referenceSimulationSetName = NULL)
 \arguments{
 \item{plotObject}{A ggplot object}
 
-\item{output}{An `Output` object}
+\item{output}{An \code{Output} object}
 
 \item{referenceSimulationSetName}{Display name of reference simulation set}
 }

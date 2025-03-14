@@ -10,6 +10,6 @@ newOutputColor()
 A color from OSP Suite Color Map
 }
 \description{
-Find a color for new `Output` objects
+Find a color for new \code{Output} objects
 }
 \keyword{internal}

@@ -7,7 +7,7 @@
 getSimulationDescriptor(workflow)
 }
 \arguments{
-\item{workflow}{A `Workflow` object}
+\item{workflow}{A \code{Workflow} object}
 }
 \value{
 character describing simulation sets

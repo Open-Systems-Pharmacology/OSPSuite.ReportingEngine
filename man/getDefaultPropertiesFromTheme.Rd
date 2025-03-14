@@ -11,11 +11,11 @@ getDefaultPropertiesFromTheme(
 )
 }
 \arguments{
-\item{plotName}{Name of the plot in Theme (e.g. `"plotTimeProfile"`)}
+\item{plotName}{Name of the plot in Theme (e.g. \code{"plotTimeProfile"})}
 
-\item{propertyType}{One of `"points"`, `"lines`, `"ribbons"` or `"errorbars"`}
+\item{propertyType}{One of \code{"points"}, \verb{"lines}, \code{"ribbons"} or \code{"errorbars"}}
 
-\item{propertyName}{Name of the aesthetic property (e.g. `"color"`)}
+\item{propertyNames}{Names of the aesthetic property (e.g. \code{"color"})}
 }
 \value{
 Property value

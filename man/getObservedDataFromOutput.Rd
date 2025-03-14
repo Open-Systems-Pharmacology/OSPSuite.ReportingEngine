@@ -7,7 +7,7 @@
 getObservedDataFromOutput(output, data, dataMapping, molWeight, structureSet)
 }
 \arguments{
-\item{output}{An `Output` object}
+\item{output}{An \code{Output} object}
 
 \item{data}{A data.frame}
 
@@ -15,7 +15,7 @@ getObservedDataFromOutput(output, data, dataMapping, molWeight, structureSet)
 
 \item{molWeight}{Molar weight for unit conversion of dependent variable}
 
-\item{structureSet}{A `SimulationStructure` object}
+\item{structureSet}{A \code{SimulationStructure} object}
 }
 \value{
 list of data and its metaData

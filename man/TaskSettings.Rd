@@ -26,7 +26,7 @@ R6 class defining properties of plot task settings
 
 \item{\code{scales}}{named list of logicals defining if log/linear plots are included}
 
-\item{\code{plotConfigurations}}{named list of `PlotConfiguration` objects
+\item{\code{plotConfigurations}}{named list of \code{PlotConfiguration} objects
 defining aesthetic properties of reported plots}
 }
 \if{html}{\out{</div>}}
@@ -42,7 +42,7 @@ defining aesthetic properties of reported plots}
 \if{html}{\out{<a id="method-TaskSettings-new"></a>}}
 \if{latex}{\out{\hypertarget{method-TaskSettings-new}{}}}
 \subsection{Method \code{new()}}{
-Create a `TaskSettings` object
+Create a \code{TaskSettings} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TaskSettings$new(taskName)}\if{html}{\out{</div>}}
 }
@@ -55,7 +55,7 @@ Create a `TaskSettings` object
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `TaskSettings` object
+A new \code{TaskSettings} object
 }
 }
 \if{html}{\out{<hr>}}

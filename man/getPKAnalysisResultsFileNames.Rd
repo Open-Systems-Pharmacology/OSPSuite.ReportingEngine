@@ -10,7 +10,7 @@ getPKAnalysisResultsFileNames(workflow)
 getPkAnalysisResultsFileNames(workflow)
 }
 \arguments{
-\item{workflow}{`Workflow` object or derived class}
+\item{workflow}{\code{Workflow} object or derived class}
 }
 \value{
 Names of the the expected PK analysis result files

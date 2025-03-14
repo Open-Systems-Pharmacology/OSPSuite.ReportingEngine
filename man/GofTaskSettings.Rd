@@ -71,7 +71,7 @@ time profiles and residual plots when applicable}
 \if{html}{\out{<a id="method-GofTaskSettings-new"></a>}}
 \if{latex}{\out{\hypertarget{method-GofTaskSettings-new}{}}}
 \subsection{Method \code{new()}}{
-Create a `GofTaskSettings` object
+Create a \code{GofTaskSettings} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{GofTaskSettings$new(
   taskName = AllAvailableTasks$plotTimeProfilesAndResiduals,
@@ -92,7 +92,7 @@ Create a `GofTaskSettings` object
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `GofTaskSettings` object
+A new \code{GofTaskSettings} object
 }
 }
 \if{html}{\out{<hr>}}
@@ -114,7 +114,7 @@ Set statistics used in population time profiles and residuals plots
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{statisticsType}}{Name of statistics type as defined in enum `StatisticsTypes`}
+\item{\code{statisticsType}}{Name of statistics type as defined in enum \code{StatisticsTypes}}
 
 \item{\code{y}}{Function or function name for middle values statistics}
 

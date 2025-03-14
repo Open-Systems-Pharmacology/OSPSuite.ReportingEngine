@@ -7,7 +7,7 @@
 plotMeanSensitivity(structureSet, settings)
 }
 \arguments{
-\item{structureSet}{`SimulationStructure` R6 class object}
+\item{structureSet}{\code{SimulationStructure} R6 class object}
 
 \item{settings}{list of settings for the output table/plot}
 }

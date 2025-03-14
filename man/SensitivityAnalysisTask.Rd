@@ -72,7 +72,7 @@ Other workflow tasks:
 \if{html}{\out{<a id="method-SensitivityAnalysisTask-new"></a>}}
 \if{latex}{\out{\hypertarget{method-SensitivityAnalysisTask-new}{}}}
 \subsection{Method \code{new()}}{
-Create a `SensitivityAnalysisTask` object
+Create a \code{SensitivityAnalysisTask} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$new(
   getTaskResults = NULL,
@@ -87,23 +87,23 @@ Create a `SensitivityAnalysisTask` object
 \describe{
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
 
-\item{\code{settings}}{`SensitivityAnalysisSettings` object}
+\item{\code{settings}}{\code{SensitivityAnalysisSettings} object}
 
 \item{\code{nameTaskResults}}{name of function that returns task results}
 
-\item{\code{...}}{parameters inherited from R6 class `Task` object}
+\item{\code{...}}{parameters inherited from R6 class \code{Task} object}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `SensitivityAnalysisTask` object
+A new \code{SensitivityAnalysisTask} object
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-SensitivityAnalysisTask-saveResults"></a>}}
 \if{latex}{\out{\hypertarget{method-SensitivityAnalysisTask-saveResults}{}}}
 \subsection{Method \code{saveResults()}}{
-Save the task results related to a `structureSet`.
+Save the task results related to a \code{structureSet}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisTask$saveResults(structureSet, taskResults)}\if{html}{\out{</div>}}
 }
@@ -111,7 +111,7 @@ Save the task results related to a `structureSet`.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{structureSet}}{A `SimulationStructure` object defining the properties of a simulation set}
+\item{\code{structureSet}}{A \code{SimulationStructure} object defining the properties of a simulation set}
 
 \item{\code{taskResults}}{list of results from task run.}
 }
@@ -130,7 +130,7 @@ Run task and save its output results
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{structureSets}}{list of `SimulationStructure` objects}
+\item{\code{structureSets}}{list of \code{SimulationStructure} objects}
 }
 \if{html}{\out{</div>}}
 }

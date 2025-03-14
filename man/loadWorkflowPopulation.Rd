@@ -7,7 +7,7 @@
 loadWorkflowPopulation(simulationSet)
 }
 \arguments{
-\item{simulationSet}{A `PopulationSimulationSet` object}
+\item{simulationSet}{A \code{PopulationSimulationSet} object}
 }
 \description{
 loadWorkflowPopulation

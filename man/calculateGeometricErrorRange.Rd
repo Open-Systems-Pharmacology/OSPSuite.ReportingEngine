@@ -12,7 +12,7 @@ calculateGeometricErrorRange(values, errorValues)
 \item{errorValues}{Numeric values of the geometric error}
 }
 \value{
-A named list, with `ymin` and `ymax`, of the range calculated from the geometric mean and errors.
+A named list, with \code{ymin} and \code{ymax}, of the range calculated from the geometric mean and errors.
 }
 \description{
 Calculate the range from the geometric mean and error.

@@ -9,12 +9,12 @@ loadStudyDesign(studyDesignFile, population, simulation)
 \arguments{
 \item{studyDesignFile}{file name of study design table}
 
-\item{population}{`Population` object}
+\item{population}{\code{Population} object}
 
-\item{simulation}{`Simulation` object}
+\item{simulation}{\code{Simulation} object}
 }
 \value{
-A `StudyDesign` object`
+A \code{StudyDesign} object`
 }
 \description{
 Load a StudyDesign object from a file containing a study design table

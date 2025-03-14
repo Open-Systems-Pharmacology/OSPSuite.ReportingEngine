@@ -10,9 +10,9 @@ tlfLinetype(configurationLinetype)
 \item{configurationLinetype}{Value of the configuration plan plot property}
 }
 \value{
-`linetype` values that follows `tlf` package nomenclature
+\code{linetype} values that follows \code{tlf} package nomenclature
 }
 \description{
-Translate value of `LineStyle` property from configuration plan into tlf `linetype`
+Translate value of \code{LineStyle} property from configuration plan into tlf \code{linetype}
 }
 \keyword{internal}

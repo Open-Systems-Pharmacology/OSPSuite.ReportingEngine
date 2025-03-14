@@ -39,7 +39,7 @@ Other workflow tasks:
 \describe{
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
 
-\item{\code{settings}}{A `SensitivityAnalysisSettings` object}
+\item{\code{settings}}{A \code{SensitivityAnalysisSettings} object}
 }
 \if{html}{\out{</div>}}
 }
@@ -70,7 +70,7 @@ Other workflow tasks:
 \if{html}{\out{<a id="method-PopulationSensitivityAnalysisTask-new"></a>}}
 \if{latex}{\out{\hypertarget{method-PopulationSensitivityAnalysisTask-new}{}}}
 \subsection{Method \code{new()}}{
-Create a `PopulationSensitivityAnalysisTask` object
+Create a \code{PopulationSensitivityAnalysisTask} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationSensitivityAnalysisTask$new(
   getTaskResults = NULL,
@@ -84,21 +84,21 @@ Create a `PopulationSensitivityAnalysisTask` object
 \describe{
 \item{\code{getTaskResults}}{function called by task that computes and format figure results}
 
-\item{\code{settings}}{`SensitivityAnalysisSettings` object}
+\item{\code{settings}}{\code{SensitivityAnalysisSettings} object}
 
-\item{\code{...}}{parameters inherited from R6 class `SensitivityAnalysisTask` object}
+\item{\code{...}}{parameters inherited from R6 class \code{SensitivityAnalysisTask} object}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `PopulationSensitivityAnalysisTask` object
+A new \code{PopulationSensitivityAnalysisTask} object
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PopulationSensitivityAnalysisTask-saveResults"></a>}}
 \if{latex}{\out{\hypertarget{method-PopulationSensitivityAnalysisTask-saveResults}{}}}
 \subsection{Method \code{saveResults()}}{
-Save the task results related to a `structureSet`.
+Save the task results related to a \code{structureSet}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationSensitivityAnalysisTask$saveResults(structureSet, taskResults)}\if{html}{\out{</div>}}
 }
@@ -106,7 +106,7 @@ Save the task results related to a `structureSet`.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{structureSet}}{A `SimulationStructure` object defining the properties of a simulation set}
+\item{\code{structureSet}}{A \code{SimulationStructure} object defining the properties of a simulation set}
 
 \item{\code{taskResults}}{list of results from task run}
 }

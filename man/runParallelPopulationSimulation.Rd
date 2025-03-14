@@ -7,7 +7,7 @@
 runParallelPopulationSimulation(structureSet, numberOfCores, settings)
 }
 \arguments{
-\item{structureSet}{`SimulationStructure` R6 class object contain paths of files to be used}
+\item{structureSet}{\code{SimulationStructure} R6 class object contain paths of files to be used}
 
 \item{numberOfCores}{number of cores do be used by the parallel simulation}
 

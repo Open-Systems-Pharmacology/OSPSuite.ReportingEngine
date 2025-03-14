@@ -20,19 +20,19 @@ Other workflows:
 \describe{
 \item{\code{workflowType}}{Type of population workflow}
 
-\item{\code{simulate}}{`SimulationTask` object for time profile simulations}
+\item{\code{simulate}}{\code{SimulationTask} object for time profile simulations}
 
-\item{\code{calculatePKParameters}}{`CalculatePKParametersTask` object for PK parameters calculation}
+\item{\code{calculatePKParameters}}{\code{CalculatePKParametersTask} object for PK parameters calculation}
 
-\item{\code{calculateSensitivity}}{`SensitivityAnalysisTask` object for sensitivity analysis}
+\item{\code{calculateSensitivity}}{\code{SensitivityAnalysisTask} object for sensitivity analysis}
 
-\item{\code{plotDemography}}{R6 class `Task` for demography plots}
+\item{\code{plotDemography}}{R6 class \code{Task} for demography plots}
 
-\item{\code{plotTimeProfilesAndResiduals}}{`PlotTask` object for goodness of fit plots}
+\item{\code{plotTimeProfilesAndResiduals}}{\code{PlotTask} object for goodness of fit plots}
 
-\item{\code{plotPKParameters}}{R6 class `Task` for PK parameters plot}
+\item{\code{plotPKParameters}}{R6 class \code{Task} for PK parameters plot}
 
-\item{\code{plotSensitivity}}{R6 class `Task` for sensitivity plot}
+\item{\code{plotSensitivity}}{R6 class \code{Task} for sensitivity plot}
 }
 \if{html}{\out{</div>}}
 }
@@ -68,7 +68,7 @@ Other workflows:
 \if{html}{\out{<a id="method-PopulationWorkflow-new"></a>}}
 \if{latex}{\out{\hypertarget{method-PopulationWorkflow-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new `PopulationWorkflow` object.
+Create a new \code{PopulationWorkflow} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$new(
   workflowType,
@@ -86,9 +86,9 @@ Create a new `PopulationWorkflow` object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{workflowType}}{Type of population workflow. Use enum `PopulationWorkflowTypes` to get list of workflow types.}
+\item{\code{workflowType}}{Type of population workflow. Use enum \code{PopulationWorkflowTypes} to get list of workflow types.}
 
-\item{\code{simulationSets}}{list of `SimulationSet` R6 class objects}
+\item{\code{simulationSets}}{list of \code{SimulationSet} R6 class objects}
 
 \item{\code{workflowFolder}}{path of the output folder created or used by the Workflow.}
 
@@ -101,14 +101,14 @@ Create a new `PopulationWorkflow` object.
 \item{\code{numberSections}}{logical defining if the report sections should be numbered}
 
 \item{\code{reportTitle}}{report title internally added as a cover page
-If `reportTitle` is an existing file, it will be merged to the report as cover page.}
+If \code{reportTitle} is an existing file, it will be merged to the report as cover page.}
 
-\item{\code{theme}}{A `Theme` object from `{tlf}` package}
+\item{\code{theme}}{A \code{Theme} object from \code{{tlf}} package}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `PopulationWorkflow` object
+A new \code{PopulationWorkflow} object
 }
 }
 \if{html}{\out{<hr>}}
@@ -117,13 +117,15 @@ A new `PopulationWorkflow` object
 \subsection{Method \code{runWorkflow()}}{
 Run population workflow tasks for all simulation sets if tasks are activated
 The order of tasks is as follows:
-# 1) Run simulations
-# 2) Perform PK and sensitivity analyses
-# 3) Perform plot tasks
-## 3.a) time profiles and residual plots
-## 3.b) demography plots
-## 3.c) PK and sensitivity analyses tables and plots
-# 4) Render report
+\enumerate{
+\item Run simulations
+\item Perform PK and sensitivity analyses
+\item Perform plot tasks\if{html}{\out{<br>}}
+a. time profiles and residual plots\if{html}{\out{<br>}}
+b. demography plots\if{html}{\out{<br>}}
+c. PK and sensitivity analyses tables and plots\if{html}{\out{<br>}}
+\item Render report
+}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationWorkflow$runWorkflow()}\if{html}{\out{</div>}}
 }

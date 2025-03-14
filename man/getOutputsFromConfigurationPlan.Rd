@@ -8,13 +8,11 @@ getOutputsFromConfigurationPlan(configurationPlan)
 }
 \arguments{
 \item{configurationPlan}{The configuration plan of a Qualification workflow read from json file.}
-
-\item{simulation}{path of the output folder created or used by the Workflow.}
 }
 \value{
 A dataframe of project, simulation, output paths and (if applicable) pk parameters and start and end times of interval over which the pk parameter is evaluated
 }
 \description{
-Get a list of outputs from simulation and from `ConfigurationPlan`
+Get a list of outputs from simulation and from \code{ConfigurationPlan}
 }
 \keyword{internal}

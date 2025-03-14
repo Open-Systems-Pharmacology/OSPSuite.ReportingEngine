@@ -7,18 +7,18 @@
 loadSimulateTask(workflow, active = TRUE, settings = NULL)
 }
 \arguments{
-\item{workflow}{`Workflow` object or derived class}
+\item{workflow}{\code{Workflow} object or derived class}
 
-\item{active}{logical defining if `Task` will be run by workflow.
-Default value is `TRUE`}
+\item{active}{logical defining if \code{Task} will be run by workflow.
+Default value is \code{TRUE}}
 
-\item{settings}{specific settings for `simulate` task}
+\item{settings}{specific settings for \code{simulate} task}
 }
 \value{
-A `SimulationTask` object
+A \code{SimulationTask} object
 }
 \description{
-Define `simulate` task and its settings
+Define \code{simulate} task and its settings
 }
 \examples{
 \dontrun{

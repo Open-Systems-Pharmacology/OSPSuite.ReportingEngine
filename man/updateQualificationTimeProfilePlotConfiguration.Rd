@@ -13,18 +13,18 @@ updateQualificationTimeProfilePlotConfiguration(
 )
 }
 \arguments{
-\item{simulatedMetaData}{List of meta data on simulated data obtained from `getSimulatedCurveProperties`}
+\item{simulatedMetaData}{List of meta data on simulated data obtained from \code{getSimulatedCurveProperties}}
 
-\item{observedMetaData}{List of meta data on observed data obtained from `getObservedCurveProperties`}
+\item{observedMetaData}{List of meta data on observed data obtained from \code{getObservedCurveProperties}}
 
-\item{requestedAxes}{Array of requested axes included in `"Y"`, `"Y2"` and `"Y3"`}
+\item{requestedAxes}{Array of requested axes included in \code{"Y"}, \code{"Y2"} and \code{"Y3"}}
 
-\item{axesProperties}{list of axes properties obtained from `getAxesProperties`}
+\item{axesProperties}{list of axes properties obtained from \code{getAxesProperties}}
 
-\item{plotConfiguration}{A `PlotConfiguration` object}
+\item{plotConfiguration}{A \code{PlotConfiguration} object}
 }
 \value{
-Updated `TimeProfilePlotConfiguration` object
+Updated \code{TimeProfilePlotConfiguration} object
 }
 \description{
 Update TimeProfilePlotConfiguration properties based on meta data and requested axes

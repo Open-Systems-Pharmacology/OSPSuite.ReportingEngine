@@ -12,7 +12,7 @@ getElapsedTime(tic, unit = "min")
 \item{unit}{display unit of elapsed time}
 }
 \value{
-Character displaying elapsed time in `unit`
+Character displaying elapsed time in \code{unit}
 }
 \description{
 Get computer time as a character

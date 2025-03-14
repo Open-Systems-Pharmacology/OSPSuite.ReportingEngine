@@ -10,7 +10,7 @@ setXParametersForPKParametersPlot(workflow, parameters)
 setXParametersForPkParametersPlot(workflow, parameters)
 }
 \arguments{
-\item{workflow}{`PopulationWorkflow` R6 class object}
+\item{workflow}{\code{PopulationWorkflow} R6 class object}
 
 \item{parameters}{list of parameters to be used as x-parameters}
 }

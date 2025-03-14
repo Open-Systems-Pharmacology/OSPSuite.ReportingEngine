@@ -17,11 +17,11 @@ plotPopTimeProfileLog(
 
 \item{observedData}{data.frame of observed data}
 
-\item{metaData}{meta data on `data`}
+\item{metaData}{meta data on \code{data}}
 
-\item{dataMapping}{A list mapping `x`, `y` and `group` from datasets}
+\item{dataMapping}{A list mapping \code{x}, \code{y} and \code{group} from datasets}
 
-\item{plotConfiguration}{`PlotConfiguration` class object from `tlf` library}
+\item{plotConfiguration}{\code{PlotConfiguration} class object from \code{tlf} library}
 }
 \value{
 ggplot object of time profile for mean model workflow

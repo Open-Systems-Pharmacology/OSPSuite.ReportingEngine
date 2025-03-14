@@ -8,10 +8,10 @@ getStatisticsFromType(statisticsType)
 }
 \arguments{
 \item{statisticsType}{Statistics summarizing time profile simulated data
-as defined by helper enum `StatisticsType`}
+as defined by helper enum \code{StatisticsType}}
 }
 \value{
-A list including `y`, `ymin` and `ymax` summary statistics as well as their `caption`
+A list including \code{y}, \code{ymin} and \code{ymax} summary statistics as well as their \code{caption}
 }
 \description{
 Get statistics

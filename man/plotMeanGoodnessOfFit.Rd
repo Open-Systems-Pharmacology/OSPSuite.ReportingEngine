@@ -7,12 +7,12 @@
 plotMeanGoodnessOfFit(structureSet, settings = NULL)
 }
 \arguments{
-\item{structureSet}{`SimulationStructure` R6 class object}
+\item{structureSet}{\code{SimulationStructure} R6 class object}
 
-\item{settings}{List of settings such as `PlotConfiguration` R6 class objects for each goodness of fit plot}
+\item{settings}{List of settings such as \code{PlotConfiguration} R6 class objects for each goodness of fit plot}
 }
 \value{
-list with `plots`, `tables` and `residuals` objects to be saved
+list with \code{plots}, \code{tables} and \code{residuals} objects to be saved
 }
 \description{
 Plot goodness of fit diagnostics including time profiles,

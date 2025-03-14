@@ -84,13 +84,13 @@ PopulationWorkflow <- R6::R6Class(
     #' @description
     #' Run population workflow tasks for all simulation sets if tasks are activated
     #' The order of tasks is as follows:
-    #' # 1) Run simulations
-    #' # 2) Perform PK and sensitivity analyses
-    #' # 3) Perform plot tasks
-    #' ## 3.a) time profiles and residual plots
-    #' ## 3.b) demography plots
-    #' ## 3.c) PK and sensitivity analyses tables and plots
-    #' # 4) Render report
+    #' 1) Run simulations
+    #' 2) Perform PK and sensitivity analyses
+    #' 3) Perform plot tasks<br>
+    #' a. time profiles and residual plots<br>
+    #' b. demography plots<br>
+    #' c. PK and sensitivity analyses tables and plots<br>
+    #' 4) Render report
     #' @return All results and plots as a structured output in the workflow folder
     runWorkflow = function() {
       # Prevent crashes if folder was deleted before (re) running a worflow

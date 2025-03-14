@@ -14,16 +14,16 @@ updatePlotConfigurationTimeTicks(
 \arguments{
 \item{data}{data.frame}
 
-\item{metaData}{meta data on `data`}
+\item{metaData}{meta data on \code{data}}
 
-\item{dataMapping}{`XYGDataMapping` R6 class object from `tlf` library}
+\item{dataMapping}{\code{XYGDataMapping} R6 class object from \code{tlf} library}
 
-\item{plotConfiguration}{`PlotConfiguration` R6 class object from `tlf` library}
+\item{plotConfiguration}{\code{PlotConfiguration} R6 class object from \code{tlf} library}
 }
 \value{
-A `PlotConfiguration` object
+A \code{PlotConfiguration} object
 }
 \description{
-Update time ticks based on selected time unit in `PlotConfiguration` objects
+Update time ticks based on selected time unit in \code{PlotConfiguration} objects
 }
 \keyword{internal}

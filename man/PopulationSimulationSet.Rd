@@ -36,7 +36,7 @@ R6 class representing Reporting Engine Population Model Set
 \if{html}{\out{<a id="method-PopulationSimulationSet-new"></a>}}
 \if{latex}{\out{\hypertarget{method-PopulationSimulationSet-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new `PopulationSimulationSet` object.
+Create a new \code{PopulationSimulationSet} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationSimulationSet$new(
   referencePopulation = FALSE,
@@ -67,12 +67,12 @@ Create a new `PopulationSimulationSet` object.
 
 \item{\code{plotReferenceObsData}}{logical for plotting reference observed data in Pediatric and Ratio Comparison workflows}
 
-\item{\code{...}}{inputs inherited from `SimulationSet`}
+\item{\code{...}}{inputs inherited from \code{SimulationSet}}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `PopulationSimulationSet` object
+A new \code{PopulationSimulationSet} object
 }
 }
 \if{html}{\out{<hr>}}

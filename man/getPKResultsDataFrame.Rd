@@ -7,7 +7,7 @@
 getPKResultsDataFrame(structureSet)
 }
 \arguments{
-\item{structureSet}{`SimulationStructure` R6 class object}
+\item{structureSet}{\code{SimulationStructure} R6 class object}
 }
 \value{
 pkResultsDataFrame, a dataframe storing the contents of the CSV file with path pkParameterResultsFilePath

@@ -13,16 +13,16 @@ measureValuesBetween(x, left, right, method = "count", strict = FALSE)
 
 \item{right}{Numeric value(s) used as upper bound}
 
-\item{method}{One of the following methods `"count"`, `"ratio"`, and `"percent"`.}
+\item{method}{One of the following methods \code{"count"}, \code{"ratio"}, and \code{"percent"}.}
 
-\item{strict}{Logical value defining if `x` is strictly between `left` and `right`.
-Default value is `FALSE`.}
+\item{strict}{Logical value defining if \code{x} is strictly between \code{left} and \code{right}.
+Default value is \code{FALSE}.}
 }
 \value{
-Measure of `x` values between `left` and `right` bounds
+Measure of \code{x} values between \code{left} and \code{right} bounds
 }
 \description{
-Measure the values of `x` between `left` and `right` bounds according to `method`.
+Measure the values of \code{x} between \code{left} and \code{right} bounds according to \code{method}.
 }
 \examples{
 measureValuesBetween(1:12, 7, 9)

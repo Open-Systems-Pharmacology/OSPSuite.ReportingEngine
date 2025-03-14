@@ -7,10 +7,10 @@
 getMetaDataFrame(listOfMetaData)
 }
 \arguments{
-\item{listOfMetaData}{list including `Path` and `Concentration`}
+\item{listOfMetaData}{list including \code{Path} and \code{Concentration}}
 }
 \value{
-A data.frame with variables `path`, `dimension`, `unit`, `group`, `color`, `fill`
+A data.frame with variables \code{path}, \code{dimension}, \code{unit}, \code{group}, \code{color}, \code{fill}
 }
 \description{
 Get time profile list of metaData as a single data.frame

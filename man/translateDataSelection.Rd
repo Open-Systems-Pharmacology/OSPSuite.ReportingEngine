@@ -13,6 +13,6 @@ translateDataSelection(dataSelection)
 characters or expression to select subset the observed data
 }
 \description{
-Translate `dataSelection` input by user into characters/expression understood by `getSelectedData`
+Translate \code{dataSelection} input by user into characters/expression understood by \code{getSelectedData}
 }
 \keyword{internal}

@@ -7,18 +7,18 @@
 loadPlotAbsorptionTask(workflow, active = FALSE, settings = NULL)
 }
 \arguments{
-\item{workflow}{`MeanModelWorkflow` object or derived class}
+\item{workflow}{\code{MeanModelWorkflow} object or derived class}
 
-\item{active}{logical defining if `Task` will be run by workflow.
-Default value is `FALSE`}
+\item{active}{logical defining if \code{Task} will be run by workflow.
+Default value is \code{FALSE}}
 
-\item{settings}{specific settings for `plotAbsorption` task}
+\item{settings}{specific settings for \code{plotAbsorption} task}
 }
 \value{
-A `PlotTask` object
+A \code{PlotTask} object
 }
 \description{
-Define `plotAbsorption` task and its settings
+Define \code{plotAbsorption} task and its settings
 }
 \examples{
 \dontrun{

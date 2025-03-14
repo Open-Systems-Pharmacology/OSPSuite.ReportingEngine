@@ -7,7 +7,7 @@
 simulateModelParallel(structureSets, settings = NULL)
 }
 \arguments{
-\item{structureSets, }{a list of `SimulationStructure` R6 class objects contain paths of files to be used}
+\item{structureSets, }{a list of \code{SimulationStructure} R6 class objects contain paths of files to be used}
 
 \item{settings}{list of options to be passed to the function}
 }

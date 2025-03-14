@@ -7,10 +7,10 @@
 isLoadedSimulation(simulation)
 }
 \arguments{
-\item{simulation}{A `Simulation` object}
+\item{simulation}{A \code{Simulation} object}
 }
 \value{
-Logical indicating if the `simulation` exists
+Logical indicating if the \code{simulation} exists
 }
 \description{
 Check that the simulation has been loaded

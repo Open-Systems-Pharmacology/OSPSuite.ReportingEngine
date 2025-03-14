@@ -189,12 +189,12 @@ Workflow <- R6::R6Class(
     #' Set the watermark to be reported on figure background.
     #' The default value `NULL` leads to check if the computer has a validated environment.
     #' If the environment is validated, no watermark is reported on the background.
-    #' If the environment is NOT validated, \code{workflowWatermarkMessage} is reported on the background.
+    #' If the environment is NOT validated, `workflowWatermarkMessage` is reported on the background.
     #' Any user-defined text will overwrite this default feature and be reported on the figure background.
     #' @param watermark text to be reported on figures background.
     #' Default value is `NULL`, which leads to check if the computer has a validated environment.
     #' If the environment is validated, no watermark is reported on the background.
-    #' If the environment is NOT validated, \code{workflowWatermarkMessage} is reported on the background.
+    #' If the environment is NOT validated, `workflowWatermarkMessage` is reported on the background.
     #' Any user-defined text will overwrite this default feature and be reported on the figure background.
     setWatermark = function(watermark) {
       validateIsString(watermark, nullAllowed = TRUE)

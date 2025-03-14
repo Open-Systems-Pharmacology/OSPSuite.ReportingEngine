@@ -9,7 +9,7 @@ adjustTitlePage(fileName, qualificationVersionInfo = NULL)
 \arguments{
 \item{fileName}{name of .md file to update}
 
-\item{qualificationVersionInfo}{A `QualificationVersionInfo`object defining Qualification Version Information to be displayed on title page}
+\item{qualificationVersionInfo}{A \code{QualificationVersionInfo}object defining Qualification Version Information to be displayed on title page}
 }
 \description{
 Adjust Qualification Version Information to be displayed on title page

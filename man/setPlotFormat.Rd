@@ -15,11 +15,11 @@ setPlotFormat(
 \arguments{
 \item{format}{file format of the exported plots. E.g. "png" or "pdf"}
 
-\item{width}{plot width in `unit`}
+\item{width}{plot width in \code{unit}}
 
-\item{height}{plot height in `unit`}
+\item{height}{plot height in \code{unit}}
 
-\item{units}{units of `width` and `height` included in "in", "cm", "mm", or "px"}
+\item{units}{units of \code{width} and \code{height} included in "in", "cm", "mm", or "px"}
 
 \item{dpi}{Plot resolution in dots per inch. Caution, font sizes depend on resolution.}
 }

@@ -15,24 +15,24 @@ plotQualificationPopulationTimeProfile(
 )
 }
 \arguments{
-\item{simulationAnalysis}{Field `Analysis` from `ConfigurationPlan` population time profile plot}
+\item{simulationAnalysis}{Field \code{Analysis} from \code{ConfigurationPlan} population time profile plot}
 
-\item{observedDataCollection}{Field `ObservedDataCollection` from `ConfigurationPlan` population time profile plot}
+\item{observedDataCollection}{Field \code{ObservedDataCollection} from \code{ConfigurationPlan} population time profile plot}
 
-\item{simulation}{A `Simulation` object from `ospsuite` package
-that includes required information to identify and convert the data requested from `configurationPlanCurve` properties}
+\item{simulation}{A \code{Simulation} object from \code{ospsuite} package
+that includes required information to identify and convert the data requested from \code{configurationPlanCurve} properties}
 
-\item{simulationResults}{A `SimulationResults` object from `ospsuite` package
-that includes the data requested from `configurationPlanCurve` properties}
+\item{simulationResults}{A \code{SimulationResults} object from \code{ospsuite} package
+that includes the data requested from \code{configurationPlanCurve} properties}
 
-\item{axesProperties}{list of axes properties obtained from `getAxesProperties`}
+\item{axesProperties}{list of axes properties obtained from \code{getAxesProperties}}
 
-\item{configurationPlan}{A `ConfigurationPlan` object that includes methods to find observed data}
+\item{configurationPlan}{A \code{ConfigurationPlan} object that includes methods to find observed data}
 
-\item{plotObject}{A `ggplot` object}
+\item{plotObject}{A \code{ggplot} object}
 }
 \value{
-Population time profile plot as a `ggplot` object
+Population time profile plot as a \code{ggplot} object
 }
 \description{
 Plot population time profile for qualification workflow

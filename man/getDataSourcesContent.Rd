@@ -14,9 +14,9 @@ getDataSourcesContent(excelFile, dataSourcesTable, simulationSources)
 \item{simulationSources}{Names of DataSource objects used by simulation sets}
 }
 \value{
-Character vector defining the `DataSource` objects
+Character vector defining the \code{DataSource} objects
 }
 \description{
-Creates a character vector to be written in a workflow .R script defining `DataSource` objects.
+Creates a character vector to be written in a workflow .R script defining \code{DataSource} objects.
 }
 \keyword{internal}

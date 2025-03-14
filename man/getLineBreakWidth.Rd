@@ -8,11 +8,11 @@ getLineBreakWidth(element = "legend", plotConfiguration)
 }
 \arguments{
 \item{element}{The name of element to which the line break should be added.
-If applied to the legend, use `"legend"`.
-If applied to a plot label use e.g. `"ylabel"` or `"title"`.
-If applied to tick labels use `"yticks"` or `"yticklabels"`.}
+If applied to the legend, use \code{"legend"}.
+If applied to a plot label use e.g. \code{"ylabel"} or \code{"title"}.
+If applied to tick labels use \code{"yticks"} or \code{"yticklabels"}.}
 
-\item{PlotConfiguration}{A `PlotConfiguration` object from the `tlf` package}
+\item{plotConfiguration}{A \code{PlotConfiguration} object from the \code{tlf} package}
 }
 \value{
 An integer as max character width before using line breaks

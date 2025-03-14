@@ -7,19 +7,19 @@
 loadCalculateSensitivityTask(workflow, active = FALSE, settings = NULL)
 }
 \arguments{
-\item{workflow}{`Workflow` object or derived class}
+\item{workflow}{\code{Workflow} object or derived class}
 
-\item{active}{logical defining if `Task` will be run by workflow.
-Default value is `FALSE`}
+\item{active}{logical defining if \code{Task} will be run by workflow.
+Default value is \code{FALSE}}
 
-\item{settings}{specific settings for `calculateSensitivity` task}
+\item{settings}{specific settings for \code{calculateSensitivity} task}
 }
 \value{
-A `PopulationSensitivityAnalysisTask` for `PopulationWorkflow` objects.
-A `SensitivityAnalysisTask` object otherwise
+A \code{PopulationSensitivityAnalysisTask} for \code{PopulationWorkflow} objects.
+A \code{SensitivityAnalysisTask} object otherwise
 }
 \description{
-Define `calculateSensitivity` task and its settings
+Define \code{calculateSensitivity} task and its settings
 }
 \examples{
 \dontrun{

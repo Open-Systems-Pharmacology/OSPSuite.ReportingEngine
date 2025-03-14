@@ -9,14 +9,14 @@ getQualificationGOFData(gofPlan, configurationPlan, axesUnits)
 \arguments{
 \item{gofPlan}{List providing the mapping of observed and simulated data}
 
-\item{configurationPlan}{A `ConfigurationPlan` object}
+\item{configurationPlan}{A \code{ConfigurationPlan} object}
 
-\item{axesUnits}{list of axes properties obtained from `getGOFAxesUnits`}
+\item{axesUnits}{list of axes properties obtained from \code{getGOFAxesUnits}}
 }
 \value{
-list with `data` and `metaData`
+list with \code{data} and \code{metaData}
 }
 \description{
-Get data of goodness of fit from field `GOFMergedPlots` of configuration plan
+Get data of goodness of fit from field \code{GOFMergedPlots} of configuration plan
 }
 \keyword{internal}

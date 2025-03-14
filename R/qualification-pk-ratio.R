@@ -69,7 +69,7 @@ plotQualificationPKRatio <- function(configurationPlan, settings) {
 
 #' @title getQualificationPKRatioGMFE
 #' @description Get Geometric Mean Fold Error for PK ratio plots
-#' @param pkParameterName Name of PK Parameter as defined by users
+#' @param pkParameterNames Name of PK Parameter as defined by users
 #' @param data data.frame with PK Ratios
 #' @return A data.frame
 #' @keywords internal

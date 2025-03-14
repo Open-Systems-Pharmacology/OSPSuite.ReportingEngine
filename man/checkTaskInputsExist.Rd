@@ -7,7 +7,7 @@
 checkTaskInputsExist(task)
 }
 \arguments{
-\item{task}{`Task` object or derived class}
+\item{task}{\code{Task} object or derived class}
 }
 \value{
 Named list of logical values assessing if the files exist

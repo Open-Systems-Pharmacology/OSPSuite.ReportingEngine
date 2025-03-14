@@ -10,9 +10,9 @@ formatAxisProperties(axisField)
 \item{axisField}{List of configuration plan field properties}
 }
 \value{
-A list of properties compatible with `tlf` package nomenclature
+A list of properties compatible with \code{tlf} package nomenclature
 }
 \description{
-Format configuration plan field values to a list compatible with `tlf` package nomenclature
+Format configuration plan field values to a list compatible with \code{tlf} package nomenclature
 }
 \keyword{internal}

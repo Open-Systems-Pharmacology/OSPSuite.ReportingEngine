@@ -12,18 +12,18 @@ getPKRatioForMapping(
 )
 }
 \arguments{
-\item{pkRatioMapping}{List providing the PK ratio mapping from field `PKRatios` of configuration plan}
+\item{pkRatioMapping}{List providing the PK ratio mapping from field \code{PKRatios} of configuration plan}
 
 \item{pkParameterNames}{Names of PK Parameters as defined by users}
 
-\item{configurationPlan}{A `ConfigurationPlan` object}
+\item{configurationPlan}{A \code{ConfigurationPlan} object}
 
 \item{settings}{settings for the task}
 }
 \value{
-list with `data` and `metaData`
+list with \code{data} and \code{metaData}
 }
 \description{
-Get data of pk ratio from field `PKRatios` of configuration plan
+Get data of pk ratio from field \code{PKRatios} of configuration plan
 }
 \keyword{internal}

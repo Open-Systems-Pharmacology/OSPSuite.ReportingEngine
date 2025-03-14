@@ -7,9 +7,9 @@
 getPopulationPKData(population, simulation)
 }
 \arguments{
-\item{population}{A `Population` object from the `{ospsuite}` package}
+\item{population}{A \code{Population} object from the \code{{ospsuite}} package}
 
-\item{simulation}{A `Simulation` object from the `{ospsuite}` package}
+\item{simulation}{A \code{Simulation} object from the \code{{ospsuite}} package}
 }
 \value{
 A data.frame

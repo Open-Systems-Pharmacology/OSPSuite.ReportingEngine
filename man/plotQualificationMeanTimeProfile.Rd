@@ -14,22 +14,22 @@ plotQualificationMeanTimeProfile(
 )
 }
 \arguments{
-\item{simulation}{A `Simulation` object from `ospsuite` package
-that includes required information to identify and convert the data requested from `configurationPlanCurve` properties}
+\item{configurationPlanCurves}{\code{Curves} fields of configuration plan}
 
-\item{simulationResults}{A `SimulationResults` object from `ospsuite` package
-that includes the data requested from `configurationPlanCurve` properties}
+\item{simulation}{A \code{Simulation} object from \code{ospsuite} package
+that includes required information to identify and convert the data requested from \code{configurationPlanCurve} properties}
 
-\item{axesProperties}{list of axes properties obtained from `getAxesProperties`}
+\item{simulationResults}{A \code{SimulationResults} object from \code{ospsuite} package
+that includes the data requested from \code{configurationPlanCurve} properties}
 
-\item{configurationPlan}{A `ConfigurationPlan` object that includes methods to find observed data}
+\item{axesProperties}{list of axes properties obtained from \code{getAxesProperties}}
 
-\item{plotConfiguration}{A `TimeProfilePlotConfiguration` object}
+\item{configurationPlan}{A \code{ConfigurationPlan} object that includes methods to find observed data}
 
-\item{configurationPlanCurve}{`Curves` fields of configuration plan}
+\item{plotConfiguration}{A \code{TimeProfilePlotConfiguration} object}
 }
 \value{
-Mean time profile plot as a `ggplot` object
+Mean time profile plot as a \code{ggplot} object
 }
 \description{
 Plot mean time profile for qualification workflow

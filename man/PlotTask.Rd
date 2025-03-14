@@ -76,7 +76,7 @@ Other workflow tasks:
 \if{html}{\out{<a id="method-PlotTask-new"></a>}}
 \if{latex}{\out{\hypertarget{method-PlotTask-new}{}}}
 \subsection{Method \code{new()}}{
-Create a `PlotTask` object
+Create a \code{PlotTask} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PlotTask$new(
   reportTitle = NULL,
@@ -101,19 +101,19 @@ Create a `PlotTask` object
 
 \item{\code{nameTaskResults}}{name of the function that returns task results,}
 
-\item{\code{...}}{input parameters inherited from `Task` R6 class}
+\item{\code{...}}{input parameters inherited from \code{Task} R6 class}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `PlotTask` object
+A new \code{PlotTask} object
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PlotTask-saveResults"></a>}}
 \if{latex}{\out{\hypertarget{method-PlotTask-saveResults}{}}}
 \subsection{Method \code{saveResults()}}{
-Save the task results related to a `structureSet`.
+Save the task results related to a \code{structureSet}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PlotTask$saveResults(structureSet, taskResults)}\if{html}{\out{</div>}}
 }
@@ -121,9 +121,9 @@ Save the task results related to a `structureSet`.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{structureSet}}{A `SimulationStructure` object defining the properties of a simulation set}
+\item{\code{structureSet}}{A \code{SimulationStructure} object defining the properties of a simulation set}
 
-\item{\code{taskResults}}{list of `TaskResults` objects}
+\item{\code{taskResults}}{list of \code{TaskResults} objects}
 }
 \if{html}{\out{</div>}}
 }
@@ -140,7 +140,7 @@ Run task and save its output results
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{structureSets}}{list of `SimulationStructure` objects}
+\item{\code{structureSets}}{list of \code{SimulationStructure} objects}
 }
 \if{html}{\out{</div>}}
 }

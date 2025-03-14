@@ -12,6 +12,6 @@ ConfigurationFontsFields
 }
 \description{
 Enum defining possible fonts fields defined in configuration plan
-Note that some fields might not be used/converted by the current `ospsuite.reportingengine` or `tlf` version (e.g. FontFamilyName)
+Note that some fields might not be used/converted by the current \code{ospsuite.reportingengine} or \code{tlf} version (e.g. FontFamilyName)
 }
 \keyword{internal}

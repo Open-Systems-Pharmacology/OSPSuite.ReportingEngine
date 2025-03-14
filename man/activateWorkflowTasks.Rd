@@ -7,13 +7,13 @@
 activateWorkflowTasks(workflow, tasks = workflow$getAllTasks())
 }
 \arguments{
-\item{workflow}{A `Workflow` object}
+\item{workflow}{A \code{Workflow} object}
 
 \item{tasks}{names of the tasks to activate
-Default activates all tasks of the workflow using workflow method `workflow$getAllTasks()`}
+Default activates all tasks of the workflow using workflow method \code{workflow$getAllTasks()}}
 }
 \description{
-activates a series of `Tasks` from a `Workflow`
+activates a series of \code{Tasks} from a \code{Workflow}
 }
 \examples{
 \dontrun{

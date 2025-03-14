@@ -7,9 +7,9 @@
 checkIsSamePopulation(simulationSet, referenceSet)
 }
 \arguments{
-\item{simulationSet}{A `PopulationSimulationSet` object}
+\item{simulationSet}{A \code{PopulationSimulationSet} object}
 
-\item{referenceSet}{A `PopulationSimulationSet` object}
+\item{referenceSet}{A \code{PopulationSimulationSet} object}
 }
 \value{
 A logical

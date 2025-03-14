@@ -9,12 +9,12 @@ getPKParametersInfoContent(excelFile, pkParametersSheet)
 \arguments{
 \item{excelFile}{name of the Excel file from which the R script is created}
 
-\item{pkParametersSheet}{name of the Excel sheet that defines the `pkParameters` information}
+\item{pkParametersSheet}{name of the Excel sheet that defines the \code{pkParameters} information}
 }
 \value{
-Character vector defining `pkParameters` input of `Output` object
+Character vector defining \code{pkParameters} input of \code{Output} object
 }
 \description{
-Creates a character vector to be written in a workflow .R script defining `pkParameters` input of `Output` object.
+Creates a character vector to be written in a workflow .R script defining \code{pkParameters} input of \code{Output} object.
 }
 \keyword{internal}

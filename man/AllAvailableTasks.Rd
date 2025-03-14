@@ -11,7 +11,7 @@ An object of class \code{list} of length 9.
 AllAvailableTasks
 }
 \description{
-Names of all existing tasks that can be performed by `MeanModelWorkflow` or `PopulationWorkflow` objects
+Names of all existing tasks that can be performed by \code{MeanModelWorkflow} or \code{PopulationWorkflow} objects
 }
 \examples{
 

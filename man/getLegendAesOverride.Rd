@@ -14,7 +14,7 @@ A list of aesthetic values
 }
 \description{
 In time profiles, legends are merged into one unique legend
-The displayed legend is stored in the `plotObject` within the color guide field `override.aes`.
+The displayed legend is stored in the \code{plotObject} within the color guide field \code{override.aes}.
 This function simply gets the list from that field for updating the current legend
 }
 \keyword{internal}

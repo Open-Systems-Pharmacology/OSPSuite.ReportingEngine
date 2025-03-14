@@ -19,12 +19,12 @@ getResidualsPlotResults(
 
 \item{metaDataFrame}{metaData represented as a data.frame}
 
-\item{structureSet}{A `SimulationStructure` object}
+\item{structureSet}{A \code{SimulationStructure} object}
 
 \item{settings}{Optional settings for the plots. In particular, includes reference data for population time profile.}
 }
 \value{
-List of `plots`, their `captions` and `data` to export
+List of \code{plots}, their \code{captions} and \code{data} to export
 }
 \description{
 Get plots and their captions for residuals

@@ -7,5 +7,5 @@
 displayDebugLogs()
 }
 \description{
-`Debug` logs are displayed on R/RStudio console
+\code{Debug} logs are displayed on R/RStudio console
 }

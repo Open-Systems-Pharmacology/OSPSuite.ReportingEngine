@@ -10,7 +10,7 @@ getPKParametersInOutput(output)
 \item{output}{Output object}
 }
 \value{
-Names of pkParameters in `output`
+Names of pkParameters in \code{output}
 }
 \description{
 getPKParametersInOutput

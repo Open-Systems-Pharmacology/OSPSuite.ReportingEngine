@@ -9,14 +9,14 @@ parseVariableFromObject(objectName, variableName, keepIfNull = FALSE)
 \arguments{
 \item{objectName}{Name of the object whose field is updated}
 
-\item{variableName}{Name of the variable and field of `objectName`}
+\item{variableName}{Name of the variable and field of \code{objectName}}
 
-\item{keepIfNull}{logical `variableName <- objectName$variableName \%||\% variableName`}
+\item{keepIfNull}{logical \verb{variableName <- objectName$variableName \\\%||\\\% variableName}}
 }
 \value{
-An expression to `eval()`
+An expression to \code{eval()}
 }
 \description{
-Create an expression of type `variableName <- objectName$variableName`
+Create an expression of type \code{variableName <- objectName$variableName}
 }
 \keyword{internal}

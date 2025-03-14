@@ -9,12 +9,12 @@ prettyCaption(captions, plotObject, element = "legend")
 \arguments{
 \item{captions}{Array of character strings to render}
 
-\item{plotObject}{A `ggplot` object}
+\item{plotObject}{A \code{ggplot} object}
 
 \item{element}{The name of element to which the line break should be added.
-If applied to the legend, use `"legend"`.
-If applied to a plot label use e.g. `"ylabel"` or `"title"`.
-If applied to tick labels use `"yticks"` or `"yticklabels"`.}
+If applied to the legend, use \code{"legend"}.
+If applied to a plot label use e.g. \code{"ylabel"} or \code{"title"}.
+If applied to tick labels use \code{"yticks"} or \code{"yticklabels"}.}
 }
 \value{
 A character vector of wrapped strings with line breaks at sensible places.

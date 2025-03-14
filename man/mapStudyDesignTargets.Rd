@@ -9,12 +9,12 @@ mapStudyDesignTargets(data, population, simulation)
 \arguments{
 \item{data}{data.frame read from a study design file}
 
-\item{population}{`Population` object}
+\item{population}{\code{Population} object}
 
-\item{simulation}{`Simulation` object}
+\item{simulation}{\code{Simulation} object}
 }
 \value{
-list of `StudyDesignTarget` objects
+list of \code{StudyDesignTarget} objects
 }
 \description{
 mapStudyDesignTargets

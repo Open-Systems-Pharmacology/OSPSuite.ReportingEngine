@@ -7,10 +7,10 @@
 getPlotSettings(plotSettingsFromConfigurationPlot)
 }
 \arguments{
-\item{plotSettingsFromConfigurationPlot}{is a field from the `configurationPlan$plots` list}
+\item{plotSettingsFromConfigurationPlot}{is a field from the \code{configurationPlan$plots} list}
 }
 \value{
-`plotSettings`, a list of settings for each of the X and Y axis.  Each list contains the unit, dimensions, and scaling type for each axes and option to plot grid lines.
+\code{plotSettings}, a list of settings for each of the X and Y axis.  Each list contains the unit, dimensions, and scaling type for each axes and option to plot grid lines.
 }
 \description{
 Read plot settings from configuration plan.

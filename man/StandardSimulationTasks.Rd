@@ -11,7 +11,7 @@ An object of class \code{list} of length 3.
 StandardSimulationTasks
 }
 \description{
-Names of simulation tasks performed by both `MeanModelWorkflow` and `PopulationWorkflow` objects
+Names of simulation tasks performed by both \code{MeanModelWorkflow} and \code{PopulationWorkflow} objects
 }
 \examples{
 

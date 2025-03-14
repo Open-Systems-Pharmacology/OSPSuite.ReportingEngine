@@ -1,7 +1,7 @@
 Type: Package
 Package: ospsuite.reportingengine
 Title: R package to create reports for the Open Systems Pharmacology models
-Version: 2.2.0
+Version: 2.3.0
 Authors@R: 
     c(person(given = "Open-Systems-Pharmacology Community",
              role = "cph"),
@@ -31,28 +31,36 @@ BugReports:
     https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues
 Depends: 
     R (>= 4.1),
-    ospsuite (>= 12.0),
-    tlf (>= 1.5),
-    rSharp (>= 1.0)
+    tlf (>= 1.6.0),
+    ospsuite (>= 12.1.0)
 Imports: 
     R6,
     ggplot2,
     jsonlite,
-    ospsuite.utils (>= 1.4.0),
+    ospsuite.utils (>= 1.6.0.9000),
+    rSharp (>= 1.0.0),
     dplyr,
-    tidyr
+    tidyr,
+    cowplot
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
     rmarkdown,
-    Rmpi,
+    devtools (>= 2.4.5),
     readxl,
-    tracelib,
     styler,
     crayon,
     webshot,
-    parallel
+    webshot2,
+    parallel,
+    devtools
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
 VignetteBuilder: knitr
+Remotes: 
+    Open-Systems-Pharmacology/rSharp,
+    ospsuite.utils=Open-Systems-Pharmacology/OSPSuite.RUtils,
+    tlf=Open-Systems-Pharmacology/TLF-Library,
+    ospsuite=Open-Systems-Pharmacology/OSPSuite-R
+Roxygen: list(markdown = TRUE)

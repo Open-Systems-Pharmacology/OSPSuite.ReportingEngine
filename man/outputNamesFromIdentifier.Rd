@@ -8,7 +8,7 @@ outputNamesFromIdentifier(outputsId)
 }
 \arguments{
 \item{outputsId}{Content translated from cell corresponding to outputs in SimulationSets sheet.
-The `outputsId` are expected as `"c(outputName1, outputName2, etc.)"`}
+The \code{outputsId} are expected as \code{"c(outputName1, outputName2, etc.)"}}
 }
 \value{
 names of Output objects in SimulationSets sheet

@@ -16,10 +16,10 @@ getTimeProfilePlotResults(
 )
 }
 \arguments{
-\item{workflowType}{`"mean"` or `"population"` workflow}
+\item{workflowType}{\code{"mean"} or \code{"population"} workflow}
 
 \item{timeRange}{array of time values defining range of simulated data.
-Note that `timeRange` accounts for user defined `timeOffset`}
+Note that \code{timeRange} accounts for user defined \code{timeOffset}}
 
 \item{simulatedData}{data.frame of simulated data}
 
@@ -29,12 +29,12 @@ Note that `timeRange` accounts for user defined `timeOffset`}
 
 \item{timeProfileMapping}{list of variables to map in the time profile plots}
 
-\item{structureSet}{A `SimulationStructure` object}
+\item{structureSet}{A \code{SimulationStructure} object}
 
 \item{settings}{Optional settings for the plots. In particular, includes reference data for population time profile.}
 }
 \value{
-List of `plots` and their `captions`
+List of \code{plots} and their \code{captions}
 }
 \description{
 Get plots and their captions for mean or population time profiles

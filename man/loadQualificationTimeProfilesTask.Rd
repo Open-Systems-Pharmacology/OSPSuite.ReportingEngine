@@ -7,15 +7,15 @@
 loadQualificationTimeProfilesTask(workflow, configurationPlan)
 }
 \arguments{
-\item{workflow}{`QualificationWorkflow` object}
+\item{workflow}{\code{QualificationWorkflow} object}
 
-\item{configurationPlan}{A `ConfigurationPlan` object}
+\item{configurationPlan}{A \code{ConfigurationPlan} object}
 }
 \value{
-A `QualificationTask` object
+A \code{QualificationTask} object
 }
 \description{
-Define `plotTimeProfiles` task and its settings
+Define \code{plotTimeProfiles} task and its settings
 }
 \seealso{
 Other workflow tasks: 

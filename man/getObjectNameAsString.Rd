@@ -10,7 +10,7 @@ getObjectNameAsString(object)
 \item{object}{the name of which is to be returned}
 }
 \value{
-the name of the `object` as a string
+the name of the \code{object} as a string
 }
 \description{
 Return the name of an object as a string

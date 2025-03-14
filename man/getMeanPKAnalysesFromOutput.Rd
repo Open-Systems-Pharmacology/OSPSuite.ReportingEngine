@@ -9,14 +9,14 @@ getMeanPKAnalysesFromOutput(data, output, molWeight = NULL)
 \arguments{
 \item{data}{A data.frame of PK Analyses}
 
-\item{output}{An `Output` object defining `pkParameters`}
+\item{output}{An \code{Output} object defining \code{pkParameters}}
 
-\item{molWeight}{Molecular weight for converting into PK Parameter `displayUnit`}
+\item{molWeight}{Molecular weight for converting into PK Parameter \code{displayUnit}}
 }
 \value{
-A data.frame with `Path`, `Parameter`, `Value` and `Unit` to display in final report
+A data.frame with \code{Path}, \code{Parameter}, \code{Value} and \code{Unit} to display in final report
 }
 \description{
-Get PK analyses from an `Output` object
+Get PK analyses from an \code{Output} object
 }
 \keyword{internal}

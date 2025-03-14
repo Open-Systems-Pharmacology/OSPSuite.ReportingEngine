@@ -9,7 +9,7 @@ updatePlotAxes(plotObject, axesProperties)
 \arguments{
 \item{plotObject}{A ggplot object}
 
-\item{axesProperties}{list of axes properties obtained from `getAxesForTimeProfiles`}
+\item{axesProperties}{list of axes properties obtained from \code{getAxesForTimeProfiles}}
 }
 \value{
 A ggplot object

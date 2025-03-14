@@ -14,7 +14,7 @@ vpcParameterPlot(
 \arguments{
 \item{data}{data.frame}
 
-\item{metaData}{list of metaData about `data`}
+\item{metaData}{list of metaData about \code{data}}
 
 \item{plotConfiguration}{PlotConfiguration R6 class object}
 

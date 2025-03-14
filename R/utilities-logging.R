@@ -176,7 +176,7 @@ logCatch <- function(expr) {
             "rows containing missing values",
             "Ignoring unknown parameters",
             "was deprecated in ggplot2",
-            "font family not found in Windows font database",
+            "(font family)*(not found)*(font database)",
             # warning thrown because of non-ASCII unicode characters
             "mbcsToSbcs"
           ),

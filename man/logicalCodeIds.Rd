@@ -12,6 +12,6 @@ logicalCodeIds
 }
 \description{
 Some of the identifiers above need to be treated
-as logical by [getIdentifierInfo()] while usually input as `"Yes"`/`"No"`
+as logical by \code{\link[=getIdentifierInfo]{getIdentifierInfo()}} while usually input as \code{"Yes"}/\code{"No"}
 }
 \keyword{internal}

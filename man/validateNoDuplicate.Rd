@@ -16,12 +16,12 @@ validateNoDuplicate(
 
 \item{variableName}{Name of variable that can be used to display a useful message}
 
-\item{na.rm}{logical indicating if `NA` values should be removed before the check}
+\item{na.rm}{logical indicating if \code{NA} values should be removed before the check}
 
-\item{nullAllowed}{logical indicating if `NULL` values should be allowed}
+\item{nullAllowed}{logical indicating if \code{NULL} values should be allowed}
 }
 \description{
-Leverage `ospsuite.utils::validateHasOnlyDistinctValues()` to
+Leverage \code{ospsuite.utils::validateHasOnlyDistinctValues()} to
 validate that a vector has only distinct values and display a useful message.
 }
 \keyword{internal}

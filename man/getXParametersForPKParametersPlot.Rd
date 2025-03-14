@@ -10,7 +10,7 @@ getXParametersForPKParametersPlot(workflow)
 getXParametersForPkParametersPlot(workflow)
 }
 \arguments{
-\item{workflow}{`PopulationWorkflow` R6 class object}
+\item{workflow}{\code{PopulationWorkflow} R6 class object}
 }
 \value{
 list of x-parameters used for PK parameters range plots

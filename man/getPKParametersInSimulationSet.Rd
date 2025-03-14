@@ -7,10 +7,10 @@
 getPKParametersInSimulationSet(simulationSet)
 }
 \arguments{
-\item{simulationSet}{A `SimulationSet` object}
+\item{simulationSet}{A \code{SimulationSet} object}
 }
 \value{
-A data.frame including \code{path} and \code{pkParameter} from the `outputs` field of `simulationSet`
+A data.frame including \code{path} and \code{pkParameter} from the \code{outputs} field of \code{simulationSet}
 }
 \description{
 getPKParametersInSimulationSet

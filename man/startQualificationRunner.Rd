@@ -24,10 +24,10 @@ startQualificationRunner(
 \item{outputFolder}{Name of output folder created by the qualification runner}
 
 \item{pkSimPortableFolder}{Folder where PK-Sim is located.
-If not specified, installation path will be read from the registry (available only in case of full **non-portable** installation).
-This option is **MANDATORY** for the portable version of PK-Sim.}
+If not specified, installation path will be read from the registry (available only in case of full \strong{non-portable} installation).
+This option is \strong{MANDATORY} for the portable version of PK-Sim.}
 
-\item{configurationPlanName}{Name of the configuration plan to be generated. Default is `"report-configuration-plan"`}
+\item{configurationPlanName}{Name of the configuration plan to be generated. Default is \code{"report-configuration-plan"}}
 
 \item{overwrite}{Logical defining if the contents of the output folder will be deleted, even if it not empty. Default is false.}
 

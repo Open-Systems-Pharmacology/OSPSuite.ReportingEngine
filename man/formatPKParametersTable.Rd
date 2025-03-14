@@ -7,11 +7,11 @@
 formatPKParametersTable(structureSet, pkParametersTable, populationTable)
 }
 \arguments{
+\item{structureSet}{A \code{SimulationStructure} object}
+
 \item{pkParametersTable}{A data.frame of PK parameters}
 
 \item{populationTable}{A data.frame of population parameters}
-
-\item{structureSets}{A `SimulationStructure` objects}
 }
 \value{
 A data.frame and its metaData including the values of PK parameters across Population Simulation sets

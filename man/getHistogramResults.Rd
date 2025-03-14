@@ -30,10 +30,10 @@ getHistogramResults(
 
 \item{simulationSetDescriptor}{Character describing the population sets within the report}
 
-\item{demographyResults}{A list of `TaskResults` objects}
+\item{demographyResults}{A list of \code{TaskResults} objects}
 }
 \value{
-A list of `TaskResults` objects
+A list of \code{TaskResults} objects
 }
 \description{
 Get Histogram results for Parallel and Ratio Comparison workflows

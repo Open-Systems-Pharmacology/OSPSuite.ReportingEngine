@@ -7,10 +7,10 @@
 getWorkflowReferencePopulationName(workflow)
 }
 \arguments{
-\item{workflow}{A `PopulationWorkflow` object}
+\item{workflow}{A \code{PopulationWorkflow} object}
 }
 \description{
-Get `simulationSetName` from the reference `PopulationSimulationSet` of a `Workflow` object
+Get \code{simulationSetName} from the reference \code{PopulationSimulationSet} of a \code{Workflow} object
 }
 \seealso{
 Other workflow helpers: 

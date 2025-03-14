@@ -10,6 +10,6 @@ loadPackageOnCores(packageName)
 \item{packageName}{Name of package to be loaded}
 }
 \description{
-Load `packageName` namespace to core, load the library and check that it has been loaded successfully
+Load \code{packageName} namespace to core, load the library and check that it has been loaded successfully
 }
 \keyword{internal}

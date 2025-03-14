@@ -7,7 +7,7 @@
 showLogMessages(logTypes = LogTypes)
 }
 \arguments{
-\item{logTypes}{Select specific logs in `LogTypes` that will be displayed in the data.frame.}
+\item{logTypes}{Select specific logs in \code{LogTypes} that will be displayed in the data.frame.}
 }
 \description{
 Display log messages as a data.frame

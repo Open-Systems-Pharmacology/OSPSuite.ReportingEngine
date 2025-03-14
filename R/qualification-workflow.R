@@ -57,14 +57,14 @@ QualificationWorkflow <- R6::R6Class(
     #' @description
     #' Run qualification workflow tasks for all simulation sets if tasks are activated
     #' The order of tasks is as follows:
-    #' # 1) Run simulations
-    #' # 2) Perform PK analyses
-    #' # 3) Perform plot tasks
-    #' ## 3.a) time profiles and residual plots
-    #' ## 3.b) comparison time profiles plots
-    #' ## 3.c) PK ratio tables and plots
-    #' ## 3.d) DDI ratio tables and plots
-    #' # 4) Render report
+    #' 1) Run simulations
+    #' 2) Perform PK analyses
+    #' 3) Perform plot tasks<br>
+    #' a. time profiles and residual plots<br>
+    #' b. comparison time profiles plots<br>
+    #' c. PK ratio tables and plots<br>
+    #' d. DDI ratio tables and plots
+    #' 4) Render report
     #' @return All results and plots as a structured output in the workflow folder
     runWorkflow = function() {
       # Prevent crashes if folder was deleted before (re) running a worflow

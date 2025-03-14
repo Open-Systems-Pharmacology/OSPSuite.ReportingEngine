@@ -15,13 +15,13 @@ getSimulatedResultsFromOutput(
 \arguments{
 \item{simulationPathResults}{list with simulated data included}
 
-\item{output}{An `Output` object}
+\item{output}{An \code{Output} object}
 
 \item{simulationQuantity}{Dimension/quantity for unit conversion of dependent variable}
 
 \item{molWeight}{Molar weight for unit conversion of dependent variable}
 
-\item{structureSet}{`SimulationStructure` object}
+\item{structureSet}{\code{SimulationStructure} object}
 }
 \value{
 list of data and metaData

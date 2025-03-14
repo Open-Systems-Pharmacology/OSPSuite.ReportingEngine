@@ -7,7 +7,7 @@
 getCaptionFromStat(statisticId, outputName)
 }
 \arguments{
-\item{statisticId}{Statistic Id as defined in `ConfigurationPlan` used for data aggregation}
+\item{statisticId}{Statistic Id as defined in \code{ConfigurationPlan} used for data aggregation}
 
 \item{outputName}{Display name of output values}
 }

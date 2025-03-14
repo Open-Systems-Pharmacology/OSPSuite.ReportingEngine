@@ -14,14 +14,14 @@ getObservedErrorValues(
 \arguments{
 \item{observedValues}{Numeric values of observed data}
 
-\item{observedResults}{A named list, including `data` and `metaData`, of observed results.}
+\item{observedResults}{A named list, including \code{data} and \code{metaData}, of observed results.}
 
-\item{axesProperties}{list of axes properties obtained from `getAxesProperties`}
+\item{axesProperties}{list of axes properties obtained from \code{getAxesProperties}}
 
 \item{molWeight}{Molecular weight if unit conversion is required}
 }
 \value{
-A named list, with `ymin` and `ymax`, of the observed data error range
+A named list, with \code{ymin} and \code{ymax}, of the observed data error range
 }
 \description{
 Get the observed data error range to display on time profile plots

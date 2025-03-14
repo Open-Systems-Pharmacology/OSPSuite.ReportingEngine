@@ -82,7 +82,7 @@ getOutputPathsInSimulationSet <- function(simulationSet) {
 
 #' @title getPKParametersInSimulationSet
 #' @param simulationSet A `SimulationSet` object
-#' @return A data.frame including \code{path} and \code{pkParameter} from the `outputs` field of `simulationSet`
+#' @return A data.frame including `path` and `pkParameter` from the `outputs` field of `simulationSet`
 #' @export
 #' @family workflow helpers
 getPKParametersInSimulationSet <- function(simulationSet) {
@@ -245,7 +245,7 @@ getSimulationTimeRanges <- function(simulation, path, simulationSet) {
 
 #' @title getApplicationTimesForSimulation
 #' @param simulation A `Simulation` object
-#' @param output A list of `Output` objects
+#' @param outputs A list of `Output` objects
 #' @return Time values of applications
 #' @keywords internal
 getApplicationTimesForSimulation <- function(simulation, outputs) {

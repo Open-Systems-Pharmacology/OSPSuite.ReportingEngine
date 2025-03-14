@@ -14,9 +14,9 @@ getIdentifierInfo(workflowTable, simulationIndex, codeId)
 \item{codeId}{Line to read in the data.frame corresponding to a specific value of "Code Identifier"}
 }
 \value{
-Information from a data.frame matching a certain `simulationIndex` column and `codeId` line
+Information from a data.frame matching a certain \code{simulationIndex} column and \code{codeId} line
 }
 \description{
-Get and format the information from a data.frame matching a certain `simulationIndex` column and `codeId` line
+Get and format the information from a data.frame matching a certain \code{simulationIndex} column and \code{codeId} line
 }
 \keyword{internal}

@@ -9,7 +9,7 @@ updateTargetValues(values, targetValues, sourceExpressions, data)
 \arguments{
 \item{values}{initial vector to update}
 
-\item{targetValues}{vector of values to be assigned using `sourceExpressions`}
+\item{targetValues}{vector of values to be assigned using \code{sourceExpressions}}
 
 \item{sourceExpressions}{study design expressions to be evaluated}
 

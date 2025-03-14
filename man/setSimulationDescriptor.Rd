@@ -7,7 +7,7 @@
 setSimulationDescriptor(workflow, text)
 }
 \arguments{
-\item{workflow}{A `Workflow` object}
+\item{workflow}{A \code{Workflow} object}
 
 \item{text}{Character describing simulation sets}
 }

@@ -7,10 +7,10 @@
 getSimulationSetType(workflowMode)
 }
 \arguments{
-\item{workflowMode}{Either `PopulationWorkflow` or `MeanModelWorkflow`}
+\item{workflowMode}{Either \code{PopulationWorkflow} or \code{MeanModelWorkflow}}
 }
 \value{
-`PopulationSimulationSet` or `SimulationSet` as character
+\code{PopulationSimulationSet} or \code{SimulationSet} as character
 }
 \description{
 Output the SimulationSet object matching the appropriate workflow type

@@ -17,16 +17,16 @@ getPopulationPKAnalysesFromOutput(
 
 \item{metaData}{metaData (dimension and unit) of the PK Analyses across Population Simulation sets}
 
-\item{output}{An `Output ` object}
+\item{output}{An \code{Output } object}
 
-\item{pkParameter}{`pkParameter` from `Output ` object}
+\item{pkParameter}{\code{pkParameter} from \code{Output } object}
 
 \item{molWeight}{Molecular weight of compound (if unit conversion needed)}
 }
 \value{
-list of data.frame and its metaData including the values of PK parameters specified by `pkParameter` and `Output` objects
+list of data.frame and its metaData including the values of PK parameters specified by \code{pkParameter} and \code{Output} objects
 }
 \description{
-Get the values of PK parameters specified by an `Output` object from a data.frame
+Get the values of PK parameters specified by an \code{Output} object from a data.frame
 }
 \keyword{internal}

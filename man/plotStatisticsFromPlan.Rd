@@ -19,7 +19,7 @@ plotStatisticsFromPlan(
 
 \item{outputValues}{Output values to be aggregated}
 
-\item{statisticId}{Statistic Id as defined in `ConfigurationPlan` used for data aggregation}
+\item{statisticId}{Statistic Id as defined in \code{ConfigurationPlan} used for data aggregation}
 
 \item{outputName}{Display name of output}
 
@@ -27,10 +27,10 @@ plotStatisticsFromPlan(
 
 \item{linetype}{Linetype of the line}
 
-\item{plotObject}{A `ggplot` object with previous statistics displayed}
+\item{plotObject}{A \code{ggplot} object with previous statistics displayed}
 }
 \value{
-A `ggplot` object updated with new displayed statistic
+A \code{ggplot} object updated with new displayed statistic
 }
 \description{
 Add summary statistics to a time profile plot from configuration plan

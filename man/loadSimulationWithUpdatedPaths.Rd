@@ -13,14 +13,14 @@ loadSimulationWithUpdatedPaths(
 \arguments{
 \item{simulationSet}{simulation set containing path to simulation file and pathIDs for quantities to be loaded into simulation object}
 
-\item{loadFromCache}{If `TRUE`, an already loaded pkml file will not be loaded again, but the `Simulation` object will be retrieved from cache.
-If `FALSE`, a new `Simulation` object will be created. Default value is `FALSE`.}
+\item{loadFromCache}{If \code{TRUE}, an already loaded pkml file will not be loaded again, but the \code{Simulation} object will be retrieved from cache.
+If \code{FALSE}, a new \code{Simulation} object will be created. Default value is \code{FALSE}.}
 
-\item{addToCache}{If `TRUE`, the loaded simulation is added to cache.
-If `FALSE`, the returned simulation only exists locally. Default is `TRUE`.}
+\item{addToCache}{If \code{TRUE}, the loaded simulation is added to cache.
+If \code{FALSE}, the returned simulation only exists locally. Default is \code{TRUE}.}
 }
 \value{
-A `Simulation` object with pathIDs updated from simulationSet
+A \code{Simulation} object with pathIDs updated from simulationSet
 }
 \description{
 loadSimulationWithUpdatedPaths

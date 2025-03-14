@@ -10,7 +10,7 @@ getPKParameterGroupsInOutput(output)
 \item{output}{Output object}
 }
 \value{
-Names of pkParameter groups in `output`
+Names of pkParameter groups in \code{output}
 }
 \description{
 getPKParameterGroupsInOutput

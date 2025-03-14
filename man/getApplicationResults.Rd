@@ -7,10 +7,10 @@
 getApplicationResults(applications)
 }
 \arguments{
-\item{applications}{list of `Application` objects queried by the method `simulation$allApplicationsFor()`}
+\item{applications}{list of \code{Application} objects queried by the method \code{simulation$allApplicationsFor()}}
 }
 \value{
-A data.frame that includes `time`, `drugMass` and `totalDrugMass` as variables
+A data.frame that includes \code{time}, \code{drugMass} and \code{totalDrugMass} as variables
 }
 \description{
 Get a data.frame of application results corresponding to

@@ -292,6 +292,7 @@ getOutputsFromGOFMergedPlotsConfiguration <- function(plot) {
 #' @param text Character from which name and unit are extracted
 #' @return A named list, with fields `name` and `unit`.
 #' @import ospsuite.utils
+#' @importFrom rSharp callStatic
 #' @keywords internal
 #' @examples \dontrun{
 #' res <- extractNameAndUnit("Value [mg]")

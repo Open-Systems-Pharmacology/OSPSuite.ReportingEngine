@@ -83,7 +83,7 @@ plotQualificationTimeProfiles <- function(configurationPlan, settings) {
 
 #' @title plotQualificationMeanTimeProfile
 #' @description Plot mean time profile for qualification workflow
-#' @param configurationPlanCurve `Curves` fields of configuration plan
+#' @param configurationPlanCurves `Curves` fields of configuration plan
 #' @param simulation A `Simulation` object from `ospsuite` package
 #' that includes required information to identify and convert the data requested from `configurationPlanCurve` properties
 #' @param simulationResults A `SimulationResults` object from `ospsuite` package

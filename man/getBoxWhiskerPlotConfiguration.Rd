@@ -20,14 +20,14 @@ getBoxWhiskerPlotConfiguration(
 
 \item{metaData}{dimensions and units in the data.frame}
 
-\item{dataMapping}{`DataMapping` object}
+\item{dataMapping}{\code{DataMapping} object}
 
-\item{plotConfiguration}{A user-defined `PlotConfiguration` object}
+\item{plotConfiguration}{A user-defined \code{PlotConfiguration} object}
 }
 \value{
-A `PlotConfiguration` object
+A \code{PlotConfiguration} object
 }
 \description{
-Define a `PlotConfiguration` object
+Define a \code{PlotConfiguration} object
 }
 \keyword{internal}

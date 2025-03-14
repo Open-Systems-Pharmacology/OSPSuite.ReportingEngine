@@ -7,18 +7,18 @@
 loadPlotDemographyTask(workflow, active = FALSE, settings = NULL)
 }
 \arguments{
-\item{workflow}{`PopulationWorkflow` object or derived class}
+\item{workflow}{\code{PopulationWorkflow} object or derived class}
 
-\item{active}{logical defining if `Task` will be run by workflow.
-Default value is `FALSE`}
+\item{active}{logical defining if \code{Task} will be run by workflow.
+Default value is \code{FALSE}}
 
-\item{settings}{specific settings for `plotDemography` task}
+\item{settings}{specific settings for \code{plotDemography} task}
 }
 \value{
-A `PlotTask` object
+A \code{PlotTask} object
 }
 \description{
-Define `plotDemography` task and its settings
+Define \code{plotDemography} task and its settings
 }
 \examples{
 \dontrun{

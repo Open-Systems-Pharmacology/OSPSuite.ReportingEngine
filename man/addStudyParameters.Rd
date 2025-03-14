@@ -7,9 +7,9 @@
 addStudyParameters(population, simulation, studyDesignFile)
 }
 \arguments{
-\item{population}{`Population` object}
+\item{population}{\code{Population} object}
 
-\item{simulation}{`Simulation` object}
+\item{simulation}{\code{Simulation} object}
 
 \item{studyDesignFile}{file name of study design table}
 }

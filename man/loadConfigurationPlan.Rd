@@ -12,10 +12,10 @@ loadConfigurationPlan(configurationPlanFile, workflowFolder)
 \item{workflowFolder}{path of the output folder created or used by the Workflow.}
 }
 \value{
-A `ConfigurationPlan` object including the content of json file
+A \code{ConfigurationPlan} object including the content of json file
 }
 \description{
-Load a `ConfigurationPlan` object from json file
+Load a \code{ConfigurationPlan} object from json file
 }
 \seealso{
 Other qualification workflow: 

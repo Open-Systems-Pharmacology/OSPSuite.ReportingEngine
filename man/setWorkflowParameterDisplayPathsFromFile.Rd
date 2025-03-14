@@ -8,9 +8,9 @@ setWorkflowParameterDisplayPathsFromFile(fileName, workflow)
 }
 \arguments{
 \item{fileName}{name of file that includes mapping of Parameters with their display paths
-Names in header should include `parameter` and `displayPath`.}
+Names in header should include \code{parameter} and \code{displayPath}.}
 
-\item{workflow}{Object of class `MeanModelWorkflow` or `PopulationWorkflow`}
+\item{workflow}{Object of class \code{MeanModelWorkflow} or \code{PopulationWorkflow}}
 }
 \description{
 Set mapping between parameters and their display paths in a workflow

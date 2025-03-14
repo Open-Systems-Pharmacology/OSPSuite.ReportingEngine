@@ -72,7 +72,7 @@ Other workflow tasks:
 \if{html}{\out{<a id="method-PopulationPlotTask-new"></a>}}
 \if{latex}{\out{\hypertarget{method-PopulationPlotTask-new}{}}}
 \subsection{Method \code{new()}}{
-Create a `PopulationPlotTask` object
+Create a \code{PopulationPlotTask} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PopulationPlotTask$new(
   workflowType = PopulationWorkflowTypes$parallelComparison,
@@ -85,18 +85,18 @@ Create a `PopulationPlotTask` object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{workflowType}}{Type of population workflow. Use enum `PopulationWorkflowTypes` to get list of workflow types.}
+\item{\code{workflowType}}{Type of population workflow. Use enum \code{PopulationWorkflowTypes} to get list of workflow types.}
 
 \item{\code{xParameters}}{list of parameter paths to be plotted along x-axis}
 
 \item{\code{yParameters}}{list of parameter paths to be plotted along y-axis}
 
-\item{\code{...}}{input parameters inherited from `PlotTask` R6 class}
+\item{\code{...}}{input parameters inherited from \code{PlotTask} R6 class}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `PopulationPlotTask` object
+A new \code{PopulationPlotTask} object
 }
 }
 \if{html}{\out{<hr>}}
@@ -111,7 +111,7 @@ Save the task results
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{taskResults}}{list of `TaskResults` objects}
+\item{\code{taskResults}}{list of \code{TaskResults} objects}
 }
 \if{html}{\out{</div>}}
 }
@@ -128,7 +128,7 @@ Run task and save its output
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{structureSets}}{list of `SimulationStructure` R6 class}
+\item{\code{structureSets}}{list of \code{SimulationStructure} R6 class}
 }
 \if{html}{\out{</div>}}
 }

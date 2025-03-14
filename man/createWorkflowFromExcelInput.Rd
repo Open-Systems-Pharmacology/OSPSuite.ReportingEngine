@@ -15,14 +15,14 @@ createWorkflowFromExcelInput(
 
 \item{workflowFile}{name of the R script file created from the Excel file}
 
-\item{removeComments}{logical to remove comments and information in `workflowFile`}
+\item{removeComments}{logical to remove comments and information in \code{workflowFile}}
 }
 \value{
-An R script of name `workflowFile` to be run
+An R script of name \code{workflowFile} to be run
 }
 \description{
 Creates an R script for running mean model or population workflows from an Excel file
-Note that the `{readxl}` package is required to use this function
+Note that the \code{{readxl}} package is required to use this function
 }
 \seealso{
 Other workflow helpers: 

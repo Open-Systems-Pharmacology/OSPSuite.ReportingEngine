@@ -9,11 +9,11 @@ buildQualificationDDIDataframe(dataframe, metadata, pkParameter, plotType)
 \arguments{
 \item{dataframe}{data.frame}
 
-\item{metadata}{meta data on `data`}
+\item{metadata}{meta data on \code{data}}
 
 \item{pkParameter}{for which DDI ratios are to be evaluated}
 
-\item{plotType}{for which DDI ratios are to be evaluated.  `plotType` is either `predictedVsObserved` or `residualsVsObserved`.}
+\item{plotType}{for which DDI ratios are to be evaluated.  \code{plotType} is either \code{predictedVsObserved} or \code{residualsVsObserved}.}
 }
 \value{
 dataframe for plotting goodness of fit of residuals vs time type

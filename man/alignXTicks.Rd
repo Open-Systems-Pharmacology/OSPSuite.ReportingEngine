@@ -7,13 +7,13 @@
 alignXTicks(plotObject)
 }
 \arguments{
-\item{plotObject}{A `ggplot` object}
+\item{plotObject}{A \code{ggplot} object}
 }
 \value{
-A `ggplot` object
+A \code{ggplot} object
 }
 \description{
-Use the `plotConfiguration` of a `plotObject`
+Use the \code{plotConfiguration} of a \code{plotObject}
 to check and perform vertical alignment of x-axis tick labels
 }
 \keyword{internal}

@@ -7,10 +7,10 @@
 getOutputGroups(metaDataFrame)
 }
 \arguments{
-\item{metaDataFrame}{A data.frame with variables `path`, `dimension`, `unit`, `group`, `color`, `fill`}
+\item{metaDataFrame}{A data.frame with variables \code{path}, \code{dimension}, \code{unit}, \code{group}, \code{color}, \code{fill}}
 }
 \value{
-List of data.frames data.frame with variables `path`, `dimension`, `unit`, `group`, `color`, `fill`
+List of data.frames data.frame with variables \code{path}, \code{dimension}, \code{unit}, \code{group}, \code{color}, \code{fill}
 }
 \description{
 Group paths with same group IDs and check their units and residuals are consistent

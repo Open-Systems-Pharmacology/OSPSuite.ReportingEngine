@@ -320,7 +320,7 @@ getSplitPositions <- function(possibleSplits, splitWidth, numberOfSplits) {
 #' If applied to the legend, use `"legend"`.
 #' If applied to a plot label use e.g. `"ylabel"` or `"title"`.
 #' If applied to tick labels use `"yticks"` or `"yticklabels"`.
-#' @param PlotConfiguration A `PlotConfiguration` object from the `tlf` package
+#' @param plotConfiguration A `PlotConfiguration` object from the `tlf` package
 #' @return An integer as max character width before using line breaks
 #' @keywords internal
 getLineBreakWidth <- function(element = "legend", plotConfiguration) {
@@ -412,21 +412,62 @@ updateWatermarkDimensions <- function(plotObject) {
   return(plotObject)
 }
 
+#' @title getLegendDimensions
+#' @description
+#' Get legend dimensions
+#' @param plotObject A `ggplot` object
+#' @return
+#' A list of `width` and `height` if legend is found,
+#' otherwise `NULL`
+#' @keywords internal
+#' @importFrom grid convertUnit
+#' @importFrom cowplot get_plot_component
+getLegendDimensions <- function(plotObject) {
+  # Duplicate plot object to apply modifications preventing crash
+  legendPlotObject <- plotObject
+  for (elementName in names(legendPlotObject$theme)) {
+    if (isOfType(legendPlotObject$theme[[elementName]], "element_text")) {
+      legendPlotObject$theme[[elementName]]$family <- ""
+    }
+  }
+  # See https://wilkelab.org/cowplot/reference/set_null_device.html for more details
+  cowplot::set_null_device("png")
+  # Get grob from plot = list of plot properties
+  allLegendGrobs <- cowplot::get_plot_component(
+    legendPlotObject,
+    pattern = "guide-box",
+    return_all = TRUE
+  )
+  # Look for legend grob that stores the dimensions of the legend
+  legendGrobIndex <- head(which(sapply(allLegendGrobs, function(grob) grob$name) %in% "guide-box"), 1)
+  # If no legend, index is empty
+  if (isEmpty(legendGrobIndex)) {
+    return(NULL)
+  }
+  legendGrob <- allLegendGrobs[[legendGrobIndex]]
+  # grid package is already required and installed by ggplot2
+  legendWidth <- as.numeric(grid::convertUnit(
+    max(legendGrob$widths),
+    plotObject$plotConfiguration$export$units
+  ))
+  legendHeight <- as.numeric(grid::convertUnit(
+    max(legendGrob$heights),
+    plotObject$plotConfiguration$export$units
+  ))
+  return(list(width = legendWidth, height = legendHeight))
+}
+
 #' @title updatePlotDimensions
 #' @description Update plot dimensions based on size and position of legend
 #' @param plotObject A `ggplot` object
 #' @return A `ggplot` object
 #' @keywords internal
 updatePlotDimensions <- function(plotObject) {
-  # Get grob from plot = list of plot properties
-  grobObject <- ggplot2::ggplotGrob(plotObject)
-  # Look for legend grob that stores the dimensions of the legend
-  legendGrobIndex <- which(sapply(grobObject$grobs, function(grob) grob$name) == "guide-box")
+  legendDimensions <- getLegendDimensions(plotObject)
   # If no legend, index is empty
-  if (isEmpty(legendGrobIndex)) {
+  if (isEmpty(legendDimensions)) {
     return(plotObject)
   }
-  legendGrob <- grobObject$grobs[[legendGrobIndex]]
   # If not empty,
   # - add nothing if legend within
   if (grepl(pattern = "inside", x = plotObject$plotConfiguration$legend$position)) {
@@ -435,9 +476,8 @@ updatePlotDimensions <- function(plotObject) {
       ggplot2::theme(plot.margin = ggplot2::margin(r = 20, b = 10, l = 10))
     return(plotObject)
   }
-  # grid package is already required and installed by ggplot2
-  legendWidth <- as.numeric(grid::convertUnit(max(legendGrob$widths), plotObject$plotConfiguration$export$units))
-  legendHeight <- as.numeric(grid::convertUnit(max(legendGrob$heights), plotObject$plotConfiguration$export$units))
+  legendWidth <- legendDimensions$width
+  legendHeight <- legendDimensions$height
   # - add legend height to the final plot dimensions if legend above/below
   isLegendPositionVertical <- any(
     grepl(pattern = "Top", x = plotObject$plotConfiguration$legend$position),
@@ -915,9 +955,9 @@ updateAxesMargin <- function(axesProperties, sideMarginsEnabled = TRUE) {
 #' @title getDefaultPropertyFromTheme
 #' @description
 #' Get default property value from current reEnv theme
-#' @param propertyName Name of the aesthetic property (e.g. `"color"`)
-#' @param propertyType One of `"points"`, `"lines`, `"ribbons"` or `"errorbars"`
 #' @param plotName Name of the plot in Theme (e.g. `"plotTimeProfile"`)
+#' @param propertyType One of `"points"`, `"lines`, `"ribbons"` or `"errorbars"`
+#' @param propertyNames Names of the aesthetic property (e.g. `"color"`)
 #' @return Property value
 #' @keywords internal
 getDefaultPropertiesFromTheme <- function(plotName,

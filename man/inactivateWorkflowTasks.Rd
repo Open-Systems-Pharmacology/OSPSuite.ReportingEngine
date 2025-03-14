@@ -7,13 +7,13 @@
 inactivateWorkflowTasks(workflow, tasks = workflow$getAllTasks())
 }
 \arguments{
-\item{workflow}{`MeanModelWorkflow` or `PopulationWorkflow` object}
+\item{workflow}{\code{MeanModelWorkflow} or \code{PopulationWorkflow} object}
 
 \item{tasks}{names of the tasks to activate
-Default inactivates all tasks of the workflow using workflow method `workflow$getAllTasks()`}
+Default inactivates all tasks of the workflow using workflow method \code{workflow$getAllTasks()}}
 }
 \description{
-inactivates a series of `Tasks` from a `Workflow`
+inactivates a series of \code{Tasks} from a \code{Workflow}
 }
 \examples{
 \dontrun{

@@ -34,7 +34,7 @@ Other workflow tasks:
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{active}}{logical indicating if `Task` is performed in a workflow.}
+\item{\code{active}}{logical indicating if \code{Task} is performed in a workflow.}
 
 \item{\code{outputFolder}}{List of output files/folders to save the task output}
 
@@ -65,7 +65,7 @@ Other workflow tasks:
 \if{html}{\out{<a id="method-Task-new"></a>}}
 \if{latex}{\out{\hypertarget{method-Task-new}{}}}
 \subsection{Method \code{new()}}{
-Create a `Task` object
+Create a \code{Task} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Task$new(
   outputFolder = NULL,
@@ -94,22 +94,22 @@ Create a `Task` object
 
 \item{\code{settings}}{specific settings for task (e.g. plot configurations)}
 
-\item{\code{active}}{logical indicating if `Task` is performed in a workflow.
-Default value is `FALSE`}
+\item{\code{active}}{logical indicating if \code{Task} is performed in a workflow.
+Default value is \code{FALSE}}
 
-\item{\code{message}}{message of the `Task`.}
+\item{\code{message}}{message of the \code{Task}.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `Task` object
+A new \code{Task} object
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Task-activate"></a>}}
 \if{latex}{\out{\hypertarget{method-Task-activate}{}}}
 \subsection{Method \code{activate()}}{
-Activate `Task`
+Activate \code{Task}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Task$activate()}\if{html}{\out{</div>}}
 }
@@ -119,7 +119,7 @@ Activate `Task`
 \if{html}{\out{<a id="method-Task-inactivate"></a>}}
 \if{latex}{\out{\hypertarget{method-Task-inactivate}{}}}
 \subsection{Method \code{inactivate()}}{
-Inactivate `Task`
+Inactivate \code{Task}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Task$inactivate()}\if{html}{\out{</div>}}
 }
@@ -129,7 +129,7 @@ Inactivate `Task`
 \if{html}{\out{<a id="method-Task-validateInput"></a>}}
 \if{latex}{\out{\hypertarget{method-Task-validateInput}{}}}
 \subsection{Method \code{validateInput()}}{
-Check if `Task` inputs exist
+Check if \code{Task} inputs exist
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Task$validateInput()}\if{html}{\out{</div>}}
 }
@@ -142,7 +142,7 @@ logical indicating if input is valid
 \if{html}{\out{<a id="method-Task-validateStructureSetInput"></a>}}
 \if{latex}{\out{\hypertarget{method-Task-validateStructureSetInput}{}}}
 \subsection{Method \code{validateStructureSetInput()}}{
-Check if a task input from a specific `SimulationStructure` is valid
+Check if a task input from a specific \code{SimulationStructure} is valid
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Task$validateStructureSetInput(structureSet)}\if{html}{\out{</div>}}
 }
@@ -150,7 +150,7 @@ Check if a task input from a specific `SimulationStructure` is valid
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{structureSet}}{`SimulationStructure` object}
+\item{\code{structureSet}}{\code{SimulationStructure} object}
 }
 \if{html}{\out{</div>}}
 }
@@ -162,7 +162,7 @@ logical indicating if input is valid
 \if{html}{\out{<a id="method-Task-print"></a>}}
 \if{latex}{\out{\hypertarget{method-Task-print}{}}}
 \subsection{Method \code{print()}}{
-Print `Task` features
+Print \code{Task} features
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Task$print()}\if{html}{\out{</div>}}
 }
@@ -215,7 +215,7 @@ Output file's absolute path
 \if{html}{\out{<a id="method-Task-getInputs"></a>}}
 \if{latex}{\out{\hypertarget{method-Task-getInputs}{}}}
 \subsection{Method \code{getInputs()}}{
-Get `Task` required input files
+Get \code{Task} required input files
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Task$getInputs()}\if{html}{\out{</div>}}
 }

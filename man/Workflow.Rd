@@ -10,7 +10,7 @@ R6 class representing Reporting Engine generic Workflow
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{simulationStructures}}{`SimulationStructure` R6 class object managing the structure of the workflow output}
+\item{\code{simulationStructures}}{\code{SimulationStructure} R6 class object managing the structure of the workflow output}
 
 \item{\code{workflowFolder}}{path of the folder create by the Workflow}
 
@@ -64,7 +64,7 @@ R6 class representing Reporting Engine generic Workflow
 \if{html}{\out{<a id="method-Workflow-new"></a>}}
 \if{latex}{\out{\hypertarget{method-Workflow-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new `Workflow` object.
+Create a new \code{Workflow} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Workflow$new(
   simulationSets,
@@ -82,7 +82,7 @@ Create a new `Workflow` object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{simulationSets}}{list of `SimulationSet` R6 class objects}
+\item{\code{simulationSets}}{list of \code{SimulationSet} R6 class objects}
 
 \item{\code{workflowFolder}}{path of the output folder created or used by the Workflow.}
 
@@ -97,73 +97,73 @@ Create a new `Workflow` object.
 \item{\code{numberSections}}{logical defining if the report sections should be numbered}
 
 \item{\code{reportTitle}}{report title internally added as a cover page
-If `reportTitle` is an existing file, it will be merged to the report as cover page.}
+If \code{reportTitle} is an existing file, it will be merged to the report as cover page.}
 
-\item{\code{theme}}{A `Theme` object from `{tlf}` package}
+\item{\code{theme}}{A \code{Theme} object from \code{{tlf}} package}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `Workflow` object
+A new \code{Workflow} object
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Workflow-getAllTasks"></a>}}
 \if{latex}{\out{\hypertarget{method-Workflow-getAllTasks}{}}}
 \subsection{Method \code{getAllTasks()}}{
-Get a vector with all the names of the tasks within the `Workflow`
+Get a vector with all the names of the tasks within the \code{Workflow}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Workflow$getAllTasks()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-Vector of `Task` names
+Vector of \code{Task} names
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Workflow-getAllPlotTasks"></a>}}
 \if{latex}{\out{\hypertarget{method-Workflow-getAllPlotTasks}{}}}
 \subsection{Method \code{getAllPlotTasks()}}{
-Get a vector with all the names of the plot tasks within the `Workflow`
+Get a vector with all the names of the plot tasks within the \code{Workflow}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Workflow$getAllPlotTasks()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-Vector of `PlotTask` names
+Vector of \code{PlotTask} names
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Workflow-getActiveTasks"></a>}}
 \if{latex}{\out{\hypertarget{method-Workflow-getActiveTasks}{}}}
 \subsection{Method \code{getActiveTasks()}}{
-Get a vector with all the names of active tasks within the `Workflow`
+Get a vector with all the names of active tasks within the \code{Workflow}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Workflow$getActiveTasks()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-Vector of active `Task` names
+Vector of active \code{Task} names
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Workflow-getInactiveTasks"></a>}}
 \if{latex}{\out{\hypertarget{method-Workflow-getInactiveTasks}{}}}
 \subsection{Method \code{getInactiveTasks()}}{
-Get a vector with all the names of inactive tasks within the `Workflow`
+Get a vector with all the names of inactive tasks within the \code{Workflow}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Workflow$getInactiveTasks()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-Vector of inactive `Task` names
+Vector of inactive \code{Task} names
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Workflow-activateTasks"></a>}}
 \if{latex}{\out{\hypertarget{method-Workflow-activateTasks}{}}}
 \subsection{Method \code{activateTasks()}}{
-Activates a series of `Tasks` from current `Workflow`
+Activates a series of \code{Tasks} from current \code{Workflow}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Workflow$activateTasks(tasks = self$getAllTasks())}\if{html}{\out{</div>}}
 }
@@ -172,19 +172,19 @@ Activates a series of `Tasks` from current `Workflow`
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{tasks}}{names of the workflow tasks to activate.
-Default activates all tasks of the workflow using workflow method `workflow$getAllTasks()`}
+Default activates all tasks of the workflow using workflow method \code{workflow$getAllTasks()}}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-Vector of inactive `Task` names
+Vector of inactive \code{Task} names
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Workflow-inactivateTasks"></a>}}
 \if{latex}{\out{\hypertarget{method-Workflow-inactivateTasks}{}}}
 \subsection{Method \code{inactivateTasks()}}{
-Inactivates a series of `Tasks` from current `Workflow`
+Inactivates a series of \code{Tasks} from current \code{Workflow}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Workflow$inactivateTasks(tasks = self$getAllTasks())}\if{html}{\out{</div>}}
 }
@@ -193,19 +193,19 @@ Inactivates a series of `Tasks` from current `Workflow`
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{tasks}}{names of the workflow tasks to inactivate.
-Default inactivates all tasks of the workflow using workflow method `workflow$getAllTasks()`}
+Default inactivates all tasks of the workflow using workflow method \code{workflow$getAllTasks()}}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-Vector of inactive `Task` names
+Vector of inactive \code{Task} names
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Workflow-printReportingEngineInfo"></a>}}
 \if{latex}{\out{\hypertarget{method-Workflow-printReportingEngineInfo}{}}}
 \subsection{Method \code{printReportingEngineInfo()}}{
-Print reporting engine information obtained from initializing a `Workflow`
+Print reporting engine information obtained from initializing a \code{Workflow}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Workflow$printReportingEngineInfo()}\if{html}{\out{</div>}}
 }
@@ -226,7 +226,7 @@ Get the current watermark to be reported on figures background
 \if{latex}{\out{\hypertarget{method-Workflow-setWatermark}{}}}
 \subsection{Method \code{setWatermark()}}{
 Set the watermark to be reported on figure background.
-The default value `NULL` leads to check if the computer has a validated environment.
+The default value \code{NULL} leads to check if the computer has a validated environment.
 If the environment is validated, no watermark is reported on the background.
 If the environment is NOT validated, \code{workflowWatermarkMessage} is reported on the background.
 Any user-defined text will overwrite this default feature and be reported on the figure background.
@@ -238,7 +238,7 @@ Any user-defined text will overwrite this default feature and be reported on the
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{watermark}}{text to be reported on figures background.
-Default value is `NULL`, which leads to check if the computer has a validated environment.
+Default value is \code{NULL}, which leads to check if the computer has a validated environment.
 If the environment is validated, no watermark is reported on the background.
 If the environment is NOT validated, \code{workflowWatermarkMessage} is reported on the background.
 Any user-defined text will overwrite this default feature and be reported on the figure background.}
@@ -260,7 +260,7 @@ to replace standard display of parameter paths.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{parameterDisplayPaths}}{data.frame mapping Parameters with their display paths
-Variables of the data.frame should include `parameter` and `displayPath`.}
+Variables of the data.frame should include \code{parameter} and \code{displayPath}.}
 }
 \if{html}{\out{</div>}}
 }
@@ -276,7 +276,7 @@ to replace standard display of parameter paths.
 }
 
 \subsection{Returns}{
-A data.frame with `parameter` and `displayPath` variables.
+A data.frame with \code{parameter} and \code{displayPath} variables.
 }
 }
 \if{html}{\out{<hr>}}

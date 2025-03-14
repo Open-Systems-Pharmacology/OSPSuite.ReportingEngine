@@ -7,7 +7,7 @@
 asTimeAfterDose(data, timeOffset, maxTime = NULL)
 }
 \arguments{
-\item{data}{A data.frame that includes the variable `Time`}
+\item{data}{A data.frame that includes the variable \code{Time}}
 
 \item{timeOffset}{Value shifting time}
 

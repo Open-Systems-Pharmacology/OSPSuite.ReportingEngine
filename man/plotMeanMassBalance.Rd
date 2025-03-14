@@ -7,13 +7,13 @@
 plotMeanMassBalance(structureSet, settings = NULL)
 }
 \arguments{
-\item{structureSet}{`SimulationStructure` R6 class object}
+\item{structureSet}{\code{SimulationStructure} R6 class object}
 
 \item{settings}{Options to be defined
 (e.g. how to group the plot results, or which molecule to exclude)}
 }
 \value{
-list of `ggplot` objects
+list of \code{ggplot} objects
 }
 \description{
 Plot mass balance diagnostics time profiles, cumulative time profiles,

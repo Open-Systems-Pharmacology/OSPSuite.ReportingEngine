@@ -7,7 +7,7 @@
 getPopulationSensitivityAnalysisResultsFileNames(workflow)
 }
 \arguments{
-\item{workflow}{`PopulationWorkflow` object or derived class}
+\item{workflow}{\code{PopulationWorkflow} object or derived class}
 }
 \value{
 Names of the the expected sensitivity analysis result files

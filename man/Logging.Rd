@@ -11,8 +11,8 @@ R6 class managing logging
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{messages}}{Array of messages to log.
-Each element of `messages` is a list
-that includes `time`, `type` and `text` of message to log.}
+Each element of \code{messages} is a list
+that includes \code{time}, \code{type} and \code{text} of message to log.}
 
 \item{\code{folder}}{Folder where log files are saved}
 }
@@ -38,7 +38,7 @@ that includes `time`, `type` and `text` of message to log.}
 \if{html}{\out{<a id="method-Logging-info"></a>}}
 \if{latex}{\out{\hypertarget{method-Logging-info}{}}}
 \subsection{Method \code{info()}}{
-Add an `Info` message to log
+Add an \code{Info} message to log
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Logging$info(text, display = NULL)}\if{html}{\out{</div>}}
 }
@@ -46,7 +46,7 @@ Add an `Info` message to log
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{text}}{content of the `Info` message}
+\item{\code{text}}{content of the \code{Info} message}
 
 \item{\code{display}}{Logical setting if message is displayed on console}
 }
@@ -57,7 +57,7 @@ Add an `Info` message to log
 \if{html}{\out{<a id="method-Logging-error"></a>}}
 \if{latex}{\out{\hypertarget{method-Logging-error}{}}}
 \subsection{Method \code{error()}}{
-Add an `Error` message to log
+Add an \code{Error} message to log
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Logging$error(text, display = NULL)}\if{html}{\out{</div>}}
 }
@@ -65,7 +65,7 @@ Add an `Error` message to log
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{text}}{content of the `Error` message}
+\item{\code{text}}{content of the \code{Error} message}
 
 \item{\code{display}}{Logical setting if message is displayed on console}
 }
@@ -76,7 +76,7 @@ Add an `Error` message to log
 \if{html}{\out{<a id="method-Logging-debug"></a>}}
 \if{latex}{\out{\hypertarget{method-Logging-debug}{}}}
 \subsection{Method \code{debug()}}{
-Add a `Debug` message to log
+Add a \code{Debug} message to log
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Logging$debug(text, display = NULL)}\if{html}{\out{</div>}}
 }
@@ -84,7 +84,7 @@ Add a `Debug` message to log
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{text}}{content of the `Debug` message}
+\item{\code{text}}{content of the \code{Debug} message}
 
 \item{\code{display}}{Logical setting if message is displayed on console}
 }
@@ -95,8 +95,8 @@ Add a `Debug` message to log
 \if{html}{\out{<a id="method-Logging-textToMessage"></a>}}
 \if{latex}{\out{\hypertarget{method-Logging-textToMessage}{}}}
 \subsection{Method \code{textToMessage()}}{
-Add meta data to `text` to create an informative message to log
-with a flag for its `logType` (`"Info"`, `"Error"`, or `"Debug"`)
+Add meta data to \code{text} to create an informative message to log
+with a flag for its \code{logType} (\code{"Info"}, \code{"Error"}, or \code{"Debug"})
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Logging$textToMessage(text, logType)}\if{html}{\out{</div>}}
 }
@@ -106,7 +106,7 @@ with a flag for its `logType` (`"Info"`, `"Error"`, or `"Debug"`)
 \describe{
 \item{\code{text}}{content of the message}
 
-\item{\code{logType}}{type of message (`"Info"`, `"Error"`, or `"Debug"`)}
+\item{\code{logType}}{type of message (\code{"Info"}, \code{"Error"}, or \code{"Debug"})}
 }
 \if{html}{\out{</div>}}
 }
@@ -115,7 +115,7 @@ with a flag for its `logType` (`"Info"`, `"Error"`, or `"Debug"`)
 \if{html}{\out{<a id="method-Logging-addMessage"></a>}}
 \if{latex}{\out{\hypertarget{method-Logging-addMessage}{}}}
 \subsection{Method \code{addMessage()}}{
-Add a message to the list of logged `messages`
+Add a message to the list of logged \code{messages}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Logging$addMessage(message)}\if{html}{\out{</div>}}
 }
@@ -132,8 +132,8 @@ Add a message to the list of logged `messages`
 \if{html}{\out{<a id="method-Logging-showMessages"></a>}}
 \if{latex}{\out{\hypertarget{method-Logging-showMessages}{}}}
 \subsection{Method \code{showMessages()}}{
-Display logged `messages` as a data.frame
-Can be filtered according to `logTypes` (`"Info"`, `"Error"`, and/or `"Debug"`)
+Display logged \code{messages} as a data.frame
+Can be filtered according to \code{logTypes} (\code{"Info"}, \code{"Error"}, and/or \code{"Debug"})
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Logging$showMessages(logTypes = LogTypes)}\if{html}{\out{</div>}}
 }
@@ -141,7 +141,7 @@ Can be filtered according to `logTypes` (`"Info"`, `"Error"`, and/or `"Debug"`)
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{logTypes}}{types of message (`"Info"`, `"Error"`, or `"Debug"`)}
+\item{\code{logTypes}}{types of message (\code{"Info"}, \code{"Error"}, or \code{"Debug"})}
 }
 \if{html}{\out{</div>}}
 }

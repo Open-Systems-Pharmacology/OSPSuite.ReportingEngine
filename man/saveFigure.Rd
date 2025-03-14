@@ -7,11 +7,11 @@
 saveFigure(plotObject, fileName, simulationSetName = NULL)
 }
 \arguments{
-\item{plotObject}{A `ggplot` object}
+\item{plotObject}{A \code{ggplot} object}
 
-\item{fileName}{Name of the file in which `plotObject` is saved}
+\item{fileName}{Name of the file in which \code{plotObject} is saved}
 
-\item{simulationSetName}{Name of the simulation set for `PlotTask` results}
+\item{simulationSetName}{Name of the simulation set for \code{PlotTask} results}
 }
 \description{
 Save figure and catches

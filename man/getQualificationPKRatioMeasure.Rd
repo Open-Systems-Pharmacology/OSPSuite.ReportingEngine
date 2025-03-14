@@ -17,6 +17,6 @@ getQualificationPKRatioMeasure(pkParameterName, data, metaData)
 A data.frame
 }
 \description{
-Get qualification measure of pk ratio from field `PKRatioPlots` of configuration plan
+Get qualification measure of pk ratio from field \code{PKRatioPlots} of configuration plan
 }
 \keyword{internal}

@@ -136,8 +136,8 @@ checkFileExists <- function(path, nullAllowed = FALSE) {
 #' 2. Use units from observed dataset
 #' 3. Use units from dictionary
 #' @param dataSource A `DataSource` object
-#' @param observedDataFile Path of observed dataset
 #' @param outputs list or array of `Output` objects
+#' @param nullAllowed Logical defining if `NULL` input is allowed
 #' @keywords internal
 validateDataSource <- function(dataSource, outputs, nullAllowed = TRUE) {
   if (nullAllowed && any(is.null(dataSource), is.null(outputs))) {

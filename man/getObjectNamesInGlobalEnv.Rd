@@ -10,7 +10,7 @@ getObjectNamesInGlobalEnv(objectType)
 \item{objectType}{Object type or class}
 }
 \value{
-Array of Number of `Output` objects in the Global Environment
+Array of Number of \code{Output} objects in the Global Environment
 }
 \description{
 Get object names of certain type/class in the Global Environment

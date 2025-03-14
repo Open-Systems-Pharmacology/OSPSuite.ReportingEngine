@@ -9,12 +9,12 @@ getSimulationParameterDisplayPaths(parameterPaths, simulation, dictionary)
 \arguments{
 \item{parameterPaths}{Paths of a parameter in simulation}
 
-\item{simulation}{A `Simulation` object from `ospsuite`}
+\item{simulation}{A \code{Simulation} object from \code{ospsuite}}
 
-\item{dictionary}{A data.frame mapping `parameterPaths` to `parameterDisplayPaths`}
+\item{dictionary}{A data.frame mapping \code{parameterPaths} to \code{parameterDisplayPaths}}
 }
 \value{
-An array of `parameterDisplayPaths` matching the `parameterPaths`
+An array of \code{parameterDisplayPaths} matching the \code{parameterPaths}
 }
 \description{
 getSimulationParameterDisplayPaths

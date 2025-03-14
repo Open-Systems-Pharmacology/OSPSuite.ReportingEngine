@@ -9,7 +9,7 @@ getPKParameterMeasure(data, dataMapping)
 \arguments{
 \item{data}{A data.frame of PK Parameter values across Population Simulation sets}
 
-\item{dataMapping}{A `BoxWhiskerDataMapping` object}
+\item{dataMapping}{A \code{BoxWhiskerDataMapping} object}
 }
 \value{
 A data.frame summarizing the PK Parameter distribution by population

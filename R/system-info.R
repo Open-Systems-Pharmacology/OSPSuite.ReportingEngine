@@ -1,7 +1,7 @@
 # System Information for Reporting Engine
 
 #' @title isValidatedSystem
-#' @description Check if environment variable is defined and as value \code{'prodrun'}
+#' @description Check if environment variable is defined and as value `'prodrun'`
 #' @return logical assessing if system is validated
 #' @keywords internal
 isValidatedSystem <- function() {

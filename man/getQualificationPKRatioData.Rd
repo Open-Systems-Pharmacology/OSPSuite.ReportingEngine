@@ -7,16 +7,16 @@
 getQualificationPKRatioData(pkRatioPlan, configurationPlan, settings)
 }
 \arguments{
-\item{pkRatioPlan}{List providing the PK ratio mapping from field `PKRatioPlots` of configuration plan}
+\item{pkRatioPlan}{List providing the PK ratio mapping from field \code{PKRatioPlots} of configuration plan}
 
-\item{configurationPlan}{A `ConfigurationPlan` object}
+\item{configurationPlan}{A \code{ConfigurationPlan} object}
 
 \item{settings}{settings for the task}
 }
 \value{
-list with `data` and `metaData`
+list with \code{data} and \code{metaData}
 }
 \description{
-Get data of pk ratio from field `PKRatioPlots` of configuration plan
+Get data of pk ratio from field \code{PKRatioPlots} of configuration plan
 }
 \keyword{internal}

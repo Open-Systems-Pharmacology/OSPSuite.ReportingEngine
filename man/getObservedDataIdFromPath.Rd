@@ -12,7 +12,7 @@ For instance, "S2|Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Ve
 or "Midazolam 600mg SD|ObservedData|Peripheral Venous Blood|Plasma|Rifampin|Conc"}
 }
 \value{
-A string corresponding to the `id` of a configuration plan observed dataset
+A string corresponding to the \code{id} of a configuration plan observed dataset
 }
 \description{
 Get an observed dataset id from a configuration plan quantity path

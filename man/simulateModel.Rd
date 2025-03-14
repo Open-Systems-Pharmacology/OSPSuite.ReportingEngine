@@ -7,7 +7,7 @@
 simulateModel(structureSet, settings = NULL)
 }
 \arguments{
-\item{structureSet}{`SimulationStructure` R6 class object contain paths of files to be used}
+\item{structureSet}{\code{SimulationStructure} R6 class object contain paths of files to be used}
 
 \item{settings}{list of options to be passed on the function}
 }

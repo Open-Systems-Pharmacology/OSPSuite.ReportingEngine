@@ -18,21 +18,21 @@ Other workflows:
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{simulate}}{`SimulationTask` object for time profile simulations}
+\item{\code{simulate}}{\code{SimulationTask} object for time profile simulations}
 
-\item{\code{calculatePKParameters}}{`CalculatePKParametersTask` object for PK parameters calculation}
+\item{\code{calculatePKParameters}}{\code{CalculatePKParametersTask} object for PK parameters calculation}
 
-\item{\code{calculateSensitivity}}{`SensitivityAnalysisTask` object for sensitivity analysis}
+\item{\code{calculateSensitivity}}{\code{SensitivityAnalysisTask} object for sensitivity analysis}
 
-\item{\code{plotTimeProfilesAndResiduals}}{`PlotTask` object for goodness of fit plots}
+\item{\code{plotTimeProfilesAndResiduals}}{\code{PlotTask} object for goodness of fit plots}
 
-\item{\code{plotMassBalance}}{`PlotTask` object for mass balance plot}
+\item{\code{plotMassBalance}}{\code{PlotTask} object for mass balance plot}
 
-\item{\code{plotAbsorption}}{`PlotTask` object for absorption plot}
+\item{\code{plotAbsorption}}{\code{PlotTask} object for absorption plot}
 
-\item{\code{plotPKParameters}}{`PlotTask` object for PK parameters plot}
+\item{\code{plotPKParameters}}{\code{PlotTask} object for PK parameters plot}
 
-\item{\code{plotSensitivity}}{`PlotTask` object for sensitivity plot}
+\item{\code{plotSensitivity}}{\code{PlotTask} object for sensitivity plot}
 }
 \if{html}{\out{</div>}}
 }
@@ -68,7 +68,7 @@ Other workflows:
 \if{html}{\out{<a id="method-MeanModelWorkflow-new"></a>}}
 \if{latex}{\out{\hypertarget{method-MeanModelWorkflow-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new `MeanModelWorkflow` object.
+Create a new \code{MeanModelWorkflow} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$new(...)}\if{html}{\out{</div>}}
 }
@@ -76,12 +76,12 @@ Create a new `MeanModelWorkflow` object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{input parameters inherited from R6 class object `Workflow`.}
+\item{\code{...}}{input parameters inherited from R6 class object \code{Workflow}.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `MeanModelWorkflow` object
+A new \code{MeanModelWorkflow} object
 }
 }
 \if{html}{\out{<hr>}}
@@ -90,14 +90,16 @@ A new `MeanModelWorkflow` object
 \subsection{Method \code{runWorkflow()}}{
 Run mean model workflow tasks for all simulation sets if tasks are activated
 The order of tasks is as follows:
-# 1) Run simulations
-# 2) Perform PK and sensitivity analyses
-# 3) Perform plot tasks
-## 3.a) time profiles and residual plots
-## 3.b) absorption plots
-## 3.c) mass balance plots
-## 3.d) PK and sensitivity analyses tables and plots
-# 4) Render report
+\enumerate{
+\item Run simulations
+\item Perform PK and sensitivity analyses
+\item Perform plot tasks\if{html}{\out{<br>}}
+a. time profiles and residual plots\if{html}{\out{<br>}}
+b. absorption plots\if{html}{\out{<br>}}
+c. mass balance plots\if{html}{\out{<br>}}
+d. PK and sensitivity analyses tables and plots
+\item Render report
+}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MeanModelWorkflow$runWorkflow()}\if{html}{\out{</div>}}
 }

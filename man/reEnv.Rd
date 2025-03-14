@@ -20,7 +20,7 @@ It is not exported and should not be directly manipulated by other packages.
 \item{\code{packageName}}{Name of the package.
 This will be used to retrieve information on the package at run time.}
 
-\item{\code{log}}{`Logging` object defining how to record log messages}
+\item{\code{log}}{\code{Logging} object defining how to record log messages}
 
 \item{\code{defaultLogPrint}}{List of logical values indicating whether to print log messages on console}
 
@@ -31,10 +31,10 @@ This will be used to retrieve information on the package at run time.}
 \item{\code{defaultBins}}{Default number of bins to use in histograms}
 
 \item{\code{binUsingQuantiles}}{Logical value indicating whether splitting method for bins
-`TRUE` uses same number of points in bins through quantiles
-`FALSE` uses same interval ranges}
+\code{TRUE} uses same number of points in bins through quantiles
+\code{FALSE} uses same interval ranges}
 
-\item{\code{defaultStairstep}}{Logical value indicating whether to use `stairstep` lines in range plots}
+\item{\code{defaultStairstep}}{Logical value indicating whether to use \code{stairstep} lines in range plots}
 
 \item{\code{defaultSimulationSetDescriptor}}{Default descriptor for simulation sets to include in reports}
 
@@ -80,7 +80,7 @@ value of the margin to add to the limits of the axis when left undefined}
 \item{\code{defaultQuantileVec}}{default quantiles for population sensitivity analysis}
 
 \item{\code{defaultMaxSimulationsPerCore}}{Default value for a scale factor used in a parallel simulation.
-The product of this scale factor and the number of allowable cores (`allowedCores`)
+The product of this scale factor and the number of allowable cores (\code{allowedCores})
 sets the maximum number of simulations that may be run on one core.}
 
 \item{\code{defaultMCRandomSeed}}{Default Random Seed for Monte Carlo sampling when calculating PK Ratios in population workflows}
@@ -95,7 +95,7 @@ sets the maximum number of simulations that may be run on one core.}
 
 \item{\code{ddiRatioSubsetsDictionary}}{Dictionary of sub-sections names for DDI Ratios}
 
-\item{\code{theme}}{A `Theme` object from the `{tlf}` package defining default properties of the figures}
+\item{\code{theme}}{A \code{Theme} object from the \code{{tlf}} package defining default properties of the figures}
 
 \item{\code{defaultPlotFormat}}{List of default format when exporting plots}
 
