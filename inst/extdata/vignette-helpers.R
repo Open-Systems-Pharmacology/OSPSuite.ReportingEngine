@@ -29,7 +29,8 @@ includeReportFromWorkflow <- function(workflow) {
   )
   webshot2::webshot(
     url = sub(".md", ".html", workflow$reportFilePath),
-    file = reportSnapshotFile
+    file = reportSnapshotFile,
+    delay = 0.1
   )
   # Display report as an image folded under "> Report" sub section
   return(
