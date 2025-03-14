@@ -28,6 +28,6 @@ jobs:
 
 
   pkgdown:
-    if: false
+    if: ${{ !cancelled() }}
     uses:  Open-Systems-Pharmacology/Workflows/.github/workflows/pkgdown.yaml@main
 
